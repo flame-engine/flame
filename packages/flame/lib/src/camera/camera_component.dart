@@ -240,7 +240,7 @@ class CameraComponent extends Component {
   }
 
   /// Converts from the global (canvas) coordinate space to
-  /// local (camera = viewport + viewfinder).
+  /// local (camera = viewport + lens + viewfinder).
   ///
   /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
@@ -252,8 +252,8 @@ class CameraComponent extends Component {
     return viewfinder.globalToLocal(throughLensPosition, output: output);
   }
 
-  /// Converts from the local (camera = viewport + viewfinder) coordinate space
-  /// to global (canvas).
+  /// Converts from the local (camera = viewport + lens + viewfinder)
+  /// coordinate space to global (canvas).
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
@@ -275,11 +275,12 @@ class CameraComponent extends Component {
   ]) sync* {
     final viewportPoint =
         viewport.globalToLocal(point, output: _componentsPoint);
+    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     final throughLensPoint = lens.globalToLocal(
       viewportPoint,
       output: _componentsPoint,
     );
-    yield* viewport.componentsAtPoint(throughLensPoint, nestedPoints);
+    yield* lens.componentsAtPoint(throughLensPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(_componentsPoint)) {

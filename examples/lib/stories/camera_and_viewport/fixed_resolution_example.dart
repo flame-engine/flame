@@ -78,7 +78,14 @@ class FixedResolutionWorld extends World with HasGameReference, TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     final currentZoom = game.camera.viewfinder.zoom;
-    game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
+    //game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
+    add(
+      CircleComponent(
+        radius: 2,
+        position: event.localPosition,
+        paint: Paint()..color = Colors.red,
+      ),
+    );
   }
 }
 

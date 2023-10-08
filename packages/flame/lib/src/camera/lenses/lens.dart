@@ -17,6 +17,9 @@ class Lens extends Component
 
   void onViewportResize() {}
 
+  final _translation = Vector2.zero();
+  final _halfViewport = Vector2.zero();
+
   /// Convert a point from the global coordinate system to the lens'
   /// coordinate system.
   ///
@@ -25,7 +28,16 @@ class Lens extends Component
   ///
   /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
-    return transform.globalToLocal(point, output: output);
+    _halfViewport
+      ..setFrom(camera.viewport.size)
+      ..scale(1 / 2);
+    _translation
+      ..setFrom(_halfViewport.clone()..multiply(camera.lens.scale))
+      ..sub(_halfViewport);
+    print('this is done $_translation with ${camera.lens.scale}');
+
+    // TODO: Don't create new vector here
+    return transform.globalToLocal(point + _translation, output: output);
   }
 
   /// Convert a point from the lens' coordinate system to the global
