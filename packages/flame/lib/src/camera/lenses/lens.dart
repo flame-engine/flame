@@ -15,6 +15,9 @@ class Lens extends Component
   @override
   Vector2 get scale => transform.scale;
 
+  @override
+  bool containsLocalPoint(Vector2 point) => true;
+
   void onViewportResize() {}
 
   final _translation = Vector2.zero();
