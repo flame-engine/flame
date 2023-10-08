@@ -19,7 +19,7 @@ This package includes a `FlameSplashScreen` widget.
 </p>
 
 <p align="center">
-  <img src="demogif.gif" />
+  <img src="demo.gif" />
 </p>
 
 ## Install

@@ -19,7 +19,7 @@ void main() {
         autoStart: false,
       );
     });
-    test('dont let start before setup', () async {
+    test('Do not let it start before setup', () async {
       expect(() => controller.start(), throwsAssertionError);
       controller.setup(1, () {});
       controller.start();
@@ -34,7 +34,7 @@ void main() {
       controller.start();
       expect(controller.state, FlameSplashControllerState.started);
     });
-    test('Calls onfinish after steps', () async {
+    test('Calls onFinish after steps', () async {
       final onFinishContainer = MockOnFinish();
       controller.setup(3, onFinishContainer.onFinish);
       controller.start();
@@ -55,14 +55,14 @@ void main() {
       controller.setup(1, () {});
       expect(controller.state, FlameSplashControllerState.started);
     });
-    test('Calls onfinish after steps', () async {
+    test('Calls onFinish after steps', () async {
       final onFinishContainer = MockOnFinish();
       controller.setup(3, onFinishContainer.onFinish);
       await untilCalled(onFinishContainer.onFinish());
       expect(controller.state, FlameSplashControllerState.finished);
     });
 
-    test('dont let start again', () async {
+    test('Do not let it start again', () async {
       controller.setup(1, () {});
       expect(() => controller.start(), throwsAssertionError);
     });

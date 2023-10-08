@@ -113,7 +113,7 @@ class FlameSplashTheme {
   });
 
   /// Decoration to be applied to the widget underneath the Flame logo.
-  /// It can be used to set the background colour, among other parameters.
+  /// It can be used to set the background color, among other parameters.
   final BoxDecoration backgroundDecoration;
 
   /// A lambda to build the widget representing the logo itself.
