@@ -23,7 +23,8 @@ This package includes a `FlameSplashScreen` widget.
 
 ## Install
 
-Add `flame_splash_screen` as a dependency in your pubspec.yaml file ([what?](https://flutter.io/using-packages/)).
+Add `flame_splash_screen` as a dependency to
+[your pubspec.yaml file](https://pub.dev/packages/flame_splash_screen/install).
 
 Import the widget:
 
@@ -47,7 +48,7 @@ There is just two required params:
 ```dart
 FlameSplashScreen(
   theme: FlameSplashTheme.dark,
-  onFinish: (BuildContext context) => Navigator.pushNamed(context, '/your-game-initial-screen')
+  onFinish: (BuildContext context) => Navigator.pushNamed(context, '/your-game-initial-screen'),
 )
 ```
 
@@ -81,7 +82,8 @@ Remember: you can also specify both `showBefore` and `showAfter` at the same tim
 
 #### Changing theme
 
-By default the splash screen has a dark background. You can change it by specifying the `white` theme.
+By default the splash screen has a dark background. You can change it by specifying the `white`
+theme.
 
 Aside from `FlameSplashTheme.dark`, you can pass `FlameSplashTheme.white` for a white background.
 
@@ -92,12 +94,14 @@ FlameSplashScreen(
 )
 ```
 
-You can create your own theme passing a custom logo builder (changing flames logo for another one) and a background decoration
+You can create your own theme passing a custom logo builder (changing flames logo for another one)
+and a background decoration
 
 
 ### Usage with controller
 
-Controller enables `FlameSplashScreen` to be customized regarding animation duration and when it starts.
+Controller enables `FlameSplashScreen` to be customized regarding animation duration and when it
+starts.
 
 There is duration params and `autoStart` (which is true by default).
 
@@ -113,7 +117,7 @@ class SplashScreenGameState extends State<SplashScreenGame> {
         fadeInDuration: Duration(seconds: 1),
         fadeOutDuration: Duration(milliseconds: 250),
         waitDuration: Duration(seconds: 2),
-        autoStart: false
+        autoStart: false,
       );
   }
   
