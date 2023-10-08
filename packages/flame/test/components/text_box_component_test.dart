@@ -6,9 +6,6 @@ import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// disable cspell as this file contains character dialogue
-// cSpell:disable
-
 void main() {
   group('TextBoxComponent', () {
     test('size is properly computed', () {
@@ -147,8 +144,9 @@ void main() {
             align: Anchor.topRight,
           ),
           _FramedTextBox(
+            // cSpell:ignore runn'st (old english)
             text: 'To move is to stir, and to be valiant is to stand. '
-                'Therefore, if thou art moved, thou runn‘st away.',
+                "Therefore, if thou art moved, thou runn'st away.",
             position: Vector2(10, 370),
             size: Vector2(390, 220),
             align: Anchor.bottomRight,

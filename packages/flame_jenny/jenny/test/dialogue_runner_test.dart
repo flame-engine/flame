@@ -6,9 +6,6 @@ import 'package:test/test.dart';
 import 'test_scenario.dart';
 import 'utils.dart';
 
-// disable cspell as this file contains character dialogue
-// cSpell:disable
-
 void main() {
   group('DialogueRunner', () {
     test('plain dialogue', () async {
@@ -245,7 +242,7 @@ void main() {
         colorID: 0
         position: 763,472
         ---
-        A: HAHAHA
+        A: HA HA HA
         ===''',
       testPlan: '''
         line: A: Hey, I'm a character in a script!

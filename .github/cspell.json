@@ -23,14 +23,6 @@
     "people_usernames",
     "words_dictionary"
   ],
-  "languageSettings": [
-    {
-      "languageId": "markdown",
-      "ignoreRegExpList": [
-        "/^\\s*```[\\s\\S]*?^\\s*```/gm"
-      ]
-    }
-  ],
   "dictionaryDefinitions": [
     {
       "name": "dart_dictionary",

@@ -1,3 +1,6 @@
+<!-- cSpell:ignore lorem ipsum dolor sit amet, consectetur adipiscing elit -->
+<!-- cSpell:ignore Malfoy -->
+
 # Markup
 
 **Markup** is a mechanism for annotating fragments of a dialogue line. They are somewhat similar to
@@ -27,7 +30,7 @@ The special **close-all** markup tag `[/]` closes all currently opened markup ra
 handy in situations where the name of the markup tag is long and you don't want to repeat it:
 
 ```yarn
-Lorem ipsum dolor sit amet, [Incididunt]consectetur adipiscing elit[/]
+Lorem ipsum dolor sit amet, [bold]consectetur adipiscing elit[/]
 ```
 
 The **self-closing** markup tags have the form `[tag_name/]`. These tags mark a single location
@@ -36,7 +39,7 @@ space after the tag will be removed from the resulting text. If this is undesire
 add an extra space after the markup tag:
 
 ```yarn
-Lorem ipsum dolor sit amet, [carramba/] consectetur adipiscing elit.
+Lorem ipsum dolor sit amet, [wave/] consectetur adipiscing elit.
 ```
 
 Markup tags also accept parameters, which are similar to HTML tag attributes. The names of these
