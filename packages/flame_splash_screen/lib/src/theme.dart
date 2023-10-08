@@ -1,4 +1,4 @@
-part of flame_splash_screen;
+import 'package:flutter/widgets.dart';
 
 /// This widget builds up the Flame logo composed of 3 layers,
 /// that are rendered via separate PNG files under the assets directory.

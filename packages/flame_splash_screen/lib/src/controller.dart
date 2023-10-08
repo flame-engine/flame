@@ -1,16 +1,16 @@
-part of flame_splash_screen;
+import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 /// Controller enables you to start the animation whenever you want with
 /// [autoStart] option and customize animation duration as well.
 class FlameSplashController {
-  /// Creates a [FlameSplashController].
   FlameSplashController({
     Duration fadeInDuration = const Duration(milliseconds: 750),
     Duration waitDuration = const Duration(seconds: 2),
     Duration fadeOutDuration = const Duration(milliseconds: 450),
     this.autoStart = true,
-  })  : _stepController = _FlameSplashControllerStep(0),
-        _durations = _FlameSplashDurations(
+  })  : stepController = FlameSplashControllerStep(0),
+        durations = FlameSplashDurations(
           fadeInDuration,
           waitDuration,
           fadeOutDuration,
@@ -19,18 +19,21 @@ class FlameSplashController {
   /// Defines if you want to start the animations right after widget mount.
   final bool autoStart;
 
-  // internally created
-  final _FlameSplashDurations _durations;
-  final _FlameSplashControllerStep _stepController;
+  @internal
+  final FlameSplashDurations durations;
 
-  // internal control
+  @internal
+  final FlameSplashControllerStep stepController;
+
   FlameSplashControllerState _state = FlameSplashControllerState.idle;
   bool _hasSetup = false;
   int _stepsAmount = 0;
-  late VoidCallback _onFinish;
+  late void Function() _onFinish;
 
   /// Displays the actual state of the controller regarding the animation.
   FlameSplashControllerState get state => _state;
+  @internal
+  set state(FlameSplashControllerState newState) => _state = newState;
 
   /// Method used to start the animation, do not call if you set [autoStart] to
   /// true.
@@ -51,10 +54,10 @@ class FlameSplashController {
   }
 
   /// Called by the [start] method; this is only exposed for testing purposes.
-  @visibleForTesting
+  @internal
   void setup(
     int steps,
-    VoidCallback onFinish,
+    void Function() onFinish,
   ) {
     _onFinish = onFinish;
     _stepsAmount = steps;
@@ -65,8 +68,8 @@ class FlameSplashController {
   }
 
   Future<void> _tickStep(int index) async {
-    _stepController.value = index;
-    await Future<void>.delayed(_durations.total);
+    stepController.value = index;
+    await Future<void>.delayed(durations.total);
     final finished = index >= _stepsAmount - 1;
     if (finished) {
       _state = FlameSplashControllerState.finished;
@@ -79,7 +82,7 @@ class FlameSplashController {
   /// Properly disposes of this controller.
   /// Must be called after no longer used.
   void dispose() {
-    _stepController.dispose();
+    stepController.dispose();
   }
 }
 
@@ -96,12 +99,12 @@ enum FlameSplashControllerState {
   finished,
 }
 
-class _FlameSplashControllerStep extends ValueNotifier<int> {
-  _FlameSplashControllerStep(super.value);
+class FlameSplashControllerStep extends ValueNotifier<int> {
+  FlameSplashControllerStep(super.value);
 }
 
-class _FlameSplashDurations {
-  const _FlameSplashDurations(
+class FlameSplashDurations {
+  const FlameSplashDurations(
     this.fadeInDuration,
     this.waitDuration,
     this.fadeOutDuration,

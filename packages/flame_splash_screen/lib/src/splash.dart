@@ -1,4 +1,5 @@
-part of flame_splash_screen;
+import 'package:flame_splash_screen/flame_splash_screen.dart';
+import 'package:flutter/widgets.dart';
 
 /// A stateful widget to show a splash screen animation for flame games
 class FlameSplashScreen extends StatefulWidget {
@@ -75,7 +76,7 @@ class FlameSplashScreenState extends State<FlameSplashScreen> {
         widget.showAfter != oldWidget.showAfter ||
         widget.theme.logoBuilder != oldWidget.theme.logoBuilder;
     if (hasStepsChanged &&
-        controller._state != FlameSplashControllerState.started) {
+        controller.state != FlameSplashControllerState.started) {
       _computeSteps();
       controller.start();
     }
@@ -96,11 +97,11 @@ class FlameSplashScreenState extends State<FlameSplashScreen> {
       decoration: widget.theme.backgroundDecoration,
       child: Center(
         child: ValueListenableBuilder<int>(
-          valueListenable: controller._stepController,
+          valueListenable: controller.stepController,
           builder: (context, currentStep, _) {
             return _SplashScreenStep(
               builder: steps[currentStep],
-              durations: controller._durations,
+              durations: controller.durations,
               key: ObjectKey(currentStep),
             );
           },
@@ -118,7 +119,7 @@ class _SplashScreenStep extends StatefulWidget {
   });
 
   final WidgetBuilder builder;
-  final _FlameSplashDurations durations;
+  final FlameSplashDurations durations;
 
   @override
   __SplashScreenStepState createState() => __SplashScreenStepState();
