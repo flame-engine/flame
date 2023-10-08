@@ -22,18 +22,22 @@ This package includes a `FlameSplashScreen` widget.
   <img src="demo.gif" />
 </p>
 
+
 ## Install
 
 Add `flame_splash_screen` as a dependency in your pubspec.yaml file ([what?](https://flutter.io/using-packages/)).
 
 Import the widget:
+
 ```dart
 import 'package:flame_splash_screen/flame_splash_screen.dart';
 ```
 
+
 ## Usage
 
 The splash screen is a widget that can be used to show the splash screen. 
+
 
 ### Simple usage
 
@@ -47,6 +51,7 @@ FlameSplashScreen(
   onFinish: (BuildContext context) => Navigator.pushNamed(context, '/your-game-initial-screen')
 )
 ```
+
 
 #### Adding your own content
 
@@ -71,7 +76,9 @@ FlameSplashScreen(
   onFinish: (BuildContext context) => Navigator.pushNamed(context, '/your-game-initial-screen'),
 )
 ```
- Remember: you can also specify both `showBefore` and `showAfter` at the same time.
+
+Remember: you can also specify both `showBefore` and `showAfter` at the same time.
+
 
 #### Changing theme
 
@@ -96,6 +103,7 @@ Controller enables `FlameSplashScreen` to be customized regarding animation dura
 There is duration params and `autoStart` (which is true by default).
 
 To use it, make the controller lives as much as a widget state:
+
 ```dart
 class SplashScreenGameState extends State<SplashScreenGame> {
   FlameSplashController controller;
