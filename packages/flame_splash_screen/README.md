@@ -20,7 +20,7 @@ This package includes a `FlameSplashScreen` widget.
   <img src="demo.gif" />
 </p>
 
-
+<!-- markdownlint-disable-next-line MD002 -->
 ## Install
 
 Add `flame_splash_screen` as a dependency to
