@@ -1,7 +1,11 @@
 name: flame_splash_screen
-description: Style your flame game with a beautiful splash screen with logo reveal. Simple to use but very customizable.
+description: Style your flame game with a beautiful splash screen with logo reveal. Simple to use but still customizable.
 version: 0.1.0
-homepage: https://github.com/flame-engine/flame_splash_screen
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_splash_screen
+funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
+  - https://patreon.com/bluefireoss
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
