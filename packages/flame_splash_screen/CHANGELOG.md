@@ -1,11 +1,8 @@
-## [0.1.0] - Refresh
+## 0.1.0
 
-Added:
-- Non nullability support
+- Added non nullability support
 - Update to new logo
 
+## 0.0.1
 
-## [0.0.1] - Initial release
-
-Added:
 - Initial implementation with theme, controller and of course, the splash screen widget.
