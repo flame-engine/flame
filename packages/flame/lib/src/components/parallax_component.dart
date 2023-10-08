@@ -26,7 +26,7 @@ extension ParallaxComponentExtension on FlameGame {
     int? priority,
     FilterQuality? filterQuality,
     ComponentKey? key,
-  }) async {
+  }) {
     return ParallaxComponent.load(
       dataList,
       baseVelocity: baseVelocity,

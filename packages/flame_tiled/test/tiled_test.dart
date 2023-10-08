@@ -36,7 +36,7 @@ void main() {
       tiled = await TiledComponent.load('map.tmx', Vector2.all(16));
     });
 
-    test('correct loads the file', () async {
+    test('correct loads the file', () {
       expect(tiled.tileMap.renderableLayers.length, equals(3));
     });
 
@@ -51,7 +51,7 @@ void main() {
     });
 
     group('is positionable', () {
-      test('size, width, and height are readable - not writable', () async {
+      test('size, width, and height are readable - not writable', () {
         expect(tiled.size, Vector2(512.0, 2048.0));
         expect(tiled.width, 512);
         expect(tiled.height, 2048);
@@ -64,7 +64,7 @@ void main() {
         expect(tiled.size, Vector2(512.0, 2048.0));
       });
 
-      test('from constructor', () async {
+      test('from constructor', () {
         final map = TiledComponent(
           tiled.tileMap,
           position: Vector2(10, 20),

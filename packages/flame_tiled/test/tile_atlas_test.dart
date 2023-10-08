@@ -23,7 +23,7 @@ void main() {
     });
 
     group('loadImages', () {
-      setUp(() async {
+      setUp(() {
         TiledAtlas.atlasMap.clear();
         Flame.bundle = TestAssetBundle(
           imageNames: [
@@ -136,7 +136,7 @@ void main() {
     });
 
     group('Single tileset map', () {
-      setUp(() async {
+      setUp(() {
         TiledAtlas.atlasMap.clear();
         Flame.bundle = TestAssetBundle(
           imageNames: [

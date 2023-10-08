@@ -12,7 +12,7 @@ import 'package:flame/sprite.dart';
 /// Adds FireAtlas loading methods to Flame [Game].
 extension FireAtlasExtensions on Game {
   /// Load a [FireAtlas] instances from the given [asset]
-  Future<FireAtlas> loadFireAtlas(String asset) async {
+  Future<FireAtlas> loadFireAtlas(String asset) {
     return FireAtlas.loadAsset(
       asset,
       assets: assets,

@@ -321,7 +321,7 @@ void main() {
       commands: ['this'],
     );
 
-    test('Dialogue runs node before finishing the previous one', () async {
+    test('Dialogue runs node before finishing the previous one', () {
       final yarn = YarnProject()
         ..parse(
           dedent('''
