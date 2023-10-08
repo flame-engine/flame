@@ -1,5 +1,3 @@
-# Flame Splash Screen
-
 <!-- markdownlint-disable MD013 -->
 <p align="center">
   <a href="https://flame-engine.org">
