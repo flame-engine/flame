@@ -17,14 +17,10 @@ class FixedResolutionExample extends FlameGame
     If you tap once you will set the zoom to 2 and if you tap again it goes back
     to 1, so that you can test how it works with a zoom level.
   ''';
-  Vector2 viewportResolution;
 
-  FixedResolutionExample({required this.viewportResolution})
+  FixedResolutionExample()
       : super(
-          camera: CameraComponent.withFixedResolution(
-            width: viewportResolution.x,
-            height: viewportResolution.y,
-          ),
+          camera: CameraComponent.withFixedResolution(width: 600, height: 1024),
           world: FixedResolutionWorld(),
         );
 
@@ -51,7 +47,7 @@ class FixedResolutionExample extends FlameGame
     camera.viewport.add(
       TextButton(
         text: 'Viewport\ncomponent',
-        position: viewportResolution - Vector2.all(10),
+        position: camera.viewport.virtualSize - Vector2.all(10),
         textRenderer: textRenderer,
         anchor: Anchor.bottomRight,
       ),
