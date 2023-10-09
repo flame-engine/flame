@@ -12,9 +12,9 @@ void main() {
       (game) async {
         await game.add(
           AdvancedButtonComponent(
-            defaultSkin: RectangleComponent(size: Vector2(100, 40)),
+            defaultSkin: RectangleComponent(size: Vector2(20, 10)),
             defaultLabel: RectangleComponent(
-              size: Vector2(20, 10),
+              size: Vector2(5, 2),
               paint: Paint()..color = const Color(0xFFFF0000),
             ),
           ),
