@@ -7,6 +7,22 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AdvancedButtonComponent', () {
+    testGolden(
+      'renders correctly',
+      (game) async {
+        await game.add(
+          AdvancedButtonComponent(
+            defaultSkin: RectangleComponent(size: Vector2(100, 40)),
+            defaultLabel: RectangleComponent(
+              size: Vector2(20, 10),
+              paint: Paint()..color = const Color(0xFFFF0000),
+            ),
+          ),
+        );
+      },
+      goldenFile: '../_goldens/advanced_button_component.png',
+    );
+
     testWithFlameGame('correctly registers taps', (game) async {
       var pressedTimes = 0;
       final initialGameSize = Vector2.all(200);
