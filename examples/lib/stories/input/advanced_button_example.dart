@@ -5,7 +5,7 @@ import 'package:flutter/painting.dart';
 
 class AdvancedButtonExample extends FlameGame {
   static const String description =
-      '''The example shows how you can use a button with different states''';
+      '''This example shows how you can use a button with different states''';
 
   @override
   Future<void> onLoad() async {
