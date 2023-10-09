@@ -66,6 +66,10 @@ abstract class Viewport extends Component
     return _size;
   }
 
+  /// In most cases [virtualSize] is the same as [size], but in the cases when
+  /// the viewport is emulating a different size, this is the size of the
+  /// emulated viewport, for example the resolution for the
+  /// [FixedResolutionViewport].
   Vector2 get virtualSize => size;
 
   @override
