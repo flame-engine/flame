@@ -11,13 +11,11 @@ class AssetsCache {
   AssetsCache({
     this.prefix = 'assets/',
     AssetBundle? bundle,
-  }) {
-    this.bundle = bundle ?? Flame.bundle;
-  }
+  }) : bundle = bundle ?? Flame.bundle;
 
   /// The [AssetBundle] from which assets are loaded.
   /// defaults to [Flame.bundle].
-  late AssetBundle bundle;
+  AssetBundle bundle;
 
   String prefix;
   final Map<String, _Asset<dynamic>> _files = {};

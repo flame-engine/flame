@@ -10,16 +10,14 @@ class Images {
   Images({
     String prefix = 'assets/images/',
     AssetBundle? bundle,
-  }) {
-    this.prefix = prefix;
-    this.bundle = bundle ?? Flame.bundle;
-  }
+  })  : _prefix = prefix,
+        bundle = bundle ?? Flame.bundle;
 
   final Map<String, _ImageAsset> _assets = {};
 
   /// The [AssetBundle] from which images are loaded.
   /// defaults to [Flame.bundle].
-  late AssetBundle bundle;
+  AssetBundle bundle;
 
   /// Path prefix to the project's directory with images.
   ///
