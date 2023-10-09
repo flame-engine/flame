@@ -161,7 +161,8 @@ These are the fields that can be used to customize the looks of the `AdvancedBut
 
 ## ToggleButtonComponent
 
-The [ToggleButtonComponent] is an [AdvancedButtonComponent] that can switch between selected and not selected
+The [ToggleButtonComponent] is an [AdvancedButtonComponent] that can switch between 
+selected and not selected.
 
 In addition to the already existing skins, the [ToggleButtonComponent] contains the following skins:
 
