@@ -158,6 +158,7 @@ These are the fields that can be used to customize the looks of the `AdvancedBut
 - `disabledSkin`: Component displayed when button is disabled.
 - `disabledLabel`: Component shown on top of skins when button is disabled.
 
+
 ## ToggleButtonComponent
 
 The [ToggleButtonComponent] is an [AdvancedButtonComponent] that can switch between selected and not selected
