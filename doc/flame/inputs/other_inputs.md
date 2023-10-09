@@ -162,7 +162,7 @@ The component also support `disabledSkin`, for the disabled state. This state is
 
 ## ToggleButtonComponent
 
-The [ToggleButtonComponent] is a [AdvancedButtonComponent] with state switching: selected and not selected
+The [ToggleButtonComponent] is an [AdvancedButtonComponent] that can switch between selected and not selected
 
 In addition to the already existing skins, the [ToggleButtonComponent] contains the following skins:
 
