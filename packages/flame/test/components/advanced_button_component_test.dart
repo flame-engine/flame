@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AdvancedButtonComponent', () {
     testGolden(
-      'renders correctly',
+      'label renders correctly',
       (game) async {
         await game.add(
           AdvancedButtonComponent(
