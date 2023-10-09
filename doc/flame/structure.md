@@ -39,7 +39,7 @@ flutter:
 ```
 
 If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your instances of `AssetsCache`, `Images`, `AudioCache`, and `SoundPool`s, instead of using the
+your instances of `AssetsCache`, `Images`, and `AudioCache`, instead of using the
 global ones provided by Flame.
 
 Additionally, `AssetsCache` and `Images` can receive a custom
