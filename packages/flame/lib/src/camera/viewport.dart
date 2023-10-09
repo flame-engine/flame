@@ -74,7 +74,6 @@ abstract class Viewport extends Component
     );
     _size.setFrom(value);
     _isInitialized = true;
-    camera.lens.onViewportResize();
     camera.viewfinder.onViewportResize();
     onViewportResize();
     if (hasChildren) {
@@ -139,4 +138,6 @@ abstract class Viewport extends Component
     final y = point.y + position.y - anchor.y * size.y;
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
+
+  void transformCanvas(Canvas canvas) {}
 }

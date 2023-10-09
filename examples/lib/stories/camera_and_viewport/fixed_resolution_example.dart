@@ -52,7 +52,7 @@ class FixedResolutionExample extends FlameGame
         anchor: Anchor.bottomRight,
       ),
     );
-    camera.lens.add(
+    camera.viewport.add(
       LensTextButton(
         text: 'Lens component\n(scales with fixed resolution)',
         position: viewportResolution - Vector2.all(10),

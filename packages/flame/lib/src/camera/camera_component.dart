@@ -1,14 +1,9 @@
-import 'dart:math';
-import 'dart:ui';
-
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
-import 'package:flame/src/camera/lenses/fixed_resolution_lens.dart';
-import 'package:flame/src/camera/lenses/lens.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
@@ -20,7 +15,6 @@ import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
 ///
@@ -49,19 +43,17 @@ class CameraComponent extends Component {
     this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
-    Lens? lens,
     Component? backdrop,
     List<Component>? hudComponents,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
-        _lens = lens ?? Lens(),
         _backdrop = backdrop ?? Component(),
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
         super(priority: 0x7fffffff) {
-    addAll([_backdrop, _viewport, _lens, _viewfinder]);
+    addAll([_backdrop, _viewport, _viewfinder]);
   }
 
   /// Create a camera that shows a portion of the game world of fixed size
@@ -83,10 +75,9 @@ class CameraComponent extends Component {
   }) {
     return CameraComponent(
       world: world,
-      viewport: FixedAspectRatioViewport(aspectRatio: width / height)
+      viewport: FixedResolutionViewport(resolution: Vector2(width, height))
         ..addAll(hudComponents ?? []),
       viewfinder: viewfinder ?? Viewfinder(),
-      lens: FixedResolutionLens(width: width, height: height),
       backdrop: backdrop,
     );
   }
@@ -133,21 +124,6 @@ class CameraComponent extends Component {
   /// The [world] component is generally mounted externally to the camera, and
   /// this variable is a mere reference to it.
   World? world;
-
-  /// The [lens] component that controls the scaling that needs to be done
-  /// before the [viewfinder] transformations, for example if you want to
-  /// achieve a fixed resolution.
-  ///
-  /// To the [Lens] you can add HUDs as children that you want to scale together
-  /// with your lens but be statically positioned when the viewfinder moves
-  /// around.
-  Lens get lens => _lens;
-  Lens _lens;
-  set lens(Lens newLens) {
-    _lens.removeFromParent();
-    add(newLens);
-    _lens = newLens;
-  }
 
   /// The [backdrop] component is rendered statically behind the world.
   ///
@@ -203,15 +179,11 @@ class CameraComponent extends Component {
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       canvas
-          .save(); //---------------------------------------------------------- SAVE 3
-      viewport.clip(canvas);
-      canvas.translateVector(viewport.size / 2);
-      canvas.transform2D(lens.transform);
-      // This needs to go back in relation to the lens scaling
-      canvas.translateVector(-(viewport.size / 2));
+          .save(); //---------------------------------------------------------- SAVE 2
+      viewport.transformCanvas(canvas);
       backdrop.renderTree(canvas);
       canvas
-          .save(); //---------------------------------------------------------- SAVE 4
+          .save(); //---------------------------------------------------------- SAVE 3
       try {
         currentCameras.add(this);
         canvas.transform2D(viewfinder.transform);
@@ -223,51 +195,35 @@ class CameraComponent extends Component {
         currentCameras.removeLast();
       }
       canvas
-          .restore(); //------------------------------------------------------- RESTORE 4
-      // Render the viewfinder elements in front of the world and only with the
-      // pre-scaling applied, so that the viewfinder components are resized
-      // according to the fixed resolution that has been set.
-      canvas.translateVector(
-        (viewport.size / 2) - (viewport.size / 2 / lens.scale.x),
-      );
-      lens.renderTree(canvas);
-      canvas
           .restore(); //------------------------------------------------------- RESTORE 3
+      // Render the viewport elements, which will be in front of the world.
+      viewport.renderTree(canvas);
+      canvas
+          .restore(); //------------------------------------------------------- RESTORE 2
     }
-    // Render the viewport elements, which will be in front of the world.
-    viewport.renderTree(canvas);
     canvas
         .restore(); //--------------------------------------------------------- RESTORE 1
   }
 
   /// Converts from the global (canvas) coordinate space to
-  /// local (camera = viewport + lens + viewfinder).
+  /// local (camera = viewport + viewfinder).
   ///
   /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
-    //final viewportPosition = viewport.globalToLocal(point, output: output);
-    final throughLensPosition = lens.globalToLocal(
-      point,
-      output: output,
-    );
-    return viewfinder.globalToLocal(throughLensPosition, output: output);
+    final viewportPosition = viewport.globalToLocal(point, output: output);
+    return viewfinder.globalToLocal(viewportPosition, output: output);
   }
 
-  /// Converts from the local (camera = viewport + lens + viewfinder)
-  /// coordinate space to global (canvas).
+  /// Converts from the local (camera = viewport + viewfinder) coordinate space
+  /// to global (canvas).
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
-    //final viewfinderPosition =
-    //    viewfinder.localToGlobal(position, output: output);
-    final throughLensPosition = lens.localToGlobal(
-      position,
-      output: output,
-    );
-    return viewport.localToGlobal(throughLensPosition, output: output);
+    final viewfinderPosition =
+        viewfinder.localToGlobal(position, output: output);
+    return viewport.localToGlobal(viewfinderPosition, output: output);
   }
 
-  final _lensPoint = Vector2.zero();
   final _viewportPoint = Vector2.zero();
 
   @override
@@ -277,14 +233,11 @@ class CameraComponent extends Component {
   ]) sync* {
     final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
-    final lensPoint = lens.globalToLocal(point, output: _lensPoint);
-    yield* lens.componentsAtPoint(lensPoint, nestedPoints);
-
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.globalToLocal(_lensPoint);
+        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
