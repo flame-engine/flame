@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../fixtures/fixture_reader.dart';
 
-class _AssetsCacheMock extends Mock implements AssetsCache {}
+class _MockAssetBundle extends Mock implements AssetBundle {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -50,9 +50,8 @@ void main() {
       final file = await assetsCache.readFile(fileName);
       expect(file, isA<String>());
 
-      final assetsCacheMock = _AssetsCacheMock();
-      assetsCacheMock.clear(fileName);
-      verify(() => assetsCacheMock.clear(fileName)).called(1);
+      assetsCache.clear(fileName);
+      expect(assetsCache.cacheCount, equals(0));
     });
 
     test('clearCache', () async {
@@ -62,14 +61,8 @@ void main() {
       final file = await assetsCache.readFile(fileName);
       expect(file, isA<String>());
 
-      final assetsCacheMock = _AssetsCacheMock();
-      assetsCacheMock.clearCache();
-      verify(assetsCacheMock.clearCache).called(1);
-
-      // If all file was not clear from cache then it will not readBinaryFile
       assetsCache.clearCache();
-      final fileTxtAsBinary = await assetsCache.readBinaryFile(fileName);
-      expect(fileTxtAsBinary, isA<Uint8List>());
+      expect(assetsCache.cacheCount, equals(0));
     });
 
     testWithFlameGame(
@@ -86,5 +79,16 @@ void main() {
         expect(game.assets, equals(Flame.assets));
       },
     );
+
+    test('bundle can be overriden', () async {
+      final bundle = _MockAssetBundle();
+      when(() => bundle.loadString(any())).thenAnswer((_) async => 'Two ducks');
+
+      final cache = AssetsCache(bundle: bundle);
+
+      final result = await cache.readFile('duck_count');
+      expect(result, equals('Two ducks'));
+      verify(() => bundle.loadString('assets/duck_count')).called(1);
+    });
   });
 }
