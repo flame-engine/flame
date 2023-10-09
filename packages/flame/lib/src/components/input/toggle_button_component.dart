@@ -2,8 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 
-/// The [ToggleButtonComponent] is a [AdvancedButtonComponent] with
-/// state switching: selected and not selected
+/// The [ToggleButtonComponent] is an [AdvancedButtonComponent] that can switch
+/// between the selected and not selected state, imagine for example a switch widget
+/// or a tab that can be selected.
 ///
 /// Note: You have to set the [defaultSkin],[defaultSelectedSkin]
 /// and other in [onLoad] if you are not passing it in through
