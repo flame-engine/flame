@@ -31,16 +31,16 @@ class Lens extends Component
   ///
   /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
-    _halfViewport
-      ..setFrom(camera.viewport.size)
-      ..scale(1 / 2);
-    _translation
-      ..setFrom(_halfViewport.clone()..multiply(camera.lens.scale))
-      ..sub(_halfViewport);
-    print('this is done $_translation with ${camera.lens.scale}');
+    // The top corner of the viewport, in global coordinates
+    final viewportCorner = camera.viewport.localToGlobal(Vector2.zero());
+    //_halfViewport
+    //  ..setFrom(camera.viewport.size)
+    //  ..scale(1 / 2);
+    //_translation
+    //  ..setFrom(_halfViewport.clone()..multiply(camera.lens.scale))
+    //  ..sub(_halfViewport);
 
-    // TODO: Don't create new vector here
-    return transform.globalToLocal(point + _translation, output: output);
+    return transform.globalToLocal(point - viewportCorner, output: output);
   }
 
   /// Convert a point from the lens' coordinate system to the global
@@ -51,6 +51,7 @@ class Lens extends Component
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 point, {Vector2? output}) {
-    return transform.localToGlobal(point, output: output);
+    final viewportCorner = camera.viewport.localToGlobal(Vector2.zero());
+    return transform.localToGlobal(point, output: output) + viewportCorner;
   }
 }

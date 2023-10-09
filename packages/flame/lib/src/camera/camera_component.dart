@@ -207,7 +207,8 @@ class CameraComponent extends Component {
       viewport.clip(canvas);
       canvas.translateVector(viewport.size / 2);
       canvas.transform2D(lens.transform);
-      canvas.translateVector(-viewport.size / 2);
+      // This needs to go back in relation to the lens scaling
+      canvas.translateVector(-(viewport.size / 2));
       backdrop.renderTree(canvas);
       canvas
           .save(); //---------------------------------------------------------- SAVE 4
@@ -244,9 +245,9 @@ class CameraComponent extends Component {
   ///
   /// Opposite of [localToGlobal].
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
-    final viewportPosition = viewport.globalToLocal(point, output: output);
+    //final viewportPosition = viewport.globalToLocal(point, output: output);
     final throughLensPosition = lens.globalToLocal(
-      viewportPosition,
+      point,
       output: output,
     );
     return viewfinder.globalToLocal(throughLensPosition, output: output);
@@ -257,35 +258,33 @@ class CameraComponent extends Component {
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
-    final viewfinderPosition =
-        viewfinder.localToGlobal(position, output: output);
+    //final viewfinderPosition =
+    //    viewfinder.localToGlobal(position, output: output);
     final throughLensPosition = lens.localToGlobal(
-      viewfinderPosition,
+      position,
       output: output,
     );
     return viewport.localToGlobal(throughLensPosition, output: output);
   }
 
-  final _componentsPoint = Vector2.zero();
+  final _lensPoint = Vector2.zero();
+  final _viewportPoint = Vector2.zero();
 
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final viewportPoint =
-        viewport.globalToLocal(point, output: _componentsPoint);
+    final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
-    final throughLensPoint = lens.globalToLocal(
-      viewportPoint,
-      output: _componentsPoint,
-    );
-    yield* lens.componentsAtPoint(throughLensPoint, nestedPoints);
+    final lensPoint = lens.globalToLocal(point, output: _lensPoint);
+    yield* lens.componentsAtPoint(lensPoint, nestedPoints);
+
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(_componentsPoint)) {
+      if (viewport.containsLocalPoint(viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.globalToLocal(_componentsPoint);
+        final worldPoint = viewfinder.globalToLocal(_lensPoint);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();

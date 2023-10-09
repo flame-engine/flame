@@ -32,6 +32,8 @@ class FixedResolutionExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
+    //camera.viewfinder.position = Vector2.all(50);
+    camera.viewfinder.zoom = 1.25;
     final textRenderer = TextPaint(
       style: TextStyle(fontSize: 25, color: BasicPalette.black.color),
     );
@@ -51,7 +53,7 @@ class FixedResolutionExample extends FlameGame
       ),
     );
     camera.lens.add(
-      TextButton(
+      LensTextButton(
         text: 'Lens component\n(scales with fixed resolution)',
         position: viewportResolution - Vector2.all(10),
         textRenderer: textRenderer,
@@ -132,4 +134,21 @@ class TextButton extends ButtonComponent {
             print('I am pressed.');
           },
         );
+}
+
+class LensTextButton extends TextButton {
+  LensTextButton({
+    required super.text,
+    required super.position,
+    super.anchor,
+    super.textRenderer,
+  });
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    print('$point at $position with $size');
+    final result = super.containsLocalPoint(point);
+    print(result);
+    return result;
+  }
 }
