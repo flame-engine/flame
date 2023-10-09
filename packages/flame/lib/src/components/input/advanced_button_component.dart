@@ -8,8 +8,8 @@ import 'package:flutter/foundation.dart';
 /// The [defaultSkin] must be added to the constructor or
 /// if you are inheriting - defined in the onLod method.
 ///
-///The label is a [PositionComponent] and is added
-///to the foreground of the button. The label is aligned to the center.
+/// The label is a [PositionComponent] and is added
+/// to the foreground of the button. The label is automatically aligned to the center of the button.
 ///
 /// Note: You have to set the [defaultSkin],[downSkin],[hoverSkin]
 /// [disabledSkin], [defaultLabel] in [onLoad] if you are
