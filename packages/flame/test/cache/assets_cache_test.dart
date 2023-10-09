@@ -80,7 +80,7 @@ void main() {
       },
     );
 
-    test('bundle can be overriden', () async {
+    test('bundle can be overridden', () async {
       final bundle = _MockAssetBundle();
       when(() => bundle.loadString(any())).thenAnswer((_) async => 'Two ducks');
 

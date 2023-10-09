@@ -130,7 +130,7 @@ void main() {
       expect(images.fromCache('image2'), isNotNull);
     });
 
-    test('can have its bundle overriden', () async {
+    test('can have its bundle overridden', () async {
       final bundle = _MockAssetBundle();
       when(() => bundle.load(any())).thenAnswer(
         (_) async {
