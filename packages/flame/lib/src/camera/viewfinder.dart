@@ -188,7 +188,7 @@ class Viewfinder extends Component
   /// Called by the viewport when its size changes.
   @internal
   void onViewportResize() {
-    final viewportSize = camera.viewport.size;
+    final viewportSize = camera.viewport.virtualSize;
     _transform.position.x = viewportSize.x * _anchor.x;
     _transform.position.y = viewportSize.y * _anchor.y;
     visibleRect = null;

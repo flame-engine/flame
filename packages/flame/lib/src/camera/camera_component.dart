@@ -169,8 +169,7 @@ class CameraComponent extends Component {
   /// will be rendered.
   @override
   void renderTree(Canvas canvas) {
-    canvas
-        .save(); //------------------------------------------------------------ SAVE 1
+    canvas.save();
     canvas.translate(
       viewport.position.x - viewport.anchor.x * viewport.size.x,
       viewport.position.y - viewport.anchor.y * viewport.size.y,
@@ -178,31 +177,26 @@ class CameraComponent extends Component {
     // Render the world through the viewport
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      canvas
-          .save(); //---------------------------------------------------------- SAVE 2
+      canvas.save();
       viewport.transformCanvas(canvas);
       backdrop.renderTree(canvas);
-      canvas
-          .save(); //---------------------------------------------------------- SAVE 3
+      canvas.save();
       try {
         currentCameras.add(this);
         canvas.transform2D(viewfinder.transform);
         world!.renderFromCamera(canvas);
         // Render the viewfinder elements, which will be in front of the world,
-        // but with the same base transform applied to them.
+        // but with the same transforms applied to them.
         viewfinder.renderTree(canvas);
       } finally {
         currentCameras.removeLast();
       }
-      canvas
-          .restore(); //------------------------------------------------------- RESTORE 3
+      canvas.restore();
       // Render the viewport elements, which will be in front of the world.
       viewport.renderTree(canvas);
-      canvas
-          .restore(); //------------------------------------------------------- RESTORE 2
+      canvas.restore();
     }
-    canvas
-        .restore(); //--------------------------------------------------------- RESTORE 1
+    canvas.restore();
   }
 
   /// Converts from the global (canvas) coordinate space to

@@ -66,6 +66,8 @@ abstract class Viewport extends Component
     return _size;
   }
 
+  Vector2 get virtualSize => size;
+
   @override
   set size(Vector2 value) {
     assert(

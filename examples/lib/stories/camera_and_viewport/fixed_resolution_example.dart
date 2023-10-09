@@ -1,5 +1,3 @@
-import 'dart:ui' hide TextStyle;
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -32,29 +30,27 @@ class FixedResolutionExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    //camera.viewfinder.position = Vector2.all(50);
-    camera.viewfinder.zoom = 1.25;
     final textRenderer = TextPaint(
       style: TextStyle(fontSize: 25, color: BasicPalette.black.color),
     );
     camera.viewport.add(
       TextButton(
-        text: 'Viewport component\n(always same size)',
+        text: 'Viewport\ncomponent',
         position: Vector2.all(10),
         textRenderer: textRenderer,
       ),
     );
     camera.viewfinder.add(
       TextButton(
-        text: 'Viewfinder component\n(scales with fixed resolution)',
-        position: viewportResolution - Vector2.all(10),
+        text: 'Viewfinder\ncomponent',
         textRenderer: textRenderer,
-        anchor: Anchor.bottomRight,
+        position: Vector2(0, 200),
+        anchor: Anchor.center,
       ),
     );
     camera.viewport.add(
-      LensTextButton(
-        text: 'Lens component\n(scales with fixed resolution)',
+      TextButton(
+        text: 'Viewport\ncomponent',
         position: viewportResolution - Vector2.all(10),
         textRenderer: textRenderer,
         anchor: Anchor.bottomRight,
@@ -63,7 +59,10 @@ class FixedResolutionExample extends FlameGame
   }
 }
 
-class FixedResolutionWorld extends World with HasGameReference, TapCallbacks {
+class FixedResolutionWorld extends World
+    with HasGameReference, TapCallbacks, DoubleTapCallbacks {
+  final red = BasicPalette.red.paint();
+
   @override
   Future<void> onLoad() async {
     final flameSprite = await game.loadSprite('layers/player.png');
@@ -79,15 +78,19 @@ class FixedResolutionWorld extends World with HasGameReference, TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    final currentZoom = game.camera.viewfinder.zoom;
-    //game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
     add(
       CircleComponent(
         radius: 2,
         position: event.localPosition,
-        paint: Paint()..color = Colors.red,
+        paint: red,
       ),
     );
+  }
+
+  @override
+  void onDoubleTapDown(DoubleTapDownEvent event) {
+    final currentZoom = game.camera.viewfinder.zoom;
+    game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
   }
 }
 
@@ -123,32 +126,20 @@ class TextButton extends ButtonComponent {
             size: Vector2(200, 100),
             paint: Paint()
               ..color = Colors.orange
+              ..strokeWidth = 2
               ..style = PaintingStyle.stroke,
           ),
           buttonDown: RectangleComponent(
             size: Vector2(200, 100),
-            paint: BasicPalette.magenta.paint(),
+            paint: Paint()..color = BasicPalette.orange.color.withOpacity(0.5),
           ),
-          children: [TextComponent(text: text, textRenderer: textRenderer)],
-          onPressed: () {
-            print('I am pressed.');
-          },
+          children: [
+            TextComponent(
+              text: text,
+              textRenderer: textRenderer,
+              position: Vector2(100, 50),
+              anchor: Anchor.center,
+            ),
+          ],
         );
-}
-
-class LensTextButton extends TextButton {
-  LensTextButton({
-    required super.text,
-    required super.position,
-    super.anchor,
-    super.textRenderer,
-  });
-
-  @override
-  bool containsLocalPoint(Vector2 point) {
-    print('$point at $position with $size');
-    final result = super.containsLocalPoint(point);
-    print(result);
-    return result;
-  }
 }
