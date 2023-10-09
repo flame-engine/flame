@@ -44,5 +44,5 @@ global ones provided by Flame.
 
 Additionally, `AssetsCache` and `Images` can receive a custom
 [`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html).
-This can be used to make Flame look for assets in different location other the `rootBundle`,
+This can be used to make Flame look for assets in a different location other the `rootBundle`,
 like the file system for example.
