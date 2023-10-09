@@ -262,8 +262,7 @@ if (!camera.canSee(component)) {
 
 ## Comparison to the deprecated camera
 
-Compared to the deprecated [Camera](camera_and_viewport.md), the `CameraComponent`
-has several advantages:
+Compared to the old Camera, the `CameraComponent` has several advantages:
 
 - Multiple cameras can be added to the game at the same time;
 - More flexibility in choosing the placement and the size of the viewport;

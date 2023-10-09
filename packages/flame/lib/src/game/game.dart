@@ -256,16 +256,6 @@ abstract mixin class Game {
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
 
-  /// This is the projector used by all components that respect the camera
-  /// (`respectCamera = true`).
-  /// This can be overridden on your [Game] implementation.
-  Projector projector = IdentityProjector();
-
-  /// This is the projector used by components that don't respect the camera
-  /// (`positionType = PositionType.viewport;`).
-  /// This can be overridden on your [Game] implementation.
-  Projector viewportProjector = IdentityProjector();
-
   /// Utility method to load and cache the image for a sprite based on its
   /// options.
   Future<Sprite> loadSprite(

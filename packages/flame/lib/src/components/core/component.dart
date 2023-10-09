@@ -982,35 +982,6 @@ class Component {
   void renderDebugMode(Canvas canvas) {}
 
   //#endregion
-
-  //#region Legacy component placement overrides
-
-  /// What coordinate system this component should respect (i.e. should it
-  /// observe camera, viewport, or use the raw canvas).
-  ///
-  /// Do note that this currently only works if the component is added directly
-  /// to the root `FlameGame`.
-  @Deprecated('''
-  Use the CameraComponent and add your component to the viewport with
-  cameraComponent.viewport.add(yourHudComponent) instead.
-  This will be removed in Flame v1.10.0.
-  ''')
-  PositionType positionType = PositionType.game;
-
-  @Deprecated('To be removed in Flame v1.10.0')
-  @protected
-  Vector2 eventPosition(PositionInfo info) {
-    switch (positionType) {
-      case PositionType.game:
-        return info.eventPosition.game;
-      case PositionType.viewport:
-        return info.eventPosition.viewport;
-      case PositionType.widget:
-        return info.eventPosition.widget;
-    }
-  }
-
-  //#endregion
 }
 
 typedef ComponentSetFactory = ComponentSet Function();

@@ -29,12 +29,6 @@ export 'src/events/messages/pointer_move_event.dart' show PointerMoveEvent;
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
 export 'src/events/messages/tap_up_event.dart' show TapUpEvent;
-// ignore: deprecated_member_use_from_same_package
-export 'src/game/mixins/has_draggables.dart' show HasDraggables;
-// ignore: deprecated_member_use_from_same_package
-export 'src/game/mixins/has_hoverables.dart' show HasHoverables;
-// ignore: deprecated_member_use_from_same_package
-export 'src/game/mixins/has_tappables.dart' show HasTappables;
 export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
 export 'src/gestures/detectors.dart'

@@ -88,25 +88,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @internal
   late final List<ComponentsNotifier> notifiers = [];
 
-  /// The camera translates the coordinate space after the viewport is applied.
-  @Deprecated('''
-    In the future (maybe as early as v1.10.0) this camera will be removed,
-    please use the CameraComponent instead, which has a default camera at 
-    `FlameGame.camera`.
-    
-    This is the simplest way of using the CameraComponent:
-    1. Instead of adding the root components directly to your game with `add`,
-       add them to the world.
-       
-       world.add(yourComponent);
-    
-    2. (Optional) If you want to add a HUD component, instead of using
-       PositionType, add the component as a child of the viewport.
-       
-       camera.viewport.add(yourHudComponent);
-    ''')
-  Camera get oldCamera => _cameraWrapper.camera;
-
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as
@@ -114,7 +95,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size => oldCamera.gameSize;
+  Vector2 get size => camera.viewport.virtualSize;
 
   @override
   @internal
@@ -177,7 +158,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @override
   @mustCallSuper
   void onGameResize(Vector2 size) {
-    oldCamera.handleResize(size);
     super.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
@@ -219,12 +199,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
-
-  @override
-  Projector get viewportProjector => oldCamera.viewport;
-
-  @override
-  Projector get projector => oldCamera.combinedProjector;
 
   /// Returns a [ComponentsNotifier] for the given type [W].
   ///
