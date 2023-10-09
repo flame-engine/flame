@@ -145,16 +145,15 @@ The following viewports are available:
 
 - `MaxViewport` (default) -- this viewport expands to the maximum size allowed
     by the game, i.e. it will be equal to the size of the game canvas.
+- `FixedResolutionViewport` -- keeps the resolution and aspect ratio fixed, with black bars on the
+    sides if it doesn't match the aspect ratio.
 - `FixedSizeViewport` -- a simple rectangular viewport with predefined size.
 - `FixedAspectRatioViewport` -- a rectangular viewport which expands to fit
     into the game canvas, but preserving its aspect ratio.
 - `CircularViewport` -- a viewport in the shape of a circle, fixed size.
 
 
-If you add children to the `Viewport` they will also appear as static HUDs in
-front of the world, but they won't have the `Viewfinder`'s pre-scaling applied
-to it, which is used to size the HUDs according to the fixed resolution that
-has been specified in `CameraComponent.withFixedResolution`, if any.
+If you add children to the `Viewport` they will appear as static HUDs in front of the world.
 
 
 ## Viewfinder
@@ -170,10 +169,9 @@ main character who is displayed not in the center of the screen but closer to
 the lower-left corner. This off-center position would be the "logical center"
 of the camera, controlled by the viewfinder's `anchor`.
 
-If you on add children to the `Viewfinder` they will appear will
-appear in front of the world, but behind the viewport and with any scaling that
-needs to be done to fulfill the fixed resolution specified in
-`CameraComponent.withFixedResolution`, if any.
+If you add children to the `Viewfinder` they will appear will appear in front
+of the world, but behind the viewport and with the same transformations as are
+applied to the world, so these components are not static.
 
 You can also add behavioral components as children to the viewfinder, for
 example [](effects.md) or other controllers. If you for example would add a

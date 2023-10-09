@@ -37,7 +37,6 @@ class FixedAspectRatioViewport extends Viewport {
     _handleResize(size);
   }
 
-  @protected
   void _handleResize(Vector2 canvasSize) {
     final availableWidth = canvasSize.x;
     final availableHeight = canvasSize.y;
