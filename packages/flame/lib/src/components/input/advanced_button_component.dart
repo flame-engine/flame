@@ -209,7 +209,7 @@ class AdvancedButtonComponent extends PositionComponent
   }
 
   @protected
-  void addSkin(ButtonState state) {
+  void setSkin(ButtonState state) {
     (skinsMap[state] ?? defaultSkin)?.parent = skinContainer;
   }
 
