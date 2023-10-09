@@ -149,7 +149,7 @@ Flame has a separate plugin to support external game controllers (gamepads), che
 The `AdvancedButtonComponent` have separate states for each of the different pointer phases.
 The skin can be customized for each state and each skin is represented by a `PositionComponent`.
 
-These are the fields that should be used to know the state of the `AdvancedButtonComponent`:
+These are the fields that can be used to customize the looks of the `AdvancedButtonComponent`:
 
 - `defaultSkin`: Component that will be displayed by default on the button.
 - `downSkin`: Component displayed when the button is clicked or tapped.
