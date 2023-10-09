@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
@@ -7,7 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_asset_bundle.dart';
@@ -93,8 +94,10 @@ void main() {
       stringNames: ['map.tmx', 'tiles/external_tileset_1.tsx'],
     );
 
-    final tsxProvider =
-        await FlameTsxProvider.parse('tiles/external_tileset_1.tsx');
+    final tsxProvider = await FlameTsxProvider.parse(
+      'tiles/external_tileset_1.tsx',
+      Flame.bundle,
+    );
 
     expect(tsxProvider.getCachedSource() != null, true);
     final source = tsxProvider.getCachedSource()!;
@@ -125,7 +128,7 @@ void main() {
     // TestAssetBundle strips assets/tiles/ from the prefix.
     final tsxProvider = await FlameTsxProvider.parse(
       'external_tileset_custom_path.tsx',
-      null,
+      Flame.bundle,
       'assets/tiles/tiles_custom_path/',
     );
 
@@ -148,7 +151,7 @@ void main() {
     late Uint8List canvasPixelData;
     late RenderableTiledMap overlapMap;
     setUp(() async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           'green_sprite.png',
           'red_sprite.png',
@@ -158,6 +161,8 @@ void main() {
       overlapMap = await RenderableTiledMap.fromFile(
         '2_tiles-green_on_red.tmx',
         Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
@@ -247,7 +252,7 @@ void main() {
     }
 
     setUp(() async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           '4_color_sprite.png',
         ],
@@ -256,6 +261,8 @@ void main() {
       overlapMap = await RenderableTiledMap.fromFile(
         '8_tiles-flips.tmx',
         Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
 
       pixelsBeforeFlipApplied = await renderMap();
@@ -340,7 +347,7 @@ void main() {
     Uint8List? rendered;
 
     Future<void> prepareForGolden({required bool ignoreFlip}) async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           '4_color_sprite.png',
         ],
@@ -351,6 +358,8 @@ void main() {
           '8_tiles-flips.tmx',
           Vector2.all(16),
           ignoreFlip: ignoreFlip,
+          bundle: bundle,
+          images: Images(bundle: bundle),
         ),
       );
 
@@ -390,8 +399,11 @@ void main() {
         imageNames: ['map-level1.png'],
         stringNames: ['layers_test.tmx'],
       );
-      renderableTiledMap =
-          await RenderableTiledMap.fromFile('layers_test.tmx', Vector2.all(32));
+      renderableTiledMap = await RenderableTiledMap.fromFile(
+        'layers_test.tmx',
+        Vector2.all(32),
+        bundle: Flame.bundle,
+      );
     });
 
     test('Get Tile Layer', () {
@@ -445,6 +457,7 @@ void main() {
       component = await TiledComponent.load(
         'map.tmx',
         Vector2(16, 16),
+        bundle: Flame.bundle,
       );
 
       // Need to initialize a game and call `onLoad` and `onGameResize` to
@@ -480,7 +493,7 @@ void main() {
     late TiledComponent component;
 
     setUp(() async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           'isometric_spritesheet.png',
         ],
@@ -489,6 +502,8 @@ void main() {
       component = await TiledComponent.load(
         'test_isometric.tmx',
         Vector2(256 / 4, 128 / 4),
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
     });
 
@@ -514,7 +529,7 @@ void main() {
       String imageFile,
       Vector2 destTileSize,
     ) async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           imageFile,
         ],
@@ -523,6 +538,8 @@ void main() {
       return component = await TiledComponent.load(
         tmxFile,
         destTileSize,
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
     }
 
@@ -591,7 +608,7 @@ void main() {
       String imageFile,
       Vector2 destTileSize,
     ) async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           imageFile,
         ],
@@ -600,6 +617,8 @@ void main() {
       return component = await TiledComponent.load(
         tmxFile,
         destTileSize,
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
     }
 
@@ -679,7 +698,7 @@ void main() {
     Future<void> setupMap(
       Vector2 destTileSize,
     ) async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           'isometric_spritesheet.png',
         ],
@@ -688,6 +707,8 @@ void main() {
       component = await TiledComponent.load(
         'test_shifted.tmx',
         destTileSize,
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
     }
 
@@ -729,13 +750,18 @@ void main() {
     final size = Vector2(256 / 2, 128 / 2);
 
     setUp(() async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: [
           'isometric_spritesheet.png',
         ],
         stringNames: ['test_isometric.tmx'],
       );
-      component = await TiledComponent.load('test_isometric.tmx', size);
+      component = await TiledComponent.load(
+        'test_isometric.tmx',
+        size,
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
     });
     test('from all layers', () {
       var stack = component.tileMap.tileStack(0, 0, all: true);
@@ -795,7 +821,7 @@ void main() {
     ]) {
       group(mapType, () {
         setUp(() async {
-          Flame.bundle = TestAssetBundle(
+          final bundle = TestAssetBundle(
             imageNames: [
               '0x72_DungeonTilesetII_v1.4.png',
             ],
@@ -804,6 +830,8 @@ void main() {
           component = await TiledComponent.load(
             'dungeon_animation_$mapType.tmx',
             size,
+            bundle: bundle,
+            images: Images(bundle: bundle),
           );
           map = component.tileMap;
         });
@@ -921,7 +949,7 @@ void main() {
     ]) {
       group(mapType, () {
         setUp(() async {
-          Flame.bundle = TestAssetBundle(
+          final bundle = TestAssetBundle(
             imageNames: [
               '0x72_DungeonTilesetII_v1.4.png',
             ],
@@ -930,6 +958,8 @@ void main() {
           component = await TiledComponent.load(
             'oversized_tiles_$mapType.tmx',
             size,
+            bundle: bundle,
+            images: Images(bundle: bundle),
           );
         });
 
