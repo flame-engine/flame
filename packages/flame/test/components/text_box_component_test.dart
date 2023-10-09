@@ -6,12 +6,9 @@ import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// disable cspell as this file contains character dialogue
-// cSpell:disable
-
 void main() {
   group('TextBoxComponent', () {
-    test('size is properly computed', () async {
+    test('size is properly computed', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox jumps over the lazy dog.',
         boxConfig: TextBoxConfig(
@@ -23,7 +20,7 @@ void main() {
       expect(c.size.y, greaterThan(1));
     });
 
-    test('size is properly computed with new line character', () async {
+    test('size is properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
         boxConfig: TextBoxConfig(
@@ -35,7 +32,7 @@ void main() {
       expect(c.size.y, 256);
     });
 
-    test('lines are properly computed with new line character', () async {
+    test('lines are properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
         boxConfig: TextBoxConfig(
@@ -147,8 +144,9 @@ void main() {
             align: Anchor.topRight,
           ),
           _FramedTextBox(
+            // cSpell:ignore runn'st (old english)
             text: 'To move is to stir, and to be valiant is to stand. '
-                'Therefore, if thou art moved, thou runn‘st away.',
+                "Therefore, if thou art moved, thou runn'st away.",
             position: Vector2(10, 370),
             size: Vector2(390, 220),
             align: Anchor.bottomRight,
@@ -163,9 +161,10 @@ void main() {
           _FramedTextBox(
             text: 'That shows thee a weak slave; for the weakest goes to the '
                 'wall.',
-            position: Vector2(410, 320),
+            position: Vector2(410, 320) + Vector2(380, 270),
             size: Vector2(380, 270),
             align: Anchor.centerRight,
+            anchor: Anchor.bottomRight,
           ),
         ]);
       },
@@ -194,6 +193,7 @@ class _FramedTextBox extends TextBoxComponent {
     super.align,
     super.position,
     super.size,
+    super.anchor,
   }) : super(
           textRenderer: DebugTextRenderer(fontSize: 22),
         );

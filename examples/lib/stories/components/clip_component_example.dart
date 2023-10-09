@@ -28,7 +28,8 @@ class _Rectangle extends RectangleComponent {
 }
 
 class ClipComponentExample extends FlameGame with TapDetector {
-  static String description = 'Tap on the objects to increase their size.';
+  static const String description =
+      'Tap on the objects to increase their size.';
 
   @override
   Future<void> onLoad() async {

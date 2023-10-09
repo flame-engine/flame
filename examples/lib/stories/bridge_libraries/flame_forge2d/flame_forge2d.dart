@@ -160,19 +160,19 @@ void addJointsStories(Dashbook dashbook) {
       .add(
         'RevoluteJoint',
         (DashbookContext ctx) => GameWidget(game: RevoluteJointExample()),
-        codeLink: link('revolute_joint.dart'),
+        codeLink: link('joints/revolute_joint.dart'),
         info: RevoluteJointExample.description,
       )
       .add(
         'RopeJoint',
         (DashbookContext ctx) => GameWidget(game: RopeJointExample()),
-        codeLink: link('rope_joint.dart'),
+        codeLink: link('joints/rope_joint.dart'),
         info: RopeJointExample.description,
       )
       .add(
         'WeldJoint',
         (DashbookContext ctx) => GameWidget(game: WeldJointExample()),
-        codeLink: link('weld_joint.dart'),
+        codeLink: link('joints/weld_joint.dart'),
         info: WeldJointExample.description,
       );
 }

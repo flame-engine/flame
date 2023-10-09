@@ -936,9 +936,9 @@ void main() {
 
           expect(game.hasLifecycleEvents, true);
           expect(game.world.descendants().length, 3);
-          // Remember that CameraComponent, Viewport, Viewfinder and World are
-          // added by default.
-          expect(game.descendants().length, 7);
+          // Remember that CameraComponent, Viewport, Viewfinder, Backdrop and
+          // World are added by default.
+          expect(game.descendants().length, 8);
         },
       );
 
@@ -1378,6 +1378,29 @@ void main() {
 
           final retrieved2 = game.findByKey(key);
           expect(retrieved2, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'Removed keys can be reused by components',
+        (game) async {
+          final key = ComponentKey.named('A');
+          final parent1 = Component(children: [ComponentA(key: key)]);
+
+          game.world.add(parent1);
+          await game.ready();
+
+          parent1.removeFromParent();
+          await game.ready();
+
+          final component = ComponentA(key: key);
+          final parent2 = Component(children: [component]);
+
+          game.world.add(parent2);
+          await game.ready();
+
+          final retrieved1 = game.findByKey(key);
+          expect(retrieved1, equals(component));
         },
       );
 
