@@ -126,7 +126,7 @@ class Sprite {
   /// **Note:** This is a heavy async operation and should not be called inside
   /// the game loop. Remember to call dispose on the [Image] object once you
   /// aren't going to use it anymore.
-  Future<Image> toImage() async {
+  Future<Image> toImage() {
     final composition = ImageComposition()
       ..add(image, _zeroPosition, source: src);
     return composition.compose();

@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TextBoxComponent', () {
-    test('size is properly computed', () async {
+    test('size is properly computed', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox jumps over the lazy dog.',
         boxConfig: TextBoxConfig(
@@ -20,7 +20,7 @@ void main() {
       expect(c.size.y, greaterThan(1));
     });
 
-    test('size is properly computed with new line character', () async {
+    test('size is properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
         boxConfig: TextBoxConfig(
@@ -32,7 +32,7 @@ void main() {
       expect(c.size.y, 256);
     });
 
-    test('lines are properly computed with new line character', () async {
+    test('lines are properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
         boxConfig: TextBoxConfig(

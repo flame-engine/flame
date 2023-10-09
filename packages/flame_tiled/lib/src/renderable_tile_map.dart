@@ -315,7 +315,7 @@ class RenderableTiledMap {
     required TiledAtlas atlas,
     bool? ignoreFlip,
     Images? images,
-  }) async {
+  }) {
     final visibleLayers = layers.where((layer) => layer.visible);
 
     final layerLoaders = visibleLayers.map((layer) async {
