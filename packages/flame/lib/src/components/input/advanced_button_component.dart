@@ -9,11 +9,12 @@ import 'package:flutter/foundation.dart';
 /// if you are inheriting - defined in the onLod method.
 ///
 /// The label is a [PositionComponent] and is added
-/// to the foreground of the button. The label is automatically aligned to the center of the button.
+/// to the foreground of the button. The label is automatically aligned to
+/// the center of the button.
 ///
-/// Note: You have to set the skins that you want to use ([defaultSkin], [downSkin], [hoverSkin]
-/// [disabledSkin], [defaultLabel]) in [onLoad] if you are
-/// not passing them in through the constructor
+/// Note: You have to set the skins that you want to use ([defaultSkin],
+/// [downSkin], [hoverSkin], [disabledSkin], [defaultLabel]) in [onLoad]
+/// if you are not passing them in through the constructor.
 class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
@@ -57,7 +58,7 @@ class AdvancedButtonComponent extends PositionComponent
   }
 
   @protected
-  final skinContainer = PositionComponent();
+  final skinContainer = Component();
 
   @protected
   AlignComponent labelAlignContainer = AlignComponent(alignment: Anchor.center);
@@ -204,7 +205,7 @@ class AdvancedButtonComponent extends PositionComponent
 
   void _updateSkin() {
     _removeSkins();
-    addSkin(_state);
+    setSkin(_state);
   }
 
   @protected
