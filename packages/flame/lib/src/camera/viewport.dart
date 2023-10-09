@@ -76,7 +76,9 @@ abstract class Viewport extends Component
     );
     _size.setFrom(value);
     _isInitialized = true;
-    camera.viewfinder.onViewportResize();
+    if (isLoaded) {
+      camera.viewfinder.onViewportResize();
+    }
     onViewportResize();
     if (hasChildren) {
       children.forEach((child) => child.onParentResize(_size));

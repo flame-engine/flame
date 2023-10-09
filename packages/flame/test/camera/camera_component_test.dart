@@ -325,7 +325,7 @@ void main() {
         camera.viewfinder.add(
           CrossHair(
             size: Vector2.all(20),
-            position: camera.viewport.size / 2 + Vector2(-6, 0),
+            position: Vector2(-2, 4),
             color: Colors.white,
           ),
         );
@@ -367,7 +367,7 @@ void main() {
       camera.viewfinder.add(
         CrossHair(
           size: Vector2.all(20),
-          position: resolution / 2 + Vector2(-6, 0),
+          position: Vector2(0, 2),
           color: Colors.white,
         ),
       );
@@ -377,12 +377,12 @@ void main() {
       camera.viewport.add(
         CrossHair(
           size: Vector2.all(8),
-          position: resolution / 2 + Vector2(4, -4),
+          position: resolution / 2 + Vector2(2, -2),
           color: Colors.red,
         ),
       );
     },
-    goldenFile: '../_goldens/camera_component_prescale_test.png',
+    goldenFile: '../_goldens/camera_component_fixed_resolution_order_test.png',
     size: Vector2(50, 50),
   );
 
@@ -409,7 +409,7 @@ void main() {
       camera.viewfinder.add(
         CrossHair(
           size: Vector2.all(20),
-          position: resolution / 2 + Vector2(-6, 0),
+          position: Vector2(-2, 4),
           color: Colors.white,
         ),
       );
@@ -424,7 +424,8 @@ void main() {
         ),
       );
     },
-    goldenFile: '../_goldens/camera_component_prescale_zoom_test.png',
+    goldenFile:
+        '../_goldens/camera_component_fixed_resolution_order_zoom_test.png',
     size: Vector2(50, 50),
   );
 

@@ -58,8 +58,13 @@ class FixedResolutionViewport extends FixedAspectRatioViewport
   }
 
   @override
+  Vector2 localToGlobal(Vector2 point, {Vector2? output}) {
+    final viewportPoint = transform.localToGlobal(point, output: output);
+    return super.localToGlobal(viewportPoint, output: output);
+  }
+
+  @override
   void transformCanvas(Canvas canvas) {
-    clip(canvas);
     canvas.translate(size.x / 2, size.y / 2);
     canvas.transform2D(transform);
     canvas.translate(-(size.x / 2) / scale.x, -(size.y / 2) / scale.y);

@@ -178,6 +178,7 @@ class CameraComponent extends Component {
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       canvas.save();
+      viewport.clip(canvas);
       viewport.transformCanvas(canvas);
       backdrop.renderTree(canvas);
       canvas.save();
