@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 /// Note: You have to set the [defaultSkin],[defaultSelectedSkin]
 /// and other in [onLoad] if you are not passing it in through
 /// the constructor
-
 class ToggleButtonComponent extends AdvancedButtonComponent {
   ToggleButtonComponent({
     super.onPressed,
