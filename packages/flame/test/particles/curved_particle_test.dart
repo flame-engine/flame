@@ -6,13 +6,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CurvedParticle', () {
-    test('A Particle which applies certain Curve', () async {
+    test('A Particle which applies certain Curve', () {
       final particle = CurvedParticle();
 
       expect(particle.curve, Curves.linear);
     });
 
-    test('A Particle which applies certain Curve', () async {
+    test('A Particle which applies certain Curve', () {
       final particle = CurvedParticle(curve: Curves.decelerate);
 
       expect(particle.curve, Curves.decelerate);

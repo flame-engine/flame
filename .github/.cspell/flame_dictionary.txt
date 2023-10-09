@@ -5,6 +5,7 @@ Audioplayers # A Flutter plugin to play multiple simultaneously audio files http
 BGUG # Break Guns Using Gems, a game by BlueFire https://github.com/bluefireteam/bgug
 Bodymovin # An After Effects extension to export Lottie animations https://aescripts.com/bodymovin/
 Dashbook # UI development tool for Flutter https://github.com/bluefireteam/dashbook
+emberquest # Ember Quest, our platformer tutorial game
 Hermione # A character from the book Harry Potter
 Kawabunga # Word expressing exhilaration, of unclear origins but popularized by the show Teenage Mutant Ninja Turtles
 Mocktail # A library for Dart that automatically creates mocks for tests https://github.com/felangel/mocktail

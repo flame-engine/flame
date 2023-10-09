@@ -101,8 +101,7 @@ void main() {
       animationTicker.update(1);
     });
 
-    test('completed completes when the animation has already completed',
-        () async {
+    test('completed completes when the animation has already completed', () {
       final sprite = MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
@@ -115,7 +114,7 @@ void main() {
     });
 
     test("completed doesn't complete when the animation is yet to complete",
-        () async {
+        () {
       final sprite = MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
@@ -126,7 +125,7 @@ void main() {
       expectLater(animationTicker.completed, doesNotComplete);
     });
 
-    test("completed doesn't complete when animation is looping", () async {
+    test("completed doesn't complete when animation is looping", () {
       final sprite = MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
@@ -136,7 +135,7 @@ void main() {
 
     test(
       "completed doesn't complete when animation is looping and on last frame",
-      () async {
+      () {
         final sprite = MockSprite();
         final animationTicker =
             SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
@@ -146,7 +145,7 @@ void main() {
       },
     );
 
-    test("completed doesn't complete after the animation is reset", () async {
+    test("completed doesn't complete after the animation is reset", () {
       final sprite = MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
@@ -163,7 +162,7 @@ void main() {
       expect(animationTicker.completeCompleter!.isCompleted, false);
     });
 
-    test('paused pauses ticket', () async {
+    test('paused pauses ticket', () {
       final sprite = MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite, sprite],

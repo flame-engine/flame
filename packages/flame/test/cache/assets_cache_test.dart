@@ -20,8 +20,7 @@ void main() {
       expect(file, isA<String>());
 
       expect(
-        () async =>
-            assetsCache.readBinaryFile(fixture('test_text_file.txt').path),
+        () => assetsCache.readBinaryFile(fixture('test_text_file.txt').path),
         failsAssert('"$fileName" was previously loaded as a text file'),
       );
     });
@@ -39,7 +38,7 @@ void main() {
       expect(file, isA<Uint8List>());
 
       expect(
-        () async => assetsCache.readFile(fixture('cave_ace.fa').path),
+        () => assetsCache.readFile(fixture('cave_ace.fa').path),
         failsAssert('"$fileName" was previously loaded as a binary file'),
       );
     });

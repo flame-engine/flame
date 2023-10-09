@@ -62,7 +62,7 @@ class FlameAudio {
   }
 
   /// Plays a single run of the given [file], with a given [volume].
-  static Future<AudioPlayer> play(String file, {double volume = 1.0}) async {
+  static Future<AudioPlayer> play(String file, {double volume = 1.0}) {
     return _preparePlayer(
       file,
       volume,
@@ -72,7 +72,7 @@ class FlameAudio {
   }
 
   /// Plays, and keeps looping the given [file].
-  static Future<AudioPlayer> loop(String file, {double volume = 1.0}) async {
+  static Future<AudioPlayer> loop(String file, {double volume = 1.0}) {
     return _preparePlayer(
       file,
       volume,

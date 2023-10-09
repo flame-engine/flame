@@ -1,3 +1,5 @@
+<!-- cSpell:ignore Slughorn horcrux horcruxes Moste Potente -->
+
 # Jenny
 
 The **jenny** library is a toolset for adding *dialogue* into a game. The dialogue may be quite
@@ -58,7 +60,7 @@ title: Slughorn_encounter
 Slughorn: Oh hello, Tom, is there anything I can help you with?
 Tom: Good {time_of_day()}, Professor.
 -> I was curious about the 12 uses of the dragon blood.
-    Slughorn: Such an inquisitive mind! You can read about that in the "Most \
+    Slughorn: Such an inquisitive mind! You can read about that in the "Moste \
               Potente Potions" in the Restricted Section of the library.
     <<give restricted_library_pass>>
     Tom: Thank you, Professor, this is very munificent of you.
