@@ -172,5 +172,5 @@ In addition to the already existing skins, the [ToggleButtonComponent] contains 
 - `downAndSelectedSkin`: The component that is displayed when the selectable button is selected and
   pressed.
 - `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
-- `disabledAndSelectedSkin`: For selected and disabled state.
+- `disabledAndSelectedSkin`: For when the button is selected and in the disabled state.
 - `defaultSelectedLabel`: Component shown on top of skins when button is selected.
