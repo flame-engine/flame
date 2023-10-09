@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart';
 /// to the foreground of the button. The label is automatically aligned to the center of the button.
 ///
 /// Note: You have to set the [defaultSkin],[downSkin],[hoverSkin]
-/// [disabledSkin], [defaultLabel] in [onLoad] if you are
+/// [disabledSkin], [defaultLabel]) in [onLoad] if you are
 /// not passing them in through the constructor
 
 class AdvancedButtonComponent extends PositionComponent
