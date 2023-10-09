@@ -1,15 +1,10 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/game/camera/camera.dart';
-import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -26,7 +21,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     super.children,
     W? world,
     CameraComponent? camera,
-    Camera? oldCamera,
   })  : assert(
           world != null || W == World,
           'The generics type $W does not conform to the type of '
@@ -39,7 +33,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(oldCamera ?? Camera(), children);
     _camera.world = _world;
     add(_camera);
     add(_world);
@@ -83,8 +76,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   CameraComponent _camera;
 
-  late final CameraWrapper _cameraWrapper;
-
   @internal
   late final List<ComponentsNotifier> notifiers = [];
 
@@ -122,7 +113,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @override
   void renderTree(Canvas canvas) {
     // Don't call super.renderTree, since the tree is rendered by the camera
-    _cameraWrapper.render(canvas);
   }
 
   @override
@@ -131,7 +121,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (parent == null) {
       updateTree(dt);
     }
-    _cameraWrapper.update(dt);
   }
 
   @override
@@ -188,8 +177,8 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
-  bool containsLocalPoint(Vector2 p) {
-    return p.x >= 0 && p.y >= 0 && p.x < size.x && p.y < size.y;
+  bool containsLocalPoint(Vector2 point) {
+    return camera.viewport.containsLocalPoint(point);
   }
 
   /// Returns the current time in seconds with microseconds precision.

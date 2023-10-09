@@ -1,3 +1,4 @@
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
@@ -68,8 +69,9 @@ mixin ComponentViewportMargin on PositionComponent, HasGameReference {
   }
 
   void _updateMargins() {
-    final bounds =
-        parent is Viewport ? (parent! as Viewport).virtualSize : parent.size;
+    final bounds = parent is Viewport
+        ? (parent! as Viewport).virtualSize
+        : (parent! as ReadOnlySizeProvider).size;
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2

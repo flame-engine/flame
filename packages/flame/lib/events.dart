@@ -5,10 +5,6 @@ export 'src/events/component_mixins/hover_callbacks.dart' show HoverCallbacks;
 export 'src/events/component_mixins/pointer_move_callbacks.dart'
     show PointerMoveCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
-export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
-    show HasDraggablesBridge;
-export 'src/events/flame_game_mixins/has_tappables_bridge.dart'
-    show HasTappablesBridge;
 export 'src/events/game_mixins/multi_touch_drag_detector.dart'
     show MultiTouchDragDetector;
 export 'src/events/game_mixins/multi_touch_tap_detector.dart'
