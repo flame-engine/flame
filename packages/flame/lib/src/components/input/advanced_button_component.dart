@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 /// The [AdvancedButtonComponent] has different skins for
 /// different button states.
-/// The defaultSkin must be added to the constructor or
+/// The [defaultSkin] must be added to the constructor or
 /// if you are inheriting - defined in the onLod method
 ///
 ///The label is a [PositionComponent] and is added
