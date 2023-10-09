@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame/sprite.dart';
@@ -85,6 +86,7 @@ class TiledAtlas {
     TiledMap map, {
     double? maxX,
     double? maxY,
+    Images? images,
   }) async {
     final imageList = _onlyTileImages(map).toList();
 
@@ -105,7 +107,7 @@ class TiledAtlas {
     if (imageList.length == 1) {
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final image = (await Flame.images.load(key)).clone();
+      final image = (await (images ?? Flame.images).load(key)).clone();
 
       // There could be a special case that a concurrent call to this method
       // passes the check `if (atlasMap.containsKey(key))` due to the async call
@@ -139,12 +141,14 @@ class TiledAtlas {
 
     // parallelize the download of images.
     await Future.wait([
-      ...imageList.map((tiledImage) => Flame.images.load(tiledImage.source!)),
+      ...imageList.map(
+        (tiledImage) => (images ?? Flame.images).load(tiledImage.source!),
+      ),
     ]);
 
     final emptyPaint = Paint();
     for (final tiledImage in imageList) {
-      final image = await Flame.images.load(tiledImage.source!);
+      final image = await (images ?? Flame.images).load(tiledImage.source!);
       final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
 
       pictureRect = pictureRect.expandToInclude(rect);
@@ -159,7 +163,7 @@ class TiledAtlas {
       pictureRect.width.toInt(),
       pictureRect.height.toInt(),
     );
-    Flame.images.add(key, image);
+    (images ?? Flame.images).add(key, image);
     return atlasMap[key] = TiledAtlas._(
       atlas: image,
       offsets: offsetMap,

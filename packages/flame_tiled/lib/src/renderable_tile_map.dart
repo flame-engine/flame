@@ -212,7 +212,8 @@ class RenderableTiledMap {
     Images? images,
     AssetBundle? bundle,
   }) async {
-    final contents = await Flame.bundle.loadString('$prefix$fileName');
+    final contents =
+        await (bundle ?? Flame.bundle).loadString('$prefix$fileName');
     return fromString(
       contents,
       destTileSize,
@@ -291,6 +292,7 @@ class RenderableTiledMap {
         map,
         maxX: atlasMaxX,
         maxY: atlasMaxY,
+        images: images,
       ),
       ignoreFlip: ignoreFlip,
       images: images,
