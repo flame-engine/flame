@@ -113,7 +113,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
 
   @override
   @protected
-  void addSkin(ButtonState state) {
+  void setSkin(ButtonState state) {
     var skin = skinsMap[state];
     if (state.isDisabledAndSelected && !hasSkinForState(state)) {
       skin = skinsMap[ButtonState.disabled];
