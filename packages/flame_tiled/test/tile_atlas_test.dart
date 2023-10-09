@@ -1,7 +1,9 @@
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_asset_bundle.dart';
@@ -23,9 +25,11 @@ void main() {
     });
 
     group('loadImages', () {
+      late AssetBundle bundle;
+
       setUp(() {
         TiledAtlas.atlasMap.clear();
-        Flame.bundle = TestAssetBundle(
+        bundle = TestAssetBundle(
           imageNames: [
             'images/blue.png',
             'images/purple_rock.png',
@@ -47,6 +51,7 @@ void main() {
       test('handles empty map', () async {
         final atlas = await TiledAtlas.fromTiledMap(
           TiledMap(height: 1, tileHeight: 1, tileWidth: 1, width: 1),
+          images: Images(bundle: bundle),
         );
 
         expect(atlas.atlas, isNull);
@@ -76,8 +81,10 @@ void main() {
       );
 
       test('returns single image atlas for simple map', () async {
+        final images = Images(bundle: bundle);
         final atlas = await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: images,
         );
 
         expect(atlas.offsets, hasLength(1));
@@ -86,7 +93,7 @@ void main() {
         expect(atlas.atlas!.height, 74);
         expect(atlas.key, 'images/green.png');
 
-        expect(Flame.images.containsKey('images/green.png'), isTrue);
+        expect(images.containsKey('images/green.png'), isTrue);
 
         expect(
           await imageToPng(atlas.atlas!),
@@ -97,9 +104,11 @@ void main() {
       test('returns cached atlas', () async {
         final atlas1 = await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: Images(bundle: bundle),
         );
         final atlas2 = await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: Images(bundle: bundle),
         );
 
         expect(atlas1, isNot(same(atlas2)));
@@ -108,8 +117,12 @@ void main() {
       });
 
       test('packs complex maps with multiple images', () async {
-        final component =
-            await TiledComponent.load('isometric_plain.tmx', Vector2(128, 74));
+        final component = await TiledComponent.load(
+          'isometric_plain.tmx',
+          Vector2(128, 74),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+        );
 
         final atlas = TiledAtlas.atlasMap.values.first;
         expect(
@@ -125,6 +138,7 @@ void main() {
       test('clearing cache', () async {
         await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: Images(bundle: bundle),
         );
 
         expect(TiledAtlas.atlasMap.isNotEmpty, true);
@@ -136,9 +150,11 @@ void main() {
     });
 
     group('Single tileset map', () {
+      late AssetBundle bundle;
+
       setUp(() {
         TiledAtlas.atlasMap.clear();
-        Flame.bundle = TestAssetBundle(
+        bundle = TestAssetBundle(
           imageNames: [
             '4_color_sprite.png',
           ],
@@ -156,10 +172,14 @@ void main() {
           TiledComponent.load(
             'single_tile_map_1.tmx',
             Vector2(16, 16),
+            bundle: bundle,
+            images: Images(bundle: bundle),
           ),
           TiledComponent.load(
             'single_tile_map_2.tmx',
             Vector2(16, 16),
+            bundle: bundle,
+            images: Images(bundle: bundle),
           ),
         ]);
 
