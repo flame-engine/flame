@@ -4,9 +4,9 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/painting.dart';
 
-class BasicAudioExample extends FlameGame {
+class BasicAudioExample extends FlameGame with TapDetector {
   static const String description = '''
     This example showcases the most basic Flame Audio functionalities.
 
@@ -17,14 +17,13 @@ class BasicAudioExample extends FlameGame {
     3. Uses the Bgm utility for background music.
   ''';
 
-  BasicAudioExample() : super(world: BasicAudioWorld());
-}
-
-class BasicAudioWorld extends World with HasGameReference {
   static final Paint black = BasicPalette.black.paint();
   static final Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
-  static final TextPaint text = TextPaint(
-    style: TextStyle(color: BasicPalette.white.color),
+  static final TextPaint topTextPaint = TextPaint(
+    style: TextStyle(color: BasicPalette.lightBlue.color),
+  );
+  static final TextPaint bottomTextPaint = TextPaint(
+    style: TextStyle(color: BasicPalette.black.color),
   );
 
   late AudioPool pool;
@@ -37,31 +36,37 @@ class BasicAudioWorld extends World with HasGameReference {
       maxPlayers: 4,
     );
     startBgmMusic();
+    final firstButtonSize = Vector2(size.x - 40, size.y * (4 / 5));
+    final secondButtonSize = Vector2(size.x - 40, size.y / 5);
     addAll(
       [
         ButtonComponent(
           position: Vector2(20, 20),
-          size: Vector2(game.size.x - 40, game.size.y * (4 / 5)),
-          button: RectangleComponent(paint: black),
+          size: firstButtonSize,
+          button: RectangleComponent(paint: black, size: firstButtonSize),
           onPressed: fireOne,
           children: [
             TextComponent(
               text: 'Click here for 1',
-              textRenderer: text,
-              position: Vector2(0, 0),
+              textRenderer: topTextPaint,
+              position: firstButtonSize / 2,
+              anchor: Anchor.center,
+              priority: 1,
             ),
           ],
         ),
         ButtonComponent(
-          position: Vector2(20, game.size.y - game.size.y / 5),
-          size: Vector2(game.size.x - 40, game.size.y / 5),
-          button: RectangleComponent(paint: gray),
+          position: Vector2(20, size.y - size.y / 5),
+          size: secondButtonSize,
+          button: RectangleComponent(paint: gray, size: secondButtonSize),
           onPressed: fireTwo,
           children: [
             TextComponent(
               text: 'Click here for 2',
-              textRenderer: text,
-              position: Vector2(0, 0),
+              textRenderer: bottomTextPaint,
+              position: secondButtonSize / 2,
+              anchor: Anchor.center,
+              priority: 1,
             ),
           ],
         ),
