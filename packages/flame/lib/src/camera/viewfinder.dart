@@ -21,19 +21,16 @@ import 'package:meta/meta.dart';
 class Viewfinder extends Component
     with ParentIsA<CameraComponent>
     implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
-  /// Internal transform matrix used by the viewfinder.
-  final Transform2D _transform = Transform2D();
-
-  @internal
-  Transform2D get transform => _transform;
+  /// Transform matrix used by the viewfinder.
+  final Transform2D transform = Transform2D();
 
   /// The game coordinates of a point that is to be positioned at the center
   /// of the viewport.
   @override
-  Vector2 get position => -_transform.offset;
+  Vector2 get position => -transform.offset;
   @override
   set position(Vector2 value) {
-    _transform.offset = -value;
+    transform.offset = -value;
     visibleRect = null;
   }
 
@@ -46,10 +43,10 @@ class Viewfinder extends Component
   /// the game world will appear further away and smaller in size.
   ///
   /// See also: [visibleGameSize] for setting the zoom level dynamically.
-  double get zoom => _transform.scale.x;
+  double get zoom => transform.scale.x;
   set zoom(double value) {
     assert(value > 0, 'zoom level must be positive: $value');
-    _transform.scale = Vector2.all(value);
+    transform.scale = Vector2.all(value);
     visibleRect = null;
   }
 
@@ -57,10 +54,10 @@ class Viewfinder extends Component
   ///
   /// The rotation is around the axis that is perpendicular to the screen.
   @override
-  double get angle => -_transform.angle;
+  double get angle => -transform.angle;
   @override
   set angle(double value) {
-    _transform.angle = -value;
+    transform.angle = -value;
     visibleRect = null;
   }
 
@@ -149,18 +146,15 @@ class Viewfinder extends Component
   @protected
   Rect computeVisibleRect() {
     final viewportSize = camera.viewport.size;
-    final currentTransform = transform;
-    final topLeft = currentTransform.globalToLocal(Vector2.zero());
-    final bottomRight = currentTransform.globalToLocal(viewportSize);
+    final topLeft = transform.globalToLocal(Vector2.zero());
+    final bottomRight = transform.globalToLocal(viewportSize);
     var minX = min(topLeft.x, bottomRight.x);
     var minY = min(topLeft.y, bottomRight.y);
     var maxX = max(topLeft.x, bottomRight.x);
     var maxY = max(topLeft.y, bottomRight.y);
     if (angle != 0) {
-      final topRight =
-          currentTransform.globalToLocal(Vector2(viewportSize.x, 0));
-      final bottomLeft =
-          currentTransform.globalToLocal(Vector2(0, viewportSize.y));
+      final topRight = transform.globalToLocal(Vector2(viewportSize.x, 0));
+      final bottomLeft = transform.globalToLocal(Vector2(0, viewportSize.y));
       minX = min(minX, min(topRight.x, bottomLeft.x));
       minY = min(minY, min(topRight.y, bottomLeft.y));
       maxX = max(maxX, max(topRight.x, bottomLeft.x));
@@ -189,8 +183,8 @@ class Viewfinder extends Component
   @internal
   void onViewportResize() {
     final viewportSize = camera.viewport.virtualSize;
-    _transform.position.x = viewportSize.x * _anchor.x;
-    _transform.position.y = viewportSize.y * _anchor.y;
+    transform.position.x = viewportSize.x * _anchor.x;
+    transform.position.y = viewportSize.y * _anchor.y;
     visibleRect = null;
   }
 
@@ -218,7 +212,7 @@ class Viewfinder extends Component
   /// [ScaleProvider]'s API.
   @internal
   @override
-  Vector2 get scale => _transform.scale;
+  Vector2 get scale => transform.scale;
   @internal
   @override
   set scale(Vector2 value) {
@@ -227,7 +221,7 @@ class Viewfinder extends Component
       'Non-uniform scale cannot be applied to a Viewfinder: $value',
     );
     assert(value.x > 0, 'Zoom must be positive: ${value.x}');
-    _transform.scale = value;
+    transform.scale = value;
     visibleRect = null;
   }
 }
