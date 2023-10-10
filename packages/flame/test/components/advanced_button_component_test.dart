@@ -12,14 +12,15 @@ void main() {
       (game) async {
         await game.add(
           AdvancedButtonComponent(
-            defaultSkin: RectangleComponent(size: Vector2(20, 10)),
+            defaultSkin: RectangleComponent(size: Vector2(40, 20)),
             defaultLabel: RectangleComponent(
-              size: Vector2(5, 2),
+              size: Vector2(10, 5),
               paint: Paint()..color = const Color(0xFFFF0000),
             ),
           ),
         );
       },
+      size: Vector2(100, 100),
       goldenFile: '../_goldens/advanced_button_component.png',
     );
 
