@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_tile_map.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
@@ -104,6 +106,8 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     String prefix = 'assets/tiles/',
     int? priority,
     bool? ignoreFlip,
+    AssetBundle? bundle,
+    Images? images,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -113,6 +117,8 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         atlasMaxY: atlasMaxY,
         ignoreFlip: ignoreFlip,
         prefix: prefix,
+        bundle: bundle,
+        images: images,
       ),
       priority: priority,
     );

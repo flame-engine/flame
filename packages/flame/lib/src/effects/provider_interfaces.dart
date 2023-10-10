@@ -33,9 +33,14 @@ class PositionProviderImpl implements PositionProvider {
   set position(Vector2 value) => _setter!(value);
 }
 
-/// Interface for a component that can be affected by scale effects.
-abstract class ScaleProvider {
+/// Interface for a class that has [scale] property which can be read but not
+/// modified.
+abstract class ReadOnlyScaleProvider {
   Vector2 get scale;
+}
+
+/// Interface for a component that can be affected by scale effects.
+abstract class ScaleProvider extends ReadOnlyScaleProvider {
   set scale(Vector2 value);
 }
 
