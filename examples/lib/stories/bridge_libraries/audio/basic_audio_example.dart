@@ -6,7 +6,7 @@ import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/painting.dart';
 
-class BasicAudioExample extends FlameGame with TapDetector {
+class BasicAudioExample extends FlameGame {
   static const String description = '''
     This example showcases the most basic Flame Audio functionalities.
 
