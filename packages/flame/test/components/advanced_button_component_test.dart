@@ -20,7 +20,7 @@ void main() {
           ),
         );
       },
-      size: Vector2(100, 100),
+      size: Vector2(50, 30),
       goldenFile: '../_goldens/advanced_button_component.png',
     );
 
