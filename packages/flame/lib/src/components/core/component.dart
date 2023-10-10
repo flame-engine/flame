@@ -190,21 +190,28 @@ class Component {
 
   /// Whether the component is currently executing its [onLoad] step.
   bool get isLoading => (_state & _loading) != 0;
+
   void _setLoadingBit() => _state |= _loading;
+
   void _clearLoadingBit() => _state &= ~_loading;
 
   /// Whether this component has completed its [onLoad] step.
   bool get isLoaded => (_state & _loaded) != 0;
+
   void _setLoadedBit() => _state |= _loaded;
 
   /// Whether this component is currently added to a component tree.
   bool get isMounted => (_state & _mounted) != 0;
+
   void _setMountedBit() => _state |= _mounted;
+
   void _clearMountedBit() => _state &= ~_mounted;
 
   /// Whether the component is scheduled to be removed.
   bool get isRemoving => (_state & _removing) != 0;
+
   void _setRemovingBit() => _state |= _removing;
+
   void _clearRemovingBit() => _state &= ~_removing;
 
   /// Whether the component has been removed. Originally this flag is `false`,
@@ -212,7 +219,9 @@ class Component {
   /// from its parent. The flag becomes `false` again when the component is
   /// mounted to a new parent.
   bool get isRemoved => (_state & _removed) != 0;
+
   void _setRemovedBit() => _state |= _removed;
+
   void _clearRemovedBit() => _state &= ~_removed;
 
   /// A future that completes when this component finishes loading.
@@ -248,6 +257,7 @@ class Component {
   /// [removeFromParent] if setting to null.
   Component? get parent => _parent;
   Component? _parent;
+
   set parent(Component? newParent) {
     if (newParent == _parent) {
       return;
@@ -266,6 +276,7 @@ class Component {
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
   ComponentSet get children => _children ??= createComponentSet();
+
   bool get hasChildren => _children?.isNotEmpty ?? false;
   ComponentSet? _children;
 
@@ -363,6 +374,7 @@ class Component {
 
   @internal
   static Game? staticGameInstance;
+
   Game? findGame() {
     return staticGameInstance ??
         ((this is Game) ? (this as Game) : _parent?.findGame());
@@ -705,6 +717,7 @@ class Component {
   /// to the parent.
   int get priority => _priority;
   int _priority;
+
   set priority(int newPriority) {
     if (parent == null) {
       _priority = newPriority;
@@ -923,7 +936,7 @@ class Component {
     }
   }
 
-  //#endregion
+//#endregion
 }
 
 typedef ComponentSetFactory = ComponentSet Function();

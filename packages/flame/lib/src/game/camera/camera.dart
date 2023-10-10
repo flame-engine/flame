@@ -50,6 +50,7 @@ class Camera extends Projector {
 
   Viewport get viewport => _viewport;
   Viewport _viewport;
+
   set viewport(Viewport value) {
     _viewport = value;
     if (_canvasSize != null) {
@@ -101,6 +102,7 @@ class Camera extends Projector {
   final Vector2 _internalPosition = Vector2.zero();
 
   Vector2 get _position => _internalPosition;
+
   set _position(Vector2 position) {
     _internalPosition.setFrom(position);
     onPositionUpdate(_internalPosition);
@@ -165,6 +167,7 @@ class Camera extends Projector {
   }
 
   Vector2? _canvasSize;
+
   Vector2 get canvasSize {
     assert(
       _canvasSize != null,
@@ -196,6 +199,7 @@ class Camera extends Projector {
 
   // TODO(st-pasha): replace with the transform matrix
   late Projector _combinedProjector;
+
   Projector get combinedProjector => _combinedProjector;
 
   /// This smoothly updates the camera for an amount of time [dt].

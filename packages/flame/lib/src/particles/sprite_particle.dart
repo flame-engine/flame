@@ -6,7 +6,6 @@ import 'package:flame/src/particles/particle.dart';
 import 'package:flame/src/sprite.dart';
 
 export '../sprite.dart';
-export '../sprite.dart';
 
 class SpriteParticle extends Particle {
   final Sprite sprite;

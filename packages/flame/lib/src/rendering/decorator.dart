@@ -92,5 +92,5 @@ class Decorator {
     }
   }
 
-  //#endregion
+//#endregion
 }

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/game/camera/camera.dart';
 import 'package:meta/meta.dart';
 
@@ -16,6 +17,8 @@ class CameraWrapper {
   final Camera camera;
   final ComponentSet world;
 
+  final Map<String, Camera> secondaryCameras = {};
+
   void update(double dt) {
     camera.update(dt);
   }
@@ -23,6 +26,15 @@ class CameraWrapper {
   void render(Canvas canvas) {
     PositionType? _previousType;
     canvas.save();
+
+    final Camera camera;
+    if (canvas is CanvasSecondary) {
+      final canvasSecondary = canvas;
+      camera = secondaryCameras[canvasSecondary.secondaryKey] ??= Camera();
+    } else {
+      camera = this.camera;
+    }
+
     world.forEach((component) {
       final sameType = component.positionType == _previousType;
       if (!sameType) {
@@ -41,7 +53,9 @@ class CameraWrapper {
           case PositionType.widget:
         }
       }
+
       component.renderTree(canvas);
+
       _previousType = component.positionType;
     });
 

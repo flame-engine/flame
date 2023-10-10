@@ -3,7 +3,8 @@ import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
+class Obstacle extends SpriteComponentDarkOnSecondary
+    with HasGameRef<TRexGame> {
   Obstacle({
     required this.settings,
     required this.groupIndex,
