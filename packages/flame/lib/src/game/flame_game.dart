@@ -141,9 +141,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// components and other methods.
   /// You can override it further to add more custom behavior, but you should
   /// seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [oldCamera] in order to
-  /// transform the coordinate system appropriately for those using the old
-  /// camera.
   @override
   @mustCallSuper
   void onGameResize(Vector2 size) {

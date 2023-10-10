@@ -1,3 +1,4 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -23,7 +24,7 @@ class MouseCursorExample extends FlameGame with MouseMovementDetector {
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    target = info.eventPosition.game;
+    target = info.eventPosition.widget;
   }
 
   Rect _toRect() => position.toPositionedRect(objSize);

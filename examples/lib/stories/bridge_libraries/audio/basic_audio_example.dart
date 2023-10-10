@@ -4,9 +4,9 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 
-class BasicAudioExample extends FlameGame with TapDetector {
+class BasicAudioExample extends FlameGame {
   static const String description = '''
     This example showcases the most basic Flame Audio functionalities.
 
@@ -17,6 +17,10 @@ class BasicAudioExample extends FlameGame with TapDetector {
     3. Uses the Bgm utility for background music.
   ''';
 
+  BasicAudioExample() : super(world: BasicAudioWorld());
+}
+
+class BasicAudioWorld extends World with HasGameReference {
   static final Paint black = BasicPalette.black.paint();
   static final Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
   static final TextPaint text = TextPaint(
@@ -33,9 +37,37 @@ class BasicAudioExample extends FlameGame with TapDetector {
       maxPlayers: 4,
     );
     startBgmMusic();
+    addAll(
+      [
+        ButtonComponent(
+          position: Vector2(20, 20),
+          size: Vector2(game.size.x - 40, game.size.y * (4 / 5)),
+          button: RectangleComponent(paint: black),
+          onPressed: fireOne,
+          children: [
+            TextComponent(
+              text: 'Click here for 1',
+              textRenderer: text,
+              position: Vector2(0, 0),
+            ),
+          ],
+        ),
+        ButtonComponent(
+          position: Vector2(20, game.size.y - game.size.y / 5),
+          size: Vector2(game.size.x - 40, game.size.y / 5),
+          button: RectangleComponent(paint: gray),
+          onPressed: fireTwo,
+          children: [
+            TextComponent(
+              text: 'Click here for 2',
+              textRenderer: text,
+              position: Vector2(0, 0),
+            ),
+          ],
+        ),
+      ],
+    );
   }
-
-  Rect get button => Rect.fromLTWH(20, size.y - 300, size.x - 40, 200);
 
   void startBgmMusic() {
     FlameAudio.bgm.initialize();
@@ -48,37 +80,6 @@ class BasicAudioExample extends FlameGame with TapDetector {
 
   void fireTwo() {
     pool.start();
-  }
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRect(size.toRect(), black);
-
-    text.render(
-      canvas,
-      '(click anywhere for 1)',
-      Vector2(size.x / 2, 200),
-      anchor: Anchor.topCenter,
-    );
-
-    canvas.drawRect(button, gray);
-
-    text.render(
-      canvas,
-      'click here for 2',
-      Vector2(size.x / 2, size.y - 200),
-      anchor: Anchor.bottomCenter,
-    );
-  }
-
-  @override
-  void onTapDown(TapDownInfo info) {
-    if (button.containsPoint(info.eventPosition.game)) {
-      fireTwo();
-    } else {
-      fireOne();
-    }
   }
 
   @override

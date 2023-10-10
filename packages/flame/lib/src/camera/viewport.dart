@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';

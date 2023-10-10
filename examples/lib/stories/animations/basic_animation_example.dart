@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
-class BasicAnimationsExample extends FlameGame with TapDetector {
+class BasicAnimationsExample extends FlameGame {
   static const description = '''
     Basic example of `SpriteAnimation`s use in Flame's `FlameGame`\n\n
     
@@ -37,13 +37,17 @@ class BasicAnimationsExample extends FlameGame with TapDetector {
     animations.
   ''';
 
+  BasicAnimationsExample() : super(world: BasicAnimationsWorld());
+}
+
+class BasicAnimationsWorld extends World with TapCallbacks, HasGameReference {
   late Image creature;
 
   @override
   Future<void> onLoad() async {
-    creature = await images.load('animations/creature.png');
+    creature = await game.images.load('animations/creature.png');
 
-    final animation = await loadSpriteAnimation(
+    final animation = await game.loadSpriteAnimation(
       'animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -57,19 +61,19 @@ class BasicAnimationsExample extends FlameGame with TapDetector {
       animation: animation,
       size: spriteSize,
     );
-    animationComponent.x = size.x / 2 - spriteSize.x;
+    animationComponent.x = game.size.x / 2 - spriteSize.x;
     animationComponent.y = spriteSize.y;
 
     final reversedAnimationComponent = SpriteAnimationComponent(
       animation: animation.reversed(),
       size: spriteSize,
     );
-    reversedAnimationComponent.x = size.x / 2;
+    reversedAnimationComponent.x = game.size.x / 2;
     reversedAnimationComponent.y = spriteSize.y;
 
     add(animationComponent);
     add(reversedAnimationComponent);
-    add(Ember()..position = size / 2);
+    add(Ember()..position = game.size / 2);
   }
 
   void addAnimation(Vector2 position) {
@@ -93,7 +97,7 @@ class BasicAnimationsExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
-    addAnimation(info.eventPosition.game);
+  void onTapDown(TapDownEvent event) {
+    addAnimation(event.localPosition);
   }
 }

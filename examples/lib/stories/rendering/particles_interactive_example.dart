@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/particles.dart';
@@ -32,7 +33,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
   void onPanUpdate(DragUpdateInfo info) {
     add(
       ParticleSystemComponent(
-        position: info.eventPosition.game,
+        position: info.eventPosition.widget,
         particle: Particle.generate(
           count: 40,
           generator: (i) {

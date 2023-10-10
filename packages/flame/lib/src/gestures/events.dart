@@ -9,8 +9,6 @@ import 'package:flutter/gestures.dart';
 /// `globalPosition` in Flutter.
 /// widget: coordinate system relative to the GameWidget widget; same as
 /// `localPosition` in Flutter.
-/// viewport: same as `widget` but also applies any transformations from the
-/// viewport to the coordinate system.
 /// game: same as `widget` but also applies any transformations from the camera
 /// and viewport to the coordinate system.
 class EventPosition {
@@ -22,14 +20,6 @@ class EventPosition {
 
   /// Coordinates of the event relative to the game widget position/size
   late final Vector2 widget = _game.convertGlobalToLocalCoordinate(global);
-
-  /// Coordinates of the event relative to the game position/size but applying
-  /// only viewport transformations (not camera).
-  late final Vector2 viewport = _game.viewportProjector.unprojectVector(widget);
-
-  /// Coordinates of the event relative to the game position/size and
-  /// transformations
-  late final Vector2 game = _game.projector.unprojectVector(widget);
 
   EventPosition(this._game, this._globalPosition);
 }
@@ -48,11 +38,10 @@ class EventDelta {
   /// Raw value relative to the game transformations
   late final Vector2 global = _delta.toVector2();
 
-  /// Scaled value relative to the game viewport only transformations (not
-  /// camera).
+  /// Scaled value relative to the game viewport only transformations.
   late final Vector2 viewport = _game.viewportProjector.unscaleVector(global);
 
-  /// Scaled value relative to the game transformations
+  /// Scaled value relative to the game (world) transformations.
   late final Vector2 game = _game.projector.unscaleVector(global);
 
   EventDelta(this._game, this._delta);

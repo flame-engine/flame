@@ -1,7 +1,6 @@
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
