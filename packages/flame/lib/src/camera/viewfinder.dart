@@ -4,7 +4,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/mixins/parent_is_a.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
@@ -19,7 +18,6 @@ import 'package:meta/meta.dart';
 /// If you add children to the [Viewfinder] they will appear like HUDs i.e.
 /// statically in front of the world.
 class Viewfinder extends Component
-    with ParentIsA<CameraComponent>
     implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
@@ -80,7 +78,7 @@ class Viewfinder extends Component
   }
 
   /// Reference to the parent camera.
-  CameraComponent get camera => parent;
+  CameraComponent get camera => parent! as CameraComponent;
 
   /// Convert a point from the global coordinate system to the viewfinder's
   /// coordinate system.
@@ -182,10 +180,12 @@ class Viewfinder extends Component
   /// Called by the viewport when its size changes.
   @internal
   void onViewportResize() {
-    final viewportSize = camera.viewport.virtualSize;
-    transform.position.x = viewportSize.x * _anchor.x;
-    transform.position.y = viewportSize.y * _anchor.y;
-    visibleRect = null;
+    if (parent != null) {
+      final viewportSize = camera.viewport.virtualSize;
+      transform.position.x = viewportSize.x * _anchor.x;
+      transform.position.y = viewportSize.y * _anchor.y;
+      visibleRect = null;
+    }
   }
 
   @mustCallSuper
@@ -199,6 +199,10 @@ class Viewfinder extends Component
   @mustCallSuper
   @override
   void onMount() {
+    assert(
+      parent! is CameraComponent,
+      'Viewfinder can only be mounted to a CameraComponent',
+    );
     super.onMount();
     updateTransform();
   }

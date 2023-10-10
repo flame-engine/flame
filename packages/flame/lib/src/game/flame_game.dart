@@ -82,7 +82,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as
-  /// exposed to the canvas after viewport transformations and camera zooming.
+  /// exposed to the canvas after viewport transformations.
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
@@ -152,6 +152,11 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @mustCallSuper
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
+    // This work-around is needed since the camera has the highest priority and
+    // [size] uses [viewport.virtualSize], so the viewport needs to be updated
+    // first since users will be using `game.size` in their [onGameResize]
+    // methods.
+    camera.viewport.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
@@ -182,7 +187,10 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
   bool containsLocalPoint(Vector2 point) {
-    return camera.viewport.containsLocalPoint(point);
+    return point.x >= 0 &&
+        point.y >= 0 &&
+        point.x < canvasSize.x &&
+        point.y < canvasSize.y;
   }
 
   /// Returns the current time in seconds with microseconds precision.
