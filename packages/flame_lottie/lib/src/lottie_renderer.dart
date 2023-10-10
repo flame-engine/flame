@@ -35,7 +35,7 @@ class LottieRenderer {
           ..enableMergePaths = enableMergePaths ?? false,
         _controller = controller ??
             EffectController(
-              duration: duration ?? composition.duration.inSeconds.toDouble(),
+              duration: duration ?? composition.duration.inMilliseconds / 1000,
               infinite: repeating ?? false,
             ) {
     size.addListener(() {

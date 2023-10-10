@@ -115,6 +115,9 @@ extension Vector2Extension on Vector2 {
     y = y.clamp(min.y, max.y);
   }
 
+  /// Sets both x and y to [value].
+  void setAll(double value) => setValues(value, value);
+
   /// Project this onto [other].
   ///
   /// [other] needs to have a length > 0;

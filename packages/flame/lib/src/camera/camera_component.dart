@@ -1,10 +1,9 @@
-import 'dart:ui';
-
+import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
@@ -16,7 +15,6 @@ import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
 ///
@@ -70,15 +68,16 @@ class CameraComponent extends Component {
   factory CameraComponent.withFixedResolution({
     required double width,
     required double height,
+    Viewfinder? viewfinder,
     World? world,
     Component? backdrop,
     List<Component>? hudComponents,
   }) {
     return CameraComponent(
       world: world,
-      viewport: FixedAspectRatioViewport(aspectRatio: width / height)
+      viewport: FixedResolutionViewport(resolution: Vector2(width, height))
         ..addAll(hudComponents ?? []),
-      viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
+      viewfinder: viewfinder ?? Viewfinder(),
       backdrop: backdrop,
     );
   }
@@ -175,25 +174,29 @@ class CameraComponent extends Component {
       viewport.position.x - viewport.anchor.x * viewport.size.x,
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
-    backdrop.renderTree(canvas);
     // Render the world through the viewport
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       canvas.save();
       viewport.clip(canvas);
+      viewport.transformCanvas(canvas);
+      backdrop.renderTree(canvas);
+      canvas.save();
       try {
         currentCameras.add(this);
-        canvas.transform(viewfinder.transform.transformMatrix.storage);
+        canvas.transform2D(viewfinder.transform);
         world!.renderFromCamera(canvas);
+        // Render the viewfinder elements, which will be in front of the world,
+        // but with the same transforms applied to them.
+        viewfinder.renderTree(canvas);
       } finally {
         currentCameras.removeLast();
       }
       canvas.restore();
+      // Render the viewport elements, which will be in front of the world.
+      viewport.renderTree(canvas);
+      canvas.restore();
     }
-    // Render the viewport elements, which will be in front of the world.
-    viewport.renderTree(canvas);
-    // Render the viewfinder elements, which will be in front of the viewport.
-    viewfinder.renderTree(canvas);
     canvas.restore();
   }
 
