@@ -9,8 +9,6 @@ import 'package:flutter/gestures.dart';
 /// `globalPosition` in Flutter.
 /// widget: coordinate system relative to the GameWidget widget; same as
 /// `localPosition` in Flutter.
-/// game: same as `widget` but also applies any transformations from the camera
-/// and viewport to the coordinate system.
 class EventPosition {
   final Game _game;
   final Offset _globalPosition;
@@ -30,7 +28,6 @@ class EventPosition {
 /// [global]: this is the raw value received by the event without any scale
 /// applied to it; this is always the same as local because Flutter doesn't
 /// apply any scaling.
-/// [game]: the scaled value with all the game transformations applied.
 class EventDelta {
   final Offset _delta;
 
