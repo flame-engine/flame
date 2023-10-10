@@ -7,33 +7,9 @@ import 'package:flame/game.dart';
 
 class BasicAnimationsExample extends FlameGame {
   static const description = '''
-    Basic example of `SpriteAnimation`s use in Flame's `FlameGame`\n\n
-    
-    The snippet shows how an animation can be loaded and added to the game
-    ```
-    class MyGame extends FlameGame {
-      @override
-      Future<void> onLoad() async {
-        final animation = await loadSpriteAnimation(
-          'animations/chopper.png',
-          SpriteAnimationData.sequenced(
-            amount: 4,
-            textureSize: Vector2.all(48),
-            stepTime: 0.15,
-          ),
-        );
-    
-        final animationComponent = SpriteAnimationComponent(
-          animation: animation,
-          size: Vector2.all(100.0),
-        );
-    
-        add(animationComponent);
-      }
-    }
-    ```
+    Basic example of how to use `SpriteAnimation`s in Flame's.
 
-    On this example, click or touch anywhere on the screen to dynamically add
+    In this example, click or touch anywhere on the screen to dynamically add
     animations.
   ''';
 
@@ -59,24 +35,25 @@ class BasicAnimationsWorld extends World with TapCallbacks, HasGameReference {
     final spriteSize = Vector2.all(100.0);
     final animationComponent = SpriteAnimationComponent(
       animation: animation,
+      position: Vector2(-spriteSize.x, 0),
       size: spriteSize,
+      anchor: Anchor.center,
     );
-    animationComponent.x = game.size.x / 2 - spriteSize.x;
-    animationComponent.y = spriteSize.y;
 
     final reversedAnimationComponent = SpriteAnimationComponent(
       animation: animation.reversed(),
+      position: Vector2(spriteSize.x, 0),
       size: spriteSize,
+      anchor: Anchor.center,
     );
-    reversedAnimationComponent.x = game.size.x / 2;
-    reversedAnimationComponent.y = spriteSize.y;
 
     add(animationComponent);
     add(reversedAnimationComponent);
-    add(Ember()..position = game.size / 2);
+    add(Ember());
   }
 
-  void addAnimation(Vector2 position) {
+  @override
+  void onTapDown(TapDownEvent event) {
     final size = Vector2(291, 178);
 
     final animationComponent = SpriteAnimationComponent.fromFrameData(
@@ -88,16 +65,12 @@ class BasicAnimationsWorld extends World with TapCallbacks, HasGameReference {
         stepTime: 0.15,
         loop: false,
       ),
+      position: event.localPosition,
+      anchor: Anchor.center,
       size: size,
       removeOnFinish: true,
     );
 
-    animationComponent.position = position - size / 2;
     add(animationComponent);
-  }
-
-  @override
-  void onTapDown(TapDownEvent event) {
-    addAnimation(event.localPosition);
   }
 }

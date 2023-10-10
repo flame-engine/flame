@@ -167,24 +167,29 @@ class MyComponent extends Component with TapCallbacks {
 ```
 
 
-### HasTappablesBridge
+### DoubleTapCallbacks
 
-This marker mixin can be used to indicate that the game has both the "new-style" components that
-use the `TapCallbacks` mixin, and the "old-style" components that use the `Tappable` mixin. In
-effect, every tap event will be propagated twice through the system: first trying to reach the
-components with `TapCallbacks` mixin, and then components with `Tappable`.
+Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the
+component. To start receiving double tap events in a component, add the
+`DoubleTapCallbacks` mixin to your `PositionComponent`.
 
 ```dart
-class MyGame extends FlameGame with HasTappablesBridge {
-  // ...
-}
+class MyComponent extends PositionComponent with DoubleTapCallbacks {
+  @override
+  void onDoubleTapUp(DoubleTapEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onDoubleTapCancel(DoubleTapCancelEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onDoubleTapDown(DoubleTapDownEvent event) {
+    /// Do something
+  }
 ```
-
-The purpose of this mixin is to ease the transition from the old event delivery system to the
-new one. With this mixin, you can transition your `Tappable` components into using `TapCallbacks`
-one by one, verifying that your game continues to work at every step.
-
-Use of this mixin for any new project is highly discouraged.
 
 
 ## Migration
@@ -192,29 +197,20 @@ Use of this mixin for any new project is highly discouraged.
 If you have an existing game that uses `Tappable`/`HasTappables` mixins, then this section will
 describe how to transition to the new API described in this document. Here's what you need to do:
 
-1. Replace the `HasTappables` mixin with the `HasTappablesBridge` mixin on your game.
-   Verify that your game continues to run as before.
+Take all of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
+The methods `onTapDown`, `onTapUp`, `onTapCancel` and `onLongTapDown` will need to be adjusted
+for the new API:
 
-2. Pick any of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
-   The methods `onTapDown`, `onTapUp`, `onTapCancel` and `onLongTapDown` will need to be adjusted
-   for the new API:
-
-   - The argument pair such as `(int pointerId, TapDownDetails details)` was replaced with a single
-     event object `TapDownEvent event`.
-   - There is no return value anymore, but if you need to make a component to pass-through the taps
-     to the components below, then set `event.continuePropagation` to true. This is only needed for
-     `onTapDown` events -- all other events will pass-through automatically.
-   - If your component needs to know the coordinates of the point of touch, use
-     `event.localPosition` instead of computing it manually. Properties `event.canvasPosition` and
-     `event.devicePosition` are also available.
-   - If the component is a `PositionComponent`, then make sure its size is set correctly (for
-     example by turning on the debug mode). If the component does not derive from
-     `PositionComponent` then make sure it implements the method `containsLocalPoint()`.
-   - If the component is not attached to the root of the game, then make sure its ancestors also
-     have correct size or implement `containsLocalPoint()`.
-
-3. Run the game to verify that it works as before.
-
-4. Repeat step 2 until you have converted all `Tappable` mixins into `TapCallbacks`.
-
-5. Remove the `HasTappablesBridge` mixin from your top-level game.
+- The argument pair such as `(int pointerId, TapDownDetails details)` was replaced with a single
+  event object `TapDownEvent event`.
+- There is no return value anymore, but if you need to make a component to pass-through the taps
+  to the components below, then set `event.continuePropagation` to true. This is only needed for
+  `onTapDown` events -- all other events will pass-through automatically.
+- If your component needs to know the coordinates of the point of touch, use
+  `event.localPosition` instead of computing it manually. Properties `event.canvasPosition` and
+  `event.devicePosition` are also available.
+- If the component is a `PositionComponent`, then make sure its size is set correctly (for
+  example by turning on the debug mode). If the component does not derive from
+  `PositionComponent` then make sure it implements the method `containsLocalPoint()`.
+- If the component is not attached to the root of the game, then make sure its ancestors also
+  have correct size or implement `containsLocalPoint()`.
