@@ -112,7 +112,12 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   void renderTree(Canvas canvas) {
-    // Don't call super.renderTree, since the tree is rendered by the camera
+    if (parent != null) {
+      renderTree(canvas);
+    }
+    for (final component in children) {
+      component.renderTree(canvas);
+    }
   }
 
   @override
@@ -129,7 +134,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (parent != null) {
       update(dt);
     }
-    children.forEach((c) => c.updateTree(dt));
+    for (final component in children) {
+      component.updateTree(dt);
+    }
     processRebalanceEvents();
   }
 

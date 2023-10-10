@@ -38,7 +38,8 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
 
   @override
   void onScroll(PointerScrollInfo info) {
-    camera.viewfinder.zoom += info.scrollDelta.game.y.sign * zoomPerScrollUnit;
+    camera.viewfinder.zoom +=
+        info.scrollDelta.global.y.sign * zoomPerScrollUnit;
     clampZoom();
   }
 
@@ -56,7 +57,7 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
       camera.viewfinder.zoom = startZoom * currentScale.y;
       clampZoom();
     } else {
-      final delta = info.delta.game;
+      final delta = info.delta.global;
       camera.viewfinder.position.translate(-delta.x, -delta.y);
     }
   }

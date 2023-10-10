@@ -32,7 +32,7 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
 
   @override
   void handleDragEnd(int pointerId, DragEndDetails details) {
-    onDragEnd(pointerId, DragEndInfo.fromDetails(this, details));
+    onDragEnd(pointerId, DragEndInfo.fromDetails(details));
   }
 
   @override

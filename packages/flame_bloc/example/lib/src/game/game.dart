@@ -78,7 +78,7 @@ class SpaceShooterGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game.x, info.delta.game.y);
+    player.move(info.delta.global.x, info.delta.global.y);
   }
 
   void increaseScore() {

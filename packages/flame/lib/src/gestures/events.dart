@@ -32,19 +32,12 @@ class EventPosition {
 /// apply any scaling.
 /// [game]: the scaled value with all the game transformations applied.
 class EventDelta {
-  final Game _game;
   final Offset _delta;
 
   /// Raw value relative to the game transformations
   late final Vector2 global = _delta.toVector2();
 
-  /// Scaled value relative to the game viewport only transformations.
-  late final Vector2 viewport = _game.viewportProjector.unscaleVector(global);
-
-  /// Scaled value relative to the game (world) transformations.
-  late final Vector2 game = _game.projector.unscaleVector(global);
-
-  EventDelta(this._game, this._delta);
+  EventDelta(this._delta);
 }
 
 /// BaseInfo is the base class for Flame's input events.
@@ -93,8 +86,7 @@ class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
 }
 
 class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
-  late final Vector2 velocity =
-      _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+  late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
 
   LongPressEndInfo.fromDetails(
     Game game,
@@ -119,7 +111,7 @@ class ForcePressInfo extends PositionInfo<ForcePressDetails> {
 }
 
 class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
-  late final EventDelta scrollDelta = EventDelta(_game, raw.scrollDelta);
+  late final EventDelta scrollDelta = EventDelta(raw.scrollDelta);
 
   PointerScrollInfo.fromDetails(
     Game game,
@@ -151,7 +143,7 @@ class DragStartInfo extends PositionInfo<DragStartDetails> with _HandledField {
 
 class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
     with _HandledField {
-  late final EventDelta delta = EventDelta(_game, raw.delta);
+  late final EventDelta delta = EventDelta(raw.delta);
 
   DragUpdateInfo.fromDetails(
     Game game,
@@ -160,15 +152,10 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
 }
 
 class DragEndInfo extends BaseInfo<DragEndDetails> with _HandledField {
-  final Game _game;
-  late final Vector2 velocity =
-      _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+  late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
   double? get primaryVelocity => raw.primaryVelocity;
 
-  DragEndInfo.fromDetails(
-    this._game,
-    DragEndDetails raw,
-  ) : super(raw);
+  DragEndInfo.fromDetails(super.raw);
 }
 
 class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
@@ -181,26 +168,18 @@ class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
 }
 
 class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
-  final Game _game;
-  late final EventDelta velocity = EventDelta(
-    _game,
-    raw.velocity.pixelsPerSecond,
-  );
+  late final EventDelta velocity = EventDelta(raw.velocity.pixelsPerSecond);
 
   int get pointerCount => raw.pointerCount;
 
-  ScaleEndInfo.fromDetails(
-    this._game,
-    ScaleEndDetails raw,
-  ) : super(raw);
+  ScaleEndInfo.fromDetails(super.raw);
 }
 
 class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
   int get pointerCount => raw.pointerCount;
   double get rotation => raw.rotation;
-  late final EventDelta delta = EventDelta(_game, raw.focalPointDelta);
+  late final EventDelta delta = EventDelta(raw.focalPointDelta);
   late final EventDelta scale = EventDelta(
-    _game,
     Offset(raw.horizontalScale, raw.verticalScale),
   );
 

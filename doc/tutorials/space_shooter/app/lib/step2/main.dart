@@ -13,16 +13,13 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     player = Player();
-
     add(player);
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 

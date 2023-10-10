@@ -20,7 +20,7 @@ class ScrollExample extends FlameGame with ScrollDetector {
 
   @override
   void onScroll(PointerScrollInfo info) {
-    target = position + info.scrollDelta.game * 5;
+    target = position + info.scrollDelta.global * 5;
   }
 
   @override
