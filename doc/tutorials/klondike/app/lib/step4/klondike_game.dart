@@ -74,6 +74,7 @@ class KlondikeGame extends FlameGame {
       piles[i].flipTopCard();
     }
     cards.forEach(stock.acquireCard);
+    print('\nLength of Cards List ${cards.length}, should be 52.\n');
   }
 }
 
