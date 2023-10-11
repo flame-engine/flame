@@ -1,38 +1,36 @@
 name: Bug Report
-description: File a bug report
-title: "[Bug]: "
-labels: ["bug", "triage"]
-projects: ["flame-engine/flame"]
-assignees:
-  - octocat
+description: You are creating a Game with Flame but you are noticing some strange behavior, that it throws an unexpected exception, or that it is not working according to the specifications.
+title: " "
+labels: ["bug"]
+assignees: ""
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
-  - type: input
-    id: contact
-    attributes:
-      label: Contact Details
-      description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
-    validations:
-      required: false
-  - type: textarea
+        When reporting a bug, please read this complete template and fill in all the questions in order to get a better response!
+ - type: textarea
     id: what-happened
     attributes:
       label: What happened?
-      description: Also tell us, what did you expect to happen?
+      description: Tell us, what happened?
       placeholder: Tell us what you see!
-      value: "A bug happened!"
     validations:
       required: true
+      
+  - type: textarea
+    id: expectation
+    attributes:
+      label: What do you expect?
+      description: Also tell us, what behavior did you expect? 
+      placeholder: Tell us what you want!
+    validations:
+      required: false
 
   - type: textarea
     id: logs
     attributes:
       label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      description: If you have any debug / error logging, please fill it here within the code block below
       render: shell
   - type: checkboxes
     id: terms
@@ -43,11 +41,26 @@ body:
         - label: I agree to follow this project's Code of Conduct
           required: true
 
-  contact_links:
-      - name: I have some questions about Flame.
-        url: https://stackoverflow.com/tags/flame
-        about: Ask your questions on StackOverflow! The community is always willing to help out.
-      - name: Join us on Discord!
-        url: https://discord.gg/pxrBmy4
-        about: Ask your questions in our community!
+# Steps to reproduce
+<!-- This one is very important, please be very precise in how we can reproduce this bug -->
+<!-- If possible please report steps based on the example from this plugin! -->
+<!-- If you can make a minimal reproducible example it is incredibly helpful, the simplest way is to share a link from https://zapp.run, you can start from https://zapp.run/edit/flame where all dependencies are already set up. -->
 
+# Flutter doctor output
+<!-- Execute in a terminal and put output into code block below -->
+```
+Output of: flutter doctor -v
+```
+
+# More environment information
+<!--
+Create a list of more environment information, like:
+* Flame version: 1.0.0
+* Platform affected: android, ios, web
+* Platform version affected: android 9, ios 13
+-->
+
+# More information
+<!-- Do you have any other useful information about this bug report? Please write it down here -->
+<!-- Possible helpful information: references to other sites/repositories -->
+<!-- Are you interested in working on a PR for this? -->
