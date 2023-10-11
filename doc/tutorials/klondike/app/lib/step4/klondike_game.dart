@@ -62,14 +62,19 @@ class KlondikeGame extends FlameGame {
     cards.shuffle();
     world.addAll(cards);
 
+    int cardToDeal = cards.length - 1;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
-        piles[j].acquireCard(cards.removeLast());
+        piles[j].acquireCard(cards[cardToDeal--]);
       }
       piles[i].flipTopCard();
     }
-    cards.forEach(stock.acquireCard);
+    for (int n = 0; n <= cardToDeal; n++) {
+      stock.acquireCard(cards[n]);
+    }
     print('\nLength of Cards List ${cards.length}, should be 52.\n');
+    print('Card to deal ${cards[cardToDeal]}, zeroth Card ${cards.first.toString()}');
+    print('The to-deal and zeroth Cards should be first and last from the Stock.');
   }
 }
 
