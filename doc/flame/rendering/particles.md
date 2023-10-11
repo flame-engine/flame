@@ -279,7 +279,7 @@ game.add(
 Renders given `dart:ui` image within the particle tree.
 
 ```dart
-// During game initialisation
+// During game initialization
 await Flame.images.loadAll(const [
   'image.png',
 ]);

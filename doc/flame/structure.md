@@ -39,5 +39,10 @@ flutter:
 ```
 
 If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your instances of `AssetsCache`, `ImagesCache`, `AudioCache`, and `SoundPool`s, instead of using the
+your instances of `AssetsCache`, `Images`, and `AudioCache`, instead of using the
 global ones provided by Flame.
+
+Additionally, `AssetsCache` and `Images` can receive a custom
+[`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html).
+This can be used to make Flame look for assets in a different location other the `rootBundle`,
+like the file system for example.

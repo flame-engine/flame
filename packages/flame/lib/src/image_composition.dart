@@ -83,7 +83,7 @@ class ImageComposition {
   void clear() => _composes.clear();
 
   /// Compose all the images into a single composition.
-  Future<Image> compose() async {
+  Future<Image> compose() {
     final result = _composeCore();
 
     return result.picture.toImageSafe(

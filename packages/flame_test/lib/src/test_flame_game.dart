@@ -72,7 +72,7 @@ Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
   return game;
 }
 
-Future<FlameGame> initializeFlameGame() async => initializeGame(FlameGame.new);
+Future<FlameGame> initializeFlameGame() => initializeGame(FlameGame.new);
 
 typedef CreateFunction<T> = T Function();
 typedef AsyncVoidFunction = Future<void> Function();

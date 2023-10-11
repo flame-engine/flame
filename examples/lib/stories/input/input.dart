@@ -1,5 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
+import 'package:examples/stories/input/advanced_button_example.dart';
 import 'package:examples/stories/input/double_tap_callbacks_example.dart';
 import 'package:examples/stories/input/draggables_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
@@ -129,5 +130,11 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: JoystickAdvancedExample()),
       codeLink: baseLink('input/joystick_advanced_example.dart'),
       info: JoystickAdvancedExample.description,
+    )
+    ..add(
+      'Advanced Button',
+      (_) => GameWidget(game: AdvancedButtonExample()),
+      codeLink: baseLink('input/advanced_button_example.dart'),
+      info: AdvancedButtonExample.description,
     );
 }

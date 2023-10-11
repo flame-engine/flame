@@ -1382,6 +1382,29 @@ void main() {
       );
 
       testWithFlameGame(
+        'Removed keys can be reused by components',
+        (game) async {
+          final key = ComponentKey.named('A');
+          final parent1 = Component(children: [ComponentA(key: key)]);
+
+          game.world.add(parent1);
+          await game.ready();
+
+          parent1.removeFromParent();
+          await game.ready();
+
+          final component = ComponentA(key: key);
+          final parent2 = Component(children: [component]);
+
+          game.world.add(parent2);
+          await game.ready();
+
+          final retrieved1 = game.findByKey(key);
+          expect(retrieved1, equals(component));
+        },
+      );
+
+      testWithFlameGame(
         'Throws assertion error when registering a component with the same key',
         (game) async {
           final component = ComponentA(key: ComponentKey.named('A'));

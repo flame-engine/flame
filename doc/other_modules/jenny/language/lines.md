@@ -135,11 +135,12 @@ is a `#` symbol followed by any text that doesn't contain whitespace.
 Hashtags are used to add line-level metadata. There can be no line content after a hashtag (though
 comments are allowed). A line can have multiple hashtags associated with it.
 
+<!-- cSpell:ignore HPMOR (Harry Potter and the Methods of Rationality) -->
 ```yarn
 title: Hashtags
 ---
 Harry: There is no justice in the laws of Nature, Headmaster, no term for \
-       fairness in the equations of motion. #sad  // HPMOR.39
+       fairness in the equations of motion. #sad // HPMOR.39
 Harry: The universe is neither evil, nor good, it simply does not care.
 Harry: The stars don't care, or the Sun, or the sky.
 Harry: But they don't have to! We care! #elated #volume:+1

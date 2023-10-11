@@ -204,7 +204,7 @@ void main() {
         );
       });
 
-      test('<<visit>> with unknown destination', () async {
+      test('<<visit>> with unknown destination', () {
         final yarn = YarnProject()
           ..parse(
             'title: A\n'
