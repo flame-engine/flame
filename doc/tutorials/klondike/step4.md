@@ -425,19 +425,32 @@ method so that it looks like this:
     cards.shuffle();
     world.addAll(cards);
 
+    int cardToDeal = cards.length - 1;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
-        piles[j].acquireCard(cards.removeLast());
+        piles[j].acquireCard(cards[cardToDeal--]);
       }
       piles[i].flipTopCard();
     }
-    cards.forEach(stock.acquireCard);
+    for(int n = 0; n <= cardToDeal; n++) {
+      stock.acquireCard(cards[n]);
+    }
   }
 ```
 
-Note how we remove the cards from the deck and place them into `TableauPile`s one by one, and only
-after that we put the remaining cards into the stock. Also, the `flipTopCard` method in the
-`TableauPile` class is as trivial as it sounds:
+Note how we deal the cards from the deck and place them into `TableauPile`s one by one, and only
+after that we put the remaining cards into the stock.
+
+Recall that I decided earlier that all the cards would be owned by the `KlondikeGame` itself. So
+they are put into a generated List structure called `cards`, shuffled and added to the `world`. This
+List should always have 52 cards in it, so a descending index `cardToDeal` is used to deal 28 cards
+one by one from the top of the deck into piles that acquire references to the cards in the deck. An
+ascending index is used to deal the remaining 24 cards into the stock in correct shuffled order. At
+the end of the deal there are still 52 `Card` objects in the `cards` list. In the card piles we
+used `removeList()` to retrieve a card from a pile, but not here because it would remove cards
+from `KlondikeGame`'s ownership.
+
+The `flipTopCard` method in the `TableauPile` class is as trivial as it sounds:
 
 ```dart
   void flipTopCard() {
