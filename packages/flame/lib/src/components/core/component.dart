@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/mixins/ignore_events.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
@@ -707,6 +708,9 @@ class Component {
     nestedPoints?.add(point);
     if (_children != null) {
       for (final child in _children!.reversed()) {
+        if (child is IgnoreEvents) {
+          continue;
+        }
         Vector2? childPoint = point;
         if (child is CoordinateTransform) {
           childPoint = (child as CoordinateTransform).parentToLocal(point);
@@ -716,7 +720,7 @@ class Component {
         }
       }
     }
-    if (containsLocalPoint(point)) {
+    if (containsLocalPoint(point) && this is! IgnoreEvents) {
       yield this;
     }
     nestedPoints?.removeLast();
