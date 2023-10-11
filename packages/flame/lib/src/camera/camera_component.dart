@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
