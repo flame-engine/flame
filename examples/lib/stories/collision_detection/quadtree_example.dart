@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -191,7 +192,7 @@ Press T button to toggle player to collide with other objects.
 
   @override
   void onScroll(PointerScrollInfo info) {
-    camera.viewfinder.zoom += info.scrollDelta.game.y.sign * 0.08;
+    camera.viewfinder.zoom += info.scrollDelta.global.y.sign * 0.08;
     camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 5.0);
   }
 }

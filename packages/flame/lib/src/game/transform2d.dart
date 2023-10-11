@@ -35,9 +35,6 @@ class Transform2D extends ChangeNotifier {
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
   final NotifyingVector2 _offset;
-  @Deprecated('Use tau from the package:flame/geometry.dart export instead, '
-      'this field will be removed in Flame v1.10.0')
-  static const tau = 2 * math.pi;
 
   Transform2D()
       : _transformMatrix = Matrix4.identity(),

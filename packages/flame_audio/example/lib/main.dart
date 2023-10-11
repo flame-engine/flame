@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -75,7 +76,7 @@ class AudioGame extends FlameGame with TapDetector {
 
   @override
   void onTapDown(TapDownInfo info) {
-    if (button.containsPoint(info.eventPosition.game)) {
+    if (button.containsPoint(info.eventPosition.widget)) {
       fireTwo();
     } else {
       fireOne();

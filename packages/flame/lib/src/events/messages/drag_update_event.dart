@@ -1,7 +1,5 @@
-import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/messages/position_event.dart';
-import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart';
 
 class DragUpdateEvent extends PositionEvent {
@@ -21,19 +19,6 @@ class DragUpdateEvent extends PositionEvent {
   @override
   Vector2 get localPosition {
     return renderingTrace.isEmpty ? _nanPoint : renderingTrace.last;
-  }
-
-  /// Converts this event into the legacy [DragStartInfo] representation.
-  DragUpdateInfo asInfo(FlameGame game) {
-    return DragUpdateInfo.fromDetails(
-      game,
-      DragUpdateDetails(
-        sourceTimeStamp: timestamp,
-        globalPosition: devicePosition.toOffset(),
-        localPosition: canvasPosition.toOffset(),
-        delta: delta.toOffset(),
-      ),
-    );
   }
 
   @override

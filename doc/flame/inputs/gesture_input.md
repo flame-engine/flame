@@ -1,6 +1,8 @@
 # Gesture Input
 
-This includes documentation for gesture inputs, which is, mouse and touch pointers.
+This is documentation for gesture inputs attached directly on the game class, most of the time you
+want to detect input on your components instead, see for example the [TapCallbacks](tap_events.md)
+and [DragCallbacks](drag_events.md) for that.
 
 For other input documents, see also:
 
@@ -143,7 +145,7 @@ on scale events:
     if (!currentScale.isIdentity()) {
       camera.zoom = startZoom * currentScale.y;
     } else {
-      camera.translateBy(-info.delta.game);
+      camera.translateBy(-info.delta.global);
       camera.snap();
     }
   }
@@ -177,9 +179,9 @@ GameWidget(
 
 ## Event coordinate system
 
-On events that have positions, like for example `Tap*` or `Drag`, you will notice that the `eventPosition`
-attribute includes 3 fields: `game`, `widget` and `global`. Below you will find a brief explanation
-about each one of them.
+On events that have positions, like for example `Tap*` or `Drag`, you will notice that the
+`eventPosition` attribute includes 2 fields: `game` and `widget`. Below you will find a brief
+explanation about each of them.
 
 
 ### global
@@ -190,32 +192,25 @@ The position where the event occurred considering the entire screen, same as
 
 ### widget
 
-The position where the event occurred relative to the `GameWidget` position and size
-, same as `localPosition` in Flutter's native events.
-
-
-### game
-
-The position where the event ocurred relative to the `GameWidget` and with any
-transformations that the game applied to the game (e.g. camera). If the game doesn't have any
-transformations, this will be equal to the `widget` attribute.
+The position where the event occurred relative to the `GameWidget` position and size, same as
+`localPosition` in Flutter's native events.
 
 
 ## Example
 
 ```dart
-class MyGame extends Game with TapDetector {
+class MyGame extends FlameGame with TapDetector {
   // Other methods omitted
 
   @override
   bool onTapDown(TapDownInfo info) {
-    print("Player tap down on ${info.eventPosition.game}");
+    print("Player tap down on ${info.eventPosition.widget}");
     return true;
   }
 
   @override
   bool onTapUp(TapUpInfo info) {
-    print("Player tap up on ${info.eventPosition.game}");
+    print("Player tap up on ${info.eventPosition.widget}");
     return true;
   }
 }
@@ -223,279 +218,6 @@ class MyGame extends Game with TapDetector {
 
 You can also check more complete examples
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/).
-
-
-## Tappable, Draggable and Hoverable components
-
-Any component derived from `Component` (most components) can add the `Tappable`, the
-`Draggable`, and/or the `Hoverable` mixins to handle taps, drags and hovers on the component.
-
-All overridden methods return a boolean to control if the event should be passed down further along
-to components underneath it. So say that you only want your top visible component to receive a tap
-and not the ones underneath it, then your `onTapDown`, `onTapUp` and `onTapCancel` implementations
-should return `false` and if you want the event to go through more of the components underneath then
-you should return `true`.
-
-The same applies if your component has children, then the event is first sent to the leaves in the
-children tree and then passed further down until a method returns `false`.
-
-
-### Tappable components
-
-By adding the `HasTappables` mixin to your game, and using the mixin `Tappable` on your
-components, you can override the following methods on your components:
-
-```dart
-bool onTapCancel();
-bool onTapDown(TapDownInfo info);
-bool onLongTapDown(TapDownInfo info);
-bool onTapUp(TapUpInfo info);
-```
-
-Minimal component example:
-
-```dart
-import 'package:flame/components.dart';
-
-class TappableComponent extends PositionComponent with Tappable {
-
-  // update and render omitted
-
-  @override
-  bool onTapUp(TapUpInfo info) {
-    print("tap up");
-    return true;
-  }
-
-  @override
-  bool onTapDown(TapDownInfo info) {
-    print("tap down");
-    return true;
-  }
-
-  @override
-  bool onTapCancel() {
-    print("tap cancel");
-    return true;
-  }
-}
-
-class MyGame extends FlameGame with HasTappables {
-  MyGame() {
-    add(TappableComponent());
-  }
-}
-```
-
-**Note**: `HasTappables` uses an advanced gesture detector under the hood and as explained
-further up on this page it shouldn't be used alongside basic detectors.
-
-To recognize whether a `Tappable` added to the game handled an event, the `handled` field can be set
-to true in the event can be checked in the corresponding method in the game class, or further down
-the chain if you let the event continue to propagate.
-
-In the following example it can be seen how it is used with `onTapDown`, the same technique can also
-be applied to `onTapUp`.
-
-```dart
-class MyComponent extends PositionComponent with Tappable{
-  @override
-  bool onTapDown(TapDownInfo info) {
-    info.handled = true;
-    return true;
-  }
-}
-
-class MyGame extends FlameGame with HasTappables {
-  @override
-  void onTapDown(int pointerId, TapDownInfo info) {
-    if (info.handled) {
-      // Do something if a child handled the event
-    }
-  }
-}
-```
-
-The event `onLongTapDown` will be triggered on a component after the user "holds" it for a certain
-minimum amount of time. By default, that time is 300ms, but it can be adjusted by overriding the
-`longTapDelay` field of the `HasTappables` mixin.
-
-
-### Draggable components
-
-Just like with `Tappable`, Flame offers a mixin for `Draggable`.
-
-By adding the `HasDraggables` mixin to your game, and by using the mixin `Draggable` on
-your components, they can override the simple methods that enable an easy to use drag api on your
-components.
-
-```dart
-  bool onDragStart(DragStartInfo info);
-  bool onDragUpdate(DragUpdateInfo info);
-  bool onDragEnd(DragEndInfo info);
-  bool onDragCancel();
-```
-
-Note that all events take a uniquely generated pointer id so you can, if desired, distinguish
-between different simultaneous drags.
-
-The default implementation provided by `Draggable` will already check:
-
-- upon drag start, the component only receives the event if the position is within its bounds; keep
- track of pointerId.
-- when handling updates/end/cancel, the component only receives the event if the pointerId was
- tracked (regardless of position).
-- on end/cancel, stop tracking pointerId.
-
-Minimal component example (this example ignores pointerId so it wont work well if you try to
-multi-drag):
-
-```dart
-import 'package:flame/components.dart';
-
-class DraggableComponent extends PositionComponent with Draggable {
-
-  // update and render omitted
-
-  Vector2? dragDeltaPosition;
-  bool get isDragging => dragDeltaPosition != null;
-
-  bool onDragStart(DragStartInfo startPosition) {
-    dragDeltaPosition = startPosition.eventPosition.game - position;
-    return false;
-  }
-
-  @override
-  bool onDragUpdate(DragUpdateInfo event) {
-    if (isDragging) {
-      final localCoords = event.eventPosition.game;
-      position = localCoords - dragDeltaPosition!;
-    }
-    return false;
-  }
-
-  @override
-  bool onDragEnd(DragEndInfo event) {
-    dragDeltaPosition = null;
-    return false;
-  }
-
-  @override
-  bool onDragCancel() {
-    dragDeltaPosition = null;
-    return false;
-  }
-}
-
-class MyGame extends FlameGame with HasDraggables {
-  MyGame() {
-    add(DraggableComponent());
-  }
-}
-```
-
-To recognize whether a `Draggable` added to the game handled an event, the `handled` field can be
-set to true in the event can be checked in the corresponding method in the game class, or further
-down the chain if you let the event continue to propagate.
-
-In the following example it can be seen how it is used with `onDragStart`, the same technique can
-also be applied to `onDragUpdate` and `onDragEnd`.
-
-```dart
-class MyComponent extends PositionComponent with Draggable {
- @override
- bool onDragStart(DragStartInfo info) {
-   info.handled = true;
-   return true;
- }
-}
-
-class MyGame extends FlameGame with HasDraggables {
-  @override
-  void onDragStart(int pointerId, DragStartInfo info) {
-    if (info.handled) {
-      // Do something if a child handled the event
-    }
-  }
-}
-```
-
-
-### Hoverable components
-
-Just like the others, this mixin allows for easy wiring of your component to listen to hover states
-and events.
-
-By adding the `HasHoverables` mixin to your base game, and by using the mixin `Hoverable` on
-your components, they get an `isHovered` field and a couple of methods (`onHoverStart`,
-`onHoverEnd`) that you can override if you want to listen to the events.
-
-```dart
-  bool isHovered = false;
-  bool onHoverEnter(PointerHoverInfo info) {
-    print("hover enter");
-    return true;
-  }
-  bool onHoverLeave(PointerHoverInfo info) {
-   print("hover leave");
-   return true;
-  }
-```
-
-The provided event info is from the mouse move that triggered the action (entering or leaving).
-While the mouse movement is kept inside or outside, no events are fired and those mouse move events are
-not propagated. Only when the state is changed the handlers are triggered.
-
-To recognize whether a `Hoverable` added to the game handled an event, the `handled` field can be
-set to true in the event can be checked in the corresponding method in the game class, or further
-down the chain if you let the event continue to propagate.
-
-In the following example it can be seen how it is used with `onHoverEnter`, the same technique can
-also be applied to `onHoverLeave`.
-
-```dart
-class MyComponent extends PositionComponent with Hoverable {
-  @override
-  bool onHoverEnter(PointerHoverInfo info) {
-    info.handled = true;
-    return true;
-  }
-}
-
-class MyGame extends FlameGame with HasHoverables {
-  @override
-  void onHoverEnter(PointerHoverInfo info) {
-    if (info.handled) {
-      // Do something if a child handled the event
-    }
-  }
-}
-```
-
-
-### DoubleTapCallbacks
-
-Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the
-component. To start receiving double tap events in a component, add the
-`DoubleTapCallbacks` mixin to your `PositionComponent`.
-
-```dart
-class MyComponent extends PositionComponent with DoubleTapCallbacks {
-  @override
-  void onDoubleTapUp(DoubleTapEvent event) {
-    /// Do something
-  }
-
-  @override
-  void onDoubleTapCancel(DoubleTapCancelEvent event) {
-    /// Do something
-  }
-
-  @override
-  void onDoubleTapDown(DoubleTapDownEvent event) {
-    /// Do something
-  }
-```
 
 
 ### GestureHitboxes

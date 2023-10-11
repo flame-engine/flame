@@ -1,3 +1,4 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -23,7 +24,7 @@ class MultitapAdvancedExample extends FlameGame
 
   @override
   void onTapDown(int pointerId, TapDownInfo info) {
-    taps[pointerId] = info.eventPosition.game.toPositionedRect(tapSize);
+    taps[pointerId] = info.eventPosition.widget.toPositionedRect(tapSize);
   }
 
   @override
@@ -46,12 +47,12 @@ class MultitapAdvancedExample extends FlameGame
   @override
   void onDragStart(int pointerId, DragStartInfo info) {
     end = null;
-    start = info.eventPosition.game;
+    start = info.eventPosition.widget;
   }
 
   @override
   void onDragUpdate(int pointerId, DragUpdateInfo info) {
-    end = info.eventPosition.game;
+    end = info.eventPosition.widget;
   }
 
   @override
