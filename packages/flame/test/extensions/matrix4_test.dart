@@ -104,6 +104,6 @@ void main() {
   });
 }
 
-// This need the mixin because Mock's == paramter is not nullable
-// but Matrix4's == paramter is nullable
+// This need the mixin because Mock's == parameter is not nullable
+// but Matrix4's == parameter is nullable
 class MockMatrix4 extends Mock with NullableEqualsMixin implements Matrix4 {}

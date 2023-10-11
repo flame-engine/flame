@@ -70,7 +70,7 @@ class AnimatedComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    animation = await gameRef.loadSpriteAnimation(
+    animation = await game.loadSpriteAnimation(
       'bomb_ptero.png',
       SpriteAnimationData.sequenced(
         amount: 4,

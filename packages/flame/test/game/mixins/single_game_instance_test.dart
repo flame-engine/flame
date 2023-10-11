@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('SingleGameInstance', () {
-    test('game instance becomes statically available', () async {
+    test('game instance becomes statically available', () {
       final game = SingletonGame()
         ..onGameResize(Vector2.all(100))
         ..onMount();
@@ -13,14 +13,14 @@ void main() {
       game.onRemove();
     });
 
-    test('guard against multiple game instances', () async {
+    test('guard against multiple game instances', () {
       final game = SingletonGame()
         ..onGameResize(Vector2.all(100))
         ..onMount();
       expect(
         FlameGame.new,
         failsAssert(
-          "Instance of 'FlameGame' instantiated, while another game "
+          "Instance of 'FlameGame<World>' instantiated, while another game "
           "Instance of 'SingletonGame' declares itself to be a singleton",
         ),
       );

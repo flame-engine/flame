@@ -217,7 +217,7 @@ void main() {
 
         expect(component.getPaint('bluePaint').color.opacity, isZero);
 
-        // RGB components shouldn't be affected after opacity efffect.
+        // RGB components shouldn't be affected after opacity effect.
         expect(component.getPaint('bluePaint').color.blue, 255);
         expect(component.getPaint('bluePaint').color.red, isZero);
         expect(component.getPaint('bluePaint').color.green, isZero);

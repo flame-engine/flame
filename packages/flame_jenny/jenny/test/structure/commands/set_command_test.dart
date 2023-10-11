@@ -42,6 +42,7 @@ void main() {
     });
 
     test('Basic.plan', () async {
+      // cSpell:ignore noooo haha aargh
       await testScenario(
         input: r'''
           <<declare $foo as Number>>
@@ -64,7 +65,7 @@ void main() {
           <<if $foo is 54>>
               haha nice now 'set' works even when deeply nested
           <<else>>
-              aaargh >:(
+              aargh >:(
           <<endif>>
           ===
         ''',

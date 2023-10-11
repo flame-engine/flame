@@ -1,3 +1,16 @@
+## 1.1.0
+
+ - **REFACTOR**: Enable new DCM rule: avoid-cascade-after-if-null ([#2676](https://github.com/flame-engine/flame/issues/2676)). ([158fc34c](https://github.com/flame-engine/flame/commit/158fc34cae858cf8d0b5d3b5155763e02454779a))
+ - **REFACTOR**: Remove unused variable on dialogue_view_test.dart ([#2673](https://github.com/flame-engine/flame/issues/2673)). ([b77802a5](https://github.com/flame-engine/flame/commit/b77802a5e3a3c2fa68650dfa5d5f2aaed0f9a147))
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Change DialogueView to a mixin class ([#2652](https://github.com/flame-engine/flame/issues/2652)). ([f3d4158b](https://github.com/flame-engine/flame/commit/f3d4158b83685b479b0e7373bfbc7f8a6c16d822))
+ - **FEAT**(flame_jenny): Allow removal of functions and commands ([#2717](https://github.com/flame-engine/flame/issues/2717)). ([a097cc01](https://github.com/flame-engine/flame/commit/a097cc01bc2bf789684c23320b16018dfc9dc664))
+ - **FEAT**(flame_jenny): Allow removal of variables ([#2716](https://github.com/flame-engine/flame/issues/2716)). ([eaa8c091](https://github.com/flame-engine/flame/commit/eaa8c091627e4dd743c88dda42d4da70dca40e8b))
+ - **FEAT**(flame_jenny): Allow removal of characters ([#2715](https://github.com/flame-engine/flame/issues/2715)). ([3421f4f9](https://github.com/flame-engine/flame/commit/3421f4f944516d998460a5347125d8f100366c42))
+ - **FEAT**(flame_jenny): Public access to variables to allow load/save ([#2689](https://github.com/flame-engine/flame/issues/2689)). ([1485f842](https://github.com/flame-engine/flame/commit/1485f8426ebb6dd1390a0062c5e83ed1c0461f21))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **DOCS**: Improved spellchecking ([#2722](https://github.com/flame-engine/flame/issues/2722)). ([2f973abe](https://github.com/flame-engine/flame/commit/2f973abe8b298a4f6f1164065783de560953d789))
+
 ## 1.0.4
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))

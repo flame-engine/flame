@@ -72,14 +72,15 @@ Future<void> main() async {
           removeOnFinish: true,
         );
 
-        await game.ensureAdd(component);
+        final world = game.world;
+        await world.ensureAdd(component);
 
-        expect(game.children.length, 1);
+        expect(world.children.length, 1);
         game.update(2);
 
         // runs a cycle to remove the component
         game.update(0.1);
-        expect(game.children.length, 0);
+        expect(world.children.length, 0);
       },
     );
 
@@ -100,17 +101,18 @@ Future<void> main() async {
           removeOnFinish: true,
         );
 
-        await game.ensureAdd(component);
+        final world = game.world;
+        await world.ensureAdd(component);
 
-        expect(component.parent, game);
-        expect(game.children.length, 1);
+        expect(component.parent, world);
+        expect(world.children.length, 1);
 
         game.update(2);
-        expect(component.parent, game);
+        expect(component.parent, world);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
-        expect(game.children.length, 1);
+        expect(world.children.length, 1);
       },
     );
 
@@ -131,17 +133,18 @@ Future<void> main() async {
           removeOnFinish: false,
         );
 
-        await game.ensureAdd(component);
+        final world = game.world;
+        await world.ensureAdd(component);
 
-        expect(component.parent, game);
-        expect(game.children.length, 1);
+        expect(component.parent, world);
+        expect(world.children.length, 1);
 
         game.update(2);
-        expect(component.parent, game);
+        expect(component.parent, world);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
-        expect(game.children.length, 1);
+        expect(world.children.length, 1);
       },
     );
 
@@ -163,17 +166,18 @@ Future<void> main() async {
           removeOnFinish: false,
         );
 
-        await game.ensureAdd(component);
+        final world = game.world;
+        await world.ensureAdd(component);
 
-        expect(component.parent, game);
-        expect(game.children.length, 1);
+        expect(component.parent, world);
+        expect(world.children.length, 1);
 
         game.update(2);
-        expect(component.parent, game);
+        expect(component.parent, world);
 
         // runs a cycle to remove the component, but failed
         game.update(0.1);
-        expect(game.children.length, 1);
+        expect(world.children.length, 1);
       },
     );
 
@@ -194,23 +198,24 @@ Future<void> main() async {
           playing: false,
         );
 
-        await game.ensureAdd(component);
+        final world = game.world;
+        await world.ensureAdd(component);
 
-        expect(component.parent, game);
-        expect(game.children.length, 1);
+        expect(component.parent, world);
+        expect(world.children.length, 1);
 
         game.update(2);
-        expect(component.parent, game);
+        expect(component.parent, world);
 
         // runs a cycle to potentially remove the component
         game.update(0.1);
-        expect(game.children.length, 1);
+        expect(world.children.length, 1);
       },
     );
   });
 
   group('SpriteAnimation timing of animation frames', () {
-    test('Can move to last frame programatically', () {
+    test('Can move to last frame programmatically', () {
       // Non-looping animation, with the expected total duration of 0.500 s
       final animation = SpriteAnimation.spriteList(
         List.filled(5, Sprite(image)),

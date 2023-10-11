@@ -1,41 +1,36 @@
+import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
-import 'package:flame_forge2d/world_contact_listener.dart';
+import 'package:flame_forge2d/forge2d_world.dart';
 import 'package:forge2d/forge2d.dart';
 
-class Forge2DGame extends FlameGame {
+/// The base game class for creating games that uses the Forge2D physics engine.
+class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   Forge2DGame({
+    Forge2DWorld? world,
+    CameraComponent? cameraComponent,
     Vector2? gravity,
-    double zoom = defaultZoom,
-    Camera? camera,
     ContactListener? contactListener,
-  })  : world = World(gravity ?? defaultGravity),
-        super(camera: camera ?? Camera()) {
-    // ignore: deprecated_member_use
-    this.camera.zoom = zoom;
-    world.setContactListener(contactListener ?? WorldContactListener());
-  }
+    double zoom = 10,
+  }) : super(
+          world: ((world?..setGravity(gravity)) ??
+              Forge2DWorld(
+                gravity: gravity,
+                contactListener: contactListener,
+              )) as T,
+          camera: (cameraComponent ?? CameraComponent())
+            ..viewfinder.zoom = zoom,
+        );
 
-  static final Vector2 defaultGravity = Vector2(0, 10.0);
-
-  static const double defaultZoom = 10.0;
-
-  final World world;
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    world.stepDt(dt);
-  }
-
+  /// Takes a point in world coordinates and returns it in screen coordinates.
   Vector2 worldToScreen(Vector2 position) {
-    return projector.projectVector(position);
+    return camera.localToGlobal(position);
   }
 
+  /// Takes a point in screen coordinates and returns it in world coordinates.
+  ///
+  /// Remember that if you are using this for your events you can most of the
+  /// time just use `event.localPosition` directly instead.
   Vector2 screenToWorld(Vector2 position) {
-    return projector.unprojectVector(position);
-  }
-
-  Vector2 screenToFlameWorld(Vector2 position) {
-    return screenToWorld(position)..y *= -1;
+    return camera.globalToLocal(position);
   }
 }

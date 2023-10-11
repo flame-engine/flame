@@ -49,6 +49,7 @@ void main() {
 
     group('parseNodeHeader', () {
       test('node with tags', () {
+        // cSpell:ignore Montagues, Capulets
         final yarn = YarnProject();
         yarn.parse('title: Romeo_v_Juliette\n'
             'requires: Montagues and Capulets\n'

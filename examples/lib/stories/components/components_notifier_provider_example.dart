@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class ComponentsNotifierProviderExampleWidget extends StatefulWidget {
   const ComponentsNotifierProviderExampleWidget({super.key});
 
-  static String description = '''
+  static const String description = '''
       Similar to the Components Notifier example, but uses provider
       instead of the built in ComponentsNotifierBuilder widget.
 ''';

@@ -1,4 +1,3 @@
-import 'package:flame/game.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/events/flame_game_mixins/double_tap_dispatcher.dart';
 import 'package:flame/src/events/messages/double_tap_cancel_event.dart';
@@ -29,7 +28,7 @@ mixin DoubleTapCallbacks on Component {
   @override
   void onMount() {
     super.onMount();
-    final game = findGame()! as FlameGame;
+    final game = findRootGame()!;
     if (game.findByKey(const DoubleTapDispatcherKey()) == null) {
       final dispatcher = DoubleTapDispatcher();
       game.registerKey(const DoubleTapDispatcherKey(), dispatcher);

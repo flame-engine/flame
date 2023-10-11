@@ -64,14 +64,15 @@ class Tire extends BodyComponent<PadRacingGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    gameRef.cameraWorld.add(Trail(car: car, tire: this));
+    game.world.add(Trail(car: car, tire: this));
   }
 
   @override
   Body createBody() {
-    final jointAnchor = isFrontTire
-        ? Vector2(isLeftTire ? -3.0 : 3.0, 3.5)
-        : Vector2(isLeftTire ? -3.0 : 3.0, -4.25);
+    final jointAnchor = Vector2(
+      isLeftTire ? -3.0 : 3.0,
+      isFrontTire ? 3.5 : -4.25,
+    );
 
     final def = BodyDef()
       ..type = BodyType.dynamic
@@ -93,7 +94,7 @@ class Tire extends BodyComponent<PadRacingGame> {
     if (body.isAwake || pressedKeys.isNotEmpty) {
       _updateTurn(dt);
       _updateFriction();
-      if (!gameRef.isGameOver) {
+      if (!game.isGameOver) {
         _updateDrive();
       }
     }

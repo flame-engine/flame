@@ -18,6 +18,78 @@ add(component);
 ```
 
 
+## TiledComponent
+
+Tiled is a free and open source, full-featured level and map editor for your platformer or
+RPG game. Currently we have an "in progress" implementation of a Tiled component. This API
+uses the lib [tiled.dart](https://github.com/flame-engine/tiled.dart) to parse map files and
+render visible layers using the performant `SpriteBatch` for each layer.
+
+Supported map types include: Orthogonal, Isometric, Hexagonal, and Staggered.
+
+Orthogonal | Hexagonal             |  Isomorphic
+:--:|:-------------------------:|:-------------------------:
+![An example of an orthogonal map](../../images/orthogonal.png)|![An example of hexagonal map](../../images/pointy_hex_even.png) |  ![An example of isomorphic map](../../images/tile_stack_single_move.png)
+
+An example of how to use the API can be found
+[here](https://github.com/flame-engine/flame_tiled/tree/main/example).
+
+
+### TileStack
+
+Once a `TiledComponent` is loaded, you can select any column of (x,y) tiles in a `tileStack` to
+then add animation. Removing the stack will not remove the tiles from the map.
+
+> **Note**: This currently only supports position based effects.
+
+```dart
+void onLoad() {
+  final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
+  stack.add(
+    SequenceEffect(
+      [
+        MoveEffect.by(
+          Vector2(5, 0),
+          NoiseEffectController(duration: 1, frequency: 20),
+        ),
+        MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
+      ],
+      repeatCount: 3,
+    )
+      ..onComplete = () => stack.removeFromParent(),
+  );
+  map.add(stack);
+}
+```
+
+
+### TileAtlas
+
+When a tilemap has multiple images (from multiple tilesets) `TiledComponent` uses a `TileAtlas` to
+pack all those image into a single big image (a.k.a atlas). This helps in rendering the whole map in
+a single draw call. But is there a limit on how big this atlas can be based on the target platform
+and hardware. As it is not possible to query this max size from Flame or Flutter as of now,
+`TiledComponent` limits the atlas to `4096x4096` for web and `8192x8192` for all other platforms.
+
+These limits should work well for most cases. But in case you are sure that your target platform can
+support bigger atlas and want to override the limits used by `TiledComponent` you can do so by
+passing in the `atlasMaxX` and `atlasMaxX` values to `TiledComponent.load`.
+
+NOTE: This is not recommended as such huge sizes might not work with all hardware. Instead consider
+resizing the original tileset images so that when packed they fit with the limits.
+
+```dart
+final component = await TiledComponent.load(
+  'my_map.tmx',
+  Vector2.all(32),
+  atlasMaxX: 9216,
+  atlasMaxY: 9216,
+);
+
+add(component);
+```
+
+
 ## Limitations
 
 

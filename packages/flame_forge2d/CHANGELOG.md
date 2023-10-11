@@ -1,3 +1,18 @@
+## 0.15.0+1
+
+ - Update a dependency to the latest release.
+
+## 0.15.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Absolute angle takes into account BodyComponent ancestors too ([#2678](https://github.com/flame-engine/flame/issues/2678)). ([75aee767](https://github.com/flame-engine/flame/commit/75aee767811ef440841956d9e467be157c4ab880))
+ - **FIX**: Proper Flame dependency in flame_forge2d ([#2644](https://github.com/flame-engine/flame/issues/2644)). ([9bbecb88](https://github.com/flame-engine/flame/commit/9bbecb88d86aa051626267fd69e5bf71fdca66d6))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+ - **BREAKING** **FEAT**: Move `Forge2DGame` to use `CameraComponent` ([#2728](https://github.com/flame-engine/flame/issues/2728)). ([7a3d5126](https://github.com/flame-engine/flame/commit/7a3d5126a54d23cdebde20953772a53ba1a53204))
+
 ## 0.14.1+1
 
  - Update a dependency to the latest release.

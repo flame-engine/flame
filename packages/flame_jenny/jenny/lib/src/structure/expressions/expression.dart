@@ -3,18 +3,17 @@ abstract class Expression {
 
   dynamic get value;
 
-  bool get isNumeric => false;
-  bool get isBoolean => false;
-  bool get isString => false;
+  bool get isNumeric => type == ExpressionType.numeric;
+  bool get isBoolean => type == ExpressionType.boolean;
+  bool get isString => type == ExpressionType.string;
 
   ExpressionType get type {
-    return isNumeric
-        ? ExpressionType.numeric
-        : isBoolean
-            ? ExpressionType.boolean
-            : isString
-                ? ExpressionType.string
-                : ExpressionType.unknown;
+    return switch (this) {
+      NumExpression() => ExpressionType.numeric,
+      BoolExpression() => ExpressionType.boolean,
+      StringExpression() => ExpressionType.string,
+      _ => ExpressionType.unknown,
+    };
   }
 }
 
@@ -30,9 +29,6 @@ abstract class NumExpression extends Expression {
 
   @override
   num get value;
-
-  @override
-  bool get isNumeric => true;
 }
 
 abstract class StringExpression extends Expression {
@@ -40,9 +36,6 @@ abstract class StringExpression extends Expression {
 
   @override
   String get value;
-
-  @override
-  bool get isString => true;
 }
 
 abstract class BoolExpression extends Expression {
@@ -50,7 +43,4 @@ abstract class BoolExpression extends Expression {
 
   @override
   bool get value;
-
-  @override
-  bool get isBoolean => true;
 }

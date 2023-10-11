@@ -1,11 +1,12 @@
 import 'dart:ui';
 
+import 'package:flame/game.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Viewport] is a part of a [CameraComponent] system.
 ///
@@ -25,6 +26,7 @@ abstract class Viewport extends Component
   Viewport({super.children});
 
   final Vector2 _size = Vector2.zero();
+  bool _isInitialized = false;
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
   ///
@@ -54,7 +56,21 @@ abstract class Viewport extends Component
   /// Changing the size at runtime triggers the [onViewportResize] event. The
   /// size cannot be negative.
   @override
-  Vector2 get size => _size;
+  Vector2 get size {
+    if (!_isInitialized && camera.parent is FlameGame) {
+      // This is so that the size can be accessed before the viewport is fully
+      // mounted.
+      onGameResize((camera.parent! as FlameGame).canvasSize);
+    }
+    return _size;
+  }
+
+  /// In most cases [virtualSize] is the same as [size], but in the cases when
+  /// the viewport is emulating a different size, this is the size of the
+  /// emulated viewport, for example the resolution for the
+  /// [FixedResolutionViewport].
+  Vector2 get virtualSize => size;
+
   @override
   set size(Vector2 value) {
     assert(
@@ -62,7 +78,8 @@ abstract class Viewport extends Component
       "Viewport's size cannot be negative: $value",
     );
     _size.setFrom(value);
-    if (isMounted) {
+    _isInitialized = true;
+    if (parent != null) {
       camera.viewfinder.onViewportResize();
     }
     onViewportResize();
@@ -103,12 +120,31 @@ abstract class Viewport extends Component
   @protected
   void onViewportResize();
 
-  @mustCallSuper
-  @override
-  void onMount() {
-    assert(
-      parent! is CameraComponent,
-      'A Viewport may only be attached to a CameraComponent',
-    );
+  /// Converts a point from the global coordinate system to the local
+  /// coordinate system of the viewport.
+  ///
+  /// Use [output] to send in a Vector2 object that will be used to avoid
+  /// creating a new Vector2 object in this method.
+  ///
+  /// Opposite of [localToGlobal].
+  Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
+    final x = point.x - position.x + anchor.x * size.x;
+    final y = point.y - position.y + anchor.y * size.y;
+    return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
+
+  /// Converts a point from the local coordinate system of the viewport to the
+  /// global coordinate system.
+  ///
+  /// Use [output] to send in a Vector2 object that will be used to avoid
+  /// creating a new Vector2 object in this method.
+  ///
+  /// Opposite of [globalToLocal].
+  Vector2 localToGlobal(Vector2 point, {Vector2? output}) {
+    final x = point.x + position.x - anchor.x * size.x;
+    final y = point.y + position.y - anchor.y * size.y;
+    return (output?..setValues(x, y)) ?? Vector2(x, y);
+  }
+
+  void transformCanvas(Canvas canvas) {}
 }

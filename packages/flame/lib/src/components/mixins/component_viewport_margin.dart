@@ -1,11 +1,13 @@
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
 /// The [ComponentViewportMargin] positions itself by a margin to the edge of
-/// the [Viewport] instead of by an absolute position on the screen or on the
-/// game, so if the game is resized the component will move to keep its margin.
+/// the [Viewport] (or another parent with a `size`) instead of by an absolute
+/// position on the screen or on the game, so if the game is resized the
+/// component will move to keep its margin.
 ///
 /// Note that the margin is calculated to the [Anchor], not to the edge of the
 /// component.
@@ -16,13 +18,10 @@ import 'package:meta/meta.dart';
 ///
 /// Do note that this only works with the old style camera and not the
 /// [CameraComponent].
-mixin ComponentViewportMargin on PositionComponent, HasGameRef {
-  // TODO(Lukas): Don't use PositionType here and use CameraComponent.
-  @override
-  PositionType positionType = PositionType.viewport;
-
+// TODO(Lukas): Rename this since it isn't necessarily related to the viewport.
+mixin ComponentViewportMargin on PositionComponent, HasGameReference {
   /// Instead of setting a position of the [PositionComponent] that uses
-  /// [ComponentViewportMargin] a margin from the edges of the viewport can be
+  /// [ComponentViewportMargin] a margin from the edges of the parent can be
   /// used instead.
   EdgeInsets? margin;
 
@@ -30,15 +29,18 @@ mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   @mustCallSuper
   Future<void> onLoad() async {
     super.onLoad();
+    assert(parent is ReadOnlySizeProvider, 'The parent must provide a size.');
     // If margin is not null we will update the position `onGameResize` instead
     if (margin == null) {
-      final screenSize = gameRef.size;
+      final bounds = parent is Viewport
+          ? (parent! as Viewport).virtualSize
+          : (parent! as ReadOnlySizeProvider).size;
       final topLeft = anchor.toOtherAnchorPosition(
         position,
         Anchor.topLeft,
         scaledSize,
       );
-      final bottomRight = screenSize -
+      final bottomRight = bounds -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.bottomRight,
@@ -66,17 +68,16 @@ mixin ComponentViewportMargin on PositionComponent, HasGameRef {
   }
 
   void _updateMargins() {
-    final screenSize = positionType == PositionType.viewport
-        // ignore: deprecated_member_use_from_same_package
-        ? gameRef.camera.viewport.effectiveSize
-        : gameRef.canvasSize;
+    final bounds = parent is Viewport
+        ? (parent! as Viewport).virtualSize
+        : (parent! as ReadOnlySizeProvider).size;
     final margin = this.margin!;
     final x = margin.left != 0
         ? margin.left + scaledSize.x / 2
-        : screenSize.x - margin.right - scaledSize.x / 2;
+        : bounds.x - margin.right - scaledSize.x / 2;
     final y = margin.top != 0
         ? margin.top + scaledSize.y / 2
-        : screenSize.y - margin.bottom - scaledSize.y / 2;
+        : bounds.y - margin.bottom - scaledSize.y / 2;
     position.setValues(x, y);
     position = Anchor.center.toOtherAnchorPosition(
       position,

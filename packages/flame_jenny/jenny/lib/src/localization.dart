@@ -125,6 +125,9 @@ String _plural25(num number, List<String> words) {
   return words[2];
 }
 
+// used as examples of Ukrainian words on the documentation below
+// cSpell:ignore рушниця, рушниці, рушниць
+
 /// Ukrainian (uk), Russian (ru)
 ///
 /// The function requires 3 forms of the word: single-, few-, and many-. You

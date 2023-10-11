@@ -10,7 +10,7 @@ import '../objects/star.dart';
 import 'water_enemy.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, CollisionCallbacks, HasGameRef<EmberQuestGame> {
+    with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
   EmberPlayer({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);

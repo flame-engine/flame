@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -47,7 +48,7 @@ class TextBoxConfig {
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
-    ..filterQuality = FilterQuality.high;
+    ..filterQuality = FilterQuality.medium;
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
@@ -133,18 +134,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @internal
   void updateBounds() {
     lines.clear();
-    double? lineHeight;
+    var lineHeight = 0.0;
     final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
       final wordLines = word.split('\n');
       final possibleLine =
           lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
-      lineHeight ??= textRenderer.measureTextHeight(possibleLine);
+      final metrics = textRenderer.getLineMetrics(possibleLine);
+      lineHeight = max(lineHeight, metrics.height);
 
-      final textWidth = textRenderer.measureTextWidth(possibleLine);
-      _updateMaxWidth(textWidth);
-      var canAppend = false;
-      if (textWidth <= maxBoxWidth - _boxConfig.margins.horizontal) {
+      _updateMaxWidth(metrics.width);
+      final bool canAppend;
+      if (metrics.width <= maxBoxWidth - _boxConfig.margins.horizontal) {
         canAppend = lines.isNotEmpty;
       } else {
         canAppend = lines.isNotEmpty && lines.last == '';
@@ -161,7 +162,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       }
     });
     _totalLines = lines.length;
-    _lineHeight = lineHeight ?? 0.0;
+    _lineHeight = lineHeight;
     size = _recomputeSize();
   }
 
@@ -197,9 +198,11 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   }
 
   double getLineWidth(String line, int charCount) {
-    return textRenderer.measureTextWidth(
-      line.substring(0, math.min(charCount, line.length)),
-    );
+    return textRenderer
+        .getLineMetrics(
+          line.substring(0, math.min(charCount, line.length)),
+        )
+        .width;
   }
 
   Vector2 _recomputeSize() {
@@ -269,17 +272,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         final nChars = math.min(currentChar - charCount, line.length);
         line = line.substring(0, nChars);
       }
-      textRenderer.render(
-        canvas,
-        line,
-        Vector2(
-          boxConfig.margins.left +
-              (boxWidth - textRenderer.measureTextWidth(line)) * align.x,
-          boxConfig.margins.top +
-              (boxHeight - nLines * _lineHeight) * align.y +
-              i * _lineHeight,
-        ),
+
+      final textElement = textRenderer.format(line);
+      final metrics = textElement.metrics;
+
+      final position = Vector2(
+        boxConfig.margins.left + (boxWidth - metrics.width) * align.x,
+        boxConfig.margins.top +
+            (boxHeight - nLines * _lineHeight) * align.y +
+            i * _lineHeight,
       );
+      textElement.render(canvas, position);
+
       charCount += lines[i].length;
     }
   }

@@ -4,11 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -266,15 +264,10 @@ class Component {
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
-    if (newParent == _parent) {
-      return;
-    } else if (newParent == null) {
+    if (newParent == null) {
       removeFromParent();
-    } else if (_parent == null) {
-      addToParent(newParent);
     } else {
-      final root = findGame()! as ComponentTreeRoot;
-      root.enqueueMove(this, newParent);
+      addToParent(newParent);
     }
   }
 
@@ -384,9 +377,27 @@ class Component {
 
   @internal
   static Game? staticGameInstance;
-  Game? findGame() {
-    return staticGameInstance ??
-        ((this is Game) ? (this as Game) : _parent?.findGame());
+
+  /// Fetches the nearest [FlameGame] ancestor to the component.
+  FlameGame? findGame() {
+    assert(
+      staticGameInstance is FlameGame || staticGameInstance == null,
+      'A component needs to have a FlameGame as the root.',
+    );
+    final gameInstance = staticGameInstance is FlameGame
+        ? staticGameInstance! as FlameGame
+        : null;
+    return gameInstance ??
+        ((this is FlameGame) ? (this as FlameGame) : _parent?.findGame());
+  }
+
+  /// Fetches the root [FlameGame] ancestor to the component.
+  FlameGame? findRootGame() {
+    var game = findGame();
+    while (game?.parent != null) {
+      game = game!.parent!.findGame();
+    }
+    return game;
   }
 
   /// Whether the children list contains the given component.
@@ -573,16 +584,22 @@ class Component {
   }
 
   FutureOr<void> _addChild(Component child) {
-    assert(
-      child._parent == null,
-      '$child cannot be added to $this because it already has a parent: '
-      '${child._parent}',
-    );
-    child._parent = this;
-    final game = findGame();
-    if (isMounted && !child.isMounted) {
-      (game! as FlameGame).enqueueAdd(child, this);
+    final game = findGame() ?? child.findGame();
+    if ((!isMounted && !child.isMounted) || game == null) {
+      child._parent?.children.remove(child);
+      child._parent = this;
+      children.add(child);
+    } else if (child._parent != null) {
+      if (child.isRemoving) {
+        game.dequeueRemove(child);
+        _clearRemovingBit();
+      }
+      game.enqueueMove(child, this);
+    } else if (isMounted && !child.isMounted) {
+      child._parent = this;
+      game.enqueueAdd(child, this);
     } else {
+      child._parent = this;
       // This will be reconciled during the mounting stage
       children.add(child);
     }
@@ -603,13 +620,11 @@ class Component {
   void remove(Component component) => _removeChild(component);
 
   /// Remove the component from its parent in the next tick.
-  void removeFromParent() => _parent?._removeChild(this);
+  void removeFromParent() => _parent?.remove(this);
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
-  void removeAll(Iterable<Component> components) {
-    components.forEach(remove);
-  }
+  void removeAll(Iterable<Component> components) => components.forEach(remove);
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
@@ -627,7 +642,7 @@ class Component {
       "$this, component's parent = ${child._parent}",
     );
     if (isMounted) {
-      final root = findGame()! as ComponentTreeRoot;
+      final root = findGame()!;
       if (child.isMounted || child.isMounting) {
         if (!child.isRemoving) {
           root.enqueueRemove(child, this);
@@ -641,14 +656,6 @@ class Component {
       _children?.remove(child);
       child._parent = null;
     }
-  }
-
-  /// Changes the current parent for another parent and prepares the tree under
-  /// the new root.
-  @Deprecated('Will be removed in 1.9.0. Use the parent setter instead.')
-  // ignore: use_setters_to_change_properties
-  void changeParent(Component newParent) {
-    parent = newParent;
   }
 
   //#endregion
@@ -740,7 +747,7 @@ class Component {
       _priority = newPriority;
       final game = findGame();
       if (game != null && _parent != null) {
-        (game as FlameGame).enqueueRebalance(_parent!);
+        game.enqueueRebalance(_parent!);
       }
     }
   }
@@ -826,8 +833,8 @@ class Component {
     assert(isLoaded && !isLoading);
     _setMountingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
-    if (_parent is ReadonlySizeProvider) {
-      onParentResize((_parent! as ReadonlySizeProvider).size);
+    if (_parent is ReadOnlySizeProvider) {
+      onParentResize((_parent! as ReadOnlySizeProvider).size);
     }
     if (isRemoved) {
       _clearRemovedBit();
@@ -888,17 +895,12 @@ class Component {
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
 
-    if (_key != null) {
-      final game = findGame();
-      if (game is FlameGame) {
-        game.unregisterKey(_key!);
-      }
-    }
     _parent!.children.remove(this);
     propagateToChildren(
       (Component component) {
         component
           ..onRemove()
+          .._unregisterKey()
           .._clearMountedBit()
           .._clearRemovingBit()
           .._setRemovedBit()
@@ -910,6 +912,15 @@ class Component {
       },
       includeSelf: true,
     );
+  }
+
+  void _unregisterKey() {
+    if (_key != null) {
+      final game = findGame();
+      if (game is FlameGame) {
+        game.unregisterKey(_key!);
+      }
+    }
   }
 
   //#endregion
@@ -930,7 +941,7 @@ class Component {
   /// How many decimal digits to print when displaying coordinates in the
   /// debug mode. Setting this to null will suppress all coordinates from
   /// the output.
-  int? get debugCoordinatesPrecision => 0;
+  int? debugCoordinatesPrecision = 0;
 
   /// A key that can be used to identify this component in the tree.
   ///
@@ -968,35 +979,6 @@ class Component {
   }
 
   void renderDebugMode(Canvas canvas) {}
-
-  //#endregion
-
-  //#region Legacy component placement overrides
-
-  /// What coordinate system this component should respect (i.e. should it
-  /// observe camera, viewport, or use the raw canvas).
-  ///
-  /// Do note that this currently only works if the component is added directly
-  /// to the root `FlameGame`.
-  @Deprecated('''
-  Use the CameraComponent and add your component to the viewport with
-  cameraComponent.viewport.add(yourHudComponent) instead.
-  This will be removed in Flame v2.
-  ''')
-  PositionType positionType = PositionType.game;
-
-  @Deprecated('To be removed in Flame v2')
-  @protected
-  Vector2 eventPosition(PositionInfo info) {
-    switch (positionType) {
-      case PositionType.game:
-        return info.eventPosition.game;
-      case PositionType.viewport:
-        return info.eventPosition.viewport;
-      case PositionType.widget:
-        return info.eventPosition.widget;
-    }
-  }
 
   //#endregion
 }

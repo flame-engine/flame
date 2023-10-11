@@ -501,12 +501,12 @@ class ParticlesExample extends FlameGame {
     const rows = 8;
     const frames = columns * rows;
     final spriteImage = images.fromCache('boom.png');
-    final spritesheet = SpriteSheet.fromColumnsAndRows(
+    final spriteSheet = SpriteSheet.fromColumnsAndRows(
       image: spriteImage,
       columns: columns,
       rows: rows,
     );
-    final sprites = List<Sprite>.generate(frames, spritesheet.getSpriteById);
+    final sprites = List<Sprite>.generate(frames, spriteSheet.getSpriteById);
     return SpriteAnimation.spriteList(sprites, stepTime: 0.1);
   }
 }

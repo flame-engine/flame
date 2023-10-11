@@ -1,10 +1,9 @@
-import 'dart:ui';
-
+import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/camera/viewports/fixed_aspect_ratio_viewport.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/camera/world.dart';
 import 'package:flame/src/components/core/component.dart';
@@ -15,8 +14,7 @@ import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
-import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flame/src/game/flame_game.dart';
 
 /// [CameraComponent] is a component through which a [World] is observed.
 ///
@@ -30,7 +28,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// main game world. However, additional cameras may also be used for some
 /// special effects. These extra cameras may be placed either in parallel with
 /// the main camera, or within the world. It is even possible to create a camera
-/// that looks at itself.
+/// that looks at itself. [FlameGame] has one [CameraComponent] added by default
+/// which is called just [FlameGame.camera].
 ///
 /// Since [CameraComponent] is a [Component], it is possible to attach other
 /// components to it. In particular, adding components directly to the camera is
@@ -44,9 +43,18 @@ class CameraComponent extends Component {
     this.world,
     Viewport? viewport,
     Viewfinder? viewfinder,
+    Component? backdrop,
     List<Component>? hudComponents,
-  })  : viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        viewfinder = viewfinder ?? Viewfinder();
+  })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
+        _viewfinder = viewfinder ?? Viewfinder(),
+        _backdrop = backdrop ?? Component(),
+        // The priority is set to the max here to avoid some bugs for the users,
+        // if they for example would add any components that modify positions
+        // before the CameraComponent, since it then will render the positions
+        // of the last tick each tick.
+        super(priority: 0x7fffffff) {
+    addAll([_backdrop, _viewport, _viewfinder]);
+  }
 
   /// Create a camera that shows a portion of the game world of fixed size
   /// [width] x [height].
@@ -60,14 +68,17 @@ class CameraComponent extends Component {
   factory CameraComponent.withFixedResolution({
     required double width,
     required double height,
+    Viewfinder? viewfinder,
     World? world,
+    Component? backdrop,
     List<Component>? hudComponents,
   }) {
     return CameraComponent(
       world: world,
-      viewport: FixedAspectRatioViewport(aspectRatio: width / height)
+      viewport: FixedResolutionViewport(resolution: Vector2(width, height))
         ..addAll(hudComponents ?? []),
-      viewfinder: Viewfinder()..visibleGameSize = Vector2(width, height),
+      viewfinder: viewfinder ?? Viewfinder(),
+      backdrop: backdrop,
     );
   }
 
@@ -78,7 +89,15 @@ class CameraComponent extends Component {
   /// the world can be observed. The viewport's size is equal to or smaller
   /// than the size of the game canvas. If it is smaller, then the viewport's
   /// position specifies where exactly it is placed on the canvas.
-  final Viewport viewport;
+  Viewport get viewport => _viewport;
+  set viewport(Viewport newViewport) {
+    _viewport.removeFromParent();
+    _viewport = newViewport;
+    add(_viewport);
+    _viewfinder.updateTransform();
+  }
+
+  Viewport _viewport;
 
   /// The [viewfinder] controls which part of the world is seen through the
   /// viewport.
@@ -87,7 +106,14 @@ class CameraComponent extends Component {
   /// center of the viewport. In addition, viewfinder controls the zoom level
   /// (i.e. how much of the world is seen through the viewport), and,
   /// optionally, rotation.
-  final Viewfinder viewfinder;
+  Viewfinder get viewfinder => _viewfinder;
+  set viewfinder(Viewfinder newViewfinder) {
+    _viewfinder.removeFromParent();
+    _viewfinder = newViewfinder;
+    add(_viewfinder);
+  }
+
+  Viewfinder _viewfinder;
 
   /// Special component that is designed to be the root of a game world.
   ///
@@ -98,6 +124,18 @@ class CameraComponent extends Component {
   /// The [world] component is generally mounted externally to the camera, and
   /// this variable is a mere reference to it.
   World? world;
+
+  /// The [backdrop] component is rendered statically behind the world.
+  ///
+  /// Here you can add things like the parallax component which should be static
+  /// when the camera moves around.
+  Component get backdrop => _backdrop;
+  Component _backdrop;
+  set backdrop(Component newBackdrop) {
+    _backdrop.removeFromParent();
+    add(newBackdrop);
+    _backdrop = newBackdrop;
+  }
 
   /// The axis-aligned bounding rectangle of a [world] region which is currently
   /// visible through the viewport.
@@ -116,22 +154,19 @@ class CameraComponent extends Component {
   /// after the camera was fully mounted.
   Rect get visibleWorldRect {
     assert(
-      viewport.isMounted && viewfinder.isMounted,
-      'This property cannot be accessed before the camera is mounted',
+      parent != null,
+      "This property can't be accessed before the camera is added to the game. "
+      'If you are using visibleWorldRect from another component (for example '
+      'the World), make sure that the CameraComponent is added before that '
+      'Component.',
     );
     return viewfinder.visibleWorldRect;
   }
 
-  @mustCallSuper
-  @override
-  Future<void> onLoad() async {
-    await addAll([viewport, viewfinder]);
-  }
-
   /// Renders the [world] as seen through this camera.
   ///
-  /// If the world is not mounted yet, only the viewport HUD elements will be
-  /// rendered.
+  /// If the world is not mounted yet, only the viewport and viewfinder elements
+  /// will be rendered.
   @override
   void renderTree(Canvas canvas) {
     canvas.save();
@@ -144,36 +179,60 @@ class CameraComponent extends Component {
         currentCameras.length < maxCamerasDepth) {
       canvas.save();
       viewport.clip(canvas);
+      viewport.transformCanvas(canvas);
+      backdrop.renderTree(canvas);
+      canvas.save();
       try {
         currentCameras.add(this);
-        canvas.transform(viewfinder.transform.transformMatrix.storage);
+        canvas.transform2D(viewfinder.transform);
         world!.renderFromCamera(canvas);
+        // Render the viewfinder elements, which will be in front of the world,
+        // but with the same transforms applied to them.
         viewfinder.renderTree(canvas);
       } finally {
         currentCameras.removeLast();
       }
       canvas.restore();
+      // Render the viewport elements, which will be in front of the world.
+      viewport.renderTree(canvas);
+      canvas.restore();
     }
-    // Now render the HUD elements
-    viewport.renderTree(canvas);
     canvas.restore();
   }
+
+  /// Converts from the global (canvas) coordinate space to
+  /// local (camera = viewport + viewfinder).
+  ///
+  /// Opposite of [localToGlobal].
+  Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
+    final viewportPosition = viewport.globalToLocal(point, output: output);
+    return viewfinder.globalToLocal(viewportPosition, output: output);
+  }
+
+  /// Converts from the local (camera = viewport + viewfinder) coordinate space
+  /// to global (canvas).
+  ///
+  /// Opposite of [globalToLocal].
+  Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
+    final viewfinderPosition =
+        viewfinder.localToGlobal(position, output: output);
+    return viewport.localToGlobal(viewfinderPosition, output: output);
+  }
+
+  final _viewportPoint = Vector2.zero();
 
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final viewportPoint = Vector2(
-      point.x - viewport.position.x + viewport.anchor.x * viewport.size.x,
-      point.y - viewport.position.y + viewport.anchor.y * viewport.size.y,
-    );
+    final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
     yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(viewportPoint)) {
+      if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.transform.globalToLocal(viewportPoint);
+        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
         yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
         yield* world!.componentsAtPoint(worldPoint, nestedPoints);
         currentCameras.removeLast();
@@ -217,7 +276,7 @@ class CameraComponent extends Component {
   /// will move from its current position to the target's position at the given
   /// speed.
   void follow(
-    PositionProvider target, {
+    ReadOnlyPositionProvider target, {
     double maxSpeed = double.infinity,
     bool horizontalOnly = false,
     bool verticalOnly = false,

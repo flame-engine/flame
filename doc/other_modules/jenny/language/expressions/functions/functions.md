@@ -74,10 +74,10 @@ title: Blacksmith
 // - money(): returns the current amount of money that the player has.
 // At the same time, functions `round()` and `plural()` are built-in.
 
-<<if broken("mainhand")>>
-  <<local $repair_cost = round(value("mainhand") / 5)>>
+<<if broken("main_hand")>>
+  <<local $repair_cost = round(value("main_hand") / 5)>>
 
-  Blacksmith: Your {name("mainhand")} seems to be completely broken!
+  Blacksmith: Your {name("main_hand")} seems to be completely broken!
   Blacksmith: I can fix it for just {plural($repair_cost, "% coin")}
   -> Ok, do it  <<if money() >= $repair_cost>>
   -> I'll be fine...

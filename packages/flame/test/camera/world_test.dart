@@ -8,6 +8,7 @@ void main() {
     testWithFlameGame(
       'by default it has a negative max 32bit int priority',
       (game) async {
+        game.removeAll(game.children);
         final world = World()..addToParent(game);
         final camera = CameraComponent(world: world)..addToParent(game);
         await game.ready();
@@ -20,8 +21,10 @@ void main() {
     testWithFlameGame(
       'with a custom priority putting it in front of the camera in the tree',
       (game) async {
-        final world = World(priority: 4)..addToParent(game);
-        final camera = CameraComponent(world: world)..addToParent(game);
+        game.removeAll(game.children);
+        final world = World(priority: 4);
+        final camera = CameraComponent(world: world)..priority = 0;
+        game.addAll([world, camera]);
         await game.ready();
 
         expect(world.priority, equals(4));

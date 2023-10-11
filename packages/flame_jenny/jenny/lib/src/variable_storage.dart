@@ -1,10 +1,8 @@
 import 'package:jenny/src/errors.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
 import 'package:jenny/src/structure/expressions/variables.dart';
-import 'package:meta/meta.dart';
 
 class VariableStorage {
-  @protected
   final Map<String, dynamic> variables = <String, dynamic>{};
 
   int get length => variables.length;
@@ -20,25 +18,25 @@ class VariableStorage {
 
   Expression getVariableAsExpression(String name) {
     final dynamic value = variables[name];
-    if (value is String) {
-      return StringVariable(name, this);
-    }
-    if (value is num) {
-      return NumericVariable(name, this);
-    }
-    assert(value is bool);
-    return BooleanVariable(name, this);
+    return switch (value) {
+      String() => StringVariable(name, this),
+      num() => NumericVariable(name, this),
+      bool() => BooleanVariable(name, this),
+      _ => throw DialogueError(
+          'Cannot convert variable $name with type ${value.runtimeType} to '
+          'an expression',
+        ),
+    };
   }
 
   ExpressionType getVariableType(String name) {
     final dynamic value = variables[name];
-    return value is String
-        ? ExpressionType.string
-        : value is num
-            ? ExpressionType.numeric
-            : value is bool
-                ? ExpressionType.boolean
-                : ExpressionType.unknown;
+    return switch (value) {
+      String() => ExpressionType.string,
+      num() => ExpressionType.numeric,
+      bool() => ExpressionType.boolean,
+      _ => ExpressionType.unknown,
+    };
   }
 
   void setVariable(String name, dynamic value) {
@@ -58,5 +56,25 @@ class VariableStorage {
       );
     }
     variables[name] = value;
+  }
+
+  /// Clear all variables. By default node visit counts will not be cleared.
+  /// To remove node visit counts as well, set [clearNodeVisits] to `true`.
+  ///
+  /// Note that node visit variable names are prefixed with an @ symbol.
+  /// If you have custom variables that start with an @ symbol these will
+  /// also be retained if [clearNodeVisits] is `false`. These will need to be
+  /// removed individually using [remove].
+  void clear({bool clearNodeVisits = false}) {
+    if (!clearNodeVisits) {
+      variables.removeWhere((key, _) => !key.startsWith('@'));
+    } else {
+      variables.clear();
+    }
+  }
+
+  /// Remove a variable by [name].
+  void remove(String name) {
+    variables.remove(name);
   }
 }

@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
@@ -258,7 +260,6 @@ class Ant extends PositionComponent {
   late final Color color;
   final Random random;
   static const black = Color(0xFF000000);
-  static const tau = Transform2D.tau;
   late final Paint bodyPaint;
   late final Paint eyesPaint;
   late final Paint legsPaint;

@@ -51,6 +51,15 @@ class ComponentTreeRoot extends Component {
   }
 
   @internal
+  void dequeueRemove(Component child) {
+    for (final event in _queue) {
+      if (event.kind == _LifecycleEventKind.remove && event.child == child) {
+        event.kind = _LifecycleEventKind.unknown;
+      }
+    }
+  }
+
+  @internal
   void enqueueMove(Component child, Component newParent) {
     _queue.addLast()
       ..kind = _LifecycleEventKind.move

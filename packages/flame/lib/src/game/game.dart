@@ -7,7 +7,7 @@ import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flame/src/game/overlay_manager.dart';
-import 'package:flame/src/game/projector.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -34,6 +34,15 @@ abstract mixin class Game {
   /// functionality in Flutter.
   late final GestureDetectorBuilder gestureDetectors =
       GestureDetectorBuilder(refreshWidget)..initializeGestures(this);
+
+  /// Set by the PointerMoveDispatcher to receive mouse events from the
+  /// game widget.
+  void Function(PointerHoverEvent event)? get mouseDetector => _mouseDetector;
+  void Function(PointerHoverEvent event)? _mouseDetector;
+  set mouseDetector(void Function(PointerHoverEvent event)? newMouseDetector) {
+    _mouseDetector = newMouseDetector;
+    refreshWidget();
+  }
 
   /// This should update the state of the game.
   void update(double dt);
@@ -245,16 +254,6 @@ abstract mixin class Game {
     }
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
-
-  /// This is the projector used by all components that respect the camera
-  /// (`respectCamera = true`).
-  /// This can be overridden on your [Game] implementation.
-  Projector projector = IdentityProjector();
-
-  /// This is the projector used by components that don't respect the camera
-  /// (`positionType = PositionType.viewport;`).
-  /// This can be overridden on your [Game] implementation.
-  Projector viewportProjector = IdentityProjector();
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.

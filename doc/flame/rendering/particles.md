@@ -279,7 +279,7 @@ game.add(
 Renders given `dart:ui` image within the particle tree.
 
 ```dart
-// During game initialisation
+// During game initialization
 await Flame.images.loadAll(const [
   'image.png',
 ]);
@@ -308,7 +308,7 @@ it's fully played during the `Particle` lifespan. It's possible to override this
 `alignAnimationTime` argument.
 
 ```dart
-final spritesheet = SpriteSheet(
+final spriteSheet = SpriteSheet(
   image: yourSpriteSheetImage,
   srcSize: Vector2.all(16.0),
 );
@@ -316,7 +316,7 @@ final spritesheet = SpriteSheet(
 game.add(
   ParticleSystemComponent(
     particle: SpriteAnimationParticle(
-      animation: spritesheet.createAnimation(0, stepTime: 0.1),
+      animation: spriteSheet.createAnimation(0, stepTime: 0.1),
     );
   ),
 );

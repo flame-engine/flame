@@ -1,5 +1,4 @@
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flame_forge2d/world_contact_listener.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/scaffolding.dart';
 

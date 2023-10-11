@@ -7,11 +7,17 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 
 class Images {
-  Images({String prefix = 'assets/images/'}) {
-    this.prefix = prefix;
-  }
+  Images({
+    String prefix = 'assets/images/',
+    AssetBundle? bundle,
+  })  : _prefix = prefix,
+        bundle = bundle ?? Flame.bundle;
 
   final Map<String, _ImageAsset> _assets = {};
+
+  /// The [AssetBundle] from which images are loaded.
+  /// defaults to [Flame.bundle].
+  AssetBundle bundle;
 
   /// Path prefix to the project's directory with images.
   ///
@@ -126,7 +132,7 @@ class Images {
   /// Loads all images in the [prefix]ed path that are matching the specified
   /// pattern.
   Future<List<Image>> loadAllFromPattern(Pattern pattern) async {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    final manifestContent = await bundle.loadString('AssetManifest.json');
     final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
     final imagePaths = manifestMap.keys.where((path) {
       return path.startsWith(_prefix) && path.toLowerCase().contains(pattern);
@@ -160,7 +166,7 @@ class Images {
   }
 
   Future<Image> _fetchToMemory(String name) async {
-    final data = await Flame.bundle.load('$_prefix$name');
+    final data = await bundle.load('$_prefix$name');
     final bytes = Uint8List.view(data.buffer);
     return decodeImageFromList(bytes);
   }

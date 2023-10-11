@@ -242,7 +242,7 @@ void main() {
         colorID: 0
         position: 763,472
         ---
-        A: HAHAHA
+        A: HA HA HA
         ===''',
       testPlan: '''
         line: A: Hey, I'm a character in a script!
@@ -318,7 +318,7 @@ void main() {
       commands: ['this'],
     );
 
-    test('Dialogue runs node before finishing the previous one', () async {
+    test('Dialogue runs node before finishing the previous one', () {
       final yarn = YarnProject()
         ..parse(
           dedent('''

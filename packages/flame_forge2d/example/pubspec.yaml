@@ -7,17 +7,17 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.13.0"
 
 dependencies:
   dashbook: ^0.1.12
-  flame: ^1.8.2
-  flame_forge2d: ^0.14.1+1
+  flame: ^1.9.1
+  flame_forge2d: ^0.15.0+1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.0
+  flame_lint: ^1.1.1
   flutter_test:
     sdk: flutter
 

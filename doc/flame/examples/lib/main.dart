@@ -1,4 +1,4 @@
-import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
+import 'dart:html';
 
 import 'package:doc_flame_examples/anchor.dart';
 import 'package:doc_flame_examples/anchor_by_effect.dart';
@@ -18,6 +18,7 @@ import 'package:doc_flame_examples/move_to_effect.dart';
 import 'package:doc_flame_examples/opacity_by_effect.dart';
 import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
+import 'package:doc_flame_examples/pointer_events.dart';
 import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
 import 'package:doc_flame_examples/remove_effect.dart';
@@ -44,37 +45,38 @@ void main() {
   final routes = <String, Game Function()>{
     'anchor_by_effect': AnchorByEffectGame.new,
     'anchor_to_effect': AnchorToEffectGame.new,
+    'anchor': AnchorGame.new,
     'collision_detection': CollisionDetectionGame.new,
+    'color_effect': ColorEffectExample.new,
     'decorator_blur': DecoratorBlurGame.new,
     'decorator_grayscale': DecoratorGrayscaleGame.new,
     'decorator_rotate3d': DecoratorRotate3DGame.new,
     'decorator_shadow3d': DecoratorShadowGame.new,
     'decorator_tint': DecoratorTintGame.new,
     'drag_events': DragEventsGame.new,
-    'opacity_to_effect': OpacityToEffectGame.new,
-    'opacity_effect_with_target': OpacityEffectWithTargetGame.new,
-    'opacity_by_effect': OpacityByEffectGame.new,
+    'glow_effect': GlowEffectExample.new,
     'move_along_path_effect': MoveAlongPathEffectGame.new,
     'move_by_effect': MoveByEffectGame.new,
     'move_to_effect': MoveToEffectGame.new,
+    'opacity_by_effect': OpacityByEffectGame.new,
+    'opacity_effect_with_target': OpacityEffectWithTargetGame.new,
+    'opacity_to_effect': OpacityToEffectGame.new,
+    'pointer_events': PointerEventsGame.new,
+    'ray_cast': RayCastExample.new,
+    'ray_trace': RayTraceExample.new,
+    'remove_effect': RemoveEffectGame.new,
+    'rive_example': RiveExampleGame.new,
     'rotate_by_effect': RotateByEffectGame.new,
     'rotate_to_effect': RotateToEffectGame.new,
     'router': RouterGame.new,
     'scale_by_effect': ScaleByEffectGame.new,
     'scale_to_effect': ScaleToEffectGame.new,
+    'sequence_effect': SequenceEffectGame.new,
     'size_by_effect': SizeByEffectGame.new,
     'size_to_effect': SizeToEffectGame.new,
-    'sequence_effect': SequenceEffectGame.new,
     'tap_events': TapEventsGame.new,
-    'value_route': ValueRouteExample.new,
-    'rive_example': RiveExampleGame.new,
-    'ray_cast': RayCastExample.new,
-    'ray_trace': RayTraceExample.new,
-    'glow_effect': GlowEffectExample.new,
-    'remove_effect': RemoveEffectGame.new,
-    'color_effect': ColorEffectExample.new,
     'time_scale': TimeScaleGame.new,
-    'anchor': AnchorGame.new,
+    'value_route': ValueRouteExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {

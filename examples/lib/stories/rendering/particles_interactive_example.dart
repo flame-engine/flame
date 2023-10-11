@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/particles.dart';
@@ -15,32 +16,24 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
   final random = Random();
   final Tween<double> noise = Tween(begin: -1, end: 1);
   final ColorTween colorTween;
-  final double zoom;
-  final world = World();
-  late final CameraComponent cameraComponent;
 
   ParticlesInteractiveExample({
     required Color from,
     required Color to,
-    required this.zoom,
-  }) : colorTween = ColorTween(begin: from, end: to);
-
-  @override
-  Future<void> onLoad() async {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 400,
-      height: 600,
-    );
-    addAll([cameraComponent, world]);
-    cameraComponent.viewfinder.zoom = zoom;
-  }
+    required double zoom,
+  })  : colorTween = ColorTween(begin: from, end: to),
+        super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          )..viewfinder.zoom = zoom,
+        );
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
     add(
       ParticleSystemComponent(
-        position: info.eventPosition.game,
+        position: info.eventPosition.widget,
         particle: Particle.generate(
           count: 40,
           generator: (i) {

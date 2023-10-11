@@ -1,3 +1,12 @@
+## 1.8.3
+
+ - Update a dependency to the latest release.
+
+## 1.8.2
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Change to `FilterQuality.medium` instead of `high` ([#2733](https://github.com/flame-engine/flame/issues/2733)). ([fc19890c](https://github.com/flame-engine/flame/commit/fc19890c87a78599ea49ee0dfb52a04ea6b09a99))
+
 ## 1.8.1
 
  - Update a dependency to the latest release.

@@ -1,8 +1,6 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
-import 'package:flame/src/game/game.dart';
-import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
 /// The event propagated through the Flame engine when the user stops touching
@@ -23,18 +21,6 @@ class TapUpEvent extends PositionEvent {
   final int pointerId;
 
   final PointerDeviceKind deviceKind;
-
-  /// Converts this event into the legacy [TapUpInfo] representation.
-  TapUpInfo asInfo(Game game) {
-    return TapUpInfo.fromDetails(
-      game,
-      TapUpDetails(
-        globalPosition: devicePosition.toOffset(),
-        localPosition: canvasPosition.toOffset(),
-        kind: deviceKind,
-      ),
-    );
-  }
 
   @override
   String toString() => 'TapUpEvent(canvasPosition: $canvasPosition, '

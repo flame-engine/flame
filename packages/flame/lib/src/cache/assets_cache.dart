@@ -1,16 +1,24 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flame/flame.dart';
+import 'package:flutter/services.dart' show AssetBundle;
 
 /// A class that loads, and caches files.
 ///
 /// It automatically looks for files in the `assets` directory.
 class AssetsCache {
-  final String prefix;
-  final Map<String, _Asset<dynamic>> _files = {};
+  AssetsCache({
+    this.prefix = 'assets/',
+    AssetBundle? bundle,
+  }) : bundle = bundle ?? Flame.bundle;
 
-  AssetsCache({this.prefix = 'assets/'});
+  /// The [AssetBundle] from which assets are loaded.
+  /// defaults to [Flame.bundle].
+  AssetBundle bundle;
+
+  String prefix;
+  final Map<String, _Asset<dynamic>> _files = {};
 
   /// Removes the file from the cache.
   void clear(String file) {
@@ -21,6 +29,9 @@ class AssetsCache {
   void clearCache() {
     _files.clear();
   }
+
+  /// Returns the number of files in the cache.
+  int get cacheCount => _files.length;
 
   /// Reads a file from assets folder.
   Future<String> readFile(String fileName) async {
@@ -53,12 +64,12 @@ class AssetsCache {
   }
 
   Future<_StringAsset> _readFile(String fileName) async {
-    final string = await rootBundle.loadString('$prefix$fileName');
+    final string = await bundle.loadString('$prefix$fileName');
     return _StringAsset(string);
   }
 
   Future<_BinaryAsset> _readBinary(String fileName) async {
-    final data = await rootBundle.load('$prefix$fileName');
+    final data = await bundle.load('$prefix$fileName');
     final bytes = Uint8List.view(data.buffer);
     return _BinaryAsset(bytes);
   }

@@ -1,3 +1,12 @@
+## 1.9.3
+
+ - Update a dependency to the latest release.
+
+## 1.9.2
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+
 ## 1.9.1
 
  - **FIX**: Respect artboard clip value ([#2639](https://github.com/flame-engine/flame/issues/2639)). ([4e664245](https://github.com/flame-engine/flame/commit/4e6642458494b4d4544bcc03b568476faeb0a71f))

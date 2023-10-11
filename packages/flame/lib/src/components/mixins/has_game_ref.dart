@@ -1,7 +1,6 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/experimental/has_game_reference.dart';
+import 'package:flame/src/components/mixins/has_game_reference.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:flame/src/game/game.dart';
 import 'package:flame/src/game/mixins/single_game_instance.dart';
 
 /// [HasGameRef] mixin provides property [game] (or [gameRef]), which is the
@@ -32,7 +31,7 @@ mixin HasGameRef<T extends FlameGame> on Component {
   T get gameRef => game;
 
   @override
-  Game? findGame() => _game ?? super.findGame();
+  FlameGame? findGame() => _game ?? super.findGame();
 
   T _findGameAndCheck() {
     final game = findGame();

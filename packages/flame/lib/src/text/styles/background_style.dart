@@ -1,9 +1,9 @@
-import 'package:flame/src/text/styles/style.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class BackgroundStyle extends Style {
+class BackgroundStyle extends FlameTextStyle {
   BackgroundStyle({
     Color? color,
     Paint? paint,

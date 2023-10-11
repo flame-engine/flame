@@ -1,4 +1,5 @@
 ``` {mermaid}
+%%{init: { 'theme': 'dark' } }%%
 graph TD
     %% Config %%
     classDef default fill:#282828,stroke:#F6BE00;
@@ -50,5 +51,5 @@ graph TD
     PositionComponent --> Sprites
     PositionComponent --> HudMarginComponent
     PositionComponent --> OtherPositionComponents
-    HudMarginComponent --> HudComponents    
+    HudMarginComponent --> HudComponents
 ```
