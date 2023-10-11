@@ -1,7 +1,4 @@
-import 'package:collection/collection.dart';
-import 'package:flame/camera.dart';
 import 'package:flame/src/components/core/component.dart';
-import 'package:meta/meta.dart';
 
 /// This mixin allows a component and all it's descendants to ignore events.
 ///
