@@ -258,16 +258,3 @@ if (!camera.canSee(component)) {
    component.removeFromParent(); // Cull the component
 }
 ```
-
-
-## Comparison to the deprecated camera
-
-Compared to the old Camera, the `CameraComponent` has several advantages:
-
-- Multiple cameras can be added to the game at the same time;
-- More flexibility in choosing the placement and the size of the viewport;
-- Switching camera from one world to another can happen instantaneously,
-    without having to unmount one world and then mount another;
-- Support rotation of the world view;
-- Effects can be applied either to the viewport, or to the viewfinder;
-- More flexible camera controllers.
