@@ -1,3 +1,4 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -18,7 +19,7 @@ class MultitapExample extends FlameGame with MultiTouchTapDetector {
 
   @override
   void onTapDown(int pointerId, TapDownInfo info) {
-    taps[pointerId] = info.eventPosition.game.toPositionedRect(tapSize);
+    taps[pointerId] = info.eventPosition.widget.toPositionedRect(tapSize);
   }
 
   @override

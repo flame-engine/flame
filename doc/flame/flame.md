@@ -14,7 +14,6 @@
 - [Layout](layout/layout.md)
 - [Overlays](overlays.md)
 - [Other](other/other.md)
-- [Camera & Viewport (deprecated)](camera_and_viewport.md)
 
 ```{toctree}
 :hidden:

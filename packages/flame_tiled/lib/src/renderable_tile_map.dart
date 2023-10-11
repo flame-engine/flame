@@ -4,7 +4,6 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
@@ -31,8 +30,8 @@ import 'package:tiled/tiled.dart';
 ///  - [Layer.opacity]
 ///  - [Layer.offsetX]
 ///  - [Layer.offsetY]
-///  - [Layer.parallaxX] (only supported if [Camera] is supplied)
-///  - [Layer.parallaxY] (only supported if [Camera] is supplied)
+///  - [Layer.parallaxX] (only supported if a [CameraComponent] is supplied)
+///  - [Layer.parallaxY] (only supported if a [CameraComponent] is supplied)
 ///
 /// {@endtemplate}
 class RenderableTiledMap {

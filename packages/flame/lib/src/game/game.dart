@@ -7,7 +7,6 @@ import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flame/src/game/overlay_manager.dart';
-import 'package:flame/src/game/projector.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -255,16 +254,6 @@ abstract mixin class Game {
     }
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
-
-  /// This is the projector used by all components that respect the camera
-  /// (`respectCamera = true`).
-  /// This can be overridden on your [Game] implementation.
-  Projector projector = IdentityProjector();
-
-  /// This is the projector used by components that don't respect the camera
-  /// (`positionType = PositionType.viewport;`).
-  /// This can be overridden on your [Game] implementation.
-  Projector viewportProjector = IdentityProjector();
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.

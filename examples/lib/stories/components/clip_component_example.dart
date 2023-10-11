@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Gradient;
@@ -62,7 +63,7 @@ class ClipComponentExample extends FlameGame with TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    final position = info.eventPosition.game;
+    final position = info.eventPosition.widget;
     final hit = children
         .whereType<PositionComponent>()
         .where(
