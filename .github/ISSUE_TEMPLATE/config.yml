@@ -1,9 +1,8 @@
-blank_issues_enabled: true
 name: Bug Report
 description: File a bug report
 title: "[Bug]: "
 labels: ["bug", "triage"]
-projects: ["octo-org/1", "octo-org/44"]
+projects: ["flame-engine/flame"]
 assignees:
   - octocat
 body:
