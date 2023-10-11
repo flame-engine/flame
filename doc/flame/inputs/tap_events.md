@@ -194,10 +194,11 @@ class MyComponent extends PositionComponent with DoubleTapCallbacks {
 
 ## Migration
 
-If you have an existing game that uses `Tappable`/`HasTappables` mixins, then this section will
+If you have an existing game that uses `Tappable`/`Draggable` mixins, then this section will
 describe how to transition to the new API described in this document. Here's what you need to do:
 
-Take all of your components that uses `Tappable`, and replace that mixin with `TapCallbacks`.
+Take all of your components that uses these mixins, and replace them with
+`TapCallbacks`/`DragCallbacks`.
 The methods `onTapDown`, `onTapUp`, `onTapCancel` and `onLongTapDown` will need to be adjusted
 for the new API:
 
@@ -209,8 +210,5 @@ for the new API:
 - If your component needs to know the coordinates of the point of touch, use
   `event.localPosition` instead of computing it manually. Properties `event.canvasPosition` and
   `event.devicePosition` are also available.
-- If the component is a `PositionComponent`, then make sure its size is set correctly (for
-  example by turning on the debug mode). If the component does not derive from
-  `PositionComponent` then make sure it implements the method `containsLocalPoint()`.
-- If the component is not attached to the root of the game, then make sure its ancestors also
-  have correct size or implement `containsLocalPoint()`.
+- If the component is attached to a custom ancestor then make sure that ancestor also have the
+  correct size or implement `containsLocalPoint()`.

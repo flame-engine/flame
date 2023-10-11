@@ -1,6 +1,8 @@
 # Gesture Input
 
-This includes documentation for gesture inputs, which is, mouse and touch pointers.
+This is documentation for gesture inputs attached directly on the game class, most of the time you
+want to detect input on your components instead, see for example the [TapCallbacks](tap_events.md)
+and [DragCallbacks](drag_events.md) for that.
 
 For other input documents, see also:
 
@@ -190,8 +192,8 @@ The position where the event occurred considering the entire screen, same as
 
 ### widget
 
-The position where the event occurred relative to the `GameWidget` position and size
-, same as `localPosition` in Flutter's native events.
+The position where the event occurred relative to the `GameWidget` position and size, same as
+`localPosition` in Flutter's native events.
 
 
 ## Example
