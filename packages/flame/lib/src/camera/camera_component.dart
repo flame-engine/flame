@@ -337,14 +337,13 @@ class CameraComponent extends Component {
   /// Note that this option only works with [Rectangle], [RoundedRectangle] and
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
-    var newBounds = bounds;
-    if (considerViewport && newBounds != null) {
-      newBounds = _calculateViewportAwareBounds(newBounds) ?? newBounds;
-    }
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
-    if (newBounds == null) {
+    if (bounds == null) {
       boundedBehavior?.removeFromParent();
-    } else if (boundedBehavior == null) {
+      return;
+    }
+    final newBounds = _calculateViewportAwareBounds(bounds);
+    if (boundedBehavior == null) {
       viewfinder.add(
         BoundedPositionBehavior(bounds: newBounds, priority: 1000),
       );
@@ -355,8 +354,8 @@ class CameraComponent extends Component {
 
   /// This method calculates adapts the [originalBounds] so that none
   /// of the viewport can go outside of the bounds.
-  /// It returns `null` if it fails to calculates new bounds.
-  Shape? _calculateViewportAwareBounds(Shape originalBounds) {
+  /// It returns the [originalBounds] if it fails to calculates new bounds.
+  Shape _calculateViewportAwareBounds(Shape originalBounds) {
     final worldSize = Vector2(
       originalBounds.support(Vector2(1, 0)).x,
       originalBounds.support(Vector2(0, 1)).y,
@@ -380,7 +379,7 @@ class CameraComponent extends Component {
         worldSize.x - max(halfViewportSize.x, halfViewportSize.y),
       );
     }
-    return null;
+    return originalBounds;
   }
 
   /// Returns true if this camera is able to see the [component].
