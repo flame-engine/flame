@@ -1,3 +1,4 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -19,7 +20,7 @@ class ScrollExample extends FlameGame with ScrollDetector {
 
   @override
   void onScroll(PointerScrollInfo info) {
-    target = position + info.scrollDelta.game * 5;
+    target = position + info.scrollDelta.global * 5;
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
@@ -120,17 +121,17 @@ class CoordinateSystemsExample extends FlameGame
       name,
       'Global: ${info.eventPosition.global}',
       'Widget: ${info.eventPosition.widget}',
-      'Game: ${info.eventPosition.game}',
+      'World: ${camera.globalToLocal(info.eventPosition.global)}',
       'Camera: ${camera.viewfinder.position}',
       if (info is DragUpdateInfo) ...[
         'Delta',
         'Global: ${info.delta.global}',
-        'Game: ${info.delta.game}',
+        'World: ${info.delta.global / camera.viewfinder.zoom}',
       ],
       if (info is PointerScrollInfo) ...[
         'Scroll Delta',
         'Global: ${info.scrollDelta.global}',
-        'Game: ${info.scrollDelta.game}',
+        'World: ${info.scrollDelta.global / camera.viewfinder.zoom}',
       ],
     ].join('\n');
   }

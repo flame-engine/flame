@@ -27,7 +27,6 @@ hitbox # the collision box around objects for the purposes of collision detectio
 hitboxes # plural of hitbox
 ints # short for integers
 jank # stutter or inconsistent gap or timing
-janky # quality of expressing jank
 lerp # short for linear interpolation
 LTRB # left top right bottom
 LTRBR # left top right bottom radius

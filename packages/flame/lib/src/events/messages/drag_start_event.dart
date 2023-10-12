@@ -2,8 +2,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
 import 'package:flame/src/events/messages/drag_update_event.dart';
 import 'package:flame/src/events/messages/position_event.dart';
-import 'package:flame/src/game/flame_game.dart';
-import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
 /// The event propagated through the Flame engine when the user starts a drag
@@ -25,18 +23,6 @@ class DragStartEvent extends PositionEvent {
   final int pointerId;
 
   final PointerDeviceKind deviceKind;
-
-  /// Converts this event into the legacy [DragStartInfo] representation.
-  DragStartInfo asInfo(FlameGame game) {
-    return DragStartInfo.fromDetails(
-      game,
-      DragStartDetails(
-        globalPosition: devicePosition.toOffset(),
-        localPosition: canvasPosition.toOffset(),
-        kind: deviceKind,
-      ),
-    );
-  }
 
   @override
   String toString() => 'DragStartEvent(canvasPosition: $canvasPosition, '

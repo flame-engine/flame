@@ -1,9 +1,7 @@
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/core/component_key.dart';
-import 'package:flame/src/components/mixins/draggable.dart';
 import 'package:flame/src/events/component_mixins/drag_callbacks.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
-import 'package:flame/src/events/flame_game_mixins/has_draggables_bridge.dart';
 import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
 import 'package:flame/src/events/messages/drag_cancel_event.dart';
 import 'package:flame/src/events/messages/drag_end_event.dart';
@@ -56,15 +54,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
         component.onDragStart(event);
       },
     );
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasDraggablesBridge) {
-      final info = event.asInfo(game)..handled = event.handled;
-      // ignore: deprecated_member_use_from_same_package
-      game.propagateToChildren<Draggable>(
-        (c) => c.handleDragStart(event.pointerId, info),
-      );
-      event.handled = info.handled;
-    }
   }
 
   /// Called continuously during the drag as the user moves their finger.
@@ -92,15 +81,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
         record.component.onDragUpdate(event);
       }
     }
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasDraggablesBridge) {
-      final info = event.asInfo(game)..handled = event.handled;
-      // ignore: deprecated_member_use_from_same_package
-      game.propagateToChildren<Draggable>(
-        (c) => c.handleDragUpdated(event.pointerId, info),
-      );
-      event.handled = info.handled;
-    }
   }
 
   /// Called when the drag gesture finishes.
@@ -117,15 +97,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
       }
       return false;
     });
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasDraggablesBridge) {
-      final info = event.asInfo(game)..handled = event.handled;
-      // ignore: deprecated_member_use_from_same_package
-      game.propagateToChildren<Draggable>(
-        (c) => c.handleDragEnded(event.pointerId, info),
-      );
-      event.handled = info.handled;
-    }
   }
 
   @mustCallSuper
@@ -137,13 +108,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
       }
       return false;
     });
-    // ignore: deprecated_member_use_from_same_package
-    if (game is HasDraggablesBridge) {
-      // ignore: deprecated_member_use_from_same_package
-      game.propagateToChildren<Draggable>(
-        (c) => c.handleDragCanceled(event.pointerId),
-      );
-    }
   }
 
   //#region MultiDragListener API
