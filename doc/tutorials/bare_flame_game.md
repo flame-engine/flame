@@ -107,7 +107,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flame: ^1.9.1
+  flame: ^--VERSION--
 ```
 
 After that, press the `[Pub get]` button at the top of the window, or you could run command `flutter
