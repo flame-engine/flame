@@ -56,6 +56,59 @@ void main() {
         expect(grandChild.tapCancelEvent, equals(0));
       },
     );
+
+    testWithFlameGame(
+      'correctly accepts events all the way down the subtree when ignoreEvents '
+      'is false',
+      (game) async {
+        final grandChild = _IgnoreTapCallbacksComponent()..ignoreEvents = false;
+        final child = _IgnoreTapCallbacksComponent(children: [grandChild])
+          ..ignoreEvents = false;
+        final component = _IgnoreTapCallbacksComponent(
+          position: Vector2.all(10),
+          children: [child],
+        )..ignoreEvents = false;
+
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiTapDispatcher>()!;
+
+        dispatcher.onTapDown(
+          createTapDownEvents(
+            game: game,
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
+          ),
+        );
+        expect(component.tapDownEvent, equals(1));
+        expect(component.tapUpEvent, equals(0));
+        expect(component.tapCancelEvent, equals(0));
+        expect(child.tapDownEvent, equals(1));
+        expect(child.tapUpEvent, equals(0));
+        expect(child.tapCancelEvent, equals(0));
+        expect(grandChild.tapDownEvent, equals(1));
+        expect(grandChild.tapUpEvent, equals(0));
+        expect(grandChild.tapCancelEvent, equals(0));
+
+        // [onTapUp] will call, if there was an [onTapDown] event before
+        dispatcher.onTapUp(
+          createTapUpEvents(
+            game: game,
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
+          ),
+        );
+
+        expect(component.tapDownEvent, equals(1));
+        expect(component.tapUpEvent, equals(1));
+        expect(component.tapCancelEvent, equals(0));
+        expect(child.tapDownEvent, equals(1));
+        expect(child.tapUpEvent, equals(1));
+        expect(child.tapCancelEvent, equals(0));
+        expect(grandChild.tapDownEvent, equals(1));
+        expect(grandChild.tapUpEvent, equals(1));
+        expect(grandChild.tapCancelEvent, equals(0));
+      },
+    );
   });
 }
 
@@ -67,25 +120,19 @@ mixin _TapCounter on TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    event.handled = true;
+    event.continuePropagation = true;
     tapDownEvent++;
   }
 
   @override
-  void onLongTapDown(TapDownEvent event) {
-    event.handled = true;
-    longTapDownEvent++;
-  }
-
-  @override
   void onTapUp(TapUpEvent event) {
-    event.handled = true;
+    event.continuePropagation = true;
     tapUpEvent++;
   }
 
   @override
   void onTapCancel(TapCancelEvent event) {
-    event.handled = true;
+    event.continuePropagation = true;
     tapCancelEvent++;
   }
 }

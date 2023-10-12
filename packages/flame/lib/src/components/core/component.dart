@@ -707,7 +707,7 @@ class Component {
     nestedPoints?.add(point);
     if (_children != null) {
       for (final child in _children!.reversed()) {
-        if (child is IgnoreEvents) {
+        if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
         Vector2? childPoint = point;
@@ -719,7 +719,9 @@ class Component {
         }
       }
     }
-    if (containsLocalPoint(point) && this is! IgnoreEvents) {
+    final shouldIgnoreEvents =
+        this is IgnoreEvents && (this as IgnoreEvents).ignoreEvents;
+    if (containsLocalPoint(point) && !shouldIgnoreEvents) {
       yield this;
     }
     nestedPoints?.removeLast();
