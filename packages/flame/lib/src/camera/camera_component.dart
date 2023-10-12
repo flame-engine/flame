@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
+import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
@@ -338,48 +337,29 @@ class CameraComponent extends Component {
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    final viewPortAwareBoundsBehavior =
+        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
     if (bounds == null) {
       boundedBehavior?.removeFromParent();
+      viewPortAwareBoundsBehavior?.removeFromParent();
       return;
     }
-    final newBounds = _calculateViewportAwareBounds(bounds);
     if (boundedBehavior == null) {
       viewfinder.add(
-        BoundedPositionBehavior(bounds: newBounds, priority: 1000),
+        BoundedPositionBehavior(bounds: bounds, priority: 1000),
       );
     } else {
-      boundedBehavior.bounds = newBounds;
+      boundedBehavior.bounds = bounds;
     }
-  }
-
-  /// This method calculates adapts the [originalBounds] so that none
-  /// of the viewport can go outside of the bounds.
-  /// It returns the [originalBounds] if it fails to calculates new bounds.
-  Shape _calculateViewportAwareBounds(Shape originalBounds) {
-    final worldSize = Vector2(
-      originalBounds.support(Vector2(1, 0)).x,
-      originalBounds.support(Vector2(0, 1)).y,
-    );
-    final halfViewportSize = viewport.size / 2;
-    if (originalBounds is Rectangle) {
-      return Rectangle.fromCenter(
-        center: originalBounds.center,
-        size: worldSize - halfViewportSize,
-      );
-    } else if (originalBounds is RoundedRectangle) {
-      final halfSize = (worldSize - halfViewportSize) / 2;
-      return RoundedRectangle.fromPoints(
-        originalBounds.center - halfSize,
-        originalBounds.center + halfSize,
-        originalBounds.radius,
-      );
-    } else if (originalBounds is Circle) {
-      return Circle(
-        originalBounds.center,
-        worldSize.x - max(halfViewportSize.x, halfViewportSize.y),
-      );
+    if (considerViewport) {
+      if (viewPortAwareBoundsBehavior == null) {
+        viewfinder.add(ViewportAwareBoundsBehavior(originalBounds: bounds));
+      } else {
+        viewPortAwareBoundsBehavior.originalBounds = bounds;
+      }
+    } else {
+      viewPortAwareBoundsBehavior?.removeFromParent();
     }
-    return originalBounds;
   }
 
   /// Returns true if this camera is able to see the [component].
