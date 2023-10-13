@@ -441,7 +441,7 @@ method so that it looks like this:
 Note how we deal the cards from the deck and place them into `TableauPile`s one by one, and only
 after that we put the remaining cards into the stock.
 
-Recall that I decided earlier that all the cards would be owned by the `KlondikeGame` itself. So
+Recall that we decided earlier that all the cards would be owned by the `KlondikeGame` itself. So
 they are put into a generated List structure called `cards`, shuffled and added to the `world`. This
 List should always have 52 cards in it, so a descending index `cardToDeal` is used to deal 28 cards
 one by one from the top of the deck into piles that acquire references to the cards in the deck. An
