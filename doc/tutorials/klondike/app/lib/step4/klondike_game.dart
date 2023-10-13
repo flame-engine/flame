@@ -51,7 +51,7 @@ class KlondikeGame extends FlameGame {
     world.addAll(piles);
 
     camera.viewfinder.visibleGameSize =
-           Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap);
+        Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap);
     camera.viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0);
     camera.viewfinder.anchor = Anchor.topCenter;
 
@@ -62,19 +62,16 @@ class KlondikeGame extends FlameGame {
     cards.shuffle();
     world.addAll(cards);
 
-    int cardToDeal = cards.length - 1;
+    var cardToDeal = cards.length - 1;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
         piles[j].acquireCard(cards[cardToDeal--]);
       }
       piles[i].flipTopCard();
     }
-    for (int n = 0; n <= cardToDeal; n++) {
+    for (var n = 0; n <= cardToDeal; n++) {
       stock.acquireCard(cards[n]);
     }
-    print('\nLength of Cards List ${cards.length}, should be 52.\n');
-    print('Card to deal ${cards[cardToDeal]}, zeroth Card ${cards.first.toString()}');
-    print('The to-deal and zeroth Cards should be first and last from the Stock.');
   }
 }
 
