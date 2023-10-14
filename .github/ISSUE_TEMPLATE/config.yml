@@ -58,18 +58,21 @@ body:
       render: shell
 
 
-# Flutter doctor output
-Execute in a terminal and put output into the code block below 
-```
+- type: markdown
+    attributes:
+       label: Execute in a terminal and put output into the code block below 
+        value: ```
 Output of: flutter doctor -v
 ```
 
 # More environment information
 
-Create a list of more environment information, like:
-* Flame version: 1.0.0
-* Platform affected: android, ios, web
-* Platform version affected: android 9, ios 13
+- type: markdown
+    attributes:
+       label: Create a list of more environment information, like:
+        value: Flame version: 1.0.0
+        value: Platform affected: android, ios, web
+        value: Platform version affected: android 9, ios 13
 
 # More information
 
@@ -82,7 +85,7 @@ Create a list of more environment information, like:
       required: false
       
 
-  type: checkboxes
+- type: checkboxes
     id: terms
     attributes:
       label:  Are you interested in working on a PR for this?
