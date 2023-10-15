@@ -974,9 +974,10 @@ class Component {
   /// Returns a [TextPaint] object with the [debugColor] set as color for the
   /// text.
   TextPaint get debugTextPaint {
+    final zoom = CameraComponent.currentCamera?.viewfinder.zoom ?? 1.0;
     if (!_debugTextPaintCache.isCacheValid([debugColor])) {
       final textPaint = TextPaint(
-        style: TextStyle(color: debugColor, fontSize: 12),
+        style: TextStyle(color: debugColor, fontSize: 12 / zoom),
       );
       _debugTextPaintCache.updateCache(textPaint, [debugColor]);
     }
