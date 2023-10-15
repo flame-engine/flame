@@ -7,6 +7,8 @@ export 'src/camera/viewport.dart' show Viewport;
 export 'src/camera/viewports/circular_viewport.dart' show CircularViewport;
 export 'src/camera/viewports/fixed_aspect_ratio_viewport.dart'
     show FixedAspectRatioViewport;
+export 'src/camera/viewports/fixed_resolution_viewport.dart'
+    show FixedResolutionViewport;
 export 'src/camera/viewports/fixed_size_viewport.dart' show FixedSizeViewport;
 export 'src/camera/viewports/max_viewport.dart' show MaxViewport;
 export 'src/camera/world.dart' show World;
