@@ -57,7 +57,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
   late final Rect _scaledRect = (size * 10).toRect();
   late final Rect _drawRect = size.toRect();
 
-  Future<Image> createFinishOverlay() async {
+  Future<Image> createFinishOverlay() {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder, _scaledRect);
     final step = _scaledRect.width / 2;

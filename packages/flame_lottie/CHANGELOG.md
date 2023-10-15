@@ -1,3 +1,8 @@
+## 0.3.0+2
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **FIX**: Duration in `LottieRenderer` rounds down milliseconds ([#2808](https://github.com/flame-engine/flame/issues/2808)). ([cccae2e1](https://github.com/flame-engine/flame/commit/cccae2e1476de456c15ee3779b746f5fe6dadee2))
+
 ## 0.3.0+1
 
  - Update a dependency to the latest release.

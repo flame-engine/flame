@@ -29,7 +29,7 @@ void main() {
       expect(cache.size, 1);
     });
 
-    test('clear', () async {
+    test('clear', () {
       final cache = MemoryCache<int, String>();
       cache.setValue(0, 'bla');
       expect(cache.containsKey(0), true);
@@ -39,7 +39,7 @@ void main() {
       expect(cache.size, 0);
     });
 
-    test('clearCache', () async {
+    test('clearCache', () {
       final cache = MemoryCache<int, String>();
       cache.setValue(0, 'bla');
       cache.setValue(1, 'ble');

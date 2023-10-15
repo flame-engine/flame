@@ -55,6 +55,7 @@ the first word is the singular form, while others are different plurals -- their
 depend on a particular language. For example, in Ukrainian locale (`uk`) the function `plural()`
 requires 3 words: the singular form, the "few" plural form, and the "many" plural form:
 
+<!--- cSpell:ignore мене монета монети монет -->
 ```yarn
 // Assuming locale == 'uk'
 У мене є {plural($coins, "% монета", "% монети", "% монет")}.
@@ -85,7 +86,7 @@ given name does not exist in the project, an exception will be thrown.
 title: LuckyWheel
 ---
 <<if visit_count("LuckyWheel") < 5>>
-  Clown: Would you like to speen a wheel and get fabulous prizes?
+  Clown: Would you like to spin a wheel and get fabulous prizes?
   -> I sure do!
      <<jump SpinLuckyWheel>>
   -> I don't talk to strangers...
@@ -118,8 +119,8 @@ title: MerchantDialogue
 <<if not visited("MerchantDialogue")>>
   // This part of the dialogue will run only during the first interaction
   // with the merchant.
-  Merchant: Greetings! My name is Hazeem
-  Merchant: I offer exquisute wares for the most fastidious customers!
+  Merchant: Greetings! My name is Linn.
+  Merchant: I offer exquisite wares for the most fastidious customers!
   Player: Hi. I'm Bob. I like stuff.
 <<endif>>
 ...

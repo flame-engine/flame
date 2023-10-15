@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_bloc_example/src/game/components/enemy.dart';
 import 'package:flame_bloc_example/src/game/components/enemy_creator.dart';
@@ -78,7 +78,7 @@ class SpaceShooterGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game.x, info.delta.game.y);
+    player.move(info.delta.global.x, info.delta.global.y);
   }
 
   void increaseScore() {

@@ -52,7 +52,7 @@ void main() {
       expect(max, 20);
     });
 
-    test('random range with min == max', () async {
+    test('random range with min == max', () {
       final fn = RandomRangeFn(
         const NumLiteral(0),
         const NumLiteral(0),
@@ -61,7 +61,7 @@ void main() {
       expect(fn.value, 0);
     });
 
-    test('random range with min > max', () async {
+    test('random range with min > max', () {
       final fn = RandomRangeFn(
         const NumLiteral(10),
         const NumLiteral(0),

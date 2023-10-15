@@ -1,3 +1,23 @@
+## 1.10.0
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **REFACTOR**: Avoid nested conditional expressions whenever possible [DCM] ([#2784](https://github.com/flame-engine/flame/issues/2784)). ([7b6a5712](https://github.com/flame-engine/flame/commit/7b6a571263ece3aa1a8267644d9118230a850830))
+ - **REFACTOR**: Mark semantically final variables as final (or const) proper [DCM] ([#2783](https://github.com/flame-engine/flame/issues/2783)). ([71f7b475](https://github.com/flame-engine/flame/commit/71f7b475e33dd6fa7224c4a3ab29ffdb89702c34))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+ - **FIX**: Un-register component keys down the component tree ([#2792](https://github.com/flame-engine/flame/issues/2792)). ([0f679b3f](https://github.com/flame-engine/flame/commit/0f679b3f3d4a643ff4c29569388941c459e35021))
+ - **FIX**: AlignComponent set child (remove compare) ([#2774](https://github.com/flame-engine/flame/issues/2774)). ([20aaf656](https://github.com/flame-engine/flame/commit/20aaf656617cef6538b49c067a562f9daf0a5972))
+ - **FIX**: Hardcode initCurrentGame lifecycle state as resumed ([#2775](https://github.com/flame-engine/flame/issues/2775)). ([0cd5037c](https://github.com/flame-engine/flame/commit/0cd5037c6a837706891d5f1b85a91715cf85ebb1))
+ - **FIX**: Fix TextBoxComponent alignment bug ([#2781](https://github.com/flame-engine/flame/issues/2781)). ([0fb53efb](https://github.com/flame-engine/flame/commit/0fb53efb661ae2a3b4a39407655efb69e92dced0))
+ - **FIX**(flame): The `component.removeFromParent` method should use `parent.remove` internally ([#2779](https://github.com/flame-engine/flame/issues/2779)). ([bdb1c79a](https://github.com/flame-engine/flame/commit/bdb1c79a0524801ab425982dae206915c691e4b2))
+ - **FIX**: Take unmounted adds into consideration ([#2770](https://github.com/flame-engine/flame/issues/2770)). ([be28a440](https://github.com/flame-engine/flame/commit/be28a4405f4024a3066b764d6dbad0713665665d))
+ - **FEAT**: Add `IgnoreEvents` mixin to ignore events for the whole subtree ([#2811](https://github.com/flame-engine/flame/issues/2811)). ([313411c3](https://github.com/flame-engine/flame/commit/313411c311a6a3c2d36e12abf16bdd27ae801f29))
+ - **FEAT**: Add advanced button component ([#2742](https://github.com/flame-engine/flame/issues/2742)). ([97fff0ed](https://github.com/flame-engine/flame/commit/97fff0ed2baab53f2780eca29a9d08ea5d90426a))
+ - **FEAT**: Introduce the `FixedResolutionViewport` ([#2796](https://github.com/flame-engine/flame/issues/2796)). ([4c762f94](https://github.com/flame-engine/flame/commit/4c762f94d40d200bb2b8a102867b0859a345dbf0))
+ - **FEAT**: AssetsBundle can be customized in Images and AssetsCache. ([#2807](https://github.com/flame-engine/flame/issues/2807)). ([a23f80e9](https://github.com/flame-engine/flame/commit/a23f80e94a5d935fc8ba232956fe02e001d5a8f9))
+ - **FEAT**: Backdrop (static backgrounds) component for CameraComponent ([#2787](https://github.com/flame-engine/flame/issues/2787)). ([ab329f71](https://github.com/flame-engine/flame/commit/ab329f718a581b8331749fed6f942b6ade0da5ac))
+ - **FEAT**: Align component refactoring ([#2767](https://github.com/flame-engine/flame/issues/2767)). ([bde34efe](https://github.com/flame-engine/flame/commit/bde34efef7264c91f49b237b589c74ba80a1554e))
+ - **DOCS**: Remove last broad cSpell bypass regex and fix all violations ([#2802](https://github.com/flame-engine/flame/issues/2802)). ([9b16b178](https://github.com/flame-engine/flame/commit/9b16b178048eb19b6596273fcf4daec83277c3b5))
+
 ## 1.9.1
 
  - **FIX**: Add necessary generics on mixins on FlameGame ([#2763](https://github.com/flame-engine/flame/issues/2763)). ([b1f5ff26](https://github.com/flame-engine/flame/commit/b1f5ff269441d55b09ce12d5ce99656f2d88a978))

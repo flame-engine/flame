@@ -97,7 +97,7 @@ mixin VerticalDragDetector on Game {
   }
 
   void handleVerticalDragEnd(DragEndDetails details) {
-    onVerticalDragEnd(DragEndInfo.fromDetails(this, details));
+    onVerticalDragEnd(DragEndInfo.fromDetails(details));
   }
 }
 
@@ -121,7 +121,7 @@ mixin HorizontalDragDetector on Game {
   }
 
   void handleHorizontalDragEnd(DragEndDetails details) {
-    onHorizontalDragEnd(DragEndInfo.fromDetails(this, details));
+    onHorizontalDragEnd(DragEndInfo.fromDetails(details));
   }
 }
 
@@ -168,7 +168,7 @@ mixin PanDetector on Game {
   }
 
   void handlePanEnd(DragEndDetails details) {
-    onPanEnd(DragEndInfo.fromDetails(this, details));
+    onPanEnd(DragEndInfo.fromDetails(details));
   }
 }
 
@@ -186,7 +186,7 @@ mixin ScaleDetector on Game {
   }
 
   void handleScaleEnd(ScaleEndDetails details) {
-    onScaleEnd(ScaleEndInfo.fromDetails(this, details));
+    onScaleEnd(ScaleEndInfo.fromDetails(details));
   }
 }
 

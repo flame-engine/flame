@@ -13,7 +13,7 @@ void main() {
     when(() => image.width).thenReturn(100);
     when(() => image.height).thenReturn(100);
 
-    test('calculates all field from SpriteSheet', () async {
+    test('calculates all field from SpriteSheet', () {
       final spriteSheet = SpriteSheet(
         image: image,
         srcSize: Vector2(1, 2),

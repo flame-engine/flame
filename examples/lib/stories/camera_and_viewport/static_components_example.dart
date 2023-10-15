@@ -36,15 +36,8 @@ class StaticComponentsExample extends FlameGame
       myParallax,
       TextComponent(
         text: 'Center backdrop Component',
-        position: camera.viewport.size / 2 + Vector2(0, 30),
+        position: camera.viewport.virtualSize / 2 + Vector2(0, 30),
         anchor: Anchor.center,
-      ),
-    ]);
-    camera.viewfinder.addAll([
-      TextComponent(
-        text: 'Corner Viewfinder Component',
-        position: camera.viewport.size - Vector2.all(10),
-        anchor: Anchor.bottomRight,
       ),
     ]);
     camera.viewport.addAll(
@@ -55,7 +48,7 @@ class StaticComponentsExample extends FlameGame
         ),
         TextComponent(
           text: 'Center Viewport Component',
-          position: camera.viewport.size / 2,
+          position: camera.viewport.virtualSize / 2,
           anchor: Anchor.center,
         ),
       ],

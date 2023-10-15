@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
+import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:meta/meta.dart';
@@ -64,6 +65,12 @@ abstract class Viewport extends Component
     return _size;
   }
 
+  /// In most cases [virtualSize] is the same as [size], but in the cases when
+  /// the viewport is emulating a different size, this is the size of the
+  /// emulated viewport, for example the resolution for the
+  /// [FixedResolutionViewport].
+  Vector2 get virtualSize => size;
+
   @override
   set size(Vector2 value) {
     assert(
@@ -113,15 +120,6 @@ abstract class Viewport extends Component
   @protected
   void onViewportResize();
 
-  @mustCallSuper
-  @override
-  void onMount() {
-    assert(
-      parent! is CameraComponent,
-      'A Viewport may only be attached to a CameraComponent',
-    );
-  }
-
   /// Converts a point from the global coordinate system to the local
   /// coordinate system of the viewport.
   ///
@@ -147,4 +145,6 @@ abstract class Viewport extends Component
     final y = point.y + position.y - anchor.y * size.y;
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
+
+  void transformCanvas(Canvas canvas) {}
 }

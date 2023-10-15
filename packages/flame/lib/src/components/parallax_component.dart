@@ -26,7 +26,7 @@ extension ParallaxComponentExtension on FlameGame {
     int? priority,
     FilterQuality? filterQuality,
     ComponentKey? key,
-  }) async {
+  }) {
     return ParallaxComponent.load(
       dataList,
       baseVelocity: baseVelocity,
@@ -55,9 +55,6 @@ extension ParallaxComponentExtension on FlameGame {
 /// to be static to the rest of the game.
 class ParallaxComponent<T extends FlameGame> extends PositionComponent
     with HasGameReference<T> {
-  @override
-  PositionType positionType = PositionType.viewport;
-
   bool isFullscreen = true;
   Parallax? _parallax;
 
@@ -93,7 +90,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     }
     final newSize = parent is ReadOnlySizeProvider
         ? (parent! as ReadOnlySizeProvider).size
-        : game.camera.viewport.size;
+        : game.size;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
   }

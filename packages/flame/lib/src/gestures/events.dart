@@ -9,10 +9,6 @@ import 'package:flutter/gestures.dart';
 /// `globalPosition` in Flutter.
 /// widget: coordinate system relative to the GameWidget widget; same as
 /// `localPosition` in Flutter.
-/// viewport: same as `widget` but also applies any transformations from the
-/// viewport to the coordinate system.
-/// game: same as `widget` but also applies any transformations from the camera
-/// and viewport to the coordinate system.
 class EventPosition {
   final Game _game;
   final Offset _globalPosition;
@@ -23,14 +19,6 @@ class EventPosition {
   /// Coordinates of the event relative to the game widget position/size
   late final Vector2 widget = _game.convertGlobalToLocalCoordinate(global);
 
-  /// Coordinates of the event relative to the game position/size but applying
-  /// only viewport transformations (not camera).
-  late final Vector2 viewport = _game.viewportProjector.unprojectVector(widget);
-
-  /// Coordinates of the event relative to the game position/size and
-  /// transformations
-  late final Vector2 game = _game.projector.unprojectVector(widget);
-
   EventPosition(this._game, this._globalPosition);
 }
 
@@ -40,22 +28,13 @@ class EventPosition {
 /// [global]: this is the raw value received by the event without any scale
 /// applied to it; this is always the same as local because Flutter doesn't
 /// apply any scaling.
-/// [game]: the scaled value with all the game transformations applied.
 class EventDelta {
-  final Game _game;
   final Offset _delta;
 
   /// Raw value relative to the game transformations
   late final Vector2 global = _delta.toVector2();
 
-  /// Scaled value relative to the game viewport only transformations (not
-  /// camera).
-  late final Vector2 viewport = _game.viewportProjector.unscaleVector(global);
-
-  /// Scaled value relative to the game transformations
-  late final Vector2 game = _game.projector.unscaleVector(global);
-
-  EventDelta(this._game, this._delta);
+  EventDelta(this._delta);
 }
 
 /// BaseInfo is the base class for Flame's input events.
@@ -104,8 +83,7 @@ class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
 }
 
 class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
-  late final Vector2 velocity =
-      _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+  late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
 
   LongPressEndInfo.fromDetails(
     Game game,
@@ -130,7 +108,7 @@ class ForcePressInfo extends PositionInfo<ForcePressDetails> {
 }
 
 class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
-  late final EventDelta scrollDelta = EventDelta(_game, raw.scrollDelta);
+  late final EventDelta scrollDelta = EventDelta(raw.scrollDelta);
 
   PointerScrollInfo.fromDetails(
     Game game,
@@ -162,7 +140,7 @@ class DragStartInfo extends PositionInfo<DragStartDetails> with _HandledField {
 
 class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
     with _HandledField {
-  late final EventDelta delta = EventDelta(_game, raw.delta);
+  late final EventDelta delta = EventDelta(raw.delta);
 
   DragUpdateInfo.fromDetails(
     Game game,
@@ -171,15 +149,10 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
 }
 
 class DragEndInfo extends BaseInfo<DragEndDetails> with _HandledField {
-  final Game _game;
-  late final Vector2 velocity =
-      _game.projector.unscaleVector(raw.velocity.pixelsPerSecond.toVector2());
+  late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
   double? get primaryVelocity => raw.primaryVelocity;
 
-  DragEndInfo.fromDetails(
-    this._game,
-    DragEndDetails raw,
-  ) : super(raw);
+  DragEndInfo.fromDetails(super.raw);
 }
 
 class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
@@ -192,26 +165,18 @@ class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
 }
 
 class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
-  final Game _game;
-  late final EventDelta velocity = EventDelta(
-    _game,
-    raw.velocity.pixelsPerSecond,
-  );
+  late final EventDelta velocity = EventDelta(raw.velocity.pixelsPerSecond);
 
   int get pointerCount => raw.pointerCount;
 
-  ScaleEndInfo.fromDetails(
-    this._game,
-    ScaleEndDetails raw,
-  ) : super(raw);
+  ScaleEndInfo.fromDetails(super.raw);
 }
 
 class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
   int get pointerCount => raw.pointerCount;
   double get rotation => raw.rotation;
-  late final EventDelta delta = EventDelta(_game, raw.focalPointDelta);
+  late final EventDelta delta = EventDelta(raw.focalPointDelta);
   late final EventDelta scale = EventDelta(
-    _game,
     Offset(raw.horizontalScale, raw.verticalScale),
   );
 

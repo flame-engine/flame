@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart' hide Viewport;
+import 'package:flame/game.dart';
 
 class CameraComponentPropertiesExample extends FlameGame {
   static const description = '''

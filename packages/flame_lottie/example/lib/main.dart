@@ -2,7 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame_lottie/flame_lottie.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+void main() {
   runApp(GameWidget(game: LottieExampleGame()));
 }
 

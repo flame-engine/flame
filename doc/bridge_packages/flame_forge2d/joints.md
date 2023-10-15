@@ -283,7 +283,7 @@ joint.
 
 ```{warning}
 Many users have tried to adapt the mouse joint for game play. Users often want
-to achieve precisepositioning and instantaneous response. The mouse joint 
+to achieve precise positioning and instantaneous response. The mouse joint 
 doesn't work very well in that context. You may wish to consider using 
 kinematic bodies instead.
 ```

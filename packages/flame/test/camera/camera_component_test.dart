@@ -226,6 +226,40 @@ void main() {
     });
 
     testWithFlameGame('visibleWorldRect', (game) async {
+      await game.ready();
+      final camera = game.camera;
+      game.onGameResize(Vector2(60, 40));
+
+      // By default, the viewfinder's position is (0,0), and its anchor is in
+      // the center of the viewport.
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-30, -20, 30, 20));
+
+      camera.viewfinder.position = Vector2(100, 200);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(70, 180, 130, 220));
+
+      camera.viewfinder.zoom = 2;
+      camera.viewfinder.position = Vector2(20, 30);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(5, 20, 35, 40));
+
+      camera.viewport.size = Vector2(100, 60);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-5, 15, 45, 45));
+
+      camera.viewfinder.position = Vector2.zero();
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-25, -15, 25, 15));
+
+      // Rotation angle: cos(a) = 0.6, sin(a) = 0.8
+      // Each point (x, y) becomes (x*cos(a) - y*sin(a), x*sin(a) + y*cos(a)),
+      // and each of the 4 corners turns into
+      //   (25, 15) -> (3, 29)
+      //   (25, -15) -> (27, 11)
+      //   (-25, -15) -> (-3, -29)
+      //   (-25, 15) -> (-27, -11)
+      // which means the culling rect is (-27, -29, 27, 29)
+      camera.viewfinder.angle = acos(0.6);
+      expect(camera.visibleWorldRect, const Rect.fromLTRB(-27, -29, 27, 29));
+    });
+
+    testWithFlameGame('visibleWorldRect with FixedSizeViewport', (game) async {
       final world = World();
       final camera = CameraComponent(
         world: world,
@@ -325,7 +359,7 @@ void main() {
         camera.viewfinder.add(
           CrossHair(
             size: Vector2.all(20),
-            position: camera.viewport.size / 2 + Vector2(-6, 0),
+            position: Vector2(-2, 4),
             color: Colors.white,
           ),
         );
@@ -344,6 +378,90 @@ void main() {
       size: Vector2(50, 50),
     );
   });
+
+  testGolden(
+    'Correct scale of rendering',
+    (game) async {
+      final world = World();
+      final resolution = Vector2(40, 60);
+      final camera = CameraComponent.withFixedResolution(
+        world: world,
+        width: resolution.x,
+        height: resolution.y,
+      );
+      game.addAll([world, camera]);
+      camera.viewfinder.position = Vector2.all(4);
+      camera.backdrop.add(
+        CrossHair(
+          size: Vector2.all(28),
+          position: resolution / 2 + Vector2.all(4),
+          color: Colors.teal,
+        ),
+      );
+      camera.viewfinder.add(
+        CrossHair(
+          size: Vector2.all(20),
+          position: Vector2(0, 2),
+          color: Colors.white,
+        ),
+      );
+      world.add(
+        CrossHair(size: Vector2.all(14), color: Colors.green),
+      );
+      camera.viewport.add(
+        CrossHair(
+          size: Vector2.all(8),
+          position: resolution / 2 + Vector2(2, -2),
+          color: Colors.red,
+        ),
+      );
+    },
+    goldenFile: '../_goldens/camera_component_fixed_resolution_order_test.png',
+    size: Vector2(50, 50),
+  );
+
+  testGolden(
+    'Correct scale of rendering after zoom',
+    (game) async {
+      final world = World();
+      final resolution = Vector2(40, 60);
+      final camera = CameraComponent.withFixedResolution(
+        world: world,
+        width: resolution.x,
+        height: resolution.y,
+      );
+      game.addAll([world, camera]);
+      camera.viewfinder.position = Vector2.all(4);
+      camera.viewfinder.zoom = 1.5;
+      camera.backdrop.add(
+        CrossHair(
+          size: Vector2.all(28),
+          position: resolution / 2 + Vector2.all(4),
+          color: Colors.teal,
+        ),
+      );
+      camera.viewfinder.add(
+        CrossHair(
+          size: Vector2.all(20),
+          position: Vector2(-2, 4),
+          color: Colors.white,
+        ),
+      );
+      world.add(
+        CrossHair(size: Vector2.all(14), color: Colors.green),
+      );
+      camera.viewport.add(
+        CrossHair(
+          size: Vector2.all(8),
+          position: resolution / 2 + Vector2(4, -4),
+          color: Colors.red,
+        ),
+      );
+    },
+    goldenFile:
+        '../_goldens/camera_component_fixed_resolution_order_zoom_test.png',
+    size: Vector2(50, 50),
+  );
 
   group('CameraComponent.canSee', () {
     testWithFlameGame('null world', (game) async {

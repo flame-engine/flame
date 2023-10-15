@@ -4,7 +4,6 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
@@ -31,8 +30,8 @@ import 'package:tiled/tiled.dart';
 ///  - [Layer.opacity]
 ///  - [Layer.offsetX]
 ///  - [Layer.offsetY]
-///  - [Layer.parallaxX] (only supported if [Camera] is supplied)
-///  - [Layer.parallaxY] (only supported if [Camera] is supplied)
+///  - [Layer.parallaxX] (only supported if a [CameraComponent] is supplied)
+///  - [Layer.parallaxY] (only supported if a [CameraComponent] is supplied)
 ///
 /// {@endtemplate}
 class RenderableTiledMap {
@@ -212,7 +211,8 @@ class RenderableTiledMap {
     Images? images,
     AssetBundle? bundle,
   }) async {
-    final contents = await Flame.bundle.loadString('$prefix$fileName');
+    final contents =
+        await (bundle ?? Flame.bundle).loadString('$prefix$fileName');
     return fromString(
       contents,
       destTileSize,
@@ -291,6 +291,7 @@ class RenderableTiledMap {
         map,
         maxX: atlasMaxX,
         maxY: atlasMaxY,
+        images: images,
       ),
       ignoreFlip: ignoreFlip,
       images: images,
@@ -315,7 +316,7 @@ class RenderableTiledMap {
     required TiledAtlas atlas,
     bool? ignoreFlip,
     Images? images,
-  }) async {
+  }) {
     final visibleLayers = layers.where((layer) => layer.visible);
 
     final layerLoaders = visibleLayers.map((layer) async {

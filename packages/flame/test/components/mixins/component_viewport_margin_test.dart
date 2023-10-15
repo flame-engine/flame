@@ -41,4 +41,4 @@ void main() {
 }
 
 class _ComponentWithViewportMargin extends PositionComponent
-    with HasGameRef, ComponentViewportMargin {}
+    with HasGameReference, ComponentViewportMargin {}
