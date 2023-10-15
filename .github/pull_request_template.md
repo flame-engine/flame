@@ -7,6 +7,7 @@ make sure that it summarizes the PR adequately.
 
 Don't remove the "exclude from commit message" comments below. They are used to prevent
 the PR description template from being included in the git log.
+Only change the "Replace this text" parts.
 -->
 
 # Description
@@ -17,7 +18,7 @@ and what motivated the change. If this is a breaking change, specify explicitly 
 changed.
 -->
 <!-- End of exclude from commit message -->
-
+Replace this text.
 
 <!-- Exclude from commit message -->
 ## Checklist
@@ -58,6 +59,7 @@ Indicate which issues this PR resolves, if any. For example:
 Closes #1234
 !-->
 <!-- End of exclude from commit message -->
+Replace or remove this text.
 
 <!-- Exclude from commit message -->
 <!-- Links -->
