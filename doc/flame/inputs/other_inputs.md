@@ -1,4 +1,4 @@
-# Other Inputs
+# Other Inputs and Helpers
 
 This includes documentation for input methods besides keyboard and mouse.
 
@@ -172,3 +172,14 @@ In addition to the already existing skins, the [ToggleButtonComponent] contains 
 - `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
 - `disabledAndSelectedSkin`: For when the button is selected and in the disabled state.
 - `defaultSelectedLabel`: Component shown on top of the skins when button is selected.
+
+
+## IgnoreEvents mixin
+
+If you don't want a component subtree to receive events, you can use the `IgnoreEvents` mixin.
+Once you have added this mixin you can turn off events to reach a component and its descendants by
+setting `ignoreEvents = true` (default when the mixin is added), and then set it to `false` when you
+want to receive events again.
+
+This can be done for optimization purposes, since all events currently go through the whole
+component tree.

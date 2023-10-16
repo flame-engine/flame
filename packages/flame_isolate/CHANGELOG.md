@@ -1,3 +1,7 @@
+## 0.5.0+2
+
+ - **REFACTOR**: Mark semantically final variables as final (or const) proper [DCM] ([#2783](https://github.com/flame-engine/flame/issues/2783)). ([71f7b475](https://github.com/flame-engine/flame/commit/71f7b475e33dd6fa7224c4a3ab29ffdb89702c34))
+
 ## 0.5.0+1
 
  - Update a dependency to the latest release.

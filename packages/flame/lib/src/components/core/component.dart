@@ -707,6 +707,9 @@ class Component {
     nestedPoints?.add(point);
     if (_children != null) {
       for (final child in _children!.reversed()) {
+        if (child is IgnoreEvents && child.ignoreEvents) {
+          continue;
+        }
         Vector2? childPoint = point;
         if (child is CoordinateTransform) {
           childPoint = (child as CoordinateTransform).parentToLocal(point);
@@ -716,7 +719,9 @@ class Component {
         }
       }
     }
-    if (containsLocalPoint(point)) {
+    final shouldIgnoreEvents =
+        this is IgnoreEvents && (this as IgnoreEvents).ignoreEvents;
+    if (containsLocalPoint(point) && !shouldIgnoreEvents) {
       yield this;
     }
     nestedPoints?.removeLast();
@@ -969,9 +974,10 @@ class Component {
   /// Returns a [TextPaint] object with the [debugColor] set as color for the
   /// text.
   TextPaint get debugTextPaint {
+    final zoom = CameraComponent.currentCamera?.viewfinder.zoom ?? 1.0;
     if (!_debugTextPaintCache.isCacheValid([debugColor])) {
       final textPaint = TextPaint(
-        style: TextStyle(color: debugColor, fontSize: 12),
+        style: TextStyle(color: debugColor, fontSize: 12 / zoom),
       );
       _debugTextPaintCache.updateCache(textPaint, [debugColor]);
     }

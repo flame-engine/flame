@@ -69,22 +69,20 @@ class CameraComponent extends Component {
   /// [height] pixels are visible within the viewport. The viewfinder will be
   /// initially set up to show world coordinates (0, 0) at the center of the
   /// viewport.
-  factory CameraComponent.withFixedResolution({
+  CameraComponent.withFixedResolution({
     required double width,
     required double height,
-    Viewfinder? viewfinder,
     World? world,
+    Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
-  }) {
-    return CameraComponent(
-      world: world,
-      viewport: FixedResolutionViewport(resolution: Vector2(width, height))
-        ..addAll(hudComponents ?? []),
-      viewfinder: viewfinder ?? Viewfinder(),
-      backdrop: backdrop,
-    );
-  }
+  }) : this(
+          world: world,
+          viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
+          viewfinder: viewfinder ?? Viewfinder(),
+          backdrop: backdrop,
+          hudComponents: hudComponents,
+        );
 
   /// The [viewport] is the "window" through which the game world is observed.
   ///
