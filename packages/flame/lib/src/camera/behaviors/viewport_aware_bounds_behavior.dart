@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
@@ -9,7 +10,6 @@ import 'package:flame/src/experimental/geometry/shapes/circle.dart';
 import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// This behavior ensures that the none of the viewport can go outside
 /// of the bounds, when it is false only the viewfinder anchor is considered.
@@ -17,6 +17,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// shapes.
 class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   Shape _originalBounds;
+  late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
     required Shape originalBounds,
@@ -24,7 +25,16 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
 
   @override
   void onLoad() {
+    _visibleWorldRect = parent.visibleWorldRect;
     _updateCameraBounds();
+  }
+
+  @override
+  void update(double dt) {
+    if (_visibleWorldRect != parent.visibleWorldRect) {
+      _visibleWorldRect = parent.visibleWorldRect;
+      _updateCameraBounds();
+    }
   }
 
   /// Returns the bounds that do not take the viewport into account.
