@@ -17,7 +17,7 @@ dependencies:
   flame: ^1.10.0
   flutter:
     sdk: flutter
-  jenny: ^1.1.1
+  jenny: ^1.2.0
   meta: ^1.9.1
 
 dev_dependencies:
