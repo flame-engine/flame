@@ -134,12 +134,14 @@ class _Parser {
         if (lines.isNotEmpty && lines.last is DialogueChoice) {
           (lines.last as DialogueChoice).options.add(option);
         } else {
-          if(lines.isNotEmpty && lines.last is DialogueLine){
-            final lastLine =  lines.removeLast() as DialogueLine;
-            lines.add(DialogueLine(
-              content: lastLine.content!,
-              character: lastLine.character,
-              tags: [...lastLine.tags, '#lastline'],),
+          if (lines.isNotEmpty && lines.last is DialogueLine) {
+            final lastLine = lines.removeLast() as DialogueLine;
+            lines.add(
+              DialogueLine(
+                content: lastLine.content!,
+                character: lastLine.character,
+                tags: [...lastLine.tags, '#lastline'],
+              ),
             );
           }
           lines.add(DialogueChoice([option]));
@@ -920,8 +922,11 @@ class _Parser {
   }
 
   bool takeId() => takeTokenType(TokenType.id);
+
   bool takeText() => takeTokenType(TokenType.text);
+
   bool takePerson() => takeTokenType(TokenType.person);
+
   bool takeNewline() {
     if (position >= tokens.length) {
       return true;
@@ -975,6 +980,7 @@ class _Parser {
 
 class _NodeHeader {
   _NodeHeader(this.title, this.tags);
+
   String? title;
   Map<String, String>? tags;
 }
