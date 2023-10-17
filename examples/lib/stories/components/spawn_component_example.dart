@@ -1,5 +1,6 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -10,19 +11,23 @@ class SpawnComponentExample extends FlameGame with TapDetector {
   static const String description =
       'Tap on the screen to start spawning Embers within different shapes.';
 
+  SpawnComponentExample() : super(world: SpawnComponentWorld());
+}
+
+class SpawnComponentWorld extends World with TapCallbacks {
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     final shapeType = Shapes.values.random();
     final Shape shape;
-    final position = info.eventPosition.game;
+    final position = info.localPosition;
     switch (shapeType) {
       case Shapes.rectangle:
         shape = Rectangle.fromCenter(
-          center: info.eventPosition.game,
+          center: position,
           size: Vector2.all(200),
         );
       case Shapes.circle:
-        shape = Circle(info.eventPosition.game, 150);
+        shape = Circle(position, 150);
       case Shapes.polygon:
         shape = Polygon(
           [

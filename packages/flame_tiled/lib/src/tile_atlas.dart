@@ -64,17 +64,19 @@ class TiledAtlas {
   }
 
   /// Collect images that we'll use in tiles - exclude image layers.
-  static Set<TiledImage> _onlyTileImages(TiledMap map) {
-    final imageSet = <TiledImage>{};
+  static Set<(String?, TiledImage)> _onlyTileImages(TiledMap map) {
+    final imageSet = <(String?, TiledImage)>{};
     for (var i = 0; i < map.tilesets.length; ++i) {
-      final image = map.tilesets[i].image;
+      final tileset = map.tilesets[i];
+      final image = tileset.image;
       if (image?.source != null) {
-        imageSet.add(image!);
+        imageSet.add((tileset.source, image!));
       }
       for (var j = 0; j < map.tilesets[i].tiles.length; ++j) {
-        final image = map.tilesets[i].tiles[j].image;
+        final tileset = map.tilesets[i];
+        final image = tileset.tiles[j].image;
         if (image?.source != null) {
-          imageSet.add(image!);
+          imageSet.add((tileset.source, image!));
         }
       }
     }
@@ -88,9 +90,31 @@ class TiledAtlas {
     double? maxY,
     Images? images,
   }) async {
-    final imageList = _onlyTileImages(map).toList();
+    final tilesetImageList = _onlyTileImages(map).toList();
 
-    if (imageList.isEmpty) {
+    final mappedImageList = tilesetImageList.map((entry) {
+      final tiledImage = entry.$2;
+      var tileImageSource = tiledImage.source!;
+      final tilesetSource = entry.$1;
+
+      if (tilesetSource == null) {
+        return (tileImageSource, tiledImage);
+      }
+
+      final tilesetParts = tilesetSource.split('/');
+      final imageParts = tileImageSource.split('/');
+
+      if (tilesetParts.length != imageParts.length) {
+        tileImageSource = [
+          ...tilesetParts.sublist(0, tilesetParts.length - 1),
+          ...imageParts,
+        ].join('/');
+      }
+
+      return (tileImageSource, tiledImage);
+    });
+
+    if (mappedImageList.isEmpty) {
       // so this map has no tiles... Ok.
       return TiledAtlas._(
         atlas: null,
@@ -98,6 +122,10 @@ class TiledAtlas {
         key: 'atlas{empty}',
       );
     }
+
+    final imagesInstance = images ?? Flame.images;
+
+    final imageList = mappedImageList.map((e) => e.$2).toList();
 
     final key = atlasKey(imageList);
     if (atlasMap.containsKey(key)) {
@@ -107,7 +135,7 @@ class TiledAtlas {
     if (imageList.length == 1) {
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final image = (await (images ?? Flame.images).load(key)).clone();
+      final image = (await imagesInstance.load(key)).clone();
 
       // There could be a special case that a concurrent call to this method
       // passes the check `if (atlasMap.containsKey(key))` due to the async call
@@ -141,14 +169,17 @@ class TiledAtlas {
 
     // parallelize the download of images.
     await Future.wait([
-      ...imageList.map(
-        (tiledImage) => (images ?? Flame.images).load(tiledImage.source!),
+      ...mappedImageList.map(
+        (entry) => imagesInstance.load(entry.$1),
       ),
     ]);
 
     final emptyPaint = Paint();
-    for (final tiledImage in imageList) {
-      final image = await (images ?? Flame.images).load(tiledImage.source!);
+    for (final entry in mappedImageList) {
+      final tiledImage = entry.$2;
+      final tileImageSource = entry.$1;
+
+      final image = await imagesInstance.load(tileImageSource);
       final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
 
       pictureRect = pictureRect.expandToInclude(rect);

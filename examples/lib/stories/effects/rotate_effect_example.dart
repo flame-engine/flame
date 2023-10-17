@@ -22,7 +22,7 @@ class RotateEffectExample extends FlameGame {
           camera: CameraComponent.withFixedResolution(
             width: 400,
             height: 600,
-          )..viewfinder.anchor = Anchor.topLeft,
+          ),
           world: _RotateEffectWorld(),
         );
 }

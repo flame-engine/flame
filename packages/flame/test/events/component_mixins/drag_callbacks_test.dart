@@ -184,6 +184,121 @@ void main() {
       },
     );
   });
+
+  group('HasDraggableComponents', () {
+    testWidgets(
+      'drags are delivered to DragCallbacks components',
+      (tester) async {
+        var nDragStartCalled = 0;
+        var nDragUpdateCalled = 0;
+        var nDragEndCalled = 0;
+        final game = FlameGame(
+          children: [
+            _DragWithCallbacksComponent(
+              position: Vector2(20, 20),
+              size: Vector2(100, 100),
+              onDragStart: (e) => nDragStartCalled++,
+              onDragUpdate: (e) => nDragUpdateCalled++,
+              onDragEnd: (e) => nDragEndCalled++,
+            ),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 10));
+
+        expect(game.children.length, 4);
+        expect(game.children.elementAt(1), isA<_DragWithCallbacksComponent>());
+        expect(game.children.elementAt(2), isA<MultiDragDispatcher>());
+
+// regular drag
+        await tester.timedDragFrom(
+          const Offset(50, 50),
+          const Offset(20, 0),
+          const Duration(milliseconds: 100),
+        );
+        expect(nDragStartCalled, 1);
+        expect(nDragUpdateCalled, 8);
+        expect(nDragEndCalled, 1);
+
+// cancelled drag
+        final gesture = await tester.startGesture(const Offset(50, 50));
+        await gesture.moveBy(const Offset(10, 10));
+        await gesture.cancel();
+        await tester.pump(const Duration(seconds: 1));
+        expect(nDragStartCalled, 2);
+        expect(nDragEndCalled, 2);
+      },
+    );
+
+    testWidgets(
+      'drag event does not affect more than one component',
+      (tester) async {
+        var nEvents = 0;
+        final game = FlameGame(
+          children: [
+            _DragWithCallbacksComponent(
+              size: Vector2.all(100),
+              onDragStart: (e) => nEvents++,
+              onDragUpdate: (e) => nEvents++,
+              onDragEnd: (e) => nEvents++,
+            ),
+            _SimpleDragCallbacksComponent(size: Vector2.all(200)),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(game.children.length, 5);
+        expect(game.children.elementAt(3), isA<MultiDragDispatcher>());
+
+        await tester.timedDragFrom(
+          const Offset(20, 20),
+          const Offset(5, 5),
+          const Duration(seconds: 1),
+        );
+        expect(nEvents, 0);
+      },
+    );
+
+    testWidgets(
+      'drag event can move outside the component bounds',
+      (tester) async {
+        final points = <Vector2>[];
+        final game = FlameGame(
+          children: [
+            _DragWithCallbacksComponent(
+              size: Vector2.all(95),
+              position: Vector2.all(5),
+              onDragUpdate: (e) => points.add(e.localPosition),
+            ),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(game.children.length, 4);
+        expect(game.children.elementAt(2), isA<MultiDragDispatcher>());
+
+        await tester.timedDragFrom(
+          const Offset(80, 80),
+          const Offset(0, 40),
+          const Duration(seconds: 1),
+          frequency: 40,
+        );
+        expect(points.length, 42);
+        expect(points.first, Vector2(75, 75));
+        expect(
+          points.skip(1).take(20),
+          List.generate(20, (i) => Vector2(75.0, 75.0 + i)),
+        );
+        expect(
+          points.skip(21),
+          everyElement(predicate((Vector2 v) => v.isNaN)),
+        );
+      },
+    );
+  });
 }
 
 mixin _DragCounter on DragCallbacks {
@@ -235,3 +350,41 @@ class _DragCallbacksComponent extends PositionComponent
     with DragCallbacks, _DragCounter {}
 
 class _DragCallbacksGame extends FlameGame with DragCallbacks, _DragCounter {}
+
+class _DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
+  _DragWithCallbacksComponent({
+    void Function(DragStartEvent)? onDragStart,
+    void Function(DragUpdateEvent)? onDragUpdate,
+    void Function(DragEndEvent)? onDragEnd,
+    super.position,
+    super.size,
+  })  : _onDragStart = onDragStart,
+        _onDragUpdate = onDragUpdate,
+        _onDragEnd = onDragEnd;
+
+  final void Function(DragStartEvent)? _onDragStart;
+  final void Function(DragUpdateEvent)? _onDragUpdate;
+  final void Function(DragEndEvent)? _onDragEnd;
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    return _onDragStart?.call(event);
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    return _onDragUpdate?.call(event);
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    return _onDragEnd?.call(event);
+  }
+}
+
+class _SimpleDragCallbacksComponent extends PositionComponent
+    with DragCallbacks {
+  _SimpleDragCallbacksComponent({super.size});
+}

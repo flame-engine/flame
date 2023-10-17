@@ -5,10 +5,6 @@ export 'src/events/component_mixins/hover_callbacks.dart' show HoverCallbacks;
 export 'src/events/component_mixins/pointer_move_callbacks.dart'
     show PointerMoveCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
-export 'src/events/flame_game_mixins/has_draggables_bridge.dart'
-    show HasDraggablesBridge;
-export 'src/events/flame_game_mixins/has_tappables_bridge.dart'
-    show HasTappablesBridge;
 export 'src/events/game_mixins/multi_touch_drag_detector.dart'
     show MultiTouchDragDetector;
 export 'src/events/game_mixins/multi_touch_tap_detector.dart'
@@ -29,12 +25,6 @@ export 'src/events/messages/pointer_move_event.dart' show PointerMoveEvent;
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
 export 'src/events/messages/tap_up_event.dart' show TapUpEvent;
-// ignore: deprecated_member_use_from_same_package
-export 'src/game/mixins/has_draggables.dart' show HasDraggables;
-// ignore: deprecated_member_use_from_same_package
-export 'src/game/mixins/has_hoverables.dart' show HasHoverables;
-// ignore: deprecated_member_use_from_same_package
-export 'src/game/mixins/has_tappables.dart' show HasTappables;
 export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
 export 'src/gestures/detectors.dart'
@@ -63,6 +53,7 @@ export 'src/gestures/events.dart'
         LongPressStartInfo,
         PointerHoverInfo,
         PointerScrollInfo,
+        PositionInfo,
         ScaleEndInfo,
         ScaleStartInfo,
         ScaleUpdateInfo,

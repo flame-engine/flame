@@ -1,15 +1,10 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/game/camera/camera.dart';
-import 'package:flame/src/game/camera/camera_wrapper.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -26,7 +21,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     super.children,
     W? world,
     CameraComponent? camera,
-    Camera? oldCamera,
   })  : assert(
           world != null || W == World,
           'The generics type $W does not conform to the type of '
@@ -39,7 +33,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(oldCamera ?? Camera(), children);
     _camera.world = _world;
     add(_camera);
     add(_world);
@@ -83,38 +76,17 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   CameraComponent _camera;
 
-  late final CameraWrapper _cameraWrapper;
-
   @internal
   late final List<ComponentsNotifier> notifiers = [];
-
-  /// The camera translates the coordinate space after the viewport is applied.
-  @Deprecated('''
-    In the future (maybe as early as v1.10.0) this camera will be removed,
-    please use the CameraComponent instead, which has a default camera at 
-    `FlameGame.camera`.
-    
-    This is the simplest way of using the CameraComponent:
-    1. Instead of adding the root components directly to your game with `add`,
-       add them to the world.
-       
-       world.add(yourComponent);
-    
-    2. (Optional) If you want to add a HUD component, instead of using
-       PositionType, add the component as a child of the viewport.
-       
-       camera.viewport.add(yourHudComponent);
-    ''')
-  Camera get oldCamera => _cameraWrapper.camera;
 
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as
-  /// exposed to the canvas after viewport transformations and camera zooming.
+  /// exposed to the canvas after viewport transformations.
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size => oldCamera.gameSize;
+  Vector2 get size => camera.viewport.virtualSize;
 
   @override
   @internal
@@ -140,8 +112,12 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   void renderTree(Canvas canvas) {
-    // Don't call super.renderTree, since the tree is rendered by the camera
-    _cameraWrapper.render(canvas);
+    if (parent != null) {
+      renderTree(canvas);
+    }
+    for (final component in children) {
+      component.renderTree(canvas);
+    }
   }
 
   @override
@@ -150,7 +126,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (parent == null) {
       updateTree(dt);
     }
-    _cameraWrapper.update(dt);
   }
 
   @override
@@ -159,7 +134,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (parent != null) {
       update(dt);
     }
-    children.forEach((c) => c.updateTree(dt));
+    for (final component in children) {
+      component.updateTree(dt);
+    }
     processRebalanceEvents();
   }
 
@@ -171,14 +148,15 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// components and other methods.
   /// You can override it further to add more custom behavior, but you should
   /// seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [oldCamera] in order to
-  /// transform the coordinate system appropriately for those using the old
-  /// camera.
   @override
   @mustCallSuper
   void onGameResize(Vector2 size) {
-    oldCamera.handleResize(size);
     super.onGameResize(size);
+    // This work-around is needed since the camera has the highest priority and
+    // [size] uses [viewport.virtualSize], so the viewport needs to be updated
+    // first since users will be using `game.size` in their [onGameResize]
+    // methods.
+    camera.viewport.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
@@ -208,8 +186,11 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
-  bool containsLocalPoint(Vector2 p) {
-    return p.x >= 0 && p.y >= 0 && p.x < size.x && p.y < size.y;
+  bool containsLocalPoint(Vector2 point) {
+    return point.x >= 0 &&
+        point.y >= 0 &&
+        point.x < canvasSize.x &&
+        point.y < canvasSize.y;
   }
 
   /// Returns the current time in seconds with microseconds precision.
@@ -219,12 +200,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     return DateTime.now().microsecondsSinceEpoch.toDouble() /
         Duration.microsecondsPerSecond;
   }
-
-  @override
-  Projector get viewportProjector => oldCamera.viewport;
-
-  @override
-  Projector get projector => oldCamera.combinedProjector;
 
   /// Returns a [ComponentsNotifier] for the given type [W].
   ///
