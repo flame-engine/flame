@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/camera/camera_component.dart';
@@ -27,6 +26,9 @@ abstract class Viewport extends Component
 
   final Vector2 _size = Vector2.zero();
   bool _isInitialized = false;
+
+  @internal
+  final Transform2D transform = Transform2D();
 
   /// Position of the viewport's anchor in the parent's coordinate frame.
   ///
@@ -146,5 +148,7 @@ abstract class Viewport extends Component
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 
-  void transformCanvas(Canvas canvas) {}
+  void transformCanvas(Canvas canvas) {
+    canvas.transform2D(transform);
+  }
 }

@@ -25,11 +25,13 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   @override
   void onLoad() {
     parent.transform.addListener(_updateCameraBounds);
+    viewport.transform.addListener(_updateCameraBounds);
     _updateCameraBounds();
   }
 
   @override
   void onRemove() {
+    viewport.transform.removeListener(_updateCameraBounds);
     parent.transform.removeListener(_updateCameraBounds);
   }
 

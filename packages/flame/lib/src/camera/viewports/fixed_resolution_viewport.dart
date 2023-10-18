@@ -26,9 +26,6 @@ class FixedResolutionViewport extends FixedAspectRatioViewport
   @override
   Vector2 get virtualSize => resolution;
 
-  @internal
-  final Transform2D transform = Transform2D();
-
   @override
   Vector2 get scale => transform.scale;
 
@@ -66,7 +63,7 @@ class FixedResolutionViewport extends FixedAspectRatioViewport
   @override
   void transformCanvas(Canvas canvas) {
     canvas.translate(size.x / 2, size.y / 2);
-    canvas.transform2D(transform);
+    super.transformCanvas(canvas);
     canvas.translate(-(size.x / 2) / scale.x, -(size.y / 2) / scale.y);
   }
 }
