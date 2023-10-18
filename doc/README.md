@@ -36,18 +36,7 @@ Give us a star if you want to help give the engine exposure and grow the communi
 Add the `flame` package as a dependency in your `pubspec.yaml` by running the following command:
 
 ```console
-$ flutter pub add flame
-Resolving dependencies...
-  collection 1.17.2 (1.18.0 available)
-+ flame 1.10.0
-  material_color_utilities 0.5.0 (0.8.0 available)
-  meta 1.9.1 (1.11.0 available)
-+ ordered_set 5.0.2
-  stack_trace 1.11.0 (1.11.1 available)
-  stream_channel 2.1.1 (2.1.2 available)
-  test_api 0.6.0 (0.6.1 available)
-  web 0.1.4-beta (0.3.0 available)
-Changed 2 dependencies!
+flutter pub add flame
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
