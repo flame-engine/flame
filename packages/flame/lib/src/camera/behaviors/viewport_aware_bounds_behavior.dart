@@ -17,7 +17,6 @@ import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 /// shapes.
 class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   Shape _originalBounds;
-  late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
     required Shape originalBounds,
@@ -25,16 +24,13 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
 
   @override
   void onLoad() {
-    _visibleWorldRect = parent.visibleWorldRect;
+    parent.transform.addListener(_updateCameraBounds);
     _updateCameraBounds();
   }
 
   @override
-  void update(double dt) {
-    if (_visibleWorldRect != parent.visibleWorldRect) {
-      _visibleWorldRect = parent.visibleWorldRect;
-      _updateCameraBounds();
-    }
+  void onRemove() {
+    parent.transform.removeListener(_updateCameraBounds);
   }
 
   /// Returns the bounds that do not take the viewport into account.
