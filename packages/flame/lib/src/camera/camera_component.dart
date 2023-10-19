@@ -334,7 +334,7 @@ class CameraComponent extends Component {
   /// Note that this option only works with [Rectangle], [RoundedRectangle] and
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
-    final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    var boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
     final viewPortAwareBoundsBehavior =
         viewfinder.firstChild<ViewportAwareBoundsBehavior>();
     if (bounds == null) {
@@ -343,15 +343,16 @@ class CameraComponent extends Component {
       return;
     }
     if (boundedBehavior == null) {
-      viewfinder.add(
-        BoundedPositionBehavior(bounds: bounds, priority: 1000),
-      );
+      boundedBehavior = BoundedPositionBehavior(bounds: bounds, priority: 1000);
+      viewfinder.add(boundedBehavior);
     } else {
       boundedBehavior.bounds = bounds;
     }
     if (considerViewport) {
       if (viewPortAwareBoundsBehavior == null) {
-        viewfinder.add(ViewportAwareBoundsBehavior(originalBounds: bounds));
+        viewfinder.add(
+          ViewportAwareBoundsBehavior(originalBounds: bounds, boundedBehavior: boundedBehavior!),
+        );
       } else {
         viewPortAwareBoundsBehavior.originalBounds = bounds;
       }

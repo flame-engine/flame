@@ -69,6 +69,8 @@ class FollowBehavior extends Component {
     if (distance > _speed * dt) {
       delta.scale(_speed * dt / distance);
     }
-    owner.position = delta..add(owner.position);
+    if (delta.x != 0 || delta.y != 0) {
+      owner.position = delta..add(owner.position);
+    }
   }
 }

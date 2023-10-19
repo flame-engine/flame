@@ -17,22 +17,32 @@ import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 /// shapes.
 class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   Shape _originalBounds;
+  final BoundedPositionBehavior _boundedBehavior;
+  late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
     required Shape originalBounds,
-  }) : _originalBounds = originalBounds;
+    required BoundedPositionBehavior boundedBehavior,
+  })  : _originalBounds = originalBounds,
+        _boundedBehavior = boundedBehavior;
 
   @override
   void onLoad() {
-    parent.transform.addListener(_updateCameraBounds);
-    viewport.transform.addListener(_updateCameraBounds);
+    _visibleWorldRect = parent.visibleWorldRect;
+    parent.transform.addListener(_updateCameraBoundsIfNeeded);
+    viewport.transform.addListener(_updateCameraBoundsIfNeeded);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
     _updateCameraBounds();
   }
 
   @override
   void onRemove() {
-    viewport.transform.removeListener(_updateCameraBounds);
-    parent.transform.removeListener(_updateCameraBounds);
+    viewport.transform.removeListener(_updateCameraBoundsIfNeeded);
+    parent.transform.removeListener(_updateCameraBoundsIfNeeded);
   }
 
   /// Returns the bounds that do not take the viewport into account.
@@ -47,10 +57,18 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   /// Returns the camera viewport.
   Viewport get viewport => parent.camera.viewport;
 
+  /// Calls [_updateCameraBounds] if the [_visibleWorldRect] differs from
+  /// viewfinder visible world rect.
+  void _updateCameraBoundsIfNeeded() {
+    if (_visibleWorldRect != parent.visibleWorldRect) {
+      _updateCameraBounds();
+    }
+  }
+
   /// Triggers an update of the current camera bounds.
   void _updateCameraBounds() {
-    final boundedBehavior = parent.firstChild<BoundedPositionBehavior>();
-    boundedBehavior?.bounds = _calculateViewportAwareBounds();
+    _visibleWorldRect = parent.visibleWorldRect;
+    _boundedBehavior.bounds = _calculateViewportAwareBounds();
   }
 
   /// This method calculates adapts the [_originalBounds] so that none
