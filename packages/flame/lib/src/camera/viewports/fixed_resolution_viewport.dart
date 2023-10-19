@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flame/camera.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/game/transform2d.dart';
-import 'package:meta/meta.dart';
 
 /// [FixedAspectRatioViewport] is a rectangular viewport which auto-expands to
 /// take as much space as possible within the canvas, while maintaining a fixed
