@@ -19,7 +19,6 @@ blockquote # HTML tag
 broadphase # common division of collision detection between broad and narrow phases
 cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
-consts # plural of const (constant)
 easings # Easing functions specify the rate of change of a parameter over time
 fullscreen # mode in which a program or app occupies the entire screen with no borders
 goldens # test files used as reference for Golden Tests
