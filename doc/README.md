@@ -33,11 +33,10 @@ Give us a star if you want to help give the engine exposure and grow the communi
 
 ## Installation
 
-Put the pub package as your dependency by putting the following in your `pubspec.yaml`:
+Add the `flame` package as a dependency in your `pubspec.yaml` by running the following command:
 
-```yaml
-dependencies:
-  flame: --VERSION--
+```console
+flutter pub add flame
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
