@@ -351,7 +351,10 @@ class CameraComponent extends Component {
     if (considerViewport) {
       if (viewPortAwareBoundsBehavior == null) {
         viewfinder.add(
-          ViewportAwareBoundsBehavior(originalBounds: bounds, boundedBehavior: boundedBehavior!),
+          ViewportAwareBoundsBehavior(
+            originalBounds: bounds,
+            boundedBehavior: boundedBehavior,
+          ),
         );
       } else {
         viewPortAwareBoundsBehavior.originalBounds = bounds;
