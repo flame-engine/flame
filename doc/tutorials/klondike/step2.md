@@ -225,9 +225,9 @@ objects. `KlondikeGame` is an extension of `FlameGame`, so we can add to that
 `world` all the components that we just created.
 
 ```dart
-    world.add(stock)
-    world.add(waste)
-    world.addAll(foundations)
+    world.add(stock);
+    world.add(waste);
+    world.addAll(foundations);
     world.addAll(piles);
 ```
 

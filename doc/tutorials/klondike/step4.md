@@ -1,4 +1,4 @@
-# Gameplay
+# 4. Gameplay
 
 In this chapter we will be implementing the core of Klondike's gameplay: how the cards move between
 the stock and the waste, the piles and the foundations.
@@ -511,7 +511,7 @@ we will add an extra method to determine the zoom level:
   @override
   void onDragUpdate(DragUpdateEvent event) {
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     position += event.delta / cameraZoom;
@@ -607,7 +607,7 @@ to `false`:
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     position += event.delta / cameraZoom;
@@ -937,7 +937,7 @@ the `onDragUpdate` method:
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     final delta = event.delta / cameraZoom;
