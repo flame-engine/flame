@@ -17,5 +17,6 @@ with the [Dart] programming language.
 2. Scaffolding  <step2.md>
 3. Cards        <step3.md>
 4. Gameplay     <step4.md>
+5. Additional features  <step5.md>
 [To be continued]... <tbc.md>
 ```
