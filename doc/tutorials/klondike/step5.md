@@ -20,14 +20,14 @@ maybe we should have KlondikeGame provide a value 1 or 3 to each of them. They b
 constructors, so we could just add an extra parameter to that code, but in Flame there is another
 way, which works even if your component has a default constructor (no code for it) or your game has
 lots of game-wide values. Let call our value `klondikeDraw` In your class declaration add the
-`HasGameReference<MyGame>' mixin, then write `game.klondikeDraw` wherever you need the value 1 or 3.
+`HasGameReference<MyGame>` mixin, then write `game.klondikeDraw` wherever you need the value 1 or 3.
 For class StockPile we will have:
-'''dart
+```dart
 class StockPile extends PositionComponent
         with TapCallbacks, HasGameReference<KlondikeGame> implements Pile {
-'''
+```
 and
-'''dart
+```dart
   @override
   void onTapUp(TapUpEvent event) {
     final wastePile = parent!.firstChild<WastePile>()!;
@@ -46,7 +46,7 @@ and
       }
     }
   }
-'''
+```
 
 For class WastePile we will have:
 ```dart
@@ -143,8 +143,8 @@ a drag-and-drop started. So let us insert new lines in two places as shown below
       _whereCardStarted = Vector2(position.x, position.y);
       if (pile is TableauPile) {
 ```
-Note that it would be a mistake to write `\_whereCardStarted = position;`. In Dart, that would just
-copy a reference -- so `\_whereCardStarted` would point to the same data as `position` while the
+Note that it would be a mistake to write `_whereCardStarted = position;`. In Dart, that would just
+copy a reference -- so `_whereCardStarted` would point to the same data as `position` while the
 drag occurred and the position of the card changed. We can get around this by copying the card's
 current X and Y co-ordinates into a new `Vector2` object.
 
