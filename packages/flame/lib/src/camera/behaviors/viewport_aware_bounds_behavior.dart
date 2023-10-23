@@ -17,20 +17,17 @@ import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 /// shapes.
 class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   Shape _originalBounds;
-  final BoundedPositionBehavior _boundedBehavior;
   late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
     required Shape originalBounds,
-    required BoundedPositionBehavior boundedBehavior,
-  })  : _originalBounds = originalBounds,
-        _boundedBehavior = boundedBehavior;
+  })  : _originalBounds = originalBounds;
 
   @override
   void onLoad() {
     _visibleWorldRect = parent.visibleWorldRect;
-    parent.transform.addListener(_updateCameraBoundsIfNeeded);
-    viewport.transform.addListener(_updateCameraBoundsIfNeeded);
+    parent.transform.scale.addListener(_updateCameraBoundsIfNeeded);
+    viewport.transform.scale.addListener(_updateCameraBoundsIfNeeded);
   }
 
   @override
@@ -41,8 +38,8 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
 
   @override
   void onRemove() {
-    viewport.transform.removeListener(_updateCameraBoundsIfNeeded);
-    parent.transform.removeListener(_updateCameraBoundsIfNeeded);
+    viewport.transform.scale.removeListener(_updateCameraBoundsIfNeeded);
+    parent.transform.scale.removeListener(_updateCameraBoundsIfNeeded);
   }
 
   /// Returns the bounds that do not take the viewport into account.
@@ -68,7 +65,8 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   /// Triggers an update of the current camera bounds.
   void _updateCameraBounds() {
     _visibleWorldRect = parent.visibleWorldRect;
-    _boundedBehavior.bounds = _calculateViewportAwareBounds();
+    final boundedBehavior = parent.firstChild<BoundedPositionBehavior>();
+    boundedBehavior?.bounds = _calculateViewportAwareBounds();
   }
 
   /// This method calculates adapts the [_originalBounds] so that none
@@ -76,8 +74,12 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   /// It returns the [_originalBounds] if it fails to calculates new bounds.
   Shape _calculateViewportAwareBounds() {
     final worldSize = Vector2(
-      _originalBounds.support(Vector2(1, 0)).x,
-      _originalBounds.support(Vector2(0, 1)).y,
+      _originalBounds.support(
+          _originalBounds.nearestPoint(_originalBounds.center + Vector2(1, 0)),
+      ).x,
+      _originalBounds.support(
+          _originalBounds.nearestPoint(_originalBounds.center + Vector2(0, 1)),
+      ).y,
     );
     final halfViewportSize = viewport.size / 2;
     if (_originalBounds is Rectangle) {
