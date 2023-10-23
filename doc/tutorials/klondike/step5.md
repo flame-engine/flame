@@ -8,8 +8,8 @@ Effect and EffectController components.
 ## The Klondike draw
 
 The Klondike patience game (or solitaire game in the USA) has two main variants: Draw 3 and Draw 1. Currently the Klondike Flame Game is Draw 3, which is a lot more difficult than Draw 1, because
-although you can see 3 cards, you can only move one of them and that changes the "phase" of other
-cards. So you have to handle that - not easy.
+although you can see 3 cards, you can only move one of them and that move changes the "phase" of
+other cards. So different cards are going to become available &mdash; not easy.
 
 In Klondike Draw 1 just one card at a time is drawn from the Stock and shown, so every card in it is
 available, and you can go through the Stock as many times as you like, just as in Klondike Draw 3.
@@ -147,7 +147,7 @@ a drag-and-drop started. So let us insert new lines in two places as shown below
       if (pile is TableauPile) {
 ```
 Note that it would be a mistake to write `_whereCardStarted = position;`. In Dart, that would just
-copy a reference -- so `_whereCardStarted` would point to the same data as `position` while the
+copy a reference &mdash; so `_whereCardStarted` would point to the same data as `position` while the
 drag occurred and the position of the card changed. We can get around this by copying the card's
 current X and Y co-ordinates into a new `Vector2` object.
 
@@ -192,7 +192,7 @@ to Waste pile and settling cards into place after a valid drag-and-drop.
 
 ------------???
 
-##Ending and restarting the game
+## Ending and restarting the game
 
 As it stands, there is no easy way to finish the game and start another, even if you have won. We
 can only close the app and start it again. And there is no "reward" for winning.
