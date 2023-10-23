@@ -7,10 +7,9 @@ Effect and EffectController components.
 
 ## The Klondike draw
 
-The Klondike patience game (or solitaire game in the USA) has two main variants: Draw 3 and Draw 1. Currently the Klondike Flame Game is Draw 3, which is a lot more difficult than Draw 1, although we
-did learn how to code fanning out 3 cards horizontally when thay are drawn from the Stock. The
-difficulty is that, although you can see 3 cards, you can only move one of them and that will change
-the "phase" of other cards. So you have to handle that - not easy.
+The Klondike patience game (or solitaire game in the USA) has two main variants: Draw 3 and Draw 1. Currently the Klondike Flame Game is Draw 3, which is a lot more difficult than Draw 1, because
+although you can see 3 cards, you can only move one of them and that changes the "phase" of other
+cards. So you have to handle that - not easy.
 
 In Klondike Draw 1 just one card at a time is drawn from the Stock and shown, so every card in it is
 available, and you can go through the Stock as many times as you like, just as in Klondike Draw 3.
@@ -19,12 +18,13 @@ So how do we implement Klondike Draw 1? Clearly only the Stock and Waste piles a
 maybe we should have KlondikeGame provide a value 1 or 3 to each of them. They both have code for
 constructors, so we could just add an extra parameter to that code, but in Flame there is another
 way, which works even if your component has a default constructor (no code for it) or your game has
-lots of game-wide values. Let call our value `klondikeDraw` In your class declaration add the
+many game-wide values. Let ius call our value `klondikeDraw`. In your class declaration add the
 `HasGameReference<MyGame>` mixin, then write `game.klondikeDraw` wherever you need the value 1 or 3.
 For class StockPile we will have:
 ```dart
 class StockPile extends PositionComponent
-        with TapCallbacks, HasGameReference<KlondikeGame> implements Pile {
+    with TapCallbacks, HasGameReference<KlondikeGame>
+    implements Pile {
 ```
 and
 ```dart
@@ -50,8 +50,9 @@ and
 
 For class WastePile we will have:
 ```dart
-class WastePile extends PositionComponent with HasGameReference<KlondikeGame>
-        implements Pile {
+class WastePile extends PositionComponent
+    with HasGameReference<KlondikeGame>
+    implements Pile {
 ```
 and
 ```dart
@@ -102,31 +103,33 @@ provide a callback, because a bit of gameplay must be done **after** the animate
 `curve:` parameter gives us a fast-in/slow-out move, much as a human player would do. So the
 following code is added to the end of the `Card` class:
 ```dart
-  void goTo(Vector2 position, {
-            double? time,
-            double? speed,
-            double  start = 0.0,
-            Curve   curve = Curves.easeOutQuad,
-            VoidCallback? onComplete = null})
-  {
+  void goTo(
+    Vector2 position, {
+    double? time,
+    double? speed,
+    double start = 0.0,
+    Curve curve = Curves.easeOutQuad,
+    VoidCallback? onComplete,
+  }) {
     // Must provide either time or speed (in widths per sec), but not both.
     assert((time == null) ^ (speed == null));
-    double dt = time != null ? time
-                : (position - this.position).length / (speed! * this.size.x);
-    this.add(
+    final dt = time ?? (position - this.position).length / (speed! * size.x);
+    add(
       MoveToEffect(
         position,
         EffectController(duration: dt, startDelay: start, curve: curve),
-        onComplete: () {onComplete?.call();},
-      )
+        onComplete: () {
+          onComplete?.call();
+        },
+      ),
     );
   }
 ```
 Notice the assert line: this has an exclusive-OR condition (`^`) to ensure that the caller provides
 either `time:` or `speed:` but not both.
 
-To make this code compile we need to import `'package:flutter/animation.dart'` and
-`'package:flame/effects.dart'` at the top of the `components/card.dart` file. That done, we can
+To make this code compile we need to import `'package:flame/effects.dart'` and
+`'package:flutter/animation.dart'` at the top of the `components/card.dart` file. That done, we can
 start using the new method to return the card(s) gracefully to where they came from, after being
 dropped in an invalid position. First, we need a private data item to store a card's position when
 a drag-and-drop started. So let us insert new lines in two places as shown below:
@@ -152,13 +155,23 @@ To animate cards being returned to their original piles after an invalid drag-an
 five lines at the end of the `onDragEnd()` method with:
 ```dart
     // Invalid drop (middle of nowhere, invalid pile or invalid card for pile).
-    this.goTo(_whereCardStarted, speed: 10.0,
-         onComplete: () {pile!.returnCard(this);});
+    goTo(
+      _whereCardStarted,
+      speed: 10.0,
+      onComplete: () {
+        pile!.returnCard(this);
+      },
+    );
     if (attachedCards.isNotEmpty) {
       attachedCards.forEach((card) {
-        Vector2 offset = card.position - this.position;
-        card.goTo(_whereCardStarted + offset, speed: 10.0,
-                  onComplete: () {pile!.returnCard(card);});
+        final offset = card.position - position;
+        card.goTo(
+          _whereCardStarted + offset,
+          speed: 10.0,
+          onComplete: () {
+            pile!.returnCard(card);
+          },
+        );
       });
       attachedCards.clear();
     }
@@ -170,9 +183,19 @@ because each moving card has a `MoveToEffect` and an `EffectController` added to
 contain all the data needed to get the right card to the right place at the right time. Thus
 no important information is lost by clearing the attached cards early. Also, by default, the
 `MoveToEffect` and `EffectController` in each moving card automatically get detached and deleted
-when the show is over.
+by Flame when the show is over.
 
+## More card moves
 
+Some other automatic and animated moves we can try are dealing the cards, flipping cards from Stock
+to Waste pile and settling cards into place after a valid drag-and-drop.
+
+------------???
+
+##Ending and restarting the game
+
+As it stands, there is no easy way to finish the game and start another, even if you have won. We
+can only close the app and start it again. And there is no "reward" for winning.
 
 
 ------------???
