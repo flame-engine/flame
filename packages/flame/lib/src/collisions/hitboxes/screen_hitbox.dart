@@ -38,11 +38,15 @@ class ScreenHitbox<T extends FlameGame> extends PositionComponent
     if (angle != 0) {
       final cosTheta = cos(angle).abs();
       final sinTheta = sin(angle).abs();
+      final newWidth = (size.x * cosTheta) + (size.y * sinTheta);
+      final newHeight = (size.x * sinTheta) + (size.y * cosTheta);
 
-      size.setValues(
-        (size.x * cosTheta) + (size.y * sinTheta),
-        (size.x * sinTheta) + (size.y * cosTheta),
-      );
+      // Shrink the new dimensions to keep the original AABB size before the
+      // rotation.
+      final scaleWidth = size.x / newWidth;
+      final scaleHeight = size.y / newHeight;
+
+      size.setValues(newWidth * scaleWidth, newHeight * scaleHeight);
     }
   }
 
