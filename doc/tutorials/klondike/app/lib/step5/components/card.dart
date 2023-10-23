@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/animation.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/animation.dart';
 
 import '../klondike_game.dart';
 import '../pile.dart';
@@ -278,13 +278,23 @@ class Card extends PositionComponent with DragCallbacks {
     }
 
     // Invalid drop (middle of nowhere, invalid pile or invalid card for pile).
-    this.goTo(_whereCardStarted, speed: 10.0,
-         onComplete: () {pile!.returnCard(this);});
+    goTo(
+      _whereCardStarted,
+      speed: 10.0,
+      onComplete: () {
+        pile!.returnCard(this);
+      },
+    );
     if (attachedCards.isNotEmpty) {
       attachedCards.forEach((card) {
-        Vector2 offset = card.position - this.position;
-        card.goTo(_whereCardStarted + offset, speed: 10.0,
-                  onComplete: () {pile!.returnCard(card);});
+        final offset = card.position - position;
+        card.goTo(
+          _whereCardStarted + offset,
+          speed: 10.0,
+          onComplete: () {
+            pile!.returnCard(card);
+          },
+        );
       });
       attachedCards.clear();
     }
@@ -292,23 +302,25 @@ class Card extends PositionComponent with DragCallbacks {
 
   //#endregion
 
-  void goTo(Vector2 position, {
-            double? time,
-            double? speed,
-            double  start = 0.0,
-            Curve   curve = Curves.easeOutQuad,
-            VoidCallback? onComplete = null})
-  {
+  void goTo(
+    Vector2 position, {
+    double? time,
+    double? speed,
+    double start = 0.0,
+    Curve curve = Curves.easeOutQuad,
+    VoidCallback? onComplete,
+  }) {
     // Must provide either time or speed (in widths per sec), but not both.
     assert((time == null) ^ (speed == null));
-    double dt = time != null ? time
-                : (position - this.position).length / (speed! * this.size.x);
-    this.add(
+    final dt = time ?? (position - this.position).length / (speed! * size.x);
+    add(
       MoveToEffect(
         position,
         EffectController(duration: dt, startDelay: start, curve: curve),
-        onComplete: () {onComplete?.call();},
-      )
+        onComplete: () {
+          onComplete?.call();
+        },
+      ),
     );
   }
 }

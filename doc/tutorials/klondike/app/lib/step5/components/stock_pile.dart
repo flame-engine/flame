@@ -9,8 +9,8 @@ import 'card.dart';
 import 'waste_pile.dart';
 
 class StockPile extends PositionComponent
-        with TapCallbacks, HasGameReference<KlondikeGame> implements Pile {
-
+    with TapCallbacks, HasGameReference<KlondikeGame>
+    implements Pile {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile. The first card in the
