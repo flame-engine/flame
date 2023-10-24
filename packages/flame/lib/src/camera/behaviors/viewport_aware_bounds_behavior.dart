@@ -11,17 +11,17 @@ import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 
-/// This behavior ensures that the none of the viewport can go outside
+/// This behavior ensures that none of the viewport can go outside
 /// of the bounds, when it is false only the viewfinder anchor is considered.
 /// Note that it only works with [Rectangle], [RoundedRectangle] and [Circle]
 /// shapes.
 class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
-  Shape _originalBounds;
+  Shape _bounds;
   late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
     required Shape originalBounds,
-  })  : _originalBounds = originalBounds;
+  }) : _bounds = originalBounds;
 
   @override
   void onLoad() {
@@ -43,11 +43,11 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   }
 
   /// Returns the bounds that do not take the viewport into account.
-  Shape get originalBounds => _originalBounds;
+  Shape get bounds => _bounds;
 
   /// Changes the original camera bounds.
-  set originalBounds(Shape originalBounds) {
-    _originalBounds = originalBounds;
+  set bounds(Shape bounds) {
+    _bounds = bounds;
     _updateCameraBounds();
   }
 
@@ -69,37 +69,45 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
     boundedBehavior?.bounds = _calculateViewportAwareBounds();
   }
 
-  /// This method calculates adapts the [_originalBounds] so that none
+  /// This method calculates adapts the [_bounds] so that none
   /// of the viewport can go outside of the bounds.
-  /// It returns the [_originalBounds] if it fails to calculates new bounds.
+  /// It returns the [_bounds] if it fails to calculates new bounds.
   Shape _calculateViewportAwareBounds() {
     final worldSize = Vector2(
-      _originalBounds.support(
-          _originalBounds.nearestPoint(_originalBounds.center + Vector2(1, 0)),
-      ).x,
-      _originalBounds.support(
-          _originalBounds.nearestPoint(_originalBounds.center + Vector2(0, 1)),
-      ).y,
+      _bounds
+          .support(
+            _bounds.nearestPoint(
+              _bounds.center + Vector2(1, 0),
+            ),
+          )
+          .x,
+      _bounds
+          .support(
+            _bounds.nearestPoint(
+              _bounds.center + Vector2(0, 1),
+            ),
+          )
+          .y,
     );
     final halfViewportSize = viewport.size / 2;
-    if (_originalBounds is Rectangle) {
+    if (_bounds is Rectangle) {
       return Rectangle.fromCenter(
-        center: _originalBounds.center,
+        center: _bounds.center,
         size: worldSize - halfViewportSize,
       );
-    } else if (_originalBounds is RoundedRectangle) {
+    } else if (_bounds is RoundedRectangle) {
       final halfSize = (worldSize - halfViewportSize) / 2;
       return RoundedRectangle.fromPoints(
-        _originalBounds.center - halfSize,
-        _originalBounds.center + halfSize,
-        (_originalBounds as RoundedRectangle).radius,
+        _bounds.center - halfSize,
+        _bounds.center + halfSize,
+        (_bounds as RoundedRectangle).radius,
       );
-    } else if (_originalBounds is Circle) {
+    } else if (_bounds is Circle) {
       return Circle(
-        _originalBounds.center,
+        _bounds.center,
         worldSize.x - max(halfViewportSize.x, halfViewportSize.y),
       );
     }
-    return _originalBounds;
+    return _bounds;
   }
 }
