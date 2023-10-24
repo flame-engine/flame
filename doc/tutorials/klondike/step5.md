@@ -93,9 +93,9 @@ attach to another component, such as a card, and modify its properties. That inc
 motion (or change of `position`). We also need an `EffectController`, which provides timing for an
 effect: when to start, how long to go for and what `Curve` to follow. The latter is not a curve in
 space. It is a time-curve that specifies accelerations and decelerations during the time of the
-effect, such as start moving a card quickly and then slow down as it reaches its destination.
+effect, such as start moving a card quickly and then slow down as it approaches its destination.
 
-To move a card, we will add a `goTo()` method to the `Card` class. It will require a `position` to
+To move a card, we will add a `doMove()` method to the `Card` class. It will require a `position` to
 go to and either a `time:` or a `speed:` parameter (but not both!). Speed is in card widths per
 second. Optional parameters are `start:` (default zero), `curve:` (default `Curves.easeOutQuad`)
 and `onComplete:` (default `null`, i.e. no callback when the move finishes). Usually we will
@@ -103,7 +103,7 @@ provide a callback, because a bit of gameplay must be done **after** the animate
 `curve:` parameter gives us a fast-in/slow-out move, much as a human player would do. So the
 following code is added to the end of the `Card` class:
 ```dart
-  void goTo(
+  void doMove(
     Vector2 position, {
     double? time,
     double? speed,
@@ -155,7 +155,7 @@ To animate cards being returned to their original piles after an invalid drag-an
 five lines at the end of the `onDragEnd()` method with:
 ```dart
     // Invalid drop (middle of nowhere, invalid pile or invalid card for pile).
-    goTo(
+    doMove(
       _whereCardStarted,
       speed: 10.0,
       onComplete: () {
@@ -165,7 +165,7 @@ five lines at the end of the `onDragEnd()` method with:
     if (attachedCards.isNotEmpty) {
       attachedCards.forEach((card) {
         final offset = card.position - position;
-        card.goTo(
+        card.doMove(
           _whereCardStarted + offset,
           speed: 10.0,
           onComplete: () {

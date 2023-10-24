@@ -30,6 +30,12 @@ class Card extends PositionComponent with DragCallbacks {
   bool get isFaceUp => _faceUp;
   bool get isFaceDown => !_faceUp;
   void flip() => _faceUp = !_faceUp;
+  // TODO - IDW: Add newPosition parameter to flip(). Could be unaltered on
+  //             Tableau Piles or Waste Pile + offset (if any) when flipping
+  //             from Stock Pile. Animate flip by scaling width to zero,
+  //             changing images, then scaling back up to card  width. Should
+  //             all this happen if card isFaceUp at start? Does it happen?
+  //             If no parameter (null?), no animation.
 
   @override
   String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
@@ -278,7 +284,7 @@ class Card extends PositionComponent with DragCallbacks {
     }
 
     // Invalid drop (middle of nowhere, invalid pile or invalid card for pile).
-    goTo(
+    doMove(
       _whereCardStarted,
       speed: 10.0,
       onComplete: () {
@@ -288,7 +294,7 @@ class Card extends PositionComponent with DragCallbacks {
     if (attachedCards.isNotEmpty) {
       attachedCards.forEach((card) {
         final offset = card.position - position;
-        card.goTo(
+        card.doMove(
           _whereCardStarted + offset,
           speed: 10.0,
           onComplete: () {
@@ -302,7 +308,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   //#endregion
 
-  void goTo(
+  void doMove(
     Vector2 position, {
     double? time,
     double? speed,
