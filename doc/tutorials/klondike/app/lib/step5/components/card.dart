@@ -22,6 +22,8 @@ class Card extends PositionComponent with DragCallbacks {
   final Suit suit;
   Pile? pile;
   bool _faceUp = false;
+  bool _isAnimatedFlip = false;
+  bool _isFaceUpView = false;
   bool _isDragging = false;
   Vector2 _whereCardStarted = Vector2(0, 0);
 
@@ -29,13 +31,17 @@ class Card extends PositionComponent with DragCallbacks {
 
   bool get isFaceUp => _faceUp;
   bool get isFaceDown => !_faceUp;
-  void flip() => _faceUp = !_faceUp;
-  // TODO - IDW: Add newPosition parameter to flip(). Could be unaltered on
-  //             Tableau Piles or Waste Pile + offset (if any) when flipping
-  //             from Stock Pile. Animate flip by scaling width to zero,
-  //             changing images, then scaling back up to card  width. Should
-  //             all this happen if card isFaceUp at start? Does it happen?
-  //             If no parameter (null?), no animation.
+  void flip() {
+    if(_isAnimatedFlip) {
+      // Keep rendering the same side for the first half of the flip.
+      _isFaceUpView = _faceUp;
+    }
+    else {
+      // No animation: render the flipped card immediately.
+      _isFaceUpView = !_faceUp;
+    }
+    _faceUp = !_faceUp;
+  }
 
   @override
   String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
@@ -44,7 +50,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   @override
   void render(Canvas canvas) {
-    if (_faceUp) {
+    if (_isFaceUpView) {
       _renderFront(canvas);
     } else {
       _renderBack(canvas);
@@ -236,7 +242,7 @@ class Card extends PositionComponent with DragCallbacks {
     if (pile?.canMoveCard(this) ?? false) {
       _isDragging = true;
       priority = 100;
-      // Copy each co-ord, else _whereCardStarted changes when position does.
+      // Copy each co-ord, else _whereCardStarted changes as the  position does.
       _whereCardStarted = Vector2(position.x, position.y);
       if (pile is TableauPile) {
         attachedCards.clear();
@@ -308,20 +314,24 @@ class Card extends PositionComponent with DragCallbacks {
 
   //#endregion
 
+  //#region Effects
+
   void doMove(
-    Vector2 position, {
-    double? time,
-    double? speed,
+    Vector2 to,
+    {
+    double speed = 10.0,
     double start = 0.0,
     Curve curve = Curves.easeOutQuad,
     VoidCallback? onComplete,
-  }) {
-    // Must provide either time or speed (in widths per sec), but not both.
-    assert((time == null) ^ (speed == null));
-    final dt = time ?? (position - this.position).length / (speed! * size.x);
+    })
+  {
+    assert(speed > 0.0, 'Speed must be > 0 widths per second');
+    final dt = (to - this.position).length / (speed * size.x);
+    assert(dt > 0, 'Distance to move must be > 0');
+    priority = 100;
     add(
       MoveToEffect(
-        position,
+        to,
         EffectController(duration: dt, startDelay: start, curve: curve),
         onComplete: () {
           onComplete?.call();
@@ -329,4 +339,72 @@ class Card extends PositionComponent with DragCallbacks {
       ),
     );
   }
+
+  void doTimedMove(
+    Vector2 to,
+    {
+    double time = 0.3,
+    double start = 0.0,
+    Curve curve = Curves.easeOutQuad,
+    VoidCallback? onComplete,
+    }) {
+    assert(time > 0.0, 'Time must be > 0.0');
+    add(
+      MoveToEffect(
+        to,
+        EffectController(duration: time, startDelay: start, curve: curve),
+        onComplete: () {
+          onComplete?.call();
+        },
+      ),
+    );
+  }
+
+  // TODO - IDW: Write doMoveAndFlip().
+
+  void turnFaceUp({
+    double time = 0.3,
+    double start = 0.0,
+    VoidCallback? onComplete,
+    })
+  {
+    assert(!_isFaceUpView, 'Card must be face-down before turning face-up.');
+    _isAnimatedFlip = true;
+    anchor = Anchor.topCenter;
+    position += Vector2(width/2, 0);
+    priority = 100;
+    add(
+      ScaleEffect.to(Vector2(scale.x/100, scale.y),
+        EffectController(
+          startDelay: start,
+          curve: Curves.easeOutSine,
+          duration: time/2,
+          onMax: () {
+            _isFaceUpView = true;
+          },
+          reverseDuration: time/2,
+          onMin: () {
+            _isAnimatedFlip = false;
+            _faceUp = true;
+            anchor = Anchor.topLeft;
+            position -= Vector2(width/2, 0);
+          },
+        ),
+        onComplete: () {
+          onComplete?.call();
+        },
+      ),
+    );
+  }
+
+/*
+  void doMoveAndFlip() {
+    Vector2 to,
+    {
+    double speed,
+    }
+  }
+*/
+
+  //#endregion
 }

@@ -54,8 +54,13 @@ class StockPile extends PositionComponent
       for (var i = 0; i < game.klondikeDraw; i++) {
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
-          card.flip();
-          wastePile.acquireCard(card);
+          card.turnFaceUp(
+            time: 0.3,
+            start: i * 0.4,
+            onComplete: () {
+              wastePile.acquireCard(card);
+            },
+          );
         }
       }
     }
