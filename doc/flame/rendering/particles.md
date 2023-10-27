@@ -106,7 +106,6 @@ game.add(
 You can find more examples of how to use different built-in particles in various combinations
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
 
-
 ## Lifecycle
 
 A behavior common to all `Particle`s is that all of them accept a `lifespan` argument. This value is
@@ -146,7 +145,6 @@ Timer.periodic(duration * .1, () => print(particle.progress));
 The `lifespan` is passed down to all the descendants of a given `Particle`, if it supports any of
 the nesting behaviors.
 
-
 ## Built-in particles
 
 Flame ships with a few built-in `Particle` behaviors:
@@ -156,7 +154,7 @@ Flame ships with a few built-in `Particle` behaviors:
 - The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
 - The `CircleParticle` renders circles of all shapes and sizes
 - The `SpriteParticle` renders Flame `Sprite` within a `Particle` effect
-- The `ImageParticle` renders *dart:ui* `Image` within a `Particle` effect
+- The `ImageParticle` renders _dart:ui_ `Image` within a `Particle` effect
 - The `ComponentParticle` renders Flame `Component` within a `Particle` effect
 - The `FlareParticle` renders Flare animation within a `Particle` effect
 
@@ -165,7 +163,6 @@ More examples of how to use these behaviors together are available
 All the implementations are available in the
 [particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder
 on the Flame repository.
-
 
 ## TranslatedParticle
 
@@ -185,7 +182,6 @@ game.add(
   ),
 );
 ```
-
 
 ## MovingParticle
 
@@ -208,13 +204,12 @@ game.add(
 );
 ```
 
-
 ## AcceleratedParticle
 
 A basic physics particle which allows you to specify its initial `position`, `speed` and
 `acceleration` and lets the `update` cycle do the rest. All three are specified as `Vector2`s, which
 you can think of as vectors. It works especially well for physics-based "bursts", but it is not
-limited to that. Unit of the `Vector2` value is *logical px/s*. So a speed of `Vector2(0, 100)` will
+limited to that. Unit of the `Vector2` value is _logical px/s_. So a speed of `Vector2(0, 100)` will
 move a child `Particle` by 100 logical pixels of the device every second of game time.
 
 ```dart
@@ -239,7 +234,6 @@ game.add(
 );
 ```
 
-
 ## CircleParticle
 
 A `Particle` which renders a circle with given `Paint` at the zero offset of passed `Canvas`. Use in
@@ -257,7 +251,6 @@ game.add(
 );
 ```
 
-
 ## SpriteParticle
 
 Allows you to embed a `Sprite` into your particle effects.
@@ -272,7 +265,6 @@ game.add(
   ),
 );
 ```
-
 
 ## ImageParticle
 
@@ -299,6 +291,24 @@ game.add(
 );
 ```
 
+## ScalingParticle
+
+Scales the child `Particle` between `1` and `to` during its lifespan.
+
+```dart
+game.add(
+  ParticleSystemComponent(
+    particle: ScalingParticle(
+      lifespan: 2,
+      to: 0,
+      child: CircleParticle(
+        radius: 2.0,
+        paint: Paint()..color = Colors.red,
+      )
+    );
+  ),
+);
+```
 
 ## SpriteAnimationParticle
 
@@ -321,7 +331,6 @@ game.add(
   ),
 );
 ```
-
 
 ## ComponentParticle
 
@@ -355,7 +364,6 @@ class RectComponent extends Component {
 }
 ```
 
-
 ## ComputedParticle
 
 A `Particle` which could help you when:
@@ -387,7 +395,6 @@ game.add(
   ),
 )
 ```
-
 
 ## Nesting behavior
 
