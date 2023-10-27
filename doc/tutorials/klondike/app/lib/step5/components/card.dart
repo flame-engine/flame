@@ -32,11 +32,10 @@ class Card extends PositionComponent with DragCallbacks {
   bool get isFaceUp => _faceUp;
   bool get isFaceDown => !_faceUp;
   void flip() {
-    if(_isAnimatedFlip) {
+    if (_isAnimatedFlip) {
       // Keep rendering the same side for the first half of the flip.
       _isFaceUpView = _faceUp;
-    }
-    else {
+    } else {
       // No animation: render the flipped card immediately.
       _isFaceUpView = !_faceUp;
     }
@@ -292,7 +291,6 @@ class Card extends PositionComponent with DragCallbacks {
     // Invalid drop (middle of nowhere, invalid pile or invalid card for pile).
     doMove(
       _whereCardStarted,
-      speed: 10.0,
       onComplete: () {
         pile!.returnCard(this);
       },
@@ -302,7 +300,6 @@ class Card extends PositionComponent with DragCallbacks {
         final offset = card.position - position;
         card.doMove(
           _whereCardStarted + offset,
-          speed: 10.0,
           onComplete: () {
             pile!.returnCard(card);
           },
@@ -317,16 +314,14 @@ class Card extends PositionComponent with DragCallbacks {
   //#region Effects
 
   void doMove(
-    Vector2 to,
-    {
+    Vector2 to, {
     double speed = 10.0,
     double start = 0.0,
     Curve curve = Curves.easeOutQuad,
     VoidCallback? onComplete,
-    })
-  {
+  }) {
     assert(speed > 0.0, 'Speed must be > 0 widths per second');
-    final dt = (to - this.position).length / (speed * size.x);
+    final dt = (to - position).length / (speed * size.x);
     assert(dt > 0, 'Distance to move must be > 0');
     priority = 100;
     add(
@@ -341,13 +336,12 @@ class Card extends PositionComponent with DragCallbacks {
   }
 
   void doTimedMove(
-    Vector2 to,
-    {
+    Vector2 to, {
     double time = 0.3,
     double start = 0.0,
     Curve curve = Curves.easeOutQuad,
     VoidCallback? onComplete,
-    }) {
+  }) {
     assert(time > 0.0, 'Time must be > 0.0');
     add(
       MoveToEffect(
@@ -360,34 +354,32 @@ class Card extends PositionComponent with DragCallbacks {
     );
   }
 
-  // TODO - IDW: Write doMoveAndFlip().
-
   void turnFaceUp({
     double time = 0.3,
     double start = 0.0,
     VoidCallback? onComplete,
-    })
-  {
+  }) {
     assert(!_isFaceUpView, 'Card must be face-down before turning face-up.');
     _isAnimatedFlip = true;
     anchor = Anchor.topCenter;
-    position += Vector2(width/2, 0);
+    position += Vector2(width / 2, 0);
     priority = 100;
     add(
-      ScaleEffect.to(Vector2(scale.x/100, scale.y),
+      ScaleEffect.to(
+        Vector2(scale.x / 100, scale.y),
         EffectController(
           startDelay: start,
           curve: Curves.easeOutSine,
-          duration: time/2,
+          duration: time / 2,
           onMax: () {
             _isFaceUpView = true;
           },
-          reverseDuration: time/2,
+          reverseDuration: time / 2,
           onMin: () {
             _isAnimatedFlip = false;
             _faceUp = true;
             anchor = Anchor.topLeft;
-            position -= Vector2(width/2, 0);
+            position -= Vector2(width / 2, 0);
           },
         ),
         onComplete: () {

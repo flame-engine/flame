@@ -55,7 +55,6 @@ class StockPile extends PositionComponent
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
           card.turnFaceUp(
-            time: 0.3,
             start: i * 0.4,
             onComplete: () {
               wastePile.acquireCard(card);
