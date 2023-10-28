@@ -33,13 +33,13 @@ class Card extends PositionComponent with DragCallbacks {
   bool get isFaceDown => !_faceUp;
   void flip() {
     if (_isAnimatedFlip) {
-      // Keep rendering the same side for the first half of the flip.
-      _isFaceUpView = _faceUp;
+      // Let the animation determine the FaceUp/FaceDown state.
+      _faceUp = _isFaceUpView;
     } else {
-      // No animation: render the flipped card immediately.
-      _isFaceUpView = !_faceUp;
+      // No animation: flip and render the card immediately.
+      _faceUp = !_faceUp;
+      _isFaceUpView = _faceUp;
     }
-    _faceUp = !_faceUp;
   }
 
   @override
