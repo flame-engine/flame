@@ -215,6 +215,53 @@ void main() {
         );
       },
     );
+
+    group('world and camera', () {
+      testWithFlameGame(
+        'game world setter',
+        (game) async {
+          final newWorld = World();
+          game.world = newWorld;
+          expect(game.world, newWorld);
+          expect(game.camera.world, newWorld);
+        },
+      );
+
+      testWithFlameGame(
+        'game camera setter',
+        (game) async {
+          final newCamera = CameraComponent();
+          game.camera = newCamera;
+          expect(game.camera, newCamera);
+          expect(game.world, isNotNull);
+          expect(game.camera.world, game.world);
+        },
+      );
+
+      testWithFlameGame(
+        'game camera setter with another world',
+        (game) async {
+          final camera1 = game.camera;
+          final world1 = game.world;
+          expect(world1, isNotNull);
+          expect(camera1, isNotNull);
+
+          final camera2 = CameraComponent();
+          final world2 = World();
+          camera2.world = world2;
+
+          game.camera = camera2;
+          expect(game.camera, camera2);
+          expect(game.camera.world, world2);
+          expect(game.world, world1);
+
+          game.camera = camera1;
+          expect(game.camera, camera1);
+          expect(game.camera.world, world1);
+          expect(game.world, world1);
+        },
+      );
+    });
   });
 
   group('Render box attachment', () {
