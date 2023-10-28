@@ -19,7 +19,7 @@ So how do we implement Klondike Draw 1? Clearly only the Stock and Waste piles a
 maybe we should have KlondikeGame provide a value 1 or 3 to each of them. They both have code for
 constructors, so we could just add an extra parameter to that code, but in Flame there is another
 way, which works even if your component has a default constructor (no code for it) or your game has
-many game-wide values. Let ius call our value `klondikeDraw`. In your class declaration add the
+many game-wide values. Let us call our value `klondikeDraw`. In your class declaration add the
 `HasGameReference<MyGame>` mixin, then write `game.klondikeDraw` wherever you need the value 1 or 3.
 For class StockPile we will have:
 ```dart
@@ -146,7 +146,7 @@ a drag-and-drop started. So let us insert new lines in two places as shown below
       if (pile is TableauPile) {
 ```
 ```{note}
-It would be a mistake to write `_whereCardStarted = position;`. In Dart, that would just
+It would be a mistake to write `_whereCardStarted = position;`here. In Dart, that would just
 copy a reference &mdash; so `_whereCardStarted` would point to the same data as `position` while the
 drag occurred and the position of the card changed. We can get around this by copying the card's
 **current** X and Y co-ordinates into a **new** `Vector2` object.
@@ -187,13 +187,14 @@ by Flame when the show is over.
 
 Some other automatic and animated moves we can try are dealing the cards, flipping cards from Stock
 to Waste pile, turning cards over automatically on the tableau piles, and settling cards into place
-after a valid drag-and-drop.
+after a valid drag-and-drop. We wiil have a look at animating a flip first.
 
 ## Animating a card-flip
 
-Flutter and Flame do not support 3-D effects (as of 2023), but we can emulate them. To make a card
-look as if it is turning over, we will shrink the width of the back-view, switch to the front view
-and expand back to full width. The code uses quite a few features of Effects and EffectControllers:
+Flutter and Flame do not yet support 3-D effects (as at October 2023), but we can emulate them.
+To make a card look as if it is turning over, we will shrink the width of the back-view, switch
+to the front view and expand back to full width. The code uses quite a few features of Effects
+and EffectControllers:
 ```dart
   void turnFaceUp({
     double time = 0.3,
@@ -290,23 +291,37 @@ However, when we tapped a non-empty Stock Pile, the executed code was:
   wastePile.acquireCard(card);
 ```
 And the first thing `wastePile.acquireCard(` does is `assert(card.isFaceUp);`, which fails if an
-animated flip is keeping the card face-down while the first half of an animated flip is occurring.
+animated flip is keeping the card face-down while the first half of the flip is occurring.
 
 ## Model and View
 
-Clearly the card cannot be in two states at once: it is not Schrödinger's cat. We can solve the
-dilemma by adopting two definitions of "face-up": a Model and a View type. The View version is used
-in rendering and animation (i.e. what appears on the screen) and the Model version in the logic
+Clearly the card cannot be in two states at once: it is not Schrödinger's cat! We can resolve the
+dilemma by using two definitions of "face-up": a Model type and a View type. The View version is
+used in rendering and animation (i.e. what appears on the screen) and the Model version in the logic
 of the game, the gameplay and its error-checks. That way, we do not have to revise all the logic
 of the Piles in this game in order to animate some of it. A more complex game might benefit from
 separating the Model and the View during the design and early coding stages &mdash; even into
-separate classes.
+separate classes. In this game we are using just a little separation of Model and View. The
+`_isAnimatedFlip` variable is `true` while there is an animated flip going on, otherwise `false`,
+and the `Card` class's `flip()` function is expanded to:
+```dart
+  void flip() {
+    if (_isAnimatedFlip) {
+      // Let the animation determine the FaceUp/FaceDown state.
+      _faceUp = _isFaceUpView;
+    } else {
+      // No animation: flip and render the card immediately.
+      _faceUp = !_faceUp;
+      _isFaceUpView = _faceUp;
+    }
+  }
+```
 
 In the Klondike Tutorial game we are still having to trigger a Model update in the `onComplete:`
 callback of the flip animation. It might be nice, for impatient or rapid-fingered players, to
 transfer a card from Stock Pile to Waste Pile instaneously, in the Model, leaving the animation
-to catch up later, with no `onComplete:` callback. That way, you could flip through the Stock Pile
-very rapidly, by tapping quickly. However, that is beyond the scope of this Tutorial.
+in the View to catch up later, with no `onComplete:` callback. That way, you could flip through
+the Stock Pile very rapidly, by tapping fast. However, that is beyond the scope of this Tutorial.
 
 ## More animations of moves
 
@@ -316,6 +331,23 @@ very rapidly, by tapping quickly. However, that is beyond the scope of this Tuto
 
 As it stands, there is no easy way to finish the Klondike Tutorial game and start another, even if
 you have won. We can only close the app and start it again. And there is no "reward" for winning.
+
+There are various ways to tackle this, depending on the simplicity or complexity of your game and
+on how long the `onLoad()` function is likely to take. They can range from writing your own
+GameWidget, to doing a few simple re-initilizations in your Game class (i.e. KlondikeGame in this
+case).
+
+In the GameWidget path you would supply the Game with a VoidCallback function parameter named
+`reset` or `restart`. When the callback is invoked, it would use the Flutter conventions of a
+`StatefulWidget` (e.g. `setState(() {});`) to force the widget to be rebuilt and replaced, thus
+eleasing all references to the current Game instance, itst state and all of its memory. There could
+also be Flutter code to run a menu or other startup screen.
+
+Re-initialization should be undertaken only if the operations involved are few and simple. Otherwise
+coding errors could lead to subtle problems, memory leaks and crashes in your code.
+Re-initialization may be the easiest way to go in Klondike (as it is in the Ember Tutorial).
+Basically, we must clear all the card references out of all the `Pile`s and then re-shufle (or not)
+and re-deal, possibly changing from Klondike Draw 3 to Klondike Draw 1 or vice-versa.
 
 
 ------------???
