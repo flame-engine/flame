@@ -72,6 +72,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (_camera.parent == null) {
       add(_camera);
     }
+    _camera.world = world;
   }
 
   CameraComponent _camera;
