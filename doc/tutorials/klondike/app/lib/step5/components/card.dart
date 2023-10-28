@@ -360,6 +360,8 @@ class Card extends PositionComponent with DragCallbacks {
     VoidCallback? onComplete,
   }) {
     assert(!_isFaceUpView, 'Card must be face-down before turning face-up.');
+    assert(time > 0.0, 'Time to turn card over must be > 0');
+    assert(start >= 0.0, 'Start tim must be >= 0');
     _isAnimatedFlip = true;
     anchor = Anchor.topCenter;
     position += Vector2(width / 2, 0);
