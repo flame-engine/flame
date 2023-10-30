@@ -20,6 +20,9 @@ class StockPile extends PositionComponent
   //#region Pile API
 
   @override
+  void init() {_cards.clear();}
+
+  @override
   bool canMoveCard(Card card) => false;
 
   @override
@@ -50,6 +53,8 @@ class StockPile extends PositionComponent
         card.flip();
         acquireCard(card);
       });
+      print('${_cards.length} CARDS IN STOCK PILE ALREADY...');
+      game.init(Startup.newDeal); // ??????? 
     } else {
       for (var i = 0; i < game.klondikeDraw; i++) {
         if (_cards.isNotEmpty) {

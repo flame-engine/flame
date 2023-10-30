@@ -42,6 +42,16 @@ class Card extends PositionComponent with DragCallbacks {
     }
   }
 
+  void init() {
+    pile = null;
+    _faceUp = false;
+    _isAnimatedFlip = false;
+    _isFaceUpView = false;
+    _isDragging = false;
+    _whereCardStarted = Vector2(0, 0);
+    attachedCards.clear();
+  }
+
   @override
   String toString() => rank.label + suit.label; // e.g. "Q♠" or "10♦"
 

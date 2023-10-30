@@ -18,6 +18,9 @@ class FoundationPile extends PositionComponent implements Pile {
   //#region Pile API
 
   @override
+  void init() {_cards.clear();}
+
+  @override
   bool canMoveCard(Card card) {
     return _cards.isNotEmpty && card == _cards.last;
   }

@@ -15,6 +15,9 @@ class WastePile extends PositionComponent
   //#region Pile API
 
   @override
+  void init() {_cards.clear();}
+
+  @override
   bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
 
   @override

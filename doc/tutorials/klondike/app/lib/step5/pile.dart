@@ -1,6 +1,9 @@
 import 'components/card.dart';
 
 abstract class Pile {
+  /// Clear all cards from this pile when re-initializing KlondikeGame.
+  void init();
+
   /// Returns true if the [card] can be taken away from this pile and moved
   /// somewhere else.
   bool canMoveCard(Card card);

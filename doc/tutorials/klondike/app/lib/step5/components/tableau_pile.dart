@@ -17,6 +17,9 @@ class TableauPile extends PositionComponent implements Pile {
   //#region Pile API
 
   @override
+  void init() {_cards.clear();}
+
+  @override
   bool canMoveCard(Card card) => card.isFaceUp;
 
   @override
