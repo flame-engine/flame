@@ -85,7 +85,8 @@ class MoveAlongPathEffect extends MoveEffect {
         'An `oriented` MoveAlongPathEffect cannot be applied to a target that '
         'does not support rotation',
       );
-      (target as AngleProvider).angle = _lastAngle = -start.angle;
+      _lastAngle = -start.angle;
+      (target as AngleProvider).angle += -start.angle;
     }
     if (_isAbsolute) {
       target.position.x = _lastOffset.x = start.position.dx;
