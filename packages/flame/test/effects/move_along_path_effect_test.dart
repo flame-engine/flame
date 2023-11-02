@@ -58,7 +58,7 @@ void main() {
     });
 
     testWithFlameGame('absolute oriented path', (game) async {
-      final initialAngle = -30.5;
+      const initialAngle = -30.5;
       final component = PositionComponent(
         position: Vector2(17, -5),
         angle: initialAngle,
@@ -121,7 +121,7 @@ void main() {
     );
 
     testWithFlameGame('non-absolute oriented path', (game) async {
-      final initialAngle = -30.5;
+      const initialAngle = -30.5;
       final component = PositionComponent(
         position: Vector2.zero(),
         angle: initialAngle,
