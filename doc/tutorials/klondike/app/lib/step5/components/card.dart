@@ -345,6 +345,30 @@ class Card extends PositionComponent with DragCallbacks {
     );
   }
 
+  void doMoveAndFlip(
+    Vector2 to, {
+    double speed = 10.0,
+    double start = 0.0,
+    Curve curve = Curves.easeOutQuad,
+    VoidCallback? whenDone,
+  }) {
+    assert(speed > 0.0, 'Speed must be > 0 widths per second');
+    final dt = (to - position).length / (speed * size.x);
+    assert(dt > 0, 'Distance to move must be > 0');
+    priority = 100;
+    add(
+      MoveToEffect(
+        to,
+        EffectController(duration: dt, startDelay: start, curve: curve),
+        onComplete: () {
+          turnFaceUp(
+            onComplete: whenDone,
+          );
+        },
+      ),
+    );
+  }
+
   void doTimedMove(
     Vector2 to, {
     double time = 0.3,

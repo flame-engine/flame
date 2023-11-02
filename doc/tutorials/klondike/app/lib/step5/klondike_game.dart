@@ -9,24 +9,32 @@ import 'components/foundation_pile.dart';
 import 'components/stock_pile.dart';
 import 'components/tableau_pile.dart';
 import 'components/waste_pile.dart';
+import 'components/flat_button.dart';
+
+enum Startup {first, newDeal, sameDeal, changeDraw, haveFun}
 
 class KlondikeGame extends FlameGame {
+
   static const double cardGap = 175.0;
+  static const double topGap = 500.0;
   static const double cardWidth = 1000.0;
   static const double cardHeight = 1400.0;
   static const double cardRadius = 100.0;
+  static const double cardSpaceWidth = cardWidth + cardGap;
+  static const double cardSpaceHeight = cardHeight + cardGap;
   static final Vector2 cardSize = Vector2(cardWidth, cardHeight);
   static final cardRRect = RRect.fromRectAndRadius(
     const Rect.fromLTWH(0, 0, cardWidth, cardHeight),
     const Radius.circular(cardRadius),
   );
 
+  // Default is Klondike Draw 1: a button switches between Draw 1 and Draw 3.
   var _klondikeDraw = 1;
 
   int get klondikeDraw => _klondikeDraw;
 
-  final stock = StockPile(position: Vector2(cardGap, cardGap));
-  final waste = WastePile(position: Vector2(cardWidth + 2 * cardGap, cardGap));
+  final stock = StockPile(position: Vector2(cardGap, topGap));
+  final waste = WastePile(position: Vector2(cardSpaceWidth + cardGap, topGap));
   final List<FoundationPile> foundations = [];
   final List<TableauPile> piles = [];
   final List<Card> cards = [];
@@ -39,7 +47,9 @@ class KlondikeGame extends FlameGame {
       foundations.add(
         FoundationPile(
           i,
-          position: Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
+          position: Vector2(
+            (i + 3) * cardSpaceWidth + cardGap,
+            topGap),
         ),
       );
     }
@@ -47,29 +57,40 @@ class KlondikeGame extends FlameGame {
       piles.add(
         TableauPile(
           position: Vector2(
-            cardGap + i * (cardWidth + cardGap),
-            cardHeight + 2 * cardGap,
+            i * cardSpaceWidth + cardGap,
+            cardSpaceHeight + topGap,
           ),
         ),
       );
     }
-
-    world.add(stock);
-    world.add(waste);
-    world.addAll(foundations);
-    world.addAll(piles);
-
-    camera.viewfinder.visibleGameSize =
-        Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap);
-    camera.viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0);
-    camera.viewfinder.anchor = Anchor.topCenter;
 
     for (var rank = 1; rank <= 13; rank++) {
       for (var suit = 0; suit < 4; suit++) {
         cards.add(Card(rank, suit));
       }
     }
+
+    final gameSize = Vector2(
+            7 * cardSpaceWidth + cardGap,
+            4 * cardSpaceHeight + topGap);
+    final gameMidX = gameSize.x / 2;
+
+    world.add(stock);
+    world.add(waste);
+    world.addAll(foundations);
+    world.addAll(piles);
     world.addAll(cards);
+
+    addButton('New deal',   gameMidX,                      Startup.newDeal);
+    addButton('Same deal',  gameMidX + cardSpaceWidth,     Startup.sameDeal);
+    addButton('Draw 1 ⇌ 3', gameMidX + 2 * cardSpaceWidth, Startup.changeDraw);
+    addButton('Have fun',   gameMidX + 3 * cardSpaceWidth, Startup.haveFun);
+
+    camera.viewfinder.visibleGameSize = gameSize;
+    camera.viewfinder.position = Vector2(gameMidX, 0);
+    camera.viewfinder.anchor = Anchor.topCenter;
+    print('Sizes: finder ${camera.viewfinder.visibleGameSize} '
+                   'port ${camera.viewport.size} screen $size');
 
     init(Startup.first);
   }
@@ -97,18 +118,14 @@ class KlondikeGame extends FlameGame {
             onComplete: () {
               nMovingCards--;
               if (nMovingCards == 0) deal(startType);
-              else print('$nMovingCards cards still moving');
             }
           );
         }
       }
-      print('$nMovingCards CARDS ARE NOW MOVING...');
     }
   }
 
   void deal(Startup startType) {
-    print('NCards ${cards.length}, cards $cards');
-
     switch(startType) {
       case Startup.first:
       case Startup.newDeal:
@@ -117,7 +134,7 @@ class KlondikeGame extends FlameGame {
         break;
       case Startup.changeDraw:
         _klondikeDraw = (_klondikeDraw == 3) ? 1 : 3;
-        print('Change to Draw $_klondikeDraw and shuffle...');
+        print('Draw $_klondikeDraw and shuffle...');
         cards.shuffle();
         break;
       case Startup.sameDeal:
@@ -128,20 +145,49 @@ class KlondikeGame extends FlameGame {
 
     print('Deal...');
     var cardToDeal = cards.length - 1;
+    var nMovingCards = 0;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
-        piles[j].acquireCard(cards[cardToDeal--]);
+        Card card = cards[cardToDeal--];
+        print('Card to move: $card, i $i, j $j, nMovingCards $nMovingCards');
+        card.doMove(
+          piles[j].position,
+          start: nMovingCards * 0.15,
+          onComplete: () {
+            piles[j].acquireCard(card);
+            nMovingCards--;
+            print('Move done, i $i, j $j, $card $nMovingCards moving cards.');
+            if (nMovingCards == 0) {
+              var delayFactor = 0;
+              for (TableauPile pile in piles) {
+                delayFactor++;
+                pile.flipTopCard(start: delayFactor * 0.15);
+              }
+              for (var m = 0; m < 7; m++) piles[m].printContents(m);
+            }
+          },
+        );
+        nMovingCards++;
       }
-      piles[i].flipTopCard();
     }
     for (var n = 0; n <= cardToDeal; n++) {
       stock.acquireCard(cards[n]);
     }
     print('NCards ${cards.length}, cards $cards');
   }
-}
 
-enum Startup {first, newDeal, sameDeal, changeDraw}
+  void addButton(String label, double buttonX, Startup action) {
+    final button = FlatButton(
+      label,
+      size: Vector2(cardWidth, 0.6 * topGap),
+      position: Vector2(buttonX, topGap / 2),
+      onReleased: () {
+        init(action);
+      },
+    );
+    world.add(button);
+  }
+}
 
 Sprite klondikeSprite(double x, double y, double width, double height) {
   return Sprite(
