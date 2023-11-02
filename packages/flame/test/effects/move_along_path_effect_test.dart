@@ -91,7 +91,7 @@ void main() {
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle + initialAngle, closeTo(pi, 1e-7));
+          expect(component.angle, closeTo(pi + initialAngle, 1e-7));
         }
         game.update(0.1);
       }
@@ -153,7 +153,7 @@ void main() {
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle + initialAngle, closeTo(pi, 1e-7));
+          expect(component.angle, closeTo(pi + initialAngle, 1e-7));
         }
         game.update(0.1);
       }
