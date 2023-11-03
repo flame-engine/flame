@@ -1,3 +1,5 @@
+## 0.16.0
+
 ## 0.15.1
 
  - **FEAT**: Allow for bodyDef and fixtureDefs to be prepared earlier ([#2768](https://github.com/flame-engine/flame/issues/2768)). ([21357bca](https://github.com/flame-engine/flame/commit/21357bcac1e7e1cebfa6f2a496ec4b627d62d0e7))

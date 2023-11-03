@@ -1,3 +1,12 @@
+## 1.10.1
+
+ - **FIX**: Properly resize ScreenHitbox when needed ([#2826](https://github.com/flame-engine/flame/issues/2826)). ([24fed757](https://github.com/flame-engine/flame/commit/24fed757ac313453639ddf122ba84b1012a4b606))
+ - **FIX**: Setting world on FlameGame camera setter ([#2831](https://github.com/flame-engine/flame/issues/2831)). ([3a8e2464](https://github.com/flame-engine/flame/commit/3a8e2464420f2b513f4f0d99cd7d64ab0eda9826))
+ - **FIX**: Allow null passthrough parent ([#2821](https://github.com/flame-engine/flame/issues/2821)). ([c4d2f86e](https://github.com/flame-engine/flame/commit/c4d2f86e1214e9895ff858c511fa3c686313f204))
+ - **FIX**: Do not scale debug texts with zoom ([#2818](https://github.com/flame-engine/flame/issues/2818)). ([c2f3f040](https://github.com/flame-engine/flame/commit/c2f3f040c6128d8fd3340d8f7622a2d4c2f22819))
+ - **FIX**(flame): Export `FixedResolutionViewport` and make `withFixedResolution` a redirect constructor ([#2817](https://github.com/flame-engine/flame/issues/2817)). ([3420d0e6](https://github.com/flame-engine/flame/commit/3420d0e6f8af6f2dd8695ea61231aa93944c602b))
+ - **FEAT**: Scaling particle feature ([#2830](https://github.com/flame-engine/flame/issues/2830)). ([9faae8a2](https://github.com/flame-engine/flame/commit/9faae8a2371efdcbdf03cad70bded05470d4719a))
+
 ## 1.10.0
 
  - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
