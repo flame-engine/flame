@@ -77,7 +77,6 @@ class ChopperBody extends BodyComponent {
       shape,
       userData: this, // To be able to determine object in collision
       restitution: 0.8,
-      density: 1.0,
       friction: 0.2,
     );
 
