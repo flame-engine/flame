@@ -15,13 +15,13 @@ dependencies:
   flame: ^1.10.0
   flutter:
     sdk: flutter
-  forge2d: ">=0.11.0 <0.12.0"
+  forge2d: ">=0.12.2 <0.13.0"
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.1
   flame_test: ^1.13.2
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.1
   test: any

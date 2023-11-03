@@ -33,7 +33,6 @@ class WidgetExample extends Forge2DGame {
     final shape = PolygonShape()..setAsBoxXY(4.6, 0.8);
     final fixtureDef = FixtureDef(
       shape,
-      density: 1.0,
       restitution: 0.8,
       friction: 0.2,
     );
