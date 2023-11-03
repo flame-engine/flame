@@ -1,4 +1,9 @@
 ## 0.16.0
+ - Updated to Forge2D 0.12.2
+
+### Migration instructions
+
+The gravity and bullet are now field setters and getters, so if you before had `setGravity(Vector2(0, -10))` then you now do `gravity = Vector2(0, -10);` and if you previously had `body.setBullet(true);` you now do `body.isBullet = true;`.
 
  - Updated to Forge2D 0.12.2
 
