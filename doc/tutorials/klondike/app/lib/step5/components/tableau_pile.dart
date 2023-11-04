@@ -17,6 +17,11 @@ class TableauPile extends PositionComponent implements Pile {
   //#region Pile API
 
   @override
+  Vector2 dropPosition() {
+    return _cards.isEmpty ? position : _cards.last.position + _fanOffset2;
+  }
+
+  @override
   void init() {_cards.clear();}
 
   @override
@@ -60,10 +65,6 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   //#endregion
-
-  void printContents(int n) {
-    print('Pile $n $_cards');
-  }
 
   void flipTopCard({double start = 0.1}) {
     assert(_cards.last.isFaceDown);

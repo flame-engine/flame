@@ -47,6 +47,7 @@ class KlondikeGame extends FlameGame {
       foundations.add(
         FoundationPile(
           i,
+          checkWin,
           position: Vector2(
             (i + 3) * cardSpaceWidth + cardGap,
             topGap),
@@ -89,15 +90,12 @@ class KlondikeGame extends FlameGame {
     camera.viewfinder.visibleGameSize = gameSize;
     camera.viewfinder.position = Vector2(gameMidX, 0);
     camera.viewfinder.anchor = Anchor.topCenter;
-    print('Sizes: finder ${camera.viewfinder.visibleGameSize} '
-                   'port ${camera.viewport.size} screen $size');
 
     init(Startup.first);
   }
 
   void init(Startup startType) {
-    print('Startup type $startType');
-    assert(cards.length == 52, 'There are ${cards.length}: should be 52.');
+    assert(cards.length == 52, 'There are ${cards.length} cards: should be 52');
     if (startType == Startup.first) {
       deal(Startup.first);
     } else {
@@ -129,41 +127,34 @@ class KlondikeGame extends FlameGame {
     switch(startType) {
       case Startup.first:
       case Startup.newDeal:
-        print('Shuffle $startType ...');
         cards.shuffle();
         break;
       case Startup.changeDraw:
         _klondikeDraw = (_klondikeDraw == 3) ? 1 : 3;
-        print('Draw $_klondikeDraw and shuffle...');
         cards.shuffle();
         break;
       case Startup.sameDeal:
       default:
-        print('Replay same deal as before...');
         break;
     }
 
-    print('Deal...');
     var cardToDeal = cards.length - 1;
     var nMovingCards = 0;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
         Card card = cards[cardToDeal--];
-        print('Card to move: $card, i $i, j $j, nMovingCards $nMovingCards');
         card.doMove(
           piles[j].position,
           start: nMovingCards * 0.15,
           onComplete: () {
             piles[j].acquireCard(card);
             nMovingCards--;
-            print('Move done, i $i, j $j, $card $nMovingCards moving cards.');
             if (nMovingCards == 0) {
               var delayFactor = 0;
               for (TableauPile pile in piles) {
                 delayFactor++;
                 pile.flipTopCard(start: delayFactor * 0.15);
               }
-              for (var m = 0; m < 7; m++) piles[m].printContents(m);
             }
           },
         );
@@ -173,7 +164,6 @@ class KlondikeGame extends FlameGame {
     for (var n = 0; n <= cardToDeal; n++) {
       stock.acquireCard(cards[n]);
     }
-    print('NCards ${cards.length}, cards $cards');
   }
 
   void addButton(String label, double buttonX, Startup action) {
@@ -182,11 +172,107 @@ class KlondikeGame extends FlameGame {
       size: Vector2(cardWidth, 0.6 * topGap),
       position: Vector2(buttonX, topGap / 2),
       onReleased: () {
-        init(action);
+        if (action == Startup.haveFun) {
+          letsCelebrate(phase: 1);
+        }  else {
+          init(action);
+        }
       },
     );
     world.add(button);
   }
+
+  void checkWin()
+  {
+    int nComplete = 0;
+    for (FoundationPile f in foundations) {
+      if (f.isFull) {
+        nComplete++;
+      }
+    }
+    if (nComplete == foundations.length) {
+      letsCelebrate(phase: 1);
+    }
+  }
+
+  void letsCelebrate({int phase = 1})
+  {
+    // Deal won: bring all cards to the middle of the screen (phase 1)
+    // then scatter them to points just outside the screen (phase 2).
+    //
+    // First get the device's screen-size in game co-ordinates, then get the
+    // top-left of the off-screen area that will accept the scattered cards.
+    // Note: The play area is anchored at TopCenter, so topLeft.y is fixed.
+
+    final double cameraZoom = camera.viewfinder.zoom;
+    final zoomedScreen = this.size / cameraZoom;
+    final playArea = Vector2(
+            7 * cardSpaceWidth + cardGap,
+            4 * cardSpaceHeight + topGap
+          );
+    final screenCenter = (playArea - cardSize) / 2;
+    final topLeft = Vector2(
+            (playArea.x - zoomedScreen.x) / 2 - cardWidth,
+            -cardHeight,
+          );
+    final nCards = cards.length;
+    double h   = zoomedScreen.y + cardSize.y;	// Height of offscreen rect.
+    double w   = zoomedScreen.x + cardSize.x;	// Width of offscreen rect.
+    double ds  = (h + w + h + w) / nCards;	// Spacing = perimeter / nCards.
+
+    // Starting points, directions and lengths of offscreen rect's sides.
+    List<Vector2> corner    = [Vector2(0.0, 0.0),  Vector2(0.0,  h),
+                               Vector2(w,   h),    Vector2(w,    0.0)];
+    List<Vector2> direction = [Vector2(0.0, 1.0),  Vector2(1.0,  0.0),
+                               Vector2(0.0, -1.0), Vector2(-1.0, 0.0)];
+    List<double>  length    = [h, w, h, w];
+
+    int side = 0;
+    int cardsToMove = nCards;
+    var offScreenPosition = corner[side] + topLeft;
+    double space = length[side];
+    int cardNum = 0;
+
+    while (cardNum < nCards) {
+      int cardIndex = phase == 1 ? cardNum : nCards - cardNum - 1;
+      Card card = cards[cardIndex];
+      card.priority = cardIndex + 1;
+      if (card.isFaceDown) {
+        card.flip();
+      }
+      // Start cards a short time apart to give a riffle effect.
+      var delay = phase == 1 ? cardNum * 0.02 : 0.5 + cardNum * 0.04;
+      var destination = (phase == 1) ? screenCenter : offScreenPosition;
+      card.doMove(destination,
+        speed: (phase == 1) ? 15.0 : 5.0,
+        start: delay,
+        onComplete: () {
+          cardsToMove--;
+          if (cardsToMove == 0) {
+            if (phase == 1) {
+              letsCelebrate(phase: 2);
+            }
+            else {
+              init(Startup.newDeal);
+            }
+          }
+        }
+      );
+      cardNum++;
+      if (phase == 1) continue;
+
+      // Phase 2: next card goes to same side with spacing ds, if possible.
+      offScreenPosition = offScreenPosition + direction[side] * ds;
+      space = space - ds;
+      if ((space < 0.0) && (side < 3)) {
+        // Out of space: change to the next side and use the excess ds there.
+        side++;
+        offScreenPosition = corner[side] + topLeft - direction[side] * space;
+        space = length[side] + space;
+      }
+    }
+  }
+
 }
 
 Sprite klondikeSprite(double x, double y, double width, double height) {

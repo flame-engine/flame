@@ -44,7 +44,6 @@ class ButtonBackground extends PositionComponent with HasAncestor<FlatButton> {
     size = ancestor.size;
     cornerRadius = 0.3 * size.y;
     _paint.strokeWidth = 0.05 * size.y;
-    print('Button size $size, cornerRadius $cornerRadius, $_paint');
   }
 
   late final _background = RRect.fromRectAndRadius(

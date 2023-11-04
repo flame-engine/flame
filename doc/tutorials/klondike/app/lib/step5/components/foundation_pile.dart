@@ -8,14 +8,21 @@ import '../suit.dart';
 import 'card.dart';
 
 class FoundationPile extends PositionComponent implements Pile {
-  FoundationPile(int intSuit, {super.position})
+  FoundationPile(int intSuit, this.checkWin, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);
+
+  final VoidCallback checkWin;
 
   final Suit suit;
   final List<Card> _cards = [];
 
   //#region Pile API
+
+  bool get isFull => _cards.length == 13;
+
+  @override
+  Vector2 dropPosition() => position;
 
   @override
   void init() {_cards.clear();}
@@ -52,6 +59,9 @@ class FoundationPile extends PositionComponent implements Pile {
     card.priority = _cards.length;
     card.pile = this;
     _cards.add(card);
+    if (this.isFull) {
+      checkWin();	// Get KlondikeGame to check all FoundationPiles.
+    }
   }
 
   //#endregion

@@ -15,6 +15,10 @@ class WastePile extends PositionComponent
   //#region Pile API
 
   @override
+  // Dummy - not used.
+  Vector2 dropPosition() => position;
+
+  @override
   void init() {_cards.clear();}
 
   @override

@@ -11,8 +11,10 @@ import '../pile.dart';
 import '../rank.dart';
 import '../suit.dart';
 import 'tableau_pile.dart';
+import 'stock_pile.dart';
 
-class Card extends PositionComponent with DragCallbacks {
+class Card extends PositionComponent
+        with DragCallbacks, TapCallbacks, HasGameReference<KlondikeGame> {
   Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
@@ -243,7 +245,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   //#endregion
 
-  //#region Dragging
+  //#region Card-Dragging
 
   @override
   void onDragStart(DragStartEvent event) {
@@ -289,9 +291,29 @@ class Card extends PositionComponent with DragCallbacks {
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         pile!.removeCard(this);
-        dropPiles.first.acquireCard(this);
+        // TODO - Added Vector2 dropPosition() to pile.dart and all pile types.
+        //        Works well now, but sometimes there is a flash jump up to the
+        //        top position of the Tableau, apparently if you move several
+        //        cards to it and drop them from high up (low Y co-ordinate) or
+        //        from low down (high Y co-ordinate). Why is this so?
+        // final targetPile = dropPiles.first;
+        var dropPosition = dropPiles.first.dropPosition();
+        doMove(
+          dropPosition,
+          onComplete: () {
+            dropPiles.first.acquireCard(this);
+          },
+        );
         if (attachedCards.isNotEmpty) {
-          attachedCards.forEach((card) => dropPiles.first.acquireCard(card));
+          attachedCards.forEach((card) {
+            dropPosition = dropPiles.first.dropPosition();
+            doMove(
+              dropPosition,
+              onComplete: () {
+                dropPiles.first.acquireCard(card);
+              },
+            );
+          });
           attachedCards.clear();
         }
         return;
@@ -320,6 +342,27 @@ class Card extends PositionComponent with DragCallbacks {
   }
 
   //#endregion
+
+  //#region Card-Tapping
+
+  // Can tap a face-up card to make it auto-move and go out, if accepted, but
+  // if it is face-down and on the Stock Pile, pass the event to that pile.
+
+  onTapUp(TapUpEvent event) {
+    if (isFaceUp) {
+      final suitIndex = suit.value;
+      if (game.foundations[suitIndex].canAcceptCard(this)) {
+        pile!.removeCard(this);
+        doMove(game.foundations[suitIndex].position,
+          onComplete: () {game.foundations[suitIndex].acquireCard(this);},
+        );
+      }
+    } else if (pile is StockPile) {
+        game.stock.onTapUp(event);
+    }
+  }
+
+  //#endRegion
 
   //#region Effects
 
@@ -368,7 +411,7 @@ class Card extends PositionComponent with DragCallbacks {
       ),
     );
   }
-
+/*
   void doTimedMove(
     Vector2 to, {
     double time = 0.3,
@@ -387,7 +430,7 @@ class Card extends PositionComponent with DragCallbacks {
       ),
     );
   }
-
+*/
   void turnFaceUp({
     double time = 0.3,
     double start = 0.0,

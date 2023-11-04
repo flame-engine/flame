@@ -20,6 +20,10 @@ class StockPile extends PositionComponent
   //#region Pile API
 
   @override
+  // Dummy - not used.
+  Vector2 dropPosition() => position;
+
+  @override
   void init() {_cards.clear();}
 
   @override
@@ -53,7 +57,6 @@ class StockPile extends PositionComponent
         card.flip();
         acquireCard(card);
       });
-      print('${_cards.length} CARDS IN STOCK PILE ALREADY...');
     } else {
       for (var i = 0; i < game.klondikeDraw; i++) {
         if (_cards.isNotEmpty) {
