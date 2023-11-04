@@ -337,20 +337,109 @@ on how long the `onLoad()` function is likely to take. They can range from writi
 GameWidget, to doing a few simple re-initilizations in your Game class (i.e. KlondikeGame in this
 case).
 
-In the GameWidget path you would supply the Game with a VoidCallback function parameter named
+In the GameWidget case you would supply the Game with a VoidCallback function parameter named
 `reset` or `restart`. When the callback is invoked, it would use the Flutter conventions of a
 `StatefulWidget` (e.g. `setState(() {});`) to force the widget to be rebuilt and replaced, thus
-eleasing all references to the current Game instance, itst state and all of its memory. There could
+releasing all references to the current Game instance, its state and all of its memory. There could
 also be Flutter code to run a menu or other startup screen.
 
 Re-initialization should be undertaken only if the operations involved are few and simple. Otherwise
-coding errors could lead to subtle problems, memory leaks and crashes in your code.
+coding errors could lead to subtle problems, memory leaks and crashes in your game.
 Re-initialization may be the easiest way to go in Klondike (as it is in the Ember Tutorial).
-Basically, we must clear all the card references out of all the `Pile`s and then re-shufle (or not)
+Basically, we must clear all the card references out of all the `Pile`s and then re-shuffle (or not)
 and re-deal, possibly changing from Klondike Draw 3 to Klondike Draw 1 or vice-versa.
+
+Hmmmm! That was not as easy as it looked. Re-initializing the `Pile`s and each `Card` was easy
+enough &mdash; see the code for the abstract `init()` method in `pile.dart`, its implementation
+in each of the Pile Components and the `init()` method in the `Card` class. To activate these, we
+add `enum Startup` to `KlondikeGame` and move some of the code from the `onLoad()` method to a
+`void init(Startup startType)` method and a `void deal(Startup startType)` where we can have
+various types of restart for the game:
+- First start, after `onLoad()`,
+- Restart with a new deal,
+- Restart with the same deal as before,
+- Switch between Klondike Draw 1 and Draw 3 and restart with a new deal and
+- Have fun before restarting with a new deal (we'll keep that as a surprise for later).
+ 
+Here is the first part of the code for starting and restarting the game.
+```dart
+enum Startup {first, newDeal, sameDeal, changeDraw, haveFun}
+```
+```dart
+    camera.viewfinder.anchor = Anchor.topCenter;
+
+    init(Startup.first);
+  } // End of onLoad().
+
+  void init(Startup startType) {
+    assert(cards.length == 52, 'There are ${cards.length}: should be 52.');
+    if (startType == Startup.first) {
+      deal(Startup.first);
+    } else {
+      stock.init();
+      waste.init();
+      foundations.forEach((foundation) => foundation.init());
+      piles.forEach((tableau) => tableau.init());
+      cards.forEach((card) => card.init());
+```
+But the difficult bit comes next... Whether the player wins or restarts without winning, we have
+52 cards spread around various piles on the screen, some face-up and maybe some face-down. We would
+like to animate the deal later, so it would be nice to collect the cards into a neat face-down pile
+at top left, in the Stock Pile area. It is not the actual Stock Pile yet, because that gets created
+during the deal. Writing a simple little loop to set each `Card` face-down and use its `doMove`
+method to animate its move to the top left does not work. It causes one of those "subtle problems"
+referred to earlier. The cards all travel at the same speed but arrive at different times. The deal
+then produces messy Tableau Piles with several cards out of position. It is better to control the
+process in KlondikeGame and make sure that the cards are all in position before the deal starts.
+Here is one way of doing that and finishing the `init` method:
+```dart
+      var nMovingCards = 0;
+      for (Card card in cards) {
+        if (card.isFaceUp) card.flip();
+        if ((card.position - stock.position).length > 1.0) {
+          // Move cards that are not already in the Stock Pile.
+          nMovingCards++;
+          card.doMove(
+            stock.position,
+            onComplete: () {
+              nMovingCards--;
+              if (nMovingCards == 0) deal(startType);
+            }
+          );
+        }
+      }
+    }
+  }
+```
+We handle all 52 cards in the loop, taking care not to animate any cards that may already be in
+the Stock Pile area, because that would cause an exception in Flame's MoveToEffect code. As they
+depart, we count each moving card. For a few milliseconds after the loop terminates `nMovingCards`
+will be at a maximum, then cards will be arriving over the next second or so and will be counted
+off in the `onComplete()` callback code. When the countdown reaches zero the `deal(startType)`
+method can be safely called. We use a similar technique to animate the deal and make sure all
+28 cards (i.e. 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28) have been dealt, before constructing the Stock Pile
+from the remaining 24 cards. This debugging printout of the deal shows how arrivals can out of
+order. The `j` variable is the Tableau Pile number and `i` is the card's position in the pile.
+```
+flutter: Move done, i 3, j 6, 6♠ 5 moving cards.
+flutter: Move done, i 4, j 5, 9♥ 4 moving cards.
+flutter: Move done, i 4, j 6, K♥ 3 moving cards.
+flutter: Move done, i 5, j 5, Q♣ 2 moving cards.
+flutter: Move done, i 5, j 6, 2♠ 1 moving cards.
+flutter: Move done, i 6, j 6, 10♠ 0 moving cards.
+flutter: Pile 0 [Q♦]
+flutter: Pile 1 [J♣, Q♥]
+flutter: Pile 2 [5♥, 5♦, J♦]
+flutter: Pile 3 [A♠, Q♠, A♥, 5♠]
+flutter: Pile 4 [8♦, 10♣, 7♥, 3♥, 4♥]
+flutter: Pile 5 [4♠, 8♣, 5♣, 2♥, 9♥, Q♣]
+flutter: Pile 6 [4♣, 3♦, K♦, 6♠, K♥, 2♠, 10♠]
+```
 
 
 ------------???
+
+The `Have fun` button.
 
 Well, this is it! The game is now more playable. We could do more, but this game **is** a Tutorial
 above all else. Press the button below to see what the resulting code looks like, or to play it
