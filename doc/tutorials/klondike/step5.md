@@ -323,10 +323,6 @@ transfer a card from Stock Pile to Waste Pile instaneously, in the Model, leavin
 in the View to catch up later, with no `onComplete:` callback. That way, you could flip through
 the Stock Pile very rapidly, by tapping fast. However, that is beyond the scope of this Tutorial.
 
-## More animations of moves
-
-------------???
-
 ## Ending and restarting the game
 
 As it stands, there is no easy way to finish the Klondike Tutorial game and start another, even if
@@ -339,7 +335,7 @@ case).
 
 In the GameWidget case you would supply the Game with a VoidCallback function parameter named
 `reset` or `restart`. When the callback is invoked, it would use the Flutter conventions of a
-`StatefulWidget` (e.g. `setState(() {});`) to force the widget to be rebuilt and replaced, thus
+`StatefulWidget` (e.g. `setState(() {});)` to force the widget to be rebuilt and replaced, thus
 releasing all references to the current Game instance, its state and all of its memory. There could
 also be Flutter code to run a menu or other startup screen.
 
@@ -358,7 +354,7 @@ various types of restart for the game:
 - First start, after `onLoad()`,
 - Restart with a new deal,
 - Restart with the same deal as before,
-- Switch between Klondike Draw 1 and Draw 3 and restart with a new deal and
+- Switch between Klondike Draw 1 and Draw 3 and restart with a new deal, and
 - Have fun before restarting with a new deal (we'll keep that as a surprise for later).
  
 Here is the first part of the code for starting and restarting the game.
@@ -372,7 +368,7 @@ enum Startup {first, newDeal, sameDeal, changeDraw, haveFun}
   } // End of onLoad().
 
   void init(Startup startType) {
-    assert(cards.length == 52, 'There are ${cards.length}: should be 52.');
+    assert(cards.length == 52, 'There are ${cards.length} cards: should be 52');
     if (startType == Startup.first) {
       deal(Startup.first);
     } else {
@@ -418,7 +414,7 @@ will be at a maximum, then cards will be arriving over the next second or so and
 off in the `onComplete()` callback code. When the countdown reaches zero the `deal(startType)`
 method can be safely called. We use a similar technique to animate the deal and make sure all
 28 cards (i.e. 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28) have been dealt, before constructing the Stock Pile
-from the remaining 24 cards. This debugging printout of the deal shows how arrivals can out of
+from the remaining 24 cards. This debugging printout of the deal shows how arrivals can get out of
 order. The `j` variable is the Tableau Pile number and `i` is the card's position in the pile.
 ```
 flutter: Move done, i 3, j 6, 6♠ 5 moving cards.
@@ -436,14 +432,120 @@ flutter: Pile 5 [4♠, 8♣, 5♣, 2♥, 9♥, Q♣]
 flutter: Pile 6 [4♣, 3♦, K♦, 6♠, K♥, 2♠, 10♠]
 ```
 
+## Buttons
 
-------------???
+We are going to use some buttons to activate the various ways of restarting the Klondike Game. First
+we extend Flame's `ButtonComponent` to create class `FlatButton`, adapted from a Flat Button which
+used to be in Flame's Examples pages. `ButtonComponent` uses two `PositionComponent`s, one for when
+the button is in its normal state (up) and one for when it is pressed. The two components are
+mounted alternately as the user presses the button and releases it. To press the button, tap and
+hold it down. In our button, the two components are the button's outlines - the `buttonDown:` one
+makes the outline of the button turn red when it is pressed, because the four button-actions all
+end the current game and start another. That is also why they are positioned at the top of the
+canvas, above all the cards, where you are less likely to press them accidentally. If you do press
+one and have second thoughts, keep pressing and slide away, then the button will have no effect.
+
+The four buttons trigger the restart actions described above and are labelled `New deal`,
+`Same deal`, `Draw 1 ⇌ 3` and `Have fun`. Flame also has a `SpriteButtonComponent`, based on two
+alternating `Sprite`s, a `HudButtonComponent` and an `AdvancedButtonComponent`. For further types
+of buttons and controllers, it would be best to use a Flutter overlay, menu or settings widget and
+have access to radio buttons, dropdown list buttons, sliders, etc. For the purposes of this
+Tutorial our FlatButton will do fine.
+
+## More animations of moves
+
+The `Card` class's `doMove()` and `turnFaceUp()` methods have been combined into a doMoveAndFlip()
+method, which is used to draw cards from the Stock Pile. The dropping of a card or cards onto a pile
+after drag-and-drop also uses `doMove()` to settle the drop more gracefully. Finally, there is a
+shortcut to auto-move a card onto its Foundation Pile if it is ready to go out. This adds
+`TapCallbacks` to the `Card` class and an `onTapUp()` callback as follows:
+```dart
+  onTapUp(TapUpEvent event) {
+    if (isFaceUp) {
+      final suitIndex = suit.value;
+      if (game.foundations[suitIndex].canAcceptCard(this)) {
+        pile!.removeCard(this);
+        doMove(game.foundations[suitIndex].position,
+          onComplete: () {game.foundations[suitIndex].acquireCard(this);},
+        );
+      }
+    } else if (pile is StockPile) {
+        game.stock.onTapUp(event);
+    }
+  }
+```
+If a card is ready to go out, just tap on it and it will move automatically to the correct
+Foundation Pile for its suit. This saves a load of dragging-and-dropping when you are close to
+winning the game! There is nothing new in the above code, except that if you tap the top card of
+the Stock Pile, the `Card` object receives the tap first and forwards it on to the `stock` object.
+
+## Winning the game
+
+You win the game when all cards in all suits, Ace to King, have been moved to the Foundation Piles,
+13 cards in each pile. The Klondike Game now has some code to recognize that event: an `isFull` test
+added to the `FoundationPile`'s `acquireCard()` method, a callback to `KlondikeGame` and a test as
+to whether all four Foundations are full. Here is the code:
+```dart
+class FoundationPile extends PositionComponent implements Pile {
+  FoundationPile(int intSuit, this.checkWin, {super.position})
+      : suit = Suit.fromInt(intSuit),
+        super(size: KlondikeGame.cardSize);
+
+  final VoidCallback checkWin;
+
+  final Suit suit;
+  final List<Card> _cards = [];
+
+  //#region Pile API
+
+  bool get isFull => _cards.length == 13;
+
+```
+```dart
+  void acquireCard(Card card) {
+    assert(card.isFaceUp);
+    card.position = position;
+    card.priority = _cards.length;
+    card.pile = this;
+    _cards.add(card);
+    if (this.isFull) {
+      checkWin();	// Get KlondikeGame to check all FoundationPiles.
+    }
+  }
+
+```
+```dart
+  void checkWin()
+  {
+    int nComplete = 0;
+    for (FoundationPile f in foundations) {
+      if (f.isFull) {
+        nComplete++;
+      }
+    }
+    if (nComplete == foundations.length) {
+      letsCelebrate(phase: 1);
+    }
+  }
+```
+It is possible to calculate whether a position of the cards in a Klondike game can or cannot be won,
+or could have been won but has missed a vital move and can no longer be won. It is even possible
+to calculate whether the initial deal is unwinnable: a percentage of Klondike deals are. But all
+that is far beyond the scope of this Tutorial, so for now it is up to the player to decide whether
+to keep playing or give up and press one of the buttons.
 
 The `Have fun` button.
 
-Well, this is it! The game is now more playable. We could do more, but this game **is** a Tutorial
-above all else. Press the button below to see what the resulting code looks like, or to play it
-live. But it is also time to have a look at the Ember Tutorial!
+When you win the Klondike Game, the `letsCelebrate()` method puts on a little display. To save you
+having to play and win a whole game before you see it and to test the method, we have provided the
+`Have fun` button. Of course a real game could not have such a button...
+
+Well, this is it! The game is now more playable.
+
+We could do more, but this game **is** a Tutorial above all else. Press the button below to see
+what the final code looks like, or to play it live.
+
+But it is also time to have a look at the Ember Tutorial!
 
 ```{flutter-app}
 :sources: ../tutorials/klondike/app
