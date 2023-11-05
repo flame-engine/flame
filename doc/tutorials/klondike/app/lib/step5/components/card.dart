@@ -284,19 +284,15 @@ class Card extends PositionComponent
       return;
     }
     _isDragging = false;
+    // Find out what is under the center-point of this card when it is dropped.
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
+        // Move card(s) gracefully into position om the receiving pile.
         pile!.removeCard(this);
-        // TODO - Added Vector2 dropPosition() to pile.dart and all pile types.
-        //        Works well now, but sometimes there is a flash jump up to the
-        //        top position of the Tableau, apparently if you move several
-        //        cards to it and drop them from high up (low Y co-ordinate) or
-        //        from low down (high Y co-ordinate). Why is this so?
-        // final targetPile = dropPiles.first;
         var dropPosition = dropPiles.first.dropPosition();
         doMove(
           dropPosition,
@@ -345,7 +341,7 @@ class Card extends PositionComponent
 
   //#region Card-Tapping
 
-  // Can tap a face-up card to make it auto-move and go out, if accepted, but
+  // Tap a face-up card to make it auto-move and go out (if acceptable), but
   // if it is face-down and on the Stock Pile, pass the event to that pile.
 
   onTapUp(TapUpEvent event) {
@@ -411,26 +407,7 @@ class Card extends PositionComponent
       ),
     );
   }
-/*
-  void doTimedMove(
-    Vector2 to, {
-    double time = 0.3,
-    double start = 0.0,
-    Curve curve = Curves.easeOutQuad,
-    VoidCallback? onComplete,
-  }) {
-    assert(time > 0.0, 'Time must be > 0.0');
-    add(
-      MoveToEffect(
-        to,
-        EffectController(duration: time, startDelay: start, curve: curve),
-        onComplete: () {
-          onComplete?.call();
-        },
-      ),
-    );
-  }
-*/
+
   void turnFaceUp({
     double time = 0.3,
     double start = 0.0,
@@ -467,15 +444,6 @@ class Card extends PositionComponent
       ),
     );
   }
-
-/*
-  void doMoveAndFlip() {
-    Vector2 to,
-    {
-    double speed,
-    }
-  }
-*/
 
   //#endregion
 }
