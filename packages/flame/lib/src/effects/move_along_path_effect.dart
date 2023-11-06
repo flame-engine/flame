@@ -88,7 +88,7 @@ class MoveAlongPathEffect extends MoveEffect {
       _lastAngle = -start.angle;
       (target as AngleProvider).angle = -start.angle;
       if(target is PositionComponent) {
-        target.angle += _target.nativeAngle;
+        target.angle += target.nativeAngle;
       }
     }
     if (_isAbsolute) {
