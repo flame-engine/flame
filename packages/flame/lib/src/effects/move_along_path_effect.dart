@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
