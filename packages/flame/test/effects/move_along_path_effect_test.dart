@@ -58,10 +58,9 @@ void main() {
     });
 
     testWithFlameGame('absolute oriented path', (game) async {
-      const initialAngle = -30.5;
       final component = PositionComponent(
         position: Vector2(17, -5),
-        angle: initialAngle,
+        angle: -30.5,
       );
       game.add(component);
       game.update(0);
@@ -83,15 +82,55 @@ void main() {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
           expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
-          expect(component.angle, closeTo(-asin(0.8) + initialAngle, 1e-7));
+          expect(component.angle, closeTo(-asin(0.8) + component.nativeAngle, 1e-7));
         } else if (i <= 35) {
           expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
           expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
-          expect(component.angle, closeTo(asin(0.6) + initialAngle, 1e-7));
+          expect(component.angle, closeTo(asin(0.6) + component.nativeAngle, 1e-7));
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle, closeTo(pi + initialAngle, 1e-7));
+          expect(component.angle, closeTo(pi + component.nativeAngle, 1e-7));
+        }
+        game.update(0.1);
+      }
+    });
+
+    testWithFlameGame('absolute oriented path with nativeAngle', (game) async {
+      final component = PositionComponent(
+        position: Vector2(17, -5),
+        angle: -30.5,
+        nativeAngle: 20.5,
+      );
+      game.add(component);
+      game.update(0);
+
+      component.add(
+        MoveAlongPathEffect(
+          Path() // pythagorean triangle, perimeter=600
+            ..moveTo(200, 200)
+            ..lineTo(290, 80)
+            ..lineTo(450, 200)
+            ..lineTo(200, 200),
+          EffectController(duration: 6),
+          absolute: true,
+          oriented: true,
+        ),
+      );
+      game.update(0);
+      for (var i = 0; i < 60; i++) {
+        if (i <= 15) {
+          expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
+          expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
+          expect(component.angle, closeTo(-asin(0.8) + component.nativeAngle, 1e-7));
+        } else if (i <= 35) {
+          expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
+          expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
+          expect(component.angle, closeTo(asin(0.6) + component.nativeAngle, 1e-7));
+        } else {
+          expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
+          expect(component.position.y, closeTo(200, 1e-10));
+          expect(component.angle, closeTo(pi + component.nativeAngle, 1e-7));
         }
         game.update(0.1);
       }
@@ -121,10 +160,9 @@ void main() {
     );
 
     testWithFlameGame('non-absolute oriented path', (game) async {
-      const initialAngle = -30.5;
       final component = PositionComponent(
         position: Vector2.zero(),
-        angle: initialAngle,
+        angle: -30.5,
       );
       game.add(component);
       game.update(0);
@@ -145,20 +183,59 @@ void main() {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
           expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
-          expect(component.angle, closeTo(-asin(0.8) + initialAngle, 1e-7));
+          expect(component.angle, closeTo(-asin(0.8) + component.nativeAngle, 1e-7));
         } else if (i <= 35) {
           expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
           expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
-          expect(component.angle, closeTo(asin(0.6) + initialAngle, 1e-7));
+          expect(component.angle, closeTo(asin(0.6) + component.nativeAngle, 1e-7));
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle, closeTo(pi + initialAngle, 1e-7));
+          expect(component.angle, closeTo(pi + component.nativeAngle, 1e-7));
         }
         game.update(0.1);
       }
     });
 
+    testWithFlameGame('non-absolute oriented path with nativeAngle', (game) async {
+      final component = PositionComponent(
+        position: Vector2.zero(),
+        angle: -30.5,
+        nativeAngle: 20.5,
+      );
+      game.add(component);
+      game.update(0);
+
+      component.add(
+        MoveAlongPathEffect(
+          Path() // pythagorean triangle, perimeter=600
+            ..moveTo(200, 200)
+            ..lineTo(290, 80)
+            ..lineTo(450, 200)
+            ..lineTo(200, 200),
+          EffectController(duration: 6),
+          oriented: true,
+        ),
+      );
+      game.update(0);
+      for (var i = 0; i < 60; i++) {
+        if (i <= 15) {
+          expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
+          expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
+          expect(component.angle, closeTo(-asin(0.8) + component.nativeAngle, 1e-7));
+        } else if (i <= 35) {
+          expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
+          expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
+          expect(component.angle, closeTo(asin(0.6) + component.nativeAngle, 1e-7));
+        } else {
+          expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
+          expect(component.position.y, closeTo(200, 1e-10));
+          expect(component.angle, closeTo(pi + component.nativeAngle, 1e-7));
+        }
+        game.update(0.1);
+      }
+    });
+    
     test('errors', () {
       final controller = LinearEffectController(0);
       expect(
