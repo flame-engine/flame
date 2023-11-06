@@ -25,7 +25,5 @@ void main() {
   });
 }
 
-Shape getBounds(CameraComponent camera) => camera
-    .viewfinder
-    .firstChild<BoundedPositionBehavior>()!
-    .bounds;
+Shape getBounds(CameraComponent camera) =>
+    camera.viewfinder.firstChild<BoundedPositionBehavior>()!.bounds;
