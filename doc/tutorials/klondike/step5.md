@@ -187,7 +187,7 @@ by Flame when the show is over.
 
 Some other automatic and animated moves we can try are dealing the cards, flipping cards from Stock
 to Waste pile, turning cards over automatically on the tableau piles, and settling cards into place
-after a valid drag-and-drop. We wiil have a look at animating a flip first.
+after a valid drag-and-drop. We will have a look at animating a flip first.
 
 ## Animating a card-flip
 
@@ -259,13 +259,13 @@ before flipping.
 Long story short, see the lines between `assert(` and `add(` and their reversal in the `onMin:`
 callback, which occurs when the Effect is finished, but before the final `onComplete:` callback.
 At the beginning, the card's rendering `priority` is set to 100, so that it will ride above all
-other cards in the neighbourhood. That value cannot always be saved and restored because we may
+other cards in the neighborhood. That value cannot always be saved and restored because we may
 not know what the card's priority should be in whatever `Pile` is receiving it. So we have made
 sure that the receiver is always called in the `onComplete:` option, using a method that will
 adjust the positions and priorities of the cards in the pile.
 
 Last but not least, in the preceding code, notice the use of the variable `_isAnimatedFlip`.
-This is a `bool` variable defined and initialised near the start of class `Card` in file
+This is a `bool` variable defined and initialized near the start of class `Card` in file
 `components/card.dart`, along with another new `bool` called `_isFaceUpView`. Initially these
 are set `false`, along with the existing `bool _faceUp = false` variable. What is the significance
 of these variables? It is **huge**. A few lines further down, we see:
@@ -319,7 +319,7 @@ and the `Card` class's `flip()` function is expanded to:
 
 In the Klondike Tutorial game we are still having to trigger a Model update in the `onComplete:`
 callback of the flip animation. It might be nice, for impatient or rapid-fingered players, to
-transfer a card from Stock Pile to Waste Pile instaneously, in the Model, leaving the animation
+transfer a card from Stock Pile to Waste Pile instantaneously, in the Model, leaving the animation
 in the View to catch up later, with no `onComplete:` callback. That way, you could flip through
 the Stock Pile very rapidly, by tapping fast. However, that is beyond the scope of this Tutorial.
 
@@ -330,7 +330,7 @@ you have won. We can only close the app and start it again. And there is no "rew
 
 There are various ways to tackle this, depending on the simplicity or complexity of your game and
 on how long the `onLoad()` function is likely to take. They can range from writing your own
-GameWidget, to doing a few simple re-initilizations in your Game class (i.e. KlondikeGame in this
+GameWidget, to doing a few simple re-initializations in your Game class (i.e. KlondikeGame in this
 case).
 
 In the GameWidget case you would supply the Game with a VoidCallback function parameter named
@@ -341,7 +341,7 @@ also be Flutter code to run a menu or other startup screen.
 
 Re-initialization should be undertaken only if the operations involved are few and simple. Otherwise
 coding errors could lead to subtle problems, memory leaks and crashes in your game.
-Re-initialization may be the easiest way to go in Klondike (as it is in the Ember Tutorial).
+It may be the easiest way to go in Klondike (as it is in the Ember Tutorial).
 Basically, we must clear all the card references out of all the `Pile`s and then re-shuffle (or not)
 and re-deal, possibly changing from Klondike Draw 3 to Klondike Draw 1 or vice-versa.
 
