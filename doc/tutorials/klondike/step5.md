@@ -537,8 +537,8 @@ to keep playing or give up and press one of the buttons.
 The `Have fun` button.
 
 When you win the Klondike Game, the `letsCelebrate()` method puts on a little display. To save you
-having to play and win a whole game before you see it and to test the method, we have provided the
-`Have fun` button. Of course a real game could not have such a button...
+having to play and win a whole game before you see it &mdash; and to test the method, we have
+provided the `Have fun` button. Of course a real game could not have such a button...
 
 Well, this is it! The game is now more playable.
 
