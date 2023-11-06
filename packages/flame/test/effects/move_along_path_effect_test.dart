@@ -114,7 +114,7 @@ void main() {
       }
     });
 
-    testWithFlameGame('absolute oriented path with nativeAngle', (game) async {
+    testWithFlameGame('absolute oriented path w/nativeAngle', (game) async {
       final component = PositionComponent(
         position: Vector2(17, -5),
         angle: -30.5,
@@ -251,7 +251,7 @@ void main() {
       }
     });
 
-    testWithFlameGame('non-absolute oriented path with nativeAngle', (game) async {
+    testWithFlameGame('non-absolute oriented path w/nativeAngle', (game) async {
       final component = PositionComponent(
         position: Vector2.zero(),
         angle: -30.5,
