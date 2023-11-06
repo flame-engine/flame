@@ -82,24 +82,33 @@ void main() {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
           expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.8) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.8) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else if (i <= 35) {
           expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
           expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.6) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.6) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle, closeTo(
-            pi + component.nativeAngle, 
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              pi + component.nativeAngle,
+              1e-7,
+            ),
+          );
         }
         game.update(0.1);
       }
@@ -131,24 +140,33 @@ void main() {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
           expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.8) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.8) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else if (i <= 35) {
           expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
           expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.6) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.6) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle, closeTo(
-            pi + component.nativeAngle, 
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              pi + component.nativeAngle,
+              1e-7,
+            ),
+          );
         }
         game.update(0.1);
       }
@@ -201,24 +219,33 @@ void main() {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
           expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.68) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.8) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else if (i <= 35) {
           expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
           expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.6) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.6) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle, closeTo(
-            pi + component.nativeAngle, 
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              pi + component.nativeAngle,
+              1e-7,
+            ),
+          );
         }
         game.update(0.1);
       }
@@ -249,24 +276,33 @@ void main() {
         if (i <= 15) {
           expect(component.position.x, closeTo(200 + 6 * i, 1e-10));
           expect(component.position.y, closeTo(200 - 8 * i, 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.68) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.8) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else if (i <= 35) {
           expect(component.position.x, closeTo(290 + 8 * (i - 15), 1e-10));
           expect(component.position.y, closeTo(80 + 6 * (i - 15), 1e-10));
-          expect(component.angle, closeTo(
-            -asin(0.6) + component.nativeAngle,
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              -asin(0.6) + component.nativeAngle,
+              1e-7,
+            ),
+          );
         } else {
           expect(component.position.x, closeTo(450 - 10 * (i - 35), 1e-10));
           expect(component.position.y, closeTo(200, 1e-10));
-          expect(component.angle, closeTo(
-            pi + component.nativeAngle, 
-            1e-7,
-          ));
+          expect(
+            component.angle, 
+            closeTo(
+              pi + component.nativeAngle,
+              1e-7,
+            ),
+          );
         }
         game.update(0.1);
       }
