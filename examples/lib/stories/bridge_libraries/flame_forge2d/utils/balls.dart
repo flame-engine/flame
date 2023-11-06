@@ -38,7 +38,6 @@ class Ball extends BodyComponent with ContactCallbacks {
     final fixtureDef = FixtureDef(
       shape,
       restitution: 0.8,
-      density: 1.0,
       friction: 0.4,
     );
 

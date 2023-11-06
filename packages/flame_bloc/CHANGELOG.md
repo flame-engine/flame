@@ -1,3 +1,7 @@
+## 1.10.5
+
+ - Update a dependency to the latest release.
+
 ## 1.10.4
 
  - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))

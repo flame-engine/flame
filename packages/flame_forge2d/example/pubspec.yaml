@@ -11,8 +11,8 @@ environment:
 
 dependencies:
   dashbook: ^0.1.12
-  flame: ^1.10.0
-  flame_forge2d: ^0.15.1
+  flame: ^1.10.1
+  flame_forge2d: ^0.16.0
   flutter:
     sdk: flutter
 

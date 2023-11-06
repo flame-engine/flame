@@ -1,3 +1,16 @@
+## 0.16.0
+ - Updated to Forge2D 0.12.2
+
+### Migration instructions
+
+The gravity and bullet are now field setters and getters, so if you before had `setGravity(Vector2(0, -10))` then you now do `gravity = Vector2(0, -10);` and if you previously had `body.setBullet(true);` you now do `body.isBullet = true;`.
+
+ - Updated to Forge2D 0.12.2
+
+### Migration instructions
+
+The gravity and bullet are now field setters and getters, so if you before had `setGravity(Vector2(0, -10))` then you now do `gravity = Vector2(0, -10);` and if you previously had `body.setBullet(true);` you now do `body.isBullet = true;`.
+
 ## 0.15.1
 
  - **FEAT**: Allow for bodyDef and fixtureDefs to be prepared earlier ([#2768](https://github.com/flame-engine/flame/issues/2768)). ([21357bca](https://github.com/flame-engine/flame/commit/21357bcac1e7e1cebfa6f2a496ec4b627d62d0e7))
