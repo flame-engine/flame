@@ -345,7 +345,7 @@ It may be the easiest way to go in Klondike (as it is in the Ember Tutorial).
 Basically, we must clear all the card references out of all the `Pile`s and then re-shuffle (or not)
 and re-deal, possibly changing from Klondike Draw 3 to Klondike Draw 1 or vice-versa.
 
-Hmmmm! That was not as easy as it looked. Re-initializing the `Pile`s and each `Card` was easy
+Well, that was not as easy as it looked! Re-initializing the `Pile`s and each `Card` was easy
 enough &mdash; see the code for the abstract `init()` method in `pile.dart`, its implementation
 in each of the Pile Components and the `init()` method in the `Card` class. To activate these, we
 add `enum Startup` to `KlondikeGame` and move some of the code from the `onLoad()` method to a
@@ -383,7 +383,7 @@ But the difficult bit comes next... Whether the player wins or restarts without 
 like to animate the deal later, so it would be nice to collect the cards into a neat face-down pile
 at top left, in the Stock Pile area. It is not the actual Stock Pile yet, because that gets created
 during the deal. Writing a simple little loop to set each `Card` face-down and use its `doMove`
-method to animate its move to the top left does not work. It causes one of those "subtle problems"
+method to make it move independently to the top left fails. It causes one of those "subtle problems"
 referred to earlier. The cards all travel at the same speed but arrive at different times. The deal
 then produces messy Tableau Piles with several cards out of position. It is better to control the
 process in KlondikeGame and make sure that the cards are all in position before the deal starts.
@@ -408,9 +408,9 @@ Here is one way of doing that and finishing the `init` method:
     }
   }
 ```
-We handle all 52 cards in the loop, taking care not to animate any cards that may already be in
+We check all 52 cards, taking care not to animate any cards that may already be in
 the Stock Pile area, because the distance and time to move would then be zero and that would cause
-an exception in Flame's MoveToEffect code. As they depart, we count each moving card. For a few
+an exception in Flame's MoveToEffect code. We count each moving card as it departs. For a few
 milliseconds after the loop terminates `nMovingCards` will be at a maximum, then cards will be
 arriving over the next second or so and will be counted off in the `onComplete()` callback code.
 When the countdown reaches zero the `deal(startType)` method can be safely called. We use a
