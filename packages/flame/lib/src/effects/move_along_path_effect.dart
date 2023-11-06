@@ -86,7 +86,9 @@ class MoveAlongPathEffect extends MoveEffect {
         'does not support rotation',
       );
       _lastAngle = -start.angle;
-      (target as AngleProvider).angle += -start.angle;
+      (target as AngleProvider).angle = (target is PositionComponent)
+          ? -start.angle + (target as PositionComponent).nativeAngle
+          : -start.angle;
     }
     if (_isAbsolute) {
       target.position.x = _lastOffset.x = start.position.dx;
