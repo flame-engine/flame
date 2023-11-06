@@ -19,7 +19,9 @@ class WastePile extends PositionComponent
   Vector2 dropPosition() => position;
 
   @override
-  void init() {_cards.clear();}
+  void init() {
+    _cards.clear();
+  }
 
   @override
   bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;

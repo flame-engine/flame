@@ -25,7 +25,9 @@ class FoundationPile extends PositionComponent implements Pile {
   Vector2 dropPosition() => position;
 
   @override
-  void init() {_cards.clear();}
+  void init() {
+    _cards.clear();
+  }
 
   @override
   bool canMoveCard(Card card) {
@@ -59,8 +61,8 @@ class FoundationPile extends PositionComponent implements Pile {
     card.priority = _cards.length;
     card.pile = this;
     _cards.add(card);
-    if (this.isFull) {
-      checkWin();	// Get KlondikeGame to check all FoundationPiles.
+    if (isFull) {
+      checkWin(); // Get KlondikeGame to check all FoundationPiles.
     }
   }
 

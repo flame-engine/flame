@@ -10,11 +10,11 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import '../rank.dart';
 import '../suit.dart';
-import 'tableau_pile.dart';
 import 'stock_pile.dart';
+import 'tableau_pile.dart';
 
 class Card extends PositionComponent
-        with DragCallbacks, TapCallbacks, HasGameReference<KlondikeGame> {
+    with DragCallbacks, TapCallbacks, HasGameReference<KlondikeGame> {
   Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
@@ -344,17 +344,21 @@ class Card extends PositionComponent
   // Tap a face-up card to make it auto-move and go out (if acceptable), but
   // if it is face-down and on the Stock Pile, pass the event to that pile.
 
-  onTapUp(TapUpEvent event) {
+  @override
+  void onTapUp(TapUpEvent event) {
     if (isFaceUp) {
       final suitIndex = suit.value;
       if (game.foundations[suitIndex].canAcceptCard(this)) {
         pile!.removeCard(this);
-        doMove(game.foundations[suitIndex].position,
-          onComplete: () {game.foundations[suitIndex].acquireCard(this);},
+        doMove(
+          game.foundations[suitIndex].position,
+          onComplete: () {
+            game.foundations[suitIndex].acquireCard(this);
+          },
         );
       }
     } else if (pile is StockPile) {
-        game.stock.onTapUp(event);
+      game.stock.onTapUp(event);
     }
   }
 

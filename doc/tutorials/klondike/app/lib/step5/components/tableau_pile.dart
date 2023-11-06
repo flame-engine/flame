@@ -22,7 +22,9 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   @override
-  void init() {_cards.clear();}
+  void init() {
+    _cards.clear();
+  }
 
   @override
   bool canMoveCard(Card card) => card.isFaceUp;

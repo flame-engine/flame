@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'components/card.dart';
 
 abstract class Pile {
-
   /// Clear all cards from this pile when re-initializing KlondikeGame.
   void init();
 

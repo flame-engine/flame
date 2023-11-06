@@ -5,16 +5,15 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 
 import 'components/card.dart';
+import 'components/flat_button.dart';
 import 'components/foundation_pile.dart';
 import 'components/stock_pile.dart';
 import 'components/tableau_pile.dart';
 import 'components/waste_pile.dart';
-import 'components/flat_button.dart';
 
-enum Startup {first, newDeal, sameDeal, changeDraw, haveFun}
+enum Startup { first, newDeal, sameDeal, changeDraw, haveFun }
 
 class KlondikeGame extends FlameGame {
-
   static const double cardGap = 175.0;
   static const double topGap = 500.0;
   static const double cardWidth = 1000.0;
@@ -43,18 +42,16 @@ class KlondikeGame extends FlameGame {
   Future<void> onLoad() async {
     await Flame.images.load('klondike-sprites.png');
 
-    for (int i = 0; i < 4; i++) {
+    for (var i = 0; i < 4; i++) {
       foundations.add(
         FoundationPile(
           i,
           checkWin,
-          position: Vector2(
-            (i + 3) * cardSpaceWidth + cardGap,
-            topGap),
+          position: Vector2((i + 3) * cardSpaceWidth + cardGap, topGap),
         ),
       );
     }
-    for (int i = 0; i < 7; i++) {
+    for (var i = 0; i < 7; i++) {
       piles.add(
         TableauPile(
           position: Vector2(
@@ -71,9 +68,8 @@ class KlondikeGame extends FlameGame {
       }
     }
 
-    final gameSize = Vector2(
-            7 * cardSpaceWidth + cardGap,
-            4 * cardSpaceHeight + topGap);
+    final gameSize =
+        Vector2(7 * cardSpaceWidth + cardGap, 4 * cardSpaceHeight + topGap);
     final gameMidX = gameSize.x / 2;
 
     world.add(stock);
@@ -82,10 +78,10 @@ class KlondikeGame extends FlameGame {
     world.addAll(piles);
     world.addAll(cards);
 
-    addButton('New deal',   gameMidX,                      Startup.newDeal);
-    addButton('Same deal',  gameMidX + cardSpaceWidth,     Startup.sameDeal);
+    addButton('New deal', gameMidX, Startup.newDeal);
+    addButton('Same deal', gameMidX + cardSpaceWidth, Startup.sameDeal);
     addButton('Draw 1 ⇌ 3', gameMidX + 2 * cardSpaceWidth, Startup.changeDraw);
-    addButton('Have fun',   gameMidX + 3 * cardSpaceWidth, Startup.haveFun);
+    addButton('Have fun', gameMidX + 3 * cardSpaceWidth, Startup.haveFun);
 
     camera.viewfinder.visibleGameSize = gameSize;
     camera.viewfinder.position = Vector2(gameMidX, 0);
@@ -106,25 +102,26 @@ class KlondikeGame extends FlameGame {
       cards.forEach((card) => card.init());
 
       var nMovingCards = 0;
-      for (Card card in cards) {
-        if (card.isFaceUp) card.flip();
+      for (final card in cards) {
+        if (card.isFaceUp) {
+          card.flip();
+        }
         if ((card.position - stock.position).length > 1.0) {
           // Move cards that are not already in the Stock Pile.
           nMovingCards++;
-          card.doMove(
-            stock.position,
-            onComplete: () {
-              nMovingCards--;
-              if (nMovingCards == 0) deal(startType);
+          card.doMove(stock.position, onComplete: () {
+            nMovingCards--;
+            if (nMovingCards == 0) {
+              deal(startType);
             }
-          );
+          },);
         }
       }
     }
   }
 
   void deal(Startup startType) {
-    switch(startType) {
+    switch (startType) {
       case Startup.first:
       case Startup.newDeal:
         cards.shuffle();
@@ -142,7 +139,7 @@ class KlondikeGame extends FlameGame {
     var nMovingCards = 0;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
-        Card card = cards[cardToDeal--];
+        final card = cards[cardToDeal--];
         card.doMove(
           piles[j].position,
           start: nMovingCards * 0.15,
@@ -151,7 +148,7 @@ class KlondikeGame extends FlameGame {
             nMovingCards--;
             if (nMovingCards == 0) {
               var delayFactor = 0;
-              for (TableauPile pile in piles) {
+              for (final pile in piles) {
                 delayFactor++;
                 pile.flipTopCard(start: delayFactor * 0.15);
               }
@@ -173,8 +170,8 @@ class KlondikeGame extends FlameGame {
       position: Vector2(buttonX, topGap / 2),
       onReleased: () {
         if (action == Startup.haveFun) {
-          letsCelebrate(phase: 1);
-        }  else {
+          letsCelebrate();
+        } else {
           init(action);
         }
       },
@@ -182,21 +179,19 @@ class KlondikeGame extends FlameGame {
     world.add(button);
   }
 
-  void checkWin()
-  {
-    int nComplete = 0;
-    for (FoundationPile f in foundations) {
+  void checkWin() {
+    var nComplete = 0;
+    for (final f in foundations) {
       if (f.isFull) {
         nComplete++;
       }
     }
     if (nComplete == foundations.length) {
-      letsCelebrate(phase: 1);
+      letsCelebrate();
     }
   }
 
-  void letsCelebrate({int phase = 1})
-  {
+  void letsCelebrate({int phase = 1}) {
     // Deal won: bring all cards to the middle of the screen (phase 1)
     // then scatter them to points just outside the screen (phase 2).
     //
@@ -204,62 +199,66 @@ class KlondikeGame extends FlameGame {
     // top-left of the off-screen area that will accept the scattered cards.
     // Note: The play area is anchored at TopCenter, so topLeft.y is fixed.
 
-    final double cameraZoom = camera.viewfinder.zoom;
-    final zoomedScreen = this.size / cameraZoom;
-    final playArea = Vector2(
-            7 * cardSpaceWidth + cardGap,
-            4 * cardSpaceHeight + topGap
-          );
+    final cameraZoom = camera.viewfinder.zoom;
+    final zoomedScreen = size / cameraZoom;
+    final playArea =
+        Vector2(7 * cardSpaceWidth + cardGap, 4 * cardSpaceHeight + topGap);
     final screenCenter = (playArea - cardSize) / 2;
     final topLeft = Vector2(
-            (playArea.x - zoomedScreen.x) / 2 - cardWidth,
-            -cardHeight,
-          );
+      (playArea.x - zoomedScreen.x) / 2 - cardWidth,
+      -cardHeight,
+    );
     final nCards = cards.length;
-    double h   = zoomedScreen.y + cardSize.y;	// Height of offscreen rect.
-    double w   = zoomedScreen.x + cardSize.x;	// Width of offscreen rect.
-    double ds  = (h + w + h + w) / nCards;	// Spacing = perimeter / nCards.
+    final h = zoomedScreen.y + cardSize.y; // Height of offscreen rect.
+    final w = zoomedScreen.x + cardSize.x; // Width of offscreen rect.
+    final ds = (h + w + h + w) / nCards; // Spacing = perimeter / nCards.
 
     // Starting points, directions and lengths of offscreen rect's sides.
-    List<Vector2> corner    = [Vector2(0.0, 0.0),  Vector2(0.0,  h),
-                               Vector2(w,   h),    Vector2(w,    0.0)];
-    List<Vector2> direction = [Vector2(0.0, 1.0),  Vector2(1.0,  0.0),
-                               Vector2(0.0, -1.0), Vector2(-1.0, 0.0)];
-    List<double>  length    = [h, w, h, w];
+    final corner = [
+      Vector2(0.0, 0.0),
+      Vector2(0.0, h),
+      Vector2(w, h),
+      Vector2(w, 0.0),
+    ];
+    final direction = [
+      Vector2(0.0, 1.0),
+      Vector2(1.0, 0.0),
+      Vector2(0.0, -1.0),
+      Vector2(-1.0, 0.0),
+    ];
+    final length = [h, w, h, w,];
 
-    int side = 0;
-    int cardsToMove = nCards;
+    var side = 0;
+    var cardsToMove = nCards;
     var offScreenPosition = corner[side] + topLeft;
-    double space = length[side];
-    int cardNum = 0;
+    var space = length[side];
+    var cardNum = 0;
 
     while (cardNum < nCards) {
-      int cardIndex = phase == 1 ? cardNum : nCards - cardNum - 1;
-      Card card = cards[cardIndex];
+      final cardIndex = phase == 1 ? cardNum : nCards - cardNum - 1;
+      final card = cards[cardIndex];
       card.priority = cardIndex + 1;
       if (card.isFaceDown) {
         card.flip();
       }
       // Start cards a short time apart to give a riffle effect.
-      var delay = phase == 1 ? cardNum * 0.02 : 0.5 + cardNum * 0.04;
-      var destination = (phase == 1) ? screenCenter : offScreenPosition;
-      card.doMove(destination,
-        speed: (phase == 1) ? 15.0 : 5.0,
-        start: delay,
-        onComplete: () {
-          cardsToMove--;
-          if (cardsToMove == 0) {
-            if (phase == 1) {
-              letsCelebrate(phase: 2);
-            }
-            else {
-              init(Startup.newDeal);
-            }
+      final delay = phase == 1 ? cardNum * 0.02 : 0.5 + cardNum * 0.04;
+      final destination = (phase == 1) ? screenCenter : offScreenPosition;
+      card.doMove(destination, speed: (phase == 1) ? 15.0 : 5.0, start: delay,
+          onComplete: () {
+        cardsToMove--;
+        if (cardsToMove == 0) {
+          if (phase == 1) {
+            letsCelebrate(phase: 2);
+          } else {
+            init(Startup.newDeal);
           }
         }
-      );
+      },);
       cardNum++;
-      if (phase == 1) continue;
+      if (phase == 1) {
+        continue;
+      }
 
       // Phase 2: next card goes to same side with spacing ds, if possible.
       offScreenPosition = offScreenPosition + direction[side] * ds;
@@ -272,7 +271,6 @@ class KlondikeGame extends FlameGame {
       }
     }
   }
-
 }
 
 Sprite klondikeSprite(double x, double y, double width, double height) {
