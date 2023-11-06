@@ -146,7 +146,7 @@ a drag-and-drop started. So let us insert new lines in two places as shown below
       if (pile is TableauPile) {
 ```
 ```{note}
-It would be a mistake to write `_whereCardStarted = position;`here. In Dart, that would just
+It would be a mistake to write `_whereCardStarted = position;` here. In Dart, that would just
 copy a reference &mdash; so `_whereCardStarted` would point to the same data as `position` while the
 drag occurred and the position of the card changed. We can get around this by copying the card's
 **current** X and Y co-ordinates into a **new** `Vector2` object.
@@ -356,7 +356,7 @@ various types of restart for the game:
 - Restart with the same deal as before,
 - Switch between Klondike Draw 1 and Draw 3 and restart with a new deal, and
 - Have fun before restarting with a new deal (we'll keep that as a surprise for later).
- 
+
 Here is the first part of the code for starting and restarting the game.
 ```dart
 enum Startup {first, newDeal, sameDeal, changeDraw, haveFun}
@@ -391,31 +391,33 @@ Here is one way of doing that and finishing the `init` method:
 ```dart
       var nMovingCards = 0;
       for (Card card in cards) {
-        if (card.isFaceUp) card.flip();
+        if (card.isFaceUp) {
+          card.flip();
+        }
         if ((card.position - stock.position).length > 1.0) {
           // Move cards that are not already in the Stock Pile.
           nMovingCards++;
-          card.doMove(
-            stock.position,
-            onComplete: () {
-              nMovingCards--;
-              if (nMovingCards == 0) deal(startType);
+          card.doMove(stock.position, onComplete: () {
+            nMovingCards--;
+            if (nMovingCards == 0) {
+              deal(startType);
             }
-          );
+          },);
         }
       }
     }
   }
 ```
 We handle all 52 cards in the loop, taking care not to animate any cards that may already be in
-the Stock Pile area, because that would cause an exception in Flame's MoveToEffect code. As they
-depart, we count each moving card. For a few milliseconds after the loop terminates `nMovingCards`
-will be at a maximum, then cards will be arriving over the next second or so and will be counted
-off in the `onComplete()` callback code. When the countdown reaches zero the `deal(startType)`
-method can be safely called. We use a similar technique to animate the deal and make sure all
-28 cards (i.e. 1 + 2 + 3 + 4 + 5 + 6 + 7 = 28) have been dealt, before constructing the Stock Pile
-from the remaining 24 cards. This debugging printout of the deal shows how arrivals can get out of
-order. The `j` variable is the Tableau Pile number and `i` is the card's position in the pile.
+the Stock Pile area, because the distance and time to move would then be zero and that would cause
+an exception in Flame's MoveToEffect code. As they depart, we count each moving card. For a few
+milliseconds after the loop terminates `nMovingCards` will be at a maximum, then cards will be
+arriving over the next second or so and will be counted off in the `onComplete()` callback code.
+When the countdown reaches zero the `deal(startType)` method can be safely called. We use a
+similar technique to animate the deal and make sure all 28 cards (i.e. 1 + 2 + 3 + 4 + 5 + 6 + 7
+= 28) have been dealt, before constructing the Stock Pile from the remaining 24 cards. This
+debugging printout of the deal shows how arrivals can get out of order. The `j` variable is
+the Tableau Pile number and `i` is the card's position in the pile.
 ```
 flutter: Move done, i 3, j 6, 6♠ 5 moving cards.
 flutter: Move done, i 4, j 5, 9♥ 4 moving cards.
@@ -438,9 +440,11 @@ We are going to use some buttons to activate the various ways of restarting the 
 we extend Flame's `ButtonComponent` to create class `FlatButton`, adapted from a Flat Button which
 used to be in Flame's Examples pages. `ButtonComponent` uses two `PositionComponent`s, one for when
 the button is in its normal state (up) and one for when it is pressed. The two components are
-mounted alternately as the user presses the button and releases it. To press the button, tap and
-hold it down. In our button, the two components are the button's outlines - the `buttonDown:` one
-makes the outline of the button turn red when it is pressed, because the four button-actions all
+`mounted` and `rendered` alternately as the user presses the button and releases it. To press the
+button, tap and hold it down.
+
+In our button, the two components are the button's outlines - the `buttonDown:` one makes
+the outline of the button turn red when it is pressed, because the four button-actions all
 end the current game and start another. That is also why they are positioned at the top of the
 canvas, above all the cards, where you are less likely to press them accidentally. If you do press
 one and have second thoughts, keep pressing and slide away, then the button will have no effect.
@@ -449,8 +453,8 @@ The four buttons trigger the restart actions described above and are labelled `N
 `Same deal`, `Draw 1 ⇌ 3` and `Have fun`. Flame also has a `SpriteButtonComponent`, based on two
 alternating `Sprite`s, a `HudButtonComponent` and an `AdvancedButtonComponent`. For further types
 of buttons and controllers, it would be best to use a Flutter overlay, menu or settings widget and
-have access to radio buttons, dropdown list buttons, sliders, etc. For the purposes of this
-Tutorial our FlatButton will do fine.
+have access to Flutter's widgets for radio buttons, dropdown lists, sliders, etc. For the purposes
+of this Tutorial our FlatButton will do fine.
 
 ## More animations of moves
 
@@ -465,12 +469,15 @@ shortcut to auto-move a card onto its Foundation Pile if it is ready to go out. 
       final suitIndex = suit.value;
       if (game.foundations[suitIndex].canAcceptCard(this)) {
         pile!.removeCard(this);
-        doMove(game.foundations[suitIndex].position,
-          onComplete: () {game.foundations[suitIndex].acquireCard(this);},
+        doMove(
+          game.foundations[suitIndex].position,
+          onComplete: () {
+            game.foundations[suitIndex].acquireCard(this);
+          },
         );
       }
     } else if (pile is StockPile) {
-        game.stock.onTapUp(event);
+      game.stock.onTapUp(event);
     }
   }
 ```
@@ -508,8 +515,8 @@ class FoundationPile extends PositionComponent implements Pile {
     card.priority = _cards.length;
     card.pile = this;
     _cards.add(card);
-    if (this.isFull) {
-      checkWin();	// Get KlondikeGame to check all FoundationPiles.
+    if (isFull) {
+      checkWin(); // Get KlondikeGame to check all FoundationPiles.
     }
   }
 
@@ -517,27 +524,27 @@ class FoundationPile extends PositionComponent implements Pile {
 ```dart
   void checkWin()
   {
-    int nComplete = 0;
-    for (FoundationPile f in foundations) {
+    var nComplete = 0;
+    for (final f in foundations) {
       if (f.isFull) {
         nComplete++;
       }
     }
     if (nComplete == foundations.length) {
-      letsCelebrate(phase: 1);
+      letsCelebrate();
     }
   }
 ```
-It is possible to calculate whether a position of the cards in a Klondike game can or cannot be won,
-or could have been won but has missed a vital move and can no longer be won. It is even possible
-to calculate whether the initial deal is unwinnable: a percentage of Klondike deals are. But all
-that is far beyond the scope of this Tutorial, so for now it is up to the player to decide whether
-to keep playing or give up and press one of the buttons.
+It is possible to calculate whether you can win from a position of the cards in a Klondike game,
+or could have won but missed a vital move. It is even possible to calculate whether the initial
+deal is winnable: a percentage of Klondike deals are not. But all that is far beyond the scope
+of this Tutorial, so for now it is up to the player to decide whether to keep playing and try to
+win &mdash; or give up and press one of the buttons.
 
 The `Have fun` button.
 
 When you win the Klondike Game, the `letsCelebrate()` method puts on a little display. To save you
-having to play and win a whole game before you see it &mdash; and to test the method, we have
+having to play and win a whole game before you see it &mdash; **and** to test the method, we have
 provided the `Have fun` button. Of course a real game could not have such a button...
 
 Well, this is it! The game is now more playable.
