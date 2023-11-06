@@ -109,12 +109,15 @@ class KlondikeGame extends FlameGame {
         if ((card.position - stock.position).length > 1.0) {
           // Move cards that are not already in the Stock Pile.
           nMovingCards++;
-          card.doMove(stock.position, onComplete: () {
-            nMovingCards--;
-            if (nMovingCards == 0) {
-              deal(startType);
-            }
-          },);
+          card.doMove(
+            stock.position,
+            onComplete: () {
+              nMovingCards--;
+              if (nMovingCards == 0) {
+                deal(startType);
+              }
+            },
+          );
         }
       }
     }
@@ -226,7 +229,12 @@ class KlondikeGame extends FlameGame {
       Vector2(0.0, -1.0),
       Vector2(-1.0, 0.0),
     ];
-    final length = [h, w, h, w,];
+    final length = [
+      h,
+      w,
+      h,
+      w,
+    ];
 
     var side = 0;
     var cardsToMove = nCards;
@@ -244,17 +252,21 @@ class KlondikeGame extends FlameGame {
       // Start cards a short time apart to give a riffle effect.
       final delay = phase == 1 ? cardNum * 0.02 : 0.5 + cardNum * 0.04;
       final destination = (phase == 1) ? screenCenter : offScreenPosition;
-      card.doMove(destination, speed: (phase == 1) ? 15.0 : 5.0, start: delay,
-          onComplete: () {
-        cardsToMove--;
-        if (cardsToMove == 0) {
-          if (phase == 1) {
-            letsCelebrate(phase: 2);
-          } else {
-            init(Startup.newDeal);
+      card.doMove(
+        destination,
+        speed: (phase == 1) ? 15.0 : 5.0,
+        start: delay,
+        onComplete: () {
+          cardsToMove--;
+          if (cardsToMove == 0) {
+            if (phase == 1) {
+              letsCelebrate(phase: 2);
+            } else {
+              init(Startup.newDeal);
+            }
           }
-        }
-      },);
+        },
+      );
       cardNum++;
       if (phase == 1) {
         continue;
