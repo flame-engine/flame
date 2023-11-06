@@ -80,7 +80,7 @@ class Tire extends BodyComponent<PadRacingGame> {
     final body = world.createBody(def)..userData = this;
 
     final polygonShape = PolygonShape()..setAsBoxXY(0.5, 1.25);
-    body.createFixtureFromShape(polygonShape, 1.0).userData = this;
+    body.createFixtureFromShape(polygonShape).userData = this;
 
     jointDef.bodyB = body;
     jointDef.localAnchorA.setFrom(jointAnchor);

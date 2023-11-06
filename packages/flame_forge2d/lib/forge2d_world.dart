@@ -59,7 +59,9 @@ class Forge2DWorld extends World {
     physicsWorld.particleSystem.raycast(callback, point1, point2);
   }
 
-  void setGravity(Vector2? gravity) {
-    physicsWorld.setGravity(gravity ?? defaultGravity);
+  Vector2 get gravity => physicsWorld.gravity;
+
+  set gravity(Vector2? gravity) {
+    physicsWorld.gravity = gravity ?? defaultGravity;
   }
 }
