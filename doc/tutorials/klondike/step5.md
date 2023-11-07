@@ -449,7 +449,8 @@ similar technique to animate the deal and make sure all 28 cards (i.e. 1 + 2 + 3
 debugging printout of the deal shows how arrivals can get out of order. The `j` variable is
 the Tableau Pile number and `i` is the card's position in the pile.
 
-```
+```dart
+/*
 flutter: Move done, i 3, j 6, 6♠ 5 moving cards.
 flutter: Move done, i 4, j 5, 9♥ 4 moving cards.
 flutter: Move done, i 4, j 6, K♥ 3 moving cards.
@@ -463,6 +464,7 @@ flutter: Pile 3 [A♠, Q♠, A♥, 5♠]
 flutter: Pile 4 [8♦, 10♣, 7♥, 3♥, 4♥]
 flutter: Pile 5 [4♠, 8♣, 5♣, 2♥, 9♥, Q♣]
 flutter: Pile 6 [4♣, 3♦, K♦, 6♠, K♥, 2♠, 10♠]
+*/
 ```
 
 
