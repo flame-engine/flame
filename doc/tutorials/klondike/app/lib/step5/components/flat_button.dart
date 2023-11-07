@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class FlatButton extends ButtonComponent {
   FlatButton(
     String text, {
-    required super.size,
+    super.size,
     super.onReleased,
     super.position,
   }) : super(
@@ -22,7 +22,7 @@ class FlatButton extends ButtonComponent {
                   color: const Color(0xffdbaf58),
                 ),
               ),
-              position: size! / 2.0,
+              position: size / 2.0,
               anchor: Anchor.center,
             ),
           ],
