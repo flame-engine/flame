@@ -145,12 +145,10 @@ a drag-and-drop started. So let us insert new lines in two places as shown below
       _whereCardStarted = Vector2(position.x, position.y);
       if (pile is TableauPile) {
 ```
-```{note}
 It would be a mistake to write `_whereCardStarted = position;` here. In Dart, that would just
 copy a reference &mdash; so `_whereCardStarted` would point to the same data as `position` while the
-drag occurred and the position of the card changed. We can get around this by copying the card's
+drag occurred and the card's `position` data changed. We can get around this by copying the card's
 **current** X and Y co-ordinates into a **new** `Vector2` object.
-```
 
 To animate cards being returned to their original piles after an invalid drag-and-drop, we replace
 five lines at the end of the `onDragEnd()` method with:
