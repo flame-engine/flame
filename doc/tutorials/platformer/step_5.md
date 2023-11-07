@@ -8,7 +8,7 @@ If you were waiting for some serious coding, this chapter is it. Prepare yoursel
 The first step will be to allow control of Ember via the keyboard. We need to start by adding the
 appropriate mixins to the game class and Ember. Add the following:
 
-`lib/ember_quest.dart'
+`lib/ember_quest.dart`
 
 ```dart
 import 'package:flame/events.dart';
