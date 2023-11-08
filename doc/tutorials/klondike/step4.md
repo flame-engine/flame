@@ -874,10 +874,10 @@ at the end of the `layOutCards()` method:
     height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
 ```
 
-The factor `1.5` here adds a little bit extra space at the bottom of each pile. The card to be dropped
-should be overlapping the hitbox by a little over half its width and height. If you are approaching from
-below, it would be just overlapping the nearest card (i.e. the one that is fully visible). You can
-temporarily turn the debug mode on to see the hitboxes.
+The factor `1.5` here adds a little bit extra space at the bottom of each pile. The card to be
+dropped should be overlapping the hitbox by a little over half its width and height. If you are
+approaching from below, it would be just overlapping the nearest card (i.e. the one that is fully
+visible). You can temporarily turn the debug mode on to see the hitboxes.
 
 [Illustration of Tableau Pile Hitboxes](../../images/tutorials/klondike-tableau-hitboxes.png)
 
