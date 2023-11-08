@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
+import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component.dart';
@@ -16,12 +17,12 @@ import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 /// Note that it only works with [Rectangle], [RoundedRectangle] and [Circle]
 /// shapes.
 class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
-  Shape _bounds;
+  Shape _boundsShape;
   late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
-    required Shape originalBounds,
-  }) : _bounds = originalBounds;
+    required Shape boundsShape,
+  }) : _boundsShape = boundsShape;
 
   @override
   void onLoad() {
@@ -43,11 +44,14 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   }
 
   /// Returns the bounds that do not take the viewport into account.
-  Shape get bounds => _bounds;
+  /// These bounds are automatically updated when [CameraComponent.setBounds]
+  /// is being called.
+  Shape get boundsShape => _boundsShape;
 
   /// Changes the original camera bounds.
-  set bounds(Shape bounds) {
-    _bounds = bounds;
+  /// This setter is used when you call [CameraComponent.setBounds].
+  set boundsShape(Shape boundsShape) {
+    _boundsShape = boundsShape;
     _updateCameraBounds();
   }
 
@@ -69,45 +73,45 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
     boundedBehavior?.bounds = _calculateViewportAwareBounds();
   }
 
-  /// This method calculates adapts the [_bounds] so that none
+  /// This method calculates adapts the [_boundsShape] so that none
   /// of the viewport can go outside of the bounds.
-  /// It returns the [_bounds] if it fails to calculates new bounds.
+  /// It returns the [_boundsShape] if it fails to calculates new bounds.
   Shape _calculateViewportAwareBounds() {
     final worldSize = Vector2(
-      _bounds
+      _boundsShape
           .support(
-            _bounds.nearestPoint(
-              _bounds.center + Vector2(1, 0),
+            _boundsShape.nearestPoint(
+              _boundsShape.center + Vector2(1, 0),
             ),
           )
           .x,
-      _bounds
+      _boundsShape
           .support(
-            _bounds.nearestPoint(
-              _bounds.center + Vector2(0, 1),
+            _boundsShape.nearestPoint(
+              _boundsShape.center + Vector2(0, 1),
             ),
           )
           .y,
     );
     final halfViewportSize = viewport.size / 2;
-    if (_bounds is Rectangle) {
+    if (_boundsShape is Rectangle) {
       return Rectangle.fromCenter(
-        center: _bounds.center,
+        center: _boundsShape.center,
         size: worldSize - halfViewportSize,
       );
-    } else if (_bounds is RoundedRectangle) {
+    } else if (_boundsShape is RoundedRectangle) {
       final halfSize = (worldSize - halfViewportSize) / 2;
       return RoundedRectangle.fromPoints(
-        _bounds.center - halfSize,
-        _bounds.center + halfSize,
-        (_bounds as RoundedRectangle).radius,
+        _boundsShape.center - halfSize,
+        _boundsShape.center + halfSize,
+        (_boundsShape as RoundedRectangle).radius,
       );
-    } else if (_bounds is Circle) {
+    } else if (_boundsShape is Circle) {
       return Circle(
-        _bounds.center,
+        _boundsShape.center,
         worldSize.x - max(halfViewportSize.x, halfViewportSize.y),
       );
     }
-    return _bounds;
+    return _boundsShape;
   }
 }
