@@ -1,6 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
+import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
@@ -13,6 +14,9 @@ import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/geometry/shapes/circle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/flame_game.dart';
 
@@ -88,6 +92,7 @@ class CameraComponent extends Component {
   /// than the size of the game canvas. If it is smaller, then the viewport's
   /// position specifies where exactly it is placed on the canvas.
   Viewport get viewport => _viewport;
+
   set viewport(Viewport newViewport) {
     _viewport.removeFromParent();
     _viewport = newViewport;
@@ -105,6 +110,7 @@ class CameraComponent extends Component {
   /// (i.e. how much of the world is seen through the viewport), and,
   /// optionally, rotation.
   Viewfinder get viewfinder => _viewfinder;
+
   set viewfinder(Viewfinder newViewfinder) {
     _viewfinder.removeFromParent();
     _viewfinder = newViewfinder;
@@ -321,20 +327,38 @@ class CameraComponent extends Component {
   /// Sets or clears the world bounds for the camera's viewfinder.
   ///
   /// The bound is a [Shape], given in the world coordinates. The viewfinder's
-  /// position will be restricted to always remain inside this region. Note that
-  /// if you want the camera to never see the empty space outside of the world's
-  /// rendering area, then you should set up the bounds to be smaller than the
-  /// size of the world.
-  void setBounds(Shape? bounds) {
+  /// position will be restricted to always remain inside this region.
+  ///
+  /// When [considerViewport] is true none of the viewport can go outside
+  /// of the bounds, when it is false only the viewfinder anchor is considered.
+  /// Note that this option only works with [Rectangle], [RoundedRectangle] and
+  /// [Circle] shapes.
+  void setBounds(Shape? bounds, {bool considerViewport = false}) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    final viewPortAwareBoundsBehavior =
+        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
     if (bounds == null) {
       boundedBehavior?.removeFromParent();
-    } else if (boundedBehavior == null) {
+      viewPortAwareBoundsBehavior?.removeFromParent();
+      return;
+    }
+    if (boundedBehavior == null) {
       viewfinder.add(
         BoundedPositionBehavior(bounds: bounds, priority: 1000),
       );
     } else {
       boundedBehavior.bounds = bounds;
+    }
+    if (considerViewport) {
+      if (viewPortAwareBoundsBehavior == null) {
+        viewfinder.add(
+          ViewportAwareBoundsBehavior(boundsShape: bounds),
+        );
+      } else {
+        viewPortAwareBoundsBehavior.boundsShape = bounds;
+      }
+    } else {
+      viewPortAwareBoundsBehavior?.removeFromParent();
     }
   }
 
