@@ -62,7 +62,7 @@ class EmberQuestGame extends FlameGame {
 As I mentioned in the [assets](step_1.md#assets) section, we are using multiple individual image
 files and for performance reasons, we should leverage Flame's built-in caching system which will
 only load the files once, but allow us to access them as many times as needed without an impact to
-the game. `await images.loadAll()` takes a list of the file names that are found in `assets\images`
+the game. `await images.loadAll()` takes a list of the file names that are found in `assets/images`
 and loads them to cache.
 
 
