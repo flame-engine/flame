@@ -13,12 +13,12 @@ void main() {
 
       camera.setBounds(bounds);
       game.update(0);
-      expect((getBounds(camera) as Rectangle).toRect(), bounds.toRect());
+      expect((_getBounds(camera) as Rectangle).toRect(), bounds.toRect());
 
       camera.setBounds(bounds, considerViewport: true);
       game.update(0);
       expect(
-        (getBounds(camera) as Rectangle).toRect(),
+        (_getBounds(camera) as Rectangle).toRect(),
         Rectangle.fromLTRB(200.0, -100.0, 200.0, 150.0).toRect(),
       );
     });
