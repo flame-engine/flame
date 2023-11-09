@@ -879,7 +879,7 @@ dropped should be overlapping the hitbox by a little over half its width and hei
 approaching from below, it would be just overlapping the nearest card (i.e. the one that is fully
 visible). You can temporarily turn the debug mode on to see the hitboxes.
 
-[Illustration of Tableau Pile Hitboxes](../../images/tutorials/klondike-tableau-hitboxes.png)
+![Illustration of Tableau Pile Hitboxes](../../images/tutorials/klondike-tableau-hitboxes.png)
 
 Ok, let's get to our main topic: how to move a stack of cards at once.
 
