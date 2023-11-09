@@ -80,7 +80,7 @@ class KlondikeGame extends FlameGame {
 
     addButton('New deal', gameMidX, Startup.newDeal);
     addButton('Same deal', gameMidX + cardSpaceWidth, Startup.sameDeal);
-    addButton('Draw 1 ⇌ 3', gameMidX + 2 * cardSpaceWidth, Startup.changeDraw);
+    addButton('Draw 1 or 3', gameMidX + 2 * cardSpaceWidth, Startup.changeDraw);
     addButton('Have fun', gameMidX + 3 * cardSpaceWidth, Startup.haveFun);
 
     camera.viewfinder.visibleGameSize = gameSize;
