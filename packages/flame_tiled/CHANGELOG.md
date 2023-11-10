@@ -1,3 +1,7 @@
+## 1.16.0
+
+ - **FEAT**: Allow flame tiled to skip tilesets when packing into a tile atlas ([#2847](https://github.com/flame-engine/flame/issues/2847)). ([b93bdd38](https://github.com/flame-engine/flame/commit/b93bdd38313fd273e3e4cf55f1b142969effbde4))
+
 ## 1.15.1
 
  - Update a dependency to the latest release.
