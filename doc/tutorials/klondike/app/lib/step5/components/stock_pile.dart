@@ -20,8 +20,8 @@ class StockPile extends PositionComponent
   //#region Pile API
 
   @override
-  // Dummy - not used.
-  Vector2 dropPosition() => position;
+  Vector2 dropPosition() =>
+      throw UnsupportedError('The Stock Pile cannot accept card drops');
 
   @override
   void init() {
