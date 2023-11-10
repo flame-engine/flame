@@ -3,7 +3,7 @@
 In this chapter we will be showing various ways to make the Klondike game more fun and easier to
 play. As it is now, the cards move from one pile to another immediately, which looks unnatural, so
 we will also be working on ways to animate that and smooth it out, for which we will be introducing
-Effect and EffectController components.
+Effect Components and EffectControllers.
 
 
 ## The Klondike draw
