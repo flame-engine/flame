@@ -584,7 +584,7 @@ of this Tutorial, so for now it is up to the player to decide whether to keep pl
 win &mdash; or give up and press one of the buttons.
 
 
-## The `Have fun` button.
+## The `Have fun` button
 
 When you win the Klondike Game, the `letsCelebrate()` method puts on a little display. To save you
 having to play and win a whole game before you see it &mdash; **and** to test the method, we have
