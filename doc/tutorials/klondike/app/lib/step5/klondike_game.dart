@@ -212,16 +212,16 @@ class KlondikeGame extends FlameGame {
       -cardHeight,
     );
     final nCards = cards.length;
-    final h = zoomedScreen.y + cardSize.y; // Height of offscreen rect.
-    final w = zoomedScreen.x + cardSize.x; // Width of offscreen rect.
-    final ds = (h + w + h + w) / nCards; // Spacing = perimeter / nCards.
+    final offscreenHeight = zoomedScreen.y + cardSize.y;
+    final offscreenWidth = zoomedScreen.x + cardSize.x;
+    final spacing = 2.0 * (offscreenHeight + offscreenWidth) / nCards;
 
     // Starting points, directions and lengths of offscreen rect's sides.
     final corner = [
       Vector2(0.0, 0.0),
-      Vector2(0.0, h),
-      Vector2(w, h),
-      Vector2(w, 0.0),
+      Vector2(0.0, offscreenHeight),
+      Vector2(offscreenWidth, offscreenHeight),
+      Vector2(offscreenWidth, 0.0),
     ];
     final direction = [
       Vector2(0.0, 1.0),
@@ -230,10 +230,10 @@ class KlondikeGame extends FlameGame {
       Vector2(-1.0, 0.0),
     ];
     final length = [
-      h,
-      w,
-      h,
-      w,
+      offscreenHeight,
+      offscreenWidth,
+      offscreenHeight,
+      offscreenWidth,
     ];
 
     var side = 0;
@@ -272,11 +272,11 @@ class KlondikeGame extends FlameGame {
         continue;
       }
 
-      // Phase 2: next card goes to same side with spacing ds, if possible.
-      offScreenPosition = offScreenPosition + direction[side] * ds;
-      space = space - ds;
+      // Phase 2: next card goes to same side with full spacing, if possible.
+      offScreenPosition = offScreenPosition + direction[side] * spacing;
+      space = space - spacing;
       if ((space < 0.0) && (side < 3)) {
-        // Out of space: change to the next side and use the excess ds there.
+        // Out of space: change to the next side and use excess spacing there.
         side++;
         offScreenPosition = corner[side] + topLeft - direction[side] * space;
         space = length[side] + space;
