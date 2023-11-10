@@ -108,6 +108,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     bool? ignoreFlip,
     AssetBundle? bundle,
     Images? images,
+    bool Function(Tileset)? tsxPackingFilter,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -119,6 +120,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         prefix: prefix,
         bundle: bundle,
         images: images,
+        tsxPackingFilter: tsxPackingFilter,
       ),
       priority: priority,
     );

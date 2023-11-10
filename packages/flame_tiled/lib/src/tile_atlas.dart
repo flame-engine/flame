@@ -8,6 +8,8 @@ import 'package:flame_tiled/src/rectangle_bin_packer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tiled/tiled.dart';
 
+bool _defaultTilesetPackingFilter(_) => true;
+
 /// One image atlas for all Tiled image sets in a map.
 ///
 /// Please note that [TiledAtlas] should not be reused without [clone] as it may
@@ -64,9 +66,16 @@ class TiledAtlas {
   }
 
   /// Collect images that we'll use in tiles - exclude image layers.
-  static Set<(String?, TiledImage)> _onlyTileImages(TiledMap map) {
+  static Set<(String?, TiledImage)> _onlyTileImages(
+    TiledMap map,
+    bool Function(Tileset) filter,
+  ) {
     final imageSet = <(String?, TiledImage)>{};
     for (var i = 0; i < map.tilesets.length; ++i) {
+      // Skip tilesets that don't match the filter.
+      if (!filter(map.tilesets[i])) {
+        continue;
+      }
       final tileset = map.tilesets[i];
       final image = tileset.image;
       if (image?.source != null) {
@@ -89,8 +98,12 @@ class TiledAtlas {
     double? maxX,
     double? maxY,
     Images? images,
+    bool Function(Tileset)? tsxPackingFilter,
   }) async {
-    final tilesetImageList = _onlyTileImages(map).toList();
+    final tilesetImageList = _onlyTileImages(
+      map,
+      tsxPackingFilter ?? _defaultTilesetPackingFilter,
+    ).toList();
 
     final mappedImageList = tilesetImageList.map((entry) {
       final tiledImage = entry.$2;
