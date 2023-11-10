@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flame_rive` - `v1.9.6`](#flame_rive---v196)
+
+---
+
+#### `flame_rive` - `v1.9.6`
+
+ - Bump to Rive 0.12.3
+
+
+## 2023-11-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flame_tiled` - `v1.16.0`](#flame_tiled---v1160)
 
 ---
