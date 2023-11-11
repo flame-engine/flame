@@ -43,4 +43,11 @@ mixin CollisionPassthrough on CollisionCallbacks {
     super.onCollisionEnd(other);
     passthroughParent?.onCollisionEnd(other);
   }
+
+  @override
+  @mustCallSuper
+  void onCollisionsCompleted() {
+    super.onCollisionsCompleted();
+    passthroughParent?.onCollisionsCompleted();
+  }
 }

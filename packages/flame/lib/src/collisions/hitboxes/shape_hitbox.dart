@@ -224,6 +224,16 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     }
   }
 
+  @override
+  @mustCallSuper
+  void onCollisionsCompleted() {
+    onCollisionsCompletedCallback?.call();
+    if (hitboxParent is CollisionCallbacks &&
+        triggersParentCollision) {
+      (hitboxParent as CollisionCallbacks).onCollisionsCompleted();
+    }
+  }
+
   /// Defines whether the [other] component should be able to collide with
   /// this component.
   ///

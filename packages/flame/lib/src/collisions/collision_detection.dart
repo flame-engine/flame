@@ -62,6 +62,20 @@ abstract class CollisionDetection<T extends Hitbox<T>,
       }
     }
     _updateLastPotentials(potentials);
+
+    // Once all the collisions have completed, then raise a callback to let each
+    // component know that we are done.
+    final itemsDone = [];
+    for (final potential in potentials) {
+      if (! itemsDone.contains(potential.a)) {
+        handleCollisionsCompleted(potential.a);
+        itemsDone.add(potential.a);
+      }
+      if (! itemsDone.contains(potential.b)) {
+        handleCollisionsCompleted(potential.b);
+        itemsDone.add(potential.b);
+      }
+    }
   }
 
   final _lastPotentialsPool = <CollisionProspect<T>>[];
@@ -89,6 +103,8 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
 
   void handleCollisionEnd(T itemA, T itemB);
+
+  void handleCollisionsCompleted(T itemA);
 
   /// Returns the first hitbox that the given [ray] hits and the associated
   /// intersection information; or null if the ray doesn't hit any hitbox.

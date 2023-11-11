@@ -74,6 +74,13 @@ mixin GenericCollisionCallbacks<T> {
     onCollisionEndCallback?.call(other);
   }
 
+  /// [onCollisionsCompleted] is called in a timestep once the other collision
+  /// callbacks have finished being called.
+  @mustCallSuper
+  void onCollisionsCompleted() {
+    onCollisionsCompletedCallback?.call();
+  }
+
   /// Works only for the QuadTree collision detection.
   /// If you need to prevent collision of items of different types -
   /// reimplement [onComponentTypeCheck]. The result of calculation is cached
@@ -94,6 +101,10 @@ mixin GenericCollisionCallbacks<T> {
   /// Assign your own [CollisionEndCallback] if you want a callback when this
   /// shape stops colliding with another [T].
   CollisionEndCallback<T>? onCollisionEndCallback;
+
+  /// Assign your own [CollisionsCompletedCallback] if you want a callback when
+  /// this shape has had all its collision callbacks called.
+  CollisionsCompletedCallback? onCollisionsCompletedCallback;
 }
 
 mixin CollisionCallbacks on Component
@@ -137,6 +148,12 @@ mixin CollisionCallbacks on Component
   }
 
   @override
+  @mustCallSuper
+  void onCollisionsCompleted() {
+    onCollisionsCompletedCallback?.call();
+  }
+
+  @override
   bool onComponentTypeCheck(PositionComponent other) {
     final myParent = parent;
     final otherParent = other.parent;
@@ -161,6 +178,11 @@ mixin CollisionCallbacks on Component
   /// shape stops colliding with another [PositionComponent].
   @override
   CollisionEndCallback<PositionComponent>? onCollisionEndCallback;
+
+  /// Assign your own [CollisionsCompletedCallback] if you want a callback when
+  /// all the collision callbacks for this shape have been done.
+  @override
+  CollisionsCompletedCallback? onCollisionsCompletedCallback;
 }
 
 /// Can be used used to implement an `onCollisionCallback` or an
@@ -172,3 +194,6 @@ typedef CollisionCallback<T> = void Function(
 
 /// Can be used used to implement an `onCollisionEndCallback`.
 typedef CollisionEndCallback<T> = void Function(T other);
+
+/// Can be used used to implement an `onCollisionsCompletedCallback`.
+typedef CollisionsCompletedCallback = void Function();
