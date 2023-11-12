@@ -11,7 +11,7 @@ Effect Components and EffectControllers.
 The Klondike patience game (or solitaire game in the USA) has two main variants: Draw 3 and Draw 1.
 Currently the Klondike Flame Game is Draw 3, which is a lot more difficult than Draw 1, because
 although you can see 3 cards, you can only move one of them and that move changes the "phase" of
-other cards. So different cards are going to become available &mdash; not easy.
+other cards. So different cards are going to become available — not easy.
 
 In Klondike Draw 1 just one card at a time is drawn from the Stock and shown, so every card in it is
 available, and you can go through the Stock as many times as you like, just as in Klondike Draw 3.
@@ -160,7 +160,7 @@ a drag-and-drop started. So let us insert new lines in two places as shown below
 ```
 
 It would be a mistake to write `_whereCardStarted = position;` here. In Dart, that would just
-copy a reference &mdash; so `_whereCardStarted` would point to the same data as `position` while the
+copy a reference: so `_whereCardStarted` would point to the same data as `position` while the
 drag occurred and the card's `position` data changed. We can get around this by copying the card's
 **current** X and Y co-ordinates into a **new** `Vector2` object.
 
@@ -250,7 +250,7 @@ and EffectControllers:
 ```
 
 So how does all this work? We have a default time of 0.3 seconds for the flip to occur, a start time
-and an optional callback on completion &mdash; as before. Now we add a ScaleEffect to the card,
+and an optional callback on completion, as before. Now we add a ScaleEffect to the card,
 which shrinks it almost to zero width, but leaves the height unchanged. However, that must take
 only half the time, then we must switch from the face-down to the face-up view of the card and
 expand it back out, also in half the time.
@@ -266,7 +266,7 @@ for `reverseDuration: time / 2`. Everything is reversed: the view of the card ex
 into 2-D of its 3-D position. Wow! That's a lot of work for a little EffectController!
 
 We are not there yet! If you were to run just the `add()` part of the code, you would see some
-ugly things happening. Yeah, yeah, been there, done that &mdash; when I was preparing this code!
+ugly things happening. Yeah, yeah, been there, done that — when I was preparing this code!
 First off, the card shrinks to a line at its left. That is because all cards in this game have
 an `Anchor` at `topLeft`, which is the point used to set the card's `position`. We would like
 the card to flip around its vertical center-line. Easy, just set `anchor = Anchor.topCenter`
@@ -322,7 +322,7 @@ dilemma by using two definitions of "face-up": a Model type and a View type. The
 used in rendering and animation (i.e. what appears on the screen) and the Model version in the logic
 of the game, the gameplay and its error-checks. That way, we do not have to revise all the logic
 of the Piles in this game in order to animate some of it. A more complex game might benefit from
-separating the Model and the View during the design and early coding stages &mdash; even into
+separating the Model and the View during the design and early coding stages — even into
 separate classes. In this game we are using just a little separation of Model and View. The
 `_isAnimatedFlip` variable is `true` while there is an animated flip going on, otherwise `false`,
 and the `Card` class's `flip()` function is expanded to:
@@ -370,7 +370,7 @@ Basically, we must clear all the card references out of all the `Pile`s and then
 and re-deal, possibly changing from Klondike Draw 3 to Klondike Draw 1 or vice-versa.
 
 Well, that was not as easy as it looked! Re-initializing the `Pile`s and each `Card` was easy
-enough &mdash; see the code for the abstract `init()` method in `pile.dart`, its implementation
+enough — see the code for the abstract `init()` method in `pile.dart`, its implementation
 in each of the Pile Components and the `init()` method in the `Card` class. To activate these, we
 add `enum Startup` to `KlondikeGame` and move some of the code from the `onLoad()` method to a
 `void init(Startup startType)` method and a `void deal(Startup startType)` where we can have
@@ -581,13 +581,13 @@ It is possible to calculate whether you can win from a position of the cards in 
 or could have won but missed a vital move. It is even possible to calculate whether the initial
 deal is winnable: a percentage of Klondike deals are not. But all that is far beyond the scope
 of this Tutorial, so for now it is up to the player to decide whether to keep playing and try to
-win &mdash; or give up and press one of the buttons.
+win — or give up and press one of the buttons.
 
 
 ## The `Have fun` button
 
 When you win the Klondike Game, the `letsCelebrate()` method puts on a little display. To save you
-having to play and win a whole game before you see it &mdash; **and** to test the method, we have
+having to play and win a whole game before you see it — **and** to test the method, we have
 provided the `Have fun` button. Of course a real game could not have such a button...
 
 Well, this is it! The game is now more playable.
