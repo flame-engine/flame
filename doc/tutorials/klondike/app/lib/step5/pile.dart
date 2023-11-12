@@ -3,10 +3,8 @@ import 'package:flame/components.dart';
 import 'components/card.dart';
 
 abstract class Pile {
-  /// Clear all cards from this pile when re-initializing KlondikeGame.
-  void init();
-
   /// Show where to drop the card(s) after a successful drag-and-drop move.
+  /// Used only in piles that accept a drop (i.e. Foundation and Tableau Piles).
   Vector2 dropPosition();
 
   /// Returns true if the [card] can be taken away from this pile and moved

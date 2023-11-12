@@ -19,11 +19,6 @@ class WastePile extends PositionComponent
       throw UnsupportedError('The Waste Pile cannot accept card drops');
 
   @override
-  void init() {
-    _cards.clear();
-  }
-
-  @override
   bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
 
   @override

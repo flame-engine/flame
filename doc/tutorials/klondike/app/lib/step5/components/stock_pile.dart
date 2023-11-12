@@ -24,11 +24,6 @@ class StockPile extends PositionComponent
       throw UnsupportedError('The Stock Pile cannot accept card drops');
 
   @override
-  void init() {
-    _cards.clear();
-  }
-
-  @override
   bool canMoveCard(Card card) => false;
 
   @override
