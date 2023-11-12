@@ -13,13 +13,16 @@ import '../suit.dart';
 import 'stock_pile.dart';
 import 'tableau_pile.dart';
 
-class Card extends PositionComponent
-    with DragCallbacks, TapCallbacks, HasGameReference<KlondikeGame> {
-  Card(int intRank, int intSuit)
+class Card extends PositionComponent with DragCallbacks, TapCallbacks {
+  Card(this.world, int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
-        super(size: KlondikeGame.cardSize);
+        super(
+          size: KlondikeGame.cardSize,
+          position: world.stock.position,
+        );
 
+  final KlondikeWorld world;
   final Rank rank;
   final Suit suit;
   Pile? pile;
@@ -42,16 +45,6 @@ class Card extends PositionComponent
       _faceUp = !_faceUp;
       _isFaceUpView = _faceUp;
     }
-  }
-
-  void init() {
-    pile = null;
-    _faceUp = false;
-    _isAnimatedFlip = false;
-    _isFaceUpView = false;
-    _isDragging = false;
-    _whereCardStarted = Vector2(0, 0);
-    attachedCards.clear();
   }
 
   @override
@@ -348,17 +341,17 @@ class Card extends PositionComponent
   void onTapUp(TapUpEvent event) {
     if (isFaceUp) {
       final suitIndex = suit.value;
-      if (game.foundations[suitIndex].canAcceptCard(this)) {
+      if (world.foundations[suitIndex].canAcceptCard(this)) {
         pile!.removeCard(this);
         doMove(
-          game.foundations[suitIndex].position,
+          world.foundations[suitIndex].position,
           onComplete: () {
-            game.foundations[suitIndex].acquireCard(this);
+            world.foundations[suitIndex].acquireCard(this);
           },
         );
       }
     } else if (pile is StockPile) {
-      game.stock.onTapUp(event);
+      world.stock.onTapUp(event);
     }
   }
 
