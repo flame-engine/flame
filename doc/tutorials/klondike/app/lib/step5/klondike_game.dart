@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -29,13 +29,14 @@ class KlondikeGame extends FlameGame {
   );
 
   // Used when creating Random seed. Cannot use the full 2^63 in Web apps.
-  static const int maxint = 2 ^ 53 - 1;
+  static const int maxInt = 2 ^ 53 - 1;
 
   // Default is Klondike Draw 1: a button switches between Draw 1 and Draw 3.
   var _klondikeDraw = 1;
 
   int get klondikeDraw => _klondikeDraw;
 
+  // NOTE: Need to finalize default of klondikeDraw. Here or in KlondikeWorld?
   final klondikeWorld = KlondikeWorld(klondikeDraw: 1);
 
   @override
@@ -50,7 +51,6 @@ class KlondikeGame extends FlameGame {
   }
 
   void deal(Startup startType) {
-    print('Deal: start type $startType');
     final cards = klondikeWorld.cards;
     final tableauPiles = klondikeWorld.tableauPiles;
     final stock = klondikeWorld.stock;
@@ -206,7 +206,7 @@ class KlondikeGame extends FlameGame {
 }
 
 class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
-  KlondikeWorld({this.klondikeDraw = 1, this.seed});
+  KlondikeWorld({this.klondikeDraw = 3, this.seed});
 
   final cardGap = KlondikeGame.cardGap;
   final topGap = KlondikeGame.topGap;
@@ -279,11 +279,11 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     game.camera.viewfinder.anchor = Anchor.topCenter;
 
     // This creates a random seed if one was not supplied.
-    seed ??= Random().nextInt(KlondikeGame.maxint);
-    // This creates the random generator that should be used everywhere for shuffling etc.
+    seed ??= Random().nextInt(KlondikeGame.maxInt);
+    // Creates the random generator to be used everywhere for shuffling etc.
     random = Random(seed);
-    // ...
-    // This would maybe not be done in this method, just showing how to pass the random class to it.
+    // This would maybe not be done in this method, just showing
+    // how to pass the random class to it.
     cards.shuffle(random);
     game.init(Startup.first);
   }
