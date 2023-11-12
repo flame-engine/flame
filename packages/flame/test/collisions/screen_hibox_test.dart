@@ -24,6 +24,7 @@ void main() {
         expect(testBlock.startCounter, 1);
         expect(testBlock.onCollisionCounter, 1);
         expect(testBlock.endCounter, 0);
+        expect(testBlock.completedCounter, 1);
 
         testBlock.position = Vector2.zero();
         game.update(0);
@@ -31,6 +32,7 @@ void main() {
         expect(testBlock.startCounter, 1);
         expect(testBlock.onCollisionCounter, 1);
         expect(testBlock.endCounter, 1);
+        expect(testBlock.completedCounter, 2);
       },
     });
 
@@ -51,6 +53,7 @@ void main() {
         expect(testBlock.startCounter, 1);
         expect(testBlock.onCollisionCounter, 1);
         expect(testBlock.endCounter, 0);
+        expect(testBlock.completedCounter, 1);
 
         testBlock.position = Vector2.zero();
         game.update(0);
@@ -58,6 +61,7 @@ void main() {
         expect(testBlock.startCounter, 1);
         expect(testBlock.onCollisionCounter, 1);
         expect(testBlock.endCounter, 1);
+        expect(testBlock.completedCounter, 2);
       },
     });
 
@@ -77,6 +81,7 @@ void main() {
         expect(testBlock.startCounter, 0);
         expect(testBlock.onCollisionCounter, 0);
         expect(testBlock.endCounter, 0);
+        expect(testBlock.completedCounter, 1);
 
         testBlock.position = visibleRect.topLeft.toVector2() / 2;
         game.onGameResize(game.size / 2);
@@ -85,6 +90,7 @@ void main() {
         expect(testBlock.startCounter, 1);
         expect(testBlock.onCollisionCounter, 1);
         expect(testBlock.endCounter, 0);
+        expect(testBlock.completedCounter, 2);
       },
     });
 
@@ -106,6 +112,7 @@ void main() {
         expect(testBlock.startCounter, 0);
         expect(testBlock.onCollisionCounter, 0);
         expect(testBlock.endCounter, 0);
+        expect(testBlock.completedCounter, 1);
 
         testBlock.position = visibleRectBeforeRotation.topLeft.toVector2();
         game.update(0);
@@ -113,6 +120,7 @@ void main() {
         expect(testBlock.startCounter, 1);
         expect(testBlock.onCollisionCounter, 1);
         expect(testBlock.endCounter, 0);
+        expect(testBlock.completedCounter, 2);
       },
     });
   });
