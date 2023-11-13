@@ -12,7 +12,7 @@ import 'components/stock_pile.dart';
 import 'components/tableau_pile.dart';
 import 'components/waste_pile.dart';
 
-enum Startup { first, newDeal, sameDeal, changeDraw, haveFun }
+enum Action { newDeal, sameDeal, changeDraw, haveFun }
 
 class KlondikeGame extends FlameGame {
   static const double cardGap = 175.0;
@@ -28,47 +28,40 @@ class KlondikeGame extends FlameGame {
     const Radius.circular(cardRadius),
   );
 
-  // Used when creating Random seed. Cannot use the full 2^63 in Web apps.
-  static const int maxInt = 2 ^ 53 - 1;
+  // Constant used to create Random seed. Cannot use 64 bits in Flame Web apps.
+  // Also Random.nextInt(n) throws an exception if n > 32 bits. 52 factorial,
+  // the number of permutations of 52 cards, is of order 10 to the power 68!
+  static const int maxInt = 4294967296; // This is 2 to the power 32.
 
-  // Default is Klondike Draw 1: a button switches between Draw 1 and Draw 3.
   var _klondikeDraw = 1;
+  var _seed = 1;
+
+  KlondikeWorld klondikeWorld = KlondikeWorld();
+  Action action = Action.newDeal;
 
   int get klondikeDraw => _klondikeDraw;
-
-  // NOTE: Need to finalize default of klondikeDraw. Here or in KlondikeWorld?
-  final klondikeWorld = KlondikeWorld(klondikeDraw: 1);
 
   @override
   Future<void> onLoad() async {
     add(klondikeWorld);
+    world = klondikeWorld;
   }
 
-  void init(Startup startType) {
-    if (startType == Startup.first) {
-      deal(Startup.first);
-    } else {}
-  }
-
-  void deal(Startup startType) {
+  void deal() {
     final cards = klondikeWorld.cards;
     final tableauPiles = klondikeWorld.tableauPiles;
     final stock = klondikeWorld.stock;
 
     assert(cards.length == 52, 'There are ${cards.length} cards: should be 52');
-    switch (startType) {
-      case Startup.first:
-      case Startup.newDeal:
-        cards.shuffle();
-        break;
-      case Startup.changeDraw:
+
+    if (action != Action.sameDeal) {
+      // New deal: change the Random Number Generator's seed.
+      _seed = Random().nextInt(KlondikeGame.maxInt);
+      if (action == Action.changeDraw) {
         _klondikeDraw = (_klondikeDraw == 3) ? 1 : 3;
-        cards.shuffle();
-        break;
-      case Startup.sameDeal:
-      default:
-        break;
+      }
     }
+    cards.shuffle(Random(_seed));
 
     var cardToDeal = cards.length - 1;
     var nMovingCards = 0;
@@ -182,7 +175,9 @@ class KlondikeGame extends FlameGame {
             if (phase == 1) {
               letsCelebrate(phase: 2);
             } else {
-              init(Startup.newDeal);
+              action = Action.newDeal;
+              klondikeWorld = KlondikeWorld();
+              world = klondikeWorld;
             }
           }
         },
@@ -206,19 +201,12 @@ class KlondikeGame extends FlameGame {
 }
 
 class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
-  KlondikeWorld({this.klondikeDraw = 3, this.seed});
+  KlondikeWorld();
 
   final cardGap = KlondikeGame.cardGap;
   final topGap = KlondikeGame.topGap;
   final cardSpaceWidth = KlondikeGame.cardSpaceWidth;
   final cardSpaceHeight = KlondikeGame.cardSpaceHeight;
-
-  // Default is Klondike Draw 1: a button switches between Draw 1 and Draw 3.
-  final int klondikeDraw;
-
-  // The seed is used to make the shuffle repeat when "Same deal" is requested.
-  int? seed;
-  late Random random;
 
   final stock = StockPile(position: Vector2(0.0, 0.0));
   final waste = WastePile(position: Vector2(0.0, 0.0));
@@ -254,7 +242,9 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     }
     for (var rank = 1; rank <= 13; rank++) {
       for (var suit = 0; suit < 4; suit++) {
-        cards.add(Card(this, rank, suit));
+        final card = Card(rank, suit);
+        card.position = stock.position;
+        cards.add(card);
       }
     }
 
@@ -268,36 +258,31 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     addAll(tableauPiles);
     addAll(cards);
 
-    addButton('New deal', gameMidX, Startup.newDeal);
-    addButton('Same deal', gameMidX + cardSpaceWidth, Startup.sameDeal);
-    addButton('Draw 1 or 3', gameMidX + 2 * cardSpaceWidth, Startup.changeDraw);
-    addButton('Have fun', gameMidX + 3 * cardSpaceWidth, Startup.haveFun);
+    addButton('New deal', gameMidX, Action.newDeal);
+    addButton('Same deal', gameMidX + cardSpaceWidth, Action.sameDeal);
+    addButton('Draw 1 or 3', gameMidX + 2 * cardSpaceWidth, Action.changeDraw);
+    addButton('Have fun', gameMidX + 3 * cardSpaceWidth, Action.haveFun);
 
     game.camera.world = this;
     game.camera.viewfinder.visibleGameSize = gameSize;
     game.camera.viewfinder.position = Vector2(gameMidX, 0);
     game.camera.viewfinder.anchor = Anchor.topCenter;
 
-    // This creates a random seed if one was not supplied.
-    seed ??= Random().nextInt(KlondikeGame.maxInt);
-    // Creates the random generator to be used everywhere for shuffling etc.
-    random = Random(seed);
-    // This would maybe not be done in this method, just showing
-    // how to pass the random class to it.
-    cards.shuffle(random);
-    game.init(Startup.first);
+    game.deal();
   }
 
-  void addButton(String label, double buttonX, Startup action) {
+  void addButton(String label, double buttonX, Action action) {
     final button = FlatButton(
       label,
       size: Vector2(KlondikeGame.cardWidth, 0.6 * topGap),
       position: Vector2(buttonX, topGap / 2),
       onReleased: () {
-        if (action == Startup.haveFun) {
+        if (action == Action.haveFun) {
           game.letsCelebrate();
         } else {
-          game.init(action);
+          game.action = action;
+          game.klondikeWorld = KlondikeWorld();
+          game.world = game.klondikeWorld;
         }
       },
     );

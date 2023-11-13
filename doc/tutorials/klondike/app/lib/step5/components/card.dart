@@ -13,16 +13,15 @@ import '../suit.dart';
 import 'stock_pile.dart';
 import 'tableau_pile.dart';
 
-class Card extends PositionComponent with DragCallbacks, TapCallbacks {
-  Card(this.world, int intRank, int intSuit)
+class Card extends PositionComponent
+    with DragCallbacks, TapCallbacks, HasWorldReference<KlondikeWorld> {
+  Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
         super(
           size: KlondikeGame.cardSize,
-          position: world.stock.position,
         );
 
-  final KlondikeWorld world;
   final Rank rank;
   final Suit suit;
   Pile? pile;
