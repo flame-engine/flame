@@ -34,7 +34,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  late final _layerPaint = FlameTiled.instance.paintFactory(layer.opacity);
+  late final _layerPaint = FlameTiled.instance.paintFactory(opacity);
   final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
