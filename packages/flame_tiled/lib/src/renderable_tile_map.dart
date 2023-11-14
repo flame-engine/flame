@@ -211,6 +211,7 @@ class RenderableTiledMap {
     Images? images,
     AssetBundle? bundle,
     bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
   }) async {
     final contents =
         await (bundle ?? Flame.bundle).loadString('$prefix$fileName');
@@ -225,6 +226,7 @@ class RenderableTiledMap {
       images: images,
       bundle: bundle,
       tsxPackingFilter: tsxPackingFilter,
+      useAtlas: useAtlas,
     );
   }
 
@@ -244,6 +246,7 @@ class RenderableTiledMap {
     Images? images,
     AssetBundle? bundle,
     bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
   }) async {
     final map = await TiledMap.fromString(
       contents,
@@ -259,6 +262,7 @@ class RenderableTiledMap {
       images: images,
       bundle: bundle,
       tsxPackingFilter: tsxPackingFilter,
+      useAtlas: useAtlas,
     );
   }
 
@@ -275,6 +279,7 @@ class RenderableTiledMap {
     Images? images,
     AssetBundle? bundle,
     bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -298,6 +303,7 @@ class RenderableTiledMap {
         maxY: atlasMaxY,
         images: images,
         tsxPackingFilter: tsxPackingFilter,
+        useAtlas: useAtlas,
       ),
       ignoreFlip: ignoreFlip,
       images: images,
