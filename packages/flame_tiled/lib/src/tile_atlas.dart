@@ -35,7 +35,14 @@ class TiledAtlas {
     required this.atlas,
     required this.offsets,
     required this.key,
-  }) : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
+    bool useAtlas = true,
+  }) : batch = atlas == null
+            ? null
+            : SpriteBatch(
+                atlas,
+                imageKey: key,
+                useAtlas: useAtlas,
+              );
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
@@ -99,6 +106,7 @@ class TiledAtlas {
     double? maxY,
     Images? images,
     bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
   }) async {
     final tilesetImageList = _onlyTileImages(
       map,
@@ -133,6 +141,7 @@ class TiledAtlas {
         atlas: null,
         offsets: {},
         key: 'atlas{empty}',
+        useAtlas: useAtlas,
       );
     }
 
