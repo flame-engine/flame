@@ -258,16 +258,19 @@ class RenderableTiledMap {
       contents,
       (key) => FlameTsxProvider.parse(key, bundle, prefix),
     );
-    return fromTiledMap(map, destTileSize,
-        atlasMaxX: atlasMaxX,
-        atlasMaxY: atlasMaxY,
-        camera: camera,
-        ignoreFlip: ignoreFlip,
-        images: images,
-        bundle: bundle,
-        tsxPackingFilter: tsxPackingFilter,
-        useAtlas: useAtlas,
-        layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory);
+    return fromTiledMap(
+      map,
+      destTileSize,
+      atlasMaxX: atlasMaxX,
+      atlasMaxY: atlasMaxY,
+      camera: camera,
+      ignoreFlip: ignoreFlip,
+      images: images,
+      bundle: bundle,
+      tsxPackingFilter: tsxPackingFilter,
+      useAtlas: useAtlas,
+      layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+    );
   }
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
