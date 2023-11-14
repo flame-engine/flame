@@ -187,7 +187,9 @@ class TiledAtlas {
       ),
     ]);
 
-    final emptyPaint = Paint();
+    final emptyPaint = Paint()
+      ..isAntiAlias = false
+      ..filterQuality = FilterQuality.none;
     for (final entry in mappedImageList) {
       final tiledImage = entry.$2;
       final tileImageSource = entry.$1;
