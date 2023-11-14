@@ -98,6 +98,11 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   /// A custom [atlasMaxX] and [atlasMaxY] can be provided in case you want to
   /// change the max size of [TiledAtlas] that [TiledComponent] creates
   /// internally.
+  ///
+  /// TiledComponent uses Flame's `SpriteBatch` to render the map. Which under
+  /// the hood uses `Canvas.drawAtlas` calls to render the tiles. This behavior
+  /// can be changed by setting `useAtlas` to `false`. This will make the map
+  /// be rendered with `Canvas.drawImageRect` calls instead.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
@@ -109,6 +114,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     AssetBundle? bundle,
     Images? images,
     bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -121,6 +127,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         bundle: bundle,
         images: images,
         tsxPackingFilter: tsxPackingFilter,
+        useAtlas: useAtlas,
       ),
       priority: priority,
     );
