@@ -28,6 +28,9 @@ class TiledAtlas {
   /// Image key for this atlas.
   final String key;
 
+  /// If SpriteBatch should use atlas or not.
+  final bool useAtlas;
+
   /// Track one atlas for all images in the Tiled map.
   ///
   /// See [fromTiledMap] for asynchronous loading.
@@ -35,7 +38,7 @@ class TiledAtlas {
     required this.atlas,
     required this.offsets,
     required this.key,
-    bool useAtlas = true,
+    this.useAtlas = true,
   }) : batch = atlas == null
             ? null
             : SpriteBatch(
@@ -53,6 +56,7 @@ class TiledAtlas {
         atlas: atlas?.clone(),
         offsets: offsets,
         key: key,
+        useAtlas: useAtlas,
       );
 
   /// Maps of tilesets compiled to [TiledAtlas].
@@ -167,6 +171,7 @@ class TiledAtlas {
         atlas: image,
         offsets: {key: Offset.zero},
         key: key,
+        useAtlas: useAtlas,
       );
     }
 
@@ -223,6 +228,7 @@ class TiledAtlas {
       atlas: image,
       offsets: offsetMap,
       key: key,
+      useAtlas: useAtlas,
     );
   }
 
