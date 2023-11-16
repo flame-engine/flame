@@ -7,6 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/animation.dart';
 
 import '../klondike_game.dart';
+import '../klondike_world.dart';
 import '../pile.dart';
 import '../rank.dart';
 import '../suit.dart';
