@@ -23,7 +23,6 @@ abstract class Pile {
   /// called for a card for which [canAcceptCard] returns true.
   void acquireCard(Card card);
 
-  /// Returns the [card] (which already belongs to this pile) in its proper
-  /// place.
+  /// Returns a [card], which already belongs to this pile, to its proper place.
   void returnCard(Card card);
 }
