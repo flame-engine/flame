@@ -127,7 +127,7 @@ class _BodyButtonState extends State<BodyButtonWidget> {
             },
             child: const Text(
               'Flying button!',
-              textScaleFactor: 2.0,
+              textScaler: TextScaler.linear(2.0),
             ),
           ),
         ),
