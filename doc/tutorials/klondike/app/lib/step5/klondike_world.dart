@@ -89,8 +89,10 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
       position: Vector2(buttonX, topGap / 2),
       onReleased: () {
         if (action == Action.haveFun) {
+          // Shortcut to the "win" sequence, for Tutorial purposes only.
           letsCelebrate();
         } else {
+          // Restart with a new deal or the same deal as before.
           game.action = action;
           game.world = KlondikeWorld();
         }
@@ -109,6 +111,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
         game.klondikeDraw = (game.klondikeDraw == 3) ? 1 : 3;
       }
     }
+    // For the "Same deal" option, re-use the previous seed, else use a new one.
     cards.shuffle(Random(game.seed));
 
     var cardToDeal = cards.length - 1;
@@ -140,6 +143,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
   }
 
   void checkWin() {
+    // Callback from a Foundation Pile when it is full (Ace to King).
     var nComplete = 0;
     for (final f in foundations) {
       if (f.isFull) {
@@ -217,6 +221,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
             if (phase == 1) {
               letsCelebrate(phase: 2);
             } else {
+              // Restart with a new deal after winning or pressing "Havefun".
               game.action = Action.newDeal;
               game.world = KlondikeWorld();
             }
