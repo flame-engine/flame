@@ -18,9 +18,9 @@ dependencies:
   flutter_svg: ^2.0.5
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.1
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.1
   test: any

@@ -11,4 +11,4 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0

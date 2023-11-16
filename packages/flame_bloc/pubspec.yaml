@@ -20,10 +20,10 @@ dependencies:
   meta: ^1.9.1
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.1
   flame_test: ^1.14.0
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.1

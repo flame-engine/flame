@@ -8,7 +8,7 @@ funding:
   - https://patreon.com/bluefireoss
 
 environment:
-  sdk: '>=2.18.0 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -21,8 +21,8 @@ dependencies:
   path_provider: ^2.0.15
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.1
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.1
