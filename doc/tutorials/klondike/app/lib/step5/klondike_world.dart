@@ -221,7 +221,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
             if (phase == 1) {
               letsCelebrate(phase: 2);
             } else {
-              // Restart with a new deal after winning or pressing "Havefun".
+              // Restart with a new deal after winning or pressing "Have fun".
               game.action = Action.newDeal;
               game.world = KlondikeWorld();
             }
