@@ -23,7 +23,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^4.0.4
-  meta: ^1.8.0
+  meta: ^1.9.1
   padracing: ^1.0.0
   provider: ^6.0.5
   rogue_shooter: ^0.1.0
@@ -32,6 +32,12 @@ dependencies:
 dev_dependencies:
   flame_lint: ^1.1.1
   test: any
+
+dependency_overrides:
+  # https://github.com/EsotericSoftware/spine-runtimes/issues/2420
+  raw_image_provider:
+    git:
+      url: https://github.com/erickzanardo/flutter_raw_image_provider.git
 
 flutter:
   uses-material-design: true

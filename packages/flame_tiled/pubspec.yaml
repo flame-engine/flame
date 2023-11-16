@@ -21,7 +21,7 @@ dependencies:
   xml: ^6.3.0
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.1
   flutter_test:
     sdk: flutter
