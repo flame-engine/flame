@@ -36,6 +36,7 @@ commonly want to show the current FPS somewhere when the `FpsComponent` is used.
 
 [TextComponent]: ../rendering/text_rendering.md#textcomponent
 
+
 ### ChildCounterComponent<T>
 
 `ChildCounterComponent` is a component that can be added to a game and will every second render
@@ -50,6 +51,7 @@ add(
 ```
 
 Will render the number of `SpriteAnimationComponent` that are children of the game `world`.
+
 
 ### TimeTrackComponent
 
