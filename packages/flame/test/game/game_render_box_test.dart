@@ -11,9 +11,9 @@ class _MockBuildContext extends Mock implements BuildContext {}
 
 class _MockPipelineOwner extends Mock implements PipelineOwner {
   @override
-    String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-      return '';
-    }
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '';
+  }
 }
 
 final nodesNeedingCompositingBitsUpdate = <RenderObject>[];
