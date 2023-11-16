@@ -4,8 +4,12 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
-class ComponentTrackComponent<T> extends TextComponent {
-  ComponentTrackComponent({
+/// A debug component that shows the number of children of a given type from
+/// a target component.
+///
+/// Add it to the game to start seeing the count.
+class ChildCounterComponent<T> extends TextComponent {
+  ChildCounterComponent({
     required this.target,
     super.position,
   });

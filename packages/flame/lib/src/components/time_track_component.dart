@@ -4,6 +4,16 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 
+/// A component that offers a simple way to track time spent in different parts
+/// of your game.
+///
+/// This component is meant to be used for debugging purposes only and should
+/// not be added in production builds.
+///
+/// To start tracking time, call [TimeTrackComponent.start] with an identifier
+/// and [TimeTrackComponent.end] with that same identifier to finish tracking.
+///
+/// To see the recorded times, simply add this component to your game.
 class TimeTrackComponent extends TextComponent {
   TimeTrackComponent({super.position});
 
