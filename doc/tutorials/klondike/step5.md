@@ -395,7 +395,7 @@ and documentation proposed a completely new approach which avoids re-initializin
 creates all the Components from scratch, which is the preferred Flutter/Flame way of doing things.
 
 
-## A New World...
+## A New World
 
 
 ### Start and restart actions
@@ -462,7 +462,7 @@ in some `addButton()` references, but more on these later.
 
 The `seed` is a common games-programming technique in any programming environment. Usually it allows
 you to start a Random Number Generator from a known point (called the seed) and give your game
-reproducible behaviour when you are in the development and testing stage. Here it is used to
+reproducible behavior when you are in the development and testing stage. Here it is used to
 provide exactly the same deal of the Klondike cards when the player requests that.
 
 
