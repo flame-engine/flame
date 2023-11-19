@@ -57,7 +57,7 @@ class FoundationPile extends PositionComponent implements Pile {
     card.pile = this;
     _cards.add(card);
     if (isFull) {
-      checkWin(); // Get KlondikeGame to check all FoundationPiles.
+      checkWin(); // Get KlondikeWorld to check all FoundationPiles.
     }
   }
 
