@@ -17,6 +17,6 @@ Entity Component System.
 ```{toctree}
 :hidden:
 
-jenny    <jenny/index.md>
+jenny    <jenny/jenny.md>
 oxygen   <oxygen/oxygen.md>
 ```

@@ -126,5 +126,5 @@ components:
 :hidden:
 
 YarnSpinner language  <language/language.md>
-Jenny API             <runtime/index.md>
+Jenny API             <runtime/jenny_runtime.md>
 ```
