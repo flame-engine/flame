@@ -34,7 +34,7 @@ class ChildCounterComponent<T> extends TextComponent {
         period: 1,
         repeat: true,
         onTick: () {
-          text = '$_label: ${target.children.whereType<T>().length}';
+          text = '$_label: ${target.children.query<T>().length}';
         },
       ),
     );

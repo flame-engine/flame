@@ -39,8 +39,8 @@ commonly want to show the current FPS somewhere when the `FpsComponent` is used.
 
 ### ChildCounterComponent
 
-`ChildCounterComponent` is a component that can be added to a game and will every second render
-the number of children of type `T` from a component. So for example:
+`ChildCounterComponent` is a component that renders the number of children of
+type `T` from a component (`target`) every second. So for example:
 
 ```dart
 add(
