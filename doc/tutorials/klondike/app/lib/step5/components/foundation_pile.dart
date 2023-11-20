@@ -25,9 +25,8 @@ class FoundationPile extends PositionComponent implements Pile {
   Vector2 dropPosition() => position;
 
   @override
-  bool canMoveCard(Card card) {
-    return _cards.isNotEmpty && card == _cards.last;
-  }
+  bool canMoveCard(Card card, MoveMethod method) =>
+      _cards.isNotEmpty && card == _cards.last && method != MoveMethod.tap;
 
   @override
   bool canAcceptCard(Card card) {
@@ -38,8 +37,8 @@ class FoundationPile extends PositionComponent implements Pile {
   }
 
   @override
-  void removeCard(Card card) {
-    assert(canMoveCard(card));
+  void removeCard(Card card, MoveMethod method) {
+    assert(canMoveCard(card, method));
     _cards.removeLast();
   }
 

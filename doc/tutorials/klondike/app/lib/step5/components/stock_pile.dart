@@ -24,13 +24,15 @@ class StockPile extends PositionComponent
       throw UnsupportedError('The Stock Pile cannot accept card drops');
 
   @override
-  bool canMoveCard(Card card) => false;
+  bool canMoveCard(Card card, MoveMethod method) => false;
+  // Can be moved by onTapUp callback (see below).
 
   @override
   bool canAcceptCard(Card card) => false;
 
   @override
-  void removeCard(Card card) => throw StateError('cannot remove cards');
+  void removeCard(Card card, MoveMethod method) =>
+      throw StateError('cannot remove cards');
 
   @override
   void returnCard(Card card) => throw StateError('cannot remove cards');

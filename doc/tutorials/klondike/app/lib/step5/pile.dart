@@ -2,14 +2,16 @@ import 'package:flame/components.dart';
 
 import 'components/card.dart';
 
+enum MoveMethod { drag, tap }
+
 abstract class Pile {
   /// Show where to drop the card(s) after a successful drag-and-drop move.
   /// Used only in piles that accept a drop (i.e. Foundation and Tableau Piles).
   Vector2 dropPosition();
 
   /// Returns true if the [card] can be taken away from this pile and moved
-  /// somewhere else.
-  bool canMoveCard(Card card);
+  /// somewhere else. A tapping move may need additional validation.
+  bool canMoveCard(Card card, MoveMethod method);
 
   /// Returns true if the [card] can be placed on top of this pile. The [card]
   /// may have other cards "attached" to it.
@@ -17,7 +19,7 @@ abstract class Pile {
 
   /// Removes [card] from this pile; this method will only be called for a card
   /// that both belong to this pile, and for which [canMoveCard] returns true.
-  void removeCard(Card card);
+  void removeCard(Card card, MoveMethod method);
 
   /// Places a single [card] on top of this pile. This method will only be
   /// called for a card for which [canAcceptCard] returns true.

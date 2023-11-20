@@ -243,10 +243,10 @@ class Card extends PositionComponent
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    if (pile?.canMoveCard(this) ?? false) {
+    if (pile?.canMoveCard(this, MoveMethod.drag) ?? false) {
       _isDragging = true;
       priority = 100;
-      // Copy each co-ord, else _whereCardStarted changes as the  position does.
+      // Copy each co-ord, else _whereCardStarted changes as the position does.
       _whereCardStarted = Vector2(position.x, position.y);
       if (pile is TableauPile) {
         attachedCards.clear();
@@ -285,7 +285,7 @@ class Card extends PositionComponent
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         // Move card(s) gracefully into position om the receiving pile.
-        pile!.removeCard(this);
+        pile!.removeCard(this, MoveMethod.drag);
         var dropPosition = dropPiles.first.dropPosition();
         doMove(
           dropPosition,
@@ -339,10 +339,10 @@ class Card extends PositionComponent
 
   @override
   void onTapUp(TapUpEvent event) {
-    if (isFaceUp) {
+    if (pile?.canMoveCard(this, MoveMethod.tap) ?? false) {
       final suitIndex = suit.value;
       if (world.foundations[suitIndex].canAcceptCard(this)) {
-        pile!.removeCard(this);
+        pile!.removeCard(this, MoveMethod.tap);
         doMove(
           world.foundations[suitIndex].position,
           onComplete: () {

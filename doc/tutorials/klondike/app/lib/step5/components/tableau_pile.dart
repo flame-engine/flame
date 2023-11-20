@@ -22,7 +22,9 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   @override
-  bool canMoveCard(Card card) => card.isFaceUp;
+  bool canMoveCard(Card card, MoveMethod method) =>
+      card.isFaceUp && (method == MoveMethod.drag || card == _cards.last);
+  // Drag can move multiple cards: tap can move last card only (to Foundation).
 
   @override
   bool canAcceptCard(Card card) {
@@ -36,7 +38,7 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   @override
-  void removeCard(Card card) {
+  void removeCard(Card card, MoveMethod method) {
     assert(_cards.contains(card) && card.isFaceUp);
     final index = _cards.indexOf(card);
     _cards.removeRange(index, _cards.length);
