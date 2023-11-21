@@ -7,3 +7,4 @@ endtemplate # Use @endtemplate to close a @template block in dartdoc
 pubspec # dependency and configuration file of every Dart project
 typedefs # plural of typedef
 intelli # JetBrain's IDE
+writeln # StringBuffer.writeln
