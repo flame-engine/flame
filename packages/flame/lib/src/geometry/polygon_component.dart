@@ -80,6 +80,7 @@ class PolygonComponent extends ShapeComponent {
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
     ComponentKey? key,
+    List<Component>? children,
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
@@ -91,6 +92,7 @@ class PolygonComponent extends ShapeComponent {
           paintLayers: paintLayers,
           shrinkToBounds: shrinkToBounds,
           key: key,
+          children: children,
         );
 
   @internal

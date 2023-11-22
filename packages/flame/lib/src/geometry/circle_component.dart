@@ -35,6 +35,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     super.anchor,
     super.paint,
     super.paintLayers,
+    super.children,
   }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
 
   @override
