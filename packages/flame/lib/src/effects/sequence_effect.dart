@@ -47,7 +47,7 @@ EffectController _createController({
 /// represented as a regular effect controller.
 class SequenceEffect extends Effect {
   SequenceEffect(
-    this.effects, {
+    List<Effect> effects, {
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
@@ -58,6 +58,7 @@ class SequenceEffect extends Effect {
           'Parameters infinite and repeatCount cannot be specified '
           'simultaneously',
         ),
+        _effects = effects,
         super(
           _createController(
             effects: effects,
@@ -67,13 +68,13 @@ class SequenceEffect extends Effect {
           ),
         );
 
-  final List<Effect> effects;
+  final List<Effect> _effects;
 
   @override
   void onMount() {
     super.onMount();
 
-    addAll(effects);
+    addAll(_effects);
   }
 
   @override
