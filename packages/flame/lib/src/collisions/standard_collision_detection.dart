@@ -64,13 +64,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     hitboxB.onCollisionEnd(hitboxA);
   }
 
-  /// Calls the hitbox of each object that is currently colliding, and inform the
-  /// component that the collision detection has finished.
-  @override
-  void handleCollisionsCompleted(ShapeHitbox hitbox) {
-    hitbox.onCollisionsCompleted();
-  }
-
   static final _temporaryRaycastResult = RaycastResult<ShapeHitbox>();
 
   static final _temporaryRayAabb = Aabb2();
