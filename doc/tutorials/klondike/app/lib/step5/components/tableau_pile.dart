@@ -65,6 +65,32 @@ class TableauPile extends PositionComponent implements Pile {
 
   //#endregion
 
+  void dropCards(Card firstCard, [List<Card> attachedCards = const []]) {
+    final cardList = [firstCard];
+    cardList.addAll(attachedCards);
+    Vector2 nextPosition = _cards.isEmpty ? position : _cards.last.position;
+    var nCardsToMove = cardList.length;
+    for (final card in cardList) {
+      card.pile = this;
+      card.priority = _cards.length;
+      if (_cards.isNotEmpty) {
+        nextPosition =
+            nextPosition + (card.isFaceDown ? _fanOffset1 : _fanOffset2);
+      }
+      _cards.add(card);
+      card.doMove(
+        nextPosition,
+        bumpPriority: false, // Priorities have been set: don't change them.
+        onComplete: () {
+          nCardsToMove--;
+          if (nCardsToMove == 0) {
+            calculateHitArea(); // Expand the hit-area.
+          }
+        },
+      );
+    }
+  }
+
   void flipTopCard({double start = 0.1}) {
     assert(_cards.last.isFaceDown);
     _cards.last.turnFaceUp(
@@ -75,6 +101,7 @@ class TableauPile extends PositionComponent implements Pile {
 
   void layOutCards() {
     if (_cards.isEmpty) {
+      calculateHitArea(); // Shrink hit-area when all cards have been removed.
       return;
     }
     _cards[0].position.setFrom(position);
@@ -85,7 +112,12 @@ class TableauPile extends PositionComponent implements Pile {
         ..setFrom(_cards[i - 1].position)
         ..add(_cards[i - 1].isFaceDown ? _fanOffset1 : _fanOffset2);
     }
-    height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
+    calculateHitArea(); // Adjust hit-area to more cards or fewer cards.
+  }
+
+  void calculateHitArea() {
+    height = KlondikeGame.cardHeight * 1.5 +
+        (_cards.length < 2 ? 0.0 : _cards.last.y - _cards.first.y);
   }
 
   List<Card> cardsOnTop(Card card) {

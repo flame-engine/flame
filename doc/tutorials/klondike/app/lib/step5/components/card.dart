@@ -283,27 +283,22 @@ class Card extends PositionComponent
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {
-      if (dropPiles.first.canAcceptCard(this)) {
-        // Move card(s) gracefully into position om the receiving pile.
+      if (dropPiles.first.canAcceptCard(this)) { // Found a Pile.
+        // Move card(s) gracefully into position on the receiving pile.
         pile!.removeCard(this, MoveMethod.drag);
-        var dropPosition = dropPiles.first.dropPosition();
-        doMove(
-          dropPosition,
-          onComplete: () {
-            dropPiles.first.acquireCard(this);
-          },
-        );
-        if (attachedCards.isNotEmpty) {
-          attachedCards.forEach((card) {
-            dropPosition = dropPiles.first.dropPosition();
-            doMove(
-              dropPosition,
-              onComplete: () {
-                dropPiles.first.acquireCard(card);
-              },
-            );
-          });
+        if (dropPiles.first is TableauPile) {
+          // Get TableauPile to handle positions, priorities and moves of cards.
+          (dropPiles.first as TableauPile).dropCards(this, attachedCards);
           attachedCards.clear();
+        } else {
+          // Drop a single card onto a FoundationPile.
+          final dropPosition = dropPiles.first.dropPosition();
+          doMove(
+            dropPosition,
+            onComplete: () {
+              dropPiles.first.acquireCard(this);
+            },
+          );
         }
         return;
       }
@@ -365,11 +360,14 @@ class Card extends PositionComponent
     double start = 0.0,
     Curve curve = Curves.easeOutQuad,
     VoidCallback? onComplete,
+    bool bumpPriority = true,
   }) {
     assert(speed > 0.0, 'Speed must be > 0 widths per second');
     final dt = (to - position).length / (speed * size.x);
     assert(dt > 0, 'Distance to move must be > 0');
-    priority = 100;
+    if (bumpPriority) {
+      priority = 100;
+    }
     add(
       MoveToEffect(
         to,
