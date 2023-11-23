@@ -208,9 +208,18 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         .whereType<FlameTileLayer>()
         .where((layer) => layer.tiledAtlas.atlas != null)
         .map((layer) {
-      final image = layer.tiledAtlas.atlas;
-      final key = layer.tiledAtlas.key;
-      return (key, image!);
-    }).toList();
+          final image = layer.tiledAtlas.atlas;
+          final key = layer.tiledAtlas.key;
+          return (key, image!);
+        })
+        .fold<Map<String, (String, Image)>>(
+          {},
+          (previousValue, element) {
+            previousValue.putIfAbsent(element.$1, () => element);
+            return previousValue;
+          },
+        )
+        .values
+        .toList();
   }
 }
