@@ -3,6 +3,25 @@ import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
 import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 
+EffectController _createController({
+  required List<Effect> effects,
+  required bool alternate,
+  required bool infinite,
+  required int repeatCount,
+}) {
+  EffectController ec = _SequenceEffectEffectController(
+    effects,
+    alternate: alternate,
+  );
+  if (infinite) {
+    ec = InfiniteEffectController(ec);
+  } else if (repeatCount > 1) {
+    ec = RepeatedEffectController(ec, repeatCount);
+  }
+  effects.forEach((e) => e.removeOnFinish = false);
+  return ec;
+}
+
 /// Run multiple effects in a sequence, one after another.
 ///
 /// The provided effects will be added as child components; however the custom
@@ -27,35 +46,35 @@ import 'package:flame/src/effects/effect.dart';
 /// effect depends on the timings of individual effects, and cannot be
 /// represented as a regular effect controller.
 class SequenceEffect extends Effect {
-  factory SequenceEffect(
-    List<Effect> effects, {
+  SequenceEffect(
+    this.effects, {
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
-    void Function()? onComplete,
-  }) {
-    assert(effects.isNotEmpty, 'The list of effects cannot be empty');
-    assert(
-      !(infinite && repeatCount != 1),
-      'Parameters infinite and repeatCount cannot be specified simultaneously',
-    );
-    EffectController ec = _SequenceEffectEffectController(
-      effects,
-      alternate: alternate,
-    );
-    if (infinite) {
-      ec = InfiniteEffectController(ec);
-    } else if (repeatCount > 1) {
-      ec = RepeatedEffectController(ec, repeatCount);
-    }
-    effects.forEach((e) => e.removeOnFinish = false);
-    return SequenceEffect._(ec, onComplete: onComplete)..addAll(effects);
-  }
-
-  SequenceEffect._(
-    super.ec, {
     super.onComplete,
-  });
+  })  : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
+        assert(
+          !(infinite && repeatCount != 1),
+          'Parameters infinite and repeatCount cannot be specified '
+          'simultaneously',
+        ),
+        super(
+          _createController(
+            effects: effects,
+            alternate: alternate,
+            infinite: infinite,
+            repeatCount: repeatCount,
+          ),
+        );
+
+  final List<Effect> effects;
+
+  @override
+  void onMount() {
+    super.onMount();
+
+    addAll(effects);
+  }
 
   @override
   void apply(double progress) {}
