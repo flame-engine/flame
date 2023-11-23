@@ -41,6 +41,12 @@ void main() {
       expect(tiled.tileMap.renderableLayers.length, equals(3));
     });
 
+    test('component atlases returns the loaded atlases', () {
+      final atlases = tiled.componentAtlases();
+      expect(atlases, hasLength(1));
+      expect(atlases.first.$1, equals('map-level1.png'));
+    });
+
     test('correct loads the file, with different prefix', () async {
       tiled = await TiledComponent.load(
         'map_custom_path.tmx',
