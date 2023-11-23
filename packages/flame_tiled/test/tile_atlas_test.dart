@@ -154,7 +154,8 @@ void main() {
           expect(
             renderMapToPng(component),
             matchesGoldenFile(
-                'goldens/larger_atlas_component_with_spacing.png'),
+              'goldens/larger_atlas_component_with_spacing.png',
+            ),
           );
         },
       );
