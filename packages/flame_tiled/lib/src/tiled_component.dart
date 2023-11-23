@@ -208,7 +208,14 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
           final key = layer.tiledAtlas.key;
           return (key, image!);
         })
-        .toSet()
+        .fold<Map<String, (String, Image)>>(
+          {},
+          (previousValue, element) {
+            previousValue.putIfAbsent(element.$1, () => element);
+            return previousValue;
+          },
+        )
+        .values
         .toList();
   }
 }
