@@ -66,16 +66,11 @@ class SequenceEffect extends Effect {
             infinite: infinite,
             repeatCount: repeatCount,
           ),
-        );
-
-  final List<Effect> _effects;
-
-  @override
-  void onMount() {
-    super.onMount();
-
+        ) {
     addAll(_effects);
   }
+
+  final List<Effect> _effects;
 
   @override
   void apply(double progress) {}
