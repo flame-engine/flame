@@ -134,6 +134,31 @@ void main() {
         );
       });
 
+      test(
+        'packs complex maps with multiple images using a custom spacing',
+        () async {
+          final component = await TiledComponent.load(
+            'isometric_plain.tmx',
+            Vector2(128, 74),
+            bundle: bundle,
+            images: Images(bundle: bundle),
+            atlasPackingSpacingX: 2,
+            atlasPackingSpacingY: 2,
+          );
+
+          final atlas = TiledAtlas.atlasMap.values.first;
+          expect(
+            await imageToPng(atlas.atlas!),
+            matchesGoldenFile('goldens/larger_atlas_with_spacing.png'),
+          );
+          expect(
+            renderMapToPng(component),
+            matchesGoldenFile(
+                'goldens/larger_atlas_component_with_spacing.png'),
+          );
+        },
+      );
+
       test('can ignore tilesets in the packing', () async {
         await TiledComponent.load(
           'isometric_plain.tmx',
