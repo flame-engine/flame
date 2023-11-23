@@ -199,7 +199,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   /// check how the tilesets were packed into the atlas.
   ///
   /// It returns a record with the Atlas key and its image.
-  List<(String, Image)> componentAtlases() {
+  List<(String, Image)> atlases() {
     return tileMap.renderableLayers
         .whereType<FlameTileLayer>()
         .where((layer) => layer.tiledAtlas.atlas != null)

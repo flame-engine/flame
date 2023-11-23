@@ -42,7 +42,7 @@ void main() {
     });
 
     test('component atlases returns the loaded atlases', () {
-      final atlases = tiled.componentAtlases();
+      final atlases = tiled.atlases();
       expect(atlases, hasLength(1));
       expect(atlases.first.$1, equals('map-level1.png'));
     });
