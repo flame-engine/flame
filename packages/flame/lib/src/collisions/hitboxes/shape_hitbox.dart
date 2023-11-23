@@ -256,8 +256,5 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   CollisionEndCallback<ShapeHitbox>? onCollisionEndCallback;
 
-  @override
-  CollisionsCompletedCallback? onCollisionsCompletedCallback;
-
 //#endregion
 }
