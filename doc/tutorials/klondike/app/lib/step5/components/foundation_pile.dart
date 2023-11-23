@@ -22,9 +22,6 @@ class FoundationPile extends PositionComponent implements Pile {
   bool get isFull => _cards.length == 13;
 
   @override
-  Vector2 dropPosition() => position;
-
-  @override
   bool canMoveCard(Card card, MoveMethod method) =>
       _cards.isNotEmpty && card == _cards.last && method != MoveMethod.tap;
 

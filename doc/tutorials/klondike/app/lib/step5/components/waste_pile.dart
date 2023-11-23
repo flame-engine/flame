@@ -15,10 +15,6 @@ class WastePile extends PositionComponent
   //#region Pile API
 
   @override
-  Vector2 dropPosition() =>
-      throw UnsupportedError('The Waste Pile cannot accept card drops');
-
-  @override
   bool canMoveCard(Card card, MoveMethod method) =>
       _cards.isNotEmpty && card == _cards.last; // Tap and drag are both OK.
 

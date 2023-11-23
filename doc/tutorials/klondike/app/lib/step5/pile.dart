@@ -5,10 +5,6 @@ import 'components/card.dart';
 enum MoveMethod { drag, tap }
 
 abstract class Pile {
-  /// Show where to drop the card(s) after a successful drag-and-drop move.
-  /// Used only in piles that accept a drop (i.e. Foundation and Tableau Piles).
-  Vector2 dropPosition();
-
   /// Returns true if the [card] can be taken away from this pile and moved
   /// somewhere else. A tapping move may need additional validation.
   bool canMoveCard(Card card, MoveMethod method);

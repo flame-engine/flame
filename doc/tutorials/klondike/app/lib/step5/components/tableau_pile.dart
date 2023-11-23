@@ -17,11 +17,6 @@ class TableauPile extends PositionComponent implements Pile {
   //#region Pile API
 
   @override
-  Vector2 dropPosition() {
-    return _cards.isEmpty ? position : _cards.last.position + _fanOffset2;
-  }
-
-  @override
   bool canMoveCard(Card card, MoveMethod method) =>
       card.isFaceUp && (method == MoveMethod.drag || card == _cards.last);
   // Drag can move multiple cards: tap can move last card only (to Foundation).

@@ -20,10 +20,6 @@ class StockPile extends PositionComponent
   //#region Pile API
 
   @override
-  Vector2 dropPosition() =>
-      throw UnsupportedError('The Stock Pile cannot accept card drops');
-
-  @override
   bool canMoveCard(Card card, MoveMethod method) => false;
   // Can be moved by onTapUp callback (see below).
 

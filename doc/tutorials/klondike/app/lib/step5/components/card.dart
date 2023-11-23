@@ -11,6 +11,7 @@ import '../klondike_world.dart';
 import '../pile.dart';
 import '../rank.dart';
 import '../suit.dart';
+import 'foundation_pile.dart';
 import 'stock_pile.dart';
 import 'tableau_pile.dart';
 
@@ -292,7 +293,7 @@ class Card extends PositionComponent
           attachedCards.clear();
         } else {
           // Drop a single card onto a FoundationPile.
-          final dropPosition = dropPiles.first.dropPosition();
+          final dropPosition = (dropPiles.first as FoundationPile).position;
           doMove(
             dropPosition,
             onComplete: () {
