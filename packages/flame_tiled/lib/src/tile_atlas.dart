@@ -111,6 +111,8 @@ class TiledAtlas {
     Images? images,
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
+    double spacingX = 0,
+    double spacingY = 0,
   }) async {
     final tilesetImageList = _onlyTileImages(
       map,
@@ -209,12 +211,17 @@ class TiledAtlas {
       final tileImageSource = entry.$1;
 
       final image = await imagesInstance.load(tileImageSource);
-      final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
+      final rect = bin.pack(
+        image.width.toDouble() + spacingX,
+        image.height.toDouble() + spacingY,
+      );
 
       pictureRect = pictureRect.expandToInclude(rect);
 
-      final offset =
-          offsetMap[tiledImage.source!] = Offset(rect.left, rect.top);
+      final offset = offsetMap[tiledImage.source!] = Offset(
+        rect.left - spacingX,
+        rect.top - spacingY,
+      );
 
       canvas.drawImage(image, offset, emptyPaint);
     }

@@ -117,6 +117,8 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
     Paint Function(double opacity)? layerPaintFactory,
+    double atlasPackingSpacingX = 0,
+    double atlasPackingSpacingY = 0,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -131,6 +133,8 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         tsxPackingFilter: tsxPackingFilter,
         useAtlas: useAtlas,
         layerPaintFactory: layerPaintFactory,
+        atlasPackingSpacingX: atlasPackingSpacingX,
+        atlasPackingSpacingY: atlasPackingSpacingY,
       ),
       priority: priority,
     );
