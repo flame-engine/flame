@@ -58,7 +58,6 @@ class SequenceEffect extends Effect {
           'Parameters infinite and repeatCount cannot be specified '
           'simultaneously',
         ),
-        _effects = effects,
         super(
           _createController(
             effects: effects,
@@ -67,10 +66,8 @@ class SequenceEffect extends Effect {
             repeatCount: repeatCount,
           ),
         ) {
-    addAll(_effects);
+    addAll(effects);
   }
-
-  final List<Effect> _effects;
 
   @override
   void apply(double progress) {}
