@@ -53,7 +53,6 @@ class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
-  int completedCounter = 0;
   String? name;
 
   TestHitbox([this.name]) {
@@ -65,9 +64,6 @@ class TestHitbox extends RectangleHitbox {
     };
     onCollisionEndCallback = (_) {
       endCounter++;
-    };
-    onCollisionsCompletedCallback =() {
-      completedCounter++;
     };
   }
 
@@ -83,7 +79,6 @@ class CompositeTestHitbox extends CompositeHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
-  int completedCounter = 0;
 
   CompositeTestHitbox({super.size, super.children}) {
     onCollisionCallback = (_, __) {
@@ -95,9 +90,6 @@ class CompositeTestHitbox extends CompositeHitbox {
     onCollisionEndCallback = (_) {
       endCounter++;
     };
-    onCollisionsCompletedCallback =() {
-      completedCounter++;
-    };
   }
 }
 
@@ -107,7 +99,6 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
-  int completedCounter = 0;
 
   final bool Function(PositionComponent other)? _onComponentTypeCheck;
 
@@ -177,12 +168,6 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     endCounter++;
-  }
-
-  @override
-  void onCollisionsCompleted() {
-    super.onCollisionsCompleted();
-    completedCounter++;
   }
 
   @override
