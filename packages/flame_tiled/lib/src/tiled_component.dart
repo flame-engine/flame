@@ -193,7 +193,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     }
   }
 
-  /// Returns a list of all the Atlases thare were created for this component.
+  /// Returns a list of all the Atlases that were created for this component.
   ///
   /// This method is useful for debugging purposes as it allows developers to
   /// check how the tilesets were packed into the atlas.
