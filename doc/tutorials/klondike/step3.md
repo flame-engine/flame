@@ -1,4 +1,4 @@
-# Cards
+# 3. Cards
 
 In this chapter we will begin implementing the most visible component in the
 game -- the **Card** component, which corresponds to a single real-life card.
