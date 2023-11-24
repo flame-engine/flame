@@ -463,7 +463,7 @@ in some `addButton()` references, but more on these later.
 The `seed` is a common games-programming technique in any programming environment. Usually it allows
 you to start a Random Number Generator from a known point (called the seed) and give your game
 reproducible behavior when you are in the development and testing stage. Here it is used to
-provide exactly the same deal of the Klondike cards when the player requests that.
+provide exactly the same deal of the Klondike cards when the player requests `Same deal`.
 
 
 ### Introducing the new KlondikeWorld class
@@ -656,6 +656,24 @@ winning the game! There is nothing new in the above code, except that if you tap
 the Stock Pile, the `Card` object receives the tap first and forwards it on to the `stock` object.
 
 
+## A graphics glitch
+
+If you moved multiple cards from one Tableau Pile to another, the internal code of the `TableauPile`
+class would formerly (in Tutorial Step 4) move the cards into place abruptly, as soon as the
+drag-and-drop ended. In the new code (Step 5), drags and drops use essentially the same code as
+before, so it is tempting to get that code to do a multi-card move as a series of animated moves
+each completing with an `acquireCard` call. But this caused some ugly graphics glitches. It
+appears they were due to `acquireCard` also calling the `layoutCards()` method of `TableauPile` and
+instantly re-arranging all the cards in the pile, every time a card was acquired. The problem has
+been solved (with some difficulty as it turned out), by adding a `dropCards` method to
+`TableauPile`, which mimics some of the existing actions while dovetailing some card animations
+in as well.
+
+The lesson to be learned is that it is worth giving some attention to animation and time-dependent
+concerns at Game Design time. When was that? Back in Klondike Tutorial Step 1 Preparation and
+Step 2 Scaffolding.
+
+
 ## Winning the game
 
 You win the game when all cards in all suits, Ace to King, have been moved to the Foundation Piles,
@@ -736,7 +754,7 @@ value, a `klondikeDraw` value (1 or 3) and a `seed` from the previous game. Each
 
 The `letsCelebrate()` method is normally invoked only when the player wins. The functions of the
 other three buttons are to set the `Action` value in KlondikeGame and to set `world` in `FlameGame`
-to refer to a new KlondikeWorld to, thus replacing the current one and leaving the former
+to refer to a new KlondikeWorld, thus replacing the current one and leaving the former
 KlondikeWorld's storage to be disposed of by Garbage Collect. `FlameGame` will continue on to
 trigger KlondikeWorld's `onLoad()` method.
 
