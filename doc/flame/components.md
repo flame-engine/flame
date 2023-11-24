@@ -428,7 +428,7 @@ removing it from the tree. This affects the visibility of the component and all 
 /// Example that implements HasVisibility
 class MyComponent extends PositionComponent with HasVisibility {}
 
-/// Usage of the isVisible property 
+/// Usage of the isVisible property
 final myComponent = MyComponent();
 add(myComponent);
 

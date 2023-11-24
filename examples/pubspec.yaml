@@ -11,19 +11,19 @@ environment:
 
 dependencies:
   dashbook: ^0.1.12
-  flame: ^1.10.0
-  flame_audio: ^2.1.2
-  flame_forge2d: ^0.15.1
-  flame_isolate: ^0.5.0+2
-  flame_lottie: ^0.3.0+2
-  flame_noise: ^0.1.1+7
-  flame_spine: ^0.1.1+4
-  flame_svg: ^1.8.4
-  flame_tiled: ^1.15.0
+  flame: ^1.10.1
+  flame_audio: ^2.1.3
+  flame_forge2d: ^0.16.0
+  flame_isolate: ^0.5.0+3
+  flame_lottie: ^0.3.0+3
+  flame_noise: ^0.1.1+8
+  flame_spine: ^0.1.1+5
+  flame_svg: ^1.8.5
+  flame_tiled: ^1.17.0
   flutter:
     sdk: flutter
   google_fonts: ^4.0.4
-  meta: ^1.8.0
+  meta: ^1.9.1
   padracing: ^1.0.0
   provider: ^6.0.5
   rogue_shooter: ^0.1.0
@@ -32,6 +32,12 @@ dependencies:
 dev_dependencies:
   flame_lint: ^1.1.1
   test: any
+
+dependency_overrides:
+  # https://github.com/EsotericSoftware/spine-runtimes/issues/2420
+  raw_image_provider:
+    git:
+      url: https://github.com/erickzanardo/flutter_raw_image_provider.git
 
 flutter:
   uses-material-design: true

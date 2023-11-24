@@ -134,6 +134,22 @@ void main() {
         );
       });
 
+      test('can ignore tilesets in the packing', () async {
+        await TiledComponent.load(
+          'isometric_plain.tmx',
+          Vector2(128, 74),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+          tsxPackingFilter: (tileset) => tileset.name != 'isometric_plain_2',
+        );
+
+        final atlas = TiledAtlas.atlasMap.values.first;
+        expect(
+          await imageToPng(atlas.atlas!),
+          matchesGoldenFile('goldens/larger_atlas_with_skipped_tileset.png'),
+        );
+      });
+
       test('clearing cache', () async {
         await TiledAtlas.fromTiledMap(
           simpleMap,

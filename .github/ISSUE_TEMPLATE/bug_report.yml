@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
         When reporting a bug, please read this complete template and fill in all the questions in order to get a better response!
- - type: textarea
+  - type: textarea
     id: what-happened
     attributes:
       label: What happened?
@@ -24,17 +24,15 @@ body:
     validations:
       required: true
 
-# Steps to reproduce
-
-- type: textarea
+  - type: textarea
     id: expectation
     attributes:
       label: How can we reproduce this?
-      description: This one is very important, please be very precise in how we can reproduce this bug
+      description: Thougougly explain how to reproduce the bug.
     validations:
       required: false
       
-- type: textarea
+  - type: textarea
     id: expectation
     attributes:
       label: What steps should take to fix this?
@@ -42,7 +40,7 @@ body:
     validations:
       required: false
       
-- type: textarea
+  - type: textarea
     id: expectation
     attributes:
       label: Do have an example of what change you want?
@@ -57,40 +55,30 @@ body:
       description: If you have any debug / error logging, please fill it here within the code block below
       render: shell
 
-
-- type: markdown
+  - type: textarea
     attributes:
-       label: Execute in a terminal and put output into the code block below 
-        value: ```
-Output of: flutter doctor -v
-```
+      label: Execute in a terminal and put output into the code block below
+      value: 'Output of: flutter doctor -v'
 
-# More environment information
-
-- type: markdown
+  - type: textarea
     attributes:
-       label: Create a list of more environment information, like:
-        value: Flame version: 1.0.0
-        value: Platform affected: android, ios, web
-        value: Platform version affected: android 9, ios 13
+      label: 'Affected platforms:'
+      description: 'Android, iOS, Linux, macOS, Windows etc'
+    validations:
+      required: false
 
-# More information
-
-- type: textarea
+  - type: textarea
     id: expectation
     attributes:
       label: What do you expect?
       description: Do you have any other useful information about this bug report? Please write it down here
     validations:
       required: false
-      
 
-- type: checkboxes
+  - type: checkboxes
     id: terms
     attributes:
       label:  Are you interested in working on a PR for this?
       options:
         - label: I want to work on this
           required: false
-
-## Possible helpful information: references to other sites/repositories

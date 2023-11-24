@@ -61,6 +61,7 @@ class RectangleComponent extends PolygonComponent {
     super.paintLayers,
     super.shrinkToBounds,
     super.key,
+    super.children,
   }) : super.relative([
           relation.clone(),
           Vector2(relation.x, -relation.y),
@@ -85,6 +86,7 @@ class RectangleComponent extends PolygonComponent {
     Paint? paint,
     List<Paint>? paintLayers,
     ComponentKey? key,
+    List<Component>? children,
   }) {
     return RectangleComponent(
       position: anchor == Anchor.topLeft
@@ -102,6 +104,7 @@ class RectangleComponent extends PolygonComponent {
       paint: paint,
       paintLayers: paintLayers,
       key: key,
+      children: children,
     );
   }
 

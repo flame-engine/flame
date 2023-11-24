@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/renderable_tile_map.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/services.dart';
@@ -98,6 +99,11 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   /// A custom [atlasMaxX] and [atlasMaxY] can be provided in case you want to
   /// change the max size of [TiledAtlas] that [TiledComponent] creates
   /// internally.
+  ///
+  /// TiledComponent uses Flame's `SpriteBatch` to render the map. Which under
+  /// the hood uses `Canvas.drawAtlas` calls to render the tiles. This behavior
+  /// can be changed by setting `useAtlas` to `false`. This will make the map
+  /// be rendered with `Canvas.drawImageRect` calls instead.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
@@ -108,6 +114,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     bool? ignoreFlip,
     AssetBundle? bundle,
     Images? images,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    Paint Function(double opacity)? layerPaintFactory,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -119,6 +128,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         prefix: prefix,
         bundle: bundle,
         images: images,
+        tsxPackingFilter: tsxPackingFilter,
+        useAtlas: useAtlas,
+        layerPaintFactory: layerPaintFactory,
       ),
       priority: priority,
     );
@@ -179,5 +191,31 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
           mapHeight * tileScaled.y,
         );
     }
+  }
+
+  /// Returns a list of all the Atlases that were created for this component.
+  ///
+  /// This method is useful for debugging purposes as it allows developers to
+  /// check how the tilesets were packed into the atlas.
+  ///
+  /// It returns a record with the Atlas key and its image.
+  List<(String, Image)> atlases() {
+    return tileMap.renderableLayers
+        .whereType<FlameTileLayer>()
+        .where((layer) => layer.tiledAtlas.atlas != null)
+        .map((layer) {
+          final image = layer.tiledAtlas.atlas;
+          final key = layer.tiledAtlas.key;
+          return (key, image!);
+        })
+        .fold<Map<String, (String, Image)>>(
+          {},
+          (previousValue, element) {
+            previousValue.putIfAbsent(element.$1, () => element);
+            return previousValue;
+          },
+        )
+        .values
+        .toList();
   }
 }

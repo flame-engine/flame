@@ -9,7 +9,7 @@ on:
 
 
 env:
-  FLUTTER_MIN_VERSION: '3.13.0'
+  FLUTTER_MIN_VERSION: '3.16.0'
 
 jobs:
   # BEGIN LINTING STAGE
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
+      - uses: bluefireteam/melos-action@v3
       - run: melos run format-check
 
   analyze:
@@ -28,7 +28,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
-      - uses: bluefireteam/melos-action@v2
+      - uses: bluefireteam/melos-action@v3
       - name: "Analyze with lowest supported version"
         uses: invertase/github-action-dart-analyzer@v2.0.0
         with:
@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
+      - uses: bluefireteam/melos-action@v3
       - name: "Analyze with latest stable"
         uses: invertase/github-action-dart-analyzer@v2.0.0
         with:
@@ -60,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
+      - uses: bluefireteam/melos-action@v3
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1
         with:
@@ -78,7 +78,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           cache: true
-      - uses: bluefireteam/melos-action@v2
+      - uses: bluefireteam/melos-action@v3
       - name: Run tests
         run: melos test
   # END TESTING STAGE

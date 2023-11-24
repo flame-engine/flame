@@ -300,6 +300,26 @@ game.add(
 ```
 
 
+## ScalingParticle
+
+Scales the child `Particle` between `1` and `to` during its lifespan.
+
+```dart
+game.add(
+  ParticleSystemComponent(
+    particle: ScalingParticle(
+      lifespan: 2,
+      to: 0,
+      child: CircleParticle(
+        radius: 2.0,
+        paint: Paint()..color = Colors.red,
+      )
+    );
+  ),
+);
+```
+
+
 ## SpriteAnimationParticle
 
 A `Particle` which embeds a `SpriteAnimation`.

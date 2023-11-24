@@ -13,6 +13,16 @@ command:
     branch: main
     # Generates a link to a prefilled GitHub release creation page.
     releaseUrl: true
+  bootstrap:
+    environment:
+      sdk: ">=3.0.0 <4.0.0"
+    dependencies:
+      meta: ^1.9.1
+      vector_math: ^2.1.4
+    dev_dependencies:
+      dartdoc: ^6.3.0
+      mocktail: ^1.0.1
+      test: any
 
 scripts:
   lint:all:
