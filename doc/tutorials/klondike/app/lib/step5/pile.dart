@@ -1,5 +1,3 @@
-import 'package:flame/components.dart';
-
 import 'components/card.dart';
 
 enum MoveMethod { drag, tap }

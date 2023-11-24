@@ -284,7 +284,8 @@ class Card extends PositionComponent
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {
-      if (dropPiles.first.canAcceptCard(this)) { // Found a Pile.
+      if (dropPiles.first.canAcceptCard(this)) {
+        // Found a Pile.
         // Move card(s) gracefully into position on the receiving pile.
         pile!.removeCard(this, MoveMethod.drag);
         if (dropPiles.first is TableauPile) {
