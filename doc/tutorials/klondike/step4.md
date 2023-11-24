@@ -1,4 +1,4 @@
-# Gameplay
+# 4. Gameplay
 
 In this chapter we will be implementing the core of Klondike's gameplay: how the cards move between
 the stock and the waste, the piles and the foundations.
@@ -511,7 +511,7 @@ we will add an extra method to determine the zoom level:
   @override
   void onDragUpdate(DragUpdateEvent event) {
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     position += event.delta / cameraZoom;
@@ -607,7 +607,7 @@ to `false`:
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     position += event.delta / cameraZoom;
@@ -874,8 +874,12 @@ at the end of the `layOutCards()` method:
     height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
 ```
 
-The factor `1.5` here adds a little bit extra space at the bottom of each pile. You can temporarily
-turn the debug mode on to see the hitboxes.
+The factor `1.5` here adds a little bit extra space at the bottom of each pile. The card to be
+dropped should be overlapping the hitbox by a little over half its width and height. If you are
+approaching from below, it would be just overlapping the nearest card (i.e. the one that is fully
+visible). You can temporarily turn the debug mode on to see the hitboxes.
+
+![Illustration of Tableau Pile Hitboxes](../../images/tutorials/klondike-tableau-hitboxes.png)
 
 Ok, let's get to our main topic: how to move a stack of cards at once.
 
@@ -937,7 +941,7 @@ the `onDragUpdate` method:
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     final delta = event.delta / cameraZoom;
