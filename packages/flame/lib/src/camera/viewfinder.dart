@@ -1,9 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/camera/camera_component.dart';
-import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
@@ -18,7 +16,12 @@ import 'package:meta/meta.dart';
 /// If you add children to the [Viewfinder] they will appear like HUDs i.e.
 /// statically in front of the world.
 class Viewfinder extends Component
-    implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
+    implements
+        AnchorProvider,
+        AngleProvider,
+        PositionProvider,
+        ScaleProvider,
+        CoordinateTransform {
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
 
@@ -178,6 +181,16 @@ class Viewfinder extends Component
       final zoomY = viewportSize.y / _visibleGameSize!.y;
       zoom = min(zoomX, zoomY);
     }
+  }
+
+  @override
+  Vector2 parentToLocal(Vector2 point) {
+    return globalToLocal(point);
+  }
+
+  @override
+  Vector2 localToParent(Vector2 point) {
+    return localToGlobal(point);
   }
 
   @override

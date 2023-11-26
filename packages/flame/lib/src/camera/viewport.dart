@@ -1,9 +1,7 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
-import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:meta/meta.dart';
 
@@ -21,7 +19,11 @@ import 'package:meta/meta.dart';
 /// A viewport establishes its own local coordinate system, with the origin at
 /// the top left corner of the viewport's bounding box.
 abstract class Viewport extends Component
-    implements AnchorProvider, PositionProvider, SizeProvider {
+    implements
+        AnchorProvider,
+        PositionProvider,
+        SizeProvider,
+        CoordinateTransform {
   Viewport({super.children});
 
   final Vector2 _size = Vector2.zero();
@@ -146,6 +148,16 @@ abstract class Viewport extends Component
     final x = point.x + position.x - anchor.x * size.x;
     final y = point.y + position.y - anchor.y * size.y;
     return (output?..setValues(x, y)) ?? Vector2(x, y);
+  }
+
+  @override
+  Vector2 parentToLocal(Vector2 point) {
+    return globalToLocal(point);
+  }
+
+  @override
+  Vector2 localToParent(Vector2 point) {
+    return localToGlobal(point);
   }
 
   void transformCanvas(Canvas canvas) {
