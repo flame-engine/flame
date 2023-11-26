@@ -14,8 +14,12 @@ class OverlappingTapCallbacksExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(TapCallbacksSquare(position: Vector2(100, 100)));
-    add(TapCallbacksSquare(
-        position: Vector2(150, 150), continuePropagation: true));
+    add(
+      TapCallbacksSquare(
+        position: Vector2(150, 150),
+        continuePropagation: true,
+      ),
+    );
     add(TapCallbacksSquare(position: Vector2(100, 200)));
   }
 }

@@ -39,12 +39,7 @@ class DraggableEmber extends Ember with DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (findGame() is! DragCallbacksExample) {
-      event.continuePropagation = true;
-      return;
-    }
-
-    position.add(event.delta);
-    event.continuePropagation = false;
+    event.continuePropagation = true;
+    return;
   }
 }
