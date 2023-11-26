@@ -13,8 +13,8 @@ class TapCallbacksExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    add(TappableSquare()..anchor = Anchor.center);
-    add(TappableSquare()..y = 350);
+    world.add(TappableSquare()..anchor = Anchor.center);
+    world.add(TappableSquare()..y = 350);
   }
 }
 
