@@ -119,6 +119,34 @@ hitbox without triggering a collision. If you want to set your hitboxes to be so
 other way around. If there are no intersections with the edges on a solid hitbox the center
 position is instead returned.
 
+### Collision order
+
+If a `PositionComponent` collides with more than one other object within a given time step, then
+the `onCollision` callbacks will be called in an essentially random order.  In some cases this can
+be a problem, such as in a bouncing ball game where the trajectory of the ball can differ depending
+on which other object was hit first.  To help resolve this the `collisionsCompleted` listener can be
+used - this triggers at the end of the collision detection process.
+
+An example of how this might be used is to add a local variable in your `PositionComponent` to save
+the other components with which this one is colliding:
+`List<PositionComponent> collisionComponents = [];`.  The `onCollision` callback is then used to
+save all the other `PositionComponent`s to this list:
+```
+@override
+void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  collisionComponents.add(other);
+  super.onCollision(intersectionPoints, other);
+}
+
+```
+Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a routine
+which will resolve how the collisions should be dealt with:
+```
+(game as HasCollisionDetection).collisionDetection.collisionsCompleted.addListener(() {
+  resolveCollisions();
+});
+```
+The list `collisionComponents` would need to be cleared in each call to `update`.
 
 ## ShapeHitbox
 

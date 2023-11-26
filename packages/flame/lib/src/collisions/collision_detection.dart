@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 /// If the [HasCollisionDetection] mixin is added to the game, [run] is called
 /// every tick to check for collisions.
 abstract class CollisionDetection<T extends Hitbox<T>,
-    B extends Broadphase<T>> with ChangeNotifier {
+    B extends Broadphase<T>> {
   final B broadphase;
 
   List<T> get items => broadphase.items;
   final _lastPotentials = <CollisionProspect<T>>[];
-  final collisionsCompleted = ChangeNotifier();
+  final collisionsCompleted = CollisionDetectionCompletionNotifier();
 
   CollisionDetection({required this.broadphase});
 
@@ -165,4 +165,9 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
+}
+
+class CollisionDetectionCompletionNotifier extends ChangeNotifier {
+  @override
+  void notifyListeners() => super.notifyListeners();
 }
