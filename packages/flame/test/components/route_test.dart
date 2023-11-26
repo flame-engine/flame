@@ -434,11 +434,11 @@ void main() {
       router.pushNamed('new');
       await game.ready();
       expect(
-        game.componentsAtPoint(Vector2(50, 50)).contains(newComponent),
+        game.componentsAtVector2(Vector2(50, 50)).contains(newComponent),
         isTrue,
       );
       expect(
-        game.componentsAtPoint(Vector2(50, 50)).contains(initialComponent),
+        game.componentsAtVector2(Vector2(50, 50)).contains(initialComponent),
         isFalse,
       );
     });
@@ -463,11 +463,11 @@ void main() {
       router.pushNamed('new');
       await game.ready();
       expect(
-        game.componentsAtPoint(Vector2(50, 50)).contains(newComponent),
+        game.componentsAtVector2(Vector2(50, 50)).contains(newComponent),
         isTrue,
       );
       expect(
-        game.componentsAtPoint(Vector2(50, 50)).contains(initialComponent),
+        game.componentsAtVector2(Vector2(50, 50)).contains(initialComponent),
         isTrue,
       );
     });

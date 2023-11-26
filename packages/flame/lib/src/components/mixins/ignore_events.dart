@@ -3,7 +3,7 @@ import 'package:flame/src/components/core/component.dart';
 /// This mixin allows a component and all it's descendants to ignore events.
 ///
 /// Do note that this will also ignore the component and its descendants in
-/// calls to [Component.componentsAtPoint].
+/// calls to [Component.componentsAtLocation].
 ///
 /// If you want to dynamically use this mixin, you can add it and set
 /// [ignoreEvents] true or false at runtime.

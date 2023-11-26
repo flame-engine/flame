@@ -62,7 +62,7 @@ import 'package:meta/meta.dart';
 /// [update]d, and then all the components will be [render]ed.
 ///
 /// You may also need to override [containsLocalPoint] if the component needs to
-/// respond to tap events or similar; the [componentsAtPoint] may also need to
+/// respond to tap events or similar; the [componentsAtLocation] may also need to
 /// be overridden if you have reimplemented [renderTree].
 class Component {
   Component({
@@ -700,31 +700,53 @@ class Component {
   /// If your component overrides [renderTree], then it almost certainly needs
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
-  Iterable<Component> componentsAtPoint(
+  Iterable<Component> componentsAtVector2(
     Vector2 point, [
     List<Vector2>? nestedPoints,
-  ]) sync* {
-    nestedPoints?.add(point);
+  ]) {
+    return componentsAtLocation<Vector2>(
+      point,
+      nestedPoints,
+      (transform, point) => transform.parentToLocal(point),
+      (component, point) => component.containsLocalPoint(point),
+    );
+  }
+
+  Iterable<Component> componentsAtLocation<T>(
+    T locationContext,
+    List<T>? nestedContexts,
+    T? Function(CoordinateTransform, T) transformContext,
+    bool Function(Component, T) checkContains,
+  ) sync* {
+    nestedContexts?.add(locationContext);
     if (_children != null) {
       for (final child in _children!.reversed()) {
         if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
-        Vector2? childPoint = point;
+        T? childPoint = locationContext;
         if (child is CoordinateTransform) {
-          childPoint = (child as CoordinateTransform).parentToLocal(point);
+          childPoint = transformContext(
+            child as CoordinateTransform,
+            locationContext,
+          );
         }
         if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint, nestedPoints);
+          yield* child.componentsAtLocation(
+            childPoint,
+            nestedContexts,
+            transformContext,
+            checkContains,
+          );
         }
       }
     }
     final shouldIgnoreEvents =
         this is IgnoreEvents && (this as IgnoreEvents).ignoreEvents;
-    if (containsLocalPoint(point) && !shouldIgnoreEvents) {
+    if (checkContains(this, locationContext) && !shouldIgnoreEvents) {
       yield this;
     }
-    nestedPoints?.removeLast();
+    nestedContexts?.removeLast();
   }
 
   //#endregion

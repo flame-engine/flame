@@ -255,7 +255,7 @@ class Card extends PositionComponent with DragCallbacks {
     }
     _isDragging = false;
     final dropPiles = parent!
-        .componentsAtPoint(position + size / 2)
+        .componentsAtVector2(position + size / 2)
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {

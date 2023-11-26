@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
@@ -226,19 +227,43 @@ class CameraComponent extends Component {
   final _viewportPoint = Vector2.zero();
 
   @override
-  Iterable<Component> componentsAtPoint(
-    Vector2 point, [
-    List<Vector2>? nestedPoints,
-  ]) sync* {
-    final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
-    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
+  Iterable<Component> componentsAtLocation<T>(
+    T locationContext,
+    List<T>? nestedContexts,
+    T? Function(CoordinateTransform, T) transformContext,
+    bool Function(Component, T) checkContains,
+  ) sync* {
+    final viewportPoint = transformContext(viewport, locationContext);
+    if (viewportPoint == null) {
+      return;
+    }
+
+    yield* viewport.componentsAtLocation(
+      viewportPoint,
+      nestedContexts,
+      transformContext,
+      checkContains,
+    );
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       if (viewport.containsLocalPoint(_viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
-        yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
-        yield* world!.componentsAtPoint(worldPoint, nestedPoints);
+        final worldPoint = transformContext(viewfinder, viewportPoint);
+        if (worldPoint == null) {
+          return;
+        }
+        yield* viewfinder.componentsAtLocation(
+          worldPoint,
+          nestedContexts,
+          transformContext,
+          checkContains,
+        );
+        yield* world!.componentsAtLocation(
+          worldPoint,
+          nestedContexts,
+          transformContext,
+          checkContains,
+        );
         currentCameras.removeLast();
       }
     }
