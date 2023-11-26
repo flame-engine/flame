@@ -2,7 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/input/advanced_button_example.dart';
 import 'package:examples/stories/input/double_tap_callbacks_example.dart';
-import 'package:examples/stories/input/draggables_example.dart';
+import 'package:examples/stories/input/drag_callbacks_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
 import 'package:examples/stories/input/hardware_keyboard_example.dart';
 import 'package:examples/stories/input/hover_callbacks_example.dart';
@@ -14,7 +14,7 @@ import 'package:examples/stories/input/mouse_cursor_example.dart';
 import 'package:examples/stories/input/mouse_movement_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
 import 'package:examples/stories/input/multitap_example.dart';
-import 'package:examples/stories/input/overlapping_tappables_example.dart';
+import 'package:examples/stories/input/overlapping_tap_callbacks_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
 import 'package:examples/stories/input/tap_callbacks_example.dart';
 import 'package:flame/game.dart';
@@ -29,16 +29,16 @@ void addInputStories(Dashbook dashbook) {
       info: TapCallbacksExample.description,
     )
     ..add(
-      'Draggables',
+      'DragCallbacks',
       (context) {
         return GameWidget(
-          game: DraggablesExample(
+          game: DragCallbacksExample(
             zoom: context.listProperty('zoom', 1, [0.5, 1, 1.5]),
           ),
         );
       },
-      codeLink: baseLink('input/draggables_example.dart'),
-      info: DraggablesExample.description,
+      codeLink: baseLink('input/drag_callbacks_example.dart'),
+      info: DragCallbacksExample.description,
     )
     ..add(
       'Double Tap (Component)',
@@ -47,7 +47,7 @@ void addInputStories(Dashbook dashbook) {
           game: DoubleTapCallbacksExample(),
         );
       },
-      codeLink: baseLink('input/draggables_example.dart'),
+      codeLink: baseLink('input/double_tap_callbacks_example.dart'),
       info: DoubleTapCallbacksExample.description,
     )
     ..add(
@@ -108,10 +108,10 @@ void addInputStories(Dashbook dashbook) {
       info: MultitapAdvancedExample.description,
     )
     ..add(
-      'Overlapping Tappables',
-      (_) => GameWidget(game: OverlappingTappablesExample()),
-      codeLink: baseLink('input/overlapping_tappables_example.dart'),
-      info: OverlappingTappablesExample.description,
+      'Overlapping TapCallbacks',
+      (_) => GameWidget(game: OverlappingTapCallbacksExample()),
+      codeLink: baseLink('input/overlapping_tap_callbacks_example.dart'),
+      info: OverlappingTapCallbacksExample.description,
     )
     ..add(
       'Gesture Hitboxes',
