@@ -241,8 +241,7 @@ class Card extends PositionComponent with DragCallbacks {
     if (!_isDragging) {
       return;
     }
-    final cameraZoom = findGame()!.camera.viewfinder.zoom;
-    final delta = event.localDelta / cameraZoom;
+    final delta = event.localDelta;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
   }

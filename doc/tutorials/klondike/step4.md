@@ -502,19 +502,13 @@ the card, so that it is rendered above all others. Without this, the card would 
 During the drag, the `onDragUpdate` event will be called continuously. Using this callback we will
 be updating the position of the card so that it follows the movement of the finger (or the mouse).
 The `event` object passed to this callback contains the most recent coordinate of the point of
-touch, and also the `delta` property -- which is the displacement vector since the previous call of
-`onDragUpdate`. The only problem is that this delta is measured in screen pixels, whereas we want
-it to be in game world units. The conversion between the two is given by the camera zoom level, so
-we will add an extra method to determine the zoom level:
+touch, and also the `localDelta` property -- which is the displacement vector since the previous 
+call of `onDragUpdate`, considering the camera zoom.
 
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    final cameraZoom = (findGame()! as FlameGame)
-        .camera
-        .viewfinder
-        .zoom;
-    position += event.delta / cameraZoom;
+    position += event.delta;
   }
 ```
 
@@ -606,11 +600,7 @@ to `false`:
     if (!isDragged) {
       return;
     }
-    final cameraZoom = (findGame()! as FlameGame)
-        .camera
-        .viewfinder
-        .zoom;
-    position += event.delta / cameraZoom;
+    position += event.delta;
   }
 
   @override
@@ -940,11 +930,7 @@ the `onDragUpdate` method:
     if (!isDragged) {
       return;
     }
-    final cameraZoom = (findGame()! as FlameGame)
-        .camera
-        .viewfinder
-        .zoom;
-    final delta = event.delta / cameraZoom;
+    final delta = event.delta;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
   }
