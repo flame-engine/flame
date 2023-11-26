@@ -373,8 +373,6 @@ void main() {
       );
       await tester.pump();
       await tester.pump();
-      await tester.pump();
-      await tester.pump();
 
       final canvasSize = game.canvasSize;
 
