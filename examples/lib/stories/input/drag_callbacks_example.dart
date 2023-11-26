@@ -3,14 +3,14 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart' show Colors;
 
-class DraggablesExample extends FlameGame {
+class DragCallbacksExample extends FlameGame {
   static const String description = '''
     In this example we show you can use the `DragCallbacks` mixin on
     `PositionComponent`s. Drag around the Embers and see their position
     changing.
   ''';
 
-  DraggablesExample({required this.zoom});
+  DragCallbacksExample({required this.zoom});
 
   final double zoom;
   late final DraggableEmber square;
@@ -34,14 +34,14 @@ class DraggableEmber extends Ember with DragCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    debugColor = isDragged && findGame() is DraggablesExample
+    debugColor = isDragged && findGame() is DragCallbacksExample
         ? Colors.greenAccent
         : Colors.purple;
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (findGame() is! DraggablesExample) {
+    if (findGame() is! DragCallbacksExample) {
       event.continuePropagation = true;
       return;
     }
