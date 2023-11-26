@@ -2,12 +2,17 @@ import 'package:flame/components.dart';
 import 'package:flame/src/events/messages/location_context_event.dart';
 import 'package:flame/src/game/game.dart';
 
+/// Location context for the Displacement Event.
+///
+/// This represents a user event that has a start and end locations, as the
+/// ones that are represented by a [DisplacementEvent].
 typedef DisplacementContext = ({
   Vector2 start,
   Vector2 end,
 });
 
 extension DisplacementContextDelta on DisplacementContext {
+  /// Displacement delta
   Vector2 get delta => end - start;
 }
 
