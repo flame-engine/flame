@@ -1,24 +1,25 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/messages/event.dart';
+import 'package:flame/src/events/messages/location_context_event.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:meta/meta.dart';
 
-class DisplacementContext {
-  final Vector2 start;
-  final Vector2 end;
+typedef DisplacementContext = ({
+  Vector2 start,
+  Vector2 end,
+});
 
-  DisplacementContext({
-    required this.start,
-    required this.end,
-  });
+extension DisplacementContextDelta on DisplacementContext {
+  Vector2 get delta => end - start;
 }
 
-/// Base class for events that originate at some point on the screen. These
-/// include: tap events, drag events, scale events, etc.
+/// Base class for events that contain two points on the screen, representing
+/// some sort of movement (from a "start" to and "end") and having a "delta".
+/// These include: drag events and (in the future) pointer move events.
 ///
-/// This class includes properties that describe the position where the event
-/// has occurred.
-abstract class DisplacementEvent extends Event {
+/// This class includes properties that describe both positions where the event
+/// has occurred (start and end) and the delta (i.e. displacement) represented
+/// by the event.
+abstract class DisplacementEvent
+    extends LocationContextEvent<DisplacementContext> {
   DisplacementEvent(
     this._game, {
     required this.deviceStartPosition,
@@ -26,42 +27,97 @@ abstract class DisplacementEvent extends Event {
   });
   final Game _game;
 
-  late final Vector2 canvasPosition = canvasStartPosition;
+  @Deprecated(
+    'use deviceStartPosition instead; will be removed in version 1.12.0',
+  )
   late final Vector2 devicePosition = deviceStartPosition;
+
+  @Deprecated(
+    'use canvasStartPosition instead; will be removed in version 1.12.0',
+  )
+  late final Vector2 canvasPosition = canvasStartPosition;
+
+  @Deprecated(
+    'use localStartPosition instead; will be removed in version 1.12.0',
+  )
   Vector2 get localPosition => localStartPosition;
 
+  @Deprecated('use localDelta instead; will be removed in version 1.12.0')
+  Vector2 get delta => localDelta;
+
+  /// Event start position in the coordinate space of the device -- either the
+  /// phone, or the browser window, or the app.
+  ///
+  /// If the game runs in a full-screen mode, then this would be equal to the
+  /// [canvasStartPosition]. Otherwise, the [deviceStartPosition] is the
+  /// Flutter-level global position.
+  final Vector2 deviceStartPosition;
+
+  /// Event start position in the coordinate space of the game widget, i.e.
+  /// relative to the game canvas.
+  ///
+  /// This could be considered the Flame-level global position.
   late final Vector2 canvasStartPosition =
       _game.convertGlobalToLocalCoordinate(deviceStartPosition);
 
-  final Vector2 deviceStartPosition;
-
+  /// Event start position in the local coordinate space of the current
+  /// component.
+  ///
+  /// This property is only accessible when the event is being propagated to
+  /// the components via [deliverAtPoint]. It is an error to try to read this
+  /// property at other times.
   Vector2 get localStartPosition => renderingTrace.last.start;
 
+  /// Event end position in the coordinate space of the device -- either the
+  /// phone, or the browser window, or the app.
+  ///
+  /// If the game runs in a full-screen mode, then this would be equal to the
+  /// [canvasEndPosition]. Otherwise, the [deviceEndPosition] is the
+  /// Flutter-level global position.
+  final Vector2 deviceEndPosition;
+
+  /// Event end position in the coordinate space of the game widget, i.e.
+  /// relative to the game canvas.
+  ///
+  /// This could be considered the Flame-level global position.
   late final Vector2 canvasEndPosition =
       _game.convertGlobalToLocalCoordinate(deviceEndPosition);
 
-  final Vector2 deviceEndPosition;
-
+  /// Event end position in the local coordinate space of the current
+  /// component.
+  ///
+  /// This property is only accessible when the event is being propagated to
+  /// the components via [deliverAtPoint]. It is an error to try to read this
+  /// property at other times.
   Vector2 get localEndPosition => renderingTrace.last.end;
 
-  final List<DisplacementContext> renderingTrace = [];
+  /// Event delta in the coordinate space of the device -- either the
+  /// phone, or the browser window, or the app.
+  ///
+  /// If the game runs in a full-screen mode, then this would be equal to the
+  /// [canvasDelta]. Otherwise, the [deviceDelta] is the
+  /// Flutter-level global position.
+  late final Vector2 deviceDelta = deviceEndPosition - deviceStartPosition;
 
-  DisplacementContext? get parentContext {
-    if (renderingTrace.length >= 2) {
-      return renderingTrace[renderingTrace.length - 2];
-    } else {
-      return null;
-    }
-  }
+  /// Event delta in the coordinate space of the game widget, i.e.
+  /// relative to the game canvas.
+  ///
+  /// This could be considered the Flame-level global position.
+  late final Vector2 canvasDelta = canvasEndPosition - canvasStartPosition;
 
-  @internal
-  void deliverAtPoint<T extends Component>({
+  /// Event delta in the local coordinate space of the current component.
+  ///
+  /// This property is only accessible when the event is being propagated to
+  /// the components via [deliverAtPoint]. It is an error to try to read this
+  /// property at other times.
+  Vector2 get localDelta => localEndPosition - localStartPosition;
+
+  @override
+  Iterable<Component> collectApplicableChildren({
     required Component rootComponent,
-    required void Function(T component) eventHandler,
-    bool deliverToAll = false,
   }) {
-    final applicableChildren = rootComponent.componentsAtLocation(
-      DisplacementContext(
+    return rootComponent.componentsAtLocation(
+      (
         start: canvasStartPosition,
         end: canvasEndPosition,
       ),
@@ -76,20 +132,15 @@ abstract class DisplacementEvent extends Event {
         if (transformedStart == null || transformedEnd == null) {
           return null;
         }
-        return DisplacementContext(
+        return (
           start: transformedStart,
           end: transformedEnd,
         );
       },
+      // we only trigger the drag start if the component check passes, but
+      // as the user drags the cursor it could end up outside the component
+      // bounds; we don't want the event to be lost, so we bypass the check
       (component, context) => true,
     );
-    for (final child in applicableChildren.whereType<T>()) {
-      continuePropagation = deliverToAll;
-      eventHandler(child);
-      if (!continuePropagation) {
-        CameraComponent.currentCameras.clear();
-        break;
-      }
-    }
   }
 }

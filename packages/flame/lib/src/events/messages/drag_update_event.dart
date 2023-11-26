@@ -14,24 +14,12 @@ class DragUpdateEvent extends DisplacementEvent {
   final int pointerId;
   final Duration timestamp;
 
-  @Deprecated('use localDelta instead; will be removed in version 1.12.0')
-  Vector2 get delta => localDelta;
-
-  Vector2 get localDelta {
-    final start = localStartPosition;
-    final end = localEndPosition;
-    if (end.isNaN || start.isNaN) {
-      print('s $start , e $end');
-      return Vector2.zero();
-    }
-
-    return end - start;
-  }
-  // add other deltas
-
   @override
-  String toString() => 'DragUpdateEvent(devicePosition: $deviceStartPosition, '
+  String toString() => 'DragUpdateEvent('
+      'devicePosition: $deviceStartPosition, '
       'canvasPosition: $canvasStartPosition, '
       'delta: $localDelta, '
-      'pointerId: $pointerId, timestamp: $timestamp)';
+      'pointerId: $pointerId, '
+      'timestamp: $timestamp'
+      ')';
 }
