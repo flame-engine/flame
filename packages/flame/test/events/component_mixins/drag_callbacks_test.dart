@@ -262,7 +262,7 @@ void main() {
     );
 
     testWidgets(
-      'drag event can move outside the component bounds',
+      'drag event can move outside the component bounds and still fire',
       (tester) async {
         final points = <Vector2>[];
         final game = FlameGame(
@@ -270,7 +270,7 @@ void main() {
             _DragWithCallbacksComponent(
               size: Vector2.all(95),
               position: Vector2.all(5),
-              onDragUpdate: (e) => points.add(e.localPosition),
+              onDragUpdate: (e) => points.add(e.localStartPosition),
             ),
           ],
         );
@@ -289,12 +289,8 @@ void main() {
         expect(points.length, 42);
         expect(points.first, Vector2(75, 75));
         expect(
-          points.skip(1).take(20),
-          List.generate(20, (i) => Vector2(75.0, 75.0 + i)),
-        );
-        expect(
-          points.skip(21),
-          everyElement(predicate((Vector2 v) => v.isNaN)),
+          points.skip(1),
+          List.generate(41, (i) => Vector2(75.0, 75.0 + i)),
         );
       },
     );

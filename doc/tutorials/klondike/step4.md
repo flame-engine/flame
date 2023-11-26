@@ -627,7 +627,7 @@ so let's work on that.
 
 At this point what we want to do is to figure out where the dragged card is being dropped. More
 specifically, we want to know into which *pile* it is being dropped. This can be achieved by using
-the `componentsAtPoint()` API, which allows you to query which components are located at a given
+the `componentsAtVector2()` API, which allows you to query which components are located at a given
 position on the screen.
 
 Thus, my first attempt at revising the `onDragEnd` callback looks like this:
@@ -640,7 +640,7 @@ Thus, my first attempt at revising the `onDragEnd` callback looks like this:
     }
     super.onDragEnd(event);
     final dropPiles = parent!
-        .componentsAtPoint(position + size / 2)
+        .componentsAtVector2(position + size / 2)
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {
@@ -810,7 +810,7 @@ Now, putting this all together, the `Card`'s `onDragEnd` method will look like t
     }
     super.onDragEnd(event);
     final dropPiles = parent!
-        .componentsAtPoint(position + size / 2)
+        .componentsAtVector2(position + size / 2)
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {
@@ -976,7 +976,7 @@ attached cards into the pile, and the same when it comes to returning the cards 
     }
     super.onDragEnd(event);
     final dropPiles = parent!
-        .componentsAtPoint(position + size / 2)
+        .componentsAtVector2(position + size / 2)
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {

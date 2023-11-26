@@ -1125,7 +1125,7 @@ void main() {
       );
     });
 
-    group('componentsAtPoint()', () {
+    group('componentsAtVector2()', () {
       testWithFlameGame('nested components', (game) async {
         final world = game.world;
         final componentA = PositionComponent()

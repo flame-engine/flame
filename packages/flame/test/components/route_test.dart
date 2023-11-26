@@ -415,7 +415,7 @@ void main() {
       goldenFile: '../_goldens/route_decorator_removed.png',
     );
 
-    testWithFlameGame('componentsAtPoint for opaque route', (game) async {
+    testWithFlameGame('componentsAtVector2 for opaque route', (game) async {
       final initialComponent = PositionComponent(size: Vector2.all(100));
       final newComponent = PositionComponent(size: Vector2.all(100));
       final router = RouterComponent(
@@ -443,34 +443,37 @@ void main() {
       );
     });
 
-    testWithFlameGame('componentsAtPoint for transparent route', (game) async {
-      final initialComponent = PositionComponent(size: Vector2.all(100));
-      final newComponent = PositionComponent(size: Vector2.all(100));
-      final router = RouterComponent(
-        initialRoute: 'initial',
-        routes: {
-          'initial': Route(
-            () => initialComponent,
-          ),
-          'new': Route(
-            () => newComponent,
-            transparent: true,
-          ),
-        },
-      )..addToParent(game);
-      await game.ready();
+    testWithFlameGame(
+      'componentsAtVector2 for transparent route',
+      (game) async {
+        final initialComponent = PositionComponent(size: Vector2.all(100));
+        final newComponent = PositionComponent(size: Vector2.all(100));
+        final router = RouterComponent(
+          initialRoute: 'initial',
+          routes: {
+            'initial': Route(
+              () => initialComponent,
+            ),
+            'new': Route(
+              () => newComponent,
+              transparent: true,
+            ),
+          },
+        )..addToParent(game);
+        await game.ready();
 
-      router.pushNamed('new');
-      await game.ready();
-      expect(
-        game.componentsAtVector2(Vector2(50, 50)).contains(newComponent),
-        isTrue,
-      );
-      expect(
-        game.componentsAtVector2(Vector2(50, 50)).contains(initialComponent),
-        isTrue,
-      );
-    });
+        router.pushNamed('new');
+        await game.ready();
+        expect(
+          game.componentsAtVector2(Vector2(50, 50)).contains(newComponent),
+          isTrue,
+        );
+        expect(
+          game.componentsAtVector2(Vector2(50, 50)).contains(initialComponent),
+          isTrue,
+        );
+      },
+    );
   });
 }
 

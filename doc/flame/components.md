@@ -334,7 +334,7 @@ void update(double dt) {
 
 ### Querying components at a specific point on the screen
 
-The method `componentsAtPoint()` allows you to check which components were rendered at some point
+The method `componentsAtVector2()` allows you to check which components were rendered at some point
 on the screen. The returned value is an iterable of components, but you can also obtain the
 coordinates of the initial point in each component's local coordinate space by providing a writable
 `List<Vector2>` as a second parameter.
@@ -347,11 +347,11 @@ This method can only return components that implement the method `containsLocalP
 implementation. However, if you're defining a custom class that derives from `Component`, you'd have
 to implement the `containsLocalPoint()` method yourself.
 
-Here is an example of how `componentsAtPoint()` can be used:
+Here is an example of how `componentsAtVector2()` can be used:
 
 ```dart
 void onDragUpdate(DragUpdateInfo info) {
-  game.componentsAtPoint(info.widget).forEach((component) {
+  game.componentsAtVector2(info.widget).forEach((component) {
     if (component is DropTarget) {
       component.highlight();
     }

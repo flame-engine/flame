@@ -62,8 +62,8 @@ import 'package:meta/meta.dart';
 /// [update]d, and then all the components will be [render]ed.
 ///
 /// You may also need to override [containsLocalPoint] if the component needs to
-/// respond to tap events or similar; the [componentsAtLocation] may also need to
-/// be overridden if you have reimplemented [renderTree].
+/// respond to tap events or similar; the [componentsAtLocation] may also need
+/// to be overridden if you have reimplemented [renderTree].
 class Component {
   Component({
     Iterable<Component>? children,
