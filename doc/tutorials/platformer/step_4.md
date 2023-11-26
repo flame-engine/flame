@@ -131,8 +131,8 @@ class WaterEnemy extends SpriteAnimationComponent
       ),
     );
     position = Vector2(
-      (gridPosition.x * size.x) + xOffset + (size.x / 2),
-      game.size.y - (gridPosition.y * size.y) - (size.y / 2),
+      (gridPosition.x * size.x) + xOffset,
+      game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
@@ -165,9 +165,7 @@ the Platform. The only difference will be instead of the `SizeEffect`, we are go
 docs](../../flame/effects.md#sizeeffectby).
 
 In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely. It
-will move our enemy to the left, 128 pixels (-2 x image width). You may have noticed that in the
-constructor, I set `Anchor` to `center`. This was done just for the sake of making the calculations
-easier but could have been left as `bottomLeft`.
+will move our enemy to the left, 128 pixels (-2 x image width).
 
 Don't forget to add the water enemy to your `lib/ember_quest.dart` file by doing:
 
