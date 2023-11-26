@@ -4,22 +4,31 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class HoverCallbacksExample extends FlameGame with TapCallbacks {
+class HoverCallbacksExample extends FlameGame {
   static const String description = '''
     This example shows how to use `HoverCallbacks`s.\n\n
     Add more squares by clicking and hover them to change their color.
   ''';
 
+  HoverCallbacksExample() : super(world: HoverCallbacksWorld());
+
   @override
   Future<void> onLoad() async {
     camera.viewfinder.anchor = Anchor.topLeft;
-    world.add(HoverSquare(Vector2(200, 500)));
-    world.add(HoverSquare(Vector2(700, 300)));
+    camera.viewfinder.zoom = 1.5;
+  }
+}
+
+class HoverCallbacksWorld extends World with TapCallbacks {
+  @override
+  Future<void> onLoad() async {
+    add(HoverSquare(Vector2(200, 500)));
+    add(HoverSquare(Vector2(700, 300)));
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    world.add(HoverSquare(event.localPosition));
+    add(HoverSquare(event.localPosition));
   }
 }
 
