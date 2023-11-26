@@ -4,7 +4,6 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
     as intersection_system;
-import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 /// A [ShapeHitbox] turns a [ShapeComponent] into a [Hitbox].
@@ -23,9 +22,6 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
 
   @override
   CollisionType get collisionType => collisionTypeNotifier.value;
-
-  ChangeNotifier? get collisionsCompleted =>
-    _collisionDetection?.collisionsCompleted;
 
   /// Whether the hitbox is allowed to collide with another hitbox that is
   /// added to the same parent.
