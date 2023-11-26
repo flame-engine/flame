@@ -34,9 +34,7 @@ class DraggableEmber extends Ember with DragCallbacks {
   @override
   void update(double dt) {
     super.update(dt);
-    debugColor = isDragged && findGame() is DragCallbacksExample
-        ? Colors.greenAccent
-        : Colors.purple;
+    debugColor = isDragged ? Colors.greenAccent : Colors.purple;
   }
 
   @override
