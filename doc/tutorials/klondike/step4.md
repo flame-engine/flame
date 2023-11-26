@@ -502,7 +502,7 @@ the card, so that it is rendered above all others. Without this, the card would 
 During the drag, the `onDragUpdate` event will be called continuously. Using this callback we will
 be updating the position of the card so that it follows the movement of the finger (or the mouse).
 The `event` object passed to this callback contains the most recent coordinate of the point of
-touch, and also the `localDelta` property -- which is the displacement vector since the previous 
+touch, and also the `localDelta` property -- which is the displacement vector since the previous
 call of `onDragUpdate`, considering the camera zoom.
 
 ```dart
