@@ -169,7 +169,22 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 
 /// A most basic override of the ChangeNotifier class, created to ensure
 /// that CollisionDetection doesn't need to mixing ChangeNotifier.
-class CollisionDetectionCompletionNotifier extends ChangeNotifier {
+class CollisionDetectionCompletionNotifier implements Listenable {
+  final List<VoidCallback> _listenFunctions = [];
+
   @override
-  void notifyListeners() => super.notifyListeners();
+  void addListener(VoidCallback listener) {
+    _listenFunctions.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _listenFunctions.remove(listener);
+  }
+
+  void notifyListeners() {
+    for (final callback in _listenFunctions) {
+      callback();
+    }
+  }
 }
