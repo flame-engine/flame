@@ -33,12 +33,6 @@ dev_dependencies:
   flame_lint: ^1.1.1
   test: any
 
-dependency_overrides:
-  # https://github.com/EsotericSoftware/spine-runtimes/issues/2420
-  raw_image_provider:
-    git:
-      url: https://github.com/erickzanardo/flutter_raw_image_provider.git
-
 flutter:
   uses-material-design: true
 
