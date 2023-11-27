@@ -541,7 +541,7 @@ final effect = ColorEffect(
 );
 ```
 
-The `opacityfrom` and `opacityTo` arguments will determine "how much" of the color that will be
+The `opacityFrom` and `opacityTo` arguments will determine "how much" of the color that will be
 applied to the component. In this example the effect will start with 20% and will go up to 80%.
 
 **Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this

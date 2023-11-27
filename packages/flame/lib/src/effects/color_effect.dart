@@ -23,8 +23,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     double opacityTo = 1,
     this.paintId,
     void Function()? onComplete,
-  })  :
-   assert(
+  })  : assert(
           opacityfrom >= 0 &&
               opacityfrom <= 1 &&
               opacityTo >= 0 &&
