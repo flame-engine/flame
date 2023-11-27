@@ -536,7 +536,7 @@ Usage example:
 final effect = ColorEffect(
   const Color(0xFF00FF00),
   EffectController(duration: 1.5),
-  opacityfrom = 0.2,
+  opacityFrom = 0.2,
   opacityTo: 0.8,
 );
 ```
