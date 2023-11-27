@@ -535,13 +535,14 @@ Usage example:
 ```dart
 final effect = ColorEffect(
   const Color(0xFF00FF00),
-  const Offset(0.0, 0.8),
   EffectController(duration: 1.5),
+  opacityfrom = 0.2,
+  opacityTo: 0.8,
 );
 ```
 
-The `Offset` argument will determine "how much" of the color that will be applied to the component,
-in this example the effect will start with 0% and will go up to 80%.
+The `opacityfrom` and `opacityTo` arguments will determine "how much" of the color that will be
+applied to the component. In this example the effect will start with 20% and will go up to 80%.
 
 **Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only

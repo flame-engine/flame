@@ -18,11 +18,12 @@ class ColorEffect extends ComponentEffect<HasPaint> {
 
   ColorEffect(
     this.color,
-    Offset offset,
     EffectController controller, {
+    double opacityfrom = 0,
+    double opacityTo = 1,
     this.paintId,
     void Function()? onComplete,
-  })  : _tween = Tween(begin: offset.dx, end: offset.dy),
+  })  : _tween = Tween(begin: opacityfrom, end: opacityTo),
         super(controller, onComplete: onComplete);
 
   @override
