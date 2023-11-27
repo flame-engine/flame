@@ -19,18 +19,18 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   ColorEffect(
     this.color,
     EffectController controller, {
-    double opacityfrom = 0,
+    double opacityFrom = 0,
     double opacityTo = 1,
     this.paintId,
     void Function()? onComplete,
   })  : assert(
-          opacityfrom >= 0 &&
-              opacityfrom <= 1 &&
+          opacityFrom >= 0 &&
+              opacityFrom <= 1 &&
               opacityTo >= 0 &&
               opacityTo <= 1,
           'Opacity value should be between 0 and 1',
         ),
-        _tween = Tween(begin: opacityfrom, end: opacityTo),
+        _tween = Tween(begin: opacityFrom, end: opacityTo),
         super(controller, onComplete: onComplete);
 
   @override

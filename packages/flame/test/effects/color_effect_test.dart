@@ -98,7 +98,7 @@ void main() {
         () => ColorEffect(
           Colors.blue,
           EffectController(duration: 1),
-          opacityfrom: 255,
+          opacityFrom: 255,
         ),
         throwsAssertionError,
       );
@@ -116,7 +116,7 @@ void main() {
         () => ColorEffect(
           Colors.blue,
           EffectController(duration: 1),
-          opacityfrom: -0.5,
+          opacityFrom: -0.5,
         ),
         throwsAssertionError,
       );
@@ -125,7 +125,7 @@ void main() {
         () => ColorEffect(
           Colors.blue,
           EffectController(duration: 1),
-          opacityfrom: 0.1,
+          opacityFrom: 0.1,
           opacityTo: 0.9,
         ),
         returnsNormally,
