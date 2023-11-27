@@ -83,5 +83,53 @@ void main() {
         );
       },
     );
+
+    test('Validates opacity values', () {
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityTo: 1.1,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityfrom: 255,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityTo: -254,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityfrom: -0.5,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityfrom: 0.1,
+          opacityTo: 0.9,
+        ),
+        returnsNormally,
+      );
+    });
   });
 }

@@ -23,7 +23,15 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     double opacityTo = 1,
     this.paintId,
     void Function()? onComplete,
-  })  : _tween = Tween(begin: opacityfrom, end: opacityTo),
+  })  :
+   assert(
+          opacityfrom >= 0 &&
+              opacityfrom <= 1 &&
+              opacityTo >= 0 &&
+              opacityTo <= 1,
+          'Opacity value should be between 0 and 1',
+        ),
+        _tween = Tween(begin: opacityfrom, end: opacityTo),
         super(controller, onComplete: onComplete);
 
   @override
