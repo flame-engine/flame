@@ -1,3 +1,7 @@
+## 1.9.6
+
+ - Bump to Rive 0.12.3
+
 ## 1.9.5
 
  - Update a dependency to the latest release.

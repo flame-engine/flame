@@ -149,7 +149,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
 In the `onLoad` method, you can see where we loop from 1 to the `game.health` amount, to create
 the number of hearts necessary. The last step is to add the hud to the game.
 
-Go to 'lib/ember_quest.dart` and add the following code in the `initializeGame` method:
+Go to `lib/ember_quest.dart` and add the following code in the `initializeGame` method:
 
 ```dart
 cameraComponent.viewport.add(Hud());

@@ -41,6 +41,7 @@ abstract class RenderableLayer<T extends Layer> {
     required CameraComponent? camera,
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
+    required Paint Function(double opacity) layerPaintFactory,
     FilterQuality? filterQuality,
     bool? ignoreFlip,
     Images? images,
@@ -55,6 +56,7 @@ abstract class RenderableLayer<T extends Layer> {
         atlas: atlas.clone(),
         ignoreFlip: ignoreFlip,
         filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
       );
     } else if (layer is ImageLayer) {
       return FlameImageLayer.load(

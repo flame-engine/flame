@@ -178,8 +178,8 @@ class RoundedRectangle extends Shape {
   @override
   Vector2 nearestPoint(Vector2 point) {
     _tmpResult.setValues(
-      (point.x).clamp(_left, _right),
-      (point.y).clamp(_top, _bottom),
+      point.x.clamp(_left, _right),
+      point.y.clamp(_top, _bottom),
     );
     if (containsPoint(_tmpResult)) {
       return _tmpResult;

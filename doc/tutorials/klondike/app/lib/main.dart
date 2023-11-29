@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'step2/main.dart' as step2;
 import 'step3/main.dart' as step3;
 import 'step4/main.dart' as step4;
+import 'step5/main.dart' as step5;
 
 void main() {
   var page = window.location.search ?? '';
@@ -20,6 +21,10 @@ void main() {
 
     case 'step4':
       step4.main();
+      break;
+
+    case 'step5':
+      step5.main();
       break;
 
     default:

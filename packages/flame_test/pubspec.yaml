@@ -22,5 +22,5 @@ dependencies:
   vector_math: ^2.1.4
 
 dev_dependencies:
-  dartdoc: ^6.2.2
+  dartdoc: ^6.3.0
   flame_lint: ^1.1.1

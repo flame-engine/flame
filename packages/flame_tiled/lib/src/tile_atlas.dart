@@ -8,6 +8,8 @@ import 'package:flame_tiled/src/rectangle_bin_packer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tiled/tiled.dart';
 
+bool _defaultTilesetPackingFilter(_) => true;
+
 /// One image atlas for all Tiled image sets in a map.
 ///
 /// Please note that [TiledAtlas] should not be reused without [clone] as it may
@@ -26,6 +28,9 @@ class TiledAtlas {
   /// Image key for this atlas.
   final String key;
 
+  /// If SpriteBatch should use atlas or not.
+  final bool useAtlas;
+
   /// Track one atlas for all images in the Tiled map.
   ///
   /// See [fromTiledMap] for asynchronous loading.
@@ -33,7 +38,14 @@ class TiledAtlas {
     required this.atlas,
     required this.offsets,
     required this.key,
-  }) : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
+    this.useAtlas = true,
+  }) : batch = atlas == null
+            ? null
+            : SpriteBatch(
+                atlas,
+                imageKey: key,
+                useAtlas: useAtlas,
+              );
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
@@ -44,6 +56,7 @@ class TiledAtlas {
         atlas: atlas?.clone(),
         offsets: offsets,
         key: key,
+        useAtlas: useAtlas,
       );
 
   /// Maps of tilesets compiled to [TiledAtlas].
@@ -64,9 +77,16 @@ class TiledAtlas {
   }
 
   /// Collect images that we'll use in tiles - exclude image layers.
-  static Set<(String?, TiledImage)> _onlyTileImages(TiledMap map) {
+  static Set<(String?, TiledImage)> _onlyTileImages(
+    TiledMap map,
+    bool Function(Tileset) filter,
+  ) {
     final imageSet = <(String?, TiledImage)>{};
     for (var i = 0; i < map.tilesets.length; ++i) {
+      // Skip tilesets that don't match the filter.
+      if (!filter(map.tilesets[i])) {
+        continue;
+      }
       final tileset = map.tilesets[i];
       final image = tileset.image;
       if (image?.source != null) {
@@ -89,8 +109,15 @@ class TiledAtlas {
     double? maxX,
     double? maxY,
     Images? images,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    double spacingX = 0,
+    double spacingY = 0,
   }) async {
-    final tilesetImageList = _onlyTileImages(map).toList();
+    final tilesetImageList = _onlyTileImages(
+      map,
+      tsxPackingFilter ?? _defaultTilesetPackingFilter,
+    ).toList();
 
     final mappedImageList = tilesetImageList.map((entry) {
       final tiledImage = entry.$2;
@@ -120,6 +147,7 @@ class TiledAtlas {
         atlas: null,
         offsets: {},
         key: 'atlas{empty}',
+        useAtlas: useAtlas,
       );
     }
 
@@ -145,6 +173,7 @@ class TiledAtlas {
         atlas: image,
         offsets: {key: Offset.zero},
         key: key,
+        useAtlas: useAtlas,
       );
     }
 
@@ -174,18 +203,25 @@ class TiledAtlas {
       ),
     ]);
 
-    final emptyPaint = Paint();
+    final emptyPaint = Paint()
+      ..isAntiAlias = false
+      ..filterQuality = FilterQuality.none;
     for (final entry in mappedImageList) {
       final tiledImage = entry.$2;
       final tileImageSource = entry.$1;
 
       final image = await imagesInstance.load(tileImageSource);
-      final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
+      final rect = bin.pack(
+        image.width.toDouble() + spacingX,
+        image.height.toDouble() + spacingY,
+      );
 
       pictureRect = pictureRect.expandToInclude(rect);
 
-      final offset =
-          offsetMap[tiledImage.source!] = Offset(rect.left, rect.top);
+      final offset = offsetMap[tiledImage.source!] = Offset(
+        rect.left - spacingX,
+        rect.top - spacingY,
+      );
 
       canvas.drawImage(image, offset, emptyPaint);
     }
@@ -199,6 +235,7 @@ class TiledAtlas {
       atlas: image,
       offsets: offsetMap,
       key: key,
+      useAtlas: useAtlas,
     );
   }
 

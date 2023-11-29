@@ -18,16 +18,16 @@ class ColorEffectExample extends FlameGame {
           ember.add(
             ColorEffect(
               const Color(0xFF00FF00),
-              const Offset(0.0, 0.6),
               EffectController(duration: 1.5),
+              opacityTo: 0.6,
             ),
           );
         } else {
           ember.add(
             ColorEffect(
               const Color(0xFF1039DB),
-              const Offset(0.0, 0.6),
               EffectController(duration: 1.5),
+              opacityTo: 0.6,
             ),
           );
         }

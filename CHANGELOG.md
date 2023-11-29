@@ -3,6 +3,71 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-11-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_tiled` - `v1.17.0`](#flame_tiled---v1170)
+
+---
+
+#### `flame_tiled` - `v1.17.0`
+
+ - **FIX**: Configuration useAtlas was not been propagated correctly everywhere ([#2853](https://github.com/flame-engine/flame/issues/2853)). ([2f0dab9e](https://github.com/flame-engine/flame/commit/2f0dab9e59958176e6c46f6e417188e6c4fa3831))
+ - **FEAT**: Adding way to configure a layer paint in flame tiled ([#2851](https://github.com/flame-engine/flame/issues/2851)). ([e893d115](https://github.com/flame-engine/flame/commit/e893d1152c2aeb1c976668c875a1c267bbf819c0))
+ - **FEAT**: Expose useAtlas on Flame Tiled ([#2852](https://github.com/flame-engine/flame/issues/2852)). ([c4efb4f8](https://github.com/flame-engine/flame/commit/c4efb4f859fe08cc7fbd3e0ddb35c806d0060c78))
+
+
+## 2023-11-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_rive` - `v1.9.6`](#flame_rive---v196)
+
+---
+
+#### `flame_rive` - `v1.9.6`
+
+ - Bump to Rive 0.12.3
+
+
+## 2023-11-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_tiled` - `v1.16.0`](#flame_tiled---v1160)
+
+---
+
+#### `flame_tiled` - `v1.16.0`
+
+ - **FEAT**: Allow flame tiled to skip tilesets when packing into a tile atlas ([#2847](https://github.com/flame-engine/flame/issues/2847)). ([b93bdd38](https://github.com/flame-engine/flame/commit/b93bdd38313fd273e3e4cf55f1b142969effbde4))
+
+
 ## 2023-11-03
 
 ### Changes
