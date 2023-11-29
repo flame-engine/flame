@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
@@ -974,10 +975,21 @@ class Component {
   /// Returns a [TextPaint] object with the [debugColor] set as color for the
   /// text.
   TextPaint get debugTextPaint {
-    final zoom = CameraComponent.currentCamera?.viewfinder.zoom ?? 1.0;
+    final viewfinder = CameraComponent.currentCamera?.viewfinder;
+    final viewport = CameraComponent.currentCamera?.viewport;
+    final zoom = viewfinder?.zoom ?? 1.0;
+
+    final viewportScale = math.max(
+      viewport?.transform.scale.x ?? 1,
+      viewport?.transform.scale.y ?? 1,
+    );
+
     if (!_debugTextPaintCache.isCacheValid([debugColor])) {
       final textPaint = TextPaint(
-        style: TextStyle(color: debugColor, fontSize: 12 / zoom),
+        style: TextStyle(
+          color: debugColor,
+          fontSize: 12 / zoom / viewportScale,
+        ),
       );
       _debugTextPaintCache.updateCache(textPaint, [debugColor]);
     }
