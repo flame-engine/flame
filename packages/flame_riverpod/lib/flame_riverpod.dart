@@ -3,5 +3,5 @@
 /// application into your game.
 library flame_riverpod;
 
-export 'src/component_ref.dart';
-export 'src/has_component_ref_mixin.dart';
+export 'src/consumer.dart';
+export 'src/widget.dart';

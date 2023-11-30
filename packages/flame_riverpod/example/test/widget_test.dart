@@ -1,4 +1,5 @@
 import 'package:flame/game.dart';
+import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flame_riverpod_example/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,19 +29,12 @@ void main() {
     final flutterCounterTextWidgets =
         widgetTester.widgetList(flutterCounterTextFinder);
 
-    // Expect RiverpodGameWidget to exist
-    final riverpodGameWidgetFinder = find.byType(RiverpodGameWidget);
+    // Expect RiverpodAwareGameWidget to exist
+    final riverpodGameWidgetFinder = find.byType(RiverpodAwareGameWidget);
     expect(riverpodGameWidgetFinder, findsOneWidget);
 
-    // Find the game widget
-    final gameWidgetFinder = find.descendant(
-      of: riverpodGameWidgetFinder,
-      matching: find.byType(GameWidget<FlameGame>),
-    );
-    expect(gameWidgetFinder, findsOneWidget);
-
-    final gameWidget =
-        widgetTester.widget(gameWidgetFinder) as GameWidget<FlameGame>;
+    final gameWidget = widgetTester.widget(riverpodGameWidgetFinder)
+        as RiverpodAwareGameWidget;
 
     // GameWidget contains a FutureBuilder, which calls setState when a Future
     // completes. We therefore need to pump / re-render the widget to ensure
@@ -48,19 +42,19 @@ void main() {
     // lifecycle events.
     await widgetTester.pump(const Duration(seconds: 1));
 
-    expect(gameWidget.game is FlameGame, true);
-    expect(gameWidget.game!.isLoaded, true);
-    expect(gameWidget.game!.isMounted, true);
-    expect(gameWidget.game!.isAttached, true);
+    final flameGame = gameWidget.game as FlameGame?;
+    expect(flameGame?.isAttached, true);
+    expect(flameGame?.isLoaded, true);
+    expect(flameGame?.isMounted, true);
 
     // Pump again to provide the gameRenderBox with a [BuildContext].
     await widgetTester.pump(const Duration(seconds: 1));
 
     // Check components are mounted as expected.
-    expect(gameWidget.game?.children.isNotEmpty ?? false, true);
+    expect(flameGame?.children.isNotEmpty ?? false, true);
 
     final riverpodAwareTextComponent =
-        gameWidget.game?.children.elementAt(1) as RiverpodAwareTextComponent?;
+        flameGame?.children.elementAt(2) as RiverpodAwareTextComponent?;
     expect(riverpodAwareTextComponent is RiverpodAwareTextComponent, true);
 
     // Current count of the stream from the [Text] widget. This is best

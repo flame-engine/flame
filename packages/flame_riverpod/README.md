@@ -7,35 +7,30 @@ of a provider changes.
 
 When using Flame, we are interacting with components, which are *not* Widgets.
 
-`flame_riverpod` provides the `ComponentRef` and `HasComponentRef` to
-facilitate managing state from Providers in your Flame Game.
-
+`flame_riverpod` provides the `RiverpodAwareGameWidget`, `RiverpodGameMixin`, and
+`RiverpodComponentMixin` to facilitate managing state from Providers in your Flame Game.
 
 ## Usage
 
-Your Widget that extends `FlameGame` should use the HasComponentRef mixin,
-and accept a WidgetRef inside its constructor, and should be wrapped in a
-ConsumerStatefulWidget, as per the example.
+You should use the `RiverpodAwareGameWidget` as your Flame `GameWidget`, the `RiverpodGameMixin` 
+mixin on your game that extends `FlameGame`, and the `RiverpodComponentMixin` on any components 
+interacting with Riverpod providers.
 
-The `listen` method can be used within any Component that uses the
-HasComponentMixin to subscribe to updates from a provider.
-
-Alternatively, you could use `ref.read` as you would elsewhere when consuming `flutter_riverpod`.
+The full range of operations defined in Riverpod's `WidgetRef` definition are accessible from 
+components.
 
 Subscriptions to a provider are managed in accordance with the lifecycle
 of a Flame Component: initialization occurs when a Component is mounted, and disposal
-occurs when a Component is removed.
+occurs when a Component is removed. By default, the `RiverpodAwareGameWidget` is rebuilt when 
+Riverpod-aware (i.e. using the `RiverpodComponentMixin`) components are mounted and when they are 
+removed.
 
 ```dart
 
 /// An excerpt from the Example. Check it out!
-class RefExampleGame extends FlameGame with HasComponentRef {
-  RefExampleGame(WidgetRef ref) {
-    HasComponentRef.widgetRef = ref;
-  }
-
+class RefExampleGame extends FlameGame with RiverpodGameMixin {
   @override
-  onLoad() async {
+  Future<void> onLoad() async {
     await super.onLoad();
     add(TextComponent(text: 'Flame'));
     add(RiverpodAwareTextComponent());
@@ -43,28 +38,33 @@ class RefExampleGame extends FlameGame with HasComponentRef {
 }
 
 class RiverpodAwareTextComponent extends PositionComponent
-    with HasComponentRef {
-
+    with RiverpodComponentMixin {
   late TextComponent textComponent;
   int currentValue = 0;
 
   /// [onMount] should be used over [onLoad] to initialize subscriptions,
   /// cancellation is handled for the user inside [onRemove],
   /// which is only called if the [Component] was mounted.
+  /// 
+  /// [RiverpodComponentMixin.addToGameWidgetBuild] **must** be invoked in 
+  /// your Component **before** [RiverpodComponentMixin.onMount] in order to 
+  /// have the provided function invoked on 
+  /// [RiverpodAwareGameWidgetState.build].
+  /// 
+  /// From `flame_riverpod` 5.0.0, [WidgetRef.watch], is also accessible from 
+  /// components.
   @override
   void onMount() {
+    addToGameWidgetBuild(() {
+      ref.listen(countingStreamProvider, (p0, p1) {
+        if (p1.hasValue) {
+          currentValue = p1.value!;
+          textComponent.text = '$currentValue';
+        }
+      });
+    });
     super.onMount();
     add(textComponent = TextComponent(position: position + Vector2(0, 27)));
-
-    // "Watch" a provider using [listen] from the [HasComponentRef] mixin.
-    // Watch is not exposed directly as this would rebuild the ancestor that
-    // exposes the [WidgetRef] unnecessarily.
-    listen(countingStreamProvider, (p0, p1) {
-      if (p1.hasValue) {
-        currentValue = p1.value!;
-        textComponent.text = '$currentValue';
-      }
-    });
   }
 }
 

@@ -1,3 +1,7 @@
+## 5.0.0
+
+* New API with breaking changes. Added [RiverpodAwareGameWidget], [RiverpodGameMixin], [RiverpodComponentMixin]. See the example for details.
+
 ## 4.0.0+2
 
 * Miscellaneous format post-processing on the files. 

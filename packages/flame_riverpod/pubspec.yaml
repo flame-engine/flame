@@ -1,14 +1,13 @@
 name: flame_riverpod
 description: Helpers for using Riverpod - a reactive caching and data-binding framework, 
-  in conjunction with Flame. The ComponentRef is used as an intermediary between Flame and
-  the Widget tree in order to provide state to Flame Components.
-version: 4.0.0+2
+  in conjunction with Flame.
+version: 5.0.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_riverpod
 environment:
-  sdk: ">=2.18.5 <3.0.0"
+  sdk: '>=2.18.5 <4.0.0'
   flutter: ">=1.17.0"
 dependencies:
-  flame: ^1.6.0
+  flame: ^1.10.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.1.3

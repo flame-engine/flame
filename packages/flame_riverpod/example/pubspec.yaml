@@ -1,12 +1,13 @@
 name: flame_riverpod_example
 description: Showcasing the flame_riverpod functionality.
-publish_to: 'none'
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 environment:
-  sdk: ">=2.18.5 <3.0.0"
+  sdk: '>=2.18.5 <3.0.0'
 dependencies:
-  flame: ^1.6.0
-  flame_riverpod: ^4.0.0+2
+  flame: ^1.10.1
+  flame_riverpod:
+    path: ../
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.1.3
