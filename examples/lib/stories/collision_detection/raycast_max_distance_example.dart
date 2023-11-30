@@ -5,6 +5,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
+import 'package:flame_noise/flame_noise.dart';
 import 'package:flutter/material.dart';
 
 class RaycastMaxDistanceExample extends FlameGame with HasCollisionDetection {
@@ -27,18 +28,22 @@ This examples showcases how raycast APIs can be used to detect hits within certa
         color: Colors.amber,
       ),
     ),
-  )..positionType = PositionType.viewport;
+  );
 
   @override
   void onLoad() {
-    camera.viewport = FixedResolutionViewport(Vector2(320, 180));
+    camera = CameraComponent.withFixedResolution(
+      world: world,
+      width: 320,
+      height: 180,
+    );
 
     _addMovingWall();
 
-    add(
+    world.add(
       _character = _Character(
         maxDistance: _maxDistance,
-        position: size / 2 - Vector2(50, 0),
+        position: Vector2(-50, 0),
         anchor: Anchor.center,
       ),
     );
@@ -52,9 +57,8 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   }
 
   void _addMovingWall() {
-    add(
+    world.add(
       RectangleComponent(
-        position: size / 2,
         size: Vector2(20, 40),
         anchor: Anchor.center,
         paint: BasicPalette.red.paint(),
@@ -77,11 +81,16 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   void update(double dt) {
     collisionDetection.raycast(_ray, maxDistance: _maxDistance, out: _result);
     if (_result.isActive) {
-      if (!camera.shaking) {
-        camera.shake(duration: 0.2, intensity: 1);
+      if (camera.viewfinder.children.query<Effect>().isEmpty) {
+        camera.viewfinder.add(
+          MoveEffect.by(
+            Vector2(5, 5),
+            PerlinNoiseEffectController(duration: 0.2, frequency: 400),
+          ),
+        );
       }
       if (!_text.isMounted) {
-        add(_text);
+        world.add(_text);
       }
     } else {
       _text.removeFromParent();
@@ -101,26 +110,22 @@ class _Character extends PositionComponent {
 
   @override
   Future<void>? onLoad() async {
-    add(
+    addAll([
       CircleComponent(
         radius: 20,
         anchor: Anchor.center,
         paint: BasicPalette.green.paint(),
       )..scale = Vector2(0.55, 1),
-    );
-    add(
       CircleComponent(
         radius: 10,
         anchor: Anchor.center,
         paint: _rayPaint,
       ),
-    );
-    add(
       RectangleComponent(
         size: Vector2(10, 3),
         position: Vector2(12, 5),
       ),
-    );
+    ]);
   }
 
   @override

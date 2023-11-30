@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame/experimental.dart';
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
 import 'package:flutter/material.dart' hide Image, Gradient;
@@ -102,7 +102,7 @@ class Car extends BodyComponent<PadRacingGame> {
       final isLeftTire = i.isEven;
       return Tire(
         car: this,
-        pressedKeys: gameRef.pressedKeySets[playerNumber],
+        pressedKeys: game.pressedKeySets[playerNumber],
         isFrontTire: isFrontTire,
         isLeftTire: isLeftTire,
         jointDef: jointDef,
@@ -110,7 +110,7 @@ class Car extends BodyComponent<PadRacingGame> {
       );
     });
 
-    gameRef.cameraWorld.addAll(tires);
+    game.world.addAll(tires);
     return body;
   }
 

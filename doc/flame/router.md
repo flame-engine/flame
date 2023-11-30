@@ -37,7 +37,7 @@ class MyGame extends FlameGame {
   late final RouterComponent router;
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     add(
       router = RouterComponent(
         routes: {
@@ -55,6 +55,13 @@ class MyGame extends FlameGame {
 
 class PauseRoute extends Route { ... }
 ```
+
+```{note}
+Use `hide Route` if any of your imported packages export another class called `Route`
+
+eg: `import 'package:flutter/material.dart' hide Route;`
+```
+
 
 [Flutter Navigator]: https://api.flutter.dev/flutter/widgets/Navigator-class.html
 

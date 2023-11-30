@@ -2,19 +2,19 @@ import 'dart:collection';
 import 'dart:math' show pi;
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/cache/images.dart';
-import 'package:flame/src/extensions/image.dart';
-import 'package:flame/src/extensions/picture_extension.dart';
-import 'package:flame/src/flame.dart';
+import 'package:meta/meta.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
   /// its options.
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
+    Color? defaultColor,
+    BlendMode? defaultBlendMode,
     RSTransform? defaultTransform,
     Images? imageCache,
     bool useAtlas = true,
@@ -37,9 +37,9 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
+    Color? color,
     this.flip = false,
-    required this.color,
-  })  : paint = Paint()..color = color,
+  })  : paint = Paint()..color = color ?? const Color(0x00000000),
         destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
@@ -55,9 +55,6 @@ class BatchItem {
 
   /// The flip value for this batch item.
   final bool flip;
-
-  /// The background color for this batch item.
-  final Color color;
 
   /// Fallback matrix for the web.
   ///
@@ -75,6 +72,23 @@ class BatchItem {
 
   /// Paint object used for the web.
   final Paint paint;
+}
+
+@internal
+enum FlippedAtlasStatus {
+  /// There is no need to generate a flipped atlas yet.
+  none,
+
+  /// The flipped atlas generation is currently in progress.
+  generating,
+
+  /// The flipped atlas image has been generated.
+  generated,
+  ;
+
+  bool get isNone => this == FlippedAtlasStatus.none;
+  bool get isGenerating => this == FlippedAtlasStatus.generating;
+  bool get isGenerated => this == FlippedAtlasStatus.generated;
 }
 
 /// The SpriteBatch API allows for rendering multiple items at once.
@@ -96,10 +110,10 @@ class BatchItem {
 class SpriteBatch {
   SpriteBatch(
     this.atlas, {
-    this.defaultColor = const Color(0x00000000),
-    this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
+    this.defaultColor,
+    this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
   })  : _imageCache = imageCache,
@@ -110,23 +124,25 @@ class SpriteBatch {
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteBatch> load(
     String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
+    Color? defaultColor,
+    BlendMode? defaultBlendMode,
     bool useAtlas = true,
   }) async {
-    final _images = images ?? Flame.images;
+    final imagesCache = images ?? Flame.images;
     return SpriteBatch(
-      await _images.load(path),
-      defaultColor: defaultColor,
+      await imagesCache.load(path),
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
+      defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
-      imageCache: _images,
+      imageCache: imagesCache,
       imageKey: path,
     );
   }
+
+  FlippedAtlasStatus _flippedAtlasStatus = FlippedAtlasStatus.none;
 
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
@@ -181,21 +197,15 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// Whether any [BatchItem]s needs a flippable atlas.
-  bool _hasFlips = false;
-
-  /// The status of the atlas image loading operations.
-  bool _atlasReady = true;
-
   /// The default color, used as a background color for a [BatchItem].
-  final Color defaultColor;
+  final Color? defaultColor;
 
   /// The default transform, used when a transform was not supplied for a
   /// [BatchItem].
   final RSTransform? defaultTransform;
 
   /// The default blend mode, used for blending a batch item.
-  final BlendMode defaultBlendMode;
+  final BlendMode? defaultBlendMode;
 
   /// The width of the [atlas].
   int get width => atlas.width;
@@ -213,20 +223,18 @@ class SpriteBatch {
   bool get isEmpty => _batchItems.isEmpty;
 
   Future<void> _makeFlippedAtlas() async {
-    _hasFlips = true;
-    _atlasReady = false;
+    _flippedAtlasStatus = FlippedAtlasStatus.generating;
     final key = '$imageKey#with-flips';
     atlas = await imageCache.fetchOrGenerate(
       key,
       () => _generateFlippedAtlas(atlas),
     );
-    _atlasReady = true;
+    _flippedAtlasStatus = FlippedAtlasStatus.generated;
   }
 
   Future<Image> _generateFlippedAtlas(Image image) {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
     canvas.drawImage(image, Offset.zero, _emptyPaint);
     canvas.scale(-1, 1);
     canvas.drawImage(image, Offset(-image.width * 2, 0), _emptyPaint);
@@ -263,7 +271,7 @@ class SpriteBatch {
       color: color ?? defaultColor,
     );
 
-    if (flip && useAtlas && !_hasFlips) {
+    if (flip && useAtlas && _flippedAtlasStatus.isNone) {
       _makeFlippedAtlas();
     }
 
@@ -271,7 +279,9 @@ class SpriteBatch {
     _sources.add(
       flip
           ? Rect.fromLTWH(
-              (atlas.width * (!_atlasReady ? 2 : 1)) - source.right,
+              // The atlas is twice as wide when the flipped atlas is generated.
+              (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
+                  source.right,
               source.top,
               source.width,
               source.height,
@@ -279,7 +289,9 @@ class SpriteBatch {
           : batchItem.source,
     );
     _transforms.add(batchItem.transform);
-    _colors.add(batchItem.color);
+    if (color != null) {
+      _colors.add(color);
+    }
   }
 
   /// Add a new batch item.
@@ -346,8 +358,9 @@ class SpriteBatch {
     _batchItems.clear();
   }
 
-  // Used to not create new paint objects in [render] on every tick.
-  final Paint _emptyPaint = Paint();
+  // Used to not create new Paint objects in [render] and
+  // [generateFlippedAtlas].
+  final _emptyPaint = Paint();
 
   void render(
     Canvas canvas, {
@@ -359,21 +372,21 @@ class SpriteBatch {
       return;
     }
 
-    paint ??= _emptyPaint;
+    final renderPaint = paint ?? _emptyPaint;
 
-    if (useAtlas && _atlasReady) {
+    if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
         _transforms,
         _sources,
-        _colors,
+        _colors.isEmpty ? null : _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
-        paint,
+        renderPaint,
       );
     } else {
       for (final batchItem in _batchItems) {
-        paint.blendMode = blendMode ?? paint.blendMode;
+        renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
 
         canvas
           ..save()
@@ -383,7 +396,7 @@ class SpriteBatch {
             atlas,
             batchItem.source,
             batchItem.destination,
-            paint,
+            renderPaint,
           )
           ..restore();
       }

@@ -13,16 +13,24 @@ import 'package:flutter/material.dart';
 class ColorEffect extends ComponentEffect<HasPaint> {
   final String? paintId;
   final Color color;
-  late final ColorFilter? _original;
+  ColorFilter? _original;
   late final Tween<double> _tween;
 
   ColorEffect(
     this.color,
-    Offset offset,
     EffectController controller, {
+    double opacityFrom = 0,
+    double opacityTo = 1,
     this.paintId,
     void Function()? onComplete,
-  })  : _tween = Tween(begin: offset.dx, end: offset.dy),
+  })  : assert(
+          opacityFrom >= 0 &&
+              opacityFrom <= 1 &&
+              opacityTo >= 0 &&
+              opacityTo <= 1,
+          'Opacity value should be between 0 and 1',
+        ),
+        _tween = Tween(begin: opacityFrom, end: opacityTo),
         super(controller, onComplete: onComplete);
 
   @override

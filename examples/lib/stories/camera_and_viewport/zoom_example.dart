@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
@@ -8,39 +9,37 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
     On mobile: use scale gesture to zoom in and out.
   ''';
 
-  final Vector2 viewportResolution;
-  late SpriteComponent flame;
-
   ZoomExample({
-    required this.viewportResolution,
-  });
+    required Vector2 viewportResolution,
+  }) : super(
+          camera: CameraComponent.withFixedResolution(
+            width: viewportResolution.x,
+            height: viewportResolution.y,
+          ),
+        );
 
   @override
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('flame.png');
 
-    camera.viewport = FixedResolutionViewport(viewportResolution);
-    camera.setRelativeOffset(Anchor.center);
-    camera.speed = 100;
-
-    final flameSize = Vector2(149, 211);
-    add(
-      flame = SpriteComponent(
+    world.add(
+      SpriteComponent(
         sprite: flameSprite,
-        size: flameSize,
+        size: Vector2(149, 211),
       )..anchor = Anchor.center,
     );
   }
 
   void clampZoom() {
-    camera.zoom = camera.zoom.clamp(0.05, 3.0);
+    camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 3.0);
   }
 
   static const zoomPerScrollUnit = 0.02;
 
   @override
   void onScroll(PointerScrollInfo info) {
-    camera.zoom += info.scrollDelta.game.y.sign * zoomPerScrollUnit;
+    camera.viewfinder.zoom +=
+        info.scrollDelta.global.y.sign * zoomPerScrollUnit;
     clampZoom();
   }
 
@@ -48,18 +47,18 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
 
   @override
   void onScaleStart(_) {
-    startZoom = camera.zoom;
+    startZoom = camera.viewfinder.zoom;
   }
 
   @override
   void onScaleUpdate(ScaleUpdateInfo info) {
     final currentScale = info.scale.global;
     if (!currentScale.isIdentity()) {
-      camera.zoom = startZoom * currentScale.y;
+      camera.viewfinder.zoom = startZoom * currentScale.y;
       clampZoom();
     } else {
-      camera.translateBy(-info.delta.game);
-      camera.snap();
+      final delta = info.delta.global;
+      camera.viewfinder.position.translate(-delta.x, -delta.y);
     }
   }
 }

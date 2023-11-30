@@ -11,12 +11,12 @@ class EnemyCreator extends TimerComponent with HasGameRef {
 
   @override
   void onTick() {
-    gameRef.addAll(
+    game.addAll(
       List.generate(
         5,
         (index) => EnemyComponent(
           position: Vector2(
-            _halfWidth + (gameRef.size.x - _halfWidth) * random.nextDouble(),
+            _halfWidth + (game.size.x - _halfWidth) * random.nextDouble(),
             0,
           ),
         ),

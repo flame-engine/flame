@@ -12,7 +12,7 @@ class OverlayManager {
 
   final Game _game;
   final List<String> _activeOverlays = [];
-  final Map<String, _OverlayBuilderFunction> _builders = {};
+  final Map<String, OverlayBuilderFunction> _builders = {};
 
   /// The names of all currently active overlays.
   UnmodifiableListView<String> get activeOverlays {
@@ -25,14 +25,14 @@ class OverlayManager {
   /// Clears all active overlays.
   void clear() {
     _activeOverlays.clear();
-    _game.refreshWidget();
+    _game.refreshWidget(isInternalRefresh: false);
   }
 
   /// Marks the [overlayName] to be rendered.
   bool add(String overlayName) {
     final setChanged = _addImpl(overlayName);
     if (setChanged) {
-      _game.refreshWidget();
+      _game.refreshWidget(isInternalRefresh: false);
     }
     return setChanged;
   }
@@ -42,7 +42,7 @@ class OverlayManager {
     final initialCount = _activeOverlays.length;
     overlayNames.forEach(_addImpl);
     if (initialCount != _activeOverlays.length) {
-      _game.refreshWidget();
+      _game.refreshWidget(isInternalRefresh: false);
     }
   }
 
@@ -59,7 +59,7 @@ class OverlayManager {
   }
 
   /// Adds a named overlay builder
-  void addEntry(String name, _OverlayBuilderFunction builder) {
+  void addEntry(String name, OverlayBuilderFunction builder) {
     _builders[name] = builder;
   }
 
@@ -67,7 +67,7 @@ class OverlayManager {
   bool remove(String overlayName) {
     final hasRemoved = _activeOverlays.remove(overlayName);
     if (hasRemoved) {
-      _game.refreshWidget();
+      _game.refreshWidget(isInternalRefresh: false);
     }
     return hasRemoved;
   }
@@ -77,7 +77,7 @@ class OverlayManager {
     final initialCount = _activeOverlays.length;
     overlayNames.forEach(_activeOverlays.remove);
     if (_activeOverlays.length != initialCount) {
-      _game.refreshWidget();
+      _game.refreshWidget(isInternalRefresh: false);
     }
   }
 
@@ -97,7 +97,7 @@ class OverlayManager {
   }
 }
 
-typedef _OverlayBuilderFunction = Widget Function(
+typedef OverlayBuilderFunction = Widget Function(
   BuildContext context,
   Game game,
 );

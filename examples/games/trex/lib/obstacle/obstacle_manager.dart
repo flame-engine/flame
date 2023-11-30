@@ -6,7 +6,7 @@ import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
-class ObstacleManager extends Component with HasGameRef<TRexGame> {
+class ObstacleManager extends Component with HasGameReference<TRexGame> {
   ObstacleManager();
 
   ListQueue<ObstacleType> history = ListQueue();
@@ -23,7 +23,7 @@ class ObstacleManager extends Component with HasGameRef<TRexGame> {
           !lastObstacle.followingObstacleCreated &&
           lastObstacle.isVisible &&
           (lastObstacle.x + lastObstacle.width + lastObstacle.gap) <
-              gameRef.size.x) {
+              game.size.x) {
         addNewObstacle();
         lastObstacle.followingObstacleCreated = true;
       }
@@ -33,7 +33,7 @@ class ObstacleManager extends Component with HasGameRef<TRexGame> {
   }
 
   void addNewObstacle() {
-    final speed = gameRef.currentSpeed;
+    final speed = game.currentSpeed;
     if (speed == 0) {
       return;
     }
@@ -47,7 +47,7 @@ class ObstacleManager extends Component with HasGameRef<TRexGame> {
     final groupSize = _groupSize(settings);
     for (var i = 0; i < groupSize; i++) {
       add(Obstacle(settings: settings, groupIndex: i));
-      gameRef.score++;
+      game.score++;
     }
 
     history.addFirst(settings.type);
@@ -71,7 +71,7 @@ class ObstacleManager extends Component with HasGameRef<TRexGame> {
   }
 
   int _groupSize(ObstacleTypeSettings settings) {
-    if (gameRef.currentSpeed > settings.multipleAt) {
+    if (game.currentSpeed > settings.multipleAt) {
       return random.fromRange(1.0, ObstacleTypeSettings.maxGroupSize).floor();
     } else {
       return 1;

@@ -8,8 +8,9 @@ bounding boxes of your components. In Flame the hitboxes are areas of the compon
 to collisions (and make [gesture input](inputs/gesture_input.md#gesturehitboxes)) more accurate.
 
 The collision detection system supports three different types of shapes that you can build hitboxes
-from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added to a component to
-form the area which can be used to either detect collisions or whether it contains a point or not,
+from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added
+to a component to form the area which can be used to either detect collisions
+or whether it contains a point or not,
 the latter is very useful for accurate gesture detection. The collision detection does not handle
 what should happen when two hitboxes collide, so it is up to the user to implement what will happen
 when for example two `PositionComponent`s have intersecting hitboxes.
@@ -41,6 +42,24 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
 Now when you add `ShapeHitbox`s to components that are then added to the game, they will
 automatically be checked for collisions.
+
+You can also add `HasCollisionDetection` directly to another `Component` instead
+of the `FlameGame`,
+for example to the `World` that is used for the `CameraComponent`.
+If that is done, hitboxes that are added in that component's tree will only be compared to other
+hitboxes in that subtree, which makes it possible to have several worlds with collision detection
+within one `FlameGame`.
+
+Example:
+
+```dart
+class CollisionDetectionWorld extends World with HasCollisionDetection {}
+```
+
+```{note}
+Hitboxes will only be connected to one collision detection system and that is
+the closest parent that has the `HasCollisionDetection` mixin.
+```
 
 
 ### CollisionCallbacks
@@ -79,8 +98,8 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-In this example we use Dart's `is` keyword to check what kind of component we collided with. The set
-of points is where the edges of the hitboxes intersect.
+In this example we use Dart's `is` keyword to check what kind of component we collided with.
+The set of points is where the edges of the hitboxes intersect.
 
 Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
@@ -108,17 +127,57 @@ hitboxes to just like any other component:
 
 ```dart
 class MyComponent extends PositionComponent {
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     add(RectangleHitbox());
   }
 }
 ```
 
 If you don't add any arguments to the hitbox, like above, the hitbox will try to fill its parent as
-much as possible. Except for having the hitboxes trying to fill their parents, there are two ways to
+much as possible. Except for having the hitboxes trying to fill their parents,
+there are two ways to
 initiate hitboxes and it is with the normal constructor where you define the hitbox by itself, with
 a size and a position etc. The other way is to use the `relative` constructor which defines the
 hitbox in relation to the size of its intended parent.
+
+
+In some specific cases you might want to handle collisions only between hitboxes, without
+propagating `onCollision*` events to the hitbox's parent component. For example, a vehicle could
+have a body hitbox to control collisions and side hitboxes to check the possibility to turn left
+or right.
+So, colliding with a body hitbox means colliding with the component itself, whereas colliding with
+a side hitbox does not mean a real collision and should not be propagated to hitbox's parent.
+For this case you can set `triggersParentCollision` variable to `false`:
+
+```dart
+class MyComponent extends PositionComponent {
+
+  late final MySpecialHitbox utilityHitbox;
+
+  @override
+  void onLoad() {
+    utilityHitbox = MySpecialHitbox();
+    add(utilityHitbox);
+  }
+
+  void update(double dt) {
+    if (utilityHitbox.isColliding) {
+      // do some specific things if hitbox is colliding
+    }
+  }
+// component's onCollision* functions, ignoring MySpecialHitbox collisions.
+}
+
+class MySpecialHitbox extends RectangleHitbox {
+  MySpecialHitbox() {
+    triggersParentCollision = false;
+  }
+
+// hitbox specific onCollision* functions
+
+}
+```
 
 You can read more about how the different shapes are defined in the
 [ShapeComponents](components.md#shapecomponents) section.
@@ -145,15 +204,16 @@ The `CollisionType` enum contains the following values:
 - `inactive` will not collide with any other `Collidable`s
 
 So if you have hitboxes that you don't need to check collisions against each other you can mark
-them as passive by setting `collisionType = CollisionType.passive`, this could for example be
-ground components or maybe your enemies don't need to check collisions between each other, then they
-could be marked as `passive` too.
+them as passive by setting `collisionType: CollisionType.passive` in the constructor,
+this could for example be ground components or maybe your enemies don't need
+to check collisions between each other, then they could be marked as `passive` too.
 
 Imagine a game where there are a lot of bullets, that can't collide with each other, flying towards
 the player, then the player would be set to `CollisionType.active` and the bullets would be set to
 `CollisionType.passive`.
 
-Then we have the `inactive` type which simply doesn't get checked at all in the collision detection.
+Then we have the `inactive` type which simply doesn't get checked at all
+in the collision detection.
 This could be used for example if you have components outside of the screen that you don't care
 about at the moment but that might later come back in to view so they are not completely removed
 from the game.
@@ -166,8 +226,9 @@ them so don't doubt to use them even if your use case isn't listed here.
 
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
 the polygon needs to be convex. So always use convex polygons or you will most likely run into
-problems if you don't really know what you are doing. It should also be noted that you should always
-define the vertices in your polygon in a counter-clockwise order.
+problems if you don't really know what you are doing.
+It should also be noted that you should always define the vertices in your polygon
+in a counter-clockwise order.
 
 The other hitbox shapes don't have any mandatory constructor, that is because they can have a
 default calculated from the size of the collidable that they are attached to, but since a
@@ -203,32 +264,36 @@ want the `ScreenHitbox` itself to be notified when something collides with it. S
 
 ## CompositeHitbox
 
-In the `CompositeHitbox` you can add multiple hitboxes so that they emulate being one joined hitbox.
+In the `CompositeHitbox` you can add multiple hitboxes so that
+they emulate being one joined hitbox.
 
-If you want to form a hat for example you might want to use two [](#rectanglehitbox)s to follow that
+If you want to form a hat for example you might want
+to use two [](#rectanglehitbox)s to follow that
 hat's edges properly, then you can add those hitboxes to an instance of this class and react to
 collisions to the whole hat, instead of for just each hitbox separately.
 
 
 ## Broad phase
 
-If your game field is small and do not have a lot of collidable components - you don't have to
+If your game field isn't huge and does not have a lot of collidable components - you don't have to
 worry about the broad phase system that is used, so if the standard implementation is performant
 enough for you, you probably don't have to read this section.
 
 A broad phase is the first step of collision detection where potential collisions are calculated.
-To calculate these potential collisions are a lot cheaper to calculate than to check the exact
-intersections directly and it removes the need to check all hitboxes against each other and
-therefore avoiding O(n²). The broad phase produces a set of potential collisions (a set of
-`CollisionProspect`s), this set is then used to check the exact intersections between hitboxes, this
-is sometimes called narrow phase.
+Calculating these potential collisions is faster than to checking the intersections exactly,
+and it removes the need to check all hitboxes against each other and
+therefore avoiding O(n²).
 
-By default Flame's collision detection is using a sweep and prune broadphase step, if your game
+The broad phase produces a set of potential collisions (a set of
+`CollisionProspect`s). This set is then used to check the exact intersections between
+hitboxes (sometimes called "narrow phase").
+
+By default, Flame's collision detection is using a sweep and prune broadphase step. If your game
 requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
 manually setting the collision detection system that should be used.
 
-For example if you have implemented a broadphase built on a magic algorithm instead of the standard
-sweep and prune, then you would do the following:
+For example, if you have implemented a broadphase built on a magic algorithm
+instead of the standard sweep and prune, then you would do the following:
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
@@ -245,12 +310,14 @@ class MyGame extends FlameGame with HasCollisionDetection {
 If your game field is large and the game contains a lot of collidable
 components (more than a hundred), standard sweep and prune can
 become inefficient. If it does, you can try to use the quad tree broad phase.
+
 To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
 `HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
 
 ```dart
 class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
-  Future<void> onLoad() async {
+  @override
+  void onLoad() {
     initializeCollisionDetection(
       mapDimensions: const Rect.fromLTWH(0, 0, mapWidth, mapHeight),
       minimumDistance: 10,
@@ -266,11 +333,12 @@ more efficient:
 - `minimumDistance`: minimum distance between objects to consider them as possibly colliding.
   If `null` - the check is disabled, it is default behavior
 - `maxObjects`: maximum objects count in one quadrant. Default to 25.
-- `maxDepth`: - maximum nesting levels inside quadrant. Default to 10
+- `maxDepth`: maximum nesting levels inside quadrant. Default to 10
 
 If you use the quad tree system, you can make it even more efficient by implementing the
-`onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components. It is useful if
-you need to prevent collisions of items of different types. The result of the calculation is cached so
+`onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components.
+It is useful if you need to prevent collisions of items of different types.
+The result of the calculation is cached so
 you should not check any dynamic parameters here, the function is intended to be used as a pure
 type checker:
 
@@ -283,6 +351,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       // do NOT collide with Player or Water
       return false;
     }
+    // Just return true if you're not interested in the parent's type check result.
+    // Or call super and you will be able to override the result with the parent's
+    // result.
     return super.onComponentTypeCheck(other);
   }
 
@@ -323,16 +394,26 @@ class QuadTreeExample extends FlameGame
 
 ```
 
+```{note}
+Always experiment with different collision detection approaches
+and check how they perform on your game.
+It is not unheard of that `QuadTreeBroadphase` is significantly 
+_slower_ than the default.
+Don't assume that the more sophisticated approach is always faster.
+```
+
 
 ## Ray casting and Ray tracing
 
 Ray casting and ray tracing are methods for sending out rays from a point in your game and being
 able to see what these rays collide with and how they reflect after hitting something.
 
-For all of the following methods, if there are any hitboxes that you wish to ignore, you can add the
-`ignoreHitboxes` argument which is a list of the hitboxes that you wish to disregard for the call.
-This can be quite useful for example if you are casting rays from within a hitbox, which could be on
-your player or NPC; or if you don't want a ray to bounce off a `ScreenHitbox`.
+For all of the following methods, if there are any hitboxes that you wish to ignore,
+you can add the `ignoreHitboxes` argument which is a list of the hitboxes
+that you wish to disregard for the call.
+This can be quite useful for example if you are casting rays from within a hitbox,
+which could be on your player or NPC;
+or if you don't want a ray to bounce off a `ScreenHitbox`.
 
 
 ### Ray casting
@@ -342,12 +423,14 @@ anything, in Flame's case, hitboxes.
 
 We provide two methods for doing so, `raycast` and `raycastAll`. The first one just casts out
 a single ray and gets back a result with information about what and where the ray hit, and some
-extra information like the distance, the normal and the reflection ray. The second one, `raycastAll`,
+extra information like the distance, the normal and the reflection ray.
+The second one, `raycastAll`,
 works similarly but sends out multiple rays uniformly around the origin, or within an angle
 centered at the origin.
 
-By default, `raycast` and `raycastAll` scan for the nearest hit irrespective of how far it lies from
-the ray origin. But in some use cases, it might be interesting to find hits only within a certain
+By default, `raycast` and `raycastAll` scan for the nearest hit irrespective of
+how far it lies from the ray origin.
+But in some use cases, it might be interesting to find hits only within a certain
 range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
@@ -467,8 +550,9 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
-In the example above we send out a ray from (0, 100) diagonally down to the right and we say that we
-want it the bounce on at most 100 hitboxes, it doesn't necessarily have to get 100 results since at
+In the example above we send out a ray from (0, 100) diagonally down to the right
+and we say that we want it the bounce on at most 100 hitboxes,
+it doesn't necessarily have to get 100 results since at
 some point one of the reflection rays might not hit a hitbox and then the method is done.
 
 The method is lazy, which means that it will only do the calculations that you ask for, so you have
@@ -477,8 +561,8 @@ calculate all the results.
 
 In the for-loop it can be seen how this can be used, in that loop we check whether the current
 reflection rays intersection point (where the previous ray hit the hitbox) is further away than 300
-pixels from the origin of the starting ray, and if it is we don't care about the rest of the results
-(and then they don't have to be calculated either).
+pixels from the origin of the starting ray, and if it is we don't care about the rest
+of the results (and then they don't have to be calculated either).
 
 If you are concerned about performance you can re-use the `RaycastResult` objects that are created
 by the function by sending them in as a list with the `out` argument.
@@ -505,33 +589,6 @@ need some of the following things (since it is simpler to not involve Forge2D):
 - The ability to act on your components colliding with the screen boundaries
 - Complex shapes to act as a hitbox for your component so that gestures will be more accurate
 - Hitboxes that can tell what part of a component that collided with something
-
-
-## Migration from the collision detection system in v1.0
-
-The collision detection system introduced in v1.1 is easier to use, and much more efficient than the
-one that was in v1.0, but while making these improvements some breaking changes had to be made.
-
-There is no longer a `Collidable` mixin, instead your game automatically knows when a hitbox has
-been added to one of your components when the `HasCollisionDetection` mixin is added to your game.
-
-To receive the callbacks from collisions that your component is involved in you should add the
-`CollisionCallbacks` mixin to your component, and then override the same methods as you did
-previously.
-
-Since the hitboxes now are `Component`s you add them to your component with `add` instead of
-`addHitbox` which was used previously.
-
-
-### Name changes
-
-- `ScreenCollidable` -> `ScreenHitbox`
-- `HitboxCircle` -> `CircleHitbox`
-- `HitboxRectangle` -> `RectangleHitbox`
-- `HitboxPolygon` -> `PolygonHitbox`
-- `Collidable` -> `CollisionCallbacks` (Only needed when you want to receive the callbacks)
-- `HasHitboxes` -> `GestureHitboxes` (Only when you need hitboxes for gestures)
-- `CollidableType` -> `CollisionType`
 
 
 ## Examples

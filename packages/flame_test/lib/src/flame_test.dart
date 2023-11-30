@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_test/flutter_test.dart' as flutter_test show test;
 import 'package:flutter_test/flutter_test.dart' hide test;
 import 'package:meta/meta.dart';
 
@@ -18,28 +17,28 @@ extension FlameGameExtension on Component {
   /// returned future to resolve.
   Future<void> ensureAdd(Component component) async {
     await add(component);
-    await (component.findGame()! as FlameGame).ready();
+    await component.findGame()!.ready();
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
   Future<void> ensureAddAll(Iterable<Component> components) async {
     await addAll(components);
-    await (components.first.findGame()! as FlameGame).ready();
+    await components.first.findGame()!.ready();
   }
 
   /// Makes sure that the [component] is removed from the tree if you wait for
   /// the returned future to resolve.
   Future<void> ensureRemove(Component component) async {
     remove(component);
-    await (component.findGame()! as FlameGame).ready();
+    await component.findGame()!.ready();
   }
 
   /// Makes sure that the [components] are removed from the tree if you wait for
   /// the returned future to resolve.
   Future<void> ensureRemoveAll(Iterable<Component> components) async {
     removeAll(components);
-    await (components.first.findGame()! as FlameGame).ready();
+    await components.first.findGame()!.ready();
   }
 }
 
@@ -96,52 +95,6 @@ class GameTester<T extends Game> {
     this.pumpWidget,
   });
 
-  @Deprecated('Will be removed in version 1.7.0')
-  Future<T> initializeGame() async {
-    final game = createGame();
-
-    final size = gameSize ?? Vector2.all(500);
-    game.onGameResize(size);
-
-    await game.onLoad();
-    // ignore: invalid_use_of_internal_member
-    game.mount();
-    if (game is FlameGame && makeReady) {
-      await game.ready();
-    }
-    return game;
-  }
-
-  /// Creates a [Game] specific test case with given [description].
-  ///
-  /// Use [verify] closure to make verifications/assertions.
-  @isTest
-  @Deprecated('Will be removed in version 1.6.0')
-  void test(
-    String description,
-    VerifyFunction<T> verify, {
-    String? skip,
-    String? testOn,
-    Timeout? timeout,
-    dynamic tags,
-    Map<String, dynamic>? onPlatform,
-    int? retry,
-  }) {
-    flutter_test.test(
-      description,
-      () async {
-        final game = await initializeGame();
-        await verify(game);
-      },
-      skip: skip,
-      testOn: testOn,
-      timeout: timeout,
-      tags: tags,
-      onPlatform: onPlatform,
-      retry: retry,
-    );
-  }
-
   /// Creates a [Game] specific test case with given [description]
   /// which runs inside the Flutter test environment.
   ///
@@ -167,11 +120,11 @@ class GameTester<T extends Game> {
           final gameWidget =
               createGameWidget?.call(game) ?? GameWidget(game: game);
 
-          final _pump = pumpWidget ??
-              (GameWidget<T> _gameWidget, WidgetTester _tester) =>
-                  _tester.pumpWidget(_gameWidget);
+          final pump = pumpWidget ??
+              (GameWidget<T> pumpWidget, WidgetTester tester) =>
+                  tester.pumpWidget(pumpWidget);
 
-          await _pump(gameWidget, tester);
+          await pump(gameWidget, tester);
           await tester.pump();
 
           if (setUp != null) {

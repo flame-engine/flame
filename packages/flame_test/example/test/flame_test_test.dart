@@ -11,7 +11,7 @@ void main() {
       'can load the game',
       MyGame.new,
       (game) async {
-        expect(game.children.length, 1);
+        expect(game.world.children.length, 1);
       },
     );
 
@@ -29,7 +29,6 @@ void main() {
       'render the background correctly',
       setUp: (game, _) async {
         await game.ready();
-        await game.ensureAdd(Background());
       },
       verify: (game, tester) async {
         await expectLater(

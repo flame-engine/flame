@@ -2,8 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
-import 'package:flame/game.dart';
+import 'package:flame/events.dart';
 import '../klondike_game.dart';
 import '../pile.dart';
 import '../rank.dart';
@@ -56,7 +55,7 @@ class Card extends PositionComponent with DragCallbacks {
     const Radius.circular(KlondikeGame.cardRadius),
   );
   static final RRect backRRectInner = cardRRect.deflate(40);
-  static late final Sprite flameSprite = klondikeSprite(1367, 6, 357, 501);
+  static final Sprite flameSprite = klondikeSprite(1367, 6, 357, 501);
 
   void _renderBack(Canvas canvas) {
     canvas.drawRRect(cardRRect, backBackgroundPaint);
@@ -80,14 +79,14 @@ class Card extends PositionComponent with DragCallbacks {
       Color(0x880d8bff),
       BlendMode.srcATop,
     );
-  static late final Sprite redJack = klondikeSprite(81, 565, 562, 488);
-  static late final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
-  static late final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
-  static late final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
+  static final Sprite redJack = klondikeSprite(81, 565, 562, 488);
+  static final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
+  static final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
+  static final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
     ..paint = blueFilter;
-  static late final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
+  static final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
     ..paint = blueFilter;
-  static late final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
+  static final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
     ..paint = blueFilter;
 
   void _renderFront(Canvas canvas) {
@@ -222,6 +221,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     if (pile?.canMoveCard(this) ?? false) {
       _isDragging = true;
       priority = 100;
@@ -241,10 +241,7 @@ class Card extends PositionComponent with DragCallbacks {
     if (!_isDragging) {
       return;
     }
-    final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
-        .viewfinder
-        .zoom;
+    final cameraZoom = findGame()!.camera.viewfinder.zoom;
     final delta = event.delta / cameraZoom;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
@@ -252,6 +249,7 @@ class Card extends PositionComponent with DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     if (!_isDragging) {
       return;
     }

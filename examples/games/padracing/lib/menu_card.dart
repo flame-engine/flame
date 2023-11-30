@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:padracing/game_colors.dart';
 
 class MenuCard extends StatelessWidget {
-  const MenuCard({super.key, required this.children});
+  const MenuCard({required this.children, super.key});
 
   final List<Widget> children;
 

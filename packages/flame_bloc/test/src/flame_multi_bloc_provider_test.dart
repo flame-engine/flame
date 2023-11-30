@@ -95,7 +95,8 @@ void main() {
       final inventoryCubit = InventoryCubit();
       final playerCubit = PlayerCubit();
 
-      late FlameBlocProvider inventoryCubitProvider, playerCubitProvider;
+      late FlameBlocProvider inventoryCubitProvider;
+      late FlameBlocProvider playerCubitProvider;
 
       final provider = FlameMultiBlocProvider(
         providers: [
@@ -182,6 +183,34 @@ void main() {
         expect(player.lastState, equals(PlayerState.sad));
         expect(inventory.lastState, equals(InventoryState.bow));
       });
+
+      testWithFlameGame(
+        'can listen to multiple subsequent state changes',
+        (game) async {
+          final playerCubit = PlayerCubit();
+          late PlayerListener player;
+
+          final provider = FlameMultiBlocProvider(
+            providers: [
+              FlameBlocProvider<PlayerCubit, PlayerState>.value(
+                value: playerCubit,
+              ),
+            ],
+            children: [
+              player = PlayerListener(),
+            ],
+          );
+          await game.ensureAdd(provider);
+
+          playerCubit.kill();
+          await Future<void>.microtask(() {});
+          expect(player.lastState, equals(PlayerState.dead));
+
+          playerCubit.riseFromTheDead();
+          await Future<void>.microtask(() {});
+          expect(player.lastState, equals(PlayerState.alive));
+        },
+      );
     });
   });
 }

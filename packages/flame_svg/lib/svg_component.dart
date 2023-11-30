@@ -19,6 +19,7 @@ class SvgComponent extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     Paint? paint,
+    super.key,
   }) : _svg = svg {
     this.paint = paint ?? this.paint;
   }

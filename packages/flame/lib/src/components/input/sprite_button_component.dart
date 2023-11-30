@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 enum ButtonState {
@@ -16,7 +17,7 @@ enum ButtonState {
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
 class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
-    with Tappable {
+    with TapCallbacks {
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;
 
@@ -45,30 +46,29 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
       button != null,
       'The button sprite has to be set either in onLoad or in the constructor',
     );
-    sprites = {ButtonState.up: button!};
-    sprites![ButtonState.down] = buttonDown ?? button!;
+    sprites = {
+      ButtonState.up: button!,
+      ButtonState.down: buttonDown ?? button!,
+    };
     super.onMount();
   }
 
   @override
   @mustCallSuper
-  bool onTapDown(_) {
+  void onTapDown(_) {
     current = ButtonState.down;
-    return false;
   }
 
   @override
   @mustCallSuper
-  bool onTapUp(_) {
-    onTapCancel();
-    return false;
-  }
-
-  @override
-  @mustCallSuper
-  bool onTapCancel() {
+  void onTapUp(_) {
     current = ButtonState.up;
     onPressed?.call();
-    return false;
+  }
+
+  @override
+  @mustCallSuper
+  void onTapCancel(_) {
+    current = ButtonState.up;
   }
 }

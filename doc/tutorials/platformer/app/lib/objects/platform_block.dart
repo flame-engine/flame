@@ -3,7 +3,8 @@ import 'package:flame/components.dart';
 
 import '../ember_quest.dart';
 
-class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
+class PlatformBlock extends SpriteComponent
+    with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -22,7 +23,7 @@ class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
       (gridPosition.x * size.x) + xOffset,
       game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override

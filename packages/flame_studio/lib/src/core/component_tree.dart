@@ -63,7 +63,7 @@ class ComponentTreeObserver extends StateNotifier<ComponentTreeState> {
     }
   }
 
-  static Duration refreshFrequency = const Duration(milliseconds: 300);
+  static const Duration refreshFrequency = Duration(milliseconds: 300);
 
   void _refresh() {
     if (!mounted) {

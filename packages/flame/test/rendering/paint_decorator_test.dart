@@ -56,7 +56,7 @@ void main() {
     testGolden(
       'tint effect',
       (game) async {
-        final image = await loadImage('zz_guitarre.png');
+        final image = await loadImage('zz_guitar.png');
         game.addAll([
           SpriteComponent(sprite: Sprite(image)),
           _DecoratedSprite(
@@ -83,7 +83,7 @@ void main() {
     testGolden(
       'grayscale/tinted with blur',
       (game) async {
-        final image = await loadImage('zz_guitarre.png');
+        final image = await loadImage('zz_guitar.png');
         const color = Color(0x88EBFF7F);
         game.addAll([
           SpriteComponent(sprite: Sprite(image)),
@@ -107,9 +107,9 @@ void main() {
 
 class _DecoratedSprite extends SpriteComponent {
   _DecoratedSprite({
+    required Decorator decorator,
     super.sprite,
     super.position,
-    required Decorator decorator,
   }) {
     this.decorator.addLast(decorator);
   }

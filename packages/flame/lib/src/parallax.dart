@@ -7,6 +7,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/sprite_animation.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flutter/painting.dart';
 
 extension ParallaxExtension on Game {
@@ -18,6 +19,7 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    FilterQuality? filterQuality,
   }) {
     return Parallax.load(
       dataList,
@@ -28,6 +30,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 
@@ -54,6 +57,7 @@ extension ParallaxExtension on Game {
     ImageRepeat repeat = ImageRepeat.repeatX,
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
+    FilterQuality? filterQuality,
   }) {
     return ParallaxAnimation.load(
       path,
@@ -62,6 +66,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 
@@ -71,6 +76,7 @@ extension ParallaxExtension on Game {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Vector2? velocityMultiplier,
+    FilterQuality? filterQuality,
   }) {
     return ParallaxLayer.load(
       data,
@@ -79,6 +85,7 @@ extension ParallaxExtension on Game {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 }
@@ -106,6 +113,7 @@ abstract class ParallaxRenderer {
         filterQuality = filterQuality ?? FilterQuality.low;
 
   void update(double dt);
+
   Image get image;
 }
 
@@ -150,7 +158,7 @@ class ParallaxImage extends ParallaxRenderer {
   Image get image => _image;
 
   @override
-  void update(_) {
+  void update(double dt) {
     // noop
   }
 }
@@ -158,19 +166,20 @@ class ParallaxImage extends ParallaxRenderer {
 /// Specifications with a SpriteAnimation and how it should be drawn in
 /// relation to the device screen
 class ParallaxAnimation extends ParallaxRenderer {
-  final SpriteAnimation _animation;
+  final SpriteAnimationTicker _animationTicker;
 
   /// The animation's frames pre-rendered into images so it can be used in the
   /// parallax.
   final List<Image> _prerenderedFrames;
 
   ParallaxAnimation(
-    this._animation,
+    SpriteAnimation animation,
     this._prerenderedFrames, {
     super.repeat,
     super.alignment,
     super.fill,
-  });
+    super.filterQuality,
+  }) : _animationTicker = animation.createTicker();
 
   /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
   /// for how the image should repeat ([repeat]), which edge it should align
@@ -190,14 +199,14 @@ class ParallaxAnimation extends ParallaxRenderer {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     images ??= Flame.images;
 
     final animation =
         await SpriteAnimation.load(path, animationData, images: images);
-    final prerenderedFrames = await Future.wait(
-      animation.frames.map((frame) => frame.sprite.toImage()).toList(),
-    );
+    final prerenderedFrames =
+        animation.frames.map((frame) => frame.sprite.toImageSync()).toList();
 
     return ParallaxAnimation(
       animation,
@@ -205,15 +214,16 @@ class ParallaxAnimation extends ParallaxRenderer {
       repeat: repeat,
       alignment: alignment,
       fill: fill,
+      filterQuality: filterQuality,
     );
   }
 
   @override
-  Image get image => _prerenderedFrames[_animation.currentIndex];
+  Image get image => _prerenderedFrames[_animationTicker.currentIndex];
 
   @override
   void update(double dt) {
-    _animation.update(dt);
+    _animationTicker.update(dt);
   }
 }
 
@@ -223,7 +233,7 @@ class ParallaxLayer {
   final ParallaxRenderer parallaxRenderer;
   late Vector2 velocityMultiplier;
   late Rect _paintArea;
-  late Vector2 _scroll;
+  final Vector2 _scroll = Vector2.zero();
   late Vector2 _imageSize;
   double _scale = 1.0;
 
@@ -269,35 +279,40 @@ class ParallaxLayer {
     final marginX = alignment.x * overflow.x / 2 + overflow.x / 2;
     final marginY = alignment.y * overflow.y / 2 + overflow.y / 2;
 
-    _scroll = Vector2(marginX, marginY);
+    _scroll.setValues(marginX, marginY);
 
     // Size of the area to paint the images on
     final paintSize = count..multiply(_imageSize);
     _paintArea = paintSize.toRect();
   }
 
+  // Used to avoid creating new Vector2 objects in the update-loop.
+  final _delta = Vector2.zero();
+
   void update(Vector2 delta, double dt) {
     parallaxRenderer.update(dt);
     // Scale the delta so that images that are larger don't scroll faster
-    _scroll += delta.clone()..divide(_imageSize);
+    _delta
+      ..setFrom(delta)
+      ..divide(_imageSize);
+    _scroll.add(_delta);
     switch (parallaxRenderer.repeat) {
       case ImageRepeat.repeat:
-        _scroll = Vector2(_scroll.x % 1, _scroll.y % 1);
+        _scroll.setValues(_scroll.x % 1, _scroll.y % 1);
         break;
       case ImageRepeat.repeatX:
-        _scroll = Vector2(_scroll.x % 1, _scroll.y);
+        _scroll.setValues(_scroll.x % 1, _scroll.y);
         break;
       case ImageRepeat.repeatY:
-        _scroll = Vector2(_scroll.x, _scroll.y % 1);
+        _scroll.setValues(_scroll.x, _scroll.y % 1);
         break;
       case ImageRepeat.noRepeat:
         break;
     }
 
-    final scrollPosition = _scroll.clone()..multiply(_imageSize);
     _paintArea = Rect.fromLTWH(
-      -scrollPosition.x,
-      -scrollPosition.y,
+      -_scroll.x * _imageSize.x,
+      -_scroll.y * _imageSize.y,
       _paintArea.width,
       _paintArea.height,
     );
@@ -330,6 +345,7 @@ class ParallaxLayer {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     return ParallaxLayer(
       await data.load(
@@ -337,6 +353,7 @@ class ParallaxLayer {
         alignment,
         fill,
         images,
+        filterQuality,
       ),
       velocityMultiplier: velocityMultiplier,
     );
@@ -352,6 +369,7 @@ abstract class ParallaxData {
     Alignment alignment,
     LayerFill fill,
     Images? images,
+    FilterQuality? filterQuality,
   );
 }
 
@@ -367,6 +385,7 @@ class ParallaxImageData extends ParallaxData {
     Alignment alignment,
     LayerFill fill,
     Images? images,
+    FilterQuality? filterQuality,
   ) {
     return ParallaxImage.load(
       path,
@@ -374,6 +393,7 @@ class ParallaxImageData extends ParallaxData {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 }
@@ -391,6 +411,7 @@ class ParallaxAnimationData extends ParallaxData {
     Alignment alignment,
     LayerFill fill,
     Images? images,
+    FilterQuality? filterQuality,
   ) {
     return ParallaxAnimation.load(
       path,
@@ -399,6 +420,7 @@ class ParallaxAnimationData extends ParallaxData {
       alignment: alignment,
       fill: fill,
       images: images,
+      filterQuality: filterQuality,
     );
   }
 }
@@ -415,6 +437,7 @@ class Parallax {
 
   /// Do not modify this directly, since the layers won't be resized if you do.
   Vector2 get size => _size;
+
   set size(Vector2 newSize) {
     resize(newSize);
   }
@@ -448,10 +471,16 @@ class Parallax {
     isSized |= true;
   }
 
+  // Used to avoid creating new Vector2 objects in the update-loop.
+  final _delta = Vector2.zero();
+
   void update(double dt) {
     layers.forEach((layer) {
       layer.update(
-        (baseVelocity.clone()..multiply(layer.velocityMultiplier)) * dt,
+        _delta
+          ..setFrom(baseVelocity)
+          ..multiply(layer.velocityMultiplier)
+          ..scale(dt),
         dt,
       );
     });
@@ -483,6 +512,7 @@ class Parallax {
     Alignment alignment = Alignment.bottomLeft,
     LayerFill fill = LayerFill.height,
     Images? images,
+    FilterQuality? filterQuality,
   }) async {
     final velocityDelta = velocityMultiplierDelta ?? Vector2.all(1.0);
     final layers = await Future.wait<ParallaxLayer>(
@@ -497,6 +527,7 @@ class Parallax {
           alignment,
           fill,
           images,
+          filterQuality,
         );
         return ParallaxLayer(
           renderer,

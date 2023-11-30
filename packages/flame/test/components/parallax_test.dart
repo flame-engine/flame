@@ -23,7 +23,7 @@ class _ParallaxGame extends FlameGame {
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
     );
-    add(parallaxComponent);
+    camera.viewport.add(parallaxComponent);
   }
 }
 

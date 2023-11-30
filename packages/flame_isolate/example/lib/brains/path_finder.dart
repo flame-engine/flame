@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
-import 'package:flutter_isolates_example/standard/pair.dart';
-import 'package:flutter_isolates_example/terrain/terrain.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/standard/pair.dart';
+import 'package:flame_isolate_example/terrain/terrain.dart';
 
 /// Synchronous implementation of finding a path between start and destination.
 Iterable<IntVector2>? findPath({

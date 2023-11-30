@@ -1,52 +1,58 @@
 {
   "version": "0.2",
   "language": "en",
-  "flagWords": ["teh", "hte"],
+  "flagWords": [
+    "teh",
+    "hte"
+  ],
   "ignorePaths": [
     "**/media/**",
     "**/assets/**",
-    "**/test/**",
     "**/CHANGELOG.md"
   ],
   "ignoreRegExpList": [
-      "@[\\w\\-]+",
-      "\\$\\w+",
-      "\\{\\w+",
-      "\\`\\w+",
-      "\\:\\w+",
-      "\\/\\w+",
-      "\\#[\\w\\-]+"
+    "\\#[\\w\\-]+"
   ],
   "dictionaries": [
-      "en_US",
-      "softwareTerms",
-      "flame_dictionary",
-      "gamedev_dictionary",
-      "sphinx_dictionary"
-  ],
-  "languageSettings": [
-      {
-          "languageId": "markdown",
-          "ignoreRegExpList": [
-              "/^\\s*```[\\s\\S]*?^\\s*```/gm"
-          ]
-      }
+    "en_US",
+    "softwareTerms",
+    "dart_dictionary",
+    "flame_dictionary",
+    "gamedev_dictionary",
+    "sphinx_dictionary",
+    "people_usernames",
+    "words_dictionary"
   ],
   "dictionaryDefinitions": [
-      {
-          "name": "flame_dictionary",
-          "path": "./.cspell/flame_dictionary.txt",
-          "addWords": true
-      },
-      {
-        "name": "gamedev_dictionary",
-        "path": "./.cspell/gamedev_dictionary.txt",
-        "addWords": true
-      },
-      {
-        "name": "sphinx_dictionary",
-        "path": "./.cspell/sphinx_dictionary.txt",
-        "addWords": true
-      }
+    {
+      "name": "dart_dictionary",
+      "path": "./.cspell/dart_dictionary.txt",
+      "addWords": true
+    },
+    {
+      "name": "flame_dictionary",
+      "path": "./.cspell/flame_dictionary.txt",
+      "addWords": true
+    },
+    {
+      "name": "gamedev_dictionary",
+      "path": "./.cspell/gamedev_dictionary.txt",
+      "addWords": true
+    },
+    {
+      "name": "sphinx_dictionary",
+      "path": "./.cspell/sphinx_dictionary.txt",
+      "addWords": true
+    },
+    {
+      "name": "people_usernames",
+      "path": "./.cspell/people_usernames.txt",
+      "addWords": true
+    },
+    {
+      "name": "words_dictionary",
+      "path": "./.cspell/words_dictionary.txt",
+      "addWords": true
+    }
   ]
 }

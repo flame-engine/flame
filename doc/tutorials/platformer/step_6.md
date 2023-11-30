@@ -3,8 +3,8 @@
 
 ## Setting up the HUD
 
-Now that the game is up and running, the rest of the code should come fairly easily.  To prepare for
-the hud, we need to add some variables in `lib/ember_quest.dart`.  Add the following to the top of
+Now that the game is up and running, the rest of the code should come fairly easily. To prepare for
+the hud, we need to add some variables in `lib/ember_quest.dart`. Add the following to the top of
 the class:
 
 ```dart
@@ -13,8 +13,8 @@ int health = 3;
 ```
 
 Start by creating a folder called `lib/overlays`, and in that folder, create a component called
-`heart.dart`.  This is going to be the health monitoring component in the upper left-hand corner of
-the game.  Add the following code:
+`heart.dart`. This is going to be the health monitoring component in the upper left-hand corner of
+the game. Add the following code:
 
 ```dart
 import 'package:ember_quest/ember_quest.dart';
@@ -74,7 +74,7 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 ```
 
 The `HeartHealthComponent` is just a [SpriteGroupComponent](../../flame/components.md#spritegroup)
-that uses the heart images that were created early on.  The unique thing that is being done, is when
+that uses the heart images that were created early on. The unique thing that is being done, is when
 the component is created, it requires a `heartNumber`, so in the `update` method, we check to see if
 the `game.health` is less than the `heartNumber` and if so, change the state of the component to
 unavailable.
@@ -97,14 +97,12 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
     super.anchor,
     super.children,
     super.priority = 5,
-  }) {
-    positionType = PositionType.viewport;
-  }
+  });
 
   late TextComponent _scoreTextComponent;
 
   @override
-  Future<void>? onLoad() async {
+  Future<void> onLoad() async {
     _scoreTextComponent = TextComponent(
       text: '${game.starsCollected}',
       textRenderer: TextPaint(
@@ -138,26 +136,23 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
         ),
       );
     }
-
-    return super.onLoad();
   }
 
   @override
   void update(double dt) {
     _scoreTextComponent.text = '${game.starsCollected}';
-    super.update(dt);
   }
 }
 
 ```
 
 In the `onLoad` method, you can see where we loop from 1 to the `game.health` amount, to create
-the number of hearts necessary.  The last step is to add the hud to the game.
+the number of hearts necessary. The last step is to add the hud to the game.
 
-Go to 'lib/ember_quest.dart` and add the following code in the `initializeGame` method:
+Go to `lib/ember_quest.dart` and add the following code in the `initializeGame` method:
 
 ```dart
-add(Hud());
+cameraComponent.viewport.add(Hud());
 ```
 
 If the auto-import did not occur, you will need to add:
@@ -173,38 +168,38 @@ If you run the game now, you should see:
 
 ## Updating the HUD Data
 
-The last thing we need to do before closing out the HUD is to update the data.  To do this, we need
+The last thing we need to do before closing out the HUD is to update the data. To do this, we need
 to open `lib/actors/ember.dart` and add the following code:
 
 `onCollision`
 
 ```dart
 if (other is Star) {
-    other.removeFromParent();
-    game.starsCollected++;
+  other.removeFromParent();
+  game.starsCollected++;
 }
 ```
 
 ```dart
 void hit() {
-if (!hitByEnemy) {
+  if (!hitByEnemy) {
     game.health--;
     hitByEnemy = true;
-}
-add(
+  }
+  add(
     OpacityEffect.fadeOut(
-    EffectController(
-      alternate: true,
-      duration: 0.1,
-      repeatCount: 5,
-    ),
+      EffectController(
+        alternate: true,
+        duration: 0.1,
+        repeatCount: 5,
+      ),
     )..onComplete = () {
       hitByEnemy = false;
     },
-);
+  );
 }
 ```
 
 If you run the game now, you will see that your health is updated and the stars are incremented as
-appropriate.  Finally, in [](step_7), we will finish the game by adding the main menu and the
+appropriate. Finally, in [](step_7), we will finish the game by adding the main menu and the
 game-over menu.

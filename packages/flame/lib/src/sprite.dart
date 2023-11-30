@@ -38,8 +38,8 @@ class Sprite {
     Vector2? srcSize,
     Images? images,
   }) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(src);
+    final imagesCache = images ?? Flame.images;
+    final image = await imagesCache.load(src);
     return Sprite(image, srcPosition: srcPosition, srcSize: srcSize);
   }
 
@@ -84,6 +84,7 @@ class Sprite {
   // Used to avoid the creation of new Vector2 objects in render.
   static final _tmpRenderPosition = Vector2.zero();
   static final _tmpRenderSize = Vector2.zero();
+  static final _zeroPosition = Vector2.zero();
 
   /// Renders this sprite onto the [canvas].
   ///
@@ -125,9 +126,19 @@ class Sprite {
   /// **Note:** This is a heavy async operation and should not be called inside
   /// the game loop. Remember to call dispose on the [Image] object once you
   /// aren't going to use it anymore.
-  Future<Image> toImage() async {
+  Future<Image> toImage() {
     final composition = ImageComposition()
-      ..add(image, Vector2.zero(), source: src);
+      ..add(image, _zeroPosition, source: src);
     return composition.compose();
+  }
+
+  /// Return a new [Image] based on the [src] of the Sprite.
+  ///
+  /// A sync version of the [toImage] function. Read [Picture.toImageSync] for a
+  /// detailed description of possible benefits in performance.
+  Image toImageSync() {
+    final composition = ImageComposition()
+      ..add(image, _zeroPosition, source: src);
+    return composition.composeSync();
   }
 }

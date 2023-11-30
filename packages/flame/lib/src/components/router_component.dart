@@ -31,8 +31,9 @@ class RouterComponent extends Component {
   RouterComponent({
     required this.initialRoute,
     required Map<String, Route> routes,
-    Map<String, _RouteFactory>? routeFactories,
+    Map<String, RouteFactory>? routeFactories,
     this.onUnknownRoute,
+    super.key,
   })  : _routes = routes,
         _routeFactories = routeFactories ?? {} {
     routes.forEach((name, route) => route.name = name);
@@ -64,12 +65,12 @@ class RouterComponent extends Component {
   /// "prefix/arg". For such a name, we will call the factory "prefix" with the
   /// argument "arg". The produced route will be cached in the main [_routes]
   /// map, and then built and mounted normally.
-  final Map<String, _RouteFactory> _routeFactories;
+  final Map<String, RouteFactory> _routeFactories;
 
   /// Function that will be called to resolve any route names that couldn't be
   /// resolved via [_routes] or [_routeFactories]. Unlike with routeFactories,
   /// the route returned by this function will not be cached.
-  final _RouteFactory? onUnknownRoute;
+  final RouteFactory? onUnknownRoute;
 
   /// Returns the route that is currently at the top of the stack.
   Route get currentRoute => _routeStack.last;
@@ -295,4 +296,4 @@ class RouterComponent extends Component {
   }
 }
 
-typedef _RouteFactory = Route Function(String parameter);
+typedef RouteFactory = Route Function(String parameter);

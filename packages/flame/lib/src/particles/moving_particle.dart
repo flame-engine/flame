@@ -25,13 +25,13 @@ class MovingParticle extends CurvedParticle with SingleChildParticle {
   static final _tmpVector = Vector2.zero();
 
   @override
-  void render(Canvas c) {
-    c.save();
+  void render(Canvas canvas) {
+    canvas.save();
     final current = _tmpVector
       ..setFrom(from)
       ..lerp(to, progress);
-    c.translateVector(current);
-    super.render(c);
-    c.restore();
+    canvas.translateVector(current);
+    super.render(canvas);
+    canvas.restore();
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/experimental.dart';
+import 'package:flame/camera.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -71,9 +71,10 @@ void main() {
 
     testWithFlameGame('hit testing', (game) async {
       final world = World();
+      final viewport = FixedAspectRatioViewport(aspectRatio: 1);
       final camera = CameraComponent(
         world: world,
-        viewport: FixedAspectRatioViewport(aspectRatio: 1),
+        viewport: viewport,
       );
       game.addAll([world, camera]);
       game.onGameResize(Vector2(100, 200));
@@ -81,7 +82,9 @@ void main() {
 
       bool hit(double x, double y) {
         final components = game.componentsAtPoint(Vector2(x, y)).toList();
-        return components.isNotEmpty && components.first == world;
+        return components.isNotEmpty &&
+            components.first == viewport &&
+            components[1] == world;
       }
 
       for (final x in [0.0, 5.0, 50.0, 100.0]) {

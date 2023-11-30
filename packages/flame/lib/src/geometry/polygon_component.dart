@@ -2,11 +2,10 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/extensions/rect.dart';
-import 'package:flame/src/extensions/vector2.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
@@ -39,6 +38,7 @@ class PolygonComponent extends ShapeComponent {
     super.priority,
     super.paint,
     super.paintLayers,
+    super.key,
     bool? shrinkToBounds,
   })  : assert(
           _vertices.length > 2,
@@ -79,6 +79,8 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
+    ComponentKey? key,
+    List<Component>? children,
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
@@ -89,6 +91,8 @@ class PolygonComponent extends ShapeComponent {
           paint: paint,
           paintLayers: paintLayers,
           shrinkToBounds: shrinkToBounds,
+          key: key,
+          children: children,
         );
 
   @internal
@@ -119,6 +123,11 @@ class PolygonComponent extends ShapeComponent {
       newVertices.length == _vertices.length,
       'A polygon can not change their number of vertices',
     );
+    // If the list isn't ccw we have to reverse the order in order for
+    // `containsPoint` to work.
+    if (_isClockwise(newVertices)) {
+      newVertices.reverse();
+    }
     _topLeft.setFrom(newVertices[0]);
     newVertices.forEachIndexed((i, _) {
       final newVertex = newVertices[i];
@@ -270,5 +279,14 @@ class PolygonComponent extends ShapeComponent {
       list[i] = list[list.length - 1 - i];
       list[list.length - 1 - i] = temp;
     }
+  }
+
+  bool _isClockwise(List<Vector2> vertices) {
+    var area = 0.0;
+    for (var i = 0; i < vertices.length; i++) {
+      final j = (i + 1) % vertices.length;
+      area += vertices[i].x * vertices[j].y - vertices[j].x * vertices[i].y;
+    }
+    return area >= 0;
   }
 }

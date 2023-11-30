@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame_isolate_example/colonists_game.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_isolates_example/colonists_game.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
 
 enum MoveDirection {
   idle(isLeft: false), // 0
@@ -31,11 +31,12 @@ enum MoveDirection {
     if (index >= 6 && index <= 8) {
       return MoveDirection.values[index - 3];
     }
+    // ignore: avoid_returning_this
     return this;
   }
 }
 
-mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
+mixin Movable on PositionComponent, HasGameReference<ColonistsGame> {
   double get speed;
 
   void reachedDestination();
@@ -79,13 +80,13 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
 
   void walkPath(List<IntVector2> path) {
     final absolutePath = path.map((e) {
-      return gameRef.tileAtPosition(e.x, e.y).positionOfAnchor(Anchor.center);
+      return game.tileAtPosition(e.x, e.y).positionOfAnchor(Anchor.center);
     }).toList();
 
     _walkAlongPath(absolutePath);
 
     if (path.length > 2) {
-      gameRef.add(pathLine = PathLine(absolutePath));
+      game.world.add(pathLine = PathLine(absolutePath));
     }
   }
 
@@ -104,7 +105,7 @@ mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
   };
 }
 
-class PathLine extends ShapeComponent with HasGameRef<ColonistsGame> {
+class PathLine extends ShapeComponent {
   final Path path;
 
   PathLine(List<Vector2> path) : path = _toPath(path) {
@@ -128,6 +129,5 @@ class PathLine extends ShapeComponent with HasGameRef<ColonistsGame> {
   @override
   void render(Canvas canvas) {
     canvas.drawPath(path, paint);
-    super.render(canvas);
   }
 }

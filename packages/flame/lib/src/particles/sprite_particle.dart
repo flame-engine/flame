@@ -7,14 +7,19 @@ import 'package:flame/src/sprite.dart';
 
 export '../sprite.dart';
 
+/// A [Particle] which applies certain [Sprite].
 class SpriteParticle extends Particle {
   final Sprite sprite;
+  final Vector2? position;
   final Vector2? size;
+  final Anchor anchor;
   final Paint? overridePaint;
 
   SpriteParticle({
     required this.sprite,
+    this.position,
     this.size,
+    this.anchor = Anchor.center,
     this.overridePaint,
     super.lifespan,
   });
@@ -23,8 +28,9 @@ class SpriteParticle extends Particle {
   void render(Canvas canvas) {
     sprite.render(
       canvas,
+      position: position,
       size: size,
-      anchor: Anchor.center,
+      anchor: anchor,
       overridePaint: overridePaint,
     );
   }

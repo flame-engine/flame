@@ -24,6 +24,7 @@ class NineTileBoxComponent extends PositionComponent implements SizeProvider {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   });
 
   @override
@@ -37,7 +38,7 @@ class NineTileBoxComponent extends PositionComponent implements SizeProvider {
 
   @mustCallSuper
   @override
-  void render(Canvas c) {
-    nineTileBox?.drawRect(c, size.toRect());
+  void render(Canvas canvas) {
+    nineTileBox?.drawRect(canvas, size.toRect());
   }
 }

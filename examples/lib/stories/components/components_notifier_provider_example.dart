@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,7 @@ import 'package:provider/provider.dart';
 class ComponentsNotifierProviderExampleWidget extends StatefulWidget {
   const ComponentsNotifierProviderExampleWidget({super.key});
 
-  static String description = '''
+  static const String description = '''
       Similar to the Components Notifier example, but uses provider
       instead of the built in ComponentsNotifierBuilder widget.
 ''';
@@ -77,7 +78,7 @@ class GameHud extends StatelessWidget {
   }
 }
 
-class Enemy extends CircleComponent with Tappable, Notifier {
+class Enemy extends CircleComponent with TapCallbacks, Notifier {
   Enemy({super.position})
       : super(
           radius: 20,
@@ -85,13 +86,12 @@ class Enemy extends CircleComponent with Tappable, Notifier {
         );
 
   @override
-  bool onTapUp(_) {
+  void onTapUp(_) {
     removeFromParent();
-    return true;
   }
 }
 
-class ComponentNotifierExample extends FlameGame with HasTappables {
+class ComponentNotifierExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     replay();

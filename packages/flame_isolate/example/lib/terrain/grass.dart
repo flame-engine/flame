@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame_isolate_example/terrain/terrain.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_isolates_example/terrain/terrain.dart';
 
 class Grass extends PositionComponent with Terrain {
   static final _color = Paint()..color = const Color(0xff567d46);

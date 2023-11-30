@@ -177,14 +177,14 @@ following:
 
 4. Install the remaining requirements using the command
 
-   ```console
+   ```shell
    melos run doc-setup
    ```
 
 Once these prerequisites are met, you can build the documentation by using the built-in Melos
 target:
 
-```console
+```shell
 melos doc-build
 ```
 
@@ -197,7 +197,7 @@ If you want to automatically recompile the docs every time there is a change to 
 you can use the the built-in Melos target below, which will also serve and open your default
 browser with the docs.
 
-```console
+```shell
 melos doc-serve
 ```
 
@@ -211,6 +211,7 @@ There are other make commands that you may find occasionally useful too:
 - **melos doc-clean** removes all cached generated files (in case the system gets stuck in a bad
 state).
 - **melos doc-linkcheck** to check whether there are any broken links in the documentation.
+- **melos doc-kill** removes any orphaned TCP threads running on port 8000.
 
 The generated html files will be in the `doc/_build/html` directory, you can view them directly
 by opening the file `doc/_build/html/index.html` in your browser. The only drawback is that the

@@ -1,15 +1,49 @@
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flame_audio/audio_pool.dart';
 
 import 'package:flame_audio/bgm.dart';
+
+export 'package:audioplayers/audioplayers.dart';
+
+/// A typedef for a function that creates an [AudioCache] instance.
+typedef AudioCacheFactory = AudioCache Function({required String prefix});
+
+/// A typedef for a function that creates a [Bgm] instance.
+typedef BgmFactory = Bgm Function({required AudioCache audioCache});
 
 /// This utility class holds static references to some global audio objects.
 ///
 /// You can use as a helper to very simply play a sound or a background music.
 /// Alternatively you can create your own instances and control them yourself.
 class FlameAudio {
+  /// The factory used to create the global [AudioCache] instance.
+  ///
+  /// Useful to override the default [AudioCache] constructor in testing
+  /// or edge cases where the developer needs control on how [AudioCache]
+  /// are created.
+  static AudioCacheFactory audioCacheFactory = AudioCache.new;
+
+  /// The factory used to create the global [Bgm] instance.
+  ///
+  /// Useful to override the default [Bgm] constructor in testing
+  /// or edge cases where the developer needs control on how [Bgm]
+  /// are created.
+  static BgmFactory bgmFactory = Bgm.new;
+
   /// Access a shared instance of the [AudioCache] class.
-  static AudioCache audioCache = AudioCache(prefix: 'assets/audio/');
+  static AudioCache audioCache = audioCacheFactory(
+    prefix: 'assets/audio/',
+  );
+
+  /// Access a shared instance of the [Bgm] class.
+  ///
+  /// This will use the same global audio cache from [FlameAudio].
+  static final Bgm bgm = bgmFactory(audioCache: audioCache);
+
+  /// Updates the prefix in the global [AudioCache] and [bgm] instances.
+  static void updatePrefix(String prefix) {
+    audioCache.prefix = prefix;
+    bgm.audioPlayer.audioCache.prefix = prefix;
+  }
 
   static Future<AudioPlayer> _preparePlayer(
     String file,
@@ -28,7 +62,7 @@ class FlameAudio {
   }
 
   /// Plays a single run of the given [file], with a given [volume].
-  static Future<AudioPlayer> play(String file, {double volume = 1.0}) async {
+  static Future<AudioPlayer> play(String file, {double volume = 1.0}) {
     return _preparePlayer(
       file,
       volume,
@@ -38,7 +72,7 @@ class FlameAudio {
   }
 
   /// Plays, and keeps looping the given [file].
-  static Future<AudioPlayer> loop(String file, {double volume = 1.0}) async {
+  static Future<AudioPlayer> loop(String file, {double volume = 1.0}) {
     return _preparePlayer(
       file,
       volume,
@@ -73,19 +107,14 @@ class FlameAudio {
     );
   }
 
-  /// Access a shared instance of the [Bgm] class.
-  ///
-  /// This will use the same global audio cache from [FlameAudio].
-  static late final Bgm bgm = Bgm(audioCache: audioCache);
-
   /// Creates a new Audio Pool using Flame's global Audio Cache.
   static Future<AudioPool> createPool(
     String sound, {
-    int minPlayers = 1,
     required int maxPlayers,
+    int minPlayers = 1,
   }) {
     return AudioPool.create(
-      sound,
+      source: AssetSource(sound),
       audioCache: audioCache,
       minPlayers: minPlayers,
       maxPlayers: maxPlayers,

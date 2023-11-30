@@ -1,8 +1,13 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/renderable_tile_map.dart';
+import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
@@ -13,7 +18,7 @@ import 'package:tiled/tiled.dart';
 /// Sprite Batches.
 /// {@endtemplate}
 class TiledComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
+    with HasGameReference<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
@@ -47,6 +52,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) : super(
           size: computeSize(
             tileMap.map.orientation,
@@ -62,8 +68,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   @override
   Future<void>? onLoad() async {
     super.onLoad();
-    // Automatically use the FlameGame camera if it's not already set.
-    tileMap.camera ??= gameRef.camera;
+    // Automatically use the first attached CameraComponent camera if it's not
+    // already set..
+    tileMap.camera ??= game.children.query<CameraComponent>().firstOrNull;
   }
 
   @override
@@ -77,26 +84,57 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    tileMap.handleResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    tileMap.handleResize(size);
   }
 
   /// Loads a [TiledComponent] from a file.
   ///
+  /// {@macro renderable_tile_prefix_path}
+  ///
   /// By default, [RenderableTiledMap] renders flipped tiles if they exist.
   /// You can disable it by passing [ignoreFlip] as `true`.
+  ///
+  /// A custom [atlasMaxX] and [atlasMaxY] can be provided in case you want to
+  /// change the max size of [TiledAtlas] that [TiledComponent] creates
+  /// internally.
+  ///
+  /// TiledComponent uses Flame's `SpriteBatch` to render the map. Which under
+  /// the hood uses `Canvas.drawAtlas` calls to render the tiles. This behavior
+  /// can be changed by setting `useAtlas` to `false`. This will make the map
+  /// be rendered with `Canvas.drawImageRect` calls instead.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
+    String prefix = 'assets/tiles/',
     int? priority,
     bool? ignoreFlip,
+    AssetBundle? bundle,
+    Images? images,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    Paint Function(double opacity)? layerPaintFactory,
+    double atlasPackingSpacingX = 0,
+    double atlasPackingSpacingY = 0,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
         fileName,
         destTileSize,
+        atlasMaxX: atlasMaxX,
+        atlasMaxY: atlasMaxY,
         ignoreFlip: ignoreFlip,
+        prefix: prefix,
+        bundle: bundle,
+        images: images,
+        tsxPackingFilter: tsxPackingFilter,
+        useAtlas: useAtlas,
+        layerPaintFactory: layerPaintFactory,
+        atlasPackingSpacingX: atlasPackingSpacingX,
+        atlasPackingSpacingY: atlasPackingSpacingY,
       ),
       priority: priority,
     );
@@ -157,5 +195,31 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
           mapHeight * tileScaled.y,
         );
     }
+  }
+
+  /// Returns a list of all the Atlases that were created for this component.
+  ///
+  /// This method is useful for debugging purposes as it allows developers to
+  /// check how the tilesets were packed into the atlas.
+  ///
+  /// It returns a record with the Atlas key and its image.
+  List<(String, Image)> atlases() {
+    return tileMap.renderableLayers
+        .whereType<FlameTileLayer>()
+        .where((layer) => layer.tiledAtlas.atlas != null)
+        .map((layer) {
+          final image = layer.tiledAtlas.atlas;
+          final key = layer.tiledAtlas.key;
+          return (key, image!);
+        })
+        .fold<Map<String, (String, Image)>>(
+          {},
+          (previousValue, element) {
+            previousValue.putIfAbsent(element.$1, () => element);
+            return previousValue;
+          },
+        )
+        .values
+        .toList();
   }
 }

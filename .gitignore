@@ -1,3 +1,4 @@
+pubspec.lock
 
 # Miscellaneous
 *.class
@@ -30,6 +31,9 @@
 .pub/
 android/
 ios/
+macos/
+windows/
+linux/
 desktop/
 build/
 coverage/
@@ -43,3 +47,10 @@ _build/
 # Custom
 lib/generated_plugin_registrant.dart
 examples/**/.gitignore
+
+**/example/android
+**/example/ios
+**/example/linux
+**/example/macos
+**/example/windows
+**/example/web

@@ -14,7 +14,7 @@ class BulletComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     add(CircleHitbox());
-    animation = await gameRef.loadSpriteAnimation(
+    animation = await game.loadSpriteAnimation(
       'rogue_shooter/bullet.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
@@ -28,8 +28,11 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
-    super.onCollisionStart(points, other);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
     if (other is EnemyComponent) {
       other.takeHit();
       removeFromParent();
@@ -44,9 +47,7 @@ class BulletComponent extends SpriteAnimationComponent
       ..scale(dt);
     position += deltaPosition;
 
-    if (position.y < 0 ||
-        position.x > gameRef.size.x ||
-        position.x + size.x < 0) {
+    if (position.y < 0 || position.x > game.size.x || position.x + size.x < 0) {
       removeFromParent();
     }
   }

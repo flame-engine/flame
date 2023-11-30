@@ -3,8 +3,8 @@
 Before you begin any kind of game project, you need to give it a **name**. For
 this tutorial the name will be simply `klondike`.
 
-Having this name in mind, please head over to the [](../bare_flame_game.md)
-tutorial and complete the necessary set up steps. When you come back, you should
+Having this name in mind, please head over to the [tutorial](../bare_flame_game.md)
+and complete the necessary set up steps. When you come back, you should
 already have the `main.dart` file with the following content:
 
 ```dart
@@ -75,14 +75,14 @@ klondike/
  └─pubspec.yaml
 ```
 
-By the way, this kind of file is called the **spritesheet**: it's just a
+By the way, this kind of file is called the **sprite sheet**: it's just a
 collection of multiple independent images in a single file. We are using a
-spritesheet here for the simple reason that loading a single large image is
+sprite sheet here for the simple reason that loading a single large image is
 faster than many small images. In addition, rendering sprites that were
 extracted from a single source image can be faster too, since Flutter will
 optimize multiple such drawing commands into a single `drawAtlas` command.
 
-Here are the contents of my spritesheet:
+Here are the contents of my sprite sheet:
 
 - Numerals 2, 3, 4, ..., K, A. In theory, we could have rendered these in the
     game as text strings, but then we would need to also include a font as an

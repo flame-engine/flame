@@ -396,12 +396,17 @@ div.nav-left li.current > ul {
  *----------------------------------------------------------------------------*/
 
 div.sidebar-right {
-  flex: 5;
+  flex: 5 1 auto;
   height: calc(100vh - 25px - var(--top-menu-height));
-  margin-right: 20px;
+  margin-right: -28px;
   max-width: var(--right-menu-width);
   position: sticky;
   top: calc(25px + var(--top-menu-height));
+  overflow: hidden;
+}
+
+div.sidebar-right:hover {
+  overflow-y: auto;
 }
 
 @media (max-width: 1200px) {
@@ -652,6 +657,7 @@ pre {
   line-height: 125%;
   margin: 0;
   padding: 10px;
+  min-height: 25px;
 }
 
 div[class^="highlight-"] pre:before {
@@ -665,8 +671,8 @@ div[class^="highlight-"] pre:before {
   top: 0;
 }
 
-div.highlight-console pre:before {
-  content: "bash";
+div.highlight-shell pre:before {
+  content: "shell";
   color: #666;
 }
 div.highlight-dart pre:before {

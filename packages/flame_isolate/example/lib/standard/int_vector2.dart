@@ -15,7 +15,8 @@ class IntVector2 {
   }
 
   @override
-  bool operator ==(Object o) => o is IntVector2 && x == o.x && y == o.y;
+  bool operator ==(Object other) =>
+      other is IntVector2 && x == other.x && y == other.y;
 
   @override
   int get hashCode => hash2(x, y);

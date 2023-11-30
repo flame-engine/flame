@@ -1,7 +1,9 @@
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 
 TapDownEvent createTapDownEvents({
+  required Game game,
   int? pointerId,
   PointerDeviceKind? kind,
   Offset? globalPosition,
@@ -9,6 +11,7 @@ TapDownEvent createTapDownEvents({
 }) {
   return TapDownEvent(
     pointerId ?? 1,
+    game,
     TapDownDetails(
       localPosition: localPosition ?? Offset.zero,
       globalPosition: globalPosition ?? Offset.zero,
@@ -18,6 +21,7 @@ TapDownEvent createTapDownEvents({
 }
 
 TapUpEvent createTapUpEvents({
+  required Game game,
   int? pointerId,
   PointerDeviceKind? kind,
   Offset? globalPosition,
@@ -25,6 +29,7 @@ TapUpEvent createTapUpEvents({
 }) {
   return TapUpEvent(
     pointerId ?? 1,
+    game,
     TapUpDetails(
       localPosition: localPosition ?? Offset.zero,
       globalPosition: globalPosition ?? Offset.zero,
@@ -34,6 +39,7 @@ TapUpEvent createTapUpEvents({
 }
 
 DragStartEvent createDragStartEvents({
+  required Game game,
   int? pointerId,
   PointerDeviceKind? kind,
   Offset? globalPosition,
@@ -41,6 +47,7 @@ DragStartEvent createDragStartEvents({
 }) {
   return DragStartEvent(
     pointerId ?? 1,
+    game,
     DragStartDetails(
       localPosition: localPosition ?? Offset.zero,
       globalPosition: globalPosition ?? Offset.zero,
@@ -49,6 +56,7 @@ DragStartEvent createDragStartEvents({
 }
 
 DragUpdateEvent createDragUpdateEvents({
+  required Game game,
   int? pointerId,
   PointerDeviceKind? kind,
   Offset? globalPosition,
@@ -56,6 +64,7 @@ DragUpdateEvent createDragUpdateEvents({
 }) {
   return DragUpdateEvent(
     pointerId ?? 1,
+    game,
     DragUpdateDetails(
       localPosition: localPosition ?? Offset.zero,
       globalPosition: globalPosition ?? Offset.zero,

@@ -39,9 +39,9 @@ have been more difficult to access that image from other classes.
 
 Also note that I am `await`ing the image to finish loading before initializing
 anything else in the game. This is for convenience: it means that by the time
-all other components are initialized, they can assume the spritesheet is already
+all other components are initialized, they can assume the sprite sheet is already
 loaded. We can even add a helper function to extract a sprite from the common
-spritesheet:
+sprite sheet:
 
 ```dart
 Sprite klondikeSprite(double x, double y, double width, double height) {
@@ -166,12 +166,6 @@ KlondikeGame
  └─ CameraComponent
 ```
 
-```{note}
-The **Camera** system described in this tutorial is different from the
-"official" camera available as a property of the `FlameGame` class. The latter
-may become deprecated in the future.
-```
-
 For this game I've been drawing my image assets having in mind the dimension of
 a single card at 1000×1400 pixels. So, this will serve as the reference size for
 determining the overall layout. Another important measurement that affects the
@@ -199,7 +193,7 @@ not planning to change these values during the game:
 Next, we will create a `Stock` component, the `Waste`, four `Foundation`s and
 seven `Pile`s, setting their sizes and positions in the world. The positions
 are calculated using simple arithmetics. This should all happen inside the
-`onLoad` method, after loading the spritesheet:
+`onLoad` method, after loading the sprite sheet:
 
 ```dart
     final stock = Stock()
@@ -226,16 +220,15 @@ are calculated using simple arithmetics. This should all happen inside the
     );
 ```
 
-Then we create the main `World` component, add to it all the components that
-we just created, and finally add the `world` to the game.
+Since Flame version 1.9.0, `FlameGame` sets up default `world` and `camera`
+objects. `KlondikeGame` is an extension of `FlameGame`, so we can add to that
+`world` all the components that we just created.
 
 ```dart
-    final world = World()
-      ..add(stock)
-      ..add(waste)
-      ..addAll(foundations)
-      ..addAll(piles);
-    add(world);
+    world.add(stock);
+    world.add(waste);
+    world.addAll(foundations);
+    world.addAll(piles);
 ```
 
 ```{note}
@@ -253,11 +246,11 @@ If you don't `await` the future from `.add()`, then the component will be added
 to the game anyways, and in the same amount of time.
 ```
 
-Lastly, we create a camera object to look at the `world`. Internally, the camera
-consists of two parts: a **viewport** and a **viewfinder**. The default viewport
-is `MaxViewport`, which takes up the entire available screen size -- this is
-exactly what we need for our game, so no need to change anything. The
-viewfinder, on the other hand, needs to be set up to properly take the
+Lastly, we use FlameGame's `camera` object to look at the `world`. Internally,
+the camera consists of two parts: a **viewport** and a **viewfinder**. The
+default viewport is `MaxViewport`, which takes up the entire available screen
+size -- this is exactly what we need for our game, so no need to change
+anything. The viewfinder, on the other hand, needs to be set up to take the
 dimensions of the underlying world into account.
 
 We want the entire card layout to be visible on the screen without the need to
@@ -287,12 +280,10 @@ but if the screen is too tall, we want the content to be aligned at the
 top.
 
 ```dart
-    final camera = CameraComponent(world: world)
-      ..viewfinder.visibleGameSize =
-          Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap)
-      ..viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0)
-      ..viewfinder.anchor = Anchor.topCenter;
-    add(camera);
+    camera.viewfinder.visibleGameSize =
+           Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap);
+    camera.viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0);
+    camera.viewfinder.anchor = Anchor.topCenter;
 ```
 
 If you run the game now, you should see the placeholders for where the various

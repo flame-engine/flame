@@ -26,7 +26,8 @@ void main() {
 
     test('normal command <<wait>>', () async {
       int getTime() => DateTime.now().millisecondsSinceEpoch;
-      late int t0, t1;
+      late int t0;
+      late int t1;
       await testScenario(
         yarn: YarnProject()
           ..commands.addCommand0('startTimer', () => t0 = getTime())

@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
@@ -52,7 +53,7 @@ class ExampleGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapUp(TapUpInfo details) {
+  void onTapUp(TapUpInfo info) {
     add(
       SpriteAnimationComponent(
         size: Vector2(100, 100),
@@ -60,7 +61,7 @@ class ExampleGame extends FlameGame with TapDetector {
         removeOnFinish: true,
       )
         ..anchor = Anchor.center
-        ..position = details.eventPosition.game,
+        ..position = info.eventPosition.widget,
     );
   }
 }

@@ -12,7 +12,8 @@ class LeftPanel extends ConsumerWidget {
 
     return Directionality(
       textDirection: ref.watch(textDirectionProvider),
-      child: MediaQuery.fromWindow(
+      child: MediaQuery.fromView(
+        view: View.of(context),
         child: Container(
           constraints: BoxConstraints.tightFor(width: width),
           decoration: BoxDecoration(

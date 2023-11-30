@@ -1,9 +1,11 @@
 import 'dart:math';
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
@@ -258,7 +260,6 @@ class Ant extends PositionComponent {
   late final Color color;
   final Random random;
   static const black = Color(0xFF000000);
-  static const tau = Transform2D.tau;
   late final Paint bodyPaint;
   late final Paint eyesPaint;
   late final Paint legsPaint;
@@ -353,12 +354,12 @@ class Ant extends PositionComponent {
       ..cubicTo(0, -1.8, 0, -1.1, 0.5, -1.1)
       ..close();
     legs = [
-      InsectLeg(-0.3, 0.4, -2.6, 0.6, 1.1, 1.1, 0.5, true),
-      InsectLeg(-0.2, 0.7, -2.3, 2.6, 1.5, 1.5, 0.6, true),
-      InsectLeg(0.3, 0, 1.7, -2.3, 1.5, 1.3, 0.6, true),
-      InsectLeg(0.3, 0.4, 2.6, 0.6, 1.1, 1.1, 0.5, false),
-      InsectLeg(0.2, 0.7, 2.3, 2.6, 1.5, 1.5, 0.6, false),
-      InsectLeg(-0.3, 0, -1.7, -2.3, 1.5, 1.3, 0.6, false),
+      InsectLeg(-0.3, 0.4, -2.6, 0.6, 1.1, 1.1, 0.5, mirrorBendDirection: true),
+      InsectLeg(-0.2, 0.7, -2.3, 2.6, 1.5, 1.5, 0.6, mirrorBendDirection: true),
+      InsectLeg(0.3, 0, 1.7, -2.3, 1.5, 1.3, 0.6, mirrorBendDirection: true),
+      InsectLeg(0.3, 0.4, 2.6, 0.6, 1.1, 1.1, 0.5, mirrorBendDirection: false),
+      InsectLeg(0.2, 0.7, 2.3, 2.6, 1.5, 1.5, 0.6, mirrorBendDirection: false),
+      InsectLeg(-0.3, 0, -1.7, -2.3, 1.5, 1.3, 0.6, mirrorBendDirection: false),
     ];
   }
 
@@ -478,9 +479,9 @@ class InsectLeg {
     this.y1,
     this.l1,
     this.l2,
-    this.l3,
-    bool bendDirection,
-  )   : dir = bendDirection ? -1 : 1,
+    this.l3, {
+    required bool mirrorBendDirection,
+  })  : dir = mirrorBendDirection ? -1 : 1,
         path = Path(),
         foot = Vector2.zero() {
     final ok = placeFoot(Vector2(x1, y1));
@@ -488,14 +489,18 @@ class InsectLeg {
   }
 
   /// Place where the leg is attached to the body
-  final double x0, y0;
+  final double x0;
+  final double y0;
 
   /// Place on the ground where the ant needs to place its foot
-  final double x1, y1;
+  final double x1;
+  final double y1;
 
   /// Lengths of the 3 segments of the leg: [l1] is nearest to the body, [l2]
   /// is the middle part, and [l3] is the "foot".
-  final double l1, l2, l3;
+  final double l1;
+  final double l2;
+  final double l3;
 
   /// +1 if the leg bends "forward", or -1 if backwards
   final double dir;

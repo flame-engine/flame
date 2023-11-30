@@ -77,40 +77,4 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     super.clear();
     elements.forEach(super.add);
   }
-
-  /// Call this on your update method.
-  ///
-  /// This method effectuates any pending operations of insertion or removal,
-  /// and thus actually modifies the components set.
-  /// Note: do not call this while iterating the set.
-  @Deprecated('Will be removed in 1.8.0.')
-  void updateComponentList() {}
-
-  @Deprecated('Will be removed in 1.8.0.')
-  @override
-  void rebalanceAll() => reorder();
-
-  @Deprecated('Will be removed in 1.8.0.')
-  @override
-  void rebalanceWhere(bool Function(Component element) test) {
-    // bypass the wrapper because the components are already added
-    final elements = super.removeWhere(test).toList();
-    elements.forEach(super.add);
-  }
-
-  /// Changes the priority of [component] and reorders the games component list.
-  ///
-  /// Returns true if changing the component's priority modified one of the
-  /// components that existed directly on the game and false if it
-  /// either was a child of another component, if it didn't exist at all or if
-  /// it was a component added directly on the game but its priority didn't
-  /// change.
-  @Deprecated('Will be removed in 1.8.0.')
-  bool changePriority(
-    Component component,
-    int priority,
-  ) {
-    component.priority = priority;
-    return true;
-  }
 }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
@@ -14,9 +15,9 @@ mixin CollisionPassthrough on CollisionCallbacks {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    passthroughParent = ancestors().firstWhere(
+    passthroughParent = ancestors().firstWhereOrNull(
       (c) => c is CollisionCallbacks,
-    ) as CollisionCallbacks;
+    ) as CollisionCallbacks?;
   }
 
   @override

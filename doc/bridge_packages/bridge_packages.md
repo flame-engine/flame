@@ -25,6 +25,16 @@ A Box2D physics engine (bridge package for [Forge2D]).
 Use isolates to offload heavy computations to another thread.
 :::
 
+:::{package} flame_lottie
+
+Use Lottie animations in Flame (bridge package for [Lottie]).
+:::
+
+:::{package} flame_network_assets
+
+Fetch assets over the network.
+:::
+
 :::{package} flame_oxygen
 
 Replace FCS with the Oxygen Entity Component System.
@@ -33,6 +43,11 @@ Replace FCS with the Oxygen Entity Component System.
 :::{package} flame_rive
 
 Create interactive animations (bridge package for [Rive]).
+:::
+
+:::{package} flame_spine
+
+Use Spine skeletal animations (bridge package for [Spine]).
 :::
 
 :::{package} flame_splash_screen
@@ -54,7 +69,9 @@ Draw SVG files in Flutter (bridge package for [flutter_svg]).
 [Bloc]: https://github.com/felangel/bloc
 [FireAtlas]: https://github.com/flame-engine/fire-atlas
 [Forge2D]: https://github.com/flame-engine/forge2d
+[Lottie]: https://pub.dev/packages/lottie
 [Rive]: https://rive.app/
+[Spine]: https://pub.dev/packages/spine_flutter
 [Tiled]: https://www.mapeditor.org/
 [flutter_svg]: https://github.com/dnfield/flutter_svg
 
@@ -62,15 +79,17 @@ Draw SVG files in Flutter (bridge package for [flutter_svg]).
 ```{toctree}
 :hidden:
 
-flame_audio         <flame_audio/flame_audio.md>
-flame_bloc          <flame_bloc/flame_bloc.md>
-flame_fire_atlas    <flame_fire_atlas/flame_fire_atlas.md>
-flame_forge2d       <flame_forge2d/flame_forge2d.md>
-flame_isolate       <flame_isolate/flame_isolate.md>
-flame_lottie        <flame_lottie/flame_lottie.md>
-flame_oxygen        <flame_oxygen/flame_oxygen.md>
-flame_rive          <flame_rive/flame_rive.md>
-flame_splash_screen <flame_splash_screen/flame_splash_screen.md>
-flame_svg           <flame_svg/flame_svg.md>
-flame_tiled         <flame_tiled/flame_tiled.md>
+flame_audio                 <flame_audio/flame_audio.md>
+flame_bloc                  <flame_bloc/flame_bloc.md>
+flame_fire_atlas            <flame_fire_atlas/flame_fire_atlas.md>
+flame_forge2d               <flame_forge2d/flame_forge2d.md>
+flame_isolate               <flame_isolate/flame_isolate.md>
+flame_lottie                <flame_lottie/flame_lottie.md>
+flame_network_assets        <flame_network_assets/flame_network_assets.md>
+flame_oxygen                <flame_oxygen/flame_oxygen.md>
+flame_rive                  <flame_rive/flame_rive.md>
+flame_splash_screen         <flame_splash_screen/flame_splash_screen.md>
+flame_spine                 <flame_spine/flame_spine.md>
+flame_svg                   <flame_svg/flame_svg.md>
+flame_tiled                 <flame_tiled/flame_tiled.md>
 ```

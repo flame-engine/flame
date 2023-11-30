@@ -20,13 +20,13 @@ separate DOM elements.
 
 To run your game using skia, use the following command:
 
-```console
+```shell
 flutter run -d chrome --web-renderer canvaskit
 ```
 
 To build the game for production, using skia, use the following:
 
-```console
+```shell
 flutter build web --release --web-renderer canvaskit
 ```
 
@@ -40,7 +40,7 @@ Here we will explain the easiest way to get your game hosted using GitHub pages.
 
 First thing, lets create the branch where your deployed files will live:
 
-```bash
+```shell
 git checkout -b gh-pages
 ```
 

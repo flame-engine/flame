@@ -122,7 +122,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// These widgets can be turned on-and-off dynamically from within the game
   /// via the [Game.overlays] property.
   ///
-  /// ```
+  /// ```dart
   /// void main() {
   ///   runApp(
   ///     GameWidget(
@@ -165,7 +165,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///
   /// To use overlays, the game subclass has to be mixed with HasWidgetsOverlay.
   @override
-  _GameWidgetState<T> createState() => _GameWidgetState<T>();
+  GameWidgetState<T> createState() => GameWidgetState<T>();
 
   void _initializeGame(T game) {
     if (mouseCursor != null) {
@@ -185,7 +185,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   }
 }
 
-class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
+class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
@@ -196,6 +196,9 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           await onLoad;
         }
         game.mount();
+        if (!game.paused) {
+          game.update(0);
+        }
       })();
 
   Future<void>? _loaderFuture;
@@ -250,13 +253,34 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     } else {
       currentGame = widget.game!;
     }
-    currentGame.addGameStateListener(_onGameStateChange);
+    initGameStateListener(currentGame, _onGameStateChange);
     _loaderFuture = null;
   }
 
-  void disposeCurrentGame() {
+  /// Visible for testing for
+  /// https://github.com/flame-engine/flame/issues/2771.
+  @visibleForTesting
+  static void initGameStateListener(
+    Game currentGame,
+    void Function() onGameStateChange,
+  ) {
+    currentGame.addGameStateListener(onGameStateChange);
+
+    // See https://github.com/flame-engine/flame/issues/2771
+    // for why we aren't using [WidgetsBinding.instance.lifecycleState].
+    currentGame.lifecycleStateChange(AppLifecycleState.resumed);
+  }
+
+  /// [disposeCurrentGame] is called by two flutter events - `didUpdateWidget`
+  /// and `dispose`.  When the parameter [callGameOnDispose] is true, the
+  /// `currentGame`'s `onDispose` method will be called; otherwise, it will not.
+  void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
+    currentGame.lifecycleStateChange(AppLifecycleState.paused);
     currentGame.onRemove();
+    if (callGameOnDispose) {
+      currentGame.onDispose();
+    }
   }
 
   @override
@@ -282,7 +306,7 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   @override
   void dispose() {
     super.dispose();
-    disposeCurrentGame();
+    disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
@@ -356,6 +380,12 @@ class _GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             Container();
                       }
                       currentGame.onGameResize(size);
+                      // This should only be called if the game has already been
+                      // loaded (in the case of resizing for example), since
+                      // update otherwise should be called after onMount.
+                      if (!currentGame.paused && currentGame.isAttached) {
+                        currentGame.update(0);
+                      }
                       return FutureBuilder(
                         future: loaderFuture,
                         builder: (_, snapshot) {

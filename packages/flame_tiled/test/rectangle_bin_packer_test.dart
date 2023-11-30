@@ -8,18 +8,12 @@ void main() {
   group('RectangleBinPacker', () {
     late RectangleBinPacker bin;
     setUp(() {
-      bin = RectangleBinPacker();
+      bin = RectangleBinPacker(1024, 1024);
     });
 
-    test('ignores oversized requests', () {
-      expect(
-        bin.pack(bin.maxX + 1, bin.maxY),
-        Rect.zero,
-      );
-      expect(
-        bin.pack(bin.maxX, bin.maxY + 1),
-        Rect.zero,
-      );
+    test('asserts oversized requests', () {
+      expect(() => bin.pack(bin.maxX + 1, bin.maxY), throwsAssertionError);
+      expect(() => bin.pack(bin.maxX, bin.maxY + 1), throwsAssertionError);
       expect(bin.bins, hasLength(1));
       expect(bin.bins.first.top, 0);
       expect(bin.bins.first.left, 0);

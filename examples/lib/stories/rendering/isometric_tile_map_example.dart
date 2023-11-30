@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -32,7 +33,6 @@ class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
 
   @override
   Future<void> onLoad() async {
-    debugMode = true;
     final tilesetImage = await images.load('tile_maps/tiles$suffix.png');
     final tileset = SpriteSheet(
       image: tilesetImage,
@@ -73,7 +73,7 @@ class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    final screenPosition = info.eventPosition.game;
+    final screenPosition = info.eventPosition.widget;
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
     selector.position.setFrom(topLeft + base.getBlockRenderPosition(block));

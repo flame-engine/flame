@@ -1,13 +1,19 @@
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame_tiled/src/rectangle_bin_packer.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:tiled/tiled.dart';
 
+bool _defaultTilesetPackingFilter(_) => true;
+
 /// One image atlas for all Tiled image sets in a map.
+///
+/// Please note that [TiledAtlas] should not be reused without [clone] as it may
+/// have a different [batch] instance.
 class TiledAtlas {
   /// Single atlas for all renders.
   // Retain this as SpriteBatch can dispose of the original image for flips.
@@ -22,6 +28,9 @@ class TiledAtlas {
   /// Image key for this atlas.
   final String key;
 
+  /// If SpriteBatch should use atlas or not.
+  final bool useAtlas;
+
   /// Track one atlas for all images in the Tiled map.
   ///
   /// See [fromTiledMap] for asynchronous loading.
@@ -29,7 +38,14 @@ class TiledAtlas {
     required this.atlas,
     required this.offsets,
     required this.key,
-  }) : batch = atlas == null ? null : SpriteBatch(atlas, imageKey: key);
+    this.useAtlas = true,
+  }) : batch = atlas == null
+            ? null
+            : SpriteBatch(
+                atlas,
+                imageKey: key,
+                useAtlas: useAtlas,
+              );
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
@@ -40,6 +56,7 @@ class TiledAtlas {
         atlas: atlas?.clone(),
         offsets: offsets,
         key: key,
+        useAtlas: useAtlas,
       );
 
   /// Maps of tilesets compiled to [TiledAtlas].
@@ -60,17 +77,26 @@ class TiledAtlas {
   }
 
   /// Collect images that we'll use in tiles - exclude image layers.
-  static Set<TiledImage> _onlyTileImages(TiledMap map) {
-    final imageSet = <TiledImage>{};
+  static Set<(String?, TiledImage)> _onlyTileImages(
+    TiledMap map,
+    bool Function(Tileset) filter,
+  ) {
+    final imageSet = <(String?, TiledImage)>{};
     for (var i = 0; i < map.tilesets.length; ++i) {
-      final image = map.tilesets[i].image;
+      // Skip tilesets that don't match the filter.
+      if (!filter(map.tilesets[i])) {
+        continue;
+      }
+      final tileset = map.tilesets[i];
+      final image = tileset.image;
       if (image?.source != null) {
-        imageSet.add(image!);
+        imageSet.add((tileset.source, image!));
       }
       for (var j = 0; j < map.tilesets[i].tiles.length; ++j) {
-        final image = map.tilesets[i].tiles[j].image;
+        final tileset = map.tilesets[i];
+        final image = tileset.tiles[j].image;
         if (image?.source != null) {
-          imageSet.add(image!);
+          imageSet.add((tileset.source, image!));
         }
       }
     }
@@ -78,17 +104,56 @@ class TiledAtlas {
   }
 
   /// Loads all the tileset images for the [map] into one [TiledAtlas].
-  static Future<TiledAtlas> fromTiledMap(TiledMap map) async {
-    final imageList = _onlyTileImages(map).toList();
+  static Future<TiledAtlas> fromTiledMap(
+    TiledMap map, {
+    double? maxX,
+    double? maxY,
+    Images? images,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    double spacingX = 0,
+    double spacingY = 0,
+  }) async {
+    final tilesetImageList = _onlyTileImages(
+      map,
+      tsxPackingFilter ?? _defaultTilesetPackingFilter,
+    ).toList();
 
-    if (imageList.isEmpty) {
+    final mappedImageList = tilesetImageList.map((entry) {
+      final tiledImage = entry.$2;
+      var tileImageSource = tiledImage.source!;
+      final tilesetSource = entry.$1;
+
+      if (tilesetSource == null) {
+        return (tileImageSource, tiledImage);
+      }
+
+      final tilesetParts = tilesetSource.split('/');
+      final imageParts = tileImageSource.split('/');
+
+      if (tilesetParts.length != imageParts.length) {
+        tileImageSource = [
+          ...tilesetParts.sublist(0, tilesetParts.length - 1),
+          ...imageParts,
+        ].join('/');
+      }
+
+      return (tileImageSource, tiledImage);
+    });
+
+    if (mappedImageList.isEmpty) {
       // so this map has no tiles... Ok.
       return TiledAtlas._(
         atlas: null,
         offsets: {},
         key: 'atlas{empty}',
+        useAtlas: useAtlas,
       );
     }
+
+    final imagesInstance = images ?? Flame.images;
+
+    final imageList = mappedImageList.map((e) => e.$2).toList();
 
     final key = atlasKey(imageList);
     if (atlasMap.containsKey(key)) {
@@ -98,19 +163,29 @@ class TiledAtlas {
     if (imageList.length == 1) {
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final image = (await Flame.images.load(key)).clone();
+      final image = (await imagesInstance.load(key)).clone();
 
-      return atlasMap[key] ??= TiledAtlas._(
+      // There could be a special case that a concurrent call to this method
+      // passes the check `if (atlasMap.containsKey(key))` due to the async call
+      // inside this block. So, instance should always be recreated within this
+      // block to prevent unintended reuse.
+      return atlasMap[key] = TiledAtlas._(
         atlas: image,
         offsets: {key: Offset.zero},
         key: key,
+        useAtlas: useAtlas,
       );
     }
 
-    final bin = RectangleBinPacker();
+    /// Note: Chrome on Android has a maximum texture size of 4096x4096. kIsWeb
+    /// is used to select the smaller texture and might overflow. Consider using
+    /// smaller textures for web targets, or, pack your own atlas.
+    final bin = RectangleBinPacker(
+      maxX ?? (kIsWeb ? 4096 : 8192),
+      maxY ?? (kIsWeb ? 4096 : 8192),
+    );
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder);
-    final _emptyPaint = Paint();
 
     final offsetMap = <String, Offset>{};
 
@@ -123,30 +198,52 @@ class TiledAtlas {
 
     // parallelize the download of images.
     await Future.wait([
-      ...imageList.map((tiledImage) => Flame.images.load(tiledImage.source!))
+      ...mappedImageList.map(
+        (entry) => imagesInstance.load(entry.$1),
+      ),
     ]);
 
-    for (final tiledImage in imageList) {
-      final image = await Flame.images.load(tiledImage.source!);
-      final rect = bin.pack(image.width.toDouble(), image.height.toDouble());
+    final emptyPaint = Paint()
+      ..isAntiAlias = false
+      ..filterQuality = FilterQuality.none;
+    for (final entry in mappedImageList) {
+      final tiledImage = entry.$2;
+      final tileImageSource = entry.$1;
+
+      final image = await imagesInstance.load(tileImageSource);
+      final rect = bin.pack(
+        image.width.toDouble() + spacingX,
+        image.height.toDouble() + spacingY,
+      );
 
       pictureRect = pictureRect.expandToInclude(rect);
 
-      final offset =
-          offsetMap[tiledImage.source!] = Offset(rect.left, rect.top);
+      final offset = offsetMap[tiledImage.source!] = Offset(
+        rect.left - spacingX,
+        rect.top - spacingY,
+      );
 
-      canvas.drawImage(image, offset, _emptyPaint);
+      canvas.drawImage(image, offset, emptyPaint);
     }
     final picture = recorder.endRecording();
     final image = await picture.toImageSafe(
       pictureRect.width.toInt(),
       pictureRect.height.toInt(),
     );
-    Flame.images.add(key, image);
+    (images ?? Flame.images).add(key, image);
     return atlasMap[key] = TiledAtlas._(
       atlas: image,
       offsets: offsetMap,
       key: key,
+      useAtlas: useAtlas,
     );
+  }
+
+  /// Clears images cached in `TiledAtlas`
+  ///
+  /// If you called `Flame.images.clearCache()` you also need to call this
+  /// function to clear disposed images from tiled cache.
+  static void clearCache() {
+    atlasMap.clear();
   }
 }

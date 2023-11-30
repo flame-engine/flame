@@ -11,7 +11,7 @@ import 'package:flutter/services.dart';
 
 class PlayerController extends Component
     with
-        HasGameRef<SpaceShooterGame>,
+        HasGameReference<SpaceShooterGame>,
         FlameBlocListenable<GameStatsBloc, GameStatsState> {
   @override
   bool listenWhen(GameStatsState previousState, GameStatsState newState) {
@@ -22,15 +22,15 @@ class PlayerController extends Component
   void onNewState(GameStatsState state) {
     if (state.status == GameStatus.respawn ||
         state.status == GameStatus.initial) {
-      gameRef.statsBloc.add(const PlayerRespawned());
-      parent?.add(gameRef.player = PlayerComponent());
+      game.statsBloc.add(const PlayerRespawned());
+      parent?.add(game.player = PlayerComponent());
     }
   }
 }
 
 class PlayerComponent extends SpriteAnimationComponent
     with
-        HasGameRef<SpaceShooterGame>,
+        HasGameReference<SpaceShooterGame>,
         CollisionCallbacks,
         KeyboardHandler,
         FlameBlocListenable<InventoryBloc, InventoryState> {
@@ -47,7 +47,7 @@ class PlayerComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    animation = await gameRef.loadSpriteAnimation(
+    animation = await game.loadSpriteAnimation(
       'player.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
@@ -68,7 +68,7 @@ class PlayerComponent extends SpriteAnimationComponent
     final bulletX = x + 20;
     final bulletY = y + 20;
 
-    gameRef.add(
+    game.add(
       BulletComponent(
         bulletX,
         bulletY,
@@ -100,9 +100,9 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   void takeHit() {
-    gameRef.add(ExplosionComponent(x, y));
+    game.add(ExplosionComponent(x, y));
     removeFromParent();
-    gameRef.statsBloc.add(const PlayerDied());
+    game.statsBloc.add(const PlayerDied());
   }
 
   @override
@@ -111,15 +111,15 @@ class PlayerComponent extends SpriteAnimationComponent
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.tab)) {
-      gameRef.inventoryBloc.add(const NextWeaponEquipped());
+      game.inventoryBloc.add(const NextWeaponEquipped());
       return true;
     }
     return false;
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    super.onCollision(points, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
     if (other is EnemyComponent) {
       takeHit();
       other.takeHit();

@@ -1,14 +1,14 @@
 # 5. Controlling Movement
 
-If you were waiting for some serious coding, this chapter is it.  Prepare yourself as we dive in!
+If you were waiting for some serious coding, this chapter is it. Prepare yourself as we dive in!
 
 
 ## Keyboard Controls
 
-The first step will be to allow control of Ember via the keyboard.  We need to start by adding the
+The first step will be to allow control of Ember via the keyboard. We need to start by adding the
 appropriate mixins to the game class and Ember. Add the following:
 
-`lib/ember_quest.dart'
+`lib/ember_quest.dart`
 
 ```dart
 import 'package:flame/events.dart';
@@ -39,7 +39,7 @@ import 'package:flutter/services.dart';
 ```
 
 To control Ember's movement, it is easiest to set a variable where we think of the direction of
-movement like a normalized vector, meaning the value will be restricted to -1, 0, or 1.  So let's
+movement like a normalized vector, meaning the value will be restricted to -1, 0, or 1. So let's
 set a variable at the top of the class:
 
 ```dart
@@ -65,8 +65,8 @@ Now in our `onKeyEvent` method, we can register the key pressed by adding:
   }
 ```
 
-Let's make Ember move by adding a few lines of code and creating our `update` method.  First, we
-need to define a velocity variable for Ember.  Add the following at the top of the `EmberPlayer`
+Let's make Ember move by adding a few lines of code and creating our `update` method. First, we
+need to define a velocity variable for Ember. Add the following at the top of the `EmberPlayer`
 class:
 
 ```dart
@@ -104,10 +104,10 @@ Now Ember looks in the direction they are traveling.
 
 ## Collisions
 
-It is time to get into the thick of it with collisions.  I highly suggest reading the
-[documentation](../../flame/collision_detection.md) to understand how collisions work in Flame.  The
+It is time to get into the thick of it with collisions. I highly suggest reading the
+[documentation](../../flame/collision_detection.md) to understand how collisions work in Flame. The
 first thing we need to do is make the game aware that collisions are going to occur using the
-`HasCollisionDetection` mixin.  Add that to `lib/ember_quest.dart` like:
+`HasCollisionDetection` mixin. Add that to `lib/ember_quest.dart` like:
 
 ```dart
 class EmberQuestGame extends FlameGame
@@ -182,7 +182,7 @@ add(
 ```
 
 Now that we have the basic collisions created, we can add gravity so Ember exists in a game world
-with very basic physics.  To do that, we need to create some more variables:
+with very basic physics. To do that, we need to create some more variables:
 
 ```dart
   final double gravity = 15;
@@ -219,7 +219,7 @@ velocity.y = velocity.y.clamp(-jumpSpeed, terminalVelocity);
 ```
 
 Earlier I mentioned that Ember was in the center of the grass, to solve this and show how collisions
-and gravity work with Ember, I like to add a little drop-in when you start the game.  So in
+and gravity work with Ember, I like to add a little drop-in when you start the game. So in
 `lib/ember_quest.dart` in the `initializeGame` method, change the following:
 
 ```dart
@@ -293,9 +293,9 @@ collide with an enemy, Ember should blink.
 
 ## Adding the Scrolling
 
-This is our last task with Ember.  We need to restrict Ember's movement because as of now, Ember can
-go off-screen and we never move the map.  So to implement this feature, we simply need to add the
-following to our `update` method:
+This is our last task with Ember. We need to restrict Ember's movement because as of now, Ember can
+go off-screen and we never move the map. So to implement this feature, we simply need to add the
+following to the end of our `update` method:
 
 ```dart
 game.objectSpeed = 0;
@@ -308,11 +308,14 @@ if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
   velocity.x = 0;
   game.objectSpeed = -moveSpeed;
 }
+
+position += velocity * dt;
+super.update(dt);
 ```
 
 If you run the game now, Ember can't move off-screen to the left, and as Ember moves to the right,
-once they get to the middle of the screen, the rest of the objects scroll by.  This is because we
-are now updating `game.objectSpeed` which we established early on in the series.  Additionally,
+once they get to the middle of the screen, the rest of the objects scroll by. This is because we
+are now updating `game.objectSpeed` which we established early on in the series. Additionally,
 you will see the next random segment be generated and added to the level based on the work we did in
 Ground Block.
 
@@ -325,5 +328,5 @@ object, we could reload the level and start all over maintaining the stars
 collected and health.
 ```
 
-We are almost done!  In [](step_6.md), we will add the health system, keep track of
+We are almost done! In [](step_6.md), we will add the health system, keep track of
 the score, and provide a HUD to relay that information to the player.

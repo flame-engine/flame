@@ -32,8 +32,8 @@ mixin SingleChildParticle on Particle {
   }
 
   @override
-  void render(Canvas c) {
-    child.render(c);
+  void render(Canvas canvas) {
+    child.render(canvas);
   }
 
   @override

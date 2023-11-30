@@ -54,6 +54,12 @@ Keep in mind that the name of the user-defined function must be:
 **addFunction4**(`String name`, `T0 Function(T1, T2, T3, T4) fn4`)
 : Registers a four-argument function `fn4` as `name`.
 
+**clear**
+: Removes all user-defined functions
+
+**remove**(`String name`)
+: Removes the user-defined function with the specified `name`.
+
 
 ## Properties
 

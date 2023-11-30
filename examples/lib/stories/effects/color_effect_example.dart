@@ -22,15 +22,13 @@ class ColorEffectExample extends FlameGame with TapDetector {
       )..add(
           ColorEffect(
             Colors.blue,
-            const Offset(
-              0.0,
-              0.8,
-            ), // Means, applies from 0% to 80% of the color
             EffectController(
               duration: 1.5,
               reverseDuration: 1.5,
               infinite: true,
             ),
+            // Means, applies from 0% to 80% of the color
+            opacityTo: 0.8,
           ),
         ),
     );

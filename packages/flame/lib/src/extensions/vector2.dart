@@ -6,6 +6,13 @@ import 'package:vector_math/vector_math_64.dart';
 export 'package:vector_math/vector_math_64.dart' hide Colors;
 
 extension Vector2Extension on Vector2 {
+  /// This is a reusable vector that can be used within the [Vector2Extension]
+  /// to avoid creation of new Vector2 instances.
+  ///
+  /// Avoid using this in async extension methods, as it can lead to race
+  /// conditions.
+  static final _reusableVector = Vector2.zero();
+
   /// Creates an [Offset] from the [Vector2]
   Offset toOffset() => Offset(x, y);
 
@@ -31,7 +38,13 @@ extension Vector2Extension on Vector2 {
 
   /// Linearly interpolate towards another Vector2
   void lerp(Vector2 to, double t) {
-    setFrom(this + (to - this) * t);
+    setFrom(
+      _reusableVector
+        ..setFrom(to)
+        ..sub(this)
+        ..scale(t)
+        ..add(this),
+    );
   }
 
   /// Whether the [Vector2] is the zero vector or not
@@ -95,6 +108,16 @@ extension Vector2Extension on Vector2 {
     }
   }
 
+  /// Clamps this vector so that it is within or equals to the bounds defined by
+  /// [min] and [max].
+  void clamp(Vector2 min, Vector2 max) {
+    x = x.clamp(min.x, max.x);
+    y = y.clamp(min.y, max.y);
+  }
+
+  /// Sets both x and y to [value].
+  void setAll(double value) => setValues(value, value);
+
   /// Project this onto [other].
   ///
   /// [other] needs to have a length > 0;
@@ -115,6 +138,17 @@ extension Vector2Extension on Vector2 {
   /// Returns the inverse of this vector.
   Vector2 inverted() => Vector2(-x, -y);
 
+  /// Translates this Vector2 by [x] and [y].
+  void translate(double x, double y) {
+    setValues(this.x + x, this.y + y);
+  }
+
+  /// Creates a new Vector2 that is the current Vector2 translated by
+  /// [x] and [y].
+  Vector2 translated(double x, double y) {
+    return Vector2(this.x + x, this.y + y);
+  }
+
   /// Smoothly moves this [Vector2] in the direction [target] by a displacement
   /// given by a distance [ds] in that direction.
   ///
@@ -128,7 +162,10 @@ extension Vector2Extension on Vector2 {
     double ds,
   ) {
     if (this != target) {
-      final diff = target - this;
+      final diff = _reusableVector
+        ..setFrom(target)
+        ..sub(this);
+
       if (diff.length < ds) {
         setFrom(target);
       } else {
@@ -149,7 +186,8 @@ extension Vector2Extension on Vector2 {
   /// Down: Vector(0.0, 1.0).screenAngle == +-pi
   /// Left: Vector(-1.0, 0.0).screenAngle == -pi/2
   /// Right: Vector(-1.0, 0.0).screenAngle == pi/2
-  double screenAngle() => (clone()..y *= -1).angleToSigned(Vector2(0.0, 1.0));
+  double screenAngle() => (_reusableVector..setValues(x, y * (-1)))
+      .angleToSigned(Vector2(0.0, 1.0));
 
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);

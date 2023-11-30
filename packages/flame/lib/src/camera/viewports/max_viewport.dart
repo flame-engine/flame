@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/src/camera/viewport.dart';
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// The default viewport, which is as big as the game canvas allows.
@@ -10,9 +11,15 @@ class MaxViewport extends Viewport {
   MaxViewport({super.children});
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    size = gameSize;
+  @mustCallSuper
+  void onLoad() {
+    size = findGame()!.canvasSize;
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    this.size = size;
+    super.onGameResize(size);
   }
 
   @override

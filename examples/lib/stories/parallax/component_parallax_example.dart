@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
@@ -17,7 +19,7 @@ class ComponentParallaxExample extends FlameGame {
 class MyParallaxComponent extends ParallaxComponent<ComponentParallaxExample> {
   @override
   Future<void> onLoad() async {
-    parallax = await gameRef.loadParallax(
+    parallax = await game.loadParallax(
       [
         ParallaxImageData('parallax/bg.png'),
         ParallaxImageData('parallax/mountain-far.png'),
@@ -27,6 +29,7 @@ class MyParallaxComponent extends ParallaxComponent<ComponentParallaxExample> {
       ],
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
+      filterQuality: FilterQuality.none,
     );
   }
 }

@@ -5,7 +5,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 import '../custom_component.dart';
-// ignore_for_file: deprecated_member_use_from_same_package
 
 void main() {
   void componentsSorted(Iterable<Component> components) {
@@ -31,11 +30,11 @@ void main() {
         final priorityComponents = List.generate(10, _PriorityComponent.new)
           ..add(firstComponent);
         priorityComponents.shuffle();
-        final components = game.children;
-        await game.ensureAddAll(priorityComponents);
+        final components = game.world.children;
+        await game.world.ensureAddAll(priorityComponents);
         componentsSorted(components);
         expect(components.first, firstComponent);
-        game.children.changePriority(firstComponent, 11);
+        firstComponent.priority = 11;
         game.update(0);
         expect(components.last, firstComponent);
       },
@@ -48,8 +47,8 @@ void main() {
         final priorityComponents = List.generate(10, _PriorityComponent.new)
           ..add(firstComponent);
         priorityComponents.shuffle();
-        final components = game.children;
-        await game.ensureAddAll(priorityComponents);
+        final components = game.world.children;
+        await game.world.ensureAddAll(priorityComponents);
         componentsSorted(components);
         expect(components.first, firstComponent);
         firstComponent.priority = 11;
@@ -68,8 +67,8 @@ void main() {
         componentsSorted(components);
         final first = components.first;
         final last = components.last;
-        game.children.changePriority(first, 20);
-        game.children.changePriority(last, -1);
+        first.priority = 20;
+        last.priority = -1;
         expect(components.first, first);
         expect(components.last, last);
         game.update(0);
@@ -89,7 +88,7 @@ void main() {
         final children = parentComponent.children;
         componentsSorted(children);
         final first = children.first;
-        game.children.changePriority(first, 20);
+        first.priority = 20;
         expect(children.last, isNot(first));
         game.update(0);
         expect(children.last, first);
@@ -108,8 +107,8 @@ void main() {
         componentsSorted(children);
         final first = children.first;
         final last = children.last;
-        game.children.changePriority(first, 20);
-        game.children.changePriority(last, -1);
+        first.priority = 20;
+        last.priority = -1;
         expect(children.first, first);
         expect(children.last, last);
         game.update(0);
@@ -131,7 +130,7 @@ void main() {
         final children = parentComponent.children;
         componentsSorted(children);
         final first = children.first;
-        game.children.changePriority(first, 20);
+        first.priority = 20;
         expect(children.last, isNot(first));
         game.update(0);
         expect(children.last, first);
@@ -165,7 +164,7 @@ void main() {
         b.assertCalled(0);
         c.assertCalled(0);
 
-        game.children.changePriority(a, 10);
+        a.priority = 10;
         game.update(0);
 
         componentsSorted(game.children);
@@ -176,10 +175,10 @@ void main() {
         b.assertCalled(0);
         c.assertCalled(0);
 
-        // change priority multiple times on c and once on a (and zero on b)
-        game.children.changePriority(c3, 2);
-        game.children.changePriority(c1, 10);
-        game.children.changePriority(a2, 0);
+        // Change priority multiple times on c and once on a (and zero on b).
+        c3.priority = 2;
+        c1.priority = 10;
+        a2.priority = 0;
         game.update(0);
 
         a.assertCalled(1);
@@ -191,9 +190,9 @@ void main() {
         componentsSorted(b.children);
         componentsSorted(c.children);
 
-        // change of b now
-        game.children.changePriority(b1, 2);
-        game.children.changePriority(a1, 1); // no-op!
+        // Change of b now.
+        b1.priority = 2;
+        a1.priority = 1; // no-op!
         game.update(0);
 
         a.assertCalled(0);

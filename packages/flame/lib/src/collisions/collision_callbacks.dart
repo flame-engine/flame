@@ -79,7 +79,8 @@ mixin GenericCollisionCallbacks<T> {
   /// reimplement [onComponentTypeCheck]. The result of calculation is cached
   /// so you should not check any dynamical parameters here, the function
   /// intended to be used as pure type checker.
-  @mustCallSuper
+  /// Call super.onComponentTypeCheck to get the parent's result of the
+  /// type check if needed. In other causes this call is redundant in game code.
   bool onComponentTypeCheck(PositionComponent other);
 
   /// Assign your own [CollisionCallback] if you want a callback when this
@@ -136,7 +137,6 @@ mixin CollisionCallbacks on Component
   }
 
   @override
-  @mustCallSuper
   bool onComponentTypeCheck(PositionComponent other) {
     final myParent = parent;
     final otherParent = other.parent;

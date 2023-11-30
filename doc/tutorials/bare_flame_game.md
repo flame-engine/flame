@@ -3,7 +3,7 @@
 This tutorial assumes that you have basic familiarity with using the command line, and the following
 programs on your computer (all of them are free):
 
-- [Flutter], version 3.3.0 or above.
+- [Flutter], version 3.13.0 or above.
 - [Android Studio], or any other IDE for example [Visual Studio Code].
 - [git] (optional), to save your project on GitHub.
 
@@ -13,19 +13,24 @@ programs on your computer (all of them are free):
 First, let's verify that your Flutter SDK was installed correctly and is accessible from the command
 line:
 
-```console
+```shell
 $ flutter doctor
-[✓] Flutter (Channel stable, 2.10.0, on macOS 12.3.1 21E258 darwin-x64, locale en)
-[✓] Android toolchain - develop for Android devices (Android SDK version 31.0.0)
-[✓] Xcode - develop for iOS and macOS (Xcode 13.1)
+Doctor summary (to see all details, run flutter doctor -v):
+[✓] Flutter (Channel stable, 3.13.7, on macOS 13.6 22G120 darwin-arm64, locale en)
+[✓] Android toolchain - develop for Android devices (Android SDK version 33.0.0)
+[✓] Xcode - develop for iOS and macOS (Xcode 15.0)
 [✓] Chrome - develop for the web
-[✓] Android Studio (version 2020.3)
-[✓] Connected device (1 available)
-[✓] HTTP Host Availability
+[✓] Android Studio (version 2021.2)
+[✓] IntelliJ IDEA Community Edition (version 2022.2.2)
+[✓] VS Code (version 1.83.0)
+[✓] Connected device (2 available)
+[✓] Network resources
+
+• No issues found!
 ```
 
 Your output will be slightly different, but the important thing is to verify that no errors are
-reported and that your Flutter version is at least **3.3.0**.
+reported and that your Flutter version is at least **3.13.0**.
 
 
 ## 2. Create the Project Directory
@@ -37,7 +42,7 @@ non-made-up word.
 
 Create the directory for your new project:
 
-```console
+```shell
 mkdir -p ~/projects/syzygy
 cd ~/projects/syzygy
 ```
@@ -47,7 +52,7 @@ cd ~/projects/syzygy
 
 To turn this barren directory into an actual Flutter project, run the following command:
 
-```console
+```shell
 flutter create .
 ```
 
@@ -55,7 +60,7 @@ flutter create .
 
 You can verify that the project files were created successfully:
 
-```console
+```shell
 $ ls
 README.md               android/   lib/           pubspec.yaml   test/
 analysis_options.yaml   ios/       pubspec.lock   syzygy.iml     web/
@@ -96,8 +101,8 @@ version: 0.0.0
 publish_to: none
 
 environment:
-  sdk: ^2.16.0
-  flutter: ^2.10.0
+  sdk: ^3.0.0
+  flutter: ^3.13.0
 
 dependencies:
   flutter:
@@ -152,7 +157,7 @@ type "private"; and opt out of adding initial files like `README`, `license`, an
 Now go to your project's directory in the terminal and execute the following commands (make sure to
 replace the URL with the link to the repository that you just created):
 
-```console
+```shell
 git init
 git add --all
 git commit -m 'Initial commit'

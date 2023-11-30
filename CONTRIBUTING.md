@@ -50,7 +50,7 @@ please read these instructions carefully.
 For a contribution to be accepted:
 
 - Follow the [Style Guide] when writing the code;
-- Format the code using `flutter format .`;
+- Format the code using `dart format .`;
 - Lint the code with `melos run analyze`;
 - Check that all tests pass: `melos run test`;
 - Documentation should always be updated or added (if applicable);
@@ -75,17 +75,24 @@ and it will be automatically reflected in the PR.
 
 ### Environment Setup
 
-Flame uses [Melos] to manage the project and dependencies.
+Flame is setup to run with the most recent `stable` version of Flutter, so make sure your version
+matches that:
+
+```shell
+flutter channel stable
+```
+
+Also, Flame uses [Melos] to manage the project and dependencies.
 
 To install Melos, run the following command from your terminal:
 
-```bash
-flutter pub global activate melos 3.0.0-dev.0
+```shell
+flutter pub global activate melos
 ```
 
 Next, at the root of your locally cloned repository bootstrap the projects dependencies:
 
-```bash
+```shell
 melos bootstrap
 ```
 
@@ -96,10 +103,36 @@ command once.
 
 > You do not need to run `flutter pub get` once bootstrap has been completed.
 
+
+#### CSpell
+
+If you want to run the spellchecker locally, you will have to install
+[cspell](https://github.com/streetsidesoftware/cspell/tree/main/packages/cspell);
+you can do so using npm or yarn:
+
+```bash
+npm install -g cspell
+```
+
+Then you can run it with the following arguments:
+
+```bash
+cspell --no-progress -c .github/cspell.json "**/*.{md,dart}"
+```
+
+
+#### Markdown Lint
+
 If you want to lint the markdown files you have to install
 [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) and once that is installed you
 can run `melos markdown-check` to check if the markdown follows the rules. Some markdown linting
 errors can be automatically fixed with `melos markdown-fix`.
+
+Note that, sadly, a particularly laborious rule, MD013, [does not provide an auto-fix
+option](https://github.com/DavidAnson/markdownlint/issues/535). However, you can use other tools to
+circumvent this. For example, the extension [Rewrap](https://stkb.github.io/Rewrap/) for VSCode, when
+[configured with](https://stkb.github.io/Rewrap/configuration/) `rewrap.wrappingColumn=100`, will do
+the trick for you.
 
 
 ### Performing changes

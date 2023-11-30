@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -59,7 +60,7 @@ class TRexGame extends FlameGame
         ascent: 23,
         glyphs: [
           for (var i = 0; i < chars.length; i++)
-            Glyph(chars[i], left: 954.0 + 20 * i, top: 0, width: 20)
+            Glyph(chars[i], left: 954.0 + 20 * i, top: 0, width: 20),
         ],
       ),
       letterSpacing: 2,
@@ -68,7 +69,7 @@ class TRexGame extends FlameGame
       scoreText = TextComponent(
         position: Vector2(20, 20),
         textRenderer: renderer,
-      )..positionType = PositionType.viewport,
+      ),
     );
     score = 0;
   }

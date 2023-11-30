@@ -1,3 +1,4 @@
+import 'package:flame/camera.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -5,10 +6,18 @@ import 'package:flame/game.dart';
 /// This should be applied to a [FlameGame] to bring QuadTree collision
 /// support.
 ///
+/// Use [HasQuadTreeCollisionDetection] if you have lots of collidable entities
+/// in your game, but most of them are static (such as platforms, walls, trees,
+/// buildings).
+///
+/// Always experiment before deciding which collision detection
+/// method to use. It's not unheard of to see better performance with
+/// the default [HasCollisionDetection] mixin.
+///
 /// [initializeCollisionDetection] should be called in the game's [onLoad]
 /// method.
-mixin HasQuadTreeCollisionDetection on FlameGame
-    implements HasCollisionDetection<QuadTreeBroadphase<ShapeHitbox>> {
+mixin HasQuadTreeCollisionDetection<W extends World> on FlameGame<W>
+    implements HasCollisionDetection<QuadTreeBroadphase> {
   late QuadTreeCollisionDetection _collisionDetection;
 
   @override
@@ -16,7 +25,7 @@ mixin HasQuadTreeCollisionDetection on FlameGame
 
   @override
   set collisionDetection(
-    CollisionDetection<ShapeHitbox, QuadTreeBroadphase<ShapeHitbox>> cd,
+    CollisionDetection<ShapeHitbox, QuadTreeBroadphase> cd,
   ) {
     if (cd is! QuadTreeCollisionDetection) {
       throw 'Must be QuadTreeCollisionDetection!';

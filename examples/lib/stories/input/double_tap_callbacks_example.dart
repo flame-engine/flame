@@ -1,6 +1,6 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +17,13 @@ class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
   }
 
   @override
-  void onGameResize(Vector2 canvasSize) {
+  void onGameResize(Vector2 size) {
     children
         .query<DoubleTappableEmber>()
         .forEach((element) => element.removeFromParent());
-    add(DoubleTappableEmber(position: canvasSize / 2));
+    add(DoubleTappableEmber(position: size / 2));
 
-    super.onGameResize(canvasSize);
+    super.onGameResize(size);
   }
 
   @override

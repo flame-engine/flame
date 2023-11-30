@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
-class PriorityExample extends FlameGame with HasTappables {
+class PriorityExample extends FlameGame {
   static const String description = '''
     On this example, click on the square to bring them to the front by changing
     the priority.
@@ -21,7 +21,7 @@ class PriorityExample extends FlameGame with HasTappables {
 }
 
 class Square extends RectangleComponent
-    with HasGameRef<PriorityExample>, Tappable {
+    with HasGameReference<PriorityExample>, TapCallbacks {
   Square(Vector2 position)
       : super(
           position: position,
@@ -30,11 +30,10 @@ class Square extends RectangleComponent
         );
 
   @override
-  bool onTapDown(TapDownInfo info) {
-    final topComponent = gameRef.children.last;
+  void onTapDown(TapDownEvent event) {
+    final topComponent = game.children.last;
     if (topComponent != this) {
       priority = topComponent.priority + 1;
     }
-    return false;
   }
 }

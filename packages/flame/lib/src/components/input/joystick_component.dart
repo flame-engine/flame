@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/src/components/input/hud_margin_component.dart';
-import 'package:flame/src/gestures/events.dart';
 import 'package:meta/meta.dart';
 
 enum JoystickDirection {
@@ -17,7 +17,7 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends HudMarginComponent with Draggable {
+class JoystickComponent extends HudMarginComponent with DragCallbacks {
   late final PositionComponent? knob;
   late final PositionComponent? background;
 
@@ -53,6 +53,7 @@ class JoystickComponent extends HudMarginComponent with Draggable {
     Anchor super.anchor = Anchor.center,
     super.children,
     super.priority,
+    super.key,
   })  : assert(
           size != null || background != null,
           'Either size or background must be defined',
@@ -105,26 +106,33 @@ class JoystickComponent extends HudMarginComponent with Draggable {
   }
 
   @override
-  bool onDragStart(DragStartInfo info) {
+  bool onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     return false;
   }
 
   @override
-  bool onDragUpdate(DragUpdateInfo info) {
-    _unscaledDelta.add(info.delta.viewport);
+  bool onDragUpdate(DragUpdateEvent event) {
+    _unscaledDelta.add(event.delta);
     return false;
   }
 
   @override
   bool onDragEnd(_) {
-    onDragCancel();
+    super.onDragEnd(_);
+    onDragStop();
     return false;
   }
 
   @override
-  bool onDragCancel() {
-    _unscaledDelta.setZero();
+  bool onDragCancel(_) {
+    super.onDragCancel(_);
+    onDragStop();
     return false;
+  }
+
+  void onDragStop() {
+    _unscaledDelta.setZero();
   }
 
   static const double _eighthOfPi = pi / 8;

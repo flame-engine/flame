@@ -10,10 +10,12 @@ class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 class HasQuadTreeCollidablesGame extends FlameGame
     with HasQuadTreeCollisionDetection {}
 
+class CollisionDetectionWorld extends World with HasCollisionDetection {}
+
 @isTest
 Future<void> testCollisionDetectionGame(
   String testName,
-  Future Function(HasCollidablesGame) testBody,
+  Future<void> Function(HasCollidablesGame) testBody,
 ) {
   return testWithGame(testName, HasCollidablesGame.new, testBody);
 }
@@ -21,7 +23,7 @@ Future<void> testCollisionDetectionGame(
 @isTest
 Future<void> testQuadTreeCollisionDetectionGame(
   String testName,
-  Future Function(HasCollisionDetection) testBody,
+  Future<void> Function(HasCollisionDetection) testBody,
 ) {
   return testWithGame(
     testName,
@@ -37,7 +39,7 @@ Future<void> testQuadTreeCollisionDetectionGame(
 }
 
 Future<void> runCollisionTestRegistry(
-  Map<String, Future Function(HasCollisionDetection)> testRegistry,
+  Map<String, Future<void> Function(HasCollisionDetection)> testRegistry,
 ) async {
   for (final entry in testRegistry.entries) {
     final name = entry.key;
@@ -51,8 +53,9 @@ class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
+  String? name;
 
-  TestHitbox() {
+  TestHitbox([this.name]) {
     onCollisionCallback = (_, __) {
       onCollisionCounter++;
     };
@@ -62,6 +65,13 @@ class TestHitbox extends RectangleHitbox {
     onCollisionEndCallback = (_) {
       endCounter++;
     };
+  }
+
+  @override
+  String toString() {
+    return name == null
+        ? '_TestHitbox[${identityHashCode(this)}]'
+        : '_TestHitbox[$name]';
   }
 }
 

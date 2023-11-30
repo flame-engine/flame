@@ -3,7 +3,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  const _diff = 0.0000000000001;
+  const diff = 0.0000000000001;
 
   group('FPSComponent', () {
     testWithFlameGame('reports correct FPS for 1 frames', (game) async {
@@ -12,7 +12,7 @@ void main() {
       expect(fpsComponent.fps, 0);
       game.update(1 / 60);
 
-      expect(fpsComponent.fps, closeTo(60, _diff));
+      expect(fpsComponent.fps, closeTo(60, diff));
     });
 
     testWithFlameGame('reports correct FPS with full window', (game) async {
@@ -23,10 +23,10 @@ void main() {
         game.update(1 / 60);
       }
 
-      expect(fpsComponent.fps, closeTo(60, _diff));
+      expect(fpsComponent.fps, closeTo(60, diff));
     });
 
-    testWithFlameGame('reports correct FPS with slided window', (game) async {
+    testWithFlameGame('reports correct FPS with slid window', (game) async {
       const windowSize = 30;
       final fpsComponent = FpsComponent(windowSize: windowSize);
       await game.ensureAdd(fpsComponent);
@@ -34,7 +34,7 @@ void main() {
         game.update(1 / 60);
       }
 
-      expect(fpsComponent.fps, closeTo(60, _diff));
+      expect(fpsComponent.fps, closeTo(60, diff));
     });
 
     testWithFlameGame('reports correct FPS with varying dt', (game) async {
@@ -46,7 +46,7 @@ void main() {
         game.update(dt);
       }
 
-      expect(fpsComponent.fps, closeTo(100 / 1.5, _diff));
+      expect(fpsComponent.fps, closeTo(100 / 1.5, diff));
     });
   });
 }

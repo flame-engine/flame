@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
@@ -26,6 +28,7 @@ class NoFCSParallaxExample extends Game {
       size: size,
       baseVelocity: Vector2(20, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),
+      filterQuality: FilterQuality.none,
     );
   }
 

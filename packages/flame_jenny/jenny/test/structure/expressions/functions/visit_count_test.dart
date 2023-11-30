@@ -97,8 +97,8 @@ void main() {
           title: End
           ---
           entered End
-          did we visit NoTrack? {visited("NoTrack")}!
-          did we visit Track? {visited("Trac" + "k")}!
+          did we visit NoTrack? {visited("No" + "Track")}!
+          did we visit Track? {visited("Track")}!
           done
           ===
         ''',

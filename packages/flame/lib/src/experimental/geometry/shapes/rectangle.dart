@@ -1,13 +1,17 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
+import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flame/src/math/random_fallback.dart';
+import 'package:flutter/cupertino.dart';
 
 /// An axis-aligned rectangle.
 ///
-/// This is similar to ui's [Rect], except that this class is mutable and
+/// This is similar to ui [Rect], except that this class is mutable and
 /// conforms to the [Shape] API.
 ///
 /// Unlike with [Rect], the [Rectangle] is always correctly oriented, in the
@@ -34,13 +38,29 @@ class Rectangle extends Shape {
     }
   }
 
+  Rectangle.fromLTWH(double left, double top, double width, double height)
+      : this.fromLTRB(left, top, left + width, top + height);
+
   /// Constructs a [Rectangle] from two opposite corners. The points can be in
   /// any disposition to each other.
   factory Rectangle.fromPoints(Vector2 a, Vector2 b) =>
       Rectangle.fromLTRB(a.x, a.y, b.x, b.y);
 
+  /// Constructs a [Rectangle] from a [Rect].
   factory Rectangle.fromRect(Rect rect) =>
       Rectangle.fromLTRB(rect.left, rect.top, rect.right, rect.bottom);
+
+  /// Constructs a [Rectangle] from a center point and a size.
+  factory Rectangle.fromCenter({
+    required Vector2 center,
+    required Vector2 size,
+  }) {
+    final halfSize = size / 2;
+    return Rectangle.fromPoints(
+      center - halfSize,
+      center + halfSize,
+    );
+  }
 
   double _left;
   double _top;
@@ -69,6 +89,8 @@ class Rectangle extends Shape {
 
   @override
   double get perimeter => 2 * (width + height);
+
+  double get area => width * height;
 
   @override
   Path asPath() {
@@ -133,6 +155,43 @@ class Rectangle extends Shape {
         (point.y).clamp(_top, _bottom),
       );
   }
+
+  Rect toRect() => Rect.fromLTWH(left, top, width, height);
+
+  /// Returns all intersections between this rectangle's edges and the given
+  /// line segment.
+  Set<Vector2> intersections(LineSegment line) {
+    return edges.expand((e) => e.intersections(line)).toSet();
+  }
+
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    final randomGenerator = random ?? randomFallback;
+    if (within) {
+      return Vector2(
+        left + randomGenerator.nextDouble() * width,
+        top + randomGenerator.nextDouble() * height,
+      );
+    } else {
+      return Polygon.randomPointAlongEdges(vertices, random: randomGenerator);
+    }
+  }
+
+  /// The 4 edges of this rectangle, returned in a clockwise fashion.
+  List<LineSegment> get edges => [topEdge, rightEdge, bottomEdge, leftEdge];
+
+  LineSegment get topEdge => LineSegment(topLeft, topRight);
+  LineSegment get rightEdge => LineSegment(topRight, bottomRight);
+  LineSegment get bottomEdge => LineSegment(bottomRight, bottomLeft);
+  LineSegment get leftEdge => LineSegment(bottomLeft, topLeft);
+
+  /// The 4 corners of this rectangle, returned in a clockwise fashion.
+  List<Vector2> get vertices => [topLeft, topRight, bottomRight, bottomLeft];
+
+  Vector2 get topLeft => Vector2(left, top);
+  Vector2 get topRight => Vector2(right, top);
+  Vector2 get bottomRight => Vector2(right, bottom);
+  Vector2 get bottomLeft => Vector2(left, bottom);
 
   @override
   String toString() => 'Rectangle([$_left, $_top], [$_right, $_bottom])';

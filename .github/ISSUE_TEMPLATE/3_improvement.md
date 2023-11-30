@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-<!-- When reporting a improvement, please read this complete template and fill all the questions in order to get a better response -->
+<!-- When reporting an improvement, please read this complete template and fill all the questions in order to get a better response -->
 
 # What could be improved
 <!-- What part of the code/functionality could be improved? -->

@@ -1,32 +1,32 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flutter_isolates_example/brains/path_finder.dart';
-import 'package:flutter_isolates_example/colonists_game.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/extensions/range_extensions.dart';
-import 'package:flutter_isolates_example/objects/bread.dart';
-import 'package:flutter_isolates_example/objects/cheese.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
-import 'package:flutter_isolates_example/terrain/grass.dart';
-import 'package:flutter_isolates_example/terrain/terrain.dart';
-import 'package:flutter_isolates_example/units/worker.dart';
+import 'package:flame_isolate_example/brains/path_finder.dart';
+import 'package:flame_isolate_example/colonists_game.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/extensions/range_extensions.dart';
+import 'package:flame_isolate_example/objects/bread.dart';
+import 'package:flame_isolate_example/objects/cheese.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/terrain/grass.dart';
+import 'package:flame_isolate_example/terrain/terrain.dart';
+import 'package:flame_isolate_example/units/worker.dart';
 
-class GameMap extends Component with HasGameRef<ColonistsGame> {
+class GameMap extends Component with HasGameReference<ColonistsGame> {
   static const mapSizeX = 50;
   static const mapSizeY = 50;
   static const totalPositions = mapSizeX * mapSizeY;
 
-  static int cheeseSpread = (0.03 * totalPositions).toInt();
-  static int breadSpread = (0.05 * totalPositions).toInt();
-  static int workerSpread = (0.1 * totalPositions).toInt();
+  static final int cheeseSpread = (0.03 * totalPositions).toInt();
+  static final int breadSpread = (0.05 * totalPositions).toInt();
+  static final int workerSpread = (0.1 * totalPositions).toInt();
 
   static const double workerMinSpeed = 25;
   static const double workerMaxSpeed = 75;
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
     for (var x = 0; x < mapSizeX; x++) {
       for (var y = 0; y < mapSizeY; y++) {
         addTerrain(IntVector2(x, y), Grass());
@@ -36,7 +36,7 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
     final mapPositions = List.generate(totalPositions, (index) => index)
       ..shuffle();
 
-    final worldObjects = {
+    worldObjects = [
       for (final _ in 0.to(cheeseSpread))
         Cheese(
           mapPositions[0] ~/ mapSizeX,
@@ -49,24 +49,19 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
         ),
       for (final _ in 0.to(workerSpread))
         Worker(
-          (mapPositions[0] ~/ mapSizeX).toDouble(),
-          (mapPositions.removeAt(0) % mapSizeY).toDouble(),
+          mapPositions[0] ~/ mapSizeX,
+          mapPositions.removeAt(0) % mapSizeY,
           speed: Random().nextDouble() * (workerMaxSpeed - workerMinSpeed) +
               workerMinSpeed,
         ),
-    };
+    ];
 
     worldObjects.forEach(addObject);
-
-    super.onLoad();
   }
 
-  Set<Worker> workers = {};
-
+  final Set<Worker> workers = {};
   final Map<IntVector2, Terrain> _terrain = {};
-  final List<ColonistsObject> _worldObjects = [];
-
-  List<ColonistsObject> get worldObjects => _worldObjects;
+  late final List<ColonistsObject> worldObjects;
 
   void addTerrain(IntVector2 position, Terrain terrain) {
     _terrain[position] = terrain;
@@ -88,13 +83,12 @@ class GameMap extends Component with HasGameRef<ColonistsGame> {
       (_terrain[object.tilePosition]! as Grass).difficulty = object.difficulty;
     }
 
-    _worldObjects.add(object);
     add(object);
   }
 
   PathFinderData get pathFinderData => PathFinderData.fromWorld(
         terrain: _terrain,
-        worldObjects: _worldObjects,
+        worldObjects: game.worldObjects,
       );
 
   Terrain tileAtPosition(int x, int y) {

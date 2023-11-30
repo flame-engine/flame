@@ -1,7 +1,9 @@
 import 'dart:math' as math;
+
 import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
@@ -68,6 +70,7 @@ class PositionComponent extends Component
         AngleProvider,
         PositionProvider,
         ScaleProvider,
+        SizeProvider,
         CoordinateTransform {
   PositionComponent({
     Vector2? position,
@@ -78,6 +81,7 @@ class PositionComponent extends Component
     Anchor? anchor,
     super.children,
     super.priority,
+    super.key,
   })  : transform = Transform2D(),
         _anchor = anchor ?? Anchor.topLeft,
         _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
@@ -184,8 +188,16 @@ class PositionComponent extends Component
   /// This property can be reassigned at runtime, although this is not
   /// recommended. Instead, in order to make the [PositionComponent] larger
   /// or smaller, change its [scale].
+  @override
   NotifyingVector2 get size => _size;
-  set size(Vector2 size) => _size.setFrom(size);
+
+  @override
+  set size(Vector2 size) {
+    _size.setFrom(size);
+    if (hasChildren) {
+      children.forEach((child) => child.onParentResize(_size));
+    }
+  }
 
   /// The width of the component in local coordinates. Note that the object
   /// may visually appear larger or smaller due to application of [scale].
@@ -220,7 +232,7 @@ class PositionComponent extends Component
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
     return ancestors(includeSelf: true)
-        .whereType<PositionComponent>()
+        .whereType<ReadOnlyAngleProvider>()
         .map((c) => c.angle)
         .sum;
   }
@@ -241,7 +253,7 @@ class PositionComponent extends Component
 
   //#region Coordinate transformations
 
-  /// Test whether the `point` (given in global coordinates) lies within this
+  /// Test whether the `point` (given in local coordinates) lies within this
   /// component. The top and the left borders of the component are inclusive,
   /// while the bottom and the right borders are exclusive.
   @override
@@ -252,6 +264,9 @@ class PositionComponent extends Component
         (point.y < _size.y);
   }
 
+  /// Test whether the `point` (given in global coordinates) lies within this
+  /// component. The top and the left borders of the component are inclusive,
+  /// while the bottom and the right borders are exclusive.
   @override
   bool containsPoint(Vector2 point) {
     return containsLocalPoint(absoluteToLocal(point));
@@ -415,6 +430,7 @@ class PositionComponent extends Component
 
   @override
   void renderDebugMode(Canvas canvas) {
+    final zoom = CameraComponent.currentCamera?.viewfinder.zoom ?? 1.0;
     super.renderDebugMode(canvas);
     final precision = debugCoordinatesPrecision;
     canvas.drawRect(size.toRect(), debugPaint);
@@ -430,7 +446,7 @@ class PositionComponent extends Component
       debugTextPaint.render(
         canvas,
         'x:$x1str y:$y1str',
-        Vector2(-10 * (precision + 3), -15),
+        Vector2(-10 * (precision + 3) / zoom, -15 / zoom),
       );
       // print coordinates at the bottom-right corner
       final p2 = absolutePositionOfAnchor(Anchor.bottomRight);
@@ -439,7 +455,7 @@ class PositionComponent extends Component
       debugTextPaint.render(
         canvas,
         'x:$x2str y:$y2str',
-        Vector2(size.x - 10 * (precision + 3), size.y),
+        Vector2(size.x - 10 * (precision + 3) / zoom, size.y),
       );
     }
   }

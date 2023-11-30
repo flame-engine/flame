@@ -5,14 +5,14 @@ import 'package:flame/geometry.dart';
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.
 ///
-/// If the [HasCollisionDetection] mixin is added to the game, [run] is
-/// called every tick to check for collisions
+/// If the [HasCollisionDetection] mixin is added to the game, [run] is called
+/// every tick to check for collisions.
 abstract class CollisionDetection<T extends Hitbox<T>,
     B extends Broadphase<T>> {
   final B broadphase;
 
   List<T> get items => broadphase.items;
-  final Set<CollisionProspect<T>> _lastPotentials = {};
+  final _lastPotentials = <CollisionProspect<T>>[];
 
   CollisionDetection({required this.broadphase});
 
@@ -20,8 +20,8 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 
   void addAll(Iterable<T> items) => items.forEach(add);
 
-  /// Removes the [item] from the collision detection, if you just want
-  /// to temporarily inactivate it you can set
+  /// Removes the [item] from the collision detection, if you just want to
+  /// temporarily inactivate it you can set
   /// `collisionType = CollisionType.inactive;` instead.
   void remove(T item) => broadphase.remove(item);
 
@@ -32,9 +32,11 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   void run() {
     broadphase.update();
     final potentials = broadphase.query();
-    potentials.forEach((tuple) {
-      final itemA = tuple.a;
-      final itemB = tuple.b;
+    final hashes = Set.unmodifiable(potentials.map((p) => p.hash));
+
+    for (final potential in potentials) {
+      final itemA = potential.a;
+      final itemB = potential.b;
 
       if (itemA.possiblyIntersects(itemB)) {
         final intersectionPoints = intersections(itemA, itemB);
@@ -49,18 +51,33 @@ abstract class CollisionDetection<T extends Hitbox<T>,
       } else if (itemA.collidingWith(itemB)) {
         handleCollisionEnd(itemA, itemB);
       }
-    });
+    }
 
     // Handles callbacks for an ended collision that the broadphase didn't
-    // reports as a potential collision anymore.
-    _lastPotentials.difference(potentials).forEach((tuple) {
-      if (tuple.a.collidingWith(tuple.b)) {
-        handleCollisionEnd(tuple.a, tuple.b);
+    // report as a potential collision anymore.
+    for (final prospect in _lastPotentials) {
+      if (!hashes.contains(prospect.hash) &&
+          prospect.a.collidingWith(prospect.b)) {
+        handleCollisionEnd(prospect.a, prospect.b);
       }
-    });
-    _lastPotentials
-      ..clear()
-      ..addAll(potentials);
+    }
+    _updateLastPotentials(potentials);
+  }
+
+  final _lastPotentialsPool = <CollisionProspect<T>>[];
+  void _updateLastPotentials(Iterable<CollisionProspect<T>> potentials) {
+    _lastPotentials.clear();
+    for (final potential in potentials) {
+      final CollisionProspect<T> lastPotential;
+      if (_lastPotentialsPool.length > _lastPotentials.length) {
+        lastPotential = _lastPotentialsPool[_lastPotentials.length]
+          ..setFrom(potential);
+      } else {
+        lastPotential = potential.clone();
+        _lastPotentialsPool.add(lastPotential);
+      }
+      _lastPotentials.add(lastPotential);
+    }
   }
 
   /// Check what the intersection points of two items are,

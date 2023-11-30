@@ -5,6 +5,7 @@ import 'package:flame/src/cache/images.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/sprite.dart';
+import 'package:flame/src/sprite_animation_ticker.dart';
 
 export 'sprite.dart';
 
@@ -174,7 +175,7 @@ class SpriteAnimation {
     return SpriteAnimation(
       [
         for (var i = 0; i < sprites.length; i++)
-          SpriteAnimationFrame(sprites[i], stepTimes[i])
+          SpriteAnimationFrame(sprites[i], stepTimes[i]),
       ],
       loop: loop,
     );
@@ -198,7 +199,7 @@ class SpriteAnimation {
               srcPosition: frameData.srcPosition,
             ),
             frameData.stepTime,
-          )
+          ),
       ],
       loop: data.loop,
     );
@@ -241,67 +242,17 @@ class SpriteAnimation {
     SpriteAnimationData data, {
     Images? images,
   }) async {
-    final _images = images ?? Flame.images;
-    final image = await _images.load(src);
+    final imagesCache = images ?? Flame.images;
+    final image = await imagesCache.load(src);
     return SpriteAnimation.fromFrameData(image, data);
   }
 
   /// The frames that compose this animation.
   List<SpriteAnimationFrame> frames = [];
 
-  /// Index of the current frame that should be displayed.
-  int currentIndex = 0;
-
-  /// Current clock time (total time) of this animation, in seconds, since last
-  /// frame.
-  ///
-  /// It's ticked by the update method. It's reset every frame change.
-  double clock = 0.0;
-
-  /// Total elapsed time of this animation, in seconds, since start or a reset.
-  double elapsed = 0.0;
-
   /// Whether the animation loops after the last sprite of the list, going back
   /// to the first, or keeps returning the last when done.
   bool loop = true;
-
-  /// Registered method to be triggered when the animation starts.
-  void Function()? onStart;
-
-  /// Registered method to be triggered when the animation frame updates.
-  void Function(int currentIndex)? onFrame;
-
-  /// Registered method to be triggered when the animation complete.
-  void Function()? onComplete;
-
-  Completer<void>? _completeCompleter;
-
-  /// The current frame that should be displayed.
-  SpriteAnimationFrame get currentFrame => frames[currentIndex];
-
-  /// Returns whether the animation is on the first frame.
-  bool get isFirstFrame => currentIndex == 0;
-
-  /// Returns whether the animation is on the last frame.
-  bool get isLastFrame => currentIndex == frames.length - 1;
-
-  /// Returns whether the animation has only a single frame (and is, thus, a
-  /// still image).
-  bool get isSingleFrame => frames.length == 1;
-
-  /// A future that will complete when the animation completes.
-  ///
-  /// An animation is considered to be completed if it reaches its [isLastFrame]
-  /// and is not [loop]ing.
-  Future<void> get completed {
-    if (_done) {
-      return Future.value();
-    }
-
-    _completeCompleter ??= Completer<void>();
-
-    return _completeCompleter!.future;
-  }
 
   /// Sets a different step time to each frame.
   /// The sizes of the arrays must match.
@@ -319,77 +270,6 @@ class SpriteAnimation {
     frames.forEach((frame) => frame.stepTime = stepTime);
   }
 
-  /// Resets the animation, like it would just have been created.
-  void reset() {
-    clock = 0.0;
-    elapsed = 0.0;
-    currentIndex = 0;
-    _done = false;
-    _started = false;
-  }
-
-  /// Sets this animation to be on the last frame.
-  void setToLast() {
-    currentIndex = frames.length - 1;
-    clock = frames[currentIndex].stepTime;
-    elapsed = totalDuration();
-    update(0);
-  }
-
-  /// Gets the current [Sprite] that should be shown.
-  ///
-  /// In case it reaches the end:
-  ///  * If [loop] is true, it will return the last sprite. Otherwise, it will
-  ///  go back to the first.
-  Sprite getSprite() {
-    return currentFrame.sprite;
-  }
-
-  /// If [loop] is false, returns whether the animation is done (fixed in the
-  /// last Sprite).
-  ///
-  /// Always returns false otherwise.
-  bool _done = false;
-  bool done() => _done;
-
-  /// Local flag to determine if the animation has started to prevent multiple
-  /// calls to [onStart].
-  bool _started = false;
-
-  /// Updates this animation, ticking the lifeTime by an amount [dt]
-  /// (in seconds).
-  void update(double dt) {
-    clock += dt;
-    elapsed += dt;
-    if (_done) {
-      return;
-    }
-    if (!_started) {
-      onStart?.call();
-      onFrame?.call(currentIndex);
-      _started = true;
-    }
-
-    while (clock >= currentFrame.stepTime) {
-      if (isLastFrame) {
-        if (loop) {
-          clock -= currentFrame.stepTime;
-          currentIndex = 0;
-          onFrame?.call(currentIndex);
-        } else {
-          _done = true;
-          onComplete?.call();
-          _completeCompleter?.complete();
-          return;
-        }
-      } else {
-        clock -= currentFrame.stepTime;
-        currentIndex++;
-        onFrame?.call(currentIndex);
-      }
-    }
-  }
-
   /// Returns a new Animation equal to this one in definition, but each copy can
   /// be run independently.
   SpriteAnimation clone() {
@@ -402,9 +282,6 @@ class SpriteAnimation {
     return SpriteAnimation(frames.reversed.toList(), loop: loop);
   }
 
-  /// Computes the total duration of this animation
-  /// (before it's done or repeats).
-  double totalDuration() {
-    return frames.map((f) => f.stepTime).reduce((a, b) => a + b);
-  }
+  /// Creates and returns a new [SpriteAnimationTicker].
+  SpriteAnimationTicker createTicker() => SpriteAnimationTicker(this);
 }

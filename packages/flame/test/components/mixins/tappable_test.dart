@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:test/test.dart';
@@ -18,19 +19,6 @@ void main() {
       },
     );
 
-    testWithFlameGame(
-      'make sure they cannot be added to invalid games',
-      (game) async {
-        expect(
-          () => game.ensureAdd(_TappableComponent()),
-          failsAssert(
-            'Tappable components can only be added to '
-            'a FlameGame with HasTappables',
-          ),
-        );
-      },
-    );
-
     testWithGame<_GameHasTappables>(
       'can be Tapped Down',
       _GameHasTappables.new,
@@ -42,8 +30,9 @@ void main() {
           ..height = 10;
 
         await game.ensureAdd(component);
+        final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-        game.handleTapDown(
+        tapDispatcher.handleTapDown(
           1,
           TapDownDetails(
             kind: PointerDeviceKind.touch,
@@ -67,8 +56,9 @@ void main() {
           ..height = 10;
 
         await game.ensureAdd(component);
+        final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-        game
+        tapDispatcher
           ..handleTapDown(
             1,
             TapDownDetails(
@@ -101,8 +91,9 @@ void main() {
           ..height = 10;
 
         await game.ensureAdd(component);
+        final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-        game
+        tapDispatcher
           ..handleTapDown(
             1,
             TapDownDetails(
@@ -130,8 +121,9 @@ void main() {
           ..height = 10;
 
         await game.ensureAdd(component);
+        final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-        game
+        tapDispatcher
           ..handleTapDown(
             1,
             TapDownDetails(
@@ -219,73 +211,73 @@ void main() {
   );
 }
 
-class _TappableComponent extends PositionComponent with Tappable {
+class _TappableComponent extends PositionComponent with TapCallbacks {
   bool hasOnTapUp = false;
   bool hasOnTapDown = false;
   bool hasOnTapCancel = false;
   bool hasOnLongTapDown = false;
 
   @override
-  bool onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     info.handled = true;
+    info.continuePropagation = true;
     hasOnTapDown = true;
-    return true;
   }
 
   @override
-  bool onTapUp(TapUpInfo info) {
+  void onTapUp(TapUpEvent info) {
     info.handled = true;
+    info.continuePropagation = true;
     hasOnTapUp = true;
-    return true;
   }
 
   @override
-  bool onTapCancel() {
+  void onTapCancel(TapCancelEvent info) {
+    info.continuePropagation = true;
     hasOnTapCancel = true;
-    return true;
   }
 
   @override
-  bool onLongTapDown(TapDownInfo info) {
+  void onLongTapDown(TapDownEvent info) {
     info.handled = true;
+    info.continuePropagation = true;
     hasOnLongTapDown = true;
-    return true;
   }
 }
 
-class _GameHasTappables extends FlameGame with HasTappables {
+class _GameHasTappables extends FlameGame with TapCallbacks {
   int handledOnTapDown = 0;
   int handledOnLongTapDown = 0;
   int handledOnTapUp = 0;
   int handledOnTapCancel = 0;
 
   @override
-  void onTapDown(int pointerId, TapDownInfo info) {
-    super.onTapDown(pointerId, info);
+  void onTapDown(TapDownEvent info) {
+    super.onTapDown(info);
     if (info.handled) {
       handledOnTapDown++;
     }
   }
 
   @override
-  void onLongTapDown(int pointerId, TapDownInfo info) {
-    super.onLongTapDown(pointerId, info);
+  void onLongTapDown(TapDownEvent info) {
+    super.onLongTapDown(info);
     if (info.handled) {
       handledOnLongTapDown++;
     }
   }
 
   @override
-  void onTapUp(int pointerId, TapUpInfo info) {
-    super.onTapUp(pointerId, info);
+  void onTapUp(TapUpEvent info) {
+    super.onTapUp(info);
     if (info.handled) {
       handledOnTapUp++;
     }
   }
 
   @override
-  void onTapCancel(int pointerId) {
-    super.onTapCancel(pointerId);
+  void onTapCancel(_) {
+    super.onTapCancel(_);
     handledOnTapCancel++;
   }
 }

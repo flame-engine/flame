@@ -23,6 +23,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) : _builder = builder;
 
   /// {@macro circle_clip_component}
@@ -36,6 +37,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     Anchor? anchor,
     Iterable<Component>? children,
     int? priority,
+    ComponentKey? key,
   }) {
     return ClipComponent(
       builder: (size) => Circle(size / 2, size.x / 2),
@@ -46,6 +48,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
       anchor: anchor,
       children: children,
       priority: priority,
+      key: key,
     );
   }
 
@@ -60,6 +63,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     Anchor? anchor,
     Iterable<Component>? children,
     int? priority,
+    ComponentKey? key,
   }) {
     return ClipComponent(
       builder: (size) => Rectangle.fromRect(size.toRect()),
@@ -70,6 +74,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
       anchor: anchor,
       children: children,
       priority: priority,
+      key: key,
     );
   }
 
@@ -85,6 +90,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     Anchor? anchor,
     Iterable<Component>? children,
     int? priority,
+    ComponentKey? key,
   }) {
     assert(
       points.length > 2,
@@ -107,6 +113,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
       anchor: anchor,
       children: children,
       priority: priority,
+      key: key,
     );
   }
 

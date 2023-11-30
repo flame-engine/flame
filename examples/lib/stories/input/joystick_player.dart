@@ -16,8 +16,7 @@ class JoystickPlayer extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('layers/player.png');
-    position = gameRef.size / 2;
+    sprite = await game.loadSprite('layers/player.png');
     add(RectangleHitbox());
   }
 
@@ -32,14 +31,12 @@ class JoystickPlayer extends SpriteComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> _, PositionComponent __) {
-    super.onCollisionStart(_, __);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
     transform.setFrom(_lastTransform);
     size.setFrom(_lastSize);
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent __) {
-    super.onCollisionEnd(__);
   }
 }

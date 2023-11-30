@@ -11,6 +11,7 @@ class FlameMultiBlocProvider extends Component {
   FlameMultiBlocProvider({
     required List<FlameBlocProvider> providers,
     List<Component>? children,
+    super.key,
   })  : _providers = providers,
         _initialChildren = children,
         assert(providers.isNotEmpty, 'At least one provider must be given') {
@@ -22,11 +23,11 @@ class FlameMultiBlocProvider extends Component {
   FlameBlocProvider? _lastProvider;
 
   Future<void> _addProviders() async {
-    final _list = [..._providers];
+    final list = [..._providers];
 
-    var current = _list.removeAt(0);
-    while (_list.isNotEmpty) {
-      final provider = _list.removeAt(0);
+    var current = list.removeAt(0);
+    while (list.isNotEmpty) {
+      final provider = list.removeAt(0);
       await current.add(provider);
       current = provider;
     }

@@ -65,8 +65,8 @@ class RogueShooterGame extends FlameGame
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo details) {
-    player.position += details.delta.game;
+  void onPanUpdate(DragUpdateInfo info) {
+    player.position += info.delta.global;
   }
 
   void increaseScore() {

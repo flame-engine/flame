@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+class _MockAssetBundle extends Mock implements AssetBundle {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -110,7 +114,7 @@ void main() {
     test('throws when setting an invalid prefix', () {
       final images = Images();
       expect(
-        () => images.prefix = 'adasd',
+        () => images.prefix = 'foo',
         failsAssert('Prefix must be empty or end with a "/"'),
       );
     });
@@ -124,6 +128,24 @@ void main() {
       await images.ready();
       expect(images.fromCache('image1'), isNotNull);
       expect(images.fromCache('image2'), isNotNull);
+    });
+
+    test('can have its bundle overridden', () async {
+      final bundle = _MockAssetBundle();
+      when(() => bundle.load(any())).thenAnswer(
+        (_) async {
+          final list = base64Decode(pixel.split(',').last);
+          return ByteData.view(list.buffer);
+        },
+      );
+
+      final images = Images(bundle: bundle);
+      final image = await images.load('pixel.png');
+
+      expect(image.width, equals(1));
+      expect(image.height, equals(1));
+
+      verify(() => bundle.load('assets/images/pixel.png')).called(1);
     });
   });
 }

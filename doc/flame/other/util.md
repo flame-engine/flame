@@ -55,15 +55,16 @@ events.
 Countdown example:
 
 ```dart
-import 'dart:ui';
-
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/text_config.dart';
-import 'package:flame/timer.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
 class MyGame extends Game {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextPaint textPaint = TextPaint(
+    style: const TextStyle(color: Colors.white, fontSize: 20),
+  );
+
   final countdown = Timer(2);
 
   @override
@@ -76,7 +77,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(
+    textPaint.render(
       canvas,
       "Countdown: ${countdown.current.toString()}",
       Vector2(10, 100),
@@ -89,15 +90,15 @@ class MyGame extends Game {
 Interval example:
 
 ```dart
-import 'dart:ui';
-
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/text_config.dart';
-import 'package:flame/timer.dart';
-import 'package:flame/vector2.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
 
 class MyGame extends Game {
-  final TextConfig textConfig = TextConfig(color: const Color(0xFFFFFFFF));
+  final TextPaint textPaint = TextPaint(
+    style: const TextStyle(color: Colors.white, fontSize: 20),
+  );
   Timer interval;
 
   int elapsedSecs = 0;
@@ -117,7 +118,7 @@ class MyGame extends Game {
 
   @override
   void render(Canvas canvas) {
-    textConfig.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
+    textPaint.render(canvas, "Elapsed time: $elapsedSecs", Vector2(10, 150));
   }
 }
 
@@ -141,6 +142,45 @@ class MyFlameGame extends FlameGame {
         onTick: () => print('10 seconds elapsed'),
       )
     );
+  }
+}
+```
+
+
+## Time Scale
+
+In many games it is often desirable to create  slow-motion or fast-forward effects based on some in
+game events. A very common approach to achieve these results is to manipulate the in game time or
+tick rate.
+
+To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mixin can be attached
+to any Flame `Component` and exposes a simple get/set API for `timeScale`. The default value of
+`timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
+time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
+it tick at half the speed as compared to real life time.
+
+Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
+so will allow controlling time scale for all the component of the game from a single place.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: time_scale
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+
+class MyFlameGame extends FlameGame with HasTimeScale {
+  void speedUp(){
+    timeScale = 2.0;
+  }
+
+  void slowDown(){
+    timeScale = 1.0;
   }
 }
 ```
@@ -211,6 +251,7 @@ Methods:
 - `intersectsSegment`; Whether the segment formed by two `Vector2`s intersects this `Rect`.
 - `intersectsLineSegment`: Whether the `LineSegment` intersects the `Rect`.
 - `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`.
+- `toFlameRectangle`: Converts this `Rect` into a Flame `Rectangle`.
 - `toMathRectangle`: Converts this `Rect` into a `math.Rectangle`.
 - `toGeometryRectangle`: Converts this `Rect` into a `Rectangle` from flame-geom.
 - `transform`: Transforms the `Rect` using a `Matrix4`.

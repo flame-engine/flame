@@ -26,10 +26,10 @@ class QuadTree<T extends Hitbox<T>> {
 
   Rect mainBoxSize;
 
-  var _rootNode = _Node<T>();
+  var _rootNode = QuadTreeNode<T>();
   int _nodeLastId = 0;
   final _oldPositionByItem = <ShapeHitbox, Aabb2>{};
-  final _hitboxAtNode = <ShapeHitbox, _Node>{};
+  final _hitboxAtNode = <ShapeHitbox, QuadTreeNode>{};
 
   List<T> get hitboxes => _rootNode.valuesRecursive;
 
@@ -41,10 +41,10 @@ class QuadTree<T extends Hitbox<T>> {
     return Rect.fromPoints(minOffset, value.aabb.max.toOffset());
   }
 
-  bool _noChildren(_Node node) => node.children[0] == null;
+  bool _noChildren(QuadTreeNode node) => node.children[0] == null;
 
   void clear() {
-    _rootNode = _Node<T>();
+    _rootNode = QuadTreeNode<T>();
     _nodeLastId = 0;
     _hitboxAtNode.clear();
     _oldPositionByItem.clear();
@@ -79,7 +79,7 @@ class QuadTree<T extends Hitbox<T>> {
           childSize.dy,
         );
       default:
-        assert(false, 'Invalid child index');
+        assert(false, 'Invalid child index $box $zone');
         return Rect.zero;
     }
   }
@@ -113,8 +113,14 @@ class QuadTree<T extends Hitbox<T>> {
     _hitboxAtNode[hitbox as ShapeHitbox] = node;
   }
 
-  _Node<T> _add(_Node<T> node, int depth, Rect box, T value, _Node? parent) {
-    _Node<T> finalNode;
+  QuadTreeNode<T> _add(
+    QuadTreeNode<T> node,
+    int depth,
+    Rect box,
+    T value,
+    QuadTreeNode? parent,
+  ) {
+    QuadTreeNode<T> finalNode;
     if (_noChildren(node)) {
       // Insert the value in this node if possible.
       if (depth >= maxDepth || node.hitboxes.length < maxObjects) {
@@ -135,7 +141,7 @@ class QuadTree<T extends Hitbox<T>> {
           throw 'Invalid index $quadrant';
         }
         finalNode = _add(
-          children as _Node<T>,
+          children as QuadTreeNode<T>,
           depth + 1,
           _computeBox(box, quadrant),
           value,
@@ -154,12 +160,12 @@ class QuadTree<T extends Hitbox<T>> {
     return finalNode;
   }
 
-  void _split(_Node node, Rect box) {
+  void _split(QuadTreeNode node, Rect box) {
     assert(_noChildren(node), 'Only leaves can be split');
     // Create children
     for (var i = 0; i < node.children.length; i++) {
       final newId = ++_nodeLastId;
-      node.children[i] = _Node<T>()
+      node.children[i] = QuadTreeNode<T>()
         ..parent = node
         ..id = newId;
     }
@@ -187,8 +193,8 @@ class QuadTree<T extends Hitbox<T>> {
     final node = _hitboxAtNode.remove(hitbox);
     if (node != null) {
       node.hitboxes.remove(hitbox);
-      if (keepOldPosition) {
-        _oldPositionByItem.remove(node);
+      if (!keepOldPosition) {
+        _oldPositionByItem.remove(hitbox);
       }
     }
   }
@@ -197,7 +203,7 @@ class QuadTree<T extends Hitbox<T>> {
     _tryMergeRecursive(_rootNode);
   }
 
-  void _tryMergeRecursive(_Node node) {
+  void _tryMergeRecursive(QuadTreeNode node) {
     if (_noChildren(node)) {
       return;
     }
@@ -243,7 +249,7 @@ class QuadTree<T extends Hitbox<T>> {
     return {id: values};
   }
 
-  List<T> _getChildrenItems(_Node parent) {
+  List<T> _getChildrenItems(QuadTreeNode parent) {
     final list = <T>[];
     for (final child in parent.children) {
       if (child != null) {
@@ -256,7 +262,7 @@ class QuadTree<T extends Hitbox<T>> {
     return list;
   }
 
-  List<T> _getParentItems(_Node node) {
+  List<T> _getParentItems(QuadTreeNode node) {
     final list = <T>[];
     final parent = node.parent;
     if (parent != null) {
@@ -287,7 +293,7 @@ class QuadTree<T extends Hitbox<T>> {
 /// The class might be useful to render debugging info.
 /// See examples for details.
 class QuadTreeNodeDebugInfo {
-  QuadTreeNodeDebugInfo(this.rect, this._node, this.cd);
+  QuadTreeNodeDebugInfo(this.rect, this.node, this.cd);
 
   factory QuadTreeNodeDebugInfo.init(QuadTreeCollisionDetection cd) {
     final node = cd.broadphase.tree._rootNode;
@@ -296,22 +302,22 @@ class QuadTreeNodeDebugInfo {
   }
 
   final Rect rect;
-  final _Node _node;
+  final QuadTreeNode node;
   final QuadTreeCollisionDetection cd;
 
-  List<ShapeHitbox> get ownElements => _node.hitboxes as List<ShapeHitbox>;
+  List<ShapeHitbox> get ownElements => node.hitboxes as List<ShapeHitbox>;
 
   List<ShapeHitbox> get allElements =>
-      _node.valuesRecursive as List<ShapeHitbox>;
+      node.valuesRecursive as List<ShapeHitbox>;
 
-  bool get noChildren => _node.children[0] == null;
+  bool get noChildren => node.children[0] == null;
 
-  int get id => _node.id;
+  int get id => node.id;
 
   List<QuadTreeNodeDebugInfo> get nodes {
     final list = <QuadTreeNodeDebugInfo>[this];
-    for (var i = 0; i < _node.children.length; i++) {
-      final node = _node.children[i];
+    for (var i = 0; i < node.children.length; i++) {
+      final node = this.node.children[i];
       if (node == null) {
         continue;
       }
@@ -325,13 +331,13 @@ class QuadTreeNodeDebugInfo {
   }
 }
 
-class _Node<T extends Hitbox<T>> {
-  final List<_Node?> children =
+class QuadTreeNode<T extends Hitbox<T>> {
+  final List<QuadTreeNode?> children =
       List.generate(4, (index) => null, growable: false);
 
   List<T> hitboxes = <T>[];
 
-  _Node? parent;
+  QuadTreeNode? parent;
   int id = 0;
 
   List<T> get valuesRecursive {

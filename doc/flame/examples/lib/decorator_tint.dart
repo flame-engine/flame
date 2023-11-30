@@ -1,11 +1,10 @@
 import 'dart:ui';
 
 import 'package:doc_flame_examples/flower.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorTintGame extends FlameGame with HasTappableComponents {
+class DecoratorTintGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     var step = 0;

@@ -5,17 +5,18 @@ publish_to: 'none'
 version: 0.0.1+1
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.6.0
-  flame_lottie: ^0.2.0
+  flame: ^1.10.1
+  flame_lottie: ^0.3.0+3
   flutter:
     sdk: flutter
   lottie:
 
 dev_dependencies:
-  flame_lint: ^0.2.0
+  flame_lint: ^1.1.1
+
 flutter:
   uses-material-design: true
   assets:

@@ -68,11 +68,11 @@ class WorldContactListener extends ContactListener {
   }
 
   @override
-  void postSolve(Contact contact, ContactImpulse contactImpulse) {
+  void postSolve(Contact contact, ContactImpulse impulse) {
     _callback(
       contact,
       (contactCallback, other) =>
-          contactCallback.postSolve(other, contact, contactImpulse),
+          contactCallback.postSolve(other, contact, impulse),
     );
   }
 }

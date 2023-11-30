@@ -2,7 +2,8 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/system/overlays_example.dart';
 import 'package:examples/stories/system/pause_resume_example.dart';
-import 'package:examples/stories/system/without_flamegame_example.dart';
+import 'package:examples/stories/system/step_engine_example.dart';
+import 'package:examples/stories/system/without_flame_game_example.dart';
 import 'package:flame/game.dart';
 
 void addSystemStories(Dashbook dashbook) {
@@ -22,7 +23,13 @@ void addSystemStories(Dashbook dashbook) {
     ..add(
       'Without FlameGame',
       (_) => GameWidget(game: NoFlameGameExample()),
-      codeLink: baseLink('system/without_flamegame_example.dart'),
+      codeLink: baseLink('system/without_flame_game_example.dart'),
       info: NoFlameGameExample.description,
+    )
+    ..add(
+      'Step Game',
+      (_) => GameWidget(game: StepEngineExample()),
+      codeLink: baseLink('system/step_engine_game.dart'),
+      info: StepEngineExample.description,
     );
 }

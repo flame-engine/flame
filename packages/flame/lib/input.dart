@@ -10,4 +10,3 @@ export 'src/events/game_mixins/multi_touch_tap_detector.dart';
 export 'src/extensions/vector2.dart';
 export 'src/game/mixins/keyboard.dart';
 export 'src/gestures/detectors.dart';
-export 'src/gestures/events.dart';

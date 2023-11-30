@@ -1,7 +1,6 @@
-import 'package:flame/src/components/core/component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/components/core/recycled_queue.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// **ComponentTreeRoot** is a component that can be used as a root node of a
 /// component tree.
@@ -18,6 +17,7 @@ class ComponentTreeRoot extends Component {
   final RecycledQueue<_LifecycleEvent> _queue;
   final Set<int> _blocked;
   final Set<Component> _componentsToRebalance;
+  late final Map<ComponentKey, Component> _index = {};
 
   @internal
   void enqueueAdd(Component child, Component parent) {
@@ -48,6 +48,15 @@ class ComponentTreeRoot extends Component {
       ..kind = _LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
+  }
+
+  @internal
+  void dequeueRemove(Component child) {
+    for (final event in _queue) {
+      if (event.kind == _LifecycleEventKind.remove && event.child == child) {
+        event.kind = _LifecycleEventKind.unknown;
+      }
+    }
   }
 
   @internal
@@ -126,6 +135,28 @@ class ComponentTreeRoot extends Component {
         event.child!.onGameResize(size);
       }
     });
+  }
+
+  @mustCallSuper
+  @internal
+  void registerKey(ComponentKey key, Component component) {
+    assert(!_index.containsKey(key), 'Key $key is already registered');
+    _index[key] = component;
+  }
+
+  @mustCallSuper
+  @internal
+  void unregisterKey(ComponentKey key) {
+    _index.remove(key);
+  }
+
+  T? findByKey<T extends Component>(ComponentKey key) {
+    final component = _index[key];
+    return component as T?;
+  }
+
+  T? findByKeyName<T extends Component>(String name) {
+    return findByKey(ComponentKey.named(name));
   }
 }
 

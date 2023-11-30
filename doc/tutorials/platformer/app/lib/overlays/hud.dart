@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 import 'heart.dart';
 
-class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
+class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
   Hud({
     super.position,
     super.size,
@@ -13,9 +13,7 @@ class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
     super.anchor,
     super.children,
     super.priority = 5,
-  }) {
-    positionType = PositionType.viewport;
-  }
+  });
 
   late TextComponent _scoreTextComponent;
 

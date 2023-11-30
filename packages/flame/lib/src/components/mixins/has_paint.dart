@@ -30,16 +30,16 @@ mixin HasPaint<T extends Object> on Component
   /// Returns the main paint if no [paintId] is provided.
   Paint getPaint([T? paintId]) {
     if (paintId == null) {
-      return paint;
+      return this.paint;
     }
 
-    final _paint = _paints[paintId];
+    final paint = _paints[paintId];
 
-    if (_paint == null) {
+    if (paint == null) {
       throw ArgumentError('No Paint found for $paintId');
     }
 
-    return _paint;
+    return paint;
   }
 
   /// Sets a paint on the collection.
@@ -153,8 +153,8 @@ mixin HasPaint<T extends Object> on Component
   }) {
     return _MultiPaintOpacityProvider(
       paintIds ?? (List<T?>.from(_paints.keys)..add(null)),
-      includeLayers,
       this,
+      includeLayers: includeLayers,
     );
   }
 }
@@ -173,7 +173,11 @@ class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {
 }
 
 class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
-  _MultiPaintOpacityProvider(this.paintIds, this.includeLayers, this.target) {
+  _MultiPaintOpacityProvider(
+    this.paintIds,
+    this.target, {
+    required this.includeLayers,
+  }) {
     final maxOpacity = opacity;
 
     _opacityRatios = [

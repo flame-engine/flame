@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
 
@@ -12,7 +13,7 @@ enum ComputeType {
   const ComputeType(this.description);
 }
 
-class WorkerOvermindHud extends PositionComponent with Tappable {
+class WorkerOvermindHud extends PositionComponent with TapCallbacks {
   ComputeType computeType = ComputeType.isolate;
 
   @override
@@ -21,14 +22,12 @@ class WorkerOvermindHud extends PositionComponent with Tappable {
     y = 10;
     width = 210;
     height = 80;
-    positionType = PositionType.viewport;
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     computeType =
         ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
-    return false;
   }
 
   final _paint = Paint()..color = const Color(0xa98d560d);

@@ -1,0 +1,12 @@
+include: analysis_options.yaml
+
+# DCM rules defined here: https://dcm.dev/docs/rules/
+
+dart_code_metrics:
+  rules:
+  # dart rules
+    - avoid-banned-imports
+    - avoid-cascade-after-if-null
+    - avoid-collection-methods-with-unrelated-types
+  # flutter rules
+    - prefer-define-hero-tag

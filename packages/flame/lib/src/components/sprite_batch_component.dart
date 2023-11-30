@@ -16,6 +16,7 @@ class SpriteBatchComponent extends Component {
     this.blendMode,
     this.cullRect,
     this.paint,
+    super.key,
   });
 
   @override

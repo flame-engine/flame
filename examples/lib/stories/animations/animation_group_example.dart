@@ -18,7 +18,7 @@ class AnimationGroupExample extends FlameGame with TapDetector {
     back to the original animation.
   ''';
 
-  late SpriteAnimationGroupComponent robot;
+  late SpriteAnimationGroupComponent<RobotState> robot;
 
   @override
   Future<void> onLoad() async {

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,8 +19,19 @@ void main() {
       expect(rectangle.isConvex, true);
       expect(rectangle.isClosed, true);
       expect(rectangle.perimeter, 34);
+      expect(rectangle.area, 60);
       expect(rectangle.center, closeToVector(Vector2(6.5, 6)));
       expect('$rectangle', 'Rectangle([4.0, 0.0], [9.0, 12.0])');
+    });
+
+    test('simple rectangle from LTWH', () {
+      final rectangle = Rectangle.fromLTWH(2, 2, 5, 7);
+      expect(rectangle.left, 2);
+      expect(rectangle.top, 2);
+      expect(rectangle.right, 7);
+      expect(rectangle.bottom, 9);
+      expect(rectangle.width, 5);
+      expect(rectangle.height, 7);
     });
 
     test('rectangle with inverted left-right edges', () {
@@ -51,6 +63,17 @@ void main() {
         expect(rectangle.top, 8);
         expect(rectangle.bottom, 9);
       }
+    });
+
+    test('.fromCenter', () {
+      final rectangle = Rectangle.fromCenter(
+        center: Vector2.zero(),
+        size: Vector2(10.0, 2.0),
+      );
+      expect(rectangle.left, -5);
+      expect(rectangle.top, -1);
+      expect(rectangle.right, 5);
+      expect(rectangle.bottom, 1);
     });
 
     test('.fromRect', () {
@@ -223,5 +246,57 @@ void main() {
       expect(rectangle.nearestPoint(Vector2(17, 1)), Vector2(5, 1));
       expect(rectangle.nearestPoint(Vector2(8, -2)), Vector2(5, 0));
     });
+  });
+
+  test('edges and vertices', () {
+    final rectangle = Rectangle.fromCenter(
+      center: Vector2.zero(),
+      size: Vector2(10.0, 2.0),
+    );
+    expect(rectangle.topLeft, Vector2(-5, -1));
+    expect(rectangle.topRight, Vector2(5, -1));
+    expect(rectangle.bottomLeft, Vector2(-5, 1));
+    expect(rectangle.bottomRight, Vector2(5, 1));
+
+    expect(rectangle.topEdge.from, Vector2(-5, -1));
+    expect(rectangle.topEdge.to, Vector2(5, -1));
+    expect(rectangle.rightEdge.from, Vector2(5, -1));
+    expect(rectangle.rightEdge.to, Vector2(5, 1));
+    expect(rectangle.bottomEdge.from, Vector2(5, 1));
+    expect(rectangle.bottomEdge.to, Vector2(-5, 1));
+    expect(rectangle.leftEdge.from, Vector2(-5, 1));
+    expect(rectangle.leftEdge.to, Vector2(-5, -1));
+  });
+
+  test('intersections', () {
+    final rectangle = Rectangle.fromCenter(
+      center: Vector2.zero(),
+      size: Vector2(2.0, 2.0),
+    );
+    expect(
+      rectangle.intersections(LineSegment(Vector2.zero(), Vector2(0, -2))),
+      [Vector2(0, -1)],
+    );
+    expect(
+      rectangle.intersections(LineSegment(Vector2.zero(), Vector2(0, 2))),
+      [Vector2(0, 1)],
+    );
+    expect(
+      rectangle.intersections(LineSegment(Vector2(-2, 0), Vector2.zero())),
+      [Vector2(-1, 0)],
+    );
+    expect(
+      rectangle.intersections(LineSegment(Vector2(2, 0), Vector2.zero())),
+      [Vector2(1, 0)],
+    );
+
+    expect(
+      rectangle.intersections(LineSegment(Vector2(2, 2), Vector2(-2, -2))),
+      unorderedMatches([Vector2(1, 1), Vector2(-1, -1)]),
+    );
+    expect(
+      rectangle.intersections(LineSegment(Vector2(-2, 2), Vector2(2, -2))),
+      unorderedMatches([Vector2(-1, 1), Vector2(1, -1)]),
+    );
   });
 }

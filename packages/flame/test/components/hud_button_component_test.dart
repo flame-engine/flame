@@ -1,16 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../game/flame_game_test.dart';
-
 void main() {
   group('HudButtonComponent', () {
-    testWithGame<GameWithTappables>(
-        'correctly registers taps', GameWithTappables.new, (game) async {
+    testWithFlameGame('correctly registers taps', (game) async {
       var pressedTimes = 0;
       var releasedTimes = 0;
       var cancelledTimes = 0;
@@ -33,16 +31,16 @@ void main() {
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
+      final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-      game.onTapDown(1, createTapDownEvent(game));
+      tapDispatcher.handleTapDown(1, TapDownDetails());
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
 
-      game.onTapUp(
+      tapDispatcher.handleTapUp(
         1,
-        createTapUpEvent(
-          game,
+        createTapUpDetails(
           globalPosition: button.positionOfAnchor(Anchor.center).toOffset(),
         ),
       );
@@ -50,10 +48,9 @@ void main() {
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
+        TapDownDetails(
           globalPosition: initialGameSize.toOffset() +
               margin.bottomRight -
               const Offset(1, 1),
@@ -63,10 +60,9 @@ void main() {
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
 
-      game.onTapUp(
+      tapDispatcher.handleTapUp(
         1,
-        createTapUpEvent(
-          game,
+        createTapUpDetails(
           globalPosition: button.positionOfAnchor(Anchor.center).toOffset(),
         ),
       );
@@ -74,24 +70,21 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 0);
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
+        TapDownDetails(
           globalPosition: initialGameSize.toOffset() +
               margin.bottomRight -
               const Offset(1, 1),
         ),
       );
-      game.onTapCancel(1);
+      tapDispatcher.handleTapCancel(1);
       expect(pressedTimes, 2);
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });
 
-    testWithGame<GameWithTappables>(
-        'correctly registers taps onGameResize', GameWithTappables.new,
-        (game) async {
+    testWithFlameGame('correctly registers taps onGameResize', (game) async {
       var pressedTimes = 0;
       var releasedTimes = 0;
       var cancelledTimes = 0;
@@ -113,29 +106,23 @@ void main() {
       final previousPosition =
           button.positionOfAnchor(Anchor.center).toOffset();
       game.onGameResize(initialGameSize * 2);
+      final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
-          globalPosition: previousPosition,
-        ),
+        TapDownDetails(globalPosition: previousPosition),
       );
-      game.onTapUp(
+      tapDispatcher.handleTapUp(
         1,
-        createTapUpEvent(
-          game,
-          globalPosition: previousPosition,
-        ),
+        createTapUpDetails(globalPosition: previousPosition),
       );
       expect(pressedTimes, 0);
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
+        TapDownDetails(
           globalPosition:
               game.size.toOffset() + margin.bottomRight - const Offset(1, 1),
         ),
@@ -144,10 +131,9 @@ void main() {
       expect(releasedTimes, 0);
       expect(cancelledTimes, 0);
 
-      game.onTapUp(
+      tapDispatcher.handleTapUp(
         1,
-        createTapUpEvent(
-          game,
+        createTapUpDetails(
           globalPosition:
               game.size.toOffset() + margin.bottomRight - const Offset(1, 1),
         ),
@@ -156,18 +142,33 @@ void main() {
       expect(releasedTimes, 1);
       expect(cancelledTimes, 0);
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
+        TapDownDetails(
           globalPosition:
               game.size.toOffset() + margin.bottomRight - const Offset(1, 1),
         ),
       );
-      game.onTapCancel(1);
+      tapDispatcher.handleTapCancel(1);
       expect(pressedTimes, 2);
       expect(releasedTimes, 1);
       expect(cancelledTimes, 1);
     });
+
+    testWithFlameGame('can set button and buttonDown in onLoad', (game) async {
+      expect(
+        () => game.ensureAdd(_CustomHudButtonComponent()),
+        returnsNormally,
+      );
+    });
   });
+}
+
+class _CustomHudButtonComponent extends HudButtonComponent {
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    button = RectangleComponent(size: Vector2.all(10));
+    buttonDown = CircleComponent(radius: 10);
+  }
 }

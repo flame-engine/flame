@@ -1,11 +1,10 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/game/camera/camera.dart';
-import 'package:flame/src/game/camera/camera_wrapper.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:flame/src/game/projector.dart';
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -15,35 +14,83 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
-class FlameGame extends ComponentTreeRoot with Game {
+class FlameGame<W extends World> extends ComponentTreeRoot
+    with Game
+    implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
-    Camera? camera,
-  }) {
+    W? world,
+    CameraComponent? camera,
+  })  : assert(
+          world != null || W == World,
+          'The generics type $W does not conform to the type of '
+          '${world?.runtimeType ?? 'World'}.',
+        ),
+        _world = world ?? World() as W,
+        _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
-    _cameraWrapper = CameraWrapper(camera ?? Camera(), children);
+    _camera.world = _world;
+    add(_camera);
+    add(_world);
   }
 
-  late final CameraWrapper _cameraWrapper;
+  /// The [World] that the [camera] is rendering.
+  /// Inside of this world is where most of your components should be added.
+  ///
+  /// You don't have to add the world to the tree after setting it here, it is
+  /// done automatically.
+  W get world => _world;
+  set world(W newWorld) {
+    if (newWorld == _world) {
+      return;
+    }
+    _world.removeFromParent();
+    camera.world = newWorld;
+    _world = newWorld;
+    if (_world.parent == null) {
+      add(_world);
+    }
+  }
+
+  W _world;
+
+  /// The component that is responsible for rendering your [world].
+  ///
+  /// In this component you can set different viewports, viewfinders, follow
+  /// components, set bounds for where the camera can move etc.
+  ///
+  /// You don't have to add the CameraComponent to the tree after setting it
+  /// here, it is done automatically.
+  ///
+  /// When setting the camera, if it doesn't already have a world it will be
+  /// set to match the game's world.
+  CameraComponent get camera => _camera;
+  set camera(CameraComponent newCameraComponent) {
+    _camera.removeFromParent();
+    _camera = newCameraComponent;
+    if (_camera.parent == null) {
+      add(_camera);
+    }
+    _camera.world ??= world;
+  }
+
+  CameraComponent _camera;
 
   @internal
   late final List<ComponentsNotifier> notifiers = [];
 
-  /// The camera translates the coordinate space after the viewport is applied.
-  Camera get camera => _cameraWrapper.camera;
-
   /// This is overwritten to consider the viewport transformation.
   ///
   /// Which means that this is the logical size of the game screen area as
-  /// exposed to the canvas after viewport transformations and camera zooming.
+  /// exposed to the canvas after viewport transformations.
   ///
   /// This does not match the Flutter widget size; for that see [canvasSize].
   @override
-  Vector2 get size => camera.gameSize;
+  Vector2 get size => camera.viewport.virtualSize;
 
   @override
   @internal
@@ -69,8 +116,12 @@ class FlameGame extends ComponentTreeRoot with Game {
 
   @override
   void renderTree(Canvas canvas) {
-    // Don't call super.renderTree, since the tree is rendered by the camera
-    _cameraWrapper.render(canvas);
+    if (parent != null) {
+      renderTree(canvas);
+    }
+    for (final component in children) {
+      component.renderTree(canvas);
+    }
   }
 
   @override
@@ -79,7 +130,6 @@ class FlameGame extends ComponentTreeRoot with Game {
     if (parent == null) {
       updateTree(dt);
     }
-    _cameraWrapper.update(dt);
   }
 
   @override
@@ -88,7 +138,9 @@ class FlameGame extends ComponentTreeRoot with Game {
     if (parent != null) {
       update(dt);
     }
-    children.forEach((c) => c.updateTree(dt));
+    for (final component in children) {
+      component.updateTree(dt);
+    }
     processRebalanceEvents();
   }
 
@@ -100,17 +152,20 @@ class FlameGame extends ComponentTreeRoot with Game {
   /// components and other methods.
   /// You can override it further to add more custom behavior, but you should
   /// seriously consider calling the super implementation as well.
-  /// This implementation also uses the current [camera] in order to transform
-  /// the coordinate system appropriately.
   @override
   @mustCallSuper
-  void onGameResize(Vector2 canvasSize) {
-    camera.handleResize(canvasSize);
-    super.onGameResize(canvasSize);
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    // This work-around is needed since the camera has the highest priority and
+    // [size] uses [viewport.virtualSize], so the viewport needs to be updated
+    // first since users will be using `game.size` in their [onGameResize]
+    // methods.
+    camera.viewport.onGameResize(size);
     // [onGameResize] is declared both in [Component] and in [Game]. Since
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
-    handleResize(canvasSize);
+    handleResize(size);
+    children.forEach((child) => child.onParentResize(size));
   }
 
   /// Ensure that all pending tree operations finish.
@@ -135,8 +190,11 @@ class FlameGame extends ComponentTreeRoot with Game {
 
   /// Whether a point is within the boundaries of the visible part of the game.
   @override
-  bool containsLocalPoint(Vector2 p) {
-    return p.x >= 0 && p.y >= 0 && p.x < size.x && p.y < size.y;
+  bool containsLocalPoint(Vector2 point) {
+    return point.x >= 0 &&
+        point.y >= 0 &&
+        point.x < canvasSize.x &&
+        point.y < canvasSize.y;
   }
 
   /// Returns the current time in seconds with microseconds precision.
@@ -147,13 +205,7 @@ class FlameGame extends ComponentTreeRoot with Game {
         Duration.microsecondsPerSecond;
   }
 
-  @override
-  Projector get viewportProjector => camera.viewport;
-
-  @override
-  Projector get projector => camera.combinedProjector;
-
-  /// Returns a [ComponentsNotifier] for the given type [T].
+  /// Returns a [ComponentsNotifier] for the given type [W].
   ///
   /// This method handles duplications, so there will never be
   /// more than one [ComponentsNotifier] for a given type, meaning
@@ -181,5 +233,45 @@ class FlameGame extends ComponentTreeRoot with Game {
         callback(notifier);
       }
     }
+  }
+
+  /// Whether the game should pause when the app is backgrounded.
+  ///
+  /// On the latest Flutter stable at the time of writing (3.13),
+  /// this is only working on Android and iOS.
+  ///
+  /// Defaults to true.
+  bool pauseWhenBackgrounded = true;
+  bool _pausedBecauseBackgrounded = false;
+
+  @override
+  @mustCallSuper
+  void lifecycleStateChange(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+      case AppLifecycleState.inactive:
+        if (_pausedBecauseBackgrounded) {
+          resumeEngine();
+        }
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+        if (pauseWhenBackgrounded && !paused) {
+          pauseEngine();
+          _pausedBecauseBackgrounded = true;
+        }
+    }
+  }
+
+  @override
+  void pauseEngine() {
+    _pausedBecauseBackgrounded = false;
+    super.pauseEngine();
+  }
+
+  @override
+  void resumeEngine() {
+    _pausedBecauseBackgrounded = false;
+    super.resumeEngine();
   }
 }

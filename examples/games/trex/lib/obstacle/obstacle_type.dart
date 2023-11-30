@@ -19,10 +19,10 @@ class ObstacleTypeSettings {
     required this.multipleAt,
     required this.minGap,
     required this.minSpeed,
+    required this.generateHitboxes,
     this.numFrames,
     this.frameRate,
     this.speedOffset,
-    required this.generateHitboxes,
   });
 
   final ObstacleType type;

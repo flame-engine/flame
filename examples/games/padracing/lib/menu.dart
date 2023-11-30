@@ -71,9 +71,9 @@ class Menu extends StatelessWidget {
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                final _url =
-                                    Uri.parse('https://github.com/spydon');
-                                launchUrl(_url);
+                                launchUrl(
+                                  Uri.parse('https://github.com/spydon'),
+                                );
                               },
                           ),
                         ],

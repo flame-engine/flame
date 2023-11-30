@@ -5,7 +5,6 @@ packages:
   - packages/**
   - examples/
   - examples/games/**
-  - tutorials/**
   - doc/**
 
 command:
@@ -14,6 +13,16 @@ command:
     branch: main
     # Generates a link to a prefilled GitHub release creation page.
     releaseUrl: true
+  bootstrap:
+    environment:
+      sdk: ">=3.0.0 <4.0.0"
+    dependencies:
+      meta: ^1.9.1
+      vector_math: ^2.1.4
+    dev_dependencies:
+      dartdoc: ^6.3.0
+      mocktail: ^1.0.1
+      test: any
 
 scripts:
   lint:all:
@@ -22,7 +31,7 @@ scripts:
 
   analyze:
     run: |
-      melos exec -c 10 -- \
+      melos exec -c 1 -- \
         flutter analyze --fatal-infos
     description: Run `flutter analyze` for all packages.
 
@@ -47,16 +56,16 @@ scripts:
     description: Run dartdoc checks for all packages.
 
   doc-setup:
-    run: |
-      echo '\033[1;32mChecking python version:\033[m' &&
+    run: >
+      echo Checking python version: &&
       python --version &&
-      (python -c 'import sys; sys.exit(0 if sys.version_info>=(3,8) else 2)' ||
-       (echo '\033[1;31mError: Python 3.8+ is required\033[m' && false)) &&
-      echo '\n\033[1;32mInstalling required python modules:\033[m' &&
+      (python -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
+      (echo  Error: Python 3.8+ is required && exit 1)) &&
+      echo Installing required python modules: &&
       python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
-      echo '\n\033[1;32mInstalling dartdoc_json:\033[m' &&
+      echo Installing dartdoc_json: &&
       dart pub global activate dartdoc_json &&
-      echo '\n\033[1;32mDone.\033[m'
+      echo Done.
     description: Prepares the environment for documentation development.
 
   doc-build:
@@ -65,7 +74,11 @@ scripts:
 
   doc-serve:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
-    description: Recompiles the docs enerytime there is a change in them and opens your browser.
+    description: Recompiles the docs every time there is a change in them and opens your browser.
+  
+  doc-kill:
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python kill-server.py
+    description: Kills any TCP processes running on port 8000.
 
   doc-clean:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make clean
@@ -76,7 +89,7 @@ scripts:
     description: Checks whether there are any broken links in the docs.
 
   test:select:
-    run: melos exec -- flutter test
+    run: melos exec -c 1 -- flutter test
     packageFilters:
       dirExists: test
     description: Run `flutter test` for selected packages.

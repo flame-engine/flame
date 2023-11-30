@@ -14,9 +14,9 @@ that document first, as it is sure to improve your skill in Dart programming.
 Most of the code formatting rules are enforced automatically via the linter. Run the following
 commands to ensure the code is conformant and to fix any easy formatting problems:
 
-```console
+```shell
 flutter analyze
-flutter format .
+dart format .
 ```
 
 

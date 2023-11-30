@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Gradient;
@@ -19,25 +20,17 @@ class _Rectangle extends RectangleComponent {
               [Colors.orange, Colors.blue],
             ),
           children: [
-            SequenceEffect(
-              [
-                RotateEffect.by(
-                  pi * 2,
-                  LinearEffectController(.4),
-                ),
-                RotateEffect.by(
-                  0,
-                  LinearEffectController(.4),
-                ),
-              ],
-              infinite: true,
+            RotateEffect.by(
+              pi * 2,
+              EffectController(duration: .4, infinite: true),
             ),
           ],
         );
 }
 
 class ClipComponentExample extends FlameGame with TapDetector {
-  static String description = 'Tap on the objects to increase their size.';
+  static const String description =
+      'Tap on the objects to increase their size.';
 
   @override
   Future<void> onLoad() async {
@@ -70,7 +63,7 @@ class ClipComponentExample extends FlameGame with TapDetector {
 
   @override
   void onTapUp(TapUpInfo info) {
-    final position = info.eventPosition.game;
+    final position = info.eventPosition.widget;
     final hit = children
         .whereType<PositionComponent>()
         .where(

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/parallax.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
@@ -22,7 +24,9 @@ extension ParallaxComponentExtension on FlameGame {
     double? angle,
     Anchor? anchor,
     int? priority,
-  }) async {
+    FilterQuality? filterQuality,
+    ComponentKey? key,
+  }) {
     return ParallaxComponent.load(
       dataList,
       baseVelocity: baseVelocity,
@@ -37,17 +41,20 @@ extension ParallaxComponentExtension on FlameGame {
       angle: angle,
       anchor: anchor,
       priority: priority,
+      filterQuality: filterQuality,
+      key: key,
     );
   }
 }
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
+///
+/// Most of the time you want to add the [ParallaxComponent] as a child to the
+/// viewport: `game.camera.viewport.add(parallaxComponent);`, since you want it
+/// to be static to the rest of the game.
 class ParallaxComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
-  @override
-  PositionType positionType = PositionType.viewport;
-
+    with HasGameReference<T> {
   bool isFullscreen = true;
   Parallax? _parallax;
 
@@ -67,6 +74,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : _parallax = parallax,
         isFullscreen = size == null && !(parallax?.isSized ?? false),
         super(
@@ -80,7 +88,9 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     if (!isFullscreen) {
       return;
     }
-    final newSize = gameRef.camera.viewport.effectiveSize;
+    final newSize = parent is ReadOnlySizeProvider
+        ? (parent! as ReadOnlySizeProvider).size
+        : game.size;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
   }
@@ -139,6 +149,8 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     double? angle,
     Anchor? anchor,
     int? priority,
+    FilterQuality? filterQuality,
+    ComponentKey? key,
   }) async {
     return ParallaxComponent(
       parallax: await Parallax.load(
@@ -150,6 +162,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
         alignment: alignment,
         fill: fill,
         images: images,
+        filterQuality: filterQuality,
       ),
       position: position,
       size: size,
@@ -157,6 +170,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
       angle: angle,
       anchor: anchor,
       priority: priority,
+      key: key,
     );
   }
 }

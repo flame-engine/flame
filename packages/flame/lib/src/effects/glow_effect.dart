@@ -18,9 +18,7 @@ class GlowEffect extends Effect with EffectTarget<PaintProvider> {
 
   @override
   void apply(double progress) {
-    final _value = strength * progress;
-
-    target.paint.maskFilter = MaskFilter.blur(style, _value);
+    target.paint.maskFilter = MaskFilter.blur(style, strength * progress);
   }
 
   @override

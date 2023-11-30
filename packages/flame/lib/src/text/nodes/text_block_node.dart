@@ -1,21 +1,16 @@
 import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/block_element.dart';
 import 'package:flame/src/text/elements/group_element.dart';
-import 'package:flame/src/text/elements/text_element.dart';
-import 'package:flame/src/text/nodes/block_node.dart';
-import 'package:flame/src/text/nodes/text_node.dart';
-import 'package:flame/src/text/styles/document_style.dart';
-import 'package:flame/src/text/styles/flame_text_style.dart';
+import 'package:flame/text.dart';
 import 'package:meta/meta.dart';
 
 abstract class TextBlockNode extends BlockNode {
   TextBlockNode(this.child);
 
-  final TextNode child;
+  final InlineTextNode child;
 
   @mustCallSuper
   @override
-  void fillStyles(DocumentStyle stylesheet, FlameTextStyle parentTextStyle) {
+  void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
     child.fillStyles(stylesheet, parentTextStyle);
   }
 
@@ -28,7 +23,7 @@ abstract class TextBlockNode extends BlockNode {
     final blockWidth = availableWidth;
     final contentWidth = blockWidth - style.padding.horizontal;
 
-    final lines = <TextElement>[];
+    final lines = <InlineTextElement>[];
     final horizontalOffset = style.padding.left;
     var verticalOffset = style.padding.top;
     while (!layoutBuilder.isDone) {

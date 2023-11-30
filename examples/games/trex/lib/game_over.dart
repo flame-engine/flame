@@ -20,42 +20,42 @@ class GameOverPanel extends Component {
   }
 }
 
-class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
+class GameOverText extends SpriteComponent with HasGameReference<TRexGame> {
   GameOverText() : super(size: Vector2(382, 25), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
     sprite = Sprite(
-      gameRef.spriteImage,
+      game.spriteImage,
       srcPosition: Vector2(955.0, 26.0),
       srcSize: size,
     );
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    x = gameSize.x / 2;
-    y = gameSize.y * .25;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    x = size.x / 2;
+    y = size.y * .25;
   }
 }
 
-class GameOverRestart extends SpriteComponent with HasGameRef<TRexGame> {
+class GameOverRestart extends SpriteComponent with HasGameReference<TRexGame> {
   GameOverRestart() : super(size: Vector2(72, 64), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
     sprite = Sprite(
-      gameRef.spriteImage,
+      game.spriteImage,
       srcPosition: Vector2.all(2.0),
       srcSize: size,
     );
   }
 
   @override
-  void onGameResize(Vector2 gameSize) {
-    super.onGameResize(gameSize);
-    x = gameSize.x / 2;
-    y = gameSize.y * .75;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    x = size.x / 2;
+    y = size.y * .75;
   }
 }

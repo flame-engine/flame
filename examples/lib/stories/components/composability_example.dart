@@ -4,9 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
-// This class only has `HasDraggables` since the game-in-game example moves a
-// draggable component to this game.
-class ComposabilityExample extends FlameGame with HasDraggables {
+class ComposabilityExample extends FlameGame {
   static const String description = '''
     In this example we showcase how you can add children to a component and how
     they transform together with their parent, if the parent is a

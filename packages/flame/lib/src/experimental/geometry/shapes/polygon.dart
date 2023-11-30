@@ -1,9 +1,12 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:flame/components.dart';
+import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:flame/src/math/tmp_vector2.dart';
 
 /// An arbitrary polygon with 3 or more vertices.
 ///
@@ -218,18 +221,18 @@ class Polygon extends Shape {
   static final Vector2 _tmpResult = Vector2.zero();
 
   @override
-  Vector2 nearestPoint(Vector2 externalPoint) {
+  Vector2 nearestPoint(Vector2 point) {
     var shortestDistance2 = double.infinity;
     for (var i = 0; i < _vertices.length; i++) {
       final vertex = _vertices[i];
       final edge = _edges[i];
-      final dotProduct = (externalPoint.x - vertex.x) * edge.x +
-          (externalPoint.y - vertex.y) * edge.y;
+      final dotProduct =
+          (point.x - vertex.x) * edge.x + (point.y - vertex.y) * edge.y;
       final t = (dotProduct / edge.length2).clamp(-1.0, 0.0);
       final edgePointX = vertex.x + edge.x * t;
       final edgePointY = vertex.y + edge.y * t;
-      final dx = edgePointX - externalPoint.x;
-      final dy = edgePointY - externalPoint.y;
+      final dx = edgePointX - point.x;
+      final dy = edgePointY - point.y;
       final distance2 = dx * dx + dy * dy;
       if (distance2 < shortestDistance2) {
         shortestDistance2 = distance2;
@@ -241,4 +244,62 @@ class Polygon extends Shape {
 
   @override
   String toString() => 'Polygon($vertices)';
+
+  @override
+  Vector2 randomPoint({Random? random, bool within = true}) {
+    final randomGenerator = random ?? randomFallback;
+    if (within) {
+      final result = Vector2.zero();
+      final min = aabb.min;
+      final max = aabb.max;
+
+      while (true) {
+        final randomX = min.x + randomGenerator.nextDouble() * (max.x - min.x);
+        final randomY = min.y + randomGenerator.nextDouble() * (max.y - min.y);
+        result.setValues(randomX, randomY);
+
+        if (containsPoint(result)) {
+          return result;
+        }
+      }
+    } else {
+      return Polygon.randomPointAlongEdges(_vertices, random: randomGenerator);
+    }
+  }
+
+  /// Returns a random point on the [vertices].
+  static Vector2 randomPointAlongEdges(
+    List<Vector2> vertices, {
+    Random? random,
+  }) {
+    final randomGenerator = random ?? randomFallback;
+    final verticesLengths = <double>[];
+    var totalLength = 0.0;
+    for (final (i, startPoint) in vertices.indexed) {
+      final endPoint = vertices[(i + 1) % vertices.length];
+      final length = startPoint.distanceTo(endPoint);
+      verticesLengths.add(length);
+      totalLength += length;
+    }
+    final pointOnEdges = randomGenerator.nextDouble() * totalLength;
+    var vertexIndex = 0;
+    var currentEndPoint = 0.0;
+    late final double localEdgePoint;
+    while (vertexIndex < verticesLengths.length) {
+      final lastEndPoint = currentEndPoint;
+      currentEndPoint += verticesLengths[vertexIndex];
+      if (currentEndPoint >= pointOnEdges) {
+        localEdgePoint = pointOnEdges - lastEndPoint;
+        break;
+      }
+      vertexIndex++;
+    }
+    final startPoint = vertices[vertexIndex];
+    final endPoint = vertices[(vertexIndex + 1) % vertices.length];
+    tmpVector2
+      ..setFrom(endPoint)
+      ..sub(startPoint)
+      ..scaleTo(localEdgePoint);
+    return startPoint + tmpVector2;
+  }
 }

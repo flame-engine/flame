@@ -45,7 +45,7 @@ bounce on will appear.
     addAll([
       ScreenHitbox(),
       CircleComponent(
-        radius: min(camera.canvasSize.x, camera.canvasSize.y) / 2,
+        radius: min(canvasSize.x, canvasSize.y) / 2,
         paint: boxPaint,
         children: [CircleHitbox()],
       ),
@@ -129,7 +129,7 @@ bounce on will appear.
 
   @override
   void onMouseMove(PointerHoverInfo info) {
-    final origin = info.eventPosition.game;
+    final origin = info.eventPosition.widget;
     isOriginCasted = origin == this.origin;
     this.origin = origin;
   }

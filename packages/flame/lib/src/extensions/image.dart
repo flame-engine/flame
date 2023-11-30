@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame/src/extensions/color.dart';
-import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/palette.dart';
 
 export 'dart:ui' show Image;
 
 extension ImageExtension on Image {
+  static final Paint _whitePaint = BasicPalette.white.paint();
+
   /// Converts a raw list of pixel values into an [Image] object.
   ///
   /// The pixels must be in the RGBA format, i.e. first 4 bytes encode the red,
@@ -89,5 +91,26 @@ extension ImageExtension on Image {
       newPixelData[i + 3] = color.alpha;
     }
     return fromPixels(newPixelData, width, height);
+  }
+
+  /// Resizes this image to the given [newSize].
+  ///
+  /// Keep in mind that is considered an expensive operation and should be
+  /// avoided in the the game loop methods. Prefer using it
+  /// in the loading phase of the game or components.
+  Future<Image> resize(Vector2 newSize) async {
+    final recorder = PictureRecorder();
+    Canvas(recorder).drawImageRect(
+      this,
+      getBoundingRect(),
+      newSize.toRect(),
+      _whitePaint,
+    );
+    final picture = recorder.endRecording();
+    final resizedImage = await picture.toImageSafe(
+      newSize.x.toInt(),
+      newSize.y.toInt(),
+    );
+    return resizedImage;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
@@ -21,6 +23,7 @@ class AdvancedParallaxExample extends FlameGame {
       (e) => loadParallaxLayer(
         ParallaxImageData(e.key),
         velocityMultiplier: Vector2(e.value, 1.0),
+        filterQuality: FilterQuality.none,
       ),
     );
     final parallax = ParallaxComponent(

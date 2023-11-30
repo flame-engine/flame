@@ -1,22 +1,19 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/rendering.dart';
 
-/// The main [FlameGame] class uses [HasTappableComponents] in order to enable
-/// tap events propagation.
-class TapEventsGame extends FlameGame with HasTappableComponents {
+class TapEventsGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     add(TapTarget());
   }
 }
 
-/// This component is the tappable blue-ish rectangle in the center of the
-/// game. It uses the [TapCallbacks] mixin in order to inform the game that it
-/// wants to receive tap events.
+/// This component is the tappable blue-ish rectangle in the center of the game.
+/// It uses the [TapCallbacks] mixin to receive tap events.
 class TapTarget extends PositionComponent with TapCallbacks {
   TapTarget() : super(anchor: Anchor.center);
 
@@ -27,13 +24,13 @@ class TapTarget extends PositionComponent with TapCallbacks {
   final Map<int, ExpandingCircle> _circles = {};
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    size = canvasSize - Vector2(100, 75);
-    if (size.x < 100 || size.y < 100) {
-      size = canvasSize * 0.9;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size - Vector2(100, 75);
+    if (this.size.x < 100 || this.size.y < 100) {
+      this.size = size * 0.9;
     }
-    position = canvasSize / 2;
+    position = size / 2;
   }
 
   @override

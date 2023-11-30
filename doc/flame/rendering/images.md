@@ -120,6 +120,32 @@ class MyGame extends Game {
 ```
 
 
+## Loading images over the network
+
+The Flame core package doesn't offer a built in method to loading images from the network.
+
+The reason for that is that Flutter/Dart does not have a built in http client, which requires
+a package to be used and since there are a couple of packages available out there, we refrain
+from forcing the user to use a specific package.
+
+With that said, it is quite simple to load images from the network once a http client package
+is chosen by the user. The following snippet shows how an `Image` can be fetched from the web
+using the [http](https://pub.dev/packages/http) package.
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:flutter/painting.dart';
+
+final response = await http.get('https://url.com/image.png');
+final image = await decodeImageFromList(response.bytes);
+```
+
+```{note}
+Check [`flame_network_assets`](https://pub.dev/packages/flame_network_assets)
+for a ready to use network assets solution that provides a built in cache.
+```
+
+
 ## Sprite
 
 Flame offers a `Sprite` class that represents an image, or a region of an image.
@@ -204,9 +230,14 @@ final composition = ImageComposition()
     Vector2(128, 0),
     source: Rect.fromLTWH(32, 32, 64, 64),
   );
-
+  
 Image image = await composition.compose();
+Image imageSync = composition.composeSync();
 ```
+
+As you can see, two versions of composing image are available. Use `ImageComposition.compose()` for
+the async approach. Or use the new `ImageComposition.composeSync()` function to rasterize the
+image into GPU context using the benefits of the `Picture.toImageSync` function.
 
 **Note:** Composing images is expensive, we do not recommend you run this every tick as it affect
 the performance badly. Instead we recommend to have your compositions pre-rendered so you can just
@@ -290,58 +321,6 @@ A complete example of using animations as widgets can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
 
 
-## FlareAnimation
-
-Do note that Flare is discontinued and [Rive](https://github.com/flame-engine/flame/tree/main/packages/flame_rive)
-is preferred.
-
-Flame provides a simple wrapper of [Flare](https://flare.rive.app/) animations so you can use
-them in Flame games.
-
-Check the following snippet on how to use this wrapper:
-
-```dart
-class MyGame extends Game {
-  FlareAnimation flareAnimation;
-  bool loaded = false;
-
-  MyGame() {
-    _start();
-  }
-
-  void _start() async {
-    flareAnimation = await FlareAnimation.load("assets/FLARE_FILE.flr");
-    flareAnimation.updateAnimation("ANIMATION_NAME");
-
-    flareAnimation.width = 306;
-    flareAnimation.height = 228;
-
-    loaded = true;
-  }
-
-  @override
-  void render(Canvas canvas) {
-    if (loaded) {
-      flareAnimation.render(canvas, x: 50, y: 50);
-    }
-  }
-
-  @override
-  void update(double dt) {
-    if (loaded) {
-      flareAnimation.update(dt);
-    }
-  }
-}
-```
-
-FlareAnimations are normally used inside `FlareComponent`s, that way `FlameGame` will handle calling
-`render` and `update` automatically.
-
-You can see a full example of how to use Flare together with Flame in the example
-[here](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
-
-
 ## SpriteSheet
 
 Sprite sheets are big images with several frames of the same sprite on it and is a very good way to
@@ -352,21 +331,37 @@ a very simple example of how to use it:
 ```dart
 import 'package:flame/sprite.dart';
 
-final spritesheet = SpriteSheet(
+final spriteSheet = SpriteSheet(
   image: imageInstance,
   srcSize: Vector2.all(16.0),
 );
 
-final animation = spritesheet.createAnimation(0, stepTime: 0.1);
+final animation = spriteSheet.createAnimation(0, stepTime: 0.1);
 ```
 
 Now you can use the animation directly or use it in an animation component.
 
-You can also get a single frame of the sprite sheet using the `getSprite` method:
+You can also create a custom animation by retrieving individual `SpriteAnimationFrameData` using
+either `SpriteSheet.createFrameData` or `SpriteSheet.createFrameDataFromId`:
 
 ```dart
-spritesheet.getSprite(0, 0) // row, column;
+final animation = SpriteAnimation.fromFrameData(
+  imageInstance, 
+  SpriteAnimationData([
+    spriteSheet.createFrameDataFromId(1, stepTime: 0.1), // by id
+    spriteSheet.createFrameData(2, 3, stepTime: 0.3), // row, column
+    spriteSheet.createFrameDataFromId(4, stepTime: 0.1), // by id
+  ]),
+);
+```
+
+If you don't need any kind of animation and instead only want an instance of a `Sprite` on the
+`SpriteSheet` you can use the `getSprite` or `getSpriteById` methods:
+
+```dart
+spriteSheet.getSpriteById(2); // by id
+spriteSheet.getSprite(0, 0); // row, column
 ```
 
 You can see a full example of the `SpriteSheet` class
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritesheet_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_sheet_example.dart).

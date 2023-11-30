@@ -5,7 +5,7 @@ import 'package:flame_bloc_example/src/game/game.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
 class BulletComponent extends SpriteAnimationComponent
-    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
   static const bulletSpeed = -500;
 
   bool destroyed = false;
@@ -59,7 +59,7 @@ class BulletComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    animation = await gameRef.loadSpriteAnimation(
+    animation = await game.loadSpriteAnimation(
       _mapSpritePath(),
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
@@ -70,8 +70,8 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    super.onCollision(points, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
     if (other is EnemyComponent) {
       destroyed = true;
       other.takeHit();

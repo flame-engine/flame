@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -41,7 +42,8 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
 void main() {
   group('Benchmark collision detection', () {
     runCollisionTestRegistry({
-      'collidable callbacks are called': (game) async {
+      'collidable callbacks are called': (collisionSystem) async {
+        final game = collisionSystem as FlameGame;
         final rng = Random(0);
         final blocks = List.generate(
           100,
@@ -68,7 +70,7 @@ void main() {
           '${1000 / (totalTime / ticks)} runs per second\n'
           '${_TestBlock.collisionCounter}',
         );
-      }
+      },
     });
   });
 }

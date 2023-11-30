@@ -1,4 +1,4 @@
-# Gameplay
+# 4. Gameplay
 
 In this chapter we will be implementing the core of Klondike's gameplay: how the cards move between
 the stock and the waste, the piles and the foundations.
@@ -148,14 +148,8 @@ Now that the waste pile is ready, let's get back to the `StockPile`.
 The second item on our todo list is the first interactive functionality in the game: tap the stock
 pile to deal 3 cards onto the waste.
 
-Adding tap functionality to the components in Flame is quite simple: first, we add the mixin
-`HasTappableComponents` to our top-level game class:
-
-```dart
-class KlondikeGame extends FlameGame with HasTappableComponents { ... }
-```
-
-And second, we add the mixin `TapCallbacks` to the component that we want to be tappable:
+Adding tap functionality to the components in Flame is quite simple: we just add the mixin
+`TapCallbacks` to the component that we want to be tappable:
 
 ```dart
 class StockPile extends PositionComponent with TapCallbacks { ... }
@@ -419,6 +413,7 @@ into the `TableauPile`s at the beginning of the game. Modify the code at the end
 method so that it looks like this:
 
 ```dart
+  @override
   Future<void> onLoad() async {
     ...
 
@@ -430,19 +425,32 @@ method so that it looks like this:
     cards.shuffle();
     world.addAll(cards);
 
+    int cardToDeal = cards.length - 1;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
-        piles[j].acquireCard(cards.removeLast());
+        piles[j].acquireCard(cards[cardToDeal--]);
       }
       piles[i].flipTopCard();
     }
-    cards.forEach(stock.acquireCard);
+    for(int n = 0; n <= cardToDeal; n++) {
+      stock.acquireCard(cards[n]);
+    }
   }
 ```
 
-Note how we remove the cards from the deck and place them into `TableauPile`s one by one, and only
-after that we put the remaining cards into the stock. Also, the `flipTopCard` method in the
-`TableauPile` class is as trivial as it sounds:
+Note how we deal the cards from the deck and place them into `TableauPile`s one by one, and only
+after that we put the remaining cards into the stock.
+
+Recall that we decided earlier that all the cards would be owned by the `KlondikeGame` itself. So
+they are put into a generated List structure called `cards`, shuffled and added to the `world`. This
+List should always have 52 cards in it, so a descending index `cardToDeal` is used to deal 28 cards
+one by one from the top of the deck into piles that acquire references to the cards in the deck. An
+ascending index is used to deal the remaining 24 cards into the stock in correct shuffled order. At
+the end of the deal there are still 52 `Card` objects in the `cards` list. In the card piles we
+used `removeList()` to retrieve a card from a pile, but not here because it would remove cards
+from `KlondikeGame`'s ownership.
+
+The `flipTopCard` method in the `TableauPile` class is as trivial as it sounds:
 
 ```dart
   void flipTopCard() {
@@ -503,7 +511,7 @@ we will add an extra method to determine the zoom level:
   @override
   void onDragUpdate(DragUpdateEvent event) {
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     position += event.delta / cameraZoom;
@@ -581,23 +589,25 @@ it so that it would check whether the card is allowed to be moved before startin
 ```dart
   void onDragStart(DragStartEvent event) {
     if (pile?.canMoveCard(this) ?? false) {
-      _isDragging = true;
+      super.onDragStart(event);
       priority = 100;
     }
   }
 ```
 
-We have also added the boolean `_isDragging` variable here: make sure to define it, and then to
-check this flag in the `onDragUpdate()` method, and to set it back to false in the `onDragEnd()`:
+We have also added a call to `super.onDragStart()` which sets an `_isDragged` variable to `true`
+in the `DragCallbacks` mixin, we need to check this flag via the public `isDragged` getter in
+the `onDragUpdate()` method and use `super.onDragEnd()` in `onDragEnd()` so the flag is set back
+to `false`:
 
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     position += event.delta / cameraZoom;
@@ -605,11 +615,11 @@ check this flag in the `onDragUpdate()` method, and to set it back to false in t
 
   @override
   void onDragEnd(DragEndEvent event) {
-    _isDragging = false;
+    super.onDragEnd(event);
   }
 ```
 
-Now the only the proper cards can be dragged, but they still drop at random positions on the table,
+Now only the proper cards can be dragged, but they still drop at random positions on the table,
 so let's work on that.
 
 
@@ -625,10 +635,10 @@ Thus, my first attempt at revising the `onDragEnd` callback looks like this:
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
-    _isDragging = false;
+    super.onDragEnd(event);
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()
@@ -795,10 +805,10 @@ Now, putting this all together, the `Card`'s `onDragEnd` method will look like t
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
-    _isDragging = false;
+    super.onDragEnd(event);
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()
@@ -864,8 +874,12 @@ at the end of the `layOutCards()` method:
     height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
 ```
 
-The factor `1.5` here adds a little bit extra space at the bottom of each pile. You can temporarily
-turn the debug mode on to see the hitboxes.
+The factor `1.5` here adds a little bit extra space at the bottom of each pile. The card to be
+dropped should be overlapping the hitbox by a little over half its width and height. If you are
+approaching from below, it would be just overlapping the nearest card (i.e. the one that is fully
+visible). You can temporarily turn the debug mode on to see the hitboxes.
+
+![Illustration of Tableau Pile Hitboxes](../../images/tutorials/klondike-tableau-hitboxes.png)
 
 Ok, let's get to our main topic: how to move a stack of cards at once.
 
@@ -903,7 +917,7 @@ Heading back into the `Card` class, we can use this method in order to populate 
   @override
   void onDragStart(DragStartEvent event) {
     if (pile?.canMoveCard(this) ?? false) {
-      _isDragging = true;
+      super.onDragStart();
       priority = 100;
       if (pile is TableauPile) {
         attachedCards.clear();
@@ -923,11 +937,11 @@ the `onDragUpdate` method:
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
     final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
+        .camera
         .viewfinder
         .zoom;
     final delta = event.delta / cameraZoom;
@@ -957,10 +971,10 @@ attached cards into the pile, and the same when it comes to returning the cards 
 ```dart
   @override
   void onDragEnd(DragEndEvent event) {
-    if (!_isDragging) {
+    if (!isDragged) {
       return;
     }
-    _isDragging = false;
+    super.onDragEnd(event);
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
         .whereType<Pile>()

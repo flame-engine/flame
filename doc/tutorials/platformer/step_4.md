@@ -3,9 +3,9 @@
 
 ## Star
 
-The star is pretty simple.  It is just like the Platform block except we are going to add an effect
-to make it pulse in size.  For the effect to look correct, we need to change the object's `Anchor`
-to `center`.  This means we will need to adjust the position by half of the image size. For brevity,
+The star is pretty simple. It is just like the Platform block except we are going to add an effect
+to make it pulse in size. For the effect to look correct, we need to change the object's `Anchor`
+to `center`. This means we will need to adjust the position by half of the image size. For brevity,
 I am going to add the whole class and explain the additional changes after.
 
 ```dart
@@ -29,14 +29,14 @@ class Star extends SpriteComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final starImage = game.images.fromCache('star.png');
     sprite = Sprite(starImage);
     position = Vector2(
-        (gridPosition.x * size.x) + xOffset + (size.x / 2),
-        game.size.y - (gridPosition.y * size.y) - (size.y / 2),
+      (gridPosition.x * size.x) + xOffset + (size.x / 2),
+      game.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       SizeEffect.by(
         Vector2(-24, -24),
@@ -64,30 +64,32 @@ So the only change between the Star and the Platform beyond the anchor is simply
 
 ```dart
 add(
-    SizeEffect.by(
-    Vector2(-24, -24),
+  SizeEffect.by(
+  Vector2(-24, -24),
     EffectController(
-        duration: .75,
-        reverseDuration: .5,
-        infinite: true,
-        curve: Curves.easeOut,
+      duration: .75,
+      reverseDuration: .5,
+      infinite: true,
+      curve: Curves.easeOut,
     ),
-    ),
+  ),
 );
 ```
 
 The `SizeEffect` is best explained by going to their [help
-docs](../../flame/effects.md#sizeeffectby).  In short, we simply reduce the size of the star
+docs](../../flame/effects.md#sizeeffectby). In short, we simply reduce the size of the star
 by -24 pixels in both directions and we make it pulse infinitely using the `EffectController`.
 
 Don't forget to add the star to your `lib/ember_quest.dart` file by doing:
 
 ```dart
 case Star:
-    add(Star(
+    add(
+      Star(
         gridPosition: block.gridPosition,
         xOffset: xPositionOffset,
-    ));
+      ),
+    );
     break;
 ```
 
@@ -119,7 +121,7 @@ class WaterEnemy extends SpriteAnimationComponent
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('water_enemy.png'),
       SpriteAnimationData.sequenced(
@@ -129,10 +131,10 @@ class WaterEnemy extends SpriteAnimationComponent
       ),
     );
     position = Vector2(
-        (gridPosition.x * size.x) + xOffset + (size.x / 2),
-        game.size.y - (gridPosition.y * size.y) - (size.y / 2),
+      (gridPosition.x * size.x) + xOffset,
+      game.size.y - (gridPosition.y * size.y),
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
       MoveEffect.by(
         Vector2(-2 * size.x, 0),
@@ -158,23 +160,23 @@ class WaterEnemy extends SpriteAnimationComponent
 
 The water drop enemy is an animation just like Ember, so this class is extending the
 `SpriteAnimationComponent` class but it uses all of the previous code we have used for the Star and
-the Platform.  The only difference will be instead of the `SizeEffect`, we are going to use the
-`MoveEffect`.  The best resource for information will be their [help
-docs](../../flame/effects.md#sizeeffectby).  
+the Platform. The only difference will be instead of the `SizeEffect`, we are going to use the
+`MoveEffect`. The best resource for information will be their [help
+docs](../../flame/effects.md#sizeeffectby).
 
-In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely.  It
-will move our enemy to the left, 128 pixels (-2 x image width).  You may have noticed that in the
-constructor, I set `Anchor` to `center`.  This was done just for the sake of making the calculations
-easier but could have been left as `bottomLeft`.
+In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely. It
+will move our enemy to the left, 128 pixels (-2 x image width).
 
 Don't forget to add the water enemy to your `lib/ember_quest.dart` file by doing:
 
 ```dart
 case WaterEnemy:
-    add(WaterEnemy(
-        gridPosition: block.gridPosition,
-        xOffset: xPositionOffset,
-    ));
+    add(
+      WaterEnemy(
+       gridPosition: block.gridPosition,
+       xOffset: xPositionOffset,
+      ),
+    );
     break;
 ```
 
@@ -185,7 +187,7 @@ If you run the game now, the Water Enemy should be displayed and moving!
 
 ## Ground Blocks
 
-Finally, the last component that needs to be displayed is the Ground Block!  This component is more
+Finally, the last component that needs to be displayed is the Ground Block! This component is more
 complex than the others as we need to identify two times during a block's life cycle.
 
 - When the block is added, if it is the last block in the segment, we need to update a global value
@@ -214,13 +216,14 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
-    position = Vector2((gridPosition.x * size.x) + xOffset,
-        game.size.y - (gridPosition.y * size.y),
+    position = Vector2(
+      gridPosition.x * size.x + xOffset,
+      game.size.y - gridPosition.y * size.y,
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override
@@ -233,7 +236,7 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
 ```
 
 The first thing we will tackle is registering the block globally if it is the absolute last block to
-be loaded.  To do this, add two new global variables in `lib/ember_quest.dart` called:
+be loaded. To do this, add two new global variables in `lib/ember_quest.dart` called:
 
 ```dart
   late double lastBlockXPosition = 0.0;
@@ -279,14 +282,14 @@ Now we can address updating this information, so in the `update` method, add the
 ```
 
 `game.lastBlockXPosition` is being updated by the block's current x-axis position plus its width -
-10 pixels.  This will cause a little overlap, but due to the potential variance in `dt` this
+10 pixels. This will cause a little overlap, but due to the potential variance in `dt` this
 prevents gaps in the map as it loads while a player is moving.
 
 
 ### Loading the Next Random Segment
 
 To load the next random segment, we will use the `Random()` function that is built-in to
-`dart:math`.  The following line of code gets a random integer from 0 (inclusive) to the max number
+`dart:math`. The following line of code gets a random integer from 0 (inclusive) to the max number
 in the passed parameter (exclusive).
 
 ```dart
@@ -301,7 +304,9 @@ if (position.x < -size.x) {
   removeFromParent();
   if (gridPosition.x == 0) {
     game.loadGameSegments(
-        Random().nextInt(segments.length), game.lastBlockXPosition);
+      Random().nextInt(segments.length),
+      game.lastBlockXPosition,
+    );
   }
 }
 ```
@@ -309,7 +314,7 @@ if (position.x < -size.x) {
 This simply extends the code that we have in our other objects, where once the block is off the
 screen and if the block is the first block of the segment, we will call the `loadGameSegments`
 method in our game class, get a random number between 0 and the number of segments and pass in the
-offset.  If `Random()` or `segments.length` does not auto-import, you will need:
+offset. If `Random()` or `segments.length` does not auto-import, you will need:
 
 ```dart
 import 'dart:math';
@@ -342,13 +347,14 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   }) : super(size: Vector2.all(64), anchor: Anchor.bottomLeft);
 
   @override
-  Future<void> onLoad() async {
+  void onLoad() {
     final groundImage = game.images.fromCache('ground.png');
     sprite = Sprite(groundImage);
-    position = Vector2((gridPosition.x * size.x) + xOffset,
-        game.size.y - (gridPosition.y * size.y),
+    position = Vector2(
+      gridPosition.x * size.x + xOffset,
+      game.size.y - gridPosition.y * size.y,
     );
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
     if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
       game.lastBlockKey = _blockKey;
       game.lastBlockXPosition = position.x + size.x;
@@ -364,8 +370,9 @@ class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
       removeFromParent();
       if (gridPosition.x == 0) {
         game.loadGameSegments(
-            Random().nextInt(segments.length),
-            game.lastBlockXPosition);
+          Random().nextInt(segments.length),
+          game.lastBlockXPosition,
+        );
       }
     }
     if (gridPosition.x == 9) {
@@ -384,10 +391,12 @@ Finally, don't forget to add your Ground Block to `lib/ember_quest.dart` by addi
 
 ```dart
 case GroundBlock:
-    add(GroundBlock(
+    add(
+      GroundBlock(
         gridPosition: block.gridPosition,
         xOffset: xPositionOffset,
-    ));
+      ),
+    );
     break;
 ```
 
@@ -395,6 +404,6 @@ If you run your code, your game should now look like this:
 
 ![Ground Blocks](../../images/tutorials/platformer/Step4Ground.jpg)
 
-You might say, but wait!  Ember is in the middle of the ground and that is correct because Ember's
-`Anchor` is set to center.  This is ok and we will be addressing this in [](step_5.md) where we will
+You might say, but wait! Ember is in the middle of the ground and that is correct because Ember's
+`Anchor` is set to center. This is ok and we will be addressing this in [](step_5.md) where we will
 be adding movement and collisions to Ember!

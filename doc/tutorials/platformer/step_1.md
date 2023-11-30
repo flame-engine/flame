@@ -52,10 +52,10 @@ provide free pixel art that can be used in games, but please check and comply wi
 always provide valid creator attribution.  For this game though, I am going to take a chance and
 make my artwork using an online pixel art tool.  If you decide to use this tool, multiple online
 tutorials will assist you with the basic operations as well as exporting the assets.  Now normally,
-most games will utilize spritesheets.  These combine many images into one larger image that can be
+most games will utilize sprite sheets.  These combine many images into one larger image that can be
 sectioned and used as individual images.  For this tutorial though, I specifically will save the
 images individually as I want to demonstrate the Flame engine's caching abilities.  Ember and the
-water enemy are spritesheets though as they contain multiple images to create animations.
+water enemy are sprite sheets though as they contain multiple images to create animations.
 
 Right-click the images below, choose "Save as...", and store them in the `assets/images` folder of the
 project. At this point our project's structure looks like this:

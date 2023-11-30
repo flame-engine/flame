@@ -2,20 +2,30 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-class RemoveEffectExample extends FlameGame with HasTappables {
+class RemoveEffectExample extends FlameGame {
   static const description = '''
     Click on any circle to apply a RemoveEffect, which will make the circle
     disappear after a 0.5 second delay.
   ''';
 
+  RemoveEffectExample()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          )..viewfinder.anchor = Anchor.topLeft,
+          world: _RemoveEffectWorld(),
+        );
+}
+
+class _RemoveEffectWorld extends World {
   @override
-  void onMount() {
-    super.onMount();
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
+  void onLoad() {
+    super.onLoad();
     final rng = Random();
     for (var i = 0; i < 20; i++) {
       add(_RandomCircle.random(rng));
@@ -23,7 +33,7 @@ class RemoveEffectExample extends FlameGame with HasTappables {
   }
 }
 
-class _RandomCircle extends CircleComponent with Tappable {
+class _RandomCircle extends CircleComponent with TapCallbacks {
   _RandomCircle(double radius, {super.position, super.paint})
       : super(radius: radius);
 
@@ -39,8 +49,7 @@ class _RandomCircle extends CircleComponent with Tappable {
   }
 
   @override
-  bool onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     add(RemoveEffect(delay: 0.5));
-    return false;
   }
 }

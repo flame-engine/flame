@@ -14,6 +14,7 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
   FlameBlocProvider({
     required B Function() create,
     List<Component>? children,
+    super.key,
   })  : _bloc = create(),
         _created = true {
     _addChildren(children);

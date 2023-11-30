@@ -1,7 +1,8 @@
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
-import 'package:flame/flame.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'test_asset_bundle.dart';
@@ -23,9 +24,11 @@ void main() {
     });
 
     group('loadImages', () {
-      setUp(() async {
+      late AssetBundle bundle;
+
+      setUp(() {
         TiledAtlas.atlasMap.clear();
-        Flame.bundle = TestAssetBundle(
+        bundle = TestAssetBundle(
           imageNames: [
             'images/blue.png',
             'images/purple_rock.png',
@@ -37,13 +40,17 @@ void main() {
             'images/orange.png',
             'images/peach.png',
           ],
-          mapPath: 'test/assets/isometric_plain.tmx',
+          stringNames: [
+            'isometric_plain.tmx',
+            'tiles/isometric_plain_1.tsx',
+          ],
         );
       });
 
       test('handles empty map', () async {
         final atlas = await TiledAtlas.fromTiledMap(
           TiledMap(height: 1, tileHeight: 1, tileWidth: 1, width: 1),
+          images: Images(bundle: bundle),
         );
 
         expect(atlas.atlas, isNull);
@@ -73,8 +80,10 @@ void main() {
       );
 
       test('returns single image atlas for simple map', () async {
+        final images = Images(bundle: bundle);
         final atlas = await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: images,
         );
 
         expect(atlas.offsets, hasLength(1));
@@ -83,7 +92,7 @@ void main() {
         expect(atlas.atlas!.height, 74);
         expect(atlas.key, 'images/green.png');
 
-        expect(Flame.images.containsKey('images/green.png'), isTrue);
+        expect(images.containsKey('images/green.png'), isTrue);
 
         expect(
           await imageToPng(atlas.atlas!),
@@ -94,9 +103,11 @@ void main() {
       test('returns cached atlas', () async {
         final atlas1 = await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: Images(bundle: bundle),
         );
         final atlas2 = await TiledAtlas.fromTiledMap(
           simpleMap,
+          images: Images(bundle: bundle),
         );
 
         expect(atlas1, isNot(same(atlas2)));
@@ -105,8 +116,12 @@ void main() {
       });
 
       test('packs complex maps with multiple images', () async {
-        final component =
-            await TiledComponent.load('isometric_plain.tmx', Vector2(128, 74));
+        final component = await TiledComponent.load(
+          'isometric_plain.tmx',
+          Vector2(128, 74),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+        );
 
         final atlas = TiledAtlas.atlasMap.values.first;
         expect(
@@ -116,6 +131,116 @@ void main() {
         expect(
           renderMapToPng(component),
           matchesGoldenFile('goldens/larger_atlas_component.png'),
+        );
+      });
+
+      test(
+        'packs complex maps with multiple images using a custom spacing',
+        () async {
+          final component = await TiledComponent.load(
+            'isometric_plain.tmx',
+            Vector2(128, 74),
+            bundle: bundle,
+            images: Images(bundle: bundle),
+            atlasPackingSpacingX: 2,
+            atlasPackingSpacingY: 2,
+          );
+
+          final atlas = TiledAtlas.atlasMap.values.first;
+          expect(
+            await imageToPng(atlas.atlas!),
+            matchesGoldenFile('goldens/larger_atlas_with_spacing.png'),
+          );
+          expect(
+            renderMapToPng(component),
+            matchesGoldenFile(
+              'goldens/larger_atlas_component_with_spacing.png',
+            ),
+          );
+        },
+      );
+
+      test('can ignore tilesets in the packing', () async {
+        await TiledComponent.load(
+          'isometric_plain.tmx',
+          Vector2(128, 74),
+          bundle: bundle,
+          images: Images(bundle: bundle),
+          tsxPackingFilter: (tileset) => tileset.name != 'isometric_plain_2',
+        );
+
+        final atlas = TiledAtlas.atlasMap.values.first;
+        expect(
+          await imageToPng(atlas.atlas!),
+          matchesGoldenFile('goldens/larger_atlas_with_skipped_tileset.png'),
+        );
+      });
+
+      test('clearing cache', () async {
+        await TiledAtlas.fromTiledMap(
+          simpleMap,
+          images: Images(bundle: bundle),
+        );
+
+        expect(TiledAtlas.atlasMap.isNotEmpty, true);
+
+        TiledAtlas.clearCache();
+
+        expect(TiledAtlas.atlasMap.isEmpty, true);
+      });
+    });
+
+    group('Single tileset map', () {
+      late AssetBundle bundle;
+
+      setUp(() {
+        TiledAtlas.atlasMap.clear();
+        bundle = TestAssetBundle(
+          imageNames: [
+            '4_color_sprite.png',
+          ],
+          stringNames: [
+            'single_tile_map_1.tmx',
+            'single_tile_map_2.tmx',
+          ],
+        );
+      });
+
+      test(
+          '''Two maps with a same tileset but different tile alignment should be rendered differently''',
+          () async {
+        final components = await Future.wait([
+          TiledComponent.load(
+            'single_tile_map_1.tmx',
+            Vector2(16, 16),
+            bundle: bundle,
+            images: Images(bundle: bundle),
+          ),
+          TiledComponent.load(
+            'single_tile_map_2.tmx',
+            Vector2(16, 16),
+            bundle: bundle,
+            images: Images(bundle: bundle),
+          ),
+        ]);
+
+        final atlas = TiledAtlas.atlasMap.values.first;
+        final imageRendered_1 = renderMapToPng(components[0]);
+        final imageRendered_2 = renderMapToPng(components[1]);
+
+        expect(TiledAtlas.atlasMap.length, 1);
+        expect(
+          await imageToPng(atlas.atlas!),
+          matchesGoldenFile('goldens/single_tile_atlas.png'),
+        );
+        expect(imageRendered_1, isNot(same(imageRendered_2)));
+        expect(
+          imageRendered_1,
+          matchesGoldenFile('goldens/single_tile_map_1.png'),
+        );
+        expect(
+          imageRendered_2,
+          matchesGoldenFile('goldens/single_tile_map_2.png'),
         );
       });
     });

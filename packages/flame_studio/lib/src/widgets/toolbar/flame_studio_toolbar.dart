@@ -1,4 +1,5 @@
 import 'package:flame_studio/src/core/theme.dart';
+import 'package:flame_studio/src/widgets/toolbar/next_frame_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/pause_button.dart';
 import 'package:flame_studio/src/widgets/toolbar/start_button.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +15,7 @@ class FlameStudioToolbar extends ConsumerWidget {
     const middleButtons = <Widget>[
       StartButton(),
       PauseButton(),
+      NextFrameButton(),
     ];
 
     final height = ref.watch(toolbarHeightProvider);

@@ -38,7 +38,7 @@ mixin FlameIsolate on Component implements IsolateGetter {
   BackpressureStrategy get backpressureStrategy => NoBackPressureStrategy();
 
   @override
-  Future onMount() async {
+  Future<void> onMount() async {
     _isolate = Isolated(backpressureStrategy: backpressureStrategy);
     _isolate?.init();
     return super.onMount();

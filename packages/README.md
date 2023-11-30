@@ -1,11 +1,7 @@
 # Flame repository structure
 
-The Flame repository is a monorepo which contains both the main Flame repository, and its
+The Flame repository is a monorepo which contains both the main Flame package and other so-called
 bridge packages.
-
-Note that not all bridge packages have moved to the monorepo, so some may
-still be on their own repositories, since this is a new organizational change and we are gradually
-migrating all of them to this repository.
 
 
 ## Bridge packages
@@ -17,10 +13,6 @@ Bridge packages are packages which:
 - Packages with features that are somehow very context specific and doesn't have a place inside the
   core package (e.g. `flame_splash_screen`).
 
-
-## Index
-
-- [Flame](./flame)
-- [Flame Audio](./flame_audio)
-- [Fire Atlas](./flame_fire_atlas)
-- [Svg support](./flame_svg)
+While most of the officially supported bridge packages live in this monorepo, a few can be found
+under Flame Engine's GitHub organization. There are also many bridge packages developed and maintained
+by other members of the community.

@@ -7,7 +7,7 @@ import 'package:flame_forge2d/flame_forge2d.dart';
 /// To react to contacts you should assign [ContactCallbacks] to a [Body]'s
 /// userData or/and to a [Fixture]'s userData.
 /// {@macro flame_forge2d.world_contact_listener.algorithm}
-class ContactCallbacks {
+mixin class ContactCallbacks {
   /// Called when two [Fixture]s start being in contact.
   ///
   /// It is called for sensors and non-sensors.

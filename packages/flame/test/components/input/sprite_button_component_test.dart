@@ -1,13 +1,14 @@
+import 'dart:ui';
+
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/sprite_group_component.dart';
-import 'package:flame/src/spritesheet.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
+import 'package:flame/src/sprite_sheet.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../../game/flame_game_test.dart';
 
 enum _ButtonState {
   up,
@@ -19,8 +20,7 @@ Future<void> main() async {
   final image = await generateImage();
 
   group('SpriteButtonComponent', () {
-    testWithGame<GameWithTappables>(
-        'correctly registers taps', GameWithTappables.new, (game) async {
+    testWithFlameGame('correctly registers taps', (game) async {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -51,31 +51,30 @@ Future<void> main() async {
         ),
       );
 
-      game.onTapDown(1, createTapDownEvent(game));
+      final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
+
+      tapDispatcher.handleTapDown(1, TapDownDetails());
       expect(component.current, _ButtonState.down);
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
+        TapDownDetails(
           globalPosition: buttonPosition.toOffset(),
         ),
       );
       expect(component.current, _ButtonState.down);
 
-      game.onTapUp(
+      tapDispatcher.handleTapUp(
         1,
-        createTapUpEvent(
-          game,
+        TapUpDetails(
+          kind: PointerDeviceKind.touch,
           globalPosition: button.positionOfAnchor(Anchor.center).toOffset(),
         ),
       );
       expect(component.current, _ButtonState.up);
     });
 
-    testWithGame<GameWithTappables>(
-        'correctly registers taps onGameResize', GameWithTappables.new,
-        (game) async {
+    testWithFlameGame('correctly registers taps onGameResize', (game) async {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -109,20 +108,20 @@ Future<void> main() async {
       final previousPosition =
           button.positionOfAnchor(Anchor.center).toOffset();
       game.onGameResize(initialGameSize * 2);
+      final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
-      game.onTapDown(
+      tapDispatcher.handleTapDown(
         1,
-        createTapDownEvent(
-          game,
+        TapDownDetails(
           globalPosition: previousPosition,
         ),
       );
       expect(component.current, _ButtonState.down);
 
-      game.onTapUp(
+      tapDispatcher.handleTapUp(
         1,
-        createTapUpEvent(
-          game,
+        TapUpDetails(
+          kind: PointerDeviceKind.touch,
           globalPosition: button.positionOfAnchor(Anchor.center).toOffset(),
         ),
       );
@@ -132,7 +131,7 @@ Future<void> main() async {
     testWidgets(
       'Button can be pressed while the engine is paused',
       (tester) async {
-        final game = GameWithTappables();
+        final game = FlameGame();
 
         final buttonSheet = SpriteSheet.fromColumnsAndRows(
           image: image,

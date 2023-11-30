@@ -2,14 +2,13 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
 enum Shapes { circle, rectangle, polygon }
 
-class GestureHitboxesExample extends FlameGame
-    with HasTappables, HasHoverables {
+class GestureHitboxesExample extends FlameGame {
   static const description = '''
     Tap to create a PositionComponent with a randomly shaped hitbox.
     You can then hover over to shapes to see that they receive the hover events
@@ -17,6 +16,10 @@ class GestureHitboxesExample extends FlameGame
     it is removed.
   ''';
 
+  GestureHitboxesExample() : super(world: _GestureHitboxesWorld());
+}
+
+class _GestureHitboxesWorld extends World with TapCallbacks {
   final _rng = Random();
 
   PositionComponent randomShape(Vector2 position) {
@@ -24,22 +27,21 @@ class GestureHitboxesExample extends FlameGame
     final shapeSize =
         Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
-    final hitbox = () {
-      switch (shapeType) {
-        case Shapes.circle:
-          return CircleHitbox();
-        case Shapes.rectangle:
-          return RectangleHitbox();
-        case Shapes.polygon:
-          final points = [
-            -Vector2.random(_rng),
-            Vector2.random(_rng)..x *= -1,
-            Vector2.random(_rng),
-            Vector2.random(_rng)..y *= -1,
-          ];
-          return PolygonHitbox.relative(points, parentSize: shapeSize);
-      }
-    }();
+    ShapeHitbox hitbox;
+    switch (shapeType) {
+      case Shapes.circle:
+        hitbox = CircleHitbox();
+      case Shapes.rectangle:
+        hitbox = RectangleHitbox();
+      case Shapes.polygon:
+        final points = [
+          -Vector2.random(_rng),
+          Vector2.random(_rng)..x *= -1,
+          Vector2.random(_rng),
+          Vector2.random(_rng)..y *= -1,
+        ];
+        hitbox = PolygonHitbox.relative(points, parentSize: shapeSize);
+    }
     return MyShapeComponent(
       hitbox: hitbox,
       position: position,
@@ -49,17 +51,13 @@ class GestureHitboxesExample extends FlameGame
   }
 
   @override
-  bool onTapDown(int pointerId, TapDownInfo info) {
-    super.onTapDown(pointerId, info);
-    final tapPosition = info.eventPosition.game;
-    final component = randomShape(tapPosition);
-    add(component);
-    return true;
+  void onTapDown(TapDownEvent event) {
+    add(randomShape(event.localPosition));
   }
 }
 
 class MyShapeComponent extends PositionComponent
-    with Tappable, Hoverable, GestureHitboxes {
+    with TapCallbacks, HoverCallbacks, GestureHitboxes {
   final ShapeHitbox hitbox;
   late final Color baseColor;
   late final Color hoverColor;
@@ -69,9 +67,7 @@ class MyShapeComponent extends PositionComponent
     super.position,
     super.size,
     super.angle,
-  }) : super(
-          anchor: Anchor.center,
-        );
+  }) : super(anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -83,20 +79,17 @@ class MyShapeComponent extends PositionComponent
   }
 
   @override
-  bool onTapDown(TapDownInfo _) {
+  void onTapDown(TapDownEvent _) {
     removeFromParent();
-    return true;
   }
 
   @override
-  bool onHoverEnter(PointerHoverInfo info) {
+  void onHoverEnter() {
     hitbox.paint.color = hitbox.paint.color.darken(0.5);
-    return true;
   }
 
   @override
-  bool onHoverLeave(PointerHoverInfo info) {
+  void onHoverExit() {
     hitbox.paint.color = baseColor;
-    return true;
   }
 }

@@ -4,6 +4,8 @@ import 'package:examples/commons/ember.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -11,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class FollowComponentExample extends FlameGame
-    with HasCollisionDetection, HasTappables, HasKeyboardHandlerComponents {
+    with HasCollisionDetection, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
     sprite.\n
@@ -21,25 +23,27 @@ class FollowComponentExample extends FlameGame
     respects the camera transformation.
   ''';
 
+  FollowComponentExample({required this.viewportResolution})
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: viewportResolution.x,
+            height: viewportResolution.y,
+          ),
+        );
+
   late MovableEmber ember;
   final Vector2 viewportResolution;
 
-  FollowComponentExample({
-    required this.viewportResolution,
-  });
-
   @override
   Future<void> onLoad() async {
-    camera.viewport = FixedResolutionViewport(viewportResolution);
-    add(Map());
+    world.add(Map());
+    world.add(ember = MovableEmber());
+    camera.setBounds(Map.bounds);
+    camera.follow(ember, maxSpeed: 250);
 
-    add(ember = MovableEmber());
-    camera.speed = 1;
-    camera.followComponent(ember, worldBounds: Map.bounds);
-
-    for (var i = 0; i < 30; i++) {
-      add(Rock(Vector2(Map.genCoord(), Map.genCoord())));
-    }
+    world.addAll(
+      List.generate(30, (_) => Rock(Map.generateCoordinates())),
+    );
   }
 }
 
@@ -53,6 +57,8 @@ class MovableEmber extends Ember<FollowComponentExample>
   final Vector2 velocity = Vector2.zero();
   late final TextComponent positionText;
   late final Vector2 textPosition;
+  late final maxPosition = Vector2.all(Map.size - size.x / 2);
+  late final minPosition = -maxPosition;
 
   MovableEmber() : super(priority: 2);
 
@@ -73,22 +79,23 @@ class MovableEmber extends Ember<FollowComponentExample>
     super.update(dt);
     final deltaPosition = velocity * (speed * dt);
     position.add(deltaPosition);
+    position.clamp(minPosition, maxPosition);
     positionText.text = '(${x.toInt()}, ${y.toInt()})';
   }
 
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
-    super.onCollision(points, other);
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
     if (other is Rock) {
-      gameRef.camera.setRelativeOffset(Anchor.topCenter);
-    }
-  }
-
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    if (other is Rock) {
-      gameRef.camera.setRelativeOffset(Anchor.center);
+      other.add(
+        ScaleEffect.to(
+          Vector2.all(1.5),
+          EffectController(duration: 0.2, alternate: true),
+        ),
+      );
     }
   }
 
@@ -124,7 +131,8 @@ class MovableEmber extends Ember<FollowComponentExample>
 
 class Map extends Component {
   static const double size = 1500;
-  static const Rect bounds = Rect.fromLTWH(-size, -size, 2 * size, 2 * size);
+  static const Rect _bounds = Rect.fromLTRB(-size, -size, size, size);
+  static final Rectangle bounds = Rectangle.fromLTRB(-size, -size, size, size);
 
   static final Paint _paintBorder = Paint()
     ..color = Colors.white12
@@ -154,42 +162,44 @@ class Map extends Component {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(bounds, _paintBg);
-    canvas.drawRect(bounds, _paintBorder);
+    canvas.drawRect(_bounds, _paintBg);
+    canvas.drawRect(_bounds, _paintBorder);
     for (var i = 0; i < (size / 50).ceil(); i++) {
       canvas.drawCircle(Offset.zero, size - i * 50, _paintPool[i]);
       canvas.drawRect(_rectPool[i], _paintBorder);
     }
   }
 
-  static double genCoord() {
-    return -size + _rng.nextDouble() * (2 * size);
+  static Vector2 generateCoordinates() {
+    return Vector2.random()
+      ..scale(2 * size)
+      ..sub(Vector2.all(size));
   }
 }
 
-class Rock extends SpriteComponent with HasGameRef, Tappable {
+class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
   Rock(Vector2 position)
       : super(
           position: position,
           size: Vector2.all(50),
           priority: 1,
+          anchor: Anchor.center,
         );
 
   @override
   Future<void> onLoad() async {
-    sprite = await gameRef.loadSprite('nine-box.png');
+    sprite = await game.loadSprite('nine-box.png');
     paint = Paint()..color = Colors.white;
     add(RectangleHitbox());
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     add(
-      ScaleEffect.by(
-        Vector2.all(10),
+      ScaleEffect.to(
+        Vector2.all(scale.x >= 2.0 ? 1 : 2),
         EffectController(duration: 0.3),
       ),
     );
-    return true;
   }
 }

@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_svg/flame_svg.dart';
 
-class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
+class Player extends SvgComponent with HasGameReference<SvgComponentExample> {
   Player() : super(priority: 3, size: Vector2(106, 146), anchor: Anchor.center);
 
   Vector2? destination;
@@ -14,7 +14,7 @@ class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await gameRef.loadSvg('svgs/happy_player.svg');
+    svg = await game.loadSvg('svgs/happy_player.svg');
   }
 
   @override
@@ -33,7 +33,8 @@ class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
   }
 }
 
-class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
+class Background extends SvgComponent
+    with HasGameReference<SvgComponentExample> {
   Background()
       : super(
           priority: 1,
@@ -45,12 +46,12 @@ class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await gameRef.loadSvg('svgs/checkboard.svg');
+    svg = await game.loadSvg('svgs/checkerboard.svg');
   }
 }
 
-class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
-  Balloons()
+class Balloons extends SvgComponent with HasGameReference<SvgComponentExample> {
+  Balloons({super.position})
       : super(
           priority: 2,
           size: Vector2(75, 125),
@@ -63,12 +64,11 @@ class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
 
     final color = Random().nextBool() ? 'red' : 'green';
 
-    svg = await gameRef.loadSvg('svgs/${color}_balloons.svg');
+    svg = await game.loadSvg('svgs/${color}_balloons.svg');
   }
 }
 
-class SvgComponentExample extends FlameGame
-    with TapDetector, DoubleTapDetector {
+class SvgComponentExample extends FlameGame {
   static const description = '''
       Simple game showcasing how to use SVGs inside a flame game. This game 
       uses several SVGs for its graphics. Click or touch the screen to make the 
@@ -76,54 +76,42 @@ class SvgComponentExample extends FlameGame
       clicked position.
   ''';
 
+  SvgComponentExample()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+          world: _SvgComponentWorld(),
+        );
+}
+
+class _SvgComponentWorld extends World with TapCallbacks, DoubleTapCallbacks {
   late Player player;
 
   @override
   Future<void>? onLoad() async {
     await super.onLoad();
-    camera.followVector2(Vector2.zero());
 
     add(player = Player());
     add(Background());
 
-    add(
-      Balloons()
-        ..x = -10
-        ..y = -20,
-    );
-
-    add(
-      Balloons()
-        ..x = -100
-        ..y = -150,
-    );
-
-    add(
-      Balloons()
-        ..x = -200
-        ..y = -140,
-    );
-
-    add(
-      Balloons()
-        ..x = 100
-        ..y = 130,
-    );
-
-    add(
-      Balloons()
-        ..x = 50
-        ..y = -130,
-    );
+    addAll([
+      Balloons(position: Vector2(-10, -20)),
+      Balloons(position: Vector2(-100, -150)),
+      Balloons(position: Vector2(-200, -140)),
+      Balloons(position: Vector2(100, 130)),
+      Balloons(position: Vector2(50, -130)),
+    ]);
   }
 
   @override
-  void onTapUp(TapUpInfo info) {
-    player.destination = info.eventPosition.game;
+  void onTapUp(TapUpEvent info) {
+    player.destination = info.localPosition;
   }
 
   @override
-  void onDoubleTapDown(TapDownInfo info) {
-    add(Balloons()..position = info.eventPosition.game);
+  void onDoubleTapDown(DoubleTapDownEvent info) {
+    add(Balloons()..position = info.localPosition);
   }
 }

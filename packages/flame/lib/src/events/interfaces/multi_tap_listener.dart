@@ -1,5 +1,5 @@
-import 'package:flame/src/events/flame_game_mixins/has_tappable_components.dart';
 import 'package:flame/src/events/game_mixins/multi_touch_tap_detector.dart';
+import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 
 /// Interface that must be implemented by a game in order for it to be eligible
@@ -7,7 +7,6 @@ import 'package:flutter/gestures.dart';
 ///
 /// Instead of implementing this class directly consider using one of the
 /// prebuilt mixins:
-///  - [HasTappableComponents] for a `FlameGame`
 ///  - [MultiTouchTapDetector] for a custom `Game`
 abstract class MultiTapListener {
   /// The amount of time before the "long tap down" event is triggered.
@@ -29,4 +28,6 @@ abstract class MultiTapListener {
   /// A pointer that has previously triggered [handleTapDown] is still touching
   /// the screen after [longTapDelay] seconds.
   void handleLongTapDown(int pointerId, TapDownDetails details);
+
+  GameRenderBox get renderBox;
 }

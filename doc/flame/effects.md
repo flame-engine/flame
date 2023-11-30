@@ -84,9 +84,6 @@ functionality inherited by all other effects. This includes:
 - The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
   check whether the effect is currently paused using `effect.isPaused`.
 
-- The ability to reverse the effect's time direction using `effect.reverse()`. Use
-  `effect.isReversed` to check if the effect is currently running back in time.
-
 - Property `removeOnFinish` (which is true by default) will cause the effect component to be
   removed from the game tree and garbage-collected once the effect completes. Set this to false
   if you plan to reuse the effect after it is finished.
@@ -538,13 +535,14 @@ Usage example:
 ```dart
 final effect = ColorEffect(
   const Color(0xFF00FF00),
-  const Offset(0.0, 0.8),
   EffectController(duration: 1.5),
+  opacityFrom = 0.2,
+  opacityTo: 0.8,
 );
 ```
 
-The `Offset` argument will determine "how much" of the color that will be applied to the component,
-in this example the effect will start with 0% and will go up to 80%.
+The `opacityFrom` and `opacityTo` arguments will determine "how much" of the color that will be
+applied to the component. In this example the effect will start with 20% and will go up to 80%.
 
 **Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only

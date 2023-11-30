@@ -6,6 +6,7 @@ import 'package:flame/src/particles/composed_particle.dart';
 import 'package:flame/src/particles/moving_particle.dart';
 import 'package:flame/src/particles/rotating_particle.dart';
 import 'package:flame/src/particles/scaled_particle.dart';
+import 'package:flame/src/particles/scaling_particle.dart';
 import 'package:flame/src/particles/translated_particle.dart';
 import 'package:flame/src/timer.dart';
 import 'package:flutter/animation.dart';
@@ -25,8 +26,8 @@ abstract class Particle {
   ///
   /// Useful for procedural particle generation.
   static Particle generate({
-    int count = 10,
     required ParticleGenerator generator,
+    int count = 10,
     double? lifespan,
     bool applyLifespanToChildren = true,
   }) {
@@ -58,6 +59,9 @@ abstract class Particle {
   }) {
     setLifespan(lifespan ?? .5);
   }
+
+  /// Getter for the current lifespan of this [Particle].
+  double get lifespan => _lifespan;
 
   /// This method will return true as soon as the particle reaches the end of
   /// its lifespan.
@@ -111,8 +115,8 @@ abstract class Particle {
   ///
   /// Allowing it to move from one [Vector2] to another one.
   Particle moving({
-    Vector2? from,
     required Vector2 to,
+    Vector2? from,
     Curve curve = Curves.linear,
   }) {
     return MovingParticle(
@@ -172,5 +176,12 @@ abstract class Particle {
   /// Allows for changing the size of this particle and/or its children.
   Particle scaled(double scale) {
     return ScaledParticle(scale: scale, child: this, lifespan: _lifespan);
+  }
+
+  /// Wraps this particle with a [ScalingParticle].
+  ///
+  /// Allows for changing the size of this particle and/or its children.
+  ScalingParticle scaling({double to = 0}) {
+    return ScalingParticle(to: to, child: this, lifespan: _lifespan);
   }
 }

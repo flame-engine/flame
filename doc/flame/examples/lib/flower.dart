@@ -1,11 +1,9 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/rendering.dart';
-
-const tau = 2 * pi;
 
 enum FlowerPaint { paintId1, paintId2, paintId3, paintId4, paintId5 }
 
@@ -34,7 +32,7 @@ class Flower extends PositionComponent
   }
 
   final List<Path> _paths = [];
-  final void Function(Flower)? _onTap;
+  final void Function(Flower flower)? _onTap;
 
   Path _makePath(double radius, int n, double sharpness, double f) {
     final radius2 = radius * f;

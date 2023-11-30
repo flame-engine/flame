@@ -12,12 +12,6 @@ class GameStatsBloc extends Bloc<GameStatsEvent, GameStatsState> {
       ),
     );
 
-    on<ScoreEventCleared>(
-      (event, emit) => emit(
-        state.copyWith(score: 0),
-      ),
-    );
-
     on<PlayerRespawned>(
       (event, emit) => emit(
         state.copyWith(status: GameStatus.respawned),

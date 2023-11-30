@@ -1,10 +1,9 @@
 import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class OpacityEffectWithTargetGame extends FlameGame with HasTappableComponents {
+class OpacityEffectWithTargetGame extends FlameGame {
   bool reset = false;
 
   // This reference needs to be stored because every new instance of

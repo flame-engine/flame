@@ -1,9 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/text/elements/text_element.dart';
-import 'package:flame/src/text/formatter_text_renderer.dart';
-import 'package:flame/src/text/text_renderer.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -18,8 +16,9 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   })  : _text = text ?? '',
-        _textRenderer = textRenderer ?? TextRenderer.createDefault<T>() {
+        _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>() {
     updateBounds();
   }
 
@@ -39,28 +38,18 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     updateBounds();
   }
 
-  TextElement? _textElement;
+  late InlineTextElement _textElement;
 
   @internal
   void updateBounds() {
-    if (_textRenderer is FormatterTextRenderer) {
-      _textElement =
-          (_textRenderer as FormatterTextRenderer).formatter.format(_text);
-      final measurements = _textElement!.metrics;
-      _textElement!.translate(0, measurements.ascent);
-      size.setValues(measurements.width, measurements.height);
-    } else {
-      final expectedSize = textRenderer.measureText(_text);
-      size.setValues(expectedSize.x, expectedSize.y);
-    }
+    _textElement = _textRenderer.format(_text);
+    final measurements = _textElement.metrics;
+    _textElement.translate(0, measurements.ascent);
+    size.setValues(measurements.width, measurements.height);
   }
 
   @override
   void render(Canvas canvas) {
-    if (_textElement != null) {
-      _textElement!.render(canvas);
-    } else {
-      _textRenderer.render(canvas, text, Vector2.zero());
-    }
+    _textElement.draw(canvas);
   }
 }

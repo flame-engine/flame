@@ -63,6 +63,14 @@ class GameLoop {
     _previous = Duration.zero;
   }
 
+  /// Steps the game loop by the given amount of time while the ticker is
+  /// stopped.
+  void step(double stepTime) {
+    if (!_ticker.isActive) {
+      callback(stepTime);
+    }
+  }
+
   /// Call this before deleting the [GameLoop] object.
   ///
   /// The [GameLoop] will no longer be usable after this method is called. You

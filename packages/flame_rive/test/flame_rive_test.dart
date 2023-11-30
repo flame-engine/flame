@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flame_test/flame_test.dart';
@@ -32,7 +33,7 @@ void main() {
         expect(artboard.name, artboardName);
       });
 
-      test('Load an artboard that does not exist', () async {
+      test('Load an artboard that does not exist', () {
         expect(
           () => loadArtboard(
             riveFile,
@@ -54,11 +55,10 @@ void main() {
         expect(riveComponent.parent, game);
       });
 
-      testWithGame<_RiveComponentHasTappable>(
+      testWithFlameGame(
         'Can Add with Tappable',
-        _RiveComponentHasTappable.new,
         (game) async {
-          final child = _RiveComponentWthTappable(
+          final child = _RiveComponentWithTappable(
             artboard: await loadArtboard(riveFile),
           );
           await game.ensureAdd(child);
@@ -127,7 +127,7 @@ void main() {
     });
 
     group('Component size', () {
-      test('use specifiy size', () async {
+      test('use specific size', () async {
         final skillsArtboard = await loadArtboard(riveFile);
         final riveComponent = RiveComponent(
           artboard: skillsArtboard,
@@ -137,7 +137,7 @@ void main() {
         expect(riveComponent.size, Vector2.all(250.0));
       });
 
-      test('deafult value (ArtboardSize)', () async {
+      test('default value (ArtboardSize)', () async {
         final skillsArtboard = await loadArtboard(riveFile);
         final riveComponent = RiveComponent(artboard: skillsArtboard);
 
@@ -169,8 +169,6 @@ class _RiveComponentWithAnimation extends RiveComponent {
   }
 }
 
-class _RiveComponentHasTappable extends FlameGame with HasTappables {}
-
-class _RiveComponentWthTappable extends RiveComponent with Tappable {
-  _RiveComponentWthTappable({required super.artboard});
+class _RiveComponentWithTappable extends RiveComponent with TapCallbacks {
+  _RiveComponentWithTappable({required super.artboard});
 }

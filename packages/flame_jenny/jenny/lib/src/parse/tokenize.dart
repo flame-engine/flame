@@ -66,7 +66,7 @@ class _Lexer {
     indentStack.add(0);
     pushMode(modeMain);
     while (!eof) {
-      final ok = (modeStack.last)();
+      final ok = modeStack.last();
       if (!ok) {
         error('invalid token');
       }
@@ -1033,7 +1033,8 @@ class _Lexer {
   String _errorMessageAtPosition(int position) {
     final lineEnd = _findLineEnd(position);
     final lineStart = _findLineStart(position);
-    String lineFragment, markerIndent;
+    String lineFragment;
+    String markerIndent;
     if (lineEnd - lineStart <= 74) {
       lineFragment = text.substring(lineStart, lineEnd);
       markerIndent = ' ' * (position - lineStart);

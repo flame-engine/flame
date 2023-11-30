@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -39,6 +40,8 @@ Press T button to toggle player to collide with other objects.
 
   static const mapSize = 300;
   static const bricksCount = 8000;
+  late final Player player;
+  final staticLayer = StaticLayer();
 
   @override
   Future<void> onLoad() async {
@@ -63,75 +66,78 @@ Press T button to toggle player to collide with other objects.
       srcPosition: Vector2(0, tileSize),
       srcSize: Vector2.all(tileSize),
     );
+
     for (var i = 0; i < bricksCount; i++) {
       final x = random.nextInt(mapSize);
       final y = random.nextInt(mapSize);
       final brick = Brick(
-        position: Vector2(x.toDouble() * tileSize, y.toDouble() * tileSize),
+        position: Vector2(x * tileSize, y * tileSize),
         size: Vector2.all(tileSize),
         priority: 0,
         sprite: spriteBrick,
       );
-      add(brick);
+      world.add(brick);
       staticLayer.components.add(brick);
     }
 
     staticLayer.reRender();
-    camera.viewport = FixedResolutionViewport(Vector2(500, 250));
-    final playerPoint = Vector2.all(mapSize * tileSize / 2);
+    camera = CameraComponent.withFixedResolution(
+      world: world,
+      width: 500,
+      height: 250,
+    );
 
-    final player =
-        Player(position: playerPoint, size: Vector2.all(tileSize), priority: 2);
-    add(player);
-    this.player = player;
-    camera.followComponent(player);
+    player = Player(
+      position: Vector2.all(mapSize * tileSize / 2),
+      size: Vector2.all(tileSize),
+      priority: 2,
+    );
+    world.add(player);
+    camera.follow(player);
 
     final brick = Brick(
-      position: playerPoint.translate(0, -tileSize * 2),
+      position: player.position.translated(0, -tileSize * 2),
       size: Vector2.all(tileSize),
       priority: 0,
       sprite: spriteBrick,
     );
-    add(brick);
+    world.add(brick);
     staticLayer.components.add(brick);
 
     final water1 = Water(
-      position: playerPoint.translate(0, tileSize * 2),
+      position: player.position.translated(0, tileSize * 2),
       size: Vector2.all(tileSize),
       priority: 0,
       sprite: spriteWater,
     );
-    add(water1);
+    world.add(water1);
 
     final water2 = Water(
-      position: playerPoint.translate(tileSize * 2, 0),
+      position: player.position.translated(tileSize * 2, 0),
       size: Vector2.all(tileSize),
       priority: 0,
       sprite: spriteWater,
     );
-    add(water2);
+    world.add(water2);
 
     final water3 = Water(
-      position: playerPoint.translate(-tileSize * 2, 0),
+      position: player.position.translated(-tileSize * 2, 0),
       size: Vector2.all(tileSize),
       priority: 0,
       sprite: spriteWater,
     );
-    add(water3);
+    world.add(water3);
 
-    add(QuadTreeDebugComponent(collisionDetection));
-    add(LayerComponent(staticLayer));
-    add(FpsTextComponent());
-    camera.zoom = 1;
+    world.add(QuadTreeDebugComponent(collisionDetection));
+    world.add(LayerComponent(staticLayer));
+    camera.viewport.add(FpsTextComponent());
   }
 
   final elapsedMicroseconds = <double>[];
 
-  late Player player;
   final _playerDisplacement = Vector2.zero();
   var _fireBullet = false;
 
-  final staticLayer = StaticLayer();
   static const stepSize = 1.0;
 
   @override
@@ -142,19 +148,19 @@ Press T button to toggle player to collide with other objects.
     for (final key in keysPressed) {
       if (key == LogicalKeyboardKey.keyW && player.canMoveTop) {
         _playerDisplacement.setValues(0, -stepSize);
-        player.position = player.position.translate(0, -stepSize);
+        player.position.translate(0, -stepSize);
       }
       if (key == LogicalKeyboardKey.keyA && player.canMoveLeft) {
         _playerDisplacement.setValues(-stepSize, 0);
-        player.position = player.position.translate(-stepSize, 0);
+        player.position.translate(-stepSize, 0);
       }
       if (key == LogicalKeyboardKey.keyS && player.canMoveBottom) {
         _playerDisplacement.setValues(0, stepSize);
-        player.position = player.position.translate(0, stepSize);
+        player.position.translate(0, stepSize);
       }
       if (key == LogicalKeyboardKey.keyD && player.canMoveRight) {
         _playerDisplacement.setValues(stepSize, 0);
-        player.position = player.position.translate(stepSize, 0);
+        player.position.translate(stepSize, 0);
       }
       if (key == LogicalKeyboardKey.space) {
         _fireBullet = true;
@@ -186,36 +192,37 @@ Press T button to toggle player to collide with other objects.
 
   @override
   void onScroll(PointerScrollInfo info) {
-    camera.zoom += info.scrollDelta.game.y.sign * 0.08;
-    camera.zoom = camera.zoom.clamp(0.05, 5.0);
+    camera.viewfinder.zoom += info.scrollDelta.global.y.sign * 0.08;
+    camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 5.0);
   }
 }
 
 //#region Player
 
 class Player extends SpriteComponent
-    with CollisionCallbacks, HasGameRef<QuadTreeExample> {
+    with CollisionCallbacks, HasGameReference<QuadTreeExample> {
   Player({
     required super.position,
     required super.size,
     required super.priority,
-  }) {
-    Sprite.load(
-      'retro_tiles.png',
-      srcSize: Vector2.all(tileSize),
-      srcPosition: Vector2(tileSize * 3, tileSize),
-    ).then((value) {
-      sprite = value;
-    });
+  });
 
-    add(hitbox);
-  }
-
-  final hitbox = RectangleHitbox();
   bool canMoveLeft = true;
   bool canMoveRight = true;
   bool canMoveTop = true;
   bool canMoveBottom = true;
+  final hitbox = RectangleHitbox();
+
+  @override
+  Future<void> onLoad() async {
+    sprite = await Sprite.load(
+      'retro_tiles.png',
+      srcSize: Vector2.all(tileSize),
+      srcPosition: Vector2(tileSize * 3, tileSize),
+    );
+
+    add(hitbox);
+  }
 
   @override
   void onCollisionStart(
@@ -337,7 +344,7 @@ class Water extends SpriteComponent
 
 mixin GameCollidable on PositionComponent {
   void initCollision() {
-    add(RectangleHitbox()..collisionType = CollisionType.passive);
+    add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   void initCenter() {
@@ -392,12 +399,6 @@ class LayerComponent extends PositionComponent {
   }
 }
 
-extension Vector2Ext on Vector2 {
-  Vector2 translate(double x, double y) {
-    return Vector2(this.x + x, this.y + y);
-  }
-}
-
 class QuadTreeDebugComponent extends PositionComponent with HasPaint {
   QuadTreeDebugComponent(QuadTreeCollisionDetection cd) {
     dbg = QuadTreeNodeDebugInfo.init(cd);
@@ -408,22 +409,22 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
 
   late final QuadTreeNodeDebugInfo dbg;
 
+  final _boxPaint = Paint()
+    ..style = PaintingStyle.stroke
+    ..color = Colors.lightGreenAccent
+    ..strokeWidth = 1;
+
   @override
   void render(Canvas canvas) {
     final nodes = dbg.nodes;
     for (final node in nodes) {
       canvas.drawRect(node.rect, paint);
       final nodeElements = node.ownElements;
-      Paint? boxPaint;
-      if (!node.noChildren && nodeElements.isNotEmpty) {
-        boxPaint = Paint();
-        boxPaint.style = PaintingStyle.stroke;
-        boxPaint.color = Colors.lightGreenAccent;
-        boxPaint.strokeWidth = 1;
-      }
+
+      final shouldPaint = !node.noChildren && nodeElements.isNotEmpty;
       for (final box in nodeElements) {
-        if (boxPaint != null) {
-          canvas.drawRect(box.aabb.toRect(), boxPaint);
+        if (shouldPaint) {
+          canvas.drawRect(box.aabb.toRect(), _boxPaint);
         }
       }
     }

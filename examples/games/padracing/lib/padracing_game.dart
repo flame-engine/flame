@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
@@ -44,10 +44,9 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
   @override
   Color backgroundColor() => Colors.black;
 
-  static Vector2 trackSize = Vector2.all(500);
-  static double playZoom = 8.0;
+  static final Vector2 trackSize = Vector2.all(500);
+  static const double playZoom = 8.0;
   static const int numberOfLaps = 3;
-  late final World cameraWorld;
   late CameraComponent startCamera;
   late List<Map<LogicalKeyboardKey, LogicalKeyboardKey>> activeKeyMaps;
   late List<Set<LogicalKeyboardKey>> pressedKeySets;
@@ -58,16 +57,16 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   @override
   Future<void> onLoad() async {
+    super.onLoad();
+    camera.removeFromParent();
     children.register<CameraComponent>();
-    cameraWorld = World();
-    add(cameraWorld);
 
     final walls = createWalls(trackSize);
-    final bigBall = Ball(position: Vector2(200, 245), isMovable: false);
-    cameraWorld.addAll([
-      LapLine(1, Vector2(25, 50), Vector2(50, 5), false),
-      LapLine(2, Vector2(25, 70), Vector2(50, 5), false),
-      LapLine(3, Vector2(52.5, 25), Vector2(5, 50), true),
+    final bigBall = Ball(initialPosition: Vector2(200, 245), isMovable: false);
+    world.addAll([
+      LapLine(1, Vector2(25, 50), Vector2(50, 5), isFinish: false),
+      LapLine(2, Vector2(25, 70), Vector2(50, 5), isFinish: false),
+      LapLine(3, Vector2(52.5, 25), Vector2(5, 50), isFinish: true),
       bigBall,
       ...walls,
       ...createBalls(trackSize, walls, bigBall),
@@ -82,9 +81,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
       canvasSize.x / trackSize.x,
       canvasSize.y / trackSize.y,
     );
-    startCamera = CameraComponent(
-      world: cameraWorld,
-    )
+    startCamera = CameraComponent(world: world)
       ..viewfinder.position = trackSize / 2
       ..viewfinder.anchor = Anchor.center
       ..viewfinder.zoom = zoomLevel - 0.2;
@@ -136,7 +133,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
           ..paint.style = PaintingStyle.stroke;
     final cameras = List.generate(numberOfPlayers, (i) {
       return CameraComponent(
-        world: cameraWorld,
+        world: world,
         viewport: FixedSizeViewport(viewportSize.x, viewportSize.y)
           ..position = alignedVector(
             longMultiplier: i == 0 ? 0.0 : 1 / (i + 1),
@@ -152,7 +149,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
     const mapCameraZoom = 0.5;
     final mapCameras = List.generate(numberOfPlayers, (i) {
       return CameraComponent(
-        world: cameraWorld,
+        world: world,
         viewport: FixedSizeViewport(mapCameraSize.x, mapCameraSize.y)
           ..position = Vector2(
             viewportSize.x - mapCameraSize.x * mapCameraZoom - 50,
@@ -193,7 +190,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
         }
       });
       cars.add(car);
-      cameraWorld.add(car);
+      world.add(car);
       cameras[i].viewport.addAll([lapText, mapCameras[i]]);
     }
 
@@ -239,9 +236,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   void reset() {
     _clearPressedKeys();
-    for (final keyMap in activeKeyMaps) {
-      keyMap.clear();
-    }
+    activeKeyMaps.clear();
     _timePassed = 0;
     overlays.remove('game_over');
     openMenu();

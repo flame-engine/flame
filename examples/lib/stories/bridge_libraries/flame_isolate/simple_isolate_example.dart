@@ -2,12 +2,13 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flutter/material.dart';
 
-class SimpleIsolateExample extends FlameGame with HasTappables {
+class SimpleIsolateExample extends FlameGame {
   static const String description = '''
     This example showcases a simple FlameIsolate example, making it easy to 
     continually run heavy load without stutter.
@@ -21,23 +22,23 @@ class SimpleIsolateExample extends FlameGame with HasTappables {
   ''';
 
   @override
-  Future onLoad() async {
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-
-    const rect = Rect.fromLTRB(80, 230, 320, 470);
-
-    add(
-      CalculatePrimeNumber(
-        position: rect.center.toVector2(),
-        anchor: Anchor.center,
-      ),
+  Future<void> onLoad() async {
+    final world = World();
+    final cameraComponent = CameraComponent.withFixedResolution(
+      world: world,
+      width: 400,
+      height: 600,
     );
+    addAll([world, cameraComponent]);
 
+    const rect = Rect.fromLTRB(-120, -120, 120, 120);
     final circle = Path()..addOval(rect);
+    final teal = Paint()..color = Colors.tealAccent;
+
     for (var i = 0; i < 20; i++) {
-      add(
+      world.add(
         RectangleComponent.square(size: 10)
-          ..paint = (Paint()..color = Colors.tealAccent)
+          ..paint = teal
           ..add(
             MoveAlongPathEffect(
               circle,
@@ -51,7 +52,8 @@ class SimpleIsolateExample extends FlameGame with HasTappables {
           ),
       );
     }
-    return super.onMount();
+
+    world.add(CalculatePrimeNumber());
   }
 }
 
@@ -65,11 +67,8 @@ enum ComputeType {
 }
 
 class CalculatePrimeNumber extends PositionComponent
-    with Tappable, FlameIsolate {
-  CalculatePrimeNumber({
-    required super.position,
-    required super.anchor,
-  });
+    with TapCallbacks, FlameIsolate {
+  CalculatePrimeNumber() : super(anchor: Anchor.center);
 
   ComputeType computeType = ComputeType.isolate;
   late Timer _interval;
@@ -85,15 +84,15 @@ class CalculatePrimeNumber extends PositionComponent
   }
 
   @override
-  Future onMount() {
+  Future<void> onMount() {
     _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)
       ..start();
     return super.onMount();
   }
 
   @override
-  void update(double t) {
-    _interval.update(t);
+  void update(double dt) {
+    _interval.update(dt);
   }
 
   @override
@@ -112,7 +111,7 @@ class CalculatePrimeNumber extends PositionComponent
     _isPrime(_primeStartNumber),
   );
 
-  Future _checkNextAgainstPrime() async {
+  Future<void> _checkNextAgainstPrime() async {
     final nextInt = _primeData.key + 1;
 
     try {
@@ -134,13 +133,12 @@ class CalculatePrimeNumber extends PositionComponent
   }
 
   @override
-  bool onTapDown(_) {
+  void onTapDown(_) {
     computeType =
         ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
-    return false;
   }
 
-  final _paint = Paint()..color = const Color(0xa98d560d);
+  final _paint = Paint()..color = Colors.green;
 
   final _textPaint = TextPaint(
     style: const TextStyle(
@@ -149,7 +147,7 @@ class CalculatePrimeNumber extends PositionComponent
   );
 
   late final rect = Rect.fromLTWH(0, 0, width, height);
-  late final topLeftVector = rect.topLeft.toVector2();
+  late final topLeftVector = rect.topLeft.toVector2() + Vector2.all(4);
   late final centerVector = rect.center.toVector2();
 
   @override

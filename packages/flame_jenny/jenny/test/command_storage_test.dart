@@ -63,25 +63,25 @@ void main() {
       storage.addCommand1('check', (bool x) => value = x);
       expect(storage.hasCommand('check'), true);
 
-      void check(String arg, bool expectedValue) {
+      void check(String arg, {required bool expectedValue}) {
         storage.runCommand(UserDefinedCommand('check', LineContent(arg)));
         expect(value, expectedValue);
       }
 
-      check('true', true);
-      check('  false ', false);
-      check('+', true);
-      check('-', false);
-      check(' "on"', true);
-      check('off ', false);
-      check('yes', true);
-      check('no', false);
-      check('T', true);
-      check('F', false);
-      check('1', true);
-      check('0', false);
+      check('true', expectedValue: true);
+      check('  false ', expectedValue: false);
+      check('+', expectedValue: true);
+      check('-', expectedValue: false);
+      check(' "on"', expectedValue: true);
+      check('off ', expectedValue: false);
+      check('yes', expectedValue: true);
+      check('no', expectedValue: false);
+      check('T', expectedValue: true);
+      check('F', expectedValue: false);
+      check('1', expectedValue: true);
+      check('0', expectedValue: false);
       expect(
-        () => check('12', true),
+        () => check('12', expectedValue: true),
         hasTypeError(
           'TypeError: Argument 1 for command <<check>> has value "12", which '
           'is not a boolean',
@@ -161,6 +161,7 @@ void main() {
       });
       expect(storage.hasCommand('three'), true);
 
+      // ignore: avoid_positional_boolean_parameters
       void check(String args, bool v1, bool v2, bool v3) {
         storage.runCommand(UserDefinedCommand('three', LineContent(args)));
         expect(value1, v1);
@@ -228,6 +229,32 @@ void main() {
             'arguments',
           ),
         );
+      });
+
+      test('Clear all commands', () {
+        final storage = CommandStorage();
+        storage.addCommand0('foo', () => null);
+        storage.addCommand1('bar', (int n) => n);
+
+        expect(storage.isEmpty, false);
+
+        storage.clear();
+
+        expect(storage.isEmpty, true);
+      });
+
+      test('Remove a command', () {
+        final storage = CommandStorage();
+        storage.addCommand0('foo', () => null);
+        storage.addCommand1('bar', (int n) => n);
+
+        expect(storage.hasCommand('foo'), true);
+        expect(storage.hasCommand('bar'), true);
+
+        storage.remove('foo');
+
+        expect(storage.hasCommand('foo'), false);
+        expect(storage.hasCommand('bar'), true);
       });
     });
   });

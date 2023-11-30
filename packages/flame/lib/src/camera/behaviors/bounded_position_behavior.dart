@@ -60,7 +60,7 @@ class BoundedPositionBehavior extends Component {
       );
       _target = parent! as PositionProvider;
     }
-    if (isValidPoint(target.position)) {
+    if (_target != null && isValidPoint(target.position)) {
       _previousPosition.setFrom(target.position);
     } else {
       _previousPosition.setFrom(_bounds.center);

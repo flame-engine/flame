@@ -44,6 +44,9 @@ class FlutterAppDirective(SphinxDirective):
         In addition, the "code" run mode will try to locate a file or a folder
         with the matching name.
 
+      :subfolder: - optional parameter, needed if the app page is not located in the lib folder.
+      The value of the parameter should be the path from the lib folder to the page source file.
+
       :show: - a list of one or more run modes, which could include "widget",
         "popup", "code", and "infobox". Each of these modes produces a different
         output:
@@ -65,6 +68,7 @@ class FlutterAppDirective(SphinxDirective):
     option_spec = {
         'sources': directives.unchanged,
         'page': directives.unchanged,
+        'subfolder': directives.unchanged,
         'show': directives.unchanged,
         'width': directives.unchanged,
         'height': directives.unchanged,
@@ -222,7 +226,10 @@ class FlutterAppDirective(SphinxDirective):
             out.write('</body>\n</html>\n')
 
     def _generate_code_listings(self, code_id):
-        code_dir = self.source_dir + '/lib/' + self.options.get('page', '')
+        subfolder = self.options.get('subfolder', '')
+        if subfolder and not subfolder.endswith('/'):
+            subfolder += '/'
+        code_dir = self.source_dir + '/lib/' +  subfolder + self.options.get('page', '')
         if os.path.isdir(code_dir):
             files = glob.glob(code_dir + '/**', recursive=True)
         elif os.path.isfile(code_dir + '.dart'):

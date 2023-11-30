@@ -14,10 +14,10 @@ class SpritePainter extends CustomPainter {
       : _angle = angle;
 
   @override
-  bool shouldRepaint(SpritePainter old) {
-    return old._sprite != _sprite ||
-        old._anchor != _anchor ||
-        old._angle != _angle;
+  bool shouldRepaint(SpritePainter oldDelegate) {
+    return oldDelegate._sprite != _sprite ||
+        oldDelegate._anchor != _anchor ||
+        oldDelegate._angle != _angle;
   }
 
   @override

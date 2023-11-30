@@ -15,6 +15,7 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
     Paint? paint,
     List<Paint>? paintLayers,
   }) {

@@ -7,6 +7,10 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+
+env:
+  FLUTTER_MIN_VERSION: '3.16.0'
+
 jobs:
   # BEGIN LINTING STAGE
   format:
@@ -14,13 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.7.1'
-          channel: 'stable'
-          cache: true
-      - uses: bluefireteam/melos-action@main
-        with:
-          melos-version: '3.0.0-dev.0'
+      - uses: bluefireteam/melos-action@v3
       - run: melos run format-check
 
   analyze:
@@ -29,16 +27,23 @@ jobs:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.7.1'
-          channel: 'stable'
-      - uses: bluefireteam/melos-action@v2
-        with:
-          melos-version: '3.0.0-dev.0'
-      - name: "Analyze"
-        uses: invertase/github-action-dart-analyzer@v1
+          flutter-version: ${{env.FLUTTER_MIN_VERSION}}
+      - uses: bluefireteam/melos-action@v3
+      - name: "Analyze with lowest supported version"
+        uses: invertase/github-action-dart-analyzer@v2.0.0
         with:
           fatal-infos: true
-          fatal-warnings: true
+
+  analyze-latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v3
+      - name: "Analyze with latest stable"
+        uses: invertase/github-action-dart-analyzer@v2.0.0
+        with:
+          fatal-infos: true
 
   markdown-lint:
     runs-on: ubuntu-latest
@@ -49,6 +54,20 @@ jobs:
           node-version: 18
       - run: npm install -g markdownlint-cli
       - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
+
+  dcm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v3
+      - name: Install DCM
+        uses: CQLabs/setup-dcm@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run DCM
+        run: dcm analyze .
   # END LINTING STAGE
 
   # BEGIN TESTING STAGE
@@ -58,11 +77,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.7.1'
-          channel: 'stable'
           cache: true
-      - uses: bluefireteam/melos-action@main
-        with:
-          melos-version: '3.0.0-dev.0'
-      - uses: bluefireteam/spec-action@main
+      - uses: bluefireteam/melos-action@v3
+      - name: Run tests
+        run: melos test
   # END TESTING STAGE

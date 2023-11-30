@@ -5,5 +5,6 @@
 
 export 'src/sprite.dart';
 export 'src/sprite_animation.dart';
-export 'src/sprite_batch.dart';
-export 'src/spritesheet.dart';
+export 'src/sprite_animation_ticker.dart';
+export 'src/sprite_batch.dart' hide FlippedAtlasStatus;
+export 'src/sprite_sheet.dart';

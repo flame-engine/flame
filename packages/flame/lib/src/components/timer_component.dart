@@ -22,6 +22,7 @@ class TimerComponent extends Component {
     bool autoStart = true,
     this.removeOnFinish = false,
     VoidCallback? onTick,
+    super.key,
   }) : _onTick = onTick {
     timer = Timer(
       period,

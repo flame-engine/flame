@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
@@ -31,30 +32,47 @@ class CoordinateSystemsExample extends FlameGame
   );
 
   String? lastEventDescription;
-  Vector2 cameraPosition = Vector2.zero();
-  Vector2 cameraVelocity = Vector2.zero();
+  final cameraPosition = Vector2.zero();
+  final cameraVelocity = Vector2.zero();
 
   @override
   Future<void> onLoad() async {
-    camera.followVector2(cameraPosition, relativeOffset: Anchor.topLeft);
+    final rectanglePosition = canvasSize / 4;
+    final rectangleSize = Vector2.all(20);
+    final positions = [
+      Vector2(rectanglePosition.x, rectanglePosition.y),
+      Vector2(rectanglePosition.x, -rectanglePosition.y),
+      Vector2(-rectanglePosition.x, rectanglePosition.y),
+      Vector2(-rectanglePosition.x, -rectanglePosition.y),
+    ];
+    world.addAll(
+      [
+        for (final position in positions)
+          RectangleComponent(
+            position: position,
+            size: rectangleSize,
+          ),
+      ],
+    );
   }
 
   @override
-  void render(Canvas c) {
-    c.drawRect(canvasSize.toRect(), _borderPaint);
+  void render(Canvas canvas) {
+    canvas.drawRect(canvasSize.toRect(), _borderPaint);
     _text.render(
-      c,
+      canvas,
       'Camera: WASD to move, QE to zoom',
       Vector2.all(5.0),
     );
     _text.render(
-      c,
-      'Camera: ${camera.position}, zoom: ${camera.zoom}',
+      canvas,
+      'Camera: ${camera.viewfinder.position}, '
+      'zoom: ${camera.viewfinder.zoom}',
       Vector2(canvasSize.x - 5, 5.0),
       anchor: Anchor.topRight,
     );
     _text.render(
-      c,
+      canvas,
       'This is your Flame game!',
       canvasSize - Vector2.all(5.0),
       anchor: Anchor.bottomRight,
@@ -62,22 +80,22 @@ class CoordinateSystemsExample extends FlameGame
     final lastEventDescription = this.lastEventDescription;
     if (lastEventDescription != null) {
       _text.render(
-        c,
+        canvas,
         lastEventDescription,
         canvasSize / 2,
         anchor: Anchor.center,
       );
     }
-    super.render(c);
+    super.render(canvas);
   }
 
   @override
-  void onTapUp(int pointer, TapUpInfo info) {
+  void onTapUp(int pointerId, TapUpInfo info) {
     lastEventDescription = _describe('TapUp', info);
   }
 
   @override
-  void onTapDown(int pointer, TapDownInfo info) {
+  void onTapDown(int pointerId, TapDownInfo info) {
     lastEventDescription = _describe('TapDown', info);
   }
 
@@ -98,21 +116,22 @@ class CoordinateSystemsExample extends FlameGame
 
   /// Describes generic event information + some event specific details for
   /// some events.
-  static String _describe(String name, PositionInfo info) {
+  String _describe(String name, PositionInfo info) {
     return [
       name,
       'Global: ${info.eventPosition.global}',
       'Widget: ${info.eventPosition.widget}',
-      'Game: ${info.eventPosition.game}',
+      'World: ${camera.globalToLocal(info.eventPosition.global)}',
+      'Camera: ${camera.viewfinder.position}',
       if (info is DragUpdateInfo) ...[
         'Delta',
         'Global: ${info.delta.global}',
-        'Game: ${info.delta.game}',
+        'World: ${info.delta.global / camera.viewfinder.zoom}',
       ],
       if (info is PointerScrollInfo) ...[
         'Scroll Delta',
         'Global: ${info.scrollDelta.global}',
-        'Game: ${info.scrollDelta.game}',
+        'World: ${info.scrollDelta.global / camera.viewfinder.zoom}',
       ],
     ].join('\n');
   }
@@ -120,10 +139,11 @@ class CoordinateSystemsExample extends FlameGame
   @override
   void update(double dt) {
     super.update(dt);
-    cameraPosition.add(cameraVelocity * dt * 10);
+    cameraPosition.add(cameraVelocity * dt * 30);
     // just make it look pretty
     cameraPosition.x = _roundDouble(cameraPosition.x, 5);
     cameraPosition.y = _roundDouble(cameraPosition.y, 5);
+    camera.viewfinder.position = cameraPosition;
   }
 
   /// Round [val] up to [places] decimal places.
@@ -150,9 +170,9 @@ class CoordinateSystemsExample extends FlameGame
       cameraVelocity.y = isKeyDown ? 1 : 0;
     } else if (isKeyDown) {
       if (event.logicalKey == LogicalKeyboardKey.keyQ) {
-        camera.zoom *= 2;
+        camera.viewfinder.zoom *= 2;
       } else if (event.logicalKey == LogicalKeyboardKey.keyE) {
-        camera.zoom /= 2;
+        camera.viewfinder.zoom /= 2;
       }
     }
 

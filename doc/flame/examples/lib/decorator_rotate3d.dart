@@ -1,9 +1,8 @@
 import 'package:doc_flame_examples/flower.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 
-class DecoratorRotate3DGame extends FlameGame with HasTappableComponents {
+class DecoratorRotate3DGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     var step = 0;

@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flutter/animation.dart';
 
 class RotateEffectExample extends FlameGame {
@@ -16,10 +17,20 @@ class RotateEffectExample extends FlameGame {
     add small amounts of wobble, creating quasi-chaotic movement.
   ''';
 
+  RotateEffectExample()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+          world: _RotateEffectWorld(),
+        );
+}
+
+class _RotateEffectWorld extends World {
   @override
-  void onMount() {
-    camera.viewport = FixedResolutionViewport(Vector2(400, 600));
-    final compass = Compass(200)..position = Vector2(200, 300);
+  void onLoad() {
+    final compass = Compass(size: 200);
     add(compass);
 
     compass.rim.add(
@@ -36,7 +47,7 @@ class RotateEffectExample extends FlameGame {
     compass.arrow
       ..add(
         RotateEffect.to(
-          Transform2D.tau,
+          tau,
           EffectController(
             duration: 20,
             infinite: true,
@@ -45,7 +56,7 @@ class RotateEffectExample extends FlameGame {
       )
       ..add(
         RotateEffect.by(
-          Transform2D.tau * 0.015,
+          tau * 0.015,
           EffectController(
             duration: 0.1,
             reverseDuration: 0.1,
@@ -55,7 +66,7 @@ class RotateEffectExample extends FlameGame {
       )
       ..add(
         RotateEffect.by(
-          Transform2D.tau * 0.021,
+          tau * 0.021,
           EffectController(
             duration: 0.13,
             reverseDuration: 0.13,
@@ -67,7 +78,7 @@ class RotateEffectExample extends FlameGame {
 }
 
 class Compass extends PositionComponent {
-  Compass(double size)
+  Compass({required double size})
       : _radius = size / 2,
         super(
           size: Vector2.all(size),
@@ -89,7 +100,7 @@ class Compass extends PositionComponent {
   Future<void> onLoad() async {
     _marksPath = Path();
     for (var i = 0; i < 12; i++) {
-      final angle = Transform2D.tau * (i / 12);
+      final angle = tau * (i / 12);
       // Note: rim takes up 0.1radius, so the lengths must be > than that
       final markLength = (i % 3 == 0) ? _radius * 0.2 : _radius * 0.15;
       _marksPath.moveTo(
@@ -180,7 +191,7 @@ class CompassRim extends PositionComponent {
     final innerRadius = _radius - _width;
     final midRadius = _radius - _width / 3;
     for (var i = 0; i < numberOfNotches; i++) {
-      final angle = Transform2D.tau * (i / numberOfNotches);
+      final angle = tau * (i / numberOfNotches);
       _marksPath.moveTo(
         _radius + innerRadius * sin(angle),
         _radius + innerRadius * cos(angle),

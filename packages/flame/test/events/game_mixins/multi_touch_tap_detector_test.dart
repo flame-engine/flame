@@ -88,7 +88,6 @@ void main() {
 }
 
 class _GameWithMultiTouchTapDetector extends Game with MultiTouchTapDetector {
-  int tapTimes = 0;
   bool updated = false;
   bool rendered = false;
 

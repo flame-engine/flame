@@ -1,6 +1,7 @@
+import 'package:flame/cache.dart';
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flutter/rendering.dart';
@@ -19,6 +20,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required super.map,
     required super.destTileSize,
     required Image image,
+    super.filterQuality,
   }) : _image = image {
     _initImageRepeat();
   }
@@ -29,7 +31,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   }
 
   @override
-  void render(Canvas canvas, Camera? camera) {
+  void render(Canvas canvas, CameraComponent? camera) {
     canvas.save();
 
     canvas.translate(offsetX, offsetY);
@@ -45,6 +47,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       opacity: opacity,
       alignment: Alignment.topLeft,
       repeat: _repeat,
+      filterQuality: filterQuality,
     );
 
     canvas.restore();
@@ -65,16 +68,19 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   static Future<FlameImageLayer> load({
     required ImageLayer layer,
     required GroupLayer? parent,
-    required Camera? camera,
+    required CameraComponent? camera,
     required TiledMap map,
     required Vector2 destTileSize,
+    FilterQuality? filterQuality,
+    Images? images,
   }) async {
     return FlameImageLayer(
       layer: layer,
       parent: parent,
       map: map,
       destTileSize: destTileSize,
-      image: await Flame.images.load(layer.image.source!),
+      filterQuality: filterQuality,
+      image: await (images ?? Flame.images).load(layer.image.source!),
     );
   }
 

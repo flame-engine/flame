@@ -1,9 +1,8 @@
 import 'package:doc_flame_examples/flower.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 
-class MoveToEffectGame extends FlameGame with HasTappableComponents {
+class MoveToEffectGame extends FlameGame {
   bool reset = false;
   @override
   Future<void> onLoad() async {

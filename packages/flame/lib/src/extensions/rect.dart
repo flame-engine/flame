@@ -1,11 +1,13 @@
-import 'dart:math' show min, max;
+import 'dart:math' show Random, max, min;
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flame/experimental.dart' as flame show Rectangle;
 import 'package:flame/geometry.dart';
 import 'package:flame/src/extensions/matrix4.dart';
 import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
+import 'package:flame/src/math/random_fallback.dart';
 
 export 'dart:ui' show Rect;
 
@@ -18,6 +20,10 @@ extension RectExtension on Rect {
 
   /// Converts this [Rect] into a [math.Rectangle].
   math.Rectangle toMathRectangle() => math.Rectangle(left, top, width, height);
+
+  /// Converts this [Rect] into a [flame.Rectangle].
+  flame.Rectangle toFlameRectangle() =>
+      flame.Rectangle.fromLTWH(left, top, width, height);
 
   /// Converts this [Rect] into a [RectangleComponent].
   RectangleComponent toRectangleComponent() {
@@ -71,6 +77,15 @@ extension RectExtension on Rect {
       (bottomRight.dx * matrix.m12) +
           (bottomRight.dy * matrix.m22) +
           matrix.m42,
+    );
+  }
+
+  /// Generates a random point within the bounds of this [Rect].
+  Vector2 randomPoint([Random? random]) {
+    final randomGenerator = random ?? randomFallback;
+    return Vector2(
+      left + randomGenerator.nextDouble() * width,
+      top + randomGenerator.nextDouble() * height,
     );
   }
 

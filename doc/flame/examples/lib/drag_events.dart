@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/geometry.dart';
 import 'package:flutter/rendering.dart';
 
 class DragEventsGame extends FlameGame {
@@ -58,13 +59,13 @@ class DragTarget extends PositionComponent with DragCallbacks {
   final Map<int, Trail> _trails = {};
 
   @override
-  void onGameResize(Vector2 canvasSize) {
-    super.onGameResize(canvasSize);
-    size = canvasSize - Vector2(100, 75);
-    if (size.x < 100 || size.y < 100) {
-      size = canvasSize * 0.9;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size - Vector2(100, 75);
+    if (this.size.x < 100 || this.size.y < 100) {
+      this.size = size * 0.9;
     }
-    position = canvasSize / 2;
+    position = size / 2;
   }
 
   @override
@@ -74,6 +75,7 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     final trail = Trail(event.localPosition);
     _trails[event.pointerId] = trail;
     add(trail);
@@ -86,11 +88,13 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
   @override
   void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     _trails.remove(event.pointerId)!.end();
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     _trails.remove(event.pointerId)!.cancel();
   }
 }
@@ -203,7 +207,6 @@ class Star extends PositionComponent with DragCallbacks {
     ..color = const Color(0xFF000000)
     ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4.0);
   late final Path _path;
-  bool _isDragged = false;
 
   @override
   bool containsLocalPoint(Vector2 point) {
@@ -212,7 +215,7 @@ class Star extends PositionComponent with DragCallbacks {
 
   @override
   void render(Canvas canvas) {
-    if (_isDragged) {
+    if (isDragged) {
       _paint.color = color.withOpacity(0.5);
       canvas.drawPath(_path, _paint);
       canvas.drawPath(_path, _borderPaint);
@@ -225,13 +228,13 @@ class Star extends PositionComponent with DragCallbacks {
 
   @override
   void onDragStart(DragStartEvent event) {
-    _isDragged = true;
+    super.onDragStart(event);
     priority = 10;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    _isDragged = false;
+    super.onDragEnd(event);
     priority = 0;
   }
 
@@ -240,5 +243,3 @@ class Star extends PositionComponent with DragCallbacks {
     position += event.delta;
   }
 }
-
-const tau = 2 * pi;

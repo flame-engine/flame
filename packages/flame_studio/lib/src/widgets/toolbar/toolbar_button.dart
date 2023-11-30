@@ -15,10 +15,10 @@ class ToolbarButton extends ConsumerStatefulWidget {
   final bool disabled;
 
   @override
-  _ToolbarButtonState createState() => _ToolbarButtonState();
+  ToolbarButtonState createState() => ToolbarButtonState();
 }
 
-class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
+class ToolbarButtonState extends ConsumerState<ToolbarButton> {
   bool _isHovered = false;
   bool _isActive = false;
 
@@ -26,11 +26,11 @@ class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
   Widget build(BuildContext context) {
     final painter = CustomPaint(
       painter: _ToolbarButtonPainter(
-        widget.disabled,
-        _isHovered,
-        _isActive,
         widget.icon,
         ref.watch(themeProvider),
+        isDisabled: widget.disabled,
+        isHovered: _isHovered,
+        isActive: _isActive,
       ),
     );
 
@@ -68,14 +68,21 @@ class _ToolbarButtonState extends ConsumerState<ToolbarButton> {
   }
 }
 
+enum _ToolbarButtonRenderState {
+  disabled,
+  active,
+  hovered,
+  normal,
+}
+
 class _ToolbarButtonPainter extends CustomPainter {
   _ToolbarButtonPainter(
-    this.isDisabled,
-    this.isHovered,
-    this.isActive,
     this.icon,
-    this.theme,
-  );
+    this.theme, {
+    required this.isDisabled,
+    required this.isHovered,
+    required this.isActive,
+  });
 
   final bool isDisabled;
   final bool isHovered;
@@ -89,26 +96,26 @@ class _ToolbarButtonPainter extends CustomPainter {
     canvas.save();
     canvas.scale(size.height / 20.0);
 
+    final renderState = _renderState;
+
     final radius = Radius.circular(theme.buttonRadius);
-    final color = isDisabled
-        ? theme.buttonDisabledColor
-        : isActive
-            ? theme.buttonActiveColor
-            : isHovered
-                ? theme.buttonHoverColor
-                : theme.buttonColor;
+    final color = switch (renderState) {
+      _ToolbarButtonRenderState.disabled => theme.buttonDisabledColor,
+      _ToolbarButtonRenderState.active => theme.buttonActiveColor,
+      _ToolbarButtonRenderState.hovered => theme.buttonHoverColor,
+      _ToolbarButtonRenderState.normal => theme.buttonColor,
+    };
     canvas.drawRRect(
       RRect.fromLTRBR(0, 0, size.width / scale, 20.0, radius),
       Paint()..color = color,
     );
 
-    final textColor = isDisabled
-        ? theme.buttonDisabledTextColor
-        : isActive
-            ? theme.buttonActiveTextColor
-            : isHovered
-                ? theme.buttonHoverTextColor
-                : theme.buttonTextColor;
+    final textColor = switch (renderState) {
+      _ToolbarButtonRenderState.disabled => theme.buttonDisabledTextColor,
+      _ToolbarButtonRenderState.active => theme.buttonActiveTextColor,
+      _ToolbarButtonRenderState.hovered => theme.buttonHoverTextColor,
+      _ToolbarButtonRenderState.normal => theme.buttonTextColor,
+    };
     canvas.translate(size.width / scale / 2, 10);
     canvas.drawPath(icon, Paint()..color = textColor);
     canvas.restore();
@@ -120,5 +127,18 @@ class _ToolbarButtonPainter extends CustomPainter {
         isActive != old.isActive ||
         isDisabled != old.isDisabled ||
         icon != old.icon;
+  }
+
+  _ToolbarButtonRenderState get _renderState {
+    if (isDisabled) {
+      return _ToolbarButtonRenderState.disabled;
+    }
+    if (isActive) {
+      return _ToolbarButtonRenderState.active;
+    }
+    if (isHovered) {
+      return _ToolbarButtonRenderState.hovered;
+    }
+    return _ToolbarButtonRenderState.normal;
   }
 }

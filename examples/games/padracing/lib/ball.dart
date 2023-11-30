@@ -11,14 +11,14 @@ import 'package:padracing/wall.dart';
 
 class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
   final double radius;
-  final Vector2 position;
+  final Vector2 initialPosition;
   final double rotation;
   final bool isMovable;
   final rng = Random();
   late final Paint _shaderPaint;
 
   Ball({
-    required this.position,
+    required this.initialPosition,
     this.radius = 80.0,
     this.rotation = 1.0,
     this.isMovable = true,
@@ -48,7 +48,7 @@ class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
     final def = BodyDef()
       ..userData = this
       ..type = isMovable ? BodyType.dynamic : BodyType.kinematic
-      ..position = position;
+      ..position = initialPosition;
     final body = world.createBody(def)..angularVelocity = rotation;
 
     final shape = CircleShape()..radius = radius;
@@ -72,7 +72,7 @@ class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
   }
 
   late Rect asRect = Rect.fromCircle(
-    center: position.toOffset(),
+    center: initialPosition.toOffset(),
     radius: radius,
   );
 }
@@ -82,12 +82,13 @@ List<Ball> createBalls(Vector2 trackSize, List<Wall> walls, Ball bigBall) {
   final rng = Random();
   while (balls.length < 20) {
     final ball = Ball(
-      position: Vector2.random(rng)..multiply(trackSize),
+      initialPosition: Vector2.random(rng)..multiply(trackSize),
       radius: 3.0 + rng.nextInt(5),
       rotation: (rng.nextBool() ? 1 : -1) * rng.nextInt(5).toDouble(),
     );
-    final touchesBall = ball.position.distanceTo(bigBall.position) <
-        ball.radius + bigBall.radius;
+    final touchesBall =
+        ball.initialPosition.distanceTo(bigBall.initialPosition) <
+            ball.radius + bigBall.radius;
     if (!touchesBall) {
       final touchesWall =
           walls.any((wall) => wall.asRect.overlaps(ball.asRect));

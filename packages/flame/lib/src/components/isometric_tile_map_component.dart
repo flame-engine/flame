@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/spritesheet.dart';
+import 'package:flame/src/sprite_sheet.dart';
 import 'package:meta/meta.dart';
 
 /// This is just a pair of <int, int>.
@@ -9,8 +9,11 @@ import 'package:meta/meta.dart';
 /// Represents a position in a matrix, or in this case, on the tilemap.
 @immutable
 class Block {
-  /// x and y coordinates on the matrix
-  final int x, y;
+  /// x coordinate in the matrix.
+  final int x;
+
+  /// y coordinate in the matrix.
+  final int y;
 
   const Block(this.x, this.y);
 
@@ -51,6 +54,9 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Note: this must be measured in the destination space.
   double? tileHeight;
 
+  /// Where the tileset's image is stored.
+  Sprite _renderSprite;
+
   IsometricTileMapComponent(
     this.tileset,
     this.matrix, {
@@ -63,6 +69,7 @@ class IsometricTileMapComponent extends PositionComponent {
     super.anchor,
     super.children,
     super.priority,
+    super.key,
   }) : _renderSprite = Sprite(tileset.image);
 
   /// This is the size the tiles will be drawn (either original or overwritten).
@@ -75,10 +82,8 @@ class IsometricTileMapComponent extends PositionComponent {
   /// tile size.
   double get effectiveTileHeight => tileHeight ?? (effectiveTileSize.y / 2);
 
-  Sprite _renderSprite;
   @override
-  void render(Canvas c) {
-    _renderSprite.image = tileset.image;
+  void render(Canvas canvas) {
     final size = effectiveTileSize;
     for (var i = 0; i < matrix.length; i++) {
       for (var j = 0; j < matrix[i].length; j++) {
@@ -87,7 +92,7 @@ class IsometricTileMapComponent extends PositionComponent {
           _renderSprite = tileset.getSpriteById(element);
           final p = getBlockRenderPositionInts(j, i);
           _renderSprite.render(
-            c,
+            canvas,
             position: p,
             size: size,
           );
@@ -111,8 +116,9 @@ class IsometricTileMapComponent extends PositionComponent {
       effectiveTileSize.x / 2,
       (effectiveTileSize.y / 2) / scalingFactor,
     )..multiply(scale);
-    final pos = Vector2(i.toDouble(), j.toDouble())..multiply(halfTile);
-    return cartToIso(pos) - halfTile;
+    final cartesianPosition = Vector2(i.toDouble(), j.toDouble())
+      ..multiply(halfTile);
+    return cartToIso(cartesianPosition) - halfTile;
   }
 
   /// Get the position of the center of the surface of the isometric tile in

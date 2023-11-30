@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -11,29 +12,44 @@ void main() {
 class TiledGame extends FlameGame {
   late TiledComponent mapComponent;
 
-  double time = 0;
-  Vector2 cameraTarget = Vector2.zero();
+  TiledGame()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 16 * 28,
+            height: 16 * 14,
+          ),
+        );
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-    mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
-    add(mapComponent);
+    camera.viewfinder
+      ..zoom = 0.5
+      ..anchor = Anchor.topLeft
+      ..add(
+        MoveToEffect(
+          Vector2(1000, 0),
+          EffectController(
+            duration: 10,
+            alternate: true,
+            infinite: true,
+          ),
+        ),
+      );
 
-    final objGroup =
+    mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
+    world.add(mapComponent);
+
+    final objectGroup =
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
 
-    camera.zoom = 0.5;
-    camera.viewport = FixedResolutionViewport(Vector2(16 * 28, 16 * 14));
-
     // We are 100% sure that an object layer named `AnimatedCoins`
     // exists in the example `map.tmx`.
-    for (final obj in objGroup!.objects) {
-      add(
+    for (final object in objectGroup!.objects) {
+      world.add(
         SpriteAnimationComponent(
           size: Vector2.all(20.0),
-          position: Vector2(obj.x, obj.y),
+          position: Vector2(object.x, object.y),
           animation: SpriteAnimation.fromFrameData(
             coins,
             SpriteAnimationData.sequenced(
@@ -45,21 +61,5 @@ class TiledGame extends FlameGame {
         ),
       );
     }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    time += dt;
-    final tiledMap = mapComponent.tileMap.map;
-    // Pan the camera down and right for 10 seconds, then reverse
-    if (time % 20 < 10) {
-      cameraTarget.x = tiledMap.width * tiledMap.tileWidth.toDouble() -
-          camera.viewport.effectiveSize.x;
-      cameraTarget.y = camera.viewport.effectiveSize.y;
-    } else {
-      cameraTarget.setZero();
-    }
-    camera.moveTo(cameraTarget);
   }
 }

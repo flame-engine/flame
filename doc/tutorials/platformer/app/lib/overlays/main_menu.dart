@@ -6,7 +6,7 @@ class MainMenu extends StatelessWidget {
   // Reference to parent game.
   final EmberQuestGame game;
 
-  const MainMenu({super.key, required this.game});
+  const MainMenu({required this.game, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +58,9 @@ class MainMenu extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const Text(
-                '''Use WASD or Arrow Keys for movement.  Space bar to jump.
-                 Collect as many stars as you can and avoid enemies!''',
+                '''Use WASD or Arrow Keys for movement.
+Space bar to jump.
+Collect as many stars as you can and avoid enemies!''',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: whiteTextColor,

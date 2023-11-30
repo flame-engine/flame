@@ -56,6 +56,9 @@ class DialogueLine extends DialogueEntry {
   final LineContent _content;
   String? _value;
 
+  /// The content of this Line.
+  LineContent? get content => _content;
+
   /// The character who is speaking the line. This can be null if the line does
   /// not contain a speaker.
   Character? get character => _character;
@@ -85,9 +88,9 @@ class DialogueLine extends DialogueEntry {
   bool get isConst => _content.isConst;
 
   @override
-  Future<void> processInDialogueRunner(DialogueRunner runner) {
+  Future<void> processInDialogueRunner(DialogueRunner dialogueRunner) {
     evaluate();
-    return runner.deliverLine(this);
+    return dialogueRunner.deliverLine(this);
   }
 
   /// Computes the [text] of the line, substituting the current values of all

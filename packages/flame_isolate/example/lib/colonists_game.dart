@@ -4,39 +4,45 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_isolate_example/brains/path_finder.dart';
+import 'package:flame_isolate_example/brains/worker_overmind.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/game_map/game_map.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/terrain/terrain.dart';
+import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_isolates_example/brains/path_finder.dart';
-import 'package:flutter_isolates_example/brains/worker_overmind.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/game_map/game_map.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/terrain/terrain.dart';
-import 'package:flutter_isolates_example/units/worker.dart';
 
-class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
-  final PositionComponent _cameraPos = PositionComponent();
+class ColonistsGame extends FlameGame with KeyboardEvents {
+  final PositionComponent _cameraPosition = PositionComponent();
   late final GameMap _currentMap;
-  late final WorkerOvermind workerOvermind;
+  ColonistsGame()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+        );
 
   @override
-  Future onLoad() async {
+  Future<void> onLoad() async {
+    super.onLoad();
+    camera.follow(_cameraPosition);
+    camera.viewfinder.zoom = 0.4;
+
     await Flame.images.load('bread.png');
     await Flame.images.load('worker.png');
     await Flame.images.load('cheese.png');
 
-    add(_currentMap = GameMap());
+    world.add(_currentMap = GameMap());
 
-    camera.followComponent(_cameraPos);
-    camera.zoom = 0.4;
-    _cameraPos.position = Vector2(
+    _cameraPosition.position = Vector2(
       GameMap.mapSizeX * Constants.tileSize / 2,
       GameMap.mapSizeY * Constants.tileSize / 2,
     );
 
-    add(workerOvermind = WorkerOvermind());
-
-    super.onLoad();
+    add(WorkerOvermind());
   }
 
   Terrain tileAtPosition(int x, int y) {
@@ -72,10 +78,16 @@ class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
       _leftForce = howMuch;
     } else if (event.data.logicalKey == LogicalKeyboardKey.numpadAdd &&
         event is RawKeyDownEvent) {
-      camera.zoom = min(camera.zoom + 0.1, 5);
+      camera.viewfinder.zoom = min(
+        camera.viewfinder.zoom + 0.1,
+        5,
+      );
     } else if (event.data.logicalKey == LogicalKeyboardKey.numpadSubtract &&
         event is RawKeyDownEvent) {
-      camera.zoom = max(camera.zoom - 0.1, 0.1);
+      camera.viewfinder.zoom = max(
+        camera.viewfinder.zoom - 0.1,
+        0.1,
+      );
     }
     return super.onKeyEvent(event, keysPressed);
   }
@@ -84,10 +96,13 @@ class ColonistsGame extends FlameGame with HasTappables, KeyboardEvents {
 
   @override
   void update(double dt) {
+    super.update(dt);
     direction.setValues(_rightForce - _leftForce, _downForce - _upForce);
     final step = direction..scale(cameraSpeed * dt * 4);
-    _cameraPos.position += step;
-    super.update(dt);
+    _cameraPosition.position += step;
+    if (workers.isNotEmpty) {
+      camera.follow(workers.first);
+    }
   }
 
   PathFinderData get pathFinderData => _currentMap.pathFinderData;

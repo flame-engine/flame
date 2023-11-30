@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
-import 'package:flutter_isolates_example/constants.dart';
-import 'package:flutter_isolates_example/objects/colonists_object.dart';
-import 'package:flutter_isolates_example/standard/int_vector2.dart';
+import 'package:flame_isolate_example/constants.dart';
+import 'package:flame_isolate_example/objects/colonists_object.dart';
+import 'package:flame_isolate_example/standard/int_vector2.dart';
 
 class Bread extends StaticColonistsObject {
   @override

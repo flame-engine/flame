@@ -33,16 +33,15 @@ Give us a star if you want to help give the engine exposure and grow the communi
 
 ## Installation
 
-Put the pub package as your dependency by putting the following in your `pubspec.yaml`:
+Add the `flame` package as a dependency in your `pubspec.yaml` by running the following command:
 
-```yaml
-dependencies:
-  flame: --VERSION--
+```console
+flutter pub add flame
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
 
-then run `pub get` and you are ready to start using it!
+then run `flutter pub get` and you are ready to start using it!
 
 
 ## Getting started
@@ -72,10 +71,11 @@ Flame doesn't bundle any network feature, which may be needed to write online mu
 
 If you are building a multiplayer game, here are some recommendations of packages/services:
 
-- [Nakama](https://github.com/Allan-Nava/nakama-flutter): Nakama is an open-source server designed
+- [Nakama](https://github.com/obrunsmann/flutter_nakama/): Nakama is an open-source server designed
  to power modern games and apps.
 - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
+- [Supabase](https://supabase.com/): A cheaper alternative to Firebase, based on Postgres.
 
 
 ### External assets

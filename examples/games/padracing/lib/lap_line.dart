@@ -10,12 +10,12 @@ import 'package:padracing/car.dart';
 import 'package:padracing/game_colors.dart';
 
 class LapLine extends BodyComponent with ContactCallbacks {
-  LapLine(this.id, this.position, this.size, this.isFinish)
+  LapLine(this.id, this.initialPosition, this.size, {required this.isFinish})
       : super(priority: 1);
 
   final int id;
   final bool isFinish;
-  final Vector2 position;
+  final Vector2 initialPosition;
   final Vector2 size;
   late final Rect rect = size.toRect();
   Image? _finishOverlay;
@@ -45,7 +45,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
 
     final groundBody = world.createBody(
       BodyDef(
-        position: position,
+        position: initialPosition,
         userData: this,
       ),
     );
@@ -57,7 +57,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
   late final Rect _scaledRect = (size * 10).toRect();
   late final Rect _drawRect = size.toRect();
 
-  Future<Image> createFinishOverlay() async {
+  Future<Image> createFinishOverlay() {
     final recorder = PictureRecorder();
     final canvas = Canvas(recorder, _scaledRect);
     final step = _scaledRect.width / 2;
