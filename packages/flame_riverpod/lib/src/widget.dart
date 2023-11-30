@@ -1,8 +1,16 @@
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// A [GameWidget] that provides access to [Component]s using
+/// [RiverpodComponentMixin] attached to [FlameGame]s using [RiverpodGameMixin]
+/// access to Riverpod [Provider]s.
+///
+/// The corresponding [State] object ([RiverpodAwareGameWidgetState]) assumes
+/// responsibilities associated with [ConsumerStatefulElement] in
+/// `flutter_riverpod`.
 class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
   RiverpodAwareGameWidget({required super.game, required this.key})
       : super(key: key);
