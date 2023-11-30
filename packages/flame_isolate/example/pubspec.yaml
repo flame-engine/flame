@@ -10,15 +10,15 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.10.1
-  flame_isolate: ^0.5.0+3
+  flame: ^1.11.0
+  flame_isolate: ^0.5.0+4
   flutter:
     sdk: flutter
   integral_isolates: ^0.3.0
   quiver: ^3.2.1
 
 dev_dependencies:
-  flame_lint: ^1.1.1
+  flame_lint: ^1.1.2
 flutter:
   assets:
     - assets/images/

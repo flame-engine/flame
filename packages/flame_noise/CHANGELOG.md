@@ -1,3 +1,7 @@
+## 0.1.1+9
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
 ## 0.1.1+8
 
  - Update a dependency to the latest release.

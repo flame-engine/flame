@@ -1,3 +1,7 @@
+## 0.16.0+1
+
+ - Update a dependency to the latest release.
+
 ## 0.16.0
  - Updated to Forge2D 0.12.2
 

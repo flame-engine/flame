@@ -17,7 +17,7 @@ dependencies:
   meta: ^1.9.1
 
 dev_dependencies:
-  flame_lint: ^1.1.1
+  flame_lint: ^1.1.2
   flutter_test:
     sdk: flutter
   mockito: ^5.4.2
