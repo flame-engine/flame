@@ -1,6 +1,7 @@
 # flame_riverpod
 
-[Riverpod](https://pub.dev/packages/flutter_riverpod) is a reactive caching and data-binding framework for Dart & Flutter.
+[Riverpod](https://pub.dev/packages/flutter_riverpod) is a reactive caching and data-binding
+framework for Dart & Flutter.
 
 In `flutter_riverpod`, widgets can be configured to rebuild when the state
 of a provider changes.
@@ -9,6 +10,7 @@ When using Flame, we are interacting with components, which are *not* Widgets.
 
 `flame_riverpod` provides the `RiverpodAwareGameWidget`, `RiverpodGameMixin`, and
 `RiverpodComponentMixin` to facilitate managing state from Providers in your Flame Game.
+
 
 ## Usage
 
