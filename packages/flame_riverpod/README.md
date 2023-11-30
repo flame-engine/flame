@@ -1,6 +1,6 @@
 # flame_riverpod
 
-Riverpod is a reactive caching and data-binding framework for Dart & Flutter.
+[Riverpod](https://pub.dev/packages/flutter_riverpod) is a reactive caching and data-binding framework for Dart & Flutter.
 
 In `flutter_riverpod`, widgets can be configured to rebuild when the state
 of a provider changes.
