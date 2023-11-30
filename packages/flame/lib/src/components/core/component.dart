@@ -701,7 +701,7 @@ class Component {
   /// If your component overrides [renderTree], then it almost certainly needs
   /// to override this method as well, so that this method can find all rendered
   /// components wherever they are.
-  Iterable<Component> componentsAtVector2(
+  Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) {
@@ -713,6 +713,21 @@ class Component {
     );
   }
 
+  /// This is a generic implementation of [componentsAtPoint]; refer to those
+  /// docs for context.
+  ///
+  /// This will find components intersecting a given location context [T]. The
+  /// context can be a single point or a more complicated structure. How to
+  /// interpret the structure T is determined by the provided lambdas,
+  /// [transformContext] and [checkContains].
+  ///
+  /// A simple choice of T would be a simple point (i.e. Vector2). In that case
+  /// transformContext needs to be able to transform a Vector2 on the parent
+  /// coordinate space into the coordinate space of a provided
+  /// [CoordinateTransform]; and [checkContains] must be able to determine if
+  /// a given [Component] "contains" the Vector2 (the definition of "contains"
+  /// will vary and shall be determined by the nature of the chosen location
+  /// context [T]).
   Iterable<Component> componentsAtLocation<T>(
     T locationContext,
     List<T>? nestedContexts,

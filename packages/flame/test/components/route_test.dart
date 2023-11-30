@@ -415,7 +415,7 @@ void main() {
       goldenFile: '../_goldens/route_decorator_removed.png',
     );
 
-    testWithFlameGame('componentsAtVector2 for opaque route', (game) async {
+    testWithFlameGame('componentsAtPoint for opaque route', (game) async {
       final initialComponent = PositionComponent(size: Vector2.all(100));
       final newComponent = PositionComponent(size: Vector2.all(100));
       final router = RouterComponent(
@@ -434,17 +434,17 @@ void main() {
       router.pushNamed('new');
       await game.ready();
       expect(
-        game.componentsAtVector2(Vector2(50, 50)).contains(newComponent),
+        game.componentsAtPoint(Vector2(50, 50)).contains(newComponent),
         isTrue,
       );
       expect(
-        game.componentsAtVector2(Vector2(50, 50)).contains(initialComponent),
+        game.componentsAtPoint(Vector2(50, 50)).contains(initialComponent),
         isFalse,
       );
     });
 
     testWithFlameGame(
-      'componentsAtVector2 for transparent route',
+      'componentsAtPoint for transparent route',
       (game) async {
         final initialComponent = PositionComponent(size: Vector2.all(100));
         final newComponent = PositionComponent(size: Vector2.all(100));
@@ -465,11 +465,11 @@ void main() {
         router.pushNamed('new');
         await game.ready();
         expect(
-          game.componentsAtVector2(Vector2(50, 50)).contains(newComponent),
+          game.componentsAtPoint(Vector2(50, 50)).contains(newComponent),
           isTrue,
         );
         expect(
-          game.componentsAtVector2(Vector2(50, 50)).contains(initialComponent),
+          game.componentsAtPoint(Vector2(50, 50)).contains(initialComponent),
           isTrue,
         );
       },

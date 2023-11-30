@@ -144,7 +144,7 @@ abstract class DisplacementEvent
       },
       // we only trigger the drag start if the component check passes, but
       // as the user drags the cursor it could end up outside the component
-      // bounds; we don't want the event to be lost, so we bypass the check
+      // bounds; we don't want the event to be lost, so we bypass the check.
       (component, context) => true,
     );
   }

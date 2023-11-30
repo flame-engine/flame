@@ -1125,7 +1125,7 @@ void main() {
       );
     });
 
-    group('componentsAtVector2()', () {
+    group('componentsAtPoint()', () {
       testWithFlameGame('nested components', (game) async {
         final world = game.world;
         final componentA = PositionComponent()
@@ -1142,7 +1142,7 @@ void main() {
         void matchComponentsAtPoint(Vector2 point, List<_Pair> expected) {
           final nested = <Vector2>[];
           var i = 0;
-          for (final component in world.componentsAtVector2(point, nested)) {
+          for (final component in world.componentsAtPoint(point, nested)) {
             expect(i, lessThan(expected.length));
             expect(component, expected[i].component);
             expect(nested, expected[i].points);

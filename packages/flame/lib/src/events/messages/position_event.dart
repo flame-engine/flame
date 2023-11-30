@@ -37,6 +37,6 @@ abstract class PositionEvent extends LocationContextEvent<Vector2> {
   Iterable<Component> collectApplicableChildren({
     required Component rootComponent,
   }) {
-    return rootComponent.componentsAtVector2(canvasPosition, renderingTrace);
+    return rootComponent.componentsAtPoint(canvasPosition, renderingTrace);
   }
 }

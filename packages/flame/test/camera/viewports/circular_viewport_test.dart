@@ -127,7 +127,7 @@ void main() {
         final viewport = game.camera.viewport;
 
         bool hit(double x, double y) {
-          final components = game.componentsAtVector2(Vector2(x, y)).toList();
+          final components = game.componentsAtPoint(Vector2(x, y)).toList();
           return components.first == viewport && components[1] == game.world;
         }
 
@@ -142,7 +142,7 @@ void main() {
 
         final nestedPoints = <Vector2>[];
         final center = Vector2(100, 50);
-        for (final component in game.componentsAtVector2(
+        for (final component in game.componentsAtPoint(
           center,
           nestedPoints,
         )) {

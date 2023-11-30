@@ -198,7 +198,7 @@ void main() {
       await game.ready();
 
       final nested = <Vector2>[];
-      final it = game.componentsAtVector2(Vector2(400, 300), nested).iterator;
+      final it = game.componentsAtPoint(Vector2(400, 300), nested).iterator;
       expect(it.moveNext(), true);
       expect(it.current, camera.viewport);
       expect(nested, [Vector2(400, 300), Vector2(300, 200)]);
@@ -216,11 +216,11 @@ void main() {
       // Check that `componentsAtPoint` is usable with non-top-level components
       // also.
       expect(
-        world.componentsAtVector2(Vector2(100, 100)).toList(),
+        world.componentsAtPoint(Vector2(100, 100)).toList(),
         [component, world],
       );
       expect(
-        component.componentsAtVector2(Vector2(100, 50)).toList(),
+        component.componentsAtPoint(Vector2(100, 50)).toList(),
         [component],
       );
     });

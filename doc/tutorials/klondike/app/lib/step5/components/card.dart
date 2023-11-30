@@ -279,7 +279,7 @@ class Card extends PositionComponent
     _isDragging = false;
     // Find out what is under the center-point of this card when it is dropped.
     final dropPiles = parent!
-        .componentsAtVector2(position + size / 2)
+        .componentsAtPoint(position + size / 2)
         .whereType<Pile>()
         .toList();
     if (dropPiles.isNotEmpty) {
