@@ -12,17 +12,17 @@ When using Flame, we are interacting with components, which are *not* Widgets.
 
 ## Usage
 
-You should use the `RiverpodAwareGameWidget` as your Flame `GameWidget`, the `RiverpodGameMixin` 
-mixin on your game that extends `FlameGame`, and the `RiverpodComponentMixin` on any components 
+You should use the `RiverpodAwareGameWidget` as your Flame `GameWidget`, the `RiverpodGameMixin`
+mixin on your game that extends `FlameGame`, and the `RiverpodComponentMixin` on any components
 interacting with Riverpod providers.
 
-The full range of operations defined in Riverpod's `WidgetRef` definition are accessible from 
+The full range of operations defined in Riverpod's `WidgetRef` definition are accessible from
 components.
 
 Subscriptions to a provider are managed in accordance with the lifecycle
 of a Flame Component: initialization occurs when a Component is mounted, and disposal
-occurs when a Component is removed. By default, the `RiverpodAwareGameWidget` is rebuilt when 
-Riverpod-aware (i.e. using the `RiverpodComponentMixin`) components are mounted and when they are 
+occurs when a Component is removed. By default, the `RiverpodAwareGameWidget` is rebuilt when
+Riverpod-aware (i.e. using the `RiverpodComponentMixin`) components are mounted and when they are
 removed.
 
 ```dart

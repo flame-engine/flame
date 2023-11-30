@@ -23,7 +23,7 @@ void main() {
     );
 
     // Expect a title 'e.g. Flutter' and the current count of the stream as
-    // seperate [Text] widget.
+    // separate [Text] widget.
     expect(flutterCounterTextFinder, findsNWidgets(2));
 
     final flutterCounterTextWidgets =
