@@ -30,6 +30,7 @@ proxying
 ptero # short for pterodactyl
 rebalance
 redeclaration
+refreshable
 renderable
 rescan
 tappable
@@ -38,3 +39,4 @@ toolset
 underutilize
 unproject
 unscale
+videon
