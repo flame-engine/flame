@@ -83,8 +83,8 @@ class RiverpodAwareTextComponent extends PositionComponent
   int currentValue = 0;
 
   /// [onMount] should be used over [onLoad] to initialize subscriptions,
-  /// cancellation is handled for the user inside [onRemove],
   /// which is only called if the [Component] was mounted.
+  /// Cancellation is handled for the user automatically inside [onRemove].
   ///
   /// [RiverpodComponentMixin.addToGameWidgetBuild] **must** be invoked in
   /// your Component **before** [RiverpodComponentMixin.onMount] in order to
