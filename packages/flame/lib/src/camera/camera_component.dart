@@ -221,8 +221,6 @@ class CameraComponent extends Component {
     return viewport.localToGlobal(viewfinderPosition, output: output);
   }
 
-  final _viewportPoint = Vector2.zero();
-
   @override
   Iterable<Component> componentsAtLocation<T>(
     T locationContext,
@@ -243,7 +241,7 @@ class CameraComponent extends Component {
     );
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(_viewportPoint)) {
+      if (checkContains(viewport, viewportPoint)) {
         currentCameras.add(this);
         final worldPoint = transformContext(viewfinder, viewportPoint);
         if (worldPoint == null) {
