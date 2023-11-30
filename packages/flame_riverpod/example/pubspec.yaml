@@ -6,8 +6,7 @@ environment:
   sdk: '>=2.18.5 <3.0.0'
 dependencies:
   flame: ^1.10.1
-  flame_riverpod:
-    path: ../
+  flame_riverpod: ^5.0.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.1.3
