@@ -1,3 +1,7 @@
+## 1.9.7
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
 ## 1.9.6
 
  - Bump to Rive 0.12.3

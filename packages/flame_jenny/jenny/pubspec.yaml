@@ -1,6 +1,6 @@
 name: jenny
 description: YarnSpinner equivalent for Dart.
-version: 1.2.0
+version: 1.2.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_jenny/jenny
 funding:
   - https://opencollective.com/blue-fire
@@ -15,5 +15,5 @@ dependencies:
 
 dev_dependencies:
   dartdoc: ^6.3.0
-  flame_lint: ^1.1.1
+  flame_lint: ^1.1.2
   test: any

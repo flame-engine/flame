@@ -11,13 +11,13 @@ environment:
 
 dependencies:
   dashbook: ^0.1.12
-  flame: ^1.10.1
-  flame_forge2d: ^0.16.0
+  flame: ^1.11.0
+  flame_forge2d: ^0.16.0+1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.1
+  flame_lint: ^1.1.2
   flutter_test:
     sdk: flutter
 
