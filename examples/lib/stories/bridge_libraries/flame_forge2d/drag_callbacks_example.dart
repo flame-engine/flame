@@ -36,7 +36,7 @@ class DraggableBall extends Ball with DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    body.applyLinearImpulse(event.delta * 1000);
+    body.applyLinearImpulse(event.localDelta * 1000);
   }
 
   @override

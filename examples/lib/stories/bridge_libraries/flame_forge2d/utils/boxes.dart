@@ -64,10 +64,7 @@ class DraggableBox extends Box with DragCallbacks {
 
   @override
   bool onDragUpdate(DragUpdateEvent info) {
-    final target = info.localPosition;
-    if (target.isNaN) {
-      return false;
-    }
+    final target = info.localEndPosition;
     final mouseJointDef = MouseJointDef()
       ..maxForce = body.mass * 300
       ..dampingRatio = 0

@@ -265,8 +265,7 @@ class Card extends PositionComponent
     if (!_isDragging) {
       return;
     }
-    final cameraZoom = findGame()!.camera.viewfinder.zoom;
-    final delta = event.delta / cameraZoom;
+    final delta = event.localDelta;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
   }

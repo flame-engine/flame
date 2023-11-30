@@ -12,7 +12,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// transformation, that is, the transform applies to all children of the
 /// component equally. If that is not the case (for example, the component does
 /// different transformations for some of its children), then that component
-/// must implement [Component.componentsAtPoint] method instead.
+/// must implement [Component.componentsAtLocation] method instead.
 ///
 /// The two methods of this interface convert between the parent's coordinate
 /// space and the local coordinates. The methods may also return `null`,
