@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
@@ -62,8 +63,8 @@ import 'package:meta/meta.dart';
 /// [update]d, and then all the components will be [render]ed.
 ///
 /// You may also need to override [containsLocalPoint] if the component needs to
-/// respond to tap events or similar; the [componentsAtPoint] may also need to
-/// be overridden if you have reimplemented [renderTree].
+/// respond to tap events or similar; the [componentsAtLocation] may also need
+/// to be overridden if you have reimplemented [renderTree].
 class Component {
   Component({
     Iterable<Component>? children,
@@ -703,28 +704,65 @@ class Component {
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
-  ]) sync* {
-    nestedPoints?.add(point);
+  ]) {
+    return componentsAtLocation<Vector2>(
+      point,
+      nestedPoints,
+      (transform, point) => transform.parentToLocal(point),
+      (component, point) => component.containsLocalPoint(point),
+    );
+  }
+
+  /// This is a generic implementation of [componentsAtPoint]; refer to those
+  /// docs for context.
+  ///
+  /// This will find components intersecting a given location context [T]. The
+  /// context can be a single point or a more complicated structure. How to
+  /// interpret the structure T is determined by the provided lambdas,
+  /// [transformContext] and [checkContains].
+  ///
+  /// A simple choice of T would be a simple point (i.e. Vector2). In that case
+  /// transformContext needs to be able to transform a Vector2 on the parent
+  /// coordinate space into the coordinate space of a provided
+  /// [CoordinateTransform]; and [checkContains] must be able to determine if
+  /// a given [Component] "contains" the Vector2 (the definition of "contains"
+  /// will vary and shall be determined by the nature of the chosen location
+  /// context [T]).
+  Iterable<Component> componentsAtLocation<T>(
+    T locationContext,
+    List<T>? nestedContexts,
+    T? Function(CoordinateTransform, T) transformContext,
+    bool Function(Component, T) checkContains,
+  ) sync* {
+    nestedContexts?.add(locationContext);
     if (_children != null) {
       for (final child in _children!.reversed()) {
         if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
-        Vector2? childPoint = point;
+        T? childPoint = locationContext;
         if (child is CoordinateTransform) {
-          childPoint = (child as CoordinateTransform).parentToLocal(point);
+          childPoint = transformContext(
+            child as CoordinateTransform,
+            locationContext,
+          );
         }
         if (childPoint != null) {
-          yield* child.componentsAtPoint(childPoint, nestedPoints);
+          yield* child.componentsAtLocation(
+            childPoint,
+            nestedContexts,
+            transformContext,
+            checkContains,
+          );
         }
       }
     }
     final shouldIgnoreEvents =
         this is IgnoreEvents && (this as IgnoreEvents).ignoreEvents;
-    if (containsLocalPoint(point) && !shouldIgnoreEvents) {
+    if (checkContains(this, locationContext) && !shouldIgnoreEvents) {
       yield this;
     }
-    nestedPoints?.removeLast();
+    nestedContexts?.removeLast();
   }
 
   //#endregion
@@ -974,10 +1012,21 @@ class Component {
   /// Returns a [TextPaint] object with the [debugColor] set as color for the
   /// text.
   TextPaint get debugTextPaint {
-    final zoom = CameraComponent.currentCamera?.viewfinder.zoom ?? 1.0;
+    final viewfinder = CameraComponent.currentCamera?.viewfinder;
+    final viewport = CameraComponent.currentCamera?.viewport;
+    final zoom = viewfinder?.zoom ?? 1.0;
+
+    final viewportScale = math.max(
+      viewport?.transform.scale.x ?? 1,
+      viewport?.transform.scale.y ?? 1,
+    );
+
     if (!_debugTextPaintCache.isCacheValid([debugColor])) {
       final textPaint = TextPaint(
-        style: TextStyle(color: debugColor, fontSize: 12 / zoom),
+        style: TextStyle(
+          color: debugColor,
+          fontSize: 12 / zoom / viewportScale,
+        ),
       );
       _debugTextPaintCache.updateCache(textPaint, [debugColor]);
     }

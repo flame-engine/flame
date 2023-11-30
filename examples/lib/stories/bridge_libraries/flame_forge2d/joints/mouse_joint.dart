@@ -55,7 +55,7 @@ class MouseJointWorld extends Forge2DWorld
 
   @override
   void onDragUpdate(DragUpdateEvent info) {
-    mouseJoint?.setTarget(info.localPosition);
+    mouseJoint?.setTarget(info.localEndPosition);
   }
 
   @override
