@@ -13,7 +13,7 @@ void main() {
       await game.ensureAdd(component);
       const color = Colors.red;
       await component.add(
-        ColorEffect(color, const Offset(0, 1), EffectController(duration: 1)),
+        ColorEffect(color, EffectController(duration: 1)),
       );
       game.update(0);
       expect(
@@ -43,7 +43,6 @@ void main() {
 
         final effect = ColorEffect(
           color,
-          const Offset(0, 1),
           EffectController(duration: 1),
         );
         await component.add(effect);
@@ -71,7 +70,6 @@ void main() {
 
         final effect = ColorEffect(
           Colors.red,
-          const Offset(0, 1),
           EffectController(duration: 1),
         );
         await component.ensureAdd(effect);
@@ -85,5 +83,53 @@ void main() {
         );
       },
     );
+
+    test('Validates opacity values', () {
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityTo: 1.1,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityFrom: 255,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityTo: -254,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityFrom: -0.5,
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => ColorEffect(
+          Colors.blue,
+          EffectController(duration: 1),
+          opacityFrom: 0.1,
+          opacityTo: 0.9,
+        ),
+        returnsNormally,
+      );
+    });
   });
 }
