@@ -1,3 +1,7 @@
+## 0.5.0+4
+
+ - **DOCS**: Update flame_isolate to point at repository ([#2880](https://github.com/flame-engine/flame/issues/2880)). ([06fdeac6](https://github.com/flame-engine/flame/commit/06fdeac684b2be26206d50282e6a7f2cbac4264c))
+
 ## 0.5.0+3
 
  - Update a dependency to the latest release.

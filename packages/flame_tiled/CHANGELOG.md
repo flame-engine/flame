@@ -1,3 +1,10 @@
+## 1.18.0
+
+ - **FIX**: TiledComponent.atlases had duplicated values ([#2867](https://github.com/flame-engine/flame/issues/2867)). ([e56ad187](https://github.com/flame-engine/flame/commit/e56ad1878333ba19e0c8af3fb9c9758603662330))
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+ - **FEAT**: Adding configurable padding to Tiled atlas packing ([#2868](https://github.com/flame-engine/flame/issues/2868)). ([d0c10cbb](https://github.com/flame-engine/flame/commit/d0c10cbbea20415de471ad0269a22c168082b02d))
+ - **FEAT**: Exposing atlases for reading in a TiledComponent ([#2865](https://github.com/flame-engine/flame/issues/2865)). ([e1b4d93a](https://github.com/flame-engine/flame/commit/e1b4d93ad43a4e1b1b55a3843e26612b73d45ed7))
+
 ## 1.17.0
 
  - **FIX**: Configuration useAtlas was not been propagated correctly everywhere ([#2853](https://github.com/flame-engine/flame/issues/2853)). ([2f0dab9e](https://github.com/flame-engine/flame/commit/2f0dab9e59958176e6c46f6e417188e6c4fa3831))

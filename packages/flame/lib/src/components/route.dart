@@ -1,13 +1,10 @@
 import 'dart:ui';
 
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/mixins/parent_is_a.dart';
-import 'package:flame/src/components/position_component.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/components/router_component.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/rendering/decorator.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Route] is a light-weight component that builds and manages a page.
 ///
@@ -166,12 +163,19 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   }
 
   @override
-  Iterable<Component> componentsAtPoint(
-    Vector2 point, [
-    List<Vector2>? nestedPoints,
-  ]) {
+  Iterable<Component> componentsAtLocation<T>(
+    T locationContext,
+    List<T>? nestedContexts,
+    T? Function(CoordinateTransform, T) transformContext,
+    bool Function(Component, T) checkContains,
+  ) {
     if (isRendered) {
-      return super.componentsAtPoint(point, nestedPoints);
+      return super.componentsAtLocation(
+        locationContext,
+        nestedContexts,
+        transformContext,
+        checkContains,
+      );
     } else {
       return const Iterable<Component>.empty();
     }
