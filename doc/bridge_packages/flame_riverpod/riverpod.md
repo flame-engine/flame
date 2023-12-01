@@ -23,7 +23,7 @@ interacting with Riverpod providers.
 
 Subscriptions to a provider are managed in accordance with the lifecycle
 of a Flame Component: initialization occurs when a Component is mounted, and disposal
-occurs when a Component is removed. 
+occurs when a Component is removed.
 
 By default, the `RiverpodAwareGameWidget` is rebuilt when
 Riverpod-aware (i.e. using the `RiverpodComponentMixin`) components are mounted and when they are
