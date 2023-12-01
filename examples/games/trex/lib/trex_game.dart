@@ -15,7 +15,7 @@ import 'package:trex_game/player.dart';
 enum GameState { playing, intro, gameOver }
 
 class TRexGame extends FlameGame
-    with KeyboardEvents, TapDetector, HasCollisionDetection {
+    with KeyboardEvents, TapCallbacks, HasCollisionDetection {
   static const String description = '''
     A game similar to the game in chrome that you get to play while offline.
     Press space or tap/click the screen to jump, the more obstacles you manage
@@ -33,11 +33,11 @@ class TRexGame extends FlameGame
   late final TextComponent scoreText;
 
   int _score = 0;
-  int _highscore = 0;
+  int _highScore = 0;
   int get score => _score;
   set score(int newScore) {
     _score = newScore;
-    scoreText.text = '${scoreString(_score)}  HI ${scoreString(_highscore)}';
+    scoreText.text = '${scoreString(_score)}  HI ${scoreString(_highScore)}';
   }
 
   String scoreString(int score) => score.toString().padLeft(5, '0');
@@ -99,7 +99,7 @@ class TRexGame extends FlameGame
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent event) {
     onAction();
   }
 
@@ -125,8 +125,8 @@ class TRexGame extends FlameGame
     currentSpeed = startSpeed;
     gameOverPanel.visible = false;
     timePlaying = 0.0;
-    if (score > _highscore) {
-      _highscore = score;
+    if (score > _highScore) {
+      _highScore = score;
     }
     score = 0;
     _distanceTraveled = 0;
