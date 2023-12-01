@@ -29,6 +29,7 @@ proxying
 ptero # short for pterodactyl
 rebalance
 redeclaration
+refreshable
 renderable
 rescan
 tappable
