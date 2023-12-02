@@ -27,12 +27,13 @@ class Card extends PositionComponent
   final Rank rank;
   final Suit suit;
   Pile? pile;
-  final bool isBaseCard;
+
   // A Base Card is rendered in outline only and is NOT playable. It can be
   // added to the base of a Pile (e.g. the Stock Pile) to allow it to handle
   // taps and short drags (on an empty Pile) with the same behavior and
   // tolerances as for regular cards (see KlondikeGame.dragTolerance) and using
   // the same event-handling code, but with different handleTapUp() methods.
+  final bool isBaseCard;
 
   bool _faceUp = false;
   bool _isAnimatedFlip = false;
@@ -271,8 +272,8 @@ class Card extends PositionComponent
       _isDragging = false;
       return;
     }
-    // Copy each co-ord, else _whereCardStarted changes as the position does.
-    _whereCardStarted = Vector2(position.x, position.y);
+    // Clone the position, else _whereCardStarted changes as the position does.
+    _whereCardStarted = position.clone();
     attachedCards.clear();
     if (pile?.canMoveCard(this, MoveMethod.drag) ?? false) {
       _isDragging = true;
