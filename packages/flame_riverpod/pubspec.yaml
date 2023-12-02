@@ -4,7 +4,7 @@ description: Helpers for using Riverpod - a reactive caching and data-binding fr
 version: 5.0.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_riverpod
 environment:
-  sdk: '>=2.18.5 <4.0.0'
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=1.17.0"
 dependencies:
   flame: ^1.10.1

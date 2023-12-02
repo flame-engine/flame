@@ -121,6 +121,50 @@ Future<void> main() async {
     );
 
     testWidgets(
+      'does not resets the ticker when has a new animation',
+      (tester) async {
+        final frames = List.generate(5, (_) => Sprite(image));
+        final animation = SpriteAnimation.spriteList(
+          frames,
+          stepTime: 0.1,
+          loop: false,
+        );
+        final animationTicker = SpriteAnimationTicker(animation);
+
+        animationTicker.setToLast();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  children: [
+                    SpriteAnimationWidget(
+                      animation: animation,
+                      animationTicker: animationTicker,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: const Text('Change animations'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+        animationTicker.setToLast();
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+
+        expect(animationTicker.isLastFrame, isTrue);
+      },
+    );
+
+    testWidgets(
       'onComplete callback is called when the animation is finished',
       (tester) async {
         const imagePath = 'test_image_path';
