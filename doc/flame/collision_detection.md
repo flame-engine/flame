@@ -119,6 +119,7 @@ hitbox without triggering a collision. If you want to set your hitboxes to be so
 other way around. If there are no intersections with the edges on a solid hitbox the center
 position is instead returned.
 
+
 ### Collision order
 
 If a `PositionComponent` collides with more than one other object within a given time step, then
@@ -131,7 +132,8 @@ An example of how this might be used is to add a local variable in your `Positio
 the other components with which this one is colliding:
 `List<PositionComponent> collisionComponents = [];`.  The `onCollision` callback is then used to
 save all the other `PositionComponent`s to this list:
-```
+
+```dart
 @override
 void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
   collisionComponents.add(other);
@@ -139,14 +141,19 @@ void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
 }
 
 ```
+
 Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a routine
 which will resolve how the collisions should be dealt with:
-```
-(game as HasCollisionDetection).collisionDetection.collisionsCompleted.addListener(() {
+
+```dart
+(game as HasCollisionDetection).collisionDetection.collisionsCompleted.
+                                addListener(() {
   resolveCollisions();
 });
 ```
+
 The list `collisionComponents` would need to be cleared in each call to `update`.
+
 
 ## ShapeHitbox
 
