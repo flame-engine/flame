@@ -3,10 +3,10 @@ import 'package:flame/events.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 
-/// [ScrollTextBoxComponent] configures the layout and
-/// interactivity of a scrollable text box.
-/// It focuses on the box's size, scrolling mechanics,
-/// padding, and alignment, contrasting with [TextRenderer],
+/// [ScrollTextBoxComponent] configures the layout and interactivity of a
+/// scrollable text box.
+/// It focuses on the box's size, scrolling mechanics, padding, and alignment,
+/// contrasting with [TextRenderer],
 /// which handles text appearance like font and color.
 /// This component uses [TextBoxComponent] to provide
 /// scrollable text capabilities.
@@ -68,8 +68,9 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
       pixelRatio: pixelRatio,
       innerMargins: innerMargins,
     );
-    // Integrates the [ClipComponent] for managing the text box's
-    // scrollable area.
+    _scrollTextBoxComponent.setOwnerComponent = this;
+    // Integrates the [ClipComponent] for managing
+    // the text box's scrollable area.
     add(
       ClipComponent.rectangle(
         size: desiredFrameSize - Vector2(0, innerMargins.vertical),
@@ -84,9 +85,12 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   }
 
   /// Override this method to provide a custom background to the text box.
-  void drawBackground(Canvas c) {
-    _scrollTextBoxComponent.drawBackground(c);
-  }
+  ///
+  /// Note: The background is designed to stretch across the entire scrollable
+  /// area of the text box. This ensures that as the user scrolls through the
+  /// text, the background moves in sync with the text. As an alternative,
+  /// consider adding [ScrollTextBoxComponent] to a [SpriteComponent].
+  void drawBackground(Canvas c) {}
 }
 
 /// Private class handling the internal workings of [ScrollTextBoxComponent].
@@ -103,6 +107,7 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
   final EdgeInsets innerMargins;
 
   late final ClipComponent clipComponent;
+  late ScrollTextBoxComponent<TextRenderer> _owner;
 
   _ScrollTextBoxComponent({
     required this.desiredFrameSize,
@@ -144,5 +149,14 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
       position += Vector2(0, event.localDelta.y);
       position.y = position.y.clamp(-scrollBoundsY, 0);
     }
+  }
+
+  @override
+  void drawBackground(Canvas c) {
+    _owner.drawBackground(c);
+  }
+
+  set setOwnerComponent(ScrollTextBoxComponent scrollTextBoxComponent) {
+    _owner = scrollTextBoxComponent;
   }
 }
