@@ -113,7 +113,7 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
 
   @override
   bool onDragUpdate(DragUpdateEvent event) {
-    _unscaledDelta.add(event.delta);
+    _unscaledDelta.add(event.localDelta);
     return false;
   }
 

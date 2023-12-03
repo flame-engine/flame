@@ -39,7 +39,6 @@ class DraggableEmber extends Ember with DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    event.continuePropagation = true;
-    return;
+    position += event.localDelta;
   }
 }
