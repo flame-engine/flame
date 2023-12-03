@@ -69,7 +69,7 @@ mixin Snapshot on PositionComponent {
     return _picture!;
   }
 
-  /// clear the current snapshot. will trigger the creation of a new snapshot 
+  /// clear the current snapshot. will trigger the creation of a new snapshot
   /// next time renderTree is called.
   void clearSnapshot() {
     _picture = null;
