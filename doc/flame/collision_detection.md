@@ -125,8 +125,8 @@ position is instead returned.
 If a `PositionComponent` collides with more than one other object within a given time step, then
 the `onCollision` callbacks will be called in an essentially random order.  In some cases this can
 be a problem, such as in a bouncing ball game where the trajectory of the ball can differ depending
-on which other object was hit first.  To help resolve this the `collisionsCompleted` listener can be
-used - this triggers at the end of the collision detection process.
+on which other object was hit first.  To help resolve this the `collisionsCompletedNotifier`
+listener can be used - this triggers at the end of the collision detection process.
 
 An example of how this might be used is to add a local variable in your `PositionComponent` to save
 the other components with which this one is colliding:
@@ -146,7 +146,7 @@ Finally, one adds a listener to the `onLoad` method of the `PositionComponent` t
 which will resolve how the collisions should be dealt with:
 
 ```dart
-(game as HasCollisionDetection).collisionDetection.collisionsCompleted.
+(game as HasCollisionDetection).collisionDetection.collisionsCompletedNotifier.
                                 addListener(() {
   resolveCollisions();
 });

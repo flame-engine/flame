@@ -14,7 +14,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 
   List<T> get items => broadphase.items;
   final _lastPotentials = <CollisionProspect<T>>[];
-  final collisionsCompleted = CollisionDetectionCompletionNotifier();
+  final collisionsCompletedNotifier = CollisionDetectionCompletionNotifier();
 
   CollisionDetection({required this.broadphase});
 
@@ -66,7 +66,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     _updateLastPotentials(potentials);
 
     // Let all listeners know that the collision detection step has completed
-    collisionsCompleted.notifyListeners();
+    collisionsCompletedNotifier.notifyListeners();
   }
 
   final _lastPotentialsPool = <CollisionProspect<T>>[];
