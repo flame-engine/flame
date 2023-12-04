@@ -65,7 +65,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     }
     _updateLastPotentials(potentials);
 
-    // Let any listeners know that the collision detection step has completed
+    // Let all listeners know that the collision detection step has completed
     collisionsCompleted.notifyListeners();
   }
 
