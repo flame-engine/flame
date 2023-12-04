@@ -1765,6 +1765,7 @@ void main() {
         for(final listener in listeners) {
           game.collisionDetection.collisionsCompletedNotifier.addListener(listener);
         }
+        game.update(0);
         expect(calledTimes, listeners.length);
       },
     });
