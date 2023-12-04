@@ -168,22 +168,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 }
 
 /// Add a basic class which implements a Listener.
-class CollisionDetectionCompletionNotifier implements Listenable {
-  final List<VoidCallback> _listenFunctions = [];
-
+class CollisionDetectionCompletionNotifier extends ChangeNotifier {
   @override
-  void addListener(VoidCallback listener) {
-    _listenFunctions.add(listener);
-  }
-
-  @override
-  void removeListener(VoidCallback listener) {
-    _listenFunctions.remove(listener);
-  }
-
-  void notifyListeners() {
-    for (final callback in _listenFunctions) {
-      callback();
-    }
-  }
+  void notifyListeners() => super.notifyListeners();
 }
