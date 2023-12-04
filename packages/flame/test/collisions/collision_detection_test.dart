@@ -1756,6 +1756,19 @@ void main() {
       },
     });
   });
+
+  group('collisionsCompletedNotifier', (){
+    runCollisionTestRegistry({
+      'collisionsCompletedNotifier calls listeners': (game) async {
+        var calledTimes = 0;
+        final listeners = List.generate(10, (_) => () => calledTimes++);
+        for(final listener in listeners) {
+          game.collisionDetection.collisionsCompletedNotifier.addListener(listener);
+        }
+        expect(calledTimes, listeners.length);
+      },
+    });
+  });
 }
 
 class _CollisionDetectionGame extends FlameGame with HasCollisionDetection {}
