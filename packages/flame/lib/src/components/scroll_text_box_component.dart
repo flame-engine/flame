@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/text.dart';
@@ -14,17 +16,16 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
 
   /// Constructor for [ScrollTextBoxComponent].
-  /// - [desiredFrameSize]: Specifies the size of the text box.
+  /// - [size]: Specifies the size of the text box.
   /// Must have positive dimensions.
   /// - [text]: The text content to be displayed.
   /// - [textRenderer]: Handles the rendering of the text.
   /// - [boxConfig]: Configuration for the text box appearance.
   /// - Other parameters include alignment, pixel ratio, and
   /// positioning settings.
-  /// An assertion ensures that the [desiredFrameSize] has
-  /// positive dimensions.
+  /// An assertion ensures that the [size] has positive dimensions.
   ScrollTextBoxComponent({
-    required Vector2 desiredFrameSize,
+    required Vector2 size,
     String? text,
     T? textRenderer,
     TextBoxConfig? boxConfig,
@@ -37,10 +38,11 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     super.priority,
     super.key,
     List<Component>? children,
-  }) : assert(
-          desiredFrameSize.x > 0 && desiredFrameSize.y > 0,
-          'desiredFrameSize must have positive dimensions: $desiredFrameSize',
-        ) {
+  })  : assert(
+          size.x > 0 && size.y > 0,
+          'size must have positive dimensions: $size',
+        ),
+        super(size: size) {
     final marginTop = boxConfig?.margins.top ?? 0;
     final marginBottom = boxConfig?.margins.bottom ?? 0;
     final innerMargins = EdgeInsets.fromLTRB(0, marginTop, 0, marginBottom);
@@ -50,7 +52,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
       timePerChar: boxConfig.timePerChar,
       dismissDelay: boxConfig.dismissDelay,
       growingBox: boxConfig.growingBox,
-      maxWidth: desiredFrameSize.x,
+      maxWidth: size.x,
       margins: EdgeInsets.fromLTRB(
         boxConfig.margins.left,
         0,
@@ -60,24 +62,21 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     );
 
     _scrollTextBoxComponent = _ScrollTextBoxComponent<T>(
-      desiredFrameSize: desiredFrameSize - Vector2(0, innerMargins.vertical),
       text: text,
       textRenderer: textRenderer,
       boxConfig: boxConfig,
       align: align,
       pixelRatio: pixelRatio,
-      innerMargins: innerMargins,
     );
     _scrollTextBoxComponent.setOwnerComponent = this;
     // Integrates the [ClipComponent] for managing
     // the text box's scrollable area.
     add(
       ClipComponent.rectangle(
-        size: desiredFrameSize - Vector2(0, innerMargins.vertical),
-        position: Vector2(0, marginTop),
+        size: size - Vector2(0, innerMargins.vertical),
+        position: Vector2(0, innerMargins.top),
         angle: angle,
         scale: scale,
-        anchor: anchor,
         priority: priority,
         children: children,
       )..add(_scrollTextBoxComponent),
@@ -97,21 +96,17 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
 ///
 /// Extends [TextBoxComponent] and incorporates
 /// drag callbacks for text scrolling.
-/// It manages the rendering and user interaction
-/// for the text within the box.
+/// It manages the rendering and user interaction for the text within the box.
 class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     with DragCallbacks {
-  final Vector2 desiredFrameSize;
   double scrollBoundsY = 0.0;
   int _linesScrolled = 0;
-  final EdgeInsets innerMargins;
 
   late final ClipComponent clipComponent;
+
   late ScrollTextBoxComponent<TextRenderer> _owner;
 
   _ScrollTextBoxComponent({
-    required this.desiredFrameSize,
-    required this.innerMargins,
     String? text,
     T? textRenderer,
     TextBoxConfig? boxConfig,

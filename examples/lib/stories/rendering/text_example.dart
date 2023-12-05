@@ -11,46 +11,77 @@ class TextExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    addAll([
-      TextComponent(text: 'Hello, Flame', textRenderer: _regular)
-        ..anchor = Anchor.topCenter
-        ..x = size.x / 2
-        ..y = 32.0,
-      TextComponent(text: 'Text with shade', textRenderer: _shaded)
-        ..anchor = Anchor.topRight
-        ..position = size - Vector2.all(100),
-      TextComponent(text: 'center', textRenderer: _tiny)
-        ..anchor = Anchor.center
-        ..position.setFrom(size / 2),
-      TextComponent(text: 'bottomRight', textRenderer: _tiny)
-        ..anchor = Anchor.bottomRight
-        ..position.setFrom(size),
-      MyTextBox(
-        '"This is our world now. The world of the electron and the switch; '
-        'the beauty of the baud. We exist without nationality, skin color, '
-        'or religious bias. You wage wars, murder, cheat, lie to us and try '
-        "to make us believe it's for our own good, yet we're the "
-        'criminals. Yes, I am a criminal. My crime is that of curiosity."',
-      )
-        ..anchor = Anchor.bottomLeft
-        ..y = size.y,
-      MyTextBox(
-        'Let A be a finitely generated torsion-free abelian group. Then '
-        'A is free.',
-        align: Anchor.center,
-        size: Vector2(300, 200),
-        timePerChar: 0,
-        margins: 10,
-      )..position = Vector2(10, 50),
-      MyTextBox(
-        'Let A be a torsion abelian group. Then A is the direct sum of its '
-        'subgroups A(p) for all primes p such that A(p) ≠ 0.',
-        align: Anchor.bottomRight,
-        size: Vector2(300, 200),
-        timePerChar: 0,
-        margins: 10,
-      )..position = Vector2(10, 260),
-    ]);
+    addAll(
+      [
+        TextComponent(text: 'Hello, Flame', textRenderer: _regular)
+          ..anchor = Anchor.topCenter
+          ..x = size.x / 2
+          ..y = 32.0,
+        TextComponent(text: 'Text with shade', textRenderer: _shaded)
+          ..anchor = Anchor.topRight
+          ..position = size - Vector2.all(100),
+        TextComponent(text: 'center', textRenderer: _tiny)
+          ..anchor = Anchor.center
+          ..position.setFrom(size / 2),
+        TextComponent(text: 'bottomRight', textRenderer: _tiny)
+          ..anchor = Anchor.bottomRight
+          ..position.setFrom(size),
+        MyTextBox(
+          '"This is our world now. The world of the electron and the switch; '
+          'the beauty of the baud. We exist without nationality, skin color, '
+          'or religious bias. You wage wars, murder, cheat, lie to us and try '
+          "to make us believe it's for our own good, yet we're the "
+          'criminals. Yes, I am a criminal. My crime is that of curiosity."',
+        )
+          ..anchor = Anchor.bottomLeft
+          ..y = size.y,
+        MyTextBox(
+          'Let A be a finitely generated torsion-free abelian group. Then '
+          'A is free.',
+          align: Anchor.center,
+          size: Vector2(300, 200),
+          timePerChar: 0,
+          margins: 10,
+        )..position = Vector2(10, 50),
+        MyTextBox(
+          'Let A be a torsion abelian group. Then A is the direct sum of its '
+          'subgroups A(p) for all primes p such that A(p) ≠ 0.',
+          align: Anchor.bottomRight,
+          size: Vector2(300, 200),
+          timePerChar: 0,
+          margins: 10,
+        )..position = Vector2(10, 260),
+        TextComponent(
+          text: 'Scroll me when finished:',
+          position: Vector2(size.x / 2, size.y / 2 + 100),
+          anchor: Anchor.bottomCenter,
+        ),
+        MyScrollTextBox(
+          'In a bustling city, a small team of developers set out to create '
+          'a mobile game using the Flame engine for Flutter. Their goal was '
+          'simple: to create an engaging, easy-to-play game that could reach '
+          'a wide audience on both iOS and Android platforms. '
+          'After weeks of brainstorming, they decided on a concept: '
+          'a fast-paced, endless runner game set in a whimsical, '
+          'ever-changing world. They named it "Swift Dash." '
+          "Using Flutter's versatility and the Flame engine's "
+          'capabilities, the team crafted a game with vibrant graphics, '
+          'smooth animations, and responsive controls. '
+          'The game featured a character dashing through various landscapes, '
+          'dodging obstacles, and collecting points. '
+          'As they launched "Swift Dash," the team was anxious but hopeful. '
+          'To their delight, the game was well-received. Players loved its '
+          'simplicity and charm, and the game quickly gained popularity.',
+          size: Vector2(200, 150),
+          position: Vector2(size.x / 2, size.y / 2 + 100),
+          anchor: Anchor.topCenter,
+          boxConfig: TextBoxConfig(
+            timePerChar: 0.005,
+            margins: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -93,6 +124,23 @@ class MyTextBox extends TextBoxComponent {
             margins: EdgeInsets.all(margins ?? 25),
           ),
         );
+
+  @override
+  void render(Canvas canvas) {
+    final rect = Rect.fromLTWH(0, 0, width, height);
+    canvas.drawRect(rect, Paint()..color = Colors.white10);
+    super.render(canvas);
+  }
+}
+
+class MyScrollTextBox extends ScrollTextBoxComponent {
+  MyScrollTextBox(
+    String text, {
+    required super.size,
+    super.boxConfig,
+    super.position,
+    super.anchor,
+  }) : super(text: text, textRenderer: _box);
 
   @override
   void render(Canvas canvas) {
