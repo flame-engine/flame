@@ -11,7 +11,7 @@ components:
 - `TextComponent` for rendering a single line of text
 - `TextBoxComponent` for bounding multi-line text within a sized box, including the possibility of a
   typing effect
-- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling 
+- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling
 capability when the text exceeds the boundaries of the enclosing box.
 
 All components are showcased in [this
@@ -116,9 +116,12 @@ You can find all the options under [TextBoxComponent's
 API](https://pub.dev/documentation/flame/latest/components/TextBoxComponent-class.html).
 
 
-
 ### ScrollTextBoxComponent
-The `ScrollTextBoxComponent` is an advanced version of the `TextBoxComponent`, designed for displaying scrollable text within a defined area. This component is particularly useful for creating interfaces where large amounts of text need to be presented in a constrained space, such as dialogues or information panels.
+
+The `ScrollTextBoxComponent` is an advanced version of the `TextBoxComponent`,
+designed for displaying scrollable text within a defined area.
+This component is particularly useful for creating interfaces where large amounts of text
+need to be presented in a constrained space, such as dialogues or information panels.
 
 Note that the `align` property of `TextBoxComponent` is not available.
 
