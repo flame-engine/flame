@@ -29,7 +29,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// size of current animation sprite.
   bool _autoResize;
 
-  /// Whether the current animation's ticker should reset to the beginning 
+  /// Whether the current animation's ticker should reset to the beginning
   /// when it becomes current.
   bool autoResetTicker;
 
