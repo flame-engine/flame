@@ -29,6 +29,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// size of current animation sprite.
   bool _autoResize;
 
+  /// Whether the current animation's ticker should reset to the beginning 
+  /// when it becomes current.
+  bool autoResetTicker;
+
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationGroupComponent({
     Map<T, SpriteAnimation>? animations,
@@ -36,6 +40,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     bool? autoResize,
     this.playing = true,
     this.removeOnFinish = const {},
+    this.autoResetTicker = false,
     Paint? paint,
     super.position,
     super.size,
@@ -83,6 +88,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     bool? autoResize,
     bool playing = true,
     Map<T, bool> removeOnFinish = const {},
+    bool autoResetTicker = false,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -104,6 +110,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           current: current,
           autoResize: autoResize,
           removeOnFinish: removeOnFinish,
+          autoResetTicker: autoResetTicker,
           playing: playing,
           paint: paint,
           position: position,
@@ -125,8 +132,13 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    final changed = value != current;
     _current = value;
     _resizeToSprite();
+
+    if (changed && autoResetTicker) {
+      animationTicker?.reset();
+    }
   }
 
   /// Returns the map of animation state and their corresponding animations.

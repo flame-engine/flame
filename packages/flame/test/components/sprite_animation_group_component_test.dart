@@ -353,4 +353,64 @@ Future<void> main() async {
       expect(sizeChangeCounter, equals(4));
     });
   });
+
+  group('SpriteAnimationGroupComponent.autoResetTicker', () {
+    final sprite1 = Sprite(image, srcSize: Vector2.all(76));
+    final sprite2 = Sprite(image, srcSize: Vector2.all(15));
+    final animation1 = SpriteAnimation.spriteList(
+      List.filled(5, sprite1),
+      stepTime: 0.1,
+      loop: false,
+    );
+    final animation2 = SpriteAnimation.spriteList(
+      List.filled(5, sprite2),
+      stepTime: 0.1,
+      loop: false,
+    );
+
+    test('does not reset ticker by default', () {
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {
+          _AnimationState.idle: animation1,
+          _AnimationState.running: animation2,
+        },
+        current: _AnimationState.idle,
+      );
+      component.update(0.9);
+      expect(component.animationTicker!.currentIndex, 4);
+
+      component.current = _AnimationState.running;
+      component.update(0.1);
+      expect(component.animationTicker!.currentIndex, 1);
+
+      component.current = _AnimationState.idle;
+      expect(component.animationTicker!.currentIndex, 4);
+
+      component.current = _AnimationState.running;
+      expect(component.animationTicker!.currentIndex, 1);
+    });
+
+    test('resets the ticker when enaled', () {
+      final component = SpriteAnimationGroupComponent<_AnimationState>(
+        animations: {
+          _AnimationState.idle: animation1,
+          _AnimationState.running: animation2,
+        },
+        autoResetTicker: true,
+        current: _AnimationState.idle,
+      );
+      component.update(0.9);
+      expect(component.animationTicker!.currentIndex, 4);
+
+      component.current = _AnimationState.running;
+      component.update(0.1);
+      expect(component.animationTicker!.currentIndex, 1);
+
+      component.current = _AnimationState.idle;
+      expect(component.animationTicker!.currentIndex, 0);
+
+      component.current = _AnimationState.running;
+      expect(component.animationTicker!.currentIndex, 0);
+    });
+  });
 }
