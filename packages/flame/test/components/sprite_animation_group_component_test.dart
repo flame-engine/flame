@@ -390,7 +390,7 @@ Future<void> main() async {
       expect(component.animationTicker!.currentIndex, 1);
     });
 
-    test('resets the ticker when enaled', () {
+    test('resets the ticker when enabled', () {
       final component = SpriteAnimationGroupComponent<_AnimationState>(
         animations: {
           _AnimationState.idle: animation1,
