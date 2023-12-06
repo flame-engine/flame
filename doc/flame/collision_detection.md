@@ -122,15 +122,15 @@ position is instead returned.
 
 ### Collision order
 
-If a `PositionComponent` collides with more than one other object within a given time step, then
-the `onCollision` callbacks will be called in an essentially random order.  In some cases this can
+If a `Hitbox` collides with more than one other `Hitbox` within a given time step, then
+the `onCollision` callbacks will be called in an essentially random order. In some cases this can
 be a problem, such as in a bouncing ball game where the trajectory of the ball can differ depending
-on which other object was hit first.  To help resolve this the `collisionsCompletedNotifier`
+on which other object was hit first. To help resolve this the `collisionsCompletedNotifier`
 listener can be used - this triggers at the end of the collision detection process.
 
 An example of how this might be used is to add a local variable in your `PositionComponent` to save
-the other components with which this one is colliding:
-`List<PositionComponent> collisionComponents = [];`.  The `onCollision` callback is then used to
+the other components with which it's colliding:
+`List<PositionComponent> collisionComponents = [];`. The `onCollision` callback is then used to
 save all the other `PositionComponent`s to this list:
 
 ```dart
@@ -142,12 +142,13 @@ void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
 
 ```
 
-Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a routine
+Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a function
 which will resolve how the collisions should be dealt with:
 
 ```dart
-(game as HasCollisionDetection).collisionDetection.collisionsCompletedNotifier.
-                                addListener(() {
+(game as HasCollisionDetection).collisionDetection
+                               .collisionsCompletedNotifier
+                               .addListener(() {
   resolveCollisions();
 });
 ```
