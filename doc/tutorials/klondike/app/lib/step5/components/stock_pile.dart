@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 
 import '../klondike_game.dart';
 import '../pile.dart';
@@ -9,7 +8,7 @@ import 'card.dart';
 import 'waste_pile.dart';
 
 class StockPile extends PositionComponent
-    with TapCallbacks, HasGameReference<KlondikeGame>
+    with HasGameReference<KlondikeGame>
     implements Pile {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
@@ -31,7 +30,8 @@ class StockPile extends PositionComponent
       throw StateError('cannot remove cards');
 
   @override
-  void returnCard(Card card) => throw StateError('cannot remove cards');
+  // Card cannot be removed but could have been dragged out of place.
+  void returnCard(Card card) => card.priority = _cards.indexOf(card);
 
   @override
   void acquireCard(Card card) {
@@ -44,10 +44,11 @@ class StockPile extends PositionComponent
 
   //#endregion
 
-  @override
-  void onTapUp(TapUpEvent event) {
+  void handleTapUp(Card card) {
     final wastePile = parent!.firstChild<WastePile>()!;
     if (_cards.isEmpty) {
+      assert(card.isBaseCard, 'Stock Pile is empty, but no Base Card present');
+      card.position = position; // Force Base Card (back) into correct position.
       wastePile.removeAllCards().reversed.forEach((card) {
         card.flip();
         acquireCard(card);
