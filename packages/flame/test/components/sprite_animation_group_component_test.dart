@@ -368,7 +368,7 @@ Future<void> main() async {
       loop: false,
     );
 
-    test('does not reset ticker by default', () {
+    test('does reset ticker by default', () {
       final component = SpriteAnimationGroupComponent<_AnimationState>(
         animations: {
           _AnimationState.idle: animation1,
@@ -384,10 +384,10 @@ Future<void> main() async {
       expect(component.animationTicker!.currentIndex, 1);
 
       component.current = _AnimationState.idle;
-      expect(component.animationTicker!.currentIndex, 4);
+      expect(component.animationTicker!.currentIndex, 0);
 
       component.current = _AnimationState.running;
-      expect(component.animationTicker!.currentIndex, 1);
+      expect(component.animationTicker!.currentIndex, 0);
     });
 
     test('resets the ticker when enabled', () {
@@ -396,7 +396,7 @@ Future<void> main() async {
           _AnimationState.idle: animation1,
           _AnimationState.running: animation2,
         },
-        autoResetTicker: true,
+        autoResetTicker: false,
         current: _AnimationState.idle,
       );
       component.update(0.9);
@@ -407,10 +407,10 @@ Future<void> main() async {
       expect(component.animationTicker!.currentIndex, 1);
 
       component.current = _AnimationState.idle;
-      expect(component.animationTicker!.currentIndex, 0);
+      expect(component.animationTicker!.currentIndex, 4);
 
       component.current = _AnimationState.running;
-      expect(component.animationTicker!.currentIndex, 0);
+      expect(component.animationTicker!.currentIndex, 1);
     });
   });
 }
