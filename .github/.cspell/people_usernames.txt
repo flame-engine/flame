@@ -13,5 +13,6 @@ subosito # github.com/subosito
 spydon # github.com/spydon
 stpasha # github.com/stpasha
 tavian # tavianator.com
+videon # github.com/markvideon
 wolfenrain # github.com/wolfenrain
 xaha # github.com/xvrh

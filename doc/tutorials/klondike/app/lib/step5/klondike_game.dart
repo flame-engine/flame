@@ -22,7 +22,10 @@ class KlondikeGame extends FlameGame<KlondikeWorld> {
     const Radius.circular(cardRadius),
   );
 
-  // Constant used when creating Random seed.
+  /// Constant used to decide when a short drag is treated as a TapUp event.
+  static const double dragTolerance = cardWidth / 5;
+
+  /// Constant used when creating Random seed.
   static const int maxInt = 0xFFFFFFFE; // = (2 to the power 32) - 1
 
   // This KlondikeGame constructor also initiates the first KlondikeWorld.

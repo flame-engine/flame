@@ -17,7 +17,7 @@ import 'tableau_pile.dart';
 
 class Card extends PositionComponent
     with DragCallbacks, TapCallbacks, HasWorldReference<KlondikeWorld> {
-  Card(int intRank, int intSuit)
+  Card(int intRank, int intSuit, {this.isBaseCard = false})
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
         super(
@@ -27,6 +27,14 @@ class Card extends PositionComponent
   final Rank rank;
   final Suit suit;
   Pile? pile;
+
+  // A Base Card is rendered in outline only and is NOT playable. It can be
+  // added to the base of a Pile (e.g. the Stock Pile) to allow it to handle
+  // taps and short drags (on an empty Pile) with the same behavior and
+  // tolerances as for regular cards (see KlondikeGame.dragTolerance) and using
+  // the same event-handling code, but with different handleTapUp() methods.
+  final bool isBaseCard;
+
   bool _faceUp = false;
   bool _isAnimatedFlip = false;
   bool _isFaceUpView = false;
@@ -55,6 +63,10 @@ class Card extends PositionComponent
 
   @override
   void render(Canvas canvas) {
+    if (isBaseCard) {
+      _renderBaseCard(canvas);
+      return;
+    }
     if (_isFaceUpView) {
       _renderFront(canvas);
     } else {
@@ -84,6 +96,10 @@ class Card extends PositionComponent
     canvas.drawRRect(cardRRect, backBorderPaint1);
     canvas.drawRRect(backRRectInner, backBorderPaint2);
     flameSprite.render(canvas, position: size / 2, anchor: Anchor.center);
+  }
+
+  void _renderBaseCard(Canvas canvas) {
+    canvas.drawRRect(cardRRect, backBorderPaint1);
   }
 
   static final Paint frontBackgroundPaint = Paint()
@@ -242,15 +258,27 @@ class Card extends PositionComponent
   //#region Card-Dragging
 
   @override
+  void onTapCancel(TapCancelEvent event) {
+    if (pile is StockPile) {
+      _isDragging = false;
+      handleTapUp();
+    }
+  }
+
+  @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
+    if (pile is StockPile) {
+      _isDragging = false;
+      return;
+    }
+    // Clone the position, else _whereCardStarted changes as the position does.
+    _whereCardStarted = position.clone();
+    attachedCards.clear();
     if (pile?.canMoveCard(this, MoveMethod.drag) ?? false) {
       _isDragging = true;
       priority = 100;
-      // Copy each co-ord, else _whereCardStarted changes as the position does.
-      _whereCardStarted = Vector2(position.x, position.y);
       if (pile is TableauPile) {
-        attachedCards.clear();
         final extraCards = (pile! as TableauPile).cardsOnTop(this);
         for (final card in extraCards) {
           card.priority = attachedCards.length + 101;
@@ -277,6 +305,22 @@ class Card extends PositionComponent
       return;
     }
     _isDragging = false;
+
+    // If short drag, return card to Pile and treat it as having been tapped.
+    final shortDrag =
+        (position - _whereCardStarted).length < KlondikeGame.dragTolerance;
+    if (shortDrag && attachedCards.isEmpty) {
+      doMove(
+        _whereCardStarted,
+        onComplete: () {
+          pile!.returnCard(this);
+          // Card moves to its Foundation Pile next, if valid, or it stays put.
+          handleTapUp();
+        },
+      );
+      return;
+    }
+
     // Find out what is under the center-point of this card when it is dropped.
     final dropPiles = parent!
         .componentsAtPoint(position + size / 2)
@@ -284,8 +328,7 @@ class Card extends PositionComponent
         .toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
-        // Found a Pile.
-        // Move card(s) gracefully into position on the receiving pile.
+        // Found a Pile: move card(s) the rest of the way onto it.
         pile!.removeCard(this, MoveMethod.drag);
         if (dropPiles.first is TableauPile) {
           // Get TableauPile to handle positions, priorities and moves of cards.
@@ -335,6 +378,12 @@ class Card extends PositionComponent
 
   @override
   void onTapUp(TapUpEvent event) {
+    handleTapUp();
+  }
+
+  void handleTapUp() {
+    // Can be called by onTapUp or after a very short (failed) drag-and-drop.
+    // We need to be more user-friendly towards taps that include a short drag.
     if (pile?.canMoveCard(this, MoveMethod.tap) ?? false) {
       final suitIndex = suit.value;
       if (world.foundations[suitIndex].canAcceptCard(this)) {
@@ -347,7 +396,7 @@ class Card extends PositionComponent
         );
       }
     } else if (pile is StockPile) {
-      world.stock.onTapUp(event);
+      world.stock.handleTapUp(this);
     }
   }
 
@@ -359,20 +408,18 @@ class Card extends PositionComponent
     Vector2 to, {
     double speed = 10.0,
     double start = 0.0,
+    int startPriority = 100,
     Curve curve = Curves.easeOutQuad,
     VoidCallback? onComplete,
-    bool bumpPriority = true,
   }) {
     assert(speed > 0.0, 'Speed must be > 0 widths per second');
     final dt = (to - position).length / (speed * size.x);
     assert(dt > 0, 'Distance to move must be > 0');
-    if (bumpPriority) {
-      priority = 100;
-    }
     add(
-      MoveToEffect(
+      CardMoveEffect(
         to,
         EffectController(duration: dt, startDelay: start, curve: curve),
+        transitPriority: startPriority,
         onComplete: () {
           onComplete?.call();
         },
@@ -442,4 +489,21 @@ class Card extends PositionComponent
   }
 
   //#endregion
+}
+
+class CardMoveEffect extends MoveToEffect {
+  CardMoveEffect(
+    super.destination,
+    super.controller, {
+    super.onComplete,
+    this.transitPriority = 100,
+  });
+
+  final int transitPriority;
+
+  @override
+  void onStart() {
+    super.onStart(); // Flame connects MoveToEffect to EffectController.
+    parent?.priority = transitPriority;
+  }
 }

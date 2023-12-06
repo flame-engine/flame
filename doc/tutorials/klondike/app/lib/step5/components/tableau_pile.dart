@@ -75,7 +75,7 @@ class TableauPile extends PositionComponent implements Pile {
       _cards.add(card);
       card.doMove(
         nextPosition,
-        bumpPriority: false, // Priorities have been set: don't change them.
+        startPriority: card.priority,
         onComplete: () {
           nCardsToMove--;
           if (nCardsToMove == 0) {
