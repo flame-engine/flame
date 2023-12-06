@@ -141,7 +141,7 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     if (finished && _linesScrolled > 0) {
-      position += Vector2(0, event.localDelta.y);
+      position.y += event.localDelta.y;
       position.y = position.y.clamp(-scrollBoundsY, 0);
     }
   }
