@@ -26,17 +26,17 @@ so first create a new folder called `lib/objects`. In that folder, create 3 file
 boilerplate code for the class, so create the following in their respective files:
 
 ```dart
-class GroundBlock{}
+class GroundBlock {}
 
-class PlatformBlock{}
+class PlatformBlock {}
 
-class Star{}
+class Star {}
 ```
 
 Also, create `water_enemy.dart` in the `lib/actors` folder using this boilerplate code:
 
 ```dart
-class WaterEnemy{}
+class WaterEnemy {}
 ```
 
 Now we can create a file called `segment_manager.dart` which will be placed in a new folder called
@@ -300,10 +300,7 @@ as:
       'water_enemy.png',
     ]);
     
-    cameraComponent = CameraComponent(world: world);
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, world]);
-
+    camera.viewfinder.anchor = Anchor.topLeft;
     initializeGame();
   }
 ```
@@ -329,7 +326,7 @@ import 'package:flame/components.dart';
 import '../ember_quest.dart';
 
 class PlatformBlock extends SpriteComponent
-    with HasGameRef<EmberQuestGame> {
+    with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -433,11 +430,11 @@ the block in a `Vector2`. So add the following to your `loadGameSegments` method
 
 ```dart
 case PlatformBlock:
-    add(PlatformBlock(
-      gridPosition: block.gridPosition,
-      xOffset: xPositionOffset,
-    ));
-    break;
+  add(PlatformBlock(
+    gridPosition: block.gridPosition,
+    xOffset: xPositionOffset,
+  ));
+  break;
 ```
 
 If you run your code, you should now see:
@@ -453,7 +450,7 @@ import 'package:flutter/material.dart';
 
 @override
 Color backgroundColor() {
-    return const Color.fromARGB(255, 173, 223, 247);
+  return const Color.fromARGB(255, 173, 223, 247);
 }
 ```
 

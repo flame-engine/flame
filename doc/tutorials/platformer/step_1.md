@@ -23,7 +23,7 @@ void main() {
 
 Like in the [klondike](../klondike/klondike.md) tutorial, starting a new game can feel overwhelming.
 I like to first decide what platform I am trying to target. Will this be a mobile game, a desktop
-game, or maybe a web game, with Flutter and Flame, these are all possible.  For this game though, I
+game, or maybe a web game, with Flutter and Flame, these are all possible. For this game though, I
 am going to focus on a web game. This means my users will interact with the game using their
 keyboards.
 
@@ -45,16 +45,16 @@ All of these will be brought together in `EmberQuestGame` derived from `FlameGam
 
 ## Assets
 
-Every game needs assets.  Assets are images, sprites, animations, sounds, etc. Now, I am not an
+Every game needs assets. Assets are images, sprites, animations, sounds, etc. Now, I am not an
 artist, but because I am basing this game on Ember, the flame mascot, and Ember is already designed,
-it sets the tone that this will be a pixel art game.  There are numerous sites available that
+it sets the tone that this will be a pixel art game. There are numerous sites available that
 provide free pixel art that can be used in games, but please check and comply with the licensing and
-always provide valid creator attribution.  For this game though, I am going to take a chance and
-make my artwork using an online pixel art tool.  If you decide to use this tool, multiple online
-tutorials will assist you with the basic operations as well as exporting the assets.  Now normally,
-most games will utilize sprite sheets.  These combine many images into one larger image that can be
-sectioned and used as individual images.  For this tutorial though, I specifically will save the
-images individually as I want to demonstrate the Flame engine's caching abilities.  Ember and the
+always provide valid creator attribution. For this game though, I am going to take a chance and
+make my artwork using an online pixel art tool. If you decide to use this tool, multiple online
+tutorials will assist you with the basic operations as well as exporting the assets. Now normally,
+most games will utilize sprite sheets. These combine many images into one larger image that can be
+sectioned and used as individual images. For this tutorial though, I specifically will save the
+images individually as I want to demonstrate the Flame engine's caching abilities. Ember and the
 water enemy are sprite sheets though as they contain multiple images to create animations.
 
 Right-click the images below, choose "Save as...", and store them in the `assets/images` folder of the
@@ -88,8 +88,8 @@ emberquest/
 You may ask, why are the images different sizes?
 
 As I was using the online tool to make the assets, I had trouble getting the
-detail I desired for the game in a 16x16 block.  The heart worked out in 32x32 
-and the ground as well as the star were 64x64.  Regardless, the asset size does
+detail I desired for the game in a 16x16 block. The heart worked out in 32x32 
+and the ground as well as the star were 64x64. Regardless, the asset size does
 not matter for the game as we will resize as needed.
 ```
 

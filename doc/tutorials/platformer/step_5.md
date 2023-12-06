@@ -20,7 +20,7 @@ class EmberQuestGame extends FlameGame with HasKeyboardHandlerComponents {
 
 ```dart
 class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, HasGameRef<EmberQuestGame> {
+    with KeyboardHandler, HasGameReference<EmberQuestGame> {
 ```
 
 Now we can add a new method:
@@ -118,7 +118,7 @@ Next, add the `CollisionCallbacks` mixin to `lib/actors/ember.dart` like:
 
 ```dart
 class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, CollisionCallbacks, HasGameRef<EmberQuestGame> {
+    with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
 ```
 
 If it did not auto-import, you will need the following:
@@ -176,9 +176,7 @@ For the collisions to be activated for Ember, we need to add a `CircleHitbox`, s
 method, add the following:
 
 ```dart
-add(
-  CircleHitbox(),
-);
+add(CircleHitbox());
 ```
 
 Now that we have the basic collisions created, we can add gravity so Ember exists in a game world
