@@ -131,12 +131,17 @@ class _InternalSpriteAnimationWidgetState
     if (oldWidget.animation != widget.animation) {
       oldWidget.animationTicker.onComplete = null;
       _setupController();
+      if (widget.playing) {
+        _initAnimation();
+      }
     }
 
-    if (widget.playing) {
-      _initAnimation();
-    } else {
-      _pauseAnimation();
+    if (widget.playing != oldWidget.playing) {
+      if (widget.playing) {
+        _initAnimation();
+      } else {
+        _pauseAnimation();
+      }
     }
   }
 

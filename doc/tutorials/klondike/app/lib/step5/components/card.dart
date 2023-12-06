@@ -408,20 +408,18 @@ class Card extends PositionComponent
     Vector2 to, {
     double speed = 10.0,
     double start = 0.0,
+    int startPriority = 100,
     Curve curve = Curves.easeOutQuad,
     VoidCallback? onComplete,
-    bool bumpPriority = true,
   }) {
     assert(speed > 0.0, 'Speed must be > 0 widths per second');
     final dt = (to - position).length / (speed * size.x);
     assert(dt > 0, 'Distance to move must be > 0');
-    if (bumpPriority) {
-      priority = 100;
-    }
     add(
-      MoveToEffect(
+      CardMoveEffect(
         to,
         EffectController(duration: dt, startDelay: start, curve: curve),
+        transitPriority: startPriority,
         onComplete: () {
           onComplete?.call();
         },
@@ -491,4 +489,21 @@ class Card extends PositionComponent
   }
 
   //#endregion
+}
+
+class CardMoveEffect extends MoveToEffect {
+  CardMoveEffect(
+    super.destination,
+    super.controller, {
+    super.onComplete,
+    this.transitPriority = 100,
+  });
+
+  final int transitPriority;
+
+  @override
+  void onStart() {
+    super.onStart(); // Flame connects MoveToEffect to EffectController.
+    parent?.priority = transitPriority;
+  }
 }

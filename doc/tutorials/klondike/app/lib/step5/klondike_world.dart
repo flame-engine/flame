@@ -123,6 +123,13 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     // For the "Same deal" option, re-use the previous seed, else use a new one.
     cards.shuffle(Random(game.seed));
 
+    // Each card dealt must be seen to come from the top of the deck!
+    var dealPriority = 1;
+    for (final card in cards) {
+      card.priority = dealPriority++;
+    }
+
+    // Change priority as cards take off: so later cards fly above earlier ones.
     var cardToDeal = cards.length - 1;
     var nMovingCards = 0;
     for (var i = 0; i < 7; i++) {
@@ -130,7 +137,9 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
         final card = cards[cardToDeal--];
         card.doMove(
           tableauPiles[j].position,
+          speed: 15.0,
           start: nMovingCards * 0.15,
+          startPriority: 100 + nMovingCards,
           onComplete: () {
             tableauPiles[j].acquireCard(card);
             nMovingCards--;
