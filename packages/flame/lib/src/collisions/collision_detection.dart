@@ -167,5 +167,9 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   });
 }
 
-/// A class to handle callbacks for when the collision detection is done each tick.
-class CollisionDetectionCompletionNotifier extends ChangeNotifier {}
+/// A class to handle callbacks for when the collision detection is done each
+/// tick.
+class CollisionDetectionCompletionNotifier extends ChangeNotifier {
+  @override
+  void notifyListeners() => super.notifyListeners();
+}
