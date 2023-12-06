@@ -51,6 +51,14 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
         ),
       );
     }
+
+    // Add a Base Card to the Stock Pile, above the pile and below other cards.
+    final baseCard = Card(1, 0, isBaseCard: true);
+    baseCard.position = stock.position;
+    baseCard.priority = -1;
+    baseCard.pile = stock;
+    stock.priority = -2;
+
     for (var rank = 1; rank <= 13; rank++) {
       for (var suit = 0; suit < 4; suit++) {
         final card = Card(rank, suit);
@@ -64,6 +72,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     addAll(foundations);
     addAll(tableauPiles);
     addAll(cards);
+    add(baseCard);
 
     playAreaSize =
         Vector2(7 * cardSpaceWidth + cardGap, 4 * cardSpaceHeight + topGap);
