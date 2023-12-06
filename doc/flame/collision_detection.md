@@ -146,9 +146,10 @@ Finally, one adds a listener to the `onLoad` method of the `PositionComponent` t
 which will resolve how the collisions should be dealt with:
 
 ```dart
-(game as HasCollisionDetection).collisionDetection
-                               .collisionsCompletedNotifier
-                               .addListener(() {
+(game as HasCollisionDetection)
+    .collisionDetection
+    .collisionsCompletedNotifier
+    .addListener(() {
   resolveCollisions();
 });
 ```
