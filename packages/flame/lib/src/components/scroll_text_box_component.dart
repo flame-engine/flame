@@ -94,9 +94,9 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
 
 /// Private class handling the internal workings of [ScrollTextBoxComponent].
 ///
-/// Extends [TextBoxComponent] and incorporates
-/// drag callbacks for text scrolling.
-/// It manages the rendering and user interaction for the text within the box.
+/// Extends [TextBoxComponent] and incorporates drag callbacks for text
+/// scrolling. It manages the rendering and user interaction for the text within
+/// the box.
 class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     with DragCallbacks {
   double scrollBoundsY = 0.0;

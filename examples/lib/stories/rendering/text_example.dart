@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
@@ -85,9 +87,13 @@ class TextExample extends FlameGame {
   }
 }
 
-final _regularTextStyle =
-    TextStyle(fontSize: 18, color: BasicPalette.white.color);
-final _regular = TextPaint(style: _regularTextStyle);
+final _regularTextStyle = TextStyle(
+  fontSize: 18,
+  color: BasicPalette.white.color,
+);
+final _regular = TextPaint(
+  style: _regularTextStyle,
+);
 final _tiny = TextPaint(style: _regularTextStyle.copyWith(fontSize: 14.0));
 final _box = _regular.copyWith(
   (style) => style.copyWith(
@@ -108,6 +114,9 @@ final _shaded = TextPaint(
 );
 
 class MyTextBox extends TextBoxComponent {
+  late Paint paint;
+  late Rect bgRect;
+
   MyTextBox(
     String text, {
     super.align,
@@ -126,14 +135,25 @@ class MyTextBox extends TextBoxComponent {
         );
 
   @override
+  Future<void> onLoad() {
+    paint = Paint();
+    bgRect = Rect.fromLTWH(0, 0, width, height);
+
+    paint.color = Colors.white10;
+    return super.onLoad();
+  }
+
+  @override
   void render(Canvas canvas) {
-    final rect = Rect.fromLTWH(0, 0, width, height);
-    canvas.drawRect(rect, Paint()..color = Colors.white10);
+    canvas.drawRect(bgRect, paint);
     super.render(canvas);
   }
 }
 
 class MyScrollTextBox extends ScrollTextBoxComponent {
+  late Paint paint;
+  late Rect bgRect;
+
   MyScrollTextBox(
     String text, {
     required super.size,
@@ -143,9 +163,17 @@ class MyScrollTextBox extends ScrollTextBoxComponent {
   }) : super(text: text, textRenderer: _box);
 
   @override
+  FutureOr<void> onLoad() {
+    paint = Paint();
+    bgRect = Rect.fromLTWH(0, 0, width, height);
+
+    paint.color = Colors.white10;
+    return super.onLoad();
+  }
+
+  @override
   void render(Canvas canvas) {
-    final rect = Rect.fromLTWH(0, 0, width, height);
-    canvas.drawRect(rect, Paint()..color = Colors.white10);
+    canvas.drawRect(bgRect, paint);
     super.render(canvas);
   }
 }

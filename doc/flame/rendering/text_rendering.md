@@ -10,15 +10,15 @@ components:
 
 - `TextComponent` for rendering a single line of text
 - `TextBoxComponent` for bounding multi-line text within a sized box, including the possibility of a
-  typing effect
+typing effect
 - `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling
 capability when the text exceeds the boundaries of the enclosing box.
 
 Use the `onFinished` callback to get notified when the text is completely printed.
 
 
-All components are showcased in
-[this example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
+All components are showcased in [this
+example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
 
 
 ### TextComponent
