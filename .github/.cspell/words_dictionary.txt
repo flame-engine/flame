@@ -2,8 +2,6 @@
 bloodlust
 collidable
 collidables
-composability
-discoverability
 draggables
 focusable
 gamepad
