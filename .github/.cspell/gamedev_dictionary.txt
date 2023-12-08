@@ -45,7 +45,6 @@ raycasts # plural of raycast
 raytrace # act of raytracing
 raytracing # rendering techniques that calculates light rays as straight lines
 rects # plural of rect
-refactorings # plural of refactoring
 respawned # past tense of respawn
 respawn # when the player character dies and is brought back after some time and penalties
 RGBA # red green blue alpha
