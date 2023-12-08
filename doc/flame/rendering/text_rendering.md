@@ -34,7 +34,7 @@ class MyGame extends FlameGame {
     add(
       TextComponent(
         text: 'Hello, Flame',
-        position = Vector2.all(16.0),
+        position: Vector2.all(16.0),
       ),
     );
   }
