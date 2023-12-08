@@ -8,8 +8,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.11.0
-  flame_network_assets: ^0.2.0+9
+  flame: ^1.12.0
+  flame_network_assets: ^0.2.0+10
   flutter:
     sdk: flutter
 

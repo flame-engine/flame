@@ -3,6 +3,72 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.12.0`](#flame---v1120)
+ - [`flame_riverpod` - `v5.1.0`](#flame_riverpod---v510)
+ - [`flame_test` - `v1.15.1`](#flame_test---v1151)
+ - [`flame_tiled` - `v1.18.1`](#flame_tiled---v1181)
+ - [`flame_oxygen` - `v0.1.9+5`](#flame_oxygen---v0195)
+ - [`flame_isolate` - `v0.5.0+5`](#flame_isolate---v0505)
+ - [`flame_fire_atlas` - `v1.4.5`](#flame_fire_atlas---v145)
+ - [`flame_audio` - `v2.1.5`](#flame_audio---v215)
+ - [`flame_spine` - `v0.1.1+7`](#flame_spine---v0117)
+ - [`flame_bloc` - `v1.10.7`](#flame_bloc---v1107)
+ - [`flame_lottie` - `v0.3.0+5`](#flame_lottie---v0305)
+ - [`flame_markdown` - `v0.1.1+5`](#flame_markdown---v0115)
+ - [`flame_rive` - `v1.9.8`](#flame_rive---v198)
+ - [`flame_forge2d` - `v0.16.0+2`](#flame_forge2d---v01602)
+ - [`flame_noise` - `v0.1.1+10`](#flame_noise---v01110)
+ - [`flame_svg` - `v1.8.7`](#flame_svg---v187)
+ - [`flame_network_assets` - `v0.2.0+10`](#flame_network_assets---v02010)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.1`
+ - `flame_tiled` - `v1.18.1`
+ - `flame_oxygen` - `v0.1.9+5`
+ - `flame_isolate` - `v0.5.0+5`
+ - `flame_fire_atlas` - `v1.4.5`
+ - `flame_audio` - `v2.1.5`
+ - `flame_spine` - `v0.1.1+7`
+ - `flame_bloc` - `v1.10.7`
+ - `flame_lottie` - `v0.3.0+5`
+ - `flame_markdown` - `v0.1.1+5`
+ - `flame_rive` - `v1.9.8`
+ - `flame_forge2d` - `v0.16.0+2`
+ - `flame_noise` - `v0.1.1+10`
+ - `flame_svg` - `v1.8.7`
+ - `flame_network_assets` - `v0.2.0+10`
+
+---
+
+#### `flame` - `v1.12.0`
+
+ - **FIX**: SpriteAnimationWidget was resetting the ticker even when the playing didn't changed ([#2891](https://github.com/flame-engine/flame/issues/2891)). ([9aed8b4d](https://github.com/flame-engine/flame/commit/9aed8b4dea3074c9ca708ad991cdc90b12707fbe))
+ - **FEAT**: Scrollable TextBoxComponent ([#2901](https://github.com/flame-engine/flame/issues/2901)). ([8c3cb725](https://github.com/flame-engine/flame/commit/8c3cb725413c46089854713f6ecc4617e1f15600))
+ - **FEAT**: Add collision completed listener ([#2896](https://github.com/flame-engine/flame/issues/2896)). ([957db3c1](https://github.com/flame-engine/flame/commit/957db3c1ed476b22f7cc62d4df22595449f8756c))
+ - **FEAT**: Adding autoResetTicker option to SpriteAnimationGroupComponent ([#2899](https://github.com/flame-engine/flame/issues/2899)). ([001c870d](https://github.com/flame-engine/flame/commit/001c870d61be6e7e7aae798df0dc33e5321ed882))
+ - **FEAT**: Add clearSnapshot function ([#2897](https://github.com/flame-engine/flame/issues/2897)). ([d4decd21](https://github.com/flame-engine/flame/commit/d4decd21eb7506ffd6d84ab5a3ebf1f2067083b6))
+
+#### `flame_riverpod` - `v5.1.0`
+
+ - **FIX**: SpriteAnimationWidget was resetting the ticker even when the playing didn't changed ([#2891](https://github.com/flame-engine/flame/issues/2891)). ([9aed8b4d](https://github.com/flame-engine/flame/commit/9aed8b4dea3074c9ca708ad991cdc90b12707fbe))
+ - **FEAT**: Integration of flame_riverpod ([#2367](https://github.com/flame-engine/flame/issues/2367)). ([0c74560b](https://github.com/flame-engine/flame/commit/0c74560b2e25e86163c6c678ef6515bc11f9c3e7))
+
+
 ## 2023-11-30
 
 ### Changes
