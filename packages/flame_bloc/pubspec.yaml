@@ -1,6 +1,6 @@
 name: flame_bloc
 description: Integration for the Bloc state management library to Flame games.
-version: 1.10.6
+version: 1.10.7
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_bloc
 funding:
   - https://opencollective.com/blue-fire
@@ -13,7 +13,7 @@ environment:
 
 dependencies:
   bloc: ^8.1.1
-  flame: ^1.11.0
+  flame: ^1.12.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.2
@@ -22,7 +22,7 @@ dependencies:
 dev_dependencies:
   dartdoc: ^6.3.0
   flame_lint: ^1.1.2
-  flame_test: ^1.15.0
+  flame_test: ^1.15.1
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter

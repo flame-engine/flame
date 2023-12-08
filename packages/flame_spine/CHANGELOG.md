@@ -1,3 +1,7 @@
+## 0.1.1+7
+
+ - Update a dependency to the latest release.
+
 ## 0.1.1+6
 
  - **FIX**: Removing spine flutter overriding ([#2877](https://github.com/flame-engine/flame/issues/2877)). ([f4ff3117](https://github.com/flame-engine/flame/commit/f4ff31174a0498dd8af90f815ad9c098df3b30b7))

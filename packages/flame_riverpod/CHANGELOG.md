@@ -1,3 +1,8 @@
+## 5.1.0
+
+ - **FIX**: SpriteAnimationWidget was resetting the ticker even when the playing didn't changed ([#2891](https://github.com/flame-engine/flame/issues/2891)). ([9aed8b4d](https://github.com/flame-engine/flame/commit/9aed8b4dea3074c9ca708ad991cdc90b12707fbe))
+ - **FEAT**: Integration of flame_riverpod ([#2367](https://github.com/flame-engine/flame/issues/2367)). ([0c74560b](https://github.com/flame-engine/flame/commit/0c74560b2e25e86163c6c678ef6515bc11f9c3e7))
+
 ## 5.0.0
 
 * New API with breaking changes. Added [RiverpodAwareGameWidget], [RiverpodGameMixin], [RiverpodComponentMixin]. See the example for details.

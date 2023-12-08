@@ -1,3 +1,7 @@
+## 1.18.1
+
+ - Update a dependency to the latest release.
+
 ## 1.18.0
 
  - **FIX**: TiledComponent.atlases had duplicated values ([#2867](https://github.com/flame-engine/flame/issues/2867)). ([e56ad187](https://github.com/flame-engine/flame/commit/e56ad1878333ba19e0c8af3fb9c9758603662330))

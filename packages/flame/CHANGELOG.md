@@ -1,3 +1,11 @@
+## 1.12.0
+
+ - **FIX**: SpriteAnimationWidget was resetting the ticker even when the playing didn't changed ([#2891](https://github.com/flame-engine/flame/issues/2891)). ([9aed8b4d](https://github.com/flame-engine/flame/commit/9aed8b4dea3074c9ca708ad991cdc90b12707fbe))
+ - **FEAT**: Scrollable TextBoxComponent ([#2901](https://github.com/flame-engine/flame/issues/2901)). ([8c3cb725](https://github.com/flame-engine/flame/commit/8c3cb725413c46089854713f6ecc4617e1f15600))
+ - **FEAT**: Add collision completed listener ([#2896](https://github.com/flame-engine/flame/issues/2896)). ([957db3c1](https://github.com/flame-engine/flame/commit/957db3c1ed476b22f7cc62d4df22595449f8756c))
+ - **FEAT**: Adding autoResetTicker option to SpriteAnimationGroupComponent ([#2899](https://github.com/flame-engine/flame/issues/2899)). ([001c870d](https://github.com/flame-engine/flame/commit/001c870d61be6e7e7aae798df0dc33e5321ed882))
+ - **FEAT**: Add clearSnapshot function ([#2897](https://github.com/flame-engine/flame/issues/2897)). ([d4decd21](https://github.com/flame-engine/flame/commit/d4decd21eb7506ffd6d84ab5a3ebf1f2067083b6))
+
 ## 1.11.0
 
 > Note: This release has breaking changes.
