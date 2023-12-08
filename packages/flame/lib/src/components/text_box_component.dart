@@ -65,6 +65,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   Image? cache;
 
   TextBoxConfig get boxConfig => _boxConfig;
+  double get lineHeight => _lineHeight;
 
   TextBoxComponent({
     super.text,
