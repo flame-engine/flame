@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:flutter/material.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.
@@ -13,6 +14,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
 
   List<T> get items => broadphase.items;
   final _lastPotentials = <CollisionProspect<T>>[];
+  final collisionsCompletedNotifier = CollisionDetectionCompletionNotifier();
 
   CollisionDetection({required this.broadphase});
 
@@ -62,6 +64,9 @@ abstract class CollisionDetection<T extends Hitbox<T>,
       }
     }
     _updateLastPotentials(potentials);
+
+    // Let all listeners know that the collision detection step has completed
+    collisionsCompletedNotifier.notifyListeners();
   }
 
   final _lastPotentialsPool = <CollisionProspect<T>>[];
@@ -160,4 +165,11 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
+}
+
+/// A class to handle callbacks for when the collision detection is done each
+/// tick.
+class CollisionDetectionCompletionNotifier extends ChangeNotifier {
+  @override
+  void notifyListeners() => super.notifyListeners();
 }

@@ -180,7 +180,7 @@ GameWidget(
 ## Event coordinate system
 
 On events that have positions, like for example `Tap*` or `Drag`, you will notice that the
-`eventPosition` attribute includes 2 fields: `game` and `widget`. Below you will find a brief
+`eventPosition` attribute includes 2 fields: `global` and `widget`. Below you will find a brief
 explanation about each of them.
 
 
