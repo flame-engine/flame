@@ -8,21 +8,22 @@ import 'package:flutter/painting.dart';
 /// [ScrollTextBoxComponent] configures the layout and interactivity of a
 /// scrollable text box.
 /// It focuses on the box's size, scrolling mechanics, padding, and alignment,
-/// contrasting with [TextRenderer],
-/// which handles text appearance like font and color.
-/// This component uses [TextBoxComponent] to provide
-/// scrollable text capabilities.
+/// contrasting with [TextRenderer], which handles text appearance like font and
+/// color.
+///
+/// This component uses [TextBoxComponent] to provide scrollable text
+/// capabilities.
 class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
 
   /// Constructor for [ScrollTextBoxComponent].
   /// - [size]: Specifies the size of the text box.
-  /// Must have positive dimensions.
+  ///   Must have positive dimensions.
   /// - [text]: The text content to be displayed.
   /// - [textRenderer]: Handles the rendering of the text.
   /// - [boxConfig]: Configuration for the text box appearance.
-  /// - Other parameters include alignment, pixel ratio, and
-  /// positioning settings.
+  /// - Other parameters include alignment, pixel ratio, and positioning
+  ///   settings.
   /// An assertion ensures that the [size] has positive dimensions.
   ScrollTextBoxComponent({
     required Vector2 size,
@@ -89,7 +90,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   /// area of the text box. This ensures that as the user scrolls through the
   /// text, the background moves in sync with the text. As an alternative,
   /// consider adding [ScrollTextBoxComponent] to a [SpriteComponent].
-  void drawBackground(Canvas c) {}
+  void drawBackground(Canvas canvas) {}
 }
 
 /// Private class handling the internal workings of [ScrollTextBoxComponent].
@@ -147,8 +148,8 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
   }
 
   @override
-  void drawBackground(Canvas c) {
-    _owner.drawBackground(c);
+  void drawBackground(Canvas canvas) {
+    _owner.drawBackground(canvas);
   }
 
   set setOwnerComponent(ScrollTextBoxComponent scrollTextBoxComponent) {
