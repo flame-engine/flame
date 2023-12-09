@@ -23,7 +23,7 @@ import 'package:flutter/material.dart';
 void addInputStories(Dashbook dashbook) {
   dashbook.storiesOf('Input')
     ..add(
-      'Tappables',
+      'TapCallbacks',
       (_) => GameWidget(game: TapCallbacksExample()),
       codeLink: baseLink('input/tap_callbacks_example.dart'),
       info: TapCallbacksExample.description,
