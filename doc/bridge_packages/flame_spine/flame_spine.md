@@ -21,7 +21,7 @@ void main() async {
   runApp(const GameWidget.controlled(gameFactory: SpineExample.new));
 }
 
-class FlameSpineExample extends FlameGame with TapDetector {
+class FlameSpineExample extends FlameGame {
  late final SpineComponent spineboy;
 
  @override

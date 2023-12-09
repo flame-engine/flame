@@ -35,5 +35,19 @@ class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {
   }
 
   @override
-  void onTapUp([TapUpEvent? event]) => _onTap?.call(this);
+  void onTapDown(TapDownEvent event) {
+    if (_onTap == null) {
+      event.continuePropagation = true;
+    }
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    final onTap = _onTap;
+    if (onTap == null) {
+      event.continuePropagation = true;
+    } else {
+      onTap.call(this);
+    }
+  }
 }

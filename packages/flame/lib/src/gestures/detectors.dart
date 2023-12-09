@@ -2,7 +2,7 @@ import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
-// Basic touch detectors
+@Deprecated('Use TapCallbacks instead')
 mixin TapDetector on Game {
   void onTap() {}
   void onTapCancel() {}
