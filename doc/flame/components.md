@@ -105,12 +105,12 @@ In the following example we first initialize the component with priority 1, and 
 user taps the component we change its priority to 2:
 
 ```dart
-class MyComponent extends PositionComponent with Tappable {
+class MyComponent extends PositionComponent with TapCallbacks {
 
   MyComponent() : super(priority: 1);
 
   @override
-  void onTap() {
+  void onTapDown(TapDownEvent event) {
     priority = 2;
   }
 }
@@ -818,8 +818,8 @@ robot.animationTickers?[RobotState.idle]?.onFrame = (currentIndex) {
 Example:
 
 ```dart
-class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameRef<SpriteGroupExample>, Tappable {
+class PlayerComponent extends SpriteGroupComponent<ButtonState>
+    with HasGameReference<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void>? onLoad() async {
     final pressedSprite = await gameRef.loadSprite(/* omitted */);

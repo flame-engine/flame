@@ -56,7 +56,7 @@ void main() {
       });
 
       testWithFlameGame(
-        'Can Add with Tappable',
+        'Can Add with TapCallbacks',
         (game) async {
           final child = _RiveComponentWithTappable(
             artboard: await loadArtboard(riveFile),
