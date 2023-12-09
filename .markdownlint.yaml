@@ -201,7 +201,7 @@ MD044:
   html_elements: true
 
 # MD045/no-alt-text - Images should have alternate text (alt text)
-# TODO: Activate this
+# TODO: Activate this with #2913 
 MD045: false
 
 # MD046/code-block-style - Code block style
