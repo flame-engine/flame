@@ -119,6 +119,13 @@ class HexagonalTileLayer extends FlameTileLayer {
           offsetY = ty * size.y + staggerY + halfDestinationTile.y;
         }
 
+        // Adjust offset according to the Tiled Editor, Tileset Object Alignment
+        // math needed
+        
+        // Adjust offset according to the Tiled Editor, Tileset Drawing Offset
+        offsetX += (tileset.tileOffset?.x ?? 0) * -1;
+        offsetY += (tileset.tileOffset?.y ?? 0) * -1;
+
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 
