@@ -13,7 +13,7 @@ animations, collision detection, and a component system that we call Flame Compo
 short).
 
 We also provide stand-alone packages that extend the Flame functionality which can be found in the
-[Bridge Packages](#bridge_packages/bridge_packages) section.
+[Bridge Packages](bridge_packages/bridge_packages.md) section.
 
 You can pick and choose whichever parts you want, as they are all independent and modular.
 
@@ -68,3 +68,10 @@ If you are building a multiplayer game, here are some recommendations of package
 - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
 - [Supabase](https://supabase.com/): A cheaper alternative to Firebase, based on Postgres.
+
+
+```{toctree}
+:hidden:
+
+Bridge Packages   <bridge_packages/bridge_packages.md>
+```
