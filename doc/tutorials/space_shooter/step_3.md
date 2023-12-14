@@ -72,8 +72,8 @@ animation!
 Now lets add some depth and energy to our game background. Of course there are many ways of
 doing so, in this tutorial we will explore the idea of parallax scrolling. If you never heard
 about it, it consist of a technique where background images move past the camera with different
-speeds, this not only creates the sensation of depth but also improve a lot the movement feeling
-of the game. If you want to read more about Parallax Scrolling, check this article
+speeds, this not only creates the sensation of depth but also improves the movement feeling
+of the game a lot. If you want to read more about Parallax Scrolling, check this article
 from [Wikipedia](https://en.wikipedia.org/wiki/Parallax_scrolling).
 
 Flame provides classes to implement parallax scrolling out of the box, these classes are `Parallax` and
