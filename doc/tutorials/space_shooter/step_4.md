@@ -2,12 +2,12 @@
 
 For this next step we will add a very important feature to any space shooter game, shooting!
 
-Here is how we will implement it: since we already control our space ship by dragging the screen
+Here is how we will implement it: since we already control our space ship by dragging on the screen
 with the mouse/fingers, we will make the ship auto shoot when the player stars the dragging and
 stops shooting when the gesture/input has ended.
 
-So let's start, to begin with it, let's first create a `Bullet` component that will represent the
-shoots in the game.
+So let's start, to begin let's first create a `Bullet` component that will represent the
+shots in the game.
 
 ```dart
 class Bullet extends SpriteAnimationComponent
@@ -36,11 +36,11 @@ class Bullet extends SpriteAnimationComponent
 }
 ```
 
-So far, this does not introduces any new concept, we just created a component, setting
+So far, this does not introduce any new concepts, we just created a component and set
 up its animations attributes.
 
-A `Bullet` behavior is a simple one, it always moves towards to the top of the screen and should
-be removed from the game if they are not visible anymore, so let's add an `update` method to it
+The `Bullet` behavior is a simple one, it always moves towards the top of the screen and should
+be removed from the game if it is not visible anymore, so let's add an `update` method to it
 and make it happen:
 
 ```dart
@@ -75,8 +75,8 @@ in the y axis means getting closer to `0` since the top left corner of the scree
 - If the y is smaller than the negative value of the bullet's height, means that the component is
 completely off the screen and it can be removed.
 
-Right, we have a `Bullet` class ready now, so lets make start to implement the action of shooting
-now. First thing, let's create two empty methods in the `Player` class, `startShooting` and
+Right, we now have a `Bullet` class ready, so lets start to implement the action of shooting.
+First thing, let's create two empty methods in the `Player` class, `startShooting` and
 `stopShooting`.
 
 ```dart
@@ -127,7 +127,7 @@ We now have everything set up, so let's write the shooting routine in our player
 Remember, the shooting behavior will be adding bullets through time intervals when the player is
 dragging the starship.
 
-We could very much likely implement the time interval code manually, but Flame provides an component
+We could very likely implement the time interval code manually, but Flame provides a component
 out of the box for that, the `TimerComponent`, so let's take advantage of it:
 
 
@@ -173,12 +173,12 @@ class Player extends SpriteAnimationComponent
 }
 ```
 
-Hopefully the code above speaks for itself, but let's look at it with more detail:
+Hopefully the code above speaks for itself, but let's look at it in more detail:
 
 - First we declared a `TimerComponent` called `_bulletSpawner` in our game class, we needed it
-to be an attribute since we will accessing it in the `startShooting` and `stopShooting` methods.
-- We initialize our `_bulletSpawner` in the `onLoad` method. The first argument `period` we set
-how much time in seconds will take place between calls, and we choose `.2` seconds for now.
+to be an variable accessible to the whole component since we will be accessing it in the `startShooting` and `stopShooting` methods.
+- We initialize our `_bulletSpawner` in the `onLoad` method. In the first argument, `period`, we set
+how much time in seconds it will take between calls, and we choose `.2` seconds for now.
 - The `onTick` attribute receives a function that will be called every time the `period` is reached.
 - We say that it should loop forever by setting `repeat` to `true`.
 - Then we set that it should not auto start by default.
