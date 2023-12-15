@@ -184,6 +184,7 @@ how much time in seconds will take place between calls, and we choose `.2` secon
 - Then we set that it should not auto start by default.
 - Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
 
-With the `_bulletSpawner` all setup, the only missing piece now is to start the `_bulletSpawner.timer` at `startShooting` and stop it in the `stopShooting`!
+With the `_bulletSpawner` all setup, the only missing piece now is to start the
+`_bulletSpawner.timer` at `startShooting` and stop it in the `stopShooting`!
 
 And that closes this step, putting us real close to a real game!
