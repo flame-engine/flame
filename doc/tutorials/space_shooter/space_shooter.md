@@ -15,4 +15,6 @@ with the [Dart] programming language.
 1. Getting Started  <step_1.md>
 2. Controlling the player and adding some graphics <step_2.md>
 3. Adding animations and depth <step_3.md>
+4. Adding Bullets <step_4.md>
+5. Adding Enemies <step_5.md>
 ```
