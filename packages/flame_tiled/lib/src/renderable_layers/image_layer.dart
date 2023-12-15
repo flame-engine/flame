@@ -71,7 +71,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       _maxTranslation.y = offsetY.abs();
     }
 
-
     // When the image is being repeated, make sure the _paintArea rect is
     // big enough that it repeats off the edge of the canvas in both positive
     // and negative directions on that axis (Tiled repeats forever on an axis).
