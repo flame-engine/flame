@@ -37,10 +37,10 @@ class Bullet extends SpriteAnimationComponent
 ```
 
 So far, this does not introduces any new concept, we just created a component, setting
-up its animations atrtibutes.
+up its animations attributes.
 
-A `Bullet` behaviour is a simple one, it always moves towards to the top of the screen and should
-be removed from the game if they are not visibile anymore, so let's add an `update` method to it
+A `Bullet` behavior is a simple one, it always moves towards to the top of the screen and should
+be removed from the game if they are not visible anymore, so let's add an `update` method to it
 and make it happen:
 
 ```dart
@@ -69,6 +69,7 @@ class Bullet extends SpriteAnimationComponent
 ```
 
 The above code should be straight forward, but lets break it down:
+
 - We add to the bullet's y axis position at a rate of -500 pixels per second. Remember going up
 in the y axis means getting closer to `0` since the top left corner of the screen is `0, 0`.
 - If the y is smaller than the negative value of the bullet's height, means that the component is
@@ -123,7 +124,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
 We now have everything set up, so let's write the shooting routine in our player class.
 
-Remember, the shooting behaviour will be adding bullets through time intervals when the player is
+Remember, the shooting behavior will be adding bullets through time intervals when the player is
 dragging the starship.
 
 We could very much likely implement the time interval code manually, but Flame provides an component
@@ -178,7 +179,7 @@ Hopefully the code above speaks for itself, but let's look at it with more detai
 to be an attribute since we will accessing it in the `startShooting` and `stopShooting` methods.
 - We initialize our `_bulletSpawner` in the `onLoad` method. The first argument `period` we set
 how much time in seconds will take place between calls, and we choose `.2` seconds for now.
-- The `onTick` attribute receives a function that will be called everytime the `period` is reached.
+- The `onTick` attribute receives a function that will be called every time the `period` is reached.
 - We say that it should loop forever by setting `repeat` to `true`.
 - Then we set that it should not auto start by default.
 - Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
