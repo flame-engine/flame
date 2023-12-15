@@ -1,0 +1,188 @@
+# Adding bullets
+
+For this next step we will add a very important feature to any space shooter game, shooting!
+
+Here is how we will implement it: since we already control our space ship by dragging the screen
+with the mouse/fingers, we will make the ship auto shoot when the player stars the dragging and
+stops shooting when the gesture/input has ended.
+
+So let's start, to begin with it, let's first create a `Bullet` component that will represent the
+shoots in the game.
+
+```dart
+class Bullet extends SpriteAnimationComponent
+    with HasGameReference<SpaceShooterGame> {
+  Bullet({
+    super.position,
+  }) : super(size: Vector2(25, 50));
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+
+    animation = await game.loadSpriteAnimation(
+      'bullet.png',
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: .2,
+        textureSize: Vector2(8, 16),
+      ),
+    );
+
+    width = 25;
+    height = 50;
+    anchor = Anchor.center;
+  }
+}
+```
+
+So far, this does not introduces any new concept, we just created a component, setting
+up its animations atrtibutes.
+
+A `Bullet` behaviour is a simple one, it always moves towards to the top of the screen and should
+be removed from the game if they are not visibile anymore, so let's add an `update` method to it
+and make it happen:
+
+```dart
+class Bullet extends SpriteAnimationComponent
+    with HasGameReference<SpaceShooterGame> {
+  Bullet({
+    super.position,
+  }) : super(size: Vector2(25, 50));
+
+  @override
+  Future<void> onLoad() async {
+    // Omitted
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    position.y += dt * -500;
+
+    if (position.y < -height) {
+      removeFromParent();
+    }
+  }
+}
+```
+
+The above code should be straight forward, but lets break it down:
+- We add to the bullet's y axis position at a rate of -500 pixels per second. Remember going up
+in the y axis means getting closer to `0` since the top left corner of the screen is `0, 0`.
+- If the y is smaller than the negative value of the bullet's height, means that the component is
+completely off the screen and it can be removed.
+
+Right, we have a `Bullet` class ready now, so lets make start to implement the action of shooting
+now. First thing, let's create two empty methods in the `Player` class, `startShooting` and
+`stopShooting`.
+
+```dart
+class Player extends SpriteAnimationComponent
+    with HasGameReference<SpaceShooterGame> {
+
+  // Rest of implementation omitted
+
+  void startShooting() {
+    // TODO
+  }
+
+  void stopShooting() {
+    // TODO
+  }
+}
+```
+
+And let's hook into those methods from the game class, we will do that by using the `onPanStart`
+and `onPanEnd` methods from the `PanDetector` mixin that we already have been using for the ship
+movement:
+
+```dart
+class SpaceShooterGame extends FlameGame with PanDetector {
+  late Player player;
+
+  // Rest of implementation omitted
+
+  @override
+  void onPanUpdate(DragUpdateInfo info) {
+    player.move(info.delta.global);
+  }
+
+  @override
+  void onPanStart(DragStartInfo info) {
+    player.startShooting();
+  }
+
+  @override
+  void onPanEnd(DragEndInfo info) {
+    player.stopShooting();
+  }
+}
+```
+
+We now have everything set up, so let's write the shooting routine in our player class.
+
+Remember, the shooting behaviour will be adding bullets through time intervals when the player is
+dragging the starship.
+
+We could very much likely implement the time interval code manually, but Flame provides an component
+out of the box for that, the `TimerComponent`, so let's take advantage of it:
+
+
+```dart
+class Player extends SpriteAnimationComponent
+    with HasGameReference<SpaceShooterGame> {
+  late final TimerComponent _bulletSpawner;
+
+  @override
+  Future<void> onLoad() async {
+    // Loading animation omitted
+
+    _bulletSpawner = TimerComponent(
+      period: .2,
+      onTick: () {
+        final bullet = Bullet(
+          position: position +
+              Vector2(
+                0,
+                -height / 2,
+              ),
+        );
+        game.add(bullet);
+      },
+      repeat: true,
+      autoStart: false,
+    );
+
+    add(_bulletSpawner);
+  }
+
+  void move(Vector2 delta) {
+    position.add(delta);
+  }
+
+  void startShooting() {
+    _bulletSpawner.timer.start();
+  }
+
+  void stopShooting() {
+    _bulletSpawner.timer.stop();
+  }
+}
+```
+
+Hopefully the code above speaks for itself, but let's look at it with more detail:
+
+- First we declared a `TimerComponent` called `_bulletSpawner` in our game class, we needed it
+to be an attribute since we will accessing it in the `startShooting` and `stopShooting` methods.
+- We initialize our `_bulletSpawner` in the `onLoad` method. The first argument `period` we set
+how much time in seconds will take place between calls, and we choose `.2` seconds for now.
+- The `onTick` attribute receives a function that will be called everytime the `period` is reached.
+- We say that it should loop forever by setting `repeat` to `true`.
+- Then we set that it should not auto start by default.
+- Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
+
+With the `_bulletSpawner` all setup, the only missing piece now is to start the `_bulletSpawner.timer` at `startShooting` and stop it in the `stopShooting`!
+
+And that closes this step, putting us real close to a real game!
