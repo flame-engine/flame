@@ -176,7 +176,8 @@ class Player extends SpriteAnimationComponent
 Hopefully the code above speaks for itself, but let's look at it in more detail:
 
 - First we declared a `TimerComponent` called `_bulletSpawner` in our game class, we needed it
-to be an variable accessible to the whole component since we will be accessing it in the `startShooting` and `stopShooting` methods.
+to be an variable accessible to the whole component since we will be accessing it in the
+`startShooting` and `stopShooting` methods.
 - We initialize our `_bulletSpawner` in the `onLoad` method. In the first argument, `period`, we set
 how much time in seconds it will take between calls, and we choose `.2` seconds for now.
 - The `onTick` attribute receives a function that will be called every time the `period` is reached.
