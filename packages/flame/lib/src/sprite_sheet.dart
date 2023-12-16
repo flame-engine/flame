@@ -27,30 +27,46 @@ class SpriteSheet {
   /// size. If it's an animation sheet, this would be the frame size.
   final Vector2 srcSize;
 
+  /// The empty space around the edges of the image.
+  final double margin;
+
+  /// This empty space in between adjacent tiles within the image.
+  final double spacing;
+
+  final int _rows;
+  final int _columns;
   final Map<int, Sprite> _spriteCache = {};
 
   /// Creates a sprite sheet given the image and the tile size.
   SpriteSheet({
     required this.image,
     required this.srcSize,
-  });
+    this.margin = 0,
+    this.spacing = 0,
+  })  : _columns =
+            (image.width - 2 * margin + spacing) ~/ (srcSize.x + spacing),
+        _rows = (image.height - 2 * margin + spacing) ~/ (srcSize.y + spacing);
 
   SpriteSheet.fromColumnsAndRows({
     required this.image,
     required int columns,
     required int rows,
-  }) : srcSize = Vector2(
-          image.width / columns,
-          image.height / rows,
+    this.spacing = 0,
+    this.margin = 0,
+  })  : _columns = columns,
+        _rows = rows,
+        srcSize = Vector2(
+          (image.width - 2 * margin - (columns - 1) * spacing) / columns,
+          (image.height - 2 * margin - (rows - 1) * spacing) / rows,
         );
 
   /// Compute the number of columns the image has
   /// by using the image width and tile size.
-  int get columns => image.width ~/ srcSize.x;
+  int get columns => _columns;
 
   /// Compute the number of rows the image has
   /// by using the image height and tile size.
-  int get rows => image.height ~/ srcSize.y;
+  int get rows => _rows;
 
   /// Gets the sprite in the position (row, column) on the sprite sheet grid.
   ///
@@ -101,7 +117,9 @@ class SpriteSheet {
     final j = spriteId ~/ columns;
     return Sprite(
       image,
-      srcPosition: Vector2Extension.fromInts(i, j)..multiply(srcSize),
+      srcPosition: Vector2Extension.fromInts(i, j)
+        ..multiply(srcSize)
+        ..translate(margin + i * spacing, margin + j * spacing),
       srcSize: srcSize,
     );
   }
