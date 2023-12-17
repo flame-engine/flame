@@ -38,7 +38,7 @@ void main() {
     });
 
     test('correct loads the file', () {
-      expect(tiled.tileMap.renderableLayers.length, equals(3));
+      expect(tiled.tileMap.renderableLayers.length, equals(4));
     });
 
     test('component atlases returns the loaded atlases', () {
