@@ -231,8 +231,7 @@ class PolygonComponent extends ShapeComponent {
     }
     for (var i = 0; i < _vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) *
-                  (point.y - edge.from.y) -
+      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
               (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
           0;
       if (isOutside) {

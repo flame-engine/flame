@@ -43,6 +43,19 @@ void main() {
       );
     });
 
+    test('polygon contains point in local', () {
+      final polygon = PolygonComponent(
+        [
+          Vector2(0.5, 0.5),
+          Vector2(0.5, 1.5),
+          Vector2(1.5, 1.5),
+          Vector2(1.5, 0.5),
+        ],
+      );
+      expect(polygon.containsLocalPoint(Vector2(0.25, 0.25)), isFalse);
+      expect(polygon.containsLocalPoint(Vector2(0.75, 0.75)), isTrue);
+    });
+
     test('rotated circle does not contain point', () {
       final component = CircleComponent(
         radius: 1.0,
