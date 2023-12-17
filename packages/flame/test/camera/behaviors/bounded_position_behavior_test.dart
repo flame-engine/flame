@@ -38,6 +38,13 @@ void main() {
       );
     });
 
+    test('update bounds while target is null', () {
+      final circle1 = Circle(Vector2.zero(), 10);
+      final circle2 = Circle(Vector2.all(30), 10);
+      final boundedPositionBehavior = BoundedPositionBehavior(bounds: circle1);
+      expect(() => boundedPositionBehavior.bounds = circle2, returnsNormally);
+    });
+
     testWithFlameGame('bad parent', (game) async {
       final shape = Circle(Vector2.zero(), 10);
       final parent = Component()..addToParent(game);
