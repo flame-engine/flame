@@ -33,8 +33,14 @@ class SpriteSheet {
   /// This empty space in between adjacent tiles within the image.
   final double spacing;
 
-  final int _rows;
-  final int _columns;
+  /// The number of rows in the image based on the image height and the tile
+  /// size.
+  final int rows;
+
+  /// The number of columns in the image based on the image width and the tile
+  /// size.
+  final int columns;
+
   final Map<int, Sprite> _spriteCache = {};
 
   /// Creates a sprite sheet given the image and the tile size.
@@ -43,30 +49,19 @@ class SpriteSheet {
     required this.srcSize,
     this.margin = 0,
     this.spacing = 0,
-  })  : _columns =
-            (image.width - 2 * margin + spacing) ~/ (srcSize.x + spacing),
-        _rows = (image.height - 2 * margin + spacing) ~/ (srcSize.y + spacing);
+  })  : columns = (image.width - 2 * margin + spacing) ~/ (srcSize.x + spacing),
+        rows = (image.height - 2 * margin + spacing) ~/ (srcSize.y + spacing);
 
   SpriteSheet.fromColumnsAndRows({
     required this.image,
-    required int columns,
-    required int rows,
+    required this.columns,
+    required this.rows,
     this.spacing = 0,
     this.margin = 0,
-  })  : _columns = columns,
-        _rows = rows,
-        srcSize = Vector2(
+  }) : srcSize = Vector2(
           (image.width - 2 * margin - (columns - 1) * spacing) / columns,
           (image.height - 2 * margin - (rows - 1) * spacing) / rows,
         );
-
-  /// Compute the number of columns the image has
-  /// by using the image width and tile size.
-  int get columns => _columns;
-
-  /// Compute the number of rows the image has
-  /// by using the image height and tile size.
-  int get rows => _rows;
 
   /// Gets the sprite in the position (row, column) on the sprite sheet grid.
   ///
