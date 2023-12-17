@@ -42,7 +42,7 @@ class MyGame extends FlameGame {
 ```
 
 In order to configure aspects of the rendering like font family, size, color, etc, you need to
-provide (or amend) a `TextRenderer` with such information; while you can read more details ab out
+provide (or amend) a `TextRenderer` with such information; while you can read more details about
 this interface below, the simplest implementation you can use is the `TextPaint`, which takes a
 Flutter `TextStyle`:
 
