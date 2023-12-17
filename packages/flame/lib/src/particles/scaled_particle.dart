@@ -4,8 +4,7 @@ import 'package:flame/src/components/mixins/single_child_particle.dart';
 import 'package:flame/src/particles/curved_particle.dart';
 import 'package:flame/src/particles/particle.dart';
 
-/// A particle which rotates its child over the lifespan
-/// between two given bounds in radians
+/// A particle which scales its child over the lifespan to the set scale.
 class ScaledParticle extends CurvedParticle with SingleChildParticle {
   @override
   Particle child;
