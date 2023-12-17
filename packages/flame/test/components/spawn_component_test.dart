@@ -110,5 +110,35 @@ void main() {
         isTrue,
       );
     });
+
+    testWithFlameGame('Can self position', (game) async {
+      final random = Random(0);
+      final spawn = SpawnComponent(
+        factory: (_) => PositionComponent(position: Vector2.all(1000)),
+        period: 1,
+        selfPositioning: true,
+        random: random,
+      );
+      final world = game.world;
+      await world.ensureAdd(spawn);
+      game.update(0.5);
+      expect(world.children.length, 1);
+      game.update(0.5);
+      game.update(0.0);
+      expect(world.children.length, 2);
+      game.update(1.0);
+      game.update(0.0);
+      expect(world.children.length, 3);
+
+      for (var i = 0; i < 1000; i++) {
+        game.update(random.nextDouble());
+      }
+      expect(
+        world.children
+            .query<PositionComponent>()
+            .every((c) => c.position == Vector2.all(1000)),
+        isTrue,
+      );
+    });
   });
 }
