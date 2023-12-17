@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('PolygonComponent', () {
-    test('Hittest for PolygonComponent', () {
+    test('HitTest for PolygonComponent', () {
       final polygon = PolygonComponent(
         [
           Vector2(50, 50),
@@ -20,7 +20,7 @@ void main() {
       expect(polygon.containsLocalPoint(Vector2(125, 75)), isTrue);
     });
     
-    test('Hittest for PolygonComponent.relative', () {
+    test('HitTest for PolygonComponent.relative', () {
       final polygon = PolygonComponent.relative(
         [
           Vector2(-0.5, -0.5),
