@@ -18,6 +18,14 @@ void main() {
       expect(cache.keys.length, 1);
     });
 
+    test('updates key', () {
+      final cache = MemoryCache<int, String>();
+      cache.setValue(0, 'bla');
+      expect(cache.getValue(0), 'bla');
+      cache.setValue(0, 'ble');
+      expect(cache.getValue(0), 'ble');
+    });
+
     test('cache size', () {
       final cache = MemoryCache<int, String>(cacheSize: 1);
       cache.setValue(0, 'bla');

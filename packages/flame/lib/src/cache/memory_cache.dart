@@ -9,9 +9,10 @@ class MemoryCache<K, V> {
   MemoryCache({this.cacheSize = 10});
 
   void setValue(K key, V value) {
-    if (!_cache.containsKey(key)) {
-      _cache[key] = value;
+    final preexisting = _cache.containsKey(key);
+    _cache[key] = value;
 
+    if (!preexisting) {
       while (_cache.length > cacheSize) {
         final k = _cache.keys.first;
         _cache.remove(k);
