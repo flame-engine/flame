@@ -12,8 +12,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// responsibilities associated with [ConsumerStatefulElement] in
 /// `flutter_riverpod`.
 class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
-  RiverpodAwareGameWidget({required super.game, required this.key})
-      : super(key: key);
+  RiverpodAwareGameWidget({
+    required super.game,
+    required this.key,
+    super.textDirection,
+    super.loadingBuilder,
+    super.errorBuilder,
+    super.backgroundBuilder,
+    super.overlayBuilderMap,
+    super.initialActiveOverlays,
+    super.focusNode,
+    super.autofocus,
+    super.mouseCursor,
+    super.addRepaintBoundary,
+  }) : super(key: key);
 
   @override
   final GlobalKey<RiverpodAwareGameWidgetState<T>> key;
