@@ -14,6 +14,8 @@ import 'package:flame/math.dart';
 /// components.
 /// If you want to use a non static time interval, use the
 /// [SpawnComponent.periodRange] constructor.
+/// If you want to set the position of the spawned components yourself inside of
+/// the [factory], set [selfPositioning] to true.
 /// {@endtemplate}
 class SpawnComponent extends Component {
   /// {@macro spawn_component}
@@ -22,9 +24,14 @@ class SpawnComponent extends Component {
     required double period,
     this.area,
     this.within = true,
+    this.selfPositioning = false,
     Random? random,
     super.key,
-  })  : _period = period,
+  })  : assert(
+          !(selfPositioning && area != null),
+          "Don't set an area when you are using selfPositioning=true",
+        ),
+        _period = period,
         _random = random ?? randomFallback;
 
   /// Use this constructor if you want your components to spawn within an
@@ -38,9 +45,14 @@ class SpawnComponent extends Component {
     required double maxPeriod,
     this.area,
     this.within = true,
+    this.selfPositioning = false,
     Random? random,
     super.key,
-  })  : _period = minPeriod +
+  })  : assert(
+          !(selfPositioning && area != null),
+          "Don't set an area when you are using selfPositioning=true",
+        ),
+        _period = minPeriod +
             (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
         _random = random ?? randomFallback;
 
@@ -55,6 +67,11 @@ class SpawnComponent extends Component {
 
   /// Whether the random point should be within the [area] or along its edges.
   bool within;
+
+  /// Whether the spawned components positions shouldn't be given a position,
+  /// so that they can continue to have the position that they had after they
+  /// came out of the [factory].
+  bool selfPositioning;
 
   /// The timer that is used to control when components are spawned.
   late final Timer timer;
@@ -87,7 +104,7 @@ class SpawnComponent extends Component {
 
   @override
   FutureOr<void> onLoad() async {
-    if (area == null) {
+    if (area == null && !selfPositioning) {
       final parentPosition =
           ancestors().whereType<PositionProvider>().firstOrNull?.position ??
               Vector2.zero();
@@ -120,10 +137,12 @@ class SpawnComponent extends Component {
       repeat: true,
       onTick: () {
         final component = factory(amount);
-        component.position = area!.randomPoint(
-          random: _random,
-          within: within,
-        );
+        if (!selfPositioning) {
+          component.position = area!.randomPoint(
+            random: _random,
+            within: within,
+          );
+        }
         parent?.add(component);
         updatePeriod();
         amount++;

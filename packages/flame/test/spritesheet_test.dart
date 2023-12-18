@@ -23,6 +23,31 @@ void main() {
       expect(spriteSheet.columns, 100);
     });
 
+    test('calculates columns and rows with margin and spacing', () {
+      final spriteSheet = SpriteSheet(
+        image: image,
+        srcSize: Vector2(1, 2),
+        margin: 3,
+        spacing: 2,
+      );
+
+      expect(spriteSheet.rows, 24);
+      expect(spriteSheet.columns, 32);
+    });
+
+    test('calculates srcSize with margin and spacing', () {
+      final spriteSheet = SpriteSheet.fromColumnsAndRows(
+        image: image,
+        columns: 32,
+        rows: 24,
+        margin: 3,
+        spacing: 2,
+      );
+
+      expect(spriteSheet.srcSize.x, 1);
+      expect(spriteSheet.srcSize.y, 2);
+    });
+
     test('assign the correct time in sprite', () {
       final spriteSheet = SpriteSheet(
         image: image,

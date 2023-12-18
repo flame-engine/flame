@@ -853,9 +853,13 @@ spawn components along the edges of the shape set the `within` argument to false
 This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
 within the defined circle:
 
+The `factory` function takes an `int` as an argument, which is the index of the component that is
+being spawned, so if for example 4 components have been spawned already the 5th component will have
+the index 4, since the indexing starts at 0.
+
 ```dart
 SpawnComponent(
-  factory: () => MyComponent(size: Vector2(10, 20)),
+  factory: (i) => MyComponent(size: Vector2(10, 20)),
   period: 0.5,
   area: Circle(Vector2(100, 200), 150),
 );
@@ -868,10 +872,23 @@ between each new spawned component is between 0.5 to 10 seconds.
 
 ```dart
 SpawnComponent.periodRange(
-  factory: () => MyComponent(size: Vector2(10, 20)),
+  factory: (i) => MyComponent(size: Vector2(10, 20)),
   minPeriod: 0.5,
   maxPeriod: 10,
   area: Circle(Vector2(100, 200), 150),
+);
+```
+
+If you want to set the position yourself within the `factory` function, you can use set
+`selfPositioning = true` in the constructors and you will be able to set the positions yourself and
+ignore the `area` argument.
+
+```dart
+SpawnComponent(
+  factory: (i) =>
+    MyComponent(position: Vector2(100, 200), size: Vector2(10, 20)),
+  selfPositioning: true,
+  period: 0.5,
 );
 ```
 
