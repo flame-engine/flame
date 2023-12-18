@@ -36,7 +36,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
           return Enemy();
         },
         period: 1,
-        area: Rectangle.fromLTWH(0, 0, size.x, -50),
+        area: Rectangle.fromLTWH(0, 0, size.x, -Enemy.enemySize),
       ),
     );
   }
@@ -151,7 +151,9 @@ class Enemy extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Enemy({
     super.position,
-  }) : super(size: Vector2.all(50));
+  }) : super(size: Vector2.all(enemySize));
+
+  static const enemySize = 50.0;
 
   @override
   Future<void> onLoad() async {

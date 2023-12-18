@@ -8,9 +8,12 @@ So first things first, let's create an `Enemy` class that will represent the ene
 ```dart
 class Enemy extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
+
   Enemy({
     super.position,
-  }) : super(size: Vector2.all(50));
+  }) : super(size: Vector2.all(enemySize));
+
+  static const enemySize = 50.0;
 
   @override
   Future<void> onLoad() async {
@@ -62,15 +65,15 @@ way to avoid having to write all that by ourselves, we can use the `SpawnCompone
           return Enemy();
         },
         period: 1,
-        area: Rectangle.fromLTWH(0, 0, size.x, -50),
+        area: Rectangle.fromLTWH(0, 0, size.x, -Enemy.enemySize),
       ),
     );
 ```
 
 The `SpawnComponent` will take a couple of arguments, let's review them as they appear in the code:
 
-- `factory` receives a function which has the index of the component that should be created. We don't use
-the index in our code, but it is useful to create more advanced spawn routines.
+- `factory` receives a function which has the index of the component that should be created. We
+don't use the index in our code, but it is useful to create more advanced spawn routines.
 This function should return the created component, in our case a new instance of `Enemy`.
 - `period` simply define the interval in which a new component will be spawned.
 - `area` defines the possible area where the components can be placed once created. In our case they
