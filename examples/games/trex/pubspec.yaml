@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   collection: ^1.16.0
-  flame: ^1.12.0
+  flame: ^1.13.0
   flutter:
     sdk: flutter
 

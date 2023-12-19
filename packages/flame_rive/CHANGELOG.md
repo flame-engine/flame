@@ -1,3 +1,7 @@
+## 1.9.9
+
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
 ## 1.9.8
 
  - Update a dependency to the latest release.

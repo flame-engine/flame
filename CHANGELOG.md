@@ -3,6 +3,80 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-19
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.13.0`](#flame---v1130)
+ - [`flame_rive` - `v1.9.9`](#flame_rive---v199)
+ - [`flame_riverpod` - `v5.1.1`](#flame_riverpod---v511)
+ - [`flame_tiled` - `v1.18.2`](#flame_tiled---v1182)
+ - [`flame_test` - `v1.15.2`](#flame_test---v1152)
+ - [`flame_oxygen` - `v0.1.9+6`](#flame_oxygen---v0196)
+ - [`flame_isolate` - `v0.5.0+6`](#flame_isolate---v0506)
+ - [`flame_fire_atlas` - `v1.4.6`](#flame_fire_atlas---v146)
+ - [`flame_audio` - `v2.1.6`](#flame_audio---v216)
+ - [`flame_spine` - `v0.1.1+8`](#flame_spine---v0118)
+ - [`flame_bloc` - `v1.10.8`](#flame_bloc---v1108)
+ - [`flame_lottie` - `v0.3.0+6`](#flame_lottie---v0306)
+ - [`flame_markdown` - `v0.1.1+6`](#flame_markdown---v0116)
+ - [`flame_svg` - `v1.8.8`](#flame_svg---v188)
+ - [`flame_forge2d` - `v0.16.0+3`](#flame_forge2d---v01603)
+ - [`flame_noise` - `v0.1.1+11`](#flame_noise---v01111)
+ - [`flame_network_assets` - `v0.2.0+11`](#flame_network_assets---v02011)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.2`
+ - `flame_oxygen` - `v0.1.9+6`
+ - `flame_isolate` - `v0.5.0+6`
+ - `flame_fire_atlas` - `v1.4.6`
+ - `flame_audio` - `v2.1.6`
+ - `flame_spine` - `v0.1.1+8`
+ - `flame_bloc` - `v1.10.8`
+ - `flame_lottie` - `v0.3.0+6`
+ - `flame_markdown` - `v0.1.1+6`
+ - `flame_svg` - `v1.8.8`
+ - `flame_forge2d` - `v0.16.0+3`
+ - `flame_noise` - `v0.1.1+11`
+ - `flame_network_assets` - `v0.2.0+11`
+
+---
+
+#### `flame` - `v1.13.0`
+
+ - **FIX**: Logic error in MemoryCache.setValue() ([#2931](https://github.com/flame-engine/flame/issues/2931)). ([8cee80c3](https://github.com/flame-engine/flame/commit/8cee80c35ca676ad25a25c771f0aade88b58150b))
+ - **FIX**: Export `ScalingParticle` ([#2928](https://github.com/flame-engine/flame/issues/2928)). ([3730cb1d](https://github.com/flame-engine/flame/commit/3730cb1d834c73c87dc3597554039fd0f0a32bae))
+ - **FIX**: Misalignment of the hittest area of PolygonHitbox ([#2930](https://github.com/flame-engine/flame/issues/2930)). ([dbdb1379](https://github.com/flame-engine/flame/commit/dbdb1379d0bc1b6ac02b3ee27f62263bd1be3fc3))
+ - **FIX**: Allow setting `bounds` while `BoundedPositionBehavior`'s target is null ([#2926](https://github.com/flame-engine/flame/issues/2926)). ([bab9be6e](https://github.com/flame-engine/flame/commit/bab9be6e7051b7be6c84fc9760c7347692dbf140))
+ - **FEAT**: Ability to use `selfPositioning` in `SpawnComponent` ([#2927](https://github.com/flame-engine/flame/issues/2927)). ([b526aa14](https://github.com/flame-engine/flame/commit/b526aa1488c0f891edb356007ebc2c5c2de596b5))
+ - **FEAT**: Add `margin` and `spacing` properties to `SpriteSheet` ([#2925](https://github.com/flame-engine/flame/issues/2925)). ([67f7c126](https://github.com/flame-engine/flame/commit/67f7c126b4c8052df99ffa8c657a90cc7fb6f867))
+ - **FEAT**: Add `children` to `SpriteAnimationComponent.fromFrameData` ([#2914](https://github.com/flame-engine/flame/issues/2914)). ([caf2b909](https://github.com/flame-engine/flame/commit/caf2b90930ca500c85b9f9f63e7d3d7a5d82c18e))
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
+#### `flame_rive` - `v1.9.9`
+
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
+#### `flame_riverpod` - `v5.1.1`
+
+ - **FIX**: Add super constructor fields to RiverpodAwareGameWidget ([#2932](https://github.com/flame-engine/flame/issues/2932)). ([c2e6ea71](https://github.com/flame-engine/flame/commit/c2e6ea71e5c3c5f0d7ae6bc01a6c2f1f4d4d563b))
+
+#### `flame_tiled` - `v1.18.2`
+
+ - **FIX**: Image layers repeat indefinitely if repeated in Tiled ([#2921](https://github.com/flame-engine/flame/issues/2921)). ([6f79bc5e](https://github.com/flame-engine/flame/commit/6f79bc5ef920ace17d09c88156a73043357d514f))
+
+
 ## 2023-12-08
 
 ### Changes

@@ -8,8 +8,8 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.12.0
-  flame_forge2d: ^0.16.0+2
+  flame: ^1.13.0
+  flame_forge2d: ^0.16.0+3
   flutter:
     sdk: flutter
   google_fonts: ^4.0.4
