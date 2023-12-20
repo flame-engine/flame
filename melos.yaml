@@ -58,11 +58,11 @@ scripts:
   doc-setup:
     run: >
       echo Checking python version: &&
-      python --version &&
-      (python -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
+      python3 --version &&
+      (python3 -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
       (echo  Error: Python 3.8+ is required && exit 1)) &&
       echo Installing required python modules: &&
-      python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
+      python3 -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
       echo Installing dartdoc_json: &&
       dart pub global activate dartdoc_json &&
       echo Done.
@@ -75,9 +75,9 @@ scripts:
   doc-serve:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
     description: Recompiles the docs every time there is a change in them and opens your browser.
-  
+
   doc-kill:
-    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python kill-server.py
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python3 kill-server.py
     description: Kills any TCP processes running on port 8000.
 
   doc-clean:

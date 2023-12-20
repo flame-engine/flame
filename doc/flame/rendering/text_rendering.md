@@ -243,7 +243,7 @@ this section is for you.
 
 The following diagram showcases the class and inheritance structure of the text rendering pipeline:
 
-```mermaid
+```{mermaid}
 %%{init: { 'theme': 'dark' } }%%
 classDiagram
     %% renderers
@@ -466,7 +466,7 @@ defined in the `FlameTextStyle` class.
 
 The actual nodes all inherit from `TextNode` and are broken down by the following diagram:
 
-```mermaid
+```{mermaid}
 %%{init: { 'theme': 'dark' } }%%
 graph TD
     %% Config %%
@@ -542,7 +542,7 @@ to, and can be thought of as, CSS definitions.
 
 The full inheritance chain can be seen on the following diagram:
 
-```mermaid
+```{mermaid}
 %%{init: { 'theme': 'dark' } }%%
 classDiagram
     %% Nodes %%
