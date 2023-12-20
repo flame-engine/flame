@@ -32,5 +32,4 @@ Rendering            <rendering/rendering.md>
 Layout               <layout/layout.md>
 Overlays             <overlays.md>
 Other                <other/other.md>
-Camera & Viewport    <camera_and_viewport.md>
 ```
