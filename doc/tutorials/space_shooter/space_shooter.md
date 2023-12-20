@@ -17,4 +17,5 @@ with the [Dart] programming language.
 3. Adding animations and depth <step_3.md>
 4. Adding Bullets <step_4.md>
 5. Adding Enemies <step_5.md>
+6. Enemies and Bullets collision <step_6.md>
 ```

@@ -5,6 +5,8 @@ import 'package:tutorials_space_shooter/step1/main.dart' as step1;
 import 'package:tutorials_space_shooter/step2/main.dart' as step2;
 import 'package:tutorials_space_shooter/step3/main.dart' as step3;
 import 'package:tutorials_space_shooter/step4/main.dart' as step4;
+import 'package:tutorials_space_shooter/step5/main.dart' as step5;
+import 'package:tutorials_space_shooter/step6/main.dart' as step6;
 
 void main() {
   var page = window.location.search ?? '';
@@ -24,6 +26,12 @@ void main() {
       break;
     case 'step4':
       step4.main();
+      break;
+    case 'step5':
+      step5.main();
+      break;
+    case 'step6':
+      step6.main();
       break;
 
     default:
