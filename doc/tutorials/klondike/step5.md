@@ -602,7 +602,7 @@ Tableau Pile number and `i` is the card's position in the pile. The King of Hear
 arriving before the Queen of Clubs that is the last card in Pile 5. And there are two more cards
 to go in Pile 6.
 
-```
+```console
 flutter: Move done, i 3, j 6, 6♠ 5 moving cards.
 flutter: Move done, i 4, j 5, 9♥ 4 moving cards.
 flutter: Move done, i 4, j 6, K♥ 3 moving cards.
