@@ -15,5 +15,6 @@ Gesture Input   <gesture_input.md>
 Keyboard Input  <keyboard_input.md>
 Other Inputs    <other_inputs.md>
 Tap Events      <tap_events.md>
+Pointer Events  <pointer_events.md>
 HardwareKeyboardDetector  <hardware_keyboard_detector.md>
 ```
