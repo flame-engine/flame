@@ -121,7 +121,9 @@ different tiles than the previous.
 
 [Tiled]: https://www.mapeditor.org/
 
+
 ## Troubleshooting
+
 
 ### My game shows "lines" and artifacts between the map tiles
 
