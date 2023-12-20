@@ -121,6 +121,17 @@ different tiles than the previous.
 
 [Tiled]: https://www.mapeditor.org/
 
+
+## Troubleshooting
+
+
+### My game shows "lines" and artifacts between the map tiles
+
+This is caused by the imprecision found in float-pointing numbers in computer science.
+
+Check this [Article](https://verygood.ventures/blog/solving-super-dashs-rendering-challenges-eliminating-ghost-lines-for-a-seamless-gaming-experience)
+to learn more about the issue and how it can be solved.
+
 ```{toctree}
 :hidden:
 
