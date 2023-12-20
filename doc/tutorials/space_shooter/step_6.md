@@ -27,7 +27,7 @@ other objects. Flame offers a collection of classes to define a hitbox, the simp
 the `RectangleHitbox`, which like the name implies will make a rectangular area the component's
 hitbox.
 
-Hitboxes are also components, so, in order to add them to our components we can simply add 
+Hitboxes are also components, so, in order to add them to our components we can simply add
 the following line on both the `Bullet` and `Enemy` `onLoad` method:
 
 ```dart
@@ -38,8 +38,8 @@ From this point on, Flame will take care of checking the collision between those
 we need now to do something when they came in contact.
 
 We can start that by receiving the collision events in one of the classes. I will choose the
-`Enemy` class to be the one responsible to listenning to events, since in theory, there will
-mostly likelly have fewer enemies than bullets, so we can less checkings if we keep that logic
+`Enemy` class to be the one responsible to listening to events, since in theory, there will
+mostly likely have fewer enemies than bullets, so we can less checking if we keep that logic
 on the enemies.
 
 To listen collision event we need to simply add the `CollisionCallbacks` mixin to a component,
@@ -69,7 +69,7 @@ class Enemy extends SpriteAnimationComponent
 }
 ```
 
-As you can see, we simply added the mixin to the class, overriden the `onCollisionStart` method,
+As you can see, we simply added the mixin to the class, overridden the `onCollisionStart` method,
 where we check with the component that collided with us was a `Bullet` and if it was, then
 we remove both the current `Enemy` instance and the `Bullet`.
 
