@@ -51,11 +51,9 @@ performance!
 
 There are three types of collisions in Flame:
 
-- `active`: These hitboxes will both check itself against other hitboxes, as well other hitboxes
-will check their hitboxes against this one.
-- `passive`: It will not check its own hitboxes against others, but other active hitboxes will
-check their hitboxes against it.
-- `inactive`: Will not check or be checked upon.
+- `active` collides with other `Collidable`s of type active or passive
+- `passive` collides with other `Collidable`s of type active
+- `inactive` will not collide with any other `Collidable`s
 
 Usually it is smart to mark hitboxes from components that will have a higher number of instances
 as passive, so they will be taken into account for collision, but they themselves will not check
