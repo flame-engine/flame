@@ -129,22 +129,23 @@ We now have everything set up, so let's write the shooting routine in our player
 Remember, the shooting behavior will be adding bullets through time intervals when the player is
 dragging the starship.
 
-We could very likely implement the time interval code manually, but Flame provides a component
-out of the box for that, the `TimerComponent`, so let's take advantage of it:
+We could very likely implement the time interval code and the spawning manually, but Flame
+provides a component out of the box for that, the `SpawnComponent`, so let's take advantage of it:
 
 
 ```dart
 class Player extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
-  late final TimerComponent _bulletSpawner;
+  late final SpawnComponent _bulletSpawner;
 
   @override
   Future<void> onLoad() async {
     // Loading animation omitted
 
-    _bulletSpawner = TimerComponent(
+    _bulletSpawner = SpawnComponent(
       period: .2,
-      onTick: () {
+      selfPositioning: true,
+      factory: (index) {
         final bullet = Bullet(
           position: position +
               Vector2(
@@ -152,9 +153,9 @@ class Player extends SpriteAnimationComponent
                 -height / 2,
               ),
         );
-        game.add(bullet);
+
+        return bullet;
       },
-      repeat: true,
       autoStart: false,
     );
 
@@ -177,13 +178,15 @@ class Player extends SpriteAnimationComponent
 
 Hopefully the code above speaks for itself, but let's look at it in more detail:
 
-- First we declared a `TimerComponent` called `_bulletSpawner` in our game class, we needed it
+- First we declared a `SpawnComponent` called `_bulletSpawner` in our game class, we needed it
 to be an variable accessible to the whole component since we will be accessing it in the
 `startShooting` and `stopShooting` methods.
 - We initialize our `_bulletSpawner` in the `onLoad` method. In the first argument, `period`, we set
 how much time in seconds it will take between calls, and we choose `.2` seconds for now.
-- The `onTick` attribute receives a function that will be called every time the `period` is reached.
-- We say that it should loop forever by setting `repeat` to `true`.
+- We set `selfPositioning: true` so the spawn component don't try to position the created
+component itself since we want to handle that ourselves to make the bullets spawn out of the ship.
+- The `factory` attribute receives a function that will be called every time the `period` is reached.
+and must return the create component.
 - Then we set that it should not auto start by default.
 - Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
 

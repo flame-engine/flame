@@ -67,7 +67,7 @@ class Player extends SpriteAnimationComponent
           anchor: Anchor.center,
         );
 
-  late final TimerComponent _bulletSpawner;
+  late final SpawnComponent _bulletSpawner;
 
   @override
   Future<void> onLoad() async {
@@ -84,9 +84,10 @@ class Player extends SpriteAnimationComponent
 
     position = game.size / 2;
 
-    _bulletSpawner = TimerComponent(
+    _bulletSpawner = SpawnComponent(
       period: .2,
-      onTick: () {
+      selfPositioning: true,
+      factory: (index) {
         final bullet = Bullet(
           position: position +
               Vector2(
@@ -94,9 +95,9 @@ class Player extends SpriteAnimationComponent
                 -height / 2,
               ),
         );
-        game.add(bullet);
+
+        return bullet;
       },
-      repeat: true,
       autoStart: false,
     );
 
