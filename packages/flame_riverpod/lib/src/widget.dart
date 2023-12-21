@@ -35,8 +35,11 @@ class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
 }
 
 class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
-    implements WidgetRef {
+    with WidgetsBindingObserver implements WidgetRef {
   RiverpodGameMixin get game => widget.game! as RiverpodGameMixin;
+
+  bool _isForceBuilding = false;
+  bool _hasQueuedBuild = false;
 
   late ProviderContainer _container = ProviderScope.containerOf(context);
   var _dependencies =
@@ -47,7 +50,14 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   List<_ListenManual<Object?>>? _manualListeners;
 
   /// Rebuilds the [RiverpodAwareGameWidget] by calling [setState].
+  // Undesirable to call [setState] while the widget may be building.
+  // Honour requests to rebuild by setting a flag. 
   void forceBuild() {
+    if (_isForceBuilding) { 
+      _hasQueuedBuild = true; 
+      return;
+    }
+    _isForceBuilding = true;
     setState(() {});
   }
 
@@ -55,6 +65,16 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   void initState() {
     super.initState();
     game.key = (widget as RiverpodAwareGameWidget<T>).key;
+
+    WidgetsBinding.instance.addPersistentFrameCallback((_) {
+      if (_hasQueuedBuild) {
+        _isForceBuilding = true;
+        _hasQueuedBuild = false;
+        forceBuild();
+      } else {
+        _isForceBuilding = false;
+      } 
+    });
   }
 
   @override
@@ -136,7 +156,10 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
 
       return _container.listen<Res>(
         target,
-        (_, __) => setState(() {}),
+        // setState call has been replaced with forceBuild, 
+        // to prevent setState calls while the widget is 
+        // building, which throws a framework error.
+        (_, __) => forceBuild(),
       );
     }).read() as Res;
   }
