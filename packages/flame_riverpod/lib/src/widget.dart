@@ -51,8 +51,9 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   List<_ListenManual<Object?>>? _manualListeners;
 
   /// Rebuilds the [RiverpodAwareGameWidget] by calling [setState].
-  // Undesirable to call [setState] while the widget may be building.
-  // Honour requests to rebuild by setting a flag.
+  /// As it is undesirable to call [setState] while the widget may be building,
+  /// this function honours (potential) subsequent requests to rebuild by
+  /// setting a flag.
   void forceBuild() {
     if (_isForceBuilding) {
       _hasQueuedBuild = true;
