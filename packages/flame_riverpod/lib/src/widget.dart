@@ -35,7 +35,8 @@ class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
 }
 
 class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
-    with WidgetsBindingObserver implements WidgetRef {
+    with WidgetsBindingObserver
+    implements WidgetRef {
   RiverpodGameMixin get game => widget.game! as RiverpodGameMixin;
 
   bool _isForceBuilding = false;
@@ -51,10 +52,10 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
 
   /// Rebuilds the [RiverpodAwareGameWidget] by calling [setState].
   // Undesirable to call [setState] while the widget may be building.
-  // Honour requests to rebuild by setting a flag. 
+  // Honour requests to rebuild by setting a flag.
   void forceBuild() {
-    if (_isForceBuilding) { 
-      _hasQueuedBuild = true; 
+    if (_isForceBuilding) {
+      _hasQueuedBuild = true;
       return;
     }
     _isForceBuilding = true;
@@ -73,7 +74,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
         forceBuild();
       } else {
         _isForceBuilding = false;
-      } 
+      }
     });
   }
 
@@ -156,8 +157,8 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
 
       return _container.listen<Res>(
         target,
-        // setState call has been replaced with forceBuild, 
-        // to prevent setState calls while the widget is 
+        // setState call has been replaced with forceBuild,
+        // to prevent setState calls while the widget is
         // building, which throws a framework error.
         (_, __) => forceBuild(),
       );
