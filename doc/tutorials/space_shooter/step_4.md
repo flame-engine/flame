@@ -129,7 +129,7 @@ We now have everything set up, so let's write the shooting routine in our player
 Remember, the shooting behavior will be adding bullets through time intervals when the player is
 dragging the starship.
 
-We could very likely implement the time interval code and the spawning manually, but Flame
+We could implement the time interval code and the spawning manually, but Flame
 provides a component out of the box for that, the `SpawnComponent`, so let's take advantage of it:
 
 
