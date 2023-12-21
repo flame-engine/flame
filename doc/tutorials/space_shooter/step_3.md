@@ -27,6 +27,12 @@ simple, take a look at how the component will look like now:
 ```dart
 class Player extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
+
+  Player() : super(
+    size: Vector2(100, 150),
+    anchor: Anchor.center,
+  );
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -41,9 +47,6 @@ class Player extends SpriteAnimationComponent
     );
 
     position = game.size / 2;
-    width = 100;
-    height = 150;
-    anchor = Anchor.center;
   }
 
   // Other methods omitted
