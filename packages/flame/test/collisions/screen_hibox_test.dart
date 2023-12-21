@@ -115,5 +115,41 @@ void main() {
         expect(testBlock.endCounter, 0);
       },
     });
+
+    runCollisionTestRegistry({
+      'collides with FixedResolutionViewport': (hasCollisionDetection) async {
+        final game = hasCollisionDetection as FlameGame;
+        game.camera = CameraComponent.withFixedResolution(
+          width: 100,
+          height: 100,
+        );
+        final testBlock = TestBlock(
+          Vector2.all(-50),
+          Vector2.all(2),
+        )..anchor = Anchor.center;
+        final screenHitbox = ScreenHitbox();
+        await game.world.addAll([screenHitbox, testBlock]);
+        await game.ready();
+        game.update(0);
+
+        expect(testBlock.startCounter, 1);
+        expect(testBlock.onCollisionCounter, 1);
+        expect(testBlock.endCounter, 0);
+
+        testBlock.position = Vector2.all(50);
+        game.update(0);
+
+        expect(testBlock.startCounter, 1);
+        expect(testBlock.onCollisionCounter, 2);
+        expect(testBlock.endCounter, 0);
+
+        testBlock.position = Vector2.all(0);
+        game.update(0);
+
+        expect(testBlock.startCounter, 1);
+        expect(testBlock.onCollisionCounter, 2);
+        expect(testBlock.endCounter, 1);
+      },
+    });
   });
 }
