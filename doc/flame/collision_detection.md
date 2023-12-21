@@ -236,9 +236,9 @@ the collision detection more performant. By default the `CollisionType` is `acti
 
 The `CollisionType` enum contains the following values:
 
-- `active` collides with other `Collidable`s of type active or passive
-- `passive` collides with other `Collidable`s of type active
-- `inactive` will not collide with any other `Collidable`s
+- `active` collides with other `Hitbox`es of type active or passive
+- `passive` collides with other `Hitbox`es of type active
+- `inactive` will not collide with any other `Hitbox`es
 
 So if you have hitboxes that you don't need to check collisions against each other you can mark
 them as passive by setting `collisionType: CollisionType.passive` in the constructor,
