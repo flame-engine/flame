@@ -1,3 +1,8 @@
+## 1.13.1
+
+ - **FIX**: The `visibleGameSize` should be based on `viewport.virtualSize` ([#2945](https://github.com/flame-engine/flame/issues/2945)). ([bd130b71](https://github.com/flame-engine/flame/commit/bd130b711b5cb486b8f05225711c6e6c3fe574e6))
+ - **FEAT**: Adding ability for a SpawnComponent to not auto start ([#2947](https://github.com/flame-engine/flame/issues/2947)). ([37c7a075](https://github.com/flame-engine/flame/commit/37c7a075a37cfc7c298f02542715b18e87f4cf99))
+
 ## 1.13.0
 
  - **FIX**: Logic error in MemoryCache.setValue() ([#2931](https://github.com/flame-engine/flame/issues/2931)). ([8cee80c3](https://github.com/flame-engine/flame/commit/8cee80c35ca676ad25a25c771f0aade88b58150b))
