@@ -25,8 +25,8 @@ class SpawnComponent extends Component {
     this.area,
     this.within = true,
     this.selfPositioning = false,
-    Random? random,
     this.autoStart = true,
+    Random? random,
     super.key,
   })  : assert(
           !(selfPositioning && area != null),
@@ -47,8 +47,8 @@ class SpawnComponent extends Component {
     this.area,
     this.within = true,
     this.selfPositioning = false,
-    Random? random,
     this.autoStart = true,
+    Random? random,
     super.key,
   })  : assert(
           !(selfPositioning && area != null),
