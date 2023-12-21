@@ -29,19 +29,45 @@ the `RectangleHitbox`, which like the name implies will make a rectangular area 
 hitbox.
 
 Hitboxes are also components, so in order to add them to our components we can simply add
-the following line on both the `Bullet`'s and `Enemy`'s `onLoad` method:
+them to the components that we want to have hitboxes, so let's do it, let's start by adding the
+following line to the `Enemy` class:
 
 ```dart
 add(RectangleHitbox());
 ```
 
+For the bullet we will do the same, but with a slight difference:
+
+```dart
+add(
+  RectangleHitbox(
+    collisionType: CollisionType.passive,
+  ),
+);
+```
+
+The `collisionType`s are very important to understand, since they can directly impact the game
+performance!
+
+There are three types of collisions in Flame:
+
+- `active` collides with other `Hitbox`es of type active or passive
+- `passive` collides with other `Hitbox`es of type active
+- `inactive` will not collide with any other `Hitbox`es
+
+Usually it is smart to mark hitboxes from components that will have a higher number of instances
+as passive, so they will be taken into account for collision, but they themselves will not check
+their own collisions, drastically reducing the number of checking, giving a better performance
+to the game!
+
+And since in this game we anticipate that there will be more bullets than enemies, we choose the
+bullets to have a passive collision type!
+
 From this point on, Flame will take care of checking the collision between those two components,
 we now need to do something when they come in contact.
 
-We can start that by receiving the collision events in one of the classes. I will choose the
-`Enemy` class to be the one responsible for listening to events, since in theory, there will
-mostly likely be fewer enemies than bullets, so we can do less checking if we keep that logic
-in the enemy class.
+We can start that by receiving the collision events in one of the classes. Since `Bullet`s have a
+passive collision type, we will also add the collision checking logic to the `Enemy` class.
 
 To listen to collision events we need to add the `CollisionCallbacks` mixin to the component.
 By doing so we will be able to override some methods like `onCollisionStart` and `onCollisionEnd`.

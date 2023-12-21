@@ -138,7 +138,11 @@ class Bullet extends SpriteAnimationComponent
       ),
     );
 
-    add(RectangleHitbox());
+    add(
+      RectangleHitbox(
+        collisionType: CollisionType.passive,
+      ),
+    );
   }
 
   @override
