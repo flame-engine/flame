@@ -343,7 +343,7 @@ At least one body should by dynamic with a non-fixed rotation.
 The `PrismaticJoint` definition is similar to the [`RevoluteJoint`](#revolutejoint) definition, but
 instead of rotation, it uses translation.
 
-```{dart}
+```dart
 final prismaticJointDef = PrismaticJointDef()
   ..initialize(
     dynamicBody,

@@ -1,11 +1,5 @@
 # Camera component
 
-```{note}
-This document describes a new camera API. The more traditional approach
-(which is deprecated) for handling a camera is described in
-[](camera_and_viewport.md).
-```
-
 Camera-as-a-component is the new way of structuring a game, an approach that
 allows more flexibility in placing the camera, or even having more than one
 camera simultaneously.

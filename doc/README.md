@@ -68,10 +68,3 @@ If you are building a multiplayer game, here are some recommendations of package
 - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
 - [Supabase](https://supabase.com/): A cheaper alternative to Firebase, based on Postgres.
-
-
-```{toctree}
-:hidden:
-
-Bridge Packages   <bridge_packages/bridge_packages.md>
-```
