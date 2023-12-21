@@ -24,6 +24,12 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 }
 
 class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
+  Player()
+      : super(
+          size: Vector2(100, 150),
+          anchor: Anchor.center,
+        );
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -31,8 +37,6 @@ class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
     sprite = await game.loadSprite('player-sprite.png');
 
     position = game.size / 2;
-    width = 100;
-    height = 150;
     anchor = Anchor.center;
   }
 

@@ -147,6 +147,12 @@ our game a little bit:
 
 ```dart
 class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
+
+  Player() : super(
+    size: Vector2(100, 150),
+    anchor: Anchor.center,
+  );
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -154,9 +160,6 @@ class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
     sprite = await gameRef.loadSprite('player-sprite.png');
 
     position = gameRef.size / 2;
-    width = 100;
-    height = 150;
-    anchor = Anchor.center;
   }
 
   void move(Vector2 delta) {

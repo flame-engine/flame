@@ -48,6 +48,12 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
 class Player extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
+  Player()
+      : super(
+          size: Vector2(100, 150),
+          anchor: Anchor.center,
+        );
+
   late final TimerComponent _bulletSpawner;
 
   @override
@@ -64,9 +70,6 @@ class Player extends SpriteAnimationComponent
     );
 
     position = game.size / 2;
-    width = 100;
-    height = 150;
-    anchor = Anchor.center;
 
     _bulletSpawner = TimerComponent(
       period: .2,
@@ -104,7 +107,10 @@ class Bullet extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Bullet({
     super.position,
-  }) : super(size: Vector2(25, 50));
+  }) : super(
+          size: Vector2(25, 50),
+          anchor: Anchor.center,
+        );
 
   @override
   Future<void> onLoad() async {
@@ -118,10 +124,6 @@ class Bullet extends SpriteAnimationComponent
         textureSize: Vector2(8, 16),
       ),
     );
-
-    width = 25;
-    height = 50;
-    anchor = Anchor.center;
   }
 
   @override

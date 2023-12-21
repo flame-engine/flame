@@ -11,7 +11,11 @@ class Enemy extends SpriteAnimationComponent
 
   Enemy({
     super.position,
-  }) : super(size: Vector2.all(enemySize));
+  }) : super(
+          size: Vector2.all(enemySize),
+          anchor: Anchor.center,
+        );
+
 
   static const enemySize = 50.0;
 
@@ -27,10 +31,6 @@ class Enemy extends SpriteAnimationComponent
         textureSize: Vector2.all(16),
       ),
     );
-
-    width = 50;
-    height = 50;
-    anchor = Anchor.center;
   }
 
   @override

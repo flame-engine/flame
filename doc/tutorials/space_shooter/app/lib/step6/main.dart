@@ -61,6 +61,12 @@ class SpaceShooterGame extends FlameGame
 
 class Player extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
+  Player()
+      : super(
+          size: Vector2(100, 150),
+          anchor: Anchor.center,
+        );
+
   late final TimerComponent _bulletSpawner;
 
   @override
@@ -77,9 +83,6 @@ class Player extends SpriteAnimationComponent
     );
 
     position = game.size / 2;
-    width = 100;
-    height = 150;
-    anchor = Anchor.center;
 
     _bulletSpawner = TimerComponent(
       period: .2,
@@ -117,7 +120,10 @@ class Bullet extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Bullet({
     super.position,
-  }) : super(size: Vector2(25, 50));
+  }) : super(
+          size: Vector2(25, 50),
+          anchor: Anchor.center,
+        );
 
   @override
   Future<void> onLoad() async {
@@ -131,10 +137,6 @@ class Bullet extends SpriteAnimationComponent
         textureSize: Vector2(8, 16),
       ),
     );
-
-    width = 25;
-    height = 50;
-    anchor = Anchor.center;
 
     add(RectangleHitbox());
   }
@@ -155,7 +157,10 @@ class Enemy extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
   Enemy({
     super.position,
-  }) : super(size: Vector2.all(enemySize));
+  }) : super(
+          size: Vector2.all(enemySize),
+          anchor: Anchor.center,
+        );
 
   static const enemySize = 50.0;
 
@@ -171,10 +176,6 @@ class Enemy extends SpriteAnimationComponent
         textureSize: Vector2.all(16),
       ),
     );
-
-    width = 50;
-    height = 50;
-    anchor = Anchor.center;
 
     add(RectangleHitbox());
   }
@@ -209,7 +210,11 @@ class Explosion extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Explosion({
     super.position,
-  }) : super(size: Vector2.all(150));
+  }) : super(
+          size: Vector2.all(150),
+          anchor: Anchor.center,
+          removeOnFinish: true,
+        );
 
   @override
   Future<void> onLoad() async {
@@ -224,8 +229,5 @@ class Explosion extends SpriteAnimationComponent
         loop: false,
       ),
     );
-
-    anchor = Anchor.center;
-    removeOnFinish = true;
   }
 }

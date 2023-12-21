@@ -84,7 +84,12 @@ class Explosion extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Explosion({
     super.position,
-  }) : super(size: Vector2.all(150));
+  }) : super(
+          size: Vector2.all(150),
+          anchor: Anchor.center,
+          removeOnFinish: true,
+        );
+
 
   @override
   Future<void> onLoad() async {
@@ -99,16 +104,13 @@ class Explosion extends SpriteAnimationComponent
         loop: false,
       ),
     );
-
-    anchor = Anchor.center;
-    removeOnFinish = true;
   }
 }
 ```
 
 There is not much new in it, the biggest difference compared to the other animation components is
 that we are passing `loop: false` in the `SpriteAnimationData.sequenced` constructor and that we are
-setting `removeOnFinish = true;`. We do that so that when the animation is finished, it will
+setting `removeOnFinish: true;`. We do that so that when the animation is finished, it will
 automatically be removed from the game!
 
 And finally, we make a small change in the `onCollisionStart` method from the `Enemy` class
