@@ -3,8 +3,9 @@
 Right, we are really close to a playable game, we have enemies and we have the ability to shoot bullets
 at them! We now need to do something when a bullet hits an enemy.
 
-Flame provides a collision detection system out of the box, which we will use to implement our logic that will handle when
-a bullet and an enemy comes into contact. The result will be that both are removed!
+Flame provides a collision detection system out of the box, which we will use to implement our
+logic that will handle when a bullet and an enemy comes into contact. The result will be that
+both are removed!
 
 First we need to let our `FlameGame` know that we want collisions between components to
 be checked. In order to do so, simply add the `HasCollisionDetection` mixin to the declaration
