@@ -47,21 +47,22 @@ add(
 ```
 
 The `collisionType`s are very important to understand, since they can directly impact the game
-perfomance!
+performance!
 
 There are three types of collisions in Flame:
-- `active`: These hitboxes will both check itself against other hitboxes, as well other hitboxes 
+
+- `active`: These hitboxes will both check itself against other hitboxes, as well other hitboxes
 will check their hitboxes against this one.
 - `passive`: It will not check its own hitboxes against others, but other active hitboxes will
-check their hitboxes agains it.
+check their hitboxes against it.
 - `inactive`: Will not check or be checked upon.
 
 Usually it is smart to mark hitboxes from components that will have a higher number of instances
 as passive, so they will be taken into account for collision, but they themselves will not check
-their own collisions, drasticly reducing the number of checkings, giving a better perfomance
+their own collisions, drastically reducing the number of checking, giving a better performance
 to the game!
 
-And since in this game we antecipate that there will be more bullets than enemies, we choose the
+And since in this game we anticipate that there will be more bullets than enemies, we choose the
 bullets to have a passive collision type!
 
 From this point on, Flame will take care of checking the collision between those two components,
