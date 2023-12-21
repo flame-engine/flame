@@ -14,7 +14,10 @@ class Bullet extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Bullet({
     super.position,
-  }) : super(size: Vector2(25, 50));
+  }) : super(
+          size: Vector2(25, 50),
+          anchor: Anchor.center,
+        );
 
   @override
   Future<void> onLoad() async {
@@ -28,10 +31,6 @@ class Bullet extends SpriteAnimationComponent
         textureSize: Vector2(8, 16),
       ),
     );
-
-    width = 25;
-    height = 50;
-    anchor = Anchor.center;
   }
 }
 ```
@@ -48,7 +47,10 @@ class Bullet extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Bullet({
     super.position,
-  }) : super(size: Vector2(25, 50));
+  }) : super(
+          size: Vector2(25, 50),
+          anchor: Anchor.center,
+        );
 
   @override
   Future<void> onLoad() async {
