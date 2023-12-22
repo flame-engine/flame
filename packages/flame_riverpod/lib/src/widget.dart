@@ -35,7 +35,6 @@ class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
 }
 
 class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
-    with WidgetsBindingObserver
     implements WidgetRef {
   RiverpodGameMixin get game => widget.game! as RiverpodGameMixin;
 
@@ -69,12 +68,11 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
     game.key = (widget as RiverpodAwareGameWidget<T>).key;
 
     WidgetsBinding.instance.addPersistentFrameCallback((_) {
+      _isForceBuilding = false;
+
       if (_hasQueuedBuild) {
-        _isForceBuilding = true;
         _hasQueuedBuild = false;
         forceBuild();
-      } else {
-        _isForceBuilding = false;
       }
     });
   }
