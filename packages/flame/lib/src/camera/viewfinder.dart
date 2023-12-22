@@ -152,7 +152,7 @@ class Viewfinder extends Component
   Rect? visibleRect;
   @protected
   Rect computeVisibleRect() {
-    final viewportSize = camera.viewport.size;
+    final viewportSize = camera.viewport.virtualSize;
     final currentTransform = transform;
     currentTransform.globalToLocal(_zeroVector, output: _topLeft);
     currentTransform.globalToLocal(viewportSize, output: _bottomRight);

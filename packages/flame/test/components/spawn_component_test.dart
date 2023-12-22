@@ -140,5 +140,31 @@ void main() {
         isTrue,
       );
     });
+
+    testWithFlameGame('Does not spawns when auto start is false', (game) async {
+      final random = Random(0);
+      final shape = Rectangle.fromCenter(
+        center: Vector2(100, 200),
+        size: Vector2.all(200),
+      );
+      final spawn = SpawnComponent(
+        factory: (_) => PositionComponent(),
+        period: 1,
+        area: shape,
+        random: random,
+        autoStart: false,
+      );
+      final world = game.world;
+      await world.ensureAdd(spawn);
+      game.update(1.5);
+      await game.ready();
+      expect(world.children.length, 1);
+
+      spawn.timer.start();
+
+      game.update(1);
+      await game.ready();
+      expect(world.children.length, 2);
+    });
   });
 }

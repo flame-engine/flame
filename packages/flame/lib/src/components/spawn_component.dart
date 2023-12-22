@@ -25,6 +25,7 @@ class SpawnComponent extends Component {
     this.area,
     this.within = true,
     this.selfPositioning = false,
+    this.autoStart = true,
     Random? random,
     super.key,
   })  : assert(
@@ -46,6 +47,7 @@ class SpawnComponent extends Component {
     this.area,
     this.within = true,
     this.selfPositioning = false,
+    this.autoStart = true,
     Random? random,
     super.key,
   })  : assert(
@@ -102,6 +104,9 @@ class SpawnComponent extends Component {
   /// The amount of spawned components.
   int amount = 0;
 
+  /// Whether the timer automatically starts or not.
+  final bool autoStart;
+
   @override
   FutureOr<void> onLoad() async {
     if (area == null && !selfPositioning) {
@@ -147,6 +152,7 @@ class SpawnComponent extends Component {
         updatePeriod();
         amount++;
       },
+      autoStart: autoStart,
     );
     timer = timerComponent.timer;
     add(timerComponent);

@@ -1,3 +1,7 @@
+## 5.1.2
+
+ - **FIX**: Package flame_riverpod, setState() or markNeedsBuild() called during build. ([#2943](https://github.com/flame-engine/flame/issues/2943)). ([54d0e95d](https://github.com/flame-engine/flame/commit/54d0e95d863cc40e95f0310b4964343085f422e9))
+
 ## 5.1.1
 
  - **FIX**: Add super constructor fields to RiverpodAwareGameWidget ([#2932](https://github.com/flame-engine/flame/issues/2932)). ([c2e6ea71](https://github.com/flame-engine/flame/commit/c2e6ea71e5c3c5f0d7ae6bc01a6c2f1f4d4d563b))

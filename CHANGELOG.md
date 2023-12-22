@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.13.1`](#flame---v1131)
+ - [`flame_riverpod` - `v5.1.2`](#flame_riverpod---v512)
+ - [`flame_test` - `v1.15.3`](#flame_test---v1153)
+ - [`flame_tiled` - `v1.18.3`](#flame_tiled---v1183)
+ - [`flame_oxygen` - `v0.1.9+7`](#flame_oxygen---v0197)
+ - [`flame_isolate` - `v0.5.0+7`](#flame_isolate---v0507)
+ - [`flame_fire_atlas` - `v1.4.7`](#flame_fire_atlas---v147)
+ - [`flame_audio` - `v2.1.7`](#flame_audio---v217)
+ - [`flame_spine` - `v0.1.1+9`](#flame_spine---v0119)
+ - [`flame_bloc` - `v1.10.9`](#flame_bloc---v1109)
+ - [`flame_lottie` - `v0.3.0+7`](#flame_lottie---v0307)
+ - [`flame_markdown` - `v0.1.1+7`](#flame_markdown---v0117)
+ - [`flame_rive` - `v1.9.10`](#flame_rive---v1910)
+ - [`flame_forge2d` - `v0.16.0+4`](#flame_forge2d---v01604)
+ - [`flame_noise` - `v0.1.1+12`](#flame_noise---v01112)
+ - [`flame_svg` - `v1.8.9`](#flame_svg---v189)
+ - [`flame_network_assets` - `v0.2.0+12`](#flame_network_assets---v02012)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.3`
+ - `flame_tiled` - `v1.18.3`
+ - `flame_oxygen` - `v0.1.9+7`
+ - `flame_isolate` - `v0.5.0+7`
+ - `flame_fire_atlas` - `v1.4.7`
+ - `flame_audio` - `v2.1.7`
+ - `flame_spine` - `v0.1.1+9`
+ - `flame_bloc` - `v1.10.9`
+ - `flame_lottie` - `v0.3.0+7`
+ - `flame_markdown` - `v0.1.1+7`
+ - `flame_rive` - `v1.9.10`
+ - `flame_forge2d` - `v0.16.0+4`
+ - `flame_noise` - `v0.1.1+12`
+ - `flame_svg` - `v1.8.9`
+ - `flame_network_assets` - `v0.2.0+12`
+
+---
+
+#### `flame` - `v1.13.1`
+
+ - **FIX**: The `visibleGameSize` should be based on `viewport.virtualSize` ([#2945](https://github.com/flame-engine/flame/issues/2945)). ([bd130b71](https://github.com/flame-engine/flame/commit/bd130b711b5cb486b8f05225711c6e6c3fe574e6))
+ - **FEAT**: Adding ability for a SpawnComponent to not auto start ([#2947](https://github.com/flame-engine/flame/issues/2947)). ([37c7a075](https://github.com/flame-engine/flame/commit/37c7a075a37cfc7c298f02542715b18e87f4cf99))
+
+#### `flame_riverpod` - `v5.1.2`
+
+ - **FIX**: Package flame_riverpod, setState() or markNeedsBuild() called during build. ([#2943](https://github.com/flame-engine/flame/issues/2943)). ([54d0e95d](https://github.com/flame-engine/flame/commit/54d0e95d863cc40e95f0310b4964343085f422e9))
+
+
 ## 2023-12-19
 
 ### Changes
