@@ -1,5 +1,3 @@
-pubspec.lock
-
 # Miscellaneous
 *.class
 *.bak
@@ -35,7 +33,7 @@ macos/
 windows/
 linux/
 desktop/
-build/
+**/build/
 coverage/
 pubspec.lock
 pubspec_overrides.yaml
