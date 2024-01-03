@@ -11,6 +11,5 @@ export 'src/game/game.dart';
 export 'src/game/game_widget/game_widget.dart';
 export 'src/game/mixins/single_game_instance.dart';
 export 'src/game/notifying_vector2.dart';
-export 'src/game/projector.dart';
 export 'src/game/transform2d.dart';
 export 'src/text/renderers/text_paint.dart';
