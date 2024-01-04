@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
 

@@ -135,17 +135,6 @@ Future<void> main() async {
 
   group('SpriteGroupComponent.currentSpriteNotifier', () {
     test('notifies when the current sprite changes', () {
-      final sprite1 = Sprite(image, srcSize: Vector2.all(76));
-      final sprite2 = Sprite(image, srcSize: Vector2.all(15));
-      final animation1 = SpriteAnimation.spriteList(
-        List.filled(5, sprite1),
-        stepTime: 1,
-        loop: false,
-      );
-      final animation2 = SpriteAnimation.spriteList(
-        [sprite2, sprite1],
-        stepTime: 1,
-      );
       final spritesMap = {
         _SpriteState.idle: Sprite(image, srcSize: Vector2.all(15)),
         _SpriteState.running: Sprite(image, srcSize: Vector2.all(15)),
