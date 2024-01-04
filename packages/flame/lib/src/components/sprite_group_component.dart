@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
@@ -11,17 +12,23 @@ export '../sprite_animation.dart';
 class SpriteGroupComponent<T> extends PositionComponent
     with HasPaint
     implements SizeProvider {
-  /// Key with the current playing animation
+  /// Key for the current sprite.
   T? _current;
 
-  /// Map with the available states for this sprite group
+  ValueNotifier<T?>? _currentSpriteNotifier;
+
+  /// A [ValueNotifier] that notifies when the current sprite changes.
+  ValueNotifier<T?> get currentSpriteNotifier =>
+      _currentSpriteNotifier ??= ValueNotifier<T?>(_current);
+
+  /// Map with the available states for this sprite group.
   Map<T, Sprite>? _sprites;
 
   /// When set to true, the component is auto-resized to match the
   /// size of current sprite.
   bool _autoResize;
 
-  /// Creates a component with an empty animation which can be set later
+  /// Creates a component with an empty animation which can be set later.
   SpriteGroupComponent({
     Map<T, Sprite>? sprites,
     T? current,
@@ -62,8 +69,12 @@ class SpriteGroupComponent<T> extends PositionComponent
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    final changed = _current != value;
     _current = value;
     _resizeToSprite();
+    if (changed) {
+      _currentSpriteNotifier?.value = value;
+    }
   }
 
   /// Returns current value of auto resize flag.
