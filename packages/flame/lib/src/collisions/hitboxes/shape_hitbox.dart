@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/shape_intersections.dart'
@@ -19,6 +20,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
     }
     collisionTypeNotifier.value = type;
   }
+
+  @override
+  Color debugColor = const Color(0xFFFFFF00);
 
   @override
   CollisionType get collisionType => collisionTypeNotifier.value;
