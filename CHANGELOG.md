@@ -3,6 +3,69 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-01-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.14.0`](#flame---v1140)
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.16.0+4`](#flame_forge2d---v01604)
+ - [`flame_test` - `v1.15.3`](#flame_test---v1153)
+ - [`flame_tiled` - `v1.18.3`](#flame_tiled---v1183)
+ - [`flame_oxygen` - `v0.1.9+7`](#flame_oxygen---v0197)
+ - [`flame_isolate` - `v0.5.0+7`](#flame_isolate---v0507)
+ - [`flame_fire_atlas` - `v1.4.7`](#flame_fire_atlas---v147)
+ - [`flame_audio` - `v2.1.7`](#flame_audio---v217)
+ - [`flame_spine` - `v0.1.1+9`](#flame_spine---v0119)
+ - [`flame_bloc` - `v1.10.9`](#flame_bloc---v1109)
+ - [`flame_lottie` - `v0.3.0+7`](#flame_lottie---v0307)
+ - [`flame_markdown` - `v0.1.1+7`](#flame_markdown---v0117)
+ - [`flame_rive` - `v1.9.10`](#flame_rive---v1910)
+ - [`flame_noise` - `v0.1.1+12`](#flame_noise---v01112)
+ - [`flame_riverpod` - `v5.1.4`](#flame_riverpod---v514)
+ - [`flame_svg` - `v1.8.9`](#flame_svg---v189)
+ - [`flame_network_assets` - `v0.2.0+12`](#flame_network_assets---v02012)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.3`
+ - `flame_tiled` - `v1.18.3`
+ - `flame_oxygen` - `v0.1.9+7`
+ - `flame_isolate` - `v0.5.0+7`
+ - `flame_fire_atlas` - `v1.4.7`
+ - `flame_audio` - `v2.1.7`
+ - `flame_spine` - `v0.1.1+9`
+ - `flame_bloc` - `v1.10.9`
+ - `flame_lottie` - `v0.3.0+7`
+ - `flame_markdown` - `v0.1.1+7`
+ - `flame_rive` - `v1.9.10`
+ - `flame_noise` - `v0.1.1+12`
+ - `flame_riverpod` - `v5.1.4`
+ - `flame_svg` - `v1.8.9`
+ - `flame_network_assets` - `v0.2.0+12`
+
+---
+
+#### `flame` - `v1.14.0`
+
+ - **FIX**: Consider displaced hitboxes in GestureHitboxes mixin ([#2957](https://github.com/flame-engine/flame/issues/2957)). ([1085518f](https://github.com/flame-engine/flame/commit/1085518fe279e674bef9a7b938d59926472511f3))
+ - **FIX**: PolygonComponent.containsLocalPoint to use anchor ([#2953](https://github.com/flame-engine/flame/issues/2953)). ([7969321e](https://github.com/flame-engine/flame/commit/7969321e8662515aa9efe305831ff36d51dd43cb))
+ - **FEAT**: Notifier for changing current sprite/animation in group components ([#2956](https://github.com/flame-engine/flame/issues/2956)). ([75cf2390](https://github.com/flame-engine/flame/commit/75cf23908e5d509a25cd794d6810162f22b978cb))
+ - **BREAKING** **REFACTOR**: Remove the Projector interface that is no longer used for coordinate transformations ([#2955](https://github.com/flame-engine/flame/issues/2955)). ([0979dc97](https://github.com/flame-engine/flame/commit/0979dc97f54af1b71b200ced609d874d390c1ca6))
+
+#### `flame_forge2d` - `v0.16.0+4`
+
+ - **FIX**: Wake up bodies on gravity change ([#2954](https://github.com/flame-engine/flame/issues/2954)). ([4f58329c](https://github.com/flame-engine/flame/commit/4f58329ceacef84d91cd41019d72bc2351bc50cd))
+
+
 ## 2023-12-22
 
 ### Changes
