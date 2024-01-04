@@ -56,6 +56,33 @@ void main() {
       expect(polygon.containsLocalPoint(Vector2(0.75, 0.75)), isTrue);
     });
 
+    test('rectangle contains point in local with anchor', () {
+      final rectangle = RectangleComponent(
+        position: Vector2.zero(),
+        size: Vector2.all(10),
+        anchor: Anchor.center,
+      );
+      expect(rectangle.containsLocalPoint(Vector2.zero()), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2.all(5)), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2.all(10)), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2(10, 0)), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2(0, 10)), isTrue);
+    });
+
+    test('angled rectangle contains point in local with anchor', () {
+      final rectangle = RectangleComponent(
+        position: Vector2.zero(),
+        size: Vector2.all(10),
+        angle: pi / 4,
+        anchor: Anchor.center,
+      );
+      expect(rectangle.containsLocalPoint(Vector2.zero()), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2.all(5)), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2.all(10)), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2(10, 0)), isTrue);
+      expect(rectangle.containsLocalPoint(Vector2(0, 10)), isTrue);
+    });
+
     test('rotated circle does not contain point', () {
       final component = CircleComponent(
         radius: 1.0,
