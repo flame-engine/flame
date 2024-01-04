@@ -10,8 +10,8 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.13.0
-  flame_isolate: ^0.5.0+6
+  flame: ^1.14.0
+  flame_isolate: ^0.5.0+7
   flutter:
     sdk: flutter
   integral_isolates: ^0.3.0
