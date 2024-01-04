@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
@@ -12,6 +12,12 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     implements SizeProvider {
   /// Key with the current playing animation
   T? _current;
+
+  ValueNotifier<T?>? _currentAnimationNotifier;
+
+  /// A [ValueNotifier] that notifies when the current animation changes.
+  ValueNotifier<T?> get currentAnimationNotifier =>
+      _currentAnimationNotifier ??= ValueNotifier<T?>(_current);
 
   /// Map with the mapping each state to the flag removeOnFinish
   final Map<T, bool> removeOnFinish;
@@ -136,8 +142,11 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     _current = value;
     _resizeToSprite();
 
-    if (changed && autoResetTicker) {
-      animationTicker?.reset();
+    if (changed) {
+      if (autoResetTicker) {
+        animationTicker?.reset();
+      }
+      _currentAnimationNotifier?.value = value;
     }
   }
 
