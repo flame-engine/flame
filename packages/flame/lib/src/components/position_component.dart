@@ -273,10 +273,12 @@ class PositionComponent extends Component
   }
 
   @override
-  Vector2 parentToLocal(Vector2 point) => transform.globalToLocal(point);
+  Vector2 parentToLocal(Vector2 point, {Vector2? output}) =>
+      transform.globalToLocal(point, output: output);
 
   @override
-  Vector2 localToParent(Vector2 point) => transform.localToGlobal(point);
+  Vector2 localToParent(Vector2 point, {Vector2? output}) =>
+      transform.localToGlobal(point, output: output);
 
   /// Convert local coordinates of a point [point] inside the component
   /// into the parent's coordinate space.

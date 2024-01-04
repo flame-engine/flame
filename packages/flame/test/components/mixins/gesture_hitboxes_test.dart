@@ -47,6 +47,49 @@ void main() {
       expect(component.containsPoint(point), isTrue);
     });
 
+    testWithFlameGame('CircleHitbox is displaced within the parent component',
+        (game) async {
+      final component = _HitboxComponent();
+      component.position.setAll(10);
+      component.size.setValues(2.0, 2.0);
+
+      final hitbox = CircleHitbox(
+        position: Vector2(1.0, 1.5),
+        radius: 0.5,
+        anchor: Anchor.center,
+      );
+
+      component.add(hitbox);
+      await game.ensureAdd(component);
+
+      final point = component.position + hitbox.position;
+      expect(component.containsPoint(point), isTrue);
+      final outsidePoint = component.position + Vector2(1.0, 0.99);
+      expect(component.containsPoint(outsidePoint), isFalse);
+    });
+
+    testWithFlameGame(
+        'RectangleHitbox is displaced within the parent component',
+        (game) async {
+      final component = _HitboxComponent();
+      component.position.setAll(10);
+      component.size.setValues(2.0, 2.0);
+
+      final hitbox = RectangleHitbox(
+        position: Vector2(1.0, 1.5),
+        size: Vector2.all(1.0),
+        anchor: Anchor.center,
+      );
+
+      component.add(hitbox);
+      await game.ensureAdd(component);
+
+      final point = component.position + hitbox.position;
+      expect(component.containsPoint(point), isTrue);
+      final outsidePoint = component.position + Vector2(1.0, 0.99);
+      expect(component.containsPoint(outsidePoint), isFalse);
+    });
+
     testWithFlameGame('get component hitboxes', (game) async {
       final component = _HitboxComponent();
       component.position.setValues(1.0, 1.0);
