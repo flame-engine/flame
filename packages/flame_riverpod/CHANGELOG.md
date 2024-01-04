@@ -1,3 +1,7 @@
+## 5.1.4
+
+ - Update a dependency to the latest release.
+
 ## 5.1.3
 
  - **FIX**: Fix logic inside flame_riverpod persistent frame callback. ([#2950](https://github.com/flame-engine/flame/issues/2950)). ([230fb88f](https://github.com/flame-engine/flame/commit/230fb88fa9f9d82711461d10fe4aff9f8520cd29))

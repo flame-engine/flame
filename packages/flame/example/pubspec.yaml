@@ -8,7 +8,7 @@ environment:
   flutter: ">=3.13.0"
 
 dependencies:
-  flame: ^1.13.0
+  flame: ^1.14.0
   flutter:
     sdk: flutter
 

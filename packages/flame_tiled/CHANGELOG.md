@@ -1,3 +1,7 @@
+## 1.18.3
+
+ - Update a dependency to the latest release.
+
 ## 1.18.2
 
  - **FIX**: Image layers repeat indefinitely if repeated in Tiled ([#2921](https://github.com/flame-engine/flame/issues/2921)). ([6f79bc5e](https://github.com/flame-engine/flame/commit/6f79bc5ef920ace17d09c88156a73043357d514f))
