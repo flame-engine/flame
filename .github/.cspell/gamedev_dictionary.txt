@@ -6,7 +6,6 @@ AHSV # alpha hue saturation value
 antialiasing # set of techniques to combat the problems of aliasing
 ARGB # alpha red green blue
 arities # plural of arity
-arity # number of parameters a function takes
 autofocus # auto focus event
 backgrounded # moving the app to the background
 backgrounding # moving the app to the background
