@@ -1,3 +1,7 @@
+## 5.1.5
+
+ - **FIX**: Change return type of RiverpodComponentMixin.onLoad to FutureOr<void> ([#2964](https://github.com/flame-engine/flame/issues/2964)). ([7ac80a78](https://github.com/flame-engine/flame/commit/7ac80a78e95b06bb1287fb74773634483d80b1c9))
+
 ## 5.1.4
 
  - Update a dependency to the latest release.
