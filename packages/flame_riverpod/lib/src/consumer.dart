@@ -80,7 +80,7 @@ mixin RiverpodComponentMixin on Component {
 
   @mustCallSuper
   @override
-  void onLoad() {
+  FutureOr<void> onLoad() {
     ref.game = findGame()! as RiverpodGameMixin;
     super.onLoad();
   }
