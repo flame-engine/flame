@@ -185,10 +185,8 @@ Future<void> onLoad() async {
       'star.png',
       'water_enemy.png',
   ]);
-  cameraComponent = CameraComponent(world: world);
-  cameraComponent.viewfinder.anchor = Anchor.topLeft;
-  addAll([cameraComponent, world]);
-
+  
+  camera.viewfinder.anchor = Anchor.topLeft;
   initializeGame(true);
 }
 
@@ -311,6 +309,7 @@ void update(double dt) {
   if (health <= 0) {
     overlays.add('GameOver');
   }
+  super.update(dt);
 }
 ```
 

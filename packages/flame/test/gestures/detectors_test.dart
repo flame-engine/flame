@@ -1,5 +1,5 @@
+import 'package:flame/events.dart' hide PointerMoveEvent;
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -363,10 +363,10 @@ void main() {
       verify: (game, tester) async {
         await tester.dragFrom(const Offset(10, 10), const Offset(10, 50));
 
-        expect(game.hasVerticaDragDown, isTrue);
-        expect(game.hasVerticaDragStart, isTrue);
-        expect(game.hasVerticaDragUpdate, isTrue);
-        expect(game.hasVerticaDragEnd, isTrue);
+        expect(game.hasVerticalDragDown, isTrue);
+        expect(game.hasVerticalDragStart, isTrue);
+        expect(game.hasVerticalDragUpdate, isTrue);
+        expect(game.hasVerticalDragEnd, isTrue);
       },
     );
 
@@ -377,7 +377,7 @@ void main() {
         await game.ready();
         game.handleVerticalDragDown(DragDownDetails());
 
-        expect(game.hasVerticaDragDown, isTrue);
+        expect(game.hasVerticalDragDown, isTrue);
       },
     );
 
@@ -389,7 +389,7 @@ void main() {
 
         game.handleVerticalDragStart(DragStartDetails());
 
-        expect(game.hasVerticaDragStart, isTrue);
+        expect(game.hasVerticalDragStart, isTrue);
       },
     );
 
@@ -401,7 +401,7 @@ void main() {
           DragUpdateDetails(globalPosition: const Offset(10, 10)),
         );
 
-        expect(game.hasVerticaDragUpdate, isTrue);
+        expect(game.hasVerticalDragUpdate, isTrue);
       },
     );
 
@@ -411,7 +411,7 @@ void main() {
       (game) async {
         game.handleVerticalDragEnd(DragEndDetails());
 
-        expect(game.hasVerticaDragEnd, isTrue);
+        expect(game.hasVerticalDragEnd, isTrue);
       },
     );
   });
@@ -932,35 +932,35 @@ class _HorizontalDragDetectorGame extends FlameGame
 }
 
 class _VerticalDragDetectorGame extends FlameGame with VerticalDragDetector {
-  bool hasVerticaDragDown = false;
-  bool hasVerticaDragCancel = false;
-  bool hasVerticaDragEnd = false;
-  bool hasVerticaDragUpdate = false;
-  bool hasVerticaDragStart = false;
+  bool hasVerticalDragDown = false;
+  bool hasVerticalDragCancel = false;
+  bool hasVerticalDragEnd = false;
+  bool hasVerticalDragUpdate = false;
+  bool hasVerticalDragStart = false;
 
   @override
   void onVerticalDragDown(DragDownInfo info) {
-    hasVerticaDragDown = true;
+    hasVerticalDragDown = true;
   }
 
   @override
   void onVerticalDragCancel() {
-    hasVerticaDragCancel = true;
+    hasVerticalDragCancel = true;
   }
 
   @override
   void onVerticalDragEnd(DragEndInfo info) {
-    hasVerticaDragEnd = true;
+    hasVerticalDragEnd = true;
   }
 
   @override
   void onVerticalDragUpdate(DragUpdateInfo info) {
-    hasVerticaDragUpdate = true;
+    hasVerticalDragUpdate = true;
   }
 
   @override
   void onVerticalDragStart(DragStartInfo info) {
-    hasVerticaDragStart = true;
+    hasVerticalDragStart = true;
   }
 }
 

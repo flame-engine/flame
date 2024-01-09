@@ -1,69 +1,56 @@
-import 'package:flame/camera.dart' as camera;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/widgets.dart';
 
 void main() {
-  runApp(GameWidget(game: Forge2DExample()));
+  runApp(const GameWidget.controlled(gameFactory: Forge2DExample.new));
 }
 
 class Forge2DExample extends Forge2DGame {
-  final cameraWorld = camera.World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent(world: cameraWorld);
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, cameraWorld]);
+    await super.onLoad();
 
-    cameraWorld.add(Ball(size / 2));
-    cameraWorld.addAll(createBoundaries());
+    camera.viewport.add(FpsTextComponent());
+    world.add(Ball());
+    world.addAll(createBoundaries());
   }
 
   List<Component> createBoundaries() {
-    final topLeft = Vector2.zero();
-    final bottomRight = screenToWorld(cameraComponent.viewport.size);
-    final topRight = Vector2(bottomRight.x, topLeft.y);
-    final bottomLeft = Vector2(topLeft.x, bottomRight.y);
+    final visibleRect = camera.visibleWorldRect;
+    final topLeft = visibleRect.topLeft.toVector2();
+    final topRight = visibleRect.topRight.toVector2();
+    final bottomRight = visibleRect.bottomRight.toVector2();
+    final bottomLeft = visibleRect.bottomLeft.toVector2();
 
     return [
       Wall(topLeft, topRight),
       Wall(topRight, bottomRight),
       Wall(bottomLeft, bottomRight),
-      Wall(topLeft, bottomLeft)
+      Wall(topLeft, bottomLeft),
     ];
   }
 }
 
 class Ball extends BodyComponent with TapCallbacks {
-  final Vector2 _position;
-
-  Ball(this._position);
-
-  @override
-  Body createBody() {
-    final shape = CircleShape();
-    shape.radius = 5;
-
-    final fixtureDef = FixtureDef(
-      shape,
-      restitution: 0.8,
-      density: 1.0,
-      friction: 0.4,
-    );
-
-    final bodyDef = BodyDef(
-      userData: this,
-      angularDamping: 0.8,
-      position: _position,
-      type: BodyType.dynamic,
-    );
-
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
-  }
+  Ball({Vector2? initialPosition})
+      : super(
+          fixtureDefs: [
+            FixtureDef(
+              CircleShape()..radius = 5,
+              restitution: 0.8,
+              friction: 0.4,
+            ),
+          ],
+          bodyDef: BodyDef(
+            angularDamping: 0.8,
+            position: initialPosition ?? Vector2.zero(),
+            type: BodyType.dynamic,
+          ),
+        );
 
   @override
   void onTapDown(_) {
@@ -82,7 +69,6 @@ class Wall extends BodyComponent {
     final shape = EdgeShape()..set(_start, _end);
     final fixtureDef = FixtureDef(shape, friction: 0.3);
     final bodyDef = BodyDef(
-      userData: this,
       position: Vector2.zero(),
     );
 

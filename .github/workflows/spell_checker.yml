@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: streetsidesoftware/cspell-action@v2
-        with:
-          files: "**/*.{md,dart}"
-          incremental_files_only: false
-          config: .github/cspell.json
+      - run: npm -g install cspell
+      # spell check
+      - run: ./scripts/cspell-run.sh
+      # verify dictionary words are sorted and not orphan
+      - run: ./scripts/cspell-verify.sh

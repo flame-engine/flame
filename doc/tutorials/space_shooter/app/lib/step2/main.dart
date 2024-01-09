@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
@@ -12,29 +13,30 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad();
-
     player = Player();
-
     add(player);
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 
-class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
+class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
+  Player()
+      : super(
+          size: Vector2(100, 150),
+          anchor: Anchor.center,
+        );
+
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite('player-sprite.png');
+    sprite = await game.loadSprite('player-sprite.png');
 
-    position = gameRef.size / 2;
-    width = 100;
-    height = 150;
+    position = game.size / 2;
     anchor = Anchor.center;
   }
 

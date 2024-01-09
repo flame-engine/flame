@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/utils/solve_quadratic.dart';
+import 'package:flame/src/math/solve_quadratic.dart';
 import 'package:meta/meta.dart';
 
 class CircleComponent extends ShapeComponent implements SizeProvider {
@@ -14,6 +14,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
   CircleComponent({
     double? radius,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.children,
@@ -29,10 +30,12 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     double relation, {
     required Vector2 parentSize,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.paint,
     super.paintLayers,
+    super.children,
   }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
 
   @override

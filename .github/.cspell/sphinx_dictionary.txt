@@ -1,9 +1,6 @@
-deflist
-dollarmath
+# keywords used on the sphinx language
+infobox
 linkcheck
-markdownlint
 seealso
-smartquotes
-tasklist
 toctree
 toctrees

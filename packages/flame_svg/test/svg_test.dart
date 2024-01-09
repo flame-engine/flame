@@ -71,7 +71,7 @@ void main() {
                       size: const Size(300, 300),
                       painter: SvgPainter(flameSvg),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

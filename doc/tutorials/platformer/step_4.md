@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 
 class Star extends SpriteComponent
-    with HasGameRef<EmberQuestGame> {
+    with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -65,7 +65,7 @@ So the only change between the Star and the Platform beyond the anchor is simply
 ```dart
 add(
   SizeEffect.by(
-  Vector2(-24, -24),
+    Vector2(-24, -24),
     EffectController(
       duration: .75,
       reverseDuration: .5,
@@ -76,24 +76,24 @@ add(
 );
 ```
 
-The `SizeEffect` is best explained by going to their [help
-docs](../../flame/effects.md#sizeeffectby). In short, we simply reduce the size of the star
+The `SizeEffect` is best explained by going to their
+[docs](../../flame/effects.md#sizeeffectby). In short, we simply reduce the size of the star
 by -24 pixels in both directions and we make it pulse infinitely using the `EffectController`.
 
 Don't forget to add the star to your `lib/ember_quest.dart` file by doing:
 
 ```dart
 case Star:
-    add(
-      Star(
-        gridPosition: block.gridPosition,
-        xOffset: xPositionOffset,
-      ),
-    );
-    break;
+  world.add(
+    Star(
+      gridPosition: block.gridPosition,
+      xOffset: xPositionOffset,
+    ),
+  );
+  break;
 ```
 
-If you run your game, you should now see pulsing stars!
+If you run your game, you should now see pulsating stars!
 
 
 ## Water Enemy
@@ -109,7 +109,7 @@ import 'package:flame/effects.dart';
 import '../ember_quest.dart';
 
 class WaterEnemy extends SpriteAnimationComponent
-    with HasGameRef<EmberQuestGame> {
+    with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -131,8 +131,8 @@ class WaterEnemy extends SpriteAnimationComponent
       ),
     );
     position = Vector2(
-      (gridPosition.x * size.x) + xOffset + (size.x / 2),
-      game.size.y - (gridPosition.y * size.y) - (size.y / 2),
+      (gridPosition.x * size.x) + xOffset,
+      game.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
@@ -165,15 +165,13 @@ the Platform. The only difference will be instead of the `SizeEffect`, we are go
 docs](../../flame/effects.md#sizeeffectby).
 
 In short, the `MoveEffect` will last for 3 seconds, alternate directions, and run infinitely. It
-will move our enemy to the left, 128 pixels (-2 x image width). You may have noticed that in the
-constructor, I set `Anchor` to `center`. This was done just for the sake of making the calculations
-easier but could have been left as `bottomLeft`.
+will move our enemy to the left, 128 pixels (-2 x image width).
 
 Don't forget to add the water enemy to your `lib/ember_quest.dart` file by doing:
 
 ```dart
 case WaterEnemy:
-    add(
+    world.add(
       WaterEnemy(
        gridPosition: block.gridPosition,
        xOffset: xPositionOffset,
@@ -206,7 +204,7 @@ import 'package:flutter/material.dart';
 
 import '../ember_quest.dart';
 
-class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
+class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -255,8 +253,8 @@ Now in your Ground Block's `onLoad` method, add the following at the end of the 
 
 ```dart
 if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
-    game.lastBlockKey = _blockKey;
-    game.lastBlockXPosition = position.x + size.x;
+  game.lastBlockKey = _blockKey;
+  game.lastBlockXPosition = position.x + size.x;
 }
 ```
 
@@ -336,7 +334,7 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 import '../managers/segment_manager.dart';
 
-class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
+class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
   
@@ -393,13 +391,13 @@ Finally, don't forget to add your Ground Block to `lib/ember_quest.dart` by addi
 
 ```dart
 case GroundBlock:
-    add(
-      GroundBlock(
-        gridPosition: block.gridPosition,
-        xOffset: xPositionOffset,
-      ),
-    );
-    break;
+  world.add(
+    GroundBlock(
+      gridPosition: block.gridPosition,
+      xOffset: xPositionOffset,
+    ),
+  );
+  break;
 ```
 
 If you run your code, your game should now look like this:

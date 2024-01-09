@@ -107,7 +107,7 @@ class PlayerCustomPainter extends CustomPainter {
 }
 
 class Player extends CustomPainterComponent
-    with HasGameRef<CustomPainterExample> {
+    with HasGameReference<CustomPainterExample> {
   static const speed = 150;
 
   int direction = 1;
@@ -126,7 +126,7 @@ class Player extends CustomPainterComponent
 
     x += speed * direction * dt;
 
-    if ((x + width >= gameRef.size.x && direction > 0) ||
+    if ((x + width >= game.size.x && direction > 0) ||
         (x <= 0 && direction < 0)) {
       direction *= -1;
     }

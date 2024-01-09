@@ -2,8 +2,11 @@ import 'dart:ui';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../camera_test_helpers.dart';
 
 void main() {
   group('CircularViewport', () {
@@ -41,7 +44,7 @@ void main() {
       size: Vector2(200, 100),
     );
 
-    // Renders magenta border around the viewport's edge
+    // Renders magenta border around the viewport's edge behind the world.
     testGolden(
       'circular viewport with debug mode',
       (game) async {
@@ -73,7 +76,7 @@ void main() {
         camera.viewport.position = Vector2(5, 5);
         camera.viewport.size = Vector2(40, 40);
       },
-      goldenFile: '../../_goldens/circular_viewport_test2.png',
+      goldenFile: '../../_goldens/circular_viewport_test3.png',
       size: Vector2(50, 50),
     );
 
@@ -85,44 +88,73 @@ void main() {
         final viewport = CircularViewport(20)..position = Vector2(5, 5);
         final camera = CameraComponent(world: world, viewport: viewport);
         viewport.add(
-          _CrossHair(size: Vector2.all(16), position: viewport.size / 2),
+          CrossHair(size: Vector2.all(16), position: viewport.size / 2),
         );
         game.addAll([world, camera]);
       },
-      goldenFile: '../../_goldens/circular_viewport_test3.png',
+      goldenFile: '../../_goldens/circular_viewport_test4.png',
       size: Vector2(50, 50),
     );
 
-    testWithFlameGame('hit testing', (game) async {
-      final world = _MyWorld();
-      final camera = CameraComponent(
-        world: world,
-        viewport: CircularViewport.ellipse(80, 20)..position = Vector2(20, 30),
-      );
-      game.addAll([world, camera]);
-      await game.ready();
+    // Renders magenta border around the viewfinder's edge behind the world.
+    // Should not be visible.
+    testGolden(
+      'circular viewport with debug mode',
+      (game) async {
+        final world = _MyWorld();
+        final camera = CameraComponent(
+          world: world,
+          viewport: CircularViewport(20)..position = Vector2(5, 5),
+          viewfinder: Viewfinder()..debugMode = true,
+        );
+        game.addAll([world, camera]);
+      },
+      goldenFile: '../../_goldens/circular_viewport_test5.png',
+      size: Vector2(50, 50),
+    );
 
-      bool hit(double x, double y) {
-        return game.componentsAtPoint(Vector2(x, y)).first == world;
-      }
+    testWithGame(
+      'hit testing',
+      () => FlameGame(
+        camera: CameraComponent(
+          viewport: CircularViewport.ellipse(80, 20)
+            ..position = Vector2(20, 30),
+          world: _MyWorld(),
+        ),
+      ),
+      (game) async {
+        await game.ready();
+        final viewport = game.camera.viewport;
 
-      expect(hit(10, 20), false);
-      expect(hit(20, 30), false);
-      expect(hit(25, 35), false);
-      expect(hit(100, 35), true);
-      expect(hit(100, 50), true);
-      expect(hit(180, 50), true);
-      expect(hit(180, 49), false);
-      expect(hit(180, 51), false);
+        bool hit(double x, double y) {
+          final components = game.componentsAtPoint(Vector2(x, y)).toList();
+          return components.first == viewport && components[1] == game.world;
+        }
 
-      final nestedPoints = <Vector2>[];
-      final center = Vector2(100, 50);
-      for (final component in game.componentsAtPoint(center, nestedPoints)) {
-        expect(component, world);
-        expect(nestedPoints.last, Vector2.zero());
-        break;
-      }
-    });
+        expect(hit(10, 20), false);
+        expect(hit(20, 30), false);
+        expect(hit(25, 35), false);
+        expect(hit(100, 35), true);
+        expect(hit(100, 50), true);
+        expect(hit(180, 50), true);
+        expect(hit(180, 49), false);
+        expect(hit(180, 51), false);
+
+        final nestedPoints = <Vector2>[];
+        final center = Vector2(100, 50);
+        for (final component in game.componentsAtPoint(
+          center,
+          nestedPoints,
+        )) {
+          if (component == viewport) {
+            continue;
+          }
+          expect(component, game.world);
+          expect(nestedPoints.last, Vector2.zero());
+          break;
+        }
+      },
+    );
 
     test('set wrong size', () {
       expect(
@@ -141,20 +173,5 @@ class _MyWorld extends World {
   @override
   void render(Canvas canvas) {
     canvas.drawColor(const Color(0xFFFFFFFF), BlendMode.src);
-  }
-}
-
-class _CrossHair extends PositionComponent {
-  _CrossHair({super.size, super.position}) : super(anchor: Anchor.center);
-
-  final _paint = Paint()
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = 2.0
-    ..color = const Color(0xFFFF0000);
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawLine(Offset(size.x / 2, 0), Offset(size.x / 2, size.y), _paint);
-    canvas.drawLine(Offset(0, size.y / 2), Offset(size.x, size.y / 2), _paint);
   }
 }

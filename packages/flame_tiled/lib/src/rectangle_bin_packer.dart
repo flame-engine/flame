@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 /// A simple solution to packing a series of rectangles into a larger bin.
 ///
 /// Packing different rectangles in the smallest area possible is an
@@ -11,10 +9,6 @@ import 'package:flutter/foundation.dart';
 /// Light reading:
 ///   * https://en.wikipedia.org/wiki/Rectangle_packing#Packing_different_rectangles_in_a_minimum-area_rectangle
 ///   * https://www.david-colson.com/2020/03/10/exploring-rect-packing.html
-///
-/// Note: Chrome on Android has a maximum texture size of 4096x4096. kIsWeb is
-/// used to select the smaller texture and might overflow. Consider using
-/// smaller textures for web targets, or, pack your own atlas.
 class RectangleBinPacker {
   final double maxX;
   final double maxY;
@@ -22,10 +16,7 @@ class RectangleBinPacker {
   /// The bins of free space that we can search.
   late final List<Rect> bins = [Rect.fromLTWH(0, 0, maxX, maxY)];
 
-  RectangleBinPacker({
-    this.maxX = kIsWeb ? 4096 : 8192,
-    this.maxY = kIsWeb ? 4096 : 8192,
-  });
+  RectangleBinPacker(this.maxX, this.maxY);
 
   /// Finds a free space for a rectangle of lengths [width] and [height] in
   /// the atlas.
@@ -40,6 +31,10 @@ class RectangleBinPacker {
     }
     // If we exhausted our search, return an empty rect.
     if (search == null || search.width < width || search.height < height) {
+      assert(
+        false,
+        '''RectangleBinPacker failed to pack an image. Consider using a bigger atlas if you are sure that your target platform can handle it.''',
+      );
       return Rect.zero;
     }
 

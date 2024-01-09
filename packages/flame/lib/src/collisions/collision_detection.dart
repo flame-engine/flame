@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
+import 'package:flutter/material.dart';
 
 /// [CollisionDetection] is the foundation of the collision detection system in
 /// Flame.
@@ -12,7 +13,8 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   final B broadphase;
 
   List<T> get items => broadphase.items;
-  final Set<CollisionProspect<T>> _lastPotentials = {};
+  final _lastPotentials = <CollisionProspect<T>>[];
+  final collisionsCompletedNotifier = CollisionDetectionCompletionNotifier();
 
   CollisionDetection({required this.broadphase});
 
@@ -32,9 +34,11 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   void run() {
     broadphase.update();
     final potentials = broadphase.query();
-    potentials.forEach((tuple) {
-      final itemA = tuple.a;
-      final itemB = tuple.b;
+    final hashes = Set.unmodifiable(potentials.map((p) => p.hash));
+
+    for (final potential in potentials) {
+      final itemA = potential.a;
+      final itemB = potential.b;
 
       if (itemA.possiblyIntersects(itemB)) {
         final intersectionPoints = intersections(itemA, itemB);
@@ -49,18 +53,36 @@ abstract class CollisionDetection<T extends Hitbox<T>,
       } else if (itemA.collidingWith(itemB)) {
         handleCollisionEnd(itemA, itemB);
       }
-    });
+    }
 
     // Handles callbacks for an ended collision that the broadphase didn't
-    // reports as a potential collision anymore.
-    _lastPotentials.difference(potentials).forEach((tuple) {
-      if (tuple.a.collidingWith(tuple.b)) {
-        handleCollisionEnd(tuple.a, tuple.b);
+    // report as a potential collision anymore.
+    for (final prospect in _lastPotentials) {
+      if (!hashes.contains(prospect.hash) &&
+          prospect.a.collidingWith(prospect.b)) {
+        handleCollisionEnd(prospect.a, prospect.b);
       }
-    });
-    _lastPotentials
-      ..clear()
-      ..addAll(potentials);
+    }
+    _updateLastPotentials(potentials);
+
+    // Let all listeners know that the collision detection step has completed
+    collisionsCompletedNotifier.notifyListeners();
+  }
+
+  final _lastPotentialsPool = <CollisionProspect<T>>[];
+  void _updateLastPotentials(Iterable<CollisionProspect<T>> potentials) {
+    _lastPotentials.clear();
+    for (final potential in potentials) {
+      final CollisionProspect<T> lastPotential;
+      if (_lastPotentialsPool.length > _lastPotentials.length) {
+        lastPotential = _lastPotentialsPool[_lastPotentials.length]
+          ..setFrom(potential);
+      } else {
+        lastPotential = potential.clone();
+        _lastPotentialsPool.add(lastPotential);
+      }
+      _lastPotentials.add(lastPotential);
+    }
   }
 
   /// Check what the intersection points of two items are,
@@ -79,15 +101,22 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// [maxDistance] can be provided to limit the raycast to only return hits
   /// within this distance from the ray origin.
   ///
-  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
-  /// the rays will go straight through them. For example the hitbox of the
-  /// component that you might be casting the rays from.
+  /// You can provide a [hitboxFilter] callback to define which hitboxes
+  /// to consider and which to ignore. This callback will be called with
+  /// every prospective hitbox, and only if the callback returns `true`
+  /// will the hitbox be considered. Otherwise, the ray will go straight
+  /// through it. One common use case is ignoring the component that is
+  /// shooting the ray.
+  ///
+  /// If you have a list of hitboxes to ignore in advance,
+  /// you can provide them via the [ignoreHitboxes] argument.
   ///
   /// If [out] is provided that object will be modified and returned with the
   /// result.
   RaycastResult<T>? raycast(
     Ray2 ray, {
     double? maxDistance,
+    bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     RaycastResult<T>? out,
   });
@@ -105,9 +134,15 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// If there are less objects in [rays] than the operation requires, the
   /// missing [Ray2] objects will be created and added to [rays].
   ///
-  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
-  /// the rays will go straight through them. For example the hitbox of the
-  /// component that you might be casting the rays from.
+  /// You can provide a [hitboxFilter] callback to define which hitboxes
+  /// to consider and which to ignore. This callback will be called with
+  /// every prospective hitbox, and only if the callback returns `true`
+  /// will the hitbox be considered. Otherwise, the ray will go straight
+  /// through it. One common use case is ignoring the component that is
+  /// shooting the ray.
+  ///
+  /// If you have a list of hitboxes to ignore in advance,
+  /// you can provide them via the [ignoreHitboxes] argument.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
@@ -119,6 +154,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     double sweepAngle = tau,
     double? maxDistance,
     List<Ray2>? rays,
+    bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
@@ -130,9 +166,15 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// [maxDepth] is how many times the ray should collide before returning a
   /// result, defaults to 10.
   ///
-  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
-  /// the rays will go straight through them. For example the hitbox of the
-  /// component that you might be casting the rays from.
+  /// You can provide a [hitboxFilter] callback to define which hitboxes
+  /// to consider and which to ignore. This callback will be called with
+  /// every prospective hitbox, and only if the callback returns `true`
+  /// will the hitbox be considered. Otherwise, the ray will go straight
+  /// through it. One common use case is ignoring the component that is
+  /// shooting the ray.
+  ///
+  /// If you have a list of hitboxes to ignore in advance,
+  /// you can provide them via the [ignoreHitboxes] argument.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
@@ -140,7 +182,15 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   Iterable<RaycastResult<T>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
+    bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
+}
+
+/// A class to handle callbacks for when the collision detection is done each
+/// tick.
+class CollisionDetectionCompletionNotifier extends ChangeNotifier {
+  @override
+  void notifyListeners() => super.notifyListeners();
 }

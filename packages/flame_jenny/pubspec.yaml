@@ -10,17 +10,17 @@ funding:
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.13.0"
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.8.0
+  flame: ^1.14.0
   flutter:
     sdk: flutter
-  jenny: ^1.0.3
+  jenny: ^1.2.1
   meta: ^1.9.1
 
 dev_dependencies:
-  dartdoc: ^6.2.2
-  flame_lint: ^1.0.0
+  dartdoc: ^6.3.0
+  flame_lint: ^1.1.2
   test: any

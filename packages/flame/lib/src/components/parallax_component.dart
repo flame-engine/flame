@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/images.dart';
+import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/parallax.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
@@ -24,7 +26,7 @@ extension ParallaxComponentExtension on FlameGame {
     int? priority,
     FilterQuality? filterQuality,
     ComponentKey? key,
-  }) async {
+  }) {
     return ParallaxComponent.load(
       dataList,
       baseVelocity: baseVelocity,
@@ -47,11 +49,12 @@ extension ParallaxComponentExtension on FlameGame {
 
 /// A full parallax, several layers of images drawn out on the screen and each
 /// layer moves with different velocities to give an effect of depth.
+///
+/// Most of the time you want to add the [ParallaxComponent] as a child to the
+/// viewport: `game.camera.viewport.add(parallaxComponent);`, since you want it
+/// to be static to the rest of the game.
 class ParallaxComponent<T extends FlameGame> extends PositionComponent
-    with HasGameRef<T> {
-  @override
-  PositionType positionType = PositionType.viewport;
-
+    with HasGameReference<T> {
   bool isFullscreen = true;
   Parallax? _parallax;
 
@@ -85,9 +88,9 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     if (!isFullscreen) {
       return;
     }
-    // TODO(Lukas): Use CameraComponent here instead.
-    // ignore: deprecated_member_use_from_same_package
-    final newSize = gameRef.camera.viewport.effectiveSize;
+    final newSize = parent is ReadOnlySizeProvider
+        ? (parent! as ReadOnlySizeProvider).size
+        : game.size;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
   }

@@ -1,20 +1,15 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/messages/event.dart';
-import 'package:meta/meta.dart';
+import 'package:flame/src/events/messages/location_context_event.dart';
+import 'package:flame/src/game/game.dart';
 
 /// Base class for events that originate at some point on the screen. These
-/// include: tap events, drag events, scale events, etc.
+/// include: tap events, scale events, etc.
 ///
 /// This class includes properties that describe the position where the event
 /// has occurred.
-abstract class PositionEvent extends Event {
-  PositionEvent({required this.canvasPosition, required this.devicePosition});
-
-  /// Event position in the coordinate space of the game widget, i.e. relative
-  /// to the game canvas.
-  ///
-  /// This could be considered the Flame-level global position.
-  final Vector2 canvasPosition;
+abstract class PositionEvent extends LocationContextEvent<Vector2> {
+  PositionEvent(this._game, {required this.devicePosition});
+  final Game _game;
 
   /// Event position in the coordinate space of the device -- either the phone,
   /// or the browser window, or the app.
@@ -24,6 +19,13 @@ abstract class PositionEvent extends Event {
   /// global position.
   final Vector2 devicePosition;
 
+  /// Event position in the coordinate space of the game widget, i.e. relative
+  /// to the game canvas.
+  ///
+  /// This could be considered the Flame-level global position.
+  late final Vector2 canvasPosition =
+      _game.convertGlobalToLocalCoordinate(devicePosition);
+
   /// Event position in the local coordinate space of the current component.
   ///
   /// This property is only accessible when the event is being propagated to
@@ -31,35 +33,10 @@ abstract class PositionEvent extends Event {
   /// property at other times.
   Vector2 get localPosition => renderingTrace.last;
 
-  /// The stacktrace of coordinates of the event within the components in their
-  /// rendering order.
-  final List<Vector2> renderingTrace = [];
-
-  Vector2? get parentPosition {
-    if (renderingTrace.length >= 2) {
-      return renderingTrace[renderingTrace.length - 2];
-    } else {
-      return null;
-    }
-  }
-
-  /// Sends the event to components of type <T> that are currently rendered at
-  /// the [canvasPosition].
-  @internal
-  void deliverAtPoint<T extends Component>({
+  @override
+  Iterable<Component> collectApplicableChildren({
     required Component rootComponent,
-    required void Function(T component) eventHandler,
-    bool deliverToAll = false,
   }) {
-    for (final child in rootComponent
-        .componentsAtPoint(canvasPosition, renderingTrace)
-        .whereType<T>()) {
-      continuePropagation = deliverToAll;
-      eventHandler(child);
-      if (!continuePropagation) {
-        CameraComponent.currentCameras.clear();
-        break;
-      }
-    }
+    return rootComponent.componentsAtPoint(canvasPosition, renderingTrace);
   }
 }

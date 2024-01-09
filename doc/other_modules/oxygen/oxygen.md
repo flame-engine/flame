@@ -69,7 +69,7 @@ This allows easy access to the methods on the game class.
 class YourSystem extends System with GameRef<YourGame> {
   @override
   void init() {
-    // Access to game using the .game propery
+    // Access to game using the .game property
   }
 
   // ...

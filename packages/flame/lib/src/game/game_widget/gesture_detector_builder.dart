@@ -173,19 +173,19 @@ class GestureDetectorBuilder {
 bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
       game is ScrollDetector ||
-      // ignore: deprecated_member_use_from_same_package
-      game is HasHoverables;
+      game.mouseDetector != null;
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
-  final mouseMoveFn = game is MouseMovementDetector
-      ? game.onMouseMove
-      // ignore: deprecated_member_use_from_same_package
-      : (game is HasHoverables ? game.onMouseMove : null);
+  final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
+  final mouseDetector = game.mouseDetector;
   return Listener(
     child: MouseRegion(
       child: child,
-      onHover: (e) => mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e)),
+      onHover: (PointerHoverEvent e) {
+        mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e));
+        mouseDetector?.call(e);
+      },
     ),
     onPointerSignal: (event) =>
         game is ScrollDetector && event is PointerScrollEvent

@@ -1,3 +1,61 @@
+## 0.16.0+4
+
+ - **FIX**: Wake up bodies on gravity change ([#2954](https://github.com/flame-engine/flame/issues/2954)). ([4f58329c](https://github.com/flame-engine/flame/commit/4f58329ceacef84d91cd41019d72bc2351bc50cd))
+
+## 0.16.0+3
+
+ - Update a dependency to the latest release.
+
+## 0.16.0+2
+
+ - Update a dependency to the latest release.
+
+## 0.16.0+1
+
+ - Update a dependency to the latest release.
+
+## 0.16.0
+ - Updated to Forge2D 0.12.2
+
+### Migration instructions
+
+The gravity and bullet are now field setters and getters, so if you before had `setGravity(Vector2(0, -10))` then you now do `gravity = Vector2(0, -10);` and if you previously had `body.setBullet(true);` you now do `body.isBullet = true;`.
+
+ - Updated to Forge2D 0.12.2
+
+### Migration instructions
+
+The gravity and bullet are now field setters and getters, so if you before had `setGravity(Vector2(0, -10))` then you now do `gravity = Vector2(0, -10);` and if you previously had `body.setBullet(true);` you now do `body.isBullet = true;`.
+
+## 0.15.1
+
+ - **FEAT**: Allow for bodyDef and fixtureDefs to be prepared earlier ([#2768](https://github.com/flame-engine/flame/issues/2768)). ([21357bca](https://github.com/flame-engine/flame/commit/21357bcac1e7e1cebfa6f2a496ec4b627d62d0e7))
+
+## 0.15.0+1
+
+ - Update a dependency to the latest release.
+
+## 0.15.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Absolute angle takes into account BodyComponent ancestors too ([#2678](https://github.com/flame-engine/flame/issues/2678)). ([75aee767](https://github.com/flame-engine/flame/commit/75aee767811ef440841956d9e467be157c4ab880))
+ - **FIX**: Proper Flame dependency in flame_forge2d ([#2644](https://github.com/flame-engine/flame/issues/2644)). ([9bbecb88](https://github.com/flame-engine/flame/commit/9bbecb88d86aa051626267fd69e5bf71fdca66d6))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+ - **BREAKING** **FEAT**: Move `Forge2DGame` to use `CameraComponent` ([#2728](https://github.com/flame-engine/flame/issues/2728)). ([7a3d5126](https://github.com/flame-engine/flame/commit/7a3d5126a54d23cdebde20953772a53ba1a53204))
+
+## 0.14.1+1
+
+ - Update a dependency to the latest release.
+
+## 0.14.1
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **DOCS**: Fix broken link on flame_forge2d readme ([#2588](https://github.com/flame-engine/flame/issues/2588)). ([45115bbf](https://github.com/flame-engine/flame/commit/45115bbff8539010f5d7bb7cf9479183b1a27cc8))
+
 ## 0.14.0
 
 > Note: This release has breaking changes.

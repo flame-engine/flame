@@ -7,14 +7,24 @@ import 'package:flame/src/events/messages/double_tap_event.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
+class DoubleTapDispatcherKey implements ComponentKey {
+  const DoubleTapDispatcherKey();
+
+  @override
+  int get hashCode => 20260645; // 'DoubleTapDispatcherKey' as hashCode
+
+  @override
+  bool operator ==(dynamic other) =>
+      other is DoubleTapDispatcherKey && other.hashCode == hashCode;
+}
+
 /// [DoubleTapDispatcher] propagates double-tap events to every components in
 /// the component tree that is mixed with [DoubleTapCallbacks]. This will be
 /// attached to the [FlameGame] instance automatically whenever any
 /// [DoubleTapCallbacks] are mounted into the component tree.
 @internal
-class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
+class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
-  bool _eventHandlerRegistered = false;
 
   void _onDoubleTapDown(DoubleTapDownEvent event) {
     event.deliverAtPoint(
@@ -37,30 +47,21 @@ class DoubleTapDispatcher extends Component with HasGameRef<FlameGame> {
 
   @override
   void onMount() {
-    if (game.firstChild<DoubleTapDispatcher>() == null) {
-      game.gestureDetectors.add(
-        DoubleTapGestureRecognizer.new,
-        (DoubleTapGestureRecognizer instance) {
-          instance.onDoubleTapDown =
-              (details) => _onDoubleTapDown(DoubleTapDownEvent(details));
-          instance.onDoubleTapCancel =
-              () => _onDoubleTapCancel(DoubleTapCancelEvent());
-          instance.onDoubleTap = () => _onDoubleTapUp(DoubleTapEvent());
-        },
-      );
-      _eventHandlerRegistered = true;
-    } else {
-      removeFromParent();
-    }
+    game.gestureDetectors.add(
+      DoubleTapGestureRecognizer.new,
+      (DoubleTapGestureRecognizer instance) {
+        instance.onDoubleTapDown =
+            (details) => _onDoubleTapDown(DoubleTapDownEvent(game, details));
+        instance.onDoubleTapCancel =
+            () => _onDoubleTapCancel(DoubleTapCancelEvent());
+        instance.onDoubleTap = () => _onDoubleTapUp(DoubleTapEvent());
+      },
+    );
   }
 
   @override
   void onRemove() {
-    if (!_eventHandlerRegistered) {
-      return;
-    }
-
     game.gestureDetectors.remove<DoubleTapGestureRecognizer>();
-    _eventHandlerRegistered = false;
+    game.unregisterKey(const DoubleTapDispatcherKey());
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flame_bloc_example/src/game/components/enemy.dart';
 import 'package:flame_bloc_example/src/game/components/enemy_creator.dart';
@@ -8,7 +8,8 @@ import 'package:flame_bloc_example/src/game/components/player.dart';
 import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
+class GameStatsController extends Component
+    with HasGameReference<SpaceShooterGame> {
   @override
   Future<void>? onLoad() async {
     add(
@@ -18,7 +19,7 @@ class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
               newState.status == GameStatus.initial;
         },
         onNewState: (state) {
-          gameRef.removeWhere((element) => element is EnemyComponent);
+          game.removeWhere((element) => element is EnemyComponent);
         },
       ),
     );
@@ -77,7 +78,7 @@ class SpaceShooterGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game.x, info.delta.game.y);
+    player.move(info.delta.global.x, info.delta.global.y);
   }
 
   void increaseScore() {

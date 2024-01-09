@@ -1,3 +1,46 @@
+## 1.10.9
+
+ - Update a dependency to the latest release.
+
+## 1.10.8
+
+ - Update a dependency to the latest release.
+
+## 1.10.7
+
+ - Update a dependency to the latest release.
+
+## 1.10.6
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.10.5
+
+ - Update a dependency to the latest release.
+
+## 1.10.4
+
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+## 1.10.3
+
+ - Update a dependency to the latest release.
+
+## 1.10.2
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+
+## 1.10.1
+
+ - Update a dependency to the latest release.
+
+## 1.10.0
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **FEAT**: Add onInitialState to FlameBlocListener ([#2565](https://github.com/flame-engine/flame/issues/2565)). ([f440bbf5](https://github.com/flame-engine/flame/commit/f440bbf5db207d454b4abba75a62e0ff2ff5b408))
+
 ## 1.9.0
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))

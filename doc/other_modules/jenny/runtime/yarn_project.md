@@ -75,6 +75,12 @@ final yarn = YarnProject()
 **trueValues**, **falseValues** `Set<String>`
 : The strings that can be recognized as `true`/`false` values respectively.
 
+**variables** `VariableStorage`
+: The [container][VariableStorage] for all variables declared and manipulated in your yarn scripts.
+  This is also used for maintaining the visit counts for nodes that the user has visited. To
+  implement a 'save game' feature it is possible to save the variables from
+  `VariableStorage.variables` and later restore them again.
+
 
 ## Methods
 
@@ -92,3 +98,4 @@ final yarn = YarnProject()
 [CommandStorage]: command_storage.md
 [FunctionStorage]: function_storage.md
 [Node]: node.md
+[VariableStorage]: variable_storage.md

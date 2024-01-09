@@ -132,4 +132,40 @@ Future<void> main() async {
       expect(sizeChangeCounter, equals(2));
     });
   });
+
+  group('SpriteGroupComponent.currentSpriteNotifier', () {
+    test('notifies when the current sprite changes', () {
+      final spritesMap = {
+        _SpriteState.idle: Sprite(image, srcSize: Vector2.all(15)),
+        _SpriteState.running: Sprite(image, srcSize: Vector2.all(15)),
+        _SpriteState.flying: Sprite(image, srcSize: Vector2(15, 12)),
+      };
+      final component = SpriteGroupComponent<_SpriteState>(
+        sprites: spritesMap,
+      );
+      var spriteChangeCounter = 0;
+      component.currentSpriteNotifier.addListener(
+        () => spriteChangeCounter++,
+      );
+
+      component.current = _SpriteState.running;
+      expect(spriteChangeCounter, equals(1));
+
+      component.current = _SpriteState.idle;
+      expect(spriteChangeCounter, equals(2));
+
+      component.update(1);
+      expect(spriteChangeCounter, equals(2));
+
+      component.current = _SpriteState.running;
+      expect(spriteChangeCounter, equals(3));
+
+      component.update(1);
+      expect(spriteChangeCounter, equals(3));
+
+      component.current = _SpriteState.running;
+      component.update(1);
+      expect(spriteChangeCounter, equals(3));
+    });
+  });
 }

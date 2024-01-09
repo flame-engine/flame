@@ -12,7 +12,7 @@ void main() {
         world: World(),
         viewport: FixedSizeViewport(300, 100),
       );
-      game.addAll([camera.world, camera]);
+      game.addAll([camera.world!, camera]);
       await game.ready();
 
       expect(camera.viewport, isA<FixedSizeViewport>());
@@ -29,7 +29,7 @@ void main() {
         world: World(),
         viewport: FixedSizeViewport(400, 100),
       );
-      game.addAll([camera.world, camera]);
+      game.addAll([camera.world!, camera]);
       await game.ready();
 
       final viewport = camera.viewport;
@@ -70,7 +70,7 @@ void main() {
               position: Vector2(i * 60.0 - i * i.abs() * 3, 0),
               radius: 25 - i.abs() * 3,
               anchor: Anchor.center,
-            )
+            ),
         ]);
         game.addAll([world, camera]);
       },

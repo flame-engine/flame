@@ -1,4 +1,4 @@
-# Cards
+# 3. Cards
 
 In this chapter we will begin implementing the most visible component in the
 game -- the **Card** component, which corresponds to a single real-life card.
@@ -55,13 +55,14 @@ symbol on the canvas. The sprite object is initialized using the
 ```
 
 Then comes the static list of all `Suit` objects in the game. Note that we
-define it as `late`, meaning that it will be only initialized the first time
-it is needed. This is important: as we seen above, the constructor tries to
-retrieve an image from the global cache, so it can only be invoked after the
-image is loaded into the cache.
+define it as static variable so it is evaluated lazily (as if it was marked
+with the `late` keyword) meaning that it will be only initialized the first
+time it is needed. This is important: as we can see above, the constructor
+tries to retrieve an image from the global cache, so it can only be invoked
+after the image is loaded into the cache.
 
 ```dart
-  static late final List<Suit> _singletons = [
+  static final List<Suit> _singletons = [
     Suit._(0, '♥', 1176, 17, 172, 183),
     Suit._(1, '♦', 973, 14, 177, 182),
     Suit._(2, '♣', 974, 226, 184, 172),
@@ -70,9 +71,9 @@ image is loaded into the cache.
 ```
 
 The last four numbers in the constructor are the coordinates of the sprite
-image within the spritesheet `klondike-sprites.png`. If you're wondering how I
+image within the sprite sheet `klondike-sprites.png`. If you're wondering how I
 obtained these numbers, the answer is that I used a free online service
-[spritecow.com] -- it's a handy tool for locating sprites within a spritesheet.
+[spritecow.com] -- it's a handy tool for locating sprites within a sprite sheet.
 
 Lastly, I have simple getters to determine the "color" of a suit. This will be
 needed later when we need to enforce the rule that cards can only be placed
@@ -120,7 +121,7 @@ class Rank {
   final Sprite redSprite;
   final Sprite blackSprite;
 
-  static late final List<Rank> _singletons = [
+  static final List<Rank> _singletons = [
     Rank._(1, 'A', 335, 164, 789, 161, 120, 129),
     Rank._(2, '2', 20, 19, 15, 322, 83, 125),
     Rank._(3, '3', 122, 19, 117, 322, 80, 127),
@@ -272,7 +273,7 @@ Various properties used in the `_renderBack()` method are defined as follows:
     const Radius.circular(KlondikeGame.cardRadius),
   );
   static final RRect backRRectInner = cardRRect.deflate(40);
-  static late final Sprite flameSprite = klondikeSprite(1367, 6, 357, 501);
+  static final Sprite flameSprite = klondikeSprite(1367, 6, 357, 501);
 ```
 
 I declared these properties as static because they will all be the same across
@@ -307,9 +308,9 @@ depending on whether the card is of a "red" suit or "black":
 Next, we also need the images for the court cards:
 
 ```dart
-  static late final Sprite redJack = klondikeSprite(81, 565, 562, 488);
-  static late final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
-  static late final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
+  static final Sprite redJack = klondikeSprite(81, 565, 562, 488);
+  static final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
+  static final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
 ```
 
 Note that I'm calling these sprites `redJack`, `redQueen`, and `redKing`. This
@@ -325,11 +326,11 @@ blending mode:
       Color(0x880d8bff),
       BlendMode.srcATop,
     );
-  static late final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
+  static final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
     ..paint = blueFilter;
-  static late final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
+  static final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
     ..paint = blueFilter;
-  static late final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
+  static final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
     ..paint = blueFilter;
 ```
 

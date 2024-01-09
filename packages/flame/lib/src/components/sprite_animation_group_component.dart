@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
@@ -12,6 +12,12 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     implements SizeProvider {
   /// Key with the current playing animation
   T? _current;
+
+  ValueNotifier<T?>? _currentAnimationNotifier;
+
+  /// A [ValueNotifier] that notifies when the current animation changes.
+  ValueNotifier<T?> get currentAnimationNotifier =>
+      _currentAnimationNotifier ??= ValueNotifier<T?>(_current);
 
   /// Map with the mapping each state to the flag removeOnFinish
   final Map<T, bool> removeOnFinish;
@@ -29,6 +35,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// size of current animation sprite.
   bool _autoResize;
 
+  /// Whether the current animation's ticker should reset to the beginning
+  /// when it becomes current.
+  bool autoResetTicker;
+
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationGroupComponent({
     Map<T, SpriteAnimation>? animations,
@@ -36,6 +46,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     bool? autoResize,
     this.playing = true,
     this.removeOnFinish = const {},
+    this.autoResetTicker = true,
     Paint? paint,
     super.position,
     super.size,
@@ -83,6 +94,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     bool? autoResize,
     bool playing = true,
     Map<T, bool> removeOnFinish = const {},
+    bool autoResetTicker = true,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -104,6 +116,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           current: current,
           autoResize: autoResize,
           removeOnFinish: removeOnFinish,
+          autoResetTicker: autoResetTicker,
           playing: playing,
           paint: paint,
           position: position,
@@ -125,8 +138,16 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    final changed = value != current;
     _current = value;
     _resizeToSprite();
+
+    if (changed) {
+      if (autoResetTicker) {
+        animationTicker?.reset();
+      }
+      _currentAnimationNotifier?.value = value;
+    }
   }
 
   /// Returns the map of animation state and their corresponding animations.

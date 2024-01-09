@@ -1,4 +1,4 @@
-# Other Inputs
+# Other Inputs and Helpers
 
 This includes documentation for input methods besides keyboard and mouse.
 
@@ -142,3 +142,44 @@ else which isn't a pure sprite.
 
 Flame has a separate plugin to support external game controllers (gamepads), check
 [here](https://github.com/flame-engine/flame_gamepad) for more information.
+
+
+## AdvancedButtonComponent
+
+The `AdvancedButtonComponent` have separate states for each of the different pointer phases.
+The skin can be customized for each state and each skin is represented by a `PositionComponent`.
+
+These are the fields that can be used to customize the looks of the `AdvancedButtonComponent`:
+
+- `defaultSkin`: Component that will be displayed by default on the button.
+- `downSkin`: Component displayed when the button is clicked or tapped.
+- `hoverSkin`: Component displayed when the button is hovered. (desktop and web).
+- `defaultLabel`: Component shown on top of skins. Automatically aligned to center.
+- `disabledSkin`: Component displayed when button is disabled.
+- `disabledLabel`: Component shown on top of skins when button is disabled.
+
+
+## ToggleButtonComponent
+
+The [ToggleButtonComponent] is an [AdvancedButtonComponent] that can switch between selected
+and not selected.
+
+In addition to the already existing skins, the [ToggleButtonComponent] contains the following skins:
+
+- `defaultSelectedSkin`: The component to display when the button is selected.
+- `downAndSelectedSkin`: The component that is displayed when the selectable button is selected and
+  pressed.
+- `hoverAndSelectedSkin`: Hover on selectable and selected button (desktop and web).
+- `disabledAndSelectedSkin`: For when the button is selected and in the disabled state.
+- `defaultSelectedLabel`: Component shown on top of the skins when button is selected.
+
+
+## IgnoreEvents mixin
+
+If you don't want a component subtree to receive events, you can use the `IgnoreEvents` mixin.
+Once you have added this mixin you can turn off events to reach a component and its descendants by
+setting `ignoreEvents = true` (default when the mixin is added), and then set it to `false` when you
+want to receive events again.
+
+This can be done for optimization purposes, since all events currently go through the whole
+component tree.

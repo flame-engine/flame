@@ -42,7 +42,7 @@ void main() {
       expect(diceFn.value, 3);
     });
 
-    test('dice(0)', () async {
+    test('dice(0)', () {
       final diceFn = DiceFn(const NumLiteral(0), YarnProject());
       expect(
         () => diceFn.value,

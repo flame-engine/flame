@@ -38,7 +38,7 @@ class AnchorGame extends FlameGame {
         radius: 4,
         position: size / 2,
         anchor: Anchor.center,
-      )
+      ),
     ]);
   }
 

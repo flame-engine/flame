@@ -1,1 +1,1 @@
-include: lib/analysis_options.yaml
+include: lib/analysis_options_with_dcm.yaml

@@ -1,7 +1,7 @@
 # Structure
 
 Flame has a proposed structure for your project that includes the standard Flutter `assets`
-directory in addition to two children: `audio` and `images`.
+directory in addition to some children: `audio`, `images` and `tiles`.
 
 If using the following example code:
 
@@ -11,6 +11,8 @@ void main() {
 
   Flame.images.load('player.png');
   Flame.images.load('enemy.png');
+  
+  TiledComponent.load('level.tmx', tileSize);
 }
 ```
 
@@ -21,9 +23,11 @@ The following file structure is where Flame would expect to find the files:
 └── assets
     ├── audio
     │   └── explosion.mp3
-    └── images
-        ├── enemy.png
-        └── player.png
+    ├── images
+    │   ├── enemy.png
+    │   └── player.png
+    └── tiles
+        └── level.tmx
 ```
 
 Optionally you can split your `audio` folder into two subfolders, one for `music` and one for `sfx`.
@@ -36,8 +40,14 @@ flutter:
     - assets/audio/explosion.mp3
     - assets/images/player.png
     - assets/images/enemy.png
+    - assets/tiles/level.tmx
 ```
 
 If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your instances of `AssetsCache`, `ImagesCache`, `AudioCache`, and `SoundPool`s, instead of using the
+your instances of `AssetsCache`, `Images`, and `AudioCache`, instead of using the
 global ones provided by Flame.
+
+Additionally, `AssetsCache` and `Images` can receive a custom
+[`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html).
+This can be used to make Flame look for assets in a different location other the `rootBundle`,
+like the file system for example.

@@ -13,6 +13,16 @@ command:
     branch: main
     # Generates a link to a prefilled GitHub release creation page.
     releaseUrl: true
+  bootstrap:
+    environment:
+      sdk: ">=3.0.0 <4.0.0"
+    dependencies:
+      meta: ^1.9.1
+      vector_math: ^2.1.4
+    dev_dependencies:
+      dartdoc: ^6.3.0
+      mocktail: ^1.0.1
+      test: any
 
 scripts:
   lint:all:
@@ -21,7 +31,7 @@ scripts:
 
   analyze:
     run: |
-      melos exec -c 10 -- \
+      melos exec -c 1 -- \
         flutter analyze --fatal-infos
     description: Run `flutter analyze` for all packages.
 
@@ -48,11 +58,11 @@ scripts:
   doc-setup:
     run: >
       echo Checking python version: &&
-      python --version &&
-      (python -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
+      python3 --version &&
+      (python3 -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
       (echo  Error: Python 3.8+ is required && exit 1)) &&
       echo Installing required python modules: &&
-      python -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
+      python3 -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
       echo Installing dartdoc_json: &&
       dart pub global activate dartdoc_json &&
       echo Done.
@@ -65,9 +75,9 @@ scripts:
   doc-serve:
     run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && make livehtml
     description: Recompiles the docs every time there is a change in them and opens your browser.
-  
+
   doc-kill:
-    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python kill-server.py
+    run: cd "$MELOS_ROOT_PATH/doc/_sphinx" && python3 kill-server.py
     description: Kills any TCP processes running on port 8000.
 
   doc-clean:
@@ -79,7 +89,7 @@ scripts:
     description: Checks whether there are any broken links in the docs.
 
   test:select:
-    run: melos exec -- flutter test
+    run: melos exec -c 1 -- flutter test
     packageFilters:
       dirExists: test
     description: Run `flutter test` for selected packages.

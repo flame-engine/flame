@@ -3,7 +3,7 @@ import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
+class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
   Obstacle({
     required this.settings,
     required this.groupIndex,
@@ -21,10 +21,10 @@ class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
 
   @override
   Future<void> onLoad() async {
-    sprite = settings.sprite(gameRef.spriteImage);
-    x = gameRef.size.x + width * groupIndex;
+    sprite = settings.sprite(game.spriteImage);
+    x = game.size.x + width * groupIndex;
     y = settings.y;
-    gap = computeGap(_gapCoefficient, gameRef.currentSpeed);
+    gap = computeGap(_gapCoefficient, game.currentSpeed);
     addAll(settings.generateHitboxes());
   }
 
@@ -38,7 +38,7 @@ class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    x -= gameRef.currentSpeed * dt;
+    x -= game.currentSpeed * dt;
 
     if (!isVisible) {
       removeFromParent();

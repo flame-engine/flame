@@ -1,7 +1,7 @@
 import 'package:flame/camera.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 void main() {
   group('MaxViewport', () {
@@ -41,9 +41,22 @@ void main() {
 
       final viewport = camera.viewport;
       expect(viewport, isA<_MyMaxViewport>());
+      expect((viewport as _MyMaxViewport).onViewportResizeCalled, 2);
+      game.onGameResize(Vector2(200, 200));
+      expect(viewport.onViewportResizeCalled, 3);
+    });
+
+    testWithGame(
+        'check that onViewportResize is called with game CameraComponent', () {
+      return FlameGame(
+        camera: CameraComponent(viewport: _MyMaxViewport()),
+      );
+    }, (game) async {
+      final viewport = game.camera.viewport;
+      expect(viewport, isA<_MyMaxViewport>());
       expect((viewport as _MyMaxViewport).onViewportResizeCalled, 3);
       game.onGameResize(Vector2(200, 200));
-      expect(viewport.onViewportResizeCalled, 4);
+      expect(viewport.onViewportResizeCalled, 5);
     });
   });
 }

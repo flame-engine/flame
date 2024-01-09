@@ -4,7 +4,6 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
@@ -16,6 +15,9 @@ import 'package:flame_tiled/src/tile_stack.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:tiled/tiled.dart';
+
+Paint _defaultLayerPaintFactory(double opacity) =>
+    Paint()..color = Color.fromRGBO(255, 255, 255, opacity);
 
 /// {@template _renderable_tiled_map}
 /// This is a wrapper over Tiled's [TiledMap] which can be rendered to a
@@ -31,8 +33,8 @@ import 'package:tiled/tiled.dart';
 ///  - [Layer.opacity]
 ///  - [Layer.offsetX]
 ///  - [Layer.offsetY]
-///  - [Layer.parallaxX] (only supported if [Camera] is supplied)
-///  - [Layer.parallaxY] (only supported if [Camera] is supplied)
+///  - [Layer.parallaxX] (only supported if a [CameraComponent] is supplied)
+///  - [Layer.parallaxY] (only supported if a [CameraComponent] is supplied)
 ///
 /// {@endtemplate}
 class RenderableTiledMap {
@@ -192,7 +194,10 @@ class RenderableTiledMap {
 
   /// Parses a file returning a [RenderableTiledMap].
   ///
-  /// NOTE: this method looks for files under the path "assets/tiles/".
+  /// {@template renderable_tile_prefix_path}
+  /// This method looks for files under the path "assets/tiles/" by default.
+  /// This can be changed by providing a different path to [prefix].
+  /// {@endtemplate}
   ///
   /// {@template renderable_tile_map_factory}
   /// By default, [FlameTileLayer] renders flipped tiles if they exist.
@@ -201,44 +206,78 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromFile(
     String fileName,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
+    String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
     AssetBundle? bundle,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    Paint Function(double opacity)? layerPaintFactory,
+    double atlasPackingSpacingX = 0,
+    double atlasPackingSpacingY = 0,
   }) async {
-    final contents = await Flame.bundle.loadString('assets/tiles/$fileName');
+    final contents =
+        await (bundle ?? Flame.bundle).loadString('$prefix$fileName');
     return fromString(
       contents,
       destTileSize,
+      atlasMaxX: atlasMaxX,
+      atlasMaxY: atlasMaxY,
+      prefix: prefix,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
       bundle: bundle,
+      tsxPackingFilter: tsxPackingFilter,
+      useAtlas: useAtlas,
+      layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+      atlasPackingSpacingX: atlasPackingSpacingX,
+      atlasPackingSpacingY: atlasPackingSpacingY,
     );
   }
 
   /// Parses a string returning a [RenderableTiledMap].
   ///
+  /// {@macro renderable_tile_prefix_path}
+  ///
   /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromString(
     String contents,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
+    String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
     AssetBundle? bundle,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    Paint Function(double opacity)? layerPaintFactory,
+    double atlasPackingSpacingX = 0,
+    double atlasPackingSpacingY = 0,
   }) async {
     final map = await TiledMap.fromString(
       contents,
-      (key) => FlameTsxProvider.parse(key, bundle),
+      (key) => FlameTsxProvider.parse(key, bundle, prefix),
     );
     return fromTiledMap(
       map,
       destTileSize,
+      atlasMaxX: atlasMaxX,
+      atlasMaxY: atlasMaxY,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
       bundle: bundle,
+      tsxPackingFilter: tsxPackingFilter,
+      useAtlas: useAtlas,
+      layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+      atlasPackingSpacingX: atlasPackingSpacingX,
+      atlasPackingSpacingY: atlasPackingSpacingY,
     );
   }
 
@@ -248,10 +287,17 @@ class RenderableTiledMap {
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
+    double? atlasMaxX,
+    double? atlasMaxY,
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
     AssetBundle? bundle,
+    bool Function(Tileset)? tsxPackingFilter,
+    bool useAtlas = true,
+    Paint Function(double opacity)? layerPaintFactory,
+    double atlasPackingSpacingX = 0,
+    double atlasPackingSpacingY = 0,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -269,9 +315,19 @@ class RenderableTiledMap {
       destTileSize,
       camera,
       animationFrames,
-      atlas: await TiledAtlas.fromTiledMap(map),
+      atlas: await TiledAtlas.fromTiledMap(
+        map,
+        maxX: atlasMaxX,
+        maxY: atlasMaxY,
+        images: images,
+        tsxPackingFilter: tsxPackingFilter,
+        useAtlas: useAtlas,
+        spacingX: atlasPackingSpacingX,
+        spacingY: atlasPackingSpacingY,
+      ),
       ignoreFlip: ignoreFlip,
       images: images,
+      layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
     );
 
     return RenderableTiledMap(
@@ -291,9 +347,10 @@ class RenderableTiledMap {
     CameraComponent? camera,
     Map<Tile, TileFrames> animationFrames, {
     required TiledAtlas atlas,
+    required Paint Function(double opacity) layerPaintFactory,
     bool? ignoreFlip,
     Images? images,
-  }) async {
+  }) {
     final visibleLayers = layers.where((layer) => layer.visible);
 
     final layerLoaders = visibleLayers.map((layer) async {
@@ -307,6 +364,7 @@ class RenderableTiledMap {
         atlas: atlas,
         ignoreFlip: ignoreFlip,
         images: images,
+        layerPaintFactory: layerPaintFactory,
       );
 
       if (layer is Group && renderableLayer is GroupLayer) {
@@ -320,6 +378,7 @@ class RenderableTiledMap {
           atlas: atlas,
           ignoreFlip: ignoreFlip,
           images: images,
+          layerPaintFactory: layerPaintFactory,
         );
       }
 

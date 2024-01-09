@@ -8,12 +8,14 @@ class RectangleComponent extends PolygonComponent {
   RectangleComponent({
     super.position,
     super.size,
+    super.scale,
     super.angle,
     super.anchor,
     super.children,
     super.priority,
     super.paint,
     super.paintLayers,
+    super.key,
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
     size.addListener(
       () => refreshVertices(
@@ -26,12 +28,14 @@ class RectangleComponent extends PolygonComponent {
   RectangleComponent.square({
     double size = 0,
     super.position,
+    super.scale,
     super.angle,
     super.anchor,
     super.priority,
     super.paint,
     super.paintLayers,
     super.children,
+    super.key,
   }) : super(sizeToVertices(Vector2.all(size), anchor)) {
     this.size.addListener(
           () => refreshVertices(
@@ -56,6 +60,8 @@ class RectangleComponent extends PolygonComponent {
     super.paint,
     super.paintLayers,
     super.shrinkToBounds,
+    super.key,
+    super.children,
   }) : super.relative([
           relation.clone(),
           Vector2(relation.x, -relation.y),
@@ -73,11 +79,14 @@ class RectangleComponent extends PolygonComponent {
   /// This factory will create a [RectangleComponent] from a positioned [Rect].
   factory RectangleComponent.fromRect(
     Rect rect, {
+    Vector2? scale,
     double? angle,
     Anchor anchor = Anchor.topLeft,
     int? priority,
     Paint? paint,
     List<Paint>? paintLayers,
+    ComponentKey? key,
+    List<Component>? children,
   }) {
     return RectangleComponent(
       position: anchor == Anchor.topLeft
@@ -88,11 +97,14 @@ class RectangleComponent extends PolygonComponent {
               rect.size.toVector2(),
             ),
       size: rect.size.toVector2(),
+      scale: scale,
       angle: angle,
       anchor: anchor,
       priority: priority,
       paint: paint,
       paintLayers: paintLayers,
+      key: key,
+      children: children,
     );
   }
 

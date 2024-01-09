@@ -251,6 +251,7 @@ Methods:
 - `intersectsSegment`; Whether the segment formed by two `Vector2`s intersects this `Rect`.
 - `intersectsLineSegment`: Whether the `LineSegment` intersects the `Rect`.
 - `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`.
+- `toFlameRectangle`: Converts this `Rect` into a Flame `Rectangle`.
 - `toMathRectangle`: Converts this `Rect` into a `math.Rectangle`.
 - `toGeometryRectangle`: Converts this `Rect` into a `Rectangle` from flame-geom.
 - `transform`: Transforms the `Rect` using a `Matrix4`.

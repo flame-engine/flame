@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import '../klondike_game.dart';
 import '../pile.dart';
 import '../rank.dart';
@@ -242,11 +241,7 @@ class Card extends PositionComponent with DragCallbacks {
     if (!_isDragging) {
       return;
     }
-    final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
-        .viewfinder
-        .zoom;
-    final delta = event.delta / cameraZoom;
+    final delta = event.localDelta;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
   }

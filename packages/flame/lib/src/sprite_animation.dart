@@ -175,7 +175,7 @@ class SpriteAnimation {
     return SpriteAnimation(
       [
         for (var i = 0; i < sprites.length; i++)
-          SpriteAnimationFrame(sprites[i], stepTimes[i])
+          SpriteAnimationFrame(sprites[i], stepTimes[i]),
       ],
       loop: loop,
     );
@@ -199,7 +199,7 @@ class SpriteAnimation {
               srcPosition: frameData.srcPosition,
             ),
             frameData.stepTime,
-          )
+          ),
       ],
       loop: data.loop,
     );
@@ -280,12 +280,6 @@ class SpriteAnimation {
   /// reversed order
   SpriteAnimation reversed() {
     return SpriteAnimation(frames.reversed.toList(), loop: loop);
-  }
-
-  /// Returns a new instance of [SpriteAnimationTicker].
-  @Deprecated('Will be removed in Flame v1.9, use createTicker() instead.')
-  SpriteAnimationTicker ticker() {
-    return SpriteAnimationTicker(this);
   }
 
   /// Creates and returns a new [SpriteAnimationTicker].

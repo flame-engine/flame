@@ -104,7 +104,9 @@ class RiveArtboardRenderer {
     var scaleY = 1.0;
 
     canvas.save();
-    canvas.clipRect(position & size);
+    if (artboard.clip) {
+      canvas.clipRect(position & size);
+    }
 
     switch (fit) {
       case BoxFit.fill:

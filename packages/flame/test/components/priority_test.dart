@@ -5,7 +5,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 import '../custom_component.dart';
-// ignore_for_file: deprecated_member_use_from_same_package
 
 void main() {
   void componentsSorted(Iterable<Component> components) {
@@ -31,8 +30,8 @@ void main() {
         final priorityComponents = List.generate(10, _PriorityComponent.new)
           ..add(firstComponent);
         priorityComponents.shuffle();
-        final components = game.children;
-        await game.ensureAddAll(priorityComponents);
+        final components = game.world.children;
+        await game.world.ensureAddAll(priorityComponents);
         componentsSorted(components);
         expect(components.first, firstComponent);
         firstComponent.priority = 11;
@@ -48,8 +47,8 @@ void main() {
         final priorityComponents = List.generate(10, _PriorityComponent.new)
           ..add(firstComponent);
         priorityComponents.shuffle();
-        final components = game.children;
-        await game.ensureAddAll(priorityComponents);
+        final components = game.world.children;
+        await game.world.ensureAddAll(priorityComponents);
         componentsSorted(components);
         expect(components.first, firstComponent);
         firstComponent.priority = 11;

@@ -53,7 +53,7 @@ It can for example be useful when simulating "soft-bodies".
 
 ```{flutter-app}
 :sources: ../../examples
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :page: constant_volume_joint
 :show: code popup
 ```
@@ -87,7 +87,7 @@ world.createJoint(DistanceJoint(distanceJointDef));
 ```{flutter-app}
 :sources: ../../examples
 :page: distance_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -142,7 +142,7 @@ final frictionJointDef = FrictionJointDef()
 ```{flutter-app}
 :sources: ../../examples
 :page: friction_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -183,7 +183,7 @@ world.createJoint(GearJoint(gearJointDef));
 ```{flutter-app}
 :sources: ../../examples
 :page: gear_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -233,7 +233,7 @@ final motorJointDef = MotorJointDef()
 ```{flutter-app}
 :sources: ../../examples
 :page: motor_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -283,7 +283,7 @@ joint.
 
 ```{warning}
 Many users have tried to adapt the mouse joint for game play. Users often want
-to achieve precisepositioning and instantaneous response. The mouse joint 
+to achieve precise positioning and instantaneous response. The mouse joint 
 doesn't work very well in that context. You may wish to consider using 
 kinematic bodies instead.
 ```
@@ -306,7 +306,7 @@ final mouseJointDef = MouseJointDef()
 ```{flutter-app}
 :sources: ../../examples
 :page: mouse_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -343,7 +343,7 @@ At least one body should by dynamic with a non-fixed rotation.
 The `PrismaticJoint` definition is similar to the [`RevoluteJoint`](#revolutejoint) definition, but
 instead of rotation, it uses translation.
 
-```{dart}
+```dart
 final prismaticJointDef = PrismaticJointDef()
   ..initialize(
     dynamicBody,
@@ -356,7 +356,7 @@ final prismaticJointDef = PrismaticJointDef()
 ```{flutter-app}
 :sources: ../../examples
 :page: prismatic_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -461,7 +461,7 @@ world.createJoint(PulleyJoint(pulleyJointDef));
 ```{flutter-app}
 :sources: ../../examples
 :page: pulley_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -505,7 +505,7 @@ world.createJoint(RevoluteJoint(jointDef));
 ```{flutter-app}
 :sources: ../../examples
 :page: revolute_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -586,7 +586,7 @@ world.createJoint(RopeJoint(ropeJointDef));
 ```{flutter-app}
 :sources: ../../examples
 :page: rope_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 
@@ -618,7 +618,7 @@ world.createJoint(WeldJoint(weldJointDef));
 ```{flutter-app}
 :sources: ../../examples
 :page: weld_joint
-:subfolder: stories/bridge_libraries/forge2d/joints
+:subfolder: stories/bridge_libraries/flame_forge2d/joints
 :show: code popup
 ```
 

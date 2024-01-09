@@ -19,13 +19,13 @@ void main() {
               Vector2(0, 0),
               Vector2(0, 20),
               Vector2(10, 20),
-              Vector2(10, 0)
+              Vector2(10, 0),
             ];
             final size2 = [
               Vector2(0, 0),
               Vector2(0, 40),
               Vector2(20, 40),
-              Vector2(20, 0)
+              Vector2(20, 0),
             ];
 
             component.size /= 2;
@@ -47,13 +47,13 @@ void main() {
               Vector2(0, 0),
               Vector2(0, 15),
               Vector2(15, 15),
-              Vector2(15, 0)
+              Vector2(15, 0),
             ];
             final size2 = [
               Vector2(0, 0),
               Vector2(0, 30),
               Vector2(30, 30),
-              Vector2(30, 0)
+              Vector2(30, 0),
             ];
 
             component.size /= 2;
@@ -74,13 +74,13 @@ void main() {
               Vector2(0, 0),
               Vector2(0, 30),
               Vector2(25, 30),
-              Vector2(25, 0)
+              Vector2(25, 0),
             ];
             final size2 = [
               Vector2(0, 0),
               Vector2(0, 60),
               Vector2(50, 60),
-              Vector2(50, 0)
+              Vector2(50, 0),
             ];
 
             component.size /= 2;
@@ -102,13 +102,13 @@ void main() {
               Vector2(0, 0),
               Vector2(0, 15),
               Vector2(45, 15),
-              Vector2(45, 0)
+              Vector2(45, 0),
             ];
             final size2 = [
               Vector2(0, 0),
               Vector2(0, 30),
               Vector2(90, 30),
-              Vector2(90, 0)
+              Vector2(90, 0),
             ];
 
             component.size /= 2;

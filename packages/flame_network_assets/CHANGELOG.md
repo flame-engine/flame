@@ -1,3 +1,43 @@
+## 0.2.0+12
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+11
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+10
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+9
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 0.2.0+8
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+7
+
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+## 0.2.0+6
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+5
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+
+## 0.2.0+4
+
+ - Update a dependency to the latest release.
+
+## 0.2.0+3
+
+ - Update a dependency to the latest release.
+
 ## 0.2.0+2
 
  - **FIX**: Solve warnings from 3.10.0 analyzer ([#2532](https://github.com/flame-engine/flame/issues/2532)). ([b41622db](https://github.com/flame-engine/flame/commit/b41622db8faa7559328f83f8f1d93ec4c6386961))

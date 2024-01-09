@@ -12,7 +12,7 @@ import 'package:flame/sprite.dart';
 /// Adds FireAtlas loading methods to Flame [Game].
 extension FireAtlasExtensions on Game {
   /// Load a [FireAtlas] instances from the given [asset]
-  Future<FireAtlas> loadFireAtlas(String asset) async {
+  Future<FireAtlas> loadFireAtlas(String asset) {
     return FireAtlas.loadAsset(
       asset,
       assets: assets,
@@ -270,24 +270,40 @@ class FireAtlas {
   }
 
   /// Loads the [FireAtlas] from an asset.
+  ///
+  /// Use [encoded] = false to load the asset from a json file.
   static Future<FireAtlas> loadAsset(
     String fileName, {
     AssetsCache? assets,
     Images? images,
+    bool encoded = true,
   }) async {
     final assetsCache = assets ?? Flame.assets;
-
-    final bytes = await assetsCache.readBinaryFile(fileName);
-    final atlas = FireAtlas.deserialize(bytes);
+    final FireAtlas atlas;
+    if (encoded) {
+      final bytes = await assetsCache.readBinaryFile(fileName);
+      atlas = FireAtlas.deserializeBytes(bytes);
+    } else {
+      final json = await assetsCache.readJson(fileName);
+      atlas = FireAtlas.deserializeJson(json);
+    }
     await atlas.loadImage(images: images);
     return atlas;
   }
 
   /// Serializes this instances into a byte array.
-  List<int> serialize() {
+  ///
+  /// If [encoded] is set to true,
+  /// it will return a gzip compressed byte array,
+  /// otherwise it will return a string byte array.
+  List<int> serialize({bool encoded = true}) {
     final raw = jsonEncode(toJson());
 
     final stringBytes = utf8.encode(raw);
+    if (!encoded) {
+      return stringBytes;
+    }
+
     final gzipBytes = GZipEncoder().encode(stringBytes);
 
     if (gzipBytes == null) {
@@ -296,11 +312,15 @@ class FireAtlas {
     return gzipBytes;
   }
 
+  /// Reads a [FireAtlas] instance from a json file.
+  factory FireAtlas.deserializeJson(Map<String, dynamic> rawJson) =>
+      FireAtlas._fromJson(rawJson);
+
   /// Reads a [FireAtlas] instance from a byte array.
-  factory FireAtlas.deserialize(List<int> bytes) {
+  factory FireAtlas.deserializeBytes(List<int> bytes) {
     final unzippedBytes = GZipDecoder().decodeBytes(bytes);
     final unzippedString = utf8.decode(unzippedBytes);
-    return FireAtlas._fromJson(
+    return FireAtlas.deserializeJson(
       jsonDecode(unzippedString) as Map<String, dynamic>,
     );
   }

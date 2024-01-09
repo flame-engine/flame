@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -26,9 +27,9 @@ class TextBoxConfig {
   /// between each character.
   final double timePerChar;
 
-  /// Defaults to 0. If not zero, this component will disappear after this many
-  /// seconds after being fully typed out.
-  final double dismissDelay;
+  /// Defaults to null. If not null, this component will disappear after this
+  /// many seconds after being fully typed out.
+  final double? dismissDelay;
 
   /// Only relevant if [timePerChar] is set. If true, the box will start with
   /// the size to fit the first character and grow as more lines are typed.
@@ -40,14 +41,14 @@ class TextBoxConfig {
     this.maxWidth = 200.0,
     this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
-    this.dismissDelay = 0.0,
+    this.dismissDelay,
     this.growingBox = false,
   });
 }
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
-    ..filterQuality = FilterQuality.high;
+    ..filterQuality = FilterQuality.medium;
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
@@ -64,6 +65,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   Image? cache;
 
   TextBoxConfig get boxConfig => _boxConfig;
+  double get lineHeight => _lineHeight;
 
   TextBoxComponent({
     super.text,
@@ -133,18 +135,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @internal
   void updateBounds() {
     lines.clear();
-    double? lineHeight;
+    var lineHeight = 0.0;
     final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
       final wordLines = word.split('\n');
       final possibleLine =
           lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
-      lineHeight ??= textRenderer.measureTextHeight(possibleLine);
+      final metrics = textRenderer.getLineMetrics(possibleLine);
+      lineHeight = max(lineHeight, metrics.height);
 
-      final textWidth = textRenderer.measureTextWidth(possibleLine);
-      _updateMaxWidth(textWidth);
-      var canAppend = false;
-      if (textWidth <= maxBoxWidth - _boxConfig.margins.horizontal) {
+      _updateMaxWidth(metrics.width);
+      final bool canAppend;
+      if (metrics.width <= maxBoxWidth - _boxConfig.margins.horizontal) {
         canAppend = lines.isNotEmpty;
       } else {
         canAppend = lines.isNotEmpty && lines.last == '';
@@ -161,7 +163,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       }
     });
     _totalLines = lines.length;
-    _lineHeight = lineHeight ?? 0.0;
+    _lineHeight = lineHeight;
     size = _recomputeSize();
   }
 
@@ -173,7 +175,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   double get totalCharTime => text.length * _boxConfig.timePerChar;
 
-  bool get finished => _lifeTime > totalCharTime + _boxConfig.dismissDelay;
+  bool get finished =>
+      _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
 
   int get _actualTextLength {
     return lines.map((e) => e.length).sum;
@@ -196,9 +199,11 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   }
 
   double getLineWidth(String line, int charCount) {
-    return textRenderer.measureTextWidth(
-      line.substring(0, math.min(charCount, line.length)),
-    );
+    return textRenderer
+        .getLineMetrics(
+          line.substring(0, math.min(charCount, line.length)),
+        )
+        .width;
   }
 
   Vector2 _recomputeSize() {
@@ -268,17 +273,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         final nChars = math.min(currentChar - charCount, line.length);
         line = line.substring(0, nChars);
       }
-      textRenderer.render(
-        canvas,
-        line,
-        Vector2(
-          boxConfig.margins.left +
-              (boxWidth - textRenderer.measureTextWidth(line)) * align.x,
-          boxConfig.margins.top +
-              (boxHeight - nLines * _lineHeight) * align.y +
-              i * _lineHeight,
-        ),
+
+      final textElement = textRenderer.format(line);
+      final metrics = textElement.metrics;
+
+      final position = Vector2(
+        boxConfig.margins.left + (boxWidth - metrics.width) * align.x,
+        boxConfig.margins.top +
+            (boxHeight - nLines * _lineHeight) * align.y +
+            i * _lineHeight,
       );
+      textElement.render(canvas, position);
+
       charCount += lines[i].length;
     }
   }
@@ -295,7 +301,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       // See issue #1618 for details.
       Future.delayed(const Duration(milliseconds: 100), () {
         cachedToRemove.remove(cachedImage);
-        cachedImage.dispose();
+        if (isMounted) {
+          cachedImage.dispose();
+        }
       });
     }
     cache = await _fullRenderAsImage(newSize);
@@ -309,6 +317,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       redraw();
     }
     _previousChar = currentChar;
+
+    if (_boxConfig.dismissDelay != null && finished) {
+      removeFromParent();
+    }
   }
 
   @override

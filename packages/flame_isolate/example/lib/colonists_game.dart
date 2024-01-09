@@ -17,19 +17,19 @@ import 'package:flutter/services.dart';
 class ColonistsGame extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPosition = PositionComponent();
   late final GameMap _currentMap;
-  final world = World();
-  late final CameraComponent cameraComponent;
+  ColonistsGame()
+      : super(
+          camera: CameraComponent.withFixedResolution(
+            width: 400,
+            height: 600,
+          ),
+        );
 
   @override
   Future<void> onLoad() async {
-    cameraComponent = CameraComponent.withFixedResolution(
-      world: world,
-      width: 400,
-      height: 600,
-    );
-    addAll([cameraComponent, world]);
-    cameraComponent.follow(_cameraPosition);
-    cameraComponent.viewfinder.zoom = 0.4;
+    super.onLoad();
+    camera.follow(_cameraPosition);
+    camera.viewfinder.zoom = 0.4;
 
     await Flame.images.load('bread.png');
     await Flame.images.load('worker.png');
@@ -78,14 +78,14 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
       _leftForce = howMuch;
     } else if (event.data.logicalKey == LogicalKeyboardKey.numpadAdd &&
         event is RawKeyDownEvent) {
-      cameraComponent.viewfinder.zoom = min(
-        cameraComponent.viewfinder.zoom + 0.1,
+      camera.viewfinder.zoom = min(
+        camera.viewfinder.zoom + 0.1,
         5,
       );
     } else if (event.data.logicalKey == LogicalKeyboardKey.numpadSubtract &&
         event is RawKeyDownEvent) {
-      cameraComponent.viewfinder.zoom = max(
-        cameraComponent.viewfinder.zoom - 0.1,
+      camera.viewfinder.zoom = max(
+        camera.viewfinder.zoom - 0.1,
         0.1,
       );
     }
@@ -101,7 +101,7 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
     final step = direction..scale(cameraSpeed * dt * 4);
     _cameraPosition.position += step;
     if (workers.isNotEmpty) {
-      cameraComponent.follow(workers.first);
+      camera.follow(workers.first);
     }
   }
 

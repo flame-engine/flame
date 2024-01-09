@@ -1,3 +1,45 @@
+## 1.8.9
+
+ - Update a dependency to the latest release.
+
+## 1.8.8
+
+ - Update a dependency to the latest release.
+
+## 1.8.7
+
+ - Update a dependency to the latest release.
+
+## 1.8.6
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.8.5
+
+ - Update a dependency to the latest release.
+
+## 1.8.4
+
+ - **FIX**: Do not render SVGs bigger than requested when pixelRatio > 1 and no match in _imageCache ([#2795](https://github.com/flame-engine/flame/issues/2795)). ([5fa4e09f](https://github.com/flame-engine/flame/commit/5fa4e09f7c464ce2f676df81049a95dad46bf2bd))
+
+## 1.8.3
+
+ - Update a dependency to the latest release.
+
+## 1.8.2
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Change to `FilterQuality.medium` instead of `high` ([#2733](https://github.com/flame-engine/flame/issues/2733)). ([fc19890c](https://github.com/flame-engine/flame/commit/fc19890c87a78599ea49ee0dfb52a04ea6b09a99))
+
+## 1.8.1
+
+ - Update a dependency to the latest release.
+
+## 1.8.0
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+
 ## 1.7.4
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))

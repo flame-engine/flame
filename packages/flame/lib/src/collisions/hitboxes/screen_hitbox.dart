@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/collisions/collision_callbacks.dart';
@@ -6,27 +8,54 @@ import 'package:flame/src/collisions/hitboxes/rectangle_hitbox.dart';
 /// This component is used to detect hitboxes colliding into the edges of the
 /// viewport of the game.
 class ScreenHitbox<T extends FlameGame> extends PositionComponent
-    with CollisionCallbacks, HasGameRef<T> {
+    with CollisionCallbacks, HasGameReference<T> {
+  bool _hasWorldAncestor = false;
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    size = gameRef.size;
     add(RectangleHitbox());
+    _hasWorldAncestor = findParent<World>() != null;
+    if (_hasWorldAncestor) {
+      game.camera.viewfinder.transform.addListener(_updateTransform);
+      _updateTransform();
+    }
   }
 
-  final _zeroVector = Vector2.zero();
-  @override
-  void update(double dt) {
-    super.update(dt);
-    // TODO(Lukas): Pass in a CameraComponent and use the position of the
-    // viewfinder, or only allow this to be attached to a viewport.
-    // ignore: deprecated_member_use_from_same_package
-    position = gameRef.camera.unprojectVector(_zeroVector);
+  final Vector2 _tmpPosition = Vector2.zero();
+
+  void _updateTransform() {
+    final viewfinder = game.camera.viewfinder;
+    final visibleRect = game.camera.visibleWorldRect;
+    size.setValues(visibleRect.width, visibleRect.height);
+    _tmpPosition.setValues(visibleRect.topLeft.dx, visibleRect.topLeft.dy);
+    position = Anchor.topLeft.toOtherAnchorPosition(
+      _tmpPosition,
+      viewfinder.anchor,
+      size,
+    );
+    anchor = viewfinder.anchor;
+    angle = viewfinder.angle;
+    if (angle != 0) {
+      final cosTheta = cos(angle).abs();
+      final sinTheta = sin(angle).abs();
+      final newWidth = (size.x * cosTheta) + (size.y * sinTheta);
+      final newHeight = (size.x * sinTheta) + (size.y * cosTheta);
+
+      // Shrink the new dimensions to keep the original AABB size before the
+      // rotation.
+      final scaleWidth = size.x / newWidth;
+      final scaleHeight = size.y / newHeight;
+
+      size.setValues(newWidth * scaleWidth, newHeight * scaleHeight);
+    }
   }
 
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     this.size = size;
+    if (_hasWorldAncestor) {
+      _updateTransform();
+    }
   }
 }

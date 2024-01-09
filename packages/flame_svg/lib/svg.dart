@@ -23,7 +23,7 @@ class Svg {
 
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
-  final _paint = Paint()..filterQuality = FilterQuality.high;
+  final _paint = Paint()..filterQuality = FilterQuality.medium;
 
   final List<Size> _lock = [];
 
@@ -80,6 +80,7 @@ class Svg {
       _lock.add(size);
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
+      canvas.scale(pixelRatio);
       _render(canvas, size);
       final picture = recorder.endRecording();
       picture
@@ -97,8 +98,6 @@ class Svg {
   }
 
   void _render(Canvas canvas, Size size) {
-    canvas.scale(pixelRatio);
-
     final scale = math.min(
       size.width / pictureInfo.size.width,
       size.height / pictureInfo.size.height,

@@ -26,9 +26,23 @@ import 'package:meta/meta.dart';
 @isTest
 Future<void> testWithFlameGame(
   String testName,
-  AsyncGameFunction<FlameGame> testBody,
-) {
-  return testWithGame<FlameGame>(testName, FlameGame.new, testBody);
+  AsyncGameFunction<FlameGame> testBody, {
+  Timeout? timeout,
+  dynamic tags,
+  dynamic skip,
+  Map<String, dynamic>? onPlatform,
+  int? retry,
+}) {
+  return testWithGame<FlameGame>(
+    testName,
+    FlameGame.new,
+    testBody,
+    timeout: timeout,
+    tags: tags,
+    skip: skip,
+    onPlatform: onPlatform,
+    retry: retry,
+  );
 }
 
 /// Utility function for writing tests that require a custom game instance.
@@ -52,14 +66,27 @@ Future<void> testWithFlameGame(
 Future<void> testWithGame<T extends FlameGame>(
   String testName,
   CreateFunction<T> create,
-  AsyncGameFunction<T> testBody,
-) async {
-  test(testName, () async {
-    final game = await initializeGame<T>(create);
-    await testBody(game);
+  AsyncGameFunction<T> testBody, {
+  Timeout? timeout,
+  dynamic tags,
+  dynamic skip,
+  Map<String, dynamic>? onPlatform,
+  int? retry,
+}) async {
+  test(
+    testName,
+    () async {
+      final game = await initializeGame<T>(create);
+      await testBody(game);
 
-    game.onRemove();
-  });
+      game.onRemove();
+    },
+    timeout: timeout,
+    tags: tags,
+    skip: skip,
+    onPlatform: onPlatform,
+    retry: retry,
+  );
 }
 
 Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
@@ -72,7 +99,7 @@ Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
   return game;
 }
 
-Future<FlameGame> initializeFlameGame() async => initializeGame(FlameGame.new);
+Future<FlameGame> initializeFlameGame() => initializeGame(FlameGame.new);
 
 typedef CreateFunction<T> = T Function();
 typedef AsyncVoidFunction = Future<void> Function();

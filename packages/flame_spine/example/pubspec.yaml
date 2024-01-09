@@ -7,13 +7,13 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.8.0
-  flame_spine: ^0.1.0+1
+  flame: ^1.14.0
+  flame_spine: ^0.1.1+9
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.0.0
+  flame_lint: ^1.1.2
   flutter_test:
     sdk: flutter
 

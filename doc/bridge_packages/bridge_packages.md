@@ -45,6 +45,11 @@ Replace FCS with the Oxygen Entity Component System.
 Create interactive animations (bridge package for [Rive]).
 :::
 
+:::{package} flame_riverpod
+
+A reactive caching and data-binding framework (bridge package for [Riverpod]).
+:::
+
 :::{package} flame_spine
 
 Use Spine skeletal animations (bridge package for [Spine]).
@@ -71,6 +76,7 @@ Draw SVG files in Flutter (bridge package for [flutter_svg]).
 [Forge2D]: https://github.com/flame-engine/forge2d
 [Lottie]: https://pub.dev/packages/lottie
 [Rive]: https://rive.app/
+[Riverpod]: https://github.com/rrousselGit/riverpod
 [Spine]: https://pub.dev/packages/spine_flutter
 [Tiled]: https://www.mapeditor.org/
 [flutter_svg]: https://github.com/dnfield/flutter_svg
@@ -88,6 +94,7 @@ flame_lottie                <flame_lottie/flame_lottie.md>
 flame_network_assets        <flame_network_assets/flame_network_assets.md>
 flame_oxygen                <flame_oxygen/flame_oxygen.md>
 flame_rive                  <flame_rive/flame_rive.md>
+flame_riverpod              <flame_riverpod/flame_riverpod.md>
 flame_splash_screen         <flame_splash_screen/flame_splash_screen.md>
 flame_spine                 <flame_spine/flame_spine.md>
 flame_svg                   <flame_svg/flame_svg.md>

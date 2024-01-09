@@ -1,3 +1,46 @@
+## 0.1.9+7
+
+ - Update a dependency to the latest release.
+
+## 0.1.9+6
+
+ - Update a dependency to the latest release.
+
+## 0.1.9+5
+
+ - Update a dependency to the latest release.
+
+## 0.1.9+4
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 0.1.9+3
+
+ - Update a dependency to the latest release.
+
+## 0.1.9+2
+
+ - Update a dependency to the latest release.
+
+## 0.1.9+1
+
+ - Update a dependency to the latest release.
+
+## 0.1.9
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **BREAKING** **REFACTOR**: Simplify text rendering pipeline ([#2663](https://github.com/flame-engine/flame/issues/2663)). ([34f69b95](https://github.com/flame-engine/flame/commit/34f69b953c137fbf0168aebec3860c6abc888594))
+
+## 0.1.8+5
+
+ - Update a dependency to the latest release.
+
+## 0.1.8+4
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
 ## 0.1.8+3
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))

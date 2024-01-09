@@ -18,4 +18,15 @@ mixin GestureHitboxes on Component {
   bool containsPoint(Vector2 point) {
     return hitboxes.any((hitbox) => hitbox.containsPoint(point));
   }
+
+  static final _temporaryPoint = Vector2.zero();
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    return hitboxes.any(
+      (hitbox) => hitbox.containsLocalPoint(
+        hitbox.parentToLocal(point, output: _temporaryPoint),
+      ),
+    );
+  }
 }

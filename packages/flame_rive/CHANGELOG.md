@@ -1,3 +1,50 @@
+## 1.9.10
+
+ - Update a dependency to the latest release.
+
+## 1.9.9
+
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
+## 1.9.8
+
+ - Update a dependency to the latest release.
+
+## 1.9.7
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.9.6
+
+ - Bump to Rive 0.12.3
+
+## 1.9.5
+
+ - Update a dependency to the latest release.
+
+## 1.9.4
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+
+## 1.9.3
+
+ - Update a dependency to the latest release.
+
+## 1.9.2
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+
+## 1.9.1
+
+ - **FIX**: Respect artboard clip value ([#2639](https://github.com/flame-engine/flame/issues/2639)). ([4e664245](https://github.com/flame-engine/flame/commit/4e6642458494b4d4544bcc03b568476faeb0a71f))
+
+## 1.9.0
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Avoid creation of unnecessary objects for RiveComponent ([#2553](https://github.com/flame-engine/flame/issues/2553)). ([52b35fbf](https://github.com/flame-engine/flame/commit/52b35fbf56a551a7585c493e2de51473266bf759))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+
 ## 1.8.0
 
 > Note: This release has breaking changes.

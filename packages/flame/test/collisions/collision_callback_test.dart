@@ -403,6 +403,54 @@ void main() {
       expect(blockA.endCounter, 1);
       expect(blockB.endCounter, 1);
     },
+    'component collision callbacks are not called with hitbox '
+        'triggersParentCollision option': (game) async {
+      final utilityHitboxA = TestHitbox('hitboxA')
+        ..triggersParentCollision = false;
+      final blockA = TestBlock(
+        Vector2.all(10),
+        Vector2.all(10),
+      );
+      blockA.add(utilityHitboxA);
+
+      final utilityHitboxB = TestHitbox('hitboxB')
+        ..triggersParentCollision = false;
+      final blockB = TestBlock(
+        Vector2.all(15),
+        Vector2.all(10),
+      );
+      blockB.add(utilityHitboxB);
+      await game.ensureAddAll([blockA, blockB]);
+
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 0);
+      expect(blockB.endCounter, 0);
+      expect(utilityHitboxA.startCounter, 2);
+      expect(utilityHitboxB.startCounter, 2);
+      expect(utilityHitboxA.onCollisionCounter, 2);
+      expect(utilityHitboxB.onCollisionCounter, 2);
+      expect(utilityHitboxA.endCounter, 0);
+      expect(utilityHitboxB.endCounter, 0);
+
+      blockB.position = Vector2(30, 30);
+      game.update(0);
+      expect(blockA.startCounter, 1);
+      expect(blockB.startCounter, 1);
+      expect(blockA.onCollisionCounter, 1);
+      expect(blockB.onCollisionCounter, 1);
+      expect(blockA.endCounter, 1);
+      expect(blockB.endCounter, 1);
+      expect(utilityHitboxA.startCounter, 2);
+      expect(utilityHitboxB.startCounter, 2);
+      expect(utilityHitboxA.onCollisionCounter, 2);
+      expect(utilityHitboxB.onCollisionCounter, 2);
+      expect(utilityHitboxA.endCounter, 2);
+      expect(utilityHitboxB.endCounter, 2);
+    },
 
     // Reproduced #1478
     'collision callbacks with many hitboxes added': (game) async {
@@ -468,13 +516,16 @@ void main() {
       final game = collisionSystem as FlameGame;
       final block = TestBlock(Vector2.all(20), Vector2.all(10))
         ..anchor = Anchor.center;
-      await game.ensureAddAll([ScreenHitbox(), block]);
+      final screenHitbox = ScreenHitbox();
+      game.world.addAll([block, screenHitbox]);
+      await game.ready();
+      game.world.update(0);
 
       game.update(0);
       expect(block.startCounter, 0);
       expect(block.onCollisionCounter, 0);
       expect(block.endCounter, 0);
-      block.position.x = game.size.x;
+      block.position.x = game.size.x / 2;
 
       game.update(0);
       expect(block.startCounter, 1);
@@ -486,7 +537,7 @@ void main() {
       expect(block.startCounter, 1);
       expect(block.onCollisionCounter, 1);
       expect(block.endCounter, 1);
-      block.position.y = game.size.y;
+      block.position.y = game.size.y / 2;
 
       game.update(0);
       expect(block.startCounter, 2);

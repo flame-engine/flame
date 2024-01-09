@@ -1,3 +1,45 @@
+## 1.4.7
+
+ - Update a dependency to the latest release.
+
+## 1.4.6
+
+ - Update a dependency to the latest release.
+
+## 1.4.5
+
+ - Update a dependency to the latest release.
+
+## 1.4.4
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.4.3
+
+ - Update a dependency to the latest release.
+
+## 1.4.2
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+## 1.4.1
+
+ - Update a dependency to the latest release.
+
+## 1.4.0
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**(fire_atlas): Encoded option to load json instead of .fa ([#2649](https://github.com/flame-engine/flame/issues/2649)). ([5be6fc8c](https://github.com/flame-engine/flame/commit/5be6fc8caea138b577bf91244165c0a61659b4c5))
+
+## 1.3.8
+
+ - Update a dependency to the latest release.
+
+## 1.3.7
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
 ## 1.3.6
 
  - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))

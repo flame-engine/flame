@@ -12,11 +12,8 @@ import 'package:meta/meta.dart';
 mixin Notifier on Component {
   FlameGame get _gameRef {
     final game = findGame();
-    assert(
-      game == null || game is FlameGame,
-      "Notifier can't be used without FlameGame",
-    );
-    return game! as FlameGame;
+    assert(game != null, "Notifier can't be used without FlameGame");
+    return game!;
   }
 
   @override

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame_isolate_example/brains/path_finder.dart';
 import 'package:flame_isolate_example/colonists_game.dart';
 import 'package:flame_isolate_example/constants.dart';
@@ -19,9 +18,9 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
   static const mapSizeY = 50;
   static const totalPositions = mapSizeX * mapSizeY;
 
-  static int cheeseSpread = (0.03 * totalPositions).toInt();
-  static int breadSpread = (0.05 * totalPositions).toInt();
-  static int workerSpread = (0.1 * totalPositions).toInt();
+  static final int cheeseSpread = (0.03 * totalPositions).toInt();
+  static final int breadSpread = (0.05 * totalPositions).toInt();
+  static final int workerSpread = (0.1 * totalPositions).toInt();
 
   static const double workerMinSpeed = 25;
   static const double workerMaxSpeed = 75;

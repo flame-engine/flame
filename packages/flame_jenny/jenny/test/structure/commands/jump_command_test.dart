@@ -105,7 +105,7 @@ void main() {
       );
     });
 
-    test('<<jump>> with unknown destination', () async {
+    test('<<jump>> with unknown destination', () {
       final yarn = YarnProject()
         ..parse(
           'title:A\n'

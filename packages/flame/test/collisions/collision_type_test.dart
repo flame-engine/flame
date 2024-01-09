@@ -188,7 +188,7 @@ void main() {
         final actives = generateBlocks(CollisionType.active);
         final passives = generateBlocks(CollisionType.passive);
         final inactives = generateBlocks(CollisionType.inactive);
-        await game.ensureAddAll((actives + passives + inactives)..shuffle());
+        await game.ensureAddAll((actives + passives + inactives)..shuffle(rng));
         game.update(0);
         expect(
           actives.every((c) => c.collidedWithExactly(actives + passives)),
@@ -300,7 +300,7 @@ void main() {
         expect(blockB.activeCollisions, {blockA, innerBlockA});
         expect(innerBlockA.activeCollisions, {blockB, innerBlockB});
         expect(innerBlockB.activeCollisions, {blockA, innerBlockA});
-      }
+      },
     });
   });
 }

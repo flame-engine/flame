@@ -53,8 +53,9 @@ class TestHitbox extends RectangleHitbox {
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
+  String? name;
 
-  TestHitbox() {
+  TestHitbox([this.name]) {
     onCollisionCallback = (_, __) {
       onCollisionCounter++;
     };
@@ -64,6 +65,13 @@ class TestHitbox extends RectangleHitbox {
     onCollisionEndCallback = (_) {
       endCounter++;
     };
+  }
+
+  @override
+  String toString() {
+    return name == null
+        ? '_TestHitbox[${identityHashCode(this)}]'
+        : '_TestHitbox[$name]';
   }
 }
 

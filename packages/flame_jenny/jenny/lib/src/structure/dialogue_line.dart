@@ -56,6 +56,9 @@ class DialogueLine extends DialogueEntry {
   final LineContent _content;
   String? _value;
 
+  /// The content of this Line.
+  LineContent? get content => _content;
+
   /// The character who is speaking the line. This can be null if the line does
   /// not contain a speaker.
   Character? get character => _character;

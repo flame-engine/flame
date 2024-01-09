@@ -3,6 +3,1148 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-01-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_riverpod` - `v5.1.5`](#flame_riverpod---v515)
+
+---
+
+#### `flame_riverpod` - `v5.1.5`
+
+ - **FIX**: Change return type of RiverpodComponentMixin.onLoad to FutureOr<void> ([#2964](https://github.com/flame-engine/flame/issues/2964)). ([7ac80a78](https://github.com/flame-engine/flame/commit/7ac80a78e95b06bb1287fb74773634483d80b1c9))
+
+
+## 2024-01-04
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.14.0`](#flame---v1140)
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.16.0+4`](#flame_forge2d---v01604)
+ - [`flame_test` - `v1.15.3`](#flame_test---v1153)
+ - [`flame_tiled` - `v1.18.3`](#flame_tiled---v1183)
+ - [`flame_oxygen` - `v0.1.9+7`](#flame_oxygen---v0197)
+ - [`flame_isolate` - `v0.5.0+7`](#flame_isolate---v0507)
+ - [`flame_fire_atlas` - `v1.4.7`](#flame_fire_atlas---v147)
+ - [`flame_audio` - `v2.1.7`](#flame_audio---v217)
+ - [`flame_spine` - `v0.1.1+9`](#flame_spine---v0119)
+ - [`flame_bloc` - `v1.10.9`](#flame_bloc---v1109)
+ - [`flame_lottie` - `v0.3.0+7`](#flame_lottie---v0307)
+ - [`flame_markdown` - `v0.1.1+7`](#flame_markdown---v0117)
+ - [`flame_rive` - `v1.9.10`](#flame_rive---v1910)
+ - [`flame_noise` - `v0.1.1+12`](#flame_noise---v01112)
+ - [`flame_riverpod` - `v5.1.4`](#flame_riverpod---v514)
+ - [`flame_svg` - `v1.8.9`](#flame_svg---v189)
+ - [`flame_network_assets` - `v0.2.0+12`](#flame_network_assets---v02012)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.3`
+ - `flame_tiled` - `v1.18.3`
+ - `flame_oxygen` - `v0.1.9+7`
+ - `flame_isolate` - `v0.5.0+7`
+ - `flame_fire_atlas` - `v1.4.7`
+ - `flame_audio` - `v2.1.7`
+ - `flame_spine` - `v0.1.1+9`
+ - `flame_bloc` - `v1.10.9`
+ - `flame_lottie` - `v0.3.0+7`
+ - `flame_markdown` - `v0.1.1+7`
+ - `flame_rive` - `v1.9.10`
+ - `flame_noise` - `v0.1.1+12`
+ - `flame_riverpod` - `v5.1.4`
+ - `flame_svg` - `v1.8.9`
+ - `flame_network_assets` - `v0.2.0+12`
+
+---
+
+#### `flame` - `v1.14.0`
+
+ - **FIX**: Set hitbox `debugColor` to yellow ([#2958](https://github.com/flame-engine/flame/issues/2958)). ([6858eae0](https://github.com/flame-engine/flame/commit/6858eae0766225bb7c940c2aa453459063f7d514))
+ - **FIX**: Consider displaced hitboxes in GestureHitboxes mixin ([#2957](https://github.com/flame-engine/flame/issues/2957)). ([1085518f](https://github.com/flame-engine/flame/commit/1085518fe279e674bef9a7b938d59926472511f3))
+ - **FIX**: PolygonComponent.containsLocalPoint to use anchor ([#2953](https://github.com/flame-engine/flame/issues/2953)). ([7969321e](https://github.com/flame-engine/flame/commit/7969321e8662515aa9efe305831ff36d51dd43cb))
+ - **FEAT**: Notifier for changing current sprite/animation in group components ([#2956](https://github.com/flame-engine/flame/issues/2956)). ([75cf2390](https://github.com/flame-engine/flame/commit/75cf23908e5d509a25cd794d6810162f22b978cb))
+ - **BREAKING** **REFACTOR**: Remove the Projector interface that is no longer used for coordinate transformations ([#2955](https://github.com/flame-engine/flame/issues/2955)). ([0979dc97](https://github.com/flame-engine/flame/commit/0979dc97f54af1b71b200ced609d874d390c1ca6))
+
+#### `flame_forge2d` - `v0.16.0+4`
+
+ - **FIX**: Wake up bodies on gravity change ([#2954](https://github.com/flame-engine/flame/issues/2954)). ([4f58329c](https://github.com/flame-engine/flame/commit/4f58329ceacef84d91cd41019d72bc2351bc50cd))
+
+
+## 2023-12-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_riverpod` - `v5.1.3`](#flame_riverpod---v513)
+
+---
+
+#### `flame_riverpod` - `v5.1.3`
+
+ - **FIX**: Fix logic inside flame_riverpod persistent frame callback. ([#2950](https://github.com/flame-engine/flame/issues/2950)). ([230fb88f](https://github.com/flame-engine/flame/commit/230fb88fa9f9d82711461d10fe4aff9f8520cd29))
+
+
+## 2023-12-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.13.1`](#flame---v1131)
+ - [`flame_riverpod` - `v5.1.2`](#flame_riverpod---v512)
+ - [`flame_test` - `v1.15.3`](#flame_test---v1153)
+ - [`flame_tiled` - `v1.18.3`](#flame_tiled---v1183)
+ - [`flame_oxygen` - `v0.1.9+7`](#flame_oxygen---v0197)
+ - [`flame_isolate` - `v0.5.0+7`](#flame_isolate---v0507)
+ - [`flame_fire_atlas` - `v1.4.7`](#flame_fire_atlas---v147)
+ - [`flame_audio` - `v2.1.7`](#flame_audio---v217)
+ - [`flame_spine` - `v0.1.1+9`](#flame_spine---v0119)
+ - [`flame_bloc` - `v1.10.9`](#flame_bloc---v1109)
+ - [`flame_lottie` - `v0.3.0+7`](#flame_lottie---v0307)
+ - [`flame_markdown` - `v0.1.1+7`](#flame_markdown---v0117)
+ - [`flame_rive` - `v1.9.10`](#flame_rive---v1910)
+ - [`flame_forge2d` - `v0.16.0+4`](#flame_forge2d---v01604)
+ - [`flame_noise` - `v0.1.1+12`](#flame_noise---v01112)
+ - [`flame_svg` - `v1.8.9`](#flame_svg---v189)
+ - [`flame_network_assets` - `v0.2.0+12`](#flame_network_assets---v02012)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.3`
+ - `flame_tiled` - `v1.18.3`
+ - `flame_oxygen` - `v0.1.9+7`
+ - `flame_isolate` - `v0.5.0+7`
+ - `flame_fire_atlas` - `v1.4.7`
+ - `flame_audio` - `v2.1.7`
+ - `flame_spine` - `v0.1.1+9`
+ - `flame_bloc` - `v1.10.9`
+ - `flame_lottie` - `v0.3.0+7`
+ - `flame_markdown` - `v0.1.1+7`
+ - `flame_rive` - `v1.9.10`
+ - `flame_forge2d` - `v0.16.0+4`
+ - `flame_noise` - `v0.1.1+12`
+ - `flame_svg` - `v1.8.9`
+ - `flame_network_assets` - `v0.2.0+12`
+
+---
+
+#### `flame` - `v1.13.1`
+
+ - **FIX**: The `visibleGameSize` should be based on `viewport.virtualSize` ([#2945](https://github.com/flame-engine/flame/issues/2945)). ([bd130b71](https://github.com/flame-engine/flame/commit/bd130b711b5cb486b8f05225711c6e6c3fe574e6))
+ - **FEAT**: Adding ability for a SpawnComponent to not auto start ([#2947](https://github.com/flame-engine/flame/issues/2947)). ([37c7a075](https://github.com/flame-engine/flame/commit/37c7a075a37cfc7c298f02542715b18e87f4cf99))
+
+#### `flame_riverpod` - `v5.1.2`
+
+ - **FIX**: Package flame_riverpod, setState() or markNeedsBuild() called during build. ([#2943](https://github.com/flame-engine/flame/issues/2943)). ([54d0e95d](https://github.com/flame-engine/flame/commit/54d0e95d863cc40e95f0310b4964343085f422e9))
+
+
+## 2023-12-19
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.13.0`](#flame---v1130)
+ - [`flame_rive` - `v1.9.9`](#flame_rive---v199)
+ - [`flame_riverpod` - `v5.1.1`](#flame_riverpod---v511)
+ - [`flame_tiled` - `v1.18.2`](#flame_tiled---v1182)
+ - [`flame_test` - `v1.15.2`](#flame_test---v1152)
+ - [`flame_oxygen` - `v0.1.9+6`](#flame_oxygen---v0196)
+ - [`flame_isolate` - `v0.5.0+6`](#flame_isolate---v0506)
+ - [`flame_fire_atlas` - `v1.4.6`](#flame_fire_atlas---v146)
+ - [`flame_audio` - `v2.1.6`](#flame_audio---v216)
+ - [`flame_spine` - `v0.1.1+8`](#flame_spine---v0118)
+ - [`flame_bloc` - `v1.10.8`](#flame_bloc---v1108)
+ - [`flame_lottie` - `v0.3.0+6`](#flame_lottie---v0306)
+ - [`flame_markdown` - `v0.1.1+6`](#flame_markdown---v0116)
+ - [`flame_svg` - `v1.8.8`](#flame_svg---v188)
+ - [`flame_forge2d` - `v0.16.0+3`](#flame_forge2d---v01603)
+ - [`flame_noise` - `v0.1.1+11`](#flame_noise---v01111)
+ - [`flame_network_assets` - `v0.2.0+11`](#flame_network_assets---v02011)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.2`
+ - `flame_oxygen` - `v0.1.9+6`
+ - `flame_isolate` - `v0.5.0+6`
+ - `flame_fire_atlas` - `v1.4.6`
+ - `flame_audio` - `v2.1.6`
+ - `flame_spine` - `v0.1.1+8`
+ - `flame_bloc` - `v1.10.8`
+ - `flame_lottie` - `v0.3.0+6`
+ - `flame_markdown` - `v0.1.1+6`
+ - `flame_svg` - `v1.8.8`
+ - `flame_forge2d` - `v0.16.0+3`
+ - `flame_noise` - `v0.1.1+11`
+ - `flame_network_assets` - `v0.2.0+11`
+
+---
+
+#### `flame` - `v1.13.0`
+
+ - **FIX**: Logic error in MemoryCache.setValue() ([#2931](https://github.com/flame-engine/flame/issues/2931)). ([8cee80c3](https://github.com/flame-engine/flame/commit/8cee80c35ca676ad25a25c771f0aade88b58150b))
+ - **FIX**: Export `ScalingParticle` ([#2928](https://github.com/flame-engine/flame/issues/2928)). ([3730cb1d](https://github.com/flame-engine/flame/commit/3730cb1d834c73c87dc3597554039fd0f0a32bae))
+ - **FIX**: Misalignment of the hittest area of PolygonHitbox ([#2930](https://github.com/flame-engine/flame/issues/2930)). ([dbdb1379](https://github.com/flame-engine/flame/commit/dbdb1379d0bc1b6ac02b3ee27f62263bd1be3fc3))
+ - **FIX**: Allow setting `bounds` while `BoundedPositionBehavior`'s target is null ([#2926](https://github.com/flame-engine/flame/issues/2926)). ([bab9be6e](https://github.com/flame-engine/flame/commit/bab9be6e7051b7be6c84fc9760c7347692dbf140))
+ - **FEAT**: Ability to use `selfPositioning` in `SpawnComponent` ([#2927](https://github.com/flame-engine/flame/issues/2927)). ([b526aa14](https://github.com/flame-engine/flame/commit/b526aa1488c0f891edb356007ebc2c5c2de596b5))
+ - **FEAT**: Add `margin` and `spacing` properties to `SpriteSheet` ([#2925](https://github.com/flame-engine/flame/issues/2925)). ([67f7c126](https://github.com/flame-engine/flame/commit/67f7c126b4c8052df99ffa8c657a90cc7fb6f867))
+ - **FEAT**: Add `children` to `SpriteAnimationComponent.fromFrameData` ([#2914](https://github.com/flame-engine/flame/issues/2914)). ([caf2b909](https://github.com/flame-engine/flame/commit/caf2b90930ca500c85b9f9f63e7d3d7a5d82c18e))
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
+#### `flame_rive` - `v1.9.9`
+
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
+#### `flame_riverpod` - `v5.1.1`
+
+ - **FIX**: Add super constructor fields to RiverpodAwareGameWidget ([#2932](https://github.com/flame-engine/flame/issues/2932)). ([c2e6ea71](https://github.com/flame-engine/flame/commit/c2e6ea71e5c3c5f0d7ae6bc01a6c2f1f4d4d563b))
+
+#### `flame_tiled` - `v1.18.2`
+
+ - **FIX**: Image layers repeat indefinitely if repeated in Tiled ([#2921](https://github.com/flame-engine/flame/issues/2921)). ([6f79bc5e](https://github.com/flame-engine/flame/commit/6f79bc5ef920ace17d09c88156a73043357d514f))
+
+
+## 2023-12-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.12.0`](#flame---v1120)
+ - [`flame_riverpod` - `v5.1.0`](#flame_riverpod---v510)
+ - [`flame_test` - `v1.15.1`](#flame_test---v1151)
+ - [`flame_tiled` - `v1.18.1`](#flame_tiled---v1181)
+ - [`flame_oxygen` - `v0.1.9+5`](#flame_oxygen---v0195)
+ - [`flame_isolate` - `v0.5.0+5`](#flame_isolate---v0505)
+ - [`flame_fire_atlas` - `v1.4.5`](#flame_fire_atlas---v145)
+ - [`flame_audio` - `v2.1.5`](#flame_audio---v215)
+ - [`flame_spine` - `v0.1.1+7`](#flame_spine---v0117)
+ - [`flame_bloc` - `v1.10.7`](#flame_bloc---v1107)
+ - [`flame_lottie` - `v0.3.0+5`](#flame_lottie---v0305)
+ - [`flame_markdown` - `v0.1.1+5`](#flame_markdown---v0115)
+ - [`flame_rive` - `v1.9.8`](#flame_rive---v198)
+ - [`flame_forge2d` - `v0.16.0+2`](#flame_forge2d---v01602)
+ - [`flame_noise` - `v0.1.1+10`](#flame_noise---v01110)
+ - [`flame_svg` - `v1.8.7`](#flame_svg---v187)
+ - [`flame_network_assets` - `v0.2.0+10`](#flame_network_assets---v02010)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.15.1`
+ - `flame_tiled` - `v1.18.1`
+ - `flame_oxygen` - `v0.1.9+5`
+ - `flame_isolate` - `v0.5.0+5`
+ - `flame_fire_atlas` - `v1.4.5`
+ - `flame_audio` - `v2.1.5`
+ - `flame_spine` - `v0.1.1+7`
+ - `flame_bloc` - `v1.10.7`
+ - `flame_lottie` - `v0.3.0+5`
+ - `flame_markdown` - `v0.1.1+5`
+ - `flame_rive` - `v1.9.8`
+ - `flame_forge2d` - `v0.16.0+2`
+ - `flame_noise` - `v0.1.1+10`
+ - `flame_svg` - `v1.8.7`
+ - `flame_network_assets` - `v0.2.0+10`
+
+---
+
+#### `flame` - `v1.12.0`
+
+ - **FIX**: SpriteAnimationWidget was resetting the ticker even when the playing didn't changed ([#2891](https://github.com/flame-engine/flame/issues/2891)). ([9aed8b4d](https://github.com/flame-engine/flame/commit/9aed8b4dea3074c9ca708ad991cdc90b12707fbe))
+ - **FEAT**: Scrollable TextBoxComponent ([#2901](https://github.com/flame-engine/flame/issues/2901)). ([8c3cb725](https://github.com/flame-engine/flame/commit/8c3cb725413c46089854713f6ecc4617e1f15600))
+ - **FEAT**: Add collision completed listener ([#2896](https://github.com/flame-engine/flame/issues/2896)). ([957db3c1](https://github.com/flame-engine/flame/commit/957db3c1ed476b22f7cc62d4df22595449f8756c))
+ - **FEAT**: Adding autoResetTicker option to SpriteAnimationGroupComponent ([#2899](https://github.com/flame-engine/flame/issues/2899)). ([001c870d](https://github.com/flame-engine/flame/commit/001c870d61be6e7e7aae798df0dc33e5321ed882))
+ - **FEAT**: Add clearSnapshot function ([#2897](https://github.com/flame-engine/flame/issues/2897)). ([d4decd21](https://github.com/flame-engine/flame/commit/d4decd21eb7506ffd6d84ab5a3ebf1f2067083b6))
+
+#### `flame_riverpod` - `v5.1.0`
+
+ - **FIX**: SpriteAnimationWidget was resetting the ticker even when the playing didn't changed ([#2891](https://github.com/flame-engine/flame/issues/2891)). ([9aed8b4d](https://github.com/flame-engine/flame/commit/9aed8b4dea3074c9ca708ad991cdc90b12707fbe))
+ - **FEAT**: Integration of flame_riverpod ([#2367](https://github.com/flame-engine/flame/issues/2367)). ([0c74560b](https://github.com/flame-engine/flame/commit/0c74560b2e25e86163c6c678ef6515bc11f9c3e7))
+
+
+## 2023-11-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.11.0`](#flame---v1110)
+
+Packages with other changes:
+
+ - [`flame_audio` - `v2.1.4`](#flame_audio---v214)
+ - [`flame_bloc` - `v1.10.6`](#flame_bloc---v1106)
+ - [`flame_fire_atlas` - `v1.4.4`](#flame_fire_atlas---v144)
+ - [`flame_isolate` - `v0.5.0+4`](#flame_isolate---v0504)
+ - [`flame_lint` - `v1.1.2`](#flame_lint---v112)
+ - [`flame_markdown` - `v0.1.1+4`](#flame_markdown---v0114)
+ - [`flame_network_assets` - `v0.2.0+9`](#flame_network_assets---v0209)
+ - [`flame_noise` - `v0.1.1+9`](#flame_noise---v0119)
+ - [`flame_oxygen` - `v0.1.9+4`](#flame_oxygen---v0194)
+ - [`flame_rive` - `v1.9.7`](#flame_rive---v197)
+ - [`flame_spine` - `v0.1.1+6`](#flame_spine---v0116)
+ - [`flame_svg` - `v1.8.6`](#flame_svg---v186)
+ - [`flame_test` - `v1.15.0`](#flame_test---v1150)
+ - [`flame_tiled` - `v1.18.0`](#flame_tiled---v1180)
+ - [`jenny` - `v1.2.1`](#jenny---v121)
+ - [`flame_lottie` - `v0.3.0+4`](#flame_lottie---v0304)
+ - [`flame_forge2d` - `v0.16.0+1`](#flame_forge2d---v01601)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_lottie` - `v0.3.0+4`
+ - `flame_forge2d` - `v0.16.0+1`
+
+---
+
+#### `flame` - `v1.11.0`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+ - **FIX**: Properly resize ScreenHitbox when needed ([#2826](https://github.com/flame-engine/flame/issues/2826)). ([24fed757](https://github.com/flame-engine/flame/commit/24fed757ac313453639ddf122ba84b1012a4b606))
+ - **FIX**: Setting world on FlameGame camera setter ([#2831](https://github.com/flame-engine/flame/issues/2831)). ([3a8e2464](https://github.com/flame-engine/flame/commit/3a8e2464420f2b513f4f0d99cd7d64ab0eda9826))
+ - **FIX**: Allow null passthrough parent ([#2821](https://github.com/flame-engine/flame/issues/2821)). ([c4d2f86e](https://github.com/flame-engine/flame/commit/c4d2f86e1214e9895ff858c511fa3c686313f204))
+ - **FIX**: Do not scale debug texts with zoom ([#2818](https://github.com/flame-engine/flame/issues/2818)). ([c2f3f040](https://github.com/flame-engine/flame/commit/c2f3f040c6128d8fd3340d8f7622a2d4c2f22819))
+ - **FIX**(flame): Export `FixedResolutionViewport` and make `withFixedResolution` a redirect constructor ([#2817](https://github.com/flame-engine/flame/issues/2817)). ([3420d0e6](https://github.com/flame-engine/flame/commit/3420d0e6f8af6f2dd8695ea61231aa93944c602b))
+ - **FEAT**: Using viewport scale on debug mode text paint ([#2883](https://github.com/flame-engine/flame/issues/2883)). ([07ef46ca](https://github.com/flame-engine/flame/commit/07ef46cab01ae08749e678211245896572bb1081))
+ - **FEAT**: Make Viewfinder and Viewport comply with CoordinateTransform interface ([#2872](https://github.com/flame-engine/flame/issues/2872)). ([685e1d95](https://github.com/flame-engine/flame/commit/685e1d9529df90f203e7827950ed5d9261b2ce42))
+ - **FEAT**: Allow sequence effect to be extended ([#2864](https://github.com/flame-engine/flame/issues/2864)). ([ee11aae9](https://github.com/flame-engine/flame/commit/ee11aae9f519fdb967eb384aaffdb5a6f87a808f))
+ - **FEAT**: Adding children argument to all constructors in the shape components ([#2862](https://github.com/flame-engine/flame/issues/2862)). ([082743d3](https://github.com/flame-engine/flame/commit/082743d3ba0860a87a58377a7b5a9cd6b5ae7c70))
+ - **FEAT**: Optimization in sprite batch ([#2861](https://github.com/flame-engine/flame/issues/2861)). ([208d7897](https://github.com/flame-engine/flame/commit/208d7897f1e9e512f0bc235233e41e1953a8d546))
+ - **FEAT**: Add TimeTrackComponent and ChildCounterComponent ([#2846](https://github.com/flame-engine/flame/issues/2846)). ([6269551a](https://github.com/flame-engine/flame/commit/6269551a77cfbc27094e262c131dec09e489e583))
+ - **FEAT**: MoveAlongPathEffect should maintain initial angle of the component ([#2835](https://github.com/flame-engine/flame/issues/2835)). ([e6e78c0d](https://github.com/flame-engine/flame/commit/e6e78c0d66bc958dbe1c2295a7cc946dc5852455))
+ - **FEAT**: Add a method to adapt the camera bounds to the world ([#2769](https://github.com/flame-engine/flame/issues/2769)). ([87b69df6](https://github.com/flame-engine/flame/commit/87b69df6a1d29261a514a7ee7d28d2d1f730920e))
+ - **FEAT**: Scaling particle feature ([#2830](https://github.com/flame-engine/flame/issues/2830)). ([9faae8a2](https://github.com/flame-engine/flame/commit/9faae8a2371efdcbdf03cad70bded05470d4719a))
+ - **BREAKING** **REFACTOR**: Replace `Offset` with `opacityFrom` and `opacityTo` in ColorEffect ([#2876](https://github.com/flame-engine/flame/issues/2876)). ([0fd2662d](https://github.com/flame-engine/flame/commit/0fd2662d4b1187285ee168271a38e1576b6e444a))
+ - **BREAKING** **FIX**: Add DisplacementEvent to fix delta coordinate transformations for drag events ([#2871](https://github.com/flame-engine/flame/issues/2871)). ([63994ebc](https://github.com/flame-engine/flame/commit/63994ebcd8e850f68622f4a89ea17224574a8214))
+
+#### `flame_audio` - `v2.1.4`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_bloc` - `v1.10.6`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_fire_atlas` - `v1.4.4`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_isolate` - `v0.5.0+4`
+
+ - **DOCS**: Update flame_isolate to point at repository ([#2880](https://github.com/flame-engine/flame/issues/2880)). ([06fdeac6](https://github.com/flame-engine/flame/commit/06fdeac684b2be26206d50282e6a7f2cbac4264c))
+
+#### `flame_lint` - `v1.1.2`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_markdown` - `v0.1.1+4`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_network_assets` - `v0.2.0+9`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_noise` - `v0.1.1+9`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_oxygen` - `v0.1.9+4`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_rive` - `v1.9.7`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_spine` - `v0.1.1+6`
+
+ - **FIX**: Removing spine flutter overriding ([#2877](https://github.com/flame-engine/flame/issues/2877)). ([f4ff3117](https://github.com/flame-engine/flame/commit/f4ff31174a0498dd8af90f815ad9c098df3b30b7))
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_svg` - `v1.8.6`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+#### `flame_test` - `v1.15.0`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+ - **FEAT**: Expose addition test arguments on flame test ([#2832](https://github.com/flame-engine/flame/issues/2832)). ([08b4bd6d](https://github.com/flame-engine/flame/commit/08b4bd6d3f308013d18fec4eb126927239cd6481))
+
+#### `flame_tiled` - `v1.18.0`
+
+ - **FIX**: TiledComponent.atlases had duplicated values ([#2867](https://github.com/flame-engine/flame/issues/2867)). ([e56ad187](https://github.com/flame-engine/flame/commit/e56ad1878333ba19e0c8af3fb9c9758603662330))
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+ - **FEAT**: Adding configurable padding to Tiled atlas packing ([#2868](https://github.com/flame-engine/flame/issues/2868)). ([d0c10cbb](https://github.com/flame-engine/flame/commit/d0c10cbbea20415de471ad0269a22c168082b02d))
+ - **FEAT**: Exposing atlases for reading in a TiledComponent ([#2865](https://github.com/flame-engine/flame/issues/2865)). ([e1b4d93a](https://github.com/flame-engine/flame/commit/e1b4d93ad43a4e1b1b55a3843e26612b73d45ed7))
+
+#### `jenny` - `v1.2.1`
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+
+## 2023-11-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_tiled` - `v1.17.0`](#flame_tiled---v1170)
+
+---
+
+#### `flame_tiled` - `v1.17.0`
+
+ - **FIX**: Configuration useAtlas was not been propagated correctly everywhere ([#2853](https://github.com/flame-engine/flame/issues/2853)). ([2f0dab9e](https://github.com/flame-engine/flame/commit/2f0dab9e59958176e6c46f6e417188e6c4fa3831))
+ - **FEAT**: Adding way to configure a layer paint in flame tiled ([#2851](https://github.com/flame-engine/flame/issues/2851)). ([e893d115](https://github.com/flame-engine/flame/commit/e893d1152c2aeb1c976668c875a1c267bbf819c0))
+ - **FEAT**: Expose useAtlas on Flame Tiled ([#2852](https://github.com/flame-engine/flame/issues/2852)). ([c4efb4f8](https://github.com/flame-engine/flame/commit/c4efb4f859fe08cc7fbd3e0ddb35c806d0060c78))
+
+
+## 2023-11-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_rive` - `v1.9.6`](#flame_rive---v196)
+
+---
+
+#### `flame_rive` - `v1.9.6`
+
+ - Bump to Rive 0.12.3
+
+
+## 2023-11-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_tiled` - `v1.16.0`](#flame_tiled---v1160)
+
+---
+
+#### `flame_tiled` - `v1.16.0`
+
+ - **FEAT**: Allow flame tiled to skip tilesets when packing into a tile atlas ([#2847](https://github.com/flame-engine/flame/issues/2847)). ([b93bdd38](https://github.com/flame-engine/flame/commit/b93bdd38313fd273e3e4cf55f1b142969effbde4))
+
+
+## 2023-11-03
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.16.0`](#flame_forge2d---v0160)
+ - [`flame` - `v1.10.1`](#flame---v1101)
+ - [`flame_test` - `v1.14.0`](#flame_test---v1140)
+ - [`flame_spine` - `v0.1.1+5`](#flame_spine---v0115)
+ - [`flame_markdown` - `v0.1.1+3`](#flame_markdown---v0113)
+ - [`flame_network_assets` - `v0.2.0+8`](#flame_network_assets---v0208)
+ - [`flame_oxygen` - `v0.1.9+3`](#flame_oxygen---v0193)
+ - [`flame_audio` - `v2.1.3`](#flame_audio---v213)
+ - [`flame_fire_atlas` - `v1.4.3`](#flame_fire_atlas---v143)
+ - [`flame_svg` - `v1.8.5`](#flame_svg---v185)
+ - [`flame_lottie` - `v0.3.0+3`](#flame_lottie---v0303)
+ - [`flame_isolate` - `v0.5.0+3`](#flame_isolate---v0503)
+ - [`flame_noise` - `v0.1.1+8`](#flame_noise---v0118)
+ - [`flame_bloc` - `v1.10.5`](#flame_bloc---v1105)
+ - [`flame_rive` - `v1.9.5`](#flame_rive---v195)
+ - [`flame_tiled` - `v1.15.1`](#flame_tiled---v1151)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_spine` - `v0.1.1+5`
+ - `flame_markdown` - `v0.1.1+3`
+ - `flame_network_assets` - `v0.2.0+8`
+ - `flame_oxygen` - `v0.1.9+3`
+ - `flame_audio` - `v2.1.3`
+ - `flame_fire_atlas` - `v1.4.3`
+ - `flame_svg` - `v1.8.5`
+ - `flame_lottie` - `v0.3.0+3`
+ - `flame_isolate` - `v0.5.0+3`
+ - `flame_noise` - `v0.1.1+8`
+ - `flame_bloc` - `v1.10.5`
+ - `flame_rive` - `v1.9.5`
+ - `flame_tiled` - `v1.15.1`
+
+---
+
+#### `flame_forge2d` - `v0.16.0`
+
+#### `flame` - `v1.10.1`
+
+ - **FIX**: Properly resize ScreenHitbox when needed ([#2826](https://github.com/flame-engine/flame/issues/2826)). ([24fed757](https://github.com/flame-engine/flame/commit/24fed757ac313453639ddf122ba84b1012a4b606))
+ - **FIX**: Setting world on FlameGame camera setter ([#2831](https://github.com/flame-engine/flame/issues/2831)). ([3a8e2464](https://github.com/flame-engine/flame/commit/3a8e2464420f2b513f4f0d99cd7d64ab0eda9826))
+ - **FIX**: Allow null passthrough parent ([#2821](https://github.com/flame-engine/flame/issues/2821)). ([c4d2f86e](https://github.com/flame-engine/flame/commit/c4d2f86e1214e9895ff858c511fa3c686313f204))
+ - **FIX**: Do not scale debug texts with zoom ([#2818](https://github.com/flame-engine/flame/issues/2818)). ([c2f3f040](https://github.com/flame-engine/flame/commit/c2f3f040c6128d8fd3340d8f7622a2d4c2f22819))
+ - **FIX**(flame): Export `FixedResolutionViewport` and make `withFixedResolution` a redirect constructor ([#2817](https://github.com/flame-engine/flame/issues/2817)). ([3420d0e6](https://github.com/flame-engine/flame/commit/3420d0e6f8af6f2dd8695ea61231aa93944c602b))
+ - **FEAT**: Scaling particle feature ([#2830](https://github.com/flame-engine/flame/issues/2830)). ([9faae8a2](https://github.com/flame-engine/flame/commit/9faae8a2371efdcbdf03cad70bded05470d4719a))
+
+#### `flame_test` - `v1.14.0`
+
+ - **FEAT**: Expose addition test arguments on flame test ([#2832](https://github.com/flame-engine/flame/issues/2832)). ([08b4bd6d](https://github.com/flame-engine/flame/commit/08b4bd6d3f308013d18fec4eb126927239cd6481))
+
+
+## 2023-10-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`jenny` - `v1.2.0`](#jenny---v120)
+
+---
+
+#### `jenny` - `v1.2.0`
+
+ - **FEAT**: Added lastline before choice ([#2822](https://github.com/flame-engine/flame/issues/2822)). ([3ef52524](https://github.com/flame-engine/flame/commit/3ef525246a0d3b1d02c470b5696164e677cdb6c4))
+
+
+## 2023-10-12
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.10.0`](#flame---v1100)
+ - [`flame_audio` - `v2.1.2`](#flame_audio---v212)
+ - [`flame_bloc` - `v1.10.4`](#flame_bloc---v1104)
+ - [`flame_fire_atlas` - `v1.4.2`](#flame_fire_atlas---v142)
+ - [`flame_forge2d` - `v0.15.1`](#flame_forge2d---v0151)
+ - [`flame_isolate` - `v0.5.0+2`](#flame_isolate---v0502)
+ - [`flame_lottie` - `v0.3.0+2`](#flame_lottie---v0302)
+ - [`flame_network_assets` - `v0.2.0+7`](#flame_network_assets---v0207)
+ - [`flame_rive` - `v1.9.4`](#flame_rive---v194)
+ - [`flame_svg` - `v1.8.4`](#flame_svg---v184)
+ - [`flame_test` - `v1.13.2`](#flame_test---v1132)
+ - [`flame_tiled` - `v1.15.0`](#flame_tiled---v1150)
+ - [`jenny` - `v1.1.1`](#jenny---v111)
+ - [`flame_spine` - `v0.1.1+4`](#flame_spine---v0114)
+ - [`flame_markdown` - `v0.1.1+2`](#flame_markdown---v0112)
+ - [`flame_oxygen` - `v0.1.9+2`](#flame_oxygen---v0192)
+ - [`flame_noise` - `v0.1.1+7`](#flame_noise---v0117)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_spine` - `v0.1.1+4`
+ - `flame_markdown` - `v0.1.1+2`
+ - `flame_oxygen` - `v0.1.9+2`
+ - `flame_noise` - `v0.1.1+7`
+
+---
+
+#### `flame` - `v1.10.0`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **REFACTOR**: Avoid nested conditional expressions whenever possible [DCM] ([#2784](https://github.com/flame-engine/flame/issues/2784)). ([7b6a5712](https://github.com/flame-engine/flame/commit/7b6a571263ece3aa1a8267644d9118230a850830))
+ - **REFACTOR**: Mark semantically final variables as final (or const) proper [DCM] ([#2783](https://github.com/flame-engine/flame/issues/2783)). ([71f7b475](https://github.com/flame-engine/flame/commit/71f7b475e33dd6fa7224c4a3ab29ffdb89702c34))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+ - **FIX**: Un-register component keys down the component tree ([#2792](https://github.com/flame-engine/flame/issues/2792)). ([0f679b3f](https://github.com/flame-engine/flame/commit/0f679b3f3d4a643ff4c29569388941c459e35021))
+ - **FIX**: AlignComponent set child (remove compare) ([#2774](https://github.com/flame-engine/flame/issues/2774)). ([20aaf656](https://github.com/flame-engine/flame/commit/20aaf656617cef6538b49c067a562f9daf0a5972))
+ - **FIX**: Hardcode initCurrentGame lifecycle state as resumed ([#2775](https://github.com/flame-engine/flame/issues/2775)). ([0cd5037c](https://github.com/flame-engine/flame/commit/0cd5037c6a837706891d5f1b85a91715cf85ebb1))
+ - **FIX**: Fix TextBoxComponent alignment bug ([#2781](https://github.com/flame-engine/flame/issues/2781)). ([0fb53efb](https://github.com/flame-engine/flame/commit/0fb53efb661ae2a3b4a39407655efb69e92dced0))
+ - **FIX**(flame): The `component.removeFromParent` method should use `parent.remove` internally ([#2779](https://github.com/flame-engine/flame/issues/2779)). ([bdb1c79a](https://github.com/flame-engine/flame/commit/bdb1c79a0524801ab425982dae206915c691e4b2))
+ - **FIX**: Take unmounted adds into consideration ([#2770](https://github.com/flame-engine/flame/issues/2770)). ([be28a440](https://github.com/flame-engine/flame/commit/be28a4405f4024a3066b764d6dbad0713665665d))
+ - **FEAT**: Add `IgnoreEvents` mixin to ignore events for the whole subtree ([#2811](https://github.com/flame-engine/flame/issues/2811)). ([313411c3](https://github.com/flame-engine/flame/commit/313411c311a6a3c2d36e12abf16bdd27ae801f29))
+ - **FEAT**: Add advanced button component ([#2742](https://github.com/flame-engine/flame/issues/2742)). ([97fff0ed](https://github.com/flame-engine/flame/commit/97fff0ed2baab53f2780eca29a9d08ea5d90426a))
+ - **FEAT**: Introduce the `FixedResolutionViewport` ([#2796](https://github.com/flame-engine/flame/issues/2796)). ([4c762f94](https://github.com/flame-engine/flame/commit/4c762f94d40d200bb2b8a102867b0859a345dbf0))
+ - **FEAT**: AssetsBundle can be customized in Images and AssetsCache. ([#2807](https://github.com/flame-engine/flame/issues/2807)). ([a23f80e9](https://github.com/flame-engine/flame/commit/a23f80e94a5d935fc8ba232956fe02e001d5a8f9))
+ - **FEAT**: Backdrop (static backgrounds) component for CameraComponent ([#2787](https://github.com/flame-engine/flame/issues/2787)). ([ab329f71](https://github.com/flame-engine/flame/commit/ab329f718a581b8331749fed6f942b6ade0da5ac))
+ - **FEAT**: Align component refactoring ([#2767](https://github.com/flame-engine/flame/issues/2767)). ([bde34efe](https://github.com/flame-engine/flame/commit/bde34efef7264c91f49b237b589c74ba80a1554e))
+ - **DOCS**: Remove last broad cSpell bypass regex and fix all violations ([#2802](https://github.com/flame-engine/flame/issues/2802)). ([9b16b178](https://github.com/flame-engine/flame/commit/9b16b178048eb19b6596273fcf4daec83277c3b5))
+
+#### `flame_audio` - `v2.1.2`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **REFACTOR**: Mark semantically final variables as final (or const) proper [DCM] ([#2783](https://github.com/flame-engine/flame/issues/2783)). ([71f7b475](https://github.com/flame-engine/flame/commit/71f7b475e33dd6fa7224c4a3ab29ffdb89702c34))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+#### `flame_bloc` - `v1.10.4`
+
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+#### `flame_fire_atlas` - `v1.4.2`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+#### `flame_forge2d` - `v0.15.1`
+
+ - **FEAT**: Allow for bodyDef and fixtureDefs to be prepared earlier ([#2768](https://github.com/flame-engine/flame/issues/2768)). ([21357bca](https://github.com/flame-engine/flame/commit/21357bcac1e7e1cebfa6f2a496ec4b627d62d0e7))
+
+#### `flame_isolate` - `v0.5.0+2`
+
+ - **REFACTOR**: Mark semantically final variables as final (or const) proper [DCM] ([#2783](https://github.com/flame-engine/flame/issues/2783)). ([71f7b475](https://github.com/flame-engine/flame/commit/71f7b475e33dd6fa7224c4a3ab29ffdb89702c34))
+
+#### `flame_lottie` - `v0.3.0+2`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **FIX**: Duration in `LottieRenderer` rounds down milliseconds ([#2808](https://github.com/flame-engine/flame/issues/2808)). ([cccae2e1](https://github.com/flame-engine/flame/commit/cccae2e1476de456c15ee3779b746f5fe6dadee2))
+
+#### `flame_network_assets` - `v0.2.0+7`
+
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+
+#### `flame_rive` - `v1.9.4`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+
+#### `flame_svg` - `v1.8.4`
+
+ - **FIX**: Do not render SVGs bigger than requested when pixelRatio > 1 and no match in _imageCache ([#2795](https://github.com/flame-engine/flame/issues/2795)). ([5fa4e09f](https://github.com/flame-engine/flame/commit/5fa4e09f7c464ce2f676df81049a95dad46bf2bd))
+
+#### `flame_test` - `v1.13.2`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+
+#### `flame_tiled` - `v1.15.0`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+ - **FIX**: Parallax offset calculations in flame_tiled don't scale properly ([#2766](https://github.com/flame-engine/flame/issues/2766)). ([89e8427a](https://github.com/flame-engine/flame/commit/89e8427a7a34258ec20276e4ec64d4a484277cdd))
+ - **FEAT**(flame_tiled): Allowing tilesets with images in the same folder to load ([#2814](https://github.com/flame-engine/flame/issues/2814)). ([3b0d7e65](https://github.com/flame-engine/flame/commit/3b0d7e65c2bf158db378d66c4f7e687dd05b46e1))
+ - **FEAT**: AssetsBundle can be customized in Images and AssetsCache. ([#2807](https://github.com/flame-engine/flame/issues/2807)). ([a23f80e9](https://github.com/flame-engine/flame/commit/a23f80e94a5d935fc8ba232956fe02e001d5a8f9))
+ - **FEAT**: Add overriding of Images and Bundle in all classes ([#2806](https://github.com/flame-engine/flame/issues/2806)). ([2df90c9b](https://github.com/flame-engine/flame/commit/2df90c9ba8f2b1cc088c5270df571eee7e18bb57))
+
+#### `jenny` - `v1.1.1`
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **REFACTOR**: Avoid nested conditional expressions whenever possible [DCM] ([#2784](https://github.com/flame-engine/flame/issues/2784)). ([7b6a5712](https://github.com/flame-engine/flame/commit/7b6a571263ece3aa1a8267644d9118230a850830))
+ - **DOCS**: Remove last broad cSpell bypass regex and fix all violations ([#2802](https://github.com/flame-engine/flame/issues/2802)). ([9b16b178](https://github.com/flame-engine/flame/commit/9b16b178048eb19b6596273fcf4daec83277c3b5))
+
+
+## 2023-09-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.9.1`](#flame---v191)
+ - [`flame_isolate` - `v0.5.0+1`](#flame_isolate---v0501)
+ - [`flame_tiled` - `v1.14.1`](#flame_tiled---v1141)
+ - [`flame_audio` - `v2.1.1`](#flame_audio---v211)
+ - [`flame_spine` - `v0.1.1+3`](#flame_spine---v0113)
+ - [`flame_svg` - `v1.8.3`](#flame_svg---v183)
+ - [`flame_test` - `v1.13.1`](#flame_test---v1131)
+ - [`flame_oxygen` - `v0.1.9+1`](#flame_oxygen---v0191)
+ - [`flame_bloc` - `v1.10.3`](#flame_bloc---v1103)
+ - [`flame_fire_atlas` - `v1.4.1`](#flame_fire_atlas---v141)
+ - [`flame_markdown` - `v0.1.1+1`](#flame_markdown---v0111)
+ - [`flame_forge2d` - `v0.15.0+1`](#flame_forge2d---v01501)
+ - [`flame_rive` - `v1.9.3`](#flame_rive---v193)
+ - [`flame_noise` - `v0.1.1+6`](#flame_noise---v0116)
+ - [`flame_network_assets` - `v0.2.0+6`](#flame_network_assets---v0206)
+ - [`flame_lottie` - `v0.3.0+1`](#flame_lottie---v0301)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_isolate` - `v0.5.0+1`
+ - `flame_tiled` - `v1.14.1`
+ - `flame_audio` - `v2.1.1`
+ - `flame_spine` - `v0.1.1+3`
+ - `flame_svg` - `v1.8.3`
+ - `flame_test` - `v1.13.1`
+ - `flame_oxygen` - `v0.1.9+1`
+ - `flame_bloc` - `v1.10.3`
+ - `flame_fire_atlas` - `v1.4.1`
+ - `flame_markdown` - `v0.1.1+1`
+ - `flame_forge2d` - `v0.15.0+1`
+ - `flame_rive` - `v1.9.3`
+ - `flame_noise` - `v0.1.1+6`
+ - `flame_network_assets` - `v0.2.0+6`
+ - `flame_lottie` - `v0.3.0+1`
+
+---
+
+#### `flame` - `v1.9.1`
+
+ - **FIX**: Add necessary generics on mixins on FlameGame ([#2763](https://github.com/flame-engine/flame/issues/2763)). ([b1f5ff26](https://github.com/flame-engine/flame/commit/b1f5ff269441d55b09ce12d5ce99656f2d88a978))
+ - **FIX**: Correctly refreshes the widget after new mouse detector ([#2765](https://github.com/flame-engine/flame/issues/2765)). ([64330022](https://github.com/flame-engine/flame/commit/643300222f8bf0545abdd1d8608202f388f8693f))
+ - **FIX**: Allow moving to a new parent in the same tick ([#2762](https://github.com/flame-engine/flame/issues/2762)). ([313650ea](https://github.com/flame-engine/flame/commit/313650eafadca4427421ddd355fa5b373966b8d1))
+
+
+## 2023-09-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.9.0`](#flame---v190)
+ - [`flame_oxygen` - `v0.1.9`](#flame_oxygen---v019)
+ - [`flame_test` - `v1.13.0`](#flame_test---v1130)
+ - [`flame_tiled` - `v1.14.0`](#flame_tiled---v1140)
+ - [`flame_forge2d` - `v0.15.0`](#flame_forge2d---v0150)
+ - [`flame_isolate` - `v0.5.0`](#flame_isolate---v050)
+ - [`flame_lottie` - `v0.3.0`](#flame_lottie---v030)
+
+Packages with other changes:
+
+ - [`flame_audio` - `v2.1.0`](#flame_audio---v210)
+ - [`flame_bloc` - `v1.10.2`](#flame_bloc---v1102)
+ - [`flame_fire_atlas` - `v1.4.0`](#flame_fire_atlas---v140)
+ - [`flame_lint` - `v1.1.1`](#flame_lint---v111)
+ - [`flame_markdown` - `v0.1.1`](#flame_markdown---v011)
+ - [`flame_network_assets` - `v0.2.0+5`](#flame_network_assets---v0205)
+ - [`flame_noise` - `v0.1.1+5`](#flame_noise---v0115)
+ - [`flame_rive` - `v1.9.2`](#flame_rive---v192)
+ - [`flame_spine` - `v0.1.1+2`](#flame_spine---v0112)
+ - [`flame_svg` - `v1.8.2`](#flame_svg---v182)
+ - [`jenny` - `v1.1.0`](#jenny---v110)
+
+---
+
+#### `flame` - `v1.9.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **REFACTOR**: Fix lint issues across the codebase - Part 2 ([#2677](https://github.com/flame-engine/flame/issues/2677)). ([10e4109c](https://github.com/flame-engine/flame/commit/10e4109c81b266147ec35744e484c2ec7ea15acd))
+ - **FIX**: Prevent `onRemove`/`onDetach` being called for initial Gesture Detector addition ([#2653](https://github.com/flame-engine/flame/issues/2653)). ([d1721464](https://github.com/flame-engine/flame/commit/d17214640548eba26f10ba0d55e70545d58cb1b9))
+ - **FIX**: Use root game for gestures ([#2756](https://github.com/flame-engine/flame/issues/2756)). ([f5d0cb38](https://github.com/flame-engine/flame/commit/f5d0cb3856e5b397b11a1c4bb2dc9c49afa51de0))
+ - **FIX**: Add possibility to remove a child and add it to the same parent ([#2755](https://github.com/flame-engine/flame/issues/2755)). ([285d31ab](https://github.com/flame-engine/flame/commit/285d31ab9894a8c24b995a68fc29329f142d0d09))
+ - **FIX**: Adding scale parameter to RectangleComponent constructors ([#2730](https://github.com/flame-engine/flame/issues/2730)). ([173908d9](https://github.com/flame-engine/flame/commit/173908d9f26c5555ffa69d1557bf346c0ab5fbee))
+ - **FIX**: Set `CameraComponent.priority` to max ([#2732](https://github.com/flame-engine/flame/issues/2732)). ([820ece1c](https://github.com/flame-engine/flame/commit/820ece1c9aba9d770326adcd2224c951ef54f6f7))
+ - **FIX**: Change to `FilterQuality.medium` instead of `high` ([#2733](https://github.com/flame-engine/flame/issues/2733)). ([fc19890c](https://github.com/flame-engine/flame/commit/fc19890c87a78599ea49ee0dfb52a04ea6b09a99))
+ - **FIX**: Avoid creating new `Vector2` in `globalToLocal` and `localToGlobal` ([#2727](https://github.com/flame-engine/flame/issues/2727)). ([9fb3bf8d](https://github.com/flame-engine/flame/commit/9fb3bf8dbd71bc981b00d3b4dabbe997d50030bb))
+ - **FIX**: Ambiguation is not needed in render box anymore ([#2711](https://github.com/flame-engine/flame/issues/2711)). ([b3d78f58](https://github.com/flame-engine/flame/commit/b3d78f58831ec72f40f721f96f8d659111f25a88))
+ - **FIX**: HasGameReference should default to FlameGame ([#2710](https://github.com/flame-engine/flame/issues/2710)). ([93dcb3a1](https://github.com/flame-engine/flame/commit/93dcb3a117c365767e3f20569b2d82abc8a7b152))
+ - **FIX**: Make `debugCoordinatesPrecision` into a variable instead of a getter ([#2713](https://github.com/flame-engine/flame/issues/2713)). ([9918c051](https://github.com/flame-engine/flame/commit/9918c0515ae88c2f1bfb7423a2993c983dec16c2))
+ - **FIX**: Absolute angle takes into account BodyComponent ancestors too ([#2678](https://github.com/flame-engine/flame/issues/2678)). ([75aee767](https://github.com/flame-engine/flame/commit/75aee767811ef440841956d9e467be157c4ab880))
+ - **FEAT**: SpawnComponent ([#2709](https://github.com/flame-engine/flame/issues/2709)). ([83f5ea45](https://github.com/flame-engine/flame/commit/83f5ea45dcc024c3bfd3fe9002533daaf1a2be4e))
+ - **FEAT**: Add globalToLocal and localToGlobal methods to viewport, viewfinder and camera ([#2720](https://github.com/flame-engine/flame/issues/2720)). ([00185a3b](https://github.com/flame-engine/flame/commit/00185a3b6b1e0e6b06e67dc724a26d4e9651e1a2))
+ - **FEAT**: Add HoverCallbacks ([#2706](https://github.com/flame-engine/flame/issues/2706)). ([d460b846](https://github.com/flame-engine/flame/commit/d460b846c23fb1f67041469c99c81e4c78b89c2e))
+ - **FEAT**: Add `onDispose` to `game.dart` called from `game_widget.dart` ([#2659](https://github.com/flame-engine/flame/issues/2659)). ([2f44e483](https://github.com/flame-engine/flame/commit/2f44e4832f0a9a8edf9c002783501610aa051370))
+ - **FEAT**(flame): Add helper methods to create frame data on `SpriteSheet` ([#2754](https://github.com/flame-engine/flame/issues/2754)). ([47722199](https://github.com/flame-engine/flame/commit/477221998a272bf659cd86d2bf145adf0f277e65))
+ - **FEAT**: Implement Snapshot mixin on PositionComponent ([#2695](https://github.com/flame-engine/flame/issues/2695)). ([c1ee24a2](https://github.com/flame-engine/flame/commit/c1ee24a2894eaffa1f6e206313cda4087a02f0a4))
+ - **FEAT**: Add TextElementComponent ([#2694](https://github.com/flame-engine/flame/issues/2694)). ([10fb65f6](https://github.com/flame-engine/flame/commit/10fb65f66ca1f1dbac04a138ef4a28b1ed5e5a23))
+ - **FEAT**: Component visibility (HasVisibility mixin) ([#2681](https://github.com/flame-engine/flame/issues/2681)). ([76405daf](https://github.com/flame-engine/flame/commit/76405daf48b2efd59241329d4d1fb4b451d254c0))
+ - **FEAT**: Add `HasWorldReference` mixin ([#2746](https://github.com/flame-engine/flame/issues/2746)). ([9105411d](https://github.com/flame-engine/flame/commit/9105411d46e097d4b5bf84ee8921c146dcf5a6cd))
+ - **FEAT**: Add `pause` and `isPaused` to SpriteAnimationTicker ([#2660](https://github.com/flame-engine/flame/issues/2660)). ([37271f5c](https://github.com/flame-engine/flame/commit/37271f5c52e75e6b086520a35361a03e0d784586))
+ - **DOCS**: Improve documentation around SpriteFontTextFormatter ([#2661](https://github.com/flame-engine/flame/issues/2661)). ([8401c569](https://github.com/flame-engine/flame/commit/8401c569bfbc92a13ce5cee18cd817da06bd0bd8))
+ - **DOCS**: Improved spellchecking ([#2722](https://github.com/flame-engine/flame/issues/2722)). ([2f973abe](https://github.com/flame-engine/flame/commit/2f973abe8b298a4f6f1164065783de560953d789))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **DOCS**: Improve comments and documentation for text-rendering Nodes ([#2662](https://github.com/flame-engine/flame/issues/2662)). ([96978e24](https://github.com/flame-engine/flame/commit/96978e2496ffe29dbbf19b8e7e70c2d63309b115))
+ - **DOCS**: Fix examples for v1.9.0 ([#2757](https://github.com/flame-engine/flame/issues/2757)). ([152fbb61](https://github.com/flame-engine/flame/commit/152fbb61db1986632f60f3bf98c93aa2e4fbfc86))
+ - **BREAKING** **REFACTOR**: Rename (Text) Elements, Nodes and Styles for clarity, add docs ([#2700](https://github.com/flame-engine/flame/issues/2700)). ([4b420b79](https://github.com/flame-engine/flame/commit/4b420b7952ab8d675140b9d8d132015ff2780f92))
+ - **BREAKING** **REFACTOR**: Extract TextRendererFactory ([#2680](https://github.com/flame-engine/flame/issues/2680)). ([eeb6749f](https://github.com/flame-engine/flame/commit/eeb6749fd2baa825c7e8267a546ec8bf405a63ae))
+ - **BREAKING** **REFACTOR**: Make TextElement more usable on its own ([#2679](https://github.com/flame-engine/flame/issues/2679)). ([1a64443c](https://github.com/flame-engine/flame/commit/1a64443ccaae32e71fe7d016ad1e8f18a75c93da))
+ - **BREAKING** **REFACTOR**: Simplify text rendering pipeline ([#2663](https://github.com/flame-engine/flame/issues/2663)). ([34f69b95](https://github.com/flame-engine/flame/commit/34f69b953c137fbf0168aebec3860c6abc888594))
+ - **BREAKING** **REFACTOR**: Kill TextRenderer, Long Live TextRenderer ([#2683](https://github.com/flame-engine/flame/issues/2683)). ([a1cb9a06](https://github.com/flame-engine/flame/commit/a1cb9a06ada6f87bf22bc20e3c190ccd53517389))
+ - **BREAKING** **FIX**: Update should be called before render in first tick ([#2714](https://github.com/flame-engine/flame/issues/2714)). ([51932c09](https://github.com/flame-engine/flame/commit/51932c09c1e934ec30ffa04eda6c050440f85548))
+ - **BREAKING** **FEAT**: Move `Forge2DGame` to use `CameraComponent` ([#2728](https://github.com/flame-engine/flame/issues/2728)). ([7a3d5126](https://github.com/flame-engine/flame/commit/7a3d5126a54d23cdebde20953772a53ba1a53204))
+ - **BREAKING** **FEAT**: Pause game when backgrounded ([#2642](https://github.com/flame-engine/flame/issues/2642)). ([521e56b6](https://github.com/flame-engine/flame/commit/521e56b6d20c1c5b24a2818d73be58a6e6523f6b))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
+#### `flame_oxygen` - `v0.1.9`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **BREAKING** **REFACTOR**: Simplify text rendering pipeline ([#2663](https://github.com/flame-engine/flame/issues/2663)). ([34f69b95](https://github.com/flame-engine/flame/commit/34f69b953c137fbf0168aebec3860c6abc888594))
+
+#### `flame_test` - `v1.13.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: HasGameReference should default to FlameGame ([#2710](https://github.com/flame-engine/flame/issues/2710)). ([93dcb3a1](https://github.com/flame-engine/flame/commit/93dcb3a117c365767e3f20569b2d82abc8a7b152))
+ - **FEAT**: Add HoverCallbacks ([#2706](https://github.com/flame-engine/flame/issues/2706)). ([d460b846](https://github.com/flame-engine/flame/commit/d460b846c23fb1f67041469c99c81e4c78b89c2e))
+ - **BREAKING** **REFACTOR**: Rename (Text) Elements, Nodes and Styles for clarity, add docs ([#2700](https://github.com/flame-engine/flame/issues/2700)). ([4b420b79](https://github.com/flame-engine/flame/commit/4b420b7952ab8d675140b9d8d132015ff2780f92))
+ - **BREAKING** **REFACTOR**: Kill TextRenderer, Long Live TextRenderer ([#2683](https://github.com/flame-engine/flame/issues/2683)). ([a1cb9a06](https://github.com/flame-engine/flame/commit/a1cb9a06ada6f87bf22bc20e3c190ccd53517389))
+ - **BREAKING** **REFACTOR**: Make TextElement more usable on its own ([#2679](https://github.com/flame-engine/flame/issues/2679)). ([1a64443c](https://github.com/flame-engine/flame/commit/1a64443ccaae32e71fe7d016ad1e8f18a75c93da))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
+#### `flame_tiled` - `v1.14.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**: Expose atlas limits for `TiledComponent` ([#2701](https://github.com/flame-engine/flame/issues/2701)). ([99a1016f](https://github.com/flame-engine/flame/commit/99a1016f72d02f4a989986f224e0e77cddd0dfa8))
+ - **FEAT**: Added prefix parameter to TiledComponent.load to specify assets folder for tiled maps ([#2651](https://github.com/flame-engine/flame/issues/2651)). ([d08284dd](https://github.com/flame-engine/flame/commit/d08284ddcaf5d2ad6e5312336a71a113702dc241))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
+#### `flame_forge2d` - `v0.15.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Absolute angle takes into account BodyComponent ancestors too ([#2678](https://github.com/flame-engine/flame/issues/2678)). ([75aee767](https://github.com/flame-engine/flame/commit/75aee767811ef440841956d9e467be157c4ab880))
+ - **FIX**: Proper Flame dependency in flame_forge2d ([#2644](https://github.com/flame-engine/flame/issues/2644)). ([9bbecb88](https://github.com/flame-engine/flame/commit/9bbecb88d86aa051626267fd69e5bf71fdca66d6))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+ - **BREAKING** **FEAT**: Move `Forge2DGame` to use `CameraComponent` ([#2728](https://github.com/flame-engine/flame/issues/2728)). ([7a3d5126](https://github.com/flame-engine/flame/commit/7a3d5126a54d23cdebde20953772a53ba1a53204))
+
+#### `flame_isolate` - `v0.5.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
+#### `flame_lottie` - `v0.3.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **REFACTOR**: Fix lint issues across the codebase ([#2672](https://github.com/flame-engine/flame/issues/2672)). ([6fe9a247](https://github.com/flame-engine/flame/commit/6fe9a24778fbe1e9cb74ec0d50d71eae7b1a048e))
+ - **BREAKING** **FEAT**: Add CameraComponent to FlameGame ([#2740](https://github.com/flame-engine/flame/issues/2740)). ([7c2f4000](https://github.com/flame-engine/flame/commit/7c2f4000761580dbabb5d73b27f64d5819b34e8d))
+
+#### `flame_audio` - `v2.1.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**(flame_audio): Adding an easy way of updating the prefix from FlameAudio ([#2751](https://github.com/flame-engine/flame/issues/2751)). ([d2c9dcec](https://github.com/flame-engine/flame/commit/d2c9dcecbe661896ba8c84d81b9500cdfa8c78c8))
+
+#### `flame_bloc` - `v1.10.2`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+
+#### `flame_fire_atlas` - `v1.4.0`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FEAT**(fire_atlas): Encoded option to load json instead of .fa ([#2649](https://github.com/flame-engine/flame/issues/2649)). ([5be6fc8c](https://github.com/flame-engine/flame/commit/5be6fc8caea138b577bf91244165c0a61659b4c5))
+
+#### `flame_lint` - `v1.1.1`
+
+ - **REFACTOR**: Enable new DCM rule: avoid-cascade-after-if-null ([#2676](https://github.com/flame-engine/flame/issues/2676)). ([158fc34c](https://github.com/flame-engine/flame/commit/158fc34cae858cf8d0b5d3b5155763e02454779a))
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+
+#### `flame_markdown` - `v0.1.1`
+
+ - **FEAT**: Create flame_markdown ([#2703](https://github.com/flame-engine/flame/issues/2703)). ([b77c2373](https://github.com/flame-engine/flame/commit/b77c23737104260aea2483c38ec3bef999975e7d))
+
+#### `flame_network_assets` - `v0.2.0+5`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+
+#### `flame_noise` - `v0.1.1+5`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+
+#### `flame_rive` - `v1.9.2`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+
+#### `flame_spine` - `v0.1.1+2`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+
+#### `flame_svg` - `v1.8.2`
+
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Change to `FilterQuality.medium` instead of `high` ([#2733](https://github.com/flame-engine/flame/issues/2733)). ([fc19890c](https://github.com/flame-engine/flame/commit/fc19890c87a78599ea49ee0dfb52a04ea6b09a99))
+
+#### `jenny` - `v1.1.0`
+
+ - **REFACTOR**: Enable new DCM rule: avoid-cascade-after-if-null ([#2676](https://github.com/flame-engine/flame/issues/2676)). ([158fc34c](https://github.com/flame-engine/flame/commit/158fc34cae858cf8d0b5d3b5155763e02454779a))
+ - **REFACTOR**: Remove unused variable on dialogue_view_test.dart ([#2673](https://github.com/flame-engine/flame/issues/2673)). ([b77802a5](https://github.com/flame-engine/flame/commit/b77802a5e3a3c2fa68650dfa5d5f2aaed0f9a147))
+ - **REFACTOR**: Enable DCM linting ([#2667](https://github.com/flame-engine/flame/issues/2667)). ([27a8fd61](https://github.com/flame-engine/flame/commit/27a8fd61cb7f62513e07a93ff61cf03b426353f2))
+ - **FIX**: Change DialogueView to a mixin class ([#2652](https://github.com/flame-engine/flame/issues/2652)). ([f3d4158b](https://github.com/flame-engine/flame/commit/f3d4158b83685b479b0e7373bfbc7f8a6c16d822))
+ - **FEAT**(flame_jenny): Allow removal of functions and commands ([#2717](https://github.com/flame-engine/flame/issues/2717)). ([a097cc01](https://github.com/flame-engine/flame/commit/a097cc01bc2bf789684c23320b16018dfc9dc664))
+ - **FEAT**(flame_jenny): Allow removal of variables ([#2716](https://github.com/flame-engine/flame/issues/2716)). ([eaa8c091](https://github.com/flame-engine/flame/commit/eaa8c091627e4dd743c88dda42d4da70dca40e8b))
+ - **FEAT**(flame_jenny): Allow removal of characters ([#2715](https://github.com/flame-engine/flame/issues/2715)). ([3421f4f9](https://github.com/flame-engine/flame/commit/3421f4f944516d998460a5347125d8f100366c42))
+ - **FEAT**(flame_jenny): Public access to variables to allow load/save ([#2689](https://github.com/flame-engine/flame/issues/2689)). ([1485f842](https://github.com/flame-engine/flame/commit/1485f8426ebb6dd1390a0062c5e83ed1c0461f21))
+ - **DOCS**: Enable CSpell on tests ([#2723](https://github.com/flame-engine/flame/issues/2723)). ([e051298c](https://github.com/flame-engine/flame/commit/e051298cba76550229780438b1a589557c7b488d))
+ - **DOCS**: Improved spellchecking ([#2722](https://github.com/flame-engine/flame/issues/2722)). ([2f973abe](https://github.com/flame-engine/flame/commit/2f973abe8b298a4f6f1164065783de560953d789))
+
+
+## 2023-08-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.8.2`](#flame---v182)
+ - [`flame_lint` - `v1.1.0`](#flame_lint---v110)
+
+Packages with other changes:
+
+ - [`flame_rive` - `v1.9.1`](#flame_rive---v191)
+ - [`flame_tiled` - `v1.13.0`](#flame_tiled---v1130)
+ - [`flame_isolate` - `v0.4.0+2`](#flame_isolate---v0402)
+ - [`flame_audio` - `v2.0.5`](#flame_audio---v205)
+ - [`flame_spine` - `v0.1.1+1`](#flame_spine---v0111)
+ - [`flame_svg` - `v1.8.1`](#flame_svg---v181)
+ - [`flame_test` - `v1.12.1`](#flame_test---v1121)
+ - [`flame_oxygen` - `v0.1.8+5`](#flame_oxygen---v0185)
+ - [`flame_bloc` - `v1.10.1`](#flame_bloc---v1101)
+ - [`flame_fire_atlas` - `v1.3.8`](#flame_fire_atlas---v138)
+ - [`flame_forge2d` - `v0.14.1+1`](#flame_forge2d---v01411)
+ - [`flame_noise` - `v0.1.1+4`](#flame_noise---v0114)
+ - [`flame_network_assets` - `v0.2.0+4`](#flame_network_assets---v0204)
+ - [`flame_lottie` - `v0.2.1+1`](#flame_lottie---v0211)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_isolate` - `v0.4.0+2`
+ - `flame_audio` - `v2.0.5`
+ - `flame_spine` - `v0.1.1+1`
+ - `flame_svg` - `v1.8.1`
+ - `flame_test` - `v1.12.1`
+ - `flame_oxygen` - `v0.1.8+5`
+ - `flame_bloc` - `v1.10.1`
+ - `flame_fire_atlas` - `v1.3.8`
+ - `flame_forge2d` - `v0.14.1+1`
+ - `flame_noise` - `v0.1.1+4`
+ - `flame_network_assets` - `v0.2.0+4`
+ - `flame_lottie` - `v0.2.1+1`
+
+---
+
+#### `flame` - `v1.8.2`
+
+ - **PERF**: Improve performance of raycasts ([#2617](https://github.com/flame-engine/flame/issues/2617)). ([8e0a7879](https://github.com/flame-engine/flame/commit/8e0a7879d7669e09efcbcee28d9f2038fe9014c0))
+ - **FIX**: Reset _completeCompleter in ticker ([#2636](https://github.com/flame-engine/flame/issues/2636)). ([a35d3a10](https://github.com/flame-engine/flame/commit/a35d3a10abfe9e5caab1a646e0980d03fbf585d1))
+ - **FIX**: Viewport should recieve events before the world  ([#2630](https://github.com/flame-engine/flame/issues/2630)). ([e852064e](https://github.com/flame-engine/flame/commit/e852064e494e58ea2be19a5b035e09ed2e465608))
+ - **FIX**: Use `ComponentKey`s to keep track of dispatchers ([#2629](https://github.com/flame-engine/flame/issues/2629)). ([ff59aa15](https://github.com/flame-engine/flame/commit/ff59aa152c5a2e0b360f980c78a8b3cc4fad7507))
+ - **FIX**: FlameGame onRemove fix to prevent memory leak ([#2602](https://github.com/flame-engine/flame/issues/2602)). ([dac2ebbf](https://github.com/flame-engine/flame/commit/dac2ebbf506ff48ca8f34d872bbc47cba3ad6c7b))
+ - **FIX**: Only use pre-set ReadonlySizeProvider for sizing in HudMarginComponent ([#2611](https://github.com/flame-engine/flame/issues/2611)). ([832c0510](https://github.com/flame-engine/flame/commit/832c051085e0fade8a7e4b262bf9941d279baef4))
+ - **FIX**: TextBoxConfig dismissDelay to not be ignored ([#2607](https://github.com/flame-engine/flame/issues/2607)). ([1567b389](https://github.com/flame-engine/flame/commit/1567b3891057e4ce168d76c920bd40403febd82a))
+ - **FEAT**: Adding key argument to shape components ([#2632](https://github.com/flame-engine/flame/issues/2632)). ([c542d3c3](https://github.com/flame-engine/flame/commit/c542d3c34bf911cec8332dcdeb65d0017e6cb576))
+ - **FEAT**: Add optional world input to `CameraComponent.canSee` ([#2616](https://github.com/flame-engine/flame/issues/2616)). ([1cad0b23](https://github.com/flame-engine/flame/commit/1cad0b23e18db8f352da5790c8ea5ec6053936da))
+ - **FEAT**: Add a Circle.fromPoints utility method ([#2603](https://github.com/flame-engine/flame/issues/2603)). ([a83f2815](https://github.com/flame-engine/flame/commit/a83f2815bbdaf9c176a34a325485a96b5a323575))
+ - **FEAT**: Add a midpoint getter to LineSegment ([#2605](https://github.com/flame-engine/flame/issues/2605)). ([1f9f3509](https://github.com/flame-engine/flame/commit/1f9f35093b3b90113e32a36e1103b87246212fa4))
+ - **FEAT**: Add Rectangle.fromLTWH and Rect.toFlameRectangle utility methods ([#2604](https://github.com/flame-engine/flame/issues/2604)). ([76271cee](https://github.com/flame-engine/flame/commit/76271ceef04264ec8fa5c39a23f43d638d731694))
+ - **DOCS**: Add more guidance to collision detection algorithm choices ([#2624](https://github.com/flame-engine/flame/issues/2624)). ([781e8983](https://github.com/flame-engine/flame/commit/781e898315a0162117a83bf62e2650ce7244503d))
+ - **BREAKING** **PERF**: Pool `CollisionProspect`s and remove some list creations from the collision detection ([#2625](https://github.com/flame-engine/flame/issues/2625)). ([e430b6cd](https://github.com/flame-engine/flame/commit/e430b6cdf2e6be52bf384efb3428bcb41ae13d30))
+ - **BREAKING** **FEAT**: Make world nullable in `CameraComponent` ([#2615](https://github.com/flame-engine/flame/issues/2615)). ([14f51635](https://github.com/flame-engine/flame/commit/14f51635421b8b30049ea287b7c472e54a269250))
+
+#### `flame_lint` - `v1.1.0`
+
+ - **BREAKING** **PERF**: Pool `CollisionProspect`s and remove some list creations from the collision detection ([#2625](https://github.com/flame-engine/flame/issues/2625)). ([e430b6cd](https://github.com/flame-engine/flame/commit/e430b6cdf2e6be52bf384efb3428bcb41ae13d30))
+
+#### `flame_rive` - `v1.9.1`
+
+ - **FIX**: Respect artboard clip value ([#2639](https://github.com/flame-engine/flame/issues/2639)). ([4e664245](https://github.com/flame-engine/flame/commit/4e6642458494b4d4544bcc03b568476faeb0a71f))
+
+#### `flame_tiled` - `v1.13.0`
+
+ - **FIX**: Compute scale in TileLayers based on native map tile size rather than image sizes to support oversized/undersized tiles. ([#2634](https://github.com/flame-engine/flame/issues/2634)). ([1c4d6cd0](https://github.com/flame-engine/flame/commit/1c4d6cd0654f133771a7af5795cc1de2343268c1))
+ - **FEAT**: Possiblity to pass in FilterQuality to tiled layers ([#2627](https://github.com/flame-engine/flame/issues/2627)). ([f3de6650](https://github.com/flame-engine/flame/commit/f3de66507e623e2fe0100cfd4d002dea14f72470))
+
+
+## 2023-07-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.8.1`](#flame---v181)
+ - [`flame_test` - `v1.12.0`](#flame_test---v1120)
+
+Packages with other changes:
+
+ - [`flame_audio` - `v2.0.4`](#flame_audio---v204)
+ - [`flame_bloc` - `v1.10.0`](#flame_bloc---v1100)
+ - [`flame_fire_atlas` - `v1.3.7`](#flame_fire_atlas---v137)
+ - [`flame_forge2d` - `v0.14.1`](#flame_forge2d---v0141)
+ - [`flame_isolate` - `v0.4.0+1`](#flame_isolate---v0401)
+ - [`flame_lottie` - `v0.2.1`](#flame_lottie---v021)
+ - [`flame_noise` - `v0.1.1+3`](#flame_noise---v0113)
+ - [`flame_oxygen` - `v0.1.8+4`](#flame_oxygen---v0184)
+ - [`flame_rive` - `v1.9.0`](#flame_rive---v190)
+ - [`flame_spine` - `v0.1.1`](#flame_spine---v011)
+ - [`flame_svg` - `v1.8.0`](#flame_svg---v180)
+ - [`flame_tiled` - `v1.12.0`](#flame_tiled---v1120)
+ - [`jenny` - `v1.0.4`](#jenny---v104)
+ - [`flame_network_assets` - `v0.2.0+3`](#flame_network_assets---v0203)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_network_assets` - `v0.2.0+3`
+
+---
+
+#### `flame` - `v1.8.1`
+
+ - **FIX**: Adds a check to confirm the component is not loaded ([#2579](https://github.com/flame-engine/flame/issues/2579)). ([985400f2](https://github.com/flame-engine/flame/commit/985400f2955f6bed14066660711d53c5b302ab09))
+ - **FIX**: Animation ticker readability improvements ([#2578](https://github.com/flame-engine/flame/issues/2578)). ([667a1698](https://github.com/flame-engine/flame/commit/667a1698115ed69cc11b2e5a598371e136c7e7f0))
+ - **FIX**: Remove `mustCallSuper` from `onComponentTypeCheck` ([#2561](https://github.com/flame-engine/flame/issues/2561)). ([bcae760c](https://github.com/flame-engine/flame/commit/bcae760c7138839fee203a1693e02fade753292c))
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Reduce the Vector2 creations in Anchor ([#2550](https://github.com/flame-engine/flame/issues/2550)). ([5a9434b0](https://github.com/flame-engine/flame/commit/5a9434b09a6fbe2c86db2d8192cd2d7ae0d5868c))
+ - **FIX**: Fix disappearing text on TextBoxComponent for larger pixelRatios ([#2540](https://github.com/flame-engine/flame/issues/2540)). ([6e1d5466](https://github.com/flame-engine/flame/commit/6e1d5466aadc59f90475b1a9e7658bb78ed60340))
+ - **FEAT**: Option to prevent propagating collision events from ShapeHitbox to _hitboxParent ([#2594](https://github.com/flame-engine/flame/issues/2594)). ([a58d7436](https://github.com/flame-engine/flame/commit/a58d7436c9b71a2358edc6c3732aeda56d980f64))
+ - **FEAT**: Adding filterQuality arguments to Parallax load methods ([#2596](https://github.com/flame-engine/flame/issues/2596)). ([ff3d9107](https://github.com/flame-engine/flame/commit/ff3d91075c49df8efb6130f8e8ac9b711a1a8a14))
+ - **FEAT**: Option to use toImageSync in ImageComposition class ([#2593](https://github.com/flame-engine/flame/issues/2593)). ([66d5f97d](https://github.com/flame-engine/flame/commit/66d5f97d303aa1712673b8ca7e1a889cf5e7270e))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **FEAT**(flame): Set a default negative priority on the world for general use ([#2572](https://github.com/flame-engine/flame/issues/2572)). ([390e9700](https://github.com/flame-engine/flame/commit/390e9700b4293e12b7d4212ce04f6b3d967a24e1))
+ - **FEAT**: Add useful methods to Rectangle class ([#2562](https://github.com/flame-engine/flame/issues/2562)). ([4710530b](https://github.com/flame-engine/flame/commit/4710530b420469794602bf4d8cfea98078e0d973))
+ - **BREAKING** **FIX**: Convert PositionEvent.canvasPosition to local coordinates ([#2598](https://github.com/flame-engine/flame/issues/2598)). ([87139c85](https://github.com/flame-engine/flame/commit/87139c854534782638fe1b0c24d2dc92f98a3e59))
+
+#### `flame_test` - `v1.12.0`
+
+ - **FIX**: Set constraint for test dependency in flame_test ([#2558](https://github.com/flame-engine/flame/issues/2558)). ([aeef9464](https://github.com/flame-engine/flame/commit/aeef9464f6ca448e3aa2b578af8b3443cbbf6f71))
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **BREAKING** **FIX**: Convert PositionEvent.canvasPosition to local coordinates ([#2598](https://github.com/flame-engine/flame/issues/2598)). ([87139c85](https://github.com/flame-engine/flame/commit/87139c854534782638fe1b0c24d2dc92f98a3e59))
+
+#### `flame_audio` - `v2.0.4`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
+#### `flame_bloc` - `v1.10.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **FEAT**: Add onInitialState to FlameBlocListener ([#2565](https://github.com/flame-engine/flame/issues/2565)). ([f440bbf5](https://github.com/flame-engine/flame/commit/f440bbf5db207d454b4abba75a62e0ff2ff5b408))
+
+#### `flame_fire_atlas` - `v1.3.7`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
+#### `flame_forge2d` - `v0.14.1`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **DOCS**: Fix broken link on flame_forge2d readme ([#2588](https://github.com/flame-engine/flame/issues/2588)). ([45115bbf](https://github.com/flame-engine/flame/commit/45115bbff8539010f5d7bb7cf9479183b1a27cc8))
+
+#### `flame_isolate` - `v0.4.0+1`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
+#### `flame_lottie` - `v0.2.1`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+
+#### `flame_noise` - `v0.1.1+3`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
+#### `flame_oxygen` - `v0.1.8+4`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
+#### `flame_rive` - `v1.9.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FIX**: Avoid creation of unnecessary objects for RiveComponent ([#2553](https://github.com/flame-engine/flame/issues/2553)). ([52b35fbf](https://github.com/flame-engine/flame/commit/52b35fbf56a551a7585c493e2de51473266bf759))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+
+#### `flame_spine` - `v0.1.1`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+
+#### `flame_svg` - `v1.8.0`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+
+#### `flame_tiled` - `v1.12.0`
+
+ - **FIX**: Tiled component orthogonal test ([#2549](https://github.com/flame-engine/flame/issues/2549)). ([34e5f0e4](https://github.com/flame-engine/flame/commit/34e5f0e443e21923c311120ce8634a14339bc71d))
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+ - **FEAT**: TiledAtlas.clearCache function ([#2592](https://github.com/flame-engine/flame/issues/2592)). ([d40fefcf](https://github.com/flame-engine/flame/commit/d40fefcf08850a986304472d5369dcd74f2b9d4b))
+ - **FEAT**: ComponentKey API ([#2566](https://github.com/flame-engine/flame/issues/2566)). ([b3efb612](https://github.com/flame-engine/flame/commit/b3efb612cb3cb77f69bc030e9ba71516348035d2))
+ - **FEAT**: Add option for a custom image and asset loader ([#2569](https://github.com/flame-engine/flame/issues/2569)). ([dfe18251](https://github.com/flame-engine/flame/commit/dfe18251c1bac8aaca9bf146e03320efbbc3ce9c))
+
+#### `jenny` - `v1.0.4`
+
+ - **FIX**: Update sdk constraints to >=3.0.0 ([#2554](https://github.com/flame-engine/flame/issues/2554)). ([2f71e06e](https://github.com/flame-engine/flame/commit/2f71e06eb86ffc65cd459c4d722eee2470be13e5))
+
+
 ## 2023-06-09
 
 ### Changes

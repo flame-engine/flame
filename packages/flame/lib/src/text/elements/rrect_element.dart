@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:flame/src/text/elements/element.dart';
+import 'package:flame/text.dart';
 
-class RRectElement extends Element {
+class RRectElement extends TextElement {
   RRectElement(
     double width,
     double height,
@@ -19,7 +19,7 @@ class RRectElement extends Element {
   }
 
   @override
-  void render(Canvas canvas) {
+  void draw(Canvas canvas) {
     canvas.drawRRect(_rrect, _paint);
   }
 }

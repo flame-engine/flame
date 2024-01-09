@@ -14,12 +14,24 @@ class TestAssetBundle extends CachingAssetBundle {
 
   @override
   Future<ByteData> load(String key) async {
-    final pattern = RegExp(r'assets/images/(\.\./)*');
-    final split = key.split('/');
-    final imgName = split.isNotEmpty ? key.replaceFirst(pattern, '') : key;
+    late String imgName;
+    late String fileName;
+    if (key.contains('..')) {
+      final parts = key.split('/');
 
-    final toLoadName = key.replaceFirst(pattern, '');
-    final fileName = 'test/assets/$toLoadName';
+      final index = parts.indexOf('..');
+
+      imgName = parts.sublist(index + 1).join('/');
+
+      fileName = key.replaceFirst('assets/images/', 'test/assets/');
+    } else {
+      final pattern = RegExp(r'assets/images/(\.\./)*');
+      final split = key.split('/');
+      imgName = split.isNotEmpty ? key.replaceFirst(pattern, '') : key;
+
+      final toLoadName = key.replaceFirst(pattern, '');
+      fileName = 'test/assets/$toLoadName';
+    }
 
     if (!imageNames.contains(imgName)) {
       throw StateError(

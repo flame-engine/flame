@@ -1,10 +1,5 @@
 # Drag Events
 
-```{note}
-This document describes the new drag events API. The old (legacy) approach,
-which is still supported, is described in [](gesture_input.md).
-```
-
 **Drag events** occur when the user moves their finger across the screen of the device, or when they
 move the mouse while holding its button down.
 
@@ -141,23 +136,3 @@ class MyComponent extends PositionComponent with DragCallbacks {
   }
 }
 ```
-
-
-### HasDraggablesBridge
-
-This marker mixin can be used to indicate that the game has both the "new-style" components that
-use the `DragCallbacks` mixin, and the "old-style" components that use the `Draggable` mixin. In
-effect, every drag event will be propagated twice through the system: first trying to reach the
-components with `DragCallbacks` mixin, and then components with `Draggable`.
-
-```dart
-class MyGame extends FlameGame with HasDraggablesBridge {
-  // ...
-}
-```
-
-The purpose of this mixin is to ease the transition from the old event delivery system to the
-new one. With this mixin, you can transition your `Draggable` components into using `DragCallbacks`
-one by one, verifying that your game continues to work at every step.
-
-Use of this mixin for any new project is highly discouraged.

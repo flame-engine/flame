@@ -7,7 +7,7 @@ import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
 import 'package:flame/src/game/overlay_manager.dart';
-import 'package:flame/src/game/projector.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
@@ -34,6 +34,15 @@ abstract mixin class Game {
   /// functionality in Flutter.
   late final GestureDetectorBuilder gestureDetectors =
       GestureDetectorBuilder(refreshWidget)..initializeGestures(this);
+
+  /// Set by the PointerMoveDispatcher to receive mouse events from the
+  /// game widget.
+  void Function(PointerHoverEvent event)? get mouseDetector => _mouseDetector;
+  void Function(PointerHoverEvent event)? _mouseDetector;
+  set mouseDetector(void Function(PointerHoverEvent event)? newMouseDetector) {
+    _mouseDetector = newMouseDetector;
+    refreshWidget();
+  }
 
   /// This should update the state of the game.
   void update(double dt);
@@ -190,7 +199,10 @@ abstract mixin class Game {
       );
     }
     _gameRenderBox = gameRenderBox;
-    onAttach();
+    if (!_isInternalRefresh) {
+      onAttach();
+    }
+    _isInternalRefresh = false;
   }
 
   /// Called when the game has been attached. This can be overridden
@@ -202,14 +214,19 @@ abstract mixin class Game {
   ///
   /// Should not be called manually.
   void detach() {
+    if (!_isInternalRefresh) {
+      onDetach();
+    }
     _gameRenderBox = null;
-
-    onDetach();
   }
 
   /// Called when the game is about to be removed from the Flutter widget tree,
-  /// but before it is actually removed.
+  /// but before it is actually removed.  See the docs for an example on how to
+  /// do cleanups to avoid memory leaks.
   void onRemove() {}
+
+  /// Called when the GameWidget is disposed by Flutter.
+  void onDispose() {}
 
   /// Called after the game has left the widget tree.
   /// This can be overridden to add logic that requires the game
@@ -237,16 +254,6 @@ abstract mixin class Game {
     }
     return _gameRenderBox!.localToGlobal(point.toOffset()).toVector2();
   }
-
-  /// This is the projector used by all components that respect the camera
-  /// (`respectCamera = true`).
-  /// This can be overridden on your [Game] implementation.
-  Projector projector = IdentityProjector();
-
-  /// This is the projector used by components that don't respect the camera
-  /// (`positionType = PositionType.viewport;`).
-  /// This can be overridden on your [Game] implementation.
-  Projector viewportProjector = IdentityProjector();
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.
@@ -353,11 +360,17 @@ abstract mixin class Game {
     gameStateListeners.remove(callback);
   }
 
+  bool _isInternalRefresh = false;
+
   /// When a Game is attached to a `GameWidget`, this method will force that
   /// widget to be rebuilt. This can be used when updating any property which is
   /// implemented within the Flutter tree.
+  ///
+  /// When [isInternalRefresh] is passed as false it will trigger the `onAttach`
+  /// and `onDetach` events; otherwise, those events will not be called.
   @internal
-  void refreshWidget() {
+  void refreshWidget({bool isInternalRefresh = true}) {
+    _isInternalRefresh = isInternalRefresh;
     gameStateListeners.forEach((callback) => callback());
   }
 }

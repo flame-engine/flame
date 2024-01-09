@@ -34,12 +34,13 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  late final _layerPaint = Paint();
+  late final _layerPaint = layerPaintFactory(opacity);
   final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
   final bool ignoreFlip;
+  Paint Function(double opacity) layerPaintFactory;
 
   FlameTileLayer({
     required super.layer,
@@ -49,9 +50,9 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required this.tiledAtlas,
     required this.animationFrames,
     required this.ignoreFlip,
-  }) {
-    _layerPaint.color = Color.fromRGBO(255, 255, 255, opacity);
-  }
+    required this.layerPaintFactory,
+    super.filterQuality,
+  });
 
   /// {@macro flame_tile_layer}
   static FlameTileLayer load({
@@ -61,10 +62,11 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required Vector2 destTileSize,
     required Map<Tile, TileFrames> animationFrames,
     required TiledAtlas atlas,
+    required Paint Function(double opacity) layerPaintFactory,
+    FilterQuality? filterQuality,
     bool? ignoreFlip,
   }) {
     ignoreFlip ??= false;
-
     final mapOrientation = map.orientation;
     if (mapOrientation == null) {
       throw StateError('Map orientation should be present');
@@ -80,6 +82,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
+          layerPaintFactory: layerPaintFactory,
         );
       case MapOrientation.staggered:
         return StaggeredTileLayer(
@@ -90,6 +94,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
+          layerPaintFactory: layerPaintFactory,
         );
       case MapOrientation.hexagonal:
         return HexagonalTileLayer(
@@ -100,6 +106,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
+          layerPaintFactory: layerPaintFactory,
         );
       case MapOrientation.orthogonal:
         return OrthogonalTileLayer(
@@ -110,6 +118,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           tiledAtlas: atlas,
           animationFrames: animationFrames,
           ignoreFlip: ignoreFlip,
+          filterQuality: filterQuality,
+          layerPaintFactory: layerPaintFactory,
         );
     }
   }

@@ -105,12 +105,12 @@ In the following example we first initialize the component with priority 1, and 
 user taps the component we change its priority to 2:
 
 ```dart
-class MyComponent extends PositionComponent with Tappable {
+class MyComponent extends PositionComponent with TapCallbacks {
 
   MyComponent() : super(priority: 1);
 
   @override
-  void onTap() {
+  void onTapDown(TapDownEvent event) {
     priority = 2;
   }
 }
@@ -187,6 +187,28 @@ Note that the children added via either methods are only guaranteed to be
 available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
+
+
+### Access to the World from a Component
+
+If a component that has a `World` as an ancestor and requires access to that `World` object, one can
+use the `HasWorldReference` mixin.
+
+Example:
+
+```dart
+class MyComponent extends Component with HasWorldReference<MyWorld>,
+    TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent info) {
+    // world is of type MyWorld
+    world.add(AnotherComponent());
+  }
+}
+```
+
+If you try to access `world` from a component that doesn't have a `World`
+ancestor of the correct type an assertion error will be thrown.
 
 
 ### Ensuring a component has a given parent
@@ -340,6 +362,12 @@ void onDragUpdate(DragUpdateInfo info) {
 
 ### PositionType
 
+```{note}
+If you are using the `CameraComponent` you should not use `PositionType`, but
+instead adding your components directly to the viewport for example if you
+want to use them as a HUD.
+```
+
 If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
 to the game coordinates, you can change the `PositionType` of the component.
 The default `PositionType` is `positionType = PositionType.game` and that can be changed to
@@ -363,10 +391,84 @@ Do note that this setting is only respected if the component is added directly t
 `FlameGame` and not as a child component of another component.
 
 
+### Visibility of components
+
+The recommended way to hide or show a component is usually to add or remove it from the tree
+using the `add` and `remove` methods.
+
+However, adding and removing components from the tree will trigger lifecycle steps for that
+component (such as calling `onRemove` and `onMount`). It is also an asynchronous process and care
+needs to be taken to ensure the component has finished removing before it is added again if you
+are removing and adding a component in quick succession.
+
+```dart
+/// Example of handling the removal and adding of a child component
+/// in quick succession
+void show() async {
+  // Need to await the [removed] future first, just in case the
+  // component is still in the process of being removed.
+  await myChildComponent.removed;
+  add(myChildComponent);
+}
+
+void hide() {
+  remove(myChildComponent);
+}
+```
+
+These behaviors are not always desirable.
+
+An alternative method to show and hide a component is to use the `HasVisibility` mixin, which may
+be used on any class that inherits from `Component`. This mixin introduces the `isVisible` property.
+Simply set `isVisible` to `false` to hide the component, and `true` to show it again, without
+removing it from the tree. This affects the visibility of the component and all it's descendants
+(children).
+
+```dart
+/// Example that implements HasVisibility
+class MyComponent extends PositionComponent with HasVisibility {}
+
+/// Usage of the isVisible property
+final myComponent = MyComponent();
+add(myComponent);
+
+myComponent.isVisible = false;
+```
+
+The mixin only affects whether the component is rendered, and will not affect other behaviors.
+
+```{note}
+Important! Even when the component is not visible, it is still in the tree and
+will continue to receive calls to 'update' and all other lifecycle events. It
+will still respond to input events, and will still interact with other
+components, such as collision detection for example.
+```
+
+The mixin works by preventing the `renderTree` method, therefore if `renderTree` is being
+overridden, a manual check for `isVisible` should be included to retain this functionality.
+
+```dart
+class MyComponent extends PositionComponent with HasVisibility {
+
+  @override
+  void renderTree(Canvas canvas) {
+    // Check for visibility
+    if (isVisible) {
+      // Custom code here
+
+      // Continue rendering the tree
+      super.renderTree(canvas);
+    }
+  }
+}
+```
+
+
 ## PositionComponent
 
-This class represent a positioned object on the screen, being a floating rectangle or a rotating
-sprite. It can also represent a group of positioned components if children are added to it.
+This class represents a positioned object on the screen, being a floating rectangle, a rotating
+sprite, or anything else with position and size. It can also represent a group of positioned
+components if children are added to it.
 
 The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
 `anchor` which transforms how the component is rendered.
@@ -716,8 +818,8 @@ robot.animationTickers?[RobotState.idle]?.onFrame = (currentIndex) {
 Example:
 
 ```dart
-class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameRef<SpriteGroupExample>, Tappable {
+class PlayerComponent extends SpriteGroupComponent<ButtonState>
+    with HasGameReference<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void>? onLoad() async {
     final pressedSprite = await gameRef.loadSprite(/* omitted */);
@@ -733,6 +835,61 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
 
   // tap methods handler omitted...
 }
+```
+
+
+## SpawnComponent
+
+This component is a non-visual component that spawns other components inside of the parent of the
+`SpawnComponent`. It's great if you for example want to spawn enemies or power-ups randomly within
+an area.
+
+The `SpawnComponent` takes a factory function that it uses to create new components and an area
+where the components should be spawned within (or along the edges of).
+
+For the area, you can use the `Circle`, `Rectangle` or `Polygon` class, and if you want to only
+spawn components along the edges of the shape set the `within` argument to false (defaults to true).
+
+This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
+within the defined circle:
+
+The `factory` function takes an `int` as an argument, which is the index of the component that is
+being spawned, so if for example 4 components have been spawned already the 5th component will have
+the index 4, since the indexing starts at 0.
+
+```dart
+SpawnComponent(
+  factory: (i) => MyComponent(size: Vector2(10, 20)),
+  period: 0.5,
+  area: Circle(Vector2(100, 200), 150),
+);
+```
+
+If you don't want the spawning rate to be static, you can use the `SpawnComponent.periodRange`
+constructor with the `minPeriod` and `maxPeriod` arguments instead.
+In the following example the component would be spawned randomly within the circle and the time
+between each new spawned component is between 0.5 to 10 seconds.
+
+```dart
+SpawnComponent.periodRange(
+  factory: (i) => MyComponent(size: Vector2(10, 20)),
+  minPeriod: 0.5,
+  maxPeriod: 10,
+  area: Circle(Vector2(100, 200), 150),
+);
+```
+
+If you want to set the position yourself within the `factory` function, you can use set
+`selfPositioning = true` in the constructors and you will be able to set the positions yourself and
+ignore the `area` argument.
+
+```dart
+SpawnComponent(
+  factory: (i) =>
+    MyComponent(position: Vector2(100, 200), size: Vector2(10, 20)),
+  selfPositioning: true,
+  period: 0.5,
+);
 ```
 
 
@@ -755,65 +912,6 @@ Future<void> onLoad() async {
   );
 }
 ```
-
-
-## FlareActorComponent
-
-**Note**: The previous implementation of a Flare integration API using `FlareAnimation` and
-`FlareComponent` has been deprecated.
-
-To use Flare within Flame, use the [`flame_flare`](https://github.com/flame-engine/flame_flare)
-package.
-
-This is the interface for using a [flare animation](https://pub.dev/packages/flare_flutter) within
-flame. `FlareActorComponent` has almost the same API as of flare's `FlareActor` widget. It receives
-the animation filename (that is loaded by default with `Flame.bundle`), it can also receive a
-FlareController that can play multiple animations and control nodes.
-
-```dart
-import 'package:flame_flare/flame_flare.dart';
-
-class YourFlareController extends FlareControls {
-
-  late ActorNode rightHandNode;
-
-  void initialize(FlutterActorArtboard artboard) {
-    super.initialize(artboard);
-
-    // get flare node
-    rightHand = artboard.getNode('right_hand');
-  }
-}
-
-final fileName = 'assets/george_washington.flr';
-final size = Vector2(1776, 1804);
-final controller = YourFlareController();
-
-FlareActorComponent flareAnimation = FlareActorComponent(
-  fileName,
-  controller: controller,
-  width: 306,
-  height: 228,
-);
-
-flareAnimation.x = 50;
-flareAnimation.y = 240;
-add(flareAnimation);
-
-// to play an animation
-controller.play('rise_up');
-
-// you can add another animation to play at the same time
-controller.play('close_door_way_out');
-
-// also, you can get a flare node and modify it
-controller.rightHandNode.rotation = math.pi;
-```
-
-You can also change the current playing animation by using the `updateAnimation` method.
-
-For a working example, check the example in the
-[flame_flare repository](https://github.com/flame-engine/flame/tree/main/packages/flame_flare/example).
 
 
 ## ParallaxComponent
@@ -1118,51 +1216,6 @@ The following example would result in a `CircleComponent` that defines a circle 
 ```dart
 void main() {
   CircleComponent.relative(0.8, size: Vector2.all(100));
-}
-```
-
-
-## TiledComponent
-
-Tiled is a free and open source, full-featured level and map editor for your platformer or
-RPG game. Currently we have an "in progress" implementation of a Tiled component. This API
-uses the lib [tiled.dart](https://github.com/flame-engine/tiled.dart) to parse map files and
-render visible layers using the performant `SpriteBatch` for each layer.
-
-Supported map types include: Orthogonal, Isometric, Hexagonal, and Staggered.
-
-Orthogonal | Hexagonal             |  Isomorphic
-:--:|:-------------------------:|:-------------------------:
-![An example of an orthogonal map](../images/orthogonal.png)|![An example of hexagonal map](../images/pointy_hex_even.png) |  ![An example of isomorphic map](../images/tile_stack_single_move.png)
-
-An example of how to use the API can be found
-[here](https://github.com/flame-engine/flame_tiled/tree/main/example).
-
-
-### TileStack
-
-Once a `TiledComponent` is loaded, you can select any column of (x,y) tiles in a `tileStack` to
-then add animation. Removing the stack will not remove the tiles from the map.
-
-> **Note**: This currently only supports position based effects.
-
-```dart
-void onLoad() {
-  final stack = map.tileMap.tileStack(4, 0, named: {'floor_under'});
-  stack.add(
-    SequenceEffect(
-      [
-        MoveEffect.by(
-          Vector2(5, 0),
-          NoiseEffectController(duration: 1, frequency: 20),
-        ),
-        MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
-      ],
-      repeatCount: 3,
-    )
-      ..onComplete = () => stack.removeFromParent(),
-  );
-  map.add(stack);
 }
 ```
 

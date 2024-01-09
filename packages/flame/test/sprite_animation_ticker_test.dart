@@ -101,8 +101,7 @@ void main() {
       animationTicker.update(1);
     });
 
-    test('completed completes when the animation has already completed',
-        () async {
+    test('completed completes when the animation has already completed', () {
       final sprite = MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
@@ -115,7 +114,7 @@ void main() {
     });
 
     test("completed doesn't complete when the animation is yet to complete",
-        () async {
+        () {
       final sprite = MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
@@ -126,7 +125,7 @@ void main() {
       expectLater(animationTicker.completed, doesNotComplete);
     });
 
-    test("completed doesn't complete when animation is looping", () async {
+    test("completed doesn't complete when animation is looping", () {
       final sprite = MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
@@ -136,7 +135,7 @@ void main() {
 
     test(
       "completed doesn't complete when animation is looping and on last frame",
-      () async {
+      () {
         final sprite = MockSprite();
         final animationTicker =
             SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
@@ -145,5 +144,43 @@ void main() {
         expectLater(animationTicker.completed, doesNotComplete);
       },
     );
+
+    test("completed doesn't complete after the animation is reset", () {
+      final sprite = MockSprite();
+      final animationTicker = SpriteAnimation.spriteList(
+        [sprite],
+        stepTime: 1,
+        loop: false,
+      ).createTicker();
+
+      animationTicker.completed;
+      animationTicker.update(1);
+      expect(animationTicker.completeCompleter!.isCompleted, true);
+
+      animationTicker.reset();
+      animationTicker.completed;
+      expect(animationTicker.completeCompleter!.isCompleted, false);
+    });
+
+    test('paused pauses ticket', () {
+      final sprite = MockSprite();
+      final animationTicker = SpriteAnimation.spriteList(
+        [sprite, sprite],
+        stepTime: 1,
+        loop: false,
+      ).createTicker();
+
+      expect(animationTicker.isPaused, false);
+      expect(animationTicker.currentIndex, 0);
+      animationTicker.update(1);
+      expect(animationTicker.currentIndex, 1);
+      animationTicker.paused = true;
+      expect(animationTicker.isPaused, true);
+      animationTicker.update(1);
+      expect(animationTicker.currentIndex, 1);
+      animationTicker.reset();
+      expect(animationTicker.currentIndex, 0);
+      expect(animationTicker.isPaused, false);
+    });
   });
 }

@@ -3,21 +3,21 @@ import 'package:examples/platform/stub_provider.dart'
     if (dart.library.html) 'platform/web_provider.dart';
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/flame_forge2d.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/constant_volume_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/friction_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/gear_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/motor_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/mouse_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/prismatic_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/pulley_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/revolute_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/rope_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/weld_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
 import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
 import 'package:examples/stories/bridge_libraries/flame_spine/flame_spine.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/flame_forge2d.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/constant_volume_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/distance_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/friction_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/gear_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/motor_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/mouse_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/prismatic_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/pulley_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/revolute_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/rope_joint.dart';
-import 'package:examples/stories/bridge_libraries/forge2d/joints/weld_joint.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
 import 'package:examples/stories/collision_detection/collision_detection.dart';
 import 'package:examples/stories/components/components.dart';
@@ -30,6 +30,7 @@ import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
 import 'package:examples/stories/rendering/rendering.dart';
 import 'package:examples/stories/sprites/sprites.dart';
+import 'package:examples/stories/structure/structure.dart';
 import 'package:examples/stories/svg/svg.dart';
 import 'package:examples/stories/system/system.dart';
 import 'package:examples/stories/tiled/tiled.dart';
@@ -70,6 +71,9 @@ void runAsDashbook() {
 
   // Some small sample games
   addGameStories(dashbook);
+
+  // Show some different ways of structuring games
+  addStructureStories(dashbook);
 
   // Feature examples
   addAudioStories(dashbook);

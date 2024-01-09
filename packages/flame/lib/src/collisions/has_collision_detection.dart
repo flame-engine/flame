@@ -7,6 +7,10 @@ import 'package:flame/components.dart';
 /// Hitboxes are only part of the collision detection performed by its closest
 /// parent with the [HasCollisionDetection] mixin, if there are multiple nested
 /// classes that has [HasCollisionDetection].
+///
+/// You can experiment with non-standard collision detection methods, such
+/// as `HasQuadTreeCollisionDetection`. This can sometimes bring better
+/// performance, but it's not guaranteed.
 mixin HasCollisionDetection<B extends Broadphase<ShapeHitbox>> on Component {
   CollisionDetection<ShapeHitbox, B> _collisionDetection =
       StandardCollisionDetection();

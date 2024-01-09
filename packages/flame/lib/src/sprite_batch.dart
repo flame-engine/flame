@@ -13,8 +13,8 @@ extension SpriteBatchExtension on Game {
   /// its options.
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
+    Color? defaultColor,
+    BlendMode? defaultBlendMode,
     RSTransform? defaultTransform,
     Images? imageCache,
     bool useAtlas = true,
@@ -37,9 +37,9 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
-    required this.color,
+    Color? color,
     this.flip = false,
-  })  : paint = Paint()..color = color,
+  })  : paint = Paint()..color = color ?? const Color(0x00000000),
         destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
@@ -55,9 +55,6 @@ class BatchItem {
 
   /// The flip value for this batch item.
   final bool flip;
-
-  /// The background color for this batch item.
-  final Color color;
 
   /// Fallback matrix for the web.
   ///
@@ -113,10 +110,10 @@ enum FlippedAtlasStatus {
 class SpriteBatch {
   SpriteBatch(
     this.atlas, {
-    this.defaultColor = const Color(0x00000000),
-    this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
+    this.defaultColor,
+    this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
   })  : _imageCache = imageCache,
@@ -127,17 +124,17 @@ class SpriteBatch {
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteBatch> load(
     String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
+    Color? defaultColor,
+    BlendMode? defaultBlendMode,
     bool useAtlas = true,
   }) async {
     final imagesCache = images ?? Flame.images;
     return SpriteBatch(
       await imagesCache.load(path),
-      defaultColor: defaultColor,
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
+      defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
       imageCache: imagesCache,
@@ -201,14 +198,14 @@ class SpriteBatch {
       'image[${identityHashCode(atlas)}]';
 
   /// The default color, used as a background color for a [BatchItem].
-  final Color defaultColor;
+  final Color? defaultColor;
 
   /// The default transform, used when a transform was not supplied for a
   /// [BatchItem].
   final RSTransform? defaultTransform;
 
   /// The default blend mode, used for blending a batch item.
-  final BlendMode defaultBlendMode;
+  final BlendMode? defaultBlendMode;
 
   /// The width of the [atlas].
   int get width => atlas.width;
@@ -292,7 +289,9 @@ class SpriteBatch {
           : batchItem.source,
     );
     _transforms.add(batchItem.transform);
-    _colors.add(batchItem.color);
+    if (color != null) {
+      _colors.add(color);
+    }
   }
 
   /// Add a new batch item.
@@ -361,7 +360,7 @@ class SpriteBatch {
 
   // Used to not create new Paint objects in [render] and
   // [generateFlippedAtlas].
-  final Paint _emptyPaint = Paint();
+  final _emptyPaint = Paint();
 
   void render(
     Canvas canvas, {
@@ -373,21 +372,21 @@ class SpriteBatch {
       return;
     }
 
-    paint ??= _emptyPaint;
+    final renderPaint = paint ?? _emptyPaint;
 
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
         _transforms,
         _sources,
-        _colors,
+        _colors.isEmpty ? null : _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
-        paint,
+        renderPaint,
       );
     } else {
       for (final batchItem in _batchItems) {
-        paint.blendMode = blendMode ?? paint.blendMode;
+        renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
 
         canvas
           ..save()
@@ -397,7 +396,7 @@ class SpriteBatch {
             atlas,
             batchItem.source,
             batchItem.destination,
-            paint,
+            renderPaint,
           )
           ..restore();
       }

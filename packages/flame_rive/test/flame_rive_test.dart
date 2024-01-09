@@ -33,7 +33,7 @@ void main() {
         expect(artboard.name, artboardName);
       });
 
-      test('Load an artboard that does not exist', () async {
+      test('Load an artboard that does not exist', () {
         expect(
           () => loadArtboard(
             riveFile,
@@ -56,7 +56,7 @@ void main() {
       });
 
       testWithFlameGame(
-        'Can Add with Tappable',
+        'Can Add with TapCallbacks',
         (game) async {
           final child = _RiveComponentWithTappable(
             artboard: await loadArtboard(riveFile),
@@ -127,7 +127,7 @@ void main() {
     });
 
     group('Component size', () {
-      test('use specifiy size', () async {
+      test('use specific size', () async {
         final skillsArtboard = await loadArtboard(riveFile);
         final riveComponent = RiveComponent(
           artboard: skillsArtboard,
@@ -137,7 +137,7 @@ void main() {
         expect(riveComponent.size, Vector2.all(250.0));
       });
 
-      test('deafult value (ArtboardSize)', () async {
+      test('default value (ArtboardSize)', () async {
         final skillsArtboard = await loadArtboard(riveFile);
         final riveComponent = RiveComponent(artboard: skillsArtboard);
 
