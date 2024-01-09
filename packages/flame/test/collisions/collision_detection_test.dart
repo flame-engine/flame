@@ -1,8 +1,8 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/geometry.dart';
 import 'package:flame/geometry.dart' as geometry;
+import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -1083,6 +1083,37 @@ void main() {
           ignoreHitboxes: [
             world.children.first.children.first as ShapeHitbox,
           ],
+        );
+        expect(result?.hitbox?.parent, game.world.children.toList()[1]);
+        expect(
+          result?.reflectionRay?.origin,
+          closeToVector(Vector2.all(100.5)),
+        );
+        expect(
+          result?.reflectionRay?.direction,
+          closeToVector(Vector2(-1, 1)..normalize()),
+        );
+      },
+      'multiple hitboxes after each other with filter':
+          (collisionSystem) async {
+        final game = collisionSystem as FlameGame;
+        final world = game.world;
+        await world.ensureAddAll([
+          for (var i = 0.0; i < 10; i++)
+            PositionComponent(
+              position: Vector2.all(100 + i * 10),
+              size: Vector2.all(20 - i),
+              anchor: Anchor.center,
+            )..add(RectangleHitbox()),
+        ]);
+        await game.ready();
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: Vector2.all(1)..normalize(),
+        );
+        final result = collisionSystem.collisionDetection.raycast(
+          ray,
+          hitboxFilter: (hitbox) => hitbox.parent != world.children.first,
         );
         expect(result?.hitbox?.parent, game.world.children.toList()[1]);
         expect(
