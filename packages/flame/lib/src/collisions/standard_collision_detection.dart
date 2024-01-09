@@ -72,6 +72,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   RaycastResult<ShapeHitbox>? raycast(
     Ray2 ray, {
     double? maxDistance,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
     List<ShapeHitbox>? ignoreHitboxes,
     RaycastResult<ShapeHitbox>? out,
   }) {
@@ -80,6 +81,11 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     for (final item in items) {
       if (ignoreHitboxes?.contains(item) ?? false) {
         continue;
+      }
+      if (hitboxFilter != null) {
+        if (!hitboxFilter(item)) {
+          continue;
+        }
       }
       if (!item.aabb.intersectsWithAabb2(_temporaryRayAabb)) {
         continue;
@@ -109,6 +115,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     double sweepAngle = tau,
     double? maxDistance,
     List<Ray2>? rays,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
   }) {
@@ -140,6 +147,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       result = raycast(
         ray,
         maxDistance: maxDistance,
+        hitboxFilter: hitboxFilter,
         ignoreHitboxes: ignoreHitboxes,
         out: result,
       );
@@ -155,6 +163,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   Iterable<RaycastResult<ShapeHitbox>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
+    bool Function(ShapeHitbox candidate)? hitboxFilter,
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
   }) sync* {
@@ -166,6 +175,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
           hasResultObject ? out![i] : RaycastResult<ShapeHitbox>();
       final currentResult = raycast(
         currentRay,
+        hitboxFilter: hitboxFilter,
         ignoreHitboxes: ignoreHitboxes,
         out: storeResult,
       );

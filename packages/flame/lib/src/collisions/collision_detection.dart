@@ -101,15 +101,22 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// [maxDistance] can be provided to limit the raycast to only return hits
   /// within this distance from the ray origin.
   ///
-  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
-  /// the rays will go straight through them. For example the hitbox of the
-  /// component that you might be casting the rays from.
+  /// You can provide a [hitboxFilter] callback to define which hitboxes
+  /// to consider and which to ignore. This callback will be called with
+  /// every prospective hitbox, and only if the callback returns `true`
+  /// will the hitbox be considered. Otherwise, the ray will go straight
+  /// through it. One common use case is ignoring the component that is
+  /// shooting the ray.
+  ///
+  /// If you have a list of hitboxes to ignore in advance,
+  /// you can provide them via the [ignoreHitboxes] argument.
   ///
   /// If [out] is provided that object will be modified and returned with the
   /// result.
   RaycastResult<T>? raycast(
     Ray2 ray, {
     double? maxDistance,
+    bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     RaycastResult<T>? out,
   });
@@ -127,9 +134,15 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// If there are less objects in [rays] than the operation requires, the
   /// missing [Ray2] objects will be created and added to [rays].
   ///
-  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
-  /// the rays will go straight through them. For example the hitbox of the
-  /// component that you might be casting the rays from.
+  /// You can provide a [hitboxFilter] callback to define which hitboxes
+  /// to consider and which to ignore. This callback will be called with
+  /// every prospective hitbox, and only if the callback returns `true`
+  /// will the hitbox be considered. Otherwise, the ray will go straight
+  /// through it. One common use case is ignoring the component that is
+  /// shooting the ray.
+  ///
+  /// If you have a list of hitboxes to ignore in advance,
+  /// you can provide them via the [ignoreHitboxes] argument.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
@@ -141,6 +154,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
     double sweepAngle = tau,
     double? maxDistance,
     List<Ray2>? rays,
+    bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
@@ -152,9 +166,15 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   /// [maxDepth] is how many times the ray should collide before returning a
   /// result, defaults to 10.
   ///
-  /// [ignoreHitboxes] can be used if you want to ignore certain hitboxes, i.e.
-  /// the rays will go straight through them. For example the hitbox of the
-  /// component that you might be casting the rays from.
+  /// You can provide a [hitboxFilter] callback to define which hitboxes
+  /// to consider and which to ignore. This callback will be called with
+  /// every prospective hitbox, and only if the callback returns `true`
+  /// will the hitbox be considered. Otherwise, the ray will go straight
+  /// through it. One common use case is ignoring the component that is
+  /// shooting the ray.
+  ///
+  /// If you have a list of hitboxes to ignore in advance,
+  /// you can provide them via the [ignoreHitboxes] argument.
   ///
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
@@ -162,6 +182,7 @@ abstract class CollisionDetection<T extends Hitbox<T>,
   Iterable<RaycastResult<T>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
+    bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
   });
