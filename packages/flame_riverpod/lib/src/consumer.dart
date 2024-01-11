@@ -132,7 +132,7 @@ mixin RiverpodComponentMixin on Component {
   }
 }
 
-mixin RiverpodGameMixin on FlameGame {
+mixin RiverpodGameMixin<W extends World> on FlameGame<W> {
   /// [GlobalKey] associated with the [RiverpodAwareGameWidget] that this game
   /// was provided to.
   ///
