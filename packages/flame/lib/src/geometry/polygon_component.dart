@@ -207,30 +207,44 @@ class PolygonComponent extends ShapeComponent {
       return false;
     }
 
-    // Count the amount of edges crossed by a straight horizontal line going left from the point
-    int count = 0;
+    // Count the amount of edges crossed by going left from the point
+    var count = 0;
     for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
 
-      // If the edge is entirely to the right, above or below the point then it can't be crossed
+      // Skip if the edge is entirely to the right, above or below the point
       if (edge.from.x > point.x && edge.to.x > point.x ||
           min(edge.from.y, edge.to.y) > point.y ||
           max(edge.from.y, edge.to.y) < point.y) {
         continue;
       }
 
-      // If the edge is crossed by the line, increase the count
-      if (edge.from.y == edge.to.y ||
-          ((point.y - edge.from.y) * (edge.to.x - edge.from.x)) /
-                      (edge.to.y - edge.from.y) +
-                  edge.from.x <
-              point.x) {
-        count++;
+      // Get x coordinate of where the edge intersects with the horizontal line
+      double intersectionX;
+      if (edge.from.y == edge.to.y) {
+        intersectionX = min(edge.from.x, edge.to.x);
+      } else {
+        intersectionX = ((point.y - edge.from.y) * (edge.to.x - edge.from.x)) /
+                (edge.to.y - edge.from.y) +
+            edge.from.x;
+      }
+
+      if (intersectionX == point.x) {
+        // If the point is on the edge, return true
+        return true;
+      } else if (intersectionX < point.x) {
+        // Only count one edge if vertex is crossed
+        // Only count if edges cross the line, not just touch it and go back
+        if ((edge.from.y != point.y && edge.to.y != point.y) ||
+            edge.to.y == edge.from.y ||
+            point.y == max(edge.from.y, edge.to.y)) {
+          count++;
+        }
       }
     }
 
-    // If the amount of edges crossed is odd then the point is inside the polygon
-    return count % 2 == 1;
+    // If the amount of edges crossed is odd, the point is inside the polygon
+    return (count % 2).isOdd;
   }
 
   @override
