@@ -201,27 +201,42 @@ class PolygonComponent extends ShapeComponent {
     canvas.drawPath(_path, debugPaint);
   }
 
-  /// Checks whether the polygon contains the [point].
-  /// Note: The polygon needs to be convex for this to work.
-  @override
-  bool containsPoint(Vector2 point) {
+  bool _containsPoint(Vector2 point, List<Vector2> vertices) {
     // If the size is 0 then it can't contain any points
     if (size.x == 0 || size.y == 0) {
       return false;
     }
 
-    final vertices = globalVertices();
+    // Count the amount of edges crossed by a straight horizontal line going left from the point
+    int count = 0;
     for (var i = 0; i < vertices.length; i++) {
       final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
-              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
-          0;
-      if (isOutside) {
-        // Point is outside of convex polygon
-        return false;
+
+      // If the edge is entirely to the right, above or below the point then it can't be crossed
+      if (edge.from.x > point.x && edge.to.x > point.x ||
+          min(edge.from.y, edge.to.y) > point.y ||
+          max(edge.from.y, edge.to.y) < point.y) {
+        continue;
+      }
+
+      // If the edge is crossed by the line, increase the count
+      if (edge.from.y == edge.to.y ||
+          ((point.y - edge.from.y) * (edge.to.x - edge.from.x)) /
+                      (edge.to.y - edge.from.y) +
+                  edge.from.x <
+              point.x) {
+        count++;
       }
     }
-    return true;
+
+    // If the amount of edges crossed is odd then the point is inside the polygon
+    return count % 2 == 1;
+  }
+
+  @override
+  bool containsPoint(Vector2 point) {
+    final vertices = globalVertices();
+    return _containsPoint(point, vertices);
   }
 
   @override
@@ -229,20 +244,8 @@ class PolygonComponent extends ShapeComponent {
     // Take anchor into consideration.
     final localPoint =
         anchor.toOtherAnchorPosition(point, Anchor.topLeft, size);
-    if (size.x == 0 || size.y == 0) {
-      return false;
-    }
-    for (var i = 0; i < _vertices.length; i++) {
-      final edge = getEdge(i, vertices: vertices);
-      final isOutside =
-          (edge.to.x - edge.from.x) * (localPoint.y - edge.from.y) -
-                  (localPoint.x - edge.from.x) * (edge.to.y - edge.from.y) >
-              0;
-      if (isOutside) {
-        return false;
-      }
-    }
-    return true;
+
+    return _containsPoint(localPoint, _vertices);
   }
 
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
