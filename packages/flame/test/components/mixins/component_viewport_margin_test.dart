@@ -1,12 +1,14 @@
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ComponentViewportMargin', () {
-    testWithFlameGame(
+    testWithGame(
       'margin should stay same after GameResize',
+      _TestGame.new,
       (game) async {
         final initialGameSize = Vector2.all(100);
         final componentSize = Vector2.all(10);
@@ -40,5 +42,7 @@ void main() {
   });
 }
 
+class _TestGame extends FlameGame<World> {}
+
 class _ComponentWithViewportMargin extends PositionComponent
-    with HasGameReference, ComponentViewportMargin {}
+    with HasGameReference<_TestGame>, ComponentViewportMargin<_TestGame> {}
