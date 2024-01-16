@@ -210,23 +210,23 @@ class PolygonComponent extends ShapeComponent {
     // Count the amount of edges crossed by going left from the point
     var count = 0;
     for (var i = 0; i < vertices.length; i++) {
-      final edge = getEdge(i, vertices: vertices);
+      final from = vertices[i];
+      final to = vertices[(i + 1) % vertices.length];
 
       // Skip if the edge is entirely to the right, above or below the point
-      if (edge.from.x > point.x && edge.to.x > point.x ||
-          min(edge.from.y, edge.to.y) > point.y ||
-          max(edge.from.y, edge.to.y) < point.y) {
+      if (from.x > point.x && to.x > point.x ||
+          min(from.y, to.y) > point.y ||
+          max(from.y, to.y) < point.y) {
         continue;
       }
 
       // Get x coordinate of where the edge intersects with the horizontal line
       double intersectionX;
-      if (edge.from.y == edge.to.y) {
-        intersectionX = min(edge.from.x, edge.to.x);
+      if (from.y == to.y) {
+        intersectionX = min(from.x, to.x);
       } else {
-        intersectionX = ((point.y - edge.from.y) * (edge.to.x - edge.from.x)) /
-                (edge.to.y - edge.from.y) +
-            edge.from.x;
+        intersectionX =
+            ((point.y - from.y) * (to.x - from.x)) / (to.y - from.y) + from.x;
       }
 
       if (intersectionX == point.x) {
@@ -235,9 +235,9 @@ class PolygonComponent extends ShapeComponent {
       } else if (intersectionX < point.x) {
         // Only count one edge if vertex is crossed
         // Only count if edges cross the line, not just touch it and go back
-        if ((edge.from.y != point.y && edge.to.y != point.y) ||
-            edge.to.y == edge.from.y ||
-            point.y == max(edge.from.y, edge.to.y)) {
+        if ((from.y != point.y && to.y != point.y) ||
+            to.y == from.y ||
+            point.y == max(from.y, to.y)) {
           count++;
         }
       }
