@@ -17,13 +17,7 @@ add it to your game.
 Check this example to get a better understanding:
 
 ```dart
-class MyGame extends FlameGame with HasDraggables {
-
-  MyGame() {
-    joystick.addObserver(player);
-    add(player);
-    add(joystick);
-  }
+class MyGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
@@ -52,8 +46,8 @@ class MyGame extends FlameGame with HasDraggables {
   }
 }
 
-class JoystickPlayer extends SpriteComponent with HasGameRef {
-  JoystickPlayer(this.joystick)
+class Player extends SpriteComponent with HasGameRef {
+  Player(this.joystick)
     : super(
         anchor: Anchor.center,
         size: Vector2.all(100.0),
@@ -73,7 +67,7 @@ class JoystickPlayer extends SpriteComponent with HasGameRef {
   @override
   void update(double dt) {
     if (joystick.direction != JoystickDirection.idle) {
-      position.add(joystick.velocity * maxSpeed * dt);
+      position.add(joystick.relativeDelta  * maxSpeed * dt);
       angle = joystick.delta.screenAngle();
     }
   }
@@ -90,7 +84,7 @@ These are the fields that should be used to know the state of the joystick:
 - `intensity`: The percentage [0.0, 1.0] that the knob is dragged from the epicenter to the edge of
   the joystick (or `knobRadius` if that is set).
 - `delta`: The absolute amount (defined as a `Vector2`) that the knob is dragged from its epicenter.
-- `velocity`: The percentage, presented as a `Vector2`, and direction that the knob is currently
+- `relativeDelta`: The percentage, presented as a `Vector2`, and direction that the knob is currently
   pulled from its base position to a edge of the joystick.
 
 If you want to create buttons to go with your joystick, check out
