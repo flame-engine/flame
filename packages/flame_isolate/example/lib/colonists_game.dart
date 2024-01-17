@@ -32,7 +32,7 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
     camera.viewfinder.zoom = 0.4;
 
     await Flame.images.load('bread.png');
-    await Flame.images.load('worker.png');
+    await Flame.images.load('ant_walk.png');
     await Flame.images.load('cheese.png');
 
     world.add(_currentMap = GameMap());
@@ -100,9 +100,6 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
     direction.setValues(_rightForce - _leftForce, _downForce - _upForce);
     final step = direction..scale(cameraSpeed * dt * 4);
     _cameraPosition.position += step;
-    if (workers.isNotEmpty) {
-      camera.follow(workers.first);
-    }
   }
 
   PathFinderData get pathFinderData => _currentMap.pathFinderData;
