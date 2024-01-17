@@ -38,9 +38,6 @@ class Worker extends SpriteAnimationGroupComponent<MoveDirection>
     };
   }
 
-  final double _spriteSize = 72;
-  final double _spritePadding = 36 / 2;
-
   SpriteAnimation getSpriteAnimation(int row, double stepTime) {
     return SpriteAnimation.fromFrameData(
       Flame.images.fromCache('ant_walk.png'),
