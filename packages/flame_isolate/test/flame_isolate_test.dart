@@ -13,7 +13,7 @@ void main() {
     'Test running function in isolate',
     TestGame.new,
     (game) async {
-      final result = await game.isolate(_pow, 10);
+      final result = await game.isolateCompute(_pow, 10);
       expect(result, 100);
     },
   );
@@ -25,7 +25,7 @@ void main() {
         final isolateComponent = IsolateComponent();
         await game.add(isolateComponent);
         await game.ready();
-        final result = await isolateComponent.isolate(_pow, 4);
+        final result = await isolateComponent.isolateCompute(_pow, 4);
         expect(result, 16);
       },
     );
@@ -37,14 +37,14 @@ void main() {
         await game.add(isolateComponent);
         await game.ready();
 
-        final result = await isolateComponent.isolate(_pow, 4);
+        final result = await isolateComponent.isolateCompute(_pow, 4);
         expect(result, 16);
 
         game.remove(isolateComponent);
         await game.ready();
 
         expect(
-          () => isolateComponent.isolate(_pow, 4),
+          () => isolateComponent.isolateCompute(_pow, 4),
           throwsA(
             isA<TypeError>().having(
               (error) => error.toString(),
