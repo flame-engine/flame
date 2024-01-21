@@ -14,7 +14,7 @@ class ComponentRef implements WidgetRef {
   BuildContext get context => game!.buildContext!;
 
   RiverpodAwareGameWidgetState? get _container {
-    return game?.key?.currentState;
+    return game?.widgetKey?.currentState;
   }
 
   @override
@@ -127,7 +127,7 @@ mixin RiverpodComponentMixin on Component {
   void rebuildGameWidget() {
     assert(ref.game!.isMounted == true);
     if (ref.game!.isMounted) {
-      ref.game!.key!.currentState!.forceBuild();
+      ref.game!.widgetKey!.currentState!.forceBuild();
     }
   }
 }
@@ -137,7 +137,7 @@ mixin RiverpodGameMixin<W extends World> on FlameGame<W> {
   /// was provided to.
   ///
   /// Used to facilitate [Component] access to the [ProviderContainer].
-  GlobalKey<RiverpodAwareGameWidgetState>? key;
+  GlobalKey<RiverpodAwareGameWidgetState>? widgetKey;
 
   final List<void Function()> _onBuildCallbacks = [];
 
