@@ -58,6 +58,7 @@ sublist # any sub-set of elements of a given list
 sublists # plural of sublist
 subrange # a range entirely contained on a given range
 SVGs # plural of SVG
+texturepacker # a packed spritesheet format
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
 tweening # the process of tween
