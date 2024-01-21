@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -77,6 +78,9 @@ class TexturePackerSprite extends Sprite {
   /// More advanced texture packing may support other rotations (eg, for tightly
   /// packing polygons).
   final int degrees;
+
+  /// The [degrees] field (angle) represented as radians.
+  double get angle => degrees * (pi / 180);
 
   late final Decorator decorator;
   final Transform2D transform = Transform2D();

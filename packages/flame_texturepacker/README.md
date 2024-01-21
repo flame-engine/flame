@@ -33,13 +33,13 @@ flutter pub add flame_texturepacker
 
 ## Usage
 
-Drop generated atlas file and sprite sheet images into the  `assets/` and link the files in your
+Drop generated atlas file and sprite sheet images into the `assets/` and link the files in your
 `pubspec.yaml` file:
 
 ```yaml
  assets:
-    - assets/spriteSheet.atlas
-    - assets/spriteSheet.png
+    - assets/atlas_map.atlas
+    - assets/sprite_sheet1.png
 ```
 
 Import the plugin like this:
@@ -49,7 +49,7 @@ Import the plugin like this:
 Load the TextureAtlas passing the path of the sprite sheet atlas file:
 
 ```Dart
-final atlas = await fromAtlas('FlameAtlasMap.atlas');
+final atlas = await fromAtlas('atlas_map.atlas');
 ```
 
 Get a list of sprites ordered by their index, you can use the list to generate an animation:
@@ -79,7 +79,7 @@ Note: Sprites used in this example can be found OpenGameArt [here][4].
 
 ## Credits
 
-Big thanks to [Jonas Fröber][5] for the original implementation!
+Thanks to [Jonas Fröber][5] for the original implementation.
 
 [1]: https://www.codeandweb.com/texturepacker 'Code & Web Texture Packer'
 [2]: https://github.com/crashinvaders/gdx-texture-packer-gui 'Gdx Texture Packer'

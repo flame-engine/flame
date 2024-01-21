@@ -1,5 +1,5 @@
 
-FlameAtlasMap.png
+sprite_sheet1.png
 size: 512, 512
 format: RGBA8888
 filter: Nearest, Nearest
@@ -33,7 +33,7 @@ robot_walk
   offset: 0, 0
   index: 2
 
-FlameAtlasMap2.png
+sprite_sheet2.png
 size: 512, 512
 format: RGBA8888
 filter: Nearest, Nearest
@@ -67,7 +67,7 @@ robot_walk
   offset: 0, 0
   index: 4
 
-FlameAtlasMap3.png
+sprite_sheet3.png
 size: 512, 512
 format: RGBA8888
 filter: Nearest, Nearest

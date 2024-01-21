@@ -20,6 +20,7 @@ spineboy # Name of a famous character used as an example for Spine https://en.es
 spineboys # Plural of spineboy
 Spritecow # A handy tool for locating sprites within a spritesheet http://www.spritecow.com/
 Supabase # Supabase, one of our sponsors https://supabase.com/
+texturepacker # a packed spritesheet format
 Tilemap # What tile maps are called within Tiled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
 Weasley # Ron Weasley, a character from the book Harry Potter
