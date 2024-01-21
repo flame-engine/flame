@@ -180,6 +180,33 @@ void main() {
       );
     });
 
+    test('concave polygon contains point', () {
+      final component = PolygonComponent(
+        [
+          Vector2(0, 0),
+          Vector2(-2, -4),
+          Vector2(2, 0),
+          Vector2(-2, 4),
+        ],
+      );
+      expect(
+        component.containsPoint(Vector2(-1, 0)),
+        isFalse,
+      );
+      expect(
+        component.containsPoint(Vector2(-1, 1)),
+        isFalse,
+      );
+      expect(
+        component.containsPoint(Vector2(2, 0)),
+        isTrue,
+      );
+      expect(
+        component.containsPoint(Vector2(1, 1)),
+        isTrue,
+      );
+    });
+
     test('horizontally flipped rectangle contains point', () {
       final component = RectangleComponent(
         position: Vector2.all(1.0),
