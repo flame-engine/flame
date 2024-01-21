@@ -69,9 +69,8 @@ class Component {
   Component({
     Iterable<Component>? children,
     int? priority,
-    ComponentKey? key,
-  })  : _priority = priority ?? 0,
-        _key = key {
+    this.key,
+  }) : _priority = priority ?? 0 {
     if (children != null) {
       addAll(children);
     }
@@ -897,10 +896,10 @@ class Component {
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
 
-    if (_key != null) {
+    if (key != null) {
       final currentGame = findGame();
       if (currentGame is FlameGame) {
-        currentGame.registerKey(_key!, this);
+        currentGame.registerKey(key!, this);
       }
     }
   }
@@ -958,10 +957,10 @@ class Component {
   }
 
   void _unregisterKey() {
-    if (_key != null) {
+    if (key != null) {
       final game = findGame();
       if (game is FlameGame) {
-        game.unregisterKey(_key!);
+        game.unregisterKey(key!);
       }
     }
   }
@@ -989,7 +988,7 @@ class Component {
   /// A key that can be used to identify this component in the tree.
   ///
   /// It can be used to retrieve this component from anywhere in the tree.
-  final ComponentKey? _key;
+  final ComponentKey? key;
 
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
