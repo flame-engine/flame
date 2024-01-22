@@ -32,7 +32,7 @@ class TexturePackerSprite extends Sprite {
         ) {
     decorator = Transform2DDecorator(transform);
     if (region.rotate) {
-      transform.angle = radians(90);
+      transform.angle = radians(region.degrees.toDouble());
     }
   }
 
@@ -80,7 +80,7 @@ class TexturePackerSprite extends Sprite {
   final int degrees;
 
   /// The [degrees] field (angle) represented as radians.
-  double get angle => degrees * (pi / 180);
+  double get angle => radians(degrees.toDouble());
 
   late final Decorator decorator;
   final Transform2D transform = Transform2D();
