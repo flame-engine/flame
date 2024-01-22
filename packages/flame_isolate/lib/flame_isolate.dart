@@ -52,7 +52,9 @@ mixin FlameIsolate on Component {
   }
 
   /// Deprecated in favor of [isolateCompute].
-  @Deprecated('Use isolateCompute instead.')
+  @Deprecated(
+    'Will be removed in flame_isolate 0.7.0. Use isolateCompute instead.',
+  )
   Future<R> isolate<Q, R>(
     IsolateCallback<Q, R> callback,
     Q message, {
