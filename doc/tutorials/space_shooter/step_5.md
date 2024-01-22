@@ -81,3 +81,9 @@ should be placed in the area above the screen top, so they can be seen as they a
 playable area.
 
 And this concludes this short step!
+
+```{flutter-app}
+:sources: ../tutorials/space_shooter/app
+:page: step5
+:show: popup code
+```
