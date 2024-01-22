@@ -3,8 +3,8 @@ import 'package:integral_isolates/integral_isolates.dart';
 
 export 'package:integral_isolates/integral_isolates.dart';
 
-/// Mixin on [Component] that holds an instance of a long running isolate using
-/// the library integral_isolates.
+/// Mixin on [Component] that holds an instance of a long running tailored
+/// isolate using the library integral_isolates.
 ///
 /// Using the isolate is done by just running [isolateCompute] function the same
 /// way you would run Flutter's compute function or [isolateComputeStream] if
@@ -20,27 +20,30 @@ export 'package:integral_isolates/integral_isolates.dart';
 /// has passed.
 ///
 /// ```dart
-/// class MyGame extends FlameGame with FlameIsolate {
+/// class MyGame extends FlameGame with FlameTailoredIsolate<Maze, WalkPath> {
 ///   @override
 ///   void update(double dt) {
 ///     if (shouldRecalculate) {
-///       compute(recalculateWorld, worldData).then(updateWorld);
+///       compute(recalculatePath, worldData).then(updateWorld);
 ///     }
 ///     return super.update(dt);
 ///   }
 /// }
 /// ```
-mixin FlameIsolate on Component {
-  StatefulIsolate? _isolate;
+mixin FlameTailoredIsolate<Q, R> on Component {
+  TailoredStatefulIsolate<Q, R>? _isolate;
 
   /// The backpressureStrategy to use.
   ///
   /// Override this to change strategy.
-  BackpressureStrategy get backpressureStrategy => NoBackPressureStrategy();
+  BackpressureStrategy<Q, R> get backpressureStrategy =>
+      NoBackPressureStrategy();
 
   @override
   Future<void> onMount() async {
-    _isolate = StatefulIsolate(backpressureStrategy: backpressureStrategy);
+    _isolate = TailoredStatefulIsolate<Q, R>(
+      backpressureStrategy: backpressureStrategy,
+    );
     _isolate?.init();
     return super.onMount();
   }
@@ -51,24 +54,12 @@ mixin FlameIsolate on Component {
     _isolate = null;
   }
 
-  /// Deprecated in favor of [isolateCompute].
-  @Deprecated(
-    'Will be removed in flame_isolate 0.7.0. Use isolateCompute instead.',
-  )
-  Future<R> isolate<Q, R>(
-    IsolateCallback<Q, R> callback,
-    Q message, {
-    String? debugLabel,
-  }) {
-    return isolateCompute(callback, message, debugLabel: debugLabel);
-  }
-
   /// A function that runs the provided [callback] on the long running isolate
   /// and (eventually) returns the value returned.
   ///
   /// Same footprint as the function compute from flutter, but runs on the
   /// long running thread.
-  Future<R> isolateCompute<Q, R>(
+  Future<R> isolateCompute(
     IsolateCallback<Q, R> callback,
     Q message, {
     String? debugLabel,
@@ -83,7 +74,7 @@ mixin FlameIsolate on Component {
   /// [Future], a [Stream] is returned to allow for a response in multiple
   /// parts. Every stream event will be sent individually through from the
   /// isolate.
-  Stream<R> isolateComputeStream<Q, R>(
+  Stream<R> isolateComputeStream(
     IsolateStream<Q, R> callback,
     Q message, {
     String? debugLabel,

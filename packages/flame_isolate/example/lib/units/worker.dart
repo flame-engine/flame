@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_isolate_example/colonists_game.dart';
@@ -20,35 +18,41 @@ class Worker extends SpriteAnimationGroupComponent<MoveDirection>
     height = Constants.tileSize;
     width = Constants.tileSize;
     current = MoveDirection.idle;
+    anchor = Anchor.center;
+
+    final downRightAnimation = getSpriteAnimation(5);
+    animations = {
+      MoveDirection.idle: SpriteAnimation.spriteList(
+        // Use the second frame from down-right animation
+        [downRightAnimation.frames[1].sprite],
+        stepTime: 1,
+      ),
+      MoveDirection.up: getSpriteAnimation(0),
+      MoveDirection.upRight: getSpriteAnimation(7),
+      MoveDirection.right: getSpriteAnimation(6),
+      MoveDirection.downRight: downRightAnimation,
+      MoveDirection.down: getSpriteAnimation(4),
+      MoveDirection.upLeft: getSpriteAnimation(1),
+      MoveDirection.left: getSpriteAnimation(2),
+      MoveDirection.downLeft: getSpriteAnimation(3),
+    };
   }
 
-  final double _spriteSize = 72;
-  final double _spritePadding = 36 / 2;
-
-  Sprite getSprite(int row, int column) {
-    return Sprite(
-      Flame.images.fromCache('worker.png'),
-      srcPosition: Vector2(
-        column * _spriteSize + _spritePadding,
-        row * _spriteSize + _spritePadding,
+  SpriteAnimation getSpriteAnimation(int row) {
+    return SpriteAnimation.fromFrameData(
+      Flame.images.fromCache('ant_walk.png'),
+      SpriteAnimationData.sequenced(
+        amount: 4,
+        stepTime: 0.1,
+        textureSize: Vector2(64, 64),
+        amountPerRow: 4,
+        texturePosition: Vector2(0, 64.0 * row),
       ),
-      srcSize: Vector2.all(72 - _spritePadding * 2),
     );
   }
 
   @override
-  void render(Canvas c) {
-    super.render(c);
-    c.drawCircle(Offset.zero, 5, paint);
-  }
-
-  @override
   void setCurrentDirection(MoveDirection direction) {
-    if (direction.isLeft && !isFlippedHorizontally) {
-      flipHorizontally();
-    } else if (!direction.isLeft && isFlippedHorizontally) {
-      flipHorizontally();
-    }
     current = direction;
   }
 
@@ -66,92 +70,4 @@ class Worker extends SpriteAnimationGroupComponent<MoveDirection>
 
   @override
   IntVector2 tileSize = const IntVector2(1, 1);
-
-  @override
-  late Map<MoveDirection, SpriteAnimation>? animations = {
-    MoveDirection.idle: SpriteAnimation.spriteList(
-      [getSprite(0, 4)],
-      stepTime: 1,
-    ),
-    MoveDirection.up: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 0),
-        getSprite(1, 0),
-        getSprite(2, 0),
-        getSprite(3, 0),
-        getSprite(4, 0),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.upRight: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 1),
-        getSprite(1, 1),
-        getSprite(2, 1),
-        getSprite(3, 1),
-        getSprite(4, 1),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.right: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 2),
-        getSprite(1, 2),
-        getSprite(2, 2),
-        getSprite(3, 2),
-        getSprite(4, 2),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.downRight: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 3),
-        getSprite(1, 3),
-        getSprite(2, 3),
-        getSprite(3, 3),
-        getSprite(4, 3),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.down: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 4),
-        getSprite(1, 4),
-        getSprite(2, 4),
-        getSprite(3, 4),
-        getSprite(4, 4),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.upLeft: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 1),
-        getSprite(1, 1),
-        getSprite(2, 1),
-        getSprite(3, 1),
-        getSprite(4, 1),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.left: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 2),
-        getSprite(1, 2),
-        getSprite(2, 2),
-        getSprite(3, 2),
-        getSprite(4, 2),
-      ],
-      stepTime: 0.1,
-    ),
-    MoveDirection.downLeft: SpriteAnimation.spriteList(
-      [
-        getSprite(0, 3),
-        getSprite(1, 3),
-        getSprite(2, 3),
-        getSprite(3, 3),
-        getSprite(4, 3),
-      ],
-      stepTime: 0.1,
-    ),
-  };
 }
