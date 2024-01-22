@@ -7,7 +7,8 @@ export 'package:integral_isolates/integral_isolates.dart';
 /// isolate using the library integral_isolates.
 ///
 /// Using isolate is done by just running [isolateCompute] function the same way
-/// you would run Flutter's compute function.
+/// you would run Flutter's compute function or [isolateComputeStream] if your
+/// work returns a [Stream].
 ///
 /// Keep in mind that every component you create and add with this mixin to the
 /// game will create and hold it's own isolate. This makes it easy to
