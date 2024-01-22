@@ -96,7 +96,12 @@ Future<_TextureAtlasData> _parse(
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
-  final fileAsString = await Flame.assets.readFile(path);
+  late final String fileAsString;
+  if (fromStorage) {
+    fileAsString = await File(path).readAsString();
+  } else {
+    fileAsString = await Flame.assets.readFile(path);
+  }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
   var line = iterator.moveNextAndGet();
