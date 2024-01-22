@@ -6,9 +6,9 @@ export 'package:integral_isolates/integral_isolates.dart';
 /// Mixin on [Component] that holds an instance of a long running isolate using
 /// the library integral_isolates.
 ///
-/// Using isolate is done by just running [isolateCompute] function the same way
-/// you would run Flutter's compute function or [isolateComputeStream] if your
-/// work returns a [Stream].
+/// Using the isolate is done by just running [isolateCompute] function the same
+/// way you would run Flutter's compute function or [isolateComputeStream] if
+/// your work returns a [Stream].
 ///
 /// Keep in mind that every component you create and add with this mixin to the
 /// game will create and hold it's own isolate. This makes it easy to
