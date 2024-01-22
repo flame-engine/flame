@@ -59,7 +59,7 @@ final atlas = await fromAtlas('atlas_map.atlas');
 If you are using file storage, grab your atlas file like this:
 
 ```Dart
-final atlas = await fromAtlas("${(await getApplicationDocumentsDirectory()).path}/FlamAtlasMap.atlas", fromStorage: true);
+final atlas = await fromAtlas("${(await getApplicationDocumentsDirectory()).path}/atlas_map.atlas", fromStorage: true);
 ```
 
 Get a list of sprites ordered by their index, you can use the list to generate an animation:

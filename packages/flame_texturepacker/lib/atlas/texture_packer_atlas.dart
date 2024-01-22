@@ -71,7 +71,7 @@ Future<_TextureAtlasData> _fromAssets(String path) async {
   try {
     return await _parse(path, fromStorage: false);
   } on Exception catch (e) {
-    throw Exception('Error loading from assets: $e');
+    throw Exception('Error loading $path from assets: $e');
   }
 }
 
@@ -81,7 +81,7 @@ Future<_TextureAtlasData> _fromStorage(String path) async {
   try {
     return await _parse(path, fromStorage: true);
   } on Exception catch (e) {
-    throw Exception('Error loading from storage: $e');
+    throw Exception('Error loading $path from storage: $e');
   }
 }
 

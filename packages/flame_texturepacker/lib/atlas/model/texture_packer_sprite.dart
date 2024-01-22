@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -32,7 +31,7 @@ class TexturePackerSprite extends Sprite {
         ) {
     decorator = Transform2DDecorator(transform);
     if (region.rotate) {
-      transform.angle = radians(region.degrees.toDouble());
+      transform.angle = angle;
     }
   }
 
@@ -117,6 +116,8 @@ class TexturePackerSprite extends Sprite {
       _tmpRenderPosition.x - (unrotatedAnchor.x * _tmpRenderSize.x),
       _tmpRenderPosition.y - (unrotatedAnchor.y * _tmpRenderSize.y),
     );
+
+    _tmpRenderSize.setValues(tempSize.x, tempSize.y);
 
     decorator.applyChain(
       (applyCanvas) => super.render(
