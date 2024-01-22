@@ -33,6 +33,8 @@ flutter pub add flame_texturepacker
 
 ## Usage
 
+### Asset Storage
+
 Drop generated atlas file and sprite sheet images into the `assets/` and link the files in your
 `pubspec.yaml` file:
 
@@ -50,6 +52,14 @@ Load the TextureAtlas passing the path of the sprite sheet atlas file:
 
 ```Dart
 final atlas = await fromAtlas('atlas_map.atlas');
+```
+
+### File Storage
+
+If you are using file storage, grab your atlas file like this:
+
+```Dart
+final atlas = await fromAtlas("${(await getApplicationDocumentsDirectory()).path}/FlamAtlasMap.atlas", fromStorage: true);
 ```
 
 Get a list of sprites ordered by their index, you can use the list to generate an animation:
