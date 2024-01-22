@@ -89,11 +89,12 @@ Note: Sprites used in this example can be found OpenGameArt [here][4].
 
 ## Credits
 
-Thanks to [Jonas Fröber][5] for the original implementation.
+Thanks to [Jonas Fröber][5] for the original implementation and [Gnarhard][6] for the feature to build the atlas file from a device's storage.
 
 [1]: https://www.codeandweb.com/texturepacker 'Code & Web Texture Packer'
 [2]: https://github.com/crashinvaders/gdx-texture-packer-gui 'Gdx Texture Packer'
 [3]: example/lib/main.dart 'Full working example'
 [4]: https://opengameart.org/content/toon-characters-1 'Robot sprite'
 [5]: https://github.com/Brixto
+[6]: https://github.com/gnarhard
 
