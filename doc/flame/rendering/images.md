@@ -210,7 +210,7 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritebatch_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart).
 
 
 ## ImageComposition
