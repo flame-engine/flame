@@ -65,7 +65,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   @override
   void initState() {
     super.initState();
-    game.key = (widget as RiverpodAwareGameWidget<T>).key;
+    game.widgetKey = (widget as RiverpodAwareGameWidget<T>).key;
 
     WidgetsBinding.instance.addPersistentFrameCallback((_) {
       _isForceBuilding = false;
@@ -80,7 +80,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   @override
   void didUpdateWidget(covariant GameWidget<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    game.key = (widget as RiverpodAwareGameWidget<T>).key;
+    game.widgetKey = (widget as RiverpodAwareGameWidget<T>).key;
   }
 
   @override
