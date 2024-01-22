@@ -194,3 +194,9 @@ With the `_bulletSpawner` all setup, the only missing piece now is to start the
 `_bulletSpawner.timer` at `startShooting` and stop it in the `stopShooting`!
 
 And that closes this step, putting us real close to a real game!
+
+```{flutter-app}
+:sources: ../tutorials/space_shooter/app
+:page: step4
+:show: popup code
+```
