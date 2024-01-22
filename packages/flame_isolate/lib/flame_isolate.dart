@@ -51,6 +51,16 @@ mixin FlameIsolate on Component {
     _isolate = null;
   }
 
+  /// Deprecated in favor of [isolateCompute].
+  @Deprecated('Use isolateCompute instead.')
+  Future<R> isolate<Q, R>(
+    IsolateCallback<Q, R> callback,
+    Q message, {
+    String? debugLabel,
+  }) {
+    return isolateCompute(callback, message, debugLabel: debugLabel);
+  }
+
   /// A function that runs the provided [callback] on the long running isolate
   /// and (eventually) returns the value returned.
   ///
