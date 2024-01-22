@@ -20,30 +20,30 @@ class Worker extends SpriteAnimationGroupComponent<MoveDirection>
     current = MoveDirection.idle;
     anchor = Anchor.center;
 
-    final downRightAnimation = getSpriteAnimation(5, 0.1);
+    final downRightAnimation = getSpriteAnimation(5);
     animations = {
       MoveDirection.idle: SpriteAnimation.spriteList(
         // Use the second frame from down-right animation
         [downRightAnimation.frames[1].sprite],
         stepTime: 1,
       ),
-      MoveDirection.up: getSpriteAnimation(0, 0.1),
-      MoveDirection.upRight: getSpriteAnimation(7, 0.1),
-      MoveDirection.right: getSpriteAnimation(6, 0.1),
+      MoveDirection.up: getSpriteAnimation(0),
+      MoveDirection.upRight: getSpriteAnimation(7),
+      MoveDirection.right: getSpriteAnimation(6),
       MoveDirection.downRight: downRightAnimation,
-      MoveDirection.down: getSpriteAnimation(4, 0.1),
-      MoveDirection.upLeft: getSpriteAnimation(1, 0.1),
-      MoveDirection.left: getSpriteAnimation(2, 0.1),
-      MoveDirection.downLeft: getSpriteAnimation(3, 0.1),
+      MoveDirection.down: getSpriteAnimation(4),
+      MoveDirection.upLeft: getSpriteAnimation(1),
+      MoveDirection.left: getSpriteAnimation(2),
+      MoveDirection.downLeft: getSpriteAnimation(3),
     };
   }
 
-  SpriteAnimation getSpriteAnimation(int row, double stepTime) {
+  SpriteAnimation getSpriteAnimation(int row) {
     return SpriteAnimation.fromFrameData(
       Flame.images.fromCache('ant_walk.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: stepTime,
+        stepTime: 0.1,
         textureSize: Vector2(64, 64),
         amountPerRow: 4,
         texturePosition: Vector2(0, 64.0 * row),
