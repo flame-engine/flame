@@ -164,3 +164,9 @@ the player suffer damage if it clashes with an enemy, or make the enemies shoot 
 both?
 
 Good hunting pilot, and happy coding!
+
+```{flutter-app}
+:sources: ../tutorials/space_shooter/app
+:page: step6
+:show: popup code
+```
