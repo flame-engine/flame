@@ -60,6 +60,19 @@ void main() {
       }
     });
 
+    testWithFlameGame('camera should be able to retarget follow', (game) async {
+      final world = World()..addToParent(game);
+      final camera = CameraComponent(world: world)..addToParent(game);
+      final player = PositionComponent()..addToParent(world);
+      final player2 = PositionComponent()..addToParent(world);
+      camera.follow(player);
+      camera.follow(player2);
+      await game.ready();
+
+      expect(camera.viewfinder.children.length, 1);
+      expect(camera.viewfinder.children.first, isA<FollowBehavior>());
+    });
+
     testWithFlameGame('follow with snap', (game) async {
       final world = World()..addToParent(game);
       final player = PositionComponent()
