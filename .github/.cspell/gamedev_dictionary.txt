@@ -46,6 +46,7 @@ raytracing # rendering techniques that calculates light rays as straight lines
 rects # plural of rect
 respawned # past tense of respawn
 respawn # when the player character dies and is brought back after some time and penalties
+retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
 rrect # rounded rect
@@ -67,4 +68,3 @@ vsync # vertical sync; a graphics technology that synchronizes the software's fr
 WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
 WebP # WebP image format
-retarget # to direct (something) toward a different target
