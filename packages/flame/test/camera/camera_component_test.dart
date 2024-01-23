@@ -61,10 +61,11 @@ void main() {
     });
 
     testWithFlameGame('camera should be able to retarget follow', (game) async {
-      final world = World()..addToParent(game);
-      final camera = CameraComponent(world: world)..addToParent(game);
-      final player = PositionComponent()..addToParent(world);
-      final player2 = PositionComponent()..addToParent(world);
+      // Creating new camera as the one included with game is not mounted and
+      // will therefore not be queued.
+      final camera = CameraComponent(world: game.world)..addToParent(game);
+      final player = PositionComponent()..addToParent(game.world);
+      final player2 = PositionComponent()..addToParent(game.world);
       camera.follow(player);
       camera.follow(player2);
       await game.ready();
