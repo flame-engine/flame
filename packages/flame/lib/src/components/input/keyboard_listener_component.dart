@@ -23,8 +23,8 @@ class KeyboardListenerComponent extends Component with KeyboardHandler {
   final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyDown;
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isUp = event is RawKeyUpEvent;
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isUp = event is KeyUpEvent;
 
     final handlers = isUp ? _keyUp : _keyDown;
     final handler = handlers[event.logicalKey];

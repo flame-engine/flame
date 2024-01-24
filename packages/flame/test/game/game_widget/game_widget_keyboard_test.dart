@@ -12,7 +12,7 @@ class _KeyboardEventsGame extends FlameGame with KeyboardEvents {
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     this.keysPressed.add(event.character ?? 'none');
@@ -25,7 +25,7 @@ class _KeyboardHandlerComponent extends Component with KeyboardHandler {
   final List<String> keysPressed = [];
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     this.keysPressed.add(event.character ?? 'none');
     return false;
   }

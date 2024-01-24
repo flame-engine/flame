@@ -5,8 +5,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '_help.dart';
-
 void main() {
   group('Matrix4Extension', () {
     final matrix4 = Matrix4.fromList([
@@ -106,4 +104,4 @@ void main() {
 
 // This need the mixin because Mock's == parameter is not nullable
 // but Matrix4's == parameter is nullable
-class MockMatrix4 extends Mock with NullableEqualsMixin implements Matrix4 {}
+class MockMatrix4 extends Mock implements Matrix4 {}
