@@ -16,6 +16,7 @@ declare the `KlondikeGame` class inside:
 
 ```dart
 import 'package:flame/game.dart';
+import 'package:flame/flame.dart';
 
 class KlondikeGame extends FlameGame {
   @override
