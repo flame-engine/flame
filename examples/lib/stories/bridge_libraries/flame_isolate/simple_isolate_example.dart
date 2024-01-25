@@ -119,7 +119,7 @@ class CalculatePrimeNumber extends PositionComponent
 
       switch (computeType) {
         case ComputeType.isolate:
-          isPrime = await isolate(_isPrime, nextInt);
+          isPrime = await isolateCompute(_isPrime, nextInt);
           break;
         case ComputeType.synchronous:
           isPrime = _isPrime(nextInt);

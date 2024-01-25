@@ -98,7 +98,7 @@ class WorkerOvermind extends Component
         final List<List<IntVector2>> paths;
         switch (isolateHud.computeType) {
           case ComputeType.isolate:
-            paths = await isolate(
+            paths = await isolateCompute(
               _calculateWork,
               calculateWorkData,
             );

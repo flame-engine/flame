@@ -46,6 +46,7 @@ raytracing # rendering techniques that calculates light rays as straight lines
 rects # plural of rect
 respawned # past tense of respawn
 respawn # when the player character dies and is brought back after some time and penalties
+retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
 rrect # rounded rect
