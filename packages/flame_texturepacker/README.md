@@ -33,6 +33,7 @@ flutter pub add flame_texturepacker
 
 ## Usage
 
+
 ### Asset Storage
 
 Drop generated atlas file and sprite sheet images into the `assets/` and link the files in your
@@ -54,12 +55,14 @@ Load the TextureAtlas passing the path of the sprite sheet atlas file:
 final atlas = await fromAtlas('atlas_map.atlas');
 ```
 
+
 ### File Storage
 
 If you are using file storage, grab your atlas file like this:
 
 ```Dart
-final atlas = await fromAtlas("${(await getApplicationDocumentsDirectory()).path}/atlas_map.atlas", fromStorage: true);
+final documentsPath = (await getApplicationDocumentsDirectory()).path;
+final atlas = await fromAtlas("${documentsPath}/atlas_map.atlas", fromStorage: true);
 ```
 
 Get a list of sprites ordered by their index, you can use the list to generate an animation:
@@ -89,7 +92,8 @@ Note: Sprites used in this example can be found OpenGameArt [here][4].
 
 ## Credits
 
-Thanks to [Jonas Fröber][5] for the original implementation and [Gnarhard][6] for the feature to build the atlas file from a device's storage.
+Thanks to [Jonas Fröber][5] for the original implementation.
+Thanks to [Gnarhard][6] for the feature to build the atlas file from a device's storage.
 
 [1]: https://www.codeandweb.com/texturepacker 'Code & Web Texture Packer'
 [2]: https://github.com/crashinvaders/gdx-texture-packer-gui 'Gdx Texture Packer'
