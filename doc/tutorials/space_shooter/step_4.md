@@ -159,7 +159,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    add(_bulletSpawner);
+    game.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {
@@ -189,8 +189,16 @@ component itself since we want to handle that ourselves to make the bullets spaw
 and must return the create component.
 - Then we set that it should not auto start by default.
 - Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
+- Note how the `_bulletSpawner` is added to the game instead of the player, since the bullets
+are part of the whole game and not the player itself.
 
 With the `_bulletSpawner` all setup, the only missing piece now is to start the
 `_bulletSpawner.timer` at `startShooting` and stop it in the `stopShooting`!
 
 And that closes this step, putting us real close to a real game!
+
+```{flutter-app}
+:sources: ../tutorials/space_shooter/app
+:page: step4
+:show: popup code
+```

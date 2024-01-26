@@ -1,12 +1,13 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame_isolate/flame_isolate.dart';
+import 'package:flame_isolate/flame_tailored_isolate.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class TestGame extends FlameGame with FlameIsolate {}
+class TestGame extends FlameGame with FlameTailoredIsolate<double, int> {}
 
-class IsolateComponent extends Component with FlameIsolate {}
+class IsolateComponent extends Component
+    with FlameTailoredIsolate<double, int> {}
 
 void main() {
   testWithGame<TestGame>(
@@ -88,11 +89,11 @@ void main() {
   });
 }
 
-int _pow(int message) {
-  return message * message;
+int _pow(double message) {
+  return (message * message).toInt();
 }
 
-Stream<int> _messages(int amount) async* {
+Stream<int> _messages(double amount) async* {
   for (var i = 1; i <= amount; i++) {
     yield i;
   }

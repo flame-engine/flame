@@ -57,6 +57,10 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
     ];
 
     worldObjects.forEach(addObject);
+
+    if (workers.isNotEmpty) {
+      game.camera.follow(workers.first);
+    }
   }
 
   final Set<Worker> workers = {};

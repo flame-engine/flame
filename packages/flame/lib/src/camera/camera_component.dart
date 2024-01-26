@@ -323,7 +323,7 @@ class CameraComponent extends Component {
 
   /// Removes all movement effects or behaviors from the viewfinder.
   void stop() {
-    viewfinder.children.forEach((child) {
+    viewfinder.children.toList().forEach((child) {
       if (child is FollowBehavior || child is MoveEffect) {
         child.removeFromParent();
       }

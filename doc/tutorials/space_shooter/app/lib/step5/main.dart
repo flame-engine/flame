@@ -97,7 +97,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    add(_bulletSpawner);
+    game.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {
