@@ -1,8 +1,4 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
-import 'package:flame/rendering.dart';
 import 'package:flame_texturepacker/atlas/model/region.dart';
 
 /// {@template _texture_packer_sprite}
@@ -15,8 +11,8 @@ class TexturePackerSprite extends Sprite {
         index = region.index,
         offsetX = region.offsetX,
         offsetY = region.offsetY,
-        packedWidth = region.rotate ? region.height : region.width,
-        packedHeight = region.rotate ? region.width : region.height,
+        packedWidth = region.width,
+        packedHeight = region.height,
         originalWidth = region.originalWidth,
         originalHeight = region.originalHeight,
         rotate = region.rotate,
@@ -24,16 +20,8 @@ class TexturePackerSprite extends Sprite {
         super(
           region.page.texture,
           srcPosition: Vector2(region.left, region.top),
-          srcSize: Vector2(
-            region.rotate ? region.height : region.width,
-            region.rotate ? region.width : region.height,
-          ),
-        ) {
-    decorator = Transform2DDecorator(transform);
-    if (region.rotate) {
-      transform.angle = angle;
-    }
-  }
+          srcSize: Vector2(region.width, region.height),
+        );
 
   /// The number at the end of the original image file name, or -1 if none.
   ///
@@ -80,54 +68,4 @@ class TexturePackerSprite extends Sprite {
 
   /// The [degrees] field (angle) represented as radians.
   double get angle => radians(degrees.toDouble());
-
-  late final Decorator decorator;
-  final Transform2D transform = Transform2D();
-
-  // Used to avoid the creation of new Vector2 objects in render.
-  static final _tmpRenderPosition = Vector2.zero();
-  static final _tmpRenderSize = Vector2.zero();
-
-  @override
-  void render(
-    Canvas canvas, {
-    Vector2? position,
-    Vector2? size,
-    Anchor anchor = Anchor.topLeft,
-    Paint? overridePaint,
-  }) {
-    if (position != null) {
-      _tmpRenderPosition.setFrom(position);
-    } else {
-      _tmpRenderPosition.setZero();
-    }
-
-    // If the sprite is rotated on the sprite sheet un-rotate it and adjust the
-    // size.
-    final unrotatedAnchor = rotate ? Anchor.bottomLeft : anchor;
-
-    final tempSize = size ?? srcSize;
-    final tempWidth = rotate ? tempSize.y : tempSize.x;
-    final tempHeight = rotate ? tempSize.x : tempSize.y;
-
-    _tmpRenderSize.setValues(tempWidth, tempHeight);
-
-    _tmpRenderPosition.setValues(
-      _tmpRenderPosition.x - (unrotatedAnchor.x * _tmpRenderSize.x),
-      _tmpRenderPosition.y - (unrotatedAnchor.y * _tmpRenderSize.y),
-    );
-
-    _tmpRenderSize.setValues(tempSize.x, tempSize.y);
-
-    decorator.applyChain(
-      (applyCanvas) => super.render(
-        applyCanvas,
-        position: _tmpRenderPosition,
-        size: _tmpRenderSize,
-        anchor: anchor,
-        overridePaint: overridePaint,
-      ),
-      canvas,
-    );
-  }
 }
