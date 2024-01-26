@@ -253,30 +253,30 @@ Future<_TextureAtlasData> _parse(
 }
 
 ({int count, List<String> entry}) _readEntry(String line) {
-  line = line.trim();
+  final trimmedLine = line.trim();
 
-  if (line.isEmpty) {
+  if (trimmedLine.isEmpty) {
     return (count: 0, entry: []);
   }
 
-  final colonIndex = line.indexOf(':');
+  final colonIndex = trimmedLine.indexOf(':');
 
   if (colonIndex == -1) {
     return (count: 0, entry: []);
   }
 
   final entry = <String>[];
-  entry.add(line.substring(0, colonIndex).trim());
+  entry.add(trimmedLine.substring(0, colonIndex).trim());
 
   for (var i = 1, lastMatch = colonIndex + 1;; i++) {
-    final commaIndex = line.indexOf(',', lastMatch);
+    final commaIndex = trimmedLine.indexOf(',', lastMatch);
 
     if (commaIndex == -1) {
-      entry.add(line.substring(lastMatch).trim());
+      entry.add(trimmedLine.substring(lastMatch).trim());
       return (count: i, entry: entry);
     }
 
-    entry.add(line.substring(lastMatch, commaIndex).trim());
+    entry.add(trimmedLine.substring(lastMatch, commaIndex).trim());
     lastMatch = commaIndex + 1;
 
     if (i == 4) {
