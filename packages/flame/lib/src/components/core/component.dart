@@ -945,6 +945,15 @@ class Component {
     _reAddChildren();
   }
 
+  /// Used by the [FlameGame] to set the removed state of the component, since
+  /// the game isn't going through the whole normal component life cycle.
+  @internal
+  void setRemoved() {
+    _setRemovedBit();
+    _removeCompleter?.complete();
+    _removeCompleter = null;
+  }
+
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
 

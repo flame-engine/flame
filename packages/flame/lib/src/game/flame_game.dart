@@ -106,6 +106,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     setMounted();
   }
 
+  @override
+  @internal
+  void finalizeRemoval() {
+    super.finalizeRemoval();
+    setRemoved();
+  }
+
   /// This implementation of render renders each component, making sure the
   /// canvas is reset for each one.
   ///

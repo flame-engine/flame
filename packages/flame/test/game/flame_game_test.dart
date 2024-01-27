@@ -223,9 +223,8 @@ void main() {
           final game = _CompleterGame();
 
           await tester.pumpWidget(GameWidget(game: game));
-          game.update(0);
-          expect(game.loadedCompleterCounter, 1);
-          expect(game.mountedCompleterCounter, 1);
+          expect(game.loadedCompleterCount, 1);
+          expect(game.mountedCompleterCount, 1);
         },
       );
 
@@ -234,7 +233,20 @@ void main() {
         _CompleterGame.new,
         (game) async {
           await game.mounted;
-          expect(game.mountedCompleterCounter, 1);
+          expect(game.mountedCompleterCount, 1);
+        },
+      );
+
+      testWidgets(
+        'game calls loaded completer',
+        (WidgetTester tester) async {
+          final game = _CompleterGame();
+
+          await tester.pumpWidget(GameWidget(game: game));
+          expect(game.loadedCompleterCount, 1);
+          expect(game.mountedCompleterCount, 1);
+          await tester.pumpWidget(Container());
+          expect(game.removedCompleterCount, 1);
         },
       );
     });
@@ -465,13 +477,13 @@ class _OnAttachGame extends FlameGame {
 }
 
 class _CompleterGame extends FlameGame {
-  int loadedCompleterCounter = 0;
-  int mountedCompleterCounter = 0;
-  int removedCompleterCounter = 0;
+  int loadedCompleterCount = 0;
+  int mountedCompleterCount = 0;
+  int removedCompleterCount = 0;
 
   _CompleterGame() {
-    loaded.whenComplete(() => loadedCompleterCounter++);
-    mounted.whenComplete(() => mountedCompleterCounter++);
-    removed.whenComplete(() => removedCompleterCounter++);
+    loaded.whenComplete(() => loadedCompleterCount++);
+    mounted.whenComplete(() => mountedCompleterCount++);
+    removed.whenComplete(() => removedCompleterCount++);
   }
 }

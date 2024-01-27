@@ -274,7 +274,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
     currentGame.lifecycleStateChange(AppLifecycleState.paused);
-    currentGame.onRemove();
+    currentGame.finalizeRemoval();
     if (callGameOnDispose) {
       currentGame.onDispose();
     }
