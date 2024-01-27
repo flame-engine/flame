@@ -94,8 +94,8 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   @internal
-  FutureOr<void> load() {
-    super.load();
+  FutureOr<void> load() async {
+    await super.load();
     setLoaded();
   }
 
