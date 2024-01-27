@@ -73,14 +73,14 @@ abstract mixin class Game {
   bool _debugOnLoadStarted = false;
 
   @internal
-  FutureOr<void> get onLoadFuture {
+  FutureOr<void> load() async {
     assert(
       () {
         _debugOnLoadStarted = true;
         return true;
       }(),
     );
-    return _onLoadFuture;
+    await _onLoadFuture;
   }
 
   /// To be used for tests that needs to evaluate the game after it has been

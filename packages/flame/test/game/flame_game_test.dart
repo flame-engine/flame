@@ -216,6 +216,29 @@ void main() {
       },
     );
 
+    group('completers', () {
+      testWidgets(
+        'game calls loaded completer',
+        (WidgetTester tester) async {
+          final game = _CompleterGame();
+
+          await tester.pumpWidget(GameWidget(game: game));
+          game.update(0);
+          expect(game.loadedCompleterCounter, 1);
+          expect(game.mountedCompleterCounter, 1);
+        },
+      );
+
+      testWithGame(
+        'game calls mount completer',
+        _CompleterGame.new,
+        (game) async {
+          await game.mounted;
+          expect(game.mountedCompleterCounter, 1);
+        },
+      );
+    });
+
     group('world and camera', () {
       testWithFlameGame(
         'game world setter',
@@ -438,5 +461,17 @@ class _OnAttachGame extends FlameGame {
   @override
   Future<void>? onLoad() {
     return Future.delayed(const Duration(seconds: 1));
+  }
+}
+
+class _CompleterGame extends FlameGame {
+  int loadedCompleterCounter = 0;
+  int mountedCompleterCounter = 0;
+  int removedCompleterCounter = 0;
+
+  _CompleterGame() {
+    loaded.whenComplete(() => loadedCompleterCounter++);
+    mounted.whenComplete(() => mountedCompleterCounter++);
+    removed.whenComplete(() => removedCompleterCounter++);
   }
 }

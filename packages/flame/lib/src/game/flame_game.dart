@@ -94,6 +94,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   @internal
+  FutureOr<void> load() {
+    super.load();
+    setLoaded();
+  }
+
+  @override
+  @internal
   void mount() {
     super.mount();
     setMounted();

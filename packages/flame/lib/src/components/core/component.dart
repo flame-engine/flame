@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -927,10 +928,22 @@ class Component {
     }
   }
 
+  /// Used by the [FlameGame] to set the loaded state of the component, since
+  /// the game isn't going through the whole normal component life cycle.
+  @internal
+  void setLoaded() {
+    _setLoadedBit();
+    _loadCompleter?.complete();
+    _loadCompleter = null;
+  }
+
+  /// Used by the [FlameGame] to set the mounted state of the component, since
+  /// the game isn't going through the whole normal component life cycle.
   @internal
   void setMounted() {
-    _setLoadedBit();
     _setMountedBit();
+    _mountCompleter?.complete();
+    _mountCompleter = null;
     _reAddChildren();
   }
 
