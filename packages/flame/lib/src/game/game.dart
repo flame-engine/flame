@@ -80,7 +80,7 @@ abstract mixin class Game {
         return true;
       }(),
     );
-    await _onLoadFuture;
+    return _onLoadFuture;
   }
 
   /// To be used for tests that needs to evaluate the game after it has been

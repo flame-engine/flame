@@ -7,8 +7,6 @@ import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/game/flame_game.dart';
-import 'package:flame/src/game/game.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
