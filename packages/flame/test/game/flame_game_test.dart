@@ -216,6 +216,41 @@ void main() {
       },
     );
 
+    group('completers', () {
+      testWidgets(
+        'game calls loaded completer',
+        (WidgetTester tester) async {
+          final game = _CompleterGame();
+
+          await tester.pumpWidget(GameWidget(game: game));
+          expect(game.loadedCompleterCount, 1);
+          expect(game.mountedCompleterCount, 1);
+        },
+      );
+
+      testWithGame(
+        'game calls mount completer',
+        _CompleterGame.new,
+        (game) async {
+          await game.mounted;
+          expect(game.mountedCompleterCount, 1);
+        },
+      );
+
+      testWidgets(
+        'game calls loaded completer',
+        (WidgetTester tester) async {
+          final game = _CompleterGame();
+
+          await tester.pumpWidget(GameWidget(game: game));
+          expect(game.loadedCompleterCount, 1);
+          expect(game.mountedCompleterCount, 1);
+          await tester.pumpWidget(Container());
+          expect(game.removedCompleterCount, 1);
+        },
+      );
+    });
+
     group('world and camera', () {
       testWithFlameGame(
         'game world setter',
@@ -438,5 +473,17 @@ class _OnAttachGame extends FlameGame {
   @override
   Future<void>? onLoad() {
     return Future.delayed(const Duration(seconds: 1));
+  }
+}
+
+class _CompleterGame extends FlameGame {
+  int loadedCompleterCount = 0;
+  int mountedCompleterCount = 0;
+  int removedCompleterCount = 0;
+
+  _CompleterGame() {
+    loaded.whenComplete(() => loadedCompleterCount++);
+    mounted.whenComplete(() => mountedCompleterCount++);
+    removed.whenComplete(() => removedCompleterCount++);
   }
 }
