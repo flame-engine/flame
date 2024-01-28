@@ -22,7 +22,7 @@ void main() {
   group('Images', () {
     test('can add a base64 image to the cache', () async {
       final cache = Images();
-      await cache.addBase64EncodedImage('img', pixel);
+      await cache.addFromBase64Data('img', pixel);
 
       expect(cache.fromCache('img'), isA<Image>());
     });

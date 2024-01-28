@@ -51,7 +51,7 @@ class Images {
 
   /// Transform the base64 encoded image into an [Image] and adds it into the
   /// cache.
-  Future<void> addBase64EncodedImage(String name, String base64Data) async {
+  Future<void> addFromBase64Data(String name, String base64Data) async {
     _assets[name]?.dispose();
     final image = await _fetchFromBase64(base64Data);
     _assets[name] = _ImageAsset.fromImage(image);
