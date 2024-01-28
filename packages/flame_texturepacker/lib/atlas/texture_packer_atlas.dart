@@ -27,7 +27,7 @@ class TexturePackerAtlas {
     String path, {
     bool fromStorage = false,
   }) async {
-    late final _TextureAtlasData atlasData;
+    final _TextureAtlasData atlasData;
 
     if (fromStorage) {
       atlasData = await _fromStorage(path);
@@ -96,7 +96,8 @@ Future<_TextureAtlasData> _parse(
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
-  late final String fileAsString;
+  final String fileAsString;
+
   if (fromStorage) {
     fileAsString = await File(path).readAsString();
   } else {
