@@ -20,6 +20,13 @@ void main() {
       'AAAAXNSR0IArs4c6QAAAA1JREFUGFdjWP33/n8ACGUDhwieHSEAAAAASUVORK5CYII=';
 
   group('Images', () {
+    test('can add a base64 image to the cache', () async {
+      final cache = Images();
+      await cache.addFromBase64Data('img', pixel);
+
+      expect(cache.fromCache('img'), isA<Image>());
+    });
+
     test('load image', () async {
       final cache = Images();
       final image = await cache.fromBase64('img', pixel);

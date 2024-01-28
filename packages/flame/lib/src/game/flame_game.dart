@@ -94,9 +94,23 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   @internal
+  FutureOr<void> load() async {
+    await super.load();
+    setLoaded();
+  }
+
+  @override
+  @internal
   void mount() {
     super.mount();
     setMounted();
+  }
+
+  @override
+  @internal
+  void finalizeRemoval() {
+    super.finalizeRemoval();
+    setRemoved();
   }
 
   /// This implementation of render renders each component, making sure the
