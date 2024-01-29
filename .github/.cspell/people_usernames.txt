@@ -4,6 +4,7 @@ bluefireteam # github.com/bluefireteam
 erayzesen # erayzesen.itch.io
 erickzanardo # github.com/erickzanardo 
 feroult # github.com/feroult 
+fröber # github.com/Brixto
 Klingsbo # github.com/spydon
 luanpotter # github.com/luanpotter
 Lukas # github.com/spydon

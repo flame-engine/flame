@@ -191,10 +191,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
         final game = currentGame;
         assert(game.hasLayout);
-        final onLoad = game.onLoadFuture;
-        if (onLoad != null) {
-          await onLoad;
-        }
+        await game.load();
         game.mount();
         if (!game.paused) {
           game.update(0);
@@ -277,7 +274,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
     currentGame.lifecycleStateChange(AppLifecycleState.paused);
-    currentGame.onRemove();
+    currentGame.finalizeRemoval();
     if (callGameOnDispose) {
       currentGame.onDispose();
     }

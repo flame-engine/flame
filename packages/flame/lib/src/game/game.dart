@@ -73,7 +73,7 @@ abstract mixin class Game {
   bool _debugOnLoadStarted = false;
 
   @internal
-  FutureOr<void> get onLoadFuture {
+  FutureOr<void> load() async {
     assert(
       () {
         _debugOnLoadStarted = true;
@@ -99,6 +99,12 @@ abstract mixin class Game {
   @internal
   void mount() {
     onMount();
+  }
+
+  @mustCallSuper
+  @internal
+  void finalizeRemoval() {
+    onRemove();
   }
 
   /// Current game viewport size, updated every resize via the [onGameResize]
@@ -221,7 +227,7 @@ abstract mixin class Game {
   }
 
   /// Called when the game is about to be removed from the Flutter widget tree,
-  /// but before it is actually removed.  See the docs for an example on how to
+  /// but before it is actually removed. See the docs for an example on how to
   /// do cleanups to avoid memory leaks.
   void onRemove() {}
 
