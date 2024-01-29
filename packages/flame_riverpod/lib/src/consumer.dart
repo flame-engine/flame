@@ -96,7 +96,7 @@ mixin RiverpodComponentMixin on Component {
   @override
   void onMount() {
     super.onMount();
-    ref.game!._onBuildCallbacks.addAll(_onBuildCallbacks);
+    ref.game!._allOnBuildCallbacks.addAll(_onBuildCallbacks);
 
     if (rebuildOnMountWhen(ref) == true) {
       rebuildGameWidget();
@@ -107,7 +107,7 @@ mixin RiverpodComponentMixin on Component {
   @override
   void onRemove() {
     // Remove this component's onBuild callbacks from the GameWidget
-    _onBuildCallbacks.forEach(ref.game!._onBuildCallbacks.remove);
+    _onBuildCallbacks.forEach(ref.game!._allOnBuildCallbacks.remove);
 
     // Clear the local store of build callbacks - if the component is
     // re-mounted, it would be undesirable to double-up.
@@ -139,16 +139,38 @@ mixin RiverpodGameMixin<W extends World> on FlameGame<W> {
   /// Used to facilitate [Component] access to the [ProviderContainer].
   GlobalKey<RiverpodAwareGameWidgetState>? widgetKey;
 
-  final List<void Function()> _onBuildCallbacks = [];
+  final ComponentRef ref = ComponentRef(game: null);
+  final List<void Function()> _allOnBuildCallbacks = [];
+
+  /// Adds a callback method to be invoked in the build method of
+  /// [RiverpodAwareGameWidgetState].
+  void addToGameWidgetBuild(Function() cb) {
+    _allOnBuildCallbacks.add(cb);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    mounted.whenComplete(() {
+      widgetKey!.currentState!.forceBuild();
+    });
+  }
+
+  @mustCallSuper
+  @override
+  FutureOr<void> onLoad() {
+    ref.game = this;
+    return super.onLoad();
+  }
 
   /// Invoked in [RiverpodAwareGameWidgetState.build]. Each callback is
   /// expected to consist of calls to methods implemented in [WidgetRef].
   /// E.g. [WidgetRef.watch], [WidgetRef.listen], etc.
   void onBuild() {
-    for (final callback in _onBuildCallbacks) {
+    for (final callback in _allOnBuildCallbacks) {
       callback.call();
     }
   }
 
-  bool get hasBuildCallbacks => _onBuildCallbacks.isNotEmpty;
+  bool get hasBuildCallbacks => _allOnBuildCallbacks.isNotEmpty;
 }
