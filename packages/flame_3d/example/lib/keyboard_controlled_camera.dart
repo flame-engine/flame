@@ -1,8 +1,9 @@
 import 'package:flame/components.dart' show KeyboardHandler;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/game.dart';
-import 'package:flutter/gestures.dart' hide Matrix4;
-import 'package:flutter/services.dart' hide Matrix4;
+import 'package:flutter/gestures.dart' show kMiddleMouseButton;
+import 'package:flutter/services.dart'
+    show LogicalKeyboardKey, PointerEvent, RawKeyEvent;
 
 class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
   KeyboardControlledCamera({
@@ -151,6 +152,7 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
             rotateAroundTarget: rotateAroundTarget,
           );
         }
+        pointerEvent = null;
       }
 
       // Keyboard movement

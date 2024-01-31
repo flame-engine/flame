@@ -13,9 +13,7 @@ import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' show Colors;
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart' show runApp, Listener;
+import 'package:flutter/material.dart' show runApp, Color, Colors, Listener;
 
 class ExampleGame3D extends FlameGame<World3D>
     with HasKeyboardHandlerComponents {
@@ -41,19 +39,14 @@ class ExampleGame3D extends FlameGame<World3D>
       PlayerBox(),
 
       // Floating crate
-      Crate(
-        size: Vector3.all(1),
-        position: Vector3(0, 5, 0),
-      ),
+      Crate(size: Vector3.all(1), position: Vector3(0, 5, 0)),
 
       // Floating sphere
       MeshComponent(
         position: Vector3(5, 5, 5),
         mesh: SphereMesh(
           radius: 1,
-          material: DefaultMaterial(
-            texture: ColorTexture(Colors.purple),
-          ),
+          material: DefaultMaterial(texture: ColorTexture(Colors.purple)),
         ),
       ),
 
@@ -61,8 +54,7 @@ class ExampleGame3D extends FlameGame<World3D>
       MeshComponent(
         mesh: PlaneMesh(
           size: Vector2(32, 32),
-          material:
-              DefaultMaterial(texture: ColorTexture(Colors.grey.shade300)),
+          material: DefaultMaterial(texture: ColorTexture(Colors.grey)),
         ),
       ),
 

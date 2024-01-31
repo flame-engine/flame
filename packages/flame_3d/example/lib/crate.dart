@@ -1,13 +1,11 @@
 import 'dart:async';
 
-import 'package:example/main.dart';
-import 'package:flame/components.dart' show HasGameReference;
 import 'package:flame/flame.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-class Crate extends MeshComponent with HasGameReference<ExampleGame3D> {
+class Crate extends MeshComponent {
   Crate({
     required Vector3 size,
     super.position,
