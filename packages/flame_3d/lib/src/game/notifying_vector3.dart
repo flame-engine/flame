@@ -3,25 +3,39 @@ import 'dart:typed_data';
 import 'package:flame_3d/game.dart';
 import 'package:flutter/widgets.dart';
 
-/// Extension of the standard [Vector2] class, implementing the [ChangeNotifier]
+/// {@template notifying_vector_3}
+/// Extension of the standard [Vector3] class, implementing the [ChangeNotifier]
 /// functionality. This allows any interested party to be notified when the
 /// value of this vector changes.
 ///
-/// This class can be used as a regular [Vector2] class. However, if you do
+/// This class can be used as a regular [Vector3] class. However, if you do
 /// subscribe to notifications, don't forget to eventually unsubscribe in
 /// order to avoid resource leaks.
 ///
 /// Direct modification of this vector's [storage] is not allowed.
+/// {@endtemplate}
 class NotifyingVector3 extends Vector3 with ChangeNotifier {
+  /// {@macro notifying_vector_3}
+  ///
+  /// Constructs a vector using the raw values [x], [y], and [z].
   factory NotifyingVector3(double x, double y, double z) =>
       NotifyingVector3.zero()..setValues(x, y, z);
 
+  /// {@macro notifying_vector_3}
+  ///
+  /// Create an empty vector.
   NotifyingVector3.zero() : super.zero();
 
+  /// {@macro notifying_vector_3}
+  ///
+  /// Create an vector whose values are all [v].
   factory NotifyingVector3.all(double v) => NotifyingVector3.zero()..splat(v);
 
-  factory NotifyingVector3.copy(Vector3 v) =>
-      NotifyingVector3.zero()..setFrom(v);
+  /// {@macro notifying_vector_3}
+  ///
+  /// Create a copy of the [other] vector.
+  factory NotifyingVector3.copy(Vector3 other) =>
+      NotifyingVector3.zero()..setFrom(other);
 
   @override
   void setValues(double x, double y, double z) {

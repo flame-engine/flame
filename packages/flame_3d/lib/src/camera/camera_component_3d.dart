@@ -17,7 +17,7 @@ class CameraComponent3D extends CameraComponent {
     Vector3? up,
     this.projection = CameraProjection.perspective,
     this.mode = CameraMode.free,
-    super.world,
+    World3D? super.world,
     super.viewport,
     super.viewfinder,
     super.backdrop,
@@ -25,6 +25,12 @@ class CameraComponent3D extends CameraComponent {
   })  : position = position?.clone() ?? Vector3.zero(),
         target = target?.clone() ?? Vector3.zero(),
         _up = up?.clone() ?? Vector3(0, 1, 0);
+
+  @override
+  World3D? get world => super.world as World3D?;
+
+  @override
+  set world(covariant World3D? world) => super.world = world;
 
   /// The [fovY] is the field of view in Y (degrees) when the [projection] is
   /// [CameraProjection.perspective] otherwise it is used as the near plane when

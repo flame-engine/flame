@@ -16,9 +16,14 @@ enum DepthStencilState {
   none,
 }
 
+/// {@template graphics_device}
+///
+/// {@endtemplate}
 class GraphicsDevice {
+  /// {@macro graphics_device}
   GraphicsDevice({this.clearValue = const Color(0x00000000)});
 
+  /// The clear value, used to clear out the screen.
   final Color clearValue;
 
   late gpu.CommandBuffer _commandBuffer;
@@ -29,6 +34,13 @@ class GraphicsDevice {
 
   Size _previousSize = Size.zero;
 
+  /// Begin a new rendering batch.
+  ///
+  /// After [begin] is called the graphics device can be used to bind resources
+  /// like [Mesh]s, [Material]s and [Texture]s.
+  ///
+  /// Once you have executed all your bindings you can submit the batch to the
+  /// GPU with [end].
   void begin(
     Size size, {
     // TODO(wolfen): unused at the moment
@@ -53,7 +65,8 @@ class GraphicsDevice {
     _transformMatrix.setFrom(transformMatrix ?? Matrix4.identity());
   }
 
-  /// Submit all the commands and return the result.
+  /// Submit the rendering batch and it's the commands to the GPU and return
+  /// the result.
   Image end() {
     _commandBuffer.submit();
     return _renderTarget!.colorAttachments[0].texture.asImage();
@@ -63,6 +76,8 @@ class GraphicsDevice {
     _renderPass.clearBindings();
   }
 
+  /// Bind a [mesh] and apply the [mvp] to transform it relative to the known
+  /// transform matrix.
   void bindMesh(Mesh mesh, Matrix4 mvp) {
     _renderPass.clearBindings();
     bindMaterial(mesh.material, _transformMatrix.multiplied(mvp));
@@ -70,10 +85,12 @@ class GraphicsDevice {
     _renderPass.draw();
   }
 
+  /// Bind a [material] and set up the buffer correctly.
   void bindMaterial(Material material, Matrix4 mvp) {
     material.bind(_renderPass, _hostBuffer, mvp);
   }
 
+  /// Bind a [geometry] and set up the vertices correctly.
   void bindGeometry(Geometry geometry) {
     geometry.bind(_renderPass);
   }
