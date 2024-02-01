@@ -46,6 +46,6 @@ class DefaultMaterial extends Material {
   }
 
   static final _library = gpu.ShaderLibrary.fromAsset(
-    'packages/flame_3d/assets/default_material.shaderbundle',
+    'packages/flame_3d/assets/shaders/default_material.shaderbundle',
   )!;
 }
