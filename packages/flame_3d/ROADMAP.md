@@ -21,7 +21,7 @@ materials.
 
 ### Abstracting the Flutter GPU into a user-friendly API for 3D
 
-- [ ] Abstract the GPU setup into a class that represents the graphics device
+- [x] Abstract the GPU setup into a class that represents the graphics device
   - [ ] Setup binding logic for meshes, geometry and materials.
 - [ ] Provide a `Mesh` API
   - [x] Provide a `Geometry` API

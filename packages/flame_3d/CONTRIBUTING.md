@@ -16,7 +16,7 @@ follow the steps described in the [Flutter Wiki](https://github.com/flutter/flut
 The engine commit that we have used for testing is `9e03a57cde8ae8d1811492653a4ca930986f53e3`. 
 
 Once you have cloned the Flutter engine you can add the `flutter_gpu` as an override dependency 
-to the `pubspec_overrides.yaml` file in the `flame_3d` directory:
+to the `pubspec_overrides.yaml` file in the `flame_3d` directory and it's example:
 
 ```yaml
 dependency_overrides:

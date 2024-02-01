@@ -21,6 +21,11 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
           fovY: 60,
         );
 
+  final double moveSpeed = 0.9;
+  final double rotationSpeed = 0.3;
+  final double panSpeed = 2;
+  final double orbitalSpeed = 0.5;
+
   Set<Key> _keysDown = {};
   PointerEvent? pointerEvent;
   double scrollMove = 0;
@@ -74,13 +79,6 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
 
   @override
   void update(double dt) {
-    super.update(dt);
-
-    final moveSpeed = 0.9 * dt;
-    final rotationSpeed = 0.3 * dt;
-    final panSpeed = 2 * dt;
-    final orbitalSpeed = 0.5 * dt;
-
     final moveInWorldPlane = switch (mode) {
       CameraMode.firstPerson || CameraMode.thirdPerson => true,
       _ => false,
@@ -95,33 +93,33 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
     };
 
     if (mode == CameraMode.orbital) {
-      final rotation = Matrix4.identity()..rotate(up, orbitalSpeed);
+      final rotation = Matrix4.identity()..rotate(up, orbitalSpeed * dt);
       final view = rotation.transform3(position - target);
       position = target + view;
     } else {
       // Camera rotation
       if (isKeyDown(Key.arrowDown)) {
         pitch(
-          -rotationSpeed,
+          -rotationSpeed * dt,
           lockView: lockView,
           rotateAroundTarget: rotateAroundTarget,
         );
       } else if (isKeyDown(Key.arrowUp)) {
         pitch(
-          rotationSpeed,
+          rotationSpeed * dt,
           lockView: lockView,
           rotateAroundTarget: rotateAroundTarget,
         );
       }
       if (isKeyDown(Key.arrowRight)) {
-        yaw(-rotationSpeed, rotateAroundTarget: rotateAroundTarget);
+        yaw(-rotationSpeed * dt, rotateAroundTarget: rotateAroundTarget);
       } else if (isKeyDown(Key.arrowLeft)) {
-        yaw(rotationSpeed, rotateAroundTarget: rotateAroundTarget);
+        yaw(rotationSpeed * dt, rotateAroundTarget: rotateAroundTarget);
       }
       if (isKeyDown(Key.keyQ)) {
-        roll(-rotationSpeed);
+        roll(-rotationSpeed * dt);
       } else if (isKeyDown(Key.keyE)) {
-        roll(rotationSpeed);
+        roll(rotationSpeed * dt);
       }
 
       // Camera movement, if mode is free and mouse button is down we pan the
@@ -131,14 +129,14 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
             pointerEvent?.buttons == kMiddleMouseButton) {
           final mouseDelta = pointerEvent!.delta;
           if (mouseDelta.dx > 0) {
-            moveRight(panSpeed, moveInWorldPlane: moveInWorldPlane);
+            moveRight(panSpeed * dt, moveInWorldPlane: moveInWorldPlane);
           } else if (mouseDelta.dx < 0) {
-            moveRight(-panSpeed, moveInWorldPlane: moveInWorldPlane);
+            moveRight(-panSpeed * dt, moveInWorldPlane: moveInWorldPlane);
           }
           if (mouseDelta.dy > 0) {
-            moveUp(-panSpeed);
+            moveUp(-panSpeed * dt);
           } else if (mouseDelta.dy < 0) {
-            moveUp(panSpeed);
+            moveUp(panSpeed * dt);
           }
         } else {
           const mouseMoveSensitivity = 0.003;
@@ -157,21 +155,21 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
 
       // Keyboard movement
       if (isKeyDown(Key.keyW)) {
-        moveForward(moveSpeed);
+        moveForward(moveSpeed * dt);
       } else if (isKeyDown(Key.keyS)) {
-        moveForward(-moveSpeed);
+        moveForward(-moveSpeed * dt);
       }
       if (isKeyDown(Key.keyA)) {
-        moveRight(-moveSpeed);
+        moveRight(-moveSpeed * dt);
       } else if (isKeyDown(Key.keyD)) {
-        moveRight(moveSpeed);
+        moveRight(moveSpeed * dt);
       }
 
       if (mode == CameraMode.free) {
         if (isKeyDown(Key.space)) {
-          moveUp(moveSpeed);
+          moveUp(moveSpeed * dt);
         } else if (isKeyDown(Key.controlLeft)) {
-          moveUp(-moveSpeed);
+          moveUp(-moveSpeed * dt);
         }
       }
     }
