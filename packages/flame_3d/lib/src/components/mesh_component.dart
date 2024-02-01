@@ -31,7 +31,8 @@ class MeshComponent extends Component3D {
           rotation: rotation,
           mesh: Mesh(
             geometry: geometry,
-            material: material ?? DefaultMaterial(texture: Texture.empty),
+            material:
+                material ?? StandardMaterial(albedoTexture: Texture.standard),
           ),
         );
 

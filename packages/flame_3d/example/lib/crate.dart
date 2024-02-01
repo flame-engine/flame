@@ -14,14 +14,14 @@ class Crate extends MeshComponent {
   @override
   FutureOr<void> onLoad() async {
     final crateTexture = await Flame.images.loadTexture('crate.jpg');
-    material = DefaultMaterial(texture: crateTexture);
+    material = StandardMaterial(albedoTexture: crateTexture);
   }
 
   double direction = 0.1;
 
   @override
   void update(double dt) {
-    if (scale.x > 1.1 || scale.x < 0.9) {
+    if (scale.x >= 1.19 || scale.x <= 0.99) {
       direction *= -1;
     }
     scale.add(Vector3.all(direction * dt));

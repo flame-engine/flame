@@ -31,4 +31,6 @@ class Texture extends Resource<gpu.Texture> {
   Image toImage() => resource.asImage();
 
   static final empty = ColorTexture(const Color(0x00000000));
+
+  static final standard = ColorTexture(const Color(0xFFFFFFFF));
 }

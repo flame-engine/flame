@@ -13,7 +13,8 @@ class PlayerBox extends MeshComponent with HasGameReference<ExampleGame3D> {
       : super(
           mesh: BoxMesh(
             size: Vector3.all(0.5),
-            material: DefaultMaterial(texture: ColorTexture(Colors.purple)),
+            material:
+                StandardMaterial(albedoTexture: ColorTexture(Colors.purple)),
           ),
         );
 
