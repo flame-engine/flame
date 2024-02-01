@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart' show Component, HasWorldReference;
 import 'package:flame/game.dart' show FlameGame;
 import 'package:flame_3d/camera.dart';
@@ -75,4 +77,17 @@ class Component3D extends Component with HasWorldReference<World3D> {
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
   double distance(Component3D other) => position.distanceTo(other.position);
+
+  @override
+  void renderTree(Canvas canvas) {
+    // We set the priority to the distance between the camera and the object.
+    // This ensures that our rendering is done in a specific order allowing for
+    // alpha blending.
+    //
+    // Note(wolfen): we should optimize this in the long run.
+    priority =
+        -(CameraComponent3D.currentCamera!.position - position).length.toInt();
+
+    super.renderTree(canvas);
+  }
 }

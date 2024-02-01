@@ -54,6 +54,13 @@ class GraphicsDevice {
     _hostBuffer = gpu.gpuContext.createHostBuffer();
     _renderPass = _commandBuffer.createRenderPass(_getRenderTarget(size))
       ..setColorBlendEnable(true)
+      ..setColorBlendEquation(
+        gpu.ColorBlendEquation(
+          sourceAlphaBlendFactor: blendState == BlendState.alphaBlend
+              ? gpu.BlendFactor.oneMinusSourceAlpha
+              : gpu.BlendFactor.one,
+        ),
+      )
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
       ..setDepthCompareOperation(
         // TODO(wolfen): this is not correctly implemented AT all.
