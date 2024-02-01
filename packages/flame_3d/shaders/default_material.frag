@@ -2,13 +2,15 @@
 in vec2 fragTexCoord;
 in vec4 fragColor;
 
-out vec4 oFragColor;
+out vec4 outColor;
 
 uniform sampler2D texture0;
-// TODO(wolfen): add support of color diffusing in the default shader.
-// uniform vec4 colDiffuse;
+
+uniform FragmentInfo {
+  vec4 colorDiffuse;
+} fragment_info;
 
 void main() {
   vec4 texelColor = texture(texture0, fragTexCoord);
-  oFragColor = texelColor * vec4(1.0) * fragColor;
+  outColor = texelColor * fragment_info.colorDiffuse * fragColor;
 }

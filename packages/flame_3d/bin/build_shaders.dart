@@ -48,7 +48,6 @@ void main() async {
     };
 
     final result = await Process.run(impellerC, [
-      '--runtime-stage-metal',
       '--sl=${assets.path}/$name.shaderbundle',
       '--shader-bundle=${jsonEncode(bundle)}',
     ]);

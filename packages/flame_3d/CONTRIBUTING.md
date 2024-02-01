@@ -10,10 +10,17 @@ first and then come back to this one.
 
 First follow the steps described in the main [Flame Contribution Guidelines](https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md#environment-setup)
 
-After you have followed those steps you can follow the steps to setup the Flutter GPU, you can 
-follow the steps described in the [Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu). 
+After you have followed those steps you have to setup Flutter to use the specific build that this
+package is built against:
 
-The engine commit that we have used for testing is `9e03a57cde8ae8d1811492653a4ca930986f53e3`. 
+```sh
+cd $(dirname $(which flutter)) && git checkout 8a5509ea6a277d48c15e5965163b08bd4ad4816a -q && echo "Engine commit: $(cat internal/engine.version)" && cd - >/dev/null
+```
+
+This will check out the GIT repo of your Flutter installation to the specific commit that we require
+and also gets us t he the commit SHA of the Flutter Engine that you need to use in setting up the 
+Flutter GPU. For that you can follow the steps described in the 
+[Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu). 
 
 Once you have cloned the Flutter engine you can add the `flutter_gpu` as an override dependency 
 to the `pubspec_overrides.yaml` file in the `flame_3d` directory and it's example:
@@ -23,14 +30,6 @@ dependency_overrides:
   ... # Melos related overrides
   flutter_gpu:
     path: <path_to_the_cloned_flutter_engine_directory>/lib/gpu
-```
-
-Because this package is still experimental it depends on the beta channel, so switch to `beta` and
-upgrade to the latest:
-
-```sh
-flutter channel beta
-flutter upgrade
 ```
 
 After all of that you should run `flutter pub get` one more time to ensure all dependencies are 

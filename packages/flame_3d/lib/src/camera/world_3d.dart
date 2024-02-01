@@ -19,7 +19,7 @@ class World3D extends flame.World {
   });
 
   /// The graphical device attached to this world.
-  final graphics = GraphicsDevice(clearValue: const Color(0xFFFFFFFF));
+  final graphics = GraphicsDevice();
 
   final _paint = Paint();
 

@@ -65,11 +65,23 @@ ecosystem.
 
 ## Prerequisites
 
-Before you can get started with using this package a few things have to happen first. Step one is 
-setting up the Flutter GPU. You can follow the steps described in the 
-[Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu). 
+Before you can get started with using this package a few steps have to happen first. Step one is 
+switching to a specific commit on the Flutter tooling. Because this package is still experimental 
+some of the features it requires are still being worked on from the Flutter side.
 
-The engine commit that we have used for testing is `9e03a57cde8ae8d1811492653a4ca930986f53e3`. 
+So to make sure you are using the same build that we use while developing you have to manually 
+checkout a specific Flutter build. Thankfully we were able to simplify that process into a 
+one-liner:
+
+```sh
+cd $(dirname $(which flutter)) && git checkout 8a5509ea6a277d48c15e5965163b08bd4ad4816a -q && echo "Engine commit: $(cat internal/engine.version)" && cd - >/dev/null
+```
+
+This will check out the GIT repo of your Flutter installation to the specific commit that we require
+and also return the commit SHA of the Flutter Engine that it was build with. We need for step two.
+
+Step two is setting up the Flutter GPU. You can follow the steps described in the [Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu). 
+The engine commit that you should use is the one we got in step one.
 
 Once you have cloned the Flutter engine you can add the `flutter_gpu` as an override dependency 
 to your `pubspec.yaml` or in a `pubspec_overrides.yaml` file:
@@ -80,7 +92,7 @@ dependency_overrides:
     path: <path_to_the_cloned_flutter_engine_directory>/lib/gpu
 ```
 
-Step two would be to enable impeller for the macOS platform, add the following to the 
+Step three would be to enable impeller for the macOS platform, add the following to the 
 `Info.plist` in your `macos/` directory:
 
 ```xml
@@ -89,15 +101,6 @@ Step two would be to enable impeller for the macOS platform, add the following t
 	<key>FLTEnableImpeller</key>
 	<true/>
 </dict>
-```
-
-And finally step three is switching to the beta channel. Because this package is still experimental 
-some of the features it requires are only on the beta channel:
-
-```sh
-flutter channel beta
-flutter upgrade
-flutter pub get
 ```
 
 Now everything is set up you can start doing some 3D magic! You can check out the

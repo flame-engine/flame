@@ -51,7 +51,7 @@ class GraphicsDevice {
     Matrix4? transformMatrix,
   }) {
     _commandBuffer = gpu.gpuContext.createCommandBuffer();
-    _hostBuffer = gpu.HostBuffer();
+    _hostBuffer = gpu.gpuContext.createHostBuffer();
     _renderPass = _commandBuffer.createRenderPass(_getRenderTarget(size))
       ..setColorBlendEnable(true)
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
@@ -90,7 +90,16 @@ class GraphicsDevice {
   /// Bind a [material] and set up the buffer correctly.
   void bindMaterial(Material material, Matrix4 mvp) {
     _renderPass.bindPipeline(material.resource);
-    bindUniform(material.vertexShader, 'mvp', mvp.storage.buffer.asByteData());
+    bindUniform(
+      material.vertexShader,
+      'VertexInfo',
+      material.getVertexInfo(mvp).buffer.asByteData(),
+    );
+    bindUniform(
+      material.fragmentShader,
+      'FragmentInfo',
+      material.getFragmentInfo().buffer.asByteData(),
+    );
     material.bind(this);
   }
 
@@ -102,13 +111,13 @@ class GraphicsDevice {
   /// Bind a uniform slot of [name] with the [data] on the [shader].
   void bindUniform(gpu.Shader shader, String name, ByteData data) {
     _renderPass.bindUniform(
-      shader.getUniformSlot(name)!,
+      shader.getUniformSlot(name),
       _hostBuffer.emplace(data),
     );
   }
 
   void bindTexture(gpu.Shader shader, String name, Texture texture) {
-    _renderPass.bindTexture(shader.getUniformSlot(name)!, texture.resource);
+    _renderPass.bindTexture(shader.getUniformSlot(name), texture.resource);
   }
 
   gpu.RenderTarget _getRenderTarget(Size size) {
