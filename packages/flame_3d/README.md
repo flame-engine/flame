@@ -105,6 +105,23 @@ Now everything is set up you can start doing some 3D magic! You can check out th
 can set up a simple 3D environment using Flame.
 
 
+## Building shaders
+
+You can write your own shaders and use them on Materials. Currently Flutter does not do the bundling
+of shaders for us so this package provides a simple dart script. Create your fragment and vertex 
+shader in a `shaders` directory, make sure the file names are identical. Like so:
+
+- `my_custom_shader`.frag
+- `my_custom_shader`.vert
+
+You can then run `dart pub run flame_3d:build_shaders` to bundle the shaders. They will 
+automatically be placed in `assets/shaders`. 
+
+You can check out the
+[default shaders](https://github.com/flame-engine/flame/tree/main/packages/flame_3d/shaders) if you
+want to have some examples.
+
+
 ## Contributing
 
 Have you found a bug or have a suggestion of how to enhance the 3D APIs? Open an issue and we will
