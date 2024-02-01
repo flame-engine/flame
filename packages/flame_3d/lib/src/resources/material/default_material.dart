@@ -8,31 +8,37 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 class DefaultMaterial extends Material {
   DefaultMaterial({
     Texture? texture,
-    Color colorDiffuse = const Color(0xFFFFFFFF),
-  })  : _texture = texture ?? Texture.empty,
-        _colorDiffuse = colorDiffuse,
-        super(_library);
+    Color? albedoColor,
+  })  : texture = texture ?? Texture.empty,
+        _albedoColorCache = Vector4.zero(),
+        super(_library) {
+    this.albedoColor = albedoColor ?? const Color(0xFFFFFFFF);
+  }
 
-  final Texture _texture;
+  Texture texture;
 
-  final Color _colorDiffuse;
+  Color get albedoColor => _albedoColor;
+  set albedoColor(Color color) {
+    _albedoColor = color;
+    _albedoColorCache.setValues(
+      color.red / 255,
+      color.green / 255,
+      color.blue / 255,
+      color.alpha / 255,
+    );
+  }
+
+  late Color _albedoColor;
+  final Vector4 _albedoColorCache;
 
   @override
   void bind(GraphicsDevice device) {
-    device.bindTexture(fragmentShader, 'texture0', _texture);
+    device.bindTexture(fragmentShader, 'texture0', texture);
   }
 
   @override
   ShaderInfo getFragmentInfo() {
-    return super.getFragmentInfo()
-      ..addVector4(
-        Vector4(
-          _colorDiffuse.red / 255,
-          _colorDiffuse.green / 255,
-          _colorDiffuse.blue / 255,
-          _colorDiffuse.alpha / 255,
-        ),
-      );
+    return super.getFragmentInfo()..addVector4(_albedoColorCache);
   }
 
   static final _library = gpu.ShaderLibrary.fromAsset(
