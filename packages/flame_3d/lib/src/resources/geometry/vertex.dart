@@ -13,9 +13,9 @@ class Vertex {
   Vertex({
     required this.position,
     required this.texCoords,
-    required this.normal,
+    Vector3? normal,
     this.color = const Color(0xFFFFFFFF),
-  });
+  }) : normal = normal ?? Vector3.zero();
 
   /// The position of the vertex in 3D space.
   final Vector3 position;
