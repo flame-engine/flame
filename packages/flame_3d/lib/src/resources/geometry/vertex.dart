@@ -13,13 +13,9 @@ class Vertex {
   Vertex({
     required this.position,
     required this.texCoords,
-    Color color = const Color(0xFFFFFFFF),
-  }) : color = Vector4(
-          color.red / 255,
-          color.green / 255,
-          color.blue / 255,
-          color.opacity,
-        );
+    required this.normal,
+    this.color = const Color(0xFFFFFFFF),
+  });
 
   /// The position of the vertex in 3D space.
   final Vector3 position;
@@ -27,6 +23,9 @@ class Vertex {
   /// The UV coordinates of the texture to map.
   final Vector2 texCoords;
 
+  /// The normal vector of the vertex.
+  final Vector3 normal;
+
   /// The color on the vertex.
-  final Vector4 color;
+  final Color color;
 }

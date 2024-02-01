@@ -49,10 +49,16 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
         (p, v) => p
           ..addAll(v.position.storage)
           ..addAll(v.texCoords.storage)
-          ..addAll(v.color.storage),
+          ..addAll(v.normal.storage)
+          ..addAll([
+            v.color.red / 255,
+            v.color.green / 255,
+            v.color.blue / 255,
+            v.color.opacity,
+          ]),
       ),
     ).buffer;
-    _vertexCount = _vertices.lengthInBytes ~/ (vertices.length * 9);
+    _vertexCount = _vertices.lengthInBytes ~/ (vertices.length * 10);
   }
 
   void setIndices(List<int> indices) {
