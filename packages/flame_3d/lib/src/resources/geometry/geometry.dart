@@ -49,7 +49,8 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
         (p, v) => p
           ..addAll(v.position.storage)
           ..addAll(v.texCoords.storage)
-          ..addAll(v.normal.storage)
+          // TODO(wolfen): uhh normals fuck shit up, I should read up on it
+          // ..addAll(v.normal.storage)
           ..addAll([
             v.color.red / 255,
             v.color.green / 255,
