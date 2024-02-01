@@ -19,6 +19,26 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
   ByteBuffer _indices = ByteData(0).buffer;
   int _indexCount = 0;
 
+  @override
+  gpu.DeviceBuffer? get resource {
+    var resource = super.resource;
+    final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
+    if (resource?.sizeInBytes != sizeInBytes) {
+      resource = super.resource = gpu.gpuContext.createDeviceBuffer(
+        gpu.StorageMode.hostVisible,
+        sizeInBytes,
+      );
+
+      resource!.overwrite(_vertices.asByteData());
+
+      resource.overwrite(
+        _indices.asByteData(),
+        destinationOffsetInBytes: _vertices.lengthInBytes,
+      );
+    }
+    return resource;
+  }
+
   // TODO(bdero): This should have an attribute map instead and be fully SoA,
   //              but vertex attributes in Impeller aren't flexible enough yet.
   //              See also https://github.com/flutter/flutter/issues/116168.
@@ -32,7 +52,7 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
           ..addAll(v.color.storage),
       ),
     ).buffer;
-    _vertexCount = _vertices.lengthInBytes ~/ vertices.length * 6;
+    _vertexCount = _vertices.lengthInBytes ~/ (vertices.length * 9);
   }
 
   void setIndices(List<int> indices) {
@@ -42,15 +62,6 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
 
   // TODO(wolfen): preferably this uses the `GraphicsDevice`
   void bind(gpu.RenderPass renderPass) {
-    final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
-    if (resource?.sizeInBytes != sizeInBytes) {
-      resource = gpu.gpuContext.createDeviceBuffer(
-        gpu.StorageMode.hostVisible,
-        _vertices.lengthInBytes + _indices.lengthInBytes,
-      );
-    }
-
-    resource!.overwrite(_vertices.asByteData());
     renderPass.bindVertexBuffer(
       gpu.BufferView(
         resource!,
@@ -60,10 +71,6 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
       _vertexCount,
     );
 
-    resource!.overwrite(
-      _indices.asByteData(),
-      destinationOffsetInBytes: _vertices.lengthInBytes,
-    );
     renderPass.bindIndexBuffer(
       gpu.BufferView(
         resource!,
