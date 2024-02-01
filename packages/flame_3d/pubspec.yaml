@@ -26,4 +26,4 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/default_material.shaderbundle
+    - assets/shaders/
