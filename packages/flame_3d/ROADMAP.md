@@ -33,9 +33,10 @@ materials.
       - [x] Support images as textures
       - [x] Support single color textures
       - [x] Support generated textures
-    - [x] Provide a default `Material`
-    - [ ] Support custom shaders
-  - [ ] Support multiple `Material`s.
+    - [x] Provide a standard `Material`
+  - [ ] Support custom shaders
+    - [ ] Add a more dev friendly way to set uniforms
+  - [x] Support multiple `Material`s by defining surfaces on a mesh.
 
 
 ### Providing a familiar API for developers to use 3D with Flame

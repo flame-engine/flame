@@ -1,21 +1,14 @@
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-class CuboidGeometry extends Geometry {
-  CuboidGeometry({required Vector3 size})
-      : super(
-          indices: [
-            0, 1, 2, 2, 3, 0, // Face 1
-            4, 5, 6, 6, 7, 4, // Face 2
-            8, 9, 10, 10, 11, 8, // Face 3
-            12, 13, 14, 14, 15, 12, // Face 4
-            16, 17, 18, 18, 19, 16, // Face 5
-            20, 21, 22, 22, 23, 20, // Face 6
-          ],
-        ) {
+class CuboidMesh extends Mesh {
+  CuboidMesh({
+    required Vector3 size,
+    Material? material,
+  }) {
     final Vector3(:x, :y, :z) = size / 2;
 
-    setVertices([
+    final vertices = [
       // Face 1 (front)
       Vertex(position: Vector3(-x, -y, -z), texCoord: Vector2(0, 0)),
       Vertex(position: Vector3(x, -y, -z), texCoord: Vector2(1, 0)),
@@ -51,6 +44,17 @@ class CuboidGeometry extends Geometry {
       Vertex(position: Vector3(x, -y, z), texCoord: Vector2(1, 0)),
       Vertex(position: Vector3(x, -y, -z), texCoord: Vector2(1, 1)),
       Vertex(position: Vector3(-x, -y, -z), texCoord: Vector2(0, 1)),
-    ]);
+    ];
+
+    final indices = [
+      0, 1, 2, 2, 3, 0, // Face 1
+      4, 5, 6, 6, 7, 4, // Face 2
+      8, 9, 10, 10, 11, 8, // Face 3
+      12, 13, 14, 14, 15, 12, // Face 4
+      16, 17, 18, 18, 19, 16, // Face 5
+      20, 21, 22, 22, 23, 20, // Face 6
+    ];
+
+    addSurface(vertices, indices, material: material);
   }
 }

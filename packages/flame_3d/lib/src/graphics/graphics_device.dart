@@ -32,6 +32,7 @@ class GraphicsDevice {
   late gpu.RenderPass _renderPass;
   late gpu.RenderTarget _renderTarget;
   final _transformMatrix = Matrix4.identity();
+  final _viewModelMatrix = Matrix4.identity();
 
   Size _previousSize = Size.zero;
 
@@ -84,23 +85,54 @@ class GraphicsDevice {
     _renderPass.clearBindings();
   }
 
-  /// Bind a [mesh] and apply the [mvp] to transform it relative to the known
-  /// transform matrix.
-  void bindMesh(Mesh mesh, Matrix4 mvp) {
+  void setViewModel(Matrix4 mvp) => _viewModelMatrix.setFrom(mvp);
+
+  /// Bind a [mesh].
+  void bindMesh(Mesh mesh) {
     _renderPass.clearBindings();
-    bindMaterial(mesh.material, _transformMatrix.multiplied(mvp));
-    bindGeometry(mesh.geometry);
     mesh.bind(this);
     _renderPass.draw();
   }
 
+  /// Bind a [surface].
+  void bindSurface(Surface surface) {
+    _renderPass.clearBindings();
+    if (surface.material != null) {
+      bindMaterial(surface.material!);
+    }
+
+    _renderPass.bindVertexBuffer(
+      gpu.BufferView(
+        surface.resource!,
+        offsetInBytes: 0,
+        lengthInBytes: surface.verticesBytes,
+      ),
+      surface.vertexCount,
+    );
+
+    _renderPass.bindIndexBuffer(
+      gpu.BufferView(
+        surface.resource!,
+        offsetInBytes: surface.verticesBytes,
+        lengthInBytes: surface.indicesBytes,
+      ),
+      gpu.IndexType.int16,
+      surface.indexCount,
+    );
+
+    _renderPass.draw();
+  }
+
   /// Bind a [material] and set up the buffer correctly.
-  void bindMaterial(Material material, Matrix4 mvp) {
+  void bindMaterial(Material material) {
     _renderPass.bindPipeline(material.resource);
     bindUniform(
       material.vertexShader,
       'VertexInfo',
-      material.getVertexInfo(mvp).buffer.asByteData(),
+      material
+          .getVertexInfo(_transformMatrix.multiplied(_viewModelMatrix))
+          .buffer
+          .asByteData(),
     );
     bindUniform(
       material.fragmentShader,

@@ -16,10 +16,11 @@ class World3D extends flame.World {
   World3D({
     super.children,
     super.priority,
-  });
+    Color clearColor = const Color(0x00000000),
+  }) : graphics = GraphicsDevice(clearValue: clearColor);
 
   /// The graphical device attached to this world.
-  final graphics = GraphicsDevice();
+  final GraphicsDevice graphics;
 
   final _paint = Paint();
 
@@ -33,6 +34,7 @@ class World3D extends flame.World {
       transformMatrix: camera.projectionMatrix,
     );
 
+    culled = 0;
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
 
@@ -40,4 +42,7 @@ class World3D extends flame.World {
     canvas.drawImage(image, (-viewport.virtualSize / 2).toOffset(), _paint);
     image.dispose();
   }
+
+  // TODO(wolfen): this is only here for testing purposes
+  int culled = 0;
 }

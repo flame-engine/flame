@@ -6,10 +6,10 @@ class PlaneGeometry extends Geometry {
     final Vector2(:x, :y) = size / 2;
 
     setVertices([
-      Vertex(position: Vector3(-x, 0, -y), texCoords: Vector2(0, 0)),
-      Vertex(position: Vector3(x, 0, -y), texCoords: Vector2(1, 0)),
-      Vertex(position: Vector3(x, 0, y), texCoords: Vector2(1, 1)),
-      Vertex(position: Vector3(-x, 0, y), texCoords: Vector2(0, 1)),
+      Vertex(position: Vector3(-x, 0, -y), texCoord: Vector2(0, 0)),
+      Vertex(position: Vector3(x, 0, -y), texCoord: Vector2(1, 0)),
+      Vertex(position: Vector3(x, 0, y), texCoord: Vector2(1, 1)),
+      Vertex(position: Vector3(-x, 0, y), texCoord: Vector2(0, 1)),
     ]);
   }
 }

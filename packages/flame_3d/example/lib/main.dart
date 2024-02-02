@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:example/crate.dart';
 import 'package:example/keyboard_controlled_camera.dart';
@@ -19,7 +20,7 @@ class ExampleGame3D extends FlameGame<World3D>
     with HasKeyboardHandlerComponents {
   ExampleGame3D()
       : super(
-          world: World3D(),
+          world: World3D(clearColor: const Color(0xFFFFFFFF)),
           camera: KeyboardControlledCamera(
             viewport: FixedResolutionViewport(
               resolution: v64.Vector2(800, 600),
@@ -63,7 +64,7 @@ class ExampleGame3D extends FlameGame<World3D>
       // Front wall
       MeshComponent(
         position: Vector3(16.5, 2.5, 0),
-        mesh: BoxMesh(
+        mesh: CuboidMesh(
           size: Vector3(1, 5, 32),
           material:
               StandardMaterial(albedoTexture: ColorTexture(Colors.yellow)),
@@ -73,7 +74,7 @@ class ExampleGame3D extends FlameGame<World3D>
       // Left wall
       MeshComponent(
         position: Vector3(0, 2.5, 16.5),
-        mesh: BoxMesh(
+        mesh: CuboidMesh(
           size: Vector3(32, 5, 1),
           material: StandardMaterial(albedoTexture: ColorTexture(Colors.blue)),
         ),
@@ -82,7 +83,7 @@ class ExampleGame3D extends FlameGame<World3D>
       // Right wall
       MeshComponent(
         position: Vector3(0, 2.5, -16.5),
-        mesh: BoxMesh(
+        mesh: CuboidMesh(
           size: Vector3(32, 5, 1),
           material: StandardMaterial(albedoTexture: ColorTexture(Colors.lime)),
         ),
@@ -96,7 +97,7 @@ class ExampleGame3D extends FlameGame<World3D>
       world.add(
         MeshComponent(
           position: Vector3(rnd.range(-15, 15), height / 2, rnd.range(-15, 15)),
-          mesh: BoxMesh(
+          mesh: CuboidMesh(
             size: Vector3(1, height, 1),
             material: StandardMaterial(
               albedoTexture: ColorTexture(

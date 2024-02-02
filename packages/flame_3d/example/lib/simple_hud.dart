@@ -62,6 +62,7 @@ Camera controls:
 FPS: $fps
 Mode: ${game.camera.mode.name}
 Projection: ${game.camera.projection.name}
+Culled: ${game.world.culled}
 
 Position: ${position.x.toStringAsFixed(2)}, ${position.y.toStringAsFixed(2)}, ${position.z.toStringAsFixed(2)}
 Target: ${target.x.toStringAsFixed(2)}, ${target.y.toStringAsFixed(2)}, ${target.z.toStringAsFixed(2)}

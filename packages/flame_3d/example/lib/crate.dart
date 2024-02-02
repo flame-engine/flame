@@ -9,12 +9,12 @@ class Crate extends MeshComponent {
   Crate({
     required Vector3 size,
     super.position,
-  }) : super(mesh: BoxMesh(size: size));
+  }) : super(mesh: CuboidMesh(size: size));
 
   @override
   FutureOr<void> onLoad() async {
     final crateTexture = await Flame.images.loadTexture('crate.jpg');
-    material = StandardMaterial(albedoTexture: crateTexture);
+    mesh.addMaterialToSurface(0, StandardMaterial(albedoTexture: crateTexture));
   }
 
   double direction = 0.1;

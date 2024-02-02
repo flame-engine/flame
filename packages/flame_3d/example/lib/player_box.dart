@@ -11,7 +11,7 @@ import 'package:flutter/material.dart' show Colors;
 class PlayerBox extends MeshComponent with HasGameReference<ExampleGame3D> {
   PlayerBox()
       : super(
-          mesh: BoxMesh(
+          mesh: CuboidMesh(
             size: Vector3.all(0.5),
             material:
                 StandardMaterial(albedoTexture: ColorTexture(Colors.purple)),

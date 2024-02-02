@@ -19,7 +19,7 @@ class SphereGeometry extends Geometry {
         final v = phi / pi;
 
         vertices.add(
-          Vertex(position: Vector3(x, y, z), texCoords: Vector2(u, v)),
+          Vertex(position: Vector3(x, y, z), texCoord: Vector2(u, v)),
         );
       }
     }

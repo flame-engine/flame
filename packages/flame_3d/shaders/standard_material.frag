@@ -12,5 +12,5 @@ uniform FragmentInfo {
 
 void main() {
   vec4 texelColor = texture(albedoTexture, fragTexCoord);
-  outColor = texelColor * fragment_info.albedoColor;
+  outColor = texelColor * fragment_info.albedoColor * fragColor;
 }

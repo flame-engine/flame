@@ -5,6 +5,7 @@ import 'package:flame/game.dart' show FlameGame;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
 /// {@template component_3d}
@@ -80,14 +81,28 @@ class Component3D extends Component with HasWorldReference<World3D> {
 
   @override
   void renderTree(Canvas canvas) {
+    super.renderTree(canvas);
+    if (!shouldCull(CameraComponent3D.currentCamera!)) {
+      world.culled++;
+      return;
+    }
+
     // We set the priority to the distance between the camera and the object.
     // This ensures that our rendering is done in a specific order allowing for
     // alpha blending.
     //
-    // Note(wolfen): we should optimize this in the long run.
-    priority =
-        -(CameraComponent3D.currentCamera!.position - position).length.toInt();
+    // Note(wolfen): we should optimize this in the long run it currently sucks.
+    priority = -(CameraComponent3D.currentCamera!.position - position)
+        .length
+        .abs()
+        .toInt();
 
-    super.renderTree(canvas);
+    bind(world.graphics);
+  }
+
+  void bind(GraphicsDevice device) {}
+
+  bool shouldCull(CameraComponent3D camera) {
+    return camera.frustum.containsVector3(position);
   }
 }

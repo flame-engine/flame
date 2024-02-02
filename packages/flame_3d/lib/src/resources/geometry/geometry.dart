@@ -44,20 +44,7 @@ class Geometry extends Resource<gpu.DeviceBuffer?> {
   //              See also https://github.com/flutter/flutter/issues/116168.
   void setVertices(List<Vertex> vertices) {
     _vertices = Float32List.fromList(
-      vertices.fold(
-        [],
-        (p, v) => p
-          ..addAll(v.position.storage)
-          ..addAll(v.texCoords.storage)
-          // TODO(wolfen): uhh normals fuck shit up, I should read up on it
-          // ..addAll(v.normal.storage)
-          ..addAll([
-            v.color.red / 255,
-            v.color.green / 255,
-            v.color.blue / 255,
-            v.color.opacity,
-          ]),
-      ),
+      vertices.fold([], (p, v) => p..addAll(v.storage)),
     ).buffer;
     _vertexCount = _vertices.lengthInBytes ~/ (vertices.length * 10);
   }

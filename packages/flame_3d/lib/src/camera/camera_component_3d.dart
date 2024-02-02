@@ -80,8 +80,9 @@ class CameraComponent3D extends CameraComponent {
   }
 
   final Matrix4 _projectionMatrix = Matrix4.zero();
+  final Frustum _frustum = Frustum();
 
-  Frustum get frustum => Frustum.matrix(projectionMatrix);
+  Frustum get frustum => _frustum..setFromMatrix(_projectionMatrix);
 
   void moveForward(double distance, {bool moveInWorldPlane = false}) {
     final forward = this.forward..scale(distance);
