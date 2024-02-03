@@ -1,6 +1,6 @@
 import 'dart:typed_data';
-import 'dart:ui';
 
+import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flutter/widgets.dart';
 
@@ -54,25 +54,4 @@ class Vertex {
 
   @override
   int get hashCode => Object.hashAll([position, texCoord, normal, color]);
-}
-
-typedef ImmutableVector2 = ({double x, double y});
-typedef ImmutableVector3 = ({double x, double y, double z});
-typedef ImmutableVector4 = ({double x, double y, double z, double w});
-
-extension on Vector2 {
-  ImmutableVector2 get immutable => (x: x, y: y);
-}
-
-extension on Vector3 {
-  ImmutableVector3 get immutable => (x: x, y: y, z: z);
-}
-
-extension on Vector4 {
-  ImmutableVector4 get immutable => (x: x, y: y, z: z, w: w);
-}
-
-extension on Color {
-  List<double> get storage =>
-      Float32List.fromList([red / 255, green / 255, blue / 255, opacity]);
 }

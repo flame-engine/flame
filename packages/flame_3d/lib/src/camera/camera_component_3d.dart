@@ -1,4 +1,5 @@
 import 'package:flame_3d/camera.dart';
+import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';
 
 enum CameraProjection { perspective, orthographic }
@@ -203,31 +204,4 @@ class CameraComponent3D extends CameraComponent {
 
   static const distanceNear = 0.01;
   static const distanceFar = 1000.0;
-}
-
-extension on Matrix4 {
-  void setAsViewMatrix(Vector3 position, Vector3 target, Vector3 up) {
-    setViewMatrix(this, position, target, up);
-  }
-
-  void setAsPerspective(
-    double fovy,
-    double aspectRatio,
-    double zNear,
-    double zFar,
-  ) {
-    final fovYRadians = fovy * degrees2Radians;
-    setPerspectiveMatrix(this, fovYRadians, aspectRatio, zNear, zFar);
-  }
-
-  void setAsOrthographic(
-    double nearPlaneWidth,
-    double aspectRatio,
-    double zNear,
-    double zFar,
-  ) {
-    final top = nearPlaneWidth / 2.0;
-    final right = top * aspectRatio;
-    setOrthographicMatrix(this, -right, right, -top, top, zNear, zFar);
-  }
 }
