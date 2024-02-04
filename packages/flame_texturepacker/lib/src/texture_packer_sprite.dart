@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame_texturepacker/atlas/model/region.dart';
+import 'package:flame_texturepacker/src/model/region.dart';
 
 /// {@template _texture_packer_sprite}
 /// A [Sprite] extracted from a texture packer file.
