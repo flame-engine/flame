@@ -1,1 +1,1 @@
-export 'effects/perlin_noise_effect_controller.dart';
+export 'effects/noise_effect_controller.dart';

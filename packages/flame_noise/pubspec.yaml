@@ -12,7 +12,7 @@ environment:
   flutter: ">=3.13.0"
 
 dependencies:
-  fast_noise: ^1.0.1
+  fast_noise: ^2.0.0
   flame: ^1.14.0
   flutter:
     sdk: flutter
