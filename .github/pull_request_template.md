@@ -51,6 +51,9 @@ instructions" section below.
 If the PR is breaking, uncomment this header and add instructions for how to migrate from the
 currently released version to the new proposed way.
 -->
+<!-- End of exclude from commit message -->
+Replace or remove this text.
+<!-- Exclude from commit message -->
 
 ## Related Issues
 <!--
@@ -58,10 +61,7 @@ Indicate which issues this PR resolves, if any. For example:
 
 Closes #1234
 !-->
-<!-- End of exclude from commit message -->
-Replace or remove this text.
 
-<!-- Exclude from commit message -->
 <!-- Links -->
 [Contributor Guide]: https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md
 [Conventional Commit]: https://conventionalcommits.org
