@@ -66,6 +66,6 @@ class MouseMoveDispatcherKey implements ComponentKey {
   int get hashCode => 'MouseMoveDispatcherKey'.hashCode;
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is MouseMoveDispatcherKey && other.hashCode == hashCode;
 }

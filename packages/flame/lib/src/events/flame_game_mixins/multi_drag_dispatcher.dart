@@ -20,7 +20,7 @@ class MultiDragDispatcherKey implements ComponentKey {
   int get hashCode => 91604879; // 'MultiDragDispatcherKey' as hashCode
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is MultiDragDispatcherKey && other.hashCode == hashCode;
 }
 
