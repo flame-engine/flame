@@ -90,10 +90,10 @@ class IsometricTileMapComponent extends PositionComponent {
         final element = matrix[i][j];
         if (element != -1) {
           _renderSprite = tileset.getSpriteById(element);
-          final p = getBlockRenderPositionInts(j, i);
+          final blockPosition = getBlockRenderPositionInts(j, i);
           _renderSprite.render(
             canvas,
-            position: p,
+            position: blockPosition,
             size: size,
           );
         }
@@ -110,15 +110,21 @@ class IsometricTileMapComponent extends PositionComponent {
     return getBlockRenderPositionInts(block.x, block.y);
   }
 
+  final Vector2 _blockRenderPositionCache = Vector2.zero();
+  final Vector2 _cartesianPositionCache = Vector2.zero();
+
   /// Same as getBlockRenderPosition but the arguments are exploded as integers.
   Vector2 getBlockRenderPositionInts(int i, int j) {
-    final halfTile = Vector2(
-      effectiveTileSize.x / 2,
-      (effectiveTileSize.y / 2) / scalingFactor,
-    )..multiply(scale);
-    final cartesianPosition = Vector2(i.toDouble(), j.toDouble())
+    final halfTile = _blockRenderPositionCache
+      ..setValues(
+        effectiveTileSize.x / 2,
+        (effectiveTileSize.y / 2) / scalingFactor,
+      )
+      ..multiply(scale);
+    final cartesianPosition = _cartesianPositionCache
+      ..setValues(i.toDouble(), j.toDouble())
       ..multiply(halfTile);
-    return cartToIso(cartesianPosition) - halfTile;
+    return cartToIso(cartesianPosition)..sub(halfTile);
   }
 
   /// Get the position of the center of the surface of the isometric tile in
@@ -127,10 +133,11 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the opposite of [getBlock].
   Vector2 getBlockCenterPosition(Block block) {
     final tile = effectiveTileSize;
-    final result = getBlockRenderPosition(block) +
-        (Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4)
-          ..multiply(scale));
-    return result;
+    return getBlockRenderPosition(block)
+      ..addValues(
+        (tile.x / 2) * scale.x,
+        (tile.y - effectiveTileHeight - tile.y / 4) * scale.y,
+      );
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
@@ -147,19 +154,29 @@ class IsometricTileMapComponent extends PositionComponent {
     return Vector2(x, y);
   }
 
+  final Vector2 _getBlockCache = Vector2.zero();
+  final Vector2 _getBlockIsoCache = Vector2.zero();
+
   /// Get which block's surface is at isometric position [p].
   ///
   /// This can be used to handle clicks or hovers.
   /// This is the opposite of [getBlockCenterPosition].
   Block getBlock(Vector2 p) {
-    final halfTile = (effectiveTileSize / 2)..multiply(scale);
+    final halfTile = _getBlockCache
+      ..setFrom(effectiveTileSize)
+      ..multiply(scale / 2);
     final multiplier = 1 - halfTile.y / (2 * effectiveTileHeight * scale.x);
-    final delta = halfTile.clone()..multiply(Vector2(1, multiplier));
-    final cart = isoToCart(p - position + delta);
+    final iso = _getBlockIsoCache
+      ..setFrom(p)
+      ..sub(position)
+      ..addValues(halfTile.x, halfTile.y * multiplier);
+    final cart = isoToCart(iso);
     final px = (cart.x / halfTile.x - 1).ceil();
     final py = (cart.y / halfTile.y).ceil();
     return Block(px, py);
   }
+
+  final Vector2 _blockPositionCache = Vector2.zero();
 
   /// Get which block should be rendered on position [p].
   ///
@@ -167,9 +184,12 @@ class IsometricTileMapComponent extends PositionComponent {
   Block getBlockRenderedAt(Vector2 p) {
     final tile = effectiveTileSize;
     return getBlock(
-      p +
-          (Vector2(tile.x / 2, tile.y - effectiveTileHeight - tile.y / 4)
-            ..multiply(scale)),
+      _blockPositionCache
+        ..setFrom(p)
+        ..addValues(
+          (tile.x / 2) * scale.x,
+          (tile.y - effectiveTileHeight - tile.y / 4) * scale.y,
+        ),
     );
   }
 
