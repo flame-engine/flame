@@ -1,13 +1,15 @@
 library flame_texturepacker;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flame_texturepacker/atlas/model/page.dart';
-import 'package:flame_texturepacker/atlas/model/region.dart';
-import 'package:flame_texturepacker/atlas/model/texture_packer_sprite.dart';
+import 'package:flame_texturepacker/src/model/page.dart';
+import 'package:flame_texturepacker/src/model/region.dart';
+import 'package:flame_texturepacker/src/texture_packer_sprite.dart';
+import 'package:flutter/painting.dart';
 
 final _images = Images(prefix: 'assets/');
 
@@ -19,8 +21,20 @@ class TexturePackerAtlas {
 
   /// Loads all the sprites from the atlas that resides on the [path] and
   /// returns a new [TexturePackerAtlas].
-  static Future<TexturePackerAtlas> load(String path) async {
-    final atlasData = await _load(path);
+  /// If [fromStorage] is true, the atlas will be loaded from the device's
+  /// storage instead of the assets folder.
+  static Future<TexturePackerAtlas> load(
+    String path, {
+    bool fromStorage = false,
+  }) async {
+    final _TextureAtlasData atlasData;
+
+    if (fromStorage) {
+      atlasData = await _fromStorage(path);
+    } else {
+      atlasData = await _fromAssets(path);
+    }
+
     return TexturePackerAtlas(
       atlasData.regions.map(TexturePackerSprite.new).toList(),
     );
@@ -51,27 +65,65 @@ class TexturePackerAtlas {
   }
 }
 
-Future<_TextureAtlasData> _load(String path) async {
+/// Loads images from the assets folder.
+/// Uses the [path] to find the image directory.
+Future<_TextureAtlasData> _fromAssets(String path) async {
+  try {
+    return await _parse(path, fromStorage: false);
+  } on Exception catch (e) {
+    throw Exception('Error loading $path from assets: $e');
+  }
+}
+
+/// Loads images from the device's storage.
+/// Uses the [path] to find the image directory.
+Future<_TextureAtlasData> _fromStorage(String path) async {
+  try {
+    return await _parse(path, fromStorage: true);
+  } on Exception catch (e) {
+    throw Exception('Error loading $path from storage: $e');
+  }
+}
+
+/// Parses the atlas file and loads the images.
+/// Uses the [path] to find the image directory.
+/// Atlas will be loaded from the device's storage if [fromStorage] is true.
+/// Otherwise, it will be loaded from the assets folder.
+/// Returns a [_TextureAtlasData] containing the pages and regions.
+Future<_TextureAtlasData> _parse(
+  String path, {
+  required bool fromStorage,
+}) async {
   final pages = <Page>[];
   final regions = <Region>[];
-  final fileAsString = await Flame.assets.readFile(path);
+  final String fileAsString;
+
+  if (fromStorage) {
+    fileAsString = await File(path).readAsString();
+  } else {
+    fileAsString = await Flame.assets.readFile(path);
+  }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
   var line = iterator.moveNextAndGet();
   var hasIndexes = false;
+
   while (true) {
     if (line == null) {
       break;
     }
+
     if (line.isEmpty) {
       line = iterator.moveNextAndGet();
     }
 
     Page? page;
+
     while (true) {
       if (line == null) {
         break;
       }
+
       if (line.isEmpty) {
         page = null;
         line = iterator.moveNextAndGet();
@@ -80,7 +132,21 @@ Future<_TextureAtlasData> _load(String path) async {
         page.textureFile = line;
         final parentPath = (path.split('/')..removeLast()).join('/');
         final texturePath = '$parentPath/$line';
-        page.texture = await _images.load(texturePath);
+
+        if (fromStorage) {
+          try {
+            final textureFile = File(texturePath);
+            final bytes = await textureFile.readAsBytes();
+            final decodedBytes = await decodeImageFromList(bytes);
+            Flame.images.add(texturePath, decodedBytes);
+            page.texture = Flame.images.fromCache(texturePath);
+          } on Exception catch (e) {
+            throw Exception('Could not add storage file to Flame cache. $e');
+          }
+        } else {
+          page.texture = await _images.load(texturePath);
+        }
+
         while (true) {
           line = iterator.moveNextAndGet();
           if (line == null) {
@@ -142,6 +208,7 @@ Future<_TextureAtlasData> _load(String path) async {
               region.originalHeight = double.parse(entry[4]);
             case 'rotate':
               final value = entry[1];
+
               if (value == 'true') {
                 region.degrees = 90;
               } else if (value == 'false') {
@@ -149,9 +216,11 @@ Future<_TextureAtlasData> _load(String path) async {
               } else {
                 region.degrees = int.parse(value);
               }
+
               region.rotate = region.degrees == 90;
             case 'index':
               region.index = int.parse(entry[1]);
+
               if (region.index != -1) {
                 hasIndexes = true;
               }
@@ -161,10 +230,12 @@ Future<_TextureAtlasData> _load(String path) async {
           region.originalWidth = region.width;
           region.originalHeight = region.height;
         }
+
         regions.add(region);
       }
     }
   }
+
   if (hasIndexes) {
     regions.sort((region1, region2) {
       var i1 = region1.index;
@@ -178,28 +249,37 @@ Future<_TextureAtlasData> _load(String path) async {
       return i1 - i2;
     });
   }
+
   return (pages: pages, regions: regions);
 }
 
-({int count, List<String> entry}) _readEntry(String inputLine) {
-  final line = inputLine.trim();
-  if (line.isEmpty) {
+({int count, List<String> entry}) _readEntry(String line) {
+  final trimmedLine = line.trim();
+
+  if (trimmedLine.isEmpty) {
     return (count: 0, entry: []);
   }
-  final colonIndex = line.indexOf(':');
+
+  final colonIndex = trimmedLine.indexOf(':');
+
   if (colonIndex == -1) {
     return (count: 0, entry: []);
   }
+
   final entry = <String>[];
-  entry.add(line.substring(0, colonIndex).trim());
+  entry.add(trimmedLine.substring(0, colonIndex).trim());
+
   for (var i = 1, lastMatch = colonIndex + 1;; i++) {
-    final commaIndex = line.indexOf(',', lastMatch);
+    final commaIndex = trimmedLine.indexOf(',', lastMatch);
+
     if (commaIndex == -1) {
-      entry.add(line.substring(lastMatch).trim());
+      entry.add(trimmedLine.substring(lastMatch).trim());
       return (count: i, entry: entry);
     }
-    entry.add(line.substring(lastMatch, commaIndex).trim());
+
+    entry.add(trimmedLine.substring(lastMatch, commaIndex).trim());
     lastMatch = commaIndex + 1;
+
     if (i == 4) {
       return (count: 4, entry: entry);
     }
@@ -213,6 +293,7 @@ extension _IteratorExtension on Iterator<String> {
     if (moveNext()) {
       return current;
     }
+
     return null;
   }
 }

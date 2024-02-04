@@ -194,6 +194,40 @@ Future<void> main() async {
       },
     );
   });
+
+  testWithFlameGame('can change button sprites', (game) async {
+    final buttonSheet = SpriteSheet.fromColumnsAndRows(
+      image: image,
+      columns: 1,
+      rows: 2,
+    );
+
+    final button = SpriteButtonComponent(
+      button: buttonSheet.getSpriteById(0),
+      buttonDown: buttonSheet.getSpriteById(1),
+    );
+
+    await game.ensureAdd(button);
+
+    expect(
+      button.sprites,
+      {
+        ButtonState.up: buttonSheet.getSpriteById(0),
+        ButtonState.down: buttonSheet.getSpriteById(1),
+      },
+    );
+
+    button.button = buttonSheet.getSpriteById(1);
+    button.buttonDown = buttonSheet.getSpriteById(0);
+
+    expect(
+      button.sprites,
+      {
+        ButtonState.up: buttonSheet.getSpriteById(1),
+        ButtonState.down: buttonSheet.getSpriteById(0),
+      },
+    );
+  });
 }
 
 class SimpleStatelessWidget extends StatelessWidget {

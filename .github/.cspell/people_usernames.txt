@@ -5,6 +5,7 @@ erayzesen # erayzesen.itch.io
 erickzanardo # github.com/erickzanardo 
 feroult # github.com/feroult 
 fröber # github.com/Brixto
+gnarhard # github.com/gnarhard
 Klingsbo # github.com/spydon
 luanpotter # github.com/luanpotter
 Lukas # github.com/spydon
