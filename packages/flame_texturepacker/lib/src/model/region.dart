@@ -1,4 +1,4 @@
-import 'package:flame_texturepacker/atlas/model/page.dart';
+import 'package:flame_texturepacker/src/model/page.dart';
 
 /// Represents a region within the texture packer atlas.
 class Region {
