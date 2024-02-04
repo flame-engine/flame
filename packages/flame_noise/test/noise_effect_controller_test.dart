@@ -1,4 +1,3 @@
-import 'package:fast_noise/fast_noise.dart';
 import 'package:flame_noise/flame_noise.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/animation.dart';
