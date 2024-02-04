@@ -85,7 +85,10 @@ This examples showcases how raycast APIs can be used to detect hits within certa
         camera.viewfinder.add(
           MoveEffect.by(
             Vector2(5, 5),
-            PerlinNoiseEffectController(duration: 0.2, frequency: 400),
+            NoiseEffectController(
+              duration: 0.2,
+              noise: PerlinNoise(frequency: 400),
+            ),
           ),
         );
       }
