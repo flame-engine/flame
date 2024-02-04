@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 
 class CameraFollowAndWorldBoundsExample extends FlameGame
     with HasKeyboardHandlerComponents {
-  static const description = ''' 
+  static const description = '''
     This example demonstrates camera following the player, but also obeying the
     world bounds (which are set up to leave a small margin around the visible
     part of the ground).

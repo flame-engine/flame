@@ -107,12 +107,18 @@ class _MoveEffectWorld extends World {
             [
               MoveEffect.by(
                 Vector2(5, 0),
-                PerlinNoiseEffectController(duration: 1, frequency: 20),
+                NoiseEffectController(
+                  duration: 1,
+                  noise: PerlinNoise(frequency: 20),
+                ),
               ),
               MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
               MoveEffect.by(
                 Vector2(0, 10),
-                PerlinNoiseEffectController(duration: 1, frequency: 10),
+                NoiseEffectController(
+                  duration: 1,
+                  noise: PerlinNoise(frequency: 10),
+                ),
               ),
             ],
             infinite: true,

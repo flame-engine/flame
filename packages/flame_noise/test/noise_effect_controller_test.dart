@@ -6,7 +6,10 @@ import 'package:test/test.dart';
 void main() {
   group('PerlinNoiseEffectController', () {
     test('general properties', () {
-      final ec = PerlinNoiseEffectController(duration: 1, frequency: 12);
+      final ec = NoiseEffectController(
+        duration: 1,
+        noise: PerlinNoise(frequency: 12),
+      );
       expect(ec.duration, 1.0);
       expect(ec.taperingCurve, Curves.easeInOutCubic);
       expect(ec.started, true);
@@ -16,7 +19,10 @@ void main() {
     });
 
     test('progression', () {
-      final ec = PerlinNoiseEffectController(duration: 1);
+      final ec = NoiseEffectController(
+        duration: 1,
+        noise: PerlinNoise(frequency: 0.05),
+      );
       final observed = <double>[];
       for (var t = 0.0; t < 1.0; t += 0.1) {
         observed.add(ec.progress);
@@ -39,12 +45,8 @@ void main() {
 
     test('errors', () {
       expect(
-        () => PerlinNoiseEffectController(duration: 0, frequency: 1),
-        failsAssert('duration must be positive'),
-      );
-      expect(
-        () => PerlinNoiseEffectController(duration: 1, frequency: 0),
-        failsAssert('frequency parameter must be positive'),
+        () => NoiseEffectController(duration: -1),
+        failsAssert('Duration cannot be negative: -1.0'),
       );
     });
   });
