@@ -46,4 +46,8 @@ class Mesh extends Resource<void> {
   void addMaterialToSurface(int index, Material material) {
     _surfaces[index].material = material;
   }
+
+  Material? getMaterialToSurface(int index) {
+    return _surfaces[index].material;
+  }
 }
