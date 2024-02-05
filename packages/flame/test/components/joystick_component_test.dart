@@ -45,9 +45,27 @@ void main() {
           size: 20,
           margin: const EdgeInsets.only(left: 20, bottom: 20),
         );
-        joystick.loaded.then((_) => game.onGameResize(Vector2(200, 100)));
+        joystick.mounted.then((_) => game.onGameResize(Vector2(200, 100)));
         await game.ensureAdd(joystick);
         expect(joystick.position, Vector2(30, 70));
+      },
+    );
+
+    testWithFlameGame(
+      'properly re-positions with FixedResolutionViewport',
+      (game) async {
+        game.camera =
+            CameraComponent.withFixedResolution(width: 100, height: 200);
+        game.onGameResize(Vector2(100, 200));
+        final joystick = JoystickComponent(
+          knob: CircleComponent(radius: 5.0),
+          size: 20,
+          margin: const EdgeInsets.only(left: 20, bottom: 20),
+        );
+        await game.camera.viewport.ensureAdd(joystick);
+        expect(joystick.position, Vector2(30, 170));
+        game.onGameResize(Vector2(200, 100));
+        expect(joystick.position, Vector2(30, 170));
       },
     );
   });
