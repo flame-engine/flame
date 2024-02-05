@@ -472,12 +472,6 @@ void main() {
       expect(p1.hashCode == p2.hashCode, false);
     });
 
-    test('addValues', () {
-      final p = Vector2(1.0, 0.0);
-      p.addValues(2.0, 3.0);
-      expect(p, Vector2(3.0, 3.0));
-    });
-
     test('limit', () {
       final p1 = Vector2(1.0, 0.0);
       p1.clampScalar(0, 0.75);

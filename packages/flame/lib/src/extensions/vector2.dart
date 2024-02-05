@@ -175,12 +175,6 @@ extension Vector2Extension on Vector2 {
     }
   }
 
-  /// Adds [x] and [y] to the current [Vector2].
-  void addValues(double x, double y) {
-    this.x += x;
-    this.y += y;
-  }
-
   /// Signed angle in a coordinate system where the Y-axis is flipped.
   ///
   /// Since on a canvas/screen y is smaller the further up you go, instead of

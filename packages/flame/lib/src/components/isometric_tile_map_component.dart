@@ -134,7 +134,7 @@ class IsometricTileMapComponent extends PositionComponent {
   Vector2 getBlockCenterPosition(Block block) {
     final tile = effectiveTileSize;
     return getBlockRenderPosition(block)
-      ..addValues(
+      ..translate(
         (tile.x / 2) * scale.x,
         (tile.y - effectiveTileHeight - tile.y / 4) * scale.y,
       );
@@ -169,7 +169,7 @@ class IsometricTileMapComponent extends PositionComponent {
     final iso = _getBlockIsoCache
       ..setFrom(p)
       ..sub(position)
-      ..addValues(halfTile.x, halfTile.y * multiplier);
+      ..translate(halfTile.x, halfTile.y * multiplier);
     final cart = isoToCart(iso);
     final px = (cart.x / halfTile.x - 1).ceil();
     final py = (cart.y / halfTile.y).ceil();
@@ -186,7 +186,7 @@ class IsometricTileMapComponent extends PositionComponent {
     return getBlock(
       _blockPositionCache
         ..setFrom(p)
-        ..addValues(
+        ..translate(
           (tile.x / 2) * scale.x,
           (tile.y - effectiveTileHeight - tile.y / 4) * scale.y,
         ),
