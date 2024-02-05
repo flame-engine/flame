@@ -2,9 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/components/input/hud_margin_component.dart';
 import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
 
 enum JoystickDirection {
   up,
