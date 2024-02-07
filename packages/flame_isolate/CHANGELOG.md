@@ -1,3 +1,7 @@
+## 0.5.1
+
+ - **FEAT**: Bumped integral_isolates package for flame_isolate ([#2994](https://github.com/flame-engine/flame/issues/2994)). ([3c38ee60](https://github.com/flame-engine/flame/commit/3c38ee6058e7c8b7546c3fcdb1b08e3e40ba138b))
+
 ## 0.5.0+7
 
  - Update a dependency to the latest release.

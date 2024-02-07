@@ -1,3 +1,7 @@
+## 0.16.0+5
+
+ - Update a dependency to the latest release.
+
 ## 0.16.0+4
 
  - **FIX**: Wake up bodies on gravity change ([#2954](https://github.com/flame-engine/flame/issues/2954)). ([4f58329c](https://github.com/flame-engine/flame/commit/4f58329ceacef84d91cd41019d72bc2351bc50cd))
