@@ -5,8 +5,8 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.0.0 <4.0.0"
 dependencies:
-  flame: ^1.14.0
-  flame_riverpod: ^5.1.5
+  flame: ^1.15.0
+  flame_riverpod: ^5.2.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.1.3
