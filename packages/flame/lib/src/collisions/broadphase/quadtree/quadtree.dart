@@ -190,11 +190,11 @@ class QuadTree<T extends Hitbox<T>> {
   }
 
   void remove(T hitbox, {bool keepOldPosition = false}) {
-    final node = _hitboxAtNode.remove(hitbox);
+    final node = _hitboxAtNode.remove(hitbox as ShapeHitbox);
     if (node != null) {
       node.hitboxes.remove(hitbox);
       if (!keepOldPosition) {
-        _oldPositionByItem.remove(hitbox);
+        _oldPositionByItem.remove(hitbox as ShapeHitbox);
       }
     }
   }
@@ -273,7 +273,7 @@ class QuadTree<T extends Hitbox<T>> {
   }
 
   bool hasMoved(T hitbox) {
-    final lastPos = _oldPositionByItem[hitbox];
+    final lastPos = _oldPositionByItem[hitbox as ShapeHitbox];
     if (lastPos == null) {
       return true;
     }
