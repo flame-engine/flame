@@ -126,7 +126,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     return activeCollisions.contains(other);
   }
 
-  bool collidedWithExactly(List<CollisionCallbacks> collidables) {
+  bool collidedWithExactly(List<PositionComponent> collidables) {
     final otherCollidables = collidables.toSet()..remove(this);
     return activeCollisions.containsAll(otherCollidables) &&
         otherCollidables.containsAll(activeCollisions);

@@ -11,7 +11,7 @@ You can also see all the widgets showcased inside a
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets)
 
 
-## Nine Tile Box
+## NineTileBoxWidget
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
 
@@ -21,7 +21,7 @@ middle.
 The corners are drawn at the same size, the sides are stretched on the side direction and the middle
 is expanded both ways.
 
-The `NineTileBox` widget implements a `Container` using that standard. This pattern is also
+The `NineTileBoxWidget` implements a `Container` using that standard. This pattern is also
 implemented as a component in the `NineTileBoxComponent` so that you can add this feature directly
 to your `FlameGame`. To get to know more about this, check the component docs
 [here](../components.md#ninetileboxcomponent).
@@ -29,9 +29,9 @@ to your `FlameGame`. To get to know more about this, check the component docs
 Here you can find an example of how to use it (without using the `NineTileBoxComponent`):
 
 ```dart
-import 'package:flame/widgets/nine_tile_box.dart';
+import 'package:flame/widgets';
 
-NineTileBox.asset(
+NineTileBoxWidget(
     image: image, // dart:ui image instance
     tileSize: 16, // The width/height of the tile on your grid image
     destTileSize: 50, // The dimensions to be used when drawing the tile on the canvas
@@ -50,13 +50,15 @@ in Flutter.
 How to use it:
 
 ```dart
-SpriteButton.asset(
+SpriteButton(
     onPressed: () {
       print('Pressed');
     },
     label: const Text('Sprite Button', style: const TextStyle(color: const Color(0xFF5D275D))),
     sprite: _spriteButton,
     pressedSprite: _pressedSprite,
+    height: _height,
+    width: _width,
 )
 ```
 
@@ -69,7 +71,7 @@ tree.
 This is how to use it:
 
 ```dart
-SpriteWidget.asset(
+SpriteWidget(
     sprite: yourSprite,
     anchor: Anchor.center,
 )
@@ -84,8 +86,9 @@ SpriteWidget.asset(
 This is how to use it:
 
 ```dart
-SpriteAnimationWidget.asset(
+SpriteAnimationWidget(
     animation: _animation,
+    animationTicker: _animationTicker,
     playing: true,
     anchor: Anchor.center,
 )
