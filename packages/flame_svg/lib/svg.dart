@@ -43,6 +43,18 @@ class Svg {
     );
   }
 
+  /// Loads an [Svg] from a string.
+  static Future<Svg> loadFromString(
+    String svgString, {
+    double? pixelRatio,
+  }) async {
+    final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
+    return Svg(
+      pictureInfo,
+      pixelRatio: pixelRatio,
+    );
+  }
+
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(
     Canvas canvas,
