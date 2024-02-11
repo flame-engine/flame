@@ -1,3 +1,7 @@
+## 1.9.0
+
+ - **FEAT**: Add `loadFromString` to Svg class ([#3030](https://github.com/flame-engine/flame/issues/3030)). ([b0cafb2a](https://github.com/flame-engine/flame/commit/b0cafb2a5561de136af93eb7a09df37b93d38ce0))
+
 ## 1.8.10
 
  - Update a dependency to the latest release.
