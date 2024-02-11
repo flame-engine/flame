@@ -1,5 +1,4 @@
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flame_tiled/src/extensions.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
