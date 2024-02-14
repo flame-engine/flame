@@ -14,7 +14,6 @@ import 'package:meta/meta.dart';
 /// and [addOrphanedCommand], depending on the arity of the function
 /// that needs to be invoked. All user-defined commands need to be declared
 /// before parsing any Yarn scripts.
-
 class CommandStorage {
   CommandStorage() : _commands = {};
 
