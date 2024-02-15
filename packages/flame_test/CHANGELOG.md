@@ -1,3 +1,7 @@
+## 1.15.4
+
+ - **FIX**: Lifecycle completers to be called for FlameGame ([#3007](https://github.com/flame-engine/flame/issues/3007)). ([3804f524](https://github.com/flame-engine/flame/commit/3804f52434cf1bcaf28b501bf96858ecd3636164))
+
 ## 1.15.3
 
  - Update a dependency to the latest release.

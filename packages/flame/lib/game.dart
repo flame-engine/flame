@@ -1,5 +1,7 @@
 /// {@canonicalFor text.TextPaint}
 /// {@canonicalFor text.TextRenderer}
+library game;
+
 export 'src/collisions/has_collision_detection.dart';
 export 'src/components/overlay_route.dart' show OverlayRoute;
 export 'src/components/route.dart' show Route;
