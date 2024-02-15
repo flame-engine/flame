@@ -25,8 +25,6 @@ class PolygonComponent extends ShapeComponent {
   /// With this constructor you create your [PolygonComponent] from positions in
   /// anywhere in the 2d-space. It will automatically calculate the [size] of
   /// the Polygon (the bounding box) if no size it given.
-  /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
-  /// screen coordinate system).
   PolygonComponent(
     this._vertices, {
     super.position,
@@ -129,16 +127,20 @@ class PolygonComponent extends ShapeComponent {
       newVertices.reverse();
     }
     _topLeft.setFrom(newVertices[0]);
-    newVertices.forEachIndexed((i, _) {
+    for (var i = 0; i < newVertices.length; i++) {
       final newVertex = newVertices[i];
       _vertices[i].setFrom(newVertex);
       _topLeft.x = min(_topLeft.x, newVertex.x);
       _topLeft.y = min(_topLeft.y, newVertex.y);
-    });
+    }
+    for (var i = 0; i < newVertices.length; i++) {
+      final newVertex = newVertices[i];
+      _vertices[i].setFrom(newVertex - _topLeft);
+    }
     _path
       ..reset()
       ..addPolygon(
-        vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
+        _vertices.map((p) => p.toOffset()).toList(growable: false),
         true,
       );
     if (shrinkToBoundsOverride ?? shrinkToBounds) {
@@ -255,11 +257,7 @@ class PolygonComponent extends ShapeComponent {
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    // Take anchor into consideration.
-    final localPoint =
-        anchor.toOtherAnchorPosition(point, Anchor.topLeft, size);
-
-    return _containsPoint(localPoint, _vertices);
+    return _containsPoint(point, _vertices);
   }
 
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
