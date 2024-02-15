@@ -142,8 +142,8 @@ class Player extends PositionComponent with KeyboardHandler {
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isKeyDown = event is RawKeyDownEvent;
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isKeyDown = event is KeyDownEvent;
     final keyLeft = (event.logicalKey == LogicalKeyboardKey.arrowLeft) ||
         (event.logicalKey == LogicalKeyboardKey.keyA);
     final keyRight = (event.logicalKey == LogicalKeyboardKey.arrowRight) ||

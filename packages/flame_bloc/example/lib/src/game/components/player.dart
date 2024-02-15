@@ -107,7 +107,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   @override
   bool onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.tab)) {
