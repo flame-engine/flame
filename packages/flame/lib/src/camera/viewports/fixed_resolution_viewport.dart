@@ -3,8 +3,6 @@ import 'dart:math';
 import 'package:flame/camera.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/game/transform2d.dart';
-import 'package:meta/meta.dart';
 
 /// [FixedAspectRatioViewport] is a rectangular viewport which auto-expands to
 /// take as much space as possible within the canvas, while maintaining a fixed
@@ -25,9 +23,6 @@ class FixedResolutionViewport extends FixedAspectRatioViewport
 
   @override
   Vector2 get virtualSize => resolution;
-
-  @internal
-  final Transform2D transform = Transform2D();
 
   @override
   Vector2 get scale => transform.scale;
@@ -66,7 +61,7 @@ class FixedResolutionViewport extends FixedAspectRatioViewport
   @override
   void transformCanvas(Canvas canvas) {
     canvas.translate(size.x / 2, size.y / 2);
-    canvas.transform2D(transform);
+    super.transformCanvas(canvas);
     canvas.translate(-(size.x / 2) / scale.x, -(size.y / 2) / scale.y);
   }
 }

@@ -1,3 +1,17 @@
+## 1.2.1
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.2.0
+
+ - **FEAT**: Added lastline before choice ([#2822](https://github.com/flame-engine/flame/issues/2822)). ([3ef52524](https://github.com/flame-engine/flame/commit/3ef525246a0d3b1d02c470b5696164e677cdb6c4))
+
+## 1.1.1
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **REFACTOR**: Avoid nested conditional expressions whenever possible [DCM] ([#2784](https://github.com/flame-engine/flame/issues/2784)). ([7b6a5712](https://github.com/flame-engine/flame/commit/7b6a571263ece3aa1a8267644d9118230a850830))
+ - **DOCS**: Remove last broad cSpell bypass regex and fix all violations ([#2802](https://github.com/flame-engine/flame/issues/2802)). ([9b16b178](https://github.com/flame-engine/flame/commit/9b16b178048eb19b6596273fcf4daec83277c3b5))
+
 ## 1.1.0
 
  - **REFACTOR**: Enable new DCM rule: avoid-cascade-after-if-null ([#2676](https://github.com/flame-engine/flame/issues/2676)). ([158fc34c](https://github.com/flame-engine/flame/commit/158fc34cae858cf8d0b5d3b5155763e02454779a))

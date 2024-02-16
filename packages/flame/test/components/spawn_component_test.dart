@@ -110,5 +110,61 @@ void main() {
         isTrue,
       );
     });
+
+    testWithFlameGame('Can self position', (game) async {
+      final random = Random(0);
+      final spawn = SpawnComponent(
+        factory: (_) => PositionComponent(position: Vector2.all(1000)),
+        period: 1,
+        selfPositioning: true,
+        random: random,
+      );
+      final world = game.world;
+      await world.ensureAdd(spawn);
+      game.update(0.5);
+      expect(world.children.length, 1);
+      game.update(0.5);
+      game.update(0.0);
+      expect(world.children.length, 2);
+      game.update(1.0);
+      game.update(0.0);
+      expect(world.children.length, 3);
+
+      for (var i = 0; i < 1000; i++) {
+        game.update(random.nextDouble());
+      }
+      expect(
+        world.children
+            .query<PositionComponent>()
+            .every((c) => c.position == Vector2.all(1000)),
+        isTrue,
+      );
+    });
+
+    testWithFlameGame('Does not spawns when auto start is false', (game) async {
+      final random = Random(0);
+      final shape = Rectangle.fromCenter(
+        center: Vector2(100, 200),
+        size: Vector2.all(200),
+      );
+      final spawn = SpawnComponent(
+        factory: (_) => PositionComponent(),
+        period: 1,
+        area: shape,
+        random: random,
+        autoStart: false,
+      );
+      final world = game.world;
+      await world.ensureAdd(spawn);
+      game.update(1.5);
+      await game.ready();
+      expect(world.children.length, 1);
+
+      spawn.timer.start();
+
+      game.update(1);
+      await game.ready();
+      expect(world.children.length, 2);
+    });
   });
 }

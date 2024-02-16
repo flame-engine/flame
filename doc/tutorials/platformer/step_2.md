@@ -62,7 +62,7 @@ class EmberQuestGame extends FlameGame {
 As I mentioned in the [assets](step_1.md#assets) section, we are using multiple individual image
 files and for performance reasons, we should leverage Flame's built-in caching system which will
 only load the files once, but allow us to access them as many times as needed without an impact to
-the game. `await images.loadAll()` takes a list of the file names that are found in `assets\images`
+the game. `await images.loadAll()` takes a list of the file names that are found in `assets/images`
 and loads them to cache.
 
 
@@ -91,20 +91,15 @@ You can run this file and you should just have a blank screen now. Let's get Emb
 
 ## CameraComponent and World
 
-Since `FlameGame.camera` is deprecated, we want to add a `CameraComponent` that we can move around,
-and a world that we can add all our components to and move around our player in.
-(The `CameraComponent` will be built-in in Flame v2).
+To move around in the world we are going the use the built-in `CameraComponent` and `World` that
+exists on the `FlameGame` class.
+We are going to add all our components to the `world` and follow the player with the `camera`.
 
 ```dart
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 class EmberQuestGame extends FlameGame {
-  EmberQuestGame();
-  
-  final world = World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
     await images.loadAll([
@@ -117,12 +112,10 @@ class EmberQuestGame extends FlameGame {
       'water_enemy.png',
     ]);
 
-    cameraComponent = CameraComponent(world: world);
     // Everything in this tutorial assumes that the position
     // of the `CameraComponent`s viewfinder (where the camera is looking)
     // is in the top left corner, that's why we set the anchor here.
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, world]);
+    camera.viewfinder.anchor = Anchor.topLeft;
   }
 }
 ```
@@ -140,7 +133,7 @@ import 'package:flame/components.dart';
 import '../ember_quest.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
-    with HasGameRef<EmberQuestGame> {
+    with HasGameReference<EmberQuestGame> {
   EmberPlayer({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
@@ -181,13 +174,8 @@ import 'package:flame/game.dart';
 import 'actors/ember.dart';
 
 class EmberQuestGame extends FlameGame {
-  EmberQuestGame();
-
   late EmberPlayer _ember;
   
-  final world = World();
-  late final CameraComponent cameraComponent;
-
   @override
   Future<void> onLoad() async {
     await images.loadAll([
@@ -200,9 +188,7 @@ class EmberQuestGame extends FlameGame {
       'water_enemy.png',
     ]);
 
-    cameraComponent = CameraComponent(world: world);
-    cameraComponent.viewfinder.anchor = Anchor.topLeft;
-    addAll([cameraComponent, world]);
+    camera.viewfinder.anchor = Anchor.topLeft;
     
     _ember = EmberPlayer(
       position: Vector2(128, canvasSize.y - 70),

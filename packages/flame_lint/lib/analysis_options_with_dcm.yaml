@@ -5,7 +5,6 @@ include: analysis_options.yaml
 dart_code_metrics:
   rules:
   # dart rules
-    - avoid-banned-imports
     - avoid-cascade-after-if-null
     - avoid-collection-methods-with-unrelated-types
   # flutter rules

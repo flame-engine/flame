@@ -1,18 +1,20 @@
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
+import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
 import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
-import 'package:flame/src/camera/world.dart';
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:flame/src/experimental/geometry/shapes/circle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
+import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/flame_game.dart';
 
@@ -65,22 +67,20 @@ class CameraComponent extends Component {
   /// [height] pixels are visible within the viewport. The viewfinder will be
   /// initially set up to show world coordinates (0, 0) at the center of the
   /// viewport.
-  factory CameraComponent.withFixedResolution({
+  CameraComponent.withFixedResolution({
     required double width,
     required double height,
-    Viewfinder? viewfinder,
     World? world,
+    Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
-  }) {
-    return CameraComponent(
-      world: world,
-      viewport: FixedResolutionViewport(resolution: Vector2(width, height))
-        ..addAll(hudComponents ?? []),
-      viewfinder: viewfinder ?? Viewfinder(),
-      backdrop: backdrop,
-    );
-  }
+  }) : this(
+          world: world,
+          viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
+          viewfinder: viewfinder ?? Viewfinder(),
+          backdrop: backdrop,
+          hudComponents: hudComponents,
+        );
 
   /// The [viewport] is the "window" through which the game world is observed.
   ///
@@ -90,6 +90,7 @@ class CameraComponent extends Component {
   /// than the size of the game canvas. If it is smaller, then the viewport's
   /// position specifies where exactly it is placed on the canvas.
   Viewport get viewport => _viewport;
+
   set viewport(Viewport newViewport) {
     _viewport.removeFromParent();
     _viewport = newViewport;
@@ -107,6 +108,7 @@ class CameraComponent extends Component {
   /// (i.e. how much of the world is seen through the viewport), and,
   /// optionally, rotation.
   Viewfinder get viewfinder => _viewfinder;
+
   set viewfinder(Viewfinder newViewfinder) {
     _viewfinder.removeFromParent();
     _viewfinder = newViewfinder;
@@ -219,22 +221,44 @@ class CameraComponent extends Component {
     return viewport.localToGlobal(viewfinderPosition, output: output);
   }
 
-  final _viewportPoint = Vector2.zero();
-
   @override
-  Iterable<Component> componentsAtPoint(
-    Vector2 point, [
-    List<Vector2>? nestedPoints,
-  ]) sync* {
-    final viewportPoint = viewport.globalToLocal(point, output: _viewportPoint);
-    yield* viewport.componentsAtPoint(viewportPoint, nestedPoints);
+  Iterable<Component> componentsAtLocation<T>(
+    T locationContext,
+    List<T>? nestedContexts,
+    T? Function(CoordinateTransform, T) transformContext,
+    bool Function(Component, T) checkContains,
+  ) sync* {
+    final viewportPoint = transformContext(viewport, locationContext);
+    if (viewportPoint == null) {
+      return;
+    }
+
+    yield* viewport.componentsAtLocation(
+      viewportPoint,
+      nestedContexts,
+      transformContext,
+      checkContains,
+    );
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
-      if (viewport.containsLocalPoint(_viewportPoint)) {
+      if (checkContains(viewport, viewportPoint)) {
         currentCameras.add(this);
-        final worldPoint = viewfinder.transform.globalToLocal(_viewportPoint);
-        yield* viewfinder.componentsAtPoint(worldPoint, nestedPoints);
-        yield* world!.componentsAtPoint(worldPoint, nestedPoints);
+        final worldPoint = transformContext(viewfinder, viewportPoint);
+        if (worldPoint == null) {
+          return;
+        }
+        yield* viewfinder.componentsAtLocation(
+          worldPoint,
+          nestedContexts,
+          transformContext,
+          checkContains,
+        );
+        yield* world!.componentsAtLocation(
+          worldPoint,
+          nestedContexts,
+          transformContext,
+          checkContains,
+        );
         currentCameras.removeLast();
       }
     }
@@ -299,7 +323,7 @@ class CameraComponent extends Component {
 
   /// Removes all movement effects or behaviors from the viewfinder.
   void stop() {
-    viewfinder.children.forEach((child) {
+    viewfinder.children.toList().forEach((child) {
       if (child is FollowBehavior || child is MoveEffect) {
         child.removeFromParent();
       }
@@ -323,20 +347,38 @@ class CameraComponent extends Component {
   /// Sets or clears the world bounds for the camera's viewfinder.
   ///
   /// The bound is a [Shape], given in the world coordinates. The viewfinder's
-  /// position will be restricted to always remain inside this region. Note that
-  /// if you want the camera to never see the empty space outside of the world's
-  /// rendering area, then you should set up the bounds to be smaller than the
-  /// size of the world.
-  void setBounds(Shape? bounds) {
+  /// position will be restricted to always remain inside this region.
+  ///
+  /// When [considerViewport] is true none of the viewport can go outside
+  /// of the bounds, when it is false only the viewfinder anchor is considered.
+  /// Note that this option only works with [Rectangle], [RoundedRectangle] and
+  /// [Circle] shapes.
+  void setBounds(Shape? bounds, {bool considerViewport = false}) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
+    final viewPortAwareBoundsBehavior =
+        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
     if (bounds == null) {
       boundedBehavior?.removeFromParent();
-    } else if (boundedBehavior == null) {
+      viewPortAwareBoundsBehavior?.removeFromParent();
+      return;
+    }
+    if (boundedBehavior == null) {
       viewfinder.add(
         BoundedPositionBehavior(bounds: bounds, priority: 1000),
       );
     } else {
       boundedBehavior.bounds = bounds;
+    }
+    if (considerViewport) {
+      if (viewPortAwareBoundsBehavior == null) {
+        viewfinder.add(
+          ViewportAwareBoundsBehavior(boundsShape: bounds),
+        );
+      } else {
+        viewPortAwareBoundsBehavior.boundsShape = bounds;
+      }
+    } else {
+      viewPortAwareBoundsBehavior?.removeFromParent();
     }
   }
 

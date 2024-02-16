@@ -1,9 +1,7 @@
 import 'dart:math';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/anchor.dart';
-import 'package:flame/src/camera/camera_component.dart';
-import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
@@ -18,7 +16,12 @@ import 'package:meta/meta.dart';
 /// If you add children to the [Viewfinder] they will appear like HUDs i.e.
 /// statically in front of the world.
 class Viewfinder extends Component
-    implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider {
+    implements
+        AnchorProvider,
+        AngleProvider,
+        PositionProvider,
+        ScaleProvider,
+        CoordinateTransform {
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
 
@@ -136,6 +139,12 @@ class Viewfinder extends Component
     }
   }
 
+  final Vector2 _zeroVector = Vector2.zero();
+  final Vector2 _topLeft = Vector2.zero();
+  final Vector2 _bottomRight = Vector2.zero();
+  final Vector2 _topRight = Vector2.zero();
+  final Vector2 _bottomLeft = Vector2.zero();
+
   /// See [CameraComponent.visibleWorldRect].
   @internal
   Rect get visibleWorldRect => visibleRect ??= computeVisibleRect();
@@ -143,20 +152,23 @@ class Viewfinder extends Component
   Rect? visibleRect;
   @protected
   Rect computeVisibleRect() {
-    final viewportSize = camera.viewport.size;
-    final topLeft = transform.globalToLocal(Vector2.zero());
-    final bottomRight = transform.globalToLocal(viewportSize);
-    var minX = min(topLeft.x, bottomRight.x);
-    var minY = min(topLeft.y, bottomRight.y);
-    var maxX = max(topLeft.x, bottomRight.x);
-    var maxY = max(topLeft.y, bottomRight.y);
+    final viewportSize = camera.viewport.virtualSize;
+    final currentTransform = transform;
+    currentTransform.globalToLocal(_zeroVector, output: _topLeft);
+    currentTransform.globalToLocal(viewportSize, output: _bottomRight);
+    var minX = min(_topLeft.x, _bottomRight.x);
+    var minY = min(_topLeft.y, _bottomRight.y);
+    var maxX = max(_topLeft.x, _bottomRight.x);
+    var maxY = max(_topLeft.y, _bottomRight.y);
     if (angle != 0) {
-      final topRight = transform.globalToLocal(Vector2(viewportSize.x, 0));
-      final bottomLeft = transform.globalToLocal(Vector2(0, viewportSize.y));
-      minX = min(minX, min(topRight.x, bottomLeft.x));
-      minY = min(minY, min(topRight.y, bottomLeft.y));
-      maxX = max(maxX, max(topRight.x, bottomLeft.x));
-      maxY = max(maxY, max(topRight.y, bottomLeft.y));
+      _topRight.setValues(viewportSize.x, 0);
+      _bottomLeft.setValues(0, viewportSize.y);
+      currentTransform.globalToLocal(_topRight, output: _topRight);
+      currentTransform.globalToLocal(_bottomLeft, output: _bottomLeft);
+      minX = min(minX, min(_topRight.x, _bottomLeft.x));
+      minY = min(minY, min(_topRight.y, _bottomLeft.y));
+      maxX = max(maxX, max(_topRight.x, _bottomLeft.x));
+      maxY = max(maxY, max(_topRight.y, _bottomLeft.y));
     }
     return Rect.fromLTRB(minX, minY, maxX, maxY);
   }
@@ -169,6 +181,16 @@ class Viewfinder extends Component
       final zoomY = viewportSize.y / _visibleGameSize!.y;
       zoom = min(zoomX, zoomY);
     }
+  }
+
+  @override
+  Vector2 parentToLocal(Vector2 point) {
+    return globalToLocal(point);
+  }
+
+  @override
+  Vector2 localToParent(Vector2 point) {
+    return localToGlobal(point);
   }
 
   @override

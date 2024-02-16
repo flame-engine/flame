@@ -6,28 +6,28 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
+/// This example simply adds a rotating white square on the screen.
+/// If you press on a square, it will be removed.
+/// If you press anywhere else, another square will be added.
 void main() {
   runApp(
     GameWidget(
-      game: MyGame(),
+      game: FlameGame(world: MyWorld()),
     ),
   );
 }
 
-/// This example simply adds a rotating white square on the screen.
-/// If you press on a square, it will be removed.
-/// If you press anywhere else, another square will be added.
-class MyGame extends FlameGame with TapCallbacks {
+class MyWorld extends World with TapCallbacks {
   @override
   Future<void> onLoad() async {
-    add(Square(size / 2));
+    add(Square(Vector2.zero()));
   }
 
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
     if (!event.handled) {
-      final touchPoint = event.canvasPosition;
+      final touchPoint = event.localPosition;
       add(Square(touchPoint));
     }
   }
@@ -49,13 +49,6 @@ class Square extends RectangleComponent with TapCallbacks {
         );
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    angle += speed * dt;
-    angle %= 2 * math.pi;
-  }
-
-  @override
   Future<void> onLoad() async {
     super.onLoad();
     add(
@@ -72,6 +65,13 @@ class Square extends RectangleComponent with TapCallbacks {
         paint: red,
       ),
     );
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    angle += speed * dt;
+    angle %= 2 * math.pi;
   }
 
   @override

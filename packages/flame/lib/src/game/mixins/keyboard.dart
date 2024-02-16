@@ -13,7 +13,7 @@ mixin HasKeyboardHandlerComponents<W extends World> on FlameGame<W>
   @override
   @mustCallSuper
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     final blockedPropagation = !propagateToChildren<KeyboardHandler>(
@@ -34,7 +34,7 @@ mixin HasKeyboardHandlerComponents<W extends World> on FlameGame<W>
 /// Override [onKeyEvent] to customize the keyboard handling behavior.
 mixin KeyboardEvents on Game {
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     assert(

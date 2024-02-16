@@ -191,10 +191,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
         final game = currentGame;
         assert(game.hasLayout);
-        final onLoad = game.onLoadFuture;
-        if (onLoad != null) {
-          await onLoad;
-        }
+        await game.load();
         game.mount();
         if (!game.paused) {
           game.update(0);
@@ -277,7 +274,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   void disposeCurrentGame({bool callGameOnDispose = false}) {
     currentGame.removeGameStateListener(_onGameStateChange);
     currentGame.lifecycleStateChange(AppLifecycleState.paused);
-    currentGame.onRemove();
+    currentGame.finalizeRemoval();
     if (callGameOnDispose) {
       currentGame.onDispose();
     }
@@ -314,7 +311,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   }
 
-  KeyEventResult _handleKeyEvent(FocusNode focusNode, RawKeyEvent event) {
+  KeyEventResult _handleKeyEvent(FocusNode focusNode, KeyEvent event) {
     final game = currentGame;
 
     if (!_focusNode.hasPrimaryFocus) {
@@ -322,7 +319,10 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
 
     if (game is KeyboardEvents) {
-      return game.onKeyEvent(event, RawKeyboard.instance.keysPressed);
+      return game.onKeyEvent(
+        event,
+        HardwareKeyboard.instance.logicalKeysPressed,
+      );
     }
     return KeyEventResult.handled;
   }
@@ -364,7 +364,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           focusNode: _focusNode,
           autofocus: widget.autofocus,
           descendantsAreFocusable: true,
-          onKey: _handleKeyEvent,
+          onKeyEvent: _handleKeyEvent,
           child: MouseRegion(
             cursor: currentGame.mouseCursor,
             child: Directionality(

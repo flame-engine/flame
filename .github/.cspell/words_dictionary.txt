@@ -2,8 +2,6 @@
 bloodlust
 collidable
 collidables
-composability
-discoverability
 draggables
 focusable
 gamepad
@@ -11,7 +9,6 @@ gamepads
 gameplay
 gapless
 grayscale
-highscore
 hoverable
 hoverables
 inactives
@@ -30,11 +27,10 @@ proxying
 ptero # short for pterodactyl
 rebalance
 redeclaration
+refreshable
 renderable
 rescan
 tappable
 tappables
 toolset
 underutilize
-unproject
-unscale

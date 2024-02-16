@@ -1,6 +1,7 @@
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/widgets.dart' show EdgeInsets;
 import 'package:meta/meta.dart';
 
@@ -19,7 +20,8 @@ import 'package:meta/meta.dart';
 /// Do note that this only works with the old style camera and not the
 /// [CameraComponent].
 // TODO(Lukas): Rename this since it isn't necessarily related to the viewport.
-mixin ComponentViewportMargin on PositionComponent, HasGameReference {
+mixin ComponentViewportMargin<T extends FlameGame>
+    on PositionComponent, HasGameReference<T> {
   /// Instead of setting a position of the [PositionComponent] that uses
   /// [ComponentViewportMargin] a margin from the edges of the parent can be
   /// used instead.

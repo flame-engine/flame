@@ -59,7 +59,14 @@ class Forge2DWorld extends World {
     physicsWorld.particleSystem.raycast(callback, point1, point2);
   }
 
-  void setGravity(Vector2? gravity) {
-    physicsWorld.setGravity(gravity ?? defaultGravity);
+  /// Don't change the gravity object directly, use the setter instead.
+  Vector2 get gravity => physicsWorld.gravity;
+
+  /// Sets the gravity of the world and wakes up all bodies.
+  set gravity(Vector2? gravity) {
+    physicsWorld.gravity = gravity ?? defaultGravity;
+    for (final body in physicsWorld.bodies) {
+      body.setAwake(true);
+    }
   }
 }

@@ -33,8 +33,8 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
     );
     colorEffect = ColorEffect(
       Colors.blue,
-      const Offset(0.0, 0.8),
       colorController,
+      opacityTo: 0.8,
     );
     mySprite.add(colorEffect);
 

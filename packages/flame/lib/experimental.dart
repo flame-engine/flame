@@ -9,6 +9,8 @@
 /// After the components lived here for some time, and when we gain more
 /// confidence in their robustness, they will be moved out into the main Flame
 /// library.
+library experimental;
+
 export 'src/experimental/geometry/shapes/circle.dart' show Circle;
 export 'src/experimental/geometry/shapes/polygon.dart' show Polygon;
 export 'src/experimental/geometry/shapes/rectangle.dart' show Rectangle;

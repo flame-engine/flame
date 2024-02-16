@@ -58,7 +58,7 @@ Every component that received an `onTapDown` event will eventually receive eithe
 ### onLongTapDown
 
 If the user holds their finger down for some time (as configured by the `.longTapDelay` property
-in `HasTappableComponents`), the "long tap" will be generated. This event invokes the
+in `MultiTapDispatcher`), "long tap" will be triggered. This event invokes the
 `void onLongTapDown(TapDownEvent)` handler on those components that previously received the
 `onTapDown` event.
 

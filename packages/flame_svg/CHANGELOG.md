@@ -1,3 +1,35 @@
+## 1.9.0
+
+ - **FEAT**: Add `loadFromString` to Svg class ([#3030](https://github.com/flame-engine/flame/issues/3030)). ([b0cafb2a](https://github.com/flame-engine/flame/commit/b0cafb2a5561de136af93eb7a09df37b93d38ce0))
+
+## 1.8.10
+
+ - Update a dependency to the latest release.
+
+## 1.8.9
+
+ - Update a dependency to the latest release.
+
+## 1.8.8
+
+ - Update a dependency to the latest release.
+
+## 1.8.7
+
+ - Update a dependency to the latest release.
+
+## 1.8.6
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.8.5
+
+ - Update a dependency to the latest release.
+
+## 1.8.4
+
+ - **FIX**: Do not render SVGs bigger than requested when pixelRatio > 1 and no match in _imageCache ([#2795](https://github.com/flame-engine/flame/issues/2795)). ([5fa4e09f](https://github.com/flame-engine/flame/commit/5fa4e09f7c464ce2f676df81049a95dad46bf2bd))
+
 ## 1.8.3
 
  - Update a dependency to the latest release.

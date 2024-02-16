@@ -10,8 +10,6 @@ import 'package:meta/meta.dart';
 /// In addition to adding this mixin, the component must also implement the
 /// [containsLocalPoint] method -- the component will only be considered
 /// "tapped" if the point where the tap has occurred is inside the component.
-///
-/// This mixin is the replacement of the Tappable mixin.
 mixin TapCallbacks on Component {
   void onTapDown(TapDownEvent event) {}
   void onLongTapDown(TapDownEvent event) {}

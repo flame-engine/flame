@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -211,7 +211,7 @@ void main() {
         expect(game.children.elementAt(1), isA<_DragWithCallbacksComponent>());
         expect(game.children.elementAt(2), isA<MultiDragDispatcher>());
 
-// regular drag
+        // regular drag
         await tester.timedDragFrom(
           const Offset(50, 50),
           const Offset(20, 0),
@@ -221,7 +221,7 @@ void main() {
         expect(nDragUpdateCalled, 8);
         expect(nDragEndCalled, 1);
 
-// cancelled drag
+        // cancelled drag
         final gesture = await tester.startGesture(const Offset(50, 50));
         await gesture.moveBy(const Offset(10, 10));
         await gesture.cancel();
@@ -262,7 +262,7 @@ void main() {
     );
 
     testWidgets(
-      'drag event can move outside the component bounds',
+      'drag event can move outside the component bounds and still fire',
       (tester) async {
         final points = <Vector2>[];
         final game = FlameGame(
@@ -270,7 +270,7 @@ void main() {
             _DragWithCallbacksComponent(
               size: Vector2.all(95),
               position: Vector2.all(5),
-              onDragUpdate: (e) => points.add(e.localPosition),
+              onDragUpdate: (e) => points.add(e.localStartPosition),
             ),
           ],
         );
@@ -289,16 +289,110 @@ void main() {
         expect(points.length, 42);
         expect(points.first, Vector2(75, 75));
         expect(
-          points.skip(1).take(20),
-          List.generate(20, (i) => Vector2(75.0, 75.0 + i)),
-        );
-        expect(
-          points.skip(21),
-          everyElement(predicate((Vector2 v) => v.isNaN)),
+          points.skip(1),
+          List.generate(41, (i) => Vector2(75.0, 75.0 + i)),
         );
       },
     );
   });
+
+  testWidgets(
+    'drag event delta respects camera & zoom',
+    (tester) async {
+      // canvas size is 800x600 so this means a 10x logical scale across
+      // both dimensions
+      final resolution = Vector2(80, 60);
+      final game = FlameGame(
+        camera: CameraComponent.withFixedResolution(
+          width: resolution.x,
+          height: resolution.y,
+        ),
+      );
+
+      game.camera.viewfinder.zoom = 2;
+
+      final deltas = <Vector2>[];
+      await game.world.add(
+        _DragWithCallbacksComponent(
+          position: Vector2.all(-5),
+          size: Vector2.all(10),
+          onDragUpdate: (event) => deltas.add(event.localDelta),
+        ),
+      );
+      await tester.pumpWidget(GameWidget(game: game));
+      await tester.pump();
+      await tester.pump();
+
+      final canvasSize = game.canvasSize;
+      await tester.dragFrom(
+        (canvasSize / 2).toOffset(),
+        Offset(canvasSize.x / 10, 0),
+      );
+      final totalDelta = deltas.reduce((a, b) => a + b);
+      expect(totalDelta, Vector2(4, 0));
+    },
+  );
+
+  testWidgets(
+    'drag event delta respects widget positioning',
+    (tester) async {
+      // canvas size is 800x600 so this means a 10x logical scale across
+      // both dimensions
+      final resolution = Vector2(80, 60);
+      final game = FlameGame(
+        camera: CameraComponent.withFixedResolution(
+          width: resolution.x,
+          height: resolution.y,
+        ),
+      );
+
+      game.camera.viewfinder.zoom = 1 / 2;
+
+      final deltas = <Vector2>[];
+      await game.world.add(
+        _DragWithCallbacksComponent(
+          position: Vector2.all(-5),
+          size: Vector2.all(10),
+          onDragUpdate: (event) => deltas.add(event.localDelta),
+        ),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Stack(
+            children: [
+              Positioned(
+                left: 100.0,
+                top: 200.0,
+                width: 800,
+                height: 600,
+                child: GameWidget(game: game),
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      final canvasSize = game.canvasSize;
+
+      // no offset
+      await tester.dragFrom(
+        (canvasSize / 2).toOffset(),
+        Offset(canvasSize.x / 10, 0),
+      );
+      expect(deltas, isEmpty);
+
+      // accounting for offset
+      await tester.dragFrom(
+        (canvasSize / 2 + Vector2(100, 200)).toOffset(),
+        Offset(canvasSize.x / 10, 0),
+      );
+      expect(deltas, isNotEmpty);
+      final totalDelta = deltas.reduce((a, b) => a + b);
+      expect(totalDelta, Vector2(16, 0));
+    },
+  );
 }
 
 mixin _DragCounter on DragCallbacks {

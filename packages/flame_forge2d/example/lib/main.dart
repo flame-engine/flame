@@ -42,7 +42,6 @@ class Ball extends BodyComponent with TapCallbacks {
             FixtureDef(
               CircleShape()..radius = 5,
               restitution: 0.8,
-              density: 1.0,
               friction: 0.4,
             ),
           ],

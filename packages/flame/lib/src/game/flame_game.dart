@@ -65,6 +65,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   ///
   /// You don't have to add the CameraComponent to the tree after setting it
   /// here, it is done automatically.
+  ///
+  /// When setting the camera, if it doesn't already have a world it will be
+  /// set to match the game's world.
   CameraComponent get camera => _camera;
   set camera(CameraComponent newCameraComponent) {
     _camera.removeFromParent();
@@ -72,6 +75,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (_camera.parent == null) {
       add(_camera);
     }
+    _camera.world ??= world;
   }
 
   CameraComponent _camera;
@@ -90,9 +94,23 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   @internal
+  FutureOr<void> load() async {
+    await super.load();
+    setLoaded();
+  }
+
+  @override
+  @internal
   void mount() {
     super.mount();
     setMounted();
+  }
+
+  @override
+  @internal
+  void finalizeRemoval() {
+    super.finalizeRemoval();
+    setRemoved();
   }
 
   /// This implementation of render renders each component, making sure the

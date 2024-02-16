@@ -1,3 +1,33 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Update flame_noise to use latest version of fast_noise ([#3015](https://github.com/flame-engine/flame/issues/3015)). ([2fd84c84](https://github.com/flame-engine/flame/commit/2fd84c846f808bf593ef568150ffb49eecaebf30))
+
+## 0.1.1+12
+
+ - Update a dependency to the latest release.
+
+## 0.1.1+11
+
+ - Update a dependency to the latest release.
+
+## 0.1.1+10
+
+ - Update a dependency to the latest release.
+
+## 0.1.1+9
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 0.1.1+8
+
+ - Update a dependency to the latest release.
+
+## 0.1.1+7
+
+ - Update a dependency to the latest release.
+
 ## 0.1.1+6
 
  - Update a dependency to the latest release.

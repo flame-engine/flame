@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
+import 'package:flame/camera.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
@@ -272,10 +273,12 @@ class PositionComponent extends Component
   }
 
   @override
-  Vector2 parentToLocal(Vector2 point) => transform.globalToLocal(point);
+  Vector2 parentToLocal(Vector2 point, {Vector2? output}) =>
+      transform.globalToLocal(point, output: output);
 
   @override
-  Vector2 localToParent(Vector2 point) => transform.localToGlobal(point);
+  Vector2 localToParent(Vector2 point, {Vector2? output}) =>
+      transform.localToGlobal(point, output: output);
 
   /// Convert local coordinates of a point [point] inside the component
   /// into the parent's coordinate space.
@@ -429,6 +432,7 @@ class PositionComponent extends Component
 
   @override
   void renderDebugMode(Canvas canvas) {
+    final zoom = CameraComponent.currentCamera?.viewfinder.zoom ?? 1.0;
     super.renderDebugMode(canvas);
     final precision = debugCoordinatesPrecision;
     canvas.drawRect(size.toRect(), debugPaint);
@@ -444,7 +448,7 @@ class PositionComponent extends Component
       debugTextPaint.render(
         canvas,
         'x:$x1str y:$y1str',
-        Vector2(-10 * (precision + 3), -15),
+        Vector2(-10 * (precision + 3) / zoom, -15 / zoom),
       );
       // print coordinates at the bottom-right corner
       final p2 = absolutePositionOfAnchor(Anchor.bottomRight);
@@ -453,7 +457,7 @@ class PositionComponent extends Component
       debugTextPaint.render(
         canvas,
         'x:$x2str y:$y2str',
-        Vector2(size.x - 10 * (precision + 3), size.y),
+        Vector2(size.x - 10 * (precision + 3) / zoom, size.y),
       );
     }
   }

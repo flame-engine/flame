@@ -1,3 +1,31 @@
+## 0.5.1
+
+ - **FEAT**: Bumped integral_isolates package for flame_isolate ([#2994](https://github.com/flame-engine/flame/issues/2994)). ([3c38ee60](https://github.com/flame-engine/flame/commit/3c38ee6058e7c8b7546c3fcdb1b08e3e40ba138b))
+
+## 0.5.0+7
+
+ - Update a dependency to the latest release.
+
+## 0.5.0+6
+
+ - Update a dependency to the latest release.
+
+## 0.5.0+5
+
+ - Update a dependency to the latest release.
+
+## 0.5.0+4
+
+ - **DOCS**: Update flame_isolate to point at repository ([#2880](https://github.com/flame-engine/flame/issues/2880)). ([06fdeac6](https://github.com/flame-engine/flame/commit/06fdeac684b2be26206d50282e6a7f2cbac4264c))
+
+## 0.5.0+3
+
+ - Update a dependency to the latest release.
+
+## 0.5.0+2
+
+ - **REFACTOR**: Mark semantically final variables as final (or const) proper [DCM] ([#2783](https://github.com/flame-engine/flame/issues/2783)). ([71f7b475](https://github.com/flame-engine/flame/commit/71f7b475e33dd6fa7224c4a3ab29ffdb89702c34))
+
 ## 0.5.0+1
 
  - Update a dependency to the latest release.

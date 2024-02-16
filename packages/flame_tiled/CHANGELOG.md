@@ -1,3 +1,49 @@
+## 1.18.4
+
+ - Update a dependency to the latest release.
+
+## 1.18.3
+
+ - Update a dependency to the latest release.
+
+## 1.18.2
+
+ - **FIX**: Image layers repeat indefinitely if repeated in Tiled ([#2921](https://github.com/flame-engine/flame/issues/2921)). ([6f79bc5e](https://github.com/flame-engine/flame/commit/6f79bc5ef920ace17d09c88156a73043357d514f))
+
+## 1.18.1
+
+ - Update a dependency to the latest release.
+
+## 1.18.0
+
+ - **FIX**: TiledComponent.atlases had duplicated values ([#2867](https://github.com/flame-engine/flame/issues/2867)). ([e56ad187](https://github.com/flame-engine/flame/commit/e56ad1878333ba19e0c8af3fb9c9758603662330))
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+ - **FEAT**: Adding configurable padding to Tiled atlas packing ([#2868](https://github.com/flame-engine/flame/issues/2868)). ([d0c10cbb](https://github.com/flame-engine/flame/commit/d0c10cbbea20415de471ad0269a22c168082b02d))
+ - **FEAT**: Exposing atlases for reading in a TiledComponent ([#2865](https://github.com/flame-engine/flame/issues/2865)). ([e1b4d93a](https://github.com/flame-engine/flame/commit/e1b4d93ad43a4e1b1b55a3843e26612b73d45ed7))
+
+## 1.17.0
+
+ - **FIX**: Configuration useAtlas was not been propagated correctly everywhere ([#2853](https://github.com/flame-engine/flame/issues/2853)). ([2f0dab9e](https://github.com/flame-engine/flame/commit/2f0dab9e59958176e6c46f6e417188e6c4fa3831))
+ - **FEAT**: Adding way to configure a layer paint in flame tiled ([#2851](https://github.com/flame-engine/flame/issues/2851)). ([e893d115](https://github.com/flame-engine/flame/commit/e893d1152c2aeb1c976668c875a1c267bbf819c0))
+ - **FEAT**: Expose useAtlas on Flame Tiled ([#2852](https://github.com/flame-engine/flame/issues/2852)). ([c4efb4f8](https://github.com/flame-engine/flame/commit/c4efb4f859fe08cc7fbd3e0ddb35c806d0060c78))
+
+## 1.16.0
+
+ - **FEAT**: Allow flame tiled to skip tilesets when packing into a tile atlas ([#2847](https://github.com/flame-engine/flame/issues/2847)). ([b93bdd38](https://github.com/flame-engine/flame/commit/b93bdd38313fd273e3e4cf55f1b142969effbde4))
+
+## 1.15.1
+
+ - Update a dependency to the latest release.
+
+## 1.15.0
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+ - **FIX**: Remove deprecations for 1.10.0 ([#2809](https://github.com/flame-engine/flame/issues/2809)). ([5b67b8f1](https://github.com/flame-engine/flame/commit/5b67b8f14ad4fdb38a249d0a41ecba49ba2fcc44))
+ - **FIX**: Parallax offset calculations in flame_tiled don't scale properly ([#2766](https://github.com/flame-engine/flame/issues/2766)). ([89e8427a](https://github.com/flame-engine/flame/commit/89e8427a7a34258ec20276e4ec64d4a484277cdd))
+ - **FEAT**(flame_tiled): Allowing tilesets with images in the same folder to load ([#2814](https://github.com/flame-engine/flame/issues/2814)). ([3b0d7e65](https://github.com/flame-engine/flame/commit/3b0d7e65c2bf158db378d66c4f7e687dd05b46e1))
+ - **FEAT**: AssetsBundle can be customized in Images and AssetsCache. ([#2807](https://github.com/flame-engine/flame/issues/2807)). ([a23f80e9](https://github.com/flame-engine/flame/commit/a23f80e94a5d935fc8ba232956fe02e001d5a8f9))
+ - **FEAT**: Add overriding of Images and Bundle in all classes ([#2806](https://github.com/flame-engine/flame/issues/2806)). ([2df90c9b](https://github.com/flame-engine/flame/commit/2df90c9ba8f2b1cc088c5270df571eee7e18bb57))
+
 ## 1.14.1
 
  - Update a dependency to the latest release.

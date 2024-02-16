@@ -20,6 +20,6 @@ class ComponentKey {
   int get hashCode => _internalHash;
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is ComponentKey && other._internalHash == _internalHash;
 }

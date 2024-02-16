@@ -11,6 +11,7 @@ export 'src/particles/paint_particle.dart';
 export 'src/particles/particle.dart';
 export 'src/particles/rotating_particle.dart';
 export 'src/particles/scaled_particle.dart';
+export 'src/particles/scaling_particle.dart';
 export 'src/particles/sprite_animation_particle.dart';
 export 'src/particles/sprite_particle.dart';
 export 'src/particles/translated_particle.dart';

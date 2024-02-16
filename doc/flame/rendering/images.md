@@ -210,7 +210,7 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 A `SpriteBatchComponent` is also available for your convenience.
 
 See the examples
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/spritebatch_example.dart).
+[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart).
 
 
 ## ImageComposition
@@ -252,7 +252,7 @@ You can create it by passing a list of equally sized sprites and the stepTime (t
 seconds it takes to move to the next frame):
 
 ```dart
-final a = SpriteAnimation.spriteList(sprites, stepTime: 0.02);
+final a = SpriteAnimationTicker(SpriteAnimation.spriteList(sprites, stepTime: 0.02));
 ```
 
 After the animation is created, you need to call its `update` method and render the current frame's
@@ -262,10 +262,10 @@ Example:
 
 ```dart
 class MyGame extends Game {
-  SpriteAnimation a;
+  SpriteAnimationTicker a;
 
   MyGame() {
-    a = SpriteAnimation(...);
+    a = SpriteAnimationTicker(SpriteAnimation(...));
   }
 
   void update(double dt) {

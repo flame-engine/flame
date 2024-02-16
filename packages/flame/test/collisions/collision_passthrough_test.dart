@@ -1,5 +1,6 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/src/collisions/collision_passthrough.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 import 'collision_test_helpers.dart';
@@ -39,6 +40,23 @@ void main() {
         expect(hitboxParent.endCounter, 1);
         expect(hitboxParent.onCollisionCounter, 1);
       },
+    });
+
+    testWithFlameGame('Null passthrough', (game) async {
+      final hitbox = CompositeHitbox(children: [RectangleHitbox()]);
+      final component = PositionComponent(children: [hitbox]);
+      final testBlock = TestBlock(Vector2.zero(), Vector2.all(10));
+
+      await game.addAll([component, testBlock]);
+      await game.ready();
+
+      expect(hitbox.passthroughParent, isNull);
+
+      hitbox.removeFromParent();
+      testBlock.add(hitbox);
+      await game.ready();
+
+      expect(hitbox.passthroughParent, testBlock);
     });
   });
 }

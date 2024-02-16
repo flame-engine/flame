@@ -47,7 +47,7 @@ it is only run once even if the component is removed both by using the parents r
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
-like loading an image for example. This method is executed after `onGameResize`, but before
+like loading an image for example. This method is executed before `onGameResize` and
 `onMount`. This method is guaranteed to execute only once during the lifetime of the component, so
 you can think of it as an "asynchronous constructor".
 
@@ -105,12 +105,12 @@ In the following example we first initialize the component with priority 1, and 
 user taps the component we change its priority to 2:
 
 ```dart
-class MyComponent extends PositionComponent with Tappable {
+class MyComponent extends PositionComponent with TapCallbacks {
 
   MyComponent() : super(priority: 1);
 
   @override
-  void onTap() {
+  void onTapDown(TapDownEvent event) {
     priority = 2;
   }
 }
@@ -428,7 +428,7 @@ removing it from the tree. This affects the visibility of the component and all 
 /// Example that implements HasVisibility
 class MyComponent extends PositionComponent with HasVisibility {}
 
-/// Usage of the isVisible property 
+/// Usage of the isVisible property
 final myComponent = MyComponent();
 add(myComponent);
 
@@ -811,15 +811,15 @@ robot.animationTickers?[RobotState.idle]?.onFrame = (currentIndex) {
 ```
 
 
-## SpriteGroup
+## SpriteGroupComponent
 
 `SpriteGroupComponent` is pretty similar to its animation counterpart, but especially for sprites.
 
 Example:
 
 ```dart
-class ButtonComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameRef<SpriteGroupExample>, Tappable {
+class PlayerComponent extends SpriteGroupComponent<ButtonState>
+    with HasGameReference<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void>? onLoad() async {
     final pressedSprite = await gameRef.loadSprite(/* omitted */);
@@ -853,9 +853,13 @@ spawn components along the edges of the shape set the `within` argument to false
 This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
 within the defined circle:
 
+The `factory` function takes an `int` as an argument, which is the index of the component that is
+being spawned, so if for example 4 components have been spawned already the 5th component will have
+the index 4, since the indexing starts at 0.
+
 ```dart
 SpawnComponent(
-  factory: () => MyComponent(size: Vector2(10, 20)),
+  factory: (i) => MyComponent(size: Vector2(10, 20)),
   period: 0.5,
   area: Circle(Vector2(100, 200), 150),
 );
@@ -868,10 +872,23 @@ between each new spawned component is between 0.5 to 10 seconds.
 
 ```dart
 SpawnComponent.periodRange(
-  factory: () => MyComponent(size: Vector2(10, 20)),
+  factory: (i) => MyComponent(size: Vector2(10, 20)),
   minPeriod: 0.5,
   maxPeriod: 10,
   area: Circle(Vector2(100, 200), 150),
+);
+```
+
+If you want to set the position yourself within the `factory` function, you can use set
+`selfPositioning = true` in the constructors and you will be able to set the positions yourself and
+ignore the `area` argument.
+
+```dart
+SpawnComponent(
+  factory: (i) =>
+    MyComponent(position: Vector2(100, 200), size: Vector2(10, 20)),
+  selfPositioning: true,
+  period: 0.5,
 );
 ```
 

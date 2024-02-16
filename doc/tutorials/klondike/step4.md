@@ -1,4 +1,4 @@
-# Gameplay
+# 4. Gameplay
 
 In this chapter we will be implementing the core of Klondike's gameplay: how the cards move between
 the stock and the waste, the piles and the foundations.
@@ -425,19 +425,32 @@ method so that it looks like this:
     cards.shuffle();
     world.addAll(cards);
 
+    int cardToDeal = cards.length - 1;
     for (var i = 0; i < 7; i++) {
       for (var j = i; j < 7; j++) {
-        piles[j].acquireCard(cards.removeLast());
+        piles[j].acquireCard(cards[cardToDeal--]);
       }
       piles[i].flipTopCard();
     }
-    cards.forEach(stock.acquireCard);
+    for(int n = 0; n <= cardToDeal; n++) {
+      stock.acquireCard(cards[n]);
+    }
   }
 ```
 
-Note how we remove the cards from the deck and place them into `TableauPile`s one by one, and only
-after that we put the remaining cards into the stock. Also, the `flipTopCard` method in the
-`TableauPile` class is as trivial as it sounds:
+Note how we deal the cards from the deck and place them into `TableauPile`s one by one, and only
+after that we put the remaining cards into the stock.
+
+Recall that we decided earlier that all the cards would be owned by the `KlondikeGame` itself. So
+they are put into a generated List structure called `cards`, shuffled and added to the `world`. This
+List should always have 52 cards in it, so a descending index `cardToDeal` is used to deal 28 cards
+one by one from the top of the deck into piles that acquire references to the cards in the deck. An
+ascending index is used to deal the remaining 24 cards into the stock in correct shuffled order. At
+the end of the deal there are still 52 `Card` objects in the `cards` list. In the card piles we
+used `removeList()` to retrieve a card from a pile, but not here because it would remove cards
+from `KlondikeGame`'s ownership.
+
+The `flipTopCard` method in the `TableauPile` class is as trivial as it sounds:
 
 ```dart
   void flipTopCard() {
@@ -489,19 +502,13 @@ the card, so that it is rendered above all others. Without this, the card would 
 During the drag, the `onDragUpdate` event will be called continuously. Using this callback we will
 be updating the position of the card so that it follows the movement of the finger (or the mouse).
 The `event` object passed to this callback contains the most recent coordinate of the point of
-touch, and also the `delta` property -- which is the displacement vector since the previous call of
-`onDragUpdate`. The only problem is that this delta is measured in screen pixels, whereas we want
-it to be in game world units. The conversion between the two is given by the camera zoom level, so
-we will add an extra method to determine the zoom level:
+touch, and also the `localDelta` property -- which is the displacement vector since the previous
+call of `onDragUpdate`, considering the camera zoom.
 
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
-        .viewfinder
-        .zoom;
-    position += event.delta / cameraZoom;
+    position += event.delta;
   }
 ```
 
@@ -593,11 +600,7 @@ to `false`:
     if (!isDragged) {
       return;
     }
-    final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
-        .viewfinder
-        .zoom;
-    position += event.delta / cameraZoom;
+    position += event.delta;
   }
 
   @override
@@ -861,8 +864,12 @@ at the end of the `layOutCards()` method:
     height = KlondikeGame.cardHeight * 1.5 + _cards.last.y - _cards.first.y;
 ```
 
-The factor `1.5` here adds a little bit extra space at the bottom of each pile. You can temporarily
-turn the debug mode on to see the hitboxes.
+The factor `1.5` here adds a little bit extra space at the bottom of each pile. The card to be
+dropped should be overlapping the hitbox by a little over half its width and height. If you are
+approaching from below, it would be just overlapping the nearest card (i.e. the one that is fully
+visible). You can temporarily turn the debug mode on to see the hitboxes.
+
+![Illustration of Tableau Pile Hitboxes](../../images/tutorials/klondike-tableau-hitboxes.png)
 
 Ok, let's get to our main topic: how to move a stack of cards at once.
 
@@ -923,11 +930,7 @@ the `onDragUpdate` method:
     if (!isDragged) {
       return;
     }
-    final cameraZoom = (findGame()! as FlameGame)
-        .firstChild<CameraComponent>()!
-        .viewfinder
-        .zoom;
-    final delta = event.delta / cameraZoom;
+    final delta = event.delta;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
   }

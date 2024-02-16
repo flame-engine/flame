@@ -2,40 +2,40 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-class CirclesExample extends FlameGame with HasCollisionDetection, TapDetector {
+class CirclesExample extends FlameGame {
   static const description = '''
     This example will create a circle every time you tap on the screen. It will
     have the initial velocity towards the center of the screen and if it touches
     another circle both of them will change color.
   ''';
 
-  @override
-  Future<void> onLoad() async {
-    add(ScreenHitbox());
-  }
+  CirclesExample()
+      : super(
+          camera: CameraComponent.withFixedResolution(width: 600, height: 400),
+          world: MyWorld(),
+        );
+}
+
+class MyWorld extends World with TapCallbacks, HasCollisionDetection {
+  MyWorld() : super(children: [ScreenHitbox()..debugMode = true]);
 
   @override
-  void onTapDown(TapDownInfo info) {
-    add(MyCollidable(info.eventPosition.widget));
+  void onTapDown(TapDownEvent info) {
+    add(MyCollidable(position: info.localPosition));
   }
 }
 
 class MyCollidable extends PositionComponent
     with HasGameReference<CirclesExample>, CollisionCallbacks {
+  MyCollidable({super.position})
+      : super(size: Vector2.all(30), anchor: Anchor.center);
+
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
   final _defaultColor = Colors.cyan;
   late ShapeHitbox hitbox;
-
-  MyCollidable(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(100),
-          anchor: Anchor.center,
-        );
 
   @override
   Future<void> onLoad() async {
@@ -46,8 +46,8 @@ class MyCollidable extends PositionComponent
       ..paint = defaultPaint
       ..renderShape = true;
     add(hitbox);
-    final center = game.size / 2;
-    velocity = (center - position)..scaleTo(150);
+    velocity = -position
+      ..scaleTo(50);
   }
 
   @override

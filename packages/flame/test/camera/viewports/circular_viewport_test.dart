@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
+import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -112,42 +113,48 @@ void main() {
       size: Vector2(50, 50),
     );
 
-    testWithFlameGame('hit testing', (game) async {
-      final world = _MyWorld();
-      final viewport = CircularViewport.ellipse(80, 20)
-        ..position = Vector2(20, 30);
-      final camera = CameraComponent(
-        world: world,
-        viewport: viewport,
-      );
-      game.addAll([world, camera]);
-      await game.ready();
+    testWithGame(
+      'hit testing',
+      () => FlameGame(
+        camera: CameraComponent(
+          viewport: CircularViewport.ellipse(80, 20)
+            ..position = Vector2(20, 30),
+          world: _MyWorld(),
+        ),
+      ),
+      (game) async {
+        await game.ready();
+        final viewport = game.camera.viewport;
 
-      bool hit(double x, double y) {
-        final components = game.componentsAtPoint(Vector2(x, y)).toList();
-        return components.first == viewport && components[1] == world;
-      }
-
-      expect(hit(10, 20), false);
-      expect(hit(20, 30), false);
-      expect(hit(25, 35), false);
-      expect(hit(100, 35), true);
-      expect(hit(100, 50), true);
-      expect(hit(180, 50), true);
-      expect(hit(180, 49), false);
-      expect(hit(180, 51), false);
-
-      final nestedPoints = <Vector2>[];
-      final center = Vector2(100, 50);
-      for (final component in game.componentsAtPoint(center, nestedPoints)) {
-        if (component == viewport) {
-          continue;
+        bool hit(double x, double y) {
+          final components = game.componentsAtPoint(Vector2(x, y)).toList();
+          return components.first == viewport && components[1] == game.world;
         }
-        expect(component, world);
-        expect(nestedPoints.last, Vector2.zero());
-        break;
-      }
-    });
+
+        expect(hit(10, 20), false);
+        expect(hit(20, 30), false);
+        expect(hit(25, 35), false);
+        expect(hit(100, 35), true);
+        expect(hit(100, 50), true);
+        expect(hit(180, 50), true);
+        expect(hit(180, 49), false);
+        expect(hit(180, 51), false);
+
+        final nestedPoints = <Vector2>[];
+        final center = Vector2(100, 50);
+        for (final component in game.componentsAtPoint(
+          center,
+          nestedPoints,
+        )) {
+          if (component == viewport) {
+            continue;
+          }
+          expect(component, game.world);
+          expect(nestedPoints.last, Vector2.zero());
+          break;
+        }
+      },
+    );
 
     test('set wrong size', () {
       expect(

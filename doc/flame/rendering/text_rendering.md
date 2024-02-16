@@ -10,10 +10,15 @@ components:
 
 - `TextComponent` for rendering a single line of text
 - `TextBoxComponent` for bounding multi-line text within a sized box, including the possibility of a
-  typing effect
+typing effect
+- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling
+capability when the text exceeds the boundaries of the enclosing box.
 
-Both components are showcased in [this
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
+Use the `onFinished` callback to get notified when the text is completely printed.
+
+
+All components are showcased in
+[this example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
 
 
 ### TextComponent
@@ -29,7 +34,7 @@ class MyGame extends FlameGame {
     add(
       TextComponent(
         text: 'Hello, Flame',
-        position = Vector2.all(16.0),
+        position: Vector2.all(16.0),
       ),
     );
   }
@@ -37,7 +42,7 @@ class MyGame extends FlameGame {
 ```
 
 In order to configure aspects of the rendering like font family, size, color, etc, you need to
-provide (or amend) a `TextRenderer` with such information; while you can read more details ab out
+provide (or amend) a `TextRenderer` with such information; while you can read more details about
 this interface below, the simplest implementation you can use is the `TextPaint`, which takes a
 Flutter `TextStyle`:
 
@@ -109,8 +114,34 @@ class MyTextBox extends TextBoxComponent {
 }
 ```
 
+
 You can find all the options under [TextBoxComponent's
 API](https://pub.dev/documentation/flame/latest/components/TextBoxComponent-class.html).
+
+
+### ScrollTextBoxComponent
+
+The `ScrollTextBoxComponent` is an advanced version of the `TextBoxComponent`,
+designed for displaying scrollable text within a defined area.
+This component is particularly useful for creating interfaces where large amounts of text
+need to be presented in a constrained space, such as dialogues or information panels.
+
+Note that the `align` property of `TextBoxComponent` is not available.
+
+
+Example usage:
+
+
+```dart
+class MyScrollableText extends ScrollTextBoxComponent {
+  MyScrollableText(Vector2 frameSize, String text) : super(
+    size: frameSize,
+    text: text,
+    textRenderer: regular, 
+    boxConfig: TextBoxConfig(timePerChar: 0.05),
+  );
+}
+```
 
 
 ### TextElementComponent
@@ -212,7 +243,7 @@ this section is for you.
 
 The following diagram showcases the class and inheritance structure of the text rendering pipeline:
 
-```mermaid
+```{mermaid}
 %%{init: { 'theme': 'dark' } }%%
 classDiagram
     %% renderers
@@ -435,7 +466,7 @@ defined in the `FlameTextStyle` class.
 
 The actual nodes all inherit from `TextNode` and are broken down by the following diagram:
 
-```mermaid
+```{mermaid}
 %%{init: { 'theme': 'dark' } }%%
 graph TD
     %% Config %%
@@ -511,7 +542,7 @@ to, and can be thought of as, CSS definitions.
 
 The full inheritance chain can be seen on the following diagram:
 
-```mermaid
+```{mermaid}
 %%{init: { 'theme': 'dark' } }%%
 classDiagram
     %% Nodes %%

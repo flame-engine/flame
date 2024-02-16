@@ -12,16 +12,8 @@ functionalities that you might need in a game. For instance; input, images, spri
 animations, collision detection, and a component system that we call Flame Component System (FCS for
 short).
 
-We also provide stand-alone packages that extend the Flame functionality:
-
-- [flame_audio](https://pub.dev/packages/flame_audio) Which provides audio capabilities using the
-  `audioplayers` package.
-- [flame_forge2d](https://pub.dev/packages/flame_forge2d) Which provides physics capabilities using
-  our own `Box2D` port called `Forge2D`.
-- [flame_tiled](https://pub.dev/packages/flame_tiled) Which provides integration with the
-  [tiled](https://pub.dev/packages/tiled) package.
-- [flame_svg](https://pub.dev/packages/flame_svg) Which provides integration with
-  [flutter_svg](https://pub.dev/packages/flutter_svg).
+We also provide stand-alone packages that extend the Flame functionality which can be found in the
+[Bridge Packages](bridge_packages/bridge_packages.md) section.
 
 You can pick and choose whichever parts you want, as they are all independent and modular.
 
@@ -33,11 +25,10 @@ Give us a star if you want to help give the engine exposure and grow the communi
 
 ## Installation
 
-Put the pub package as your dependency by putting the following in your `pubspec.yaml`:
+Add the `flame` package as a dependency in your `pubspec.yaml` by running the following command:
 
-```yaml
-dependencies:
-  flame: --VERSION--
+```console
+flutter pub add flame
 ```
 
 The latest version can be found on [pub.dev](https://pub.dev/packages/flame/install).
@@ -77,18 +68,3 @@ If you are building a multiplayer game, here are some recommendations of package
 - [Firebase](https://firebase.google.com/): Provides dozens of services that can be used to write
 simpler multiplayer experiences.
 - [Supabase](https://supabase.com/): A cheaper alternative to Firebase, based on Postgres.
-
-
-### External assets
-
-Flame doesn't bundle any helpers to load assets from an external source (external storage or online
-sources).
-
-But most of Flame's API can be loaded from concrete asset instances, for examples, `Sprite`s can be
-created from `dart:ui`s `Image` instances, so the user can write custom code to load images from
-anywhere they need, and then load it into Flame's classes.
-
-Here are some suggestions for http client packages:
-
-- [http](https://pub.dev/packages/http): A simple package for performing http requests.
-- [Dio](https://pub.dev/packages/dio): A popular and powerful package for performing http requests.

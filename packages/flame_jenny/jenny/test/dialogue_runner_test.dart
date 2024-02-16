@@ -124,6 +124,7 @@ void main() {
     test('dialogue with choices', () async {
       final yarn = YarnProject()
         ..parse('title: X\n---\n'
+            'Question?\n'
             '-> Hi there\n'
             '-> Howdy\n'
             '   Greetings to you too\n'
@@ -138,6 +139,8 @@ void main() {
         [
           '[*] onDialogueStart()',
           '[*] onNodeStart(Node(X))',
+          '[*] onLineStart(DialogueLine(Question?)[#lastline])',
+          '[*] onLineFinish(DialogueLine(Question?))',
           '[*] onChoiceStart(DialogueChoice([Option(Hi there), ' +
               'Option(Howdy), Option(Yo! #disabled)])) -> 1',
           '[*] onChoiceFinish(Option(Howdy))',
@@ -157,6 +160,8 @@ void main() {
         [
           '[*] onDialogueStart()',
           '[*] onNodeStart(Node(X))',
+          '[*] onLineStart(DialogueLine(Question?)[#lastline])',
+          '[*] onLineFinish(DialogueLine(Question?))',
           '[*] onChoiceStart(DialogueChoice([Option(Hi there), ' +
               'Option(Howdy), Option(Yo! #disabled)])) -> 0',
           '[*] onChoiceFinish(Option(Hi there))',
@@ -373,7 +378,7 @@ class _RecordingDialogueView extends DialogueView {
 
   @override
   FutureOr<bool> onLineStart(DialogueLine line) =>
-      _record('onLineStart($line)');
+      _record('onLineStart($line${line.tags.isNotEmpty ? line.tags : ""})');
 
   @override
   void onLineFinish(DialogueLine line) => _record('onLineFinish($line)');

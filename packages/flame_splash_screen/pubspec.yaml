@@ -9,7 +9,7 @@ funding:
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.13.0"
+  flutter: ^3.19.0
 
 dependencies:
   flutter:
@@ -17,7 +17,7 @@ dependencies:
   meta: ^1.9.1
 
 dev_dependencies:
-  flame_lint: ^1.1.1
+  flame_lint: ^1.1.2
   flutter_test:
     sdk: flutter
   mockito: ^5.4.2

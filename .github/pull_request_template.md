@@ -1,8 +1,13 @@
+<!-- Exclude from commit message -->
 <!--
 The title of your PR on the line above should start with a [Conventional Commit] prefix
 (`fix:`, `feat:`, `docs:`, `test:`, `chore:`, `refactor:`, `perf:`, `build:`, `ci:`,
 `style:`, `revert:`). This title will later become an entry in the [CHANGELOG], so please
 make sure that it summarizes the PR adequately.
+
+Don't remove the "exclude from commit message" comments below. They are used to prevent
+the PR description template from being included in the git log.
+Only change the "Replace this text" parts.
 -->
 
 # Description
@@ -12,8 +17,10 @@ If you're modifying existing behavior, describe the existing behavior, how this 
 and what motivated the change. If this is a breaking change, specify explicitly which APIs were
 changed.
 -->
+<!-- End of exclude from commit message -->
+Replace this text.
 
-
+<!-- Exclude from commit message -->
 ## Checklist
 <!--
 Before you create this PR confirm that it meets all requirements listed below by checking the
@@ -42,8 +49,10 @@ instructions" section below.
 ### Migration instructions
 
 If the PR is breaking, uncomment this header and add instructions for how to migrate from the
-currently released version to the new proposed way.
+currently released version in-between the two following tags:
 -->
+<!-- End of exclude from commit message -->
+<!-- Exclude from commit message -->
 
 ## Related Issues
 <!--
@@ -56,3 +65,4 @@ Closes #1234
 [Contributor Guide]: https://github.com/flame-engine/flame/blob/main/CONTRIBUTING.md
 [Conventional Commit]: https://conventionalcommits.org
 [CHANGELOG]: https://github.com/flame-engine/flame/blob/main/CHANGELOG.md
+<!-- End of exclude from commit message -->

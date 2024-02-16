@@ -2,8 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/components/input/hud_margin_component.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/widgets.dart';
 
 enum JoystickDirection {
   up,
@@ -17,7 +16,8 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends HudMarginComponent with DragCallbacks {
+class JoystickComponent extends PositionComponent
+    with HasGameReference, ComponentViewportMargin, DragCallbacks {
   late final PositionComponent? knob;
   late final PositionComponent? background;
 
@@ -46,8 +46,8 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
   JoystickComponent({
     this.knob,
     this.background,
-    super.margin,
     super.position,
+    EdgeInsets? margin,
     double? size,
     double? knobRadius,
     Anchor super.anchor = Anchor.center,
@@ -66,6 +66,7 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
         super(
           size: background?.size ?? Vector2.all(size ?? 0),
         ) {
+    this.margin = margin;
     this.knobRadius = knobRadius ?? this.size.x / 2;
   }
 
@@ -113,7 +114,7 @@ class JoystickComponent extends HudMarginComponent with DragCallbacks {
 
   @override
   bool onDragUpdate(DragUpdateEvent event) {
-    _unscaledDelta.add(event.delta);
+    _unscaledDelta.add(event.localDelta);
     return false;
   }
 

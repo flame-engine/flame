@@ -18,6 +18,7 @@ class HexagonalTileLayer extends FlameTileLayer {
     required super.tiledAtlas,
     required super.animationFrames,
     required super.ignoreFlip,
+    required super.layerPaintFactory,
     super.filterQuality,
   });
 

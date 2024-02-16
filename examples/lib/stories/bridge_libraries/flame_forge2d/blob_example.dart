@@ -97,7 +97,6 @@ class BlobPart extends BodyComponent {
     final shape = CircleShape()..radius = bodyRadius;
     final fixtureDef = FixtureDef(
       shape,
-      density: 1.0,
       friction: 0.2,
     );
     body.createFixture(fixtureDef);
@@ -119,7 +118,7 @@ class FallingBox extends BodyComponent {
     );
     final shape = PolygonShape()..setAsBoxXY(2, 4);
     final body = world.createBody(bodyDef);
-    body.createFixtureFromShape(shape, 1.0);
+    body.createFixtureFromShape(shape);
     return body;
   }
 }

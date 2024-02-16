@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 
 class CameraFollowAndWorldBoundsExample extends FlameGame
     with HasKeyboardHandlerComponents {
-  static const description = ''' 
+  static const description = '''
     This example demonstrates camera following the player, but also obeying the
     world bounds (which are set up to leave a small margin around the visible
     part of the ground).
@@ -142,8 +142,8 @@ class Player extends PositionComponent with KeyboardHandler {
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isKeyDown = event is RawKeyDownEvent;
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isKeyDown = event is KeyDownEvent;
     final keyLeft = (event.logicalKey == LogicalKeyboardKey.arrowLeft) ||
         (event.logicalKey == LogicalKeyboardKey.keyA);
     final keyRight = (event.logicalKey == LogicalKeyboardKey.arrowRight) ||

@@ -6,7 +6,6 @@ AHSV # alpha hue saturation value
 antialiasing # set of techniques to combat the problems of aliasing
 ARGB # alpha red green blue
 arities # plural of arity
-arity # number of parameters a function takes
 autofocus # auto focus event
 backgrounded # moving the app to the background
 backgrounding # moving the app to the background
@@ -19,7 +18,6 @@ blockquote # HTML tag
 broadphase # common division of collision detection between broad and narrow phases
 cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
-consts # plural of const (constant)
 easings # Easing functions specify the rate of change of a parameter over time
 fullscreen # mode in which a program or app occupies the entire screen with no borders
 goldens # test files used as reference for Golden Tests
@@ -46,9 +44,9 @@ raycasts # plural of raycast
 raytrace # act of raytracing
 raytracing # rendering techniques that calculates light rays as straight lines
 rects # plural of rect
-refactorings # plural of refactoring
 respawned # past tense of respawn
 respawn # when the player character dies and is brought back after some time and penalties
+retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
 rrect # rounded rect

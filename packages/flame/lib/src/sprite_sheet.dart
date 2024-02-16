@@ -27,30 +27,41 @@ class SpriteSheet {
   /// size. If it's an animation sheet, this would be the frame size.
   final Vector2 srcSize;
 
+  /// The empty space around the edges of the image.
+  final double margin;
+
+  /// This empty space in between adjacent tiles within the image.
+  final double spacing;
+
+  /// The number of rows in the image based on the image height and the tile
+  /// size.
+  final int rows;
+
+  /// The number of columns in the image based on the image width and the tile
+  /// size.
+  final int columns;
+
   final Map<int, Sprite> _spriteCache = {};
 
   /// Creates a sprite sheet given the image and the tile size.
   SpriteSheet({
     required this.image,
     required this.srcSize,
-  });
+    this.margin = 0,
+    this.spacing = 0,
+  })  : columns = (image.width - 2 * margin + spacing) ~/ (srcSize.x + spacing),
+        rows = (image.height - 2 * margin + spacing) ~/ (srcSize.y + spacing);
 
   SpriteSheet.fromColumnsAndRows({
     required this.image,
-    required int columns,
-    required int rows,
+    required this.columns,
+    required this.rows,
+    this.spacing = 0,
+    this.margin = 0,
   }) : srcSize = Vector2(
-          image.width / columns,
-          image.height / rows,
+          (image.width - 2 * margin - (columns - 1) * spacing) / columns,
+          (image.height - 2 * margin - (rows - 1) * spacing) / rows,
         );
-
-  /// Compute the number of columns the image has
-  /// by using the image width and tile size.
-  int get columns => image.width ~/ srcSize.x;
-
-  /// Compute the number of rows the image has
-  /// by using the image height and tile size.
-  int get rows => image.height ~/ srcSize.y;
 
   /// Gets the sprite in the position (row, column) on the sprite sheet grid.
   ///
@@ -101,7 +112,9 @@ class SpriteSheet {
     final j = spriteId ~/ columns;
     return Sprite(
       image,
-      srcPosition: Vector2Extension.fromInts(i, j)..multiply(srcSize),
+      srcPosition: Vector2Extension.fromInts(i, j)
+        ..multiply(srcSize)
+        ..translate(margin + i * spacing, margin + j * spacing),
       srcSize: srcSize,
     );
   }

@@ -120,6 +120,43 @@ other way around. If there are no intersections with the edges on a solid hitbox
 position is instead returned.
 
 
+### Collision order
+
+If a `Hitbox` collides with more than one other `Hitbox` within a given time step, then
+the `onCollision` callbacks will be called in an essentially random order. In some cases this can
+be a problem, such as in a bouncing ball game where the trajectory of the ball can differ depending
+on which other object was hit first. To help resolve this the `collisionsCompletedNotifier`
+listener can be used - this triggers at the end of the collision detection process.
+
+An example of how this might be used is to add a local variable in your `PositionComponent` to save
+the other components with which it's colliding:
+`List<PositionComponent> collisionComponents = [];`. The `onCollision` callback is then used to
+save all the other `PositionComponent`s to this list:
+
+```dart
+@override
+void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  collisionComponents.add(other);
+  super.onCollision(intersectionPoints, other);
+}
+
+```
+
+Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a function
+which will resolve how the collisions should be dealt with:
+
+```dart
+(game as HasCollisionDetection)
+    .collisionDetection
+    .collisionsCompletedNotifier
+    .addListener(() {
+  resolveCollisions();
+});
+```
+
+The list `collisionComponents` would need to be cleared in each call to `update`.
+
+
 ## ShapeHitbox
 
 The `ShapeHitbox`s are normal components, so you add them to the component that you want to add
@@ -199,9 +236,9 @@ the collision detection more performant. By default the `CollisionType` is `acti
 
 The `CollisionType` enum contains the following values:
 
-- `active` collides with other `Collidable`s of type active or passive
-- `passive` collides with other `Collidable`s of type active
-- `inactive` will not collide with any other `Collidable`s
+- `active` collides with other `Hitbox`es of type active or passive
+- `passive` collides with other `Hitbox`es of type active
+- `inactive` will not collide with any other `Hitbox`es
 
 So if you have hitboxes that you don't need to check collisions against each other you can mark
 them as passive by setting `collisionType: CollisionType.passive` in the constructor,

@@ -1,3 +1,32 @@
+## 1.15.4
+
+ - **FIX**: Lifecycle completers to be called for FlameGame ([#3007](https://github.com/flame-engine/flame/issues/3007)). ([3804f524](https://github.com/flame-engine/flame/commit/3804f52434cf1bcaf28b501bf96858ecd3636164))
+
+## 1.15.3
+
+ - Update a dependency to the latest release.
+
+## 1.15.2
+
+ - Update a dependency to the latest release.
+
+## 1.15.1
+
+ - Update a dependency to the latest release.
+
+## 1.15.0
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+ - **FEAT**: Expose addition test arguments on flame test ([#2832](https://github.com/flame-engine/flame/issues/2832)). ([08b4bd6d](https://github.com/flame-engine/flame/commit/08b4bd6d3f308013d18fec4eb126927239cd6481))
+
+## 1.14.0
+
+ - **FEAT**: Expose addition test arguments on flame test ([#2832](https://github.com/flame-engine/flame/issues/2832)). ([08b4bd6d](https://github.com/flame-engine/flame/commit/08b4bd6d3f308013d18fec4eb126927239cd6481))
+
+## 1.13.2
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+
 ## 1.13.1
 
  - Update a dependency to the latest release.

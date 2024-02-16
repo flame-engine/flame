@@ -76,7 +76,7 @@ class MyGame extends FlameGame with KeyboardEvents {
 
 To receive keyboard events directly in components, there is the mixin `KeyboardHandler`.
 
-Similarly to `Tappable` and `Draggable`, `KeyboardHandler` can be mixed into any subclass of
+Similarly to `TapCallbacks` and `DragCallbacks`, `KeyboardHandler` can be mixed into any subclass of
 `Component`.
 
 KeyboardHandlers must only be added to games that are mixed with `HasKeyboardHandlerComponents`.

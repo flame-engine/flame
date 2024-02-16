@@ -80,6 +80,7 @@ class PolygonComponent extends ShapeComponent {
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
     ComponentKey? key,
+    List<Component>? children,
   }) : this(
           normalsToVertices(relation, parentSize),
           position: position,
@@ -91,6 +92,7 @@ class PolygonComponent extends ShapeComponent {
           paintLayers: paintLayers,
           shrinkToBounds: shrinkToBounds,
           key: key,
+          children: children,
         );
 
   @internal
@@ -199,45 +201,65 @@ class PolygonComponent extends ShapeComponent {
     canvas.drawPath(_path, debugPaint);
   }
 
-  /// Checks whether the polygon contains the [point].
-  /// Note: The polygon needs to be convex for this to work.
-  @override
-  bool containsPoint(Vector2 point) {
+  bool _containsPoint(Vector2 point, List<Vector2> vertices) {
     // If the size is 0 then it can't contain any points
     if (size.x == 0 || size.y == 0) {
       return false;
     }
 
-    final vertices = globalVertices();
+    // Count the amount of edges crossed by going left from the point
+    var count = 0;
     for (var i = 0; i < vertices.length; i++) {
-      final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) * (point.y - edge.from.y) -
-              (point.x - edge.from.x) * (edge.to.y - edge.from.y) >
-          0;
-      if (isOutside) {
-        // Point is outside of convex polygon
-        return false;
+      final from = vertices[i];
+      final to = vertices[(i + 1) % vertices.length];
+
+      // Skip if the edge is entirely to the right, above or below the point
+      if (from.x > point.x && to.x > point.x ||
+          min(from.y, to.y) > point.y ||
+          max(from.y, to.y) < point.y) {
+        continue;
+      }
+
+      // Get x coordinate of where the edge intersects with the horizontal line
+      double intersectionX;
+      if (from.y == to.y) {
+        intersectionX = min(from.x, to.x);
+      } else {
+        intersectionX =
+            ((point.y - from.y) * (to.x - from.x)) / (to.y - from.y) + from.x;
+      }
+
+      if (intersectionX == point.x) {
+        // If the point is on the edge, return true
+        return true;
+      } else if (intersectionX < point.x) {
+        // Only count one edge if vertex is crossed
+        // Only count if edges cross the line, not just touch it and go back
+        if ((from.y != point.y && to.y != point.y) ||
+            to.y == from.y ||
+            point.y == max(from.y, to.y)) {
+          count++;
+        }
       }
     }
-    return true;
+
+    // If the amount of edges crossed is odd, the point is inside the polygon
+    return (count % 2).isOdd;
+  }
+
+  @override
+  bool containsPoint(Vector2 point) {
+    final vertices = globalVertices();
+    return _containsPoint(point, vertices);
   }
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    if (size.x == 0 || size.y == 0) {
-      return false;
-    }
-    for (var i = 0; i < _vertices.length; i++) {
-      final edge = getEdge(i, vertices: vertices);
-      final isOutside = (edge.to.x - edge.from.x) *
-                  (point.y - edge.from.y + _topLeft.y) -
-              (point.x - edge.from.x + _topLeft.x) * (edge.to.y - edge.from.y) >
-          0;
-      if (isOutside) {
-        return false;
-      }
-    }
-    return true;
+    // Take anchor into consideration.
+    final localPoint =
+        anchor.toOtherAnchorPosition(point, Anchor.topLeft, size);
+
+    return _containsPoint(localPoint, _vertices);
   }
 
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]

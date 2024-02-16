@@ -1,3 +1,35 @@
+## 1.9.11
+
+ - Update a dependency to the latest release.
+
+## 1.9.10
+
+ - Update a dependency to the latest release.
+
+## 1.9.9
+
+ - **DOCS**: Remove references to Tappable and Draggable ([#2912](https://github.com/flame-engine/flame/issues/2912)). ([d12e4544](https://github.com/flame-engine/flame/commit/d12e45444e49bbe0b24a7acbd24f0cda20a13755))
+
+## 1.9.8
+
+ - Update a dependency to the latest release.
+
+## 1.9.7
+
+ - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))
+
+## 1.9.6
+
+ - Bump to Rive 0.12.3
+
+## 1.9.5
+
+ - Update a dependency to the latest release.
+
+## 1.9.4
+
+ - **REFACTOR**: Remove unnecessary 'async' keyword across the codebase [DCM] ([#2803](https://github.com/flame-engine/flame/issues/2803)). ([2dfe0e5a](https://github.com/flame-engine/flame/commit/2dfe0e5a431213c7148ab6389e3e8c8dc49fbf3d))
+
 ## 1.9.3
 
  - Update a dependency to the latest release.

@@ -9,7 +9,12 @@ class _MockFlameGame extends Mock implements FlameGame {}
 
 class _MockBuildContext extends Mock implements BuildContext {}
 
-class _MockPipelineOwner extends Mock implements PipelineOwner {}
+class _MockPipelineOwner extends Mock implements PipelineOwner {
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return '';
+  }
+}
 
 final nodesNeedingCompositingBitsUpdate = <RenderObject>[];
 

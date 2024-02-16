@@ -1,11 +1,5 @@
 # Camera component
 
-```{note}
-This document describes a new camera API. The more traditional approach
-(which is deprecated) for handling a camera is described in
-[](camera_and_viewport.md).
-```
-
 Camera-as-a-component is the new way of structuring a game, an approach that
 allows more flexibility in placing the camera, or even having more than one
 camera simultaneously.
@@ -19,15 +13,15 @@ same world (or different worlds) at the same time.
 
 With this mindset, we can now understand how camera-as-a-component works.
 
-First, there is the [](#world) class, which contains all components that are
+First, there is the [World](#world) class, which contains all components that are
 inside your game world. The `World` component can be mounted anywhere, for
 example at the root of your game class, like the built-in `World` is.
 
-Then, a [](#cameracomponent) class that "looks at" the [](#world). The
-`CameraComponent` has a [](#viewport) and a [](#viewfinder) inside, allowing
+Then, a [CameraComponent](#cameracomponent) class that "looks at" the [World](#world). The
+`CameraComponent` has a [Viewport](#viewport) and a [Viewfinder](#viewfinder) inside, allowing
 both the flexibility of rendering the world at any place on the screen, and
 also control the viewing location and angle. The `CameraComponent` also
-contains a [](#backdrop) component which is statically rendered below the
+contains a [backdrop](#backdrop) component which is statically rendered below the
 world.
 
 
@@ -36,7 +30,7 @@ world.
 This component should be used to host all other components that comprise your
 game world. The main property of the `World` class is that it does not render
 through traditional means -- instead it is rendered by one or more
-[](#cameracomponent)s to "look at" the world. In the `FlameGame` class there is
+[CameraComponent](#cameracomponent)s to "look at" the world. In the `FlameGame` class there is
 one `World` called `world` which is added by default and paired together with
 the default `CameraComponent` called `camera`.
 
@@ -79,8 +73,8 @@ There is a default `CameraComponent` called `camera` on the `FlameGame` class
 which is paired together with the default `world`, so you don't need to create
 or add your own `CameraComponent` if your game doesn't need to.
 
-A `CameraComponent` has two other components inside: a [](#viewport) and a
-[](#viewfinder). Unlike the `World` object, the camera owns the viewport and
+A `CameraComponent` has two other components inside: a [Viewport](#viewport) and a
+[Viewfinder](#viewfinder). Unlike the `World` object, the camera owns the viewport and
 the viewfinder, which means those components are children of the camera.
 
 There is also a static property `CameraComponent.currentCamera` which is not
@@ -174,7 +168,7 @@ of the world, but behind the viewport and with the same transformations as are
 applied to the world, so these components are not static.
 
 You can also add behavioral components as children to the viewfinder, for
-example [](effects.md) or other controllers. If you for example would add a
+example [effects](effects.md) or other controllers. If you for example would add a
 `ScaleEffect` you would be able to achieve a smooth zoom in your game.
 
 

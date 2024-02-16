@@ -1,4 +1,6 @@
 /// {@canonicalFor anchor.Anchor}
+library components;
+
 export 'src/anchor.dart';
 export 'src/camera/camera_component.dart' show CameraComponent;
 export 'src/camera/world.dart' show World;
@@ -29,6 +31,7 @@ export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/has_time_scale.dart';
 export 'src/components/mixins/has_visibility.dart';
 export 'src/components/mixins/has_world.dart';
+export 'src/components/mixins/ignore_events.dart';
 export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';
 export 'src/components/mixins/parent_is_a.dart';
@@ -38,6 +41,7 @@ export 'src/components/nine_tile_box_component.dart';
 export 'src/components/parallax_component.dart';
 export 'src/components/particle_system_component.dart';
 export 'src/components/position_component.dart';
+export 'src/components/scroll_text_box_component.dart';
 export 'src/components/spawn_component.dart';
 export 'src/components/sprite_animation_component.dart';
 export 'src/components/sprite_animation_group_component.dart';

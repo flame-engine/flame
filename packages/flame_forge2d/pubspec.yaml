@@ -1,6 +1,6 @@
 name: flame_forge2d
 description: Forge2D (Box2D) support for the Flame game engine. This uses the forge2d package and provides wrappers and components to be used inside Flame.
-version: 0.15.0+1
+version: 0.16.0+5
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d
 funding:
   - https://opencollective.com/blue-fire
@@ -9,19 +9,19 @@ funding:
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.13.0"
+  flutter: ^3.19.0
 
 dependencies:
-  flame: ^1.9.1
+  flame: ^1.15.0
   flutter:
     sdk: flutter
-  forge2d: ">=0.11.0 <0.12.0"
+  forge2d: ">=0.12.2 <0.13.0"
 
 dev_dependencies:
-  dartdoc: ^6.2.2
-  flame_lint: ^1.1.1
-  flame_test: ^1.13.1
+  dartdoc: ^6.3.0
+  flame_lint: ^1.1.2
+  flame_test: ^1.15.4
   flutter_test:
     sdk: flutter
-  mocktail: ^0.3.0
+  mocktail: ^1.0.1
   test: any

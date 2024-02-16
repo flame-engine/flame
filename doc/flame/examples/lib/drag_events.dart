@@ -83,7 +83,7 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    _trails[event.pointerId]!.addPoint(event.localPosition);
+    _trails[event.pointerId]!.addPoint(event.localEndPosition);
   }
 
   @override
@@ -240,6 +240,6 @@ class Star extends PositionComponent with DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    position += event.delta;
+    position += event.localDelta;
   }
 }
