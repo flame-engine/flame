@@ -25,8 +25,6 @@ class PolygonComponent extends ShapeComponent {
   /// With this constructor you create your [PolygonComponent] from positions in
   /// anywhere in the 2d-space. It will automatically calculate the [size] of
   /// the Polygon (the bounding box) if no size it given.
-  /// NOTE: Always define your polygon in a counter-clockwise fashion (in the
-  /// screen coordinate system).
   PolygonComponent(
     this._vertices, {
     super.position,
@@ -110,10 +108,6 @@ class PolygonComponent extends ShapeComponent {
         .toList(growable: false);
   }
 
-  // Used to not create new Vector2 objects when calculating the top left of the
-  // bounds of the polygon.
-  final _topLeft = Vector2.zero();
-
   @protected
   void refreshVertices({
     required List<Vector2> newVertices,
@@ -128,24 +122,29 @@ class PolygonComponent extends ShapeComponent {
     if (_isClockwise(newVertices)) {
       newVertices.reverse();
     }
-    _topLeft.setFrom(newVertices[0]);
-    newVertices.forEachIndexed((i, _) {
+    final topLeft = Vector2.zero();
+    topLeft.setFrom(newVertices[0]);
+    for (var i = 0; i < newVertices.length; i++) {
       final newVertex = newVertices[i];
       _vertices[i].setFrom(newVertex);
-      _topLeft.x = min(_topLeft.x, newVertex.x);
-      _topLeft.y = min(_topLeft.y, newVertex.y);
-    });
+      topLeft.x = min(topLeft.x, newVertex.x);
+      topLeft.y = min(topLeft.y, newVertex.y);
+    }
+    for (var i = 0; i < newVertices.length; i++) {
+      final newVertex = newVertices[i];
+      _vertices[i].setFrom(newVertex - topLeft);
+    }
     _path
       ..reset()
       ..addPolygon(
-        vertices.map((p) => (p - _topLeft).toOffset()).toList(growable: false),
+        _vertices.map((p) => p.toOffset()).toList(growable: false),
         true,
       );
     if (shrinkToBoundsOverride ?? shrinkToBounds) {
       final bounds = _path.getBounds();
       size.setValues(bounds.width, bounds.height);
       if (!manuallyPositioned) {
-        position = Anchor.topLeft.toOtherAnchorPosition(_topLeft, anchor, size);
+        position = Anchor.topLeft.toOtherAnchorPosition(topLeft, anchor, size);
       }
     }
   }
@@ -161,14 +160,14 @@ class PolygonComponent extends ShapeComponent {
       scale,
       angle,
     ])) {
-      vertices.forEachIndexed((i, vertex) {
+      for (var i = 0; i < _vertices.length; i++) {
+        final vertex = _vertices[i];
         _globalVertices[i]
           ..setFrom(vertex)
-          ..sub(_topLeft)
           ..multiply(scale)
           ..add(position)
           ..rotate(angle, center: position);
-      });
+      }
       if (scale.y.isNegative || scale.x.isNegative) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
@@ -255,11 +254,7 @@ class PolygonComponent extends ShapeComponent {
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    // Take anchor into consideration.
-    final localPoint =
-        anchor.toOtherAnchorPosition(point, Anchor.topLeft, size);
-
-    return _containsPoint(localPoint, _vertices);
+    return _containsPoint(point, _vertices);
   }
 
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]
