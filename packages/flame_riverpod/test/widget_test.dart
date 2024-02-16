@@ -184,8 +184,7 @@ void main() {
     // Expect that the component has been removed from the game.
     expect(game.isAttached, false);
 
-    // Expect that the GameWidget is no longer listening to
-    // numberProvider as the watching component has been removed.
+    // Expect that the key no longer has access to a state.
     expect(key.currentState, null);
   });
 }
