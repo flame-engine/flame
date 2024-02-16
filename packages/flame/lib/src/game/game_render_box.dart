@@ -73,6 +73,16 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     markNeedsCompositingBitsUpdate();
   }
 
+  int _updateTime = 0;
+  int _renderTime = 0;
+  final _stopwatch = Stopwatch();
+
+  /// The time it took to update the game in milliseconds.
+  int get updateTime => _updateTime;
+
+  /// The time it took to render the game in milliseconds.
+  int get renderTime => _renderTime;
+
   @override
   bool get isRepaintBoundary => _isRepaintBoundary;
 
@@ -118,7 +128,15 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     if (!attached) {
       return;
     }
+
+    _stopwatch.reset();
+    _stopwatch.start();
+
     game.update(dt);
+
+    _stopwatch.stop();
+    _updateTime = _stopwatch.elapsedMilliseconds;
+
     markNeedsPaint();
   }
 
@@ -126,7 +144,15 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
     context.canvas.translate(offset.dx, offset.dy);
+
+    _stopwatch.reset();
+    _stopwatch.start();
+
     game.render(context.canvas);
+
+    _stopwatch.stop();
+    _renderTime = _stopwatch.elapsedMilliseconds;
+
     context.canvas.restore();
   }
 

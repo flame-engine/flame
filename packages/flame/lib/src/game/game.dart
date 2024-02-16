@@ -61,6 +61,12 @@ abstract mixin class Game {
   /// Whether the game widget was attached to the Flutter tree.
   bool get isAttached => buildContext != null;
 
+  /// The time it took to update the game in milliseconds.
+  int get updateTime => _gameRenderBox?.updateTime ?? 0;
+
+  /// The time it took to render the game in milliseconds.
+  int get renderTime => _gameRenderBox?.renderTime ?? 0;
+
   /// Current size of the game as provided by the framework; it will be null if
   /// layout has not been computed yet.
   ///
