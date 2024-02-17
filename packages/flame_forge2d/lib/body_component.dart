@@ -207,9 +207,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    _hitTestPoint
-      ..setFrom(body.position)
-      ..add(point);
+    _transform.localToGlobal(point, output: _hitTestPoint);
     return body.fixtures.any((fixture) => fixture.testPoint(_hitTestPoint));
   }
 
