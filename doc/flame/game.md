@@ -244,3 +244,18 @@ class MyGame extends FlameGame {
 
 On the current Flutter stable (3.13), this flag is effectively ignored on
 non-mobile platforms including the web.
+
+
+## HasPerformanceTracker mixin
+
+While optimizing a game, it can be useful to track the time it took for the game to update and render
+each frame. This data can help in detecting areas of the code that are running hot. It can also help
+in detecting visual areas of the game that are taking the most time to render.
+
+To get the update and render times, just add the `HasPerformanceTracker` mixin to the game class.
+
+```dart
+class MyGame extends FlameGame with HasPerformanceTracker {
+  // access `updateTime` and `renderTime` getters.
+}
+```
