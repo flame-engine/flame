@@ -3,6 +3,125 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.16.0`](#flame---v1160)
+ - [`flame_audio` - `v2.10.0`](#flame_audio---v2100)
+ - [`flame_bloc` - `v1.11.0`](#flame_bloc---v1110)
+ - [`flame_fire_atlas` - `v1.5.0`](#flame_fire_atlas---v150)
+ - [`flame_rive` - `v1.10.0`](#flame_rive---v1100)
+ - [`flame_riverpod` - `v5.3.0`](#flame_riverpod---v530)
+ - [`flame_svg` - `v1.10.0`](#flame_svg---v1100)
+ - [`flame_test` - `v1.16.0`](#flame_test---v1160)
+ - [`flame_texturepacker` - `v3.1.0`](#flame_texturepacker---v310)
+ - [`flame_tiled` - `v1.19.0`](#flame_tiled---v1190)
+ - [`flame_forge2d` - `v0.17.0`](#flame_forge2d---v0170)
+ - [`flame_isolate` - `v0.6.0`](#flame_isolate---v060)
+ - [`flame_lottie` - `v0.4.0`](#flame_lottie---v040)
+ - [`flame_markdown` - `v0.2.0`](#flame_markdown---v020)
+ - [`flame_network_assets` - `v0.3.0`](#flame_network_assets---v030)
+ - [`flame_noise` - `v0.3.0`](#flame_noise---v030)
+ - [`flame_oxygen` - `v0.2.0`](#flame_oxygen---v020)
+ - [`flame_spine` - `v0.2.0`](#flame_spine---v020)
+ - [`flame_splash_screen` - `v0.3.0`](#flame_splash_screen---v030)
+
+Packages with other changes:
+
+ - [`jenny` - `v1.3.0`](#jenny---v130)
+
+---
+
+#### `flame` - `v1.16.0`
+
+ - **REFACTOR**: Fix unrelated types reported by DCM ([#3023](https://github.com/flame-engine/flame/issues/3023)). ([1d020a52](https://github.com/flame-engine/flame/commit/1d020a525b81df1cb45345d3e36a9c4e9caf701e))
+ - **FIX**: Vertices in `PolygonComponent` should subtract vertices positioning ([#3040](https://github.com/flame-engine/flame/issues/3040)). ([4f053ed7](https://github.com/flame-engine/flame/commit/4f053ed74c09d4e19a53694130b5d5c0d3e23aa6))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_audio` - `v2.10.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_bloc` - `v1.11.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_fire_atlas` - `v1.5.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_rive` - `v1.10.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_riverpod` - `v5.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_svg` - `v1.10.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_test` - `v1.16.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_texturepacker` - `v3.1.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_tiled` - `v1.19.0`
+
+ - **FEAT**: Add TiledObjectHealpers extension on TiledObject ([#3032](https://github.com/flame-engine/flame/issues/3032)). ([78380b9d](https://github.com/flame-engine/flame/commit/78380b9d3bb895e20f382c4a1227bcc11e5038b9))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_forge2d` - `v0.17.0`
+
+ - **FIX**: BodyComponent fixtures should test with global point ([#3042](https://github.com/flame-engine/flame/issues/3042)). ([7c3038be](https://github.com/flame-engine/flame/commit/7c3038becba91550eb47a033cbed7208d570e012))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_isolate` - `v0.6.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_lottie` - `v0.4.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_markdown` - `v0.2.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_network_assets` - `v0.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_noise` - `v0.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_oxygen` - `v0.2.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_spine` - `v0.2.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_splash_screen` - `v0.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `jenny` - `v1.3.0`
+
+ - **FEAT**: Add new methods to CommandStorage to support more arguments ([#3035](https://github.com/flame-engine/flame/issues/3035)). ([21922620](https://github.com/flame-engine/flame/commit/219226201a8d0c6e301c388299277be95b585c0e))
+
+
 ## 2024-02-11
 
 ### Changes
