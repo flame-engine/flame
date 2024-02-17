@@ -8,15 +8,11 @@ class PlayerComponent extends SpriteAnimationComponent
     with HasGameRef, CollisionCallbacks {
   late TimerComponent bulletCreator;
 
-  PlayerComponent()
-      : super(
-          size: Vector2(50, 75),
-          position: Vector2(100, 500),
-          anchor: Anchor.center,
-        );
+  PlayerComponent() : super(size: Vector2(50, 75), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
+    position = game.size / 2;
     add(CircleHitbox());
     add(
       bulletCreator = TimerComponent(
