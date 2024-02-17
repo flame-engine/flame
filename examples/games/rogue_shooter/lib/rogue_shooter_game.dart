@@ -6,7 +6,7 @@ import 'package:rogue_shooter/components/player_component.dart';
 import 'package:rogue_shooter/components/star_background_creator.dart';
 
 class RogueShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+    with PanDetector, HasCollisionDetection, HasPerformanceTracker {
   static const String description = '''
     A simple space shooter game used for testing performance of the collision
     detection system in Flame.

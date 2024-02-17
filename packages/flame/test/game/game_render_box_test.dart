@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/rendering.dart';
@@ -76,37 +73,5 @@ void main() {
 
       expect(renderBox.isRepaintBoundary, true);
     });
-
-    testWidgets(
-      'update and render times',
-      (widgetTester) async {
-        final game = FlameGame(children: [_SlowComponent()]);
-
-        expect(game.updateTime, 0);
-        expect(game.renderTime, 0);
-
-        await widgetTester.pumpFrames(
-          GameWidget(game: game),
-          const Duration(seconds: 1),
-        );
-
-        expect(
-          game.renderBox.updateTime,
-          _SlowComponent.duration.inMilliseconds,
-        );
-        expect(
-          game.renderBox.renderTime,
-          _SlowComponent.duration.inMilliseconds,
-        );
-      },
-    );
   });
-}
-
-class _SlowComponent extends Component {
-  static const duration = Duration(milliseconds: 8);
-  @override
-  void update(double dt) => sleep(duration);
-  @override
-  void render(Canvas canvas) => sleep(duration);
 }

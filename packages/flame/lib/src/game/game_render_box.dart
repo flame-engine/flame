@@ -73,33 +73,6 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     markNeedsCompositingBitsUpdate();
   }
 
-  int _updateTime = 0;
-  int _renderTime = 0;
-  bool _trackPerformance = false;
-  Stopwatch? _stopwatch;
-
-  /// The time it took to update the game in milliseconds.
-  int get updateTime => _updateTime;
-
-  /// The time it took to render the game in milliseconds.
-  int get renderTime => _renderTime;
-
-  /// Whether or not to track the performance of the game.
-  bool get trackPerformance => _trackPerformance;
-  set trackPerformance(bool value) {
-    if (_trackPerformance == value) {
-      return;
-    }
-    _trackPerformance = value;
-
-    if (_trackPerformance) {
-      _stopwatch = Stopwatch();
-    } else {
-      _stopwatch?.stop();
-      _stopwatch = null;
-    }
-  }
-
   @override
   bool get isRepaintBoundary => _isRepaintBoundary;
 
@@ -145,15 +118,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     if (!attached) {
       return;
     }
-
-    _stopwatch?.reset();
-    _stopwatch?.start();
-
     game.update(dt);
-
-    _stopwatch?.stop();
-    _updateTime = _stopwatch?.elapsedMilliseconds ?? 0;
-
     markNeedsPaint();
   }
 
@@ -161,15 +126,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   void paint(PaintingContext context, Offset offset) {
     context.canvas.save();
     context.canvas.translate(offset.dx, offset.dy);
-
-    _stopwatch?.reset();
-    _stopwatch?.start();
-
     game.render(context.canvas);
-
-    _stopwatch?.stop();
-    _renderTime = _stopwatch?.elapsedMilliseconds ?? 0;
-
     context.canvas.restore();
   }
 
