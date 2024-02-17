@@ -1,3 +1,10 @@
+## 0.17.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: BodyComponent fixtures should test with global point ([#3042](https://github.com/flame-engine/flame/issues/3042)). ([7c3038be](https://github.com/flame-engine/flame/commit/7c3038becba91550eb47a033cbed7208d570e012))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
 ## 0.16.0+5
 
  - Update a dependency to the latest release.
