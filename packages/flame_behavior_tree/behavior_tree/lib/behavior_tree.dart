@@ -1,8 +1,10 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library;
+/// Behavior tree implementation in dart
+library behavior_tree;
 
-export 'src/behavior_tree_base.dart';
+export 'src/composites/selector.dart';
+export 'src/composites/sequence.dart';
 
-// TODO: Export any libraries intended for clients of this package.
+export 'src/decorators/inverter.dart';
+export 'src/decorators/limiter.dart';
+
+export 'src/node.dart';
