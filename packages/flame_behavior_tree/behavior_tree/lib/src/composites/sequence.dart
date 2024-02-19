@@ -1,6 +1,6 @@
 import 'package:behavior_tree/src/node.dart';
 
-/// A composite node that stops at its first succesful child node.
+/// A composite node that stops at its first successful child node.
 class Sequence implements Node {
   /// Creates a sequence node for given [children] nodes.
   Sequence({List<Node>? children}) : _children = children ?? <Node>[];

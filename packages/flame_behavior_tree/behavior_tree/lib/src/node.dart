@@ -5,7 +5,7 @@ enum NodeStatus {
   /// Indicates that the node is running.
   running,
 
-  /// Indicates that the node has completed succesfully.
+  /// Indicates that the node has completed successfully.
   success,
 
   /// Indicates that the node has failed.

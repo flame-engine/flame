@@ -1,6 +1,6 @@
 import 'package:behavior_tree/src/node.dart';
 
-/// A decorator node that invertes [child]'s status if it is not
+/// A decorator node that inverts [child]'s status if it is not
 /// [NodeStatus.running].
 class Inverter implements Node {
   /// Creates an inverter node for given [child] node.
