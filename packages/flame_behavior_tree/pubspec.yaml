@@ -13,6 +13,7 @@ environment:
 
 dependencies:
   behavior_tree: ^1.0.0
+  flame: ^1.16.0
   flutter:
     sdk: flutter
 

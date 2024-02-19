@@ -1,7 +1,5 @@
+/// A bridge package that integrates behavior_tree package with flame.
 library flame_behavior_tree;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:behavior_tree/behavior_tree.dart';
+export 'src/has_behavior_tree.dart';
