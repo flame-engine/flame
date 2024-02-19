@@ -1,4 +1,4 @@
-This is a bridge packge that integrates the [behavior_tree](behavior_tree/) dart package with Flame engine.
+This is a bridge package that integrates the [behavior_tree](behavior_tree/) dart package with Flame.
 
 
 ## Features
