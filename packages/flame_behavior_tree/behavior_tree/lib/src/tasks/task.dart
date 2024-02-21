@@ -5,6 +5,7 @@ typedef TaskCallback = NodeStatus Function();
 
 /// This is a leaf node that will execute the given task when ticked.
 class Task implements Node {
+  /// Creates a task node for given [taskCallback].
   Task(this.taskCallback);
 
   /// The callback that will be executed when the task is ticked.
