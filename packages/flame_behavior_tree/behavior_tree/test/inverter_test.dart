@@ -22,9 +22,9 @@ void main() {
       expect(() => Inverter(alwaysRunning), returnsNormally);
     });
 
-    test('default status is running.', () {
+    test('default status is inverted child status.', () {
       final inverter = Inverter(alwaysSuccess);
-      expect(inverter.status, NodeStatus.running);
+      expect(inverter.status, NodeStatus.failure);
     });
 
     test('inverts status of child.', () {
@@ -42,4 +42,4 @@ void main() {
   });
 }
 
-class _MockNode extends Mock implements Node {}
+class _MockNode extends Mock implements INode {}

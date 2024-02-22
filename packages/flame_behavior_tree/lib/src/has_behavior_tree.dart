@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 /// via [treeRoot]. The update frequency of the tree can be reduced by
 /// increasing [tickInterval]. By default, the tree will be updated on every
 /// update of the component.
-mixin HasBehaviorTree<T extends Node> on Component {
+mixin HasBehaviorTree<T extends INode> on Component {
   T? _treeRoot;
   Timer? _timer;
   double _tickInterval = 0;

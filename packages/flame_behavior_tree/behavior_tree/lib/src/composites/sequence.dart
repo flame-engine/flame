@@ -1,25 +1,30 @@
-import 'package:behavior_tree/src/node.dart';
+import 'package:behavior_tree/behavior_tree.dart';
 
 /// A composite node that stops at its first successful child node.
-class Sequence implements Node {
+class Sequence extends BaseNode implements INode {
   /// Creates a sequence node for given [children] nodes.
-  Sequence({List<Node>? children}) : _children = children ?? <Node>[];
+  Sequence({List<INode>? children}) : _children = children ?? <INode>[];
 
-  final List<Node> _children;
-  var _nodeStatus = NodeStatus.running;
-
-  @override
-  NodeStatus get status => _nodeStatus;
+  final List<INode> _children;
 
   @override
   void tick() {
     for (final node in _children) {
       node.tick();
+
       if (node.status != NodeStatus.success) {
-        _nodeStatus = node.status;
+        status = node.status;
         return;
       }
     }
-    _nodeStatus = NodeStatus.success;
+    status = NodeStatus.success;
+  }
+
+  @override
+  void reset() {
+    for (final node in _children) {
+      node.reset();
+    }
+    super.reset();
   }
 }

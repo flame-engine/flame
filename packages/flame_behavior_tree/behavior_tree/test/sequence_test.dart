@@ -35,9 +35,9 @@ void main() {
       );
     });
 
-    test('default status is running.', () {
+    test('default status is not started.', () {
       final sequence = Sequence();
-      expect(sequence.status, NodeStatus.running);
+      expect(sequence.status, NodeStatus.notStarted);
     });
 
     test('can be ticked without the children.', () {
@@ -104,29 +104,25 @@ void main() {
   });
 }
 
-class _MockNode extends Mock implements Node {}
+class _MockNode extends Mock implements INode {}
 
-class _StatusAfterNTries implements Node {
+class _StatusAfterNTries extends BaseNode implements INode {
   _StatusAfterNTries(this.nTries, this.statusAfterTries);
 
   final int nTries;
   final NodeStatus statusAfterTries;
 
   var _tickCount = 0;
-  var _nodeStatus = NodeStatus.running;
-
   int get tickCount => _tickCount;
 
   @override
-  NodeStatus get status => _nodeStatus;
-
-  @override
   void tick() {
-    _nodeStatus = _tickCount++ < nTries ? NodeStatus.running : statusAfterTries;
+    status = _tickCount++ < nTries ? NodeStatus.running : statusAfterTries;
   }
 
+  @override
   void reset() {
+    super.reset();
     _tickCount = 0;
-    _nodeStatus = NodeStatus.running;
   }
 }

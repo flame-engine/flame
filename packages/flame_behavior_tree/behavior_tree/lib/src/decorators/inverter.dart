@@ -1,29 +1,39 @@
-import 'package:behavior_tree/src/node.dart';
+import 'package:behavior_tree/behavior_tree.dart';
 
 /// A decorator node that inverts [child]'s status if it is not
 /// [NodeStatus.running].
-class Inverter implements Node {
+class Inverter extends BaseNode implements INode {
   /// Creates an inverter node for given [child] node.
-  Inverter(this.child);
-
-  var _nodeStatus = NodeStatus.running;
+  Inverter(this.child) {
+    _invertStatus();
+  }
 
   /// The child node whose status needs to be inverted.
-  final Node child;
-
-  @override
-  NodeStatus get status => _nodeStatus;
+  final INode child;
 
   @override
   void tick() {
     child.tick();
+    _invertStatus();
+  }
+
+  void _invertStatus() {
     switch (child.status) {
+      case NodeStatus.notStarted:
+        status = NodeStatus.notStarted;
       case NodeStatus.running:
-        _nodeStatus = NodeStatus.running;
+        status = NodeStatus.running;
       case NodeStatus.success:
-        _nodeStatus = NodeStatus.failure;
+        status = NodeStatus.failure;
       case NodeStatus.failure:
-        _nodeStatus = NodeStatus.success;
+        status = NodeStatus.success;
     }
+  }
+
+  @override
+  void reset() {
+    super.reset();
+    child.reset();
+    _invertStatus();
   }
 }

@@ -6,6 +6,9 @@ repository: https://github.com/flame-engine/flame/tree/main/packages/flame_behav
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
+dependencies:
+  meta: ^1.9.1
+
 dev_dependencies:
   flame_lint: ^1.1.2
   lints: ^3.0.0

@@ -1,15 +1,11 @@
-import 'package:behavior_tree/src/node.dart';
+import 'package:behavior_tree/behavior_tree.dart';
 
 /// A composite node that stops at its first non-failing child node.
-class Selector implements Node {
+class Selector extends BaseNode implements INode {
   /// Creates a selector node for given [children] nodes.
-  Selector({List<Node>? children}) : _children = children ?? <Node>[];
+  Selector({List<INode>? children}) : _children = children ?? <INode>[];
 
-  final List<Node> _children;
-  var _nodeStatus = NodeStatus.running;
-
-  @override
-  NodeStatus get status => _nodeStatus;
+  final List<INode> _children;
 
   @override
   void tick() {
@@ -17,10 +13,18 @@ class Selector implements Node {
       node.tick();
 
       if (node.status != NodeStatus.failure) {
-        _nodeStatus = node.status;
+        status = node.status;
         return;
       }
     }
-    _nodeStatus = NodeStatus.failure;
+    status = NodeStatus.failure;
+  }
+
+  @override
+  void reset() {
+    for (final node in _children) {
+      node.reset();
+    }
+    super.reset();
   }
 }
