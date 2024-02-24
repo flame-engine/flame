@@ -41,7 +41,6 @@ mixin HasBehaviorTree<T extends INode> on Component {
   @mustCallSuper
   Future<void> onLoad() async {
     super.onLoad();
-    assert(_treeRoot != null, 'A treeRoot must be provided.');
     _timer?.onTick = _treeRoot?.tick;
   }
 
