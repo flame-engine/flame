@@ -21,10 +21,10 @@ void main() {
     });
 
     testWithFlameGame(
-      'asserts on adding to the game with null tree.',
+      'updates with null tree.',
       (game) async {
         final component = _BehaviorTreeComponent();
-        expect(() => game.add(component), throwsAssertionError);
+        expect(() => game.add(component), returnsNormally);
       },
     );
 
