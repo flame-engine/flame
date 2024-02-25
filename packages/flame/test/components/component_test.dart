@@ -572,7 +572,7 @@ void main() {
         // gets blocked in such cases.
         expect(game.ready().timeout(const Duration(seconds: 2)), completes);
 
-        // Readding the parent should eventually mount the child as well.
+        // Adding the parent again should eventually mount the child as well.
         await game.add(parent);
         await game.ready();
         expect(child.isMounted, true);
