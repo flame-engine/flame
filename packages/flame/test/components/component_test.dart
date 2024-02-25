@@ -556,6 +556,27 @@ void main() {
           expect(wrapper.contains(child), true);
         },
       );
+
+      testWithFlameGame('when parent is in removing state', (game) async {
+        final parent = Component();
+        final child = Component();
+
+        await game.add(parent);
+        await game.ready();
+
+        // Remove the parent and add the child in the same tick.
+        parent.removeFromParent();
+        await parent.add(child);
+
+        // Timeout is added because processLifecycleEvents of ComponentTreeRoot
+        // gets blocked in such cases.
+        expect(game.ready().timeout(const Duration(seconds: 2)), completes);
+
+        // Readding the parent should eventually mount the child as well.
+        await game.add(parent);
+        await game.ready();
+        expect(child.isMounted, true);
+      });
     });
 
     group('Removing components', () {
