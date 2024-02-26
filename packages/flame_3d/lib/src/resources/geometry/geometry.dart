@@ -3,7 +3,12 @@ import 'dart:typed_data';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
+/// {@template geometry}
+/// Base geometric [Resource], this describes the vertices and indices of a
+/// geometric shape.
+/// {@endtemplate}
 class Geometry extends Resource<gpu.DeviceBuffer?> {
+  /// {@macro geometry}
   Geometry({List<Vertex>? vertices, List<int>? indices}) : super(null) {
     if (vertices != null) {
       setVertices(vertices);

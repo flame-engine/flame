@@ -4,7 +4,11 @@ import 'dart:ui';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
+/// {@template texture}
+/// Base texture [Resource], represents an image/texture on the GPU.
+/// {@endtemplate}
 class Texture extends Resource<gpu.Texture> {
+  /// {@macro texture}
   Texture(
     ByteData sourceData, {
     required int width,
@@ -30,7 +34,9 @@ class Texture extends Resource<gpu.Texture> {
 
   Image toImage() => resource.asImage();
 
+  /// A transparent single pixel texture.
   static final empty = ColorTexture(const Color(0x00000000));
 
+  /// A white single pixel texture.
   static final standard = ColorTexture(const Color(0xFFFFFFFF));
 }

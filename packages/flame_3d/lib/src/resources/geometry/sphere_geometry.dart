@@ -3,7 +3,11 @@ import 'dart:math';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
+/// {@template sphere_geometry}
+/// Creates a Sphere's geometry.
+/// {@endtemplate}
 class SphereGeometry extends Geometry {
+  /// {@macro sphere_geometry}
   SphereGeometry({required double radius, required int segments}) {
     final vertices = <Vertex>[];
     for (var i = 0; i <= segments; i++) {

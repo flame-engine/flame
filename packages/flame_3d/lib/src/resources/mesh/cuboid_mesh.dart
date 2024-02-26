@@ -1,7 +1,11 @@
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
+/// {@template cuboid_mesh}
+/// Represents a Cuboid's geometry with a single surface.
+/// {@endtemplate}
 class CuboidMesh extends Mesh {
+  /// {@macro cuboid_mesh}
   CuboidMesh({
     required Vector3 size,
     Material? material,

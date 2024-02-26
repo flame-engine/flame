@@ -18,7 +18,12 @@ enum DepthStencilState {
 }
 
 /// {@template graphics_device}
+/// The Graphical Device provides a way for developers to interact with the GPU
+/// by binding different resources to it.
 ///
+/// A single render call starts with a call to [begin] and only ends when [end]
+/// is called. Anything that gets binded to the device in between will be
+/// uploaded to the GPU and returns as an [Image] in [end].
 /// {@endtemplate}
 class GraphicsDevice {
   /// {@macro graphics_device}
@@ -126,25 +131,25 @@ class GraphicsDevice {
   /// Bind a [material] and set up the buffer correctly.
   void bindMaterial(Material material) {
     _renderPass.bindPipeline(material.resource);
-    bindUniform(
-      material.vertexShader,
-      'VertexInfo',
-      material
-          .getVertexInfo(_transformMatrix.multiplied(_viewModelMatrix))
-          .buffer
-          .asByteData(),
-    );
-    bindUniform(
-      material.fragmentShader,
-      'FragmentInfo',
-      material.getFragmentInfo().buffer.asByteData(),
-    );
+    material.vertexBuffer
+      ..clear()
+      ..addMatrix4(_transformMatrix.multiplied(_viewModelMatrix));
+    material.fragmentBuffer.clear();
     material.bind(this);
   }
 
   /// Bind a [geometry] and set up the vertices correctly.
   void bindGeometry(Geometry geometry) {
     geometry.bind(_renderPass);
+  }
+
+  /// Bind a [shader] with the given [buffer].
+  void bindShader(gpu.Shader shader, ShaderBuffer buffer) {
+    bindUniform(
+      shader,
+      buffer.slot,
+      buffer.bytes.asByteData(),
+    );
   }
 
   /// Bind a uniform slot of [name] with the [data] on the [shader].

@@ -5,7 +5,11 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
+/// {@template standard_material}
+/// The standard material, it applies the [albedoColor] to the [albedoTexture].
+/// {@endtemplate}
 class StandardMaterial extends Material {
+  /// {@macro standard_material}
   StandardMaterial({
     Texture? albedoTexture,
     Color? albedoColor,
@@ -33,12 +37,9 @@ class StandardMaterial extends Material {
 
   @override
   void bind(GraphicsDevice device) {
+    fragmentBuffer.addVector4(_albedoColorCache);
     device.bindTexture(fragmentShader, 'albedoTexture', albedoTexture);
-  }
-
-  @override
-  ShaderInfo getFragmentInfo() {
-    return super.getFragmentInfo()..addVector4(_albedoColorCache);
+    return super.bind(device);
   }
 
   static final _library = gpu.ShaderLibrary.fromAsset(

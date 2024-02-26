@@ -3,7 +3,11 @@ import 'dart:math' as math;
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
+/// {@template sphere_mesh}
+/// Represents a Sphere's geometry with a single surface.
+/// {@endtemplate}
 class SphereMesh extends Mesh {
+  /// {@macro sphere_mesh}
   SphereMesh({
     required double radius,
     int segments = 64,

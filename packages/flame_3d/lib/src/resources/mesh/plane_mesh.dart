@@ -1,7 +1,11 @@
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
+/// {@template plane_mesh}
+/// Represents a 2D Plane's geometry with a single surface.
+/// {@endtemplate}
 class PlaneMesh extends Mesh {
+  /// {@macro plane_mesh}
   PlaneMesh({
     required Vector2 size,
     Material? material,

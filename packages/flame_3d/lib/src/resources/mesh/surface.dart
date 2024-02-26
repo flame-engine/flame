@@ -5,7 +5,15 @@ import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
+enum PrimitiveType {
+  triangles,
+}
+
+/// {@template surface}
+/// Base surface [Resource], it describes a single surface to be rendered.
+/// {@endtemplate}
 class Surface extends Resource<gpu.DeviceBuffer?> {
+  /// {@macro surface}
   Surface(
     List<Vertex> vertices,
     List<int> indices, [

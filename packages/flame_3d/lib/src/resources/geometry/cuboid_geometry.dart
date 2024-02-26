@@ -1,7 +1,11 @@
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
+/// {@template cuboid_geometry}
+/// Creates a Cuboid's geometry.
+/// {@endtemplate}
 class CuboidGeometry extends Geometry {
+  /// {@macro cuboid_geometry}
   CuboidGeometry({required Vector3 size})
       : super(
           indices: [
