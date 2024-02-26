@@ -3,7 +3,7 @@ import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flutter/gestures.dart' show kMiddleMouseButton;
 import 'package:flutter/services.dart'
-    show LogicalKeyboardKey, PointerEvent, RawKeyEvent;
+    show KeyEvent, KeyRepeatEvent, LogicalKeyboardKey, PointerEvent;
 
 class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
   KeyboardControlledCamera({
@@ -31,7 +31,7 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
   double scrollMove = 0;
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<Key> keysPressed) {
+  bool onKeyEvent(KeyEvent event, Set<Key> keysPressed) {
     _keysDown = keysPressed;
 
     // Switch camera mode
@@ -49,7 +49,7 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
       up = Vector3(0, 1, 0); // Reset roll
     }
 
-    if (isKeyDown(Key.keyP) && !event.repeat) {
+    if (isKeyDown(Key.keyP) && event is! KeyRepeatEvent) {
       if (projection == CameraProjection.perspective) {
         // Create an isometric view.
         mode = CameraMode.thirdPerson;
