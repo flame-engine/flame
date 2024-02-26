@@ -24,7 +24,7 @@ final _style = TextStyle(
 class SimpleHud extends Component with HasGameReference<ExampleGame3D> {
   SimpleHud() : super(children: [FpsComponent()]);
 
-  String get fps => firstChild<FpsComponent>()?.fps.toStringAsFixed(2) ?? '0';
+  String get fps => query<FpsComponent>().firstOrNull?.fps.toStringAsFixed(2) ?? '0';
 
   final _textLeft = TextPaint(style: _style);
 

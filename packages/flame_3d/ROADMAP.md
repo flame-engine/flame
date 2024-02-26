@@ -10,7 +10,7 @@ means the package will tie into the existing [FCS](https://docs.flame-engine.org
 and provide the tools needed, like a [`CameraComponent`](https://docs.flame-engine.org/latest/flame/camera_component.html), 
 `World` and similar components. 
 
-In a perfect world this API does not depend or even knows about the Flutter GPU, which brings us 
+In a perfect world this API does not depend or even know about the Flutter GPU, which brings us 
 to our secondary goal: to abstract the Flutter GPU into an API that is user-friendly for 3D 
 development. That includes simplifying things like creating render targets, setting up the color 
 and depth textures and configuring depth stencils. But it also includes higher level APIs like 

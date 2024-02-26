@@ -15,8 +15,8 @@ import 'package:flame_3d/resources.dart';
 /// freely moved around in 3D space, rotated, and scaled.
 ///
 /// The [Component3D] class has no visual representation of its own (except in
-/// debug mode). It is common, therefore, to derive from this class,
-/// implementing a specific rendering logic.
+/// debug mode). It is common, therefore, to derive from this class
+/// and implement a specific rendering logic.
 ///
 /// The base [Component3D] class can also be used as a container
 /// for several other components. In this case, changing the position,
@@ -25,7 +25,7 @@ import 'package:flame_3d/resources.dart';
 ///
 /// The main property of this class is the [transform] (which combines
 /// the [position], [rotation], and [scale]). Thus, the [Component3D] can be
-/// seen as an object in 3D space where you can change it's perceived
+/// seen as an object in 3D space where you can change its perceived
 /// visualization.
 ///
 /// See the [MeshComponent] for a [Component3D] that has a visual representation
@@ -70,7 +70,7 @@ class Component3D extends Component with HasWorldReference<World3D> {
 
   /// The scale factor of this component. The scale can be different along
   /// the X, Y and Z dimensions. A scale greater than 1 makes the component
-  /// bigger, and less than 1 smaller. The scale can also be negative,
+  /// bigger along that axis, and less than 1 smaller. The scale can also be negative,
   /// which results in a mirror reflection along the corresponding axis.
   NotifyingVector3 get scale => transform.scale;
   set scale(Vector3 scale) => transform.scale = scale;

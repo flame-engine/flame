@@ -9,7 +9,7 @@ import 'package:flame_3d/src/graphics/graphics_device.dart';
 /// A [Component3D] that renders a [Mesh] at the [position] with the [rotation]
 /// and [scale] applied.
 ///
-/// This a commonly used subclass of [Component3D].
+/// This is a commonly used subclass of [Component3D].
 /// {@endtemplate}
 class MeshComponent extends Component3D {
   /// {@macro mesh_component}
