@@ -1,6 +1,6 @@
 # Roadmap
 
-In the interested of transparency, we provide a high-level detail of the roadmap for adding 3D 
+In the interest of transparency, we provide a high-level detail of the roadmap for adding 3D 
 support to Flame. We hope this roadmap will help others in making plans and priorities based on the
 work we are doing and potentially contribute back to the project itself.
 
