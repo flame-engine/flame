@@ -33,7 +33,7 @@ abstract class Material extends Resource<gpu.RenderPipeline> {
 
   @mustCallSuper
   void bind(GraphicsDevice device) {
-    device.bindShader(fragmentShader, fragmentBuffer);
+    device.bindShader(vertexShader, _vertexBuffer);
     device.bindShader(fragmentShader, fragmentBuffer);
   }
 }
