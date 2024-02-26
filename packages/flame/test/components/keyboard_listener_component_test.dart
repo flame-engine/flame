@@ -9,15 +9,15 @@ abstract class _KeyCallStub {
 
 class KeyCallStub extends Mock implements _KeyCallStub {}
 
-class MockRawKeyUpEvent extends Mock implements RawKeyUpEvent {
+class MockKeyUpEvent extends Mock implements KeyUpEvent {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return super.toString();
   }
 }
 
-RawKeyUpEvent _mockKeyUp(LogicalKeyboardKey key) {
-  final event = MockRawKeyUpEvent();
+KeyUpEvent _mockKeyUp(LogicalKeyboardKey key) {
+  final event = MockKeyUpEvent();
   when(() => event.logicalKey).thenReturn(key);
   return event;
 }

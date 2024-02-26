@@ -1,3 +1,14 @@
+## 5.3.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+## 5.2.0
+
+ - **FIX**: Add Template param to RiverpodGameMixin ([#2972](https://github.com/flame-engine/flame/issues/2972)). ([622c8553](https://github.com/flame-engine/flame/commit/622c855318b6c1731891b023ddc6429ba1f32329))
+ - **FEAT**: Make `Component.key` public ([#2988](https://github.com/flame-engine/flame/issues/2988)). ([7fbd5af9](https://github.com/flame-engine/flame/commit/7fbd5af935211264822f89bc1beb4062d3efdf7a))
+
 ## 5.1.5
 
  - **FIX**: Change return type of RiverpodComponentMixin.onLoad to FutureOr<void> ([#2964](https://github.com/flame-engine/flame/issues/2964)). ([7ac80a78](https://github.com/flame-engine/flame/commit/7ac80a78e95b06bb1287fb74773634483d80b1c9))

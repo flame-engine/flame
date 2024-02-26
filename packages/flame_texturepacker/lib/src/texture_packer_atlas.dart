@@ -6,9 +6,9 @@ import 'dart:io';
 import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flame_texturepacker/atlas/model/page.dart';
-import 'package:flame_texturepacker/atlas/model/region.dart';
-import 'package:flame_texturepacker/atlas/model/texture_packer_sprite.dart';
+import 'package:flame_texturepacker/src/model/page.dart';
+import 'package:flame_texturepacker/src/model/region.dart';
+import 'package:flame_texturepacker/src/texture_packer_sprite.dart';
 import 'package:flutter/painting.dart';
 
 final _images = Images(prefix: 'assets/');

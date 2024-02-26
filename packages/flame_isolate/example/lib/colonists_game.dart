@@ -58,32 +58,32 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     var howMuch = 0.0;
-    if (event is RawKeyDownEvent) {
+    if (event is KeyDownEvent) {
       howMuch = 1;
-    } else if (event is RawKeyUpEvent) {
+    } else if (event is KeyUpEvent) {
       howMuch = 0;
     }
 
-    if (event.data.logicalKey == LogicalKeyboardKey.keyS) {
+    if (event.logicalKey == LogicalKeyboardKey.keyS) {
       _downForce = howMuch;
-    } else if (event.data.logicalKey == LogicalKeyboardKey.keyW) {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyW) {
       _upForce = howMuch;
-    } else if (event.data.logicalKey == LogicalKeyboardKey.keyD) {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyD) {
       _rightForce = howMuch;
-    } else if (event.data.logicalKey == LogicalKeyboardKey.keyA) {
+    } else if (event.logicalKey == LogicalKeyboardKey.keyA) {
       _leftForce = howMuch;
-    } else if (event.data.logicalKey == LogicalKeyboardKey.numpadAdd &&
-        event is RawKeyDownEvent) {
+    } else if (event.logicalKey == LogicalKeyboardKey.numpadAdd &&
+        event is KeyDownEvent) {
       camera.viewfinder.zoom = min(
         camera.viewfinder.zoom + 0.1,
         5,
       );
-    } else if (event.data.logicalKey == LogicalKeyboardKey.numpadSubtract &&
-        event is RawKeyDownEvent) {
+    } else if (event.logicalKey == LogicalKeyboardKey.numpadSubtract &&
+        event is KeyDownEvent) {
       camera.viewfinder.zoom = max(
         camera.viewfinder.zoom - 0.1,
         0.1,

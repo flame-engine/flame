@@ -1,3 +1,13 @@
+## 0.3.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+## 0.2.0+13
+
+ - Update a dependency to the latest release.
+
 ## 0.2.0+12
 
  - Update a dependency to the latest release.

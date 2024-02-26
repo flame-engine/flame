@@ -1,3 +1,17 @@
+## 1.10.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+## 1.9.0
+
+ - **FEAT**: Add `loadFromString` to Svg class ([#3030](https://github.com/flame-engine/flame/issues/3030)). ([b0cafb2a](https://github.com/flame-engine/flame/commit/b0cafb2a5561de136af93eb7a09df37b93d38ce0))
+
+## 1.8.10
+
+ - Update a dependency to the latest release.
+
 ## 1.8.9
 
  - Update a dependency to the latest release.

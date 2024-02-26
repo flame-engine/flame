@@ -39,14 +39,14 @@ class KeyboardExample extends FlameGame with KeyboardEvents {
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    final isKeyDown = event is RawKeyDownEvent;
+    final isKeyDown = event is KeyDownEvent;
 
     // Avoiding repeat event as we are interested only in
     // key up and key down event.
-    if (!event.repeat) {
+    if (key is! KeyRepeatEvent) {
       if (event.logicalKey == LogicalKeyboardKey.keyA) {
         _direction.x += isKeyDown ? -1 : 1;
       } else if (event.logicalKey == LogicalKeyboardKey.keyD) {

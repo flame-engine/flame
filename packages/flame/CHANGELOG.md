@@ -1,3 +1,24 @@
+## 1.16.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Fix unrelated types reported by DCM ([#3023](https://github.com/flame-engine/flame/issues/3023)). ([1d020a52](https://github.com/flame-engine/flame/commit/1d020a525b81df1cb45345d3e36a9c4e9caf701e))
+ - **FIX**: Vertices in `PolygonComponent` should subtract vertices positioning ([#3040](https://github.com/flame-engine/flame/issues/3040)). ([4f053ed7](https://github.com/flame-engine/flame/commit/4f053ed74c09d4e19a53694130b5d5c0d3e23aa6))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+## 1.15.0
+
+ - **REFACTOR**: Minimize `Vector2` creation in `IsometricTileMapComponent` ([#3018](https://github.com/flame-engine/flame/issues/3018)). ([5d3be313](https://github.com/flame-engine/flame/commit/5d3be3137a177c8900158fce10cffc01f729ed7a))
+ - **FIX**: Set margins of `JoystickComponent` properly ([#3019](https://github.com/flame-engine/flame/issues/3019)). ([e27818d8](https://github.com/flame-engine/flame/commit/e27818d8721c577507411fca085859335206391f))
+ - **FIX**: Properly update sprites in SpriteButtonComponent ([#3013](https://github.com/flame-engine/flame/issues/3013)). ([23cf8b9d](https://github.com/flame-engine/flame/commit/23cf8b9de81cade9ce90b8401c39432bc70f9d0d))
+ - **FIX**: Lifecycle completers to be called for FlameGame ([#3007](https://github.com/flame-engine/flame/issues/3007)). ([3804f524](https://github.com/flame-engine/flame/commit/3804f52434cf1bcaf28b501bf96858ecd3636164))
+ - **FIX**: CameraComponent no longer throws Concurrent modification on stop ([#2997](https://github.com/flame-engine/flame/issues/2997)). ([6a1059b0](https://github.com/flame-engine/flame/commit/6a1059b0a6e381020cdaa7a96ceecbcaa45b9a42))
+ - **FIX**: Updated PolygonComponent.containsPoint to account for concave polygons ([#2979](https://github.com/flame-engine/flame/issues/2979)). ([a6fe62a2](https://github.com/flame-engine/flame/commit/a6fe62a2c3b74d9b4781531e0c53470b6d3242ea))
+ - **FIX**: Add missing generic to `ComponentViewportMargin` ([#2983](https://github.com/flame-engine/flame/issues/2983)). ([1d9fe613](https://github.com/flame-engine/flame/commit/1d9fe6139287b984a05e0056c279b9c5d277e026))
+ - **FEAT**: Add support for base64 encoded images to be manually added to Images cache. ([#3008](https://github.com/flame-engine/flame/issues/3008)). ([1e56293c](https://github.com/flame-engine/flame/commit/1e56293c1f89e7636c97b0ed518642bd493d7a40))
+ - **FEAT**: Make `Component.key` public ([#2988](https://github.com/flame-engine/flame/issues/2988)). ([7fbd5af9](https://github.com/flame-engine/flame/commit/7fbd5af935211264822f89bc1beb4062d3efdf7a))
+ - **FEAT**: Add a hitboxFilter argument to raycast() ([#2968](https://github.com/flame-engine/flame/issues/2968)). ([d7c53e23](https://github.com/flame-engine/flame/commit/d7c53e230f32b4b224e23483d99b0b276d14686f))
+
 ## 1.14.0
 
 > Note: This release has breaking changes.

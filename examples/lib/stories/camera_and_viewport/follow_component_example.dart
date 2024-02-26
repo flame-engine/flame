@@ -100,8 +100,8 @@ class MovableEmber extends Ember<FollowComponentExample>
   }
 
   @override
-  bool onKeyEvent(RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    final isKeyDown = event is RawKeyDownEvent;
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isKeyDown = event is KeyDownEvent;
 
     final bool handled;
     if (event.logicalKey == LogicalKeyboardKey.keyA) {

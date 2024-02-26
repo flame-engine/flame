@@ -44,6 +44,13 @@ void main() {
       svgInstance.dispose();
     });
 
+    test('load from svg string', () async {
+      final svg = await flame_svg.Svg.loadFromString(
+        File('test/_resources/android.svg').readAsStringSync(),
+      );
+      expect(svg, isNotNull);
+    });
+
     testWidgets(
       'render sharply',
       (tester) async {
