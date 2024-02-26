@@ -1,5 +1,5 @@
 name: flame_3d
-description: "Experimental 3D support for the Flame Engine"
+description: Experimental 3D support for the Flame Engine
 version: 0.1.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
 funding:
