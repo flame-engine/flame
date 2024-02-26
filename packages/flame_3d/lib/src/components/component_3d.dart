@@ -82,7 +82,12 @@ class Component3D extends Component with HasWorldReference<World3D> {
   @override
   void renderTree(Canvas canvas) {
     super.renderTree(canvas);
-    if (!shouldCull(CameraComponent3D.currentCamera!)) {
+    final camera = CameraComponent3D.currentCamera;
+    assert(
+      camera != null,
+      '''Component is either not part of a World3D or the render is being called outside of the camera rendering''',
+    );
+    if (!shouldCull(camera!)) {
       world.culled++;
       return;
     }
