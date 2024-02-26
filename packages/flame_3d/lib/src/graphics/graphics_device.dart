@@ -138,11 +138,6 @@ class GraphicsDevice {
     material.bind(this);
   }
 
-  /// Bind a [geometry] and set up the vertices correctly.
-  void bindGeometry(Geometry geometry) {
-    geometry.bind(_renderPass);
-  }
-
   /// Bind a [shader] with the given [buffer].
   void bindShader(gpu.Shader shader, ShaderBuffer buffer) {
     bindUniform(

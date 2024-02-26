@@ -24,10 +24,7 @@ materials.
 - [x] Abstract the GPU setup into a class that represents the graphics device
   - [ ] Setup binding logic for meshes, geometry and materials.
 - [ ] Provide a `Mesh` API
-  - [x] Provide a `Geometry` API
-    - [x] Support defining a cuboid
-    - [x] Support defining a sphere
-    - [x] Support defining a plane
+  - [x] Provide `Surface`s that can hold geometric shapes.
   - [x] Provide a `Material` API
     - [x] Define a `Texture` API to be used with the `Material` API
       - [x] Support images as textures

@@ -1,7 +1,6 @@
 import 'package:flame/cache.dart';
 import 'package:flame_3d/resources.dart';
 
-export 'src/resources/geometry.dart';
 export 'src/resources/material.dart';
 export 'src/resources/mesh.dart';
 export 'src/resources/resource.dart';
