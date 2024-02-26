@@ -30,6 +30,8 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
   PointerEvent? pointerEvent;
   double scrollMove = 0;
 
+  final Matrix4 _orbitalMatrix = Matrix4.identity();
+
   @override
   bool onKeyEvent(KeyEvent event, Set<Key> keysPressed) {
     _keysDown = keysPressed;
@@ -93,7 +95,9 @@ class KeyboardControlledCamera extends CameraComponent3D with KeyboardHandler {
     };
 
     if (mode == CameraMode.orbital) {
-      final rotation = Matrix4.identity()..rotate(up, orbitalSpeed * dt);
+      final rotation = _orbitalMatrix
+        ..setIdentity()
+        ..rotate(up, orbitalSpeed * dt);
       final view = rotation.transform3(position - target);
       position = target + view;
     } else {
