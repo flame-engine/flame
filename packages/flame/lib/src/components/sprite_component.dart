@@ -56,7 +56,6 @@ class SpriteComponent extends PositionComponent
     Image image, {
     Vector2? srcPosition,
     Vector2? srcSize,
-    bool? autoResize,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -72,7 +71,6 @@ class SpriteComponent extends PositionComponent
             srcPosition: srcPosition,
             srcSize: srcSize,
           ),
-          autoResize: autoResize,
           paint: paint,
           position: position,
           size: size ?? srcSize ?? image.size,
