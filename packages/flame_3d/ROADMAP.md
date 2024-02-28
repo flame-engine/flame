@@ -1,23 +1,25 @@
 # Roadmap
 
-In the interest of transparency, we provide a high-level detail of the roadmap for adding 3D 
+In the interest of transparency, we provide a high-level detail of the roadmap for adding 3D
 support to Flame. We hope this roadmap will help others in making plans and priorities based on the
 work we are doing and potentially contribute back to the project itself.
 
 The goal of the package can be split up into two sections, the primary goal is to provide an API for
 Flame developers so they can create 3D environments without having to learn new Flame concepts. This
 means the package will tie into the existing [FCS](https://docs.flame-engine.org/latest/flame/components.html#component)
-and provide the tools needed, like a [`CameraComponent`](https://docs.flame-engine.org/latest/flame/camera_component.html), 
-`World` and similar components. 
+and provide the tools needed, like a [`CameraComponent`](https://docs.flame-engine.org/latest/flame/camera_component.html),
+`World` and similar components.
 
-In a perfect world this API does not depend or even know about the Flutter GPU, which brings us 
-to our secondary goal: to abstract the Flutter GPU into an API that is user-friendly for 3D 
-development. That includes simplifying things like creating render targets, setting up the color 
-and depth textures and configuring depth stencils. But it also includes higher level APIs like 
-geometric shapes, texture/material rendering and creating Meshes that can use those shapes and 
+In a perfect world this API does not depend or even know about the Flutter GPU, which brings us
+to our secondary goal: to abstract the Flutter GPU into an API that is user-friendly for 3D
+development. That includes simplifying things like creating render targets, setting up the color
+and depth textures and configuring depth stencils. But it also includes higher level APIs like
+geometric shapes, texture/material rendering and creating Meshes that can use those shapes and
 materials.
 
+
 ## Goals
+
 
 ### Abstracting the Flutter GPU into a user-friendly API for 3D
 
