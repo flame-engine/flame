@@ -243,6 +243,43 @@ class SpriteBatch {
     return picture.toImageSafe(image.width * 2, image.height);
   }
 
+  int get length => _sources.length;
+
+  /// Replace a batch item at the [index] with the new values.
+  ///
+  /// Throws an [ArgumentError] if the [index] is out of bounds.
+  /// At least one of the parameters must be different from null.
+  void replace(int index, {
+    Rect? source,
+    Color? color,
+    RSTransform? transform,
+  }) {
+    assert(
+      source != null || color != null || transform != null,
+      'At least one of the parameters must be different from null.',
+    );
+
+    if (index < 0 || index >= length) {
+      throw ArgumentError('Index out of bounds: $index');
+    }
+
+    final currentBatchItem = _batchItems[index];
+    final newBatchItem = BatchItem(
+      source: source ?? currentBatchItem.source,
+      transform: transform ?? currentBatchItem.transform,
+      color: color ?? currentBatchItem.paint.color,
+      flip: currentBatchItem.flip,
+    );
+
+    _batchItems[index] = newBatchItem;
+
+    _sources[index] = newBatchItem.source;
+    _transforms[index] = newBatchItem.transform;
+    if (color != null) {
+      _colors[index] = color;
+    }
+  }
+
   /// Add a new batch item using a RSTransform.
   ///
   /// The [source] parameter is the source location on the [atlas].
