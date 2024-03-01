@@ -44,8 +44,20 @@ Future<void> main() async {
         () => SpriteComponent(autoResize: true, size: Vector2.all(2)),
         throwsAssertionError,
       );
+      expect(
+        () => SpriteComponent.fromImage(
+          image,
+          autoResize: true,
+          size: Vector2.all(2),
+        ),
+        throwsAssertionError,
+      );
 
       expect(() => SpriteComponent(autoResize: false), throwsAssertionError);
+      expect(
+        () => SpriteComponent.fromImage(image, autoResize: false),
+        throwsAssertionError,
+      );
     });
 
     test('default value set correctly when not provided explicitly', () {
