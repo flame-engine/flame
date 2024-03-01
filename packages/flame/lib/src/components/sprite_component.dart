@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/extensions/image.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite.dart';
