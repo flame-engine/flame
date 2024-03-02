@@ -5,7 +5,7 @@ directly in [Flame engine](https://flame-engine.org/).
 ## Features
 
 Provides a component called `SpriteFusionTilemapComponent` to easily load json exports from Sprite Fusion.
-This component works exactly like any other Flame component and plays nices with rest of the Flame
+This component works exactly like any other Flame component and plays nicely with rest of the Flame
 Component System (a.k.a FCS).
 
 
