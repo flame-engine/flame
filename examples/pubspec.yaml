@@ -11,8 +11,7 @@ environment:
 
 dependencies:
   dashbook: ^0.1.12
-  flame:
-    path: ../packages/flame
+  flame: ^1.16.0
   flame_audio: ^2.10.0
   flame_forge2d: ^0.17.0
   flame_isolate: ^0.6.0
