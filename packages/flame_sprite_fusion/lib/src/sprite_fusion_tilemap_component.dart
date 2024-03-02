@@ -66,9 +66,9 @@ class SpriteFusionTilemapComponent extends PositionComponent {
 
   /// Loads a [SpriteFusionTilemapComponent] from the given json file and
   /// spritesheet file.
-  static Future<SpriteFusionTilemapComponent> load(
-    String mapJsonFile,
-    String spriteSheetFile, {
+  static Future<SpriteFusionTilemapComponent> load({
+    required String mapJsonFile,
+    required String spriteSheetFile,
     bool useAtlas = true,
     String tilemapPrefix = 'assets/tiles/',
     AssetBundle? assetBundle,

@@ -33,8 +33,8 @@ class PlatformerGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final map = await SpriteFusionTilemapComponent.load(
-      'map.json',
-      'spritesheet.png',
+      mapJsonFile: 'map.json',
+      spriteSheetFile: 'spritesheet.png',
     );
     await world.add(map);
 
