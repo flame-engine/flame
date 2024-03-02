@@ -73,6 +73,14 @@ class SpriteFusionTilemapComponent extends PositionComponent {
     String tilemapPrefix = 'assets/tiles/',
     AssetBundle? assetBundle,
     Images? images,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
+    double? nativeAngle,
+    Anchor? anchor,
+    Iterable<Component>? children,
+    int? priority,
+    ComponentKey? key,
   }) async {
     final content = await (assetBundle ?? Flame.bundle)
         .loadString('$tilemapPrefix$mapJsonFile');
@@ -86,6 +94,14 @@ class SpriteFusionTilemapComponent extends PositionComponent {
         srcSize: Vector2.all(double.parse(json['tileSize'].toString())),
       ),
       useAtlas: useAtlas,
+      position: position,
+      scale: scale,
+      angle: angle,
+      nativeAngle: nativeAngle ?? 0,
+      anchor: anchor,
+      children: children,
+      priority: priority,
+      key: key,
     );
   }
 }
