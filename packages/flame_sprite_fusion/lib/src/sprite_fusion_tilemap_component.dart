@@ -19,6 +19,8 @@ class SpriteFusionTilemapComponent extends PositionComponent {
   /// The sprite batch of the tilemap.
   late final SpriteBatch _spriteBatch;
 
+  /// Creates a new [SpriteFusionTilemapComponent] with the given [tilemapData]
+  /// and [spriteSheet].
   SpriteFusionTilemapComponent({
     required this.tilemapData,
     required this.spriteSheet,
