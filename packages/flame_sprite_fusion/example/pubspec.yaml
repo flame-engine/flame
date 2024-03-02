@@ -1,0 +1,24 @@
+name: example
+description: "An example for the SpriteFusionTilemapComponent."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flame: ^1.16.0
+  flame_sprite_fusion: ^1.0.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.1.2
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/tiles/
