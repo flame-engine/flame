@@ -1,4 +1,4 @@
-name: example
+name: flame_sprite_fusion_example
 description: "An example for the SpriteFusionTilemapComponent."
 
 publish_to: "none"
@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   flame: ^1.16.0
-  flame_sprite_fusion: ^1.0.0
+  flame_sprite_fusion: ^0.1.0
   flutter:
     sdk: flutter
 
