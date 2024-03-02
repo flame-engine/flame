@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-// TODO(wolfen): in the long run it would be nice of we can make it
+// TODO(wolfenrain): in the long run it would be nice of we can make it
 // automatically refer to same type of objects to prevent memory leaks
 
 /// {@template resource}

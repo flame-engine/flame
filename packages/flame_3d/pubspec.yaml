@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_gpu:
+  vector_math: ^2.1.4
 
 dev_dependencies:
   flame_lint: ^1.1.2

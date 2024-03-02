@@ -22,8 +22,8 @@ enum DepthStencilState {
 /// by binding different resources to it.
 ///
 /// A single render call starts with a call to [begin] and only ends when [end]
-/// is called. Anything that gets binded to the device in between will be
-/// uploaded to the GPU and returns as an [Image] in [end].
+/// is called. Any resource that gets bound to the device in between these two
+/// method calls will be uploaded to the GPU and returns as an [Image] in [end].
 /// {@endtemplate}
 class GraphicsDevice {
   /// {@macro graphics_device}
@@ -50,9 +50,9 @@ class GraphicsDevice {
   /// GPU with [end].
   void begin(
     Size size, {
-    // TODO(wolfen): unused at the moment
+    // TODO(wolfenrain): unused at the moment
     BlendState blendState = BlendState.alphaBlend,
-    // TODO(wolfen): used incorrectly
+    // TODO(wolfenrain): used incorrectly
     DepthStencilState depthStencilState = DepthStencilState.depthRead,
     Matrix4? transformMatrix,
   }) {
@@ -69,7 +69,7 @@ class GraphicsDevice {
       )
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
       ..setDepthCompareOperation(
-        // TODO(wolfen): this is not correctly implemented AT all.
+        // TODO(wolfenrain): this is not correctly implemented AT all.
         switch (depthStencilState) {
           DepthStencilState.none => gpu.CompareFunction.never,
           DepthStencilState.standard => gpu.CompareFunction.always,

@@ -24,7 +24,7 @@ class Vertex {
         _storage = Float32List.fromList([
           ...position.storage,
           ...texCoord.storage,
-          // `TODO`(wolfen): uhh normals fuck shit up, I should read up on it
+          // TODO(wolfenrain): uhh normals fuck shit up, I should read up on it
           // ...(normal ?? Vector3.zero()).storage,
           ...color.storage,
         ]);
