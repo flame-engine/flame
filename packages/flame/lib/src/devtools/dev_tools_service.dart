@@ -1,8 +1,8 @@
 import 'package:flame/game.dart';
-import 'package:flame/src/devtools_helpers/connectors/component_count_connector.dart';
-import 'package:flame/src/devtools_helpers/connectors/debug_mode_connector.dart';
-import 'package:flame/src/devtools_helpers/connectors/game_loop_connector.dart';
-import 'package:flame/src/devtools_helpers/dev_tools_connector.dart';
+import 'package:flame/src/devtools/connectors/component_count_connector.dart';
+import 'package:flame/src/devtools/connectors/debug_mode_connector.dart';
+import 'package:flame/src/devtools/connectors/game_loop_connector.dart';
+import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// When [DevToolsService] is initialized by the [FlameGame] it will call
 /// the `init` method for all [DevToolsConnector]s so that they can register
@@ -20,12 +20,12 @@ class DevToolsService {
 
   /// Initializes the service with the given game instance.
   factory DevToolsService.initWithGame(FlameGame game) {
-    instance.game = game;
-    instance.initGame();
+    instance.initGame(game);
     return instance;
   }
 
-  late FlameGame game;
+  FlameGame? _game;
+  FlameGame get game => _game!;
 
   /// The list of available connectors, remember to add your connector here if
   /// you create a new one.
@@ -37,8 +37,17 @@ class DevToolsService {
 
   /// This method is called every time a new game is set in the service and it
   /// is responsible for calling the [DevToolsConnector.initGame] method in all
-  /// the connectors.
-  void initGame() {
+  /// the connectors. It is also responsible for calling
+  /// [DevToolsConnector.disposeGame] of all connectors when a new game is set,
+  /// if there was a game set previously.
+  void initGame(FlameGame game) {
+    if (_game != null) {
+      for (final connector in connectors) {
+        connector.disposeGame();
+      }
+    }
+
+    _game = game;
     for (final connector in connectors) {
       connector.initGame(game);
     }

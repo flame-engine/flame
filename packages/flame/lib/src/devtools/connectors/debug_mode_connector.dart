@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/devtools_helpers/dev_tools_connector.dart';
+import 'package:flame/src/devtools/dev_tools_connector.dart';
 import 'package:flutter/foundation.dart';
 
 /// The [DebugModeConnector] is responsible for reporting and setting the

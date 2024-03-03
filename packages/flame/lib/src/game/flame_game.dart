@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
-import 'package:flame/src/devtools_helpers/dev_tools_service.dart';
+import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/foundation.dart';

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flame/src/devtools_helpers/dev_tools_connector.dart';
+import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// The [ComponentCountConnector] is responsible for reporting the component
 /// count of the game to the devtools extension.
