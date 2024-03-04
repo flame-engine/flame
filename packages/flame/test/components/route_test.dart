@@ -274,19 +274,19 @@ void main() {
       router.pushNamed('pause');
       await game.ready();
       expect(router.currentRoute.name, 'pause');
-      expect(router.previousRoute!.timeSpeed, 0);
+      expect(router.previousRoute!.timeScale, 0);
 
       game.update(10);
       expect(timer.elapsedTime, 1);
 
-      router.previousRoute!.timeSpeed = 0.1;
+      router.previousRoute!.timeScale = 0.1;
       game.update(10);
       expect(timer.elapsedTime, 2);
 
       router.pop();
       await game.ready();
       expect(router.currentRoute.name, 'start');
-      expect(router.currentRoute.timeSpeed, 1);
+      expect(router.currentRoute.timeScale, 1);
 
       game.update(10);
       expect(timer.elapsedTime, 12);
