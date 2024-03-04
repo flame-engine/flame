@@ -13,7 +13,7 @@ class ComponentCountConnector extends DevToolsConnector {
       'ext.flame_devtools.getComponentCount',
       (method, parameters) async {
         var componentCount = 0;
-        game.propagateToChildren((p0) {
+        game.propagateToChildren((_) {
           componentCount++;
           return true;
         });
