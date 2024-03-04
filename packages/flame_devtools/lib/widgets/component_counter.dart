@@ -33,7 +33,7 @@ class _ComponentCounterState extends State<ComponentCounter> {
               onPressed: () => setState(() {
                 _componentCount = Repository.getComponentCount();
               }),
-              child: const Text('Recalculate Components'),
+              child: const Text('Update count'),
             ),
           ],
         );
