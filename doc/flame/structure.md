@@ -12,7 +12,12 @@ void main() {
   Flame.images.load('player.png');
   Flame.images.load('enemy.png');
   
-  TiledComponent.load('level.tmx', tileSize);
+  final map1 = TiledComponent.load('level.tmx', tileSize);
+  
+  final map2 = await SpriteFusionTilemapComponent.load(
+    mapJsonFile: 'map.json',
+    spriteSheetFile: 'spritesheet.png'
+  );
 }
 ```
 
@@ -25,9 +30,11 @@ The following file structure is where Flame would expect to find the files:
     │   └── explosion.mp3
     ├── images
     │   ├── enemy.png
-    │   └── player.png
+    │   ├── player.png
+    │   └── spritesheet.png
     └── tiles
-        └── level.tmx
+        ├── level.tmx
+        └── map.json
 ```
 
 Optionally you can split your `audio` folder into two subfolders, one for `music` and one for `sfx`.
