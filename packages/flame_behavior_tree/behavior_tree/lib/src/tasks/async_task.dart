@@ -13,17 +13,14 @@ class AsyncTask extends BaseNode implements INode {
   AsyncTask(AsyncTaskCallback callback) : _callback = callback;
 
   final AsyncTaskCallback _callback;
-  var _isCallbackRunning = false;
 
   @override
   void tick() {
-    if (!_isCallbackRunning) {
-      _isCallbackRunning = true;
+    if (status != NodeStatus.running) {
       status = NodeStatus.running;
 
       _callback().then((returnedStatus) {
         status = returnedStatus;
-        _isCallbackRunning = false;
       });
     }
   }
