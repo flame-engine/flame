@@ -20,7 +20,8 @@ import 'package:meta/meta.dart';
 /// any potentially costly initialization operations.
 ///
 /// Routes are managed by the [RouterComponent] component.
-class Route extends PositionComponent with ParentIsA<RouterComponent> {
+class Route extends PositionComponent
+    with ParentIsA<RouterComponent>, HasTimeScale {
   Route(
     Component Function()? builder, {
     this.transparent = false,
@@ -82,13 +83,6 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
     return _builder!();
   }
 
-  /// The time "speed" factor.
-  ///
-  /// The value of 1 means that the time on this page runs normally. The value
-  /// less than 1 corresponds to time running slower than normal. The speed of
-  /// zero means the time on this page is stopped.
-  double timeSpeed = 1.0;
-
   /// Completely stops time for the managed page.
   ///
   /// When the time is stopped, the [updateTree] method of the page is not
@@ -96,11 +90,11 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
   /// means that the lifecycle events on the page will not be processed, and
   /// therefore no components will be able to be added or removed from the
   /// page.
-  void stopTime() => timeSpeed = 0;
+  void stopTime() => timeScale = 0;
 
   /// Resumes normal time progression for the page, if it was previously slowed
   /// down or stopped.
-  void resumeTime() => timeSpeed = 1.0;
+  void resumeTime() => timeScale = 1.0;
 
   /// Applies the provided [Decorator] to the page.
   ///
@@ -157,8 +151,8 @@ class Route extends PositionComponent with ParentIsA<RouterComponent> {
 
   @override
   void updateTree(double dt) {
-    if (timeSpeed > 0) {
-      super.updateTree(dt * timeSpeed);
+    if (timeScale > 0) {
+      super.updateTree(dt);
     }
   }
 
