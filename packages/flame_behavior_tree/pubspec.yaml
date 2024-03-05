@@ -1,6 +1,6 @@
 name: flame_behavior_tree
 description: A bridge package that integrates behavior_tree package with flame.
-version: 1.0.0
+version: 0.1.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_behavior_tree
 funding:
   - https://opencollective.com/blue-fire
