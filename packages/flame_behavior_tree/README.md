@@ -46,31 +46,31 @@ flutter pub add flame_behavior_tree
 
 - Set-up a behavior tree and set its root as the `treeRoot` of the `HasBehaviorTree`.
 
-  ```dart
-  class MyComponent extends Position with HasBehaviorTree {
-      Future<void> onLoad async () {
-          treeRoot = Selector(
-              children: [
-                  Sequence(children: [task1, condition, task2]),
-                  Sequence(...),
-              ]
-          );
-          super.onLoad();
-      }
+```dart
+class MyComponent extends PositionComponent with HasBehaviorTree {
+  Future<void> onLoad() async {
+    treeRoot = Selector(
+      children: [
+        Sequence(children: [task1, condition, task2]),
+        Sequence(...),
+      ]
+    );
+    super.onLoad();
   }
-  ```
+}
+```
 
 - Increase the `tickInterval` to make the tree tick less frequently.
 
-  ```dart
-  class MyComponent extends Position with HasBehaviorTree {
-      Future<void> onLoad async () {
-          treeRoot = Selector(...);
-          tickInterval = 4;
-          super.onLoad();
-      }
-  }  
-  ```
+```dart
+class MyComponent extends PositionComponent with HasBehaviorTree {
+  Future<void> onLoad() async {
+    treeRoot = Selector(...);
+    tickInterval = 4;
+    super.onLoad();
+  }
+}
+```
 
 
 ## Additional information
