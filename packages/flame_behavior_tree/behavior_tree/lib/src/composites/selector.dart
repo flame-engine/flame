@@ -1,11 +1,11 @@
 import 'package:behavior_tree/behavior_tree.dart';
 
 /// A composite node that stops at its first non-failing child node.
-class Selector extends BaseNode implements INode {
+class Selector extends BaseNode implements NodeInterface {
   /// Creates a selector node for given [children] nodes.
-  Selector({List<INode>? children}) : _children = children ?? <INode>[];
+  Selector({List<NodeInterface>? children}) : _children = children ?? <NodeInterface>[];
 
-  final List<INode> _children;
+  final List<NodeInterface> _children;
 
   @override
   void tick() {

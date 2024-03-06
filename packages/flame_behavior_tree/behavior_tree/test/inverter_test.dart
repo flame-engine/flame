@@ -42,4 +42,4 @@ void main() {
   });
 }
 
-class _MockNode extends Mock implements INode {}
+class _MockNode extends Mock implements NodeInterface {}

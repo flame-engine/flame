@@ -2,14 +2,14 @@ import 'package:behavior_tree/behavior_tree.dart';
 
 /// A decorator node that inverts [child]'s status if it is not
 /// [NodeStatus.running].
-class Inverter extends BaseNode implements INode {
+class Inverter extends BaseNode implements NodeInterface {
   /// Creates an inverter node for given [child] node.
   Inverter(this.child) {
     _invertStatus();
   }
 
   /// The child node whose status needs to be inverted.
-  final INode child;
+  final NodeInterface child;
 
   @override
   void tick() {

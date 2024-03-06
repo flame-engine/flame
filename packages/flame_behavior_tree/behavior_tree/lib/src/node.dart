@@ -18,7 +18,7 @@ enum NodeStatus {
 /// An interface which all the nodes implement.
 ///
 /// Some examples are [Selector], [Sequence], [Inverter] and [Limiter].
-abstract interface class INode {
+abstract interface class NodeInterface {
   /// Returns the current status of this node.
   NodeStatus get status;
 

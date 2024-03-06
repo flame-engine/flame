@@ -95,4 +95,4 @@ void main() {
 
 class _BehaviorTreeComponent extends Component with HasBehaviorTree {}
 
-class _MockNode extends Mock implements INode {}
+class _MockNode extends Mock implements NodeInterface {}

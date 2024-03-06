@@ -1,11 +1,11 @@
 import 'package:behavior_tree/behavior_tree.dart';
 
 /// A composite node that stops at its first successful child node.
-class Sequence extends BaseNode implements INode {
+class Sequence extends BaseNode implements NodeInterface {
   /// Creates a sequence node for given [children] nodes.
-  Sequence({List<INode>? children}) : _children = children ?? <INode>[];
+  Sequence({List<NodeInterface>? children}) : _children = children ?? <NodeInterface>[];
 
-  final List<INode> _children;
+  final List<NodeInterface> _children;
 
   @override
   void tick() {

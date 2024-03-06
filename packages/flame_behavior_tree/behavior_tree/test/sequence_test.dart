@@ -104,9 +104,9 @@ void main() {
   });
 }
 
-class _MockNode extends Mock implements INode {}
+class _MockNode extends Mock implements NodeInterface {}
 
-class _StatusAfterNTries extends BaseNode implements INode {
+class _StatusAfterNTries extends BaseNode implements NodeInterface {
   _StatusAfterNTries(this.nTries, this.statusAfterTries);
 
   final int nTries;
