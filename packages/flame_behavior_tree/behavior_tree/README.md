@@ -29,7 +29,7 @@ can break-down a complex behavior of an in game AI, into multiple smaller nodes.
 - Nodes
   - Composite
     - Sequence: Continues execution until one of the children fails.
-    - Selector: Continues execution until one of the children  succeeds.
+    - Selector: Continues execution until one of the children succeeds.
   - Decorator
     - Inverter: Flips the status of the child node.
     - Limiter: Limits the number of ticks for child node.
