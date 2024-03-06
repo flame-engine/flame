@@ -51,7 +51,7 @@ flutter pub add flame_behavior_tree
       Future<void> onLoad async () {
           treeRoot = Selector(
               children: [
-                  Sequence(childre: [task1, condition, task2]),
+                  Sequence(children: [task1, condition, task2]),
                   Sequence(...),
               ]
           );
