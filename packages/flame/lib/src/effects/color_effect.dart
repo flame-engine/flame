@@ -46,7 +46,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
       // Currently there is a bug when opacity is 0 in the color filter.
       // "Expected a value of type 'SkDeletable', but got one of type 'Null'"
       // https://github.com/flutter/flutter/issues/89433
-      max(_tween.transform(progress), 1 / 255),
+      min(max(_tween.transform(progress), 1 / 255), 1),
     );
     target.tint(currentColor, paintId: paintId);
   }
