@@ -26,7 +26,7 @@ To make a `Game` sub class sensitive to key stroke, mix it with `KeyboardEvents`
 After that, it will be possible to override an `onKeyEvent` method.
 
 This method receives two parameters, first the
-[`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html)
+[`KeyEvent`](https://api.flutter.dev/flutter/services/KeyEvent-class.html)
 that triggers the callback in the first place. The second is a set of the currently pressed
 [`LogicalKeyboardKey`](https://api.flutter.dev/flutter/services/LogicalKeyboardKey-class.html).
 
@@ -50,10 +50,10 @@ class MyGame extends FlameGame with KeyboardEvents {
   // ...
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    final isKeyDown = event is RawKeyDownEvent;
+    final isKeyDown = event is KeyDownEvent;
 
     final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
 
@@ -87,7 +87,7 @@ KeyboardHandlers must only be added to games that are mixed with `HasKeyboardHan
 After applying `KeyboardHandler`, it will be possible to override an `onKeyEvent` method.
 
 This method receives two parameters. First the
-[`RawKeyEvent`](https://api.flutter.dev/flutter/services/RawKeyEvent-class.html)
+[`KeyEvent`](https://api.flutter.dev/flutter/services/KeyEvent-class.html)
 that triggered the callback in the first place. The second is a set of the currently pressed
 [`LogicalKeyboardKey`](https://api.flutter.dev/flutter/services/LogicalKeyboardKey-class.html)s.
 
