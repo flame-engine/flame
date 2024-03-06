@@ -54,11 +54,13 @@ dart pub add behavior_tree
 
   ```dart
   final treeRoot = Sequence(
-    Condition(() => isHungry),
-    Task(() => goToShop()),
-    Task(() => buyFood()),
-    Task(() => goToHome()),
-    Task(() => eatFood()),
+    children: [
+      Condition(() => isHungry),
+      Task(() => goToShop()),
+      Task(() => buyFood()),
+      Task(() => goToHome()),
+      Task(() => eatFood()),
+    ]
   );
   ```
 
