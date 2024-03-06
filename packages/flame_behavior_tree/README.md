@@ -60,7 +60,7 @@ flutter pub add flame_behavior_tree
   }
   ```
 
-- Increase the `tickInterval` to make the tree tick less frequency.
+- Increase the `tickInterval` to make the tree tick less frequently.
 
   ```dart
   class MyComponent extends Position with HasBehaviorTree {
