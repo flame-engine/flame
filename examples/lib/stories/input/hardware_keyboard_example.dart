@@ -15,7 +15,7 @@ class HardwareKeyboardExample extends FlameGame {
   ''';
 
   /// The list of [KeyboardKey] components currently shown on the screen. This
-  /// list is re-generated on every RawKeyEvent. These components are also
+  /// list is re-generated on every KeyEvent. These components are also
   /// attached as children.
   List<KeyboardKey> _keyComponents = [];
 
@@ -221,9 +221,9 @@ class KeyboardKey extends PositionComponent {
   late final InlineTextElement textElement;
   late final RRect rect;
 
-  /// The RawKeyEvents may occur very fast, and out of sync with the game loop.
+  /// The KeyEvents may occur very fast, and out of sync with the game loop.
   /// On each such event we remove old KeyboardKey components, and add new ones.
-  /// However, since multiple RawKeyEvents may occur within a single game tick,
+  /// However, since multiple KeyEvents may occur within a single game tick,
   /// we end up adding/removing components many times within that tick, and for
   /// a brief moment there could be a situation that the old components still
   /// haven't been removed while the new ones were already added. In order to
