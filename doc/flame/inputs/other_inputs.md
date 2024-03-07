@@ -130,8 +130,8 @@ else which isn't a pure sprite.
 
 ## Gamepad
 
-Flame has a separate plugin to support external game controllers (gamepads), check
-[here](https://github.com/flame-engine/flame_gamepad) for more information.
+Flame has a dedicated plugin to support external game controllers (gamepads). Find more information in the 
+[Gamepads repository](https://github.com/flame-engine/gamepad).
 
 
 ## AdvancedButtonComponent
