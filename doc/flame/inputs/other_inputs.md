@@ -14,7 +14,7 @@ Flame provides a component capable of creating a virtual joystick for taking inp
 To use this feature, you need to create a `JoystickComponent`, configure it the way you want, and
 add it to your game.
 
-Check this example to get a better understanding:
+Check out the following example to get a better understanding:
 
 ```dart
 class MyGame extends FlameGame {
@@ -74,12 +74,11 @@ class Player extends SpriteComponent with HasGameRef {
 }
 ```
 
-So in this example, we create the classes `MyGame` and `Player`. `MyGame` creates a joystick which is
-passed to the `Player` when it is created. In the `Player` class we act upon the current state of
-the joystick.
+So in this example, we create the classes `MyGame` and `Player`. `MyGame` creates a joystick which is passed to the `Player` when it is created. In the `Player` class we act upon the current state of the joystick.
 
 The joystick has a few fields that change depending on what state it is in.
-These are the fields that should be used to know the state of the joystick:
+
+Following are the fields that should be used to know the state of the joystick:
 
 - `intensity`: The percentage [0.0, 1.0] that the knob is dragged from the epicenter to the edge of
   the joystick (or `knobRadius` if that is set).
@@ -90,13 +89,10 @@ These are the fields that should be used to know the state of the joystick:
 If you want to create buttons to go with your joystick, check out
 [`HudButtonComponent`](#hudbuttoncomponent).
 
-A full examples of how to use it can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart).
-And it can be seen running [here](https://examples.flame-engine.org/#/Input_Joystick).
+For the complete code on implementing the joystick, check out the [Joystick Example on GitHub](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart). You can also view the [JoystickComponent in action](https://examples.flame-engine.org/#/Input_Joystick) to see a live example of the joystick input function integrated into a game.
 
-There is also a more advanced example
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart)
-which is running [here](https://examples.flame-engine.org/#/Input_Joystick%20Advanced).
+For an add challenge, explore the 
+[Advanced Joystick Example on GitHub](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart). See what else the advanced features can do in the [live demo](https://examples.flame-engine.org/#/Input_Joystick%20Advanced).
 
 
 ## HudButtonComponent
