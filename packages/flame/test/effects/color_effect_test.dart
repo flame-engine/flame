@@ -18,11 +18,7 @@ void main() {
       game.update(0);
       expect(
         component.paint.colorFilter.toString(),
-        // Once https://github.com/flutter/flutter/issues/89433 has been fixed
-        // the two equals lines should be swapped and the ColorEffect should go
-        // to opacity 0.
-        //equals('ColorFilter.mode(Color(0x00f44336), BlendMode.srcATop)'),
-        equals('ColorFilter.mode(Color(0x01f44336), BlendMode.srcATop)'),
+        equals('ColorFilter.mode(Color(0x00f44336), BlendMode.srcATop)'),
       );
 
       game.update(0.5);
@@ -31,6 +27,36 @@ void main() {
         equals('ColorFilter.mode(Color(0x80f44336), BlendMode.srcATop)'),
       );
     });
+
+    testWithFlameGame(
+      'resets the color filter to the original state',
+      (game) async {
+        final component = _PaintComponent();
+        await game.ensureAdd(component);
+
+        final originalColorFilter = component.paint.colorFilter;
+        const color = Colors.red;
+
+        final effect = ColorEffect(
+          color,
+          EffectController(duration: 1),
+        );
+        await component.add(effect);
+        game.update(0.5);
+
+        expect(
+          originalColorFilter,
+          isNot(equals(component.paint.colorFilter)),
+        );
+
+        effect.reset();
+
+        expect(
+          originalColorFilter,
+          equals(component.paint.colorFilter),
+        );
+      },
+    );
 
     testWithFlameGame(
       'resets the color filter to the original state',
@@ -79,6 +105,28 @@ void main() {
         component.add(effect);
         expect(
           () => game.update(0),
+          returnsNormally,
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'will clamp controllers that over or under set the progress value',
+      (game) async {
+        final component = _PaintComponent();
+        await game.ensureAdd(component);
+
+        final effect = ColorEffect(
+          opacityFrom: 1,
+          opacityTo: 0,
+          Colors.black,
+          ZigzagEffectController(
+            period: 1,
+          ),
+        );
+        await component.ensureAdd(effect);
+        expect(
+          () => game.update(0.56),
           returnsNormally,
         );
       },
