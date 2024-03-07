@@ -74,7 +74,9 @@ class Player extends SpriteComponent with HasGameRef {
 }
 ```
 
-So in this example, we create the classes `MyGame` and `Player`. `MyGame` creates a joystick which is passed to the `Player` when it is created. In the `Player` class we act upon the current state of the joystick.
+So in this example, we create the classes `MyGame` and `Player`. 
+`MyGame` creates a joystick which is passed to the `Player` when it is created. 
+In the `Player` class we act upon the current state of the joystick.
 
 The joystick has a few fields that change depending on what state it is in.
 
@@ -89,10 +91,15 @@ Following are the fields that should be used to know the state of the joystick:
 If you want to create buttons to go with your joystick, check out
 [`HudButtonComponent`](#hudbuttoncomponent).
 
-For the complete code on implementing the joystick, check out the [Joystick Example on GitHub](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart). You can also view the [JoystickComponent in action](https://examples.flame-engine.org/#/Input_Joystick) to see a live example of the joystick input function integrated into a game.
+For the complete code on implementing the joystick, check out the 
+[Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart). 
+You can also view the [JoystickComponent in action](https://examples.flame-engine.org/#/Input_Joystick) 
+to see a live example of the joystick input function integrated into a game.
 
 For an add challenge, explore the 
-[Advanced Joystick Example on GitHub](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart). See what else the advanced features can do in the [live demo](https://examples.flame-engine.org/#/Input_Joystick%20Advanced).
+[Advanced Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart). 
+See what else the advanced features can do in the 
+[live demo](https://examples.flame-engine.org/#/Input_Joystick%20Advanced).
 
 
 ## HudButtonComponent
