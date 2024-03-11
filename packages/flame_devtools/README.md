@@ -18,3 +18,9 @@ To develop things from the Flame side, create a new `DevToolsConnector` which
 registers the new extension end points so that you can communicate with Flame
 from the devtools extension. Don't forget to add the new connector to the
 list of connectors in the `DevToolsService` class.
+
+If you want to run with the devtools extension with the simulated mode for
+faster development, you can use `melos devtools-simulate` to start the
+simulated environment and run the devtools extension in the browser.
+Remember that you have to manually enter the Dart VM Service Connection URI
+in the simulated devtools environment.

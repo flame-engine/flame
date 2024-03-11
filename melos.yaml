@@ -118,3 +118,9 @@ scripts:
     packageFilters:
       scope: flame_devtools
     description: Builds the devtools and copies the build directory to the Flame package.
+
+  devtools-simulator:
+    run: melos exec -- flutter run -d chrome --dart-define=use_simulated_environment=true
+    packageFilters:
+      scope: flame_devtools
+    description: Runs the devtools in the simulated mode.

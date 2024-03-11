@@ -1,4 +1,5 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
+import 'package:flame/devtools.dart';
 
 sealed class Repository {
   Repository._();
@@ -9,6 +10,16 @@ sealed class Repository {
       'ext.flame_devtools.getComponentCount',
     );
     return componentCountResponse.json!['component_count'] as int;
+  }
+
+  static Future<ComponentTreeNode> getComponentTree() async {
+    final componentTreeResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentTree',
+    );
+    return ComponentTreeNode.fromJson(
+      componentTreeResponse.json!['component_tree'] as Map<String, dynamic>,
+    );
   }
 
   static Future<bool> swapDebugMode() async {
