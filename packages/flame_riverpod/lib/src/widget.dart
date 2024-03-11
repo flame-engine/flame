@@ -253,5 +253,5 @@ class _ListenManual<T> implements ProviderSubscription<T> {
   bool get closed => _subscription.closed;
 
   @override
-  Node get source => throw UnimplementedError();
+  Node get source => _subscription.source;
 }
