@@ -412,6 +412,7 @@ The proposal is to have a new KlondikeWorld class, which replaces the default `w
 FlameGame. The new world contains (almost) everything we need to play the game and is created or
 re-created during each of the above actions.
 
+### KlondikeWorld class
 
 ### A stripped-down KlondikeGame class
 
