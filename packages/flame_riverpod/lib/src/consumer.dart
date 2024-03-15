@@ -139,7 +139,29 @@ mixin RiverpodGameMixin<W extends World> on FlameGame<W> {
   /// Used to facilitate [Component] access to the [ProviderContainer].
   GlobalKey<RiverpodAwareGameWidgetState>? widgetKey;
 
+  final ComponentRef ref = ComponentRef(game: null);
   final List<void Function()> _onBuildCallbacks = [];
+
+  /// Adds a callback method to be invoked in the build method of
+  /// [RiverpodAwareGameWidgetState].
+  void addToGameWidgetBuild(Function() cb) {
+    _onBuildCallbacks.add(cb);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    mounted.whenComplete(() {
+      widgetKey!.currentState!.forceBuild();
+    });
+  }
+
+  @mustCallSuper
+  @override
+  FutureOr<void> onLoad() {
+    ref.game = this;
+    return super.onLoad();
+  }
 
   /// Invoked in [RiverpodAwareGameWidgetState.build]. Each callback is
   /// expected to consist of calls to methods implemented in [WidgetRef].
