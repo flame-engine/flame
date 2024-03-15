@@ -79,13 +79,6 @@ mixin RiverpodComponentMixin on Component {
   /// this component is removed.
   bool rebuildOnRemoveWhen(ComponentRef ref) => true;
 
-  @mustCallSuper
-  @override
-  FutureOr<void> onLoad() {
-    ref.game = findGame()! as RiverpodGameMixin;
-    super.onLoad();
-  }
-
   /// Adds a callback method to be invoked in the build method of
   /// [RiverpodAwareGameWidgetState].
   void addToGameWidgetBuild(Function() cb) {
@@ -96,6 +89,7 @@ mixin RiverpodComponentMixin on Component {
   @override
   void onMount() {
     super.onMount();
+    ref.game = findGame()! as RiverpodGameMixin;
     ref.game!._onBuildCallbacks.addAll(_onBuildCallbacks);
 
     if (rebuildOnMountWhen(ref) == true) {
