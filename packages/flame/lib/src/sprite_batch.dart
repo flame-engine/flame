@@ -245,11 +245,13 @@ class SpriteBatch {
 
   int get length => _sources.length;
 
-  /// Replace a batch item at the [index] with the new values.
+  /// Replace a batch item at the [index] the new provided values, when a
+  /// value is not informed, the method will keep the current information.
   ///
   /// Throws an [ArgumentError] if the [index] is out of bounds.
   /// At least one of the parameters must be different from null.
-  void replace(int index, {
+  void replace(
+    int index, {
     Rect? source,
     Color? color,
     RSTransform? transform,

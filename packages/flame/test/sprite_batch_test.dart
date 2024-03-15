@@ -17,14 +17,6 @@ void main() {
       expect(spriteBatch.transforms, hasLength(1));
     });
 
-    test('can add to the batch', () {
-      final image = _MockImage();
-      final spriteBatch = SpriteBatch(image);
-      spriteBatch.add(source: Rect.zero);
-
-      expect(spriteBatch.transforms, hasLength(1));
-    });
-
     test('can replace the color of a batch', () {
       final image = _MockImage();
       final spriteBatch = SpriteBatch(image);
