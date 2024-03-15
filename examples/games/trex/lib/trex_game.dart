@@ -88,7 +88,7 @@ class TRexGame extends FlameGame
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.enter) ||

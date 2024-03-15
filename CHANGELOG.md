@@ -3,6 +3,232 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.16.0`](#flame---v1160)
+ - [`flame_audio` - `v2.10.0`](#flame_audio---v2100)
+ - [`flame_bloc` - `v1.11.0`](#flame_bloc---v1110)
+ - [`flame_fire_atlas` - `v1.5.0`](#flame_fire_atlas---v150)
+ - [`flame_rive` - `v1.10.0`](#flame_rive---v1100)
+ - [`flame_riverpod` - `v5.3.0`](#flame_riverpod---v530)
+ - [`flame_svg` - `v1.10.0`](#flame_svg---v1100)
+ - [`flame_test` - `v1.16.0`](#flame_test---v1160)
+ - [`flame_texturepacker` - `v3.1.0`](#flame_texturepacker---v310)
+ - [`flame_tiled` - `v1.19.0`](#flame_tiled---v1190)
+ - [`flame_forge2d` - `v0.17.0`](#flame_forge2d---v0170)
+ - [`flame_isolate` - `v0.6.0`](#flame_isolate---v060)
+ - [`flame_lottie` - `v0.4.0`](#flame_lottie---v040)
+ - [`flame_markdown` - `v0.2.0`](#flame_markdown---v020)
+ - [`flame_network_assets` - `v0.3.0`](#flame_network_assets---v030)
+ - [`flame_noise` - `v0.3.0`](#flame_noise---v030)
+ - [`flame_oxygen` - `v0.2.0`](#flame_oxygen---v020)
+ - [`flame_spine` - `v0.2.0`](#flame_spine---v020)
+ - [`flame_splash_screen` - `v0.3.0`](#flame_splash_screen---v030)
+
+Packages with other changes:
+
+ - [`jenny` - `v1.3.0`](#jenny---v130)
+
+---
+
+#### `flame` - `v1.16.0`
+
+ - **REFACTOR**: Fix unrelated types reported by DCM ([#3023](https://github.com/flame-engine/flame/issues/3023)). ([1d020a52](https://github.com/flame-engine/flame/commit/1d020a525b81df1cb45345d3e36a9c4e9caf701e))
+ - **FIX**: Vertices in `PolygonComponent` should subtract vertices positioning ([#3040](https://github.com/flame-engine/flame/issues/3040)). ([4f053ed7](https://github.com/flame-engine/flame/commit/4f053ed74c09d4e19a53694130b5d5c0d3e23aa6))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_audio` - `v2.10.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_bloc` - `v1.11.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_fire_atlas` - `v1.5.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_rive` - `v1.10.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_riverpod` - `v5.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_svg` - `v1.10.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_test` - `v1.16.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_texturepacker` - `v3.1.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_tiled` - `v1.19.0`
+
+ - **FEAT**: Add TiledObjectHealpers extension on TiledObject ([#3032](https://github.com/flame-engine/flame/issues/3032)). ([78380b9d](https://github.com/flame-engine/flame/commit/78380b9d3bb895e20f382c4a1227bcc11e5038b9))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_forge2d` - `v0.17.0`
+
+ - **FIX**: BodyComponent fixtures should test with global point ([#3042](https://github.com/flame-engine/flame/issues/3042)). ([7c3038be](https://github.com/flame-engine/flame/commit/7c3038becba91550eb47a033cbed7208d570e012))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_isolate` - `v0.6.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_lottie` - `v0.4.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_markdown` - `v0.2.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_network_assets` - `v0.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_noise` - `v0.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_oxygen` - `v0.2.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_spine` - `v0.2.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `flame_splash_screen` - `v0.3.0`
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+#### `jenny` - `v1.3.0`
+
+ - **FEAT**: Add new methods to CommandStorage to support more arguments ([#3035](https://github.com/flame-engine/flame/issues/3035)). ([21922620](https://github.com/flame-engine/flame/commit/219226201a8d0c6e301c388299277be95b585c0e))
+
+
+## 2024-02-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_svg` - `v1.9.0`](#flame_svg---v190)
+
+---
+
+#### `flame_svg` - `v1.9.0`
+
+ - **FEAT**: Add `loadFromString` to Svg class ([#3030](https://github.com/flame-engine/flame/issues/3030)). ([b0cafb2a](https://github.com/flame-engine/flame/commit/b0cafb2a5561de136af93eb7a09df37b93d38ce0))
+
+
+## 2024-02-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_noise` - `v0.2.0`](#flame_noise---v020)
+ - [`flame_texturepacker` - `v3.0.0`](#flame_texturepacker---v300)
+
+Packages with other changes:
+
+ - [`flame` - `v1.15.0`](#flame---v1150)
+ - [`flame_isolate` - `v0.5.1`](#flame_isolate---v051)
+ - [`flame_riverpod` - `v5.2.0`](#flame_riverpod---v520)
+ - [`flame_test` - `v1.15.4`](#flame_test---v1154)
+ - [`flame_oxygen` - `v0.1.9+8`](#flame_oxygen---v0198)
+ - [`flame_tiled` - `v1.18.4`](#flame_tiled---v1184)
+ - [`flame_fire_atlas` - `v1.4.8`](#flame_fire_atlas---v148)
+ - [`flame_audio` - `v2.1.8`](#flame_audio---v218)
+ - [`flame_spine` - `v0.1.1+10`](#flame_spine---v01110)
+ - [`flame_bloc` - `v1.10.10`](#flame_bloc---v11010)
+ - [`flame_rive` - `v1.9.11`](#flame_rive---v1911)
+ - [`flame_lottie` - `v0.3.0+8`](#flame_lottie---v0308)
+ - [`flame_markdown` - `v0.1.1+8`](#flame_markdown---v0118)
+ - [`flame_forge2d` - `v0.16.0+5`](#flame_forge2d---v01605)
+ - [`flame_svg` - `v1.8.10`](#flame_svg---v1810)
+ - [`flame_network_assets` - `v0.2.0+13`](#flame_network_assets---v02013)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_oxygen` - `v0.1.9+8`
+ - `flame_tiled` - `v1.18.4`
+ - `flame_fire_atlas` - `v1.4.8`
+ - `flame_audio` - `v2.1.8`
+ - `flame_spine` - `v0.1.1+10`
+ - `flame_bloc` - `v1.10.10`
+ - `flame_rive` - `v1.9.11`
+ - `flame_lottie` - `v0.3.0+8`
+ - `flame_markdown` - `v0.1.1+8`
+ - `flame_forge2d` - `v0.16.0+5`
+ - `flame_svg` - `v1.8.10`
+ - `flame_network_assets` - `v0.2.0+13`
+
+---
+
+#### `flame_noise` - `v0.2.0`
+
+ - **BREAKING** **FEAT**: Update flame_noise to use latest version of fast_noise ([#3015](https://github.com/flame-engine/flame/issues/3015)). ([2fd84c84](https://github.com/flame-engine/flame/commit/2fd84c846f808bf593ef568150ffb49eecaebf30))
+
+#### `flame_texturepacker` - `v3.0.0`
+
+ - **REFACTOR**: Update `flame_texturepacker`'s file structure ([#3014](https://github.com/flame-engine/flame/issues/3014)). ([982f2263](https://github.com/flame-engine/flame/commit/982f2263daae882fb456e750298c874b77c5471b))
+ - **FEAT**: TexturePacker atlas can be generated from device's file ([#3006](https://github.com/flame-engine/flame/issues/3006)). ([4e6968a0](https://github.com/flame-engine/flame/commit/4e6968a05c659aae09e9f613870c6e5b326f4b44))
+ - **BREAKING** **FEAT**: Transfer flame_texturepacker to monorepo ([#2987](https://github.com/flame-engine/flame/issues/2987)). ([45c87ddf](https://github.com/flame-engine/flame/commit/45c87ddfb668b035f095cdc17f1a4b7662a3ae11))
+
+#### `flame` - `v1.15.0`
+
+ - **REFACTOR**: Minimize `Vector2` creation in `IsometricTileMapComponent` ([#3018](https://github.com/flame-engine/flame/issues/3018)). ([5d3be313](https://github.com/flame-engine/flame/commit/5d3be3137a177c8900158fce10cffc01f729ed7a))
+ - **FIX**: Set margins of `JoystickComponent` properly ([#3019](https://github.com/flame-engine/flame/issues/3019)). ([e27818d8](https://github.com/flame-engine/flame/commit/e27818d8721c577507411fca085859335206391f))
+ - **FIX**: Properly update sprites in SpriteButtonComponent ([#3013](https://github.com/flame-engine/flame/issues/3013)). ([23cf8b9d](https://github.com/flame-engine/flame/commit/23cf8b9de81cade9ce90b8401c39432bc70f9d0d))
+ - **FIX**: Lifecycle completers to be called for FlameGame ([#3007](https://github.com/flame-engine/flame/issues/3007)). ([3804f524](https://github.com/flame-engine/flame/commit/3804f52434cf1bcaf28b501bf96858ecd3636164))
+ - **FIX**: CameraComponent no longer throws Concurrent modification on stop ([#2997](https://github.com/flame-engine/flame/issues/2997)). ([6a1059b0](https://github.com/flame-engine/flame/commit/6a1059b0a6e381020cdaa7a96ceecbcaa45b9a42))
+ - **FIX**: Updated PolygonComponent.containsPoint to account for concave polygons ([#2979](https://github.com/flame-engine/flame/issues/2979)). ([a6fe62a2](https://github.com/flame-engine/flame/commit/a6fe62a2c3b74d9b4781531e0c53470b6d3242ea))
+ - **FIX**: Add missing generic to `ComponentViewportMargin` ([#2983](https://github.com/flame-engine/flame/issues/2983)). ([1d9fe613](https://github.com/flame-engine/flame/commit/1d9fe6139287b984a05e0056c279b9c5d277e026))
+ - **FEAT**: Add support for base64 encoded images to be manually added to Images cache. ([#3008](https://github.com/flame-engine/flame/issues/3008)). ([1e56293c](https://github.com/flame-engine/flame/commit/1e56293c1f89e7636c97b0ed518642bd493d7a40))
+ - **FEAT**: Make `Component.key` public ([#2988](https://github.com/flame-engine/flame/issues/2988)). ([7fbd5af9](https://github.com/flame-engine/flame/commit/7fbd5af935211264822f89bc1beb4062d3efdf7a))
+ - **FEAT**: Add a hitboxFilter argument to raycast() ([#2968](https://github.com/flame-engine/flame/issues/2968)). ([d7c53e23](https://github.com/flame-engine/flame/commit/d7c53e230f32b4b224e23483d99b0b276d14686f))
+
+#### `flame_isolate` - `v0.5.1`
+
+ - **FEAT**: Bumped integral_isolates package for flame_isolate ([#2994](https://github.com/flame-engine/flame/issues/2994)). ([3c38ee60](https://github.com/flame-engine/flame/commit/3c38ee6058e7c8b7546c3fcdb1b08e3e40ba138b))
+
+#### `flame_riverpod` - `v5.2.0`
+
+ - **FIX**: Add Template param to RiverpodGameMixin ([#2972](https://github.com/flame-engine/flame/issues/2972)). ([622c8553](https://github.com/flame-engine/flame/commit/622c855318b6c1731891b023ddc6429ba1f32329))
+ - **FEAT**: Make `Component.key` public ([#2988](https://github.com/flame-engine/flame/issues/2988)). ([7fbd5af9](https://github.com/flame-engine/flame/commit/7fbd5af935211264822f89bc1beb4062d3efdf7a))
+
+#### `flame_test` - `v1.15.4`
+
+ - **FIX**: Lifecycle completers to be called for FlameGame ([#3007](https://github.com/flame-engine/flame/issues/3007)). ([3804f524](https://github.com/flame-engine/flame/commit/3804f52434cf1bcaf28b501bf96858ecd3636164))
+
+
 ## 2024-01-07
 
 ### Changes

@@ -20,6 +20,11 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
     the buttons.
   ''';
 
+  JoystickAdvancedExample()
+      : super(
+          camera: CameraComponent.withFixedResolution(width: 1200, height: 800),
+        );
+
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
   late final TextComponent speedText;

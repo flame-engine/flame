@@ -25,7 +25,7 @@ class _GameWithKeyboardEvents extends FlameGame with KeyboardEvents {
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     keyEvents.add(event.logicalKey);
@@ -443,7 +443,7 @@ void main() {
     testWidgets('overlay handles keys', (tester) async {
       final overlayKeyEvents = <LogicalKeyboardKey>[];
       final overlayFocusNode = FocusNode(
-        onKey: (_, keyEvent) {
+        onKeyEvent: (_, keyEvent) {
           overlayKeyEvents.add(keyEvent.logicalKey);
           return KeyEventResult.ignored;
         },
@@ -475,7 +475,7 @@ void main() {
       await simulateKeyDownEvent(LogicalKeyboardKey.keyA);
       await tester.pump();
 
-      expect(game.keyEvents, <RawKeyEvent>[]);
+      expect(game.keyEvents, <KeyEvent>[]);
       expect(overlayKeyEvents, [LogicalKeyboardKey.keyA]);
     });
   });

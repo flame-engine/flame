@@ -1,3 +1,13 @@
+## 0.6.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
+## 0.5.1
+
+ - **FEAT**: Bumped integral_isolates package for flame_isolate ([#2994](https://github.com/flame-engine/flame/issues/2994)). ([3c38ee60](https://github.com/flame-engine/flame/commit/3c38ee6058e7c8b7546c3fcdb1b08e3e40ba138b))
+
 ## 0.5.0+7
 
  - Update a dependency to the latest release.

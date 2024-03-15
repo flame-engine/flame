@@ -17,7 +17,7 @@ class MultiTapDispatcherKey implements ComponentKey {
   int get hashCode => 401913931; // 'MultiTapDispatcherKey' as hashCode
 
   @override
-  bool operator ==(dynamic other) =>
+  bool operator ==(Object other) =>
       other is MultiTapDispatcherKey && other.hashCode == hashCode;
 }
 

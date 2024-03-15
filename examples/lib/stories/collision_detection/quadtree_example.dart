@@ -142,7 +142,7 @@ Press T button to toggle player to collide with other objects.
 
   @override
   KeyEventResult onKeyEvent(
-    RawKeyEvent event,
+    KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     for (final key in keysPressed) {

@@ -52,8 +52,34 @@ void main() {
           Vector2(1.5, 0.5),
         ],
       );
-      expect(polygon.containsLocalPoint(Vector2(0.25, 0.25)), isFalse);
+      expect(polygon.containsLocalPoint(Vector2(0.0, 0.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.25, 0.25)), isTrue);
       expect(polygon.containsLocalPoint(Vector2(0.75, 0.75)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(1.0, 1.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(1.0, 0.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.0, 1.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.0, 1.0001)), isFalse);
+      expect(polygon.containsLocalPoint(Vector2(-0.0001, 0.0)), isFalse);
+    });
+
+    test('polygon contains point in local with anchor', () {
+      final polygon = PolygonComponent(
+        [
+          Vector2(0.5, 0.5),
+          Vector2(0.5, 1.5),
+          Vector2(1.5, 1.5),
+          Vector2(1.5, 0.5),
+        ],
+        anchor: Anchor.center,
+      );
+      expect(polygon.containsLocalPoint(Vector2(0.0, 0.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.25, 0.25)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.75, 0.75)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(1.0, 1.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(1.0, 0.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.0, 1.0)), isTrue);
+      expect(polygon.containsLocalPoint(Vector2(0.0, 1.0001)), isFalse);
+      expect(polygon.containsLocalPoint(Vector2(-0.0001, 0.0)), isFalse);
     });
 
     test('rectangle contains point in local with anchor', () {

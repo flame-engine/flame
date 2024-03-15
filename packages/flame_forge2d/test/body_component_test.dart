@@ -1,5 +1,12 @@
-import 'package:flame/components.dart' show ComponentKey, PositionComponent;
+// ignore_for_file: invalid_use_of_internal_member
+
+import 'dart:math';
+
+import 'package:flame/components.dart'
+    show Anchor, ComponentKey, PositionComponent;
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +15,19 @@ import 'package:mocktail/mocktail.dart';
 
 import 'helpers/mocks.dart';
 
-class _TestBodyComponent extends BodyComponent {
+class _TestBodyComponent extends BodyComponent with TapCallbacks {
+  int tapCount = 0;
+
   @override
   Body createBody() => body;
 
   @override
   void noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+
+  @override
+  void onTapDown(TapDownEvent _) {
+    tapCount++;
+  }
 }
 
 class _MockCanvas extends Mock implements Canvas {}
@@ -350,6 +364,7 @@ void main() {
         },
       );
     });
+
     group('createBody', () {
       test('should throw an error if bodyDef is null', () {
         final bodyComponent = BodyComponent();
@@ -397,6 +412,73 @@ void main() {
             expect(bodyComponent.body.fixtures[2].shape.radius, 30);
           },
         );
+      });
+    });
+
+    group('containsLocalPoint', () {
+      testWithGame('with rotation', Forge2DGame.new, (game) async {
+        game.camera.viewfinder.anchor = Anchor.topLeft;
+        final zoom = game.camera.viewfinder.zoom;
+        final position = Vector2.all(10);
+        final body = game.world.createBody(
+          BodyDef(position: position, angle: pi / 2),
+        );
+
+        body.createFixtureFromShape(
+          CircleShape()
+            ..radius = 1
+            ..position.setFrom(Vector2(3, 0)),
+        );
+        body.createFixtureFromShape(
+          CircleShape()
+            ..radius = 1
+            ..position.setFrom(Vector2(-3, 0)),
+        );
+        final component = _TestBodyComponent()..body = body;
+
+        await game.world.ensureAdd(component);
+        game.update(0);
+        final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
+
+        tapDispatcher.handleTapDown(
+          1,
+          TapDownDetails(
+            globalPosition: position.toOffset() * zoom + Offset(0, 3 * zoom),
+          ),
+        );
+        expect(component.tapCount, 1);
+
+        tapDispatcher.handleTapDown(
+          1,
+          TapDownDetails(
+            globalPosition: position.toOffset() * zoom + Offset(3 * zoom, 0),
+          ),
+        );
+        expect(component.tapCount, 1);
+
+        tapDispatcher.handleTapDown(
+          1,
+          TapDownDetails(
+            globalPosition: position.toOffset() * zoom + Offset(0, -3 * zoom),
+          ),
+        );
+        expect(component.tapCount, 2);
+
+        tapDispatcher.handleTapDown(
+          1,
+          TapDownDetails(
+            globalPosition: position.toOffset() * zoom + Offset(-3 * zoom, 0),
+          ),
+        );
+        expect(component.tapCount, 2);
+
+        tapDispatcher.handleTapDown(
+          1,
+          TapDownDetails(
+            globalPosition: position.toOffset() * zoom,
+          ),
+        );
+        expect(component.tapCount, 2);
       });
     });
   });

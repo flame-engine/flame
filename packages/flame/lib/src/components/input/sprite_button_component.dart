@@ -18,15 +18,9 @@ enum ButtonState {
 /// through the constructor.
 class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
     with TapCallbacks {
-  /// Callback for what should happen when the button is pressed.
-  void Function()? onPressed;
-
-  Sprite? button;
-  Sprite? buttonDown;
-
   SpriteButtonComponent({
-    this.button,
-    this.buttonDown,
+    Sprite? button,
+    Sprite? buttonDown,
     this.onPressed,
     super.position,
     Vector2? size,
@@ -35,20 +29,41 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
     super.anchor,
     super.children,
     super.priority,
-  }) : super(
+  })  : _button = button,
+        _buttonDown = buttonDown,
+        super(
           current: ButtonState.up,
           size: size ?? button?.originalSize,
         );
 
+  /// Callback for what should happen when the button is pressed.
+  void Function()? onPressed;
+
+  Sprite? _button;
+  Sprite? _buttonDown;
+
+  Sprite get button => _button!;
+  Sprite get buttonDown => _buttonDown ?? button;
+
+  set button(Sprite value) {
+    _button = value;
+    sprites?[ButtonState.up] = value;
+  }
+
+  set buttonDown(Sprite value) {
+    _buttonDown = value;
+    sprites?[ButtonState.down] = value;
+  }
+
   @override
   void onMount() {
     assert(
-      button != null,
+      _button != null,
       'The button sprite has to be set either in onLoad or in the constructor',
     );
     sprites = {
-      ButtonState.up: button!,
-      ButtonState.down: buttonDown ?? button!,
+      ButtonState.up: button,
+      ButtonState.down: buttonDown,
     };
     super.onMount();
   }

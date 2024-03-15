@@ -10,9 +10,10 @@ import 'package:meta/meta.dart';
 /// YarnProject.
 ///
 /// This repository is populated by the user, using commands [addCommand0],
-/// [addCommand1], [addCommand2], [addCommand3], and [addOrphanedCommand],
-/// depending on the arity of the function that needs to be invoked. All user-
-/// defined commands need to be declared before parsing any Yarn scripts.
+/// [addCommand1], [addCommand2], [addCommand3], [addCommand4], [addCommand5],
+/// and [addOrphanedCommand], depending on the arity of the function
+/// that needs to be invoked. All user-defined commands need to be declared
+/// before parsing any Yarn scripts.
 class CommandStorage {
   CommandStorage() : _commands = {};
 
@@ -55,6 +56,43 @@ class CommandStorage {
       name,
       [T1, T2, T3],
       (List args) => fn(args[0] as T1, args[1] as T2, args[2] as T3),
+    );
+  }
+
+  /// Registers a 4-arguments function [fn] as a custom yarn command [name].
+  void addCommand4<T1, T2, T3, T4>(
+    String name,
+    FutureOr<void> Function(T1, T2, T3, T4) fn,
+  ) {
+    _checkName(name);
+    _commands[name] = _Cmd(
+      name,
+      [T1, T2, T3, T4],
+      (List args) => fn(
+        args[0] as T1,
+        args[1] as T2,
+        args[2] as T3,
+        args[3] as T4,
+      ),
+    );
+  }
+
+  /// Registers a 5-arguments function [fn] as a custom yarn command [name].
+  void addCommand5<T1, T2, T3, T4, T5>(
+    String name,
+    FutureOr<void> Function(T1, T2, T3, T4, T5) fn,
+  ) {
+    _checkName(name);
+    _commands[name] = _Cmd(
+      name,
+      [T1, T2, T3, T4, T5],
+      (List args) => fn(
+        args[0] as T1,
+        args[1] as T2,
+        args[2] as T3,
+        args[3] as T4,
+        args[4] as T5,
+      ),
     );
   }
 

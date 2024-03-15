@@ -3,6 +3,8 @@ import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore: depend_on_referenced_packages, implementation_imports
+import 'package:riverpod/src/framework.dart';
 
 /// A [GameWidget] that provides access to [Component]s using
 /// [RiverpodComponentMixin] attached to [FlameGame]s using [RiverpodGameMixin]
@@ -246,4 +248,10 @@ class _ListenManual<T> implements ProviderSubscription<T> {
 
   @override
   T read() => _subscription.read();
+
+  @override
+  bool get closed => _subscription.closed;
+
+  @override
+  Node get source => _subscription.source;
 }

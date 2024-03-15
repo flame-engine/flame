@@ -16,6 +16,7 @@ command:
   bootstrap:
     environment:
       sdk: ">=3.0.0 <4.0.0"
+      flutter: ">=3.19.0"
     dependencies:
       meta: ^1.9.1
       vector_math: ^2.1.4
@@ -111,3 +112,9 @@ scripts:
     packageFilters:
       dirExists: test
     description: Re-generate all golden test files
+
+  devtools-build:
+    run: melos exec -- dart run devtools_extensions build_and_copy --source=. --dest=../flame/extension/devtools
+    packageFilters:
+      scope: flame_devtools
+    description: Builds the devtools and copies the build directory to the Flame package.

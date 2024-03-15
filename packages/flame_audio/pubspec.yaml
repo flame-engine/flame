@@ -1,7 +1,7 @@
 name: flame_audio
 description: |
   Audio support for the Flame game engine, basically a thin wrapper around the audioplayers package.
-version: 2.1.7
+version: 2.10.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_audio
 funding:
   - https://opencollective.com/blue-fire
@@ -10,11 +10,11 @@ funding:
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.13.0"
+  flutter: ">=3.19.0"
 
 dependencies:
   audioplayers: ^5.0.0
-  flame: ^1.14.0
+  flame: ^1.16.0
   flutter:
     sdk: flutter
   synchronized: ^3.1.0

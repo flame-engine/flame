@@ -10,7 +10,6 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/isometric_tile_lay
 import 'package:flame_tiled/src/renderable_layers/tile_layers/orthogonal_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/staggered_tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
-import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
