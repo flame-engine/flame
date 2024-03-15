@@ -44,3 +44,5 @@ class RiverpodAwareTextComponent extends PositionComponent
 
 `RiverpodGameMixin` provides listeners from all components to the build method of the
 `RiverpodAwareGameWidget`.
+The `addToGameWidgetBuild` method is available in the `RiverpodGameMixin` as well,
+enabling you to access `ComponentRef` methods directly in your Game class.

@@ -1,0 +1,25 @@
+name: flame_behavior_tree_example
+description: "A simple demo to show usage of behavior trees in flame."
+publish_to: 'none'
+version: 0.1.0
+funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
+  - https://patreon.com/bluefireoss
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flame: ^1.16.0
+  flame_behavior_tree: ^0.1.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.1.2
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

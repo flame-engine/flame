@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -29,7 +31,7 @@ mixin ComponentViewportMargin<T extends FlameGame>
 
   @override
   @mustCallSuper
-  Future<void> onLoad() async {
+  FutureOr<void> onLoad() async {
     super.onLoad();
     assert(parent is ReadOnlySizeProvider, 'The parent must provide a size.');
     // If margin is not null we will update the position `onGameResize` instead

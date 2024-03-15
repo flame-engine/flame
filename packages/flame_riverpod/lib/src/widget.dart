@@ -3,6 +3,8 @@ import 'package:flame/game.dart';
 import 'package:flame_riverpod/flame_riverpod.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore: depend_on_referenced_packages, implementation_imports
+import 'package:riverpod/src/framework.dart';
 
 /// A [GameWidget] that provides access to [Component]s using
 /// [RiverpodComponentMixin] attached to [FlameGame]s using [RiverpodGameMixin]
@@ -217,8 +219,13 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
     _assertNotDisposed();
     final listeners = _manualListeners ??= [];
 
+    // Reading the container using "listen:false" to guarantee that this can
+    // be used inside initState.
+    final container = ProviderScope.containerOf(context, listen: false);
+
     final sub = _ListenManual(
-      ProviderScope.containerOf(context, listen: false).listen(
+      container,
+      container.listen(
         provider,
         listener,
         onError: onError,
@@ -232,18 +239,27 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   }
 }
 
-class _ListenManual<T> implements ProviderSubscription<T> {
-  _ListenManual(this._subscription, this._element);
+class _ListenManual<T> extends ProviderSubscription<T> {
+  _ListenManual(super.source, this._subscription, this._element);
 
   final ProviderSubscription<T> _subscription;
   final RiverpodAwareGameWidgetState _element;
 
   @override
   void close() {
-    _subscription.close();
-    _element._manualListeners?.remove(this);
+    if (!closed) {
+      _subscription.close();
+      _element._manualListeners?.remove(this);
+    }
+    super.close();
   }
 
   @override
   T read() => _subscription.read();
+
+  @override
+  bool get closed => _subscription.closed;
+
+  @override
+  Node get source => _subscription.source;
 }
