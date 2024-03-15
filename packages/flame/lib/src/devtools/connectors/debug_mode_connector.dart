@@ -2,15 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
-import 'package:flutter/foundation.dart';
 
 /// The [DebugModeConnector] is responsible for reporting and setting the
 /// `debugMode` of the game from the devtools extension.
 class DebugModeConnector extends DevToolsConnector {
-  var _debugModeNotifier = ValueNotifier<bool>(false);
-
   @override
   void init() {
     // Get the current `debugMode`.
@@ -19,7 +15,7 @@ class DebugModeConnector extends DevToolsConnector {
       (method, parameters) async {
         return ServiceExtensionResponse.result(
           json.encode({
-            'debug_mode': _debugModeNotifier.value,
+            'debug_mode': game.debugMode,
           }),
         );
       },
@@ -30,7 +26,7 @@ class DebugModeConnector extends DevToolsConnector {
       'ext.flame_devtools.setDebugMode',
       (method, parameters) async {
         final debugMode = bool.parse(parameters['debug_mode'] ?? 'false');
-        _debugModeNotifier.value = debugMode;
+        _setDebugMode(debugMode);
         return ServiceExtensionResponse.result(
           json.encode({
             'debug_mode': debugMode,
@@ -38,26 +34,64 @@ class DebugModeConnector extends DevToolsConnector {
         );
       },
     );
+
+    // Set the `debugMode` for one component in the tree.
+    registerExtension(
+      'ext.flame_devtools.setDebugModeSingle',
+      (method, parameters) async {
+        final id = int.tryParse(parameters['id'] ?? '');
+        final debugMode = bool.parse(parameters['debug_mode'] ?? 'false');
+        _setDebugMode(debugMode, id: id);
+        return ServiceExtensionResponse.result(
+          json.encode({
+            'id': id,
+            'debug_mode': debugMode,
+          }),
+        );
+      },
+    );
+
+    // Get the `debugMode` for one component in the tree.
+    registerExtension(
+      'ext.flame_devtools.getDebugModeSingle',
+      (method, parameters) async {
+        final id = int.tryParse(parameters['id'] ?? '');
+        return ServiceExtensionResponse.result(
+          json.encode({
+            'id': id,
+            'debug_mode': id != null ? _getDebugMode(id) : null,
+          }),
+        );
+      },
+    );
   }
 
-  @override
-  void initGame(FlameGame game) {
-    super.initGame(game);
-    _debugModeNotifier = ValueNotifier<bool>(game.debugMode);
-    _debugModeNotifier.addListener(() {
-      final newDebugMode = _debugModeNotifier.value;
-      game.propagateToChildren<Component>(
-        (c) {
-          c.debugMode = newDebugMode;
-          return true;
-        },
-        includeSelf: true,
-      );
-    });
+  bool _getDebugMode(int id) {
+    var debugMode = false;
+    game.propagateToChildren<Component>(
+      (c) {
+        if (c.hashCode != id) {
+          debugMode = c.debugMode;
+          return false;
+        }
+        return true;
+      },
+      includeSelf: true,
+    );
+    return debugMode;
   }
 
-  @override
-  void disposeGame() {
-    _debugModeNotifier.dispose();
+  void _setDebugMode(bool debugMode, {int? id}) {
+    game.propagateToChildren<Component>(
+      (c) {
+        if (id != null && c.hashCode != id) {
+          c.debugMode = debugMode;
+          return false;
+        }
+        c.debugMode = debugMode;
+        return true;
+      },
+      includeSelf: true,
+    );
   }
 }
