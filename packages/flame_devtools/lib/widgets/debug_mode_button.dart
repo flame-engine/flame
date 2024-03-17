@@ -2,7 +2,9 @@ import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 
 class DebugModeButton extends StatefulWidget {
-  const DebugModeButton({super.key});
+  const DebugModeButton({this.id, super.key});
+
+  final int? id;
 
   @override
   State<DebugModeButton> createState() => _DebugModeButtonState();
@@ -13,7 +15,7 @@ class _DebugModeButtonState extends State<DebugModeButton> {
 
   @override
   void initState() {
-    _debugMode = Repository.getDebugMode();
+    _debugMode = Repository.getDebugMode(id: widget.id);
     super.initState();
   }
 
@@ -31,7 +33,11 @@ class _DebugModeButtonState extends State<DebugModeButton> {
         return ElevatedButton(
           onPressed: value.data == null
               ? null
-              : () => setState(() => _debugMode = Repository.swapDebugMode()),
+              : () {
+                  setState(
+                    () => _debugMode = Repository.swapDebugMode(id: widget.id),
+                  );
+                },
           child: Text('$buttonPrefix Debug Mode'),
         );
       },
