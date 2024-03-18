@@ -219,8 +219,13 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
     _assertNotDisposed();
     final listeners = _manualListeners ??= [];
 
+    // Reading the container using "listen:false" to guarantee that this can
+    // be used inside initState.
+    final container = ProviderScope.containerOf(context, listen: false);
+
     final sub = _ListenManual(
-      ProviderScope.containerOf(context, listen: false).listen(
+      container,
+      container.listen(
         provider,
         listener,
         onError: onError,
@@ -234,16 +239,19 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   }
 }
 
-class _ListenManual<T> implements ProviderSubscription<T> {
-  _ListenManual(this._subscription, this._element);
+class _ListenManual<T> extends ProviderSubscription<T> {
+  _ListenManual(super.source, this._subscription, this._element);
 
   final ProviderSubscription<T> _subscription;
   final RiverpodAwareGameWidgetState _element;
 
   @override
   void close() {
-    _subscription.close();
-    _element._manualListeners?.remove(this);
+    if (!closed) {
+      _subscription.close();
+      _element._manualListeners?.remove(this);
+    }
+    super.close();
   }
 
   @override
