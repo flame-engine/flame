@@ -412,7 +412,49 @@ The proposal is to have a new KlondikeWorld class, which replaces the default `w
 FlameGame. The new world contains (almost) everything we need to play the game and is created or
 re-created during each of the above actions.
 
+
 ### KlondikeWorld class
+
+In Flame, a World is a type of Component that can contain other Components, such as Piles.
+
+You can learn more about Worlds in game programming here:
+
+<https://media.worldbookonline.com/image/upload/v1467051964/asset/webquests/Electronic_Games_Advanced.pdf>
+<https://docs.flame-engine.org/latest/flame/game.html>
+We won't dive too deep into Worlds here, just understand their purpose for now.
+
+
+#### Creating KlondikeWorld
+
+Let's create a World for our Klondike game, called KlondikeWorld.
+At the start of the game, we'll create a World. Each new game will be represented by a new World.
+Worlds are also created when the player restarts the game.
+Each World is responsible for loading its own Components and dealing the cards accordingly.
+Therefore, the onLoad() method will be moved from the KlondikeGame class to KlondikeWorld.
+First, let's modify the KlondikeGame class:
+
+```dart
+ // KlondikeWorld is our new World
+class KlondikeGame extends FlameGame<KlondikeWorld> {
+   // we keep all constant values here
+  KlondikeGame() : super(world: KlondikeWorld()); // init a World
+
+  // delete the onLoad() method
+
+  // keep below method
+  Sprite klondikeSprite(double x, double y, double width, double height) {
+  // ...
+  }
+}
+
+```
+
+
+#### what properties?
+
+
+#### what actions we should implement at this class
+
 
 ### A stripped-down KlondikeGame class
 
