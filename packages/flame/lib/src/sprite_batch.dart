@@ -245,7 +245,8 @@ class SpriteBatch {
 
   int get length => _sources.length;
 
-  /// Replace provided values of a batch item at the [index], when a parameter is not provided, the original value of the batch item will be used.
+  /// Replace provided values of a batch item at the [index], when a parameter
+  /// is not provided, the original value of the batch item will be used.
   ///
   /// Throws an [ArgumentError] if the [index] is out of bounds.
   /// At least one of the parameters must be different from null.
