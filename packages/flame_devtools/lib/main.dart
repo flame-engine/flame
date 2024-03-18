@@ -17,12 +17,10 @@ class FlameDevTools extends StatelessWidget {
     return DevToolsExtension(
       child: Column(
         children: [
-          const GameLoopControls(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const ComponentCounter(),
+              const GameLoopControls(),
               const DebugModeButton(),
             ].withSpacing(),
           ),
