@@ -35,11 +35,12 @@ class Component3D extends Component with HasWorldReference<World3D> {
   /// {@macro component_3d}
   Component3D({
     Vector3? position,
+    Vector3? scale,
     Quaternion? rotation,
   }) : transform = Transform3D()
           ..position = position ?? Vector3.zero()
           ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
-          ..scale = Vector3.all(1);
+          ..scale = scale ?? Vector3.all(1);
 
   final Transform3D transform;
 
@@ -103,7 +104,7 @@ class Component3D extends Component with HasWorldReference<World3D> {
         .abs()
         .toInt();
 
-    bind(world.graphics);
+    bind(world.device);
   }
 
   void bind(GraphicsDevice device) {}

@@ -23,6 +23,8 @@ class Mesh extends Resource<void> {
   /// This is the sum of all the AABB's of the surfaces it contains.
   Aabb3 get aabb => _aabb ??= _recomputeAabb3();
 
+  int get vertexCount => _surfaces.fold(0, (p, e) => p + e.vertexCount);
+
   void bind(GraphicsDevice device) {
     for (final surface in _surfaces) {
       device.bindSurface(surface);

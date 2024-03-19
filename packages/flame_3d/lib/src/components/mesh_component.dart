@@ -15,6 +15,7 @@ class MeshComponent extends Component3D {
   MeshComponent({
     required Mesh mesh,
     super.position,
+    super.scale,
     super.rotation,
   }) : _mesh = mesh;
 
@@ -29,8 +30,8 @@ class MeshComponent extends Component3D {
 
   @override
   void bind(GraphicsDevice device) {
-    world.graphics
-      ..setViewModel(transformMatrix)
+    world.device
+      ..model.setFrom(transformMatrix)
       ..bindMesh(mesh);
   }
 

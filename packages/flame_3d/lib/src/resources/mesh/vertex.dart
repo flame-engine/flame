@@ -15,17 +15,17 @@ class Vertex {
   Vertex({
     required Vector3 position,
     required Vector2 texCoord,
-    Vector3? normal,
     this.color = const Color(0xFFFFFFFF),
+    Vector3? normal,
   })  : position = position.immutable,
         texCoord = texCoord.immutable,
         normal = (normal ?? Vector3.zero()).immutable,
         _storage = Float32List.fromList([
-          ...position.storage,
-          ...texCoord.storage,
+          ...position.storage, // 1, 2, 3
+          ...texCoord.storage, // 4, 5
+          ...color.storage, // 6,7,8
           // `TODO`(wolfen): uhh normals fuck shit up, I should read up on it
-          // ...(normal ?? Vector3.zero()).storage,
-          ...color.storage,
+          ...(normal ?? Vector3.zero()).storage, // 9, 10, 11
         ]);
 
   Float32List get storage => _storage;
@@ -53,4 +53,19 @@ class Vertex {
 
   @override
   int get hashCode => Object.hashAll([position, texCoord, normal, color]);
+
+  Vertex copyWith({
+    Vector3? position,
+    Vector2? texCoord,
+    Vector3? normal,
+    Color? color,
+  }) {
+    // TODO(wolfen): optimize this.
+    return Vertex(
+      position: position ?? this.position.mutable,
+      texCoord: texCoord ?? this.texCoord.mutable,
+      normal: normal ?? this.normal.mutable,
+      color: color ?? this.color,
+    );
+  }
 }
