@@ -68,7 +68,8 @@ class _ComponentTreeState extends State<ComponentTree> {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.refresh),
-                                alignment: Alignment.topCenter,
+                                iconSize: 18,
+                                alignment: Alignment.center,
                                 onPressed: () =>
                                     setState(_refreshComponentTree),
                               ),
@@ -86,6 +87,8 @@ class _ComponentTreeState extends State<ComponentTree> {
                                   color: Colors.blue,
                                   style: IndentStyle.roundJoint,
                                 ),
+                                onTreeReady: (controller) => controller
+                                    .expandAllChildren(controller.tree),
                                 padding: const EdgeInsets.only(left: 20),
                                 expansionIndicatorBuilder: (context, node) =>
                                     node.isLeaf
@@ -100,9 +103,9 @@ class _ComponentTreeState extends State<ComponentTree> {
                                         ? EdgeInsets.zero
                                         : const EdgeInsets.only(left: 20),
                                     child: ListTile(
-                                      //key: Key(
-                                      //  node.data?.id.toString() ?? node.key,
-                                      //),
+                                      key: Key(
+                                        node.data?.id.toString() ?? node.key,
+                                      ),
                                       title: Text(node.data!.name),
                                       subtitle: Text(node.data!.id.toString()),
                                       onTap: () {
@@ -124,35 +127,7 @@ class _ComponentTreeState extends State<ComponentTree> {
                   ),
                 ),
                 const SizedBox(width: 20),
-                Expanded(
-                  child: RoundedOutlinedBorder(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AreaPaneHeader(
-                          title: Row(
-                            children: [
-                              Text(
-                                'Selected Component',
-                                style: theme.textTheme.titleSmall,
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.refresh),
-                                alignment: Alignment.topCenter,
-                                onPressed: () => setState(
-                                  () {
-                                    // TODO(Lukas): Update the selected component
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        ComponentView(_selectedTreeNode?.data),
-                      ],
-                    ),
-                  ),
-                ),
+                ComponentView(_selectedTreeNode?.data),
               ],
             );
           },
@@ -170,23 +145,46 @@ class ComponentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final node = componentNode;
-    const textStyle = TextStyle(fontSize: 18);
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: node == null
-          ? const Text(
-              'Select a component in the tree',
-              style: textStyle,
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Type: ${node.name}', style: textStyle),
-                Text('Id: ${node.id}', style: textStyle),
-                Text('Children: ${node.children.length}', style: textStyle),
-                DebugModeButton(id: node.id),
-              ].withSpacing(),
+    final theme = Theme.of(context);
+    final textStyle = theme.textTheme.bodyLarge;
+
+    return Expanded(
+      child: RoundedOutlinedBorder(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AreaPaneHeader(
+              title: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Selected Component',
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ],
+              ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: node == null
+                  ? Text(
+                      'Select a component in the tree',
+                      style: textStyle,
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Type: ${node.name}', style: textStyle),
+                        Text('Id: ${node.id}', style: textStyle),
+                        Text('Children: ${node.children.length}',
+                            style: textStyle),
+                        DebugModeButton(id: node.id),
+                      ].withSpacing(),
+                    ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
