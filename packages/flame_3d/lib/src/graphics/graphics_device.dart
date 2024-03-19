@@ -36,8 +36,23 @@ class GraphicsDevice {
   late gpu.HostBuffer _hostBuffer;
   late gpu.RenderPass _renderPass;
   late gpu.RenderTarget _renderTarget;
-  final _transformMatrix = Matrix4.identity();
-  final _viewModelMatrix = Matrix4.identity();
+
+  Matrix4 get model => _modelMatrix;
+  final Matrix4 _modelMatrix = Matrix4.zero();
+
+  Matrix4 get view => _viewMatrix;
+  final Matrix4 _viewMatrix = Matrix4.zero();
+
+  Matrix4 get projection => _projectionMatrix;
+  final Matrix4 _projectionMatrix = Matrix4.zero();
+
+  // @Deprecated('Use model, view and projection instead')
+  // // Matrix4 get transform => _transformMatrix;
+  // // final _transformMatrix = Matrix4.identity();
+
+  // @Deprecated('Use model, view and projection instead')
+  // Matrix4 get viewModel => _viewModelMatrix;
+  // final _viewModelMatrix = Matrix4.identity();
 
   Size _previousSize = Size.zero;
 
@@ -54,7 +69,6 @@ class GraphicsDevice {
     BlendState blendState = BlendState.alphaBlend,
     // TODO(wolfen): used incorrectly
     DepthStencilState depthStencilState = DepthStencilState.depthRead,
-    Matrix4? transformMatrix,
   }) {
     _commandBuffer = gpu.gpuContext.createCommandBuffer();
     _hostBuffer = gpu.gpuContext.createHostBuffer();
@@ -76,7 +90,6 @@ class GraphicsDevice {
           DepthStencilState.depthRead => gpu.CompareFunction.less,
         },
       );
-    _transformMatrix.setFrom(transformMatrix ?? Matrix4.identity());
   }
 
   /// Submit the rendering batch and it's the commands to the GPU and return
@@ -89,8 +102,6 @@ class GraphicsDevice {
   void clearBindings() {
     _renderPass.clearBindings();
   }
-
-  void setViewModel(Matrix4 mvp) => _viewModelMatrix.setFrom(mvp);
 
   /// Bind a [mesh].
   void bindMesh(Mesh mesh) {
@@ -131,32 +142,20 @@ class GraphicsDevice {
   /// Bind a [material] and set up the buffer correctly.
   void bindMaterial(Material material) {
     _renderPass.bindPipeline(material.resource);
-    material.vertexBuffer
-      ..clear()
-      ..addMatrix4(_transformMatrix.multiplied(_viewModelMatrix));
-    material.fragmentBuffer.clear();
+
     material.bind(this);
+    material.vertexShader.bind(this);
+    material.fragmentShader.bind(this);
   }
 
-  /// Bind a [shader] with the given [buffer].
-  void bindShader(gpu.Shader shader, ShaderBuffer buffer) {
-    bindUniform(
-      shader,
-      buffer.slot,
-      buffer.bytes.asByteData(),
-    );
+  /// Bind a uniform [slot] to the [buffer].
+  void bindUniform(gpu.UniformSlot slot, ByteBuffer buffer) {
+    _renderPass.bindUniform(slot, _hostBuffer.emplace(buffer.asByteData()));
   }
 
-  /// Bind a uniform slot of [name] with the [data] on the [shader].
-  void bindUniform(gpu.Shader shader, String name, ByteData data) {
-    _renderPass.bindUniform(
-      shader.getUniformSlot(name),
-      _hostBuffer.emplace(data),
-    );
-  }
-
-  void bindTexture(gpu.Shader shader, String name, Texture texture) {
-    _renderPass.bindTexture(shader.getUniformSlot(name), texture.resource);
+  /// Bind a uniform [slot] to the [texture].
+  void bindTexture(gpu.UniformSlot slot, Texture texture) {
+    _renderPass.bindTexture(slot, texture.resource);
   }
 
   gpu.RenderTarget _getRenderTarget(Size size) {

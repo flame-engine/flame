@@ -16,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_gpu:
+  meta: ^1.9.1
 
 dev_dependencies:
   flame_lint: ^1.1.2
