@@ -15,7 +15,7 @@ dependencies:
   flame: ^1.16.0
   flutter:
     sdk: flutter
-  oxygen: ^0.2.0
+  oxygen: ^0.3.1
 
 dev_dependencies:
   dartdoc: ^6.3.0
