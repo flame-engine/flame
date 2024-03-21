@@ -12,7 +12,7 @@ For other input documents, see also:
 
 ## Intro
 
-Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on
+Inside `package:flame/src/gestures/detectors.dart` you can find a whole set of `mixin`s which can be included on
 your game class instance to be able to receive touch input events. Below you can see the full list
 of these `mixin`s and its methods:
 
