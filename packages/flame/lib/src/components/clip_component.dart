@@ -88,7 +88,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     int? priority,
     ComponentKey? key,
   }) : this(
-          builder: _polygonBuilderCallback(points),
+          builder: _polygonShapeBuilder(points),
           position: position,
           size: size,
           scale: scale,
@@ -131,7 +131,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
   ///
   /// this allows us to use an assertion during Constructor initialization
   /// rather than at the execution of the builder function.
-  static ShapeBuilder _polygonBuilderCallback(List<Vector2> points) {
+  static ShapeBuilder _polygonShapeBuilder(List<Vector2> points) {
     assert(
       points.length >= 3,
       'PolygonClipComponent requires at least 3 points.',
