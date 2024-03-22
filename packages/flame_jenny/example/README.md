@@ -1,6 +1,6 @@
 # jenny_example
 
-Example of Jenny API
+Example of how to use the Jenny package.
 
 ## Getting Started
 
