@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogue_controller_component.dart';
+import 'package:examples/stories/bridge_libraries/flame_jenny/components/menu_button.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
@@ -14,47 +14,61 @@ class JennyAdvancedExample extends FlameGame {
     This example shows how to use the Jenny API. .
   ''';
 
+  int coins = 0;
+
   final Paint white = BasicPalette.white.paint();
-  final TextPaint topTextPaint = TextPaint(
+  final TextPaint mainTextPaint = TextPaint(
+    style: TextStyle(color: BasicPalette.white.color),
+  );
+  final TextPaint buttonTextPaint = TextPaint(
     style: TextStyle(color: BasicPalette.black.color),
   );
   final startButtonSize = Vector2(128, 56);
 
-  late DialogueRunner dialogueRunner;
+  final DialogueControllerComponent dialogueControllerComponent =
+      DialogueControllerComponent();
+  late final TextComponent header = TextComponent(
+    text: 'Select player name.',
+    position: Vector2(size.x / 2, 32),
+    size: startButtonSize,
+    anchor: Anchor.center,
+    textRenderer: mainTextPaint,
+  );
 
-  void startDialogue() {
-    dialogueRunner.startDialogue('hello_world');
+  Future<void> startDialogue(String playerName) async {
+    final yarnProject = YarnProject();
+
+    yarnProject
+      ..commands.addCommand1('updateCoins', updateCoins)
+      ..variables.setVariable(r'$playerName', playerName)
+      ..parse(await rootBundle.loadString('assets/yarn/advanced.yarn'));
+    final dialogueRunner = DialogueRunner(
+      yarnProject: yarnProject,
+      dialogueViews: [dialogueControllerComponent],
+    );
+    dialogueRunner.startDialogue('gamble');
+  }
+
+  void updateCoins(int amountChange) {
+    coins += amountChange;
+    header.text = 'Select player name. Current coins: $coins';
   }
 
   @override
   Future<void> onLoad() async {
-    final dialogueControllerComponent = DialogueControllerComponent();
-
-    add(dialogueControllerComponent);
-    final yarnProject = YarnProject();
-    yarnProject.parse(await rootBundle.loadString('assets/yarn/simple.yarn'));
-    dialogueRunner = DialogueRunner(
-      yarnProject: yarnProject,
-      dialogueViews: [dialogueControllerComponent],
-    );
-
-    add(
-      ButtonComponent(
-        position: Vector2(size.x / 2, 96),
-        size: startButtonSize,
-        button: RectangleComponent(paint: white, size: startButtonSize),
-        onPressed: startDialogue,
-        anchor: Anchor.center,
-        children: [
-          TextComponent(
-            text: 'Start conversation',
-            textRenderer: topTextPaint,
-            position: startButtonSize / 2,
-            anchor: Anchor.center,
-            priority: 1,
-          ),
-        ],
+    addAll([
+      dialogueControllerComponent,
+      header,
+      MenuButton(
+        position: Vector2(size.x / 4, 96),
+        onPressed: () => startDialogue('Jessie'),
+        text: 'Jessie',
       ),
-    );
+      MenuButton(
+        position: Vector2(size.x * 3 / 4, 96),
+        onPressed: () => startDialogue('James'),
+        text: 'James',
+      ),
+    ]);
   }
 }
