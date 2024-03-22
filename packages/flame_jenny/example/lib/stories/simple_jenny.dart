@@ -43,30 +43,33 @@ class JennySimpleExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    DialogueControllerComponent dialogueControllerComponent =
-        DialogueControllerComponent();
+    final dialogueControllerComponent = DialogueControllerComponent();
 
     add(dialogueControllerComponent);
-    YarnProject yarnProject = YarnProject();
+    final yarnProject = YarnProject();
     yarnProject.parse(await rootBundle.loadString('assets/yarn/simple.yarn'));
     dialogueRunner = DialogueRunner(
-        yarnProject: yarnProject, dialogueViews: [dialogueControllerComponent]);
+      yarnProject: yarnProject,
+      dialogueViews: [dialogueControllerComponent],
+    );
 
-    add(ButtonComponent(
-      position: Vector2(size.x / 2, 96),
-      size: startButtonSize,
-      button: RectangleComponent(paint: white, size: startButtonSize),
-      onPressed: startDialogue,
-      anchor: Anchor.center,
-      children: [
-        TextComponent(
-          text: 'Start conversation',
-          textRenderer: topTextPaint,
-          position: startButtonSize / 2,
-          anchor: Anchor.center,
-          priority: 1,
-        ),
-      ],
-    ));
+    add(
+      ButtonComponent(
+        position: Vector2(size.x / 2, 96),
+        size: startButtonSize,
+        button: RectangleComponent(paint: white, size: startButtonSize),
+        onPressed: startDialogue,
+        anchor: Anchor.center,
+        children: [
+          TextComponent(
+            text: 'Start conversation',
+            textRenderer: topTextPaint,
+            position: startButtonSize / 2,
+            anchor: Anchor.center,
+            priority: 1,
+          ),
+        ],
+      ),
+    );
   }
 }

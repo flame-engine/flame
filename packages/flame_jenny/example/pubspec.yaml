@@ -8,19 +8,17 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-
   cupertino_icons: ^1.0.6
   dashbook: ^0.1.13
   flame: ^1.16.0
+  flutter:
+    sdk: flutter
   jenny: ^1.3.0
 
 dev_dependencies:
+  flame_lint: ^1.1.2
   flutter_test:
     sdk: flutter
-
-  flame_lint: ^1.1.2
 
 flutter:
 

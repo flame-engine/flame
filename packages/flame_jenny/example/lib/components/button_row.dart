@@ -6,9 +6,9 @@ class ButtonRow extends PositionComponent {
   ButtonRow({required super.size}) : super(position: Vector2(0, 96));
 
   void removeButtons() {
-    List<DialogueButton> buttonList = children.query<DialogueButton>();
+    final buttonList = children.query<DialogueButton>();
     if (buttonList.isNotEmpty) {
-      for (DialogueButton dialogueButton in buttonList) {
+      for (final dialogueButton in buttonList) {
         if (dialogueButton.parent != null) {
           dialogueButton.removeFromParent();
         }
@@ -16,7 +16,7 @@ class ButtonRow extends PositionComponent {
     }
   }
 
-  void showNextButton(Function onNextButtonPressed) {
+  void showNextButton(Function() onNextButtonPressed) {
     removeButtons();
     final nextButton = DialogueButton(
       assetPath: 'green_button.png',
@@ -31,12 +31,12 @@ class ButtonRow extends PositionComponent {
   }
 
   void showOptionButtons({
-    required Function onChoice,
+    required Function(int optionNumber) onChoice,
     required DialogueOption option1,
     required DialogueOption option2,
   }) {
     removeButtons();
-    List<DialogueButton> optionButtons = [
+    final optionButtons = <DialogueButton>[
       DialogueButton(
         assetPath: 'green_button.png',
         text: option1.text,
@@ -59,8 +59,8 @@ class ButtonRow extends PositionComponent {
     addAll(optionButtons);
   }
 
-  void showCloseButton(Function onClose) {
-    DialogueButton closeButton = DialogueButton(
+  void showCloseButton(Function() onClose) {
+    final closeButton = DialogueButton(
       assetPath: 'green_button.png',
       text: 'Close',
       onPressed: () => onClose(),

@@ -24,14 +24,14 @@ class DialogueControllerComponent extends Component
   @override
   Future<void> onNodeFinish(Node node) async {
     _dialogueBoxComponent.showCloseButton(_onClose);
-    return await _closeCompleter.future;
+    return _closeCompleter.future;
   }
 
   void _onClose() {
     if (!_closeCompleter.isCompleted) {
       _closeCompleter.complete();
     }
-    List<DialogueBoxComponent> list =
+    final list =
         game.camera.viewport.children.query<DialogueBoxComponent>();
     if (list.isNotEmpty) {
       game.camera.viewport.removeAll(list);
@@ -51,8 +51,8 @@ class DialogueControllerComponent extends Component
   }
 
   void _changeTextAndShowNextButton(DialogueLine line) {
-    String characterName = line.character?.name ?? '';
-    String dialogueLineText = '$characterName: ${line.text}';
+    final characterName = line.character?.name ?? '';
+    final dialogueLineText = '$characterName: ${line.text}';
     _dialogueBoxComponent.changeText(dialogueLineText, _goNextLine);
   }
 
@@ -75,12 +75,12 @@ class DialogueControllerComponent extends Component
     return _choiceCompleter.future;
   }
 
-  void _onChoice(int optionNum) {
+  void _onChoice(int optionNumber) {
     if (!_forwardCompleter.isCompleted) {
       _forwardCompleter.complete();
     }
     if (!_choiceCompleter.isCompleted) {
-      _choiceCompleter.complete(optionNum);
+      _choiceCompleter.complete(optionNumber);
     }
   }
 }

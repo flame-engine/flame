@@ -18,7 +18,7 @@ class DialogueButton extends SpriteButtonComponent {
   @override
   Future<void> onLoad() async {
     button = await Sprite.load(assetPath);
-    ButtonText buttonText = ButtonText(text: text);
+    final buttonText = ButtonText(text: text);
     add(buttonText);
   }
 }
