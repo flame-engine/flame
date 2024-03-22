@@ -1,6 +1,6 @@
+import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogue_button.dart';
 import 'package:flame/components.dart';
 import 'package:jenny/jenny.dart';
-import 'package:jenny_example/components/dialogue_button.dart';
 
 class ButtonRow extends PositionComponent {
   ButtonRow({required super.size}) : super(position: Vector2(0, 96));
@@ -31,7 +31,7 @@ class ButtonRow extends PositionComponent {
   }
 
   void showOptionButtons({
-    required Function(int optionNumber) onChoice,
+    required Function(int optionumber) onChoice,
     required DialogueOption option1,
     required DialogueOption option2,
   }) {

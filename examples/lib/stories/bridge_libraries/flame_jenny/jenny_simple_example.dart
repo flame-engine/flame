@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:dashbook/dashbook.dart';
+import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogue_controller_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -8,21 +8,6 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:jenny/jenny.dart';
-import 'package:jenny_example/commons/commons.dart';
-import 'package:jenny_example/components/dialogue_controller_component.dart';
-
-void addJennySimpleExample(Dashbook dashbook) {
-  dashbook.storiesOf('JennySimple').add(
-        'Simple Jenny example',
-        (_) => GameWidget(
-          game: JennySimpleExample(),
-        ),
-        codeLink: baseLink(
-          'example/lib/stories/simple_jenny.dart',
-        ),
-        info: JennySimpleExample.description,
-      );
-}
 
 class JennySimpleExample extends FlameGame {
   static const String description = '''

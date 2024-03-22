@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogue_box.dart';
 import 'package:flame/components.dart' hide Timer;
 import 'package:jenny/jenny.dart';
-import 'package:jenny_example/components/dialogue_box.dart';
 
 class DialogueControllerComponent extends Component
     with DialogueView, HasGameReference {

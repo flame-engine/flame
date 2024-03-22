@@ -1,7 +1,7 @@
+import 'package:examples/stories/bridge_libraries/flame_jenny/components/button_row.dart';
+import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogue_text_box.dart';
 import 'package:flame/components.dart';
 import 'package:jenny/jenny.dart';
-import 'package:jenny_example/components/button_row.dart';
-import 'package:jenny_example/components/dialogue_text_box.dart';
 
 class DialogueBoxComponent extends SpriteComponent with HasGameReference {
   DialogueTextBox textBox = DialogueTextBox(text: '');

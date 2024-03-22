@@ -1,6 +1,6 @@
+import 'package:examples/stories/bridge_libraries/flame_jenny/commons/commons.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:jenny_example/commons/commons.dart';
 
 class DialogueTextBox extends TextBoxComponent {
   DialogueTextBox({required super.text})
