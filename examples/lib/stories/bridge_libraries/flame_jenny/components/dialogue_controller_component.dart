@@ -31,8 +31,7 @@ class DialogueControllerComponent extends Component
     if (!_closeCompleter.isCompleted) {
       _closeCompleter.complete();
     }
-    final list =
-        game.camera.viewport.children.query<DialogueBoxComponent>();
+    final list = game.camera.viewport.children.query<DialogueBoxComponent>();
     if (list.isNotEmpty) {
       game.camera.viewport.removeAll(list);
     }
