@@ -31,7 +31,7 @@ class ButtonRow extends PositionComponent {
   }
 
   void showOptionButtons({
-    required Function(int optionumber) onChoice,
+    required Function(int optionNumber) onChoice,
     required DialogueOption option1,
     required DialogueOption option2,
   }) {
