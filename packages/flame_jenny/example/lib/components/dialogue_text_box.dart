@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:jenny_example/commons/commons.dart';
 
 class DialogueTextBox extends TextBoxComponent {
-  DialogueTextBox({required String text})
+  DialogueTextBox({required super.text})
       : super(
-          text: text,
           position: Vector2(16, 16),
           size: Vector2(704, 96),
           textRenderer: TextPaint(
