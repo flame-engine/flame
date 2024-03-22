@@ -6,18 +6,14 @@ import 'package:jenny_example/commons/commons.dart';
 class DialogueButton extends SpriteButtonComponent {
   DialogueButton({
     required super.position,
-    required String assetPath,
-    required String text,
+    required this.assetPath,
+    required this.text,
     required super.onPressed,
     super.anchor = Anchor.center,
-  }) : super() {
-    position = posit;
-    _text = text;
-    _assetPath = assetPath;
-  }
+  });
 
-  late String _text;
-  late String _assetPath;
+  final String text;
+  final String assetPath;
 
   @override
   Future<void> onLoad() async {
