@@ -1,5 +1,5 @@
 name: jenny_example
-description: Example of Jenny API
+description: An example of the Jenny package
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
