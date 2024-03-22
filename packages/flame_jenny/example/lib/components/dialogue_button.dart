@@ -5,7 +5,7 @@ import 'package:jenny_example/commons/commons.dart';
 
 class DialogueButton extends SpriteButtonComponent {
   DialogueButton({
-    required Vector2 posit,
+    required super.position,
     required String assetPath,
     required String text,
     required super.onPressed,
