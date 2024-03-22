@@ -18,7 +18,7 @@ class ButtonRow extends PositionComponent {
 
   void showNextButton(Function onNextButtonPressed) {
     removeButtons();
-    DialogueButton nextButton = DialogueButton(
+    final nextButton = DialogueButton(
       assetPath: 'green_button.png',
       text: 'Next',
       posit: Vector2(size.x / 2, 0),
