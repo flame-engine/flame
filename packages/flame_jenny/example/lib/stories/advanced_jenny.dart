@@ -17,7 +17,7 @@ void addJennyAdvancedExample(Dashbook dashbook) {
 
 class JennyAdvancedExample extends FlameGame {
   static const String description = '''
-    This example shows how to use the Jenny API. .
+    This example shows how to use the Jenny package. .
   ''';
 
   @override
