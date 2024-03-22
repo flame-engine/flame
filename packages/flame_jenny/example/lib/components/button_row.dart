@@ -21,7 +21,7 @@ class ButtonRow extends PositionComponent {
     final nextButton = DialogueButton(
       assetPath: 'green_button.png',
       text: 'Next',
-      posit: Vector2(size.x / 2, 0),
+      position: Vector2(size.x / 2, 0),
       onPressed: () {
         onNextButtonPressed();
         removeButtons();
@@ -40,7 +40,7 @@ class ButtonRow extends PositionComponent {
       DialogueButton(
         assetPath: 'green_button.png',
         text: option1.text,
-        posit: Vector2(size.x / 4, 0),
+        position: Vector2(size.x / 4, 0),
         onPressed: () {
           onChoice(0);
           removeButtons();
@@ -49,7 +49,7 @@ class ButtonRow extends PositionComponent {
       DialogueButton(
         assetPath: 'red_button.png',
         text: option2.text,
-        posit: Vector2(size.x * 3 / 4, 0),
+        position: Vector2(size.x * 3 / 4, 0),
         onPressed: () {
           onChoice(1);
           removeButtons();
@@ -64,7 +64,7 @@ class ButtonRow extends PositionComponent {
       assetPath: 'green_button.png',
       text: 'Close',
       onPressed: () => onClose(),
-      posit: Vector2(size.x / 2, 0),
+      position: Vector2(size.x / 2, 0),
     );
     add(closeButton);
   }
