@@ -6,7 +6,8 @@ import 'package:jenny/jenny.dart';
 
 class JennySimpleExample extends FlameGame {
   static const String description = '''
-    This example shows how to use the Jenny API. .
+    This is a simple example of how to use the Jenny Package. 
+    It includes instantiating YarnProject and parsing a .yarn script.
   ''';
 
   final dialogueControllerComponent = DialogueControllerComponent();

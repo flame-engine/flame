@@ -11,7 +11,9 @@ import 'package:jenny/jenny.dart';
 
 class JennyAdvancedExample extends FlameGame {
   static const String description = '''
-    This example shows how to use the Jenny API. .
+    This is an advanced example of how to use the Jenny Package. 
+    It includes implementing dialogue choices, setting custom variables,
+    using commands and implementing User-Defined Commands, .
   ''';
 
   int coins = 0;
