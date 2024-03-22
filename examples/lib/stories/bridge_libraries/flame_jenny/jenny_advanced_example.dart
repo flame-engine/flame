@@ -29,7 +29,7 @@ class JennyAdvancedExample extends FlameGame {
       DialogueControllerComponent();
   late final TextComponent header = TextComponent(
     text: 'Select player name.',
-    position: Vector2(size.x / 2, 32),
+    position: Vector2(size.x / 2, 56),
     size: startButtonSize,
     anchor: Anchor.center,
     textRenderer: mainTextPaint,
@@ -60,12 +60,12 @@ class JennyAdvancedExample extends FlameGame {
       dialogueControllerComponent,
       header,
       MenuButton(
-        position: Vector2(size.x / 4, 96),
+        position: Vector2(size.x / 4, 128),
         onPressed: () => startDialogue('Jessie'),
         text: 'Jessie',
       ),
       MenuButton(
-        position: Vector2(size.x * 3 / 4, 96),
+        position: Vector2(size.x * 3 / 4, 128),
         onPressed: () => startDialogue('James'),
         text: 'James',
       ),

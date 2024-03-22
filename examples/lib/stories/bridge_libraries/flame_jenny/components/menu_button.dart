@@ -19,7 +19,7 @@ class MenuButton extends ButtonComponent {
   final TextPaint topTextPaint = TextPaint(
     style: TextStyle(color: BasicPalette.black.color),
   );
-  final startButtonSize = Vector2(128, 56);
+  final startButtonSize = Vector2(128, 42);
 
   @override
   Future<void> onLoad() async {
