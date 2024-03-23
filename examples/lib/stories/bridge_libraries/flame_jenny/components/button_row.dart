@@ -19,7 +19,7 @@ class ButtonRow extends PositionComponent {
   void showNextButton(Function() onNextButtonPressed) {
     removeButtons();
     final nextButton = DialogueButton(
-      assetPath: 'green_button.png',
+      assetPath: 'green_button_sqr.png',
       text: 'Next',
       position: Vector2(size.x / 2, 0),
       onPressed: () {
@@ -38,7 +38,7 @@ class ButtonRow extends PositionComponent {
     removeButtons();
     final optionButtons = <DialogueButton>[
       DialogueButton(
-        assetPath: 'green_button.png',
+        assetPath: 'green_button_sqr.png',
         text: option1.text,
         position: Vector2(size.x / 4, 0),
         onPressed: () {
@@ -47,7 +47,7 @@ class ButtonRow extends PositionComponent {
         },
       ),
       DialogueButton(
-        assetPath: 'red_button.png',
+        assetPath: 'red_button_sqr.png',
         text: option2.text,
         position: Vector2(size.x * 3 / 4, 0),
         onPressed: () {
@@ -61,7 +61,7 @@ class ButtonRow extends PositionComponent {
 
   void showCloseButton(Function() onClose) {
     final closeButton = DialogueButton(
-      assetPath: 'green_button.png',
+      assetPath: 'green_button_sqr.png',
       text: 'Close',
       onPressed: () => onClose(),
       position: Vector2(size.x / 2, 0),
