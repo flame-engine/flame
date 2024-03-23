@@ -18,24 +18,19 @@ class DialogueButton extends SpriteButtonComponent {
   @override
   Future<void> onLoad() async {
     button = await Sprite.load(assetPath);
-    final buttonText = ButtonText(text: text);
-    add(buttonText);
-  }
-}
-
-class ButtonText extends TextComponent {
-  ButtonText({
-    required String text,
-  }) : super(
-          text: text,
-          position: Vector2(48, 16),
-          anchor: Anchor.center,
-          size: Vector2(88, 28),
-          textRenderer: TextPaint(
-            style: const TextStyle(
-              fontSize: fontSize,
-              color: Colors.white70,
-            ),
+    add(
+      TextComponent(
+        text: text,
+        position: Vector2(48, 16),
+        anchor: Anchor.center,
+        size: Vector2(88, 28),
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            fontSize: fontSize,
+            color: Colors.white70,
           ),
-        );
+        ),
+      ),
+    );
+  }
 }

@@ -8,12 +8,10 @@ class MenuButton extends ButtonComponent {
   MenuButton({
     required super.position,
     required super.onPressed,
-    required String text,
-  }) : super(size: Vector2(128, 42)) {
-    _text = text;
-  }
+    required this.text,
+  }) : super(size: Vector2(128, 42));
 
-  late String _text;
+  late String text;
 
   final Paint white = BasicPalette.white.paint();
   final TextPaint topTextPaint = TextPaint(
@@ -26,7 +24,7 @@ class MenuButton extends ButtonComponent {
     anchor = Anchor.center;
     add(
       TextComponent(
-        text: _text,
+        text: text,
         textRenderer: topTextPaint,
         position: size / 2,
         anchor: Anchor.center,
