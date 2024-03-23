@@ -78,6 +78,12 @@ void main() {
                   game.camera.viewfinder.zoom,
         );
       });
+
+      test("Game does not override World's gravity with null", () {
+        final game = Forge2DGame(world: Forge2DWorld(gravity: Vector2(10, 0)));
+        expect(game.world.gravity.x, 10);
+        expect(game.world.gravity.y, 0);
+      });
     },
   );
 }
