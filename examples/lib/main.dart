@@ -99,7 +99,7 @@ void runAsDashbook() {
   // Bridge package examples
   addForge2DStories(dashbook);
   addFlameIsolateExample(dashbook);
-  addJennyExample(dashbook);
+  addFlameJennyExample(dashbook);
   addFlameLottieExample(dashbook);
   addFlameSpineExamples(dashbook);
 

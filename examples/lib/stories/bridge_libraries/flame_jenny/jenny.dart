@@ -4,7 +4,7 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/jenny_advanced_exa
 import 'package:examples/stories/bridge_libraries/flame_jenny/jenny_simple_example.dart';
 import 'package:flame/game.dart';
 
-void addJennyExample(Dashbook dashbook) {
+void addFlameJennyExample(Dashbook dashbook) {
   dashbook.storiesOf('FlameJenny')
     ..add(
       'Simple Jenny example',
