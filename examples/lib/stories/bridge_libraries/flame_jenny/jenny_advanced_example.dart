@@ -27,8 +27,6 @@ class JennyAdvancedExample extends FlameGame {
   );
   final startButtonSize = Vector2(128, 56);
 
-  final DialogueControllerComponent dialogueControllerComponent =
-      DialogueControllerComponent();
   late final TextComponent header = TextComponent(
     text: 'Select player name.',
     position: Vector2(size.x / 2, 56),
@@ -38,6 +36,9 @@ class JennyAdvancedExample extends FlameGame {
   );
 
   Future<void> startDialogue(String playerName) async {
+    final dialogueControllerComponent = DialogueControllerComponent();
+    add(dialogueControllerComponent);
+
     final yarnProject = YarnProject();
 
     yarnProject
@@ -59,7 +60,6 @@ class JennyAdvancedExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     addAll([
-      dialogueControllerComponent,
       header,
       MenuButton(
         position: Vector2(size.x / 4, 128),

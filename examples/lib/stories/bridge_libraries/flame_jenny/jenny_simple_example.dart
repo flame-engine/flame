@@ -10,9 +10,10 @@ class JennySimpleExample extends FlameGame {
     It includes instantiating YarnProject and parsing a .yarn script.
   ''';
 
-  final dialogueControllerComponent = DialogueControllerComponent();
-
   Future<void> startDialogue() async {
+    final dialogueControllerComponent = DialogueControllerComponent();
+    add(dialogueControllerComponent);
+
     final yarnProject = YarnProject();
     yarnProject.parse(await rootBundle.loadString('assets/yarn/simple.yarn'));
     final dialogueRunner = DialogueRunner(
@@ -25,7 +26,6 @@ class JennySimpleExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     addAll([
-      dialogueControllerComponent,
       MenuButton(
         position: Vector2(size.x / 2, 96),
         onPressed: startDialogue,
