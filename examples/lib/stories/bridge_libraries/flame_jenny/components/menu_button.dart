@@ -9,7 +9,7 @@ class MenuButton extends ButtonComponent {
     required super.position,
     required super.onPressed,
     required String text,
-  }) : super() {
+  }) : super(size: Vector2(128, 42)) {
     _text = text;
   }
 
@@ -19,18 +19,16 @@ class MenuButton extends ButtonComponent {
   final TextPaint topTextPaint = TextPaint(
     style: TextStyle(color: BasicPalette.black.color),
   );
-  final startButtonSize = Vector2(128, 42);
 
   @override
   Future<void> onLoad() async {
-    size = startButtonSize;
-    button = RectangleComponent(paint: white, size: startButtonSize);
+    button = RectangleComponent(paint: white, size: size);
     anchor = Anchor.center;
     add(
       TextComponent(
         text: _text,
         textRenderer: topTextPaint,
-        position: startButtonSize / 2,
+        position: size / 2,
         anchor: Anchor.center,
         priority: 1,
       ),
