@@ -51,81 +51,82 @@ class _ComponentTreeState extends State<ComponentTree> {
     return FutureBuilder(
       future: _componentTree,
       builder: (context, value) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        return Split(
+          axis: MediaQuery.of(context).size.width > 1000
+              ? Axis.horizontal
+              : Axis.vertical,
+          initialFractions: const [0.5, 0.5],
+          minSizes: const [300, 350],
           children: [
-            Expanded(
-              child: RoundedOutlinedBorder(
-                child: Column(
-                  children: [
-                    AreaPaneHeader(
-                      title: Row(
-                        children: [
-                          Text(
-                            'Component Tree ($_componentCount components)',
-                            style: theme.textTheme.titleSmall,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.refresh),
-                            iconSize: 18,
-                            alignment: Alignment.center,
-                            onPressed: () => setState(_refreshComponentTree),
-                          ),
-                        ],
-                      ),
-                    ),
-                    if (value.hasData)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: TreeView.simple(
-                            showRootNode: false,
-                            shrinkWrap: true,
-                            indentation: const Indentation(
-                              color: Colors.blue,
-                              style: IndentStyle.roundJoint,
-                            ),
-                            onTreeReady: (controller) =>
-                                controller.expandAllChildren(controller.tree),
-                            padding: const EdgeInsets.only(left: 20),
-                            expansionIndicatorBuilder: (context, node) =>
-                                node.isLeaf
-                                    ? NoExpansionIndicator(tree: node)
-                                    : ChevronIndicator.rightDown(
-                                        tree: node,
-                                        alignment: Alignment.centerLeft,
-                                      ),
-                            builder: (context, node) {
-                              return Padding(
-                                padding: node.isLeaf
-                                    ? EdgeInsets.zero
-                                    : const EdgeInsets.only(left: 20),
-                                child: ListTile(
-                                  key: Key(
-                                    node.data?.id.toString() ?? node.key,
-                                  ),
-                                  selected: node == _selectedTreeNode,
-                                  selectedColor: theme.colorScheme.primary,
-                                  title: Text(node.data!.name),
-                                  subtitle: Text(node.data!.id.toString()),
-                                  onTap: () {
-                                    return setState(
-                                      () => _selectedTreeNode = node,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            tree: _tree,
-                          ),
+            RoundedOutlinedBorder(
+              child: Column(
+                children: [
+                  AreaPaneHeader(
+                    title: Row(
+                      children: [
+                        Text(
+                          'Component Tree ($_componentCount components)',
+                          style: theme.textTheme.titleSmall,
                         ),
-                      )
-                    else
-                      const CircularProgressIndicator(strokeWidth: 20),
-                  ],
-                ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh),
+                          iconSize: 18,
+                          alignment: Alignment.center,
+                          onPressed: () => setState(_refreshComponentTree),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (value.hasData)
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: TreeView.simple(
+                          showRootNode: false,
+                          shrinkWrap: true,
+                          indentation: const Indentation(
+                            color: Colors.blue,
+                            style: IndentStyle.roundJoint,
+                          ),
+                          onTreeReady: (controller) =>
+                              controller.expandAllChildren(controller.tree),
+                          padding: const EdgeInsets.only(left: 20),
+                          expansionIndicatorBuilder: (context, node) =>
+                              node.isLeaf
+                                  ? NoExpansionIndicator(tree: node)
+                                  : ChevronIndicator.rightDown(
+                                      tree: node,
+                                      alignment: Alignment.centerLeft,
+                                    ),
+                          builder: (context, node) {
+                            return Padding(
+                              padding: node.isLeaf
+                                  ? EdgeInsets.zero
+                                  : const EdgeInsets.only(left: 20),
+                              child: ListTile(
+                                key: Key(
+                                  node.data?.id.toString() ?? node.key,
+                                ),
+                                selected: node == _selectedTreeNode,
+                                selectedColor: theme.colorScheme.primary,
+                                title: Text(node.data!.name),
+                                subtitle: Text(node.data!.id.toString()),
+                                onTap: () {
+                                  return setState(
+                                    () => _selectedTreeNode = node,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          tree: _tree,
+                        ),
+                      ),
+                    )
+                  else
+                    const CircularProgressIndicator(strokeWidth: 20),
+                ],
               ),
             ),
-            const SizedBox(width: 20),
             ComponentView(_selectedTreeNode?.data),
           ],
         );
@@ -145,52 +146,50 @@ class ComponentView extends StatelessWidget {
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.bodyLarge;
 
-    return Expanded(
-      child: RoundedOutlinedBorder(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AreaPaneHeader(
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Selected Component',
-                    style: theme.textTheme.titleSmall,
+    return RoundedOutlinedBorder(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AreaPaneHeader(
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Selected Component',
+                  style: theme.textTheme.titleSmall,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: node == null
+                ? Text(
+                    'Select a component in the tree',
+                    style: textStyle,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Id: ${node.id}', style: textStyle),
+                          DebugModeButton(id: node.id),
+                        ].withSpacing(),
+                      ),
+                      Text('Type: ${node.name}', style: textStyle),
+                      Text(
+                        'Children: ${node.children.length}',
+                        style: textStyle,
+                      ),
+                      Text(
+                        'toString:\n${node.toStringText}',
+                        style: textStyle,
+                      ),
+                    ].withSpacing(),
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: node == null
-                  ? Text(
-                      'Select a component in the tree',
-                      style: textStyle,
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text('Id: ${node.id}', style: textStyle),
-                            DebugModeButton(id: node.id),
-                          ].withSpacing(),
-                        ),
-                        Text('Type: ${node.name}', style: textStyle),
-                        Text(
-                          'Children: ${node.children.length}',
-                          style: textStyle,
-                        ),
-                        Text(
-                          'toString:\n${node.toStringText}',
-                          style: textStyle,
-                        ),
-                      ].withSpacing(),
-                    ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
