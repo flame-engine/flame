@@ -35,7 +35,9 @@ class _DebugModeButtonState extends State<DebugModeButton> {
               ? null
               : () {
                   setState(
-                    () => _debugMode = Repository.swapDebugMode(id: widget.id),
+                    () {
+                      _debugMode = Repository.swapDebugMode(id: widget.id);
+                    },
                   );
                 },
           child: Text('$buttonPrefix Debug Mode'),
