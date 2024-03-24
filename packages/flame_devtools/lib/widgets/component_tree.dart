@@ -171,13 +171,21 @@ class ComponentView extends StatelessWidget {
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Row(
+                          children: [
+                            Text('Id: ${node.id}', style: textStyle),
+                            DebugModeButton(id: node.id),
+                          ].withSpacing(),
+                        ),
                         Text('Type: ${node.name}', style: textStyle),
-                        Text('Id: ${node.id}', style: textStyle),
                         Text(
                           'Children: ${node.children.length}',
                           style: textStyle,
                         ),
-                        DebugModeButton(id: node.id),
+                        Text(
+                          'toString:\n${node.toStringText}',
+                          style: textStyle,
+                        ),
                       ].withSpacing(),
                     ),
             ),
