@@ -1,5 +1,4 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
-import 'package:flame_devtools/widgets/component_counter.dart';
 import 'package:flame_devtools/widgets/component_tree.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/game_loop_controls.dart';
@@ -24,7 +23,7 @@ class FlameDevTools extends StatelessWidget {
               const DebugModeButton(),
             ].withSpacing(),
           ),
-          const ComponentTree(),
+          const Expanded(child: ComponentTree()),
         ].withSpacing(),
       ),
     );

@@ -47,92 +47,89 @@ class _ComponentTreeState extends State<ComponentTree> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      children: [
-        FutureBuilder(
-          future: _componentTree,
-          builder: (context, value) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: RoundedOutlinedBorder(
-                    child: Column(
-                      children: [
-                        AreaPaneHeader(
-                          title: Row(
-                            children: [
-                              Text(
-                                'Component Tree ($_componentCount components)',
-                                style: theme.textTheme.titleSmall,
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.refresh),
-                                iconSize: 18,
-                                alignment: Alignment.center,
-                                onPressed: () =>
-                                    setState(_refreshComponentTree),
-                              ),
-                            ],
+
+    return FutureBuilder(
+      future: _componentTree,
+      builder: (context, value) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: RoundedOutlinedBorder(
+                child: Column(
+                  children: [
+                    AreaPaneHeader(
+                      title: Row(
+                        children: [
+                          Text(
+                            'Component Tree ($_componentCount components)',
+                            style: theme.textTheme.titleSmall,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.refresh),
+                            iconSize: 18,
+                            alignment: Alignment.center,
+                            onPressed: () => setState(_refreshComponentTree),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (value.hasData)
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: TreeView.simple(
+                            showRootNode: false,
+                            shrinkWrap: true,
+                            indentation: const Indentation(
+                              color: Colors.blue,
+                              style: IndentStyle.roundJoint,
+                            ),
+                            onTreeReady: (controller) =>
+                                controller.expandAllChildren(controller.tree),
+                            padding: const EdgeInsets.only(left: 20),
+                            expansionIndicatorBuilder: (context, node) =>
+                                node.isLeaf
+                                    ? NoExpansionIndicator(tree: node)
+                                    : ChevronIndicator.rightDown(
+                                        tree: node,
+                                        alignment: Alignment.centerLeft,
+                                      ),
+                            builder: (context, node) {
+                              return Padding(
+                                padding: node.isLeaf
+                                    ? EdgeInsets.zero
+                                    : const EdgeInsets.only(left: 20),
+                                child: ListTile(
+                                  key: Key(
+                                    node.data?.id.toString() ?? node.key,
+                                  ),
+                                  selected: node == _selectedTreeNode,
+                                  selectedColor: theme.colorScheme.primary,
+                                  title: Text(node.data!.name),
+                                  subtitle: Text(node.data!.id.toString()),
+                                  onTap: () {
+                                    return setState(
+                                      () => _selectedTreeNode = node,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            tree: _tree,
                           ),
                         ),
-                        if (value.hasData)
-                          SingleChildScrollView(
-                            child: ValueListenableBuilder(
-                              valueListenable: _tree,
-                              builder: (context, _, __) => TreeView.simple(
-                                showRootNode: false,
-                                shrinkWrap: true,
-                                indentation: const Indentation(
-                                  color: Colors.blue,
-                                  style: IndentStyle.roundJoint,
-                                ),
-                                onTreeReady: (controller) => controller
-                                    .expandAllChildren(controller.tree),
-                                padding: const EdgeInsets.only(left: 20),
-                                expansionIndicatorBuilder: (context, node) =>
-                                    node.isLeaf
-                                        ? NoExpansionIndicator(tree: node)
-                                        : ChevronIndicator.rightDown(
-                                            tree: node,
-                                            alignment: Alignment.centerLeft,
-                                          ),
-                                builder: (context, node) {
-                                  return Padding(
-                                    padding: node.isLeaf
-                                        ? EdgeInsets.zero
-                                        : const EdgeInsets.only(left: 20),
-                                    child: ListTile(
-                                      key: Key(
-                                        node.data?.id.toString() ?? node.key,
-                                      ),
-                                      title: Text(node.data!.name),
-                                      subtitle: Text(node.data!.id.toString()),
-                                      onTap: () {
-                                        return setState(
-                                          () => _selectedTreeNode = node,
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                                tree: _tree,
-                              ),
-                            ),
-                          )
-                        else
-                          const CircularProgressIndicator(strokeWidth: 20),
-                      ],
-                    ),
-                  ),
+                      )
+                    else
+                      const CircularProgressIndicator(strokeWidth: 20),
+                  ],
                 ),
-                const SizedBox(width: 20),
-                ComponentView(_selectedTreeNode?.data),
-              ],
-            );
-          },
-        ),
-      ],
+              ),
+            ),
+            const SizedBox(width: 20),
+            ComponentView(_selectedTreeNode?.data),
+          ],
+        );
+      },
     );
   }
 }
@@ -176,8 +173,10 @@ class ComponentView extends StatelessWidget {
                       children: [
                         Text('Type: ${node.name}', style: textStyle),
                         Text('Id: ${node.id}', style: textStyle),
-                        Text('Children: ${node.children.length}',
-                            style: textStyle),
+                        Text(
+                          'Children: ${node.children.length}',
+                          style: textStyle,
+                        ),
                         DebugModeButton(id: node.id),
                       ].withSpacing(),
                     ),
