@@ -45,35 +45,37 @@ class _GameLoopControlsState extends State<GameLoopControls> {
             IconButton(
               onPressed: (isPaused == null || !isPaused)
                   ? null
-                  : () => setState(
-                        () => Repository.step(stepTime: -stepTime),
-                      ),
+                  : () => Repository.step(stepTime: -stepTime),
               icon: const Icon(Icons.skip_previous),
             ),
             IconButton(
               onPressed: (isPaused == null || isPaused)
                   ? null
-                  : () => setState(() => _paused = Repository.setPaused(true)),
+                  : () => _setPaused(true),
               icon: const Icon(Icons.pause),
             ),
             IconButton(
               onPressed: (isPaused == null || !isPaused)
                   ? null
-                  : () => setState(() => _paused = Repository.setPaused(false)),
+                  : () => _setPaused(false),
               icon: const Icon(Icons.play_arrow),
             ),
             IconButton(
               onPressed: (isPaused == null || !isPaused)
                   ? null
-                  : () => setState(
-                        () => Repository.step(stepTime: stepTime),
-                      ),
+                  : () => Repository.step(stepTime: stepTime),
               icon: const Icon(Icons.skip_next),
             ),
           ],
         );
       },
     );
+  }
+
+  void _setPaused(bool paused) {
+    setState(() {
+      _paused = Repository.setPaused(paused);
+    });
   }
 
   @override
