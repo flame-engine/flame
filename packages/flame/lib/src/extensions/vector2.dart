@@ -194,7 +194,7 @@ extension Vector2Extension on Vector2 {
 
   /// Stringifies the Vector2 with a maximum precision of [maxPrecision].
   String toStringWithMaxPrecision(int maxPrecision) {
-    final precision = 10 ^ maxPrecision;
+    final precision = pow(10, maxPrecision);
     final truncatedX = (x * precision).truncate() / precision;
     final truncatedY = (y * precision).truncate() / precision;
     return 'Vector2($truncatedX, $truncatedY)';
