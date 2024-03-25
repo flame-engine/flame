@@ -509,8 +509,8 @@ class PositionComponent extends Component
     // ignore_for_file: no_runtimeType_toString
     return '''
 $runtimeType(
-  position: $position,
-  size: $size,
+  position: ${position.toStringWithMaxPrecision(4)},
+  size: ${size.toStringWithMaxPrecision(4)},
   angle: $angle,
   scale: $scale,
 )''';
