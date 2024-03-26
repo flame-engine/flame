@@ -11,7 +11,7 @@ void main() {
     test('size is properly computed', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox jumps over the lazy dog.',
-        boxConfig: TextBoxConfig(
+        boxConfig: const TextBoxConfig(
           maxWidth: 100.0,
         ),
       );
@@ -23,7 +23,7 @@ void main() {
     test('size is properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
-        boxConfig: TextBoxConfig(
+        boxConfig: const TextBoxConfig(
           maxWidth: 100.0,
         ),
       );
@@ -35,7 +35,7 @@ void main() {
     test('lines are properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
-        boxConfig: TextBoxConfig(
+        boxConfig: const TextBoxConfig(
           maxWidth: 400.0,
         ),
       );
@@ -51,7 +51,7 @@ void main() {
       (game) async {
         final component = TextBoxComponent(
           text: 'foo bar',
-          boxConfig: TextBoxConfig(
+          boxConfig: const TextBoxConfig(
             dismissDelay: 10.0,
             timePerChar: 1.0,
           ),

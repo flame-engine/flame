@@ -37,13 +37,29 @@ class TextBoxConfig {
   /// beginning (both width and height).
   final bool growingBox;
 
-  TextBoxConfig({
+  const TextBoxConfig({
     this.maxWidth = 200.0,
     this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
     this.dismissDelay,
     this.growingBox = false,
   });
+
+  TextBoxConfig copyWith({
+    double? maxWidth,
+    EdgeInsets? margins,
+    double? timePerChar,
+    double? dismissDelay,
+    bool? growingBox,
+  }) {
+    return TextBoxConfig(
+      maxWidth: maxWidth ?? this.maxWidth,
+      margins: margins ?? this.margins,
+      timePerChar: timePerChar ?? this.timePerChar,
+      dismissDelay: dismissDelay ?? this.dismissDelay,
+      growingBox: growingBox ?? this.growingBox,
+    );
+  }
 }
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
@@ -81,7 +97,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.children,
     super.priority,
     super.key,
-  })  : _boxConfig = boxConfig ?? TextBoxConfig(),
+  })  : _boxConfig = boxConfig ?? const TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
         pixelRatio = pixelRatio ??
