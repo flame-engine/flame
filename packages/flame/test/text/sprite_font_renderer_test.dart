@@ -37,12 +37,12 @@ void main() {
           TextBoxComponent(
             text: textSample,
             textRenderer: await createRenderer(letterSpacing: 1),
-            boxConfig: TextBoxConfig(maxWidth: 800),
+            boxConfig: const TextBoxConfig(maxWidth: 800),
           ),
           TextBoxComponent(
             text: textSample,
             textRenderer: await createRenderer(scale: 2),
-            boxConfig: TextBoxConfig(maxWidth: 800),
+            boxConfig: const TextBoxConfig(maxWidth: 800),
             position: Vector2(0, 100),
           ),
           TextComponent(
