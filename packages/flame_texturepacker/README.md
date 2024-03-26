@@ -56,7 +56,7 @@ Import the plugin like this:
 Load the TextureAtlas passing the path of the sprite sheet atlas file:
 
 ```Dart
-final atlas = await fromAtlas('atlas_map.atlas');
+final atlas = await atlasFromAssets('atlas_map.atlas');
 ```
 
 
@@ -66,7 +66,7 @@ If you are using file storage, grab your atlas file like this:
 
 ```Dart
 final documentsPath = (await getApplicationDocumentsDirectory()).path;
-final atlas = await fromAtlas('$documentsPath/atlas_map.atlas', fromStorage: true);
+final atlas = await atlasFromStorage('$documentsPath/atlas_map.atlas');
 ```
 
 Get a list of sprites ordered by their index, you can use the list to generate an animation:
