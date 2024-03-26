@@ -73,7 +73,8 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
     }
 
-    if (_temporaryLineSegment.to.length2 < radius * radius) {
+    if (ray.origin.distanceToSquared(_temporaryAbsoluteCenter) <
+        radius * radius) {
       _temporaryLineSegment.to.scaleTo(2 * radius);
       isInsideHitbox = true;
     }
