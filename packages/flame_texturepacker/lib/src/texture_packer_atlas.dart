@@ -131,7 +131,7 @@ Future<_TextureAtlasData> _parse(
         page = Page();
         page.textureFile = line;
         final parentPath = (path.split('/')..removeLast()).join('/');
-        final texturePath = '$parentPath/$line';
+        final texturePath = parentPath.isEmpty ? line : '$parentPath/$line';
 
         if (fromStorage) {
           try {

@@ -1,4 +1,5 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
+import 'package:flame/devtools.dart';
 
 sealed class Repository {
   Repository._();
@@ -11,19 +12,33 @@ sealed class Repository {
     return componentCountResponse.json!['component_count'] as int;
   }
 
-  static Future<bool> swapDebugMode() async {
-    final nextDebugMode = !(await getDebugMode());
+  static Future<ComponentTreeNode> getComponentTree() async {
+    final componentTreeResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentTree',
+    );
+    return ComponentTreeNode.fromJson(
+      componentTreeResponse.json!['component_tree'] as Map<String, dynamic>,
+    );
+  }
+
+  static Future<bool> swapDebugMode({int? id}) async {
+    final nextDebugMode = !(await getDebugMode(id: id));
     await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.setDebugMode',
-      args: {'debug_mode': nextDebugMode},
+      args: {
+        'debug_mode': nextDebugMode,
+        'id': id,
+      },
     );
     return nextDebugMode;
   }
 
-  static Future<bool> getDebugMode() async {
+  static Future<bool> getDebugMode({int? id}) async {
     final debugModeResponse =
         await serviceManager.callServiceExtensionOnMainIsolate(
       'ext.flame_devtools.getDebugMode',
+      args: {'id': id},
     );
     return debugModeResponse.json!['debug_mode'] as bool;
   }

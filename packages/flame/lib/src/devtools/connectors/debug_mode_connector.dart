@@ -2,37 +2,40 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flame/components.dart';
-import 'package:flame/game.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
-import 'package:flutter/foundation.dart';
 
 /// The [DebugModeConnector] is responsible for reporting and setting the
 /// `debugMode` of the game from the devtools extension.
 class DebugModeConnector extends DevToolsConnector {
-  var _debugModeNotifier = ValueNotifier<bool>(false);
-
   @override
   void init() {
-    // Get the current `debugMode`.
+    // Get the `debugMode` for a component in the tree.
+    // If no id is provided, the `debugMode` for the entire game will be
+    // returned.
     registerExtension(
       'ext.flame_devtools.getDebugMode',
       (method, parameters) async {
+        final id = int.tryParse(parameters['id'] ?? '') ?? game.hashCode;
         return ServiceExtensionResponse.result(
           json.encode({
-            'debug_mode': _debugModeNotifier.value,
+            'id': id,
+            'debug_mode': _getDebugMode(id),
           }),
         );
       },
     );
 
-    // Set the `debugMode` for all components in the tree.
+    // Set the `debugMode` for a component in the tree.
+    // If no id is provided, the `debugMode` will be set for the entire game.
     registerExtension(
       'ext.flame_devtools.setDebugMode',
       (method, parameters) async {
+        final id = int.tryParse(parameters['id'] ?? '');
         final debugMode = bool.parse(parameters['debug_mode'] ?? 'false');
-        _debugModeNotifier.value = debugMode;
+        _setDebugMode(debugMode, id: id);
         return ServiceExtensionResponse.result(
           json.encode({
+            'id': id,
             'debug_mode': debugMode,
           }),
         );
@@ -40,24 +43,34 @@ class DebugModeConnector extends DevToolsConnector {
     );
   }
 
-  @override
-  void initGame(FlameGame game) {
-    super.initGame(game);
-    _debugModeNotifier = ValueNotifier<bool>(game.debugMode);
-    _debugModeNotifier.addListener(() {
-      final newDebugMode = _debugModeNotifier.value;
-      game.propagateToChildren<Component>(
-        (c) {
-          c.debugMode = newDebugMode;
-          return true;
-        },
-        includeSelf: true,
-      );
-    });
+  bool _getDebugMode(int id) {
+    var debugMode = false;
+    game.propagateToChildren<Component>(
+      (c) {
+        if (c.hashCode == id) {
+          debugMode = c.debugMode;
+          return false;
+        }
+        return true;
+      },
+      includeSelf: true,
+    );
+    return debugMode;
   }
 
-  @override
-  void disposeGame() {
-    _debugModeNotifier.dispose();
+  void _setDebugMode(bool debugMode, {int? id}) {
+    game.propagateToChildren<Component>(
+      (c) {
+        if (id == null) {
+          c.debugMode = debugMode;
+          return true;
+        } else if (c.hashCode == id) {
+          c.debugMode = debugMode;
+          return false;
+        }
+        return true;
+      },
+      includeSelf: true,
+    );
   }
 }
