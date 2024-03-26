@@ -13,6 +13,7 @@ command:
     branch: main
     # Generates a link to a prefilled GitHub release creation page.
     releaseUrl: true
+    
   bootstrap:
     environment:
       sdk: ">=3.0.0 <4.0.0"
@@ -24,6 +25,10 @@ command:
       dartdoc: ^6.3.0
       mocktail: ^1.0.1
       test: any
+      
+  publish:
+    hooks:
+      pre: melos devtools-build
 
 scripts:
   lint:all:
@@ -118,3 +123,9 @@ scripts:
     packageFilters:
       scope: flame_devtools
     description: Builds the devtools and copies the build directory to the Flame package.
+
+  devtools-simulator:
+    run: melos exec -- flutter run -d chrome --dart-define=use_simulated_environment=true
+    packageFilters:
+      scope: flame_devtools
+    description: Runs the devtools in the simulated mode.

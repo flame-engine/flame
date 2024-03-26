@@ -7,15 +7,15 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  devtools_app_shared: ^0.0.9
-  devtools_extensions: ^0.0.13
+  animated_tree_view: ^2.2.0
+  devtools_app_shared: ^0.0.10
+  devtools_extensions: ^0.0.14
+  flame: ^1.16.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flame_lint: ^1.1.2
-  flutter_test:
-    sdk: flutter
 
 flutter:
   uses-material-design: true
