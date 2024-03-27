@@ -10,7 +10,7 @@ import 'package:flutter/gestures.dart';
 ///  - [MultiTouchTapDetector] for a custom `Game`
 abstract class MultiTapListener {
   /// The amount of time before the "long tap down" event is triggered.
-  double get longTapDelay;
+  int get longTapDelay;
 
   /// A tap has occurred.
   void handleTap(int pointerId);

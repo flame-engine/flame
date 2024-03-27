@@ -22,7 +22,7 @@ mixin MultiTouchTapDetector on Game implements MultiTapListener {
 
   //#region MultiTapListener API
   @override
-  double get longTapDelay => 0.300;
+  int get longTapDelay => 300;
 
   @override
   void handleTap(int pointerId) => onTap(pointerId);

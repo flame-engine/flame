@@ -23,8 +23,15 @@ class MultiTapDispatcherKey implements ComponentKey {
 
 @internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
+  MultiTapDispatcher({
+    int longTapDelay = 300,
+  }) : _longTapDelay = longTapDelay;
+
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
+
+  /// The delay (in milliseconds) after which a tap is considered a long tap.
+  final int _longTapDelay;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -50,7 +57,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   }
 
   /// Called after the user has been touching the screen for [longTapDelay]
-  /// seconds without the tap being cancelled.
+  /// milliseconds without the tap being cancelled.
   ///
   /// This event will be delivered to all the components that previously
   /// received the `onTapDown` event, and who remain at the point where the user
@@ -118,9 +125,9 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   //#region MultiTapListener API
 
-  /// The delay (in seconds) after which a tap is considered a long tap.
+  /// The delay (in milliseconds) after which a tap is considered a long tap.
   @override
-  double get longTapDelay => 0.300;
+  int get longTapDelay => _longTapDelay;
 
   @override
   void handleTap(int pointerId) {}
@@ -157,7 +164,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
       MultiTapGestureRecognizer.new,
       (MultiTapGestureRecognizer instance) {
         instance.longTapDelay = Duration(
-          milliseconds: (longTapDelay * 1000).toInt(),
+          milliseconds: longTapDelay,
         );
         instance.onTap = handleTap;
         instance.onTapDown = handleTapDown;
