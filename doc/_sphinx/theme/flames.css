@@ -32,12 +32,16 @@ body {
 }
 
 a {
-  color: #ffbb3e;
+  color: #ff9500;
   text-decoration: none;
 }
 
 a:hover {
   color: #ddbb99;
+}
+
+a:visited {
+  color: #ffbc70;
 }
 
 a:hover code {
@@ -347,7 +351,7 @@ div.nav-left li {
 div.nav-left li > a,
 div.nav-left li > div.submenu > a.reference {
   border-radius: 5px 0 0 5px;
-  color: #9d9175;
+  color: #ff9500;
   display: block;
   font-size: 13px;
   margin-left: -5px;
@@ -431,7 +435,7 @@ div.nav-right > #toc-local > div.header {
 div.nav-right > #toc-local > a.list-group-item {
   border: none;
   border-left: 4px solid transparent;
-  color: #9d9175;
+  color: #ff9500;
   display: block;
   font-size: 13px;
   line-height: 1.2;
@@ -526,12 +530,17 @@ div.document::after { /* clearfix */
   clear: both;
 }
 
+
 div.copyright {
+  color: #d4d4d4;
   font-size: 12px;
   margin-top: 3px;
   opacity: 0.5;
 }
 
+.copyright a {
+  color: #ffae00;
+}
 div.document h1 {
   border-bottom: 1px solid #555;
   color: #ccc;
@@ -867,7 +876,7 @@ table.docutils td {
 }
 
 table.docutils th {
-  color: #9d9175;
+  color: #ff9500;
 }
 
 /* This ensures that when navigating to a link within a page, the link
