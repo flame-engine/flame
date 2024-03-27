@@ -304,9 +304,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       textElement.render(canvas, position);
       if (position.y > _currentLinePosition) {
         _currentLinePosition = position.y;
-        if (newLineCallback != null) {
-          newLineCallback!(_currentLinePosition + _lineHeight);
-        }
+        newLineCallback?.call(_currentLinePosition + _lineHeight);
       }
       charCount += lines[i].length;
     }

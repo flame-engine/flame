@@ -115,7 +115,7 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
   }) : super(
           text: text ?? '',
           textRenderer: textRenderer ?? TextPaint(),
-          boxConfig: boxConfig ?? TextBoxConfig(),
+          boxConfig: boxConfig ?? const TextBoxConfig(),
         );
 
   @override
@@ -134,9 +134,7 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     if (!_isOnFinishedExecuted && finished) {
       _isOnFinishedExecuted = true;
       scrollBoundsY = clipComponent.size.y - size.y;
-      if (onFinished != null) {
-        onFinished!();
-      }
+      onFinished?.call();
     }
 
     super.update(dt);
