@@ -18,7 +18,7 @@ class MyGame extends FlameGame {
     super.onLoad();
 
     // Load the atlasMap.
-    final atlas = await fromAtlas('atlas_map.atlas');
+    final atlas = await atlasFromAssets('atlas_map.atlas');
 
     // Get a list of sprites ordered by their index
     final walkingSprites = atlas.findSpritesByName('robot_walk');
