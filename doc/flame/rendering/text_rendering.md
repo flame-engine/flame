@@ -12,9 +12,8 @@ components:
 - `TextBoxComponent` for bounding multi-line text within a sized box, including the possibility of a
 typing effect
 - `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling
-capability when the text exceeds the boundaries of the enclosing box.
-
-Use the `onFinished` callback to get notified when the text is completely printed.
+capability when the text exceeds the boundaries of the enclosing box. Use the `onFinished` callback 
+to get notified when the text is completely printed.
 
 
 All components are showcased in

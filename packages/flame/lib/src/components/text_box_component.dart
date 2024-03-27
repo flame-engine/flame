@@ -79,6 +79,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @visibleForTesting
   Image? cache;
+  Function(double)? newLineCallback;
+  double _currentLinePosition = 0.0;
 
   TextBoxConfig get boxConfig => _boxConfig;
   double get lineHeight => _lineHeight;
@@ -300,7 +302,12 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
             i * _lineHeight,
       );
       textElement.render(canvas, position);
-
+      if (position.y > _currentLinePosition) {
+        _currentLinePosition = position.y;
+        if (newLineCallback != null) {
+          newLineCallback!(_currentLinePosition + _lineHeight);
+        }
+      }
       charCount += lines[i].length;
     }
   }

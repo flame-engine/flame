@@ -22,6 +22,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   /// - [text]: The text content to be displayed.
   /// - [textRenderer]: Handles the rendering of the text.
   /// - [boxConfig]: Configuration for the text box appearance.
+  /// - [onFinished]: Callback will be executed after all text is displayed.
   /// - Other parameters include alignment, pixel ratio, and positioning
   ///   settings.
   /// An assertion ensures that the [size] has positive dimensions.
@@ -39,6 +40,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     super.priority,
     super.key,
     List<Component>? children,
+    void Function()? onFinished,
   })  : assert(
           size.x > 0 && size.y > 0,
           'size must have positive dimensions: $size',
@@ -56,6 +58,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
       boxConfig: boxConfig,
       align: align,
       pixelRatio: pixelRatio,
+      onFinished: onFinished,
     );
     _scrollTextBoxComponent.setOwnerComponent = this;
     // Integrates the [ClipComponent] for managing
@@ -89,11 +92,15 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
 class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     with DragCallbacks {
   double scrollBoundsY = 0.0;
-  int _linesScrolled = 0;
 
   late final ClipComponent clipComponent;
 
   late ScrollTextBoxComponent<TextRenderer> _owner;
+
+  /// Callback function to be executed after all text is displayed.
+  void Function()? onFinished;
+
+  bool _isOnFinishedExecuted = false;
 
   _ScrollTextBoxComponent({
     String? text,
@@ -104,34 +111,42 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     super.position,
     super.scale,
     double super.angle = 0.0,
+    this.onFinished,
   }) : super(
           text: text ?? '',
           textRenderer: textRenderer ?? TextPaint(),
-          boxConfig: boxConfig ?? const TextBoxConfig(),
+          boxConfig: boxConfig ?? TextBoxConfig(),
         );
 
   @override
   Future<void> onLoad() {
     clipComponent = parent! as ClipComponent;
+    newLineCallback = (double y) {
+      if (y > clipComponent.size.y) {
+        position.y = -y + clipComponent.size.y;
+      }
+    };
     return super.onLoad();
   }
 
   @override
-  Future<void> redraw() async {
-    if ((currentLine + 1 - _linesScrolled) * lineHeight >
-        clipComponent.size.y) {
-      _linesScrolled++;
-      position.y -= lineHeight;
-      scrollBoundsY = -position.y;
+  void update(double dt) {
+    if (!_isOnFinishedExecuted && finished) {
+      _isOnFinishedExecuted = true;
+      scrollBoundsY = clipComponent.size.y - size.y;
+      if (onFinished != null) {
+        onFinished!();
+      }
     }
-    await super.redraw();
+
+    super.update(dt);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (finished && _linesScrolled > 0) {
+    if (finished && scrollBoundsY < 0) {
       position.y += event.localDelta.y;
-      position.y = position.y.clamp(-scrollBoundsY, 0);
+      position.y = position.y.clamp(scrollBoundsY, 0);
     }
   }
 
