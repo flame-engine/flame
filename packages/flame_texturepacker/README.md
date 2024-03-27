@@ -40,13 +40,13 @@ flutter pub add flame_texturepacker
 
 ### Asset Storage
 
-Drop generated atlas file and sprite sheet images into the `assets/` and link the files in your
+Drop generated atlas file and sprite sheet images into the `assets/images/` and link the files in your
 `pubspec.yaml` file:
 
 ```yaml
  assets:
-   - assets/atlas_map.atlas
-   - assets/sprite_sheet1.png
+   - assets/images/atlas_map.atlas
+   - assets/images/sprite_sheet1.png
 ```
 
 Import the plugin like this:
