@@ -88,6 +88,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       ValueNotifier<double>(0);
 
   double _currentLinePosition = 0.0;
+  bool _isOnCompleteExecuted = false;
+
+  /// Callback function to be executed after all text is displayed.
+  void Function()? onComplete;
 
   TextBoxConfig get boxConfig => _boxConfig;
   double get lineHeight => _lineHeight;
@@ -105,6 +109,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    this.onComplete,
     super.key,
   })  : _boxConfig = boxConfig ?? const TextBoxConfig(),
         _fixedSize = size != null,
@@ -347,8 +352,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _previousChar = currentChar;
 
-    if (_boxConfig.dismissDelay != null && finished) {
-      removeFromParent();
+    if (finished) {
+      if (!_isOnCompleteExecuted) {
+        _isOnCompleteExecuted = true;
+        onComplete?.call();
+      }
+      if (_boxConfig.dismissDelay != null) {
+        removeFromParent();
+      }
     }
   }
 

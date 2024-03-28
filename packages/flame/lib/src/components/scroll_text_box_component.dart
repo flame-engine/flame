@@ -114,9 +114,6 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
 
   late ScrollTextBoxComponent<TextRenderer> _owner;
 
-  /// Callback function to be executed after all text is displayed.
-  void Function()? onComplete;
-
   bool _isOnCompleteExecuted = false;
 
   _ScrollTextBoxComponent({
@@ -128,7 +125,7 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     super.position,
     super.scale,
     double super.angle = 0.0,
-    this.onComplete,
+    super.onComplete,
   }) : super(
           text: text ?? '',
           textRenderer: textRenderer ?? TextPaint(),
@@ -151,7 +148,6 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     if (!_isOnCompleteExecuted && finished) {
       _isOnCompleteExecuted = true;
       scrollBoundsY = clipComponent.size.y - size.y;
-      onComplete?.call();
     }
 
     super.update(dt);

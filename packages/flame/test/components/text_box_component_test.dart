@@ -5,6 +5,9 @@ import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+import 'scroll_text_box_component_test.dart';
 
 void main() {
   group('TextBoxComponent', () {
@@ -118,6 +121,26 @@ void main() {
         await null;
         expect(c.cache, isNotNull);
         expect(c.cache!.debugDisposed, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'onComplete is called when no scrolling is required',
+      (game) async {
+        final onComplete = MockOnCompleteCallback();
+
+        when(onComplete).thenReturn(null);
+
+        final component = ScrollTextBoxComponent(
+          size: Vector2(200, 100),
+          text: 'Short text',
+          onComplete: onComplete,
+        );
+        await game.ensureAdd(component);
+
+        game.update(0.1);
+
+        verify(onComplete).called(1);
       },
     );
 
