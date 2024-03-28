@@ -4,14 +4,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_texturepacker/src/model/page.dart';
 import 'package:flame_texturepacker/src/model/region.dart';
 import 'package:flame_texturepacker/src/texture_packer_sprite.dart';
 import 'package:flutter/painting.dart';
-
-final _images = Images(prefix: 'assets/');
 
 class TexturePackerAtlas {
   /// The sprites contained in this atlas.
@@ -144,7 +141,7 @@ Future<_TextureAtlasData> _parse(
             throw Exception('Could not add storage file to Flame cache. $e');
           }
         } else {
-          page.texture = await _images.load(texturePath);
+          page.texture = await Flame.images.load(texturePath);
         }
 
         while (true) {
