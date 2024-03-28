@@ -413,6 +413,83 @@ FlameGame. The new world contains (almost) everything we need to play the game a
 re-created during each of the above actions.
 
 
+### KlondikeWorld class
+
+In Flame, a ```World``` is a type of ```Component``` that can contain other ```Components```,
+ such as Piles.
+
+You can learn more about World in game programming here:
+
+<https://media.worldbookonline.com/image/upload/v1467051964/asset/webquests/Electronic_Games_Advanced.pdf>
+<https://docs.flame-engine.org/latest/flame/game.html>
+We won't dive too deep into World here, just understand their purpose for now.
+
+
+#### Creating KlondikeWorld
+
+Let's create a ```World``` for our Klondike game, called ```KlondikeWorld```.
+At the start of the game, we'll create a ```World```. Each new game will be represented by a new World.
+Worlds are also created when the player restarts the game.
+Each ```World``` is responsible for loading its own Components and dealing the cards accordingly.
+Therefore, the ```onLoad()``` method will be moved from the ```KlondikeGame``` class to ```KlondikeWorld```.
+First, let's modify the ```KlondikeGame``` class:
+
+```dart
+ // KlondikeWorld is our new World
+class KlondikeGame extends FlameGame<KlondikeWorld> {
+   // we keep all constant values here
+  KlondikeGame() : super(world: KlondikeWorld()); // init a World
+
+  // delete the onLoad() method
+
+  // keep below method
+  Sprite klondikeSprite(double x, double y, double width, double height) {
+  // ...
+  }
+}
+
+```
+
+The code above shows that when ```FlameGame``` is initialized, a ```KlondikeWorld``` is
+also initialized.
+Previously, without the ```KlondikeWorld``` class, FlameGame would create a
+default ```World``` upon
+initialization. It's important to note that a Game can have multiple Worlds,
+but only one World is displayed at a time.
+
+We removed the ```onLoad()``` method from the ```KlondikeGame``` class and now
+need to re-implement it in ```KlondikeWorld```.
+
+First, create a file called ```klondike_world.dart``` in the lib folder and add
+the following ```KlondikeWorld``` class:
+  
+```dart
+  class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
+    final cardGap = KlondikeGame.cardGap;
+    final topGap = KlondikeGame.topGap;
+    final cardSpaceWidth = KlondikeGame.cardSpaceWidth;
+    final cardSpaceHeight = KlondikeGame.cardSpaceHeight;
+
+    final stock = StockPile(position: Vector2(0.0, 0.0));
+    final waste = WastePile(position: Vector2(0.0, 0.0));
+    final List<FoundationPile> foundations = [];
+    final List<TableauPile> tableauPiles = [];
+    final List<Card> cards = [];
+    @override
+    Future<void> onLoad() async {
+      // ... 
+
+    }
+}
+```
+
+
+#### what properties?
+
+
+#### what actions we should implement at this class
+
+
 ### A stripped-down KlondikeGame class
 
 Here is the new code for the KlondikeGame class (what is left of it).
