@@ -157,7 +157,7 @@ class GestureDetectorBuilder {
         (MultiTapGestureRecognizer instance) {
           final g = game as MultiTapListener;
           instance.longTapDelay = Duration(
-            milliseconds: (g.longTapDelay * 1000).toInt(),
+            milliseconds: g.longTapDelay,
           );
           instance.onTap = g.handleTap;
           instance.onTapDown = g.handleTapDown;

@@ -16,13 +16,18 @@ mixin TapCallbacks on Component {
   void onTapUp(TapUpEvent event) {}
   void onTapCancel(TapCancelEvent event) {}
 
+  /// The delay (in milliseconds) after which a tap is considered a long tap.
+  int get longTapDelay => 300;
+
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
     final game = findRootGame()!;
     if (game.findByKey(const MultiTapDispatcherKey()) == null) {
-      final dispatcher = MultiTapDispatcher();
+      final dispatcher = MultiTapDispatcher(
+          longTapDelay: longTapDelay,
+      );
       game.registerKey(const MultiTapDispatcherKey(), dispatcher);
       game.add(dispatcher);
     }

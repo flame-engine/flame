@@ -84,6 +84,23 @@ void main() {
         expect(game.nOnTapCancel, 2);
       },
     );
+
+    test(
+      'default longTapDelay is 300ms',
+      () {
+        final detector = _GameWithMultiTouchTapDetector();
+        expect(detector.longTapDelay, 300);
+      },
+    );
+
+    test(
+      'longTapDelay can be customized',
+      () {
+        final detector = _GameWithMultiTouchTapDetector();
+        detector.longTapDelayValue = 500;
+        expect(detector.longTapDelay, 500);
+      },
+    );
   });
 }
 
@@ -96,6 +113,11 @@ class _GameWithMultiTouchTapDetector extends Game with MultiTouchTapDetector {
   int nOnTapUp = 0;
   int nOnTap = 0;
   int nOnTapCancel = 0;
+
+  int? longTapDelayValue;
+
+  @override
+  int get longTapDelay => longTapDelayValue ?? super.longTapDelay;
 
   @override
   void render(Canvas canvas) => rendered = true;

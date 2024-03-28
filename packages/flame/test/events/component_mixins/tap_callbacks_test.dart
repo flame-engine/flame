@@ -135,6 +135,20 @@ void main() {
     );
 
     testWidgets(
+      'TapCallbacks default long tap delay is 300ms',
+          (tester) async {
+        expect(_TapCallbacksComponent().longTapDelay, 300);
+      },
+    );
+
+    testWidgets(
+      'Custom TapCallbacks can override default long tap delay',
+          (tester) async {
+        expect(_CustomDelayTapCallbacksComponent().longTapDelay, 500);
+      },
+    );
+
+    testWidgets(
       'tap outside of component is not registered as handled',
       (tester) async {
         final component = _TapCallbacksComponent()..size = Vector2.all(100);
@@ -510,5 +524,11 @@ mixin _TapCounter on TapCallbacks {
 
 class _TapCallbacksComponent extends PositionComponent
     with TapCallbacks, _TapCounter {}
+
+class _CustomDelayTapCallbacksComponent extends PositionComponent
+    with TapCallbacks, _TapCounter {
+  @override
+  int get longTapDelay => 500;
+}
 
 class _TapCallbacksGame extends FlameGame with TapCallbacks, _TapCounter {}
