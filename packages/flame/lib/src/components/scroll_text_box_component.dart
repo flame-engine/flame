@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 /// [ScrollTextBoxComponent] configures the layout and interactivity of a
@@ -15,6 +16,9 @@ import 'package:flutter/painting.dart';
 /// capabilities.
 class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
+  late final ValueNotifier<int> _newLineNotifier;
+
+  ValueNotifier<int> get newLineNotifier => _newLineNotifier;
 
   /// Constructor for [ScrollTextBoxComponent].
   /// - [size]: Specifies the size of the text box.
@@ -50,8 +54,19 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     final marginBottom = boxConfig?.margins.bottom ?? 0;
     final innerMargins = EdgeInsets.fromLTRB(0, marginTop, 0, marginBottom);
 
-    boxConfig = (boxConfig ?? const TextBoxConfig()).copyWith(maxWidth: size.x);
-
+    boxConfig ??= const TextBoxConfig();
+    boxConfig = TextBoxConfig(
+      timePerChar: boxConfig.timePerChar,
+      dismissDelay: boxConfig.dismissDelay,
+      growingBox: boxConfig.growingBox,
+      maxWidth: size.x,
+      margins: EdgeInsets.fromLTRB(
+        boxConfig.margins.left,
+        0,
+        boxConfig.margins.right,
+        0,
+      ),
+    );
     _scrollTextBoxComponent = _ScrollTextBoxComponent<T>(
       text: text,
       textRenderer: textRenderer,
@@ -60,6 +75,8 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
       pixelRatio: pixelRatio,
       onComplete: onComplete,
     );
+    _newLineNotifier = _scrollTextBoxComponent.newLineNotifier;
+
     _scrollTextBoxComponent.setOwnerComponent = this;
     // Integrates the [ClipComponent] for managing
     // the text box's scrollable area.
@@ -121,11 +138,11 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
   @override
   Future<void> onLoad() {
     clipComponent = parent! as ClipComponent;
-    newLineCallback = (double y) {
-      if (y > clipComponent.size.y) {
-        position.y = -y + clipComponent.size.y;
+    newLinePositionNotifier.addListener(() {
+      if (newLinePositionNotifier.value > clipComponent.size.y) {
+        position.y = -newLinePositionNotifier.value + clipComponent.size.y;
       }
-    };
+    });
     return super.onLoad();
   }
 

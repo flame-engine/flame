@@ -79,7 +79,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @visibleForTesting
   Image? cache;
-  Function(double)? newLineCallback;
+
+  /// Notifies when a new line is rendered.
+  final ValueNotifier<int> newLineNotifier = ValueNotifier<int>(0);
+  // Notifies when a new line is rendered with the position of the new line.
+  @internal
+  final ValueNotifier<double> newLinePositionNotifier =
+      ValueNotifier<double>(0);
+
   double _currentLinePosition = 0.0;
 
   TextBoxConfig get boxConfig => _boxConfig;
@@ -304,7 +311,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       textElement.render(canvas, position);
       if (position.y > _currentLinePosition) {
         _currentLinePosition = position.y;
-        newLineCallback?.call(_currentLinePosition + _lineHeight);
+        newLineNotifier.value = newLineNotifier.value + 1;
+        newLinePositionNotifier.value = _currentLinePosition + _lineHeight;
       }
       charCount += lines[i].length;
     }

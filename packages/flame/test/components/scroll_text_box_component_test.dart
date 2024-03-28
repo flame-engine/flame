@@ -72,6 +72,25 @@ functionality properly adjusts the text position.''',
         expect(innerScrollComponent.position.y, lessThan(0));
       },
     );
+
+    testWithFlameGame('Text notifies if a new line is added', (game) async {
+      int newLineCount = 0;
+      final scrollComponent = ScrollTextBoxComponent(
+        size: Vector2(50, 50),
+        text: '''This 
+test
+has
+five
+lines.''',
+      );
+      expect(scrollComponent.newLineNotifier.value, equals(0));
+
+      scrollComponent.newLineNotifier.addListener(() {
+        newLineCount++;
+      });
+      await game.ensureAdd(scrollComponent);
+      expect(newLineCount, equals(5));
+    });
   });
 }
 

@@ -121,6 +121,27 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+        'TextBoxComponent notifies if a new line is added and requires space',
+        (game) async {
+      double lineSize = 0;
+      final textBoxComponent = TextBoxComponent(
+        size: Vector2(50, 50),
+        text: '''This 
+test
+has
+five
+lines.''',
+      );
+      expect(textBoxComponent.newLinePositionNotifier.value, equals(0));
+
+      textBoxComponent.newLinePositionNotifier.addListener(() {
+        lineSize += textBoxComponent.newLinePositionNotifier.value;
+      });
+      await game.ensureAdd(textBoxComponent);
+      expect(lineSize, greaterThan(0));
+    });
+
     testGolden(
       'Alignment options',
       (game) async {
