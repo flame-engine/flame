@@ -63,12 +63,12 @@ functionality properly adjusts the text position.''',
 
         expect(clipCmp.children.length, greaterThan(0));
         expect(clipCmp.children.first, isA<PositionComponent>());
-        final innerScrolComponent = clipCmp.children.first as PositionComponent;
+        final innerScrollComponent = clipCmp.children.first as PositionComponent;
 
-        expect(innerScrolComponent.position.y, equals(0));
+        expect(innerScrollComponent.position.y, equals(0));
         await game.ensureAdd(scrollComponent);
 
-        expect(innerScrolComponent.position.y, lessThan(0));
+        expect(innerScrollComponent.position.y, lessThan(0));
       },
     );
   });
