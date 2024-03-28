@@ -82,6 +82,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   /// Notifies when a new line is rendered.
   final ValueNotifier<int> newLineNotifier = ValueNotifier<int>(0);
+
   // Notifies when a new line is rendered with the position of the new line.
   @internal
   final ValueNotifier<double> newLinePositionNotifier =

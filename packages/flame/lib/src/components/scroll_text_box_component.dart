@@ -16,9 +16,7 @@ import 'package:flutter/painting.dart';
 /// capabilities.
 class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
-  late final ValueNotifier<int> _newLineNotifier;
-
-  ValueNotifier<int> get newLineNotifier => _newLineNotifier;
+  late final ValueNotifier<int> newLineNotifier;
 
   /// Constructor for [ScrollTextBoxComponent].
   /// - [size]: Specifies the size of the text box.
@@ -75,7 +73,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
       pixelRatio: pixelRatio,
       onComplete: onComplete,
     );
-    _newLineNotifier = _scrollTextBoxComponent.newLineNotifier;
+    newLineNotifier = _scrollTextBoxComponent.newLineNotifier;
 
     _scrollTextBoxComponent.setOwnerComponent = this;
     // Integrates the [ClipComponent] for managing
