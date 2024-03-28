@@ -11,9 +11,9 @@ components:
 - `TextComponent` for rendering a single line of text
 - `TextBoxComponent` for bounding multi-line text within a sized box, including the possibility of a
 typing effect. You can use the `newLineNotifier` to be notified when a new line is added. Use the 
-`onComplete` callback to get notified when the text is completely printed. 
-- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling
-capability when the text exceeds the boundaries of the enclosing box. 
+`onComplete` callback to execute a function when the text is completely printed. 
+- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding vertical 
+scrolling capability when the text exceeds the boundaries of the enclosing box. 
 
 
 All components are showcased in

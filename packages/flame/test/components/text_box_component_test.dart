@@ -147,7 +147,7 @@ void main() {
     testWithFlameGame(
         'TextBoxComponent notifies if a new line is added and requires space',
         (game) async {
-      double lineSize = 0;
+      var lineSize = 0.0;
       final textBoxComponent = TextBoxComponent(
         size: Vector2(50, 50),
         text: '''This 

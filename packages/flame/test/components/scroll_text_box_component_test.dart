@@ -74,7 +74,7 @@ functionality properly adjusts the text position.''',
     );
 
     testWithFlameGame('Text notifies if a new line is added', (game) async {
-      int newLineCount = 0;
+      var newLineCount = 0;
       final scrollComponent = ScrollTextBoxComponent(
         size: Vector2(50, 50),
         text: '''This 
