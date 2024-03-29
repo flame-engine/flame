@@ -1,3 +1,7 @@
+## 5.4.1
+
+ - Update a dependency to the latest release.
+
 ## 5.4.0
 
  - **FIX**: Resolve logic error with assignment of ComponentRef's game property in flame_riverpod ([#3082](https://github.com/flame-engine/flame/issues/3082)). ([b44011fd](https://github.com/flame-engine/flame/commit/b44011fd714ec5919de5407f53d0772f31ed1a13))
