@@ -630,7 +630,7 @@ need some of the following things (since it is simpler to not involve Forge2D):
 
 ## Examples
 
-- [https://examples.flame-engine.org/#/Collision%20Detection_Collidable%20AnimationComponent]
-- [https://examples.flame-engine.org/#/Collision%20Detection_Circles]
-- [https://examples.flame-engine.org/#/Collision%20Detection_Multiple%20shapes]
-- [https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection]
+- [Collidable AnimationComponent](https://examples.flame-engine.org/#/Collision_Detection_Collidable_AnimationComponent)
+- [Circles](https://examples.flame-engine.org/#/Collision_Detection_Circles)
+- [Multiple shapes](https://examples.flame-engine.org/#/Collision_Detection_Multiple_shapes)
+- [More Examples](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/collision_detection)

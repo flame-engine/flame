@@ -96,7 +96,7 @@ And it can be seen running [here](https://examples.flame-engine.org/#/Input_Joys
 
 There is also a more advanced example
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart)
-which is running [here](https://examples.flame-engine.org/#/Input_Joystick%20Advanced).
+which is running [here](https://examples.flame-engine.org/#/Input_Joystick_Advanced).
 
 
 ## HudButtonComponent
