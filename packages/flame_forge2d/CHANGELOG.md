@@ -1,3 +1,7 @@
+## 0.17.1
+
+ - **FIX**: Null gravity override by Forge2dGame ([#3092](https://github.com/flame-engine/flame/issues/3092)). ([3c35d59b](https://github.com/flame-engine/flame/commit/3c35d59b4a4ec064106d24a17e748005a20d9fde))
+
 ## 0.17.0
 
 > Note: This release has breaking changes.

@@ -11,8 +11,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_behavior_tree: ^0.1.0
+  flame: ^1.17.0
+  flame_behavior_tree: ^0.1.1
   flutter:
     sdk: flutter
 
