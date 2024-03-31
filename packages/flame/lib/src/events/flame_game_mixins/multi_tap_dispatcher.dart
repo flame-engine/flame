@@ -5,6 +5,7 @@ import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
 import 'package:flame/src/events/messages/tap_up_event.dart';
 import 'package:flame/src/events/tagged_component.dart';
+import 'package:flame/src/events/tap_config.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
@@ -120,7 +121,7 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   /// The delay (in seconds) after which a tap is considered a long tap.
   @override
-  double get longTapDelay => 0.300;
+  double get longTapDelay => TapConfig.longTapDelay;
 
   @override
   void handleTap(int pointerId) {}
