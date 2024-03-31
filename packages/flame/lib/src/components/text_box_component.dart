@@ -80,6 +80,20 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @visibleForTesting
   Image? cache;
 
+  /// Notifies when a new line is rendered.
+  final ValueNotifier<int> newLineNotifier = ValueNotifier<int>(0);
+
+  // Notifies when a new line is rendered with the position of the new line.
+  @internal
+  final ValueNotifier<double> newLinePositionNotifier =
+      ValueNotifier<double>(0);
+
+  double _currentLinePosition = 0.0;
+  bool _isOnCompleteExecuted = false;
+
+  /// Callback function to be executed after all text is displayed.
+  void Function()? onComplete;
+
   TextBoxConfig get boxConfig => _boxConfig;
   double get lineHeight => _lineHeight;
 
@@ -96,6 +110,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    this.onComplete,
     super.key,
   })  : _boxConfig = boxConfig ?? const TextBoxConfig(),
         _fixedSize = size != null,
@@ -300,7 +315,11 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
             i * _lineHeight,
       );
       textElement.render(canvas, position);
-
+      if (position.y > _currentLinePosition) {
+        _currentLinePosition = position.y;
+        newLineNotifier.value = newLineNotifier.value + 1;
+        newLinePositionNotifier.value = _currentLinePosition + _lineHeight;
+      }
       charCount += lines[i].length;
     }
   }
@@ -334,8 +353,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _previousChar = currentChar;
 
-    if (_boxConfig.dismissDelay != null && finished) {
-      removeFromParent();
+    if (finished) {
+      if (!_isOnCompleteExecuted) {
+        _isOnCompleteExecuted = true;
+        onComplete?.call();
+      }
+      if (_boxConfig.dismissDelay != null) {
+        removeFromParent();
+      }
     }
   }
 

@@ -3,6 +3,112 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-03-29
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.17.0`](#flame---v1170)
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.17.1`](#flame_forge2d---v0171)
+ - [`flame_oxygen` - `v0.2.1`](#flame_oxygen---v021)
+ - [`behavior_tree` - `v0.1.1`](#behavior_tree---v011)
+ - [`flame_behavior_tree` - `v0.1.1`](#flame_behavior_tree---v011)
+ - [`flame_network_assets` - `v0.3.1`](#flame_network_assets---v031)
+ - [`flame_sprite_fusion` - `v0.1.1`](#flame_sprite_fusion---v011)
+ - [`flame_texturepacker` - `v3.2.0`](#flame_texturepacker---v320)
+ - [`flame_tiled` - `v1.20.0`](#flame_tiled---v1200)
+ - [`flame_test` - `v1.16.1`](#flame_test---v1161)
+ - [`flame_isolate` - `v0.6.0+1`](#flame_isolate---v0601)
+ - [`flame_fire_atlas` - `v1.5.1`](#flame_fire_atlas---v151)
+ - [`flame_audio` - `v2.10.1`](#flame_audio---v2101)
+ - [`flame_spine` - `v0.2.0+1`](#flame_spine---v0201)
+ - [`flame_bloc` - `v1.11.1`](#flame_bloc---v1111)
+ - [`flame_lottie` - `v0.4.0+1`](#flame_lottie---v0401)
+ - [`flame_markdown` - `v0.2.0+1`](#flame_markdown---v0201)
+ - [`flame_rive` - `v1.10.1`](#flame_rive---v1101)
+ - [`flame_noise` - `v0.3.0+1`](#flame_noise---v0301)
+ - [`flame_riverpod` - `v5.4.1`](#flame_riverpod---v541)
+ - [`flame_svg` - `v1.10.1`](#flame_svg---v1101)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.16.1`
+ - `flame_isolate` - `v0.6.0+1`
+ - `flame_fire_atlas` - `v1.5.1`
+ - `flame_audio` - `v2.10.1`
+ - `flame_spine` - `v0.2.0+1`
+ - `flame_bloc` - `v1.11.1`
+ - `flame_lottie` - `v0.4.0+1`
+ - `flame_markdown` - `v0.2.0+1`
+ - `flame_rive` - `v1.10.1`
+ - `flame_noise` - `v0.3.0+1`
+ - `flame_riverpod` - `v5.4.1`
+ - `flame_svg` - `v1.10.1`
+
+---
+
+#### `flame` - `v1.17.0`
+
+ - **REFACTOR**: Change the ClipComponent factory Constructor to redirect Constructor ([#3089](https://github.com/flame-engine/flame/issues/3089)). ([cc035fb4](https://github.com/flame-engine/flame/commit/cc035fb4a3e123473d4e5e0db1fa0253e533bc61))
+ - **FIX**: Call `render` properly from nested `FlameGame`s ([#3106](https://github.com/flame-engine/flame/issues/3106)). ([cb1e3701](https://github.com/flame-engine/flame/commit/cb1e37014bac7bb68b647234b718a37e26ad7559))
+ - **FIX**: CircleHitbox should properly detect when ray is outside ([#3100](https://github.com/flame-engine/flame/issues/3100)). ([8cd9e123](https://github.com/flame-engine/flame/commit/8cd9e12319c0715def655fcf42f3976fa5f45e11))
+ - **FIX**: Clamp opacity set by the `ColorEffect` to 1.0 ([#3069](https://github.com/flame-engine/flame/issues/3069)). ([9282cc38](https://github.com/flame-engine/flame/commit/9282cc38f06cd6c87ed3a1880d28d5c9f290cc04))
+ - **FIX**: FutureOr return type of ComponentViewportMargin.onLoad ([#3059](https://github.com/flame-engine/flame/issues/3059)). ([72678c67](https://github.com/flame-engine/flame/commit/72678c676020480beae1d944ee687fd73eac9cf7))
+ - **FIX**: Size for `SpriteComponent.fromImage` should be nullable ([#3054](https://github.com/flame-engine/flame/issues/3054)). ([2ed71a3c](https://github.com/flame-engine/flame/commit/2ed71a3c89b3c2182828f2812d8515811483f4d5))
+ - **FIX**: Check for removing state while adding a child ([#3050](https://github.com/flame-engine/flame/issues/3050)). ([3a24a51d](https://github.com/flame-engine/flame/commit/3a24a51d108b1138ac3dd735956f4276f16b2974))
+ - **FEAT**: Add onFinished callback to ScrollTextBoxComponent ([#3105](https://github.com/flame-engine/flame/issues/3105)). ([233cc94c](https://github.com/flame-engine/flame/commit/233cc94c557e0af2fcf7599943ddf75180abf801))
+ - **FEAT**: Add `copyWith` method on the `TextBoxConfig` ([#3099](https://github.com/flame-engine/flame/issues/3099)). ([b946ba70](https://github.com/flame-engine/flame/commit/b946ba70cbfb5793a8d4d7c61d6ba029fbc303ab))
+ - **FEAT**: Component tree for the devtools extension tab ([#3094](https://github.com/flame-engine/flame/issues/3094)). ([bf5d68e9](https://github.com/flame-engine/flame/commit/bf5d68e9b5147dd5e7c10d72bf9c2f705733d688))
+ - **FEAT**: Add PositionComponent.toString ([#3095](https://github.com/flame-engine/flame/issues/3095)). ([b1f01986](https://github.com/flame-engine/flame/commit/b1f01986b440ac18bb35b0d76963b2c66f49ea33))
+ - **FEAT**: Add SpriteBatch.replace to allow the replacement of the batch information ([#3079](https://github.com/flame-engine/flame/issues/3079)). ([bf3c282d](https://github.com/flame-engine/flame/commit/bf3c282dd669e9a32a550b86770dba7fb8472afa))
+ - **FEAT**: Initial functionality of flame_devtools ([#3061](https://github.com/flame-engine/flame/issues/3061)). ([c92910c6](https://github.com/flame-engine/flame/commit/c92910c688f5dc4463e129132759102e7ebf2e36))
+ - **FEAT**: Add `HasPerformanceTracker` mixin on `Game` ([#3043](https://github.com/flame-engine/flame/issues/3043)). ([6270353a](https://github.com/flame-engine/flame/commit/6270353af9a6ec58ee9275ddfa6a8b26276a2c20))
+ - **BREAKING** **REFACTOR**: Use HasTimeScale for Route ([#3064](https://github.com/flame-engine/flame/issues/3064)). ([30fde805](https://github.com/flame-engine/flame/commit/30fde805b4650cc802f9908f9a1149dae19669d4))
+ - **BREAKING** **FIX**: Removed unused parameters from SpriteWidget ([#3074](https://github.com/flame-engine/flame/issues/3074)). ([f49d24c0](https://github.com/flame-engine/flame/commit/f49d24c02dd0d9b781926908bad1fb6dfcbda5f2))
+
+#### `flame_forge2d` - `v0.17.1`
+
+ - **FIX**: Null gravity override by Forge2dGame ([#3092](https://github.com/flame-engine/flame/issues/3092)). ([3c35d59b](https://github.com/flame-engine/flame/commit/3c35d59b4a4ec064106d24a17e748005a20d9fde))
+
+#### `flame_oxygen` - `v0.2.1`
+
+ - **FIX**: Updated oxygen dep to v0.3.1 and added removing components ([#3087](https://github.com/flame-engine/flame/issues/3087)). ([8f50c927](https://github.com/flame-engine/flame/commit/8f50c9279581999b4ff7f506682148425b248e28))
+
+#### `behavior_tree` - `v0.1.1`
+
+ - **FEAT**: Add initial version of `behavior_tree` and `flame_behavior_tree` package ([#3045](https://github.com/flame-engine/flame/issues/3045)). ([faf2df4b](https://github.com/flame-engine/flame/commit/faf2df4b8c68015a1bfbdd96f93c950cb14963ef))
+
+#### `flame_behavior_tree` - `v0.1.1`
+
+ - **FEAT**: Add initial version of `behavior_tree` and `flame_behavior_tree` package ([#3045](https://github.com/flame-engine/flame/issues/3045)). ([faf2df4b](https://github.com/flame-engine/flame/commit/faf2df4b8c68015a1bfbdd96f93c950cb14963ef))
+
+#### `flame_network_assets` - `v0.3.1`
+
+ - **FEAT**: Update http dependency on flame_network_assets ([#3084](https://github.com/flame-engine/flame/issues/3084)). ([e3e755c6](https://github.com/flame-engine/flame/commit/e3e755c6dec35f36b4a42893afeea5f64ff025b7))
+
+#### `flame_sprite_fusion` - `v0.1.1`
+
+ - **FEAT**: Add initial version of `flame_sprite_fusion` package ([#3062](https://github.com/flame-engine/flame/issues/3062)). ([1c51334e](https://github.com/flame-engine/flame/commit/1c51334e865ae7000f93832574e24707e8c9dfa0))
+
+#### `flame_texturepacker` - `v3.2.0`
+
+ - **REFACTOR**: Deprecate `fromAtlas` in favour of `atlasFromAssets` and `atlasFromStorage` ([#3098](https://github.com/flame-engine/flame/issues/3098)). ([6c8190b7](https://github.com/flame-engine/flame/commit/6c8190b7215671e7d6e1e271b6aac2a9723ec20d))
+ - **FEAT**: Support for new atlas format and rotated sprites ([#3097](https://github.com/flame-engine/flame/issues/3097)). ([ed690b30](https://github.com/flame-engine/flame/commit/ed690b3048924749f829c7c44156e258bf4ab3e7))
+ - **FEAT**(flame_texturepacker): Expose TexturePackerAtlas ([#3047](https://github.com/flame-engine/flame/issues/3047)). ([892052b9](https://github.com/flame-engine/flame/commit/892052b99a21a8e371c4163e1e1918fd187c6e11))
+
+#### `flame_tiled` - `v1.20.0`
+
+ - **FEAT**: Export `TileAtlas` from `flame_tiled` package ([#3049](https://github.com/flame-engine/flame/issues/3049)). ([41e9e4e3](https://github.com/flame-engine/flame/commit/41e9e4e38c643b07a3a7269b1cd8d3fa60cbeebb))
+
+
 ## 2024-03-15
 
 ### Changes
