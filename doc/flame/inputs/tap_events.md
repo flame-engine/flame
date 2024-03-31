@@ -62,6 +62,10 @@ in `MultiTapDispatcher`), "long tap" will be triggered. This event invokes the
 `void onLongTapDown(TapDownEvent)` handler on those components that previously received the
 `onTapDown` event.
 
+By default, the `.longTapDelay` is set to 300 milliseconds, what may be different of the system default.
+You can change this value by setting the `TapConfig.longTapDelay` value.
+It may also be useful for specific accessibility needs.
+
 
 ### onTapUp
 
