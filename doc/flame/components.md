@@ -1254,7 +1254,7 @@ This is an example of how a quarter-length map looks like:
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
-and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric%20Tile%20Map).
+and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric_Tile_Map).
 
 
 ## NineTileBoxComponent

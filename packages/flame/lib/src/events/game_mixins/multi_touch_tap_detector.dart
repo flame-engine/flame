@@ -1,4 +1,5 @@
 import 'package:flame/events.dart';
+import 'package:flame/src/events/tap_config.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 
@@ -22,7 +23,7 @@ mixin MultiTouchTapDetector on Game implements MultiTapListener {
 
   //#region MultiTapListener API
   @override
-  double get longTapDelay => 0.300;
+  double get longTapDelay => TapConfig.longTapDelay;
 
   @override
   void handleTap(int pointerId) => onTap(pointerId);
