@@ -482,6 +482,60 @@ the following ```KlondikeWorld``` class:
     }
 }
 ```
+In the above code we have changed a bit compared to KlondikeGame from step 4. 
+By declaring stock, waste, foundations, tableauPiles, cards, 
+we confirm that it is owned by the KlondikeWord class.
+And so onLoad has also changed a bit
+```dart
+    @override
+    Future<void> onLoad() async {
+      await Flame.images.load('klondike-sprites.png');
+      // set up the stock and waste piles
+      stock.position = Vector2(cardGap, topGap);
+      waste.position = Vector2(cardSpaceWidth + cardGap, topGap);
+
+      // set up the foundation piles
+      for (var i = 0; i < 4; i++) {
+        foundations.add(
+          FoundationPile(
+            i,
+            position: Vector2((i + 3) * cardSpaceWidth + cardGap, topGap),
+          ),
+        );
+      }
+      // set up the tableau piles
+      for (var i = 0; i < 7; i++) {
+        tableauPiles.add(
+          TableauPile(
+            position: Vector2(
+              i * cardSpaceWidth + cardGap,
+              cardSpaceHeight + topGap,
+            ),
+          ),
+        );
+      }
+      // set up the cards
+      for (var rank = 1; rank <= 13; rank++) {
+        for (var suit = 0; suit < 4; suit++) {
+          final card = Card(rank, suit);
+          card.position = stock.position;
+          cards.add(card);
+        }
+      }
+      add(stock);
+      add(waste);
+      addAll(foundations);
+      addAll(tableauPiles);
+      addAll(cards);
+
+    }
+```
+This code only has the same settings from step 4 and
+ changes a few points as follows:
+- The Piles have been declared before, so we just set 
+the position and add elements to the list
+- there are 4 foundations, 7 tableaus, 52 cards
+- replace world.add with add. because we are now in the World class
 
 
 #### what properties?
