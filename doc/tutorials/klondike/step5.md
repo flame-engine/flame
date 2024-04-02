@@ -482,10 +482,12 @@ the following ```KlondikeWorld``` class:
     }
 }
 ```
-In the above code we have changed a bit compared to KlondikeGame from step 4. 
-By declaring stock, waste, foundations, tableauPiles, cards, 
+
+In the above code we have changed a bit compared to KlondikeGame from step 4.
+By declaring stock, waste, foundations, tableauPiles, cards,
 we confirm that it is owned by the KlondikeWord class.
 And so onLoad has also changed a bit
+
 ```dart
     @override
     Future<void> onLoad() async {
@@ -530,9 +532,11 @@ And so onLoad has also changed a bit
 
     }
 ```
+
 This code only has the same settings from step 4 and
  changes a few points as follows:
-- The Piles have been declared before, so we just set 
+
+- The Piles have been declared before, so we just set
 the position and add elements to the list
 - there are 4 foundations, 7 tableaus, 52 cards
 - replace world.add with add. because we are now in the World class
