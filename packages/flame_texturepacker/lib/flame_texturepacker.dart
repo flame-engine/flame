@@ -1,5 +1,6 @@
 library flame_texturepacker;
 
+import 'package:flame/cache.dart';
 import 'package:flame/game.dart';
 import 'package:flame_texturepacker/src/texture_packer_atlas.dart';
 
@@ -13,16 +14,27 @@ extension TexturepackerLoader on Game {
   Future<TexturePackerAtlas> fromAtlas(
     String assetsPath, {
     bool fromStorage = false,
+    Images? images,
   }) async =>
-      TexturePackerAtlas.load(assetsPath, fromStorage: fromStorage);
+      TexturePackerAtlas.load(
+        assetsPath,
+        fromStorage: fromStorage,
+        images: images,
+      );
 
   /// Loads the specified pack file from assets
   /// Uses the parent directory of the pack file to find the page images.
-  Future<TexturePackerAtlas> atlasFromAssets(String assetsPath) async =>
-      TexturePackerAtlas.load(assetsPath);
+  Future<TexturePackerAtlas> atlasFromAssets(
+    String assetsPath, {
+    Images? images,
+  }) async =>
+      TexturePackerAtlas.load(assetsPath, images: images);
 
   /// Loads the specified pack file from storage
   /// Uses the parent directory of the pack file to find the page images.
-  Future<TexturePackerAtlas> atlasFromStorage(String storagePath) async =>
-      TexturePackerAtlas.load(storagePath, fromStorage: true);
+  Future<TexturePackerAtlas> atlasFromStorage(
+    String storagePath, {
+    Images? images,
+  }) async =>
+      TexturePackerAtlas.load(storagePath, fromStorage: true, images: images);
 }

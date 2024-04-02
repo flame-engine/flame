@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_texturepacker/src/model/page.dart';
 import 'package:flame_texturepacker/src/model/region.dart';
@@ -23,13 +24,14 @@ class TexturePackerAtlas {
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
+    Images? images,
   }) async {
     final _TextureAtlasData atlasData;
 
     if (fromStorage) {
-      atlasData = await _fromStorage(path);
+      atlasData = await _fromStorage(path, images: images);
     } else {
-      atlasData = await _fromAssets(path);
+      atlasData = await _fromAssets(path, images: images);
     }
 
     return TexturePackerAtlas(
@@ -64,9 +66,9 @@ class TexturePackerAtlas {
 
 /// Loads images from the assets folder.
 /// Uses the [path] to find the image directory.
-Future<_TextureAtlasData> _fromAssets(String path) async {
+Future<_TextureAtlasData> _fromAssets(String path, {Images? images}) async {
   try {
-    return await _parse(path, fromStorage: false);
+    return await _parse(path, fromStorage: false, images: images);
   } on Exception catch (e) {
     throw Exception('Error loading $path from assets: $e');
   }
@@ -74,9 +76,9 @@ Future<_TextureAtlasData> _fromAssets(String path) async {
 
 /// Loads images from the device's storage.
 /// Uses the [path] to find the image directory.
-Future<_TextureAtlasData> _fromStorage(String path) async {
+Future<_TextureAtlasData> _fromStorage(String path, {Images? images}) async {
   try {
-    return await _parse(path, fromStorage: true);
+    return await _parse(path, fromStorage: true, images: images);
   } on Exception catch (e) {
     throw Exception('Error loading $path from storage: $e');
   }
@@ -90,6 +92,7 @@ Future<_TextureAtlasData> _fromStorage(String path) async {
 Future<_TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
+  Images? images,
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
@@ -130,18 +133,19 @@ Future<_TextureAtlasData> _parse(
         final parentPath = (path.split('/')..removeLast()).join('/');
         final texturePath = parentPath.isEmpty ? line : '$parentPath/$line';
 
+        images ??= Flame.images;
         if (fromStorage) {
           try {
             final textureFile = File(texturePath);
             final bytes = await textureFile.readAsBytes();
             final decodedBytes = await decodeImageFromList(bytes);
-            Flame.images.add(texturePath, decodedBytes);
-            page.texture = Flame.images.fromCache(texturePath);
+            images.add(texturePath, decodedBytes);
+            page.texture = images.fromCache(texturePath);
           } on Exception catch (e) {
             throw Exception('Could not add storage file to Flame cache. $e');
           }
         } else {
-          page.texture = await Flame.images.load(texturePath);
+          page.texture = await images.load(texturePath);
         }
 
         while (true) {
