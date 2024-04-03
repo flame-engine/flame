@@ -1,3 +1,7 @@
+## 0.2.1
+
+ - **FIX**: Updated oxygen dep to v0.3.1 and added removing components ([#3087](https://github.com/flame-engine/flame/issues/3087)). ([8f50c927](https://github.com/flame-engine/flame/commit/8f50c9279581999b4ff7f506682148425b248e28))
+
 ## 0.2.0
 
 > Note: This release has breaking changes.

@@ -12,7 +12,7 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
     ContactListener? contactListener,
     double zoom = 10,
   }) : super(
-          world: ((world?..gravity = gravity) ??
+          world: ((world?..gravity = gravity ?? world.gravity) ??
               Forge2DWorld(
                 gravity: gravity,
                 contactListener: contactListener,

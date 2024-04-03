@@ -29,7 +29,7 @@ class ClipComponent extends PositionComponent implements SizeProvider {
   /// {@macro circle_clip_component}
   ///
   /// Clips the canvas in the form of a circle based on its size.
-  factory ClipComponent.circle({
+  ClipComponent.circle({
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -38,24 +38,22 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
-  }) {
-    return ClipComponent(
-      builder: (size) => Circle(size / 2, size.x / 2),
-      position: position,
-      size: size,
-      scale: scale,
-      angle: angle,
-      anchor: anchor,
-      children: children,
-      priority: priority,
-      key: key,
-    );
-  }
+  }) : this(
+          builder: (size) => Circle(size / 2, size.x / 2),
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          children: children,
+          priority: priority,
+          key: key,
+        );
 
   /// {@macro rectangle_clip_component}
   ///
   /// Clips the canvas in the form of a rectangle based on its size.
-  factory ClipComponent.rectangle({
+  ClipComponent.rectangle({
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -64,24 +62,22 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
-  }) {
-    return ClipComponent(
-      builder: (size) => Rectangle.fromRect(size.toRect()),
-      position: position,
-      size: size,
-      scale: scale,
-      angle: angle,
-      anchor: anchor,
-      children: children,
-      priority: priority,
-      key: key,
-    );
-  }
+  }) : this(
+          builder: (size) => Rectangle.fromRect(size.toRect()),
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          children: children,
+          priority: priority,
+          key: key,
+        );
 
   /// {@macro polygon_clip_component}
   ///
   /// Clips the canvas in the form of a polygon based on its size.
-  factory ClipComponent.polygon({
+  ClipComponent.polygon({
     required List<Vector2> points,
     Vector2? position,
     Vector2? size,
@@ -91,31 +87,17 @@ class ClipComponent extends PositionComponent implements SizeProvider {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
-  }) {
-    assert(
-      points.length > 2,
-      'PolygonClipComponent requires at least 3 points.',
-    );
-
-    return ClipComponent(
-      builder: (size) {
-        final translatedPoints = points
-            .map(
-              (p) => p.clone()..multiply(size),
-            )
-            .toList();
-        return Polygon(translatedPoints);
-      },
-      position: position,
-      size: size,
-      scale: scale,
-      angle: angle,
-      anchor: anchor,
-      children: children,
-      priority: priority,
-      key: key,
-    );
-  }
+  }) : this(
+          builder: _polygonShapeBuilder(points),
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          anchor: anchor,
+          children: children,
+          priority: priority,
+          key: key,
+        );
 
   late Path _path;
   late Shape _shape;
@@ -143,5 +125,27 @@ class ClipComponent extends PositionComponent implements SizeProvider {
   @override
   bool containsLocalPoint(Vector2 point) {
     return _shape.containsPoint(point);
+  }
+
+  /// Returns the [ShapeBuilder] function that builds a polygon
+  ///
+  /// this allows us to use an assertion during Constructor initialization
+  /// rather than at the execution of the builder function.
+  static ShapeBuilder _polygonShapeBuilder(List<Vector2> points) {
+    assert(
+      points.length >= 3,
+      'PolygonClipComponent requires at least 3 points.',
+    );
+
+    return (Vector2 size) => _polygonBuilder(points, size);
+  }
+
+  static Shape _polygonBuilder(List<Vector2> points, Vector2 size) {
+    final translatedPoints = points
+        .map(
+          (p) => p.clone()..multiply(size),
+        )
+        .toList();
+    return Polygon(translatedPoints);
   }
 }

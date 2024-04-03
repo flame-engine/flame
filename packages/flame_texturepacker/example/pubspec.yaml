@@ -8,8 +8,8 @@ environment:
   flutter: ">=3.19.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_texturepacker: ^3.1.0
+  flame: ^1.17.0
+  flame_texturepacker: ^3.2.0
   flutter:
     sdk: flutter
 
@@ -18,4 +18,4 @@ dev_dependencies:
 
 flutter:
   assets:
-    - assets/
+    - assets/images/

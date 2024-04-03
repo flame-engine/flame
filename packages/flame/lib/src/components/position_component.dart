@@ -503,4 +503,16 @@ class PositionComponent extends Component
     size.setValues(rect.width, rect.height);
     topLeftPosition = rect.topLeft.toVector2();
   }
+
+  @override
+  String toString() {
+    // ignore_for_file: no_runtimeType_toString
+    return '''
+$runtimeType(
+  position: ${position.toStringWithMaxPrecision(4)},
+  size: ${size.toStringWithMaxPrecision(4)},
+  angle: $angle,
+  scale: $scale,
+)''';
+  }
 }

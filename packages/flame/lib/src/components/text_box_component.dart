@@ -37,13 +37,29 @@ class TextBoxConfig {
   /// beginning (both width and height).
   final bool growingBox;
 
-  TextBoxConfig({
+  const TextBoxConfig({
     this.maxWidth = 200.0,
     this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
     this.dismissDelay,
     this.growingBox = false,
   });
+
+  TextBoxConfig copyWith({
+    double? maxWidth,
+    EdgeInsets? margins,
+    double? timePerChar,
+    double? dismissDelay,
+    bool? growingBox,
+  }) {
+    return TextBoxConfig(
+      maxWidth: maxWidth ?? this.maxWidth,
+      margins: margins ?? this.margins,
+      timePerChar: timePerChar ?? this.timePerChar,
+      dismissDelay: dismissDelay ?? this.dismissDelay,
+      growingBox: growingBox ?? this.growingBox,
+    );
+  }
 }
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
@@ -64,6 +80,20 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @visibleForTesting
   Image? cache;
 
+  /// Notifies when a new line is rendered.
+  final ValueNotifier<int> newLineNotifier = ValueNotifier<int>(0);
+
+  // Notifies when a new line is rendered with the position of the new line.
+  @internal
+  final ValueNotifier<double> newLinePositionNotifier =
+      ValueNotifier<double>(0);
+
+  double _currentLinePosition = 0.0;
+  bool _isOnCompleteExecuted = false;
+
+  /// Callback function to be executed after all text is displayed.
+  void Function()? onComplete;
+
   TextBoxConfig get boxConfig => _boxConfig;
   double get lineHeight => _lineHeight;
 
@@ -80,8 +110,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    this.onComplete,
     super.key,
-  })  : _boxConfig = boxConfig ?? TextBoxConfig(),
+  })  : _boxConfig = boxConfig ?? const TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
         pixelRatio = pixelRatio ??
@@ -284,7 +315,11 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
             i * _lineHeight,
       );
       textElement.render(canvas, position);
-
+      if (position.y > _currentLinePosition) {
+        _currentLinePosition = position.y;
+        newLineNotifier.value = newLineNotifier.value + 1;
+        newLinePositionNotifier.value = _currentLinePosition + _lineHeight;
+      }
       charCount += lines[i].length;
     }
   }
@@ -318,8 +353,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _previousChar = currentChar;
 
-    if (_boxConfig.dismissDelay != null && finished) {
-      removeFromParent();
+    if (finished) {
+      if (!_isOnCompleteExecuted) {
+        _isOnCompleteExecuted = true;
+        onComplete?.call();
+      }
+      if (_boxConfig.dismissDelay != null) {
+        removeFromParent();
+      }
     }
   }
 

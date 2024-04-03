@@ -1,0 +1,21 @@
+<<character Jenny>>
+<<declare $winnings = 0>>
+title: gamble
+---
+Jenny: Hello {$playerName}. This is a game of chance.
+Jenny: You can win or lose up to 10 coins. Do you want to play?
+-> No
+    Jenny: No bids made.
+-> Yes
+    <<set $winnings = dice(21) - 11>> // returns a random value from -10 to 10
+    <<if $winnings == 0 >>
+        Jenny: Too bad, you did not win anything.
+    <<elseif $winnings < 0 >>
+        Jenny: Bad luck. You lost {$winnings} coins.
+        Jenny: Play again to change your fortunes.
+    <<else>>
+        Jenny: Congratulations! You won {$winnings} coins.
+        Jenny: Play again to win even more.
+    <<endif>>
+    <<updateCoins {$winnings}>>
+===

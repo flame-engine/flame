@@ -77,9 +77,9 @@ class TextExample extends FlameGame {
           size: Vector2(200, 150),
           position: Vector2(size.x / 2, size.y / 2 + 100),
           anchor: Anchor.topCenter,
-          boxConfig: TextBoxConfig(
+          boxConfig: const TextBoxConfig(
             timePerChar: 0.005,
-            margins: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+            margins: EdgeInsets.fromLTRB(10, 10, 10, 10),
           ),
         ),
       ],
@@ -138,6 +138,9 @@ class MyTextBox extends TextBoxComponent {
   Future<void> onLoad() {
     paint = Paint();
     bgRect = Rect.fromLTWH(0, 0, width, height);
+    size.addListener(() {
+      bgRect = Rect.fromLTWH(0, 0, width, height);
+    });
 
     paint.color = Colors.white10;
     return super.onLoad();
@@ -152,7 +155,7 @@ class MyTextBox extends TextBoxComponent {
 
 class MyScrollTextBox extends ScrollTextBoxComponent {
   late Paint paint;
-  late Rect bgRect;
+  late Rect backgroundRect;
 
   MyScrollTextBox(
     String text, {
@@ -165,7 +168,7 @@ class MyScrollTextBox extends ScrollTextBoxComponent {
   @override
   FutureOr<void> onLoad() {
     paint = Paint();
-    bgRect = Rect.fromLTWH(0, 0, width, height);
+    backgroundRect = Rect.fromLTWH(0, 0, width, height);
 
     paint.color = Colors.white10;
     return super.onLoad();
@@ -173,7 +176,7 @@ class MyScrollTextBox extends ScrollTextBoxComponent {
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(bgRect, paint);
+    canvas.drawRect(backgroundRect, paint);
     super.render(canvas);
   }
 }
