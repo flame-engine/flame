@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -630,7 +629,7 @@ void main() {
 
     test('tile offset hexagonal', () async {
       await setupMap(
-        // flame tiled currently does not support `hexsidelength` property,
+        // flame tiled currently does not support hexagon side length property,
         // to use export from Tiled, tweak that value
         'test_tile_offset_hexagonal.tmx',
         '4_color_sprite.png',
