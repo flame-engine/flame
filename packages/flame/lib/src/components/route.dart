@@ -24,9 +24,11 @@ class Route extends PositionComponent
     with ParentIsA<RouterComponent>, HasTimeScale {
   Route(
     Component Function()? builder, {
+    Component Function()? loadingBuilder,
     this.transparent = false,
     this.maintainState = true,
   })  : _builder = builder,
+        _loadingBuilder = loadingBuilder,
         _renderEffect = Decorator();
 
   /// If true, then the route below this one will continue to be rendered when
@@ -52,6 +54,11 @@ class Route extends PositionComponent
   /// when this route first becomes active. This function may also be `null`,
   /// in which case the user must override the [build] method.
   final Component Function()? _builder;
+
+  /// The function that will be invoked that will build the loading page
+  /// component when this route first becomes active. Can be left `null`,
+  /// in which case it is not required.
+  final Component Function()? _loadingBuilder;
 
   /// This method is invoked when the route is pushed on top of the
   /// [RouterComponent]'s stack.
@@ -118,15 +125,29 @@ class Route extends PositionComponent
   /// also be added as a child component.
   Component? _page;
 
+  /// The loadingpage that was built and is now owned by this route. This
+  /// loadingpage will also be added as a child component.
+  Component? _loadingpage;
+
   /// Additional visual effect that may be applied to the page during rendering.
   final Decorator _renderEffect;
 
   /// Invoked by the [RouterComponent] when this route is pushed to the top
-  /// of the navigation stack.
+  /// of the navigation stack
   @internal
   void didPush(Route? previousRoute) {
-    _page ??= build()..addToParent(this);
+    _page ??= build();
+    (_loadingBuilder != null) ? _addLoadingPage() : _page!.addToParent(this);
     onPush(previousRoute);
+  }
+
+  /// Adds the [_loadingpage] to the parent and invoked by [didPush] , when
+  /// [_loadingBuilder] is specified
+  Future<void> _addLoadingPage() async {
+    _loadingpage ??= _loadingBuilder!()..addToParent(this);
+    await _page!.addToParent(this);
+    await _page!.loaded;
+    _loadingpage!.removeFromParent();
   }
 
   /// Invoked by the [RouterComponent] when this route is popped off the top
