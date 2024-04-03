@@ -641,7 +641,9 @@ void main() {
       final pngData = await renderMapToPng(component);
 
       expect(
-          pngData, matchesGoldenFile('goldens/test_tile_offset_hexagonal.png'));
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_hexagonal.png'),
+      );
     });
 
     test('tile offset isometric', () async {
@@ -656,7 +658,9 @@ void main() {
       final pngData = await renderMapToPng(component);
 
       expect(
-          pngData, matchesGoldenFile('goldens/test_tile_offset_isometric.png'));
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_isometric.png'),
+      );
     });
 
     test('tile offset orthogonal', () async {
@@ -670,8 +674,10 @@ void main() {
 
       final pngData = await renderMapToPng(component);
 
-      expect(pngData,
-          matchesGoldenFile('goldens/test_tile_offset_orthogonal.png'));
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_orthogonal.png'),
+      );
     });
 
     test('tile offset staggered', () async {
@@ -686,7 +692,9 @@ void main() {
       final pngData = await renderMapToPng(component);
 
       expect(
-          pngData, matchesGoldenFile('goldens/test_tile_offset_staggered.png'));
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_staggered.png'),
+      );
     });
   });
 
