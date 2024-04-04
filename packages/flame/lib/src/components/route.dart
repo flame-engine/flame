@@ -125,8 +125,8 @@ class Route extends PositionComponent
   /// also be added as a child component.
   Component? _page;
 
-  /// The loadingpage that was built and is now owned by this route. This
-  /// loadingpage will also be added as a child component.
+  /// The loadingPage that was built and is now owned by this route. This
+  /// loadingPage will also be added as a child component.
   Component? _loadingPage;
 
   /// Additional visual effect that may be applied to the page during rendering.
@@ -141,7 +141,7 @@ class Route extends PositionComponent
     onPush(previousRoute);
   }
 
-  /// Adds the [_loadingpage] to the parent and invoked by [didPush] , when
+  /// Adds the [_loadingPage] to the parent and invoked by [didPush] , when
   /// [_loadingBuilder] is specified
   Future<void> _addLoadingPage() async {
     _loadingPage ??= _loadingBuilder!()..addToParent(this);
