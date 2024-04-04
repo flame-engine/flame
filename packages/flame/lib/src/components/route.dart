@@ -127,7 +127,7 @@ class Route extends PositionComponent
 
   /// The loadingpage that was built and is now owned by this route. This
   /// loadingpage will also be added as a child component.
-  Component? _loadingpage;
+  Component? _loadingPage;
 
   /// Additional visual effect that may be applied to the page during rendering.
   final Decorator _renderEffect;
