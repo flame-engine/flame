@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-04-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_texturepacker` - `v4.0.0`](#flame_texturepacker---v400)
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.18.0`](#flame_forge2d---v0180)
+ - [`flame_tiled` - `v1.20.1`](#flame_tiled---v1201)
+
+---
+
+#### `flame_texturepacker` - `v4.0.0`
+
+ - **BREAKING** **FEAT**: Use `Flame.images` in flame_texturepacker ([#3103](https://github.com/flame-engine/flame/issues/3103)). ([418cc578](https://github.com/flame-engine/flame/commit/418cc578053d969a4a5c3789b1713b9e1a4b3bdd))
+
+#### `flame_forge2d` - `v0.18.0`
+
+ - **FIX**: Use camera argument name in Forge2DGame ([#3115](https://github.com/flame-engine/flame/issues/3115)). ([9d97b123](https://github.com/flame-engine/flame/commit/9d97b12348161b4b150ee4166ba552f28d5f9d8b))
+ - **DOCS**: Upgrade dashbook version ([#3109](https://github.com/flame-engine/flame/issues/3109)). ([a717bcb4](https://github.com/flame-engine/flame/commit/a717bcb475a5604c5d8c66a3a5ac53f0dc173109))
+
+#### `flame_tiled` - `v1.20.1`
+
+ - **FIX**: Respect tile offset when drawing tiles ([#3112](https://github.com/flame-engine/flame/issues/3112)). ([e3477474](https://github.com/flame-engine/flame/commit/e34774743038bc75fec14afc3c753fa997e71577))
+
+
 ## 2024-03-29
 
 ### Changes
