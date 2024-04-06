@@ -393,7 +393,7 @@ class CameraComponent extends Component {
   /// the world to which the given [component] belongs (if any). This means, in
   /// such cases, any component overlapping the [visibleWorldRect] will be
   /// reported as visible, even if it is not part of the [world] this camera is
-  /// currently looking at. This can be changed by passing the the component's
+  /// currently looking at. This can be changed by passing the component's
   /// world as [componentWorld].
   bool canSee(PositionComponent component, {World? componentWorld}) {
     if (!(world?.isMounted ?? false) ||
