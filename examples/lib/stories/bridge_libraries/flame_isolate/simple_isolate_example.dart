@@ -13,7 +13,7 @@ class SimpleIsolateExample extends FlameGame {
     This example showcases a simple FlameIsolate example, making it easy to 
     continually run heavy load without stutter.
     
-    Tap the brown square to swap between running heavy load in in an isolate or
+    Tap the brown square to swap between running heavy load in an isolate or
     synchronous.
     
     The selected backpressure strategy used for this example is

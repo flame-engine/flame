@@ -10,11 +10,10 @@ components:
 
 - `TextComponent` for rendering a single line of text
 - `TextBoxComponent` for bounding multi-line text within a sized box, including the possibility of a
-typing effect
-- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding scrolling
-capability when the text exceeds the boundaries of the enclosing box.
-
-Use the `onFinished` callback to get notified when the text is completely printed.
+typing effect. You can use the `newLineNotifier` to be notified when a new line is added. Use the
+`onComplete` callback to execute a function when the text is completely printed.
+- `ScrollTextBoxComponent` enhances the functionality of `TextBoxComponent` by adding vertical
+scrolling capability when the text exceeds the boundaries of the enclosing box.
 
 
 All components are showcased in
@@ -82,7 +81,7 @@ You can decide if the box should grow as the text is written or if it should be 
 `growingBox` variable in the `TextBoxConfig`. A static box could either have a fixed size (setting
 the `size` property of the `TextBoxComponent`), or to automatically shrink to fit the text content.
 
-In addition, the `align` property allows you to control the the horizontal and vertical alignment of
+In addition, the `align` property allows you to control the horizontal and vertical alignment of
 the text content. For example, setting `align` to `Anchor.center` will center the text within its
 bounding box both vertically and horizontally.
 

@@ -7,17 +7,19 @@ import 'package:forge2d/forge2d.dart';
 class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   Forge2DGame({
     Forge2DWorld? world,
+    CameraComponent? camera,
+    @Deprecated('Use the `camera` argument instead')
     CameraComponent? cameraComponent,
     Vector2? gravity,
     ContactListener? contactListener,
     double zoom = 10,
   }) : super(
-          world: ((world?..gravity = gravity) ??
+          world: ((world?..gravity = gravity ?? world.gravity) ??
               Forge2DWorld(
                 gravity: gravity,
                 contactListener: contactListener,
               )) as T,
-          camera: (cameraComponent ?? CameraComponent())
+          camera: (camera ?? cameraComponent ?? CameraComponent())
             ..viewfinder.zoom = zoom,
         );
 

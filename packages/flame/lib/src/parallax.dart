@@ -189,7 +189,7 @@ class ParallaxAnimation extends ParallaxRenderer {
   ///
   /// _IMPORTANT_: This method pre render all the frames of the animation into
   /// image instances so it can be used inside the parallax. Just keep that in
-  /// mind when using animations in in parallax, the over use of it, or the use
+  /// mind when using animations in parallax, the over use of it, or the use
   /// of big animations (be it in number of frames or the size of the images)
   /// can lead to high use of memory.
   static Future<ParallaxAnimation> load(

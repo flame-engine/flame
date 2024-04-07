@@ -1,0 +1,20 @@
+name: behavior_tree
+description: A behavior tree implementation written in dart. This package is designed to be used for implementing AI in games.
+version: 0.1.1
+repository: https://github.com/flame-engine/flame/tree/main/packages/flame_behavior_tree/behavior_tree
+funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
+  - https://patreon.com/bluefireoss
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  meta: ^1.9.1
+
+dev_dependencies:
+  flame_lint: ^1.1.2
+  lints: ^3.0.0
+  mocktail: ^1.0.1
+  test: any
