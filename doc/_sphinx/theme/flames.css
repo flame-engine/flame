@@ -541,6 +541,7 @@ div.copyright {
 
 .copyright a {
   color: #ff9500;
+  text-decoration: underline;
 }
 div.document h1 {
   border-bottom: 1px solid #555;
