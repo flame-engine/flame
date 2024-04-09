@@ -74,7 +74,7 @@ class Player extends SpriteComponent with HasGameRef {
 }
 ```
 
-In this example, we created the classes `MyGame` and `Player`. 
+In this example, we created the classes `MyGame` and `Player`.
 `MyGame` creates a joystick which is passed to the `Player` when the latter is created.
 In the `Player` class we act upon the current state of the joystick.
 
@@ -91,12 +91,13 @@ Following fields should be used to know the state of the joystick:
 If you want to create buttons to go with your joystick, check out
 [`HudButtonComponent`](#hudbuttoncomponent).
 
-For the complete code on implementing the joystick, check out the 
-[Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart). 
-You can also view the [JoystickComponent in action](https://examples.flame-engine.org/#/Input_Joystick) 
+For the complete code on implementing the joystick, check out the [Joystick Example]
+(https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart).
+You can also view the [JoystickComponent in action]
+(https://examples.flame-engine.org/#/Input_Joystick) 
 to see a live example of the joystick input function integrated into a game.
 
-For an additional challenge, explore the 
+For an additional challenge, explore the
 [Advanced Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart). 
 See what else the advanced features can do in the 
 [live demo](https://examples.flame-engine.org/#/Input_Joystick_Advanced).
@@ -137,8 +138,8 @@ else which isn't a pure sprite.
 
 ## Gamepad
 
-Flame has a dedicated plugin to support external game controllers (gamepads). Find more information in the 
-[Gamepads repository](https://github.com/flame-engine/gamepad).
+Flame has a dedicated plugin to support external game controllers (gamepads). 
+Find more information in the [Gamepads repository](https://github.com/flame-engine/gamepad).
 
 
 ## AdvancedButtonComponent
