@@ -9,8 +9,8 @@ When `debugMode` is enabled, each `PositionComponent` will be rendered with thei
 have their positions written on the screen. This way, you can visually verify the components
 boundaries and positions.
 
-To see a working example of the debugging features of the `FlameGame`, check this
-[example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
+Check out this [working example of the debugging features of the `FlameGame`],[example]
+(https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
 
 
 ## FPS
