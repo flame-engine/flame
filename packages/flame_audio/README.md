@@ -29,6 +29,7 @@ code.
 Add this as a dependency to your Flame game if you want to play background music,
 ambient sounds, sound effects, etc. For the full documentation, visit [flame_audio](https://docs.flame-engine.org/latest/bridge_packages/flame_audio/flame_audio.html).
 
+
 ## How to use
 
 Add sound files to `assets/audio`. Remember to run `pub get` after updating pubspec.yaml with:
@@ -37,6 +38,7 @@ Add sound files to `assets/audio`. Remember to run `pub get` after updating pubs
 assets:
     - assets/audio
 ```
+
 
 ### General sounds
 
@@ -58,9 +60,11 @@ FlameAudio.playLongAudio('music.mp3');
 FlameAudio.loopLongAudio('music.mp3');
 ```
 
+
 ### Background music
 
-Start by initializing FlameAudio bgm. 
+Start by initializing FlameAudio bgm.
+
 ```dart
 FlameAudio.bgm.initialize();
 ```
@@ -93,9 +97,12 @@ FlameAudio.bgm.pause();
 FlameAudio.bgm.resume();
 ```
 
+
 ### Caching
 
-You can pre-load your sounds into the audioCache. This prevents a delay for the first time an audio file is called. The files are cached automatically after the first time.
+You can pre-load your sounds into the audioCache.
+This prevents a delay for the first time an audio file is called.
+The files are cached automatically after the first time.
 
 ```dart
 // cache single track
@@ -114,5 +121,3 @@ FlameAudio.audioCache.clear('explosion.mp3');
 // clear whole cache
 FlameAudio.audioCache.clearCache();
 ```
-
-
