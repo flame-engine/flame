@@ -40,7 +40,7 @@ assets:
 
 ### General sounds
 
-Call these built-in methods to play sounds for your Flame game.
+Use these built-in methods to play sounds in your Flame game:
 
 ```dart
 import 'package:flame_audio/flame_audio.dart';
