@@ -21,7 +21,7 @@
 
 body {
   background-color: #383838;
-  color: #757575;
+  color: #cccccc;
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.5;
@@ -533,14 +533,14 @@ div.document::after { /* clearfix */
 
 
 div.copyright {
-  color: #ffffe8;
+  color: #cccccc;
   font-size: 12px;
   margin-top: 3px;
   opacity: 0.5;
 }
 
 .copyright a {
-  color: #ffbf00;
+  color: #ff9500;
 }
 div.document h1 {
   border-bottom: 1px solid #555;
