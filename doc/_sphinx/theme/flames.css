@@ -425,7 +425,7 @@ div.nav-right > #toc-local {
   flex-direction: column;
   margin: 0 0 0 6px;
   max-width: var(--right-menu-width);
-  padding: 0 0 0 10px;
+  padding: 0 0 0 1rem;
 }
 
 div.nav-right > #toc-local > div.header {
