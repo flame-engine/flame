@@ -103,9 +103,8 @@ game.add(
 );
 ```
 
-See more [examples of how to use different built-in particles in various
-combinations](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/
-particles_example.dart).
+See more [examples of how to use built-in particles in various
+combinations](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
 
 
 ## Lifecycle
@@ -161,12 +160,10 @@ Flame ships with a few built-in `Particle` behaviors:
 - The `ComponentParticle` renders Flame `Component` within a `Particle` effect
 - The `FlareParticle` renders Flare animation within a `Particle` effect
 
-See more [examples of how to use built-in Particle behaviors together]
-(https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/
-particles_example.dart).
-All the implementations are available in the
-[particles folder on the Flame repository.]
-(https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles)
+See more [examples of how to use built-in Particle behaviors
+together](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
+All the implementations are available in the [particles folder on the 
+Flame repository.](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles)
 
 
 ## TranslatedParticle

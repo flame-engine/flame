@@ -192,9 +192,8 @@ well):
   );
 ```
 
-See also, [a more elaborate example of rich-text, formatted text blocks
-rendering](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/
-rich_text_example.dart).
+See a more elaborate [example of rich-text, formatted
+text blocks rendering](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
 
 For more details about the underlying mechanics of the text rendering pipeline, see "Text Elements,
 Text Nodes, and Text Styles" below.
