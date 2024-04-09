@@ -74,13 +74,13 @@ class Player extends SpriteComponent with HasGameRef {
 }
 ```
 
-So in this example, we create the classes `MyGame` and `Player`. 
-`MyGame` creates a joystick which is passed to the `Player` when it is created. 
+In this example, we created the classes `MyGame` and `Player`. 
+`MyGame` creates a joystick which is passed to the `Player` when the latter is created.
 In the `Player` class we act upon the current state of the joystick.
 
 The joystick has a few fields that change depending on what state it is in.
 
-Following are the fields that should be used to know the state of the joystick:
+Following fields should be used to know the state of the joystick:
 
 - `intensity`: The percentage [0.0, 1.0] that the knob is dragged from the epicenter to the edge of
   the joystick (or `knobRadius` if that is set).
