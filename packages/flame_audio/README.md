@@ -121,3 +121,14 @@ FlameAudio.audioCache.clear('explosion.mp3');
 // clear whole cache
 FlameAudio.audioCache.clearCache();
 ```
+
+
+### Audio pool
+
+Use AudioPools if you have extremely quick firing, repetitive or simultaneous sounds.
+To create an AudioPool:
+
+```dart
+AudioPool audioPool = await FlameAudio.createPool('explosion.mp3', maxPlayers: 2);
+audioPool.start();
+```
