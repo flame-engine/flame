@@ -119,6 +119,9 @@ class StaggeredTileLayer extends FlameTileLayer {
           offsetY = ty * size.y + staggerY + halfDestinationTile.y;
         }
 
+        offsetX += tileset.tileOffset?.x ?? 0;
+        offsetY += tileset.tileOffset?.y ?? 0;
+
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 

@@ -194,7 +194,7 @@ rebuild the documents that have changed since the previous run, so usually, a re
 second or two.
 
 If you want to automatically recompile the docs every time there is a change to one of the files
-you can use the the built-in Melos target below, which will also serve and open your default
+you can use the built-in Melos target below, which will also serve and open your default
 browser with the docs.
 
 ```shell

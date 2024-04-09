@@ -19,12 +19,6 @@ class SpriteWidget extends StatelessWidget {
   /// The angle to rotate this [Sprite], in rad. (default = 0)
   final double angle;
 
-  /// Holds the position of the sprite on the image
-  final Vector2? srcPosition;
-
-  /// Holds the size of the sprite on the image
-  final Vector2? srcSize;
-
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
 
@@ -33,12 +27,13 @@ class SpriteWidget extends StatelessWidget {
 
   final FutureOr<Sprite> _spriteFuture;
 
+  /// renders the [sprite] as a Widget.
+  ///
+  /// To change the source size and position, see [Sprite.new]
   const SpriteWidget({
     required Sprite sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-    this.srcPosition,
-    this.srcSize,
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
@@ -55,8 +50,8 @@ class SpriteWidget extends StatelessWidget {
     Images? images,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-    this.srcPosition,
-    this.srcSize,
+    Vector2? srcPosition,
+    Vector2? srcSize,
     this.errorBuilder,
     this.loadingBuilder,
     super.key,

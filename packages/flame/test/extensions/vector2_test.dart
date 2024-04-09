@@ -488,6 +488,15 @@ void main() {
       expectDouble(p2.length, math.sqrt(2));
       expect(p2.x, p2.y);
     });
+
+    test('toStringWithMaxPrecision', () {
+      final p1 = Vector2(1.123456789, 2.123456789);
+      expect(p1.toStringWithMaxPrecision(2), 'Vector2(1.12, 2.12)');
+      final p2 = Vector2(1, 2.123456789);
+      expect(p2.toStringWithMaxPrecision(3), 'Vector2(1.0, 2.123)');
+      final p3 = Vector2(-1, -2.123456789);
+      expect(p3.toStringWithMaxPrecision(3), 'Vector2(-1.0, -2.123)');
+    });
   });
 
   testRandom('Creating a Vector2 fromRadians points to the correct direction',

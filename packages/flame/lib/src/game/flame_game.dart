@@ -138,7 +138,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @override
   void renderTree(Canvas canvas) {
     if (parent != null) {
-      renderTree(canvas);
+      render(canvas);
     }
     for (final component in children) {
       component.renderTree(canvas);

@@ -13,6 +13,14 @@ Check out this [working example of the debugging features of the `FlameGame`],[e
 (https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
 
 
+## Devtools extension
+
+If you open the [Flutter DevTools](https://docs.flutter.dev/tools/devtools/overview), you will see a
+new tab called "Flame". This tab will show you information about the current game, for example a
+visualization of the component tree, the ability to play, pause and step the game, information
+about the selected component, and more.
+
+
 ## FPS
 
 The FPS reported from Flame might be a bit lower than what is reported from for example the Flutter

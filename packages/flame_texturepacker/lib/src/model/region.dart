@@ -8,11 +8,11 @@ class Region {
   late double top;
   late double width;
   late double height;
-  late double offsetX;
-  late double offsetY;
-  late double originalWidth;
-  late double originalHeight;
-  late int degrees;
-  late bool rotate;
-  late int index;
+  double offsetX = 0;
+  double offsetY = 0;
+  double originalWidth = 0;
+  double originalHeight = 0;
+  int degrees = 0;
+  bool rotate = false;
+  int index = -1;
 }

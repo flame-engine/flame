@@ -13,6 +13,7 @@ command:
     branch: main
     # Generates a link to a prefilled GitHub release creation page.
     releaseUrl: true
+
   bootstrap:
     environment:
       sdk: ">=3.0.0 <4.0.0"
@@ -25,20 +26,16 @@ command:
       mocktail: ^1.0.1
       test: any
 
+  publish:
+    hooks:
+      pre: melos devtools-build
+
 scripts:
   lint:all:
-    run: melos run analyze && melos run format
+    steps:
+      - analyze
+      - format
     description: Run all static analysis checks.
-
-  analyze:
-    run: |
-      melos exec -c 1 -- \
-        flutter analyze --fatal-infos
-    description: Run `flutter analyze` for all packages.
-
-  format:
-    run: melos exec dart format . --fix
-    description: Run `dart format` for all packages.
 
   format-check:
     run: melos exec dart format . --set-exit-if-changed
@@ -57,16 +54,14 @@ scripts:
     description: Run dartdoc checks for all packages.
 
   doc-setup:
-    run: >
-      echo Checking python version: &&
-      python3 --version &&
-      (python3 -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" ||
-      (echo  Error: Python 3.8+ is required && exit 1)) &&
-      echo Installing required python modules: &&
-      python3 -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt" &&
-      echo Installing dartdoc_json: &&
-      dart pub global activate dartdoc_json &&
-      echo Done.
+    steps:
+      - "echo Checking python version:"
+      - 'python3 --version && (python3 -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" || (echo  Error: Python 3.8+ is required && exit 1))'
+      - "echo Installing required python modules:"
+      - 'python3 -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt"'
+      - "echo Installing dartdoc_json:"
+      - "dart pub global activate dartdoc_json"
+      - "echo Done."
     description: Prepares the environment for documentation development.
 
   doc-build:
@@ -100,9 +95,9 @@ scripts:
     description: Run all Flutter tests in this project.
 
   coverage:
-    run: |
-      melos exec -- flutter test --coverage &&
-      melos exec -- genhtml coverage/lcov.info --output-directory=coverage/
+    steps: 
+      - melos exec -- flutter test --coverage
+      - melos exec -- genhtml coverage/lcov.info --output-directory=coverage/
     packageFilters:
       dirExists: test
     description: Generate coverage for the selected package.
@@ -118,3 +113,9 @@ scripts:
     packageFilters:
       scope: flame_devtools
     description: Builds the devtools and copies the build directory to the Flame package.
+
+  devtools-simulator:
+    run: melos exec -- flutter run -d chrome --dart-define=use_simulated_environment=true
+    packageFilters:
+      scope: flame_devtools
+    description: Runs the devtools in the simulated mode.

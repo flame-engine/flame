@@ -1,5 +1,5 @@
 import 'package:devtools_extensions/devtools_extensions.dart';
-import 'package:flame_devtools/widgets/component_counter.dart';
+import 'package:flame_devtools/widgets/component_tree.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/game_loop_controls.dart';
 import 'package:flutter/material.dart';
@@ -16,15 +16,14 @@ class FlameDevTools extends StatelessWidget {
     return DevToolsExtension(
       child: Column(
         children: [
-          const GameLoopControls(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const ComponentCounter(),
+              const GameLoopControls(),
               const DebugModeButton(),
             ].withSpacing(),
           ),
+          const Expanded(child: ComponentTree()),
         ].withSpacing(),
       ),
     );
