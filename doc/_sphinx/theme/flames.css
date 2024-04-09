@@ -20,7 +20,7 @@
 }
 
 body {
-  background-color: #484848;
+  background-color: #383838;
   color: #757575;
   font-family: var(--font-sans);
   font-size: 15px;
@@ -533,14 +533,14 @@ div.document::after { /* clearfix */
 
 
 div.copyright {
-  color: #757575;
+  color: #ffffe8;
   font-size: 12px;
   margin-top: 3px;
   opacity: 0.5;
 }
 
 .copyright a {
-  color: #ffae00;
+  color: #ffbf00;
 }
 div.document h1 {
   border-bottom: 1px solid #555;
@@ -636,7 +636,7 @@ div.document :is(h1, h2, h3, h4) > code {
 }
 
 .prev-next-area > a > .prev-next-info > p.prev-next-subtitle {
-  color: #888;
+  color: #ffffe8;
 }
 
 .prev-next-area > a:hover > .prev-next-info > p.prev-next-title {

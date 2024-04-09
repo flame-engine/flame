@@ -194,8 +194,8 @@ well):
   );
 ```
 
-For a more elaborate example of rich-text, formatted text blocks rendering, check [this
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+See also, [a more elaborate example of rich-text, formatted text blocks rendering]
+(https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
 
 For more details about the underlying mechanics of the text rendering pipeline, see "Text Elements,
 Text Nodes, and Text Styles" below.
@@ -442,8 +442,8 @@ However, the other types of Text Elements, Text Nodes, and Text Styles must be u
 to create an entire document (multiple blocks or paragraphs), enriched with formatted text. In order
 to render an arbitrary TextElement, you can alternatively use the `TextElementComponent` (see above).
 
-An example of such usages can be seen in [this
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+See [examples of such usage]
+(https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
 
 
 ### Text Nodes and the Document Root
