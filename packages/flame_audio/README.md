@@ -60,7 +60,7 @@ FlameAudio.loopLongAudio('music.mp3');
 
 ### Background music
 
-Start by initialising FlameAudio bgm. 
+Start by initializing FlameAudio bgm. 
 ```dart
 FlameAudio.bgm.initialize();
 ```
