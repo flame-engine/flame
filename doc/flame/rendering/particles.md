@@ -162,7 +162,7 @@ Flame ships with a few built-in `Particle` behaviors:
 
 See more [examples of how to use built-in Particle behaviors
 together](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
-All the implementations are available in the [particles folder on the 
+All the implementations are available in the [particles folder on the
 Flame repository.](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles)
 
 

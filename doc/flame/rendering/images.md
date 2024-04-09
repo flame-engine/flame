@@ -208,7 +208,7 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See how to use it in the 
+See how to use it in the
 [SpriteBatch examples](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart)
 
 
@@ -324,8 +324,8 @@ To learn more, check out the full example code of
 
 Sprite sheets are big images with several frames of the same sprite on it and is a very good way to
 organize and store your animations. Flame provides a very simple utility class to deal with
-SpriteSheets, using which you can load your sprite sheet image and extract animations from it as well. Following is
-a very simple example of how to use it:
+SpriteSheets, using which you can load your sprite sheet image and extract animations from it as
+well. Following is a simple example of how to use it:
 
 ```dart
 import 'package:flame/sprite.dart';
