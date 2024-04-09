@@ -21,7 +21,7 @@
 
 body {
   background-color: #484848;
-  color: #b8b8b8;
+  color: #757575;
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.5;
@@ -73,7 +73,7 @@ code {
 
 code.xref {
   background: none;
-  color: #f75151;
+  color: #ff9500;
   padding: 0;
 }
 
@@ -87,6 +87,7 @@ p {
 strong {
   color: white;
 }
+
 
 div.expander {
   flex: 1;
@@ -144,7 +145,7 @@ div.top-bar .btn {
   background-color: transparent;
   border: none;
   border-radius: 0.25rem;
-  color: #ffd78d;
+  color: #ff9500;
   cursor: pointer;
   display: inline-flex;
   font-size: 1rem;
@@ -199,7 +200,7 @@ div.top-bar #menu-button {
 }
 
 #versions-menu > .btn > .version-id {
-  color: #ffe95c;
+  color: #ff9500;
   font-weight: bold;
   padding: 0 0 0 6px;
 }
@@ -518,7 +519,7 @@ div.warning .version {
 
 div.document {
   background-color: #282828;
-  color: #b0b0b0;
+  color: #D6D6D6;
   border-radius: 2pt;
   box-shadow: 2px 2px 3px 0 #000;
   padding: var(--document-padding);
@@ -532,7 +533,7 @@ div.document::after { /* clearfix */
 
 
 div.copyright {
-  color: #d4d4d4;
+  color: #000000;
   font-size: 12px;
   margin-top: 3px;
   opacity: 0.5;
@@ -699,7 +700,9 @@ div.highlight-text pre:before {
   content: "text";
   color: #666;
 }
-
+span.keyword {
+  color: #ffffcA;
+}
 
 /*----------------------------------------------------------------------------*
  * Search elements
