@@ -16,8 +16,7 @@ typing effect. You can use the `newLineNotifier` to be notified when a new line 
 scrolling capability when the text exceeds the boundaries of the enclosing box.
 
 
-All components are showcased in
-[this example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
+All components are showcased in [this example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
 
 
 ### TextComponent
@@ -193,8 +192,8 @@ well):
   );
 ```
 
-For a more elaborate example of rich-text, formatted text blocks rendering, check [this
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+See a more elaborate [example of rich-text, formatted
+text blocks rendering](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
 
 For more details about the underlying mechanics of the text rendering pipeline, see "Text Elements,
 Text Nodes, and Text Styles" below.
@@ -354,16 +353,16 @@ import 'package:flutter/painting.dart';
 import 'dart:ui' hide TextStyle;
 ```
 
-Some common properties of `TextStyle` are the following (here is the [full
-list](https://api.flutter.dev/flutter/painting/TextStyle-class.html)):
+Following are some common properties of `TextStyle`(see the [full
+list of `TextStyle` properties](https://api.flutter.dev/flutter/painting/TextStyle-class.html)):
 
 - `fontFamily`: a commonly available font, like Arial (default), or a custom font added in your
- pubspec (see [here](https://docs.flutter.dev/cookbook/design/fonts) how to do it).
+ pubspec (see [how to add a custom font](https://docs.flutter.dev/cookbook/design/fonts)).
 - `fontSize`: font size, in pts (default `24.0`).
 - `height`: height of text line, as a multiple of font size (default `null`).
 - `color`: the color, as a `ui.Color` (default white).
 
-For more information regarding colors and how to create then, see the [Colors and the
+For more information regarding colors and how to create them, see the [Colors and
 Palette](palette.md) guide.
 
 
@@ -441,8 +440,7 @@ However, the other types of Text Elements, Text Nodes, and Text Styles must be u
 to create an entire document (multiple blocks or paragraphs), enriched with formatted text. In order
 to render an arbitrary TextElement, you can alternatively use the `TextElementComponent` (see above).
 
-An example of such usages can be seen in [this
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
+See [examples of such usage](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/rich_text_example.dart).
 
 
 ### Text Nodes and the Document Root

@@ -20,8 +20,8 @@
 }
 
 body {
-  background-color: #484848;
-  color: #b8b8b8;
+  background-color: #383838;
+  color: #cccccc;
   font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.5;
@@ -32,12 +32,16 @@ body {
 }
 
 a {
-  color: #ffbb3e;
+  color: #ff9500;
   text-decoration: none;
 }
 
 a:hover {
   color: #ddbb99;
+}
+
+a:visited {
+  color: #ffbc70;
 }
 
 a:hover code {
@@ -69,7 +73,7 @@ code {
 
 code.xref {
   background: none;
-  color: #f75151;
+  color: #ff9500;
   padding: 0;
 }
 
@@ -83,6 +87,7 @@ p {
 strong {
   color: white;
 }
+
 
 div.expander {
   flex: 1;
@@ -140,7 +145,7 @@ div.top-bar .btn {
   background-color: transparent;
   border: none;
   border-radius: 0.25rem;
-  color: #ffd78d;
+  color: #ff9500;
   cursor: pointer;
   display: inline-flex;
   font-size: 1rem;
@@ -195,7 +200,7 @@ div.top-bar #menu-button {
 }
 
 #versions-menu > .btn > .version-id {
-  color: #ffe95c;
+  color: #ff9500;
   font-weight: bold;
   padding: 0 0 0 6px;
 }
@@ -347,7 +352,7 @@ div.nav-left li {
 div.nav-left li > a,
 div.nav-left li > div.submenu > a.reference {
   border-radius: 5px 0 0 5px;
-  color: #9d9175;
+  color: #ff9500;
   display: block;
   font-size: 13px;
   margin-left: -5px;
@@ -420,7 +425,7 @@ div.nav-right > #toc-local {
   flex-direction: column;
   margin: 0 0 0 6px;
   max-width: var(--right-menu-width);
-  padding: 0 0 0 10px;
+  padding: 0 0 0 1rem;
 }
 
 div.nav-right > #toc-local > div.header {
@@ -431,7 +436,7 @@ div.nav-right > #toc-local > div.header {
 div.nav-right > #toc-local > a.list-group-item {
   border: none;
   border-left: 4px solid transparent;
-  color: #9d9175;
+  color: #ff9500;
   display: block;
   font-size: 13px;
   line-height: 1.2;
@@ -514,7 +519,7 @@ div.warning .version {
 
 div.document {
   background-color: #282828;
-  color: #b0b0b0;
+  color: #D6D6D6;
   border-radius: 2pt;
   box-shadow: 2px 2px 3px 0 #000;
   padding: var(--document-padding);
@@ -526,12 +531,18 @@ div.document::after { /* clearfix */
   clear: both;
 }
 
+
 div.copyright {
+  color: #cccccc;
   font-size: 12px;
   margin-top: 3px;
   opacity: 0.5;
 }
 
+.copyright a {
+  color: #ff9500;
+  text-decoration: underline;
+}
 div.document h1 {
   border-bottom: 1px solid #555;
   color: #ccc;
@@ -626,7 +637,7 @@ div.document :is(h1, h2, h3, h4) > code {
 }
 
 .prev-next-area > a > .prev-next-info > p.prev-next-subtitle {
-  color: #888;
+  color: #ffffe8;
 }
 
 .prev-next-area > a:hover > .prev-next-info > p.prev-next-title {
@@ -690,7 +701,9 @@ div.highlight-text pre:before {
   content: "text";
   color: #666;
 }
-
+span.keyword {
+  color: #ffffcA;
+}
 
 /*----------------------------------------------------------------------------*
  * Search elements
@@ -867,7 +880,7 @@ table.docutils td {
 }
 
 table.docutils th {
-  color: #9d9175;
+  color: #ff9500;
 }
 
 /* This ensures that when navigating to a link within a page, the link
