@@ -16,9 +16,7 @@ typing effect. You can use the `newLineNotifier` to be notified when a new line 
 scrolling capability when the text exceeds the boundaries of the enclosing box.
 
 
-All components are showcased in [this
-example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/
-text_example.dart).
+All components are showcased in [this example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/text_example.dart).
 
 
 ### TextComponent

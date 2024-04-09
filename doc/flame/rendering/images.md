@@ -192,9 +192,8 @@ parameter `overridePaint` that parameter will override the current `Sprite` pain
 render call.
 
 `Sprite`s can also be used as widgets, to do so just use `SpriteWidget` class.
-Here is [a complete example using sprite as 
-widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/
-sprite_widget_example.dart).
+Here is a complete
+[example using sprite as widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
 
 
 ## SpriteBatch
@@ -209,9 +208,8 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See how to use it in the [SpriteBatch 
-examples](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/
-sprite_batch_example.dart)
+See how to use it in the 
+[SpriteBatch examples](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart)
 
 
 ## ImageComposition
@@ -318,9 +316,8 @@ and the former ticks the internal clock to update the frames.
 Animations are normally used inside `SpriteAnimationComponent`s, but custom components with several
 Animations can be created as well.
 
-To learn more, check out the full example code of [using animations as 
-widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/
-sprite_animation_widget_example.dart).
+To learn more, check out the full example code of
+[using animations as widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
 
 
 ## SpriteSheet
@@ -365,6 +362,5 @@ spriteSheet.getSpriteById(2); // by id
 spriteSheet.getSprite(0, 0); // row, column
 ```
 
-See a full example of the [`SpriteSheet` class](https://github.com/flame-engine/flame/blob/main/
-examples/lib/stories/sprites/sprite_sheet_example.dart)
+See a full example of the [`SpriteSheet` class](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_sheet_example.dart)
 for more details on how to work with it.

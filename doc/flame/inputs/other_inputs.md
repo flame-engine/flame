@@ -92,14 +92,14 @@ If you want to create buttons to go with your joystick, check out
 [`HudButtonComponent`](#hudbuttoncomponent).
 
 For the complete code on implementing the joystick, check out the
-[Joystick Examp
-le](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart).
-You can also view the [JoystickComponent in action](https://examples.flame-engine.org/#/Input_Joystick) 
+[Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_example.dart).
+You can also view the
+[JoystickComponent in action](https://examples.flame-engine.org/#/Input_Joystick)
 to see a live example of the joystick input function integrated into a game.
 
 For an additional challenge, explore the
-[Advanced Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart). 
-See what else the advanced features can do in the 
+[Advanced Joystick Example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/joystick_advanced_example.dart).
+See what else the advanced features can do in the
 [live demo](https://examples.flame-engine.org/#/Input_Joystick_Advanced).
 
 
