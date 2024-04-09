@@ -31,7 +31,7 @@ ambient sounds, sound effects, etc. For the full documentation, visit [flame_aud
 
 ## How to use
 
-Add sound files to `assets/audio`. Remember to run `pub get` after updating pubspec.yaml with
+Add sound files to `assets/audio`. Remember to run `pub get` after updating pubspec.yaml with:
 
 ```dart
 assets:
