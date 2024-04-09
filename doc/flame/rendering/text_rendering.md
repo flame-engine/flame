@@ -364,7 +364,7 @@ list of `TextStyle` properties](https://api.flutter.dev/flutter/painting/TextSty
 - `height`: height of text line, as a multiple of font size (default `null`).
 - `color`: the color, as a `ui.Color` (default white).
 
-For more information regarding colors and how to create them, see the [Colors and the
+For more information regarding colors and how to create them, see the [Colors and
 Palette](palette.md) guide.
 
 
