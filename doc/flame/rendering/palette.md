@@ -40,12 +40,12 @@ You can create such an object like this:
 Paint green = Paint()..color = const Color(0xFF00FF00);
 ```
 
-To help you with this and to also keep your game's color palette consistent, Flame adds the `Palette`
-class. You can use it to easily access both `Color`s and `Paint`s where needed and also to define
-the colors your game use as constants, so you don't get those mixed up.
+To help you with this and also keep your game's color palette consistent, Flame adds the `Palette`
+class. You can use it to easily access both `Color`s and `Paint`s where needed and also define
+the colors your game use as constants, so that you don't get those mixed up.
 
 The `BasicPalette` class is an example of what a palette can look like, and adds black and white as
-colors. So to use black or white you can access those directly from the `BasicPalette`; for example,
+colors. So you can access black or white directly from the `BasicPalette`; for example,
 using `color`:
 
 ```dart
@@ -60,8 +60,8 @@ canvas.drawRect(rect, BasicPalette.black.paint);
 
 However, the idea is that you can create your own palette, following the `BasicPalette` example, and
 add the color palette/scheme of your game. Then you will be able to statically access any color in
-your components and classes. Below is an example of a `Palette` implementation, from the example
-game [BGUG](https://github.com/bluefireteam/bgug/blob/master/lib/palette.dart):
+your components and classes. Below is an example of a `Palette` implementation, from the [example
+game BGUG](https://github.com/bluefireteam/bgug/blob/master/lib/palette.dart):
 
 ```dart
 import 'dart:ui';

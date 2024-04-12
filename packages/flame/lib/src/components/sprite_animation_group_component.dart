@@ -134,7 +134,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// Returns the current group state.
   T? get current => _current;
 
-  /// The the group state to given state.
+  /// The group state to given state.
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {

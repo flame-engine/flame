@@ -1,3 +1,7 @@
+## 1.20.1
+
+ - **FIX**: Respect tile offset when drawing tiles ([#3112](https://github.com/flame-engine/flame/issues/3112)). ([e3477474](https://github.com/flame-engine/flame/commit/e34774743038bc75fec14afc3c753fa997e71577))
+
 ## 1.20.0
 
  - **FEAT**: Export `TileAtlas` from `flame_tiled` package ([#3049](https://github.com/flame-engine/flame/issues/3049)). ([41e9e4e3](https://github.com/flame-engine/flame/commit/41e9e4e38c643b07a3a7269b1cd8d3fa60cbeebb))
