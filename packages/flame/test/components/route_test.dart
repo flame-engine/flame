@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -474,6 +475,51 @@ void main() {
         );
       },
     );
+    testWithFlameGame('Route with loading', (game) async {
+      final loadingComponent = PositionComponent(size: Vector2.all(100));
+      final pageComponent = _HeavyComponent()..size = Vector2.all(100);
+      final router = RouterComponent(
+        initialRoute: 'start',
+        routes: {
+          'start': Route(
+            Component.new,
+          ),
+          'new': Route(
+            () => pageComponent,
+            loadingBuilder: () => loadingComponent,
+          ),
+        },
+      )..addToParent(game);
+      await game.ready();
+
+      router.pushNamed('new');
+
+      // I can't perform this following checking, probably because the way it 
+      // was implemented, in assumption that line 512 actually logically works.
+      // If line 512, is doing nothing then I don't think, I can perform this 
+      // following check either, that is to check state when loading was 
+      // mounted before it was removed.
+
+      // expect(
+      //   loadingComponent.isMounted,
+      //   isTrue,
+      // );
+      // expect(
+      //   pageComponent.isMounted,
+      //   isFalse,
+      // );
+
+      game.update(pageComponent.dummyTime.inSeconds.toDouble());
+      await game.ready();
+      expect(
+        loadingComponent.isRemoved,
+        isFalse,
+      );
+      expect(
+        pageComponent.isMounted,
+        isTrue,
+      );
+    });
   });
 }
 
@@ -525,5 +571,14 @@ class _ColoredComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(size.toRect(), _paint);
+  }
+}
+
+class _HeavyComponent extends PositionComponent {
+  final dummyTime = const Duration(seconds: 3);
+  @override
+  FutureOr<void> onLoad() async {
+    await Future.delayed(dummyTime);
+    return super.onLoad();
   }
 }
