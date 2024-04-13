@@ -30,9 +30,10 @@ class ComponentTreeSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final model = ref.watch(componentTreeModelProvider);
+    final loader = ref.read(componentTreeLoaderProvider);
+    final loadedModel = ref.watch(loadedTreeModelProvider);
     final selectedTreeNode = ref.watch(selectedTreeNodeProvider);
-    final componentCount = model.value?.componentCount ?? 0;
+    final componentCount = loadedModel.componentCount;
 
     return RoundedOutlinedBorder(
       child: Column(
@@ -48,58 +49,54 @@ class ComponentTreeSection extends ConsumerWidget {
                   icon: const Icon(Icons.refresh),
                   iconSize: 18,
                   alignment: Alignment.center,
-                  onPressed: () => ref.refresh(componentTreeModelProvider),
+                  onPressed: loader.isLoading
+                      ? null
+                      : () => ref.refresh(componentTreeLoaderProvider),
                 ),
               ],
             ),
           ),
-          model.when(
-            data: (data) {
-              return Expanded(
-                child: SingleChildScrollView(
-                  child: TreeView.simple(
-                    showRootNode: false,
-                    shrinkWrap: true,
-                    indentation: const Indentation(
-                      color: Colors.blue,
-                      style: IndentStyle.roundJoint,
-                    ),
-                    onTreeReady: (controller) =>
-                        controller.expandAllChildren(controller.tree),
-                    padding: const EdgeInsets.only(left: 20),
-                    expansionIndicatorBuilder: (context, node) => node.isLeaf
-                        ? NoExpansionIndicator(tree: node)
-                        : ChevronIndicator.rightDown(
-                            tree: node,
-                            alignment: Alignment.centerLeft,
-                          ),
-                    builder: (context, node) {
-                      return Padding(
-                        padding: node.isLeaf
-                            ? EdgeInsets.zero
-                            : const EdgeInsets.only(left: 20),
-                        child: ListTile(
-                          key: Key(
-                            node.data?.id.toString() ?? node.key,
-                          ),
-                          selected: node == selectedTreeNode,
-                          selectedColor: theme.colorScheme.primary,
-                          title: Text(node.data!.name),
-                          subtitle: Text(node.data!.id.toString()),
-                          onTap: () {
-                            ref.read(selectedTreeNodeProvider.notifier).state =
-                                node;
-                          },
-                        ),
-                      );
-                    },
-                    tree: data.treeRoot,
-                  ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: TreeView.simple(
+                showRootNode: false,
+                shrinkWrap: true,
+                indentation: const Indentation(
+                  color: Colors.blue,
+                  style: IndentStyle.roundJoint,
                 ),
-              );
-            },
-            loading: () => const CircularProgressIndicator(strokeWidth: 20),
-            error: (_, __) => const Text('Error loading the component tree'),
+                onTreeReady: (controller) =>
+                    controller.expandAllChildren(controller.tree),
+                padding: const EdgeInsets.only(left: 20),
+                expansionIndicatorBuilder: (context, node) => node.isLeaf
+                    ? NoExpansionIndicator(tree: node)
+                    : ChevronIndicator.rightDown(
+                        tree: node,
+                        alignment: Alignment.centerLeft,
+                      ),
+                builder: (context, node) {
+                  return Padding(
+                    padding: node.isLeaf
+                        ? EdgeInsets.zero
+                        : const EdgeInsets.only(left: 20),
+                    child: ListTile(
+                      key: Key(
+                        node.data?.id.toString() ?? node.key,
+                      ),
+                      selected: node == selectedTreeNode,
+                      selectedColor: theme.colorScheme.primary,
+                      title: Text(node.data!.name),
+                      subtitle: Text(node.data!.id.toString()),
+                      onTap: () {
+                        ref.read(selectedTreeNodeProvider.notifier).state =
+                            node;
+                      },
+                    ),
+                  );
+                },
+                tree: loadedModel.treeRoot,
+              ),
+            ),
           ),
         ],
       ),
