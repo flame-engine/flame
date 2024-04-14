@@ -1,148 +1,115 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart';
-import 'package:flame/devtools.dart';
-import 'package:flame_devtools/repository.dart';
+import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ComponentTree extends StatefulWidget {
+class ComponentTree extends StatelessWidget {
   const ComponentTree({super.key});
 
   @override
-  State<ComponentTree> createState() => _ComponentTreeState();
+  Widget build(BuildContext context) {
+    return Split(
+      axis: MediaQuery.of(context).size.width > 1000
+          ? Axis.horizontal
+          : Axis.vertical,
+      initialFractions: const [0.5, 0.5],
+      minSizes: const [300, 350],
+      children: const [
+        ComponentTreeSection(),
+        ComponentSection(),
+      ],
+    );
+  }
 }
 
-class _ComponentTreeState extends State<ComponentTree> {
-  Future<ComponentTreeNode>? _componentTree;
-  final TreeNode<ComponentTreeNode> _tree = TreeNode.root();
-  TreeNode<ComponentTreeNode>? _selectedTreeNode;
-  int _componentCount = 0;
+class ComponentTreeSection extends ConsumerWidget {
+  const ComponentTreeSection({super.key});
 
   @override
-  void initState() {
-    _refreshComponentTree();
-    super.initState();
-  }
-
-  void _refreshComponentTree() {
-    _tree.clear();
-    _componentCount = 0;
-    _componentTree = Repository.getComponentTree();
-    _componentTree?.then((value) => setState(() => _buildTree(value, _tree)));
-  }
-
-  void _buildTree(ComponentTreeNode node, TreeNode<ComponentTreeNode> parent) {
-    _componentCount++;
-    final current = TreeNode(
-      key: node.id.toString(),
-      parent: parent,
-      data: node,
-    );
-    parent.add(current);
-    for (final child in node.children) {
-      _buildTree(child, current);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final loader = ref.read(componentTreeLoaderProvider);
+    final loadedModel = ref.watch(loadedTreeModelProvider);
+    final selectedTreeNode = ref.watch(selectedTreeNodeProvider);
+    final componentCount = loadedModel.componentCount;
 
-    return FutureBuilder(
-      future: _componentTree,
-      builder: (context, value) {
-        return Split(
-          axis: MediaQuery.of(context).size.width > 1000
-              ? Axis.horizontal
-              : Axis.vertical,
-          initialFractions: const [0.5, 0.5],
-          minSizes: const [300, 350],
-          children: [
-            RoundedOutlinedBorder(
-              child: Column(
-                children: [
-                  AreaPaneHeader(
-                    title: Row(
-                      children: [
-                        Text(
-                          'Component Tree ($_componentCount components)',
-                          style: theme.textTheme.titleSmall,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.refresh),
-                          iconSize: 18,
-                          alignment: Alignment.center,
-                          onPressed: () => setState(_refreshComponentTree),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (value.hasData)
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: TreeView.simple(
-                          showRootNode: false,
-                          shrinkWrap: true,
-                          indentation: const Indentation(
-                            color: Colors.blue,
-                            style: IndentStyle.roundJoint,
-                          ),
-                          onTreeReady: (controller) =>
-                              controller.expandAllChildren(controller.tree),
-                          padding: const EdgeInsets.only(left: 20),
-                          expansionIndicatorBuilder: (context, node) =>
-                              node.isLeaf
-                                  ? NoExpansionIndicator(tree: node)
-                                  : ChevronIndicator.rightDown(
-                                      tree: node,
-                                      alignment: Alignment.centerLeft,
-                                    ),
-                          builder: (context, node) {
-                            return Padding(
-                              padding: node.isLeaf
-                                  ? EdgeInsets.zero
-                                  : const EdgeInsets.only(left: 20),
-                              child: ListTile(
-                                key: Key(
-                                  node.data?.id.toString() ?? node.key,
-                                ),
-                                selected: node == _selectedTreeNode,
-                                selectedColor: theme.colorScheme.primary,
-                                title: Text(node.data!.name),
-                                subtitle: Text(node.data!.id.toString()),
-                                onTap: () {
-                                  return setState(
-                                    () => _selectedTreeNode = node,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          tree: _tree,
-                        ),
+    return RoundedOutlinedBorder(
+      child: Column(
+        children: [
+          AreaPaneHeader(
+            title: Row(
+              children: [
+                Text(
+                  'Component Tree ($componentCount components)',
+                  style: theme.textTheme.titleSmall,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  iconSize: 18,
+                  alignment: Alignment.center,
+                  onPressed: loader.isLoading
+                      ? null
+                      : () => ref.refresh(componentTreeLoaderProvider),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: TreeView.simple(
+                showRootNode: false,
+                shrinkWrap: true,
+                indentation: const Indentation(
+                  color: Colors.blue,
+                  style: IndentStyle.roundJoint,
+                ),
+                onTreeReady: (controller) =>
+                    controller.expandAllChildren(controller.tree),
+                padding: const EdgeInsets.only(left: 20),
+                expansionIndicatorBuilder: (context, node) => node.isLeaf
+                    ? NoExpansionIndicator(tree: node)
+                    : ChevronIndicator.rightDown(
+                        tree: node,
+                        alignment: Alignment.centerLeft,
                       ),
-                    )
-                  else
-                    const CircularProgressIndicator(strokeWidth: 20),
-                ],
+                builder: (context, node) {
+                  return Padding(
+                    padding: node.isLeaf
+                        ? EdgeInsets.zero
+                        : const EdgeInsets.only(left: 20),
+                    child: ListTile(
+                      key: Key(
+                        node.data?.id.toString() ?? node.key,
+                      ),
+                      selected: node == selectedTreeNode,
+                      selectedColor: theme.colorScheme.primary,
+                      title: Text(node.data!.name),
+                      subtitle: Text(node.data!.id.toString()),
+                      onTap: () {
+                        ref.read(selectedTreeNodeProvider.notifier).state =
+                            node;
+                      },
+                    ),
+                  );
+                },
+                tree: loadedModel.treeRoot,
               ),
             ),
-            ComponentView(_selectedTreeNode?.data),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
 
-class ComponentView extends StatelessWidget {
-  const ComponentView(this.componentNode, {super.key});
-
-  final ComponentTreeNode? componentNode;
+class ComponentSection extends ConsumerWidget {
+  const ComponentSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final node = componentNode;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final node = ref.watch(selectedTreeNodeProvider)?.data;
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.bodyLarge;
 
