@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:meta/meta.dart';
@@ -74,6 +76,15 @@ abstract class Effect extends Component {
   /// Resume updates in a previously paused effect. If the effect is not
   /// currently paused, this call is a no-op.
   void resume() => _paused = false;
+
+  Completer<void>? _completer;
+
+  /// A future that completes when the effect is finished.
+  Future<void> get completed {
+    return controller.completed
+        ? Future.value()
+        : (_completer ??= Completer<void>()).future;
+  }
 
   /// Restore the effect to its original state as it was when the effect was
   /// just created.
@@ -186,6 +197,8 @@ abstract class Effect extends Component {
   @mustCallSuper
   void onFinish() {
     onComplete?.call();
+    _completer?.complete();
+    _completer = null;
   }
 
   /// Apply the given [progress] level to the effect's target.

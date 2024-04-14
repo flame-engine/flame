@@ -5,7 +5,11 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _MyEffect extends Effect {
-  _MyEffect(super.controller);
+  _MyEffect(super.controller) {
+    completed.whenComplete(() => ++completedCounter);
+  }
+
+  int completedCounter = 0;
 
   double x = -1;
   Function()? onStartCallback;
@@ -67,6 +71,17 @@ void main() {
       effect.update(5);
       expect(effect.x, closeTo(1, 1e-15));
     });
+
+    test(
+      'Completed future return on complete',
+      () async {
+        final effect = _MyEffect(EffectController(duration: 2));
+        final completer = effect.completed;
+
+        effect.update(4);
+        await expectLater(completer, completes);
+      },
+    );
 
     testWithFlameGame(
       'removeOnFinish = true',
