@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart' as flutter;
+import 'package:meta/meta.dart';
 
 class TextPainterTextElement extends InlineTextElement {
   TextPainterTextElement(this._textPainter)
@@ -15,6 +16,9 @@ class TextPainterTextElement extends InlineTextElement {
 
   final flutter.TextPainter _textPainter;
   final LineMetrics _box;
+
+  @visibleForTesting
+  flutter.TextPainter get textPainter => _textPainter;
 
   @override
   LineMetrics get metrics => _box;
