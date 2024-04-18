@@ -7,7 +7,7 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// The [FixedResolutionViewport] is a rectangular viewport which auto-expands
 /// to take as much space as possible within the canvas, while maintaining a
 /// fixed resolution and aspect ratio. I.e. the viewport will always show the
-/// same portion ([resolution]) of the game world, regardless of the size of the
+/// same dimensions ([resolution]) of the game world, regardless of the size of the
 /// canvas.
 ///
 /// This viewport will automatically adjust its size and position when the
