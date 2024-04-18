@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
 
 /// An [TextElement] is a basic rendering block of a rich-text document.
@@ -21,4 +22,6 @@ abstract class TextElement {
   /// calling the [translate] method, or applying a translation transform to the
   /// canvas itself.
   void draw(Canvas canvas);
+
+  Rect get boundingBox;
 }
