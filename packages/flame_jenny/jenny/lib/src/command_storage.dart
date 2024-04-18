@@ -205,7 +205,6 @@ class _Cmd {
               'which is not a boolean',
             );
           }
-          break;
         case _Type.integer:
           final value = int.tryParse(strValue);
           if (value == null) {
@@ -215,7 +214,6 @@ class _Cmd {
             );
           }
           _arguments[i] = value;
-          break;
         case _Type.double:
           final value = double.tryParse(strValue);
           if (value == null) {
@@ -225,7 +223,6 @@ class _Cmd {
             );
           }
           _arguments[i] = value;
-          break;
         case _Type.numeric:
           final value = num.tryParse(strValue);
           if (value == null) {
@@ -235,10 +232,8 @@ class _Cmd {
             );
           }
           _arguments[i] = value;
-          break;
         case _Type.string:
           _arguments[i] = strValue;
-          break;
       }
     }
     return _arguments;

@@ -287,15 +287,13 @@ MyCollidable randomCollidable(
   final rng = random ?? Random();
   final rotationSpeed = 0.5 - rng.nextDouble();
   final shapeType = Shapes.values[rng.nextInt(Shapes.values.length)];
-  switch (shapeType) {
-    case Shapes.circle:
-      return CollidableCircle(position, size, velocity, screenHitbox)
-        ..rotationSpeed = rotationSpeed;
-    case Shapes.rectangle:
-      return CollidableRectangle(position, size, velocity, screenHitbox)
-        ..rotationSpeed = rotationSpeed;
-    case Shapes.polygon:
-      return CollidablePolygon(position, size, velocity, screenHitbox)
-        ..rotationSpeed = rotationSpeed;
-  }
+  return switch (shapeType) {
+    Shapes.circle => CollidableCircle(position, size, velocity, screenHitbox)
+      ..rotationSpeed = rotationSpeed,
+    Shapes.rectangle =>
+      CollidableRectangle(position, size, velocity, screenHitbox)
+        ..rotationSpeed = rotationSpeed,
+    Shapes.polygon => CollidablePolygon(position, size, velocity, screenHitbox)
+      ..rotationSpeed = rotationSpeed,
+  };
 }

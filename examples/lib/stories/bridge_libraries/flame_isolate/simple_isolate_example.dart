@@ -115,16 +115,10 @@ class CalculatePrimeNumber extends PositionComponent
     final nextInt = _primeData.key + 1;
 
     try {
-      final bool isPrime;
-
-      switch (computeType) {
-        case ComputeType.isolate:
-          isPrime = await isolateCompute(_isPrime, nextInt);
-          break;
-        case ComputeType.synchronous:
-          isPrime = _isPrime(nextInt);
-          break;
-      }
+      final isPrime = switch (computeType) {
+        ComputeType.isolate => await isolateCompute(_isPrime, nextInt),
+        ComputeType.synchronous => _isPrime(nextInt),
+      };
 
       _primeData = MapEntry(nextInt, isPrime);
     } on BackpressureDropException catch (_) {

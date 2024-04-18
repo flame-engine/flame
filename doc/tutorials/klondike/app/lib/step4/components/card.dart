@@ -105,29 +105,24 @@ class Card extends PositionComponent with DragCallbacks {
     switch (rank.value) {
       case 1:
         _drawSprite(canvas, suitSprite, 0.5, 0.5, scale: 2.5);
-        break;
       case 2:
         _drawSprite(canvas, suitSprite, 0.5, 0.25);
         _drawSprite(canvas, suitSprite, 0.5, 0.25, rotate: true);
-        break;
       case 3:
         _drawSprite(canvas, suitSprite, 0.5, 0.2);
         _drawSprite(canvas, suitSprite, 0.5, 0.5);
         _drawSprite(canvas, suitSprite, 0.5, 0.2, rotate: true);
-        break;
       case 4:
         _drawSprite(canvas, suitSprite, 0.3, 0.25);
         _drawSprite(canvas, suitSprite, 0.7, 0.25);
         _drawSprite(canvas, suitSprite, 0.3, 0.25, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.25, rotate: true);
-        break;
       case 5:
         _drawSprite(canvas, suitSprite, 0.3, 0.25);
         _drawSprite(canvas, suitSprite, 0.7, 0.25);
         _drawSprite(canvas, suitSprite, 0.3, 0.25, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.25, rotate: true);
         _drawSprite(canvas, suitSprite, 0.5, 0.5);
-        break;
       case 6:
         _drawSprite(canvas, suitSprite, 0.3, 0.25);
         _drawSprite(canvas, suitSprite, 0.7, 0.25);
@@ -135,7 +130,6 @@ class Card extends PositionComponent with DragCallbacks {
         _drawSprite(canvas, suitSprite, 0.7, 0.5);
         _drawSprite(canvas, suitSprite, 0.3, 0.25, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.25, rotate: true);
-        break;
       case 7:
         _drawSprite(canvas, suitSprite, 0.3, 0.2);
         _drawSprite(canvas, suitSprite, 0.7, 0.2);
@@ -144,7 +138,6 @@ class Card extends PositionComponent with DragCallbacks {
         _drawSprite(canvas, suitSprite, 0.7, 0.5);
         _drawSprite(canvas, suitSprite, 0.3, 0.2, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
-        break;
       case 8:
         _drawSprite(canvas, suitSprite, 0.3, 0.2);
         _drawSprite(canvas, suitSprite, 0.7, 0.2);
@@ -154,7 +147,6 @@ class Card extends PositionComponent with DragCallbacks {
         _drawSprite(canvas, suitSprite, 0.3, 0.2, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
         _drawSprite(canvas, suitSprite, 0.5, 0.35, rotate: true);
-        break;
       case 9:
         _drawSprite(canvas, suitSprite, 0.3, 0.2);
         _drawSprite(canvas, suitSprite, 0.7, 0.2);
@@ -165,7 +157,6 @@ class Card extends PositionComponent with DragCallbacks {
         _drawSprite(canvas, suitSprite, 0.7, 0.2, rotate: true);
         _drawSprite(canvas, suitSprite, 0.3, 0.4, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.4, rotate: true);
-        break;
       case 10:
         _drawSprite(canvas, suitSprite, 0.3, 0.2);
         _drawSprite(canvas, suitSprite, 0.7, 0.2);
@@ -177,16 +168,12 @@ class Card extends PositionComponent with DragCallbacks {
         _drawSprite(canvas, suitSprite, 0.5, 0.3, rotate: true);
         _drawSprite(canvas, suitSprite, 0.3, 0.4, rotate: true);
         _drawSprite(canvas, suitSprite, 0.7, 0.4, rotate: true);
-        break;
       case 11:
         _drawSprite(canvas, suit.isRed ? redJack : blackJack, 0.5, 0.5);
-        break;
       case 12:
         _drawSprite(canvas, suit.isRed ? redQueen : blackQueen, 0.5, 0.5);
-        break;
       case 13:
         _drawSprite(canvas, suit.isRed ? redKing : blackKing, 0.5, 0.5);
-        break;
     }
   }
 

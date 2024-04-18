@@ -95,26 +95,19 @@ class WorkerOvermind extends Component
           pathFinderData: game.pathFinderData,
         );
 
-        final List<List<IntVector2>> paths;
-        switch (isolateHud.computeType) {
-          case ComputeType.isolate:
-            paths = await isolateCompute(
+        final paths = switch (isolateHud.computeType) {
+          ComputeType.isolate => await isolateCompute(
               _calculateWork,
               calculateWorkData,
-            );
-            break;
-          case ComputeType.synchronous:
-            paths = _calculateWork(
+            ),
+          ComputeType.synchronous => _calculateWork(
               calculateWorkData,
-            );
-            break;
-          case ComputeType.compute:
-            paths = await compute(
+            ),
+          ComputeType.compute => await compute(
               _calculateWork,
               calculateWorkData,
-            );
-            break;
-        }
+            ),
+        };
 
         for (var i = 0; i < paths.length; i++) {
           idleWorkers[i].issueWork(
