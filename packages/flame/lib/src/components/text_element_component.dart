@@ -1,15 +1,16 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
 
 class TextElementComponent extends PositionComponent {
+  final Vector2? documentSize;
   TextElement element;
 
   TextElementComponent({
     required this.element,
-    super.position,
+    this.documentSize,
     super.size,
+    super.position,
     super.scale,
     super.angle,
     super.anchor,
@@ -37,10 +38,12 @@ class TextElementComponent extends PositionComponent {
       width: effectiveSize.x,
       height: effectiveSize.y,
     );
+    final box = element.boundingBox;
     return TextElementComponent(
       element: element,
       position: position,
-      size: effectiveSize,
+      documentSize: effectiveSize,
+      size: box.bottomRight.toVector2(),
       scale: scale,
       angle: angle,
       anchor: anchor,

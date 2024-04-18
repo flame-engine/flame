@@ -20,4 +20,7 @@ abstract class InlineTextElement extends TextElement {
     );
     draw(canvas);
   }
+
+  @override
+  Rect get boundingBox => metrics.toRect();
 }
