@@ -63,4 +63,15 @@ class TextPaint extends TextRenderer {
       textDirection: textDirection ?? this.textDirection,
     );
   }
+
+  InlineTextStyle asInlineTextStyle() {
+    return InlineTextStyle(
+      color: style.color,
+      fontFamily: style.fontFamily,
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      fontStyle: style.fontStyle,
+      letterSpacing: style.letterSpacing,
+    );
+  }
 }

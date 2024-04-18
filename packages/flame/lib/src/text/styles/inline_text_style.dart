@@ -37,7 +37,6 @@ class InlineTextStyle extends FlameTextStyle {
     );
   }
 
-  @internal
   TextPaint asTextRenderer() {
     return TextPaint(
       style: TextStyle(
