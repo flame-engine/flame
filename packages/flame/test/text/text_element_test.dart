@@ -36,7 +36,6 @@ void main() {
       expect(element3.boundingBox, expected);
     });
 
-
     test('bounding box is composed', () {
       final document = DocumentRoot([
         ParagraphNode.group([

@@ -23,11 +23,12 @@ class GroupElement extends BlockElement {
   @override
   Rect get boundingBox {
     return children.fold<Rect?>(
-      null,
-      (previousValue, element) {
-        final box = element.boundingBox;
-        return previousValue?.expandToInclude(box) ?? box;
-      },
-    ) ?? Rect.zero;
+          null,
+          (previousValue, element) {
+            final box = element.boundingBox;
+            return previousValue?.expandToInclude(box) ?? box;
+          },
+        ) ??
+        Rect.zero;
   }
 }
