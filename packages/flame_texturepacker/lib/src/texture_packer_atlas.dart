@@ -101,7 +101,7 @@ Future<_TextureAtlasData> _parse(
   if (fromStorage) {
     fileAsString = await File(path).readAsString();
   } else {
-    fileAsString = await Flame.assets.readFile(path);
+    fileAsString = await Flame.assets.readFile('images/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
