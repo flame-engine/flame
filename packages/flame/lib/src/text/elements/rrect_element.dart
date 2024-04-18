@@ -22,4 +22,7 @@ class RRectElement extends TextElement {
   void draw(Canvas canvas) {
     canvas.drawRRect(_rrect, _paint);
   }
+
+  @override
+  Rect get boundingBox => _rrect.outerRect;
 }
