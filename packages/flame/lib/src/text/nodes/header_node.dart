@@ -42,7 +42,7 @@ class HeaderNode extends TextBlockNode {
       5 => stylesheet.header5,
       _ => stylesheet.header6,
     };
-    final textStyle = FlameTextStyle.merge(parentTextStyle, style.text)!;
+    final textStyle = FlameTextStyle.merge(style.text, parentTextStyle)!;
     super.fillStyles(stylesheet, textStyle);
   }
 }

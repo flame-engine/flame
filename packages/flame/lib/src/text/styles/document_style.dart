@@ -127,6 +127,7 @@ class DocumentStyle extends FlameTextStyle {
 
   final Map<FlameTextStyle, Map<FlameTextStyle, FlameTextStyle>>
       _mergedStylesCache = {};
+
   FlameTextStyle? merge(FlameTextStyle? style1, FlameTextStyle? style2) {
     if (style1 == null) {
       return style2;

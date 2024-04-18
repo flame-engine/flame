@@ -17,7 +17,7 @@ class ItalicTextNode extends InlineTextNode {
 
   @override
   void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
-    style = FlameTextStyle.merge(parentTextStyle, stylesheet.italicText)!;
+    style = FlameTextStyle.merge(stylesheet.italicText, parentTextStyle)!;
     child.fillStyles(stylesheet, style);
   }
 

@@ -27,13 +27,13 @@ class InlineTextStyle extends FlameTextStyle {
   @override
   InlineTextStyle copyWith(InlineTextStyle other) {
     return InlineTextStyle(
-      color: color ?? other.color,
-      fontFamily: fontFamily ?? other.fontFamily,
-      fontSize: fontSize ?? other.fontSize,
-      fontScale: fontScale ?? other.fontScale,
-      fontWeight: fontWeight ?? other.fontWeight,
-      fontStyle: fontStyle ?? other.fontStyle,
-      letterSpacing: letterSpacing ?? other.letterSpacing,
+      color: other.color ?? color,
+      fontFamily: other.fontFamily ?? fontFamily,
+      fontSize: other.fontSize ?? fontSize,
+      fontScale: other.fontScale ?? fontScale,
+      fontWeight: other.fontWeight ?? fontWeight,
+      fontStyle: other.fontStyle ?? fontStyle,
+      letterSpacing: other.letterSpacing ?? letterSpacing,
     );
   }
 

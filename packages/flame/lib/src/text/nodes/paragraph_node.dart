@@ -16,7 +16,7 @@ class ParagraphNode extends TextBlockNode {
   @override
   void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
     style = stylesheet.paragraph;
-    final textStyle = FlameTextStyle.merge(parentTextStyle, style.text)!;
+    final textStyle = FlameTextStyle.merge(style.text, parentTextStyle)!;
     super.fillStyles(stylesheet, textStyle);
   }
 }
