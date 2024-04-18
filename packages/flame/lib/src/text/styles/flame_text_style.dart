@@ -20,7 +20,7 @@ abstract class FlameTextStyle {
   FlameTextStyle copyWith(covariant FlameTextStyle other);
 
   /// Merges two [FlameTextStyle]s together, preferring the properties of
-  /// [style1] if present, falling back to the properties of [style2].
+  /// [style2] if present, falling back to the properties of [style1].
   static T? merge<T extends FlameTextStyle>(T? style1, T? style2) {
     if (style1 == null) {
       return style2;
@@ -28,7 +28,7 @@ abstract class FlameTextStyle {
       return style1;
     } else {
       assert(style1.runtimeType == style2.runtimeType);
-      return style2.copyWith(style1) as T;
+      return style1.copyWith(style2) as T;
     }
   }
 }

@@ -17,7 +17,7 @@ class BoldTextNode extends InlineTextNode {
 
   @override
   void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
-    style = FlameTextStyle.merge(stylesheet.boldText, parentTextStyle)!;
+    style = FlameTextStyle.merge(parentTextStyle, stylesheet.boldText)!;
     child.fillStyles(stylesheet, style);
   }
 

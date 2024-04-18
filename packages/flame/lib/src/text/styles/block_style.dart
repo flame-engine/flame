@@ -28,7 +28,7 @@ class BlockStyle extends FlameTextStyle {
       margin: other._margin ?? _margin,
       padding: other._padding ?? _padding,
       background: other.background ?? background,
-      text: FlameTextStyle.merge(other.text, text),
+      text: FlameTextStyle.merge(text, other.text),
     );
   }
 }

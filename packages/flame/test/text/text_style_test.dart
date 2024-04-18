@@ -38,6 +38,50 @@ void main() {
       expect(style.paragraph.padding, EdgeInsets.zero);
     });
 
+    test('document style can be copied', () {
+      final style = DocumentStyle(
+        text: InlineTextStyle(
+          fontSize: 8,
+        ),
+        boldText: InlineTextStyle(
+          fontWeight: FontWeight.w900,
+        ),
+        paragraph: const BlockStyle(
+          margin: EdgeInsets.zero,
+          padding: EdgeInsets.zero,
+        ),
+        background: BackgroundStyle(
+          color: const Color(0xFFFF00FF),
+        ),
+      );
+      final newStyle = style.copyWith(
+        DocumentStyle(
+          text: InlineTextStyle(
+            fontSize: 10,
+          ),
+          boldText: InlineTextStyle(
+            fontWeight: FontWeight.w900,
+          ),
+          italicText: InlineTextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+          paragraph: const BlockStyle(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.zero,
+          ),
+        ),
+      );
+      expect(newStyle.text.fontSize, 10);
+      expect(newStyle.boldText.fontWeight, FontWeight.w900);
+      expect(newStyle.italicText.fontStyle, FontStyle.italic);
+      expect(newStyle.paragraph.margin, const EdgeInsets.all(10));
+      expect(newStyle.paragraph.padding, EdgeInsets.zero);
+      expect(
+        newStyle.background!.backgroundPaint!.color,
+        const Color(0xFFFF00FF),
+      );
+    });
+
     test('styles are cascading', () {
       final style = DocumentStyle(
         width: 600.0,

@@ -27,18 +27,18 @@ class DocumentStyle extends FlameTextStyle {
     BlockStyle? header4,
     BlockStyle? header5,
     BlockStyle? header6,
-  })  : _text = FlameTextStyle.merge(text, DocumentStyle.defaultTextStyle),
-        _boldText = FlameTextStyle.merge(boldText, BoldTextNode.defaultStyle),
+  })  : _text = FlameTextStyle.merge(DocumentStyle.defaultTextStyle, text),
+        _boldText = FlameTextStyle.merge(BoldTextNode.defaultStyle, boldText),
         _italicText =
-            FlameTextStyle.merge(italicText, ItalicTextNode.defaultStyle),
+            FlameTextStyle.merge(ItalicTextNode.defaultStyle, italicText),
         _paragraph =
-            FlameTextStyle.merge(paragraph, ParagraphNode.defaultStyle),
-        _header1 = FlameTextStyle.merge(header1, HeaderNode.defaultStyleH1),
-        _header2 = FlameTextStyle.merge(header2, HeaderNode.defaultStyleH2),
-        _header3 = FlameTextStyle.merge(header3, HeaderNode.defaultStyleH3),
-        _header4 = FlameTextStyle.merge(header4, HeaderNode.defaultStyleH4),
-        _header5 = FlameTextStyle.merge(header5, HeaderNode.defaultStyleH5),
-        _header6 = FlameTextStyle.merge(header6, HeaderNode.defaultStyleH6);
+            FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
+        _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
+        _header2 = FlameTextStyle.merge(HeaderNode.defaultStyleH2, header2),
+        _header3 = FlameTextStyle.merge(HeaderNode.defaultStyleH3, header3),
+        _header4 = FlameTextStyle.merge(HeaderNode.defaultStyleH4, header4),
+        _header5 = FlameTextStyle.merge(HeaderNode.defaultStyleH5, header5),
+        _header6 = FlameTextStyle.merge(HeaderNode.defaultStyleH6, header6);
 
   final InlineTextStyle? _text;
   final InlineTextStyle? _boldText;
@@ -114,20 +114,25 @@ class DocumentStyle extends FlameTextStyle {
       width: other.width ?? width,
       height: other.height ?? height,
       padding: other.padding,
-      background: merge(other.background, background)! as BackgroundStyle,
-      paragraph: merge(other.paragraph, paragraph)! as BlockStyle,
-      header1: merge(other.header1, header1)! as BlockStyle,
-      header2: merge(other.header2, header2)! as BlockStyle,
-      header3: merge(other.header3, header3)! as BlockStyle,
-      header4: merge(other.header4, header4)! as BlockStyle,
-      header5: merge(other.header5, header5)! as BlockStyle,
-      header6: merge(other.header6, header6)! as BlockStyle,
+      text: FlameTextStyle.merge(_text, other.text),
+      boldText: FlameTextStyle.merge(_boldText, other.boldText),
+      italicText: FlameTextStyle.merge(_italicText, other.italicText),
+      background: merge(background, other.background) as BackgroundStyle?,
+      paragraph: merge(paragraph, other.paragraph) as BlockStyle?,
+      header1: merge(header1, other.header1) as BlockStyle?,
+      header2: merge(header2, other.header2) as BlockStyle?,
+      header3: merge(header3, other.header3) as BlockStyle?,
+      header4: merge(header4, other.header4) as BlockStyle?,
+      header5: merge(header5, other.header5) as BlockStyle?,
+      header6: merge(header6, other.header6) as BlockStyle?,
     );
   }
 
   final Map<FlameTextStyle, Map<FlameTextStyle, FlameTextStyle>>
       _mergedStylesCache = {};
 
+  /// Merges two [FlameTextStyle]s together, preferring the properties of
+  /// [style2] if present, falling back to the properties of [style1].
   FlameTextStyle? merge(FlameTextStyle? style1, FlameTextStyle? style2) {
     if (style1 == null) {
       return style2;
