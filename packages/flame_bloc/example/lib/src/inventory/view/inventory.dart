@@ -6,25 +6,19 @@ class Inventory extends StatelessWidget {
   const Inventory({super.key});
 
   Color _mapWeaponColor(Weapon weapon) {
-    switch (weapon) {
-      case Weapon.bullet:
-        return Colors.orange;
-      case Weapon.laser:
-        return Colors.red;
-      case Weapon.plasma:
-        return Colors.blue;
-    }
+    return switch (weapon) {
+      Weapon.bullet => Colors.orange,
+      Weapon.laser => Colors.red,
+      Weapon.plasma => Colors.blue,
+    };
   }
 
   String _mapWeaponName(Weapon weapon) {
-    switch (weapon) {
-      case Weapon.bullet:
-        return 'Kinetic';
-      case Weapon.laser:
-        return 'Laser';
-      case Weapon.plasma:
-        return 'Plasma';
-    }
+    return switch (weapon) {
+      Weapon.bullet => 'Kinetic',
+      Weapon.laser => 'Laser',
+      Weapon.plasma => 'Plasma',
+    };
   }
 
   @override

@@ -235,13 +235,9 @@ void loadGameSegments(int segmentIndex, double xPositionOffset) {
     for (final block in segments[segmentIndex]) {
       switch (block.blockType) {
         case GroundBlock:
-          break;
         case PlatformBlock:
-          break;
         case Star:
-          break;
         case WaterEnemy:
-          break;
       }
     }
   }
@@ -434,7 +430,6 @@ case PlatformBlock:
     gridPosition: block.gridPosition,
     xOffset: xPositionOffset,
   ));
-  break;
 ```
 
 If you run your code, you should now see:
