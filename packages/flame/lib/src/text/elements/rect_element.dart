@@ -18,4 +18,7 @@ class RectElement extends TextElement {
   void draw(Canvas canvas) {
     canvas.drawRect(_rect, _paint);
   }
+
+  @override
+  Rect get boundingBox => _rect;
 }
