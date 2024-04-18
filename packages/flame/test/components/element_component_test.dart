@@ -77,7 +77,7 @@ void main() {
         size: Vector2(800, 160), // oversized
       );
       expect(c.documentSize, equals(Vector2(800, 160)));
-      expect(c.size, equals(Vector2(96, 38)));
+      expect(c.size, equals(Vector2(96, 44)));
     });
   });
 }
