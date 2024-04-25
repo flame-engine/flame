@@ -7,7 +7,7 @@ But our game so far is too boring, the starship is just a static sprite and the 
 just a black screen.
 
 In this step we will look at how to improve that, we will replace the static graphics of the player
-with an animation and create a cool sense of depth and movement by adding a parallax to the
+to an animation and will create a cool sense of depth and movement by adding a parallax to the
 background of the game.
 
 So lets start by adding the animation to the player ship! For that, we will something that we
@@ -62,7 +62,7 @@ So lets break down the changes:
 
 The `SpriteAnimationData` class might look complicated at first glance, but it is actually quite
 simple, note how we used the `sequenced` constructor, which is a helper to load animation images
-where the frames are already laid down in the sequence that they will play, then:
+where the frames are already layed down in the sequence that they will play, then:
 
 - `amount` defines how many frames the animation has, in this case `4`
 - `stepTime` is the time in seconds that each frame will be rendered, before it gets replaced
@@ -135,4 +135,3 @@ more convincing feeling to the player that the spaceship is really crossing the 
 :page: step3
 :show: popup code
 ```
-[Next step: Adding bullets ](./step_4.md)
