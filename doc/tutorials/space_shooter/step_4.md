@@ -182,10 +182,10 @@ to be an variable accessible to the whole component since we will be accessing i
 `startShooting` and `stopShooting` methods.
 - We initialize our `_bulletSpawner` in the `onLoad` method. In the first argument, `period`, we set
 how much time in seconds it will take between calls, and we choose `.2` seconds for now.
-- We set `selfPositioning: true` so the spawn component doesn't try to position itself  
+- We set `selfPositioning: true` so the spawn component doesn't try to position the created component
 since we want to handle that ourselves to make the bullets spawn out of the ship.
 - The `factory` attribute receives a function that will be called every time the `period` is  
-reached and return the create component.
+reached and return the created component.
 - We set `autoStart: false` so it does not start by default.
 - Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
 - Note how the `_bulletSpawner` is added to the game instead of the player, since the bullets

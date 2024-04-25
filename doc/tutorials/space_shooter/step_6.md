@@ -20,14 +20,14 @@ class SpaceShooterGame extends FlameGame
 With that, Flame now will start to check if components have collided with each other. Next we need to
 identify which components can cause collisions.
 
-In our case those are the `Bullet` and `Enemy` components and we need to add `hitboxes` to them.
+In our case those are the `Bullet` and `Enemy` components and we need to add hitboxes to them.
 
-A `hitbox` is nothing more than a defined part of the component's area that can hit
-other objects. Flame offers a collection of classes to define a `hitbox`, the simplest of them is
+A hitbox is nothing more than a defined part of the component's area that can hit
+other objects. Flame offers a collection of classes to define a hitbox, the simplest of them is
 the `RectangleHitbox`, which like the name implies, will set a rectangular area as the component's
-`hitbox`.
+hitbox.
 
-`Hitboxes` are also components, so we can simply add them to the components that we want to have `hitboxes`.
+Hitboxes are also components, so we can simply add them to the components that we want to have hitboxes.
 Let's start by adding the following line to the `Enemy` class:
 
 ```dart
@@ -49,9 +49,9 @@ performance!
 
 There are three types of collisions in Flame:
 
-- `active` collides with other `Hitbox` of type active or passive
-- `passive` collides with other `Hitbox` of type active
-- `inactive` will not collide with any other `Hitbox`
+- `active` collides with other hitboxes of type active or passive
+- `passive` collides with other hitboxes of type active
+- `inactive` will not collide with any other hitbox
 
 Usually it is smart to mark `hitboxes` from components that will have a higher number of instances
 as passive, so they will be taken into account for collision, but they themselves will not check
@@ -62,7 +62,7 @@ And since in this game we anticipate that there will be more bullets than enemie
 bullets to have a passive collision type!
 
 From this point on, Flame will take care of checking the collision between those two components and
-we now need to do something when these occur.
+we now need to do something when this occurs.
 
 We start by receiving the collision events in one of the classes. Since `Bullet`s have a
 passive collision type, we will also add the collision checking logic to the `Enemy` class.
