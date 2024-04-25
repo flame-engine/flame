@@ -87,4 +87,5 @@ And this concludes this short step!
 :page: step5
 :show: popup code
 ```
-[Next step: Collision Detection ](./step_6.md)
+
+[Next step: Collision Detection](./step_6.md)

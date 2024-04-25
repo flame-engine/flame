@@ -135,4 +135,5 @@ more convincing feeling to the player that the spaceship is really crossing the 
 :page: step3
 :show: popup code
 ```
-[Next step: Adding bullets ](./step_4.md)
+
+[Next step: Adding bullets](./step_4.md)
