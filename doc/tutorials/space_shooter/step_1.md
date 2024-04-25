@@ -87,3 +87,4 @@ game class, insert it into the Flutter widget tree, and render a simple componen
 :page: step1
 :show: popup code
 ```
+[Next step: Controlling the player and adding some graphics](./step_2.md)
