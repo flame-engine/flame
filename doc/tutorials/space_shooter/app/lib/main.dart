@@ -24,7 +24,7 @@ void main() {
     _ => runApp(
         Directionality(
           textDirection: TextDirection.ltr,
-          child: Text('Error: unknown page name "$page"'),
+          child: Text('Error: unknown page. Pass "step{1,6}" as a GET param; e.g: ' + window.location.toString() + '?step1'),
         ),
       ),
   };
