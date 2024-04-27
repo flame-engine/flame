@@ -10,5 +10,8 @@ funding:
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
+dependencies:
+  lints: ^3.0.0
+
 dev_dependencies:
   dartdoc: ^6.3.0

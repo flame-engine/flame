@@ -35,7 +35,7 @@ void main() {
 
       final drawFunction = MocktailDrawFunction();
       when(() => drawFunction.call(canvas)).thenReturn(null);
-      canvas.renderAt(Vector2(1, 1), drawFunction);
+      canvas.renderAt(Vector2(1, 1), drawFunction.call);
       verify(canvas.save).called(1);
       verify(() => canvas.translateVector(Vector2(1, 1))).called(1);
       verify(() => drawFunction(canvas)).called(1);
@@ -54,7 +54,7 @@ void main() {
 
       final drawFunction = MocktailDrawFunction();
       when(() => drawFunction.call(canvas)).thenReturn(null);
-      canvas.renderRotated(0.5, Vector2(1, 1), drawFunction);
+      canvas.renderRotated(0.5, Vector2(1, 1), drawFunction.call);
       verify(canvas.save).called(1);
       verify(() => canvas.translateVector(Vector2(1, 1))).called(1);
       verify(() => canvas.rotate(.5)).called(1);

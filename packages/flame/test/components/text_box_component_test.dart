@@ -129,18 +129,18 @@ void main() {
       (game) async {
         final onComplete = MockOnCompleteCallback();
 
-        when(onComplete).thenReturn(null);
+        when(onComplete.call).thenReturn(null);
 
         final component = ScrollTextBoxComponent(
           size: Vector2(200, 100),
           text: 'Short text',
-          onComplete: onComplete,
+          onComplete: onComplete.call,
         );
         await game.ensureAdd(component);
 
         game.update(0.1);
 
-        verify(onComplete).called(1);
+        verify(onComplete.call).called(1);
       },
     );
 
