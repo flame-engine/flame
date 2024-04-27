@@ -74,7 +74,7 @@ checkout a specific Flutter build. Thankfully we were able to simplify that proc
 one-liner:
 
 ```sh
-cd $(dirname $(which flutter)) && && git fetch && git checkout bcdd1b2c481bca0647beff690238efaae68ca5ac -q && echo "Engine commit: $(cat internal/engine.version)" && cd - >/dev/null
+cd $(dirname $(which flutter)) && git fetch && git checkout bcdd1b2c481bca0647beff690238efaae68ca5ac -q && echo "Engine commit: $(cat internal/engine.version)" && cd - >/dev/null
 ```
 
 This will check out the GIT repo of your Flutter installation to the specific commit that we require
