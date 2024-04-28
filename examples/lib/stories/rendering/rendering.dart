@@ -21,7 +21,11 @@ void addRenderingStories(Dashbook dashbook) {
     )
     ..add(
       'Isometric Tile Map',
-      (_) => GameWidget(game: IsometricTileMapExample()),
+      (context) => GameWidget(
+        game: IsometricTileMapExample(
+          halfSize: context.boolProperty('Half size', true),
+        ),
+      ),
       codeLink: baseLink('rendering/isometric_tile_map_example.dart'),
       info: IsometricTileMapExample.description,
     )
