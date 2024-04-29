@@ -60,7 +60,7 @@ class IsometricTileMapComponent extends PositionComponent {
 
   /// Displacement applied so that the origin of the component
   /// matches the origin of the AABB.
-  final Vector2 _ds = Vector2.zero();
+  final Vector2 _offset = Vector2.zero();
 
   IsometricTileMapComponent(
     this.tileset,
@@ -136,7 +136,8 @@ class IsometricTileMapComponent extends PositionComponent {
     final cartesianPosition = _cartesianPositionCache
       ..setValues(i.toDouble(), j.toDouble())
       ..multiply(halfTile);
-    return _ds + cartToIso(cartesianPosition)
+    return cartToIso(cartesianPosition)
+      ..add(_offset)
       ..sub(halfTile);
   }
 
@@ -181,7 +182,7 @@ class IsometricTileMapComponent extends PositionComponent {
     final multiplier = 1 - halfTile.y / (2 * effectiveTileHeight * scale.x);
     final iso = _getBlockIsoCache
       ..setFrom(p)
-      ..sub(_ds)
+      ..sub(_offset)
       ..sub(position)
       ..translate(halfTile.x, halfTile.y * multiplier);
     final cart = isoToCart(iso);
@@ -235,7 +236,7 @@ class IsometricTileMapComponent extends PositionComponent {
     size.x = effectiveTileSize.x * width;
     size.y = effectiveTileSize.y * height / 2 + effectiveTileHeight;
 
-    _ds.x = size.x / 2;
-    _ds.y = effectiveTileHeight;
+    _offset.x = size.x / 2;
+    _offset.y = effectiveTileHeight;
   }
 }
