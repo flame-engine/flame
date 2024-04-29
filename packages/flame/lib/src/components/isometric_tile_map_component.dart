@@ -76,7 +76,7 @@ class IsometricTileMapComponent extends PositionComponent {
     super.priority,
     super.key,
   }) : _renderSprite = Sprite(tileset.image) {
-    _recomputeSize();
+    _recomputeSizeAndOffset();
   }
 
   /// This is the size the tiles will be drawn (either original or overwritten).
@@ -110,7 +110,7 @@ class IsometricTileMapComponent extends PositionComponent {
 
   @override
   void update(double dt) {
-    _recomputeSize();
+    _recomputeSizeAndOffset();
   }
 
   /// Get the position in which a block is rendered in, in the isometric space.
@@ -226,7 +226,7 @@ class IsometricTileMapComponent extends PositionComponent {
         block.x < matrix[block.y].length;
   }
 
-  void _recomputeSize() {
+  void _recomputeSizeAndOffset() {
     final width = matrix.fold<int>(
       0,
       (previousValue, element) => max(previousValue, element.length),
