@@ -10,29 +10,16 @@ void main() {
   if (page.startsWith('?')) {
     page = page.substring(1);
   }
-  switch (page) {
-    case 'step2':
-      step2.main();
-      break;
-
-    case 'step3':
-      step3.main();
-      break;
-
-    case 'step4':
-      step4.main();
-      break;
-
-    case 'step5':
-      step5.main();
-      break;
-
-    default:
-      runApp(
+  return switch (page) {
+    'step2' => step2.main(),
+    'step3' => step3.main(),
+    'step4' => step4.main(),
+    'step5' => step5.main(),
+    _ => runApp(
         Directionality(
           textDirection: TextDirection.ltr,
-          child: Text('Error: unknown page name "$page"'),
+          child: Text('Error=> unknown page name "$page"'),
         ),
-      );
-  }
+      ),
+  };
 }

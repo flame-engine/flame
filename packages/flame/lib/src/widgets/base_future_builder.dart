@@ -28,11 +28,12 @@ class BaseFutureBuilder<T> extends StatelessWidget {
             case ConnectionState.active:
               return loadingBuilder?.call(context) ?? const SizedBox();
             case ConnectionState.done:
-              if (snapshot.hasData) {
-                return builder(context, snapshot.data!);
-              }
               if (snapshot.hasError) {
                 return errorBuilder?.call(context) ?? const SizedBox();
+              }
+              final data = snapshot.data;
+              if (data != null) {
+                return builder(context, data);
               }
               return loadingBuilder?.call(context) ?? const SizedBox();
           }

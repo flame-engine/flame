@@ -135,16 +135,12 @@ class BodyComponent<T extends Forge2DGame> extends Component
     switch (fixture.type) {
       case ShapeType.chain:
         _renderChain(canvas, fixture);
-        break;
       case ShapeType.circle:
         _renderCircle(canvas, fixture);
-        break;
       case ShapeType.edge:
         _renderEdge(canvas, fixture);
-        break;
       case ShapeType.polygon:
         _renderPolygon(canvas, fixture);
-        break;
     }
     canvas.restore();
   }

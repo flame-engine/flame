@@ -102,6 +102,8 @@ scripts:
       dirExists: test
     description: Generate coverage for the selected package.
 
+  upgrade: melos exec flutter pub upgrade
+
   update-goldens:
     run: melos exec -- flutter test --update-goldens
     packageFilters:

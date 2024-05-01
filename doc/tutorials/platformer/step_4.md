@@ -90,7 +90,6 @@ case Star:
       xOffset: xPositionOffset,
     ),
   );
-  break;
 ```
 
 If you run your game, you should now see pulsating stars!
@@ -177,7 +176,6 @@ case WaterEnemy:
        xOffset: xPositionOffset,
       ),
     );
-    break;
 ```
 
 If you run the game now, the Water Enemy should be displayed and moving!
@@ -397,7 +395,6 @@ case GroundBlock:
       xOffset: xPositionOffset,
     ),
   );
-  break;
 ```
 
 If you run your code, your game should now look like this:

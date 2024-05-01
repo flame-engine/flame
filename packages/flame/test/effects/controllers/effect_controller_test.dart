@@ -323,8 +323,8 @@ void main() {
       final ec = EffectController(
         duration: 1,
         reverseDuration: 1,
-        onMax: mockOnMax,
-        onMin: mockOnMin,
+        onMax: mockOnMax.call,
+        onMin: mockOnMin.call,
         infinite: true,
       );
 

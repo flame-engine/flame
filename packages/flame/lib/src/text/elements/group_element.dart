@@ -1,5 +1,5 @@
+import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
-import 'package:flutter/rendering.dart' hide TextStyle;
 
 class GroupElement extends BlockElement {
   GroupElement({
@@ -18,5 +18,17 @@ class GroupElement extends BlockElement {
   @override
   void draw(Canvas canvas) {
     children.forEach((child) => child.draw(canvas));
+  }
+
+  @override
+  Rect get boundingBox {
+    return children.fold<Rect?>(
+          null,
+          (previousValue, element) {
+            final box = element.boundingBox;
+            return previousValue?.expandToInclude(box) ?? box;
+          },
+        ) ??
+        Rect.zero;
   }
 }

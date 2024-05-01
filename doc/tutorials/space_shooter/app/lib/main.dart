@@ -14,32 +14,19 @@ void main() {
     page = page.substring(1);
   }
 
-  switch (page) {
-    case 'step1':
-      step1.main();
-      break;
-    case 'step2':
-      step2.main();
-      break;
-    case 'step3':
-      step3.main();
-      break;
-    case 'step4':
-      step4.main();
-      break;
-    case 'step5':
-      step5.main();
-      break;
-    case 'step6':
-      step6.main();
-      break;
-
-    default:
-      runApp(
+  return switch (page) {
+    'step1' => step1.main(),
+    'step2' => step2.main(),
+    'step3' => step3.main(),
+    'step4' => step4.main(),
+    'step5' => step5.main(),
+    'step6' => step6.main(),
+    _ => runApp(
         Directionality(
           textDirection: TextDirection.ltr,
-          child: Text('Error: unknown page name "$page"'),
+          child: Text('''Error: unknown page. Pass "step{1,6}" as a GET param; 
+e.g: ${window.location}?step1'''),
         ),
-      );
-  }
+      ),
+  };
 }

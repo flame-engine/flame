@@ -58,20 +58,7 @@ void main() {
       final pixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) {
-            switch (index % 4) {
-              case 0:
-                return originalColor.red;
-              case 1:
-                return originalColor.green;
-              case 2:
-                return originalColor.blue;
-              case 3:
-                return originalColor.alpha;
-              default:
-                throw 'No 4 in switch % 4';
-            }
-          },
+          (index) => _colorBit(index, originalColor),
         ),
       );
       final image = await ImageExtension.fromPixels(pixels, 10, 10);
@@ -85,20 +72,7 @@ void main() {
       final expectedDarkenPixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) {
-            switch (index % 4) {
-              case 0:
-                return darkenColor.red;
-              case 1:
-                return darkenColor.green;
-              case 2:
-                return darkenColor.blue;
-              case 3:
-                return darkenColor.alpha;
-              default:
-                throw 'No 4 in switch % 4';
-            }
-          },
+          (index) => _colorBit(index, darkenColor),
         ),
       );
       expect(originalDarkenPixelsList, expectedDarkenPixels);
@@ -109,20 +83,7 @@ void main() {
       final pixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) {
-            switch (index % 4) {
-              case 0:
-                return originalColor.red;
-              case 1:
-                return originalColor.green;
-              case 2:
-                return originalColor.blue;
-              case 3:
-                return originalColor.alpha;
-              default:
-                throw 'No 4 in switch % 4';
-            }
-          },
+          (index) => _colorBit(index, originalColor),
         ),
       );
       final image = await ImageExtension.fromPixels(pixels, 10, 10);
@@ -136,20 +97,7 @@ void main() {
       final expectedBrightenPixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) {
-            switch (index % 4) {
-              case 0:
-                return brightenColor.red;
-              case 1:
-                return brightenColor.green;
-              case 2:
-                return brightenColor.blue;
-              case 3:
-                return brightenColor.alpha;
-              default:
-                throw 'No 4 in switch % 4';
-            }
-          },
+          (index) => _colorBit(index, brightenColor),
         ),
       );
       expect(originalBrightenPixelsList, expectedBrightenPixels);
@@ -169,4 +117,14 @@ void main() {
       expect(resizedImage.height, equals(400));
     });
   });
+}
+
+int _colorBit(int index, Color color) {
+  return switch (index % 4) {
+    0 => color.red,
+    1 => color.green,
+    2 => color.blue,
+    3 => color.alpha,
+    _ => throw UnimplementedError(),
+  };
 }
