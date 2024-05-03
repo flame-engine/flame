@@ -250,14 +250,11 @@ class ParallaxLayer {
 
   void resize(Vector2 size) {
     double scale(LayerFill fill) {
-      switch (fill) {
-        case LayerFill.height:
-          return parallaxRenderer.image.height / size.y;
-        case LayerFill.width:
-          return parallaxRenderer.image.width / size.x;
-        default:
-          return _scale;
-      }
+      return switch (fill) {
+        LayerFill.height => parallaxRenderer.image.height / size.y,
+        LayerFill.width => parallaxRenderer.image.width / size.x,
+        _ => _scale,
+      };
     }
 
     _scale = scale(parallaxRenderer.fill);
@@ -299,15 +296,11 @@ class ParallaxLayer {
     switch (parallaxRenderer.repeat) {
       case ImageRepeat.repeat:
         _scroll.setValues(_scroll.x % 1, _scroll.y % 1);
-        break;
       case ImageRepeat.repeatX:
         _scroll.setValues(_scroll.x % 1, _scroll.y);
-        break;
       case ImageRepeat.repeatY:
         _scroll.setValues(_scroll.x, _scroll.y % 1);
-        break;
       case ImageRepeat.noRepeat:
-        break;
     }
 
     _paintArea = Rect.fromLTWH(

@@ -26,34 +26,25 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   double _mapWidth() {
-    switch (weapon) {
-      case Weapon.bullet:
-        return 10;
-      case Weapon.laser:
-      case Weapon.plasma:
-        return 5;
-    }
+    return switch (weapon) {
+      Weapon.bullet => 10,
+      Weapon.laser || Weapon.plasma => 5,
+    };
   }
 
   String _mapSpritePath() {
-    switch (weapon) {
-      case Weapon.bullet:
-        return 'bullet.png';
-      case Weapon.laser:
-        return 'laser.png';
-      case Weapon.plasma:
-        return 'plasma.png';
-    }
+    return switch (weapon) {
+      Weapon.bullet => 'bullet.png',
+      Weapon.laser => 'laser.png',
+      Weapon.plasma => 'plasma.png',
+    };
   }
 
   double _mapSpriteWidth() {
-    switch (weapon) {
-      case Weapon.bullet:
-        return 8;
-      case Weapon.laser:
-      case Weapon.plasma:
-        return 4;
-    }
+    return switch (weapon) {
+      Weapon.bullet => 8,
+      Weapon.laser || Weapon.plasma => 4,
+    };
   }
 
   @override

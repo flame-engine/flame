@@ -71,9 +71,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
       throw StateError('Map orientation should be present');
     }
 
-    switch (mapOrientation) {
-      case MapOrientation.isometric:
-        return IsometricTileLayer(
+    return switch (mapOrientation) {
+      MapOrientation.isometric => IsometricTileLayer(
           layer: layer,
           parent: parent,
           map: map,
@@ -83,9 +82,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           ignoreFlip: ignoreFlip,
           filterQuality: filterQuality,
           layerPaintFactory: layerPaintFactory,
-        );
-      case MapOrientation.staggered:
-        return StaggeredTileLayer(
+        ),
+      MapOrientation.staggered => StaggeredTileLayer(
           layer: layer,
           parent: parent,
           map: map,
@@ -95,9 +93,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           ignoreFlip: ignoreFlip,
           filterQuality: filterQuality,
           layerPaintFactory: layerPaintFactory,
-        );
-      case MapOrientation.hexagonal:
-        return HexagonalTileLayer(
+        ),
+      MapOrientation.hexagonal => HexagonalTileLayer(
           layer: layer,
           parent: parent,
           map: map,
@@ -107,9 +104,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           ignoreFlip: ignoreFlip,
           filterQuality: filterQuality,
           layerPaintFactory: layerPaintFactory,
-        );
-      case MapOrientation.orthogonal:
-        return OrthogonalTileLayer(
+        ),
+      MapOrientation.orthogonal => OrthogonalTileLayer(
           layer: layer,
           parent: parent,
           map: map,
@@ -119,8 +115,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
           ignoreFlip: ignoreFlip,
           filterQuality: filterQuality,
           layerPaintFactory: layerPaintFactory,
-        );
-    }
+        ),
+    };
   }
 
   @override

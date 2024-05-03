@@ -112,33 +112,26 @@ class RiveArtboardRenderer {
       case BoxFit.fill:
         scaleX = size.width / contentWidth;
         scaleY = size.height / contentHeight;
-        break;
       case BoxFit.contain:
         final minScale =
             min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale;
-        break;
       case BoxFit.cover:
         final maxScale =
             max(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = maxScale;
-        break;
       case BoxFit.fitHeight:
         final minScale = size.height / contentHeight;
         scaleX = scaleY = minScale;
-        break;
       case BoxFit.fitWidth:
         final minScale = size.width / contentWidth;
         scaleX = scaleY = minScale;
-        break;
       case BoxFit.none:
         scaleX = scaleY = 1.0;
-        break;
       case BoxFit.scaleDown:
         final minScale =
             min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
-        break;
     }
 
     Mat2D.setIdentity(_transform);

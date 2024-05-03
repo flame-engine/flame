@@ -3,7 +3,7 @@
 Now that the starship is able to shoot, we need something for the player to shoot at! So for
 this step we will work on adding enemies to the game.
 
-So first things first, let's create an `Enemy` class that will represent the enemies in game:
+First, let's create an `Enemy` class that will represent the enemies in game:
 
 ```dart
 class Enemy extends SpriteAnimationComponent
@@ -50,13 +50,13 @@ Note that for now, the `Enemy` class is super similar to the `Bullet` one, the o
 their sizes, animation information and that bullets travel from bottom to top, while enemies travel from
 top to bottom, so nothing new here.
 
-Next we need to make the enemies spawn in the game, the logic that we will do here will be simple,
-we will simply make enemies spawn from the top of the screen at a random position on the `x` axis.
+Next we need to make the enemies spawn in the game, the logic here will be simple:
+we will make enemies spawn from the top of the screen at a random position on the `x` axis.
 
-Once again, we could manually make all the time based event in the game's `update` method, maintain
-a random instance to get the enemy x position and so on and so forth, but Flame provides us a
-way to avoid having to write all that by ourselves, we can use the `SpawnComponent`! So in the
-`SpaceShooterGame.onLoad` method let's add the following code:
+Once again, we could manually add all the time based events in the game's `update()` method, maintain
+a random instance to get the enemy x position and so on and so forth, but Flame provides us with a
+way to avoid having to write all that by ourselves: we can use the `SpawnComponent`! So in the
+`SpaceShooterGame.onLoad()` method let's add the following code:
 
 ```dart
     add(
@@ -87,3 +87,5 @@ And this concludes this short step!
 :page: step5
 :show: popup code
 ```
+
+[Next step: Collision Detection](./step_6.md)
