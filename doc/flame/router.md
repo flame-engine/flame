@@ -30,7 +30,7 @@ On the contrary, if a page is transparent, then the page below it will be render
 events normally. Such transparent pages are useful for implementing modal dialogs, inventory or
 dialogue UIs, etc. If you want your route to be visually transparent but for the routes below it
 to not receive events, make sure to add a background component to your route that captures the
-events.
+events by using one of the [event capturing mixins](inputs/inputs.md).
 
 Usage example:
 
