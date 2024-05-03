@@ -29,7 +29,7 @@ below it in the stack are not rendered and do not receive pointer events (such a
 On the contrary, if a page is transparent, then the page below it will be rendered and receive
 events normally. Such transparent pages are useful for implementing modal dialogs, inventory or
 dialogue UIs, etc. If you want your route to be visually transparent but for the routes below it
-to not recieve events, make sure to add a background component to your route that captures the
+to not receive events, make sure to add a background component to your route that captures the
 events.
 
 Usage example:
