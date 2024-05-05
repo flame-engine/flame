@@ -72,6 +72,16 @@ class TextPaint extends TextRenderer {
       fontWeight: style.fontWeight,
       fontStyle: style.fontStyle,
       letterSpacing: style.letterSpacing,
+      wordSpacing: style.wordSpacing,
+      height: style.height,
+      leadingDistribution: style.leadingDistribution,
+      shadows: style.shadows,
+      fontFeatures: style.fontFeatures,
+      fontVariations: style.fontVariations,
+      decoration: style.decoration,
+      decorationColor: style.decorationColor,
+      decorationStyle: style.decorationStyle,
+      decorationThickness: style.decorationThickness,
     );
   }
 }
