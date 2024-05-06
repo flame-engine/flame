@@ -4,6 +4,10 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 
 class RichTextExample extends FlameGame {
+  final TextAlign textAlign;
+
+  RichTextExample({this.textAlign = TextAlign.left});
+
   static const String description =
       'A non-interactive example of how to render rich text in Flame.';
 
@@ -23,10 +27,14 @@ class RichTextExample extends FlameGame {
       ),
       paragraph: BlockStyle(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        textAlign: textAlign,
         background: BackgroundStyle(
           color: const Color(0xFF004D40),
           borderColor: const Color(0xFFAAAAAA),
         ),
+      ),
+      header1: BlockStyle(
+        textAlign: textAlign,
       ),
     );
     final document = DocumentRoot([

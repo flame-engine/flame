@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/src/text/common/utils.dart';
 import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/text.dart';
@@ -26,6 +28,7 @@ abstract class TextBlockNode extends BlockNode {
     final lines = <InlineTextElement>[];
     final horizontalOffset = style.padding.left;
     var verticalOffset = style.padding.top;
+    final textAlign = style.textAlign ?? TextAlign.left;
     while (!layoutBuilder.isDone) {
       final element = layoutBuilder.layOutNextLine(contentWidth);
       if (element == null) {
@@ -36,7 +39,12 @@ abstract class TextBlockNode extends BlockNode {
       } else {
         final metrics = element.metrics;
         assert(metrics.left == 0 && metrics.baseline == 0);
-        element.translate(horizontalOffset, verticalOffset + metrics.ascent);
+
+        final dx = horizontalOffset +
+            (contentWidth - metrics.width) * _relativeOffset(textAlign);
+        final dy = verticalOffset + metrics.ascent;
+        element.translate(dx, dy);
+
         lines.add(element);
         verticalOffset += metrics.height;
       }
@@ -49,5 +57,20 @@ abstract class TextBlockNode extends BlockNode {
       height: verticalOffset,
       children: elements,
     );
+  }
+
+  double _relativeOffset(TextAlign textAlign) {
+    return switch (textAlign) {
+      TextAlign.left => 0,
+      TextAlign.right => 1,
+      TextAlign.center => 0.5,
+      // NOTE: we do not support non-LRT text directions
+      TextAlign.start => 0,
+      TextAlign.end => 1,
+      // Not supported by Flame
+      TextAlign.justify => throw UnimplementedError(
+          'The text rendering pipeline cannot justify text.',
+        ),
+    };
   }
 }
