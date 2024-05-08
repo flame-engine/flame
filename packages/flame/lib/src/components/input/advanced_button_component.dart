@@ -86,13 +86,16 @@ class AdvancedButtonComponent extends PositionComponent
     if (_isDisabled) {
       return;
     }
-    onPressed?.call();
     isPressed = true;
     updateState();
   }
 
   @override
   void onTapUp(TapUpEvent event) {
+    if (_isDisabled) {
+      return;
+    }
+    onPressed?.call();
     isPressed = false;
     updateState();
   }

@@ -58,7 +58,7 @@ void main() {
         1,
         TapDownDetails(globalPosition: buttonPosition.toOffset()),
       );
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
@@ -71,7 +71,7 @@ void main() {
         TapDownDetails(globalPosition: buttonPosition.toOffset()),
       );
       tapDispatcher.handleTapCancel(1);
-      expect(pressedTimes, 2);
+      expect(pressedTimes, 1);
     });
 
     testWithFlameGame('correctly registers taps onGameResize', (game) async {
@@ -98,7 +98,7 @@ void main() {
         1,
         TapDownDetails(globalPosition: previousPosition),
       );
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
@@ -111,7 +111,7 @@ void main() {
         TapDownDetails(globalPosition: previousPosition),
       );
       tapDispatcher.handleTapCancel(1);
-      expect(pressedTimes, 2);
+      expect(pressedTimes, 1);
     });
 
     testWithFlameGame('correctly work isDisabled', (game) async {
