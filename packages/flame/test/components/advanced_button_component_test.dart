@@ -26,6 +26,7 @@ void main() {
 
     testWithFlameGame('correctly registers taps', (game) async {
       var pressedTimes = 0;
+      var releasedTimes = 0;
       final initialGameSize = Vector2.all(200);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -35,16 +36,19 @@ void main() {
         button = AdvancedButtonComponent(
           defaultSkin: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
+          onReleased: () => releasedTimes++,
           position: buttonPosition,
           size: componentSize,
         ),
       );
 
       expect(pressedTimes, 0);
+      expect(releasedTimes, 0);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
       tapDispatcher.handleTapDown(1, TapDownDetails());
       expect(pressedTimes, 0);
+      expect(releasedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
@@ -53,29 +57,34 @@ void main() {
         ),
       );
       expect(pressedTimes, 0);
+      expect(releasedTimes, 0);
 
       tapDispatcher.handleTapDown(
         1,
         TapDownDetails(globalPosition: buttonPosition.toOffset()),
       );
-      expect(pressedTimes, 0);
+      expect(pressedTimes, 1);
+      expect(releasedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
         createTapUpDetails(globalPosition: buttonPosition.toOffset()),
       );
       expect(pressedTimes, 1);
+      expect(releasedTimes, 1);
 
       tapDispatcher.handleTapDown(
         1,
         TapDownDetails(globalPosition: buttonPosition.toOffset()),
       );
       tapDispatcher.handleTapCancel(1);
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 2);
+      expect(releasedTimes, 1);
     });
 
     testWithFlameGame('correctly registers taps onGameResize', (game) async {
       var pressedTimes = 0;
+      var releasedTimes = 0;
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -85,6 +94,7 @@ void main() {
         button = AdvancedButtonComponent(
           defaultSkin: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
+          onReleased: () => releasedTimes++,
           position: buttonPosition,
           size: componentSize,
         ),
@@ -98,24 +108,28 @@ void main() {
         1,
         TapDownDetails(globalPosition: previousPosition),
       );
-      expect(pressedTimes, 0);
+      expect(pressedTimes, 1);
+      expect(releasedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
         createTapUpDetails(globalPosition: previousPosition),
       );
       expect(pressedTimes, 1);
+      expect(releasedTimes, 1);
 
       tapDispatcher.handleTapDown(
         1,
         TapDownDetails(globalPosition: previousPosition),
       );
       tapDispatcher.handleTapCancel(1);
-      expect(pressedTimes, 1);
+      expect(pressedTimes, 2);
+      expect(releasedTimes, 1);
     });
 
     testWithFlameGame('correctly work isDisabled', (game) async {
       var pressedTimes = 0;
+      var releasedTimes = 0;
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -125,6 +139,7 @@ void main() {
         button = AdvancedButtonComponent(
           defaultSkin: RectangleComponent(size: componentSize),
           onPressed: () => pressedTimes++,
+          onReleased: () => releasedTimes++,
           position: buttonPosition,
           size: componentSize,
         ),
@@ -140,12 +155,14 @@ void main() {
         TapDownDetails(globalPosition: previousPosition),
       );
       expect(pressedTimes, 0);
+      expect(releasedTimes, 0);
 
       tapDispatcher.handleTapUp(
         1,
         createTapUpDetails(globalPosition: previousPosition),
       );
       expect(pressedTimes, 0);
+      expect(releasedTimes, 0);
 
       tapDispatcher.handleTapDown(
         1,
@@ -153,6 +170,7 @@ void main() {
       );
       tapDispatcher.handleTapCancel(1);
       expect(pressedTimes, 0);
+      expect(releasedTimes, 0);
     });
 
     testWidgets(
