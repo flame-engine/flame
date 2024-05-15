@@ -13,7 +13,7 @@ environment:
   flutter: ">=3.19.0"
 
 dependencies:
-  audioplayers: ^5.0.0
+  audioplayers: ^6.0.0
   flame: ^1.17.0
   flutter:
     sdk: flutter
