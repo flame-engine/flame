@@ -67,7 +67,15 @@ void addRenderingStories(Dashbook dashbook) {
     )
     ..add(
       'Rich Text',
-      (_) => GameWidget(game: RichTextExample()),
+      (context) => GameWidget(
+        game: RichTextExample(
+          textAlign: context.listProperty(
+            'Text align',
+            TextAlign.left,
+            TextAlign.values,
+          ),
+        ),
+      ),
       codeLink: baseLink('rendering/rich_text_example.dart'),
       info: RichTextExample.description,
     );

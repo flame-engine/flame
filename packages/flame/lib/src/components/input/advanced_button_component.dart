@@ -19,6 +19,7 @@ class AdvancedButtonComponent extends PositionComponent
     with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
     this.onPressed,
+    this.onReleased,
     this.onChangeState,
     PositionComponent? defaultSkin,
     PositionComponent? downSkin,
@@ -45,6 +46,9 @@ class AdvancedButtonComponent extends PositionComponent
 
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;
+
+  /// Callback for what should happen when the button is released.
+  void Function()? onReleased;
 
   /// Callback when button state changes
   void Function(ButtonState state)? onChangeState;
@@ -93,8 +97,12 @@ class AdvancedButtonComponent extends PositionComponent
 
   @override
   void onTapUp(TapUpEvent event) {
+    if (_isDisabled) {
+      return;
+    }
     isPressed = false;
     updateState();
+    onReleased?.call();
   }
 
   @override
