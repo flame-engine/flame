@@ -491,32 +491,15 @@ void main() {
         },
       )..addToParent(game);
       await game.ready();
-
       router.pushNamed('new');
-
-      // I can't perform this following checking, probably because the way it 
-      // was implemented, in assumption that line 512 actually logically works.
-      // If line 512, is doing nothing then I don't think, I can perform this 
-      // following check either, that is to check state when loading was 
-      // mounted before it was removed.
-
-      // expect(
-      //   loadingComponent.isMounted,
-      //   isTrue,
-      // );
-      // expect(
-      //   pageComponent.isMounted,
-      //   isFalse,
-      // );
-
-      game.update(pageComponent.dummyTime.inSeconds.toDouble());
+      pageComponent.completer.complete();
       await game.ready();
       expect(
-        loadingComponent.isRemoved,
-        isFalse,
+        pageComponent.isMounted,
+        isTrue,
       );
       expect(
-        pageComponent.isMounted,
+        loadingComponent.isRemoved,
         isTrue,
       );
     });
@@ -575,10 +558,11 @@ class _ColoredComponent extends PositionComponent {
 }
 
 class _HeavyComponent extends PositionComponent {
-  final dummyTime = const Duration(seconds: 3);
+  Duration dummyTime = const Duration(seconds: 3);
+  Completer<void> completer = Completer();
   @override
   FutureOr<void> onLoad() async {
-    await Future.delayed(dummyTime);
+    await completer.future;
     return super.onLoad();
   }
 }
