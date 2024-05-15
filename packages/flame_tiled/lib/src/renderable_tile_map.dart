@@ -405,7 +405,7 @@ class RenderableTiledMap {
   /// Renders each renderable layer in the same order specified by the Tiled map
   void render(Canvas c) {
     if (_backgroundPaint != null) {
-      c.drawPaint(_backgroundPaint!);
+      c.drawPaint(_backgroundPaint);
     }
 
     // Paint each layer in reverse order, because the last layers should be
