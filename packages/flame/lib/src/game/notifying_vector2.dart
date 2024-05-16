@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math_64.dart';
 
@@ -185,5 +186,5 @@ class NotifyingVector2 extends Vector2 with ChangeNotifier {
   }
 
   @override
-  Float64List get storage => super.storage.asUnmodifiableView();
+  Float64List get storage => UnmodifiableFloat64ListView(super.storage);
 }
