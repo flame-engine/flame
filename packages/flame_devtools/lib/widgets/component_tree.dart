@@ -2,7 +2,7 @@ import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
-import 'package:flutter/material.dart' hide Split;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ComponentTree extends StatelessWidget {
