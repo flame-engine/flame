@@ -39,7 +39,7 @@ class OverlayRoute extends Route {
   @override
   Component build() {
     if (_builder != null) {
-      game.overlays.addEntry(name, _builder!);
+      game.overlays.addEntry(name, _builder);
     }
     return Component();
   }

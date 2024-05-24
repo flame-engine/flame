@@ -1,5 +1,5 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
-import 'package:devtools_app_shared/ui.dart';
+import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class ComponentTree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Split(
+    return devtools_ui.Split(
       axis: MediaQuery.of(context).size.width > 1000
           ? Axis.horizontal
           : Axis.vertical,
@@ -35,10 +35,10 @@ class ComponentTreeSection extends ConsumerWidget {
     final selectedTreeNode = ref.watch(selectedTreeNodeProvider);
     final componentCount = loadedModel.componentCount;
 
-    return RoundedOutlinedBorder(
+    return devtools_ui.RoundedOutlinedBorder(
       child: Column(
         children: [
-          AreaPaneHeader(
+          devtools_ui.AreaPaneHeader(
             title: Row(
               children: [
                 Text(
@@ -113,11 +113,11 @@ class ComponentSection extends ConsumerWidget {
     final theme = Theme.of(context);
     final textStyle = theme.textTheme.bodyLarge;
 
-    return RoundedOutlinedBorder(
+    return devtools_ui.RoundedOutlinedBorder(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AreaPaneHeader(
+          devtools_ui.AreaPaneHeader(
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
