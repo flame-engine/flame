@@ -1,25 +1,29 @@
-import 'package:flame/src/effects/controllers/effect_controller.dart';
-import 'package:flame/src/effects/effect.dart';
+import 'package:flame/effects.dart';
 
 /// Effect controller that repeats [child] controller a certain number of times.
 ///
 /// The [repeatCount] must be positive, and [child] controller cannot be
 /// infinite. The child controller will be reset after each iteration (except
 /// the last).
-class RepeatedEffectController extends EffectController {
-  RepeatedEffectController(this.child, this.repeatCount)
+class RepeatedEffectController extends EffectController
+    with HasSingleChildEffectController {
+  RepeatedEffectController(EffectController child, this.repeatCount)
       : assert(repeatCount > 0, 'repeatCount must be positive'),
         assert(!child.isInfinite, 'child cannot be infinite'),
+        _child = child,
         _remainingCount = repeatCount,
         super.empty();
 
-  final EffectController child;
+  final EffectController _child;
   final int repeatCount;
 
   /// How many iterations this controller has remaining. When this reaches 0
   /// the controller is considered completed.
   int get remainingIterationsCount => _remainingCount;
   int _remainingCount;
+
+  @override
+  EffectController get child => _child;
 
   @override
   double get progress => child.progress;
@@ -74,15 +78,12 @@ class RepeatedEffectController extends EffectController {
   @override
   void setToStart() {
     _remainingCount = repeatCount;
-    child.setToStart();
+    super.setToStart();
   }
 
   @override
   void setToEnd() {
     _remainingCount = 0;
-    child.setToEnd();
+    super.setToEnd();
   }
-
-  @override
-  void onMount(Effect parent) => child.onMount(parent);
 }
