@@ -5,5 +5,4 @@ dartdoc # documentation tool for dart
 dartdocs # plural of dartdoc
 endtemplate # Use @endtemplate to close a @template block in dartdoc
 pubspec # dependency and configuration file of every Dart project
-typedefs # plural of typedef
 writeln # StringBuffer.writeln

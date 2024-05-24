@@ -14,7 +14,6 @@ hoverables
 inactives
 microtask
 orientable
-overridable
 platformer
 positionable
 postmultiply
@@ -22,11 +21,8 @@ preorder
 prerender
 prerendered
 pressable
-proxied
-proxying
 ptero # short for pterodactyl
 rebalance
-redeclaration
 refreshable
 renderable
 rescan
