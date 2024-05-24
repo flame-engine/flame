@@ -1231,7 +1231,7 @@ A simple example on how to use it:
 // Creates a tileset, the block ids are automatically assigned sequentially
 // starting at 0, from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
-final tileset = IsometricTileset(tilesetImage, 32);
+final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
 // Each element is a block id, -1 means nothing
 final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
 add(IsometricTileMapComponent(tileset, matrix));
