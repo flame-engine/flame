@@ -2,6 +2,9 @@ name: flame_isolate
 description: Flame wrapper for integral_isolates making multi-threading easy in Flame
 version: 0.6.0+1
 repository: https://github.com/flame-engine/flame/blob/main/packages/flame_isolate
+topics:
+  - flame
+  - isolate
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

@@ -6,6 +6,9 @@ funding:
   - https://opencollective.com/blue-fire
   - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
+topics:
+  - flame
+  - lints
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
