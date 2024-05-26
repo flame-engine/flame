@@ -9,8 +9,10 @@ import 'package:meta/meta.dart';
 /// functionality, namely: it contains global lifecycle events for the component
 /// tree.
 class ComponentTreeRoot extends Component {
-  ComponentTreeRoot({super.children})
-      : _queue = RecycledQueue(_LifecycleEvent.new),
+  ComponentTreeRoot({
+    super.children,
+    super.key,
+  })  : _queue = RecycledQueue(_LifecycleEvent.new),
         _blocked = <int>{},
         _componentsToRebalance = <Component>{};
 
