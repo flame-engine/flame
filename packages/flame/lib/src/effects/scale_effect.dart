@@ -3,7 +3,6 @@ import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/effects/effect_target.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// Scale a component.
 ///

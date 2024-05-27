@@ -6,7 +6,6 @@ import 'package:flame/src/effects/measurable_effect.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_to_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// Base class for effects that affect the `position` of their targets.
 ///
