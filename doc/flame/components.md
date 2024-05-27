@@ -1231,7 +1231,7 @@ A simple example on how to use it:
 // Creates a tileset, the block ids are automatically assigned sequentially
 // starting at 0, from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
-final tileset = IsometricTileset(tilesetImage, 32);
+final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
 // Each element is a block id, -1 means nothing
 final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
 add(IsometricTileMapComponent(tileset, matrix));
@@ -1254,7 +1254,7 @@ This is an example of how a quarter-length map looks like:
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
-and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric%20Tile%20Map).
+and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric_Tile_Map).
 
 
 ## NineTileBoxComponent

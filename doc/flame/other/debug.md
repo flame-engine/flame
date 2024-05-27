@@ -9,8 +9,15 @@ When `debugMode` is enabled, each `PositionComponent` will be rendered with thei
 have their positions written on the screen. This way, you can visually verify the components
 boundaries and positions.
 
-To see a working example of the debugging features of the `FlameGame`, check this
-[example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
+Check out this [working example of the debugging features of the `FlameGame`](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
+
+
+## Devtools extension
+
+If you open the [Flutter DevTools](https://docs.flutter.dev/tools/devtools/overview), you will see a
+new tab called "Flame". This tab will show you information about the current game, for example a
+visualization of the component tree, the ability to play, pause and step the game, information
+about the selected component, and more.
 
 
 ## FPS

@@ -594,7 +594,7 @@ class Component {
         _clearRemovingBit();
       }
       game.enqueueMove(child, this);
-    } else if (isMounted && !child.isMounted) {
+    } else if (isMounted && !isRemoving && !child.isMounted) {
       child._parent = this;
       game.enqueueAdd(child, this);
     } else {

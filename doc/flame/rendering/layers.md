@@ -111,7 +111,7 @@ entire layer. At the moment, out of the box, only the `ShadowProcessor` is avail
 renders a back drop shadow on your layer.
 
 To add processors to your layer, just add them to the layer `preProcessors` or `postProcessors`
-list. For example:
+list, like so:
 
 ```dart
 // Works the same for both DynamicLayer and PreRenderedLayer
@@ -130,8 +130,7 @@ class BackgroundLayer extends PreRenderedLayer {
 
 Custom processors can be created by extending the `LayerProcessor` class.
 
-You can check a working example of layers
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/layers_example.dart).
+See [a working example of layers](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/layers_example.dart).
 
 
 ## Snapshots
@@ -158,8 +157,8 @@ class MyGame extends FlameGame {
 
 Setting `renderSnapshot` to `true` (the default) on a snapshot-enabled component behaves similarly
 to a `PreRenderedLayer`. The component is rendered only once, cached in memory and then just
-replicated on the game canvas afterwards. They are useful for caching content that doesn't change
-during the game, like a background for example.
+replicated on the game canvas afterwards. This is useful for caching content that doesn't change
+during the game, like a background.
 
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
@@ -243,7 +242,7 @@ class MyGame extends FlameGame {
 
 ### Snapshots that are cropped or off-center
 
-Sometimes your snapshot `Image` may appear cropped, or not in the position that is expected.
+Sometimes your snapshot `Image` may appear cropped, or not in the position you expected.
 
 This is because the contents of a `Picture` can be positioned anywhere with respect to the origin,
 but when it is converted to an `Image`, the image always starts from `0,0`. This means that
@@ -254,7 +253,7 @@ The best way to deal with this is to ensure that your `Snapshot` component is al
 contain what you expect it to.
 
 However, this is not always possible. To move (or rotate, or scale etc) the snapshot before
-converting it to an image, pass a transformation matrix to `snapshotToImage`.
+converting it to an image, pass a transformation matrix to `snapshotToImage` like so:
 
 ```dart
 // Call something like this to take an image snapshot at any time.

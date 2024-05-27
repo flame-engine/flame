@@ -47,6 +47,7 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    super.key,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
         _backdrop = backdrop ?? Component(),
@@ -74,12 +75,14 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    ComponentKey? key,
   }) : this(
           world: world,
           viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
           viewfinder: viewfinder ?? Viewfinder(),
           backdrop: backdrop,
           hudComponents: hudComponents,
+          key: key,
         );
 
   /// The [viewport] is the "window" through which the game world is observed.
@@ -393,7 +396,7 @@ class CameraComponent extends Component {
   /// the world to which the given [component] belongs (if any). This means, in
   /// such cases, any component overlapping the [visibleWorldRect] will be
   /// reported as visible, even if it is not part of the [world] this camera is
-  /// currently looking at. This can be changed by passing the the component's
+  /// currently looking at. This can be changed by passing the component's
   /// world as [componentWorld].
   bool canSee(PositionComponent component, {World? componentWorld}) {
     if (!(world?.isMounted ?? false) ||

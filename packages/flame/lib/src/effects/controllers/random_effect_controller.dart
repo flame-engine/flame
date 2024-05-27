@@ -1,8 +1,6 @@
 import 'dart:math';
 
-import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
-import 'package:flame/src/effects/controllers/effect_controller.dart';
-import 'package:flame/src/effects/effect.dart';
+import 'package:flame/effects.dart';
 
 /// An [EffectController] that wraps another effect controller [child] and
 /// randomizes its duration after each reset.
@@ -14,9 +12,11 @@ import 'package:flame/src/effects/effect.dart';
 /// The child's duration is randomized first at construction, and then at each
 /// reset (`setToStart`). Thus, the child has a concrete well-defined duration
 /// at any point in time.
-class RandomEffectController extends EffectController {
-  RandomEffectController(this.child, this.randomGenerator)
+class RandomEffectController extends EffectController
+    with HasSingleChildEffectController<DurationEffectController> {
+  RandomEffectController(DurationEffectController child, this.randomGenerator)
       : assert(!child.isInfinite, 'Child cannot be infinite'),
+        _child = child,
         super.empty() {
     _initializeDuration();
   }
@@ -52,8 +52,11 @@ class RandomEffectController extends EffectController {
     );
   }
 
-  final DurationEffectController child;
+  final DurationEffectController _child;
   final RandomVariable randomGenerator;
+
+  @override
+  DurationEffectController get child => _child;
 
   @override
   bool get isRandom => true;
@@ -74,16 +77,10 @@ class RandomEffectController extends EffectController {
   double recede(double dt) => child.recede(dt);
 
   @override
-  void setToEnd() => child.setToEnd();
-
-  @override
   void setToStart() {
-    child.setToStart();
+    super.setToStart();
     _initializeDuration();
   }
-
-  @override
-  void onMount(Effect parent) => child.onMount(parent);
 
   void _initializeDuration() {
     final duration = randomGenerator.nextValue();

@@ -9,8 +9,10 @@ import 'package:meta/meta.dart';
 /// functionality, namely: it contains global lifecycle events for the component
 /// tree.
 class ComponentTreeRoot extends Component {
-  ComponentTreeRoot({super.children})
-      : _queue = RecycledQueue(_LifecycleEvent.new),
+  ComponentTreeRoot({
+    super.children,
+    super.key,
+  })  : _queue = RecycledQueue(_LifecycleEvent.new),
         _blocked = <int>{},
         _componentsToRebalance = <Component>{};
 
@@ -86,31 +88,23 @@ class ComponentTreeRoot extends Component {
             _blocked.contains(identityHashCode(parent))) {
           continue;
         }
-        var status = LifecycleEventStatus.done;
-        switch (event.kind) {
-          case _LifecycleEventKind.add:
-            status = child.handleLifecycleEventAdd(parent);
-            break;
-          case _LifecycleEventKind.remove:
-            status = child.handleLifecycleEventRemove(parent);
-            break;
-          case _LifecycleEventKind.move:
-            status = child.handleLifecycleEventMove(parent);
-            break;
-          case _LifecycleEventKind.unknown:
-            break;
-        }
+
+        final status = switch (event.kind) {
+          _LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
+          _LifecycleEventKind.remove =>
+            child.handleLifecycleEventRemove(parent),
+          _LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
+          _LifecycleEventKind.unknown => LifecycleEventStatus.done,
+        };
+
         switch (status) {
           case LifecycleEventStatus.done:
             _queue.removeCurrent();
             repeatLoop = true;
-            break;
           case LifecycleEventStatus.block:
             _blocked.add(identityHashCode(child));
             _blocked.add(identityHashCode(parent));
-            break;
           default:
-            break;
         }
       }
       _blocked.clear();

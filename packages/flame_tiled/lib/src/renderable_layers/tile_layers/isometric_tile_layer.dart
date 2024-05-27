@@ -72,6 +72,9 @@ class IsometricTileLayer extends FlameTileLayer {
         offsetX = halfDestinationTile.x * (tx - ty) + isometricXShift;
         offsetY = halfDestinationTile.y * (tx + ty) + isometricYShift;
 
+        offsetX += tileset.tileOffset?.x ?? 0;
+        offsetY += tileset.tileOffset?.y ?? 0;
+
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;
 

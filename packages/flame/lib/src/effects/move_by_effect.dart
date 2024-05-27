@@ -23,6 +23,7 @@ class MoveByEffect extends MoveEffect {
     EffectController controller, {
     PositionProvider? target,
     void Function()? onComplete,
+    super.key,
   })  : _offset = offset.clone(),
         super(controller, target, onComplete: onComplete);
 

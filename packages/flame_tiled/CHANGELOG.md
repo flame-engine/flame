@@ -1,3 +1,18 @@
+## 1.20.1
+
+ - **FIX**: Respect tile offset when drawing tiles ([#3112](https://github.com/flame-engine/flame/issues/3112)). ([e3477474](https://github.com/flame-engine/flame/commit/e34774743038bc75fec14afc3c753fa997e71577))
+
+## 1.20.0
+
+ - **FEAT**: Export `TileAtlas` from `flame_tiled` package ([#3049](https://github.com/flame-engine/flame/issues/3049)). ([41e9e4e3](https://github.com/flame-engine/flame/commit/41e9e4e38c643b07a3a7269b1cd8d3fa60cbeebb))
+
+## 1.19.0
+
+> Note: This release has breaking changes.
+
+ - **FEAT**: Add TiledObjectHealpers extension on TiledObject ([#3032](https://github.com/flame-engine/flame/issues/3032)). ([78380b9d](https://github.com/flame-engine/flame/commit/78380b9d3bb895e20f382c4a1227bcc11e5038b9))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
 ## 1.18.4
 
  - Update a dependency to the latest release.

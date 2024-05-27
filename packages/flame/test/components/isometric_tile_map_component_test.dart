@@ -65,7 +65,7 @@ void main() {
 
       expect(
         c.getBlockCenterPosition(const Block(0, 0)),
-        closeToVector(Vector2.zero()),
+        closeToVector(Vector2(32, 8)),
       );
     });
 
@@ -77,9 +77,10 @@ void main() {
         destTileSize: tileSize,
       );
       //expect the block to be directly below
+      final blockAbove = c.getBlockRenderPositionInts(0, 0);
       expect(
         c.getBlockRenderPositionInts(1, 1),
-        closeToVector(Vector2(-156 / 2, 12.5), 1e-13),
+        closeToVector(blockAbove + Vector2(0, 181 / 2), 1e-13),
       );
     });
   });

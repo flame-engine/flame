@@ -1,3 +1,7 @@
+## 1.3.0
+
+ - **FEAT**: Add new methods to CommandStorage to support more arguments ([#3035](https://github.com/flame-engine/flame/issues/3035)). ([21922620](https://github.com/flame-engine/flame/commit/219226201a8d0c6e301c388299277be95b585c0e))
+
 ## 1.2.1
 
  - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))

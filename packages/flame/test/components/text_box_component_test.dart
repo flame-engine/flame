@@ -5,13 +5,16 @@ import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+import 'scroll_text_box_component_test.dart';
 
 void main() {
   group('TextBoxComponent', () {
     test('size is properly computed', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox jumps over the lazy dog.',
-        boxConfig: TextBoxConfig(
+        boxConfig: const TextBoxConfig(
           maxWidth: 100.0,
         ),
       );
@@ -23,7 +26,7 @@ void main() {
     test('size is properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
-        boxConfig: TextBoxConfig(
+        boxConfig: const TextBoxConfig(
           maxWidth: 100.0,
         ),
       );
@@ -35,7 +38,7 @@ void main() {
     test('lines are properly computed with new line character', () {
       final c = TextBoxComponent(
         text: 'The quick brown fox \n jumps over the lazy dog.',
-        boxConfig: TextBoxConfig(
+        boxConfig: const TextBoxConfig(
           maxWidth: 400.0,
         ),
       );
@@ -51,7 +54,7 @@ void main() {
       (game) async {
         final component = TextBoxComponent(
           text: 'foo bar',
-          boxConfig: TextBoxConfig(
+          boxConfig: const TextBoxConfig(
             dismissDelay: 10.0,
             timePerChar: 1.0,
           ),
@@ -120,6 +123,47 @@ void main() {
         expect(c.cache!.debugDisposed, isFalse);
       },
     );
+
+    testWithFlameGame(
+      'onComplete is called when no scrolling is required',
+      (game) async {
+        final onComplete = MockOnCompleteCallback();
+
+        when(onComplete.call).thenReturn(null);
+
+        final component = ScrollTextBoxComponent(
+          size: Vector2(200, 100),
+          text: 'Short text',
+          onComplete: onComplete.call,
+        );
+        await game.ensureAdd(component);
+
+        game.update(0.1);
+
+        verify(onComplete.call).called(1);
+      },
+    );
+
+    testWithFlameGame(
+        'TextBoxComponent notifies if a new line is added and requires space',
+        (game) async {
+      var lineSize = 0.0;
+      final textBoxComponent = TextBoxComponent(
+        size: Vector2(50, 50),
+        text: '''This 
+test
+has
+five
+lines.''',
+      );
+      expect(textBoxComponent.newLinePositionNotifier.value, equals(0));
+
+      textBoxComponent.newLinePositionNotifier.addListener(() {
+        lineSize += textBoxComponent.newLinePositionNotifier.value;
+      });
+      await game.ensureAdd(textBoxComponent);
+      expect(lineSize, greaterThan(0));
+    });
 
     testGolden(
       'Alignment options',

@@ -7,7 +7,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
-import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -603,6 +602,99 @@ void main() {
       final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
+    });
+  });
+
+  group('tile offset', () {
+    late TiledComponent component;
+
+    Future<TiledComponent> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      final bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        stringNames: [tmxFile],
+      );
+      return component = await TiledComponent.load(
+        tmxFile,
+        destTileSize,
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+    }
+
+    test('tile offset hexagonal', () async {
+      await setupMap(
+        // flame tiled currently does not support hexagon side length property,
+        // to use export from Tiled, tweak that value
+        'test_tile_offset_hexagonal.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(40, 28));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_hexagonal.png'),
+      );
+    });
+
+    test('tile offset isometric', () async {
+      await setupMap(
+        'test_tile_offset_isometric.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(32, 32));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_isometric.png'),
+      );
+    });
+
+    test('tile offset orthogonal', () async {
+      await setupMap(
+        'test_tile_offset_orthogonal.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(32, 32));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_orthogonal.png'),
+      );
+    });
+
+    test('tile offset staggered', () async {
+      await setupMap(
+        'test_tile_offset_staggered.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(40, 24));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_staggered.png'),
+      );
     });
   });
 

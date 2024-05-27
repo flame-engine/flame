@@ -1459,6 +1459,25 @@ void main() {
             closeToVector(Vector2(0, 1)),
           );
         },
+        'ray from slightly outside of the CircleHitbox should not be counted '
+            'as inside': (collisionSystem) async {
+          final game = collisionSystem as FlameGame;
+          final world = game.world;
+          final positionComponent = PositionComponent(
+            position: Vector2.zero(),
+            anchor: Anchor.center,
+            size: Vector2.all(120),
+          )..add(CircleHitbox());
+          await world.ensureAdd(positionComponent);
+          await game.ready();
+          final ray = Ray2(
+            origin: Vector2(-38.06044293218409, -48.5986651724067),
+            direction: Vector2(0.927474693393028, -0.3738859359691247),
+          );
+          final result = collisionSystem.collisionDetection.raycast(ray);
+          expect(result?.hitbox?.parent, positionComponent);
+          expect(result?.isInsideHitbox, isFalse);
+        },
       });
     });
 

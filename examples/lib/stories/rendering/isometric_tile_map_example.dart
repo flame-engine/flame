@@ -19,17 +19,17 @@ class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
   static const srcTileSize = 32.0;
   static const destTileSize = scale * srcTileSize;
 
-  static const halfSize = true;
-  static const tileHeight = scale * (halfSize ? 8.0 : 16.0);
-  static const suffix = halfSize ? '-short' : '';
-
   final originColor = Paint()..color = const Color(0xFFFF00FF);
   final originColor2 = Paint()..color = const Color(0xFFAA55FF);
+
+  final bool halfSize;
+  late final tileHeight = scale * (halfSize ? 8.0 : 16.0);
+  late final suffix = halfSize ? '-short' : '';
 
   late IsometricTileMapComponent base;
   late Selector selector;
 
-  IsometricTileMapExample();
+  IsometricTileMapExample({required this.halfSize});
 
   @override
   Future<void> onLoad() async {
@@ -65,7 +65,7 @@ class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
     super.render(canvas);
     canvas.renderPoint(topLeft, size: 5, paint: originColor);
     canvas.renderPoint(
-      topLeft.clone()..y -= tileHeight,
+      base.position + base.getBlockCenterPosition(const Block(0, 0)),
       size: 5,
       paint: originColor2,
     );

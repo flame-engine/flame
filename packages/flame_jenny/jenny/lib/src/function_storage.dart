@@ -99,16 +99,12 @@ class FunctionStorage {
     return (List<FunctionArgument> args, YarnProject yarn, ErrorFn errorFn) {
       final arguments = function.checkAndUnpackArguments(args, errorFn);
       function.useYarnProject(yarn);
-      switch (function.returnType) {
-        case ExpressionType.boolean:
-          return BooleanUserDefinedFn(function, arguments);
-        case ExpressionType.numeric:
-          return NumericUserDefinedFn(function, arguments);
-        case ExpressionType.string:
-          return StringUserDefinedFn(function, arguments);
-        default:
-          throw AssertionError('Bad return type'); // coverage:ignore-line
-      }
+      return switch (function.returnType) {
+        ExpressionType.boolean => BooleanUserDefinedFn(function, arguments),
+        ExpressionType.numeric => NumericUserDefinedFn(function, arguments),
+        ExpressionType.string => StringUserDefinedFn(function, arguments),
+        _ => throw AssertionError('Bad return type'), // coverage:ignore-line
+      };
     };
   }
 

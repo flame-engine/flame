@@ -135,16 +135,12 @@ class BodyComponent<T extends Forge2DGame> extends Component
     switch (fixture.type) {
       case ShapeType.chain:
         _renderChain(canvas, fixture);
-        break;
       case ShapeType.circle:
         _renderCircle(canvas, fixture);
-        break;
       case ShapeType.edge:
         _renderEdge(canvas, fixture);
-        break;
       case ShapeType.polygon:
         _renderPolygon(canvas, fixture);
-        break;
     }
     canvas.restore();
   }
@@ -207,9 +203,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    _hitTestPoint
-      ..setFrom(body.position)
-      ..add(point);
+    _transform.localToGlobal(point, output: _hitTestPoint);
     return body.fixtures.any((fixture) => fixture.testPoint(_hitTestPoint));
   }
 
