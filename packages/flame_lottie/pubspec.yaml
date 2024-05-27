@@ -12,7 +12,7 @@ topics:
   - animations
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
   flutter: ">=3.22.0"
 
 dependencies:
@@ -26,4 +26,3 @@ dev_dependencies:
   flame_test: ^1.16.1
   flutter_test:
     sdk: flutter
-  lint: ^2.1.2

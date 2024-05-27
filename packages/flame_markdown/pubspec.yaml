@@ -12,7 +12,7 @@ topics:
   - markdown
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
   flutter: ">=3.22.0"
 
 dependencies:
@@ -22,7 +22,7 @@ dependencies:
   markdown: ^7.1.1
 
 dev_dependencies:
-  dartdoc: ^6.3.0
+  dartdoc: ^8.0.8
   flame_lint: ^1.1.2
   flutter_test:
     sdk: flutter

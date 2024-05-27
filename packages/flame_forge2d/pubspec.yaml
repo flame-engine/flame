@@ -12,7 +12,7 @@ topics:
   - physics
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
   flutter: ">=3.22.0"
 
 dependencies:
@@ -22,10 +22,10 @@ dependencies:
   forge2d: ^0.13.0
 
 dev_dependencies:
-  dartdoc: ^6.3.0
+  dartdoc: ^8.0.8
   flame_lint: ^1.1.2
   flame_test: ^1.16.1
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.1
+  mocktail: ^1.0.3
   test: any

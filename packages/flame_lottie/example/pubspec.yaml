@@ -1,11 +1,10 @@
 name: flame_lottie_example
 description: An example for flame_lottie. The example shows how load a Lottie animation and add it to a flame game.
-
 publish_to: 'none'
 version: 0.0.1+1
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
   flame: ^1.17.0
