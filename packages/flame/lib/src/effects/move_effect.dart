@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/effects/effect_target.dart';
@@ -21,6 +22,7 @@ abstract class MoveEffect extends Effect
     super.controller,
     PositionProvider? target, {
     super.onComplete,
+    super.key,
   }) {
     this.target = target;
   }
@@ -30,12 +32,14 @@ abstract class MoveEffect extends Effect
     EffectController controller, {
     PositionProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) =>
       MoveByEffect(
         offset,
         controller,
         target: target,
         onComplete: onComplete,
+        key: key,
       );
 
   factory MoveEffect.to(
@@ -43,11 +47,13 @@ abstract class MoveEffect extends Effect
     EffectController controller, {
     PositionProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) =>
       MoveToEffect(
         destination,
         controller,
         target: target,
         onComplete: onComplete,
+        key: key,
       );
 }

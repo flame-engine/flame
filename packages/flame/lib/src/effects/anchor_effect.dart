@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/effects/anchor_by_effect.dart';
 import 'package:flame/src/effects/anchor_to_effect.dart';
@@ -22,6 +23,7 @@ abstract class AnchorEffect extends Effect
     super.controller,
     AnchorProvider? target, {
     super.onComplete,
+    super.key,
   }) {
     this.target = target;
   }
@@ -31,12 +33,14 @@ abstract class AnchorEffect extends Effect
     EffectController controller, {
     AnchorProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) =>
       AnchorByEffect(
         offset,
         controller,
         target: target,
         onComplete: onComplete,
+        key: key,
       );
 
   factory AnchorEffect.to(
@@ -44,11 +48,13 @@ abstract class AnchorEffect extends Effect
     EffectController controller, {
     AnchorProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) =>
       AnchorToEffect(
         destination,
         controller,
         target: target,
         onComplete: onComplete,
+        key: key,
       );
 }
