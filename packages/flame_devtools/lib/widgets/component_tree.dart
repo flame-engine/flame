@@ -10,7 +10,7 @@ class ComponentTree extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return devtools_ui.Split(
+    return devtools_ui.SplitPane(
       axis: MediaQuery.of(context).size.width > 1000
           ? Axis.horizontal
           : Axis.vertical,
