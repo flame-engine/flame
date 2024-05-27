@@ -10,7 +10,7 @@ class LottieRenderer {
   final BoxFit? fit;
   final Alignment? alignment;
 
-  late Rect boundingRect;
+  Rect boundingRect;
 
   LottieRenderer({
     required LottieComposition composition,
@@ -26,11 +26,8 @@ class LottieRenderer {
     FrameRate? frameRate,
   })  : assert(progress >= 0.0 && progress <= 1.0),
         boundingRect = size.toRect(),
-        drawable = LottieDrawable(composition)
-          ..setProgress(
-            progress,
-            frameRate: frameRate,
-          )
+        drawable = LottieDrawable(composition, frameRate: frameRate)
+          ..setProgress(progress)
           ..delegates = delegates
           ..enableMergePaths = enableMergePaths ?? false,
         _controller = controller ??

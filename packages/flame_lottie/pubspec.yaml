@@ -19,7 +19,7 @@ dependencies:
   flame: ^1.17.0
   flutter:
     sdk: flutter
-  lottie: ^2.3.2
+  lottie: ^3.1.2
 
 dev_dependencies:
   flame_lint: ^1.1.2
