@@ -22,6 +22,10 @@ class Viewfinder extends Component
         PositionProvider,
         ScaleProvider,
         CoordinateTransform {
+  Viewfinder({
+    super.key,
+  });
+
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
 

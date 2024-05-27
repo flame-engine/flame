@@ -24,6 +24,7 @@ class FollowBehavior extends Component {
     this.horizontalOnly = false,
     this.verticalOnly = false,
     super.priority,
+    super.key,
   })  : _target = target,
         _owner = owner,
         _speed = maxSpeed,

@@ -24,7 +24,10 @@ abstract class Viewport extends Component
         PositionProvider,
         SizeProvider,
         CoordinateTransform {
-  Viewport({super.children});
+  Viewport({
+    super.children,
+    super.key,
+  });
 
   final Vector2 _size = Vector2.zero();
   bool _isInitialized = false;
