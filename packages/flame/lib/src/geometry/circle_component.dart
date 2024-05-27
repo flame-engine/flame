@@ -21,6 +21,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     super.priority,
     super.paint,
     super.paintLayers,
+    super.key,
   }) : super(size: Vector2.all((radius ?? 0) * 2));
 
   /// With this constructor you define the [CircleComponent] in relation to the
@@ -36,6 +37,7 @@ class CircleComponent extends ShapeComponent implements SizeProvider {
     super.paint,
     super.paintLayers,
     super.children,
+    super.key,
   }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
 
   @override

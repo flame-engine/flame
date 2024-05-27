@@ -27,8 +27,11 @@ import 'package:meta/meta.dart';
 /// changes in the effect's target; and also the `reset()` method if they have
 /// non-trivial internal state.
 abstract class Effect extends Component {
-  Effect(this.controller, {this.onComplete})
-      : removeOnFinish = true,
+  Effect(
+    this.controller, {
+    this.onComplete,
+    super.key,
+  })  : removeOnFinish = true,
         _paused = false,
         _started = false,
         _finished = false {
@@ -210,5 +213,5 @@ abstract class Effect extends Component {
   /// This is a main method that MUST be implemented in every derived class.
   void apply(double progress);
 
-  //#endregion
+//#endregion
 }
