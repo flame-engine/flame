@@ -13,7 +13,7 @@ topics:
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   flame: ^1.17.0

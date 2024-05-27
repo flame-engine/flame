@@ -52,6 +52,7 @@ class SequenceEffect extends Effect {
     bool infinite = false,
     int repeatCount = 1,
     super.onComplete,
+    super.key,
   })  : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
         assert(
           !(infinite && repeatCount != 1),

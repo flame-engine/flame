@@ -15,6 +15,7 @@ class AnchorToEffect extends AnchorEffect {
     EffectController controller, {
     AnchorProvider? target,
     void Function()? onComplete,
+    super.key,
   })  : _destination = destination,
         super(controller, target, onComplete: onComplete);
 
