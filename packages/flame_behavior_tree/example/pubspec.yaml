@@ -11,13 +11,13 @@ environment:
   sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
-  flame: ^1.17.0
-  flame_behavior_tree: ^0.1.1
+  flame: ^1.18.0
+  flame_behavior_tree: ^0.1.2
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.2.0
   flutter_test:
     sdk: flutter
 

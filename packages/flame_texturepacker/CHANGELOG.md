@@ -1,3 +1,7 @@
+## 4.0.1
+
+ - **FIX**: TexturePacker fixes the wrong path for the atlas file. ([#3124](https://github.com/flame-engine/flame/issues/3124)). ([69f5c388](https://github.com/flame-engine/flame/commit/69f5c388ce4e0a64ba5f7331a596777a9eab1e40))
+
 ## 4.0.0
 
 > Note: This release has breaking changes.
