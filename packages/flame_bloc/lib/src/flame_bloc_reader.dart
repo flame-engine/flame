@@ -18,6 +18,7 @@ mixin FlameBlocReader<B extends BlocBase<S>, S> on Component {
   @override
   @mustCallSuper
   Future<void> onLoad() async {
+    super.onLoad();
     final providers = ancestors().whereType<FlameBlocProvider<B, S>>();
     assert(
       providers.isNotEmpty,
