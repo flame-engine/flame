@@ -47,6 +47,7 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    super.key,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
         _backdrop = backdrop ?? Component(),
@@ -74,12 +75,14 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    ComponentKey? key,
   }) : this(
           world: world,
           viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
           viewfinder: viewfinder ?? Viewfinder(),
           backdrop: backdrop,
           hudComponents: hudComponents,
+          key: key,
         );
 
   /// The [viewport] is the "window" through which the game world is observed.

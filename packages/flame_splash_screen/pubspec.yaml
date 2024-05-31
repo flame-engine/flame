@@ -6,18 +6,20 @@ funding:
   - https://opencollective.com/blue-fire
   - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
+topics:
+  - flame
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  meta: ^1.9.1
+  meta: ^1.12.0
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.2.0
   flutter_test:
     sdk: flutter
   mockito: ^5.4.2

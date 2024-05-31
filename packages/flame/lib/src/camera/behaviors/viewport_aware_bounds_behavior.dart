@@ -22,6 +22,7 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
 
   ViewportAwareBoundsBehavior({
     required Shape boundsShape,
+    super.key,
   }) : _boundsShape = boundsShape;
 
   @override

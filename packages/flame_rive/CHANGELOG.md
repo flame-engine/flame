@@ -1,3 +1,7 @@
+## 1.10.2
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
 ## 1.10.1
 
  - Update a dependency to the latest release.

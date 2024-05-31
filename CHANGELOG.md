@@ -3,6 +3,132 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-05-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.18.0`](#flame---v1180)
+
+Packages with other changes:
+
+ - [`behavior_tree` - `v0.1.2`](#behavior_tree---v012)
+ - [`flame_behavior_tree` - `v0.1.2`](#flame_behavior_tree---v012)
+ - [`flame_forge2d` - `v0.18.1`](#flame_forge2d---v0181)
+ - [`flame_isolate` - `v0.6.1`](#flame_isolate---v061)
+ - [`flame_markdown` - `v0.2.1`](#flame_markdown---v021)
+ - [`flame_oxygen` - `v0.2.2`](#flame_oxygen---v022)
+ - [`flame_sprite_fusion` - `v0.1.2`](#flame_sprite_fusion---v012)
+ - [`flame_lottie` - `v0.4.1`](#flame_lottie---v041)
+ - [`flame_noise` - `v0.3.1`](#flame_noise---v031)
+ - [`flame_network_assets` - `v0.3.2`](#flame_network_assets---v032)
+ - [`flame_spine` - `v0.2.1`](#flame_spine---v021)
+ - [`flame_audio` - `v2.10.2`](#flame_audio---v2102)
+ - [`flame_bloc` - `v1.12.0`](#flame_bloc---v1120)
+ - [`flame_lint` - `v1.2.0`](#flame_lint---v120)
+ - [`flame_rive` - `v1.10.2`](#flame_rive---v1102)
+ - [`flame_texturepacker` - `v4.0.1`](#flame_texturepacker---v401)
+ - [`flame_tiled` - `v1.20.2`](#flame_tiled---v1202)
+ - [`jenny` - `v1.3.1`](#jenny---v131)
+ - [`flame_test` - `v1.16.2`](#flame_test---v1162)
+ - [`flame_fire_atlas` - `v1.5.2`](#flame_fire_atlas---v152)
+ - [`flame_riverpod` - `v5.4.2`](#flame_riverpod---v542)
+ - [`flame_svg` - `v1.10.2`](#flame_svg---v1102)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_test` - `v1.16.2`
+ - `flame_fire_atlas` - `v1.5.2`
+ - `flame_riverpod` - `v5.4.2`
+ - `flame_svg` - `v1.10.2`
+
+---
+
+#### `flame` - `v1.18.0`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+ - **FIX**: Add key parameters to the rest of the components ([#3170](https://github.com/flame-engine/flame/issues/3170)). ([2477ea0f](https://github.com/flame-engine/flame/commit/2477ea0fcee99e71597983146f4af2dffd866971))
+ - **FIX**: Invoke `setToStart` on child effect controller of wrapping effect controllers ([#3168](https://github.com/flame-engine/flame/issues/3168)). ([217c95f0](https://github.com/flame-engine/flame/commit/217c95f0a53fd5a7933bfa57833f951cc0037878))
+ - **FIX**: Fix cascading and fallback propagation of text styles ([#3129](https://github.com/flame-engine/flame/issues/3129)). ([7b706d5f](https://github.com/flame-engine/flame/commit/7b706d5f63207aaf82d12a4b26233bc476771b1e))
+ - **FEAT**: Add `onReleased` action to `AdvancedButtonComponent` which will be called within `onTapUp` ([#3152](https://github.com/flame-engine/flame/issues/3152)). ([2269732e](https://github.com/flame-engine/flame/commit/2269732e64a2acef2451d283c85b03e1101229ec))
+ - **FEAT**: Support text align on new text rendering pipeline ([#3147](https://github.com/flame-engine/flame/issues/3147)). ([194d5536](https://github.com/flame-engine/flame/commit/194d5536560e464644bff8d5582a8ca8996539f5))
+ - **FEAT**: Add missing parameters to InlineTextStyle ([#3146](https://github.com/flame-engine/flame/issues/3146)). ([ce9392ab](https://github.com/flame-engine/flame/commit/ce9392abd85fe5fd3ae6f766c3a2957275c6fb8c))
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+ - **FEAT**: Add accessor to determine a TextElement size ([#3130](https://github.com/flame-engine/flame/issues/3130)). ([8a63a07a](https://github.com/flame-engine/flame/commit/8a63a07ae3b569c316eafa23f0378e00180e0963))
+ - **FEAT**: Add ability to convert between TextPaint and InlineTextStyle ([#3128](https://github.com/flame-engine/flame/issues/3128)). ([6b63a57a](https://github.com/flame-engine/flame/commit/6b63a57a4888211b284f3a074c17519cb31341e0))
+ - **FEAT**: Add completed future for effects ([#3123](https://github.com/flame-engine/flame/issues/3123)). ([5e967deb](https://github.com/flame-engine/flame/commit/5e967deb876ed39fa4ee6839471bbfbcd3b72463))
+ - **FEAT**: Add custom long tap delay ([#3110](https://github.com/flame-engine/flame/issues/3110)). ([a95d7df6](https://github.com/flame-engine/flame/commit/a95d7df606bd2119423cc8a7ae51cacfb7b4dbed))
+ - **DOCS**: Update the dartdocs for `FixedResolutionViewport` ([#3132](https://github.com/flame-engine/flame/issues/3132)). ([db4b6fd6](https://github.com/flame-engine/flame/commit/db4b6fd6fa5968462d3f89238a92edbb93e4898d))
+ - **BREAKING** **FIX**: Update IsometricTileMapComponent to have better defined position and size ([#3142](https://github.com/flame-engine/flame/issues/3142)). ([9a7bdc74](https://github.com/flame-engine/flame/commit/9a7bdc7439322a26a388e3ac1b9c1a7c43742222))
+
+#### `behavior_tree` - `v0.1.2`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `flame_behavior_tree` - `v0.1.2`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `flame_forge2d` - `v0.18.1`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `flame_isolate` - `v0.6.1`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `flame_markdown` - `v0.2.1`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `flame_oxygen` - `v0.2.2`
+
+#### `flame_sprite_fusion` - `v0.1.2`
+
+#### `flame_lottie` - `v0.4.1`
+
+#### `flame_noise` - `v0.3.1`
+
+#### `flame_network_assets` - `v0.3.2`
+
+#### `flame_spine` - `v0.2.1`
+
+#### `flame_audio` - `v2.10.2`
+
+ - **DOCS**: Update flame_audio readme ([#3119](https://github.com/flame-engine/flame/issues/3119)). ([843984de](https://github.com/flame-engine/flame/commit/843984dee5f5f6afd351ef29ad2adb39650f30bb))
+
+#### `flame_bloc` - `v1.12.0`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+ - **FIX**: Call `super.onLoad` from `FlameBlockReader` ([#3175](https://github.com/flame-engine/flame/issues/3175)). ([349f7bd7](https://github.com/flame-engine/flame/commit/349f7bd71437abad666d05f973b6983970ccd0c6))
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+
+#### `flame_lint` - `v1.2.0`
+
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+
+#### `flame_rive` - `v1.10.2`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `flame_texturepacker` - `v4.0.1`
+
+ - **FIX**: TexturePacker fixes the wrong path for the atlas file. ([#3124](https://github.com/flame-engine/flame/issues/3124)). ([69f5c388](https://github.com/flame-engine/flame/commit/69f5c388ce4e0a64ba5f7331a596777a9eab1e40))
+
+#### `flame_tiled` - `v1.20.2`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+#### `jenny` - `v1.3.1`
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+
 ## 2024-04-05
 
 ### Changes
