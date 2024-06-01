@@ -66,8 +66,7 @@ class ExampleGame3D extends FlameGame<World3D>
         position: Vector3(16.5, 2.5, 0),
         mesh: CuboidMesh(
           size: Vector3(1, 5, 32),
-          material:
-              SpatialMaterial(albedoTexture: ColorTexture(Colors.yellow)),
+          material: SpatialMaterial(albedoTexture: ColorTexture(Colors.yellow)),
         ),
       ),
 
