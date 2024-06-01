@@ -8,12 +8,12 @@ extension Matrix4Extension on Matrix4 {
 
   /// Set the matrix to use a projection view.
   void setAsPerspective(
-    double fovy,
+    double fovY,
     double aspectRatio,
     double zNear,
     double zFar,
   ) {
-    final fovYRadians = fovy * degrees2Radians;
+    final fovYRadians = fovY * degrees2Radians;
     setPerspectiveMatrix(this, fovYRadians, aspectRatio, zNear, zFar);
   }
 
