@@ -46,14 +46,6 @@ class GraphicsDevice {
   Matrix4 get projection => _projectionMatrix;
   final Matrix4 _projectionMatrix = Matrix4.zero();
 
-  // @Deprecated('Use model, view and projection instead')
-  // // Matrix4 get transform => _transformMatrix;
-  // // final _transformMatrix = Matrix4.identity();
-
-  // @Deprecated('Use model, view and projection instead')
-  // Matrix4 get viewModel => _viewModelMatrix;
-  // final _viewModelMatrix = Matrix4.identity();
-
   Size _previousSize = Size.zero;
 
   /// Begin a new rendering batch.

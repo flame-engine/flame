@@ -46,15 +46,11 @@ class World3D extends flame.World with flame.HasGameReference {
       ..projection.setFrom(camera.projectionMatrix)
       ..begin(size);
 
-    // print(position);
-    // print(Matrix4.inverted(viewMatrix).transform3(Vector3.all(0)));
-
     culled = 0;
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
 
     final image = device.end();
-    // canvas.drawImage(image, (-viewport.virtualSize / 2).toOffset(), _paint);
     canvas.drawImageRect(
       image,
       Offset.zero & size,
