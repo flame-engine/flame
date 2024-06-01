@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart' as flame;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/graphics.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 /// {@template world_3d}

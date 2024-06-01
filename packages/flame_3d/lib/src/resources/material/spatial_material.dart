@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';

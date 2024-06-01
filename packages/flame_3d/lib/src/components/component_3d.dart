@@ -71,8 +71,9 @@ class Component3D extends Component with HasWorldReference<World3D> {
 
   /// The scale factor of this component. The scale can be different along
   /// the X, Y and Z dimensions. A scale greater than 1 makes the component
-  /// bigger along that axis, and less than 1 smaller. The scale can also be negative,
-  /// which results in a mirror reflection along the corresponding axis.
+  /// bigger along that axis, and less than 1 smaller. The scale can also be
+  /// negative, which results in a mirror reflection along the corresponding
+  /// axis.
   NotifyingVector3 get scale => transform.scale;
   set scale(Vector3 scale) => transform.scale = scale;
 
@@ -97,7 +98,8 @@ class Component3D extends Component with HasWorldReference<World3D> {
     // This ensures that our rendering is done in a specific order allowing for
     // alpha blending.
     //
-    // Note(wolfenrain): we should optimize this in the long run it currently sucks.
+    // Note(wolfenrain): we should optimize this in the long run it currently
+    // sucks.
     priority = -(CameraComponent3D.currentCamera!.position - position)
         .length
         .abs()
