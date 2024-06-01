@@ -61,6 +61,6 @@ class World3D extends flame.World with flame.HasGameReference {
     image.dispose();
   }
 
-  // TODO(wolfen): this is only here for testing purposes
+  // TODO(wolfenrain): this is only here for testing purposes
   int culled = 0;
 }
