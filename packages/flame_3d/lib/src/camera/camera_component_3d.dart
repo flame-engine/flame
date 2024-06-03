@@ -76,14 +76,19 @@ class CameraComponent3D extends CameraComponent {
         ..setAsPerspective(fovY, aspectRatio, distanceNear, distanceFar),
       CameraProjection.orthographic => _projectionMatrix
         ..setAsOrthographic(fovY, aspectRatio, distanceNear, distanceFar)
-    }
-      ..multiply(viewMatrix);
+    };
   }
 
   final Matrix4 _projectionMatrix = Matrix4.zero();
+
+  Matrix4 get viewProjectionMatrix => _viewProjectionMatrix
+    ..setFrom(projectionMatrix)
+    ..multiply(viewMatrix);
+  final Matrix4 _viewProjectionMatrix = Matrix4.zero();
+
   final Frustum _frustum = Frustum();
 
-  Frustum get frustum => _frustum..setFromMatrix(_projectionMatrix);
+  Frustum get frustum => _frustum..setFromMatrix(viewProjectionMatrix);
 
   void moveForward(double distance, {bool moveInWorldPlane = false}) {
     final forward = this.forward..scale(distance);
