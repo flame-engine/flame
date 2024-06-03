@@ -22,7 +22,7 @@ enum DepthStencilState {
 /// by binding different resources to it.
 ///
 /// A single render call starts with a call to [begin] and only ends when [end]
-/// is called. Anything that gets binded to the device in between will be
+/// is called. Anything that gets bound to the device in between will be
 /// uploaded to the GPU and returns as an [Image] in [end].
 /// {@endtemplate}
 class GraphicsDevice {
@@ -46,14 +46,6 @@ class GraphicsDevice {
   Matrix4 get projection => _projectionMatrix;
   final Matrix4 _projectionMatrix = Matrix4.zero();
 
-  // @Deprecated('Use model, view and projection instead')
-  // // Matrix4 get transform => _transformMatrix;
-  // // final _transformMatrix = Matrix4.identity();
-
-  // @Deprecated('Use model, view and projection instead')
-  // Matrix4 get viewModel => _viewModelMatrix;
-  // final _viewModelMatrix = Matrix4.identity();
-
   Size _previousSize = Size.zero;
 
   /// Begin a new rendering batch.
@@ -65,9 +57,9 @@ class GraphicsDevice {
   /// GPU with [end].
   void begin(
     Size size, {
-    // TODO(wolfen): unused at the moment
+    // TODO(wolfenrain): unused at the moment
     BlendState blendState = BlendState.alphaBlend,
-    // TODO(wolfen): used incorrectly
+    // TODO(wolfenrain): used incorrectly
     DepthStencilState depthStencilState = DepthStencilState.depthRead,
   }) {
     _commandBuffer = gpu.gpuContext.createCommandBuffer();
@@ -83,7 +75,7 @@ class GraphicsDevice {
       )
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
       ..setDepthCompareOperation(
-        // TODO(wolfen): this is not correctly implemented AT all.
+        // TODO(wolfenrain): this is not correctly implemented AT all.
         switch (depthStencilState) {
           DepthStencilState.none => gpu.CompareFunction.never,
           DepthStencilState.standard => gpu.CompareFunction.always,

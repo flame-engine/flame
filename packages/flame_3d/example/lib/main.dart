@@ -46,7 +46,7 @@ class ExampleGame3D extends FlameGame<World3D>
         position: Vector3(5, 5, 5),
         mesh: SphereMesh(
           radius: 1,
-          material: StandardMaterial(
+          material: SpatialMaterial(
             albedoTexture: ColorTexture(Colors.purple),
           ),
         ),
@@ -56,7 +56,7 @@ class ExampleGame3D extends FlameGame<World3D>
       MeshComponent(
         mesh: PlaneMesh(
           size: Vector2(32, 32),
-          material: StandardMaterial(albedoTexture: ColorTexture(Colors.grey)),
+          material: SpatialMaterial(albedoTexture: ColorTexture(Colors.grey)),
         ),
       ),
 
@@ -65,8 +65,7 @@ class ExampleGame3D extends FlameGame<World3D>
         position: Vector3(16.5, 2.5, 0),
         mesh: CuboidMesh(
           size: Vector3(1, 5, 32),
-          material:
-              StandardMaterial(albedoTexture: ColorTexture(Colors.yellow)),
+          material: SpatialMaterial(albedoTexture: ColorTexture(Colors.yellow)),
         ),
       ),
 
@@ -75,7 +74,7 @@ class ExampleGame3D extends FlameGame<World3D>
         position: Vector3(0, 2.5, 16.5),
         mesh: CuboidMesh(
           size: Vector3(32, 5, 1),
-          material: StandardMaterial(albedoTexture: ColorTexture(Colors.blue)),
+          material: SpatialMaterial(albedoTexture: ColorTexture(Colors.blue)),
         ),
       ),
 
@@ -84,7 +83,7 @@ class ExampleGame3D extends FlameGame<World3D>
         position: Vector3(0, 2.5, -16.5),
         mesh: CuboidMesh(
           size: Vector3(32, 5, 1),
-          material: StandardMaterial(albedoTexture: ColorTexture(Colors.lime)),
+          material: SpatialMaterial(albedoTexture: ColorTexture(Colors.lime)),
         ),
       ),
     ]);
@@ -98,7 +97,7 @@ class ExampleGame3D extends FlameGame<World3D>
           position: Vector3(rnd.range(-15, 15), height / 2, rnd.range(-15, 15)),
           mesh: CuboidMesh(
             size: Vector3(1, height, 1),
-            material: StandardMaterial(
+            material: SpatialMaterial(
               albedoTexture: ColorTexture(
                 Color.fromRGBO(rnd.iRange(20, 255), rnd.iRange(10, 55), 30, 1),
               ),

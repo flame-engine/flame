@@ -98,7 +98,8 @@ class Component3D extends Component with HasWorldReference<World3D> {
     // This ensures that our rendering is done in a specific order allowing for
     // alpha blending.
     //
-    // Note(wolfen): we should optimize this in the long run it currently sucks.
+    // Note(wolfenrain): we should optimize this in the long run it currently
+    // sucks.
     priority = -(CameraComponent3D.currentCamera!.position - position)
         .length
         .abs()

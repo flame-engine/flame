@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart' as flame;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/graphics.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 /// {@template world_3d}
@@ -46,15 +44,11 @@ class World3D extends flame.World with flame.HasGameReference {
       ..projection.setFrom(camera.projectionMatrix)
       ..begin(size);
 
-    // print(position);
-    // print(Matrix4.inverted(viewMatrix).transform3(Vector3.all(0)));
-
     culled = 0;
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
 
     final image = device.end();
-    // canvas.drawImage(image, (-viewport.virtualSize / 2).toOffset(), _paint);
     canvas.drawImageRect(
       image,
       Offset.zero & size,
@@ -65,6 +59,6 @@ class World3D extends flame.World with flame.HasGameReference {
     image.dispose();
   }
 
-  // TODO(wolfen): this is only here for testing purposes
+  // TODO(wolfenrain): this is only here for testing purposes
   int culled = 0;
 }

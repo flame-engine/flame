@@ -24,7 +24,7 @@ class Vertex {
           ...position.storage, // 1, 2, 3
           ...texCoord.storage, // 4, 5
           ...color.storage, // 6,7,8
-          // `TODO`(wolfen): uhh normals fuck shit up, I should read up on it
+          // `TODO`(wolfenrain): uhh normals fuck shit up, I should read up on it
           ...(normal ?? Vector3.zero()).storage, // 9, 10, 11
         ]);
 
@@ -60,7 +60,7 @@ class Vertex {
     Vector3? normal,
     Color? color,
   }) {
-    // TODO(wolfen): optimize this.
+    // TODO(wolfenrain): optimize this.
     return Vertex(
       position: position ?? this.position.mutable,
       texCoord: texCoord ?? this.texCoord.mutable,
