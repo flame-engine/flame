@@ -103,7 +103,6 @@ class GraphicsDevice {
     _lights.add(light);
   }
 
-
   Vector3? get lightPosition {
     // TODO(luan):  support multiple lights
     return _lights.firstOrNull?.position;
