@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d/src/resources/light/light.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 enum BlendState {
@@ -47,6 +48,8 @@ class GraphicsDevice {
   final Matrix4 _projectionMatrix = Matrix4.zero();
 
   Size _previousSize = Size.zero;
+
+  final List<Light> _lights = [];
 
   /// Begin a new rendering batch.
   ///
@@ -93,6 +96,17 @@ class GraphicsDevice {
 
   void clearBindings() {
     _renderPass.clearBindings();
+  }
+
+  /// Bind a [light].
+  void bindLight(Light light) {
+    _lights.add(light);
+  }
+
+
+  Vector3? get lightPosition {
+    // TODO(luan):  support multiple lights
+    return _lights.firstOrNull?.position;
   }
 
   /// Bind a [mesh].
