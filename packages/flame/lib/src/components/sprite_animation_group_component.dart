@@ -151,7 +151,11 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   }
 
   /// Returns the map of animation state and their corresponding animations.
-  Map<T, SpriteAnimation>? get animations => _animations;
+  ///
+  /// If you want to change the contents of the map use the animations setter
+  /// and pass in a new map of animations
+  Map<T, SpriteAnimation>? get animations =>
+      _animations != null ? Map.unmodifiable(_animations!) : null;
 
   /// Sets the given [value] as new animation state map.
   set animations(Map<T, SpriteAnimation>? value) {
