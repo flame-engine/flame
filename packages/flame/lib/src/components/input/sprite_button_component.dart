@@ -47,12 +47,12 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
 
   set button(Sprite value) {
     _button = value;
-    sprites?[ButtonState.up] = value;
+    updateSprite(ButtonState.up, value);
   }
 
   set buttonDown(Sprite value) {
     _buttonDown = value;
-    sprites?[ButtonState.down] = value;
+    updateSprite(ButtonState.down, value);
   }
 
   @override
