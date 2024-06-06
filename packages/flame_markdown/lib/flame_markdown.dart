@@ -55,6 +55,7 @@ class FlameMarkdown {
       'p' => ParagraphNode(child),
       'em' || 'i' => ItalicTextNode(child),
       'strong' || 'b' => BoldTextNode(child),
+      'code' => CodeTextNode(child),
       _ => throw Exception('Unknown element tag: ${element.tag}'),
     } as TextNode;
   }
