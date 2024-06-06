@@ -1,6 +1,7 @@
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
+/// An [InlineTextNode] representing plain text.
 class PlainTextNode extends InlineTextNode {
   PlainTextNode(this.text);
 

@@ -2,6 +2,7 @@ import 'package:flame/src/text/elements/group_text_element.dart';
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
+/// An [InlineTextNode] to group other [InlineTextNode]s.
 class GroupTextNode extends InlineTextNode {
   GroupTextNode(this.children);
 
