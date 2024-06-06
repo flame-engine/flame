@@ -58,14 +58,24 @@ class RichTextExample extends FlameGame {
           PlainTextNode('."'),
         ]),
       ]),
-      ParagraphNode.simple(
-        'He pushed the thought under instantly. The fallacy was obvious. It '
-        'presupposed that somewhere or other, outside oneself, there was a '
-        '"real" world where "real" things happened. But how could there be '
-        'such a world? What knowledge have we of anything, save through our '
-        'own minds? All happenings are in the mind. Whatever happens in all '
-        'minds, truly happens.',
-      ),
+      ParagraphNode.group([
+        PlainTextNode(
+          'He pushed the thought under instantly. The fallacy was obvious. It '
+          'presupposed that somewhere or other, outside oneself, there was a '
+          '"',
+        ),
+        CodeTextNode.simple('real'),
+        PlainTextNode(
+          '" world where "',
+        ),
+        CodeTextNode.simple('real'),
+        PlainTextNode(
+          '" things happened. But how could there be '
+          'such a world? What knowledge have we of anything, save through our '
+          'own minds? All happenings are in the mind. Whatever happens in all '
+          'minds, truly happens.',
+        ),
+      ]),
     ]);
 
     add(

@@ -26,6 +26,8 @@ class InlineTextStyle extends FlameTextStyle {
     this.decorationColor,
     this.decorationStyle,
     this.decorationThickness,
+    this.background,
+    this.foreground,
   });
 
   final Color? color;
@@ -45,6 +47,8 @@ class InlineTextStyle extends FlameTextStyle {
   final Color? decorationColor;
   final TextDecorationStyle? decorationStyle;
   final double? decorationThickness;
+  final Paint? background;
+  final Paint? foreground;
 
   late final TextRenderer renderer = asTextRenderer();
 
@@ -68,6 +72,8 @@ class InlineTextStyle extends FlameTextStyle {
       decorationColor: other.decorationColor ?? decorationColor,
       decorationStyle: other.decorationStyle ?? decorationStyle,
       decorationThickness: other.decorationThickness ?? decorationThickness,
+      background: other.background ?? background,
+      foreground: other.foreground ?? foreground,
     );
   }
 
@@ -95,6 +101,8 @@ class InlineTextStyle extends FlameTextStyle {
       decorationColor: decorationColor,
       decorationStyle: decorationStyle,
       decorationThickness: decorationThickness,
+      background: background,
+      foreground: foreground,
     );
   }
 }
