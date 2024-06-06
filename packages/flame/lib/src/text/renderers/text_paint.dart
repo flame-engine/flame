@@ -82,6 +82,18 @@ class TextPaint extends TextRenderer {
       decorationColor: style.decorationColor,
       decorationStyle: style.decorationStyle,
       decorationThickness: style.decorationThickness,
+      background: _extractBackground(style),
+      foreground: style.foreground,
     );
+  }
+
+  Paint? _extractBackground(TextStyle style) {
+    if (style.background != null) {
+      return style.background;
+    }
+    if (style.backgroundColor != null) {
+      return Paint()..color = style.backgroundColor!;
+    }
+    return null;
   }
 }
