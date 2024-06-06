@@ -162,6 +162,8 @@ Do you want to contribute with a PR? PRs are always welcome, just make sure to c
 correct branch (main) and follow the [checklist](.github/pull_request_template.md) which will
 appear when you open the PR.
 
+Also, before you start, make sure to read our [Contributing Guide](CONTRIBUTING.md).
+
 For bigger changes, or if in doubt, make sure to talk about your contribution to the team. Either
 via an issue, GitHub discussion, or reach out to the team either using the
 [Discord server](https://discord.gg/pxrBmy4).
