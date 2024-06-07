@@ -44,6 +44,7 @@ void main() {
           decorationColor: Color(0xFF0000FF),
           decorationStyle: TextDecorationStyle.dashed,
           decorationThickness: 1.5,
+          backgroundColor: Color(0xFFFF00FF),
         );
         final textPaint = TextPaint(style: flutterStyle);
 
@@ -77,6 +78,7 @@ void main() {
         expect(inlineTextStyle.decorationColor, const Color(0xFF0000FF));
         expect(inlineTextStyle.decorationStyle, TextDecorationStyle.dashed);
         expect(inlineTextStyle.decorationThickness, 1.5);
+        expect(inlineTextStyle.background!.color, const Color(0xFFFF00FF));
 
         final newTextPaint = inlineTextStyle.asTextRenderer();
         expect(newTextPaint.style.fontSize, 12);
@@ -108,7 +110,33 @@ void main() {
         expect(newTextPaint.style.decorationColor, const Color(0xFF0000FF));
         expect(newTextPaint.style.decorationStyle, TextDecorationStyle.dashed);
         expect(newTextPaint.style.decorationThickness, 1.5);
+        expect(newTextPaint.style.background!.color, const Color(0xFFFF00FF));
       },
     );
   });
+
+  test(
+    'TextPaint and InlineTextStyle can receive Paint instead of Color',
+    () {
+      final flutterStyle = flutter.TextStyle(
+        fontSize: 12,
+        fontFamily: 'Times',
+        foreground: Paint()..color = const Color(0xFF0000FF),
+        background: Paint()..color = const Color(0xFFFF00FF),
+      );
+      final textPaint = TextPaint(style: flutterStyle);
+
+      final inlineTextStyle = textPaint.asInlineTextStyle();
+      expect(inlineTextStyle.fontSize, 12);
+      expect(inlineTextStyle.fontFamily, 'Times');
+      expect(inlineTextStyle.foreground!.color, const Color(0xFF0000FF));
+      expect(inlineTextStyle.background!.color, const Color(0xFFFF00FF));
+
+      final newTextPaint = inlineTextStyle.asTextRenderer();
+      expect(newTextPaint.style.fontSize, 12);
+      expect(newTextPaint.style.fontFamily, 'Times');
+      expect(newTextPaint.style.foreground!.color, const Color(0xFF0000FF));
+      expect(newTextPaint.style.background!.color, const Color(0xFFFF00FF));
+    },
+  );
 }
