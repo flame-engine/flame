@@ -30,4 +30,9 @@ class TextPainterTextElement extends InlineTextElement {
   void draw(Canvas canvas) {
     _textPainter.paint(canvas, Offset(_box.left, _box.top));
   }
+
+  @override
+  String toString() {
+    return 'TextPainterTextElement(text: ${_textPainter.text?.toPlainText()})';
+  }
 }
