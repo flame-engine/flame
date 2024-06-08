@@ -21,6 +21,9 @@ abstract class InlineTextNode extends TextNode<InlineTextStyle> {
 }
 
 abstract class TextNodeLayoutBuilder {
-  InlineTextElement? layOutNextLine(double availableWidth);
+  InlineTextElement? layOutNextLine(
+    double availableWidth, {
+    required bool isStartOfLine,
+  });
   bool get isDone;
 }
