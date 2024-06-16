@@ -100,6 +100,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     Vector2? size,
     Vector2? scale,
     double? angle,
+    double nativeAngle = 0,
     Anchor? anchor,
     int? priority,
     ComponentKey? key,
@@ -124,6 +125,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           scale: scale,
           angle: angle,
           anchor: anchor,
+          nativeAngle: nativeAngle,
           priority: priority,
           key: key,
         );
