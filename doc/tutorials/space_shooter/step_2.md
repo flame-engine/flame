@@ -67,7 +67,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 ```
@@ -116,7 +116,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 ```
@@ -181,7 +181,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 ```
