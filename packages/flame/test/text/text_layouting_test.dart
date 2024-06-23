@@ -24,7 +24,7 @@ void main() {
             ]),
             style: DocumentStyle(
               text: InlineTextStyle(
-                // using DebugTextRenderer, this will make each character 10px wide
+                // using DebugTextRenderer, this will make each char 10px wide
                 fontSize: 10,
               ),
             ),
