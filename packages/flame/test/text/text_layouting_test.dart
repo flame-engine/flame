@@ -4,7 +4,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:test/test.dart';
 
-final _size = Vector2(320, 300); // 3 sets of 10 + 1 space
+final _size = Vector2(100, 100);
 
 void main() {
   group('text layouting', () {
@@ -19,7 +19,7 @@ void main() {
           TextElementComponent.fromDocument(
             document: DocumentRoot([
               ParagraphNode.group(
-                List.filled(10, PlainTextNode(' 1234567890')),
+                ['012345', '67 89'].map(PlainTextNode.new).toList(),
               ),
             ]),
             style: DocumentStyle(
