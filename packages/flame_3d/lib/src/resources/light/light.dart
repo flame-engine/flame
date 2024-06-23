@@ -1,8 +1,23 @@
-import 'package:flame_3d/components.dart';
+import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
+import 'package:flame_3d/resources.dart';
 
-abstract class Light extends Component3D {
-  @override
+/// {@template light}
+/// A [Resource] that represents a light source that changes how the scene is
+/// rendered.
+///
+/// This class isn't a true resource, it does not upload it self to the GPU.
+/// Instead, it is used to modify how meshes are uploaded.
+/// {@endtemplate}
+class Light extends Resource<void> {
+  // TODO(luan): Add more attributes and light types
+  final Vector3 position;
+
+  /// {@macro light}
+  Light({
+    required this.position,
+  }): super(null);
+
   void bind(GraphicsDevice device) {
     device.bindLight(this);
   }

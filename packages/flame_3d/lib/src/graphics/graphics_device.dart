@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flame_3d/src/resources/light/light.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 enum BlendState {
