@@ -4,10 +4,10 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:test/test.dart';
 
+final _size = Vector2(320, 300); // 3 sets of 10 + 1 space
+
 void main() {
   group('text layouting', () {
-    final _size = Vector2(320, 300); // 3 sets of 10 + 1 space
-
     testGolden(
       'Text is properly laid out across multiple lines',
       (game) async {
@@ -24,7 +24,8 @@ void main() {
             ]),
             style: DocumentStyle(
               text: InlineTextStyle(
-                fontSize: 10, // using DebugTextRenderer, each character will be 10px wide
+                // using DebugTextRenderer, this will make each character 10px wide
+                fontSize: 10,
               ),
             ),
             size: _size,
