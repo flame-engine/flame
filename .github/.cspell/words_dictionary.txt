@@ -12,6 +12,7 @@ grayscale
 hoverable
 hoverables
 inactives
+layouting
 microtask
 orientable
 platformer
