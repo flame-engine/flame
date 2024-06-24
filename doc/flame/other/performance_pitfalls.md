@@ -1,0 +1,83 @@
+# Performance Pitfalls
+
+Just like any other game engine, Flame comes with its own set of performance problems and depending on
+the underlying hardware, there will always be a hard limit on what can be achieved with Flame. But apart
+from the hardware limits, there are some common pitfalls that Flame users run into which can be easily
+avoided by following simple steps. This section tries to cover such common issues and ways to tackle
+them.
+
+Disclaimer: Each Flame project is very different from the others. As a result, solution described here
+cannot guarantee to always produce a significant improvement in performance.
+
+
+## Object creation per frame
+
+
+### Problem
+
+Creating objects of a class is very common in any kind of project/game. But object creation is a somewhat
+involved operation. Depending on the frequency and amount of objects that are being created, the application
+can experience some slow down.
+
+In games, this is something to be very careful of because games generally have a gameloop that updates
+as fast as possible, where each update is called a frame. Depending on the hardware, a game can be updating
+30, 60, 120 or even higher frames per second. This means if a new object is created in a frame, the game
+will end up creating as many number of objects as the frame count per second.
+
+Flame users, generally tend to run into this problem when they override the `update` and `render` method
+of a `Component`. For example, in the following innocent looking code, a new `Vector2` and a new `Paint`
+object is spawned every frame. But the data inside the objects is essentially the same across all frames.
+Now imagine if there are 100 instances of `MyComponent` in a game running at 60 FPS. That would essentially
+mean 6000 (100 * 60) new instances of `Vector2` and `Paint` each will be created every second.
+
+```{note}
+It is like buying a new computer every time you want to send an email or buying
+a new pen every time you want to write something. Sure it gets the job done, but
+it is not very economically smart.
+```
+
+```dart
+class MyComponent extends PositionComponent {
+  @override
+  void update(double dt) {
+    position += Vector2(10, 20) * dt;
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRect(size.toRect(), Paint());
+  }
+}
+```
+
+
+### Solution
+
+A better way of doing things would be something like as shown below. This code stores the required `Vector2`
+and `Paint` objects as class members and reuses them across all the update and render calls.
+
+```dart
+class MyComponent extends PositionComponent {
+  final _direction = Vector2(10, 20);
+  final _paint = Paint();
+
+  @override
+  void update(double dt) {
+    position.setValues(
+      position.x + _direction.x * dt, 
+      position.y + _direction.y * dt,
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRect(size.toRect(), _paint);
+  }
+}
+```
+
+```{note}
+To summarize, avoid creating unnecessary objects in every frame. Even a seemingly
+small object can affect the performance if spawned in high volume.
+```
+
