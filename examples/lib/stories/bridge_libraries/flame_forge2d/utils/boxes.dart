@@ -9,12 +9,14 @@ class Box extends BodyComponent {
   final Vector2 startPosition;
   final double width;
   final double height;
+  final double density;
   final BodyType bodyType;
 
   Box({
     required this.startPosition,
     required this.width,
     required this.height,
+    this.density = 10,
     this.bodyType = BodyType.dynamic,
     Color? color,
   }) {
@@ -31,7 +33,12 @@ class Box extends BodyComponent {
   Body createBody() {
     final shape = PolygonShape()
       ..setAsBox(width / 2, height / 2, Vector2.zero(), 0);
-    final fixtureDef = FixtureDef(shape, friction: 0.3, density: 10);
+    final fixtureDef = FixtureDef(
+      shape,
+      friction: 0.3,
+      restitution: 0.2,
+      density: density,
+    );
     final bodyDef = BodyDef(
       userData: this, // To be able to determine object in collision
       position: startPosition,
@@ -51,6 +58,7 @@ class DraggableBox extends Box with DragCallbacks {
     required super.startPosition,
     required super.width,
     required super.height,
+    super.density = 1000,
   });
 
   @override
@@ -63,33 +71,42 @@ class DraggableBox extends Box with DragCallbacks {
   }
 
   @override
-  bool onDragUpdate(DragUpdateEvent info) {
-    final target = info.localEndPosition;
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+
+    final target = game.screenToWorld(event.devicePosition);
+
     final mouseJointDef = MouseJointDef()
-      ..maxForce = body.mass * 300
-      ..dampingRatio = 0
-      ..frequencyHz = 20
-      ..target.setFrom(body.position)
+      ..maxForce = 2000 * body.mass
+      ..dampingRatio = 0.1
+      ..frequencyHz = 50
+      ..target.setFrom(target)
       ..collideConnected = false
       ..bodyA = groundBody
       ..bodyB = body;
+    mouseJoint = MouseJoint(mouseJointDef);
 
-    if (mouseJoint == null) {
-      mouseJoint = MouseJoint(mouseJointDef);
-      world.createJoint(mouseJoint!);
-    } else {
-      mouseJoint?.setTarget(target);
-    }
+    world.createJoint(mouseJoint!);
+  }
+
+  @override
+  bool onDragUpdate(DragUpdateEvent event) {
+    mouseJoint?.setTarget(
+      game.screenToWorld(event.deviceEndPosition),
+    );
+
     return false;
   }
 
   @override
-  void onDragEnd(DragEndEvent info) {
-    super.onDragEnd(info);
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+
     if (mouseJoint == null) {
       return;
     }
+
     _destroyJoint = true;
-    info.continuePropagation = false;
+    event.continuePropagation = false;
   }
 }
