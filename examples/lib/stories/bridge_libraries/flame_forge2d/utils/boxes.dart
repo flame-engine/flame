@@ -31,8 +31,12 @@ class Box extends BodyComponent {
   Body createBody() {
     final shape = PolygonShape()
       ..setAsBox(width / 2, height / 2, Vector2.zero(), 0);
-    final fixtureDef =
-        FixtureDef(shape, friction: 0.3, restitution: 0.2, density: 10);
+    final fixtureDef = FixtureDef(
+      shape,
+      friction: 0.3,
+      restitution: 0.2,
+      density: 10,
+    );
     final bodyDef = BodyDef(
       userData: this, // To be able to determine object in collision
       position: startPosition,
