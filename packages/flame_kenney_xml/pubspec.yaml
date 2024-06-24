@@ -1,6 +1,6 @@
 name: flame_kenney_xml
 description: "Support for Kenney XML spritesheets for the Flame game engine. This package parses XML files produced by Kenney."
-version: 0.1.2
+version: 0.1.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_kenney_xml
 funding:
   - https://opencollective.com/blue-fire

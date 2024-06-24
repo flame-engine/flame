@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
-import 'package:flame_kenney_xml/xml_sprite_sheet.dart';
+import 'package:flame_kenney_xml/flame_kenney_xml.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

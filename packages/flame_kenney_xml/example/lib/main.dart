@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_kenney_xml/xml_sprite_sheet.dart';
+import 'package:flame_kenney_xml/flame_kenney_xml.dart';
 import 'package:flutter/material.dart';
 
 /// A simple game that adds a random sprite component created from a kenney.nl
