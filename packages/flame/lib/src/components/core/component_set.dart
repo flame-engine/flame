@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
@@ -79,9 +77,9 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// ```
   ///
   /// This is equivalent to `world.children.whereType<MyCustomComponent>()`
-  /// except that it is O(1).
+  /// except that [query] is O(1).
   ///
-  /// The function returns an unmodifiable list. In past versions of Flame,
+  /// The function returns an [Iterable]. In past versions of Flame,
   /// it was a modifiable [List] but modifying this list would have been a bug.
   ///
   /// When [strictMode] is `true`, you *must* call [register]
@@ -91,13 +89,13 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// world.children.register<MyCustomComponent>();
   /// ```
   @override
-  UnmodifiableListView<C> query<C extends Component>() {
-    // We are returning unmodifiable list view here to avoid hard-to-detect
+  Iterable<C> query<C extends Component>() {
+    // We are returning an iterable (view) here to avoid hard-to-detect
     // bugs where the user assumes the query is a unique result list
     // and they start doing things like `removeWhere()`.
     // This would remove components from the component set itself
     // (but not from the game)!
-    return UnmodifiableListView(super.query());
+    return super.query();
   }
 
   /// Sorts the components according to their `priority`s. This method is
