@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/comparing.dart';
@@ -66,6 +68,37 @@ class ComponentSet extends QueryableOrderedSet<Component> {
   /// marked to be added later.
   @override
   bool get isNotEmpty => !isEmpty;
+
+  /// Queries the component set (typically [Component.children]) for
+  /// components of type [C].
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// final myComponents = world.children.query<MyCustomComponent>();
+  /// ```
+  ///
+  /// This is equivalent to `world.children.whereType<MyCustomComponent>()`
+  /// except that it is O(1).
+  ///
+  /// The function returns an unmodifiable list. In past versions of Flame,
+  /// it was a modifiable [List] but modifying this list would have been a bug.
+  ///
+  /// When [strictMode] is `true`, you *must* call [register]
+  /// for every type [C] you desire to use. Use something like:
+  ///
+  /// ```dart
+  /// world.children.register<MyCustomComponent>();
+  /// ```
+  @override
+  UnmodifiableListView<C> query<C extends Component>() {
+    // We are returning unmodifiable list view here to avoid hard-to-detect
+    // bugs where the user assumes the query is a unique result list
+    // and they start doing things like `removeWhere()`.
+    // This would remove components from the component set itself
+    // (but not from the game)!
+    return UnmodifiableListView(super.query());
+  }
 
   /// Sorts the components according to their `priority`s. This method is
   /// invoked by the framework when it knows that the priorities of the
