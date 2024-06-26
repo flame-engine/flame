@@ -19,5 +19,4 @@ class RotatingLight extends LightComponent {
     final z = sin(angle) * radius;
     light.position.setValues(x, 10, z);
   }
-
 }
