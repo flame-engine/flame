@@ -1,13 +1,19 @@
 # Performance
 
-Just like any other game engine, Flame comes with its own set of performance problems and depending on
-the underlying hardware, there will always be a hard limit on what can be achieved with Flame. But apart
-from the hardware limits, there are some common pitfalls that Flame users run into which can be easily
-avoided by following simple steps. This section tries to cover such common issues and ways to tackle
-them.
+Just like any other game engine, Flame tries to be as efficient as possible without making the API
+too complex. But given its general purpose nature, Flame cannot make any assumption about the type of
+game being made. This means game developers will always have some room for performance optimizations
+based on how their game functions.
 
-Disclaimer: Each Flame project is very different from the others. As a result, solution described here
-cannot guarantee to always produce a significant improvement in performance.
+On the other hand, depending on the underlying hardware, there will always be some hard limit on what
+can be achieved with Flame. But apart from the hardware limits, there are some common pitfalls that
+Flame users can run into, which can be easily avoided by following some simple steps. This section tries
+to cover some optimization tricks and ways to avoid the common performance pitfalls.
+
+```{note}
+Disclaimer: Each Flame project is very different from the others. As a result, solution
+described here cannot guarantee to always produce a significant improvement in performance.
+```
 
 
 ## Object creation per frame
