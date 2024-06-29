@@ -1,4 +1,4 @@
-# Performance Pitfalls
+# Performance
 
 Just like any other game engine, Flame comes with its own set of performance problems and depending on
 the underlying hardware, there will always be a hard limit on what can be achieved with Flame. But apart
