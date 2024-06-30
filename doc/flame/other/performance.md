@@ -18,9 +18,6 @@ described here cannot guarantee to always produce a significant improvement in p
 
 ## Object creation per frame
 
-
-### Problem
-
 Creating objects of a class is very common in any kind of project/game. But object creation is a somewhat
 involved operation. Depending on the frequency and amount of objects that are being created, the application
 can experience some slow down.
@@ -56,9 +53,6 @@ class MyComponent extends PositionComponent {
 }
 ```
 
-
-### Solution
-
 A better way of doing things would be something like as shown below. This code stores the required `Vector2`
 and `Paint` objects as class members and reuses them across all the update and render calls.
 
@@ -87,3 +81,25 @@ To summarize, avoid creating unnecessary objects in every frame. Even a seemingl
 small object can affect the performance if spawned in high volume.
 ```
 
+
+## Unwanted collison checks
+
+Flame has a built-in collision detection system which can detect when any two `Hitbox`es intersect with
+each other. In an ideal case, this system run on every frame and checks for collison. It is also smart
+enough to filter out only the possible collisions before performing th actually intersection checks.
+
+Despite this, it is safe to assume that the cost of collision detection will increase as the number of
+hitboxes increases. But in many games, the developers are not always interested in detecting collision
+between every possible pair. For example, consider a simple game where players can fire a `Bullet` component
+that has a hitbox. In such a game it is likely that the developers are not interested in detecting collision
+between any two bullets, but Flame will still perform those collison checks.
+
+To avoid this, you can set the `collisionType` for bullet component to `CollisionType.passive`. Doing
+so will cause Flame to completely skip any kind of collision check between all the passive hitboxes.
+
+```{note}
+This does not mean bullet component in all games must always have a passive hitbox.
+It is up to the developers to decide which hitboxes can be made passive based on
+the rules of the game. For example, the Rogue Shooter game in Flame's examples uses
+passive hitbox for enemies instead of the bullets. 
+```
