@@ -46,22 +46,43 @@ class Mesh extends Resource<void> {
     }
   }
 
-  /// Add a new surface represented by [vertices], [indices] and a material.
+  /// Add a new surface represented by [vertices], [indices] and a [material].
   void addSurface(
     List<Vertex> vertices,
     List<int> indices, {
     Material? material,
   }) {
-    _surfaces.add(Surface(vertices, indices, material));
+    add(Surface(vertices, indices, material));
   }
 
-  /// Add a material to the surface at [index].
-  void addMaterialToSurface(int index, Material material) {
-    _surfaces[index].material = material;
+  /// Must be called when the mesh has been modified.
+  void updateBounds() {
+    _aabb = null;
   }
 
-  /// Get a material from the surface at [index].
-  Material? getMaterialToSurface(int index) {
-    return _surfaces[index].material;
+  /// Add a new [surface] to the mesh.
+  void add(Surface surface) {
+    _surfaces.add(surface);
+    updateBounds();
+  }
+
+  /// An unmodifiable view over the list of the surfaces.
+  /// 
+  /// Note: if you modify the geometry of any [Surface] within this list,
+  /// you will need to call [updateBounds] to update the mesh's bounds.
+  List<Surface> get surfaces {
+    return List.unmodifiable(_surfaces);
+  }
+
+  /// Replace the surface at [index] with [surface].
+  void updateSurface(int index, Surface surface) {
+    _surfaces[index] = surface;
+    updateBounds();
+  }
+
+  /// Remove the surface at [index].
+  void removeSurface(int index) {
+    _surfaces.removeAt(index);
+    updateBounds();
   }
 }
