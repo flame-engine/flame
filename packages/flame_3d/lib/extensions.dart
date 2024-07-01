@@ -1,3 +1,5 @@
+export 'package:vector_math/vector_math.dart' hide Colors;
+
 export 'src/extensions/aabb3.dart';
 export 'src/extensions/color.dart';
 export 'src/extensions/matrix4.dart';
