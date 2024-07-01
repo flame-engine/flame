@@ -1,3 +1,9 @@
+export 'package:vector_math/vector_math.dart'
+    show
+        degrees2Radians,
+        setViewMatrix,
+        setPerspectiveMatrix,
+        setOrthographicMatrix;
 import 'package:flame_3d/game.dart';
 
 extension Matrix4Extension on Matrix4 {
