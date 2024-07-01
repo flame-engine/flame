@@ -95,6 +95,7 @@ class GraphicsDevice {
 
   void clearBindings() {
     _renderPass.clearBindings();
+    _lights.clear();
   }
 
   /// Bind a [light].

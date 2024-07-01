@@ -10,13 +10,13 @@ import 'package:flame_3d/resources.dart';
 /// Instead, it is used to modify how meshes are uploaded.
 /// {@endtemplate}
 class Light extends Resource<void> {
-  // TODO(luan): Add more attributes and light types
-  final Vector3 position;
-
   /// {@macro light}
   Light({
     required this.position,
   }): super(null);
+
+  // TODO(luan): Add more attributes and light types
+  final Vector3 position;
 
   void bind(GraphicsDevice device) {
     device.bindLight(this);
