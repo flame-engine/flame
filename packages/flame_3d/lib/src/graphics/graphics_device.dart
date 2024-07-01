@@ -48,6 +48,8 @@ class GraphicsDevice {
 
   Size _previousSize = Size.zero;
 
+  final List<Light> _lights = [];
+
   /// Begin a new rendering batch.
   ///
   /// After [begin] is called the graphics device can be used to bind resources
@@ -93,6 +95,17 @@ class GraphicsDevice {
 
   void clearBindings() {
     _renderPass.clearBindings();
+    _lights.clear();
+  }
+
+  /// Bind a [light].
+  void bindLight(Light light) {
+    _lights.add(light);
+  }
+
+  Vector3? get lightPosition {
+    // TODO(luan):  support multiple lights
+    return _lights.firstOrNull?.position;
   }
 
   /// Bind a [mesh].

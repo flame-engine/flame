@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame_3d/extensions.dart';
@@ -61,17 +60,17 @@ class SpatialMaterial extends Material {
 
   @override
   void bind(GraphicsDevice device) {
+    final lightPosition = device.lightPosition;
+    if (lightPosition == null) {
+      return;
+    }
+
     vertexShader
       ..setMatrix4('VertexInfo.model', device.model)
       ..setMatrix4('VertexInfo.view', device.view)
       ..setMatrix4('VertexInfo.projection', device.projection);
 
     final invertedView = Matrix4.inverted(device.view);
-
-    const radius = 15;
-    final angle = DateTime.now().millisecondsSinceEpoch / 4000;
-    final x = cos(angle) * radius;
-    final z = sin(angle) * radius;
 
     fragmentShader
       // Material
@@ -81,7 +80,7 @@ class SpatialMaterial extends Material {
       ..setFloat('Material.metallicSpecular', metallicSpecular)
       ..setFloat('Material.roughness', roughness)
       // Light
-      ..setVector3('Light.position', Vector3(x, 10, z))
+      ..setVector3('Light.position', lightPosition)
       // Camera
       ..setVector3('Camera.position', invertedView.transform3(Vector3.zero()));
   }
