@@ -1,5 +1,4 @@
 import 'package:flame_3d/camera.dart';
-import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';
 
 enum CameraProjection { perspective, orthographic }

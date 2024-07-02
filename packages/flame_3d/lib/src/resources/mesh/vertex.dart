@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flutter/widgets.dart';
 

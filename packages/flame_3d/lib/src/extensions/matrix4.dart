@@ -1,5 +1,12 @@
 import 'package:flame_3d/game.dart';
 
+export 'package:vector_math/vector_math.dart'
+    show
+        degrees2Radians,
+        setViewMatrix,
+        setPerspectiveMatrix,
+        setOrthographicMatrix;
+
 extension Matrix4Extension on Matrix4 {
   /// Set the matrix to be a view matrix.
   void setAsViewMatrix(Vector3 position, Vector3 target, Vector3 up) {

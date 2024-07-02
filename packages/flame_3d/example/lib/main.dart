@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:example/crate.dart';
 import 'package:example/keyboard_controlled_camera.dart';

@@ -2,7 +2,6 @@ import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flame_3d/src/camera/camera_component_3d.dart';
-import 'package:flame_3d/src/extensions/aabb3.dart';
 import 'package:flame_3d/src/graphics/graphics_device.dart';
 
 /// {@template mesh_component}
