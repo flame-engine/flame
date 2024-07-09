@@ -85,6 +85,63 @@ void main() {
         );
       },
     );
+
+    testWithGame(
+      'pausing and resuming',
+      _GameWithTimeScale.new,
+      (game) async {
+        final component = _MovingComponent();
+        await game.add(component);
+        await game.ready();
+        const stepTime = 10.0;
+        var distance = 0.0;
+        final offset = stepTime * component.speed;
+
+        game.pause();
+        distance = component.x;
+        game.update(stepTime);
+        expect(component.x, distance);
+
+        game.resume();
+        distance = component.x;
+        game.update(stepTime);
+        expect(component.x, distance + offset);
+
+        game.pause();
+        distance = component.x;
+        game.update(stepTime);
+        expect(component.x, distance);
+
+        game.resume(newTimeScale: 0.5);
+        distance = component.x;
+        game.update(stepTime);
+        expect(component.x, distance + 0.5 * offset);
+      },
+    );
+
+    testWithGame(
+      'resume does not modify timeScale if not paused',
+      _GameWithTimeScale.new,
+      (game) async {
+        final component = _MovingComponent();
+        await game.add(component);
+        await game.ready();
+        const stepTime = 10.0;
+        var distance = 0.0;
+        final offset = stepTime * component.speed;
+
+        game.pause();
+        distance = component.x;
+        game.update(stepTime);
+        expect(component.x, distance + game.timeScale * offset);
+
+        game.timeScale = 0.5;
+        game.resume();
+        distance = component.x;
+        game.update(stepTime);
+        expect(component.x, distance + game.timeScale * offset);
+      },
+    );
   });
 }
 
