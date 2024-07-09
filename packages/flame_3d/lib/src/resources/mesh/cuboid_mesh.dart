@@ -59,6 +59,12 @@ class CuboidMesh extends Mesh {
       20, 21, 22, 22, 23, 20, // Face 6
     ];
 
-    addSurface(vertices, indices, material: material);
+    addSurface(
+      Surface(
+        vertices: vertices,
+        indices: indices,
+        material: material,
+      ),
+    );
   }
 }
