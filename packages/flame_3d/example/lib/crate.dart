@@ -14,7 +14,11 @@ class Crate extends MeshComponent {
   @override
   FutureOr<void> onLoad() async {
     final crateTexture = await Flame.images.loadTexture('crate.jpg');
-    mesh.addMaterialToSurface(0, StandardMaterial(albedoTexture: crateTexture));
+    mesh.updateSurfaces((surfaces) {
+      surfaces[0].material = StandardMaterial(
+        albedoTexture: crateTexture,
+      );
+    });
   }
 
   double direction = 0.1;

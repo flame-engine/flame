@@ -18,6 +18,12 @@ class PlaneMesh extends Mesh {
       Vertex(position: Vector3(x, 0, y), texCoord: Vector2(1, 1)),
       Vertex(position: Vector3(-x, 0, y), texCoord: Vector2(0, 1)),
     ];
-    addSurface(vertices, [0, 1, 2, 2, 3, 0], material: material);
+    addSurface(
+      Surface(
+        vertices: vertices,
+        indices: [0, 1, 2, 2, 3, 0],
+        material: material,
+      ),
+    );
   }
 }
