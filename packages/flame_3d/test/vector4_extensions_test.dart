@@ -1,4 +1,3 @@
-import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flutter_test/flutter_test.dart';
 
