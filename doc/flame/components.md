@@ -8,9 +8,8 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 
 ## Component
 
-All components inherit from the abstract class `Component` and all components can have other
-`Component`s as children. This is the base of what we call the Flame Component System, or FCS for
-short.
+All components inherit from the `Component` class and all components can have other `Component`s as
+children. This is the base of what we call the Flame Component System, or FCS for short.
 
 Children can be added either with the `add(Component c)` method or directly in the constructor.
 
