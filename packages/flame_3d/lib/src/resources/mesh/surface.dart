@@ -14,11 +14,11 @@ enum PrimitiveType {
 /// {@endtemplate}
 class Surface extends Resource<gpu.DeviceBuffer?> {
   /// {@macro surface}
-  Surface(
-    List<Vertex> vertices,
-    List<int> indices, [
+  Surface({
+    required List<Vertex> vertices,
+    required List<int> indices,
     this.material,
-  ]) : super(null) {
+  }) : super(null) {
     // `TODO`(bdero): This should have an attribute map instead and be fully SoA
     // but vertex attributes in Impeller aren't flexible enough yet.
     // See also https://github.com/flutter/flutter/issues/116168.
