@@ -15,30 +15,13 @@ class Mesh extends Resource<void> {
       : _surfaces = [],
         super(null);
 
+  final List<Surface> _surfaces;
+  Aabb3? _aabb;
+
   /// The AABB of the mesh.
   ///
   /// This is the sum of all the AABB's of the surfaces it contains.
-  Aabb3 get aabb {
-    if (_aabb == null) {
-      var aabb = Aabb3();
-      for (var i = 0; i < _surfaces.length; i++) {
-        if (i == 0) {
-          aabb = _surfaces[i].aabb;
-        } else {
-          aabb.hull(_surfaces[i].aabb);
-        }
-      }
-      _aabb = aabb;
-    }
-    return _aabb!;
-  }
-
-  Aabb3? _aabb;
-
-  final List<Surface> _surfaces;
-
-  /// The total surface count of the mesh.
-  int get surfaceCount => _surfaces.length;
+  Aabb3 get aabb => _aabb ??= _recomputeAabb3();
 
   void bind(GraphicsDevice device) {
     for (final surface in _surfaces) {
@@ -46,32 +29,22 @@ class Mesh extends Resource<void> {
     }
   }
 
-  /// Add a new surface represented by [vertices], [indices] and a [material].
-  void addSurface(
-    List<Vertex> vertices,
-    List<int> indices, {
-    Material? material,
-  }) {
-    add(Surface(vertices, indices, material));
-  }
+  /// The total surface count of the mesh.
+  int get surfaceCount => _surfaces.length;
 
-  /// Must be called when the mesh has been modified.
-  void updateBounds() {
-    _aabb = null;
-  }
-
-  /// Add a new [surface] to the mesh.
-  void add(Surface surface) {
-    _surfaces.add(surface);
-    updateBounds();
-  }
-
-  /// An unmodifiable view over the list of the surfaces.
+  /// An unmodifiable iterable over the list of the surfaces.
   /// 
   /// Note: if you modify the geometry of any [Surface] within this list,
   /// you will need to call [updateBounds] to update the mesh's bounds.
-  List<Surface> get surfaces {
-    return List.unmodifiable(_surfaces);
+  Iterable<Surface> get surfaces => _surfaces;
+
+  /// Add a new [surface] to this mesh.
+  /// Return the index of the newly added surface.
+  /// Surfaces are always added to the end of the list.
+  int addSurface(Surface surface) {
+    _surfaces.add(surface);
+    updateBounds();
+    return _surfaces.length - 1;
   }
 
   /// Replace the surface at [index] with [surface].
@@ -84,5 +57,28 @@ class Mesh extends Resource<void> {
   void removeSurface(int index) {
     _surfaces.removeAt(index);
     updateBounds();
+  }
+
+  /// Update the surfaces of the mesh, making sure to recompute the bounds after.
+  void updateSurfaces(void Function(List<Surface> surfaces) update) {
+    update(_surfaces);
+    updateBounds();
+  }
+
+  /// Must be called when the mesh has been modified.
+  void updateBounds() {
+    _aabb = null;
+  }
+
+  Aabb3 _recomputeAabb3() {
+    var aabb = Aabb3();
+    for (var i = 0; i < _surfaces.length; i++) {
+      if (i == 0) {
+        aabb = _surfaces[i].aabb;
+      } else {
+        aabb.hull(_surfaces[i].aabb);
+      }
+    }
+    return aabb;
   }
 }

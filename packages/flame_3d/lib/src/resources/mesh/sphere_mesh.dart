@@ -48,6 +48,12 @@ class SphereMesh extends Mesh {
       }
     }
 
-    addSurface(vertices, indices, material: material);
+    addSurface(
+      Surface(
+        vertices: vertices,
+        indices: indices,
+        material: material,
+      ),
+    );
   }
 }
