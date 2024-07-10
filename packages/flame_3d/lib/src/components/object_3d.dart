@@ -16,7 +16,7 @@ import 'package:flame_3d/resources.dart';
 /// debug mode). It is common, therefore, to derive from this class
 /// and implement a specific rendering logic.
 ///
-/// See the [MeshComponent] for a [Component3D] that has a visual representation
+/// See the [MeshComponent] for an [Object3D] that has a visual representation
 /// using a [Mesh].
 /// {@endtemplate}
 abstract class Object3D extends Component3D {
