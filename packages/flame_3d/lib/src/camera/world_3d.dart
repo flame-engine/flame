@@ -2,6 +2,7 @@ import 'package:flame/components.dart' as flame;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/graphics.dart';
+import 'package:flame_3d/resources.dart';
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
@@ -17,11 +18,16 @@ class World3D extends flame.World with flame.HasGameReference {
     super.children,
     super.priority,
     Color clearColor = const Color(0x00000000),
-  }) : device = GraphicsDevice(clearValue: clearColor);
+  }) : device = GraphicsDevice(clearValue: clearColor) {
+    children.register<LightComponent>();
+  }
 
   /// The graphical device attached to this world.
   @internal
   final GraphicsDevice device;
+
+  Iterable<Light> get lights =>
+      children.query<LightComponent>().map((component) => component.light);
 
   final _paint = Paint();
 
@@ -45,6 +51,8 @@ class World3D extends flame.World with flame.HasGameReference {
       ..begin(size);
 
     culled = 0;
+
+    _prepareDevice();
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
 
@@ -57,6 +65,10 @@ class World3D extends flame.World with flame.HasGameReference {
       _paint,
     );
     image.dispose();
+  }
+
+  void _prepareDevice() {
+    device.lights = lights;
   }
 
   // TODO(wolfenrain): this is only here for testing purposes

@@ -35,7 +35,7 @@ class Mesh extends Resource<void> {
   int get surfaceCount => _surfaces.length;
 
   /// An unmodifiable iterable over the list of the surfaces.
-  /// 
+  ///
   /// Note: if you modify the geometry of any [Surface] within this list,
   /// you will need to call [updateBounds] to update the mesh's bounds.
   Iterable<Surface> get surfaces => _surfaces;
@@ -61,7 +61,8 @@ class Mesh extends Resource<void> {
     updateBounds();
   }
 
-  /// Update the surfaces of the mesh, making sure to recompute the bounds after.
+  /// Update the surfaces of the mesh, making sure to recompute the bounds
+  /// after.
   void updateSurfaces(void Function(List<Surface> surfaces) update) {
     update(_surfaces);
     updateBounds();

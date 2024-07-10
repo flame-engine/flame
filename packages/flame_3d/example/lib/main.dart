@@ -35,9 +35,9 @@ class ExampleGame3D extends FlameGame<World3D>
 
   @override
   FutureOr<void> onLoad() async {
-    world.add(RotatingLight());
-
     world.addAll([
+      RotatingLight(),
+
       // Add a player box
       PlayerBox(),
 

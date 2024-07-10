@@ -5,12 +5,12 @@ import 'package:flame_3d/src/camera/camera_component_3d.dart';
 import 'package:flame_3d/src/graphics/graphics_device.dart';
 
 /// {@template mesh_component}
-/// A [Component3D] that renders a [Mesh] at the [position] with the [rotation]
+/// An [Object3D] that renders a [Mesh] at the [position] with the [rotation]
 /// and [scale] applied.
 ///
-/// This is a commonly used subclass of [Component3D].
+/// This is a commonly used subclass of [Object3D].
 /// {@endtemplate}
-class MeshComponent extends Component3D {
+class MeshComponent extends Object3D {
   /// {@macro mesh_component}
   MeshComponent({
     required Mesh mesh,

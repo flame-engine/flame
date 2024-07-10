@@ -48,7 +48,9 @@ class GraphicsDevice {
 
   Size _previousSize = Size.zero;
 
-  final List<Light> _lights = [];
+  /// Must be set by the rendering pipeline before elements are bound.
+  /// Can be accessed by elements in their bind method.
+  Iterable<Light> lights = [];
 
   /// Begin a new rendering batch.
   ///
@@ -95,17 +97,6 @@ class GraphicsDevice {
 
   void clearBindings() {
     _renderPass.clearBindings();
-    _lights.clear();
-  }
-
-  /// Bind a [light].
-  void bindLight(Light light) {
-    _lights.add(light);
-  }
-
-  Vector3? get lightPosition {
-    // TODO(luan):  support multiple lights
-    return _lights.firstOrNull?.position;
   }
 
   /// Bind a [mesh].
