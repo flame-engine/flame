@@ -309,6 +309,7 @@ game.add(
     particle: ScalingParticle(
       lifespan: 2,
       to: 0,
+      curve: Curves.easeIn,
       child: CircleParticle(
         radius: 2.0,
         paint: Paint()..color = Colors.red,
