@@ -108,11 +108,14 @@ class _Chopper extends SpriteAnimationComponent
   }
 
   @override
-  void onCollisionStart(Set<Vector2> _, PositionComponent other) {
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     if (other is _Chopper) {
       game.timeScale = 0.25;
     }
-    super.onCollisionStart(_, other);
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
