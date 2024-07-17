@@ -138,7 +138,7 @@ class TexturePackerSprite extends Sprite {
   // Used to avoid the creation of new Vector2 objects in render.
   static final _tmpRenderPosition = Vector2.zero();
   static final _tmpRenderSize = Vector2.zero();
-  static final _tmpRenderScale = Vector2.all(1.0);
+  static final _tmpRenderScale = Vector2.zero();
   static final _tmpRenderImageSize = Vector2.zero();
   static final _tmpRenderOffset = Vector2.zero();
 
@@ -184,10 +184,10 @@ class TexturePackerSprite extends Sprite {
     if (!rotate) {
       // Calculate and render for non-rotated image, must call function render
       // from super class with anchor = Anchor.topLeft, because we already
-      // calculated size and positon based on Anchor.topLeft to rendered by
+      // calculated size and position based on Anchor.topLeft to rendered by
       // super class function.
-      _tmpRenderSize.setValues(_tmpRenderImageSize.x, _tmpRenderImageSize.y);
-      _tmpRenderPosition.setValues(_tmpRenderOffset.x, _tmpRenderOffset.y);
+      _tmpRenderSize.setFrom(_tmpRenderImageSize);
+      _tmpRenderPosition.setFrom(_tmpRenderOffset);
       return super.render(
         canvas,
         position: _tmpRenderPosition,
@@ -198,7 +198,7 @@ class TexturePackerSprite extends Sprite {
 
     // Calculate and render for non-rotated image, must call function render
     // from super class with anchor = Anchor.topLeft, because we already
-    // calculated size and positon based on Anchor.topLeft to rendered by super
+    // calculated size and position based on Anchor.topLeft to rendered by super
     // class function.
     _tmpRenderSize.setValues(_tmpRenderImageSize.y, _tmpRenderImageSize.x);
     _tmpRenderPosition.setValues(
