@@ -45,8 +45,8 @@ void main() {
       expect(jumpSprite.rotate, true);
       expect(jumpSprite.name, 'robot_jump');
       expect(jumpSprite.srcPosition, Vector2(196, 260));
-      expect(jumpSprite.packedHeight, 192);
-      expect(jumpSprite.packedWidth, 256);
+      expect(jumpSprite.packedHeight, 256);
+      expect(jumpSprite.packedWidth, 192);
       expect(jumpSprite.index, -1);
       expect(jumpSprite.offsetY, 0);
       expect(jumpSprite.offsetX, 0);
