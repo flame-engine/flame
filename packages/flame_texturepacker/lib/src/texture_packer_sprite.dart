@@ -196,7 +196,7 @@ class TexturePackerSprite extends Sprite {
       );
     }
 
-    // Calculate and render for non-rotated image, must call function render
+    // Calculate and render for rotated image, must call function render
     // from super class with anchor = Anchor.topLeft, because we already
     // calculated size and position based on Anchor.topLeft to rendered by super
     // class function.
