@@ -17,7 +17,12 @@ import 'package:flame_3d/game.dart';
 /// implementations:
 /// - [Object3D] for a 3D object that can be bound and rendered by the GPU
 /// - [LightComponent] for a light source that affects how objects are rendered
-/// - [Group3D] for a generic container for several [Component3D]s
+///
+/// If you want to have a pure group for several components, you have two
+/// options:
+/// - Use an [Object3D], the group itself will have some superfluous render
+/// logic but should not affect your children.
+/// - Extend the abstract class [Component3D] yourself.
 ///
 /// The base [Component3D] class can also be used as a container
 /// for several other components. In this case, changing the position,
