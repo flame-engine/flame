@@ -11,13 +11,14 @@ import 'package:flame_texturepacker/src/model/region.dart';
 /// {@endtemplate}
 class TexturePackerSprite extends Sprite {
   /// {@macro _texture_packer_sprite}
-  TexturePackerSprite(Region region)
-      : name = region.name,
+  TexturePackerSprite(Region region, {this.useOriginalSize = true})
+      : _region = region,
+        name = region.name,
         index = region.index,
         offsetX = region.offsetX,
         offsetY = region.offsetY,
-        packedWidth = region.rotate ? region.height : region.width,
-        packedHeight = region.rotate ? region.width : region.height,
+        packedWidth = region.width,
+        packedHeight = region.height,
         originalWidth = region.originalWidth,
         originalHeight = region.originalHeight,
         rotate = region.rotate,
@@ -26,8 +27,8 @@ class TexturePackerSprite extends Sprite {
           region.page.texture,
           srcPosition: Vector2(region.left, region.top),
           srcSize: Vector2(
-            region.rotate ? region.height : region.width,
-            region.rotate ? region.width : region.height,
+            useOriginalSize ? region.originalWidth : region.width,
+            useOriginalSize ? region.originalHeight : region.height,
           ),
         ) {
     _decorator = Transform2DDecorator(_transform);
@@ -35,6 +36,13 @@ class TexturePackerSprite extends Sprite {
       _transform.angle = math.pi / 2;
     }
   }
+
+  /// Region object for [clone] function, don't modify this object properties.
+  final Region _region;
+
+  /// If true, use [originalWidth] and [originalHeight] as size; otherwise use
+  /// [packedWidth] and [packedHeight] as size.
+  final bool useOriginalSize;
 
   /// The number at the end of the original image file name, or -1 if none.
   ///
@@ -82,12 +90,57 @@ class TexturePackerSprite extends Sprite {
   /// The [degrees] field (angle) represented as radians.
   double get angle => radians(degrees.toDouble());
 
+  /// Clone current object with new value for argument [useOriginalSize].
+  TexturePackerSprite clone({bool useOriginalSize = true}) =>
+      TexturePackerSprite(_region, useOriginalSize: useOriginalSize);
+
+  Vector2 get _srcSize => Vector2(src.width, src.height);
+
+  Vector2 get _srcSizeRotated => Vector2(src.height, src.width);
+
+  Vector2 get _srcSizeRender => rotate ? _srcSizeRotated : _srcSize;
+
+  Vector2 get _offset => Vector2(offsetX, offsetY);
+
+  Vector2 get _packedSize => Vector2(packedWidth, packedHeight);
+
+  Vector2 get _originalSize => Vector2(originalWidth, originalHeight);
+
+  Vector2 get offset => useOriginalSize ? _offset : Vector2.zero();
+
+  @override
+  Vector2 get originalSize => useOriginalSize ? _originalSize : _packedSize;
+
+  @override
+  Vector2 get srcSize => _srcSizeRender
+    ..divide(_packedSize)
+    ..multiply(originalSize);
+
+  @override
+  set srcSize(Vector2? size) {
+    final actualSize = Vector2.copy(size ?? originalSize)
+      ..divide(originalSize)
+      ..multiply(_packedSize);
+    if (rotate) {
+      actualSize.setValues(actualSize.y, actualSize.x);
+    }
+    src = srcPosition.toPositionedRect(actualSize);
+  }
+
+  @override
+  set srcPosition(Vector2? position) {
+    src = (position ?? Vector2.zero()).toPositionedRect(_srcSize);
+  }
+
   late final Decorator _decorator;
   final Transform2D _transform = Transform2D();
 
   // Used to avoid the creation of new Vector2 objects in render.
   static final _tmpRenderPosition = Vector2.zero();
   static final _tmpRenderSize = Vector2.zero();
+  static final _tmpRenderScale = Vector2.zero();
+  static final _tmpRenderImageSize = Vector2.zero();
+  static final _tmpRenderOffset = Vector2.zero();
 
   @override
   void render(
@@ -97,34 +150,60 @@ class TexturePackerSprite extends Sprite {
     Anchor anchor = Anchor.topLeft,
     Paint? overridePaint,
   }) {
-    if (!rotate) {
-      return super.render(
-        canvas,
-        position: position,
-        size: size,
-        anchor: anchor,
-        overridePaint: overridePaint,
-      );
-    }
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
     } else {
       _tmpRenderPosition.setZero();
     }
 
-    // If the sprite is rotated on the sprite sheet un-rotate it
-    // and adjust the size
-    final auxAnchor = rotate ? Anchor.bottomLeft : anchor;
+    // Get sprite size
+    _tmpRenderSize.setFrom(size ?? srcSize);
 
-    final tempSize = size ?? srcSize;
-    final tempWidth = rotate ? tempSize.y : tempSize.x;
-    final tempHeight = rotate ? tempSize.x : tempSize.y;
-
-    _tmpRenderSize.setValues(tempWidth, tempHeight);
-
+    // Calculate topLeft position
     _tmpRenderPosition.setValues(
-      _tmpRenderPosition.x - (auxAnchor.x * _tmpRenderSize.x),
-      _tmpRenderPosition.y - (auxAnchor.y * _tmpRenderSize.y),
+      _tmpRenderPosition.x - (anchor.x * _tmpRenderSize.x),
+      _tmpRenderPosition.y - (anchor.y * _tmpRenderSize.y),
+    );
+
+    // Calculate multiplier value
+    _tmpRenderScale
+      ..setFrom(_tmpRenderSize)
+      ..divide(originalSize);
+
+    // Calculate image size rendered based on packedSize
+    _tmpRenderImageSize
+      ..setFrom(_packedSize)
+      ..multiply(_tmpRenderScale);
+
+    // Calculate image rendered offset from topLeft position
+    _tmpRenderOffset
+      ..setFrom(offset)
+      ..multiply(_tmpRenderScale)
+      ..add(_tmpRenderPosition);
+
+    if (!rotate) {
+      // Calculate and render for non-rotated image, must call function render
+      // from super class with anchor = Anchor.topLeft, because we already
+      // calculated size and position based on Anchor.topLeft to rendered by
+      // super class function.
+      _tmpRenderSize.setFrom(_tmpRenderImageSize);
+      _tmpRenderPosition.setFrom(_tmpRenderOffset);
+      return super.render(
+        canvas,
+        position: _tmpRenderPosition,
+        size: _tmpRenderSize,
+        overridePaint: overridePaint,
+      );
+    }
+
+    // Calculate and render for rotated image, must call function render
+    // from super class with anchor = Anchor.topLeft, because we already
+    // calculated size and position based on Anchor.topLeft to rendered by super
+    // class function.
+    _tmpRenderSize.setValues(_tmpRenderImageSize.y, _tmpRenderImageSize.x);
+    _tmpRenderPosition.setValues(
+      _tmpRenderOffset.y - 0,
+      -_tmpRenderOffset.x - _tmpRenderImageSize.x,
     );
 
     _decorator.applyChain(
@@ -132,7 +211,6 @@ class TexturePackerSprite extends Sprite {
         applyCanvas,
         position: _tmpRenderPosition,
         size: _tmpRenderSize,
-        anchor: anchor,
         overridePaint: overridePaint,
       ),
       canvas,
