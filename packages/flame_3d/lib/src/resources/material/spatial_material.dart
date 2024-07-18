@@ -60,8 +60,7 @@ class SpatialMaterial extends Material {
   @override
   void bind(GraphicsDevice device) {
     _bindVertexInfo(device);
-    _bindMaterialProperties();
-    _bindLights(device);
+    _bindMaterial(device);
     _bindCamera(device);
   }
 
@@ -72,7 +71,8 @@ class SpatialMaterial extends Material {
       ..setMatrix4('VertexInfo.projection', device.projection);
   }
 
-  void _bindMaterialProperties() {
+  void _bindMaterial(GraphicsDevice device) {
+    _applyLights(device);
     fragmentShader
       ..setTexture('albedoTexture', albedoTexture)
       ..setVector3('Material.albedoColor', _albedoCache)
@@ -87,7 +87,7 @@ class SpatialMaterial extends Material {
     fragmentShader.setVector3('Camera.position', cameraPosition);
   }
 
-  void _bindLights(GraphicsDevice device) {
+  void _applyLights(GraphicsDevice device) {
     final light = device.lights.firstOrNull;
     if (light == null) {
       return;
