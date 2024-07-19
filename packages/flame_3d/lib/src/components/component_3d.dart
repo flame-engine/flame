@@ -28,7 +28,6 @@ import 'package:flame_3d/game.dart';
 /// for several other components. In this case, changing the position,
 /// rotating or scaling the [Component3D] will affect the whole
 /// group as if it was a single entity.
-///
 /// {@endtemplate}
 abstract class Component3D extends Component with HasWorldReference<World3D> {
   final Transform3D transform;

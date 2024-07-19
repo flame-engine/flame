@@ -20,13 +20,11 @@ class LightComponent extends Component3D {
   final LightSource source;
 
   late final Light _light = Light(
-    transform: Transform3D(),
+    transform: transform,
     source: source,
   );
 
-  Light get light {
-    return _light..transform.setFrom(transform);
-  }
+  Light get light => _light;
 
   @override
   void onMount() {
