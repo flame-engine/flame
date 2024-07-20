@@ -22,7 +22,7 @@ Creating objects of a class is very common in any kind of project/game. But obje
 involved operation. Depending on the frequency and amount of objects that are being created, the application
 can experience some slow down.
 
-In games, this is something to be very careful of because games generally have a gameloop that updates
+In games, this is something to be very careful of because games generally have a game loop that updates
 as fast as possible, where each update is called a frame. Depending on the hardware, a game can be updating
 30, 60, 120 or even higher frames per second. This means if a new object is created in a frame, the game
 will end up creating as many number of objects as the frame count per second.
@@ -82,17 +82,17 @@ small object can affect the performance if spawned in high volume.
 ```
 
 
-## Unwanted collison checks
+## Unwanted collision checks
 
 Flame has a built-in collision detection system which can detect when any two `Hitbox`es intersect with
-each other. In an ideal case, this system run on every frame and checks for collison. It is also smart
+each other. In an ideal case, this system run on every frame and checks for collision. It is also smart
 enough to filter out only the possible collisions before performing th actually intersection checks.
 
 Despite this, it is safe to assume that the cost of collision detection will increase as the number of
 hitboxes increases. But in many games, the developers are not always interested in detecting collision
 between every possible pair. For example, consider a simple game where players can fire a `Bullet` component
 that has a hitbox. In such a game it is likely that the developers are not interested in detecting collision
-between any two bullets, but Flame will still perform those collison checks.
+between any two bullets, but Flame will still perform those collision checks.
 
 To avoid this, you can set the `collisionType` for bullet component to `CollisionType.passive`. Doing
 so will cause Flame to completely skip any kind of collision check between all the passive hitboxes.
