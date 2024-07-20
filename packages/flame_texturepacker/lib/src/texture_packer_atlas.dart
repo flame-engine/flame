@@ -21,10 +21,15 @@ class TexturePackerAtlas {
   /// returns a new [TexturePackerAtlas].
   /// If [fromStorage] is true, the atlas will be loaded from the device's
   /// storage instead of the assets folder.
+  ///
+  /// If [useOriginalSize] is true, the sprites loaded will be use original size
+  /// instead of the packed size. For animation sprites, load with origin size
+  /// is recommended for smooth result.
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
     Images? images,
+    bool useOriginalSize = true,
   }) async {
     final _TextureAtlasData atlasData;
 
@@ -35,7 +40,9 @@ class TexturePackerAtlas {
     }
 
     return TexturePackerAtlas(
-      atlasData.regions.map(TexturePackerSprite.new).toList(),
+      atlasData.regions
+          .map((e) => TexturePackerSprite(e, useOriginalSize: useOriginalSize))
+          .toList(),
     );
   }
 

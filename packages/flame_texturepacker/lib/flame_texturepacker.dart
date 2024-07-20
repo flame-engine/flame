@@ -27,14 +27,25 @@ extension TexturepackerLoader on Game {
   Future<TexturePackerAtlas> atlasFromAssets(
     String assetsPath, {
     Images? images,
+    bool useOriginalSize = true,
   }) async =>
-      TexturePackerAtlas.load(assetsPath, images: images);
+      TexturePackerAtlas.load(
+        assetsPath,
+        images: images,
+        useOriginalSize: useOriginalSize,
+      );
 
   /// Loads the specified pack file from storage
   /// Uses the parent directory of the pack file to find the page images.
   Future<TexturePackerAtlas> atlasFromStorage(
     String storagePath, {
     Images? images,
+    bool useOriginalSize = true,
   }) async =>
-      TexturePackerAtlas.load(storagePath, fromStorage: true, images: images);
+      TexturePackerAtlas.load(
+        storagePath,
+        fromStorage: true,
+        images: images,
+        useOriginalSize: useOriginalSize,
+      );
 }

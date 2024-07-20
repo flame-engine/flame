@@ -30,7 +30,10 @@ abstract class TextBlockNode extends BlockNode {
     var verticalOffset = style.padding.top;
     final textAlign = style.textAlign ?? TextAlign.left;
     while (!layoutBuilder.isDone) {
-      final element = layoutBuilder.layOutNextLine(contentWidth);
+      final element = layoutBuilder.layOutNextLine(
+        contentWidth,
+        isStartOfLine: true,
+      );
       if (element == null) {
         // Not enough horizontal space to lay out. For now we just stop the
         // layout altogether cutting off the remainder of the content. But is
