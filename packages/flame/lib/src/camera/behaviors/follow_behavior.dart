@@ -3,6 +3,7 @@ import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 /// This behavior will make the [owner] follow the [target].
 ///
@@ -46,6 +47,8 @@ class FollowBehavior extends Component {
   final bool horizontalOnly;
   final bool verticalOnly;
 
+  final _tempDelta = Vector2.zero();
+
   @override
   void onMount() {
     if (_owner == null) {
@@ -59,19 +62,17 @@ class FollowBehavior extends Component {
 
   @override
   void update(double dt) {
-    final delta = target.position - owner.position;
-    if (horizontalOnly) {
-      delta.y = 0;
-    }
-    if (verticalOnly) {
-      delta.x = 0;
-    }
-    final distance = delta.length;
+    _tempDelta.setValues(
+      verticalOnly ? 0 : target.position.x - owner.position.x,
+      horizontalOnly ? 0 : target.position.y - owner.position.y,
+    );
+
+    final distance = _tempDelta.length;
     if (distance > _speed * dt) {
-      delta.scale(_speed * dt / distance);
+      _tempDelta.scale(_speed * dt / distance);
     }
-    if (delta.x != 0 || delta.y != 0) {
-      owner.position = delta..add(owner.position);
+    if (_tempDelta.x != 0 || _tempDelta.y != 0) {
+      owner.position = _tempDelta..add(owner.position);
     }
   }
 }
