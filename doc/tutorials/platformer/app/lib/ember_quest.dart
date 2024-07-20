@@ -57,19 +57,19 @@ class EmberQuestGame extends FlameGame
   void loadGameSegments(int segmentIndex, double xPositionOffset) {
     for (final block in segments[segmentIndex]) {
       final component = switch (block.blockType) {
-        GroundBlock _ => GroundBlock(
+        const (GroundBlock) => GroundBlock(
             gridPosition: block.gridPosition,
             xOffset: xPositionOffset,
           ),
-        PlatformBlock _ => PlatformBlock(
+        const (PlatformBlock) => PlatformBlock(
             gridPosition: block.gridPosition,
             xOffset: xPositionOffset,
           ),
-        Star _ => Star(
+        const (Star) => Star(
             gridPosition: block.gridPosition,
             xOffset: xPositionOffset,
           ),
-        WaterEnemy _ => WaterEnemy(
+        const (WaterEnemy) => WaterEnemy(
             gridPosition: block.gridPosition,
             xOffset: xPositionOffset,
           ),
