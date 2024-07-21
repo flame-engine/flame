@@ -12,6 +12,7 @@ use the `onPanUpdate` method. The updated code will look like the following:
 
 ```dart
 import 'package:flame/input.dart';
+import 'package:flame/events.dart';
 
 class SpaceShooterGame extends FlameGame with PanDetector {
   late Player player;
