@@ -1,9 +1,5 @@
-import 'dart:typed_data';
-
-import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
-import 'package:flame_3d/src/resources/resource.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// {@template material}
@@ -12,57 +8,46 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 /// {@endtemplate}
 abstract class Material extends Resource<gpu.RenderPipeline> {
   /// {@macro material}
-  Material(gpu.ShaderLibrary library)
-      : super(
+  Material({
+    required Shader vertexShader,
+    required Shader fragmentShader,
+  })  : _vertexShader = vertexShader,
+        _fragmentShader = fragmentShader,
+        super(
           gpu.gpuContext.createRenderPipeline(
-            library['TextureVertex']!,
-            library['TextureFragment']!,
+            vertexShader.resource,
+            fragmentShader.resource,
           ),
         );
 
-  final _vertexBuffer = ShaderBuffer('VertexInfo');
-  final _fragmentBuffer = ShaderBuffer('FragmentInfo');
-
-  /// The vertex shader being used.
-  gpu.Shader get vertexShader => resource.vertexShader;
-  ShaderBuffer get vertexBuffer => _vertexBuffer;
-
-  /// The fragment shader being used.
-  gpu.Shader get fragmentShader => resource.fragmentShader;
-  ShaderBuffer get fragmentBuffer => _fragmentBuffer;
-
-  @mustCallSuper
-  void bind(GraphicsDevice device) {
-    device.bindShader(vertexShader, _vertexBuffer);
-    device.bindShader(fragmentShader, fragmentBuffer);
+  @override
+  gpu.RenderPipeline get resource {
+    var resource = super.resource;
+    if (_recreateResource) {
+      resource = super.resource = gpu.gpuContext.createRenderPipeline(
+        _vertexShader.resource,
+        _fragmentShader.resource,
+      );
+      _recreateResource = false;
+    }
+    return resource;
   }
-}
 
-/// {@template shader_buffer}
-/// Class that buffers all the float uniforms that have to be uploaded to a
-/// shader.
-/// {@endtemplate}
-class ShaderBuffer {
-  /// {@macro shader_buffer}
-  ShaderBuffer(this.slot);
+  bool _recreateResource = false;
 
-  final String slot;
+  Shader get vertexShader => _vertexShader;
+  Shader _vertexShader;
+  set vertexShader(Shader shader) {
+    _vertexShader = shader;
+    _recreateResource = true;
+  }
 
-  final List<double> _storage = [];
-  ByteBuffer get bytes => Float32List.fromList(_storage).buffer;
+  Shader get fragmentShader => _fragmentShader;
+  Shader _fragmentShader;
+  set fragmentShader(Shader shader) {
+    _fragmentShader = shader;
+    _recreateResource = true;
+  }
 
-  /// Add a [Vector2] to the buffer.
-  void addVector2(Vector2 vector) => _storage.addAll(vector.storage);
-
-  /// Add a [Vector3] to the buffer.
-  void addVector3(Vector3 vector) => _storage.addAll(vector.storage);
-
-  /// Add a [Vector4] to the buffer.
-  void addVector4(Vector4 vector) => _storage.addAll(vector.storage);
-
-  /// Add a [Matrix4] to the buffer.
-  void addMatrix4(Matrix4 matrix) => _storage.addAll(matrix.storage);
-
-  /// Clear the buffer.
-  void clear() => _storage.clear();
+  void bind(GraphicsDevice device) {}
 }

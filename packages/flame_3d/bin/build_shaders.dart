@@ -10,10 +10,21 @@ import 'dart:io';
 ///
 /// Note: this script should be run from the root of the package:
 /// packages/flame_3d
-void main() async {
+void main(List<String> arguments) async {
   final root = Directory.current;
-
   final assets = Directory.fromUri(root.uri.resolve('assets/shaders'));
+  final shaders = Directory.fromUri(root.uri.resolve('shaders'));
+
+  await compute(assets, shaders);
+  if (arguments.contains('watch')) {
+    stdout.writeln('Running in watch mode');
+    shaders.watch(recursive: true).listen((event) {
+      compute(assets, shaders);
+    });
+  }
+}
+
+Future<void> compute(Directory assets, Directory shaders) async {
   // Delete all the bundled shaders so we can replace them with new ones.
   if (assets.existsSync()) {
     assets.deleteSync(recursive: true);
@@ -21,8 +32,6 @@ void main() async {
   // Create if not exists.
   assets.createSync(recursive: true);
 
-  // Directory where our unbundled shaders are stored.
-  final shaders = Directory.fromUri(root.uri.resolve('shaders'));
   if (!shaders.existsSync()) {
     return stderr.writeln('Missing shader directory');
   }
@@ -39,14 +48,15 @@ void main() async {
     final bundle = {
       'TextureFragment': {
         'type': 'fragment',
-        'file': '${root.path}/shaders/$name.frag',
+        'file': '${shaders.path}/$name.frag',
       },
       'TextureVertex': {
         'type': 'vertex',
-        'file': '${root.path}/shaders/$name.vert',
+        'file': '${shaders.path}/$name.vert',
       },
     };
 
+    stdout.writeln('Computing shader "$name"');
     final result = await Process.run(impellerC, [
       '--sl=${assets.path}/$name.shaderbundle',
       '--shader-bundle=${jsonEncode(bundle)}',
