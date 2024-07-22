@@ -1,47 +1,48 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart' show Component, HasWorldReference;
-import 'package:flame/game.dart' show FlameGame;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
-import 'package:flame_3d/graphics.dart';
-import 'package:flame_3d/resources.dart';
 
 /// {@template component_3d}
-/// [Component3D]s are the basic building blocks for a 3D [FlameGame].
+/// [Component3D] is a base class for any concept that lives in 3D space.
 ///
 /// It is a [Component] implementation that represents a 3D object that can be
 /// freely moved around in 3D space, rotated, and scaled.
 ///
-/// The [Component3D] class has no visual representation of its own (except in
-/// debug mode). It is common, therefore, to derive from this class
-/// and implement a specific rendering logic.
+/// The main property of this class is the [transform] (which combines
+/// the [position], [rotation], and [scale]). Thus, the [Component3D] can be
+/// seen as an object in 3D space.
+///
+/// It is typically not used directly, but rather use one of the following
+/// implementations:
+/// - [Object3D] for a 3D object that can be bound and rendered by the GPU
+/// - [LightComponent] for a light source that affects how objects are rendered
+///
+/// If you want to have a pure group for several components, you have two
+/// options:
+/// - Use an [Object3D], the group itself will have some superfluous render
+/// logic but should not affect your children.
+/// - Extend the abstract class [Component3D] yourself.
 ///
 /// The base [Component3D] class can also be used as a container
 /// for several other components. In this case, changing the position,
 /// rotating or scaling the [Component3D] will affect the whole
 /// group as if it was a single entity.
-///
-/// The main property of this class is the [transform] (which combines
-/// the [position], [rotation], and [scale]). Thus, the [Component3D] can be
-/// seen as an object in 3D space where you can change its perceived
-/// visualization.
-///
-/// See the [MeshComponent] for a [Component3D] that has a visual representation
-/// by using [Mesh]es
 /// {@endtemplate}
-class Component3D extends Component with HasWorldReference<World3D> {
+abstract class Component3D extends Component with HasWorldReference<World3D> {
+  final Transform3D transform;
+
   /// {@macro component_3d}
   Component3D({
     Vector3? position,
+    Vector3? scale,
     Quaternion? rotation,
-  }) : transform = Transform3D()
+    List<Component3D> children = const [],
+  })  : transform = Transform3D()
           ..position = position ?? Vector3.zero()
           ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
-          ..scale = Vector3.all(1);
-
-  final Transform3D transform;
+          ..scale = scale ?? Vector3.all(1),
+        super(children: children);
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
@@ -79,36 +80,4 @@ class Component3D extends Component with HasWorldReference<World3D> {
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
   double distance(Component3D other) => position.distanceTo(other.position);
-
-  @override
-  void renderTree(Canvas canvas) {
-    super.renderTree(canvas);
-    final camera = CameraComponent3D.currentCamera;
-    assert(
-      camera != null,
-      '''Component is either not part of a World3D or the render is being called outside of the camera rendering''',
-    );
-    if (!shouldCull(camera!)) {
-      world.culled++;
-      return;
-    }
-
-    // We set the priority to the distance between the camera and the object.
-    // This ensures that our rendering is done in a specific order allowing for
-    // alpha blending.
-    //
-    // Note(wolfen): we should optimize this in the long run it currently sucks.
-    priority = -(CameraComponent3D.currentCamera!.position - position)
-        .length
-        .abs()
-        .toInt();
-
-    bind(world.graphics);
-  }
-
-  void bind(GraphicsDevice device) {}
-
-  bool shouldCull(CameraComponent3D camera) {
-    return camera.frustum.containsVector3(position);
-  }
 }
