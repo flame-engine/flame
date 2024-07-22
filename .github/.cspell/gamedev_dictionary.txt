@@ -23,6 +23,7 @@ goldens # test files used as reference for Golden Tests
 hitbox # the collision box around objects for the purposes of collision detection
 hitboxes # plural of hitbox
 ints # short for integers
+impellerc # Flutter's impeller compiler
 jank # stutter or inconsistent gap or timing
 lerp # short for linear interpolation
 LTRB # left top right bottom
@@ -48,8 +49,10 @@ respawn # when the player character dies and is brought back after some time and
 retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
+BGRA # blue green red alpha
 rrect # rounded rect
 scos # cosine of a rotation multiplied by the scale factor
+shaderbundle # a file extension used to bundle shaders for GLSL
 spritesheet # a single image packing multiple sprites, normally in a grid
 ssin # sine of a rotation multiplied by the scale factor
 stylesheet # name of a CSS style file
@@ -57,6 +60,7 @@ subfolders # plural of subfolders
 sublist # any sub-set of elements of a given list
 sublists # plural of sublist
 subrange # a range entirely contained on a given range
+struct # a type of data model in programming that aggregates fields
 SVGs # plural of SVG
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset

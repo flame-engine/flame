@@ -22,7 +22,7 @@ enum DepthStencilState {
 /// by binding different resources to it.
 ///
 /// A single render call starts with a call to [begin] and only ends when [end]
-/// is called. Anything that gets binded to the device in between will be
+/// is called. Anything that gets bound to the device in between will be
 /// uploaded to the GPU and returns as an [Image] in [end].
 /// {@endtemplate}
 class GraphicsDevice {
@@ -36,10 +36,21 @@ class GraphicsDevice {
   late gpu.HostBuffer _hostBuffer;
   late gpu.RenderPass _renderPass;
   late gpu.RenderTarget _renderTarget;
-  final _transformMatrix = Matrix4.identity();
-  final _viewModelMatrix = Matrix4.identity();
+
+  Matrix4 get model => _modelMatrix;
+  final Matrix4 _modelMatrix = Matrix4.zero();
+
+  Matrix4 get view => _viewMatrix;
+  final Matrix4 _viewMatrix = Matrix4.zero();
+
+  Matrix4 get projection => _projectionMatrix;
+  final Matrix4 _projectionMatrix = Matrix4.zero();
 
   Size _previousSize = Size.zero;
+
+  /// Must be set by the rendering pipeline before elements are bound.
+  /// Can be accessed by elements in their bind method.
+  Iterable<Light> lights = [];
 
   /// Begin a new rendering batch.
   ///
@@ -50,11 +61,10 @@ class GraphicsDevice {
   /// GPU with [end].
   void begin(
     Size size, {
-    // TODO(wolfen): unused at the moment
+    // TODO(wolfenrain): unused at the moment
     BlendState blendState = BlendState.alphaBlend,
-    // TODO(wolfen): used incorrectly
+    // TODO(wolfenrain): used incorrectly
     DepthStencilState depthStencilState = DepthStencilState.depthRead,
-    Matrix4? transformMatrix,
   }) {
     _commandBuffer = gpu.gpuContext.createCommandBuffer();
     _hostBuffer = gpu.gpuContext.createHostBuffer();
@@ -69,14 +79,13 @@ class GraphicsDevice {
       )
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
       ..setDepthCompareOperation(
-        // TODO(wolfen): this is not correctly implemented AT all.
+        // TODO(wolfenrain): this is not correctly implemented AT all.
         switch (depthStencilState) {
           DepthStencilState.none => gpu.CompareFunction.never,
           DepthStencilState.standard => gpu.CompareFunction.always,
           DepthStencilState.depthRead => gpu.CompareFunction.less,
         },
       );
-    _transformMatrix.setFrom(transformMatrix ?? Matrix4.identity());
   }
 
   /// Submit the rendering batch and it's the commands to the GPU and return
@@ -89,8 +98,6 @@ class GraphicsDevice {
   void clearBindings() {
     _renderPass.clearBindings();
   }
-
-  void setViewModel(Matrix4 mvp) => _viewModelMatrix.setFrom(mvp);
 
   /// Bind a [mesh].
   void bindMesh(Mesh mesh) {
@@ -131,32 +138,20 @@ class GraphicsDevice {
   /// Bind a [material] and set up the buffer correctly.
   void bindMaterial(Material material) {
     _renderPass.bindPipeline(material.resource);
-    material.vertexBuffer
-      ..clear()
-      ..addMatrix4(_transformMatrix.multiplied(_viewModelMatrix));
-    material.fragmentBuffer.clear();
+
     material.bind(this);
+    material.vertexShader.bind(this);
+    material.fragmentShader.bind(this);
   }
 
-  /// Bind a [shader] with the given [buffer].
-  void bindShader(gpu.Shader shader, ShaderBuffer buffer) {
-    bindUniform(
-      shader,
-      buffer.slot,
-      buffer.bytes.asByteData(),
-    );
+  /// Bind a uniform [slot] to the [buffer].
+  void bindUniform(gpu.UniformSlot slot, ByteBuffer buffer) {
+    _renderPass.bindUniform(slot, _hostBuffer.emplace(buffer.asByteData()));
   }
 
-  /// Bind a uniform slot of [name] with the [data] on the [shader].
-  void bindUniform(gpu.Shader shader, String name, ByteData data) {
-    _renderPass.bindUniform(
-      shader.getUniformSlot(name),
-      _hostBuffer.emplace(data),
-    );
-  }
-
-  void bindTexture(gpu.Shader shader, String name, Texture texture) {
-    _renderPass.bindTexture(shader.getUniformSlot(name), texture.resource);
+  /// Bind a uniform [slot] to the [texture].
+  void bindTexture(gpu.UniformSlot slot, Texture texture) {
+    _renderPass.bindTexture(slot, texture.resource);
   }
 
   gpu.RenderTarget _getRenderTarget(Size size) {
