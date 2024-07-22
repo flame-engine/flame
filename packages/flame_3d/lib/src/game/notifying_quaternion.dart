@@ -170,5 +170,5 @@ class NotifyingQuaternion extends Quaternion with ChangeNotifier {
   }
 
   @override
-  Float32List get storage => UnmodifiableFloat32ListView(super.storage);
+  Float32List get storage => super.storage.asUnmodifiableView();
 }

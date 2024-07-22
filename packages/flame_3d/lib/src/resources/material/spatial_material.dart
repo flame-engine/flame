@@ -1,7 +1,5 @@
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame_3d/extensions.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
@@ -32,7 +30,7 @@ class SpatialMaterial extends Material {
                 'metallicSpecular',
                 'roughness',
               }),
-              UniformSlot.value('Light', {'position'}),
+              Light.shaderSlot,
               UniformSlot.value('Camera', {'position'}),
             ],
           ),
@@ -61,29 +59,40 @@ class SpatialMaterial extends Material {
 
   @override
   void bind(GraphicsDevice device) {
+    _bindVertexInfo(device);
+    _bindMaterial(device);
+    _bindCamera(device);
+  }
+
+  void _bindVertexInfo(GraphicsDevice device) {
     vertexShader
       ..setMatrix4('VertexInfo.model', device.model)
       ..setMatrix4('VertexInfo.view', device.view)
       ..setMatrix4('VertexInfo.projection', device.projection);
+  }
 
-    final invertedView = Matrix4.inverted(device.view);
-
-    const radius = 15;
-    final angle = DateTime.now().millisecondsSinceEpoch / 4000;
-    final x = cos(angle) * radius;
-    final z = sin(angle) * radius;
-
+  void _bindMaterial(GraphicsDevice device) {
+    _applyLights(device);
     fragmentShader
-      // Material
       ..setTexture('albedoTexture', albedoTexture)
       ..setVector3('Material.albedoColor', _albedoCache)
       ..setFloat('Material.metallic', metallic)
       ..setFloat('Material.metallicSpecular', metallicSpecular)
-      ..setFloat('Material.roughness', roughness)
-      // Light
-      ..setVector3('Light.position', Vector3(x, 10, z))
-      // Camera
-      ..setVector3('Camera.position', invertedView.transform3(Vector3.zero()));
+      ..setFloat('Material.roughness', roughness);
+  }
+
+  void _bindCamera(GraphicsDevice device) {
+    final invertedView = Matrix4.inverted(device.view);
+    final cameraPosition = invertedView.transform3(Vector3.zero());
+    fragmentShader.setVector3('Camera.position', cameraPosition);
+  }
+
+  void _applyLights(GraphicsDevice device) {
+    final light = device.lights.firstOrNull;
+    if (light == null) {
+      return;
+    }
+    light.apply(fragmentShader);
   }
 
   static final _library = gpu.ShaderLibrary.fromAsset(

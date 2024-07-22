@@ -48,6 +48,10 @@ class GraphicsDevice {
 
   Size _previousSize = Size.zero;
 
+  /// Must be set by the rendering pipeline before elements are bound.
+  /// Can be accessed by elements in their bind method.
+  Iterable<Light> lights = [];
+
   /// Begin a new rendering batch.
   ///
   /// After [begin] is called the graphics device can be used to bind resources

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:example/crate.dart';
 import 'package:example/keyboard_controlled_camera.dart';
 import 'package:example/player_box.dart';
+import 'package:example/rotating_light.dart';
 import 'package:example/simple_hud.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart' as v64 show Vector2;
@@ -35,6 +36,8 @@ class ExampleGame3D extends FlameGame<World3D>
   @override
   FutureOr<void> onLoad() async {
     world.addAll([
+      RotatingLight(),
+
       // Add a player box
       PlayerBox(),
 
