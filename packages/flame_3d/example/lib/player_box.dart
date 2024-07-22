@@ -14,7 +14,7 @@ class PlayerBox extends MeshComponent with HasGameReference<ExampleGame3D> {
           mesh: CuboidMesh(
             size: Vector3.all(0.5),
             material:
-                StandardMaterial(albedoTexture: ColorTexture(Colors.purple)),
+                SpatialMaterial(albedoTexture: ColorTexture(Colors.purple)),
           ),
         );
 
