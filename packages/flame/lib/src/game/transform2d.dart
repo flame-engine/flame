@@ -175,7 +175,14 @@ class Transform2D extends ChangeNotifier {
     }
     return _transformMatrix;
   }
-
+  
+  /// Set the total transformation matrix for the component. 
+  /// You can control transform by Matrix4 more flexible.
+  set transformMatrix(Matrix4 value){
+    _transformMatrix.setFrom(value);
+    notifyListeners();
+  }
+  
   /// Transform [point] from local coordinates into the parent coordinate space.
   /// Effectively, this function applies the current transform to [point].
   ///
