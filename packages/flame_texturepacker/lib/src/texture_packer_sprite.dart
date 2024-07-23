@@ -31,8 +31,9 @@ class TexturePackerSprite extends Sprite {
             useOriginalSize ? region.originalHeight : region.height,
           ),
         ) {
-    _decorator = Transform2DDecorator(_transform);
     if (region.rotate) {
+      final _transform = Transform2D();
+      _decorator = Transform2DDecorator(_transform);
       _transform.angle = math.pi / 2;
     }
   }
@@ -132,8 +133,7 @@ class TexturePackerSprite extends Sprite {
     src = (position ?? Vector2.zero()).toPositionedRect(_srcSize);
   }
 
-  late final Decorator _decorator;
-  final Transform2D _transform = Transform2D();
+  Decorator? _decorator;
 
   // Used to avoid the creation of new Vector2 objects in render.
   static final _tmpRenderPosition = Vector2.zero();
@@ -206,7 +206,7 @@ class TexturePackerSprite extends Sprite {
       -_tmpRenderOffset.x - _tmpRenderImageSize.x,
     );
 
-    _decorator.applyChain(
+    _decorator?.applyChain(
       (applyCanvas) => super.render(
         applyCanvas,
         position: _tmpRenderPosition,
