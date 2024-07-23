@@ -71,4 +71,3 @@ vsync # vertical sync; a graphics technology that synchronizes the software's fr
 WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
 WebP # WebP image format
-fovy # Field of View Y-axis
