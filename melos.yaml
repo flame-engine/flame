@@ -7,9 +7,6 @@ packages:
   - examples/games/**
   - doc/**
 
-ignore:
-  - 'packages/flame_3d'
-
 command:
   version:
     # Only allow versioning to happen on main branch.
