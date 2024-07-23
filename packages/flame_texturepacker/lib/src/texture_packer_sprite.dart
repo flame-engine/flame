@@ -32,9 +32,8 @@ class TexturePackerSprite extends Sprite {
           ),
         ) {
     if (region.rotate) {
-      final _transform = Transform2D();
-      _decorator = Transform2DDecorator(_transform);
-      _transform.angle = math.pi / 2;
+      final transform = Transform2D()..angle = math.pi / 2;
+      _decorator = Transform2DDecorator(transform);
     }
   }
 
