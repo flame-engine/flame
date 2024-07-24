@@ -11,7 +11,12 @@ import 'package:meta/meta.dart';
 /// same component also used incremental updates.
 @experimental
 class GlowEffect extends Effect with EffectTarget<PaintProvider> {
-  GlowEffect(this.strength, super.controller, {this.style = BlurStyle.outer});
+  GlowEffect(
+    this.strength,
+    super.controller, {
+    this.style = BlurStyle.outer,
+    super.key,
+  });
 
   final BlurStyle style;
   final double strength;

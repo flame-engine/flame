@@ -59,7 +59,10 @@ class StepEngineExample extends FlameGame
   }
 
   @override
-  KeyEventResult onKeyEvent(_, Set<LogicalKeyboardKey> keysPressed) {
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
     if (keysPressed.contains(LogicalKeyboardKey.keyP)) {
       paused = !paused;
     } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
@@ -71,7 +74,7 @@ class StepEngineExample extends FlameGame
       _stepTimeMultiplier -= 1;
       _controlsText.text = _text;
     }
-    return super.onKeyEvent(_, keysPressed);
+    return super.onKeyEvent(event, keysPressed);
   }
 
   // Creates the circle detectors.
@@ -128,14 +131,17 @@ class _DetectorComponents extends CircleComponent with CollisionCallbacks {
   });
 
   @override
-  void onCollisionStart(_, __) {
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     paint.color = BasicPalette.black.color;
-    super.onCollisionStart(_, __);
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
-  void onCollisionEnd(__) {
+  void onCollisionEnd(PositionComponent other) {
     paint.color = BasicPalette.white.color;
-    super.onCollisionEnd(__);
+    super.onCollisionEnd(other);
   }
 }

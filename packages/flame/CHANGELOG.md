@@ -1,3 +1,22 @@
+## 1.18.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+ - **FIX**: Add key parameters to the rest of the components ([#3170](https://github.com/flame-engine/flame/issues/3170)). ([2477ea0f](https://github.com/flame-engine/flame/commit/2477ea0fcee99e71597983146f4af2dffd866971))
+ - **FIX**: Invoke `setToStart` on child effect controller of wrapping effect controllers ([#3168](https://github.com/flame-engine/flame/issues/3168)). ([217c95f0](https://github.com/flame-engine/flame/commit/217c95f0a53fd5a7933bfa57833f951cc0037878))
+ - **FIX**: Fix cascading and fallback propagation of text styles ([#3129](https://github.com/flame-engine/flame/issues/3129)). ([7b706d5f](https://github.com/flame-engine/flame/commit/7b706d5f63207aaf82d12a4b26233bc476771b1e))
+ - **FEAT**: Add `onReleased` action to `AdvancedButtonComponent` which will be called within `onTapUp` ([#3152](https://github.com/flame-engine/flame/issues/3152)). ([2269732e](https://github.com/flame-engine/flame/commit/2269732e64a2acef2451d283c85b03e1101229ec))
+ - **FEAT**: Support text align on new text rendering pipeline ([#3147](https://github.com/flame-engine/flame/issues/3147)). ([194d5536](https://github.com/flame-engine/flame/commit/194d5536560e464644bff8d5582a8ca8996539f5))
+ - **FEAT**: Add missing parameters to InlineTextStyle ([#3146](https://github.com/flame-engine/flame/issues/3146)). ([ce9392ab](https://github.com/flame-engine/flame/commit/ce9392abd85fe5fd3ae6f766c3a2957275c6fb8c))
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+ - **FEAT**: Add accessor to determine a TextElement size ([#3130](https://github.com/flame-engine/flame/issues/3130)). ([8a63a07a](https://github.com/flame-engine/flame/commit/8a63a07ae3b569c316eafa23f0378e00180e0963))
+ - **FEAT**: Add ability to convert between TextPaint and InlineTextStyle ([#3128](https://github.com/flame-engine/flame/issues/3128)). ([6b63a57a](https://github.com/flame-engine/flame/commit/6b63a57a4888211b284f3a074c17519cb31341e0))
+ - **FEAT**: Add completed future for effects ([#3123](https://github.com/flame-engine/flame/issues/3123)). ([5e967deb](https://github.com/flame-engine/flame/commit/5e967deb876ed39fa4ee6839471bbfbcd3b72463))
+ - **FEAT**: Add custom long tap delay ([#3110](https://github.com/flame-engine/flame/issues/3110)). ([a95d7df6](https://github.com/flame-engine/flame/commit/a95d7df606bd2119423cc8a7ae51cacfb7b4dbed))
+ - **DOCS**: Update the dartdocs for `FixedResolutionViewport` ([#3132](https://github.com/flame-engine/flame/issues/3132)). ([db4b6fd6](https://github.com/flame-engine/flame/commit/db4b6fd6fa5968462d3f89238a92edbb93e4898d))
+ - **BREAKING** **FIX**: Update IsometricTileMapComponent to have better defined position and size ([#3142](https://github.com/flame-engine/flame/issues/3142)). ([9a7bdc74](https://github.com/flame-engine/flame/commit/9a7bdc7439322a26a388e3ac1b9c1a7c43742222))
+
 ## 1.17.0
 
 > Note: This release has breaking changes.

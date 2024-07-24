@@ -119,15 +119,15 @@ class JoystickComponent extends PositionComponent
   }
 
   @override
-  bool onDragEnd(_) {
-    super.onDragEnd(_);
+  bool onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     onDragStop();
     return false;
   }
 
   @override
-  bool onDragCancel(_) {
-    super.onDragCancel(_);
+  bool onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     onDragStop();
     return false;
   }

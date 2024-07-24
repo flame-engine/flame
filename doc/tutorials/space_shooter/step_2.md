@@ -12,6 +12,7 @@ use the `onPanUpdate` method. The updated code will look like the following:
 
 ```dart
 import 'package:flame/input.dart';
+import 'package:flame/events.dart';
 
 class SpaceShooterGame extends FlameGame with PanDetector {
   late Player player;
@@ -67,7 +68,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 ```
@@ -116,7 +117,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 ```
@@ -181,7 +182,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.game);
+    player.move(info.delta.global);
   }
 }
 ```

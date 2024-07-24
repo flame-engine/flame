@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
+/// An [InlineTextNode] representing italic text.
 class ItalicTextNode extends InlineTextNode {
   ItalicTextNode(this.child);
 

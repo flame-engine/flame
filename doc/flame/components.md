@@ -8,9 +8,8 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 
 ## Component
 
-All components inherit from the abstract class `Component` and all components can have other
-`Component`s as children. This is the base of what we call the Flame Component System, or FCS for
-short.
+All components inherit from the `Component` class and can have other `Component`s as children.
+This is the base of what we call the Flame Component System, or FCS for short.
 
 Children can be added either with the `add(Component c)` method or directly in the constructor.
 
@@ -358,37 +357,6 @@ void onDragUpdate(DragUpdateInfo info) {
   });
 }
 ```
-
-
-### PositionType
-
-```{note}
-If you are using the `CameraComponent` you should not use `PositionType`, but
-instead adding your components directly to the viewport for example if you
-want to use them as a HUD.
-```
-
-If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
-to the game coordinates, you can change the `PositionType` of the component.
-The default `PositionType` is `positionType = PositionType.game` and that can be changed to
-either `PositionType.viewport` or `PositionType.widget` depending on how you want to position
-the component.
-
-- `PositionType.game` (Default) - Respects camera and viewport.
-- `PositionType.viewport` - Respects viewport only (ignores camera).
-- `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
-   widget (i.e. the raw canvas).
-
-Most of your components will probably be positioned according to `PositionType.game`, since you
-want them to respect the `Camera` and the `Viewport`. But quite often you want for example buttons
-and text to always show on the screen, no matter if you move the camera, then you want to use
-`PositionType.viewport`. In some rare cases you want to use `PositionType.widget` to position
-your widgets, when you don't want the component to respect the camera nor the viewport; this could
-for example be for controls or joysticks that would not be ergonomic to use if they had to stay
-within the viewport.
-
-Do note that this setting is only respected if the component is added directly to the root
-`FlameGame` and not as a child component of another component.
 
 
 ### Visibility of components
@@ -1231,7 +1199,7 @@ A simple example on how to use it:
 // Creates a tileset, the block ids are automatically assigned sequentially
 // starting at 0, from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
-final tileset = IsometricTileset(tilesetImage, 32);
+final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
 // Each element is a block id, -1 means nothing
 final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
 add(IsometricTileMapComponent(tileset, matrix));

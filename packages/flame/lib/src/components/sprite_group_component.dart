@@ -80,7 +80,12 @@ class SpriteGroupComponent<T> extends PositionComponent
   bool get autoResize => _autoResize;
 
   /// Returns the sprites map.
-  Map<T, Sprite>? get sprites => _sprites;
+  ///
+  /// If you want to change the contents of the map use the sprites setter
+  /// and pass in a new map of sprites, or use [updateSprite] to update a
+  /// specific sprite.
+  Map<T, Sprite>? get sprites =>
+      _sprites != null ? Map.unmodifiable(_sprites!) : null;
 
   /// Sets the given [value] as sprites map.
   set sprites(Map<T, Sprite>? value) {
@@ -88,6 +93,12 @@ class SpriteGroupComponent<T> extends PositionComponent
       _sprites = value;
       _resizeToSprite();
     }
+  }
+
+  /// Updates the sprite for the given key.
+  void updateSprite(T key, Sprite sprite) {
+    _sprites![key] = sprite;
+    _resizeToSprite();
   }
 
   /// Sets the given value of autoResize flag.

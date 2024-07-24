@@ -15,6 +15,7 @@ abstract class Transform2DEffect extends ComponentEffect<PositionComponent> {
   Transform2DEffect(
     super.controller, {
     super.onComplete,
+    super.key,
   });
 
   late Transform2D transform;

@@ -20,6 +20,7 @@ class DocumentStyle extends FlameTextStyle {
     InlineTextStyle? text,
     InlineTextStyle? boldText,
     InlineTextStyle? italicText,
+    InlineTextStyle? codeText,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -31,6 +32,7 @@ class DocumentStyle extends FlameTextStyle {
         _boldText = FlameTextStyle.merge(BoldTextNode.defaultStyle, boldText),
         _italicText =
             FlameTextStyle.merge(ItalicTextNode.defaultStyle, italicText),
+        _codeText = FlameTextStyle.merge(CodeTextNode.defaultStyle, codeText),
         _paragraph =
             FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
         _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
@@ -43,6 +45,7 @@ class DocumentStyle extends FlameTextStyle {
   final InlineTextStyle? _text;
   final InlineTextStyle? _boldText;
   final InlineTextStyle? _italicText;
+  final InlineTextStyle? _codeText;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -94,6 +97,7 @@ class DocumentStyle extends FlameTextStyle {
   InlineTextStyle get text => _text!;
   InlineTextStyle get boldText => _boldText!;
   InlineTextStyle get italicText => _italicText!;
+  InlineTextStyle get codeText => _codeText!;
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;
@@ -117,6 +121,7 @@ class DocumentStyle extends FlameTextStyle {
       text: FlameTextStyle.merge(_text, other.text),
       boldText: FlameTextStyle.merge(_boldText, other.boldText),
       italicText: FlameTextStyle.merge(_italicText, other.italicText),
+      codeText: FlameTextStyle.merge(_codeText, other.codeText),
       background: merge(background, other.background) as BackgroundStyle?,
       paragraph: merge(paragraph, other.paragraph) as BlockStyle?,
       header1: merge(header1, other.header1) as BlockStyle?,
