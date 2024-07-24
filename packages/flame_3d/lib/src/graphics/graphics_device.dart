@@ -22,8 +22,8 @@ enum DepthStencilState {
 /// by binding different resources to it.
 ///
 /// A single render call starts with a call to [begin] and only ends when [end]
-/// is called. Anything that gets bound to the device in between will be
-/// uploaded to the GPU and returns as an [Image] in [end].
+/// is called. Any resource that gets bound to the device in between these two
+/// method calls will be uploaded to the GPU and returns as an [Image] in [end].
 /// {@endtemplate}
 class GraphicsDevice {
   /// {@macro graphics_device}
