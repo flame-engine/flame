@@ -23,7 +23,7 @@ cd $(dirname $(which flutter)) \
 ```
 
 This will check out the GIT repo of your Flutter installation to the specific commit that we require
-and also gets us t he the commit SHA of the Flutter Engine that you need to use in setting up the
+and also gets us the commit SHA of the Flutter Engine that you need to use in setting up the
 Flutter GPU. For that you can follow the steps described in the
 [Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu).
 
