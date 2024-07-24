@@ -55,9 +55,8 @@ class Route extends PositionComponent
   /// in which case the user must override the [build] method.
   final Component Function()? _builder;
 
-  /// The function that will be invoked that will build the loading page
-  /// component when this route first becomes active. Can be left `null`,
-  /// in which case it is not required.
+  /// The function that will build the loading page component, which is shown
+  /// when this route first becomes active, but hasn't fully loaded yet.
   final Component Function()? _loadingBuilder;
 
   /// This method is invoked when the route is pushed on top of the
@@ -125,8 +124,8 @@ class Route extends PositionComponent
   /// also be added as a child component.
   Component? _page;
 
-  /// The loadingPage that was built and is now owned by this route. This
-  /// loadingPage will also be added as a child component.
+  /// The loadingPage that was built and is now owned by this route. The
+  /// [_loadingPage] will also be added as a child component.
   Component? _loadingPage;
 
   /// Additional visual effect that may be applied to the page during rendering.
@@ -146,7 +145,7 @@ class Route extends PositionComponent
   Future<void> _addLoadingPage() async {
     _loadingPage ??= _loadingBuilder!()..addToParent(this);
     await _loadingPage!.loaded;
-    await _page!.addToParent(this);
+    await add(_page!);
     await _page!.loaded;
     _loadingPage!.removeFromParent();
   }
