@@ -22,7 +22,7 @@ Adds 3D support for <a href="https://github.com/flame-engine/flame">Flame</a> us
 <!-- markdownlint-disable-next-line MD002 -->
 # flame_3d
 
-This package provides an experimental implementation of 3D support for Flame. The main focus is to 
+This package provides an experimental implementation of 3D support for Flame. The main focus is to
 explore the potential capabilities of 3D for Flame while providing a familiar API to existing Flame
 developers.
 
@@ -37,53 +37,58 @@ Supported platforms:
 | Linux    | ❌        |
 | Web      | ❌        |
 
+
 ## Prologue
 
 **STOP**, we know you are hyped up and want to start coding some funky 3D stuff but we first have to
 set your expectations and clarify some things. So turn down your music, put away the coffee and make
 some tea instead because you have to do some reading first!
 
-This package provides 3D support for Flame but it depends on the still experimental 
-[Flutter GPU](https://github.com/flutter/flutter/wiki/Flutter-GPU) which in turn depends on 
-Impeller. The Flutter GPU is currently not shipped with Flutter so this package wont work without 
+This package provides 3D support for Flame but it depends on the still experimental
+[Flutter GPU](https://github.com/flutter/flutter/wiki/Flutter-GPU) which in turn depends on
+Impeller. The Flutter GPU is currently not shipped with Flutter so this package wont work without
 following the prerequisites steps.
 
 Because we depend on Flutter GPU this package is also highly experimental. Our long term goal is to
-eventually deprecate this package and integrate it into the core `flame` package, for more 
+eventually deprecate this package and integrate it into the core `flame` package, for more
 information on this see the [Roadmap](https://github.com/flame-engine/flame/blob/main/packages/flame_3d/ROADMAP.md).
 
 This package does not guarantee that it will follow correct [semver](https://semver.org/) versioning
-rules nor does it assure that it's APIs wont break. Be ready to constantly have to refactor your 
+rules nor does it assure that it's APIs wont break. Be ready to constantly have to refactor your
 code if you are planning on using this package in a semi-production environment, which we do not
-recommend. 
+recommend.
 
 Documentation and tests might be lacking for quite a while because of the potential constant changes
 of the API. Where possible we will try to provide in-code documentation and code examples to help
-developers but our main goal for now is to enable the usage of 3D rendering within a Flame 
+developers but our main goal for now is to enable the usage of 3D rendering within a Flame
 ecosystem.
 
 
 ## Prerequisites
 
-Before you can get started with using this package a few steps have to happen first. Step one is 
-switching to a specific commit on the Flutter tooling. Because this package is still experimental 
+Before you can get started with using this package a few steps have to happen first. Step one is
+switching to a specific commit on the Flutter tooling. Because this package is still experimental
 some of the features it requires are still being worked on from the Flutter side.
 
-So to make sure you are using the same build that we use while developing you have to manually 
-checkout a specific Flutter build. Thankfully we were able to simplify that process into a 
+So to make sure you are using the same build that we use while developing you have to manually
+checkout a specific Flutter build. Thankfully we were able to simplify that process into a
 one-liner:
 
 ```sh
-cd $(dirname $(which flutter)) && git fetch && git checkout bcdd1b2c481bca0647beff690238efaae68ca5ac -q && echo "Engine commit: $(cat internal/engine.version)" && cd - >/dev/null
+cd $(dirname $(which flutter)) \
+  && git fetch \
+  && git checkout bcdd1b2c481bca0647beff690238efaae68ca5ac -q \
+  && echo "Engine commit: $(cat internal/engine.version)" \
+  && cd - >/dev/null
 ```
 
 This will check out the GIT repo of your Flutter installation to the specific commit that we require
 and also return the commit SHA of the Flutter Engine that it was build with. We need for step two.
 
-Step two is setting up the Flutter GPU. You can follow the steps described in the [Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu). 
+Step two is setting up the Flutter GPU. You can follow the steps described in the [Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu).
 The engine commit that you should use is the one we got in step one.
 
-Once you have cloned the Flutter engine you can add the `flutter_gpu` as an override dependency 
+Once you have cloned the Flutter engine you can add the `flutter_gpu` as an override dependency
 to your `pubspec.yaml` or in a `pubspec_overrides.yaml` file:
 
 ```yaml
@@ -92,14 +97,14 @@ dependency_overrides:
     path: <path_to_the_cloned_flutter_engine_directory>/lib/gpu
 ```
 
-Step three would be to enable impeller for the macOS platform, add the following to the 
+Step three would be to enable impeller for the macOS platform, add the following to the
 `Info.plist` in your `macos/` directory:
 
 ```xml
 <dict>
     ...
-	<key>FLTEnableImpeller</key>
-	<true/>
+ <key>FLTEnableImpeller</key>
+ <true/>
 </dict>
 ```
 
@@ -111,14 +116,14 @@ can set up a simple 3D environment using Flame.
 ## Building shaders
 
 You can write your own shaders and use them on Materials. Currently Flutter does not do the bundling
-of shaders for us so this package provides a simple dart script. Create your fragment and vertex 
+of shaders for us so this package provides a simple dart script. Create your fragment and vertex
 shader in a `shaders` directory, make sure the file names are identical. Like so:
 
 - `my_custom_shader`.frag
 - `my_custom_shader`.vert
 
-You can then run `dart pub run flame_3d:build_shaders` to bundle the shaders. They will 
-automatically be placed in `assets/shaders`. 
+You can then run `dart pub run flame_3d:build_shaders` to bundle the shaders. They will
+automatically be placed in `assets/shaders`.
 
 You can check out the
 [default shaders](https://github.com/flame-engine/flame/tree/main/packages/flame_3d/shaders) if you
@@ -135,5 +140,5 @@ correct branch (main) and follow the [checklist](.github/pull_request_template.m
 appear when you open the PR.
 
 For bigger changes, or if in doubt, make sure to talk about your contribution to the team. Either
-via an issue, GitHub discussion, or reach out to the team using the 
+via an issue, GitHub discussion, or reach out to the team using the
 [Discord server](https://discord.gg/pxrBmy4).
