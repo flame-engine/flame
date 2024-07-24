@@ -479,37 +479,38 @@ void main() {
       final loadingComponent = PositionComponent(size: Vector2.all(100));
       final pageComponent = _HeavyComponent()..size = Vector2.all(100);
       final router = RouterComponent(
-        initialRoute: 'start',
+        initialRoute: 'new',
         routes: {
           'start': Route(
             Component.new,
           ),
           'new': Route(
-            () => pageComponent,
-            loadingBuilder: () => loadingComponent,
+            () {
+              return pageComponent;
+            },
+            loadingBuilder: () {
+              return loadingComponent;
+            },
           ),
         },
-      )..addToParent(game);
+      );
+      game.add(router);
       await game.ready();
-      router.pushNamed('new');
       expect(
         pageComponent.isMounted,
         isFalse,
       );
-      // expect(
-      //   loadingComponent.isMounted,
-      //   isTrue,
-      // );
+      expect(loadingComponent.isMounted, isTrue);
       pageComponent.completer.complete();
       await game.ready();
       expect(
         pageComponent.isMounted,
         isTrue,
       );
-      // expect(
-      //   loadingComponent.isRemoved,
-      //   isTrue,
-      // );
+      expect(
+        loadingComponent.isRemoved,
+        isTrue,
+      );
     });
   });
 }
