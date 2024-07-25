@@ -73,7 +73,7 @@ abstract class BaseSelection {
   final Selection _info;
 
   /// {@macro _base_selection}
-  BaseSelection(this._info);
+  BaseSelection(this._info, {this.group});
 
   /// The id of the selection.
   String get id => _info.id;
@@ -90,6 +90,9 @@ abstract class BaseSelection {
   /// The height of the selection.
   int get h => _info.h;
 
+  /// A group that this selection belongs to.
+  final String? group;
+
   /// Returns this instance as a json.
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{}
@@ -97,7 +100,8 @@ abstract class BaseSelection {
       ..['x'] = x
       ..['y'] = y
       ..['w'] = w
-      ..['h'] = h;
+      ..['h'] = h
+      ..['group'] = group;
 
     return json;
   }
@@ -110,13 +114,15 @@ class SpriteSelection extends BaseSelection {
   /// {@macro _sprite_selection}
   SpriteSelection({
     required Selection info,
+    super.group,
   }) : super(info);
 
   /// Creates a [SpriteSelection] from [json].
   @override
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
-    return SpriteSelection(info: info);
+    final group = json['group'] as String?;
+    return SpriteSelection(info: info, group: group);
   }
 
   /// Returns this instance as a json.
@@ -145,18 +151,21 @@ class AnimationSelection extends BaseSelection {
     required this.frameCount,
     required this.stepTime,
     required this.loop,
+    super.group,
   }) : super(info);
 
   /// Creates a [AnimationSelection] from [json].
   @override
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
+    final group = json['group'] as String?;
 
     return AnimationSelection(
       info: info,
       frameCount: json['frameCount'] as int,
       stepTime: json['stepTime'] as double,
       loop: json['loop'] as bool,
+      group: group,
     );
   }
 

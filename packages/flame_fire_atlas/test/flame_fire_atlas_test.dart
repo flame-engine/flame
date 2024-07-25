@@ -170,5 +170,96 @@ void main() {
         verify(() => game.images.fromBase64(any(), any())).called(1);
       },
     );
+
+    group('SpriteSelection', () {
+      test('can be created from a json', () async {
+        final sprite = SpriteSelection.fromJson({
+          'id': 'kinetic_bullet',
+          'x': 0,
+          'y': 0,
+          'w': 16,
+          'h': 16,
+          'group': 'bullets',
+        });
+        expect(sprite.id, 'kinetic_bullet');
+        expect(sprite.x, 0);
+        expect(sprite.y, 0);
+        expect(sprite.w, 16);
+        expect(sprite.h, 16);
+        expect(sprite.group, 'bullets');
+      });
+
+      test('serializes to json', () async {
+        final sprite = SpriteSelection(
+          info: Selection(
+            id: 'kinetic_bullet',
+            x: 0,
+            y: 0,
+            w: 16,
+            h: 16,
+          ),
+          group: 'bullets',
+        );
+        final json = sprite.toJson();
+        expect(json['id'], 'kinetic_bullet');
+        expect(json['x'], 0);
+        expect(json['y'], 0);
+        expect(json['w'], 16);
+        expect(json['h'], 16);
+        expect(json['group'], 'bullets');
+      });
+    });
+
+    group('AnimationSelection', () {
+      test('can be created from a json', () async {
+        final animation = AnimationSelection.fromJson({
+          'id': 'bomb_ptero',
+          'frameCount': 1,
+          'stepTime': .2,
+          'loop': true,
+          'x': 0,
+          'y': 0,
+          'w': 16,
+          'h': 16,
+          'group': 'enemies',
+        });
+
+        expect(animation.id, 'bomb_ptero');
+        expect(animation.frameCount, 1);
+        expect(animation.stepTime, .2);
+        expect(animation.loop, isTrue);
+        expect(animation.x, 0);
+        expect(animation.y, 0);
+        expect(animation.w, 16);
+        expect(animation.h, 16);
+        expect(animation.group, 'enemies');
+      });
+
+      test('serializes to json', () async {
+        final animation = AnimationSelection(
+          info: Selection(
+            id: 'bomb_ptero',
+            x: 0,
+            y: 0,
+            w: 16,
+            h: 16,
+          ),
+          frameCount: 1,
+          stepTime: .2,
+          loop: true,
+          group: 'enemies',
+        );
+        final json = animation.toJson();
+        expect(json['id'], 'bomb_ptero');
+        expect(json['frameCount'], 1);
+        expect(json['stepTime'], .2);
+        expect(json['loop'], isTrue);
+        expect(json['x'], 0);
+        expect(json['y'], 0);
+        expect(json['w'], 16);
+        expect(json['h'], 16);
+        expect(json['group'], 'enemies');
+      });
+    });
   });
 }
