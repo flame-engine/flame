@@ -23,7 +23,7 @@ class CameraComponent3D extends CameraComponent {
     super.backdrop,
     super.hudComponents,
   })  : position = position?.clone() ?? Vector3.zero(),
-        target = target?.clone() ?? Vector3.zero(),
+        target = target?.clone() ?? Vector3(0, 0, -1),
         _up = up?.clone() ?? Vector3(0, 1, 0);
 
   @override
