@@ -4,22 +4,22 @@ import 'package:flame_isolate/flame_isolate.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class TestGame extends FlameGame with FlameIsolate {}
+class _TestGame extends FlameGame with FlameIsolate {}
 
-class IsolateComponent extends Component with FlameIsolate {}
+class _IsolateComponent extends Component with FlameIsolate {}
 
 void main() {
-  testWithGame<TestGame>(
+  testWithGame<_TestGame>(
     'Test running isolateCompute on game',
-    TestGame.new,
+    _TestGame.new,
     (game) async {
       final result = game.isolateCompute(_pow, 10);
       await expectLater(result, completion(100));
     },
   );
-  testWithGame<TestGame>(
+  testWithGame<_TestGame>(
     'Test running isolateComputeStream on game',
-    TestGame.new,
+    _TestGame.new,
     (game) async {
       final result = game.isolateComputeStream(_messages, 10);
       await expectLater(result, emitsInOrder([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
@@ -30,7 +30,7 @@ void main() {
     testWithFlameGame(
       'Running isolateCompute in sub-component',
       (game) async {
-        final isolateComponent = IsolateComponent();
+        final isolateComponent = _IsolateComponent();
         await game.add(isolateComponent);
         await game.ready();
         final result = isolateComponent.isolateCompute(_pow, 4);
@@ -41,7 +41,7 @@ void main() {
     testWithFlameGame(
       'Running isolateComputeStream in sub-component',
       (game) async {
-        final isolateComponent = IsolateComponent();
+        final isolateComponent = _IsolateComponent();
         await game.add(isolateComponent);
         await game.ready();
         final result = isolateComponent.isolateComputeStream(_messages, 4);
@@ -52,7 +52,7 @@ void main() {
     testWithFlameGame(
       'Running isolateCompute or isolateComputeStream after remove gives error',
       (game) async {
-        final isolateComponent = IsolateComponent();
+        final isolateComponent = _IsolateComponent();
         await game.add(isolateComponent);
         await game.ready();
 

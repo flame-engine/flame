@@ -9,39 +9,39 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class AssetsCacheMock extends Mock implements AssetsCache {}
+class _AssetsCacheMock extends Mock implements AssetsCache {}
 
-class ImagesMock extends Mock implements Images {}
+class _ImagesMock extends Mock implements Images {}
 
-class ImageMock extends Mock implements Image {}
+class _ImageMock extends Mock implements Image {}
 
-class MockedGame extends Mock implements FlameGame {
-  final _imagesMock = ImagesMock();
+class _MockedGame extends Mock implements FlameGame {
+  final _imagesMock = _ImagesMock();
   @override
   Images get images => _imagesMock;
 
-  final _assetsMock = AssetsCacheMock();
+  final _assetsMock = _AssetsCacheMock();
   @override
   AssetsCache get assets => _assetsMock;
 }
 
-Future<Uint8List> readExampleFile() async {
+Future<Uint8List> _readTestFile() async {
   final exampleAtlas = File('./example/assets/cave_ace.fa');
   final bytes = await exampleAtlas.readAsBytes();
   return bytes;
 }
 
-Future<FireAtlas> readTestAtlas() async {
-  final assetsMock = AssetsCacheMock();
+Future<FireAtlas> _readTestAtlas() async {
+  final assetsMock = _AssetsCacheMock();
 
   when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-    return readExampleFile();
+    return _readTestFile();
   });
 
-  final imagesMock = ImagesMock();
+  final imagesMock = _ImagesMock();
 
   when(() => imagesMock.fromBase64(any(), any())).thenAnswer((_) async {
-    return ImageMock();
+    return _ImageMock();
   });
 
   final atlas = await FireAtlas.loadAsset(
@@ -57,21 +57,21 @@ void main() {
 
   group('FireAtlas', () {
     test('can load the asset', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
       expect(atlas.id, 'cave_ace');
     });
 
     test('can load the asset using the global assets/images', () async {
-      final assetsMock = AssetsCacheMock();
+      final assetsMock = _AssetsCacheMock();
 
       when(() => assetsMock.readBinaryFile('cave.fa')).thenAnswer((_) async {
-        return readExampleFile();
+        return _readTestFile();
       });
 
-      final imagesMock = ImagesMock();
+      final imagesMock = _ImagesMock();
 
       when(() => imagesMock.fromBase64(any(), any())).thenAnswer((_) async {
-        return ImageMock();
+        return _ImageMock();
       });
 
       Flame.images = imagesMock;
@@ -84,14 +84,14 @@ void main() {
     });
 
     test('returns a sprite', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
 
       final bullet = atlas.getSprite('bullet');
       expect(bullet, isNotNull);
     });
 
     test('throws when there is not sprite for that id', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
 
       expect(
         () => atlas.getSprite('bla'),
@@ -102,7 +102,7 @@ void main() {
     });
 
     test('throws when getSprite is used for an animation selection', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
 
       expect(
         () => atlas.getSprite('bomb_ptero'),
@@ -111,13 +111,13 @@ void main() {
     });
 
     test('returns an animation', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
       final bombPtero = atlas.getAnimation('bomb_ptero');
       expect(bombPtero, isNotNull);
     });
 
     test('throws when there is not an animation for that id', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
 
       expect(
         () => atlas.getAnimation('bla'),
@@ -128,7 +128,7 @@ void main() {
     });
 
     test('throws when getAnimation is used for a sprite selection', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
 
       expect(
         () => atlas.getAnimation('bullet'),
@@ -137,13 +137,13 @@ void main() {
     });
 
     test('converts to json', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
       final json = atlas.toJson();
       expect(json['id'], 'cave_ace');
     });
 
     test('serialize/deserialize', () async {
-      final atlas = await readTestAtlas();
+      final atlas = await _readTestAtlas();
 
       final bytes = atlas.serialize();
 
@@ -154,14 +154,14 @@ void main() {
     test(
       'Uses the game images and assets when loading from the game',
       () async {
-        final game = MockedGame();
+        final game = _MockedGame();
 
         when(() => game.assets.readBinaryFile('cave.fa')).thenAnswer((_) async {
-          return readExampleFile();
+          return _readTestFile();
         });
 
         when(() => game.images.fromBase64(any(), any())).thenAnswer((_) async {
-          return ImageMock();
+          return _ImageMock();
         });
 
         await game.loadFireAtlas('cave.fa');

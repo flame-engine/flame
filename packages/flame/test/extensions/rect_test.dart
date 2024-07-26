@@ -67,7 +67,7 @@ void main() {
     });
 
     test('test containsPoint calls contains on Rect', () {
-      final rect = MockRect();
+      final rect = _MockRect();
       final point = Vector2.zero();
 
       // mock contains result, but check it is called
@@ -227,4 +227,4 @@ void main() {
   });
 }
 
-class MockRect extends Mock implements Rect {}
+class _MockRect extends Mock implements Rect {}

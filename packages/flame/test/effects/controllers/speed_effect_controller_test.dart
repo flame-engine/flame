@@ -45,13 +45,13 @@ void main() {
       testWithFlameGame('negative measure', (game) async {
         expect(
           () async {
-            final effect = BadEffect(
+            final effect = _BadEffect(
               SpeedEffectController(LinearEffectController(1), speed: 1),
             );
             await game.ensureAdd(PositionComponent()..add(effect));
             game.update(0);
           },
-          failsAssert('negative measure returned by BadEffect: -1.0'),
+          failsAssert('negative measure returned by _BadEffect: -1.0'),
         );
       });
     });
@@ -127,8 +127,8 @@ void main() {
   });
 }
 
-class BadEffect extends Effect implements MeasurableEffect {
-  BadEffect(super.controller);
+class _BadEffect extends Effect implements MeasurableEffect {
+  _BadEffect(super.controller);
 
   @override
   void apply(double progress) {}

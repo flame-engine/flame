@@ -6,12 +6,12 @@ import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockParticle extends Mock implements Particle {}
+class _MockParticle extends Mock implements Particle {}
 
 void main() {
   group('ParticleSystem', () {
     test('returns the progress of its particle', () {
-      final particle = MockParticle();
+      final particle = _MockParticle();
       when(() => particle.progress).thenReturn(0.2);
 
       final progress = ParticleSystemComponent(particle: particle).progress;
@@ -19,7 +19,7 @@ void main() {
     });
 
     test('returns the progress of its particle', () {
-      final particle = MockParticle();
+      final particle = _MockParticle();
 
       final canvas = MockCanvas();
       ParticleSystemComponent(particle: particle).render(canvas);
@@ -28,7 +28,7 @@ void main() {
     });
 
     test('updates its particle', () {
-      final particle = MockParticle();
+      final particle = _MockParticle();
       when(() => particle.shouldRemove).thenReturn(false);
 
       ParticleSystemComponent(particle: particle).update(0.1);
@@ -38,7 +38,7 @@ void main() {
     testWithFlameGame(
       'is removed when its particle is finished',
       (FlameGame game) async {
-        final particle = MockParticle();
+        final particle = _MockParticle();
         when(() => particle.shouldRemove).thenReturn(true);
 
         final component = ParticleSystemComponent(particle: particle);

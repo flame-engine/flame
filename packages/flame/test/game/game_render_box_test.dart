@@ -16,12 +16,12 @@ class _MockPipelineOwner extends Mock implements PipelineOwner {
   }
 }
 
-final nodesNeedingCompositingBitsUpdate = <RenderObject>[];
+final _nodesNeedingCompositingBitsUpdate = <RenderObject>[];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(nodesNeedingCompositingBitsUpdate.clear);
+  setUp(_nodesNeedingCompositingBitsUpdate.clear);
 
   group('GameRenderBox', () {
     test('game/attach', () {

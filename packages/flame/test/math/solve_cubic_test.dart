@@ -19,7 +19,7 @@ void main() {
         final d = -x1 * x2 * x3 * a;
         final solutions = solveCubic(a, b, c, d);
         if (((x1 - x2) * (x2 - x3) * (x3 - x1)).abs() > 1e-5) {
-          check(solutions, [x1, x2, x3]);
+          _check(solutions, [x1, x2, x3]);
         }
       },
       repeatCount: repeatCount,
@@ -37,19 +37,19 @@ void main() {
         final d = -x1 * x2 * x2 * a;
         final solutions = solveCubic(a, b, c, d);
         if (solutions.length == 1) {
-          check(solutions, [x1]);
+          _check(solutions, [x1]);
         } else {
-          check(solutions, [x1, x2, x2]);
+          _check(solutions, [x1, x2, x2]);
         }
       },
       repeatCount: repeatCount,
     );
 
     test('solve equation with 1 triple root', () {
-      check(solveCubic(1, -3, 3, -1), [1, 1, 1]);
-      check(solveCubic(10, 30, 30, 10), [-1, -1, -1]);
+      _check(solveCubic(1, -3, 3, -1), [1, 1, 1]);
+      _check(solveCubic(10, 30, 30, 10), [-1, -1, -1]);
       const x = 2.78;
-      check(solveCubic(1, -3 * x, 3 * x * x, -x * x * x), [x, x, x]);
+      _check(solveCubic(1, -3 * x, 3 * x * x, -x * x * x), [x, x, x]);
     });
 
     testRandom(
@@ -63,19 +63,19 @@ void main() {
         final c = (2 * x1 * x2 + x2 * x2 + 0.5) * a;
         final d = -x1 * (x2 * x2 + 0.5) * a;
         final solutions = solveCubic(a, b, c, d);
-        check(solutions, [x1]);
+        _check(solutions, [x1]);
       },
       repeatCount: repeatCount,
     );
 
     test('solve degenerate equation', () {
-      check(solveCubic(0, 1, 2, 1), [-1, -1]);
-      check(solveCubic(0, 0, 1, 3), [-3]);
+      _check(solveCubic(0, 1, 2, 1), [-1, -1]);
+      _check(solveCubic(0, 0, 1, 3), [-3]);
     });
 
     test('solve depressed equation', () {
-      check(solveCubic(1, 0, -7, 6), [1, 2, -3]);
-      check(solveCubic(0.1, 0, -0.7, -0.6), [-1, -2, 3]);
+      _check(solveCubic(1, 0, -7, 6), [1, 2, -3]);
+      _check(solveCubic(0.1, 0, -0.7, -0.6), [-1, -2, 3]);
     });
 
     testRandom(
@@ -95,7 +95,7 @@ void main() {
   });
 }
 
-void check(List<double> list1, List<double> list2) {
+void _check(List<double> list1, List<double> list2) {
   expect(
     list1.length,
     equals(list2.length),

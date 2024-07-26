@@ -22,8 +22,8 @@ void main() {
       'shadow behind object',
       (game) async {
         game.addAll([
-          Background(const Color(0xffc9c9c9)),
-          DecoratedRectangle(
+          _Background(const Color(0xffc9c9c9)),
+          _DecoratedRectangle(
             position: Vector2(20, 30),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
@@ -43,8 +43,8 @@ void main() {
       'shadow in front object',
       (game) async {
         game.addAll([
-          Background(const Color(0xffc9c9c9)),
-          DecoratedRectangle(
+          _Background(const Color(0xffc9c9c9)),
+          _DecoratedRectangle(
             position: Vector2(60, 20),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
@@ -67,8 +67,8 @@ void main() {
       'dynamically change shadow properties',
       (game) async {
         game.addAll([
-          Background(const Color(0xffc9c9c9)),
-          DecoratedRectangle(
+          _Background(const Color(0xffc9c9c9)),
+          _DecoratedRectangle(
             position: Vector2(60, 20),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
@@ -89,8 +89,8 @@ void main() {
   });
 }
 
-class DecoratedRectangle extends RectangleComponent {
-  DecoratedRectangle({
+class _DecoratedRectangle extends RectangleComponent {
+  _DecoratedRectangle({
     super.position,
     super.size,
     super.paint,
@@ -100,8 +100,8 @@ class DecoratedRectangle extends RectangleComponent {
   }
 }
 
-class Background extends Component {
-  Background(this.color);
+class _Background extends Component {
+  _Background(this.color);
   final Color color;
 
   @override
