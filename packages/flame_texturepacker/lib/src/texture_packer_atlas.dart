@@ -76,8 +76,11 @@ class TexturePackerAtlas {
 Future<_TextureAtlasData> _fromAssets(String path, {Images? images}) async {
   try {
     return await _parse(path, fromStorage: false, images: images);
-  } on Exception catch (e) {
-    throw Exception('Error loading $path from assets: $e');
+  } on Exception catch (e, stack) {
+    Error.throwWithStackTrace(
+      Exception('Error loading $path from assets: $e'),
+      stack,
+    );
   }
 }
 
@@ -86,8 +89,11 @@ Future<_TextureAtlasData> _fromAssets(String path, {Images? images}) async {
 Future<_TextureAtlasData> _fromStorage(String path, {Images? images}) async {
   try {
     return await _parse(path, fromStorage: true, images: images);
-  } on Exception catch (e) {
-    throw Exception('Error loading $path from storage: $e');
+  } on Exception catch (e, stack) {
+    Error.throwWithStackTrace(
+      Exception('Error loading $path from storage: $e'),
+      stack,
+    );
   }
 }
 
@@ -148,8 +154,11 @@ Future<_TextureAtlasData> _parse(
             final decodedBytes = await decodeImageFromList(bytes);
             images.add(texturePath, decodedBytes);
             page.texture = images.fromCache(texturePath);
-          } on Exception catch (e) {
-            throw Exception('Could not add storage file to Flame cache. $e');
+          } on Exception catch (e, stack) {
+            Error.throwWithStackTrace(
+              Exception('Could not add storage file to Flame cache. $e'),
+              stack,
+            );
           }
         } else {
           page.texture = await images.load(texturePath);
