@@ -51,7 +51,7 @@ void main() {
             await game.ensureAdd(PositionComponent()..add(effect));
             game.update(0);
           },
-          failsAssert('negative measure returned by BadEffect: -1.0'),
+          failsAssert('negative measure returned by _BadEffect: -1.0'),
         );
       });
     });
