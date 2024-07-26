@@ -25,5 +25,15 @@ void main() {
       expect((a - b).storage, [-1, 8, -3]);
       expect((a - b.immutable).storage, [-1, 8, -3]);
     });
+
+    test('can convert to Color', () {
+      final src = Vector3(0.1, 0.2, 0.3);
+
+      final color = src.toColor();
+      expect(color.alpha, 255);
+      expect(color.red, 26);
+      expect(color.green, 51);
+      expect(color.blue, 77);
+    });
   });
 }
