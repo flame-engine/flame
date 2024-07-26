@@ -3,13 +3,13 @@ import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockImage extends Mock implements Image {}
+class _MockImage extends Mock implements Image {}
 
 void main() {
   group('ImageComposition', () {
     test('breaks assertion when adding an invalid portion', () {
       final composition = ImageComposition();
-      final image = MockImage();
+      final image = _MockImage();
       when(() => image.width).thenReturn(100);
       when(() => image.height).thenReturn(100);
 

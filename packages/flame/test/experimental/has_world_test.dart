@@ -74,9 +74,9 @@ void main() {
       final component = _BarComponent();
       await game.world.ensureAdd(component);
 
-      component.world = MockWorld();
+      component.world = _MockWorld();
 
-      expect(component.world, isA<MockWorld>());
+      expect(component.world, isA<_MockWorld>());
     });
   });
 }
@@ -100,4 +100,4 @@ class _FooComponent extends Component with HasWorldReference<_ReferenceWorld> {
 
 class _BarComponent extends Component with HasWorldReference<_ReferenceWorld> {}
 
-class MockWorld extends Mock implements _ReferenceWorld {}
+class _MockWorld extends Mock implements _ReferenceWorld {}

@@ -6,10 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import '../inventory_cubit.dart';
 import '../player_cubit.dart';
 
-class InventoryReader extends Component
+class _InventoryReader extends Component
     with FlameBlocReader<InventoryCubit, InventoryState> {}
 
-class InventoryListener extends Component
+class _InventoryListener extends Component
     with FlameBlocListenable<InventoryCubit, InventoryState> {
   InventoryState? lastState;
 
@@ -19,10 +19,10 @@ class InventoryListener extends Component
   }
 }
 
-class PlayerReader extends Component
+class _PlayerReader extends Component
     with FlameBlocReader<PlayerCubit, PlayerState> {}
 
-class PlayerListener extends Component
+class _PlayerListener extends Component
     with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerState? lastState;
 
@@ -50,8 +50,8 @@ void main() {
       );
       await game.ensureAdd(provider);
 
-      final inventory = InventoryReader();
-      final player = PlayerReader();
+      final inventory = _InventoryReader();
+      final player = _PlayerReader();
 
       await provider.ensureAdd(inventory);
       await provider.ensureAdd(player);
@@ -76,8 +76,8 @@ void main() {
       );
       await game.ensureAdd(provider);
 
-      final inventory = InventoryListener();
-      final player = PlayerListener();
+      final inventory = _InventoryListener();
+      final player = _PlayerListener();
 
       await provider.ensureAdd(inventory);
       await provider.ensureAdd(player);
@@ -130,8 +130,8 @@ void main() {
         final inventoryCubit = InventoryCubit();
         final playerCubit = PlayerCubit();
 
-        late InventoryReader inventory;
-        late PlayerReader player;
+        late _InventoryReader inventory;
+        late _PlayerReader player;
 
         final provider = FlameMultiBlocProvider(
           providers: [
@@ -143,8 +143,8 @@ void main() {
             ),
           ],
           children: [
-            inventory = InventoryReader(),
-            player = PlayerReader(),
+            inventory = _InventoryReader(),
+            player = _PlayerReader(),
           ],
         );
         await game.ensureAdd(provider);
@@ -157,8 +157,8 @@ void main() {
         final inventoryCubit = InventoryCubit();
         final playerCubit = PlayerCubit();
 
-        late InventoryListener inventory;
-        late PlayerListener player;
+        late _InventoryListener inventory;
+        late _PlayerListener player;
 
         final provider = FlameMultiBlocProvider(
           providers: [
@@ -170,8 +170,8 @@ void main() {
             ),
           ],
           children: [
-            inventory = InventoryListener(),
-            player = PlayerListener(),
+            inventory = _InventoryListener(),
+            player = _PlayerListener(),
           ],
         );
         await game.ensureAdd(provider);
@@ -188,7 +188,7 @@ void main() {
         'can listen to multiple subsequent state changes',
         (game) async {
           final playerCubit = PlayerCubit();
-          late PlayerListener player;
+          late _PlayerListener player;
 
           final provider = FlameMultiBlocProvider(
             providers: [
@@ -197,7 +197,7 @@ void main() {
               ),
             ],
             children: [
-              player = PlayerListener(),
+              player = _PlayerListener(),
             ],
           );
           await game.ensureAdd(provider);

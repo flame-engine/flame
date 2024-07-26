@@ -6,7 +6,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockParticle extends Mock implements SpriteParticle {}
+class _MockParticle extends Mock implements SpriteParticle {}
 
 Future<void> main() async {
   // Generate an image
@@ -14,7 +14,7 @@ Future<void> main() async {
 
   group('SpriteParticle', () {
     test('Should render this Particle to given Canvas', () {
-      final particle = MockParticle();
+      final particle = _MockParticle();
 
       final canvas = MockCanvas();
       ParticleSystemComponent(particle: particle).render(canvas);

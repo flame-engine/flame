@@ -42,7 +42,7 @@ void main() {
     });
 
     test('unknown variable type', () {
-      final storage = BadVariableStorage();
+      final storage = _BadVariableStorage();
       expect(storage.hasVariable('x'), true);
       expect(storage.getVariableType('x'), ExpressionType.unknown);
     });
@@ -101,8 +101,8 @@ void main() {
   });
 }
 
-class BadVariableStorage extends VariableStorage {
-  BadVariableStorage() {
+class _BadVariableStorage extends VariableStorage {
+  _BadVariableStorage() {
     variables['x'] = null;
   }
 }

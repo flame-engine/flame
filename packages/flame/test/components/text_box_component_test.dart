@@ -7,8 +7,6 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'scroll_text_box_component_test.dart';
-
 void main() {
   group('TextBoxComponent', () {
     test('size is properly computed', () {
@@ -127,7 +125,7 @@ void main() {
     testWithFlameGame(
       'onComplete is called when no scrolling is required',
       (game) async {
-        final onComplete = MockOnCompleteCallback();
+        final onComplete = _MockOnCompleteCallback();
 
         when(onComplete.call).thenReturn(null);
 
@@ -255,4 +253,8 @@ class _FramedTextBox extends TextBoxComponent {
     );
     super.render(canvas);
   }
+}
+
+class _MockOnCompleteCallback extends Mock {
+  void call();
 }
