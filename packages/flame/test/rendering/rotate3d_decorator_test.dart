@@ -12,7 +12,7 @@ void main() {
       (game) async {
         for (var angle = 0.0; angle <= 1.5; angle += 0.5) {
           game.add(
-            DecoratedRectangle(
+            _DecoratedRectangle(
               position: Vector2(20, 30),
               size: Vector2(60, 100),
               paint: Paint()..color = const Color(0x9dde0445),
@@ -34,7 +34,7 @@ void main() {
       (game) async {
         for (var angle = 0.0; angle <= 1.5; angle += 0.5) {
           game.add(
-            DecoratedRectangle(
+            _DecoratedRectangle(
               position: Vector2(20, 30),
               size: Vector2(60, 100),
               paint: Paint()..color = const Color(0x9dde0445),
@@ -55,7 +55,7 @@ void main() {
       'Rotation around all axes',
       (game) async {
         game.add(
-          DecoratedRectangle(
+          _DecoratedRectangle(
             position: Vector2(20, 30),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xff199f2b),
@@ -92,8 +92,8 @@ void main() {
   });
 }
 
-class DecoratedRectangle extends RectangleComponent {
-  DecoratedRectangle({
+class _DecoratedRectangle extends RectangleComponent {
+  _DecoratedRectangle({
     super.position,
     super.size,
     super.paint,

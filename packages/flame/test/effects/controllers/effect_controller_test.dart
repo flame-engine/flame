@@ -7,11 +7,11 @@ import 'package:flutter/animation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-abstract class Callback {
+abstract class _Callback {
   void call();
 }
 
-class CallbackMock extends Mock implements Callback {}
+class _CallbackMock extends Mock implements _Callback {}
 
 void main() {
   group('EffectController', () {
@@ -318,8 +318,8 @@ void main() {
     });
 
     test('onMax and onMin callbacks', () {
-      final mockOnMax = CallbackMock();
-      final mockOnMin = CallbackMock();
+      final mockOnMax = _CallbackMock();
+      final mockOnMin = _CallbackMock();
       final ec = EffectController(
         duration: 1,
         reverseDuration: 1,

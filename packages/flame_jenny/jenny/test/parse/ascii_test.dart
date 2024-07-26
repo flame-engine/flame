@@ -3,47 +3,47 @@ import 'package:test/test.dart';
 
 void main() {
   test('ASCII', () {
-    check($tab, '\t');
-    check($lineFeed, '\n');
-    check($carriageReturn, '\r');
-    check($space, ' ');
-    check($exclamation, '!');
-    check($doubleQuote, '"');
-    check($hash, '#');
-    check($dollar, r'$');
-    check($percent, '%');
-    check($ampersand, '&');
-    check($singleQuote, "'");
-    check($leftParenthesis, '(');
-    check($rightParenthesis, ')');
-    check($asterisk, '*');
-    check($plus, '+');
-    check($comma, ',');
-    check($minus, '-');
-    check($dot, '.');
-    check($slash, '/');
-    check($digit0, '0');
-    check($digit9, '9');
-    check($colon, ':');
-    check($lessThan, '<');
-    check($equals, '=');
-    check($greaterThan, '>');
-    check($uppercaseA, 'A');
-    check($uppercaseZ, 'Z');
-    check($leftBracket, '[');
-    check($backslash, r'\');
-    check($rightBracket, ']');
-    check($caret, '^');
-    check($underscore, '_');
-    check($lowercaseA, 'a');
-    check($lowercaseN, 'n');
-    check($lowercaseZ, 'z');
-    check($leftBrace, '{');
-    check($pipe, '|');
-    check($rightBrace, '}');
+    _check($tab, '\t');
+    _check($lineFeed, '\n');
+    _check($carriageReturn, '\r');
+    _check($space, ' ');
+    _check($exclamation, '!');
+    _check($doubleQuote, '"');
+    _check($hash, '#');
+    _check($dollar, r'$');
+    _check($percent, '%');
+    _check($ampersand, '&');
+    _check($singleQuote, "'");
+    _check($leftParenthesis, '(');
+    _check($rightParenthesis, ')');
+    _check($asterisk, '*');
+    _check($plus, '+');
+    _check($comma, ',');
+    _check($minus, '-');
+    _check($dot, '.');
+    _check($slash, '/');
+    _check($digit0, '0');
+    _check($digit9, '9');
+    _check($colon, ':');
+    _check($lessThan, '<');
+    _check($equals, '=');
+    _check($greaterThan, '>');
+    _check($uppercaseA, 'A');
+    _check($uppercaseZ, 'Z');
+    _check($leftBracket, '[');
+    _check($backslash, r'\');
+    _check($rightBracket, ']');
+    _check($caret, '^');
+    _check($underscore, '_');
+    _check($lowercaseA, 'a');
+    _check($lowercaseN, 'n');
+    _check($lowercaseZ, 'z');
+    _check($leftBrace, '{');
+    _check($pipe, '|');
+    _check($rightBrace, '}');
   });
 }
 
-void check(int codeUnit, String text) {
+void _check(int codeUnit, String text) {
   expect(String.fromCharCode(codeUnit), text);
 }

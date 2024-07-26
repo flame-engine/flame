@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockParticle extends Mock implements CircleParticle {}
+class _MockParticle extends Mock implements CircleParticle {}
 
 void main() {
   group('CircleParticle', () {
     test('Should render this Particle to given Canvas', () {
-      final particle = MockParticle();
+      final particle = _MockParticle();
 
       final canvas = MockCanvas();
       ParticleSystemComponent(particle: particle).render(canvas);
