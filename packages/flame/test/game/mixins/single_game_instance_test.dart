@@ -21,7 +21,7 @@ void main() {
         FlameGame.new,
         failsAssert(
           "Instance of 'FlameGame<World>' instantiated, while another game "
-          "Instance of 'SingletonGame' declares itself to be a singleton",
+          "Instance of '_SingletonGame' declares itself to be a singleton",
         ),
       );
       game.onRemove();
