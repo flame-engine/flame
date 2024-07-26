@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -474,6 +475,43 @@ void main() {
         );
       },
     );
+    testWithFlameGame('Route with loading', (game) async {
+      final loadingComponent = PositionComponent(size: Vector2.all(100));
+      final pageComponent = _HeavyComponent()..size = Vector2.all(100);
+      final router = RouterComponent(
+        initialRoute: 'new',
+        routes: {
+          'start': Route(
+            Component.new,
+          ),
+          'new': Route(
+            () {
+              return pageComponent;
+            },
+            loadingBuilder: () {
+              return loadingComponent;
+            },
+          ),
+        },
+      );
+      game.add(router);
+      await game.ready();
+      expect(
+        pageComponent.isMounted,
+        isFalse,
+      );
+      expect(loadingComponent.isMounted, isTrue);
+      pageComponent.completer.complete();
+      await game.ready();
+      expect(
+        pageComponent.isMounted,
+        isTrue,
+      );
+      expect(
+        loadingComponent.isRemoved,
+        isTrue,
+      );
+    });
   });
 }
 
@@ -525,5 +563,15 @@ class _ColoredComponent extends PositionComponent {
   @override
   void render(Canvas canvas) {
     canvas.drawRect(size.toRect(), _paint);
+  }
+}
+
+class _HeavyComponent extends PositionComponent {
+  Duration dummyTime = const Duration(seconds: 3);
+  Completer<void> completer = Completer();
+  @override
+  FutureOr<void> onLoad() async {
+    await completer.future;
+    return super.onLoad();
   }
 }
