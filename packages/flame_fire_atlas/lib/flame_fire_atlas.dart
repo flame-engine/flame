@@ -93,6 +93,9 @@ abstract class BaseSelection {
   /// A group that this selection belongs to.
   final String? group;
 
+  /// Copies this instance with a new group.
+  BaseSelection copyWithGroup(String? group);
+
   /// Returns this instance as a json.
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{}
@@ -129,6 +132,12 @@ class SpriteSelection extends BaseSelection {
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..['type'] = 'sprite';
+  }
+
+  /// Copies this instance with a new group.
+  @override
+  SpriteSelection copyWithGroup(String? group) {
+    return SpriteSelection(info: _info, group: group);
   }
 }
 
@@ -177,6 +186,18 @@ class AnimationSelection extends BaseSelection {
       ..['stepTime'] = stepTime
       ..['loop'] = loop
       ..['type'] = 'animation';
+  }
+
+  /// Copies this instance with a new group.
+  @override
+  AnimationSelection copyWithGroup(String? group) {
+    return AnimationSelection(
+      info: _info,
+      frameCount: frameCount,
+      stepTime: stepTime,
+      loop: loop,
+      group: group,
+    );
   }
 }
 
