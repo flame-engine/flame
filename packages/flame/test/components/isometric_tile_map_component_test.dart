@@ -6,8 +6,8 @@ import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockImage extends Mock implements Image {
-  MockImage(this.size);
+class _MockImage extends Mock implements Image {
+  _MockImage(this.size);
 
   final Vector2 size;
 
@@ -24,7 +24,7 @@ class _MockSpriteSheet extends Mock implements SpriteSheet {
   final Vector2 tileSize;
 
   @override
-  Image get image => MockImage(tileSize);
+  Image get image => _MockImage(tileSize);
 }
 
 void main() {

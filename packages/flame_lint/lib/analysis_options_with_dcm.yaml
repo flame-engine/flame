@@ -8,5 +8,8 @@ dart_code_metrics:
     - avoid-cascade-after-if-null
     - avoid-collection-methods-with-unrelated-types
     - avoid-throw-in-catch-block
+    - avoid-top-level-members-in-tests:
+        include:
+          - 'test/**/*_test.dart'
   # flutter rules
     - prefer-define-hero-tag

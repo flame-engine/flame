@@ -10,7 +10,7 @@ void main() {
   group('Component', () {
     group('Lifecycle', () {
       testWithFlameGame('correct order', (game) async {
-        final component = LifecycleComponent();
+        final component = _LifecycleComponent();
         await game.world.add(component);
         await game.ready();
 
@@ -21,7 +21,7 @@ void main() {
       });
 
       testWithFlameGame('component mounted completes', (game) async {
-        final component = LifecycleComponent();
+        final component = _LifecycleComponent();
         final mounted = component.mounted;
         await game.world.add(component);
         await game.ready();
@@ -33,7 +33,7 @@ void main() {
       testWithFlameGame(
         'component.removed completes if obtained before the game was ready',
         (game) async {
-          final component = LifecycleComponent();
+          final component = _LifecycleComponent();
           final removed = component.removed;
           await game.world.add(component);
           await game.ready();
@@ -48,7 +48,7 @@ void main() {
       testWithFlameGame(
         'component removed completes when set after game is ready',
         (game) async {
-          final component = LifecycleComponent();
+          final component = _LifecycleComponent();
           await game.world.add(component);
           await game.ready();
           final removed = component.removed;
@@ -62,8 +62,8 @@ void main() {
       testWithFlameGame(
         'component removed completes after changing parent',
         (game) async {
-          final parent = LifecycleComponent('parent')..addToParent(game);
-          final child = LifecycleComponent('child')..addToParent(parent);
+          final parent = _LifecycleComponent('parent')..addToParent(game);
+          final child = _LifecycleComponent('child')..addToParent(parent);
           await game.ready();
           final removed = child.removed;
 
@@ -80,8 +80,8 @@ void main() {
 
       testWithFlameGame('remove parent of child that has removed set',
           (game) async {
-        final parent = LifecycleComponent('parent')..addToParent(game);
-        final child = LifecycleComponent('child')..addToParent(parent);
+        final parent = _LifecycleComponent('parent')..addToParent(game);
+        final child = _LifecycleComponent('child')..addToParent(parent);
         await game.ready();
         final removed = child.removed;
 
@@ -94,8 +94,8 @@ void main() {
       testWithFlameGame(
         'component mounted completes when changing parent',
         (game) async {
-          final parent = LifecycleComponent('parent');
-          final child = LifecycleComponent('child');
+          final parent = _LifecycleComponent('parent');
+          final child = _LifecycleComponent('child');
           parent.add(child);
           game.world.add(parent);
 
@@ -116,8 +116,8 @@ void main() {
       testWithFlameGame(
         'component mounted completes when changing parent from a null parent',
         (game) async {
-          final parent = LifecycleComponent('parent');
-          final child = LifecycleComponent('child');
+          final parent = _LifecycleComponent('parent');
+          final child = _LifecycleComponent('child');
           game.world.add(parent);
 
           final mounted = child.mounted;
@@ -136,7 +136,7 @@ void main() {
       testWithFlameGame(
         'Component.mounted completes after the component is mounted',
         (game) async {
-          final child = LifecycleComponent();
+          final child = _LifecycleComponent();
           var mountedFutureCompleted = false;
           final future = child.mounted.then((_) {
             expect(child.isMounted, true);
@@ -152,7 +152,7 @@ void main() {
       );
 
       testWithFlameGame('component loaded completes', (game) async {
-        final component = LifecycleComponent();
+        final component = _LifecycleComponent();
         await game.world.add(component);
         final loaded = component.loaded;
 
@@ -174,8 +174,8 @@ void main() {
       );
 
       testWithFlameGame('correct lifecycle on parent change', (game) async {
-        final parent = LifecycleComponent('parent');
-        final child = LifecycleComponent('child');
+        final parent = _LifecycleComponent('parent');
+        final child = _LifecycleComponent('child');
         parent.add(child);
         game.world.add(parent);
         await game.ready();
@@ -205,10 +205,10 @@ void main() {
       testWithFlameGame(
         'components added in correct order even with different load times',
         (game) async {
-          final a = SlowComponent('A', 0.1);
-          final b = SlowComponent('B', 0.02);
-          final c = SlowComponent('C', 0.05);
-          final d = SlowComponent('D', 0);
+          final a = _SlowComponent('A', 0.1);
+          final b = _SlowComponent('B', 0.02);
+          final c = _SlowComponent('C', 0.05);
+          final d = _SlowComponent('D', 0);
           game.world.add(a);
           game.world.add(b);
           game.world.add(c);
@@ -232,8 +232,8 @@ void main() {
               ],
             ),
           );
-          final component1 = LifecycleComponent('A')..addToParent(game1);
-          final component2 = LifecycleComponent('B')..addToParent(game2);
+          final component1 = _LifecycleComponent('A')..addToParent(game1);
+          final component2 = _LifecycleComponent('B')..addToParent(game2);
           await game1.ready();
           await game2.ready();
           expect(
@@ -250,8 +250,8 @@ void main() {
       testWithFlameGame(
         'Remove and re-add component with children',
         (game) async {
-          final parent = LifecycleComponent('parent');
-          final child = LifecycleComponent('child')..addToParent(parent);
+          final parent = _LifecycleComponent('parent');
+          final child = _LifecycleComponent('child')..addToParent(parent);
           await game.world.add(parent);
           await game.ready();
 
@@ -283,7 +283,7 @@ void main() {
       _myDetachableGame(open: false).testGameWidget(
         'Confirm child component only loads once with game widget change',
         verify: (game, tester) async {
-          final child = LifecycleComponent();
+          final child = _LifecycleComponent();
           expect(game.onAttachCalled, false);
           expect(game.isLoaded, false);
           expect(game.isMounted, false);
@@ -376,7 +376,7 @@ void main() {
       testWithFlameGame('children in the constructor', (game) async {
         game.world.add(
           Component(
-            children: [ComponentA(), ComponentB()],
+            children: [_ComponentA(), _ComponentB()],
           ),
         );
         await game.ready();
@@ -385,11 +385,11 @@ void main() {
         expect(game.world.children.first.children.length, 2);
         expect(
           game.world.children.first.children.elementAt(0),
-          isA<ComponentA>(),
+          isA<_ComponentA>(),
         );
         expect(
           game.world.children.first.children.elementAt(1),
-          isA<ComponentB>(),
+          isA<_ComponentB>(),
         );
       });
 
@@ -491,8 +491,8 @@ void main() {
       );
 
       testWithFlameGame('children in constructor and onLoad', (game) async {
-        final component = TwoChildrenComponent(
-          children: [ComponentA(), ComponentB()],
+        final component = _TwoChildrenComponent(
+          children: [_ComponentA(), _ComponentB()],
         );
         game.world.add(component);
         await game.ready();
@@ -500,8 +500,8 @@ void main() {
         expect(game.world.children.length, 1);
         expect(game.world.children.first, component);
         expect(component.children.length, 4);
-        expect(component.children.elementAt(0), isA<ComponentA>());
-        expect(component.children.elementAt(1), isA<ComponentB>());
+        expect(component.children.elementAt(0), isA<_ComponentA>());
+        expect(component.children.elementAt(1), isA<_ComponentB>());
         expect(component.children.elementAt(2), component.child1);
         expect(component.children.elementAt(3), component.child2);
       });
@@ -522,7 +522,7 @@ void main() {
       testWithFlameGame(
         'game resize while components are being added',
         (game) async {
-          final component = ComponentWithSizeHistory();
+          final component = _ComponentWithSizeHistory();
           game.world.add(component);
           expect(component.history, isEmpty);
           expect(component.isLoading, false);
@@ -614,7 +614,7 @@ void main() {
       testWithFlameGame(
         'remove and re-add should not double trigger onRemove',
         (game) async {
-          final component = LifecycleComponent();
+          final component = _LifecycleComponent();
           await game.ensureAdd(component);
 
           component.removeFromParent();
@@ -706,7 +706,7 @@ void main() {
       testWithFlameGame(
         'remove component immediately after adding',
         (game) async {
-          final component = LifecycleComponent();
+          final component = _LifecycleComponent();
           game.world.add(component);
           expect(component.isLoading, true);
           expect(component.isLoaded, false);
@@ -765,7 +765,7 @@ void main() {
       testWithFlameGame(
         'Quickly removed component can be re-added',
         (game) async {
-          final component = LifecycleComponent();
+          final component = _LifecycleComponent();
           game.world.add(component);
           game.world.remove(component);
           await game.ready();
@@ -1003,14 +1003,14 @@ void main() {
       );
 
       testWithFlameGame('descendants() iterator is lazy', (game) async {
-        final componentA = Visitor()..addToParent(game);
-        final componentB = Visitor()..addToParent(game);
-        final componentC = Visitor()..addToParent(componentB);
-        final componentD = Visitor()..addToParent(componentB);
-        final componentE = Visitor()..addToParent(game);
+        final componentA = _Visitor()..addToParent(game);
+        final componentB = _Visitor()..addToParent(game);
+        final componentC = _Visitor()..addToParent(componentB);
+        final componentD = _Visitor()..addToParent(componentB);
+        final componentE = _Visitor()..addToParent(game);
         await game.ready();
 
-        game.descendants().whereType<Visitor>().firstWhere((component) {
+        game.descendants().whereType<_Visitor>().firstWhere((component) {
           component.visited = true;
           return component == componentC;
         });
@@ -1024,19 +1024,19 @@ void main() {
       testWithFlameGame(
         'firstChild returns the first child on the matching type',
         (game) async {
-          final firstA = ComponentA();
-          final firstB = ComponentB();
+          final firstA = _ComponentA();
+          final firstB = _ComponentB();
 
           await game.ensureAdd(firstA);
-          await game.ensureAdd(ComponentA());
+          await game.ensureAdd(_ComponentA());
           await game.ensureAdd(firstB);
-          await game.ensureAdd(ComponentB());
+          await game.ensureAdd(_ComponentB());
 
-          final childA = game.firstChild<ComponentA>();
+          final childA = game.firstChild<_ComponentA>();
           expect(childA, isNotNull);
           expect(childA, equals(firstA));
 
-          final childB = game.firstChild<ComponentB>();
+          final childB = game.firstChild<_ComponentB>();
           expect(childB, isNotNull);
           expect(childB, equals(firstB));
 
@@ -1048,19 +1048,19 @@ void main() {
       testWithFlameGame(
         'lastChild returns the last child on the matching type',
         (game) async {
-          final lastA = ComponentA();
-          final lastB = ComponentB();
+          final lastA = _ComponentA();
+          final lastB = _ComponentB();
 
-          await game.ensureAdd(ComponentA());
+          await game.ensureAdd(_ComponentA());
           await game.ensureAdd(lastA);
-          await game.ensureAdd(ComponentB());
+          await game.ensureAdd(_ComponentB());
           await game.ensureAdd(lastB);
 
-          final childA = game.lastChild<ComponentA>();
+          final childA = game.lastChild<_ComponentA>();
           expect(childA, isNotNull);
           expect(childA, equals(lastA));
 
-          final childB = game.lastChild<ComponentB>();
+          final childB = game.lastChild<_ComponentB>();
           expect(childB, isNotNull);
           expect(childB, equals(lastB));
 
@@ -1271,17 +1271,17 @@ void main() {
       testWithFlameGame(
         'propagateToChildren visits children in the correct order',
         (game) async {
-          final component1 = IntComponent()..addToParent(game.world);
-          final component2 = IntComponent()..addToParent(game.world);
-          final component3 = IntComponent()..addToParent(component2);
-          final component4 = IntComponent()..addToParent(component2);
+          final component1 = _IntComponent()..addToParent(game.world);
+          final component2 = _IntComponent()..addToParent(game.world);
+          final component3 = _IntComponent()..addToParent(component2);
+          final component4 = _IntComponent()..addToParent(component2);
           await game.ready();
 
           var order = 0;
           game.world.propagateToChildren(
             (component) {
               order += 1;
-              if (component is IntComponent) {
+              if (component is _IntComponent) {
                 expect(component.value, 0);
                 component.value = order;
               } else {
@@ -1326,7 +1326,7 @@ void main() {
       testWithFlameGame(
         'Components can be retrieved via a named key',
         (game) async {
-          final component = ComponentA(key: ComponentKey.named('A'));
+          final component = _ComponentA(key: ComponentKey.named('A'));
           game.world.add(component);
           await game.ready();
 
@@ -1342,8 +1342,8 @@ void main() {
         (game) async {
           final key1 = ComponentKey.unique();
           final key2 = ComponentKey.unique();
-          final component1 = ComponentA(key: key1);
-          final component2 = ComponentA(key: key2);
+          final component1 = _ComponentA(key: key1);
+          final component2 = _ComponentA(key: key2);
 
           game.world.add(component1);
           game.world.add(component2);
@@ -1364,7 +1364,7 @@ void main() {
       testWithFlameGame(
         'Components can be retrieved via their name',
         (game) async {
-          final component = ComponentA(key: ComponentKey.named('A'));
+          final component = _ComponentA(key: ComponentKey.named('A'));
           game.world.add(component);
           await game.ready();
 
@@ -1386,7 +1386,7 @@ void main() {
         'findByKey returns null when the component is removed',
         (game) async {
           final key = ComponentKey.unique();
-          final component = ComponentA(key: key);
+          final component = _ComponentA(key: key);
 
           game.world.add(component);
           await game.ready();
@@ -1406,7 +1406,7 @@ void main() {
         'Removed keys can be reused by components',
         (game) async {
           final key = ComponentKey.named('A');
-          final parent1 = Component(children: [ComponentA(key: key)]);
+          final parent1 = Component(children: [_ComponentA(key: key)]);
 
           game.world.add(parent1);
           await game.ready();
@@ -1414,7 +1414,7 @@ void main() {
           parent1.removeFromParent();
           await game.ready();
 
-          final component = ComponentA(key: key);
+          final component = _ComponentA(key: key);
           final parent2 = Component(children: [component]);
 
           game.world.add(parent2);
@@ -1428,8 +1428,8 @@ void main() {
       testWithFlameGame(
         'Throws assertion error when registering a component with the same key',
         (game) async {
-          final component = ComponentA(key: ComponentKey.named('A'));
-          final component2 = ComponentA(key: ComponentKey.named('A'));
+          final component = _ComponentA(key: ComponentKey.named('A'));
+          final component2 = _ComponentA(key: ComponentKey.named('A'));
 
           game.world.add(component);
           game.world.add(component2);
@@ -1450,15 +1450,15 @@ void main() {
   });
 }
 
-class ComponentA extends Component {
-  ComponentA({super.key});
+class _ComponentA extends Component {
+  _ComponentA({super.key});
 }
 
-class ComponentB extends Component {
-  ComponentB({super.key});
+class _ComponentB extends Component {
+  _ComponentB();
 }
 
-class ComponentWithSizeHistory extends Component {
+class _ComponentWithSizeHistory extends Component {
   List<Vector2> history = [];
 
   @override
@@ -1468,16 +1468,16 @@ class ComponentWithSizeHistory extends Component {
   }
 }
 
-class Visitor extends Component {
+class _Visitor extends Component {
   bool visited = false;
 }
 
-class IntComponent extends Component {
+class _IntComponent extends Component {
   int value = 0;
 }
 
-class TwoChildrenComponent extends Component {
-  TwoChildrenComponent({super.children});
+class _TwoChildrenComponent extends Component {
+  _TwoChildrenComponent({super.children});
 
   late final Component child1;
   late final Component child2;
@@ -1491,11 +1491,11 @@ class TwoChildrenComponent extends Component {
   }
 }
 
-class LifecycleComponent extends Component {
+class _LifecycleComponent extends Component {
   final List<String> events = [];
   final String name;
 
-  LifecycleComponent([this.name = '']);
+  _LifecycleComponent([this.name = '']);
 
   int countEvents(String event) {
     return events.where((e) => e == event).length;
@@ -1547,8 +1547,8 @@ class _SlowLoadingComponent extends Component {
   }
 }
 
-class SlowComponent extends Component {
-  SlowComponent(this.name, this.loadTime);
+class _SlowComponent extends Component {
+  _SlowComponent(this.name, this.loadTime);
   final double loadTime;
   final String name;
 

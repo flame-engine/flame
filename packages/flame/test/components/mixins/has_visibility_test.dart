@@ -12,7 +12,7 @@ void main() {
     testGolden(
       'Render a Component with isVisible set to false',
       (game) async {
-        game.add(MyComponent()..mySprite.isVisible = false);
+        game.add(_MyComponent()..mySprite.isVisible = false);
       },
       size: Vector2(300, 400),
       goldenFile: '../../_goldens/visibility_test_1.png',
@@ -20,7 +20,7 @@ void main() {
   });
 }
 
-class MySpriteComponent extends PositionComponent with HasVisibility {
+class _MySpriteComponent extends PositionComponent with HasVisibility {
   late final Sprite sprite;
 
   @override
@@ -34,16 +34,16 @@ class MySpriteComponent extends PositionComponent with HasVisibility {
   }
 }
 
-/// This component contains a [MySpriteComponent]. It first
+/// This component contains a [_MySpriteComponent]. It first
 /// renders a rectangle, and then the children will render.
 /// In this test the visibility of [mySprite] is set to
 /// false, so only the rectangle is expected to be rendered.
-class MyComponent extends PositionComponent {
-  MyComponent() : super(size: Vector2(300, 400)) {
-    mySprite = MySpriteComponent()..position = Vector2(150, 200);
+class _MyComponent extends PositionComponent {
+  _MyComponent() : super(size: Vector2(300, 400)) {
+    mySprite = _MySpriteComponent()..position = Vector2(150, 200);
     add(mySprite);
   }
-  late final MySpriteComponent mySprite;
+  late final _MySpriteComponent mySprite;
 
   @override
   void render(Canvas canvas) {

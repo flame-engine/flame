@@ -36,7 +36,7 @@ void main() {
         initialRoute: 'start',
         routes: {
           'start': Route(Component.new),
-          'new': CustomRoute(
+          'new': _CustomRoute(
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
@@ -81,7 +81,7 @@ void main() {
         initialRoute: 'start',
         routes: {
           'start': Route(Component.new),
-          'first': CustomRoute(
+          'first': _CustomRoute(
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
@@ -95,7 +95,7 @@ void main() {
               return PositionComponent();
             },
           ),
-          'second': CustomRoute(
+          'second': _CustomRoute(
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
@@ -169,7 +169,7 @@ void main() {
         initialRoute: 'start',
         routes: {
           'start': Route(Component.new),
-          'first': CustomRoute(
+          'first': _CustomRoute(
             maintainState: false,
             onPush: (self, prevRoute) {
               onPushCalled++;
@@ -184,7 +184,7 @@ void main() {
               return PositionComponent();
             },
           ),
-          'second': CustomRoute(
+          'second': _CustomRoute(
             onPush: (self, prevRoute) {
               onPushCalled++;
               previousRoute = prevRoute;
@@ -257,7 +257,7 @@ void main() {
         initialRoute: 'start',
         routes: {
           'start': Route(_TimerComponent.new),
-          'pause': CustomRoute(
+          'pause': _CustomRoute(
             builder: Component.new,
             onPush: (self, route) => route?.stopTime(),
             onPop: (self, route) => route.resumeTime(),
@@ -362,7 +362,7 @@ void main() {
                 size: Vector2.all(100),
               ),
             ),
-            'green': CustomRoute(
+            'green': _CustomRoute(
               builder: () => _ColoredComponent(
                 color: const Color(0x8800FF00),
                 position: Vector2.all(10),
@@ -394,7 +394,7 @@ void main() {
                 size: Vector2.all(100),
               ),
             ),
-            'green': CustomRoute(
+            'green': _CustomRoute(
               builder: () => _ColoredComponent(
                 color: const Color(0x8800FF00),
                 position: Vector2.all(10),
@@ -515,8 +515,8 @@ void main() {
   });
 }
 
-class CustomRoute extends Route {
-  CustomRoute({
+class _CustomRoute extends Route {
+  _CustomRoute({
     Component Function()? builder,
     super.transparent,
     super.maintainState,

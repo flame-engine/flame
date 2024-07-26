@@ -35,11 +35,11 @@ void main() {
 class _CustomTextRenderer extends TextRenderer {
   @override
   InlineTextElement format(String text) {
-    return CustomTextElement();
+    return _CustomTextElement();
   }
 }
 
-class CustomTextElement extends InlineTextElement {
+class _CustomTextElement extends InlineTextElement {
   @override
   LineMetrics get metrics => LineMetrics();
 

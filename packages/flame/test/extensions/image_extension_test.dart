@@ -7,7 +7,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final output = List.filled(8 * 8 * 4, 255);
+final _output = List.filled(8 * 8 * 4, 255);
 
 void main() {
   group('ImageExtension', () {
@@ -22,7 +22,7 @@ void main() {
       final image = await ImageExtension.fromPixels(data, 8, 8);
       final bytes = await image.toByteData();
 
-      expect(bytes!.buffer.asUint8List(), equals(output));
+      expect(bytes!.buffer.asUint8List(), equals(_output));
     });
 
     test('pixelsInUint8', () async {
@@ -34,7 +34,7 @@ void main() {
         data[i + 3] = 255;
       }
       final image = await ImageExtension.fromPixels(data, 8, 8);
-      expect(await image.pixelsInUint8(), equals(output));
+      expect(await image.pixelsInUint8(), equals(_output));
     });
 
     testRandom('getBoundingRect', (Random r) async {
