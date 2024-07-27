@@ -11,5 +11,7 @@ dart_code_metrics:
     - avoid-top-level-members-in-tests:
         include:
           - 'test/**/*_test.dart'
+    - avoid-unrelated-type-assertions:
+      ignore-mixins: true
   # flutter rules
     - prefer-define-hero-tag
