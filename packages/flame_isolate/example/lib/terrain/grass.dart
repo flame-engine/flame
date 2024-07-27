@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class Grass extends PositionComponent with Terrain {
   static final _color = Paint()..color = const Color(0xff567d46);
-  static final _debugColor = Paint()..color = Colors.black.withOpacity(.5);
+  static final _debugColor = Paint()..color = Colors.black.withOpacity(0.5);
 
   late final _rect = size.toRect();
   late final _rect2 = Rect.fromCenter(

@@ -52,7 +52,7 @@ class Player extends SpriteAnimationComponent
       'player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: .2,
+        stepTime: 0.2,
         textureSize: Vector2(32, 48),
       ),
     );

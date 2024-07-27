@@ -969,27 +969,27 @@ void main() {
 
           final waterAnimation = layer.animations.first;
           final spikeAnimation = layer.animations.last;
-          expect(waterAnimation.frames.durations, [.18, .17, .15]);
-          expect(spikeAnimation.frames.durations, [.176, .176, .176, .176]);
+          expect(waterAnimation.frames.durations, [0.18, 0.17, 0.15]);
+          expect(spikeAnimation.frames.durations, [0.176, 0.176, 0.176, 0.176]);
 
-          map.update(.177);
+          map.update(0.177);
           expect(waterAnimation.frame, 0);
-          expect(waterAnimation.frames.frameTime, .177);
+          expect(waterAnimation.frames.frameTime, 0.177);
           expect(
             waterAnimation.batchedSource.toRect(),
             waterAnimation.frames.sources[0],
           );
 
           expect(spikeAnimation.frame, 1);
-          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(.001));
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.001));
           expect(
             spikeAnimation.batchedSource.toRect(),
             spikeAnimation.frames.sources[1],
           );
 
-          map.update(.003);
+          map.update(0.003);
           expect(waterAnimation.frame, 1);
-          expect(waterAnimation.frames.frameTime, moreOrLessEquals(.0));
+          expect(waterAnimation.frames.frameTime, moreOrLessEquals(0.0));
           expect(spikeAnimation.frame, 1);
           expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
 

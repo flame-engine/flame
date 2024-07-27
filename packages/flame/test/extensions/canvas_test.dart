@@ -47,7 +47,7 @@ void main() {
         ' and then restores', () {
       final canvas = _MocktailCanvas();
       when(canvas.save).thenReturn(null);
-      when(() => canvas.rotate(.5)).thenReturn(null);
+      when(() => canvas.rotate(0.5)).thenReturn(null);
       when(() => canvas.translateVector(Vector2(1, 1))).thenReturn(null);
       when(() => canvas.translateVector(Vector2(-1, -1))).thenReturn(null);
       when(canvas.restore).thenReturn(null);
@@ -57,7 +57,7 @@ void main() {
       canvas.renderRotated(0.5, Vector2(1, 1), drawFunction.call);
       verify(canvas.save).called(1);
       verify(() => canvas.translateVector(Vector2(1, 1))).called(1);
-      verify(() => canvas.rotate(.5)).called(1);
+      verify(() => canvas.rotate(0.5)).called(1);
       verify(() => drawFunction(canvas)).called(1);
       verify(() => canvas.translateVector(Vector2(-1, -1))).called(1);
       verify(canvas.restore).called(1);

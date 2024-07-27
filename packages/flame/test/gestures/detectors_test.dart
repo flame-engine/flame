@@ -556,7 +556,7 @@ void main() {
         game.handleForcePressStart(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .4,
+            pressure: 0.4,
           ),
         );
 
@@ -573,7 +573,7 @@ void main() {
         game.handleForcePressUpdate(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .7,
+            pressure: 0.7,
           ),
         );
 
@@ -590,7 +590,7 @@ void main() {
         game.handleForcePressPeak(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .9,
+            pressure: 0.9,
           ),
         );
 
@@ -607,7 +607,7 @@ void main() {
         game.handleForcePressEnd(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .2,
+            pressure: 0.2,
           ),
         );
         expect(game.forcePressEnded, equals(1));
