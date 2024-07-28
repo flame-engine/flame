@@ -22,7 +22,8 @@ class EllipseComponent extends ShapeComponent implements SizeProvider {
   }) : super(size: Vector2(width ?? 0, height ?? 0));
 
   /// Constructor to create an [EllipseComponent] relative to the parent size.
-  /// The width and height are determined by [widthRelation] and [heightRelation]
+  /// The width and height are determined by
+  /// [widthRelation] and [heightRelation]
   /// which are fractions of the parent's width and height.
   EllipseComponent.relative(
     double widthRelation,
@@ -54,26 +55,31 @@ class EllipseComponent extends ShapeComponent implements SizeProvider {
   late Offset _centerOffset;
 
   /// Get the width of the ellipse before scaling.
+  @override
   double get width {
     return size.x;
   }
 
   /// Set the width of the ellipse (and therefore the [size]).
+  @override
   set width(double value) {
     size.setValues(value, size.y);
   }
 
   /// Get the height of the ellipse before scaling.
+  @override
   double get height {
     return size.y;
   }
 
   /// Set the height of the ellipse (and therefore the [size]).
+  @override
   set height(double value) {
     size.setValues(size.x, value);
   }
 
-  // Used to not create new Vector2 objects every time scaledWidth or scaledHeight is called.
+  // Used to not create new Vector2 objects
+  // every time scaledWidth or scaledHeight is called.
   final Vector2 _scaledSize = Vector2.zero();
 
   /// Get the width of the ellipse after it has been sized and scaled.
