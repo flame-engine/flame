@@ -5,7 +5,7 @@ import 'package:flame_3d/game.dart';
 
 class RotatingLight extends LightComponent {
   RotatingLight()
-      : super.spot(
+      : super.point(
           position: Vector3.zero(),
         );
 

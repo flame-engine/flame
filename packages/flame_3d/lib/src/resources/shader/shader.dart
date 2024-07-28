@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:typed_data';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
@@ -35,6 +36,11 @@ class Shader extends Resource<gpu.Shader> {
 
   /// Set a [Vector4] at the given [key] on the buffer.
   void setVector4(String key, Vector4 vector) => _setValue(key, vector.storage);
+
+  /// Set an [int] (encoded as uint) at the given [key] on the buffer.
+  void setUInt(String key, int value) {
+    _setValue(key, _encodeUint32(value, Endian.little));
+  }
 
   /// Set a [double] at the given [key] on the buffer.
   void setFloat(String key, double value) => _setValue(key, [value]);
@@ -90,5 +96,9 @@ class Shader extends Resource<gpu.Shader> {
     }
 
     return (_instances[keys.first], keys.elementAtOrNull(1)) as (T, String?);
+  }
+
+  static List<double> _encodeUint32(int value, Endian endian) {
+    return (ByteData(4)..setUint32(0, value, endian)).buffer.asFloat32List();
   }
 }

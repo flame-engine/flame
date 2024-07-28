@@ -5,6 +5,7 @@ import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d/src/camera/world_config.dart';
 import 'package:flutter/widgets.dart' show MediaQuery;
 import 'package:meta/meta.dart';
 
@@ -15,12 +16,16 @@ import 'package:meta/meta.dart';
 /// render directly to a [GraphicsDevice] instead of the regular rendering.
 /// {@endtemplate}
 class World3D extends flame.World with flame.HasGameReference {
+  final WorldConfig config;
+
   /// {@macro world_3d}
   World3D({
     super.children,
     super.priority,
     Color clearColor = const Color(0x00000000),
-  }) : device = GraphicsDevice(clearValue: clearColor) {
+    WorldConfig? config,
+  })  : device = GraphicsDevice(clearValue: clearColor),
+        config = config ?? WorldConfig() {
     children.register<LightComponent>();
   }
 
@@ -70,7 +75,8 @@ class World3D extends flame.World with flame.HasGameReference {
   }
 
   void _prepareDevice() {
-    device.lights = lights;
+    device.lightingInfo.ambient = config.ambientLight;
+    device.lightingInfo.lights = lights;
   }
 
   // TODO(wolfenrain): this is only here for testing purposes
