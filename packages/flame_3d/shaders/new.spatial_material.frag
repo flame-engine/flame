@@ -21,20 +21,20 @@ uniform Material {
 
 // light info
 
-uniform AmbientLight {
-  vec3 color;
-  float intensity;
-} ambientLight;
+// uniform AmbientLight {
+//   vec3 color;
+//   float intensity;
+// } ambientLight;
 
-uniform LightsInfo {
-  uint numLights;
-} lightsInfo;
+// uniform LightsInfo {
+//   float numLights;
+// } lightsInfo;
 
-uniform Light {
-  vec3 position;
-  vec3 color;
-  float intensity;
-} lights[NUM_LIGHTS];
+// uniform Light {
+//   vec3 position;
+//   vec3 color;
+//   float intensity;
+// } lights [NUM_LIGHTS];
 
 // camera info
 
@@ -57,16 +57,16 @@ void main() {
   vec3 baseColor = material.albedoColor;
   baseColor *= texture(albedoTexture, fragTexCoord).rgb;
 
-  vec3 finalColor = baseColor * ambientLight.color * ambientLight.intensity;
+  vec3 finalColor = baseColor; //  * ambientLight.color * ambientLight.intensity;
 
-  for(uint i = 0; i < lightsInfo.numLights; ++i) {
-    vec3 lightPos = lights[i].position;
-    float lightIntensity = lights[i].intensity;
-    vec3 lightColor = lights[i].color;
+  for (uint i = 0; i < 1; ++i) {
+    vec3 lightPos = vec3(0); // lights[i].position;
+    float lightIntensity = 0.5; // lights[i].intensity;
+    vec3 lightColor = vec3(0, 0.5, 0.2); // lights[i].color
 
     vec3 lightDir = normalize(lightPos - fragPosition);
     float distance = length(lightPos - fragPosition);
-    float attenuation = lightIntensity / (distance * distance);
+    float attenuation = 0 * lightIntensity / (distance * distance);
 
     vec3 halfwayDir = normalize(viewDir + lightDir);
 
@@ -78,7 +78,7 @@ void main() {
     float specular = SchlickGGX(NdotL, material.roughness).x * SchlickGGX(NdotH, material.roughness).x;
 
     vec3 diffuse = mix(baseColor, vec3(0.04, 0.04, 0.04), material.metallic);
-    vec3 lightContribution = (diffuse + specular * material.metallic) * NdotL * fresnel; //  * lightColor * attenuation;
+    vec3 lightContribution = (diffuse + specular * material.metallic) * NdotL * fresnel * lightColor * attenuation;
 
     finalColor += lightContribution;
   }

@@ -50,7 +50,7 @@ class GraphicsDevice {
 
   /// Must be set by the rendering pipeline before elements are bound.
   /// Can be accessed by elements in their bind method.
-  Iterable<Light> lights = [];
+  final LightingInfo lightingInfo = LightingInfo();
 
   /// Begin a new rendering batch.
   ///

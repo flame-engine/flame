@@ -38,6 +38,12 @@ class ExampleGame3D extends FlameGame<World3D>
     world.addAll([
       RotatingLight(),
 
+      LightComponent.point(
+        position: Vector3(0, 10, 0),
+        color: const Color(0xFFFF00FF),
+        intensity: 1.0,
+      ),
+
       // Add a player box
       PlayerBox(),
 
