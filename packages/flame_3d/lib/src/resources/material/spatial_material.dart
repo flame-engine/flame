@@ -9,8 +9,8 @@ class SpatialMaterial extends Material {
   SpatialMaterial({
     Texture? albedoTexture,
     Color albedoColor = const Color(0xFFFFFFFF),
-    this.metallic = 0,
-    this.roughness = 1.0,
+    this.metallic = 0.8,
+    this.roughness = 0.6,
   })  : albedoTexture = albedoTexture ?? Texture.standard,
         super(
           vertexShader: Shader(

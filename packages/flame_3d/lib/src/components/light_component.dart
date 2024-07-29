@@ -15,7 +15,7 @@ class LightComponent extends Component3D {
   LightComponent.point({
     Vector3? position,
     Color color = const Color(0xFFFFFFFF),
-    double intensity = 0.5,
+    double intensity = 100.0,
   }) : this(
           source: PointLight(
             color: color,
