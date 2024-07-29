@@ -98,27 +98,27 @@ class EllipseComponent extends ShapeComponent implements SizeProvider {
     return _scaledSize.y;
   }
 
+  Rect _getRect() {
+    return Rect.fromCenter(
+      center: _centerOffset,
+      width: scaledWidth,
+      height: scaledHeight,
+    );
+  }
+
   @override
   void render(Canvas canvas) {
     if (renderShape) {
       if (hasPaintLayers) {
         for (final paint in paintLayers) {
           canvas.drawOval(
-            Rect.fromCenter(
-              center: _centerOffset,
-              width: scaledWidth,
-              height: scaledHeight,
-            ),
+            _getRect(),
             paint,
           );
         }
       } else {
         canvas.drawOval(
-          Rect.fromCenter(
-            center: _centerOffset,
-            width: scaledWidth,
-            height: scaledHeight,
-          ),
+          _getRect(),
           paint,
         );
       }
@@ -129,11 +129,7 @@ class EllipseComponent extends ShapeComponent implements SizeProvider {
   void renderDebugMode(Canvas canvas) {
     super.renderDebugMode(canvas);
     canvas.drawOval(
-      Rect.fromCenter(
-        center: _centerOffset,
-        width: scaledWidth,
-        height: scaledHeight,
-      ),
+      _getRect(),
       debugPaint,
     );
   }
