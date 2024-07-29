@@ -1,7 +1,7 @@
 name: flame_fire_atlas
 description: Easy to use texture atlases for the flame engine created with the
   fire atlas editor
-version: 1.5.2
+version: 1.5.3
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas
 funding:
   - https://opencollective.com/blue-fire
