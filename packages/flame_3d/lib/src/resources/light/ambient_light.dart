@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame_3d/core.dart';
 import 'package:flame_3d/resources.dart';
 
 class AmbientLight {
@@ -9,11 +8,11 @@ class AmbientLight {
 
   AmbientLight({
     this.color = const Color(0xFFFFFFFF),
-    this.intensity = 0.1,
-  }) : assert(intensity >= 0 && intensity <= 1);
+    this.intensity = 1.0,
+  });
 
   void apply(Shader shader) {
-    shader.setVector3('AmbientLight.color', color.toVector3());
+    shader.setColor('AmbientLight.color', color);
     shader.setFloat('AmbientLight.intensity', intensity);
   }
 }
