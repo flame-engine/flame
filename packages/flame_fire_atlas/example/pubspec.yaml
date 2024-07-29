@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   flame: ^1.18.0
-  flame_fire_atlas: ^1.5.2
+  flame_fire_atlas: ^1.5.3
   flutter:
     sdk: flutter
 

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-07-29
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_fire_atlas` - `v1.5.3`](#flame_fire_atlas---v153)
+
+---
+
+#### `flame_fire_atlas` - `v1.5.3`
+
+ - **FEAT**: Adding group to flame fire atlas ([#3245](https://github.com/flame-engine/flame/issues/3245)). ([0fab444c](https://github.com/flame-engine/flame/commit/0fab444c3dd9ad8faa1e0e9e702150b950dbf30f))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+
 ## 2024-05-27
 
 ### Changes

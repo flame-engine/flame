@@ -13,5 +13,7 @@ dart_code_metrics:
           - 'test/**/*_test.dart'
     - avoid-unrelated-type-assertions:
       ignore-mixins: true
+    - avoid-unnecessary-type-assertions:
+      ignore-mixins: true
   # flutter rules
     - prefer-define-hero-tag
