@@ -15,5 +15,6 @@ dart_code_metrics:
       ignore-mixins: true
     - avoid-unnecessary-type-assertions:
       ignore-mixins: true
+    - double-literal-format
   # flutter rules
     - prefer-define-hero-tag

@@ -23,7 +23,7 @@ class WaterEnemy extends SpriteAnimationComponent
       SpriteAnimationData.sequenced(
         amount: 2,
         textureSize: Vector2.all(16),
-        stepTime: 0.70,
+        stepTime: 0.7,
       ),
     );
     position = Vector2(

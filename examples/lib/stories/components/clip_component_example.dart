@@ -22,7 +22,7 @@ class _Rectangle extends RectangleComponent {
           children: [
             RotateEffect.by(
               pi * 2,
-              EffectController(duration: .4, infinite: true),
+              EffectController(duration: 0.4, infinite: true),
             ),
           ],
         );

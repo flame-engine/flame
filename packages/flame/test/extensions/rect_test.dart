@@ -81,9 +81,9 @@ void main() {
       // create points left, above, right and under
 
       // y position [0, 1] but left to rect's left
-      final left = Vector2(-.5, r.nextDouble() * 1);
+      final left = Vector2(-0.5, r.nextDouble() * 1);
       // x position [0, 1] but above rect's top
-      final above = Vector2(r.nextDouble() * 1, -.5);
+      final above = Vector2(r.nextDouble() * 1, -0.5);
       // y position [0, 1] but right to rect's right
       final right = Vector2(1.5, r.nextDouble() * 1);
       // x position [0, 1] but under rect's bottom
@@ -96,22 +96,22 @@ void main() {
       expect(rect.intersectsSegment(under, above), true);
 
       // above the rect and left to rect's left
-      final aboveLeft = Vector2(-.5, r.nextDouble() * 1 - 1);
+      final aboveLeft = Vector2(-0.5, r.nextDouble() * 1 - 1);
       // above the rect and left to rect's left
       final aboveRight = Vector2(1.5, r.nextDouble() * 1 - 1);
       // under the rect and right to rect's right
       final underRight = Vector2(1.5, r.nextDouble() * 1 + 1);
       // under the rect and left to rect's left
-      final underLeft = Vector2(-.5, r.nextDouble() * 1 + 1);
+      final underLeft = Vector2(-0.5, r.nextDouble() * 1 + 1);
       expect(rect.intersectsSegment(aboveLeft, aboveRight), false);
       expect(rect.intersectsSegment(aboveLeft, underLeft), false);
       expect(rect.intersectsSegment(underLeft, underRight), false);
       expect(rect.intersectsSegment(underRight, aboveRight), false);
 
       // any y position but left to rect's left
-      final nearLeft = Vector2(-.25, r.nextDouble() * 256);
+      final nearLeft = Vector2(-0.25, r.nextDouble() * 256);
       // any x position but above rect's top
-      final nearAbove = Vector2(r.nextDouble() * 256, -.25);
+      final nearAbove = Vector2(r.nextDouble() * 256, -0.25);
       // any y position but right to rect's right
       final nearRight = Vector2(1.25, r.nextDouble() * 256);
       // any x position but under rect's bottom

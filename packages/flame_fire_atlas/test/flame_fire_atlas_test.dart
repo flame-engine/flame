@@ -238,7 +238,7 @@ void main() {
         final animation = AnimationSelection.fromJson({
           'id': 'bomb_ptero',
           'frameCount': 1,
-          'stepTime': .2,
+          'stepTime': 0.2,
           'loop': true,
           'x': 0,
           'y': 0,
@@ -249,7 +249,7 @@ void main() {
 
         expect(animation.id, 'bomb_ptero');
         expect(animation.frameCount, 1);
-        expect(animation.stepTime, .2);
+        expect(animation.stepTime, 0.2);
         expect(animation.loop, isTrue);
         expect(animation.x, 0);
         expect(animation.y, 0);
@@ -268,14 +268,14 @@ void main() {
             h: 16,
           ),
           frameCount: 1,
-          stepTime: .2,
+          stepTime: 0.2,
           loop: true,
           group: 'enemies',
         );
         final json = animation.toJson();
         expect(json['id'], 'bomb_ptero');
         expect(json['frameCount'], 1);
-        expect(json['stepTime'], .2);
+        expect(json['stepTime'], 0.2);
         expect(json['loop'], isTrue);
         expect(json['x'], 0);
         expect(json['y'], 0);
@@ -295,7 +295,7 @@ void main() {
               h: 16,
             ),
             frameCount: 1,
-            stepTime: .2,
+            stepTime: 0.2,
             loop: true,
             group: 'enemies',
           );
@@ -304,7 +304,7 @@ void main() {
           expect(copy.group, 'new_group');
           expect(copy.id, 'bomb_ptero');
           expect(copy.frameCount, 1);
-          expect(copy.stepTime, .2);
+          expect(copy.stepTime, 0.2);
           expect(copy.loop, isTrue);
           expect(copy.x, 0);
           expect(copy.y, 0);

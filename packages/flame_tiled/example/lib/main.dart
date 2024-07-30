@@ -54,7 +54,7 @@ class TiledGame extends FlameGame {
             coins,
             SpriteAnimationData.sequenced(
               amount: 8,
-              stepTime: .15,
+              stepTime: 0.15,
               textureSize: Vector2.all(20),
             ),
           ),
