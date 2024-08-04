@@ -1,7 +1,8 @@
 import 'dart:typed_data';
+import 'dart:ui' show Color;
 
 import 'package:flame_3d/game.dart';
-import 'package:flutter/widgets.dart';
+import 'package:meta/meta.dart';
 
 /// {@template vertex}
 /// Represents a vertex in 3D space.
