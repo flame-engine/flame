@@ -1,7 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flame_3d/game.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 
 /// {@template notifying_vector_3}
 /// Extension of the standard [Vector3] class, implementing the [ChangeNotifier]

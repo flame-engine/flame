@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 
 // TODO(wolfenrain): in the long run it would be nice of we can make it
 // automatically refer to same type of objects to prevent memory leaks
