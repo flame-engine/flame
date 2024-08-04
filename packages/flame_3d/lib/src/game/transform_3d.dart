@@ -1,5 +1,5 @@
 import 'package:flame_3d/game.dart';
-import 'package:flutter/widgets.dart' show ChangeNotifier;
+import 'package:flutter/foundation.dart' show ChangeNotifier;
 
 /// {@template transform_3d}
 /// This class describes a generic 3D transform, which is a combination of
