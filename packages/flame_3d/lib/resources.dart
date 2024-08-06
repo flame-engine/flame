@@ -9,6 +9,7 @@ export 'src/resources/shader.dart';
 export 'src/resources/texture.dart';
 
 extension TextureCache on Images {
-  Future<Texture> loadTexture(String path) =>
-      load('crate.jpg').then(ImageTexture.create);
+  Future<Texture> loadTexture(String path) {
+    return load(path).then(ImageTexture.create);
+  }
 }
