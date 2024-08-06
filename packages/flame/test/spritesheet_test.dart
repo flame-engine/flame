@@ -5,11 +5,11 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockImage extends Mock implements Image {}
+class _MockImage extends Mock implements Image {}
 
 void main() {
   group('SpriteSheet', () {
-    late final Image image = MockImage();
+    late final Image image = _MockImage();
     when(() => image.width).thenReturn(100);
     when(() => image.height).thenReturn(100);
 

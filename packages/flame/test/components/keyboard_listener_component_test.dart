@@ -7,9 +7,9 @@ abstract class _KeyCallStub {
   bool onCall(Set<LogicalKeyboardKey> keysPressed);
 }
 
-class KeyCallStub extends Mock implements _KeyCallStub {}
+class _KeyCallStubImpl extends Mock implements _KeyCallStub {}
 
-class MockKeyUpEvent extends Mock implements KeyUpEvent {
+class _MockKeyUpEvent extends Mock implements KeyUpEvent {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return super.toString();
@@ -17,7 +17,7 @@ class MockKeyUpEvent extends Mock implements KeyUpEvent {
 }
 
 KeyUpEvent _mockKeyUp(LogicalKeyboardKey key) {
-  final event = MockKeyUpEvent();
+  final event = _MockKeyUpEvent();
   when(() => event.logicalKey).thenReturn(key);
   return event;
 }
@@ -25,7 +25,7 @@ KeyUpEvent _mockKeyUp(LogicalKeyboardKey key) {
 void main() {
   group('KeyboardListenerComponent', () {
     test('calls registered handlers', () {
-      final stub = KeyCallStub();
+      final stub = _KeyCallStubImpl();
       when(() => stub.onCall(any())).thenReturn(true);
 
       final input = KeyboardListenerComponent(
@@ -41,7 +41,7 @@ void main() {
     test(
       'returns false the handler return value',
       () {
-        final stub = KeyCallStub();
+        final stub = _KeyCallStubImpl();
         when(() => stub.onCall(any())).thenReturn(false);
 
         final input = KeyboardListenerComponent(
@@ -60,7 +60,7 @@ void main() {
     test(
       'returns true (allowing event to bubble) when no handler is registered',
       () {
-        final stub = KeyCallStub();
+        final stub = _KeyCallStubImpl();
         when(() => stub.onCall(any())).thenReturn(true);
 
         final input = KeyboardListenerComponent();

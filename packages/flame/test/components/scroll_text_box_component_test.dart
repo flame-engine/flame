@@ -8,7 +8,7 @@ void main() {
     testWithFlameGame(
       'onComplete is called when no scrolling is required',
       (game) async {
-        final onComplete = MockOnCompleteCallback();
+        final onComplete = _MockOnCompleteCallback();
 
         when(onComplete.call).thenReturn(null);
 
@@ -28,7 +28,7 @@ void main() {
     testWithFlameGame(
       'onComplete is called when scrolling is required',
       (game) async {
-        final onComplete = MockOnCompleteCallback();
+        final onComplete = _MockOnCompleteCallback();
 
         when(onComplete.call).thenReturn(null);
 
@@ -94,6 +94,6 @@ lines.''',
   });
 }
 
-class MockOnCompleteCallback extends Mock {
+class _MockOnCompleteCallback extends Mock {
   void call();
 }

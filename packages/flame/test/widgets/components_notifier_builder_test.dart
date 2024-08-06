@@ -3,12 +3,12 @@ import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class Enemy extends PositionComponent with Notifier {}
+class _Enemy extends PositionComponent with Notifier {}
 
 void main() {
   group('ComponentsNotifierBuilder', () {
     testWidgets('renders the initial value', (tester) async {
-      final notifier = ComponentsNotifier<Enemy>([Enemy()]);
+      final notifier = ComponentsNotifier<_Enemy>([_Enemy()]);
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -28,7 +28,7 @@ void main() {
     });
 
     testWidgets('rebuilds when an enemy is added', (tester) async {
-      final notifier = ComponentsNotifier<Enemy>([Enemy()]);
+      final notifier = ComponentsNotifier<_Enemy>([_Enemy()]);
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -44,15 +44,15 @@ void main() {
         ),
       );
 
-      notifier.add(Enemy());
+      notifier.add(_Enemy());
       await tester.pump();
 
       expect(find.text('Enemies: 2'), findsOneWidget);
     });
 
     testWidgets('rebuilds when an enemy is added', (tester) async {
-      final enemy = Enemy();
-      final notifier = ComponentsNotifier<Enemy>([enemy]);
+      final enemy = _Enemy();
+      final notifier = ComponentsNotifier<_Enemy>([enemy]);
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

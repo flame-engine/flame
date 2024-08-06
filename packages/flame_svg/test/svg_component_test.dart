@@ -2,14 +2,14 @@ import 'package:flame_svg/flame_svg.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-class MockSvg extends Mock implements Svg {}
+class _MockSvg extends Mock implements Svg {}
 
 void main() {
   group('SvgComponent', () {
     late Svg svg;
 
     setUp(() {
-      svg = MockSvg();
+      svg = _MockSvg();
       when(svg.dispose).thenAnswer((_) {});
     });
 
@@ -23,7 +23,7 @@ void main() {
     test('disposes the old svg instance when a new one is received', () {
       final component = SvgComponent(svg: svg);
 
-      final newSvg = MockSvg();
+      final newSvg = _MockSvg();
       component.svg = newSvg;
 
       verify(svg.dispose).called(1);

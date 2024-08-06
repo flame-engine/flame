@@ -6,14 +6,14 @@ import 'package:test/test.dart';
 void main() {
   group('CanvasExtension', () {
     test('scaleVector calls scale', () {
-      final canvas = MocktailCanvas();
+      final canvas = _MocktailCanvas();
       when(() => canvas.scale(1, 2)).thenReturn(null);
       canvas.scaleVector(Vector2(1, 2));
       verify(() => canvas.scale(1, 2)).called(1);
     });
 
     test('translateVector calls translate', () {
-      final canvas = MocktailCanvas();
+      final canvas = _MocktailCanvas();
       when(() => canvas.translate(1, 2)).thenReturn(null);
       canvas.translateVector(Vector2(1, 2));
       verify(() => canvas.translate(1, 2)).called(1);
@@ -28,12 +28,12 @@ void main() {
     });
 
     test('renderAt saves, translates draws and then restores', () {
-      final canvas = MocktailCanvas();
+      final canvas = _MocktailCanvas();
       when(canvas.save).thenReturn(null);
       when(() => canvas.translateVector(Vector2(1, 1))).thenReturn(null);
       when(canvas.restore).thenReturn(null);
 
-      final drawFunction = MocktailDrawFunction();
+      final drawFunction = _MocktailDrawFunction();
       when(() => drawFunction.call(canvas)).thenReturn(null);
       canvas.renderAt(Vector2(1, 1), drawFunction.call);
       verify(canvas.save).called(1);
@@ -45,19 +45,19 @@ void main() {
     test(
         'renderRotated saves, translates, rotates, draws, translatesBack'
         ' and then restores', () {
-      final canvas = MocktailCanvas();
+      final canvas = _MocktailCanvas();
       when(canvas.save).thenReturn(null);
-      when(() => canvas.rotate(.5)).thenReturn(null);
+      when(() => canvas.rotate(0.5)).thenReturn(null);
       when(() => canvas.translateVector(Vector2(1, 1))).thenReturn(null);
       when(() => canvas.translateVector(Vector2(-1, -1))).thenReturn(null);
       when(canvas.restore).thenReturn(null);
 
-      final drawFunction = MocktailDrawFunction();
+      final drawFunction = _MocktailDrawFunction();
       when(() => drawFunction.call(canvas)).thenReturn(null);
       canvas.renderRotated(0.5, Vector2(1, 1), drawFunction.call);
       verify(canvas.save).called(1);
       verify(() => canvas.translateVector(Vector2(1, 1))).called(1);
-      verify(() => canvas.rotate(.5)).called(1);
+      verify(() => canvas.rotate(0.5)).called(1);
       verify(() => drawFunction(canvas)).called(1);
       verify(() => canvas.translateVector(Vector2(-1, -1))).called(1);
       verify(canvas.restore).called(1);
@@ -65,10 +65,10 @@ void main() {
   });
 }
 
-class MocktailCanvas extends Mock implements Canvas {}
+class _MocktailCanvas extends Mock implements Canvas {}
 
-abstract class DrawerFunction {
+abstract class _DrawerFunction {
   void call(Canvas _);
 }
 
-class MocktailDrawFunction extends Mock implements DrawerFunction {}
+class _MocktailDrawFunction extends Mock implements _DrawerFunction {}

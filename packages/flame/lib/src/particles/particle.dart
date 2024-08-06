@@ -57,7 +57,7 @@ abstract class Particle {
   Particle({
     double? lifespan,
   }) {
-    setLifespan(lifespan ?? .5);
+    setLifespan(lifespan ?? 0.5);
   }
 
   /// Getter for the current lifespan of this [Particle].

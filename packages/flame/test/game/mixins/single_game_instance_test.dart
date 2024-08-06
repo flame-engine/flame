@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('SingleGameInstance', () {
     test('game instance becomes statically available', () {
-      final game = SingletonGame()
+      final game = _SingletonGame()
         ..onGameResize(Vector2.all(100))
         ..onMount();
       expect(Component.staticGameInstance, game);
@@ -14,25 +14,25 @@ void main() {
     });
 
     test('guard against multiple game instances', () {
-      final game = SingletonGame()
+      final game = _SingletonGame()
         ..onGameResize(Vector2.all(100))
         ..onMount();
       expect(
         FlameGame.new,
         failsAssert(
           "Instance of 'FlameGame<World>' instantiated, while another game "
-          "Instance of 'SingletonGame' declares itself to be a singleton",
+          "Instance of '_SingletonGame' declares itself to be a singleton",
         ),
       );
       game.onRemove();
     });
 
-    testWithGame<SingletonGame>(
+    testWithGame<_SingletonGame>(
       'Component starts loading before the parent is mounted',
-      SingletonGame.new,
+      _SingletonGame.new,
       (game) async {
         final parent = Component();
-        final child = DelayedComponent();
+        final child = _DelayedComponent();
         final future = child.addToParent(parent);
         expect(parent.isMounted, false);
         expect(parent.isLoaded, false);
@@ -52,11 +52,11 @@ void main() {
   });
 }
 
-class DelayedComponent extends Component {
+class _DelayedComponent extends Component {
   @override
   Future<void> onLoad() async {
     await Future<int?>.delayed(const Duration(milliseconds: 20));
   }
 }
 
-class SingletonGame extends FlameGame with SingleGameInstance {}
+class _SingletonGame extends FlameGame with SingleGameInstance {}

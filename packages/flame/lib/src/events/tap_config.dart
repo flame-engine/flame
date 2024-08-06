@@ -20,7 +20,7 @@ final class TapConfig {
   /// Min delay to long tap delay is defined below.
   /// Values too low don't make sense because they
   /// would be basically a regular tap.
-  static const double _minLongTapDelay = 0.150;
+  static const double _minLongTapDelay = 0.15;
 
   /// Default long tap delay is 0.3 seconds.
   static const double _defaultLongTapDelay = 0.3;

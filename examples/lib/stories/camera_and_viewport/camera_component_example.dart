@@ -173,7 +173,7 @@ class AntWorld extends World {
       add(
         Ant()
           ..color = baseColor.withHue(random.nextDouble() * 360).toColor()
-          ..scale = Vector2.all(.4)
+          ..scale = Vector2.all(0.4)
           ..setTravelPath(curve.path),
       );
     }
