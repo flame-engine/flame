@@ -5,7 +5,6 @@ import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flame_3d/src/camera/world_config.dart';
 import 'package:flutter/widgets.dart' show MediaQuery;
 import 'package:meta/meta.dart';
 
