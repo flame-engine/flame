@@ -29,11 +29,11 @@ ask you if you want to add the Flame DevTools extension as a separate tab.
 
 ## Development
 
-To run it locally, make sure to run `melos run devtools-build` to build the
+To run it locally, make sure to run `melos devtools-build` to build the
 extension so that it can be loaded in the browser (the build files are not
 committed to the repository).
 
-After you have done any changes, make sure to run `melos run devtools-build` to
+After you have done any changes, make sure to run `melos devtools-build` to
 build and copy the changes to `packages/flame/extension/build`.
 
 To develop things from the Flame side, create a new `DevToolsConnector` which
@@ -42,7 +42,7 @@ from the devtools extension. Don't forget to add the new connector to the
 list of connectors in the `DevToolsService` class.
 
 If you want to run with the devtools extension with the simulated mode for
-faster development, you can use `melos run devtools-simulator` to start the
+faster development, you can use `melos devtools-simulator` to start the
 simulated environment and run the devtools extension in the browser.
 Remember that you have to manually enter the Dart VM Service Connection URI
 in the simulated devtools environment.
