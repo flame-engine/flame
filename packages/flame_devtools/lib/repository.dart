@@ -67,4 +67,13 @@ sealed class Repository {
     );
     return stepResponse.json!['step_time'] as double;
   }
+
+  static Future<String?> snapshot({String? id}) async {
+    final snapshotResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentSnapshot',
+      args: {'id': id},
+    );
+    return snapshotResponse.json!['snapshot'] as String?;
+  }
 }

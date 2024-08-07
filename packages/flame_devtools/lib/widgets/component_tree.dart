@@ -1,5 +1,6 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
+import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +154,7 @@ class ComponentSection extends ConsumerWidget {
                         'toString:\n${node.toStringText}',
                         style: textStyle,
                       ),
+                      ComponentSnapshot(id: node.id.toString()),
                     ].withSpacing(),
                   ),
           ),
