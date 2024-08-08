@@ -9,137 +9,150 @@ class CuboidMesh extends Mesh {
   CuboidMesh({
     required Vector3 size,
     Material? material,
+    bool useFaceNormals = true,
   }) {
     final Vector3(:x, :y, :z) = size / 2;
 
+    Vertex vertex({
+      required Vector3 position,
+      required Vector2 texCoord,
+      required Vector3 normal,
+    }) {
+      return Vertex(
+        position: position,
+        texCoord: texCoord,
+        normal: useFaceNormals ? normal : null,
+      );
+    }
+
     final vertices = [
       // Face 1 (front)
-      Vertex(
+      vertex(
         position: Vector3(-x, -y, -z),
         texCoord: Vector2(0, 0),
         normal: Vector3(0, 0, -1),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, -y, -z),
         texCoord: Vector2(1, 0),
         normal: Vector3(0, 0, -1),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, y, -z),
         texCoord: Vector2(1, 1),
         normal: Vector3(0, 0, -1),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, y, -z),
         texCoord: Vector2(0, 1),
         normal: Vector3(0, 0, -1),
       ),
 
       // Face 2 (back)
-      Vertex(
+      vertex(
         position: Vector3(-x, -y, z),
         texCoord: Vector2(0, 0),
         normal: Vector3(0, 0, 1),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, -y, z),
         texCoord: Vector2(1, 0),
         normal: Vector3(0, 0, 1),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, y, z),
         texCoord: Vector2(1, 1),
         normal: Vector3(0, 0, 1),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, y, z),
         texCoord: Vector2(0, 1),
         normal: Vector3(0, 0, 1),
       ),
 
       // Face 3 (left)
-      Vertex(
+      vertex(
         position: Vector3(-x, -y, z),
         texCoord: Vector2(0, 0),
         normal: Vector3(-1, 0, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, -y, -z),
         texCoord: Vector2(1, 0),
         normal: Vector3(-1, 0, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, y, -z),
         texCoord: Vector2(1, 1),
         normal: Vector3(-1, 0, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, y, z),
         texCoord: Vector2(0, 1),
         normal: Vector3(-1, 0, 0),
       ),
 
       // Face 4 (right)
-      Vertex(
+      vertex(
         position: Vector3(x, -y, -z),
         texCoord: Vector2(0, 0),
         normal: Vector3(1, 0, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, -y, z),
         texCoord: Vector2(1, 0),
         normal: Vector3(1, 0, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, y, z),
         texCoord: Vector2(1, 1),
         normal: Vector3(1, 0, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, y, -z),
         texCoord: Vector2(0, 1),
         normal: Vector3(1, 0, 0),
       ),
 
       // Face 5 (top)
-      Vertex(
+      vertex(
         position: Vector3(-x, y, -z),
         texCoord: Vector2(0, 0),
         normal: Vector3(0, 1, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, y, -z),
         texCoord: Vector2(1, 0),
         normal: Vector3(0, 1, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, y, z),
         texCoord: Vector2(1, 1),
         normal: Vector3(0, 1, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, y, z),
         texCoord: Vector2(0, 1),
         normal: Vector3(0, 1, 0),
       ),
 
       // Face 6 (bottom)
-      Vertex(
+      vertex(
         position: Vector3(-x, -y, z),
         texCoord: Vector2(0, 0),
         normal: Vector3(0, -1, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, -y, z),
         texCoord: Vector2(1, 0),
         normal: Vector3(0, -1, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(x, -y, -z),
         texCoord: Vector2(1, 1),
         normal: Vector3(0, -1, 0),
       ),
-      Vertex(
+      vertex(
         position: Vector3(-x, -y, -z),
         texCoord: Vector2(0, 1),
         normal: Vector3(0, -1, 0),
