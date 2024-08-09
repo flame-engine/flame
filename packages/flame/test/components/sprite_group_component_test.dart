@@ -34,6 +34,15 @@ Future<void> main() async {
       component.current = _SpriteState.running;
       expect(component.sprite, sprite2);
     });
+
+    test('Asserts that map contains key', () {
+      expect(
+        () {
+          SpriteGroupComponent<String>().current = 'non-existent-key';
+        },
+        failsAssert('Sprite not found for key: non-existent-key'),
+      );
+    });
   });
 
   group('SpriteComponent.autoResize', () {

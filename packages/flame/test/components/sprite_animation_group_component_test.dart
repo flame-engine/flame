@@ -45,6 +45,15 @@ Future<void> main() async {
       component.current = _AnimationState.running;
       expect(component.animation, animation2);
     });
+
+    test('Asserts that map contains key', () {
+      expect(
+        () {
+          SpriteAnimationGroupComponent<String>().current = 'non-existent-key';
+        },
+        failsAssert('Animation not found for key: non-existent-key'),
+      );
+    });
   });
 
   group('SpriteAnimationGroupComponent.shouldRemove', () {
