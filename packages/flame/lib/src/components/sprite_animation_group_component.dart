@@ -140,6 +140,12 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    assert(_animations != null, 'Animations not set');
+    assert(
+      _animations!.keys.contains(value),
+      'Animation not found for key: $value',
+    );
+
     final changed = value != current;
     _current = value;
     _resizeToSprite();
