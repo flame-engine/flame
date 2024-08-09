@@ -1,5 +1,6 @@
 import 'package:animated_tree_view/animated_tree_view.dart';
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
+import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flutter/material.dart';
@@ -128,33 +129,38 @@ class ComponentSection extends ConsumerWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: node == null
-                ? Text(
-                    'Select a component in the tree',
-                    style: textStyle,
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: node == null
+                  ? Text(
+                      'Select a component in the tree',
+                      style: textStyle,
+                    )
+                  : SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Id: ${node.id}', style: textStyle),
-                          DebugModeButton(id: node.id),
+                          Row(
+                            children: [
+                              Text('Id: ${node.id}', style: textStyle),
+                              DebugModeButton(id: node.id),
+                            ].withSpacing(),
+                          ),
+                          Text('Type: ${node.name}', style: textStyle),
+                          Text(
+                            'Children: ${node.children.length}',
+                            style: textStyle,
+                          ),
+                          Text(
+                            'toString:\n${node.toStringText}',
+                            style: textStyle,
+                          ),
+                          ComponentSnapshot(id: node.id.toString()),
                         ].withSpacing(),
                       ),
-                      Text('Type: ${node.name}', style: textStyle),
-                      Text(
-                        'Children: ${node.children.length}',
-                        style: textStyle,
-                      ),
-                      Text(
-                        'toString:\n${node.toStringText}',
-                        style: textStyle,
-                      ),
-                    ].withSpacing(),
-                  ),
+                    ),
+            ),
           ),
         ],
       ),
