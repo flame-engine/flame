@@ -38,6 +38,38 @@ class ExampleGame3D extends FlameGame<World3D>
     world.addAll([
       RotatingLight(),
 
+      LightComponent.point(
+        position: Vector3(0, 0.1, 0),
+        color: const Color(0xFFFF00FF),
+      ),
+      MeshComponent(
+        mesh: SphereMesh(
+          radius: 0.05,
+          material: SpatialMaterial(
+            albedoTexture: ColorTexture(
+              const Color(0xFFFF00FF),
+            ),
+          ),
+        ),
+        position: Vector3(0, 0.1, 0),
+      ),
+
+      LightComponent.point(
+        position: Vector3(-2, 3, 2),
+        color: const Color(0xFFFF2255),
+      ),
+      MeshComponent(
+        mesh: SphereMesh(
+          radius: 0.05,
+          material: SpatialMaterial(
+            albedoTexture: ColorTexture(
+              const Color(0xFFFF2255),
+            ),
+          ),
+        ),
+        position: Vector3(-2, 3, 2),
+      ),
+
       // Add a player box
       PlayerBox(),
 
@@ -50,7 +82,7 @@ class ExampleGame3D extends FlameGame<World3D>
         mesh: SphereMesh(
           radius: 1,
           material: SpatialMaterial(
-            albedoTexture: ColorTexture(Colors.purple),
+            albedoTexture: ColorTexture(Colors.green),
           ),
         ),
       ),

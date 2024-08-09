@@ -9,9 +9,8 @@ class SpatialMaterial extends Material {
   SpatialMaterial({
     Texture? albedoTexture,
     Color albedoColor = const Color(0xFFFFFFFF),
-    this.metallic = 0,
-    this.metallicSpecular = 0.5,
-    this.roughness = 1.0,
+    this.metallic = 0.8,
+    this.roughness = 0.6,
   })  : albedoTexture = albedoTexture ?? Texture.standard,
         super(
           vertexShader: Shader(
@@ -27,10 +26,9 @@ class SpatialMaterial extends Material {
               UniformSlot.value('Material', {
                 'albedoColor',
                 'metallic',
-                'metallicSpecular',
                 'roughness',
               }),
-              Light.shaderSlot,
+              ...LightingInfo.shaderSlots,
               UniformSlot.value('Camera', {'position'}),
             ],
           ),
@@ -52,8 +50,6 @@ class SpatialMaterial extends Material {
   Texture albedoTexture;
 
   double metallic;
-
-  double metallicSpecular;
 
   double roughness;
 
@@ -77,7 +73,6 @@ class SpatialMaterial extends Material {
       ..setTexture('albedoTexture', albedoTexture)
       ..setVector3('Material.albedoColor', _albedoCache)
       ..setFloat('Material.metallic', metallic)
-      ..setFloat('Material.metallicSpecular', metallicSpecular)
       ..setFloat('Material.roughness', roughness);
   }
 
@@ -88,11 +83,7 @@ class SpatialMaterial extends Material {
   }
 
   void _applyLights(GraphicsDevice device) {
-    final light = device.lights.firstOrNull;
-    if (light == null) {
-      return;
-    }
-    light.apply(fragmentShader);
+    device.lightingInfo.apply(fragmentShader);
   }
 
   static final _library = gpu.ShaderLibrary.fromAsset(

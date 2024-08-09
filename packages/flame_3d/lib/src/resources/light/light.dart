@@ -19,11 +19,8 @@ class Light extends Resource<void> {
     required this.source,
   }) : super(null);
 
-  void apply(Shader shader) {
-    shader.setVector3('Light.position', transform.position);
-    // apply additional parameters
-    source.apply(shader);
+  void apply(int index, Shader shader) {
+    shader.setVector3('Light$index.position', transform.position);
+    source.apply(index, shader);
   }
-
-  static UniformSlot shaderSlot = UniformSlot.value('Light', {'position'});
 }
