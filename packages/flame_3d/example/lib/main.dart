@@ -87,6 +87,7 @@ class ExampleGame3D extends FlameGame<World3D>
         mesh: CuboidMesh(
           size: Vector3(32, 5, 1),
           material: SpatialMaterial(albedoTexture: ColorTexture(Colors.lime)),
+          useFaceNormals: false,
         ),
       ),
     ]);
