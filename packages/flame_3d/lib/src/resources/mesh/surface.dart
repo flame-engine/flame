@@ -18,19 +18,28 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
     required List<Vertex> vertices,
     required List<int> indices,
     this.material,
+    /**
+     * If `true`, the normals will be calculated if they are not provided.
+     */
+    bool calculateNormals = true,
   }) : super(null) {
+    final normalizedVertices = _normalize(
+      vertices: vertices,
+      indices: indices,
+      calculateNormals: calculateNormals,
+    );
     // `TODO`(bdero): This should have an attribute map instead and be fully SoA
     // but vertex attributes in Impeller aren't flexible enough yet.
     // See also https://github.com/flutter/flutter/issues/116168.
     _vertices = Float32List.fromList(
-      vertices.fold([], (p, v) => p..addAll(v.storage)),
+      normalizedVertices.fold([], (p, v) => p..addAll(v.storage)),
     ).buffer;
-    _vertexCount = _vertices.lengthInBytes ~/ (vertices.length * 9);
+    _vertexCount = _vertices.lengthInBytes ~/ (normalizedVertices.length * 9);
 
     _indices = Uint16List.fromList(indices).buffer;
     _indexCount = _indices.lengthInBytes ~/ 2;
 
-    _calculateAabb(vertices);
+    _calculateAabb(normalizedVertices);
   }
 
   Material? material;
@@ -92,5 +101,26 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
       Vector3(minX, minY, minZ),
       Vector3(maxX, maxY, maxZ),
     );
+  }
+
+  static List<Vertex> _normalize({
+    required List<Vertex> vertices,
+    required List<int> indices,
+    required bool calculateNormals,
+  }) {
+    final recalculate =
+        calculateNormals && vertices.any((e) => e.normal == null);
+    if (!recalculate) {
+      return vertices;
+    }
+
+    final normals = Vertex.calculateVertexNormals(
+      vertices.map((e) => e.position.mutable).toList(),
+      indices,
+    );
+    return [
+      for (final (i, v) in vertices.indexed)
+        v.copyWith(normal: v.normal?.mutable ?? normals[i]),
+    ];
   }
 }
