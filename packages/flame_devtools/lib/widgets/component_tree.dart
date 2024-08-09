@@ -138,7 +138,7 @@ class ComponentSection extends ConsumerWidget {
                       style: textStyle,
                     )
                   : SingleChildScrollView(
-                    child: Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
@@ -159,7 +159,7 @@ class ComponentSection extends ConsumerWidget {
                           ComponentSnapshot(id: node.id.toString()),
                         ].withSpacing(),
                       ),
-                  ),
+                    ),
             ),
           ),
         ],
