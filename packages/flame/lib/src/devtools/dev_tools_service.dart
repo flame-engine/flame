@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flame/src/devtools/connectors/component_count_connector.dart';
+import 'package:flame/src/devtools/connectors/component_snapshot_connector.dart';
 import 'package:flame/src/devtools/connectors/component_tree_connector.dart';
 import 'package:flame/src/devtools/connectors/debug_mode_connector.dart';
 import 'package:flame/src/devtools/connectors/game_loop_connector.dart';
@@ -35,6 +36,7 @@ class DevToolsService {
     ComponentCountConnector(),
     ComponentTreeConnector(),
     GameLoopConnector(),
+    ComponentSnapshotConnector(),
   ];
 
   /// This method is called every time a new game is set in the service and it
