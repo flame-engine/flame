@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -29,4 +30,23 @@ abstract class DevToolsConnector {
 
   /// Here you can do clean-up before a new game is set in the connector.
   void disposeGame() {}
+
+  /// Finds a component in the game tree by its id.
+  ///
+  /// Returns the component if found, otherwise null.
+  T? findGameComponent<T extends Component>(int? id) {
+    T? component;
+    game.propagateToChildren<T>(
+      (c) {
+        if (c.hashCode == id) {
+          component = c;
+          return false;
+        }
+        return true;
+      },
+      includeSelf: true,
+    );
+
+    return component;
+  }
 }
