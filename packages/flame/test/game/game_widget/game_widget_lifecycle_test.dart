@@ -214,12 +214,24 @@ void main() {
       final events = <String>[];
       await tester.pumpWidget(_MyContainer(events));
 
+      // This ensures that the game is attached.
+      await tester.pump();
+
       events.clear();
       final state = tester.state<_MyContainerState>(find.byType(_MyContainer));
       state.causeResize();
 
       await tester.pump();
-      expect(events, ['onGameResize', 'update', 'render']); // no onRemove
+      expect(
+        events,
+        [
+          // additional because of the initial pump to ensure attachment
+          'update',
+          'onGameResize',
+          'update',
+          'render',
+        ],
+      ); // no onRemove
       final game =
           tester.allWidgets.whereType<GameWidget<_MyGame>>().first.game;
       expect(game?.children, everyElement((Component c) => c.parent == game));
