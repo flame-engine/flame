@@ -225,7 +225,7 @@ void main() {
       expect(
         events,
         [
-          // additional because of the initial pump to ensure attachement
+          // additional because of the initial pump to ensure attachment
           'update',
           'onGameResize',
           'update',
