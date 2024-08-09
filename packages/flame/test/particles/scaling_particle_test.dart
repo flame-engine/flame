@@ -18,7 +18,7 @@ void main() {
         ),
       );
 
-      final particle = rect.scaling(to: .5, curve: Curves.easeIn);
+      final particle = rect.scaling(to: 0.5, curve: Curves.easeIn);
 
       final component = ParticleSystemComponent(
         particle: particle,
@@ -28,7 +28,7 @@ void main() {
       await game.ready();
       game.update(1);
 
-      expect(particle.scale, .841796875);
+      expect(particle.scale, 0.841796875);
       expect(particle.curve, Curves.easeIn);
       expect(particle.progress, 0.31640625);
       expect(particle.child, isInstanceOf<ComputedParticle>());

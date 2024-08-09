@@ -16,9 +16,9 @@ void main() {
   group('testWithGame', () {
     List<String>? storedEvents;
 
-    testWithGame<RecordedGame>(
+    testWithGame<_RecordedGame>(
       'correct event sequence',
-      RecordedGame.new,
+      _RecordedGame.new,
       (game) async {
         var events = <String>[];
         events = game.events;
@@ -44,7 +44,7 @@ void main() {
   });
 }
 
-class RecordedGame extends FlameGame {
+class _RecordedGame extends FlameGame {
   final List<String> events = [];
 
   @override

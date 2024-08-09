@@ -31,7 +31,7 @@ class MyGame extends FlameGame with TapDetector {
         SpriteAnimationData.sequenced(
           textureSize: Vector2(48, 32),
           amount: 4,
-          stepTime: .2,
+          stepTime: 0.2,
         ),
         size: Vector2(100, 50),
         anchor: Anchor.center,
