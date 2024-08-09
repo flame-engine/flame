@@ -20,7 +20,7 @@ dependencies:
   vector_math: ^2.1.4
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.2.0
   flame_test: ^1.15.3
   flutter_test:
     sdk: flutter
