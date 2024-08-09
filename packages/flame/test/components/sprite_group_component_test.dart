@@ -38,7 +38,8 @@ Future<void> main() async {
     test('Asserts that map contains key', () {
       expect(
         () {
-          SpriteGroupComponent<String>().current = 'non-existent-key';
+          SpriteGroupComponent<String>(sprites: {}).current =
+              'non-existent-key';
         },
         failsAssert('Sprite not found for key: non-existent-key'),
       );

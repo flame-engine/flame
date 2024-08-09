@@ -49,7 +49,8 @@ Future<void> main() async {
     test('Asserts that map contains key', () {
       expect(
         () {
-          SpriteAnimationGroupComponent<String>().current = 'non-existent-key';
+          SpriteAnimationGroupComponent<String>(animations: {}).current =
+              'non-existent-key';
         },
         failsAssert('Animation not found for key: non-existent-key'),
       );
