@@ -20,7 +20,7 @@ class Vertex {
     Vector3? normal,
   })  : position = position.immutable,
         texCoord = texCoord.immutable,
-        normal = (normal ?? Vector3.zero()).immutable,
+        normal = normal?.immutable,
         _storage = Float32List.fromList([
           ...position.storage, // 1, 2, 3
           ...texCoord.storage, // 4, 5
@@ -39,7 +39,7 @@ class Vertex {
   final ImmutableVector2 texCoord;
 
   /// The normal vector of the vertex.
-  final ImmutableVector3 normal;
+  final ImmutableVector3? normal;
 
   /// The color on the vertex.
   final Color color;
@@ -65,8 +65,36 @@ class Vertex {
     return Vertex(
       position: position ?? this.position.mutable,
       texCoord: texCoord ?? this.texCoord.mutable,
-      normal: normal ?? this.normal.mutable,
+      normal: normal ?? this.normal?.mutable,
       color: color ?? this.color,
     );
+  }
+
+  static List<Vector3> calculateVertexNormals(
+    List<Vector3> vertices,
+    List<int> indices,
+  ) {
+    final normals = List.filled(vertices.length, Vector3.zero());
+    for (var i = 0; i < indices.length; i += 3) {
+      final i0 = indices[i];
+      final i1 = indices[i + 1];
+      final i2 = indices[i + 2];
+
+      final v0 = vertices[i0];
+      final v1 = vertices[i1];
+      final v2 = vertices[i2];
+
+      final edge1 = v1 - v0;
+      final edge2 = v2 - v0;
+      final faceNormal = edge1.cross(edge2)..normalize();
+
+      normals[i0] += faceNormal;
+      normals[i1] += faceNormal;
+      normals[i2] += faceNormal;
+    }
+    for (final normal in normals) {
+      normal.normalize();
+    }
+    return normals;
   }
 }
