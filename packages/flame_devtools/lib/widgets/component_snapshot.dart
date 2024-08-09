@@ -39,30 +39,50 @@ class _ComponentSnapshotState extends State<ComponentSnapshot> {
     return FutureBuilder<String?>(
       future: _snapshot,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final imageFuture = Flame.images.fromBase64(
-            widget.id,
-            snapshot.data!,
-          );
-          return FutureBuilder(
-            future: imageFuture,
-            builder: (context, imageSnapshot) {
-              if (imageSnapshot.connectionState == ConnectionState.done) {
-                return SizedBox(
-                  width: 200,
-                  height: 200,
-                  child: SpriteWidget(
-                    sprite: Sprite(
-                      imageSnapshot.data!,
-                    ),
-                  ),
-                );
-              }
-              return const Text('Loading image...');
-            },
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          return Base64Image(
+            base64: snapshot.data!,
+            imageId: widget.id,
           );
         }
         return const Text('Loading snapshot...');
+      },
+    );
+  }
+}
+
+class Base64Image extends StatelessWidget {
+  const Base64Image({
+    required this.base64,
+    required this.imageId,
+    super.key,
+  });
+
+  final String base64;
+  final String imageId;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageFuture = Flame.images.fromBase64(
+      imageId,
+      base64,
+    );
+    return FutureBuilder(
+      future: imageFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return SizedBox(
+            width: 200,
+            height: 200,
+            child: SpriteWidget(
+              sprite: Sprite(
+                snapshot.data!,
+              ),
+            ),
+          );
+        }
+        return const Text('Loading image...');
       },
     );
   }

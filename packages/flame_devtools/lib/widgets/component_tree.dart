@@ -129,34 +129,38 @@ class ComponentSection extends ConsumerWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: node == null
-                ? Text(
-                    'Select a component in the tree',
-                    style: textStyle,
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: node == null
+                  ? Text(
+                      'Select a component in the tree',
+                      style: textStyle,
+                    )
+                  : SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Id: ${node.id}', style: textStyle),
-                          DebugModeButton(id: node.id),
+                          Row(
+                            children: [
+                              Text('Id: ${node.id}', style: textStyle),
+                              DebugModeButton(id: node.id),
+                            ].withSpacing(),
+                          ),
+                          Text('Type: ${node.name}', style: textStyle),
+                          Text(
+                            'Children: ${node.children.length}',
+                            style: textStyle,
+                          ),
+                          Text(
+                            'toString:\n${node.toStringText}',
+                            style: textStyle,
+                          ),
+                          ComponentSnapshot(id: node.id.toString()),
                         ].withSpacing(),
                       ),
-                      Text('Type: ${node.name}', style: textStyle),
-                      Text(
-                        'Children: ${node.children.length}',
-                        style: textStyle,
-                      ),
-                      Text(
-                        'toString:\n${node.toStringText}',
-                        style: textStyle,
-                      ),
-                      ComponentSnapshot(id: node.id.toString()),
-                    ].withSpacing(),
                   ),
+            ),
           ),
         ],
       ),
