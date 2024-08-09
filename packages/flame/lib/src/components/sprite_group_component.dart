@@ -68,6 +68,9 @@ class SpriteGroupComponent<T> extends PositionComponent
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    assert(_sprites != null, 'Sprites not set');
+    assert(_sprites!.keys.contains(value), 'Sprite not found for key: $value');
+
     final changed = _current != value;
     _current = value;
     _resizeToSprite();
