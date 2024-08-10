@@ -29,6 +29,17 @@ class _PositionComponentAttributesFormState
   }
 
   @override
+  void didUpdateWidget(PositionComponentAttributesForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.componentId != widget.componentId) {
+      _attributesFuture = Repository.getPositionComponentAttributes(
+        id: widget.componentId,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<PositionComponentAttributes>(
       future: _attributesFuture,
@@ -38,31 +49,60 @@ class _PositionComponentAttributesFormState
           final data = snapshot.data!;
           return Column(
             children: [
-              IncrementalNumberFormField<double>(
-                label: 'X',
-                initialValue: data.x,
-                onChanged: (v) {
-                  Repository.setPositionComponentAttribute(
-                    id: widget.componentId,
-                    attribute: 'x',
-                    value: v,
-                  );
-                },
+              Row(
+                children: [
+                  IncrementalNumberFormField<double>(
+                    label: 'X',
+                    initialValue: data.x,
+                    onChanged: (v) {
+                      Repository.setPositionComponentAttribute(
+                        id: widget.componentId,
+                        attribute: 'x',
+                        value: v,
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  IncrementalNumberFormField<double>(
+                    label: 'Y',
+                    initialValue: data.y,
+                    onChanged: (v) {
+                      Repository.setPositionComponentAttribute(
+                        id: widget.componentId,
+                        attribute: 'y',
+                        value: v,
+                      );
+                    },
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
-              IncrementalNumberFormField<double>(
-                label: 'Y',
-                initialValue: data.y,
-              ),
-              const SizedBox(height: 8),
-              IncrementalNumberFormField<double>(
-                label: 'Width',
-                initialValue: data.width,
-              ),
-              const SizedBox(height: 8),
-              IncrementalNumberFormField<double>(
-                label: 'Height',
-                initialValue: data.height,
+              Row(
+                children: [
+                  IncrementalNumberFormField<double>(
+                    label: 'Width',
+                    initialValue: data.width,
+                    onChanged: (v) {
+                      Repository.setPositionComponentAttribute(
+                        id: widget.componentId,
+                        attribute: 'width',
+                        value: v,
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  IncrementalNumberFormField<double>(
+                    label: 'Height',
+                    initialValue: data.height,
+                    onChanged: (v) {
+                      Repository.setPositionComponentAttribute(
+                        id: widget.componentId,
+                        attribute: 'height',
+                        value: v,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           );

@@ -22,6 +22,8 @@ class _IncrementalNumberFormFieldState<T extends num>
   late final _controller = TextEditingController()
     ..text = widget.initialValue.toString();
 
+  String? errorText;
+
   @override
   void dispose() {
     _controller.dispose();
@@ -29,18 +31,42 @@ class _IncrementalNumberFormFieldState<T extends num>
   }
 
   T _parse() {
-    if (T is double) {
+    if (T == double) {
       return double.parse(_controller.text) as T;
     } else {
       return int.parse(_controller.text) as T;
     }
   }
 
+  void _tryUpdate(String value) {
+    try {
+      final value = _parse();
+      _update(value);
+    } on Exception catch (_) {
+      setState(() {
+        errorText = 'Invalid number';
+      });
+    }
+  }
+
   void _update(T v) {
-    widget.onChanged?.call(v);
     setState(() {
-      _controller.text = v.toString();
+      errorText = null;
     });
+
+    widget.onChanged?.call(v);
+  }
+
+  void _increment() {
+    final value = _parse() + 1 as T;
+    _update(value);
+    _controller.text = value.toString();
+  }
+
+  void _decrement() {
+    final value = _parse() - 1 as T;
+    _update(value);
+    _controller.text = value.toString();
   }
 
   @override
@@ -48,9 +74,7 @@ class _IncrementalNumberFormFieldState<T extends num>
     return Row(
       children: [
         IconButton(
-          onPressed: () {
-            _update(_parse() - 1 as T);
-          },
+          onPressed: _decrement,
           icon: const Icon(Icons.remove),
         ),
         const SizedBox(width: 8),
@@ -59,17 +83,15 @@ class _IncrementalNumberFormFieldState<T extends num>
           child: TextField(
             decoration: InputDecoration(
               labelText: widget.label,
+              errorText: errorText,
             ),
             controller: _controller,
-            // TODO(erickzanardo): Implement this
-            // onChanged: (v) => _update(v as T),
+            onChanged: _tryUpdate,
           ),
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: () {
-            _update(_parse() + 1 as T);
-          },
+          onPressed: _increment,
           icon: const Icon(Icons.add),
         ),
       ],
