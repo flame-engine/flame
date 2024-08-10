@@ -153,42 +153,69 @@ class EllipseComponent extends ShapeComponent implements SizeProvider {
     return dx * dx + dy * dy <= 1;
   }
 
-  /// Returns the locus of points in which the provided line segment intersects
+  /// Returns the locus of points where the provided line segment intersects
   /// the ellipse.
   ///
   /// This can be an empty list (if they don't intersect), one point (if the
-  /// line is tangent) or two points (if the line is secant).
-  /// An edge point of the [lineSegment] that originates on the edge of the
-  /// ellipse doesn't count as an intersection.
+  /// line is tangent), or two points (if the line is secant).
+  /// An edge point of the [lineSegment] that lies exactly on the ellipse's edge
+  /// might be considered as one intersection.
   List<Vector2> lineSegmentIntersections(
     LineSegment lineSegment, {
     double epsilon = double.minPositive,
   }) {
-    // A point on a line is `from + t*(to - from)`. We're trying to solve the
-    // equation `‖point - center‖² == 1`. Or, denoting `Δ₂₁ = to - from`
-    // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == 1`.
-    // Expanding the norm, this becomes a square equation in `t`:
-    // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - 1 == 0`.
+    // Calculate the semi-major (scaleX) and semi-minor (scaleY) axes
+    // of the ellipse.
+    // These represent half of the width and height, respectively.
+    final scaleX = scaledWidth / 2;
+    final scaleY = scaledHeight / 2;
+
+    // Δ₂₁ represents the vector from the start to the end of the line segment:
+    // Δ₂₁ = to - from.
     _delta21
       ..setFrom(lineSegment.to)
-      ..sub(lineSegment.from); // to - from
+      ..sub(lineSegment.from);
+
+    // Δ₁₀ represents the vector from the center of the ellipse to the start of
+    // the line segment: Δ₁₀ = from - center.
     _delta10
       ..setFrom(lineSegment.from)
-      ..sub(absoluteCenter); // from - absoluteCenter
+      ..sub(absoluteCenter);
 
-    final a = (_delta21.x / scaledWidth) * (_delta21.x / scaledWidth) +
-        (_delta21.y / scaledHeight) * (_delta21.y / scaledHeight);
+    // Find the intersection points where the line segment meets the ellipse.
+    // The equation of an ellipse centered at the origin is:
+    // (x/scaleX)² + (y/scaleY)² = 1
+    // Substituting the parametric equation of the line into this:
+    // Let point = from + t*(to - from), then:
+    // ((Δ₁₀.x + t*Δ₂₁.x) / scaleX)² + ((Δ₁₀.y + t*Δ₂₁.y) / scaleY)² = 1
+    // Expanding and simplifying, we get a quadratic equation in t:
+    final a = (_delta21.x * _delta21.x) / (scaleX * scaleX) +
+        (_delta21.y * _delta21.y) / (scaleY * scaleY);
     final b = 2 *
-        ((_delta21.x * _delta10.x) / (scaledWidth * scaledWidth) +
-            (_delta21.y * _delta10.y) / (scaledHeight * scaledHeight));
-    final c = (_delta10.x / scaledWidth) * (_delta10.x / scaledWidth) +
-        (_delta10.y / scaledHeight) * (_delta10.y / scaledHeight) -
+        ((_delta21.x * _delta10.x) / (scaleX * scaleX) +
+            (_delta21.y * _delta10.y) / (scaleY * scaleY));
+    final c = (_delta10.x * _delta10.x) / (scaleX * scaleX) +
+        (_delta10.y * _delta10.y) / (scaleY * scaleY) -
         1;
 
-    return solveQuadratic(a, b, c)
-        .where((t) => t > 0 && t <= 1)
-        .map((t) => lineSegment.from.clone()..addScaled(_delta21, t))
-        .toList();
+    // The roots of this quadratic equation give the values of t
+    // where the line intersects the ellipse.
+    final roots = solveQuadratic(a, b, c);
+
+    // Filter roots to ensure they lie within the segment (0 <= t <= 1).
+    // Use a set to avoid adding duplicate intersections,
+    // which may occur in edge cases.
+    final intersections = <Vector2>{};
+    for (final t in roots) {
+      if (t >= 0 && t <= 1) {
+        // Calculate the intersection point corresponding to each valid t.
+        final intersection = lineSegment.from + _delta21 * t;
+        intersections.add(intersection);
+      }
+    }
+
+    // Convert the set of intersections to a list and return.
+    return intersections.toList();
   }
 
   static final Vector2 _delta21 = Vector2.zero();
