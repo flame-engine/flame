@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/geometry/ellipse_component.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -57,6 +58,9 @@ void main() {
       final intersections = component.lineSegmentIntersections(lineSegment);
       expect(intersections.length, 2);
       expect(intersections[0].x < intersections[1].x, isTrue);
+      // Check the approximate intersection points
+      expect(intersections[0], closeToVector(Vector2(50, 50)));
+      expect(intersections[1], closeToVector(Vector2(150, 50)));
     });
   });
 }
