@@ -30,7 +30,7 @@ jobs:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
       - name: "Analyze with lowest supported version"
-        uses: invertase/github-action-dart-analyzer@v2.0.0
+        uses: invertase/github-action-dart-analyzer@v3
         with:
           fatal-infos: true
 
@@ -41,7 +41,7 @@ jobs:
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v3
       - name: "Analyze with latest stable"
-        uses: invertase/github-action-dart-analyzer@v2.0.0
+        uses: invertase/github-action-dart-analyzer@v3
         with:
           fatal-infos: true
 
