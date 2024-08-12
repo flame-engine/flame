@@ -20,10 +20,6 @@ class PositionComponentAttributesForm extends ConsumerWidget {
       ),
     );
 
-    // We don't want to keep the attributes in cache since the user will most
-    // likely change them often.
-    ref.invalidate(positionComponentAttributesProvider(componentId));
-
     return attributesData.when(
       error: (e, s) => const Text(
         'Error loading component attributes',
