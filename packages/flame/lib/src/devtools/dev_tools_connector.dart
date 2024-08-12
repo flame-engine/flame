@@ -34,7 +34,7 @@ abstract class DevToolsConnector {
   /// Finds a component in the game tree by its id.
   ///
   /// Returns the component if found, otherwise null.
-  T? findGameComponent<T extends Component>(int? id) {
+  T? findComponent<T extends Component>(int? id) {
     T? component;
     game.propagateToChildren<T>(
       (c) {

@@ -4,7 +4,7 @@ import 'package:flame/src/devtools/connectors/component_snapshot_connector.dart'
 import 'package:flame/src/devtools/connectors/component_tree_connector.dart';
 import 'package:flame/src/devtools/connectors/debug_mode_connector.dart';
 import 'package:flame/src/devtools/connectors/game_loop_connector.dart';
-import 'package:flame/src/devtools/connectors/position_attributes_component_connector.dart';
+import 'package:flame/src/devtools/connectors/position_component_attributes_connector.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// When [DevToolsService] is initialized by the [FlameGame] it will call
@@ -38,7 +38,7 @@ class DevToolsService {
     ComponentTreeConnector(),
     GameLoopConnector(),
     ComponentSnapshotConnector(),
-    PositionAttributesComponentConnector(),
+    PositionComponentAttributesConnector(),
   ];
 
   /// This method is called every time a new game is set in the service and it

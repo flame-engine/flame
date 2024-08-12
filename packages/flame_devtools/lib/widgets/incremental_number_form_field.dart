@@ -25,6 +25,16 @@ class _IncrementalNumberFormFieldState<T extends num>
   String? errorText;
 
   @override
+  void didUpdateWidget(covariant IncrementalNumberFormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.initialValue != widget.initialValue) {
+      _controller.text = widget.initialValue.toString();
+      errorText = null;
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();

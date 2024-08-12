@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flame/components.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
-class PositionAttributesComponentConnector extends DevToolsConnector {
+class PositionComponentAttributesConnector extends DevToolsConnector {
   @override
   void init() {
     registerExtension(
@@ -12,7 +12,7 @@ class PositionAttributesComponentConnector extends DevToolsConnector {
       (method, parameters) async {
         final id = int.tryParse(parameters['id'] ?? '');
 
-        final positionComponent = findGameComponent<PositionComponent>(id);
+        final positionComponent = findComponent<PositionComponent>(id);
 
         if (positionComponent != null) {
           return ServiceExtensionResponse.result(
@@ -39,7 +39,7 @@ class PositionAttributesComponentConnector extends DevToolsConnector {
         final id = int.tryParse(parameters['id'] ?? '');
         final attribute = parameters['attribute'];
 
-        final positionComponent = findGameComponent<PositionComponent>(id);
+        final positionComponent = findComponent<PositionComponent>(id);
 
         if (positionComponent != null) {
           if (attribute == 'x') {
