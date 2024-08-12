@@ -27,7 +27,12 @@ class PositionComponentAttributesForm extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       data: (attributes) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Position',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             Row(
               children: [
                 IncrementalNumberFormField<double>(
@@ -56,6 +61,10 @@ class PositionComponentAttributesForm extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 8),
+            Text(
+              'Size',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             Row(
               children: [
                 IncrementalNumberFormField<double>(
