@@ -29,8 +29,10 @@ class _IncrementalNumberFormFieldState<T extends num>
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.initialValue != widget.initialValue) {
-      _controller.text = widget.initialValue.toString();
-      errorText = null;
+      setState(() {
+        _controller.text = widget.initialValue.toString();
+        errorText = null;
+      });
     }
   }
 

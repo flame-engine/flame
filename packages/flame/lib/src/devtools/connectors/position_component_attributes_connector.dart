@@ -22,6 +22,9 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
               'y': positionComponent.y,
               'width': positionComponent.width,
               'height': positionComponent.height,
+              'angle': positionComponent.angle,
+              'scaleX': positionComponent.scale.x,
+              'scaleY': positionComponent.scale.y,
             }),
           );
         } else {
@@ -50,6 +53,12 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
             positionComponent.width = double.parse(parameters['value']!);
           } else if (attribute == 'height') {
             positionComponent.height = double.parse(parameters['value']!);
+          } else if (attribute == 'angle') {
+            positionComponent.angle = double.parse(parameters['value']!);
+          } else if (attribute == 'scaleX') {
+            positionComponent.scale.x = double.parse(parameters['value']!);
+          } else if (attribute == 'scaleY') {
+            positionComponent.scale.y = double.parse(parameters['value']!);
           } else {
             return ServiceExtensionResponse.error(
               ServiceExtensionResponse.extensionError,

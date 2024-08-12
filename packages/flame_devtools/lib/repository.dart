@@ -112,12 +112,18 @@ class PositionComponentAttributes {
   final double y;
   final double width;
   final double height;
+  final double angle;
+  final double scaleX;
+  final double scaleY;
 
   PositionComponentAttributes({
     required this.x,
     required this.y,
     required this.width,
     required this.height,
+    required this.angle,
+    required this.scaleX,
+    required this.scaleY,
   });
 
   factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
@@ -126,6 +132,9 @@ class PositionComponentAttributes {
       y: json['y'] as double,
       width: json['width'] as double,
       height: json['height'] as double,
+      angle: json['angle'] as double,
+      scaleX: json['scaleX'] as double,
+      scaleY: json['scaleY'] as double,
     );
   }
 }
