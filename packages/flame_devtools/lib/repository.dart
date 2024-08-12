@@ -76,4 +76,56 @@ sealed class Repository {
     );
     return snapshotResponse.json!['snapshot'] as String?;
   }
+
+  static Future<PositionComponentAttributes> getPositionComponentAttributes({
+    int? id,
+  }) async {
+    final potentialPositionComponentResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getPositionComponentAttributes',
+      args: {'id': id},
+    );
+
+    return PositionComponentAttributes.fromJson(
+      potentialPositionComponentResponse.json!,
+    );
+  }
+
+  static Future<void> setPositionComponentAttribute({
+    required String attribute,
+    required dynamic value,
+    int? id,
+  }) async {
+    await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.setPositionComponentAttributes',
+      args: {
+        'id': id,
+        'attribute': attribute,
+        'value': value,
+      },
+    );
+  }
+}
+
+class PositionComponentAttributes {
+  final double x;
+  final double y;
+  final double width;
+  final double height;
+
+  PositionComponentAttributes({
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
+  });
+
+  factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
+    return PositionComponentAttributes(
+      x: json['x'] as double,
+      y: json['y'] as double,
+      width: json['width'] as double,
+      height: json['height'] as double,
+    );
+  }
 }

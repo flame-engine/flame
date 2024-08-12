@@ -3,6 +3,7 @@ import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame_devtools/widgets/component_snapshot.dart';
 import 'package:flame_devtools/widgets/component_tree_model.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
+import 'package:flame_devtools/widgets/position_component_attributes_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -152,6 +153,13 @@ class ComponentSection extends ConsumerWidget {
                             'Children: ${node.children.length}',
                             style: textStyle,
                           ),
+                          if (node.isPositionComponent)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: PositionComponentAttributesForm(
+                                componentId: node.id,
+                              ),
+                            ),
                           Text(
                             'toString:\n${node.toStringText}',
                             style: textStyle,
