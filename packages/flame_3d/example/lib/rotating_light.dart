@@ -9,7 +9,7 @@ class RotatingLight extends LightComponent {
       : super.point(
           position: Vector3.zero(),
           color: const Color(0xFF00FF00),
-          intensity: 500.0,
+          intensity: 20.0,
         );
 
   @override

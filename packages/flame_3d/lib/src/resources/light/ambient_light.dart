@@ -1,14 +1,11 @@
-import 'dart:ui';
+import 'dart:ui' show Color;
 
 import 'package:flame_3d/resources.dart';
 
-class AmbientLight {
-  Color color;
-  double intensity;
-
+class AmbientLight extends LightSource {
   AmbientLight({
-    this.color = const Color(0xFFFFFFFF),
-    this.intensity = 1.0,
+    super.color = const Color(0xFFFFFFFF),
+    super.intensity = 0.2,
   });
 
   void apply(Shader shader) {

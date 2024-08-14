@@ -45,7 +45,7 @@ class Shader extends Resource<gpu.Shader> {
 
   /// Set a [double] at the given [key] on the buffer.
   void setFloat(String key, double value) {
-    _setValue(key, _encodeFloat(value, Endian.little));
+    _setValue(key, [value]);
   }
 
   /// Set a [Matrix2] at the given [key] on the buffer.
@@ -103,11 +103,7 @@ class Shader extends Resource<gpu.Shader> {
     return (_instances[keys.first], keys.elementAtOrNull(1)) as (T, String?);
   }
 
-  static List<double> _encodeUint32(int value, Endian endian) {
+  static Float32List _encodeUint32(int value, Endian endian) {
     return (ByteData(16)..setUint32(0, value, endian)).buffer.asFloat32List();
-  }
-
-  static List<double> _encodeFloat(double value, Endian endian) {
-    return (ByteData(16)..setFloat32(0, value, endian)).buffer.asFloat32List();
   }
 }

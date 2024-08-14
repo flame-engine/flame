@@ -21,6 +21,7 @@ class Light extends Resource<void> {
 
   void apply(int index, Shader shader) {
     shader.setVector3('Light$index.position', transform.position);
-    source.apply(index, shader);
+    shader.setColor('Light$index.color', source.color);
+    shader.setFloat('Light$index.intensity', source.intensity);
   }
 }

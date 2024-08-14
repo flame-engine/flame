@@ -2,7 +2,7 @@
 
 // implementation based on https://learnopengl.com/PBR/Lighting
 
-#define NUM_LIGHTS 8
+// #define NUM_LIGHTS 8
 #define PI 3.14159265359
 #define EPSILON 0.0001
 
@@ -30,9 +30,9 @@ uniform AmbientLight {
   float intensity;
 } ambientLight;
 
-// uniform LightsInfo {
-//   uint numLights;
-// } lightsInfo;
+uniform LightsInfo {
+  uint numLights;
+} lightsInfo;
 
 // uniform Light {
 //   vec3 position;
@@ -151,23 +151,29 @@ void main() {
   vec3 lo = vec3(0.0);
 
   // for(uint i = 0; i < lightsInfo.numLights; ++i) {
+  if (lightsInfo.numLights > 0) {
     vec3 light0Pos = light0.position;
     vec3 light0Color = light0.color;
     float light0Intensity = light0.intensity;
 
     lo += processLight(light0Pos, light0Color, light0Intensity, baseColor, normal, viewDir, diffuse);
+  }
 
+  if (lightsInfo.numLights > 1) {
     vec3 light1Pos = light1.position;
     vec3 light1Color = light1.color;
     float light1Intensity = light1.intensity;
 
     lo += processLight(light1Pos, light1Color, light1Intensity, baseColor, normal, viewDir, diffuse);
+  }
 
+  if (lightsInfo.numLights > 2) {
     vec3 light2Pos = light2.position;
     vec3 light2Color = light2.color;
     float light2Intensity = light2.intensity;
 
     lo += processLight(light2Pos, light2Color, light2Intensity, baseColor, normal, viewDir, diffuse);
+  }
   // }
 
   vec3 color = ambient + lo;

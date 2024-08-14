@@ -36,6 +36,9 @@ class ExampleGame3D extends FlameGame<World3D>
   @override
   FutureOr<void> onLoad() async {
     world.addAll([
+      LightComponent.ambient(
+        intensity: 1.0,
+      ),
       RotatingLight(),
 
       LightComponent.point(
@@ -67,7 +70,7 @@ class ExampleGame3D extends FlameGame<World3D>
             ),
           ),
         ),
-        position: Vector3(-2, 3, 2),
+        position: Vector3(-2, 4, 2),
       ),
 
       // Add a player box
