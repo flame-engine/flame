@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
@@ -10,11 +12,26 @@ class LightComponent extends Component3D {
     super.position,
   });
 
-  LightComponent.spot({
+  LightComponent.point({
     Vector3? position,
+    Color color = const Color(0xFFFFFFFF),
+    double intensity = 1.0,
   }) : this(
-          source: SpotLight(),
+          source: PointLight(
+            color: color,
+            intensity: intensity,
+          ),
           position: position,
+        );
+
+  LightComponent.ambient({
+    Color color = const Color(0xFFFFFFFF),
+    double intensity = 0.2,
+  }) : this(
+          source: AmbientLight(
+            color: color,
+            intensity: intensity,
+          ),
         );
 
   final LightSource source;
