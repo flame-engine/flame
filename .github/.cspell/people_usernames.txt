@@ -20,3 +20,4 @@ tavian # tavianator.com
 videon # github.com/markvideon
 wolfenrain # github.com/wolfenrain
 xaha # github.com/xvrh
+luan # github.com/luanpotter

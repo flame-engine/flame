@@ -24,9 +24,8 @@ class Vertex {
         _storage = Float32List.fromList([
           ...position.storage, // 1, 2, 3
           ...texCoord.storage, // 4, 5
-          ...color.storage, // 6,7,8
-          // TODO(wolfenrain): fix normals not working properly
-          ...(normal ?? Vector3.zero()).storage, // 9, 10, 11
+          ...color.storage, // 6, 7, 8, 9
+          ...(normal ?? Vector3.zero()).storage, // 10, 11, 12
         ]);
 
   Float32List get storage => _storage;
