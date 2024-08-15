@@ -39,7 +39,7 @@ class Shader extends Resource<gpu.Shader> {
   void setVector4(String key, Vector4 vector) => _setValue(key, vector.storage);
 
   /// Set an [int] (encoded as uint) at the given [key] on the buffer.
-  void setUInt(String key, int value) {
+  void setUint(String key, int value) {
     _setValue(key, _encodeUint32(value, Endian.little));
   }
 

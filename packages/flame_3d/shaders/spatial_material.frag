@@ -150,7 +150,6 @@ void main() {
 
   vec3 lo = vec3(0.0);
 
-  // for(uint i = 0; i < lightsInfo.numLights; ++i) {
   if (lightsInfo.numLights > 0) {
     vec3 light0Pos = light0.position;
     vec3 light0Color = light0.color;
@@ -174,7 +173,6 @@ void main() {
 
     lo += processLight(light2Pos, light2Color, light2Intensity, baseColor, normal, viewDir, diffuse);
   }
-  // }
 
   vec3 color = ambient + lo;
 
