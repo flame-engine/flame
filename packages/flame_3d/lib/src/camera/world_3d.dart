@@ -69,8 +69,9 @@ class World3D extends flame.World with flame.HasGameReference {
     image.dispose();
   }
 
+  // TODO(luan): consider making this a fixed-size array later
   void _prepareDevice() {
-    device.lights = lights;
+    device.lightingInfo.lights = lights;
   }
 
   // TODO(wolfenrain): this is only here for testing purposes
