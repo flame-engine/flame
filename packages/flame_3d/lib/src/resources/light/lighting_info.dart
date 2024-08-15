@@ -21,7 +21,7 @@ class LightingInfo {
       throw Exception('At most 3 point lights are allowed');
     }
 
-    shader.setUInt('LightsInfo.numLights', numLights);
+    shader.setUint('LightsInfo.numLights', numLights);
     for (final (idx, light) in pointLights.indexed) {
       light.apply(idx, shader);
     }
