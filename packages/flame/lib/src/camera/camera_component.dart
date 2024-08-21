@@ -120,6 +120,17 @@ class CameraComponent extends Component {
 
   Viewfinder _viewfinder;
 
+  /// The [considerViewport] flag is read-only and cannot be set except through
+  /// [setBounds] as an optional parameter. If true, this represents that the
+  /// camera's [viewfinder] will recalculate your desired bounds with respect
+  /// to your viewport dimensions by ensuring that [ViewportAwareBoundsBehavior]
+  /// component is mounted correctly when the tree updates.
+  ///
+  /// The default value is false.
+  bool get considerViewport => _considerViewport;
+
+  bool _considerViewport = false;
+
   /// Special component that is designed to be the root of a game world.
   ///
   /// Multiple cameras can observe the same [world] simultaneously, and the
@@ -357,31 +368,21 @@ class CameraComponent extends Component {
   /// Note that this option only works with [Rectangle], [RoundedRectangle] and
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
+    _considerViewport = considerViewport;
+
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
-    final viewPortAwareBoundsBehavior =
-        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
+
     if (bounds == null) {
       boundedBehavior?.removeFromParent();
-      viewPortAwareBoundsBehavior?.removeFromParent();
       return;
     }
+
     if (boundedBehavior == null) {
       viewfinder.add(
         BoundedPositionBehavior(bounds: bounds, priority: 1000),
       );
     } else {
       boundedBehavior.bounds = bounds;
-    }
-    if (considerViewport) {
-      if (viewPortAwareBoundsBehavior == null) {
-        viewfinder.add(
-          ViewportAwareBoundsBehavior(boundsShape: bounds),
-        );
-      } else {
-        viewPortAwareBoundsBehavior.boundsShape = bounds;
-      }
-    } else {
-      viewPortAwareBoundsBehavior?.removeFromParent();
     }
   }
 
