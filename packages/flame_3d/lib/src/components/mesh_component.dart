@@ -30,7 +30,7 @@ class MeshComponent extends Object3D {
 
   @override
   void bind(GraphicsDevice device) {
-    world.device
+    device
       ..model.setFrom(transformMatrix)
       ..bindMesh(mesh);
   }
