@@ -16,7 +16,18 @@ class SpatialMaterial extends Material {
           vertexShader: Shader(
             _library['TextureVertex']!,
             slots: [
-              UniformSlot.value('VertexInfo', {'model', 'view', 'projection'}),
+              UniformSlot.value('VertexInfo', {
+                'model',
+                'view',
+                'projection',
+              }),
+              UniformSlot.value('JointMatrices', {
+                'joint0',
+                'joint1',
+                'joint2',
+                'joint3',
+                'joint4',
+              }),
             ],
           ),
           fragmentShader: Shader(
@@ -56,6 +67,7 @@ class SpatialMaterial extends Material {
   @override
   void bind(GraphicsDevice device) {
     _bindVertexInfo(device);
+    _bindJointMatrices(device);
     _bindMaterial(device);
     _bindCamera(device);
   }
@@ -65,6 +77,18 @@ class SpatialMaterial extends Material {
       ..setMatrix4('VertexInfo.model', device.model)
       ..setMatrix4('VertexInfo.view', device.view)
       ..setMatrix4('VertexInfo.projection', device.projection);
+  }
+
+  void _bindJointMatrices(GraphicsDevice device) {
+    final jointTransforms = device.jointsInfo.jointTransforms;
+    if (jointTransforms.length > 5) {
+      throw Exception(
+        'At most 5 joints per surface, found ${jointTransforms.length}',
+      );
+    }
+    for (final (idx, transform) in jointTransforms.indexed) {
+      vertexShader.setMatrix4('JointMatrices.joint$idx', transform);
+    }
   }
 
   void _bindMaterial(GraphicsDevice device) {

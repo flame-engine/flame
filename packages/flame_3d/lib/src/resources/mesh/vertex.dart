@@ -18,14 +18,20 @@ class Vertex {
     required Vector2 texCoord,
     this.color = const Color(0xFFFFFFFF),
     Vector3? normal,
+    Vector4? joints,
+    Vector4? weights,
   })  : position = position.immutable,
         texCoord = texCoord.immutable,
         normal = normal?.immutable,
+        joints = joints?.immutable,
+        weights = weights?.immutable,
         _storage = Float32List.fromList([
           ...position.storage, // 1, 2, 3
           ...texCoord.storage, // 4, 5
           ...color.storage, // 6, 7, 8, 9
           ...(normal ?? Vector3.zero()).storage, // 10, 11, 12
+          ...(joints ?? Vector4.zero()).storage, // 13, 14, 15, 16
+          ...(weights ?? Vector4.zero()).storage, // 17, 18, 19, 20
         ]);
 
   Float32List get storage => _storage;
@@ -40,6 +46,12 @@ class Vertex {
   /// The normal vector of the vertex.
   final ImmutableVector3? normal;
 
+  /// The joints of the vertex.
+  final ImmutableVector4? joints;
+
+  /// The weights of the vertex.
+  final ImmutableVector4? weights;
+
   /// The color on the vertex.
   final Color color;
 
@@ -49,16 +61,27 @@ class Vertex {
       position == other.position &&
       texCoord == other.texCoord &&
       normal == other.normal &&
-      color == other.color;
+      color == other.color &&
+      joints == other.joints &&
+      weights == other.weights;
 
   @override
-  int get hashCode => Object.hashAll([position, texCoord, normal, color]);
+  int get hashCode => Object.hashAll([
+        position,
+        texCoord,
+        normal,
+        color,
+        joints,
+        weights,
+      ]);
 
   Vertex copyWith({
     Vector3? position,
     Vector2? texCoord,
     Vector3? normal,
     Color? color,
+    Vector4? joints,
+    Vector4? weights,
   }) {
     // TODO(wolfenrain): optimize this.
     return Vertex(
@@ -66,6 +89,8 @@ class Vertex {
       texCoord: texCoord ?? this.texCoord.mutable,
       normal: normal ?? this.normal?.mutable,
       color: color ?? this.color,
+      joints: joints ?? this.joints?.mutable,
+      weights: weights ?? this.weights?.mutable,
     );
   }
 
