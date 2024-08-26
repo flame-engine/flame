@@ -145,9 +145,9 @@ void main() {
   color = color / (color + vec3(1.0));
   color = pow(color, vec3(1.0 / 2.2));
 
-  int idx = int(lightsInfo.numLights) - 3;
+  int idx = int(lightsInfo.numLights) - 2;
   if (lights[idx].position.x == 0 && lights[idx].position.y == 0 && lights[idx].position.z == 0 && lights[idx].color.r == 0 && lights[idx].color.g == 0 && lights[idx].color.b == 0 && lights[idx].intensity.x == 0) {
-    outColor = vec4(0.04, 0.0, 0.02, 1.0);
+    outColor = vec4(1, 0, 1, 1);
   } else {
     outColor = vec4(color, 1.0);
   }
