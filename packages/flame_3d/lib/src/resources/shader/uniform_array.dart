@@ -33,7 +33,9 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
         data.addAll(entry.value.data);
       }
     }
-    return Float32List.fromList(data).buffer;
+    final buffer = Float32List.fromList(data).buffer;
+    print('Resource ${slot.name} has size ${buffer.lengthInBytes}');
+    return buffer;
   }
 
   Map<int, ({int hash, List<double> data})> _get(int index) {
@@ -49,6 +51,8 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
 
   @override
   void set(UniformArrayKey key, ByteBuffer buffer) {
+    print('Setting $key to ${buffer.lengthInBytes} bytes');
+
     final storage = _get(key.index);
     final index = slot.indexOf(key.field);
 
