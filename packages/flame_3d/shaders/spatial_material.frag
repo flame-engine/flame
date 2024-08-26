@@ -2,7 +2,7 @@
 
 // implementation based on https://learnopengl.com/PBR/Lighting
 
-// #define NUM_LIGHTS 8
+#define MAX_LIGHTS 8
 #define PI 3.14159265359
 #define EPSILON 0.0001
 
@@ -23,7 +23,13 @@ uniform Material {
   float roughness;
 } material;
 
-// light info
+// lighting info
+
+uniform Light {
+  vec4 position;
+  vec4 color;
+  vec4 intensity;
+} lights[MAX_LIGHTS];
 
 uniform AmbientLight {
   vec3 color;
@@ -33,30 +39,6 @@ uniform AmbientLight {
 uniform LightsInfo {
   uint numLights;
 } lightsInfo;
-
-// uniform Light {
-//   vec3 position;
-//   vec3 color;
-//   float intensity;
-// } lights[NUM_LIGHTS];
-
-uniform Light0 {
-  vec3 position;
-  vec3 color;
-  float intensity;
-} light0;
-
-uniform Light1 {
-  vec3 position;
-  vec3 color;
-  float intensity;
-} light1;
-
-uniform Light2 {
-  vec3 position;
-  vec3 color;
-  float intensity;
-} light2;
 
 // camera info
 
@@ -150,28 +132,12 @@ void main() {
 
   vec3 lo = vec3(0.0);
 
-  if (lightsInfo.numLights > 0) {
-    vec3 light0Pos = light0.position;
-    vec3 light0Color = light0.color;
-    float light0Intensity = light0.intensity;
+  for (uint i = 0; i < lightsInfo.numLights; i++) {
+    vec3 lightPos = lights[i].position.xyz;
+    vec3 lightColor = lights[i].color.xyz;
+    float lightIntensity = lights[i].intensity.x;
 
-    lo += processLight(light0Pos, light0Color, light0Intensity, baseColor, normal, viewDir, diffuse);
-  }
-
-  if (lightsInfo.numLights > 1) {
-    vec3 light1Pos = light1.position;
-    vec3 light1Color = light1.color;
-    float light1Intensity = light1.intensity;
-
-    lo += processLight(light1Pos, light1Color, light1Intensity, baseColor, normal, viewDir, diffuse);
-  }
-
-  if (lightsInfo.numLights > 2) {
-    vec3 light2Pos = light2.position;
-    vec3 light2Color = light2.color;
-    float light2Intensity = light2.intensity;
-
-    lo += processLight(light2Pos, light2Color, light2Intensity, baseColor, normal, viewDir, diffuse);
+    lo += processLight(lightPos, lightColor, lightIntensity, baseColor, normal, viewDir, diffuse);
   }
 
   vec3 color = ambient + lo;
@@ -179,5 +145,10 @@ void main() {
   color = color / (color + vec3(1.0));
   color = pow(color, vec3(1.0 / 2.2));
 
-  outColor = vec4(color, 1.0);
+  int idx = int(lightsInfo.numLights) - 3;
+  if (lights[idx].position.x == 0 && lights[idx].position.y == 0 && lights[idx].position.z == 0 && lights[idx].color.r == 0 && lights[idx].color.g == 0 && lights[idx].color.b == 0 && lights[idx].intensity.x == 0) {
+    outColor = vec4(0.04, 0.0, 0.02, 1.0);
+  } else {
+    outColor = vec4(color, 1.0);
+  }
 }
