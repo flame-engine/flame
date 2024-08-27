@@ -4,12 +4,14 @@ A sample Flame game showcasing the basic game structure and the use of PositionC
 
 There are a lot more more [examples](../doc/examples) and [docs](../doc).
 
+
 # Running the sample app
 
 Before running the sample app, be sure you have run `melos bootstrap` from the root
 of the `flame` repository.
 
 Then, run the sample app from your IDE or by running `flutter run` from this directory.
+
 
 # Try using the Flame developer tools when running this app
 
