@@ -1,3 +1,5 @@
+## 1.5.4
+
 ## 1.5.3
 
  - **FEAT**: Adding group to flame fire atlas ([#3245](https://github.com/flame-engine/flame/issues/3245)). ([0fab444c](https://github.com/flame-engine/flame/commit/0fab444c3dd9ad8faa1e0e9e702150b950dbf30f))
