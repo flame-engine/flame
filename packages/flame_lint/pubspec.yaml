@@ -1,6 +1,6 @@
 name: flame_lint
 description: Flame lint package
-version: 1.2.0
+version: 1.2.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
 funding:
   - https://opencollective.com/blue-fire

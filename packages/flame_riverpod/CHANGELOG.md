@@ -1,3 +1,7 @@
+## 5.4.3
+
+ - Bump "flame_riverpod" to `5.4.3`.
+
 ## 5.4.2
 
  - Update a dependency to the latest release.
