@@ -24,6 +24,17 @@ uniform JointMatrices {
   mat4 joint2;
   mat4 joint3;
   mat4 joint4;
+  mat4 joint5;
+  mat4 joint6;
+  mat4 joint7;
+  mat4 joint8;
+  mat4 joint9;
+  mat4 joint10;
+  mat4 joint11;
+  mat4 joint12;
+  mat4 joint13;
+  mat4 joint14;
+  mat4 joint15;
 } joints;
 
 mat4 jointMat(float jointIndex) {
@@ -37,6 +48,28 @@ mat4 jointMat(float jointIndex) {
     return joints.joint3;
   } else if (jointIndex == 4.0) {
     return joints.joint4;
+  } else if (jointIndex == 5.0) {
+    return joints.joint5;
+  } else if (jointIndex == 6.0) {
+    return joints.joint6;
+  } else if (jointIndex == 7.0) {
+    return joints.joint7;
+  } else if (jointIndex == 8.0) {
+    return joints.joint8;
+  } else if (jointIndex == 9.0) {
+    return joints.joint9;
+  } else if (jointIndex == 10.0) {
+    return joints.joint10;
+  } else if (jointIndex == 11.0) {
+    return joints.joint11;
+  } else if (jointIndex == 12.0) {
+    return joints.joint12;
+  } else if (jointIndex == 13.0) {
+    return joints.joint13;
+  } else if (jointIndex == 14.0) {
+    return joints.joint14;
+  } else if (jointIndex == 15.0) {
+    return joints.joint15;
   } else {
     return mat4(0.0);
   }

@@ -21,13 +21,10 @@ class SpatialMaterial extends Material {
                 'view',
                 'projection',
               }),
-              UniformSlot.value('JointMatrices', {
-                'joint0',
-                'joint1',
-                'joint2',
-                'joint3',
-                'joint4',
-              }),
+              UniformSlot.value(
+                'JointMatrices',
+                List.generate(_maxJoints, (idx) => 'joint$idx').toSet(),
+              ),
             ],
           ),
           fragmentShader: Shader(
@@ -81,9 +78,9 @@ class SpatialMaterial extends Material {
 
   void _bindJointMatrices(GraphicsDevice device) {
     final jointTransforms = device.jointsInfo.jointTransforms;
-    if (jointTransforms.length > 5) {
+    if (jointTransforms.length > _maxJoints) {
       throw Exception(
-        'At most 5 joints per surface, found ${jointTransforms.length}',
+        'At most $_maxJoints joints per surface, found ${jointTransforms.length}',
       );
     }
     for (final (idx, transform) in jointTransforms.indexed) {
@@ -113,4 +110,6 @@ class SpatialMaterial extends Material {
   static final _library = gpu.ShaderLibrary.fromAsset(
     'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
   )!;
+
+  static const _maxJoints = 16;
 }
