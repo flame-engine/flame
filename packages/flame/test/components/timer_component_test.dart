@@ -49,6 +49,7 @@ void main() {
     testWithFlameGame('runs the tick method', (game) async {
       final timer = _MyTimerComponent();
       game.add(timer);
+      await game.ready();
       game.update(0);
 
       game.update(1.2);
@@ -61,6 +62,7 @@ void main() {
         (game) async {
       final world = game.world;
       world.add(_MyTimerComponent());
+      await game.ready();
       game.update(0);
 
       game.update(1.2);
@@ -91,6 +93,7 @@ void main() {
           },
         ),
       );
+      await game.ready();
       game.update(0);
       game.update(1.2);
 
