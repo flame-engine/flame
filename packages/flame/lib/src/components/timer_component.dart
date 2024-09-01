@@ -40,14 +40,12 @@ class TimerComponent extends Component {
 
   @override
   @mustCallSuper
-  FutureOr<void> onLoad() {
-    final result = super.onLoad();
+  FutureOr<void> onLoad() async {
+    await super.onLoad();
 
     if (tickOnLoad) {
       onTick();
     }
-
-    return result;
   }
 
   /// Called every time the [timer] reached a tick.
