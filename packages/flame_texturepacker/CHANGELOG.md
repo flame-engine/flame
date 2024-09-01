@@ -1,3 +1,9 @@
+## 4.1.0
+
+ - **PERF**: Optimize `TexturePackerSprite` when sprites do not need to be rotated ([#3236](https://github.com/flame-engine/flame/issues/3236)). ([e9512e9b](https://github.com/flame-engine/flame/commit/e9512e9b28188476d5956e875430f1ef195f5882))
+ - **FEAT**: Enhance TexturePackerSprite ([#3224](https://github.com/flame-engine/flame/issues/3224)). ([0b0a6c1b](https://github.com/flame-engine/flame/commit/0b0a6c1bacfca8772d1b9518e9433d994e68bae1))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
 ## 4.0.1
 
  - **FIX**: TexturePacker fixes the wrong path for the atlas file. ([#3124](https://github.com/flame-engine/flame/issues/3124)). ([69f5c388](https://github.com/flame-engine/flame/commit/69f5c388ce4e0a64ba5f7331a596777a9eab1e40))
