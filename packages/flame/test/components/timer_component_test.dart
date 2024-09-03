@@ -26,7 +26,7 @@ class _MyTickOnLoadTimerComponent extends TimerComponent {
           period: 1,
           repeat: true,
           removeOnFinish: false,
-          tickOnLoad: true,
+          tickWhenLoaded: true,
         );
 
   @override
@@ -101,7 +101,7 @@ void main() {
     });
 
     testWithFlameGame(
-      'runs the tick method on load when tickOnLoad is true',
+      'runs the tick method on load when tickWhenLoaded is true',
       (game) async {
         final timer = _MyTickOnLoadTimerComponent();
         game.add(timer);

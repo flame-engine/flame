@@ -10,7 +10,7 @@ class TimerComponent extends Component {
   late final Timer timer;
   final bool removeOnFinish;
   final VoidCallback? _onTick;
-  final bool tickOnLoad;
+  final bool tickWhenLoaded;
 
   /// Creates a [TimerComponent]
   ///
@@ -19,7 +19,7 @@ class TimerComponent extends Component {
   /// [autoStart] When true, will start upon instantiation (default is true)
   /// [onTick] When provided, will be called every time [period] is reached.
   /// This overrides the [onTick] method
-  /// [tickOnLoad] When true, will call [onTick] when the component is first
+  /// [tickWhenLoaded] When true, will call [onTick] when the component is first
   /// loaded (default is false).
   TimerComponent({
     required double period,
@@ -27,7 +27,7 @@ class TimerComponent extends Component {
     bool autoStart = true,
     this.removeOnFinish = false,
     VoidCallback? onTick,
-    this.tickOnLoad = false,
+    this.tickWhenLoaded = false,
     super.key,
   }) : _onTick = onTick {
     timer = Timer(
@@ -43,7 +43,7 @@ class TimerComponent extends Component {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    if (tickOnLoad) {
+    if (tickWhenLoaded) {
       onTick();
     }
   }
