@@ -170,7 +170,7 @@ void main() {
         final component = _MyComponent();
         component.makeTransparent();
 
-        expect(component.paint.color.opacity, 0);
+        expect(component.paint.color.a, 0);
       },
     );
 
@@ -182,7 +182,7 @@ void main() {
         component.makeTransparent(paintId: _MyComponentKeys.background);
 
         expect(
-          component.getPaint(_MyComponentKeys.background).color.opacity,
+          component.getPaint(_MyComponentKeys.background).color.a,
           0,
         );
       },
@@ -195,7 +195,7 @@ void main() {
         component.makeTransparent();
         component.makeOpaque();
 
-        expect(component.paint.color.opacity, 1);
+        expect(component.paint.color.a, 1);
       },
     );
 
@@ -210,7 +210,7 @@ void main() {
         component.makeOpaque(paintId: _MyComponentKeys.background);
 
         expect(
-          component.getPaint(_MyComponentKeys.background).color.opacity,
+          component.getPaint(_MyComponentKeys.background).color.a,
           1,
         );
       },
@@ -222,7 +222,7 @@ void main() {
         final component = _MyComponent();
         component.setOpacity(0.2);
 
-        expect(component.paint.color.opacity, 0.2);
+        expect(component.paint.color.a, 0.2);
       },
     );
 
@@ -234,7 +234,7 @@ void main() {
         component.setOpacity(0.2, paintId: _MyComponentKeys.background);
 
         expect(
-          component.getPaint(_MyComponentKeys.background).color.opacity,
+          component.getPaint(_MyComponentKeys.background).color.a,
           0.2,
         );
       },

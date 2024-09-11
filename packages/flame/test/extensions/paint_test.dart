@@ -46,9 +46,8 @@ void main() {
       // valid inputs are : ccc, CCC, #ccc, #CCC, #c1c1c1, #C1C1C1, c1c1c1,
       // C1C1C1
       final color = ColorExtension.random();
-      final sixHexColor = color.red.toRadixString(16).padLeft(2, '0') +
-          color.green.toRadixString(16).padLeft(2, '0') +
-          color.blue.toRadixString(16).padLeft(2, '0');
+
+      final sixHexColor = '${_hex2(color.r)}${_hex2(color.g)}${_hex2(color.b)}';
 
       // C1C1C1
       final sixUpperCaseColor = sixHexColor.toUpperCase();
@@ -81,9 +80,8 @@ void main() {
       );
 
       // Let's generate a new color from only 3 digits
-      final threeHexColor = color.red.toRadixString(16).padLeft(1, '0')[0] +
-          color.green.toRadixString(16).padLeft(1, '0')[0] +
-          color.blue.toRadixString(16).padLeft(1, '0')[0];
+      final threeHexColor =
+          '${_hex1(color.r)}${_hex1(color.g)}${_hex1(color.b)}';
       final threeDigitsColor = ColorExtension.fromRGBHexString(threeHexColor);
 
       // CCC
@@ -127,10 +125,8 @@ void main() {
       // valid inputs are : fccc, FCCC, #fccc, #FCCC, #ffc1c1c1, #FFC1C1C1,
       // ffc1c1c1, FFC1C1C1
       var color = ColorExtension.random(rng: r);
-      final sixHexColor = color.alpha.toRadixString(16).padLeft(2, '0') +
-          color.red.toRadixString(16).padLeft(2, '0') +
-          color.green.toRadixString(16).padLeft(2, '0') +
-          color.blue.toRadixString(16).padLeft(2, '0');
+      final sixHexColor = '${_hex2(color.a)}${_hex2(color.r)}'
+          '${_hex2(color.g)}${_hex2(color.b)}';
 
       // FFC1C1C1
       final sixUpperCaseColor = sixHexColor.toUpperCase();
@@ -163,10 +159,8 @@ void main() {
       );
 
       // Let's generate a new color from only 3 digits
-      final threeHexColor = color.alpha.toRadixString(16).padLeft(1, '0')[0] +
-          color.red.toRadixString(16).padLeft(1, '0')[0] +
-          color.green.toRadixString(16).padLeft(1, '0')[0] +
-          color.blue.toRadixString(16).padLeft(1, '0')[0];
+      final threeHexColor = '${_hex1(color.a)}${_hex1(color.r)}'
+          '${_hex1(color.g)}${_hex1(color.b)}';
       color = ColorExtension.fromARGBHexString(threeHexColor);
 
       // FCCC
@@ -213,10 +207,18 @@ void main() {
       // As explained in the documentation
       // object with the set alpha as [withAlpha]
       expect(
-        paint.color.alpha,
-        color.alpha,
+        paint.color.a,
+        closeTo(color.a, 10e-6),
         reason: 'alpha does not have the right value',
       );
     });
   });
+}
+
+String _hex2(double v) {
+  return (255 * v).round().toRadixString(16).padLeft(2, '0');
+}
+
+String _hex1(double v) {
+  return (255 * v).round().toRadixString(16).padLeft(1, '0')[0];
 }
