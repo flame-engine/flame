@@ -25,6 +25,10 @@ class SpriteWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
+  /// A custom [Paint] to be used when rendering the sprite
+  /// When ommited the default paint from the [Sprite] class will be used.
+  final Paint? paint;
+
   final FutureOr<Sprite> _spriteFuture;
 
   /// renders the [sprite] as a Widget.
@@ -36,6 +40,7 @@ class SpriteWidget extends StatelessWidget {
     this.angle = 0,
     this.errorBuilder,
     this.loadingBuilder,
+    this.paint,
     super.key,
   }) : _spriteFuture = sprite;
 
@@ -54,6 +59,7 @@ class SpriteWidget extends StatelessWidget {
     Vector2? srcSize,
     this.errorBuilder,
     this.loadingBuilder,
+    this.paint,
     super.key,
   }) : _spriteFuture = Sprite.load(
           path,
@@ -71,6 +77,7 @@ class SpriteWidget extends StatelessWidget {
           sprite: sprite,
           anchor: anchor,
           angle: angle,
+          paint: paint,
         );
       },
       errorBuilder: errorBuilder,
@@ -91,17 +98,20 @@ class InternalSpriteWidget extends StatelessWidget {
   /// The angle to rotate this [sprite], in rad. (default = 0)
   final double angle;
 
+  final Paint? paint;
+
   const InternalSpriteWidget({
     required this.sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
+    this.paint,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: SpritePainter(sprite, anchor, angle: angle),
+      painter: SpritePainter(sprite, anchor, paint, angle: angle),
       size: sprite.srcSize.toSize(),
     );
   }
