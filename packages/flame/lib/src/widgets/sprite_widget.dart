@@ -26,7 +26,7 @@ class SpriteWidget extends StatelessWidget {
   final WidgetBuilder? loadingBuilder;
 
   /// A custom [Paint] to be used when rendering the sprite
-  /// When ommited the default paint from the [Sprite] class will be used.
+  /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
   final FutureOr<Sprite> _spriteFuture;

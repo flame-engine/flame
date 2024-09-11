@@ -31,7 +31,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   final VoidCallback? onComplete;
 
   /// A custom [Paint] to be used when rendering the sprite
-  /// When ommited the default paint from the [Sprite] class will be used.
+  /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
   const SpriteAnimationWidget({
