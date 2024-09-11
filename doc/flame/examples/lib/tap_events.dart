@@ -115,7 +115,7 @@ class ExpandingCircle extends Component {
       removeFromParent();
     } else {
       final opacity = 1 - radius / maxRadius;
-      _paint.color = _baseColor.withOpacity(opacity);
+      _paint.color = _baseColor.withValues(alpha: opacity);
       _paint.strokeWidth = _outerRadius - _innerRadius;
     }
   }
