@@ -9,7 +9,7 @@ void main() {
   group('uniform bindings', () {
     test('can bind a vec3 a slot', () {
       final slot = UniformSlot.value('Vertex', {'position'});
-      final shader = createShader([slot]);
+      final shader = _createShader([slot]);
 
       shader.setVector3('Vertex.position', Vector3(7, 8, 9));
 
@@ -20,7 +20,7 @@ void main() {
 
     test('can bind multiple vector slots', () {
       final slot = UniformSlot.value('AmbientLight', {'color', 'position'});
-      final shader = createShader([slot]);
+      final shader = _createShader([slot]);
 
       shader.setVector3('AmbientLight.position', Vector3(7, 8, 9));
       shader.setVector4('AmbientLight.color', Vector4(4, 3, 2, 1));
@@ -36,7 +36,7 @@ void main() {
 
     test('can bind a mat4 a slot', () {
       final slot = UniformSlot.value('Vertex', {'camera'});
-      final shader = createShader([slot]);
+      final shader = _createShader([slot]);
 
       shader.setMatrix4('Vertex.camera', Matrix4.identity());
 
@@ -47,7 +47,7 @@ void main() {
 
     test('can bind a vec3 to an array slot', () {
       final slot = UniformSlot.array('Light', {'position'});
-      final shader = createShader([slot]);
+      final shader = _createShader([slot]);
 
       shader.setVector3('Light[0].position', Vector3(7, 8, 9));
 
@@ -63,7 +63,7 @@ void main() {
         UniformSlot.value('Material', {'color', 'metallic'}),
         UniformSlot.array('Light', {'position', 'color'}),
       ];
-      final shader = createShader(slots);
+      final shader = _createShader(slots);
 
       shader.setVector3('Vertex.position', Vector3(1, 2, 3));
       shader.setVector4('Material.color', Vector4(4, 3, 2, 1));
@@ -105,7 +105,7 @@ void main() {
   });
 }
 
-Shader createShader(List<UniformSlot> slots) {
+Shader _createShader(List<UniformSlot> slots) {
   return Shader(
     name: '-test-',
     slots: slots,
