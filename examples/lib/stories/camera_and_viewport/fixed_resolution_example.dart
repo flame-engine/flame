@@ -127,7 +127,7 @@ class TextButton extends ButtonComponent {
           ),
           buttonDown: RectangleComponent(
             size: Vector2(200, 100),
-            paint: Paint()..color = BasicPalette.orange.color.withOpacity(0.5),
+            paint: BasicPalette.orange.withOpacity(0.5).paint(),
           ),
           children: [
             TextComponent(
