@@ -15,5 +15,14 @@ void main() {
       expect(mutable.x, 1);
       expect(mutable.y, 2);
     });
+
+    test('can lerp', () {
+      final a = Vector2(1, 2);
+      final b = Vector2(3, 4);
+
+      final result = Vector2Extension.lerp(a, b, 0.5);
+      expect(result.x, 2);
+      expect(result.y, 3);
+    });
   });
 }
