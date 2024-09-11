@@ -33,7 +33,7 @@ void main() {
         OpacityEffect.by(0.4, EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.getOpacity(), 0.2);
+      expectDouble(component.getOpacity(), 0.2, epsilon: epsilon);
       expect(component.children.length, 1);
 
       game.update(0.5);
@@ -55,7 +55,7 @@ void main() {
         OpacityEffect.to(0.4, EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.getOpacity(), 0.2);
+      expectDouble(component.getOpacity(), 0.2, epsilon: epsilon);
       expect(component.children.length, 1);
 
       game.update(0.5);

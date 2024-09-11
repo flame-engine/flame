@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -209,9 +210,9 @@ void main() {
         );
         component.makeOpaque(paintId: _MyComponentKeys.background);
 
-        expect(
+        expectDouble(
           component.getPaint(_MyComponentKeys.background).color.a,
-          1,
+          1.0,
         );
       },
     );
@@ -222,7 +223,7 @@ void main() {
         final component = _MyComponent();
         component.setOpacity(0.2);
 
-        expect(component.paint.color.a, 0.2);
+        expectDouble(component.paint.color.a, 0.2);
       },
     );
 
@@ -233,7 +234,7 @@ void main() {
         component.setPaint(_MyComponentKeys.background, Paint());
         component.setOpacity(0.2, paintId: _MyComponentKeys.background);
 
-        expect(
+        expectDouble(
           component.getPaint(_MyComponentKeys.background).color.a,
           0.2,
         );
