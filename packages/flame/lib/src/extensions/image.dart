@@ -47,48 +47,45 @@ extension ImageExtension on Image {
   ///
   /// The [amount] is a double value between 0 and 1.
   Future<Image> darken(double amount) async {
-    assert(amount >= 0 && amount <= 1);
-
-    final pixelData = await pixelsInUint8();
-    final newPixelData = Uint8List(pixelData.length);
-
-    for (var i = 0; i < pixelData.length; i += 4) {
-      final color = Color.fromARGB(
-        pixelData[i + 3],
-        pixelData[i + 0],
-        pixelData[i + 1],
-        pixelData[i + 2],
-      ).darken(amount);
-
-      newPixelData[i] = color.red;
-      newPixelData[i + 1] = color.green;
-      newPixelData[i + 2] = color.blue;
-      newPixelData[i + 3] = color.alpha;
-    }
-    return fromPixels(newPixelData, width, height);
+    return _transformColorsByAmount(
+      amount,
+      (color, amount) => color.darken(amount),
+    );
   }
 
   /// Change each pixel's color to be brighter and return a new [Image].
   ///
   /// The [amount] is a double value between 0 and 1.
   Future<Image> brighten(double amount) async {
+    return _transformColorsByAmount(
+      amount,
+      (color, amount) => color.brighten(amount),
+    );
+  }
+
+  Future<Image> _transformColorsByAmount(
+    double amount,
+    Color Function(Color, double) process,
+  ) async {
     assert(amount >= 0 && amount <= 1);
 
     final pixelData = await pixelsInUint8();
     final newPixelData = Uint8List(pixelData.length);
 
     for (var i = 0; i < pixelData.length; i += 4) {
-      final color = Color.fromARGB(
+      final originalColor = Color.fromARGB(
         pixelData[i + 3],
         pixelData[i + 0],
         pixelData[i + 1],
         pixelData[i + 2],
-      ).brighten(amount);
+      );
 
-      newPixelData[i] = color.red;
-      newPixelData[i + 1] = color.green;
-      newPixelData[i + 2] = color.blue;
-      newPixelData[i + 3] = color.alpha;
+      final color = process(originalColor, amount);
+
+      newPixelData[i] = (255 * color.r).round();
+      newPixelData[i + 1] = (255 * color.g).round();
+      newPixelData[i + 2] = (255 * color.b).round();
+      newPixelData[i + 3] = (255 * color.a).round();
     }
     return fromPixels(newPixelData, width, height);
   }
