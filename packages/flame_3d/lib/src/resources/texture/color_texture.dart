@@ -11,6 +11,7 @@ class ColorTexture extends Texture {
   ColorTexture(Color color, {int width = 1, int height = 1})
       : super(
           Uint32List.fromList(
+            // ignore: deprecated_member_use
             List.filled(width * height, color.value),
           ).buffer.asByteData(),
           width: width,
