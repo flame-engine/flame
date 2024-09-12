@@ -19,5 +19,16 @@ void main() {
       expect(mutable.z, 3);
       expect(mutable.w, 4);
     });
+
+    test('can lerp', () {
+      final a = Vector4(1, 2, 3, 4);
+      final b = Vector4(3, 4, 5, 6);
+
+      final result = a.lerp(b, 0.5);
+      expect(result.x, 2);
+      expect(result.y, 3);
+      expect(result.z, 4);
+      expect(result.w, 5);
+    });
   });
 }
