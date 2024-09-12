@@ -25,5 +25,15 @@ void main() {
       expect((a - b).storage, [-1, 8, -3]);
       expect((a - b.immutable).storage, [-1, 8, -3]);
     });
+
+    test('can lerp', () {
+      final a = Vector3(1, 2, 3);
+      final b = Vector3(3, 4, 5);
+
+      final result = a.lerp(b, 0.5);
+      expect(result.x, 2);
+      expect(result.y, 3);
+      expect(result.z, 4);
+    });
   });
 }

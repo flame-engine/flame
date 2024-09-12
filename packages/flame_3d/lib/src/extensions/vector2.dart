@@ -6,6 +6,18 @@ typedef ImmutableVector2 = ({double x, double y});
 extension Vector2Extension on Vector2 {
   /// Returns an immutable representation of the vector.
   ImmutableVector2 get immutable => (x: x, y: y);
+
+  Vector2 lerp(Vector2 other, double t) {
+    return Vector2Utils.lerp(this, other, t);
+  }
+}
+
+final class Vector2Utils {
+  Vector2Utils._();
+
+  static Vector2 lerp(Vector2 a, Vector2 b, double t) {
+    return a + (b - a).scaled(t);
+  }
 }
 
 extension Vector2Math on ImmutableVector2 {
