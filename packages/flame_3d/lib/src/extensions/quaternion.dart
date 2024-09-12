@@ -18,7 +18,9 @@ extension QuaternionExtension on Quaternion {
   }
 }
 
-extension QuaternionUtils on Quaternion {
+final class QuaternionUtils {
+  QuaternionUtils._();
+
   static Quaternion slerp(
     Quaternion q0,
     Quaternion q1,
