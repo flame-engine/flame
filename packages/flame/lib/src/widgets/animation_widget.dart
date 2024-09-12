@@ -30,6 +30,10 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// A callback that is called when the animation completes.
   final VoidCallback? onComplete;
 
+  /// A custom [Paint] to be used when rendering the sprite.
+  /// When omitted the default paint from the [Sprite] class will be used.
+  final Paint? paint;
+
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
     required SpriteAnimationTicker animationTicker,
@@ -38,6 +42,7 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.onComplete,
+    this.paint,
     super.key,
   })  : _animationFuture = animation,
         _animationTicker = animationTicker;
@@ -57,6 +62,7 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.onComplete,
+    this.paint,
     super.key,
   })  : _animationFuture = SpriteAnimation.load(path, data, images: images),
         _animationTicker = null;
@@ -74,6 +80,7 @@ class SpriteAnimationWidget extends StatelessWidget {
           animationTicker: ticker,
           anchor: anchor,
           playing: playing,
+          paint: paint,
         );
       },
       errorBuilder: errorBuilder,
@@ -97,11 +104,14 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
+  final Paint? paint;
+
   const InternalSpriteAnimationWidget({
     required this.animation,
     required this.animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
+    this.paint,
     super.key,
   });
 
@@ -193,6 +203,7 @@ class _InternalSpriteAnimationWidgetState
       painter: SpritePainter(
         widget.animationTicker.getSprite(),
         widget.anchor,
+        widget.paint,
       ),
     );
   }
