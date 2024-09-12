@@ -7,6 +7,12 @@ extension Vector2Extension on Vector2 {
   /// Returns an immutable representation of the vector.
   ImmutableVector2 get immutable => (x: x, y: y);
 
+  Vector2 lerp(Vector2 other, double t) {
+    return Vector2Utils.lerp(this, other, t);
+  }
+}
+
+extension Vector2Utils on Vector2 {
   static Vector2 lerp(Vector2 a, Vector2 b, double t) {
     return a + (b - a).scaled(t);
   }

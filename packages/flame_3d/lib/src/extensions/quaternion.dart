@@ -9,6 +9,16 @@ extension QuaternionExtension on Quaternion {
     return x * other.x + y * other.y + z * other.z + w * other.w;
   }
 
+  Quaternion lerp(Quaternion other, double t) {
+    return QuaternionUtils.lerp(this, other, t);
+  }
+
+  Quaternion slerp(Quaternion other, double t, {double epsilon = 10e-6}) {
+    return QuaternionUtils.slerp(this, other, t, epsilon: epsilon);
+  }
+}
+
+extension QuaternionUtils on Quaternion {
   static Quaternion slerp(
     Quaternion q0,
     Quaternion q1,

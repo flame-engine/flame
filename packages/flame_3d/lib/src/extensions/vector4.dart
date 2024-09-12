@@ -7,6 +7,12 @@ extension Vector4Extension on Vector4 {
   /// Returns an immutable representation of the vector.
   ImmutableVector4 get immutable => (x: x, y: y, z: z, w: w);
 
+  Vector4 lerp(Vector4 other, double t) {
+    return Vector4Utils.lerp(this, other, t);
+  }
+}
+
+extension Vector4Utils on Vector4 {
   static Vector4 lerp(Vector4 a, Vector4 b, double t) {
     return a + (b - a).scaled(t);
   }

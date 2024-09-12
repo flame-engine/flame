@@ -24,7 +24,7 @@ void main() {
       final a = Vector4(1, 2, 3, 4);
       final b = Vector4(3, 4, 5, 6);
 
-      final result = Vector4Extension.lerp(a, b, 0.5);
+      final result = a.lerp(b, 0.5);
       expect(result.x, 2);
       expect(result.y, 3);
       expect(result.z, 4);

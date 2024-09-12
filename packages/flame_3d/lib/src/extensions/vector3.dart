@@ -7,6 +7,12 @@ extension Vector3Extension on Vector3 {
   /// Returns an immutable representation of the vector.
   ImmutableVector3 get immutable => (x: x, y: y, z: z);
 
+  Vector3 lerp(Vector3 other, double t) {
+    return Vector3Utils.lerp(this, other, t);
+  }
+}
+
+extension Vector3Utils on Vector3 {
   static Vector3 lerp(Vector3 a, Vector3 b, double t) {
     return a + (b - a).scaled(t);
   }

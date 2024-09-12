@@ -30,7 +30,7 @@ void main() {
       final a = Vector3(1, 2, 3);
       final b = Vector3(3, 4, 5);
 
-      final result = Vector3Extension.lerp(a, b, 0.5);
+      final result = a.lerp(b, 0.5);
       expect(result.x, 2);
       expect(result.y, 3);
       expect(result.z, 4);

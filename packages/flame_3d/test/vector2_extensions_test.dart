@@ -20,7 +20,7 @@ void main() {
       final a = Vector2(1, 2);
       final b = Vector2(3, 4);
 
-      final result = Vector2Extension.lerp(a, b, 0.5);
+      final result = a.lerp(b, 0.5);
       expect(result.x, 2);
       expect(result.y, 3);
     });
