@@ -30,7 +30,7 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// A callback that is called when the animation completes.
   final VoidCallback? onComplete;
 
-  /// A custom [Paint] to be used when rendering the sprite
+  /// A custom [Paint] to be used when rendering the sprite.
   /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
