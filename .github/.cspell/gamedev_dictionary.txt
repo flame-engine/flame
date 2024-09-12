@@ -53,6 +53,7 @@ BGRA # blue green red alpha
 rrect # rounded rect
 scos # cosine of a rotation multiplied by the scale factor
 shaderbundle # a file extension used to bundle shaders for GLSL
+slerp # short for spherical linear interpolation, a method to interpolate quaternions
 spritesheet # a single image packing multiple sprites, normally in a grid
 ssin # sine of a rotation multiplied by the scale factor
 stylesheet # name of a CSS style file
