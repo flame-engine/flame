@@ -80,7 +80,8 @@ class SpatialMaterial extends Material {
     final jointTransforms = device.jointsInfo.jointTransforms;
     if (jointTransforms.length > _maxJoints) {
       throw Exception(
-        'At most $_maxJoints joints per surface, found ${jointTransforms.length}',
+        'At most $_maxJoints joints per surface are supported;'
+        ' found ${jointTransforms.length}',
       );
     }
     for (final (idx, transform) in jointTransforms.indexed) {
