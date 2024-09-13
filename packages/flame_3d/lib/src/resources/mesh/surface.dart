@@ -18,6 +18,7 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
     required List<Vertex> vertices,
     required List<int> indices,
     this.material,
+    this.jointMap,
     /**
      * If `true`, the normals will be calculated if they are not provided.
      */
@@ -34,15 +35,16 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
     _vertices = Float32List.fromList(
       normalizedVertices.fold([], (p, v) => p..addAll(v.storage)),
     ).buffer;
-    _vertexCount = _vertices.lengthInBytes ~/ (normalizedVertices.length * 9);
+    _vertexCount = normalizedVertices.length;
 
     _indices = Uint16List.fromList(indices).buffer;
-    _indexCount = _indices.lengthInBytes ~/ 2;
+    _indexCount = indices.length;
 
     _calculateAabb(normalizedVertices);
   }
 
   Material? material;
+  Map<int, int>? jointMap;
 
   Aabb3 get aabb => _aabb;
   late Aabb3 _aabb;
