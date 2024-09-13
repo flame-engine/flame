@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:ordered_set/comparing.dart';
 
 /// {@template uniform_value}
 /// Instance of a uniform value. Represented by a [ByteBuffer].
@@ -21,7 +22,9 @@ class UniformValue extends UniformInstance<ByteBuffer> {
     if (super.resource == null) {
       var previousIndex = -1;
 
-      final data = _storage.entries.fold<List<double>>([], (p, e) {
+      final entries = _storage.entries.toList()
+        ..sort(Comparing.on((c) => c.key));
+      final data = entries.fold<List<double>>([], (p, e) {
         if (previousIndex + 1 != e.key) {
           final field =
               slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
