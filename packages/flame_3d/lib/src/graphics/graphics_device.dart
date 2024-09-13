@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d/src/graphics/joints_info.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 enum BlendState {
@@ -47,6 +48,10 @@ class GraphicsDevice {
   final Matrix4 _projectionMatrix = Matrix4.zero();
 
   Size _previousSize = Size.zero;
+
+  /// Must be set by the rendering pipeline before elements are bound.
+  /// Can be accessed by elements in their bind method.
+  final JointsInfo jointsInfo = JointsInfo();
 
   /// Must be set by the rendering pipeline before elements are bound.
   /// Can be accessed by elements in their bind method.
