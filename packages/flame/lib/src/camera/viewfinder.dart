@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
-import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
@@ -239,37 +237,6 @@ class Viewfinder extends Component
   void updateTransform() {
     _updateZoom();
     onViewportResize();
-  }
-
-  /// When [CameraComponent.considerViewport] is true, the component
-  /// [ViewportAwareBoundsBehavior] is expected to be added. However,
-  /// [onMount] will fail if [BoundedPositionBehavior] is not fully mounted.
-  /// We must wait until it is mounted to ensure the correct behavior.
-  /// [onChildrenChanged] also executes when an unmount event has occurred.
-  /// Therefore, we additionally check if it is necessary to remove the
-  /// viewport-aware behavior component.
-  @override
-  void onChildrenChanged(Component child, ChildrenChangeType type) {
-    super.onChildrenChanged(child, type);
-
-    if (child is BoundedPositionBehavior) {
-      final viewPortAwareBoundsBehavior =
-          firstChild<ViewportAwareBoundsBehavior>();
-      if (type == ChildrenChangeType.added && camera.considerViewport) {
-        final bounds = viewPortAwareBoundsBehavior?.boundsShape = child.bounds;
-        // Failed to update because component was null.
-        // We must add instead.
-        if (bounds == null) {
-          add(
-            ViewportAwareBoundsBehavior(
-              boundsShape: child.bounds,
-            ),
-          );
-        }
-      } else {
-        viewPortAwareBoundsBehavior?.removeFromParent();
-      }
-    }
   }
 
   /// [ScaleProvider]'s API.
