@@ -40,21 +40,34 @@ final class QuaternionUtils {
   /// here:
   /// https://blog.magnum.graphics/backstage/the-unnecessarily-short-ways-to-do-a-quaternion-slerp/
   static Quaternion _slerp(
-    Quaternion q0,
-    Quaternion q1,
+    Quaternion qa,
+    Quaternion qb,
     double t, {
-    double epsilon = 10e-6,
+    double epsilon = 10e-3,
   }) {
+    final q0 = qa.normalized();
+    final q1 = qb.normalized();
+
     if (isEqual(q0, q1)) {
       return q0;
     }
 
-    final dot = q0.dot(q1);
+    final dot = q0.dot(q1).clamp(-1.0, 1.0);
     if (1 - dot < epsilon) {
       // The quaternions are very close, so the linear interpolation algorithm
       // will be a good approximation.
       // This will prevent a NaN from the slerp algorithm.
-      return lerp(q0, q1, t);
+      return lerp(q0, q1, t).normalized();
+    } else if (dot < epsilon) {
+      // Quaternions are nearly opposite; special handling
+      // Find an orthogonal quaternion to q0
+      Quaternion orthogonal;
+      if (q0.x.abs() > q0.y.abs()) {
+        orthogonal = Quaternion(-q0.z, q0.x, q0.y, q0.w);
+      } else {
+        orthogonal = Quaternion(q0.x, -q0.z, q0.y, q0.w);
+      }
+      return lerp(q0, orthogonal, t).normalized();
     }
 
     final angle = acos(dot.abs());

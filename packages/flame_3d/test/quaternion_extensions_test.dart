@@ -40,6 +40,22 @@ void main() {
       final slerp3 = QuaternionUtils.slerp(quaternion2, quaternion2, 0.5);
       expect(angle2, closeTo(slerp3.radians, _epsilon));
     });
+
+    test('slerp edge cases', () {
+      const angle1 = 1.2;
+      const angle2 = angle1 + _epsilon;
+
+      final axis = Vector3(1, 0, 0);
+
+      final quaternion1 = Quaternion.axisAngle(axis, angle1);
+      final quaternion2 = Quaternion.axisAngle(axis, angle2);
+
+      final slerp1 = QuaternionUtils.slerp(quaternion1, quaternion2, 0);
+      expect(angle1, closeTo(slerp1.radians, _epsilon));
+
+      final slerp2 = QuaternionUtils.slerp(quaternion1, quaternion2, 1);
+      expect(angle2, closeTo(slerp2.radians, _epsilon));
+    });
   });
 }
 
