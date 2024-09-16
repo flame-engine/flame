@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   flame: ^1.16.0
-  flame_3d: ^0.1.0
+  flame_3d: ^0.1.0-dev.2
   flutter:
     sdk: flutter
 
