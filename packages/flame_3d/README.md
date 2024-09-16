@@ -45,59 +45,31 @@ set your expectations and clarify some things. So turn down your music, put away
 some tea instead because you have to do some reading first!
 
 This package provides 3D support for Flame but it depends on the still experimental
-[Flutter GPU](https://github.com/flutter/flutter/wiki/Flutter-GPU) which in turn depends on
-Impeller. The Flutter GPU is currently not shipped with Flutter so this package wont work without
-following the prerequisites steps.
+[Flutter GPU](https://github.com/flutter/flutter/wiki/Flutter-GPU), which in turn depends on
+Impeller.
 
-Because we depend on Flutter GPU this package is also highly experimental. Our long term goal is to
-eventually deprecate this package and integrate it into the core `flame` package, for more
-information on this see the [Roadmap](https://github.com/flame-engine/flame/blob/main/packages/flame_3d/ROADMAP.md).
+Because of that, this package is also highly experimental. Our long term goal is to
+eventually merge this branch into Flame's `main`, but we currently need to depend on Flutter's `main`
+(Flame depends on `stable`). For more information on this, check out our
+[Roadmap](https://github.com/flame-engine/flame/blob/main/packages/flame_3d/ROADMAP.md).
 
 This package does not guarantee that it will follow correct [semver](https://semver.org/) versioning
-rules nor does it assure that it's APIs wont break. Be ready to constantly have to refactor your
-code if you are planning on using this package in a semi-production environment, which we do not
-recommend.
+rules, nor does it assure that its APIs wont break. Be ready to constantly have to refactor your
+code if you are planning on using this package, and potentially to have to contribute with
+improvements and fixes. Please do not use this for production environments.
 
 Documentation and tests might be lacking for quite a while because of the potential constant changes
-of the API. Where possible we will try to provide in-code documentation and code examples to help
+of the API. Where possible, we will try to provide in-code documentation and code examples to help
 developers but our main goal for now is to enable the usage of 3D rendering within a Flame
 ecosystem.
 
 
 ## Prerequisites
 
-Before you can get started with using this package a few steps have to happen first. Step one is
-switching to a specific commit on the Flutter tooling. Because this package is still experimental
-some of the features it requires are still being worked on from the Flutter side.
+In order to use flame_3d, you will need to ensure a few things. First of all, you need to be on
+the `main` channel of Flutter, and on MacOS, the only currently supported platform.
 
-So to make sure you are using the same build that we use while developing you have to manually
-checkout a specific Flutter build. Thankfully we were able to simplify that process into a
-one-liner:
-
-```sh
-cd $(dirname $(which flutter)) \
-  && git fetch \
-  && git checkout bcdd1b2c481bca0647beff690238efaae68ca5ac -q \
-  && echo "Engine commit: $(cat internal/engine.version)" \
-  && cd - >/dev/null
-```
-
-This will check out the GIT repo of your Flutter installation to the specific commit that we require
-and also return the commit SHA of the Flutter Engine that it was build with. We need for step two.
-
-Step two is setting up the Flutter GPU. You can follow the steps described in the [Flutter Wiki](https://github.com/flutter/flutter/wiki/Flutter-GPU#try-out-flutter-gpu).
-The engine commit that you should use is the one we got in step one.
-
-Once you have cloned the Flutter engine you can add the `flutter_gpu` as an override dependency
-to your `pubspec.yaml` or in a `pubspec_overrides.yaml` file:
-
-```yaml
-dependency_overrides:
-  flutter_gpu:
-    path: <path_to_the_cloned_flutter_engine_directory>/lib/gpu
-```
-
-Step three would be to enable impeller for the macOS platform, add the following to the
+Then, you need to enable Impeller; to do that, add the following to the
 `Info.plist` in your `macos/` directory:
 
 ```xml
@@ -112,12 +84,18 @@ Now everything is set up you can start doing some 3D magic! You can check out th
 [example](https://github.com/flame-engine/flame/tree/main/packages/flame_3d/example) to see how you
 can set up a simple 3D environment using Flame.
 
+Also check out the [flame_3d_extras](https://github.com/luanpotter/flame_3d_extras) package for more
+utilities and helpers not yet merged into `flame_3d`.
+
 
 ## Building shaders
 
-You can write your own shaders and use them on Materials. Currently Flutter does not do the bundling
-of shaders for us so this package provides a simple dart script. Create your fragment and vertex
-shader in a `shaders` directory, make sure the file names are identical. Like so:
+If you are using the `SpatialMaterial` provided by `flame_3d`, you do not need to worry about shaders.
+
+That being said, you can write your own shaders and use them on custom materials.
+Currently, Flutter does not do the bundling of shaders for us so this package provides a simple
+Dart script. Create your fragment and vertex shader in a `shaders` directory,
+make sure the file names are identical. Like so:
 
 - `my_custom_shader`.frag
 - `my_custom_shader`.vert
