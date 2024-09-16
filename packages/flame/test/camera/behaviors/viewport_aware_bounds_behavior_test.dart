@@ -27,7 +27,7 @@ void main() {
         reason: 'Camera bounds at unexpected location',
       );
 
-      expect(camera.considerViewport, false);
+      expect(camera.viewfinder.considerViewport, false);
 
       // With considerViewport = true
       camera.setBounds(bounds, considerViewport: true);
@@ -38,7 +38,7 @@ void main() {
         reason: 'Camera bounds did not consider viewport',
       );
 
-      expect(camera.considerViewport, true);
+      expect(camera.viewfinder.considerViewport, true);
     });
 
     testWithFlameGame('setBounds wrt RoundedRectangle', (game) async {
@@ -60,7 +60,7 @@ void main() {
         reason: 'Camera bounds at unexpected location',
       );
 
-      expect(camera.considerViewport, false);
+      expect(camera.viewfinder.considerViewport, false);
 
       // With considerViewport = true
       camera.setBounds(bounds, considerViewport: true);
@@ -82,7 +82,7 @@ void main() {
         reason: 'Camera bounds did not consider viewport',
       );
 
-      expect(camera.considerViewport, true);
+      expect(camera.viewfinder.considerViewport, true);
     });
 
     testWithFlameGame('setBounds wrt Circle', (game) async {
@@ -101,10 +101,10 @@ void main() {
       expect(
         (_getBounds(camera) as Circle?)?.center,
         Vector2(320, 240),
-        reason: 'Camera bounds at unexpected location',
+        reason: 'Camera bounds at unexpected location (considerViewport=false)',
       );
 
-      expect(camera.considerViewport, false);
+      expect(camera.viewfinder.considerViewport, false);
 
       // With considerViewport = true
       camera.setBounds(bounds, considerViewport: true);
@@ -112,7 +112,7 @@ void main() {
       expect(
         (_getBounds(camera) as Circle?)?.center,
         Vector2(320, 240),
-        reason: 'Camera bounds did not consider viewport',
+        reason: 'Camera bounds at unexpected location (considerViewport=true)',
       );
 
       // Check bounds after moving away from the center
@@ -127,7 +127,7 @@ void main() {
         reason: 'Camera bounds did not consider viewport after move',
       );
 
-      expect(camera.considerViewport, true);
+      expect(camera.viewfinder.considerViewport, true);
     });
 
     testWithFlameGame('setBounds explicit null Shape request', (game) async {
