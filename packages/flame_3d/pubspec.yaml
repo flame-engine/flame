@@ -1,6 +1,6 @@
 name: flame_3d
 description: Experimental 3D support for the Flame Engine
-version: 0.1.0-dev.1
+version: 0.1.0-dev.2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
 funding:
   - https://opencollective.com/blue-fire
