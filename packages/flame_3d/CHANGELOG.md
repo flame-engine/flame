@@ -1,3 +1,8 @@
+## 0.1.0-dev.3
+
+ - **FIX**: Improve behavior of Quaternion.slerp function [flame_3d] ([#3306](https://github.com/flame-engine/flame/issues/3306)). ([b9d6a0f1](https://github.com/flame-engine/flame/commit/b9d6a0f1d34e009cd91ae9d2ab0eed09b546d110))
+ - **DOCS**: Update README.md docs to reflect current state of affairs ([#3305](https://github.com/flame-engine/flame/issues/3305)). ([be72daee](https://github.com/flame-engine/flame/commit/be72daee6b92bcef2af3af78c1f64abe94c49d18))
+
 ## 0.1.0-dev.2
 
  - **FIX**: Improve quaternion slerp logic to avoid NaN edge cases ([#3303](https://github.com/flame-engine/flame/issues/3303)). ([565b68b9](https://github.com/flame-engine/flame/commit/565b68b9da52d44281e93f9ae8617f9dbe9551f3))
