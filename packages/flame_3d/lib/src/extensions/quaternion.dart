@@ -9,6 +9,10 @@ extension QuaternionExtension on Quaternion {
     return x * other.x + y * other.y + z * other.z + w * other.w;
   }
 
+  Quaternion operator /(double s) {
+    return Quaternion(x / s, y / s, z / s, w / s);
+  }
+
   Quaternion lerp(Quaternion other, double t) {
     return QuaternionUtils.lerp(this, other, t);
   }
@@ -40,43 +44,31 @@ final class QuaternionUtils {
   /// here:
   /// https://blog.magnum.graphics/backstage/the-unnecessarily-short-ways-to-do-a-quaternion-slerp/
   static Quaternion _slerp(
-    Quaternion qa,
-    Quaternion qb,
+    Quaternion q0,
+    Quaternion q1,
     double t, {
-    double epsilon = 10e-3,
+    double epsilon = 10e-6,
   }) {
-    final q0 = qa.normalized();
-    final q1 = qb.normalized();
-
     if (isEqual(q0, q1)) {
       return q0;
     }
 
+    // clamp the dot product just in case of numerical instability
     final dot = q0.dot(q1).clamp(-1.0, 1.0);
-    if (1 - dot < epsilon) {
+    if (1 - dot.abs() < epsilon) {
       // The quaternions are very close, so the linear interpolation algorithm
       // will be a good approximation.
       // This will prevent a NaN from the slerp algorithm.
       return lerp(q0, q1, t).normalized();
-    } else if (dot < epsilon) {
-      // Quaternions are nearly opposite; special handling
-      // Find an orthogonal quaternion to q0
-      Quaternion orthogonal;
-      if (q0.x.abs() > q0.y.abs()) {
-        orthogonal = Quaternion(-q0.z, q0.x, q0.y, q0.w);
-      } else {
-        orthogonal = Quaternion(q0.x, -q0.z, q0.y, q0.w);
-      }
-      return lerp(q0, orthogonal, t).normalized();
     }
 
     final angle = acos(dot.abs());
 
     final q1Prime = dot >= 0 ? q1 : q1.scaled(-1);
-    final a = sin((1 - t) * angle) / sin(angle);
-    final b = sin(t * angle) / sin(angle);
+    final a = sin((1 - t) * angle);
+    final b = sin(t * angle);
 
-    return q0.scaled(a) + q1Prime.scaled(b);
+    return (q0.scaled(a) + q1Prime.scaled(b)) / sin(angle);
   }
 
   static Quaternion lerp(Quaternion q0, Quaternion q1, double t) {
