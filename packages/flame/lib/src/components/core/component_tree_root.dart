@@ -140,7 +140,7 @@ class ComponentTreeRoot extends Component {
       _blocked.clear();
     }
 
-    if (_lifecycleEventsCompleter != null) {
+    if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
       _lifecycleEventsCompleter!.complete();
       _lifecycleEventsCompleter = null;
     }
