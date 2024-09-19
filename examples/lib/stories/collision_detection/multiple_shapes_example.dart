@@ -263,7 +263,7 @@ class CollidableSnowman extends MyCollidable {
     );
     final middle = SnowmanPart(
       size.x * 0.4,
-      Vector2(size.x / 2, size.y * 0.40),
+      Vector2(size.x / 2, size.y * 0.4),
       Colors.yellow,
     );
     final bottom = SnowmanPart(

@@ -1,3 +1,10 @@
+## 1.5.4
+
+## 1.5.3
+
+ - **FEAT**: Adding group to flame fire atlas ([#3245](https://github.com/flame-engine/flame/issues/3245)). ([0fab444c](https://github.com/flame-engine/flame/commit/0fab444c3dd9ad8faa1e0e9e702150b950dbf30f))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
 ## 1.5.2
 
  - Update a dependency to the latest release.

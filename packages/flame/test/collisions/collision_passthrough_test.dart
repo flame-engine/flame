@@ -5,15 +5,15 @@ import 'package:test/test.dart';
 
 import 'collision_test_helpers.dart';
 
-class Passthrough extends TestBlock with CollisionPassthrough {
-  Passthrough() : super(Vector2.zero(), Vector2.all(10));
+class _Passthrough extends TestBlock with CollisionPassthrough {
+  _Passthrough() : super(Vector2.zero(), Vector2.all(10));
 }
 
 void main() {
   group('CollisionPassthrough', () {
     runCollisionTestRegistry({
       'Passing collisions to parent': (game) async {
-        final passthrough = Passthrough();
+        final passthrough = _Passthrough();
         final hitboxParent =
             TestBlock(Vector2.zero(), Vector2.all(10), addTestHitbox: false)
               ..add(passthrough);

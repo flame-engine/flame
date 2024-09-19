@@ -194,7 +194,7 @@ void main() {
             game: game,
             overlayBuilderMap: {
               'pause-menu': (context, _) {
-                return SimpleStatelessWidget(
+                return _SimpleStatelessWidget(
                   build: (context) {
                     return Center(
                       child: OutlinedButton(
@@ -226,10 +226,9 @@ void main() {
   });
 }
 
-class SimpleStatelessWidget extends StatelessWidget {
-  const SimpleStatelessWidget({
+class _SimpleStatelessWidget extends StatelessWidget {
+  const _SimpleStatelessWidget({
     required Widget Function(BuildContext) build,
-    super.key,
   }) : _build = build;
 
   final Widget Function(BuildContext) _build;

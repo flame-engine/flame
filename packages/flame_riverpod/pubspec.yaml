@@ -1,6 +1,6 @@
 name: flame_riverpod
 description: Helpers for using Riverpod - a reactive caching and data-binding framework, in conjunction with Flame.
-version: 5.4.2
+version: 5.4.3
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_riverpod
 funding:
   - https://opencollective.com/blue-fire
@@ -15,13 +15,13 @@ environment:
   flutter: ">=3.22.0"
 
 dependencies:
-  flame: ^1.18.0
+  flame: ^1.19.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.1
   riverpod: ^2.5.1
 
 dev_dependencies:
-  flame_lint: ^1.2.0
+  flame_lint: ^1.2.1
   flutter_test:
     sdk: flutter

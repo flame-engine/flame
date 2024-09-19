@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/effects.dart';
 import 'package:test/test.dart';
 
-class MyRandom implements Random {
+class _MyRandom implements Random {
   double value = 0.5;
 
   @override
@@ -16,8 +16,8 @@ class MyRandom implements Random {
   int nextInt(int max) => 1;
 }
 
-class MyRandomVariable extends RandomVariable {
-  MyRandomVariable() : super(null);
+class _MyRandomVariable extends RandomVariable {
+  _MyRandomVariable() : super(null);
   double value = 1.23;
 
   @override
@@ -27,7 +27,7 @@ class MyRandomVariable extends RandomVariable {
 void main() {
   group('RandomEffectController', () {
     test('custom random', () {
-      final randomVariable = MyRandomVariable();
+      final randomVariable = _MyRandomVariable();
       final ec = RandomEffectController(
         LinearEffectController(1000),
         randomVariable,
@@ -47,7 +47,7 @@ void main() {
     });
 
     test('.uniform', () {
-      final random = MyRandom();
+      final random = _MyRandom();
       final ec = RandomEffectController.uniform(
         LinearEffectController(1000),
         min: 0,
@@ -66,7 +66,7 @@ void main() {
 
     test('.exponential', () {
       const n = 1000;
-      final random = MyRandom();
+      final random = _MyRandom();
       final ec = RandomEffectController.exponential(
         LinearEffectController(1e6),
         beta: 42,

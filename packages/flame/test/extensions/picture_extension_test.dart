@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 void main() {
   group('PictureExtension', () {
     test('toImageSafe calls dispose on the Picture', () async {
-      final picture = MockPicture();
+      final picture = _MockPicture();
 
       // Mock the picture.toImage call to return a test image
       when(() => picture.toImage(1, 1)).thenAnswer((_) => createTestImage());
@@ -21,4 +21,4 @@ void main() {
   });
 }
 
-class MockPicture extends Mock implements Picture {}
+class _MockPicture extends Mock implements Picture {}
