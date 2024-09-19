@@ -327,6 +327,38 @@ void main() {
           expect(child.isMounted, true);
         },
       );
+
+      group('lifecycleEventsProcessed', () {
+        testWithFlameGame('waits for unprocessed events', (game) async {
+          await game.ready();
+          final component = _LifecycleComponent();
+          await game.world.add(component);
+          expect(game.hasLifecycleEvents, isTrue);
+
+          Future.delayed(Duration.zero).then((_) => game.update(0));
+          await game.lifecycleEventsProcessed;
+          expect(game.hasLifecycleEvents, isFalse);
+        });
+
+        testWithFlameGame("doesn't block when there are no events",
+            (game) async {
+          await game.ready();
+          expect(game.hasLifecycleEvents, isFalse);
+          await game.lifecycleEventsProcessed;
+          expect(game.hasLifecycleEvents, isFalse);
+        });
+      });
+
+      testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {
+        await game.ready();
+        final component = _LifecycleComponent();
+        await game.world.add(component);
+        expect(game.hasLifecycleEvents, isTrue);
+
+        Future.delayed(Duration.zero).then((_) => game.update(0));
+        await game.lifecycleEventsProcessed;
+        expect(game.hasLifecycleEvents, isFalse);
+      });
     });
 
     group('onGameResize', () {

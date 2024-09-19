@@ -259,7 +259,20 @@ class Component {
   /// This can be null if the component hasn't been added to the component tree
   /// yet, or if it is the root of component tree.
   ///
-  /// Setting this property to null is equivalent to [removeFromParent].
+  /// Setting this property to `null` is equivalent to [removeFromParent].
+  /// Setting it to a new parent component is equivalent to calling
+  /// [addToParent] and will properly remove this component from its current
+  /// parent, if any.
+  ///
+  /// Note that the [parent] setter, like [add] and similar methods,
+  /// merely enqueues the move from one parent to another. For example:
+  ///
+  /// ```dart
+  /// coin.parent = inventory;
+  /// // The inventory.children set does not include coin yet.
+  /// await game.lifecycleEventsProcessed;
+  /// // The inventory.children set now includes coin.
+  /// ```
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
@@ -543,6 +556,13 @@ class Component {
   /// The cost of this flexibility is that the component won't be added right
   /// away. Instead, it will be placed into a queue, and then added later, after
   /// it has finished loading, but no sooner than on the next game tick.
+  /// You can await [FlameGame.lifecycleEventsProcessed] like so:
+  ///
+  /// ```dart
+  /// world.add(coin);
+  /// await game.lifecycleEventsProcessed;
+  /// // The coin is now guaranteed to be added.
+  /// ```
   ///
   /// When multiple children are scheduled to be added to the same parent, we
   /// start loading all of them as soon as possible. Nevertheless, the children
