@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/recycled_queue.dart';
 import 'package:meta/meta.dart';
@@ -20,6 +22,7 @@ class ComponentTreeRoot extends Component {
   final Set<int> _blocked;
   final Set<Component> _componentsToRebalance;
   late final Map<ComponentKey, Component> _index = {};
+  Completer<void>? _lifecycleEventsCompleter;
 
   @internal
   void enqueueAdd(Component child, Component parent) {
@@ -76,6 +79,33 @@ class ComponentTreeRoot extends Component {
 
   bool get hasLifecycleEvents => _queue.isNotEmpty;
 
+  /// A future that will complete once all lifecycle events have been
+  /// processed.
+  ///
+  /// If there are no lifecycle events to be processed ([hasLifecycleEvents]
+  /// is `false`), then this future returns immediately.
+  ///
+  /// This is useful when you modify the component tree
+  /// (by adding, moving or removing a component) and you want to make sure
+  /// you react to the changed state, not the current one.
+  /// Remember, methods like [Component.add] don't act immediately and instead
+  /// enqueue their action. This action also cannot be awaited
+  /// with something like `await world.add(something)` since that future
+  /// completes _before_ the lifecycle events are processed.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// player.inventory.addAll(enemy.inventory.children);
+  /// await game.lifecycleEventsProcessed;
+  /// updateUi(player.inventory);
+  /// ```
+  Future<void> get lifecycleEventsProcessed {
+    return !hasLifecycleEvents
+        ? Future.value()
+        : (_lifecycleEventsCompleter ??= Completer<void>()).future;
+  }
+
   void processLifecycleEvents() {
     assert(_blocked.isEmpty);
     var repeatLoop = true;
@@ -108,6 +138,11 @@ class ComponentTreeRoot extends Component {
         }
       }
       _blocked.clear();
+    }
+
+    if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
+      _lifecycleEventsCompleter!.complete();
+      _lifecycleEventsCompleter = null;
     }
   }
 
