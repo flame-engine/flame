@@ -351,15 +351,42 @@ void main() {
         testWithFlameGame('guarantees addition even with heavy onLoad',
             (game) async {
           await game.ready();
-          final component = _SlowComponent('heavy', 1);
+          final component = _SlowComponent('heavy', 0.1);
+          final child = _SlowComponent('child', 0.1);
+          await component.add(child);
           await game.world.add(component);
           expect(game.world.children, isNot(contains(component)));
 
           game.lifecycleEventsProcessed.then(
             expectAsync1((_) {
               expect(game.world.children, contains(component));
+              expect(component.children, contains(child));
             }),
           );
+
+          await game.ready();
+        });
+
+        testWithFlameGame('completes even with dequeued event', (game) async {
+          final parent1 = Component();
+          final parent2 = Component();
+          game.addAll([parent1, parent2]);
+          await game.ready();
+          final component = _SlowComponent('heavy', 0.1);
+          final child = _SlowComponent('child', 0.1);
+          await component.add(child);
+          await parent1.add(component);
+
+          expect(game.lifecycleEventsProcessed, completes);
+
+          await Future.delayed(Duration.zero).then((_) => game.update(0));
+          assert(
+              game.hasLifecycleEvents,
+              'One update should not have been enough '
+              'to add the heavy component');
+
+          // Trigger dequeue.
+          component.parent = parent2;
 
           await game.ready();
         });
@@ -367,7 +394,7 @@ void main() {
 
       testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {
         await game.ready();
-        final component = _LifecycleComponent();
+        final component = Component();
         await game.world.add(component);
         expect(game.hasLifecycleEvents, isTrue);
 
