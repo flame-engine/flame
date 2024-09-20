@@ -347,6 +347,22 @@ void main() {
           await game.lifecycleEventsProcessed;
           expect(game.hasLifecycleEvents, isFalse);
         });
+
+        testWithFlameGame('guarantees addition even with heavy onLoad',
+            (game) async {
+          await game.ready();
+          final component = _SlowComponent('heavy', 1);
+          await game.world.add(component);
+          expect(game.world.children, isNot(contains(component)));
+
+          game.lifecycleEventsProcessed.then(
+            expectAsync1((_) {
+              expect(game.world.children, contains(component));
+            }),
+          );
+
+          await game.ready();
+        });
       });
 
       testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {
