@@ -381,9 +381,10 @@ void main() {
 
           await Future.delayed(Duration.zero).then((_) => game.update(0));
           assert(
-              game.hasLifecycleEvents,
-              'One update should not have been enough '
-              'to add the heavy component');
+            game.hasLifecycleEvents,
+            'One update should not have been enough '
+            'to add the heavy component',
+          );
 
           // Trigger dequeue.
           component.parent = parent2;
