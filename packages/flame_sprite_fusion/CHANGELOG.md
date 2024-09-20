@@ -1,3 +1,7 @@
+## 0.1.3+1
+
+ - Update a dependency to the latest release.
+
 ## 0.1.3
 
  - **FIX**: Add nativeAngle to constructors where it makes sense ([#3197](https://github.com/flame-engine/flame/issues/3197)). ([e8704934](https://github.com/flame-engine/flame/commit/e8704934b19d9ed1982d35ce62819f01ac3de189))

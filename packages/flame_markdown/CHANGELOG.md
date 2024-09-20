@@ -1,3 +1,7 @@
+## 0.2.2+1
+
+ - Update a dependency to the latest release.
+
 ## 0.2.2
 
  - **FEAT**: Support inline code blocks on markdown rich text ([#3186](https://github.com/flame-engine/flame/issues/3186)). ([67e069c0](https://github.com/flame-engine/flame/commit/67e069c00dcb32c258231a326b0918739c6f80e6))
