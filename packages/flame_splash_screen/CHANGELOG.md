@@ -1,3 +1,11 @@
+## 0.4.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: SpriteButtonComponent to initialize sprites in `onLoad` ([#3302](https://github.com/flame-engine/flame/issues/3302)). ([1204216c](https://github.com/flame-engine/flame/commit/1204216cb227d3831b546a54818075065fa7beec))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+ - **BREAKING** **FIX**: Migrate from `RawKeyEvent` to `KeyEvent` ([#3002](https://github.com/flame-engine/flame/issues/3002)). ([330862c9](https://github.com/flame-engine/flame/commit/330862c98ecc7ed8d94e7cae0c34cd5781da0007))
+
 ## 0.3.1
 
  - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))

@@ -7,14 +7,14 @@ environment:
   sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
-  flame: ^1.19.0
-  flame_rive: ^1.10.3
+  flame: ^2.0.0
+  flame_rive: ^2.0.0
   flutter:
     sdk: flutter
   rive: ^0.12.3
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^2.0.0
   flutter_test:
     sdk: flutter
 

@@ -11,12 +11,12 @@ environment:
 
 dependencies:
   collection: ^1.16.0
-  flame: ^1.19.0
+  flame: ^2.0.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^2.0.0
 flutter:
   uses-material-design: true
   assets:
