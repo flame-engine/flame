@@ -1,6 +1,6 @@
 name: flame_test
 description: A package with classes to help testing applications using Flame
-version: 1.17.0
+version: 1.17.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 funding:
   - https://opencollective.com/blue-fire
@@ -16,7 +16,7 @@ environment:
   flutter: ">=3.22.0"
 
 dependencies:
-  flame: ^1.19.0
+  flame: ^1.20.0
   flutter:
     sdk: flutter
   flutter_test:

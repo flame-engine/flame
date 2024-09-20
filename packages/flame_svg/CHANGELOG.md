@@ -1,3 +1,7 @@
+## 1.11.1
+
+ - Update a dependency to the latest release.
+
 ## 1.11.0
 
  - **FEAT**: Fixing tests on flutter 3.24.0 ([#3259](https://github.com/flame-engine/flame/issues/3259)). ([bf9a2481](https://github.com/flame-engine/flame/commit/bf9a2481fbeb77413a26ae96b57843ca51411f9f))
