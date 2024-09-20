@@ -22,6 +22,6 @@ jobs:
           melos exec -c1 --no-published --no-private --order-dependents -- \
           gh workflow run release-publish.yml \
           --ref \$MELOS_PACKAGE_NAME-v\$MELOS_PACKAGE_VERSION
-          env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
