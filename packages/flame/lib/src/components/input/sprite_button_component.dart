@@ -56,16 +56,21 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
   }
 
   @override
-  void onMount() {
-    assert(
-      _button != null,
-      'The button sprite has to be set either in onLoad or in the constructor',
-    );
+  void onLoad() {
+    super.onLoad();
     sprites = {
       ButtonState.up: button,
       ButtonState.down: buttonDown,
     };
+  }
+
+  @override
+  void onMount() {
     super.onMount();
+    assert(
+      _button != null,
+      'The button sprite has to be set either in onLoad or in the constructor',
+    );
   }
 
   @override

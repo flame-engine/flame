@@ -100,6 +100,7 @@ class SpriteGroupComponent<T> extends PositionComponent
 
   /// Updates the sprite for the given key.
   void updateSprite(T key, Sprite sprite) {
+    assert(_sprites != null, 'Sprites map is not yet initialized');
     _sprites?[key] = sprite;
     _resizeToSprite();
   }
