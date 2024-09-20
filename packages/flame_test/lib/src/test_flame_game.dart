@@ -77,9 +77,12 @@ Future<void> testWithGame<T extends FlameGame>(
     testName,
     () async {
       final game = await initializeGame<T>(create);
-      await testBody(game);
 
-      game.onRemove();
+      try {
+        await testBody(game);
+      } finally {
+        game.onRemove();
+      }
     },
     timeout: timeout,
     tags: tags,
