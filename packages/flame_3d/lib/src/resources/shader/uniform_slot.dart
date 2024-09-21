@@ -23,6 +23,14 @@ class UniformSlot extends Resource<gpu.UniformSlot?> {
 
   /// {@macro uniform_slot}
   ///
+  /// Used for array uniforms in shaders.
+  ///
+  /// The [fields] should be defined in order as they appear in the struct.
+  UniformSlot.array(String name, Set<String> fields)
+      : this._(name, fields, UniformArray.new);
+
+  /// {@macro uniform_slot}
+  ///
   /// Used for sampler uniforms in shaders.
   UniformSlot.sampler(String name) : this._(name, {}, UniformSampler.new);
 

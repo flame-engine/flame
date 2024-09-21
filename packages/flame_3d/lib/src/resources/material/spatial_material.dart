@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flutter_gpu/gpu.dart' as gpu;
 
 class SpatialMaterial extends Material {
   SpatialMaterial({
@@ -14,7 +13,7 @@ class SpatialMaterial extends Material {
   })  : albedoTexture = albedoTexture ?? Texture.standard,
         super(
           vertexShader: Shader(
-            _library['TextureVertex']!,
+            name: 'TextureVertex',
             slots: [
               UniformSlot.value('VertexInfo', {
                 'model',
@@ -28,7 +27,7 @@ class SpatialMaterial extends Material {
             ],
           ),
           fragmentShader: Shader(
-            _library['TextureFragment']!,
+            name: 'TextureFragment',
             slots: [
               UniformSlot.sampler('albedoTexture'),
               UniformSlot.value('Material', {
@@ -107,10 +106,6 @@ class SpatialMaterial extends Material {
   void _applyLights(GraphicsDevice device) {
     device.lightingInfo.apply(fragmentShader);
   }
-
-  static final _library = gpu.ShaderLibrary.fromAsset(
-    'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-  )!;
 
   static const _maxJoints = 16;
 }

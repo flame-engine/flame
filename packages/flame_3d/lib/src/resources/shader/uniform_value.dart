@@ -11,11 +11,11 @@ import 'package:ordered_set/comparing.dart';
 /// The `[]` operator can be used to set the raw data of a field. If the data is
 /// different from the last set it will recalculated the [resource].
 /// {@endtemplate}
-class UniformValue extends UniformInstance<ByteBuffer> {
+class UniformValue extends UniformInstance<String, ByteBuffer> {
   /// {@macro uniform_value}
   UniformValue(super.slot);
 
-  final Map<int, ({int hash, List<double> data})> _storage = HashMap();
+  final Map<int, ({int hash, Float32List data})> _storage = HashMap();
 
   @override
   ByteBuffer? get resource {
@@ -40,9 +40,9 @@ class UniformValue extends UniformInstance<ByteBuffer> {
     return super.resource;
   }
 
-  List<double>? operator [](String key) => _storage[slot.indexOf(key)]?.data;
+  Float32List? operator [](String key) => _storage[slot.indexOf(key)]?.data;
 
-  void operator []=(String key, List<double> data) {
+  void operator []=(String key, Float32List data) {
     final index = slot.indexOf(key);
 
     // Ensure that we are only setting new data if the hash has changed.
@@ -59,7 +59,27 @@ class UniformValue extends UniformInstance<ByteBuffer> {
   }
 
   @override
+  String makeKey(int? idx, String? field) {
+    if (idx != null) {
+      throw StateError('idx is not supported for ${slot.name}');
+    }
+    if (field == null) {
+      throw StateError('field is required for ${slot.name}');
+    }
+
+    return field;
+  }
+
+  @override
   void bind(GraphicsDevice device) {
     device.bindUniform(slot.resource!, resource!);
+  }
+
+  @override
+  void set(String key, ByteBuffer value) {
+    if (!slot.fields.contains(key)) {
+      throw StateError('Field "$key" is unmapped for "${slot.name}"');
+    }
+    this[key] = value.asFloat32List();
   }
 }
