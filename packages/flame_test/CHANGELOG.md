@@ -1,3 +1,7 @@
+## 1.17.1
+
+ - Update a dependency to the latest release.
+
 ## 1.17.0
 
  - **FEAT**: Add a closeToVector3 matcher to flame_test ([#3242](https://github.com/flame-engine/flame/issues/3242)). ([965b684a](https://github.com/flame-engine/flame/commit/965b684a286ae2e2a89ba303839004d0b12cb3ef))

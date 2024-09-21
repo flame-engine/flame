@@ -1,3 +1,7 @@
+## 4.1.1
+
+ - Update a dependency to the latest release.
+
 ## 4.1.0
 
  - **PERF**: Optimize `TexturePackerSprite` when sprites do not need to be rotated ([#3236](https://github.com/flame-engine/flame/issues/3236)). ([e9512e9b](https://github.com/flame-engine/flame/commit/e9512e9b28188476d5956e875430f1ef195f5882))
