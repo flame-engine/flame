@@ -15,8 +15,8 @@ abstract class Material extends Resource<gpu.RenderPipeline> {
         _fragmentShader = fragmentShader,
         super(
           gpu.gpuContext.createRenderPipeline(
-            vertexShader.resource,
-            fragmentShader.resource,
+            vertexShader.compile().resource,
+            fragmentShader.compile().resource,
           ),
         );
 
@@ -25,8 +25,8 @@ abstract class Material extends Resource<gpu.RenderPipeline> {
     var resource = super.resource;
     if (_recreateResource) {
       resource = super.resource = gpu.gpuContext.createRenderPipeline(
-        _vertexShader.resource,
-        _fragmentShader.resource,
+        _vertexShader.compile().resource,
+        _fragmentShader.compile().resource,
       );
       _recreateResource = false;
     }
