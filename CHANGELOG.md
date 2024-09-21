@@ -3,6 +3,77 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-09-20
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.20.0`](#flame---v1200)
+ - [`flame_oxygen` - `v0.2.3+1`](#flame_oxygen---v0231)
+ - [`flame_behavior_tree` - `v0.1.3+1`](#flame_behavior_tree---v0131)
+ - [`flame_isolate` - `v0.6.2+1`](#flame_isolate---v0621)
+ - [`flame_noise` - `v0.3.2+1`](#flame_noise---v0321)
+ - [`flame_svg` - `v1.11.1`](#flame_svg---v1111)
+ - [`flame_rive` - `v1.10.4`](#flame_rive---v1104)
+ - [`flame_audio` - `v2.10.4`](#flame_audio---v2104)
+ - [`flame_texturepacker` - `v4.1.1`](#flame_texturepacker---v411)
+ - [`flame_spine` - `v0.2.2+1`](#flame_spine---v0221)
+ - [`flame_sprite_fusion` - `v0.1.3+1`](#flame_sprite_fusion---v0131)
+ - [`flame_markdown` - `v0.2.2+1`](#flame_markdown---v0221)
+ - [`flame_forge2d` - `v0.18.2+1`](#flame_forge2d---v01821)
+ - [`flame_test` - `v1.17.1`](#flame_test---v1171)
+ - [`flame_fire_atlas` - `v1.5.5`](#flame_fire_atlas---v155)
+ - [`flame_bloc` - `v1.12.2`](#flame_bloc---v1122)
+ - [`flame_kenney_xml` - `v0.1.1+1`](#flame_kenney_xml---v0111)
+ - [`flame_riverpod` - `v5.4.4`](#flame_riverpod---v544)
+ - [`flame_network_assets` - `v0.3.3+1`](#flame_network_assets---v0331)
+ - [`flame_tiled` - `v1.20.4`](#flame_tiled---v1204)
+ - [`flame_lottie` - `v0.4.2+1`](#flame_lottie---v0421)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_oxygen` - `v0.2.3+1`
+ - `flame_behavior_tree` - `v0.1.3+1`
+ - `flame_isolate` - `v0.6.2+1`
+ - `flame_noise` - `v0.3.2+1`
+ - `flame_svg` - `v1.11.1`
+ - `flame_rive` - `v1.10.4`
+ - `flame_audio` - `v2.10.4`
+ - `flame_texturepacker` - `v4.1.1`
+ - `flame_spine` - `v0.2.2+1`
+ - `flame_sprite_fusion` - `v0.1.3+1`
+ - `flame_markdown` - `v0.2.2+1`
+ - `flame_forge2d` - `v0.18.2+1`
+ - `flame_test` - `v1.17.1`
+ - `flame_fire_atlas` - `v1.5.5`
+ - `flame_bloc` - `v1.12.2`
+ - `flame_kenney_xml` - `v0.1.1+1`
+ - `flame_riverpod` - `v5.4.4`
+ - `flame_network_assets` - `v0.3.3+1`
+ - `flame_tiled` - `v1.20.4`
+ - `flame_lottie` - `v0.4.2+1`
+
+---
+
+#### `flame` - `v1.20.0`
+
+ - **FIX**: SpriteButtonComponent to initialize sprites in `onLoad` ([#3302](https://github.com/flame-engine/flame/issues/3302)). ([1204216c](https://github.com/flame-engine/flame/commit/1204216cb227d3831b546a54818075065fa7beec))
+ - **FIX**: ViewportAwareBounds component and lifecycle issues ([#3276](https://github.com/flame-engine/flame/issues/3276)). ([026bf41f](https://github.com/flame-engine/flame/commit/026bf41f020de66ae9adfcdda9209bfbb75cf60c))
+ - **FEAT**: Add ComponentTreeRoot.lifecycleEventsProcessed future ([#3308](https://github.com/flame-engine/flame/issues/3308)). ([ebc47418](https://github.com/flame-engine/flame/commit/ebc474189ceb587bcdebef7d3645ed2f3b3dba6f))
+ - **FEAT**: Adding paint attribute to SpriteWidget and SpriteAnimationWidget ([#3298](https://github.com/flame-engine/flame/issues/3298)). ([a5338d0c](https://github.com/flame-engine/flame/commit/a5338d0c20d01bbe461c6d7fed5951d11e1c76f0))
+ - **FEAT**: Adding tickOnLoad to TimerComponent ([#3285](https://github.com/flame-engine/flame/issues/3285)). ([0113aa37](https://github.com/flame-engine/flame/commit/0113aa376145109079a89bd310b9e528631ce9d4))
+ - **DOCS**: Include information about the Flame DevTools extension in example readme ([#3288](https://github.com/flame-engine/flame/issues/3288)). ([76a9abaf](https://github.com/flame-engine/flame/commit/76a9abaf3c70659323e02bf7b6531b4fbba1f7a2))
+
+
 ## 2024-08-27
 
 ### Changes

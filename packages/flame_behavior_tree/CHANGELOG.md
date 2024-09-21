@@ -1,3 +1,7 @@
+## 0.1.3+1
+
+ - Update a dependency to the latest release.
+
 ## 0.1.3
 
  - **FIX**: Update version of lints to comply with new pub requirements ([#3223](https://github.com/flame-engine/flame/issues/3223)). ([1b0bee72](https://github.com/flame-engine/flame/commit/1b0bee726b5937f73d4be5e304bc8780aa3ca6f0))
