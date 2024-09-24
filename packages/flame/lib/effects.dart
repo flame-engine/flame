@@ -42,6 +42,6 @@ export 'src/effects/provider_interfaces.dart'
 export 'src/effects/remove_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
-export 'src/effects/sequence_effect.dart' show SequenceEffect;
+export 'src/effects/sequence_effect.dart' show SequenceEffect, AlternatePattern;
 export 'src/effects/size_effect.dart';
 export 'src/effects/transform2d_effect.dart';

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
@@ -22,22 +25,34 @@ class TiledGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    camera.viewfinder
-      ..zoom = 0.5
-      ..anchor = Anchor.topLeft
-      ..add(
-        MoveToEffect(
-          Vector2(1000, 0),
-          EffectController(
-            duration: 10,
-            alternate: true,
-            infinite: true,
-          ),
-        ),
-      );
-
     mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
     world.add(mapComponent);
+
+    // Create a camera-panning sequence across the 4 corners
+    // of the map
+    camera.viewfinder.add(
+      SequenceEffect(
+        [
+          for (int i = 0, j = 0; j < 2; i++, j = i ~/ 2)
+            MoveToEffect(
+              Vector2(
+                mapComponent.width * min(1, i % 3),
+                mapComponent.height * j,
+              ),
+              EffectController(
+                duration: 3,
+              ),
+            ),
+        ],
+        alternatePattern: AlternatePattern.excludeLast,
+        infinite: true,
+      ),
+    );
+
+    camera.setBounds(
+      Rectangle.fromLTRB(0, 0, mapComponent.width, mapComponent.height),
+      considerViewport: true,
+    );
 
     final objectGroup =
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');

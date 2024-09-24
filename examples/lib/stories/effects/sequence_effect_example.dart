@@ -28,7 +28,7 @@ class SequenceEffectExample extends FlameGame {
               ScaleEffect.by(Vector2.all(1.5), duration(0.7)),
               MoveEffect.to(Vector2(400, 500), duration(0.7)),
             ],
-            alternate: true,
+            alternatePattern: AlternatePattern.excludeLast,
             infinite: true,
           ),
         ),
