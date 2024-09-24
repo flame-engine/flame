@@ -212,7 +212,7 @@ class _SequenceEffectEffectController extends EffectController {
     var t = dt;
     for (;;) {
       if (_index >= 0) {
-        t = currentEffect.advance(t);
+        t = currentEffect.recede(t);
         if (t > 0) {
           _index -= 1;
           if (_index < 0) {

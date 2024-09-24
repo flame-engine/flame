@@ -44,5 +44,5 @@ class MoveToEffect extends MoveEffect {
   }
 
   @override
-  double measure() => _offset.length.abs();
+  double measure() => _offset.length;
 }
