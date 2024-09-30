@@ -151,6 +151,9 @@ class Images {
   /// Whether the cache contains the specified [key] or not.
   bool containsKey(String key) => _assets.containsKey(key);
 
+  /// Returns the list of keys in the cache.
+  List<String> get keys => _assets.keys.toList();
+
   String? findKeyForImage(Image image) {
     return _assets.keys.firstWhere(
       (k) => _assets[k]?.image?.isCloneOf(image) ?? false,

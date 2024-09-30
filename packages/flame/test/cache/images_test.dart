@@ -91,6 +91,18 @@ void main() {
       }
     });
 
+    test('keys', () {
+      final cache = Images();
+      final images = List.generate(10, (_) => _MockImage());
+      for (var i = 0; i < images.length; i++) {
+        cache.add(i.toString(), images[i]);
+      }
+      expect(
+        cache.keys.toSet(),
+        {for (var i = 0; i < images.length; i++) i.toString()},
+      );
+    });
+
     testWithFlameGame(
       'prefix on game.images can be changed',
       (game) async {
