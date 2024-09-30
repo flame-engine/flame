@@ -123,6 +123,7 @@ void main() {
         final img = _MockImage();
         game.images.add('my image', img);
         expect(Flame.images.containsKey('my image'), isTrue);
+        expect(Flame.images.keys, hasLength(1));
 
         game.images = Images();
         game.images.add('new image', img);
