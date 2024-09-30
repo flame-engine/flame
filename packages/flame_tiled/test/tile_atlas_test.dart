@@ -92,6 +92,7 @@ void main() {
         expect(atlas.key, 'images/green.png');
 
         expect(images.containsKey('images/green.png'), isTrue);
+        expect(images.keys, hasLength(1));
 
         expect(
           await imageToPng(atlas.atlas!),
