@@ -61,6 +61,32 @@ void main() {
       expect(atlas.id, 'cave_ace');
     });
 
+    test('atlasImage returns the loaded image', () async {
+      final atlas = await _readTestAtlas();
+      final image = atlas.atlasImage;
+      expect(image, isA<Image>());
+    });
+
+    test('atlasImage throws when the image is not loaded', () async {
+      final atlas = FireAtlas(
+        id: '',
+        tileWidth: 0,
+        tileHeight: 0,
+        imageData: '',
+      );
+
+      expect(
+        () => atlas.atlasImage,
+        throwsA(
+          isA<Exception>().having(
+            (e) => e.toString(),
+            'toString',
+            'Exception: Atlas is not loaded yet, call "load" before using it',
+          ),
+        ),
+      );
+    });
+
     test('can load the asset using the global assets/images', () async {
       final assetsMock = _AssetsCacheMock();
 

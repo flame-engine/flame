@@ -428,4 +428,9 @@ class FireAtlas {
       loop: selection.loop,
     );
   }
+
+  /// Returns the atlas image.
+  ///
+  /// Throws if called before the image is loaded.
+  Image get atlasImage => _assertImageLoaded();
 }
