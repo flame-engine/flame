@@ -432,5 +432,5 @@ class FireAtlas {
   /// Returns the atlas image.
   ///
   /// Throws if called before the image is loaded.
-  Image get atlasImage => _assertImageLoaded();
+  Image get image => _assertImageLoaded();
 }

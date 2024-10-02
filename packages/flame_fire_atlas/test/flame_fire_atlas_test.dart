@@ -61,13 +61,13 @@ void main() {
       expect(atlas.id, 'cave_ace');
     });
 
-    test('atlasImage returns the loaded image', () async {
+    test('image returns the loaded image', () async {
       final atlas = await _readTestAtlas();
-      final image = atlas.atlasImage;
+      final image = atlas.image;
       expect(image, isA<Image>());
     });
 
-    test('atlasImage throws when the image is not loaded', () async {
+    test('image throws when the image is not loaded', () async {
       final atlas = FireAtlas(
         id: '',
         tileWidth: 0,
@@ -76,7 +76,7 @@ void main() {
       );
 
       expect(
-        () => atlas.atlasImage,
+        () => atlas.image,
         throwsA(
           isA<Exception>().having(
             (e) => e.toString(),
