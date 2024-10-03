@@ -35,7 +35,8 @@ To synchronously retrieve a previously cached image, the `fromCache` method can 
 with that key was not previously loaded, it will throw an exception.
 
 To add an already loaded image to the cache, the `add` method can be used and you can set the key
-that the image should have in the cache.
+that the image should have in the cache. You can retrieve all the keys in the cache using the `keys`
+getter.
 
 You can also use `ImageExtension.fromPixels()` to dynamically create an image during the game.
 
