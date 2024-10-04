@@ -199,7 +199,7 @@ Future<void> main() async {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
-      late final CustomSpriteButtonComponent button;
+      late final _CustomSpriteButtonComponent button;
       game.onGameResize(initialGameSize);
 
       final buttonSheet = SpriteSheet.fromColumnsAndRows(
@@ -217,7 +217,7 @@ Future<void> main() async {
       component.current = _ButtonState.down;
 
       await game.ensureAdd(
-        button = CustomSpriteButtonComponent(
+        button = _CustomSpriteButtonComponent(
           customButton: buttonSheet.getSpriteById(0),
           customButtonDown: buttonSheet.getSpriteById(1),
           customOnPressed: () => component.current = _ButtonState.up,
@@ -254,7 +254,7 @@ Future<void> main() async {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
-      late final CustomSpriteButtonComponent button;
+      late final _CustomSpriteButtonComponent button;
       game.onGameResize(initialGameSize);
 
       final buttonSheet = SpriteSheet.fromColumnsAndRows(
@@ -272,7 +272,7 @@ Future<void> main() async {
       component.current = _ButtonState.down;
 
       await game.ensureAdd(
-        button = CustomSpriteButtonComponent(
+        button = _CustomSpriteButtonComponent(
           customButton: buttonSheet.getSpriteById(0),
           customButtonDown: buttonSheet.getSpriteById(1),
           customOnPressed: () => component.current = _ButtonState.up,
@@ -324,7 +324,7 @@ Future<void> main() async {
         component.current = _ButtonState.down;
 
         game.add(
-          CustomSpriteButtonComponent(
+          _CustomSpriteButtonComponent(
             customButton: buttonSheet.getSpriteById(0),
             customButtonDown: buttonSheet.getSpriteById(1),
             customOnPressed: () {
@@ -412,7 +412,7 @@ Future<void> main() async {
       rows: 2,
     );
 
-    final button = CustomSpriteButtonComponent(
+    final button = _CustomSpriteButtonComponent(
       customButton: buttonSheet.getSpriteById(0),
       customButtonDown: buttonSheet.getSpriteById(1),
     );
@@ -440,19 +440,19 @@ Future<void> main() async {
   });
 }
 
-/// test class [CustomSpriteButtonComponent] extending
+/// test class [_CustomSpriteButtonComponent] extending
 /// the [SpriteButtonComponent] class,
 /// To test [SpriteButtonComponent] without using Constructor
 /// but setting properties in [onLoad]
 ///
-class CustomSpriteButtonComponent extends SpriteButtonComponent {
+class _CustomSpriteButtonComponent extends SpriteButtonComponent {
   final Sprite customButton;
   final Sprite customButtonDown;
   final void Function()? customOnPressed;
   final Vector2? customPosition;
   final Vector2? customSize;
 
-  CustomSpriteButtonComponent({
+  _CustomSpriteButtonComponent({
     required this.customButton,
     required this.customButtonDown,
     this.customOnPressed,
@@ -462,7 +462,6 @@ class CustomSpriteButtonComponent extends SpriteButtonComponent {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
     position = customPosition ?? Vector2(0.0, 0.0);
     button = customButton;
     buttonDown = customButtonDown;
