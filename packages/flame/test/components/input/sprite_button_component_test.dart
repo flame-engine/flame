@@ -440,11 +440,8 @@ Future<void> main() async {
   });
 }
 
-/// test class [_CustomSpriteButtonComponent] extending
-/// the [SpriteButtonComponent] class,
-/// To test [SpriteButtonComponent] without using Constructor
-/// but setting properties in [onLoad]
-///
+/// This is used to test [SpriteButtonComponent] without using the constructor
+/// and setting properties in [onLoad] of an extending class instead.
 class _CustomSpriteButtonComponent extends SpriteButtonComponent {
   final Sprite customButton;
   final Sprite customButtonDown;
