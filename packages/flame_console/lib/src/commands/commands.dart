@@ -24,8 +24,8 @@ abstract class ConsoleCommand<G extends FlameGame> {
   void onChildMatch(
     void Function(Component) onChild, {
     required Component rootComponent,
-    String? id,
-    String? type,
+    List<String>? ids,
+    List<String>? types,
     int? limit,
   }) {
     final components = listAllChildren(rootComponent);
@@ -37,9 +37,13 @@ abstract class ConsoleCommand<G extends FlameGame> {
         break;
       }
 
-      final isIdMatch = id == null || element.hashCode.toString() == id;
+      ids = ids ?? [];
+      types = types ?? [];
+
+      final isIdMatch =
+          ids.isEmpty || ids.contains(element.hashCode.toString());
       final isTypeMatch =
-          type == null || element.runtimeType.toString() == type;
+          types.isEmpty || types.contains(element.runtimeType.toString());
 
       if (isIdMatch && isTypeMatch) {
         count++;
@@ -64,28 +68,30 @@ abstract class ConsoleCommand<G extends FlameGame> {
 }
 
 abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
-  void processChild(Component child);
+  (String?, String) processChildren(List<Component> children);
 
   @override
   (String?, String) execute(G game, ArgResults results) {
+    final children = <Component>[];
+
     onChildMatch(
-      processChild,
+      children.add,
       rootComponent: game,
-      id: results['id'] as String?,
-      type: results['type'] as String?,
+      ids: results['id'] as List<String>?,
+      types: results['type'] as List<String>?,
       limit: optionalIntResult('limit', results),
     );
 
-    return (null, '');
+    return processChildren(children);
   }
 
   @override
   ArgParser get parser => ArgParser()
-    ..addOption(
+    ..addMultiOption(
       'id',
       abbr: 'i',
     )
-    ..addOption(
+    ..addMultiOption(
       'type',
       abbr: 't',
     )

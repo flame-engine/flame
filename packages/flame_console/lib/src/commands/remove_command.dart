@@ -4,7 +4,10 @@ import 'package:flame_console/flame_console.dart';
 
 class RemoveConsoleCommand<G extends FlameGame> extends QueryCommand<G> {
   @override
-  void processChild(Component child) {
-    child.removeFromParent();
+  (String?, String) processChildren(List<Component> children) {
+    for (final component in children) {
+      component.removeFromParent();
+    }
+    return (null, '');
   }
 }

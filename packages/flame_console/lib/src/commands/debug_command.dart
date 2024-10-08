@@ -4,7 +4,10 @@ import 'package:flame_console/src/commands/commands.dart';
 
 class DebugConsoleCommand<G extends FlameGame> extends QueryCommand<G> {
   @override
-  void processChild(Component child) {
-    child.debugMode = !child.debugMode;
+  (String?, String) processChildren(List<Component> children) {
+    for (final child in children) {
+      child.debugMode = !child.debugMode;
+    }
+    return (null, '');
   }
 }
