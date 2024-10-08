@@ -62,7 +62,6 @@ abstract class ConsoleCommand<G extends FlameGame> {
 }
 
 abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
-
   void processChild(Component child);
 
   @override
