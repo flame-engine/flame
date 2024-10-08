@@ -4,8 +4,7 @@ Right, we are really close to a playable game, we have enemies and we have the a
 at them! We now need to do something when a bullet hits an enemy.
 
 Flame provides a collision detection system out of the box, which we will use to implement our
-logic that will handle when a bullet and an enemy comes into contact. The result will be that
-both are removed!
+logic when a bullet and an enemy come into contact. The result will be that both are removed!
 
 First we need to let our `FlameGame` know that we want collisions between components to
 be checked. In order to do so, simply add the `HasCollisionDetection` mixin to the declaration
@@ -18,19 +17,18 @@ class SpaceShooterGame extends FlameGame
 }
 ```
 
-With that, Flame now will start to check if components has collided with each other. Next we need to
+With that, Flame now will start to check if components have collided with each other. Next we need to
 identify which components can cause collisions.
 
 In our case those are the `Bullet` and `Enemy` components and we need to add hitboxes to them.
 
 A hitbox is nothing more than a defined part of the component's area that can hit
 other objects. Flame offers a collection of classes to define a hitbox, the simplest of them is
-the `RectangleHitbox`, which like the name implies will make a rectangular area as the component's
+the `RectangleHitbox`, which like the name implies, will set a rectangular area as the component's
 hitbox.
 
-Hitboxes are also components, so in order to add them to our components we can simply add
-them to the components that we want to have hitboxes, so let's do it, let's start by adding the
-following line to the `Enemy` class:
+Hitboxes are also components, so we can simply add them to the components that we want to have hitboxes.
+Let's start by adding the following line to the `Enemy` class:
 
 ```dart
 add(RectangleHitbox());
@@ -51,28 +49,28 @@ performance!
 
 There are three types of collisions in Flame:
 
-- `active` collides with other `Hitbox`es of type active or passive
-- `passive` collides with other `Hitbox`es of type active
-- `inactive` will not collide with any other `Hitbox`es
+- `active` collides with other hitboxes of type active or passive
+- `passive` collides with other hitboxes of type active
+- `inactive` will not collide with any other hitbox
 
-Usually it is smart to mark hitboxes from components that will have a higher number of instances
+Usually it is smart to mark `hitboxes` from components that will have a higher number of instances
 as passive, so they will be taken into account for collision, but they themselves will not check
 their own collisions, drastically reducing the number of checking, giving a better performance
 to the game!
 
-And since in this game we anticipate that there will be more bullets than enemies, we choose the
+And since in this game we anticipate that there will be more bullets than enemies, we set the
 bullets to have a passive collision type!
 
-From this point on, Flame will take care of checking the collision between those two components,
-we now need to do something when they come in contact.
+From this point on, Flame will take care of checking the collision between those two components and
+we now need to do something when this occurs.
 
-We can start that by receiving the collision events in one of the classes. Since `Bullet`s have a
+We start by receiving the collision events in one of the classes. Since `Bullet`s have a
 passive collision type, we will also add the collision checking logic to the `Enemy` class.
 
-To listen to collision events we need to add the `CollisionCallbacks` mixin to the component.
-By doing so we will be able to override some methods like `onCollisionStart` and `onCollisionEnd`.
+To listen for collision events we need to add the `CollisionCallbacks` mixin to the component.
+By doing so we will be able to override some methods like `onCollisionStart()` and `onCollisionEnd()`.
 
-So let's do that and make a few changes to the `Enemy` class:
+So let's make a few changes to the `Enemy` class:
 
 ```dart
 class Enemy extends SpriteAnimationComponent
@@ -101,7 +99,7 @@ we remove both the current `Enemy` instance and the `Bullet`.
 
 If you run the game now you will finally be able to defeat the enemies crawling down the screen!
 
-To add some final touches, let's add some explosion animations and add more action to the game!
+To add some final touches, let's add some explosion animations to introduce more action to the game!
 
 First, let's create the explosion class:
 
@@ -139,7 +137,7 @@ that we are passing `loop: false` in the `SpriteAnimationData.sequenced` constru
 setting `removeOnFinish: true;`. We do that so that when the animation is finished, it will
 automatically be removed from the game!
 
-And finally, we make a small change in the `onCollisionStart` method from the `Enemy` class
+And finally, we make a small change in the `onCollisionStart()` method in the `Enemy` class
 in order to add the explosion to the game:
 
 ```dart

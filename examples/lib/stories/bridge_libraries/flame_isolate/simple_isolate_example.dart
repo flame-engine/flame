@@ -13,7 +13,7 @@ class SimpleIsolateExample extends FlameGame {
     This example showcases a simple FlameIsolate example, making it easy to 
     continually run heavy load without stutter.
     
-    Tap the brown square to swap between running heavy load in in an isolate or
+    Tap the brown square to swap between running heavy load in an isolate or
     synchronous.
     
     The selected backpressure strategy used for this example is
@@ -115,16 +115,10 @@ class CalculatePrimeNumber extends PositionComponent
     final nextInt = _primeData.key + 1;
 
     try {
-      final bool isPrime;
-
-      switch (computeType) {
-        case ComputeType.isolate:
-          isPrime = await isolateCompute(_isPrime, nextInt);
-          break;
-        case ComputeType.synchronous:
-          isPrime = _isPrime(nextInt);
-          break;
-      }
+      final isPrime = switch (computeType) {
+        ComputeType.isolate => await isolateCompute(_isPrime, nextInt),
+        ComputeType.synchronous => _isPrime(nextInt),
+      };
 
       _primeData = MapEntry(nextInt, isPrime);
     } on BackpressureDropException catch (_) {

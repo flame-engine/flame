@@ -3,6 +3,7 @@ import 'package:flame_devtools/widgets/component_tree.dart';
 import 'package:flame_devtools/widgets/debug_mode_button.dart';
 import 'package:flame_devtools/widgets/game_loop_controls.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(const FlameDevTools());
@@ -14,17 +15,19 @@ class FlameDevTools extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DevToolsExtension(
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const GameLoopControls(),
-              const DebugModeButton(),
-            ].withSpacing(),
-          ),
-          const Expanded(child: ComponentTree()),
-        ].withSpacing(),
+      child: ProviderScope(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const GameLoopControls(),
+                const DebugModeButton(),
+              ].withSpacing(),
+            ),
+            const Expanded(child: ComponentTree()),
+          ].withSpacing(),
+        ),
       ),
     );
   }

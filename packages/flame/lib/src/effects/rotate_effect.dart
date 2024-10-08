@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/effects/effect_target.dart';
@@ -25,17 +26,20 @@ class RotateEffect extends Effect
     double angle,
     super.controller, {
     super.onComplete,
+    super.key,
   }) : _angle = angle;
 
   factory RotateEffect.to(
     double angle,
     EffectController controller, {
     void Function()? onComplete,
+    ComponentKey? key,
   }) {
     return _RotateToEffect(
       angle,
       controller,
       onComplete: onComplete,
+      key: key,
     );
   }
 
@@ -58,6 +62,7 @@ class _RotateToEffect extends RotateEffect {
     double angle,
     EffectController controller, {
     void Function()? onComplete,
+    super.key,
   })  : _destinationAngle = angle,
         super.by(0, controller, onComplete: onComplete);
 

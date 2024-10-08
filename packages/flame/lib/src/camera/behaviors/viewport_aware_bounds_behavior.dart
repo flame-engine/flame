@@ -22,6 +22,7 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
 
   ViewportAwareBoundsBehavior({
     required Shape boundsShape,
+    super.key,
   }) : _boundsShape = boundsShape;
 
   @override
@@ -93,23 +94,27 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
           )
           .y,
     );
-    final halfViewportSize = viewport.size / 2;
+
+    final viewportSize = viewport.virtualSize;
     if (_boundsShape is Rectangle) {
       return Rectangle.fromCenter(
         center: _boundsShape.center,
-        size: worldSize - halfViewportSize,
+        size: worldSize - viewportSize,
       );
     } else if (_boundsShape is RoundedRectangle) {
-      final halfSize = (worldSize - halfViewportSize) / 2;
+      final halfSize = (worldSize - viewportSize) / 2;
       return RoundedRectangle.fromPoints(
         _boundsShape.center - halfSize,
         _boundsShape.center + halfSize,
         (_boundsShape as RoundedRectangle).radius,
       );
     } else if (_boundsShape is Circle) {
+      final diameter =
+          max(worldSize.x, worldSize.y) - max(viewportSize.x, viewportSize.y);
+      final radius = diameter / 2;
       return Circle(
         _boundsShape.center,
-        worldSize.x - max(halfViewportSize.x, halfViewportSize.y),
+        radius,
       );
     }
     return _boundsShape;

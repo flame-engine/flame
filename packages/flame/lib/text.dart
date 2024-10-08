@@ -14,6 +14,7 @@ export 'src/text/elements/text_painter_text_element.dart'
     show TextPainterTextElement;
 export 'src/text/nodes/block_node.dart' show BlockNode;
 export 'src/text/nodes/bold_text_node.dart' show BoldTextNode;
+export 'src/text/nodes/code_text_node.dart' show CodeTextNode;
 export 'src/text/nodes/column_node.dart' show ColumnNode;
 export 'src/text/nodes/document_root.dart' show DocumentRoot;
 export 'src/text/nodes/group_text_node.dart' show GroupTextNode;

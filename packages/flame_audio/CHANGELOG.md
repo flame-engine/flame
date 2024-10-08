@@ -1,3 +1,15 @@
+## 2.10.4
+
+ - Update a dependency to the latest release.
+
+## 2.10.3
+
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+## 2.10.2
+
+ - **DOCS**: Update flame_audio readme ([#3119](https://github.com/flame-engine/flame/issues/3119)). ([843984de](https://github.com/flame-engine/flame/commit/843984dee5f5f6afd351ef29ad2adb39650f30bb))
+
 ## 2.10.1
 
  - Update a dependency to the latest release.

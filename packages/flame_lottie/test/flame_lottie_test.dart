@@ -28,9 +28,9 @@ void main() {
     'Load composition as AssetBundle and use loadLottie function by library',
     (game) async {
       final logoData =
-          Future.value(bytesForFile('example/assets/LottieLogo1.json'));
+          Future.value(_bytesForFile('example/assets/LottieLogo1.json'));
 
-      final mockAsset = FakeAssetBundle({'logo.json': logoData});
+      final mockAsset = _FakeAssetBundle({'logo.json': logoData});
 
       final asset = Lottie.asset(
         'logo.json',
@@ -49,13 +49,13 @@ void main() {
   );
 }
 
-ByteData bytesForFile(String path) =>
+ByteData _bytesForFile(String path) =>
     File(path).readAsBytesSync().buffer.asByteData();
 
-class FakeAssetBundle extends Fake implements AssetBundle {
+class _FakeAssetBundle extends Fake implements AssetBundle {
   final Map<String, Future<ByteData>> data;
 
-  FakeAssetBundle(this.data);
+  _FakeAssetBundle(this.data);
 
   @override
   Future<ByteData> load(String key) {

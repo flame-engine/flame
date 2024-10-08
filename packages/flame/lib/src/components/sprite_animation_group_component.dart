@@ -100,6 +100,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     Vector2? size,
     Vector2? scale,
     double? angle,
+    double nativeAngle = 0,
     Anchor? anchor,
     int? priority,
     ComponentKey? key,
@@ -124,6 +125,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
           scale: scale,
           angle: angle,
           anchor: anchor,
+          nativeAngle: nativeAngle,
           priority: priority,
           key: key,
         );
@@ -134,10 +136,16 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// Returns the current group state.
   T? get current => _current;
 
-  /// The the group state to given state.
+  /// The group state to given state.
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    assert(_animations != null, 'Animations not set');
+    assert(
+      _animations!.keys.contains(value),
+      'Animation not found for key: $value',
+    );
+
     final changed = value != current;
     _current = value;
     _resizeToSprite();
@@ -151,7 +159,11 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   }
 
   /// Returns the map of animation state and their corresponding animations.
-  Map<T, SpriteAnimation>? get animations => _animations;
+  ///
+  /// If you want to change the contents of the map use the animations setter
+  /// and pass in a new map of animations.
+  Map<T, SpriteAnimation>? get animations =>
+      _animations != null ? Map.unmodifiable(_animations!) : null;
 
   /// Sets the given [value] as new animation state map.
   set animations(Map<T, SpriteAnimation>? value) {

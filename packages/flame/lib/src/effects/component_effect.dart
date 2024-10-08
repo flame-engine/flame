@@ -9,6 +9,7 @@ abstract class ComponentEffect<T extends Component> extends Effect {
   ComponentEffect(
     super.controller, {
     super.onComplete,
+    super.key,
   });
 
   late T target;

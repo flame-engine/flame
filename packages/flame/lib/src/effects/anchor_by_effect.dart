@@ -24,6 +24,7 @@ class AnchorByEffect extends AnchorEffect {
     EffectController controller, {
     AnchorProvider? target,
     void Function()? onComplete,
+    super.key,
   })  : _offset = offset.clone(),
         super(controller, target, onComplete: onComplete);
 

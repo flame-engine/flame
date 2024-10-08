@@ -1,7 +1,7 @@
 import 'package:flame/src/components/core/component.dart';
 
 /// This mixin allows components to control their speed as compared to the
-/// normal speed. Only framerate independent logic will benefit [timeScale]
+/// normal speed. Only framerate independent logic will benefit from [timeScale]
 /// changes.
 ///
 /// Note: Modified [timeScale] will be applied to all children as well.
@@ -33,5 +33,18 @@ mixin HasTimeScale on Component {
   @override
   void updateTree(double dt) {
     super.updateTree(dt * (parent != null ? _timeScale : 1.0));
+  }
+
+  /// Pauses the component by setting the time scale to 0.0.
+  void pause() {
+    timeScale = 0.0;
+  }
+
+  /// Resumes the component by setting the time scale to 1.0 or to the given
+  /// value.
+  void resume({double? newTimeScale}) {
+    if (timeScale == 0.0) {
+      timeScale = newTimeScale ?? 1.0;
+    }
   }
 }

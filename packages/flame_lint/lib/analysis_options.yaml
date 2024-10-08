@@ -1,6 +1,8 @@
 # Source of linter options:
 # https://dart-lang.github.io/linter/lints/options/options.html
 
+include: package:lints/core.yaml
+
 analyzer:
   exclude:
     - "**/*.g.dart"

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/text.dart';
+import 'package:meta/meta.dart';
 
 class GroupTextElement extends InlineTextElement {
   GroupTextElement(List<InlineTextElement> children)
@@ -14,6 +15,9 @@ class GroupTextElement extends InlineTextElement {
 
   @override
   LineMetrics get metrics => _metrics;
+
+  @visibleForTesting
+  List<InlineTextElement> get children => List.unmodifiable(_children);
 
   @override
   void draw(Canvas canvas) {

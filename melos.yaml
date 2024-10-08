@@ -16,14 +16,14 @@ command:
 
   bootstrap:
     environment:
-      sdk: ">=3.0.0 <4.0.0"
-      flutter: ">=3.19.0"
+      sdk: ">=3.4.0 <4.0.0"
+      flutter: ">=3.22.0"
     dependencies:
-      meta: ^1.9.1
+      meta: ^1.12.0
       vector_math: ^2.1.4
     dev_dependencies:
-      dartdoc: ^6.3.0
-      mocktail: ^1.0.1
+      dartdoc: ^8.0.8
+      mocktail: ^1.0.3
       test: any
 
   publish:
@@ -101,6 +101,8 @@ scripts:
     packageFilters:
       dirExists: test
     description: Generate coverage for the selected package.
+
+  upgrade: melos exec flutter pub upgrade
 
   update-goldens:
     run: melos exec -- flutter test --update-goldens

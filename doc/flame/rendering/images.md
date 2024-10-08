@@ -35,7 +35,8 @@ To synchronously retrieve a previously cached image, the `fromCache` method can 
 with that key was not previously loaded, it will throw an exception.
 
 To add an already loaded image to the cache, the `add` method can be used and you can set the key
-that the image should have in the cache.
+that the image should have in the cache. You can retrieve all the keys in the cache using the `keys`
+getter.
 
 You can also use `ImageExtension.fromPixels()` to dynamically create an image during the game.
 
@@ -192,9 +193,8 @@ parameter `overridePaint` that parameter will override the current `Sprite` pain
 render call.
 
 `Sprite`s can also be used as widgets, to do so just use `SpriteWidget` class.
-
-A complete example using sprite as widgets can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
+Here is a complete
+[example using sprite as widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
 
 
 ## SpriteBatch
@@ -209,8 +209,8 @@ You render it with a `Canvas` and an optional `Paint`, `BlendMode` and `CullRect
 
 A `SpriteBatchComponent` is also available for your convenience.
 
-See the examples
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart).
+See how to use it in the
+[SpriteBatch examples](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart)
 
 
 ## ImageComposition
@@ -317,16 +317,16 @@ and the former ticks the internal clock to update the frames.
 Animations are normally used inside `SpriteAnimationComponent`s, but custom components with several
 Animations can be created as well.
 
-A complete example of using animations as widgets can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
+To learn more, check out the full example code of
+[using animations as widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_animation_widget_example.dart).
 
 
 ## SpriteSheet
 
 Sprite sheets are big images with several frames of the same sprite on it and is a very good way to
-organize and keep your animations stored. Flame provides a very simple utility class to deal with
-SpriteSheets, with it you can load your sprite sheet image and extract animations from it. Below is
-a very simple example of how to use it:
+organize and store your animations. Flame provides a very simple utility class to deal with
+SpriteSheets, using which you can load your sprite sheet image and extract animations from it as
+well. Following is a simple example of how to use it:
 
 ```dart
 import 'package:flame/sprite.dart';
@@ -363,5 +363,5 @@ spriteSheet.getSpriteById(2); // by id
 spriteSheet.getSprite(0, 0); // row, column
 ```
 
-You can see a full example of the `SpriteSheet` class
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_sheet_example.dart).
+See a full example of the [`SpriteSheet` class](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_sheet_example.dart)
+for more details on how to work with it.

@@ -33,7 +33,7 @@ void main() {
 
     testRandom('translate2 calls translate on the matrix with a vector',
         (Random r) {
-      final matrix4 = MockMatrix4();
+      final matrix4 = _MockMatrix4();
       final v = Vector2(r.nextDouble(), r.nextDouble());
       matrix4.translate2(v);
       verify(() => matrix4.translate(v.x, v.y)).called(1);
@@ -102,4 +102,4 @@ void main() {
   });
 }
 
-class MockMatrix4 extends Mock implements Matrix4 {}
+class _MockMatrix4 extends Mock implements Matrix4 {}

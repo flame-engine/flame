@@ -45,30 +45,19 @@ class FlameMarkdown {
         .map(_castCheck<InlineTextNode>)
         .toList();
     final child = _groupInlineChildren(children);
-    switch (element.tag) {
-      case 'h1':
-        return HeaderNode(child, level: 1);
-      case 'h2':
-        return HeaderNode(child, level: 2);
-      case 'h3':
-        return HeaderNode(child, level: 3);
-      case 'h4':
-        return HeaderNode(child, level: 4);
-      case 'h5':
-        return HeaderNode(child, level: 5);
-      case 'h6':
-        return HeaderNode(child, level: 6);
-      case 'p':
-        return ParagraphNode(child);
-      case 'em':
-      case 'i':
-        return ItalicTextNode(child);
-      case 'strong':
-      case 'b':
-        return BoldTextNode(child);
-      default:
-        throw Exception('Unknown element tag: ${element.tag}');
-    }
+    return switch (element.tag) {
+      'h1' => HeaderNode(child, level: 1),
+      'h2' => HeaderNode(child, level: 2),
+      'h3' => HeaderNode(child, level: 3),
+      'h4' => HeaderNode(child, level: 4),
+      'h5' => HeaderNode(child, level: 5),
+      'h6' => HeaderNode(child, level: 6),
+      'p' => ParagraphNode(child),
+      'em' || 'i' => ItalicTextNode(child),
+      'strong' || 'b' => BoldTextNode(child),
+      'code' => CodeTextNode(child),
+      _ => throw Exception('Unknown element tag: ${element.tag}'),
+    } as TextNode;
   }
 
   static PlainTextNode _convertText(Text text) {

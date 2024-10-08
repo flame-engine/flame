@@ -54,14 +54,13 @@ class RateRoute extends ValueRoute<int>
     final size = Vector2(250, 130);
     const radius = 18.0;
     final starGap = (size.x - 5 * 2 * radius) / 6;
-    return RectangleComponent(
+    return DialogBackground(
       position: game.size / 2,
       size: size,
-      anchor: Anchor.center,
-      paint: Paint()..color = const Color(0xee858585),
       children: [
         RoundedButton(
           text: 'Ok',
+          position: position = Vector2(size.x / 2, 100),
           action: () {
             completeWith(
               descendants().where((c) => c is Star && c.active).length,
@@ -69,7 +68,7 @@ class RateRoute extends ValueRoute<int>
           },
           color: const Color(0xFFFFFFFF),
           borderColor: const Color(0xFF000000),
-        )..position = Vector2(size.x / 2, 100),
+        ),
         for (var i = 0; i < 5; i++)
           Star(
             value: i + 1,
@@ -79,6 +78,14 @@ class RateRoute extends ValueRoute<int>
       ],
     );
   }
+}
+
+class DialogBackground extends RectangleComponent with TapCallbacks {
+  DialogBackground({super.position, super.size, super.children})
+      : super(
+          anchor: Anchor.center,
+          paint: Paint()..color = const Color(0xee858585),
+        );
 }
 
 class Star extends PositionComponent with TapCallbacks {

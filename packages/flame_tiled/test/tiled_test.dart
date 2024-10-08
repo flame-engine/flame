@@ -605,6 +605,99 @@ void main() {
     });
   });
 
+  group('tile offset', () {
+    late TiledComponent component;
+
+    Future<TiledComponent> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      final bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        stringNames: [tmxFile],
+      );
+      return component = await TiledComponent.load(
+        tmxFile,
+        destTileSize,
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+    }
+
+    test('tile offset hexagonal', () async {
+      await setupMap(
+        // flame tiled currently does not support hexagon side length property,
+        // to use export from Tiled, tweak that value
+        'test_tile_offset_hexagonal.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(40, 28));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_hexagonal.png'),
+      );
+    });
+
+    test('tile offset isometric', () async {
+      await setupMap(
+        'test_tile_offset_isometric.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(32, 32));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_isometric.png'),
+      );
+    });
+
+    test('tile offset orthogonal', () async {
+      await setupMap(
+        'test_tile_offset_orthogonal.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(32, 32));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_orthogonal.png'),
+      );
+    });
+
+    test('tile offset staggered', () async {
+      await setupMap(
+        'test_tile_offset_staggered.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(40, 24));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_staggered.png'),
+      );
+    });
+  });
+
   group('isometric staggered', () {
     late TiledComponent component;
 
@@ -876,27 +969,27 @@ void main() {
 
           final waterAnimation = layer.animations.first;
           final spikeAnimation = layer.animations.last;
-          expect(waterAnimation.frames.durations, [.18, .17, .15]);
-          expect(spikeAnimation.frames.durations, [.176, .176, .176, .176]);
+          expect(waterAnimation.frames.durations, [0.18, 0.17, 0.15]);
+          expect(spikeAnimation.frames.durations, [0.176, 0.176, 0.176, 0.176]);
 
-          map.update(.177);
+          map.update(0.177);
           expect(waterAnimation.frame, 0);
-          expect(waterAnimation.frames.frameTime, .177);
+          expect(waterAnimation.frames.frameTime, 0.177);
           expect(
             waterAnimation.batchedSource.toRect(),
             waterAnimation.frames.sources[0],
           );
 
           expect(spikeAnimation.frame, 1);
-          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(.001));
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.001));
           expect(
             spikeAnimation.batchedSource.toRect(),
             spikeAnimation.frames.sources[1],
           );
 
-          map.update(.003);
+          map.update(0.003);
           expect(waterAnimation.frame, 1);
-          expect(waterAnimation.frames.frameTime, moreOrLessEquals(.0));
+          expect(waterAnimation.frames.frameTime, moreOrLessEquals(0.0));
           expect(spikeAnimation.frame, 1);
           expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
 

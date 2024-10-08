@@ -63,4 +63,37 @@ class TextPaint extends TextRenderer {
       textDirection: textDirection ?? this.textDirection,
     );
   }
+
+  InlineTextStyle asInlineTextStyle() {
+    return InlineTextStyle(
+      color: style.color,
+      fontFamily: style.fontFamily,
+      fontSize: style.fontSize,
+      fontWeight: style.fontWeight,
+      fontStyle: style.fontStyle,
+      letterSpacing: style.letterSpacing,
+      wordSpacing: style.wordSpacing,
+      height: style.height,
+      leadingDistribution: style.leadingDistribution,
+      shadows: style.shadows,
+      fontFeatures: style.fontFeatures,
+      fontVariations: style.fontVariations,
+      decoration: style.decoration,
+      decorationColor: style.decorationColor,
+      decorationStyle: style.decorationStyle,
+      decorationThickness: style.decorationThickness,
+      background: _extractBackground(style),
+      foreground: style.foreground,
+    );
+  }
+
+  Paint? _extractBackground(TextStyle style) {
+    if (style.background != null) {
+      return style.background;
+    }
+    if (style.backgroundColor != null) {
+      return Paint()..color = style.backgroundColor!;
+    }
+    return null;
+  }
 }

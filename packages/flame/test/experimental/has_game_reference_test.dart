@@ -98,9 +98,9 @@ void main() {
       final component = _BarComponent();
       await game.ensureAdd(component);
 
-      component.game = MockFlameGame();
+      component.game = _MockFlameGame();
 
-      expect(component.game, isA<MockFlameGame>());
+      expect(component.game, isA<_MockFlameGame>());
     });
   });
 }
@@ -123,4 +123,4 @@ class _FooComponent extends Component with HasGameReference<_MyGame> {
 
 class _BarComponent extends Component with HasGameReference<_MyGame> {}
 
-class MockFlameGame extends Mock implements _MyGame {}
+class _MockFlameGame extends Mock implements _MyGame {}

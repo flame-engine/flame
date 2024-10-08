@@ -23,6 +23,7 @@ class BoundedPositionBehavior extends Component {
     PositionProvider? target,
     double precision = 0.5,
     super.priority,
+    super.key,
   })  : assert(precision > 0, 'Precision must be positive: $precision'),
         _bounds = bounds,
         _target = target,

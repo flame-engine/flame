@@ -1,3 +1,11 @@
+## 0.3.3+1
+
+ - Update a dependency to the latest release.
+
+## 0.3.3
+
+## 0.3.2
+
 ## 0.3.1
 
  - **FEAT**: Update http dependency on flame_network_assets ([#3084](https://github.com/flame-engine/flame/issues/3084)). ([e3e755c6](https://github.com/flame-engine/flame/commit/e3e755c6dec35f36b4a42893afeea5f64ff025b7))

@@ -4,17 +4,17 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.22.0"
 
 dependencies:
-  flame: ^1.17.0
-  flame_texturepacker: ^3.2.0
+  flame: ^1.20.0
+  flame_texturepacker: ^4.1.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.2.1
 
 flutter:
   assets:

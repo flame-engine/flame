@@ -18,16 +18,12 @@ class Inverter extends BaseNode implements NodeInterface {
   }
 
   void _invertStatus() {
-    switch (child.status) {
-      case NodeStatus.notStarted:
-        status = NodeStatus.notStarted;
-      case NodeStatus.running:
-        status = NodeStatus.running;
-      case NodeStatus.success:
-        status = NodeStatus.failure;
-      case NodeStatus.failure:
-        status = NodeStatus.success;
-    }
+    status = switch (child.status) {
+      NodeStatus.notStarted => NodeStatus.notStarted,
+      NodeStatus.running => NodeStatus.running,
+      NodeStatus.success => NodeStatus.failure,
+      NodeStatus.failure => NodeStatus.success,
+    };
   }
 
   @override

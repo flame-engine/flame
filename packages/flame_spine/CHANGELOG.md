@@ -1,3 +1,13 @@
+## 0.2.2+1
+
+ - Update a dependency to the latest release.
+
+## 0.2.2
+
+ - **DOCS**: Homepage link typo for flame_spine ([#3277](https://github.com/flame-engine/flame/issues/3277)). ([f76355f1](https://github.com/flame-engine/flame/commit/f76355f151a61fa0eddb5356b7e2a7c27b96c221))
+
+## 0.2.1
+
 ## 0.2.0+1
 
  - Update a dependency to the latest release.

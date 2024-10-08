@@ -8,41 +8,41 @@ void main() {
     testWithFlameGame(
       'onComplete is called when no scrolling is required',
       (game) async {
-        final onComplete = MockOnCompleteCallback();
+        final onComplete = _MockOnCompleteCallback();
 
-        when(onComplete).thenReturn(null);
+        when(onComplete.call).thenReturn(null);
 
         final component = ScrollTextBoxComponent(
           size: Vector2(200, 100),
           text: 'Short text',
-          onComplete: onComplete,
+          onComplete: onComplete.call,
         );
         await game.ensureAdd(component);
 
         game.update(0.1);
 
-        verify(onComplete).called(1);
+        verify(onComplete.call).called(1);
       },
     );
 
     testWithFlameGame(
       'onComplete is called when scrolling is required',
       (game) async {
-        final onComplete = MockOnCompleteCallback();
+        final onComplete = _MockOnCompleteCallback();
 
-        when(onComplete).thenReturn(null);
+        when(onComplete.call).thenReturn(null);
 
         final component = ScrollTextBoxComponent(
           size: Vector2(200, 100),
           text: '''Long text that will definitely require scrolling to be 
 fully visible in the given size of the ScrollTextBoxComponent.''',
-          onComplete: onComplete,
+          onComplete: onComplete.call,
         );
         await game.ensureAdd(component);
 
         game.update(0.1);
 
-        verify(onComplete).called(1);
+        verify(onComplete.call).called(1);
       },
     );
 
@@ -94,6 +94,6 @@ lines.''',
   });
 }
 
-class MockOnCompleteCallback extends Mock {
+class _MockOnCompleteCallback extends Mock {
   void call();
 }

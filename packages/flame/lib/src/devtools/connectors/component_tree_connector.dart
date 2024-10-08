@@ -30,15 +30,24 @@ class ComponentTreeNode {
   final int id;
   final String name;
   final String toStringText;
+  final bool isPositionComponent;
   final List<ComponentTreeNode> children;
 
-  ComponentTreeNode(this.id, this.name, this.toStringText, this.children);
+  ComponentTreeNode(
+    this.id,
+    this.name,
+    this.toStringText,
+    // ignore: avoid_positional_boolean_parameters
+    this.isPositionComponent,
+    this.children,
+  );
 
   ComponentTreeNode.fromComponent(Component component)
       : this(
           component.hashCode,
           component.runtimeType.toString(),
           component.toString(),
+          component is PositionComponent,
           component.children.map(ComponentTreeNode.fromComponent).toList(),
         );
 
@@ -47,6 +56,7 @@ class ComponentTreeNode {
           json['id'] as int,
           json['name'] as String,
           json['toString'] as String,
+          json['isPositionComponent'] as bool,
           (json['children'] as List)
               .map((e) => ComponentTreeNode.fromJson(e as Map<String, dynamic>))
               .toList(),
@@ -57,6 +67,7 @@ class ComponentTreeNode {
       'id': id,
       'name': name,
       'toString': toStringText,
+      'isPositionComponent': isPositionComponent,
       'children': children.map((e) => e.toJson()).toList(),
     };
   }

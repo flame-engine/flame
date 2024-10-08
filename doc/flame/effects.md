@@ -91,6 +91,8 @@ functionality inherited by all other effects. This includes:
 - Optional user-provided `onComplete`, which will be invoked when the effect has just
   completed its execution but before it is removed from the game.
 
+- A `completed` future that completes when the effect finishes.
+
 - The `reset()` method reverts the effect to its original state, allowing it to run once again.
 
 

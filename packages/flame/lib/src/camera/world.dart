@@ -19,6 +19,7 @@ class World extends Component implements CoordinateTransform {
   World({
     super.children,
     super.priority = -0x7fffffff,
+    super.key,
   });
 
   @override
