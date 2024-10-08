@@ -9,14 +9,12 @@ environment:
 
 dependencies:
   args: ^2.5.0
+  flame: ^1.19.0
   flutter:
     sdk: flutter
-  flame: ^1.19.0
 
 dev_dependencies:
   flame_lint: ^1.2.1
+  flame_test: ^1.17.1
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
-
-flutter:
