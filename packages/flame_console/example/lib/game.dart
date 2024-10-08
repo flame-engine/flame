@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
@@ -21,6 +22,19 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
             Vector2.all(.8),
             parentSize: Vector2(100, 100),
           ),
+          SequenceEffect(
+            [
+              MoveEffect.by(
+                Vector2(-200, 0),
+                LinearEffectController(1),
+              ),
+              MoveEffect.by(
+                Vector2(200, 0),
+                LinearEffectController(1),
+              ),
+            ],
+            infinite: true,
+          ),
         ],
       ),
       RectangleComponent(
@@ -32,6 +46,19 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
             Vector2.all(.4),
             parentSize: Vector2(100, 100),
           ),
+          SequenceEffect(
+            [
+              MoveEffect.by(
+                Vector2(-200, 0),
+                LinearEffectController(1),
+              ),
+              MoveEffect.by(
+                Vector2(200, 0),
+                LinearEffectController(1),
+              ),
+            ],
+            infinite: true,
+          ),
         ],
       ),
       RectangleComponent(
@@ -42,6 +69,19 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
           RectangleHitbox.relative(
             Vector2.all(.2),
             parentSize: Vector2(100, 100),
+          ),
+          SequenceEffect(
+            [
+              MoveEffect.by(
+                Vector2(-200, 0),
+                LinearEffectController(1),
+              ),
+              MoveEffect.by(
+                Vector2(200, 0),
+                LinearEffectController(1),
+              ),
+            ],
+            infinite: true,
           ),
         ],
       ),

@@ -128,9 +128,16 @@ class ConsoleController<G extends FlameGame> {
           commandHistory: [...state.value.commandHistory, originalCommand],
         );
         final result = command.run(game, split.skip(1).toList());
-        state.value = state.value.copyWith(
-          history: [...state.value.history, ...result.$2.split('\n')],
-        );
+
+        if (result.$1 != null) {
+          state.value = state.value.copyWith(
+            history: [...state.value.history, ...result.$1!.split('\n')],
+          );
+        } else if (result.$2.isNotEmpty) {
+          state.value = state.value.copyWith(
+            history: [...state.value.history, ...result.$2.split('\n')],
+          );
+        }
       }
 
       WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -2,6 +2,8 @@ import 'package:args/args.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_console/src/commands/commands.dart';
+import 'package:flame_console/src/commands/pause_command.dart';
+import 'package:flame_console/src/commands/resume_command.dart';
 
 export 'debug_command.dart';
 export 'ls_command.dart';
@@ -98,5 +100,7 @@ class ConsoleCommands {
     'ls': LsConsoleCommand(),
     'rm': RemoveConsoleCommand(),
     'debug': DebugConsoleCommand(),
+    'pause': PauseConsoleCommand(),
+    'resume': ResumeConsoleCommand(),
   };
 }
