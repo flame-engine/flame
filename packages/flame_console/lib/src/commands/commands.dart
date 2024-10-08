@@ -3,8 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_console/src/commands/commands.dart';
 
-export 'ls_command.dart';
 export 'debug_command.dart';
+export 'ls_command.dart';
 export 'remove_command.dart';
 
 abstract class ConsoleCommand<G extends FlameGame> {
@@ -19,15 +19,28 @@ abstract class ConsoleCommand<G extends FlameGame> {
     ];
   }
 
-  void onChildMatch(void Function(Component) onChild,
-      {required Component rootComponent, String? id, String? type}) {
+  void onChildMatch(
+    void Function(Component) onChild, {
+    required Component rootComponent,
+    String? id,
+    String? type,
+    int? limit,
+  }) {
     final components = listAllChildren(rootComponent);
-    for (var element in components) {
+
+    var count = 0;
+
+    for (final element in components) {
+      if (limit != null && count >= limit) {
+        break;
+      }
+
       final isIdMatch = id == null || element.hashCode.toString() == id;
       final isTypeMatch =
           type == null || element.runtimeType.toString() == type;
 
       if (isIdMatch && isTypeMatch) {
+        count++;
         onChild(element);
       }
     }
@@ -39,6 +52,46 @@ abstract class ConsoleCommand<G extends FlameGame> {
   }
 
   (String?, String) execute(G game, ArgResults results);
+
+  int? optionalIntResult(String key, ArgResults results) {
+    if (results[key] != null) {
+      return int.tryParse(results[key] as String);
+    }
+    return null;
+  }
+}
+
+abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
+
+  void processChild(Component child);
+
+  @override
+  (String?, String) execute(G game, ArgResults results) {
+    onChildMatch(
+      processChild,
+      rootComponent: game,
+      id: results['id'] as String?,
+      type: results['type'] as String?,
+      limit: optionalIntResult('limit', results),
+    );
+
+    return (null, '');
+  }
+
+  @override
+  ArgParser get parser => ArgParser()
+    ..addOption(
+      'id',
+      abbr: 'i',
+    )
+    ..addOption(
+      'type',
+      abbr: 't',
+    )
+    ..addOption(
+      'limit',
+      abbr: 'l',
+    );
 }
 
 class ConsoleCommands {

@@ -1,4 +1,50 @@
+import 'dart:async';
+
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/palette.dart';
 
-class MyGame extends FlameGame with HasKeyboardHandlerComponents {}
+class MyGame extends FlameGame with HasKeyboardHandlerComponents {
+  @override
+  FutureOr<void> onLoad() async {
+    await super.onLoad();
+
+    world.addAll([
+      RectangleComponent(
+        position: Vector2(100, 0),
+        size: Vector2(100, 100),
+        paint: BasicPalette.white.paint(),
+        children: [
+          RectangleHitbox.relative(
+            Vector2.all(.8),
+            parentSize: Vector2(100, 100),
+          ),
+        ],
+      ),
+      RectangleComponent(
+        position: Vector2(200, 100),
+        size: Vector2(100, 100),
+        paint: BasicPalette.white.paint(),
+        children: [
+          RectangleHitbox.relative(
+            Vector2.all(.4),
+            parentSize: Vector2(100, 100),
+          ),
+        ],
+      ),
+      RectangleComponent(
+        position: Vector2(300, 200),
+        size: Vector2(100, 100),
+        paint: BasicPalette.white.paint(),
+        children: [
+          RectangleHitbox.relative(
+            Vector2.all(.2),
+            parentSize: Vector2(100, 100),
+          ),
+        ],
+      ),
+    ]);
+  }
+}
