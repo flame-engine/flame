@@ -19,10 +19,11 @@ typedef ContainerBuilder = Widget Function(
   Widget child,
 );
 
-class ConsoleView extends StatefulWidget {
+class ConsoleView<G extends FlameGame> extends StatefulWidget {
   const ConsoleView({
     required this.game,
     required this.onClose,
+    this.customCommands,
     ConsoleRepository? repository,
     this.containerBuilder,
     this.cursorBuilder,
@@ -33,7 +34,8 @@ class ConsoleView extends StatefulWidget {
     super.key,
   }) : repository = repository ?? const MemoryConsoleRepository();
 
-  final FlameGame game;
+  final G game;
+  final Map<String, ConsoleCommand<G>>? customCommands;
   final VoidCallback onClose;
   final ConsoleRepository repository;
   final ConsoleController? controller;
@@ -68,6 +70,10 @@ class _ConsoleViewState extends State<ConsoleView> {
         game: widget.game,
         scrollController: _scrollController,
         onClose: widget.onClose,
+        commands: {
+          ...ConsoleCommands.commands,
+          if (widget.customCommands != null) ...widget.customCommands!,
+        },
       );
 
   late final _scrollController = ScrollController();

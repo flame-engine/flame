@@ -41,6 +41,7 @@ class ConsoleController<G extends FlameGame> {
     required this.game,
     required this.scrollController,
     required this.onClose,
+    required this.commands,
     ConsoleState state = const ConsoleState(),
   }) : state = ValueNotifier(state);
 
@@ -49,6 +50,7 @@ class ConsoleController<G extends FlameGame> {
   final G game;
   final VoidCallback onClose;
   final ScrollController scrollController;
+  final Map<String, ConsoleCommand<G>> commands;
 
   Future<void> init() async {
     final history = await repository.listCommandHistory();
@@ -110,13 +112,27 @@ class ConsoleController<G extends FlameGame> {
         return;
       }
 
+      if (split.first == 'help') {
+        final output = commands.entries.fold('', (previous, entry) {
+          final help = '${entry.key} - ${entry.value.description}\n\n'
+              '${entry.value.parser.usage}\n\n';
+
+          return '$previous\n$help';
+        });
+
+        state.value = state.value.copyWith(
+          history: [...state.value.history, output],
+        );
+        return;
+      }
+
       final originalCommand = state.value.cmd;
       state.value = state.value.copyWith(
         history: [...state.value.history, state.value.cmd],
         cmd: '',
       );
 
-      final command = ConsoleCommands.commands[split.first];
+      final command = commands[split.first];
 
       if (command == null) {
         state.value = state.value.copyWith(

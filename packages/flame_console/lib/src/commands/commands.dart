@@ -11,6 +11,7 @@ export 'remove_command.dart';
 
 abstract class ConsoleCommand<G extends FlameGame> {
   ArgParser get parser;
+  String get description;
 
   List<Component> listAllChildren(Component component) {
     return [

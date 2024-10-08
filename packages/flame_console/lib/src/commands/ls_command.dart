@@ -13,4 +13,7 @@ class LsConsoleCommand<G extends FlameGame> extends QueryCommand<G> {
 
     return (null, out.toString());
   }
+
+  @override
+  String get description => 'List components that match the query arguments.';
 }

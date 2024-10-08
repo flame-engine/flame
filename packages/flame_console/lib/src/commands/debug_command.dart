@@ -10,4 +10,7 @@ class DebugConsoleCommand<G extends FlameGame> extends QueryCommand<G> {
     }
     return (null, '');
   }
+
+  @override
+  String get description => 'Toggle debug mode on the matched components.';
 }
