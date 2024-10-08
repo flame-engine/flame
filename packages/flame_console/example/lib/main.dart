@@ -39,6 +39,7 @@ class _MyGameAppState extends State<MyGameApp> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: 'console_button',
         onPressed: () {
           _game.overlays.add('console');
         },

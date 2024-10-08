@@ -19,7 +19,7 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
         paint: BasicPalette.white.paint(),
         children: [
           RectangleHitbox.relative(
-            Vector2.all(.8),
+            Vector2.all(0.8),
             parentSize: Vector2(100, 100),
           ),
           SequenceEffect(
@@ -43,7 +43,7 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
         paint: BasicPalette.white.paint(),
         children: [
           RectangleHitbox.relative(
-            Vector2.all(.4),
+            Vector2.all(0.4),
             parentSize: Vector2(100, 100),
           ),
           SequenceEffect(
@@ -67,7 +67,7 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
         paint: BasicPalette.white.paint(),
         children: [
           RectangleHitbox.relative(
-            Vector2.all(.2),
+            Vector2.all(0.2),
             parentSize: Vector2(100, 100),
           ),
           SequenceEffect(
