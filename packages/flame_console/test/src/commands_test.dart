@@ -6,7 +6,7 @@ import 'package:flame_console/flame_console.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class NoopCommand extends ConsoleCommand {
+class _NoopCommand extends ConsoleCommand {
   @override
   String get description => '';
 
@@ -35,7 +35,7 @@ void main() {
 
         await game.ready();
 
-        final command = NoopCommand();
+        final command = _NoopCommand();
         final components = command.listAllChildren(game.world);
 
         expect(components, hasLength(2));
@@ -60,7 +60,7 @@ void main() {
 
           await game.ready();
 
-          final command = NoopCommand();
+          final command = _NoopCommand();
           final components = <Component>[];
           command.onChildMatch(
             components.add,
@@ -89,7 +89,7 @@ void main() {
 
           await game.ready();
 
-          final command = NoopCommand();
+          final command = _NoopCommand();
           final components = <Component>[];
           command.onChildMatch(
             components.add,
@@ -119,7 +119,7 @@ void main() {
 
           await game.ready();
 
-          final command = NoopCommand();
+          final command = _NoopCommand();
           final components = <Component>[];
           command.onChildMatch(
             components.add,
