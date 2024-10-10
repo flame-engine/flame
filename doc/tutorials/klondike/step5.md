@@ -413,6 +413,57 @@ FlameGame. The new world contains (almost) everything we need to play the game a
 re-created during each of the above actions.
 
 
+### KlondikeWorld Class
+
+
+#### Introduction to `World` in Flame
+
+In Flame, `World` is a special type of `Component` that can contain other `Components`,
+such as Piles in the Klondike game. Think of `World` as the playground where everything 
+happens—dealing cards, arranging them, and player actions.
+
+You can learn more about `World` in game programming here:
+
+- An introduction to `World` in game programming: [Ecampus](https://ecampusontario.pressbooks.pub/gamedesigndevelopmenttextbook/chapter/what-is-a-game-world/)
+- The concept of `World` in Flame: [Flame Docs](https://docs.flame-engine.org/latest/flame/camera_component.html#world)
+
+We won’t go too deep here; just understand that `World` is where everything is managed in the game.
+
+
+#### Creating `KlondikeWorld`
+
+Let’s dive in! When the game starts, we’ll create a new “World” called `KlondikeWorld` to hold
+ all the components of the game. Each new game round will create a new `World`—like resetting the playing
+  field every time a new game starts. This ensures that everything is set up from
+  scratch, keeping the game fresh.
+
+
+#### Transitioning from `KlondikeGame` to `KlondikeWorld`
+
+Previously, `KlondikeGame` managed all `Piles` and `Cards`. However, in step 5, we move this responsibility
+ to `KlondikeWorld` for better separation. As a result, the `onLoad()` method is transferred from `KlondikeGame`
+  to `KlondikeWorld`. This change makes the code easier to manage and aligns with object-oriented programming
+   principles.
+
+
+#### Updating the `KlondikeGame` Class
+
+First, we need to modify `KlondikeGame` to use `KlondikeWorld` instead of Flame’s default `World`:
+
+```dart
+class KlondikeGame extends FlameGame<KlondikeWorld> {
+   KlondikeGame() : super(world: KlondikeWorld());
+
+   // No need for the onLoad() method here anymore
+}
+
+
+#### what properties?
+
+
+#### what actions we should implement at this class
+
+
 ### A stripped-down KlondikeGame class
 
 Here is the new code for the KlondikeGame class (what is left of it).
