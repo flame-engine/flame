@@ -20,7 +20,8 @@ void main() {
 }
 ```
 
-The following file structure is where Flame would expect to find the files:
+下面的文件结构是Flame预期要找到文件的地方。
+
 
 ```text
 .
@@ -36,9 +37,9 @@ The following file structure is where Flame would expect to find the files:
         └── map.json
 ```
 
-Optionally you can split your `audio` folder into two subfolders, one for `music` and one for `sfx`.
+你可以将 `audio` 文件夹分成两个子文件夹，一个用于 `music`，另一个用于 `sfx`。
 
-Don't forget to add these files to your `pubspec.yaml` file:
+别忘了将这些文件添加到你的 `pubspec.yaml` 文件中：
 
 ```yaml
 flutter:
@@ -49,11 +50,8 @@ flutter:
     - assets/tiles/level.tmx
 ```
 
-If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your instances of `AssetsCache`, `Images`, and `AudioCache`, instead of using the
-global ones provided by Flame.
 
-Additionally, `AssetsCache` and `Images` can receive a custom
-[`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html).
-This can be used to make Flame look for assets in a different location other the `rootBundle`,
-like the file system for example.
+如果你想改变这种结构，可以通过使用 `prefix` 参数并创建你自己的 `AssetsCache`、`Images` 和 `AudioCache` 实例来实现，而不是使用 Flame 提供的全局实例。
+
+此外，`AssetsCache` 和 `Images` 可以接受一个自定义的[`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html)。
+这可以用来让 Flame 在不同的目录下查找资源，而不是默认的 `rootBundle`，例如可以在文件系统中查找。

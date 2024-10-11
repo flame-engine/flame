@@ -1,30 +1,26 @@
 # Supported Platforms
 
-Since Flame runs on top of Flutter, so its supported platforms depend on which platforms that are
-supported by Flutter.
+由于 Flame 是在 Flutter 之上运行的，所以它支持的平台取决于 Flutter 支持的平台。
 
-At the moment, Flame supports web, mobile(Android and iOS) and desktop (Windows, MacOS and Linux).
+目前，Flame 支持 web、移动（Android 和 iOS）以及桌面（Windows、MacOS 和 Linux）平台。
 
 
 ## Flutter channels
 
-Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we
-don't support them. This means that issues happening outside the stable channel are not a priority.
+Flame 保持其对稳定频道的支持。开发、测试和主频道应该可以工作，但我们不提供支持。这意味着在稳定频道之外发生的问题不是优先考虑的。
 
 
 ## Flame web
 
-To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/)
-renderer. This will increase performance on the web, as it will use the `canvas` element instead of
-separate DOM elements.
+要在使用 Web 平台的 Flame，你需要确保你的游戏使用的是 CanvasKit/[Skia](https://skia.org/) 渲染器。这将提升在 Web 上的性能，因为它将使用 `canvas` 元素而不是独立的 DOM 元素。
 
-To run your game using skia, use the following command:
+要使用 Skia 运行你的游戏，请使用以下命令：
 
 ```shell
 flutter run -d chrome --web-renderer canvaskit
 ```
 
-To build the game for production, using skia, use the following:
+为了构建生产版本的游戏，使用下面的命令:
 
 ```shell
 flutter build web --release --web-renderer canvaskit
@@ -33,23 +29,20 @@ flutter build web --release --web-renderer canvaskit
 
 ## Deploy your game to GitHub Pages
 
-One easy way to deploy your game online, is to use [GitHub Pages](https://pages.github.com/).
-It is a cool feature from GitHub, by which you can easily host web content from your repository.
+一个将你的游戏在线部署的简单方法是使用 [GitHub Pages](https://pages.github.com/)。
+它是 GitHub 的一个很酷的特性，通过它你可以轻松地从你的仓库托管 Web 内容。
 
-Here we will explain the easiest way to get your game hosted using GitHub pages.
+这里我们将解释使用 GitHub 页面托管你的游戏的最简单方法。
 
-First thing, lets create the branch where your deployed files will live:
+首先，让我们创建一个分支，你的部署文件将存放在这里：
 
 ```shell
 git checkout -b gh-pages
 ```
 
-This branch can be created from `main` or any other place, it doesn't matter much. After you push that
-branch go back to your `main` branch.
+这个分支可以从 `main` 或任何其他地方创建，这并不重要。在你推送了那个分支后，返回到你的 `main` 分支。
 
-Now you should add the [flutter-gh-pages](https://github.com/bluefireteam/flutter-gh-pages)
-action to your repository, you can do that by creating a file `gh-pages.yaml` under the folder
-`.github/workflows`.
+现在你应该为你的仓库添加 [flutter-gh-pages](https://github.com/bluefireteam/flutter-gh-pages) 动作，你可以通过在 `.github/workflows` 文件夹下创建一个 `gh-pages.yaml` 文件来实现。
 
 ```yaml
 name: Gh-Pages
@@ -71,44 +64,43 @@ jobs:
           webRenderer: canvaskit
 ```
 
-Be sure to change `NAME_OF_YOUR_REPOSITORY` to the name of your GitHub repository.
+确保将 `NAME_OF_YOUR_REPOSITORY` 替换为你的 GitHub 仓库名称。
 
-Now, whenever you push something to the `main` branch, the action will run and update your
-deployed game.
+现在，每当你向 `main` 分支推送内容时，该动作将运行并更新你部署的游戏。
 
-The game should be available at an URL like this:
+游戏应该可以在类似这样的 URL 访问：
 `https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/`
 
 
 ## Deploy your game to itch.io
 
-1. Create a web build, either from your IDE or by running `flutter build web`
-(If it complains about `Missing index.html` run `flutter create . --platforms=web`)
-2. Go into `index.html` and remove the line that says `<base href="/">`
-3. zip the `build/web` folder and upload to itch.io
+1. 创建一个 web 构建，可以通过你的 IDE 或运行 `flutter build web` 来完成。
+   （如果出现 `Missing index.html` 的错误，运行 `flutter create . --platforms=web`）
 
-**Remember that it shouldn't be the `web` directory in your project's root, but in `build/web`!**
+2. 打开 `index.html` 文件，删除 `<base href="/">` 这一行。
 
-If you are submitting your game to a game jam, remember to make it public and submit it on the
-game jam page too (many get confused by this).
+3. 将 `build/web` 文件夹压缩为 ZIP 文件并上传到 itch.io。
 
-Further instructions can be found on
-[itch.io](https://itch.io/docs/creators/html5#getting-started/zip-file).
+**记住，这应该是你项目根目录下的 `build/web`，而不是 `web` 目录！**
+
+如果你正在将游戏提交到游戏开发比赛，请记得将其设为公开，并在比赛页面上提交（许多人对此感到困惑）。
+
+进一步的说明可以在 [itch.io](https://itch.io/docs/creators/html5#getting-started/zip-file) 找到。
 
 
 ### Web support
 
-When using Flame on the web some methods may not work. For example `Flame.device.setOrientation` and
-`Flame.device.fullScreen` won't work on web, they can be called, but nothing will happen.
 
-Another example: pre caching audio using `flame_audio` package also doesn't work due to Audioplayers
-not supporting it on web. This can be worked around by using the `http` package, and requesting a
-get to the audio file, that will make the browser cache the file producing the same effect as on
-mobile.
+当在 web 上使用 Flame 时，一些方法可能无法工作。
 
-If you want to create instances of `ui.Image` on the web you can use our
-`Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui`
-library, but with support for the web platform. If the `runAsWeb` argument is set to `true` (by
-default it is set to `kIsWeb`) it will decode the image using an internal image method. When the
-`runAsWeb` is `false` it will use the `decodeImageFromPixels`, which is currently not supported on
-the web.
+例如 `Flame.device.setOrientation` 和 `Flame.device.fullScreen` 在 web 上不会工作，它们可以被调用，但不会有任何反应。
+
+另一个例子：使用 `flame_audio` 包预缓存音频也无法工作，因为 Audioplayers 在 web 上不支持。
+
+这个问题可以通过使用 `http` 包，并请求一个音频文件的 GET 请求来解决，这将使浏览器缓存该文件，产生与在移动设备上相同的效果。
+
+如果你想在 web 上创建 `ui.Image` 的实例，你可以使用我们的 `Flame.images.decodeImageFromPixels` 方法。
+
+这个方法包装了 `ui` 库中的 `decodeImageFromPixels`，但增加了对 web 平台的支持。如果 `runAsWeb` 参数设置为 `true`（默认设置为 `kIsWeb`），它将使用内部图像方法解码图像。
+
+当 `runAsWeb` 设置为 `false` 时，它将使用 `decodeImageFromPixels`，这在 web 上目前是不支持的。

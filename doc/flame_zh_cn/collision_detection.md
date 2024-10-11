@@ -1,27 +1,16 @@
 # Collision Detection
 
-Collision detection is needed in most games to detect and act upon two components intersecting each
-other. For example an arrow hitting an enemy or the player picking up a coin.
+在大多数游戏中，需要碰撞检测来检测和响应两个组件相互交叉。例如，箭矢击中敌人或玩家捡起硬币。
 
-In most collision detection systems you use something called hitboxes to create more precise
-bounding boxes of your components. In Flame the hitboxes are areas of the component that can react
-to collisions (and make [gesture input](inputs/gesture_input.md#gesturehitboxes)) more accurate.
+在大多数碰撞检测系统中，你使用所谓的命中框来创建组件的更精确的边界框。
 
-The collision detection system supports three different types of shapes that you can build hitboxes
-from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added
-to a component to form the area which can be used to either detect collisions
-or whether it contains a point or not,
-the latter is very useful for accurate gesture detection. The collision detection does not handle
-what should happen when two hitboxes collide, so it is up to the user to implement what will happen
-when for example two `PositionComponent`s have intersecting hitboxes.
+在 Flame 中，命中框是组件的区域，可以对碰撞做出反应（并使[手势输入](inputs/gesture_input.md#gesturehitboxes))更准确。
 
-Do note that the built-in collision detection system does not take collisions between two hitboxes
-that overshoot each other into account, this could happen when they either move very fast or
-`update` being called with a large delta time (for example if your app is not in the foreground).
-This behavior is called tunneling, if you want to read more about it.
+碰撞检测系统支持三种不同类型的形状，你可以用它们构建命中框，这些形状是多边形、矩形和圆形。可以向组件添加多个命中框来形成区域，该区域可以用来检测碰撞或判断它是否包含一个点，后者对于精确的手势检测非常有用。碰撞检测不处理当两个命中框碰撞时应该发生什么，因此用户需要自己实现，例如当两个 `PositionComponent`s 的命中框相交时会发生什么。
 
-Also note that the collision detection system has a limitation that makes it not work properly if
-you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
+请注意，内置的碰撞检测系统不考虑两个相互超车的命中框之间的碰撞，这可能发生在它们移动得非常快或 `update` 被调用时有一个大的时间差（例如，如果你的应用不在前台）。这种行为被称为隧道效应，如果你想了解更多，可以阅读更多关于它的信息。
+
+还请注意，碰撞检测系统有一个限制，如果你有某些类型的祖先的翻转和缩放组合的命中框，它可能无法正常工作。
 
 
 ## Mixins
@@ -29,10 +18,9 @@ you have certain types of combinations of flips and scales of the ancestors of t
 
 ### HasCollisionDetection
 
-If you want to use collision detection in your game you have to add the `HasCollisionDetection`
-mixin to your game so that it can keep track of the components that can collide.
+如果你想在游戏中使用碰撞检测，你必须给你的游戏添加 `HasCollisionDetection` 混入，这样它就能追踪可能发生碰撞的组件。
 
-Example:
+示例：
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
@@ -40,32 +28,25 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
-Now when you add `ShapeHitbox`s to components that are then added to the game, they will
-automatically be checked for collisions.
+现在当你向游戏中添加了 `ShapeHitbox` 的组件时，它们将自动被检查是否发生碰撞。
 
-You can also add `HasCollisionDetection` directly to another `Component` instead
-of the `FlameGame`,
-for example to the `World` that is used for the `CameraComponent`.
-If that is done, hitboxes that are added in that component's tree will only be compared to other
-hitboxes in that subtree, which makes it possible to have several worlds with collision detection
-within one `FlameGame`.
+你也可以直接将 `HasCollisionDetection` 混入到另一个 `Component` 中，而不是 `FlameGame`，例如，用于 `CameraComponent` 的 `World`。如果这样做，添加到该组件树中的命中框将只与该子树中的其他命中框进行比较，这使得在一个 `FlameGame` 中可以有多个具有碰撞检测的世界。
 
-Example:
+示例：
 
 ```dart
 class CollisionDetectionWorld extends World with HasCollisionDetection {}
 ```
 
 ```{note}
-Hitboxes will only be connected to one collision detection system and that is
-the closest parent that has the `HasCollisionDetection` mixin.
+命中框只会连接到一个碰撞检测系统，那就是具有 `HasCollisionDetection` 混入的最近的父组件。
 ```
 
 
 ### CollisionCallbacks
 
-To react to a collision you should add the `CollisionCallbacks` mixin to your component.
-Example:
+要响应碰撞，你应该向你的组件添加 `CollisionCallbacks` 混入。
+示例：
 
 
 ```{flutter-app}
@@ -98,40 +79,25 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-In this example we use Dart's `is` keyword to check what kind of component we collided with.
-The set of points is where the edges of the hitboxes intersect.
+在这个示例中，我们使用 Dart 的 `is` 关键字来检查我们碰撞的组件类型。点集是命中框边缘相交的位置。
 
-Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
-implemented the `onCollision` method, and also on both hitboxes. The same goes for the
-`onCollisionStart` and `onCollisionEnd` methods, which are called when two components and hitboxes
-starts or stops colliding with each other.
+请注意，如果两个 `PositionComponent` 都实现了 `onCollision` 方法，`onCollision` 方法将被调用，同时对两个命中框也是如此。同样适用于 `onCollisionStart` 和 `onCollisionEnd` 方法，当两个组件和命中框开始或停止相互碰撞时会被调用。
 
-When a `PositionComponent` (and hitbox) starts to collide with another `PositionComponent`
-both `onCollisionStart` and `onCollision` are called, so if you don't need to do something specific
-when a collision starts you only need to override `onCollision`, and vice versa.
+当一个 `PositionComponent`（和命中框）开始与另一个 `PositionComponent` 碰撞时，会调用 `onCollisionStart` 和 `onCollision`，所以如果你不需要在碰撞开始时做特定的事情，你只需要覆盖 `onCollision`，反之亦然。
 
-If you want to check collisions with the screen edges, as we do in the example above, you can use
-the predefined [ScreenHitbox](#screenhitbox) class.
+如果你想检查与屏幕边缘的碰撞，就像我们在上面的示例中所做的，你可以使用预定义的 [ScreenHitbox](#screenhitbox) 类。
 
-By default all hitboxes are hollow, this means that one hitbox can be fully enclosed by another
-hitbox without triggering a collision. If you want to set your hitboxes to be solid you can set
-`isSolid = true`. A hollow hitbox inside of a solid hitbox will trigger a collision, but not the
-other way around. If there are no intersections with the edges on a solid hitbox the center
-position is instead returned.
+默认情况下，所有命中框都是空心的，这意味着一个命中框可以完全被另一个命中框包围而不触发碰撞。如果你想将你的命中框设置为实心，可以设置 `isSolid = true`。实心命中框内的空心命中框将触发碰撞，但反之则不会。如果实心命中框的边缘没有交集，将返回中心位置。
 
 
 ### Collision order
 
-If a `Hitbox` collides with more than one other `Hitbox` within a given time step, then
-the `onCollision` callbacks will be called in an essentially random order. In some cases this can
-be a problem, such as in a bouncing ball game where the trajectory of the ball can differ depending
-on which other object was hit first. To help resolve this the `collisionsCompletedNotifier`
-listener can be used - this triggers at the end of the collision detection process.
+如果一个 `Hitbox` 在给定的时间步内与多个其他 `Hitbox` 发生碰撞，那么 `onCollision` 回调将以本质上随机的顺序被调用。在某些情况下，这可能会成为问题，例如在弹跳球游戏中，球的轨迹可能会因为首先击中哪个其他对象而有所不同。为了帮助解决这个问题，可以使用 `collisionsCompletedNotifier` 监听器——这会在碰撞检测过程结束时触发。
 
-An example of how this might be used is to add a local variable in your `PositionComponent` to save
-the other components with which it's colliding:
-`List<PositionComponent> collisionComponents = [];`. The `onCollision` callback is then used to
-save all the other `PositionComponent`s to this list:
+一个可能的使用示例是在你的 `PositionComponent` 中添加一个局部变量来保存与之碰撞的其他组件：
+
+`List<PositionComponent> collisionComponents = [];`。
+然后 `onCollision` 回调被用来将所有其他的 `PositionComponent` 保存到这个列表中：
 
 ```dart
 @override
@@ -142,8 +108,7 @@ void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
 
 ```
 
-Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a function
-which will resolve how the collisions should be dealt with:
+最后，在 `PositionComponent` 的 `onLoad` 方法中添加一个监听器，调用一个函数，该函数将决定如何处理碰撞：
 
 ```dart
 (game as HasCollisionDetection)
@@ -154,13 +119,12 @@ which will resolve how the collisions should be dealt with:
 });
 ```
 
-The list `collisionComponents` would need to be cleared in each call to `update`.
+每次调用 `update` 时，都需要清空 `collisionComponents` 列表。
 
 
 ## ShapeHitbox
 
-The `ShapeHitbox`s are normal components, so you add them to the component that you want to add
-hitboxes to just like any other component:
+`ShapeHitbox` 是正常的组件，因此你只需像添加其他任何组件一样，将它们添加到你想要添加命中框的组件中：
 
 ```dart
 class MyComponent extends PositionComponent {
@@ -171,21 +135,11 @@ class MyComponent extends PositionComponent {
 }
 ```
 
-If you don't add any arguments to the hitbox, like above, the hitbox will try to fill its parent as
-much as possible. Except for having the hitboxes trying to fill their parents,
-there are two ways to
-initiate hitboxes and it is with the normal constructor where you define the hitbox by itself, with
-a size and a position etc. The other way is to use the `relative` constructor which defines the
-hitbox in relation to the size of its intended parent.
+如果你没有给命中框添加任何参数，像上面那样，命中框会尽量填充其父组件。除了让命中框尽量填充其父组件之外，还有两种方式来初始化命中框，一种是常规构造函数，你可以通过它自己定义命中框，包括大小、位置等。另一种是使用 `relative` 构造函数，它根据其预期父组件的大小来定义命中框。
 
-
-In some specific cases you might want to handle collisions only between hitboxes, without
-propagating `onCollision*` events to the hitbox's parent component. For example, a vehicle could
-have a body hitbox to control collisions and side hitboxes to check the possibility to turn left
-or right.
-So, colliding with a body hitbox means colliding with the component itself, whereas colliding with
-a side hitbox does not mean a real collision and should not be propagated to hitbox's parent.
-For this case you can set `triggersParentCollision` variable to `false`:
+在某些特定情况下，你可能只想在命中框之间处理碰撞，而不将 `onCollision*` 事件传播到命中框的父组件。例如，一个车辆可以有一个主体命中框来控制碰撞，以及侧面命中框来检查向左转或向右转的可能性。
+因此，与主体命中框的碰撞意味着与组件本身的碰撞，而与侧面命中框的碰撞则不意味着真正的碰撞，并且不应该传播到命中框的父组件。
+对于这种情况，你可以将 `triggersParentCollision` 变量设置为 `false`：
 
 ```dart
 class MyComponent extends PositionComponent {
@@ -216,121 +170,77 @@ class MySpecialHitbox extends RectangleHitbox {
 }
 ```
 
-You can read more about how the different shapes are defined in the
-[ShapeComponents](components.md#shapecomponents) section.
+你可以在[ShapeComponents](components.md#shapecomponents)部分阅读更多关于不同形状是如何定义的。
 
-Remember that you can add as many `ShapeHitbox`s as you want to your `PositionComponent` to make up
-more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
-and two `RectangleHitbox`s as its hat.
+请记住，你可以根据自己的需要向 `PositionComponent` 添加尽可能多的 `ShapeHitbox`，以构成更复杂的区域。例如，一个戴着帽子的雪人可以用三个 `CircleHitbox` 和两个 `RectangleHitbox` 来表示帽子。
 
-A hitbox can be used either for collision detection or for making gesture detection more accurate
-on top of components, see more regarding the latter in the section about the
-[GestureHitboxes](inputs/gesture_input.md#gesturehitboxes) mixin.
+命中框可以用于碰撞检测，或者用于使组件上方的手势检测更准确，有关后者的更多信息，请参阅关于[GestureHitboxes](inputs/gesture_input.md#gesturehitboxes)混入的章节。
 
 
 ### CollisionType
 
-The hitboxes have a field called `collisionType` which defines when a hitbox should collide with
-another. Usually you want to set as many hitboxes as possible to `CollisionType.passive` to make
-the collision detection more performant. By default the `CollisionType` is `active`.
+命中框有一个名为 `collisionType` 的字段，它定义了何时一个命中框应该与另一个命中框发生碰撞。通常，你希望尽可能多地将命中框设置为 `CollisionType.passive`，以提高碰撞检测的性能。默认情况下，`CollisionType` 是 `active`。
 
-The `CollisionType` enum contains the following values:
+`CollisionType` 枚举包含以下值：
 
-- `active` collides with other `Hitbox`es of type active or passive
-- `passive` collides with other `Hitbox`es of type active
-- `inactive` will not collide with any other `Hitbox`es
+- `active` 与类型为 active 或 passive 的其他 `Hitbox` 发生碰撞
+- `passive` 与类型为 active 的其他 `Hitbox` 发生碰撞
+- `inactive` 不与任何其他 `Hitbox` 发生碰撞
 
-So if you have hitboxes that you don't need to check collisions against each other you can mark
-them as passive by setting `collisionType: CollisionType.passive` in the constructor,
-this could for example be ground components or maybe your enemies don't need
-to check collisions between each other, then they could be marked as `passive` too.
+所以，如果你有不需要相互检查碰撞的命中框，你可以通过在构造函数中设置 `collisionType: CollisionType.passive` 将它们标记为被动，例如地面组件，或者也许你的敌人之间不需要检查碰撞，那么它们也可以被标记为 `passive`。
 
-Imagine a game where there are a lot of bullets, that can't collide with each other, flying towards
-the player, then the player would be set to `CollisionType.active` and the bullets would be set to
-`CollisionType.passive`.
+想象一个游戏中有很多子弹，它们不能相互碰撞，向玩家飞去，那么玩家可以被设置为 `CollisionType.active`，而子弹被设置为 `CollisionType.passive`。
 
-Then we have the `inactive` type which simply doesn't get checked at all
-in the collision detection.
-This could be used for example if you have components outside of the screen that you don't care
-about at the moment but that might later come back in to view so they are not completely removed
-from the game.
+然后我们有 `inactive` 类型，它在碰撞检测中根本不会被检查。这可以用于例如，如果你有组件在屏幕外，你目前不关心它们，但它们可能后来会重新回到视野中，所以它们没有完全从游戏中移除。
 
-These are just examples of how you could use these types, there will be a lot more use cases for
-them so don't doubt to use them even if your use case isn't listed here.
+这些只是你如何使用这些类型的示例，它们的用例会更多，所以即使你的用例没有在这里列出，也不要犹豫使用它们。
 
 
 ### PolygonHitbox
 
-It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
-the polygon needs to be convex. So always use convex polygons or you will most likely run into
-problems if you don't really know what you are doing.
-It should also be noted that you should always define the vertices in your polygon
-in a counter-clockwise order.
+需要注意的是，如果你想在 `Polygon` 上使用碰撞检测或 `containsPoint`，那么这个多边形必须是凸的。因此，始终使用凸多边形，否则如果你不太了解你在做什么，很可能会碰到问题。还需要注意的是，你应该总是以逆时针顺序定义多边形的顶点。
 
-The other hitbox shapes don't have any mandatory constructor, that is because they can have a
-default calculated from the size of the collidable that they are attached to, but since a
-polygon can be made in an infinite number of ways inside of a bounding box you have to add the
-definition in the constructor for this shape.
+其他命中框形状没有任何强制性的构造函数，这是因为它们可以有一个默认值，这个默认值可以从它们所附加的可碰撞对象的大小中计算得出，但是由于多边形可以在边界框内以无限多种方式制作，所以你必须在构造函数中为这个形状添加定义。
 
-The `PolygonHitbox` has the same constructors as the [](components.md#polygoncomponent), see that
-section for documentation regarding those.
+`PolygonHitbox` 具有与 [](components.md#polygoncomponent) 相同的构造函数，请参阅相关文档以了解更多信息。
 
 
 ### RectangleHitbox
 
-The `RectangleHitbox` has the same constructors as the [](components.md#rectanglecomponent), see
-that section for documentation regarding those.
+`RectangleHitbox` 具有与 [](components.md#rectanglecomponent) 相同的构造函数，请参阅相关文档以了解更多信息。
 
 
 ### CircleHitbox
 
-The `CircleHitbox` has the same constructors as the [](components.md#circlecomponent), see that
-section for documentation regarding those.
+`CircleHitbox` 具有与 [](components.md#circlecomponent) 相同的构造函数，请参阅相关文档以了解更多信息。
 
 
 ## ScreenHitbox
 
-`ScreenHitbox` is a component which represents the edges of your viewport/screen. If you add a
-`ScreenHitbox` to your game your other components with hitboxes will be notified when they
-collide with the edges. It doesn't take any arguments, it only depends on the `size` of the game
-that it is added to. To add it you can just do `add(ScreenHitbox())` in your game, if you don't
-want the `ScreenHitbox` itself to be notified when something collides with it. Since
-`ScreenHitbox` has the `CollisionCallbacks` mixin you can add your own `onCollisionCallback`,
-`onStartCollisionCallback` and `onEndCollisionCallback` functions to that object if needed.
-
+`ScreenHitbox` 是一个组件，代表你的视口/屏幕边缘。
+如果你将 `ScreenHitbox` 添加到游戏中，其他带有命中框的组件在与边缘碰撞时将收到通知。
+它不需要任何参数，它只依赖于它被添加到的游戏的 `size`。
+要添加它，你只需在游戏的 `add(ScreenHitbox())` 中进行，如果你不希望 `ScreenHitbox` 本身在有东西与它碰撞时收到通知。
+由于 `ScreenHitbox` 具有 `CollisionCallbacks` 混入，如果需要，你可以向该对象添加自己的 `onCollisionCallback`、`onStartCollisionCallback` 和 `onEndCollisionCallback` 函数。
 
 ## CompositeHitbox
 
-In the `CompositeHitbox` you can add multiple hitboxes so that
-they emulate being one joined hitbox.
+在 `CompositeHitbox` 中，你可以添加多个命中框，使它们模拟成为一个合并的命中框。
 
-If you want to form a hat for example you might want
-to use two [](#rectanglehitbox)s to follow that
-hat's edges properly, then you can add those hitboxes to an instance of this class and react to
-collisions to the whole hat, instead of for just each hitbox separately.
+如果你想制作一个帽子，例如，你可能想使用两个 [](#rectanglehitbox) 来恰当地跟随帽子的边缘，然后你可以将这些命中框添加到这个类的实例中，并对整个帽子的碰撞做出反应，而不是仅对每个单独的命中框做出反应。
 
 
 ## Broad phase
 
-If your game field isn't huge and does not have a lot of collidable components - you don't have to
-worry about the broad phase system that is used, so if the standard implementation is performant
-enough for you, you probably don't have to read this section.
+如果你的游戏场地不是很大，并且没有很多可碰撞的组件——你不必担心所使用的广度阶段系统，所以如果标准实现对你来说已经足够高效，你可能不需要阅读本节。
 
-A broad phase is the first step of collision detection where potential collisions are calculated.
-Calculating these potential collisions is faster than to checking the intersections exactly,
-and it removes the need to check all hitboxes against each other and
-therefore avoiding O(n²).
+广度阶段是碰撞检测的第一步，在这里计算潜在的碰撞。计算这些潜在碰撞比精确检查交集要快，并且它消除了需要检查所有命中框之间的相互关系，因此避免了 O(n²) 的复杂度。
 
-The broad phase produces a set of potential collisions (a set of
-`CollisionProspect`s). This set is then used to check the exact intersections between
-hitboxes (sometimes called "narrow phase").
+广度阶段产生一组潜在的碰撞（一组 `CollisionProspect`）。然后使用这组潜在碰撞来检查命中框之间的确切交集（有时称为“深度阶段”）。
 
-By default, Flame's collision detection is using a sweep and prune broadphase step. If your game
-requires another type of broadphase you can write your own broadphase by extending `Broadphase` and
-manually setting the collision detection system that should be used.
+默认情况下，Flame 的碰撞检测使用扫描和修剪广度阶段。如果你的游戏需要另一种类型的广度阶段，你可以通过扩展 `Broadphase` 并手动设置应该使用的碰撞检测系统来编写自己的广度阶段。
 
-For example, if you have implemented a broadphase built on a magic algorithm
-instead of the standard sweep and prune, then you would do the following:
+例如，如果你实现了一个基于神奇算法而不是标准扫描和修剪的广度阶段，那么你会做以下操作：
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
@@ -344,12 +254,9 @@ class MyGame extends FlameGame with HasCollisionDetection {
 
 ## Quad Tree broad phase
 
-If your game field is large and the game contains a lot of collidable
-components (more than a hundred), standard sweep and prune can
-become inefficient. If it does, you can try to use the quad tree broad phase.
+如果你的游戏场地很大，并且游戏包含很多可碰撞的组件（超过一百个），标准的扫描和修剪可能会变得效率低下。如果是这样，你可以尝试使用四叉树广度阶段。
 
-To do this, add the `HasQuadTreeCollisionDetection` mixin to your game instead of
-`HasCollisionDetection` and call the `initializeCollisionDetection` function on game load:
+要做到这一点，在你的游戏中添加 `HasQuadTreeCollisionDetection` 混入，而不是 `HasCollisionDetection` 并在游戏加载时调用 `initializeCollisionDetection` 函数：
 
 ```dart
 class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
@@ -363,21 +270,14 @@ class MyGame extends FlameGame with HasQuadTreeCollisionDetection {
 }
 ```
 
-When calling `initializeCollisionDetection` you should pass it the correct map dimensions, to make
-the quad tree algorithm to work properly. There are also additional parameters to make the system
-more efficient:
+在调用 `initializeCollisionDetection` 时，你应该传递正确的地图尺寸，以使四叉树算法正常工作。还有一些额外的参数可以使系统更高效：
 
-- `minimumDistance`: minimum distance between objects to consider them as possibly colliding.
-  If `null` - the check is disabled, it is default behavior
-- `maxObjects`: maximum objects count in one quadrant. Default to 25.
-- `maxDepth`: maximum nesting levels inside quadrant. Default to 10
+- `minimumDistance`：对象之间考虑它们可能发生碰撞的最小距离。如果为 `null`，则检查被禁用，这是默认行为。
+- `maxObjects`：一个象限中的最大对象数。默认为 25。
+- `maxDepth`：象限内的最大嵌套级别。默认为 10。
 
-If you use the quad tree system, you can make it even more efficient by implementing the
-`onComponentTypeCheck` function of the `CollisionCallbacks` mixin in your components.
-It is useful if you need to prevent collisions of items of different types.
-The result of the calculation is cached so
-you should not check any dynamic parameters here, the function is intended to be used as a pure
-type checker:
+如果你使用四叉树系统，可以通过在组件中实现 `CollisionCallbacks` 混入的 `onComponentTypeCheck` 函数使其更加高效。
+如果你需要防止不同类型项目之间的碰撞，这会很有用。计算结果是缓存的，所以这里不应该检查任何动态参数，该函数打算用作纯粹的类型检查器：
 
 ```dart
 class Bullet extends PositionComponent with CollisionCallbacks {
@@ -411,8 +311,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 }
 ```
 
-After intensive gameplay a map could become over-clusterized with a lot of empty quadrants.
-Run `QuadTree.optimize()` to perform a cleanup of empty quadrants:
+经过激烈的游戏玩法后，地图可能会变得过度聚集，有很多空的象限。运行 `QuadTree.optimize()` 来进行空象限的清理：
 
 ```dart
 class QuadTreeExample extends FlameGame
@@ -432,46 +331,31 @@ class QuadTreeExample extends FlameGame
 ```
 
 ```{note}
-Always experiment with different collision detection approaches
-and check how they perform on your game.
-It is not unheard of that `QuadTreeBroadphase` is significantly 
-_slower_ than the default.
-Don't assume that the more sophisticated approach is always faster.
+总是尝试不同的碰撞检测方法，并检查它们在你的游戏中的表现如何。
+并不是没有听说过 `QuadTreeBroadphase` 明显 _比默认的慢_。
+不要想当然地认为更复杂的方法总是更快。
 ```
 
 
 ## Ray casting and Ray tracing
 
-Ray casting and ray tracing are methods for sending out rays from a point in your game and being
-able to see what these rays collide with and how they reflect after hitting something.
+射线投射和射线追踪是在游戏中从一个点发出射线的方法，能够看到这些射线与什么发生碰撞以及在撞击某物后如何反射。
 
-For all of the following methods, if there are any hitboxes that you wish to ignore,
-you can add the `ignoreHitboxes` argument which is a list of the hitboxes
-that you wish to disregard for the call.
-This can be quite useful for example if you are casting rays from within a hitbox,
-which could be on your player or NPC;
-or if you don't want a ray to bounce off a `ScreenHitbox`.
+对于所有以下方法，如果你有任何想要忽略的命中框，你可以添加 `ignoreHitboxes` 参数，这是一个你希望在调用中忽略的命中框的列表。
+这在某些情况下非常有用，例如，如果你从命中框内发出射线，这可能是在你的玩家或NPC上；或者如果你不希望射线从 `ScreenHitbox` 反弹。
 
 
 ### Ray casting
 
-Ray casting is the operation of casting out one or more rays from a point and see if they hit
-anything, in Flame's case, hitboxes.
+射线投射是从一点发出一个或多个射线并查看它们是否击中任何物体的操作，在 Flame 的情况下，是命中框。
 
-We provide two methods for doing so, `raycast` and `raycastAll`. The first one just casts out
-a single ray and gets back a result with information about what and where the ray hit, and some
-extra information like the distance, the normal and the reflection ray.
-The second one, `raycastAll`,
-works similarly but sends out multiple rays uniformly around the origin, or within an angle
-centered at the origin.
+我们提供了两种方法来进行射线投射，`raycast` 和 `raycastAll`。第一个方法只发出一个单一的射线并返回一个结果，其中包含有关射线击中了什么以及击中位置的信息，以及一些额外的信息，如距离、法线和反射射线。
+第二个方法，`raycastAll`，工作方式类似，但是从原点向外均匀发出多个射线，或者在一个以原点为中心的角度内发出。
 
-By default, `raycast` and `raycastAll` scan for the nearest hit irrespective of
-how far it lies from the ray origin.
-But in some use cases, it might be interesting to find hits only within a certain
-range. For such cases, an optional `maxDistance` can be provided.
+默认情况下，`raycast` 和 `raycastAll` 扫描最近的命中，而不考虑它距离射线原点有多远。
+但在某些用例中，可能只希望在某个特定范围内找到命中。对于这些情况，可以提供可选的 `maxDistance`。
 
-To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
-game. After you have added that you can call `collisionDetection.raycast(...)` on your game class.
+要使用射线投射功能，你必须在你的游戏中有 `HasCollisionDetection` 混入。添加后，你可以在游戏类上调用 `collisionDetection.raycast(...)`。
 
 Example:
 
@@ -497,31 +381,25 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
-In this example one can see that the `Ray2` class is being used, this class defines a ray from an
-origin position and a direction (which are both defined by `Vector2`s). This particular ray starts
-from `0, 100` and shoots a ray straight to the right.
+在这个例子中，我们可以看到 `Ray2` 类被使用，这个类定义了一个从原点位置和方向（都由 `Vector2` 定义）的射线。这个特定的射线从 `0, 100` 开始，并向右侧直线发射。
 
-The result from this operation will either be `null` if the ray didn't hit anything, or a
-`RaycastResult` which contains:
+这个操作的结果要么是 `null`（如果射线没有击中任何东西），或者是一个 `RaycastResult`，其中包含：
 
-- Which hitbox the ray hit
-- The intersection point of the collision
-- The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
-- The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
+- 射线击中的命中框
+- 碰撞的交点
+- 反射射线，即射线在它击中的命中框上的反射方式
+- 碰撞的法线，即一个垂直于它击中的命中框表面的向量
 
-If you are concerned about performance you can pre create a `RaycastResult` object that you send in
-to the method with the `out` argument, this will make it possible for the method to reuse this
-object instead of creating a new one for each iteration. This can be good if you do a lot of
-ray casting in your `update` methods.
+如果你关心性能，你可以预先创建一个 `RaycastResult` 对象，你可以通过 `out` 参数将其传递给方法，这将允许方法重用这个对象而不是为每次迭代创建一个新的。
+
+如果你在 `update` 方法中进行大量的射线投射，这可能很有帮助。
 
 
 #### raycastAll
 
-Sometimes you want to send out rays in all, or a limited range, of directions from an origin. This
-can have a lot of applications, for example you could calculate the field of view of a player or
-enemy, or it can also be used to create light sources.
+有时你希望从一个原点向所有方向或有限范围的方向发射射线。这可以有很多应用，例如，你可以计算玩家或敌人的视野，或者它也可以用来创建光源。
 
-Example:
+示例：
 
 ```dart
 class MyGame extends FlameGame with HasCollisionDetection {
@@ -537,25 +415,18 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
-In this example we would send out 100 rays from (200, 200) uniformly spread in all directions.
+在这个例子中，我们将从 (200, 200) 向所有方向均匀发射 100 条射线。
 
-If you want to limit the directions you can use the `startAngle` and the `sweepAngle` arguments.
-Where the `startAngle` (counting from straight up) is where the rays will start and then the rays
-will end at `startAngle + sweepAngle`.
+如果你想限制方向，你可以使用 `startAngle` 和 `sweepAngle` 参数。其中 `startAngle`（从正上方开始计数）是射线开始的位置，然后射线将在 `startAngle + sweepAngle` 结束。
 
-If you are concerned about performance you can re-use the `RaycastResult` objects that are created
-by the function by sending them in as a list with the `out` argument.
+如果你关心性能，你可以通过将它们作为列表用 `out` 参数发送，来重用函数创建的 `RaycastResult` 对象。
 
 
 ### Ray tracing
 
-Ray tracing is similar to ray casting, but instead of just checking what the ray hits you can
-continue to trace the ray and see what its reflection ray (the ray bouncing off the hitbox) will
-hit and then what that casted reflection ray's reflection ray will hit and so on, until you decide
-that you have traced the ray for long enough. If you imagine how a pool ball would bounce on a pool
-table for example, that information could be retrieved with the help of ray tracing.
+射线追踪与射线投射类似，但不是只检查射线击中了什么，而是可以继续追踪射线，看看它的反射射线（从命中框反弹的射线）将击中什么，然后看看那个投射的反射射线的反射射线将击中什么，以此类推，直到你决定已经足够长时间地追踪了射线。如果你想象一下台球在台球桌上的反弹方式，那么这些信息就可以通过射线追踪来获取。
 
-Example:
+示例：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -587,45 +458,34 @@ class MyGame extends FlameGame with HasCollisionDetection {
 }
 ```
 
-In the example above we send out a ray from (0, 100) diagonally down to the right
-and we say that we want it the bounce on at most 100 hitboxes,
-it doesn't necessarily have to get 100 results since at
-some point one of the reflection rays might not hit a hitbox and then the method is done.
+在上述示例中，我们从 (0, 100) 处发出一条射线，斜向下向右发射，并声明我们希望它最多在 100 个命中框上反弹，它不一定能得到 100 个结果，因为在某个时刻，其中一个反射射线可能没有击中命中框，然后该方法就完成了。
 
-The method is lazy, which means that it will only do the calculations that you ask for, so you have
-to loop through the iterable that it returns to get the results, or do `toList()` to directly
-calculate all the results.
+该方法是惰性的，这意味着它只会执行你要求的计算，所以你必须遍历它返回的可迭代对象来获取结果，或者使用 `toList()` 直接计算所有结果。
 
-In the for-loop it can be seen how this can be used, in that loop we check whether the current
-reflection rays intersection point (where the previous ray hit the hitbox) is further away than 300
-pixels from the origin of the starting ray, and if it is we don't care about the rest
-of the results (and then they don't have to be calculated either).
+在 for 循环中，可以看到如何使用它，在该循环中，我们检查当前反射射线的交点（前一个射线击中命中框的位置）是否比起始射线的原点更远超过 300 像素，如果是，我们就不需要关心其余的结果（然后它们也不需要被计算）。
 
-If you are concerned about performance you can re-use the `RaycastResult` objects that are created
-by the function by sending them in as a list with the `out` argument.
+如果你关心性能，你可以通过将它们作为列表用 `out` 参数发送，来重用函数创建的 `RaycastResult` 对象。
 
 
 ## Comparison to Forge2D
 
-If you want to have a full-blown physics engine in your game we recommend that you use
-Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame_forge2d) as a dependency.
-But if you have a simpler use-case and just want to check for collisions of components and improve
-the accuracy of gestures, Flame's built-in collision detection will serve you very well.
+如果你想在游戏中拥有一个完整的物理引擎，我们推荐你使用 Forge2D，通过添加 [flame_forge2d](https://github.com/flame-engine/flame_forge2d) 作为依赖来实现。
+但如果你的用例更简单，只需要检查组件的碰撞并提高手势的准确性，Flame 内置的碰撞检测将非常适用。
 
-If you have the following needs you should at least consider to use
-[Forge2D](https://github.com/flame-engine/forge2d):
+如果你有以下需求，至少应该考虑使用 [Forge2D](https://github.com/flame-engine/forge2d)：
 
-- Interacting realistic forces
-- Particle systems that can interact with other bodies
-- Joints between bodies
+- 相互作用的真实力
+- 可以与其他物体互动的粒子系统
+- 物体之间的连接件
 
-It is a good idea to just use the Flame collision detection system if you on the other hand only
-need some of the following things (since it is simpler to not involve Forge2D):
+如果你只需要以下功能（因为不涉及 Forge2D 会更简单）：
 
-- The ability to act on some of your components colliding
-- The ability to act on your components colliding with the screen boundaries
-- Complex shapes to act as a hitbox for your component so that gestures will be more accurate
-- Hitboxes that can tell what part of a component that collided with something
+- 能够对一些组件的碰撞做出响应
+- 能够对组件与屏幕边界的碰撞做出响应
+- 复杂形状作为组件的命中框，以便手势更准确
+- 能够指明组件的哪一部分与某物发生碰撞的命中框
+
+只是一个好主意，如果上述情况符合你的需求，只需使用 Flame 碰撞检测系统即可。
 
 
 ## Examples

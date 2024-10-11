@@ -1,43 +1,36 @@
 # Layers and Snapshots
 
-Layers and snapshots share some common features, including the ability to pre-render and cache
-objects for improved performance. However, they also have unique features which make them better
-suited for different use-cases.
+层和快照共享一些共同特性，包括预渲染和缓存对象以提升性能。然而，它们也有各自独特的功能，使它们更适合不同的使用场景。
 
-`Snapshot` is a mixin that can be added to any `PositionComponent`. Use this for:
+`Snapshot` 是一个可以添加到任何 `PositionComponent` 的混入（mixin）。使用它来：
 
-- Mixing in to existing game objects (that are `PositionComponents`).
-- Caching game objects, such as sprites, that are complex to render.
-- Drawing the same object many times without rendering it each time.
-- Capturing an image snapshot to save as a screenshot (for example).
+- 混入到现有的游戏对象中（这些对象是 `PositionComponents`）。
+- 缓存渲染复杂的游戏对象，例如精灵（sprites）。
+- 多次绘制同一对象而不必每次都进行渲染。
+- 捕捉图像快照并保存为截图（例如用于截屏）。
 
-`Layer` is a class. Use or extend this class for:
+`Layer` 是一个类。使用或扩展该类可用于：
 
-- Structuring your game with logical layers (e.g. UI, foreground, main, background).
-- Grouping objects to form a complex scene, and then caching it (e.g. a background layer).
-- Processor support. Layers allow user-defined processors to run pre- and post- render.
+- 以逻辑层次结构组织你的游戏（如 UI、前景、主场景、背景）。
+- 将对象分组以形成复杂场景，然后进行缓存（例如背景层）。
+- 处理器支持。层允许用户定义的处理器在渲染前后运行。
 
 
 ## Layers
 
-Layers allow you to group rendering by context, as well as allow you to pre-render things. This
-enables, for example, rendering parts of your game that don't change much in memory, like a
-background. By doing this, you'll free processing power for more dynamic content that needs to be
-rendered every game tick.
+层允许你根据上下文对渲染进行分组，并支持预渲染内容。这使得你可以在内存中渲染那些变化不大的游戏部分，例如背景。通过这样做，你可以释放处理能力，用于那些每个游戏帧都需要渲染的动态内容。
 
-There are two types of layers on Flame:
+在 Flame 中有两种类型的层：
 
-- `DynamicLayer`: For things that are moving or changing.
-- `PreRenderedLayer`: For things that are static.
+- `DynamicLayer`：用于处理移动或变化的内容。
+- `PreRenderedLayer`：用于处理静态内容。
 
 
 ### DynamicLayer
 
-Dynamic layers are layers that are rendered every time that they are drawn on the canvas. As the
-name suggests, it is meant for dynamic content and is most useful for grouping rendering of objects
-that have the same context.
+动态层是指每次在画布上绘制时都会被渲染的层。顾名思义，它适用于动态内容，最适合用于将具有相同上下文的对象进行渲染分组。
 
-Usage example:
+使用示例：
 
 ```dart
 class GameLayer extends DynamicLayer {
@@ -71,11 +64,9 @@ class MyGame extends Game {
 
 ### PreRenderedLayer
 
-Pre-rendered layers are rendered only once, cached in memory and then just
-replicated on the game canvas afterwards. They are useful for caching content that doesn't change
-during the game, like a background for example.
+预渲染层只渲染一次，并缓存在内存中，之后仅在游戏画布上进行复制。它们非常适合缓存游戏中不发生变化的内容，例如背景。
 
-Usage example:
+使用示例：
 
 ```dart
 class BackgroundLayer extends PreRenderedLayer {
@@ -106,12 +97,9 @@ class MyGame extends Game {
 
 ### Layer Processors
 
-Flame also provides a way to add processors on your layer, which are ways to add effects on the
-entire layer. At the moment, out of the box, only the `ShadowProcessor` is available, this processor
-renders a back drop shadow on your layer.
+Flame 还提供了一种在层上添加处理器的方法，它可以为整个层添加效果。目前，Flame 内置的处理器中只有 `ShadowProcessor` 可用，该处理器可以在层上渲染投影效果。
 
-To add processors to your layer, just add them to the layer `preProcessors` or `postProcessors`
-list, like so:
+要向层中添加处理器，只需将它们添加到层的 `preProcessors` 或 `postProcessors` 列表中，如下所示：
 
 ```dart
 // Works the same for both DynamicLayer and PreRenderedLayer
@@ -128,14 +116,14 @@ class BackgroundLayer extends PreRenderedLayer {
   // ...
 ```
 
-Custom processors can be created by extending the `LayerProcessor` class.
+可以通过扩展 `LayerProcessor` 类来创建自定义处理器。
 
-See [a working example of layers](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/layers_example.dart).
+请参阅[层的工作示例](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/layers_example.dart)。
 
 
 ## Snapshots
 
-Snapshots are an alternative to layers. The `Snapshot` mixin can be applied to any `PositionComponent`.
+快照是层的另一种替代方案。`Snapshot` 混入（mixin）可以应用于任何 `PositionComponent`。
 
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
@@ -155,10 +143,7 @@ class MyGame extends FlameGame {
 
 ### Render as a snapshot
 
-Setting `renderSnapshot` to `true` (the default) on a snapshot-enabled component behaves similarly
-to a `PreRenderedLayer`. The component is rendered only once, cached in memory and then just
-replicated on the game canvas afterwards. This is useful for caching content that doesn't change
-during the game, like a background.
+将启用快照的组件的 `renderSnapshot` 设置为 `true`（默认值）时，其行为类似于 `PreRenderedLayer`。组件只渲染一次，并缓存在内存中，之后仅在游戏画布上进行复制。这对于缓存游戏中不发生变化的内容（例如背景）非常有用。
 
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
@@ -194,27 +179,18 @@ class MyGame extends FlameGame {
 
 #### Regenerating a snapshot
 
-A snapshot-enabled component will generate a snapshot of its entire tree, including its children.
-If any of the children change (for example, their position changes, or they are animated), call
-`takeSnapshot` to update the cached snapshot. If they are changing very frequently, it's best not
-to use a `Snapshot` because there will be no performance benefit.
+启用快照的组件将生成其整个树（包括其子组件）的快照。如果任何子组件发生变化（例如，它们的位置发生变化或它们正在执行动画），请调用 `takeSnapshot` 来更新缓存的快照。如果子组件变化非常频繁，最好不要使用 `Snapshot`，因为这将无法带来性能提升。
 
-A component rendering a snapshot can still be transformed without incurring any performance cost.
-Once a snapshot has been taken, the component may still be scaled, moved and rotated. However, if
-the content of the component changes (what it is rendering) then the snapshot must be regenerated
-by calling `takeSnapshot`.
+渲染快照的组件仍然可以进行变换，而不会带来任何性能消耗。一旦快照被捕捉，组件仍然可以进行缩放、移动和旋转。然而，如果组件的内容（即渲染的内容）发生了变化，则必须通过调用 `takeSnapshot` 来重新生成快照。
 
 
 ### Taking a snapshot
 
-A snapshot-enabled component can be used to generate a snapshot at any time, even if
-`renderSnapshot` is set to false. This is useful for taking screen-grabs or any other purpose when
-it may be useful to have a static snapshot of all or part of your game.
+启用快照的组件可以在任何时候生成快照，即使 `renderSnapshot` 被设置为 false。这对于截屏或其他需要静态快照的场景（无论是游戏的全部还是部分）都非常有用。
 
-A snapshot is always generated with no transform applied - i.e. as if the snapshot-enabled
-component is at position (0,0) and has no scale or rotation applied.
+快照总是在没有任何变换的情况下生成的——即生成快照时，启用快照的组件处于位置 (0,0)，且没有缩放或旋转效果。
 
-A snapshot is saved as a `Picture`, but it can be converted to an `Image` using `snapshotToImage`.
+快照会以 `Picture` 的形式保存，但可以使用 `snapshotToImage` 将其转换为 `Image`。
 
 ```dart
 class SnapshotComponent extends PositionComponent with Snapshot {}
@@ -242,18 +218,13 @@ class MyGame extends FlameGame {
 
 ### Snapshots that are cropped or off-center
 
-Sometimes your snapshot `Image` may appear cropped, or not in the position you expected.
+有时，你的快照 `Image` 可能会出现被裁剪或位置不符合预期的情况。
 
-This is because the contents of a `Picture` can be positioned anywhere with respect to the origin,
-but when it is converted to an `Image`, the image always starts from `0,0`. This means that
-anything with a -ve position will be cropped.
+这是因为 `Picture` 的内容可以相对于原点放置在任何位置，但当它被转换为 `Image` 时，图像总是从 `0,0` 开始。这意味着任何具有负坐标位置的内容都会被裁剪掉。
 
-The best way to deal with this is to ensure that your `Snapshot` component is always at position
-`0,0` with respect to your game and you never move it. This means that the image will usually
-contain what you expect it to.
+解决这个问题的最佳方法是确保你的 `Snapshot` 组件始终相对于游戏处于位置 `0,0`，并且从不移动它。这样通常可以确保图像包含你预期的内容。
 
-However, this is not always possible. To move (or rotate, or scale etc) the snapshot before
-converting it to an image, pass a transformation matrix to `snapshotToImage` like so:
+然而，这并不总是可行。如果需要在将快照转换为图像之前移动（或旋转、缩放等）快照，可以向 `snapshotToImage` 传递一个变换矩阵，如下所示：
 
 ```dart
 // Call something like this to take an image snapshot at any time.

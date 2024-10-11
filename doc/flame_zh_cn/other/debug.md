@@ -1,79 +1,54 @@
-# Debug features
+# 调试功能
 
+## FlameGame 功能
 
-## FlameGame features
+Flame 为 `FlameGame` 类提供了一些调试功能。当 `debugMode` 属性被设置为 `true`（或被覆盖为 `true`）时，这些功能会被启用。启用 `debugMode` 后，每个 `PositionComponent` 将会显示其边界大小，并在屏幕上显示其位置。这样，你可以直观地验证组件的边界和位置。
 
-Flame provides some debugging features for the `FlameGame` class. These features are enabled when
-the `debugMode` property is set to `true` (or overridden to be `true`).
-When `debugMode` is enabled, each `PositionComponent` will be rendered with their bounding size, and
-have their positions written on the screen. This way, you can visually verify the components
-boundaries and positions.
+查看[`FlameGame` 调试功能的工作示例](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart)。
 
-Check out this [working example of the debugging features of the `FlameGame`](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/debug_example.dart).
+## 开发工具扩展
 
-
-## Devtools extension
-
-If you open the [Flutter DevTools](https://docs.flutter.dev/tools/devtools/overview), you will see a
-new tab called "Flame". This tab will show you information about the current game, for example a
-visualization of the component tree, the ability to play, pause and step the game, information
-about the selected component, and more.
-
+如果你打开 [Flutter DevTools](https://docs.flutter.dev/tools/devtools/overview)，你会看到一个名为 "Flame" 的新选项卡。该选项卡将显示当前游戏的相关信息，例如组件树的可视化、控制游戏的播放、暂停和单步调试的功能、选定组件的信息等。
 
 ## FPS
 
-The FPS reported from Flame might be a bit lower than what is reported from for example the Flutter
-DevTools, depending on which platform you are targeting. The source of truth for how many FPS your
-game is running in should be the FPS that we are reporting, since that is what our game loop is
-bound by.
-
+Flame 报告的 FPS（帧率）可能会比例如 Flutter DevTools 报告的帧率稍低，这取决于目标平台。你应该以我们报告的 FPS 作为游戏实际帧率的标准，因为这是游戏循环的实际运行帧率。
 
 ### FpsComponent
 
-The `FpsComponent` can be added to anywhere in the component tree and will keep track of how many
-FPS that the game is currently rendering in. If you want to display this as text in the game, use
-the [](#fpstextcomponent).
-
+`FpsComponent` 可以添加到组件树中的任意位置，并用于跟踪当前游戏的渲染 FPS。如果你希望将 FPS 显示为游戏中的文本，请使用 `FpsTextComponent`。
 
 ### FpsTextComponent
 
-The `FpsTextComponent` is simply a [TextComponent] that wraps an `FpsComponent`, since you most
-commonly want to show the current FPS somewhere when the `FpsComponent` is used.
-
+`FpsTextComponent` 本质上是一个包装了 `FpsComponent` 的 [TextComponent]，因为通常你希望在使用 `FpsComponent` 时，在某个地方显示当前 FPS。
 
 [TextComponent]: ../rendering/text_rendering.md#textcomponent
 
-
 ### ChildCounterComponent
 
-`ChildCounterComponent` is a component that renders the number of children of
-type `T` from a component (`target`) every second. So for example:
+`ChildCounterComponent` 是一个组件，它会每秒渲染目标组件 (`target`) 中类型为 `T` 的子组件数量。例如：
 
-So for example, the following will render the number of `SpriteAnimationComponent` that are
-children of the game `world`:
+以下代码将渲染 `SpriteAnimationComponent` 类型的子组件数量，它们是游戏 `world` 的子组件：
 
 ```dart
 add(
-  ChildCounterComponent<SpriteAnimationComponent>(
-    target: world,
-  ),
+ChildCounterComponent<SpriteAnimationComponent>(
+target: world,
+),
 );
 ```
 
-
 ### TimeTrackComponent
 
-This component allows developers to track time spent inside their code. This can be useful for
-performance debugging time spent in certain parts of the code.
+此组件允许开发者跟踪代码中某个部分的时间消耗。这对于调试代码中特定部分的性能问题非常有用。
 
-To use it, add it to your game somewhere (since this is a debug feature, we advise to only add the
-component in a debug build/flavor):
+要使用它，只需将其添加到游戏中（由于这是一个调试功能，我们建议只在调试版本/环境中添加该组件）：
 
 ```dart
 add(TimeTrackComponent());
 ```
 
-Then in the code section that you want to track time, do the following:
+然后在你希望跟踪时间的代码部分中，执行以下操作：
 
 ```dart
 void update(double dt) {
@@ -83,5 +58,4 @@ void update(double dt) {
 }
 ```
 
-With the calls above, the added `TimeTrackComponent` will render the elapsed time in
-microseconds.
+通过上述调用，添加的 `TimeTrackComponent` 将会以微秒为单位显示经过的时间。

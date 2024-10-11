@@ -1,21 +1,15 @@
 # Palette
 
-Throughout your game you are going to need to use colors in lots of places. There are two classes on
-`dart:ui` that can be used, `Color` and `Paint`.
+在你的游戏中，你需要在许多地方使用颜色。在 `dart:ui` 中有两个类可以使用，分别是 `Color` 和 `Paint`。
 
-The `Color` class represents a ARGB color in a hexadecimal integer
-format. So to create a `Color` instance, you just need to pass the color as an integer in the ARGB
-format.
+`Color` 类表示一种以十六进制整数格式的 ARGB 颜色。因此，要创建一个 `Color` 实例，只需将颜色作为 ARGB 格式的整数传递即可。
 
 <!--- cSpell:ignore AARRGGBB -->
-You can use Dart's hexadecimal notation to make it really easy; for instance: `0xFF00FF00` is fully
-opaque green (the "mask" would be `0xAARRGGBB`).
+你可以使用 Dart 的十六进制表示法来简化操作；例如：`0xFF00FF00` 表示完全不透明的绿色（格式为 `0xAARRGGBB`）。
 
-**Note**: The first two hexadecimal digits are for
-the alpha channel (transparency), unlike on regular (non-A) RGB. The max(FF = 255) for the two first
-digits means fully opaque, and the min (00 = 0) means fully transparent.
+**注意**：前两个十六进制数字表示 alpha 通道（透明度），这与常规的（非 A）RGB 不同。前两位数字的最大值 (FF = 255) 表示完全不透明，最小值 (00 = 0) 表示完全透明。
 
-In the Material Flutter package there is a `Colors` class that provides common colors as constants:
+在 Material Flutter 包中，存在一个 `Colors` 类，它提供了一些常用颜色的常量：
 
 ```dart
 import 'package:flutter/material.dart' show Colors;
@@ -23,45 +17,32 @@ import 'package:flutter/material.dart' show Colors;
 const black = Colors.black;
 ```
 
-Some more complex methods might also take a `Paint` object, which is a more complete structure that
-allows you to configure aspects related to stroke, colors, filters and blends.
-However, normally when using even the more complex APIs, you just want an instance of a `Paint`
-object representing just a single simple plain solid color.
+有些更复杂的方法可能还会接受一个 `Paint` 对象，它是一个更完整的结构，可以配置与描边、颜色、滤镜和混合相关的各种属性。不过，通常即使在使用较复杂的 API 时，你也只希望拥有一个表示单一纯色的 `Paint` 实例。
 
-**Note:** we don't recommend that you create a new `Paint` object every time you need a specific
-`Paint`, since it could potentially lead to a lot of unnecessary objects being created. A better way
-is to either define the `Paint` object somewhere and re-use it (however, do note that the `Paint`
-class is mutable, unlike `Color`), or to use the `Palette` class to define all the colors that you
-want to use in your game.
+**注意**：我们不建议每次需要特定的 `Paint` 时都创建一个新的 `Paint` 对象，因为这可能会导致创建大量不必要的对象。更好的做法是将 `Paint` 对象定义在某个地方并重复使用（但要注意 `Paint` 类是可变的，不像 `Color`），或者使用 `Palette` 类来定义你在游戏中需要使用的所有颜色。
 
-You can create such an object like this:
+你可以这样创建一个对象：
 
 ```dart
 Paint green = Paint()..color = const Color(0xFF00FF00);
 ```
 
-To help you with this and also keep your game's color palette consistent, Flame adds the `Palette`
-class. You can use it to easily access both `Color`s and `Paint`s where needed and also define
-the colors your game use as constants, so that you don't get those mixed up.
+为帮助你管理颜色并保持游戏的色彩一致性，Flame 提供了 `Palette` 类。你可以使用它在需要的地方轻松访问 `Color` 和 `Paint`，并将游戏中使用的颜色定义为常量，这样就不会混淆颜色。
 
-The `BasicPalette` class is an example of what a palette can look like, and adds black and white as
-colors. So you can access black or white directly from the `BasicPalette`; for example,
-using `color`:
+`BasicPalette` 类是调色板的一个示例，它添加了黑色和白色作为颜色。因此，你可以直接从 `BasicPalette` 中访问黑色或白色；例如，使用 `color`：
 
 ```dart
 TextConfig regular = TextConfig(color: BasicPalette.white.color);
 ```
 
-Or using `paint`:
+或者使用 `paint`:
 
 ```dart
 canvas.drawRect(rect, BasicPalette.black.paint);
 ```
 
-However, the idea is that you can create your own palette, following the `BasicPalette` example, and
-add the color palette/scheme of your game. Then you will be able to statically access any color in
-your components and classes. Below is an example of a `Palette` implementation, from the [example
-game BGUG](https://github.com/bluefireteam/bgug/blob/master/lib/palette.dart):
+然而，理想情况下，你可以根据 `BasicPalette` 的示例创建你自己的调色板，并添加游戏的颜色调色板/配色方案。这样你就可以在组件和类中静态访问任何颜色。
+以下是 [示例游戏 BGUG](https://github.com/bluefireteam/bgug/blob/master/lib/palette.dart) 中 `Palette` 实现的示例：
 
 ```dart
 import 'dart:ui';
@@ -79,10 +60,7 @@ class Palette {
 }
 ```
 
-A `PaletteEntry` is a `const` class that holds information of a color and it has the following
-members:
+`PaletteEntry` 是一个 `const` 类，用于保存颜色信息，并包含以下成员：
 
-- `color`: returns the `Color` specified
-- `paint`: creates a new `Paint` with the color specified. `Paint` is a non-`const` class, so this
-  method actually creates a brand new instance every time it's called. It's safe to cascade
-  mutations to this.
+- `color`：返回指定的 `Color`。
+- `paint`：使用指定的颜色创建一个新的 `Paint`。由于 `Paint` 是一个非 `const` 类，因此该方法每次调用时都会创建一个全新的实例。可以安全地对其进行级联修改。

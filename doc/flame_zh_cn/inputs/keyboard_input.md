@@ -1,22 +1,20 @@
 # Keyboard Input
 
-This includes documentation for keyboard inputs.
+这包括了键盘输入的文档。
 
-For other input documents, see also:
+对于其他输入文档，也请参考：
 
-- [Gesture Input](gesture_input.md): for mouse and touch pointer gestures
-- [Other Inputs](other_inputs.md): For joysticks, game pads, etc.
-
+- [手势输入](gesture_input.md)：用于鼠标和触摸指针手势
+- [其他输入](other_inputs.md)：用于游戏手柄、游戏杆等
 
 ## Intro
 
-The keyboard API on flame relies on the
-[Flutter's Focus widget](https://api.flutter.dev/flutter/widgets/Focus-class.html).
+Flame 的键盘 API 依赖于 [Flutter 的 Focus widget](https://api.flutter.dev/flutter/widgets/Focus-class.html)。
 
-To customize focus behavior, see [Controlling focus](#controlling-focus).
+要自定义焦点行为，请参考 [控制焦点](#controlling-focus)。
 
-There are two ways a game can react to key strokes; at the game level and at a component level.
-For each we have a mixin that can me added to a `Game` or `Component` class.
+游戏可以通过两种方式响应按键输入：在游戏级别和组件级别。
+对于每种情况，我们都有一个可以添加到 `Game` 或 `Component` 类的混入。
 
 
 ### Receive keyboard events in a game level

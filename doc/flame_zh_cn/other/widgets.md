@@ -1,32 +1,30 @@
 # Widgets
 
-One advantage when developing games with Flutter is the ability to use Flutter's extensive toolset
-for building UIs, Flame tries to expand on that by introducing widgets that are made with games in
-mind.
+使用 Flutter 开发游戏的一个优势是能够利用 Flutter 强大的 UI 构建工具集，Flame 通过引入以游戏为目标的组件来进一步扩展这一点。
 
-Here you can find all the available widgets provided by Flame.
+在这里，你可以找到 Flame 提供的所有可用组件。
 
-You can also see all the widgets showcased inside a
+你还可以查看所有组件的展示，见于一...
 [Dashbook](https://github.com/bluefireteam/dashbook) sandbox
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets)
 
 
 ## NineTileBoxWidget
 
-A Nine Tile Box is a rectangle drawn using a grid sprite.
+九宫格框（Nine Tile Box）是一个使用网格精灵绘制的矩形。
 
-The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the 4 sides and the
-middle.
+网格精灵是一个 3x3 的网格，共有 9 个块，分别代表 4 个角、4 条边和中间部分。
 
-The corners are drawn at the same size, the sides are stretched on the side direction and the middle
-is expanded both ways.
+角落部分保持相同大小，边缘部分在侧向上拉伸，而中间部分在两个方向上扩展。
 
-The `NineTileBoxWidget` implements a `Container` using that standard. This pattern is also
-implemented as a component in the `NineTileBoxComponent` so that you can add this feature directly
-to your `FlameGame`. To get to know more about this, check the component docs
+`NineTileBoxWidget` 实现了一个使用该标准的 `Container`。
+
+这种模式也作为组件在 `NineTileBoxComponent` 中实现，以便你可以将此功能直接添加到你的 `FlameGame` 中。
+
+要了解更多信息，请查看组件文档。
 [here](../components.md#ninetileboxcomponent).
 
-Here you can find an example of how to use it (without using the `NineTileBoxComponent`):
+在这里你可以找到一个如何使用它的示例（不使用 `NineTileBoxComponent`）：
 
 ```dart
 import 'package:flame/widgets';
@@ -42,12 +40,11 @@ NineTileBoxWidget(
 
 ## SpriteButton
 
-`SpriteButton` is a simple widget that creates a button based on Flame sprites. This can be very
-useful when trying to create non-default looking buttons. For example when it is easier for you to
-achieve your wanted look by drawing the button in a graphics editor, instead of making it directly
-in Flutter.
+`SpriteButton` 是一个简单的组件，用于根据 Flame 精灵创建按钮。当你想创建不同于默认样式的按钮时，这个组件非常有用。
 
-How to use it:
+例如，当通过图形编辑器绘制按钮的外观比直接在 Flutter 中制作更简单时，它就可以派上用场。
+
+使用方法：
 
 ```dart
 SpriteButton(
@@ -65,10 +62,9 @@ SpriteButton(
 
 ## SpriteWidget
 
-`SpriteWidget` is a widget used to display a [Sprite](../rendering/images.md#sprite) inside a widget
-tree.
+`SpriteWidget` 是一个用于在组件树中显示 [Sprite](../rendering/images.md#sprite) 的组件。
 
-This is how to use it:
+以下是使用方法：
 
 ```dart
 SpriteWidget(
@@ -80,10 +76,9 @@ SpriteWidget(
 
 ## SpriteAnimationWidget
 
-`SpriteAnimationWidget` is a widget used to display
-[SpriteAnimations](../rendering/images.md#animation) inside a widget tree.
+`SpriteAnimationWidget` 是一个用于在组件树中显示 [SpriteAnimations](../rendering/images.md#animation) 的组件。
 
-This is how to use it:
+以下是使用方法：
 
 ```dart
 SpriteAnimationWidget(

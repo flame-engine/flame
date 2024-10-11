@@ -1,36 +1,30 @@
 # Effects
 
-An effect is a special component that can attach to another component in order to modify its
-properties or appearance.
+```markdown
+效果（Effect）是一个特殊的组件，可以附加到另一个组件上以修改其属性或外观。
 
-For example, suppose you are making a game with collectible power-up items. You want these power-ups
-to generate randomly around the map and then de-spawn after some time. Obviously, you could make a
-sprite component for the power-up and then place that component on the map, but we could do even
-better!
+例如，假设你正在制作一个有可收集增强物品的游戏。你希望这些增强物品在地图上随机生成，然后在一段时间后消失。
 
-Let's add a `ScaleEffect` to grow the item from 0 to 100% when the power-up first appears. Add
-another infinitely repeating alternating `MoveEffect` in order to make the item move slightly up
-and down. Then add an `OpacityEffect` that will "blink" the item 3 times, this effect will have a
-built-in delay of 30 seconds, or however long you want your power-up to stay in place. Lastly, add
-a `RemoveEffect` that will automatically remove the item from the game tree after the specified
-time (you probably want to time it right after the end of the `OpacityEffect`).
+显然，你可以为增强物品制作一个精灵组件，然后将该组件放置在地图上，但我们可以做的更好！
 
-As you can see, with a few simple effects we have turned a simple lifeless sprite into a much more
-interesting item. And what's more important, it didn't result in an increased code complexity: the
-effects, once added, will work automatically, and then self-remove from the game tree when
-finished.
+让我们添加一个 `ScaleEffect`，使物品在首次出现时从0%增长到100%。
+
+再添加一个无限重复的交替 `MoveEffect`，使物品轻微地上下移动。
+
+然后添加一个 `OpacityEffect`，使物品“闪烁”3次，这个效果将内置30秒的延迟，或者你希望增强物品停留在原地的任何时长。
+
+最后，添加一个 `RemoveEffect`，在指定的时间后自动将物品从游戏树中移除（你可能希望在 `OpacityEffect` 结束后立即进行计时）。
+
+正如你所见，通过一些简单效果，我们将一个简单的无生命精灵变成了一个更有趣的物品。更重要的是，它并没有导致代码复杂性的增加：效果一旦添加，将自动工作，然后在完成后自动从游戏树中移除。
+```
+
 
 
 ## Overview
 
-The function of an `Effect` is to effect a change over time in some component's property. In order
-to achieve that, the `Effect` must know the initial value of the property, the final value, and how
-it should progress over time. The initial value is usually determined by an effect automatically,
-the final value is provided by the user explicitly, and progression over time is handled by
-`EffectController`s.
+`Effect` 的功能是在一段时间内改变某个组件的属性。为了实现这一点，`Effect` 必须知道属性的初始值、最终值以及它应该如何随时间变化。初始值通常由效果自动确定，最终值由用户明确提供，而随时间的变化则由 `EffectController` 处理。
 
-There are multiple effects provided by Flame, and you can also
-[create your own](#creating-new-effects). The following effects are included:
+Flame 提供了多种效果，你还可以[创建你自己的效果](#creating-new-effects)。以下是包括的效果：
 
 - [`MoveByEffect`](#movebyeffect)
 - [`MoveToEffect`](#movetoeffect)
@@ -49,12 +43,9 @@ There are multiple effects provided by Flame, and you can also
 - [`SequenceEffect`](#sequenceeffect)
 - [`RemoveEffect`](#removeeffect)
 
-An `EffectController` is an object that describes how the effect should evolve over time. If you
-think of the initial value of the effect as 0% progress, and the final value as 100% progress, then
-the job of the effect controller is to map from the "physical" time, measured in seconds, into the
-"logical" time, which changes from 0 to 1.
+`EffectController` 是一个描述效果应如何随时间演变的对象。如果你将效果的初始值视为0%进度，最终值视为100%进度，那么效果控制器的工作就是将“物理”时间（以秒为单位）映射到“逻辑”时间，后者从0变化到1。
 
-There are multiple effect controllers provided by the Flame framework as well:
+Flame框架也提供了多种效果控制器：
 
 - [`EffectController`](#effectcontroller)
 - [`LinearEffectController`](#lineareffectcontroller)
@@ -78,28 +69,22 @@ There are multiple effect controllers provided by the Flame framework as well:
 
 ### `Effect`
 
-The base `Effect` class is not usable on its own (it is abstract), but it provides some common
-functionality inherited by all other effects. This includes:
+基 `Effect` 类本身不可用（它是抽象的），但它提供了所有其他效果所继承的一些共同功能。这包括：
 
-- The ability to pause/resume the effect using `effect.pause()` and `effect.resume()`. You can
-  check whether the effect is currently paused using `effect.isPaused`.
+- 使用 `effect.pause()` 和 `effect.resume()` 暂停/恢复效果的能力。你可以使用 `effect.isPaused` 检查效果当前是否已暂停。
 
-- Property `removeOnFinish` (which is true by default) will cause the effect component to be
-  removed from the game tree and garbage-collected once the effect completes. Set this to false
-  if you plan to reuse the effect after it is finished.
+- 属性 `removeOnFinish`（默认为 true）会在效果完成后将效果组件从游戏树中移除并进行垃圾回收。如果你计划在效果完成后重用该效果，请将其设置为 false。
 
-- Optional user-provided `onComplete`, which will be invoked when the effect has just
-  completed its execution but before it is removed from the game.
+- 可选的用户提供的 `onComplete`，在效果完成执行但尚未从游戏树中移除之前调用。
 
-- A `completed` future that completes when the effect finishes.
+- 当效果完成时，`completed` 未来（future）将完成。
 
-- The `reset()` method reverts the effect to its original state, allowing it to run once again.
+- `reset()` 方法将效果恢复到原始状态，允许它再次运行。
 
 
 ### `MoveByEffect`
 
-This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
-offset is relative to the current position of the target:
+这个效果应用于 `PositionComponent`，并将其按照指定的 `offset` 数量进行移动。这个偏移量是相对于目标当前位置的：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -116,17 +101,14 @@ final effect = MoveByEffect(
 );
 ```
 
-If the component is currently at `Vector2(250, 200)`, then at the end of the effect its position
-will be `Vector2(250, 190)`.
+如果组件当前位于 `Vector2(250, 200)`，那么在效果结束时，它的位置将变为 `Vector2(250, 190)`。
 
-Multiple move effects can be applied to a component at the same time. The result will be the
-superposition of all the individual effects.
+可以同时对一个组件应用多个移动效果。结果将是所有个别效果的叠加。
 
 
 ### `MoveToEffect`
 
-This effect moves a `PositionComponent` from its current position to the specified destination
-point in a straight line.
+这个效果使 `PositionComponent` 从当前位置沿直线移动到指定的目的地点。
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -143,15 +125,11 @@ final effect = MoveToEffect(
 );
 ```
 
-It is possible, but not recommended to attach multiple such effects to the same component.
-
+可以，但不建议在同一组件上附加多个这样的效果。
 
 ### `MoveAlongPathEffect`
 
-This effect moves a `PositionComponent` along the specified path relative to the component's
-current position. The path can have non-linear segments, but must be singly connected. It is
-recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
-position.
+这个效果使 `PositionComponent` 沿着相对于组件当前位置的指定路径移动。路径可以有非直线段，但必须是单连通的。建议从 `Vector2.zero()` 开始路径，以避免组件位置的突然跳跃。
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -168,20 +146,14 @@ final effect = MoveAlongPathEffect(
 );
 ```
 
-An optional flag `absolute: true` will declare the path within the effect as absolute. That is, the
-target will "jump" to the beginning of the path at start, and then follow that path as if it was a
-curve drawn on the canvas.
+可选标志 `absolute: true` 会将效果内定义的路径视为绝对路径。也就是说，目标会在开始时“跳跃”到路径的起点，然后沿着这条路径移动，就好像它是画布上的一条曲线一样。
 
-Another flag `oriented: true` instructs the target not only move along the curve, but also rotate
-itself in the direction the curve is facing at each point. With this flag the effect becomes both
-the move- and the rotate- effect at the same time.
+另一个标志 `oriented: true` 指示目标不仅要沿着曲线移动，而且在每个点也要朝着曲线面向的方向旋转。有了这个标志，效果同时成为了移动和旋转效果。
 
 
 ### `RotateEffect.by`
 
-Rotates the target clockwise by the specified angle relative to its current orientation. The angle
-is in radians. For example, the following effect will rotate the target 90º (=[tau]/4 in radians)
-clockwise:
+将目标顺时针旋转指定角度，相对于其当前方向。角度以弧度为单位。例如，以下效果将使目标顺时针旋转90º（即 $\frac{\tau}{4}$ 弧度）：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -201,8 +173,7 @@ final effect = RotateEffect.by(
 
 ### `RotateEffect.to`
 
-Rotates the target clockwise to the specified angle. For example, the following will rotate the
-target to look east (0º is north, 90º=[tau]/4 east, 180º=tau/2 south, and 270º=tau*3/4 west):
+将目标顺时针旋转到指定角度。例如，以下代码将使目标朝向东方（0º 是北，90º 是东，180º 是南，270º 是西）：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -222,8 +193,7 @@ final effect = RotateEffect.to(
 
 ### `ScaleEffect.by`
 
-This effect will change the target's scale by the specified amount. For example, this will cause
-the component to grow 50% larger:
+这个效果会通过指定的数量改变目标的缩放比例。例如，这将使组件的尺寸增大50%：
 
  ```{flutter-app}
  :sources: ../flame/examples
@@ -243,7 +213,7 @@ final effect = ScaleEffect.by(
 
 ### `ScaleEffect.to`
 
-This effect works similar to `ScaleEffect.by`, but sets the absolute value of the target's scale.
+这个效果的工作方式类似于 `ScaleEffect.by`，但它设置目标缩放的绝对值。
 
  ```{flutter-app}
  :sources: ../flame/examples
@@ -263,9 +233,7 @@ final effect = ScaleEffect.to(
 
 ### `SizeEffect.by`
 
-This effect will change the size of the target component, relative to its current size. For example,
-if the target has size `Vector2(100, 100)`, then after the following effect is applied and runs its
-course, the new size will be `Vector2(120, 50)`:
+这个效果会相对于目标组件的当前大小改变其尺寸。例如，如果目标的大小为 `Vector2(100, 100)`，那么在应用了以下效果并运行完毕后，新的大小将变为 `Vector2(120, 50)`：
 
  ```{flutter-app}
  :sources: ../flame/examples
@@ -282,21 +250,19 @@ final effect = SizeEffect.by(
 );
 ```
 
-The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
-negative value, the size will be clamped at zero.
+```markdown
+`PositionComponent` 的大小不能为负数。如果一个效果试图将大小设置为负值，那么大小将被限制在零。
 
-Note that for this effect to work, the target component must implement the `SizeProvider` interface
-and take its `size` into account when rendering. Only few of the built-in components implement this
-API, but you can always make your own component work with size effects by adding
-`implements SizeEffect` to the class declaration.
+请注意，为了让这个效果起作用，目标组件必须实现 `SizeProvider` 接口，并在渲染时考虑其 `size`。只有少数内置组件实现了这个 API，但你可以通过在类声明中添加 `implements SizeEffect` 来让你自己的组件与大小效果一起工作。
 
-An alternative to `SizeEffect` is the `ScaleEffect`, which works more generally and scales both the
-target component and its children.
+`SizeEffect` 的一个替代方案是 `ScaleEffect`，它的工作方式更通用，可以缩放目标组件及其子组件。
+```
+
 
 
 ### `SizeEffect.to`
 
-Changes the size of the target component to the specified size. Target size cannot be negative:
+将目标组件的大小更改为指定的大小。目标大小不能为负数：
 
 
  ```{flutter-app}
@@ -317,8 +283,7 @@ final effect = SizeEffect.to(
 
 ### `AnchorByEffect`
 
-Changes the location of the target's anchor by the specified offset. This effect can also be created
-using `AnchorEffect.by()`.
+通过指定的偏移量改变目标的锚点位置。这个效果也可以使用 `AnchorEffect.by()` 创建。
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -338,8 +303,7 @@ final effect = AnchorByEffect(
 
 ### `AnchorToEffect`
 
-Changes the location of the target's anchor. This effect can also be created using
-`AnchorEffect.to()`.
+改变目标的锚点位置。这个效果也可以使用 `AnchorEffect.to()` 创建。
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -359,8 +323,7 @@ final effect = AnchorToEffect(
 
 ### `OpacityToEffect`
 
-This effect will change the opacity of the target over time to the specified alpha-value.
-It can only be applied to components that implement the `OpacityProvider`.
+这个效果会随时间改变目标的透明度至指定的 alpha 值。它只能应用于实现了 `OpacityProvider` 的组件。
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -377,10 +340,8 @@ final effect = OpacityEffect.to(
 );
 ```
 
-If the component uses multiple paints, the effect can target one more more of those paints
-using the `target` parameter. The `HasPaint` mixin implements `OpacityProvider` and exposes APIs
-to easily create providers for desired paintIds. For single paintId `opacityProviderOf` can be used
-and for multiple paintIds and `opacityProviderOfList` can be used.
+如果组件使用了多个画笔，效果可以通过 `target` 参数来定位一个或多个画笔。`HasPaint` 混入实现了 `OpacityProvider` 并提供了 API，可以轻松地为所需的 paintIds 创建提供者。
+对于单个 paintId，可以使用 `opacityProviderOf`，对于多个 paintIds，可以使用 `opacityProviderOfList`。
 
 
 ```{flutter-app}
@@ -401,15 +362,12 @@ final effect = OpacityEffect.to(
 );
 ```
 
-The opacity value of 0 corresponds to a fully transparent component, and the opacity value of 1 is
-fully opaque. Convenience constructors `OpacityEffect.fadeOut()` and `OpacityEffect.fadeIn()` will
-animate the target into full transparency / full visibility respectively.
+透明度值为 0 对应于完全透明的组件，而透明度值为 1 则表示完全不透明。便利构造函数 `OpacityEffect.fadeOut()` 和 `OpacityEffect.fadeIn()` 将分别使目标动画过渡到完全透明和完全可见。
 
 
 ### `OpacityByEffect`
 
-This effect will change the opacity of the target relative to the specified alpha-value. For example,
-the following effect will change the opacity of the target by `90%`:
+这个效果将相对于指定的 alpha 值改变目标的透明度。例如，以下效果将使目标的透明度改变 `90%`：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -426,8 +384,7 @@ final effect = OpacityEffect.by(
 );
 ```
 
-Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
-uses multiple paints, the effect can target any individual color using the `paintId` parameter.
+目前，这个效果只能应用于具有 `HasPaint` 混入的组件。如果目标组件使用了多个画笔，效果可以通过 `paintId` 参数针对任何单一颜色进行操作。
 
 
 ### GlowEffect
@@ -436,9 +393,7 @@ uses multiple paints, the effect can target any individual color using the `pain
 This effect is currently experimental, and its API may change in the future.
 ```
 
-This effect will apply the glowing shade around target relative to the specified
-`glow-strength`. The color of shade will be targets paint color. For example, the following effect
-will apply the glowing shade around target by strength of `10`:
+这个效果将在目标周围应用发光效果，相对于指定的 `glow-strength`。阴影的颜色将是目标的绘画颜色。例如，以下效果将通过强度为 `10` 的方式在目标周围应用发光效果：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -455,16 +410,14 @@ final effect = GlowEffect(
 );
 ```
 
-Currently this effect can only be applied to components that have a `HasPaint` mixin.
+目前，这个效果只能应用于包含 `HasPaint` 混入的组件。
 
 
 ### `SequenceEffect`
 
-This effect can be used to run multiple other effects one after another. The constituent effects
-may have different types.
+这个效果可以用来连续运行多个其他效果。这些组成效果可以有不同的类型。
 
-The sequence effect can also be alternating (the sequence will first run forward, and then
-backward); and also repeat a certain predetermined number of times, or infinitely.
+序列效果也可以是交替的（序列首先向前运行，然后向后运行）；并且可以重复一定次数，或者无限重复。
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -502,8 +455,7 @@ final effect = SequenceEffect([
 
 ### `RemoveEffect`
 
-This is a simple effect that can be attached to a component causing it to be removed from the game
-tree after the specified delay has passed:
+这是一个简单的效果，可以附加到一个组件上，使其在指定的延迟过后从游戏树中移除：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -521,10 +473,9 @@ final effect = RemoveEffect(delay: 3.0);
 
 ## ColorEffect
 
-This effect will change the base color of the paint, causing the rendered component to be tinted by
-the provided color between a provided range.
+这个效果将改变画笔的基础颜色，使得渲染的组件在指定范围内被提供的颜色染色。
 
-Usage example:
+使用示例：
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -543,38 +494,24 @@ final effect = ColorEffect(
 );
 ```
 
-The `opacityFrom` and `opacityTo` arguments will determine "how much" of the color that will be
-applied to the component. In this example the effect will start with 20% and will go up to 80%.
+`opacityFrom` 和 `opacityTo` 参数将决定将多少颜色应用到组件上。在这个例子中，效果将从20%开始，上升到80%。
 
-**Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
-effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
-the last one will have effect.
+**注意：** 由于这个效果的实现方式以及 Flutter 的 `ColorFilter` 类的工作原理，这个效果不能与其他 `ColorEffect` 混用，当有多个效果被添加到组件时，只有最后一个会起作用。
 
 
 ## Creating new effects
 
-Although Flame provides a wide array of built-in effects, eventually you may find them to be
-insufficient. Luckily, creating new effects is very simple.
+尽管 Flame 提供了丰富的内置效果，但最终你可能会发现它们不够用。幸运的是，创建新效果非常简单。
 
-Each effect extends the base `Effect` class, possibly via one of the more specialized abstract
-subclasses such as `ComponentEffect<T>` or `Transform2DEffect`.
+每个效果都扩展了基 `Effect` 类，可能是通过更专业的抽象子类之一，如 `ComponentEffect<T>` 或 `Transform2DEffect`。
 
-The `Effect` class' constructor requires an `EffectController` instance as an argument. In most
-cases you may want to pass that controller from your own constructor. Luckily, the effect controller
-encapsulates much of the complexity of an effect's implementation, so you don't need to worry about
-re-creating that functionality.
+`Effect` 类的构造函数需要一个 `EffectController` 实例作为参数。在大多数情况下，你可能希望从你自己的构造函数中传递该控制器。幸运的是，效果控制器封装了效果实现的复杂性，所以你不需要担心重新创建该功能。
 
-Lastly, you will need to implement a single method `apply(double progress)` that will be called at
-each update tick while the effect is active. In this method you are supposed to make changes to the
-target of your effect.
+最后，你需要实现一个单一的方法 `apply(double progress)`，该方法将在效果激活时的每个更新刻被调用。在这个方法中，你应该对效果的目标进行更改。
 
-In addition, you may want to implement callbacks `onStart()` and `onFinish()` if there are any
-actions that must be taken when the effect starts or ends.
+此外，如果你想在效果开始或结束时执行任何操作，可能需要实现回调 `onStart()` 和 `onFinish()`。
 
-When implementing the `apply()` method we recommend to use relative updates only. That is, change
-the target property by incrementing/decrementing its current value, rather than directly setting
-that property to a fixed value. This way multiple effects would be able to act on the same component
-without interfering with each other.
+在实现 `apply()` 方法时，我们建议只使用相对更新。也就是说，通过增加/减少其当前值来改变目标属性，而不是直接将该属性设置为固定值。这样，多个效果就能在同一组件上作用，而不会相互干扰。
 
 
 ## Effect controllers
@@ -582,8 +519,7 @@ without interfering with each other.
 
 ### `EffectController`
 
-The base `EffectController` class provides a factory constructor capable of creating a variety of
-common controllers. The syntax of the constructor is the following:
+基 `EffectController` 类提供了一个工厂构造函数，能够创建多种常见的控制器。该构造函数的语法如下：
 
 ```dart
 EffectController({
@@ -602,80 +538,30 @@ EffectController({
 });
 ```
 
-- *`duration`* -- the length of the main part of the effect, i.e. how long it should take to go
-  from 0 to 100%. This parameter cannot be negative, but can be zero. If this is the only parameter
-  specified then the effect will grow linearly over the `duration` seconds.
+- `duration` -- 效果主要部分的持续时间，即从0%发展到100%所需的时间。这个参数不能为负，但可以为零。如果这是唯一指定的参数，那么效果将在 `duration` 秒内线性增长。
 
-- *`curve`* -- if given, creates a non-linear effect that grows from 0 to 100% according to the
-  provided [curve](https://api.flutter.dev/flutter/animation/Curves-class.html).
+- `curve` -- 如果提供，根据提供的[曲线](https://api.flutter.dev/flutter/animation/Curves-class.html)创建一个非线性效果，从0%发展到100%。
 
-- *`reverseDuration`* -- if provided, adds an additional step to the controller: after the effect
-  has grown from 0 to 100% over the `duration` seconds, it will then go backwards from 100% to 0
-  over the `reverseDuration` seconds. In addition, the effect will complete at progress level of 0
-  (normally the effect completes at progress 1).
+- `reverseDuration` -- 如果提供，在控制器中添加一个额外的步骤：在效果在 `duration` 秒内从0%增长到100%之后，它将然后在 `reverseDuration` 秒内从100%倒退到0%。此外，效果将在进度级别0完成（通常效果在进度1完成）。
 
-- *`reverseCurve`* -- the curve to be used during the "reverse" step of the effect. If not given,
-  this will default to `curve.flipped`.
+- `reverseCurve` -- 在效果的“倒退”步骤中使用的曲线。如果没有提供，这将默认为 `curve.flipped`。
 
-- *`alternate`* -- setting this to true is equivalent to specifying the `reverseDuration` equal
-  to the `duration`. If the `reverseDuration` is already set, this flag has no effect.
+- `alternate` -- 设置为 true 相当于指定 `reverseDuration` 等于 `duration`。如果已经设置了 `reverseDuration`，则此标志无效果。
 
-- *`atMaxDuration`* -- if non-zero, this inserts a pause after the effect reaches its max
-  progress and before the reverse stage. During this time the effect is kept at 100% progress. If
-  there is no reverse stage, then this will simply be a pause before the effect is marked as
-  completed.
+- `atMaxDuration` -- 如果非零，这在效果达到最大进度后和倒退阶段之前插入一个暂停。在这段时间内，效果保持在100%进度。如果没有倒退阶段，那么这将简单地在效果被标记为完成之前暂停。
 
-- *`atMinDuration`* -- if non-zero, this inserts a pause after the reaches its lowest progress
-  (0) at the end of the reverse stage. During this time, the effect's progress is at 0%. If there
-  is no reverse stage, then this pause will still be inserted after the "at-max" pause if it's
-  present, or after the forward stage otherwise. In addition, the effect will now complete at
-  progress level of 0.
+- `atMinDuration` -- 如果非零，这在倒退阶段结束时效果达到最低进度（0）后插入一个暂停。在这段时间内，效果的进度为0%。如果没有倒退阶段，那么如果存在“at-max”暂停，这个暂停仍将在其后插入，或者在其他情况下在向前阶段之后插入。此外，效果现在将在进度级别0完成。
 
-- *`repeatCount`* -- if greater than one, it will cause the effect to repeat itself the prescribed
-  number of times. Each iteration will consists of the forward stage, pause at max, reverse stage,
-  then pause at min (skipping those that were not specified).
+- `repeatCount` -- 如果大于一，它将导致效果重复自身指定的次数。每次迭代将包括向前阶段、在最大值处暂停、倒退阶段，然后是最小值处暂停（跳过未指定的）。
 
-- *`infinite`* -- if true, the effect will repeat infinitely and never reach completion. This is
-  equivalent to as if `repeatCount` was set to infinity.
+- `infinite` -- 如果为 true，效果将无限重复，永不完成。这相当于将 `repeatCount` 设置为无限大。
 
-- *`startDelay`* -- an additional wait time inserted before the beginning of the effect. This
-  wait time is executed only once, even if the effect is repeating. During this time the effect's
-  `.started` property returns false. The effect's `onStart()` callback will be executed at the end
-  of this waiting period.
-
-  Using this parameter is the simplest way to create a chain of effects that execute one after
-  another (or with an overlap).
-
-- *`onMax`* -- callback function which will be invoked right after reaching its max progress and
-  before the optional pause and reverse stage.
-
-- *`onMin`* -- callback function which will be invoked right after reaching its lowest progress
-  at the end of the reverse stage and before the optional pause and forward stage.
-
-The effect controller returned by this factory constructor will be composited of multiple simpler
-effect controllers described further below. If this constructor proves to be too limited for your
-needs, you can always create your own combination from the same building blocks.
-
-In addition to the factory constructor, the `EffectController` class defines a number of properties
-common for all effect controllers. These properties are:
-
-- `.started` -- true if the effect has already started. For most effect controllers this property
-  is always true. The only exception is the `DelayedEffectController` which returns false while the
-  effect is in the waiting stage.
-
-- `.completed` -- becomes true when the effect controller finishes execution.
-
-- `.progress` -- current value of the effect controller, a floating-point value from 0 to 1. This
-  variable is the main "output" value of an effect controller.
-
-- `.duration` -- total duration of the effect, or `null` if the duration cannot be determined (for
-  example if the duration is random or infinite).
+- `startDelay` -- 在效果开始之前插入的额外等待时间。
 
 
 ### `LinearEffectController`
 
-This is the simplest effect controller that grows linearly from 0 to 1 over the specified
-`duration`:
+这是最简单的效果控制器，它在指定的 `duration` 时间内从 0 线性增长到 1：
 
 ```dart
 final ec = LinearEffectController(3);
@@ -684,8 +570,7 @@ final ec = LinearEffectController(3);
 
 ### `ReverseLinearEffectController`
 
-Similar to the `LinearEffectController`, but it goes in the opposite direction and grows linearly
-from 1 to 0 over the specified duration:
+与 `LinearEffectController` 类似，但它的方向相反，并且在指定的持续时间内从 1 线性减少到 0：
 
 ```dart
 final ec = ReverseLinearEffectController(1);
@@ -694,8 +579,7 @@ final ec = ReverseLinearEffectController(1);
 
 ### `CurvedEffectController`
 
-This effect controller grows non-linearly from 0 to 1 over the specified `duration` and following
-the provided `curve`:
+这个效果控制器在指定的 `duration` 时间内非线性地从 0 增长到 1，并遵循提供的 `curve`：
 
 ```dart
 final ec = CurvedEffectController(0.5, Curves.easeOut);
@@ -704,8 +588,7 @@ final ec = CurvedEffectController(0.5, Curves.easeOut);
 
 ### `ReverseCurvedEffectController`
 
-Similar to the `CurvedEffectController`, but the controller grows down from 1 to 0 following the
-provided `curve`:
+与 `CurvedEffectController` 类似，但是控制器按照提供的 `curve` 从 1 减少到 0：
 
 ```dart
 final ec = ReverseCurvedEffectController(0.5, Curves.bounceInOut);
@@ -714,8 +597,7 @@ final ec = ReverseCurvedEffectController(0.5, Curves.bounceInOut);
 
 ### `PauseEffectController`
 
-This effect controller keeps the progress at a constant value for the specified time duration.
-Typically, the `progress` would be either 0 or 1:
+这个效果控制器在指定的时间持续内保持进度在恒定值。通常，`progress` 会是 0 或者 1：
 
 ```dart
 final ec = PauseEffectController(1.5, progress: 0);
@@ -724,20 +606,18 @@ final ec = PauseEffectController(1.5, progress: 0);
 
 ### `RepeatedEffectController`
 
-This is a composite effect controller. It takes another effect controller as a child, and repeats
-it multiple times, resetting before the start of each next cycle.
+这是一个复合效果控制器。它将另一个效果控制器作为子控制器，并多次重复它，在每个下一个周期开始前重置。
 
 ```dart
 final ec = RepeatedEffectController(LinearEffectController(1), 10);
 ```
 
-The child effect controller cannot be infinite. If the child is random, then it will be
-re-initialized with new random values on each iteration.
+子效果控制器不能是无限的。如果子控制器是随机的，那么它将在每次迭代时用新的随机值重新初始化。
 
 
 ### `InfiniteEffectController`
 
-Similar to the `RepeatedEffectController`, but repeats its child controller indefinitely.
+与 `RepeatedEffectController` 类似，但它会无限期地重复其子控制器。
 
 ```dart
 final ec = InfiniteEffectController(LinearEffectController(1));
@@ -746,8 +626,7 @@ final ec = InfiniteEffectController(LinearEffectController(1));
 
 ### `SequenceEffectController`
 
-Executes a sequence of effect controllers, one after another. The list of controllers cannot be
-empty.
+按顺序一个接一个地执行一系列效果控制器。控制器列表不能为空。
 
 ```dart
 final ec = SequenceEffectController([
@@ -760,19 +639,12 @@ final ec = SequenceEffectController([
 
 ### `SpeedEffectController`
 
-Alters the duration of its child effect controller so that the effect proceeds at the predefined
-speed. The initial duration of the child EffectController is irrelevant. The child controller must
-be the subclass of `DurationEffectController`.
+改变其子效果控制器的持续时间，以便效果以预定义的速度进行。子 `EffectController` 的初始持续时间是不相关的。子控制器必须是 `DurationEffectController` 的子类。
 
-The `SpeedEffectController` can only be applied to effects for which the notion of speed is
-well-defined. Such effects must implement the `MeasurableEffect` interface. For example, the
-following effects qualify: [`MoveByEffect`](#movebyeffect), [`MoveToEffect`](#movetoeffect),
-[`MoveAlongPathEffect`](#movealongpatheffect), [`RotateEffect.by`](#rotateeffectby),
-[`RotateEffect.to`](#rotateeffectto).
+`SpeedEffectController` 只能应用于速度概念已明确定义的效果。这样的效果必须实现 `MeasurableEffect` 接口。
+例如，以下效果符合条件：[`MoveByEffect`](#movebyeffect)、[`MoveToEffect`](#movetoeffect)、[`MoveAlongPathEffect`](#movealongpatheffect)、[`RotateEffect.by`](#rotateeffectby)、[`RotateEffect.to`](#rotateeffectto)。
 
-The parameter `speed` is in units per second, where the notion of a "unit" depends on the target
-effect. For example, for move effects, they refer to the distance traveled; for rotation effects
-the units are radians.
+参数 `speed` 以单位每秒表示，其中“单位”的概念取决于目标效果。例如，对于移动效果，它们指的是旅行的距离；对于旋转效果，单位是弧度。
 
 ```dart
 final ec1 = SpeedEffectController(LinearEffectController(0), speed: 1);
@@ -782,9 +654,7 @@ final ec2 = EffectController(speed: 1); // same as ec1
 
 ### `DelayedEffectController`
 
-Effect controller that executes its child controller after the prescribed `delay`. While the
-controller is executing the "delay" stage, the effect will be considered "not started", i.e. its
-`.started` property will be returning `false`.
+效果控制器在指定的 `delay` 之后执行其子控制器。在控制器执行“延迟”阶段时，效果将被视为“未开始”，即其 `.started` 属性将返回 `false`。
 
 ```dart
 final ec = DelayedEffectController(LinearEffectController(1), delay: 5);
@@ -793,8 +663,7 @@ final ec = DelayedEffectController(LinearEffectController(1), delay: 5);
 
 ### `NoiseEffectController`
 
-This effect controller exhibits noisy behavior, i.e. it oscillates randomly around zero. Such effect
-controller can be used to implement a variety of shake effects.
+这个效果控制器表现出嘈杂的行为，即它在零点左右随机振荡。这种效果控制器可以用来实现各种震动效果。
 
 ```dart
 final ec = NoiseEffectController(duration: 0.6, frequency: 10);
@@ -803,9 +672,7 @@ final ec = NoiseEffectController(duration: 0.6, frequency: 10);
 
 ### `RandomEffectController`
 
-This controller wraps another controller and makes its duration random. The actual value for the
-duration is re-generated upon each reset, which makes this controller particularly useful within
-repeated contexts, such as [](#repeatedeffectcontroller) or [](#infiniteeffectcontroller).
+此控制器包装了另一个控制器，使其持续时间变为随机。每次重置时，持续时间的实际值将被重新生成，这使得该控制器在重复上下文中特别有用，例如在 [](#repeatedeffectcontroller) 或 [](#infiniteeffectcontroller) 中。
 
 ```dart
 final ec = RandomEffectController.uniform(
@@ -815,16 +682,13 @@ final ec = RandomEffectController.uniform(
 );
 ```
 
-The user has the ability to control which `Random` source to use, as well as the exact distribution
-of the produced random durations. Two distributions -- `.uniform` and `.exponential` are included,
-any other can be implemented by the user.
+用户有能力控制使用哪个 `Random` 源，以及控制生成的随机持续时间的确切分布。包括了两种分布——`.uniform` 和 `.exponential`，用户可以自己实现任何其他分布。
 
 
 ### `SineEffectController`
 
-An effect controller that represents a single period of the sine function. Use this to create
-natural-looking harmonic oscillations. Two perpendicular move effects governed by
-`SineEffectControllers` with different periods, will create a [Lissajous curve].
+一个代表正弦函数单个周期的效果控制器。使用这个来创建看起来自然的谐波振荡。
+两个由具有不同周期的 `SineEffectControllers` 控制的垂直移动效果，将创建一个[Lissajous curve](https://en.wikipedia.org/wiki/Lissajous_curve)。
 
 ```dart
 final ec = SineEffectController(period: 1);
@@ -833,17 +697,14 @@ final ec = SineEffectController(period: 1);
 
 ### `ZigzagEffectController`
 
-Simple alternating effect controller. Over the course of one `period`, this controller will proceed
-linearly from 0 to 1, then to -1, and then back to 0. Use this for oscillating effects where the
-starting position should be the center of the oscillations, rather than the extreme (as provided
-by the standard alternating `EffectController`).
+简单的交替效果控制器。在一个 `period` 的过程中，此控制器将从 0 线性进展到 1，然后到 -1，再回到 0。当起始位置应该是振荡的中心，而不是极端值时（如标准交替 `EffectController` 提供的），使用这种振荡效果。
 
 ```dart
 final ec = ZigzagEffectController(period: 2);
 ```
 
 
-## See also
+## 其他的
 
 - [Examples of various effects](https://examples.flame-engine.org/).
 

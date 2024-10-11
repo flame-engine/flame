@@ -1,20 +1,17 @@
 # Gesture Input
 
-This is documentation for gesture inputs attached directly on the game class, most of the time you
-want to detect input on your components instead, see for example the [TapCallbacks](tap_events.md)
-and [DragCallbacks](drag_events.md) for that.
+这是直接附加在游戏类上的手势输入文档，但大多数情况下，你可能希望在组件上检测输入，例如，请参见以下内容： [TapCallbacks](tap_events.md)
+和 [DragCallbacks](drag_events.md) .
 
-For other input documents, see also:
+有关其他输入文档，请参见：
 
-- [Keyboard Input](keyboard_input.md): for keystrokes
-- [Other Inputs](other_inputs.md): For joysticks, game pads, etc.
+- [Keyboard Input](keyboard_input.md): 用于按键输入的文档：
+- [Other Inputs](other_inputs.md): 用于摇杆、游戏手柄等的文档：
 
 
 ## Intro
 
-Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on
-your game class instance to be able to receive touch input events. Below you can see the full list
-of these `mixin`s and its methods:
+在 `package:flame/gestures.dart` 中，你可以找到一整套可以包含在你的游戏类实例中的 `mixin`，以便接收触摸输入事件。下面是这些 `mixin` 及其方法的完整列表：
 
 
 ## Touch and mouse detectors
@@ -89,7 +86,8 @@ of these `mixin`s and its methods:
   - onReceiveDrag
 ```
 
-Mouse only events
+仅限鼠标事件。
+
 
 ```text
  - MouseMovementDetector
@@ -99,12 +97,10 @@ Mouse only events
 ```
 
 
-It is not possible to mix advanced detectors (`MultiTouch*`) with basic detectors of the same
-kind, since the advanced detectors will *always win the gesture arena* and the basic detectors will
-never be triggered. So for example, you can't use both `MultiTouchTapDetector` and `PanDetector`
-together, since no events will be triggered for the latter (there is also an assertion for this).
+无法将高级检测器（`MultiTouch*`）与同类的基本检测器混合使用，因为高级检测器将 **始终赢得手势竞技场**，而基本检测器将永远不会被触发。
+例如，你不能同时使用 `MultiTouchTapDetector` 和 `PanDetector`，因为后者将不会触发任何事件（这里还有一个断言）。
 
-Flame's GestureApi is provided by Flutter's Gesture Widgets, including
+Flame的GestureApi由Flutter的Gesture Widgets提供，包括
 [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html),
 [RawGestureDetector widget](https://api.flutter.dev/flutter/widgets/RawGestureDetector-class.html)
 and [MouseRegion widget](https://api.flutter.dev/flutter/widgets/MouseRegion-class.html), you can
@@ -114,8 +110,7 @@ also read more about Flutter's gestures
 
 ## PanDetector and ScaleDetector
 
-If you add a `PanDetector` together with a `ScaleDetector` you will be prompted with a quite cryptic
-assertion from Flutter that says:
+如果你同时添加了 `PanDetector` 和 `ScaleDetector`，Flutter 会提示一个相当难以理解的断言：
 
 ```{note}
 Having both a pan gesture recognizer and a scale gesture recognizer is
@@ -124,12 +119,10 @@ redundant; scale is a superset of pan.
 Just use the scale gesture recognizer.
 ```
 
-This might seem strange, but `onScaleUpdate` is not only triggered when the scale should be changed,
-but for all pan/drag events too. So if you need to use both of those detectors you'll have to handle
-both of their logic inside `onScaleUpdate` (+`onScaleStart` and `onScaleEnd`).
+这可能看起来有些奇怪，但 `onScaleUpdate` 不仅在需要改变缩放时被触发，还会在所有的平移/拖动事件中触发。
+所以如果你需要同时使用这两种检测器，你将不得不在 `onScaleUpdate`（以及 `onScaleStart` 和 `onScaleEnd`）中处理它们的逻辑。
 
-For example you could do something like this if you want to move the camera on pan events and zoom
-on scale events:
+例如，如果你想在平移事件中移动相机，在缩放事件中进行缩放，你可以这样做：
 
 ```dart
   late double startZoom;
@@ -151,23 +144,21 @@ on scale events:
   }
 ```
 
-In the example above the pan events are handled with `info.delta` and the scale events with
-`info.scale`, although they are theoretically both from underlying scale events.
+在上述示例中，平移事件通过 `info.delta` 处理，而缩放事件通过 `info.scale` 处理，尽管它们理论上都来自底层的缩放事件。
 
-This can also be seen in the
+这也可以在
 [zoom example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/camera_and_viewport/zoom_example.dart).
 
 
 ## Mouse cursor
 
-It is also possible to change the current mouse cursor displayed on the `GameWidget` region. To do
-so the following code can be used inside the `Game` class
+也可以更改在 `GameWidget` 区域显示的当前鼠标光标。要实现这一点，可以在 `Game` 类中使用以下代码
 
 ```dart
 mouseCursor.value = SystemMouseCursors.move;
 ```
 
-To already initialize the `GameWidget` with a custom cursor, the `mouseCursor` property can be used
+要使用自定义光标初始化 `GameWidget`，可以使用 `mouseCursor` 属性
 
 ```dart
 GameWidget(
@@ -179,21 +170,18 @@ GameWidget(
 
 ## Event coordinate system
 
-On events that have positions, like for example `Tap*` or `Drag`, you will notice that the
-`eventPosition` attribute includes 2 fields: `global` and `widget`. Below you will find a brief
-explanation about each of them.
+在具有位置信息的事件上，比如 `Tap*` 或 `Drag`，你会注意到 `eventPosition` 属性包含两个字段：`global` 和 `widget`。下面你将找到关于它们的简要解释。
 
 
 ### global
 
-The position where the event occurred considering the entire screen, same as
-`globalPosition` in Flutter's native events.
+事件发生时考虑整个屏幕的位置，与 Flutter 原生事件中的 `globalPosition` 相同。
+
 
 
 ### widget
 
-The position where the event occurred relative to the `GameWidget` position and size, same as
-`localPosition` in Flutter's native events.
+事件发生时相对于 `GameWidget` 的位置和大小的位置，与 Flutter 原生事件中的 `localPosition` 相同。
 
 
 ## Example
@@ -216,24 +204,19 @@ class MyGame extends FlameGame with TapDetector {
 }
 ```
 
-You can also check more complete examples
+你也可以查看更完整的例子。
+
 [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/).
 
 
 ### GestureHitboxes
 
-The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
-`Component`s. Say that you have a fairly round rock as a `SpriteComponent` for example, then you
-don't want to register input that is in the corner of the image where the rock is not displayed,
-since a `PositionComponent` is rectangular by default. Then you can use the `GestureHitboxes` mixin
-to define a more accurate circle or polygon (or another shape) for which the input should be within
-for the event to be registered on your component.
+`GestureHitboxes` 混入用于更准确地识别位于你的 `Component`s 之上的手势。假设你有一个相当圆的石头作为 `SpriteComponent`，那么你就不想注册在图片角落的输入，因为石头并没有显示在那里，而 `PositionComponent` 默认是矩形的。然后你可以使用 `GestureHitboxes` 混入来定义一个更准确的圆形或多边形（或其他形状），输入应该在这个范围内，以便事件能在你的组件上注册。
 
-You can add new hitboxes to the component that has the `GestureHitboxes` mixin just like they are
-added in the below `Collidable` example.
+你可以像下面 `Collidable` 示例中添加新的命中框一样，向具有 `GestureHitboxes` 混入的组件添加新的命中框。
 
-More information about how to define hitboxes can be found in the hitbox section of the
+更多关于如何定义命中框的信息可以在命中框部分找到。
 [collision detection](../collision_detection.md#shapehitbox) docs.
 
-An example of how to use it can be seen
+如何使用的一些例子
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/gesture_hitboxes_example.dart).

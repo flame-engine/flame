@@ -1,17 +1,10 @@
 # Overlays
 
-Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
-widgets in your tree. However, if you want to easily show widgets on top of your Flame game, like
-messages, menu screens or something of that nature, you can use the Widgets Overlay API to make
-things even easier.
+由于 Flame 游戏可以被封装在一个小部件中，因此很容易将其与你的树中的其他 Flutter 小部件一起使用。然而，如果你想轻松地在 Flame 游戏顶部显示小部件，比如消息、菜单屏幕或类似的东西，你可以使用 Widgets Overlay API 来使事情变得更简单。
 
-`Game.overlays` enables any Flutter widget to be shown on top of a game instance. This makes it very
-easy to create things like a pause menu or an inventory screen for example.
+`Game.overlays` 允许任何 Flutter 小部件显示在游戏实例的顶部。这使得创建暂停菜单或库存屏幕等变得非常容易。
 
-The feature can be used via the `game.overlays.add` and `game.overlays.remove` methods that mark an
-overlay to be shown or hidden, respectively, via a `String` argument that identifies the overlay.
-After that, you can map each overlay to their corresponding Widget in your `GameWidget` declaration
-by providing an `overlayBuilderMap`.
+你可以通过 `game.overlays.add` 和 `game.overlays.remove` 方法使用这个特性，这两个方法分别通过一个 `String` 参数标识要显示或隐藏的覆盖层。之后，你可以通过提供一个 `overlayBuilderMap`，在 `GameWidget` 声明中将每个覆盖层映射到它们对应的小部件。
 
 ```dart
   // Inside your game:
@@ -39,7 +32,6 @@ Widget build(BuildContext context) {
 }
 ```
 
-The order of rendering for an overlay is determined by the order of the keys in the
-`overlayBuilderMap`.
+覆盖层的渲染顺序由 `overlayBuilderMap` 中的键的顺序决定。
 
-See an [example of the Overlays feature](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).
+查看 [覆盖层特性的示例](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart)。

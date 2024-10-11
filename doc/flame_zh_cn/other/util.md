@@ -1,58 +1,48 @@
 # Util
 
-On this page you can find documentation for some utility classes and methods.
+在此页面中，你可以找到一些实用类和方法的文档。
 
 
 ## Device Class
 
-This class can be accessed from `Flame.device` and it has some methods that can be used to control
-the state of the device, for instance you can change the screen orientation and set whether the
-application should be fullscreen or not.
+该类可以通过 `Flame.device` 访问，并提供了一些用于控制设备状态的方法，例如，可以更改屏幕方向以及设置应用是否全屏显示。
 
 
 ### `Flame.device.fullScreen()`
 
-When called, this disables all `SystemUiOverlay` making the app full screen.
-When called in the main method, it makes your app full screen (no top nor bottom bars).
+调用此方法时，将禁用所有 `SystemUiOverlay`，使应用全屏显示。当在主方法中调用时，它会使你的应用全屏（没有顶部或底部的工具栏）。
 
-**Note:** It has no effect when called on the web.
+**注意：** 在 Web 上调用此方法没有效果。
 
 
 ### `Flame.device.setLandscape()`
 
-This method sets the orientation of the whole application (effectively, also the game) to landscape
-and depending on operating system and device setting, should allow both left and right landscape
-orientations. To set the app orientation to landscape on a specific direction, use either
-`Flame.device.setLandscapeLeftOnly` or `Flame.device.setLandscapeRightOnly`.
+此方法将整个应用（实际上也包括游戏）的方向设置为横屏，并根据操作系统和设备设置，应该允许左右横屏方向。如果要将应用方向设置为特定方向的横屏，请使用 `Flame.device.setLandscapeLeftOnly` 或 `Flame.device.setLandscapeRightOnly`。
 
-**Note:** It has no effect when called on the web.
+**注意：** 在 Web 上调用此方法没有效果。
 
 
 ### `Flame.device.setPortrait()`
 
-This method sets the orientation of the whole application (effectively, also the game) to portrait
-and depending on operating system and device setting, it should allow for both up and down portrait
-orientations. To set the app orientation to portrait for a specific direction, use either
-`Flame.device.setPortraitUpOnly` or `Flame.device.setPortraitDownOnly`.
+此方法将整个应用（实际上也包括游戏）的方向设置为竖屏，并根据操作系统和设备设置，应该允许上下竖屏方向。
 
-**Note:** It has no effect when called on the web.
+如果要将应用方向设置为特定方向的竖屏，请使用 `Flame.device.setPortraitUpOnly` 或 `Flame.device.setPortraitDownOnly`。
+
+**注意：** 在 Web 上调用此方法没有效果。
 
 
 ### `Flame.device.setOrientation()` and `Flame.device.setOrientations()`
 
-If a finer control of the allowed orientations is required (without having to deal with
-`SystemChrome` directly), `setOrientation` (accepts a single `DeviceOrientation` as a parameter) and
-`setOrientations` (accepts a `List<DeviceOrientation>` for possible orientations) can be used.
+如果需要更细致地控制允许的方向（而不必直接处理 `SystemChrome`），可以使用 `setOrientation`（接受一个 `DeviceOrientation` 作为参数）和 `setOrientations`（接受一个 `List<DeviceOrientation>` 作为可能的方向）。
 
-**Note:** It has no effect when called on the web.
+**注意：** 在 Web 上调用此方法没有效果。
 
 
 ## Timer
 
-Flame provides a simple utility class to help you handle countdowns and timer state changes like
-events.
+Flame 提供了一个简单的实用类，帮助你处理倒计时和计时器状态变化，例如事件。
 
-Countdown example:
+倒计时示例：
 
 ```dart
 import 'package:flame/components.dart';
@@ -87,7 +77,7 @@ class MyGame extends Game {
 
 ```
 
-Interval example:
+间隔示例：
 
 ```dart
 import 'package:flame/components.dart';
@@ -124,9 +114,9 @@ class MyGame extends Game {
 
 ```
 
-`Timer` instances can also be used inside a `FlameGame` game by using the `TimerComponent` class.
+`Timer` 实例也可以通过使用 `TimerComponent` 类在 `FlameGame` 中使用。
 
-`TimerComponent` example:
+`TimerComponent` 示例：
 
 ```dart
 import 'package:flame/timer.dart';
@@ -149,23 +139,18 @@ class MyFlameGame extends FlameGame {
 
 ## Time Scale
 
-In many games it is often desirable to create  slow-motion or fast-forward effects based on some in
-game events. A very common approach to achieve these results is to manipulate the in game time or
-tick rate.
+在许多游戏中，基于某些游戏事件创建慢动作或快进效果通常是很有必要的。实现这些效果的一个非常常见的方法是操控游戏内的时间或滴答率（tick rate）。
 
-To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mixin can be attached
-to any Flame `Component` and exposes a simple get/set API for `timeScale`. The default value of
-`timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
-time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
-it tick at half the speed as compared to real life time. This mixin also provides `pause` and `resume`
-methods, which can be used instead of manually setting the timeScale to 0 and 1 respectively.
+为了简化这种操控，Flame 提供了一个 `HasTimeScale` 混入（mixin）。该混入可以附加到任何 Flame `Component`，并暴露一个简单的 `timeScale` 的获取/设置 API。
 
-Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
-so will allow controlling time scale for all the component of the game from a single place.
+`timeScale` 的默认值为 `1`，这意味着组件的游戏时间与现实生活中的时间以相同速度运行。
+
+将其设置为 `2` 将使组件的时间快两倍，而设置为 `0.5` 则使其以现实生活时间的一半速度运行。该混入还提供 `pause` 和 `resume` 方法，可以用来替代手动将 `timeScale` 设置为 `0` 和 `1`。
+
+由于 `FlameGame` 也是一个 `Component`，因此该混入也可以附加到 `FlameGame` 上。这样做将允许从一个地方控制游戏中所有组件的时间缩放。
 
 ```{note}
-HasTimeScale cannot control the movement of BodyComponent from flame_forge2d individually.
-It is only useful if the whole Game or Forge2DWorld is to be time scaled.
+`HasTimeScale` 无法单独控制来自 `flame_forge2d` 的 `BodyComponent` 的移动。只有在整个游戏或 `Forge2DWorld` 需要进行时间缩放时，它才会有用。
 ```
 
 ```{flutter-app}
@@ -194,158 +179,146 @@ class MyFlameGame extends FlameGame with HasTimeScale {
 
 ## Extensions
 
-Flame bundles a collection of utility extensions, these extensions are meant to help the developer
-with shortcuts and conversion methods, here you can find the summary of those extensions.
+Flame 包含了一组实用的扩展，这些扩展旨在帮助开发者提供快捷方式和转换方法，以下是这些扩展的总结。
 
-They can all be imported from `package:flame/extensions.dart`
+它们都可以从 `package:flame/extensions.dart` 导入。
 
 
 ### Canvas
 
-Methods:
+方法：
 
-- `scaleVector`: Just like `canvas scale` method, but takes a `Vector2` as an argument.
-- `translateVector`: Just like `canvas translate` method, but takes a `Vector2` as an argument.
-- `renderPoint`: renders a single point on the canvas (mostly for debugging purposes).
-- `renderAt` and `renderRotated`: if you are directly rendering to the `Canvas`, you can use these
-  functions to easily manipulate coordinates to render things on the correct places. They change the
-  `Canvas` transformation matrix but reset afterwards.
+- `scaleVector`：与 `canvas scale` 方法类似，但接受 `Vector2` 作为参数。
+- `translateVector`：与 `canvas translate` 方法类似，但接受 `Vector2` 作为参数。
+- `renderPoint`：在画布上渲染一个点（主要用于调试）。
+- `renderAt` 和 `renderRotated`：如果你直接渲染到 `Canvas`，可以使用这些函数轻松操作坐标，以便在正确的位置渲染内容。它们会更改 `Canvas` 的变换矩阵，但在之后会重置。
 
 
 ### Color
 
-Methods:
+方法：
 
-- `darken`: Darken the shade of the color by an amount between 0 to 1.
-- `brighten`: Brighten the shade of the color by an amount between 0 to 1.
+- `darken`：将颜色的阴影变暗，范围在 0 到 1 之间。
+- `brighten`：将颜色的阴影变亮，范围在 0 到 1 之间。
 
-Factories:
+工厂：
 
-- `ColorExtension.fromRGBHexString`: Parses an RGB color from a valid hex string (e.g. #1C1C1C).
-- `ColorExtension.fromARGBHexString`: Parses an ARGB color from a valid hex string (e.g. #FF1C1C1C).
+- `ColorExtension.fromRGBHexString`：从有效的十六进制字符串解析 RGB 颜色（例如 #1C1C1C）。
+- `ColorExtension.fromARGBHexString`：从有效的十六进制字符串解析 ARGB 颜色（例如 #FF1C1C1C）。
 
 
 ### Image
 
-Methods:
+方法：
 
-- `pixelsInUint8`: Retrieves the pixel data as a `Uint8List`, in the `ImageByteFormat.rawRgba`
- pixel format, for the image.
-- `getBoundingRect`: Get the bounding rectangle of the `Image` as a `Rect`.
-- `size`: The size of an `Image` as `Vector2`.
-- `darken`: Darken each pixel of the `Image` by an amount between 0 to 1.
-- `brighten`: Brighten each pixel of the `Image` by an amount between 0 to 1.
-
+- `pixelsInUint8`：以 `Uint8List` 的形式检索图像的像素数据，格式为 `ImageByteFormat.rawRgba`。
+- `getBoundingRect`：获取 `Image` 的边界矩形，返回 `Rect`。
+- `size`：返回 `Image` 的大小，类型为 `Vector2`。
+- `darken`：将图像的每个像素变暗，范围在 0 到 1 之间。
+- `brighten`：将图像的每个像素变亮，范围在 0 到 1 之间。
 
 ### Offset
 
-Methods;
+方法：
 
-- `toVector2`; Creates an `Vector2` from the `Offset`.
-- `toSize`: Creates a `Size` from the `Offset`.
-- `toPoint`: Creates a `Point` from the `Offset`.
-- `toRect`: Creates a `Rect` starting in (0,0) and its bottom right corner is the [Offset].
+- `toVector2`：从 `Offset` 创建一个 `Vector2`。
+- `toSize`：从 `Offset` 创建一个 `Size`。
+- `toPoint`：从 `Offset` 创建一个 `Point`。
+- `toRect`：创建一个以 (0,0) 为起点的 `Rect`，其右下角为给定的 `Offset`。
 
 
 ### Rect
 
-Methods:
+方法：
 
-- `toOffset`: Creates an `Offset` from the `Rect`.
-- `toVector2`: Creates a `Vector2` starting in (0,0) and goes to the size of the `Rect`.
-- `containsPoint` Whether this `Rect` contains a `Vector2` point or not.
-- `intersectsSegment`; Whether the segment formed by two `Vector2`s intersects this `Rect`.
-- `intersectsLineSegment`: Whether the `LineSegment` intersects the `Rect`.
-- `toVertices`: Turns the four corners of the `Rect` into a list of `Vector2`.
-- `toFlameRectangle`: Converts this `Rect` into a Flame `Rectangle`.
-- `toMathRectangle`: Converts this `Rect` into a `math.Rectangle`.
-- `toGeometryRectangle`: Converts this `Rect` into a `Rectangle` from flame-geom.
-- `transform`: Transforms the `Rect` using a `Matrix4`.
+- `toOffset`：从 `Rect` 创建一个 `Offset`。
+- `toVector2`：创建一个从 (0,0) 开始并延伸到 `Rect` 大小的 `Vector2`。
+- `containsPoint`：判断该 `Rect` 是否包含一个 `Vector2` 点。
+- `intersectsSegment`：判断由两个 `Vector2` 形成的线段是否与该 `Rect` 相交。
+- `intersectsLineSegment`：判断 `LineSegment` 是否与该 `Rect` 相交。
+- `toVertices`：将 `Rect` 的四个角转化为 `Vector2` 列表。
+- `toFlameRectangle`：将该 `Rect` 转换为 Flame 的 `Rectangle`。
+- `toMathRectangle`：将该 `Rect` 转换为 `math.Rectangle`。
+- `toGeometryRectangle`：将该 `Rect` 转换为来自 flame-geom 的 `Rectangle`。
+- `transform`：使用 `Matrix4` 转换 `Rect`。
 
 Factories:
 
-- `RectExtension.getBounds`: Construct a `Rect` that represents the bounds of a list of `Vector2`s.
-- `RectExtension.fromCenter`: Construct a `Rect` from a center point (using `Vector2`).
+- `RectExtension.getBounds`：构造一个 `Rect`，表示一组 `Vector2` 的边界。
+- `RectExtension.fromCenter`：从中心点（使用 `Vector2`）构造一个 `Rect`。
 
 
 ### math.Rectangle
 
 Methods:
 
-- `toRect`: Converts this math `Rectangle` into an ui `Rect`.
+- `toRect`：将此数学 `Rectangle` 转换为 UI `Rect`。
 
 
 ### Size
 
 Methods:
 
-- `toVector2`; Creates an `Vector2` from the `Size`.
-- `toOffset`: Creates a `Offset` from the `Size`.
-- `toPoint`: Creates a `Point` from the `Size`.
-- `toRect`: Creates a `Rect` starting in (0,0) with the size of `Size`.
+- `toVector2`：从 `Size` 创建一个 `Vector2`。
+- `toOffset`：从 `Size` 创建一个 `Offset`。
+- `toPoint`：从 `Size` 创建一个 `Point`。
+- `toRect`：创建一个以 (0,0) 为起点，大小为 `Size` 的 `Rect`。
 
 
 ### Vector2
 
-This class comes from the `vector_math` package and we have some useful extension methods on top of
-what is offered by that package.
+该类来自 `vector_math` 包，我们在该包提供的基础上添加了一些有用的扩展方法。
 
 Methods:
 
-- `toOffset`: Creates a `Offset` from the `Vector2`.
-- `toPoint`: Creates a `Point` from the `Vector2`.
-- `toRect`: Creates a `Rect` starting in (0,0) with the size of `Vector2`.
-- `toPositionedRect`: Creates a `Rect` starting from [x, y] in the `Vector2` and has the size of
-  the `Vector2` argument.
-- `lerp`: Linearly interpolates the `Vector2` towards another Vector2.
-- `rotate`: Rotates the `Vector2` with an angle specified in radians, it rotates around the
-  optionally defined `Vector2`, otherwise around the center.
-- `scaleTo`: Changes the length of the `Vector2` to the length provided, without changing
-  direction.
-- `moveToTarget`: Smoothly moves a Vector2 in the target direction by a given distance.
+- `toOffset`：从 `Vector2` 创建一个 `Offset`。
+- `toPoint`：从 `Vector2` 创建一个 `Point`。
+- `toRect`：创建一个以 (0,0) 为起点，大小为 `Vector2` 的 `Rect`。
+- `toPositionedRect`：创建一个以 `Vector2` 中的 [x, y] 为起点，大小为 `Vector2` 参数的 `Rect`。
+- `lerp`：将 `Vector2` 线性插值到另一个 `Vector2`。
+- `rotate`：按弧度指定的角度旋转 `Vector2`，可选择围绕定义的 `Vector2` 旋转，否则围绕中心旋转。
+- `scaleTo`：将 `Vector2` 的长度更改为提供的长度，而不改变方向。
+- `moveToTarget`：以给定距离平滑移动 `Vector2` 朝目标方向。
 
 Factories:
 
-- `Vector2Extension.fromInts`: Create a `Vector2` with ints as input.
+- `Vector2Extension.fromInts`：使用整数作为输入创建一个 `Vector2`。
 
 Operators:
 
-- `&`: Combines two `Vector2`s to form a Rect, the origin should be on the left and the size on the
-  right.
-- `%`: Modulo/Remainder of x and y separately of two `Vector2`s.
+- `&`：将两个 `Vector2` 组合成一个 `Rect`，左侧为原点，右侧为大小。
+- `%`：对两个 `Vector2` 的 x 和 y 分别进行取模/余数运算。
 
 
 ### Matrix4
 
-This class comes from the `vector_math` package. We have created a few extension methods on top
-of what is already offered by `vector_math`.
+该类来自 `vector_math` 包。我们在 `vector_math` 提供的基础上创建了一些扩展方法。
 
-Methods:
+方法：
 
-- `translate2`: Translate the `Matrix4` by the given `Vector2`.
-- `transform2`: Create a new `Vector2` by transforming the given `Vector2` using the `Matrix4`.
-- `transformed2`: Transform the input `Vector2` into the output `Vector2`.
+- `translate2`：通过给定的 `Vector2` 平移 `Matrix4`。
+- `transform2`：通过使用 `Matrix4` 变换给定的 `Vector2` 创建一个新的 `Vector2`。
+- `transformed2`：将输入的 `Vector2` 转换为输出的 `Vector2`。
 
-Getters:
+获取器：
 
-- `m11`: The first row and first column.
-- `m12`: The first row and second column.
-- `m13`: The first row and third column.
-- `m14`: The first row and fourth column.
-- `m21`: The second row and first column.
-- `m22`: The second row and second column.
-- `m23`: The second row and third column.
-- `m24`: The second row and fourth column.
-- `m31`: The third row and first column.
-- `m32`: The third row and second column.
-- `m33`: The third row and third column.
-- `m34`: The third row and fourth column.
-- `m41`: The fourth row and first column.
-- `m42`: The fourth row and second column.
-- `m43`: The fourth row and third column.
-- `m44`: The fourth row and fourth column.
+- `m11`：第一行第一列。
+- `m12`：第一行第二列。
+- `m13`：第一行第三列。
+- `m14`：第一行第四列。
+- `m21`：第二行第一列。
+- `m22`：第二行第二列。
+- `m23`：第二行第三列。
+- `m24`：第二行第四列。
+- `m31`：第三行第一列。
+- `m32`：第三行第二列。
+- `m33`：第三行第三列。
+- `m34`：第三行第四列。
+- `m41`：第四行第一列。
+- `m42`：第四行第二列。
+- `m43`：第四行第三列。
+- `m44`：第四行第四列。
 
-Factories:
+工厂：
 
-- `Matrix4Extension.scale`: Create a scaled `Matrix4`. Either by passing a `Vector4` or `Vector2`
-   as it's first argument, or by passing x y z doubles.
+- `Matrix4Extension.scale`：创建一个缩放的 `Matrix4`。可以通过将 `Vector4` 或 `Vector2` 作为第一个参数传递，或者通过传递 x、y、z 的 `double` 值来实现。

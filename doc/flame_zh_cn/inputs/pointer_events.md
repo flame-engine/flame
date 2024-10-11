@@ -1,16 +1,14 @@
 # Pointer Events
 
 ```{note}
-This document describes the new events API. The old (legacy) approach,
-which is still supported, is described in [](gesture_input.md).
+本文档描述了新的事件API。旧的（遗留）方法仍然得到支持，详见 [](gesture_input.md).
 ```
 
-**Pointer events** are Flutter's generalized "mouse-movement"-type events (for desktop or web).
+**指针事件** 是 Flutter 中通用的“鼠标移动”类型事件（适用于桌面或网络）。
 
-If you want to interact with mouse movement events within your component or game, you can use the
-`PointerMoveCallbacks` mixin.
+如果你想在组件或游戏中与鼠标移动事件交互，可以使用 `PointerMoveCallbacks` 混入。
 
-For example:
+🌰:
 
 ```dart
 class MyComponent extends PositionComponent with PointerMoveCallbacks {
@@ -23,29 +21,23 @@ class MyComponent extends PositionComponent with PointerMoveCallbacks {
 }
 ```
 
-The mixin adds two overridable methods to your component:
+这个混入为你的组件添加了两个可覆盖的方法：
 
-- `onPointerMove`: called when the mouse moves within the component
-- `onPointerMoveStop`: called once if the component was being hovered and the mouse leaves
+- `onPointerMove`：当鼠标在组件内移动时调用
+- `onPointerMoveStop`：如果组件正在被悬停，并且鼠标离开时，会调用一次
 
-By default, each of these methods does nothing, they need to be overridden in order to perform any
-function.
+默认情况下，这些方法什么也不做，需要被覆盖以便执行任何功能。
 
-In addition, the component must implement the `containsLocalPoint()` method (already implemented in
-`PositionComponent`, so most of the time you don't need to do anything here) -- this method allows
-Flame to know whether the event occurred within the component or not.
+此外，组件必须实现 `containsLocalPoint()` 方法（在 `PositionComponent` 中已经实现，所以大多数情况下你不需要在这里做任何事情）——这个方法让 Flame 知道事件是否发生在组件内。
 
-Note that only mouse events happening within your component will be proxied along. However,
-`onPointerMoveStop` will be fired once on the first mouse movement that leaves your component, so
-you can handle any exit conditions there.
+请注意，只有在你的组件内发生的鼠标事件才会被代理。然而，`onPointerMoveStop` 会在第一次鼠标移动离开你的组件时触发一次，所以你可以在其中处理任何退出条件。
 
 
 ## HoverCallbacks
 
-If you want to specifically know if your component is being hovered or not, or if you want to hook
-into hover enter and exist events, you can use a more dedicated mixin called `HoverCallbacks`.
+如果你想特别知道组件是否正在被悬停，或者如果你想挂钩悬停进入和退出事件，你可以使用一个更专门的混入，叫做 `HoverCallbacks`。
 
-For example:
+例如：
 
 ```dart
 class MyComponent extends PositionComponent with HoverCallbacks {
@@ -69,13 +61,12 @@ class MyComponent extends PositionComponent with HoverCallbacks {
 }
 ```
 
-Note that you can still listen to the "raw" onPointerMove methods for additional functionality, just
-make sure to call the `super` version to enable the `HoverCallbacks` behavior.
+请注意，你仍然可以监听“原始”的 `onPointerMove` 方法以获得额外的功能，只是确保调用 `super` 版本以启用 `HoverCallbacks` 行为。
 
 
 ### Demo
 
-Play with the demo below to see the pointer hover events in action.
+尝试下面的演示，查看指针悬停事件的实际效果。
 
 ```{flutter-app}
 :sources: ../flame/examples
