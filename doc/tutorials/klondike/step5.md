@@ -438,35 +438,16 @@ Let’s dive in! When the game starts, we’ll create a new “World” called `
   scratch, keeping the game fresh.
 
 
-#### Transitioning from `KlondikeGame` to `KlondikeWorld`
+### Transitioning from `KlondikeGame` to `KlondikeWorld`
 
-Previously, `KlondikeGame` managed all `Piles` and `Cards`. However, in step 5, we move this responsibility
- to `KlondikeWorld` for better separation. As a result, the `onLoad()` method is transferred from `KlondikeGame`
-  to `KlondikeWorld`. This change makes the code easier to manage and aligns with object-oriented programming
-   principles.
 
+Previously, `KlondikeGame` managed all `Piles` and `Cards`. However, in step 5, we move this responsibility to 
+`KlondikeWorld` for better separation of concerns and cleaner code organization. This change improves the 
+structure by adhering to object-oriented programming principles, allowing for more modular and maintainable code.
 
 #### Updating the `KlondikeGame` Class
 
-First, we need to modify `KlondikeGame` to use `KlondikeWorld` instead of Flame’s default `World`:
-
-```dart
-class KlondikeGame extends FlameGame<KlondikeWorld> {
-   KlondikeGame() : super(world: KlondikeWorld());
-
-   // No need for the onLoad() method here anymore
-}
-
-
-#### what properties?
-
-
-#### what actions we should implement at this class
-
-
-### A stripped-down KlondikeGame class
-
-Here is the new code for the KlondikeGame class (what is left of it).
+Now, we modify the `KlondikeGame` class to utilize `KlondikeWorld` instead of Flame's default `World`. Here’s the new structure:
 
 ```dart
 enum Action { newDeal, sameDeal, changeDraw, haveFun }
@@ -486,27 +467,28 @@ class KlondikeGame extends FlameGame<KlondikeWorld> {
   );
 
   // Constant used when creating Random seed.
-  static const int maxInt = 0xFFFFFFFE; // = (2 to the power 32) - 1
+  static const int maxInt = 0xFFFFFFFE;
 
-  // This KlondikeGame constructor also initiates the first KlondikeWorld.
+  // Constructor initiates the first KlondikeWorld.
   KlondikeGame() : super(world: KlondikeWorld());
 
-  // These three values persist between games and are starting conditions
-  // for the next game to be played in KlondikeWorld. The actual seed is
-  // computed in KlondikeWorld but is held here in case the player chooses
-  // to replay a game by selecting Action.sameDeal.
+  // These values persist between games and are used as starting conditions
+  // for the next game in KlondikeWorld.
   int klondikeDraw = 1;
   int seed = 1;
   Action action = Action.newDeal;
 }
 ```
 
-Huh! What happened to the `onLoad()` method? And what's this `seed` thing? And how does
-KlondikeWorld get into the act? Well, everything that used to be in the `onLoad()` method is now
-in the `onLoad()` method of KlondikeWorld, which is an extension of the `World` class and is a type
-of `Component`, so it can have an `onLoad()` method, as can any `Component` type. The content of
-the method is much the same as before, except that `world.add(` becomes just `add(`. It also brings
-in some `addButton()` references, but more on these later.
+#### Explanation of Changes
+
+Ohhh, so what happened to the `onLoad()` method? Well, previously, `KlondikeGame` handled everything in the `onLoad()` method, managing all the game components like `Piles` and `Cards`. But now, to make things cleaner and more organized, we’ve moved that responsibility over to `KlondikeWorld`. 
+
+Everything that used to be inside the `onLoad()` method of `KlondikeGame` is now in `KlondikeWorld`'s `onLoad()` method. This keeps the code more modular, meaning it's easier to maintain and update. Instead of `KlondikeGame` getting messy with too many tasks, we let `KlondikeWorld` handle the game setup and logic.
+
+And what’s this `seed` thing? Ah, good question! So, the `seed` attribute is like a magic key. It lets you replay the same game configuration by selecting `Action.sameDeal`. This is super useful when you want to give players the option to retry the exact same game setup. The `seed` ensures that the randomness in the game (like card shuffling) can be repeated exactly the same way. Think of it as a way to recreate the same starting point in a game.
+
+So, with the `seed` safely stored in `KlondikeGame`, the `KlondikeWorld` can use it to keep everything consistent between rounds. If you choose `Action.sameDeal`, it will load the same shuffled deck and game state, letting you replay that round with the same starting conditions. Pretty cool, right?
 
 
 ### Using a Random Number Generator seed
@@ -515,21 +497,6 @@ The `seed` is a common games-programming technique in any programming environmen
 you to start a Random Number Generator from a known point (called the seed) and give your game
 reproducible behavior when you are in the development and testing stage. Here it is used to
 provide exactly the same deal of the Klondike cards when the player requests `Same deal`.
-
-
-### Introducing the new KlondikeWorld class
-
-The `class KlondikeGame` declaration specifies that this extension of the FlameGame class must
-have a world of type KlondikeWorld (i.e. `FlameGame<KlondikeWorld>`). Didn't know we could do
-that for a game, did we? So how does the first instance of KlondikeWorld get created? It's all in
-the KlondikeGame constructor code:
-
-```dart
-  KlondikeGame() : super(world: KlondikeWorld());
-```
-
-The constructor itself is a default constructor, but the colon `:` begins a constructor
-initialization sequence which creates our world for the first time.
 
 
 ### Buttons
