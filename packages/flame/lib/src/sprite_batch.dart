@@ -277,9 +277,7 @@ class SpriteBatch {
 
     _sources[index] = newBatchItem.source;
     _transforms[index] = newBatchItem.transform;
-    if (color != null) {
-      _colors[index] = color;
-    }
+    _colors[index] = color ?? _defaultColor;
   }
 
   /// Add a new batch item using a RSTransform.
@@ -418,7 +416,10 @@ class SpriteBatch {
         atlas,
         _transforms,
         _sources,
-        _colors.isEmpty ? _transforms.map((_) => _white).toList() : _colors,
+        _colors.isEmpty
+            ? null
+            // ? _transforms.map((_) => _defaultColor).toList()
+            : _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
         renderPaint,
@@ -442,5 +443,5 @@ class SpriteBatch {
     }
   }
 
-  static const _white = Color(0xFFFFFFFF);
+  static const _defaultColor = Color(0xFF000000);
 }
