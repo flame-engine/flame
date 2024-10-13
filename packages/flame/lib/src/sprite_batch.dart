@@ -326,9 +326,7 @@ class SpriteBatch {
           : batchItem.source,
     );
     _transforms.add(batchItem.transform);
-    if (color != null) {
-      _colors.add(color);
-    }
+    _colors.add(color ?? _defaultColor);
   }
 
   /// Add a new batch item.
@@ -416,7 +414,7 @@ class SpriteBatch {
         atlas,
         _transforms,
         _sources,
-        _colors.isEmpty ? null : _colors,
+        _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
         renderPaint,
