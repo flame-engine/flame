@@ -414,7 +414,7 @@ class SpriteBatch {
         atlas,
         _transforms,
         _sources,
-        _colors,
+        _colors.every((c) => c == _defaultColor) ? null : _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
         renderPaint,
