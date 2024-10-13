@@ -277,9 +277,7 @@ class SpriteBatch {
 
     _sources[index] = newBatchItem.source;
     _transforms[index] = newBatchItem.transform;
-    if (color != null) {
-      _colors[index] = color;
-    }
+    _colors[index] = color ?? _defaultColor;
   }
 
   /// Add a new batch item using a RSTransform.
@@ -328,9 +326,7 @@ class SpriteBatch {
           : batchItem.source,
     );
     _transforms.add(batchItem.transform);
-    if (color != null) {
-      _colors.add(color);
-    }
+    _colors.add(color ?? _defaultColor);
   }
 
   /// Add a new batch item.
@@ -413,13 +409,19 @@ class SpriteBatch {
 
     final renderPaint = paint ?? _emptyPaint;
 
+    final hasNoColors = _colors.every((c) => c == _defaultColor);
+    final actualBlendMode = blendMode ?? defaultBlendMode;
+    if (!hasNoColors && actualBlendMode == null) {
+      throw 'When setting any colors, a blend mode must be provided.';
+    }
+
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
         _transforms,
         _sources,
-        _colors.isEmpty ? null : _colors,
-        blendMode ?? defaultBlendMode,
+        hasNoColors ? null : _colors,
+        actualBlendMode,
         cullRect,
         renderPaint,
       );
@@ -441,4 +443,6 @@ class SpriteBatch {
       }
     }
   }
+
+  static const _defaultColor = Color(0x00000000);
 }
