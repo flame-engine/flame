@@ -418,7 +418,7 @@ class SpriteBatch {
         atlas,
         _transforms,
         _sources,
-        _colors.isEmpty ? null : _colors,
+        _colors.isEmpty ? _transforms.map((_) => _white).toList() : _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
         renderPaint,
@@ -441,4 +441,6 @@ class SpriteBatch {
       }
     }
   }
+
+  static const _white = Color(0xFFFFFFFF);
 }
