@@ -54,7 +54,7 @@ scripts:
     description: Run dartdoc checks for all packages.
 
   doc-setup:
-    run: scripts/doc-setup.sh
+    run: ./scripts/doc-setup.sh
     description: Prepares the environment for documentation development.
 
   doc-build:
