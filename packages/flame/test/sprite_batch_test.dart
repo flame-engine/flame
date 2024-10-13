@@ -1,9 +1,13 @@
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '_resources/load_image.dart';
 
 class _MockImage extends Mock implements Image {}
 
@@ -56,5 +60,34 @@ void main() {
             .having((t) => t.ty, 'ty', 1),
       );
     });
+
+    testGolden(
+      'can render a batch',
+      (game) async {
+        final spriteSheet = await loadImage('boom.png');
+        final spriteBatch = SpriteBatch(spriteSheet);
+
+        const source = Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128);
+
+        spriteBatch.add(
+          source: source,
+          color: Colors.redAccent,
+        );
+
+        spriteBatch.add(
+          source: source,
+          offset: Vector2(100, 0),
+        );
+
+        game.add(
+          SpriteBatchComponent(
+            spriteBatch: spriteBatch,
+            blendMode: BlendMode.srcOver,
+          ),
+        );
+      },
+      size: Vector2(300, 200),
+      goldenFile: '_goldens/sprite_batch_test.png',
+    );
   });
 }
