@@ -416,10 +416,7 @@ class SpriteBatch {
         atlas,
         _transforms,
         _sources,
-        _colors.isEmpty
-            ? null
-            // ? _transforms.map((_) => _defaultColor).toList()
-            : _colors,
+        _colors.isEmpty ? null : _colors,
         blendMode ?? defaultBlendMode,
         cullRect,
         renderPaint,
