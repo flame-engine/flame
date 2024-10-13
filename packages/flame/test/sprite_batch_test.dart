@@ -61,22 +61,26 @@ void main() {
       );
     });
 
+    const margin = 2.0;
+    const tileSize = 6.0;
+
     testGolden(
-      'can render a batch',
+      'can render a batch with blend mode',
       (game) async {
-        final spriteSheet = await loadImage('boom.png');
+        final spriteSheet = await loadImage('alphabet.png');
         final spriteBatch = SpriteBatch(spriteSheet);
 
-        const source = Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128);
+        const source = Rect.fromLTWH(3 * tileSize, 0, tileSize, tileSize);
 
         spriteBatch.add(
           source: source,
           color: Colors.redAccent,
+          offset: Vector2.all(margin),
         );
 
         spriteBatch.add(
           source: source,
-          offset: Vector2(100, 0),
+          offset: Vector2(2 * margin + tileSize, margin),
         );
 
         game.add(
@@ -86,8 +90,38 @@ void main() {
           ),
         );
       },
-      size: Vector2(300, 200),
-      goldenFile: '_goldens/sprite_batch_test.png',
+      size: Vector2(3 * margin + 2 * tileSize, 2 * margin + tileSize),
+      backgroundColor: const Color(0xFFFFFFFF),
+      goldenFile: '_goldens/sprite_batch_test_1.png',
+    );
+
+    testGolden(
+      'can render a batch without blend mode',
+      (game) async {
+        final spriteSheet = await loadImage('alphabet.png');
+        final spriteBatch = SpriteBatch(spriteSheet);
+
+        const source = Rect.fromLTWH(3 * tileSize, 0, tileSize, tileSize);
+
+        spriteBatch.add(
+          source: source,
+          offset: Vector2.all(margin),
+        );
+
+        spriteBatch.add(
+          source: source,
+          offset: Vector2(2 * margin + tileSize, margin),
+        );
+
+        game.add(
+          SpriteBatchComponent(
+            spriteBatch: spriteBatch,
+          ),
+        );
+      },
+      size: Vector2(3 * margin + 2 * tileSize, 2 * margin + tileSize),
+      backgroundColor: const Color(0xFFFFFFFF),
+      goldenFile: '_goldens/sprite_batch_test_2.png',
     );
   });
 }
