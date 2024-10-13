@@ -166,5 +166,58 @@ void main() {
       await game.ready();
       expect(world.children.length, 2);
     });
+
+    testWithFlameGame(
+      'Does not spawns right away when spawnWhenLoaded is false (default)',
+      (game) async {
+        final random = Random(0);
+        final shape = Rectangle.fromCenter(
+          center: Vector2(100, 200),
+          size: Vector2.all(200),
+        );
+        final spawn = SpawnComponent(
+          factory: (_) => PositionComponent(),
+          period: 1,
+          area: shape,
+          random: random,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+        expect(world.children.whereType<PositionComponent>(), isEmpty);
+        game.update(1.5);
+        await game.ready();
+        expect(
+          world.children.whereType<PositionComponent>(),
+          hasLength(1),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'Spawns right away when spawnWhenLoaded is true',
+      (game) async {
+        final random = Random(0);
+        final shape = Rectangle.fromCenter(
+          center: Vector2(100, 200),
+          size: Vector2.all(200),
+        );
+        final spawn = SpawnComponent(
+          factory: (_) => PositionComponent(),
+          period: 1,
+          area: shape,
+          random: random,
+          spawnWhenLoaded: true,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+        expect(world.children.whereType<PositionComponent>(), hasLength(1));
+        game.update(1.5);
+        await game.ready();
+        expect(
+          world.children.whereType<PositionComponent>(),
+          hasLength(2),
+        );
+      },
+    );
   });
 }
