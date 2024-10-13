@@ -1,13 +1,12 @@
 import 'package:flame/sprite.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'sprite_animation_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 void main() {
   group('SpriteAnimationTicker', () {
     test('onStart called for single-frame animation', () {
       var counter = 0;
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
               .createTicker()
@@ -22,7 +21,7 @@ void main() {
 
     test('onComplete called for single-frame animation', () {
       var counter = 0;
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
               .createTicker()
@@ -42,7 +41,7 @@ void main() {
       var timePassed = 0.0;
       const dt = 0.03;
       var timesCalled = 0;
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final spriteList = [sprite, sprite, sprite];
       final animationTicker =
           SpriteAnimation.spriteList(spriteList, stepTime: 1, loop: false)
@@ -62,7 +61,7 @@ void main() {
       var animationStarted = false;
       var animationRunning = false;
       var animationComplete = false;
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1, loop: false)
               .createTicker();
@@ -89,7 +88,7 @@ void main() {
     });
 
     test('completed completes', () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
         stepTime: 1,
@@ -102,7 +101,7 @@ void main() {
     });
 
     test('completed completes when the animation has already completed', () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
         stepTime: 1,
@@ -115,7 +114,7 @@ void main() {
 
     test("completed doesn't complete when the animation is yet to complete",
         () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
         stepTime: 1,
@@ -126,7 +125,7 @@ void main() {
     });
 
     test("completed doesn't complete when animation is looping", () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker =
           SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
 
@@ -136,7 +135,7 @@ void main() {
     test(
       "completed doesn't complete when animation is looping and on last frame",
       () {
-        final sprite = MockSprite();
+        final sprite = _MockSprite();
         final animationTicker =
             SpriteAnimation.spriteList([sprite], stepTime: 1).createTicker();
 
@@ -146,7 +145,7 @@ void main() {
     );
 
     test("completed doesn't complete after the animation is reset", () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite],
         stepTime: 1,
@@ -163,7 +162,7 @@ void main() {
     });
 
     test('paused pauses ticket', () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       final animationTicker = SpriteAnimation.spriteList(
         [sprite, sprite],
         stepTime: 1,
@@ -184,3 +183,5 @@ void main() {
     });
   });
 }
+
+class _MockSprite extends Mock implements Sprite {}

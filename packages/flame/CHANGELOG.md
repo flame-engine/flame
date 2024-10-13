@@ -1,3 +1,57 @@
+## 1.20.0
+
+ - **FIX**: SpriteButtonComponent to initialize sprites in `onLoad` ([#3302](https://github.com/flame-engine/flame/issues/3302)). ([1204216c](https://github.com/flame-engine/flame/commit/1204216cb227d3831b546a54818075065fa7beec))
+ - **FIX**: ViewportAwareBounds component and lifecycle issues ([#3276](https://github.com/flame-engine/flame/issues/3276)). ([026bf41f](https://github.com/flame-engine/flame/commit/026bf41f020de66ae9adfcdda9209bfbb75cf60c))
+ - **FEAT**: Add ComponentTreeRoot.lifecycleEventsProcessed future ([#3308](https://github.com/flame-engine/flame/issues/3308)). ([ebc47418](https://github.com/flame-engine/flame/commit/ebc474189ceb587bcdebef7d3645ed2f3b3dba6f))
+ - **FEAT**: Adding paint attribute to SpriteWidget and SpriteAnimationWidget ([#3298](https://github.com/flame-engine/flame/issues/3298)). ([a5338d0c](https://github.com/flame-engine/flame/commit/a5338d0c20d01bbe461c6d7fed5951d11e1c76f0))
+ - **FEAT**: Adding tickOnLoad to TimerComponent ([#3285](https://github.com/flame-engine/flame/issues/3285)). ([0113aa37](https://github.com/flame-engine/flame/commit/0113aa376145109079a89bd310b9e528631ce9d4))
+ - **DOCS**: Include information about the Flame DevTools extension in example readme ([#3288](https://github.com/flame-engine/flame/issues/3288)). ([76a9abaf](https://github.com/flame-engine/flame/commit/76a9abaf3c70659323e02bf7b6531b4fbba1f7a2))
+
+## 1.19.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Use a temp vector for delta calculations of `FollowBehavior` ([#3230](https://github.com/flame-engine/flame/issues/3230)). ([524793d4](https://github.com/flame-engine/flame/commit/524793d4a0dbe384d42fb9f844685b85abb05574))
+ - **FIX**: Add assertion when trying to set "current" that doesn't exist ([#3258](https://github.com/flame-engine/flame/issues/3258)). ([267d6801](https://github.com/flame-engine/flame/commit/267d6801cb7e6cbbaa450e24e38aaa7d8fcfc03f))
+ - **FIX**: Update version of lints to comply with new pub requirements ([#3223](https://github.com/flame-engine/flame/issues/3223)). ([1b0bee72](https://github.com/flame-engine/flame/commit/1b0bee726b5937f73d4be5e304bc8780aa3ca6f0))
+ - **FIX**: Replace CurvedParticle inheritance with Particle in ScaledParticle ([#3221](https://github.com/flame-engine/flame/issues/3221)). ([8cd054d0](https://github.com/flame-engine/flame/commit/8cd054d02b614d1ee35a71f32dcbacf0952c9780))
+ - **FIX**: Fix text rendering issue where spaces are missing ([#3192](https://github.com/flame-engine/flame/issues/3192)). ([28fd2a0f](https://github.com/flame-engine/flame/commit/28fd2a0f0f1ea04872d0c4e8b674c8ce7bca69ee))
+ - **FIX**: Add nativeAngle to constructors where it makes sense ([#3197](https://github.com/flame-engine/flame/issues/3197)). ([e8704934](https://github.com/flame-engine/flame/commit/e8704934b19d9ed1982d35ce62819f01ac3de189))
+ - **FIX**: Wire in background and foreground colors in TextPaint ([#3191](https://github.com/flame-engine/flame/issues/3191)). ([983cfab6](https://github.com/flame-engine/flame/commit/983cfab6def86dbf68455fb021281caaf0135793))
+ - **FIX**: Disallow mutatation of `SpriteGroupComponent.sprites` ([#3185](https://github.com/flame-engine/flame/issues/3185)). ([7c40034d](https://github.com/flame-engine/flame/commit/7c40034d20ed26114b14fd262130d11cf226fb6a))
+ - **FIX**: Disallow mutatation of `SpriteAnimationGroupComponent.animations` ([#3183](https://github.com/flame-engine/flame/issues/3183)). ([52773407](https://github.com/flame-engine/flame/commit/527734071b030ec7dbe0f3c017108db0dfda3ced))
+ - **FEAT**: Adding scale and angle to devtools attributes ([#3267](https://github.com/flame-engine/flame/issues/3267)). ([b2a5e658](https://github.com/flame-engine/flame/commit/b2a5e6581ebaebc8044d65504efc58309f8a2b9b))
+ - **FEAT**: Adding x,y,width and height inputs to position components on Dev Tools ([#3263](https://github.com/flame-engine/flame/issues/3263)). ([003ec3a1](https://github.com/flame-engine/flame/commit/003ec3a17beed2bad5540b968a0f5602c19ada79))
+ - **FEAT**: Adding component snapshot to Dev tools ([#3261](https://github.com/flame-engine/flame/issues/3261)). ([1a574917](https://github.com/flame-engine/flame/commit/1a574917cd5311aea2576942d5cf4ea579218aaf))
+ - **FEAT**: Fixing tests on flutter 3.24.0 ([#3259](https://github.com/flame-engine/flame/issues/3259)). ([bf9a2481](https://github.com/flame-engine/flame/commit/bf9a2481fbeb77413a26ae96b57843ca51411f9f))
+ - **FEAT**: Loading builder for Route ([#3113](https://github.com/flame-engine/flame/issues/3113)). ([1e62b342](https://github.com/flame-engine/flame/commit/1e62b3424578150718514aa762f184485dba024a))
+ - **FEAT**: Take in super.curve in ScalingParticle ([#3220](https://github.com/flame-engine/flame/issues/3220)). ([0fbc73cc](https://github.com/flame-engine/flame/commit/0fbc73ccdf36938a20f2eb8ae544881a8dbeae1e))
+ - **FEAT**: Add `pause` and `resume` to `HasTimeScale` mixin ([#3216](https://github.com/flame-engine/flame/issues/3216)). ([9a86e7b5](https://github.com/flame-engine/flame/commit/9a86e7b54b55047ec9c63997015f71b7308dec27))
+ - **FEAT**: Add missing background and foreground properties to InlineTextStyle ([#3187](https://github.com/flame-engine/flame/issues/3187)). ([34dde50f](https://github.com/flame-engine/flame/commit/34dde50f978f810df89fb1c051d13aee9214b307))
+ - **FEAT**: Support inline code blocks on markdown rich text ([#3186](https://github.com/flame-engine/flame/issues/3186)). ([67e069c0](https://github.com/flame-engine/flame/commit/67e069c00dcb32c258231a326b0918739c6f80e6))
+ - **DOCS**: Remove `PositionType` from the docs ([#3198](https://github.com/flame-engine/flame/issues/3198)). ([b0ff5c41](https://github.com/flame-engine/flame/commit/b0ff5c41c572da4dfa4221bef89b93b6f6be74c6))
+ - **DOCS**: Add dartdocs to inline text node classes ([#3189](https://github.com/flame-engine/flame/issues/3189)). ([84c1ee87](https://github.com/flame-engine/flame/commit/84c1ee87f827a85c7accd92e061077ef291cb433))
+ - **BREAKING** **REFACTOR**: Make query() result an Iterable ([#3209](https://github.com/flame-engine/flame/issues/3209)). ([c094caa7](https://github.com/flame-engine/flame/commit/c094caa77b17b1d69856396e27c88db8515bb44a))
+
+## 1.18.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+ - **FIX**: Add key parameters to the rest of the components ([#3170](https://github.com/flame-engine/flame/issues/3170)). ([2477ea0f](https://github.com/flame-engine/flame/commit/2477ea0fcee99e71597983146f4af2dffd866971))
+ - **FIX**: Invoke `setToStart` on child effect controller of wrapping effect controllers ([#3168](https://github.com/flame-engine/flame/issues/3168)). ([217c95f0](https://github.com/flame-engine/flame/commit/217c95f0a53fd5a7933bfa57833f951cc0037878))
+ - **FIX**: Fix cascading and fallback propagation of text styles ([#3129](https://github.com/flame-engine/flame/issues/3129)). ([7b706d5f](https://github.com/flame-engine/flame/commit/7b706d5f63207aaf82d12a4b26233bc476771b1e))
+ - **FEAT**: Add `onReleased` action to `AdvancedButtonComponent` which will be called within `onTapUp` ([#3152](https://github.com/flame-engine/flame/issues/3152)). ([2269732e](https://github.com/flame-engine/flame/commit/2269732e64a2acef2451d283c85b03e1101229ec))
+ - **FEAT**: Support text align on new text rendering pipeline ([#3147](https://github.com/flame-engine/flame/issues/3147)). ([194d5536](https://github.com/flame-engine/flame/commit/194d5536560e464644bff8d5582a8ca8996539f5))
+ - **FEAT**: Add missing parameters to InlineTextStyle ([#3146](https://github.com/flame-engine/flame/issues/3146)). ([ce9392ab](https://github.com/flame-engine/flame/commit/ce9392abd85fe5fd3ae6f766c3a2957275c6fb8c))
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+ - **FEAT**: Add accessor to determine a TextElement size ([#3130](https://github.com/flame-engine/flame/issues/3130)). ([8a63a07a](https://github.com/flame-engine/flame/commit/8a63a07ae3b569c316eafa23f0378e00180e0963))
+ - **FEAT**: Add ability to convert between TextPaint and InlineTextStyle ([#3128](https://github.com/flame-engine/flame/issues/3128)). ([6b63a57a](https://github.com/flame-engine/flame/commit/6b63a57a4888211b284f3a074c17519cb31341e0))
+ - **FEAT**: Add completed future for effects ([#3123](https://github.com/flame-engine/flame/issues/3123)). ([5e967deb](https://github.com/flame-engine/flame/commit/5e967deb876ed39fa4ee6839471bbfbcd3b72463))
+ - **FEAT**: Add custom long tap delay ([#3110](https://github.com/flame-engine/flame/issues/3110)). ([a95d7df6](https://github.com/flame-engine/flame/commit/a95d7df606bd2119423cc8a7ae51cacfb7b4dbed))
+ - **DOCS**: Update the dartdocs for `FixedResolutionViewport` ([#3132](https://github.com/flame-engine/flame/issues/3132)). ([db4b6fd6](https://github.com/flame-engine/flame/commit/db4b6fd6fa5968462d3f89238a92edbb93e4898d))
+ - **BREAKING** **FIX**: Update IsometricTileMapComponent to have better defined position and size ([#3142](https://github.com/flame-engine/flame/issues/3142)). ([9a7bdc74](https://github.com/flame-engine/flame/commit/9a7bdc7439322a26a388e3ac1b9c1a7c43742222))
+
 ## 1.17.0
 
 > Note: This release has breaking changes.

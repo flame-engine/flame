@@ -157,10 +157,16 @@ To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mi
 to any Flame `Component` and exposes a simple get/set API for `timeScale`. The default value of
 `timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
 time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
-it tick at half the speed as compared to real life time.
+it tick at half the speed as compared to real life time. This mixin also provides `pause` and `resume`
+methods, which can be used instead of manually setting the timeScale to 0 and 1 respectively.
 
 Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
 so will allow controlling time scale for all the component of the game from a single place.
+
+```{note}
+HasTimeScale cannot control the movement of BodyComponent from flame_forge2d individually.
+It is only useful if the whole Game or Forge2DWorld is to be time scaled.
+```
 
 ```{flutter-app}
 :sources: ../flame/examples

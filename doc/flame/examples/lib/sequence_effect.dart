@@ -24,7 +24,7 @@ class SequenceEffectGame extends FlameGame {
               EffectController(duration: 0.5),
             ),
             ScaleEffect.by(
-              Vector2.all(.75),
+              Vector2.all(0.75),
               EffectController(duration: 0.2, alternate: true),
             ),
           ]),

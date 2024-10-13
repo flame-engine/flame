@@ -29,6 +29,19 @@ void main() {
       ]);
     });
 
+    test('inline code block', () {
+      final doc = FlameMarkdown.toDocument('Flame: `var game = FlameGame();`');
+
+      _expectDocument(doc, [
+        (node) => _expectParagraph(node, (p) {
+              _expectGroup(p, [
+                (node) => _expectPlain(node, 'Flame: '),
+                (node) => _expectCode(node, 'var game = FlameGame();'),
+              ]);
+            }),
+      ]);
+    });
+
     test('all header levels', () {
       final doc = FlameMarkdown.toDocument(
         '# h1\n'
@@ -105,6 +118,13 @@ void _expectPlain(InlineTextNode node, String text) {
   expect(node, isA<PlainTextNode>());
   final span = node as PlainTextNode;
   expect(span.text, text);
+}
+
+void _expectCode(InlineTextNode node, String text) {
+  expect(node, isA<CodeTextNode>());
+  final content = (node as CodeTextNode).child;
+  expect(content, isA<PlainTextNode>());
+  expect((content as PlainTextNode).text, text);
 }
 
 void _expectParagraph(

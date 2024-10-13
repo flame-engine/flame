@@ -19,7 +19,7 @@ class FlameStudioToolbar extends ConsumerWidget {
     ];
 
     final height = ref.watch(toolbarHeightProvider);
-    final gap = height * 0.10;
+    final gap = height * 0.1;
 
     return Container(
       constraints: BoxConstraints.tightFor(height: height),

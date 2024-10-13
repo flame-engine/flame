@@ -789,7 +789,7 @@ class _Lexer {
     return false;
   }
 
-  /// Helper for [_eatNumber]: consumes a simple run of digits.
+  /// Helper for [eatNumber]: consumes a simple run of digits.
   bool eatDigits() {
     var found = false;
     while (!eof) {

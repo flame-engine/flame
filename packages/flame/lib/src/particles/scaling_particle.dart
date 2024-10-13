@@ -16,6 +16,7 @@ class ScalingParticle extends CurvedParticle with SingleChildParticle {
     required this.child,
     this.to = 0,
     super.lifespan,
+    super.curve,
   });
 
   double get scale => lerpDouble(1, to, progress) ?? 0;

@@ -1,3 +1,11 @@
+## 1.3.2
+
+ - **FIX**: Fix analyze issue on main ([#3265](https://github.com/flame-engine/flame/issues/3265)). ([f60b6e13](https://github.com/flame-engine/flame/commit/f60b6e134177495bcfd0f405a50f9e0e666b8b42))
+
+## 1.3.1
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
 ## 1.3.0
 
  - **FEAT**: Add new methods to CommandStorage to support more arguments ([#3035](https://github.com/flame-engine/flame/issues/3035)). ([21922620](https://github.com/flame-engine/flame/commit/219226201a8d0c6e301c388299277be95b585c0e))

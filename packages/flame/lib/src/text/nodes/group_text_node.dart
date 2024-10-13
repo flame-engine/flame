@@ -2,6 +2,7 @@ import 'package:flame/src/text/elements/group_text_element.dart';
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
+/// An [InlineTextNode] to group other [InlineTextNode]s.
 class GroupTextNode extends InlineTextNode {
   GroupTextNode(this.children);
 
@@ -30,7 +31,10 @@ class _GroupTextLayoutBuilder extends TextNodeLayoutBuilder {
   bool get isDone => _currentChildIndex == node.children.length;
 
   @override
-  InlineTextElement? layOutNextLine(double availableWidth) {
+  InlineTextElement? layOutNextLine(
+    double availableWidth, {
+    required bool isStartOfLine,
+  }) {
     assert(!isDone);
     final out = <InlineTextElement>[];
     var usedWidth = 0.0;
@@ -44,8 +48,10 @@ class _GroupTextLayoutBuilder extends TextNodeLayoutBuilder {
       }
       _currentChildBuilder ??= node.children[_currentChildIndex].layoutBuilder;
 
-      final maybeLine =
-          _currentChildBuilder!.layOutNextLine(availableWidth - usedWidth);
+      final maybeLine = _currentChildBuilder!.layOutNextLine(
+        availableWidth - usedWidth,
+        isStartOfLine: isStartOfLine && out.isEmpty,
+      );
       if (maybeLine == null) {
         break;
       } else {

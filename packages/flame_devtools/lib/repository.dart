@@ -67,4 +67,74 @@ sealed class Repository {
     );
     return stepResponse.json!['step_time'] as double;
   }
+
+  static Future<String?> snapshot({String? id}) async {
+    final snapshotResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getComponentSnapshot',
+      args: {'id': id},
+    );
+    return snapshotResponse.json!['snapshot'] as String?;
+  }
+
+  static Future<PositionComponentAttributes> getPositionComponentAttributes({
+    int? id,
+  }) async {
+    final potentialPositionComponentResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getPositionComponentAttributes',
+      args: {'id': id},
+    );
+
+    return PositionComponentAttributes.fromJson(
+      potentialPositionComponentResponse.json!,
+    );
+  }
+
+  static Future<void> setPositionComponentAttribute({
+    required String attribute,
+    required dynamic value,
+    int? id,
+  }) async {
+    await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.setPositionComponentAttributes',
+      args: {
+        'id': id,
+        'attribute': attribute,
+        'value': value,
+      },
+    );
+  }
+}
+
+class PositionComponentAttributes {
+  final double x;
+  final double y;
+  final double width;
+  final double height;
+  final double angle;
+  final double scaleX;
+  final double scaleY;
+
+  PositionComponentAttributes({
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
+    required this.angle,
+    required this.scaleX,
+    required this.scaleY,
+  });
+
+  factory PositionComponentAttributes.fromJson(Map<String, dynamic> json) {
+    return PositionComponentAttributes(
+      x: json['x'] as double,
+      y: json['y'] as double,
+      width: json['width'] as double,
+      height: json['height'] as double,
+      angle: json['angle'] as double,
+      scaleX: json['scaleX'] as double,
+      scaleY: json['scaleY'] as double,
+    );
+  }
 }

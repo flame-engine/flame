@@ -14,7 +14,7 @@ void main() {
 
     test('longTapDelay cannot be set to a value lower than 0.150', () {
       TapConfig.longTapDelay = 0.1;
-      expect(TapConfig.longTapDelay, 0.150);
+      expect(TapConfig.longTapDelay, 0.15);
     });
   });
 }

@@ -1,4 +1,5 @@
 import 'package:dashbook/dashbook.dart';
+import 'package:examples/stories/widgets/paints.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/widgets.dart';
 import 'package:flutter/widgets.dart';
@@ -20,6 +21,13 @@ Widget spriteAnimationWidgetBuilder(DashbookContext ctx) {
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),
       ),
+      paint: paintList[paintChoices.indexOf(
+        ctx.listProperty(
+          'paint',
+          'none',
+          paintChoices,
+        ),
+      )],
     ),
   );
 }

@@ -67,8 +67,8 @@ class OrthogonalTileLayer extends FlameTileLayer {
 
         late double offsetX;
         late double offsetY;
-        offsetX = (tx + .5) * size.x;
-        offsetY = (ty + .5) * size.y;
+        offsetX = (tx + 0.5) * size.x;
+        offsetY = (ty + 0.5) * size.y;
 
         offsetX += tileset.tileOffset?.x ?? 0;
         offsetY += tileset.tileOffset?.y ?? 0;

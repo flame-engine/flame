@@ -11,7 +11,7 @@ void main() {
       'Render debug text',
       (game) async {
         game.add(
-          TextElementsComponent([
+          _TextElementsComponent([
             DebugTextRenderer().format('one two  three')..translate(5, 5),
             DebugTextRenderer().format(' x ')..translate(5, 25),
             DebugTextRenderer().format('  ')..translate(5, 45),
@@ -42,8 +42,8 @@ void main() {
   });
 }
 
-class TextElementsComponent extends PositionComponent {
-  TextElementsComponent(this.elements);
+class _TextElementsComponent extends PositionComponent {
+  _TextElementsComponent(this.elements);
 
   final List<InlineTextElement> elements;
 
