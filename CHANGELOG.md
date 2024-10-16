@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-10-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.21.0`](#flame---v1210)
+ - [`flame_fire_atlas` - `v1.6.0`](#flame_fire_atlas---v160)
+ - [`flame_test` - `v1.17.2`](#flame_test---v1172)
+ - [`flame_tiled` - `v1.21.0`](#flame_tiled---v1210)
+ - [`flame_audio` - `v2.10.5`](#flame_audio---v2105)
+ - [`flame_forge2d` - `v0.18.2+2`](#flame_forge2d---v01822)
+ - [`flame_oxygen` - `v0.2.3+2`](#flame_oxygen---v0232)
+ - [`flame_rive` - `v1.10.5`](#flame_rive---v1105)
+ - [`flame_texturepacker` - `v4.1.2`](#flame_texturepacker---v412)
+ - [`flame_behavior_tree` - `v0.1.3+2`](#flame_behavior_tree---v0132)
+ - [`flame_spine` - `v0.2.2+2`](#flame_spine---v0222)
+ - [`flame_riverpod` - `v5.4.5`](#flame_riverpod---v545)
+ - [`flame_kenney_xml` - `v0.1.1+2`](#flame_kenney_xml---v0112)
+ - [`flame_bloc` - `v1.12.3`](#flame_bloc---v1123)
+ - [`flame_noise` - `v0.3.2+2`](#flame_noise---v0322)
+ - [`flame_lottie` - `v0.4.2+2`](#flame_lottie---v0422)
+ - [`flame_network_assets` - `v0.3.3+2`](#flame_network_assets---v0332)
+ - [`flame_svg` - `v1.11.2`](#flame_svg---v1112)
+ - [`flame_sprite_fusion` - `v0.1.3+2`](#flame_sprite_fusion---v0132)
+ - [`flame_markdown` - `v0.2.2+2`](#flame_markdown---v0222)
+ - [`flame_isolate` - `v0.6.2+2`](#flame_isolate---v0622)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_audio` - `v2.10.5`
+ - `flame_forge2d` - `v0.18.2+2`
+ - `flame_oxygen` - `v0.2.3+2`
+ - `flame_rive` - `v1.10.5`
+ - `flame_texturepacker` - `v4.1.2`
+ - `flame_behavior_tree` - `v0.1.3+2`
+ - `flame_spine` - `v0.2.2+2`
+ - `flame_riverpod` - `v5.4.5`
+ - `flame_kenney_xml` - `v0.1.1+2`
+ - `flame_bloc` - `v1.12.3`
+ - `flame_noise` - `v0.3.2+2`
+ - `flame_lottie` - `v0.4.2+2`
+ - `flame_network_assets` - `v0.3.3+2`
+ - `flame_svg` - `v1.11.2`
+ - `flame_sprite_fusion` - `v0.1.3+2`
+ - `flame_markdown` - `v0.2.2+2`
+ - `flame_isolate` - `v0.6.2+2`
+
+---
+
+#### `flame` - `v1.21.0`
+
+ - **FIX**: Widgets flickering ([#3343](https://github.com/flame-engine/flame/issues/3343)). ([ff170dc5](https://github.com/flame-engine/flame/commit/ff170dc5c2acc41190249b48e61767ea459fabb4))
+ - **FIX**: Ray should not be able to escape `CircleHitbox` ([#3341](https://github.com/flame-engine/flame/issues/3341)). ([7311d034](https://github.com/flame-engine/flame/commit/7311d034d4c3b43592b49472384fe8576809e6a5))
+ - **FIX**: Fix SpriteBatch to comply with new drawAtlas requirement ([#3338](https://github.com/flame-engine/flame/issues/3338)). ([a17fe4cd](https://github.com/flame-engine/flame/commit/a17fe4cdfaafa071cfd2ab8ef8279b26b79f00a7))
+ - **FIX**: Set SpriteButtonComponent sprites in `onMount` ([#3327](https://github.com/flame-engine/flame/issues/3327)). ([f36533e7](https://github.com/flame-engine/flame/commit/f36533e78c7634866680ab5fb202a3e230529943))
+ - **FIX**: Export TapConfig to make visible ([#3323](https://github.com/flame-engine/flame/issues/3323)). ([8e00115c](https://github.com/flame-engine/flame/commit/8e00115cd299423564dfce4b9d1674c9257a3c42))
+ - **FIX**: Clarify `SpriteGroupComponent.updateSprite` assertion ([#3317](https://github.com/flame-engine/flame/issues/3317)). ([d976ee8c](https://github.com/flame-engine/flame/commit/d976ee8c7e4fbbca08e549412ca8b5af6928d4f4))
+ - **FEAT**: Adding spawnWhenLoaded flag on SpawnComponent ([#3334](https://github.com/flame-engine/flame/issues/3334)). ([51a7e26b](https://github.com/flame-engine/flame/commit/51a7e26b1ab0ef2a2d040548c74aef84b164272d))
+ - **FEAT**: Add a getter for images cache keys ([#3324](https://github.com/flame-engine/flame/issues/3324)). ([7746f2f8](https://github.com/flame-engine/flame/commit/7746f2f867092c19222a40aec2b66dc80558dccb))
+
+#### `flame_fire_atlas` - `v1.6.0`
+
+ - **FEAT**: Adding getter for the atlas image on flame fire atlas ([#3326](https://github.com/flame-engine/flame/issues/3326)). ([ae230ffa](https://github.com/flame-engine/flame/commit/ae230ffaaa588df7a99a3e2e8fa8980dc32104c0))
+
+#### `flame_test` - `v1.17.2`
+
+ - **FIX**: Widgets flickering ([#3343](https://github.com/flame-engine/flame/issues/3343)). ([ff170dc5](https://github.com/flame-engine/flame/commit/ff170dc5c2acc41190249b48e61767ea459fabb4))
+ - **FIX**: Fix SpriteBatch to comply with new drawAtlas requirement ([#3338](https://github.com/flame-engine/flame/issues/3338)). ([a17fe4cd](https://github.com/flame-engine/flame/commit/a17fe4cdfaafa071cfd2ab8ef8279b26b79f00a7))
+
+#### `flame_tiled` - `v1.21.0`
+
+ - **FEAT**: Add a getter for images cache keys ([#3324](https://github.com/flame-engine/flame/issues/3324)). ([7746f2f8](https://github.com/flame-engine/flame/commit/7746f2f867092c19222a40aec2b66dc80558dccb))
+
+
 ## 2024-09-20
 
 ### Changes
