@@ -1,3 +1,14 @@
+## 1.21.0
+
+ - **FIX**: Widgets flickering ([#3343](https://github.com/flame-engine/flame/issues/3343)). ([ff170dc5](https://github.com/flame-engine/flame/commit/ff170dc5c2acc41190249b48e61767ea459fabb4))
+ - **FIX**: Ray should not be able to escape `CircleHitbox` ([#3341](https://github.com/flame-engine/flame/issues/3341)). ([7311d034](https://github.com/flame-engine/flame/commit/7311d034d4c3b43592b49472384fe8576809e6a5))
+ - **FIX**: Fix SpriteBatch to comply with new drawAtlas requirement ([#3338](https://github.com/flame-engine/flame/issues/3338)). ([a17fe4cd](https://github.com/flame-engine/flame/commit/a17fe4cdfaafa071cfd2ab8ef8279b26b79f00a7))
+ - **FIX**: Set SpriteButtonComponent sprites in `onMount` ([#3327](https://github.com/flame-engine/flame/issues/3327)). ([f36533e7](https://github.com/flame-engine/flame/commit/f36533e78c7634866680ab5fb202a3e230529943))
+ - **FIX**: Export TapConfig to make visible ([#3323](https://github.com/flame-engine/flame/issues/3323)). ([8e00115c](https://github.com/flame-engine/flame/commit/8e00115cd299423564dfce4b9d1674c9257a3c42))
+ - **FIX**: Clarify `SpriteGroupComponent.updateSprite` assertion ([#3317](https://github.com/flame-engine/flame/issues/3317)). ([d976ee8c](https://github.com/flame-engine/flame/commit/d976ee8c7e4fbbca08e549412ca8b5af6928d4f4))
+ - **FEAT**: Adding spawnWhenLoaded flag on SpawnComponent ([#3334](https://github.com/flame-engine/flame/issues/3334)). ([51a7e26b](https://github.com/flame-engine/flame/commit/51a7e26b1ab0ef2a2d040548c74aef84b164272d))
+ - **FEAT**: Add a getter for images cache keys ([#3324](https://github.com/flame-engine/flame/issues/3324)). ([7746f2f8](https://github.com/flame-engine/flame/commit/7746f2f867092c19222a40aec2b66dc80558dccb))
+
 ## 1.20.0
 
  - **FIX**: SpriteButtonComponent to initialize sprites in `onLoad` ([#3302](https://github.com/flame-engine/flame/issues/3302)). ([1204216c](https://github.com/flame-engine/flame/commit/1204216cb227d3831b546a54818075065fa7beec))
