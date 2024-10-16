@@ -3,6 +3,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/widgets/custom_painter_example.dart';
 import 'package:examples/stories/widgets/nine_tile_box_example.dart';
+import 'package:examples/stories/widgets/nine_tile_box_example_with_animation.dart';
 import 'package:examples/stories/widgets/partial_sprite_widget_example.dart';
 import 'package:examples/stories/widgets/sprite_animation_widget_example.dart';
 import 'package:examples/stories/widgets/sprite_button_example.dart';
@@ -19,6 +20,15 @@ void addWidgetsStories(Dashbook dashbook) {
         If you want to create a background for something that can stretch you
         can use the `NineTileBox` which is showcased here, don't forget to check
         out the settings on the pen icon.
+      ''',
+    )
+    ..add(
+      'Nine Tile Box (With animation widgets)',
+      nineTileBoxBuilderWithAnimation,
+      codeLink: baseLink('widgets/nine_tile_box_example_with_animation.dart'),
+      info: '''
+        Similar to the Nine Tile Box example, but here a NineTileBoxWidget is composed
+        with Flutter's AnimatedOpacity.
       ''',
     )
     ..add(

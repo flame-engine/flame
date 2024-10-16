@@ -60,5 +60,67 @@ Future<void> main() async {
         expect(nineTileBoxWidgetFinder, findsOneWidget);
       },
     );
+
+    group('when the nine tile box changes', () {
+      testWidgets('updates the widget', (tester) async {
+        const imagePath = 'test_path_2';
+        const imagePath2 = 'test_path_3';
+
+        final image = await generateImage(100, 100);
+        final image2 = await generateImage(100, 102);
+
+        Flame.images.add(imagePath, image);
+        Flame.images.add(imagePath2, image2);
+
+        var flag = false;
+        await tester.pumpWidget(
+          StatefulBuilder(
+            builder: (context, setState) {
+              return MaterialApp(
+                home: Scaffold(
+                  body: SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Wrap(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              flag = !flag;
+                            });
+                          },
+                          child: const Text('Change sprite'),
+                        ),
+                        NineTileBoxWidget.asset(
+                          path: flag ? imagePath2 : imagePath,
+                          tileSize: 10,
+                          destTileSize: 10,
+                          loadingBuilder: (_) => const LoadingWidget(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        var internalWidget = tester
+            .widget<InternalNineTileBox>(find.byType(InternalNineTileBox));
+
+        expect(internalWidget.image, image);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pumpAndSettle();
+
+        internalWidget = tester
+            .widget<InternalNineTileBox>(find.byType(InternalNineTileBox));
+
+        expect(internalWidget.image, image2);
+      });
+    });
   });
 }
