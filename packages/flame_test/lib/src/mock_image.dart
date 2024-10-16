@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 Future<Image> generateImage([int width = 1, int height = 1]) {
