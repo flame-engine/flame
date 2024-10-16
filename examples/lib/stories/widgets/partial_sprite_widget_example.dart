@@ -12,8 +12,14 @@ Widget partialSpriteWidgetBuilder(DashbookContext ctx) {
     decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
     child: SpriteWidget.asset(
       path: 'bomb_ptero.png',
-      srcPosition: Vector2(48, 0),
-      srcSize: Vector2(48, 32),
+      srcPosition: Vector2(
+        ctx.numberProperty('srcPosition.x', 48),
+        ctx.numberProperty('srcPosition.y', 0),
+      ),
+      srcSize: Vector2(
+        ctx.numberProperty('srcSize.x', 48),
+        ctx.numberProperty('srcSize.y', 32),
+      ),
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),
       ),

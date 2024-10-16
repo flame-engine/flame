@@ -11,7 +11,7 @@ import 'package:flutter/material.dart' hide Animation;
 export '../sprite_animation.dart';
 
 /// A [StatelessWidget] that renders a [SpriteAnimation]
-class SpriteAnimationWidget extends StatelessWidget {
+class SpriteAnimationWidget extends StatefulWidget {
   /// The positioning [Anchor].
   final Anchor anchor;
 
@@ -68,23 +68,73 @@ class SpriteAnimationWidget extends StatelessWidget {
         _animationTicker = null;
 
   @override
+  State<SpriteAnimationWidget> createState() => _SpriteAnimationWidgetState();
+}
+
+class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
+  late FutureOr<SpriteAnimation> _animationFuture = widget._animationFuture;
+  late SpriteAnimationTicker? _animationTicker = widget._animationTicker;
+
+  @override
+  void didUpdateWidget(covariant SpriteAnimationWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _updateAnimation(
+      oldWidget._animationFuture,
+      widget._animationFuture,
+      oldWidget._animationTicker,
+      widget._animationTicker,
+    );
+  }
+
+  Future<void> _updateAnimation(
+    FutureOr<SpriteAnimation> oldFutureValue,
+    FutureOr<SpriteAnimation> newFutureValue,
+    SpriteAnimationTicker? oldTicker,
+    SpriteAnimationTicker? newTicker,
+  ) async {
+    final oldValue = await oldFutureValue;
+    final newValue = await newFutureValue;
+
+    final areFramesDifferent = oldValue != newValue ||
+        oldValue.frames.length != newValue.frames.length ||
+        oldValue.frames.fold(
+          true,
+          (previous, frame) {
+            final newFrame = newValue.frames[oldValue.frames.indexOf(frame)];
+
+            return previous &&
+                (frame.sprite.image == newFrame.sprite.image ||
+                    frame.sprite.src == newFrame.sprite.src);
+          },
+        );
+
+    if (areFramesDifferent || oldTicker != newTicker) {
+      setState(() {
+        _animationFuture = newFutureValue;
+        _animationTicker = newTicker;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<SpriteAnimation>(
       future: _animationFuture,
       builder: (_, spriteAnimation) {
         final ticker = _animationTicker ?? spriteAnimation.createTicker();
-        ticker.completed.then((_) => onComplete?.call());
+        ticker.completed.then((_) => widget.onComplete?.call());
 
         return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
           animationTicker: ticker,
-          anchor: anchor,
-          playing: playing,
-          paint: paint,
+          anchor: widget.anchor,
+          playing: widget.playing,
+          paint: widget.paint,
         );
       },
-      errorBuilder: errorBuilder,
-      loadingBuilder: loadingBuilder,
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }
