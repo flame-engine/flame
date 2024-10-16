@@ -40,7 +40,7 @@ class MoveToEffect extends MoveEffect {
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
+    target.position += _offset * dProgress.abs();
   }
 
   @override

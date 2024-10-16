@@ -169,6 +169,9 @@ abstract class Effect extends Component {
   double recede(double dt) {
     if (_finished && dt > 0) {
       _finished = false;
+
+      /// Effects such as [MoveToEffect] must recalculate the direction vector.
+      onStart();
     }
     final remainingDt = controller.recede(dt);
     if (_started) {
