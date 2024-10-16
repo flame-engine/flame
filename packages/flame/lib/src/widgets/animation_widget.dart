@@ -73,37 +73,46 @@ class SpriteAnimationWidget extends StatefulWidget {
 
 class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
   late FutureOr<SpriteAnimation> _animationFuture = widget._animationFuture;
+  late SpriteAnimationTicker? _animationTicker = widget._animationTicker;
 
   @override
   void didUpdateWidget(covariant SpriteAnimationWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _updateAnimation(oldWidget._animationFuture, widget._animationFuture);
+    _updateAnimation(
+      oldWidget._animationFuture,
+      widget._animationFuture,
+      oldWidget._animationTicker,
+      widget._animationTicker,
+    );
   }
 
   Future<void> _updateAnimation(
     FutureOr<SpriteAnimation> oldFutureValue,
     FutureOr<SpriteAnimation> newFutureValue,
+    SpriteAnimationTicker? oldTicker,
+    SpriteAnimationTicker? newTicker,
   ) async {
     final oldValue = await oldFutureValue;
     final newValue = await newFutureValue;
 
-    final areFramesDifferent =
+    final areFramesDifferent = oldValue != newValue ||
         oldValue.frames.length != newValue.frames.length ||
-            oldValue.frames.fold(
-              false,
-              (previous, frame) {
-                final newFrame =
-                    newValue.frames[oldValue.frames.indexOf(frame)];
+        oldValue.frames.fold(
+          true,
+          (previous, frame) {
+            final newFrame = newValue.frames[oldValue.frames.indexOf(frame)];
 
-                return frame.sprite.image != newFrame.sprite.image ||
-                    frame.sprite.src != newFrame.sprite.src;
-              },
-            );
+            return previous &&
+                (frame.sprite.image == newFrame.sprite.image ||
+                    frame.sprite.src == newFrame.sprite.src);
+          },
+        );
 
-    if (areFramesDifferent) {
+    if (areFramesDifferent || oldTicker != newTicker) {
       setState(() {
         _animationFuture = newFutureValue;
+        _animationTicker = newTicker;
       });
     }
   }
@@ -113,8 +122,7 @@ class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
     return BaseFutureBuilder<SpriteAnimation>(
       future: _animationFuture,
       builder: (_, spriteAnimation) {
-        final ticker =
-            widget._animationTicker ?? spriteAnimation.createTicker();
+        final ticker = _animationTicker ?? spriteAnimation.createTicker();
         ticker.completed.then((_) => widget.onComplete?.call());
 
         return InternalSpriteAnimationWidget(

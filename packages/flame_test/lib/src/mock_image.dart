@@ -1,14 +1,23 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
-import 'package:flame/extensions.dart';
+Future<Image> generateImage([int width = 1, int height = 1]) {
+  final recorder = PictureRecorder();
+  final canvas = Canvas(recorder);
+  canvas.drawRect(
+    Rect.fromLTWH(
+      0,
+      0,
+      height.toDouble(),
+      width.toDouble(),
+    ),
+    Paint()..color = const Color(0xFFFFFFFF),
+  );
 
-Future<Image> generateImage() {
-  final data = Uint8List(4);
-  for (var i = 0; i < data.length; i += 4) {
-    data[i] = 255;
-    data[i + 1] = 255;
-    data[i + 2] = 255;
-    data[i + 3] = 255;
-  }
-  return ImageExtension.fromPixels(data, 1, 1);
+  final picture = recorder.endRecording();
+  final image = picture.toImage(
+    width,
+    height,
+  );
+  return image;
 }
