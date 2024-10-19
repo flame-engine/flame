@@ -16,7 +16,7 @@ class OverlayManager {
 
   /// The names of all currently active overlays.
   UnmodifiableListView<String> get activeOverlays {
-    return UnmodifiableListView(_activeOverlays.map((e) => e.name));
+    return UnmodifiableListView(_activeOverlays.map((overlay) => overlay.name));
   }
 
   /// Returns if the given [overlayName] is active
