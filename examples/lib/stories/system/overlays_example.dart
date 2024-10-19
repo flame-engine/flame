@@ -31,6 +31,9 @@ class OverlaysExample extends FlameGame with TapDetector {
         ..anchor = Anchor.center
         ..size = Vector2.all(100),
     );
+
+    // 'SecondaryMenu' will be displayed above 'PauseMenu'
+    overlays.add('SecondaryMenu', priority: 1);
   }
 
   @override
@@ -45,14 +48,44 @@ class OverlaysExample extends FlameGame with TapDetector {
   }
 }
 
-Widget _pauseMenuBuilder(BuildContext buildContext, OverlaysExample game) {
+Widget _pauseMenuBuilder(
+  BuildContext buildContext,
+  OverlaysExample game,
+  GestureTapCallback? onTap,
+) {
   return Center(
-    child: Container(
-      width: 100,
-      height: 100,
-      color: Colors.orange,
-      child: const Center(
-        child: Text('Paused'),
+    child: GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 100,
+        height: 100,
+        color: Colors.orange,
+        child: const Center(
+          child: Text('Paused'),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _secondaryMenuBuilder(BuildContext buildContext, OverlaysExample game) {
+  return Align(
+    alignment: Alignment.bottomRight,
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: 100,
+        height: 50,
+        alignment: Alignment.center,
+        color: Colors.red,
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.music_off_rounded),
+            Icon(Icons.info),
+            Icon(Icons.star),
+          ],
+        ),
       ),
     ),
   );
@@ -61,8 +94,13 @@ Widget _pauseMenuBuilder(BuildContext buildContext, OverlaysExample game) {
 Widget overlayBuilder(DashbookContext ctx) {
   return GameWidget<OverlaysExample>(
     game: OverlaysExample()..paused = true,
-    overlayBuilderMap: const {
-      'PauseMenu': _pauseMenuBuilder,
+    overlayBuilderMap: {
+      'PauseMenu': (context, game) => _pauseMenuBuilder(
+            context,
+            game,
+            () => game.onTap(),
+          ),
+      'SecondaryMenu': _secondaryMenuBuilder,
     },
     initialActiveOverlays: const ['PauseMenu'],
   );
