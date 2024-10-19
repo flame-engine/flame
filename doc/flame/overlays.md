@@ -20,7 +20,7 @@ by providing an `overlayBuilderMap`.
 
   // Marks 'SecondaryMenu' to be rendered.
   overlays.add(secondaryOverlayIdentifier, priority: 1);
-  // Marks 'PauseMenu' to be rendered. Priority = 0 by default, means the 'PauseMenu' will be displayed under the 'SecondaryMenu'
+  // Marks 'PauseMenu' to be rendered. Priority = 0 by default, which means the 'PauseMenu' will be displayed under the 'SecondaryMenu'
   overlays.add(pauseOverlayIdentifier);
   // Marks 'PauseMenu' to not be rendered. 
   overlays.remove(pauseOverlayIdentifier);
