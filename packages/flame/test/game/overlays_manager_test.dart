@@ -109,6 +109,18 @@ void main() {
       expect(overlays.activeOverlays.length, 2);
     });
 
+    test('can add multiple overlays with priorities', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test1', (ctx, game) => Container())
+        ..addEntry('test2', (ctx, game) => Container());
+      overlays.add('test1', priority: 1);
+      overlays.add('test2');
+      expect(overlays.activeOverlays, ['test2', 'test1']);
+      expect(overlays.isActive('test1'), true);
+      expect(overlays.isActive('test2'), true);
+      expect(overlays.activeOverlays.length, 2);
+    });
+
     test('cannot add an unknown overlay', () {
       final overlays = FlameGame().overlays;
       expect(
