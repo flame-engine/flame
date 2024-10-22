@@ -78,7 +78,7 @@ Future<void> main() async {
         const executionCount = 10;
         final frames = List.generate(5, (_) => Sprite(image));
         final animation1 = SpriteAnimation.spriteList(frames, stepTime: 0.1);
-        final animation2 = SpriteAnimation.spriteList(frames, stepTime: 0.1);
+        final animation2 = SpriteAnimation.spriteList(frames, stepTime: 0.2);
         final animationTicker1 = SpriteAnimationTicker(animation1);
         final animationTicker2 = SpriteAnimationTicker(animation2);
 
@@ -98,10 +98,13 @@ Future<void> main() async {
               animationTicker: animationTicker1,
             ),
           );
+          await tester.pump();
+
           expect(animationTicker1.onComplete, isNotNull);
           expect(animationTicker2.onComplete, isNull);
 
           await tester.pump();
+
           expect(animation1Started, true);
 
           // This will call didUpdateWidget lifecycle
@@ -111,6 +114,9 @@ Future<void> main() async {
               animationTicker: animationTicker2,
             ),
           );
+
+          await tester.pump();
+
           expect(animationTicker1.onComplete, isNull);
           expect(animationTicker2.onComplete, isNotNull);
 
@@ -191,5 +197,334 @@ Future<void> main() async {
         expect(onCompleteCalled, isTrue);
       },
     );
+
+    group('when the image changes', () {
+      testWidgets('updates the widget', (tester) async {
+        const imagePath = 'test_path_2';
+        const imagePath2 = 'test_path_3';
+
+        final image = await generateImage(100, 100);
+        final image2 = await generateImage(100, 102);
+
+        Flame.images.add(imagePath, image);
+        Flame.images.add(imagePath2, image2);
+
+        final spriteAnimationData = SpriteAnimationData.sequenced(
+          amount: 1,
+          stepTime: 0.1,
+          textureSize: Vector2(16, 16),
+          loop: false,
+        );
+
+        var flag = false;
+        await tester.pumpWidget(
+          StatefulBuilder(
+            builder: (context, setState) {
+              return MaterialApp(
+                home: Scaffold(
+                  body: SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Wrap(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              flag = !flag;
+                            });
+                          },
+                          child: const Text('Change sprite'),
+                        ),
+                        SpriteAnimationWidget.asset(
+                          path: flag ? imagePath2 : imagePath,
+                          data: spriteAnimationData,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+
+        await tester.pump();
+        await tester.pump();
+        await tester.pump();
+        await tester.pump();
+
+        var internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+          find.byType(InternalSpriteAnimationWidget),
+        );
+
+        expect(internalWidget.animation.frames.first.sprite.image, image);
+
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+        await tester.pump();
+        await tester.pump();
+        await tester.pump();
+
+        internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+          find.byType(InternalSpriteAnimationWidget),
+        );
+
+        expect(internalWidget.animation.frames.first.sprite.image, image2);
+      });
+    });
+
+    group('when the sprite data changes', () {
+      group('when the frame length changes', () {
+        testWidgets('updates the widget', (tester) async {
+          const imagePath = 'test_path_2';
+
+          final image = await generateImage(100, 100);
+
+          Flame.images.add(imagePath, image);
+
+          final spriteAnimationData = SpriteAnimationData.sequenced(
+            amount: 1,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
+            loop: false,
+          );
+
+          final spriteAnimationData2 = SpriteAnimationData.sequenced(
+            amount: 2,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
+            loop: false,
+          );
+
+          var flag = false;
+          await tester.pumpWidget(
+            StatefulBuilder(
+              builder: (context, setState) {
+                return MaterialApp(
+                  home: Scaffold(
+                    body: SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Wrap(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                flag = !flag;
+                              });
+                            },
+                            child: const Text('Change sprite'),
+                          ),
+                          SpriteAnimationWidget.asset(
+                            path: imagePath,
+                            data: flag
+                                ? spriteAnimationData2
+                                : spriteAnimationData,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+
+          await tester.pump();
+          await tester.pump();
+
+          var internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+            find.byType(InternalSpriteAnimationWidget),
+          );
+
+          expect(internalWidget.animation.frames, hasLength(1));
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+
+          internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+            find.byType(InternalSpriteAnimationWidget),
+          );
+
+          expect(internalWidget.animation.frames, hasLength(2));
+        });
+      });
+
+      group('when a single frame  changes', () {
+        testWidgets('updates the widget', (tester) async {
+          const imagePath = 'test_path_2';
+
+          final image = await generateImage(100, 100);
+
+          Flame.images.add(imagePath, image);
+
+          final spriteAnimationData = SpriteAnimationData.sequenced(
+            amount: 1,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
+            loop: false,
+          );
+
+          final spriteAnimationData2 = SpriteAnimationData.sequenced(
+            amount: 1,
+            stepTime: 0.1,
+            textureSize: Vector2(12, 12),
+            loop: false,
+          );
+
+          var flag = false;
+          await tester.pumpWidget(
+            StatefulBuilder(
+              builder: (context, setState) {
+                return MaterialApp(
+                  home: Scaffold(
+                    body: SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Wrap(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                flag = !flag;
+                              });
+                            },
+                            child: const Text('Change sprite'),
+                          ),
+                          SpriteAnimationWidget.asset(
+                            path: imagePath,
+                            data: flag
+                                ? spriteAnimationData2
+                                : spriteAnimationData,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+
+          var internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+            find.byType(InternalSpriteAnimationWidget),
+          );
+
+          expect(
+            internalWidget.animation.frames.first.sprite.srcSize,
+            Vector2.all(16),
+          );
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+
+          internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+            find.byType(InternalSpriteAnimationWidget),
+          );
+
+          expect(
+            internalWidget.animation.frames.first.sprite.srcSize,
+            Vector2.all(12),
+          );
+        });
+      });
+
+      group('when looping changes', () {
+        testWidgets('updates the widget', (tester) async {
+          const imagePath = 'test_path_2';
+
+          final image = await generateImage(100, 100);
+
+          Flame.images.add(imagePath, image);
+
+          final spriteAnimationData = SpriteAnimationData.sequenced(
+            amount: 1,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
+            loop: false,
+          );
+
+          final spriteAnimationData2 = SpriteAnimationData.sequenced(
+            amount: 1,
+            stepTime: 0.1,
+            textureSize: Vector2(16, 16),
+          );
+
+          var flag = false;
+          await tester.pumpWidget(
+            StatefulBuilder(
+              builder: (context, setState) {
+                return MaterialApp(
+                  home: Scaffold(
+                    body: SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Wrap(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                flag = !flag;
+                              });
+                            },
+                            child: const Text('Change sprite'),
+                          ),
+                          SpriteAnimationWidget.asset(
+                            path: imagePath,
+                            data: flag
+                                ? spriteAnimationData2
+                                : spriteAnimationData,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+
+          var internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+            find.byType(InternalSpriteAnimationWidget),
+          );
+
+          expect(
+            internalWidget.animation.loop,
+            isFalse,
+          );
+
+          await tester.tap(find.byType(ElevatedButton));
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+          await tester.pump();
+
+          internalWidget = tester.widget<InternalSpriteAnimationWidget>(
+            find.byType(InternalSpriteAnimationWidget),
+          );
+
+          expect(
+            internalWidget.animation.loop,
+            isTrue,
+          );
+        });
+      });
+    });
   });
 }

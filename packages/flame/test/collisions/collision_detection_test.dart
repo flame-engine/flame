@@ -1804,6 +1804,31 @@ void main() {
         expect(reflectionRay2?.origin, Vector2(50, 0));
         expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
       },
+      'make sure that ray does not escape circle hitbox': (game) async {
+        final world = (game as FlameGame).world;
+        final circle = CircleComponent(
+          position: Vector2(0, 0),
+          radius: 5,
+          anchor: Anchor.center,
+        )..add(CircleHitbox());
+        await world.ensureAdd(circle);
+        final ray = Ray2(
+          origin: Vector2(0, 0),
+          direction: Vector2(1.0, 0),
+        );
+        final results = game.collisionDetection.raytrace(ray);
+        expect(results.length, 10);
+        expect(results.first.isActive, isTrue);
+        expect(results.first.isInsideHitbox, isTrue);
+        expect(
+          results.first.intersectionPoint,
+          Vector2(5, 0),
+        );
+        final reflectionRay = results.first.reflectionRay;
+        expect(reflectionRay?.origin, Vector2(5, 0));
+        expect(reflectionRay?.direction, Vector2(-1, 0)..normalize());
+        expect(results.first.normal, Vector2(-1, 0));
+      },
     });
   });
 

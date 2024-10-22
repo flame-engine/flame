@@ -1,3 +1,7 @@
+## 1.21.0
+
+ - **FEAT**: Add a getter for images cache keys ([#3324](https://github.com/flame-engine/flame/issues/3324)). ([7746f2f8](https://github.com/flame-engine/flame/commit/7746f2f867092c19222a40aec2b66dc80558dccb))
+
 ## 1.20.4
 
  - Update a dependency to the latest release.

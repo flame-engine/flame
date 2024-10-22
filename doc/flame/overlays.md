@@ -16,10 +16,14 @@ by providing an `overlayBuilderMap`.
 ```dart
   // Inside your game:
   final pauseOverlayIdentifier = 'PauseMenu';
+  final secondaryOverlayIdentifier = 'SecondaryMenu';
 
-  // Marks 'PauseMenu' to be rendered.
+  // Marks 'SecondaryMenu' to be rendered.
+  overlays.add(secondaryOverlayIdentifier, priority: 1);
+  // Marks 'PauseMenu' to be rendered. Priority = 0 by default 
+  // which means the 'PauseMenu' will be displayed under the 'SecondaryMenu'
   overlays.add(pauseOverlayIdentifier);
-  // Marks 'PauseMenu' to not be rendered.
+  // Marks 'PauseMenu' to not be rendered. 
   overlays.remove(pauseOverlayIdentifier);
 ```
 
@@ -33,6 +37,9 @@ Widget build(BuildContext context) {
     overlayBuilderMap: {
       'PauseMenu': (BuildContext context, MyGame game) {
         return Text('A pause menu');
+      },
+      'SecondaryMenu': (BuildContext context, MyGame game) {
+        return Text('A secondary menu');
       },
     },
   );
