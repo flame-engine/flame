@@ -1,4 +1,4 @@
-/// A repository to persist and read history of commands
+/// A repository to persist and read history of commands.
 abstract class ConsoleRepository {
   const ConsoleRepository();
 

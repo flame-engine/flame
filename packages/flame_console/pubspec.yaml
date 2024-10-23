@@ -1,6 +1,6 @@
 name: flame_console
-description: "An extensible and customizable console to help debug a Flame game"
-version: 0.0.1
+description: "An extensible and customizable console to help debug Flame games."
+version: 0.1.0
 homepage:
 
 environment:

@@ -3,9 +3,9 @@
 Flame Console is a terminal overlay for Flame games which allows developers to debug and interact
 with their games.
 
-It offers an overlay that can be plugged in your `GameWidget` which when activated will show a
+It offers an overlay that can be plugged in to your `GameWidget` which when activated will show a
 terminal-like interface written with Flutter widgets where commands can be executed to see
-information about the running game, or perform actions.
+information about the running game and components, or perform actions.
 
 It comes with a set of built-in commands, but it is also possible to add custom commands.
 
@@ -14,7 +14,7 @@ It comes with a set of built-in commands, but it is also possible to add custom 
 
 Flame Console is an overlay, so to use it, you will need to register it in your game widget.
 
-Then, showing the overlay is up to you, below we see example of a floating action button that will
+Then, showing the overlay is up to you, below we see an example of a floating action button that will
 show the console when pressed.
 
 ```dart
@@ -46,12 +46,12 @@ Widget build(BuildContext context) {
 
 ## Built-in commands
 
-- `help` - list available commands and their usage
-- `ls` - list components
-- `rm` - remove components
-- `debug` - toggle debug mode on components
-- `pause` - pauses the game loop
-- `resume` - resumes the game loop
+- `help` - List available commands and their usage.
+- `ls` - List components.
+- `rm` - Remove components.
+- `debug` - Toggle debug mode on components.
+- `pause` - Pauses the game loop.
+- `resume` -Resumes the game loop.
 
 
 ## Custom commands
