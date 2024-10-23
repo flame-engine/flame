@@ -1,6 +1,6 @@
-import 'package:example/game.dart';
 import 'package:flame/game.dart';
 import 'package:flame_console/flame_console.dart';
+import 'package:flame_console_example/game.dart';
 import 'package:flutter/material.dart';
 
 void main() {

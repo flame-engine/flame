@@ -17,5 +17,8 @@ class ResumeConsoleCommand<G extends FlameGame> extends ConsoleCommand<G> {
   ArgParser get parser => ArgParser();
 
   @override
+  String get name => 'resume';
+
+  @override
   String get description => 'Resumes the game loop.';
 }

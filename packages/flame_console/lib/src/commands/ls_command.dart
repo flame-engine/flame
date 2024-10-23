@@ -15,5 +15,8 @@ class LsConsoleCommand<G extends FlameGame> extends QueryCommand<G> {
   }
 
   @override
+  String get name => 'ls';
+
+  @override
   String get description => 'List components that match the query arguments.';
 }

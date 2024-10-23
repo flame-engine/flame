@@ -17,5 +17,8 @@ class PauseConsoleCommand<G extends FlameGame> extends ConsoleCommand<G> {
   ArgParser get parser => ArgParser();
 
   @override
+  String get name => 'pause';
+
+  @override
   String get description => 'Pauses the game loop.';
 }

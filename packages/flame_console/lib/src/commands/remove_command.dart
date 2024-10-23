@@ -12,6 +12,9 @@ class RemoveConsoleCommand<G extends FlameGame> extends QueryCommand<G> {
   }
 
   @override
+  String get name => 'rm';
+
+  @override
   String get description =>
       'Removes components that match the query arguments.';
 }

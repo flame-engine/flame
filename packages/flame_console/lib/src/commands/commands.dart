@@ -12,6 +12,7 @@ export 'remove_command.dart';
 abstract class ConsoleCommand<G extends FlameGame> {
   ArgParser get parser;
   String get description;
+  String get name;
 
   List<Component> listAllChildren(Component component) {
     return [
@@ -103,11 +104,11 @@ abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
 }
 
 class ConsoleCommands {
-  static Map<String, ConsoleCommand> commands = {
-    'ls': LsConsoleCommand(),
-    'rm': RemoveConsoleCommand(),
-    'debug': DebugConsoleCommand(),
-    'pause': PauseConsoleCommand(),
-    'resume': ResumeConsoleCommand(),
-  };
+  static List<ConsoleCommand> commands = [
+    LsConsoleCommand(),
+    RemoveConsoleCommand(),
+    DebugConsoleCommand(),
+    PauseConsoleCommand(),
+    ResumeConsoleCommand(),
+  ];
 }

@@ -35,7 +35,7 @@ class ConsoleView<G extends FlameGame> extends StatefulWidget {
   }) : repository = repository ?? const MemoryConsoleRepository();
 
   final G game;
-  final Map<String, ConsoleCommand<G>>? customCommands;
+  final List<ConsoleCommand<G>>? customCommands;
   final VoidCallback onClose;
   final ConsoleRepository repository;
   final ConsoleController? controller;
@@ -64,16 +64,22 @@ class _ConsoleKeyboardHandler extends Component with KeyboardHandler {
 }
 
 class _ConsoleViewState extends State<ConsoleView> {
+  late final List<ConsoleCommand> _commandList = [
+    ...ConsoleCommands.commands,
+    if (widget.customCommands != null) ...widget.customCommands!,
+  ];
+
+  late final Map<String, ConsoleCommand> _commandsMap = {
+    for (final command in _commandList) command.name: command,
+  };
+
   late final _controller = widget.controller ??
       ConsoleController(
         repository: widget.repository,
         game: widget.game,
         scrollController: _scrollController,
         onClose: widget.onClose,
-        commands: {
-          ...ConsoleCommands.commands,
-          if (widget.customCommands != null) ...widget.customCommands!,
-        },
+        commands: _commandsMap,
       );
 
   late final _scrollController = ScrollController();

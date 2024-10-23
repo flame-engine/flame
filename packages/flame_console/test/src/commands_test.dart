@@ -11,6 +11,9 @@ class _NoopCommand extends ConsoleCommand {
   String get description => '';
 
   @override
+  String get name => '';
+
+  @override
   (String?, String) execute(FlameGame<World> game, ArgResults results) {
     return (null, '');
   }
