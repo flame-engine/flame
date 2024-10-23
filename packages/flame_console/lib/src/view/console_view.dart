@@ -19,6 +19,25 @@ typedef ContainerBuilder = Widget Function(
   Widget child,
 );
 
+/// A Console like view that can be used to interact with a game.
+///
+/// It should be registered as an overlay in the game widget
+/// of the game you want to interact with.
+///
+/// Example:
+///
+/// ```dart
+/// GameWidget(
+///   game: _game,
+///   overlayBuilderMap: {
+///     'console': (BuildContext context, MyGame game) => ConsoleView(
+///       game: game,
+///       onClose: () {
+///         _game.overlays.remove('console');
+///       },
+///     ),
+///   },
+/// )
 class ConsoleView<G extends FlameGame> extends StatefulWidget {
   const ConsoleView({
     required this.game,
