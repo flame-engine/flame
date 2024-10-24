@@ -264,8 +264,6 @@ them so don't doubt to use them even if your use case isn't listed here.
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
 the polygon needs to be convex. So always use convex polygons or you will most likely run into
 problems if you don't really know what you are doing.
-It should also be noted that you should always define the vertices in your polygon
-in a counter-clockwise order.
 
 The other hitbox shapes don't have any mandatory constructor, that is because they can have a
 default calculated from the size of the collidable that they are attached to, but since a
