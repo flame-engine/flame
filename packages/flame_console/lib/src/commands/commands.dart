@@ -26,8 +26,8 @@ abstract class ConsoleCommand<G extends FlameGame> {
   void onChildMatch(
     void Function(Component) onChild, {
     required Component rootComponent,
-    List<String>? ids,
-    List<String>? types,
+    List<String> ids = const [],
+    List<String> types = const [],
     int? limit,
   }) {
     final components = listAllChildren(rootComponent);
@@ -38,9 +38,6 @@ abstract class ConsoleCommand<G extends FlameGame> {
       if (limit != null && count >= limit) {
         break;
       }
-
-      ids = ids ?? [];
-      types = types ?? [];
 
       final isIdMatch =
           ids.isEmpty || ids.contains(element.hashCode.toString());
@@ -79,8 +76,8 @@ abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
     onChildMatch(
       children.add,
       rootComponent: game,
-      ids: results['id'] as List<String>?,
-      types: results['type'] as List<String>?,
+      ids: results['id'] as List<String>? ?? [],
+      types: results['type'] as List<String>? ?? [],
       limit: optionalIntResult('limit', results),
     );
 
