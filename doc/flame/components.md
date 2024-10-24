@@ -1070,9 +1070,9 @@ For example you could create a diamond shapes polygon like this:
 void main() {
   PolygonComponent.relative(
     [
-      Vector2(0.0, 1.0), // Middle of top wall
+      Vector2(0.0, -1.0), // Middle of top wall
       Vector2(1.0, 0.0), // Middle of right wall
-      Vector2(0.0, -1.0), // Middle of bottom wall
+      Vector2(0.0, 1.0), // Middle of bottom wall
       Vector2(-1.0, 0.0), // Middle of left wall
     ],
     size: Vector2.all(100),
