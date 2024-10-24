@@ -27,7 +27,10 @@ void main() {
           final result = command.execute(game, command.parser.parse([]));
           expect(game.paused, isTrue);
 
-          expect(result.$1, 'Game is already paused');
+          expect(
+            result.$1,
+            'Game is already paused, use the resume command start it again',
+          );
         },
       );
     });

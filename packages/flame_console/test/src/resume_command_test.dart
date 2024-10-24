@@ -27,7 +27,10 @@ void main() {
           final result = command.execute(game, command.parser.parse([]));
           expect(game.paused, isFalse);
 
-          expect(result.$1, 'Game is not paused');
+          expect(
+            result.$1,
+            'Game is not paused, use the pause command to pause it',
+          );
         },
       );
     });

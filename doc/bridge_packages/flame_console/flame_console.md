@@ -61,7 +61,13 @@ Widget build(BuildContext context) {
 
  ```dart
 class MyCustomCommand extends ConsoleCommand<MyGame> {
-  MyCustomCommand() : super('my_command', 'Description of my command');
+  MyCustomCommand();
+
+  @override
+  String get name => 'my_command';
+
+  @override
+  String get description => 'Description of my command';
 
   // The execute method is supposed to return a tuple where the first
   // element is an error message in case of failure, and the second
@@ -82,9 +88,7 @@ ConsoleView(
   onClose: () {
     _game.overlays.remove('console');
   },
-  customCommands: {
-    'custom_cmd': MyCustomCommand(),
-  },
+  customCommands: [MyCustomCommand()],
 ),
 ```
 

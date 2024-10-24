@@ -6,7 +6,7 @@ class ResumeConsoleCommand<G extends FlameGame> extends ConsoleCommand<G> {
   @override
   (String?, String) execute(G game, ArgResults results) {
     if (!game.paused) {
-      return ('Game is not paused', '');
+      return ('Game is not paused, use the pause command to pause it', '');
     } else {
       game.resumeEngine();
       return (null, '');
