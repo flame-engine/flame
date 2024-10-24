@@ -1090,9 +1090,6 @@ the center of the polygon.
 In the image you can see how the polygon shape formed by the purple arrows is defined by the red
 arrows.
 
-Remember to define the lists in a counter clockwise manner (if you think in the screen coordinate
-system where the y-axis is flipped, otherwise it is clockwise).
-
 
 ### RectangleComponent
 
