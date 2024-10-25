@@ -257,6 +257,9 @@ class FireAtlas {
   /// The height of the tile.
   double tileHeight;
 
+  /// The space between tiles.
+  double? spacing;
+
   /// Stores the asset data once this instance has loaded.
   String? imageData;
   Image? _image;
@@ -270,6 +273,7 @@ class FireAtlas {
     required this.tileWidth,
     required this.tileHeight,
     required this.imageData,
+    this.spacing,
   });
 
   /// Holds all the selections of this file.
@@ -310,7 +314,8 @@ class FireAtlas {
       ..['imageData'] = imageData
       ..['selections'] = selectionsJson
       ..['tileWidth'] = tileWidth
-      ..['tileHeight'] = tileHeight;
+      ..['tileHeight'] = tileHeight
+      ..['spacing'] = spacing;
 
     return json;
   }
@@ -319,12 +324,14 @@ class FireAtlas {
     final tileHeight = json['tileHeight'] as num?;
     final tileWidth = json['tileWidth'] as num?;
     final tileSize = json['tileSize'] as num? ?? 0;
+    final spacing = json['spacing'] as num?;
 
     final atlas = FireAtlas(
       id: json['id'] as String,
       imageData: json['imageData'] as String?,
       tileHeight: (tileHeight ?? tileSize).toDouble(),
       tileWidth: (tileWidth ?? tileSize).toDouble(),
+      spacing: spacing?.toDouble(),
     );
 
     final selections = json['selections'] as Map<String, dynamic>;

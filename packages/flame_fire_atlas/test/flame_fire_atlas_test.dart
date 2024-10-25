@@ -163,9 +163,13 @@ void main() {
     });
 
     test('converts to json', () async {
-      final atlas = await _readTestAtlas();
+      final atlas = await _readTestAtlas()
+          ..spacing = 2;
       final json = atlas.toJson();
       expect(json['id'], 'cave_ace');
+      expect(json['tileWidth'], 16);
+      expect(json['tileHeight'], 16);
+      expect(json['spacing'], 2);
     });
 
     test('serialize/deserialize', () async {
