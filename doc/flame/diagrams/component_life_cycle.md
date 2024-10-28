@@ -41,6 +41,6 @@
     D-->E
     E-->D
     E-. If removed .->F
-    F-. If re-parented .->A
+    F-. If re-parented .->B
 
 ```
