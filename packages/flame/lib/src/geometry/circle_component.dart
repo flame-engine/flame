@@ -3,11 +3,10 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/math/solve_quadratic.dart';
 import 'package:meta/meta.dart';
 
-class CircleComponent extends ShapeComponent implements SizeProvider {
+class CircleComponent extends ShapeComponent {
   /// With this constructor you can create your [CircleComponent] from a radius
   /// and a position. It will also calculate the bounding rectangle [size] for
   /// the [CircleComponent].
