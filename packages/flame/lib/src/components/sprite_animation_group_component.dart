@@ -1,15 +1,12 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationGroupComponent<T> extends PositionComponent
-    with HasPaint
-    implements SizeProvider {
+class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   /// Key with the current playing animation
   T? _current;
 

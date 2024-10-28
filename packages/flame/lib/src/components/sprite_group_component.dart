@@ -1,16 +1,13 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
 /// A [PositionComponent] that can have multiple [Sprite]s and render
 /// the one mapped with the [current] key.
-class SpriteGroupComponent<T> extends PositionComponent
-    with HasPaint
-    implements SizeProvider {
+class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
   /// Key for the current sprite.
   T? _current;
 
