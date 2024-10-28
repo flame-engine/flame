@@ -1,15 +1,12 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationComponent extends PositionComponent
-    with HasPaint
-    implements SizeProvider {
+class SpriteAnimationComponent extends PositionComponent with HasPaint {
   /// The animation ticker used for updating [animation].
   SpriteAnimationTicker? _animationTicker;
 
