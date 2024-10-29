@@ -165,6 +165,15 @@ void main() {
       expect(jumpSprite, isNotNull);
     });
 
+    test('findSpriteByNameIndex will return 1 sprite', () async {
+      final atlas = await TexturePackerAtlas.load(
+        atlasPath,
+        fromStorage: true,
+      );
+      final jumpSprite = atlas.findSpriteByNameIndex('robot_jump', -1);
+      expect(jumpSprite, isNotNull);
+    });
+
     test('Sprite data is loaded correctly', () async {
       final atlas = await TexturePackerAtlas.load(
         atlasPath,
