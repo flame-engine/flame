@@ -58,6 +58,7 @@ void main() {
       expect(jumpSprite.srcSize, Vector2(192, 256));
       expect(jumpSprite.originalSize, Vector2(192, 256));
       expect(jumpSprite.offset, Vector2(0, 0));
+      expect(jumpSprite.angle, 1.5707963267948966);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
       expect(walkSprite.rotate, false);
@@ -74,6 +75,7 @@ void main() {
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
       expect(walkSprite.offset, Vector2(0, 0));
+      expect(walkSprite.angle, 0);
     });
     test('Trimmed sprite data is loaded correctly', () async {
       final atlas = await TexturePackerAtlas.load(
@@ -96,12 +98,14 @@ void main() {
       expect(idleSprite.srcSize, Vector2(192, 256));
       expect(idleSprite.originalSize, Vector2(192, 256));
       expect(idleSprite.offset, Vector2(31, 0));
+      expect(idleSprite.angle, 0);
 
       final idleSpritePackedSize = idleSprite.clone(useOriginalSize: false);
       expect(idleSpritePackedSize.src, const Rect.fromLTWH(0, 310, 130, 182));
       expect(idleSpritePackedSize.srcSize, Vector2(130, 182));
       expect(idleSpritePackedSize.originalSize, Vector2(130, 182));
       expect(idleSpritePackedSize.offset, Vector2(0, 0));
+      expect(idleSpritePackedSize.angle, 0);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
       expect(walkSprite.rotate, true);
@@ -118,12 +122,14 @@ void main() {
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
       expect(walkSprite.offset, Vector2(14, 2));
+      expect(walkSprite.angle, 1.5707963267948966);
 
       final walkSpritePackedSize = walkSprite.clone(useOriginalSize: false);
       expect(walkSpritePackedSize.src, const Rect.fromLTWH(0, 0, 183, 150));
       expect(walkSpritePackedSize.srcSize, Vector2(150, 183));
       expect(walkSpritePackedSize.originalSize, Vector2(150, 183));
       expect(walkSpritePackedSize.offset, Vector2(0, 0));
+      expect(walkSpritePackedSize.angle, 1.5707963267948966);
     });
   });
 
@@ -180,6 +186,7 @@ void main() {
       expect(jumpSprite.srcSize, Vector2(192, 256));
       expect(jumpSprite.originalSize, Vector2(192, 256));
       expect(jumpSprite.offset, Vector2(0, 0));
+      expect(jumpSprite.angle, 0);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
       expect(walkSprite.rotate, false);
@@ -196,6 +203,7 @@ void main() {
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
       expect(walkSprite.offset, Vector2(0, 0));
+      expect(walkSprite.angle, 0);
     });
     test('Trimmed sprite data is loaded correctly', () async {
       final atlas = await TexturePackerAtlas.load(
@@ -218,12 +226,14 @@ void main() {
       expect(idleSprite.srcSize, Vector2(192, 256));
       expect(idleSprite.originalSize, Vector2(192, 256));
       expect(idleSprite.offset, Vector2(31, 0));
+      expect(idleSprite.angle, 0);
 
       final idleSpritePackedSize = idleSprite.clone(useOriginalSize: false);
       expect(idleSpritePackedSize.src, const Rect.fromLTWH(0, 160, 130, 182));
       expect(idleSpritePackedSize.srcSize, Vector2(130, 182));
       expect(idleSpritePackedSize.originalSize, Vector2(130, 182));
       expect(idleSpritePackedSize.offset, Vector2(0, 0));
+      expect(idleSpritePackedSize.angle, 0);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
       expect(walkSprite.rotate, true);
@@ -240,12 +250,14 @@ void main() {
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
       expect(walkSprite.offset, Vector2(14, 2));
+      expect(walkSprite.angle, 1.5707963267948966);
 
       final walkSpritePackedSize = walkSprite.clone(useOriginalSize: false);
       expect(walkSpritePackedSize.src, const Rect.fromLTWH(191, 367, 183, 150));
       expect(walkSpritePackedSize.srcSize, Vector2(150, 183));
       expect(walkSpritePackedSize.originalSize, Vector2(150, 183));
       expect(walkSpritePackedSize.offset, Vector2(0, 0));
+      expect(walkSpritePackedSize.angle, 1.5707963267948966);
     });
   });
 }
