@@ -12,7 +12,7 @@ export '../sprite.dart';
 
 /// A [StatelessWidget] which renders a Sprite
 /// To render an animation, use [SpriteAnimationWidget].
-class SpriteWidget extends StatelessWidget {
+class SpriteWidget extends StatefulWidget {
   /// The positioning [Anchor]
   final Anchor anchor;
 
@@ -69,19 +69,47 @@ class SpriteWidget extends StatelessWidget {
         );
 
   @override
+  State<SpriteWidget> createState() => _SpriteWidgetState();
+}
+
+class _SpriteWidgetState extends State<SpriteWidget> {
+  late FutureOr<Sprite> _spriteFuture = widget._spriteFuture;
+
+  @override
+  void didUpdateWidget(covariant SpriteWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _updateSprite(oldWidget._spriteFuture, widget._spriteFuture);
+  }
+
+  Future<void> _updateSprite(
+    FutureOr<Sprite> oldFutureValue,
+    FutureOr<Sprite> newFutureValue,
+  ) async {
+    final oldValue = await oldFutureValue;
+    final newValue = await newFutureValue;
+
+    if (oldValue.image != newValue.image || oldValue.src != newValue.src) {
+      setState(() {
+        _spriteFuture = newFutureValue;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Sprite>(
       future: _spriteFuture,
       builder: (_, sprite) {
         return InternalSpriteWidget(
           sprite: sprite,
-          anchor: anchor,
-          angle: angle,
-          paint: paint,
+          anchor: widget.anchor,
+          angle: widget.angle,
+          paint: widget.paint,
         );
       },
-      errorBuilder: errorBuilder,
-      loadingBuilder: loadingBuilder,
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }
