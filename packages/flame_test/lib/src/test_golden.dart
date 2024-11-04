@@ -34,13 +34,17 @@ void testGolden(
   PrepareGameFunction testBody, {
   required String goldenFile,
   Vector2? size,
+  Color? backgroundColor,
   FlameGame? game,
   bool skip = false,
 }) {
   testWidgets(
     testName,
     (tester) async {
-      final gameInstance = game ?? FlameGame();
+      final gameInstance = game ??
+          (backgroundColor != null
+              ? GameWithBackgroundColor(backgroundColor)
+              : FlameGame());
       const myKey = ValueKey('game-instance');
 
       await tester.runAsync(() async {
@@ -73,3 +77,12 @@ void testGolden(
 }
 
 typedef PrepareGameFunction = Future<void> Function(FlameGame game);
+
+class GameWithBackgroundColor extends FlameGame {
+  final Color _backgroundColor;
+
+  GameWithBackgroundColor(this._backgroundColor);
+
+  @override
+  Color backgroundColor() => _backgroundColor;
+}

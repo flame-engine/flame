@@ -91,6 +91,18 @@ void main() {
       }
     });
 
+    test('keys', () {
+      final cache = Images();
+      final images = List.generate(10, (_) => _MockImage());
+      for (var i = 0; i < images.length; i++) {
+        cache.add(i.toString(), images[i]);
+      }
+      expect(
+        cache.keys.toSet(),
+        {for (var i = 0; i < images.length; i++) i.toString()},
+      );
+    });
+
     testWithFlameGame(
       'prefix on game.images can be changed',
       (game) async {
@@ -111,6 +123,7 @@ void main() {
         final img = _MockImage();
         game.images.add('my image', img);
         expect(Flame.images.containsKey('my image'), isTrue);
+        expect(Flame.images.keys, hasLength(1));
 
         game.images = Images();
         game.images.add('new image', img);

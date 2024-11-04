@@ -1,3 +1,7 @@
+## 1.6.0
+
+ - **FEAT**: Adding getter for the atlas image on flame fire atlas ([#3326](https://github.com/flame-engine/flame/issues/3326)). ([ae230ffa](https://github.com/flame-engine/flame/commit/ae230ffaaa588df7a99a3e2e8fa8980dc32104c0))
+
 ## 1.5.5
 
  - Update a dependency to the latest release.

@@ -1,3 +1,8 @@
+## 1.17.2
+
+ - **FIX**: Widgets flickering ([#3343](https://github.com/flame-engine/flame/issues/3343)). ([ff170dc5](https://github.com/flame-engine/flame/commit/ff170dc5c2acc41190249b48e61767ea459fabb4))
+ - **FIX**: Fix SpriteBatch to comply with new drawAtlas requirement ([#3338](https://github.com/flame-engine/flame/issues/3338)). ([a17fe4cd](https://github.com/flame-engine/flame/commit/a17fe4cdfaafa071cfd2ab8ef8279b26b79f00a7))
+
 ## 1.17.1
 
  - Update a dependency to the latest release.

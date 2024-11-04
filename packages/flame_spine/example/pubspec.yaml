@@ -7,8 +7,8 @@ environment:
   sdk: ">=3.4.0 <4.0.0"
 
 dependencies:
-  flame: ^1.20.0
-  flame_spine: ^0.2.2+1
+  flame: ^1.21.0
+  flame_spine: ^0.2.2+2
   flutter:
     sdk: flutter
 
