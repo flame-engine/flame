@@ -44,7 +44,8 @@ class TiledGame extends FlameGame {
               ),
             ),
         ],
-        alternatePattern: AlternatePattern.excludeLast,
+        alternate: true,
+        alternatePattern: AlternatePattern.doNotRepeatLast,
         infinite: true,
       ),
     );

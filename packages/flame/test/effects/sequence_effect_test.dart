@@ -26,7 +26,7 @@ void main() {
           [
             MoveEffect.to(Vector2(10, 10), EffectController(duration: 3)),
           ],
-          alternatePattern: AlternatePattern.includeLast,
+          alternatePattern: AlternatePattern.repeatLast,
         );
         expect(effect.controller.duration, 6);
         expect(effect.controller.isRandom, false);
@@ -37,7 +37,7 @@ void main() {
           [
             MoveEffect.to(Vector2.zero(), EffectController(duration: 1)),
           ],
-          alternatePattern: AlternatePattern.includeLast,
+          alternatePattern: AlternatePattern.repeatLast,
           infinite: true,
         );
         expect(effect.controller.duration, double.infinity);
@@ -55,7 +55,7 @@ void main() {
         );
         final effect = SequenceEffect(
           [randomEffect],
-          alternatePattern: AlternatePattern.includeLast,
+          alternatePattern: AlternatePattern.repeatLast,
           repeatCount: 1000,
         );
         expect(
@@ -156,7 +156,7 @@ void main() {
             MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
             MoveEffect.by(Vector2(0, 10), EffectController(duration: 1)),
           ],
-          alternatePattern: AlternatePattern.includeLast,
+          alternatePattern: AlternatePattern.repeatLast,
         );
         expect(effect.controller.duration, 4);
 
@@ -186,7 +186,7 @@ void main() {
             MoveEffect.by(Vector2(1, 0), controller()),
             MoveEffect.by(Vector2(0, 1), controller()),
           ],
-          alternatePattern: AlternatePattern.includeLast,
+          alternatePattern: AlternatePattern.repeatLast,
         );
 
         final component = PositionComponent()..add(effect);
@@ -254,7 +254,7 @@ void main() {
                 MoveEffect.to(Vector2(x2, y2), duration(1)),
                 MoveEffect.to(Vector2(x3, y3), duration(1)),
               ],
-              alternatePattern: AlternatePattern.includeLast,
+              alternatePattern: AlternatePattern.repeatLast,
               repeatCount: 2,
             ),
             MoveEffect.by(Vector2(x4 - x1, y4 - y1), duration(2)),
@@ -266,7 +266,7 @@ void main() {
               repeatCount: 5,
             ),
           ],
-          alternatePattern: AlternatePattern.includeLast,
+          alternatePattern: AlternatePattern.repeatLast,
         );
         expect(effect.controller.duration, 42);
 

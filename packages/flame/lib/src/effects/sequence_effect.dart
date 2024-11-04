@@ -5,12 +5,14 @@ import 'package:flame/src/effects/effect.dart';
 
 EffectController _createController({
   required List<Effect> effects,
+  required bool alternate,
   required AlternatePattern alternatePattern,
   required bool infinite,
   required int repeatCount,
 }) {
   EffectController ec = _SequenceEffectEffectController(
     effects,
+    alternate: alternate,
     alternatePattern: alternatePattern,
   );
   if (infinite) {
@@ -24,25 +26,19 @@ EffectController _createController({
 
 /// Specifies how to alternate a [SequenceEffect] pattern.
 ///
-/// If [AlternatePattern.none] is provided, then
-/// the [SequenceEffect] does not repeat in reverse when the child
-/// [Effect]s have all completed playing.
-///
-/// When [SequenceEffect] is provided a pattern other than
-/// [AlternatePattern.none], the sequence will repeat in the
+/// When [SequenceEffect.alternate] is true, the sequence will repeat in the
 /// reverse order, doubling the length of [EffectController.duration].
 ///
-/// [AlternatePattern.includeLast] will replay the last [Effect] at the start
+/// [AlternatePattern.repeatLast] will replay the last [Effect] at the start
 /// of the alternate pattern, effectively playing it twice in a row.
 ///
-/// [AlternatePattern.excludeLast] will not replay the last [Effect] and will
-/// jump to the second-to-last [Effect], if available, at the start of the
-/// alternate pattern instead, effectively playing the last [Effect] only once
-/// throughout the original and alternating pattern.
+/// [AlternatePattern.doNotRepeatLast] will not replay the last [Effect] and
+/// will instead jump to the second-to-last [Effect], if available, at the start
+/// of the alternate pattern. This is equivalent to playing the last [Effect]
+/// once throughout the span of the original pattern plus alternating pattern.
 enum AlternatePattern {
-  none(0),
-  includeLast(1),
-  excludeLast(2);
+  repeatLast(1),
+  doNotRepeatLast(2);
 
   final int value;
   const AlternatePattern(this.value);
@@ -74,7 +70,8 @@ enum AlternatePattern {
 class SequenceEffect extends Effect {
   SequenceEffect(
     List<Effect> effects, {
-    AlternatePattern? alternatePattern = AlternatePattern.none,
+    AlternatePattern alternatePattern = AlternatePattern.repeatLast,
+    bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
     super.onComplete,
@@ -88,7 +85,8 @@ class SequenceEffect extends Effect {
         super(
           _createController(
             effects: effects,
-            alternatePattern: alternatePattern!,
+            alternate: alternate,
+            alternatePattern: alternatePattern,
             infinite: infinite,
             repeatCount: repeatCount,
           ),
@@ -118,14 +116,19 @@ class SequenceEffect extends Effect {
 class _SequenceEffectEffectController extends EffectController {
   _SequenceEffectEffectController(
     this.effects, {
+    required this.alternate,
     required this.alternatePattern,
   }) : super.empty();
 
   /// The list of children effects.
   final List<Effect> effects;
 
-  /// If this flag is not [AlternatePattern.none], then after the sequence runs
-  /// to the end, it will run again in the reverse order according to the policy
+  /// If this flag is true, then after the sequence runs to the end, it will
+  /// run again in the reverse order.
+  final bool alternate;
+
+  /// If [alternate] is true, and after the sequence runs to completion once,
+  /// this will run again in the reverse order according to the policy
   /// of the [AlternatePattern] value provided.
   final AlternatePattern alternatePattern;
 
@@ -151,9 +154,21 @@ class _SequenceEffectEffectController extends EffectController {
     for (final effect in effects) {
       totalDuration += effect.controller.duration ?? 0;
     }
-    if (alternatePattern != AlternatePattern.none) {
-      totalDuration *= 2;
+
+    // Abort early
+    if (totalDuration == 0.0) {
+      return totalDuration;
     }
+
+    if (alternate) {
+      totalDuration *= 2;
+
+      if (alternatePattern == AlternatePattern.doNotRepeatLast) {
+        totalDuration -= effects.first.controller.duration ?? 0;
+        totalDuration -= effects.last.controller.duration ?? 0;
+      }
+    }
+
     return totalDuration;
   }
 
@@ -174,10 +189,12 @@ class _SequenceEffectEffectController extends EffectController {
         if (t > 0) {
           _index += 1;
           if (_index == n) {
-            _index = switch (alternatePattern) {
-              AlternatePattern.includeLast => -1,
-              AlternatePattern.excludeLast => -2,
-              AlternatePattern.none => n - 1,
+            _index = switch (alternate) {
+              true => switch (alternatePattern) {
+                  AlternatePattern.repeatLast => -1,
+                  AlternatePattern.doNotRepeatLast => -2,
+                },
+              false => n - 1,
             };
 
             if (_index == n - 1) {
@@ -190,7 +207,13 @@ class _SequenceEffectEffectController extends EffectController {
         t = currentEffect.recede(t);
         if (t > 0) {
           _index -= 1;
-          if (_index < -n) {
+
+          var lastIndex = -n;
+          if (alternate && alternatePattern == AlternatePattern.repeatLast) {
+            lastIndex -= 1;
+          }
+
+          if (_index == lastIndex) {
             _index = -n;
             _completed = true;
             break;
@@ -238,10 +261,12 @@ class _SequenceEffectEffectController extends EffectController {
 
   @override
   void setToEnd() {
-    _index = switch (alternatePattern) {
-      AlternatePattern.includeLast => -n,
-      AlternatePattern.excludeLast => -n + 1,
-      AlternatePattern.none => n - 1,
+    _index = switch (alternate) {
+      true => switch (alternatePattern) {
+          AlternatePattern.repeatLast => -n,
+          AlternatePattern.doNotRepeatLast => -n + 1,
+        },
+      false => n - 1,
     };
 
     if (_index == n - 1) {
