@@ -147,13 +147,17 @@ class _SequenceEffectEffectController extends EffectController {
   int get n => effects.length;
 
   /// If [alternate] is not set, our last index will be `n-1`.
-  /// Otherwise, the sequence approached 0 from the left of the
-  /// numberline, and depending on if our [alternatePattern]
-  /// includes or excludes the first [Effect], reduces the destination
-  /// index by 1.
+  /// Otherwise, the sequence approaches 0 from the left of the
+  /// numberline, and if our [alternatePattern] excludes the first
+  /// [Effect], then it will reduce the destination index by 1.
   int get _computeLastIndex => switch (alternate) {
         true => switch (alternatePattern) {
+            // index 0 is the start of the original pattern,
+            // therefore -1 is our destination index, which will
+            // be the exact same `Effect` as index 0.
             AlternatePattern.repeatLast => -1,
+            // Since the original pattern will begin again from start,
+            // skip index -1 and make -2 our destination index.
             AlternatePattern.doNotRepeatLast => -2,
           },
         false => n - 1,
