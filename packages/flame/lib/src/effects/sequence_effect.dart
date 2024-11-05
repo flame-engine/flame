@@ -148,7 +148,7 @@ class _SequenceEffectEffectController extends EffectController {
 
   /// If [alternate] is not set, our last index will be `n-1`.
   /// Otherwise, the sequence approaches 0 from the left of the
-  /// numberline, and if our [alternatePattern] excludes the first
+  /// number-line, and if our [alternatePattern] excludes the first
   /// [Effect], then it will reduce the destination index by 1.
   int get _computeLastIndex => switch (alternate) {
         true => switch (alternatePattern) {
