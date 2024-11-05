@@ -26,6 +26,7 @@ void main() {
           [
             MoveEffect.to(Vector2(10, 10), EffectController(duration: 3)),
           ],
+          alternate: true,
         );
         expect(effect.controller.duration, 6);
         expect(effect.controller.isRandom, false);
@@ -36,6 +37,7 @@ void main() {
           [
             MoveEffect.to(Vector2.zero(), EffectController(duration: 1)),
           ],
+          alternate: true,
           infinite: true,
         );
         expect(effect.controller.duration, double.infinity);
@@ -54,6 +56,7 @@ void main() {
         final effect = SequenceEffect(
           [randomEffect],
           repeatCount: 1000,
+          alternate: true,
         );
         expect(
           effect.controller.duration,
@@ -153,6 +156,7 @@ void main() {
             MoveEffect.by(Vector2(10, 0), EffectController(duration: 1)),
             MoveEffect.by(Vector2(0, 10), EffectController(duration: 1)),
           ],
+          alternate: true,
         );
         expect(effect.controller.duration, 4);
 
@@ -182,6 +186,7 @@ void main() {
             MoveEffect.by(Vector2(1, 0), controller()),
             MoveEffect.by(Vector2(0, 1), controller()),
           ],
+          alternate: true,
         );
 
         final component = PositionComponent()..add(effect);
@@ -250,6 +255,7 @@ void main() {
                 MoveEffect.to(Vector2(x3, y3), duration(1)),
               ],
               repeatCount: 2,
+              alternate: true,
             ),
             MoveEffect.by(Vector2(x4 - x1, y4 - y1), duration(2)),
             SequenceEffect(
@@ -258,6 +264,7 @@ void main() {
                 MoveEffect.by(Vector2(0, dy5), duration(1)),
               ],
               repeatCount: 5,
+              alternate: true,
             ),
           ],
         );
