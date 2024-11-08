@@ -7,7 +7,7 @@ class MemoryConsoleRepository extends ConsoleRepository {
     List<String>? commands,
   }) : _commands = commands ?? <String>[];
 
-  late final List<String> _commands;
+  final List<String> _commands;
 
   @override
   Future<void> addToCommandHistory(String command) async {
