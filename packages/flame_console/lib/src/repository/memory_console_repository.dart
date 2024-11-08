@@ -5,9 +5,7 @@ import 'package:flame_console/flame_console.dart';
 class MemoryConsoleRepository extends ConsoleRepository {
   MemoryConsoleRepository({
     List<String>? commands,
-  }) {
-    _commands = commands ?? <String>[];
-  }
+  }) : _commands = commands ?? <String>[];
 
   late final List<String> _commands;
 
