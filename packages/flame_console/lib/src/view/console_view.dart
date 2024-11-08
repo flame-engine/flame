@@ -43,7 +43,7 @@ class ConsoleView<G extends FlameGame> extends StatefulWidget {
     required this.game,
     required this.onClose,
     this.customCommands,
-    ConsoleRepository? repository,
+    this.repository,
     this.containerBuilder,
     this.cursorBuilder,
     this.cursorColor,
@@ -51,12 +51,12 @@ class ConsoleView<G extends FlameGame> extends StatefulWidget {
     this.textStyle,
     @visibleForTesting this.controller,
     super.key,
-  }) : repository = repository ?? const MemoryConsoleRepository();
+  });
 
   final G game;
   final List<ConsoleCommand<G>>? customCommands;
   final VoidCallback onClose;
-  final ConsoleRepository repository;
+  final ConsoleRepository? repository;
   final ConsoleController? controller;
 
   final ContainerBuilder? containerBuilder;
@@ -88,13 +88,15 @@ class _ConsoleViewState extends State<ConsoleView> {
     if (widget.customCommands != null) ...widget.customCommands!,
   ];
 
+  late final repository = widget.repository ?? MemoryConsoleRepository();
+
   late final Map<String, ConsoleCommand> _commandsMap = {
     for (final command in _commandList) command.name: command,
   };
 
   late final _controller = widget.controller ??
       ConsoleController(
-        repository: widget.repository,
+        repository: repository,
         game: widget.game,
         scrollController: _scrollController,
         onClose: widget.onClose,
