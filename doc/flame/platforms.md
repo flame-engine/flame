@@ -77,7 +77,7 @@ Now, whenever you push something to the `main` branch, the action will run and u
 deployed game.
 
 The game should be available at an URL like this:
-`https://YOUR_GITHUB_USERNAME.github.io/YOUR_REPO_NAME/`
+`https://YOUR_GITHUB_USERNAME.github.io/NAME_OF_YOUR_REPOSITORY/`
 
 
 ## Deploy your game to itch.io
