@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flame/src/components/route.dart';
-import 'package:flame/src/components/router_component.dart';
+import 'package:flame/src/components/router/route.dart';
+import 'package:flame/src/components/router/router_component.dart';
 import 'package:meta/meta.dart';
 
 /// [ValueRoute] is a special route that "returns a value" when popped.

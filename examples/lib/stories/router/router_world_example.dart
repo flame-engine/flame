@@ -6,7 +6,12 @@ import 'package:flame/geometry.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/rendering.dart';
 
-class RouterGame extends FlameGame {
+class RouterWorldExample extends FlameGame {
+  static const description = '''
+  This example shows how to use the RouterComponent to navigate between
+  different worlds and pages.
+  ''';
+
   late final RouterComponent router;
 
   @override
@@ -25,7 +30,7 @@ class RouterGame extends FlameGame {
   }
 }
 
-class StartPage extends Component with HasGameReference<RouterGame> {
+class StartPage extends Component with HasGameReference<RouterWorldExample> {
   StartPage() {
     addAll([
       _logo = TextComponent(
@@ -177,7 +182,8 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
   }
 }
 
-class BackButton extends SimpleButton with HasGameReference<RouterGame> {
+class BackButton extends SimpleButton
+    with HasGameReference<RouterWorldExample> {
   BackButton()
       : super(
           Path()
@@ -193,7 +199,8 @@ class BackButton extends SimpleButton with HasGameReference<RouterGame> {
   void action() => game.router.pop();
 }
 
-class PauseButton extends SimpleButton with HasGameReference<RouterGame> {
+class PauseButton extends SimpleButton
+    with HasGameReference<RouterWorldExample> {
   PauseButton()
       : super(
           Path()
@@ -392,7 +399,7 @@ class PauseRoute extends Route {
 }
 
 class PausePage extends Component
-    with TapCallbacks, HasGameReference<RouterGame> {
+    with TapCallbacks, HasGameReference<RouterWorldExample> {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;

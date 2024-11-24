@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/components/router_component.dart';
+import 'package:flame/src/components/router/router_component.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/rendering/decorator.dart';
 import 'package:meta/meta.dart';
@@ -132,7 +132,7 @@ class Route extends PositionComponent
   final Decorator _renderEffect;
 
   /// Invoked by the [RouterComponent] when this route is pushed to the top
-  /// of the navigation stack
+  /// of the navigation stack.
   @internal
   void didPush(Route? previousRoute) {
     _page ??= build();
