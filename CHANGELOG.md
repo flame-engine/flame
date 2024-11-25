@@ -3,6 +3,83 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-11-24
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.22.0`](#flame---v1220)
+ - [`flame_console` - `v0.1.1`](#flame_console---v011)
+ - [`flame_fire_atlas` - `v1.7.0`](#flame_fire_atlas---v170)
+ - [`flame_behavior_tree` - `v0.1.3+3`](#flame_behavior_tree---v0133)
+ - [`flame_test` - `v1.17.3`](#flame_test---v1173)
+ - [`flame_tiled` - `v1.21.1`](#flame_tiled---v1211)
+ - [`flame_oxygen` - `v0.2.3+3`](#flame_oxygen---v0233)
+ - [`flame_isolate` - `v0.6.2+3`](#flame_isolate---v0623)
+ - [`flame_texturepacker` - `v4.1.3`](#flame_texturepacker---v413)
+ - [`flame_sprite_fusion` - `v0.1.3+3`](#flame_sprite_fusion---v0133)
+ - [`flame_audio` - `v2.10.6`](#flame_audio---v2106)
+ - [`flame_spine` - `v0.2.2+3`](#flame_spine---v0223)
+ - [`flame_bloc` - `v1.12.4`](#flame_bloc---v1124)
+ - [`flame_kenney_xml` - `v0.1.1+3`](#flame_kenney_xml---v0113)
+ - [`flame_lottie` - `v0.4.2+3`](#flame_lottie---v0423)
+ - [`flame_rive` - `v1.10.6`](#flame_rive---v1106)
+ - [`flame_markdown` - `v0.2.2+3`](#flame_markdown---v0223)
+ - [`flame_svg` - `v1.11.3`](#flame_svg---v1113)
+ - [`flame_forge2d` - `v0.18.2+3`](#flame_forge2d---v01823)
+ - [`flame_noise` - `v0.3.2+3`](#flame_noise---v0323)
+ - [`flame_riverpod` - `v5.4.6`](#flame_riverpod---v546)
+ - [`flame_network_assets` - `v0.3.3+3`](#flame_network_assets---v0333)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+3`
+ - `flame_test` - `v1.17.3`
+ - `flame_tiled` - `v1.21.1`
+ - `flame_oxygen` - `v0.2.3+3`
+ - `flame_isolate` - `v0.6.2+3`
+ - `flame_texturepacker` - `v4.1.3`
+ - `flame_sprite_fusion` - `v0.1.3+3`
+ - `flame_audio` - `v2.10.6`
+ - `flame_spine` - `v0.2.2+3`
+ - `flame_bloc` - `v1.12.4`
+ - `flame_kenney_xml` - `v0.1.1+3`
+ - `flame_lottie` - `v0.4.2+3`
+ - `flame_rive` - `v1.10.6`
+ - `flame_markdown` - `v0.2.2+3`
+ - `flame_svg` - `v1.11.3`
+ - `flame_forge2d` - `v0.18.2+3`
+ - `flame_noise` - `v0.3.2+3`
+ - `flame_riverpod` - `v5.4.6`
+ - `flame_network_assets` - `v0.3.3+3`
+
+---
+
+#### `flame` - `v1.22.0`
+
+ - **FIX**: Remove extra `implements SizeProvider`s ([#3358](https://github.com/flame-engine/flame/issues/3358)). ([47ba0d87](https://github.com/flame-engine/flame/commit/47ba0d8738b101ed59781f8ba384cf05a16d65f1))
+ - **FEAT**: Add WorldRoute to enable swapping worlds from the RouterComponent ([#3372](https://github.com/flame-engine/flame/issues/3372)). ([497f128f](https://github.com/flame-engine/flame/commit/497f128f8c32758f94d8d4752e9166fd3b625608))
+ - **FEAT**(overlays): Added the 'priority' parameter for overlays ([#3349](https://github.com/flame-engine/flame/issues/3349)). ([e591ebf8](https://github.com/flame-engine/flame/commit/e591ebf8a320ff3d55b9ae9e50390bf2ab5a8919))
+
+#### `flame_console` - `v0.1.1`
+
+ - **FIX**(flame_console): MemoryRepository can't be const ([#3362](https://github.com/flame-engine/flame/issues/3362)). ([e977bd49](https://github.com/flame-engine/flame/commit/e977bd495b196368582eda4e7d8019adc6c268f4))
+ - **FEAT**: Adding FlameConsole ([#3329](https://github.com/flame-engine/flame/issues/3329)). ([cf5358cd](https://github.com/flame-engine/flame/commit/cf5358cd9069dab9e327e766553bd65e151f1540))
+
+#### `flame_fire_atlas` - `v1.7.0`
+
+ - **FEAT**: Adding getters and methods for easier manipulation of selections ([#3350](https://github.com/flame-engine/flame/issues/3350)). ([291af57d](https://github.com/flame-engine/flame/commit/291af57deb7d742a73438b026ca2f4fd1c6a3454))
+
+
 ## 2024-10-16
 
 ### Changes
