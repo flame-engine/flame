@@ -16,7 +16,7 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.21.0
+  flame: ^1.22.0
   flutter:
     sdk: flutter
   jenny: ^1.3.2

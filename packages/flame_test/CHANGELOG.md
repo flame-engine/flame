@@ -1,3 +1,7 @@
+## 1.17.3
+
+ - Update a dependency to the latest release.
+
 ## 1.17.2
 
  - **FIX**: Widgets flickering ([#3343](https://github.com/flame-engine/flame/issues/3343)). ([ff170dc5](https://github.com/flame-engine/flame/commit/ff170dc5c2acc41190249b48e61767ea459fabb4))
