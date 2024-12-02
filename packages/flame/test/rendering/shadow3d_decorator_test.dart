@@ -81,7 +81,8 @@ void main() {
               ..xShift = 250.0
               ..yScale = 1.5
               ..opacity = 0.4
-              ..blur = 1.0,
+              ..blur = 1.0
+              ..baseColor = BasicPalette.red.color,
           ),
         ]);
       },
