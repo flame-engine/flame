@@ -469,7 +469,8 @@ But in some use cases, it might be interesting to find hits only within a certai
 range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
-game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class, or with the `HasGameReference` Mixin from other components as well.
+game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class,
+or with the `HasGameReference` Mixin from other components as well.
 
 Example:
 
