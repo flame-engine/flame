@@ -1,8 +1,0 @@
-# keywords/terms specific to the Dart/Flutter ecosystem
-canvaskit # CLI option that improves rendering on web https://docs.flutter.dev/platform-integration/web/renderers#command-line-options
-cupertino # Flutter module containing iOS-style widgets
-dartdoc # documentation tool for dart
-dartdocs # plural of dartdoc
-endtemplate # Use @endtemplate to close a @template block in dartdoc
-pubspec # dependency and configuration file of every Dart project
-writeln # StringBuffer.writeln
