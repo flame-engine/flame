@@ -102,7 +102,6 @@ void main() {
       },
       size: Vector2(360, 216),
       goldenFile: 'goldens/sprite_fusion_render_test.png',
-      skip: true,
     );
 
     testGolden(
@@ -121,7 +120,6 @@ void main() {
       },
       size: Vector2(360, 216),
       goldenFile: 'goldens/sprite_fusion_position_test.png',
-      skip: true,
     );
 
     testGolden(
@@ -140,7 +138,6 @@ void main() {
       },
       size: Vector2(360, 216),
       goldenFile: 'goldens/sprite_fusion_anchor_test.png',
-      skip: true,
     );
 
     testGolden(
@@ -159,7 +156,6 @@ void main() {
       },
       size: Vector2(360, 216),
       goldenFile: 'goldens/sprite_fusion_scale_test.png',
-      skip: true,
     );
 
     testGolden(
@@ -178,7 +174,6 @@ void main() {
       },
       size: Vector2(360, 216),
       goldenFile: 'goldens/sprite_fusion_angle_test.png',
-      skip: true,
     );
   });
 }

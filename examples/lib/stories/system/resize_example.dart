@@ -13,7 +13,7 @@ class ResizingRectangle extends RectangleComponent {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
 
-    this.size = size * 0.4;
+    this.size = size * .4;
   }
 }
 
