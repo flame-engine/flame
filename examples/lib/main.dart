@@ -30,6 +30,7 @@ import 'package:examples/stories/input/input.dart';
 import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
 import 'package:examples/stories/rendering/rendering.dart';
+import 'package:examples/stories/router/router.dart';
 import 'package:examples/stories/sprites/sprites.dart';
 import 'package:examples/stories/structure/structure.dart';
 import 'package:examples/stories/svg/svg.dart';
@@ -88,6 +89,7 @@ void runAsDashbook() {
   addLayoutStories(dashbook);
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
+  addRouterStories(dashbook);
   addTiledStories(dashbook);
   addSpritesStories(dashbook);
   addSvgStories(dashbook);

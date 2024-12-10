@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +17,7 @@ void main() {
       expect(decorator.yScale, 1.0);
       expect(decorator.blur, 0.0);
       expect(decorator.opacity, 0.6);
+      expect(decorator.baseColor, BasicPalette.black.color);
     });
 
     testGolden(
@@ -79,7 +81,8 @@ void main() {
               ..xShift = 250.0
               ..yScale = 1.5
               ..opacity = 0.4
-              ..blur = 1.0,
+              ..blur = 1.0
+              ..baseColor = BasicPalette.red.color,
           ),
         ]);
       },

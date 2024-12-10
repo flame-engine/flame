@@ -1,6 +1,6 @@
 name: flame_console
 description: "An extensible and customizable console to help debug Flame games."
-version: 0.1.0
+version: 0.1.1
 homepage:
 
 environment:
@@ -9,12 +9,12 @@ environment:
 
 dependencies:
   args: ^2.5.0
-  flame: ^1.19.0
+  flame: ^1.22.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flame_lint: ^1.2.1
-  flame_test: ^1.17.1
+  flame_test: ^1.17.3
   flutter_test:
     sdk: flutter
