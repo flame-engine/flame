@@ -55,7 +55,6 @@ void main() {
         ]);
       },
       goldenFile: '../_goldens/sprite_font_renderer_1.png',
-      skip: true,
     );
 
     testGolden(
@@ -117,7 +116,6 @@ void main() {
       },
       goldenFile: '../_goldens/sprite_font_renderer_2.png',
       size: Vector2(200, 140),
-      skip: true,
     );
 
     testGolden(
@@ -219,7 +217,6 @@ void main() {
       },
       goldenFile: '../_goldens/sprite_font_renderer_3.png',
       size: Vector2(200, 70),
-      skip: true,
     );
 
     testGolden(
@@ -266,7 +263,6 @@ void main() {
       },
       goldenFile: '../_goldens/sprite_font_renderer_4.png',
       size: Vector2(200, 130),
-      skip: true,
     );
   });
 }

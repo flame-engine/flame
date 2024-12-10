@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -171,7 +170,7 @@ void main() {
         final component = _MyComponent();
         component.makeTransparent();
 
-        expect(component.paint.color.a, 0);
+        expect(component.paint.color.opacity, 0);
       },
     );
 
@@ -183,7 +182,7 @@ void main() {
         component.makeTransparent(paintId: _MyComponentKeys.background);
 
         expect(
-          component.getPaint(_MyComponentKeys.background).color.a,
+          component.getPaint(_MyComponentKeys.background).color.opacity,
           0,
         );
       },
@@ -196,7 +195,7 @@ void main() {
         component.makeTransparent();
         component.makeOpaque();
 
-        expect(component.paint.color.a, 1);
+        expect(component.paint.color.opacity, 1);
       },
     );
 
@@ -210,9 +209,9 @@ void main() {
         );
         component.makeOpaque(paintId: _MyComponentKeys.background);
 
-        expectDouble(
-          component.getPaint(_MyComponentKeys.background).color.a,
-          1.0,
+        expect(
+          component.getPaint(_MyComponentKeys.background).color.opacity,
+          1,
         );
       },
     );
@@ -223,7 +222,7 @@ void main() {
         final component = _MyComponent();
         component.setOpacity(0.2);
 
-        expectDouble(component.paint.color.a, 0.2);
+        expect(component.paint.color.opacity, 0.2);
       },
     );
 
@@ -234,8 +233,8 @@ void main() {
         component.setPaint(_MyComponentKeys.background, Paint());
         component.setOpacity(0.2, paintId: _MyComponentKeys.background);
 
-        expectDouble(
-          component.getPaint(_MyComponentKeys.background).color.a,
+        expect(
+          component.getPaint(_MyComponentKeys.background).color.opacity,
           0.2,
         );
       },

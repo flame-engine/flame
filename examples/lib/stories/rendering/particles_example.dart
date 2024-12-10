@@ -432,9 +432,7 @@ class ParticlesExample extends FlameGame {
             renderer: (canvas, particle) {
               final paint = randomElement(paints);
               // Override the color to dynamically update opacity
-              paint.color = paint.color.withValues(
-                alpha: 1 - particle.progress,
-              );
+              paint.color = paint.color.withOpacity(1 - particle.progress);
 
               canvas.drawCircle(
                 Offset.zero,

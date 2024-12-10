@@ -7,10 +7,6 @@ class PaletteEntry {
 
   const PaletteEntry(this.color);
 
-  PaletteEntry withOpacity(double opacity) {
-    return PaletteEntry(color.withValues(alpha: opacity));
-  }
-
   PaletteEntry withAlpha(int alpha) {
     return PaletteEntry(color.withAlpha(alpha));
   }

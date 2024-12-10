@@ -28,8 +28,8 @@ with with mouse.
   Paint tapPaint = Paint();
 
   final _colorTween = ColorTween(
-    begin: Colors.blue.withValues(alpha: 0.2),
-    end: Colors.red.withValues(alpha: 0.2),
+    begin: Colors.blue.withOpacity(0.2),
+    end: Colors.red.withOpacity(0.2),
   );
 
   static const numberOfRays = 2000;
