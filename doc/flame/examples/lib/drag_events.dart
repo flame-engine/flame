@@ -127,7 +127,7 @@ class Trail extends Component {
       final path = _paths[i];
       final opacity = _opacities[i];
       if (opacity > 0) {
-        _linePaint.color = _color.withValues(alpha: opacity);
+        _linePaint.color = _color.withOpacity(opacity);
         _linePaint.strokeWidth = lineWidth * opacity;
         canvas.drawPath(path, _linePaint);
       }
@@ -216,11 +216,11 @@ class Star extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     if (isDragged) {
-      _paint.color = color.withValues(alpha: 0.5);
+      _paint.color = color.withOpacity(0.5);
       canvas.drawPath(_path, _paint);
       canvas.drawPath(_path, _borderPaint);
     } else {
-      _paint.color = color.withValues(alpha: 1);
+      _paint.color = color.withOpacity(1);
       canvas.drawPath(_path, _shadowPaint);
       canvas.drawPath(_path, _paint);
     }

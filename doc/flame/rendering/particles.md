@@ -250,7 +250,7 @@ game.add(
   ParticleSystemComponent(
     particle: CircleParticle(
       radius: game.size.x / 2,
-      paint: Paint()..color = Colors.red.withValues(alpha: .5),
+      paint: Paint()..color = Colors.red.withOpacity(.5),
     ),
   ),
 );

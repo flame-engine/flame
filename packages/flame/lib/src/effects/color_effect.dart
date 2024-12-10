@@ -43,8 +43,8 @@ class ColorEffect extends ComponentEffect<HasPaint> {
 
   @override
   void apply(double progress) {
-    final currentColor = color.withValues(
-      alpha: min(max(_tween.transform(progress), 0), 1),
+    final currentColor = color.withOpacity(
+      min(max(_tween.transform(progress), 0), 1),
     );
     target.tint(currentColor, paintId: paintId);
   }
