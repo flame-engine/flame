@@ -13,7 +13,7 @@ class RayCastExample extends FlameGame with HasCollisionDetection {
   final velocity = 60;
   double get resetPosition => -canvasSize.y;
 
-  Paint paint = BasicPalette.red.withOpacity(0.6).paint();
+  Paint paint = Paint()..color = Colors.red.withOpacity(0.6);
 
   RaycastResult<ShapeHitbox>? result;
 
