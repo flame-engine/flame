@@ -13,11 +13,11 @@ extension ColorExtension on Color {
     assert(amount >= 0 && amount <= 1);
 
     final f = 1 - amount;
-    return Color.from(
-      alpha: a,
-      red: r * f,
-      green: g * f,
-      blue: b * f,
+    return Color.fromARGB(
+      alpha,
+      (red * f).round(),
+      (green * f).round(),
+      (blue * f).round(),
     );
   }
 
@@ -29,11 +29,11 @@ extension ColorExtension on Color {
   Color brighten(double amount) {
     assert(amount >= 0 && amount <= 1);
 
-    return Color.from(
-      alpha: a,
-      red: r + (1.0 - r) * amount,
-      blue: b + (1.0 - b) * amount,
-      green: g + (1.0 - g) * amount,
+    return Color.fromARGB(
+      alpha,
+      red + ((255 - red) * amount).round(),
+      green + ((255 - green) * amount).round(),
+      blue + ((255 - blue) * amount).round(),
     );
   }
 

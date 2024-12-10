@@ -106,13 +106,13 @@ class SelectableClass extends SpriteComponent {
     super.size,
     super.key,
     super.sprite,
-  }) : super(paint: Paint()..color = Colors.white.withValues(alpha: 0.5));
+  }) : super(paint: Paint()..color = Colors.white.withOpacity(0.5));
 
   bool _selected = false;
   bool get selected => _selected;
   set selected(bool value) {
     _selected = value;
     paint = Paint()
-      ..color = value ? Colors.white : Colors.white.withValues(alpha: 0.5);
+      ..color = value ? Colors.white : Colors.white.withOpacity(0.5);
   }
 }

@@ -94,8 +94,8 @@ abstract class MyCollidable extends PositionComponent
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
-  final Color _defaultColor = Colors.blue.withValues(alpha: 0.8);
-  final Color _collisionColor = Colors.green.withValues(alpha: 0.8);
+  final Color _defaultColor = Colors.blue.withOpacity(0.8);
+  final Color _collisionColor = Colors.green.withOpacity(0.8);
   late final Paint _dragIndicatorPaint;
   final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
@@ -219,7 +219,7 @@ class CollidableCircle extends MyCollidable {
 class SnowmanPart extends CircleHitbox {
   @override
   final renderShape = true;
-  final startColor = Colors.white.withValues(alpha: 0.8);
+  final startColor = Colors.white.withOpacity(0.8);
   final Color hitColor;
 
   SnowmanPart(double radius, Vector2 position, this.hitColor)
@@ -234,7 +234,7 @@ class SnowmanPart extends CircleHitbox {
     if (other.hitboxParent is ScreenHitbox) {
       paint.color = startColor;
     } else {
-      paint.color = hitColor.withValues(alpha: 0.8);
+      paint.color = hitColor.withOpacity(0.8);
     }
   }
 

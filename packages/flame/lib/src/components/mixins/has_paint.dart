@@ -83,15 +83,12 @@ mixin HasPaint<T extends Object> on Component
       throw ArgumentError('Opacity needs to be between 0 and 1');
     }
 
-    setColor(
-      getPaint(paintId).color.withValues(alpha: opacity),
-      paintId: paintId,
-    );
+    setColor(getPaint(paintId).color.withOpacity(opacity), paintId: paintId);
   }
 
   /// Returns the current opacity.
   double getOpacity({T? paintId}) {
-    return getPaint(paintId).color.a;
+    return getPaint(paintId).color.opacity;
   }
 
   /// Changes the opacity of the paint.
@@ -101,6 +98,11 @@ mixin HasPaint<T extends Object> on Component
     }
 
     setColor(getPaint(paintId).color.withAlpha(alpha), paintId: paintId);
+  }
+
+  /// Returns the current opacity.
+  int getAlpha({T? paintId}) {
+    return getPaint(paintId).color.alpha;
   }
 
   /// Shortcut for changing the color of the paint.
@@ -116,13 +118,13 @@ mixin HasPaint<T extends Object> on Component
   }
 
   @override
-  double get opacity => paint.color.a;
+  double get opacity => paint.color.opacity;
 
   @override
   set opacity(double value) {
-    paint.color = paint.color.withValues(alpha: value);
+    paint.color = paint.color.withOpacity(value);
     for (final paint in _paints.values) {
-      paint.color = paint.color.withValues(alpha: value);
+      paint.color = paint.color.withOpacity(value);
     }
   }
 
@@ -184,7 +186,7 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
     ];
     _layerOpacityRatios = target.paintLayersInternal
         ?.map(
-          (paint) => paint.color.a / maxOpacity,
+          (paint) => paint.color.opacity / maxOpacity,
         )
         .toList(growable: false);
   }
@@ -204,7 +206,7 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
     }
     if (includeLayers) {
       target.paintLayersInternal?.forEach(
-        (paint) => maxOpacity = max(paint.color.a, maxOpacity),
+        (paint) => maxOpacity = max(paint.color.opacity, maxOpacity),
       );
     }
 
@@ -224,7 +226,7 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
       for (var i = 0; i < (paintLayersInternal?.length ?? 0); ++i) {
         paintLayersInternal![i].color = paintLayersInternal[i]
             .color
-            .withValues(alpha: value * _layerOpacityRatios![i]);
+            .withOpacity(value * _layerOpacityRatios![i]);
       }
     }
   }
