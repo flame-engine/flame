@@ -23,8 +23,8 @@ bounce on will appear.
   ''';
 
   final _colorTween = ColorTween(
-    begin: Colors.amber.withOpacity(1.0),
-    end: Colors.lightBlueAccent.withOpacity(1.0),
+    begin: Colors.amber.withValues(alpha: 1.0),
+    end: Colors.lightBlueAccent.withValues(alpha: 1.0),
   );
   final random = Random();
   Ray2? ray;
