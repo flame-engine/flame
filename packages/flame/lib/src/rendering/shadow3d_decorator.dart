@@ -131,7 +131,7 @@ class Shadow3DDecorator extends Decorator {
   Paint? _paint;
   Paint _makePaint() {
     final paint = Paint();
-    final color = baseColor.withOpacity(opacity);
+    final color = baseColor.withValues(alpha: opacity);
     paint.colorFilter = ColorFilter.mode(color, BlendMode.srcIn);
     if (_blur > 0) {
       paint.imageFilter = ImageFilter.blur(sigmaX: blur, sigmaY: blur / _scale);

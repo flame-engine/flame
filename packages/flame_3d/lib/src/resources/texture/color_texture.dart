@@ -11,7 +11,14 @@ class ColorTexture extends Texture {
   ColorTexture(Color color, {int width = 1, int height = 1})
       : super(
           Uint32List.fromList(
-            List.filled(width * height, color.value),
+            List.filled(
+              width * height,
+              // Convert to a 32 bit value representing this color.
+              ((color.a * 255.0).round() & 0xff) << 24 |
+                  ((color.r * 255.0).round() & 0xff) << 16 |
+                  ((color.g * 255.0).round() & 0xff) << 8 |
+                  ((color.b * 255.0).round() & 0xff),
+            ),
           ).buffer.asByteData(),
           width: width,
           height: height,

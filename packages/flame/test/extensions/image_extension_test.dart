@@ -121,10 +121,10 @@ void main() {
 
 int _colorBit(int index, Color color) {
   return switch (index % 4) {
-    0 => color.red,
-    1 => color.green,
-    2 => color.blue,
-    3 => color.alpha,
+    0 => (color.r * 255.0).round() & 0xff,
+    1 => (color.g * 255.0).round() & 0xff,
+    2 => (color.b * 255.0).round() & 0xff,
+    3 => (color.a * 255.0).round() & 0xff,
     _ => throw UnimplementedError(),
   };
 }
