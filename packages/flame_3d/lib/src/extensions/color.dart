@@ -5,8 +5,8 @@ extension ColorExtension on Color {
   /// Returns a Float32List that represents the color as a vector.
   Float32List get storage => Float32List.fromList([
         a,
-        r / 255,
-        g / 255,
-        b / 255,
+        r,
+        g,
+        b,
       ]);
 }
