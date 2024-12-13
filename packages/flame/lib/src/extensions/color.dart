@@ -14,10 +14,10 @@ extension ColorExtension on Color {
 
     final f = 1 - amount;
     return Color.fromARGB(
-      alpha,
-      (red * f).round(),
-      (green * f).round(),
-      (blue * f).round(),
+      a ~/ 255,
+      (r * f).round(),
+      (g * f).round(),
+      (b * f).round(),
     );
   }
 
@@ -30,10 +30,10 @@ extension ColorExtension on Color {
     assert(amount >= 0 && amount <= 1);
 
     return Color.fromARGB(
-      alpha,
-      red + ((255 - red) * amount).round(),
-      green + ((255 - green) * amount).round(),
-      blue + ((255 - blue) * amount).round(),
+      a ~/ 255,
+      (r + ((1.0 - r) * amount)) ~/ 255,
+      (g + ((1.0 - g) * amount)) ~/ 255,
+      (b + ((1.0 - b) * amount)) ~/ 255,
     );
   }
 

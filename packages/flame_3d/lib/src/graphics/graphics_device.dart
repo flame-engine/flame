@@ -177,7 +177,15 @@ class GraphicsDevice {
       );
 
       _renderTarget = gpu.RenderTarget.singleColor(
-        gpu.ColorAttachment(texture: colorTexture!, clearValue: clearValue),
+        gpu.ColorAttachment(
+          texture: colorTexture!,
+          clearValue: Vector4(
+            clearValue.r,
+            clearValue.g,
+            clearValue.b,
+            clearValue.a,
+          ),
+        ),
         depthStencilAttachment: gpu.DepthStencilAttachment(
           texture: depthTexture!,
           depthClearValue: 1.0,
