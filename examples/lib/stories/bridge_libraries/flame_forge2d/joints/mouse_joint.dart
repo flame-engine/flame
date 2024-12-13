@@ -38,6 +38,9 @@ class MouseJointWorld extends Forge2DWorld
   @override
   void onDragStart(DragStartEvent info) {
     super.onDragStart(info);
+    if (mouseJoint != null) {
+      return;
+    }
     final mouseJointDef = MouseJointDef()
       ..maxForce = 3000 * ball.body.mass * 10
       ..dampingRatio = 0.1
@@ -47,10 +50,8 @@ class MouseJointWorld extends Forge2DWorld
       ..bodyA = groundBody
       ..bodyB = ball.body;
 
-    if (mouseJoint == null) {
-      mouseJoint = MouseJoint(mouseJointDef);
-      createJoint(mouseJoint!);
-    }
+    mouseJoint = MouseJoint(mouseJointDef);
+    createJoint(mouseJoint!);
   }
 
   @override
