@@ -12,12 +12,13 @@ class ColorTexture extends Texture {
       : super(
           Uint32List.fromList(
             List.filled(
-                width * height,
-                // Convert to a 32 bit value representing this color.
-                (color.a ~/ 255) << 24 |
-                    (color.r ~/ 255) << 16 |
-                    (color.g ~/ 255) << 8 |
-                    (color.b ~/ 255)),
+              width * height,
+              // Convert to a 32 bit value representing this color.
+              (color.a ~/ 255) << 24 |
+                  (color.r ~/ 255) << 16 |
+                  (color.g ~/ 255) << 8 |
+                  (color.b ~/ 255),
+            ),
           ).buffer.asByteData(),
           width: width,
           height: height,
