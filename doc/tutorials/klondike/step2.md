@@ -301,5 +301,5 @@ And this is it with this step -- we've created the basic game structure upon
 which everything else will be built. In the next step, we'll learn how to render
 the card objects, which are the most important visual objects in this game.
 
-[World]: ../../flame/camera_component.md#world
-[Camera]: ../../flame/camera_component.md#cameracomponent
+[World]: ../../flame/camera#world
+[Camera]: ../../flame/camera#cameracomponent
