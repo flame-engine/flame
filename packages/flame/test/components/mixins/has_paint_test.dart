@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -19,7 +20,7 @@ void main() {
         const color = Color(0xFFE5E5E5);
         component.paint = Paint()..color = color;
 
-        expect(component.getPaint().color, color);
+        expectColor(component.getPaint().color, color);
       },
     );
 
@@ -105,9 +106,9 @@ void main() {
         const color = Color(0xFFA9A9A9);
         component.setPaint(_MyComponentKeys.background, Paint()..color = color);
 
-        expect(
+        expectColor(
           component.getPaint(_MyComponentKeys.background).color,
-          equals(color),
+          color,
         );
       },
     );
@@ -135,7 +136,7 @@ void main() {
         const color = Color(0xFFE5E5E5);
         component.paintLayers.add(Paint()..color = color);
 
-        expect(component.paintLayers[0].color, equals(color));
+        expectColor(component.paintLayers[0].color, color);
       },
     );
 
@@ -155,12 +156,8 @@ void main() {
           component.getPaint('thirdTest'),
           component.getPaint('test'),
         ];
-
-        expect(
-          (component.paintLayers[0].color == thirdColor) &&
-              (component.paintLayers[1].color == color),
-          isTrue,
-        );
+        expectColor(component.paintLayers[0].color, thirdColor);
+        expectColor(component.paintLayers[1].color, color);
       },
     );
 
@@ -222,7 +219,7 @@ void main() {
         final component = _MyComponent();
         component.setOpacity(0.2);
 
-        expect(component.paint.color.a, 0.2);
+        expect(component.paint.color.a, closeTo(0.2, 0.00001));
       },
     );
 
@@ -235,7 +232,7 @@ void main() {
 
         expect(
           component.getPaint(_MyComponentKeys.background).color.a,
-          0.2,
+          closeTo(0.2, 0.00001),
         );
       },
     );
@@ -271,7 +268,7 @@ void main() {
         const color = Color(0xFFE5E5E5);
         component.setColor(color);
 
-        expect(component.paint.color, color);
+        expectColor(component.paint.color, color);
       },
     );
 
@@ -283,7 +280,10 @@ void main() {
         component.setPaint(_MyComponentKeys.background, Paint());
         component.setColor(color, paintId: _MyComponentKeys.background);
 
-        expect(component.getPaint(_MyComponentKeys.background).color, color);
+        expectColor(
+          component.getPaint(_MyComponentKeys.background).color,
+          color,
+        );
       },
     );
 

@@ -33,7 +33,7 @@ void main() {
         OpacityEffect.by(0.4, EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.getOpacity(), 0.2);
+      expect(component.getOpacity(), closeTo(0.2, 0.00001));
       expect(component.children.length, 1);
 
       game.update(0.5);
@@ -55,7 +55,7 @@ void main() {
         OpacityEffect.to(0.4, EffectController(duration: 1)),
       );
       game.update(0);
-      expect(component.getOpacity(), 0.2);
+      expect(component.getOpacity(), closeTo(0.2, 0.00001));
       expect(component.children.length, 1);
 
       game.update(0.5);
