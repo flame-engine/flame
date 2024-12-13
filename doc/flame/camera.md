@@ -1,28 +1,37 @@
-# Camera component
+# Camera & World
 
-Camera-as-a-component is the new way of structuring a game, an approach that
-allows more flexibility in placing the camera, or even having more than one
-camera simultaneously.
+Example of a simple game structure:
+```
+FlameGame
+├── World
+│   ├── Player
+│   └── Enemy
+└── CameraComponent
+    ├── Viewfinder
+    │   ├── HudButton
+    │   └── FpsTextComponent
+    └── Viewport
+```
 
-In order to understand how this approach works, imagine that your game world is
-an entity that exists *somewhere* independently from your application. Imagine
-that your game is merely a window through which you can look into that world.
-That you can close that window at any moment, and the game world would still be
-there. Or, on the contrary, you can open multiple windows that all look at the
-same world (or different worlds) at the same time.
+In order to understand how the `CameraComponent` works, imagine that your game
+world is an entity that exists *somewhere* independently from your application.
+Imagine that your game is merely a window through which you can look into that
+world. That you can close that window at any moment, and the game world would
+still be there. Or, on the contrary, you can open multiple windows that all look
+at the same world (or different worlds) at the same time.
 
-With this mindset, we can now understand how camera-as-a-component works.
+With this mindset, we can now understand how the `CameraComponent` works.
 
 First, there is the [World](#world) class, which contains all components that are
 inside your game world. The `World` component can be mounted anywhere, for
 example at the root of your game class, like the built-in `World` is.
 
 Then, a [CameraComponent](#cameracomponent) class that "looks at" the [World](#world). The
-`CameraComponent` has a [Viewport](#viewport) and a [Viewfinder](#viewfinder) inside, allowing
-both the flexibility of rendering the world at any place on the screen, and
-also control the viewing location and angle. The `CameraComponent` also
-contains a [backdrop](#backdrop) component which is statically rendered below the
-world.
+`CameraComponent` has a [Viewport](#viewport) and a [Viewfinder](#viewfinder)
+inside of it, allowing both the flexibility of rendering the world at any place
+on the screen, and also control the viewing location and angle. The
+`CameraComponent` also contains a [backdrop](#backdrop) component which is
+statically rendered below the world.
 
 
 ## World
@@ -64,45 +73,46 @@ class MyWorld extends World {
 
 ## CameraComponent
 
-This is a component through which a `World` is rendered. It requires a
-reference to a `World` instance during construction; however later the target
-world can be replaced with another one. Multiple cameras can observe the same
-world at the same time.
+This is a component through which a `World` is rendered. Multiple cameras can
+observe the same world at the same time.
 
 There is a default `CameraComponent` called `camera` on the `FlameGame` class
 which is paired together with the default `world`, so you don't need to create
 or add your own `CameraComponent` if your game doesn't need to.
 
 A `CameraComponent` has two other components inside: a [Viewport](#viewport) and a
-[Viewfinder](#viewfinder). Unlike the `World` object, the camera owns the viewport and
-the viewfinder, which means those components are children of the camera.
-
-There is also a static property `CameraComponent.currentCamera` which is not
-null only during the rendering stage, and it returns the camera object that
-currently performs rendering. This is needed only for certain advanced use
-cases where the rendering of a component depends on the camera settings. For
-example, some components may decide to skip rendering themselves and their
-children if they are outside of the camera's viewport.
+[Viewfinder](#viewfinder), those components are always children of a camera.
 
 The `FlameGame` class has a `camera` field in its constructor, so you can set
-what type of default camera that you want like this for example:
+what type of default camera that you want, like this camera with a
+[fixed resolution](#CameraComponent-with-fixed-resolution) for example:
 
 ```dart
 void main() {
   runApp(
     GameWidget(
       FlameGame(
-        camera: CameraComponent.withFixedResolution(width: 800, height: 600),
+        camera: CameraComponent.withFixedResolution(
+          width: 800,
+          height: 600,
+        ),
+        world: MyWorld(),
       ),
     ),
   );
 }
 ```
 
+There is also a static property `CameraComponent.currentCamera` and it returns
+the camera object that currently performs rendering. This is needed only for
+certain advanced use cases where the rendering of a component depends on the
+camera settings. For example, some components may decide to skip rendering
+themselves and their children if they are outside of the camera's viewport.
 
-### CameraComponent.withFixedResolution()
 
-This factory constructor will let you pretend that the user's device has a fixed resolution of your
+### CameraComponent with fixed resolution
+
+This named constructor will let you pretend that the user's device has a fixed resolution of your
 choice. For example:
 
 ```dart
@@ -114,11 +124,11 @@ final camera = CameraComponent.withFixedResolution(
 ```
 
 This will create a camera with a viewport centered in the middle of the screen, taking as much
-space as possible while still maintaining the 800:600 aspect ratio, and showing a game world region
+space as possible while still maintaining the 4:3 (800x600) aspect ratio, and showing a game world region
 of size 800 x 600.
 
 A "fixed resolution" is very simple to work with, but it will underutilize the user's available
-screen space, unless their device happens to have the same pixel ratio as your chosen dimensions.
+screen space, unless their device happens to have the same aspect ratio as your chosen dimensions.
 
 
 ## Viewport
@@ -128,7 +138,7 @@ has a certain size, shape, and position on the screen. There are multiple kinds
 of viewports available, and you can always implement your own.
 
 The `Viewport` is a component, which means you can add other components to it.
-These children components will be affected by the viewport's position, but not
+These child components will be affected by the viewport's position, but not
 by its clip mask. Thus, if a viewport is a "window" into the game world, then
 its children are things that you can put on top of the window.
 
@@ -163,9 +173,9 @@ main character who is displayed not in the center of the screen but closer to
 the lower-left corner. This off-center position would be the "logical center"
 of the camera, controlled by the viewfinder's `anchor`.
 
-If you add children to the `Viewfinder` they will appear will appear in front
-of the world, but behind the viewport and with the same transformations as are
-applied to the world, so these components are not static.
+If you add children to the `Viewfinder` they will appear in front of the world,
+but behind the viewport and with the same transformations as are applied to the
+world, so these components are not static.
 
 You can also add behavioral components as children to the viewfinder, for
 example [effects](effects.md) or other controllers. If you for example would add a
@@ -176,8 +186,8 @@ example [effects](effects.md) or other controllers. If you for example would add
 
 To add static components behind the world you can add them to the `backdrop`
 component, or replace the `backdrop` component. This is for example useful if
-you want to have a static `ParallaxComponent` beneath a world that you can move
-around it.
+you want to have a static `ParallaxComponent` that shows behind a world that
+contains a player that can move around.
 
 Example:
 
@@ -194,39 +204,39 @@ camera.backdrop = MyStaticBackground();
 
 ## Camera controls
 
-There are several ways to modify camera's settings at runtime:
+There are several ways to modify a camera's settings at runtime:
 
-  1. Do it manually. You can always override the `CameraComponent.update()`
-     method (or the same method on the viewfinder or viewport) and within it
-     change the viewfinder's position or zoom as you see fit. This approach may
-     be viable in some circumstances, but in general it is not recommended.
+1. Use camera functions such as `follow()`, `moveBy()` and `moveTo()`.
+   Under the hood, this approach uses the same effects/behaviors as in (2).
 
-  2. Apply effects and/or behaviors to the camera's `Viewfinder` or `Viewport`.
-     The effects and behaviors are special kinds of components whose purpose is
-     to modify over time some property of a component that they attach to.
+2. Apply effects and/or behaviors to the camera's `Viewfinder` or `Viewport`.
+   The effects and behaviors are special kinds of components whose purpose is
+   to modify some property of a component over time.
 
-  3. Use special camera functions such as `follow()`, `moveBy()` and `moveTo()`.
-     Under the hood, this approach uses the same effects/behaviors as in (2).
+3. Do it manually. You can always override the `CameraComponent.update()`
+   method (or the same method on the viewfinder or viewport) and within it
+   change the viewfinder's position or zoom as you see fit. This approach may
+   be viable in some circumstances, but in general it is not recommended.
 
-Camera has several methods for controlling its behavior:
+The `CameraComponent` has several methods for controlling its behavior:
 
-- `Camera.follow()` will force the camera to follow the provided target.
+- `follow()` will force the camera to follow the provided target.
    Optionally you can limit the maximum speed of movement of the camera, or
-   allow it to move horizontally/vertically only.
+   allow it to only move horizontally/vertically.
 
-- `Camera.stop()` will undo the effect of the previous call and stop the camera
+- `stop()` will undo the effect of the previous call and stop the camera
    at its current position.
 
-- `Camera.moveBy()` can be used to move the camera by the specified offset.
-   If the camera was already following another component or moving towards,
+- `moveBy()` can be used to move the camera by the specified offset.
+   If the camera was already following another component or moving,
    those behaviors would be automatically cancelled.
 
-- `Camera.moveTo()` can be used to move the camera to the designated point on
+- `moveTo()` can be used to move the camera to the designated point on
    the world map. If the camera was already following another component or
    moving towards another point, those behaviors would be automatically
    cancelled.
 
-- `Camera.setBounds()` allows you to add limits to where the camera is allowed to go. These limits
+- `setBounds()` allows you to add limits to where the camera is allowed to go. These limits
    are in the form of a `Shape`, which is commonly a rectangle, but can also be any other shape.
 
 
@@ -241,7 +251,7 @@ The `visibleWorldRect` is a cached property, and it updates automatically whenev
 moves or the viewport changes its size.
 
 
-### Check if a component is visible from the camera point of view
+### canSee
 
 The `CameraComponent` has a method called `canSee` which can be used to check
 if a component is visible from the camera point of view.
