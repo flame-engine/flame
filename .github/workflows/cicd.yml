@@ -29,6 +29,8 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
+      # flame_3d has a higher lowest supported version so we just remove it here to prevent CI errors
+      - run: rm -rf packages/flame_3d
       - name: "Analyze with lowest supported version"
         uses: invertase/github-action-dart-analyzer@v3
         with:

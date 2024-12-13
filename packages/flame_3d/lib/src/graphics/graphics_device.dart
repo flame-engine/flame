@@ -28,7 +28,12 @@ enum DepthStencilState {
 /// {@endtemplate}
 class GraphicsDevice {
   /// {@macro graphics_device}
-  GraphicsDevice({this.clearValue = const Color(0x00000000)});
+  GraphicsDevice({
+    this.clearValue = const Color(0x00000000),
+    gpu.GpuContext? gpuContext,
+  }) : _gpuContext = gpuContext ?? gpu.gpuContext;
+
+  final gpu.GpuContext _gpuContext;
 
   /// The clear value, used to clear out the screen.
   final Color clearValue;
@@ -71,8 +76,9 @@ class GraphicsDevice {
     // TODO(wolfenrain): used incorrectly
     DepthStencilState depthStencilState = DepthStencilState.depthRead,
   }) {
-    _commandBuffer = gpu.gpuContext.createCommandBuffer();
-    _hostBuffer = gpu.gpuContext.createHostBuffer();
+    _commandBuffer = _gpuContext.createCommandBuffer();
+    _hostBuffer = _gpuContext.createHostBuffer();
+
     _renderPass = _commandBuffer.createRenderPass(_getRenderTarget(size))
       ..setColorBlendEnable(true)
       ..setColorBlendEquation(
@@ -84,10 +90,9 @@ class GraphicsDevice {
       )
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
       ..setDepthCompareOperation(
-        // TODO(wolfenrain): this is not correctly implemented AT all.
         switch (depthStencilState) {
           DepthStencilState.none => gpu.CompareFunction.never,
-          DepthStencilState.standard => gpu.CompareFunction.always,
+          DepthStencilState.standard => gpu.CompareFunction.lessEqual,
           DepthStencilState.depthRead => gpu.CompareFunction.less,
         },
       );
@@ -106,9 +111,7 @@ class GraphicsDevice {
 
   /// Bind a [mesh].
   void bindMesh(Mesh mesh) {
-    _renderPass.clearBindings();
     mesh.bind(this);
-    _renderPass.draw();
   }
 
   /// Bind a [surface].
@@ -163,21 +166,24 @@ class GraphicsDevice {
     if (_previousSize != size) {
       _previousSize = size;
 
-      final colorTexture = gpu.gpuContext.createTexture(
+      final colorTexture = _gpuContext.createTexture(
         gpu.StorageMode.devicePrivate,
         size.width.toInt(),
         size.height.toInt(),
       );
 
-      final depthTexture = gpu.gpuContext.createTexture(
+      final depthTexture = _gpuContext.createTexture(
         gpu.StorageMode.deviceTransient,
         size.width.toInt(),
         size.height.toInt(),
-        format: gpu.gpuContext.defaultDepthStencilFormat,
+        format: _gpuContext.defaultDepthStencilFormat,
       );
 
       _renderTarget = gpu.RenderTarget.singleColor(
-        gpu.ColorAttachment(texture: colorTexture!, clearValue: clearValue),
+        gpu.ColorAttachment(
+          texture: colorTexture!,
+          clearValue: Vector4Utils.fromColor(clearValue),
+        ),
         depthStencilAttachment: gpu.DepthStencilAttachment(
           texture: depthTexture!,
           depthClearValue: 1.0,
