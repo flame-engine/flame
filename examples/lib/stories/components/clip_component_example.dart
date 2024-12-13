@@ -1,50 +1,43 @@
-import 'dart:math';
-import 'dart:ui';
-
+import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
-import 'package:flutter/material.dart' hide Gradient;
 
-class _Rectangle extends RectangleComponent {
-  _Rectangle()
-      : super(
-          size: Vector2(200, 200),
-          anchor: Anchor.center,
-          paint: Paint()
-            ..shader = Gradient.linear(
-              Offset.zero,
-              const Offset(0, 100),
-              [Colors.orange, Colors.blue],
-            ),
-          children: [
-            RotateEffect.by(
-              pi * 2,
-              EffectController(duration: 0.4, infinite: true),
-            ),
-          ],
-        );
+class TappableEmber extends Ember with TapCallbacks {
+  TappableEmber({required Vector2 position, required Vector2 size})
+      : super(position: position, size: size);
+
+  @override
+  bool onTapDown(TapDownEvent event) {
+    size += Vector2.all(10);
+    return true;
+  }
 }
 
-class ClipComponentExample extends FlameGame with TapDetector {
+class ClipComponentExample extends FlameGame {
   static const String description =
-      'Tap on the objects to increase their size.';
+      '''Tap on the objects to increase their size and see how the clip component
+works.''';
+
+  late final _embers = <TappableEmber>[
+    TappableEmber(size: Vector2.all(200), position: Vector2.all(100)),
+    TappableEmber(size: Vector2.all(300), position: Vector2.all(100)),
+    TappableEmber(size: Vector2.all(200), position: Vector2.all(125)),
+  ];
 
   @override
   Future<void> onLoad() async {
     addAll(
       [
         ClipComponent.circle(
-          position: Vector2(100, 100),
-          size: Vector2.all(50),
-          children: [_Rectangle()],
+          position: Vector2.all(200),
+          size: Vector2.all(200),
+          children: [_embers[0]],
         ),
         ClipComponent.rectangle(
-          position: Vector2(200, 100),
-          size: Vector2.all(50),
-          children: [_Rectangle()],
+          position: Vector2(600, 200),
+          size: Vector2.all(200),
+          children: [_embers[1]],
         ),
         ClipComponent.polygon(
           points: [
@@ -53,28 +46,11 @@ class ClipComponentExample extends FlameGame with TapDetector {
             Vector2(0, 1),
             Vector2(1, 0),
           ],
-          position: Vector2(200, 200),
-          size: Vector2.all(50),
-          children: [_Rectangle()],
+          position: Vector2(200, 500),
+          size: Vector2.all(200),
+          children: [_embers[2]],
         ),
       ],
     );
-  }
-
-  @override
-  void onTapUp(TapUpInfo info) {
-    final position = info.eventPosition.widget;
-    final hit = children
-        .whereType<PositionComponent>()
-        .where(
-          (component) => component.containsLocalPoint(
-            position - component.position,
-          ),
-        )
-        .toList();
-
-    hit.forEach((component) {
-      component.size += Vector2.all(10);
-    });
   }
 }
