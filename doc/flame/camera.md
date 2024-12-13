@@ -1,7 +1,8 @@
 # Camera & World
 
 Example of a simple game structure:
-```
+
+```text
 FlameGame
 ├── World
 │   ├── Player
@@ -85,7 +86,7 @@ A `CameraComponent` has two other components inside: a [Viewport](#viewport) and
 
 The `FlameGame` class has a `camera` field in its constructor, so you can set
 what type of default camera that you want, like this camera with a
-[fixed resolution](#CameraComponent-with-fixed-resolution) for example:
+[fixed resolution](#cameracomponent-with-fixed-resolution) for example:
 
 ```dart
 void main() {
