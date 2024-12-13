@@ -16,7 +16,7 @@ void main() {
 
       paint.darken(darkenAmount);
 
-      expect(
+      expectColor(
         paint.color,
         darkenBaseColor,
         reason: "Paint's color does not match darken color",
@@ -46,9 +46,10 @@ void main() {
       // valid inputs are : ccc, CCC, #ccc, #CCC, #c1c1c1, #C1C1C1, c1c1c1,
       // C1C1C1
       final color = ColorExtension.random();
-      final sixHexColor = color.red.toRadixString(16).padLeft(2, '0') +
-          color.green.toRadixString(16).padLeft(2, '0') +
-          color.blue.toRadixString(16).padLeft(2, '0');
+      final sixHexColor =
+          (color.r * 255).toInt().toRadixString(16).padLeft(2, '0') +
+              (color.g * 255).toInt().toRadixString(16).padLeft(2, '0') +
+              (color.b * 255).toInt().toRadixString(16).padLeft(2, '0');
 
       // C1C1C1
       final sixUpperCaseColor = sixHexColor.toUpperCase();
@@ -59,31 +60,32 @@ void main() {
       // #c1c1c1
       final hashtagSixLowerCaseColor = '#$sixLowerCaseColor';
 
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(hashtagSixUpperCaseColor).color,
         color,
         reason: 'C1C1C1 does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(sixLowerCaseColor).color,
         color,
         reason: 'c1c1c1 does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(hashtagSixUpperCaseColor).color,
         color,
         reason: '#C1C1C1 does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(hashtagSixLowerCaseColor).color,
         color,
         reason: '#c1c1c1 does not generates the good paint',
       );
 
       // Let's generate a new color from only 3 digits
-      final threeHexColor = color.red.toRadixString(16).padLeft(1, '0')[0] +
-          color.green.toRadixString(16).padLeft(1, '0')[0] +
-          color.blue.toRadixString(16).padLeft(1, '0')[0];
+      final threeHexColor =
+          (color.r ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.g ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.b ~/ 255).toRadixString(16).padLeft(1, '0')[0];
       final threeDigitsColor = ColorExtension.fromRGBHexString(threeHexColor);
 
       // CCC
@@ -95,22 +97,22 @@ void main() {
       // #ccc
       final hashtagThreeLowerCaseColor = '#$threeLowerCaseColor';
 
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(threeUpperCaseColor).color,
         threeDigitsColor,
         reason: 'CCC does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(threeLowerCaseColor).color,
         threeDigitsColor,
         reason: 'ccc does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(hashtagThreeUpperCaseColor).color,
         threeDigitsColor,
         reason: '#CCC does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromRGBHexString(hashtagThreeLowerCaseColor).color,
         threeDigitsColor,
         reason: '#ccc does not generates the good paint',
@@ -127,10 +129,11 @@ void main() {
       // valid inputs are : fccc, FCCC, #fccc, #FCCC, #ffc1c1c1, #FFC1C1C1,
       // ffc1c1c1, FFC1C1C1
       var color = ColorExtension.random(rng: r);
-      final sixHexColor = color.alpha.toRadixString(16).padLeft(2, '0') +
-          color.red.toRadixString(16).padLeft(2, '0') +
-          color.green.toRadixString(16).padLeft(2, '0') +
-          color.blue.toRadixString(16).padLeft(2, '0');
+      final sixHexColor =
+          (color.a * 255).toInt().toRadixString(16).padLeft(2, '0') +
+              (color.r * 255).toInt().toRadixString(16).padLeft(2, '0') +
+              (color.g * 255).toInt().toRadixString(16).padLeft(2, '0') +
+              (color.b * 255).toInt().toRadixString(16).padLeft(2, '0');
 
       // FFC1C1C1
       final sixUpperCaseColor = sixHexColor.toUpperCase();
@@ -141,32 +144,33 @@ void main() {
       // #ffc1c1c1
       final hashtagSixLowerCaseColor = '#$sixLowerCaseColor';
 
-      expect(
+      expectColor(
         PaintExtension.fromARGBHexString(hashtagSixUpperCaseColor).color,
         color,
         reason: 'FFC1C1C1 does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromARGBHexString(sixLowerCaseColor).color,
         color,
         reason: 'ffc1c1c1 does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromARGBHexString(hashtagSixUpperCaseColor).color,
         color,
         reason: '#FFC1C1C1 does not generates the good paint',
       );
-      expect(
+      expectColor(
         PaintExtension.fromARGBHexString(hashtagSixLowerCaseColor).color,
         color,
         reason: '#ffc1c1c1 does not generates the good paint',
       );
 
       // Let's generate a new color from only 3 digits
-      final threeHexColor = color.alpha.toRadixString(16).padLeft(1, '0')[0] +
-          color.red.toRadixString(16).padLeft(1, '0')[0] +
-          color.green.toRadixString(16).padLeft(1, '0')[0] +
-          color.blue.toRadixString(16).padLeft(1, '0')[0];
+      final threeHexColor =
+          (color.a ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.r ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.g ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.b ~/ 255).toRadixString(16).padLeft(1, '0')[0];
       color = ColorExtension.fromARGBHexString(threeHexColor);
 
       // FCCC
@@ -212,9 +216,9 @@ void main() {
 
       // As explained in the documentation
       // object with the set alpha as [withAlpha]
-      expect(
-        paint.color.alpha,
-        color.alpha,
+      expectColorAlpha(
+        paint.color,
+        color,
         reason: 'alpha does not have the right value',
       );
     });
