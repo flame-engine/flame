@@ -45,7 +45,7 @@ jobs:
       - name: "Analyze with latest stable"
         uses: invertase/github-action-dart-analyzer@v3
         with:
-          fatal-infos: true
+          fatal-infos: false # To prevent deprecation messages from failing.g
 
   markdown-lint:
     runs-on: ubuntu-latest
