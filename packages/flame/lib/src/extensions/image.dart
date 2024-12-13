@@ -60,10 +60,10 @@ extension ImageExtension on Image {
         pixelData[i + 2],
       ).darken(amount);
 
-      newPixelData[i] = (color.r * 255.0).round() & 0xff;
-      newPixelData[i + 1] = (color.g * 255.0).round() & 0xff;
-      newPixelData[i + 2] = (color.b * 255.0).round() & 0xff;
-      newPixelData[i + 3] = (color.a * 255.0).round() & 0xff;
+      newPixelData[i] = color.r ~/ 255;
+      newPixelData[i + 1] = color.g ~/ 255;
+      newPixelData[i + 2] = color.b ~/ 255;
+      newPixelData[i + 3] = color.a ~/ 255;
     }
     return fromPixels(newPixelData, width, height);
   }
@@ -85,10 +85,10 @@ extension ImageExtension on Image {
         pixelData[i + 2],
       ).brighten(amount);
 
-      newPixelData[i] = (color.r * 255.0).round() & 0xff;
-      newPixelData[i + 1] = (color.g * 255.0).round() & 0xff;
-      newPixelData[i + 2] = (color.b * 255.0).round() & 0xff;
-      newPixelData[i + 3] = (color.a * 255.0).round() & 0xff;
+      newPixelData[i] = color.r ~/ 255;
+      newPixelData[i + 1] = color.g ~/ 255;
+      newPixelData[i + 2] = color.b ~/ 255;
+      newPixelData[i + 3] = color.a ~/ 255;
     }
     return fromPixels(newPixelData, width, height);
   }

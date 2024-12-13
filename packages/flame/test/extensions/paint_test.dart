@@ -46,11 +46,9 @@ void main() {
       // valid inputs are : ccc, CCC, #ccc, #CCC, #c1c1c1, #C1C1C1, c1c1c1,
       // C1C1C1
       final color = ColorExtension.random();
-      final sixHexColor = ((color.r * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(2, '0') +
-          ((color.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, '0') +
-          ((color.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, '0');
+      final sixHexColor = (color.r ~/ 255).toRadixString(16).padLeft(2, '0') +
+          (color.g ~/ 255).toRadixString(16).padLeft(2, '0') +
+          (color.b ~/ 255).toRadixString(16).padLeft(2, '0');
 
       // C1C1C1
       final sixUpperCaseColor = sixHexColor.toUpperCase();
@@ -83,15 +81,10 @@ void main() {
       );
 
       // Let's generate a new color from only 3 digits
-      final threeHexColor = ((color.r * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0] +
-          ((color.g * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0] +
-          ((color.b * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0];
+      final threeHexColor =
+          (color.r ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.g ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.b ~/ 255).toRadixString(16).padLeft(1, '0')[0];
       final threeDigitsColor = ColorExtension.fromRGBHexString(threeHexColor);
 
       // CCC
@@ -135,12 +128,10 @@ void main() {
       // valid inputs are : fccc, FCCC, #fccc, #FCCC, #ffc1c1c1, #FFC1C1C1,
       // ffc1c1c1, FFC1C1C1
       var color = ColorExtension.random(rng: r);
-      final sixHexColor = ((color.a * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(2, '0') +
-          ((color.r * 255.0).round() & 0xff).toRadixString(16).padLeft(2, '0') +
-          ((color.g * 255.0).round() & 0xff).toRadixString(16).padLeft(2, '0') +
-          ((color.b * 255.0).round() & 0xff).toRadixString(16).padLeft(2, '0');
+      final sixHexColor = (color.a ~/ 255).toRadixString(16).padLeft(2, '0') +
+          (color.r ~/ 255).toRadixString(16).padLeft(2, '0') +
+          (color.g ~/ 255).toRadixString(16).padLeft(2, '0') +
+          (color.b ~/ 255).toRadixString(16).padLeft(2, '0');
 
       // FFC1C1C1
       final sixUpperCaseColor = sixHexColor.toUpperCase();
@@ -173,18 +164,11 @@ void main() {
       );
 
       // Let's generate a new color from only 3 digits
-      final threeHexColor = ((color.a * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0] +
-          ((color.r * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0] +
-          ((color.g * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0] +
-          ((color.b * 255.0).round() & 0xff)
-              .toRadixString(16)
-              .padLeft(1, '0')[0];
+      final threeHexColor =
+          (color.a ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.r ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.g ~/ 255).toRadixString(16).padLeft(1, '0')[0] +
+              (color.b ~/ 255).toRadixString(16).padLeft(1, '0')[0];
       color = ColorExtension.fromARGBHexString(threeHexColor);
 
       // FCCC

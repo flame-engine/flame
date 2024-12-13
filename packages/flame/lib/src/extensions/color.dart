@@ -14,7 +14,7 @@ extension ColorExtension on Color {
 
     final f = 1 - amount;
     return Color.fromARGB(
-      (a * 255.0).round() & 0xff,
+      a ~/ 255,
       (r * f).round(),
       (g * f).round(),
       (b * f).round(),
@@ -30,10 +30,10 @@ extension ColorExtension on Color {
     assert(amount >= 0 && amount <= 1);
 
     return Color.fromARGB(
-      (a * 255.0).round() & 0xff,
-      ((r + ((1.0 - r) * amount)) * 255.0).round() & 0xff,
-      ((g + ((1.0 - g) * amount)) * 255.0).round() & 0xff,
-      ((b + ((1.0 - b) * amount)) * 255.0).round() & 0xff,
+      a ~/ 255,
+      (r + ((1.0 - r) * amount)) ~/ 255,
+      (g + ((1.0 - g) * amount)) ~/ 255,
+      (b + ((1.0 - b) * amount)) ~/ 255,
     );
   }
 
