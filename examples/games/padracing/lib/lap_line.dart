@@ -31,7 +31,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
   @override
   Body createBody() {
     paint.color = (isFinish ? GameColors.green.color : GameColors.green.color)
-      ..withOpacity(0.5);
+      ..withValues(alpha: 0.5);
     paint
       ..style = PaintingStyle.fill
       ..shader = Gradient.radial(
