@@ -1,9 +1,8 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/extensions_matrix4.dart';
 import 'package:flame/src/palette.dart';
 import 'package:flame/src/rendering/decorator.dart';
-import 'package:vector_math/vector_math.dart' show Matrix4, Vector2;
 
 /// [Shadow3DDecorator] casts a realistic-looking shadow from the component
 /// onto the ground.
@@ -157,7 +156,7 @@ class Shadow3DDecorator extends Decorator {
 
     canvas.saveLayer(null, _paint!);
     canvas.translate(base.x + _shift, base.y);
-    canvas.transform(Float64List.sublistView(_transformMatrix!.storage));
+    canvas.transform(_transformMatrix!.storage64);
     draw(canvas);
     canvas.restore();
     draw(canvas);

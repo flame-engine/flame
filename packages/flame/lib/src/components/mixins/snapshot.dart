@@ -1,8 +1,7 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:vector_math/vector_math.dart';
+import 'package:flame/extensions_matrix4.dart';
 
 /// A mixin that enables caching a component and all its children. If
 /// [renderSnapshot] is set to `true`, the component and its children will be
@@ -49,7 +48,7 @@ mixin Snapshot on PositionComponent {
     } else {
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
-      canvas.transform(Float64List.sublistView(transform.storage));
+      canvas.transform(transform.storage64);
       canvas.drawPicture(_picture!);
       final picture = recorder.endRecording();
       return picture.toImageSync(width, height);
@@ -65,7 +64,7 @@ mixin Snapshot on PositionComponent {
     final canvas = Canvas(recorder);
     final matrix = transformMatrix.clone();
     matrix.invert();
-    canvas.transform(Float64List.sublistView(matrix.storage));
+    canvas.transform(matrix.storage64);
     super.renderTree(canvas);
     _picture = recorder.endRecording();
     return _picture!;
@@ -84,7 +83,7 @@ mixin Snapshot on PositionComponent {
         takeSnapshot();
       }
       canvas.save();
-      canvas.transform(Float64List.sublistView(transformMatrix.storage));
+      canvas.transform(transformMatrix.storage64);
       canvas.drawPicture(_picture!);
       canvas.restore();
     } else {

@@ -1,6 +1,6 @@
-import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame/extensions_matrix4.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
@@ -60,6 +60,6 @@ extension CanvasExtension on Canvas {
 
   /// Use the [Transform2D] object to [transform] the canvas.
   void transform2D(Transform2D transform2D) {
-    transform(Float64List.sublistView(transform2D.transformMatrix.storage));
+    transform(transform2D.transformMatrix.storage64);
   }
 }

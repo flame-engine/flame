@@ -1,14 +1,13 @@
 import 'dart:collection';
 import 'dart:math' show pi;
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/extensions_matrix4.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
@@ -433,7 +432,7 @@ class SpriteBatch {
 
         canvas
           ..save()
-          ..transform(Float64List.sublistView(batchItem.matrix.storage))
+          ..transform(batchItem.matrix.storage64)
           ..drawRect(batchItem.destination, batchItem.paint)
           ..drawImageRect(
             atlas,

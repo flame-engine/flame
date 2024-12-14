@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vector_math/vector_math.dart';
 
 export 'package:vector_math/vector_math.dart' hide Colors;
@@ -77,6 +79,8 @@ extension Matrix4Extension on Matrix4 {
     }
     return transform2(out);
   }
+
+  Float64List get storage64 => Float64List.sublistView(storage);
 
   /// Create a scaled matrix.
   ///
