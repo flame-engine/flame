@@ -14,10 +14,10 @@ class ColorTexture extends Texture {
             List.filled(
               width * height,
               // Convert to a 32 bit value representing this color.
-              (color.a ~/ 255) << 24 |
-                  (color.r ~/ 255) << 16 |
-                  (color.g ~/ 255) << 8 |
-                  (color.b ~/ 255),
+              (color.a * 255).round() << 24 |
+                  (color.r * 255).round() << 16 |
+                  (color.g * 255).round() << 8 |
+                  (color.b * 255).round(),
             ),
           ).buffer.asByteData(),
           width: width,
