@@ -24,23 +24,6 @@ void main() {
     );
 
     testWithFlameGame(
-      'changing priority should reorder component list',
-      (game) async {
-        final firstComponent = _PriorityComponent(-1);
-        final priorityComponents = List.generate(10, _PriorityComponent.new)
-          ..add(firstComponent);
-        priorityComponents.shuffle();
-        final components = game.world.children;
-        await game.world.ensureAddAll(priorityComponents);
-        componentsSorted(components);
-        expect(components.first, firstComponent);
-        firstComponent.priority = 11;
-        game.update(0);
-        expect(components.last, firstComponent);
-      },
-    );
-
-    testWithFlameGame(
       'changing priority with the priority setter should reorder the list',
       (game) async {
         final firstComponent = _PriorityComponent(-1);
