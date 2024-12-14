@@ -17,6 +17,7 @@ abstract class SPipelineStep extends PositionComponent {
   SPipelineStep({
     required this.program,
     required this.configuration,
+    double? pixelRatio,
     super.position,
     super.size,
     super.scale,
@@ -26,7 +27,9 @@ abstract class SPipelineStep extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : super(
+  }) :  pixelRatio = pixelRatio ??
+            PlatformDispatcher.instance.views.first.devicePixelRatio,
+            super(
           nativeAngle: nativeAngle ?? 0,
         );
 
@@ -42,8 +45,8 @@ abstract class SPipelineStep extends PositionComponent {
   );
 
 
-  // todo: figure out this
-  double get pixelRatio;
+  
+  final double pixelRatio;
 
   Canvas _canvasFactory(PictureRecorder recorder, int passIndex) {
     return SamplingCanvas(

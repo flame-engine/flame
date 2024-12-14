@@ -54,7 +54,7 @@ class CrystalBallGame extends FlameGame {
             width: kCameraSize.$1,
             height: kCameraSize.$2,
             hudComponents: [
-              CrystalBall(
+              CrystalBallPipelineStep(
                 program: ballProgram,
               ),
             ],
@@ -64,16 +64,13 @@ class CrystalBallGame extends FlameGame {
   final ui.FragmentProgram ballProgram;
 }
 
-class CrystalBall extends SPipelineStep {
-  CrystalBall({
+class CrystalBallPipelineStep extends SPipelineStep {
+  CrystalBallPipelineStep({
     required super.program,
     super.configuration = const SPipelineConfiguration(
       samplingPasses: 0,
     ),
   }) : super(size: Vector2(900, 1600));
-
-  @override
-  double get pixelRatio => 1;
 
   c.Viewport get camera => c.CameraComponent.currentCamera!.viewport;
 
