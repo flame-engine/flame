@@ -65,11 +65,11 @@ ecosystem.
 
 ## Prerequisites
 
-In order to use flame_3d, you will need to ensure a few things. Also, so far, the only
-platforms that we have explicitly tested for support are Android, iOS, and macOS.
+In order to use flame_3d, you will need to ensure a few things. Firstly, the only platforms that we
+have explicitly tested so far for support were Android, iOS, and macOS.
 
-Then, you need to enable Impeller; to do that, add the following to the
-`Info.plist` in your `macos/` directory:
+Then, you need to enable Impeller, if not already enabled by default. For example, for macOS, add
+the following to the `Info.plist` in your `macos/` directory:
 
 ```xml
 <dict>
