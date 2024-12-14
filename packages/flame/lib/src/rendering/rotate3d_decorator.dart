@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/geometry.dart';
 import 'package:flame/src/rendering/decorator.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// [Rotate3DDecorator] treats the underlying component as if it was a flat
 /// sheet of paper, and applies a 3D rotation to it.

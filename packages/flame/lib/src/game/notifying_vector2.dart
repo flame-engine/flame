@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// Extension of the standard [Vector2] class, implementing the [ChangeNotifier]
 /// functionality. This allows any interested party to be notified when the

@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/src/palette.dart';
 import 'package:flame/src/rendering/decorator.dart';
-import 'package:vector_math/vector_math_64.dart' show Matrix4, Vector2;
+import 'package:vector_math/vector_math.dart' show Matrix4, Vector2;
 
 /// [Shadow3DDecorator] casts a realistic-looking shadow from the component
 /// onto the ground.

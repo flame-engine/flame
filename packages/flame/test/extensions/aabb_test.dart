@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 void main() {
   group('Aabb2Extension', () {
     // aabb2 is an axis aligned bounding box between a min and a max
-    // see https://api.flutter.dev/flutter/vector_math_64/Aabb2-class.html
+    // see https://api.flutter.dev/flutter/vector_math/Aabb2-class.html
     // The extension is used to convert this bounding box to a rect.
     test('Default aabb constructor', () {
       final aab2 = Aabb2();
