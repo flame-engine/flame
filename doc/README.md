@@ -62,15 +62,15 @@ void main() {
 }
 ```
 
-In Flame we use a concept called the Flame Component System (FCS), which is a way to organize your
-game objects in a way that makes it easy to manage them. You can read more about it in the
+In Flame we provide a concept called the Flame Component System (FCS), which is a way to organize
+your game objects in a way that makes it easy to manage them. You can read more about it in the
 [Components](flame/components.md) section.
 
 When you want to start a new game you either have to extend the `FlameGame` class or the `World`
 class. The `FlameGame` is the root of your game and is responsible for managing the game loop and
 the components. The `World` class is a component that can be used to create a world in your game.
 
-So if we want to create a simple game we can do something like this:
+So to create a simple game you can do something like this:
 
 ```dart
 import 'package:flame/game.dart';
@@ -133,11 +133,11 @@ the `Player` class set the position of the component when creating it
 
 To handle input on a component you can add any of our [input mixins](flame/inputs/inputs.md) to the
 component. For example, if you want to handle tap input you can add the `TapCallbacks` mixin to the
-player if you want to handle tap input within the bounds of the players component, of if you want to
-handle tap input on the whole screen you can add the `TapCallbacks` mixin to the extended `World`
+player component, and receive tap events within the bounds of the player component. Or if you want
+to handle tap input on the whole world you can add the `TapCallbacks` mixin to the extended `World`
 class.
 
-The following example shows how to handle tap input on the player component, and when the player is
+The following example handles taps on the player component, and when the player component is
 tapped the size of the player will increase by 50 pixels in both width and height.
 
 ```dart
