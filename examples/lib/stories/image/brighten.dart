@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -18,6 +21,7 @@ class ImageBrightnessExample extends FlameGame {
   Future<void> onLoad() async {
     final image = await images.load('flame.png');
     final brightenedImage = await image.brighten(brightness / 100);
+    await saveImage(brightenedImage, '/tmp/brightened.png');
 
     add(
       SpriteComponent(
@@ -37,4 +41,12 @@ class ImageBrightnessExample extends FlameGame {
       ),
     );
   }
+}
+
+Future<void> saveImage(ui.Image image, String filename) async {
+  final byteData = await image.toByteData(
+    format: ui.ImageByteFormat.png,
+  );
+  final pngBytes = byteData!.buffer.asUint8List();
+  await File(filename).writeAsBytes(pngBytes);
 }
