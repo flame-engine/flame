@@ -85,11 +85,12 @@ Uri findEngineArtifactsDir({String? dartPath}) {
   // Could be:
   //   `/path/to/flutter/bin/cache/dart-sdk/bin/dart`
   //   `/path/to/flutter/bin/cache/artifacts/engine/darwin-x64/flutter_tester`
-  //   `/path/to/.puro/shared/caches/94cf8c8fad31206e440611e309757a5a9b3be712/dart-sdk/bin/dart`
+  //   `/path/to/.user/shared/caches/94cf8c8fad31206e440611e309757a5a9b3be712/dart-sdk/bin/dart`
   final dartExec = Uri.file(dartPath ?? Platform.resolvedExecutable);
 
   Uri? cacheDir;
-  // Search backwards through the segment list until finding `bin` and `cache` in sequence.
+  // Search backwards through the segment list until finding `bin` and `cache`
+  // in sequence.
   for (var i = dartExec.pathSegments.length - 1; i >= 0; i--) {
     if (dartExec.pathSegments[i] == 'dart-sdk' ||
         dartExec.pathSegments[i] == 'artifacts') {
