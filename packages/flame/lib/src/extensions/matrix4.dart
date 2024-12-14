@@ -80,7 +80,7 @@ extension Matrix4Extension on Matrix4 {
     return transform2(out);
   }
 
-  Float64List get storage64 => Float64List.sublistView(storage);
+  Float64List get storage64 => Float64List.fromList(storage);
 
   /// Create a scaled matrix.
   ///

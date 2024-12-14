@@ -45,7 +45,7 @@ void main() {
 
       t.position.setFrom(Vector2(7, 2.2));
       expect(t.x, 7);
-      expect(t.y, 2.2);
+      expect(t.y, closeTo(2.2, _epsilon));
       expect(notified, 4);
 
       t.position.setZero();
@@ -93,12 +93,12 @@ void main() {
     test('angle', () {
       final t = Transform2D();
       t.angle = tau / 6;
-      expect(t.angleDegrees, closeTo(60, 1e-10));
+      expect(t.angleDegrees, closeTo(60, 10e-6));
       t.angleDegrees = 45;
-      expect(t.angle, closeTo(tau / 8, 1e-10));
+      expect(t.angle, closeTo(tau / 8, 10e-6));
       t.angle = 1;
       expect(t.angle, 1);
-      expect(t.angleDegrees, closeTo(360 / tau, 1e-10));
+      expect(t.angleDegrees, closeTo(360 / tau, 10e-6));
     });
 
     test('.closeTo', () {
@@ -173,7 +173,7 @@ void main() {
         for (var k = 0; k < 16; k++) {
           expect(
             transform2d.transformMatrix.storage[k],
-            closeTo(matrix4.storage[k], 1e-10),
+            closeTo(matrix4.storage[k], 10e-6),
           );
         }
         // Check round-trip conversion between local and global
@@ -181,8 +181,8 @@ void main() {
             Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
         final point2 =
             transform2d.globalToLocal(transform2d.localToGlobal(point1));
-        expect(point1.x, closeTo(point2.x, 1e-10));
-        expect(point1.y, closeTo(point2.y, 1e-10));
+        expect(point1.x, closeTo(point2.x, 10e-6));
+        expect(point1.y, closeTo(point2.y, 10e-6));
       }
     });
 
@@ -194,8 +194,8 @@ void main() {
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.angleDegrees = 60;
-      expect(t.localToGlobal(point).x, closeTo(1 / 2, 1e-10));
-      expect(t.localToGlobal(point).y, closeTo(math.sqrt(3) / 2, 1e-10));
+      expect(t.localToGlobal(point).x, closeTo(1 / 2, 10e-6));
+      expect(t.localToGlobal(point).y, closeTo(math.sqrt(3) / 2, 10e-6));
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.scale = Vector2(0, 1);
@@ -203,3 +203,5 @@ void main() {
     });
   });
 }
+
+const _epsilon = 10e-6;
