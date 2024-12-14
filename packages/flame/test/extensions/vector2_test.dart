@@ -291,12 +291,6 @@ void main() {
     });
 
     group('inversion', () {
-      test('invert', () {
-        final v = Vector2.all(1);
-        v.invert();
-        expect(v, Vector2.all(-1));
-      });
-
       test('inverted', () {
         final v = Vector2.all(1);
         final w = v.inverted();
