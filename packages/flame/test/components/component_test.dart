@@ -653,6 +653,16 @@ void main() {
         await game.ready();
         expect(child.isMounted, true);
       });
+
+      testWithFlameGame(
+        "can remove component's children before adding the parent",
+        (game) async {
+          final c = _ComponentWithChildrenRemoveAll();
+          game.add(c);
+
+          await game.ready();
+        },
+      );
     });
 
     group('Removing components', () {
@@ -1803,4 +1813,14 @@ FlameTester<_DetachableFlameGame> _myDetachableGame({required bool open}) {
       await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
     },
   );
+}
+
+class _ComponentWithChildrenRemoveAll extends Component {
+  @override
+  void onMount() {
+    super.onMount();
+
+    add(Component());
+    removeAll(children);
+  }
 }
