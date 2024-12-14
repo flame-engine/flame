@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
@@ -8,7 +7,7 @@ import 'package:flame/extensions.dart' show OffsetExtension;
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 
 class CameraComponentExample extends FlameGame with PanDetector {
   static const description = '''
@@ -117,25 +116,13 @@ class Bezel extends PositionComponent {
               const Radius.circular(5.0),
             ),
           ))
-        .transform(
-      Float64List.fromList(
-        (Matrix4.identity()..rotateZ(pi / 4)).storage,
-      ),
-    );
+        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
     connector = (Path()
           ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
-        .transform(
-      Float64List.fromList(
-        (Matrix4.identity()..rotateZ(pi / 4)).storage,
-      ),
-    );
+        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
     specularHighlight = (Path()
           ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
-        .transform(
-      Float64List.fromList(
-        (Matrix4.identity()..rotateZ(pi / 4)).storage,
-      ),
-    );
+        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
 
     glassPaint = Paint()..color = const Color(0x1400ffae);
     rimBorderPaint = Paint()

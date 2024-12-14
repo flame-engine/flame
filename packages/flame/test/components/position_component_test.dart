@@ -8,6 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
   group('PositionComponent', () {

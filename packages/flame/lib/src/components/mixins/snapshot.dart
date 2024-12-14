@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// A mixin that enables caching a component and all its children. If
 /// [renderSnapshot] is set to `true`, the component and its children will be

@@ -1,9 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:vector_math/vector_math.dart';
-
-export 'package:vector_math/vector_math.dart' hide Colors;
+import 'package:vector_math/vector_math.dart' hide Colors, Matrix4;
+export 'package:vector_math/vector_math.dart' hide Colors, Matrix4;
 
 extension Vector2Extension on Vector2 {
   /// This is a reusable vector that can be used within the [Vector2Extension]

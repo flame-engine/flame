@@ -14,6 +14,7 @@ import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame/src/rendering/decorator.dart';
 import 'package:flame/src/rendering/transform2d_decorator.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.

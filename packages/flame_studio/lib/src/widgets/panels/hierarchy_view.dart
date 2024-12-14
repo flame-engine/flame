@@ -1,4 +1,4 @@
-import 'package:flame/components.dart' show Component;
+import 'package:flame/components.dart';
 import 'package:flame_studio/src/core/component_tree.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

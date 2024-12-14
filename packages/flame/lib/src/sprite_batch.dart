@@ -8,6 +8,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math.dart';
 
 extension SpriteBatchExtension on Game {
   /// Utility method to load and cache the image for a [SpriteBatch] based on
