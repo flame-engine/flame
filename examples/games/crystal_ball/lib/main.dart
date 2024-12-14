@@ -66,16 +66,16 @@ class CrystalBallGame extends FlameGame {
 
 class CrystalBallPipelineStep extends SPipelineStep {
   CrystalBallPipelineStep({
-    required super.program,
-    super.configuration = const SPipelineConfiguration(
-      samplingPasses: 0,
-    ),
+    required this.program,
+    super.samplingPasses = 0,
   }) : super(size: Vector2(900, 1600));
 
   c.Viewport get camera => c.CameraComponent.currentCamera!.viewport;
 
+  final FragmentProgram program;
+
   @override
-  void renderShader(List<ui.Image> samples, Size size, Canvas canvas) {
+  void postProcess(List<ui.Image> samples, Size size, Canvas canvas) {
     final uvBall = Vector2(0.5, 0.5);
     final shader = program.fragmentShader();
     shader.setFloatUniforms((value) {

@@ -4,19 +4,12 @@ import 'dart:ui' hide Image;
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
-@immutable
-class SPipelineConfiguration {
-  const SPipelineConfiguration({
-    required this.samplingPasses,
-  });
 
-  final int samplingPasses;
-}
 
 abstract class SPipelineStep extends PositionComponent {
   SPipelineStep({
-    required this.program,
-    required this.configuration,
+    
+    required this.samplingPasses,
     double? pixelRatio,
     super.position,
     super.size,
@@ -33,15 +26,16 @@ abstract class SPipelineStep extends PositionComponent {
           nativeAngle: nativeAngle ?? 0,
         );
 
-  final SPipelineConfiguration configuration;
+final int samplingPasses;
 
-  // todo: maybe we dont need this in this class
-  final FragmentProgram program;
+
+
+
   late final _layer = _SPipelineStepLayer(
     renderTree: super.renderTree,
     canvasFactory: _canvasFactory,
-    configuration: configuration,
-    renderShader: renderShader,
+    samplingPasses: samplingPasses,
+    postProcess: postProcess,
   );
 
 
@@ -64,20 +58,20 @@ abstract class SPipelineStep extends PositionComponent {
     );
   }
 
-  void renderShader(List<ui.Image> samples, Size size, Canvas canvas);
+  void postProcess(List<ui.Image> samples, Size size, Canvas canvas);
 }
 
 class _SPipelineStepLayer {
   final Canvas Function(PictureRecorder, int) canvasFactory;
   final void Function(Canvas) renderTree;
-  final void Function(List<ui.Image>, Size, Canvas) renderShader;
-  final SPipelineConfiguration configuration;
+  final void Function(List<ui.Image>, Size, Canvas) postProcess;
+  final int samplingPasses;
 
   _SPipelineStepLayer({
     required this.renderTree,
     required this.canvasFactory,
-    required this.configuration,
-    required this.renderShader,
+    required this.samplingPasses,
+    required this.postProcess,
   });
 
   ui.Image _renderPass(Vector2 size, int pass, double pixelRatio) {
@@ -95,14 +89,14 @@ class _SPipelineStepLayer {
 
   void render(Canvas canvas, Vector2 size, double pixelRatio) {
     final results = List<ui.Image>.generate(
-      configuration.samplingPasses,
+      samplingPasses,
       (i) {
         return _renderPass(size, i, pixelRatio);
       },
     );
 
     canvas.save();
-    renderShader(results, size.toSize(), canvas);
+    postProcess(results, size.toSize(), canvas);
     canvas.restore();
   }
 }
