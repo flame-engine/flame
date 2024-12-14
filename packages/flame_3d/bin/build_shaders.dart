@@ -41,25 +41,25 @@ Future<void> compute(Directory assets, Directory shaders) async {
   final uniqueShaders = shaders
       .listSync()
       .whereType<File>()
-      .map((f) => f.path.split('/').last.split('.').first)
+      .map((f) => f.path.split(Platform.pathSeparator).last.split('.').first)
       .toSet();
 
   for (final name in uniqueShaders) {
     final bundle = {
       'TextureFragment': {
         'type': 'fragment',
-        'file': '${shaders.path}/$name.frag',
+        'file': '${shaders.path}${Platform.pathSeparator}$name.frag',
       },
       'TextureVertex': {
         'type': 'vertex',
-        'file': '${shaders.path}/$name.vert',
+        'file': '${shaders.path}${Platform.pathSeparator}$name.vert',
       },
     };
 
     stdout.writeln('Computing shader "$name"');
     final impellerC = await findImpellerC();
     final result = await Process.run(impellerC.toFilePath(), [
-      '--sl=${assets.path}/$name.shaderbundle',
+      '--sl=${assets.path}${Platform.pathSeparator}$name.shaderbundle',
       '--shader-bundle=${jsonEncode(bundle)}',
     ]);
 
