@@ -62,7 +62,7 @@ class Rotate3DDecorator extends Decorator {
       ..rotateY(angleY)
       ..rotateZ(angleZ)
       ..translate(-center.x, -center.y);
-    canvas.transform(Float64List.fromList(matrix.storage));
+    canvas.transform(Float64List.sublistView(matrix.storage));
     draw(canvas);
     canvas.restore();
   }

@@ -18,7 +18,8 @@ class Transform2DDecorator extends Decorator {
   @override
   void apply(void Function(Canvas) draw, Canvas canvas) {
     canvas.save();
-    canvas.transform(Float64List.fromList(transform2d.transformMatrix.storage));
+    canvas.transform(
+        Float64List.sublistView(transform2d.transformMatrix.storage));
     draw(canvas);
     canvas.restore();
   }

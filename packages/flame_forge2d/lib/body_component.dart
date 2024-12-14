@@ -102,7 +102,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
       _lastAngle = angle;
     }
     canvas.save();
-    canvas.transform(Float64List.fromList(matrix.storage));
+    canvas.transform(Float64List.sublistView(matrix.storage));
     super.renderTree(canvas);
     canvas.restore();
   }

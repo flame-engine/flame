@@ -157,7 +157,7 @@ class Shadow3DDecorator extends Decorator {
 
     canvas.saveLayer(null, _paint!);
     canvas.translate(base.x + _shift, base.y);
-    canvas.transform(Float64List.fromList(_transformMatrix!.storage));
+    canvas.transform(Float64List.sublistView(_transformMatrix!.storage));
     draw(canvas);
     canvas.restore();
     draw(canvas);

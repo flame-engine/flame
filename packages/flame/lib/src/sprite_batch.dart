@@ -433,7 +433,7 @@ class SpriteBatch {
 
         canvas
           ..save()
-          ..transform(Float64List.fromList(batchItem.matrix.storage))
+          ..transform(Float64List.sublistView(batchItem.matrix.storage))
           ..drawRect(batchItem.destination, batchItem.paint)
           ..drawImageRect(
             atlas,
