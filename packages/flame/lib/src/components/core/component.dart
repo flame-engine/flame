@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
+import 'package:flame/src/components/core/component_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
@@ -541,17 +542,33 @@ class Component {
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
+    final context = createContext();
+    if (context != null) {
+      _contexts.add(context);
+    }
+
     render(canvas);
     final children = _children;
     if (children != null) {
       for (final child in children) {
+        final hasContext = _contexts.isNotEmpty;
+        if (hasContext) {
+          child._contexts.addAll(_contexts);
+        }
         child.renderTree(canvas);
+        if (hasContext) {
+          child._contexts.removeRange(_contexts.length, child._contexts.length);
+        }
       }
     }
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
+    }
+
+    if (context != null) {
+      _contexts.removeLast();
     }
   }
 
@@ -1038,6 +1055,18 @@ class Component {
         game.unregisterKey(key!);
       }
     }
+  }
+
+  //#endregion
+
+  //#region Context
+
+  final QueueList<ComponentContext> _contexts = QueueList();
+
+  ComponentContext? createContext() => null;
+
+  T? findContext<T extends ComponentContext>() {
+    return _contexts.whereType<T>().lastOrNull;
   }
 
   //#endregion
