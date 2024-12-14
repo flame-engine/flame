@@ -8,7 +8,7 @@
 - [Platforms](platforms.md)
 - [Collision Detection](collision_detection.md)
 - [Effects](effects.md)
-- [Camera Component](camera)
+- [Camera](camera.md)
 - [Inputs](inputs/inputs.md)
 - [Rendering](rendering/rendering.md)
 - [Layout](layout/layout.md)
