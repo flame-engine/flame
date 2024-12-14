@@ -4,12 +4,17 @@ import 'dart:ui' hide Image;
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
+abstract class PostProcessor {
+  int get samplingPasses;
 
+  void update(double dt) {}
 
-abstract class SPipelineStep extends PositionComponent {
-  SPipelineStep({
-    
-    required this.samplingPasses,
+  void postProcess(List<ui.Image> samples, Size size, Canvas canvas);
+}
+
+class PostProcessorComponent extends PositionComponent {
+  PostProcessorComponent({
+    required this.postProcess,
     double? pixelRatio,
     super.position,
     super.size,
@@ -20,31 +25,24 @@ abstract class SPipelineStep extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) :  pixelRatio = pixelRatio ??
+  })  : pixelRatio = pixelRatio ??
             PlatformDispatcher.instance.views.first.devicePixelRatio,
-            super(
+        super(
           nativeAngle: nativeAngle ?? 0,
         );
 
-final int samplingPasses;
-
-
-
-
-  late final _layer = _SPipelineStepLayer(
+  late final _layer = _PostProcessRenderer(
     renderTree: super.renderTree,
     canvasFactory: _canvasFactory,
-    samplingPasses: samplingPasses,
-    postProcess: postProcess,
+    processor: postProcess,
   );
 
-
-  
+  final PostProcessor postProcess;
   final double pixelRatio;
 
   Canvas _canvasFactory(PictureRecorder recorder, int passIndex) {
     return SamplingCanvas(
-      step: this,
+      step: postProcess,
       passIndex: passIndex,
       actualCanvas: Canvas(recorder),
     );
@@ -57,21 +55,17 @@ final int samplingPasses;
       canvas,
     );
   }
-
-  void postProcess(List<ui.Image> samples, Size size, Canvas canvas);
 }
 
-class _SPipelineStepLayer {
+class _PostProcessRenderer {
   final Canvas Function(PictureRecorder, int) canvasFactory;
   final void Function(Canvas) renderTree;
-  final void Function(List<ui.Image>, Size, Canvas) postProcess;
-  final int samplingPasses;
+  final PostProcessor processor;
 
-  _SPipelineStepLayer({
+  _PostProcessRenderer({
     required this.renderTree,
     required this.canvasFactory,
-    required this.samplingPasses,
-    required this.postProcess,
+    required this.processor,
   });
 
   ui.Image _renderPass(Vector2 size, int pass, double pixelRatio) {
@@ -89,19 +83,19 @@ class _SPipelineStepLayer {
 
   void render(Canvas canvas, Vector2 size, double pixelRatio) {
     final results = List<ui.Image>.generate(
-      samplingPasses,
+      processor.samplingPasses,
       (i) {
         return _renderPass(size, i, pixelRatio);
       },
     );
 
     canvas.save();
-    postProcess(results, size.toSize(), canvas);
+    processor.postProcess(results, size.toSize(), canvas);
     canvas.restore();
   }
 }
 
-class SamplingCanvas<S extends SPipelineStep> implements Canvas {
+class SamplingCanvas<S extends PostProcessor> implements Canvas {
   SamplingCanvas({
     required this.step,
     required this.passIndex,
