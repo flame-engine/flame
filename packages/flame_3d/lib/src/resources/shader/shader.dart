@@ -6,48 +6,52 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
-/// {@template shader}
+/// {@template shader_resource}
 ///
 /// {@endtemplate}
 class ShaderResource extends Resource<gpu.Shader> {
-  final Shader shader;
+  /// {@macro shader_resource}
+  factory ShaderResource.createFromAsset({
+    required String asset,
+    required String shaderName,
+    required List<UniformSlot> slots,
+  }) {
+    final library = gpu.ShaderLibrary.fromAsset(asset)!;
 
-  /// {@macro shader}
-  ShaderResource(
+    final shader = library[shaderName];
+    if (shader == null) {
+      throw StateError('Shader "$shaderName" not found in library "$asset"');
+    }
+    return ShaderResource._(shader, slots: slots);
+  }
+
+  ShaderResource._(
     super.resource, {
-    required String name,
     List<UniformSlot> slots = const [],
-  }) : shader = Shader(name: name, slots: slots) {
+  }) {
     for (final slot in slots) {
       slot.resource = resource.getUniformSlot(slot.name);
     }
   }
-
-  factory ShaderResource.create({
-    required String name,
-    required List<UniformSlot> slots,
-  }) {
-    final shader = _library[name];
-    if (shader == null) {
-      throw StateError('Shader "$name" not found in library');
-    }
-    return ShaderResource(shader, name: name, slots: slots);
-  }
-
-  static final _library = gpu.ShaderLibrary.fromAsset(
-    'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-  )!;
 }
 
 class Shader {
+  final String asset;
   final String name;
   final List<UniformSlot> slots;
   final Map<String, UniformInstance> instances = {};
 
   Shader({
+    required this.asset,
     required this.name,
     required this.slots,
   });
+
+  Shader.vertex({required String asset, required List<UniformSlot> slots})
+      : this(asset: asset, name: 'TextureVertex', slots: slots);
+
+  Shader.fragment({required String asset, required List<UniformSlot> slots})
+      : this(asset: asset, name: 'TextureFragment', slots: slots);
 
   /// Set a [Texture] at the given [key] on the buffer.
   void setTexture(String key, Texture texture) => _setTypedValue(key, texture);
@@ -140,6 +144,10 @@ class Shader {
   }
 
   ShaderResource compile() {
-    return ShaderResource.create(name: name, slots: slots);
+    return ShaderResource.createFromAsset(
+      asset: asset,
+      shaderName: name,
+      slots: slots,
+    );
   }
 }
