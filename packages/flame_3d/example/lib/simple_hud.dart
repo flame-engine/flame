@@ -61,7 +61,6 @@ Camera controls:
       canvas,
       '''
 FPS: $fps
-Mode: ${game.camera.mode.name}
 Projection: ${game.camera.projection.name}
 Culled: ${game.world.culled}
 

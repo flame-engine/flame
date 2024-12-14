@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:example/main.dart';
 import 'package:flame/components.dart' show HasGameReference;
-import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
@@ -20,10 +19,6 @@ class PlayerBox extends MeshComponent with HasGameReference<ExampleGame3D> {
 
   @override
   void renderTree(Canvas canvas) {
-    // Only show the box if we are in third person mode.
-    if (game.camera.mode == CameraMode.thirdPerson) {
-      position.setFrom(game.camera.target);
-      super.renderTree(canvas);
-    }
+    game.camera.target = position + Vector3(0, 2, 0);
   }
 }
