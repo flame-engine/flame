@@ -48,10 +48,9 @@ This package provides 3D support for Flame but it depends on the still experimen
 [Flutter GPU](https://github.com/flutter/flutter/wiki/Flutter-GPU), which in turn depends on
 Impeller.
 
-Because of that, this package is also highly experimental. Our long term goal is to
-eventually merge this branch into Flame's `main`, but we currently need to depend on Flutter's `main`
-(Flame depends on `stable`). For more information on this, check out our
-[Roadmap](https://github.com/flame-engine/flame/blob/main/packages/flame_3d/ROADMAP.md).
+Therefore, this package is also experimental; you can check our
+[Roadmap](https://github.com/flame-engine/flame/blob/main/packages/flame_3d/ROADMAP.md)
+for more details on our plans and what is currently supported.
 
 This package does not guarantee that it will follow correct [semver](https://semver.org/) versioning
 rules, nor does it assure that its APIs wont break. Be ready to constantly have to refactor your
@@ -66,8 +65,8 @@ ecosystem.
 
 ## Prerequisites
 
-In order to use flame_3d, you will need to ensure a few things. First of all, you need to be on
-the `main` channel of Flutter, and on MacOS, the only currently supported platform.
+In order to use flame_3d, you will need to ensure a few things. Sadly, you need to be on
+MacOS - the only currently supported platform.
 
 Then, you need to enable Impeller; to do that, add the following to the
 `Info.plist` in your `macos/` directory:
@@ -78,6 +77,12 @@ Then, you need to enable Impeller; to do that, add the following to the
  <key>FLTEnableImpeller</key>
  <true/>
 </dict>
+```
+
+You can also run Flutter with the flag:
+
+```bash
+flutter run --enable-impeller
 ```
 
 Now everything is set up you can start doing some 3D magic! You can check out the
