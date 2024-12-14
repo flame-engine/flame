@@ -37,7 +37,7 @@ class _Painter extends CustomPainter {
 }
 
 /// A [StatelessWidget] that renders NineTileBox
-class NineTileBoxWidget extends StatelessWidget {
+class NineTileBoxWidget extends StatefulWidget {
   final FutureOr<Image> _imageFuture;
 
   /// The size of the tile on the image
@@ -92,22 +92,50 @@ class NineTileBoxWidget extends StatelessWidget {
   }) : _imageFuture = (images ?? Flame.images).load(path);
 
   @override
+  State<NineTileBoxWidget> createState() => _NineTileBoxWidgetState();
+}
+
+class _NineTileBoxWidgetState extends State<NineTileBoxWidget> {
+  late FutureOr<Image> _imageFuture = widget._imageFuture;
+
+  @override
+  void didUpdateWidget(covariant NineTileBoxWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _updateNineTileBox(widget._imageFuture, oldWidget._imageFuture);
+  }
+
+  Future<void> _updateNineTileBox(
+    FutureOr<Image> imageFuture,
+    FutureOr<Image> oldImageFuture,
+  ) async {
+    final image = await imageFuture;
+    final oldImage = await oldImageFuture;
+
+    if (image != oldImage) {
+      setState(() {
+        _imageFuture = imageFuture;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseFutureBuilder<Image>(
       future: _imageFuture,
       builder: (_, image) {
         return InternalNineTileBox(
           image: image,
-          tileSize: tileSize,
-          destTileSize: destTileSize,
-          width: width,
-          height: height,
-          padding: padding,
-          child: child,
+          tileSize: widget.tileSize,
+          destTileSize: widget.destTileSize,
+          width: widget.width,
+          height: widget.height,
+          padding: widget.padding,
+          child: widget.child,
         );
       },
-      errorBuilder: errorBuilder,
-      loadingBuilder: loadingBuilder,
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }

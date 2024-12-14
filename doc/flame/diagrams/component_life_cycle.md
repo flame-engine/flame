@@ -28,10 +28,10 @@
 
     A(onLoad):::yellow
     B(onGameResize):::lightYellow
-    C(onMount):::yellow
+    C(onMount):::lightYellow
     D(update)
     E(render)
-    F(onRemove):::yellow
+    F(onRemove):::lightYellow
 
     %% Flow %%
 
@@ -41,6 +41,6 @@
     D-->E
     E-->D
     E-. If removed .->F
-    F-. If re-parented .->A
+    F-. If re-parented .->B
 
 ```

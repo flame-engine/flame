@@ -1,7 +1,7 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/overlay_route.dart';
-import 'package:flame/src/components/route.dart';
-import 'package:flame/src/components/value_route.dart';
+import 'package:flame/src/components/router/overlay_route.dart';
+import 'package:flame/src/components/router/route.dart';
+import 'package:flame/src/components/router/value_route.dart';
 import 'package:meta/meta.dart';
 
 /// [RouterComponent] handles transitions between multiple pages of a game.

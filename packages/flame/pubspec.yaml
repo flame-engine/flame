@@ -1,6 +1,6 @@
 name: flame
 description: A minimalist Flutter game engine, provides a nice set of somewhat independent modules you can choose from.
-version: 1.20.0
+version: 1.22.0
 homepage: https://github.com/flame-engine/flame
 funding:
   - https://opencollective.com/blue-fire
@@ -14,7 +14,7 @@ topics:
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   collection: ^1.18.0
@@ -28,7 +28,7 @@ dev_dependencies:
   canvas_test: ^0.2.0
   dartdoc: ^8.0.8
   flame_lint: ^1.2.1
-  flame_test: ^1.17.1
+  flame_test: ^1.17.3
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.3
