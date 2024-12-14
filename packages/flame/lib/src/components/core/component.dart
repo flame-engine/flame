@@ -643,11 +643,13 @@ class Component {
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
-  void removeAll(Iterable<Component> components) => components.forEach(remove);
+  void removeAll(Iterable<Component> components) {
+    components.toList(growable: false).forEach(_removeChild);
+  }
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
-    removeAll([...children.where(test)]);
+    children.where(test).toList(growable: false).forEach(_removeChild);
   }
 
   void _removeChild(Component child) {
