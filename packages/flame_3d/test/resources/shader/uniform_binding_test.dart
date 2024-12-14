@@ -107,6 +107,7 @@ void main() {
 
 Shader _createShader(List<UniformSlot> slots) {
   return Shader(
+    asset: 'none',
     name: '-test-',
     slots: slots,
   );

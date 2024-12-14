@@ -12,8 +12,9 @@ class SpatialMaterial extends Material {
     this.roughness = 0.6,
   })  : albedoTexture = albedoTexture ?? Texture.standard,
         super(
-          vertexShader: Shader(
-            name: 'TextureVertex',
+          vertexShader: Shader.vertex(
+            asset:
+                'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
             slots: [
               UniformSlot.value('VertexInfo', {
                 'model',
@@ -26,8 +27,9 @@ class SpatialMaterial extends Material {
               ),
             ],
           ),
-          fragmentShader: Shader(
-            name: 'TextureFragment',
+          fragmentShader: Shader.fragment(
+            asset:
+                'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
             slots: [
               UniformSlot.sampler('albedoTexture'),
               UniformSlot.value('Material', {
