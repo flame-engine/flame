@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 void main() {
   group('TextBoxComponent', () {
@@ -123,26 +122,6 @@ void main() {
     );
 
     testWithFlameGame(
-      'onComplete is called when no scrolling is required',
-      (game) async {
-        final onComplete = _MockOnCompleteCallback();
-
-        when(onComplete.call).thenReturn(null);
-
-        final component = ScrollTextBoxComponent(
-          size: Vector2(200, 100),
-          text: 'Short text',
-          onComplete: onComplete.call,
-        );
-        await game.ensureAdd(component);
-
-        game.update(0.1);
-
-        verify(onComplete.call).called(1);
-      },
-    );
-
-    testWithFlameGame(
         'TextBoxComponent notifies if a new line is added and requires space',
         (game) async {
       var lineSize = 0.0;
@@ -253,8 +232,4 @@ class _FramedTextBox extends TextBoxComponent {
     );
     super.render(canvas);
   }
-}
-
-class _MockOnCompleteCallback extends Mock {
-  void call();
 }

@@ -2,36 +2,24 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:example/crate.dart';
-import 'package:example/keyboard_controlled_camera.dart';
 import 'package:example/player_box.dart';
 import 'package:example/rotating_light.dart';
-import 'package:example/simple_hud.dart';
+import 'package:example/touch_controlled_camera.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart' as v64 show Vector2;
-import 'package:flame/game.dart' show FlameGame, GameWidget;
+import 'package:flame/game.dart' show GameWidget;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart' show runApp, Color, Colors, Listener;
+import 'package:flutter/material.dart' show runApp, Color, Colors;
 
-class ExampleGame3D extends FlameGame<World3D>
-    with HasKeyboardHandlerComponents {
+class ExampleGame3D extends FlameGame3D<World3D, TouchControlledCamera>
+    with DragCallbacks, ScrollDetector {
   ExampleGame3D()
       : super(
           world: World3D(clearColor: const Color(0xFFFFFFFF)),
-          camera: KeyboardControlledCamera(
-            viewport: FixedResolutionViewport(
-              resolution: v64.Vector2(800, 600),
-            ),
-            hudComponents: [SimpleHud()],
-          ),
+          camera: TouchControlledCamera(),
         );
-
-  @override
-  KeyboardControlledCamera get camera =>
-      super.camera as KeyboardControlledCamera;
 
   @override
   FutureOr<void> onLoad() async {
@@ -146,30 +134,38 @@ class ExampleGame3D extends FlameGame<World3D>
       );
     }
   }
+
+  @override
+  void onScroll(PointerScrollInfo info) {
+    const scrollSensitivity = 0.01;
+    final delta = info.scrollDelta.global.y.clamp(-10, 10) * scrollSensitivity;
+
+    camera.distance += delta;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    camera.delta.setValues(event.deviceDelta.x, event.deviceDelta.y);
+    super.onDragUpdate(event);
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    camera.delta.setZero();
+    super.onDragEnd(event);
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    camera.delta.setZero();
+    super.onDragCancel(event);
+  }
 }
 
 void main() {
   final example = ExampleGame3D();
 
-  runApp(
-    Listener(
-      onPointerMove: (event) {
-        if (!event.down) {
-          return;
-        }
-        example.camera.pointerEvent = event;
-      },
-      onPointerSignal: (event) {
-        if (event is! PointerScrollEvent || !event.down) {
-          return;
-        }
-        example.camera.scrollMove = event.delta.dy / 3000;
-      },
-      onPointerUp: (event) => example.camera.pointerEvent = null,
-      onPointerCancel: (event) => example.camera.pointerEvent = null,
-      child: GameWidget(game: example),
-    ),
-  );
+  runApp(GameWidget(game: example));
 }
 
 extension on Random {

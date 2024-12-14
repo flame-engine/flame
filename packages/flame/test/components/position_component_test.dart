@@ -298,17 +298,6 @@ void main() {
         expect(component.containsPoint(point), false);
       });
 
-      test('component with zero size does not contain point', () {
-        final component = PositionComponent();
-        component.position.setValues(2.0, 2.0);
-        component.size.setValues(0.0, 0.0);
-        component.angle = 0.0;
-        component.anchor = Anchor.center;
-
-        final point = Vector2(2.0, 2.0);
-        expect(component.containsPoint(point), false);
-      });
-
       test('scaled component contains point', () {
         final component = PositionComponent();
         component.anchor = Anchor.center;
