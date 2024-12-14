@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame_3d/game.dart';
 
 /// Represents an immutable [Vector3].
@@ -17,6 +19,10 @@ class Vector4Utils {
 
   static Vector4 lerp(Vector4 a, Vector4 b, double t) {
     return a + (b - a).scaled(t);
+  }
+
+  static Vector4 fromColor(Color color) {
+    return Vector4(color.r, color.g, color.b, color.a);
   }
 }
 
