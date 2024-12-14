@@ -1,7 +1,7 @@
 import 'package:example/simple_hud.dart';
+import 'package:flame/extensions.dart' as v64 show Vector2;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/core.dart';
-import 'package:flame/extensions.dart' as v64 show Vector2;
 
 class TouchControlledCamera extends ThirdPersonCamera {
   TouchControlledCamera()
