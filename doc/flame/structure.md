@@ -1,4 +1,4 @@
-# Assets File Structure
+# Assets Directory Structure
 
 Flame has a proposed structure for your project that includes the standard Flutter `assets`
 directory in addition to some children: `audio`, `images` and `tiles`.
