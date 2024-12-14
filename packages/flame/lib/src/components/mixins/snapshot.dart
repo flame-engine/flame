@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -47,7 +48,7 @@ mixin Snapshot on PositionComponent {
     } else {
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
-      canvas.transform(transform.storage);
+      canvas.transform(Float64List.fromList(transform.storage));
       canvas.drawPicture(_picture!);
       final picture = recorder.endRecording();
       return picture.toImageSync(width, height);
@@ -63,7 +64,7 @@ mixin Snapshot on PositionComponent {
     final canvas = Canvas(recorder);
     final matrix = transformMatrix.clone();
     matrix.invert();
-    canvas.transform(matrix.storage);
+    canvas.transform(Float64List.fromList(matrix.storage));
     super.renderTree(canvas);
     _picture = recorder.endRecording();
     return _picture!;
@@ -82,9 +83,7 @@ mixin Snapshot on PositionComponent {
         takeSnapshot();
       }
       canvas.save();
-      canvas.transform(
-        transformMatrix.storage,
-      );
+      canvas.transform(Float64List.fromList(transformMatrix.storage));
       canvas.drawPicture(_picture!);
       canvas.restore();
     } else {

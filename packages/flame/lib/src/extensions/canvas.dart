@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/palette.dart';
@@ -59,6 +60,6 @@ extension CanvasExtension on Canvas {
 
   /// Use the [Transform2D] object to [transform] the canvas.
   void transform2D(Transform2D transform2D) {
-    transform(transform2D.transformMatrix.storage);
+    transform(Float64List.fromList(transform2D.transformMatrix.storage));
   }
 }

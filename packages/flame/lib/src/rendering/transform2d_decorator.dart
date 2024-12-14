@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/src/components/position_component.dart';
@@ -17,7 +18,7 @@ class Transform2DDecorator extends Decorator {
   @override
   void apply(void Function(Canvas) draw, Canvas canvas) {
     canvas.save();
-    canvas.transform(transform2d.transformMatrix.storage);
+    canvas.transform(Float64List.fromList(transform2d.transformMatrix.storage));
     draw(canvas);
     canvas.restore();
   }

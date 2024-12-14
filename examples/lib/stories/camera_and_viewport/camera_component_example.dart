@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
@@ -116,13 +117,25 @@ class Bezel extends PositionComponent {
               const Radius.circular(5.0),
             ),
           ))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform(
+      Float64List.fromList(
+        (Matrix4.identity()..rotateZ(pi / 4)).storage,
+      ),
+    );
     connector = (Path()
           ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform(
+      Float64List.fromList(
+        (Matrix4.identity()..rotateZ(pi / 4)).storage,
+      ),
+    );
     specularHighlight = (Path()
           ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform(
+      Float64List.fromList(
+        (Matrix4.identity()..rotateZ(pi / 4)).storage,
+      ),
+    );
 
     glassPaint = Paint()..color = const Color(0x1400ffae);
     rimBorderPaint = Paint()

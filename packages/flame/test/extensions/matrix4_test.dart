@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flame/extensions.dart';
+import 'package:flame/extensions_matrix4.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';

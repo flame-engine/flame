@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/geometry.dart';
@@ -61,7 +62,7 @@ class Rotate3DDecorator extends Decorator {
       ..rotateY(angleY)
       ..rotateZ(angleZ)
       ..translate(-center.x, -center.y);
-    canvas.transform(matrix.storage);
+    canvas.transform(Float64List.fromList(matrix.storage));
     draw(canvas);
     canvas.restore();
   }

@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:math' show pi;
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -431,7 +432,7 @@ class SpriteBatch {
 
         canvas
           ..save()
-          ..transform(batchItem.matrix.storage)
+          ..transform(Float64List.fromList(batchItem.matrix.storage))
           ..drawRect(batchItem.destination, batchItem.paint)
           ..drawImageRect(
             atlas,

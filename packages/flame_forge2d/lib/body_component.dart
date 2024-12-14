@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart' hide World;
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/extensions_matrix4.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/foundation.dart';
@@ -101,7 +102,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
       _lastAngle = angle;
     }
     canvas.save();
-    canvas.transform(matrix.storage);
+    canvas.transform(Float64List.fromList(matrix.storage));
     super.renderTree(canvas);
     canvas.restore();
   }

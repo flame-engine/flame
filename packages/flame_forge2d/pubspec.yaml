@@ -19,7 +19,7 @@ dependencies:
   flame: ^1.22.0
   flutter:
     sdk: flutter
-  forge2d: ^0.13.1
+  forge2d: ^0.14.0
 
 dev_dependencies:
   dartdoc: ^8.0.8
