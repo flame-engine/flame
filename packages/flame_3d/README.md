@@ -30,8 +30,8 @@ Supported platforms:
 
 | Platform | Supported |
 | -------- | --------- |
-| Android  | ❌        |
-| iOS      | ❌        |
+| Android  | ✅        |
+| iOS      | ✅        |
 | macOS    | ✅        |
 | Windows  | ❌        |
 | Linux    | ❌        |
@@ -65,8 +65,8 @@ ecosystem.
 
 ## Prerequisites
 
-In order to use flame_3d, you will need to ensure a few things. Sadly, you need to be on
-MacOS - the only currently supported platform.
+In order to use flame_3d, you will need to ensure a few things. Also, so far, the only
+platforms that we have explicitly tested for support are Android, iOS, and macOS.
 
 Then, you need to enable Impeller; to do that, add the following to the
 `Info.plist` in your `macos/` directory:
