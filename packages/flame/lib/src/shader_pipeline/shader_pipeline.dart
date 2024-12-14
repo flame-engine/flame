@@ -1,12 +1,12 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui show Image;
 import 'dart:ui' hide Image;
 
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
+@immutable
 class SPipelineConfiguration {
-  SPipelineConfiguration({
+  const SPipelineConfiguration({
     required this.samplingPasses,
   });
 
@@ -31,6 +31,8 @@ abstract class SPipelineStep extends PositionComponent {
         );
 
   final SPipelineConfiguration configuration;
+
+  // todo: maybe we dont need this in this class
   final FragmentProgram program;
   late final _layer = _SPipelineStepLayer(
     renderTree: super.renderTree,
@@ -39,6 +41,8 @@ abstract class SPipelineStep extends PositionComponent {
     renderShader: renderShader,
   );
 
+
+  // todo: figure out this
   double get pixelRatio;
 
   Canvas _canvasFactory(PictureRecorder recorder, int passIndex) {
