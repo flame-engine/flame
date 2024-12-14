@@ -1,4 +1,4 @@
-# Structure
+# Assets File Structure
 
 Flame has a proposed structure for your project that includes the standard Flutter `assets`
 directory in addition to some children: `audio`, `images` and `tiles`.
@@ -6,18 +6,20 @@ directory in addition to some children: `audio`, `images` and `tiles`.
 If using the following example code:
 
 ```dart
-void main() {
-  FlameAudio.play('explosion.mp3');
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    await FlameAudio.play('explosion.mp3');
 
-  Flame.images.load('player.png');
-  Flame.images.load('enemy.png');
-  
-  final map1 = TiledComponent.load('level.tmx', tileSize);
-  
-  final map2 = await SpriteFusionTilemapComponent.load(
-    mapJsonFile: 'map.json',
-    spriteSheetFile: 'spritesheet.png'
-  );
+    // Load some images
+    await Flame.images.load('player.png');
+    await Flame.images.load('enemy.png');
+    
+    // Or load all images in your images folder
+    await Flame.images.loadAllImages();
+
+    final map1 = await TiledComponent.load('level.tmx', tileSize);
+  }
 }
 ```
 
