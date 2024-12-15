@@ -26,5 +26,5 @@ dev_dependencies:
   flame_lint: ^1.2.1
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.3
+  mocktail: ^1.0.4
   test: any
