@@ -15,5 +15,5 @@ dependencies:
 
 dev_dependencies:
   flame_lint: ^1.2.1
-  mocktail: ^1.0.3
+  mocktail: ^1.0.4
   test: any
