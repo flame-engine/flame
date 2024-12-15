@@ -5,6 +5,8 @@ import 'package:flame_3d/resources.dart';
 /// Instance of a uniform sampler. Represented by a [Texture].
 /// {@endtemplate}
 class UniformSampler extends UniformInstance<void, Texture> {
+  Texture? texture;
+
   /// {@macro uniform_sampler}
   UniformSampler(super.slot);
 
@@ -15,8 +17,12 @@ class UniformSampler extends UniformInstance<void, Texture> {
 
   @override
   void set(void key, Texture value) {
-    resource = value;
+    texture = value;
+    recreateResource = true;
   }
+
+  @override
+  Texture createResource() => texture!;
 
   @override
   void makeKey(int? idx, String? field) {}

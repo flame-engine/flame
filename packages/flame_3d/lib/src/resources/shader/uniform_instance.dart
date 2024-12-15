@@ -7,7 +7,7 @@ import 'package:flame_3d/resources.dart';
 /// {@endtemplate}
 abstract class UniformInstance<K, T> extends Resource<T?> {
   /// {@macro uniform_instance}
-  UniformInstance(this.slot) : super(null);
+  UniformInstance(this.slot);
 
   /// The slot this instance belongs too.
   final UniformSlot slot;
