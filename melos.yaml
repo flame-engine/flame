@@ -23,7 +23,7 @@ command:
       vector_math: ^2.1.4
     dev_dependencies:
       dartdoc: ^8.0.8
-      mocktail: ^1.0.3
+      mocktail: ^1.0.4
       test: any
 
   publish:

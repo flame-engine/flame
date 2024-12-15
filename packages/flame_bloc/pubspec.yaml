@@ -28,4 +28,4 @@ dev_dependencies:
   flame_test: ^1.17.3
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.3
+  mocktail: ^1.0.4
