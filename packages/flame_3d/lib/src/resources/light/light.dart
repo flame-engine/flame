@@ -20,8 +20,10 @@ class Light extends Resource<void> {
   }) : super(null);
 
   void apply(int index, Shader shader) {
-    shader.setVector3('Light$index.position', transform.position);
-    shader.setColor('Light$index.color', source.color);
-    shader.setFloat('Light$index.intensity', source.intensity);
+    shader.setVector4('Light[$index].position', vec4(transform.position, 1.0));
+    shader.setColor('Light[$index].color', source.color);
+    shader.setVector4('Light[$index].intensity', Vector4.all(source.intensity));
   }
+
+  Vector4 vec4(Vector3 v, double w) => Vector4(v.x, v.y, v.z, w);
 }

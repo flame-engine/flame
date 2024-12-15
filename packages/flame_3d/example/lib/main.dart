@@ -27,7 +27,23 @@ class ExampleGame3D extends FlameGame3D<World3D, TouchControlledCamera>
       LightComponent.ambient(
         intensity: 1.0,
       ),
-      RotatingLight(),
+      // RotatingLight(),
+
+      LightComponent.point(
+        position: Vector3(-2, 0.1, 2),
+        color: const Color(0xFF22FF55),
+      ),
+      MeshComponent(
+        mesh: SphereMesh(
+          radius: 0.05,
+          material: SpatialMaterial(
+            albedoTexture: ColorTexture(
+              const Color(0xFF22FF55),
+            ),
+          ),
+        ),
+        position: Vector3(-2, 0.1, 2),
+      ),
 
       LightComponent.point(
         position: Vector3(0, 0.1, 0),
@@ -46,19 +62,19 @@ class ExampleGame3D extends FlameGame3D<World3D, TouchControlledCamera>
       ),
 
       LightComponent.point(
-        position: Vector3(-2, 3, 2),
-        color: const Color(0xFFFF2255),
+        position: Vector3(0, 0.1, 0),
+        color: const Color(0xFFFF00FF),
       ),
       MeshComponent(
         mesh: SphereMesh(
           radius: 0.05,
           material: SpatialMaterial(
             albedoTexture: ColorTexture(
-              const Color(0xFFFF2255),
+              const Color(0xFFFF00FF),
             ),
           ),
         ),
-        position: Vector3(-2, 4, 2),
+        position: Vector3(0, 0.1, 0),
       ),
 
       // Add a player box
