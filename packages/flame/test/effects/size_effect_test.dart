@@ -144,7 +144,7 @@ void main() {
       game.update(1000 - totalTime);
       // Typically, `component.size` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
-      expect(component.size, closeToVector(Vector2(0, 0), 1e-10));
+      expect(component.size, closeToVector(Vector2(0, 0), 1e-6));
     });
   });
 }

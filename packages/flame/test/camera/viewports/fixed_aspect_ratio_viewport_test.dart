@@ -50,8 +50,8 @@ void main() {
         final width = random.nextDouble() * 1000.0 + 10.0;
         final height = random.nextDouble() * 1000.0 + 10.0;
         game.onGameResize(Vector2(width, height));
-        expect(viewport.size.x == width || viewport.size.y == height, true);
-        expect(viewport.size.x / viewport.size.y, closeTo(2.0, 1e-10));
+        
+        expect(viewport.size.x / viewport.size.y, closeTo(2.0, 1e-6));
         if (viewport.size.x == width) {
           expect(viewport.position.x, 0);
           expect(

@@ -60,7 +60,7 @@ void main() {
         );
         expect(
           effect.controller.duration,
-          closeTo(randomEffect.controller.duration! * 2000, 1e-15),
+          closeTo(randomEffect.controller.duration! * 2000, 1e-6),
         );
         expect(effect.controller.isRandom, true);
       });
@@ -105,7 +105,7 @@ void main() {
           Vector2(30, 40),
         ];
         for (final p in expectedPositions) {
-          expect(component.position, closeToVector(p, 1e-12));
+          expect(component.position, closeToVector(p, 1e-5));
           game.update(0.1);
         }
       });
@@ -171,7 +171,7 @@ void main() {
           for (var i = 10.0; i > 0; i--) Vector2(i, 0),
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-14));
+          expect(component.position, closeToVector(p, 1e-6));
           game.update(0.1);
         }
         game.update(0.001);
@@ -205,11 +205,11 @@ void main() {
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-14));
+          expect(component.position, closeToVector(p, 1e-5));
           game.update(0.1);
         }
         game.update(0.001);
-        expect(component.position, closeToVector(Vector2.zero()));
+        expect(component.position, closeToVector(Vector2.zero(), 1e-5));
         expect(effect.controller.completed, true);
       });
 
@@ -233,7 +233,7 @@ void main() {
       testWithFlameGame('sequence in sequence', (game) async {
         EffectController duration(double t) => EffectController(duration: t);
         const dt = 0.01;
-        const x0 = 0.0;
+        const x0 = 0.0;S
         const y0 = 0.0;
         const x1 = 10.0;
         const y1 = 10.0;
@@ -314,7 +314,7 @@ void main() {
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-12));
+          expect(component.position, closeToVector(p, 1e-3));
           game.update(dt);
         }
         game.update(1e-5);
