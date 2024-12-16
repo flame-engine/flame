@@ -30,7 +30,7 @@ class _MyGameAppState extends State<MyGameApp> {
       body: GameWidget(
         game: _game,
         overlayBuilderMap: {
-          'console': (BuildContext context, MyGame game) => ConsoleView(
+          'console': (BuildContext context, MyGame game) => FlameConsoleView(
                 game: game,
                 onClose: () {
                   _game.overlays.remove('console');

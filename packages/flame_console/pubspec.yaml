@@ -12,6 +12,7 @@ dependencies:
   flame: ^1.22.0
   flutter:
     sdk: flutter
+  terminui: ^0.1.0
 
 dev_dependencies:
   flame_lint: ^1.2.1
