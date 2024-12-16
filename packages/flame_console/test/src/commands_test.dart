@@ -6,7 +6,7 @@ import 'package:flame_console/flame_console.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _NoopCommand extends ConsoleCommand {
+class _NoopCommand extends FlameConsoleCommand {
   @override
   String get description => '';
 
