@@ -45,6 +45,9 @@ class ButtonComponent extends PositionComponent with TapCallbacks {
       button != null,
       'The button has to either be passed in as an argument or set in onLoad',
     );
+    if (size.isZero()) {
+      size = button!.size;
+    }
     if (!contains(button!)) {
       add(button!);
     }

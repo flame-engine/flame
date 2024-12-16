@@ -4,16 +4,14 @@ import 'package:flame/game.dart';
 import 'package:flame_console/src/commands/commands.dart';
 import 'package:flame_console/src/commands/pause_command.dart';
 import 'package:flame_console/src/commands/resume_command.dart';
+import 'package:terminui/terminui.dart';
 
 export 'debug_command.dart';
 export 'ls_command.dart';
 export 'remove_command.dart';
 
-abstract class ConsoleCommand<G extends FlameGame> {
-  ArgParser get parser;
-  String get description;
-  String get name;
-
+abstract class FlameConsoleCommand<T extends FlameGame>
+    extends TerminuiCommand<T> {
   List<Component> listAllChildren(Component component) {
     return [
       for (final child in component.children) ...[
@@ -50,23 +48,10 @@ abstract class ConsoleCommand<G extends FlameGame> {
       }
     }
   }
-
-  (String?, String) run(G game, List<String> args) {
-    final results = parser.parse(args);
-    return execute(game, results);
-  }
-
-  (String?, String) execute(G game, ArgResults results);
-
-  int? optionalIntResult(String key, ArgResults results) {
-    if (results[key] != null) {
-      return int.tryParse(results[key] as String);
-    }
-    return null;
-  }
 }
 
-abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
+abstract class QueryCommand<G extends FlameGame>
+    extends FlameConsoleCommand<G> {
   (String?, String) processChildren(List<Component> children);
 
   @override
@@ -100,8 +85,8 @@ abstract class QueryCommand<G extends FlameGame> extends ConsoleCommand<G> {
     );
 }
 
-class ConsoleCommands {
-  static List<ConsoleCommand> commands = [
+class FlameConsoleCommands {
+  static List<FlameConsoleCommand> commands = [
     LsConsoleCommand(),
     RemoveConsoleCommand(),
     DebugConsoleCommand(),
