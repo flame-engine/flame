@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
+import 'package:flutter/painting.dart';
 
 export 'dart:ui' show Image;
 
@@ -53,17 +54,39 @@ extension ImageExtension on Image {
     final newPixelData = Uint8List(pixelData.length);
 
     for (var i = 0; i < pixelData.length; i += 4) {
-      final color = Color.fromARGB(
-        pixelData[i + 3],
-        pixelData[i + 0],
-        pixelData[i + 1],
-        pixelData[i + 2],
-      ).darken(amount);
+      final a = pixelData[i + 3] / 255;
 
-      newPixelData[i] = (color.r * 255).round();
-      newPixelData[i + 1] = (color.g * 255).round();
-      newPixelData[i + 2] = (color.b * 255).round();
-      newPixelData[i + 3] = (color.a * 255).round();
+      // Lets avoid division by zero.
+      if (a == 0) {
+        newPixelData[i + 0] = pixelData[i + 0];
+        newPixelData[i + 1] = pixelData[i + 1];
+        newPixelData[i + 2] = pixelData[i + 2];
+        newPixelData[i + 3] = pixelData[i + 3];
+        continue;
+      }
+
+      // Reverse premultiplied alpha.
+      var r = (pixelData[i + 0] / 255) / a;
+      var g = (pixelData[i + 1] / 255) / a;
+      var b = (pixelData[i + 2] / 255) / a;
+
+      // Convert to HSL (Hue, Saturation, and Lightness).
+      var hsl =
+          HSLColor.fromColor(Color.from(alpha: a, red: r, green: g, blue: b));
+      hsl = hsl.withLightness(
+        clampDouble(hsl.lightness * amount, 0, 1.0),
+      );
+
+      final color = hsl.toColor();
+      r = color.r;
+      g = color.g;
+      b = color.b;
+
+      // Premultiply the new color.
+      newPixelData[i + 0] = (r * a * 255).round();
+      newPixelData[i + 1] = (g * a * 255).round();
+      newPixelData[i + 2] = (b * a * 255).round();
+      newPixelData[i + 3] = pixelData[i + 3];
     }
     return fromPixels(newPixelData, width, height);
   }
@@ -78,17 +101,39 @@ extension ImageExtension on Image {
     final newPixelData = Uint8List(pixelData.length);
 
     for (var i = 0; i < pixelData.length; i += 4) {
-      final color = Color.fromARGB(
-        pixelData[i + 3],
-        pixelData[i + 0],
-        pixelData[i + 1],
-        pixelData[i + 2],
-      ).brighten(amount);
+      final a = pixelData[i + 3] / 255;
 
-      newPixelData[i] = (color.r * 255).round();
-      newPixelData[i + 1] = (color.g * 255).round();
-      newPixelData[i + 2] = (color.b * 255).round();
-      newPixelData[i + 3] = (color.a * 255).round();
+      // Lets avoid division by zero.
+      if (a == 0) {
+        newPixelData[i + 0] = pixelData[i + 0];
+        newPixelData[i + 1] = pixelData[i + 1];
+        newPixelData[i + 2] = pixelData[i + 2];
+        newPixelData[i + 3] = pixelData[i + 3];
+        continue;
+      }
+
+      // Reverse premultiplied alpha.
+      var r = (pixelData[i + 0] / 255) / a;
+      var g = (pixelData[i + 1] / 255) / a;
+      var b = (pixelData[i + 2] / 255) / a;
+
+      // Convert to HSL (Hue, Saturation, and Lightness).
+      var hsl =
+          HSLColor.fromColor(Color.from(alpha: a, red: r, green: g, blue: b));
+      hsl = hsl.withLightness(
+        clampDouble(hsl.lightness + (1 - hsl.lightness) * amount, 0, 1.0),
+      );
+
+      final color = hsl.toColor();
+      r = color.r;
+      g = color.g;
+      b = color.b;
+
+      // Premultiply the new color.
+      newPixelData[i + 0] = (r * a * 255).round();
+      newPixelData[i + 1] = (g * a * 255).round();
+      newPixelData[i + 2] = (b * a * 255).round();
+      newPixelData[i + 3] = pixelData[i + 3];
     }
     return fromPixels(newPixelData, width, height);
   }
