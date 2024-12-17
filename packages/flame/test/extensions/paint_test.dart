@@ -32,7 +32,7 @@ void main() {
 
       paint.brighten(brightenAmount);
 
-      expect(
+      expectColor(
         paint.color,
         brightenBaseColor,
         reason: "Paint's color does not match brighten color",
