@@ -45,33 +45,31 @@ extension ImageExtension on Image {
     final newPixelData = Uint8List(pixelData.length);
 
     for (var i = 0; i < pixelData.length; i += 4) {
+      final r = pixelData[i + 0] / 255;
+      final g = pixelData[i + 1] / 255;
+      final b = pixelData[i + 2] / 255;
       final a = pixelData[i + 3] / 255;
 
-      if (a == 0) {
-        newPixelData[i + 0] = pixelData[i + 0];
-        newPixelData[i + 1] = pixelData[i + 1];
-        newPixelData[i + 2] = pixelData[i + 2];
-        newPixelData[i + 3] = pixelData[i + 3];
-        continue;
-      }
+      final d = a == 0 || !reversePremultipliedAlpha ? 1 : a;
 
       // Reverse the pre-multiplied alpha.
       final color = Color.from(
         alpha: a,
-        red: (pixelData[i + 0] / 255) / a,
-        green: (pixelData[i + 1] / 255) / a,
-        blue: (pixelData[i + 2] / 255) / a,
+        red: r / d,
+        green: g / d,
+        blue: b / d,
       );
 
-      final newColor = transform(color);
-      final r = newColor.r;
-      final g = newColor.g;
-      final b = newColor.b;
+      final newColor = a == 0 ? color : transform(color);
+
+      final newR = newColor.r;
+      final newG = newColor.g;
+      final newB = newColor.b;
 
       // Pre-multiply the alpha back into the new color.
-      newPixelData[i + 0] = (r * a * 255).round();
-      newPixelData[i + 1] = (g * a * 255).round();
-      newPixelData[i + 2] = (b * a * 255).round();
+      newPixelData[i + 0] = (newR * d * 255).round();
+      newPixelData[i + 1] = (newG * d * 255).round();
+      newPixelData[i + 2] = (newB * d * 255).round();
       newPixelData[i + 3] = pixelData[i + 3];
     }
 
