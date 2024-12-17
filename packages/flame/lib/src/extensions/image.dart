@@ -55,6 +55,7 @@ extension ImageExtension on Image {
         continue;
       }
 
+      // Reverse the pre-multiplied alpha.
       final color = Color.from(
         alpha: a,
         red: (pixelData[i + 0] / 255) / a,
@@ -67,7 +68,7 @@ extension ImageExtension on Image {
       final g = newColor.g;
       final b = newColor.b;
 
-      // Premultiply the new color.
+      // Pre-multiply the alpha back into the new color.
       newPixelData[i + 0] = (r * a * 255).round();
       newPixelData[i + 1] = (g * a * 255).round();
       newPixelData[i + 2] = (b * a * 255).round();
