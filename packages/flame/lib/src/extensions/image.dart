@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/painting.dart';
 
 export 'dart:ui' show Image;
 
@@ -38,6 +37,46 @@ extension ImageExtension on Image {
     return (await toByteData())!.buffer.asUint8List();
   }
 
+  Future<Image> transformPixels(
+    Color Function(Color) transform, {
+    bool reversePremultipliedAlpha = true,
+  }) async {
+    final pixelData = await pixelsInUint8();
+    final newPixelData = Uint8List(pixelData.length);
+
+    for (var i = 0; i < pixelData.length; i += 4) {
+      final a = pixelData[i + 3] / 255;
+
+      if (a == 0) {
+        newPixelData[i + 0] = pixelData[i + 0];
+        newPixelData[i + 1] = pixelData[i + 1];
+        newPixelData[i + 2] = pixelData[i + 2];
+        newPixelData[i + 3] = pixelData[i + 3];
+        continue;
+      }
+
+      final color = Color.from(
+        alpha: a,
+        red: (pixelData[i + 0] / 255) / a,
+        green: (pixelData[i + 1] / 255) / a,
+        blue: (pixelData[i + 2] / 255) / a,
+      );
+
+      final newColor = transform(color);
+      final r = newColor.r;
+      final g = newColor.g;
+      final b = newColor.b;
+
+      // Premultiply the new color.
+      newPixelData[i + 0] = (r * a * 255).round();
+      newPixelData[i + 1] = (g * a * 255).round();
+      newPixelData[i + 2] = (b * a * 255).round();
+      newPixelData[i + 3] = pixelData[i + 3];
+    }
+
+    return fromPixels(newPixelData, width, height);
+  }
+
   /// Returns the bounding [Rect] of the image.
   Rect getBoundingRect() => Vector2.zero() & size;
 
@@ -47,95 +86,31 @@ extension ImageExtension on Image {
   /// Change each pixel's color to be darker and return a new [Image].
   ///
   /// The [amount] is a double value between 0 and 1.
-  Future<Image> darken(double amount) async {
+  Future<Image> darken(
+    double amount, {
+    bool reversePremultipliedAlpha = true,
+  }) async {
     assert(amount >= 0 && amount <= 1);
 
-    final pixelData = await pixelsInUint8();
-    final newPixelData = Uint8List(pixelData.length);
-
-    for (var i = 0; i < pixelData.length; i += 4) {
-      final a = pixelData[i + 3] / 255;
-
-      // Lets avoid division by zero.
-      if (a == 0) {
-        newPixelData[i + 0] = pixelData[i + 0];
-        newPixelData[i + 1] = pixelData[i + 1];
-        newPixelData[i + 2] = pixelData[i + 2];
-        newPixelData[i + 3] = pixelData[i + 3];
-        continue;
-      }
-
-      // Reverse premultiplied alpha.
-      var r = (pixelData[i + 0] / 255) / a;
-      var g = (pixelData[i + 1] / 255) / a;
-      var b = (pixelData[i + 2] / 255) / a;
-
-      // Convert to HSL (Hue, Saturation, and Lightness).
-      var hsl =
-          HSLColor.fromColor(Color.from(alpha: a, red: r, green: g, blue: b));
-      hsl = hsl.withLightness(
-        clampDouble(hsl.lightness * amount, 0, 1.0),
-      );
-
-      final color = hsl.toColor();
-      r = color.r;
-      g = color.g;
-      b = color.b;
-
-      // Premultiply the new color.
-      newPixelData[i + 0] = (r * a * 255).round();
-      newPixelData[i + 1] = (g * a * 255).round();
-      newPixelData[i + 2] = (b * a * 255).round();
-      newPixelData[i + 3] = pixelData[i + 3];
-    }
-    return fromPixels(newPixelData, width, height);
+    return transformPixels(
+      (color) => color.darken(amount),
+      reversePremultipliedAlpha: reversePremultipliedAlpha,
+    );
   }
 
   /// Change each pixel's color to be brighter and return a new [Image].
   ///
   /// The [amount] is a double value between 0 and 1.
-  Future<Image> brighten(double amount) async {
+  Future<Image> brighten(
+    double amount, {
+    bool reversePremultipliedAlpha = false,
+  }) async {
     assert(amount >= 0 && amount <= 1);
 
-    final pixelData = await pixelsInUint8();
-    final newPixelData = Uint8List(pixelData.length);
-
-    for (var i = 0; i < pixelData.length; i += 4) {
-      final a = pixelData[i + 3] / 255;
-
-      // Lets avoid division by zero.
-      if (a == 0) {
-        newPixelData[i + 0] = pixelData[i + 0];
-        newPixelData[i + 1] = pixelData[i + 1];
-        newPixelData[i + 2] = pixelData[i + 2];
-        newPixelData[i + 3] = pixelData[i + 3];
-        continue;
-      }
-
-      // Reverse premultiplied alpha.
-      var r = (pixelData[i + 0] / 255) / a;
-      var g = (pixelData[i + 1] / 255) / a;
-      var b = (pixelData[i + 2] / 255) / a;
-
-      // Convert to HSL (Hue, Saturation, and Lightness).
-      var hsl =
-          HSLColor.fromColor(Color.from(alpha: a, red: r, green: g, blue: b));
-      hsl = hsl.withLightness(
-        clampDouble(hsl.lightness + (1 - hsl.lightness) * amount, 0, 1.0),
-      );
-
-      final color = hsl.toColor();
-      r = color.r;
-      g = color.g;
-      b = color.b;
-
-      // Premultiply the new color.
-      newPixelData[i + 0] = (r * a * 255).round();
-      newPixelData[i + 1] = (g * a * 255).round();
-      newPixelData[i + 2] = (b * a * 255).round();
-      newPixelData[i + 3] = pixelData[i + 3];
-    }
-    return fromPixels(newPixelData, width, height);
+    return transformPixels(
+      (color) => color.brighten(amount),
+      reversePremultipliedAlpha: reversePremultipliedAlpha,
+    );
   }
 
   /// Resizes this image to the given [newSize].
