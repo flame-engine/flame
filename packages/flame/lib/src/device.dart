@@ -12,6 +12,11 @@ class Device {
     return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
+  /// Sets the app to be in a window mode. (The inverse of fullScreen).
+  Future<void> windowed() {
+    return SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  }
+
   /// Sets the preferred orientation (landscape or portrait) for the app.
   ///
   /// When it opens, it will automatically change orientation to the preferred
