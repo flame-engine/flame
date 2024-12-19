@@ -5,6 +5,13 @@ On this page you can find documentation for some utility classes and methods.
 
 ## Device Class
 
+```{warning}
+Many methods in this class work only on mobile platforms (Android and iOS).
+
+Using these methods on other platforms will not have any effect and you will get a
+warning printed on your console when running in debug mode.
+```
+
 This class can be accessed from `Flame.device` and it has some methods that can be used to control
 the state of the device, for instance you can change the screen orientation and set whether the
 application should be fullscreen or not.
