@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 /// Provides methods for controlling the device (e.g. setting the screen to
@@ -7,13 +9,29 @@ import 'package:flutter/services.dart';
 ///
 /// To use this class, access it via Flame.device.
 class Device {
+  void _warnIfDesktop(String source) {
+    assert(() {
+      if (!kIsWeb &&
+          (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
+        // ignore: avoid_print
+        print(
+          'Warning: $source is not supported on desktop platforms. '
+          'It will be a no-op.',
+        );
+      }
+      return true;
+    }());
+  }
+
   /// Sets the app to be full-screen (no buttons, bar or notifications on top).
   Future<void> fullScreen() {
+    _warnIfDesktop('fullScreen');
     return SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
-  /// Sets the app to be in a window mode. (The inverse of fullScreen).
-  Future<void> windowed() {
+  /// Restore the UI mode to the default ([SystemUiMode.edgeToEdge).
+  Future<void> restoreFullscreen() {
+    _warnIfDesktop('restoreFullscreen');
     return SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
