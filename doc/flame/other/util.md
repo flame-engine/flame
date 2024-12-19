@@ -6,7 +6,7 @@ On this page you can find documentation for some utility classes and methods.
 ## Device Class
 
 ```{warning}
-Many methods in this class work only on mobile platforms (Android and iOS).
+Many methods in this class only work on mobile platforms (Android and iOS).
 
 Using these methods on other platforms will not have any effect and you will
 get a warning printed on your console when running in debug mode.
