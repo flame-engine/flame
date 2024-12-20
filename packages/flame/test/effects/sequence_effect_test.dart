@@ -55,8 +55,8 @@ void main() {
         );
         final effect = SequenceEffect(
           [randomEffect],
-          alternate: true,
           repeatCount: 1000,
+          alternate: true,
         );
         expect(
           effect.controller.duration,
@@ -254,8 +254,8 @@ void main() {
                 MoveEffect.to(Vector2(x2, y2), duration(1)),
                 MoveEffect.to(Vector2(x3, y3), duration(1)),
               ],
-              alternate: true,
               repeatCount: 2,
+              alternate: true,
             ),
             MoveEffect.by(Vector2(x4 - x1, y4 - y1), duration(2)),
             SequenceEffect(
@@ -264,9 +264,9 @@ void main() {
                 MoveEffect.by(Vector2(0, dy5), duration(1)),
               ],
               repeatCount: 5,
+              alternate: true,
             ),
           ],
-          alternate: true,
         );
         expect(effect.controller.duration, 42);
 
