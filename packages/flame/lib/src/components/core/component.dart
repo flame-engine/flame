@@ -201,7 +201,7 @@ class Component {
   /// Whether this component is currently added to a component tree.
   bool get isMounted => (_state & _mounted) != 0;
   void _setMountedBit() => _state |= _mounted;
-  void _clearMountedBit() => _state &= ~_mounted;
+  void _clearMountedBit() => _state &= ~;
 
   /// Whether the component is scheduled to be removed.
   bool get isRemoving => (_state & _removing) != 0;
@@ -614,7 +614,7 @@ class Component {
         _clearRemovingBit();
       }
       game.enqueueMove(child, this);
-    } else if (isMounted && !isRemoving && !child.isMounted) {
+    } else if (isMounted && !child.isMounted) {
       child._parent = this;
       game.enqueueAdd(child, this);
     } else {
