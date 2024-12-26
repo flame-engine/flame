@@ -1,4 +1,3 @@
-import 'package:flame/src/text/elements/group_text_element.dart';
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
