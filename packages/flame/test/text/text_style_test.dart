@@ -1,4 +1,3 @@
-import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/src/text/elements/group_text_element.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';

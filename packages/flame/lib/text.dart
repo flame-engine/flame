@@ -4,6 +4,7 @@ export 'src/text/common/glyph.dart' show Glyph;
 export 'src/text/common/line_metrics.dart' show LineMetrics;
 export 'src/text/common/sprite_font.dart' show SpriteFont;
 export 'src/text/elements/block_element.dart' show BlockElement;
+export 'src/text/elements/group_element.dart' show GroupElement;
 export 'src/text/elements/inline_text_element.dart' show InlineTextElement;
 export 'src/text/elements/rect_element.dart' show RectElement;
 export 'src/text/elements/rrect_element.dart' show RRectElement;

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/text.dart';
 import 'package:meta/meta.dart';
 
