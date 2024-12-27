@@ -68,7 +68,7 @@ void main() {
       final doc = FlameMarkdown.toDocument(markdown);
 
       _expectDocument(doc, [
-        (node) => _expectHeader(node, 1, 'Fire and Ice'),
+        (node) => _expectHeader(node, 1, 'Fire & Ice'),
         (node) => _expectParagraph(node, (p) {
               _expectGroup(p, [
                 (node) => _expectPlain(node, 'Some say the world will end in '),
@@ -86,7 +86,7 @@ void main() {
             ),
         (node) => _expectSimpleParagraph(
               node,
-              "From what I've tasted of desire",
+              "From what I've tasted of >desire<,",
             ),
         (node) => _expectParagraph(node, (p) {
               _expectGroup(p, [
