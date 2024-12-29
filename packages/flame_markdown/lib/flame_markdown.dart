@@ -62,6 +62,7 @@ class FlameMarkdown {
       'em' || 'i' => ItalicTextNode(child),
       'strong' || 'b' => BoldTextNode(child),
       'code' => CodeTextNode(child),
+      'del' => StrikethroughTextNode(child),
       _ => throw Exception('Unknown element tag: ${element.tag}'),
     } as TextNode;
   }

@@ -27,6 +27,7 @@ rebalance
 refreshable
 renderable
 rescan
+strikethrough # of a text with a horizontal line across
 tappable
 tappables
 toolset
