@@ -1,6 +1,6 @@
 # Fire & Ice
 
-Some say the world will end in **fire**,
+Some say the world will ~~end~~ in **fire**,
 
 Some say in *ice*.
 

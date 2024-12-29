@@ -25,6 +25,7 @@ export 'src/text/nodes/inline_text_node.dart' show InlineTextNode;
 export 'src/text/nodes/italic_text_node.dart' show ItalicTextNode;
 export 'src/text/nodes/paragraph_node.dart' show ParagraphNode;
 export 'src/text/nodes/plain_text_node.dart' show PlainTextNode;
+export 'src/text/nodes/strikethrough_text_node.dart' show StrikethroughTextNode;
 export 'src/text/nodes/text_block_node.dart' show TextBlockNode;
 export 'src/text/nodes/text_node.dart' show TextNode;
 export 'src/text/renderers/sprite_font_renderer.dart' show SpriteFontRenderer;
