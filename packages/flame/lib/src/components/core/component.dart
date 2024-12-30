@@ -614,7 +614,7 @@ class Component {
         _clearRemovingBit();
       }
       game.enqueueMove(child, this);
-    } else if (isMounted && !isRemoving && !child.isMounted) {
+    } else if (isMounted && !child.isMounted) {
       child._parent = this;
       game.enqueueAdd(child, this);
     } else {
@@ -829,6 +829,12 @@ class Component {
     } else {
       if (parent.isMounted && !isLoading) {
         _startLoading();
+      } else if (parent.isRemoved) {
+        // This case happens when the child is added to a parent that is being
+        // removed in the same tick.
+        _parent = parent;
+        parent.children.add(this);
+        return LifecycleEventStatus.done;
       }
       return LifecycleEventStatus.block;
     }
