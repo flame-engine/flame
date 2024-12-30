@@ -646,7 +646,13 @@ void main() {
 
         // Timeout is added because processLifecycleEvents of ComponentTreeRoot
         // gets blocked in such cases.
-        expect(game.ready().timeout(const Duration(seconds: 2)), completes);
+
+        // Expect the ready future to complete
+        await expectLater(
+          game.ready().timeout(const Duration(seconds: 2)),
+          completes,
+        );
+        expect(game.hasLifecycleEvents, isFalse);
 
         // Adding the parent again should eventually mount the child as well.
         await game.add(parent);
