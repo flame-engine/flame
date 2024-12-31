@@ -29,6 +29,7 @@ class SequenceEffectExample extends FlameGame {
               MoveEffect.to(Vector2(400, 500), duration(0.7)),
             ],
             alternate: true,
+            alternatePattern: AlternatePattern.doNotRepeatLast,
             infinite: true,
           ),
         ),
