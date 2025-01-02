@@ -1,3 +1,16 @@
+## 1.23.0
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+ - **FIX**: Take into consideration when child is added to parent that is removed in the same tick ([#3428](https://github.com/flame-engine/flame/issues/3428)). ([9a5c54be](https://github.com/flame-engine/flame/commit/9a5c54bea858fc8e9e84878f3ac0a0f7bc190b46))
+ - **FIX**: Add missing export of GroupTextElement to text.dart ([#3424](https://github.com/flame-engine/flame/issues/3424)). ([c9c0f691](https://github.com/flame-engine/flame/commit/c9c0f691412bb026c1d766ec7b424a468f8929f7))
+ - **FIX**: Add missing export of GroupElement to text.dart ([#3423](https://github.com/flame-engine/flame/issues/3423)). ([c0c4bb02](https://github.com/flame-engine/flame/commit/c0c4bb02a32306120a8770122116631f55c1c700))
+ - **FIX**: Fix brighten and darken alpha issue ([#3414](https://github.com/flame-engine/flame/issues/3414)). ([de8e3bce](https://github.com/flame-engine/flame/commit/de8e3bcea2c2c2fa5e01dd288176c8f5623d21fb))
+ - **FIX**: Set button size in onMount if not set ([#3413](https://github.com/flame-engine/flame/issues/3413)). ([916aa5ce](https://github.com/flame-engine/flame/commit/916aa5ce2ad3851b3044e043d2be7cbe923f2c40))
+ - **FIX**: Fix bug preventing removeAll(children) from be called before mount ([#3408](https://github.com/flame-engine/flame/issues/3408)). ([726cb8b6](https://github.com/flame-engine/flame/commit/726cb8b6390c839f9cbab959b2268a7b45fa691c))
+ - **FEAT**: Add support for strike-through text for flame_markdown ([#3426](https://github.com/flame-engine/flame/issues/3426)). ([1f9b0ea9](https://github.com/flame-engine/flame/commit/1f9b0ea9f35a7180725ec7f8f79a561c5f544bb7))
+ - **FEAT**: Warning and docs about fullscreen methods outside the mobile platforms ([#3419](https://github.com/flame-engine/flame/issues/3419)). ([994e098b](https://github.com/flame-engine/flame/commit/994e098bd699a30aa13aed65f2bd0ab7254ad779))
+ - **FEAT**: Add baseColor to Shadow3DDecorator ([#3375](https://github.com/flame-engine/flame/issues/3375)). ([b5d7ee07](https://github.com/flame-engine/flame/commit/b5d7ee0752ee1f2dddf1da4ac817f138296e1c96))
+
 ## 1.22.0
 
  - **FIX**: Remove extra `implements SizeProvider`s ([#3358](https://github.com/flame-engine/flame/issues/3358)). ([47ba0d87](https://github.com/flame-engine/flame/commit/47ba0d8738b101ed59781f8ba384cf05a16d65f1))

@@ -1,3 +1,7 @@
+## 1.11.4
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+
 ## 1.11.3
 
  - Update a dependency to the latest release.
