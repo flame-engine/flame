@@ -18,26 +18,21 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
   final Map<int, ({int hash, Float32List data})> _storage = HashMap();
 
   @override
-  ByteBuffer? get resource {
-    if (super.resource == null) {
-      var previousIndex = -1;
+  ByteBuffer createResource() {
+    var previousIndex = -1;
 
-      final entries = _storage.entries.toList()
-        ..sort(Comparing.on((c) => c.key));
-      final data = entries.fold<List<double>>([], (p, e) {
-        if (previousIndex + 1 != e.key) {
-          final field =
-              slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
-          throw StateError('Uniform ${slot.name}.${field.$2} was not set');
-        }
-        previousIndex = e.key;
-        return p..addAll(e.value.data);
-      });
+    final entries = _storage.entries.toList()..sort(Comparing.on((c) => c.key));
+    final data = entries.fold<List<double>>([], (p, e) {
+      if (previousIndex + 1 != e.key) {
+        final field =
+            slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
+        throw StateError('Uniform ${slot.name}.${field.$2} was not set');
+      }
+      previousIndex = e.key;
+      return p..addAll(e.value.data);
+    });
 
-      super.resource = Float32List.fromList(data).buffer;
-    }
-
-    return super.resource;
+    return Float32List.fromList(data).buffer;
   }
 
   Float32List? operator [](String key) => _storage[slot.indexOf(key)]?.data;
@@ -55,7 +50,7 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
     _storage[index] = (data: data, hash: hash);
 
     // Clear the cache.
-    super.resource = null;
+    recreateResource = true;
   }
 
   @override
