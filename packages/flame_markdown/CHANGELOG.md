@@ -1,3 +1,8 @@
+## 0.2.3
+
+ - **FIX**: Do not encode HTML by default when parsing markdown [flame_markdown] ([#3425](https://github.com/flame-engine/flame/issues/3425)). ([3067da94](https://github.com/flame-engine/flame/commit/3067da94fbc6df2da5197771cb9617588006a9b9))
+ - **FEAT**: Add support for strike-through text for flame_markdown ([#3426](https://github.com/flame-engine/flame/issues/3426)). ([1f9b0ea9](https://github.com/flame-engine/flame/commit/1f9b0ea9f35a7180725ec7f8f79a561c5f544bb7))
+
 ## 0.2.2+3
 
  - Update a dependency to the latest release.
