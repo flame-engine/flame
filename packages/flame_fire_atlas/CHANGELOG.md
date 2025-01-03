@@ -1,3 +1,7 @@
+## 1.7.1
+
+ - Update a dependency to the latest release.
+
 ## 1.7.0
 
  - **FEAT**: Adding getters and methods for easier manipulation of selections ([#3350](https://github.com/flame-engine/flame/issues/3350)). ([291af57d](https://github.com/flame-engine/flame/commit/291af57deb7d742a73438b026ca2f4fd1c6a3454))

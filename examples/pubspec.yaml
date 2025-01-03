@@ -11,15 +11,15 @@ environment:
 
 dependencies:
   dashbook: ^0.1.15
-  flame: ^1.22.0
-  flame_audio: ^2.10.6
-  flame_forge2d: ^0.18.2+3
-  flame_isolate: ^0.6.2+3
-  flame_lottie: ^0.4.2+3
-  flame_noise: ^0.3.2+3
-  flame_spine: ^0.2.2+3
-  flame_svg: ^1.11.3
-  flame_tiled: ^1.21.1
+  flame: ^1.23.0
+  flame_audio: ^2.10.7
+  flame_forge2d: ^0.18.2+4
+  flame_isolate: ^0.6.2+4
+  flame_lottie: ^0.4.2+4
+  flame_noise: ^0.3.2+4
+  flame_spine: ^0.2.2+4
+  flame_svg: ^1.11.4
+  flame_tiled: ^1.21.2
   flutter:
     sdk: flutter
   google_fonts: ^4.0.4
