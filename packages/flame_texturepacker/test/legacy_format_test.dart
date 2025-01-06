@@ -1,7 +1,11 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _MockCanvas extends Mock implements Canvas {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -268,6 +272,85 @@ void main() {
       expect(walkSpritePackedSize.originalSize, Vector2(150, 183));
       expect(walkSpritePackedSize.offset, Vector2(0, 0));
       expect(walkSpritePackedSize.angle, 1.5707963267948966);
+    });
+
+    test('Sprite renders correctly when not rotated', () async {
+      final atlas = await TexturePackerAtlas.load(
+        atlasPath,
+        fromStorage: true,
+      );
+
+      final sprite = atlas.findSpriteByName('robot_jump')!;
+      final canvas = _MockCanvas();
+
+      sprite.render(
+        canvas,
+        position: Vector2(100, 100),
+        size: Vector2(384, 512),
+      );
+
+      expect(sprite.rotate, false);
+      expect(sprite.offset, Vector2.zero());
+      expect(sprite.originalSize, Vector2(192, 256));
+      expect(sprite.srcSize, Vector2(192, 256));
+    });
+
+    test('Sprite renders correctly when rotated', () async {
+      final atlas = await TexturePackerAtlas.load(
+        atlasTrimmedPath,
+        fromStorage: true,
+      );
+
+      final sprite = atlas.findSpriteByName('robot_walk')!;
+      final canvas = _MockCanvas();
+
+      sprite.render(
+        canvas,
+        position: Vector2(100, 100),
+        size: Vector2(384, 512),
+      );
+
+      expect(sprite.rotate, true);
+      expect(sprite.offset, Vector2(14, 2));
+      expect(sprite.originalSize, Vector2(192, 256));
+      expect(sprite.srcSize, Vector2(192, 256));
+      expect(sprite.angle, 1.5707963267948966);
+    });
+
+    test('Sprite renders with correct anchor point', () async {
+      final atlas = await TexturePackerAtlas.load(
+        atlasPath,
+        fromStorage: true,
+      );
+
+      final sprite = atlas.findSpriteByName('robot_jump')!;
+      final canvas = _MockCanvas();
+
+      sprite.render(
+        canvas,
+        position: Vector2(100, 100),
+        size: Vector2(192, 256),
+        anchor: Anchor.center,
+      );
+
+      expect(sprite.originalSize, Vector2(192, 256));
+    });
+
+    test('Sprite renders correctly with default position', () async {
+      final atlas = await TexturePackerAtlas.load(
+        atlasPath,
+        fromStorage: true,
+      );
+
+      final sprite = atlas.findSpriteByName('robot_jump')!;
+      final canvas = _MockCanvas();
+
+      sprite.render(
+        canvas,
+        size: Vector2(192, 256),
+      );
+
+      expect(sprite.originalSize, Vector2(192, 256));
     });
   });
 }
