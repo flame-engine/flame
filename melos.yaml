@@ -17,13 +17,13 @@ command:
   bootstrap:
     environment:
       sdk: ">=3.4.0 <4.0.0"
-      flutter: ">=3.22.0"
+      flutter: ">=3.24.0"
     dependencies:
       meta: ^1.12.0
       vector_math: ^2.1.4
     dev_dependencies:
       dartdoc: ^8.0.8
-      mocktail: ^1.0.3
+      mocktail: ^1.0.4
       test: any
 
   publish:
@@ -54,14 +54,7 @@ scripts:
     description: Run dartdoc checks for all packages.
 
   doc-setup:
-    steps:
-      - "echo Checking python version:"
-      - 'python3 --version && (python3 -c "import sys; sys.exit(0 if sys.version_info >= (3,8) else 2)" || (echo  Error: Python 3.8+ is required && exit 1))'
-      - "echo Installing required python modules:"
-      - 'python3 -m pip install -r "$MELOS_ROOT_PATH/doc/_sphinx/requirements.txt"'
-      - "echo Installing dartdoc_json:"
-      - "dart pub global activate dartdoc_json"
-      - "echo Done."
+    run: ./scripts/doc-setup.sh
     description: Prepares the environment for documentation development.
 
   doc-build:

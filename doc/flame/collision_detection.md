@@ -264,8 +264,6 @@ them so don't doubt to use them even if your use case isn't listed here.
 It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
 the polygon needs to be convex. So always use convex polygons or you will most likely run into
 problems if you don't really know what you are doing.
-It should also be noted that you should always define the vertices in your polygon
-in a counter-clockwise order.
 
 The other hitbox shapes don't have any mandatory constructor, that is because they can have a
 default calculated from the size of the collidable that they are attached to, but since a
@@ -471,7 +469,8 @@ But in some use cases, it might be interesting to find hits only within a certai
 range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
-game. After you have added that you can call `collisionDetection.raycast(...)` on your game class.
+game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class,
+or with the `HasGameReference` Mixin from other components as well.
 
 Example:
 

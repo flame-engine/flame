@@ -60,6 +60,23 @@ class Selection {
       h: json['h'] as int,
     );
   }
+
+  /// Copies this instance with a new id.
+  Selection copyWith({
+    String? id,
+    int? x,
+    int? y,
+    int? w,
+    int? h,
+  }) {
+    return Selection(
+      id: id ?? this.id,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      w: w ?? this.w,
+      h: h ?? this.h,
+    );
+  }
 }
 
 /// {@template _base_selection}
@@ -93,8 +110,14 @@ abstract class BaseSelection {
   /// A group that this selection belongs to.
   final String? group;
 
+  /// The selection information.
+  Selection get selection => _info;
+
   /// Copies this instance with a new group.
   BaseSelection copyWithGroup(String? group);
+
+  /// Copies this instance with a new selection info.
+  BaseSelection copyWithInfo(Selection info);
 
   /// Returns this instance as a json.
   Map<String, dynamic> toJson() {
@@ -138,6 +161,12 @@ class SpriteSelection extends BaseSelection {
   @override
   SpriteSelection copyWithGroup(String? group) {
     return SpriteSelection(info: _info, group: group);
+  }
+
+  /// Copies this instance with a new info.
+  @override
+  SpriteSelection copyWithInfo(Selection info) {
+    return SpriteSelection(info: info, group: group);
   }
 }
 
@@ -193,6 +222,18 @@ class AnimationSelection extends BaseSelection {
   AnimationSelection copyWithGroup(String? group) {
     return AnimationSelection(
       info: _info,
+      frameCount: frameCount,
+      stepTime: stepTime,
+      loop: loop,
+      group: group,
+    );
+  }
+
+  /// Copies this instance with a new info.
+  @override
+  AnimationSelection copyWithInfo(Selection info) {
+    return AnimationSelection(
+      info: info,
       frameCount: frameCount,
       stepTime: stepTime,
       loop: loop,
@@ -428,4 +469,9 @@ class FireAtlas {
       loop: selection.loop,
     );
   }
+
+  /// Returns the atlas image.
+  ///
+  /// Throws if called before the image is loaded.
+  Image get image => _assertImageLoaded();
 }

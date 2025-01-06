@@ -1,0 +1,32 @@
+name: flame_3d
+description: Experimental 3D support for the Flame Engine
+version: 0.1.0-dev.4
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
+funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
+  - https://patreon.com/bluefireoss
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flame: ^1.23.0
+  flutter:
+    sdk: flutter
+  flutter_gpu:
+    sdk: flutter
+  meta: ^1.12.0
+  ordered_set: ^6.0.1
+  vector_math: ^2.1.4
+
+dev_dependencies:
+  flame_lint: ^1.2.0
+  flame_test: ^1.17.4
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/shaders/

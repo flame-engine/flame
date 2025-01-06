@@ -6,15 +6,15 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.24.0"
 
 dependencies:
-  flame_splash_screen: ^0.3.0
+  flame_splash_screen: ^0.3.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.2.0
+  flame_lint: ^1.2.1
   flutter_test:
     sdk: flutter
 

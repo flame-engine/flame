@@ -1,6 +1,6 @@
 name: flame_network_assets
 description: Network assets support for Flame.
-version: 0.3.2
+version: 0.3.3+4
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
 funding:
   - https://opencollective.com/blue-fire
@@ -13,11 +13,11 @@ topics:
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   dev: ^1.0.0
-  flame: ^1.18.0
+  flame: ^1.23.0
   flutter:
     sdk: flutter
   http: ^1.2.1
@@ -26,7 +26,7 @@ dependencies:
 
 dev_dependencies:
   dartdoc: ^8.0.8
-  flame_lint: ^1.2.0
+  flame_lint: ^1.2.1
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.3
+  mocktail: ^1.0.4

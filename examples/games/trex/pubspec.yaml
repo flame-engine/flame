@@ -7,16 +7,16 @@ version: 0.1.0
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   collection: ^1.16.0
-  flame: ^1.18.0
+  flame: ^1.23.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.2.0
+  flame_lint: ^1.2.1
 flutter:
   uses-material-design: true
   assets:

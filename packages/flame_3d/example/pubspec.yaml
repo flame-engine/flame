@@ -1,0 +1,22 @@
+name: example
+description: An example for flame_3d. The example shows how to set up 3D support in a flame game.
+version: 0.0.1+1
+publish_to: none
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flame: ^1.23.0
+  flame_3d: ^0.1.0-dev.4
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.2.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/

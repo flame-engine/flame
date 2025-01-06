@@ -27,3 +27,4 @@ vantablack # brand name for a famous super-black ink known as the darkest ever m
 Weasley # Ron Weasley, a character from the book Harry Potter
 Wyrmsun # An open-source real-time strategy game https://www.indiedb.com/games/wyrmsun
 yarnspinner # A tool for building branching narrative and dialogue in games # https://yarnspinner.dev/
+terminui # A terminal UI library for Flutter

@@ -259,7 +259,20 @@ class Component {
   /// This can be null if the component hasn't been added to the component tree
   /// yet, or if it is the root of component tree.
   ///
-  /// Setting this property to null is equivalent to [removeFromParent].
+  /// Setting this property to `null` is equivalent to [removeFromParent].
+  /// Setting it to a new parent component is equivalent to calling
+  /// [addToParent] and will properly remove this component from its current
+  /// parent, if any.
+  ///
+  /// Note that the [parent] setter, like [add] and similar methods,
+  /// merely enqueues the move from one parent to another. For example:
+  ///
+  /// ```dart
+  /// coin.parent = inventory;
+  /// // The inventory.children set does not include coin yet.
+  /// await game.lifecycleEventsProcessed;
+  /// // The inventory.children set now includes coin.
+  /// ```
   Component? get parent => _parent;
   Component? _parent;
   set parent(Component? newParent) {
@@ -543,6 +556,13 @@ class Component {
   /// The cost of this flexibility is that the component won't be added right
   /// away. Instead, it will be placed into a queue, and then added later, after
   /// it has finished loading, but no sooner than on the next game tick.
+  /// You can await [FlameGame.lifecycleEventsProcessed] like so:
+  ///
+  /// ```dart
+  /// world.add(coin);
+  /// await game.lifecycleEventsProcessed;
+  /// // The coin is now guaranteed to be added.
+  /// ```
   ///
   /// When multiple children are scheduled to be added to the same parent, we
   /// start loading all of them as soon as possible. Nevertheless, the children
@@ -594,7 +614,7 @@ class Component {
         _clearRemovingBit();
       }
       game.enqueueMove(child, this);
-    } else if (isMounted && !isRemoving && !child.isMounted) {
+    } else if (isMounted && !child.isMounted) {
       child._parent = this;
       game.enqueueAdd(child, this);
     } else {
@@ -623,11 +643,13 @@ class Component {
 
   /// Removes all the children in the list and calls [onRemove] for all of them
   /// and their children.
-  void removeAll(Iterable<Component> components) => components.forEach(remove);
+  void removeAll(Iterable<Component> components) {
+    components.toList(growable: false).forEach(_removeChild);
+  }
 
   /// Removes all the children for which the [test] function returns true.
   void removeWhere(bool Function(Component component) test) {
-    removeAll([...children.where(test)]);
+    children.where(test).toList(growable: false).forEach(_removeChild);
   }
 
   void _removeChild(Component child) {
@@ -807,6 +829,12 @@ class Component {
     } else {
       if (parent.isMounted && !isLoading) {
         _startLoading();
+      } else if (parent.isRemoved) {
+        // This case happens when the child is added to a parent that is being
+        // removed in the same tick.
+        _parent = parent;
+        parent.children.add(this);
+        return LifecycleEventStatus.done;
       }
       return LifecycleEventStatus.block;
     }

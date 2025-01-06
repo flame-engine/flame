@@ -1,3 +1,24 @@
+## 1.11.4
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+
+## 1.11.3
+
+ - Update a dependency to the latest release.
+
+## 1.11.2
+
+ - Update a dependency to the latest release.
+
+## 1.11.1
+
+ - Update a dependency to the latest release.
+
+## 1.11.0
+
+ - **FEAT**: Fixing tests on flutter 3.24.0 ([#3259](https://github.com/flame-engine/flame/issues/3259)). ([bf9a2481](https://github.com/flame-engine/flame/commit/bf9a2481fbeb77413a26ae96b57843ca51411f9f))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
 ## 1.10.2
 
  - Update a dependency to the latest release.

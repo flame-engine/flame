@@ -327,6 +327,82 @@ void main() {
           expect(child.isMounted, true);
         },
       );
+
+      group('lifecycleEventsProcessed', () {
+        testWithFlameGame('waits for unprocessed events', (game) async {
+          await game.ready();
+          final component = _LifecycleComponent();
+          await game.world.add(component);
+          expect(game.hasLifecycleEvents, isTrue);
+
+          Future.delayed(Duration.zero).then((_) => game.update(0));
+          await game.lifecycleEventsProcessed;
+          expect(game.hasLifecycleEvents, isFalse);
+        });
+
+        testWithFlameGame("doesn't block when there are no events",
+            (game) async {
+          await game.ready();
+          expect(game.hasLifecycleEvents, isFalse);
+          await game.lifecycleEventsProcessed;
+          expect(game.hasLifecycleEvents, isFalse);
+        });
+
+        testWithFlameGame('guarantees addition even with heavy onLoad',
+            (game) async {
+          await game.ready();
+          final component = _SlowComponent('heavy', 0.1);
+          final child = _SlowComponent('child', 0.1);
+          await component.add(child);
+          await game.world.add(component);
+          expect(game.world.children, isNot(contains(component)));
+
+          game.lifecycleEventsProcessed.then(
+            expectAsync1((_) {
+              expect(game.world.children, contains(component));
+              expect(component.children, contains(child));
+            }),
+          );
+
+          await game.ready();
+        });
+
+        testWithFlameGame('completes even with dequeued event', (game) async {
+          final parent1 = Component();
+          final parent2 = Component();
+          game.addAll([parent1, parent2]);
+          await game.ready();
+          final component = _SlowComponent('heavy', 0.1);
+          final child = _SlowComponent('child', 0.1);
+          await component.add(child);
+          await parent1.add(component);
+
+          expect(game.lifecycleEventsProcessed, completes);
+
+          await Future.delayed(Duration.zero).then((_) => game.update(0));
+          assert(
+            game.hasLifecycleEvents,
+            'One update should not have been enough '
+            'to add the heavy component',
+          );
+
+          // Trigger dequeue.
+          component.parent = parent2;
+
+          await game.ready();
+        });
+      });
+
+      testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {
+        await game.ready();
+        final component = Component();
+        await game.world.add(component);
+        expect(game.hasLifecycleEvents, isTrue);
+
+        Future.delayed(Duration.zero).then((_) => game.update(0));
+        await game.lifecycleEventsProcessed;
+        expect(game.hasLifecycleEvents, isFalse);
+      });
     });
 
     group('onGameResize', () {
@@ -570,13 +646,29 @@ void main() {
 
         // Timeout is added because processLifecycleEvents of ComponentTreeRoot
         // gets blocked in such cases.
-        expect(game.ready().timeout(const Duration(seconds: 2)), completes);
+
+        // Expect the ready future to complete
+        await expectLater(
+          game.ready().timeout(const Duration(seconds: 2)),
+          completes,
+        );
+        expect(game.hasLifecycleEvents, isFalse);
 
         // Adding the parent again should eventually mount the child as well.
         await game.add(parent);
         await game.ready();
         expect(child.isMounted, true);
       });
+
+      testWithFlameGame(
+        "can remove component's children before adding the parent",
+        (game) async {
+          final c = _ComponentWithChildrenRemoveAll();
+          game.add(c);
+
+          await game.ready();
+        },
+      );
     });
 
     group('Removing components', () {
@@ -1727,4 +1819,14 @@ FlameTester<_DetachableFlameGame> _myDetachableGame({required bool open}) {
       await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
     },
   );
+}
+
+class _ComponentWithChildrenRemoveAll extends Component {
+  @override
+  void onMount() {
+    super.onMount();
+
+    add(Component());
+    removeAll(children);
+  }
 }

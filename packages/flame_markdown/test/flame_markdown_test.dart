@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flame/text.dart';
 import 'package:flame_markdown/flame_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:markdown/markdown.dart';
 
 void main() {
   group('FlameMarkdown#toDocument', () {
@@ -68,10 +69,14 @@ void main() {
       final doc = FlameMarkdown.toDocument(markdown);
 
       _expectDocument(doc, [
-        (node) => _expectHeader(node, 1, 'Fire and Ice'),
+        (node) => _expectHeader(node, 1, 'Fire & Ice'),
         (node) => _expectParagraph(node, (p) {
               _expectGroup(p, [
-                (node) => _expectPlain(node, 'Some say the world will end in '),
+                (node) => _expectPlain(
+                      node,
+                      // note: strike-trough is only parsed if enabled
+                      'Some say the world will ~~end~~ in ',
+                    ),
                 (node) => _expectBold(node, 'fire'),
                 (node) => _expectPlain(node, ','),
               ]);
@@ -86,7 +91,7 @@ void main() {
             ),
         (node) => _expectSimpleParagraph(
               node,
-              "From what I've tasted of desire",
+              "From what I've tasted of >desire<,",
             ),
         (node) => _expectParagraph(node, (p) {
               _expectGroup(p, [
@@ -97,7 +102,37 @@ void main() {
             }),
       ]);
     });
+
+    test('strikethrough can be enabled', () {
+      const markdown = 'Flame ~~will be~~ is a great game engine!';
+      final doc = FlameMarkdown.toDocument(
+        markdown,
+        document: Document(
+          encodeHtml: false,
+          inlineSyntaxes: [
+            StrikethroughSyntax(),
+          ],
+        ),
+      );
+
+      _expectDocument(doc, [
+        (node) => _expectParagraph(node, (p) {
+              _expectGroup(p, [
+                (node) => _expectPlain(node, 'Flame '),
+                (node) => _expectStrikethrough(node, 'will be'),
+                (node) => _expectPlain(node, ' is a great game engine!'),
+              ]);
+            }),
+      ]);
+    });
   });
+}
+
+void _expectStrikethrough(InlineTextNode node, String text) {
+  expect(node, isA<StrikethroughTextNode>());
+  final content = (node as StrikethroughTextNode).child;
+  expect(content, isA<PlainTextNode>());
+  expect((content as PlainTextNode).text, text);
 }
 
 void _expectBold(InlineTextNode node, String text) {

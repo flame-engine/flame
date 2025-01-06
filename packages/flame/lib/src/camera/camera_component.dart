@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
@@ -360,29 +362,66 @@ class CameraComponent extends Component {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
     final viewPortAwareBoundsBehavior =
         viewfinder.firstChild<ViewportAwareBoundsBehavior>();
+
     if (bounds == null) {
+      // When bounds is null, all bounds-related components need to be dropped.
       boundedBehavior?.removeFromParent();
       viewPortAwareBoundsBehavior?.removeFromParent();
       return;
     }
+
+    Future<void>? boundedBehaviorFuture;
     if (boundedBehavior == null) {
+      final BoundedPositionBehavior ref;
       viewfinder.add(
-        BoundedPositionBehavior(bounds: bounds, priority: 1000),
+        ref = BoundedPositionBehavior(
+          bounds: bounds,
+          priority: 1000,
+        ),
       );
+
+      boundedBehaviorFuture = ref.mounted;
     } else {
       boundedBehavior.bounds = bounds;
     }
-    if (considerViewport) {
-      if (viewPortAwareBoundsBehavior == null) {
-        viewfinder.add(
-          ViewportAwareBoundsBehavior(boundsShape: bounds),
-        );
-      } else {
-        viewPortAwareBoundsBehavior.boundsShape = bounds;
+
+    if (!considerViewport) {
+      // Edge case: remove pre-existing viewport aware components.
+      viewPortAwareBoundsBehavior?.removeFromParent();
+      return;
+    }
+
+    // Param `considerViewPort` was true and we have a bounds.
+    // Add a ViewportAwareBoundsBehavior component with
+    // our desired bounds shape or update the boundsShape if the
+    // component already exists.
+    if (viewPortAwareBoundsBehavior == null) {
+      switch (boundedBehaviorFuture) {
+        case null:
+          // This represents the case when BoundedPositionBehavior was mounted
+          // earlier in another cycle. This allows us to immediately add the
+          // ViewportAwareBoundsBehavior component which will subsequently adapt
+          // the camera to the virtual resolution this frame.
+          _addViewPortAwareBoundsBehavior(bounds);
+        case _:
+          // This represents the case when BoundedPositionBehavior was added
+          // in this exact cycle but did not mount into the tree.
+          // We must wait for that component to mount first in order for
+          // ViewportAwareBoundsBehavior to correctly affect the camera.
+          boundedBehaviorFuture
+              .whenComplete(() => _addViewPortAwareBoundsBehavior(bounds));
       }
     } else {
-      viewPortAwareBoundsBehavior?.removeFromParent();
+      viewPortAwareBoundsBehavior.boundsShape = bounds;
     }
+  }
+
+  void _addViewPortAwareBoundsBehavior(Shape bounds) {
+    viewfinder.add(
+      ViewportAwareBoundsBehavior(
+        boundsShape: bounds,
+      ),
+    );
   }
 
   /// Returns true if this camera is able to see the [component].
