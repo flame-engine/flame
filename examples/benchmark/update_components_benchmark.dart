@@ -27,9 +27,9 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   @override
   Future<void> setup() async {
     _game = FlameGame();
-    for (var i = 0; i < _amountComponents; i++) {
-      _game.add(_BenchmarkComponent(i));
-    }
+    await _game.addAll(
+      List.generate(_amountComponents, _BenchmarkComponent.new),
+    );
 
     await _game.ready();
 
