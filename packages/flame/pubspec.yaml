@@ -25,6 +25,7 @@ dependencies:
   vector_math: ^2.1.4
 
 dev_dependencies:
+  benchmark_harness: ^2.3.1
   canvas_test: ^0.2.0
   dartdoc: ^8.0.8
   flame_lint: ^1.2.1

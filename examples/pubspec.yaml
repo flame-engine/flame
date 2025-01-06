@@ -31,7 +31,6 @@ dependencies:
   trex_game: ^0.1.0
 
 dev_dependencies:
-  benchmark_harness: ^2.3.1
   flame_lint: ^1.2.1
   test: any
 

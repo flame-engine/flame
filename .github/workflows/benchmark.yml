@@ -13,7 +13,7 @@ jobs:
 
       - uses: luanpotter/dart-benchmark-action@v0.1.13
         with:
-          paths: "examples/"
+          paths: "packages/flame/"
           ignore-tag: "no-benchmark"
           is-flutter: true
         env:
