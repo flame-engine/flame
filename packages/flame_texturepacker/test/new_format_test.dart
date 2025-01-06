@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -71,7 +72,7 @@ void main() {
       expect(jumpSprite.srcSize, Vector2(192, 256));
       expect(jumpSprite.originalSize, Vector2(192, 256));
       expect(jumpSprite.offset, Vector2(0, 0));
-      expect(jumpSprite.angle, 1.5707963267948966);
+      expect(jumpSprite.angle, math.pi / 2);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
       expect(walkSprite.rotate, false);
@@ -135,14 +136,14 @@ void main() {
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
       expect(walkSprite.offset, Vector2(14, 2));
-      expect(walkSprite.angle, 1.5707963267948966);
+      expect(walkSprite.angle, math.pi / 2);
 
       final walkSpritePackedSize = walkSprite.clone(useOriginalSize: false);
       expect(walkSpritePackedSize.src, const Rect.fromLTWH(0, 0, 183, 150));
       expect(walkSpritePackedSize.srcSize, Vector2(150, 183));
       expect(walkSpritePackedSize.originalSize, Vector2(150, 183));
       expect(walkSpritePackedSize.offset, Vector2(0, 0));
-      expect(walkSpritePackedSize.angle, 1.5707963267948966);
+      expect(walkSpritePackedSize.angle, math.pi / 2);
     });
 
     test('Sprite renders correctly', () async {
@@ -164,6 +165,7 @@ void main() {
       expect(sprite.offset, Vector2.zero());
       expect(sprite.originalSize, Vector2(192, 256));
       expect(sprite.srcSize, Vector2(192, 256));
+      expect(sprite.angle, math.pi / 2);
     });
 
     test('Sprite renders with correct anchor point', () async {
@@ -320,14 +322,14 @@ void main() {
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
       expect(walkSprite.offset, Vector2(14, 2));
-      expect(walkSprite.angle, 1.5707963267948966);
+      expect(walkSprite.angle, math.pi / 2);
 
       final walkSpritePackedSize = walkSprite.clone(useOriginalSize: false);
       expect(walkSpritePackedSize.src, const Rect.fromLTWH(191, 367, 183, 150));
       expect(walkSpritePackedSize.srcSize, Vector2(150, 183));
       expect(walkSpritePackedSize.originalSize, Vector2(150, 183));
       expect(walkSpritePackedSize.offset, Vector2(0, 0));
-      expect(walkSpritePackedSize.angle, 1.5707963267948966);
+      expect(walkSpritePackedSize.angle, math.pi / 2);
     });
 
     test('Sprite renders correctly', () async {
@@ -349,7 +351,7 @@ void main() {
       expect(sprite.offset, Vector2(14, 2));
       expect(sprite.originalSize, Vector2(192, 256));
       expect(sprite.srcSize, Vector2(192, 256));
-      expect(sprite.angle, 1.5707963267948966);
+      expect(sprite.angle, math.pi / 2);
     });
 
     test('Sprite renders with correct anchor point', () async {
