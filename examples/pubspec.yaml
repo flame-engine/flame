@@ -1,4 +1,5 @@
 name: examples
+resolution: workspace
 description: A set of small examples showcasing each feature provided by the Flame Engine.
 homepage: https://github.com/flame-engine/flame/tree/main/examples
 publish_to: "none"
@@ -6,11 +7,11 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
 
 dependencies:
-  dashbook: ^0.1.15
+  dashbook: ^0.1.16
   flame: ^1.23.0
   flame_audio: ^2.10.7
   flame_forge2d: ^0.18.2+4

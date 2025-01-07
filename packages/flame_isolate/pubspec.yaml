@@ -1,4 +1,5 @@
 name: flame_isolate
+resolution: workspace
 description: Flame wrapper for integral_isolates making multi-threading easy in Flame
 version: 0.6.2+4
 repository: https://github.com/flame-engine/flame/blob/main/packages/flame_isolate
@@ -7,8 +8,8 @@ topics:
   - isolate
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
 
 dependencies:
   flame: ^1.23.0
