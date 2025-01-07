@@ -1,4 +1,5 @@
 name: flame_svg
+resolution: workspace
 description: Package to add SVG rendering support for the Flame game engine
 version: 1.11.4
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_svg
@@ -12,8 +13,8 @@ topics:
   - vector-graphics
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
 
 dependencies:
   flame: ^1.23.0
