@@ -11,9 +11,7 @@ import 'package:flame_3d/resources.dart';
 /// {@endtemplate}
 class Mesh extends Resource<void> {
   /// {@macro mesh}
-  Mesh()
-      : _surfaces = [],
-        super(null);
+  Mesh() : _surfaces = [];
 
   final List<Surface> _surfaces;
   Aabb3? _aabb;
@@ -31,6 +29,9 @@ class Mesh extends Resource<void> {
       device.bindSurface(surface);
     }
   }
+
+  @override
+  void createResource() {}
 
   /// The total surface count of the mesh.
   int get surfaceCount => _surfaces.length;
