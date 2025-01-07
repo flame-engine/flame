@@ -2,7 +2,15 @@ name: flame_console
 resolution: workspace
 description: "An extensible and customizable console to help debug Flame games."
 version: 0.1.2
-homepage:
+repository: https://github.com/flame-engine/flame/tree/main/packages/flame_console
+funding:
+  - https://opencollective.com/blue-fire
+  - https://github.com/sponsors/bluefireteam
+  - https://patreon.com/bluefireoss
+topics:
+  - flame
+  - games
+  - utils
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
