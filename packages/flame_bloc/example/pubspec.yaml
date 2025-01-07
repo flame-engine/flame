@@ -1,4 +1,5 @@
 name: flame_bloc_example
+resolution: workspace
 description: Example game using the flame_bloc package
 
 publish_to: 'none'
@@ -6,7 +7,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
 
 dependencies:

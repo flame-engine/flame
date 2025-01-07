@@ -1,10 +1,11 @@
 name: example
+resolution: workspace
 description: An example for flame_3d. The example shows how to set up 3D support in a flame game.
 version: 0.0.1+1
 publish_to: none
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   flame: ^1.23.0

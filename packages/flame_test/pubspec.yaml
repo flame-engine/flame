@@ -1,4 +1,5 @@
 name: flame_test
+resolution: workspace
 description: A package with classes to help testing applications using Flame
 version: 1.17.4
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
@@ -12,7 +13,7 @@ topics:
   - testing
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
 
 dependencies:

@@ -16,7 +16,7 @@ command:
 
   bootstrap:
     environment:
-      sdk: ">=3.4.0 <4.0.0"
+      sdk: ">=3.6.0 <4.0.0"
       flutter: ">=3.24.0"
     dependencies:
       meta: ^1.12.0

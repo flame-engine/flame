@@ -1,4 +1,5 @@
 name: flame_markdown
+resolution: workspace
 description: |
   Markdown support for the Flame game engine, bridging the markdown package into Flame's text rendering pipeline.
 version: 0.2.3
@@ -12,7 +13,7 @@ topics:
   - markdown
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
 
 dependencies:

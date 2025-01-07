@@ -1,4 +1,5 @@
 name: flame_riverpod
+resolution: workspace
 description: Helpers for using Riverpod - a reactive caching and data-binding framework, in conjunction with Flame.
 version: 5.4.7
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_riverpod
@@ -11,7 +12,7 @@ topics:
   - state-management
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=3.24.0"
 
 dependencies:
