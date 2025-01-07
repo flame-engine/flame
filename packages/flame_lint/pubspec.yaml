@@ -1,4 +1,5 @@
 name: flame_lint
+resolution: workspace
 description: Flame lint package
 version: 1.2.1
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
@@ -11,7 +12,7 @@ topics:
   - lints
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   lints: ^4.0.0

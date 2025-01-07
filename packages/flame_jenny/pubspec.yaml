@@ -1,4 +1,5 @@
 name: flame_jenny
+resolution: workspace
 description: Flame bridge package to Jenny (a Dart port of Yarn Spinner).
 version: 1.0.0
 publish_to: none
@@ -11,8 +12,8 @@ topics:
   - flame
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
 
 dependencies:
   collection: ^1.17.1

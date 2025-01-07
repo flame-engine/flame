@@ -1,11 +1,12 @@
 name: ember_quest
+resolution: workspace
 description: A tutorial on how to create a basic side scrolling platformer using the Flame game engine for Flutter.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
 
 dependencies:
   flame: ^1.23.0

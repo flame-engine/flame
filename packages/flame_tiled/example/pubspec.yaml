@@ -1,10 +1,11 @@
 name: flame_tiled_example
+resolution: workspace
 description: Simple project to showcase the usage of flame_tiled
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   flame: ^1.23.0

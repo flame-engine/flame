@@ -1,4 +1,5 @@
 name: flame_behavior_tree_example
+resolution: workspace
 description: "A simple demo to show usage of behavior trees in flame."
 publish_to: 'none'
 version: 0.1.0
@@ -8,7 +9,7 @@ funding:
   - https://patreon.com/bluefireoss
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   flame: ^1.23.0
