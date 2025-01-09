@@ -41,6 +41,44 @@ void main() {
       );
     });
 
+    testWithFlameGame(
+      'Spawns multiple components within rectangle',
+      (game) async {
+        final random = Random(0);
+        final shape = Rectangle.fromCenter(
+          center: Vector2(100, 200),
+          size: Vector2.all(200),
+        );
+        final spawn = SpawnComponent(
+          multiFactory: (_) =>
+              [PositionComponent(), PositionComponent(), PositionComponent()],
+          period: 1,
+          area: shape,
+          random: random,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+        game.update(0.5);
+        expect(world.children.length, 1); //1 being the spawnComponent
+        game.update(0.5);
+        game.update(0.0);
+        expect(world.children.length, 4); //1+3 spawned components
+        game.update(1.0);
+        game.update(0.0);
+        expect(world.children.length, 7); //1+2*3 spawned components
+
+        for (var i = 0; i < 1000; i++) {
+          game.update(random.nextDouble());
+        }
+        expect(
+          world.children
+              .query<PositionComponent>()
+              .every((c) => shape.containsPoint(c.position)),
+          isTrue,
+        );
+      },
+    );
+
     testWithFlameGame('Spawns components within circle', (game) async {
       final random = Random(0);
       final shape = Circle(Vector2(100, 200), 100);
@@ -129,6 +167,39 @@ void main() {
       game.update(1.0);
       game.update(0.0);
       expect(world.children.length, 3);
+
+      for (var i = 0; i < 1000; i++) {
+        game.update(random.nextDouble());
+      }
+      expect(
+        world.children
+            .query<PositionComponent>()
+            .every((c) => c.position == Vector2.all(1000)),
+        isTrue,
+      );
+    });
+    testWithFlameGame('Can self position multiple components', (game) async {
+      final random = Random(0);
+      final spawn = SpawnComponent(
+        multiFactory: (_) => [
+          PositionComponent(position: Vector2.all(1000)),
+          PositionComponent(position: Vector2.all(1000)),
+          PositionComponent(position: Vector2.all(1000)),
+        ],
+        period: 1,
+        selfPositioning: true,
+        random: random,
+      );
+      final world = game.world;
+      await world.ensureAdd(spawn);
+      game.update(0.5);
+      expect(world.children.length, 1); //1 spawned component
+      game.update(0.5);
+      game.update(0.0);
+      expect(world.children.length, 4); //1+3 spawned components
+      game.update(1.0);
+      game.update(0.0);
+      expect(world.children.length, 7); //1+2*3 spawned components
 
       for (var i = 0; i < 1000; i++) {
         game.update(random.nextDouble());
