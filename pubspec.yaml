@@ -67,3 +67,7 @@ environment:
 
 dev_dependencies:
   melos: ^7.0.0-dev.1
+
+flutter:
+  uses-material-design: true
+
