@@ -4,9 +4,9 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-const _amountComponents = 1_000;
-const _amountTicks = 10_000;
-const _amountInputs = 2_000;
+const _amountComponents = 1000;
+const _amountTicks = 2000;
+const _amountInputs = 500;
 
 class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   final Random random;
