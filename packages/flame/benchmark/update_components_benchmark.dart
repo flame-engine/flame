@@ -4,9 +4,9 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-const _amountComponents = 20;
-const _amountTicks = 1000;
-const _amountInputs = 100;
+const _amountComponents = 1_000;
+const _amountTicks = 10_000;
+const _amountInputs = 2_000;
 
 class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   final Random random;
@@ -44,7 +44,7 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   }
 
   @override
-  Future<void> exercise() async {
+  Future<void> run() async {
     for (final (idx, dt) in _dts.indexed) {
       if (_inputTicks.contains(idx)) {
         _components[random.nextInt(_amountComponents)].input(

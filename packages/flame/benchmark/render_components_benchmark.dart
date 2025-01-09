@@ -7,8 +7,9 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-const _amountComponents = 10;
-const _amountTicks = 1000;
+const _amountComponents = 1_000;
+const _amountTicks = 10_000;
+const _depthMultiplier = 0.25;
 
 class RenderComponentsBenchmark extends AsyncBenchmarkBase {
   final Random random;
@@ -41,7 +42,7 @@ class RenderComponentsBenchmark extends AsyncBenchmarkBase {
   }
 
   @override
-  Future<void> exercise() async {
+  Future<void> run() async {
     for (var i = 0; i < _amountTicks; i++) {
       _game.render(_canvas);
     }
@@ -63,7 +64,12 @@ class _BenchmarkComponent extends PositionComponent {
       await addAll(
         List.generate(
           random.nextInt(2) + 1,
-          (_) => _BenchmarkComponent(random: random, level: level / 2),
+          (_) {
+            return _BenchmarkComponent(
+              random: random,
+              level: level * _depthMultiplier,
+            );
+          },
         ),
       );
     }
