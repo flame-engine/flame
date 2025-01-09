@@ -39,7 +39,7 @@ class SpawnComponent extends Component {
         ),
         assert(
           (factory != null) ^ (multiFactory != null),
-          'You need to provide either a factory or a multiFactory not both',
+          'You need to provide either a factory or a multiFactory, not both.',
         ),
         _period = period,
         multiFactory = multiFactory ?? _wrapFactory(factory!),
