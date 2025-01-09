@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flame/text.dart';
 import 'package:flame_markdown/flame_markdown.dart';
@@ -12,6 +13,27 @@ void main() {
 
       _expectDocument(doc, [
         (node) => _expectSimpleParagraph(node, 'Hello world!'),
+      ]);
+
+      final element = doc.format(
+        DocumentStyle(
+          width: 1000,
+          text: InlineTextStyle(
+            fontSize: 12,
+          ),
+        ),
+      );
+
+      _expectElementGroup(element, [
+        (el) => _expectElementGroup(el, [
+              (el) => _expectElementTextPainter(
+                    el,
+                    'Hello world!',
+                    const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+            ]),
       ]);
     });
 
@@ -28,6 +50,58 @@ void main() {
               ]);
             }),
       ]);
+
+      final element = doc.format(
+        DocumentStyle(
+          width: 1000,
+          text: InlineTextStyle(
+            fontSize: 12,
+          ),
+          boldText: InlineTextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          italicText: InlineTextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      );
+
+      _expectElementGroup(element, [
+        (el) => _expectElementGroup(el, [
+              (el) => _expectElementGroupText(el, [
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'Flame',
+                          const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          ': Hello, ',
+                          const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'world',
+                          const TextStyle(
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          '!',
+                          const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  ]),
+            ]),
+      ]);
     });
 
     test('inline code block', () {
@@ -40,6 +114,131 @@ void main() {
                 (node) => _expectCode(node, 'var game = FlameGame();'),
               ]);
             }),
+      ]);
+
+      final element = doc.format(
+        DocumentStyle(
+          width: 1000,
+          text: InlineTextStyle(
+            fontSize: 12,
+          ),
+          codeText: InlineTextStyle(
+            fontFamily: 'monospace',
+          ),
+        ),
+      );
+
+      _expectElementGroup(element, [
+        (el) => _expectElementGroup(el, [
+              (el) => _expectElementGroupText(el, [
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'Flame: ',
+                          const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'var game = FlameGame();',
+                          const TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'monospace',
+                          ),
+                        ),
+                  ]),
+            ]),
+      ]);
+    });
+
+    test('nested inline blocks', () {
+      final doc = FlameMarkdown.toDocument(
+        '**This _is `code` inside italics_ inside bold.**',
+      );
+
+      _expectDocument(doc, [
+        (node) => _expectParagraph(node, (p) {
+              _expectBoldGroup(p, [
+                (node) => _expectPlain(node, 'This '),
+                (node) => _expectItalicGroup(node, [
+                      (node) => _expectPlain(node, 'is '),
+                      (node) => _expectCode(node, 'code'),
+                      (node) => _expectPlain(node, ' inside italics'),
+                    ]),
+                (node) => _expectPlain(node, ' inside bold.'),
+              ]);
+            }),
+      ]);
+
+      final element = doc.format(
+        DocumentStyle(
+          width: 1000,
+          text: InlineTextStyle(
+            fontSize: 12,
+          ),
+          boldText: InlineTextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+          italicText: InlineTextStyle(
+            fontStyle: FontStyle.italic,
+          ),
+          codeText: InlineTextStyle(
+            fontFamily: 'monospace',
+          ),
+        ),
+      );
+
+      _expectElementGroup(element, [
+        (el) => _expectElementGroup(el, [
+              (el) => _expectElementGroupText(el, [
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'This ',
+                          const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    (el) => _expectElementGroupText(el, [
+                          (el) => _expectElementTextPainter(
+                                el,
+                                'is ',
+                                const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                          (el) => _expectElementTextPainter(
+                                el,
+                                'code',
+                                const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  fontFamily: 'monospace',
+                                ),
+                              ),
+                          (el) => _expectElementTextPainter(
+                                el,
+                                ' inside italics',
+                                const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                        ]),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          ' inside bold.',
+                          const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                  ]),
+            ]),
       ]);
     });
 
@@ -128,6 +327,8 @@ void main() {
   });
 }
 
+// node expects
+
 void _expectStrikethrough(InlineTextNode node, String text) {
   expect(node, isA<StrikethroughTextNode>());
   final content = (node as StrikethroughTextNode).child;
@@ -140,6 +341,24 @@ void _expectBold(InlineTextNode node, String text) {
   final content = (node as BoldTextNode).child;
   expect(content, isA<PlainTextNode>());
   expect((content as PlainTextNode).text, text);
+}
+
+void _expectBoldGroup(
+  InlineTextNode node,
+  List<void Function(InlineTextNode)> expectChildren,
+) {
+  expect(node, isA<BoldTextNode>());
+  final content = (node as BoldTextNode).child;
+  _expectGroup(content, expectChildren);
+}
+
+void _expectItalicGroup(
+  InlineTextNode node,
+  List<void Function(InlineTextNode)> expectChildren,
+) {
+  expect(node, isA<ItalicTextNode>());
+  final content = (node as ItalicTextNode).child;
+  _expectGroup(content, expectChildren);
 }
 
 void _expectItalic(InlineTextNode node, String text) {
@@ -203,4 +422,41 @@ void _expectDocument(
   for (final (idx, expectChild) in expectChildren.indexed) {
     expectChild(root.children[idx]);
   }
+}
+
+// element expects
+
+void _expectElementGroup(
+  TextElement element,
+  List<void Function(TextElement)> expectChildren,
+) {
+  expect(element, isA<GroupElement>());
+  final group = element as GroupElement;
+  expect(group.children, hasLength(expectChildren.length));
+  for (final (idx, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[idx]);
+  }
+}
+
+void _expectElementGroupText(
+  TextElement element,
+  List<void Function(TextElement)> expectChildren,
+) {
+  expect(element, isA<GroupTextElement>());
+  final group = element as GroupTextElement;
+  expect(group.children, hasLength(expectChildren.length));
+  for (final (idx, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[idx]);
+  }
+}
+
+void _expectElementTextPainter(
+  TextElement element,
+  String text,
+  TextStyle style,
+) {
+  expect(element, isA<TextPainterTextElement>());
+  final textPainterElement = element as TextPainterTextElement;
+  expect(textPainterElement.textPainter.text!.toPlainText(), text);
+  expect(textPainterElement.textPainter.text!.style, style);
 }
