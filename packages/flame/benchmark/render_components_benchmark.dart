@@ -7,8 +7,8 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
-const _amountComponents = 1_000;
-const _amountTicks = 10_000;
+const _amountComponents = 500;
+const _amountTicks = 2_000;
 const _depthMultiplier = 0.25;
 
 class RenderComponentsBenchmark extends AsyncBenchmarkBase {
