@@ -9,7 +9,19 @@ class LineSegment {
 
   LineSegment(this.from, this.to);
 
+  /// Creates a [LineSegment] starting at a given a [start] point and following
+  /// a certain [direction] for a given [length].
+  LineSegment.withLength({
+    required Vector2 start,
+    required Vector2 direction,
+    required double length,
+  }) : this(start, start + direction.normalized() * length);
+
   factory LineSegment.zero() => LineSegment(Vector2.zero(), Vector2.zero());
+
+  Vector2 get direction => (to - from)..normalize();
+
+  double get length => (to - from).length;
 
   Vector2 get midpoint => (from + to)..scale(0.5);
 
