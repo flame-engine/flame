@@ -26,7 +26,7 @@ void addImageStories(Dashbook dashbook) {
       'brightness',
       (context) => GameWidget(
         game: ImageBrightnessExample(
-          brightness: context.numberProperty('brightness', 50),
+          brightness: context.numberProperty('brightness', 80),
         ),
       ),
       codeLink: baseLink('image/brighten.dart'),
@@ -36,7 +36,7 @@ void addImageStories(Dashbook dashbook) {
       'darkness',
       (context) => GameWidget(
         game: ImageDarknessExample(
-          darkness: context.numberProperty('darkness', 50),
+          darkness: context.numberProperty('darkness', 80),
         ),
       ),
       codeLink: baseLink('image/darkness.dart'),
