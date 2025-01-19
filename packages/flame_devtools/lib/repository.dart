@@ -22,6 +22,21 @@ sealed class Repository {
     );
   }
 
+  static Future<List<String>> getOverlays() async {
+    final overlaysResponse =
+        await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.getOverlays',
+    );
+    return List<String>.from(overlaysResponse.json!['overlays'] as List);
+  }
+
+  static Future<void> navigateToOverlay(String overlay) async {
+    await serviceManager.callServiceExtensionOnMainIsolate(
+      'ext.flame_devtools.navigateToOverlay',
+      args: {'overlay': overlay},
+    );
+  }
+
   static Future<bool> swapDebugMode({int? id}) async {
     final nextDebugMode = !(await getDebugMode(id: id));
     await serviceManager.callServiceExtensionOnMainIsolate(
