@@ -3,9 +3,9 @@ import 'dart:developer';
 
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
-/// The [OverlayNavConnector] is responsible of getting the names of all
+/// The [OverlayNavigationConnector] is responsible of getting the names of all
 /// registered overlays and navigating to the overlay with the given name.
-class OverlayNavConnector extends DevToolsConnector {
+class OverlayNavigationConnector extends DevToolsConnector {
   @override
   void init() {
     // Get the names of all registered overlays
@@ -24,18 +24,20 @@ class OverlayNavConnector extends DevToolsConnector {
     registerExtension(
       'ext.flame_devtools.navigateToOverlay',
       (method, parameters) async {
+        const invalidParamsError = -32602;
+
         final overlayName = parameters['overlay'];
 
         if (overlayName == null) {
           return ServiceExtensionResponse.error(
-            -32602,
+            invalidParamsError,
             'Missing overlay parameter',
           );
         }
 
         if (!game.overlays.registeredOverlays.contains(overlayName)) {
           return ServiceExtensionResponse.error(
-            -32602,
+            invalidParamsError,
             'Unknown overlay: $overlayName',
           );
         }

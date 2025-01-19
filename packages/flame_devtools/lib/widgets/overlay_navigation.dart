@@ -2,14 +2,14 @@ import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 
-class OverlayNav extends StatefulWidget {
-  const OverlayNav({super.key});
+class OverlayNavigation extends StatefulWidget {
+  const OverlayNavigation({super.key});
 
   @override
-  State<OverlayNav> createState() => _DebugModeButtonState();
+  State<OverlayNavigation> createState() => _OverlayNavigationState();
 }
 
-class _DebugModeButtonState extends State<OverlayNav> {
+class _OverlayNavigationState extends State<OverlayNavigation> {
   Future<List<String>>? _overlays;
 
   @override
