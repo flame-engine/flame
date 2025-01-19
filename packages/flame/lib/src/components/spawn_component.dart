@@ -16,12 +16,16 @@ import 'package:flame/math.dart';
 /// [SpawnComponent.periodRange] constructor.
 /// If you want to set the position of the spawned components yourself inside of
 /// the [factory], set [selfPositioning] to true.
+/// You can either provide a factory that returns one component or a
+/// multiFactory which returns a list of components. In this case the amount
+/// parameter will be increased by the number of returned components.
 /// {@endtemplate}
 class SpawnComponent extends Component {
   /// {@macro spawn_component}
   SpawnComponent({
-    required this.factory,
     required double period,
+    PositionComponent Function(int amount)? factory,
+    List<PositionComponent> Function(int amount)? multiFactory,
     this.area,
     this.within = true,
     this.selfPositioning = false,
@@ -33,7 +37,12 @@ class SpawnComponent extends Component {
           !(selfPositioning && area != null),
           "Don't set an area when you are using selfPositioning=true",
         ),
+        assert(
+          (factory != null) ^ (multiFactory != null),
+          'You need to provide either a factory or a multiFactory, not both.',
+        ),
         _period = period,
+        multiFactory = multiFactory ?? _wrapFactory(factory!),
         _random = random ?? randomFallback;
 
   /// Use this constructor if you want your components to spawn within an
@@ -42,9 +51,10 @@ class SpawnComponent extends Component {
   /// spawns and [maxPeriod] will be the maximum amount of time before it
   /// spawns.
   SpawnComponent.periodRange({
-    required this.factory,
     required double minPeriod,
     required double maxPeriod,
+    PositionComponent Function(int amount)? factory,
+    List<PositionComponent> Function(int amount)? multiFactory,
     this.area,
     this.within = true,
     this.selfPositioning = false,
@@ -58,13 +68,44 @@ class SpawnComponent extends Component {
         ),
         _period = minPeriod +
             (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
+        multiFactory = multiFactory ?? _wrapFactory(factory!),
         _random = random ?? randomFallback;
+
+  /// The function used to create a new component to spawn.
+  ///
+  /// [amount] is the amount of components that the [SpawnComponent] has spawned
+  /// so far.
+  ///
+  /// Be aware: internally the component uses a factory that creates a list of
+  /// components.
+  /// If you have set such a factory it was wrapped to create a list. The
+  /// factory getter wraps it again to return the first element of the list and
+  /// fails when the list is empty!
+  PositionComponent Function(int amount) get factory => (int amount) {
+        final result = multiFactory.call(amount);
+        assert(
+          result.isNotEmpty,
+          'The factory call yielded no result, which is required when calling'
+          ' the single result factory',
+        );
+        return result.elementAt(0);
+      };
+
+  set factory(PositionComponent Function(int amount) newFactory) {
+    multiFactory = _wrapFactory(newFactory);
+  }
+
+  static List<PositionComponent> Function(int amount) _wrapFactory(
+    PositionComponent Function(int amount) newFactory,
+  ) {
+    return (int amount) => [newFactory.call(amount)];
+  }
 
   /// The function used to create new components to spawn.
   ///
   /// [amount] is the amount of components that the [SpawnComponent] has spawned
   /// so far.
-  PositionComponent Function(int amount) factory;
+  List<PositionComponent> Function(int amount) multiFactory;
 
   /// The area where the components should be spawned.
   Shape? area;
@@ -146,16 +187,18 @@ class SpawnComponent extends Component {
       period: _period,
       repeat: true,
       onTick: () {
-        final component = factory(amount);
+        final components = multiFactory(amount);
         if (!selfPositioning) {
-          component.position = area!.randomPoint(
-            random: _random,
-            within: within,
-          );
+          for (final component in components) {
+            component.position = area!.randomPoint(
+              random: _random,
+              within: within,
+            );
+          }
         }
-        parent?.add(component);
+        parent?.addAll(components);
         updatePeriod();
-        amount++;
+        amount += components.length;
       },
       autoStart: autoStart,
       tickWhenLoaded: spawnWhenLoaded,

@@ -821,9 +821,16 @@ spawn components along the edges of the shape set the `within` argument to false
 This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
 within the defined circle:
 
-The `factory` function takes an `int` as an argument, which is the index of the component that is
-being spawned, so if for example 4 components have been spawned already the 5th component will have
-the index 4, since the indexing starts at 0.
+The component supports two types of factories. The `factory` returns a single component and the
+`multiFactory` returns a list of components that are added in a single step.
+
+The factory functions takes an `int` as an argument, which is the number of components that have
+been spawned, so if for example 4 components have been spawned already the 5th call of the factory
+method will be called with the `amount=4`, since the counting starts at 0 for the first call.
+
+The `factory` with a single component is for backward compatibility, so you should use the
+`multiFactory` if in doubt. A single component `factory` will be wrapped internally to return a
+single item list and then used as the `multiFactory`.
 
 ```dart
 SpawnComponent(

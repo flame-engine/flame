@@ -1,10 +1,11 @@
 name: padracing
+resolution: workspace
 description: A sample game featuring Flame and Forge2D for DartPad
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
   collection: ^1.17.1
