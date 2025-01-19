@@ -103,10 +103,6 @@ melos:
       run: melos exec dart analyze .
       description: Run `dart analyze` for all packages.
 
-    format:
-      run: melos exec dart format .
-      description: Run `dart format` resolution for all packages.
-
     format-check:
       run: melos exec dart format . --set-exit-if-changed
       description: Run `dart format` checks for all packages.
