@@ -99,6 +99,10 @@ melos:
         - format
       description: Run all static analysis checks.
 
+    analyze:
+      run: melos exec dart analyze .
+      description: Run `dart analyze` for all packages.
+
     format-check:
       run: melos exec dart format . --set-exit-if-changed
       description: Run `dart format` checks for all packages.

@@ -17,7 +17,7 @@ extension ColorExtension on Color {
     final hsl = HSLColor.fromColor(this);
     return hsl
         .withLightness(
-          clampDouble(hsl.lightness * amount, 0.0, 1.0),
+          clampDouble(hsl.lightness * (1 - amount), 0.0, 1.0),
         )
         .toColor();
   }
