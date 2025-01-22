@@ -106,26 +106,26 @@ class SpriteButton extends StatelessWidget {
             ? [
                 Sprite(
                   (images ?? Flame.images).fromCache(path),
-                  srcSize: srcSize,
                   srcPosition: srcPosition,
+                  srcSize: srcSize,
                 ),
                 Sprite(
                   (images ?? Flame.images).fromCache(pressedPath),
-                  srcSize: srcSize,
-                  srcPosition: srcPosition,
+                  srcPosition: pressedSrcPosition,
+                  srcSize: pressedSrcSize,
                 ),
               ]
             : Future.wait([
                 Sprite.load(
                   path,
-                  srcSize: srcSize,
                   srcPosition: srcPosition,
+                  srcSize: srcSize,
                   images: images,
                 ),
                 Sprite.load(
                   pressedPath,
-                  srcSize: pressedSrcSize,
                   srcPosition: pressedSrcPosition,
+                  srcSize: pressedSrcSize,
                   images: images,
                 ),
               ]);

@@ -1,17 +1,14 @@
-import 'dart:io';
-
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/widgets.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'loading_widget.dart';
 
-class _MockAssetBundle extends Mock implements AssetBundle {}
+class _MockImages extends Mock implements Images {}
 
 Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -47,13 +44,13 @@ Future<void> main() async {
         const imagePath1 = 'test_path_1';
         const imagePath2 = 'test_path_2';
 
-        final bundle = _MockAssetBundle();
-        when(() => bundle.load(any())).thenAnswer(
-          (_) async {
-            print('CALLED!');
-            return generatePNGByteData();
-          },
+        final mockImageCache = _MockImages();
+
+        when(() => mockImageCache.load(any())).thenAnswer(
+          (_) => generateImage(),
         );
+
+        when(() => mockImageCache.containsKey(any())).thenAnswer((_) => false);
 
         await tester.pumpWidget(
           SpriteButton.asset(
@@ -64,7 +61,7 @@ Future<void> main() async {
             height: 100,
             label: const SizedBox(),
             loadingBuilder: (_) => const LoadingWidget(),
-            images: Images(bundle: bundle),
+            images: mockImageCache,
           ),
         );
 
@@ -77,7 +74,7 @@ Future<void> main() async {
         expect(internalButtonFinder, findsNothing);
 
         /// loading to be removed
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         expect(futureBuilderFinder, findsOneWidget);
         expect(loadingWidgetFinder, findsNothing);
@@ -86,7 +83,8 @@ Future<void> main() async {
     );
 
     testWidgets(
-      'has no FutureBuilder or LoadingWidget when passed already loaded asset paths',
+      'has no FutureBuilder or LoadingWidget when passed already '
+      'loaded asset paths',
       (tester) async {
         const imagePath1 = 'test_path_1';
         const imagePath2 = 'test_path_2';
