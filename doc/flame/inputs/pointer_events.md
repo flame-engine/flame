@@ -43,7 +43,7 @@ you can handle any exit conditions there.
 ## HoverCallbacks
 
 If you want to specifically know if your component is being hovered or not, or if you want to hook
-into hover enter and exist events, you can use a more dedicated mixin called `HoverCallbacks`.
+into hover enter and exit events, you can use a more dedicated mixin called `HoverCallbacks`.
 
 For example:
 
