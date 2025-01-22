@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/cache.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/src/extensions/size.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/sprite.dart';
@@ -100,20 +101,34 @@ class SpriteButton extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  }) : _buttonsFuture = Future.wait([
-          Sprite.load(
-            path,
-            srcSize: srcSize,
-            srcPosition: srcPosition,
-            images: images,
-          ),
-          Sprite.load(
-            pressedPath,
-            srcSize: pressedSrcSize,
-            srcPosition: pressedSrcPosition,
-            images: images,
-          ),
-        ]);
+  }) : _buttonsFuture = (images ?? Flame.images).containsKey(path) &&
+                (images ?? Flame.images).containsKey(pressedPath)
+            ? [
+                Sprite(
+                  (images ?? Flame.images).fromCache(path),
+                  srcSize: srcSize,
+                  srcPosition: srcPosition,
+                ),
+                Sprite(
+                  (images ?? Flame.images).fromCache(pressedPath),
+                  srcSize: srcSize,
+                  srcPosition: srcPosition,
+                ),
+              ]
+            : Future.wait([
+                Sprite.load(
+                  path,
+                  srcSize: srcSize,
+                  srcPosition: srcPosition,
+                  images: images,
+                ),
+                Sprite.load(
+                  pressedPath,
+                  srcSize: pressedSrcSize,
+                  srcPosition: pressedSrcPosition,
+                  images: images,
+                ),
+              ]);
 
   @override
   Widget build(BuildContext context) {
