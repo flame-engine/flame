@@ -19,27 +19,23 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
   final List<Map<int, ({int hash, List<double> data})>> _storage = [];
 
   @override
-  ByteBuffer? get resource {
-    if (super.resource == null) {
-      final data = <double>[];
-      for (final element in _storage) {
-        var previousIndex = -1;
-        for (final entry in element.entries) {
-          if (previousIndex + 1 != entry.key) {
-            final field = slot.fields.indexed
-                .firstWhere((e) => e.$1 == previousIndex + 1);
-            throw StateError(
-              'Uniform ${slot.name}.${field.$2} was not set',
-            );
-          }
-          previousIndex = entry.key;
-          data.addAll(entry.value.data);
+  ByteBuffer createResource() {
+    final data = <double>[];
+    for (final element in _storage) {
+      var previousIndex = -1;
+      for (final entry in element.entries) {
+        if (previousIndex + 1 != entry.key) {
+          final field =
+              slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
+          throw StateError(
+            'Uniform ${slot.name}.${field.$2} was not set',
+          );
         }
+        previousIndex = entry.key;
+        data.addAll(entry.value.data);
       }
-      super.resource = Float32List.fromList(data).buffer;
     }
-
-    return super.resource;
+    return Float32List.fromList(data).buffer;
   }
 
   Map<int, ({int hash, List<double> data})> _get(int idx) {
@@ -67,7 +63,7 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
     storage[index] = (data: data, hash: hash);
 
     // Clear the cache.
-    super.resource = null;
+    recreateResource = true;
   }
 
   @override

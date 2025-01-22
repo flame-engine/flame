@@ -8,29 +8,33 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 /// Base texture [Resource], represents an image/texture on the GPU.
 /// {@endtemplate}
 class Texture extends Resource<gpu.Texture> {
+  final ByteData sourceData;
+  final int width;
+  final int height;
+  final PixelFormat format;
+
   /// {@macro texture}
   Texture(
-    ByteData sourceData, {
-    required int width,
-    required int height,
-    PixelFormat format = PixelFormat.rgba8888,
-  }) : super(
-          gpu.gpuContext.createTexture(
-            gpu.StorageMode.hostVisible,
-            width,
-            height,
-            format: switch (format) {
-              PixelFormat.rgba8888 => gpu.PixelFormat.r8g8b8a8UNormInt,
-              PixelFormat.bgra8888 => gpu.PixelFormat.b8g8r8a8UNormInt,
-              PixelFormat.rgbaFloat32 => gpu.PixelFormat.r32g32b32a32Float,
-            },
-          )!
-            ..overwrite(sourceData),
-        );
+    this.sourceData, {
+    required this.width,
+    required this.height,
+    this.format = PixelFormat.rgba8888,
+  });
 
-  int get width => resource.width;
-
-  int get height => resource.height;
+  @override
+  gpu.Texture createResource() {
+    return gpu.gpuContext.createTexture(
+      gpu.StorageMode.hostVisible,
+      width,
+      height,
+      format: switch (format) {
+        PixelFormat.rgba8888 => gpu.PixelFormat.r8g8b8a8UNormInt,
+        PixelFormat.bgra8888 => gpu.PixelFormat.b8g8r8a8UNormInt,
+        PixelFormat.rgbaFloat32 => gpu.PixelFormat.r32g32b32a32Float,
+      },
+    )!
+      ..overwrite(sourceData);
+  }
 
   Image toImage() => resource.asImage();
 
