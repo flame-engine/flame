@@ -9,7 +9,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
-class CameraComponentExample extends FlameGame with PanDetector {
+class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
   static const description = '''
     This example shows how a camera can be dynamically added into a game using
     a CameraComponent.
@@ -17,6 +17,8 @@ class CameraComponentExample extends FlameGame with PanDetector {
     Click and hold the mouse to bring up a magnifying glass, then have a better
     look at the world underneath! 
   ''';
+
+  CameraComponentExample() : super(world: AntWorld());
 
   late final CameraComponent magnifyingGlass;
   late final Vector2 center;
@@ -28,13 +30,11 @@ class CameraComponentExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    final world = AntWorld();
-    await add(world);
-    final camera = CameraComponent(world: world);
-    await add(camera);
-    final offset = world.curve.boundingRect().center;
-    center = offset.toVector2();
-    camera.viewfinder.position = Vector2(center.x, center.y);
+    world.loaded.then((_) {
+      final offset = world.curve.boundingRect().center;
+      center = offset.toVector2();
+      camera.viewfinder.position = Vector2(center.x, center.y);
+    });
 
     magnifyingGlass =
         CameraComponent(world: world, viewport: CircularViewport(radius));
