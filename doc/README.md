@@ -155,7 +155,7 @@ class Player extends SpriteComponent with TapCallbacks {
   }
   
   @override
-  void onTapUp(TapUpInfo info) {
+  void onTapUp(TapUpEvent info) {
     size += Vector2.all(50);
   }
 }
