@@ -190,7 +190,7 @@ In order to use `ValueRoute`s, two steps are required:
 
      @override
      Component build() {
-       return PositionComponent(
+       return PositionedComponent(
          children: [
            RectangleComponent(),
            TextComponent(text: text),

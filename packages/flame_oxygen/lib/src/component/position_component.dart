@@ -1,7 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:oxygen/oxygen.dart';
 
-class PositionComponent extends Component<Vector2> {
+class PositionedComponent extends Component<Vector2> {
   late Vector2 _position;
 
   Vector2 get position => _position;

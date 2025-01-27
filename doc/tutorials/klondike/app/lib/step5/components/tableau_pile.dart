@@ -6,7 +6,7 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import 'card.dart';
 
-class TableauPile extends PositionComponent implements Pile {
+class TableauPile extends PositionedComponent implements Pile {
   TableauPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile.
@@ -17,8 +17,7 @@ class TableauPile extends PositionComponent implements Pile {
   //#region Pile API
 
   @override
-  bool canMoveCard(Card card, MoveMethod method) =>
-      card.isFaceUp && (method == MoveMethod.drag || card == _cards.last);
+  bool canMoveCard(Card card, MoveMethod method) => card.isFaceUp && (method == MoveMethod.drag || card == _cards.last);
   // Drag can move multiple cards: tap can move last card only (to Foundation).
 
   @override
@@ -27,8 +26,7 @@ class TableauPile extends PositionComponent implements Pile {
       return card.rank.value == 13;
     } else {
       final topCard = _cards.last;
-      return card.suit.isRed == !topCard.suit.isRed &&
-          card.rank.value == topCard.rank.value - 1;
+      return card.suit.isRed == !topCard.suit.isRed && card.rank.value == topCard.rank.value - 1;
     }
   }
 
@@ -69,8 +67,7 @@ class TableauPile extends PositionComponent implements Pile {
       card.pile = this;
       card.priority = _cards.length;
       if (_cards.isNotEmpty) {
-        nextPosition =
-            nextPosition + (card.isFaceDown ? _fanOffset1 : _fanOffset2);
+        nextPosition = nextPosition + (card.isFaceDown ? _fanOffset1 : _fanOffset2);
       }
       _cards.add(card);
       card.doMove(
@@ -111,8 +108,7 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   void calculateHitArea() {
-    height = KlondikeGame.cardHeight * 1.5 +
-        (_cards.length < 2 ? 0.0 : _cards.last.y - _cards.first.y);
+    height = KlondikeGame.cardHeight * 1.5 + (_cards.length < 2 ? 0.0 : _cards.last.y - _cards.first.y);
   }
 
   List<Card> cardsOnTop(Card card) {

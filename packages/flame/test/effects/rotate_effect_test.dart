@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('RotateEffect', () {
     testWithFlameGame('relative', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       component.angle = 1;
@@ -32,7 +32,7 @@ void main() {
 
     testWithFlameGame('absolute', (game) async {
       game.onGameResize(Vector2(1, 1));
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       component.angle = 1;
@@ -54,7 +54,7 @@ void main() {
     });
 
     testWithFlameGame('reset relative', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       final effect = RotateEffect.by(1, EffectController(duration: 1));
@@ -70,7 +70,7 @@ void main() {
     });
 
     testWithFlameGame('reset absolute', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       final effect = RotateEffect.to(1, EffectController(duration: 1));
@@ -86,7 +86,7 @@ void main() {
     });
 
     testWithFlameGame('rotation composition', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       component.add(
@@ -116,7 +116,7 @@ void main() {
 
     testRandom('a very long rotation', (Random rng) async {
       final game = await initializeFlameGame();
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       final effect = RotateEffect.by(

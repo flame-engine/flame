@@ -36,7 +36,7 @@ enum MoveDirection {
   }
 }
 
-mixin Movable on PositionComponent, HasGameReference<ColonistsGame> {
+mixin Movable on PositionedComponent, HasGameReference<ColonistsGame> {
   double get speed;
 
   void reachedDestination();

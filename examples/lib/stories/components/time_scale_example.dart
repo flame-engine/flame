@@ -9,10 +9,8 @@ import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/rendering.dart';
 
-class TimeScaleExample extends FlameGame
-    with HasTimeScale, HasCollisionDetection {
-  static const description =
-      'This example shows how time scale can be used to control game speed.';
+class TimeScaleExample extends FlameGame with HasTimeScale, HasCollisionDetection {
+  static const description = 'This example shows how time scale can be used to control game speed.';
 
   TimeScaleExample()
       : super(
@@ -74,8 +72,7 @@ class TimeScaleExample extends FlameGame
   }
 }
 
-class _Chopper extends SpriteAnimationComponent
-    with HasGameReference<TimeScaleExample>, CollisionCallbacks {
+class _Chopper extends SpriteAnimationComponent with HasGameReference<TimeScaleExample>, CollisionCallbacks {
   _Chopper({
     super.animation,
     super.position,
@@ -110,7 +107,7 @@ class _Chopper extends SpriteAnimationComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     if (other is _Chopper) {
       game.timeScale = 0.25;
@@ -119,7 +116,7 @@ class _Chopper extends SpriteAnimationComponent
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     if (other is _Chopper) {
       game.timeScale = 1.0;
       _timer.timer.start();

@@ -12,8 +12,7 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class FollowComponentExample extends FlameGame
-    with HasCollisionDetection, HasKeyboardHandlerComponents {
+class FollowComponentExample extends FlameGame with HasCollisionDetection, HasKeyboardHandlerComponents {
   static const String description = '''
     Move around with W, A, S, D and notice how the camera follows the ember 
     sprite.\n
@@ -47,8 +46,7 @@ class FollowComponentExample extends FlameGame
   }
 }
 
-class MovableEmber extends Ember<FollowComponentExample>
-    with CollisionCallbacks, KeyboardHandler {
+class MovableEmber extends Ember<FollowComponentExample> with CollisionCallbacks, KeyboardHandler {
   static const double speed = 300;
   static final TextPaint textRenderer = TextPaint(
     style: const TextStyle(color: Colors.white70, fontSize: 12),
@@ -86,7 +84,7 @@ class MovableEmber extends Ember<FollowComponentExample>
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Rock) {

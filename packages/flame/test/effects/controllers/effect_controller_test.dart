@@ -169,7 +169,7 @@ void main() {
       final ec = EffectController(speed: 1);
       expect(ec.duration, isNaN);
 
-      final component = PositionComponent();
+      final component = PositionedComponent();
       final effect = MoveEffect.by(Vector2(10, 0), ec);
       component.add(effect);
       await game.ensureAdd(component);

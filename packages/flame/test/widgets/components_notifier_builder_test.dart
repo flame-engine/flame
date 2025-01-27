@@ -3,7 +3,7 @@ import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _Enemy extends PositionComponent with Notifier {}
+class _Enemy extends PositionedComponent with Notifier {}
 
 void main() {
   group('ComponentsNotifierBuilder', () {

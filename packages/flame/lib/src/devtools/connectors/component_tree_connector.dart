@@ -47,7 +47,7 @@ class ComponentTreeNode {
           component.hashCode,
           component.runtimeType.toString(),
           component.toString(),
-          component is PositionComponent,
+          component is PositionedComponent,
           component.children.map(ComponentTreeNode.fromComponent).toList(),
         );
 
@@ -57,9 +57,7 @@ class ComponentTreeNode {
           json['name'] as String,
           json['toString'] as String,
           json['isPositionComponent'] as bool,
-          (json['children'] as List)
-              .map((e) => ComponentTreeNode.fromJson(e as Map<String, dynamic>))
-              .toList(),
+          (json['children'] as List).map((e) => ComponentTreeNode.fromJson(e as Map<String, dynamic>)).toList(),
         );
 
   Map<String, dynamic> toJson() {

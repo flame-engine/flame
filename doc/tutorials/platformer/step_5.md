@@ -131,7 +131,7 @@ Now add the following `onCollision` method:
 
 ```dart
 @override
-void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
   if (other is GroundBlock || other is PlatformBlock) {
     if (intersectionPoints.length == 2) {
       // Calculate the collision normal and separation distance.

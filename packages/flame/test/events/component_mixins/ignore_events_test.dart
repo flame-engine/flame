@@ -62,8 +62,7 @@ void main() {
       'is false',
       (game) async {
         final grandChild = _IgnoreTapCallbacksComponent()..ignoreEvents = false;
-        final child = _IgnoreTapCallbacksComponent(children: [grandChild])
-          ..ignoreEvents = false;
+        final child = _IgnoreTapCallbacksComponent(children: [grandChild])..ignoreEvents = false;
         final component = _IgnoreTapCallbacksComponent(
           position: Vector2.all(10),
           children: [child],
@@ -137,8 +136,6 @@ mixin _TapCounter on TapCallbacks {
   }
 }
 
-class _IgnoreTapCallbacksComponent extends PositionComponent
-    with TapCallbacks, _TapCounter, IgnoreEvents {
-  _IgnoreTapCallbacksComponent({super.position, super.children})
-      : super(size: Vector2.all(10));
+class _IgnoreTapCallbacksComponent extends PositionedComponent with TapCallbacks, _TapCounter, IgnoreEvents {
+  _IgnoreTapCallbacksComponent({super.position, super.children}) : super(size: Vector2.all(10));
 }

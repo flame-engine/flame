@@ -9,7 +9,7 @@ typedef ShapeBuilder = Shape Function(Vector2 size);
 /// {@template clip_component}
 /// A component that will clip its content.
 /// {@endtemplate}
-class ClipComponent extends PositionComponent {
+class ClipComponent extends PositionedComponent {
   /// {@macro clip_component}
   ///
   /// Clips the canvas based its shape and size.

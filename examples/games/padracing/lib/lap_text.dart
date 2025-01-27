@@ -6,9 +6,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:padracing/car.dart';
 import 'package:padracing/padracing_game.dart';
 
-class LapText extends PositionComponent with HasGameReference<PadRacingGame> {
-  LapText({required this.car, required Vector2 position})
-      : super(position: position);
+class LapText extends PositionedComponent with HasGameReference<PadRacingGame> {
+  LapText({required this.car, required Vector2 position}) : super(position: position);
 
   final Car car;
   late final ValueNotifier<int> lapNotifier = car.lapNotifier;

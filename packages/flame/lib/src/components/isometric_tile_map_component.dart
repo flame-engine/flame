@@ -40,7 +40,7 @@ class Block {
 ///
 /// It can change the scale of each block by using the optional destTileSize
 /// property.
-class IsometricTileMapComponent extends PositionComponent {
+class IsometricTileMapComponent extends PositionedComponent {
   /// This is the tileset that will be used to render this map.
   SpriteSheet tileset;
 
@@ -115,7 +115,7 @@ class IsometricTileMapComponent extends PositionComponent {
 
   /// Get the position in which a block is rendered in, in the isometric space.
   ///
-  /// This does not include the (x,y) PositionComponent offset!
+  /// This does not include the (x,y) PositionedComponent offset!
   /// This assumes the tile sprite as a rectangular tile.
   /// This is the opposite of [getBlockRenderedAt].
   Vector2 getBlockRenderPosition(Block block) {
@@ -220,10 +220,7 @@ class IsometricTileMapComponent extends PositionComponent {
 
   /// Return whether the matrix contains a block in its bounds.
   bool containsBlock(Block block) {
-    return block.y >= 0 &&
-        block.y < matrix.length &&
-        block.x >= 0 &&
-        block.x < matrix[block.y].length;
+    return block.y >= 0 && block.y < matrix.length && block.x >= 0 && block.x < matrix[block.y].length;
   }
 
   void _recomputeSizeAndOffset() {

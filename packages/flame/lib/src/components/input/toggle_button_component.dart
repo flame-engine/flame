@@ -18,14 +18,14 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     super.downSkin,
     super.hoverSkin,
     super.disabledSkin,
-    PositionComponent? defaultSelectedSkin,
-    PositionComponent? downAndSelectedSkin,
-    PositionComponent? hoverAndSelectedSkin,
-    PositionComponent? disabledAndSelectedSkin,
+    PositionedComponent? defaultSelectedSkin,
+    PositionedComponent? downAndSelectedSkin,
+    PositionedComponent? hoverAndSelectedSkin,
+    PositionedComponent? disabledAndSelectedSkin,
     super.defaultLabel,
     super.disabledLabel,
-    PositionComponent? defaultSelectedLabel,
-    PositionComponent? disabledAndSelectedLabel,
+    PositionedComponent? defaultSelectedLabel,
+    PositionedComponent? disabledAndSelectedLabel,
     super.size,
     super.position,
     super.scale,
@@ -56,38 +56,36 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
     super.onMount();
   }
 
-  PositionComponent? get defaultSelectedSkin =>
-      skinsMap[ButtonState.upAndSelected];
+  PositionedComponent? get defaultSelectedSkin => skinsMap[ButtonState.upAndSelected];
 
-  set defaultSelectedSkin(PositionComponent? value) {
+  set defaultSelectedSkin(PositionedComponent? value) {
     skinsMap[ButtonState.upAndSelected] = value;
     invalidateSkins();
   }
 
-  set downAndSelectedSkin(PositionComponent? value) {
+  set downAndSelectedSkin(PositionedComponent? value) {
     skinsMap[ButtonState.downAndSelected] = value;
     invalidateSkins();
   }
 
-  set hoverAndSelectedSkin(PositionComponent? value) {
+  set hoverAndSelectedSkin(PositionedComponent? value) {
     skinsMap[ButtonState.hoverAndSelected] = value;
     invalidateSkins();
   }
 
-  set disabledAndSelectedSkin(PositionComponent? value) {
+  set disabledAndSelectedSkin(PositionedComponent? value) {
     skinsMap[ButtonState.disabledAndSelected] = value;
     invalidateSkins();
   }
 
-  PositionComponent? get defaultSelectedLabel =>
-      labelsMap[ButtonState.upAndSelected];
+  PositionedComponent? get defaultSelectedLabel => labelsMap[ButtonState.upAndSelected];
 
-  set defaultSelectedLabel(PositionComponent? value) {
+  set defaultSelectedLabel(PositionedComponent? value) {
     labelsMap[ButtonState.upAndSelected] = value;
     updateLabel();
   }
 
-  set disabledAndSelectedLabel(PositionComponent? value) {
+  set disabledAndSelectedLabel(PositionedComponent? value) {
     labelsMap[ButtonState.disabledAndSelected] = value;
     updateLabel();
   }
@@ -134,8 +132,7 @@ class ToggleButtonComponent extends AdvancedButtonComponent {
   @override
   @protected
   void addLabel(ButtonState state) {
-    labelAlignContainer.child =
-        labelsMap[state] ?? (isSelected ? defaultSelectedLabel : defaultLabel);
+    labelAlignContainer.child = labelsMap[state] ?? (isSelected ? defaultSelectedLabel : defaultLabel);
   }
 
   @mustCallSuper

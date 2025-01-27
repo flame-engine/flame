@@ -14,7 +14,7 @@ void main() {
         size: Vector2.all(200),
       );
       final spawn = SpawnComponent(
-        factory: (_) => PositionComponent(),
+        factory: (_) => PositionedComponent(),
         period: 1,
         area: shape,
         random: random,
@@ -34,9 +34,7 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionedComponent>().every((c) => shape.containsPoint(c.position)),
         isTrue,
       );
     });
@@ -50,8 +48,7 @@ void main() {
           size: Vector2.all(200),
         );
         final spawn = SpawnComponent(
-          multiFactory: (_) =>
-              [PositionComponent(), PositionComponent(), PositionComponent()],
+          multiFactory: (_) => [PositionedComponent(), PositionedComponent(), PositionedComponent()],
           period: 1,
           area: shape,
           random: random,
@@ -71,9 +68,7 @@ void main() {
           game.update(random.nextDouble());
         }
         expect(
-          world.children
-              .query<PositionComponent>()
-              .every((c) => shape.containsPoint(c.position)),
+          world.children.query<PositionedComponent>().every((c) => shape.containsPoint(c.position)),
           isTrue,
         );
       },
@@ -84,7 +79,7 @@ void main() {
       final shape = Circle(Vector2(100, 200), 100);
       expect(shape.containsPoint(Vector2.all(200)), isTrue);
       final spawn = SpawnComponent(
-        factory: (_) => PositionComponent(),
+        factory: (_) => PositionedComponent(),
         period: 1,
         area: shape,
         random: random,
@@ -104,9 +99,7 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionedComponent>().every((c) => shape.containsPoint(c.position)),
         isTrue,
       );
     });
@@ -122,7 +115,7 @@ void main() {
       );
       expect(shape.containsPoint(Vector2.all(150)), isTrue);
       final spawn = SpawnComponent(
-        factory: (_) => PositionComponent(),
+        factory: (_) => PositionedComponent(),
         period: 1,
         area: shape,
         random: random,
@@ -142,9 +135,7 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionedComponent>().every((c) => shape.containsPoint(c.position)),
         isTrue,
       );
     });
@@ -152,7 +143,7 @@ void main() {
     testWithFlameGame('Can self position', (game) async {
       final random = Random(0);
       final spawn = SpawnComponent(
-        factory: (_) => PositionComponent(position: Vector2.all(1000)),
+        factory: (_) => PositionedComponent(position: Vector2.all(1000)),
         period: 1,
         selfPositioning: true,
         random: random,
@@ -172,9 +163,7 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => c.position == Vector2.all(1000)),
+        world.children.query<PositionedComponent>().every((c) => c.position == Vector2.all(1000)),
         isTrue,
       );
     });
@@ -182,9 +171,9 @@ void main() {
       final random = Random(0);
       final spawn = SpawnComponent(
         multiFactory: (_) => [
-          PositionComponent(position: Vector2.all(1000)),
-          PositionComponent(position: Vector2.all(1000)),
-          PositionComponent(position: Vector2.all(1000)),
+          PositionedComponent(position: Vector2.all(1000)),
+          PositionedComponent(position: Vector2.all(1000)),
+          PositionedComponent(position: Vector2.all(1000)),
         ],
         period: 1,
         selfPositioning: true,
@@ -205,9 +194,7 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => c.position == Vector2.all(1000)),
+        world.children.query<PositionedComponent>().every((c) => c.position == Vector2.all(1000)),
         isTrue,
       );
     });
@@ -219,7 +206,7 @@ void main() {
         size: Vector2.all(200),
       );
       final spawn = SpawnComponent(
-        factory: (_) => PositionComponent(),
+        factory: (_) => PositionedComponent(),
         period: 1,
         area: shape,
         random: random,
@@ -247,18 +234,18 @@ void main() {
           size: Vector2.all(200),
         );
         final spawn = SpawnComponent(
-          factory: (_) => PositionComponent(),
+          factory: (_) => PositionedComponent(),
           period: 1,
           area: shape,
           random: random,
         );
         final world = game.world;
         await world.ensureAdd(spawn);
-        expect(world.children.whereType<PositionComponent>(), isEmpty);
+        expect(world.children.whereType<PositionedComponent>(), isEmpty);
         game.update(1.5);
         await game.ready();
         expect(
-          world.children.whereType<PositionComponent>(),
+          world.children.whereType<PositionedComponent>(),
           hasLength(1),
         );
       },
@@ -273,7 +260,7 @@ void main() {
           size: Vector2.all(200),
         );
         final spawn = SpawnComponent(
-          factory: (_) => PositionComponent(),
+          factory: (_) => PositionedComponent(),
           period: 1,
           area: shape,
           random: random,
@@ -281,11 +268,11 @@ void main() {
         );
         final world = game.world;
         await world.ensureAdd(spawn);
-        expect(world.children.whereType<PositionComponent>(), hasLength(1));
+        expect(world.children.whereType<PositionedComponent>(), hasLength(1));
         game.update(1.5);
         await game.ready();
         expect(
-          world.children.whereType<PositionComponent>(),
+          world.children.whereType<PositionedComponent>(),
           hasLength(2),
         );
       },

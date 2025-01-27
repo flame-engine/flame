@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/widgets.dart';
 
-/// A [PositionComponent] that renders a [CustomPainter] at the designated
+/// A [PositionedComponent] that renders a [CustomPainter] at the designated
 /// position, scaled to have the designated size and rotated to the specified
 /// angle.
 ///
@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 ///
 /// Note that given the active rendering nature of a game, `shouldRepaint` is
 /// ignored by this component.
-class CustomPainterComponent extends PositionComponent {
+class CustomPainterComponent extends PositionedComponent {
   /// The [CustomPainter] used to render this component
   CustomPainter? painter;
 

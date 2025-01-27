@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AnchorToEffect', () {
     testWithFlameGame('simple anchor movement', (game) async {
-      final object = PositionComponent()
+      final object = PositionedComponent()
         ..position = Vector2(3, 4)
         ..anchor = Anchor.bottomRight;
       game.add(object);

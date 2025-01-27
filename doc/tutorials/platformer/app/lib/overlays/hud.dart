@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 import 'heart.dart';
 
-class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
+class Hud extends PositionedComponent with HasGameReference<EmberQuestGame> {
   Hud({
     super.position,
     super.size,

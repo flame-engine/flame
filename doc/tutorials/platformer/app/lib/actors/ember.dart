@@ -9,8 +9,7 @@ import '../objects/platform_block.dart';
 import '../objects/star.dart';
 import 'water_enemy.dart';
 
-class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
+class EmberPlayer extends SpriteAnimationComponent with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
   EmberPlayer({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
@@ -46,14 +45,8 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalDirection = 0;
-    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyA) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowLeft))
-        ? -1
-        : 0;
-    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyD) ||
-            keysPressed.contains(LogicalKeyboardKey.arrowRight))
-        ? 1
-        : 0;
+    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyA) || keysPressed.contains(LogicalKeyboardKey.arrowLeft)) ? -1 : 0;
+    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyD) || keysPressed.contains(LogicalKeyboardKey.arrowRight)) ? 1 : 0;
 
     hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
     return true;
@@ -110,13 +103,11 @@ class EmberPlayer extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
     if (other is GroundBlock || other is PlatformBlock) {
       if (intersectionPoints.length == 2) {
         // Calculate the collision normal and separation distance.
-        final mid = (intersectionPoints.elementAt(0) +
-                intersectionPoints.elementAt(1)) /
-            2;
+        final mid = (intersectionPoints.elementAt(0) + intersectionPoints.elementAt(1)) / 2;
 
         final collisionNormal = absoluteCenter - mid;
         final separationDistance = (size.x / 2) - collisionNormal.length;

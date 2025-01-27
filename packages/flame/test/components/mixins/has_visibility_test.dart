@@ -20,7 +20,7 @@ void main() {
   });
 }
 
-class _MySpriteComponent extends PositionComponent with HasVisibility {
+class _MySpriteComponent extends PositionedComponent with HasVisibility {
   late final Sprite sprite;
 
   @override
@@ -38,7 +38,7 @@ class _MySpriteComponent extends PositionComponent with HasVisibility {
 /// renders a rectangle, and then the children will render.
 /// In this test the visibility of [mySprite] is set to
 /// false, so only the rectangle is expected to be rendered.
-class _MyComponent extends PositionComponent {
+class _MyComponent extends PositionedComponent {
   _MyComponent() : super(size: Vector2(300, 400)) {
     mySprite = _MySpriteComponent()..position = Vector2(150, 200);
     add(mySprite);

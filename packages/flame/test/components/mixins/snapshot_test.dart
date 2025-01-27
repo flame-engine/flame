@@ -159,8 +159,7 @@ void main() {
         game: _SnapshotTestGame(),
         size: Vector2(200, 200),
         (game) async {
-          final snapshotComponent =
-              (game as _SnapshotTestGame).snapshotComponent;
+          final snapshotComponent = (game as _SnapshotTestGame).snapshotComponent;
 
           // Apply transforms
           snapshotComponent.scale = Vector2(0.75, 0.75);
@@ -247,7 +246,7 @@ class _MockSnapshotComponent extends _MockComponentSuper with Snapshot {
 
 /// Mock a superclass just so we can count how many times super.renderTree has
 /// been called
-class _MockComponentSuper extends PositionComponent {
+class _MockComponentSuper extends PositionedComponent {
   int parentRenderTreeCalled = 0;
 
   @override

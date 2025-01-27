@@ -37,7 +37,7 @@ to a variable inside our game class, adding a method `move` to our `Player`, and
 them:
 
 ```dart
-class Player extends PositionComponent { 
+class Player extends PositionedComponent { 
   static final _paint = Paint()..color = Colors.white;
   
   @override
@@ -86,8 +86,8 @@ the `Sprite` class.
 features into a component.
 
 So let's refactor our current implementation, first, we can replace our inheritance from
-`PositionComponent` to `SpriteComponent` (which is a component that extends from
-`PositionComponent`) and load the sprite:
+`PositionedComponent` to `SpriteComponent` (which is a component that extends from
+`PositionedComponent`) and load the sprite:
 
 ```dart
 class Player extends SpriteComponent {
@@ -126,7 +126,7 @@ And now, you should see a small blue spaceship on the screen!
 
 A couple of notes worth mentioning:
 
-- Unlike `PositionComponent`, `SpriteComponent` has an implementation for the `render` method, so we
+- Unlike `PositionedComponent`, `SpriteComponent` has an implementation for the `render` method, so we
 can delete the previous override.
 - `FlameGame` has a couple of methods for loading assets, like `loadSprite`. Those methods are
 quite useful, because when used, `FlameGame` will take care of cleaning any cache when the game is

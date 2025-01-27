@@ -7,7 +7,7 @@ import '../pile.dart';
 import '../suit.dart';
 import 'card.dart';
 
-class FoundationPile extends PositionComponent implements Pile {
+class FoundationPile extends PositionedComponent implements Pile {
   FoundationPile(int intSuit, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);
@@ -25,9 +25,7 @@ class FoundationPile extends PositionComponent implements Pile {
   @override
   bool canAcceptCard(Card card) {
     final topCardRank = _cards.isEmpty ? 0 : _cards.last.rank.value;
-    return card.suit == suit &&
-        card.rank.value == topCardRank + 1 &&
-        card.attachedCards.isEmpty;
+    return card.suit == suit && card.rank.value == topCardRank + 1 && card.attachedCards.isEmpty;
   }
 
   @override

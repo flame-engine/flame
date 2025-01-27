@@ -742,8 +742,7 @@ void main() {
         size: Vector2.all(2),
         anchor: Anchor.center,
       )..isSolid = true;
-      final intersections =
-          geometry.intersections(outerRectangle, innerRectangle);
+      final intersections = geometry.intersections(outerRectangle, innerRectangle);
       expect(
         intersections,
         {innerRectangle.position},
@@ -760,8 +759,7 @@ void main() {
         size: Vector2.all(2),
         anchor: Anchor.center,
       )..isSolid = true;
-      final intersections =
-          geometry.intersections(outerRectangle, innerRectangle);
+      final intersections = geometry.intersections(outerRectangle, innerRectangle);
       expect(
         intersections.isEmpty,
         isTrue,
@@ -778,8 +776,7 @@ void main() {
         size: Vector2.all(2),
         anchor: Anchor.center,
       );
-      final intersections =
-          geometry.intersections(outerRectangle, innerRectangle);
+      final intersections = geometry.intersections(outerRectangle, innerRectangle);
       expect(
         intersections,
         {innerRectangle.position},
@@ -809,7 +806,7 @@ void main() {
         radius: 4.0,
         anchor: Anchor.center,
       )..isSolid = true;
-      final outerContainer = PositionComponent(
+      final outerContainer = PositionedComponent(
         position: Vector2.all(100),
         children: [outerCircle],
       );
@@ -817,7 +814,7 @@ void main() {
         radius: 2.0,
         anchor: Anchor.center,
       )..isSolid = true;
-      final innerContainer = PositionComponent(
+      final innerContainer = PositionedComponent(
         position: Vector2.all(100),
         children: [innerCircle],
       );
@@ -989,21 +986,20 @@ void main() {
           parentSize: polygonSize,
         )..isSolid = true;
         await world.ensureAddAll([
-          PositionComponent(
+          PositionedComponent(
             position: Vector2.all(3),
             size: Vector2.all(1),
             anchor: Anchor.center,
             children: [innerCircle],
           ),
-          PositionComponent(
+          PositionedComponent(
             position: Vector2.all(3),
             size: polygonSize,
             anchor: Anchor.center,
             children: [outerPolygon],
           ),
         ]);
-        final intersections =
-            game.collisionDetection.intersections(innerCircle, outerPolygon);
+        final intersections = game.collisionDetection.intersections(innerCircle, outerPolygon);
         expect(
           intersections.isNotEmpty,
           isTrue,
@@ -1019,7 +1015,7 @@ void main() {
         final game = collisionSystem as FlameGame;
         final world = game.world;
         await world.ensureAdd(
-          PositionComponent(
+          PositionedComponent(
             children: [RectangleHitbox()],
             position: Vector2(100, 0),
             size: Vector2.all(100),
@@ -1042,7 +1038,7 @@ void main() {
         final world = game.world;
         await world.ensureAddAll([
           for (var i = 0.0; i < 10; i++)
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.all(100 + i * 10),
               size: Vector2.all(20 - i),
               anchor: Anchor.center,
@@ -1061,13 +1057,12 @@ void main() {
           closeToVector(Vector2(-1, 1)..normalize()),
         );
       },
-      'multiple hitboxes after each other with one ignored':
-          (collisionSystem) async {
+      'multiple hitboxes after each other with one ignored': (collisionSystem) async {
         final game = collisionSystem as FlameGame;
         final world = game.world;
         await world.ensureAddAll([
           for (var i = 0.0; i < 10; i++)
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.all(100 + i * 10),
               size: Vector2.all(20 - i),
               anchor: Anchor.center,
@@ -1094,13 +1089,12 @@ void main() {
           closeToVector(Vector2(-1, 1)..normalize()),
         );
       },
-      'multiple hitboxes after each other with filter':
-          (collisionSystem) async {
+      'multiple hitboxes after each other with filter': (collisionSystem) async {
         final game = collisionSystem as FlameGame;
         final world = game.world;
         await world.ensureAddAll([
           for (var i = 0.0; i < 10; i++)
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.all(100 + i * 10),
               size: Vector2.all(20 - i),
               anchor: Anchor.center,
@@ -1129,7 +1123,7 @@ void main() {
         final game = collisionSystem as FlameGame;
         final world = game.world;
         await world.ensureAddAll([
-          PositionComponent(
+          PositionedComponent(
             position: Vector2.all(10),
             size: Vector2.all(10),
           )..add(RectangleHitbox()),
@@ -1151,7 +1145,7 @@ void main() {
         final game = collisionSystem as FlameGame;
         final world = game.world;
         await world.ensureAddAll([
-          PositionComponent(
+          PositionedComponent(
             position: Vector2.all(20),
             size: Vector2.all(40),
             children: [RectangleHitbox()],
@@ -1189,7 +1183,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.all(0),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1212,7 +1206,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1231,7 +1225,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1250,7 +1244,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1269,7 +1263,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1293,7 +1287,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1309,12 +1303,11 @@ void main() {
             closeToVector(Vector2(0, -1)),
           );
         },
-        'ray from bottom-right to top-left within CircleHitbox':
-            (collisionSystem) async {
+        'ray from bottom-right to top-left within CircleHitbox': (collisionSystem) async {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1336,12 +1329,11 @@ void main() {
             closeToVector(Vector2.all(1)..normalize()),
           );
         },
-        'ray from bottom within CircleHitbox going down':
-            (collisionSystem) async {
+        'ray from bottom within CircleHitbox going down': (collisionSystem) async {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1365,7 +1357,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1384,7 +1376,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1403,7 +1395,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1422,7 +1414,7 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2.zero(),
               size: Vector2.all(10),
             )..add(CircleHitbox()),
@@ -1440,7 +1432,7 @@ void main() {
         'ray from the center of CircleHitbox': (collisionSystem) async {
           final game = collisionSystem as FlameGame;
           final world = game.world;
-          final positionComponent = PositionComponent(
+          final positionComponent = PositionedComponent(
             position: Vector2.zero(),
             size: Vector2.all(10),
           )..add(CircleHitbox());
@@ -1463,7 +1455,7 @@ void main() {
             'as inside': (collisionSystem) async {
           final game = collisionSystem as FlameGame;
           final world = game.world;
-          final positionComponent = PositionComponent(
+          final positionComponent = PositionedComponent(
             position: Vector2.zero(),
             anchor: Anchor.center,
             size: Vector2.all(120),
@@ -1487,19 +1479,19 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(10, 0),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(20, 10),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(10, 20),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(0, 10),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1517,19 +1509,19 @@ void main() {
           final game = collisionSystem as FlameGame;
           final world = game.world;
           await world.ensureAddAll([
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(10, 0),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(20, 10),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(10, 20),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
-            PositionComponent(
+            PositionedComponent(
               position: Vector2(0, 10),
               size: Vector2.all(10),
             )..add(RectangleHitbox()),
@@ -1561,19 +1553,19 @@ void main() {
         final game = collisionSystem as FlameGame;
         final world = game.world;
         await world.ensureAddAll([
-          PositionComponent(
+          PositionedComponent(
             position: Vector2(10, 0),
             size: Vector2.all(10),
           )..add(RectangleHitbox()),
-          PositionComponent(
+          PositionedComponent(
             position: Vector2(20, 10),
             size: Vector2.all(10),
           )..add(RectangleHitbox()),
-          PositionComponent(
+          PositionedComponent(
             position: Vector2(10, 20),
             size: Vector2.all(10),
           )..add(RectangleHitbox()),
-          PositionComponent(
+          PositionedComponent(
             position: Vector2(0, 10),
             size: Vector2.all(10),
           )..add(RectangleHitbox()),
@@ -1725,8 +1717,7 @@ void main() {
         final reflectionRay1 = results[0].reflectionRay;
         expect(reflectionRay1?.origin, Vector2(10, 20));
         expect(reflectionRay1?.direction, Vector2(-1, 1)..normalize());
-        final results2 =
-            game.collisionDetection.raytrace(reflectionRay1!).toList();
+        final results2 = game.collisionDetection.raytrace(reflectionRay1!).toList();
         expect(results2.length, 1);
         // Second box
         expect(results[1].intersectionPoint, Vector2(-10, 40));
@@ -1752,10 +1743,8 @@ void main() {
           origin: Vector2(0, 10),
           direction: Vector2.all(1.0)..normalize(),
         );
-        final ignoreHitbox =
-            world.children.toList()[1].children.first as ShapeHitbox;
-        final results = game.collisionDetection
-            .raytrace(ray, ignoreHitboxes: [ignoreHitbox]).toList();
+        final ignoreHitbox = world.children.toList()[1].children.first as ShapeHitbox;
+        final results = game.collisionDetection.raytrace(ray, ignoreHitboxes: [ignoreHitbox]).toList();
         expect(results.length, 1);
         expect(results.every((e) => e.isActive), isTrue);
         expect(results.every((e) => e.isInsideHitbox), isFalse);
@@ -1765,8 +1754,7 @@ void main() {
         final reflectionRay1 = results[0].reflectionRay;
         expect(reflectionRay1?.origin, Vector2(10, 20));
         expect(reflectionRay1?.direction, Vector2(-1, 1)..normalize());
-        final results2 =
-            game.collisionDetection.raytrace(reflectionRay1!).toList();
+        final results2 = game.collisionDetection.raytrace(reflectionRay1!).toList();
         expect(results2.length, 1);
       },
       'on a rectangle within another': (game) async {
@@ -1794,8 +1782,7 @@ void main() {
         final reflectionRay1 = results[0].reflectionRay;
         expect(reflectionRay1?.origin, Vector2(30, 20));
         expect(reflectionRay1?.direction, Vector2(1, -1)..normalize());
-        final results2 =
-            game.collisionDetection.raytrace(reflectionRay1!).toList();
+        final results2 = game.collisionDetection.raytrace(reflectionRay1!).toList();
         expect(results2.length, 10);
         // Second box
         expect(results[1].intersectionPoint, Vector2(50, 0));
@@ -1838,8 +1825,7 @@ void main() {
         var calledTimes = 0;
         final listeners = List.generate(10, (_) => () => calledTimes++);
         for (final listener in listeners) {
-          game.collisionDetection.collisionsCompletedNotifier
-              .addListener(listener);
+          game.collisionDetection.collisionsCompletedNotifier.addListener(listener);
         }
         game.update(0);
         expect(calledTimes, listeners.length);

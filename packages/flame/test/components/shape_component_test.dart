@@ -439,8 +439,8 @@ void main() {
     testWithFlameGame(
       'CircleComponent with multiple parents contains point',
       (game) async {
-        PositionComponent createParent() {
-          return PositionComponent(
+        PositionedComponent createParent() {
+          return PositionedComponent(
             position: Vector2.all(1.0),
             size: Vector2.all(2.0),
             angle: pi / 2,
@@ -468,8 +468,8 @@ void main() {
     testWithFlameGame(
       'Rectangle with multiple parents contains point',
       (game) async {
-        PositionComponent createParent() {
-          return PositionComponent(
+        PositionedComponent createParent() {
+          return PositionedComponent(
             position: Vector2.all(1.0),
             size: Vector2.all(2.0),
             angle: pi / 2,
@@ -497,8 +497,8 @@ void main() {
     testWithFlameGame(
       'PolygonComponent with multiple parents contains point',
       (game) async {
-        PositionComponent createParent() {
-          return PositionComponent(
+        PositionedComponent createParent() {
+          return PositionedComponent(
             position: Vector2.all(1.0),
             size: Vector2.all(2.0),
             angle: pi / 2,

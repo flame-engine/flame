@@ -73,7 +73,7 @@ class ScaleEffectExample extends FlameGame with TapDetector {
   }
 }
 
-class Star extends PositionComponent {
+class Star extends PositionedComponent {
   Star() {
     const smallR = 15.0;
     const bigR = 30.0;

@@ -21,8 +21,7 @@ class AnimatedBodyExample extends Forge2DGame {
         );
 }
 
-class AnimatedBodyWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+class AnimatedBodyWorld extends Forge2DWorld with TapCallbacks, HasGameReference<Forge2DGame> {
   late Image chopper;
   late SpriteAnimation animation;
 
@@ -64,7 +63,7 @@ class ChopperBody extends BodyComponent {
 
   ChopperBody(
     this._position,
-    PositionComponent component,
+    PositionedComponent component,
   ) : size = component.size {
     renderBody = false;
     add(component);

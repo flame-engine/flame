@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/text.dart';
 
-class TextElementComponent extends PositionComponent {
+class TextElementComponent extends PositionedComponent {
   final Vector2? documentSize;
   TextElement element;
 
@@ -64,14 +64,12 @@ class TextElementComponent extends PositionComponent {
     if (width == null || height == null) {
       throw ArgumentError('Either style.width or size.x must be provided.');
     }
-    if ((style.width != null && style.width != width) ||
-        (size?.x != null && size?.x != width)) {
+    if ((style.width != null && style.width != width) || (size?.x != null && size?.x != width)) {
       throw ArgumentError(
         'style.width and size.x, if both provided, must match.',
       );
     }
-    if ((style.height != null && style.height != height) ||
-        (size?.y != null && size?.y != height)) {
+    if ((style.height != null && style.height != height) || (size?.y != null && size?.y != height)) {
       throw ArgumentError(
         'style.height and size.y, if both provided, must match.',
       );

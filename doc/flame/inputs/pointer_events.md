@@ -13,7 +13,7 @@ If you want to interact with mouse movement events within your component or game
 For example:
 
 ```dart
-class MyComponent extends PositionComponent with PointerMoveCallbacks {
+class MyComponent extends PositionedComponent with PointerMoveCallbacks {
   MyComponent() : super(size: Vector2(80, 60));
 
   @override
@@ -32,7 +32,7 @@ By default, each of these methods does nothing, they need to be overridden in or
 function.
 
 In addition, the component must implement the `containsLocalPoint()` method (already implemented in
-`PositionComponent`, so most of the time you don't need to do anything here) -- this method allows
+`PositionedComponent`, so most of the time you don't need to do anything here) -- this method allows
 Flame to know whether the event occurred within the component or not.
 
 Note that only mouse events happening within your component will be proxied along. However,
@@ -48,7 +48,7 @@ into hover enter and exit events, you can use a more dedicated mixin called `Hov
 For example:
 
 ```dart
-class MyComponent extends PositionComponent with HoverCallbacks {
+class MyComponent extends PositionedComponent with HoverCallbacks {
 
   MyComponent() : super(size: Vector2(80, 60));
 

@@ -59,7 +59,7 @@ void main() {
         final cameraComponent = CameraComponent(world: world);
         game.ensureAddAll([world, cameraComponent]);
 
-        final parent = PositionComponent(
+        final parent = PositionedComponent(
           position: Vector2(10, 20),
           size: Vector2(50, 40),
         );

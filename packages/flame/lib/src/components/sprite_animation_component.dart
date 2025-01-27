@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationComponent extends PositionComponent with HasPaint {
+class SpriteAnimationComponent extends PositionedComponent with HasPaint {
   /// The animation ticker used for updating [animation].
   SpriteAnimationTicker? _animationTicker;
 

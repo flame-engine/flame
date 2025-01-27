@@ -168,16 +168,16 @@ the rendering of the component. In order to remove this visual effect, simply se
 property back to `null`.
 
 
-### PositionComponent
+### PositionedComponent
 
-`PositionComponent` (and all the derived classes) already has a `decorator` property, so for these
+`PositionedComponent` (and all the derived classes) already has a `decorator` property, so for these
 components the `HasDecorator` mixin is not needed.
 
-In fact, the `PositionComponent` uses its decorator in order to properly position the component on
-the screen. Thus, any new decorators that you'd want to apply to the `PositionComponent` will need
+In fact, the `PositionedComponent` uses its decorator in order to properly position the component on
+the screen. Thus, any new decorators that you'd want to apply to the `PositionedComponent` will need
 to be chained (see the [](#multiple-decorators) section below).
 
-It is also possible to replace the root decorator of the `PositionComponent`, if you want to create
+It is also possible to replace the root decorator of the `PositionedComponent`, if you want to create
 an alternative logic for how the component shall be positioned on the screen.
 
 

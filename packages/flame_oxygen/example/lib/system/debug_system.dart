@@ -39,7 +39,7 @@ class DebugSystem extends BaseSystem {
     textPainter.render(
       canvas,
       [
-        'position: ${entity.get<PositionComponent>()!.position}',
+        'position: ${entity.get<PositionedComponent>()!.position}',
         'size: $size',
         'angle: ${entity.get<AngleComponent>()?.radians ?? 0}',
         'anchor: ${entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft}',

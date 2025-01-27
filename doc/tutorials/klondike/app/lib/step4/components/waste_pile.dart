@@ -4,7 +4,7 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import 'card.dart';
 
-class WastePile extends PositionComponent implements Pile {
+class WastePile extends PositionedComponent implements Pile {
   WastePile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];

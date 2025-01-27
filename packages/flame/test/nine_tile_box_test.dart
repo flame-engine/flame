@@ -61,7 +61,7 @@ void main() {
   });
 }
 
-class _MyComponent1 extends PositionComponent {
+class _MyComponent1 extends PositionedComponent {
   _MyComponent1() : super(size: Vector2(300, 200));
   late final Sprite sprite;
   late final NineTileBox nineTileBox;
@@ -83,7 +83,7 @@ class _MyComponent1 extends PositionComponent {
   }
 }
 
-class _MyComponent2 extends PositionComponent {
+class _MyComponent2 extends PositionedComponent {
   _MyComponent2() : super(size: Vector2(300, 200));
   late final Sprite sprite;
   late final NineTileBox nineTileBox;

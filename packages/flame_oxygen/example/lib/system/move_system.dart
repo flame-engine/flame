@@ -11,7 +11,7 @@ class MoveSystem extends System with UpdateSystem, GameRef<ExampleGame> {
   @override
   void init() {
     _query = createQuery([
-      Has<PositionComponent>(),
+      Has<PositionedComponent>(),
       Has<VelocityComponent>(),
     ]);
   }
@@ -27,12 +27,10 @@ class MoveSystem extends System with UpdateSystem, GameRef<ExampleGame> {
     for (final entity in _query?.entities ?? <Entity>[]) {
       final velocity = entity.get<VelocityComponent>()!.velocity;
       final size = entity.get<SizeComponent>()!.size;
-      final position = entity.get<PositionComponent>()!.position
-        ..add(velocity * delta);
+      final position = entity.get<PositionedComponent>()!.position..add(velocity * delta);
 
       final screenSize = Vector2.zero() & game!.size;
-      if (!screenSize.containsPoint(position) ||
-          !screenSize.containsPoint(position + size)) {
+      if (!screenSize.containsPoint(position) || !screenSize.containsPoint(position + size)) {
         velocity.setFrom(-velocity);
 
         game!.createEntity(

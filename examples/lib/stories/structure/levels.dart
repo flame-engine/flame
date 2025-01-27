@@ -125,7 +125,7 @@ class LevelButton extends ButtonComponent {
         );
 }
 
-class ButtonBackground extends PositionComponent with HasAncestor<LevelButton> {
+class ButtonBackground extends PositionedComponent with HasAncestor<LevelButton> {
   ButtonBackground(Color color) {
     _paint.color = color;
   }

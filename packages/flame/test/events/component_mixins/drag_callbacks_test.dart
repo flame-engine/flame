@@ -440,12 +440,11 @@ mixin _DragCounter on DragCallbacks {
   }
 }
 
-class _DragCallbacksComponent extends PositionComponent
-    with DragCallbacks, _DragCounter {}
+class _DragCallbacksComponent extends PositionedComponent with DragCallbacks, _DragCounter {}
 
 class _DragCallbacksGame extends FlameGame with DragCallbacks, _DragCounter {}
 
-class _DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
+class _DragWithCallbacksComponent extends PositionedComponent with DragCallbacks {
   _DragWithCallbacksComponent({
     void Function(DragStartEvent)? onDragStart,
     void Function(DragUpdateEvent)? onDragUpdate,
@@ -478,7 +477,6 @@ class _DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   }
 }
 
-class _SimpleDragCallbacksComponent extends PositionComponent
-    with DragCallbacks {
+class _SimpleDragCallbacksComponent extends PositionedComponent with DragCallbacks {
   _SimpleDragCallbacksComponent({super.size});
 }

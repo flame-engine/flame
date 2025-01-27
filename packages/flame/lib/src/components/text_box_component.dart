@@ -19,7 +19,7 @@ class TextBoxConfig {
   /// word boundaries in as many lines as necessary.
   final double maxWidth;
 
-  /// Margins of the text box with respect to the [PositionComponent.size].
+  /// Margins of the text box with respect to the [PositionedComponent.size].
   final EdgeInsets margins;
 
   /// Defaults to 0. If not zero, the characters will appear one-by-one giving
@@ -63,8 +63,7 @@ class TextBoxConfig {
 }
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
-  static final Paint _imagePaint = BasicPalette.white.paint()
-    ..filterQuality = FilterQuality.medium;
+  static final Paint _imagePaint = BasicPalette.white.paint()..filterQuality = FilterQuality.medium;
   final TextBoxConfig _boxConfig;
   final double pixelRatio;
 
@@ -85,8 +84,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   // Notifies when a new line is rendered with the position of the new line.
   @internal
-  final ValueNotifier<double> newLinePositionNotifier =
-      ValueNotifier<double>(0);
+  final ValueNotifier<double> newLinePositionNotifier = ValueNotifier<double>(0);
 
   double _currentLinePosition = 0.0;
   bool _isOnCompleteExecuted = false;
@@ -115,8 +113,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   })  : _boxConfig = boxConfig ?? const TextBoxConfig(),
         _fixedSize = size != null,
         align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ??
-            PlatformDispatcher.instance.views.first.devicePixelRatio;
+        pixelRatio = pixelRatio ?? PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
@@ -170,8 +167,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
     text.split(' ').forEach((word) {
       final wordLines = word.split('\n');
-      final possibleLine =
-          lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
+      final possibleLine = lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
       final metrics = textRenderer.getLineMetrics(possibleLine);
       lineHeight = max(lineHeight, metrics.height);
 
@@ -206,16 +202,13 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   double get totalCharTime => text.length * _boxConfig.timePerChar;
 
-  bool get finished =>
-      _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
+  bool get finished => _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
 
   int get _actualTextLength {
     return lines.map((e) => e.length).sum;
   }
 
-  int get currentChar => _boxConfig.timePerChar == 0.0
-      ? _actualTextLength
-      : math.min(_lifeTime ~/ _boxConfig.timePerChar, _actualTextLength);
+  int get currentChar => _boxConfig.timePerChar == 0.0 ? _actualTextLength : math.min(_lifeTime ~/ _boxConfig.timePerChar, _actualTextLength);
 
   int get currentLine {
     var totalCharCount = 0;
@@ -246,9 +239,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       final cachedCurrentChar = currentChar;
       final cachedCurrentLine = currentLine;
       final textWidth = lines.sublist(0, cachedCurrentLine + 1).map((line) {
-        final charCount = (i < cachedCurrentLine)
-            ? line.length
-            : (cachedCurrentChar - totalCharCount);
+        final charCount = (i < cachedCurrentLine) ? line.length : (cachedCurrentChar - totalCharCount);
         totalCharCount += line.length;
         i++;
         return getLineWidth(line, charCount);
@@ -310,9 +301,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
       final position = Vector2(
         boxConfig.margins.left + (boxWidth - metrics.width) * align.x,
-        boxConfig.margins.top +
-            (boxHeight - nLines * _lineHeight) * align.y +
-            i * _lineHeight,
+        boxConfig.margins.top + (boxHeight - nLines * _lineHeight) * align.y + i * _lineHeight,
       );
       textElement.render(canvas, position);
       if (position.y > _currentLinePosition) {

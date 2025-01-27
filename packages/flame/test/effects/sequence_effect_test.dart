@@ -92,7 +92,7 @@ void main() {
           MoveEffect.by(Vector2(-10, 0), EffectController(duration: 3)),
           MoveEffect.by(Vector2(30, 30), EffectController(duration: 4)),
         ]);
-        final component = PositionComponent()..add(effect);
+        final component = PositionedComponent()..add(effect);
         game.add(component);
         await game.ready();
 
@@ -117,7 +117,7 @@ void main() {
           MoveEffect.by(Vector2(-10, 0), EffectController(duration: 3)),
           MoveEffect.by(Vector2(30, 30), EffectController(duration: 4)),
         ]);
-        final component = PositionComponent()..add(effect);
+        final component = PositionedComponent()..add(effect);
         game.add(component);
         await game.ready();
 
@@ -133,7 +133,7 @@ void main() {
           ],
           repeatCount: 5,
         );
-        final component = PositionComponent()..add(effect);
+        final component = PositionedComponent()..add(effect);
         game.add(component);
         await game.ready();
 
@@ -160,7 +160,7 @@ void main() {
         );
         expect(effect.controller.duration, 4);
 
-        final component = PositionComponent()..add(effect);
+        final component = PositionedComponent()..add(effect);
         game.add(component);
         await game.ready();
 
@@ -179,8 +179,7 @@ void main() {
       });
 
       testWithFlameGame('sequence of alternates', (game) async {
-        EffectController controller() =>
-            EffectController(duration: 1, alternate: true);
+        EffectController controller() => EffectController(duration: 1, alternate: true);
         final effect = SequenceEffect(
           [
             MoveEffect.by(Vector2(1, 0), controller()),
@@ -189,7 +188,7 @@ void main() {
           alternate: true,
         );
 
-        final component = PositionComponent()..add(effect);
+        final component = PositionedComponent()..add(effect);
         game.add(component);
         await game.ready();
 
@@ -224,7 +223,7 @@ void main() {
             EffectController(duration: 1.0),
           ),
         ]);
-        await game.ensureAdd(PositionComponent(children: [effect]));
+        await game.ensureAdd(PositionedComponent(children: [effect]));
         game.update(0);
         expect(effect.controller.duration, 2.0);
         expect(effect.controller.completed, false);
@@ -270,36 +269,26 @@ void main() {
         );
         expect(effect.controller.duration, 42);
 
-        final component = PositionComponent()..add(effect);
+        final component = PositionedComponent()..add(effect);
         game.add(component);
         await game.ready();
 
         // All points here are spaced `dt = 0.01` apart
         final forwardPath = <Vector2>[
           // First MoveEffect
-          for (var t = 0.0; t < 1; t += dt)
-            Vector2(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t),
+          for (var t = 0.0; t < 1; t += dt) Vector2(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t),
           // First SequenceEffect
-          for (var t = 0.0; t < 1; t += dt)
-            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
-          for (var t = 0.0; t < 1; t += dt)
-            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
-          for (var t = 1.0; t > 0; t -= dt)
-            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
-          for (var t = 1.0; t > 0; t -= dt)
-            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          for (var t = 0.0; t < 1; t += dt) Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          for (var t = 0.0; t < 1; t += dt) Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt) Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt) Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
           // First SequenceEffect, repeated second time
-          for (var t = 0.0; t < 1; t += dt)
-            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
-          for (var t = 0.0; t < 1; t += dt)
-            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
-          for (var t = 1.0; t > 0; t -= dt)
-            Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
-          for (var t = 1.0; t > 0; t -= dt)
-            Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          for (var t = 0.0; t < 1; t += dt) Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
+          for (var t = 0.0; t < 1; t += dt) Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt) Vector2(x2 + (x3 - x2) * t, y2 + (y3 - y2) * t),
+          for (var t = 1.0; t > 0; t -= dt) Vector2(x1 + (x2 - x1) * t, y1 + (y2 - y1) * t),
           // Second MoveEffect, duration = 2
-          for (var t = 0.0; t < 2; t += dt)
-            Vector2(x1 + (x4 - x1) * t, y1 + (y4 - y1) * t / 2),
+          for (var t = 0.0; t < 2; t += dt) Vector2(x1 + (x4 - x1) * t, y1 + (y4 - y1) * t / 2),
           // Second sequence effect, repeated 5 times
           for (var j = 0; j < 5; j++)
             for (var t = 0.0; t < 2; t += dt)

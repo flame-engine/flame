@@ -206,9 +206,7 @@ void main() {
       );
     });
 
-    testWithFlameGame(
-        'can change visibleGameSize directly with FixedAspectRatioViewport',
-        (game) async {
+    testWithFlameGame('can change visibleGameSize directly with FixedAspectRatioViewport', (game) async {
       final world = World()..addToParent(game);
       final cameraComponent = CameraComponent(
         world: world,
@@ -223,7 +221,7 @@ void main() {
 }
 
 /// Simple rectangle with default size 80x60.
-class _Rect extends PositionComponent {
+class _Rect extends PositionedComponent {
   _Rect() : super(size: Vector2(80, 60));
 
   @override

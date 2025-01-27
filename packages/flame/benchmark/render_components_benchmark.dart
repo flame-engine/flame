@@ -49,7 +49,7 @@ class RenderComponentsBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _BenchmarkComponent extends PositionComponent {
+class _BenchmarkComponent extends PositionedComponent {
   final Random random;
   final double level;
 

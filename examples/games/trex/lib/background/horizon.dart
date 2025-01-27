@@ -7,7 +7,7 @@ import 'package:trex_game/background/cloud_manager.dart';
 import 'package:trex_game/obstacle/obstacle_manager.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Horizon extends PositionComponent with HasGameReference<TRexGame> {
+class Horizon extends PositionedComponent with HasGameReference<TRexGame> {
   Horizon() : super();
 
   static final Vector2 lineSize = Vector2(1200, 24);
@@ -66,8 +66,7 @@ class Horizon extends PositionComponent with HasGameReference<TRexGame> {
 
   List<SpriteComponent> _generateLines() {
     final number = 1 + (game.size.x / lineSize.x).ceil() - groundLayers.length;
-    final lastX = (groundLayers.lastOrNull?.x ?? 0) +
-        (groundLayers.lastOrNull?.width ?? 0);
+    final lastX = (groundLayers.lastOrNull?.x ?? 0) + (groundLayers.lastOrNull?.width ?? 0);
     return List.generate(
       max(number, 0),
       (i) => SpriteComponent(

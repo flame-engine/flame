@@ -19,7 +19,7 @@ void main() {
   });
 }
 
-class _MyComponent extends PositionComponent {
+class _MyComponent extends PositionedComponent {
   _MyComponent() : super(size: Vector2(200, 400));
   late final Sprite sprite;
 

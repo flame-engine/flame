@@ -4,16 +4,16 @@ Components in Oxygen are different than the ones from FCS mainly because instead
 they only contain data. This data is then used in systems which in turn define the logic. To
 accommodate people who are switching from FCS to Oxygen we implemented a few components to help you
 get started. Some of these components are based on the multiple functionalities that the
-`PositionComponent` from FCS has. Others are just easy wrappers around certain Flame API
+`PositionedComponent` from FCS has. Others are just easy wrappers around certain Flame API
 functionality, they are often accompanied by predefined systems that you can use.
 
 Components can be registered to the world using the `world.registerComponent` method on
 `OxygenGame`.
 
 
-## PositionComponent
+## PositionedComponent
 
-The `PositionComponent` as its name implies is a component that describes the position of an
+The `PositionedComponent` as its name implies is a component that describes the position of an
 entity. And it is registered to the world by default.
 
 Creating a positioned entity using OxygenGame:
@@ -29,7 +29,7 @@ Creating a positioned entity using the World:
 
 ```dart
 world.createEntity()
-  ..add<PositionComponent, Vector2>(Vector2(100, 100));
+  ..add<PositionedComponent, Vector2>(Vector2(100, 100));
 ```
 
 
@@ -166,7 +166,7 @@ world.createEntity()
 The `TextComponent` as its name implies is a component that adds a text component to an entity.
 And it is registered to the world by default.
 
-This allows you to add text to your entity, combined with the `PositionComponent` you can use it
+This allows you to add text to your entity, combined with the `PositionedComponent` you can use it
 as a text entity.
 
 Creating an entity with text using OxygenGame:

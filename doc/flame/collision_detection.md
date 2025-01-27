@@ -13,7 +13,7 @@ to a component to form the area which can be used to either detect collisions
 or whether it contains a point or not,
 the latter is very useful for accurate gesture detection. The collision detection does not handle
 what should happen when two hitboxes collide, so it is up to the user to implement what will happen
-when for example two `PositionComponent`s have intersecting hitboxes.
+when for example two `PositionedComponent`s have intersecting hitboxes.
 
 Do note that the built-in collision detection system does not take collisions between two hitboxes
 that overshoot each other into account, this could happen when they either move very fast or
@@ -77,9 +77,9 @@ Example:
 ```
 
 ```dart
-class MyCollidable extends PositionComponent with CollisionCallbacks {
+class MyCollidable extends PositionedComponent with CollisionCallbacks {
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
+  void onCollision(Set<Vector2> points, PositionedComponent other) {
     if (other is ScreenHitbox) {
       //...
     } else if (other is YourOtherComponent) {
@@ -88,7 +88,7 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     if (other is ScreenHitbox) {
       //...
     } else if (other is YourOtherComponent) {
@@ -101,12 +101,12 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 In this example we use Dart's `is` keyword to check what kind of component we collided with.
 The set of points is where the edges of the hitboxes intersect.
 
-Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
+Note that the `onCollision` method will be called on both `PositionedComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
 `onCollisionStart` and `onCollisionEnd` methods, which are called when two components and hitboxes
 starts or stops colliding with each other.
 
-When a `PositionComponent` (and hitbox) starts to collide with another `PositionComponent`
+When a `PositionedComponent` (and hitbox) starts to collide with another `PositionedComponent`
 both `onCollisionStart` and `onCollision` are called, so if you don't need to do something specific
 when a collision starts you only need to override `onCollision`, and vice versa.
 
@@ -128,21 +128,21 @@ be a problem, such as in a bouncing ball game where the trajectory of the ball c
 on which other object was hit first. To help resolve this the `collisionsCompletedNotifier`
 listener can be used - this triggers at the end of the collision detection process.
 
-An example of how this might be used is to add a local variable in your `PositionComponent` to save
+An example of how this might be used is to add a local variable in your `PositionedComponent` to save
 the other components with which it's colliding:
-`List<PositionComponent> collisionComponents = [];`. The `onCollision` callback is then used to
-save all the other `PositionComponent`s to this list:
+`List<PositionedComponent> collisionComponents = [];`. The `onCollision` callback is then used to
+save all the other `PositionedComponent`s to this list:
 
 ```dart
 @override
-void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
   collisionComponents.add(other);
   super.onCollision(intersectionPoints, other);
 }
 
 ```
 
-Finally, one adds a listener to the `onLoad` method of the `PositionComponent` to call a function
+Finally, one adds a listener to the `onLoad` method of the `PositionedComponent` to call a function
 which will resolve how the collisions should be dealt with:
 
 ```dart
@@ -163,7 +163,7 @@ The `ShapeHitbox`s are normal components, so you add them to the component that 
 hitboxes to just like any other component:
 
 ```dart
-class MyComponent extends PositionComponent {
+class MyComponent extends PositionedComponent {
   @override
   void onLoad() {
     add(RectangleHitbox());
@@ -188,7 +188,7 @@ a side hitbox does not mean a real collision and should not be propagated to hit
 For this case you can set `triggersParentCollision` variable to `false`:
 
 ```dart
-class MyComponent extends PositionComponent {
+class MyComponent extends PositionedComponent {
 
   late final MySpecialHitbox utilityHitbox;
 
@@ -219,7 +219,7 @@ class MySpecialHitbox extends RectangleHitbox {
 You can read more about how the different shapes are defined in the
 [ShapeComponents](components.md#shapecomponents) section.
 
-Remember that you can add as many `ShapeHitbox`s as you want to your `PositionComponent` to make up
+Remember that you can add as many `ShapeHitbox`s as you want to your `PositionedComponent` to make up
 more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
 and two `RectangleHitbox`s as its hat.
 
@@ -378,10 +378,10 @@ you should not check any dynamic parameters here, the function is intended to be
 type checker:
 
 ```dart
-class Bullet extends PositionComponent with CollisionCallbacks {
+class Bullet extends PositionedComponent with CollisionCallbacks {
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(PositionedComponent other) {
     if (other is Player || other is Water) {
       // do NOT collide with Player or Water
       return false;
@@ -395,7 +395,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     // Removes the component when it comes in contact with a Brick.
     // Neither Player nor Water would be passed to this function

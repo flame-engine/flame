@@ -20,8 +20,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
     final componentSize = Vector2(150, 100);
     // Top left component
     add(
-      AnimatedComponent(Vector2.all(200), Vector2.all(100), componentSize)
-        ..flipVertically(),
+      AnimatedComponent(Vector2.all(200), Vector2.all(100), componentSize)..flipVertically(),
     );
     // Bottom right component
     add(
@@ -52,8 +51,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
   }
 }
 
-class AnimatedComponent extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameRef {
+class AnimatedComponent extends SpriteAnimationComponent with CollisionCallbacks, HasGameRef {
   final Vector2 velocity;
 
   AnimatedComponent(
@@ -78,8 +76,7 @@ class AnimatedComponent extends SpriteAnimationComponent
         textureSize: Vector2.all(48),
       ),
     );
-    final hitboxPaint = BasicPalette.white.paint()
-      ..style = PaintingStyle.stroke;
+    final hitboxPaint = BasicPalette.white.paint()..style = PaintingStyle.stroke;
     add(
       PolygonHitbox.relative(
         [
@@ -102,14 +99,13 @@ class AnimatedComponent extends SpriteAnimationComponent
     position += velocity * dt;
   }
 
-  final Paint hitboxPaint = BasicPalette.green.paint()
-    ..style = PaintingStyle.stroke;
+  final Paint hitboxPaint = BasicPalette.green.paint()..style = PaintingStyle.stroke;
   final Paint dotPaint = BasicPalette.red.paint()..style = PaintingStyle.stroke;
 
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     velocity.negate();

@@ -39,7 +39,7 @@ class RefExampleGame extends FlameGame with RiverpodGameMixin {
   }
 }
 
-class RiverpodAwareTextComponent extends PositionComponent
+class RiverpodAwareTextComponent extends PositionedComponent
     with RiverpodComponentMixin {
   late TextComponent textComponent;
   int currentValue = 0;

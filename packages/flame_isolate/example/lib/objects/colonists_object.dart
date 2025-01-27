@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_isolate_example/constants.dart';
 import 'package:flame_isolate_example/standard/int_vector2.dart';
 
-mixin ColonistsObject on PositionComponent {
+mixin ColonistsObject on PositionedComponent {
   IntVector2 get tileSize;
 
   IntVector2 get tilePosition => IntVector2(
@@ -11,8 +11,7 @@ mixin ColonistsObject on PositionComponent {
       );
 }
 
-abstract class StaticColonistsObject extends SpriteComponent
-    with ColonistsObject {
+abstract class StaticColonistsObject extends SpriteComponent with ColonistsObject {
   Sprite get objectSprite;
 
   double get difficulty;

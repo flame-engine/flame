@@ -66,16 +66,14 @@ enum ComputeType {
   const ComputeType(this.description);
 }
 
-class CalculatePrimeNumber extends PositionComponent
-    with TapCallbacks, FlameIsolate {
+class CalculatePrimeNumber extends PositionedComponent with TapCallbacks, FlameIsolate {
   CalculatePrimeNumber() : super(anchor: Anchor.center);
 
   ComputeType computeType = ComputeType.isolate;
   late Timer _interval;
 
   @override
-  BackpressureStrategy get backpressureStrategy =>
-      DiscardNewBackPressureStrategy();
+  BackpressureStrategy get backpressureStrategy => DiscardNewBackPressureStrategy();
 
   @override
   void onLoad() {
@@ -85,8 +83,7 @@ class CalculatePrimeNumber extends PositionComponent
 
   @override
   Future<void> onMount() {
-    _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)
-      ..start();
+    _interval = Timer(0.4, repeat: true, onTick: _checkNextAgainstPrime)..start();
     return super.onMount();
   }
 
@@ -103,8 +100,7 @@ class CalculatePrimeNumber extends PositionComponent
 
   static const _minStartValue = 500000000;
   static const _maxStartValue = 600000000;
-  static final _primeStartNumber =
-      Random().nextInt(_maxStartValue - _minStartValue) + _minStartValue;
+  static final _primeStartNumber = Random().nextInt(_maxStartValue - _minStartValue) + _minStartValue;
 
   MapEntry<int, bool> _primeData = MapEntry(
     _primeStartNumber,
@@ -128,8 +124,7 @@ class CalculatePrimeNumber extends PositionComponent
 
   @override
   void onTapDown(_) {
-    computeType =
-        ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
+    computeType = ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
   }
 
   final _paint = Paint()..color = Colors.green;

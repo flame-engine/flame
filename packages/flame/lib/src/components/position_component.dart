@@ -18,11 +18,11 @@ import 'package:flame/src/rendering/transform2d_decorator.dart';
 /// A [Component] implementation that represents an object that can be
 /// freely moved around the screen, rotated, and scaled.
 ///
-/// The [PositionComponent] class has no visual representation of its own
+/// The [PositionedComponent] class has no visual representation of its own
 /// (except in debug mode). It is common, therefore, to derive from this
 /// class, implementing a specific rendering logic. For example:
 /// ```dart
-/// class MyCircle extends PositionComponent {
+/// class MyCircle extends PositionedComponent {
 ///   MyCircle({required double radius, Paint? paint, Vector2? position})
 ///     : _radius = radius,
 ///       _paint = paint ?? Paint()..color=Color(0xFF80C080),
@@ -43,14 +43,14 @@ import 'package:flame/src/rendering/transform2d_decorator.dart';
 /// }
 /// ```
 ///
-/// The base [PositionComponent] class can also be used as a container
+/// The base [PositionedComponent] class can also be used as a container
 /// for several other components. In this case, changing the position,
-/// rotating or scaling the [PositionComponent] will affect the whole
+/// rotating or scaling the [PositionedComponent] will affect the whole
 /// group as if it was a single entity.
 ///
 /// The main properties of this class is the [transform] (which combines
 /// the [position], [angle] of rotation, and [scale]), the [size], and
-/// the [anchor]. Thus, the [PositionComponent] can be imagined as an
+/// the [anchor]. Thus, the [PositionedComponent] can be imagined as an
 /// abstract picture whose of a certain [size]. Within that picture
 /// a point at location [anchor] is selected, and that point is designated as
 /// a "logical center" of the picture. Then, a sequence of transforms is
@@ -59,20 +59,13 @@ import 'package:flame/src/rendering/transform2d_decorator.dart';
 /// radians around the anchor point, and finally scaled by [scale] also
 /// around the anchor point.
 ///
-/// The [size] property of the [PositionComponent] is used primarily for
+/// The [size] property of the [PositionedComponent] is used primarily for
 /// tap and collision detection. Thus, the [size] should be set equal to
 /// the approximate bounding rectangle of the rendered picture. If you
-/// do not specify the size of a PositionComponent, then it will be
+/// do not specify the size of a PositionedComponent, then it will be
 /// equal to zero and the component won't be able to respond to taps.
-class PositionComponent extends Component
-    implements
-        AnchorProvider,
-        AngleProvider,
-        PositionProvider,
-        ScaleProvider,
-        SizeProvider,
-        CoordinateTransform {
-  PositionComponent({
+class PositionedComponent extends Component implements AnchorProvider, AngleProvider, PositionProvider, ScaleProvider, SizeProvider, CoordinateTransform {
+  PositionedComponent({
     Vector2? position,
     Vector2? size,
     Vector2? scale,
@@ -114,7 +107,7 @@ class PositionComponent extends Component
 
   /// The decorator is used to apply visual effects to a component.
   ///
-  /// By default, the [PositionComponent] is equipped with a
+  /// By default, the [PositionedComponent] is equipped with a
   /// [Transform2DDecorator] which makes sure the component is rendered at a
   /// proper location on the canvas. It is possible to replace this decorator
   /// with another one if a different functionality is desired.
@@ -186,7 +179,7 @@ class PositionComponent extends Component
   /// handling.
   ///
   /// This property can be reassigned at runtime, although this is not
-  /// recommended. Instead, in order to make the [PositionComponent] larger
+  /// recommended. Instead, in order to make the [PositionedComponent] larger
   /// or smaller, change its [scale].
   @override
   NotifyingVector2 get size => _size;
@@ -231,16 +224,13 @@ class PositionComponent extends Component
   /// has been applied.
   double get absoluteAngle {
     // TODO(spydon): take scale into consideration
-    return ancestors(includeSelf: true)
-        .whereType<ReadOnlyAngleProvider>()
-        .map((c) => c.angle)
-        .sum;
+    return ancestors(includeSelf: true).whereType<ReadOnlyAngleProvider>().map((c) => c.angle).sum;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
   Vector2 get absoluteScale {
-    return ancestors().whereType<PositionComponent>().fold<Vector2>(
+    return ancestors().whereType<PositionedComponent>().fold<Vector2>(
           scale.clone(),
           (totalScale, c) => totalScale..multiply(c.scale),
         );
@@ -248,8 +238,7 @@ class PositionComponent extends Component
 
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
-  double distance(PositionComponent other) =>
-      position.distanceTo(other.position);
+  double distance(PositionedComponent other) => position.distanceTo(other.position);
 
   //#region Coordinate transformations
 
@@ -258,10 +247,7 @@ class PositionComponent extends Component
   /// while the bottom and the right borders are exclusive.
   @override
   bool containsLocalPoint(Vector2 point) {
-    return (point.x >= 0) &&
-        (point.y >= 0) &&
-        (point.x < _size.x) &&
-        (point.y < _size.y);
+    return (point.x >= 0) && (point.y >= 0) && (point.x < _size.x) && (point.y < _size.y);
   }
 
   /// Test whether the `point` (given in global coordinates) lies within this
@@ -273,12 +259,10 @@ class PositionComponent extends Component
   }
 
   @override
-  Vector2 parentToLocal(Vector2 point, {Vector2? output}) =>
-      transform.globalToLocal(point, output: output);
+  Vector2 parentToLocal(Vector2 point, {Vector2? output}) => transform.globalToLocal(point, output: output);
 
   @override
-  Vector2 localToParent(Vector2 point, {Vector2? output}) =>
-      transform.localToGlobal(point, output: output);
+  Vector2 localToParent(Vector2 point, {Vector2? output}) => transform.localToGlobal(point, output: output);
 
   /// Convert local coordinates of a point [point] inside the component
   /// into the parent's coordinate space.
@@ -301,7 +285,7 @@ class PositionComponent extends Component
     var parentPoint = positionOf(point);
     var ancestor = parent;
     while (ancestor != null) {
-      if (ancestor is PositionComponent) {
+      if (ancestor is PositionedComponent) {
         parentPoint = ancestor.positionOf(parentPoint);
       }
       ancestor = ancestor.parent;
@@ -311,8 +295,7 @@ class PositionComponent extends Component
 
   /// Similar to [absolutePositionOf()], but applies to any anchor
   /// point within the component.
-  Vector2 absolutePositionOfAnchor(Anchor anchor) =>
-      absolutePositionOf(Vector2(anchor.x * size.x, anchor.y * size.y));
+  Vector2 absolutePositionOfAnchor(Anchor anchor) => absolutePositionOf(Vector2(anchor.x * size.x, anchor.y * size.y));
 
   /// Transform [point] from the parent's coordinate space into the local
   /// coordinates. This function is the inverse of [positionOf()].
@@ -323,12 +306,12 @@ class PositionComponent extends Component
   /// [absolutePositionOf()].
   ///
   /// This can be used, for example, to detect whether a specific point
-  /// on the screen lies within this [PositionComponent], and where
+  /// on the screen lies within this [PositionedComponent], and where
   /// exactly it hits.
   Vector2 absoluteToLocal(Vector2 point) {
     var c = parent;
     while (c != null) {
-      if (c is PositionComponent) {
+      if (c is PositionedComponent) {
         return toLocal(c.absoluteToLocal(point));
       }
       c = c.parent;
@@ -353,8 +336,7 @@ class PositionComponent extends Component
   Vector2 get absolutePosition => absolutePositionOfAnchor(_anchor);
 
   /// The absolute top left position regardless of whether it is a child or not.
-  Vector2 get absoluteTopLeftPosition =>
-      absolutePositionOfAnchor(Anchor.topLeft);
+  Vector2 get absoluteTopLeftPosition => absolutePositionOfAnchor(Anchor.topLeft);
 
   /// The absolute center of the component.
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);

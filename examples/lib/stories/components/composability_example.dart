@@ -8,7 +8,7 @@ class ComposabilityExample extends FlameGame {
   static const String description = '''
     In this example we showcase how you can add children to a component and how
     they transform together with their parent, if the parent is a
-    `PositionComponent`. This example is not interactive.
+    `PositionedComponent`. This example is not interactive.
   ''';
 
   late ParentSquare parentSquare;
@@ -18,8 +18,7 @@ class ComposabilityExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    parentSquare = ParentSquare(Vector2.all(200), Vector2.all(300))
-      ..anchor = Anchor.center;
+    parentSquare = ParentSquare(Vector2.all(200), Vector2.all(300))..anchor = Anchor.center;
     add(parentSquare);
   }
 
@@ -31,8 +30,7 @@ class ComposabilityExample extends FlameGame {
 }
 
 class ParentSquare extends RectangleComponent with HasGameRef {
-  static final defaultPaint = BasicPalette.white.paint()
-    ..style = PaintingStyle.stroke;
+  static final defaultPaint = BasicPalette.white.paint()..style = PaintingStyle.stroke;
 
   ParentSquare(Vector2 position, Vector2 size)
       : super(

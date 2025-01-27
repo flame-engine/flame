@@ -30,9 +30,7 @@ void main() {
 
         final actualNewPosition = component.position.toOffset();
 
-        final expectedNewPosition = game.size.toOffset() +
-            margin.bottomRight -
-            componentSize.toOffset();
+        final expectedNewPosition = game.size.toOffset() + margin.bottomRight - componentSize.toOffset();
 
         expect(initialMargin, equals(marginAfterGameResize));
 
@@ -44,5 +42,4 @@ void main() {
 
 class _TestGame extends FlameGame<World> {}
 
-class _ComponentWithViewportMargin extends PositionComponent
-    with HasGameReference<_TestGame>, ComponentViewportMargin<_TestGame> {}
+class _ComponentWithViewportMargin extends PositionedComponent with HasGameReference<_TestGame>, ComponentViewportMargin<_TestGame> {}

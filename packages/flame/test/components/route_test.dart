@@ -47,7 +47,7 @@ void main() {
             },
             build: (self) {
               buildCalled++;
-              return PositionComponent();
+              return PositionedComponent();
             },
           ),
         },
@@ -58,7 +58,7 @@ void main() {
       expect(buildCalled, 1);
       await game.ready();
       expect(router.currentRoute.name, 'new');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 1);
       expect(onPopCalled, 0);
       expect(previousRoute!.name, 'start');
@@ -92,7 +92,7 @@ void main() {
             },
             build: (self) {
               buildFirstCalled++;
-              return PositionComponent();
+              return PositionedComponent();
             },
           ),
           'second': _CustomRoute(
@@ -105,7 +105,7 @@ void main() {
               previousRoute = prevRoute;
             },
             build: (self) {
-              return PositionComponent();
+              return PositionedComponent();
             },
           ),
         },
@@ -117,7 +117,7 @@ void main() {
       expect(buildFirstCalled, 1);
       await game.ready();
       expect(router.currentRoute.name, 'first');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 1);
       expect(onPopCalled, 0);
       expect(previousRoute!.name, 'start');
@@ -135,7 +135,7 @@ void main() {
       expect(buildFirstCalled, 1);
       await game.ready();
       expect(router.currentRoute.name, 'second');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 2);
       expect(onPopCalled, 1);
       expect(previousRoute!.name, 'start');
@@ -153,7 +153,7 @@ void main() {
       expect(buildFirstCalled, 1);
       await game.ready();
       expect(router.currentRoute.name, 'first');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 3);
       expect(onPopCalled, 2);
       expect(previousRoute!.name, 'start');
@@ -181,7 +181,7 @@ void main() {
             },
             build: (self) {
               buildFirstCalled++;
-              return PositionComponent();
+              return PositionedComponent();
             },
           ),
           'second': _CustomRoute(
@@ -195,7 +195,7 @@ void main() {
             },
             build: (self) {
               buildSecondCalled++;
-              return PositionComponent();
+              return PositionedComponent();
             },
           ),
         },
@@ -207,7 +207,7 @@ void main() {
       expect(buildFirstCalled, 1);
       await game.ready();
       expect(router.currentRoute.name, 'first');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 1);
       expect(onPopCalled, 0);
       expect(buildFirstCalled, 1);
@@ -226,7 +226,7 @@ void main() {
       expect(buildFirstCalled, 1);
       await game.ready();
       expect(router.currentRoute.name, 'second');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 2);
       expect(onPopCalled, 1);
       expect(buildSecondCalled, 1);
@@ -246,7 +246,7 @@ void main() {
       expect(buildFirstCalled, 2);
       await game.ready();
       expect(router.currentRoute.name, 'first');
-      expect(router.currentRoute.children.first, isA<PositionComponent>());
+      expect(router.currentRoute.children.first, isA<PositionedComponent>());
       expect(onPushCalled, 3);
       expect(onPopCalled, 2);
       expect(previousRoute!.name, 'start');
@@ -369,8 +369,7 @@ void main() {
                 size: Vector2.all(80),
               ),
               transparent: true,
-              onPush: (self, route) =>
-                  route!.addRenderEffect(PaintDecorator.grayscale()),
+              onPush: (self, route) => route!.addRenderEffect(PaintDecorator.grayscale()),
               onPop: (self, route) => route.removeRenderEffect(),
             ),
           },
@@ -401,8 +400,7 @@ void main() {
                 size: Vector2.all(80),
               ),
               transparent: true,
-              onPush: (self, route) =>
-                  route!.addRenderEffect(PaintDecorator.grayscale()),
+              onPush: (self, route) => route!.addRenderEffect(PaintDecorator.grayscale()),
               onPop: (self, route) => route.removeRenderEffect(),
             ),
           },
@@ -417,8 +415,8 @@ void main() {
     );
 
     testWithFlameGame('componentsAtPoint for opaque route', (game) async {
-      final initialComponent = PositionComponent(size: Vector2.all(100));
-      final newComponent = PositionComponent(size: Vector2.all(100));
+      final initialComponent = PositionedComponent(size: Vector2.all(100));
+      final newComponent = PositionedComponent(size: Vector2.all(100));
       final router = RouterComponent(
         initialRoute: 'initial',
         routes: {
@@ -447,8 +445,8 @@ void main() {
     testWithFlameGame(
       'componentsAtPoint for transparent route',
       (game) async {
-        final initialComponent = PositionComponent(size: Vector2.all(100));
-        final newComponent = PositionComponent(size: Vector2.all(100));
+        final initialComponent = PositionedComponent(size: Vector2.all(100));
+        final newComponent = PositionedComponent(size: Vector2.all(100));
         final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
@@ -476,7 +474,7 @@ void main() {
       },
     );
     testWithFlameGame('Route with loading', (game) async {
-      final loadingComponent = PositionComponent(size: Vector2.all(100));
+      final loadingComponent = PositionedComponent(size: Vector2.all(100));
       final pageComponent = _HeavyComponent()..size = Vector2.all(100);
       final router = RouterComponent(
         initialRoute: 'new',
@@ -551,7 +549,7 @@ class _TimerComponent extends Component {
   }
 }
 
-class _ColoredComponent extends PositionComponent {
+class _ColoredComponent extends PositionedComponent {
   _ColoredComponent({
     required Color color,
     super.position,
@@ -566,7 +564,7 @@ class _ColoredComponent extends PositionComponent {
   }
 }
 
-class _HeavyComponent extends PositionComponent {
+class _HeavyComponent extends PositionedComponent {
   Duration dummyTime = const Duration(seconds: 3);
   Completer<void> completer = Completer();
   @override

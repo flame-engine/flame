@@ -98,7 +98,7 @@ Flame also provides a default implementation called `KeyboardListenerComponent` 
 to handle keyboard events. Like any other component, it can be added as a child to a `FlameGame`
 or another `Component`:
 
-For example, imagine a `PositionComponent` which has methods to move on the X and Y axis,
+For example, imagine a `PositionedComponent` which has methods to move on the X and Y axis,
 then the following code could be used to bind those methods to key events:
 
 ```dart

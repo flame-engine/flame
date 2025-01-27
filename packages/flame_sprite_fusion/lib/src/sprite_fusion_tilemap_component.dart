@@ -9,7 +9,7 @@ import 'package:flame_sprite_fusion/flame_sprite_fusion.dart';
 import 'package:flutter/widgets.dart';
 
 /// A component that renders a tilemap from a sprite fusion.
-class SpriteFusionTilemapComponent extends PositionComponent {
+class SpriteFusionTilemapComponent extends PositionedComponent {
   /// The data of the tilemap.
   final SpriteFusionTilemapData tilemapData;
 
@@ -84,8 +84,7 @@ class SpriteFusionTilemapComponent extends PositionComponent {
     int? priority,
     ComponentKey? key,
   }) async {
-    final content = await (assetBundle ?? Flame.bundle)
-        .loadString('$tilemapPrefix$mapJsonFile');
+    final content = await (assetBundle ?? Flame.bundle).loadString('$tilemapPrefix$mapJsonFile');
 
     final json = jsonDecode(content) as Map<String, dynamic>;
 

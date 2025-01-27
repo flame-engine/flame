@@ -4,8 +4,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/painting.dart';
 
 class AdvancedButtonExample extends FlameGame {
-  static const String description =
-      '''This example shows how you can use a button with different states''';
+  static const String description = '''This example shows how you can use a button with different states''';
 
   @override
   Future<void> onLoad() async {
@@ -52,23 +51,17 @@ class ToggleButton extends ToggleButtonComponent {
       ),
     );
 
-    defaultSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 200, 0, 1));
+    defaultSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 200, 0, 1));
 
-    hoverSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 180, 0, 1));
+    hoverSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 180, 0, 1));
 
-    downSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 100, 0, 1));
+    downSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 100, 0, 1));
 
-    defaultSelectedSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 0, 200, 1));
+    defaultSelectedSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 0, 200, 1));
 
-    hoverAndSelectedSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 0, 180, 1));
+    hoverAndSelectedSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 0, 180, 1));
 
-    downAndSelectedSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 0, 100, 1));
+    downAndSelectedSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 0, 100, 1));
   }
 }
 
@@ -79,14 +72,11 @@ class DefaultButton extends AdvancedButtonComponent {
 
     defaultLabel = TextComponent(text: 'Default button');
 
-    defaultSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 200, 0, 1));
+    defaultSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 200, 0, 1));
 
-    hoverSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 180, 0, 1));
+    hoverSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 180, 0, 1));
 
-    downSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 100, 0, 1));
+    downSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 100, 0, 1));
   }
 }
 
@@ -97,15 +87,13 @@ class DisableButton extends AdvancedButtonComponent {
 
     disabledLabel = TextComponent(text: 'Disabled button');
 
-    defaultSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(0, 255, 0, 1));
+    defaultSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(0, 255, 0, 1));
 
-    disabledSkin = RoundedRectComponent()
-      ..setColor(const Color.fromRGBO(100, 100, 100, 1));
+    disabledSkin = RoundedRectComponent()..setColor(const Color.fromRGBO(100, 100, 100, 1));
   }
 }
 
-class RoundedRectComponent extends PositionComponent with HasPaint {
+class RoundedRectComponent extends PositionedComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     canvas.drawRRect(

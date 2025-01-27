@@ -7,10 +7,9 @@ import 'package:flame/src/rendering/decorator.dart';
 /// [Transform2DDecorator] applies a translation/rotation/scale transform to
 /// the canvas.
 ///
-/// This decorator is used internally by the [PositionComponent].
+/// This decorator is used internally by the [PositionedComponent].
 class Transform2DDecorator extends Decorator {
-  Transform2DDecorator([Transform2D? transform])
-      : transform2d = transform ?? Transform2D();
+  Transform2DDecorator([Transform2D? transform]) : transform2d = transform ?? Transform2D();
 
   final Transform2D transform2d;
 

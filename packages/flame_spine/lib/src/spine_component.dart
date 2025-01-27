@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:spine_flutter/spine_flutter.dart';
 
-class SpineComponent extends PositionComponent {
+class SpineComponent extends PositionedComponent {
   final BoundsProvider _boundsProvider;
   final SkeletonDrawable _drawable;
   late final Bounds _bounds;

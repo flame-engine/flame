@@ -7,9 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TapCallbacks', () {
-    testWithFlameGame(
-        'make sure TapCallback components can be added to a FlameGame',
-        (game) async {
+    testWithFlameGame('make sure TapCallback components can be added to a FlameGame', (game) async {
       await game.ensureAdd(_TapCallbacksComponent());
       await game.ready();
       expect(game.children.toList()[2], isA<MultiTapDispatcher>());
@@ -196,8 +194,7 @@ void main() {
           ..width = 10
           ..height = 10;
         final world = World();
-        final cameraComponent = CameraComponent(world: world)
-          ..viewfinder.anchor = Anchor.topLeft;
+        final cameraComponent = CameraComponent(world: world)..viewfinder.anchor = Anchor.topLeft;
 
         await game.ensureAddAll([world, cameraComponent]);
         await world.ensureAdd(component);
@@ -400,11 +397,11 @@ void main() {
       TapDownEvent? tapDownEvent;
       final game = FlameGame(
         children: [
-          PositionComponent(
+          PositionedComponent(
             size: Vector2.all(400),
             position: Vector2.all(10),
             children: [
-              PositionComponent(
+              PositionedComponent(
                 size: Vector2(300, 200),
                 scale: Vector2(1.5, 2),
                 position: Vector2.all(40),
@@ -441,7 +438,7 @@ void main() {
   );
 }
 
-class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
+class _TapWithCallbacksComponent extends PositionedComponent with TapCallbacks {
   _TapWithCallbacksComponent({
     required Vector2 super.position,
     required Vector2 super.size,
@@ -473,7 +470,7 @@ class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
   void onTapCancel(TapCancelEvent event) => _onTapCancel?.call(event);
 }
 
-class _SimpleTapCallbacksComponent extends PositionComponent with TapCallbacks {
+class _SimpleTapCallbacksComponent extends PositionedComponent with TapCallbacks {
   _SimpleTapCallbacksComponent({super.size});
 }
 
@@ -508,7 +505,6 @@ mixin _TapCounter on TapCallbacks {
   }
 }
 
-class _TapCallbacksComponent extends PositionComponent
-    with TapCallbacks, _TapCounter {}
+class _TapCallbacksComponent extends PositionedComponent with TapCallbacks, _TapCounter {}
 
 class _TapCallbacksGame extends FlameGame with TapCallbacks, _TapCounter {}

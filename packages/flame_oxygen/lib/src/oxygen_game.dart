@@ -28,7 +28,7 @@ abstract class OxygenGame extends Game {
     bool flipY = false,
   }) {
     final entity = world.entityManager.createEntity(name)
-      ..add<PositionComponent, Vector2>(position)
+      ..add<PositionedComponent, Vector2>(position)
       ..add<SizeComponent, Vector2>(size)
       ..add<AnchorComponent, Anchor>(anchor)
       ..add<AngleComponent, double>(angle)
@@ -41,8 +41,8 @@ abstract class OxygenGame extends Game {
   Future<void> onLoad() async {
     // Registering default components.
     world.registerComponent<SizeComponent, Vector2>(SizeComponent.new);
-    world.registerComponent<PositionComponent, Vector2>(
-      PositionComponent.new,
+    world.registerComponent<PositionedComponent, Vector2>(
+      PositionedComponent.new,
     );
     world.registerComponent<AngleComponent, double>(AngleComponent.new);
     world.registerComponent<AnchorComponent, Anchor>(AnchorComponent.new);

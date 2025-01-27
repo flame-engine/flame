@@ -33,7 +33,7 @@ class CollisionTypeNotifier with ChangeNotifier {
 /// system.
 /// The default implementation used with FCS is [CollisionCallbacks].
 /// The generic type [T] here is the type of the object that has the hitboxes
-/// are attached to, for example it is [PositionComponent] in the
+/// are attached to, for example it is [PositionedComponent] in the
 /// [StandardCollisionDetection].
 mixin GenericCollisionCallbacks<T> {
   Set<T>? _activeCollisions;
@@ -81,7 +81,7 @@ mixin GenericCollisionCallbacks<T> {
   /// intended to be used as pure type checker.
   /// Call super.onComponentTypeCheck to get the parent's result of the
   /// type check if needed. In other causes this call is redundant in game code.
-  bool onComponentTypeCheck(PositionComponent other);
+  bool onComponentTypeCheck(PositionedComponent other);
 
   /// Assign your own [CollisionCallback] if you want a callback when this
   /// shape collides with another [T].
@@ -96,12 +96,11 @@ mixin GenericCollisionCallbacks<T> {
   CollisionEndCallback<T>? onCollisionEndCallback;
 }
 
-mixin CollisionCallbacks on Component
-    implements GenericCollisionCallbacks<PositionComponent> {
+mixin CollisionCallbacks on Component implements GenericCollisionCallbacks<PositionedComponent> {
   @override
-  Set<PositionComponent>? _activeCollisions;
+  Set<PositionedComponent>? _activeCollisions;
   @override
-  Set<PositionComponent> get activeCollisions => _activeCollisions ??= {};
+  Set<PositionedComponent> get activeCollisions => _activeCollisions ??= {};
 
   @override
   bool get isColliding {
@@ -109,13 +108,13 @@ mixin CollisionCallbacks on Component
   }
 
   @override
-  bool collidingWith(PositionComponent other) {
+  bool collidingWith(PositionedComponent other) {
     return _activeCollisions != null && activeCollisions.contains(other);
   }
 
   @override
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
     onCollisionCallback?.call(intersectionPoints, other);
   }
 
@@ -123,7 +122,7 @@ mixin CollisionCallbacks on Component
   @mustCallSuper
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
@@ -131,16 +130,16 @@ mixin CollisionCallbacks on Component
 
   @override
   @mustCallSuper
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     activeCollisions.remove(other);
     onCollisionEndCallback?.call(other);
   }
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(PositionedComponent other) {
     final myParent = parent;
     final otherParent = other.parent;
-    if (myParent is CollisionCallbacks && otherParent is PositionComponent) {
+    if (myParent is CollisionCallbacks && otherParent is PositionedComponent) {
       return myParent.onComponentTypeCheck(otherParent);
     }
 
@@ -148,19 +147,19 @@ mixin CollisionCallbacks on Component
   }
 
   /// Assign your own [CollisionCallback] if you want a callback when this
-  /// shape collides with another [PositionComponent].
+  /// shape collides with another [PositionedComponent].
   @override
-  CollisionCallback<PositionComponent>? onCollisionCallback;
+  CollisionCallback<PositionedComponent>? onCollisionCallback;
 
   /// Assign your own [CollisionCallback] if you want a callback when this
-  /// shape starts to collide with another [PositionComponent].
+  /// shape starts to collide with another [PositionedComponent].
   @override
-  CollisionCallback<PositionComponent>? onCollisionStartCallback;
+  CollisionCallback<PositionedComponent>? onCollisionStartCallback;
 
   /// Assign your own [CollisionEndCallback] if you want a callback when this
-  /// shape stops colliding with another [PositionComponent].
+  /// shape stops colliding with another [PositionedComponent].
   @override
-  CollisionEndCallback<PositionComponent>? onCollisionEndCallback;
+  CollisionEndCallback<PositionedComponent>? onCollisionEndCallback;
 }
 
 /// Can be used used to implement an `onCollisionCallback` or an

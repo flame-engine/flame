@@ -8,7 +8,7 @@ import 'package:vector_math/vector_math_64.dart';
 /// This behavior will make the [owner] follow the [target].
 ///
 /// Here, both the owner and the target are [PositionProvider]s, which could be
-/// either [PositionComponent]s, or camera's [Viewfinder]/[Viewport], or any
+/// either [PositionedComponent]s, or camera's [Viewfinder]/[Viewport], or any
 /// other objects, including custom implementations.
 ///
 /// The [maxSpeed] parameter controls the maximum speed with which the [owner]

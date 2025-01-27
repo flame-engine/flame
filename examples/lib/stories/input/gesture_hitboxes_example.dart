@@ -10,7 +10,7 @@ enum Shapes { circle, rectangle, polygon }
 
 class GestureHitboxesExample extends FlameGame {
   static const description = '''
-    Tap to create a PositionComponent with a randomly shaped hitbox.
+    Tap to create a PositionedComponent with a randomly shaped hitbox.
     You can then hover over to shapes to see that they receive the hover events
     only when the cursor is within the shape. If you tap/click within the shape
     it is removed.
@@ -22,10 +22,9 @@ class GestureHitboxesExample extends FlameGame {
 class _GestureHitboxesWorld extends World with TapCallbacks {
   final _rng = Random();
 
-  PositionComponent randomShape(Vector2 position) {
+  PositionedComponent randomShape(Vector2 position) {
     final shapeType = Shapes.values[_rng.nextInt(Shapes.values.length)];
-    final shapeSize =
-        Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
+    final shapeSize = Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
     final hitbox = switch (shapeType) {
       Shapes.circle => CircleHitbox(),
@@ -54,8 +53,7 @@ class _GestureHitboxesWorld extends World with TapCallbacks {
   }
 }
 
-class MyShapeComponent extends PositionComponent
-    with TapCallbacks, HoverCallbacks, GestureHitboxes {
+class MyShapeComponent extends PositionedComponent with TapCallbacks, HoverCallbacks, GestureHitboxes {
   final ShapeHitbox hitbox;
   late final Color baseColor;
   late final Color hoverColor;

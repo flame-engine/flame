@@ -50,7 +50,7 @@ currently placed there.
 Having this in mind, let's start implementing the `StockPile` component:
 
 ```dart
-class StockPile extends PositionComponent {
+class StockPile extends PositionedComponent {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile. The first card in the
@@ -100,7 +100,7 @@ Let's start implementing the `WastePile` class same way as we did with the `Stoc
 now the cards are expected to be face up:
 
 ```dart
-class WastePile extends PositionComponent {
+class WastePile extends PositionedComponent {
   WastePile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
@@ -152,7 +152,7 @@ Adding tap functionality to the components in Flame is quite simple: we just add
 `TapCallbacks` to the component that we want to be tappable:
 
 ```dart
-class StockPile extends PositionComponent with TapCallbacks { ... }
+class StockPile extends PositionedComponent with TapCallbacks { ... }
 ```
 
 Oh, and we also need to say what we want to happen when the tap occurs. Here we want the top 3 cards
@@ -297,7 +297,7 @@ has to be some visual to show where the foundation is when there are no cards th
 First, let's implement the card-holding logic:
 
 ```dart
-class FoundationPile extends PositionComponent {
+class FoundationPile extends PositionedComponent {
   FoundationPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
@@ -316,7 +316,7 @@ suit, in grey color. Which means we'd need to update the definition of the class
 suit information:
 
 ```dart
-class FoundationPile extends PositionComponent {
+class FoundationPile extends PositionedComponent {
   FoundationPile(int intSuit, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);
@@ -373,7 +373,7 @@ a King can be placed when it is empty. I believe it could be just an empty frame
 be sufficient:
 
 ```dart
-class TableauPile extends PositionComponent {
+class TableauPile extends PositionedComponent {
   TableauPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final _borderPaint = Paint()
@@ -481,7 +481,7 @@ So, we want to be able to drag the cards on the screen. This is even simpler tha
 `StockPile` tappable: just head over into the `Card` class and add the `DragCallbacks` mixin:
 
 ```dart
-class Card extends PositionComponent with DragCallbacks {
+class Card extends PositionedComponent with DragCallbacks {
 }
 ```
 
@@ -541,25 +541,25 @@ We will expand this class further later, but for now let's make sure that each o
 interface:
 
 ```dart
-class StockPile extends PositionComponent with TapCallbacks implements Pile {
+class StockPile extends PositionedComponent with TapCallbacks implements Pile {
   ...
   @override
   bool canMoveCard(Card card) => false;
 }
 
-class WastePile extends PositionComponent implements Pile {
+class WastePile extends PositionedComponent implements Pile {
   ...
   @override
   bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
 }
 
-class FoundationPile extends PositionComponent implements Pile {
+class FoundationPile extends PositionedComponent implements Pile {
   ...
   @override
   bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;
 }
 
-class TableauPile extends PositionComponent implements Pile {
+class TableauPile extends PositionedComponent implements Pile {
   ...
   @override
   bool canMoveCard(Card card) => _cards.isNotEmpty && card == _cards.last;

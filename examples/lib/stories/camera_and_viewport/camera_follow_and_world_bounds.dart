@@ -7,8 +7,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/services.dart';
 
-class CameraFollowAndWorldBoundsExample extends FlameGame
-    with HasKeyboardHandlerComponents {
+class CameraFollowAndWorldBoundsExample extends FlameGame with HasKeyboardHandlerComponents {
   static const description = '''
     This example demonstrates camera following the player, but also obeying the
     world bounds (which are set up to leave a small margin around the visible
@@ -30,7 +29,7 @@ class CameraFollowAndWorldBoundsExample extends FlameGame
   }
 }
 
-class Ground extends PositionComponent {
+class Ground extends PositionedComponent {
   Ground()
       : pebbles = [],
         super(size: Vector2(1000, 30)) {
@@ -65,7 +64,7 @@ class Ground extends PositionComponent {
   }
 }
 
-class Player extends PositionComponent with KeyboardHandler {
+class Player extends PositionedComponent with KeyboardHandler {
   Player()
       : body = Path()
           ..moveTo(10, 0)
@@ -144,12 +143,9 @@ class Player extends PositionComponent with KeyboardHandler {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is KeyDownEvent;
-    final keyLeft = (event.logicalKey == LogicalKeyboardKey.arrowLeft) ||
-        (event.logicalKey == LogicalKeyboardKey.keyA);
-    final keyRight = (event.logicalKey == LogicalKeyboardKey.arrowRight) ||
-        (event.logicalKey == LogicalKeyboardKey.keyD);
-    final keyUp = (event.logicalKey == LogicalKeyboardKey.arrowUp) ||
-        (event.logicalKey == LogicalKeyboardKey.keyW);
+    final keyLeft = (event.logicalKey == LogicalKeyboardKey.arrowLeft) || (event.logicalKey == LogicalKeyboardKey.keyA);
+    final keyRight = (event.logicalKey == LogicalKeyboardKey.arrowRight) || (event.logicalKey == LogicalKeyboardKey.keyD);
+    final keyUp = (event.logicalKey == LogicalKeyboardKey.arrowUp) || (event.logicalKey == LogicalKeyboardKey.keyW);
 
     if (isKeyDown) {
       if (keyLeft) {
@@ -161,10 +157,8 @@ class Player extends PositionComponent with KeyboardHandler {
         nJumpsLeft -= 1;
       }
     } else {
-      final hasLeft = keysPressed.contains(LogicalKeyboardKey.arrowLeft) ||
-          keysPressed.contains(LogicalKeyboardKey.keyA);
-      final hasRight = keysPressed.contains(LogicalKeyboardKey.arrowRight) ||
-          keysPressed.contains(LogicalKeyboardKey.keyD);
+      final hasLeft = keysPressed.contains(LogicalKeyboardKey.arrowLeft) || keysPressed.contains(LogicalKeyboardKey.keyA);
+      final hasRight = keysPressed.contains(LogicalKeyboardKey.arrowRight) || keysPressed.contains(LogicalKeyboardKey.keyD);
       if (hasLeft && hasRight) {
         // Leave the current speed unchanged
       } else if (hasLeft) {

@@ -102,7 +102,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   }
 }
 
-class _Character extends PositionComponent {
+class _Character extends PositionedComponent {
   _Character({required this.maxDistance, super.position, super.anchor});
 
   final double maxDistance;

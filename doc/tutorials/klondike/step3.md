@@ -144,10 +144,10 @@ class Rank {
 
 Now that we have the `Rank` and the `Suit` classes, we can finally start
 implementing the **Card** component. Create file `components/card.dart` and
-declare the `Card` class extending from the `PositionComponent`:
+declare the `Card` class extending from the `PositionedComponent`:
 
 ```dart
-class Card extends PositionComponent {}
+class Card extends PositionedComponent {}
 ```
 
 The constructor of the class will take integer rank and suit, and make the
@@ -232,7 +232,7 @@ into the `Card` class:
 
 Since rendering the back of a card is simpler, we will do it first.
 
-The `render()` method of a `PositionComponent` operates in a local coordinate
+The `render()` method of a `PositionedComponent` operates in a local coordinate
 system, which means we don't need to worry about where the card is located on
 the screen. This local coordinate system has the origin at the top-left corner
 of the component, and extends to the right by `width` and down by `height`

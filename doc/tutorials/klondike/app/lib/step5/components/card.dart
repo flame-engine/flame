@@ -15,8 +15,7 @@ import 'foundation_pile.dart';
 import 'stock_pile.dart';
 import 'tableau_pile.dart';
 
-class Card extends PositionComponent
-    with DragCallbacks, TapCallbacks, HasWorldReference<KlondikeWorld> {
+class Card extends PositionedComponent with DragCallbacks, TapCallbacks, HasWorldReference<KlondikeWorld> {
   Card(int intRank, int intSuit, {this.isBaseCard = false})
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
@@ -74,8 +73,7 @@ class Card extends PositionComponent
     }
   }
 
-  static final Paint backBackgroundPaint = Paint()
-    ..color = const Color(0xff380c02);
+  static final Paint backBackgroundPaint = Paint()..color = const Color(0xff380c02);
   static final Paint backBorderPaint1 = Paint()
     ..color = const Color(0xffdbaf58)
     ..style = PaintingStyle.stroke
@@ -102,8 +100,7 @@ class Card extends PositionComponent
     canvas.drawRRect(cardRRect, backBorderPaint1);
   }
 
-  static final Paint frontBackgroundPaint = Paint()
-    ..color = const Color(0xff000000);
+  static final Paint frontBackgroundPaint = Paint()..color = const Color(0xff000000);
   static final Paint redBorderPaint = Paint()
     ..color = const Color(0xffece8a3)
     ..style = PaintingStyle.stroke
@@ -120,12 +117,9 @@ class Card extends PositionComponent
   static final Sprite redJack = klondikeSprite(81, 565, 562, 488);
   static final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
   static final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
-  static final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
-    ..paint = blueFilter;
-  static final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
-    ..paint = blueFilter;
-  static final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
-    ..paint = blueFilter;
+  static final Sprite blackJack = klondikeSprite(81, 565, 562, 488)..paint = blueFilter;
+  static final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)..paint = blueFilter;
+  static final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)..paint = blueFilter;
 
   void _renderFront(Canvas canvas) {
     canvas.drawRRect(cardRRect, frontBackgroundPaint);
@@ -294,8 +288,7 @@ class Card extends PositionComponent
     _isDragging = false;
 
     // If short drag, return card to Pile and treat it as having been tapped.
-    final shortDrag =
-        (position - _whereCardStarted).length < KlondikeGame.dragTolerance;
+    final shortDrag = (position - _whereCardStarted).length < KlondikeGame.dragTolerance;
     if (shortDrag && attachedCards.isEmpty) {
       doMove(
         _whereCardStarted,
@@ -309,10 +302,7 @@ class Card extends PositionComponent
     }
 
     // Find out what is under the center-point of this card when it is dropped.
-    final dropPiles = parent!
-        .componentsAtPoint(position + size / 2)
-        .whereType<Pile>()
-        .toList();
+    final dropPiles = parent!.componentsAtPoint(position + size / 2).whereType<Pile>().toList();
     if (dropPiles.isNotEmpty) {
       if (dropPiles.first.canAcceptCard(this)) {
         // Found a Pile: move card(s) the rest of the way onto it.

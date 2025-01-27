@@ -10,8 +10,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class StepEngineExample extends FlameGame
-    with HasCollisionDetection, HasKeyboardHandlerComponents {
+class StepEngineExample extends FlameGame with HasCollisionDetection, HasKeyboardHandlerComponents {
   static const description = '''
     This example demonstrates how the game can be advanced frame by frame using
     stepEngine method.
@@ -44,7 +43,7 @@ class StepEngineExample extends FlameGame
     final world = World(
       children: [
         ..._createCircularDetectors(),
-        PositionComponent(children: [car, _rotateEffect]),
+        PositionedComponent(children: [car, _rotateEffect]),
       ],
     );
 
@@ -105,8 +104,7 @@ class StepEngineExample extends FlameGame
     ),
   );
 
-  String get _text =>
-      'P: Pause/Unpause\nS: Step x$_stepTimeMultiplier\nUp: Increase step\nDown: Decrease step';
+  String get _text => 'P: Pause/Unpause\nS: Step x$_stepTimeMultiplier\nUp: Increase step\nDown: Decrease step';
 
   late final _controlsText = TextBoxComponent(
     text: _text,
@@ -133,14 +131,14 @@ class _DetectorComponents extends CircleComponent with CollisionCallbacks {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     paint.color = BasicPalette.black.color;
     super.onCollisionStart(intersectionPoints, other);
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     paint.color = BasicPalette.white.color;
     super.onCollisionEnd(other);
   }

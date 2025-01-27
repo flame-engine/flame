@@ -12,8 +12,7 @@ import 'package:flutter/services.dart';
 
 const tileSize = 8.0;
 
-class QuadTreeExample extends FlameGame
-    with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollDetector {
+class QuadTreeExample extends FlameGame with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollDetector {
   QuadTreeExample();
 
   static const description = '''
@@ -199,8 +198,7 @@ Press T button to toggle player to collide with other objects.
 
 //#region Player
 
-class Player extends SpriteComponent
-    with CollisionCallbacks, HasGameReference<QuadTreeExample> {
+class Player extends SpriteComponent with CollisionCallbacks, HasGameReference<QuadTreeExample> {
   Player({
     required super.position,
     required super.size,
@@ -227,10 +225,9 @@ class Player extends SpriteComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
-    final myCenter =
-        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
+    final myCenter = Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
     if (other is GameCollidable) {
       final diffX = myCenter.x - other.cachedCenter.x;
       if (diffX < 0) {
@@ -252,7 +249,7 @@ class Player extends SpriteComponent
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     canMoveLeft = true;
     canMoveRight = true;
     canMoveTop = true;
@@ -261,7 +258,7 @@ class Player extends SpriteComponent
   }
 }
 
-class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
+class Bullet extends PositionedComponent with CollisionCallbacks, HasPaint {
   Bullet({required super.position, required this.displacement}) {
     paint.color = Colors.deepOrange;
     priority = 10;
@@ -284,7 +281,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
   }
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
+  bool onComponentTypeCheck(PositionedComponent other) {
     if (other is Player || other is Water) {
       return false;
     }
@@ -294,7 +291,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     if (other is Brick) {
       removeFromParent();
@@ -307,8 +304,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 
 //#region Environment
 
-class Brick extends SpriteComponent
-    with CollisionCallbacks, GameCollidable, UpdateOnce {
+class Brick extends SpriteComponent with CollisionCallbacks, GameCollidable, UpdateOnce {
   Brick({
     required super.position,
     required super.size,
@@ -329,8 +325,7 @@ class Brick extends SpriteComponent
   }
 }
 
-class Water extends SpriteComponent
-    with CollisionCallbacks, GameCollidable, UpdateOnce {
+class Water extends SpriteComponent with CollisionCallbacks, GameCollidable, UpdateOnce {
   Water({
     required super.position,
     required super.size,
@@ -342,14 +337,13 @@ class Water extends SpriteComponent
   }
 }
 
-mixin GameCollidable on PositionComponent {
+mixin GameCollidable on PositionedComponent {
   void initCollision() {
     add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   void initCenter() {
-    cachedCenter =
-        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
+    cachedCenter = Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
   }
 
   late final Vector2 cachedCenter;
@@ -359,7 +353,7 @@ mixin GameCollidable on PositionComponent {
 
 //#region Utils
 
-mixin UpdateOnce on PositionComponent {
+mixin UpdateOnce on PositionedComponent {
   bool updateOnce = true;
 
   @override
@@ -374,7 +368,7 @@ mixin UpdateOnce on PositionComponent {
 class StaticLayer extends PreRenderedLayer {
   StaticLayer();
 
-  List<PositionComponent> components = [];
+  List<PositionedComponent> components = [];
 
   @override
   void drawLayer() {
@@ -388,7 +382,7 @@ class StaticLayer extends PreRenderedLayer {
   }
 }
 
-class LayerComponent extends PositionComponent {
+class LayerComponent extends PositionedComponent {
   LayerComponent(this.layer);
 
   StaticLayer layer;
@@ -399,7 +393,7 @@ class LayerComponent extends PositionComponent {
   }
 }
 
-class QuadTreeDebugComponent extends PositionComponent with HasPaint {
+class QuadTreeDebugComponent extends PositionedComponent with HasPaint {
   QuadTreeDebugComponent(QuadTreeCollisionDetection cd) {
     dbg = QuadTreeNodeDebugInfo.init(cd);
     paint.color = Colors.blue;

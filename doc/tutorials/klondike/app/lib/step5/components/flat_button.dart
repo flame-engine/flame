@@ -30,7 +30,7 @@ class FlatButton extends ButtonComponent {
         );
 }
 
-class ButtonBackground extends PositionComponent with HasAncestor<FlatButton> {
+class ButtonBackground extends PositionedComponent with HasAncestor<FlatButton> {
   final _paint = Paint()..style = PaintingStyle.stroke;
 
   late double cornerRadius;

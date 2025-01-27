@@ -77,7 +77,7 @@ class _RotateEffectWorld extends World {
   }
 }
 
-class Compass extends PositionComponent {
+class Compass extends PositionedComponent {
   Compass({required double size})
       : _radius = size / 2,
         super(
@@ -85,8 +85,8 @@ class Compass extends PositionComponent {
           anchor: Anchor.center,
         );
 
-  late PositionComponent arrow;
-  late PositionComponent rim;
+  late PositionedComponent arrow;
+  late PositionedComponent rim;
 
   final double _radius;
   final _bgPaint = Paint()..color = const Color(0xffeacb31);
@@ -113,10 +113,8 @@ class Compass extends PositionComponent {
       );
     }
 
-    arrow = CompassArrow(width: _radius * 0.3, radius: _radius * 0.7)
-      ..position = Vector2(_radius, _radius);
-    rim = CompassRim(radius: _radius, width: _radius * 0.1)
-      ..position = Vector2(_radius, _radius);
+    arrow = CompassArrow(width: _radius * 0.3, radius: _radius * 0.7)..position = Vector2(_radius, _radius);
+    rim = CompassRim(radius: _radius, width: _radius * 0.1)..position = Vector2(_radius, _radius);
     add(arrow);
     add(rim);
   }
@@ -128,7 +126,7 @@ class Compass extends PositionComponent {
   }
 }
 
-class CompassArrow extends PositionComponent {
+class CompassArrow extends PositionedComponent {
   CompassArrow({required double width, required double radius})
       : assert(width <= radius, 'The width is larger than the radius'),
         _radius = radius,
@@ -163,7 +161,7 @@ class CompassArrow extends PositionComponent {
   }
 }
 
-class CompassRim extends PositionComponent {
+class CompassRim extends PositionedComponent {
   CompassRim({required double radius, required double width})
       : assert(radius > width, 'The width is larger than the radius'),
         _radius = radius,

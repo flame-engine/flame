@@ -12,14 +12,13 @@ void main() {
     testWithFlameGame('relative path', (game) async {
       const x0 = 32.5;
       const y0 = 14.88;
-      final component = PositionComponent(position: Vector2(x0, y0));
+      final component = PositionedComponent(position: Vector2(x0, y0));
       game.add(component);
       game.update(0);
 
       component.add(
         MoveAlongPathEffect(
-          Path()
-            ..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
+          Path()..addOval(Rect.fromCircle(center: const Offset(6, 10), radius: 50)),
           LinearEffectController(1),
         ),
       );
@@ -36,7 +35,7 @@ void main() {
     });
 
     testWithFlameGame('absolute path', (game) async {
-      final component = PositionComponent(position: Vector2(17, -5));
+      final component = PositionedComponent(position: Vector2(17, -5));
       game.add(component);
       game.update(0);
 
@@ -58,7 +57,7 @@ void main() {
     });
 
     testWithFlameGame('absolute oriented path', (game) async {
-      final component = PositionComponent(
+      final component = PositionedComponent(
         position: Vector2(17, -5),
         angle: -30.5,
       );
@@ -103,7 +102,7 @@ void main() {
     });
 
     testWithFlameGame('absolute oriented path with nativeAngle', (game) async {
-      final component = PositionComponent(
+      final component = PositionedComponent(
         position: Vector2(17, -5),
         angle: -30.5,
         nativeAngle: 20.5,
@@ -172,7 +171,7 @@ void main() {
     );
 
     testWithFlameGame('non-absolute oriented path', (game) async {
-      final component = PositionComponent(
+      final component = PositionedComponent(
         position: Vector2.zero(),
         angle: -30.5,
       );
@@ -215,9 +214,8 @@ void main() {
       }
     });
 
-    testWithFlameGame('non-absolute oriented path with nativeAngle',
-        (game) async {
-      final component = PositionComponent(
+    testWithFlameGame('non-absolute oriented path with nativeAngle', (game) async {
+      final component = PositionedComponent(
         position: Vector2.zero(),
         angle: -30.5,
         nativeAngle: 20.5,

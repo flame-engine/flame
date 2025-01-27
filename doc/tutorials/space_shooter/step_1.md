@@ -8,7 +8,7 @@ This first part will introduce you to:
 
 - `FlameGame`: The base class for games using the Flame Component System.
 - `GameWidget`: The `Widget` that will insert your game into the Flutter widget tree.
-- `PositionComponent`: One of the most basic Flame components holds both a position and
+- `PositionedComponent`: One of the most basic Flame components holds both a position and
 dimension in the game space.
 
 Let's start by creating our game class and the `GameWidget` that will run it.
@@ -29,7 +29,7 @@ That is it! If you run this, you will only see an empty black screen for now, fr
 start implementing our game.
 
 Next, let's create our player component. To do so, we will create a new class based on Flame's
-`PositionComponent`. This component is the base for all components that have a position and a size
+`PositionedComponent`. This component is the base for all components that have a position and a size
 on the game screen. For now, our component will only render a white square; it could be
 implemented as follows:
 
@@ -37,7 +37,7 @@ implemented as follows:
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-class Player extends PositionComponent {
+class Player extends PositionedComponent {
   static final _paint = Paint()..color = Colors.white;
 
   @override

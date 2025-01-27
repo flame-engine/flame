@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class ColonistsGame extends FlameGame with KeyboardEvents {
-  final PositionComponent _cameraPosition = PositionComponent();
+  final PositionedComponent _cameraPosition = PositionedComponent();
   late final GameMap _currentMap;
   ColonistsGame()
       : super(
@@ -76,14 +76,12 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
       _rightForce = howMuch;
     } else if (event.logicalKey == LogicalKeyboardKey.keyA) {
       _leftForce = howMuch;
-    } else if (event.logicalKey == LogicalKeyboardKey.numpadAdd &&
-        event is KeyDownEvent) {
+    } else if (event.logicalKey == LogicalKeyboardKey.numpadAdd && event is KeyDownEvent) {
       camera.viewfinder.zoom = min(
         camera.viewfinder.zoom + 0.1,
         5,
       );
-    } else if (event.logicalKey == LogicalKeyboardKey.numpadSubtract &&
-        event is KeyDownEvent) {
+    } else if (event.logicalKey == LogicalKeyboardKey.numpadSubtract && event is KeyDownEvent) {
       camera.viewfinder.zoom = max(
         camera.viewfinder.zoom - 0.1,
         0.1,

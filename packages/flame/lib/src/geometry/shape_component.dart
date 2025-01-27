@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 /// and angle. It can also have an anchor if it shouldn't be rotated around its
 /// center.
 /// A point can be determined to be within of outside of a shape.
-abstract class ShapeComponent extends PositionComponent with HasPaint {
+abstract class ShapeComponent extends PositionedComponent with HasPaint {
   ShapeComponent({
     super.position,
     super.size,

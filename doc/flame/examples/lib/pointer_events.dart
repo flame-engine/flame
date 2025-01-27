@@ -19,7 +19,7 @@ class PointerEventsGame extends FlameGame with TapCallbacks {
   }
 }
 
-class HoverTarget extends PositionComponent with HoverCallbacks {
+class HoverTarget extends PositionedComponent with HoverCallbacks {
   static final Random _random = Random();
 
   HoverTarget(Vector2 position)
@@ -29,10 +29,7 @@ class HoverTarget extends PositionComponent with HoverCallbacks {
           anchor: Anchor.center,
         );
 
-  final _paint = Paint()
-    ..color = HSLColor.fromAHSL(1, _random.nextDouble() * 360, 1, 0.8)
-        .toColor()
-        .withValues(alpha: 0.5);
+  final _paint = Paint()..color = HSLColor.fromAHSL(1, _random.nextDouble() * 360, 1, 0.8).toColor().withValues(alpha: 0.5);
 
   @override
   void render(Canvas canvas) {

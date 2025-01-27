@@ -7,9 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('PointerMoveCallbacks', () {
-    testWithFlameGame(
-        'make sure PointerMoveCallbacks components can be added to a FlameGame',
-        (game) async {
+    testWithFlameGame('make sure PointerMoveCallbacks components can be added to a FlameGame', (game) async {
       await game.ensureAdd(_PointerMoveCallbacksComponent());
       await game.ready();
 
@@ -101,13 +99,11 @@ mixin _PointerMoveInspector on PointerMoveCallbacks {
   }
 }
 
-class _PointerMoveCallbacksComponent extends PositionComponent
-    with PointerMoveCallbacks, _PointerMoveInspector {
+class _PointerMoveCallbacksComponent extends PositionedComponent with PointerMoveCallbacks, _PointerMoveInspector {
   _PointerMoveCallbacksComponent({
     super.position,
     super.size,
   });
 }
 
-class _PointerMoveCallbacksGame extends FlameGame
-    with PointerMoveCallbacks, _PointerMoveInspector {}
+class _PointerMoveCallbacksGame extends FlameGame with PointerMoveCallbacks, _PointerMoveInspector {}

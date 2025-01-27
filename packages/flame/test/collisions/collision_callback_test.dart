@@ -49,8 +49,7 @@ void main() {
         expect(blockA.endCounter, 1);
         expect(blockB.endCounter, 1);
       },
-      'collidable callbacks are called when removing a Collidable':
-          (game) async {
+      'collidable callbacks are called when removing a Collidable': (game) async {
         final blockA = TestBlock(
           Vector2.zero(),
           Vector2.all(10),
@@ -141,9 +140,8 @@ void main() {
         expect(block.onCollisionCounter, 1);
         expect(block.endCounter, 0);
       },
-      'hitboxParent is PositionComponent but not CollisionCallbacks':
-          (game) async {
-        final player = PositionComponent(
+      'hitboxParent is PositionedComponent but not CollisionCallbacks': (game) async {
+        final player = PositionedComponent(
           position: Vector2.all(0),
           size: Vector2.all(10),
           children: [
@@ -195,8 +193,7 @@ void main() {
       expect(hitboxA.endCounter, 1);
       expect(hitboxB.endCounter, 1);
     },
-    'hitbox end callbacks are called when hitbox is moved away fast':
-        (game) async {
+    'hitbox end callbacks are called when hitbox is moved away fast': (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -222,8 +219,7 @@ void main() {
       expect(hitboxA.endCounter, 1);
       expect(hitboxB.endCounter, 1);
     },
-    'onCollisionEnd is only called when there previously was a collision':
-        (game) async {
+    'onCollisionEnd is only called when there previously was a collision': (game) async {
       final blockA = TestBlock(
         Vector2.zero(),
         Vector2.all(10),
@@ -297,8 +293,7 @@ void main() {
       expect(blockA.endCounter, 1);
       expect(blockB.endCounter, 1);
     },
-    'callbacks return the parent of the composite hitbox on collisions':
-        (game) async {
+    'callbacks return the parent of the composite hitbox on collisions': (game) async {
       final size = Vector2.all(10);
       final hitboxA = TestHitbox();
       final compositeA = CompositeTestHitbox(size: size, children: [hitboxA]);
@@ -348,8 +343,7 @@ void main() {
       expect(blockA.collidingWith(blockB), isFalse);
       expect(blockB.collidingWith(blockA), isFalse);
     },
-    'end and start callbacks are only called once for hitboxes sharing a side':
-        (game) async {
+    'end and start callbacks are only called once for hitboxes sharing a side': (game) async {
       final blockA = TestBlock(
         Vector2.all(10),
         Vector2.all(10),
@@ -393,8 +387,7 @@ void main() {
       expect(blockA.endCounter, 0);
       expect(blockB.endCounter, 0);
 
-      blockB.position =
-          blockA.positionOfAnchor(Anchor.topRight) + Vector2(1, 0);
+      blockB.position = blockA.positionOfAnchor(Anchor.topRight) + Vector2(1, 0);
       game.update(0);
       expect(blockA.startCounter, 1);
       expect(blockB.startCounter, 1);
@@ -405,16 +398,14 @@ void main() {
     },
     'component collision callbacks are not called with hitbox '
         'triggersParentCollision option': (game) async {
-      final utilityHitboxA = TestHitbox('hitboxA')
-        ..triggersParentCollision = false;
+      final utilityHitboxA = TestHitbox('hitboxA')..triggersParentCollision = false;
       final blockA = TestBlock(
         Vector2.all(10),
         Vector2.all(10),
       );
       blockA.add(utilityHitboxA);
 
-      final utilityHitboxB = TestHitbox('hitboxB')
-        ..triggersParentCollision = false;
+      final utilityHitboxB = TestHitbox('hitboxB')..triggersParentCollision = false;
       final blockB = TestBlock(
         Vector2.all(15),
         Vector2.all(10),
@@ -455,16 +446,15 @@ void main() {
     // Reproduced #1478
     'collision callbacks with many hitboxes added': (game) async {
       const side = 10.0;
-      final player = TestBlock(Vector2.zero(), Vector2.all(side))
-        ..anchor = Anchor.center;
+      final player = TestBlock(Vector2.zero(), Vector2.all(side))..anchor = Anchor.center;
       await game.ensureAdd(player);
 
-      final blocks = <PositionComponent>[];
+      final blocks = <PositionedComponent>[];
       // Change 0 or 100 and there will be different blocks breaking
       const amount = 100;
       for (var id = 0; id < amount; id++) {
         final pos = 2 * id * side;
-        final component = PositionComponent(
+        final component = PositionedComponent(
           position: Vector2.all(pos),
           size: Vector2.all(side),
           anchor: Anchor.center,
@@ -514,8 +504,7 @@ void main() {
     // Reproduced #1478
     'collision callbacks with changed game size': (collisionSystem) async {
       final game = collisionSystem as FlameGame;
-      final block = TestBlock(Vector2.all(20), Vector2.all(10))
-        ..anchor = Anchor.center;
+      final block = TestBlock(Vector2.all(20), Vector2.all(10))..anchor = Anchor.center;
       final screenHitbox = ScreenHitbox();
       game.world.addAll([block, screenHitbox]);
       await game.ready();
@@ -572,14 +561,10 @@ void main() {
       final camera1 = CameraComponent(world: world1);
       final camera2 = CameraComponent(world: world2);
       await game.ensureAddAll([world1, world2, camera1, camera2]);
-      final block1 = TestBlock(Vector2(1, 1), Vector2.all(2))
-        ..anchor = Anchor.center;
-      final block2 = TestBlock(Vector2(1, -1), Vector2.all(2))
-        ..anchor = Anchor.center;
-      final block3 = TestBlock(Vector2(-1, 1), Vector2.all(2))
-        ..anchor = Anchor.center;
-      final block4 = TestBlock(Vector2(-1, -1), Vector2.all(2))
-        ..anchor = Anchor.center;
+      final block1 = TestBlock(Vector2(1, 1), Vector2.all(2))..anchor = Anchor.center;
+      final block2 = TestBlock(Vector2(1, -1), Vector2.all(2))..anchor = Anchor.center;
+      final block3 = TestBlock(Vector2(-1, 1), Vector2.all(2))..anchor = Anchor.center;
+      final block4 = TestBlock(Vector2(-1, -1), Vector2.all(2))..anchor = Anchor.center;
       await world1.ensureAddAll([block1, block2]);
       await world2.ensureAddAll([block3, block4]);
 

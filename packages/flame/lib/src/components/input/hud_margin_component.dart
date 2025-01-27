@@ -15,7 +15,7 @@ import 'package:meta/meta.dart';
 /// If you set the position of the component instead of a margin when
 /// initializing the component, the margin to the edge of the screen from that
 /// position will be used.
-class HudMarginComponent extends PositionComponent {
+class HudMarginComponent extends PositionedComponent {
   HudMarginComponent({
     this.margin,
     super.position,
@@ -41,13 +41,11 @@ class HudMarginComponent extends PositionComponent {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    _sizeProvider =
-        ancestors().firstWhereOrNull((c) => c is ReadOnlySizeProvider)
-            as ReadOnlySizeProvider?;
+    _sizeProvider = ancestors().firstWhereOrNull((c) => c is ReadOnlySizeProvider) as ReadOnlySizeProvider?;
     assert(
       _sizeProvider != null,
       'The parent of a HudMarginComponent needs to provide a size, for example '
-      'by being a PositionComponent.',
+      'by being a PositionedComponent.',
     );
     final sizeProvider = _sizeProvider!;
 
@@ -88,12 +86,8 @@ class HudMarginComponent extends PositionComponent {
 
   void _updateMargins() {
     final margin = this.margin!;
-    final x = margin.left != 0
-        ? margin.left + scaledSize.x / 2
-        : _sizeProvider!.size.x - margin.right - scaledSize.x / 2;
-    final y = margin.top != 0
-        ? margin.top + scaledSize.y / 2
-        : _sizeProvider!.size.y - margin.bottom - scaledSize.y / 2;
+    final x = margin.left != 0 ? margin.left + scaledSize.x / 2 : _sizeProvider!.size.x - margin.right - scaledSize.x / 2;
+    final y = margin.top != 0 ? margin.top + scaledSize.y / 2 : _sizeProvider!.size.y - margin.bottom - scaledSize.y / 2;
     position.setValues(x, y);
     position = Anchor.center.toOtherAnchorPosition(
       position,

@@ -4,11 +4,11 @@ import 'package:flame/components.dart';
 import 'package:flame/particles.dart';
 
 /// {@template particle_system_component}
-/// A [PositionComponent] that renders a [Particle] at the designated
+/// A [PositionedComponent] that renders a [Particle] at the designated
 /// position, scaled to have the designated size and rotated to the specified
 /// angle.
 /// {@endtemplate}
-class ParticleSystemComponent extends PositionComponent {
+class ParticleSystemComponent extends PositionedComponent {
   Particle? particle;
 
   /// {@macro particle_system_component}

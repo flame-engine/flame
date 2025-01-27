@@ -45,8 +45,7 @@ class HomePage extends Component with HasGameReference<ValueRouteExample> {
   }
 }
 
-class RateRoute extends ValueRoute<int>
-    with HasGameReference<ValueRouteExample> {
+class RateRoute extends ValueRoute<int> with HasGameReference<ValueRouteExample> {
   RateRoute() : super(value: -1, transparent: true);
 
   @override
@@ -88,9 +87,8 @@ class DialogBackground extends RectangleComponent with TapCallbacks {
         );
 }
 
-class Star extends PositionComponent with TapCallbacks {
-  Star({required this.value, required this.radius, super.position})
-      : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
+class Star extends PositionedComponent with TapCallbacks {
+  Star({required this.value, required this.radius, super.position}) : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
 
   final int value;
   final double radius;

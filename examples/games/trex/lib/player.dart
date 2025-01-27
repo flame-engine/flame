@@ -4,8 +4,7 @@ import 'package:trex_game/trex_game.dart';
 
 enum PlayerState { crashed, jumping, running, waiting }
 
-class Player extends SpriteAnimationGroupComponent<PlayerState>
-    with HasGameReference<TRexGame>, CollisionCallbacks {
+class Player extends SpriteAnimationGroupComponent<PlayerState> with HasGameReference<TRexGame>, CollisionCallbacks {
   Player() : super(size: Vector2(90, 88));
 
   final double gravity = 1;
@@ -102,7 +101,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     game.gameOver();

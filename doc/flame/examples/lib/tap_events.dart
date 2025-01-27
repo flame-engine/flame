@@ -14,7 +14,7 @@ class TapEventsGame extends FlameGame {
 
 /// This component is the tappable blue-ish rectangle in the center of the game.
 /// It uses the [TapCallbacks] mixin to receive tap events.
-class TapTarget extends PositionComponent with TapCallbacks {
+class TapTarget extends PositionedComponent with TapCallbacks {
   TapTarget() : super(anchor: Anchor.center);
 
   final _paint = Paint()..color = const Color(0x448BA8FF);
@@ -62,9 +62,7 @@ class TapTarget extends PositionComponent with TapCallbacks {
 }
 
 class ExpandingCircle extends Component {
-  ExpandingCircle(this._center)
-      : _baseColor =
-            HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
+  ExpandingCircle(this._center) : _baseColor = HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
 
   final Color _baseColor;
   final Vector2 _center;

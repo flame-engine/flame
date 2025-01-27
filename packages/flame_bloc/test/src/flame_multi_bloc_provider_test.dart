@@ -6,11 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import '../inventory_cubit.dart';
 import '../player_cubit.dart';
 
-class _InventoryReader extends Component
-    with FlameBlocReader<InventoryCubit, InventoryState> {}
+class _InventoryReader extends Component with FlameBlocReader<InventoryCubit, InventoryState> {}
 
-class _InventoryListener extends Component
-    with FlameBlocListenable<InventoryCubit, InventoryState> {
+class _InventoryListener extends Component with FlameBlocListenable<InventoryCubit, InventoryState> {
   InventoryState? lastState;
 
   @override
@@ -19,11 +17,9 @@ class _InventoryListener extends Component
   }
 }
 
-class _PlayerReader extends Component
-    with FlameBlocReader<PlayerCubit, PlayerState> {}
+class _PlayerReader extends Component with FlameBlocReader<PlayerCubit, PlayerState> {}
 
-class _PlayerListener extends Component
-    with FlameBlocListenable<PlayerCubit, PlayerState> {
+class _PlayerListener extends Component with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerState? lastState;
 
   @override
@@ -90,8 +86,7 @@ void main() {
       expect(inventory.lastState, equals(InventoryState.bow));
     });
 
-    testWithFlameGame('Add and remove a child with two providers',
-        (game) async {
+    testWithFlameGame('Add and remove a child with two providers', (game) async {
       final inventoryCubit = InventoryCubit();
       final playerCubit = PlayerCubit();
 
@@ -100,19 +95,17 @@ void main() {
 
       final provider = FlameMultiBlocProvider(
         providers: [
-          inventoryCubitProvider =
-              FlameBlocProvider<InventoryCubit, InventoryState>.value(
+          inventoryCubitProvider = FlameBlocProvider<InventoryCubit, InventoryState>.value(
             value: inventoryCubit,
           ),
-          playerCubitProvider =
-              FlameBlocProvider<PlayerCubit, PlayerState>.value(
+          playerCubitProvider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
             value: playerCubit,
           ),
         ],
       );
       await game.ensureAdd(provider);
 
-      final myTestComponent = PositionComponent(position: Vector2.all(10));
+      final myTestComponent = PositionedComponent(position: Vector2.all(10));
 
       await provider.ensureAdd(myTestComponent);
       expect(inventoryCubitProvider.children.length, 1);
@@ -125,8 +118,7 @@ void main() {
     });
 
     group('when using children on constructor', () {
-      testWithFlameGame('Provides multiple blocs down on the tree',
-          (game) async {
+      testWithFlameGame('Provides multiple blocs down on the tree', (game) async {
         final inventoryCubit = InventoryCubit();
         final playerCubit = PlayerCubit();
 

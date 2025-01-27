@@ -11,7 +11,7 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 /// also used incremental updates.
 class SizeEffect extends Effect with EffectTarget<SizeProvider> {
   /// This constructor will create an effect that sets the size in relation to
-  /// the [PositionComponent]'s  current size, for example if the [offset] is
+  /// the [PositionedComponent]'s  current size, for example if the [offset] is
   /// set to `Vector2(10, -10)` and the size of the affected component is
   /// `Vector2(100, 100)` at the start of the affected the effect will peak when
   /// the size is `Vector2(110, 90)`, if there is nothing else affecting the

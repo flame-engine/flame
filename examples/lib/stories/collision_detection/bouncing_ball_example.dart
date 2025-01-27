@@ -20,8 +20,7 @@ class BouncingBallExample extends FlameGame with HasCollisionDetection {
   }
 }
 
-class Ball extends CircleComponent
-    with HasGameReference<FlameGame>, CollisionCallbacks {
+class Ball extends CircleComponent with HasGameReference<FlameGame>, CollisionCallbacks {
   late Vector2 velocity;
 
   Ball() {
@@ -73,7 +72,7 @@ class Ball extends CircleComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
 

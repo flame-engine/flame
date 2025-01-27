@@ -2,7 +2,7 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogu
 import 'package:flame/components.dart';
 import 'package:jenny/jenny.dart';
 
-class ButtonRow extends PositionComponent {
+class ButtonRow extends PositionedComponent {
   ButtonRow({required super.size}) : super(position: Vector2(0, 96));
 
   void removeButtons() {

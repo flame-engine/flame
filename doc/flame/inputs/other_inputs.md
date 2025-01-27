@@ -106,7 +106,7 @@ See what else the advanced features can do in the
 ## HudButtonComponent
 
 A `HudButtonComponent` is a button that can be defined with margins to the edge of the `Viewport`
-instead of with a position. It takes two `PositionComponent`s. `button` and `buttonDown`, the first
+instead of with a position. It takes two `PositionedComponent`s. `button` and `buttonDown`, the first
 is used for when the button is idle and the second is shown when the button is being pressed. The
 second one is optional if you don't want to change the look of the button when it is pressed, or if
 you handle this through the `button` component.
@@ -129,7 +129,7 @@ when the button is pressed and one that represents when the button is released.
 
 ## ButtonComponent
 
-A `ButtonComponent` is a button that is defined by two `PositionComponent`s, one that represents
+A `ButtonComponent` is a button that is defined by two `PositionedComponent`s, one that represents
 when the button is pressed and one that represents when the button is released. If you only want
 to use sprites for the button, use the [](#spritebuttoncomponent) instead, but this component can be
 good to use if you for example want to have a `SpriteAnimationComponent` as a button, or anything
@@ -145,7 +145,7 @@ Find more information in the [Gamepads repository](https://github.com/flame-engi
 ## AdvancedButtonComponent
 
 The `AdvancedButtonComponent` have separate states for each of the different pointer phases.
-The skin can be customized for each state and each skin is represented by a `PositionComponent`.
+The skin can be customized for each state and each skin is represented by a `PositionedComponent`.
 
 These are the fields that can be used to customize the looks of the `AdvancedButtonComponent`:
 

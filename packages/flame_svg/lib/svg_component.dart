@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame_svg/svg.dart';
 
 /// Wraps [Svg] in a Flame component.
-class SvgComponent extends PositionComponent with HasPaint {
+class SvgComponent extends PositionedComponent with HasPaint {
   /// The wrapped instance of [Svg].
   Svg? _svg;
 

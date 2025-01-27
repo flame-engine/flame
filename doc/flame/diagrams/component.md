@@ -14,7 +14,7 @@ graph TD
     Effects("Effects<br/>(See the effects section)")
     Game(Game)
     FlameGame(FlameGame)
-    PositionComponent(PositionComponent)
+    PositionedComponent(PositionedComponent)
    
     Sprites("
         SpriteComponent
@@ -44,12 +44,12 @@ graph TD
     %% Flow %%
     Component --> Misc
     Component --> Effects
-    Component --> PositionComponent
+    Component --> PositionedComponent
     Component --> FlameGame
    
     Game --> FlameGame
-    PositionComponent --> Sprites
-    PositionComponent --> HudMarginComponent
-    PositionComponent --> OtherPositionComponents
+    PositionedComponent --> Sprites
+    PositionedComponent --> HudMarginComponent
+    PositionedComponent --> OtherPositionComponents
     HudMarginComponent --> HudComponents
 ```

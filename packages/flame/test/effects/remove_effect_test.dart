@@ -38,7 +38,7 @@ void main() {
 
     testWithFlameGame('as a part of a sequence', (game) async {
       final world = game.world;
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await world.ensureAdd(component);
       component.add(
         SequenceEffect([

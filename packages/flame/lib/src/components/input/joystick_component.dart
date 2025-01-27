@@ -16,10 +16,9 @@ enum JoystickDirection {
   idle,
 }
 
-class JoystickComponent extends PositionComponent
-    with HasGameReference, ComponentViewportMargin, DragCallbacks {
-  late final PositionComponent? knob;
-  late final PositionComponent? background;
+class JoystickComponent extends PositionedComponent with HasGameReference, ComponentViewportMargin, DragCallbacks {
+  late final PositionedComponent? knob;
+  late final PositionedComponent? background;
 
   /// The percentage `[0.0, 1.0]` the knob is dragged from the center to the
   /// edge.
@@ -59,8 +58,7 @@ class JoystickComponent extends PositionComponent
           'Either size or background must be defined',
         ),
         assert(
-          (knob?.position.isZero() ?? true) &&
-              (background?.position.isZero() ?? true),
+          (knob?.position.isZero() ?? true) && (background?.position.isZero() ?? true),
           'Positions should not be set for the knob or the background',
         ),
         super(

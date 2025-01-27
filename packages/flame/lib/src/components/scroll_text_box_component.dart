@@ -14,7 +14,7 @@ import 'package:flutter/painting.dart';
 ///
 /// This component uses [TextBoxComponent] to provide scrollable text
 /// capabilities.
-class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
+class ScrollTextBoxComponent<T extends TextRenderer> extends PositionedComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
   late final ValueNotifier<int> newLineNotifier;
 
@@ -104,8 +104,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
 /// Extends [TextBoxComponent] and incorporates drag callbacks for text
 /// scrolling. It manages the rendering and user interaction for the text within
 /// the box.
-class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
-    with DragCallbacks {
+class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent with DragCallbacks {
   double scrollBoundsY = 0.0;
 
   late final ClipComponent clipComponent;

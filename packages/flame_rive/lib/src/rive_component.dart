@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 
-class RiveComponent extends PositionComponent {
+class RiveComponent extends PositionedComponent {
   final Artboard artboard;
   final RiveArtboardRenderer _renderer;
   late Size _renderSize;
@@ -93,12 +93,8 @@ class RiveArtboardRenderer {
       return;
     }
 
-    final x = -1 * bounds[0] -
-        contentWidth / 2.0 -
-        (alignment.x * contentWidth / 2.0);
-    final y = -1 * bounds[1] -
-        contentHeight / 2.0 -
-        (alignment.y * contentHeight / 2.0);
+    final x = -1 * bounds[0] - contentWidth / 2.0 - (alignment.x * contentWidth / 2.0);
+    final y = -1 * bounds[1] - contentHeight / 2.0 - (alignment.y * contentHeight / 2.0);
 
     var scaleX = 1.0;
     var scaleY = 1.0;
@@ -113,12 +109,10 @@ class RiveArtboardRenderer {
         scaleX = size.width / contentWidth;
         scaleY = size.height / contentHeight;
       case BoxFit.contain:
-        final minScale =
-            min(size.width / contentWidth, size.height / contentHeight);
+        final minScale = min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale;
       case BoxFit.cover:
-        final maxScale =
-            max(size.width / contentWidth, size.height / contentHeight);
+        final maxScale = max(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = maxScale;
       case BoxFit.fitHeight:
         final minScale = size.height / contentHeight;
@@ -129,8 +123,7 @@ class RiveArtboardRenderer {
       case BoxFit.none:
         scaleX = scaleY = 1.0;
       case BoxFit.scaleDown:
-        final minScale =
-            min(size.width / contentWidth, size.height / contentHeight);
+        final minScale = min(size.width / contentWidth, size.height / contentHeight);
         scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
     }
 

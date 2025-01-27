@@ -7,9 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('HoverCallbacks', () {
-    testWithFlameGame(
-        'make sure HoverCallbacks components can be added to a FlameGame',
-        (game) async {
+    testWithFlameGame('make sure HoverCallbacks components can be added to a FlameGame', (game) async {
       await game.ensureAdd(_HoverCallbacksComponent());
       await game.ready();
 
@@ -100,8 +98,7 @@ mixin _HoverInspector on HoverCallbacks {
   }
 }
 
-class _HoverCallbacksComponent extends PositionComponent
-    with HoverCallbacks, _HoverInspector {
+class _HoverCallbacksComponent extends PositionedComponent with HoverCallbacks, _HoverInspector {
   _HoverCallbacksComponent({
     super.position,
     super.size,

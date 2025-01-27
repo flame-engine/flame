@@ -7,8 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('FollowBehavior', () {
     test('basic properties', () {
-      final target = PositionComponent();
-      final owner = PositionComponent();
+      final target = PositionedComponent();
+      final owner = PositionedComponent();
       final behavior = FollowBehavior(target: target, owner: owner);
       expect(behavior.target, target);
       expect(behavior.owner, owner);
@@ -19,16 +19,16 @@ void main() {
 
     test('errors', () {
       expect(
-        () => FollowBehavior(target: PositionComponent(), maxSpeed: 0),
+        () => FollowBehavior(target: PositionedComponent(), maxSpeed: 0),
         failsAssert('maxSpeed must be positive: 0.0'),
       );
       expect(
-        () => FollowBehavior(target: PositionComponent(), maxSpeed: -2.45),
+        () => FollowBehavior(target: PositionedComponent(), maxSpeed: -2.45),
         failsAssert('maxSpeed must be positive: -2.45'),
       );
       expect(
         () => FollowBehavior(
-          target: PositionComponent(),
+          target: PositionedComponent(),
           horizontalOnly: true,
           verticalOnly: true,
         ),
@@ -39,7 +39,7 @@ void main() {
     });
 
     testWithFlameGame('parent is not position provider', (game) async {
-      final target = PositionComponent()..addToParent(game);
+      final target = PositionedComponent()..addToParent(game);
       final component = Component()..addToParent(game);
       await game.ready();
 
@@ -53,7 +53,7 @@ void main() {
     });
 
     testWithFlameGame('custom position provider', (game) async {
-      final target = PositionComponent()
+      final target = PositionedComponent()
         ..position = Vector2(3, 100)
         ..addToParent(game);
       final component = Component()..addToParent(game);
@@ -80,8 +80,8 @@ void main() {
     });
 
     testWithFlameGame('simple follow', (game) async {
-      final target = PositionComponent()..addToParent(game);
-      final pursuer = PositionComponent()
+      final target = PositionedComponent()..addToParent(game);
+      final pursuer = PositionedComponent()
         ..add(FollowBehavior(target: target))
         ..addToParent(game);
       await game.ready();
@@ -99,10 +99,10 @@ void main() {
     testWithFlameGame('follow with max speed', (game) async {
       const dt = 0.013;
       const speed = 587.0;
-      final target = PositionComponent()
+      final target = PositionedComponent()
         ..position = Vector2(600, 800)
         ..addToParent(game);
-      final pursuer = PositionComponent()
+      final pursuer = PositionedComponent()
         ..add(FollowBehavior(target: target, maxSpeed: speed))
         ..addToParent(game);
       await game.ready();
@@ -118,8 +118,8 @@ void main() {
     });
 
     testWithFlameGame('horizontal-only follow', (game) async {
-      final target = PositionComponent(position: Vector2(20, 10));
-      final pursuer = PositionComponent();
+      final target = PositionedComponent(position: Vector2(20, 10));
+      final pursuer = PositionedComponent();
       pursuer.add(
         FollowBehavior(target: target, horizontalOnly: true, maxSpeed: 1),
       );
@@ -134,8 +134,8 @@ void main() {
     });
 
     testWithFlameGame('vertical-only follow', (game) async {
-      final target = PositionComponent(position: Vector2(20, 100));
-      final pursuer = PositionComponent();
+      final target = PositionedComponent(position: Vector2(20, 100));
+      final pursuer = PositionedComponent();
       pursuer.add(
         FollowBehavior(target: target, verticalOnly: true, maxSpeed: 1),
       );

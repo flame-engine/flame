@@ -30,7 +30,7 @@ class CollisionDetectionGame extends FlameGame with HasCollisionDetection {
   }
 }
 
-class RectangleCollidable extends PositionComponent with CollisionCallbacks {
+class RectangleCollidable extends PositionedComponent with CollisionCallbacks {
   final _collisionStartColor = Colors.amber;
   final _defaultColor = Colors.cyan;
   late ShapeHitbox hitbox;
@@ -56,14 +56,14 @@ class RectangleCollidable extends PositionComponent with CollisionCallbacks {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     hitbox.paint.color = _collisionStartColor;
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     super.onCollisionEnd(other);
     if (!isColliding) {
       hitbox.paint.color = _defaultColor;

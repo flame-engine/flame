@@ -21,11 +21,11 @@ For those components that you want to respond to taps, add the `TapCallbacks` mi
   `onTapCancel`, and `onLongTapDown`. By default, each of these methods does nothing, they need
   to be overridden in order to perform any function.
 - In addition, the component must implement the `containsLocalPoint()` method (already implemented
-  in `PositionComponent`, so most of the time you don't need to do anything here) -- this method
+  in `PositionedComponent`, so most of the time you don't need to do anything here) -- this method
   allows Flame to know whether the event occurred within the component or not.
 
 ```dart
-class MyComponent extends PositionComponent with TapCallbacks {
+class MyComponent extends PositionedComponent with TapCallbacks {
   MyComponent() : super(size: Vector2(80, 60));
 
   @override
@@ -135,9 +135,9 @@ is no need to override all of them either: for example, you can override only `o
 to respond to "real" taps only.
 
 Another crucial detail is that a component will only receive tap events that occur *within* that
-component, as judged by the `containsLocalPoint()` function. The commonly-used `PositionComponent`
+component, as judged by the `containsLocalPoint()` function. The commonly-used `PositionedComponent`
 class provides such an implementation based on its `size` property. Thus, if your component derives
-from a `PositionComponent`, then make sure that you set its size correctly. If, however, your
+from a `PositionedComponent`, then make sure that you set its size correctly. If, however, your
 component derives from the bare `Component`, then the `containsLocalPoint()` method must be
 implemented manually.
 
@@ -175,10 +175,10 @@ class MyComponent extends Component with TapCallbacks {
 
 Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the
 component. To start receiving double tap events in a component, add the
-`DoubleTapCallbacks` mixin to your `PositionComponent`.
+`DoubleTapCallbacks` mixin to your `PositionedComponent`.
 
 ```dart
-class MyComponent extends PositionComponent with DoubleTapCallbacks {
+class MyComponent extends PositionedComponent with DoubleTapCallbacks {
   @override
   void onDoubleTapUp(DoubleTapEvent event) {
     /// Do something

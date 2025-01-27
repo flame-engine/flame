@@ -4,8 +4,7 @@ import 'package:flame_bloc_example/src/game/components/enemy.dart';
 import 'package:flame_bloc_example/src/game/game.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class BulletComponent extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+class BulletComponent extends SpriteAnimationComponent with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
   static const bulletSpeed = -500;
 
   bool destroyed = false;
@@ -61,7 +60,7 @@ class BulletComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is EnemyComponent) {
       destroyed = true;

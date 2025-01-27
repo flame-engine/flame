@@ -27,10 +27,8 @@ class MyWorld extends World with TapCallbacks, HasCollisionDetection {
   }
 }
 
-class MyCollidable extends PositionComponent
-    with HasGameReference<CirclesExample>, CollisionCallbacks {
-  MyCollidable({super.position})
-      : super(size: Vector2.all(30), anchor: Anchor.center);
+class MyCollidable extends PositionedComponent with HasGameReference<CirclesExample>, CollisionCallbacks {
+  MyCollidable({super.position}) : super(size: Vector2.all(30), anchor: Anchor.center);
 
   late Vector2 velocity;
   final _collisionColor = Colors.amber;
@@ -59,7 +57,7 @@ class MyCollidable extends PositionComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     hitbox.paint.color = _collisionColor;
@@ -70,7 +68,7 @@ class MyCollidable extends PositionComponent
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     super.onCollisionEnd(other);
     if (!isColliding) {
       hitbox.paint.color = _defaultColor;

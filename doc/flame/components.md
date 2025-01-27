@@ -91,7 +91,7 @@ Example:
 class MyGame extends FlameGame {
   @override
   void onLoad() {
-    final myComponent = PositionComponent(priority: 5);
+    final myComponent = PositionedComponent(priority: 5);
     add(myComponent);
   }
 }
@@ -104,7 +104,7 @@ In the following example we first initialize the component with priority 1, and 
 user taps the component we change its priority to 2:
 
 ```dart
-class MyComponent extends PositionComponent with TapCallbacks {
+class MyComponent extends PositionedComponent with TapCallbacks {
 
   MyComponent() : super(priority: 1);
 
@@ -120,7 +120,7 @@ class MyComponent extends PositionComponent with TapCallbacks {
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
 visual components through a hierarchy. You can do this by adding child components to any component,
-for example `PositionComponent`.
+for example `PositionedComponent`.
 
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
@@ -128,7 +128,7 @@ children are rendered and updated with the same conditions.
 Example of usage, where visibility of two components are handled by a wrapper:
 
 ```dart
-class GameOverPanel extends PositionComponent {
+class GameOverPanel extends PositionedComponent {
   bool visible = false;
   final Image spriteImage;
 
@@ -165,7 +165,7 @@ class MyGame extends FlameGame {
   @override
   void onLoad() {
     add(
-      PositionComponent(
+      PositionedComponent(
         position: Vector2(30, 0),
         children: [
           HighScoreDisplay(),
@@ -316,17 +316,17 @@ Example:
 ```dart
 @override
 void onLoad() {
-  children.register<PositionComponent>();
+  children.register<PositionedComponent>();
 }
 ```
 
-In the example above a query is registered for `PositionComponent`s, and an example of how to query
+In the example above a query is registered for `PositionedComponent`s, and an example of how to query
 the registered component type can be seen below.
 
 ```dart
 @override
 void update(double dt) {
-  final allPositionComponents = children.query<PositionComponent>();
+  final allPositionComponents = children.query<PositionedComponent>();
 }
 ```
 
@@ -342,7 +342,7 @@ The iterable retrieves the components in the front-to-back order, i.e. first the
 front, followed by the components in the back.
 
 This method can only return components that implement the method `containsLocalPoint()`. The
-`PositionComponent` (which is the base class for many components in Flame) provides such an
+`PositionedComponent` (which is the base class for many components in Flame) provides such an
 implementation. However, if you're defining a custom class that derives from `Component`, you'd have
 to implement the `containsLocalPoint()` method yourself.
 
@@ -394,7 +394,7 @@ removing it from the tree. This affects the visibility of the component and all 
 
 ```dart
 /// Example that implements HasVisibility
-class MyComponent extends PositionComponent with HasVisibility {}
+class MyComponent extends PositionedComponent with HasVisibility {}
 
 /// Usage of the isVisible property
 final myComponent = MyComponent();
@@ -416,7 +416,7 @@ The mixin works by preventing the `renderTree` method, therefore if `renderTree`
 overridden, a manual check for `isVisible` should be included to retain this functionality.
 
 ```dart
-class MyComponent extends PositionComponent with HasVisibility {
+class MyComponent extends PositionedComponent with HasVisibility {
 
   @override
   void renderTree(Canvas canvas) {
@@ -432,13 +432,13 @@ class MyComponent extends PositionComponent with HasVisibility {
 ```
 
 
-## PositionComponent
+## PositionedComponent
 
 This class represents a positioned object on the screen, being a floating rectangle, a rotating
 sprite, or anything else with position and size. It can also represent a group of positioned
 components if children are added to it.
 
-The base of the `PositionComponent` is that it has a `position`, `size`, `scale`, `angle` and
+The base of the `PositionedComponent` is that it has a `position`, `size`, `scale`, `angle` and
 `anchor` which transforms how the component is rendered.
 
 
@@ -512,7 +512,7 @@ of a component which is not actually the `anchor` of that component, you can use
 and `absolutePositionOfAnchor` method.
 
 ```dart
-final comp = PositionComponent(
+final comp = PositionedComponent(
   size: Vector2.all(20),
   anchor: Anchor.center,
 );
@@ -534,20 +534,20 @@ irrespective of their `anchor` values.
 ```
 
 
-### PositionComponent children
+### PositionedComponent children
 
-All children of the `PositionComponent` will be transformed in relation to the parent, which means
+All children of the `PositionedComponent` will be transformed in relation to the parent, which means
 that the `position`, `angle` and `scale` will be relative to the parents state.
 So if you, for example, wanted to position a child in the center of the parent you would do this:
 
 ```dart
 @override
 void onLoad() {
-  final parent = PositionComponent(
+  final parent = PositionedComponent(
     position: Vector2(100, 100),
     size: Vector2(100, 100),
   );
-  final child = PositionComponent(
+  final child = PositionedComponent(
     position: parent.size / 2,
     anchor: Anchor.center,
   );
@@ -555,13 +555,13 @@ void onLoad() {
 }
 ```
 
-Remember that most components that are rendered on the screen are `PositionComponent`s, so
+Remember that most components that are rendered on the screen are `PositionedComponent`s, so
 this pattern can be used in for example [](#spritecomponent) and [](#spriteanimationcomponent) too.
 
 
-### Render PositionComponent
+### Render PositionedComponent
 
-When implementing the `render` method for a component that extends `PositionComponent` remember to
+When implementing the `render` method for a component that extends `PositionedComponent` remember to
 render from the top left corner (0.0). Your render method should not handle where on the screen your
 component should be rendered. To handle where and how your component should be rendered use the
 `position`, `angle` and `anchor` properties and Flame will automatically handle the rest for you.
@@ -572,7 +572,7 @@ If you want to know where on the screen the bounding box of the component is you
 In the event that you want to change the direction of your components rendering, you can also use
 `flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during
 `render(Canvas canvas)`, around the anchor point. These methods are available on all
-`PositionComponent` objects, and are especially useful on `SpriteComponent` and
+`PositionedComponent` objects, and are especially useful on `SpriteComponent` and
 `SpriteAnimationComponent`.
 
 In case you want to flip a component around its center without having to change the anchor to
@@ -581,7 +581,7 @@ In case you want to flip a component around its center without having to change 
 
 ## SpriteComponent
 
-The most commonly used implementation of `PositionComponent` is `SpriteComponent`, and it can be
+The most commonly used implementation of `PositionedComponent` is `SpriteComponent`, and it can be
 created with a `Sprite`:
 
 ```dart
@@ -1100,7 +1100,7 @@ arrows.
 
 ### RectangleComponent
 
-A `RectangleComponent` is created very similarly to how a `PositionComponent` is created, since it
+A `RectangleComponent` is created very similarly to how a `PositionedComponent` is created, since it
 also has a bounding rectangle.
 
 Something like this for example:
@@ -1329,7 +1329,7 @@ class Player extends SpriteComponent with Notifier {
 Then our hud component could look like:
 
 ```dart
-class Hud extends PositionComponent with HasGameRef {
+class Hud extends PositionedComponent with HasGameRef {
 
   @override
   void onLoad() {

@@ -21,12 +21,12 @@ class ComponentSnapshotConnector extends DevToolsConnector {
               final canvas = Canvas(pictureRecorder);
 
               // I am not sure how we could calculate the size of a component
-              // that isn't a PositionComponent, so for now we will just use
+              // that isn't a PositionedComponent, so for now we will just use
               // an arbitrary size.
               var width = 100;
               var height = 100;
 
-              if (c is PositionComponent) {
+              if (c is PositionedComponent) {
                 width = c.width.toInt();
                 height = c.height.toInt();
 

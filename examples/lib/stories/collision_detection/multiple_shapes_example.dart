@@ -49,8 +49,7 @@ class MultiShapesWorld extends World with HasGameReference {
     while (totalAdded < 1000) {
       lastToAdd = nextRandomCollidable(lastToAdd, screenHitbox);
       final lastBottomRight = lastToAdd.toAbsoluteRect().bottomRight;
-      if (lastBottomRight.dx < game.size.x &&
-          lastBottomRight.dy < game.size.y) {
+      if (lastBottomRight.dx < game.size.x && lastBottomRight.dy < game.size.y) {
         add(lastToAdd);
         totalAdded++;
       } else {
@@ -67,15 +66,10 @@ class MultiShapesWorld extends World with HasGameReference {
     ScreenHitbox screenHitbox,
   ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
-    final isXOverflow = lastCollidable.position.x +
-            lastCollidable.size.x / 2 +
-            _distance.x +
-            collidableSize.x >
-        game.size.x;
+    final isXOverflow = lastCollidable.position.x + lastCollidable.size.x / 2 + _distance.x + collidableSize.x > game.size.x;
     var position = _distance + Vector2(0, lastCollidable.position.y + 200);
     if (!isXOverflow) {
-      position = (lastCollidable.position + _distance)
-        ..x += collidableSize.x / 2;
+      position = (lastCollidable.position + _distance)..x += collidableSize.x / 2;
     }
     final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 400;
     return randomCollidable(
@@ -88,8 +82,7 @@ class MultiShapesWorld extends World with HasGameReference {
   }
 }
 
-abstract class MyCollidable extends PositionComponent
-    with DragCallbacks, CollisionCallbacks, GestureHitboxes {
+abstract class MyCollidable extends PositionedComponent with DragCallbacks, CollisionCallbacks, GestureHitboxes {
   double rotationSpeed = 0.0;
   final Vector2 velocity;
   final delta = Vector2.zero();
@@ -127,10 +120,7 @@ abstract class MyCollidable extends PositionComponent
     angle = (angle + angleDelta) % (2 * pi);
     // Takes rotation into consideration (which topLeftPosition doesn't)
     final topLeft = absoluteCenter - (scaledSize / 2);
-    if (topLeft.x + scaledSize.x < 0 ||
-        topLeft.y + scaledSize.y < 0 ||
-        topLeft.x > screenHitbox.scaledSize.x ||
-        topLeft.y > screenHitbox.scaledSize.y) {
+    if (topLeft.x + scaledSize.x < 0 || topLeft.y + scaledSize.y < 0 || topLeft.x > screenHitbox.scaledSize.x || topLeft.y > screenHitbox.scaledSize.y) {
       final moduloSize = screenHitbox.scaledSize + scaledSize;
       topLeftPosition = topLeftPosition % moduloSize;
     }
@@ -147,14 +137,14 @@ abstract class MyCollidable extends PositionComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     hitbox?.paint.color = _collisionColor;
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     super.onCollisionEnd(other);
     if (!isColliding) {
       hitbox?.paint.color = _defaultColor;
@@ -222,8 +212,7 @@ class SnowmanPart extends CircleHitbox {
   final startColor = Colors.white.withValues(alpha: 0.8);
   final Color hitColor;
 
-  SnowmanPart(double radius, Vector2 position, this.hitColor)
-      : super(radius: radius, position: position, anchor: Anchor.center) {
+  SnowmanPart(double radius, Vector2 position, this.hitColor) : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
   }
 
@@ -288,12 +277,8 @@ MyCollidable randomCollidable(
   final rotationSpeed = 0.5 - rng.nextDouble();
   final shapeType = Shapes.values[rng.nextInt(Shapes.values.length)];
   return switch (shapeType) {
-    Shapes.circle => CollidableCircle(position, size, velocity, screenHitbox)
-      ..rotationSpeed = rotationSpeed,
-    Shapes.rectangle =>
-      CollidableRectangle(position, size, velocity, screenHitbox)
-        ..rotationSpeed = rotationSpeed,
-    Shapes.polygon => CollidablePolygon(position, size, velocity, screenHitbox)
-      ..rotationSpeed = rotationSpeed,
+    Shapes.circle => CollidableCircle(position, size, velocity, screenHitbox)..rotationSpeed = rotationSpeed,
+    Shapes.rectangle => CollidableRectangle(position, size, velocity, screenHitbox)..rotationSpeed = rotationSpeed,
+    Shapes.polygon => CollidablePolygon(position, size, velocity, screenHitbox)..rotationSpeed = rotationSpeed,
   };
 }

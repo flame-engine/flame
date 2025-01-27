@@ -182,8 +182,7 @@ class CameraComponent extends Component {
       viewport.position.y - viewport.anchor.y * viewport.size.y,
     );
     // Render the world through the viewport
-    if ((world?.isMounted ?? false) &&
-        currentCameras.length < maxCamerasDepth) {
+    if ((world?.isMounted ?? false) && currentCameras.length < maxCamerasDepth) {
       canvas.save();
       viewport.clip(canvas);
       viewport.transformCanvas(canvas);
@@ -221,8 +220,7 @@ class CameraComponent extends Component {
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
-    final viewfinderPosition =
-        viewfinder.localToGlobal(position, output: output);
+    final viewfinderPosition = viewfinder.localToGlobal(position, output: output);
     return viewport.localToGlobal(viewfinderPosition, output: output);
   }
 
@@ -244,8 +242,7 @@ class CameraComponent extends Component {
       transformContext,
       checkContains,
     );
-    if ((world?.isMounted ?? false) &&
-        currentCameras.length < maxCamerasDepth) {
+    if ((world?.isMounted ?? false) && currentCameras.length < maxCamerasDepth) {
       if (checkContains(viewport, viewportPoint)) {
         currentCameras.add(this);
         final worldPoint = transformContext(viewfinder, viewportPoint);
@@ -290,7 +287,7 @@ class CameraComponent extends Component {
   /// Makes the [viewfinder] follow the given [target].
   ///
   /// The [target] here can be any read-only [PositionProvider]. For example, a
-  /// [PositionComponent] is the most common choice of target. Alternatively,
+  /// [PositionedComponent] is the most common choice of target. Alternatively,
   /// you can use [PositionProviderImpl] to construct the target dynamically.
   ///
   /// This method adds a [FollowBehavior] to the viewfinder. If there is another
@@ -360,8 +357,7 @@ class CameraComponent extends Component {
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
-    final viewPortAwareBoundsBehavior =
-        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
+    final viewPortAwareBoundsBehavior = viewfinder.firstChild<ViewportAwareBoundsBehavior>();
 
     if (bounds == null) {
       // When bounds is null, all bounds-related components need to be dropped.
@@ -408,8 +404,7 @@ class CameraComponent extends Component {
           // in this exact cycle but did not mount into the tree.
           // We must wait for that component to mount first in order for
           // ViewportAwareBoundsBehavior to correctly affect the camera.
-          boundedBehaviorFuture
-              .whenComplete(() => _addViewPortAwareBoundsBehavior(bounds));
+          boundedBehaviorFuture.whenComplete(() => _addViewPortAwareBoundsBehavior(bounds));
       }
     } else {
       viewPortAwareBoundsBehavior.boundsShape = bounds;
@@ -437,10 +432,8 @@ class CameraComponent extends Component {
   /// reported as visible, even if it is not part of the [world] this camera is
   /// currently looking at. This can be changed by passing the component's
   /// world as [componentWorld].
-  bool canSee(PositionComponent component, {World? componentWorld}) {
-    if (!(world?.isMounted ?? false) ||
-        !component.isMounted ||
-        (componentWorld != null && componentWorld != world)) {
+  bool canSee(PositionedComponent component, {World? componentWorld}) {
+    if (!(world?.isMounted ?? false) || !component.isMounted || (componentWorld != null && componentWorld != world)) {
       return false;
     }
 

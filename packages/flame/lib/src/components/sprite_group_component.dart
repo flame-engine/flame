@@ -5,17 +5,16 @@ import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
-/// A [PositionComponent] that can have multiple [Sprite]s and render
+/// A [PositionedComponent] that can have multiple [Sprite]s and render
 /// the one mapped with the [current] key.
-class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
+class SpriteGroupComponent<T> extends PositionedComponent with HasPaint {
   /// Key for the current sprite.
   T? _current;
 
   ValueNotifier<T?>? _currentSpriteNotifier;
 
   /// A [ValueNotifier] that notifies when the current sprite changes.
-  ValueNotifier<T?> get currentSpriteNotifier =>
-      _currentSpriteNotifier ??= ValueNotifier<T?>(_current);
+  ValueNotifier<T?> get currentSpriteNotifier => _currentSpriteNotifier ??= ValueNotifier<T?>(_current);
 
   /// Map with the available states for this sprite group.
   Map<T, Sprite>? _sprites;
@@ -84,8 +83,7 @@ class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
   /// If you want to change the contents of the map use the sprites setter
   /// and pass in a new map of sprites, or use [updateSprite] to update a
   /// specific sprite.
-  Map<T, Sprite>? get sprites =>
-      _sprites != null ? Map.unmodifiable(_sprites!) : null;
+  Map<T, Sprite>? get sprites => _sprites != null ? Map.unmodifiable(_sprites!) : null;
 
   /// Sets the given [value] as sprites map.
   set sprites(Map<T, Sprite>? value) {

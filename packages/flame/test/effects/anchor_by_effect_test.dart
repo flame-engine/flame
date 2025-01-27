@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AnchorByEffect', () {
     testWithFlameGame('simple AnchorEffect.by', (game) async {
-      final component = PositionComponent(
+      final component = PositionedComponent(
         size: Vector2(100, 40),
         position: Vector2(12, 98),
         anchor: Anchor.center,
@@ -25,7 +25,7 @@ void main() {
     });
 
     testWithFlameGame('AnchorByEffect with explicit target', (game) async {
-      final component = PositionComponent(anchor: Anchor.topCenter);
+      final component = PositionedComponent(anchor: Anchor.topCenter);
       game.add(component);
       game.add(
         AnchorByEffect(

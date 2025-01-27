@@ -2,14 +2,12 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:rogue_shooter/components/enemy_component.dart';
 
-class BulletComponent extends SpriteAnimationComponent
-    with HasGameRef, CollisionCallbacks {
+class BulletComponent extends SpriteAnimationComponent with HasGameRef, CollisionCallbacks {
   static const speed = 500.0;
   late final Vector2 velocity;
   final Vector2 deltaPosition = Vector2.zero();
 
-  BulletComponent({required super.position, super.angle})
-      : super(size: Vector2(10, 20), anchor: Anchor.center);
+  BulletComponent({required super.position, super.angle}) : super(size: Vector2(10, 20), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
@@ -30,7 +28,7 @@ class BulletComponent extends SpriteAnimationComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is EnemyComponent) {

@@ -22,7 +22,7 @@ mixin CollisionPassthrough on CollisionCallbacks {
 
   @override
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
     super.onCollision(intersectionPoints, other);
     passthroughParent?.onCollision(intersectionPoints, other);
   }
@@ -31,7 +31,7 @@ mixin CollisionPassthrough on CollisionCallbacks {
   @mustCallSuper
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     passthroughParent?.onCollisionStart(intersectionPoints, other);
@@ -39,7 +39,7 @@ mixin CollisionPassthrough on CollisionCallbacks {
 
   @override
   @mustCallSuper
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     super.onCollisionEnd(other);
     passthroughParent?.onCollisionEnd(other);
   }

@@ -45,7 +45,7 @@ import 'package:flutter/widgets.dart';
 ///   ),
 /// );
 /// ```
-class AlignComponent extends PositionComponent {
+class AlignComponent extends PositionedComponent {
   /// Creates a component that keeps its [child] positioned according to the
   /// [alignment] within this component's bounding box.
   ///
@@ -53,7 +53,7 @@ class AlignComponent extends PositionComponent {
   /// within the current component's bounding box. The child's anchor will also
   /// be set to the [alignment], unless [keepChildAnchor] parameter is true.
   AlignComponent({
-    PositionComponent? child,
+    PositionedComponent? child,
     Anchor alignment = Anchor.topLeft,
     this.widthFactor,
     this.heightFactor,
@@ -63,13 +63,13 @@ class AlignComponent extends PositionComponent {
     this.child = child;
   }
 
-  PositionComponent? _child;
+  PositionedComponent? _child;
 
   /// The component that will be positioned by this component. The [child] will
   /// be automatically mounted to the current component.
-  PositionComponent? get child => _child;
+  PositionedComponent? get child => _child;
 
-  set child(PositionComponent? value) {
+  set child(PositionedComponent? value) {
     if (_child?.parent == this) {
       _child?.removeFromParent();
     }

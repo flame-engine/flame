@@ -50,9 +50,9 @@ method and the `update` method respectively to your custom system. For more info
 [RenderSystem](#mixin-rendersystem) and [UpdateSystem](#mixin-updatesystem) section.
 
 If you are coming from FCS you might expect certain default functionality that you normally got
-from the `PositionComponent`. As mentioned before components do not contain any kind of logic, but
+from the `PositionedComponent`. As mentioned before components do not contain any kind of logic, but
 to give you the same default functionality we also created a class called `BaseSystem`. This system
-acts almost identical to the prerender logic from the `PositionComponent` in FCS. You only have
+acts almost identical to the prerender logic from the `PositionedComponent` in FCS. You only have
 to subclass it to your own system. For more information see the
 [BaseSystem](#basesystem) section.
 
@@ -127,8 +127,8 @@ class SimpleUpdateSystem extends System with UpdateSystem {
 
 ### BaseSystem
 
-The `BaseSystem` is an abstract class whose logic can be compared to the `PositionComponent`
-from FCS. The `BaseSystem` automatically filters all entities that have the `PositionComponent`
+The `BaseSystem` is an abstract class whose logic can be compared to the `PositionedComponent`
+from FCS. The `BaseSystem` automatically filters all entities that have the `PositionedComponent`
 and `SizeComponent` from `flame_oxygen`. On top of that you can add your own filters by defining
 a getter called `filters`. These filters are then used to filter down the entities you are
 interested in.
@@ -136,13 +136,13 @@ interested in.
 The `BaseSystem` is also fully aware of the game instance. You can access the game instance by using
 the `game` property. This also gives you access to the `createEntity` helper method on `OxygenGame`.
 
-On each render loop the `BaseSystem` will prepare your canvas the same way the `PositionComponent`
+On each render loop the `BaseSystem` will prepare your canvas the same way the `PositionedComponent`
 from FCS would (translating, rotating and setting the anchor. After that it will call the
 `renderEntity` method so you can add your own render logic for that entity on a prepared canvas.
 
 The following components will be checked by `BaseSystem` for the preparation of the canvas:
 
-- `PositionComponent` (required)
+- `PositionedComponent` (required)
 - `SizeComponent` (required)
 - `AnchorComponent` (optional, defaults to `Anchor.topLeft`)
 - `AngleComponent` (optional, defaults to `0`)

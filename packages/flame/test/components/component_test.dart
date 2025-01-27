@@ -78,8 +78,7 @@ void main() {
         },
       );
 
-      testWithFlameGame('remove parent of child that has removed set',
-          (game) async {
+      testWithFlameGame('remove parent of child that has removed set', (game) async {
         final parent = _LifecycleComponent('parent')..addToParent(game);
         final child = _LifecycleComponent('child')..addToParent(parent);
         await game.ready();
@@ -340,16 +339,14 @@ void main() {
           expect(game.hasLifecycleEvents, isFalse);
         });
 
-        testWithFlameGame("doesn't block when there are no events",
-            (game) async {
+        testWithFlameGame("doesn't block when there are no events", (game) async {
           await game.ready();
           expect(game.hasLifecycleEvents, isFalse);
           await game.lifecycleEventsProcessed;
           expect(game.hasLifecycleEvents, isFalse);
         });
 
-        testWithFlameGame('guarantees addition even with heavy onLoad',
-            (game) async {
+        testWithFlameGame('guarantees addition even with heavy onLoad', (game) async {
           await game.ready();
           final component = _SlowComponent('heavy', 0.1);
           final child = _SlowComponent('child', 0.1);
@@ -947,8 +944,7 @@ void main() {
           game.update(0);
           expect(game.world.children.length, 5);
           expect(
-            game.world.children
-                .every((c) => (c as _IdentifiableComponent).id.isOdd),
+            game.world.children.every((c) => (c as _IdentifiableComponent).id.isOdd),
             true,
           );
         },
@@ -1241,7 +1237,7 @@ void main() {
     group('componentsAtPoint()', () {
       testWithFlameGame('nested components', (game) async {
         final world = game.world;
-        final componentA = PositionComponent()
+        final componentA = PositionedComponent()
           ..size = Vector2(200, 150)
           ..scale = Vector2.all(2)
           ..position = Vector2(350, 50)
@@ -1295,8 +1291,7 @@ void main() {
     });
 
     group('findRootGame()', () {
-      testWithFlameGame('finds root game in nested game structure',
-          (game) async {
+      testWithFlameGame('finds root game in nested game structure', (game) async {
         final component = Component();
         await game.ensureAdd(
           FlameGame(
@@ -1308,8 +1303,7 @@ void main() {
         expect(component.findRootGame(), game);
       });
 
-      testWithFlameGame('finds root game in non-nested game structure',
-          (game) async {
+      testWithFlameGame('finds root game in non-nested game structure', (game) async {
         final component = Component();
         await game.ensureAdd(component);
         expect(component.findRootGame(), game);
@@ -1715,7 +1709,7 @@ class _AsyncLoadingChild extends Component {
   }
 }
 
-class _GameResizeComponent extends PositionComponent {
+class _GameResizeComponent extends PositionedComponent {
   _GameResizeComponent(this.name) : super(size: Vector2.all(2.0));
 
   String name;
@@ -1728,7 +1722,7 @@ class _GameResizeComponent extends PositionComponent {
   }
 }
 
-class _OnChildrenChangedComponent extends PositionComponent {
+class _OnChildrenChangedComponent extends PositionedComponent {
   int onChangedChildrenRuns = 0;
   ChildrenChangeType? lastChangeType;
 

@@ -5,7 +5,7 @@ import 'package:oxygen/oxygen.dart';
 
 /// System that provides base rendering for default components.
 ///
-/// Based on the PositionComponent logic from Flame.
+/// Based on the PositionedComponent logic from Flame.
 abstract class BaseSystem extends System with RenderSystem {
   Query? _query;
 
@@ -14,14 +14,14 @@ abstract class BaseSystem extends System with RenderSystem {
 
   /// Filters used for querying entities.
   ///
-  /// The [PositionComponent] and [SizeComponent] will be added automatically.
+  /// The [PositionedComponent] and [SizeComponent] will be added automatically.
   List<Filter<Component>> get filters;
 
   @override
   @mustCallSuper
   void init() {
     _query = createQuery([
-      Has<PositionComponent>(),
+      Has<PositionedComponent>(),
       Has<SizeComponent>(),
       ...filters,
     ]);
@@ -36,7 +36,7 @@ abstract class BaseSystem extends System with RenderSystem {
   @override
   void render(Canvas canvas) {
     for (final entity in entities) {
-      final position = entity.get<PositionComponent>()!;
+      final position = entity.get<PositionedComponent>()!;
       final size = entity.get<SizeComponent>()!.size;
       final anchor = entity.get<AnchorComponent>()?.anchor ?? Anchor.topLeft;
       final angle = entity.get<AngleComponent>()?.radians ?? 0;

@@ -98,7 +98,7 @@ functionality inherited by all other effects. This includes:
 
 ### `MoveByEffect`
 
-This effect applies to a `PositionComponent` and shifts it by a prescribed `offset` amount. This
+This effect applies to a `PositionedComponent` and shifts it by a prescribed `offset` amount. This
 offset is relative to the current position of the target:
 
 ```{flutter-app}
@@ -125,7 +125,7 @@ superposition of all the individual effects.
 
 ### `MoveToEffect`
 
-This effect moves a `PositionComponent` from its current position to the specified destination
+This effect moves a `PositionedComponent` from its current position to the specified destination
 point in a straight line.
 
 ```{flutter-app}
@@ -148,7 +148,7 @@ It is possible, but not recommended to attach multiple such effects to the same 
 
 ### `MoveAlongPathEffect`
 
-This effect moves a `PositionComponent` along the specified path relative to the component's
+This effect moves a `PositionedComponent` along the specified path relative to the component's
 current position. The path can have non-linear segments, but must be singly connected. It is
 recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps in the component's
 position.
@@ -282,7 +282,7 @@ final effect = SizeEffect.by(
 );
 ```
 
-The size of a `PositionComponent` cannot be negative. If an effect attempts to set the size to a
+The size of a `PositionedComponent` cannot be negative. If an effect attempts to set the size to a
 negative value, the size will be clamped at zero.
 
 Note that for this effect to work, the target component must implement the `SizeProvider` interface

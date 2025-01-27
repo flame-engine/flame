@@ -257,7 +257,7 @@ The gravity and bullet are now field setters and getters, so if you before had `
  - Integrate Flame viewport and camera to replace own viewport
 
 ## [0.6.4-rc4]
- - Add PositionBodyComponent, keeps a PositionComponent on top of a BodyComponent
+ - Add PositionBodyComponent, keeps a PositionedComponent on top of a BodyComponent
  - Update to forge2d 0.6.4
 
 ## [0.6.3-rc4]

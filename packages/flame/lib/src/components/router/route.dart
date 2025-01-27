@@ -20,8 +20,7 @@ import 'package:meta/meta.dart';
 /// any potentially costly initialization operations.
 ///
 /// Routes are managed by the [RouterComponent] component.
-class Route extends PositionComponent
-    with ParentIsA<RouterComponent>, HasTimeScale {
+class Route extends PositionedComponent with ParentIsA<RouterComponent>, HasTimeScale {
   Route(
     Component Function()? builder, {
     Component Function()? loadingBuilder,

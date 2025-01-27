@@ -14,7 +14,7 @@ void main() {
           game.add(parent);
           parent.add(
             AlignComponent(
-              child: PositionComponent(),
+              child: PositionedComponent(),
               alignment: Anchor.center,
             ),
           );

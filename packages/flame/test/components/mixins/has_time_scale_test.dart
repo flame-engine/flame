@@ -149,7 +149,7 @@ class _GameWithTimeScale extends FlameGame with HasTimeScale {}
 
 class _ComponentWithTimeScale extends Component with HasTimeScale {}
 
-class _MovingComponent extends PositionComponent {
+class _MovingComponent extends PositionedComponent {
   final speed = 1.0;
   @override
   void update(double dt) => position.setValues(position.x + speed * dt, 0);

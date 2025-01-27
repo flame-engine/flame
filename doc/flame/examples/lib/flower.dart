@@ -7,8 +7,7 @@ import 'package:flame/rendering.dart';
 
 enum FlowerPaint { paintId1, paintId2, paintId3, paintId4, paintId5 }
 
-class Flower extends PositionComponent
-    with TapCallbacks, HasPaint<FlowerPaint> {
+class Flower extends PositionedComponent with TapCallbacks, HasPaint<FlowerPaint> {
   Flower({
     required double size,
     void Function(Flower)? onTap,

@@ -31,7 +31,7 @@ void main() {
         await game.world.add(
           RectangleComponent(
             children: [
-              PositionComponent(),
+              PositionedComponent(),
             ],
           ),
         );
@@ -43,7 +43,7 @@ void main() {
 
         expect(components, hasLength(2));
         expect(components[0], isA<RectangleComponent>());
-        expect(components[1], isA<PositionComponent>());
+        expect(components[1], isA<PositionedComponent>());
       },
     );
 
@@ -55,10 +55,10 @@ void main() {
           await game.world.addAll([
             RectangleComponent(
               children: [
-                PositionComponent(),
+                PositionedComponent(),
               ],
             ),
-            PositionComponent(),
+            PositionedComponent(),
           ]);
 
           await game.ready();
@@ -68,12 +68,12 @@ void main() {
           command.onChildMatch(
             components.add,
             rootComponent: game.world,
-            types: ['PositionComponent'],
+            types: ['PositionedComponent'],
           );
 
           expect(components, hasLength(2));
-          expect(components[0], isA<PositionComponent>());
-          expect(components[1], isA<PositionComponent>());
+          expect(components[0], isA<PositionedComponent>());
+          expect(components[1], isA<PositionedComponent>());
         },
       );
 
@@ -84,10 +84,10 @@ void main() {
           await game.world.addAll([
             RectangleComponent(
               children: [
-                PositionComponent(),
+                PositionedComponent(),
               ],
             ),
-            PositionComponent(),
+            PositionedComponent(),
           ]);
 
           await game.ready();
@@ -97,12 +97,12 @@ void main() {
           command.onChildMatch(
             components.add,
             rootComponent: game.world,
-            types: ['PositionComponent'],
+            types: ['PositionedComponent'],
             limit: 1,
           );
 
           expect(components, hasLength(1));
-          expect(components[0], isA<PositionComponent>());
+          expect(components[0], isA<PositionedComponent>());
         },
       );
 
@@ -114,10 +114,10 @@ void main() {
           await game.world.addAll([
             target = RectangleComponent(
               children: [
-                PositionComponent(),
+                PositionedComponent(),
               ],
             ),
-            PositionComponent(),
+            PositionedComponent(),
           ]);
 
           await game.ready();
@@ -131,7 +131,7 @@ void main() {
           );
 
           expect(components, hasLength(1));
-          expect(components[0], isA<PositionComponent>());
+          expect(components[0], isA<PositionedComponent>());
         },
       );
     });

@@ -36,8 +36,7 @@ class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
       camera.viewfinder.position = Vector2(center.x, center.y);
     });
 
-    magnifyingGlass =
-        CameraComponent(world: world, viewport: CircularViewport(radius));
+    magnifyingGlass = CameraComponent(world: world, viewport: CircularViewport(radius));
     magnifyingGlass.viewport.add(Bezel(radius));
     magnifyingGlass.viewfinder.zoom = zoom;
   }
@@ -75,7 +74,7 @@ class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
   }
 }
 
-class Bezel extends PositionComponent {
+class Bezel extends PositionedComponent {
   Bezel(this.radius)
       : super(
           size: Vector2.all(2 * radius),
@@ -117,12 +116,8 @@ class Bezel extends PositionComponent {
             ),
           ))
         .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
-    connector = (Path()
-          ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
-    specularHighlight = (Path()
-          ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    connector = (Path()..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44)).transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    specularHighlight = (Path()..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3))).transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
 
     glassPaint = Paint()..color = const Color(0x1400ffae);
     rimBorderPaint = Paint()
@@ -187,7 +182,7 @@ class AntWorld extends World {
   }
 }
 
-class DragonCurve extends PositionComponent {
+class DragonCurve extends PositionedComponent {
   late final Paint borderPaint;
   late final Paint mainPaint;
   late final Path dragon;
@@ -251,7 +246,7 @@ class DragonCurve extends PositionComponent {
   }
 }
 
-class Ant extends PositionComponent {
+class Ant extends PositionedComponent {
   Ant() : random = Random() {
     size = Vector2(2, 5);
     anchor = const Anchor(0.5, 0.4);
@@ -428,8 +423,7 @@ class Ant extends PositionComponent {
       'nextIndex is outside of the bounds of travelPath',
     );
     final nextPosition = travelPath[nextIndex];
-    var nextAngle =
-        angle = -(nextPosition - position).angleToSigned(Vector2(0, -1));
+    var nextAngle = angle = -(nextPosition - position).angleToSigned(Vector2(0, -1));
     if (nextAngle - angle > tau / 2) {
       nextAngle -= tau;
     }

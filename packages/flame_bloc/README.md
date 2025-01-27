@@ -87,7 +87,7 @@ Listening to states changes at the component level can be done with two approach
 By using `FlameBlocListener` component:
 
 ```dart
-class Player extends PositionComponent {
+class Player extends PositionedComponent {
   @override
   Future<void> onLoad() async {
     await add(
@@ -104,7 +104,7 @@ class Player extends PositionComponent {
 Or by using `FlameBlocListenable` mixin:
 
 ```dart
-class Player extends PositionComponent
+class Player extends PositionedComponent
   with FlameBlocListenable<PlayerInventoryBloc, PlayerInventoryState> {
 
   @override
@@ -119,7 +119,7 @@ to a component:
 
 
 ```dart
-class Player extends PositionComponent
+class Player extends PositionedComponent
   with FlameBlocReader<PlayerStatsBloc, PlayerStatsState> {
 
   void takeHit() {

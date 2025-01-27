@@ -225,7 +225,7 @@ You can also check more complete examples
 The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
 `Component`s. Say that you have a fairly round rock as a `SpriteComponent` for example, then you
 don't want to register input that is in the corner of the image where the rock is not displayed,
-since a `PositionComponent` is rectangular by default. Then you can use the `GestureHitboxes` mixin
+since a `PositionedComponent` is rectangular by default. Then you can use the `GestureHitboxes` mixin
 to define a more accurate circle or polygon (or another shape) for which the input should be within
 for the event to be registered on your component.
 

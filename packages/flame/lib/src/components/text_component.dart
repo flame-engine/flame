@@ -5,7 +5,7 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
-class TextComponent<T extends TextRenderer> extends PositionComponent {
+class TextComponent<T extends TextRenderer> extends PositionedComponent {
   TextComponent({
     String? text,
     T? textRenderer,

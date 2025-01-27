@@ -6,7 +6,7 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class Player extends PositionComponent {
+class Player extends PositionedComponent {
   static final _paint = Paint()..color = Colors.white;
   @override
   void render(Canvas canvas) {

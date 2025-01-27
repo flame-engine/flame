@@ -8,10 +8,10 @@ import 'package:flame/src/game/transform2d.dart';
 /// shake effects, scale effects, etc. In order to apply such an effect to a
 /// component simply add the effect as a child to that component.
 ///
-/// Currently this class only supports being attached to [PositionComponent]s,
+/// Currently this class only supports being attached to [PositionedComponent]s,
 /// but in the future it will be extended to work with any [Transform2D]-based
 /// classes.
-abstract class Transform2DEffect extends ComponentEffect<PositionComponent> {
+abstract class Transform2DEffect extends ComponentEffect<PositionedComponent> {
   Transform2DEffect(
     super.controller, {
     super.onComplete,

@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('MoveToEffect', () {
     testWithFlameGame('simple linear movement', (game) async {
-      final component = PositionComponent()..position = Vector2(3, 4);
+      final component = PositionedComponent()..position = Vector2(3, 4);
       game.add(component);
       game.update(0);
 

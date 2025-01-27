@@ -2,8 +2,7 @@
 
 import 'dart:math';
 
-import 'package:flame/components.dart'
-    show Anchor, ComponentKey, PositionComponent;
+import 'package:flame/components.dart' show Anchor, ComponentKey, PositionedComponent;
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
@@ -327,7 +326,7 @@ void main() {
       });
     });
 
-    group('PositionComponent parented by BodyComponent', () {
+    group('PositionedComponent parented by BodyComponent', () {
       final flameTester = FlameTester(Forge2DGame.new);
 
       flameTester.testGameWidget(
@@ -344,7 +343,7 @@ void main() {
           final bodyComponent = _TestBodyComponent()..body = body;
 
           // Creates a positional component with an angle of 1 radians
-          final positionComponent = PositionComponent(angle: 1.0);
+          final positionComponent = PositionedComponent(angle: 1.0);
 
           // Creates a hierarchy: game > bodyComponent > positionComponent
           game.world.add(bodyComponent);

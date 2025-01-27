@@ -16,8 +16,7 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   late final List<double> _dts;
   late final Set<int> _inputTicks;
 
-  UpdateComponentsBenchmark(this.random)
-      : super('Updating Components Benchmark');
+  UpdateComponentsBenchmark(this.random) : super('Updating Components Benchmark');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -33,8 +32,7 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
 
     await _game.ready();
 
-    _components =
-        _game.children.whereType<_BenchmarkComponent>().toList(growable: false);
+    _components = _game.children.whereType<_BenchmarkComponent>().toList(growable: false);
 
     _dts = List.generate(_amountTicks, (_) => random.nextDouble());
     _inputTicks = List.generate(
@@ -57,7 +55,7 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class _BenchmarkComponent extends PositionComponent {
+class _BenchmarkComponent extends PositionedComponent {
   static const _groundY = -20.0;
 
   final int id;

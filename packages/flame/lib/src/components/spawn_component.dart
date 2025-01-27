@@ -8,7 +8,7 @@ import 'package:flame/math.dart';
 
 /// {@template spawn_component}
 /// The [SpawnComponent] is a non-visual component which can spawn
-/// [PositionComponent]s randomly within a set [area]. If [area] is not set it
+/// [PositionedComponent]s randomly within a set [area]. If [area] is not set it
 /// will use the size of the nearest ancestor that provides a size.
 /// [period] will set the static time interval for when it will spawn new
 /// components.
@@ -24,8 +24,8 @@ class SpawnComponent extends Component {
   /// {@macro spawn_component}
   SpawnComponent({
     required double period,
-    PositionComponent Function(int amount)? factory,
-    List<PositionComponent> Function(int amount)? multiFactory,
+    PositionedComponent Function(int amount)? factory,
+    List<PositionedComponent> Function(int amount)? multiFactory,
     this.area,
     this.within = true,
     this.selfPositioning = false,
@@ -53,8 +53,8 @@ class SpawnComponent extends Component {
   SpawnComponent.periodRange({
     required double minPeriod,
     required double maxPeriod,
-    PositionComponent Function(int amount)? factory,
-    List<PositionComponent> Function(int amount)? multiFactory,
+    PositionedComponent Function(int amount)? factory,
+    List<PositionedComponent> Function(int amount)? multiFactory,
     this.area,
     this.within = true,
     this.selfPositioning = false,
@@ -66,8 +66,7 @@ class SpawnComponent extends Component {
           !(selfPositioning && area != null),
           "Don't set an area when you are using selfPositioning=true",
         ),
-        _period = minPeriod +
-            (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
+        _period = minPeriod + (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
         multiFactory = multiFactory ?? _wrapFactory(factory!),
         _random = random ?? randomFallback;
 
@@ -81,7 +80,7 @@ class SpawnComponent extends Component {
   /// If you have set such a factory it was wrapped to create a list. The
   /// factory getter wraps it again to return the first element of the list and
   /// fails when the list is empty!
-  PositionComponent Function(int amount) get factory => (int amount) {
+  PositionedComponent Function(int amount) get factory => (int amount) {
         final result = multiFactory.call(amount);
         assert(
           result.isNotEmpty,
@@ -91,12 +90,12 @@ class SpawnComponent extends Component {
         return result.elementAt(0);
       };
 
-  set factory(PositionComponent Function(int amount) newFactory) {
+  set factory(PositionedComponent Function(int amount) newFactory) {
     multiFactory = _wrapFactory(newFactory);
   }
 
-  static List<PositionComponent> Function(int amount) _wrapFactory(
-    PositionComponent Function(int amount) newFactory,
+  static List<PositionedComponent> Function(int amount) _wrapFactory(
+    PositionedComponent Function(int amount) newFactory,
   ) {
     return (int amount) => [newFactory.call(amount)];
   }
@@ -105,7 +104,7 @@ class SpawnComponent extends Component {
   ///
   /// [amount] is the amount of components that the [SpawnComponent] has spawned
   /// so far.
-  List<PositionComponent> Function(int amount) multiFactory;
+  List<PositionedComponent> Function(int amount) multiFactory;
 
   /// The area where the components should be spawned.
   Shape? area;
@@ -156,12 +155,8 @@ class SpawnComponent extends Component {
   @override
   FutureOr<void> onLoad() async {
     if (area == null && !selfPositioning) {
-      final parentPosition =
-          ancestors().whereType<PositionProvider>().firstOrNull?.position ??
-              Vector2.zero();
-      final parentSize =
-          ancestors().whereType<ReadOnlySizeProvider>().firstOrNull?.size ??
-              Vector2.zero();
+      final parentPosition = ancestors().whereType<PositionProvider>().firstOrNull?.position ?? Vector2.zero();
+      final parentSize = ancestors().whereType<ReadOnlySizeProvider>().firstOrNull?.size ?? Vector2.zero();
       assert(
         !parentSize.isZero(),
         'The SpawnComponent needs an ancestor with a size if area is not '

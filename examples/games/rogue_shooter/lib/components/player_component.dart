@@ -4,8 +4,7 @@ import 'package:rogue_shooter/components/bullet_component.dart';
 import 'package:rogue_shooter/components/enemy_component.dart';
 import 'package:rogue_shooter/components/explosion_component.dart';
 
-class PlayerComponent extends SpriteAnimationComponent
-    with HasGameRef, CollisionCallbacks {
+class PlayerComponent extends SpriteAnimationComponent with HasGameRef, CollisionCallbacks {
   late TimerComponent bulletCreator;
 
   PlayerComponent() : super(size: Vector2(50, 75), anchor: Anchor.center);
@@ -59,7 +58,7 @@ class PlayerComponent extends SpriteAnimationComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is EnemyComponent) {

@@ -8,7 +8,7 @@ import 'package:lottie/lottie.dart';
 
 /// A Flame [Component] which renders a [Lottie] animation using the already
 /// existing Flutter library [lottie](https://pub.dev/packages/lottie).
-class LottieComponent extends PositionComponent with HasPaint {
+class LottieComponent extends PositionedComponent with HasPaint {
   late final LottieRenderer _renderer;
 
   /// The [controller] drives the [Lottie] animation. In case none is specified

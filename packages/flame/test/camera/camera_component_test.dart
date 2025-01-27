@@ -47,7 +47,7 @@ void main() {
     testWithFlameGame('simple camera follow', (game) async {
       final world = World()..addToParent(game);
       final camera = CameraComponent(world: world)..addToParent(game);
-      final player = PositionComponent()..addToParent(world);
+      final player = PositionedComponent()..addToParent(world);
       camera.follow(player);
       await game.ready();
 
@@ -64,8 +64,8 @@ void main() {
       // Creating new camera as the one included with game is not mounted and
       // will therefore not be queued.
       final camera = CameraComponent(world: game.world)..addToParent(game);
-      final player = PositionComponent()..addToParent(game.world);
-      final player2 = PositionComponent()..addToParent(game.world);
+      final player = PositionedComponent()..addToParent(game.world);
+      final player2 = PositionedComponent()..addToParent(game.world);
       camera.follow(player);
       camera.follow(player2);
       await game.ready();
@@ -76,7 +76,7 @@ void main() {
 
     testWithFlameGame('follow with snap', (game) async {
       final world = World()..addToParent(game);
-      final player = PositionComponent()
+      final player = PositionedComponent()
         ..position = Vector2(100, 100)
         ..addToParent(world);
       final camera = CameraComponent(world: world)
@@ -202,7 +202,7 @@ void main() {
         ..position = Vector2(400, 300)
         ..priority = -1;
       game.camera.viewfinder.position = Vector2(100, 50);
-      final component = PositionComponent(
+      final component = PositionedComponent(
         size: Vector2(300, 100),
         position: Vector2(50, 30),
       );
@@ -325,7 +325,7 @@ void main() {
     });
 
     testWithFlameGame('component is in view for the camera', (game) async {
-      final component = PositionComponent(
+      final component = PositionedComponent(
         size: Vector2(10, 10),
         position: Vector2(0, 0),
       );
@@ -341,7 +341,7 @@ void main() {
     });
 
     testWithFlameGame('component is out of view for the camera', (game) async {
-      final component = PositionComponent(
+      final component = PositionedComponent(
         size: Vector2(10, 10),
         position: Vector2(100, 100),
       );
@@ -472,14 +472,13 @@ void main() {
         ),
       );
     },
-    goldenFile:
-        '../_goldens/camera_component_fixed_resolution_order_zoom_test.png',
+    goldenFile: '../_goldens/camera_component_fixed_resolution_order_zoom_test.png',
     size: Vector2(50, 50),
   );
 
   group('CameraComponent.canSee', () {
     testWithFlameGame('null world', (game) async {
-      final player = PositionComponent();
+      final player = PositionedComponent();
       final world = World(children: [player]);
       final camera = CameraComponent();
 
@@ -492,7 +491,7 @@ void main() {
     });
 
     testWithFlameGame('unmounted world', (game) async {
-      final player = PositionComponent();
+      final player = PositionedComponent();
       final world = World(children: [player]);
       final camera = CameraComponent(world: world);
 
@@ -506,7 +505,7 @@ void main() {
     });
 
     testWithFlameGame('unmounted component', (game) async {
-      final player = PositionComponent();
+      final player = PositionedComponent();
       final world = World();
       final camera = CameraComponent(world: world);
 
@@ -520,7 +519,7 @@ void main() {
     });
 
     testWithFlameGame('component from another world', (game) async {
-      final player = PositionComponent();
+      final player = PositionedComponent();
       final world1 = World(children: [player]);
       final world2 = World();
       final camera = CameraComponent(world: world2);

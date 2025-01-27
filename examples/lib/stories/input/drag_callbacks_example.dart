@@ -6,7 +6,7 @@ import 'package:flutter/material.dart' show Colors;
 class DragCallbacksExample extends FlameGame {
   static const String description = '''
     In this example we show you can use the `DragCallbacks` mixin on
-    `PositionComponent`s. Drag around the Embers and see their position
+    `PositionedComponent`s. Drag around the Embers and see their position
     changing.
   ''';
 

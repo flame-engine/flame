@@ -17,27 +17,26 @@ import 'package:tiled/tiled.dart';
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
-class TiledComponent<T extends FlameGame> extends PositionComponent
-    with HasGameReference<T> {
+class TiledComponent<T extends FlameGame> extends PositionedComponent with HasGameReference<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
   /// This property **cannot** be reassigned at runtime. To make the
-  /// [PositionComponent] larger or smaller, change its [scale].
+  /// [PositionedComponent] larger or smaller, change its [scale].
   @override
   set size(Vector2 size) {
     // Intentionally left empty.
   }
 
   /// This property **cannot** be reassigned at runtime. To make the
-  /// [PositionComponent] larger or smaller, change its [scale].
+  /// [PositionedComponent] larger or smaller, change its [scale].
   @override
   set width(double w) {
     // Intentionally left empty.
   }
 
   /// This property **cannot** be reassigned at runtime. To make the
-  /// [PositionComponent] larger or smaller, change its [scale].
+  /// [PositionedComponent] larger or smaller, change its [scale].
   @override
   set height(double h) {
     // Intentionally left empty.

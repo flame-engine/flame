@@ -5,7 +5,7 @@
 
 Flame provides some debugging features for the `FlameGame` class. These features are enabled when
 the `debugMode` property is set to `true` (or overridden to be `true`).
-When `debugMode` is enabled, each `PositionComponent` will be rendered with their bounding size, and
+When `debugMode` is enabled, each `PositionedComponent` will be rendered with their bounding size, and
 have their positions written on the screen. This way, you can visually verify the components
 boundaries and positions.
 

@@ -17,7 +17,7 @@ staged listeners and disposes of them on the user's behalf inside `onRemove`.
 
 ```dart
 
-class RiverpodAwareTextComponent extends PositionComponent
+class RiverpodAwareTextComponent extends PositionedComponent
     with RiverpodComponentMixin {
   late TextComponent textComponent;
   int currentValue = 0;

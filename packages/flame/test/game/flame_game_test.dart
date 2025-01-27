@@ -138,10 +138,10 @@ void main() {
       );
 
       testWithFlameGame(
-        'removes PositionComponent when removeFromParent is called',
+        'removes PositionedComponent when removeFromParent is called',
         (game) async {
           final world = game.world;
-          final component = PositionComponent();
+          final component = PositionedComponent();
           await world.ensureAdd(component);
           expect(world.children.length, equals(1));
           component.removeFromParent();
@@ -183,10 +183,7 @@ void main() {
 
         expect(world.children.length, 4);
         expect(
-          world.children
-              .whereType<_IndexedComponent>()
-              .map((c) => c.index)
-              .isSorted((a, b) => a.compareTo(b)),
+          world.children.whereType<_IndexedComponent>().map((c) => c.index).isSorted((a, b) => a.compareTo(b)),
           isTrue,
         );
       },
@@ -207,10 +204,7 @@ void main() {
 
         expect(game.children.whereType<_IndexedComponent>().length, 6);
         expect(
-          game.children
-              .whereType<_IndexedComponent>()
-              .map((c) => c.index)
-              .isSorted((a, b) => a.compareTo(b)),
+          game.children.whereType<_IndexedComponent>().map((c) => c.index).isSorted((a, b) => a.compareTo(b)),
           isTrue,
         );
       },
@@ -421,7 +415,7 @@ class _MyTappableComponent extends _MyComponent with TapCallbacks {
   }
 }
 
-class _MyComponent extends PositionComponent with HasGameRef {
+class _MyComponent extends PositionedComponent with HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;

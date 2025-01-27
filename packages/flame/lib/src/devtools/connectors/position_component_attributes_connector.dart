@@ -12,7 +12,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
       (method, parameters) async {
         final id = int.tryParse(parameters['id'] ?? '');
 
-        final positionComponent = findComponent<PositionComponent>(id);
+        final positionComponent = findComponent<PositionedComponent>(id);
 
         if (positionComponent != null) {
           return ServiceExtensionResponse.result(
@@ -30,7 +30,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
         } else {
           return ServiceExtensionResponse.error(
             ServiceExtensionResponse.extensionError,
-            'No PositionComponent found with id: $id',
+            'No PositionedComponent found with id: $id',
           );
         }
       },
@@ -42,7 +42,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
         final id = int.tryParse(parameters['id'] ?? '');
         final attribute = parameters['attribute'];
 
-        final positionComponent = findComponent<PositionComponent>(id);
+        final positionComponent = findComponent<PositionedComponent>(id);
 
         if (positionComponent != null) {
           if (attribute == 'x') {
@@ -69,7 +69,7 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
         } else {
           return ServiceExtensionResponse.error(
             ServiceExtensionResponse.extensionError,
-            'No PositionComponent found with id: $id',
+            'No PositionedComponent found with id: $id',
           );
         }
       },

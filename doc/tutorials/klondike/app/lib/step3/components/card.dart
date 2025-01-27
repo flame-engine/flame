@@ -6,7 +6,7 @@ import '../klondike_game.dart';
 import '../rank.dart';
 import '../suit.dart';
 
-class Card extends PositionComponent {
+class Card extends PositionedComponent {
   Card(int intRank, int intSuit)
       : rank = Rank.fromInt(intRank),
         suit = Suit.fromInt(intSuit),
@@ -32,8 +32,7 @@ class Card extends PositionComponent {
     }
   }
 
-  static final Paint backBackgroundPaint = Paint()
-    ..color = const Color(0xff380c02);
+  static final Paint backBackgroundPaint = Paint()..color = const Color(0xff380c02);
   static final Paint backBorderPaint1 = Paint()
     ..color = const Color(0xffdbaf58)
     ..style = PaintingStyle.stroke
@@ -56,8 +55,7 @@ class Card extends PositionComponent {
     flameSprite.render(canvas, position: size / 2, anchor: Anchor.center);
   }
 
-  static final Paint frontBackgroundPaint = Paint()
-    ..color = const Color(0xff000000);
+  static final Paint frontBackgroundPaint = Paint()..color = const Color(0xff000000);
   static final Paint redBorderPaint = Paint()
     ..color = const Color(0xffece8a3)
     ..style = PaintingStyle.stroke
@@ -74,12 +72,9 @@ class Card extends PositionComponent {
   static final Sprite redJack = klondikeSprite(81, 565, 562, 488);
   static final Sprite redQueen = klondikeSprite(717, 541, 486, 515);
   static final Sprite redKing = klondikeSprite(1305, 532, 407, 549);
-  static final Sprite blackJack = klondikeSprite(81, 565, 562, 488)
-    ..paint = blueFilter;
-  static final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)
-    ..paint = blueFilter;
-  static final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)
-    ..paint = blueFilter;
+  static final Sprite blackJack = klondikeSprite(81, 565, 562, 488)..paint = blueFilter;
+  static final Sprite blackQueen = klondikeSprite(717, 541, 486, 515)..paint = blueFilter;
+  static final Sprite blackKing = klondikeSprite(1305, 532, 407, 549)..paint = blueFilter;
 
   void _renderFront(Canvas canvas) {
     canvas.drawRRect(cardRRect, frontBackgroundPaint);

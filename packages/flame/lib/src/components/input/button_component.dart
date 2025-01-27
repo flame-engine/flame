@@ -2,14 +2,14 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
-/// The [ButtonComponent] bundles two [PositionComponent]s, one that shows while
+/// The [ButtonComponent] bundles two [PositionedComponent]s, one that shows while
 /// the button is being pressed, and one that shows otherwise.
 ///
 /// Note: You have to set the [button] in [onLoad] if you are not passing it in
 /// through the constructor.
-class ButtonComponent extends PositionComponent with TapCallbacks {
-  PositionComponent? button;
-  PositionComponent? buttonDown;
+class ButtonComponent extends PositionedComponent with TapCallbacks {
+  PositionedComponent? button;
+  PositionedComponent? buttonDown;
 
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;

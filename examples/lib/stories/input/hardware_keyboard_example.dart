@@ -45,8 +45,7 @@ class HardwareKeyboardExample extends FlameGame {
   }
 }
 
-class MyKeyboardDetector extends HardwareKeyboardDetector
-    with HasGameReference<HardwareKeyboardExample> {
+class MyKeyboardDetector extends HardwareKeyboardDetector with HasGameReference<HardwareKeyboardExample> {
   @override
   void onKeyEvent(KeyEvent event) {
     final newComponents = <KeyboardKey>[];
@@ -205,7 +204,7 @@ class MyKeyboardDetector extends HardwareKeyboardDetector
   };
 }
 
-class KeyboardKey extends PositionComponent {
+class KeyboardKey extends PositionedComponent {
   KeyboardKey({required this.text, super.position}) {
     textElement = textRenderer.format(text);
     width = textElement.metrics.width + padding.x;

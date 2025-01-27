@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-class Pile extends PositionComponent {
+class Pile extends PositionedComponent {
   @override
   bool get debugMode => true;
 }

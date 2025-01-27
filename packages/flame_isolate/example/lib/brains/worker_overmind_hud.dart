@@ -13,7 +13,7 @@ enum ComputeType {
   const ComputeType(this.description);
 }
 
-class WorkerOvermindHud extends PositionComponent with TapCallbacks {
+class WorkerOvermindHud extends PositionedComponent with TapCallbacks {
   ComputeType computeType = ComputeType.isolate;
 
   @override
@@ -26,8 +26,7 @@ class WorkerOvermindHud extends PositionComponent with TapCallbacks {
 
   @override
   void onTapDown(_) {
-    computeType =
-        ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
+    computeType = ComputeType.values[(computeType.index + 1) % ComputeType.values.length];
   }
 
   final _paint = Paint()..color = const Color(0xa98d560d);

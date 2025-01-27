@@ -53,8 +53,7 @@ extension ParallaxComponentExtension on FlameGame {
 /// Most of the time you want to add the [ParallaxComponent] as a child to the
 /// viewport: `game.camera.viewport.add(parallaxComponent);`, since you want it
 /// to be static to the rest of the game.
-class ParallaxComponent<T extends FlameGame> extends PositionComponent
-    with HasGameReference<T> {
+class ParallaxComponent<T extends FlameGame> extends PositionedComponent with HasGameReference<T> {
   bool isFullscreen = true;
   Parallax? _parallax;
 
@@ -88,9 +87,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     if (!isFullscreen) {
       return;
     }
-    final newSize = parent is ReadOnlySizeProvider
-        ? (parent! as ReadOnlySizeProvider).size
-        : game.size;
+    final newSize = parent is ReadOnlySizeProvider ? (parent! as ReadOnlySizeProvider).size : game.size;
     this.size.setFrom(newSize);
     parallax?.resize(newSize);
   }

@@ -9,8 +9,8 @@ import 'package:test/test.dart';
 /// For example:
 /// ```dart
 /// expect(
-///   () => PositionComponent(size: Vector2.all(-1)),
-///   failsAssert('size of a PositionComponent cannot be negative'),
+///   () => PositionedComponent(size: Vector2.all(-1)),
+///   failsAssert('size of a PositionedComponent cannot be negative'),
 /// )
 /// ```
 Matcher failsAssert([String? message]) {

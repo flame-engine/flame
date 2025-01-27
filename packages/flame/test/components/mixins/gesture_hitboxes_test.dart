@@ -47,8 +47,7 @@ void main() {
       expect(component.containsPoint(point), isTrue);
     });
 
-    testWithFlameGame('CircleHitbox is displaced within the parent component',
-        (game) async {
+    testWithFlameGame('CircleHitbox is displaced within the parent component', (game) async {
       final component = _HitboxComponent();
       component.position.setAll(10);
       component.size.setValues(2.0, 2.0);
@@ -68,9 +67,7 @@ void main() {
       expect(component.containsPoint(outsidePoint), isFalse);
     });
 
-    testWithFlameGame(
-        'RectangleHitbox is displaced within the parent component',
-        (game) async {
+    testWithFlameGame('RectangleHitbox is displaced within the parent component', (game) async {
       final component = _HitboxComponent();
       component.position.setAll(10);
       component.size.setValues(2.0, 2.0);
@@ -117,4 +114,4 @@ void main() {
   });
 }
 
-class _HitboxComponent extends PositionComponent with GestureHitboxes {}
+class _HitboxComponent extends PositionedComponent with GestureHitboxes {}

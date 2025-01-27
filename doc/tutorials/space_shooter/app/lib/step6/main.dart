@@ -11,8 +11,7 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+class SpaceShooterGame extends FlameGame with PanDetector, HasCollisionDetection {
   late Player player;
 
   @override
@@ -59,8 +58,7 @@ class SpaceShooterGame extends FlameGame
   }
 }
 
-class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+class Player extends SpriteAnimationComponent with HasGameReference<SpaceShooterGame> {
   Player()
       : super(
           size: Vector2(100, 150),
@@ -115,8 +113,7 @@ class Player extends SpriteAnimationComponent
   }
 }
 
-class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+class Bullet extends SpriteAnimationComponent with HasGameReference<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -156,8 +153,7 @@ class Bullet extends SpriteAnimationComponent
   }
 }
 
-class Enemy extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+class Enemy extends SpriteAnimationComponent with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
   Enemy({
     super.position,
   }) : super(
@@ -197,7 +193,7 @@ class Enemy extends SpriteAnimationComponent
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
 
@@ -209,8 +205,7 @@ class Enemy extends SpriteAnimationComponent
   }
 }
 
-class Explosion extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+class Explosion extends SpriteAnimationComponent with HasGameReference<SpaceShooterGame> {
   Explosion({
     super.position,
   }) : super(

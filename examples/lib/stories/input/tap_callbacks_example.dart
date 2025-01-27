@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class TapCallbacksExample extends FlameGame {
   static const String description = '''
     In this example we show the `TapCallbacks` mixin functionality. You can add
-    the `TapCallbacks` mixin to any `PositionComponent`.\n\n
+    the `TapCallbacks` mixin to any `PositionedComponent`.\n\n
     Tap the squares to see them change their angle around their anchor.
   ''';
 
@@ -18,7 +18,7 @@ class TapCallbacksExample extends FlameGame {
   }
 }
 
-class TappableSquare extends PositionComponent with TapCallbacks {
+class TappableSquare extends PositionedComponent with TapCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 

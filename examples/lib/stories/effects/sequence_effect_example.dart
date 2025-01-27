@@ -36,7 +36,7 @@ class SequenceEffectExample extends FlameGame {
   }
 }
 
-class Player extends PositionComponent {
+class Player extends PositionedComponent {
   Player()
       : path = Path()
           ..lineTo(40, 20)

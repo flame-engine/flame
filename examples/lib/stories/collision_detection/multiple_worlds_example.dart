@@ -40,8 +40,7 @@ class CollidableEmber extends Ember with CollisionCallbacks {
   CollidableEmber({super.position});
 
   static final Random _rng = Random();
-  int get index =>
-      (position.x.isNegative ? 1 : 0) + (position.y.isNegative ? 2 : 0);
+  int get index => (position.x.isNegative ? 1 : 0) + (position.y.isNegative ? 2 : 0);
 
   @override
   Future<void> onLoad() async {
@@ -62,7 +61,7 @@ class CollidableEmber extends Ember with CollisionCallbacks {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
 

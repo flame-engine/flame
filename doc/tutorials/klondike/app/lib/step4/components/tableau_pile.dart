@@ -6,7 +6,7 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import 'card.dart';
 
-class TableauPile extends PositionComponent implements Pile {
+class TableauPile extends PositionedComponent implements Pile {
   TableauPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile.
@@ -25,8 +25,7 @@ class TableauPile extends PositionComponent implements Pile {
       return card.rank.value == 13;
     } else {
       final topCard = _cards.last;
-      return card.suit.isRed == !topCard.suit.isRed &&
-          card.rank.value == topCard.rank.value - 1;
+      return card.suit.isRed == !topCard.suit.isRed && card.rank.value == topCard.rank.value - 1;
     }
   }
 

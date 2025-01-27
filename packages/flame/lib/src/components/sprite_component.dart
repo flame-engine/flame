@@ -5,12 +5,12 @@ import 'package:meta/meta.dart';
 
 export '../sprite.dart';
 
-/// A [PositionComponent] that renders a single [Sprite] at the designated
+/// A [PositionedComponent] that renders a single [Sprite] at the designated
 /// position, scaled to have the designated size and rotated to the specified
 /// angle.
 ///
 /// This a commonly used subclass of [Component].
-class SpriteComponent extends PositionComponent with HasPaint {
+class SpriteComponent extends PositionedComponent with HasPaint {
   /// When set to true, the component is auto-resized to match the
   /// size of underlying sprite.
   bool _autoResize;

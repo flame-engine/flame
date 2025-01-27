@@ -4,9 +4,7 @@ import '../klondike_game.dart';
 import '../pile.dart';
 import 'card.dart';
 
-class WastePile extends PositionComponent
-    with HasGameReference<KlondikeGame>
-    implements Pile {
+class WastePile extends PositionedComponent with HasGameReference<KlondikeGame> implements Pile {
   WastePile({super.position}) : super(size: KlondikeGame.cardSize);
 
   final List<Card> _cards = [];
@@ -15,8 +13,7 @@ class WastePile extends PositionComponent
   //#region Pile API
 
   @override
-  bool canMoveCard(Card card, MoveMethod method) =>
-      _cards.isNotEmpty && card == _cards.last; // Tap and drag are both OK.
+  bool canMoveCard(Card card, MoveMethod method) => _cards.isNotEmpty && card == _cards.last; // Tap and drag are both OK.
 
   @override
   bool canAcceptCard(Card card) => false;

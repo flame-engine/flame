@@ -4,7 +4,7 @@ Layers and snapshots share some common features, including the ability to pre-re
 objects for improved performance. However, they also have unique features which make them better
 suited for different use-cases.
 
-`Snapshot` is a mixin that can be added to any `PositionComponent`. Use this for:
+`Snapshot` is a mixin that can be added to any `PositionedComponent`. Use this for:
 
 - Mixing in to existing game objects (that are `PositionComponents`).
 - Caching game objects, such as sprites, that are complex to render.
@@ -135,10 +135,10 @@ See [a working example of layers](https://github.com/flame-engine/flame/blob/mai
 
 ## Snapshots
 
-Snapshots are an alternative to layers. The `Snapshot` mixin can be applied to any `PositionComponent`.
+Snapshots are an alternative to layers. The `Snapshot` mixin can be applied to any `PositionedComponent`.
 
 ```dart
-class SnapshotComponent extends PositionComponent with Snapshot {}
+class SnapshotComponent extends PositionedComponent with Snapshot {}
 
 class MyGame extends FlameGame {
   late final SnapshotComponent root;
@@ -161,7 +161,7 @@ replicated on the game canvas afterwards. This is useful for caching content tha
 during the game, like a background.
 
 ```dart
-class SnapshotComponent extends PositionComponent with Snapshot {}
+class SnapshotComponent extends PositionedComponent with Snapshot {}
 
 class MyGame extends FlameGame {
   late final SnapshotComponent root;
@@ -217,7 +217,7 @@ component is at position (0,0) and has no scale or rotation applied.
 A snapshot is saved as a `Picture`, but it can be converted to an `Image` using `snapshotToImage`.
 
 ```dart
-class SnapshotComponent extends PositionComponent with Snapshot {}
+class SnapshotComponent extends PositionedComponent with Snapshot {}
 
 class MyGame extends FlameGame {
   late final SnapshotComponent root;

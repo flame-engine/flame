@@ -11,7 +11,7 @@ import 'package:flame/components.dart';
 ///
 /// The [takeSnapshot] and [snapshotAsImage] methods can also be used to take
 /// one-off snapshots for screen-grabs or other purposes.
-mixin Snapshot on PositionComponent {
+mixin Snapshot on PositionedComponent {
   bool _renderSnapshot = true;
   Picture? _picture;
 

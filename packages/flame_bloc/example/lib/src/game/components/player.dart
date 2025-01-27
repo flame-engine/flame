@@ -9,10 +9,7 @@ import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 import 'package:flutter/services.dart';
 
-class PlayerController extends Component
-    with
-        HasGameReference<SpaceShooterGame>,
-        FlameBlocListenable<GameStatsBloc, GameStatsState> {
+class PlayerController extends Component with HasGameReference<SpaceShooterGame>, FlameBlocListenable<GameStatsBloc, GameStatsState> {
   @override
   bool listenWhen(GameStatsState previousState, GameStatsState newState) {
     return previousState.status != newState.status;
@@ -20,25 +17,18 @@ class PlayerController extends Component
 
   @override
   void onNewState(GameStatsState state) {
-    if (state.status == GameStatus.respawn ||
-        state.status == GameStatus.initial) {
+    if (state.status == GameStatus.respawn || state.status == GameStatus.initial) {
       game.statsBloc.add(const PlayerRespawned());
       parent?.add(game.player = PlayerComponent());
     }
   }
 }
 
-class PlayerComponent extends SpriteAnimationComponent
-    with
-        HasGameReference<SpaceShooterGame>,
-        CollisionCallbacks,
-        KeyboardHandler,
-        FlameBlocListenable<InventoryBloc, InventoryState> {
+class PlayerComponent extends SpriteAnimationComponent with HasGameReference<SpaceShooterGame>, CollisionCallbacks, KeyboardHandler, FlameBlocListenable<InventoryBloc, InventoryState> {
   bool destroyed = false;
   late Timer bulletCreator;
 
-  PlayerComponent()
-      : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
+  PlayerComponent() : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
     bulletCreator = Timer(0.5, repeat: true, onTick: _createBullet);
 
     add(RectangleHitbox());
@@ -118,7 +108,7 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is EnemyComponent) {
       takeHit();

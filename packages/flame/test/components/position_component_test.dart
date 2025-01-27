@@ -10,10 +10,10 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('PositionComponent', () {
+  group('PositionedComponent', () {
     group('Properties getters and setters', () {
       test('get/set x/y or position', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.2, 3.4);
         expect(component.x, 2.2);
         expect(component.y, 3.4);
@@ -28,7 +28,7 @@ void main() {
       });
 
       test('get/set width/height or size', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.size.setValues(2.2, 3.4);
         expect(component.size.x, 2.2);
         expect(component.size.y, 3.4);
@@ -43,7 +43,7 @@ void main() {
       });
 
       test('get/set rect', () {
-        final component = PositionComponent(
+        final component = PositionedComponent(
           position: Vector2(0, 1),
           size: Vector2.all(2),
         );
@@ -58,7 +58,7 @@ void main() {
       });
 
       test('get/set rect with anchor', () {
-        final component = PositionComponent(
+        final component = PositionedComponent(
           position: Vector2(0, 1),
           size: Vector2.all(2),
           anchor: Anchor.center,
@@ -80,7 +80,7 @@ void main() {
 
     group('Contains point', () {
       test('inside point', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..position = Vector2(2.0, 2.0)
           ..size = Vector2(4.0, 4.0)
           ..angle = 0.0
@@ -91,7 +91,7 @@ void main() {
       });
 
       test('point on edge', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 2.0);
         component.size.setValues(2.0, 2.0);
         component.angle = 0.0;
@@ -102,7 +102,7 @@ void main() {
       });
 
       test('points outside', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 2.0);
         component.size.setValues(2.0, 2.0);
         component.angle = 0.0;
@@ -113,7 +113,7 @@ void main() {
       });
 
       test('overlapping with angle', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 2.0);
         component.size.setValues(2.0, 2.0);
         component.angle = pi / 4;
@@ -124,7 +124,7 @@ void main() {
       });
 
       test('not overlapping with angle', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 2.0);
         component.size.setValues(2.0, 2.0);
         component.angle = pi / 4;
@@ -135,7 +135,7 @@ void main() {
       });
 
       test('overlapping with angle and topLeft anchor', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(1.0, 1.0);
         component.size.setValues(2.0, 2.0);
         component.angle = pi / 4;
@@ -163,8 +163,7 @@ void main() {
         expect(component.containsPoint(point), true);
       });
 
-      testWithFlameGame('component with hitbox with position contains point',
-          (game) async {
+      testWithFlameGame('component with hitbox with position contains point', (game) async {
         final component = _MyHitboxComponent();
         component.position.setValues(1.0, 1.0);
         component.anchor = Anchor.topLeft;
@@ -181,13 +180,11 @@ void main() {
         component.add(hitbox);
         await game.ensureAdd(component);
 
-        final point =
-            component.position + (component.size / 4) + hitbox.position;
+        final point = component.position + (component.size / 4) + hitbox.position;
         expect(component.containsPoint(point), true);
       });
 
-      testWithFlameGame('component with hitbox with position just misses point',
-          (game) async {
+      testWithFlameGame('component with hitbox with position just misses point', (game) async {
         final component = _MyHitboxComponent();
         component.position.setValues(1.0, 1.0);
         component.anchor = Anchor.topLeft;
@@ -204,10 +201,7 @@ void main() {
         component.add(hitbox);
         await game.ensureAdd(component);
 
-        final point = component.position +
-            (component.size / 4) -
-            Vector2(0.01, 0) +
-            hitbox.position;
+        final point = component.position + (component.size / 4) - Vector2(0.01, 0) + hitbox.position;
         expect(component.containsPoint(point), false);
       });
 
@@ -288,7 +282,7 @@ void main() {
       );
 
       test('component with zero size does not contain point', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 2.0);
         component.size.setValues(0.0, 0.0);
         component.angle = 0.0;
@@ -299,7 +293,7 @@ void main() {
       });
 
       test('scaled component contains point', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.anchor = Anchor.center;
         component.position = Vector2.all(10.0);
         component.size = Vector2.all(5.0);
@@ -361,7 +355,7 @@ void main() {
 
     group('Anchor points', () {
       test('component with anchor center has the same center and position', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 1.0);
         component.size.setValues(3.0, 1.0);
         component.anchor = Anchor.center;
@@ -375,7 +369,7 @@ void main() {
       });
 
       test('component with anchor topLeft has the correct center', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.position.setValues(2.0, 1.0);
         component.size.setValues(3.0, 1.0);
         component.angle = 0.0;
@@ -391,10 +385,10 @@ void main() {
       testWithFlameGame(
         'component with parent has the correct center',
         (game) async {
-          final parent = PositionComponent();
+          final parent = PositionedComponent();
           parent.position.setValues(2.0, 1.0);
           parent.anchor = Anchor.topLeft;
-          final child = PositionComponent();
+          final child = PositionedComponent();
           child.position.setValues(2.0, 1.0);
           child.size.setValues(3.0, 1.0);
           child.angle = 0.0;
@@ -421,7 +415,7 @@ void main() {
       game.onGameResize(Vector2.all(100));
 
       test('width and height', () {
-        final component = PositionComponent(size: Vector2.all(3));
+        final component = PositionedComponent(size: Vector2.all(3));
         component.scale = Vector2(5, -7);
         expect(component.width, 3);
         expect(component.height, 3);
@@ -440,7 +434,7 @@ void main() {
       });
 
       test('positionOf', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(50, 100)
           ..position = Vector2(500, 700)
           ..scale = Vector2(2, 1)
@@ -474,7 +468,7 @@ void main() {
       });
 
       test('local<->parent transforms', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 10)
           ..position = Vector2(50, 20)
           ..anchor = Anchor.center;
@@ -491,7 +485,7 @@ void main() {
       });
 
       test('flips', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 10)
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.6, 0.8);
@@ -513,7 +507,7 @@ void main() {
       });
 
       test('center flips', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 10)
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.6, 0.8);
@@ -533,7 +527,7 @@ void main() {
 
       test('double center flips', () {
         final startPosition = Vector2(50, 20);
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 20)
           ..angle = 2
           ..scale = Vector2(2.0, 3.0)
@@ -579,7 +573,7 @@ void main() {
       });
 
       test('isHorizontallyFlipped', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 10)
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.6, 0.8);
@@ -596,7 +590,7 @@ void main() {
       });
 
       test('isVerticallyFlipped', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 10)
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.6, 0.8);
@@ -613,7 +607,7 @@ void main() {
       });
 
       test('rotations', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(8, 6)
           ..position = Vector2(50, 20)
           ..anchor = Anchor.center;
@@ -640,8 +634,8 @@ void main() {
       });
 
       testRandom('random local<->global', (Random rnd) {
-        final parent = PositionComponent()..size = Vector2(50, 25);
-        final child = PositionComponent()
+        final parent = PositionedComponent()..size = Vector2(50, 25);
+        final child = PositionedComponent()
           ..size = Vector2(10, 8)
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.1, 0.2);
@@ -674,7 +668,7 @@ void main() {
       });
 
       testRandom('transform matrix', (Random rnd) {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(5, 10)
           ..anchor = Anchor.center;
 
@@ -700,7 +694,7 @@ void main() {
       });
 
       test('change anchor', () {
-        final component = PositionComponent()
+        final component = PositionedComponent()
           ..size = Vector2(10, 10)
           ..position = Vector2(100, 100)
           ..anchor = Anchor.center;
@@ -719,9 +713,9 @@ void main() {
       });
 
       test('distance', () {
-        final parent = PositionComponent(size: Vector2.all(100));
-        final comp1 = PositionComponent(position: Vector2(10, 20));
-        final comp2 = PositionComponent(position: Vector2(40, 60));
+        final parent = PositionedComponent(size: Vector2.all(100));
+        final comp1 = PositionedComponent(position: Vector2(10, 20));
+        final comp2 = PositionedComponent(position: Vector2(40, 60));
         parent.add(comp1);
         parent.add(comp2);
 
@@ -742,11 +736,11 @@ void main() {
       });
 
       testWithFlameGame('deep nested', (game) async {
-        final c1 = PositionComponent()..position = Vector2(10, 20);
+        final c1 = PositionedComponent()..position = Vector2(10, 20);
         final c2 = Component();
-        final c3 = PositionComponent()..position = Vector2(-1, -1);
+        final c3 = PositionedComponent()..position = Vector2(-1, -1);
         final c4 = Component();
-        final c5 = PositionComponent()..position = Vector2(5, 0);
+        final c5 = PositionedComponent()..position = Vector2(5, 0);
         c1.add(c2);
         c2.add(c3);
         c3.add(c4);
@@ -755,14 +749,13 @@ void main() {
         await game.ready();
         // Verify that the absolute coordinate is computed correctly even
         // if the component is part of a nested tree where not all of
-        // the components are [PositionComponent]s.
+        // the components are [PositionedComponent]s.
         expect(c5.absoluteToLocal(Vector2(14, 19)), Vector2.zero());
       });
 
       testWithFlameGame('auxiliary getters/setters', (game) async {
-        final parent = PositionComponent(position: Vector2(12, 19));
-        final child =
-            PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
+        final parent = PositionedComponent(position: Vector2(12, 19));
+        final child = PositionedComponent(position: Vector2(11, -1), size: Vector2(4, 6));
         parent.add(child);
         game.add(parent);
         await game.ready();
@@ -782,7 +775,7 @@ void main() {
       });
 
       test('lookAt', () {
-        final component = PositionComponent();
+        final component = PositionedComponent();
 
         final targets = [
           Vector2(0, 1),
@@ -808,7 +801,7 @@ void main() {
       });
 
       test('lookAt with native angle', () {
-        final component = PositionComponent(nativeAngle: pi / 2);
+        final component = PositionedComponent(nativeAngle: pi / 2);
 
         final targets = [
           Vector2(0, 1),
@@ -834,15 +827,15 @@ void main() {
       });
 
       test('lookAt with nested components', () {
-        late PositionComponent component;
+        late PositionedComponent component;
 
-        PositionComponent(
+        PositionedComponent(
           angle: pi / 2,
           children: [
-            PositionComponent(
+            PositionedComponent(
               angle: pi / 2,
               children: [
-                component = PositionComponent(
+                component = PositionedComponent(
                   nativeAngle: -pi,
                 ),
               ],
@@ -874,7 +867,7 @@ void main() {
       });
 
       test('lookAt corner cases', () {
-        final component = PositionComponent(position: Vector2(-20, 50));
+        final component = PositionedComponent(position: Vector2(-20, 50));
         component.lookAt(component.absolutePosition);
         expectDouble(component.angle, 0, epsilon: 1e-10);
 
@@ -960,7 +953,7 @@ void main() {
 
     group('Bounding rectangle', () {
       test('Scale/flip', () {
-        final component = PositionComponent(
+        final component = PositionedComponent(
           position: Vector2(5, 5),
           size: Vector2(4, 2),
           anchor: Anchor.center,
@@ -975,7 +968,7 @@ void main() {
       });
 
       test('flip with non-central anchor', () {
-        final component = PositionComponent(
+        final component = PositionedComponent(
           position: Vector2(0, 0),
           size: Vector2(4, 2),
         );
@@ -989,7 +982,7 @@ void main() {
       test('rotated component', () {
         const w = 5.0;
         const h = 2.0;
-        final component = PositionComponent(size: Vector2(w, h));
+        final component = PositionedComponent(size: Vector2(w, h));
         for (var i = 0; i < 10; i++) {
           final a = (i / 10) * tau / 4;
           component.angle = a;
@@ -1006,11 +999,11 @@ void main() {
       });
 
       testWithFlameGame('absolute toRect', (game) async {
-        final parent = PositionComponent(
+        final parent = PositionedComponent(
           position: Vector2(10, 10),
           size: Vector2(6, 6),
         );
-        final child = PositionComponent(
+        final child = PositionedComponent(
           position: Vector2(-3, 3),
           size: Vector2(1, 1),
         );
@@ -1024,9 +1017,9 @@ void main() {
   });
 }
 
-class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
+class _MyHitboxComponent extends PositionedComponent with GestureHitboxes {}
 
-class _MyDebugComponent extends PositionComponent {
+class _MyDebugComponent extends PositionedComponent {
   @override
   bool get debugMode => true;
 }

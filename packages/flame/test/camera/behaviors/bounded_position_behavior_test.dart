@@ -9,7 +9,7 @@ void main() {
     testWithFlameGame('target is the parent', (game) async {
       final bounds = Rectangle.fromLTRB(0, 0, 200, 100);
       final behavior = BoundedPositionBehavior(bounds: bounds);
-      final component = PositionComponent()
+      final component = PositionedComponent()
         ..add(behavior)
         ..addToParent(game);
       await game.ready();
@@ -58,7 +58,7 @@ void main() {
 
     testWithFlameGame('adjust target position on mount', (game) async {
       final shape = Circle(Vector2.zero(), 10);
-      final target = PositionComponent(position: Vector2(100, 0));
+      final target = PositionedComponent(position: Vector2(100, 0));
       game.add(target);
       target.add(BoundedPositionBehavior(bounds: shape));
       await game.ready();
@@ -67,7 +67,7 @@ void main() {
 
     testWithFlameGame('adjust target position on shape change', (game) async {
       final shape = Circle(Vector2.zero(), 10);
-      final target = PositionComponent(position: Vector2(10, 0));
+      final target = PositionedComponent(position: Vector2(10, 0));
       final behavior = BoundedPositionBehavior(bounds: shape, precision: 0.1);
       game.add(target);
       target.add(behavior);

@@ -2,10 +2,9 @@ import 'package:flame/components.dart';
 import 'package:flame_isolate_example/terrain/terrain.dart';
 import 'package:flutter/material.dart';
 
-class Grass extends PositionComponent with Terrain {
+class Grass extends PositionedComponent with Terrain {
   static final _color = Paint()..color = const Color(0xff567d46);
-  static final _debugColor = Paint()
-    ..color = Colors.black.withValues(alpha: 0.5);
+  static final _debugColor = Paint()..color = Colors.black.withValues(alpha: 0.5);
 
   late final _rect = size.toRect();
   late final _rect2 = Rect.fromCenter(

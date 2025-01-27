@@ -49,7 +49,7 @@ class DragEventsGame extends FlameGame {
 
 /// This component is the pink-ish rectangle in the center of the game window.
 /// It uses the [DragCallbacks] mixin in order to receive drag events.
-class DragTarget extends PositionComponent with DragCallbacks {
+class DragTarget extends PositionedComponent with DragCallbacks {
   DragTarget() : super(anchor: Anchor.center);
 
   final _rectPaint = Paint()..color = const Color(0x88AC54BF);
@@ -104,8 +104,7 @@ class Trail extends Component {
       : _paths = [Path()..moveTo(origin.x, origin.y)],
         _opacities = [1],
         _lastPoint = origin.clone(),
-        _color =
-            HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
+        _color = HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
 
   final List<Path> _paths;
   final List<double> _opacities;
@@ -178,7 +177,7 @@ class Trail extends Component {
   }
 }
 
-class Star extends PositionComponent with DragCallbacks {
+class Star extends PositionedComponent with DragCallbacks {
   Star({
     required int n,
     required double radius1,

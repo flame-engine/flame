@@ -6,8 +6,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
-class FixedResolutionExample extends FlameGame
-    with ScrollDetector, ScaleDetector {
+class FixedResolutionExample extends FlameGame with ScrollDetector, ScaleDetector {
   static const description = '''
     This example shows how to create a viewport with a fixed resolution.
     It is useful when you want the visible part of the game to be the same on
@@ -55,8 +54,7 @@ class FixedResolutionExample extends FlameGame
   }
 }
 
-class FixedResolutionWorld extends World
-    with HasGameReference, TapCallbacks, DoubleTapCallbacks {
+class FixedResolutionWorld extends World with HasGameReference, TapCallbacks, DoubleTapCallbacks {
   final red = BasicPalette.red.paint();
 
   @override
@@ -90,7 +88,7 @@ class FixedResolutionWorld extends World
   }
 }
 
-class Background extends PositionComponent {
+class Background extends PositionedComponent {
   @override
   int priority = -1;
 
@@ -127,8 +125,7 @@ class TextButton extends ButtonComponent {
           ),
           buttonDown: RectangleComponent(
             size: Vector2(200, 100),
-            paint: Paint()
-              ..color = BasicPalette.orange.color.withValues(alpha: 0.5),
+            paint: Paint()..color = BasicPalette.orange.color.withValues(alpha: 0.5),
           ),
           children: [
             TextComponent(

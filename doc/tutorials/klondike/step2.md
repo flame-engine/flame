@@ -93,13 +93,13 @@ file write
 ```dart
 import 'package:flame/components.dart';
 
-class Stock extends PositionComponent {
+class Stock extends PositionedComponent {
   @override
   bool get debugMode => true;
 }
 ```
 
-Here we declare the `Stock` class as a `PositionComponent` (which is a component
+Here we declare the `Stock` class as a `PositionedComponent` (which is a component
 that has a position and size). We also turn on the debug mode for this class so
 that we can see it on the screen even though we don't have any rendering logic
 yet.

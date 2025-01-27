@@ -8,7 +8,7 @@ import 'package:test/test.dart';
 
 import 'collision_test_helpers.dart';
 
-class _TestBlock extends PositionComponent with CollisionCallbacks {
+class _TestBlock extends PositionedComponent with CollisionCallbacks {
   final Vector2 velocity;
   static int collisionCounter = 0;
 
@@ -23,7 +23,7 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     collisionCounter++;
@@ -62,8 +62,7 @@ void main() {
         for (var i = 0; i < ticks; i++) {
           game.update(1 / 60);
         }
-        final totalTime = DateTime.now().millisecondsSinceEpoch -
-            startTime.millisecondsSinceEpoch;
+        final totalTime = DateTime.now().millisecondsSinceEpoch - startTime.millisecondsSinceEpoch;
         // ignore:avoid_print
         print(
           '$totalTime ms\n'

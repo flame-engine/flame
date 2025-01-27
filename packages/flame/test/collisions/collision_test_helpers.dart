@@ -7,8 +7,7 @@ import 'package:meta/meta.dart';
 
 class HasCollidablesGame extends FlameGame with HasCollisionDetection {}
 
-class HasQuadTreeCollidablesGame extends FlameGame
-    with HasQuadTreeCollisionDetection {}
+class HasQuadTreeCollidablesGame extends FlameGame with HasQuadTreeCollisionDetection {}
 
 class CollisionDetectionWorld extends World with HasCollisionDetection {}
 
@@ -69,9 +68,7 @@ class TestHitbox extends RectangleHitbox {
 
   @override
   String toString() {
-    return name == null
-        ? '_TestHitbox[${identityHashCode(this)}]'
-        : '_TestHitbox[$name]';
+    return name == null ? '_TestHitbox[${identityHashCode(this)}]' : '_TestHitbox[$name]';
   }
 }
 
@@ -93,14 +90,14 @@ class CompositeTestHitbox extends CompositeHitbox {
   }
 }
 
-class TestBlock extends PositionComponent with CollisionCallbacks {
+class TestBlock extends PositionedComponent with CollisionCallbacks {
   String? name;
   final hitbox = TestHitbox();
   int startCounter = 0;
   int onCollisionCounter = 0;
   int endCounter = 0;
 
-  final bool Function(PositionComponent other)? _onComponentTypeCheck;
+  final bool Function(PositionedComponent other)? _onComponentTypeCheck;
 
   TestBlock(
     Vector2 position,
@@ -109,7 +106,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     bool addTestHitbox = true,
     super.children,
     this.name,
-    bool Function(PositionComponent other)? onComponentTypeCheck,
+    bool Function(PositionedComponent other)? onComponentTypeCheck,
   })  : _onComponentTypeCheck = onComponentTypeCheck,
         super(
           position: position,
@@ -122,21 +119,18 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   }
 
   @override
-  bool collidingWith(PositionComponent other) {
+  bool collidingWith(PositionedComponent other) {
     return activeCollisions.contains(other);
   }
 
-  bool collidedWithExactly(List<PositionComponent> collidables) {
+  bool collidedWithExactly(List<PositionedComponent> collidables) {
     final otherCollidables = collidables.toSet()..remove(this);
-    return activeCollisions.containsAll(otherCollidables) &&
-        otherCollidables.containsAll(activeCollisions);
+    return activeCollisions.containsAll(otherCollidables) && otherCollidables.containsAll(activeCollisions);
   }
 
   @override
   String toString() {
-    return name == null
-        ? '_TestBlock[${identityHashCode(this)}]'
-        : '_TestBlock[$name]';
+    return name == null ? '_TestBlock[${identityHashCode(this)}]' : '_TestBlock[$name]';
   }
 
   Set<Vector2> intersections(TestBlock other) {
@@ -152,35 +146,34 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   @override
   void onCollisionStart(
     Set<Vector2> intersectionPoints,
-    PositionComponent other,
+    PositionedComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
     startCounter++;
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(Set<Vector2> intersectionPoints, PositionedComponent other) {
     super.onCollision(intersectionPoints, other);
     onCollisionCounter++;
   }
 
   @override
-  void onCollisionEnd(PositionComponent other) {
+  void onCollisionEnd(PositionedComponent other) {
     super.onCollisionEnd(other);
     endCounter++;
   }
 
   @override
-  bool onComponentTypeCheck(PositionComponent other) {
-    return (_onComponentTypeCheck?.call(other) ?? true) &&
-        super.onComponentTypeCheck(other);
+  bool onComponentTypeCheck(PositionedComponent other) {
+    return (_onComponentTypeCheck?.call(other) ?? true) && super.onComponentTypeCheck(other);
   }
 }
 
-class Water extends PositionComponent {
+class Water extends PositionedComponent {
   Water({super.position, super.size, super.children});
 }
 
-class Brick extends PositionComponent {
+class Brick extends PositionedComponent {
   Brick({super.position, super.size, super.children});
 }

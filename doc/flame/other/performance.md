@@ -40,7 +40,7 @@ it is not very economically smart.
 ```
 
 ```dart
-class MyComponent extends PositionComponent {
+class MyComponent extends PositionedComponent {
   @override
   void update(double dt) {
     position += Vector2(10, 20) * dt;
@@ -57,7 +57,7 @@ A better way of doing things would be something like as shown below. This code s
 and `Paint` objects as class members and reuses them across all the update and render calls.
 
 ```dart
-class MyComponent extends PositionComponent {
+class MyComponent extends PositionedComponent {
   final _direction = Vector2(10, 20);
   final _paint = Paint();
 

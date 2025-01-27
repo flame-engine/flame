@@ -48,7 +48,7 @@ void main() {
             final effect = _BadEffect(
               SpeedEffectController(LinearEffectController(1), speed: 1),
             );
-            await game.ensureAdd(PositionComponent()..add(effect));
+            await game.ensureAdd(PositionedComponent()..add(effect));
             game.update(0);
           },
           failsAssert('negative measure returned by _BadEffect: -1.0'),
@@ -58,9 +58,8 @@ void main() {
 
     group('applied to various effects', () {
       testWithFlameGame('speed on MoveEffect', (game) async {
-        final effect =
-            MoveEffect.to(Vector2(8, 12), EffectController(speed: 1));
-        final component = PositionComponent(position: Vector2(5, 8));
+        final effect = MoveEffect.to(Vector2(8, 12), EffectController(speed: 1));
+        final component = PositionedComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);
         game.update(0);
@@ -80,7 +79,7 @@ void main() {
           EffectController(speed: 4),
           absolute: true,
         );
-        final component = PositionComponent(position: Vector2(5, 8));
+        final component = PositionedComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);
         game.update(0);
@@ -92,7 +91,7 @@ void main() {
 
       testWithFlameGame('speed on RotateEffect', (game) async {
         final effect = RotateEffect.to(tau, EffectController(speed: 1));
-        final component = PositionComponent(position: Vector2(5, 8));
+        final component = PositionedComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);
         game.update(0);
@@ -107,7 +106,7 @@ void main() {
           Vector2(10, 0),
           SpeedEffectController(LinearEffectController(0), speed: 1),
         );
-        final component = PositionComponent();
+        final component = PositionedComponent();
         component.add(effect..removeOnFinish = false);
         await game.ensureAdd(component);
         game.update(0);

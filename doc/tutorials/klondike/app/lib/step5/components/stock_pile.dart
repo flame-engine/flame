@@ -7,9 +7,7 @@ import '../pile.dart';
 import 'card.dart';
 import 'waste_pile.dart';
 
-class StockPile extends PositionComponent
-    with HasGameReference<KlondikeGame>
-    implements Pile {
+class StockPile extends PositionedComponent with HasGameReference<KlondikeGame> implements Pile {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
   /// Which cards are currently placed onto this pile. The first card in the
@@ -26,8 +24,7 @@ class StockPile extends PositionComponent
   bool canAcceptCard(Card card) => false;
 
   @override
-  void removeCard(Card card, MoveMethod method) =>
-      throw StateError('cannot remove cards');
+  void removeCard(Card card, MoveMethod method) => throw StateError('cannot remove cards');
 
   @override
   // Card cannot be removed but could have been dragged out of place.

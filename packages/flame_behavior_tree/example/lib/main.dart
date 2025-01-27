@@ -71,8 +71,7 @@ class GameWorld extends World with HasGameReference {
 }
 
 class Door extends RectangleComponent with TapCallbacks {
-  Door({super.position, super.size, super.anchor})
-      : super(paint: BasicPalette.brown.paint());
+  Door({super.position, super.size, super.anchor}) : super(paint: BasicPalette.brown.paint());
 
   bool isOpen = false;
   bool _isInProgress = false;
@@ -115,13 +114,13 @@ class Door extends RectangleComponent with TapCallbacks {
   }
 }
 
-class Agent extends PositionComponent with HasBehaviorTree {
+class Agent extends PositionedComponent with HasBehaviorTree {
   Agent({required this.door, required this.house, required Vector2 position})
       : _startPosition = position.clone(),
         super(position: position);
 
   final Door door;
-  final PositionComponent house;
+  final PositionedComponent house;
   final Vector2 _startPosition;
 
   @override

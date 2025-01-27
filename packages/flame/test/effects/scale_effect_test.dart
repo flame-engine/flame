@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ScaleEffect', () {
     testWithFlameGame('relative', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       await component.add(
@@ -30,7 +30,7 @@ void main() {
     });
 
     testWithFlameGame('absolute', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       component.scale = Vector2.all(1.0);
@@ -52,7 +52,7 @@ void main() {
     });
 
     testWithFlameGame('reset relative', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       final effect = ScaleEffect.by(
@@ -72,7 +72,7 @@ void main() {
     });
 
     testWithFlameGame('reset absolute', (game) async {
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       final effect = ScaleEffect.to(
@@ -91,7 +91,7 @@ void main() {
     });
 
     testWithFlameGame('scale composition', (game) async {
-      final component = PositionComponent()..flipVertically();
+      final component = PositionedComponent()..flipVertically();
       await game.ensureAdd(component);
 
       await component.add(
@@ -125,7 +125,7 @@ void main() {
 
     testRandom('a very long scale change', (Random rng) async {
       final game = await initializeFlameGame();
-      final component = PositionComponent();
+      final component = PositionedComponent();
       await game.ensureAdd(component);
 
       final effect = ScaleEffect.by(

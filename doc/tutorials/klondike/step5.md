@@ -33,7 +33,7 @@ many game-wide values. Let us call our value `klondikeDraw`. In your class decla
 For class StockPile we will have:
 
 ```dart
-class StockPile extends PositionComponent
+class StockPile extends PositionedComponent
     with TapCallbacks, HasGameReference<KlondikeGame>
     implements Pile {
 ```
@@ -64,7 +64,7 @@ and
 For class WastePile we will have:
 
 ```dart
-class WastePile extends PositionComponent
+class WastePile extends PositionedComponent
     with HasGameReference<KlondikeGame>
     implements Pile {
 ```
@@ -485,7 +485,7 @@ initialization sequence which creates our world for the first time.
 
 We are going to use some buttons to activate the various ways of restarting the Klondike Game. First
 we extend Flame's `ButtonComponent` to create class `FlatButton`, adapted from a Flat Button which
-used to be in Flame's Examples pages. `ButtonComponent` uses two `PositionComponent`s, one for when
+used to be in Flame's Examples pages. `ButtonComponent` uses two `PositionedComponent`s, one for when
 the button is in its normal state (up) and one for when it is pressed. The two components are
 `mounted` and `rendered` alternately as the user presses the button and releases it. To press the
 button, tap and hold it down.
@@ -682,7 +682,7 @@ the `FoundationPile`'s `acquireCard()` method, a callback to `KlondikeWorld` and
 to whether all four Foundations are full. Here is the code:
 
 ```dart
-class FoundationPile extends PositionComponent implements Pile {
+class FoundationPile extends PositionedComponent implements Pile {
   FoundationPile(int intSuit, this.checkWin, {super.position})
       : suit = Suit.fromInt(intSuit),
         super(size: KlondikeGame.cardSize);

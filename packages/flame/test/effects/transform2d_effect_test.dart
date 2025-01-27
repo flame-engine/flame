@@ -16,7 +16,7 @@ void main() {
     testWithFlameGame(
       'onMount',
       (game) async {
-        final component = PositionComponent();
+        final component = PositionedComponent();
         game.add(component);
         await game.ready();
 

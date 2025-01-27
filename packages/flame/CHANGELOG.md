@@ -96,7 +96,7 @@
  - **FEAT**: Add onFinished callback to ScrollTextBoxComponent ([#3105](https://github.com/flame-engine/flame/issues/3105)). ([233cc94c](https://github.com/flame-engine/flame/commit/233cc94c557e0af2fcf7599943ddf75180abf801))
  - **FEAT**: Add `copyWith` method on the `TextBoxConfig` ([#3099](https://github.com/flame-engine/flame/issues/3099)). ([b946ba70](https://github.com/flame-engine/flame/commit/b946ba70cbfb5793a8d4d7c61d6ba029fbc303ab))
  - **FEAT**: Component tree for the devtools extension tab ([#3094](https://github.com/flame-engine/flame/issues/3094)). ([bf5d68e9](https://github.com/flame-engine/flame/commit/bf5d68e9b5147dd5e7c10d72bf9c2f705733d688))
- - **FEAT**: Add PositionComponent.toString ([#3095](https://github.com/flame-engine/flame/issues/3095)). ([b1f01986](https://github.com/flame-engine/flame/commit/b1f01986b440ac18bb35b0d76963b2c66f49ea33))
+ - **FEAT**: Add PositionedComponent.toString ([#3095](https://github.com/flame-engine/flame/issues/3095)). ([b1f01986](https://github.com/flame-engine/flame/commit/b1f01986b440ac18bb35b0d76963b2c66f49ea33))
  - **FEAT**: Add SpriteBatch.replace to allow the replacement of the batch information ([#3079](https://github.com/flame-engine/flame/issues/3079)). ([bf3c282d](https://github.com/flame-engine/flame/commit/bf3c282dd669e9a32a550b86770dba7fb8472afa))
  - **FEAT**: Initial functionality of flame_devtools ([#3061](https://github.com/flame-engine/flame/issues/3061)). ([c92910c6](https://github.com/flame-engine/flame/commit/c92910c688f5dc4463e129132759102e7ebf2e36))
  - **FEAT**: Add `HasPerformanceTracker` mixin on `Game` ([#3043](https://github.com/flame-engine/flame/issues/3043)). ([6270353a](https://github.com/flame-engine/flame/commit/6270353af9a6ec58ee9275ddfa6a8b26276a2c20))
@@ -252,7 +252,7 @@ and offset.dy should be set as opacityTo.
  - **FEAT**: Add HoverCallbacks ([#2706](https://github.com/flame-engine/flame/issues/2706)). ([d460b846](https://github.com/flame-engine/flame/commit/d460b846c23fb1f67041469c99c81e4c78b89c2e))
  - **FEAT**: Add `onDispose` to `game.dart` called from `game_widget.dart` ([#2659](https://github.com/flame-engine/flame/issues/2659)). ([2f44e483](https://github.com/flame-engine/flame/commit/2f44e4832f0a9a8edf9c002783501610aa051370))
  - **FEAT**(flame): Add helper methods to create frame data on `SpriteSheet` ([#2754](https://github.com/flame-engine/flame/issues/2754)). ([47722199](https://github.com/flame-engine/flame/commit/477221998a272bf659cd86d2bf145adf0f277e65))
- - **FEAT**: Implement Snapshot mixin on PositionComponent ([#2695](https://github.com/flame-engine/flame/issues/2695)). ([c1ee24a2](https://github.com/flame-engine/flame/commit/c1ee24a2894eaffa1f6e206313cda4087a02f0a4))
+ - **FEAT**: Implement Snapshot mixin on PositionedComponent ([#2695](https://github.com/flame-engine/flame/issues/2695)). ([c1ee24a2](https://github.com/flame-engine/flame/commit/c1ee24a2894eaffa1f6e206313cda4087a02f0a4))
  - **FEAT**: Add TextElementComponent ([#2694](https://github.com/flame-engine/flame/issues/2694)). ([10fb65f6](https://github.com/flame-engine/flame/commit/10fb65f66ca1f1dbac04a138ef4a28b1ed5e5a23))
  - **FEAT**: Component visibility (HasVisibility mixin) ([#2681](https://github.com/flame-engine/flame/issues/2681)). ([76405daf](https://github.com/flame-engine/flame/commit/76405daf48b2efd59241329d4d1fb4b451d254c0))
  - **FEAT**: Add `HasWorldReference` mixin ([#2746](https://github.com/flame-engine/flame/issues/2746)). ([9105411d](https://github.com/flame-engine/flame/commit/9105411d46e097d4b5bf84ee8921c146dcf5a6cd))
@@ -588,7 +588,7 @@ the game.
  - **FEAT**: Add possibility for solid hitboxes ([#1919](https://github.com/flame-engine/flame/issues/1919)). ([205ac561](https://github.com/flame-engine/flame/commit/205ac561eef4becd90a0d5dca2301b988b15959f))
  - **FEAT**: Adding callbacks for EffectController ([#1926](https://github.com/flame-engine/flame/issues/1926)) ([#1931](https://github.com/flame-engine/flame/issues/1931)). ([8dcdf155](https://github.com/flame-engine/flame/commit/8dcdf1557903a46766c46e6cf0855f0d6b524608))
  - **FEAT**: Added DebugTextFormatter ([#1921](https://github.com/flame-engine/flame/issues/1921)). ([426827d1](https://github.com/flame-engine/flame/commit/426827d19e803158dab271dce1fbf93bd09f07de))
- - **FEAT**: Add lookAt method for PositionComponent ([#1891](https://github.com/flame-engine/flame/issues/1891)). ([720c3566](https://github.com/flame-engine/flame/commit/720c3566b02815d7ca2c4b45861041f2bddca0fc))
+ - **FEAT**: Add lookAt method for PositionedComponent ([#1891](https://github.com/flame-engine/flame/issues/1891)). ([720c3566](https://github.com/flame-engine/flame/commit/720c3566b02815d7ca2c4b45861041f2bddca0fc))
  - **FEAT**: add applyLifespanToChildren to Particle generate ([#1911](https://github.com/flame-engine/flame/issues/1911)). ([884d5190](https://github.com/flame-engine/flame/commit/884d5190adbe6ddfc9b7d006cda310cc656d7da1))
  - **FEAT**: Add broadphase generics to CollisionDetection ([#1908](https://github.com/flame-engine/flame/issues/1908)). ([f7714122](https://github.com/flame-engine/flame/commit/f77141229345c24abdd8a09934397dc09c622352))
  - **FEAT**: Adding ClipComponent ([#1769](https://github.com/flame-engine/flame/issues/1769)). ([f34d86db](https://github.com/flame-engine/flame/commit/f34d86db1e459fb5fe36b601631d6c1999fadf8c))
@@ -642,7 +642,7 @@ the game.
  - **FEAT**: Structured text and text styles ([#1830](https://github.com/flame-engine/flame/issues/1830)). ([bfdc3a29](https://github.com/flame-engine/flame/commit/bfdc3a291ba08ee0df07a80f0709c8470ed8a739))
  - **FEAT**: Drag events that dispatch using componentsAtPoint ([#1715](https://github.com/flame-engine/flame/issues/1715)). ([10669c12](https://github.com/flame-engine/flame/commit/10669c12702a3a82fcf5be9161107dce4349a79f))
  - **FEAT**: Added routes that can return a value ([#1848](https://github.com/flame-engine/flame/issues/1848)). ([f1b276e0](https://github.com/flame-engine/flame/commit/f1b276e020c6f80a18764e63ffbea21abb52b1f2))
- - **FEAT**: PositionComponent now has a built-in Decorator ([#1846](https://github.com/flame-engine/flame/issues/1846)). ([8dd52c33](https://github.com/flame-engine/flame/commit/8dd52c338bbd66938dd90c068f99107337bae4ea))
+ - **FEAT**: PositionedComponent now has a built-in Decorator ([#1846](https://github.com/flame-engine/flame/issues/1846)). ([8dd52c33](https://github.com/flame-engine/flame/commit/8dd52c338bbd66938dd90c068f99107337bae4ea))
  - **FEAT**: add `HasAncestor` mixin ([#1711](https://github.com/flame-engine/flame/issues/1711)). ([987a44f4](https://github.com/flame-engine/flame/commit/987a44f441429534c743388b44e6d84b28e8f5ca))
  - **FEAT**: Added ability to control overlays via the RouterComponent ([#1840](https://github.com/flame-engine/flame/issues/1840)). ([e2de70c9](https://github.com/flame-engine/flame/commit/e2de70c98afabb6e570c3442213b2246a724bdd9))
  - **FEAT**: Add vector projection and inversion ([#1787](https://github.com/flame-engine/flame/issues/1787)). ([d197870f](https://github.com/flame-engine/flame/commit/d197870f529829adc51bbafc28180bde33d6f2cb))
@@ -736,7 +736,7 @@ the game.
  - **FEAT**: new flame bloc API ([#1538](https://github.com/flame-engine/flame/issues/1538)). ([f98970a9](https://github.com/flame-engine/flame/commit/f98970a91f91fe70e4a38834d7b69bfcb438d197))
  - **FEAT**: Added the onLongTapDown event ([#1587](https://github.com/flame-engine/flame/issues/1587)). ([ed302d89](https://github.com/flame-engine/flame/commit/ed302d89160cd7391e3aaf66a0038cd8f57ceca9))
  - **FEAT**: Add ability to add/remove multiple overlays at once ([#1657](https://github.com/flame-engine/flame/issues/1657)). ([0ac84c00](https://github.com/flame-engine/flame/commit/0ac84c0024338cbe87fcff264b83e01192aa355b))
- - **FEAT**: Helpers for whether a `PositionComponent` is flipped. ([#1700](https://github.com/flame-engine/flame/issues/1700)). ([cf67147e](https://github.com/flame-engine/flame/commit/cf67147ea37aed8e5f1dd12def442dccbe4576fd))
+ - **FEAT**: Helpers for whether a `PositionedComponent` is flipped. ([#1700](https://github.com/flame-engine/flame/issues/1700)). ([cf67147e](https://github.com/flame-engine/flame/commit/cf67147ea37aed8e5f1dd12def442dccbe4576fd))
  - **FEAT**: World bounds for a CameraComponent ([#1605](https://github.com/flame-engine/flame/issues/1605)). ([abb497ab](https://github.com/flame-engine/flame/commit/abb497abe47f6366d27f44d25535924bd7de8a28))
  - **FEAT**: Implement tap events based on `componentsAtPoint` ([#1661](https://github.com/flame-engine/flame/issues/1661)). ([2711ba60](https://github.com/flame-engine/flame/commit/2711ba60c2c700984d8a90d90519e17850038ab4))
  - **FEAT**: add `ParentIsA` to force parent child relations ([#1566](https://github.com/flame-engine/flame/issues/1566)). ([2cdf3868](https://github.com/flame-engine/flame/commit/2cdf3868460f04cee76079e3f81cdd12fb407d3a))
@@ -762,7 +762,7 @@ the game.
    Migration instructions:
    The coordinate system of the Viewport now always has the origin in the top-left corner
    of its bounding box (previously it was in the center) -- similar to the local coordinate
-   system of a PositionComponent.
+   system of a PositionedComponent.
 
  - **BREAKING** **FEAT**: Add ability to render without loading on image related widgets ([#1674](https://github.com/flame-engine/flame/issues/1674)). ([40a061bc](https://github.com/flame-engine/flame/commit/40a061bcf06b5bf028911964617c1d1e2599460a))
    Migration instructions:
@@ -932,7 +932,7 @@ the game.
 # CHANGELOG
 
 ## [1.0.0]
- - Add `ButtonComponent` backed by two `PositionComponent`s
+ - Add `ButtonComponent` backed by two `PositionedComponent`s
  - Add `SpriteButtonComponent` backed by two `Sprite`s
  - Allow more flexible construction of `EffectController`s and make them able to run back in time
  - Remove old effects system
@@ -964,12 +964,12 @@ the game.
  - Alternative implementation of `RotateEffect`, based on `Transform2DEffect`
  - Alternative implementation of `MoveEffect`, based on `Transform2DEffect`
  - Fix `onGameResize` margin bug in `HudMarginComponent`
- - `PositionComponent.size` now returns a `NotifyingVector2`
+ - `PositionedComponent.size` now returns a `NotifyingVector2`
  - Possibility to manually remove `TimerComponent`
  - Rename `Hitbox` mixin to `HasHitboxes`
  - Added `RemoveEffect` and `SimpleEffectController`
  - Create default implementations of `RectangleComponent`, `CircleComponent` and `PolygonComponent`
- - Streamlined the argument list for all components extending `PositionComponent`
+ - Streamlined the argument list for all components extending `PositionedComponent`
  - Improved interaction between viewport and isHud components
  - `randomColor` method in the `Color` extension
  - Calling super-method in `.render()` is now optional
@@ -987,8 +987,8 @@ the game.
  - Removed methods `preRender()` and `postRender()` in `Component`
  - Use `FlameTester` everywhere where it makes sense in the tests
  - Improved `IsometricTileMap`
- - Fix `PositionComponent`'s `flipHorizontallyAroundCenter` and `flipVerticallyAroundCenter`
- - Initialization of all `PositionComponent`s can be done from `onLoad` instead of the constructor
+ - Fix `PositionedComponent`'s `flipHorizontallyAroundCenter` and `flipVerticallyAroundCenter`
+ - Initialization of all `PositionedComponent`s can be done from `onLoad` instead of the constructor
  - Rename `HasTappableComponents` to `HasTappables`
  - Rename `HasDraggableComponents` to `HasDraggables`
  - Rename `HasHoverableComponents` to `HasHoverableis`
@@ -1014,7 +1014,7 @@ the game.
 ## [1.0.0-releasecandidate.15]
  - Fix issue with `Draggable`s not being removed from `draggables` list
  - Increase Flutter SDK constraint to `>= 2.5.0`.
- - Method `PositionComponent.toRect()` now works for flipped/rotated components.
+ - Method `PositionedComponent.toRect()` now works for flipped/rotated components.
  - Make the root bundle exposed via `Flame.bundle` actually configurable
  - Take in an optional `Camera` as a parameter to `FlameGame`
  - Make super.onLoad mandatory to avoid memory leaks
@@ -1049,18 +1049,18 @@ the game.
  - Default size of `SpriteComponent` is `srcSize` instead of spritesheet size
  - Export test helper methods
  - Rename `ScaleEffect` to `SizeEffect`
- - Introduce `scale` on `PositionComponent`
+ - Introduce `scale` on `PositionedComponent`
  - Add `ScaleEffect` that works on `scale` instead of `size`
  - Add class `NotifyingVector2`
  - Add class `Transform2D`
  - Added helper functions `testRandom()` and `testWidgetsRandom()`
  - Remove `FPSCounter` from `BaseGame`
- - Refactor `PositionComponent` to work with `Transform2D`: the component now works more reliably
+ - Refactor `PositionedComponent` to work with `Transform2D`: the component now works more reliably
    when nested
  - Properties `renderFlipX`, `renderFlipY` removed and replaced with methods
    `flipHorizontally()` and `flipVertically()`.
  - Method `.angleTo` removed as it was not working properly.
- - In debug mode `PositionComponent` now displays an indicator for the anchor position.
+ - In debug mode `PositionedComponent` now displays an indicator for the anchor position.
  - Update `Camera` docs to showcase usage with `Game` class
  - Fixed a bug with `worldBounds` being set to `null` in `Camera`
  - Remove `.viewport` from `BaseGame`, use `camera.viewport` instead
@@ -1083,7 +1083,7 @@ the game.
 
 ## [1.0.0-releasecandidate.13]
  - Fix camera not ending up in the correct position on long jumps
- - Make the `JoystickPlayer` a `PositionComponent`
+ - Make the `JoystickPlayer` a `PositionedComponent`
  - Extract shared logic when handling components set in BaseComponent and BaseGame to ComponentSet.
  - Rename `camera.shake(amount: x)` to `camera.shake(duration: x)`
  - Fix `SpriteAnimationComponent` docs to use `Future.wait`
@@ -1167,7 +1167,7 @@ the game.
  - Adding some more basic colors entries to the `BasicPalette`
  - Fixing Flutter and Dart version constraints
  - Exporting Images and AssetsCache
- - Make `size` and `position` in `PositionComponent` final
+ - Make `size` and `position` in `PositionedComponent` final
  - Add a `snapTo` and `onPositionUpdate` method to the `Camera`
  - Remove the SpriteAnimationComponent when the animation is really done, not when it is on the last frame
  - Revamp all the docs to be up to date with v1.0.0
@@ -1206,7 +1206,7 @@ the game.
  - Change RaisedButton to ElevatedButton in timer example
  - Overhaul the draggables api to fix issues relating to local vs global positions
  - Preventing errors caused by the premature use of size property on game
- - Added a hitbox mixin for PositionComponent to make more accurate gestures
+ - Added a hitbox mixin for PositionedComponent to make more accurate gestures
  - Added a collision detection system
  - Added geometrical shapes
  - Fix `SpriteAnimationComponent.shouldRemove` use `Component.shouldRemove`
@@ -1240,7 +1240,7 @@ the game.
  - Adding standard for `SpriteComponent` and `SpriteAnimationComponent` constructors
  - Added `Composition`, allows for composing multiple images into a single image.
  - Move files to comply with the dart package layout convention
- - Fix gesture detection bug of children of `PositionComponent`
+ - Fix gesture detection bug of children of `PositionedComponent`
  - The `game` argument on `GameWidget` is now required
 
 ## 1.0.0-rc5
@@ -1256,7 +1256,7 @@ the game.
  - Set loop member variable when constructing SpriteAnimationComponent from SpriteAnimationData
  - Effect shouldn't affect unrelated properties on component
  - Fix rendering of children
- - Explicitly define what fields an effect on PositionComponent modifies
+ - Explicitly define what fields an effect on PositionedComponent modifies
  - Properly propagate onMount and onRemove to children
  - Adding Canvas extensions
  - Remove Resizable mixin
@@ -1271,7 +1271,7 @@ the game.
  - Update Forge2D docs
  - Update PR template with removal of develop branch
  - Translate README to Russian
- - Split up Component and PositionComponent to BaseComponent
+ - Split up Component and PositionedComponent to BaseComponent
  - Unify multiple render methods on Sprite
  - Refactored how games are inserted into a flutter tree
  - Refactored the widgets overlay API
@@ -1279,7 +1279,7 @@ the game.
  - Dragable mixin for components
  - Fix update+render of component children
  - Update documentation for SVG component
- - Update documentation for PositionComponent
+ - Update documentation for PositionedComponent
  - Adding Component#onLoad
  - Moving size to Game instead of BaseGame
  - Fix bug with ConcurrentModificationError on add in onMount
@@ -1307,7 +1307,7 @@ the game.
  - Remove Box2D as a dependency
  - Rebuild of Images, Sprite and SpriteAnimation initialization
  - Use isRelative on effects
- - Use Vector2 for position and size on PositionComponent
+ - Use Vector2 for position and size on PositionedComponent
  - Removing all deprecated methods
  - Rename `resize` method on components to `onGameResize`
  - Make `Resizable` have a `gameSize` property instead of `size`
@@ -1527,12 +1527,12 @@ the game.
 - Added more functionality to the Position class (thanks, @illiapoplawski)
 
 ## 0.12.1
-- Fixed PositionComponent#setByRect to comply with toRect (thanks, @illiapoplawski)
+- Fixed PositionedComponent#setByRect to comply with toRect (thanks, @illiapoplawski)
 
 ## 0.12.0
 - Updating flutter_svg and pubspec to support the latest flutter version (1.6.0)
 - Adding Flare Support
-- Fixing PositionComponent#toRect which was not considering the anchor property (thanks, @illiapoplawski)
+- Fixing PositionedComponent#toRect which was not considering the anchor property (thanks, @illiapoplawski)
 
 ## [0.11.2]
 - Fixed bug on animations with a single frame
@@ -1571,7 +1571,7 @@ the game.
 ## [0.10.0]
 - Fixing a few minor bugs, typos, improving docs
 - Adding the Palette concept: easy access to white and black colors/paints, create your palette to keep your game organized.
-- Adding the Anchor concept: specify where thins should anchor, added to PositionComponent and to the new text related features.
+- Adding the Anchor concept: specify where thins should anchor, added to PositionedComponent and to the new text related features.
 - Added a whole bunch of text related components: TextConfig allows you to easily define your typography information, TextComponent allows for easy rendering of stuff and TextBox can make sized texts and also typing effects.
 - Improved Utils to have better and more concise APIs, removed unused stuff.
 - Adding TiledComponent to integrate with tiled
@@ -1621,7 +1621,7 @@ the game.
 
 ## [0.4.0]
  - Upgraded AudioPlayers, added method to disable logging
- - Created PositionComponent with some useful methods
+ - Created PositionedComponent with some useful methods
  - A few refactorings
 
 ## [0.3.0]

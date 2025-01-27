@@ -8,7 +8,7 @@ void main() {
   group('Debug Command', () {
     final components = [
       RectangleComponent(),
-      PositionComponent(),
+      PositionedComponent(),
     ];
     testWithGame(
       'toggle debug mode on components',

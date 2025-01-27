@@ -6,15 +6,14 @@ import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
+class SpriteAnimationGroupComponent<T> extends PositionedComponent with HasPaint {
   /// Key with the current playing animation
   T? _current;
 
   ValueNotifier<T?>? _currentAnimationNotifier;
 
   /// A [ValueNotifier] that notifies when the current animation changes.
-  ValueNotifier<T?> get currentAnimationNotifier =>
-      _currentAnimationNotifier ??= ValueNotifier<T?>(_current);
+  ValueNotifier<T?> get currentAnimationNotifier => _currentAnimationNotifier ??= ValueNotifier<T?>(_current);
 
   /// Map with the mapping each state to the flag removeOnFinish
   final Map<T, bool> removeOnFinish;
@@ -63,9 +62,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
         _autoResize = autoResize ?? size == null,
         _animationTickers = animations != null
             ? Map.fromEntries(
-                animations.entries
-                    .map((e) => MapEntry(e.key, e.value.createTicker()))
-                    .toList(),
+                animations.entries.map((e) => MapEntry(e.key, e.value.createTicker())).toList(),
               )
             : null {
     if (paint != null) {
@@ -159,8 +156,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   ///
   /// If you want to change the contents of the map use the animations setter
   /// and pass in a new map of animations.
-  Map<T, SpriteAnimation>? get animations =>
-      _animations != null ? Map.unmodifiable(_animations!) : null;
+  Map<T, SpriteAnimation>? get animations => _animations != null ? Map.unmodifiable(_animations!) : null;
 
   /// Sets the given [value] as new animation state map.
   set animations(Map<T, SpriteAnimation>? value) {
@@ -169,9 +165,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
 
       _animationTickers = _animations != null
           ? Map.fromEntries(
-              _animations!.entries
-                  .map((e) => MapEntry(e.key, e.value.createTicker()))
-                  .toList(),
+              _animations!.entries.map((e) => MapEntry(e.key, e.value.createTicker())).toList(),
             )
           : null;
       _resizeToSprite();
@@ -214,8 +208,7 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
       animationTicker?.update(dt);
       _resizeToSprite();
     }
-    if ((removeOnFinish[current] ?? false) &&
-        (animationTicker?.done() ?? false)) {
+    if ((removeOnFinish[current] ?? false) && (animationTicker?.done() ?? false)) {
       removeFromParent();
     }
   }

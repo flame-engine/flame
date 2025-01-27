@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class _Enemy extends PositionComponent with Notifier {}
+class _Enemy extends PositionedComponent with Notifier {}
 
 void main() {
   group('ComponentsNotifier', () {
@@ -78,7 +78,7 @@ void main() {
       var parentCalled = 0;
       var called = 0;
 
-      game.componentsNotifier<PositionComponent>().addListener(
+      game.componentsNotifier<PositionedComponent>().addListener(
             () => parentCalled++,
           );
       game.componentsNotifier<_Enemy>().addListener(() => called++);

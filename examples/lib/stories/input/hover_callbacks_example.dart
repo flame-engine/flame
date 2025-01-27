@@ -32,7 +32,7 @@ class HoverCallbacksWorld extends World with TapCallbacks {
   }
 }
 
-class HoverSquare extends PositionComponent with HoverCallbacks {
+class HoverSquare extends PositionedComponent with HoverCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 

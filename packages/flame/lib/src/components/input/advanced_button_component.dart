@@ -8,25 +8,24 @@ import 'package:flutter/foundation.dart';
 /// The [defaultSkin] must be added to the constructor or
 /// if you are inheriting - defined in the onLod method.
 ///
-/// The label is a [PositionComponent] and is added
+/// The label is a [PositionedComponent] and is added
 /// to the foreground of the button. The label is automatically aligned to
 /// the center of the button.
 ///
 /// Note: You have to set the skins that you want to use ([defaultSkin],
 /// [downSkin], [hoverSkin], [disabledSkin], [defaultLabel]) in [onLoad]
 /// if you are not passing them in through the constructor.
-class AdvancedButtonComponent extends PositionComponent
-    with HoverCallbacks, TapCallbacks {
+class AdvancedButtonComponent extends PositionedComponent with HoverCallbacks, TapCallbacks {
   AdvancedButtonComponent({
     this.onPressed,
     this.onReleased,
     this.onChangeState,
-    PositionComponent? defaultSkin,
-    PositionComponent? downSkin,
-    PositionComponent? hoverSkin,
-    PositionComponent? disabledSkin,
-    PositionComponent? defaultLabel,
-    PositionComponent? disabledLabel,
+    PositionedComponent? defaultSkin,
+    PositionedComponent? downSkin,
+    PositionedComponent? hoverSkin,
+    PositionedComponent? disabledSkin,
+    PositionedComponent? defaultLabel,
+    PositionedComponent? disabledLabel,
     super.size,
     super.position,
     super.scale,
@@ -116,11 +115,11 @@ class AdvancedButtonComponent extends PositionComponent
     updateState();
   }
 
-  Map<ButtonState, PositionComponent?> skinsMap = {};
+  Map<ButtonState, PositionedComponent?> skinsMap = {};
 
-  PositionComponent? get defaultSkin => skinsMap[ButtonState.up];
+  PositionedComponent? get defaultSkin => skinsMap[ButtonState.up];
 
-  set defaultSkin(PositionComponent? value) {
+  set defaultSkin(PositionedComponent? value) {
     skinsMap[ButtonState.up] = value;
     if (size.isZero()) {
       size = skinsMap[ButtonState.up]?.size ?? Vector2.zero();
@@ -128,31 +127,31 @@ class AdvancedButtonComponent extends PositionComponent
     invalidateSkins();
   }
 
-  set downSkin(PositionComponent? value) {
+  set downSkin(PositionedComponent? value) {
     skinsMap[ButtonState.down] = value;
     invalidateSkins();
   }
 
-  set hoverSkin(PositionComponent? value) {
+  set hoverSkin(PositionedComponent? value) {
     skinsMap[ButtonState.hover] = value;
     invalidateSkins();
   }
 
-  set disabledSkin(PositionComponent? value) {
+  set disabledSkin(PositionedComponent? value) {
     skinsMap[ButtonState.disabled] = value;
     invalidateSkins();
   }
 
-  Map<ButtonState, PositionComponent?> labelsMap = {};
+  Map<ButtonState, PositionedComponent?> labelsMap = {};
 
-  PositionComponent? get defaultLabel => labelsMap[ButtonState.up];
+  PositionedComponent? get defaultLabel => labelsMap[ButtonState.up];
 
-  set defaultLabel(PositionComponent? value) {
+  set defaultLabel(PositionedComponent? value) {
     labelsMap[ButtonState.up] = value;
     updateLabel();
   }
 
-  set disabledLabel(PositionComponent? value) {
+  set disabledLabel(PositionedComponent? value) {
     labelsMap[ButtonState.disabled] = value;
     updateLabel();
   }

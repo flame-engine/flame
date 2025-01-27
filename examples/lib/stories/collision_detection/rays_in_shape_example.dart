@@ -46,19 +46,14 @@ final redStroke = Paint()
   ..color = const Color(0xffff0000)
   ..style = PaintingStyle.stroke;
 
-class RaysInShapeWorld extends World
-    with
-        HasGameReference<RaysInShapeExample>,
-        HasCollisionDetection,
-        TapCallbacks {
+class RaysInShapeWorld extends World with HasGameReference<RaysInShapeExample>, HasCollisionDetection, TapCallbacks {
   final _rng = Random();
   List<Ray2> _rays = [];
 
   List<Ray2> randomRays(int count) => List<Ray2>.generate(
         count,
         (index) => Ray2(
-          origin: (Vector2.random(_rng)) * playArea.size.width -
-              playArea.size.toVector2() / 2,
+          origin: (Vector2.random(_rng)) * playArea.size.width - playArea.size.toVector2() / 2,
           direction: (Vector2.random(_rng) - Vector2(0.5, 0.5)).normalized(),
         ),
       );
@@ -80,7 +75,7 @@ class RaysInShapeWorld extends World
       paint: whiteStroke,
       children: [RectangleHitbox()],
     ),
-    PositionComponent(
+    PositionedComponent(
       position: Vector2.zero(),
       children: [
         PolygonHitbox.relative(

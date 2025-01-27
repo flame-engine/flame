@@ -11,8 +11,7 @@ void main() {
     testWidgets(
       'receives double-tap event',
       (tester) async {
-        final component = _DoubleTapCallbacksComponent()
-          ..position = Vector2.all(10);
+        final component = _DoubleTapCallbacksComponent()..position = Vector2.all(10);
         await tester.pumpWidget(
           GameWidget(
             game: FlameGame(children: [component]),
@@ -50,8 +49,7 @@ void main() {
     testWidgets(
       '''does not receive an event when double-tapping a position far from the component''',
       (tester) async {
-        final component = _DoubleTapCallbacksComponent()
-          ..position = Vector2.all(10);
+        final component = _DoubleTapCallbacksComponent()..position = Vector2.all(10);
         await tester.pumpWidget(
           GameWidget(
             game: FlameGame(children: [component]),
@@ -84,8 +82,7 @@ void main() {
     testWidgets(
       'receives a cancel event when gesture is canceled by drag',
       (tester) async {
-        final component = _DoubleTapCallbacksComponent()
-          ..position = Vector2.all(10);
+        final component = _DoubleTapCallbacksComponent()..position = Vector2.all(10);
         await tester.pumpWidget(
           GameWidget(
             game: FlameGame(children: [component]),
@@ -118,8 +115,7 @@ void main() {
     testWidgets(
       'receives a cancel event when gesture is canceled by cancel',
       (tester) async {
-        final component = _DoubleTapCallbacksComponent()
-          ..position = Vector2.all(10);
+        final component = _DoubleTapCallbacksComponent()..position = Vector2.all(10);
         await tester.pumpWidget(
           GameWidget(
             game: FlameGame(children: [component]),
@@ -162,8 +158,7 @@ void main() {
   });
 }
 
-class _DoubleTapCallbacksComponent extends PositionComponent
-    with DoubleTapCallbacks {
+class _DoubleTapCallbacksComponent extends PositionedComponent with DoubleTapCallbacks {
   _DoubleTapCallbacksComponent() {
     anchor = Anchor.center;
     size = Vector2.all(10);
