@@ -51,8 +51,8 @@ class SpawnComponent extends Component {
   /// spawns and [maxPeriod] will be the maximum amount of time before it
   /// spawns.
   SpawnComponent.periodRange({
-    required double minPeriod,
-    required double maxPeriod,
+    required double this.minPeriod,
+    required double this.maxPeriod,
     PositionComponent Function(int amount)? factory,
     List<PositionComponent> Function(int amount)? multiFactory,
     this.area,
@@ -180,8 +180,6 @@ class SpawnComponent extends Component {
         period = minPeriod! + _random.nextDouble() * (maxPeriod! - minPeriod!);
       }
     }
-
-    updatePeriod();
 
     final timerComponent = TimerComponent(
       period: _period,
