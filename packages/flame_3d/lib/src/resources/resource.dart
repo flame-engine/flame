@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 // TODO(wolfenrain): in the long run it would be nice of we can make it
 // automatically refer to same type of objects to prevent memory leaks
 
@@ -7,13 +5,17 @@ import 'package:meta/meta.dart';
 /// A Resource is the base class for any resource typed classes. The primary
 /// use case is to be a data container.
 /// {@endtemplate}
-class Resource<R> {
-  /// {@macro resource}
-  Resource(this._resource);
+abstract class Resource<R> {
+  R? _resource;
+  bool recreateResource = true;
 
-  /// The resource data.
-  R get resource => _resource;
-  @protected
-  set resource(R resource) => _resource = resource;
-  R _resource;
+  R createResource();
+
+  R get resource {
+    if (recreateResource) {
+      _resource = createResource();
+      recreateResource = false;
+    }
+    return _resource!;
+  }
 }
