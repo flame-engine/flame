@@ -10,8 +10,7 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 /// {@endtemplate}
 class UniformSlot extends Resource<gpu.UniformSlot?> {
   UniformSlot._(this.name, this.fields, this._instanceCreator)
-      : _fieldIndices = {for (var (index, key) in fields.indexed) key: index},
-        super(null);
+      : _fieldIndices = {for (var (index, key) in fields.indexed) key: index};
 
   /// {@macro uniform_slot}
   ///
@@ -51,4 +50,14 @@ class UniformSlot extends Resource<gpu.UniformSlot?> {
   int indexOf(String field) => _fieldIndices[field]!;
 
   UniformInstance create() => _instanceCreator.call(this);
+
+  gpu.UniformSlot? _uniformSlot;
+
+  set uniformSlot(gpu.UniformSlot value) {
+    _uniformSlot = value;
+    recreateResource = true;
+  }
+
+  @override
+  gpu.UniformSlot? createResource() => _uniformSlot;
 }

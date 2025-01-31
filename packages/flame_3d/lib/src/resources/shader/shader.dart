@@ -10,6 +10,8 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 ///
 /// {@endtemplate}
 class ShaderResource extends Resource<gpu.Shader> {
+  final gpu.Shader shader;
+
   /// {@macro shader_resource}
   factory ShaderResource.createFromAsset({
     required String asset,
@@ -22,17 +24,20 @@ class ShaderResource extends Resource<gpu.Shader> {
     if (shader == null) {
       throw StateError('Shader "$shaderName" not found in library "$asset"');
     }
-    return ShaderResource._(shader, slots: slots);
+    return ShaderResource._(shader: shader, slots: slots);
   }
 
-  ShaderResource._(
-    super.resource, {
+  ShaderResource._({
+    required this.shader,
     List<UniformSlot> slots = const [],
   }) {
     for (final slot in slots) {
-      slot.resource = resource.getUniformSlot(slot.name);
+      slot.uniformSlot = resource.getUniformSlot(slot.name);
     }
   }
+
+  @override
+  gpu.Shader createResource() => shader;
 }
 
 class Shader {
