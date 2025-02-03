@@ -416,6 +416,7 @@ class PositionComponent extends Component
     transform.flipVertically();
   }
 
+  /// Flip the component horizontally around a given anchor point.
   void flipHorizontallyAroundAnchor(Anchor anchorPoint) {
     if (anchor.x != 0.5) {
       final delta = (1 - 2 * anchorPoint.x) * width * transform.scale.x;
