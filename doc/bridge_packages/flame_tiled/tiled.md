@@ -35,5 +35,5 @@ within your game.
 
 
 [dart]: https://pub.dev/packages/tiled
-[flame_tiled]: https://github.com/flame-engine/flame_tiled
+[flame_tiled]: https://github.com/flame-engine/flame/tree/main/packages/flame_tiled
 [Tiled]: https://www.mapeditor.org/
