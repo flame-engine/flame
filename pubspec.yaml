@@ -1,4 +1,5 @@
 name: flame_workspace
+repository: https://github.com/flame-engine/flame
 workspace:
   - doc/flame/examples
   - doc/tutorials/klondike/app
