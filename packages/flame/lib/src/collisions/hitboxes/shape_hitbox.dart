@@ -89,8 +89,8 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       _validAabb = false;
       onAabbChanged?.call();
     };
-    for (final ancestor
-        in ancestors(includeSelf: true).whereType<PositionComponent>()) {
+    fina positionComponents = ancestors(includeSelf: true).whereType<PositionComponent>();
+    for (final ancestor in positionComponents) {
       _transformAncestors.add(ancestor.transform);
       ancestor.transform.addListener(_transformListener);
     }
