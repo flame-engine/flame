@@ -1,3 +1,7 @@
+## 1.17.5
+
+ - **FIX**: Don't use a future when assets for SpriteButton is already loaded (#3456).
+
 ## 1.17.4
 
  - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
