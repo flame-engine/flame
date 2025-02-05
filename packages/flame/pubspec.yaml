@@ -30,7 +30,7 @@ dev_dependencies:
   canvas_test: ^0.2.0
   dartdoc: ^8.0.8
   flame_lint: ^1.2.1
-  flame_test: ^1.17.4
+  flame_test: ^1.17.5
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4

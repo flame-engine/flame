@@ -11,8 +11,8 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.23.0
-  flame_forge2d: ^0.18.2+4
+  flame: ^1.24.0
+  flame_forge2d: ^0.18.2+5
   flutter:
     sdk: flutter
 

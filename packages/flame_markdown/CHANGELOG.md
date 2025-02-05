@@ -1,3 +1,7 @@
+## 0.2.3+1
+
+ - Update a dependency to the latest release.
+
 ## 0.2.3
 
  - **FIX**: Do not encode HTML by default when parsing markdown [flame_markdown] ([#3425](https://github.com/flame-engine/flame/issues/3425)). ([3067da94](https://github.com/flame-engine/flame/commit/3067da94fbc6df2da5197771cb9617588006a9b9))

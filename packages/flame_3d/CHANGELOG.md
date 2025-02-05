@@ -1,3 +1,9 @@
+## 0.1.0-dev.5
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Make resource creation be on demand to enable testing (#3411).
+
 ## 0.1.0-dev.4
 
 > Note: This release has breaking changes.

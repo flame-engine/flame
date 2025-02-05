@@ -17,7 +17,7 @@ environment:
 
 dependencies:
   bloc: ">=8.1.1 <10.0.0"
-  flame: ^1.23.0
+  flame: ^1.24.0
   flutter:
     sdk: flutter
   flutter_bloc: ">=8.1.2 <10.0.0"
@@ -26,7 +26,7 @@ dependencies:
 dev_dependencies:
   dartdoc: ^8.0.8
   flame_lint: ^1.2.1
-  flame_test: ^1.17.4
+  flame_test: ^1.17.5
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4

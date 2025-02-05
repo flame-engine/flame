@@ -1,3 +1,9 @@
+## 1.8.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Bump tiled to 0.11.0 and add ColorData extension (#3473).
+
 ## 1.7.1
 
  - Update a dependency to the latest release.

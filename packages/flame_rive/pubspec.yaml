@@ -17,7 +17,7 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.23.0
+  flame: ^1.24.0
   flutter:
     sdk: flutter
   rive: ^0.12.3
@@ -25,6 +25,6 @@ dependencies:
 dev_dependencies:
   dartdoc: ^8.0.8
   flame_lint: ^1.2.1
-  flame_test: ^1.17.4
+  flame_test: ^1.17.5
   flutter_test:
     sdk: flutter
