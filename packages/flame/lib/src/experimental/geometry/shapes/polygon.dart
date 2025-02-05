@@ -65,7 +65,7 @@ class Polygon extends Shape {
     var nInteriorAngles = 0;
     var nExteriorAngles = 0;
     var previousEdge = _edges.last;
-    _edges.forEach((edge) {
+    for (final edge in _edges) {
       final crossProduct = edge.cross(previousEdge);
       previousEdge = edge;
       // A straight angle counts as both internal and external
@@ -75,7 +75,7 @@ class Polygon extends Shape {
       if (crossProduct <= 0) {
         nExteriorAngles++;
       }
-    });
+    }
     if (nInteriorAngles < nExteriorAngles) {
       _reverseVertices();
       _initializeEdges();
@@ -116,7 +116,9 @@ class Polygon extends Shape {
   Aabb2? _aabb;
   Aabb2 _calculateAabb() {
     final aabb = Aabb2.minMax(_vertices.first, _vertices.first);
-    _vertices.forEach(aabb.hullPoint);
+    for (final vertex in _vertices) {
+      aabb.hullPoint(vertex);
+    }
     return aabb;
   }
 
