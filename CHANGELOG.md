@@ -3,6 +3,94 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-02-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_fire_atlas` - `v1.8.0`](#flame_fire_atlas---v180)
+ - [`flame_3d` - `v0.1.0-dev.5`](#flame_3d---v010-dev5)
+ - [`flame_tiled` - `v2.0.0`](#flame_tiled---v200)
+
+Packages with other changes:
+
+ - [`flame` - `v1.24.0`](#flame---v1240)
+ - [`flame_test` - `v1.17.5`](#flame_test---v1175)
+ - [`flame_behavior_tree` - `v0.1.3+5`](#flame_behavior_tree---v0135)
+ - [`flame_oxygen` - `v0.2.3+5`](#flame_oxygen---v0235)
+ - [`flame_isolate` - `v0.6.2+5`](#flame_isolate---v0625)
+ - [`flame_texturepacker` - `v4.1.5`](#flame_texturepacker---v415)
+ - [`flame_sprite_fusion` - `v0.1.3+5`](#flame_sprite_fusion---v0135)
+ - [`flame_audio` - `v2.10.8`](#flame_audio---v2108)
+ - [`flame_spine` - `v0.2.2+5`](#flame_spine---v0225)
+ - [`flame_bloc` - `v1.12.6`](#flame_bloc---v1126)
+ - [`flame_kenney_xml` - `v0.1.1+5`](#flame_kenney_xml---v0115)
+ - [`flame_lottie` - `v0.4.2+5`](#flame_lottie---v0425)
+ - [`flame_markdown` - `v0.2.3+1`](#flame_markdown---v0231)
+ - [`flame_console` - `v0.1.2+1`](#flame_console---v0121)
+ - [`flame_rive` - `v1.10.8`](#flame_rive---v1108)
+ - [`flame_forge2d` - `v0.18.2+5`](#flame_forge2d---v01825)
+ - [`flame_noise` - `v0.3.2+5`](#flame_noise---v0325)
+ - [`flame_riverpod` - `v5.4.8`](#flame_riverpod---v548)
+ - [`flame_svg` - `v1.11.5`](#flame_svg---v1115)
+ - [`flame_network_assets` - `v0.3.3+5`](#flame_network_assets---v0335)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+5`
+ - `flame_oxygen` - `v0.2.3+5`
+ - `flame_isolate` - `v0.6.2+5`
+ - `flame_texturepacker` - `v4.1.5`
+ - `flame_sprite_fusion` - `v0.1.3+5`
+ - `flame_audio` - `v2.10.8`
+ - `flame_spine` - `v0.2.2+5`
+ - `flame_bloc` - `v1.12.6`
+ - `flame_kenney_xml` - `v0.1.1+5`
+ - `flame_lottie` - `v0.4.2+5`
+ - `flame_markdown` - `v0.2.3+1`
+ - `flame_console` - `v0.1.2+1`
+ - `flame_rive` - `v1.10.8`
+ - `flame_forge2d` - `v0.18.2+5`
+ - `flame_noise` - `v0.3.2+5`
+ - `flame_riverpod` - `v5.4.8`
+ - `flame_svg` - `v1.11.5`
+ - `flame_network_assets` - `v0.3.3+5`
+
+---
+
+#### `flame_fire_atlas` - `v1.8.0`
+
+ - **BREAKING** **FIX**: Bump tiled to 0.11.0 and add ColorData extension (#3473).
+
+#### `flame_3d` - `v0.1.0-dev.5`
+
+ - **BREAKING** **FEAT**: Make resource creation be on demand to enable testing (#3411).
+
+#### `flame_tiled` - `v2.0.0`
+
+ - **BREAKING** **FIX**: Bump tiled to 0.11.0 and add ColorData extension (#3473).
+
+#### `flame` - `v1.24.0`
+
+ - **PERF**: Switch from forEach to regular for-loops for about 30% improvement in raw update performance (#3472).
+ - **FIX**: SpawnComponent.periodRange should change range each iteration (#3464).
+ - **FIX**: Don't use a future when assets for SpriteButton is already loaded (#3456).
+ - **FIX**: Darkness increases with higher values (#3448).
+ - **FEAT**: NineTileBoxComponent with HasPaint to enable effects (#3459).
+ - **FEAT**: Devtools overlay navigation (#3449).
+ - **FEAT**: Add direction and length getters and constructor to LineSegment (#3446).
+ - **FEAT**: Add multiFactory to SpawnComponent (#3440).
+
+#### `flame_test` - `v1.17.5`
+
+ - **FIX**: Don't use a future when assets for SpriteButton is already loaded (#3456).
+
+
 ## 2025-01-02
 
 ### Changes
