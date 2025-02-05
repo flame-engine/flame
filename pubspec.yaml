@@ -75,6 +75,8 @@ melos:
       branch: main
       # Generates a link to a prefilled GitHub release creation page.
       releaseUrl: true
+      includeCommitId: true
+      linkToCommits: true
 
     bootstrap:
       environment:
