@@ -168,7 +168,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     lines.clear();
     var lineHeight = 0.0;
     final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
-    text.split(' ').forEach((word) {
+    for (final word in text.split(' ')) {
       final wordLines = word.split('\n');
       final possibleLine =
           lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
@@ -192,7 +192,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       } else {
         lines.addAll(wordLines);
       }
-    });
+    }
     _totalLines = lines.length;
     _lineHeight = lineHeight;
     size = _recomputeSize();

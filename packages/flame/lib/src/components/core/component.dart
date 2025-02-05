@@ -878,11 +878,14 @@ class Component {
   @mustCallSuper
   @internal
   void handleResize(Vector2 size) {
-    _children?.forEach((child) {
-      if (child.isLoading || child.isLoaded) {
-        child.onGameResize(size);
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        if (child.isLoading || child.isLoaded) {
+          child.onGameResize(size);
+        }
       }
-    });
+    }
   }
 
   FutureOr<void> _startLoading() {
