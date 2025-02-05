@@ -48,7 +48,9 @@ class LineSegment {
       };
       if (overlaps.isNotEmpty) {
         final sum = Vector2.zero();
-        overlaps.forEach(sum.add);
+        for (final overlap in overlaps) {
+          sum.add(overlap);
+        }
         return [sum..scale(1 / overlaps.length)];
       }
     }
