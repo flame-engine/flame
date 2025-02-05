@@ -524,7 +524,12 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     update(dt);
-    _children?.forEach((c) => c.updateTree(dt));
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        child.updateTree(dt);
+      }
+    }
   }
 
   /// This method will be invoked from lifecycle if [child] has been added
@@ -535,7 +540,12 @@ class Component {
 
   void renderTree(Canvas canvas) {
     render(canvas);
-    _children?.forEach((c) => c.renderTree(canvas));
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        child.renderTree(canvas);
+      }
+    }
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
