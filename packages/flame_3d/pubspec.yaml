@@ -1,7 +1,7 @@
 name: flame_3d
 resolution: workspace
 description: Experimental 3D support for the Flame Engine
-version: 0.1.0-dev.4
+version: 0.1.0-dev.5
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
 funding:
   - https://opencollective.com/blue-fire
@@ -13,7 +13,7 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.23.0
+  flame: ^1.24.0
   flutter:
     sdk: flutter
   flutter_gpu:
@@ -24,7 +24,7 @@ dependencies:
 
 dev_dependencies:
   flame_lint: ^1.2.0
-  flame_test: ^1.17.4
+  flame_test: ^1.17.5
   flutter_test:
     sdk: flutter
 
