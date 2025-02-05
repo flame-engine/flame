@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.12.0
-  tiled: ">=0.10.0 <0.11.0"
+  tiled: ^0.11.0
   xml: ^6.3.0
 
 dev_dependencies:
