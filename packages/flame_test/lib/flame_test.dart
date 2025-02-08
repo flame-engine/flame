@@ -1,4 +1,5 @@
 export 'src/close_to_aabb.dart';
+export 'src/close_to_matrix4.dart';
 export 'src/close_to_vector.dart';
 export 'src/close_to_vector3.dart';
 export 'src/debug_text_renderer.dart';
