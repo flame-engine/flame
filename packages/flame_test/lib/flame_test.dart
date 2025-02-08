@@ -1,7 +1,7 @@
-export 'src/close_to_aabb.dart' show closeToAabb;
+export 'src/close_to_aabb.dart';
 export 'src/close_to_vector.dart';
 export 'src/close_to_vector3.dart';
-export 'src/debug_text_renderer.dart' show DebugTextRenderer;
+export 'src/debug_text_renderer.dart';
 export 'src/expect_color.dart';
 export 'src/expect_double.dart';
 export 'src/fails_assert.dart';
