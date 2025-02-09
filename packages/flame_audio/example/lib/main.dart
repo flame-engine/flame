@@ -39,7 +39,7 @@ class AudioGame extends FlameGame with TapDetector {
 
   Rect get button => Rect.fromLTWH(20, size.y - 300, size.x - 40, 200);
 
-  void startBgmMusic() {
+  void startBgmMusic() async {
     FlameAudio.bgm.initialize();
     FlameAudio.bgm.play('music/bg_music.ogg');
   }
