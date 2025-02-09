@@ -1,7 +1,9 @@
 export 'src/close_to_aabb.dart';
 export 'src/close_to_matrix4.dart';
+export 'src/close_to_quaternion.dart';
 export 'src/close_to_vector.dart';
 export 'src/close_to_vector3.dart';
+export 'src/close_to_vector4.dart';
 export 'src/debug_text_renderer.dart';
 export 'src/expect_color.dart';
 export 'src/expect_double.dart';
