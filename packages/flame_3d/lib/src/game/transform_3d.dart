@@ -48,9 +48,7 @@ class Transform3D extends ChangeNotifier {
   ///
   /// Create an instance of [Transform3D] and apply the [matrix] on it.
   factory Transform3D.fromMatrix4(Matrix4 matrix) {
-    final transform = Transform3D();
-    matrix.decompose(transform.position, transform.rotation, transform.scale);
-    return transform;
+    return Transform3D()..setFromMatrix4(matrix);
   }
 
   /// Clone of this.
@@ -118,6 +116,10 @@ class Transform3D extends ChangeNotifier {
     rotation.setFrom(other.rotation);
     position.setFrom(other.position);
     scale.setFrom(other.scale);
+  }
+
+  void setFromMatrix4(Matrix4 matrix) {
+    matrix.decompose(position, rotation, scale);
   }
 
   /// Check whether this transform is equal to [other], up to the given
