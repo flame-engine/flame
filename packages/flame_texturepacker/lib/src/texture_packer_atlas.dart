@@ -27,7 +27,8 @@ class TexturePackerAtlas {
   /// is recommended for smooth result.
   ///
   /// If [prefix] is not specified, the atlas file will be expected to under
-  /// a folder named "images" under [Flame.assets]
+  /// a folder named "images" under [Flame.assets]. This is only applicable when
+  /// reading from the Flutter assets folder.
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
@@ -38,7 +39,7 @@ class TexturePackerAtlas {
     final _TextureAtlasData atlasData;
 
     if (fromStorage) {
-      atlasData = await _fromStorage(path, images: images, prefix: prefix);
+      atlasData = await _fromStorage(path, images: images);
     } else {
       atlasData = await _fromAssets(path, images: images, prefix: prefix);
     }
@@ -91,7 +92,7 @@ Future<_TextureAtlasData> _fromAssets(
     );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
-      Exception('Error loading $path from assets: $e'),
+      Exception('Error loading ${prefix ?? 'images/'}$path from assets: $e'),
       stack,
     );
   }
@@ -102,14 +103,12 @@ Future<_TextureAtlasData> _fromAssets(
 Future<_TextureAtlasData> _fromStorage(
   String path, {
   Images? images,
-  String? prefix,
 }) async {
   try {
     return await _parse(
       path,
       fromStorage: true,
       images: images,
-      prefix: prefix,
     );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
@@ -137,7 +136,7 @@ Future<_TextureAtlasData> _parse(
   if (fromStorage) {
     fileAsString = await File(path).readAsString();
   } else {
-    fileAsString = await Flame.assets.readFile("${prefix ?? 'images/'}$path");
+    fileAsString = await Flame.assets.readFile('${prefix ?? 'images/'}$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
