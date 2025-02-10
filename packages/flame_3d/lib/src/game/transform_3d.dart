@@ -30,8 +30,8 @@ class Transform3D extends ChangeNotifier {
   /// {@macro transform_3d}
   Transform3D()
       : _recalculate = true,
-        _rotation = NotifyingQuaternion(0, 0, 0, 0),
         _position = NotifyingVector3.zero(),
+        _rotation = NotifyingQuaternion(0, 0, 0, 0),
         _scale = NotifyingVector3.all(1),
         _transformMatrix = Matrix4.zero() {
     _position.addListener(_markAsModified);
