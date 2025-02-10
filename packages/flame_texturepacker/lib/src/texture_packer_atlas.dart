@@ -141,9 +141,11 @@ Future<_TextureAtlasData> _parse(
   if (fromStorage) {
     fileAsString = await File(path).readAsString();
   } else {
-    fileAsString = await Flame.assets.readFile(
-      '${assetsPrefix ?? 'images/'}$path',
+    assert(
+      assetsPrefix != null,
+      'When reading from storage, the assetsPrefix needs to be provided.',
     );
+    fileAsString = await Flame.assets.readFile('$assetsPrefix!/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
