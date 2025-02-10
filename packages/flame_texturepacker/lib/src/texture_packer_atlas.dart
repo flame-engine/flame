@@ -26,9 +26,8 @@ class TexturePackerAtlas {
   /// instead of the packed size. For animation sprites, load with origin size
   /// is recommended for smooth result.
   ///
-  /// If [prefix] is not specified, the atlas file will be expected to under
-  /// a folder named "images" under [Flame.assets]. This is only applicable when
-  /// reading from the Flutter assets folder.
+  /// If [prefix] is not specified, the atlas file [path] will be resolved
+  /// relative to the `assets/images/` directory.
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
