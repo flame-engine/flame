@@ -25,18 +25,26 @@ class TexturePackerAtlas {
   /// If [useOriginalSize] is true, the sprites loaded will be use original size
   /// instead of the packed size. For animation sprites, load with origin size
   /// is recommended for smooth result.
+  ///
+  /// If [assetsPrefix] is not specified, the atlas file [path] will be resolved
+  /// relative to the `assets/images/` directory.
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
     Images? images,
     bool useOriginalSize = true,
+    String assetsPrefix = 'images/',
   }) async {
     final _TextureAtlasData atlasData;
 
     if (fromStorage) {
       atlasData = await _fromStorage(path, images: images);
     } else {
-      atlasData = await _fromAssets(path, images: images);
+      atlasData = await _fromAssets(
+        path,
+        images: images,
+        assetsPrefix: assetsPrefix,
+      );
     }
 
     return TexturePackerAtlas(
@@ -73,12 +81,23 @@ class TexturePackerAtlas {
 
 /// Loads images from the assets folder.
 /// Uses the [path] to find the image directory.
-Future<_TextureAtlasData> _fromAssets(String path, {Images? images}) async {
+Future<_TextureAtlasData> _fromAssets(
+  String path, {
+  required String assetsPrefix,
+  Images? images,
+}) async {
   try {
-    return await _parse(path, fromStorage: false, images: images);
+    return await _parse(
+      path,
+      fromStorage: false,
+      images: images,
+      assetsPrefix: assetsPrefix,
+    );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
-      Exception('Error loading $path from assets: $e'),
+      Exception(
+        'Error loading $assetsPrefix$path from assets: $e',
+      ),
       stack,
     );
   }
@@ -86,9 +105,16 @@ Future<_TextureAtlasData> _fromAssets(String path, {Images? images}) async {
 
 /// Loads images from the device's storage.
 /// Uses the [path] to find the image directory.
-Future<_TextureAtlasData> _fromStorage(String path, {Images? images}) async {
+Future<_TextureAtlasData> _fromStorage(
+  String path, {
+  Images? images,
+}) async {
   try {
-    return await _parse(path, fromStorage: true, images: images);
+    return await _parse(
+      path,
+      fromStorage: true,
+      images: images,
+    );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
       Exception('Error loading $path from storage: $e'),
@@ -106,6 +132,7 @@ Future<_TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
   Images? images,
+  String? assetsPrefix,
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
@@ -114,7 +141,11 @@ Future<_TextureAtlasData> _parse(
   if (fromStorage) {
     fileAsString = await File(path).readAsString();
   } else {
-    fileAsString = await Flame.assets.readFile('images/$path');
+    assert(
+      assetsPrefix != null,
+      'When reading from storage, the assetsPrefix needs to be provided.',
+    );
+    fileAsString = await Flame.assets.readFile('$assetsPrefix!/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
