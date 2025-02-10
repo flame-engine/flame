@@ -51,6 +51,41 @@ class Transform3D extends ChangeNotifier {
     return Transform3D()..setFromMatrix4(matrix);
   }
 
+  /// Creates a [Transform3D] from the given broken down
+  /// parameters and sensible defaults:
+  /// - [position] defaults to no translation;
+  /// - [rotation] defaults to no rotation;
+  /// - [scale] defaults to no scaling.
+  factory Transform3D.compose({
+    Vector3? position,
+    Quaternion? rotation,
+    Vector3? scale,
+  }) {
+    final matrix = matrix4(
+      position: position,
+      rotation: rotation,
+      scale: scale,
+    );
+    return Transform3D.fromMatrix4(matrix);
+  }
+
+  /// Creates a transform-3d-type [Matrix4] from the given broken down
+  /// parameters and sensible defaults:
+  /// - [position] defaults to no translation;
+  /// - [rotation] defaults to no rotation;
+  /// - [scale] defaults to no scaling.
+  static Matrix4 matrix4({
+    Vector3? position,
+    Quaternion? rotation,
+    Vector3? scale,
+  }) {
+    return Matrix4.compose(
+      position ?? Vector3.zero(),
+      rotation ?? Quaternion.identity(),
+      scale ?? Vector3.all(1),
+    );
+  }
+
   /// Clone of this.
   Transform3D clone() => Transform3D.copy(this);
 
