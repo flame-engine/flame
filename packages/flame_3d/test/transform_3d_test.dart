@@ -46,5 +46,39 @@ void main() {
         closeToMatrix4(matrix2, epsilon),
       );
     });
+
+    test('can create matrix4 using some parameters with sensible defaults', () {
+      final matrix1 = Transform3D.matrix4(
+        position: Vector3(1, 2, 3),
+      );
+      final transform1 = Transform3D.fromMatrix4(matrix1);
+      expect(transform1.position, closeToVector3(Vector3(1, 2, 3), epsilon));
+      expect(
+        transform1.rotation,
+        closeToQuaternion(Quaternion.identity(), epsilon),
+      );
+      expect(transform1.scale, closeToVector3(Vector3.all(1), epsilon));
+
+      final transform2 = Transform3D.compose(
+        rotation: Quaternion(0.1, 0.2, 0.3, 0.4).normalized(),
+      );
+      expect(transform2.position, closeToVector3(Vector3.zero(), epsilon));
+      expect(
+        transform2.rotation,
+        closeToQuaternion(Quaternion(0.1, 0.2, 0.3, 0.4).normalized(), epsilon),
+      );
+      expect(transform2.scale, closeToVector3(Vector3.all(1), epsilon));
+
+      final matrix3 = Transform3D.matrix4(
+        scale: Vector3(4, 5, 6),
+      );
+      final transform3 = Transform3D()..setFromMatrix4(matrix3);
+      expect(transform3.position, closeToVector3(Vector3.zero(), epsilon));
+      expect(
+        transform3.rotation,
+        closeToQuaternion(Quaternion.identity(), epsilon),
+      );
+      expect(transform3.scale, closeToVector3(Vector3(4, 5, 6), epsilon));
+    });
   });
 }
