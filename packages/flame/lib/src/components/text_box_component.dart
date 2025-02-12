@@ -375,4 +375,8 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     cache?.dispose();
     cache = null;
   }
+
+  void skip() {
+    boxConfig = boxConfig.copyWith(timePerChar: 0);
+  }
 }
