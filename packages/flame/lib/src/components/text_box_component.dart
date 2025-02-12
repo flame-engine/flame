@@ -376,6 +376,15 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     cache = null;
   }
 
+  /// Force [TextBoxComponent] to display [text] in its entirety.
+  ///
+  /// It is possible that in the future, one may want to revert timePerChar or
+  /// even the old [boxConfig] value to its previous value once [onComplete]
+  /// is called. Such a case might be when a new value of [text] is set.
+  /// However, this is non-trivial task, so this implementation is intentionally
+  /// kept simple.
+  /// If this behavior is needed, the user can simply add the code for setting
+  /// [boxConfig] by themselves in [onComplete].
   void skip() {
     boxConfig = boxConfig.copyWith(timePerChar: 0);
   }
