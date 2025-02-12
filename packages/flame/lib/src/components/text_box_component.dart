@@ -65,7 +65,7 @@ class TextBoxConfig {
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.medium;
-  final TextBoxConfig _boxConfig;
+  TextBoxConfig _boxConfig;
   final double pixelRatio;
 
   @visibleForTesting
@@ -95,6 +95,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   void Function()? onComplete;
 
   TextBoxConfig get boxConfig => _boxConfig;
+  set boxConfig(TextBoxConfig newTextBoxConfig) {
+    _boxConfig = newTextBoxConfig;
+  }
+
   double get lineHeight => _lineHeight;
 
   TextBoxComponent({
