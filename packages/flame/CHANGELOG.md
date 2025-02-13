@@ -1,3 +1,7 @@
+## 1.25.0
+
+ - **FEAT**: Add a setter for TextBoxComponent.boxConfig and add a convenience method to skip per-char buildup ([#3490](https://github.com/flame-engine/flame/issues/3490)). ([d1777b7a](https://github.com/flame-engine/flame/commit/d1777b7a9efcf065c4474b7c6702c45d37bf710c))
+
 ## 1.24.0
 
  - **PERF**: Switch from forEach to regular for-loops for about 30% improvement in raw update performance (#3472).

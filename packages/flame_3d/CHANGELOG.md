@@ -1,3 +1,9 @@
+## 0.1.0-dev.6
+
+ - **FEAT**: Add helper methods to create matrix4 with sensible defaults ([#3486](https://github.com/flame-engine/flame/issues/3486)). ([9345c870](https://github.com/flame-engine/flame/commit/9345c870d4de57d8d3a4d07a014d18cb71c01618))
+ - **FEAT**: Add setFromMatrix4 to Transform3D ([#3484](https://github.com/flame-engine/flame/issues/3484)). ([1dbb4433](https://github.com/flame-engine/flame/commit/1dbb4433ca9e06b93a49b430fe9c084885551ff2))
+ - **FEAT**: Add Line3D mesh component [flame_3d] ([#3412](https://github.com/flame-engine/flame/issues/3412)). ([c332c965](https://github.com/flame-engine/flame/commit/c332c9651ad8b930281c1d0bc13b89754fd0b2c1))
+
 ## 0.1.0-dev.5
 
 > Note: This release has breaking changes.

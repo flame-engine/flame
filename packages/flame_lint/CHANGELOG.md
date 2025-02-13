@@ -1,3 +1,7 @@
+## 1.2.2
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
 ## 1.2.1
 
  - **FIX**: Update version of lints to comply with new pub requirements ([#3223](https://github.com/flame-engine/flame/issues/3223)). ([1b0bee72](https://github.com/flame-engine/flame/commit/1b0bee726b5937f73d4be5e304bc8780aa3ca6f0))
