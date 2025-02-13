@@ -87,7 +87,6 @@ linter:
     - noop_primitive_operations
     - null_closures
     - omit_local_variable_types
-    - package_api_docs
     - package_names
     - package_prefixed_library_names
     - parameter_assignments
@@ -155,7 +154,6 @@ linter:
     - unnecessary_this
     - unnecessary_to_list_in_spreads
     - unrelated_type_equality_checks
-    - unsafe_html
     - use_enums
     - use_full_hex_values_for_flutter_colors
     - use_function_type_syntax_for_parameters
