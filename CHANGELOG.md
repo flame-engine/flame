@@ -3,6 +3,152 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-02-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`behavior_tree` - `v0.1.3+1`](#behavior_tree---v0131)
+ - [`flame` - `v1.25.0`](#flame---v1250)
+ - [`flame_3d` - `v0.1.0-dev.6`](#flame_3d---v010-dev6)
+ - [`flame_audio` - `v2.11.0`](#flame_audio---v2110)
+ - [`flame_behavior_tree` - `v0.1.3+6`](#flame_behavior_tree---v0136)
+ - [`flame_bloc` - `v1.12.7`](#flame_bloc---v1127)
+ - [`flame_fire_atlas` - `v1.8.1`](#flame_fire_atlas---v181)
+ - [`flame_forge2d` - `v0.18.2+6`](#flame_forge2d---v01826)
+ - [`flame_isolate` - `v0.6.2+6`](#flame_isolate---v0626)
+ - [`flame_kenney_xml` - `v0.1.1+6`](#flame_kenney_xml---v0116)
+ - [`flame_lint` - `v1.2.2`](#flame_lint---v122)
+ - [`flame_lottie` - `v0.4.2+6`](#flame_lottie---v0426)
+ - [`flame_markdown` - `v0.2.3+2`](#flame_markdown---v0232)
+ - [`flame_noise` - `v0.3.2+6`](#flame_noise---v0326)
+ - [`flame_oxygen` - `v0.2.3+6`](#flame_oxygen---v0236)
+ - [`flame_rive` - `v1.10.9`](#flame_rive---v1109)
+ - [`flame_splash_screen` - `v0.3.1+1`](#flame_splash_screen---v0311)
+ - [`flame_sprite_fusion` - `v0.1.3+6`](#flame_sprite_fusion---v0136)
+ - [`flame_svg` - `v1.11.6`](#flame_svg---v1116)
+ - [`flame_test` - `v1.18.0`](#flame_test---v1180)
+ - [`flame_texturepacker` - `v4.1.6`](#flame_texturepacker---v416)
+ - [`flame_tiled` - `v2.0.1`](#flame_tiled---v201)
+ - [`flame_spine` - `v0.2.2+6`](#flame_spine---v0226)
+ - [`flame_console` - `v0.1.2+2`](#flame_console---v0122)
+ - [`flame_riverpod` - `v5.4.9`](#flame_riverpod---v549)
+ - [`flame_network_assets` - `v0.3.3+6`](#flame_network_assets---v0336)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_spine` - `v0.2.2+6`
+ - `flame_console` - `v0.1.2+2`
+ - `flame_riverpod` - `v5.4.9`
+ - `flame_network_assets` - `v0.3.3+6`
+
+---
+
+#### `behavior_tree` - `v0.1.3+1`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame` - `v1.25.0`
+
+ - **FEAT**: Add a setter for TextBoxComponent.boxConfig and add a convenience method to skip per-char buildup ([#3490](https://github.com/flame-engine/flame/issues/3490)). ([d1777b7a](https://github.com/flame-engine/flame/commit/d1777b7a9efcf065c4474b7c6702c45d37bf710c))
+
+#### `flame_3d` - `v0.1.0-dev.6`
+
+ - **FEAT**: Add helper methods to create matrix4 with sensible defaults ([#3486](https://github.com/flame-engine/flame/issues/3486)). ([9345c870](https://github.com/flame-engine/flame/commit/9345c870d4de57d8d3a4d07a014d18cb71c01618))
+ - **FEAT**: Add setFromMatrix4 to Transform3D ([#3484](https://github.com/flame-engine/flame/issues/3484)). ([1dbb4433](https://github.com/flame-engine/flame/commit/1dbb4433ca9e06b93a49b430fe9c084885551ff2))
+ - **FEAT**: Add Line3D mesh component [flame_3d] ([#3412](https://github.com/flame-engine/flame/issues/3412)). ([c332c965](https://github.com/flame-engine/flame/commit/c332c9651ad8b930281c1d0bc13b89754fd0b2c1))
+
+#### `flame_audio` - `v2.11.0`
+
+ - **FEAT**(audio): Set audio context AudioContextConfigFocus.mixWithOthers by default ([#3483](https://github.com/flame-engine/flame/issues/3483)). ([762e0ad8](https://github.com/flame-engine/flame/commit/762e0ad8423e7bf3920139ca71a03b186d09c063))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_behavior_tree` - `v0.1.3+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_bloc` - `v1.12.7`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_fire_atlas` - `v1.8.1`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_forge2d` - `v0.18.2+6`
+
+ - **FIX**: Use correct matrix indices in BodyComponent ([#3491](https://github.com/flame-engine/flame/issues/3491)). ([d6c83fab](https://github.com/flame-engine/flame/commit/d6c83fab6c5cf56b047dcd22b9f1f0a075c26201))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_isolate` - `v0.6.2+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_kenney_xml` - `v0.1.1+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_lint` - `v1.2.2`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_lottie` - `v0.4.2+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_markdown` - `v0.2.3+2`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_noise` - `v0.3.2+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_oxygen` - `v0.2.3+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_rive` - `v1.10.9`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_splash_screen` - `v0.3.1+1`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_sprite_fusion` - `v0.1.3+6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_svg` - `v1.11.6`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_test` - `v1.18.0`
+
+ - **FEAT**: Implement closeToVector4 and closeToQuaternion by extracing a generic CloseToVector base ([#3480](https://github.com/flame-engine/flame/issues/3480)). ([57e58514](https://github.com/flame-engine/flame/commit/57e58514091248884505d3936e3e0aa076efb30a))
+ - **FEAT**: Add closeToMatrix4 test matcher ([#3478](https://github.com/flame-engine/flame/issues/3478)). ([8db2476e](https://github.com/flame-engine/flame/commit/8db2476e8c39723670641f1c2646ecf0d7bb09fb))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_texturepacker` - `v4.1.6`
+
+ - **FIX**: Remove forced location of the atlas file. ([#3481](https://github.com/flame-engine/flame/issues/3481)). ([bac68dcb](https://github.com/flame-engine/flame/commit/bac68dcbb95ec420c1401e32e60adf42dc338695))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+#### `flame_tiled` - `v2.0.1`
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+
 ## 2025-02-05
 
 ### Changes

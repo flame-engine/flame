@@ -8,13 +8,13 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.24.0
-  flame_3d: ^0.1.0-dev.5
+  flame: ^1.25.0
+  flame_3d: ^0.1.0-dev.6
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.2.0
+  flame_lint: ^1.2.2
 
 flutter:
   uses-material-design: true

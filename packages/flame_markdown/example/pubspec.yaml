@@ -8,14 +8,14 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.24.0
-  flame_markdown: ^0.2.3+1
+  flame: ^1.25.0
+  flame_markdown: ^0.2.3+2
   flutter:
     sdk: flutter
   markdown: ^7.1.1
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^1.2.2
 
 flutter:
   uses-material-design: false

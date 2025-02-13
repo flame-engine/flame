@@ -1,3 +1,8 @@
+## 0.18.2+6
+
+ - **FIX**: Use correct matrix indices in BodyComponent ([#3491](https://github.com/flame-engine/flame/issues/3491)). ([d6c83fab](https://github.com/flame-engine/flame/commit/d6c83fab6c5cf56b047dcd22b9f1f0a075c26201))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
 ## 0.18.2+5
 
  - Update a dependency to the latest release.
