@@ -13,7 +13,7 @@ dependencies:
   flame_forge2d: ^0.18.2+5
   flutter:
     sdk: flutter
-  google_fonts: ^4.0.4
+  google_fonts: ^6.2.1
   url_launcher: ^6.1.11
 
 dev_dependencies:
