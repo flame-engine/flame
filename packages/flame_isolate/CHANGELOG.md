@@ -1,3 +1,11 @@
+## 0.6.2+6
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 0.6.2+5
+
+ - Update a dependency to the latest release.
+
 ## 0.6.2+4
 
  - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))

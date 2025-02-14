@@ -375,12 +375,7 @@ class FireAtlas {
       return stringBytes;
     }
 
-    final gzipBytes = GZipEncoder().encode(stringBytes);
-
-    if (gzipBytes == null) {
-      throw 'Generated an empty file';
-    }
-    return gzipBytes;
+    return const GZipEncoder().encode(stringBytes);
   }
 
   /// Reads a [FireAtlas] instance from a json file.
@@ -389,7 +384,7 @@ class FireAtlas {
 
   /// Reads a [FireAtlas] instance from a byte array.
   factory FireAtlas.deserializeBytes(List<int> bytes) {
-    final unzippedBytes = GZipDecoder().decodeBytes(bytes);
+    final unzippedBytes = const GZipDecoder().decodeBytes(bytes);
     final unzippedString = utf8.decode(unzippedBytes);
     return FireAtlas.deserializeJson(
       jsonDecode(unzippedString) as Map<String, dynamic>,

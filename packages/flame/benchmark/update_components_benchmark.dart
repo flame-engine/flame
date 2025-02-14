@@ -7,6 +7,7 @@ import 'package:flame/game.dart';
 const _amountComponents = 1000;
 const _amountTicks = 2000;
 const _amountInputs = 500;
+const _amountChildren = 10;
 
 class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   final Random random;
@@ -64,6 +65,13 @@ class _BenchmarkComponent extends PositionComponent {
   final Vector2 velocity = Vector2.zero();
 
   _BenchmarkComponent(this.id);
+
+  @override
+  Future<void> onLoad() async {
+    for (var i = 0; i < _amountChildren; i++) {
+      await add(PositionComponent(position: Vector2(i * 2, 0)));
+    }
+  }
 
   void input({
     required int xDirection,
