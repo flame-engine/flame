@@ -5,6 +5,7 @@ import 'dart:ui' hide Offset;
 import 'package:collection/collection.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/src/anchor.dart';
+import 'package:flame/src/collisions/hitboxes/shape_hitbox.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -416,23 +417,49 @@ class PositionComponent extends Component
     transform.flipVertically();
   }
 
-  /// Flip the component horizontally around a given anchor point.
-  void flipHorizontallyAroundAnchor(Anchor anchorPoint) {
-    if (anchorPoint.x != 0.5) {
-      final delta = (1 - 2 * anchorPoint.x) * width * transform.scale.x;
-      transform.x += delta * math.cos(transform.angle);
-      transform.y += delta * math.sin(transform.angle);
-    }
+  /// Flip the component horizontally around the anchor point of a
+  /// child [ShapeHitbox].
+  void flipHorizontallyAroundHitbox(ShapeHitbox hitboxComponent) {
+    final delta = (1 - 2 * _anchor.x) *
+        (hitboxComponent.position.x * 2) *
+        transform.scale.x;
+    transform.x += delta * math.cos(transform.angle);
+    transform.y += delta * math.sin(transform.angle);
     transform.flipHorizontally();
   }
 
-  /// Flip the component vertically around a given anchor point.
-  void flipVerticallyAroundAnchor(Anchor anchorPoint) {
-    if (anchorPoint.y != 0.5) {
-      final delta = (1 - 2 * anchorPoint.y) * height * transform.scale.y;
-      transform.x += -delta * math.sin(transform.angle);
-      transform.y += delta * math.cos(transform.angle);
-    }
+  /// Flip the component horizontally around the anchor point of a
+  /// child [ShapeHitbox].
+  void flipVerticallyAroundHitbox(ShapeHitbox hitboxComponent) {
+    final delta = (1 - 2 * _anchor.y) *
+        (hitboxComponent.position.y * 2) *
+        transform.scale.y;
+    transform.x += -delta * math.sin(transform.angle);
+    transform.y += delta * math.cos(transform.angle);
+    transform.flipVertically();
+  }
+
+  /// Flip the component horizontally around the center line of a
+  /// child [ShapeHitbox].
+  void flipHorizontallyAroundHitboxCenter(ShapeHitbox hitboxComponent) {
+    final delta = (1 - 2 * _anchor.x) *
+        (hitboxComponent.position.x * 2 +
+            ((1 - 2 * hitboxComponent.anchor.x) * hitboxComponent.width)) *
+        transform.scale.x;
+    transform.x += delta * math.cos(transform.angle);
+    transform.y += delta * math.sin(transform.angle);
+    transform.flipHorizontally();
+  }
+
+  /// Flip the component vertically around the center line of a
+  /// child [ShapeHitbox].
+  void flipVerticallyAroundHitboxCenter(ShapeHitbox hitboxComponent) {
+    final delta = (1 - 2 * _anchor.y) *
+        (hitboxComponent.position.y * 2 +
+            ((1 - 2 * hitboxComponent.anchor.y) * hitboxComponent.height)) *
+        transform.scale.y;
+    transform.x += -delta * math.sin(transform.angle);
+    transform.y += delta * math.cos(transform.angle);
     transform.flipVertically();
   }
 
