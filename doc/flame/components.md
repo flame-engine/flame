@@ -578,6 +578,14 @@ In the event that you want to change the direction of your components rendering,
 In case you want to flip a component around its center without having to change the anchor to
 `Anchor.center`, you can use `flipHorizontallyAroundCenter()` and `flipVerticallyAroundCenter()`.
 
+If you have a component that has an offset hitbox, you can flip the component around the hitbox's anchor
+with `flipHorizontallyAroundHitbox(ShapeHitbox hitboxComponent)` and
+`flipVerticallyAroundHitbox(ShapeHitbox hitboxComponent)`.
+
+If you have a component that has an offset hitbox, you can flip the component around the hitbox's center
+with `flipHorizontallyAroundHitboxCenter(ShapeHitbox hitboxComponent)` and
+`flipVerticallyAroundHitboxCenter(ShapeHitbox hitboxComponent)`.
+
 
 ## SpriteComponent
 
