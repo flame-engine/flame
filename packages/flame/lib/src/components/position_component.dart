@@ -417,7 +417,7 @@ class PositionComponent extends Component
     transform.flipVertically();
   }
 
-  /// Flip the component horizontally around the anchor point of a
+  /// Flip the component horizontally around the anchor point of a 
   /// child [ShapeHitbox].
   void flipHorizontallyAroundHitbox(ShapeHitbox hitboxComponent) {
     final delta = (1 - 2 * _anchor.x) *
@@ -428,7 +428,7 @@ class PositionComponent extends Component
     transform.flipHorizontally();
   }
 
-  /// Flip the component horizontally around the anchor point of a
+  /// Flip the component horizontally around the anchor point of a 
   /// child [ShapeHitbox].
   void flipVerticallyAroundHitbox(ShapeHitbox hitboxComponent) {
     final delta = (1 - 2 * _anchor.y) *
@@ -439,7 +439,7 @@ class PositionComponent extends Component
     transform.flipVertically();
   }
 
-  /// Flip the component horizontally around the center line of a
+  /// Flip the component horizontally around the center line of a 
   /// child [ShapeHitbox].
   void flipHorizontallyAroundHitboxCenter(ShapeHitbox hitboxComponent) {
     final delta = (1 - 2 * _anchor.x) *
@@ -451,7 +451,7 @@ class PositionComponent extends Component
     transform.flipHorizontally();
   }
 
-  /// Flip the component vertically around the center line of a
+  /// Flip the component vertically around the center line of a 
   /// child [ShapeHitbox].
   void flipVerticallyAroundHitboxCenter(ShapeHitbox hitboxComponent) {
     final delta = (1 - 2 * _anchor.y) *
