@@ -1,3 +1,12 @@
+## 4.1.6
+
+ - **FIX**: Remove forced location of the atlas file. ([#3481](https://github.com/flame-engine/flame/issues/3481)). ([bac68dcb](https://github.com/flame-engine/flame/commit/bac68dcbb95ec420c1401e32e60adf42dc338695))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 4.1.5
+
+ - Update a dependency to the latest release.
+
 ## 4.1.4
 
  - Update a dependency to the latest release.

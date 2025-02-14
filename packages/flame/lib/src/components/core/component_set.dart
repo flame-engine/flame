@@ -106,6 +106,8 @@ class ComponentSet extends QueryableOrderedSet<Component> {
     final elements = toList();
     // bypass the wrapper because the components are already added
     super.clear();
-    elements.forEach(super.add);
+    for (final element in elements) {
+      super.add(element);
+    }
   }
 }

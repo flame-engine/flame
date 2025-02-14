@@ -1,3 +1,13 @@
+## 1.8.1
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.8.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Bump tiled to 0.11.0 and add ColorData extension (#3473).
+
 ## 1.7.1
 
  - Update a dependency to the latest release.

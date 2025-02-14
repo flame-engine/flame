@@ -46,6 +46,21 @@ void main() {
       }
     });
 
+    test('fails on type mismatch - vector4', () {
+      try {
+        expect(Vector4(1, 2, 3, 4), closeToVector3(Vector3.zero()));
+      } on TestFailure catch (e) {
+        expect(
+          e.message,
+          contains(
+            'Expected: a Vector3 object within 1e-15 of (0.0, 0.0, 0.0)',
+          ),
+        );
+        expect(e.message, contains('Actual: Vector4:<1.0,2.0,3.0,4.0>'));
+        expect(e.message, contains('Which: is not an instance of Vector3'));
+      }
+    });
+
     test('fails on value mismatch', () {
       try {
         expect(Vector3(101, 217, 100), closeToVector3(Vector3(100, 220, 101)));

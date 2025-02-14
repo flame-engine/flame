@@ -186,7 +186,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
     handleResize(size);
-    children.forEach((child) => child.onParentResize(size));
+    for (final child in children) {
+      child.onParentResize(size);
+    }
   }
 
   /// Ensure that all pending tree operations finish.
