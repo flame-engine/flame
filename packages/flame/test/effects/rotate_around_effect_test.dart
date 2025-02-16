@@ -69,9 +69,6 @@ void main() {
 
       for (var i = 0; i < 10; i++) {
         game.update(0.5);
-        print(i);
-        print(component.angle);
-        print(component.position);
         expect(component.angle % tau, closeTo(i.isOdd ? 0 : pi, 1e-13));
         expect(
           component.position,
