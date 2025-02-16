@@ -17,7 +17,7 @@ class ScaleByEffectGame extends FlameGame {
         hold = true;
         flower.add(
           ScaleEffect.by(
-            reverse ? Vector2.all(1.5) : Vector2.all(1 / 1.5),
+            reverse ? Vector2.all(1 / 1.5) : Vector2.all(1.5),
             EffectController(duration: 0.3),
             onComplete: () => hold = false,
           ),
