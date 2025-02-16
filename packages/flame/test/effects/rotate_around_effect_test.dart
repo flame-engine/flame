@@ -6,6 +6,8 @@ import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+const _epsilon = 1e-13;
+
 void main() {
   group('RotateAroundEffect', () {
     testWithFlameGame('applies rotation correctly', (game) async {
@@ -24,12 +26,12 @@ void main() {
       expect(component.position, Vector2(50, 0));
 
       game.update(0.5);
-      expect(component.angle, closeTo(pi, 1e-13));
-      expect(component.position, closeToVector(Vector2(50, 100), 1e-13));
+      expect(component.angle, closeTo(pi, _epsilon));
+      expect(component.position, closeToVector(Vector2(50, 100), _epsilon));
 
       game.update(0.5);
-      expect(component.angle % tau, closeTo(0, 1e-13));
-      expect(component.position, closeToVector(Vector2(50, 0), 1e-13));
+      expect(component.angle % tau, closeTo(0, _epsilon));
+      expect(component.position, closeToVector(Vector2(50, 0), _epsilon));
     });
 
     testWithFlameGame('aligns rotation correctly', (game) async {
@@ -48,12 +50,12 @@ void main() {
       expect(component.position, Vector2(100, 100));
 
       game.update(0.5);
-      expect(component.angle, closeTo(pi / 2, 1e-13));
-      expect(component.position, closeToVector(Vector2(0, 100), 1e-13));
+      expect(component.angle, closeTo(pi / 2, _epsilon));
+      expect(component.position, closeToVector(Vector2(0, 100), _epsilon));
 
       game.update(0.5);
-      expect(component.angle, closeTo(pi, 1e-13));
-      expect(component.position, closeToVector(Vector2(0, 0), 1e-13));
+      expect(component.angle, closeTo(pi, _epsilon));
+      expect(component.position, closeToVector(Vector2(0, 0), _epsilon));
     });
 
     testWithFlameGame('handles infinite rotation', (game) async {
@@ -69,10 +71,10 @@ void main() {
 
       for (var i = 0; i < 10; i++) {
         game.update(0.5);
-        expect(component.angle % tau, closeTo(i.isOdd ? 0 : pi, 1e-13));
+        expect(component.angle % tau, closeTo(i.isOdd ? 0 : pi, _epsilon));
         expect(
           component.position,
-          closeToVector(Vector2.all(i.isOdd ? 100 : 0), 1e-13),
+          closeToVector(Vector2.all(i.isOdd ? 100 : 0), _epsilon),
         );
       }
     });
