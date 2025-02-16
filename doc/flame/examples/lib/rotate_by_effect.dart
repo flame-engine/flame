@@ -5,27 +5,20 @@ import 'package:flame/geometry.dart';
 
 class RotateByEffectGame extends FlameGame {
   bool reset = false;
+
   @override
   Future<void> onLoad() async {
     final flower = Flower(
       size: 60,
       position: canvasSize / 2,
       onTap: (flower) {
-        if (reset = !reset) {
-          flower.add(
-            RotateEffect.by(
-              tau / 4,
-              EffectController(duration: 2),
-            ),
-          );
-        } else {
-          flower.add(
-            RotateEffect.by(
-              -tau / 4,
-              EffectController(duration: 2),
-            ),
-          );
-        }
+        flower.add(
+          RotateEffect.by(
+            reset ? tau / 4 : -tau / 4,
+            EffectController(duration: 2),
+          ),
+        );
+        reset = !reset;
       },
     );
     add(flower);

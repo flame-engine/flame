@@ -28,19 +28,20 @@ class OpacityEffectWithTargetGame extends FlameGame {
   void _onTap(Flower flower) {
     if (reset = !reset) {
       flower.add(
-        OpacityEffect.to(
-          0.2,
+        OpacityEffect.fadeIn(
           EffectController(duration: 0.75),
           target: _borderOpacityProvider,
         ),
       );
     } else {
       flower.add(
-        OpacityEffect.fadeIn(
+        OpacityEffect.to(
+          0.2,
           EffectController(duration: 0.75),
           target: _borderOpacityProvider,
         ),
       );
     }
+    reset = !reset;
   }
 }
