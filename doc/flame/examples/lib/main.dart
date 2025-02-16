@@ -21,6 +21,7 @@ import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
 import 'package:doc_flame_examples/remove_effect.dart';
 import 'package:doc_flame_examples/rive_example.dart';
+import 'package:doc_flame_examples/rotate_around_effect.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
 import 'package:doc_flame_examples/router.dart';
@@ -60,6 +61,7 @@ final routes = <String, Game Function()>{
   'ray_trace': RayTraceExample.new,
   'remove_effect': RemoveEffectGame.new,
   'rive_example': RiveExampleGame.new,
+  'rotate_around_effect': RotateAroundEffectGame.new,
   'rotate_by_effect': RotateByEffectGame.new,
   'rotate_to_effect': RotateToEffectGame.new,
   'router': RouterGame.new,
