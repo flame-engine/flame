@@ -201,7 +201,6 @@ final effect = RotateAroundEffect(
 ```
 
 
-
 ### `RotateEffect.by`
 
 Rotates the target clockwise by the specified angle relative to its current orientation. The angle
