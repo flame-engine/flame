@@ -10,21 +10,13 @@ class MoveByEffectGame extends FlameGame {
       size: 60,
       position: canvasSize / 2,
       onTap: (flower) {
-        if (reset = !reset) {
-          flower.add(
-            MoveEffect.by(
-              Vector2(30, 30),
-              EffectController(duration: 1.0),
-            ),
-          );
-        } else {
-          flower.add(
-            MoveEffect.by(
-              Vector2(-30, -30),
-              EffectController(duration: 1.0),
-            ),
-          );
-        }
+        flower.add(
+          MoveEffect.by(
+            reset ? Vector2(-30, -30) : Vector2(30, 30),
+            EffectController(duration: 1.0),
+          ),
+        );
+        reset = !reset;
       },
     );
     add(flower);

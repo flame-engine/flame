@@ -18,19 +18,20 @@ class OpacityToEffectGame extends FlameGame {
   }
 
   void _onTap(Flower flower) {
-    if (reset = !reset) {
+    if (reset) {
+      flower.add(
+        OpacityEffect.fadeIn(
+          EffectController(duration: 0.75),
+        ),
+      );
+    } else {
       flower.add(
         OpacityEffect.to(
           0.2,
           EffectController(duration: 0.75),
         ),
       );
-    } else {
-      flower.add(
-        OpacityEffect.fadeIn(
-          EffectController(duration: 0.75),
-        ),
-      );
     }
+    reset = !reset;
   }
 }

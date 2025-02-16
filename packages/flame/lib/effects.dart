@@ -40,6 +40,7 @@ export 'src/effects/provider_interfaces.dart'
         ReadOnlySizeProvider,
         OpacityProvider;
 export 'src/effects/remove_effect.dart';
+export 'src/effects/rotate_around_effect.dart';
 export 'src/effects/rotate_effect.dart';
 export 'src/effects/scale_effect.dart';
 export 'src/effects/sequence_effect.dart' show SequenceEffect;
