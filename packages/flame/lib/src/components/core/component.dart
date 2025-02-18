@@ -491,7 +491,7 @@ class Component {
   /// game tree
   void onMount() {}
 
-  /// Called right before the component is removed from the game
+  /// Called right before the component is removed from its parent
   /// and also before it changes parents (and is thus temporarily removed
   /// from the component tree).
   ///
