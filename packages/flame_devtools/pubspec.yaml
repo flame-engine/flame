@@ -11,13 +11,13 @@ dependencies:
   animated_tree_view: ^2.2.0
   devtools_app_shared: ^0.3.0
   devtools_extensions: ^0.3.0
-  flame: ^1.23.0
+  flame: ^1.25.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.1
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^1.2.2
 
 flutter:
   uses-material-design: true

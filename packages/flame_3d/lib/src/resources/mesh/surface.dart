@@ -23,7 +23,7 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
      * If `true`, the normals will be calculated if they are not provided.
      */
     bool calculateNormals = true,
-  }) : super(null) {
+  }) {
     final normalizedVertices = _normalize(
       vertices: vertices,
       indices: indices,
@@ -61,25 +61,27 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
   int get indexCount => _indexCount;
   late int _indexCount;
 
-  @override
-  gpu.DeviceBuffer? get resource {
-    var resource = super.resource;
-    final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
-    if (resource?.sizeInBytes != sizeInBytes) {
-      // Store the device buffer in the resource parent.
-      resource = super.resource = gpu.gpuContext.createDeviceBuffer(
-        gpu.StorageMode.hostVisible,
-        sizeInBytes,
-      );
+  int? resourceSizeInByes;
 
-      resource
-        ?..overwrite(_vertices.asByteData())
-        ..overwrite(
-          _indices.asByteData(),
-          destinationOffsetInBytes: _vertices.lengthInBytes,
-        );
-    }
-    return resource;
+  @override
+  bool get recreateResource {
+    final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
+    return resourceSizeInByes != sizeInBytes;
+  }
+
+  @override
+  gpu.DeviceBuffer? createResource() {
+    final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
+    resourceSizeInByes = sizeInBytes;
+    return gpu.gpuContext.createDeviceBuffer(
+      gpu.StorageMode.hostVisible,
+      sizeInBytes,
+    )
+      ?..overwrite(_vertices.asByteData())
+      ..overwrite(
+        _indices.asByteData(),
+        destinationOffsetInBytes: _vertices.lengthInBytes,
+      );
   }
 
   void _calculateAabb(List<Vertex> vertices) {

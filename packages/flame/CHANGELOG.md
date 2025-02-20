@@ -1,3 +1,18 @@
+## 1.25.0
+
+ - **FEAT**: Add a setter for TextBoxComponent.boxConfig and add a convenience method to skip per-char buildup ([#3490](https://github.com/flame-engine/flame/issues/3490)). ([d1777b7a](https://github.com/flame-engine/flame/commit/d1777b7a9efcf065c4474b7c6702c45d37bf710c))
+
+## 1.24.0
+
+ - **PERF**: Switch from forEach to regular for-loops for about 30% improvement in raw update performance (#3472).
+ - **FIX**: SpawnComponent.periodRange should change range each iteration (#3464).
+ - **FIX**: Don't use a future when assets for SpriteButton is already loaded (#3456).
+ - **FIX**: Darkness increases with higher values (#3448).
+ - **FEAT**: NineTileBoxComponent with HasPaint to enable effects (#3459).
+ - **FEAT**: Devtools overlay navigation (#3449).
+ - **FEAT**: Add direction and length getters and constructor to LineSegment (#3446).
+ - **FEAT**: Add multiFactory to SpawnComponent (#3440).
+
 ## 1.23.0
 
  - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))

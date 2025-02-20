@@ -1,4 +1,5 @@
 name: flame_workspace
+repository: https://github.com/flame-engine/flame
 workspace:
   - doc/flame/examples
   - doc/tutorials/klondike/app
@@ -66,7 +67,7 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^7.0.0-dev.3
+  melos: ^7.0.0-dev.7
 
 melos:
   command:
@@ -75,6 +76,8 @@ melos:
       branch: main
       # Generates a link to a prefilled GitHub release creation page.
       releaseUrl: true
+      includeCommitId: true
+      linkToCommits: true
 
     bootstrap:
       environment:
@@ -98,6 +101,10 @@ melos:
         - analyze
         - format
       description: Run all static analysis checks.
+
+    analyze:
+      run: melos exec dart analyze .
+      description: Run `dart analyze` for all packages.
 
     format-check:
       run: melos exec dart format . --set-exit-if-changed

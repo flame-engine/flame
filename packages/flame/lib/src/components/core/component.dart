@@ -491,7 +491,9 @@ class Component {
   /// game tree
   void onMount() {}
 
-  /// Called right before the component is removed from the game.
+  /// Called right before the component is removed from its parent
+  /// and also before it changes parents (and is thus temporarily removed
+  /// from the component tree).
   ///
   /// This method will only run for a component that was previously mounted into
   /// a component tree. If a component was never mounted (for example, when it
@@ -524,7 +526,12 @@ class Component {
   /// priority of the direct siblings, not the children or the ancestors.
   void updateTree(double dt) {
     update(dt);
-    _children?.forEach((c) => c.updateTree(dt));
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        child.updateTree(dt);
+      }
+    }
   }
 
   /// This method will be invoked from lifecycle if [child] has been added
@@ -535,7 +542,12 @@ class Component {
 
   void renderTree(Canvas canvas) {
     render(canvas);
-    _children?.forEach((c) => c.renderTree(canvas));
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        child.renderTree(canvas);
+      }
+    }
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
@@ -868,11 +880,14 @@ class Component {
   @mustCallSuper
   @internal
   void handleResize(Vector2 size) {
-    _children?.forEach((child) {
-      if (child.isLoading || child.isLoaded) {
-        child.onGameResize(size);
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        if (child.isLoading || child.isLoaded) {
+          child.onGameResize(size);
+        }
       }
-    });
+    }
   }
 
   FutureOr<void> _startLoading() {

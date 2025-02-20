@@ -17,7 +17,10 @@ class Light extends Resource<void> {
   Light({
     required this.transform,
     required this.source,
-  }) : super(null);
+  });
+
+  @override
+  void createResource() {}
 
   void apply(int index, Shader shader) {
     shader.setVector3('Light$index.position', transform.position);

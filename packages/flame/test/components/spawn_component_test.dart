@@ -290,5 +290,29 @@ void main() {
         );
       },
     );
+
+    testWithFlameGame('Spawns components within irregular period',
+        (game) async {
+      final random = Random(0);
+      // The first two periods will be ~4.3 and ~3.85
+      final spawn = SpawnComponent.periodRange(
+        factory: (_) => PositionComponent(),
+        minPeriod: 1.0,
+        maxPeriod: 5.0,
+        random: random,
+      );
+      final world = game.world;
+      await world.ensureAdd(spawn);
+      expect(world.children.length, 1);
+      game.update(0.3);
+      game.update(0);
+      expect(world.children.length, 1);
+      game.update(4.31);
+      game.update(0);
+      expect(world.children.length, 2);
+      game.update(3.86);
+      game.update(0);
+      expect(world.children.length, 3);
+    });
   });
 }
