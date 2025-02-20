@@ -71,6 +71,7 @@ final atlas = await atlasFromStorage('$documentsPath/atlas_map.atlas');
 
 
 ### Whitelist Images
+
 This is optional, but recommended to avoid loading every single sprite from your texture pack into memory. Use a list of relative paths to load only the Sprites you need into memory.
 
 ```Dart
