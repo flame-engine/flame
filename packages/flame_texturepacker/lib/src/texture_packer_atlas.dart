@@ -17,25 +17,51 @@ class TexturePackerAtlas {
 
   TexturePackerAtlas(this.sprites);
 
+  /// Loads all the sprites from the passed in [TextureAtlasData] and constructs
+  /// a new instance.
+  ///
+  /// Use [whiteList] to filter the sprites to be loaded. This can
+  /// significantly reduce the memory usage if only a few sprites are needed.
+  /// If the list is empty, all sprites will be loaded. The filter is case
+  /// sensitive and will load all sprites in a directory if you wish.
+  ///
+  /// If [useOriginalSize] is true, the sprites loaded will use original size
+  /// instead of the packed size. For animation sprites, load with origin size
+  /// is recommended for a smooth result.
+  factory TexturePackerAtlas.fromAtlas(
+    TextureAtlasData atlasData, {
+    List<String> whiteList = const [],
+    bool useOriginalSize = true,
+  }) {
+    return TexturePackerAtlas(
+      atlasData.regions
+          .where(
+            (e) =>
+                whiteList.isEmpty ||
+                whiteList.any((key) => e.name.contains(key)),
+          )
+          .map((e) => TexturePackerSprite(e, useOriginalSize: useOriginalSize))
+          .toList(),
+    );
+  }
+
   /// Loads all the sprites from the atlas that resides on the [path] and
   /// returns a new [TexturePackerAtlas].
   /// If [fromStorage] is true, the atlas will be loaded from the device's
   /// storage instead of the assets folder.
   ///
-  /// If [useOriginalSize] is true, the sprites loaded will be use original size
+  /// If [useOriginalSize] is true, the sprites loaded will use original size
   /// instead of the packed size. For animation sprites, load with origin size
-  /// is recommended for smooth result.
-  ///
-  /// If [assetsPrefix] is not specified, the atlas file [path] will be resolved
-  /// relative to the `assets/images/` directory.
+  /// is recommended for a smooth result.
   static Future<TexturePackerAtlas> load(
     String path, {
-    bool fromStorage = false,
     Images? images,
+    bool fromStorage = false,
     bool useOriginalSize = true,
     String assetsPrefix = 'images/',
+    List<String> whiteList = const [],
   }) async {
-    final _TextureAtlasData atlasData;
+    final TextureAtlasData atlasData;
 
     if (fromStorage) {
       atlasData = await _fromStorage(path, images: images);
@@ -52,6 +78,23 @@ class TexturePackerAtlas {
           .map((e) => TexturePackerSprite(e, useOriginalSize: useOriginalSize))
           .toList(),
     );
+  }
+
+  /// Loads the atlas that resides on the [path] and
+  /// returns a new [TextureAtlasData].
+  /// If [fromStorage] is true, the atlas will be loaded from the device's
+  /// storage instead of the assets folder.
+  static Future<TextureAtlasData> loadAtlas(
+    String path, {
+    bool fromStorage = false,
+    Images? images,
+    String assetsPrefix = 'images/',
+  }) async {
+    if (fromStorage) {
+      return _fromStorage(path, images: images);
+    } else {
+      return _fromAssets(path, images: images, assetsPrefix: assetsPrefix);
+    }
   }
 
   /// Returns the first region found with the specified name. This method uses
@@ -79,9 +122,9 @@ class TexturePackerAtlas {
   }
 }
 
-/// Loads images from the assets folder.
+// Loads images from the assets folder.
 /// Uses the [path] to find the image directory.
-Future<_TextureAtlasData> _fromAssets(
+Future<TextureAtlasData> _fromAssets(
   String path, {
   required String assetsPrefix,
   Images? images,
@@ -105,7 +148,7 @@ Future<_TextureAtlasData> _fromAssets(
 
 /// Loads images from the device's storage.
 /// Uses the [path] to find the image directory.
-Future<_TextureAtlasData> _fromStorage(
+Future<TextureAtlasData> _fromStorage(
   String path, {
   Images? images,
 }) async {
@@ -127,8 +170,8 @@ Future<_TextureAtlasData> _fromStorage(
 /// Uses the [path] to find the image directory.
 /// Atlas will be loaded from the device's storage if [fromStorage] is true.
 /// Otherwise, it will be loaded from the assets folder.
-/// Returns a [_TextureAtlasData] containing the pages and regions.
-Future<_TextureAtlasData> _parse(
+/// Returns a [TextureAtlasData] containing the pages and regions.
+Future<TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
   Images? images,
@@ -334,7 +377,7 @@ Future<_TextureAtlasData> _parse(
   }
 }
 
-typedef _TextureAtlasData = ({List<Page> pages, List<Region> regions});
+typedef TextureAtlasData = ({List<Page> pages, List<Region> regions});
 
 extension _IteratorExtension on Iterator<String> {
   String? moveNextAndGet() {
