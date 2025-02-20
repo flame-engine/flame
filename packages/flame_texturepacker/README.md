@@ -60,7 +60,6 @@ Load the TextureAtlas passing the path of the sprite sheet atlas file:
 final atlas = await atlasFromAssets('atlas_map.atlas');
 ```
 
-
 ### File Storage
 
 If you are using file storage, grab your atlas file like this:
@@ -68,6 +67,19 @@ If you are using file storage, grab your atlas file like this:
 ```Dart
 final documentsPath = (await getApplicationDocumentsDirectory()).path;
 final atlas = await atlasFromStorage('$documentsPath/atlas_map.atlas');
+```
+
+
+### Whitelist Images
+This is optional, but recommended to avoid loading every single sprite from your texture pack into memory. Use a list of relative paths to load only the Sprites you need into memory.
+
+```Dart
+final regions = await TexturePackerAtlas.loadAtlas('atlas_map.atlas');
+final atlas = TexturePackerAtlas.fromAtlas(regions, whiteList: [
+  'weapons/',
+  'ships/',
+  'explosions/'
+]);
 ```
 
 Get a list of sprites ordered by their index, you can use the list to generate an animation:
