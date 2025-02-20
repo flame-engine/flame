@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
@@ -9,4 +11,9 @@ extension TiledObjectHelpers on TiledObject {
 
   /// Returns the size of this tiled object as a Vector2.
   Vector2 get size => Vector2(width, height);
+}
+
+extension ColorDataExtension on ColorData {
+  /// Returns the color as a dart:ui Color.
+  Color toColor() => Color.fromARGB(alpha, red, green, blue);
 }

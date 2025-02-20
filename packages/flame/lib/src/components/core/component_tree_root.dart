@@ -158,12 +158,12 @@ class ComponentTreeRoot extends Component {
   @internal
   void handleResize(Vector2 size) {
     super.handleResize(size);
-    _queue.forEach((event) {
+    for (final event in _queue) {
       if ((event.kind == _LifecycleEventKind.add) &&
           (event.child!.isLoading || event.child!.isLoaded)) {
         event.child!.onGameResize(size);
       }
-    });
+    }
   }
 
   @mustCallSuper

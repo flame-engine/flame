@@ -35,6 +35,7 @@ There are multiple effects provided by Flame, and you can also
 - [`MoveByEffect`](#movebyeffect)
 - [`MoveToEffect`](#movetoeffect)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
+- [`RotateAroundEffect`](#rotatearoundeffect)
 - [`RotateEffect.by`](#rotateeffectby)
 - [`RotateEffect.to`](#rotateeffectto)
 - [`ScaleEffect.by`](#scaleeffectby)
@@ -175,6 +176,29 @@ curve drawn on the canvas.
 Another flag `oriented: true` instructs the target not only move along the curve, but also rotate
 itself in the direction the curve is facing at each point. With this flag the effect becomes both
 the move- and the rotate- effect at the same time.
+
+
+### `RotateAroundEffect`
+
+Rotates the target clockwise by the specified angle relative to its current orientation around
+the specified center. The angle is in radians. For example, the following effect will rotate the
+target 90º (=[tau]/4 in radians) clockwise around (100, 100).
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_around_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = RotateAroundEffect(
+  tau/4,
+  center: Vector2(100, 100),
+  EffectController(duration: 2),
+);
+```
 
 
 ### `RotateEffect.by`

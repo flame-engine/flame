@@ -20,5 +20,5 @@ dependencies:
 
 dev_dependencies:
   dartdoc: ^8.0.8
-  flame_lint: ^1.2.1
+  flame_lint: ^1.2.2
   test: any

@@ -12,12 +12,16 @@ class GroupElement extends BlockElement {
 
   @override
   void translate(double dx, double dy) {
-    children.forEach((child) => child.translate(dx, dy));
+    for (final child in children) {
+      child.translate(dx, dy);
+    }
   }
 
   @override
   void draw(Canvas canvas) {
-    children.forEach((child) => child.draw(canvas));
+    for (final child in children) {
+      child.draw(canvas);
+    }
   }
 
   @override

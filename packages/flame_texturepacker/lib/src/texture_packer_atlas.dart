@@ -112,10 +112,17 @@ class TexturePackerAtlas {
 /// Uses the [path] to find the image directory.
 Future<TextureAtlasData> _fromAssets(String path, {Images? images}) async {
   try {
-    return await _parse(path, fromStorage: false, images: images);
+    return await _parse(
+      path,
+      fromStorage: false,
+      images: images,
+      assetsPrefix: assetsPrefix,
+    );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
-      Exception('Error loading $path from assets: $e'),
+      Exception(
+        'Error loading $assetsPrefix$path from assets: $e',
+      ),
       stack,
     );
   }
@@ -125,7 +132,11 @@ Future<TextureAtlasData> _fromAssets(String path, {Images? images}) async {
 /// Uses the [path] to find the image directory.
 Future<TextureAtlasData> _fromStorage(String path, {Images? images}) async {
   try {
-    return await _parse(path, fromStorage: true, images: images);
+    return await _parse(
+      path,
+      fromStorage: true,
+      images: images,
+    );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
       Exception('Error loading $path from storage: $e'),
@@ -143,6 +154,7 @@ Future<TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
   Images? images,
+  String? assetsPrefix,
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
@@ -151,7 +163,11 @@ Future<TextureAtlasData> _parse(
   if (fromStorage) {
     fileAsString = await File(path).readAsString();
   } else {
-    fileAsString = await Flame.assets.readFile('images/$path');
+    assert(
+      assetsPrefix != null,
+      'When reading from storage, the assetsPrefix needs to be provided.',
+    );
+    fileAsString = await Flame.assets.readFile('$assetsPrefix!/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;

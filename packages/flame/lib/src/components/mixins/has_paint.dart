@@ -208,9 +208,12 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
       maxOpacity = max(target.getOpacity(paintId: paintId), maxOpacity);
     }
     if (includeLayers) {
-      target.paintLayersInternal?.forEach(
-        (paint) => maxOpacity = max(paint.color.a, maxOpacity),
-      );
+      final targetLayers = target.paintLayersInternal;
+      if (targetLayers != null) {
+        for (final paint in targetLayers) {
+          maxOpacity = max(paint.color.a, maxOpacity);
+        }
+      }
     }
 
     return maxOpacity;

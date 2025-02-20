@@ -22,6 +22,9 @@ fullscreen # mode in which a program or app occupies the entire screen with no b
 goldens # test files used as reference for Golden Tests
 hitbox # the collision box around objects for the purposes of collision detection
 hitboxes # plural of hitbox
+IDAT # PNG data chunk
+IHDR # PNG header chunk
+IEND # PNG end chunk
 ints # short for integers
 impellerc # Flutter's impeller compiler
 jank # stutter or inconsistent gap or timing
@@ -65,6 +68,7 @@ struct # a type of data model in programming that aggregates fields
 SVGs # plural of SVG
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
+truecolor # truecolor rendering
 tweening # the process of tween
 unawaited # un-awaited, a future that is not associated with an "await" expression
 viewports # plural of viewport

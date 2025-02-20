@@ -1,3 +1,13 @@
+## 1.18.0
+
+ - **FEAT**: Implement closeToVector4 and closeToQuaternion by extracing a generic CloseToVector base ([#3480](https://github.com/flame-engine/flame/issues/3480)). ([57e58514](https://github.com/flame-engine/flame/commit/57e58514091248884505d3936e3e0aa076efb30a))
+ - **FEAT**: Add closeToMatrix4 test matcher ([#3478](https://github.com/flame-engine/flame/issues/3478)). ([8db2476e](https://github.com/flame-engine/flame/commit/8db2476e8c39723670641f1c2646ecf0d7bb09fb))
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.17.5
+
+ - **FIX**: Don't use a future when assets for SpriteButton is already loaded (#3456).
+
 ## 1.17.4
 
  - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))

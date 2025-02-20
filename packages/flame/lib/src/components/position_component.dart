@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-
 import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
@@ -195,7 +194,9 @@ class PositionComponent extends Component
   set size(Vector2 size) {
     _size.setFrom(size);
     if (hasChildren) {
-      children.forEach((child) => child.onParentResize(_size));
+      for (final child in children) {
+        child.onParentResize(_size);
+      }
     }
   }
 

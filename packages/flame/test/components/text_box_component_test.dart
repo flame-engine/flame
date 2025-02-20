@@ -46,6 +46,40 @@ void main() {
       );
     });
 
+    test('boxConfig gets set', () {
+      const firstConfig = TextBoxConfig(maxWidth: 400, timePerChar: 0.1);
+      const secondConfig = TextBoxConfig(maxWidth: 300, timePerChar: 0.2);
+      final c = TextBoxComponent(
+        text: 'The quick brown fox jumps over the lazy dog.',
+        boxConfig: firstConfig,
+      );
+      expect(
+        c.boxConfig,
+        firstConfig,
+      );
+      c.boxConfig = secondConfig;
+      expect(
+        c.boxConfig,
+        secondConfig,
+      );
+    });
+
+    test('skip method sets boxConfig timePerChar to 0', () {
+      const firstConfig = TextBoxConfig(maxWidth: 400, timePerChar: 0.1);
+      final c = TextBoxComponent(
+        text: 'The quick brown fox jumps over the lazy dog.',
+        boxConfig: firstConfig,
+      );
+      expect(
+        c.boxConfig,
+        firstConfig,
+      );
+      c.skip();
+      expect(c.boxConfig.timePerChar, 0);
+      // other props are preserved
+      expect(c.boxConfig.maxWidth, 400);
+    });
+
     testWithFlameGame(
       'setting dismissDelay removes component when finished',
       (game) async {
@@ -140,6 +174,35 @@ lines.''',
       });
       await game.ensureAdd(textBoxComponent);
       expect(lineSize, greaterThan(0));
+    });
+
+    testWithFlameGame('TextBoxComponent skips to the end of text',
+        (game) async {
+      final textBoxComponent1 = TextBoxComponent(
+        text: 'aaa',
+        boxConfig: const TextBoxConfig(timePerChar: 1.0),
+      );
+      await game.ensureAdd(textBoxComponent1);
+      // forward time by 2.5 seconds
+      game.update(2.5);
+      expect(textBoxComponent1.finished, false);
+      // flush
+      game.update(0.6);
+      expect(textBoxComponent1.finished, true);
+
+      // reset
+      await game.ensureRemove(textBoxComponent1);
+
+      final textBoxComponent2 = TextBoxComponent(
+        text: 'aaa',
+        boxConfig: const TextBoxConfig(timePerChar: 1.0),
+      );
+      await game.ensureAdd(textBoxComponent2);
+      expect(textBoxComponent2.finished, false);
+      // Simulate running 0.5 seconds before skipping
+      game.update(0.5);
+      textBoxComponent2.skip();
+      expect(textBoxComponent2.finished, true);
     });
 
     testGolden(

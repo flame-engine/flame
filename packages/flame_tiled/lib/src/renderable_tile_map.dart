@@ -4,6 +4,7 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame_tiled/src/extensions.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
@@ -66,7 +67,7 @@ class RenderableTiledMap {
   }) {
     _refreshCache();
 
-    final backgroundColor = map.backgroundColor;
+    final backgroundColor = map.backgroundColor?.toColor();
     if (backgroundColor != null) {
       _backgroundPaint = Paint();
       _backgroundPaint!.color = backgroundColor;
