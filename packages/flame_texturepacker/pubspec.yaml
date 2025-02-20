@@ -12,12 +12,12 @@ topics:
   - spritesheet
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.27.1"
+  sdk: ">=3.5.3 <4.0.0"
+  flutter: ">=3.24.3"
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.25.0
+  flame: ^1.22.0
   flutter:
     sdk: flutter
 
