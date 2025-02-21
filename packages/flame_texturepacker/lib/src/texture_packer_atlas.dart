@@ -33,7 +33,7 @@ class TexturePackerAtlas {
     bool fromStorage = false,
     Images? images,
     bool useOriginalSize = true,
-    String assetsPrefix = 'images/',
+    String assetsPrefix = 'images',
   }) async {
     final _TextureAtlasData atlasData;
 
@@ -145,7 +145,7 @@ Future<_TextureAtlasData> _parse(
       assetsPrefix != null,
       'When reading from storage, the assetsPrefix needs to be provided.',
     );
-    fileAsString = await Flame.assets.readFile('$assetsPrefix!/$path');
+    fileAsString = await Flame.assets.readFile('$assetsPrefix/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
