@@ -182,6 +182,16 @@ abstract class LayoutComponent extends PositionComponent {
         CrossAxisAlignment.baseline => 0,
       };
       component.topLeftPosition.setFrom(newPosition);
+
+      // Stretch is the only CrossAxisAlignment that involves resizing
+      // the children. Thankfully, only cross-axis.
+      if (crossAxisAlignment == CrossAxisAlignment.stretch) {
+        final newSize = Vector2.copy(component.size);
+        newSize[_vectorCrossAxisIndex] = size[_vectorCrossAxisIndex];
+        // Don't use setFrom because children might have their own resizing
+        // logic, such as a nested LayoutComponent.
+        component.size = newSize;
+      }
     }
   }
 
