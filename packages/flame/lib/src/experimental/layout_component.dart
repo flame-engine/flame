@@ -7,7 +7,7 @@ enum Direction { horizontal, vertical }
 
 /// Superclass for linear layouts.
 /// Depending on the direction,
-/// A relayout is performed when
+/// A re-layout is performed when
 ///  - a change in this component's children takes place
 ///  - the [gap] parameter is changed
 ///  - the [size] parameter is changed
@@ -80,7 +80,7 @@ abstract class LayoutComponent extends PositionComponent {
     _gapOverride(occupiedSpace);
 
     // If the accessor `[]` operator is implemented for Offset,
-    // can directly workk with Offset rather than Vector2.
+    // can directly work with Offset rather than Vector2.
     final initialOffsetVector = Vector2.zero();
     initialOffsetVector[_vectorMainAxisIndex] = switch (mainAxisAlignment) {
       MainAxisAlignment.spaceEvenly => gap,
