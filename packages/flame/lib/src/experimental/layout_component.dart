@@ -69,9 +69,10 @@ abstract class LayoutComponent extends PositionComponent {
 
   void _layoutMainAxis() {
     final availableSpace = size[mainAxisVectorIndex];
-    final freeSpace = availableSpace - occupiedSpace - gapSpace;
+    final unoccupiedSpace = availableSpace - _mainAxisOccupiedSpace;
+    final freeSpace = unoccupiedSpace - _gapSpace;
     // Execute gap override. Internally, only does so if applicable.
-    _gapOverride(occupiedSpace);
+    _gapOverride(unoccupiedSpace);
 
     // If the accessor `[]` operator is implemented for Offset,
     // can directly work with Offset rather than Vector2.
@@ -95,7 +96,7 @@ abstract class LayoutComponent extends PositionComponent {
   /// make sense i.e. spaceEvenly, spaceAround, spaceBetween, override the
   /// value of gap based on the expected behavior of those alignments.
   /// Otherwise, no-op.
-  void _gapOverride(double occupiedSpace) {
+  void _gapOverride(double freeSpace) {
     final gapOverridingAlignments = {
       MainAxisAlignment.spaceEvenly,
       MainAxisAlignment.spaceAround,
@@ -122,7 +123,7 @@ abstract class LayoutComponent extends PositionComponent {
         // the guard at the start of this method.
         throw Exception('Unexpected call to _gapOverride');
     }
-    _gap = occupiedSpace / numberOfGaps;
+    _gap = freeSpace / numberOfGaps;
   }
 
   void _layoutMainAxisImpl({
@@ -189,17 +190,16 @@ abstract class LayoutComponent extends PositionComponent {
     }
   }
 
-  /// The total space along the main axis occupied by the [positionChildren].
-  /// Does not include the gaps.
-  double get occupiedSpace {
-    final totalSizeOfComponents =
-        positionChildren.map((c) => c.size[mainAxisVectorIndex]).sum;
-    return totalSizeOfComponents;
+  /// The total space along the main axis occupied by the [positionChildren]
+  /// without the [gap]s. This is so named because we expect to
+  /// implement crossAxisOccupiedSpace for shrinkwrapping.
+  double get _mainAxisOccupiedSpace {
+    return positionChildren.map((c) => c.size[mainAxisVectorIndex]).sum;
   }
 
   /// The total space along the main axis taken up by the gaps between
   /// the [positionChildren].
-  double get gapSpace {
+  double get _gapSpace {
     return gap * (positionChildren.length - 1);
   }
 
