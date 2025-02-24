@@ -32,6 +32,6 @@ expressions need to be placed in curly brackets.
 Then, at runtime the expression is evaluated, and (assuming `$multiplier` is 1.5) the command's
 argument string becomes `"Gold 150"`. The string is then broken at white spaces and each argument
 is parsed according to its type in the backing Dart function. For example, if the function's
-signature is `void give(String item, int? amount)`, then it will be invoked as `give("Gold", 150)`.
+signature is `void give(String item, int amount)`, then it will be invoked as `give("Gold", 150)`.
 If, on the other hand, the number or types of arguments do not match the expected signature, then
 a `DialogueException` will be raised.

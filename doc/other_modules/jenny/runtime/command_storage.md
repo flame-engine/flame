@@ -14,7 +14,7 @@ In order to register a function as a yarn command, the function must satisfy sev
   possible to create commands that take a certain time to unfold in the game, for example
   `<<walk>>`, `<<moveCamera>>`, or `<<prompt>>`.
 - The function's arguments must be of types that are known to Yarn: `String`, `num`, `int`,
-  `double`, or `bool`. All arguments must be positional, with no defaults.
+  `double`, or `bool`. All arguments must be positional, non-nullable and can't have any defaults.
 - In order to register the function, use methods `addCommand0()` ... `addCommand5()`, according to
   the number of function's arguments.
 - If the function's signature has 1 or more booleans at the end, then those arguments will be
