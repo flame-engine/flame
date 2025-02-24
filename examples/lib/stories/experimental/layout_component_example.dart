@@ -23,7 +23,7 @@ class LayoutComponentExample extends FlameGame {
     );
 
     final mainAxisControls = RowComponent(
-      size: Vector2(900, 48),
+      size: Vector2(900, 28),
       gap: 16,
       children: [
         TextComponent(text: 'MainAxisAlignment:'),
@@ -40,7 +40,7 @@ class LayoutComponentExample extends FlameGame {
       ],
     );
     final crossAxisControls = RowComponent(
-      size: Vector2(900, 48),
+      size: Vector2(900, 28),
       gap: 16,
       children: [
         TextComponent(text: 'CrossAxisAlignment:'),
@@ -57,7 +57,7 @@ class LayoutComponentExample extends FlameGame {
       ],
     );
     final gapControls = RowComponent(
-      size: Vector2(900, 48),
+      size: Vector2(900, 28),
       gap: 16,
       children: [
         TextComponent(text: 'Gap:'),
@@ -73,9 +73,6 @@ class LayoutComponentExample extends FlameGame {
         }),
       ],
     );
-    mainAxisControls.size = mainAxisControls.inherentSize();
-    crossAxisControls.size = crossAxisControls.inherentSize();
-    gapControls.size = gapControls.inherentSize();
     final rootColumnComponent = ColumnComponent(
       position: Vector2(48, 48),
       gap: 48,
