@@ -192,7 +192,7 @@ abstract class LayoutComponent extends PositionComponent {
 
   /// The total space along the main axis occupied by the [positionChildren]
   /// without the [gap]s. This is so named because we expect to
-  /// implement crossAxisOccupiedSpace for shrinkwrapping.
+  /// implement crossAxisOccupiedSpace for shrink wrapping.
   double get _mainAxisOccupiedSpace {
     return positionChildren.map((c) => c.size[mainAxisVectorIndex]).sum;
   }

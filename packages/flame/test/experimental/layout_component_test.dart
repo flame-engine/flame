@@ -11,7 +11,6 @@ void main() {
         final circle = CircleComponent(radius: 20);
         final rectangle = RectangleComponent(size: Vector2(100, 50));
         final text = TextComponent(text: 'testing');
-        final layoutComponentSize = Vector2.all(500);
         await game.ensureAdd(RowComponent(children: [circle, rectangle, text]));
         expect(circle.position.x, 0);
         expect(rectangle.position.x, circle.size.x);
@@ -117,6 +116,120 @@ void main() {
         expect(
           text.position.x,
           rectangle.position.x + rectangle.size.x + expectedGap,
+        );
+      });
+    });
+    group('ColumnComponent', () {
+      testWithFlameGame('mainAxisAlignment = start', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponent =
+            ColumnComponent(children: [circle, rectangle, text]);
+        await game.ensureAdd(layoutComponent);
+        expect(circle.position.y, 0);
+        expect(rectangle.position.y, circle.size.y);
+        expect(text.position.y, rectangle.position.y + rectangle.size.y);
+      });
+      testWithFlameGame('mainAxisAlignment = end', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          mainAxisAlignment: MainAxisAlignment.end,
+        );
+        await game.ensureAdd(layoutComponent);
+        expect(text.position.y, layoutComponentSize.y - text.size.y);
+        expect(rectangle.position.y, text.position.y - rectangle.size.y);
+        expect(circle.position.y, rectangle.position.y - circle.size.y);
+      });
+      testWithFlameGame('mainAxisAlignment = center', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          mainAxisAlignment: MainAxisAlignment.center,
+        );
+        await game.ensureAdd(layoutComponent);
+        final occupiedSpace = circle.size.y + rectangle.size.y + text.size.y;
+        final centerOffset = (layoutComponentSize.y - occupiedSpace) / 2;
+        expect(circle.position.y, centerOffset);
+        expect(rectangle.position.y, centerOffset + circle.size.y);
+        expect(text.position.y, rectangle.position.y + rectangle.size.y);
+      });
+      testWithFlameGame('mainAxisAlignment = spaceBetween', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        );
+        await game.ensureAdd(layoutComponent);
+        final occupiedSpace = circle.size.y + rectangle.size.y + text.size.y;
+        final expectedGap = (layoutComponentSize.y - occupiedSpace) / 2;
+        expect(layoutComponent.gap, expectedGap);
+        expect(circle.position.y, 0);
+        expect(rectangle.position.y, circle.size.y + expectedGap);
+        expect(
+          text.position.y,
+          rectangle.position.y + rectangle.size.y + expectedGap,
+        );
+      });
+      testWithFlameGame('mainAxisAlignment = spaceAround', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        );
+        await game.ensureAdd(layoutComponent);
+        final occupiedSpace = circle.size.y + rectangle.size.y + text.size.y;
+        final expectedGap = (layoutComponentSize.y - occupiedSpace) / 3;
+        expect(layoutComponent.gap, expectedGap);
+        expect(circle.position.y, expectedGap / 2);
+        expect(
+          rectangle.position.y,
+          circle.position.y + circle.size.y + expectedGap,
+        );
+        expect(
+          text.position.y,
+          rectangle.position.y + rectangle.size.y + expectedGap,
+        );
+      });
+      testWithFlameGame('mainAxisAlignment = spaceEvenly', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        );
+        await game.ensureAdd(layoutComponent);
+        final occupiedSpace = circle.size.y + rectangle.size.y + text.size.y;
+        final expectedGap = (layoutComponentSize.y - occupiedSpace) / 4;
+        expect(layoutComponent.gap, expectedGap);
+        expect(circle.position.y, expectedGap);
+        expect(
+          rectangle.position.y,
+          circle.position.y + circle.size.y + expectedGap,
+        );
+        expect(
+          text.position.y,
+          rectangle.position.y + rectangle.size.y + expectedGap,
         );
       });
     });
