@@ -195,24 +195,6 @@ abstract class LayoutComponent extends PositionComponent {
     }
   }
 
-  /// Does not automatically update [size]. This is a convenience method for
-  /// setting the size of a component after the fact.
-  Vector2 inherentSize() {
-    final components = children.whereType<PositionComponent>().toList();
-    final largestCrossAxisLength =
-        components.map((component) => component.size[crossAxisVectorIndex]).max;
-    // This is tricky because it depends on the mainAxisAlignment.
-    // This should only apply when mainAxisAlignment is start, center, or end.
-    // spaceAround, spaceBetween, and spaceEvenly requires the size as a
-    // constraint.
-    final cumulativeMainAxisLength = ((components.length - 1) * gap) +
-        components.map((component) => component.size[mainAxisVectorIndex]).sum;
-    final out = Vector2.zero();
-    out[mainAxisVectorIndex] = cumulativeMainAxisLength;
-    out[crossAxisVectorIndex] = largestCrossAxisLength;
-    return out;
-  }
-
   int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
   int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
 }
