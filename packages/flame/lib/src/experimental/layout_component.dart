@@ -68,14 +68,8 @@ abstract class LayoutComponent extends PositionComponent {
   }
 
   void _layoutMainAxis() {
-    final components = children.whereType<PositionComponent>().toList();
-
     final availableSpace = size[mainAxisVectorIndex];
-    final totalSizeOfComponents =
-        components.map((c) => c.size[mainAxisVectorIndex]).sum;
-    final occupiedSpace = availableSpace - totalSizeOfComponents;
-    final gapSpace = gap * (components.length - 1);
-
+    final freeSpace = availableSpace - occupiedSpace - gapSpace;
     // Execute gap override. Internally, only does so if applicable.
     _gapOverride(occupiedSpace);
 
@@ -87,11 +81,11 @@ abstract class LayoutComponent extends PositionComponent {
       MainAxisAlignment.spaceAround => gap / 2,
       MainAxisAlignment.spaceBetween => 0,
       MainAxisAlignment.start => 0,
-      MainAxisAlignment.end => size[mainAxisVectorIndex],
-      MainAxisAlignment.center => (occupiedSpace - gapSpace) / 2,
+      MainAxisAlignment.end => availableSpace,
+      MainAxisAlignment.center => freeSpace / 2,
     };
     _layoutMainAxisImpl(
-      components: components,
+      components: positionChildren,
       initialOffset: initialOffsetVector.toOffset(),
       reverse: mainAxisAlignment == MainAxisAlignment.end,
     );
@@ -194,6 +188,23 @@ abstract class LayoutComponent extends PositionComponent {
       }
     }
   }
+
+  /// The total space along the main axis occupied by the [positionChildren].
+  /// Does not include the gaps.
+  double get occupiedSpace {
+    final totalSizeOfComponents =
+        positionChildren.map((c) => c.size[mainAxisVectorIndex]).sum;
+    return totalSizeOfComponents;
+  }
+
+  /// The total space along the main axis taken up by the gaps between
+  /// the [positionChildren].
+  double get gapSpace {
+    return gap * (positionChildren.length - 1);
+  }
+
+  List<PositionComponent> get positionChildren =>
+      children.whereType<PositionComponent>().toList();
 
   int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
   int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
