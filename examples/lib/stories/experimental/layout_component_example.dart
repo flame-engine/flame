@@ -104,8 +104,4 @@ class LayoutComponentExample extends FlameGame {
       ),
     ];
   }
-
-  @override
-  // TODO: implement debugMode
-  bool get debugMode => true;
 }
