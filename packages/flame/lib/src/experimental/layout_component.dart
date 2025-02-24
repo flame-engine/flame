@@ -70,9 +70,9 @@ abstract class LayoutComponent extends PositionComponent {
   void _layoutMainAxis() {
     final components = children.whereType<PositionComponent>().toList();
 
-    final availableSpace = size[_vectorMainAxisIndex];
+    final availableSpace = size[mainAxisVectorIndex];
     final totalSizeOfComponents =
-        components.map((c) => c.size[_vectorMainAxisIndex]).sum;
+        components.map((c) => c.size[mainAxisVectorIndex]).sum;
     final occupiedSpace = availableSpace - totalSizeOfComponents;
     final gapSpace = gap * (components.length - 1);
 
@@ -82,12 +82,12 @@ abstract class LayoutComponent extends PositionComponent {
     // If the accessor `[]` operator is implemented for Offset,
     // can directly work with Offset rather than Vector2.
     final initialOffsetVector = Vector2.zero();
-    initialOffsetVector[_vectorMainAxisIndex] = switch (mainAxisAlignment) {
+    initialOffsetVector[mainAxisVectorIndex] = switch (mainAxisAlignment) {
       MainAxisAlignment.spaceEvenly => gap,
       MainAxisAlignment.spaceAround => gap / 2,
       MainAxisAlignment.spaceBetween => 0,
       MainAxisAlignment.start => 0,
-      MainAxisAlignment.end => size[_vectorMainAxisIndex],
+      MainAxisAlignment.end => size[mainAxisVectorIndex],
       MainAxisAlignment.center => (occupiedSpace - gapSpace) / 2,
     };
     _layoutMainAxisImpl(
@@ -158,8 +158,8 @@ abstract class LayoutComponent extends PositionComponent {
               (reverse ? -Vector2.all(gap) : prevChild.size + Vector2.all(gap));
       final positionOffset = reverse ? component.size : Vector2.zero();
       final newPosition = Vector2.zero();
-      newPosition[_vectorMainAxisIndex] =
-          (reference - positionOffset)[_vectorMainAxisIndex];
+      newPosition[mainAxisVectorIndex] =
+          (reference - positionOffset)[mainAxisVectorIndex];
       component.topLeftPosition.setFrom(newPosition);
     }
   }
@@ -171,9 +171,9 @@ abstract class LayoutComponent extends PositionComponent {
     // not influenced by sibling components.
     for (final component in components) {
       final newPosition = Vector2.copy(component.topLeftPosition);
-      final crossAxisLength = size[_vectorCrossAxisIndex];
-      final componentCrossAxisLength = component.size[_vectorCrossAxisIndex];
-      newPosition[_vectorCrossAxisIndex] = switch (crossAxisAlignment) {
+      final crossAxisLength = size[crossAxisVectorIndex];
+      final componentCrossAxisLength = component.size[crossAxisVectorIndex];
+      newPosition[crossAxisVectorIndex] = switch (crossAxisAlignment) {
         CrossAxisAlignment.start => 0,
         CrossAxisAlignment.end => crossAxisLength - componentCrossAxisLength,
         CrossAxisAlignment.center =>
@@ -187,7 +187,7 @@ abstract class LayoutComponent extends PositionComponent {
       // the children. Thankfully, only cross-axis.
       if (crossAxisAlignment == CrossAxisAlignment.stretch) {
         final newSize = Vector2.copy(component.size);
-        newSize[_vectorCrossAxisIndex] = size[_vectorCrossAxisIndex];
+        newSize[crossAxisVectorIndex] = size[crossAxisVectorIndex];
         // Don't use setFrom because children might have their own resizing
         // logic, such as a nested LayoutComponent.
         component.size = newSize;
@@ -199,21 +199,20 @@ abstract class LayoutComponent extends PositionComponent {
   /// setting the size of a component after the fact.
   Vector2 inherentSize() {
     final components = children.whereType<PositionComponent>().toList();
-    final largestCrossAxisLength = components
-        .map((component) => component.size[_vectorCrossAxisIndex])
-        .max;
+    final largestCrossAxisLength =
+        components.map((component) => component.size[crossAxisVectorIndex]).max;
     // This is tricky because it depends on the mainAxisAlignment.
     // This should only apply when mainAxisAlignment is start, center, or end.
     // spaceAround, spaceBetween, and spaceEvenly requires the size as a
     // constraint.
     final cumulativeMainAxisLength = ((components.length - 1) * gap) +
-        components.map((component) => component.size[_vectorMainAxisIndex]).sum;
+        components.map((component) => component.size[mainAxisVectorIndex]).sum;
     final out = Vector2.zero();
-    out[_vectorMainAxisIndex] = cumulativeMainAxisLength;
-    out[_vectorCrossAxisIndex] = largestCrossAxisLength;
+    out[mainAxisVectorIndex] = cumulativeMainAxisLength;
+    out[crossAxisVectorIndex] = largestCrossAxisLength;
     return out;
   }
 
-  int get _vectorMainAxisIndex => direction == Direction.horizontal ? 0 : 1;
-  int get _vectorCrossAxisIndex => direction == Direction.horizontal ? 1 : 0;
+  int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
+  int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
 }
