@@ -169,11 +169,12 @@ abstract class LayoutComponent extends PositionComponent {
 
   void _layoutCrossAxis() {
     final components = children.whereType<PositionComponent>().toList();
-
+    final newPosition = Vector2.zero();
+    final newSize = Vector2.zero();
     // There is no need to track index because cross axis positioning is
     // not influenced by sibling components.
     for (final component in components) {
-      final newPosition = Vector2.copy(component.topLeftPosition);
+      newPosition.setFrom(component.topLeftPosition);
       final crossAxisLength = size[crossAxisVectorIndex];
       final componentCrossAxisLength = component.size[crossAxisVectorIndex];
       newPosition[crossAxisVectorIndex] = switch (crossAxisAlignment) {
@@ -189,7 +190,7 @@ abstract class LayoutComponent extends PositionComponent {
       // Stretch is the only CrossAxisAlignment that involves resizing
       // the children. Thankfully, only cross-axis.
       if (crossAxisAlignment == CrossAxisAlignment.stretch) {
-        final newSize = Vector2.copy(component.size);
+        newSize.setFrom(component.size);
         newSize[crossAxisVectorIndex] = size[crossAxisVectorIndex];
         // Don't use setFrom because children might have their own resizing
         // logic, such as a nested LayoutComponent.
