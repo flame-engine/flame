@@ -118,6 +118,53 @@ void main() {
           rectangle.position.x + rectangle.size.x + expectedGap,
         );
       });
+      testWithFlameGame('crossAlignment = start', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final rowComponent = RowComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+        );
+        await game.ensureAdd(rowComponent);
+        expect(circle.position.y, 0);
+        expect(rectangle.position.y, 0);
+        expect(text.position.y, 0);
+      });
+      testWithFlameGame('crossAlignment = center', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final rowComponent = RowComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        );
+        await game.ensureAdd(rowComponent);
+        expect(circle.position.y, (layoutComponentSize.y - circle.size.y) / 2);
+        expect(
+          rectangle.position.y,
+          (layoutComponentSize.y - rectangle.size.y) / 2,
+        );
+        expect(text.position.y, (layoutComponentSize.y - text.size.y) / 2);
+      });
+      testWithFlameGame('crossAlignment = end', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final rowComponent = RowComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          crossAxisAlignment: CrossAxisAlignment.end,
+        );
+        await game.ensureAdd(rowComponent);
+        expect(circle.position.y, layoutComponentSize.y - circle.size.y);
+        expect(rectangle.position.y, layoutComponentSize.y - rectangle.size.y);
+        expect(text.position.y, layoutComponentSize.y - text.size.y);
+      });
     });
     group('ColumnComponent', () {
       testWithFlameGame('mainAxisAlignment = start', (game) async {
@@ -231,6 +278,53 @@ void main() {
           text.position.y,
           rectangle.position.y + rectangle.size.y + expectedGap,
         );
+      });
+      testWithFlameGame('crossAlignment = start', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+        );
+        await game.ensureAdd(layoutComponent);
+        expect(circle.position.x, 0);
+        expect(rectangle.position.x, 0);
+        expect(text.position.x, 0);
+      });
+      testWithFlameGame('crossAlignment = center', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        );
+        await game.ensureAdd(layoutComponent);
+        expect(circle.position.x, (layoutComponentSize.x - circle.size.x) / 2);
+        expect(
+          rectangle.position.x,
+          (layoutComponentSize.x - rectangle.size.x) / 2,
+        );
+        expect(text.position.x, (layoutComponentSize.x - text.size.x) / 2);
+      });
+      testWithFlameGame('crossAlignment = end', (game) async {
+        final circle = CircleComponent(radius: 20);
+        final rectangle = RectangleComponent(size: Vector2(100, 50));
+        final text = TextComponent(text: 'testing');
+        final layoutComponentSize = Vector2.all(500);
+        final layoutComponent = ColumnComponent(
+          children: [circle, rectangle, text],
+          size: layoutComponentSize,
+          crossAxisAlignment: CrossAxisAlignment.end,
+        );
+        await game.ensureAdd(layoutComponent);
+        expect(circle.position.x, layoutComponentSize.x - circle.size.x);
+        expect(rectangle.position.x, layoutComponentSize.x - rectangle.size.x);
+        expect(text.position.x, layoutComponentSize.x - text.size.x);
       });
     });
   });
