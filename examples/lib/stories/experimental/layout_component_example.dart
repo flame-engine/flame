@@ -36,7 +36,6 @@ class LayoutComponentExample extends FlameGame {
               rowDemo.mainAxisAlignment = mainAxisAlignment;
               columnDemo.mainAxisAlignment = mainAxisAlignment;
             },
-            // size: Vector2(48, 100),
           );
         }),
       ],
@@ -53,7 +52,6 @@ class LayoutComponentExample extends FlameGame {
               rowDemo.crossAxisAlignment = crossAxisAlignment;
               columnDemo.crossAxisAlignment = crossAxisAlignment;
             },
-            // size: Vector2(48, 100),
           );
         }),
       ],
@@ -70,7 +68,6 @@ class LayoutComponentExample extends FlameGame {
               rowDemo.gap = gap;
               columnDemo.gap = gap;
             },
-            // size: Vector2(48, 100),
           );
         }),
       ],
