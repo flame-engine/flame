@@ -148,14 +148,17 @@ abstract class LayoutComponent extends PositionComponent {
   }) {
     final componentList = reverse ? components.reversed : components;
     for (final (index, component) in componentList.indexed) {
-      final prevChild = index > 0 ? componentList.elementAt(index - 1) : null;
-      final reference = prevChild == null
+      final previousChild =
+          index > 0 ? componentList.elementAt(index - 1) : null;
+      final reference = previousChild == null
           // Essentially the same as start, but gap is set.
           ? initialOffset.toVector2()
           // The "end" at any loop other than the first is the previous
           // child's top left position minus the gap.
-          : prevChild.topLeftPosition +
-              (reverse ? -Vector2.all(gap) : prevChild.size + Vector2.all(gap));
+          : previousChild.topLeftPosition +
+              (reverse
+                  ? -Vector2.all(gap)
+                  : previousChild.size + Vector2.all(gap));
       final positionOffset = reverse ? component.size : Vector2.zero();
       final newPosition = Vector2.zero();
       newPosition[mainAxisVectorIndex] =
