@@ -6,11 +6,21 @@ import 'package:flutter/rendering.dart';
 enum Direction { horizontal, vertical }
 
 /// Superclass for linear layouts.
-/// Depending on the direction,
 /// A re-layout is performed when
 ///  - a change in this component's children takes place
 ///  - the [gap] parameter is changed
 ///  - the [size] parameter is changed
+///  - the [mainAxisAlignment] parameter is changed
+///  - the [crossAxisAlignment] parameter is changed
+///
+/// [gap] is ignored when the [mainAxisAlignment] is set to one of:
+///  - [MainAxisAlignment.spaceAround]
+///  - [MainAxisAlignment.spaceBetween]
+///  - [MainAxisAlignment.spaceEvenly]
+///
+/// Notes:
+///  - currently, [CrossAxisAlignment.baseline] is unsupported, and behaves
+/// exactly like [CrossAxisAlignment.start].
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required this.direction,
@@ -135,7 +145,6 @@ abstract class LayoutComponent extends PositionComponent {
     /// - Half of free space when [MainAxisAlignment.center]
     /// - [LayoutComponent.gap] when [MainAxisAlignment.spaceEvenly]
     /// - Half of [LayoutComponent.gap] when [MainAxisAlignment.spaceAround]
-    ///
     Offset initialOffset = Offset.zero,
 
     /// true if laying out from the end (bottom/right)
@@ -203,9 +212,15 @@ abstract class LayoutComponent extends PositionComponent {
     return gap * (positionChildren.length - 1);
   }
 
+  /// A helper property to get only the [PositionComponent]s
+  /// among the [children].
   List<PositionComponent> get positionChildren =>
       children.whereType<PositionComponent>().toList();
 
+  /// A helper function for returning the index in the various [Vector2]s like
+  /// [position] and [size] to get the corresponding axis.
   int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
+
+  /// See documentation for [mainAxisVectorIndex].
   int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
 }
