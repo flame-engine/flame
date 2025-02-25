@@ -32,7 +32,9 @@ abstract class LayoutComponent extends PositionComponent {
     required super.children,
   })  : _crossAxisAlignment = crossAxisAlignment,
         _mainAxisAlignment = mainAxisAlignment,
-        _gap = gap;
+        _gap = gap {
+    size.addListener(layoutChildren);
+  }
   final Direction direction;
   CrossAxisAlignment _crossAxisAlignment;
 
@@ -58,12 +60,6 @@ abstract class LayoutComponent extends PositionComponent {
   double get gap => _gap;
   set gap(double gap) {
     _gap = gap;
-    layoutChildren();
-  }
-
-  @override
-  set size(Vector2 size) {
-    super.size = size;
     layoutChildren();
   }
 
