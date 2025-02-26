@@ -7,7 +7,6 @@ erickzanardo # github.com/erickzanardo
 feroult # github.com/feroult 
 fröber # github.com/Brixto
 gnarhard # github.com/gnarhard
-gustl # github.com/gustl22
 kenney # kenney.nl
 Klingsbo # github.com/spydon
 luanpotter # github.com/luanpotter
