@@ -8,9 +8,9 @@ import 'package:flutter/material.dart';
 
 class LayoutComponentExample extends FlameGame {
   static const String description = '''
-    Press the row of buttons after MainAxisAlignment, CrossAxisAlignment,
-    and Gap. They will update the layout of the example row and column
-    layouts to reflect the chosen values.
+Press the row of buttons after MainAxisAlignment, CrossAxisAlignment,
+and Gap. They will update the layout of the example row and column
+layouts to reflect the chosen values.
   ''';
 
   @override
