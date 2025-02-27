@@ -29,13 +29,33 @@ abstract class LayoutComponent extends PositionComponent {
     required super.position,
     required super.size,
     required double gap,
+    required bool shrinkWrap,
     required super.children,
   })  : _crossAxisAlignment = crossAxisAlignment,
         _mainAxisAlignment = mainAxisAlignment,
-        _gap = gap {
-    size.addListener(layoutChildren);
+        _gap = gap,
+        _shrinkWrap = shrinkWrap {
+    syncSizeListener();
   }
   final Direction direction;
+
+  bool _shrinkWrap;
+
+  bool get shrinkWrap => _shrinkWrap;
+
+  set shrinkWrap(bool newShrinkWrap) {
+    _shrinkWrap = newShrinkWrap;
+    syncSizeListener();
+  }
+
+  void syncSizeListener() {
+    if (_shrinkWrap) {
+      size.removeListener(layoutChildren);
+    } else {
+      size.addListener(layoutChildren);
+    }
+  }
+
   CrossAxisAlignment _crossAxisAlignment;
 
   CrossAxisAlignment get crossAxisAlignment => _crossAxisAlignment;
@@ -71,6 +91,9 @@ abstract class LayoutComponent extends PositionComponent {
   void layoutChildren() {
     _layoutMainAxis();
     _layoutCrossAxis();
+    if (shrinkWrap) {
+      size.setFrom(inherentSize);
+    }
   }
 
   void _layoutMainAxis() {
@@ -223,4 +246,20 @@ abstract class LayoutComponent extends PositionComponent {
 
   /// See documentation for [mainAxisVectorIndex].
   int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
+
+  Vector2 get inherentSize {
+    final components = children.whereType<PositionComponent>().toList();
+    final largestCrossAxisLength =
+        components.map((component) => component.size[crossAxisVectorIndex]).max;
+    // This is tricky because it depends on the mainAxisAlignment.
+    // This should only apply when mainAxisAlignment is start, center, or end.
+    // spaceAround, spaceBetween, and spaceEvenly requires the size as a
+    // constraint.
+    final cumulativeMainAxisLength = ((components.length - 1) * gap) +
+        components.map((component) => component.size[mainAxisVectorIndex]).sum;
+    final out = Vector2.zero();
+    out[mainAxisVectorIndex] = cumulativeMainAxisLength;
+    out[crossAxisVectorIndex] = largestCrossAxisLength;
+    return out;
+  }
 }

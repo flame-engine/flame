@@ -12,5 +12,6 @@ class RowComponent extends LayoutComponent {
     super.size,
     super.position,
     super.children,
+    super.shrinkWrap = false,
   }) : super(direction: Direction.horizontal);
 }
