@@ -12,15 +12,19 @@ enum Direction { horizontal, vertical }
 ///  - the [size] parameter is changed
 ///  - the [mainAxisAlignment] parameter is changed
 ///  - the [crossAxisAlignment] parameter is changed
+///  - the [shrinkWrap] parameter is changed
 ///
-/// [gap] is ignored when the [mainAxisAlignment] is set to one of:
-///  - [MainAxisAlignment.spaceAround]
-///  - [MainAxisAlignment.spaceBetween]
-///  - [MainAxisAlignment.spaceEvenly]
+/// Property interactions and gotchas
+///  - [gap] is ignored when the [mainAxisAlignment] is set to one of:
+///    - [MainAxisAlignment.spaceAround]
+///    - [MainAxisAlignment.spaceBetween]
+///    - [MainAxisAlignment.spaceEvenly]
+///  - When [shrinkWrap] is true, ignore [size]. [mainAxisAlignment] acts
+///    like [MainAxisAlignment.start], regardless of value.
 ///
 /// Notes:
 ///  - currently, [CrossAxisAlignment.baseline] is unsupported, and behaves
-/// exactly like [CrossAxisAlignment.start].
+///    exactly like [CrossAxisAlignment.start].
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required this.direction,
@@ -35,7 +39,7 @@ abstract class LayoutComponent extends PositionComponent {
         _mainAxisAlignment = mainAxisAlignment,
         _gap = gap,
         _shrinkWrap = shrinkWrap {
-    syncSizeListener();
+    setupSizeListeners();
   }
   final Direction direction;
 
@@ -45,10 +49,11 @@ abstract class LayoutComponent extends PositionComponent {
 
   set shrinkWrap(bool newShrinkWrap) {
     _shrinkWrap = newShrinkWrap;
-    syncSizeListener();
+    setupSizeListeners();
+    layoutChildren();
   }
 
-  void syncSizeListener() {
+  void setupSizeListeners() {
     if (_shrinkWrap) {
       size.removeListener(layoutChildren);
       for (final child in positionChildren) {
@@ -95,11 +100,11 @@ abstract class LayoutComponent extends PositionComponent {
   }
 
   void layoutChildren() {
-    _layoutMainAxis();
-    _layoutCrossAxis();
     if (shrinkWrap) {
       size.setFrom(inherentSize);
     }
+    _layoutMainAxis();
+    _layoutCrossAxis();
   }
 
   void _layoutMainAxis() {
@@ -122,7 +127,7 @@ abstract class LayoutComponent extends PositionComponent {
     };
     _layoutMainAxisImpl(
       components: positionChildren,
-      initialOffset: initialOffsetVector.toOffset(),
+      initialOffset: shrinkWrap ? Offset.zero : initialOffsetVector.toOffset(),
       reverse: mainAxisAlignment == MainAxisAlignment.end,
     );
   }
@@ -139,6 +144,10 @@ abstract class LayoutComponent extends PositionComponent {
     };
     if (!gapOverridingAlignments.contains(mainAxisAlignment)) {
       // mainAxisAlignment is not an alignment that can override gaps, so no-op.
+      return;
+    }
+    if (shrinkWrap) {
+      // Gap overrides and shrink wrapping are mutually exclusive.
       return;
     }
 
