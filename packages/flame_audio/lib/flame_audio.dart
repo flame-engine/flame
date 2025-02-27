@@ -137,14 +137,12 @@ class FlameAudio {
     AudioContext? audioContext,
   }) async {
     audioContext ??= _defaultAudioContext;
-    // TODO(gustl22): Probably set context for each player individually,
-    //  as soon as functionality is supported.
-    await AudioPlayer.global.setAudioContext(audioContext);
     return AudioPool.create(
       source: AssetSource(sound),
       audioCache: audioCache,
       minPlayers: minPlayers,
       maxPlayers: maxPlayers,
+      audioContext: audioContext,
     );
   }
 
