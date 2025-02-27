@@ -255,5 +255,69 @@ void main() {
         },
       });
     });
+
+    group('shrinkWrap', () {
+      runLayoutComponentTestRegistry({
+        'shrinkWrap=true ignores size': (game, direction) async {
+          final circle = CircleComponent(radius: 20);
+          final rectangle = RectangleComponent(size: Vector2(100, 50));
+          final text = TextComponent(text: 'testing');
+          final layoutComponentSize = Vector2.all(500);
+          final layoutComponent = LayoutComponent.fromDirection(
+            direction,
+            shrinkWrap: true,
+            children: [circle, rectangle, text],
+            size: layoutComponentSize,
+          );
+          await game.ensureAdd(layoutComponent);
+          expect(layoutComponent.size, layoutComponent.inherentSize);
+        },
+        'shrinkWrap=true ignores mainAxisAlignment': (game, direction) async {
+          final circle = CircleComponent(radius: 20);
+          final rectangle = RectangleComponent(size: Vector2(100, 50));
+          final text = TextComponent(text: 'testing');
+          final layoutComponent = LayoutComponent.fromDirection(
+            direction,
+            shrinkWrap: true,
+            children: [circle, rectangle, text],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          );
+          await game.ensureAdd(layoutComponent);
+          expect(layoutComponent.mainAxisAlignment, MainAxisAlignment.start);
+        },
+        'shrinkWrap=true respects supported crossAxisAlignments':
+            (game, direction) async {
+          final circle = CircleComponent(radius: 20);
+          final rectangle = RectangleComponent(size: Vector2(100, 50));
+          final text = TextComponent(text: 'testing');
+          final layoutComponent = LayoutComponent.fromDirection(
+            direction,
+            shrinkWrap: true,
+            children: [circle, rectangle, text],
+            crossAxisAlignment: CrossAxisAlignment.center,
+          );
+          await game.ensureAdd(layoutComponent);
+          expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.center);
+          layoutComponent.crossAxisAlignment = CrossAxisAlignment.end;
+          expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.end);
+          layoutComponent.crossAxisAlignment = CrossAxisAlignment.start;
+          expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.start);
+        },
+        "shrinkWrap=true doesn't respect CrossAxisAlignment.stretch":
+            (game, direction) async {
+          final circle = CircleComponent(radius: 20);
+          final rectangle = RectangleComponent(size: Vector2(100, 50));
+          final text = TextComponent(text: 'testing');
+          final layoutComponent = LayoutComponent.fromDirection(
+            direction,
+            shrinkWrap: true,
+            children: [circle, rectangle, text],
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+          );
+          await game.ensureAdd(layoutComponent);
+          expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.start);
+        },
+      });
+    });
   });
 }
