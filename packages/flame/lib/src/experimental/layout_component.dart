@@ -51,8 +51,14 @@ abstract class LayoutComponent extends PositionComponent {
   void syncSizeListener() {
     if (_shrinkWrap) {
       size.removeListener(layoutChildren);
+      for (final child in positionChildren) {
+        child.size.addListener(layoutChildren);
+      }
     } else {
       size.addListener(layoutChildren);
+      for (final child in positionChildren) {
+        child.size.removeListener(layoutChildren);
+      }
     }
   }
 
@@ -248,15 +254,22 @@ abstract class LayoutComponent extends PositionComponent {
   int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
 
   Vector2 get inherentSize {
-    final components = children.whereType<PositionComponent>().toList();
-    final largestCrossAxisLength =
-        components.map((component) => component.size[crossAxisVectorIndex]).max;
+    // Used at multiple points, cache to avoid recalculating each invocation
+    final positionChildren = this.positionChildren;
+    if (positionChildren.isEmpty) {
+      return Vector2.zero();
+    }
+    final largestCrossAxisLength = positionChildren
+        .map((component) => component.size[crossAxisVectorIndex])
+        .max;
     // This is tricky because it depends on the mainAxisAlignment.
     // This should only apply when mainAxisAlignment is start, center, or end.
     // spaceAround, spaceBetween, and spaceEvenly requires the size as a
     // constraint.
-    final cumulativeMainAxisLength = ((components.length - 1) * gap) +
-        components.map((component) => component.size[mainAxisVectorIndex]).sum;
+    final cumulativeMainAxisLength = ((positionChildren.length - 1) * gap) +
+        positionChildren
+            .map((component) => component.size[mainAxisVectorIndex])
+            .sum;
     final out = Vector2.zero();
     out[mainAxisVectorIndex] = cumulativeMainAxisLength;
     out[crossAxisVectorIndex] = largestCrossAxisLength;
