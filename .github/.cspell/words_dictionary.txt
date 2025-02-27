@@ -6,7 +6,6 @@ draggables
 focusable
 gamepad
 gamepads
-gameplay
 gapless
 grayscale
 hoverable
