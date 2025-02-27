@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/experimental/layout_component.dart';
 import 'package:flame_test/flame_test.dart';
