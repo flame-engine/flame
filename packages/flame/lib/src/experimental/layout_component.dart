@@ -19,12 +19,21 @@ enum Direction { horizontal, vertical }
 ///    - [MainAxisAlignment.spaceAround]
 ///    - [MainAxisAlignment.spaceBetween]
 ///    - [MainAxisAlignment.spaceEvenly]
-///  - When [shrinkWrap] is true, ignore [size]. [mainAxisAlignment] acts
-///    like [MainAxisAlignment.start], regardless of value.
+///  - When [shrinkWrap] is true
+///    - Ignore [size].
+///    - [mainAxisAlignment] acts like [MainAxisAlignment.start], regardless
+///      of its original value.
+///    - [crossAxisAlignment] acts like [CrossAxisAlignment.start], only if
+///      its value is [CrossAxisAlignment.stretch].
 ///
 /// Notes:
-///  - currently, [CrossAxisAlignment.baseline] is unsupported, and behaves
+///  - Currently, [CrossAxisAlignment.baseline] is unsupported, and behaves
 ///    exactly like [CrossAxisAlignment.start].
+///  - Because [CrossAxisAlignment.stretch] alters the size of the children,
+///    and there is no uniform interface for getting the inherent sizes of
+///    [PositionComponent]s, using [CrossAxisAlignment.stretch] "permanently"
+///    changes the sizes of the children. Subsequent changes to
+///    [crossAxisAlignment] will work with the new sizes of the children.
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required this.direction,
@@ -69,7 +78,12 @@ abstract class LayoutComponent extends PositionComponent {
 
   CrossAxisAlignment _crossAxisAlignment;
 
-  CrossAxisAlignment get crossAxisAlignment => _crossAxisAlignment;
+  CrossAxisAlignment get crossAxisAlignment {
+    if (shrinkWrap && _crossAxisAlignment == CrossAxisAlignment.stretch) {
+      return CrossAxisAlignment.start;
+    }
+    return _crossAxisAlignment;
+  }
 
   set crossAxisAlignment(CrossAxisAlignment value) {
     _crossAxisAlignment = value;
@@ -78,7 +92,12 @@ abstract class LayoutComponent extends PositionComponent {
 
   MainAxisAlignment _mainAxisAlignment;
 
-  MainAxisAlignment get mainAxisAlignment => _mainAxisAlignment;
+  MainAxisAlignment get mainAxisAlignment {
+    if (shrinkWrap) {
+      return MainAxisAlignment.start;
+    }
+    return _mainAxisAlignment;
+  }
 
   set mainAxisAlignment(MainAxisAlignment value) {
     _mainAxisAlignment = value;
@@ -127,7 +146,7 @@ abstract class LayoutComponent extends PositionComponent {
     };
     _layoutMainAxisImpl(
       components: positionChildren,
-      initialOffset: shrinkWrap ? Offset.zero : initialOffsetVector.toOffset(),
+      initialOffset: initialOffsetVector.toOffset(),
       reverse: mainAxisAlignment == MainAxisAlignment.end,
     );
   }
@@ -144,10 +163,6 @@ abstract class LayoutComponent extends PositionComponent {
     };
     if (!gapOverridingAlignments.contains(mainAxisAlignment)) {
       // mainAxisAlignment is not an alignment that can override gaps, so no-op.
-      return;
-    }
-    if (shrinkWrap) {
-      // Gap overrides and shrink wrapping are mutually exclusive.
       return;
     }
 
@@ -226,7 +241,6 @@ abstract class LayoutComponent extends PositionComponent {
       component.topLeftPosition.setFrom(newPosition);
 
       // Stretch is the only CrossAxisAlignment that involves resizing
-      // the children. Thankfully, only cross-axis.
       if (crossAxisAlignment == CrossAxisAlignment.stretch) {
         newSize.setFrom(component.size);
         newSize[crossAxisVectorIndex] = size[crossAxisVectorIndex];
@@ -262,6 +276,11 @@ abstract class LayoutComponent extends PositionComponent {
   /// See documentation for [mainAxisVectorIndex].
   int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
 
+  /// Any positioning done in [layoutChildren] should not affect the
+  /// [inherentSize]. This is because all [crossAxisAlignment] transformations
+  /// fall within the largestCrossAxisLength, while [mainAxisAlignment] is
+  /// entirely ignored in all cases where [inherentSize] is needed.
+  /// This means that [inherentSize] should be used *before* [layoutChildren].
   Vector2 get inherentSize {
     // Used at multiple points, cache to avoid recalculating each invocation
     final positionChildren = this.positionChildren;
