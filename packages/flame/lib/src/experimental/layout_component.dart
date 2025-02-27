@@ -1,9 +1,30 @@
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/image_composition.dart';
 import 'package:flutter/rendering.dart';
 
-enum Direction { horizontal, vertical }
+enum Direction {
+  horizontal,
+  vertical;
+
+  /// A helper function for returning the index in the various [Vector2]s like
+  /// position and size to get the corresponding axis.
+  int get mainAxisVectorIndex => this == Direction.horizontal ? 0 : 1;
+
+  /// See documentation for [mainAxisVectorIndex].
+  int get crossAxisVectorIndex => this == Direction.horizontal ? 1 : 0;
+
+  /// A helper for returning the main axis for [vector], given this direction.
+  double mainAxis(Vector2 vector) {
+    return vector[mainAxisVectorIndex];
+  }
+
+  /// A helper for returning the cross axis for [vector], given this direction.
+  double crossAxis(Vector2 vector) {
+    return vector[crossAxisVectorIndex];
+  }
+}
 
 /// Superclass for linear layouts.
 /// A re-layout is performed when
@@ -42,10 +63,10 @@ abstract class LayoutComponent extends PositionComponent {
     required this.direction,
     required CrossAxisAlignment crossAxisAlignment,
     required MainAxisAlignment mainAxisAlignment,
-    required super.position,
-    required super.size,
     required double gap,
     required bool shrinkWrap,
+    required super.position,
+    required super.size,
     required super.children,
   })  : _crossAxisAlignment = crossAxisAlignment,
         _mainAxisAlignment = mainAxisAlignment,
@@ -53,6 +74,41 @@ abstract class LayoutComponent extends PositionComponent {
         _shrinkWrap = shrinkWrap {
     setupSizeListeners();
   }
+
+  factory LayoutComponent.fromDirection(
+    Direction direction, {
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    double gap = 0.0,
+    bool shrinkWrap = false,
+    Vector2? position,
+    Vector2? size,
+    Iterable<Component> children = const [],
+  }) {
+    switch (direction) {
+      case Direction.horizontal:
+        return RowComponent(
+          crossAxisAlignment: crossAxisAlignment,
+          mainAxisAlignment: mainAxisAlignment,
+          gap: gap,
+          shrinkWrap: shrinkWrap,
+          position: position,
+          size: size,
+          children: children,
+        );
+      case Direction.vertical:
+        return ColumnComponent(
+          crossAxisAlignment: crossAxisAlignment,
+          mainAxisAlignment: mainAxisAlignment,
+          gap: gap,
+          shrinkWrap: shrinkWrap,
+          position: position,
+          size: size,
+          children: children,
+        );
+    }
+  }
+
   final Direction direction;
 
   bool _shrinkWrap;
@@ -130,6 +186,7 @@ abstract class LayoutComponent extends PositionComponent {
   }
 
   void _layoutMainAxis() {
+    final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     final availableSpace = size[mainAxisVectorIndex];
     final unoccupiedSpace = availableSpace - _mainAxisOccupiedSpace;
     final freeSpace = unoccupiedSpace - _gapSpace;
@@ -202,6 +259,7 @@ abstract class LayoutComponent extends PositionComponent {
     /// true if laying out from the end (bottom/right)
     bool reverse = false,
   }) {
+    final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     final componentList = reverse ? components.reversed : components;
     for (final (index, component) in componentList.indexed) {
       final previousChild =
@@ -224,12 +282,13 @@ abstract class LayoutComponent extends PositionComponent {
   }
 
   void _layoutCrossAxis() {
-    final components = children.whereType<PositionComponent>().toList();
+    final crossAxisVectorIndex = direction.crossAxisVectorIndex;
+    final positionChildren = this.positionChildren;
     final newPosition = Vector2.zero();
     final newSize = Vector2.zero();
     // There is no need to track index because cross axis positioning is
     // not influenced by sibling components.
-    for (final component in components) {
+    for (final component in positionChildren) {
       newPosition.setFrom(component.topLeftPosition);
       final crossAxisLength = size[crossAxisVectorIndex];
       final componentCrossAxisLength = component.size[crossAxisVectorIndex];
@@ -258,7 +317,9 @@ abstract class LayoutComponent extends PositionComponent {
   /// without the [gap]s. This is so named because we expect to
   /// implement crossAxisOccupiedSpace for shrink wrapping.
   double get _mainAxisOccupiedSpace {
-    return positionChildren.map((c) => c.size[mainAxisVectorIndex]).sum;
+    return positionChildren
+        .map((c) => c.size[direction.mainAxisVectorIndex])
+        .sum;
   }
 
   /// The total space along the main axis taken up by the gaps between
@@ -272,12 +333,12 @@ abstract class LayoutComponent extends PositionComponent {
   List<PositionComponent> get positionChildren =>
       children.whereType<PositionComponent>().toList();
 
-  /// A helper function for returning the index in the various [Vector2]s like
-  /// [position] and [size] to get the corresponding axis.
-  int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
+  // /// A helper function for returning the index in the various [Vector2]s like
+  // /// [position] and [size] to get the corresponding axis.
+  // int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
 
-  /// See documentation for [mainAxisVectorIndex].
-  int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
+  // /// See documentation for [mainAxisVectorIndex].
+  // int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
 
   /// Any positioning done in [layoutChildren] should not affect the
   /// [inherentSize]. This is because all [crossAxisAlignment] transformations
@@ -287,6 +348,8 @@ abstract class LayoutComponent extends PositionComponent {
   Vector2 get inherentSize {
     // Used at multiple points, cache to avoid recalculating each invocation
     final positionChildren = this.positionChildren;
+    final crossAxisVectorIndex = direction.crossAxisVectorIndex;
+    final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     if (positionChildren.isEmpty) {
       return Vector2.zero();
     }

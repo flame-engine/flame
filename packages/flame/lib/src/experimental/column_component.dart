@@ -9,9 +9,9 @@ class ColumnComponent extends LayoutComponent {
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,
     super.gap = 0.0,
+    super.shrinkWrap = false,
     super.size,
     super.position,
     super.children,
-    super.shrinkWrap = false,
   }) : super(direction: Direction.vertical);
 }
