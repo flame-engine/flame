@@ -333,13 +333,6 @@ abstract class LayoutComponent extends PositionComponent {
   List<PositionComponent> get positionChildren =>
       children.whereType<PositionComponent>().toList();
 
-  // /// A helper function for returning the index in the various [Vector2]s like
-  // /// [position] and [size] to get the corresponding axis.
-  // int get mainAxisVectorIndex => direction == Direction.horizontal ? 0 : 1;
-
-  // /// See documentation for [mainAxisVectorIndex].
-  // int get crossAxisVectorIndex => direction == Direction.horizontal ? 1 : 0;
-
   /// Any positioning done in [layoutChildren] should not affect the
   /// [inherentSize]. This is because all [crossAxisAlignment] transformations
   /// fall within the largestCrossAxisLength, while [mainAxisAlignment] is
