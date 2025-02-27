@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-class LayoutComponentExample extends FlameGame {
+class LayoutComponentExample extends FlameGame with DragCallbacks {
   static const String description = '''
 Press the row of buttons after MainAxisAlignment, CrossAxisAlignment,
 and Gap. They will update the layout of the example row and column
@@ -15,17 +16,20 @@ layouts to reflect the chosen values.
 
   @override
   FutureOr<void> onLoad() {
+    camera.viewfinder.anchor = Anchor.topLeft;
+
+    final defaultSize = Vector2(900, 300);
     final rowDemo = RowComponent(
-      size: Vector2(900, 300),
+      size: defaultSize,
       children: createComponentList(),
     );
     final columnDemo = ColumnComponent(
-      size: Vector2(900, 300),
+      size: defaultSize,
       children: createComponentList(),
     );
 
     final mainAxisControls = RowComponent(
-      size: Vector2(900, 28),
+      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'MainAxisAlignment:'),
@@ -41,7 +45,7 @@ layouts to reflect the chosen values.
       ],
     );
     final crossAxisControls = RowComponent(
-      size: Vector2(900, 28),
+      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'CrossAxisAlignment:'),
@@ -56,8 +60,24 @@ layouts to reflect the chosen values.
         }),
       ],
     );
+    final shrinkWrapControls = RowComponent(
+      shrinkWrap: true,
+      gap: 16,
+      children: [
+        TextComponent(text: 'ShrinkWrap:'),
+        ...[false, true].map((shrinkWrap) {
+          return ButtonComponent(
+            button: TextComponent(text: shrinkWrap.toString()),
+            onPressed: () {
+              rowDemo.shrinkWrap = shrinkWrap;
+              columnDemo.shrinkWrap = shrinkWrap;
+            },
+          );
+        }),
+      ],
+    );
     final gapControls = RowComponent(
-      size: Vector2(900, 28),
+      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'Gap:'),
@@ -72,18 +92,44 @@ layouts to reflect the chosen values.
         }),
       ],
     );
+    final sizeControls = RowComponent(
+      shrinkWrap: true,
+      gap: 16,
+      children: [
+        TextComponent(text: 'Size:'),
+        ...[defaultSize, Vector2(1080, 600)].map((layoutSize) {
+          return ButtonComponent(
+            button: TextComponent(text: layoutSize.toString()),
+            onPressed: () {
+              rowDemo.size = layoutSize;
+              columnDemo.size = layoutSize;
+            },
+          );
+        }),
+      ],
+    );
     final rootColumnComponent = ColumnComponent(
       position: Vector2(48, 48),
-      gap: 48,
+      gap: 24,
+      shrinkWrap: true,
       children: [
+        TextComponent(
+            text:
+                'Because this example deals with sizes a lot, we have made it draggable.'),
+        TextBoxComponent(
+            boxConfig: TextBoxConfig(maxWidth: defaultSize.x),
+            text:
+                'The root of this example is a shrinkWrapped ColumnComponent. Notice how, when you update the size of the examples, the root component also resizes. This is a demonstration of the fact that shrinkWrapped LayoutComponents listen to changes in the sizes of their children.'),
         mainAxisControls,
         crossAxisControls,
+        shrinkWrapControls,
         gapControls,
+        sizeControls,
         rowDemo,
         columnDemo,
       ],
     );
-    add(
+    world.add(
       rootColumnComponent,
     );
   }
@@ -103,4 +149,14 @@ layouts to reflect the chosen values.
       ),
     ];
   }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    camera.viewfinder.position -= event.localDelta;
+  }
+
+  @override
+  // This is intentional for this example, so the user can see the bounding
+  // boxes without us having to render RectangleComponents.
+  bool get debugMode => true;
 }
