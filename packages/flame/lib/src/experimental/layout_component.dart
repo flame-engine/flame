@@ -19,7 +19,10 @@ enum Direction { horizontal, vertical }
 ///    - [MainAxisAlignment.spaceAround]
 ///    - [MainAxisAlignment.spaceBetween]
 ///    - [MainAxisAlignment.spaceEvenly]
-///  - When [shrinkWrap] is true
+///  - Setting the [shrinkWrap] property to true is a reversal of constraints.
+///    Instead of top-down sizing and layout, LayoutComponent derives its size
+///    from its children. In this context, certain layout options become
+///    meaningless. The following are the behaviors you should note:
 ///    - Ignore [size].
 ///    - [mainAxisAlignment] acts like [MainAxisAlignment.start], regardless
 ///      of its original value.
