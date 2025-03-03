@@ -83,9 +83,7 @@ mixin Snapshot on PositionComponent {
         takeSnapshot();
       }
       canvas.save();
-      canvas.transform(
-        transformMatrix.storage,
-      );
+      canvas.transform32(transformMatrix.storage);
       canvas.drawPicture(_picture!);
       canvas.restore();
     } else {
