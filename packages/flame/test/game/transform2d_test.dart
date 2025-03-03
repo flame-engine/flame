@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:test/test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
   group('Transform2D', () {
