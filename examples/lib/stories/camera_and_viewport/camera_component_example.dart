@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart' show OffsetExtension;
+import 'package:flame/extensions.dart' show OffsetExtension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
@@ -116,13 +116,13 @@ class Bezel extends PositionComponent {
               const Radius.circular(5.0),
             ),
           ))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
     connector = (Path()
           ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
     specularHighlight = (Path()
           ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
 
     glassPaint = Paint()..color = const Color(0x1400ffae);
     rimBorderPaint = Paint()

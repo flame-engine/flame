@@ -1,36 +1,12 @@
-import 'dart:typed_data' show Float32List, Float64List;
+import 'dart:typed_data' show Float32List;
 import 'dart:ui';
 
 import 'package:flame/palette.dart';
+import 'package:flame/src/cache/matrix_pool.dart' show canvasTransform;
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 
 export 'dart:ui' show Canvas;
-
-class MatrixPool {
-  static final List<Float64List> _pool = [];
-  static const int _bufferSize = 16;
-
-  static Float64List getBuffer() {
-    if (_pool.isEmpty) {
-      return Float64List(_bufferSize);
-    }
-    return _pool.removeLast();
-  }
-
-  static void releaseBuffer(Float64List buffer) {
-    _pool.add(buffer);
-  }
-}
-
-void applyMatrix(Canvas canvas, Float32List matrix4) {
-  final buffer = MatrixPool.getBuffer();
-  for (var i = 0; i < 16; i++) {
-    buffer[i] = matrix4[i];
-  }
-  canvas.transform(buffer);
-  MatrixPool.releaseBuffer(buffer); // Recycle the buffe
-}
 
 extension CanvasExtension on Canvas {
   void scaleVector(Vector2 vector) {
@@ -89,6 +65,6 @@ extension CanvasExtension on Canvas {
   }
 
   void transform32(Float32List matrix4) {
-    applyMatrix(this, matrix4);
+    canvasTransform(this, matrix4);
   }
 }
