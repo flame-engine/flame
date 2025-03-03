@@ -1,6 +1,6 @@
 library flame_forge2d;
 
-export 'package:forge2d/forge2d.dart' hide Vector2, Matrix2, Vector3, Matrix3;
+export 'package:forge2d/forge2d.dart';
 
 export 'body_component.dart';
 export 'contact_callbacks.dart';
