@@ -20,3 +20,6 @@ dev_dependencies:
   flame_lint: ^1.2.2
   flutter_test:
     sdk: flutter
+
+flutter:
+  uses-material-design: true
