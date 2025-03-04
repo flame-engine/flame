@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -7,7 +6,6 @@ import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame/src/math/random_fallback.dart';
-import 'package:flutter/cupertino.dart';
 
 /// An axis-aligned rectangle.
 ///

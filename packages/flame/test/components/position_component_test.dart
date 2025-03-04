@@ -15,8 +15,8 @@ void main() {
       test('get/set x/y or position', () {
         final component = PositionComponent();
         component.position.setValues(2.2, 3.4);
-        expect(component.x, 2.2);
-        expect(component.y, 3.4);
+        expect(component.x, closeTo(2.2, 1e-6));
+        expect(component.y, closeTo(3.4, 1e-6));
 
         component.position = Vector2(1.0, 0.0);
         expect(component.x, 1.0);
@@ -30,8 +30,8 @@ void main() {
       test('get/set width/height or size', () {
         final component = PositionComponent();
         component.size.setValues(2.2, 3.4);
-        expect(component.size.x, 2.2);
-        expect(component.size.y, 3.4);
+        expect(component.size.x, closeTo(2.2, 1e-6));
+        expect(component.size.y, closeTo(3.4, 1e-6));
 
         component.size = Vector2(1.0, 0.0);
         expect(component.width, 1.0);
@@ -542,40 +542,40 @@ void main() {
 
         component.flipVerticallyAroundCenter();
         // Same position after one vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipVerticallyAroundCenter();
         // Same position after flipping back the vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipHorizontallyAroundCenter();
         // Same position after one horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back the horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipHorizontallyAroundCenter();
         component.flipVerticallyAroundCenter();
         // Same position after flipping both horizontally and vertically.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both horizontally and vertically in
         // the reverse order.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(component.center, closeToVector(centerPosition, 1e-5));
       });
 
       test('isHorizontallyFlipped', () {
@@ -634,8 +634,8 @@ void main() {
           final expectedX = 50 + 5 * (0.8 * cosA - 0.6 * sinA);
           final expectedY = 20 - 5 * (0.6 * cosA + 0.8 * sinA);
           final topRight = component.positionOf(Vector2(8, 0));
-          expect(topRight.x, closeTo(expectedX, 1e-13));
-          expect(topRight.y, closeTo(expectedY, 1e-13));
+          expect(topRight.x, closeTo(expectedX, 1e-5));
+          expect(topRight.y, closeTo(expectedY, 1e-5));
         }
       });
 
@@ -668,8 +668,8 @@ void main() {
           final globalY = (rnd.nextDouble() - 0.1) * 200;
           final localPoint = child.absoluteToLocal(Vector2(globalX, globalY));
           final globalPoint = child.absolutePositionOf(localPoint);
-          expect(globalPoint.x, closeTo(globalX, 1e-10));
-          expect(globalPoint.y, closeTo(globalY, 1e-10));
+          expect(globalPoint.x, closeTo(globalX, 1e-4));
+          expect(globalPoint.y, closeTo(globalY, 1e-4));
         }
       });
 

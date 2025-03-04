@@ -9,6 +9,8 @@ class _MockFlameGame extends Mock implements FlameGame {}
 
 class _MockBuildContext extends Mock implements BuildContext {}
 
+// Ignoring dart linting error due
+// ignore: subtype_of_base_or_final_is_not_base_final_or_sealed,invalid_use_of_type_outside_library
 class _MockPipelineOwner extends Mock implements PipelineOwner {
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {

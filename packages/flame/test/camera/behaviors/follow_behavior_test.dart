@@ -74,7 +74,7 @@ void main() {
 
       const dt = 0.11;
       for (var i = 0; i < 20; i++) {
-        expect(followTarget, closeToVector(Vector2(3, 1 + i * dt), 1e-14));
+        expect(followTarget, closeToVector(Vector2(3, 1 + i * dt), 1e-6));
         game.update(dt);
       }
     });
@@ -91,7 +91,7 @@ void main() {
         game.update(0.01);
         expect(
           pursuer.position,
-          closeToVector(target.position, 1e-12),
+          closeToVector(target.position, 1e-4),
         );
       }
     });
@@ -111,7 +111,7 @@ void main() {
         final distance = speed * i * dt;
         expect(
           pursuer.position,
-          closeToVector(Vector2(distance * 0.6, distance * 0.8), 1e-12),
+          closeToVector(Vector2(distance * 0.6, distance * 0.8), 1e-3),
         );
         game.update(dt);
       }

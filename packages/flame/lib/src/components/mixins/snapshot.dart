@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 
 /// A mixin that enables caching a component and all its children. If
 /// [renderSnapshot] is set to `true`, the component and its children will be
@@ -47,7 +48,7 @@ mixin Snapshot on PositionComponent {
     } else {
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
-      canvas.transform(transform.storage);
+      canvas.transform32(transform.storage);
       canvas.drawPicture(_picture!);
       final picture = recorder.endRecording();
       return picture.toImageSync(width, height);
@@ -63,7 +64,7 @@ mixin Snapshot on PositionComponent {
     final canvas = Canvas(recorder);
     final matrix = transformMatrix.clone();
     matrix.invert();
-    canvas.transform(matrix.storage);
+    canvas.transform32(matrix.storage);
     super.renderTree(canvas);
     _picture = recorder.endRecording();
     return _picture!;
@@ -82,9 +83,7 @@ mixin Snapshot on PositionComponent {
         takeSnapshot();
       }
       canvas.save();
-      canvas.transform(
-        transformMatrix.storage,
-      );
+      canvas.transform32(transformMatrix.storage);
       canvas.drawPicture(_picture!);
       canvas.restore();
     } else {

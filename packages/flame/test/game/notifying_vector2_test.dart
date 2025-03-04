@@ -1,6 +1,6 @@
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:test/test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
   /// This helper function creates a "normal" Vector2 copy of [v1],
