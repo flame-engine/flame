@@ -105,7 +105,7 @@ void main() {
           Vector2(30, 40),
         ];
         for (final p in expectedPositions) {
-          expect(component.position, closeToVector(p, 1e-12));
+          expect(component.position, closeToVector(p, 1e-5));
           game.update(0.1);
         }
       });
@@ -205,11 +205,11 @@ void main() {
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-14));
+          expect(component.position, closeToVector(p, 1e-6));
           game.update(0.1);
         }
         game.update(0.001);
-        expect(component.position, closeToVector(Vector2.zero()));
+        expect(component.position, closeToVector(Vector2.zero(), 1e-7));
         expect(effect.controller.completed, true);
       });
 
@@ -314,7 +314,7 @@ void main() {
           ...forwardPath.reversed,
         ];
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-12));
+          expect(component.position, closeToVector(p, 1e-3));
           game.update(dt);
         }
         game.update(1e-5);

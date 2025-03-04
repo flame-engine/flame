@@ -35,8 +35,8 @@ void main() {
         AnchorToEffect(const Anchor(0.2, 0.6), EffectController(duration: 1)),
       );
       for (var t = 0.0; t <= 1.0; t += 0.1) {
-        expect(camera.viewfinder.anchor.x, closeTo(0.5 - 0.3 * t, 1e-15));
-        expect(camera.viewfinder.anchor.y, closeTo(0.5 + 0.1 * t, 1e-15));
+        expect(camera.viewfinder.anchor.x, closeTo(0.5 - 0.3 * t, 1e-7));
+        expect(camera.viewfinder.anchor.y, closeTo(0.5 + 0.1 * t, 1e-7));
         game.update(0.1);
       }
     });

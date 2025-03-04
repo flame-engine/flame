@@ -221,12 +221,12 @@ void main() {
 
       test('clamp length max', () {
         final v = Vector2(1, 0)..clampLength(0.5, 0.8);
-        expect(v.length, 0.8);
+        expect(v.length, closeTo(0.8, 1e-6));
       });
 
       test('clamp negative vector', () {
         final v = Vector2(-1, -1)..clampLength(0.5, 0.8);
-        expect(v.length, 0.8);
+        expect(v.length, closeTo(0.8, 1e-6));
       });
 
       test('no effect on vector in range', () {

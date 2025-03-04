@@ -147,7 +147,7 @@ melos:
       description: Checks whether there are any broken links in the docs.
 
     test:select:
-      run: melos exec -c 1 -- flutter test
+      run: melos exec -c 8 -- flutter test
       packageFilters:
         dirExists: test
       description: Run `flutter test` for selected packages.
