@@ -15,11 +15,13 @@ extension TexturepackerLoader on Game {
     String assetsPath, {
     bool fromStorage = false,
     Images? images,
+    AssetsCache? assets,
   }) async =>
       TexturePackerAtlas.load(
         assetsPath,
         fromStorage: fromStorage,
         images: images ?? this.images,
+        assets: assets ?? this.assets,
       );
 
   /// Loads the specified pack file from assets
@@ -27,11 +29,13 @@ extension TexturepackerLoader on Game {
   Future<TexturePackerAtlas> atlasFromAssets(
     String assetsPath, {
     Images? images,
+    AssetsCache? assets,
     bool useOriginalSize = true,
   }) async =>
       TexturePackerAtlas.load(
         assetsPath,
         images: images ?? this.images,
+        assets: assets ?? this.assets,
         useOriginalSize: useOriginalSize,
       );
 
