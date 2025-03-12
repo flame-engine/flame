@@ -12,7 +12,7 @@ dependencies:
   flame_markdown: ^0.2.3+2
   flutter:
     sdk: flutter
-  markdown: ^7.1.1
+  markdown: ^7.3.0
 
 dev_dependencies:
   flame_lint: ^1.2.2

@@ -7,3 +7,5 @@ Some say in *ice*.
 From what I've tasted of >desire<,
 
 I hold with those who favor **fire**.
+
+[- by Robert Frost]{.author}
