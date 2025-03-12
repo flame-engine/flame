@@ -31,8 +31,9 @@ class TexturePackerAtlas {
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
-    Images? images,
     bool useOriginalSize = true,
+    Images? images,
+    AssetsCache? assets,
     String assetsPrefix = 'images',
   }) async {
     final _TextureAtlasData atlasData;
@@ -43,15 +44,15 @@ class TexturePackerAtlas {
       atlasData = await _fromAssets(
         path,
         images: images,
+        assets: assets,
         assetsPrefix: assetsPrefix,
       );
     }
 
-    return TexturePackerAtlas(
-      atlasData.regions
-          .map((e) => TexturePackerSprite(e, useOriginalSize: useOriginalSize))
-          .toList(),
-    );
+    return TexturePackerAtlas([
+      for (final region in atlasData.regions)
+        TexturePackerSprite(region, useOriginalSize: useOriginalSize),
+    ]);
   }
 
   /// Returns the first region found with the specified name. This method uses
@@ -85,12 +86,14 @@ Future<_TextureAtlasData> _fromAssets(
   String path, {
   required String assetsPrefix,
   Images? images,
+  AssetsCache? assets,
 }) async {
   try {
     return await _parse(
       path,
       fromStorage: false,
       images: images,
+      assets: assets,
       assetsPrefix: assetsPrefix,
     );
   } on Exception catch (e, stack) {
@@ -132,6 +135,7 @@ Future<_TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
   Images? images,
+  AssetsCache? assets,
   String? assetsPrefix,
 }) async {
   final pages = <Page>[];
@@ -145,7 +149,8 @@ Future<_TextureAtlasData> _parse(
       assetsPrefix != null,
       'When reading from storage, the assetsPrefix needs to be provided.',
     );
-    fileAsString = await Flame.assets.readFile('$assetsPrefix/$path');
+    fileAsString =
+        await (assets ?? Flame.assets).readFile('$assetsPrefix/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
