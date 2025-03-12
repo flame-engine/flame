@@ -42,9 +42,9 @@ void main() {
         ),
       );
 
-      final flameGame = FlameGame();
-      Flame.assets = AssetsCache(bundle: bundle, prefix: '');
-      Flame.images = Images(bundle: bundle, prefix: '');
+      final flameGame = FlameGame()
+        ..assets = AssetsCache(bundle: bundle, prefix: '')
+        ..images = Images(bundle: bundle, prefix: '');
 
       final atlas = await flameGame.atlasFromAssets(atlasPath);
 
