@@ -19,7 +19,7 @@ extension TexturepackerLoader on Game {
       TexturePackerAtlas.load(
         assetsPath,
         fromStorage: fromStorage,
-        images: images,
+        images: images ?? this.images,
       );
 
   /// Loads the specified pack file from assets
@@ -31,7 +31,7 @@ extension TexturepackerLoader on Game {
   }) async =>
       TexturePackerAtlas.load(
         assetsPath,
-        images: images,
+        images: images ?? this.images,
         useOriginalSize: useOriginalSize,
       );
 
@@ -45,7 +45,7 @@ extension TexturepackerLoader on Game {
       TexturePackerAtlas.load(
         storagePath,
         fromStorage: true,
-        images: images,
+        images: images ?? this.images,
         useOriginalSize: useOriginalSize,
       );
 }
