@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flame/cache.dart';
-import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
 import 'package:flutter/services.dart';
