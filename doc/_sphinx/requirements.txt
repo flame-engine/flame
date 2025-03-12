@@ -6,5 +6,5 @@ sphinxcontrib-mermaid==0.9.2
 sphinxcontrib-jquery==4.1
 sphinx-autobuild==2021.3.14
 sphinx-copybutton==0.5.2
-Jinja2==3.1.5
+Jinja2==3.1.6
 psutil==5.9.7
