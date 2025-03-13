@@ -15,7 +15,6 @@ jobs:
       - uses: bluefireteam/flutter-gh-pages@v9
         with:
           workingDir: examples
-          compileToWasm: true
 
   build-docs:
     runs-on: ubuntu-latest
