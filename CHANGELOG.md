@@ -3,6 +3,155 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-03-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`behavior_tree` - `v0.1.3+2`](#behavior_tree---v0132)
+ - [`flame` - `v1.26.0`](#flame---v1260)
+ - [`flame_3d` - `v0.1.0-dev.7`](#flame_3d---v010-dev7)
+ - [`flame_audio` - `v2.11.1`](#flame_audio---v2111)
+ - [`flame_behavior_tree` - `v0.1.3+7`](#flame_behavior_tree---v0137)
+ - [`flame_bloc` - `v1.12.8`](#flame_bloc---v1128)
+ - [`flame_fire_atlas` - `v1.8.2`](#flame_fire_atlas---v182)
+ - [`flame_forge2d` - `v0.18.2+7`](#flame_forge2d---v01827)
+ - [`flame_isolate` - `v0.6.2+7`](#flame_isolate---v0627)
+ - [`flame_kenney_xml` - `v0.1.1+7`](#flame_kenney_xml---v0117)
+ - [`flame_lint` - `v1.2.3`](#flame_lint---v123)
+ - [`flame_lottie` - `v0.4.2+7`](#flame_lottie---v0427)
+ - [`flame_markdown` - `v0.2.4`](#flame_markdown---v024)
+ - [`flame_noise` - `v0.3.2+7`](#flame_noise---v0327)
+ - [`flame_oxygen` - `v0.2.3+7`](#flame_oxygen---v0237)
+ - [`flame_rive` - `v1.10.10`](#flame_rive---v11010)
+ - [`flame_splash_screen` - `v0.3.1+2`](#flame_splash_screen---v0312)
+ - [`flame_sprite_fusion` - `v0.1.3+7`](#flame_sprite_fusion---v0137)
+ - [`flame_svg` - `v1.11.7`](#flame_svg---v1117)
+ - [`flame_test` - `v1.18.1`](#flame_test---v1181)
+ - [`flame_texturepacker` - `v4.1.7`](#flame_texturepacker---v417)
+ - [`flame_tiled` - `v2.0.2`](#flame_tiled---v202)
+ - [`flame_spine` - `v0.2.2+7`](#flame_spine---v0227)
+ - [`flame_console` - `v0.1.2+3`](#flame_console---v0123)
+ - [`flame_riverpod` - `v5.4.10`](#flame_riverpod---v5410)
+ - [`flame_network_assets` - `v0.3.3+7`](#flame_network_assets---v0337)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_spine` - `v0.2.2+7`
+ - `flame_console` - `v0.1.2+3`
+ - `flame_riverpod` - `v5.4.10`
+ - `flame_network_assets` - `v0.3.3+7`
+
+---
+
+#### `behavior_tree` - `v0.1.3+2`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame` - `v1.26.0`
+
+ - **FIX**: RouterComponent should be on top ([#3524](https://github.com/flame-engine/flame/issues/3524)). ([aa52a2a5](https://github.com/flame-engine/flame/commit/aa52a2a58de9661557113c3d6ae5cc760842b1e7))
+ - **FEAT**: Support custom attributes syntax to allow for multiple styles in the text rendering pipeline ([#3519](https://github.com/flame-engine/flame/issues/3519)). ([fbc58053](https://github.com/flame-engine/flame/commit/fbc58053dd12e6dc62b09cb14e4b438ef7b7f1b2))
+ - **FEAT**: Layout shrinkwrap ([#3513](https://github.com/flame-engine/flame/issues/3513)). ([b3fbdd9d](https://github.com/flame-engine/flame/commit/b3fbdd9d3fd031083ecf7c53a28e2381579e846c))
+ - **FEAT**: Layout Components ([#3507](https://github.com/flame-engine/flame/issues/3507)). ([678cf057](https://github.com/flame-engine/flame/commit/678cf05780580dd2cb61dde5e40c0efb1f3bc928))
+ - **FEAT**: Add `RotateAroundEffect` ([#3499](https://github.com/flame-engine/flame/issues/3499)). ([0688f410](https://github.com/flame-engine/flame/commit/0688f41093cd451269366a2c2001a0d88bc6e532))
+ - **DOCS**: Fix missing reference on documentation for InlineTextNode ([#3520](https://github.com/flame-engine/flame/issues/3520)). ([e3aa78b2](https://github.com/flame-engine/flame/commit/e3aa78b28206150eb85621e2a788fc31f218ff1d))
+ - **DOCS**: Make onRemove() behavior more clear in API doc ([#3502](https://github.com/flame-engine/flame/issues/3502)). ([f387ad76](https://github.com/flame-engine/flame/commit/f387ad7604fca4b652d3c7521004a5d420137634))
+
+#### `flame_3d` - `v0.1.0-dev.7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_audio` - `v2.11.1`
+
+ - **REFACTOR**(flame_audio): Set AudioContext for AudioPool only ([#3511](https://github.com/flame-engine/flame/issues/3511)). ([d5ae35f2](https://github.com/flame-engine/flame/commit/d5ae35f2bbd214159fcb81e2e94e45085bdc2e66))
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_behavior_tree` - `v0.1.3+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_bloc` - `v1.12.8`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_fire_atlas` - `v1.8.2`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_forge2d` - `v0.18.2+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_isolate` - `v0.6.2+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_kenney_xml` - `v0.1.1+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_lint` - `v1.2.3`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_lottie` - `v0.4.2+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_markdown` - `v0.2.4`
+
+ - **FEAT**: Support custom attributes syntax to allow for multiple styles in the text rendering pipeline ([#3519](https://github.com/flame-engine/flame/issues/3519)). ([fbc58053](https://github.com/flame-engine/flame/commit/fbc58053dd12e6dc62b09cb14e4b438ef7b7f1b2))
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_noise` - `v0.3.2+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_oxygen` - `v0.2.3+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_rive` - `v1.10.10`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_splash_screen` - `v0.3.1+2`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_sprite_fusion` - `v0.1.3+7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_svg` - `v1.11.7`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_test` - `v1.18.1`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_texturepacker` - `v4.1.7`
+
+ - **FIX**: Use game's asset cache for texture packer ([#3523](https://github.com/flame-engine/flame/issues/3523)). ([835c40fc](https://github.com/flame-engine/flame/commit/835c40fc6bbc81218fe5c7d321a4a81e1853cf85))
+ - **FIX**: Unhandled Exception: Unable to load asset. Introduced on Texturepacker 4.16 ([#3506](https://github.com/flame-engine/flame/issues/3506)). ([3af91b0e](https://github.com/flame-engine/flame/commit/3af91b0e6cbb28c0862317d572dde5f659592c2b))
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+#### `flame_tiled` - `v2.0.2`
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+
 ## 2025-02-13
 
 ### Changes
