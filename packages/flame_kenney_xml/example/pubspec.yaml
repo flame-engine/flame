@@ -10,13 +10,13 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.25.0
-  flame_kenney_xml: ^0.1.1+6
+  flame: ^1.26.0
+  flame_kenney_xml: ^0.1.1+7
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.2.2
+  flame_lint: ^1.2.3
 
 flutter:
   assets:

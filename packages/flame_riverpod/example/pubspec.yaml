@@ -6,14 +6,14 @@ version: 1.0.0+1
 environment:
   sdk: ">=3.6.0 <4.0.0"
 dependencies:
-  flame: ^1.25.0
-  flame_riverpod: ^5.4.9
+  flame: ^1.26.0
+  flame_riverpod: ^5.4.10
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.5.1
 
 dev_dependencies:
-  flame_lint: ^1.2.2
+  flame_lint: ^1.2.3
   flutter_test:
     sdk: flutter
 
