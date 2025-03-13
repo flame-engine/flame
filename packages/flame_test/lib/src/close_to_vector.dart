@@ -1,6 +1,6 @@
 import 'package:flame_test/src/is_close_to_vector.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// Returns a matcher which checks if the argument is a vector within distance
 /// [epsilon] of [vector]. For example:

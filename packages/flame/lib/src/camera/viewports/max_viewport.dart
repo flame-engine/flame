@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/src/camera/viewport.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// The default viewport, which is as big as the game canvas allows.
 ///

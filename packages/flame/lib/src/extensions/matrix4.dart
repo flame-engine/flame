@@ -1,6 +1,6 @@
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
-export 'package:vector_math/vector_math_64.dart' hide Colors;
+export 'package:vector_math/vector_math.dart' hide Colors;
 
 extension Matrix4Extension on Matrix4 {
   /// A first row and first column value.

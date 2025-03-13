@@ -431,7 +431,7 @@ class SpriteBatch {
 
         canvas
           ..save()
-          ..transform(batchItem.matrix.storage)
+          ..transform32(batchItem.matrix.storage)
           ..drawRect(batchItem.destination, batchItem.paint)
           ..drawImageRect(
             atlas,
