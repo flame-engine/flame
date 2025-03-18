@@ -882,7 +882,7 @@ class Component {
   @internal
   LifecycleEventStatus handleLifecycleEventRebalance(int newPriority) {
     _priority = newPriority;
-    parent?.children.reorder();
+    _parent?.children.reorder();
     return LifecycleEventStatus.done;
   }
 
