@@ -1057,9 +1057,9 @@ void main() {
 
           var completed = 0;
           var total = 0;
-          void waitFor(int millis, Future<void> Function() fn) {
+          void waitFor(int milliseconds, Future<void> Function() fn) {
             total++;
-            Future.delayed(Duration(milliseconds: millis), fn)
+            Future.delayed(Duration(milliseconds: milliseconds), fn)
                 .whenComplete(() => completed++);
           }
 
