@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
@@ -1013,6 +1016,72 @@ void main() {
         expect(game.world.children.toList(), [parent, child]);
         expect(parent.children.toList(), isEmpty);
       });
+    });
+
+    group('Rebalancing components', () {
+      testWithFlameGame(
+        'rebalance is queued',
+        (game) async {
+          final c = Component();
+          await game.world.add(c);
+
+          c.priority = 10;
+          expect(c.priority, 0);
+
+          await game.ready();
+          expect(c.priority, 10);
+        },
+      );
+
+      testWithFlameGame(
+        'async rebalance, add and remove have no race condition',
+        (game) async {
+          final r = Random(69420);
+          for (var i = 0; i < 10; i++) {
+            game.world.add(Component());
+          }
+
+          Future<void> add() async {
+            final white = Component();
+            game.world.add(white);
+            await Future.delayed(
+              const Duration(milliseconds: 300),
+              white.removeFromParent,
+            );
+          }
+
+          Future<void> rebalance() async {
+            game.world.children.forEach((it) {
+              it.priority = r.nextInt(1_000);
+            });
+          }
+
+          var completed = 0;
+          var total = 0;
+          void waitFor(int millis, Future<void> Function() fn) {
+            total++;
+            Future.delayed(Duration(milliseconds: millis), fn)
+                .whenComplete(() => completed++);
+          }
+
+          Future<void> start() async {
+            for (var i = 0; i < 100; i++) {
+              waitFor(17 * i, rebalance);
+              waitFor(31 * i, add);
+            }
+          }
+
+          waitFor(0, start);
+
+          while (completed < total || game.hasLifecycleEvents) {
+            game.update(0);
+            await Future.delayed(const Duration(milliseconds: 1));
+          }
+
+          await game.ready();
+          expect(game.world.children.length, 10);
+        },
+      );
     });
 
     group('descendants()', () {

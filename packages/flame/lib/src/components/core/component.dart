@@ -819,10 +819,12 @@ class Component {
   int _priority;
   set priority(int newPriority) {
     if (_priority != newPriority) {
-      _priority = newPriority;
+      final parent = _parent;
       final game = findGame();
-      if (game != null && _parent != null) {
-        game.enqueueRebalance(_parent!);
+      if (game != null && parent != null) {
+        game.enqueuePriorityChange(parent, this, newPriority);
+      } else {
+        _priority = newPriority;
       }
     }
   }
@@ -874,6 +876,13 @@ class Component {
     } else {
       newParent.add(this);
     }
+    return LifecycleEventStatus.done;
+  }
+
+  @internal
+  LifecycleEventStatus handleLifecycleEventRebalance(int newPriority) {
+    _priority = newPriority;
+    parent?.children.reorder();
     return LifecycleEventStatus.done;
   }
 

@@ -15,12 +15,10 @@ class ComponentTreeRoot extends Component {
     super.children,
     super.key,
   })  : _queue = RecycledQueue(_LifecycleEvent.new),
-        _blocked = <int>{},
-        _componentsToRebalance = <Component>{};
+        _blocked = <int>{};
 
   final RecycledQueue<_LifecycleEvent> _queue;
   final Set<int> _blocked;
-  final Set<Component> _componentsToRebalance;
   late final Map<ComponentKey, Component> _index = {};
   Completer<void>? _lifecycleEventsCompleter;
 
@@ -73,8 +71,16 @@ class ComponentTreeRoot extends Component {
   }
 
   @internal
-  void enqueueRebalance(Component parent) {
-    _componentsToRebalance.add(parent);
+  void enqueuePriorityChange(
+    Component parent,
+    Component child,
+    int newPriority,
+  ) {
+    _queue.addLast()
+      ..kind = _LifecycleEventKind.rebalance
+      ..child = child
+      ..parent = parent
+      ..newPriority = newPriority;
   }
 
   bool get hasLifecycleEvents => _queue.isNotEmpty;
@@ -124,6 +130,8 @@ class ComponentTreeRoot extends Component {
           _LifecycleEventKind.remove =>
             child.handleLifecycleEventRemove(parent),
           _LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
+          _LifecycleEventKind.rebalance =>
+            child.handleLifecycleEventRebalance(event.newPriority!),
           _LifecycleEventKind.unknown => LifecycleEventStatus.done,
         };
 
@@ -144,13 +152,6 @@ class ComponentTreeRoot extends Component {
       _lifecycleEventsCompleter!.complete();
       _lifecycleEventsCompleter = null;
     }
-  }
-
-  void processRebalanceEvents() {
-    for (final component in _componentsToRebalance) {
-      component.children.reorder();
-    }
-    _componentsToRebalance.clear();
   }
 
   @mustCallSuper
@@ -207,18 +208,21 @@ enum _LifecycleEventKind {
   add,
   remove,
   move,
+  rebalance,
 }
 
 class _LifecycleEvent implements Disposable {
   _LifecycleEventKind kind = _LifecycleEventKind.unknown;
   Component? child;
   Component? parent;
+  int? newPriority;
 
   @override
   void dispose() {
     kind = _LifecycleEventKind.unknown;
     child = null;
     parent = null;
+    newPriority = null;
   }
 
   @override
