@@ -23,6 +23,7 @@ prerendered
 pressable
 ptero # short for pterodactyl
 rebalance
+rebalancing
 refreshable
 renderable
 rescan
