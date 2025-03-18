@@ -149,6 +149,7 @@ void main() {
 
         a.priority = 10;
         game.update(0);
+        await game.ready();
 
         componentsSorted(game.children);
         componentsSorted(a.children);
@@ -163,10 +164,13 @@ void main() {
         c1.priority = 10;
         a2.priority = 0;
         game.update(0);
+        await game.ready();
 
         a.assertCalled(1);
         b.assertCalled(0);
-        c.assertCalled(1);
+        // TODO(luan): consider optimizing so that multiple priority changes
+        // on the same parent on the same tick only trigger one reorder call
+        c.assertCalled(2);
 
         componentsSorted(game.children);
         componentsSorted(a.children);
@@ -177,6 +181,7 @@ void main() {
         b1.priority = 2;
         a1.priority = 1; // no-op!
         game.update(0);
+        await game.ready();
 
         a.assertCalled(0);
         b.assertCalled(1);
@@ -217,7 +222,10 @@ void main() {
 
       expect(parent.priority, 0);
       expect(child.priority, 0);
+
       game.update(0.1);
+      await game.ready();
+
       expect(parent.priority, 10);
       expect(child.priority, 0);
       expect(renderEvents, isEmpty);

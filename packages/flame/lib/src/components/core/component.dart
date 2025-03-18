@@ -881,6 +881,9 @@ class Component {
 
   @internal
   LifecycleEventStatus handleLifecycleEventRebalance(int newPriority) {
+    if (_priority == newPriority) {
+      return LifecycleEventStatus.skip;
+    }
     _priority = newPriority;
     _parent?.children.reorder();
     return LifecycleEventStatus.done;
