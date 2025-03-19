@@ -22,7 +22,6 @@ class DoubleTapDispatcherKey implements ComponentKey {
 /// the component tree that is mixed with [DoubleTapCallbacks]. This will be
 /// attached to the [FlameGame] instance automatically whenever any
 /// [DoubleTapCallbacks] are mounted into the component tree.
-@internal
 class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
 
