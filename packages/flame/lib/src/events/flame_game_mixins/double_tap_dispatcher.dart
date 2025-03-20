@@ -5,7 +5,6 @@ import 'package:flame/src/events/messages/double_tap_cancel_event.dart';
 import 'package:flame/src/events/messages/double_tap_down_event.dart';
 import 'package:flame/src/events/messages/double_tap_event.dart';
 import 'package:flutter/gestures.dart';
-import 'package:meta/meta.dart';
 
 class DoubleTapDispatcherKey implements ComponentKey {
   const DoubleTapDispatcherKey();
