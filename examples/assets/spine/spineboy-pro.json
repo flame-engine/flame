@@ -1,7 +1,7 @@
 {
 "skeleton": {
-	"hash": "itfFESDjM1c",
-	"spine": "4.1.23-beta",
+	"hash": "dr3Kr/vMgPA",
+	"spine": "4.2.22",
 	"x": -188.63,
 	"y": -7.94,
 	"width": 418.45,
@@ -12,7 +12,7 @@
 "bones": [
 	{ "name": "root", "rotation": 0.05 },
 	{ "name": "hip", "parent": "root", "y": 247.27 },
-	{ "name": "crosshair", "parent": "root", "x": 302.83, "y": 569.45, "color": "ff3f00ff" },
+	{ "name": "crosshair", "parent": "root", "x": 302.83, "y": 569.45, "color": "ff3f00ff", "icon": "circle" },
 	{
 		"name": "aim-constraint-target",
 		"parent": "hip",
@@ -22,8 +22,8 @@
 		"y": 5.62,
 		"color": "abe323ff"
 	},
-	{ "name": "rear-foot-target", "parent": "root", "x": 61.91, "y": 0.42, "color": "ff3f00ff" },
-	{ "name": "rear-leg-target", "parent": "rear-foot-target", "x": -33.91, "y": 37.34, "color": "ff3f00ff" },
+	{ "name": "rear-foot-target", "parent": "root", "x": 61.91, "y": 0.42, "color": "ff3f00ff", "icon": "ik" },
+	{ "name": "rear-leg-target", "parent": "rear-foot-target", "x": -33.91, "y": 37.34, "color": "ff3f00ff", "icon": "ik" },
 	{
 		"name": "rear-thigh",
 		"parent": "hip",
@@ -58,12 +58,20 @@
 		"rotation": -0.85,
 		"x": 51.17,
 		"y": 0.24,
-		"transform": "noRotationOrReflection",
+		"inherit": "noRotationOrReflection",
 		"color": "ff000dff"
 	},
-	{ "name": "board-ik", "parent": "root", "x": -131.78, "y": 69.09, "color": "4c56ffff" },
+	{ "name": "board-ik", "parent": "root", "x": -131.78, "y": 69.09, "color": "4c56ffff", "icon": "arrows" },
 	{ "name": "clipping", "parent": "root" },
-	{ "name": "hoverboard-controller", "parent": "root", "rotation": -0.28, "x": -329.69, "y": 69.82, "color": "ff0004ff" },
+	{
+		"name": "hoverboard-controller",
+		"parent": "root",
+		"rotation": -0.28,
+		"x": -329.69,
+		"y": 69.82,
+		"color": "ff0004ff",
+		"icon": "arrowsB"
+	},
 	{ "name": "exhaust1", "parent": "hoverboard-controller", "rotation": 3.02, "x": -249.68, "y": 53.39 },
 	{ "name": "exhaust2", "parent": "hoverboard-controller", "rotation": 26.34, "x": -191.6, "y": -22.92 },
 	{
@@ -76,16 +84,16 @@
 		"scaleY": 0.7847
 	},
 	{ "name": "portal-root", "parent": "root", "x": 12.9, "y": 328.54, "scaleX": 2.0334, "scaleY": 2.0334 },
-	{ "name": "flare1", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare10", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare2", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare3", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare4", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare5", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare6", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare7", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare8", "parent": "portal-root", "x": -6.34, "y": -161.57 },
-	{ "name": "flare9", "parent": "portal-root", "x": -6.34, "y": -161.57 },
+	{ "name": "flare1", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare10", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare2", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare3", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare4", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare5", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare6", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare7", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare8", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
+	{ "name": "flare9", "parent": "portal-root", "x": -6.34, "y": -161.57, "icon": "particles" },
 	{
 		"name": "torso",
 		"parent": "hip",
@@ -117,8 +125,8 @@
 		"y": 0.2,
 		"color": "00ff04ff"
 	},
-	{ "name": "front-foot-target", "parent": "root", "x": -13.53, "y": 0.04, "color": "ff3f00ff" },
-	{ "name": "front-leg-target", "parent": "front-foot-target", "x": -28.4, "y": 29.06, "color": "ff3f00ff" },
+	{ "name": "front-foot-target", "parent": "root", "x": -13.53, "y": 0.04, "color": "ff3f00ff", "icon": "ik" },
+	{ "name": "front-leg-target", "parent": "front-foot-target", "x": -28.4, "y": 29.06, "color": "ff3f00ff", "icon": "ik" },
 	{
 		"name": "front-thigh",
 		"parent": "hip",
@@ -153,7 +161,7 @@
 		"rotation": -1.68,
 		"x": 41.42,
 		"y": -0.09,
-		"transform": "noRotationOrReflection",
+		"inherit": "noRotationOrReflection",
 		"color": "00ff04ff"
 	},
 	{ "name": "back-shoulder", "parent": "torso3", "rotation": -104.11, "x": 7.32, "y": -19.22, "color": "ff000dff" },
@@ -223,11 +231,19 @@
 		"y": -0.04,
 		"color": "e0da19ff"
 	},
-	{ "name": "hoverboard-thruster-front", "parent": "hoverboard-controller", "rotation": -29.2, "x": 95.77, "y": -2.99, "transform": "noRotationOrReflection" },
-	{ "name": "hoverboard-thruster-rear", "parent": "hoverboard-controller", "rotation": -29.2, "x": -76.47, "y": -4.88, "transform": "noRotationOrReflection" },
+	{ "name": "hoverboard-thruster-front", "parent": "hoverboard-controller", "rotation": -29.2, "x": 95.77, "y": -2.99, "inherit": "noRotationOrReflection" },
+	{ "name": "hoverboard-thruster-rear", "parent": "hoverboard-controller", "rotation": -29.2, "x": -76.47, "y": -4.88, "inherit": "noRotationOrReflection" },
 	{ "name": "hoverglow-front", "parent": "hoverboard-thruster-front", "rotation": 0.17, "x": -1.78, "y": -37.79 },
 	{ "name": "hoverglow-rear", "parent": "hoverboard-thruster-rear", "rotation": 0.17, "x": 1.06, "y": -35.66 },
-	{ "name": "muzzle", "parent": "rear-bracer", "rotation": 3.06, "x": 242.34, "y": 34.26, "color": "ffb900ff" },
+	{
+		"name": "muzzle",
+		"parent": "rear-bracer",
+		"rotation": 3.06,
+		"x": 242.34,
+		"y": 34.26,
+		"color": "ffb900ff",
+		"icon": "muzzleFlash"
+	},
 	{ "name": "muzzle-ring", "parent": "muzzle", "color": "ffb900ff" },
 	{ "name": "muzzle-ring2", "parent": "muzzle", "color": "ffb900ff" },
 	{ "name": "muzzle-ring3", "parent": "muzzle", "color": "ffb900ff" },
@@ -246,7 +262,7 @@
 		"scaleY": 0.738,
 		"color": "000effff"
 	},
-	{ "name": "head-control", "parent": "head", "x": 110.21, "color": "00a220ff" }
+	{ "name": "head-control", "parent": "head", "x": 110.21, "color": "00a220ff", "icon": "arrows" }
 ],
 "slots": [
 	{ "name": "portal-bg", "bone": "portal" },
