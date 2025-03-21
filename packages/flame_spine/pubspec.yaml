@@ -20,7 +20,7 @@ dependencies:
   flame: ^1.26.0
   flutter:
     sdk: flutter
-  spine_flutter: ^4.2.29
+  spine_flutter: ^4.2.33
 
 dev_dependencies:
   flame_lint: ^1.2.3
