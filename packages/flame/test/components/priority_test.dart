@@ -168,9 +168,7 @@ void main() {
 
         a.assertCalled(1);
         b.assertCalled(0);
-        // TODO(luan): consider optimizing so that multiple priority changes
-        // on the same parent on the same tick only trigger one reorder call
-        c.assertCalled(2);
+        c.assertCalled(1);
 
         componentsSorted(game.children);
         componentsSorted(a.children);

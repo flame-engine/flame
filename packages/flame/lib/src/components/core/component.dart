@@ -879,13 +879,14 @@ class Component {
     return LifecycleEventStatus.done;
   }
 
+  /// NOTE: this method will intentionally not reorder the parent,
+  /// leaving the ordered set in an inconsistent state.
+  /// It is left to the caller to optimally reorder the parent.
   @internal
-  LifecycleEventStatus handleLifecycleEventRebalance(int newPriority) {
+  void handleLifecycleEventRebalanceUncleanly(int newPriority) {
     if (_priority != newPriority) {
       _priority = newPriority;
-      _parent?.children.reorder();
     }
-    return LifecycleEventStatus.done;
   }
 
   @mustCallSuper

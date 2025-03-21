@@ -113,6 +113,17 @@ class ComponentTreeRoot extends Component {
   }
 
   void processLifecycleEvents() {
+    // reorder events to process later grouped by parent
+    final reorderEventsByParent = <Component, List<(Component, int)>>{};
+    LifecycleEventStatus handleReorderEvent(
+      Component parent,
+      Component child,
+      int newPriority,
+    ) {
+      (reorderEventsByParent[parent] ??= []).add((child, newPriority));
+      return LifecycleEventStatus.done;
+    }
+
     assert(_blocked.isEmpty);
     var repeatLoop = true;
     while (repeatLoop) {
@@ -131,7 +142,7 @@ class ComponentTreeRoot extends Component {
             child.handleLifecycleEventRemove(parent),
           _LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
           _LifecycleEventKind.rebalance =>
-            child.handleLifecycleEventRebalance(event.newPriority!),
+            handleReorderEvent(parent, child, event.newPriority!),
           _LifecycleEventKind.unknown => LifecycleEventStatus.done,
         };
 
@@ -146,6 +157,14 @@ class ComponentTreeRoot extends Component {
         }
       }
       _blocked.clear();
+    }
+
+    for (final MapEntry(key: parent, value: events)
+        in reorderEventsByParent.entries) {
+      for (final (child, newPriority) in events) {
+        child.handleLifecycleEventRebalanceUncleanly(newPriority);
+      }
+      parent.children.reorder();
     }
 
     if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
