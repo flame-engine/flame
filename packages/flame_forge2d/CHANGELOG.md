@@ -1,3 +1,7 @@
+## 0.18.3
+
+ - **FIX**: Expose event dispatcher classes ([#3532](https://github.com/flame-engine/flame/issues/3532)). ([db8e0b20](https://github.com/flame-engine/flame/commit/db8e0b20746dc96a221dc4e85b09f5a35ecc7339))
+
 ## 0.18.2+7
 
  - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))

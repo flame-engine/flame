@@ -1,3 +1,7 @@
+## 4.1.8
+
+ - Update a dependency to the latest release.
+
 ## 4.1.7
 
  - **FIX**: Use game's asset cache for texture packer ([#3523](https://github.com/flame-engine/flame/issues/3523)). ([835c40fc](https://github.com/flame-engine/flame/commit/835c40fc6bbc81218fe5c7d321a4a81e1853cf85))

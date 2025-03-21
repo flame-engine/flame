@@ -3,6 +3,83 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-03-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.18.3`](#flame_forge2d---v0183)
+ - [`flame` - `v1.26.1`](#flame---v1261)
+ - [`flame_spine` - `v0.2.2+8`](#flame_spine---v0228)
+ - [`flame_behavior_tree` - `v0.1.3+8`](#flame_behavior_tree---v0138)
+ - [`flame_test` - `v1.18.2`](#flame_test---v1182)
+ - [`flame_tiled` - `v2.0.3`](#flame_tiled---v203)
+ - [`flame_oxygen` - `v0.2.3+8`](#flame_oxygen---v0238)
+ - [`flame_isolate` - `v0.6.2+8`](#flame_isolate---v0628)
+ - [`flame_texturepacker` - `v4.1.8`](#flame_texturepacker---v418)
+ - [`flame_sprite_fusion` - `v0.1.3+8`](#flame_sprite_fusion---v0138)
+ - [`flame_fire_atlas` - `v1.8.3`](#flame_fire_atlas---v183)
+ - [`flame_audio` - `v2.11.2`](#flame_audio---v2112)
+ - [`flame_bloc` - `v1.12.9`](#flame_bloc---v1129)
+ - [`flame_kenney_xml` - `v0.1.1+8`](#flame_kenney_xml---v0118)
+ - [`flame_lottie` - `v0.4.2+8`](#flame_lottie---v0428)
+ - [`flame_markdown` - `v0.2.4+1`](#flame_markdown---v0241)
+ - [`flame_console` - `v0.1.2+4`](#flame_console---v0124)
+ - [`flame_rive` - `v1.10.11`](#flame_rive---v11011)
+ - [`flame_noise` - `v0.3.2+8`](#flame_noise---v0328)
+ - [`flame_riverpod` - `v5.4.11`](#flame_riverpod---v5411)
+ - [`flame_svg` - `v1.11.8`](#flame_svg---v1118)
+ - [`flame_network_assets` - `v0.3.3+8`](#flame_network_assets---v0338)
+ - [`flame_3d` - `v0.1.0-dev.8`](#flame_3d---v010-dev8)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+8`
+ - `flame_test` - `v1.18.2`
+ - `flame_tiled` - `v2.0.3`
+ - `flame_oxygen` - `v0.2.3+8`
+ - `flame_isolate` - `v0.6.2+8`
+ - `flame_texturepacker` - `v4.1.8`
+ - `flame_sprite_fusion` - `v0.1.3+8`
+ - `flame_fire_atlas` - `v1.8.3`
+ - `flame_audio` - `v2.11.2`
+ - `flame_bloc` - `v1.12.9`
+ - `flame_kenney_xml` - `v0.1.1+8`
+ - `flame_lottie` - `v0.4.2+8`
+ - `flame_markdown` - `v0.2.4+1`
+ - `flame_console` - `v0.1.2+4`
+ - `flame_rive` - `v1.10.11`
+ - `flame_noise` - `v0.3.2+8`
+ - `flame_riverpod` - `v5.4.11`
+ - `flame_svg` - `v1.11.8`
+ - `flame_network_assets` - `v0.3.3+8`
+ - `flame_3d` - `v0.1.0-dev.8`
+
+---
+
+#### `flame_forge2d` - `v0.18.3`
+
+ - **FIX**: Expose event dispatcher classes ([#3532](https://github.com/flame-engine/flame/issues/3532)). ([db8e0b20](https://github.com/flame-engine/flame/commit/db8e0b20746dc96a221dc4e85b09f5a35ecc7339))
+
+#### `flame` - `v1.26.1`
+
+ - **FIX**: Fix priority rebalancing causing concurrent mutation of component ordered_set ([#3530](https://github.com/flame-engine/flame/issues/3530)). ([c2afe11f](https://github.com/flame-engine/flame/commit/c2afe11f2ce736791a35e77afa5e1ddef0ae7cbb))
+ - **FIX**: Expose event dispatcher classes ([#3532](https://github.com/flame-engine/flame/issues/3532)). ([db8e0b20](https://github.com/flame-engine/flame/commit/db8e0b20746dc96a221dc4e85b09f5a35ecc7339))
+
+#### `flame_spine` - `v0.2.2+8`
+
+ - **FIX**: Bump spine version and update example files ([#3534](https://github.com/flame-engine/flame/issues/3534)). ([f346e3f6](https://github.com/flame-engine/flame/commit/f346e3f67793f2ebece3f11c1f440c5d485bf959))
+
+
 ## 2025-03-13
 
 ### Changes

@@ -1,3 +1,7 @@
+## 2.0.3
+
+ - Update a dependency to the latest release.
+
 ## 2.0.2
 
  - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))

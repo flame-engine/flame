@@ -1,3 +1,7 @@
+## 2.11.2
+
+ - Update a dependency to the latest release.
+
 ## 2.11.1
 
  - **REFACTOR**(flame_audio): Set AudioContext for AudioPool only ([#3511](https://github.com/flame-engine/flame/issues/3511)). ([d5ae35f2](https://github.com/flame-engine/flame/commit/d5ae35f2bbd214159fcb81e2e94e45085bdc2e66))

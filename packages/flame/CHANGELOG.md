@@ -1,3 +1,8 @@
+## 1.26.1
+
+ - **FIX**: Fix priority rebalancing causing concurrent mutation of component ordered_set ([#3530](https://github.com/flame-engine/flame/issues/3530)). ([c2afe11f](https://github.com/flame-engine/flame/commit/c2afe11f2ce736791a35e77afa5e1ddef0ae7cbb))
+ - **FIX**: Expose event dispatcher classes ([#3532](https://github.com/flame-engine/flame/issues/3532)). ([db8e0b20](https://github.com/flame-engine/flame/commit/db8e0b20746dc96a221dc4e85b09f5a35ecc7339))
+
 ## 1.26.0
 
  - **FIX**: RouterComponent should be on top ([#3524](https://github.com/flame-engine/flame/issues/3524)). ([aa52a2a5](https://github.com/flame-engine/flame/commit/aa52a2a58de9661557113c3d6ae5cc760842b1e7))

@@ -1,3 +1,7 @@
+## 0.2.4+1
+
+ - Update a dependency to the latest release.
+
 ## 0.2.4
 
  - **FEAT**: Support custom attributes syntax to allow for multiple styles in the text rendering pipeline ([#3519](https://github.com/flame-engine/flame/issues/3519)). ([fbc58053](https://github.com/flame-engine/flame/commit/fbc58053dd12e6dc62b09cb14e4b438ef7b7f1b2))
