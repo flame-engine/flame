@@ -10,7 +10,6 @@ import 'package:meta/meta.dart';
 /// [PointerMoveCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
 /// [PointerMoveCallbacks] components are mounted into the component tree.
-@internal
 class PointerMoveDispatcher extends Component {
   /// The record of all components currently being hovered.
   final Set<TaggedComponent<PointerMoveCallbacks>> _records = {};
