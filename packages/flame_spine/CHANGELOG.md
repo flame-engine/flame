@@ -1,3 +1,11 @@
+## 0.2.2+8
+
+ - **FIX**: Bump spine version and update example files ([#3534](https://github.com/flame-engine/flame/issues/3534)). ([f346e3f6](https://github.com/flame-engine/flame/commit/f346e3f67793f2ebece3f11c1f440c5d485bf959))
+
+## 0.2.2+7
+
+ - Update a dependency to the latest release.
+
 ## 0.2.2+6
 
  - Update a dependency to the latest release.

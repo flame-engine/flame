@@ -9,14 +9,14 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.25.0
-  flame_rive: ^1.10.9
+  flame: ^1.26.1
+  flame_rive: ^1.10.11
   flutter:
     sdk: flutter
   web: ^1.1.0
 
 dev_dependencies:
-  flame_lint: ^1.2.2
+  flame_lint: ^1.2.3
 
 flutter:
   assets:

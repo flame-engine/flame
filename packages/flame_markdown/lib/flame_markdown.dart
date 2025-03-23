@@ -51,7 +51,20 @@ class FlameMarkdown {
         .map(_castCheck<InlineTextNode>)
         .toList();
     final child = _groupInlineChildren(children);
+
+    final customClassName = element.attributes['class'];
+    if (customClassName != null) {
+      if (element.tag != 'span') {
+        throw Exception(
+          'Invalid markdown structure: '
+          'Only <span> elements can have custom classes',
+        );
+      }
+      return CustomInlineTextNode(child, styleName: customClassName);
+    }
+
     return switch (element.tag) {
+      'span' => child,
       'h1' => HeaderNode(child, level: 1),
       'h2' => HeaderNode(child, level: 2),
       'h3' => HeaderNode(child, level: 3),

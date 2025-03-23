@@ -22,6 +22,7 @@ class DocumentStyle extends FlameTextStyle {
     InlineTextStyle? italicText,
     InlineTextStyle? codeText,
     InlineTextStyle? strikethroughText,
+    Map<String, InlineTextStyle>? customStyles,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -38,6 +39,7 @@ class DocumentStyle extends FlameTextStyle {
           StrikethroughTextNode.defaultStyle,
           strikethroughText,
         ),
+        _customStyles = customStyles,
         _paragraph =
             FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
         _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
@@ -52,6 +54,7 @@ class DocumentStyle extends FlameTextStyle {
   final InlineTextStyle? _italicText;
   final InlineTextStyle? _codeText;
   final InlineTextStyle? _strikethroughText;
+  final Map<String, InlineTextStyle>? _customStyles;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -105,6 +108,10 @@ class DocumentStyle extends FlameTextStyle {
   InlineTextStyle get italicText => _italicText!;
   InlineTextStyle get codeText => _codeText!;
   InlineTextStyle get strikethroughText => _strikethroughText!;
+
+  InlineTextStyle? getCustomStyle(String className) {
+    return _customStyles?[className];
+  }
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;

@@ -28,7 +28,6 @@ class MultiDragDispatcherKey implements ComponentKey {
 /// [DragCallbacks] components in the component tree. It will be attached to
 /// the [FlameGame] instance automatically whenever any [DragCallbacks]
 /// components are mounted into the component tree.
-@internal
 class MultiDragDispatcher extends Component implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};

@@ -8,14 +8,14 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.25.0
-  flame_lottie: ^0.4.2+6
+  flame: ^1.26.1
+  flame_lottie: ^0.4.2+8
   flutter:
     sdk: flutter
   lottie:
 
 dev_dependencies:
-  flame_lint: ^1.2.2
+  flame_lint: ^1.2.3
 
 flutter:
   uses-material-design: true
