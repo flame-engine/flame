@@ -1076,14 +1076,15 @@ void main() {
     late RenderableTiledMap renderableTiledMap;
 
     setUp(() async {
-      Flame.bundle = TestAssetBundle(
+      final bundle = TestAssetBundle(
         imageNames: ['4_color_sprite.png'],
         stringNames: ['deleted_layer_map.tmx'],
       );
       renderableTiledMap = await RenderableTiledMap.fromFile(
         'deleted_layer_map.tmx',
         Vector2.all(16),
-        bundle: Flame.bundle,
+        bundle: bundle,
+        images: Images(bundle: bundle),
       );
     });
 
