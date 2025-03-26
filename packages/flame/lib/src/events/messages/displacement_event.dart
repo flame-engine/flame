@@ -32,24 +32,6 @@ abstract class DisplacementEvent
   });
   final Game _game;
 
-  @Deprecated(
-    'use deviceStartPosition instead; will be removed in version 1.12.0',
-  )
-  late final Vector2 devicePosition = deviceStartPosition;
-
-  @Deprecated(
-    'use canvasStartPosition instead; will be removed in version 1.12.0',
-  )
-  late final Vector2 canvasPosition = canvasStartPosition;
-
-  @Deprecated(
-    'use localStartPosition instead; will be removed in version 1.12.0',
-  )
-  Vector2 get localPosition => localStartPosition;
-
-  @Deprecated('use localDelta instead; will be removed in version 1.12.0')
-  Vector2 get delta => localDelta;
-
   /// Event start position in the coordinate space of the device -- either the
   /// phone, or the browser window, or the app.
   ///
