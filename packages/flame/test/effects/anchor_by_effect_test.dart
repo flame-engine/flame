@@ -18,8 +18,8 @@ void main() {
         AnchorEffect.by(Vector2(0.3, 0.5), EffectController(duration: 1)),
       );
       for (var t = 0.0; t <= 1.0; t += 0.1) {
-        expect(component.anchor.x, closeTo(0.5 + 0.3 * t, 1e-15));
-        expect(component.anchor.y, closeTo(0.5 + 0.5 * t, 1e-15));
+        expect(component.anchor.x, closeTo(0.5 + 0.3 * t, 1e-7));
+        expect(component.anchor.y, closeTo(0.5 + 0.5 * t, 1e-7));
         game.update(0.1);
       }
     });
@@ -37,8 +37,8 @@ void main() {
       await game.ready();
 
       for (var t = 0.0; t <= 1.0; t += 0.1) {
-        expect(component.anchor.x, closeTo(0.5 - 0.2 * t, 1e-15));
-        expect(component.anchor.y, closeTo(0.0 + 0.6 * t, 1e-15));
+        expect(component.anchor.x, closeTo(0.5 - 0.2 * t, 1e-7));
+        expect(component.anchor.y, closeTo(0.0 + 0.6 * t, 1e-7));
         game.update(0.1);
       }
     });

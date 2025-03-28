@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// This class describes a generic 2D transform, which is a combination of
 /// translations, rotations, reflections and scaling. These transforms are

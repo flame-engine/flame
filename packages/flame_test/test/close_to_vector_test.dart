@@ -1,6 +1,6 @@
 import 'package:flame_test/src/close_to_vector.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
   group('closeToVector', () {
