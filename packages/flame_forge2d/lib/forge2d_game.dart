@@ -8,8 +8,6 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   Forge2DGame({
     Forge2DWorld? world,
     CameraComponent? camera,
-    @Deprecated('Use the `camera` argument instead')
-    CameraComponent? cameraComponent,
     Vector2? gravity,
     ContactListener? contactListener,
     double zoom = 10,
@@ -19,8 +17,7 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
                 gravity: gravity,
                 contactListener: contactListener,
               )) as T,
-          camera: (camera ?? cameraComponent ?? CameraComponent())
-            ..viewfinder.zoom = zoom,
+          camera: (camera ?? CameraComponent())..viewfinder.zoom = zoom,
         );
 
   /// Takes a point in world coordinates and returns it in screen coordinates.
