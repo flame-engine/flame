@@ -8,7 +8,7 @@ class LessOrEqual extends BoolExpression {
   final NumExpression _lhs;
   final NumExpression _rhs;
 
-  /// Static constructor, used by <parser.dart>
+  /// Static constructor, used by parse.dart
   factory LessOrEqual.make(
     Expression lhs,
     Expression rhs,

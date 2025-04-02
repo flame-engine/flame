@@ -9,7 +9,7 @@ class Divide extends NumExpression {
   final NumExpression _lhs;
   final NumExpression _rhs;
 
-  /// Static constructor, used by <parser.dart>
+  /// Static constructor, used by parse.dart
   factory Divide.make(
     Expression lhs,
     Expression rhs,
