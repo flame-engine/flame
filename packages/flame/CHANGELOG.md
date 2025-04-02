@@ -1,3 +1,9 @@
+## 1.27.0
+
+ - **FIX**: Remove outdated deprecations ([#3541](https://github.com/flame-engine/flame/issues/3541)). ([b918e40d](https://github.com/flame-engine/flame/commit/b918e40d0ce14b89ba9b5c82aed8ff51d6f549c3))
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+ - **FEAT**: The `FunctionEffect`, run any function as an `Effect` ([#3537](https://github.com/flame-engine/flame/issues/3537)). ([f4ac1ec6](https://github.com/flame-engine/flame/commit/f4ac1ec63a22b7a7d0c17d7119787f3ce2acadc1))
+
 ## 1.26.1
 
  - **FIX**: Fix priority rebalancing causing concurrent mutation of component ordered_set ([#3530](https://github.com/flame-engine/flame/issues/3530)). ([c2afe11f](https://github.com/flame-engine/flame/commit/c2afe11f2ce736791a35e77afa5e1ddef0ae7cbb))

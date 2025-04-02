@@ -1,3 +1,7 @@
+## 1.10.12
+
+ - **FIX**: Bump Rive version and skip tests ([#3544](https://github.com/flame-engine/flame/issues/3544)). ([a3a7dd51](https://github.com/flame-engine/flame/commit/a3a7dd51faee57d74e89fbc29e7581ed44459832))
+
 ## 1.10.11
 
  - Update a dependency to the latest release.

@@ -3,6 +3,105 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_tiled` - `v3.0.0`](#flame_tiled---v300)
+
+Packages with other changes:
+
+ - [`jenny` - `v1.3.3`](#jenny---v133)
+ - [`flame` - `v1.27.0`](#flame---v1270)
+ - [`flame_3d` - `v0.1.0-dev.9`](#flame_3d---v010-dev9)
+ - [`flame_forge2d` - `v0.18.3+1`](#flame_forge2d---v01831)
+ - [`flame_isolate` - `v0.6.2+9`](#flame_isolate---v0629)
+ - [`flame_lint` - `v1.3.0`](#flame_lint---v130)
+ - [`flame_rive` - `v1.10.12`](#flame_rive---v11012)
+ - [`flame_texturepacker` - `v4.1.9`](#flame_texturepacker---v419)
+ - [`flame_behavior_tree` - `v0.1.3+9`](#flame_behavior_tree---v0139)
+ - [`flame_test` - `v1.18.3`](#flame_test---v1183)
+ - [`flame_oxygen` - `v0.2.3+9`](#flame_oxygen---v0239)
+ - [`flame_sprite_fusion` - `v0.1.3+9`](#flame_sprite_fusion---v0139)
+ - [`flame_fire_atlas` - `v1.8.4`](#flame_fire_atlas---v184)
+ - [`flame_audio` - `v2.11.3`](#flame_audio---v2113)
+ - [`flame_spine` - `v0.2.2+9`](#flame_spine---v0229)
+ - [`flame_bloc` - `v1.12.10`](#flame_bloc---v11210)
+ - [`flame_kenney_xml` - `v0.1.1+9`](#flame_kenney_xml---v0119)
+ - [`flame_lottie` - `v0.4.2+9`](#flame_lottie---v0429)
+ - [`flame_markdown` - `v0.2.4+2`](#flame_markdown---v0242)
+ - [`flame_console` - `v0.1.2+5`](#flame_console---v0125)
+ - [`flame_noise` - `v0.3.2+9`](#flame_noise---v0329)
+ - [`flame_riverpod` - `v5.4.12`](#flame_riverpod---v5412)
+ - [`flame_svg` - `v1.11.9`](#flame_svg---v1119)
+ - [`flame_network_assets` - `v0.3.3+9`](#flame_network_assets---v0339)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+9`
+ - `flame_test` - `v1.18.3`
+ - `flame_oxygen` - `v0.2.3+9`
+ - `flame_sprite_fusion` - `v0.1.3+9`
+ - `flame_fire_atlas` - `v1.8.4`
+ - `flame_audio` - `v2.11.3`
+ - `flame_spine` - `v0.2.2+9`
+ - `flame_bloc` - `v1.12.10`
+ - `flame_kenney_xml` - `v0.1.1+9`
+ - `flame_lottie` - `v0.4.2+9`
+ - `flame_markdown` - `v0.2.4+2`
+ - `flame_console` - `v0.1.2+5`
+ - `flame_noise` - `v0.3.2+9`
+ - `flame_riverpod` - `v5.4.12`
+ - `flame_svg` - `v1.11.9`
+ - `flame_network_assets` - `v0.3.3+9`
+
+---
+
+#### `flame_tiled` - `v3.0.0`
+
+ - **BREAKING** **FIX**: Add APIs to get TileData by layer index ([#3539](https://github.com/flame-engine/flame/issues/3539)). ([4676b1b7](https://github.com/flame-engine/flame/commit/4676b1b7a5aefe7a958de55b1d209e554c9b02a6))
+
+#### `jenny` - `v1.3.3`
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
+#### `flame` - `v1.27.0`
+
+ - **FIX**: Remove outdated deprecations ([#3541](https://github.com/flame-engine/flame/issues/3541)). ([b918e40d](https://github.com/flame-engine/flame/commit/b918e40d0ce14b89ba9b5c82aed8ff51d6f549c3))
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+ - **FEAT**: The `FunctionEffect`, run any function as an `Effect` ([#3537](https://github.com/flame-engine/flame/issues/3537)). ([f4ac1ec6](https://github.com/flame-engine/flame/commit/f4ac1ec63a22b7a7d0c17d7119787f3ce2acadc1))
+
+#### `flame_3d` - `v0.1.0-dev.9`
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
+#### `flame_forge2d` - `v0.18.3+1`
+
+ - **FIX**: Remove outdated deprecations ([#3541](https://github.com/flame-engine/flame/issues/3541)). ([b918e40d](https://github.com/flame-engine/flame/commit/b918e40d0ce14b89ba9b5c82aed8ff51d6f549c3))
+
+#### `flame_isolate` - `v0.6.2+9`
+
+ - **FIX**: Remove outdated deprecations ([#3541](https://github.com/flame-engine/flame/issues/3541)). ([b918e40d](https://github.com/flame-engine/flame/commit/b918e40d0ce14b89ba9b5c82aed8ff51d6f549c3))
+
+#### `flame_lint` - `v1.3.0`
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
+#### `flame_rive` - `v1.10.12`
+
+ - **FIX**: Bump Rive version and skip tests ([#3544](https://github.com/flame-engine/flame/issues/3544)). ([a3a7dd51](https://github.com/flame-engine/flame/commit/a3a7dd51faee57d74e89fbc29e7581ed44459832))
+
+#### `flame_texturepacker` - `v4.1.9`
+
+ - **FIX**: Remove outdated deprecations ([#3541](https://github.com/flame-engine/flame/issues/3541)). ([b918e40d](https://github.com/flame-engine/flame/commit/b918e40d0ce14b89ba9b5c82aed8ff51d6f549c3))
+
+
 ## 2025-03-21
 
 ### Changes

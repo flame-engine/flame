@@ -1,3 +1,7 @@
+## 4.1.9
+
+ - **FIX**: Remove outdated deprecations ([#3541](https://github.com/flame-engine/flame/issues/3541)). ([b918e40d](https://github.com/flame-engine/flame/commit/b918e40d0ce14b89ba9b5c82aed8ff51d6f549c3))
+
 ## 4.1.8
 
  - Update a dependency to the latest release.

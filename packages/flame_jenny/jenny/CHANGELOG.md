@@ -1,3 +1,7 @@
+## 1.3.3
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
 ## 1.3.2
 
  - **FIX**: Fix analyze issue on main ([#3265](https://github.com/flame-engine/flame/issues/3265)). ([f60b6e13](https://github.com/flame-engine/flame/commit/f60b6e134177495bcfd0f405a50f9e0e666b8b42))
