@@ -12,7 +12,7 @@ class BoolFn extends BoolExpression {
 
   final Expression _arg;
 
-  /// Static constructor to be used in <parse.dart>.
+  /// Static constructor to be used in parse.dart.
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

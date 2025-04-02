@@ -8,7 +8,7 @@ class LessThan extends BoolExpression {
   final NumExpression _lhs;
   final NumExpression _rhs;
 
-  /// Static constructor, used by <parser.dart>
+  /// Static constructor, used by parse.dart
   factory LessThan.make(
     Expression lhs,
     Expression rhs,

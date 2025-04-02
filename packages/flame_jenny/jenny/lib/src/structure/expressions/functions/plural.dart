@@ -9,7 +9,7 @@ class PluralFn extends StringExpression {
   final List<StringExpression> _words;
   final YarnProject _yarn;
 
-  /// Static constructor, used by <parse.dart>.
+  /// Static constructor, used by parse.dart.
   static Expression make(
     List<FunctionArgument> arguments,
     YarnProject yarnProject,

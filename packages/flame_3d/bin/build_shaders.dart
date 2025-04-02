@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Bundle a shader (<name>.frag & <name>.vert) into a single shader bundle and
+/// Bundle a shader ('name'.frag & 'name'.vert) into a single shader bundle and
 /// store it in the assets directory.
 ///
 /// This script is just a temporary way to bundle shaders. In the long run
