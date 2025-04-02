@@ -10,144 +10,149 @@ import 'package:flutter_test/flutter_test.dart';
 import 'utils.dart';
 
 void main() {
-  group('RiveComponents', () {
-    late FutureOr<RiveFile> riveFile;
+  group(
+    'RiveComponents',
+    // Skip tests until https://github.com/rive-app/rive-flutter/issues/354 is solved
+    skip: true,
+    () {
+      late FutureOr<RiveFile> riveFile;
 
-    setUpAll(() {
-      riveFile = RiveFile.import(loadFile('assets/skills.riv'));
-    });
-
-    group('loadArtboard', () {
-      test('Load mainArtboard by default', () async {
-        final artboard = await loadArtboard(riveFile);
-        final tempFile = await riveFile;
-        expect(artboard.name, tempFile.mainArtboard.name);
+      setUpAll(() {
+        riveFile = RiveFile.import(loadFile('assets/skills.riv'));
       });
 
-      test('Load the Specified Artboard', () async {
-        const artboardName = 'New Artboard';
-        final artboard = await loadArtboard(
-          riveFile,
-          artboardName: artboardName,
-        );
-        expect(artboard.name, artboardName);
-      });
+      group('loadArtboard', () {
+        test('Load mainArtboard by default', () async {
+          final artboard = await loadArtboard(riveFile);
+          final tempFile = await riveFile;
+          expect(artboard.name, tempFile.mainArtboard.name);
+        });
 
-      test('Load an artboard that does not exist', () {
-        expect(
-          () => loadArtboard(
+        test('Load the Specified Artboard', () async {
+          const artboardName = 'New Artboard';
+          final artboard = await loadArtboard(
             riveFile,
-            artboardName: 'Empty',
-          ),
-          throwsA(isA<AssertionError>()),
-        );
-      });
-    });
-
-    group('RiveComponent', () {
-      testWithFlameGame('Can Add to FlameGame', (game) async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = _RiveComponent(artboard: skillsArtboard);
-
-        game.add(riveComponent);
-        await game.ready();
-
-        expect(riveComponent.parent, game);
-      });
-
-      testWithFlameGame(
-        'Can Add with TapCallbacks',
-        (game) async {
-          final child = _RiveComponentWithTappable(
-            artboard: await loadArtboard(riveFile),
+            artboardName: artboardName,
           );
-          await game.ensureAdd(child);
+          expect(artboard.name, artboardName);
+        });
+
+        test('Load an artboard that does not exist', () {
+          expect(
+            () => loadArtboard(
+              riveFile,
+              artboardName: 'Empty',
+            ),
+            throwsA(isA<AssertionError>()),
+          );
+        });
+      });
+
+      group('RiveComponent', () {
+        testWithFlameGame('Can Add to FlameGame', (game) async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = _RiveComponent(artboard: skillsArtboard);
+
+          game.add(riveComponent);
           await game.ready();
 
-          expect(child.parent, game);
-        },
-      );
-    });
+          expect(riveComponent.parent, game);
+        });
 
-    group('RiveAnimation', () {
-      testWithFlameGame('Does not Animate when no controller is attach',
+        testWithFlameGame(
+          'Can Add with TapCallbacks',
           (game) async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = _RiveComponent(artboard: skillsArtboard);
+            final child = _RiveComponentWithTappable(
+              artboard: await loadArtboard(riveFile),
+            );
+            await game.ensureAdd(child);
+            await game.ready();
 
-        game.add(riveComponent);
-        await game.ready();
-
-        // Check if the current artboard has animation
-        expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
-        // Check if this artboard is attach to any RiveAnimationController
-        expect(riveComponent.artboard.animationControllers.isEmpty, isTrue);
-      });
-
-      testWithFlameGame('Animate when controller is attach', (game) async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = _RiveComponentWithAnimation(
-          artboard: skillsArtboard,
-        );
-
-        game.add(riveComponent);
-        await game.ready();
-
-        // Check if this artboard has animation
-        expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
-        // Check if this artboard is attach to any RiveAnimationController
-        expect(riveComponent.artboard.animationControllers.isEmpty, isFalse);
-        // Check if the attach RiveAnimationController is active
-        expect(
-          riveComponent.artboard.animationControllers.first.isActive,
-          isTrue,
+            expect(child.parent, game);
+          },
         );
       });
-    });
 
-    group('Antialiasing', () {
-      test('Default value', () async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = RiveComponent(
-          artboard: skillsArtboard,
-        );
+      group('RiveAnimation', () {
+        testWithFlameGame('Does not Animate when no controller is attach',
+            (game) async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = _RiveComponent(artboard: skillsArtboard);
 
-        expect(riveComponent.artboard.antialiasing, isTrue);
+          game.add(riveComponent);
+          await game.ready();
+
+          // Check if the current artboard has animation
+          expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
+          // Check if this artboard is attach to any RiveAnimationController
+          expect(riveComponent.artboard.animationControllers.isEmpty, isTrue);
+        });
+
+        testWithFlameGame('Animate when controller is attach', (game) async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = _RiveComponentWithAnimation(
+            artboard: skillsArtboard,
+          );
+
+          game.add(riveComponent);
+          await game.ready();
+
+          // Check if this artboard has animation
+          expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
+          // Check if this artboard is attach to any RiveAnimationController
+          expect(riveComponent.artboard.animationControllers.isEmpty, isFalse);
+          // Check if the attach RiveAnimationController is active
+          expect(
+            riveComponent.artboard.animationControllers.first.isActive,
+            isTrue,
+          );
+        });
       });
 
-      test('Can change to false', () async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = RiveComponent(
-          artboard: skillsArtboard,
-          antialiasing: false,
-        );
+      group('Antialiasing', () {
+        test('Default value', () async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = RiveComponent(
+            artboard: skillsArtboard,
+          );
 
-        expect(riveComponent.artboard.antialiasing, isFalse);
+          expect(riveComponent.artboard.antialiasing, isTrue);
+        });
+
+        test('Can change to false', () async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = RiveComponent(
+            artboard: skillsArtboard,
+            antialiasing: false,
+          );
+
+          expect(riveComponent.artboard.antialiasing, isFalse);
+        });
       });
-    });
 
-    group('Component size', () {
-      test('use specific size', () async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = RiveComponent(
-          artboard: skillsArtboard,
-          size: Vector2.all(250.0),
-        );
+      group('Component size', () {
+        test('use specific size', () async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = RiveComponent(
+            artboard: skillsArtboard,
+            size: Vector2.all(250.0),
+          );
 
-        expect(riveComponent.size, Vector2.all(250.0));
+          expect(riveComponent.size, Vector2.all(250.0));
+        });
+
+        test('default value (ArtboardSize)', () async {
+          final skillsArtboard = await loadArtboard(riveFile);
+          final riveComponent = RiveComponent(artboard: skillsArtboard);
+
+          expect(
+            riveComponent.size,
+            Vector2(skillsArtboard.width, skillsArtboard.height),
+          );
+        });
       });
-
-      test('default value (ArtboardSize)', () async {
-        final skillsArtboard = await loadArtboard(riveFile);
-        final riveComponent = RiveComponent(artboard: skillsArtboard);
-
-        expect(
-          riveComponent.size,
-          Vector2(skillsArtboard.width, skillsArtboard.height),
-        );
-      });
-    });
-  });
+    },
+  );
 }
 
 class _RiveComponent extends RiveComponent {
