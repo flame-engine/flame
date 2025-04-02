@@ -1,3 +1,7 @@
+## 0.1.0-dev.9
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
 ## 0.1.0-dev.8
 
  - Update a dependency to the latest release.
