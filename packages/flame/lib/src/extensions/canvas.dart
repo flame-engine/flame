@@ -1,6 +1,8 @@
+import 'dart:typed_data' show Float32List;
 import 'dart:ui';
 
 import 'package:flame/palette.dart';
+import 'package:flame/src/cache/matrix_pool.dart' show canvasTransform;
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 
@@ -59,6 +61,10 @@ extension CanvasExtension on Canvas {
 
   /// Use the [Transform2D] object to [transform] the canvas.
   void transform2D(Transform2D transform2D) {
-    transform(transform2D.transformMatrix.storage);
+    transform32(transform2D.transformMatrix.storage);
+  }
+
+  void transform32(Float32List matrix4) {
+    canvasTransform(this, matrix4);
   }
 }

@@ -137,16 +137,22 @@ void main() {
             final expectedGap =
                 (mainAxis(layoutComponentSize) - occupiedSpace) / 3;
             expect(layoutComponent.gap, expectedGap);
-            expect(mainAxis(circle.position), expectedGap / 2);
+            expect(mainAxis(circle.position), closeTo(expectedGap / 2, 1e-4));
             expect(
               mainAxis(rectangle.position),
-              mainAxis(circle.position) + mainAxis(circle.size) + expectedGap,
+              closeTo(
+                mainAxis(circle.position) + mainAxis(circle.size) + expectedGap,
+                1e-4,
+              ),
             );
             expect(
               mainAxis(text.position),
-              mainAxis(rectangle.position) +
-                  mainAxis(rectangle.size) +
-                  expectedGap,
+              closeTo(
+                mainAxis(rectangle.position) +
+                    mainAxis(rectangle.size) +
+                    expectedGap,
+                1e-4,
+              ),
             );
           },
           'mainAxisAlignment = spaceEvenly': (game, direction) async {

@@ -126,11 +126,11 @@ void main() {
         for (var t = 0.0; t < 1.0; t += 0.1) {
           expect(
             camera.viewfinder.position,
-            closeToVector(Vector2(5 * t, 13 * t), 1e-14),
+            closeToVector(Vector2(5 * t, 13 * t), 1e-6),
           );
           expect(
             camera.viewport.position,
-            closeToVector(Vector2(40 * t, -77 * t), 1e-12),
+            closeToVector(Vector2(40 * t, -77 * t), 1e-5),
           );
           game.update(0.1);
         }
@@ -174,7 +174,7 @@ void main() {
         await game.ready();
 
         for (var t = 0.0; t < 1.0; t += 0.1) {
-          expect(camera.viewfinder.zoom, closeTo(1 + t, 1e-14));
+          expect(camera.viewfinder.zoom, closeTo(1 + t, 1e-6));
           game.update(0.1);
         }
       },

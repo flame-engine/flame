@@ -10,8 +10,16 @@ void main() {
       final size = Size(r.nextDouble(), r.nextDouble());
       final vector2 = size.toVector2();
 
-      expect(vector2.x, size.width, reason: 'x width does not match');
-      expect(vector2.y, size.height, reason: 'y height does not match');
+      expect(
+        vector2.x,
+        closeTo(size.width, 1e-6),
+        reason: 'x width does not match',
+      );
+      expect(
+        vector2.y,
+        closeTo(size.height, 1e-6),
+        reason: 'y height does not match',
+      );
     });
 
     testRandom('toOffset has dx to size.width and dy to size.dy', (Random r) {
