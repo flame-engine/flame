@@ -18,7 +18,8 @@ class SvgComponent extends PositionComponent with HasPaint {
     Paint? paint,
     super.key,
   }) : _svg = svg {
-    this.paint = paint ?? this.paint;
+    this.paint = paint ?? this.paint
+      ..filterQuality = FilterQuality.medium;
   }
 
   /// The wrapped instance of [Svg].
