@@ -231,6 +231,24 @@ void main() {
       expect(renderEvents, ['render:another', 'render:parent']);
     });
   });
+
+  testWithFlameGame(
+    'changing priority dependent on previous value in the same tick',
+    (game) async {
+      final component = _PriorityComponent(0);
+      component.priority = 1;
+      expect(component.priority, 1);
+      component.priority++;
+      expect(component.priority, 2);
+      await game.ensureAdd(component);
+      expect(component.priority, 2);
+      component.priority++;
+      component.priority++;
+      expect(component.priority, 4);
+      game.update(0);
+      expect(component.priority, 4);
+    },
+  );
 }
 
 class _SpyComponentSet extends ComponentSet {

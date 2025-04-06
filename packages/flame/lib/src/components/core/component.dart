@@ -815,13 +815,16 @@ class Component {
   /// Note that setting the priority is relatively expensive if the component is
   /// already added to a component tree since all siblings have to be re-added
   /// to the parent.
-  int get priority => _priority;
+  int get priority => _scheduledPriority ?? _priority;
+  int? _scheduledPriority;
   int _priority;
   set priority(int newPriority) {
-    if (_priority != newPriority) {
+    if ((_scheduledPriority == null && _priority != newPriority) ||
+        (_scheduledPriority != null && _scheduledPriority != newPriority)) {
       final parent = _parent;
       final game = findGame();
       if (game != null && parent != null) {
+        _scheduledPriority = newPriority;
         game.enqueuePriorityChange(parent, this, newPriority);
       } else {
         _priority = newPriority;
@@ -887,6 +890,7 @@ class Component {
     if (_priority != newPriority) {
       _priority = newPriority;
     }
+    _scheduledPriority = null;
   }
 
   @mustCallSuper
