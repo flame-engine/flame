@@ -1021,14 +1021,15 @@ void main() {
       testWithFlameGame(
         'rebalance is queued',
         (game) async {
-          final c = Component();
-          await game.world.add(c);
+          final c1 = Component();
+          final c2 = Component();
+          await game.world.ensureAddAll([c1, c2]);
 
-          c.priority = 10;
-          expect(c.priority, 0);
+          c1.priority = 10;
+          expect(game.world.children.first, c1);
 
           await game.ready();
-          expect(c.priority, 10);
+          expect(game.world.children.first, c2);
         },
       );
 
