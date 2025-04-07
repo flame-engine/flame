@@ -88,7 +88,7 @@ class TexturePackerAtlas {
     String path, {
     bool fromStorage = false,
     Images? images,
-    String assetsPrefix = 'images/',
+    String assetsPrefix = 'images',
   }) async {
     if (fromStorage) {
       return _fromStorage(path, images: images);
