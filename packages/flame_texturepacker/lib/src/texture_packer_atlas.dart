@@ -58,7 +58,7 @@ class TexturePackerAtlas {
     Images? images,
     bool fromStorage = false,
     bool useOriginalSize = true,
-    String assetsPrefix = 'images/',
+    String assetsPrefix = 'images',
     List<String> whiteList = const [],
   }) async {
     final TextureAtlasData atlasData;
@@ -73,10 +73,10 @@ class TexturePackerAtlas {
       );
     }
 
-    return TexturePackerAtlas(
-      atlasData.regions
-          .map((e) => TexturePackerSprite(e, useOriginalSize: useOriginalSize))
-          .toList(),
+    return TexturePackerAtlas.fromAtlas(
+      atlasData,
+      whiteList: whiteList,
+      useOriginalSize: useOriginalSize,
     );
   }
 
