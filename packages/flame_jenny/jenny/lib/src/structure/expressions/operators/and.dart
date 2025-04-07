@@ -11,7 +11,7 @@ class And extends BoolExpression {
   final BoolExpression _lhs;
   final BoolExpression _rhs;
 
-  /// Static constructor, used by <parse.dart>.
+  /// Static constructor, used by parse.dart.
   factory And.make(
     Expression lhs,
     Expression rhs,

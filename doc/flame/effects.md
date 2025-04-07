@@ -544,7 +544,7 @@ final effect = RemoveEffect(delay: 3.0);
 ```
 
 
-## ColorEffect
+### ColorEffect
 
 This effect will change the base color of the paint, causing the rendered component to be tinted by
 the provided color between a provided range.

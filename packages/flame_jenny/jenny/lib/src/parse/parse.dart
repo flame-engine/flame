@@ -433,8 +433,8 @@ class _Parser {
     }
   }
 
-  /// Parses the <<if>> command, and the subsequent <<elseif>>, <<else>>, up to
-  /// and including the <<endif>>.
+  /// Parses the `<<if>>` command, and the subsequent `<<elseif>>`, `<<else>>`,
+  /// up to and including the `<<endif>>`.
   Command parseCommandIf() {
     final parts = <IfBlock>[];
     parts.add(parseCommandIfBlock('if'));

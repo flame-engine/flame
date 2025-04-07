@@ -24,7 +24,7 @@ typedef BinaryOperatorBuilder = Expression Function(
 );
 
 /// Static constructor of expressions involving binary operators. Used by
-/// <parser.dart>.
+/// parse.dart.
 Expression makeBinaryOpExpression(
   Token operator,
   Expression lhs,
