@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flame/text.dart';
+import 'package:flame_markdown/custom_attribute_syntax.dart';
 import 'package:flame_markdown/flame_markdown.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown/markdown.dart';
@@ -299,6 +300,10 @@ void main() {
                 (node) => _expectPlain(node, '.'),
               ]);
             }),
+        // note: custom attribute is only parsed if enabled
+        (node) => _expectParagraph(node, (p) {
+              _expectPlain(p, '[- by Robert Frost]{.author}');
+            }),
       ]);
     });
 
@@ -322,6 +327,93 @@ void main() {
                 (node) => _expectPlain(node, ' is a great game engine!'),
               ]);
             }),
+      ]);
+    });
+
+    test('custom attributes can be enabled', () {
+      const markdown =
+          'This one will be [red]{.red} and this one will be [blue]{.blue}.';
+      final doc = FlameMarkdown.toDocument(
+        markdown,
+        document: Document(
+          encodeHtml: false,
+          inlineSyntaxes: [
+            CustomAttributeSyntax(),
+          ],
+        ),
+      );
+
+      _expectDocument(doc, [
+        (node) => _expectParagraph(node, (p) {
+              _expectGroup(p, [
+                (node) => _expectPlain(node, 'This one will be '),
+                (node) => _expectCustom(node, 'red', styleName: 'red'),
+                (node) => _expectPlain(node, ' and this one will be '),
+                (node) => _expectCustom(node, 'blue', styleName: 'blue'),
+                (node) => _expectPlain(node, '.'),
+              ]);
+            }),
+      ]);
+
+      final element = doc.format(
+        DocumentStyle(
+          width: 1000,
+          text: InlineTextStyle(
+            fontSize: 12,
+          ),
+          customStyles: {
+            'red': InlineTextStyle(
+              color: const Color(0xFFFF0000),
+            ),
+            'blue': InlineTextStyle(
+              color: const Color(0xFF0000FF),
+            ),
+          },
+        ),
+      );
+
+      _expectElementGroup(element, [
+        (el) => _expectElementGroup(el, [
+              (el) => _expectElementGroupText(el, [
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'This one will be ',
+                          const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'red',
+                          const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFFFF0000),
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          ' and this one will be ',
+                          const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          'blue',
+                          const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF0000FF),
+                          ),
+                        ),
+                    (el) => _expectElementTextPainter(
+                          el,
+                          '.',
+                          const TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
+                  ]),
+            ]),
       ]);
     });
   });
@@ -372,6 +464,18 @@ void _expectPlain(InlineTextNode node, String text) {
   expect(node, isA<PlainTextNode>());
   final span = node as PlainTextNode;
   expect(span.text, text);
+}
+
+void _expectCustom(
+  InlineTextNode node,
+  String text, {
+  required String styleName,
+}) {
+  expect(node, isA<CustomInlineTextNode>());
+  final custom = node as CustomInlineTextNode;
+  expect(custom.child, isA<PlainTextNode>());
+  expect((custom.child as PlainTextNode).text, text);
+  expect(custom.styleName, styleName);
 }
 
 void _expectCode(InlineTextNode node, String text) {

@@ -1,7 +1,7 @@
 name: flame_lint
 resolution: workspace
 description: Flame lint package
-version: 1.2.2
+version: 1.3.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
 funding:
   - https://opencollective.com/blue-fire
@@ -15,7 +15,7 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  lints: ^4.0.0
+  lints: ^5.1.1
 
 dev_dependencies:
   dartdoc: ^8.0.8

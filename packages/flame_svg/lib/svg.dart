@@ -9,23 +9,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 /// A [Svg] to be rendered on a Flame [Game].
 class Svg {
-  /// The [PictureInfo] that this [Svg] represents.
-  final PictureInfo pictureInfo;
-
-  /// The pixel ratio that this [Svg] is rendered based on.
-  final double pixelRatio;
-
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
   Svg(this.pictureInfo, {double? pixelRatio})
       : pixelRatio = pixelRatio ??
             PlatformDispatcher.instance.views.first.devicePixelRatio;
 
+  /// The [PictureInfo] that this [Svg] represents.
+  final PictureInfo pictureInfo;
+
+  /// The pixel ratio that this [Svg] is rendered based on.
+  final double pixelRatio;
+
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
   final _paint = Paint()..filterQuality = FilterQuality.medium;
-
-  final List<Size> _lock = [];
 
   /// Loads an [Svg] with the received [cache]. When no [cache] is provided,
   /// the global [Flame.assets] is used.
@@ -36,11 +34,7 @@ class Svg {
   }) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName);
-    final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
-    return Svg(
-      pictureInfo,
-      pixelRatio: pixelRatio,
-    );
+    return Svg.loadFromString(svgString, pixelRatio: pixelRatio);
   }
 
   /// Loads an [Svg] from a string.
@@ -64,15 +58,11 @@ class Svg {
     final localSize = size.toSize();
     final image = _getImage(localSize);
 
-    if (image != null) {
-      canvas.save();
-      canvas.scale(1 / pixelRatio);
-      final drawPaint = overridePaint ?? _paint;
-      canvas.drawImage(image, Offset.zero, drawPaint);
-      canvas.restore();
-    } else {
-      _render(canvas, localSize);
-    }
+    canvas.save();
+    canvas.scale(1 / pixelRatio);
+    final drawPaint = overridePaint ?? _paint;
+    canvas.drawImage(image, Offset.zero, drawPaint);
+    canvas.restore();
   }
 
   /// Renders the svg on the [canvas] on the given [position] using the
@@ -85,25 +75,22 @@ class Svg {
     canvas.renderAt(position, (c) => render(c, size));
   }
 
-  Image? _getImage(Size size) {
+  Image _getImage(Size size) {
     final image = _imageCache.getValue(size);
 
-    if (image == null && !_lock.contains(size)) {
-      _lock.add(size);
+    if (image == null) {
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
       canvas.scale(pixelRatio);
       _render(canvas, size);
       final picture = recorder.endRecording();
-      picture
-          .toImageSafe(
+      final image = picture.toImageSync(
         (size.width * pixelRatio).ceil(),
         (size.height * pixelRatio).ceil(),
-      )
-          .then((image) {
-        _imageCache.setValue(size, image);
-        _lock.remove(size);
-      });
+      );
+      picture.dispose();
+      _imageCache.setValue(size, image);
+      return image;
     }
 
     return image;

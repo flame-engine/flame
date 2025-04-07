@@ -55,10 +55,11 @@ class TexturePackerAtlas {
   /// is recommended for a smooth result.
   static Future<TexturePackerAtlas> load(
     String path, {
-    Images? images,
     bool fromStorage = false,
     bool useOriginalSize = true,
+    Images? images,
     String assetsPrefix = 'images',
+    AssetsCache? assets,
     List<String> whiteList = const [],
   }) async {
     final TextureAtlasData atlasData;
@@ -69,6 +70,7 @@ class TexturePackerAtlas {
       atlasData = await _fromAssets(
         path,
         images: images,
+        assets: assets,
         assetsPrefix: assetsPrefix,
       );
     }
@@ -128,12 +130,14 @@ Future<TextureAtlasData> _fromAssets(
   String path, {
   required String assetsPrefix,
   Images? images,
+  AssetsCache? assets,
 }) async {
   try {
     return await _parse(
       path,
       fromStorage: false,
       images: images,
+      assets: assets,
       assetsPrefix: assetsPrefix,
     );
   } on Exception catch (e, stack) {
@@ -175,6 +179,7 @@ Future<TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
   Images? images,
+  AssetsCache? assets,
   String? assetsPrefix,
 }) async {
   final pages = <Page>[];
@@ -188,7 +193,8 @@ Future<TextureAtlasData> _parse(
       assetsPrefix != null,
       'When reading from storage, the assetsPrefix needs to be provided.',
     );
-    fileAsString = await Flame.assets.readFile('$assetsPrefix/$path');
+    fileAsString =
+        await (assets ?? Flame.assets).readFile('$assetsPrefix/$path');
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;

@@ -4,13 +4,14 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/rendering.dart';
+import 'package:flutter/material.dart' show Colors;
 import 'package:flutter/rendering.dart';
 
 class RouterWorldExample extends FlameGame {
   static const description = '''
-  This example shows how to use the RouterComponent to navigate between
-  different worlds and pages.
-  ''';
+This example shows how to use the RouterComponent to navigate between
+different worlds and pages.
+''';
 
   late final RouterComponent router;
 
@@ -328,52 +329,55 @@ class Level2Page extends DecoratedWorld with HasGameReference {
   }
 }
 
-class Planet extends PositionComponent {
+class Planet extends CircleComponent
+    with TapCallbacks, HasGameReference<RouterWorldExample> {
   Planet({
-    required this.radius,
-    required this.color,
-    super.position,
+    required super.radius,
+    required Color color,
     super.children,
-  }) : _paint = Paint()..color = color;
-
-  final double radius;
-  final Color color;
-  final Paint _paint;
+  }) : super(paint: Paint()..color = color, anchor: Anchor.center);
 
   @override
-  void render(Canvas canvas) {
-    canvas.drawCircle(Offset.zero, radius, _paint);
+  void onTapDown(TapDownEvent event) {
+    game.router.pushAndWait(YesNoDialog()).then((shouldRemove) {
+      if (shouldRemove) {
+        removeFromParent();
+      }
+    });
   }
 }
 
-class Orbit extends PositionComponent {
+class Orbit extends CircleComponent {
   Orbit({
-    required this.radius,
+    required super.radius,
     required this.planet,
     required this.revolutionPeriod,
-    double initialAngle = 0,
-  })  : _paint = Paint()
-          ..style = PaintingStyle.stroke
-          ..color = const Color(0x888888aa),
-        _angle = initialAngle {
-    add(planet);
-  }
+  }) : super(
+          children: [planet],
+          anchor: Anchor.center,
+          paint: Paint()
+            ..style = PaintingStyle.stroke
+            ..color = const Color(0x888888aa),
+        );
 
-  final double radius;
   final double revolutionPeriod;
   final Planet planet;
-  final Paint _paint;
-  double _angle;
 
   @override
-  void render(Canvas canvas) {
-    canvas.drawCircle(Offset.zero, radius, _paint);
-  }
-
-  @override
-  void update(double dt) {
-    _angle += dt / revolutionPeriod * tau;
-    planet.position = Vector2(radius, 0)..rotate(_angle);
+  Future<void> onLoad() async {
+    super.onLoad();
+    if (parent is Planet) {
+      position = Vector2.all((parent! as Planet).radius);
+    }
+    planet.position.x = size.x;
+    planet.position.y = size.y / 2;
+    planet.add(
+      RotateAroundEffect(
+        tau,
+        EffectController(duration: revolutionPeriod, infinite: true),
+        center: size / 2,
+      ),
+    );
   }
 }
 
@@ -439,5 +443,45 @@ class DecoratedWorld extends World with HasTimeScale {
     } else {
       decorator!.applyChain(super.renderFromCamera, canvas);
     }
+  }
+}
+
+class YesNoDialog extends ValueRoute<bool> {
+  YesNoDialog() : super(value: false);
+
+  @override
+  Component build() {
+    final gameSize = findGame()!.size;
+    const margin = 10.0;
+    final boxSize = Vector2(350, 100);
+    return PositionComponent(
+      position: Vector2(gameSize.x / 2, margin),
+      size: boxSize,
+      anchor: Anchor.topCenter,
+      children: [
+        RectangleComponent(
+          size: boxSize,
+          paint: Paint()..color = const Color(0xFFAA0000),
+        ),
+        TextComponent(
+          position: Vector2.all(margin),
+          text: 'Remove the planet?',
+        ),
+        RoundedButton(
+          text: 'Yes',
+          action: () => completeWith(true),
+          color: Colors.green,
+          borderColor: Colors.white,
+          position: Vector2(boxSize.x / 4, boxSize.y - 30),
+        ),
+        RoundedButton(
+          text: 'No',
+          action: () => completeWith(false),
+          color: Colors.red,
+          borderColor: Colors.white,
+          position: Vector2(boxSize.x * 0.75, boxSize.y - 30),
+        ),
+      ],
+    );
   }
 }

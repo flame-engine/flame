@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -89,7 +90,7 @@ class RenderableTiledMap {
     return map.layers[layerId].visible;
   }
 
-  /// Changes the Gid of the corresponding layer at the given position,
+  /// Changes the Gid of the corresponding layer at the given layerId,
   /// if different
   void setTileData({
     required int layerId,
@@ -97,7 +98,7 @@ class RenderableTiledMap {
     required int y,
     required Gid gid,
   }) {
-    final layer = map.layers[layerId];
+    final layer = map.layers.firstWhereOrNull((layer) => layer.id == layerId);
     if (layer is TileLayer) {
       final td = layer.tileData;
       if (td != null) {
@@ -112,13 +113,49 @@ class RenderableTiledMap {
     }
   }
 
-  /// Gets the Gid  of the corresponding layer at the given position
+  /// Changes the Gid of the corresponding layer at the given position,
+  /// if different
+  void setTileDataByLayerIndex({
+    required int layerIndex,
+    required int x,
+    required int y,
+    required Gid gid,
+  }) {
+    final layer = map.layers[layerIndex];
+    if (layer is TileLayer) {
+      final td = layer.tileData;
+      if (td != null) {
+        if (td[y][x].tile != gid.tile ||
+            td[y][x].flips.horizontally != gid.flips.horizontally ||
+            td[y][x].flips.vertically != gid.flips.vertically ||
+            td[y][x].flips.diagonally != gid.flips.diagonally) {
+          td[y][x] = gid;
+          _refreshCache();
+        }
+      }
+    }
+  }
+
+  /// Gets the Gid  of the corresponding layer at the given layerId
   Gid? getTileData({
     required int layerId,
     required int x,
     required int y,
   }) {
-    final layer = map.layers[layerId];
+    final layer = map.layers.firstWhereOrNull((layer) => layer.id == layerId);
+    if (layer is TileLayer) {
+      return layer.tileData?[y][x];
+    }
+    return null;
+  }
+
+  /// Gets the Gid  of the corresponding layer at the given position
+  Gid? getTileDataByLayerIndex({
+    required int layerIndex,
+    required int x,
+    required int y,
+  }) {
+    final layer = map.layers[layerIndex];
     if (layer is TileLayer) {
       return layer.tileData?[y][x];
     }

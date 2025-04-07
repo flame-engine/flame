@@ -508,7 +508,7 @@ call of `onDragUpdate`, considering the camera zoom.
 ```dart
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    position += event.delta;
+    position += event.localDelta;
   }
 ```
 
@@ -600,7 +600,7 @@ to `false`:
     if (!isDragged) {
       return;
     }
-    position += event.delta;
+    position += event.localDelta;
   }
 
   @override
@@ -930,7 +930,7 @@ the `onDragUpdate` method:
     if (!isDragged) {
       return;
     }
-    final delta = event.delta;
+    final delta = event.localDelta;
     position.add(delta);
     attachedCards.forEach((card) => card.position.add(delta));
   }

@@ -6,7 +6,6 @@ draggables
 focusable
 gamepad
 gamepads
-gameplay
 gapless
 grayscale
 hoverable
@@ -24,6 +23,7 @@ prerendered
 pressable
 ptero # short for pterodactyl
 rebalance
+rebalancing
 refreshable
 renderable
 rescan

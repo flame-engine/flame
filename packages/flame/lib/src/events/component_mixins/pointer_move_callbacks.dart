@@ -1,6 +1,5 @@
 import 'package:flame/events.dart';
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/pointer_move_dispatcher.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive

@@ -251,15 +251,18 @@ void main() {
       expect(router.stack.length, 1);
 
       router.pushNamed('B');
+      await game.ready();
       router.pushNamed('C');
+      await game.ready();
       expect(router.stack.length, 3);
 
       router.pushNamed('B');
+      await game.ready();
       expect(router.stack.length, 3);
       router.pushNamed('A');
+      await game.ready();
       expect(router.stack.length, 3);
 
-      await game.ready();
       expect(router.children.length, 3);
       expect((router.children.elementAt(0) as Route).name, 'C');
       expect((router.children.elementAt(1) as Route).name, 'B');

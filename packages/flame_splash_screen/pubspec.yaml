@@ -1,7 +1,7 @@
 name: flame_splash_screen
 resolution: workspace
 description: Style your flame game with a beautiful splash screen with logo reveal. Simple to use but still customizable.
-version: 0.3.1+1
+version: 0.3.1+2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_splash_screen
 funding:
   - https://opencollective.com/blue-fire
@@ -20,7 +20,7 @@ dependencies:
   meta: ^1.12.0
 
 dev_dependencies:
-  flame_lint: ^1.2.2
+  flame_lint: ^1.3.0
   flutter_test:
     sdk: flutter
   mockito: ^5.4.2
