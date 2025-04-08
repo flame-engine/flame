@@ -124,7 +124,7 @@ class TexturePackerAtlas {
   }
 }
 
-// Loads images from the assets folder.
+/// Loads images from the assets folder.
 /// Uses the [path] to find the image directory.
 Future<TextureAtlasData> _fromAssets(
   String path, {
