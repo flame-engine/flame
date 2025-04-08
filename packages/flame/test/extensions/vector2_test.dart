@@ -375,17 +375,41 @@ void main() {
     });
 
     testRandom('fromInts created a vector with x y', (Random r) {
-      var x = r.nextInt(1 << 32);
-      var y = r.nextInt(1 << 32);
+      var x = r.nextInt(1 << 31);
+      var y = r.nextInt(1 << 31);
       var vector = Vector2Extension.fromInts(x, y);
-      expectDouble(vector.x, x.toDouble());
-      expectDouble(vector.y, y.toDouble());
+      expect(
+        vector.x,
+        closeTo(
+          x.toDouble(),
+          getNextFloat32(x.toDouble()) - getPrevFloat32(x.toDouble()),
+        ),
+      );
+      expect(
+        vector.y,
+        closeTo(
+          y.toDouble(),
+          getNextFloat32(y.toDouble()) - getPrevFloat32(y.toDouble()),
+        ),
+      );
 
-      x = -r.nextInt(1 << 32);
-      y = -r.nextInt(1 << 32);
+      x = -r.nextInt(1 << 31);
+      y = -r.nextInt(1 << 31);
       vector = Vector2Extension.fromInts(x, y);
-      expectDouble(vector.x, x.toDouble());
-      expectDouble(vector.y, y.toDouble());
+      expect(
+        vector.x,
+        closeTo(
+          x.toDouble(),
+          getNextFloat32(x.toDouble()) - getPrevFloat32(x.toDouble()),
+        ),
+      );
+      expect(
+        vector.y,
+        closeTo(
+          y.toDouble(),
+          getNextFloat32(y.toDouble()) - getPrevFloat32(y.toDouble()),
+        ),
+      );
     });
 
     test('identity() creator is identity', () {

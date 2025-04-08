@@ -47,8 +47,9 @@ void main() {
 
       final random = Random();
       for (var i = 0; i < 20; i++) {
-        final width = random.nextDouble() * 1000.0 + 10.0;
-        final height = random.nextDouble() * 1000.0 + 10.0;
+        // keep it as a float32 value
+        final width = getPrevFloat32(random.nextDouble() * 1000.0 + 10.0);
+        final height = getPrevFloat32(random.nextDouble() * 1000.0 + 10.0);
         game.onGameResize(Vector2(width, height));
         expect(viewport.size.x == width || viewport.size.y == height, true);
         expect(viewport.size.x / viewport.size.y, closeTo(2.0, 1e-10));
@@ -56,14 +57,14 @@ void main() {
           expect(viewport.position.x, 0);
           expect(
             viewport.position.y * 2 + viewport.size.y,
-            closeTo(height, 1e-10),
+            closeTo(height, getNextFloat32(height) - getPrevFloat32(height)),
           );
         }
         if (viewport.size.y == height) {
           expect(viewport.position.y, 0);
           expect(
             viewport.position.x * 2 + viewport.size.x,
-            closeTo(width, 1e-10),
+            closeTo(width, getNextFloat32(width) - getPrevFloat32(width)),
           );
         }
       }
