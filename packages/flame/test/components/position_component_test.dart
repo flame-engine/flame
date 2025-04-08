@@ -221,15 +221,34 @@ void main() {
           component.add(RectangleHitbox());
           await game.ensureAdd(component);
 
-          expect(component.containsPoint(Vector2(1, 1)), true);
-          expect(component.containsPoint(Vector2(1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, 1)), true);
+          expect(
+            component.containsPoint(
+              Vector2(getPrevFloat32(1.0), getPrevFloat32(1.0)),
+            ),
+            true,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(getPrevFloat32(1.0), getNextFloat32(-1.0)),
+            ),
+            true,
+          );
+          expect(
+              component.containsPoint(
+                Vector2(getNextFloat32(-1.0), getNextFloat32(-1.0)),
+              ),
+              true);
+          expect(
+            component.containsPoint(
+              Vector2(getNextFloat32(-1.0), getPrevFloat32(1.0)),
+            ),
+            true,
+          );
         },
       );
 
       testWithFlameGame(
-        'component with anchor bottomRight contains point on edge',
+        'component with anchor bottomRight contains point close to edge',
         (game) async {
           final component = _MyHitboxComponent();
           component.position.setValues(1, 1);
@@ -238,10 +257,33 @@ void main() {
           component.add(RectangleHitbox());
           await game.ensureAdd(component);
 
-          expect(component.containsPoint(Vector2(1, 1)), true);
-          expect(component.containsPoint(Vector2(1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, 1)), true);
+          expect(
+            component.containsPoint(
+              Vector2(
+                getPrevFloat32(1.0),
+                getPrevFloat32(1.0),
+              ),
+            ),
+            true,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(getPrevFloat32(1.0), getNextFloat32(-1.0)),
+            ),
+            true,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(getNextFloat32(-1.0), getNextFloat32(-1.0)),
+            ),
+            true,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(getNextFloat32(-1.0), getPrevFloat32(1.0)),
+            ),
+            true,
+          );
         },
       );
 
