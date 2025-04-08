@@ -1036,13 +1036,37 @@ void main() {
         for (var i = 0; i < 10; i++) {
           final a = (i / 10) * tau / 4;
           component.angle = a;
+          final componentRect = component.toRect();
           expect(
-            component.toRect(),
-            Rect.fromLTRB(
+            componentRect.left,
+            closeTo(
               -h * sin(a),
+              getNextFloat32(componentRect.left) -
+                  getPrevFloat32(componentRect.left),
+            ),
+          );
+          expect(
+            componentRect.top,
+            closeTo(
               0,
+              getNextFloat32(componentRect.top) -
+                  getPrevFloat32(componentRect.top),
+            ),
+          );
+          expect(
+            componentRect.right,
+            closeTo(
               w * cos(a),
+              getNextFloat32(componentRect.right) -
+                  getPrevFloat32(componentRect.right),
+            ),
+          );
+          expect(
+            componentRect.bottom,
+            closeTo(
               w * sin(a) + h * cos(a),
+              getNextFloat32(componentRect.bottom) -
+                  getPrevFloat32(componentRect.bottom),
             ),
           );
         }
