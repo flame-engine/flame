@@ -60,6 +60,21 @@ final atlas = await atlasFromAssets('atlas_map.atlas');
 ```
 
 
+### Whitelist Images
+
+This is optional, but recommended to avoid loading every sprite from your texture pack into memory.
+Use a list of relative paths to load only the Sprites you need into memory.
+
+```Dart
+final regions = await TexturePackerAtlas.loadAtlas('atlas_map.atlas');
+final atlas = TexturePackerAtlas.fromAtlas(regions, whiteList: [
+  'weapons/',
+  'ships/',
+  'explosions/'
+]);
+```
+
+
 ### File Storage
 
 If you are using file storage, grab your atlas file like this:
@@ -111,7 +126,7 @@ Note: Sprites used in this example can be found OpenGameArt [here][4].
 ## Credits
 
 Thanks to [Jonas Fröber][5] for the original implementation.
-Thanks to [Gnarhard][6] for the feature to build the atlas file from a device's storage.
+Thanks to [Gnarhard][6] for the feature to load an atlas file from a device's storage and whitelisting.
 
 [1]: https://www.codeandweb.com/texturepacker 'Code & Web Texture Packer'
 [2]: https://github.com/crashinvaders/gdx-texture-packer-gui 'Gdx Texture Packer'
