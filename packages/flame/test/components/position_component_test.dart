@@ -234,10 +234,11 @@ void main() {
             true,
           );
           expect(
-              component.containsPoint(
-                Vector2(getNextFloat32(-1.0), getNextFloat32(-1.0)),
-              ),
-              true);
+            component.containsPoint(
+              Vector2(getNextFloat32(-1.0), getNextFloat32(-1.0)),
+            ),
+            true,
+          );
           expect(
             component.containsPoint(
               Vector2(getNextFloat32(-1.0), getPrevFloat32(1.0)),
