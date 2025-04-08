@@ -11,6 +11,8 @@ class TimerComponent extends Component {
   final bool removeOnFinish;
   final VoidCallback? _onTick;
   final bool tickWhenLoaded;
+  final int? tickCount;
+  int _currentTick = 0;
 
   /// Creates a [TimerComponent]
   ///
@@ -21,6 +23,9 @@ class TimerComponent extends Component {
   /// This overrides the [onTick] method
   /// [tickWhenLoaded] When true, will call [onTick] when the component is first
   /// loaded (default is false).
+  /// [tickCount] The number of time the timer will tick before stopping.
+  /// This is is only used when [repeat] is true. If null,
+  /// the timer will run indefinitely.
   TimerComponent({
     required double period,
     bool repeat = false,
@@ -28,8 +33,13 @@ class TimerComponent extends Component {
     this.removeOnFinish = false,
     VoidCallback? onTick,
     this.tickWhenLoaded = false,
+    this.tickCount,
     super.key,
-  }) : _onTick = onTick {
+  })  : assert(
+          tickCount == null || tickCount > 0,
+          'tickCount must be null or bigger than 0',
+        ),
+        _onTick = onTick {
     timer = Timer(
       period,
       repeat: repeat,
@@ -52,7 +62,15 @@ class TimerComponent extends Component {
   /// The default implementation calls the closure received on the
   /// constructor and can be overridden to add custom logic.
   void onTick() {
+    _currentTick = _currentTick + 1;
     _onTick?.call();
+
+    if (tickCount != null && _currentTick >= tickCount!) {
+      timer.stop();
+      if (removeOnFinish) {
+        removeFromParent();
+      }
+    }
   }
 
   @override
