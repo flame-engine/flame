@@ -189,25 +189,12 @@ void main() {
             Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
         final point2 =
             transform2d.globalToLocal(transform2d.localToGlobal(point1));
+
         expect(
-          point1.x,
-          closeTo(
-            point2.x,
-            (toleranceFloat32(point1.x) +
-                    toleranceFloat32(point2.x) * 2 +
-                    toleranceVector2Float32(translation) +
-                    toleranceFloat32(rotation) +
-                    toleranceVector2Float32(scale) +
-                    toleranceVector2Float32(offset)) *
-                4,
-          ),
-        );
-        expect(
-          point1.y,
-          closeTo(
-            point2.y,
-            (toleranceFloat32(point1.y) +
-                    toleranceFloat32(point2.y) * 2 +
+          point1,
+          closeToVector(
+            point2,
+            (toleranceVector2Float32(point2) +
                     toleranceVector2Float32(translation) +
                     toleranceFloat32(rotation) +
                     toleranceVector2Float32(scale) +
