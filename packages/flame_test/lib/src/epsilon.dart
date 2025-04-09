@@ -100,11 +100,3 @@ bool _isNegativeZero(double value) {
   // The sign bit is the most significant bit
   return (data.getUint8(0) & 0x80) != 0;
 }
-
-/// The machine epsilon for float32 (IEEE 754 single precision)
-/// This is the difference between 1.0 and the next representable float32 value
-const double float32Epsilon = 1.1920928955078125e-7; // 2^-23
-
-/// The machine epsilon for Dart's double type (IEEE 754 double precision)
-/// This is the difference between 1.0 and the next representable double value
-const double doubleEpsilon = 2.220446049250313e-16; // 2^-52
