@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart';
 
@@ -44,8 +45,8 @@ void main() {
       expect(notified, 3);
 
       t.position.setFrom(Vector2(7, 2.2));
-      expect(t.x, 7);
-      expect(t.y, closeTo(2.2, 1e-6));
+      expect(t.x, closeTo(7, toleranceFloat32(7)));
+      expect(t.y, closeTo(2.2, toleranceFloat32(2.2)));
       expect(notified, 4);
 
       t.position.setZero();
@@ -170,10 +171,17 @@ void main() {
           ..rotateZ(rotation)
           ..scale(scale.x, scale.y, 1)
           ..translate(offset.x, offset.y);
+
         for (var k = 0; k < 16; k++) {
           expect(
             transform2d.transformMatrix.storage[k],
-            closeTo(matrix4.storage[k], 1e-5),
+            closeTo(
+              matrix4.storage[k],
+              toleranceVector2Float32(translation) +
+                  toleranceFloat32(rotation) +
+                  toleranceVector2Float32(scale) +
+                  toleranceVector2Float32(offset),
+            ),
           );
         }
         // Check round-trip conversion between local and global
@@ -181,8 +189,28 @@ void main() {
             Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
         final point2 =
             transform2d.globalToLocal(transform2d.localToGlobal(point1));
-        expect(point1.x, closeTo(point2.x, 1e-4));
-        expect(point1.y, closeTo(point2.y, 1e-4));
+        expect(
+          point1.x,
+          closeTo(
+            point2.x,
+            toleranceFloat32(point2.x) +
+                toleranceVector2Float32(translation) +
+                toleranceFloat32(rotation) +
+                toleranceVector2Float32(scale) +
+                toleranceVector2Float32(offset),
+          ),
+        );
+        expect(
+          point1.y,
+          closeTo(
+            point2.y,
+            toleranceFloat32(point2.y) +
+                toleranceVector2Float32(translation) +
+                toleranceFloat32(rotation) +
+                toleranceVector2Float32(scale) +
+                toleranceVector2Float32(offset),
+          ),
+        );
       }
     });
 
@@ -194,8 +222,11 @@ void main() {
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.angleDegrees = 60;
-      expect(t.localToGlobal(point).x, closeTo(1 / 2, 1e-6));
-      expect(t.localToGlobal(point).y, closeTo(math.sqrt(3) / 2, 1e-6));
+      expect(t.localToGlobal(point).x, closeTo(1 / 2, toleranceFloat32(1 / 2)));
+      expect(
+        t.localToGlobal(point).y,
+        closeTo(math.sqrt(3) / 2, toleranceFloat32(math.sqrt(3) / 2)),
+      );
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.scale = Vector2(0, 1);

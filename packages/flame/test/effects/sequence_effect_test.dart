@@ -104,8 +104,17 @@ void main() {
           ...List.generate(40, (i) => Vector2(i * 0.75, 10 + i * 0.75)),
           Vector2(30, 40),
         ];
+        var tolerance = toleranceVector2Float32(Vector2.zero());
         for (final p in expectedPositions) {
-          expect(component.position, closeToVector(p, 1e-5));
+          // floating point errors are cumulative
+          tolerance += toleranceVector2Float32(p);
+          expect(
+            component.position,
+            closeToVector(
+              p,
+              tolerance,
+            ),
+          );
           game.update(0.1);
         }
       });
@@ -204,12 +213,26 @@ void main() {
           Vector2.zero(),
           ...forwardPath.reversed,
         ];
+        var tolerance = toleranceVector2Float32(Vector2.zero());
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-6));
+          tolerance += toleranceVector2Float32(p);
+          expect(
+            component.position,
+            closeToVector(
+              p,
+              tolerance,
+            ),
+          );
           game.update(0.1);
         }
         game.update(0.001);
-        expect(component.position, closeToVector(Vector2.zero(), 1e-7));
+        expect(
+          component.position,
+          closeToVector(
+            Vector2.zero(),
+            tolerance + toleranceFloat32(0),
+          ),
+        );
         expect(effect.controller.completed, true);
       });
 
@@ -313,8 +336,18 @@ void main() {
           Vector2(x4 + 5 * dx5, y4 + 5 * dy5),
           ...forwardPath.reversed,
         ];
+
+        var tolerance = toleranceVector2Float32(Vector2.zero());
         for (final p in expectedPath) {
-          expect(component.position, closeToVector(p, 1e-3));
+          tolerance += toleranceVector2Float32(p);
+          expect(
+            component.position,
+            closeToVector(
+              p,
+              // this is the maximum error we can have by the end.
+              tolerance,
+            ),
+          );
           game.update(dt);
         }
         game.update(1e-5);

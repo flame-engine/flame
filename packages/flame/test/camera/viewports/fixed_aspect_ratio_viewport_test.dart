@@ -52,19 +52,22 @@ void main() {
         final height = prevFloat32(random.nextDouble() * 1000.0 + 10.0);
         game.onGameResize(Vector2(width, height));
         expect(viewport.size.x == width || viewport.size.y == height, true);
-        expect(viewport.size.x / viewport.size.y, closeTo(2.0, 1e-10));
+        expect(
+          viewport.size.x / viewport.size.y,
+          closeTo(2.0, toleranceFloat32(2.0)),
+        );
         if (viewport.size.x == width) {
           expect(viewport.position.x, 0);
           expect(
             viewport.position.y * 2 + viewport.size.y,
-            closeTo(height, nextFloat32(height) - prevFloat32(height)),
+            closeTo(height, toleranceFloat32(height)),
           );
         }
         if (viewport.size.y == height) {
           expect(viewport.position.y, 0);
           expect(
             viewport.position.x * 2 + viewport.size.x,
-            closeTo(width, nextFloat32(width) - prevFloat32(width)),
+            closeTo(width, toleranceFloat32(width)),
           );
         }
       }

@@ -15,8 +15,8 @@ void main() {
       test('get/set x/y or position', () {
         final component = PositionComponent();
         component.position.setValues(2.2, 3.4);
-        expect(component.x, closeTo(2.2, 1e-6));
-        expect(component.y, closeTo(3.4, 1e-6));
+        expect(component.x, closeTo(2.2, toleranceFloat32(2.2)));
+        expect(component.y, closeTo(3.4, toleranceFloat32(3.4)));
 
         component.position = Vector2(1.0, 0.0);
         expect(component.x, 1.0);
@@ -24,14 +24,18 @@ void main() {
 
         component.x = 3.1;
         component.y = -2.2;
-        expect(component.position, Vector2(3.1, -2.2));
+        final value = Vector2(3.1, -2.2);
+        expect(
+          component.position,
+          closeToVector(value, toleranceVector2Float32(value)),
+        );
       });
 
       test('get/set width/height or size', () {
         final component = PositionComponent();
         component.size.setValues(2.2, 3.4);
-        expect(component.size.x, closeTo(2.2, 1e-6));
-        expect(component.size.y, closeTo(3.4, 1e-6));
+        expect(component.size.x, closeTo(2.2, toleranceFloat32(2.2)));
+        expect(component.size.y, closeTo(3.4, toleranceFloat32(3.4)));
 
         component.size = Vector2(1.0, 0.0);
         expect(component.width, 1.0);
@@ -39,7 +43,11 @@ void main() {
 
         component.width = 2.1;
         component.height = 3.3;
-        expect(component.size, Vector2(2.1, 3.3));
+        final value = Vector2(2.1, 3.3);
+        expect(
+          component.size,
+          closeToVector(value, toleranceVector2Float32(value)),
+        );
       });
 
       test('get/set rect', () {
@@ -585,40 +593,88 @@ void main() {
 
         component.flipVerticallyAroundCenter();
         // Same position after one vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         // Same position after flipping back the vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         // Same position after one horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back the horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         component.flipVerticallyAroundCenter();
         // Same position after flipping both horizontally and vertically.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both horizontally and vertically in
         // the reverse order.
-        expect(component.center, closeToVector(centerPosition, 1e-5));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
       });
 
       test('isHorizontallyFlipped', () {
@@ -677,8 +733,8 @@ void main() {
           final expectedX = 50 + 5 * (0.8 * cosA - 0.6 * sinA);
           final expectedY = 20 - 5 * (0.6 * cosA + 0.8 * sinA);
           final topRight = component.positionOf(Vector2(8, 0));
-          expect(topRight.x, closeTo(expectedX, 1e-5));
-          expect(topRight.y, closeTo(expectedY, 1e-5));
+          expect(topRight.x, closeTo(expectedX, toleranceFloat32(expectedX)));
+          expect(topRight.y, closeTo(expectedY, toleranceFloat32(expectedY)));
         }
       });
 
@@ -689,7 +745,7 @@ void main() {
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.1, 0.2);
         parent.add(child);
-
+        // var tolerance = toleranceVector2Float32(child.position);
         for (var i = 0; i < 100; i++) {
           child.angle = (rnd.nextDouble() - 0.5) * 10;
           child.x = rnd.nextDouble() * 100;
@@ -711,8 +767,26 @@ void main() {
           final globalY = (rnd.nextDouble() - 0.1) * 200;
           final localPoint = child.absoluteToLocal(Vector2(globalX, globalY));
           final globalPoint = child.absolutePositionOf(localPoint);
-          expect(globalPoint.x, closeTo(globalX, 1e-4));
-          expect(globalPoint.y, closeTo(globalY, 1e-4));
+          expect(
+            globalPoint.x,
+            closeTo(
+              globalX,
+              // account for the various operations on 32bit Vector2
+              toleranceFloat32(globalX) * 2 +
+                  toleranceFloat32(localPoint.x) * 2 +
+                  toleranceFloat32(globalPoint.x) * 2,
+            ),
+          );
+          expect(
+            globalPoint.y,
+            closeTo(
+              globalY,
+              // account for the various operations on 32bit Vector2
+              toleranceFloat32(globalY) * 2 +
+                  toleranceFloat32(localPoint.y) * 2 +
+                  toleranceFloat32(globalPoint.y) * 2,
+            ),
+          );
         }
       });
 
@@ -1041,30 +1115,28 @@ void main() {
             componentRect.left,
             closeTo(
               -h * sin(a),
-              nextFloat32(componentRect.left) - prevFloat32(componentRect.left),
+              toleranceFloat32(componentRect.left),
             ),
           );
           expect(
             componentRect.top,
             closeTo(
               0,
-              nextFloat32(componentRect.top) - prevFloat32(componentRect.top),
+              toleranceFloat32(componentRect.top),
             ),
           );
           expect(
             componentRect.right,
             closeTo(
               w * cos(a),
-              nextFloat32(componentRect.right) -
-                  prevFloat32(componentRect.right),
+              toleranceFloat32(componentRect.right),
             ),
           );
           expect(
             componentRect.bottom,
             closeTo(
               w * sin(a) + h * cos(a),
-              nextFloat32(componentRect.bottom) -
-                  prevFloat32(componentRect.bottom),
+              toleranceFloat32(componentRect.bottom),
             ),
           );
         }

@@ -109,16 +109,18 @@ void main() {
       );
 
       game.update(1);
-      expect(component.scale.x, closeTo(0.7, 1e-7)); // (1 + 0.4) * 0.5
-      expect(component.scale.y, closeTo(-0.7, 1e-7));
+      // (1 + 0.4) * 0.5
+      expect(component.scale.x, closeTo(0.7, toleranceFloat32(0.7)));
+      expect(component.scale.y, closeTo(-0.7, toleranceFloat32(-0.7)));
       game.update(1);
-      expect(component.scale.x, closeTo(1.8, 1e-7)); // (1 + 2*0.4) * 1
-      expect(component.scale.y, closeTo(-1.8, 1e-7));
+      // (1 + 2*0.4) * 1
+      expect(component.scale.x, closeTo(1.8, toleranceFloat32(1.8)));
+      expect(component.scale.y, closeTo(-1.8, toleranceFloat32(-1.8)));
       for (var i = 0; i < 8; i++) {
         game.update(1);
       }
-      expect(component.scale.x, closeTo(5, 1e-7));
-      expect(component.scale.y, closeTo(-5, 1e-7));
+      expect(component.scale.x, closeTo(5, toleranceFloat32(5)));
+      expect(component.scale.y, closeTo(-5, toleranceFloat32(-5)));
       game.update(0);
       expect(component.children.length, 0);
     });

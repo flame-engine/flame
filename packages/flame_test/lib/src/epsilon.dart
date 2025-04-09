@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:vector_math/vector_math.dart' show Vector2;
+
 /// Returns the next larger representable float32 value from [value].
 ///
 /// This is useful for creating test values that are just above a target value.
@@ -66,6 +68,30 @@ double prevFloat32(double value) {
 
   // Convert back to double
   return _int32BitsToDouble(prevBits);
+}
+
+/// Calculate the tolerance for tests of float32 [value] that use double
+/// precision. This is a wrapper for calling [nextFloat32] - [prevFloat32]
+/// for [value].
+double toleranceFloat32(double value) {
+  // Handle special cases
+  if (value.isNaN) {
+    return double.nan;
+  }
+  if (!value.isFinite) {
+    return 0.0;
+  }
+
+  // Return the difference between the next and previous float32 values.
+  return nextFloat32(value) - prevFloat32(value);
+}
+
+/// Calculate the float32 tolerance for the Vector2 [value] that uses double
+/// precision. This is a wrapper for calling sum([toleranceFloat32]) for each
+/// element.
+double toleranceVector2Float32(Vector2 value) {
+  // Return the maximum difference between the next and previous float32 values.
+  return toleranceFloat32(value.x) + toleranceFloat32(value.y);
 }
 
 /// Converts a double to its raw 32-bit float representation
