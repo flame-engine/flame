@@ -7,7 +7,7 @@ void main() {
   group('Float32 epsilon tests', () {
     test('getNextFloat32 should return a slightly larger value', () {
       const original = 1.0;
-      final next = getNextFloat32(original);
+      final next = nextFloat32(original);
 
       expect(next, greaterThan(original));
       expect(
@@ -18,7 +18,7 @@ void main() {
 
     test('getPrevFloat32 should return a slightly smaller value', () {
       const original = 1.0;
-      final prev = getPrevFloat32(original);
+      final prev = prevFloat32(original);
 
       expect(prev, lessThan(original));
       expect(
@@ -31,8 +31,8 @@ void main() {
       final testValues = [0.5, 1.0, 2.0, 10.0, 100.0, 1000.0];
 
       for (final value in testValues) {
-        final next = getNextFloat32(value);
-        final prev = getPrevFloat32(value);
+        final next = nextFloat32(value);
+        final prev = prevFloat32(value);
 
         expect(
           next,
@@ -56,8 +56,8 @@ void main() {
       final testValues = [-0.5, -1.0, -2.0, -10.0, -100.0, -1000.0];
 
       for (final value in testValues) {
-        final next = getNextFloat32(value);
-        final prev = getPrevFloat32(value);
+        final next = nextFloat32(value);
+        final prev = prevFloat32(value);
 
         expect(
           next,
@@ -76,7 +76,7 @@ void main() {
       // Test with powers of 10.
       for (var i = 0; i <= 5; i++) {
         final value = math.pow(10, i).toDouble();
-        final next = getNextFloat32(value);
+        final next = nextFloat32(value);
         final epsilon = next - value;
 
         // The ratio of epsilon to value should be roughly constant.
@@ -91,8 +91,8 @@ void main() {
 
     test('when value is zero', () {
       const zero = 0.0;
-      final nextAfterZero = getNextFloat32(zero);
-      final prevBeforeZero = getPrevFloat32(zero);
+      final nextAfterZero = nextFloat32(zero);
+      final prevBeforeZero = prevFloat32(zero);
 
       expect(nextAfterZero, greaterThan(zero));
       expect(prevBeforeZero, lessThan(zero));
@@ -105,8 +105,8 @@ void main() {
     test('when value is near infinity', () {
       // Float32 max is approximately 3.4028235e+38
       const largeValue = 3.4028234e+38;
-      final next = getNextFloat32(largeValue);
-      final prev = getPrevFloat32(largeValue);
+      final next = nextFloat32(largeValue);
+      final prev = prevFloat32(largeValue);
 
       expect(next, greaterThan(largeValue));
       expect(prev, lessThan(largeValue));
@@ -121,8 +121,8 @@ void main() {
       final testValues = [1.0, -1.0, 123.0, -42.0];
 
       for (final value in testValues) {
-        final next = getNextFloat32(value);
-        final backToOriginal = getPrevFloat32(next);
+        final next = nextFloat32(value);
+        final backToOriginal = prevFloat32(next);
 
         // Small precision tolerance.
         expect(
@@ -131,8 +131,8 @@ void main() {
           reason: 'getPrev(getNext(value)) should be close to value',
         );
 
-        final prev = getPrevFloat32(value);
-        final alsoBackToOriginal = getNextFloat32(prev);
+        final prev = prevFloat32(value);
+        final alsoBackToOriginal = nextFloat32(prev);
 
         expect(
           alsoBackToOriginal,
@@ -144,8 +144,8 @@ void main() {
 
     test('NaN stays NaN', () {
       const nan = double.nan;
-      expect(getNextFloat32(nan).isNaN, isTrue);
-      expect(getPrevFloat32(nan).isNaN, isTrue);
+      expect(nextFloat32(nan).isNaN, isTrue);
+      expect(prevFloat32(nan).isNaN, isTrue);
     });
 
     test('infinite stays inf, next(-inf) and prev(inf) are finite', () {
@@ -153,14 +153,14 @@ void main() {
       const negInf = double.negativeInfinity;
 
       // Positive infinity should remain infinity when getting next
-      expect(getNextFloat32(posInf), equals(posInf));
+      expect(nextFloat32(posInf), equals(posInf));
       // Previous value before positive infinity should be finite
-      expect(getPrevFloat32(posInf).isFinite, isTrue);
+      expect(prevFloat32(posInf).isFinite, isTrue);
 
       // Next value after negative infinity should be finite
-      expect(getNextFloat32(negInf).isFinite, isTrue);
+      expect(nextFloat32(negInf).isFinite, isTrue);
       // Negative infinity should remain infinity when getting previous
-      expect(getPrevFloat32(negInf), equals(negInf));
+      expect(prevFloat32(negInf), equals(negInf));
     });
   });
 }

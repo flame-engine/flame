@@ -382,14 +382,14 @@ void main() {
         vector.x,
         closeTo(
           x.toDouble(),
-          getNextFloat32(x.toDouble()) - getPrevFloat32(x.toDouble()),
+          nextFloat32(x.toDouble()) - prevFloat32(x.toDouble()),
         ),
       );
       expect(
         vector.y,
         closeTo(
           y.toDouble(),
-          getNextFloat32(y.toDouble()) - getPrevFloat32(y.toDouble()),
+          nextFloat32(y.toDouble()) - prevFloat32(y.toDouble()),
         ),
       );
 
@@ -400,14 +400,14 @@ void main() {
         vector.x,
         closeTo(
           x.toDouble(),
-          getNextFloat32(x.toDouble()) - getPrevFloat32(x.toDouble()),
+          nextFloat32(x.toDouble()) - prevFloat32(x.toDouble()),
         ),
       );
       expect(
         vector.y,
         closeTo(
           y.toDouble(),
-          getNextFloat32(y.toDouble()) - getPrevFloat32(y.toDouble()),
+          nextFloat32(y.toDouble()) - prevFloat32(y.toDouble()),
         ),
       );
     });

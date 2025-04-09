@@ -223,25 +223,25 @@ void main() {
 
           expect(
             component.containsPoint(
-              Vector2(getPrevFloat32(1.0), getPrevFloat32(1.0)),
+              Vector2(prevFloat32(1.0), prevFloat32(1.0)),
             ),
             true,
           );
           expect(
             component.containsPoint(
-              Vector2(getPrevFloat32(1.0), getNextFloat32(-1.0)),
+              Vector2(prevFloat32(1.0), nextFloat32(-1.0)),
             ),
             true,
           );
           expect(
             component.containsPoint(
-              Vector2(getNextFloat32(-1.0), getNextFloat32(-1.0)),
+              Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
             ),
             true,
           );
           expect(
             component.containsPoint(
-              Vector2(getNextFloat32(-1.0), getPrevFloat32(1.0)),
+              Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
             ),
             true,
           );
@@ -261,27 +261,27 @@ void main() {
           expect(
             component.containsPoint(
               Vector2(
-                getPrevFloat32(1.0),
-                getPrevFloat32(1.0),
+                prevFloat32(1.0),
+                prevFloat32(1.0),
               ),
             ),
             true,
           );
           expect(
             component.containsPoint(
-              Vector2(getPrevFloat32(1.0), getNextFloat32(-1.0)),
+              Vector2(prevFloat32(1.0), nextFloat32(-1.0)),
             ),
             true,
           );
           expect(
             component.containsPoint(
-              Vector2(getNextFloat32(-1.0), getNextFloat32(-1.0)),
+              Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
             ),
             true,
           );
           expect(
             component.containsPoint(
-              Vector2(getNextFloat32(-1.0), getPrevFloat32(1.0)),
+              Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
             ),
             true,
           );
@@ -1041,32 +1041,30 @@ void main() {
             componentRect.left,
             closeTo(
               -h * sin(a),
-              getNextFloat32(componentRect.left) -
-                  getPrevFloat32(componentRect.left),
+              nextFloat32(componentRect.left) - prevFloat32(componentRect.left),
             ),
           );
           expect(
             componentRect.top,
             closeTo(
               0,
-              getNextFloat32(componentRect.top) -
-                  getPrevFloat32(componentRect.top),
+              nextFloat32(componentRect.top) - prevFloat32(componentRect.top),
             ),
           );
           expect(
             componentRect.right,
             closeTo(
               w * cos(a),
-              getNextFloat32(componentRect.right) -
-                  getPrevFloat32(componentRect.right),
+              nextFloat32(componentRect.right) -
+                  prevFloat32(componentRect.right),
             ),
           );
           expect(
             componentRect.bottom,
             closeTo(
               w * sin(a) + h * cos(a),
-              getNextFloat32(componentRect.bottom) -
-                  getPrevFloat32(componentRect.bottom),
+              nextFloat32(componentRect.bottom) -
+                  prevFloat32(componentRect.bottom),
             ),
           );
         }

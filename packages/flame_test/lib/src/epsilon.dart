@@ -4,8 +4,8 @@ import 'dart:typed_data';
 ///
 /// This is useful for creating test values that are just above a target value.
 /// For example, if you want a value that's just above 1.0, you can use:
-/// `final justAbove1 = getNextFloat32(1.0);`
-double getNextFloat32(double value) {
+/// `final justAbove1 = nextFloat32(1.0);`
+double nextFloat32(double value) {
   // Handle special cases
   if (value.isNaN) {
     return double.nan;
@@ -38,8 +38,8 @@ double getNextFloat32(double value) {
 ///
 /// This is useful for creating test values that are just below a target value.
 /// For example, if you want a value that's just below 1.0, you can use:
-/// `final justBelow1 = getPrevFloat32(1.0);`
-double getPrevFloat32(double value) {
+/// `final justBelow1 = prevFloat32(1.0);`
+double prevFloat32(double value) {
   // Handle special cases
   if (value.isNaN) {
     return double.nan;

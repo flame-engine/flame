@@ -1176,7 +1176,7 @@ void main() {
         // Extended cast
         collisionSystem.collisionDetection.raycast(
           ray,
-          maxDistance: Vector2.all(getNextFloat32(10)).length,
+          maxDistance: Vector2.all(nextFloat32(10)).length,
           out: result,
         );
         expect(result.hitbox?.parent, world.children.first);
