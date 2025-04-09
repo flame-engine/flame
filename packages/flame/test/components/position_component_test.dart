@@ -245,7 +245,7 @@ void main() {
             component.containsPoint(
               Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
             ),
-            true,
+            isTrue,
           );
           expect(
             component.containsPoint(
