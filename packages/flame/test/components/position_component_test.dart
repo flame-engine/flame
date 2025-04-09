@@ -273,7 +273,7 @@ void main() {
                 prevFloat32(1.0),
               ),
             ),
-            true,
+            isTrue,
           );
           expect(
             component.containsPoint(
