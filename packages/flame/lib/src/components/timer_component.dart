@@ -33,11 +33,7 @@ class TimerComponent extends Component {
     this.tickWhenLoaded = false,
     int? tickCount,
     super.key,
-  })  : assert(
-          tickCount == null || tickCount > 0,
-          'tickCount must be null or bigger than 0',
-        ),
-        _onTick = onTick {
+  }) : _onTick = onTick {
     timer = Timer(
       period,
       repeat: repeat,
