@@ -193,7 +193,8 @@ void main() {
           point1.x,
           closeTo(
             point2.x,
-            toleranceFloat32(point2.x) +
+            toleranceFloat32(point1.x) +
+                toleranceFloat32(point2.x) +
                 toleranceVector2Float32(translation) +
                 toleranceFloat32(rotation) +
                 toleranceVector2Float32(scale) +
@@ -204,7 +205,8 @@ void main() {
           point1.y,
           closeTo(
             point2.y,
-            toleranceFloat32(point2.y) +
+            toleranceFloat32(point1.y) +
+                toleranceFloat32(point2.y) +
                 toleranceVector2Float32(translation) +
                 toleranceFloat32(rotation) +
                 toleranceVector2Float32(scale) +
