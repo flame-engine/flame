@@ -745,7 +745,7 @@ void main() {
           ..position = Vector2(50, 20)
           ..anchor = const Anchor(0.1, 0.2);
         parent.add(child);
-        // var tolerance = toleranceVector2Float32(child.position);
+
         for (var i = 0; i < 100; i++) {
           child.angle = (rnd.nextDouble() - 0.5) * 10;
           child.x = rnd.nextDouble() * 100;
@@ -768,25 +768,13 @@ void main() {
           final localPoint = child.absoluteToLocal(Vector2(globalX, globalY));
           final globalPoint = child.absolutePositionOf(localPoint);
           expect(
-            globalPoint.x,
-            closeTo(
-              globalX,
-              // account for the various operations on 32bit Vector2
-              toleranceFloat32(parent.x) +
-                  toleranceFloat32(globalX) * 2 +
-                  toleranceFloat32(localPoint.x) * 2 +
-                  toleranceFloat32(globalPoint.x) * 2,
-            ),
-          );
-          expect(
-            globalPoint.y,
-            closeTo(
-              globalY,
-              // account for the various operations on 32bit Vector2
-              toleranceFloat32(parent.y) +
-                  toleranceFloat32(globalY) * 2 +
-                  toleranceFloat32(localPoint.y) * 2 +
-                  toleranceFloat32(globalPoint.y) * 2,
+            globalPoint,
+            closeToVector(
+              Vector2(globalX, globalY),
+              toleranceVector2Float32(Vector2(globalX, globalY)) +
+                  toleranceVector2Float32(parent.position) +
+                  toleranceVector2Float32(globalPoint) +
+                  toleranceVector2Float32(localPoint),
             ),
           );
         }
