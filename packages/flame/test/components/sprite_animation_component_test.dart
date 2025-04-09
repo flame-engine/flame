@@ -212,6 +212,36 @@ Future<void> main() async {
         expect(world.children.length, 1);
       },
     );
+
+    testWithFlameGame(
+      'resetOnRemove is resets animation ticker after it has been removed',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          loop: false,
+        );
+        final component = SpriteAnimationComponent(
+          animation: animation,
+          removeOnFinish: true,
+          resetOnRemove: true,
+        );
+
+        await game.world.ensureAdd(component);
+
+        expect(component.animationTicker?.elapsed, 0);
+        game.update(2);
+
+        expect(component.animationTicker?.elapsed, 2);
+        component.removeFromParent();
+        // runs a cycle to remove the component
+        game.update(1.0);
+        expect(component.animationTicker?.elapsed, 0);
+      },
+    );
   });
 
   group('SpriteAnimation timing of animation frames', () {
