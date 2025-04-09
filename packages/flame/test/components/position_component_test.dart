@@ -291,7 +291,7 @@ void main() {
             component.containsPoint(
               Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
             ),
-            true,
+            isTrue,
           );
         },
       );
