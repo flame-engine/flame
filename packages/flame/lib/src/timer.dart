@@ -15,19 +15,24 @@ class Timer {
   bool repeat;
   double _current = 0;
   bool _running;
+  final int? tickCount;
+  int _currentTick = 0;
 
   Timer(
     this.limit, {
     this.onTick,
     this.repeat = false,
     bool autoStart = true,
+    this.tickCount,
   }) : _running = autoStart;
 
   /// The current amount of seconds that has passed on this iteration
   double get current => _current;
 
   /// If the timer is finished, timers that repeat never finish
-  bool get finished => _current >= limit && !repeat;
+  bool get finished =>
+      (_current >= limit && !repeat) ||
+      (tickCount != null && _currentTick >= tickCount!);
 
   /// Whether the timer is running or not
   bool isRunning() => _running;
@@ -41,7 +46,7 @@ class Timer {
       if (_current >= limit) {
         if (!repeat) {
           _running = false;
-          onTick?.call();
+          _callTicker();
           return;
         }
         // This is used to cover the rare case of _current being more than
@@ -49,9 +54,18 @@ class Timer {
         // correct number of times
         while (_current >= limit) {
           _current -= limit;
-          onTick?.call();
+          _callTicker();
         }
       }
+    }
+  }
+
+  void _callTicker() {
+    if (tickCount != null && _currentTick >= tickCount!) {
+      stop();
+    } else {
+      _currentTick += 1;
+      onTick?.call();
     }
   }
 

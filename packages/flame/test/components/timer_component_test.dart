@@ -119,7 +119,7 @@ void main() {
 
     testWithFlameGame('when tickCount is provided, stops after that many times',
         (game) async {
-          var x = 0;
+      var x = 0;
       final timer = TimerComponent(
         period: 1,
         repeat: true,
