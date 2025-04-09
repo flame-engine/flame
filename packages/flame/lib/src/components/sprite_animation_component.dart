@@ -21,6 +21,10 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
   /// Whether the animation is paused or playing.
   bool playing;
 
+  /// Whether to reset the animation when the component is removed from the
+  /// component tree.
+  bool resetOnRemove;
+
   /// When set to true, the component is auto-resized to match the
   /// size of current animation sprite.
   bool _autoResize;
@@ -31,6 +35,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     bool? autoResize,
     this.removeOnFinish = false,
     this.playing = true,
+    this.resetOnRemove = false,
     Paint? paint,
     super.position,
     super.size,
@@ -68,6 +73,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     bool? autoResize,
     bool removeOnFinish = false,
     bool playing = true,
+    bool resetOnRemove = false,
     Paint? paint,
     Vector2? position,
     Vector2? size,
@@ -83,6 +89,7 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
           autoResize: autoResize,
           removeOnFinish: removeOnFinish,
           playing: playing,
+          resetOnRemove: resetOnRemove,
           paint: paint,
           position: position,
           size: size,
@@ -168,6 +175,14 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
   void _handleAutoResizeState() {
     if (_autoResize && (!_isAutoResizing)) {
       _autoResize = false;
+    }
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    if (resetOnRemove) {
+      _animationTicker?.reset();
     }
   }
 }
