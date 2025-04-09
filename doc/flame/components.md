@@ -705,7 +705,8 @@ final animationTicker = SpriteAnimationTicker(animation)
   };
 ```
 
-To reset the animation to the first frame when the component is removed, you can set `resetOnRemove` to `true`:
+To reset the animation to the first frame when the component is removed, you can set
+`resetOnRemove` to `true`:
 
 ```dart
 SpriteAnimationComponent(
