@@ -233,7 +233,7 @@ void main() {
             component.containsPoint(
               Vector2(prevFloat32(1.0), prevFloat32(1.0)),
             ),
-            true,
+            isTrue,
           );
           expect(
             component.containsPoint(
@@ -772,7 +772,8 @@ void main() {
             closeTo(
               globalX,
               // account for the various operations on 32bit Vector2
-              toleranceFloat32(globalX) * 2 +
+              toleranceFloat32(parent.x) +
+                  toleranceFloat32(globalX) * 2 +
                   toleranceFloat32(localPoint.x) * 2 +
                   toleranceFloat32(globalPoint.x) * 2,
             ),
@@ -782,7 +783,8 @@ void main() {
             closeTo(
               globalY,
               // account for the various operations on 32bit Vector2
-              toleranceFloat32(globalY) * 2 +
+              toleranceFloat32(parent.y) +
+                  toleranceFloat32(globalY) * 2 +
                   toleranceFloat32(localPoint.y) * 2 +
                   toleranceFloat32(globalPoint.y) * 2,
             ),

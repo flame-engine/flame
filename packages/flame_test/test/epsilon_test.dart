@@ -149,18 +149,18 @@ void main() {
     });
 
     test('infinite stays inf, next(-inf) and prev(inf) are finite', () {
-      const posInf = double.infinity;
-      const negInf = double.negativeInfinity;
-
       // Positive infinity should remain infinity when getting next
-      expect(nextFloat32(posInf), equals(posInf));
+      expect(nextFloat32(double.infinity), equals(double.infinity));
       // Previous value before positive infinity should be finite
-      expect(prevFloat32(posInf).isFinite, isTrue);
+      expect(prevFloat32(double.infinity).isFinite, isTrue);
 
       // Next value after negative infinity should be finite
-      expect(nextFloat32(negInf).isFinite, isTrue);
+      expect(nextFloat32(double.negativeInfinity).isFinite, isTrue);
       // Negative infinity should remain infinity when getting previous
-      expect(prevFloat32(negInf), equals(negInf));
+      expect(
+        prevFloat32(double.negativeInfinity),
+        equals(double.negativeInfinity),
+      );
     });
   });
 }
