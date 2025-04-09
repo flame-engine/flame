@@ -15,6 +15,7 @@ void main() {
   group('TexturepackerLoader', () {
     const atlasPath =
         'test/assets/newFormat/multiplePages/MultiplePageAtlasMap.atlas';
+    const atlasWhitelistPath = 'test/assets/whitelist/whitelist_test.atlas';
     const atlasImage1 =
         'test/assets/newFormat/multiplePages/MultiplePageAtlasMap.png';
 
@@ -63,6 +64,35 @@ void main() {
         () => flameGame.atlasFromStorage('invalid_path.atlas'),
         throwsException,
       );
+    });
+
+    test('only loads whitelisted path matches', () async {
+      final flameGame = FlameGame();
+      final atlas = await flameGame.atlasFromStorage(
+        atlasWhitelistPath,
+        whiteList: ['junk-1'],
+      );
+
+      expect(atlas, isNotNull);
+      expect(atlas.sprites.length, equals(2));
+
+      final firstSprite = atlas.findSpriteByName('junk-1_layer0');
+      expect(firstSprite, isNotNull);
+      expect(firstSprite!.srcSize, isNotNull);
+      expect(firstSprite.srcPosition, isNotNull);
+
+      final secondSprite = atlas.findSpriteByName('junk-2_layer0');
+      expect(secondSprite, isNull);
+    });
+
+    test('generates region data', () async {
+      final regions = await TexturePackerAtlas.loadAtlas(
+        atlasWhitelistPath,
+        fromStorage: true,
+      );
+
+      expect(regions.regions, isNotEmpty);
+      expect(regions.regions.length, equals(4));
     });
   });
 }
