@@ -61,11 +61,10 @@ class Timer {
   }
 
   void _callTicker() {
+    onTick?.call();
+    _currentTick += 1;
     if (tickCount != null && _currentTick >= tickCount!) {
       stop();
-    } else {
-      _currentTick += 1;
-      onTick?.call();
     }
   }
 
