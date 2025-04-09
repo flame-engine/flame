@@ -15,12 +15,16 @@ extension TexturepackerLoader on Game {
     Images? images,
     AssetsCache? assets,
     bool useOriginalSize = true,
+    List<String> whiteList = const [],
+    String assetsPrefix = 'images',
   }) async =>
       TexturePackerAtlas.load(
         assetsPath,
         images: images ?? this.images,
         assets: assets ?? this.assets,
         useOriginalSize: useOriginalSize,
+        whiteList: whiteList,
+        assetsPrefix: assetsPrefix,
       );
 
   /// Loads the specified pack file from storage
@@ -29,11 +33,13 @@ extension TexturepackerLoader on Game {
     String storagePath, {
     Images? images,
     bool useOriginalSize = true,
+    List<String> whiteList = const [],
   }) async =>
       TexturePackerAtlas.load(
         storagePath,
         fromStorage: true,
         images: images ?? this.images,
         useOriginalSize: useOriginalSize,
+        whiteList: whiteList,
       );
 }
