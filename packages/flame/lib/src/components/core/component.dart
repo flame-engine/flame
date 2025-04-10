@@ -5,7 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
-import 'package:flame/src/components/core/component_context.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
@@ -542,7 +542,7 @@ class Component {
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
-    final context = createContext();
+    final context = renderContext;
     if (context != null) {
       _renderContexts.add(context);
     }

@@ -432,6 +432,43 @@ class MyComponent extends PositionComponent with HasVisibility {
 ```
 
 
+### Render Contexts
+
+If you want a parent component to pass render-specific properties down its children tree, you
+can override the `renderContext` property on the parent component. You can return a custom
+class that inherits from `RenderContext`, and then use `findRenderContext` on the children
+while rendering. Render Contexts are stored as a stack and propagated whenever the render
+tree is navigated for rendering.
+
+For example:
+
+```dart
+class IntContext extends ComponentRenderContext {
+  int value;
+
+  IntContext(this.value);
+}
+
+class ParentWithContext extends Component {
+  @override
+  IntContext renderContext = IntContext(42);
+}
+
+class ChildReadsContext extends Component {
+  @override
+  void render(Canvas canvas) {
+    final context = findRenderContext<IntContext>();
+    // context.value available
+  }
+}
+```
+
+Each component will have access to the context of any parent that is above it in the
+component tree. If multiple components add the contexts matching the selected type
+`T`, the "closest" one will be returned (though typically you would create a unique
+context type for each component).
+
+
 ## PositionComponent
 
 This class represents a positioned object on the screen, being a floating rectangle, a rotating

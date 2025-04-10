@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
-import 'package:flame/src/components/core/component_context.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('Component Context', () {
+  group('Component Render Context', () {
     testWithFlameGame('simple parent and child', (game) async {
       final child = _ChildReadsContext();
       final parent = _ParentWithContext(
@@ -96,7 +96,7 @@ class _ParentWithContext extends Component {
   });
 
   @override
-  _IntContext? createContext() => _myContext;
+  _IntContext get renderContext => _myContext;
 }
 
 class _ChildReadsContext extends Component {
