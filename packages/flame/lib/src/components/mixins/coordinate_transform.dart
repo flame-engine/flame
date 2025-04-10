@@ -1,5 +1,5 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// Interface to be implemented by components that perform a coordinate change.
 ///

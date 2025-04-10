@@ -178,7 +178,7 @@ void main() {
         final expected = rect.support(direction) + circle.support(direction);
         expect(
           rrect.support(direction),
-          closeToVector(expected, 1e-14),
+          closeToVector(expected, 1e-5),
         );
       }
     });
@@ -238,7 +238,7 @@ void main() {
       );
       expect(
         rrect.nearestPoint(Vector2(0, -10)),
-        Vector2(5.52786404500042, 1.0557280900008408),
+        closeToVector(Vector2(5.52786404500042, 1.0557280900008408), 1e-6),
       );
       expect(rrect.nearestPoint(Vector2(10, -10)), Vector2(10, 0));
       expect(rrect.nearestPoint(Vector2(30, -10)), Vector2(30, 0));
