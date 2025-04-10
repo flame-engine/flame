@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
@@ -557,17 +558,36 @@ class Component {
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
+    final context = renderContext;
+    if (context != null) {
+      _renderContexts.add(context);
+    }
+
     render(canvas);
     final children = _children;
     if (children != null) {
       for (final child in children) {
+        final hasContext = _renderContexts.isNotEmpty;
+        if (hasContext) {
+          child._renderContexts.addAll(_renderContexts);
+        }
         child.renderTree(canvas);
+        if (hasContext) {
+          child._renderContexts.removeRange(
+            _renderContexts.length,
+            child._renderContexts.length,
+          );
+        }
       }
     }
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
+    }
+
+    if (context != null) {
+      _renderContexts.removeLast();
     }
   }
 
@@ -1054,6 +1074,20 @@ class Component {
         game.unregisterKey(key!);
       }
     }
+  }
+
+  //#endregion
+
+  //#region Context
+
+  final QueueList<ComponentRenderContext> _renderContexts = QueueList();
+
+  /// Override this method if you want your component to provide a custom
+  /// render context to all its children (recursively).
+  ComponentRenderContext? get renderContext => null;
+
+  T? findRenderContext<T extends ComponentRenderContext>() {
+    return _renderContexts.whereType<T>().lastOrNull;
   }
 
   //#endregion
