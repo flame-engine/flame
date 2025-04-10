@@ -5,7 +5,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// An axis-aligned rectangle with rounded corners.
 ///

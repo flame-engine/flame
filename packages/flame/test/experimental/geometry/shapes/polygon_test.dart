@@ -208,10 +208,10 @@ void main() {
       final a = 10 * sqrt(2);
       expect(result, isA<Polygon>());
       expect((result as Polygon).edges.length, 4);
-      expect(result.vertices[0], closeToVector(Vector2(-a, -a), 1e-14));
-      expect(result.vertices[1], closeToVector(Vector2(-a, a), 1e-14));
-      expect(result.vertices[2], closeToVector(Vector2(a, a), 1e-14));
-      expect(result.vertices[3], closeToVector(Vector2(a, -a), 1e-14));
+      expect(result.vertices[0], closeToVector(Vector2(-a, -a), 1e-6));
+      expect(result.vertices[1], closeToVector(Vector2(-a, a), 1e-6));
+      expect(result.vertices[2], closeToVector(Vector2(a, a), 1e-6));
+      expect(result.vertices[3], closeToVector(Vector2(a, -a), 1e-6));
     });
 
     test('project with target', () {

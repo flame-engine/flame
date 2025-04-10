@@ -6,7 +6,7 @@ import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/rectangle.dart';
 import 'package:flame/src/experimental/geometry/shapes/rounded_rectangle.dart';
 import 'package:flame/src/game/transform2d.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// Base class for various 2D geometric primitives defined on a Cartesian
 /// coordinate plane.
