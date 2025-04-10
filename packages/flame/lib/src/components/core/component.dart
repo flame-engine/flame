@@ -557,7 +557,10 @@ class Component {
         }
         child.renderTree(canvas);
         if (hasContext) {
-          child._renderContexts.removeRange(_renderContexts.length, child._renderContexts.length);
+          child._renderContexts.removeRange(
+            _renderContexts.length,
+            child._renderContexts.length,
+          );
         }
       }
     }
