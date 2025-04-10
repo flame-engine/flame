@@ -153,6 +153,12 @@ class MyFlameGame extends FlameGame {
 }
 ```
 
+```{note}
+A `Timer` or `TimerComponent` can repeat indefinitely by providing the
+`repeat: true` argument or it can be repeated a certain number of
+times by using the `tickCount` argument together with `repeat: true`.
+```
+
 
 ## Time Scale
 

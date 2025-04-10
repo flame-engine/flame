@@ -116,5 +116,41 @@ void main() {
         expect(timer.count, equals(2));
       },
     );
+
+    testWithFlameGame('when tickCount is provided, stops after that many times',
+        (game) async {
+      var x = 0;
+      final timer = TimerComponent(
+        period: 1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () {
+          x++;
+        },
+      );
+      game.add(timer);
+      await game.ready();
+      game.update(0);
+
+      game.update(1.2);
+
+      game.update(0);
+      expect(x, equals(1));
+
+      game.update(1.2);
+
+      game.update(0);
+      expect(x, equals(2));
+
+      game.update(1.2);
+
+      game.update(0);
+      expect(x, equals(2));
+
+      await game.ready();
+
+      expect(timer.timer.isRunning(), isFalse);
+      expect(timer.isRemoved, isFalse);
+    });
   });
 }
