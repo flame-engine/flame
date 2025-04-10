@@ -304,10 +304,14 @@ class Component {
   /// customized (non-default) [OrderedSet] instances in your project.
   static ComponentSetFactory childrenFactory = () {
     return OrderedSet.queryable(
-      OrderedSet.mapping<num, Component>((e) => e.priority),
+      OrderedSet.mapping<num, Component>(_componentPriorityMapper),
       strictMode: false,
     );
   };
+
+  static int _componentPriorityMapper(Component component) {
+    return component.priority;
+  }
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [OrderedSet] within
