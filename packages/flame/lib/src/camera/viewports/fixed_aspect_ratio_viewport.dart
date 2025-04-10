@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/src/camera/viewport.dart';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// [FixedAspectRatioViewport] is a rectangular viewport which auto-expands to
 /// take as much space as possible within the canvas, while maintaining a fixed

@@ -74,7 +74,9 @@ void main() {
 
       const dt = 0.11;
       for (var i = 0; i < 20; i++) {
-        expect(followTarget, closeToVector(Vector2(3, 1 + i * dt), 1e-14));
+        final value = Vector2(3, 1 + i * dt);
+        final tolerance = toleranceVector2Float32(value);
+        expect(followTarget, closeToVector(value, tolerance));
         game.update(dt);
       }
     });
@@ -89,9 +91,10 @@ void main() {
       for (var i = 0; i < 10; i++) {
         target.position = Vector2.random()..scale(1000);
         game.update(0.01);
+        final tolerance = toleranceVector2Float32(target.position);
         expect(
           pursuer.position,
-          closeToVector(target.position, 1e-12),
+          closeToVector(target.position, tolerance),
         );
       }
     });
@@ -106,12 +109,14 @@ void main() {
         ..add(FollowBehavior(target: target, maxSpeed: speed))
         ..addToParent(game);
       await game.ready();
-
+      var tolerance = toleranceVector2Float32(pursuer.position);
       for (var i = 0; i < 100; i++) {
         final distance = speed * i * dt;
+        final value = Vector2(distance * 0.6, distance * 0.8);
+        tolerance += toleranceVector2Float32(value);
         expect(
           pursuer.position,
-          closeToVector(Vector2(distance * 0.6, distance * 0.8), 1e-12),
+          closeToVector(value, tolerance),
         );
         game.update(dt);
       }

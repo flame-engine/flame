@@ -221,12 +221,12 @@ void main() {
 
       test('clamp length max', () {
         final v = Vector2(1, 0)..clampLength(0.5, 0.8);
-        expect(v.length, 0.8);
+        expect(v.length, closeTo(0.8, 1e-6));
       });
 
       test('clamp negative vector', () {
         final v = Vector2(-1, -1)..clampLength(0.5, 0.8);
-        expect(v.length, 0.8);
+        expect(v.length, closeTo(0.8, 1e-6));
       });
 
       test('no effect on vector in range', () {
@@ -375,17 +375,41 @@ void main() {
     });
 
     testRandom('fromInts created a vector with x y', (Random r) {
-      var x = r.nextInt(1 << 32);
-      var y = r.nextInt(1 << 32);
+      var x = r.nextInt(1 << 31);
+      var y = r.nextInt(1 << 31);
       var vector = Vector2Extension.fromInts(x, y);
-      expectDouble(vector.x, x.toDouble());
-      expectDouble(vector.y, y.toDouble());
+      expect(
+        vector.x,
+        closeTo(
+          x.toDouble(),
+          nextFloat32(x.toDouble()) - prevFloat32(x.toDouble()),
+        ),
+      );
+      expect(
+        vector.y,
+        closeTo(
+          y.toDouble(),
+          nextFloat32(y.toDouble()) - prevFloat32(y.toDouble()),
+        ),
+      );
 
-      x = -r.nextInt(1 << 32);
-      y = -r.nextInt(1 << 32);
+      x = -r.nextInt(1 << 31);
+      y = -r.nextInt(1 << 31);
       vector = Vector2Extension.fromInts(x, y);
-      expectDouble(vector.x, x.toDouble());
-      expectDouble(vector.y, y.toDouble());
+      expect(
+        vector.x,
+        closeTo(
+          x.toDouble(),
+          nextFloat32(x.toDouble()) - prevFloat32(x.toDouble()),
+        ),
+      );
+      expect(
+        vector.y,
+        closeTo(
+          y.toDouble(),
+          nextFloat32(y.toDouble()) - prevFloat32(y.toDouble()),
+        ),
+      );
     });
 
     test('identity() creator is identity', () {

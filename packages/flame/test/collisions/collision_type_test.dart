@@ -179,7 +179,7 @@ void main() {
             100,
             (_) => TestBlock(
               Vector2.random(rng) - Vector2.random(rng),
-              Vector2.all(10),
+              Vector2.all(prevFloat32(10)),
               type: type,
             ),
           );
