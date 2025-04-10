@@ -21,6 +21,9 @@ class TimerComponent extends Component {
   /// This overrides the [onTick] method
   /// [tickWhenLoaded] When true, will call [onTick] when the component is first
   /// loaded (default is false).
+  /// [tickCount] The number of time the timer will tick before stopping.
+  /// This is is only used when [repeat] is true. If null,
+  /// the timer will run indefinitely.
   TimerComponent({
     required double period,
     bool repeat = false,
@@ -28,6 +31,7 @@ class TimerComponent extends Component {
     this.removeOnFinish = false,
     VoidCallback? onTick,
     this.tickWhenLoaded = false,
+    int? tickCount,
     super.key,
   }) : _onTick = onTick {
     timer = Timer(
@@ -35,6 +39,7 @@ class TimerComponent extends Component {
       repeat: repeat,
       onTick: this.onTick,
       autoStart: autoStart,
+      tickCount: tickCount,
     );
   }
 
