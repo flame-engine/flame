@@ -5,6 +5,9 @@ import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ordered_set/comparing.dart';
+import 'package:ordered_set/ordered_set.dart';
+import 'package:ordered_set/queryable_ordered_set.dart';
 
 import '../custom_component.dart';
 
@@ -1389,13 +1392,18 @@ void main() {
         final component0 = Component();
         expect(component0.children.strictMode, false);
 
-        Component.childrenFactory = () => ComponentSet(strictMode: true);
+        Component.childrenFactory = () => QueryableOrderedSet(
+              OrderedSet.comparing(Comparing.on((e) => e.priority)),
+              strictMode: false,
+            );
         final component1 = Component();
         final component2 = Component();
         component1.add(component2);
         component2.add(Component());
-        expect(component1.children.strictMode, true);
-        expect(component2.children.strictMode, true);
+        expect(component1.children, isInstanceOf<QueryableOrderedSet>());
+        expect(component1.children.strictMode, false);
+        expect(component2.children, isInstanceOf<QueryableOrderedSet>());
+        expect(component2.children.strictMode, false);
       });
 
       testWithFlameGame('initially same debugMode as parent', (game) async {
