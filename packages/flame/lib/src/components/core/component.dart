@@ -544,20 +544,20 @@ class Component {
   void renderTree(Canvas canvas) {
     final context = createContext();
     if (context != null) {
-      _contexts.add(context);
+      _renderContexts.add(context);
     }
 
     render(canvas);
     final children = _children;
     if (children != null) {
       for (final child in children) {
-        final hasContext = _contexts.isNotEmpty;
+        final hasContext = _renderContexts.isNotEmpty;
         if (hasContext) {
-          child._contexts.addAll(_contexts);
+          child._renderContexts.addAll(_renderContexts);
         }
         child.renderTree(canvas);
         if (hasContext) {
-          child._contexts.removeRange(_contexts.length, child._contexts.length);
+          child._renderContexts.removeRange(_renderContexts.length, child._renderContexts.length);
         }
       }
     }
@@ -568,7 +568,7 @@ class Component {
     }
 
     if (context != null) {
-      _contexts.removeLast();
+      _renderContexts.removeLast();
     }
   }
 
@@ -1061,12 +1061,14 @@ class Component {
 
   //#region Context
 
-  final QueueList<ComponentContext> _contexts = QueueList();
+  final QueueList<ComponentRenderContext> _renderContexts = QueueList();
 
-  ComponentContext? createContext() => null;
+  /// Override this method if you want your component to provide a custom
+  /// render context to all its children (recursively).
+  ComponentRenderContext? get renderContext => null;
 
-  T? findContext<T extends ComponentContext>() {
-    return _contexts.whereType<T>().lastOrNull;
+  T? findRenderContext<T extends ComponentRenderContext>() {
+    return _renderContexts.whereType<T>().lastOrNull;
   }
 
   //#endregion

@@ -80,7 +80,7 @@ void main() {
   });
 }
 
-class _IntContext extends ComponentContext {
+class _IntContext extends ComponentRenderContext {
   int value;
 
   _IntContext(this.value);
@@ -104,7 +104,7 @@ class _ChildReadsContext extends Component {
 
   @override
   void render(Canvas canvas) {
-    final context = findContext<_IntContext>();
+    final context = findRenderContext<_IntContext>();
     myContext = context?.value;
 
     super.render(canvas);

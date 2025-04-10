@@ -1,1 +1,1 @@
-abstract class ComponentContext {}
+abstract class ComponentRenderContext {}
