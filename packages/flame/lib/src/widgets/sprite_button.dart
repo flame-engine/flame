@@ -10,33 +10,39 @@ import 'package:flutter/widgets.dart';
 
 export '../sprite.dart';
 
-/// A [StatelessWidget] that uses SpriteWidgets to render
-/// a pressable button
+/// A [StatelessWidget] that uses Sprites to render a pressable button.
 class SpriteButton extends StatelessWidget {
-  /// Holds the position of the sprite on the image
+  /// Holds the position of the sprite on the image.
   final Vector2? srcPosition;
 
-  /// Holds the size of the sprite on the image
+  /// Holds the size of the sprite on the image.
   final Vector2? srcSize;
 
-  /// Holds the position of the sprite on the image
+  /// Holds the position of the sprite on the image.
   final Vector2? pressedSrcPosition;
 
-  /// Holds the size of the sprite on the image
+  /// Holds the size of the sprite on the image.
   final Vector2? pressedSrcSize;
 
-  final Widget label;
+  /// The widget that will be rendered on top of the button.
+  final Widget? label;
 
+  /// The function that will be called when the button is pressed.
   final VoidCallback onPressed;
 
+  /// The width of the button.
   final double width;
 
+  /// The height of the button.
   final double height;
 
-  /// A builder function that is called if the loading fails
+  /// The offset of the button when pressed.
+  final EdgeInsets pressedInsets;
+
+  /// A builder function that is called if the loading fails.
   final WidgetBuilder? errorBuilder;
 
-  /// A builder function that is called while the loading is on the way
+  /// A builder function that is called while the loading is on the way.
   final WidgetBuilder? loadingBuilder;
 
   final FutureOr<List<Sprite>> _buttonsFuture;
@@ -47,11 +53,12 @@ class SpriteButton extends StatelessWidget {
     required this.onPressed,
     required this.width,
     required this.height,
-    required this.label,
+    this.label,
     this.srcPosition,
     this.srcSize,
     this.pressedSrcPosition,
     this.pressedSrcSize,
+    this.pressedInsets = const EdgeInsets.only(top: 5),
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
@@ -66,11 +73,12 @@ class SpriteButton extends StatelessWidget {
     required this.onPressed,
     required this.width,
     required this.height,
-    required this.label,
+    this.label,
     this.srcPosition,
     this.srcSize,
     this.pressedSrcPosition,
     this.pressedSrcSize,
+    this.pressedInsets = const EdgeInsets.only(top: 5),
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
@@ -92,12 +100,13 @@ class SpriteButton extends StatelessWidget {
     required this.onPressed,
     required this.width,
     required this.height,
-    required this.label,
+    this.label,
     Images? images,
     this.srcPosition,
     this.srcSize,
     this.pressedSrcPosition,
     this.pressedSrcSize,
+    this.pressedInsets = const EdgeInsets.only(top: 5),
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
@@ -156,17 +165,19 @@ class SpriteButton extends StatelessWidget {
 @visibleForTesting
 class InternalSpriteButton extends StatefulWidget {
   final VoidCallback onPressed;
-  final Widget label;
+  final Widget? label;
   final Sprite sprite;
   final Sprite pressedSprite;
+  final EdgeInsets pressedInsets;
   final double width;
   final double height;
 
   const InternalSpriteButton({
     required this.onPressed,
-    required this.label,
     required this.sprite,
     required this.pressedSprite,
+    this.pressedInsets = const EdgeInsets.only(top: 5),
+    this.label,
     this.width = 200,
     this.height = 50,
     super.key,
@@ -200,11 +211,12 @@ class _ButtonState extends State<InternalSpriteButton> {
         width: width,
         height: height,
         child: CustomPaint(
-          painter:
-              _ButtonPainter(_pressed ? widget.pressedSprite : widget.sprite),
+          painter: _ButtonPainter(
+            _pressed ? widget.pressedSprite : widget.sprite,
+          ),
           child: Center(
             child: Container(
-              padding: _pressed ? const EdgeInsets.only(top: 5) : null,
+              padding: _pressed ? widget.pressedInsets : null,
               child: widget.label,
             ),
           ),
@@ -222,8 +234,10 @@ class _ButtonPainter extends CustomPainter {
   @override
   bool shouldRepaint(_ButtonPainter old) => old._sprite != _sprite;
 
+  final Vector2 _size = Vector2.zero();
   @override
   void paint(Canvas canvas, Size size) {
-    _sprite.render(canvas, size: size.toVector2());
+    _size.setValues(size.width, size.height);
+    _sprite.render(canvas, size: _size);
   }
 }
