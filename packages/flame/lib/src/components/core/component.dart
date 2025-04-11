@@ -5,10 +5,13 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
+import 'package:ordered_set/ordered_set.dart';
+import 'package:ordered_set/queryable_ordered_set.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -283,24 +286,38 @@ class Component {
     }
   }
 
+  QueryableOrderedSet<Component>? _children;
+
   /// The children components of this component.
   ///
-  /// This getter will automatically create the [ComponentSet] container within
+  /// This getter will automatically create the [OrderedSet] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  ComponentSet get children => _children ??= createComponentSet();
+  QueryableOrderedSet<Component> get children =>
+      _children ??= createComponentSet();
+
+  /// Whether this component has any children.
+  /// Avoids the creation of the children container if not necessary.
   bool get hasChildren => _children?.isNotEmpty ?? false;
-  ComponentSet? _children;
 
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSetFactory childrenFactory = ComponentSet.new;
+  /// customized (non-default) [OrderedSet] instances in your project.
+  static ComponentSetFactory childrenFactory = () {
+    return OrderedSet.queryable(
+      OrderedSet.mapping<num, Component>(_componentPriorityMapper),
+      strictMode: false,
+    );
+  };
+
+  static int _componentPriorityMapper(Component component) {
+    return component.priority;
+  }
 
   /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [ComponentSet] within
+  /// Override this method if you need to have a custom [OrderedSet] within
   /// a particular class.
-  ComponentSet createComponentSet() => childrenFactory();
+  QueryableOrderedSet<Component> createComponentSet() => childrenFactory();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
@@ -541,17 +558,36 @@ class Component {
   void render(Canvas canvas) {}
 
   void renderTree(Canvas canvas) {
+    final context = renderContext;
+    if (context != null) {
+      _renderContexts.add(context);
+    }
+
     render(canvas);
     final children = _children;
     if (children != null) {
       for (final child in children) {
+        final hasContext = _renderContexts.isNotEmpty;
+        if (hasContext) {
+          child._renderContexts.addAll(_renderContexts);
+        }
         child.renderTree(canvas);
+        if (hasContext) {
+          child._renderContexts.removeRange(
+            _renderContexts.length,
+            child._renderContexts.length,
+          );
+        }
       }
     }
 
     // Any debug rendering should be rendered on top of everything
     if (debugMode) {
       renderDebugMode(canvas);
+    }
+
+    if (context != null) {
+      _renderContexts.removeLast();
     }
   }
 
@@ -1042,6 +1078,20 @@ class Component {
 
   //#endregion
 
+  //#region Context
+
+  final QueueList<ComponentRenderContext> _renderContexts = QueueList();
+
+  /// Override this method if you want your component to provide a custom
+  /// render context to all its children (recursively).
+  ComponentRenderContext? get renderContext => null;
+
+  T? findRenderContext<T extends ComponentRenderContext>() {
+    return _renderContexts.whereType<T>().lastOrNull;
+  }
+
+  //#endregion
+
   //#region Debugging assistance
 
   /// Returns whether this [Component] is in debug mode or not.
@@ -1112,6 +1162,6 @@ class Component {
   //#endregion
 }
 
-typedef ComponentSetFactory = ComponentSet Function();
+typedef ComponentSetFactory = QueryableOrderedSet<Component> Function();
 
 enum ChildrenChangeType { added, removed }
