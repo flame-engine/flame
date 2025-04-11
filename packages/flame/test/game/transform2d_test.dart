@@ -39,7 +39,7 @@ void main() {
       conditionFactor = 1e6;
     }
 
-    // Statisitcal error propagation
+    // Statistical error propagation
     // There are 8 variables (point + matrix elements)
     const double numVariables = 8;
     // In the round trip there's approx 14 ops
