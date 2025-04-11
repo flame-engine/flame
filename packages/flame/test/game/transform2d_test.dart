@@ -10,7 +10,7 @@ void main() {
   // Implementation of statistical error propagation based on
   // Tellinghuisen, J. (2001). Statistical Error Propagation.
   // https://pubs.acs.org/doi/10.1021/jp003484u
-  // @note, this function is only applicable to the globalToLocal 2D transform
+  // Note: this function is only applicable to the globalToLocal 2D transform
   // round trip.
   double transform2dRoundTripUncertainty(
     Transform2D transform,
