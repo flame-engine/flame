@@ -17,6 +17,7 @@ subosito # github.com/subosito
 spydon # github.com/spydon
 stpasha # github.com/stpasha
 tavian # tavianator.com
+Tellinghuisen # Author of Statistical Error Propagation (2001)
 videon # github.com/markvideon
 wolfenrain # github.com/wolfenrain
 xaha # github.com/xvrh
