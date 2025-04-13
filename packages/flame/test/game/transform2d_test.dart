@@ -7,6 +7,59 @@ import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart';
 
 void main() {
+  // Implementation of statistical error propagation based on
+  // Tellinghuisen, J. (2001). Statistical Error Propagation.
+  // https://pubs.acs.org/doi/10.1021/jp003484u
+  // Note: this function is only applicable to the globalToLocal 2D transform
+  // round trip.
+  double transform2dRoundTripUncertainty(
+    Transform2D transform,
+    Vector2 point,
+  ) {
+    final m = transform.transformMatrix.storage;
+    // Calculate the determinant
+    final det = m[0] * m[5] - m[1] * m[4];
+
+    // Base uncertainty
+    const epsilon = 1 / (1 << 23);
+
+    // Calculate indicative condition number
+    final matrixNorm =
+        math.sqrt(m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5]);
+
+    double conditionFactor;
+    if (det.abs() > 1e-10) {
+      // Calculate condition number
+      final invMatrixNorm =
+          math.sqrt(m[5] * m[5] + m[1] * m[1] + m[4] * m[4] + m[0] * m[0]) /
+              det.abs();
+      conditionFactor = matrixNorm * invMatrixNorm;
+    } else {
+      // For ~singular matrices, small input change -> large output change
+      conditionFactor = 1e6;
+    }
+
+    // Statistical error propagation
+    // There are 8 variables (point + matrix elements)
+    const double numVariables = 8;
+    // In the round trip there's approx 14 ops
+    const double numOperations = 14;
+
+    // Standard deviation (1-σ)
+    final sigma = epsilon *
+        math.sqrt(numVariables) *
+        math.sqrt(numOperations) *
+        conditionFactor;
+
+    // 99.7 CI + small low-value tolerance
+    final tolerance = 3 * sigma + epsilon;
+
+    // Adjust for relative precision
+    final magnitude = math.max(1.0, math.max(point.x.abs(), point.y.abs()));
+
+    return tolerance * magnitude;
+  }
+
   group('Transform2D', () {
     test('basic construction', () {
       final t = Transform2D()
@@ -145,8 +198,7 @@ void main() {
       expect(t.localToGlobal(one), Vector2(1, 1));
     });
 
-    test('random', () {
-      final rnd = math.Random();
+    testRandom('random', (math.Random rnd) {
       for (var i = 0; i < 20; i++) {
         final translation = Vector2(
           rnd.nextDouble() * 10,
@@ -190,16 +242,12 @@ void main() {
         final point2 =
             transform2d.globalToLocal(transform2d.localToGlobal(point1));
 
+        final tolerance = transform2dRoundTripUncertainty(transform2d, point1);
         expect(
           point1,
           closeToVector(
             point2,
-            (toleranceVector2Float32(point2) +
-                    toleranceVector2Float32(translation) +
-                    toleranceFloat32(rotation) +
-                    toleranceVector2Float32(scale) +
-                    toleranceVector2Float32(offset)) *
-                4,
+            tolerance,
           ),
         );
       }

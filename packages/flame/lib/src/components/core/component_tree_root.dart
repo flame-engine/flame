@@ -164,7 +164,7 @@ class ComponentTreeRoot extends Component {
       for (final (child, newPriority) in events) {
         child.handleLifecycleEventRebalanceUncleanly(newPriority);
       }
-      parent.children.reorder();
+      parent.children.rebalanceAll();
     }
 
     if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
