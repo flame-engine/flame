@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
-import 'package:flame/src/extensions/size.dart';
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/sprite.dart';
 import 'package:flame/src/widgets/base_future_builder.dart';
