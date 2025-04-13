@@ -11,7 +11,6 @@ backgrounded # moving the app to the background
 backgrounding # moving the app to the background
 backpressure # strategy to deal with excess flow of data
 backquote # another word for backtick
-Bezier # Bézier curves are parametric curves used in computer graphics
 bimedian # line segment joining the midpoints of opposite sides of a shape
 bitfield # data structure consisting of adjacent bits
 broadphase # common division of collision detection between broad and narrow phases
