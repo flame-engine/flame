@@ -6,12 +6,14 @@ import 'package:flame/src/effects/effect.dart';
 EffectController _createController({
   required List<Effect> effects,
   required bool alternate,
+  required AlternatePattern alternatePattern,
   required bool infinite,
   required int repeatCount,
 }) {
   EffectController ec = _SequenceEffectEffectController(
     effects,
     alternate: alternate,
+    alternatePattern: alternatePattern,
   );
   if (infinite) {
     ec = InfiniteEffectController(ec);
@@ -20,6 +22,24 @@ EffectController _createController({
   }
   effects.forEach((e) => e.removeOnFinish = false);
   return ec;
+}
+
+/// Specifies how to playback an alternating [SequenceEffect] pattern.
+///
+/// [AlternatePattern.repeatLast] will replay the first and last [Effect]
+/// when the sequence repeats, causing those [Effect]s to play twice-in-a-row.
+///
+/// [AlternatePattern.doNotRepeatLast] will not replay the first and last
+/// [Effect] and instead jumps to the second and second-to-last [Effect]
+/// respectively, if available, at the start of the alternating pattern.
+/// This is equivalent to playing the first and last [Effect] once throughout
+/// the combined span of the original pattern plus its reversed pattern.
+enum AlternatePattern {
+  repeatLast(1),
+  doNotRepeatLast(2);
+
+  final int value;
+  const AlternatePattern(this.value);
 }
 
 /// Run multiple effects in a sequence, one after another.
@@ -31,6 +51,10 @@ EffectController _createController({
 ///
 /// If the `alternate` flag is provided, then the sequence will run in the
 /// reverse after it ran forward.
+///
+/// Parameter `alternatePattern` is only used when `alternate` is true.
+/// This parameter modifies how the pattern repeats in reverse.
+/// See [AlternatePattern] for options.
 ///
 /// Parameter `repeatCount` will make the sequence repeat a certain number of
 /// times. If `alternate` is also true, then the sequence will first run
@@ -48,6 +72,7 @@ EffectController _createController({
 class SequenceEffect extends Effect {
   SequenceEffect(
     List<Effect> effects, {
+    AlternatePattern alternatePattern = AlternatePattern.repeatLast,
     bool alternate = false,
     bool infinite = false,
     int repeatCount = 1,
@@ -63,6 +88,7 @@ class SequenceEffect extends Effect {
           _createController(
             effects: effects,
             alternate: alternate,
+            alternatePattern: alternatePattern,
             infinite: infinite,
             repeatCount: repeatCount,
           ),
@@ -93,6 +119,7 @@ class _SequenceEffectEffectController extends EffectController {
   _SequenceEffectEffectController(
     this.effects, {
     required this.alternate,
+    required this.alternatePattern,
   }) : super.empty();
 
   /// The list of children effects.
@@ -101,6 +128,11 @@ class _SequenceEffectEffectController extends EffectController {
   /// If this flag is true, then after the sequence runs to the end, it will
   /// run again in the reverse order.
   final bool alternate;
+
+  /// If [alternate] is true, and after the sequence runs to completion once,
+  /// this will run again in the reverse order according to the policy
+  /// of the [AlternatePattern] value provided.
+  final AlternatePattern alternatePattern;
 
   /// Index of the currently running effect within the [effects] list. If there
   /// are n effects in total, then this runs as 0, 1, ..., n-1. After that, if
@@ -114,6 +146,23 @@ class _SequenceEffectEffectController extends EffectController {
   /// Total number of effects in this sequence.
   int get n => effects.length;
 
+  /// If [alternate] is not set, our last index will be `n-1`.
+  /// Otherwise, the sequence approaches 0 from the left of the
+  /// number-line, and if our [alternatePattern] excludes the first
+  /// [Effect], then it will reduce the destination index by 1.
+  int get _computeLastIndex => switch (alternate) {
+        true => switch (alternatePattern) {
+            // index 0 is the start of the original pattern,
+            // therefore -1 is our destination index, which will
+            // be the exact same `Effect` as index 0.
+            AlternatePattern.repeatLast => -1,
+            // Since the original pattern will begin again from start,
+            // skip index -1 and make -2 our destination index.
+            AlternatePattern.doNotRepeatLast => -2,
+          },
+        false => n - 1,
+      };
+
   @override
   bool get completed => _completed;
   bool _completed = false;
@@ -124,9 +173,21 @@ class _SequenceEffectEffectController extends EffectController {
     for (final effect in effects) {
       totalDuration += effect.controller.duration ?? 0;
     }
+
+    // Abort early
+    if (totalDuration == 0.0) {
+      return totalDuration;
+    }
+
     if (alternate) {
       totalDuration *= 2;
+
+      if (alternatePattern == AlternatePattern.doNotRepeatLast) {
+        totalDuration -= effects.first.controller.duration ?? 0;
+        totalDuration -= effects.last.controller.duration ?? 0;
+      }
     }
+
     return totalDuration;
   }
 
@@ -136,7 +197,7 @@ class _SequenceEffectEffectController extends EffectController {
   }
 
   @override
-  double get progress => (_index + 1) / n;
+  double get progress => (_index < 0 ? -_index : _index + 1) / n;
 
   @override
   double advance(double dt) {
@@ -147,20 +208,32 @@ class _SequenceEffectEffectController extends EffectController {
         if (t > 0) {
           _index += 1;
           if (_index == n) {
-            if (alternate) {
-              _index = -1;
-            } else {
-              _index = n - 1;
+            _index = _computeLastIndex;
+
+            if (_index == n - 1) {
               _completed = true;
               break;
             }
           }
         }
       } else {
+        // This case represents the reversed alternating pattern
+        // when `alternate` is true. Our indices will be negative,
+        // and we recede back to index 0.
+
         t = currentEffect.recede(t);
         if (t > 0) {
           _index -= 1;
-          if (_index < -n) {
+
+          var lastIndex = -n;
+          // Iff the requested alternate policy is `repeatLast`, then we must
+          // include and play the start Effect before considering our sequence
+          // completed.
+          if (alternate && alternatePattern == AlternatePattern.repeatLast) {
+            lastIndex -= 1;
+          }
+
+          if (_index == lastIndex) {
             _index = -n;
             _completed = true;
             break;
@@ -208,13 +281,14 @@ class _SequenceEffectEffectController extends EffectController {
 
   @override
   void setToEnd() {
-    if (alternate) {
-      _index = -n;
-      effects.forEach((e) => e.reset());
-    } else {
-      _index = n - 1;
+    _index = _computeLastIndex;
+
+    if (_index == n - 1) {
       effects.forEach((e) => e.resetToEnd());
+    } else {
+      effects.forEach((e) => e.reset());
     }
+
     _completed = true;
   }
 

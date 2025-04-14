@@ -46,7 +46,7 @@ abstract class DurationEffectController extends EffectController {
   double recede(double dt) {
     _timer -= dt;
     if (_timer < 0) {
-      final leftoverTime = 0 - _timer;
+      final leftoverTime = _timer.abs();
       _timer = 0;
       return leftoverTime;
     }
