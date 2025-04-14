@@ -420,7 +420,7 @@ class _MyTappableComponent extends _MyComponent with TapCallbacks {
   }
 }
 
-class _MyComponent extends PositionComponent with HasGameRef {
+class _MyComponent extends PositionComponent with HasGameReference{
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;

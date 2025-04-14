@@ -180,7 +180,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
+class Rock extends SpriteComponent with HasGameReference, TapCallbacks {
   Rock(Vector2 position)
       : super(
           position: position,
