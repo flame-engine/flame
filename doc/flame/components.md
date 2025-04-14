@@ -1377,7 +1377,7 @@ class Player extends SpriteComponent with Notifier {
 Then our hud component could look like:
 
 ```dart
-class Hud extends PositionComponent with HasGameRef {
+class Hud extends PositionComponent with HasGameReference {
 
   @override
   void onLoad() {

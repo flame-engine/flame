@@ -53,7 +53,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
 }
 
 class AnimatedComponent extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameRef {
+    with CollisionCallbacks, HasGameReference {
   final Vector2 velocity;
 
   AnimatedComponent(

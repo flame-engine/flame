@@ -30,7 +30,7 @@ class ComposabilityExample extends FlameGame {
   }
 }
 
-class ParentSquare extends RectangleComponent with HasGameRef {
+class ParentSquare extends RectangleComponent with HasGameReference {
   static final defaultPaint = BasicPalette.white.paint()
     ..style = PaintingStyle.stroke;
 
