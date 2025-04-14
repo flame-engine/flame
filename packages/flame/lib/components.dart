@@ -23,6 +23,7 @@ export 'src/components/mixins/coordinate_transform.dart';
 export 'src/components/mixins/gesture_hitboxes.dart';
 export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
+// ignore: deprecated_member_use_from_same_package
 export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
 export 'src/components/mixins/has_game_reference.dart' show HasGameReference;
 export 'src/components/mixins/has_paint.dart';

@@ -452,7 +452,7 @@ class Component {
   ///   - it is invoked when the size of the game canvas is already known.
   ///
   /// If your loading logic requires knowing the size of the game canvas, then
-  /// add [HasGameRef] mixin and then query `game.size` or
+  /// add [HasGameReference] mixin and then query `game.size` or
   /// `game.canvasSize`.
   ///
   /// The default implementation returns `null`, indicating that there is no
