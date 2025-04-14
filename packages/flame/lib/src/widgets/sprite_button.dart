@@ -233,8 +233,6 @@ class _ButtonState extends State<InternalSpriteButton> {
     final height = widget.height;
     final Sprite sprite;
     if (widget.onPressed == null) {
-      print(
-          'SpriteButton: onPressed is null, using disabled sprite ${widget.disabledSprite}');
       sprite = widget.disabledSprite ?? widget.sprite;
     } else if (_pressed) {
       sprite = widget.pressedSprite;
