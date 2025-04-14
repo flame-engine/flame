@@ -57,7 +57,8 @@ SpriteButton(
     label: const Text('Sprite Button', style: const TextStyle(color: const Color(0xFF5D275D))),
     sprite: _spriteButton,
     pressedSprite: _pressedSprite,
-    disabledSprite: _disabledSprite, // Optional, will be shown when onPressed in null.
+    // Optional, will be shown when onPressed in null.
+    disabledSprite: _disabledSprite,
     height: _height,
     width: _width,
 )
