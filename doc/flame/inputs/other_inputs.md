@@ -46,7 +46,7 @@ class MyGame extends FlameGame {
   }
 }
 
-class Player extends SpriteComponent with HasGameReference{
+class Player extends SpriteComponent with HasGameReference {
   Player(this.joystick)
     : super(
         anchor: Anchor.center,
