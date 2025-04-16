@@ -1,19 +1,53 @@
+import 'dart:async';
 import 'dart:ui' as ui show Image;
 import 'dart:ui' hide Image;
 
 import 'package:flame/components.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
+import 'package:meta/meta.dart';
 
-abstract class PostProcessor {
+abstract class PostProcess {
+  const PostProcess();
+
   int get samplingPasses;
+
+  Future<void> onLoad();
 
   void update(double dt) {}
 
-  void postProcess(List<ui.Image> samples, Size size, Canvas canvas);
+  void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas);
 }
 
-class PostProcessorComponent extends PositionComponent {
-  PostProcessorComponent({
+abstract class FragmentShaderPostProcess extends PostProcess {
+  Future<FragmentProgram> fragmentProgramLoader();
+
+  late FragmentShader fragmentShader;
+
+  @override
+  Future<void> onLoad() async {
+    final fragmentProgram = await fragmentProgramLoader();
+    fragmentShader = fragmentProgram.fragmentShader();
+  }
+
+  Paint getPaint() => Paint()..shader = fragmentShader;
+
+  @override
+  int get samplingPasses => 1;
+
+  @override
+  void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas) {
+    canvas
+      ..save()
+      ..drawRect(Offset.zero & size.toSize(), getPaint())
+      ..restore();
+  }
+}
+
+/// A [PositionComponent] that applies a post-processing effect to its children.
+/// This component is useful for applying effects such as bloom, blur, other
+/// fragment shader effects to a group of components.
+class PostProcessComponent<T extends PostProcess> extends PositionComponent {
+  PostProcessComponent({
     required this.postProcess,
     double? pixelRatio,
     super.position,
@@ -31,48 +65,55 @@ class PostProcessorComponent extends PositionComponent {
           nativeAngle: nativeAngle ?? 0,
         );
 
-  late final _layer = _PostProcessRenderer(
-    renderTree: super.renderTree,
-    canvasFactory: _canvasFactory,
-    processor: postProcess,
+  @override
+  PostProcessRenderContext<T> get renderContext => _renderContext;
+
+  late final PostProcessRenderContext<T> _renderContext =
+      PostProcessRenderContext<T>(
+    postProcess: postProcess,
+    passIndex: 0,
   );
 
-  final PostProcessor postProcess;
+  final T postProcess;
   final double pixelRatio;
 
-  Canvas _canvasFactory(PictureRecorder recorder, int passIndex) {
-    return SamplingCanvas(
-      step: postProcess,
-      passIndex: passIndex,
-      actualCanvas: Canvas(recorder),
-    );
+  @override
+  @mustCallSuper
+  Future<void> onLoad() async {
+    await postProcess.onLoad();
+    return super.onLoad();
   }
 
   @override
+  @mustCallSuper
   void renderTree(Canvas canvas) {
     decorator.applyChain(
-      (canvas) => _layer.render(canvas, size, pixelRatio),
+      (canvas) {
+        // Pre-render children as much as necessary
+        final results = List<ui.Image>.generate(
+          postProcess.samplingPasses,
+          (i) {
+            return _renderAndRecord(size, i, pixelRatio);
+          },
+        );
+
+        canvas.save();
+        postProcess.postProcess(results, size, canvas);
+        canvas.restore();
+      },
       canvas,
     );
   }
-}
 
-class _PostProcessRenderer {
-  final Canvas Function(PictureRecorder, int) canvasFactory;
-  final void Function(Canvas) renderTree;
-  final PostProcessor processor;
-
-  _PostProcessRenderer({
-    required this.renderTree,
-    required this.canvasFactory,
-    required this.processor,
-  });
-
-  ui.Image _renderPass(Vector2 size, int pass, double pixelRatio) {
+  ui.Image _renderAndRecord(Vector2 size, int pass, double pixelRatio) {
     final recorder = PictureRecorder();
 
-    final innerCanvas = canvasFactory(recorder, pass);
-    renderTree(innerCanvas);
+    final innerCanvas = Canvas(recorder);
+
+    // update context before rendering children
+    _renderContext.passIndex = pass;
+    super.renderTree(innerCanvas);
+
     final picture = recorder.endRecording();
 
     return picture.toImageSync(
@@ -80,277 +121,21 @@ class _PostProcessRenderer {
       (pixelRatio * size.y).ceil(),
     );
   }
-
-  void render(Canvas canvas, Vector2 size, double pixelRatio) {
-    final results = List<ui.Image>.generate(
-      processor.samplingPasses,
-      (i) {
-        return _renderPass(size, i, pixelRatio);
-      },
-    );
-
-    canvas.save();
-    processor.postProcess(results, size.toSize(), canvas);
-    canvas.restore();
-  }
 }
 
-class SamplingCanvas<S extends PostProcessor> implements Canvas {
-  SamplingCanvas({
-    required this.step,
+class PostProcessRenderContext<T extends PostProcess>
+    extends ComponentRenderContext {
+  PostProcessRenderContext({
+    required this.postProcess,
     required this.passIndex,
-    required this.actualCanvas,
   });
 
-  final S step;
-  final int passIndex;
+  final T postProcess;
+  int passIndex;
+}
 
-  final Canvas actualCanvas;
-
-  @override
-  void clipPath(Path path, {bool doAntiAlias = true}) {
-    actualCanvas.clipPath(path, doAntiAlias: doAntiAlias);
-  }
-
-  @override
-  void clipRRect(RRect rrect, {bool doAntiAlias = true}) {
-    return actualCanvas.clipRRect(rrect, doAntiAlias: doAntiAlias);
-  }
-
-  @override
-  void clipRect(
-    Rect rect, {
-    ClipOp clipOp = ClipOp.intersect,
-    bool doAntiAlias = true,
-  }) {
-    return actualCanvas.clipRect(
-      rect,
-      clipOp: clipOp,
-      doAntiAlias: doAntiAlias,
-    );
-  }
-
-  @override
-  void drawArc(
-    Rect rect,
-    double startAngle,
-    double sweepAngle,
-    bool useCenter,
-    Paint paint,
-  ) {
-    return actualCanvas.drawArc(
-      rect,
-      startAngle,
-      sweepAngle,
-      useCenter,
-      paint,
-    );
-  }
-
-  @override
-  void drawAtlas(
-    ui.Image atlas,
-    List<RSTransform> transforms,
-    List<Rect> rects,
-    List<Color>? colors,
-    BlendMode? blendMode,
-    Rect? cullRect,
-    Paint paint,
-  ) {
-    return actualCanvas.drawAtlas(
-      atlas,
-      transforms,
-      rects,
-      colors,
-      blendMode,
-      cullRect,
-      paint,
-    );
-  }
-
-  @override
-  void drawCircle(Offset c, double radius, Paint paint) {
-    actualCanvas.drawCircle(c, radius, paint);
-  }
-
-  @override
-  void drawColor(Color color, BlendMode blendMode) {
-    actualCanvas.drawColor(color, blendMode);
-  }
-
-  @override
-  void drawDRRect(RRect outer, RRect inner, Paint paint) {
-    actualCanvas.drawDRRect(outer, inner, paint);
-  }
-
-  @override
-  void drawImage(ui.Image image, Offset offset, Paint paint) {
-    return actualCanvas.drawImage(image, offset, paint);
-  }
-
-  @override
-  void drawImageNine(ui.Image image, Rect center, Rect dst, Paint paint) {
-    return actualCanvas.drawImageNine(image, center, dst, paint);
-  }
-
-  @override
-  void drawImageRect(ui.Image image, Rect src, Rect dst, Paint paint) {
-    return actualCanvas.drawImageRect(image, src, dst, paint);
-  }
-
-  @override
-  void drawLine(Offset p1, Offset p2, Paint paint) {
-    return actualCanvas.drawLine(p1, p2, paint);
-  }
-
-  @override
-  void drawOval(Rect rect, Paint paint) {
-    return actualCanvas.drawOval(rect, paint);
-  }
-
-  @override
-  void drawPaint(Paint paint) {
-    return actualCanvas.drawPaint(paint);
-  }
-
-  @override
-  void drawParagraph(Paragraph paragraph, Offset offset) {
-    return actualCanvas.drawParagraph(paragraph, offset);
-  }
-
-  @override
-  void drawPath(Path path, Paint paint) {
-    return actualCanvas.drawPath(path, paint);
-  }
-
-  @override
-  void drawPicture(Picture picture) {
-    return actualCanvas.drawPicture(picture);
-  }
-
-  @override
-  void drawPoints(PointMode pointMode, List<Offset> points, Paint paint) {
-    return actualCanvas.drawPoints(pointMode, points, paint);
-  }
-
-  @override
-  void drawRRect(RRect rrect, Paint paint) {
-    return actualCanvas.drawRRect(rrect, paint);
-  }
-
-  @override
-  void drawRawAtlas(
-    ui.Image atlas,
-    Float32List rstTransforms,
-    Float32List rects,
-    Int32List? colors,
-    BlendMode? blendMode,
-    Rect? cullRect,
-    Paint paint,
-  ) {
-    return actualCanvas.drawRawAtlas(
-      atlas,
-      rstTransforms,
-      rects,
-      colors,
-      blendMode,
-      cullRect,
-      paint,
-    );
-  }
-
-  @override
-  void drawRawPoints(PointMode pointMode, Float32List points, Paint paint) {
-    return actualCanvas.drawRawPoints(pointMode, points, paint);
-  }
-
-  @override
-  void drawRect(Rect rect, Paint paint) {
-    return actualCanvas.drawRect(rect, paint);
-  }
-
-  @override
-  void drawShadow(
-    Path path,
-    Color color,
-    double elevation,
-    bool transparentOccluder,
-  ) {
-    return actualCanvas.drawShadow(
-      path,
-      color,
-      elevation,
-      transparentOccluder,
-    );
-  }
-
-  @override
-  void drawVertices(Vertices vertices, BlendMode blendMode, Paint paint) {
-    return actualCanvas.drawVertices(vertices, blendMode, paint);
-  }
-
-  @override
-  Rect getDestinationClipBounds() {
-    return actualCanvas.getDestinationClipBounds();
-  }
-
-  @override
-  Rect getLocalClipBounds() {
-    return actualCanvas.getLocalClipBounds();
-  }
-
-  @override
-  int getSaveCount() {
-    return actualCanvas.getSaveCount();
-  }
-
-  @override
-  Float64List getTransform() {
-    return actualCanvas.getTransform();
-  }
-
-  @override
-  void restore() {
-    return actualCanvas.restore();
-  }
-
-  @override
-  void restoreToCount(int count) {
-    return actualCanvas.restoreToCount(count);
-  }
-
-  @override
-  void rotate(double radians) {
-    return actualCanvas.rotate(radians);
-  }
-
-  @override
-  void save() {
-    return actualCanvas.save();
-  }
-
-  @override
-  void saveLayer(Rect? bounds, Paint paint) {
-    return actualCanvas.saveLayer(bounds, paint);
-  }
-
-  @override
-  void scale(double sx, [double? sy]) {
-    return actualCanvas.scale(sx, sy);
-  }
-
-  @override
-  void skew(double sx, double sy) {
-    return actualCanvas.skew(sx, sy);
-  }
-
-  @override
-  void transform(Float64List matrix4) {
-    return actualCanvas.transform(matrix4);
-  }
-
-  @override
-  void translate(double dx, double dy) {
-    return actualCanvas.translate(dx, dy);
+extension PostProcessingContext on Component {
+  PostProcessRenderContext<T>? findPostProcessContext<T extends PostProcess>() {
+    return findRenderContext<PostProcessRenderContext<T>>();
   }
 }

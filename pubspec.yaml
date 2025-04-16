@@ -61,7 +61,7 @@ workspace:
   - examples/games/trex
   - examples/games/padracing
   - examples/games/rogue_shooter
-  - examples/games/turi
+  - examples/games/crystal_ball
   - examples
 
 environment:
