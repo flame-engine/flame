@@ -96,7 +96,7 @@ class LineSegment {
     return [];
   }
 
-  /// Wether the given [point] lies in this line segment.
+  /// Whether the given [point] lies in this line segment.
   bool containsPoint(Vector2 point, {double epsilon = 0.000001}) {
     final delta = to - from;
     final crossProduct =
