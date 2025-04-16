@@ -3,43 +3,142 @@ import 'dart:ui' as ui show Image;
 import 'dart:ui' hide Image;
 
 import 'package:flame/components.dart';
+import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:meta/meta.dart';
 
 abstract class PostProcess {
-  const PostProcess();
+  PostProcess({double? pixelRatio})
+      : pixelRatio = pixelRatio ??
+            PlatformDispatcher.instance.views.first.devicePixelRatio;
+
+  double pixelRatio;
 
   int get samplingPasses;
 
-  Future<void> onLoad();
+  FutureOr<void> onLoad() {}
 
   void update(double dt) {}
+
+  void render(
+    Canvas canvas,
+    Vector2 size,
+    void Function(Canvas) renderTree,
+    void Function(PostProcessRenderContext?) updateContext,
+  ) {
+    // Pre-render children as much as necessary
+    final results = List<ui.Image>.generate(
+      samplingPasses,
+      (i) {
+        return _renderAndRecord(size, i, renderTree, updateContext);
+      },
+    );
+
+    canvas.save();
+    postProcess(results, size, canvas);
+    canvas.restore();
+  }
+
+  ui.Image _renderAndRecord(
+    Vector2 size,
+    int pass,
+    void Function(Canvas) renderTree,
+    void Function(PostProcessRenderContext?) updateContext,
+  ) {
+    final recorder = PictureRecorder();
+
+    final innerCanvas = Canvas(recorder);
+
+    updateContext(
+      PostProcessRenderContext(
+        postProcess: this,
+        passIndex: pass,
+      ),
+    );
+    renderTree(innerCanvas);
+    updateContext(null);
+
+    final picture = recorder.endRecording();
+
+    return picture.toImageSync(
+      (pixelRatio * size.x).ceil(),
+      (pixelRatio * size.y).ceil(),
+    );
+  }
 
   void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas);
 }
 
-abstract class FragmentShaderPostProcess extends PostProcess {
-  Future<FragmentProgram> fragmentProgramLoader();
+class PostProcessGroup extends PostProcess {
+  PostProcessGroup({
+    required this.postProcesses,
+  });
 
-  late FragmentShader fragmentShader;
-
-  @override
-  Future<void> onLoad() async {
-    final fragmentProgram = await fragmentProgramLoader();
-    fragmentShader = fragmentProgram.fragmentShader();
-  }
-
-  Paint getPaint() => Paint()..shader = fragmentShader;
+  final List<PostProcess> postProcesses;
 
   @override
   int get samplingPasses => 1;
 
   @override
-  void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas) {
-    canvas
-      ..save()
-      ..drawRect(Offset.zero & size.toSize(), getPaint())
-      ..restore();
+  Future<void> onLoad() async {
+    for (final postProcess in postProcesses) {
+      await postProcess.onLoad();
+    }
+  }
+
+  @override
+  void update(double dt) {
+    for (final postProcess in postProcesses) {
+      postProcess.update(dt);
+    }
+  }
+
+  @override
+  void render(
+    Canvas canvas,
+    Vector2 size,
+    void Function(Canvas) renderTree,
+    void Function(PostProcessRenderContext?) updateContext,
+  ) {
+    for (final postProcess in postProcesses) {
+      postProcess.render(canvas, size, renderTree, updateContext);
+    }
+  }
+
+  @override
+  void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas) {}
+}
+
+class PostProcessSequentialGroup extends PostProcessGroup {
+  PostProcessSequentialGroup({
+    required super.postProcesses,
+  });
+
+  @override
+  void render(
+    Canvas canvas,
+    Vector2 size,
+    void Function(Canvas) renderTree,
+    void Function(PostProcessRenderContext?) updateContext,
+  ) {
+    var currentRenderTree = renderTree;
+    for (final (index, postProcess) in postProcesses.indexed) {
+      assert(
+        postProcess.samplingPasses >= 1 && index > 0,
+        'PostProcessSequentialGroup has a PostProcess with no sampling passes.'
+        ' This is only acceptable for the first post process in the group.'
+        ' Otherwise, this post process will discard the results of the'
+        ' previous ones.\n'
+        'Consider using PostProcessGroup instead.\n'
+        'Offending PostProcess:'
+        ' $postProcess',
+      );
+      currentRenderTree = (canvas) {
+        postProcess.render(canvas, size, currentRenderTree, updateContext);
+      };
+    }
+
+    currentRenderTree(canvas);
   }
 }
 
@@ -49,7 +148,6 @@ abstract class FragmentShaderPostProcess extends PostProcess {
 class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   PostProcessComponent({
     required this.postProcess,
-    double? pixelRatio,
     super.position,
     super.size,
     super.scale,
@@ -59,23 +157,16 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  })  : pixelRatio = pixelRatio ??
-            PlatformDispatcher.instance.views.first.devicePixelRatio,
-        super(
+  }) : super(
           nativeAngle: nativeAngle ?? 0,
         );
 
   @override
-  PostProcessRenderContext<T> get renderContext => _renderContext;
+  PostProcessRenderContext? get renderContext => _renderContext;
 
-  late final PostProcessRenderContext<T> _renderContext =
-      PostProcessRenderContext<T>(
-    postProcess: postProcess,
-    passIndex: 0,
-  );
+  PostProcessRenderContext? _renderContext;
 
   final T postProcess;
-  final double pixelRatio;
 
   @override
   @mustCallSuper
@@ -85,40 +176,26 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+    postProcess.update(dt);
+  }
+
+  @override
   @mustCallSuper
   void renderTree(Canvas canvas) {
     decorator.applyChain(
       (canvas) {
-        // Pre-render children as much as necessary
-        final results = List<ui.Image>.generate(
-          postProcess.samplingPasses,
-          (i) {
-            return _renderAndRecord(size, i, pixelRatio);
+        postProcess.render(
+          canvas,
+          size,
+          super.renderTree,
+          (context) {
+            _renderContext = context;
           },
         );
-
-        canvas.save();
-        postProcess.postProcess(results, size, canvas);
-        canvas.restore();
       },
       canvas,
-    );
-  }
-
-  ui.Image _renderAndRecord(Vector2 size, int pass, double pixelRatio) {
-    final recorder = PictureRecorder();
-
-    final innerCanvas = Canvas(recorder);
-
-    // update context before rendering children
-    _renderContext.passIndex = pass;
-    super.renderTree(innerCanvas);
-
-    final picture = recorder.endRecording();
-
-    return picture.toImageSync(
-      (pixelRatio * size.x).ceil(),
-      (pixelRatio * size.y).ceil(),
     );
   }
 }
@@ -134,8 +211,18 @@ class PostProcessRenderContext<T extends PostProcess>
   int passIndex;
 }
 
-extension PostProcessingContext on Component {
+extension PostProcessingContextFinder on Component {
   PostProcessRenderContext<T>? findPostProcessContext<T extends PostProcess>() {
-    return findRenderContext<PostProcessRenderContext<T>>();
+    final closestContext = findRenderContext<PostProcessRenderContext<T>>();
+    if (closestContext != null) {
+      return closestContext;
+    }
+    final contextInCamera =
+        findRenderContext<CameraRenderContext>()?.currentPostProcessContext;
+    if (contextInCamera is PostProcessRenderContext<T>) {
+      return contextInCamera;
+    }
+
+    return null;
   }
 }

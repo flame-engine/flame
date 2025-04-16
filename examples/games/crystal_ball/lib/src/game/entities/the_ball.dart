@@ -5,14 +5,10 @@ import 'dart:ui';
 
 import 'package:crystal_ball/src/game/constants.dart';
 import 'package:crystal_ball/src/game/entities/ground.dart';
-import 'package:crystal_ball/src/game/entities/platform.dart';
-import 'package:crystal_ball/src/game/entities/reaper.dart';
 import 'package:crystal_ball/src/game/game.dart';
-import 'package:crystal_ball/src/game/post_processes/ball_glow.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/shader_pipeline.dart';
 import 'package:flutter/animation.dart';
 
 class TheBall extends PositionComponent
@@ -75,28 +71,9 @@ class TheBall extends PositionComponent
       velocity.y = 0;
       position.y = 0;
       jump();
-      game.world.cameraTarget.go(
-        to: Vector2(0, -400),
-        duration: 0.1,
-      );
-    }
-    if (other is Platform && velocity.y > 0) {
       
-      velocity.y = 0;
-      position.y = other.topLeftPosition.y - kPlayerRadius;
-      jump();
-      game.world.cameraTarget.go(
-        to: Vector2(0, other.topLeftPosition.y - kCameraSize.y / 2 + 300),
-        duration: 0.1,
-      );
-      other.glowTo(to: 1.45, duration: 0.5);
     }
 
-    if (other is Reaper && velocity.y > 0) {
-      
-      game.gameOver();
-      velocity.y = 0;
-    }
   }
 
 }

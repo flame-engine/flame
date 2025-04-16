@@ -10,6 +10,7 @@ import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
@@ -50,18 +51,23 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
-    // todo implement this api
-    List<PostProcess>? postProcessors, 
+    PostProcess? postProcess,
     super.key,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
         _backdrop = backdrop ?? Component(),
+        _postProcessComponent = postProcess != null
+            ? PostProcessComponent(postProcess: postProcess)
+            : null,
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
         super(priority: 0x7fffffff) {
     addAll([_backdrop, _viewport, _viewfinder]);
+    if (_postProcessComponent != null) {
+      add(_postProcessComponent!);
+    }
   }
 
   /// Create a camera that shows a portion of the game world of fixed size
@@ -80,6 +86,7 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    PostProcess? postProcess,
     ComponentKey? key,
   }) : this(
           world: world,
@@ -87,6 +94,7 @@ class CameraComponent extends Component {
           viewfinder: viewfinder ?? Viewfinder(),
           backdrop: backdrop,
           hudComponents: hudComponents,
+          postProcess: postProcess,
           key: key,
         );
 
@@ -173,12 +181,79 @@ class CameraComponent extends Component {
     return viewfinder.visibleWorldRect;
   }
 
+  void renderTree(Canvas canvas) {
+    final postProcessComponent = _postProcessComponent;
+    if (postProcessComponent != null) {
+      canvas.save();
+      canvas.translate(
+        viewport.position.x - viewport.anchor.x * viewport.size.x,
+        viewport.position.y - viewport.anchor.y * viewport.size.y,
+      );
+      // Render the world through the viewport
+      if ((world?.isMounted ?? false) &&
+          currentCameras.length < maxCamerasDepth) {
+        canvas.save();
+        viewport.clip(canvas);
+        viewport.transformCanvas(canvas);
+        backdrop.renderTree(canvas);
+        // canvas.save();
+        // try {
+        //   currentCameras.add(this);
+        //   canvas.transform2D(viewfinder.transform);
+        //   world!.renderFromCamera(canvas);
+        //   // Render the viewfinder elements, which will be in front of the world,
+        //   // but with the same transforms applied to them.
+        //   viewfinder.renderTree(canvas);
+        // } finally {
+        //   currentCameras.removeLast();
+        // }
+        // canvas.restore();
+
+        // then
+        () {
+          canvas.save();
+          try {
+            currentCameras.add(this);
+
+            
+            postProcessComponent.postProcess.render(
+              canvas,
+              viewport.virtualSize,
+              (canvas) {
+                canvas.transform2D(viewfinder.transform);
+                world!.renderFromCamera(canvas);
+                // Render the viewfinder elements, which will be in front of 
+                // the world,
+                // but with the same transforms applied to them.
+                viewfinder.renderTree(canvas);
+              },
+              (context) {
+                renderContext.currentPostProcessContext = context;
+              },
+            );
+          } finally {
+            currentCameras.removeLast();
+          }
+          canvas.restore();
+        }();
+
+        // Render the viewport elements, which will be in front of the world.
+        viewport.renderTree(canvas);
+
+        canvas.restore();
+      }
+      canvas.restore();
+    } else {
+      _renderTree(canvas);
+    }
+  }
+
   /// Renders the [world] as seen through this camera.
   ///
   /// If the world is not mounted yet, only the viewport and viewfinder elements
   /// will be rendered.
   @override
-  void renderTree(Canvas canvas) {
+  void _renderTree(Canvas canvas) {
     canvas.save();
     canvas.translate(
       viewport.position.x - viewport.anchor.x * viewport.size.x,
@@ -449,4 +524,28 @@ class CameraComponent extends Component {
 
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
+
+  @override
+  final CameraRenderContext renderContext = CameraRenderContext();
+
+  PostProcess? get postProcess => _postProcessComponent?.postProcess;
+  set postProcess(PostProcess? postProcess) {
+    if (_postProcessComponent != null) {
+      _postProcessComponent!.removeFromParent();
+    }
+    if (postProcess != null) {
+      _postProcessComponent = PostProcessComponent(
+        postProcess: postProcess,
+      );
+      add(_postProcessComponent!);
+    } else {
+      _postProcessComponent = null;
+    }
+  }
+
+  PostProcessComponent? _postProcessComponent;
+}
+
+class CameraRenderContext extends ComponentRenderContext {
+  PostProcessRenderContext? currentPostProcessContext;
 }

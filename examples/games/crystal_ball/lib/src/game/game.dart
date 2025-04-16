@@ -4,13 +4,11 @@ import 'dart:ui';
 
 import 'package:crystal_ball/src/game/components/camera_target.dart';
 import 'package:crystal_ball/src/game/components/input_handler.dart';
-import 'package:crystal_ball/src/game/components/platform_spawner.dart';
 import 'package:crystal_ball/src/game/constants.dart';
 import 'package:crystal_ball/src/game/entities/ground.dart';
-import 'package:crystal_ball/src/game/entities/platform.dart';
-import 'package:crystal_ball/src/game/entities/reaper.dart';
 import 'package:crystal_ball/src/game/entities/the_ball.dart';
 import 'package:crystal_ball/src/game/post_processes/ball_glow.dart';
+import 'package:crystal_ball/src/game/post_processes/water.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -19,6 +17,8 @@ typedef PreloadedPrograms = ({
   FragmentProgram waterFragmentProgram,
   FragmentProgram fogFragmentProgram,
 });
+
+late CameraComponent kamera;
 
 class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
     with
@@ -30,7 +30,7 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
     required this.pixelRatio,
     required this.random,
   }) : super(
-          camera: CameraComponent.withFixedResolution(
+          camera: kamera = CameraComponent.withFixedResolution(
             width: kCameraSize.x,
             height: kCameraSize.y,
           ),
@@ -39,6 +39,10 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
             children: [],
           ),
         ) {
+    camera.postProcess = WaterPostProcess(
+      fragmentProgram: preloadedPrograms.waterFragmentProgram,
+    )..world = world;
+
     world.addAll([
       inputHandler = InputHandler(),
     ]);
@@ -46,13 +50,8 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
 
   @override
   FutureOr<void> onLoad() {
-    Future.delayed(
-      const Duration(milliseconds: 100),
-      () {
-        camera.follow(world.cameraTarget);
-        start();
-      },
-    );
+    camera.follow(world.cameraTarget);
+
     return super.onLoad();
   }
 
@@ -61,28 +60,6 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
   late final InputHandler inputHandler;
 
   final Random random;
-
-  void start() {
-    world.cameraTarget.go(
-      to: Vector2(0, -400),
-      duration: 3,
-    );
-    world.platformSpawner.needsPreloadCheck = false;
-    world.platformSpawner.currentMinY = kStartPlatformHeight;
-    world.platformSpawner.spawnIntitialPlatforms();
-  }
-
-  void gameOver() {
-    for (final platform in world.getPlatforms()) {
-      platform.removeFromParent();
-    }
-    world.theBall.position = Vector2.zero();
-    world.cameraTarget.go(
-      to: Vector2(0, 0),
-      duration: 0.3,
-    );
-    Future.delayed(const Duration(milliseconds: 1000), start);
-  }
 }
 
 class CrystalBallGameWorld extends World {
@@ -94,8 +71,6 @@ class CrystalBallGameWorld extends World {
   }) {
     addAll([
       BallGlow(),
-      platformSpawner = PlatformSpawner(random: random),
-      reaper = Reaper(),
       theBall = TheBall(position: Vector2.zero()),
       ground = Ground(),
     ]);
@@ -105,14 +80,8 @@ class CrystalBallGameWorld extends World {
 
   late final cameraTarget = CameraTarget();
 
-  late final PlatformSpawner platformSpawner;
-  late final Reaper reaper;
   late final TheBall theBall;
   late final Ground ground;
 
   final Random random;
-
-  Iterable<Platform> getPlatforms() {
-    return children.query<Platform>();
-  }
 }

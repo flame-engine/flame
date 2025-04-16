@@ -21,7 +21,12 @@ class _GamePageState extends State<GamePage> {
   late final Future<PreloadedPrograms> preloadedPrograms = Future.wait([
     FragmentProgram.fromAsset('shaders/ground.frag'),
     FragmentProgram.fromAsset('shaders/fog.frag'),
-  ]).then((l) => (waterFragmentProgram: l[0], fogFragmentProgram: l[1]));
+  ]).then(
+    (l) => (
+      waterFragmentProgram: l[0],
+      fogFragmentProgram: l[1],
+    ),
+  );
 
   late final random = Random();
 
@@ -32,6 +37,10 @@ class _GamePageState extends State<GamePage> {
     return FutureBuilder(
       future: preloadedPrograms,
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          throw snapshot.error!;
+        }
+
         if (!snapshot.hasData) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -39,7 +48,6 @@ class _GamePageState extends State<GamePage> {
         }
 
         return GameWidget(
-         
           game: game ??= CrystalBallGame(
             preloadedPrograms: snapshot.data!,
             random: random,

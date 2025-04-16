@@ -10,7 +10,6 @@ import 'package:flutter_shaders/flutter_shaders.dart';
 class BallGlow extends PostProcessComponent<BallGlowPostProcess>
     with HasGameReference<CrystalBallGame> {
   BallGlow({
-    super.pixelRatio,
     super.position,
     super.scale,
     super.angle,
@@ -27,8 +26,6 @@ class BallGlow extends PostProcessComponent<BallGlowPostProcess>
     await super.onLoad();
   }
 
-
-
   @override
   void update(double dt) {
     anchor = Anchor.center;
@@ -37,13 +34,21 @@ class BallGlow extends PostProcessComponent<BallGlowPostProcess>
   }
 }
 
-class BallGlowPostProcess extends FragmentShaderPostProcess {
+class BallGlowPostProcess extends PostProcess {
   late CrystalBallGameWorld world;
 
+  late final FragmentProgram fragmentProgram;
+
   @override
-  Future<FragmentProgram> fragmentProgramLoader() {
-    return FragmentProgram.fromAsset('shaders/the_ball.frag');
+  Future<void> onLoad() async {
+    // example of loading a shader from an asset within 
+    // the post process. Ideally, you will want to load this
+    // on something like a loading screen
+    fragmentProgram =  await FragmentProgram.fromAsset('shaders/the_ball.frag');
   }
+
+  @override
+  int get samplingPasses => 0;
 
   @override
   void postProcess(
@@ -62,7 +67,9 @@ class BallGlowPostProcess extends FragmentShaderPostProcess {
 
     final velocity = theBall.velocity.clone() / 1600;
 
-    fragmentShader.setFloatUniforms((value) {
+     final shader = fragmentProgram.fragmentShader();
+
+    shader.setFloatUniforms((value) {
       value
         ..setVector(size)
         ..setVector(uvBall)
@@ -71,6 +78,10 @@ class BallGlowPostProcess extends FragmentShaderPostProcess {
         ..setFloat(theBall.radius);
     });
 
-    super.postProcess(samples, size, canvas);
+  
+     canvas
+      ..save()
+      ..drawRect(Offset.zero & size.toSize(),  Paint()..shader = shader)
+      ..restore();
   }
 }

@@ -15,7 +15,7 @@ class CameraTarget extends PositionComponent
 
   final effectController = CurvedEffectController(
     0.1,
-    Curves.easeInOut,
+    Curves.easeOut,
   )..setToEnd();
 
   late final moveEffect = MoveCameraTarget(position, effectController);
@@ -38,6 +38,9 @@ class CameraTarget extends PositionComponent
 
     moveEffect.go(to: to);
   }
+  
+
+  
 
   @override
   void update(double dt) {
