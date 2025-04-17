@@ -66,9 +66,10 @@ class MoveCameraTarget extends Effect with EffectTarget<CameraTarget> {
 
   @override
   void apply(double progress) {
-    final delta = _to - _from;
-    final position = _from + delta * progress;
-    target.position = position;
+    target.position.setValues(
+      _from.x + (_to.x - _from.x) * progress,
+      _from.y + (_to.y - _from.y) * progress,
+    );
   }
 
   void go({required Vector2 to}) {
