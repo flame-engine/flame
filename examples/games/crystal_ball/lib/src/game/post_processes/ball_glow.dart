@@ -64,7 +64,7 @@ class BallGlowPostProcess extends PostProcess {
         ..setVector(size)
         ..setVector(uvBall)
         ..setVector(-velocity)
-        ..setFloat(theBall.gama)
+        ..setFloat(theBall.gamma)
         ..setFloat(theBall.radius);
     });
 

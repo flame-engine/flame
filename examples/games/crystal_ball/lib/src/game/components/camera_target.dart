@@ -5,23 +5,12 @@ import 'package:flutter/animation.dart';
 
 class CameraTarget extends PositionComponent
     with HasGameReference<CrystalBallGame> {
-  CameraTarget()
-      : super(
-          position: Vector2(0, 0),
-          size: Vector2.all(0),
-          anchor: Anchor.center,
-          priority: 0x7fffffff,
-        );
-
   final effectController = CurvedEffectController(
     0.1,
     Curves.easeOut,
   )..setToEnd();
 
   late final moveEffect = MoveCameraTarget(position, effectController);
-
-  @override
-  Color get debugColor => const Color(0xFFFFFF00);
 
   @override
   Future<void> onLoad() async {
@@ -33,19 +22,8 @@ class CameraTarget extends PositionComponent
     double duration = 0.25,
     double scale = 1,
   }) {
-    effectController
-      .duration = duration * 4;
-
+    effectController.duration = duration * 4;
     moveEffect.go(to: to);
-  }
-  
-
-  
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    game.camera.viewfinder.zoom = scale.x;
   }
 }
 

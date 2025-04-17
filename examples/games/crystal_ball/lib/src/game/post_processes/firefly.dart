@@ -28,16 +28,15 @@ class FireflyPostProcess extends PostProcess {
 
   @override
   void postProcess(Vector2 size, Canvas canvas) {
-    
     final fogShader = shader;
     fogShader.setFloatUniforms((value) {
-
-
-      final groundpos =
-          world.ground.rectangle.absolutePosition + Vector2(0, 1800);
       final camera = CameraComponent.currentCamera!;
-      final globalGroundPos = camera.viewfinder.localToGlobal(groundpos);
-      final uvGround = globalGroundPos.y / size.y;
+
+      final groundPosition =
+          world.ground.rectangle.absolutePosition + Vector2(0, 1800);
+      final globalGroundPosition =
+          camera.viewfinder.localToGlobal(groundPosition);
+      final uvGround = globalGroundPosition.y / size.y;
 
       final cameraVerticalPos = world.cameraTarget.position.clone()
         ..absolute()
@@ -46,7 +45,7 @@ class FireflyPostProcess extends PostProcess {
       final uvCameraVerticalPos = cameraVerticalPos..divide(kCameraSize);
 
       value
-      ..setVector(size )
+        ..setVector(size)
         ..setFloat(uvGround)
         ..setFloat(uvCameraVerticalPos.y)
         ..setFloat(3.2)
@@ -55,9 +54,9 @@ class FireflyPostProcess extends PostProcess {
 
     canvas.drawRect(
       Offset.zero & size.toSize(),
-      Paint()
-        ..shader = fogShader,
+      Paint()..shader = fogShader,
     );
-      renderSubtree(canvas);
+
+    renderSubtree(canvas);
   }
 }

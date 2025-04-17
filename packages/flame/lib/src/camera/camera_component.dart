@@ -207,7 +207,7 @@ class CameraComponent extends Component {
           canvas.transform2D(viewfinder.transform);
           world!.renderFromCamera(canvas);
 
-          // Render the viewfinder elements, which will be in front of 
+          // Render the viewfinder elements, which will be in front of
           // the world,
           // but with the same transforms applied to them.
           viewfinder.renderTree(canvas);

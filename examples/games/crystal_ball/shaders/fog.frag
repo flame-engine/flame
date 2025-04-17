@@ -78,5 +78,4 @@ void main() {
     fragment(uv, pos, color2, -0.08);
 
     fragColor = color + color2;
-
 }

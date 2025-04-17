@@ -16,10 +16,10 @@ class Rectangle extends PositionComponent
         CollisionCallbacks,
         ParentIsA<Ground>,
         HasGameReference<CrystalBallGame> {
-  Rectangle(this.ogY)
+  Rectangle(double y)
       : super(
           anchor: Anchor.topCenter,
-          position: Vector2(0, ogY),
+          position: Vector2(0, y),
           size: Vector2(
             kCameraSize.x,
             kCameraSize.y / 2,
@@ -48,8 +48,6 @@ class Rectangle extends PositionComponent
               ),
           ],
         );
-
-  final double ogY;
 
   double get topEdge => absolutePositionOfAnchor(Anchor.topCenter).y;
 }

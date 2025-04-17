@@ -6,7 +6,6 @@ final kCameraSize = Vector2(900, 1600);
 const double kPlayerRadius = 20;
 final kPlayerSize = Vector2.all(kPlayerRadius * 2);
 
-
 const double kGravity = 100;
 const double kJumpVelocity = 3000;
 

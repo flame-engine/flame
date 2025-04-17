@@ -17,12 +17,12 @@ class InputHandler extends PositionComponent
     await add(
       KeyboardListenerComponent(
         keyDown: {
-          LogicalKeyboardKey.arrowLeft: onLeftStart,
-          LogicalKeyboardKey.arrowRight: onRightStart,
+          LogicalKeyboardKey.arrowLeft: (_) => onLeftStart(),
+          LogicalKeyboardKey.arrowRight: (_) => onRightStart(),
         },
         keyUp: {
-          LogicalKeyboardKey.arrowLeft: onLeftEnd,
-          LogicalKeyboardKey.arrowRight: onRightEnd,
+          LogicalKeyboardKey.arrowLeft: (_) => onLeftEnd(),
+          LogicalKeyboardKey.arrowRight: (_) => onRightEnd(),
         },
       ),
     );
@@ -41,10 +41,9 @@ class InputHandler extends PositionComponent
     super.onTapDown(event);
 
     if (event.localPosition.x < game.size.x * 1 / 3) {
-      onLeftStart({});
+      onLeftStart();
     } else if (event.localPosition.x > game.size.x * 2 / 3) {
-      onRightStart({});
-      
+      onRightStart();
     } else {
       final pos = CameraComponent.currentCamera!.globalToLocal(
         event.canvasPosition,
@@ -61,36 +60,35 @@ class InputHandler extends PositionComponent
     super.onTapUp(event);
 
     if (event.localPosition.x < game.size.x * 1 / 3) {
-      onLeftEnd({});
+      onLeftEnd();
     }
     if (event.localPosition.x > game.size.x * 2 / 3) {
-      onRightEnd({});
+      onRightEnd();
     }
   }
-
 
   double _directionalCoefficient = 0;
 
   double get directionalCoefficient => _directionalCoefficient;
 
-  bool onLeftStart(Set<LogicalKeyboardKey> logicalKeys) {
+  bool onLeftStart() {
     _directionalCoefficient = -1;
     return false;
   }
 
-  bool onRightStart(Set<LogicalKeyboardKey> logicalKeys) {
+  bool onRightStart() {
     _directionalCoefficient = 1;
     return false;
   }
 
-  bool onLeftEnd(Set<LogicalKeyboardKey> logicalKeys) {
+  bool onLeftEnd() {
     if (_directionalCoefficient < 0) {
       _directionalCoefficient = 0;
     }
     return false;
   }
 
-  bool onRightEnd(Set<LogicalKeyboardKey> logicalKeys) {
+  bool onRightEnd() {
     if (_directionalCoefficient > 0) {
       _directionalCoefficient = 0;
     }

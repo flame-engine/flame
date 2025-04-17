@@ -28,8 +28,6 @@ class ForegroundFogPostProcess extends PostProcess {
 
   @override
   void postProcess(Vector2 size, Canvas canvas) {
-    //  renderSubtree(canvas);
-    // return;
     final origin =
         CameraComponent.currentCamera!.visibleWorldRect.topLeft.toVector2();
 
@@ -52,9 +50,7 @@ class ForegroundFogPostProcess extends PostProcess {
       ..save()
       ..drawRect(
         Offset.zero & size.toSize(),
-        Paint()
-          // ..color = const Color(0xFF00F000)
-          ..shader = shader,
+        Paint()..shader = shader,
       )
       ..restore();
   }

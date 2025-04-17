@@ -45,10 +45,7 @@ class WaterPostProcess extends PostProcess {
 
     canvas.drawRect(
       Offset.zero & size.toSize(),
-      // Paint()..shader = shader,
-      Paint()
-        ..color = const Color(0xFF00F000)
-        ..shader = shader,
+      Paint()..shader = shader,
     );
   }
 }

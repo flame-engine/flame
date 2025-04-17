@@ -17,7 +17,6 @@ float random(vec2 st) {
 }
 
 vec4 circle(vec2 uv, vec2 center, float radius) {
-
     vec2 pos = center - uv;
     pos.y /= uSize.x / uSize.y;
 
@@ -65,7 +64,6 @@ void fragment(vec2 cuv, vec2 pos, inout vec4 color) {
     f *= 0.65;
 
     color.rgb *= f;
-
 }
 
 void main() {
@@ -76,5 +74,4 @@ void main() {
     fragment(uv, pos, color);
 
     fragColor = color;
-
 }

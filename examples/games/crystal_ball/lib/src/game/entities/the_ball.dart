@@ -30,8 +30,8 @@ class TheBall extends PositionComponent
 
   final double _gravity = kGravity;
 
-  late double gama = 0.6;
-  double get radius => (1.0 - gama) / 3;
+  late double gamma = 0.6;
+  double get radius => (1.0 - gamma) / 3;
 
   final effectController = CurvedEffectController(
     0.4,
