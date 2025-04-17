@@ -16,14 +16,12 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
     super.size,
     super.scale,
     super.angle,
-    double? nativeAngle,
+    super.nativeAngle,
     super.anchor,
     super.children,
     super.priority,
     super.key,
-  }) : super(
-          nativeAngle: nativeAngle ?? 0,
-        );
+  });
 
   @override
   PostProcessComponentRenderContext<T> get renderContext => _renderContext;
@@ -56,7 +54,7 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
           size,
           super.renderTree,
           (context) {
-            _renderContext.postProcess =  postProcess;
+            _renderContext.postProcess = postProcess;
           },
         );
       },

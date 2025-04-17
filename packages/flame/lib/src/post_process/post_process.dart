@@ -45,13 +45,11 @@ abstract class PostProcess {
   @protected
   ui.Image rasterizeSubtree() {
     final recorder = PictureRecorder();
-
     final innerCanvas = Canvas(recorder);
 
     renderSubtree(innerCanvas);
 
     final picture = recorder.endRecording();
-
     return picture.toImageSync(
       (pixelRatio * _size!.x).ceil(),
       (pixelRatio * _size!.y).ceil(),
@@ -119,18 +117,22 @@ class PostProcessSequentialGroup extends PostProcessGroup {
     ValueSetter<Canvas> renderTree,
     ValueSetter<PostProcess?> updateContext,
   ) {
-    var renderTreeCurrent = renderTree;
-    for (final postProcess in postProcesses) {
-      final renderTree = renderTreeCurrent;
-      void renderTreeNext(Canvas canvas) {
-        postProcess.render(canvas, size, renderTree, updateContext);
+    // Build the stack of post processes in reverse order
+    final stack = postProcesses.reversed.toList();
+
+    // Start with the original renderTree
+    void runNext(Canvas c) {
+      if (stack.isEmpty) {
+        renderTree(c);
+        return;
       }
 
-      renderTreeCurrent = renderTreeNext;
+      final postProcess = stack.removeAt(0);
+      postProcess.render(c, size, runNext, updateContext);
     }
 
     canvas.save();
-    renderTreeCurrent(canvas);
+    runNext(canvas);
     canvas.restore();
   }
 }

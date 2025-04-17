@@ -36,8 +36,8 @@ class MoveCameraTarget extends Effect with EffectTarget<CameraTarget> {
     _from = target.position;
   }
 
-  Vector2 _to;
-  late Vector2 _from;
+  final Vector2 _to;
+  late final Vector2 _from;
 
   @override
   bool get removeOnFinish => false;
@@ -52,7 +52,7 @@ class MoveCameraTarget extends Effect with EffectTarget<CameraTarget> {
 
   void go({required Vector2 to}) {
     reset();
-    _to = to;
-    _from = target.position;
+    _to.setFrom(to);
+    _from.setFrom(target.position);
   }
 }
