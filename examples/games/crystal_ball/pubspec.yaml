@@ -16,6 +16,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   shaders:
+    - shaders/firefly.frag
     - shaders/the_ball.frag
     - shaders/ground.frag
     - shaders/fog.frag

@@ -7,18 +7,20 @@ import 'package:crystal_ball/src/game/components/input_handler.dart';
 import 'package:crystal_ball/src/game/constants.dart';
 import 'package:crystal_ball/src/game/entities/ground.dart';
 import 'package:crystal_ball/src/game/entities/the_ball.dart';
+import 'package:crystal_ball/src/game/post_processes/firefly.dart';
 import 'package:crystal_ball/src/game/post_processes/ball_glow.dart';
+import 'package:crystal_ball/src/game/post_processes/foreground_fog.dart';
 import 'package:crystal_ball/src/game/post_processes/water.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/shader_pipeline.dart';
 
 typedef PreloadedPrograms = ({
   FragmentProgram waterFragmentProgram,
   FragmentProgram fogFragmentProgram,
+  FragmentProgram fireflyFragmentProgram,
 });
-
-late CameraComponent kamera;
 
 class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
     with
@@ -30,18 +32,30 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
     required this.pixelRatio,
     required this.random,
   }) : super(
-          camera: kamera = CameraComponent.withFixedResolution(
+          camera: CameraComponent.withFixedResolution(
             width: kCameraSize.x,
             height: kCameraSize.y,
           ),
-          world: CrystalBallGameWorld(
-            random: random,
-            children: [],
-          ),
+          world: CrystalBallGameWorld(random: random),
         ) {
-    camera.postProcess = WaterPostProcess(
-      fragmentProgram: preloadedPrograms.waterFragmentProgram,
-    )..world = world;
+    camera.postProcess = PostProcessGroup(
+      postProcesses: [
+        PostProcessSequentialGroup(postProcesses: [
+          FireflyPostProcess(
+            world: world,
+            fragmentProgram: preloadedPrograms.fireflyFragmentProgram,
+          ),
+          WaterPostProcess(
+            world: world,
+            fragmentProgram: preloadedPrograms.waterFragmentProgram,
+          ),
+        ]),
+        ForegroundFogPostProcess(
+          world: world,
+          fragmentProgram: preloadedPrograms.fogFragmentProgram,
+        ),
+      ],
+    );
 
     world.addAll([
       inputHandler = InputHandler(),

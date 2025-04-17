@@ -14,59 +14,66 @@ abstract class PostProcess {
 
   double pixelRatio;
 
-  int get samplingPasses;
-
   FutureOr<void> onLoad() {}
 
   void update(double dt) {}
 
+  void Function(Canvas)? _renderTree;
+  void Function(PostProcessRenderContext?)? _updateContext;
+  Vector2? _size;
+
+  @internal
   void render(
     Canvas canvas,
     Vector2 size,
     void Function(Canvas) renderTree,
     void Function(PostProcessRenderContext?) updateContext,
   ) {
-    // Pre-render children as much as necessary
-    final results = List<ui.Image>.generate(
-      samplingPasses,
-      (i) {
-        return _renderAndRecord(size, i, renderTree, updateContext);
-      },
-    );
+    _renderTree = renderTree;
+    _updateContext = updateContext;
+    _size = size;
 
     canvas.save();
-    postProcess(results, size, canvas);
+    postProcess(size, canvas);
     canvas.restore();
+
+    _size = null;
+    _renderTree = null;
+    _updateContext = null;
   }
 
-  ui.Image _renderAndRecord(
-    Vector2 size,
-    int pass,
-    void Function(Canvas) renderTree,
-    void Function(PostProcessRenderContext?) updateContext,
-  ) {
+  @nonVirtual
+  @protected
+  ui.Image rasterizeSubtree() {
     final recorder = PictureRecorder();
 
     final innerCanvas = Canvas(recorder);
 
-    updateContext(
-      PostProcessRenderContext(
-        postProcess: this,
-        passIndex: pass,
-      ),
-    );
-    renderTree(innerCanvas);
-    updateContext(null);
+    renderSubtree(innerCanvas);
 
     final picture = recorder.endRecording();
 
     return picture.toImageSync(
-      (pixelRatio * size.x).ceil(),
-      (pixelRatio * size.y).ceil(),
+      (pixelRatio * _size!.x).ceil(),
+      (pixelRatio * _size!.y).ceil(),
     );
   }
 
-  void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas);
+  @nonVirtual
+  @protected
+  void renderSubtree(Canvas canvas) {
+    canvas.save();
+    _updateContext!(
+      PostProcessRenderContext(postProcess: this),
+    );
+    _renderTree!(canvas);
+    _updateContext!(null);
+    canvas.restore();
+  }
+
+  void postProcess(Vector2 size, Canvas canvas) {
+    renderSubtree(canvas);
+  }
 }
 
 class PostProcessGroup extends PostProcess {
@@ -75,9 +82,6 @@ class PostProcessGroup extends PostProcess {
   });
 
   final List<PostProcess> postProcesses;
-
-  @override
-  int get samplingPasses => 1;
 
   @override
   Future<void> onLoad() async {
@@ -104,9 +108,6 @@ class PostProcessGroup extends PostProcess {
       postProcess.render(canvas, size, renderTree, updateContext);
     }
   }
-
-  @override
-  void postProcess(List<ui.Image> samples, Vector2 size, Canvas canvas) {}
 }
 
 class PostProcessSequentialGroup extends PostProcessGroup {
@@ -121,24 +122,19 @@ class PostProcessSequentialGroup extends PostProcessGroup {
     void Function(Canvas) renderTree,
     void Function(PostProcessRenderContext?) updateContext,
   ) {
-    var currentRenderTree = renderTree;
-    for (final (index, postProcess) in postProcesses.indexed) {
-      assert(
-        postProcess.samplingPasses >= 1 && index > 0,
-        'PostProcessSequentialGroup has a PostProcess with no sampling passes.'
-        ' This is only acceptable for the first post process in the group.'
-        ' Otherwise, this post process will discard the results of the'
-        ' previous ones.\n'
-        'Consider using PostProcessGroup instead.\n'
-        'Offending PostProcess:'
-        ' $postProcess',
-      );
-      currentRenderTree = (canvas) {
-        postProcess.render(canvas, size, currentRenderTree, updateContext);
-      };
+    var renderTreeCurrent = renderTree;
+    for (final postProcess in postProcesses) {
+      final renderTree = renderTreeCurrent;
+      void renderTreeNext(Canvas canvas) {
+        postProcess.render(canvas, size, renderTree, updateContext);
+      }
+
+      renderTreeCurrent = renderTreeNext;
     }
 
-    currentRenderTree(canvas);
+    canvas.save();
+    renderTreeCurrent(canvas);
+    canvas.restore();
   }
 }
 
@@ -204,23 +200,21 @@ class PostProcessRenderContext<T extends PostProcess>
     extends ComponentRenderContext {
   PostProcessRenderContext({
     required this.postProcess,
-    required this.passIndex,
   });
 
   final T postProcess;
-  int passIndex;
 }
 
 extension PostProcessingContextFinder on Component {
-  PostProcessRenderContext<T>? findPostProcessContext<T extends PostProcess>() {
+  T? findPostProcessFromContext<T extends PostProcess>() {
     final closestContext = findRenderContext<PostProcessRenderContext<T>>();
     if (closestContext != null) {
-      return closestContext;
+      return closestContext.postProcess;
     }
     final contextInCamera =
         findRenderContext<CameraRenderContext>()?.currentPostProcessContext;
     if (contextInCamera is PostProcessRenderContext<T>) {
-      return contextInCamera;
+      return contextInCamera.postProcess;
     }
 
     return null;

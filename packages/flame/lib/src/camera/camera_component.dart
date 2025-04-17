@@ -181,79 +181,12 @@ class CameraComponent extends Component {
     return viewfinder.visibleWorldRect;
   }
 
-  void renderTree(Canvas canvas) {
-    final postProcessComponent = _postProcessComponent;
-    if (postProcessComponent != null) {
-      canvas.save();
-      canvas.translate(
-        viewport.position.x - viewport.anchor.x * viewport.size.x,
-        viewport.position.y - viewport.anchor.y * viewport.size.y,
-      );
-      // Render the world through the viewport
-      if ((world?.isMounted ?? false) &&
-          currentCameras.length < maxCamerasDepth) {
-        canvas.save();
-        viewport.clip(canvas);
-        viewport.transformCanvas(canvas);
-        backdrop.renderTree(canvas);
-        // canvas.save();
-        // try {
-        //   currentCameras.add(this);
-        //   canvas.transform2D(viewfinder.transform);
-        //   world!.renderFromCamera(canvas);
-        //   // Render the viewfinder elements, which will be in front of the world,
-        //   // but with the same transforms applied to them.
-        //   viewfinder.renderTree(canvas);
-        // } finally {
-        //   currentCameras.removeLast();
-        // }
-        // canvas.restore();
-
-        // then
-        () {
-          canvas.save();
-          try {
-            currentCameras.add(this);
-
-            
-            postProcessComponent.postProcess.render(
-              canvas,
-              viewport.virtualSize,
-              (canvas) {
-                canvas.transform2D(viewfinder.transform);
-                world!.renderFromCamera(canvas);
-                // Render the viewfinder elements, which will be in front of 
-                // the world,
-                // but with the same transforms applied to them.
-                viewfinder.renderTree(canvas);
-              },
-              (context) {
-                renderContext.currentPostProcessContext = context;
-              },
-            );
-          } finally {
-            currentCameras.removeLast();
-          }
-          canvas.restore();
-        }();
-
-        // Render the viewport elements, which will be in front of the world.
-        viewport.renderTree(canvas);
-
-        canvas.restore();
-      }
-      canvas.restore();
-    } else {
-      _renderTree(canvas);
-    }
-  }
-
   /// Renders the [world] as seen through this camera.
   ///
   /// If the world is not mounted yet, only the viewport and viewfinder elements
   /// will be rendered.
   @override
-  void _renderTree(Canvas canvas) {
+  void renderTree(Canvas canvas) {
     canvas.save();
     canvas.translate(
       viewport.position.x - viewport.anchor.x * viewport.size.x,
@@ -269,11 +202,29 @@ class CameraComponent extends Component {
       canvas.save();
       try {
         currentCameras.add(this);
-        canvas.transform2D(viewfinder.transform);
-        world!.renderFromCamera(canvas);
-        // Render the viewfinder elements, which will be in front of the world,
-        // but with the same transforms applied to them.
-        viewfinder.renderTree(canvas);
+
+        void renderWorld(Canvas canvas) {
+          canvas.transform2D(viewfinder.transform);
+          world!.renderFromCamera(canvas);
+
+          // Render the viewfinder elements, which will be in front of 
+          // the world,
+          // but with the same transforms applied to them.
+          viewfinder.renderTree(canvas);
+        }
+
+        if (_postProcessComponent != null) {
+          _postProcessComponent!.postProcess.render(
+            canvas,
+            viewport.virtualSize,
+            renderWorld,
+            (context) {
+              renderContext.currentPostProcessContext = context;
+            },
+          );
+        } else {
+          renderWorld(canvas);
+        }
       } finally {
         currentCameras.removeLast();
       }

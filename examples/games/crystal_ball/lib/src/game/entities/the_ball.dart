@@ -42,14 +42,9 @@ class TheBall extends PositionComponent
     velocity.y = -kJumpVelocity;
   }
 
-
-
-  
-
   @override
   void update(double dt) {
     super.update(dt);
-
 
     velocity.y += 8500 * dt;
     final horzV = pow(velocity.y.abs(), 1.8) * 0.0015;
@@ -71,9 +66,11 @@ class TheBall extends PositionComponent
       velocity.y = 0;
       position.y = 0;
       jump();
-      
+
+      game.world.cameraTarget.go(
+        to: Vector2(0, -200),
+        duration: 0.5,
+      );
     }
-
   }
-
 }

@@ -42,17 +42,16 @@ class InputHandler extends PositionComponent
 
     if (event.localPosition.x < game.size.x * 1 / 3) {
       onLeftStart({});
-      resetCamera();
     } else if (event.localPosition.x > game.size.x * 2 / 3) {
       onRightStart({});
-      resetCamera();
+      
     } else {
       final pos = CameraComponent.currentCamera!.globalToLocal(
         event.canvasPosition,
       );
       game.world.cameraTarget.go(
-        to: pos,
-        duration: 2,
+        to: Vector2(0, pos.y),
+        duration: 5,
       );
     }
   }
@@ -69,12 +68,6 @@ class InputHandler extends PositionComponent
     }
   }
 
-  void resetCamera() {
-    game.world.cameraTarget.go(
-      to: Vector2(0, -400),
-      duration: 0.5,
-    );
-  }
 
   double _directionalCoefficient = 0;
 

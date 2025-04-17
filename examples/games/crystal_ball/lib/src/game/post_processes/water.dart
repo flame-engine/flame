@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:crystal_ball/src/game/game.dart';
@@ -9,16 +8,16 @@ import 'package:flutter_shaders/flutter_shaders.dart';
 class WaterPostProcess extends PostProcess {
   WaterPostProcess({
     required this.fragmentProgram,
+    required this.world,
     super.pixelRatio,
   });
 
-  late CrystalBallGameWorld world;
-
   final FragmentProgram fragmentProgram;
+  final CrystalBallGameWorld world;
+
   late final FragmentShader shader = fragmentProgram.fragmentShader();
 
   double time = 0;
-
   @override
   void update(double dt) {
     super.update(dt);
@@ -26,11 +25,15 @@ class WaterPostProcess extends PostProcess {
   }
 
   @override
-  void postProcess(List<Image> samples, Vector2 size, Canvas canvas) {
+  void postProcess(Vector2 size, Canvas canvas) {
+    
     final groundpos = world.ground.rectangle.position;
     final camera = CameraComponent.currentCamera!;
     final globalGroundPos = camera.viewfinder.localToGlobal(groundpos);
     final uvGround = globalGroundPos.y / size.y;
+
+    final preRenderedSubtree = rasterizeSubtree();
+
 
     shader
       ..setFloatUniforms((value) {
@@ -40,14 +43,14 @@ class WaterPostProcess extends PostProcess {
           ..setFloat(uvGround)
           ..setFloat(time);
       })
-      ..setImageSampler(0, samples[0]);
+      ..setImageSampler(0, preRenderedSubtree);
 
     canvas.drawRect(
       Offset.zero & size.toSize(),
-      Paint()..shader = shader,
+      // Paint()..shader = shader,
+      Paint()
+        ..color = const Color(0xFF00F000)
+        ..shader = shader,
     );
   }
-
-  @override
-  int get samplingPasses => 1;
 }

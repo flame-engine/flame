@@ -41,18 +41,14 @@ class BallGlowPostProcess extends PostProcess {
 
   @override
   Future<void> onLoad() async {
-    // example of loading a shader from an asset within 
+    // example of loading a shader from an asset within
     // the post process. Ideally, you will want to load this
     // on something like a loading screen
-    fragmentProgram =  await FragmentProgram.fromAsset('shaders/the_ball.frag');
+    fragmentProgram = await FragmentProgram.fromAsset('shaders/the_ball.frag');
   }
 
   @override
-  int get samplingPasses => 0;
-
-  @override
   void postProcess(
-    List<Image> samples,
     Vector2 size,
     Canvas canvas,
   ) {
@@ -67,7 +63,7 @@ class BallGlowPostProcess extends PostProcess {
 
     final velocity = theBall.velocity.clone() / 1600;
 
-     final shader = fragmentProgram.fragmentShader();
+    final shader = fragmentProgram.fragmentShader();
 
     shader.setFloatUniforms((value) {
       value
@@ -78,10 +74,10 @@ class BallGlowPostProcess extends PostProcess {
         ..setFloat(theBall.radius);
     });
 
-  
-     canvas
+    canvas
       ..save()
-      ..drawRect(Offset.zero & size.toSize(),  Paint()..shader = shader)
+      ..drawRect(Offset.zero & size.toSize(), Paint()..shader = shader)
       ..restore();
   }
 }
+    

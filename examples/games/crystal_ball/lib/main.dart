@@ -21,10 +21,12 @@ class _GamePageState extends State<GamePage> {
   late final Future<PreloadedPrograms> preloadedPrograms = Future.wait([
     FragmentProgram.fromAsset('shaders/ground.frag'),
     FragmentProgram.fromAsset('shaders/fog.frag'),
+    FragmentProgram.fromAsset('shaders/firefly.frag'),
   ]).then(
     (l) => (
       waterFragmentProgram: l[0],
       fogFragmentProgram: l[1],
+      fireflyFragmentProgram: l[2],
     ),
   );
 
