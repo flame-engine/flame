@@ -14,7 +14,7 @@ import 'package:crystal_ball/src/game/post_processes/water.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/shader_pipeline.dart';
+import 'package:flame/post_process.dart';
 
 typedef PreloadedPrograms = ({
   FragmentProgram waterFragmentProgram,

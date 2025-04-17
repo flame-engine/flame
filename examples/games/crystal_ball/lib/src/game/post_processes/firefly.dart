@@ -4,7 +4,7 @@ import 'package:crystal_ball/src/game/constants.dart';
 import 'package:crystal_ball/src/game/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/shader_pipeline.dart';
+import 'package:flame/post_process.dart';
 import 'package:flutter_shaders/flutter_shaders.dart';
 
 class FireflyPostProcess extends PostProcess {
