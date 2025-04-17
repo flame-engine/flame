@@ -51,23 +51,18 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
-    PostProcess? postProcess,
+    super.children,
     super.key,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
         _backdrop = backdrop ?? Component(),
-        _postProcessComponent = postProcess != null
-            ? PostProcessComponent(postProcess: postProcess)
-            : null,
         // The priority is set to the max here to avoid some bugs for the users,
         // if they for example would add any components that modify positions
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
         super(priority: 0x7fffffff) {
+    children.register<PostProcessComponent>();
     addAll([_backdrop, _viewport, _viewfinder]);
-    if (_postProcessComponent != null) {
-      add(_postProcessComponent!);
-    }
   }
 
   /// Create a camera that shows a portion of the game world of fixed size
@@ -86,7 +81,7 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
-    PostProcess? postProcess,
+    Iterable<Component>? children,
     ComponentKey? key,
   }) : this(
           world: world,
@@ -94,7 +89,7 @@ class CameraComponent extends Component {
           viewfinder: viewfinder ?? Viewfinder(),
           backdrop: backdrop,
           hudComponents: hudComponents,
-          postProcess: postProcess,
+          children: children,
           key: key,
         );
 
@@ -212,9 +207,14 @@ class CameraComponent extends Component {
           viewfinder.renderTree(canvas);
         }
 
-        final postProcess = _postProcessComponent?.postProcess;
-        if (postProcess != null) {
-          postProcess.render(
+        final postProcessors = children.query<PostProcessComponent>();
+        if (postProcessors.isNotEmpty) {
+          assert(
+            postProcessors.length == 1,
+            'Only one post process component is allowed per camera.',
+          );
+          final postProcessor = postProcessors.first.postProcess;
+          postProcessor.render(
             canvas,
             viewport.virtualSize,
             renderWorld,
@@ -479,24 +479,21 @@ class CameraComponent extends Component {
   @override
   final CameraRenderContext renderContext = CameraRenderContext();
 
-  PostProcess? get postProcess => _postProcessComponent?.postProcess;
+  PostProcess? get postProcess =>
+      children.query<PostProcessComponent>().firstOrNull?.postProcess;
+
+  /// Sets the [postProcess] to be used for rendering.
+  ///
+  /// Do note that only one [postProcess] can be active on the camera at once.
+  /// If the [postProcess] is null, the previous post process will be removed.
+  /// If the [postProcess] is not null, it will be added to the camera, and the
+  /// previous post process will be removed.
   set postProcess(PostProcess? postProcess) {
-    final oldPostProcessComponent = _postProcessComponent;
-    if (oldPostProcessComponent != null) {
-      oldPostProcessComponent.removeFromParent();
-    }
+    children.removeAll(children.query<PostProcessComponent>());
     if (postProcess != null) {
-      final newPostProcessComponent =
-          _postProcessComponent = PostProcessComponent(
-        postProcess: postProcess,
-      );
-      add(newPostProcessComponent);
-    } else {
-      _postProcessComponent = null;
+      children.add(PostProcessComponent(postProcess: postProcess));
     }
   }
-
-  PostProcessComponent? _postProcessComponent;
 }
 
 class CameraRenderContext extends ComponentRenderContext {
