@@ -58,8 +58,6 @@ class FireflyPostProcess extends PostProcess {
       Paint()
         ..shader = fogShader,
     );
-
-        renderSubtree(canvas);
-
+      renderSubtree(canvas);
   }
 }

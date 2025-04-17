@@ -26,14 +26,12 @@ class WaterPostProcess extends PostProcess {
 
   @override
   void postProcess(Vector2 size, Canvas canvas) {
-    
-    final groundpos = world.ground.rectangle.position;
+    final groundPosition = world.ground.rectangle.position;
     final camera = CameraComponent.currentCamera!;
-    final globalGroundPos = camera.viewfinder.localToGlobal(groundpos);
-    final uvGround = globalGroundPos.y / size.y;
+    final globalGroundPosition = camera.viewfinder.localToGlobal(groundPosition);
+    final uvGround = globalGroundPosition.y / size.y;
 
     final preRenderedSubtree = rasterizeSubtree();
-
 
     shader
       ..setFloatUniforms((value) {

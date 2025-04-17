@@ -35,13 +35,10 @@ class ForegroundFogPostProcess extends PostProcess {
 
     shader.setFloatUniforms((value) {
       value.setVector(size);
-
-      final groundpos =
+      final groundPosition =
           world.ground.rectangle.absolutePosition + Vector2(0, 200);
-      final uvGround = (groundpos - origin)..divide(kCameraSize);
-
+      final uvGround = (groundPosition - origin)..divide(kCameraSize);
       final cameraVerticalPos = world.cameraTarget.position.clone()..absolute();
-
       final uvCameraVerticalPos = cameraVerticalPos..divide(kCameraSize);
 
       value
