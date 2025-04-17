@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -27,9 +26,10 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
         );
 
   @override
-  PostProcessRenderContext? get renderContext => _renderContext;
+  PostProcessComponentRenderContext<T> get renderContext => _renderContext;
 
-  PostProcessRenderContext? _renderContext;
+  final _renderContext =
+      PostProcessComponentRenderContext<T>(postProcess: null);
 
   final T postProcess;
 
@@ -56,7 +56,7 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
           size,
           super.renderTree,
           (context) {
-            _renderContext = context;
+            _renderContext.postProcess =  postProcess;
           },
         );
       },
@@ -65,25 +65,26 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   }
 }
 
-class PostProcessRenderContext<T extends PostProcess>
+class PostProcessComponentRenderContext<T extends PostProcess>
     extends ComponentRenderContext {
-  PostProcessRenderContext({
+  PostProcessComponentRenderContext({
     required this.postProcess,
   });
 
-  final T postProcess;
+  T? postProcess;
 }
 
 extension PostProcessingContextFinder on Component {
   T? findPostProcessFromContext<T extends PostProcess>() {
-    final closestContext = findRenderContext<PostProcessRenderContext<T>>();
+    final closestContext =
+        findRenderContext<PostProcessComponentRenderContext<T>>();
     if (closestContext != null) {
       return closestContext.postProcess;
     }
     final contextInCamera =
-        findRenderContext<CameraRenderContext>()?.currentPostProcessContext;
-    if (contextInCamera is PostProcessRenderContext<T>) {
-      return contextInCamera.postProcess;
+        findRenderContext<CameraRenderContext>()?.currentPostProcess;
+    if (contextInCamera is T) {
+      return contextInCamera;
     }
 
     return null;

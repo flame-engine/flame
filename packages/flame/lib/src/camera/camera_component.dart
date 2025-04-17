@@ -202,7 +202,6 @@ class CameraComponent extends Component {
       canvas.save();
       try {
         currentCameras.add(this);
-
         void renderWorld(Canvas canvas) {
           canvas.transform2D(viewfinder.transform);
           world!.renderFromCamera(canvas);
@@ -213,13 +212,14 @@ class CameraComponent extends Component {
           viewfinder.renderTree(canvas);
         }
 
-        if (_postProcessComponent != null) {
-          _postProcessComponent!.postProcess.render(
+        final postProcess = _postProcessComponent?.postProcess;
+        if (postProcess != null) {
+          postProcess.render(
             canvas,
             viewport.virtualSize,
             renderWorld,
             (context) {
-              renderContext.currentPostProcessContext = context;
+              renderContext.currentPostProcess = context;
             },
           );
         } else {
@@ -481,14 +481,16 @@ class CameraComponent extends Component {
 
   PostProcess? get postProcess => _postProcessComponent?.postProcess;
   set postProcess(PostProcess? postProcess) {
-    if (_postProcessComponent != null) {
-      _postProcessComponent!.removeFromParent();
+    final oldPostProcessComponent = _postProcessComponent;
+    if (oldPostProcessComponent != null) {
+      oldPostProcessComponent.removeFromParent();
     }
     if (postProcess != null) {
-      _postProcessComponent = PostProcessComponent(
+      final newPostProcessComponent =
+          _postProcessComponent = PostProcessComponent(
         postProcess: postProcess,
       );
-      add(_postProcessComponent!);
+      add(newPostProcessComponent);
     } else {
       _postProcessComponent = null;
     }
@@ -498,5 +500,5 @@ class CameraComponent extends Component {
 }
 
 class CameraRenderContext extends ComponentRenderContext {
-  PostProcessRenderContext? currentPostProcessContext;
+  PostProcess? currentPostProcess;
 }

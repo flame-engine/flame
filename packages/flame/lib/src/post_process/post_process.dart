@@ -3,7 +3,7 @@ import 'dart:ui' as ui show Image;
 import 'dart:ui' hide Image;
 
 import 'package:flame/components.dart';
-import 'package:flame/post_process.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 abstract class PostProcess {
@@ -18,15 +18,15 @@ abstract class PostProcess {
   void update(double dt) {}
 
   void Function(Canvas)? _renderTree;
-  void Function(PostProcessRenderContext?)? _updateContext;
+  void Function(PostProcess?)? _updateContext;
   Vector2? _size;
 
   @internal
   void render(
     Canvas canvas,
     Vector2 size,
-    void Function(Canvas) renderTree,
-    void Function(PostProcessRenderContext?) updateContext,
+    ValueSetter<Canvas> renderTree,
+    ValueSetter<PostProcess?> updateContext,
   ) {
     _renderTree = renderTree;
     _updateContext = updateContext;
@@ -62,9 +62,7 @@ abstract class PostProcess {
   @protected
   void renderSubtree(Canvas canvas) {
     canvas.save();
-    _updateContext!(
-      PostProcessRenderContext(postProcess: this),
-    );
+    _updateContext!(this);
     _renderTree!(canvas);
     _updateContext!(null);
     canvas.restore();
@@ -100,8 +98,8 @@ class PostProcessGroup extends PostProcess {
   void render(
     Canvas canvas,
     Vector2 size,
-    void Function(Canvas) renderTree,
-    void Function(PostProcessRenderContext?) updateContext,
+    ValueSetter<Canvas> renderTree,
+    ValueSetter<PostProcess?> updateContext,
   ) {
     for (final postProcess in postProcesses) {
       postProcess.render(canvas, size, renderTree, updateContext);
@@ -118,8 +116,8 @@ class PostProcessSequentialGroup extends PostProcessGroup {
   void render(
     Canvas canvas,
     Vector2 size,
-    void Function(Canvas) renderTree,
-    void Function(PostProcessRenderContext?) updateContext,
+    ValueSetter<Canvas> renderTree,
+    ValueSetter<PostProcess?> updateContext,
   ) {
     var renderTreeCurrent = renderTree;
     for (final postProcess in postProcesses) {
