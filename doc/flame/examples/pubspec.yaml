@@ -13,12 +13,15 @@ dependencies:
   flame_rive: ^1.10.12
   flutter:
     sdk: flutter
+  flutter_shaders:
   web: ^1.1.0
 
 dev_dependencies:
   flame_lint: ^1.3.0
 
 flutter:
+  shaders:
+    - packages/flutter_shaders/shaders/pixelation.frag
   assets:
     - assets/
     - assets/images/

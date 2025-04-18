@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/post_process.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
@@ -9,6 +10,7 @@ import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
+import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
@@ -42,6 +44,11 @@ import 'package:flame/src/game/flame_game.dart';
 /// mask. Such components will be rendered on top of the viewport. Components
 /// added to the viewfinder will be rendered as if they were part of the world.
 /// That is, they will be affected both by the viewport and the viewfinder.
+///
+/// A [PostProcess] can be applied to the camera, which will affect the
+/// rendering of the world. This is useful for applying effects such as bloom,
+/// blur, or other fragment shader effects to the world. See [postProcess] for
+/// more information.
 class CameraComponent extends Component {
   CameraComponent({
     this.world,
@@ -49,6 +56,7 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    super.children,
     super.key,
   })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
         _viewfinder = viewfinder ?? Viewfinder(),
@@ -58,6 +66,7 @@ class CameraComponent extends Component {
         // before the CameraComponent, since it then will render the positions
         // of the last tick each tick.
         super(priority: 0x7fffffff) {
+    children.register<PostProcessComponent>();
     addAll([_backdrop, _viewport, _viewfinder]);
   }
 
@@ -77,6 +86,7 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    Iterable<Component>? children,
     ComponentKey? key,
   }) : this(
           world: world,
@@ -84,6 +94,7 @@ class CameraComponent extends Component {
           viewfinder: viewfinder ?? Viewfinder(),
           backdrop: backdrop,
           hudComponents: hudComponents,
+          children: children,
           key: key,
         );
 
@@ -191,11 +202,34 @@ class CameraComponent extends Component {
       canvas.save();
       try {
         currentCameras.add(this);
-        canvas.transform2D(viewfinder.transform);
-        world!.renderFromCamera(canvas);
-        // Render the viewfinder elements, which will be in front of the world,
-        // but with the same transforms applied to them.
-        viewfinder.renderTree(canvas);
+        void renderWorld(Canvas canvas) {
+          canvas.transform2D(viewfinder.transform);
+          world!.renderFromCamera(canvas);
+
+          // Render the viewfinder elements, which will be in front of
+          // the world,
+          // but with the same transforms applied to them.
+          viewfinder.renderTree(canvas);
+        }
+
+        final postProcessors = children.query<PostProcessComponent>();
+        if (postProcessors.isNotEmpty) {
+          assert(
+            postProcessors.length == 1,
+            'Only one post process component is allowed per camera.',
+          );
+          final postProcessor = postProcessors.first.postProcess;
+          postProcessor.render(
+            canvas,
+            viewport.virtualSize,
+            renderWorld,
+            (context) {
+              renderContext.currentPostProcess = context;
+            },
+          );
+        } else {
+          renderWorld(canvas);
+        }
       } finally {
         currentCameras.removeLast();
       }
@@ -446,4 +480,33 @@ class CameraComponent extends Component {
 
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
+
+  @override
+  final CameraRenderContext renderContext = CameraRenderContext();
+
+  /// A [PostProcess] that is applied to the world of a camera.
+  ///
+  /// Do note that only one [postProcess] can be active on the camera at once.
+  /// If the [postProcess] is set to null, the previous post process will
+  /// be removed.
+  /// If the [postProcess] is set to not null, it will be added to the camera,
+  /// and any previously active post process will be removed.
+  ///
+  /// See also:
+  /// - [PostProcess] for the base class for post processes and more information
+  /// about how to create them.
+  /// - [PostProcessComponent] for a component that can be used to apply a
+  /// post process to a specific component.
+  PostProcess? get postProcess =>
+      children.query<PostProcessComponent>().firstOrNull?.postProcess;
+  set postProcess(PostProcess? postProcess) {
+    children.removeAll(children.query<PostProcessComponent>());
+    if (postProcess != null) {
+      children.add(PostProcessComponent(postProcess: postProcess));
+    }
+  }
+}
+
+class CameraRenderContext extends ComponentRenderContext {
+  PostProcess? currentPostProcess;
 }
