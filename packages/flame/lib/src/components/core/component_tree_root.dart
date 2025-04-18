@@ -14,29 +14,30 @@ class ComponentTreeRoot extends Component {
   ComponentTreeRoot({
     super.children,
     super.key,
-  })  : _queue = RecycledQueue(_LifecycleEvent.new),
+  })  : queue = RecycledQueue(LifecycleEvent.new),
         _blocked = <int>{};
 
-  final RecycledQueue<_LifecycleEvent> _queue;
+  @visibleForTesting
+  final RecycledQueue<LifecycleEvent> queue;
   final Set<int> _blocked;
   late final Map<ComponentKey, Component> _index = {};
   Completer<void>? _lifecycleEventsCompleter;
 
   @internal
   void enqueueAdd(Component child, Component parent) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.add
+    queue.addLast()
+      ..kind = LifecycleEventKind.add
       ..child = child
       ..parent = parent;
   }
 
   @internal
   void dequeueAdd(Component child, Component parent) {
-    for (final event in _queue) {
-      if (event.kind == _LifecycleEventKind.add &&
+    for (final event in queue) {
+      if (event.kind == LifecycleEventKind.add &&
           event.child == child &&
           event.parent == parent) {
-        event.kind = _LifecycleEventKind.unknown;
+        event.kind = LifecycleEventKind.unknown;
         return;
       }
     }
@@ -47,25 +48,25 @@ class ComponentTreeRoot extends Component {
 
   @internal
   void enqueueRemove(Component child, Component parent) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.remove
+    queue.addLast()
+      ..kind = LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
   }
 
   @internal
   void dequeueRemove(Component child) {
-    for (final event in _queue) {
-      if (event.kind == _LifecycleEventKind.remove && event.child == child) {
-        event.kind = _LifecycleEventKind.unknown;
+    for (final event in queue) {
+      if (event.kind == LifecycleEventKind.remove && event.child == child) {
+        event.kind = LifecycleEventKind.unknown;
       }
     }
   }
 
   @internal
   void enqueueMove(Component child, Component newParent) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.move
+    queue.addLast()
+      ..kind = LifecycleEventKind.move
       ..child = child
       ..parent = newParent;
   }
@@ -74,16 +75,14 @@ class ComponentTreeRoot extends Component {
   void enqueuePriorityChange(
     Component parent,
     Component child,
-    int newPriority,
   ) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.rebalance
+    queue.addLast()
+      ..kind = LifecycleEventKind.rebalance
       ..child = child
-      ..parent = parent
-      ..newPriority = newPriority;
+      ..parent = parent;
   }
 
-  bool get hasLifecycleEvents => _queue.isNotEmpty;
+  bool get hasLifecycleEvents => queue.isNotEmpty;
 
   /// A future that will complete once all lifecycle events have been
   /// processed.
@@ -114,13 +113,9 @@ class ComponentTreeRoot extends Component {
 
   void processLifecycleEvents() {
     // reorder events to process later grouped by parent
-    final reorderEventsByParent = <Component, List<(Component, int)>>{};
-    LifecycleEventStatus handleReorderEvent(
-      Component parent,
-      Component child,
-      int newPriority,
-    ) {
-      (reorderEventsByParent[parent] ??= []).add((child, newPriority));
+    final reorderParents = <Component>{};
+    LifecycleEventStatus handleReorderEvent(Component parent) {
+      reorderParents.add(parent);
       return LifecycleEventStatus.done;
     }
 
@@ -128,7 +123,7 @@ class ComponentTreeRoot extends Component {
     var repeatLoop = true;
     while (repeatLoop) {
       repeatLoop = false;
-      for (final event in _queue) {
+      for (final event in queue) {
         final child = event.child!;
         final parent = event.parent!;
         if (_blocked.contains(identityHashCode(child)) ||
@@ -137,18 +132,16 @@ class ComponentTreeRoot extends Component {
         }
 
         final status = switch (event.kind) {
-          _LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
-          _LifecycleEventKind.remove =>
-            child.handleLifecycleEventRemove(parent),
-          _LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
-          _LifecycleEventKind.rebalance =>
-            handleReorderEvent(parent, child, event.newPriority!),
-          _LifecycleEventKind.unknown => LifecycleEventStatus.done,
+          LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
+          LifecycleEventKind.remove => child.handleLifecycleEventRemove(parent),
+          LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
+          LifecycleEventKind.rebalance => handleReorderEvent(parent),
+          LifecycleEventKind.unknown => LifecycleEventStatus.done,
         };
 
         switch (status) {
           case LifecycleEventStatus.done:
-            _queue.removeCurrent();
+            queue.removeCurrent();
             repeatLoop = true;
           case LifecycleEventStatus.block:
             _blocked.add(identityHashCode(child));
@@ -159,11 +152,7 @@ class ComponentTreeRoot extends Component {
       _blocked.clear();
     }
 
-    for (final MapEntry(key: parent, value: events)
-        in reorderEventsByParent.entries) {
-      for (final (child, newPriority) in events) {
-        child.handleLifecycleEventRebalanceUncleanly(newPriority);
-      }
+    for (final parent in reorderParents) {
       parent.children.rebalanceAll();
     }
 
@@ -178,8 +167,8 @@ class ComponentTreeRoot extends Component {
   @internal
   void handleResize(Vector2 size) {
     super.handleResize(size);
-    for (final event in _queue) {
-      if ((event.kind == _LifecycleEventKind.add) &&
+    for (final event in queue) {
+      if ((event.kind == LifecycleEventKind.add) &&
           (event.child!.isLoading || event.child!.isLoaded)) {
         event.child!.onGameResize(size);
       }
@@ -222,7 +211,8 @@ enum LifecycleEventStatus {
   done,
 }
 
-enum _LifecycleEventKind {
+@visibleForTesting
+enum LifecycleEventKind {
   unknown,
   add,
   remove,
@@ -230,18 +220,17 @@ enum _LifecycleEventKind {
   rebalance,
 }
 
-class _LifecycleEvent implements Disposable {
-  _LifecycleEventKind kind = _LifecycleEventKind.unknown;
+@visibleForTesting
+class LifecycleEvent implements Disposable {
+  LifecycleEventKind kind = LifecycleEventKind.unknown;
   Component? child;
   Component? parent;
-  int? newPriority;
 
   @override
   void dispose() {
-    kind = _LifecycleEventKind.unknown;
+    kind = LifecycleEventKind.unknown;
     child = null;
     parent = null;
-    newPriority = null;
   }
 
   @override
