@@ -11,6 +11,7 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
+  crystal_ball: ^0.1.0
   dashbook: ^0.1.16
   flame: ^1.27.0
   flame_audio: ^2.11.3
@@ -53,3 +54,4 @@ flutter:
     - assets/audio/music/
     - assets/audio/sfx/
     - assets/yarn/
+    

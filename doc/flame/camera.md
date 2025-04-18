@@ -263,3 +263,26 @@ if (!camera.canSee(component)) {
    component.removeFromParent(); // Cull the component
 }
 ```
+
+
+### Post processing
+
+[Post processing](post_processing.md) is a technique used in game development to apply visual
+effects to a component tree after it has been rendered. This can be added to the camera via the
+`postProcess` property.
+
+```dart
+camera.postProcess = PostProcessGroup(
+  postProcesses: [
+    PostProcessSequentialGroup(
+      postProcesses: [
+        FireflyPostProcess(),
+        WaterPostProcess(),
+      ],
+    ),
+    ForegroundFogPostProcess(),
+  ],
+);
+```
+
+Read more about this on [Post processing](post_processing.md).

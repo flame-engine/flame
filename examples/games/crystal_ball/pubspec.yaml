@@ -1,0 +1,24 @@
+name: crystal_ball
+resolution: workspace
+description: "A game to showcase the shader pipeline API in Flame."
+publish_to: 'none' 
+version: "0.1.0"
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
+dependencies:
+  flame: ^1.27.0
+  flutter:
+    sdk: flutter
+  flutter_shaders: ^0.1.3
+dev_dependencies:
+  flame_lint: ^1.3.0
+flutter:
+  uses-material-design: true
+  shaders:
+    - shaders/firefly.frag
+    - shaders/the_ball.frag
+    - shaders/ground.frag
+    - shaders/fog.frag
+
