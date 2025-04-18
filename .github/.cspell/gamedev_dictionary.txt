@@ -18,7 +18,9 @@ cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
 easings # Easing functions specify the rate of change of a parameter over time
 fullscreen # mode in which a program or app occupies the entire screen with no borders
+glsl # OpenGL Shading Language
 goldens # test files used as reference for Golden Tests
+highp # high float precission setting on glsl fragment shaders
 hitbox # the collision box around objects for the purposes of collision detection
 hitboxes # plural of hitbox
 IDAT # PNG data chunk

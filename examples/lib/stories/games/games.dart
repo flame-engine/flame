@@ -1,3 +1,4 @@
+import 'package:crystal_ball/crystal_ball.dart';
 import 'package:dashbook/dashbook.dart';
 import 'package:padracing/padracing_game.dart';
 import 'package:padracing/padracing_widget.dart';
@@ -11,6 +12,12 @@ String gamesLink(String game) =>
 
 void addGameStories(Dashbook dashbook) {
   dashbook.storiesOf('Sample Games')
+    ..add(
+      'Crystal Ball',
+      (_) => const CrystalBallWidget(),
+      codeLink: gamesLink('crystal_ball'),
+      info: CrystalBallWidget.description,
+    )
     ..add(
       'Padracing',
       (_) => const PadracingWidget(),
