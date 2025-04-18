@@ -859,7 +859,7 @@ class Component {
       final parent = _parent;
       final game = findGame();
       if (game != null && parent != null) {
-        game.enqueuePriorityChange(parent, this, newPriority);
+        game.enqueuePriorityChange(parent, this);
       }
     }
   }
@@ -912,16 +912,6 @@ class Component {
       newParent.add(this);
     }
     return LifecycleEventStatus.done;
-  }
-
-  /// NOTE: this method will intentionally not reorder the parent,
-  /// leaving the ordered set in an inconsistent state.
-  /// It is left to the caller to optimally reorder the parent.
-  @internal
-  void handleLifecycleEventRebalanceUncleanly(int newPriority) {
-    if (_priority != newPriority) {
-      _priority = newPriority;
-    }
   }
 
   @mustCallSuper

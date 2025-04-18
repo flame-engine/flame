@@ -75,13 +75,11 @@ class ComponentTreeRoot extends Component {
   void enqueuePriorityChange(
     Component parent,
     Component child,
-    int newPriority,
   ) {
     queue.addLast()
       ..kind = LifecycleEventKind.rebalance
       ..child = child
-      ..parent = parent
-      ..newPriority = newPriority;
+      ..parent = parent;
   }
 
   bool get hasLifecycleEvents => queue.isNotEmpty;
@@ -115,13 +113,9 @@ class ComponentTreeRoot extends Component {
 
   void processLifecycleEvents() {
     // reorder events to process later grouped by parent
-    final reorderEventsByParent = <Component, List<(Component, int)>>{};
-    LifecycleEventStatus handleReorderEvent(
-      Component parent,
-      Component child,
-      int newPriority,
-    ) {
-      (reorderEventsByParent[parent] ??= []).add((child, newPriority));
+    final reorderParents = <Component>{};
+    LifecycleEventStatus handleReorderEvent(Component parent) {
+      reorderParents.add(parent);
       return LifecycleEventStatus.done;
     }
 
@@ -141,8 +135,7 @@ class ComponentTreeRoot extends Component {
           LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
           LifecycleEventKind.remove => child.handleLifecycleEventRemove(parent),
           LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
-          LifecycleEventKind.rebalance =>
-            handleReorderEvent(parent, child, event.newPriority!),
+          LifecycleEventKind.rebalance => handleReorderEvent(parent),
           LifecycleEventKind.unknown => LifecycleEventStatus.done,
         };
 
@@ -159,11 +152,7 @@ class ComponentTreeRoot extends Component {
       _blocked.clear();
     }
 
-    for (final MapEntry(key: parent, value: events)
-        in reorderEventsByParent.entries) {
-      for (final (child, newPriority) in events) {
-        child.handleLifecycleEventRebalanceUncleanly(newPriority);
-      }
+    for (final parent in reorderParents) {
       parent.children.rebalanceAll();
     }
 
@@ -236,14 +225,12 @@ class LifecycleEvent implements Disposable {
   LifecycleEventKind kind = LifecycleEventKind.unknown;
   Component? child;
   Component? parent;
-  int? newPriority;
 
   @override
   void dispose() {
     kind = LifecycleEventKind.unknown;
     child = null;
     parent = null;
-    newPriority = null;
   }
 
   @override
