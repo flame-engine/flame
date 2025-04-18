@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -1022,16 +1023,51 @@ void main() {
 
     group('Rebalancing components', () {
       testWithFlameGame(
-        'rebalance is queued',
+        'rebalance is correctly queued',
         (game) async {
           final c = Component();
-          await game.world.add(c);
+          await game.world.ensureAdd(c);
 
           c.priority = 10;
-          expect(c.priority, 0);
+          expect(c.priority, 10);
+          expect(
+            game.queue.any(
+              (e) =>
+                  e.child == c &&
+                  e.parent == game.world &&
+                  e.kind == LifecycleEventKind.rebalance,
+            ),
+            isTrue,
+          );
 
           await game.ready();
           expect(c.priority, 10);
+          expect(game.queue.isEmpty, isTrue);
+        },
+      );
+
+      testWithFlameGame(
+        'the order of children is not changed until after rebalance',
+        (game) async {
+          final c1 = Component(priority: 2);
+          final c2 = Component(priority: 1);
+          await game.world.ensureAddAll([c1, c2]);
+
+          c1.priority = 0;
+          expect(c1.priority, 0);
+          expect(c2.priority, 1);
+          expect(
+            game.world.children.toList(),
+            [c2, c1],
+          );
+
+          game.update(0);
+          expect(c1.priority, 0);
+          expect(c2.priority, 1);
+          expect(
+            game.world.children.toList(),
+            [c1, c2],
+          );
         },
       );
 
