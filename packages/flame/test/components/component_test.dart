@@ -1026,7 +1026,7 @@ void main() {
         'rebalance is correctly queued',
         (game) async {
           final c = Component();
-          await game.world.add(c);
+          await game.world.ensureAdd(c);
 
           c.priority = 10;
           expect(c.priority, 10);
@@ -1043,6 +1043,31 @@ void main() {
           await game.ready();
           expect(c.priority, 10);
           expect(game.queue.isEmpty, isTrue);
+        },
+      );
+
+      testWithFlameGame(
+        'the order of children is not changed until after rebalance',
+        (game) async {
+          final c1 = Component(priority: 2);
+          final c2 = Component(priority: 1);
+          await game.world.ensureAddAll([c1, c2]);
+
+          c1.priority = 0;
+          expect(c1.priority, 0);
+          expect(c2.priority, 1);
+          expect(
+            game.world.children.toList(),
+            [c2, c1],
+          );
+
+          game.update(0);
+          expect(c1.priority, 0);
+          expect(c2.priority, 1);
+          expect(
+            game.world.children.toList(),
+            [c1, c2],
+          );
         },
       );
 
