@@ -1,3 +1,7 @@
+## 3.0.1
+
+ - Update a dependency to the latest release.
+
 ## 3.0.0
 
 > Note: This release has breaking changes.
