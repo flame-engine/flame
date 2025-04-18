@@ -845,8 +845,8 @@ class Component {
   /// The smaller the priority, the sooner your component will be
   /// updated/rendered.
   /// It can be any integer (negative, zero, or positive).
-  /// If two components share the same priority, they will probably be drawn in
-  /// the order they were added.
+  /// If two components share the same priority, they will be updated and
+  /// rendered in the order they were added.
   ///
   /// Note that setting the priority is relatively expensive if the component is
   /// already added to a component tree since all siblings have to be re-added
@@ -855,12 +855,11 @@ class Component {
   int _priority;
   set priority(int newPriority) {
     if (_priority != newPriority) {
+      _priority = newPriority;
       final parent = _parent;
       final game = findGame();
       if (game != null && parent != null) {
         game.enqueuePriorityChange(parent, this, newPriority);
-      } else {
-        _priority = newPriority;
       }
     }
   }

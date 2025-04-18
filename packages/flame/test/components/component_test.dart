@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -1022,16 +1023,26 @@ void main() {
 
     group('Rebalancing components', () {
       testWithFlameGame(
-        'rebalance is queued',
+        'rebalance is correctly queued',
         (game) async {
           final c = Component();
           await game.world.add(c);
 
           c.priority = 10;
-          expect(c.priority, 0);
+          expect(c.priority, 10);
+          expect(
+            game.queue.any(
+              (e) =>
+                  e.child == c &&
+                  e.parent == game.world &&
+                  e.kind == LifecycleEventKind.rebalance,
+            ),
+            isTrue,
+          );
 
           await game.ready();
           expect(c.priority, 10);
+          expect(game.queue.isEmpty, isTrue);
         },
       );
 
