@@ -3,6 +3,100 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.28.0`](#flame---v1280)
+ - [`flame_test` - `v1.19.0`](#flame_test---v1190)
+ - [`flame_forge2d` - `v0.19.0`](#flame_forge2d---v0190)
+
+Packages with other changes:
+
+ - [`flame_3d` - `v0.1.0-dev.10`](#flame_3d---v010-dev10)
+ - [`flame_svg` - `v1.11.10`](#flame_svg---v11110)
+ - [`flame_texturepacker` - `v4.2.0`](#flame_texturepacker---v420)
+ - [`flame_behavior_tree` - `v0.1.3+10`](#flame_behavior_tree---v01310)
+ - [`flame_tiled` - `v3.0.1`](#flame_tiled---v301)
+ - [`flame_oxygen` - `v0.2.3+10`](#flame_oxygen---v02310)
+ - [`flame_isolate` - `v0.6.2+10`](#flame_isolate---v06210)
+ - [`flame_sprite_fusion` - `v0.1.3+10`](#flame_sprite_fusion---v01310)
+ - [`flame_fire_atlas` - `v1.8.5`](#flame_fire_atlas---v185)
+ - [`flame_audio` - `v2.11.4`](#flame_audio---v2114)
+ - [`flame_spine` - `v0.2.2+10`](#flame_spine---v02210)
+ - [`flame_bloc` - `v1.12.11`](#flame_bloc---v11211)
+ - [`flame_kenney_xml` - `v0.1.1+10`](#flame_kenney_xml---v01110)
+ - [`flame_lottie` - `v0.4.2+10`](#flame_lottie---v04210)
+ - [`flame_markdown` - `v0.2.4+3`](#flame_markdown---v0243)
+ - [`flame_console` - `v0.1.2+6`](#flame_console---v0126)
+ - [`flame_rive` - `v1.10.13`](#flame_rive---v11013)
+ - [`flame_noise` - `v0.3.2+10`](#flame_noise---v03210)
+ - [`flame_riverpod` - `v5.4.13`](#flame_riverpod---v5413)
+ - [`flame_network_assets` - `v0.3.3+10`](#flame_network_assets---v03310)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+10`
+ - `flame_tiled` - `v3.0.1`
+ - `flame_oxygen` - `v0.2.3+10`
+ - `flame_isolate` - `v0.6.2+10`
+ - `flame_sprite_fusion` - `v0.1.3+10`
+ - `flame_fire_atlas` - `v1.8.5`
+ - `flame_audio` - `v2.11.4`
+ - `flame_spine` - `v0.2.2+10`
+ - `flame_bloc` - `v1.12.11`
+ - `flame_kenney_xml` - `v0.1.1+10`
+ - `flame_lottie` - `v0.4.2+10`
+ - `flame_markdown` - `v0.2.4+3`
+ - `flame_console` - `v0.1.2+6`
+ - `flame_rive` - `v1.10.13`
+ - `flame_noise` - `v0.3.2+10`
+ - `flame_riverpod` - `v5.4.13`
+ - `flame_network_assets` - `v0.3.3+10`
+
+---
+
+#### `flame` - `v1.28.0`
+
+ - **FIX**: Priority change should be reflected directly ([#3564](https://github.com/flame-engine/flame/issues/3564)). ([ab2fd639](https://github.com/flame-engine/flame/commit/ab2fd639f73896c0859dd133337ec2adc7adf832))
+ - **FIX**: Deprecate `HasGameRef` in favor of `HasGameReference` ([#3559](https://github.com/flame-engine/flame/issues/3559)). ([a882261b](https://github.com/flame-engine/flame/commit/a882261b63ef21e29dde041d99b2eaf94264d7ad))
+ - **FIX**: The SpriteButton label should be nullable ([#3557](https://github.com/flame-engine/flame/issues/3557)). ([80a598cd](https://github.com/flame-engine/flame/commit/80a598cd006f2cf90b1b799bbb51c0c073a94743))
+ - **FIX**: Update ordered_set, remove ComponentSet ([#3554](https://github.com/flame-engine/flame/issues/3554)). ([728e13f8](https://github.com/flame-engine/flame/commit/728e13f855d988e8f8e24976557b213b98221603))
+ - **FEAT**: Post Process API ([#3404](https://github.com/flame-engine/flame/issues/3404)). ([c3316ae4](https://github.com/flame-engine/flame/commit/c3316ae4a50230e6d9720cb4653a8e3e309f3234))
+ - **FEAT**: Add helper methods on LineSegment (translate, inflate, deflate, spread) ([#3561](https://github.com/flame-engine/flame/issues/3561)). ([6d388870](https://github.com/flame-engine/flame/commit/6d388870138b9e02e120647d241d7cf9093795f6))
+ - **FEAT**: Support for disabled state for `SpriteButton` ([#3560](https://github.com/flame-engine/flame/issues/3560)). ([eaa2b442](https://github.com/flame-engine/flame/commit/eaa2b442b717ae086cac2d715a322ffa7c7a1116))
+ - **FEAT**: Add a Render Context API ([#3409](https://github.com/flame-engine/flame/issues/3409)). ([532f0191](https://github.com/flame-engine/flame/commit/532f0191f658e767fde4c200cf1902cbe36d6e7d))
+ - **FEAT**: Adding tickCount to TimerComponent ([#3552](https://github.com/flame-engine/flame/issues/3552)). ([dcd694e8](https://github.com/flame-engine/flame/commit/dcd694e8554c59b4b92f6d05928320c175d433f0))
+ - **FEAT**: Ability to reset SpriteAnimation on removal ([#3553](https://github.com/flame-engine/flame/issues/3553)). ([59ae5831](https://github.com/flame-engine/flame/commit/59ae58318eba93e3909bdb2deaa13f6aa7b7d35e))
+ - **BREAKING** **FIX**: Use 32bit Vector2 in Flame to be compatible with shaders and forge2d ([#3515](https://github.com/flame-engine/flame/issues/3515)). ([19dcecf5](https://github.com/flame-engine/flame/commit/19dcecf5df85345fd4fac168e1f360cee4665658))
+
+#### `flame_test` - `v1.19.0`
+
+ - **BREAKING** **FIX**: Use 32bit Vector2 in Flame to be compatible with shaders and forge2d ([#3515](https://github.com/flame-engine/flame/issues/3515)). ([19dcecf5](https://github.com/flame-engine/flame/commit/19dcecf5df85345fd4fac168e1f360cee4665658))
+
+#### `flame_forge2d` - `v0.19.0`
+
+ - **BREAKING** **FIX**: Use 32bit Vector2 in Flame to be compatible with shaders and forge2d ([#3515](https://github.com/flame-engine/flame/issues/3515)). ([19dcecf5](https://github.com/flame-engine/flame/commit/19dcecf5df85345fd4fac168e1f360cee4665658))
+
+#### `flame_3d` - `v0.1.0-dev.10`
+
+ - **FIX**: Update ordered_set, remove ComponentSet ([#3554](https://github.com/flame-engine/flame/issues/3554)). ([728e13f8](https://github.com/flame-engine/flame/commit/728e13f855d988e8f8e24976557b213b98221603))
+
+#### `flame_svg` - `v1.11.10`
+
+ - **FIX**: SvgComponent should use `drawImage` on first render too ([#3549](https://github.com/flame-engine/flame/issues/3549)). ([91721a6b](https://github.com/flame-engine/flame/commit/91721a6b7b2ecda338d64d3c982e448e9cd71122))
+
+#### `flame_texturepacker` - `v4.2.0`
+
+ - **FEAT**: Whitelist textures ([#3505](https://github.com/flame-engine/flame/issues/3505)). ([9ca9e858](https://github.com/flame-engine/flame/commit/9ca9e858442031cf91798e0fe09cbadc232b3900))
+
+
 ## 2025-04-02
 
 ### Changes

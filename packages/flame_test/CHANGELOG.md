@@ -1,3 +1,9 @@
+## 1.19.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Use 32bit Vector2 in Flame to be compatible with shaders and forge2d ([#3515](https://github.com/flame-engine/flame/issues/3515)). ([19dcecf5](https://github.com/flame-engine/flame/commit/19dcecf5df85345fd4fac168e1f360cee4665658))
+
 ## 1.18.3
 
  - Update a dependency to the latest release.
