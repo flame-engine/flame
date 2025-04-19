@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,11 @@ class Device {
   void _warnIfDesktop(String source) {
     assert(() {
       if (!kIsWeb &&
-          (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
+          [
+            TargetPlatform.linux,
+            TargetPlatform.macOS,
+            TargetPlatform.windows,
+          ].contains(defaultTargetPlatform)) {
         // ignore: avoid_print
         print(
           'Warning: $source is not supported on desktop platforms. '
