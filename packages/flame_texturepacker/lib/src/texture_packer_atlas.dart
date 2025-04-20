@@ -1,9 +1,9 @@
 library flame_texturepacker;
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_texturepacker/src/model/page.dart';
@@ -187,7 +187,7 @@ Future<TextureAtlasData> _parse(
   final String fileAsString;
 
   if (fromStorage) {
-    fileAsString = await File(path).readAsString();
+    fileAsString = await XFile(path).readAsString();
   } else {
     assert(
       assetsPrefix != null,
@@ -229,7 +229,7 @@ Future<TextureAtlasData> _parse(
         images ??= Flame.images;
         if (fromStorage) {
           try {
-            final textureFile = File(texturePath);
+            final textureFile = XFile(texturePath);
             final bytes = await textureFile.readAsBytes();
             final decodedBytes = await decodeImageFromList(bytes);
             images.add(texturePath, decodedBytes);
