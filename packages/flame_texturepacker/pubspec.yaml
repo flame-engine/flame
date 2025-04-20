@@ -17,6 +17,7 @@ environment:
 
 dependencies:
   collection: ^1.17.1
+  cross_file: ^0.3.4+2
   flame: ^1.28.0
   flutter:
     sdk: flutter
