@@ -86,7 +86,7 @@ small object can affect the performance if spawned in high volume.
 
 Flame has a built-in collision detection system which can detect when any two `Hitbox`es intersect with
 each other. In an ideal case, this system run on every frame and checks for collision. It is also smart
-enough to filter out only the possible collisions before performing th actually intersection checks.
+enough to filter out only the possible collisions before performing the actual intersection checks.
 
 Despite this, it is safe to assume that the cost of collision detection will increase as the number of
 hitboxes increases. But in many games, the developers are not always interested in detecting collision
