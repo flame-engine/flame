@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
+import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -955,7 +956,11 @@ class Component {
     _setMountingBit();
     onGameResize(_parent!.findGame()!.canvasSize);
     if (_parent is ReadOnlySizeProvider) {
-      onParentResize((_parent! as ReadOnlySizeProvider).size);
+      if (_parent is Viewport) {
+        onParentResize((_parent! as Viewport).virtualSize);
+      } else {
+        onParentResize((_parent! as ReadOnlySizeProvider).size);
+      }
     }
     if (isRemoved) {
       _clearRemovedBit();
