@@ -142,12 +142,12 @@ initializations. But before we implement our player's load method, note that we 
 the `loadSprite` method from the `FlameGame` class.
 
 That is not a problem! Every time our component needs to access things from its game class, we can
-mix our component with the `HasGameRef` mixin; that will add a new variable to our component called
-`gameRef` which will point to the game instance where the component is running. Now, let's refactor
+mix our component with the `HasGameReference` mixin; that will add a new variable to our component called
+`game` which will point to the game instance where the component is running. Now, let's refactor
 our game a little bit:
 
 ```dart
-class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
+class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
 
   Player() : super(
     size: Vector2(100, 150),
@@ -158,9 +158,9 @@ class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite('player-sprite.png');
+    sprite = await game.loadSprite('player-sprite.png');
 
-    position = gameRef.size / 2;
+    position = game.size / 2;
   }
 
   void move(Vector2 delta) {
