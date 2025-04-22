@@ -1,5 +1,3 @@
-import 'package:args/src/arg_parser.dart';
-import 'package:args/src/arg_results.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_console/flame_console.dart';
@@ -17,9 +15,6 @@ class _NoopCommand extends FlameConsoleCommand {
   (String?, String) execute(FlameGame<World> game, ArgResults results) {
     return (null, '');
   }
-
-  @override
-  ArgParser get parser => ArgParser();
 }
 
 void main() {
