@@ -41,6 +41,7 @@ orientable # can be oriented
 pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
 polyline # a connected series of line segments
+premultiply # premultiply alpha, a technique to optimize rendering
 quadtree # a tree-based data structure where each node has exactly 4 children
 raycast # act of raycasting
 raycasting # same as raytracing

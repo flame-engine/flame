@@ -2,6 +2,7 @@ export 'src/extensions/aabb.dart';
 export 'src/extensions/canvas.dart';
 export 'src/extensions/color.dart';
 export 'src/extensions/double.dart';
+export 'src/extensions/fragment_shader.dart';
 export 'src/extensions/image.dart';
 export 'src/extensions/list.dart';
 export 'src/extensions/matrix4.dart';
