@@ -92,7 +92,7 @@ abstract class Viewport extends Component
     onViewportResize();
     if (hasChildren) {
       for (final child in children) {
-        child.onParentResize(_size);
+        child.onParentResize(virtualSize);
       }
     }
   }
