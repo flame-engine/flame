@@ -6,6 +6,8 @@ import 'package:flame_console/src/commands/pause_command.dart';
 import 'package:flame_console/src/commands/resume_command.dart';
 import 'package:terminui/terminui.dart';
 
+export 'package:args/args.dart' show ArgResults;
+
 export 'debug_command.dart';
 export 'ls_command.dart';
 export 'remove_command.dart';
