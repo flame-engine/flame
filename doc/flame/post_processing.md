@@ -87,8 +87,7 @@ class PixelationPostProcess extends PostProcess {
     _time += dt;
   }
 
-late final myPaint = Paint()..shader = _fragmentShader;
-
+  late final myPaint = Paint()..shader = _fragmentShader;
 
   @override
   void postProcess(Vector2 size, Canvas canvas) {
