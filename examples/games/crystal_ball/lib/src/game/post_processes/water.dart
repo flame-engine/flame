@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:crystal_ball/src/game/game.dart';
 import 'package:flame/components.dart';
 import 'package:flame/post_process.dart';
-import 'package:flutter_shaders/flutter_shaders.dart';
 
 class WaterPostProcess extends PostProcess {
   WaterPostProcess({
