@@ -96,6 +96,20 @@ class OverlayManager {
     }
   }
 
+  /// Marks the [overlayName] to either be rendered or not, based on the
+  /// current state.
+  ///
+  /// [priority] is used to sort widgets for [buildCurrentOverlayWidgets]
+  /// The smaller the priority, the sooner your component will be build
+  /// (see [add] for more details).
+  bool toggle(String overlayName, {int priority = 0}) {
+    if (isActive(overlayName)) {
+      return remove(overlayName);
+    } else {
+      return add(overlayName, priority: priority);
+    }
+  }
+
   @internal
   List<Widget> buildCurrentOverlayWidgets(BuildContext context) {
     final widgets = <Widget>[];
