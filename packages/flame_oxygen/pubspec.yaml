@@ -1,7 +1,7 @@
 name: flame_oxygen
 resolution: workspace
 description: Integrate the Oxygen ECS with the Flame Engine.
-version: 0.2.3+10
+version: 0.2.3+11
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen
 funding:
   - https://opencollective.com/blue-fire
@@ -15,7 +15,7 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.28.0
+  flame: ^1.28.1
   flutter:
     sdk: flutter
   oxygen: ^0.3.1
