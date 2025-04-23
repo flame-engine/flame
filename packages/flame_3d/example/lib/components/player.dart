@@ -47,7 +47,7 @@ class Player extends MeshComponent
   }
 
   void reset() {
-    position.setFrom(Vector3(0, 0, 0));
+    position.setFrom(Vector3(0, 1, 0));
     lookAngle = 0.0;
     _input.setZero();
   }

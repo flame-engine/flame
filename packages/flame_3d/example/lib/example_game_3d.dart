@@ -29,16 +29,26 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    if (event is KeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.keyR) {
-        camera.reset();
-        player.reset();
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.keyM) {
-        camera.mode = camera.mode == CameraMode.drag
-            ? CameraMode.player
-            : CameraMode.drag;
-        return KeyEventResult.handled;
+    if (overlays.isActive('console')) {
+      if (event is KeyDownEvent &&
+          event.logicalKey == LogicalKeyboardKey.backquote) {
+        overlays.remove('console');
+      }
+    } else {
+      if (event is KeyDownEvent) {
+        if (event.logicalKey == LogicalKeyboardKey.backquote) {
+          overlays.add('console');
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.keyR) {
+          camera.reset();
+          player.reset();
+          return KeyEventResult.handled;
+        } else if (event.logicalKey == LogicalKeyboardKey.keyM) {
+          camera.mode = camera.mode == CameraMode.drag
+              ? CameraMode.player
+              : CameraMode.drag;
+          return KeyEventResult.handled;
+        }
       }
     }
 
