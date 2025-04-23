@@ -1,7 +1,7 @@
 name: flame_svg
 resolution: workspace
 description: Package to add SVG rendering support for the Flame game engine
-version: 1.11.10
+version: 1.11.11
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_svg
 funding:
   - https://opencollective.com/blue-fire
@@ -17,7 +17,7 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.28.0
+  flame: ^1.28.1
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.5

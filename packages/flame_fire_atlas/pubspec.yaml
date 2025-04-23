@@ -2,7 +2,7 @@ name: flame_fire_atlas
 resolution: workspace
 description: Easy to use texture atlases for the flame engine created with the
   fire atlas editor
-version: 1.8.5
+version: 1.8.6
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_fire_atlas
 funding:
   - https://opencollective.com/blue-fire
@@ -18,7 +18,7 @@ environment:
 
 dependencies:
   archive: ^4.0.2
-  flame: ^1.28.0
+  flame: ^1.28.1
   flutter:
     sdk: flutter
 

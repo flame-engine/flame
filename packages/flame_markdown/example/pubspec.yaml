@@ -8,8 +8,8 @@ environment:
   sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.28.0
-  flame_markdown: ^0.2.4+3
+  flame: ^1.28.1
+  flame_markdown: ^0.2.4+4
   flutter:
     sdk: flutter
   markdown: ^7.3.0
