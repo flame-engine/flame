@@ -3,6 +3,89 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-04-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.28.1`](#flame---v1281)
+ - [`flame_3d` - `v0.1.0-dev.11`](#flame_3d---v010-dev11)
+ - [`flame_console` - `v0.1.2+7`](#flame_console---v0127)
+ - [`flame_texturepacker` - `v4.3.0`](#flame_texturepacker---v430)
+ - [`flame_behavior_tree` - `v0.1.3+11`](#flame_behavior_tree---v01311)
+ - [`flame_test` - `v1.19.1`](#flame_test---v1191)
+ - [`flame_tiled` - `v3.0.2`](#flame_tiled---v302)
+ - [`flame_oxygen` - `v0.2.3+11`](#flame_oxygen---v02311)
+ - [`flame_isolate` - `v0.6.2+11`](#flame_isolate---v06211)
+ - [`flame_sprite_fusion` - `v0.1.3+11`](#flame_sprite_fusion---v01311)
+ - [`flame_fire_atlas` - `v1.8.6`](#flame_fire_atlas---v186)
+ - [`flame_audio` - `v2.11.5`](#flame_audio---v2115)
+ - [`flame_spine` - `v0.2.2+11`](#flame_spine---v02211)
+ - [`flame_bloc` - `v1.12.12`](#flame_bloc---v11212)
+ - [`flame_kenney_xml` - `v0.1.1+11`](#flame_kenney_xml---v01111)
+ - [`flame_lottie` - `v0.4.2+11`](#flame_lottie---v04211)
+ - [`flame_markdown` - `v0.2.4+4`](#flame_markdown---v0244)
+ - [`flame_rive` - `v1.10.14`](#flame_rive---v11014)
+ - [`flame_forge2d` - `v0.19.0+1`](#flame_forge2d---v01901)
+ - [`flame_noise` - `v0.3.2+11`](#flame_noise---v03211)
+ - [`flame_riverpod` - `v5.4.14`](#flame_riverpod---v5414)
+ - [`flame_svg` - `v1.11.11`](#flame_svg---v11111)
+ - [`flame_network_assets` - `v0.3.3+11`](#flame_network_assets---v03311)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+11`
+ - `flame_test` - `v1.19.1`
+ - `flame_tiled` - `v3.0.2`
+ - `flame_oxygen` - `v0.2.3+11`
+ - `flame_isolate` - `v0.6.2+11`
+ - `flame_sprite_fusion` - `v0.1.3+11`
+ - `flame_fire_atlas` - `v1.8.6`
+ - `flame_audio` - `v2.11.5`
+ - `flame_spine` - `v0.2.2+11`
+ - `flame_bloc` - `v1.12.12`
+ - `flame_kenney_xml` - `v0.1.1+11`
+ - `flame_lottie` - `v0.4.2+11`
+ - `flame_markdown` - `v0.2.4+4`
+ - `flame_rive` - `v1.10.14`
+ - `flame_forge2d` - `v0.19.0+1`
+ - `flame_noise` - `v0.3.2+11`
+ - `flame_riverpod` - `v5.4.14`
+ - `flame_svg` - `v1.11.11`
+ - `flame_network_assets` - `v0.3.3+11`
+
+---
+
+#### `flame` - `v1.28.1`
+
+ - **REFACTOR**: Replace dart:io usage with defaultTargetPlatform ([#3567](https://github.com/flame-engine/flame/issues/3567)). ([77925eb8](https://github.com/flame-engine/flame/commit/77925eb84e3ab23c301d504ccc85cc84a91cb3e4))
+ - **FIX**: Add fragment shader extension from flutter_shaders ([#3578](https://github.com/flame-engine/flame/issues/3578)). ([27115729](https://github.com/flame-engine/flame/commit/271157295209cc3f147d38582c7c9447e2e84844))
+ - **FIX**: Use `virtualSize` when calling `onParentResize` on children of `Viewport` ([#3577](https://github.com/flame-engine/flame/issues/3577)). ([245fb3f5](https://github.com/flame-engine/flame/commit/245fb3f5cf286b19076e758b8fea75a410680ffe))
+ - **FEAT**: Add method to toggle overlays ([#3581](https://github.com/flame-engine/flame/issues/3581)). ([ad7c37e1](https://github.com/flame-engine/flame/commit/ad7c37e16b20b71c8049d68fd57414b174fd9492))
+
+#### `flame_3d` - `v0.1.0-dev.11`
+
+ - **FEAT**: Add flame_console to flame_3d example to enable more complex setups ([#3580](https://github.com/flame-engine/flame/issues/3580)). ([15a6f8b0](https://github.com/flame-engine/flame/commit/15a6f8b001deb714134976d7cbb5ef0a6ec31c86))
+ - **DOCS**: Update flame_3d example to fix movement and camera, organize files ([#3573](https://github.com/flame-engine/flame/issues/3573)). ([54ca8433](https://github.com/flame-engine/flame/commit/54ca8433f20b451eb1a2c3c5f5a47a3430e71a6e))
+
+#### `flame_console` - `v0.1.2+7`
+
+ - **FIX**: Export necessary classes to build custom commands, update docs [flame_console] ([#3579](https://github.com/flame-engine/flame/issues/3579)). ([b05d55bc](https://github.com/flame-engine/flame/commit/b05d55bcc5f331ac8a8d82619b6df3a546848e10))
+
+#### `flame_texturepacker` - `v4.3.0`
+
+ - **FEAT**: Use `XFile` to support web platform ([#3569](https://github.com/flame-engine/flame/issues/3569)). ([20731167](https://github.com/flame-engine/flame/commit/20731167e8574e98d784b9734dbcee9ba6e6aa88))
+
+
 ## 2025-04-18
 
 ### Changes

@@ -1,3 +1,7 @@
+## 4.3.0
+
+ - **FEAT**: Use `XFile` to support web platform ([#3569](https://github.com/flame-engine/flame/issues/3569)). ([20731167](https://github.com/flame-engine/flame/commit/20731167e8574e98d784b9734dbcee9ba6e6aa88))
+
 ## 4.2.0
 
  - **FEAT**: Whitelist textures ([#3505](https://github.com/flame-engine/flame/issues/3505)). ([9ca9e858](https://github.com/flame-engine/flame/commit/9ca9e858442031cf91798e0fe09cbadc232b3900))

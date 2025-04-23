@@ -1,3 +1,7 @@
+## 1.11.11
+
+ - Update a dependency to the latest release.
+
 ## 1.11.10
 
  - **FIX**: SvgComponent should use `drawImage` on first render too ([#3549](https://github.com/flame-engine/flame/issues/3549)). ([91721a6b](https://github.com/flame-engine/flame/commit/91721a6b7b2ecda338d64d3c982e448e9cd71122))

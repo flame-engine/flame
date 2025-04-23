@@ -9,8 +9,8 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.28.0
-  flame_rive: ^1.10.13
+  flame: ^1.28.1
+  flame_rive: ^1.10.14
   flutter:
     sdk: flutter
   flutter_shaders:
