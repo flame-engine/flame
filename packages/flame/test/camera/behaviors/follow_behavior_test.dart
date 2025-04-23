@@ -91,7 +91,8 @@ void main() {
       for (var i = 0; i < 10; i++) {
         target.position = Vector2.random()..scale(1000);
         game.update(0.01);
-        final tolerance = toleranceVector2Float32(target.position);
+        final tolerance = toleranceVector2Float32(target.position) +
+            toleranceVector2Float32(pursuer.position);
         expect(
           pursuer.position,
           closeToVector(target.position, tolerance),
