@@ -105,8 +105,6 @@ framework.
 
 The Flame Engine's top sponsors:
 
-[![Very Good Ventures](https://raw.githubusercontent.com/flame-engine/flame/main/media/unicorn_two_toned.png)](https://verygood.ventures/)
-
 [![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
 
 Do you or your company want to sponsor Flame?
