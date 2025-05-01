@@ -1,7 +1,5 @@
 # AudioPool
 
-## Overview
-
 An AudioPool is a provider of AudioPlayers that are pre-loaded with local assets to minimize audio playback delays. This is particularly useful in fast-paced games where sound effects need to trigger quickly and potentially overlap with each other.
 
 A single AudioPool always plays the same sound, usually a quick sound effect that might need to be played repeatedly or simultaneously, such as:
@@ -11,6 +9,7 @@ A single AudioPool always plays the same sound, usually a quick sound effect tha
 - Explosion effects
 - Collecting coins or items
 - Enemy hit sounds
+
 
 ## How It Works
 
@@ -22,9 +21,11 @@ AudioPool works by creating and pre-loading a pool of AudioPlayer instances that
 
 This approach significantly reduces latency compared to creating new AudioPlayer instances on demand, while also managing memory by limiting the maximum size of the pool.
 
+
 ## Creating an AudioPool
 
 There are multiple ways to create an AudioPool:
+
 
 ### Using FlameAudio Helper
 
@@ -42,6 +43,7 @@ Future<void> loadSounds() async {
   );
 }
 ```
+
 
 ### Creating Directly with Source
 
@@ -61,6 +63,7 @@ Future<void> loadSounds() async {
   );
 }
 ```
+
 
 ### Creating from Asset Path
 
@@ -87,6 +90,7 @@ The parameters are:
 - `audioCache`: Optional AudioCache instance to use
 - `audioContext`: Optional audio context to be used by all players in the pool
 
+
 ## Using an AudioPool
 
 Once you've created an AudioPool, you can start playing sounds:
@@ -112,6 +116,7 @@ AudioPool provides a `dispose()` method to release resources when you no longer 
 // When you're done with the pool
 await audioPool.dispose();
 ```
+
 
 ## Example Usage
 
