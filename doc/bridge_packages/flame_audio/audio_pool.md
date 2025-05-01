@@ -108,6 +108,7 @@ await stopFunction();
 
 The `start()` method returns a `StopFunction` that you can call to stop the sound before it completes naturally.
 
+
 ## Managing the Pool
 
 AudioPool provides a `dispose()` method to release resources when you no longer need the pool:
