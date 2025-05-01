@@ -1,8 +1,11 @@
 # AudioPool
 
-An AudioPool is a provider of AudioPlayers that are pre-loaded with local assets to minimize audio playback delays. This is particularly useful in fast-paced games where sound effects need to trigger quickly and potentially overlap with each other.
+An AudioPool is a provider of AudioPlayers that are pre-loaded with local assets to minimize audio
+playback delays. This is particularly useful in fast-paced games where sound effects need to trigger
+quickly and potentially overlap with each other.
 
-A single AudioPool always plays the same sound, usually a quick sound effect that might need to be played repeatedly or simultaneously, such as:
+A single AudioPool always plays the same sound, usually a quick sound effect that might need to be
+played repeatedly or simultaneously, such as:
 
 - Shooting sounds in a space shooter
 - Jump sounds in a platformer
@@ -13,13 +16,16 @@ A single AudioPool always plays the same sound, usually a quick sound effect tha
 
 ## How It Works
 
-AudioPool works by creating and pre-loading a pool of AudioPlayer instances that are all configured to play the same sound. When you need to play the sound:
+AudioPool works by creating and pre-loading a pool of AudioPlayer instances that are all configured
+to play the same sound. When you need to play the sound:
 
 1. The pool gives you an available player from its collection
 2. If no player is available, a new player is created on demand
-3. When a sound finishes playing or is stopped manually, the player is returned to the pool for reuse, unless the pool already has reached its maximum size limit, in which case the player is released
+3. When a sound finishes playing or is stopped manually, the player is returned to the pool for reuse,
+   unless the pool already has reached its maximum size limit, in which case the player is released
 
-This approach significantly reduces latency compared to creating new AudioPlayer instances on demand, while also managing memory by limiting the maximum size of the pool.
+This approach significantly reduces latency compared to creating new AudioPlayer instances on demand,
+while also managing memory by limiting the maximum size of the pool.
 
 
 ## Creating an AudioPool
@@ -29,13 +35,15 @@ There are multiple ways to create an AudioPool:
 
 ### Using FlameAudio Helper
 
-The simplest approach is to use the helper method in `FlameAudio`, which conveniently uses Flame's global audio cache:
+The simplest approach is to use the helper method in `FlameAudio`, which conveniently uses Flame's
+global audio cache:
 
 ```dart
 import 'package:flame_audio/flame_audio.dart';
 
 Future<void> loadSounds() async {
   // Create a pool with minimum 1 player and maximum 2 players
+  // This automatically uses Flame's global audio cache
   AudioPool explosionSoundPool = await FlameAudio.createPool(
     'explosion.mp3',
     minPlayers: 1,
@@ -106,7 +114,8 @@ final stopFunction = await audioPool.start(volume: 0.5);
 await stopFunction();
 ```
 
-The `start()` method returns a `StopFunction` that you can call to stop the sound before it completes naturally.
+The `start()` method returns a `StopFunction` that you can call to stop the sound before it completes
+naturally.
 
 
 ## Managing the Pool
