@@ -127,6 +127,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
       canvas,
       size: size,
       overridePaint: paint,
+      bleed: bleed,
     );
   }
 
