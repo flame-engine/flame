@@ -31,6 +31,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
     super.anchor,
     super.children,
     super.priority,
+    this.bleed,
     super.key,
   })  : assert(
           (size == null) == (autoResize ?? size == null),
@@ -63,6 +64,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
+    double? bleed,
   }) : this(
           sprite: Sprite(
             image,
@@ -79,6 +81,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
           anchor: anchor,
           children: children,
           priority: priority,
+          bleed: bleed,
           key: key,
         );
 
@@ -105,6 +108,8 @@ class SpriteComponent extends PositionComponent with HasPaint {
     _sprite = value;
     _resizeToSprite();
   }
+
+  double? bleed;
 
   @override
   @mustCallSuper
