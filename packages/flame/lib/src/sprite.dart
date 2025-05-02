@@ -101,6 +101,7 @@ class Sprite {
     Vector2? size,
     Anchor anchor = Anchor.topLeft,
     Paint? overridePaint,
+    double? bleed,
   }) {
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
@@ -114,6 +115,14 @@ class Sprite {
       _tmpRenderPosition.x - (anchor.x * _tmpRenderSize.x),
       _tmpRenderPosition.y - (anchor.y * _tmpRenderSize.y),
     );
+
+    if (bleed != null) {
+      final bleedValue = bleed / 2;
+      _tmpRenderPosition.x -= bleedValue;
+      _tmpRenderPosition.y -= bleedValue;
+      _tmpRenderSize.x += bleedValue;
+      _tmpRenderSize.y += bleedValue;
+    }
 
     final drawRect = _tmpRenderPosition.toPositionedRect(_tmpRenderSize);
     final drawPaint = overridePaint ?? paint;
