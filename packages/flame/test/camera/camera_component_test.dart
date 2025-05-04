@@ -4,6 +4,7 @@ import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/post_process.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -562,6 +563,46 @@ void main() {
       expect(camera.localToGlobal(Vector2.all(50.0)), Vector2.all(500.0));
       expect(camera.localToGlobal(Vector2.all(100.0)), Vector2.all(1000.0));
     });
+
+    testWithFlameGame('postProcess can be changed', (game) async {
+      game.camera.postProcess = _PostProcessChecker();
+      await game.ready();
+      expect(
+        () => game.camera.postProcess = _PostProcessChecker(),
+        returnsNormally,
+      );
+    });
+
+    testWithFlameGame('postProcess onLoad is called', (game) async {
+      game.camera.postProcess = _PostProcessChecker();
+      await game.ready();
+      expect(
+        (game.camera.postProcess! as _PostProcessChecker).isLoaded,
+        isTrue,
+      );
+    });
+
+    testWithFlameGame('multiple postProcess add and remove ', (game) async {
+      final postProcessA = _PostProcessChecker();
+      final postProcessB = _PostProcessChecker();
+      final postProcessC = _PostProcessChecker();
+      game.camera.postProcess = postProcessA;
+      game.camera.postProcess = postProcessB;
+      game.camera.postProcess = postProcessC;
+      await game.ready();
+      expect(game.camera.postProcess, postProcessC);
+
+      game.camera.postProcess = postProcessA;
+      game.camera.postProcess = postProcessB;
+      game.camera.postProcess = postProcessA;
+      await game.ready();
+      expect(game.camera.postProcess, postProcessA);
+
+      game.camera.postProcess = postProcessB;
+      game.camera.postProcess = null;
+      await game.ready();
+      expect(game.camera.postProcess, isNull);
+    });
   });
 }
 
@@ -570,4 +611,13 @@ class _SolidBackground extends Component with HasPaint {
   final Color color;
   @override
   void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
+}
+
+class _PostProcessChecker extends PostProcess {
+  bool isLoaded = false;
+
+  @override
+  void onLoad() {
+    isLoaded = true;
+  }
 }
