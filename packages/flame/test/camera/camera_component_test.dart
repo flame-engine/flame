@@ -4,6 +4,7 @@ import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/post_process.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -561,6 +562,15 @@ void main() {
       expect(camera.localToGlobal(Vector2.all(10.0)), Vector2.all(100.0));
       expect(camera.localToGlobal(Vector2.all(50.0)), Vector2.all(500.0));
       expect(camera.localToGlobal(Vector2.all(100.0)), Vector2.all(1000.0));
+    });
+
+    testWithFlameGame('postProcess can be changed', (game) async {
+      game.camera.postProcess = PostProcessGroup(postProcesses: []);
+      await game.ready();
+      expect(
+        () => game.camera.postProcess = PostProcessGroup(postProcesses: []),
+        returnsNormally,
+      );
     });
   });
 }

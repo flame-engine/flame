@@ -500,7 +500,9 @@ class CameraComponent extends Component {
   PostProcess? get postProcess =>
       children.query<PostProcessComponent>().firstOrNull?.postProcess;
   set postProcess(PostProcess? postProcess) {
-    children.removeAll(children.query<PostProcessComponent>());
+    final postProcessComponents =
+        children.query<PostProcessComponent>().toList();
+    children.removeAll(postProcessComponents);
     if (postProcess != null) {
       children.add(PostProcessComponent(postProcess: postProcess));
     }
