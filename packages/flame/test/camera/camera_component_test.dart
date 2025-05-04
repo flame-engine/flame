@@ -591,11 +591,17 @@ void main() {
       game.camera.postProcess = postProcessC;
       await game.ready();
       expect(game.camera.postProcess, postProcessC);
+
       game.camera.postProcess = postProcessA;
       game.camera.postProcess = postProcessB;
       game.camera.postProcess = postProcessA;
       await game.ready();
       expect(game.camera.postProcess, postProcessA);
+
+      game.camera.postProcess = postProcessB;
+      game.camera.postProcess = null;
+      await game.ready();
+      expect(game.camera.postProcess, isNull);
     });
   });
 }
