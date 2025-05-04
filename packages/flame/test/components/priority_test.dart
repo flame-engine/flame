@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 

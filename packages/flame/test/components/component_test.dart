@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
