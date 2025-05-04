@@ -10,6 +10,7 @@ export 'src/components/clip_component.dart';
 export 'src/components/components_notifier.dart';
 export 'src/components/core/component.dart';
 export 'src/components/core/component_key.dart';
+export 'src/components/core/component_set.dart';
 export 'src/components/custom_painter_component.dart';
 export 'src/components/fps_component.dart';
 export 'src/components/fps_text_component.dart';
