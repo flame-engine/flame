@@ -7,12 +7,12 @@ import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component_render_context.dart';
+import 'package:flame/src/components/core/component_set.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/ordered_set.dart';
-import 'package:ordered_set/queryable_ordered_set.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -287,15 +287,14 @@ class Component {
     }
   }
 
-  QueryableOrderedSet<Component>? _children;
+  ComponentSet? _children;
 
   /// The children components of this component.
   ///
   /// This getter will automatically create the [OrderedSet] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  QueryableOrderedSet<Component> get children =>
-      _children ??= createComponentSet();
+  ComponentSet get children => _children ??= createComponentSet();
 
   /// Whether this component has any children.
   /// Avoids the creation of the children container if not necessary.
@@ -304,21 +303,12 @@ class Component {
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [OrderedSet] instances in your project.
-  static ComponentSetFactory childrenFactory = () {
-    return OrderedSet.queryable(
-      OrderedSet.mapping<num, Component>(_componentPriorityMapper),
-      strictMode: false,
-    );
-  };
-
-  static int _componentPriorityMapper(Component component) {
-    return component.priority;
-  }
+  static ComponentSet Function() childrenFactory = ComponentSet.new;
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [OrderedSet] within
   /// a particular class.
-  QueryableOrderedSet<Component> createComponentSet() => childrenFactory();
+  ComponentSet createComponentSet() => childrenFactory();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
@@ -1155,7 +1145,5 @@ class Component {
 
   //#endregion
 }
-
-typedef ComponentSetFactory = QueryableOrderedSet<Component> Function();
 
 enum ChildrenChangeType { added, removed }
