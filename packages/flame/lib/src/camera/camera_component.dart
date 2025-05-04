@@ -11,6 +11,7 @@ import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
 import 'package:flame/src/components/core/component_render_context.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
@@ -502,7 +503,15 @@ class CameraComponent extends Component {
   set postProcess(PostProcess? postProcess) {
     final postProcessComponents =
         children.query<PostProcessComponent>().toList();
-    removeAll(postProcessComponents);
+    final queuedPostProcessAdds = findGame()
+        ?.queue
+        .where(
+          (event) =>
+              event.kind == LifecycleEventKind.add &&
+              event.child is PostProcessComponent,
+        )
+        .map((event) => event.child!);
+    removeAll([...postProcessComponents, ...?queuedPostProcessAdds]);
     if (postProcess != null) {
       add(PostProcessComponent(postProcess: postProcess));
     }
