@@ -502,9 +502,9 @@ class CameraComponent extends Component {
   set postProcess(PostProcess? postProcess) {
     final postProcessComponents =
         children.query<PostProcessComponent>().toList();
-    children.removeAll(postProcessComponents);
+    removeAll(postProcessComponents);
     if (postProcess != null) {
-      children.add(PostProcessComponent(postProcess: postProcess));
+      add(PostProcessComponent(postProcess: postProcess));
     }
   }
 }

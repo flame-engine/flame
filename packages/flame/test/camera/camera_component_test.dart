@@ -565,11 +565,20 @@ void main() {
     });
 
     testWithFlameGame('postProcess can be changed', (game) async {
-      game.camera.postProcess = PostProcessGroup(postProcesses: []);
+      game.camera.postProcess = _PostProcessChecker();
       await game.ready();
       expect(
-        () => game.camera.postProcess = PostProcessGroup(postProcesses: []),
+        () => game.camera.postProcess = _PostProcessChecker(),
         returnsNormally,
+      );
+    });
+
+    testWithFlameGame('postProcess onLoad is called', (game) async {
+      game.camera.postProcess = _PostProcessChecker();
+      await game.ready();
+      expect(
+        (game.camera.postProcess! as _PostProcessChecker).isLoaded,
+        isTrue,
       );
     });
   });
@@ -580,4 +589,13 @@ class _SolidBackground extends Component with HasPaint {
   final Color color;
   @override
   void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
+}
+
+class _PostProcessChecker extends PostProcess {
+  bool isLoaded = false;
+
+  @override
+  void onLoad() {
+    isLoaded = true;
+  }
 }
