@@ -3,15 +3,10 @@ import 'package:meta/meta.dart';
 import 'package:ordered_set/ordered_set.dart';
 import 'package:ordered_set/queryable_ordered_set.dart';
 
-/// This is a simple wrapper over [QueryableOrderedSet] to be used by
-/// [Component].
-///
-/// Instead of immediately modifying the component list, all insertion
-/// and removal operations are queued to be performed on the next tick in the
-/// game loop.
-///
-/// This will avoid any concurrent modification exceptions while the game
-/// iterates through the component list.
+/// This is a simple wrapper over [QueryableOrderedSet].
+/// It is used by the [Component] to hide the add and remove methods from the
+/// user, since the user should be going through the [Component.add] and
+/// [Component.remove] methods instead.
 class ComponentSet extends QueryableOrderedSet<Component> {
   /// With default settings, creates a [ComponentSet] with the compare function
   /// that uses the Component's priority for sorting.
