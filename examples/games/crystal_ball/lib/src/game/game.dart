@@ -16,10 +16,7 @@ import 'package:flame/input.dart';
 import 'package:flame/post_process.dart';
 
 class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
-    with
-        HasKeyboardHandlerComponents,
-        HasCollisionDetection,
-        SingleGameInstance {
+    with HasKeyboardHandlerComponents, HasCollisionDetection {
   CrystalBallGame({
     required this.preloadedPrograms,
   }) : super(
