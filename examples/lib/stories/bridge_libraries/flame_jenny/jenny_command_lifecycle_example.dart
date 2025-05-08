@@ -36,13 +36,15 @@ class JennyCommandLifecycleExample extends FlameGame {
       },
     );
     add(dialogueControllerComponent);
-    add(ColumnComponent(
-      shrinkWrap: true,
-      children: [
-        onCommandLabel,
-        onCommandExecutedLabel,
-      ],
-    ));
+    add(
+      ColumnComponent(
+        shrinkWrap: true,
+        children: [
+          onCommandLabel,
+          onCommandExecutedLabel,
+        ],
+      ),
+    );
     yarnProject.commands.addCommand1('exampleCommand', (String someData) async {
       /// Placeholder for some asynchronous event, like... maybe a dice roll.
       await Future.delayed(const Duration(milliseconds: 300));
