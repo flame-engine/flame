@@ -103,11 +103,29 @@ class _SpriteWidgetState extends State<SpriteWidget> {
     final oldValue = await oldFutureValue;
     final newValue = await newFutureValue;
 
+    if (widget.raster && oldValue.image != newValue.image) {
+      oldValue.image.dispose();
+    }
+
     if (oldValue.image != newValue.image || oldValue.src != newValue.src) {
       setState(() {
-        _spriteFuture = newFutureValue;
+        _spriteFuture = _initializeFuture();
       });
     }
+  }
+
+  Future<void> _disposeImage() async {
+    final value = await _spriteFuture;
+    value.image.dispose();
+  }
+
+  @override
+  void dispose() {
+    if (widget.raster) {
+      _disposeImage();
+    }
+
+    super.dispose();
   }
 
   @override
