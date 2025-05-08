@@ -29,6 +29,9 @@ class SpriteWidget extends StatefulWidget {
   /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
+  /// If the Sprite should be rasterized or not.
+  final bool raster;
+
   final FutureOr<Sprite> _spriteFuture;
 
   /// renders the [sprite] as a Widget.
@@ -41,6 +44,7 @@ class SpriteWidget extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.paint,
+    this.raster = false,
     super.key,
   }) : _spriteFuture = sprite;
 
@@ -60,6 +64,7 @@ class SpriteWidget extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.paint,
+    this.raster = false,
     super.key,
   }) : _spriteFuture = Sprite.load(
           path,
@@ -73,7 +78,16 @@ class SpriteWidget extends StatefulWidget {
 }
 
 class _SpriteWidgetState extends State<SpriteWidget> {
-  late FutureOr<Sprite> _spriteFuture = widget._spriteFuture;
+  late FutureOr<Sprite> _spriteFuture = _initializeFuture();
+
+  FutureOr<Sprite> _initializeFuture() async {
+    if (!widget.raster) {
+      return widget._spriteFuture;
+    }
+
+    final sprite = await widget._spriteFuture;
+    return sprite.rasterize();
+  }
 
   @override
   void didUpdateWidget(covariant SpriteWidget oldWidget) {
