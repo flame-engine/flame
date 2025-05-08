@@ -62,6 +62,17 @@ class Sprite {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 
+  /// Returns a new [Sprite] where the image in memory is just the region
+  /// defined by the original sprite.
+  ///
+  /// **Note:** This is a heavy async operation and should not be called inside
+  /// the game loop. Remember to call dispose on the image object once you
+  /// aren't going to use it anymore.
+  Future<Sprite> rasterize() async {
+    final image = await toImage();
+    return Sprite(image, srcPosition: srcPosition, srcSize: srcSize);
+  }
+
   /// Same as [render], but takes both the position and the size as a single
   /// [Rect].
   ///
