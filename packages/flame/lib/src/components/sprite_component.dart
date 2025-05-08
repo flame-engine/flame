@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite.dart';
