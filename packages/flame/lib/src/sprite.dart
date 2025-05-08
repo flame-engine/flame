@@ -70,7 +70,11 @@ class Sprite {
   /// aren't going to use it anymore.
   Future<Sprite> rasterize() async {
     final rasterizedImage = await toImage();
-    return Sprite(rasterizedImage, srcPosition: srcPosition, srcSize: srcSize);
+    return Sprite(
+      rasterizedImage,
+      srcPosition: Vector2.zero(),
+      srcSize: srcSize,
+    );
   }
 
   /// Same as [render], but takes both the position and the size as a single
