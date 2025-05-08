@@ -8,7 +8,7 @@ import 'package:jenny/jenny.dart';
 
 class JennyCommandLifecycleExample extends FlameGame {
   static const String description = '''
-    This is an example of how the lifecycles relating to user-defined
+    This is an example of how the lifecycle methods relating to user-defined
     commands work.
   ''';
 
