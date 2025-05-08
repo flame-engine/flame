@@ -69,8 +69,8 @@ class Sprite {
   /// the game loop. Remember to call dispose on the image object once you
   /// aren't going to use it anymore.
   Future<Sprite> rasterize() async {
-    final image = await toImage();
-    return Sprite(image, srcPosition: srcPosition, srcSize: srcSize);
+    final rasterizedImage = await toImage();
+    return Sprite(rasterizedImage, srcPosition: srcPosition, srcSize: srcSize);
   }
 
   /// Same as [render], but takes both the position and the size as a single
