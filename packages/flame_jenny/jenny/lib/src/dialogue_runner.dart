@@ -202,10 +202,10 @@ class DialogueRunner {
     // The thing we actually want to wait for is the result of
     // [command.execute(this)]. It also makes sense to wait until all
     // [onCommand] invocations are complete because conceptually,
-    // [onCommand] should always precede [onCommandExecuted].
+    // [onCommand] should always precede [onCommandFinish].
     if (command is UserDefinedCommand) {
       await _combineFutures([
-        for (final view in _dialogueViews) view.onCommandExecuted(command),
+        for (final view in _dialogueViews) view.onCommandFinish(command),
       ]);
     }
   }

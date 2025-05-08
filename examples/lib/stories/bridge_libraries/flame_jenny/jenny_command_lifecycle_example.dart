@@ -13,15 +13,15 @@ commands work.
   ''';
 
   final TextComponent onCommandLabel = TextComponent(text: '');
-  final TextComponent onCommandExecutedLabel = TextComponent(text: '');
+  final TextComponent onCommandFinishLabel = TextComponent(text: '');
 
   static const initialOnCommandLabelText = 'onCommand: ???';
-  static const initialOnCommandExecutedLabelText = 'onCommandExecuted: ???';
+  static const initialOnCommandFinishLabelText = 'onCommandFinish: ???';
 
   Future<void> startDialogue() async {
     // Initialize the labels
     onCommandLabel.text = initialOnCommandLabelText;
-    onCommandExecutedLabel.text = initialOnCommandExecutedLabelText;
+    onCommandFinishLabel.text = initialOnCommandFinishLabelText;
     final yarnProject = YarnProject();
     final dialogueControllerComponent = CommandLifecycleDialogueController(
       onCommandOverride: (command) async {
@@ -29,10 +29,10 @@ commands work.
             yarnProject.variables.getVariable(r'$exampleVariable');
         onCommandLabel.text = 'onCommand: $exampleVariable';
       },
-      onCommandExecutedOverride: (command) async {
+      onCommandFinishOverride: (command) async {
         final exampleVariable =
             yarnProject.variables.getVariable(r'$exampleVariable');
-        onCommandExecutedLabel.text = 'onCommandExecuted: $exampleVariable';
+        onCommandFinishLabel.text = 'onCommandFinish: $exampleVariable';
       },
     );
     add(dialogueControllerComponent);
@@ -41,7 +41,7 @@ commands work.
         shrinkWrap: true,
         children: [
           onCommandLabel,
-          onCommandExecutedLabel,
+          onCommandFinishLabel,
         ],
       ),
     );

@@ -46,7 +46,7 @@ void main() {
           'onLineStart(Last line)',
           'onLineFinish(Last line)',
           'onCommand(<<Command(myCommand)>>)',
-          'onCommandExecuted(<<Command(myCommand)>>)',
+          'onCommandFinish(<<Command(myCommand)>>)',
           'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
@@ -91,7 +91,7 @@ void main() {
           'onLineStart(Last line)',
           'onLineFinish(Last line)',
           'onCommand(<<Command(myCommand)>>)',
-          'onCommandExecuted(<<Command(myCommand)>>)',
+          'onCommandFinish(<<Command(myCommand)>>)',
           'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
@@ -274,8 +274,8 @@ class _RecordingDialogueView extends DialogueView {
   }
 
   @override
-  FutureOr<void> onCommandExecuted(UserDefinedCommand command) {
-    events.add('onCommandExecuted(<<$command>>)');
+  FutureOr<void> onCommandFinish(UserDefinedCommand command) {
+    events.add('onCommandFinish(<<$command>>)');
   }
 
   @override
@@ -348,8 +348,8 @@ class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
   }
 
   @override
-  FutureOr<void> onCommandExecuted(UserDefinedCommand command) {
-    events.add('onCommandExecuted(<<$command>>)');
+  FutureOr<void> onCommandFinish(UserDefinedCommand command) {
+    events.add('onCommandFinish(<<$command>>)');
   }
 
   @override

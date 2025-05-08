@@ -183,7 +183,7 @@ abstract mixin class DialogueView {
   ///
   /// This method is invoked immediately after the command itself is executed,
   /// but before the result of the execution was awaited.
-  /// (See [onCommandExecuted]) Thus, if the command's effect is asynchronous,
+  /// (See [onCommandFinish]) Thus, if the command's effect is asynchronous,
   /// then it will be send to dialogue views and executed *at the same time*.
   ///
   /// In cases when the command's effect occurs within the game, implementing
@@ -193,5 +193,5 @@ abstract mixin class DialogueView {
   FutureOr<void> onCommand(UserDefinedCommand command) {}
 
   /// Called after the result of the [command] has been awaited.
-  FutureOr<void> onCommandExecuted(UserDefinedCommand command) {}
+  FutureOr<void> onCommandFinish(UserDefinedCommand command) {}
 }
