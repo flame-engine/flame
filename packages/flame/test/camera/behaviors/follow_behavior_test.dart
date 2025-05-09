@@ -90,9 +90,13 @@ void main() {
 
       for (var i = 0; i < 10; i++) {
         target.position = Vector2.random()..scale(1000);
+        // The key here is to make sure you check the tolerance of the pursuer
+        // position before the update, because the error may be higher if e.g.
+        // the pursuer was at a location with a large value.
+        final tolerancePursuer = toleranceVector2Float32(pursuer.position);
+        final toleranceTarget = toleranceVector2Float32(target.position);
         game.update(0.01);
-        final tolerance = toleranceVector2Float32(target.position) +
-            toleranceVector2Float32(pursuer.position);
+        final tolerance = tolerancePursuer + toleranceTarget;
         expect(
           pursuer.position,
           closeToVector(target.position, tolerance),

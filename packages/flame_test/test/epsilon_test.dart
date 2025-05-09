@@ -1,7 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:flame_test/src/close_to_vector.dart';
 import 'package:flame_test/src/epsilon.dart';
 import 'package:test/test.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
   group('Float32 epsilon tests', () {
@@ -161,6 +163,44 @@ void main() {
         prevFloat32(double.negativeInfinity),
         equals(double.negativeInfinity),
       );
+    });
+    group('Vector2Float32Precision', () {
+      test('test with synthetic game environment', () {
+        const dt = 0.013;
+        const speed = double.infinity;
+        final actualPursuer = Vector2.zero();
+
+        final delta = Vector2(
+          0.0,
+          0.0,
+        );
+
+        for (var i = 0; i < 10000; i++) {
+          final targetPosition = Vector2.random()..scale(1e10);
+          delta.setValues(
+            targetPosition.x - actualPursuer.x,
+            targetPosition.y - actualPursuer.y,
+          );
+          final distance = delta.length;
+          const deltaOffset = speed * dt;
+          if (distance > deltaOffset) {
+            delta.scale(deltaOffset / distance);
+          }
+          final tolerancePursuer = toleranceVector2Float32(actualPursuer);
+          actualPursuer.setFrom(delta..add(actualPursuer));
+
+          // Calculate tolerance
+          final tolerance =
+              toleranceVector2Float32(targetPosition) + tolerancePursuer;
+
+          expect(
+            actualPursuer,
+            closeToVector(targetPosition, tolerance),
+            reason: 'Pursuer position should be close to target position'
+                ' at iteration $i',
+          );
+        }
+      });
     });
   });
 }
