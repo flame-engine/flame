@@ -192,10 +192,22 @@ class DialogueRunner {
   @internal
   Future<void> deliverCommand(Command command) async {
     await _combineFutures([
+      // Start execution of commands
       command.execute(this),
+      // Call [onCommand] for all the views registered with this runner
+      // so they can be notified that execution of the command has started.
       if (command is UserDefinedCommand)
         for (final view in _dialogueViews) view.onCommand(command),
     ]);
+    // The thing we actually want to wait for is the result of
+    // [command.execute(this)]. It also makes sense to wait until all
+    // [onCommand] invocations are complete because conceptually,
+    // [onCommand] should always precede [onCommandFinish].
+    if (command is UserDefinedCommand) {
+      await _combineFutures([
+        for (final view in _dialogueViews) view.onCommandFinish(command),
+      ]);
+    }
   }
 
   @internal
