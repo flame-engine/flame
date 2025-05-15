@@ -718,7 +718,7 @@ class Component {
           root.enqueueRemove(child, this);
           child._setRemovingBit();
         }
-      } else {
+      } else if (!child.isRemoved) {
         root.dequeueAdd(child, this);
         child._parent = null;
       }
@@ -1053,12 +1053,12 @@ class Component {
           .._setRemovedBit()
           .._removeCompleter?.complete()
           .._removeCompleter = null
-          .._parent!.onChildrenChanged(component, ChildrenChangeType.removed)
-          .._parent = null;
+          .._parent!.onChildrenChanged(component, ChildrenChangeType.removed);
         return true;
       },
       includeSelf: true,
     );
+    _parent = null;
   }
 
   void _unregisterKey() {

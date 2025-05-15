@@ -273,7 +273,7 @@ void main() {
           expect(parent.isMounted, false);
           expect(child.isMounted, false);
           expect(parent.parent, isNull);
-          expect(child.parent, isNull);
+          expect(child.parent, isNotNull);
 
           await game.world.add(parent);
           await game.ready();
@@ -283,6 +283,36 @@ void main() {
           expect(parent.parent, game.world);
           expect(parent.parent?.parent, game);
           expect(child.parent, parent);
+        },
+      );
+
+      testWithFlameGame(
+        'Parent removal should not lead to null parent of descendants',
+        (game) async {
+          final parent = _LifecycleComponent('parent');
+          final child = _LifecycleComponent('child')..addToParent(parent);
+          final grandChild = _LifecycleComponent('grandchild')
+            ..addToParent(child);
+          await game.world.add(parent);
+          await game.ready();
+
+          expect(parent.isMounted, true);
+          expect(child.isMounted, true);
+          expect(grandChild.isMounted, true);
+          expect(parent.parent, game.world);
+          expect(parent.parent?.parent, game);
+          expect(child.parent, parent);
+          expect(grandChild.parent, child);
+
+          parent.removeFromParent();
+          await game.ready();
+
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(grandChild.isMounted, false);
+          expect(parent.parent, isNull);
+          expect(child.parent, isNotNull);
+          expect(grandChild.parent, isNotNull);
         },
       );
 
@@ -970,6 +1000,22 @@ void main() {
             },
             returnsNormally,
           );
+        },
+      );
+
+      testWithFlameGame(
+        'A removed child should be able to be removed from onRemove',
+        (game) async {
+          final parent = _RemoveAllChildrenComponent();
+          final child = _LifecycleComponent('child')..addToParent(parent);
+          await game.world.add(parent);
+          await game.ready();
+          parent.removeFromParent();
+          game.update(0);
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(child.parent, parent);
+          expect(parent.parent, isNull);
         },
       );
     });
@@ -1939,6 +1985,14 @@ class _ComponentWithChildrenRemoveAll extends Component {
     super.onMount();
 
     add(Component());
+    removeAll(children);
+  }
+}
+
+class _RemoveAllChildrenComponent extends Component {
+  @override
+  void onRemove() {
+    super.onMount();
     removeAll(children);
   }
 }
