@@ -140,7 +140,7 @@ abstract class PostProcess {
   /// what is considered the "subtree" of the post process.
   ///
   /// This method will set the context of the post process, so that
-  /// components can know they are being rendered within a post process. 
+  /// components can know they are being rendered within a post process.
   /// See [PostProcessingContextFinder.findPostProcessFromContext].
   @nonVirtual
   @protected
