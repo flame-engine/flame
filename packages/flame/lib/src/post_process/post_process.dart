@@ -126,17 +126,22 @@ abstract class PostProcess {
     renderSubtree(innerCanvas);
 
     final picture = recorder.endRecording();
-    return picture.toImageSync(
-      (pixelRatio * _size!.x).ceil(),
-      (pixelRatio * _size!.y).ceil(),
-    );
+    try {
+      return picture.toImageSync(
+        (pixelRatio * _size!.x).ceil(),
+        (pixelRatio * _size!.y).ceil(),
+      );
+    } finally {
+      picture.dispose();
+    }
   }
 
   /// One of the two methods that subclasses should invoke to render the
   /// what is considered the "subtree" of the post process.
   ///
   /// This method will set the context of the post process, so that
-  /// components can know they are being rendered within a post process.
+  /// components can know they are being rendered within a post process. 
+  /// See [PostProcessingContextFinder.findPostProcessFromContext].
   @nonVirtual
   @protected
   void renderSubtree(Canvas canvas) {
