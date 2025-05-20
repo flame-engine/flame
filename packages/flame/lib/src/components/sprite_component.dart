@@ -157,9 +157,13 @@ class SpriteComponent extends PositionComponent with HasPaint {
   }
 }
 
-/// TODO
+/// {@template raster_sprite_component}
+/// A [RasterSpriteComponent] is a [SpriteComponent] that
+/// will rasterize its sprite when loaded and will automatically
+/// manage the disposal of the rasterized image when removed.
+/// {@endtemplate}
 class RasterSpriteComponent extends SpriteComponent {
-  /// TODO
+  /// {@macro raster_sprite_component}
   RasterSpriteComponent({
     required this.baseSprite,
     super.autoResize,
@@ -176,6 +180,7 @@ class RasterSpriteComponent extends SpriteComponent {
     super.key,
   });
 
+  /// The base sprite to be rasterized.
   final Sprite baseSprite;
 
   @mustCallSuper
