@@ -16,6 +16,16 @@ void main() {
       },
       goldenFile: '_goldens/sprite_test_1.png',
     );
+
+    group('raster sprite', () {
+      testGolden(
+        'still renders correctly',
+        (game) async {
+          game.add(_MyRasterComponent()..position = Vector2.all(25));
+        },
+        goldenFile: '_goldens/sprite_test_1.png',
+      );
+    });
   });
 }
 
@@ -26,6 +36,30 @@ class _MyComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     sprite = Sprite(await loadImage('flame.png'));
+  }
+
+  @override
+  void render(Canvas canvas) {
+    canvas.drawRect(
+      size.toRect(),
+      Paint()
+        ..color = const Color(0xffffffff)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2,
+    );
+    // Expected: sprite is rendered in the center of the rect
+    sprite.render(canvas, position: size / 2, anchor: Anchor.center);
+  }
+}
+
+class _MyRasterComponent extends PositionComponent {
+  _MyRasterComponent() : super(size: Vector2(200, 400));
+  late final Sprite sprite;
+
+  @override
+  Future<void> onLoad() async {
+    final baseSprite = Sprite(await loadImage('flame.png'));
+    sprite = await baseSprite.rasterize();
   }
 
   @override
