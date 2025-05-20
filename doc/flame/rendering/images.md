@@ -196,6 +196,7 @@ render call.
 Here is a complete
 [example using sprite as widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
 
+
 ### Sprite Bleeding
 
 When rendering sprites in a tiled way, where their edges should be touching, in some cases you may
@@ -249,8 +250,8 @@ Extracting the sprite selection and rasterizing it is a way to avoid, since the 
 now happen on top of an image that only contains the selected area.
 
 ```{warning}
-When creating a rasterized sprite, the image will be allocated in memory, and will not
-be put in the automatic cache management.
+When creating a rasterized sprite, the image will be allocated in memory, and
+will not be put in the automatic cache management.
 
 Meaning that you will have dispose it manually when you are done with it.
 
