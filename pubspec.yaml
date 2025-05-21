@@ -54,7 +54,8 @@ workspace:
   - packages/flame_svg/example
   - packages/flame_network_assets
   - packages/flame_network_assets/example
-  - packages/flame_3d
+  # TODO: Bring this back when we bump to Flutter 3.32.0
+  #- packages/flame_3d
   - packages/flame_3d/example
   - packages/flame_jenny
   - packages/flame_jenny/jenny
@@ -83,7 +84,8 @@ melos:
     bootstrap:
       environment:
         sdk: ">=3.6.0 <4.0.0"
-        flutter: ">=3.27.1"
+        # TODO: Bring back once we move everything to Flutter >3.32.0
+        #flutter: ">=3.27.1"
       dependencies:
         meta: ^1.12.0
         vector_math: ^2.1.4
