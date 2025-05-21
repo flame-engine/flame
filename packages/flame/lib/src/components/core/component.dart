@@ -287,7 +287,15 @@ class Component {
     }
   }
 
+  /// This field should be used internally for functionality when you don't need
+  /// to create a component set for the children if one doesn't already exist.
+  ///
+  /// This makes it possible to have lighter components that don't have any
+  /// children.
   OrderedSet<Component>? _children;
+
+  /// This field should be used internally for functionality when you need to
+  /// make sure that the component set is created if it doesn't already exist.
   OrderedSet<Component> get _internalChildren =>
       _children ??= createComponentSet();
 
