@@ -153,7 +153,7 @@ class ComponentTreeRoot extends Component {
     }
 
     for (final parent in reorderParents) {
-      parent.children.rebalanceAll();
+      parent.rebalanceChildren();
     }
 
     if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
