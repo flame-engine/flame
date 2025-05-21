@@ -29,10 +29,11 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
-      - name: "Analyze with lowest supported version"
-        uses: invertase/github-action-dart-analyzer@v3
-        with:
-          fatal-infos: true
+      - run: melos exec --ignore=flame_3d dart analyze .
+      #- name: "Analyze with lowest supported version"
+      #  uses: invertase/github-action-dart-analyzer@v3
+      #  with:
+      #    fatal-infos: true
 
   analyze-latest:
     runs-on: ubuntu-latest

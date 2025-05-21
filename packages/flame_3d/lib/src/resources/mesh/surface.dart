@@ -77,7 +77,7 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
       gpu.StorageMode.hostVisible,
       sizeInBytes,
     )
-      ?..overwrite(_vertices.asByteData())
+      ..overwrite(_vertices.asByteData())
       ..overwrite(
         _indices.asByteData(),
         destinationOffsetInBytes: _vertices.lengthInBytes,
