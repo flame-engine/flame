@@ -1,6 +1,5 @@
 name: flame_3d
-# TODO: Bring this back when we bump to Flutter 3.32.0
-#resolution: workspace
+resolution: workspace
 description: Experimental 3D support for the Flame Engine
 version: 0.1.0-dev.11
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_3d
@@ -11,7 +10,7 @@ funding:
 
 environment:
   sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.32.0"
+  flutter: ">=3.27.1"
 
 dependencies:
   flame: ^1.28.1

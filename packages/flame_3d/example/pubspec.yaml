@@ -1,6 +1,5 @@
 name: example
-# TODO: Bring this back when we bump to Flutter 3.32.0
-#resolution: workspace
+resolution: workspace
 description: An example for flame_3d. The example shows how to set up 3D support in a flame game.
 version: 0.0.1+1
 publish_to: none
