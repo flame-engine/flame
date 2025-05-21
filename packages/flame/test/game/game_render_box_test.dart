@@ -9,13 +9,6 @@ class _MockFlameGame extends Mock implements FlameGame {}
 
 class _MockBuildContext extends Mock implements BuildContext {}
 
-class _MockPipelineOwner extends Mock implements PipelineOwner {
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return '';
-  }
-}
-
 final _nodesNeedingCompositingBitsUpdate = <RenderObject>[];
 
 void main() {
@@ -25,7 +18,7 @@ void main() {
 
   group('GameRenderBox', () {
     test('game/attach', () {
-      final owner = _MockPipelineOwner();
+      final owner = PipelineOwner();
       final game = _MockFlameGame();
       when(() => game.paused).thenReturn(true);
 
@@ -46,8 +39,9 @@ void main() {
       verify(() => anotherGame.paused).called(1);
       expect(renderBox.gameLoop, isNotNull);
     });
+
     test('buildContext', () {
-      final owner = _MockPipelineOwner();
+      final owner = PipelineOwner();
       final game = _MockFlameGame();
       when(() => game.paused).thenReturn(true);
 
@@ -57,6 +51,7 @@ void main() {
 
       expect(renderBox.buildContext, context);
     });
+
     test('isRepaintBoundary', () {
       final owner = PipelineOwner();
 

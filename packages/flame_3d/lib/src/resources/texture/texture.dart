@@ -32,8 +32,7 @@ class Texture extends Resource<gpu.Texture> {
         PixelFormat.bgra8888 => gpu.PixelFormat.b8g8r8a8UNormInt,
         PixelFormat.rgbaFloat32 => gpu.PixelFormat.r32g32b32a32Float,
       },
-    )!
-      ..overwrite(sourceData);
+    )..overwrite(sourceData);
   }
 
   Image toImage() => resource.asImage();
