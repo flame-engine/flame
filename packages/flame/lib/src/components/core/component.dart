@@ -12,7 +12,7 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 import 'package:ordered_set/ordered_set.dart';
-import 'package:ordered_set/queryable_ordered_set.dart';
+import 'package:ordered_set/read_only_ordered_set.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -287,14 +287,30 @@ class Component {
     }
   }
 
-  QueryableOrderedSet<Component>? _children;
+  /// This field should be used internally for functionality when you don't need
+  /// to create a component set for the children if one doesn't already exist.
+  ///
+  /// This makes it possible to have lighter components that don't have any
+  /// children.
+  OrderedSet<Component>? _children;
+
+  /// This field should be used internally for functionality when you need to
+  /// make sure that the component set is created if it doesn't already exist.
+  OrderedSet<Component> get _internalChildren =>
+      _children ??= createComponentSet();
+
+  void rebalanceChildren() {
+    if (_children != null) {
+      _children!.rebalanceAll();
+    }
+  }
 
   /// The children components of this component.
   ///
   /// This getter will automatically create the [OrderedSet] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  QueryableOrderedSet<Component> get children =>
+  ReadOnlyOrderedSet<Component> get children =>
       _children ??= createComponentSet();
 
   /// Whether this component has any children.
@@ -304,21 +320,25 @@ class Component {
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
   /// customized (non-default) [OrderedSet] instances in your project.
-  static ComponentSetFactory childrenFactory = () {
-    return OrderedSet.queryable(
-      OrderedSet.mapping<num, Component>(_componentPriorityMapper),
-      strictMode: false,
+  static OrderedSet<Component> Function() childrenFactory = () {
+    return OrderedSet.mapping(
+      _componentPriorityMapper,
+      strictMode: strictQueryMode,
     );
   };
 
-  static int _componentPriorityMapper(Component component) {
+  /// Whether OrderedSet's strict mode mode should be enabled for all children
+  /// sets.
+  static bool strictQueryMode = false;
+
+  static num _componentPriorityMapper(Component component) {
     return component.priority;
   }
 
   /// This method creates the children container for the current component.
   /// Override this method if you need to have a custom [OrderedSet] within
   /// a particular class.
-  QueryableOrderedSet<Component> createComponentSet() => childrenFactory();
+  OrderedSet<Component> createComponentSet() => childrenFactory();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
@@ -654,9 +674,9 @@ class Component {
   FutureOr<void> _addChild(Component child) {
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
-      child._parent?.children.remove(child);
+      child._parent?._internalChildren.remove(child);
       child._parent = this;
-      children.add(child);
+      _internalChildren.add(child);
     } else if (child._parent != null) {
       if (child.isRemoving) {
         game.dequeueRemove(child);
@@ -669,7 +689,7 @@ class Component {
     } else {
       child._parent = this;
       // This will be reconciled during the mounting stage
-      children.add(child);
+      _internalChildren.add(child);
     }
     if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
       return child._startLoading();
@@ -883,7 +903,7 @@ class Component {
         // This case happens when the child is added to a parent that is being
         // removed in the same tick.
         _parent = parent;
-        parent.children.add(this);
+        parent._internalChildren.add(this);
         return LifecycleEventStatus.done;
       }
       return LifecycleEventStatus.block;
@@ -975,7 +995,7 @@ class Component {
     _setMountedBit();
     _mountCompleter?.complete();
     _mountCompleter = null;
-    _parent!.children.add(this);
+    _parent!._internalChildren.add(this);
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
@@ -1042,7 +1062,7 @@ class Component {
   void _remove() {
     assert(_parent != null, 'Trying to remove a component with no parent');
 
-    _parent!.children.remove(this);
+    _parent!._internalChildren.remove(this);
     propagateToChildren(
       (Component component) {
         component
@@ -1155,7 +1175,5 @@ class Component {
 
   //#endregion
 }
-
-typedef ComponentSetFactory = QueryableOrderedSet<Component> Function();
 
 enum ChildrenChangeType { added, removed }
