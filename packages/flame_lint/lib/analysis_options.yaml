@@ -3,6 +3,9 @@
 
 include: package:lints/core.yaml
 
+formatter:
+  trailing_commas: preserve
+
 analyzer:
   exclude:
     - "**/*.g.dart"
