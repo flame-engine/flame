@@ -83,6 +83,13 @@ Flame provides classes to implement parallax scrolling out of the box, these cla
 `ParallaxComponent`, so lets take a look at how we can add that new feature to the game:
 
 ```dart
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
+import 'package:flame/game.dart';
+import 'package:flame/input.dart';
+import 'package:flame/parallax.dart';
+import 'package:flutter/material.dart';
+
 class SpaceShooterGame extends FlameGame with PanDetector {
   late Player player;
 
