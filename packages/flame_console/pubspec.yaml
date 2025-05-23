@@ -1,7 +1,7 @@
 name: flame_console
 resolution: workspace
 description: "An extensible and customizable console to help debug Flame games."
-version: 0.1.2+7
+version: 0.1.2+8
 repository: https://github.com/flame-engine/flame/tree/main/packages/flame_console
 funding:
   - https://opencollective.com/blue-fire
@@ -18,13 +18,13 @@ environment:
 
 dependencies:
   args: ^2.5.0
-  flame: ^1.28.1
+  flame: ^1.29.0
   flutter:
     sdk: flutter
   terminui: ^0.2.0
 
 dev_dependencies:
-  flame_lint: ^1.3.0
-  flame_test: ^1.19.1
+  flame_lint: ^1.4.0
+  flame_test: ^1.19.2
   flutter_test:
     sdk: flutter

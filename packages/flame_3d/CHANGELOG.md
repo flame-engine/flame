@@ -1,3 +1,7 @@
+## 0.1.0-dev.12
+
+ - **FIX**: Only expose `ReadOnlyOrderedset` from `component.children` ([#3606](https://github.com/flame-engine/flame/issues/3606)). ([79351d19](https://github.com/flame-engine/flame/commit/79351d195ea968b8016129e79a489ef113a0fdf3))
+
 ## 0.1.0-dev.11
 
  - **FEAT**: Add flame_console to flame_3d example to enable more complex setups ([#3580](https://github.com/flame-engine/flame/issues/3580)). ([15a6f8b0](https://github.com/flame-engine/flame/commit/15a6f8b001deb714134976d7cbb5ef0a6ec31c86))
