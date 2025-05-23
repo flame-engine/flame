@@ -1,3 +1,7 @@
+## 0.1.2+8
+
+ - Update a dependency to the latest release.
+
 ## 0.1.2+7
 
  - **FIX**: Export necessary classes to build custom commands, update docs [flame_console] ([#3579](https://github.com/flame-engine/flame/issues/3579)). ([b05d55bc](https://github.com/flame-engine/flame/commit/b05d55bcc5f331ac8a8d82619b6df3a546848e10))

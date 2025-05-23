@@ -1,7 +1,7 @@
 name: flame_sprite_fusion
 resolution: workspace
 description: "Sprite Fusion support for the Flame game engine. This package parses and renders tilemaps exported from Sprite Fusion tool."
-version: 0.1.3+11
+version: 0.1.3+12
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_sprite_fusion
 funding:
   - https://opencollective.com/blue-fire
@@ -16,12 +16,12 @@ environment:
   flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.28.1
+  flame: ^1.29.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.3.0
-  flame_test: ^1.19.1
+  flame_lint: ^1.4.0
+  flame_test: ^1.19.2
   flutter_test:
     sdk: flutter

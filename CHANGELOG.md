@@ -3,6 +3,92 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-05-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.29.0`](#flame---v1290)
+
+Packages with other changes:
+
+ - [`flame_3d` - `v0.1.0-dev.12`](#flame_3d---v010-dev12)
+ - [`flame_lint` - `v1.4.0`](#flame_lint---v140)
+ - [`jenny` - `v1.4.0`](#jenny---v140)
+ - [`flame_behavior_tree` - `v0.1.3+12`](#flame_behavior_tree---v01312)
+ - [`flame_test` - `v1.19.2`](#flame_test---v1192)
+ - [`flame_tiled` - `v3.0.3`](#flame_tiled---v303)
+ - [`flame_oxygen` - `v0.2.3+12`](#flame_oxygen---v02312)
+ - [`flame_isolate` - `v0.6.2+12`](#flame_isolate---v06212)
+ - [`flame_texturepacker` - `v4.3.1`](#flame_texturepacker---v431)
+ - [`flame_sprite_fusion` - `v0.1.3+12`](#flame_sprite_fusion---v01312)
+ - [`flame_fire_atlas` - `v1.8.7`](#flame_fire_atlas---v187)
+ - [`flame_audio` - `v2.11.6`](#flame_audio---v2116)
+ - [`flame_spine` - `v0.2.2+12`](#flame_spine---v02212)
+ - [`flame_bloc` - `v1.12.13`](#flame_bloc---v11213)
+ - [`flame_kenney_xml` - `v0.1.1+12`](#flame_kenney_xml---v01112)
+ - [`flame_lottie` - `v0.4.2+12`](#flame_lottie---v04212)
+ - [`flame_markdown` - `v0.2.4+5`](#flame_markdown---v0245)
+ - [`flame_console` - `v0.1.2+8`](#flame_console---v0128)
+ - [`flame_rive` - `v1.10.15`](#flame_rive---v11015)
+ - [`flame_forge2d` - `v0.19.0+2`](#flame_forge2d---v01902)
+ - [`flame_noise` - `v0.3.2+12`](#flame_noise---v03212)
+ - [`flame_riverpod` - `v5.4.15`](#flame_riverpod---v5415)
+ - [`flame_svg` - `v1.11.12`](#flame_svg---v11112)
+ - [`flame_network_assets` - `v0.3.3+12`](#flame_network_assets---v03312)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+12`
+ - `flame_test` - `v1.19.2`
+ - `flame_tiled` - `v3.0.3`
+ - `flame_oxygen` - `v0.2.3+12`
+ - `flame_isolate` - `v0.6.2+12`
+ - `flame_texturepacker` - `v4.3.1`
+ - `flame_sprite_fusion` - `v0.1.3+12`
+ - `flame_fire_atlas` - `v1.8.7`
+ - `flame_audio` - `v2.11.6`
+ - `flame_spine` - `v0.2.2+12`
+ - `flame_bloc` - `v1.12.13`
+ - `flame_kenney_xml` - `v0.1.1+12`
+ - `flame_lottie` - `v0.4.2+12`
+ - `flame_markdown` - `v0.2.4+5`
+ - `flame_console` - `v0.1.2+8`
+ - `flame_rive` - `v1.10.15`
+ - `flame_forge2d` - `v0.19.0+2`
+ - `flame_noise` - `v0.3.2+12`
+ - `flame_riverpod` - `v5.4.15`
+ - `flame_svg` - `v1.11.12`
+ - `flame_network_assets` - `v0.3.3+12`
+
+---
+
+#### `flame` - `v1.29.0`
+
+ - **FIX**: Only expose `ReadOnlyOrderedset` from `component.children` ([#3606](https://github.com/flame-engine/flame/issues/3606)). ([79351d19](https://github.com/flame-engine/flame/commit/79351d195ea968b8016129e79a489ef113a0fdf3))
+ - **FIX**: Dispose picture is postprocess  ([#3604](https://github.com/flame-engine/flame/issues/3604)). ([3b24cdac](https://github.com/flame-engine/flame/commit/3b24cdac18ec6d846dbc4d08905fbcb897f90be8))
+ - **FIX**: Materialize post process list before removing items ([#3591](https://github.com/flame-engine/flame/issues/3591)). ([e858cc1f](https://github.com/flame-engine/flame/commit/e858cc1fc74814769fc11f49014190d37bda5cbe))
+ - **DOCS**: Update structure and add RowComponent + ColumnComponent docs ([#3599](https://github.com/flame-engine/flame/issues/3599)). ([d04843a4](https://github.com/flame-engine/flame/commit/d04843a44c9987825cc927a2ec8952395b423ba4))
+ - **BREAKING** **FEAT**: Children should retain `parent` after parent is remove from tree ([#3602](https://github.com/flame-engine/flame/issues/3602)). ([008829af](https://github.com/flame-engine/flame/commit/008829af67e3556a92b926db6b6368acf10e249b))
+
+#### `flame_3d` - `v0.1.0-dev.12`
+
+ - **FIX**: Only expose `ReadOnlyOrderedset` from `component.children` ([#3606](https://github.com/flame-engine/flame/issues/3606)). ([79351d19](https://github.com/flame-engine/flame/commit/79351d195ea968b8016129e79a489ef113a0fdf3))
+
+#### `flame_lint` - `v1.4.0`
+
+ - **FEAT**: Preserve trailing commas in Dart ^3.8.0 ([#3607](https://github.com/flame-engine/flame/issues/3607)). ([433829cb](https://github.com/flame-engine/flame/commit/433829cbdaafa9b1e9f0250b68f5143ec1a4d562))
+
+#### `jenny` - `v1.4.0`
+
+ - **FEAT**(Jenny): Add onCommandFinish lifecycle method to DialogueView ([#3600](https://github.com/flame-engine/flame/issues/3600)). ([bd5a4ca6](https://github.com/flame-engine/flame/commit/bd5a4ca68a46feb6734a70d5320bb7bf23b782d5))
+
+
 ## 2025-04-23
 
 ### Changes
