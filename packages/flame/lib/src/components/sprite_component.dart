@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -31,6 +32,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
     super.anchor,
     super.children,
     super.priority,
+    this.bleed,
     super.key,
   })  : assert(
           (size == null) == (autoResize ?? size == null),
@@ -63,6 +65,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
+    double? bleed,
   }) : this(
           sprite: Sprite(
             image,
@@ -79,6 +82,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
           anchor: anchor,
           children: children,
           priority: priority,
+          bleed: bleed,
           key: key,
         );
 
@@ -106,6 +110,8 @@ class SpriteComponent extends PositionComponent with HasPaint {
     _resizeToSprite();
   }
 
+  double? bleed;
+
   @override
   @mustCallSuper
   void onMount() {
@@ -122,6 +128,7 @@ class SpriteComponent extends PositionComponent with HasPaint {
       canvas,
       size: size,
       overridePaint: paint,
+      bleed: bleed,
     );
   }
 
@@ -147,5 +154,49 @@ class SpriteComponent extends PositionComponent with HasPaint {
     if (_autoResize && (!_isAutoResizing)) {
       _autoResize = false;
     }
+  }
+}
+
+/// {@template raster_sprite_component}
+/// A [RasterSpriteComponent] is a [SpriteComponent] that
+/// will rasterize its sprite when loaded and will automatically
+/// manage the disposal of the rasterized image when removed.
+/// {@endtemplate}
+class RasterSpriteComponent extends SpriteComponent {
+  /// {@macro raster_sprite_component}
+  RasterSpriteComponent({
+    required this.baseSprite,
+    super.autoResize,
+    super.paint,
+    super.position,
+    super.size,
+    super.scale,
+    super.angle,
+    super.nativeAngle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.bleed,
+    super.key,
+  });
+
+  /// The base sprite to be rasterized.
+  final Sprite baseSprite;
+
+  @mustCallSuper
+  @override
+  FutureOr<void> onLoad() async {
+    await super.onLoad();
+
+    sprite = await baseSprite.rasterize();
+  }
+
+  @mustCallSuper
+  @override
+  void onRemove() {
+    super.onRemove();
+
+    sprite?.image.dispose();
+    sprite = null;
   }
 }
