@@ -22,8 +22,7 @@ import 'package:meta/meta.dart';
 ///
 /// If a specific [size] is provided the component will be rendered with that
 /// size, otherwise it will calculate the size based on the bounding box of
-/// its children. If there are no children, it will use the size of its
-/// parent if it has a size or zero otherwise.
+/// its children.
 ///
 /// See also:
 /// - [PostProcess] for the base class for post processes and more information
@@ -99,18 +98,8 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   @override
   NotifyingVector2 get size {
     final superSize = super.size;
-    if (superSize.isZero()) {
-      if (hasChildren) {
-        return _boundingSizeOfChildren;
-      } else if (parent is ReadOnlySizeProvider &&
-          !(parent! as ReadOnlySizeProvider).size.isZero()) {
-        final parentSize = (parent! as ReadOnlySizeProvider).size;
-        if (parentSize is NotifyingVector2) {
-          return parentSize;
-        } else {
-          return NotifyingVector2.copy(parentSize);
-        }
-      }
+    if (superSize.isZero() && hasChildren) {
+      return _boundingSizeOfChildren;
     }
     return superSize;
   }

@@ -32,37 +32,6 @@ Future<void> main() async {
       expect(postProcess.size, Vector2.all(150));
     });
 
-    testWithFlameGame('renders post process with the size of the parent',
-        (game) async {
-      final postProcess = PostProcessComponent(
-        postProcess: PostProcessGroup(postProcesses: []),
-      );
-      final parent = PositionComponent(
-        size: Vector2.all(500),
-        children: [postProcess],
-      );
-      await game.ensureAdd(parent);
-
-      expect(game.children, contains(parent));
-      expect(postProcess.size, Vector2.all(500));
-    });
-
-    testWithFlameGame('changes size with the parent', (game) async {
-      final postProcess = PostProcessComponent(
-        postProcess: PostProcessGroup(postProcesses: []),
-      );
-      final parent = PositionComponent(
-        size: Vector2.all(500),
-        children: [postProcess],
-      );
-      await game.ensureAdd(parent);
-
-      expect(game.children, contains(parent));
-      expect(postProcess.size, Vector2.all(500));
-      parent.size = Vector2.all(600);
-      expect(postProcess.size, Vector2.all(600));
-    });
-
     testWithFlameGame('changes size when children change', (game) async {
       final componentA = PositionComponent(size: Vector2.all(50));
       final componentB =
