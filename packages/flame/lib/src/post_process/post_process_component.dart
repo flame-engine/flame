@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/post_process.dart';
 import 'package:flame/src/camera/camera_component.dart';
@@ -18,6 +19,11 @@ import 'package:meta/meta.dart';
 /// During the rendering process, children of this component can verify if they
 /// are being rendered within a post process by using
 /// [PostProcessingContextFinder.findPostProcessFromContext].
+///
+/// If a specific [size] is provided the component will be rendered with that
+/// size, otherwise it will calculate the size based on the bounding box of
+/// its children. If there are no children, it will use the size of its
+/// parent if it has a size or zero otherwise.
 ///
 /// See also:
 /// - [PostProcess] for the base class for post processes and more information
@@ -56,28 +62,55 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   }
 
   @override
+  @mustCallSuper
   void update(double dt) {
     super.update(dt);
     postProcess.update(dt);
   }
 
-  Rect get _boundingRectOfChildren {
+  @override
+  @mustCallSuper
+  void onChildrenChanged(_, __) {
+    _recalculateBoundingSize();
+  }
+
+  NotifyingVector2? _maybeBoundingSize;
+  NotifyingVector2 get _boundingSizeOfChildren {
+    if (_maybeBoundingSize == null) {
+      _recalculateBoundingSize();
+    }
+    return _maybeBoundingSize!;
+  }
+
+  void _recalculateBoundingSize() {
     final rectChildren = children.query<PositionComponent>();
 
     if (rectChildren.isEmpty) {
-      return Rect.zero;
+      (_maybeBoundingSize ??= NotifyingVector2.zero()).setZero();
     }
 
-    return rectChildren
+    final boundingBox = rectChildren
         .map((child) => child.toRect())
         .reduce((a, b) => a.expandToInclude(b));
+    (_maybeBoundingSize ??= NotifyingVector2.zero())
+        .setValues(boundingBox.width, boundingBox.height);
   }
 
   @override
   NotifyingVector2 get size {
     final superSize = super.size;
-    if (superSize.isZero() && hasChildren) {
-      super.size.setFrom(_boundingRectOfChildren.size.toVector2());
+    if (superSize.isZero()) {
+      if (hasChildren) {
+        return _boundingSizeOfChildren;
+      } else if (parent is ReadOnlySizeProvider &&
+          !(parent! as ReadOnlySizeProvider).size.isZero()) {
+        final parentSize = (parent! as ReadOnlySizeProvider).size;
+        if (parentSize is NotifyingVector2) {
+          return parentSize;
+        } else {
+          return NotifyingVector2.copy(parentSize);
+        }
+      }
     }
     return superSize;
   }
