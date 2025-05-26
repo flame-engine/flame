@@ -20,15 +20,16 @@ class BallGlow extends PostProcessComponent<BallGlowPostProcess>
   }) : super(postProcess: BallGlowPostProcess());
 
   @override
-  Future<void> onLoad() async {
+  Future<void> onLoad() {
     postProcess.world = game.world;
-    await super.onLoad();
+    return super.onLoad();
   }
 
   @override
   void update(double dt) {
     position = game.world.cameraTarget.position;
     size = game.size;
+    super.update(dt);
   }
 }
 
