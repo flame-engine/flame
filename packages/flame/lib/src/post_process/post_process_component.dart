@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/post_process.dart';
 import 'package:flame/src/camera/camera_component.dart';
