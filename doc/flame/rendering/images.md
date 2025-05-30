@@ -199,19 +199,19 @@ Here is a complete
 
 ### Sprite Bleeding
 
-When rendering sprites in a tiled way, where their edges should be touching, in some cases you may
-see some "ghost lines" between them.
+In some cases when rendering sprites next to each other, when the edges of the sprites are touching,
+you may see a rendering artifact called "ghost lines" between them.
 
-This happens specially when the sprites are positioned in coordinates that are not whole numbers, or
-when zooming are applied to the canvas.
+This happens especially when the sprites are positioned in coordinates that are not whole numbers,
+or when scaling is applied to the canvas.
 
-Those lines appears because how real numbers are not 100% accurate in computer science, and due
-rounding errors, even though the sprites should be supposed to be touching, they are not rendered
-as such.
+Those lines appear because floating-point numbers aren't 100% accurate in computer science. Due
+to rounding errors, even though the sprites are supposed to be touching, they are not rendered that
+way.
 
-One technique to avoid this is to use a technique called "bleeding", which consists of adding a
-very small margin to the edges of the sprites, so that when they are rendered, they will overlap a
-bit and avoid those ghost lines.
+One way to avoid this is to use a technique called "bleeding", which consists of adding a very small
+margin to the edges of the sprites, so that when they are rendered, they will overlap a bit and thus
+avoid rendering the ghost lines.
 
 Flame provides a way to do this by using the `bleed` parameter in the `Sprite` render. This is a
 double value that represents the amount of bleeding to be applied to the edges of the sprite.
@@ -235,28 +235,28 @@ Note that the amount of the bleed value depends on the size of the sprite, so a 
 might not make much difference for a sprite of 100x100.
 
 
-### Sprite Raster
+### Sprite Rasterization
 
 Rasterizing a sprite is the process of extracting the selected area of the image from that sprite,
-it storing in memory, and returning a new Sprite that contains that rasterized image.
+storing it in memory, and returning a new Sprite that contains that rasterized image.
 
-That can be used for a variety of reasons, one of the most useful one is to avoid texture leaking
+That can be used for a variety of reasons, one of the most useful ones is to avoid texture leaking
 when using a sprite sheet.
 
-Texture leaking can happen for the same rounding issue explained above, and it consist of parts
-outside of a sprite selection to also be rendered.
+Texture leaking can happen for the same reason as in the issue explained above (floating point
+rounding errors), and it causes parts outside of a sprite selection to also be rendered.
 
-Extracting the sprite selection and rasterizing it is a way to avoid, since the renderization will
-now happen on top of an image that only contains the selected area.
+Extracting the sprite selection and rasterizing it before rendering is a way to avoid this issue,
+since it then renders an image that only contains the selected area.
 
 ```{warning}
 When creating a rasterized sprite, the image will be allocated in memory, and
 will not be put in the automatic cache management.
 
-Meaning that you will have dispose it manually when you are done with it.
+Meaning that you will have dispose of it manually when you are done with it.
 
-But, when using the `RasterizedSpriteComponent` from Flame Component System,
-that component will take care of disposing the image when removed from the game.
+But, when using the `RasterizedSpriteComponent`, the component will take care of disposing the image
+when the component is removed from the game.
 ```
 
 

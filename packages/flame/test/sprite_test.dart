@@ -17,7 +17,7 @@ void main() {
       goldenFile: '_goldens/sprite_test_1.png',
     );
 
-    group('raster sprite', () {
+    group('rasterize sprite', () {
       testGolden(
         'still renders correctly',
         (game) async {

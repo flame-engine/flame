@@ -30,7 +30,7 @@ class SpriteWidget extends StatefulWidget {
   final Paint? paint;
 
   /// If the Sprite should be rasterized or not.
-  final bool raster;
+  final bool rasterize;
 
   final FutureOr<Sprite> _spriteFuture;
 
