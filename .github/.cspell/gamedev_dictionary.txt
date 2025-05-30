@@ -79,4 +79,3 @@ WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
 WebP # WebP image format
 Rasterizing
-renderization
