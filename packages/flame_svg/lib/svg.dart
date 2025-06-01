@@ -55,11 +55,14 @@ class Svg {
     Vector2 size, {
     Paint? overridePaint,
   }) {
-    final localSize = size.toSize();
+    final ratio = canvas.getDestinationClipBounds().size.width /
+        canvas.getLocalClipBounds().size.width;
+
+    final localSize = size.toSize() * ratio;
     final image = _getImage(localSize);
 
     canvas.save();
-    canvas.scale(1 / pixelRatio);
+    canvas.scale(1 / (pixelRatio * ratio));
     final drawPaint = overridePaint ?? _paint;
     canvas.drawImage(image, Offset.zero, drawPaint);
     canvas.restore();
