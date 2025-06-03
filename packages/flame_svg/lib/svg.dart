@@ -55,14 +55,24 @@ class Svg {
     Vector2 size, {
     Paint? overridePaint,
   }) {
-    final ratio = canvas.getDestinationClipBounds().size.width /
+    // Scale the canvas to the size of the destination clip bounds
+    // This is necessary to avoid blurriness when having a
+    // camera.viewfinder.zoom larger than 1.0
+    final widthRatio = canvas.getDestinationClipBounds().size.width /
         canvas.getLocalClipBounds().size.width;
+    final heightRatio = canvas.getDestinationClipBounds().size.height /
+        canvas.getLocalClipBounds().size.height;
 
-    final localSize = size.toSize() * ratio;
+    final localSize = Size(size.x * widthRatio, size.y * heightRatio);
     final image = _getImage(localSize);
 
     canvas.save();
-    canvas.scale(1 / (pixelRatio * ratio));
+    canvas.scaleVector(
+      Vector2(
+        1 / (pixelRatio * widthRatio),
+        1 / (pixelRatio * heightRatio),
+      ),
+    );
     final drawPaint = overridePaint ?? _paint;
     canvas.drawImage(image, Offset.zero, drawPaint);
     canvas.restore();
