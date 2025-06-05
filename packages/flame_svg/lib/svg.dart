@@ -66,11 +66,9 @@ class Svg {
     final image = _getImage(localSize, widthRatio, heightRatio);
 
     canvas.save();
-    canvas.scaleVector(
-      Vector2(
-        1 / (pixelRatio * widthRatio) ,
-        1 / (pixelRatio * heightRatio),
-      ),
+    canvas.scale(
+      1 / (pixelRatio * widthRatio),
+      1 / (pixelRatio * heightRatio),
     );
     final drawPaint = overridePaint ?? _paint;
     canvas.drawImage(image, Offset.zero, drawPaint);
