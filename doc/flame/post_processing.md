@@ -31,6 +31,15 @@ In Flame, the post processing system is modular and flexible, allowing developer
   the output of the previous one.
 
 
+## PostProcessComponent
+
+```{dartdoc}
+:package: flame
+:symbol: PostProcessComponent
+:file: src/post_process/post_process_component.dart
+```
+
+
 ## Creating a Custom Post Process
 
 To implement a custom post process:
