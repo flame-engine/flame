@@ -123,7 +123,8 @@ void main() {
         await expectLater(
           find.byType(MaterialApp),
           matchesGoldenFile(
-              './_goldens/render_sharply_with_viewfinder_zoom.png'),
+            './_goldens/render_sharply_with_viewfinder_zoom.png',
+          ),
         );
       },
     );
