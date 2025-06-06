@@ -46,7 +46,8 @@ class PolygonPolygonIntersections
     );
     for (final lineA in intersectionsA) {
       for (final lineB in intersectionsB) {
-        intersectionPoints.addAll(lineA.intersections(lineB));
+        final lineIntersections = lineA.intersections(lineB);
+        intersectionPoints.addAll(lineIntersections);
       }
     }
     if (intersectionPoints.isEmpty && (polygonA.isSolid || polygonB.isSolid)) {
