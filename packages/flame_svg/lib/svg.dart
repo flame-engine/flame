@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -109,13 +110,15 @@ class Svg {
   }
 
   void _render(Canvas canvas, Size size) {
-    final scaleX = size.width / pictureInfo.size.width;
-    final scaleY = size.height / pictureInfo.size.height;
-    canvas.translate(
-      (size.width - pictureInfo.size.width * scaleX) / 2,
-      (size.height - pictureInfo.size.height * scaleY) / 2,
+    final scale = math.min(
+      size.width / pictureInfo.size.width,
+      size.height / pictureInfo.size.height,
     );
-    canvas.scale(scaleX, scaleY);
+    canvas.translate(
+      (size.width - pictureInfo.size.width * scale) / 2,
+      (size.height - pictureInfo.size.height * scale) / 2,
+    );
+    canvas.scale(scale);
     canvas.drawPicture(pictureInfo.picture);
   }
 
