@@ -46,4 +46,3 @@ class RasterSpriteComponent extends SpriteComponent {
     sprite = null;
   }
 }
-
