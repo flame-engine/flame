@@ -148,6 +148,7 @@ class TexturePackerSprite extends Sprite {
     Vector2? size,
     Anchor anchor = Anchor.topLeft,
     Paint? overridePaint,
+    double? bleed,
   }) {
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
@@ -211,6 +212,7 @@ class TexturePackerSprite extends Sprite {
         position: _tmpRenderPosition,
         size: _tmpRenderSize,
         overridePaint: overridePaint,
+        bleed: bleed,
       ),
       canvas,
     );

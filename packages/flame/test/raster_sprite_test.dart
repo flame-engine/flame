@@ -8,27 +8,24 @@ import 'package:flutter_test/flutter_test.dart';
 import '_resources/load_image.dart';
 
 void main() {
-  group('Raster Sprite', () {
-    group('rasterize sprite', () {
-      testGolden(
-        'still renders correctly',
-        (game) async {
-          game.add(_MyRasterComponent()..position = Vector2.all(25));
-        },
-        goldenFile: '_goldens/sprite_test_1.png',
-      );
-    });
+  group('Sprite', () {
+    testGolden(
+      'Render with anchor',
+      (game) async {
+        game.add(_MyComponent()..position = Vector2.all(25));
+      },
+      goldenFile: '_goldens/sprite_test_1.png',
+    );
   });
 }
 
-class _MyRasterComponent extends PositionComponent {
-  _MyRasterComponent() : super(size: Vector2(200, 400));
+class _MyComponent extends PositionComponent {
+  _MyComponent() : super(size: Vector2(200, 400));
   late final Sprite sprite;
 
   @override
   Future<void> onLoad() async {
-    final baseSprite = Sprite(await loadImage('flame.png'));
-    sprite = await baseSprite.rasterize();
+    sprite = Sprite(await loadImage('flame.png'));
   }
 
   @override

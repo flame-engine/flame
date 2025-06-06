@@ -62,6 +62,17 @@ class Sprite {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 
+  /// Returns a new [Sprite] where the image in memory is just the region
+  /// defined by the original sprite.
+  Future<Sprite> rasterize() async {
+    final rasterizedImage = await toImage();
+    return Sprite(
+      rasterizedImage,
+      srcPosition: Vector2.zero(),
+      srcSize: srcSize,
+    );
+  }
+
   /// Same as [render], but takes both the position and the size as a single
   /// [Rect].
   ///
@@ -101,6 +112,7 @@ class Sprite {
     Vector2? size,
     Anchor anchor = Anchor.topLeft,
     Paint? overridePaint,
+    double? bleed,
   }) {
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
@@ -114,6 +126,14 @@ class Sprite {
       _tmpRenderPosition.x - (anchor.x * _tmpRenderSize.x),
       _tmpRenderPosition.y - (anchor.y * _tmpRenderSize.y),
     );
+
+    if (bleed != null) {
+      final bleedValue = bleed / 2;
+      _tmpRenderPosition.x -= bleedValue;
+      _tmpRenderPosition.y -= bleedValue;
+      _tmpRenderSize.x += bleedValue;
+      _tmpRenderSize.y += bleedValue;
+    }
 
     final drawRect = _tmpRenderPosition.toPositionedRect(_tmpRenderSize);
     final drawPaint = overridePaint ?? paint;
