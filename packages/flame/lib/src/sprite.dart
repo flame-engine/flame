@@ -64,10 +64,6 @@ class Sprite {
 
   /// Returns a new [Sprite] where the image in memory is just the region
   /// defined by the original sprite.
-  ///
-  /// **Note:** This is a heavy async operation and should not be called inside
-  /// the game loop. Remember to call dispose on the image object once you
-  /// aren't going to use it anymore.
   Future<Sprite> rasterize() async {
     final rasterizedImage = await toImage();
     return Sprite(

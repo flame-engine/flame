@@ -44,7 +44,7 @@ class SpriteWidget extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.paint,
-    this.raster = false,
+    this.rasterize = false,
     super.key,
   }) : _spriteFuture = sprite;
 
@@ -64,7 +64,7 @@ class SpriteWidget extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.paint,
-    this.raster = false,
+    this.rasterize = false,
     super.key,
   }) : _spriteFuture = Sprite.load(
           path,
@@ -81,7 +81,7 @@ class _SpriteWidgetState extends State<SpriteWidget> {
   late FutureOr<Sprite> _spriteFuture = _initializeFuture();
 
   FutureOr<Sprite> _initializeFuture() async {
-    if (!widget.raster) {
+    if (!widget.rasterize) {
       return widget._spriteFuture;
     }
 
@@ -103,7 +103,7 @@ class _SpriteWidgetState extends State<SpriteWidget> {
     final oldValue = await oldFutureValue;
     final newValue = await newFutureValue;
 
-    if (widget.raster && oldValue.image != newValue.image) {
+    if (widget.rasterize && oldValue.image != newValue.image) {
       oldValue.image.dispose();
     }
 
@@ -121,7 +121,7 @@ class _SpriteWidgetState extends State<SpriteWidget> {
 
   @override
   void dispose() {
-    if (widget.raster) {
+    if (widget.rasterize) {
       _disposeImage();
     }
 

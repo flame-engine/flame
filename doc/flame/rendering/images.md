@@ -231,6 +231,19 @@ playerFrame.render(canvas, 16.0, 16.0, bleed: 1.0);
 The sprite will be rendered with a bleed amount of 1.0, meaning that it will have
 a value of 0.5 pixels added to each edge of the sprite.
 
+For users of the `SpriteComponent`, using the bleeding feature is also quite simple, it is just
+a matter of passing a value in the `bleed` attribute on the component constructor:
+
+```dart
+final sprite = Sprite(...);
+
+final spriteComponent = SpriteComponent(
+  sprite: sprite,
+  size: Vector2.all(16.0),
+  bleed: 1.0, // bleed value
+);
+```
+
 Note that the amount of the bleed value depends on the size of the sprite, so a bleed value of 1.0
 might not make much difference for a sprite of 100x100.
 
