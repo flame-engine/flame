@@ -268,8 +268,8 @@ will not be put in the automatic cache management.
 
 Meaning that you will have dispose of it manually when you are done with it.
 
-But, when using the `RasterizedSpriteComponent`, the component will take care of disposing the image
-when the component is removed from the game.
+But, when using the `RasterizedSpriteComponent`, the component will take care
+of disposing the image when the component is removed from the game.
 ```
 
 
