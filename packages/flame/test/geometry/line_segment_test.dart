@@ -93,5 +93,12 @@ void main() {
         ),
       );
     });
+
+    test('Slightly angled line segments should intersect', () {
+      // This tests that the epsilon is sufficiently large, see #3587
+      final lineA = LineSegment(Vector2(-27.5, 2.5), Vector2(-22.5, 2.5));
+      final lineB = LineSegment(Vector2(-25, -25), Vector2(-25 + 1 / 18, 25));
+      expect(lineA.intersections(lineB), isNotEmpty);
+    });
   });
 }
