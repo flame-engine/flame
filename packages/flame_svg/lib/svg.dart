@@ -55,11 +55,22 @@ class Svg {
     Vector2 size, {
     Paint? overridePaint,
   }) {
-    final localSize = size.toSize();
-    final image = _getImage(localSize);
+    // Scale the canvas to the size of the destination clip bounds
+    // This is necessary to avoid blurriness when having a
+    // camera.viewfinder.zoom larger than 1.0
+    final widthRatio = canvas.getDestinationClipBounds().size.width /
+        canvas.getLocalClipBounds().size.width;
+    final heightRatio = canvas.getDestinationClipBounds().size.height /
+        canvas.getLocalClipBounds().size.height;
+
+    final localSize = Size(size.x, size.y);
+    final image = _getImage(localSize, widthRatio, heightRatio);
 
     canvas.save();
-    canvas.scale(1 / pixelRatio);
+    canvas.scale(
+      1 / (pixelRatio * widthRatio),
+      1 / (pixelRatio * heightRatio),
+    );
     final drawPaint = overridePaint ?? _paint;
     canvas.drawImage(image, Offset.zero, drawPaint);
     canvas.restore();
@@ -75,21 +86,23 @@ class Svg {
     canvas.renderAt(position, (c) => render(c, size));
   }
 
-  Image _getImage(Size size) {
-    final image = _imageCache.getValue(size);
+  Image _getImage(Size size, double widthRatio, double heightRatio) {
+    final cacheKey = Size(size.width * widthRatio, size.height * heightRatio);
+    final image = _imageCache.getValue(cacheKey);
 
     if (image == null) {
       final recorder = PictureRecorder();
       final canvas = Canvas(recorder);
-      canvas.scale(pixelRatio);
+      canvas.scale(pixelRatio * widthRatio, pixelRatio * heightRatio);
       _render(canvas, size);
       final picture = recorder.endRecording();
       final image = picture.toImageSync(
-        (size.width * pixelRatio).ceil(),
-        (size.height * pixelRatio).ceil(),
+        (size.width * pixelRatio * widthRatio).ceil(),
+        (size.height * pixelRatio * heightRatio).ceil(),
       );
+
       picture.dispose();
-      _imageCache.setValue(size, image);
+      _imageCache.setValue(cacheKey, image);
       return image;
     }
 
