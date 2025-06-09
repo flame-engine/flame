@@ -5,6 +5,7 @@ import 'package:flame/cache.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/widgets.dart' show WidgetsBinding;
 import 'package:flutter_svg/flutter_svg.dart';
 
 /// A [Svg] to be rendered on a Flame [Game].
@@ -13,7 +14,8 @@ class Svg {
   /// Default [pixelRatio] is the device pixel ratio.
   Svg(this.pictureInfo, {double? pixelRatio})
       : pixelRatio = pixelRatio ??
-            PlatformDispatcher.instance.views.first.devicePixelRatio;
+            WidgetsBinding
+                .instance.platformDispatcher.views.first.devicePixelRatio;
 
   /// The [PictureInfo] that this [Svg] represents.
   final PictureInfo pictureInfo;
