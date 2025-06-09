@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_svg/flame_svg.dart';
 import 'package:flame_svg/svg.dart' as flame_svg;
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -94,40 +97,30 @@ void main() {
       },
     );
 
-    testWidgets(
-      'render sharply with viewfinder zoom',
-      (tester) async {
-        addTearDown(() async {
-          await tester.binding.setSurfaceSize(null);
-        });
-
-        final flameSvg = await _parseSvgFromTestFile(
-          'test/_resources/hand.svg',
-        );
-
-        tester.view.devicePixelRatio = 1;
-        await tester.binding.setSurfaceSize(const Size(100, 100));
-
-        await tester.pumpWidget(
-          MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Transform.scale(
-              scale: 2,
-              child: CustomPaint(
-                painter: _SvgPainter(flameSvg),
+    testGolden(
+      'Svg.withCameraZoom',
+      (game) async {
+        final world = World()
+          ..add(
+            SvgComponent(
+              position: Vector2(0, 0),
+              size: Vector2(50, 50),
+              svg: await _parseSvgFromTestFile(
+                'test/_resources/hand.svg',
               ),
             ),
-          ),
-        );
+          );
 
-        await tester.pumpAndSettle();
-        await expectLater(
-          find.byType(MaterialApp),
-          matchesGoldenFile(
-            './_goldens/render_sharply_with_viewfinder_zoom.png',
-          ),
-        );
+        final camera = CameraComponent();
+        camera.viewfinder.zoom = 5;
+        camera.viewfinder.position = Vector2(25, 25);
+
+        game.camera = camera;
+        game.world = world;
       },
+      goldenFile: './_goldens/render_sharply_with_viewfinder_zoom.png',
+      size: Vector2(250, 250),
+      backgroundColor: Colors.white,
     );
   });
 }
