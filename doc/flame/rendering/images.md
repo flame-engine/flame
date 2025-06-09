@@ -213,7 +213,7 @@ One way to avoid this is to use a technique called "bleeding", which consists of
 margin to the edges of the sprites, so that when they are rendered, they will overlap a bit and thus
 avoid rendering the ghost lines.
 
-Flame provides a way to do this by using the `bleed` parameter in the `Sprite` render. This is a
+Flame provides a way to do this by using the `bleed` parameter in the `Sprite` render method. This is a
 double value that represents the amount of bleeding to be applied to the edges of the sprite.
 
 For example, if you do:
@@ -232,7 +232,7 @@ The sprite will be rendered with a bleed amount of 1.0, meaning that it will hav
 a value of 0.5 pixels added to each edge of the sprite.
 
 For users of the `SpriteComponent`, using the bleeding feature is also quite simple, it is just
-a matter of passing a value in the `bleed` attribute on the component constructor:
+a matter of passing a value to the `bleed` attribute in the component constructor:
 
 ```dart
 final sprite = Sprite(...);
