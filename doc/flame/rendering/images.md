@@ -213,8 +213,8 @@ One way to avoid this is to use a technique called "bleeding", which consists of
 margin to the edges of the sprites, so that when they are rendered, they will overlap a bit and thus
 avoid rendering the ghost lines.
 
-Flame provides a way to do this by using the `bleed` parameter in the `Sprite` render method. This is a
-double value that represents the amount of bleeding to be applied to the edges of the sprite.
+Flame provides a way to do this by using the `bleed` parameter in the `Sprite` render method. This
+is a double value that represents the amount of bleeding to be applied to the edges of the sprite.
 
 For example, if you do:
 
