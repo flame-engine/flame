@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
+
+export '../sprite.dart';
 
 /// {@template raster_sprite_component}
 /// A [RasterSpriteComponent] is a [SpriteComponent] that
@@ -12,6 +15,7 @@ class RasterSpriteComponent extends SpriteComponent {
   /// {@macro raster_sprite_component}
   RasterSpriteComponent({
     required this.baseSprite,
+    this.images,
     super.autoResize,
     super.paint,
     super.position,
@@ -29,20 +33,13 @@ class RasterSpriteComponent extends SpriteComponent {
   /// The base sprite to be rasterized.
   final Sprite baseSprite;
 
+  /// The [Images] cache used to store the rasterized image.
+  final Images? images;
+
   @mustCallSuper
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
-
-    sprite = await baseSprite.rasterize();
-  }
-
-  @mustCallSuper
-  @override
-  void onRemove() {
-    super.onRemove();
-
-    sprite?.image.dispose();
-    sprite = null;
+    sprite = await baseSprite.rasterize(images: images);
   }
 }

@@ -64,8 +64,15 @@ class Sprite {
 
   /// Returns a new [Sprite] where the image in memory is just the region
   /// defined by the original sprite.
-  Future<Sprite> rasterize() async {
+  ///
+  /// If the [images] argument is passed it will be used to cache the
+  /// rasterized image, otherwise the global [Flame.images] will be used.
+  /// If the [cacheKey] is passed in, that will be the key for the cached image,
+  /// otherwise the hash code of the rasterized image will be used as the key.
+  Future<Sprite> rasterize({String? cacheKey, Images? images}) async {
     final rasterizedImage = await toImage();
+    (images ?? Flame.images)
+        .add(cacheKey ?? rasterizedImage.hashCode.toString(), rasterizedImage);
     return Sprite(
       rasterizedImage,
       srcPosition: Vector2.zero(),
