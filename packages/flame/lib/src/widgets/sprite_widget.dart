@@ -93,17 +93,22 @@ class _SpriteWidgetState extends State<SpriteWidget> {
   void didUpdateWidget(covariant SpriteWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _updateSprite(oldWidget._spriteFuture, widget._spriteFuture);
+    _updateSprite(
+      widget.rasterize || oldWidget.rasterize,
+      oldWidget._spriteFuture,
+      widget._spriteFuture,
+    );
   }
 
   Future<void> _updateSprite(
+    bool rasterize,
     FutureOr<Sprite> oldFutureValue,
     FutureOr<Sprite> newFutureValue,
   ) async {
     final oldValue = await oldFutureValue;
     final newValue = await newFutureValue;
 
-    if (widget.rasterize && oldValue.image != newValue.image) {
+    if (rasterize && oldValue.image != newValue.image) {
       oldValue.image.dispose();
     }
 
