@@ -262,16 +262,42 @@ rounding errors), and it causes parts outside of a sprite selection to also be r
 Extracting the sprite selection and rasterizing it before rendering is a way to avoid this issue,
 since it then renders an image that only contains the selected area.
 
-```{warning}
-When creating a rasterized sprite, the image will be allocated in memory, and
-will not be put in the automatic cache management.
-
-Meaning that you will have dispose of it manually when you are done with it.
-
-But, when using the `RasterizedSpriteComponent`, the component will take care
-of disposing the image when the component is removed from the game.
+Example of using a `RasterSpriteComponent`:
+```dart
+final sprite = await Sprite.load('flame.png');
+final rasterSpriteComponent = RasterSpriteComponent(
+  sprite: sprite,
+  size: Vector2.all(16.0),
+);
 ```
 
+When using the `RasterSpriteComponent`, it will automatically rasterize the sprite when it is
+loaded.
+
+If you need to rasterize a sprite manually, you can use the `Sprite.rasterize` method:
+
+```dart
+final image = await images.load('player.png');
+final playerFrame = Sprite(
+  image,
+  srcPosition: Vector2(32.0, 0),
+  srcSize: Vector2(16.0, 16.0),
+);
+
+final rasterizedSprite = await playerFrame.rasterize();
+```
+
+By default, the `rasterize` method will use `Flame.images` to cache the rasterized image,
+auto generating a key based on the sprite's source position and size. If you want to use a custom
+key for the rasterized image, or use a different cache object, you can pass it as an optional
+parameter:
+
+```dart
+final rasterizedSprite = await playerFrame.rasterize(
+  cacheKey: 'custom_key_for_rasterized_image',
+  images: Images(),
+);
+```
 
 ## SpriteBatch
 
