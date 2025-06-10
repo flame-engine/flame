@@ -229,7 +229,7 @@ playerFrame.render(canvas, 16.0, 16.0, bleed: 1.0);
 ```
 
 The sprite will be rendered with a bleed amount of 1.0, meaning that it will have
-a value of 0.5 pixels added to each edge of the sprite.
+a value of 1 pixels added to each edge of the sprite.
 
 For users of the `SpriteComponent`, using the bleeding feature is also quite simple, it is just
 a matter of passing a value to the `bleed` attribute in the component constructor:

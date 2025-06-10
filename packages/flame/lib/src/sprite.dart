@@ -151,11 +151,10 @@ class Sprite {
     );
 
     if (bleed != null) {
-      final bleedValue = bleed / 2;
-      _tmpRenderPosition.x -= bleedValue;
-      _tmpRenderPosition.y -= bleedValue;
-      _tmpRenderSize.x += bleedValue;
-      _tmpRenderSize.y += bleedValue;
+      _tmpRenderPosition.x -= bleed;
+      _tmpRenderPosition.y -= bleed;
+      _tmpRenderSize.x += bleed;
+      _tmpRenderSize.y += bleed;
     }
 
     final drawRect = _tmpRenderPosition.toPositionedRect(_tmpRenderSize);
