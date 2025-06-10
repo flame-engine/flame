@@ -11,32 +11,28 @@ import 'package:meta/meta.dart';
 /// effect controller will be considered [completed] when the timer reaches the
 /// [duration] value.
 abstract class DurationEffectController extends EffectController {
-  DurationEffectController(double duration)
+  DurationEffectController(this.duration)
       : assert(duration >= 0, 'Duration cannot be negative: $duration'),
-        _duration = duration,
         _timer = 0,
         super.empty();
 
-  double _duration;
   double _timer;
 
   @override
-  double get duration => _duration;
-
-  set duration(double value) => _duration = value;
+  double duration;
 
   @protected
   double get timer => _timer;
 
   @override
-  bool get completed => _timer == _duration;
+  bool get completed => _timer == duration;
 
   @override
   double advance(double dt) {
     _timer += dt;
-    if (_timer > _duration) {
-      final leftoverTime = _timer - _duration;
-      _timer = _duration;
+    if (_timer > duration) {
+      final leftoverTime = _timer - duration;
+      _timer = duration;
       return leftoverTime;
     }
     return 0;

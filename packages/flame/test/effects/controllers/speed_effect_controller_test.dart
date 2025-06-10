@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/effects/measurable_effect.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -41,19 +40,6 @@ void main() {
           ),
         );
       });
-
-      testWithFlameGame('negative measure', (game) async {
-        expect(
-          () async {
-            final effect = _BadEffect(
-              SpeedEffectController(LinearEffectController(1), speed: 1),
-            );
-            await game.ensureAdd(PositionComponent()..add(effect));
-            game.update(0);
-          },
-          failsAssert('negative measure returned by _BadEffect: -1.0'),
-        );
-      });
     });
 
     group('applied to various effects', () {
@@ -66,6 +52,21 @@ void main() {
         game.update(0);
 
         expect(effect.controller.duration, 5);
+        game.update(5);
+        expect(component.position, closeToVector(Vector2(8, 12)));
+      });
+
+      testWithFlameGame('speed on MoveEffect with delay', (game) async {
+        final effect = MoveToEffect(
+          Vector2(8, 12),
+          EffectController(speed: 1, startDelay: 1),
+        );
+        final component = PositionComponent(position: Vector2(5, 8));
+        component.add(effect);
+        await game.ensureAdd(component);
+        expect(effect.controller.duration, 6);
+        game.update(1);
+        expect(component.position, closeToVector(Vector2(5, 8)));
         game.update(5);
         expect(component.position, closeToVector(Vector2(8, 12)));
       });
@@ -125,14 +126,4 @@ void main() {
       });
     });
   });
-}
-
-class _BadEffect extends Effect implements MeasurableEffect {
-  _BadEffect(super.controller);
-
-  @override
-  void apply(double progress) {}
-
-  @override
-  double measure() => -1;
 }
