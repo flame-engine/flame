@@ -43,6 +43,7 @@ perlin # Perlin Noise, a type of noise generating algorithm
 polyline # a connected series of line segments
 premultiply # premultiply alpha, a technique to optimize rendering
 quadtree # a tree-based data structure where each node has exactly 4 children
+rasterizing
 raycast # act of raycasting
 raycasting # same as raytracing
 raycasts # plural of raycast
