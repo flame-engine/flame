@@ -263,6 +263,7 @@ Extracting the sprite selection and rasterizing it before rendering is a way to 
 since it then renders an image that only contains the selected area.
 
 Example of using a `RasterSpriteComponent`:
+
 ```dart
 final sprite = await Sprite.load('flame.png');
 final rasterSpriteComponent = RasterSpriteComponent(
@@ -298,6 +299,7 @@ final rasterizedSprite = await playerFrame.rasterize(
   images: Images(),
 );
 ```
+
 
 ## SpriteBatch
 
