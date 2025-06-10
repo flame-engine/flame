@@ -57,6 +57,10 @@ void main() {
     testWidgets(
       'render sharply',
       (tester) async {
+        addTearDown(() {
+          tester.view.devicePixelRatio = 1;
+        });
+
         final flameSvg = await _parseSvgFromTestFile(
           'test/_resources/hand.svg',
         );
@@ -103,7 +107,7 @@ void main() {
         final world = World()
           ..add(
             SvgComponent(
-              position: Vector2(0, 0),
+              anchor: Anchor.center,
               size: Vector2(50, 50),
               svg: await _parseSvgFromTestFile(
                 'test/_resources/hand.svg',
@@ -112,14 +116,14 @@ void main() {
           );
 
         final camera = CameraComponent();
-        camera.viewfinder.zoom = 5;
-        camera.viewfinder.position = Vector2(25, 25);
+        camera.viewfinder.zoom = 2;
+        camera.viewfinder.position = Vector2(0, 0);
 
         game.camera = camera;
         game.world = world;
       },
       goldenFile: './_goldens/render_sharply_with_viewfinder_zoom.png',
-      size: Vector2(250, 250),
+      size: Vector2(100, 100),
       backgroundColor: Colors.white,
     );
   });
