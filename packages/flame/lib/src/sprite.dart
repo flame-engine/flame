@@ -62,6 +62,11 @@ class Sprite {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 
+  String _createRasterizeCacheKey() {
+    return '${image.hashCode}-${srcPosition.x}-'
+        '${srcPosition.y}-${srcSize.x}-${srcSize.y}';
+  }
+
   /// Returns a new [Sprite] where the image in memory is just the region
   /// defined by the original sprite.
   ///
@@ -70,12 +75,23 @@ class Sprite {
   /// If the [cacheKey] is passed in, that will be the key for the cached image,
   /// otherwise the hash code of the rasterized image will be used as the key.
   Future<Sprite> rasterize({String? cacheKey, Images? images}) async {
+    final key = cacheKey ?? _createRasterizeCacheKey();
+
+    final imagesCache = images ?? Flame.images;
+
+    if (imagesCache.containsKey(key)) {
+      final cachedImage = imagesCache.fromCache(key);
+      return Sprite(
+        cachedImage,
+        srcSize: srcSize,
+      );
+    }
+
     final rasterizedImage = await toImage();
-    (images ?? Flame.images)
-        .add(cacheKey ?? rasterizedImage.hashCode.toString(), rasterizedImage);
+    imagesCache.add(key, rasterizedImage);
+
     return Sprite(
       rasterizedImage,
-      srcPosition: Vector2.zero(),
       srcSize: srcSize,
     );
   }
