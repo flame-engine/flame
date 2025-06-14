@@ -109,7 +109,7 @@ class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
           },
         );
 
-    if (areFramesDifferent || oldTicker != newTicker) {
+    if (mounted && (areFramesDifferent || oldTicker != newTicker)) {
       setState(() {
         _animationFuture = newFutureValue;
         _animationTicker = newTicker;
@@ -231,7 +231,7 @@ class _InternalSpriteAnimationWidgetState
     widget.animationTicker.update(dt);
     final frameIndexAfterTick = widget.animationTicker.currentIndex;
 
-    if (frameIndexBeforeTick != frameIndexAfterTick) {
+    if (mounted && frameIndexBeforeTick != frameIndexAfterTick) {
       setState(() {});
     }
     _lastUpdated = now;

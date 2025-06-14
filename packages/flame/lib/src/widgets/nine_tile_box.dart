@@ -112,7 +112,7 @@ class _NineTileBoxWidgetState extends State<NineTileBoxWidget> {
     final image = await imageFuture;
     final oldImage = await oldImageFuture;
 
-    if (image != oldImage) {
+    if (mounted && image != oldImage) {
       setState(() {
         _imageFuture = imageFuture;
       });
