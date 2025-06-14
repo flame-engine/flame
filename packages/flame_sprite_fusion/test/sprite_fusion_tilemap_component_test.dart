@@ -89,7 +89,7 @@ void main() {
 
     testGolden(
       'renders the map correctly',
-      (game) async {
+      (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
           mapJsonFile: 'map.json',
           spriteSheetFile: 'spritesheet.png',
@@ -106,7 +106,7 @@ void main() {
 
     testGolden(
       'position is respected when rendering',
-      (game) async {
+      (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
           mapJsonFile: 'map.json',
           spriteSheetFile: 'spritesheet.png',
@@ -124,7 +124,7 @@ void main() {
 
     testGolden(
       'anchor is respected when rendering',
-      (game) async {
+      (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
           mapJsonFile: 'map.json',
           spriteSheetFile: 'spritesheet.png',
@@ -142,7 +142,7 @@ void main() {
 
     testGolden(
       'scale is respected when rendering',
-      (game) async {
+      (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
           mapJsonFile: 'map.json',
           spriteSheetFile: 'spritesheet.png',
@@ -160,7 +160,7 @@ void main() {
 
     testGolden(
       'angle is respected when rendering',
-      (game) async {
+      (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
           mapJsonFile: 'map.json',
           spriteSheetFile: 'spritesheet.png',

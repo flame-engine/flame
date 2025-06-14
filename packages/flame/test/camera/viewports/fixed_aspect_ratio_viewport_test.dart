@@ -10,7 +10,7 @@ void main() {
   group('FixedAspectRatioViewport', () {
     testGolden(
       'viewport with tall screen',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,
@@ -24,7 +24,7 @@ void main() {
 
     testGolden(
       'viewport with wide screen',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,
