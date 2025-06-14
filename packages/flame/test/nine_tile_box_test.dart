@@ -11,7 +11,7 @@ void main() {
   group('NineTileBox', () {
     testGolden(
       'Render with default grid',
-      (game) async {
+      (game, tester) async {
         game.add(_MyComponent1());
       },
       size: Vector2(300, 200),
@@ -20,7 +20,7 @@ void main() {
 
     testGolden(
       'Render with specified grid',
-      (game) async {
+      (game, tester) async {
         game.add(_MyComponent2());
       },
       size: Vector2(300, 200),

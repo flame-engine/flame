@@ -10,7 +10,7 @@ void main() {
   group('text layouting', () {
     testGolden(
       'Text is properly laid out across multiple lines',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           RectangleComponent(
             size: _size,
