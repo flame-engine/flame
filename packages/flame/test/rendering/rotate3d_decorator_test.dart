@@ -9,7 +9,7 @@ void main() {
   group('Rotate3DDecorator', () {
     testGolden(
       'Rotation around X axis',
-      (game) async {
+      (game, tester) async {
         for (var angle = 0.0; angle <= 1.5; angle += 0.5) {
           game.add(
             _DecoratedRectangle(
@@ -31,7 +31,7 @@ void main() {
 
     testGolden(
       'Rotation around Y axis',
-      (game) async {
+      (game, tester) async {
         for (var angle = 0.0; angle <= 1.5; angle += 0.5) {
           game.add(
             _DecoratedRectangle(
@@ -53,7 +53,7 @@ void main() {
 
     testGolden(
       'Rotation around all axes',
-      (game) async {
+      (game, tester) async {
         game.add(
           _DecoratedRectangle(
             position: Vector2(20, 30),

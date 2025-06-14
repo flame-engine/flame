@@ -29,7 +29,7 @@ void main() {
 
     testGolden(
       'Same test but with testGolden',
-      (game) async {
+      (game, tester) async {
         final paint = Paint()..color = Colors.white;
         game.add(
           CircleComponent(radius: 10, position: Vector2.all(100), paint: paint),
@@ -40,7 +40,7 @@ void main() {
 
     testGolden(
       'Same test, but with smaller size',
-      (game) async {
+      (game, tester) async {
         final paint = Paint()..color = Colors.white;
         game.add(
           CircleComponent(radius: 10, position: Vector2.all(100), paint: paint),
@@ -52,7 +52,7 @@ void main() {
 
     testGolden(
       'skipped test',
-      (game) async {},
+      (game, tester) async {},
       goldenFile: 'golden_test.png',
       skip: true,
     );

@@ -15,7 +15,7 @@ void main() {
   group('CameraComponent', () {
     testGolden(
       'CameraComponent.withFixedResolution',
-      (game) async {
+      (game, tester) async {
         final world = World()
           ..addAll([
             _SolidBackground(const Color(0xFF333333)),
@@ -359,7 +359,7 @@ void main() {
 
     testGolden(
       'Correct order of rendering',
-      (game) async {
+      (game, tester) async {
         final world = World();
         final camera = CameraComponent(world: world);
         game.addAll([world, camera]);
@@ -396,7 +396,7 @@ void main() {
 
   testGolden(
     'Correct scale of rendering',
-    (game) async {
+    (game, tester) async {
       final world = World();
       final resolution = Vector2(40, 60);
       final camera = CameraComponent.withFixedResolution(
@@ -437,7 +437,7 @@ void main() {
 
   testGolden(
     'Correct scale of rendering after zoom',
-    (game) async {
+    (game, tester) async {
       final world = World();
       final resolution = Vector2(40, 60);
       final camera = CameraComponent.withFixedResolution(

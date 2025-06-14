@@ -11,7 +11,7 @@ void main() {
   group('PaintDecorator', () {
     testGolden(
       'blur effect',
-      (game) async {
+      (game, tester) async {
         final image = await loadImage('flame.png');
         game.addAll([
           SpriteComponent(sprite: Sprite(image)),
@@ -28,7 +28,7 @@ void main() {
 
     testGolden(
       'grayscale effect',
-      (game) async {
+      (game, tester) async {
         final image = await loadImage('flame.png');
         game.addAll([
           SpriteComponent(sprite: Sprite(image)),
@@ -55,7 +55,7 @@ void main() {
 
     testGolden(
       'tint effect',
-      (game) async {
+      (game, tester) async {
         final image = await loadImage('zz_guitar.png');
         game.addAll([
           SpriteComponent(sprite: Sprite(image)),
@@ -82,7 +82,7 @@ void main() {
 
     testGolden(
       'grayscale/tinted with blur',
-      (game) async {
+      (game, tester) async {
         final image = await loadImage('zz_guitar.png');
         const color = Color(0x88EBFF7F);
         game.addAll([

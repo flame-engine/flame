@@ -13,7 +13,7 @@ void main() {
     group('rasterize sprite', () {
       testGolden(
         'still renders correctly',
-        (game) async {
+        (game, tester) async {
           game.add(_MyRasterComponent()..position = Vector2.all(25));
         },
         goldenFile: '_goldens/sprite_test_1.png',

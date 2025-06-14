@@ -17,7 +17,7 @@ void main() {
     group('RectangleClipComponent', () {
       testGolden(
         'renders correctly',
-        (game) async {
+        (game, tester) async {
           await game.add(
             ClipComponent.rectangle(
               size: Vector2(100, 100),
@@ -32,7 +32,7 @@ void main() {
     group('CircleClipComponent', () {
       testGolden(
         'renders correctly',
-        (game) async {
+        (game, tester) async {
           await game.add(
             ClipComponent.circle(
               size: Vector2(100, 100),
@@ -47,7 +47,7 @@ void main() {
     group('PolygonClipComponent', () {
       testGolden(
         'renders correctly',
-        (game) async {
+        (game, tester) async {
           await game.add(
             ClipComponent.polygon(
               points: [
