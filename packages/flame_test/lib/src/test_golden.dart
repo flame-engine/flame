@@ -31,7 +31,7 @@ import 'package:meta/meta.dart';
 @isTest
 void testGolden(
   String testName,
-  PrepareGameFunction testBody, {
+  PrepareFunction testBody, {
   required String goldenFile,
   Vector2? size,
   Color? backgroundColor,
@@ -62,7 +62,7 @@ void testGolden(
         }
         await tester.pumpWidget(widget);
         await tester.pump();
-        await testBody(gameInstance);
+        await testBody(gameInstance, tester);
         await gameInstance.ready();
         await tester.pump();
       });
@@ -76,7 +76,10 @@ void testGolden(
   );
 }
 
-typedef PrepareGameFunction = Future<void> Function(FlameGame game);
+typedef PrepareFunction = Future<void> Function(
+  FlameGame game,
+  WidgetTester tester,
+);
 
 class GameWithBackgroundColor extends FlameGame {
   final Color _backgroundColor;

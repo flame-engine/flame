@@ -207,7 +207,7 @@ lines.''',
 
     testGolden(
       'Alignment options',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           _FramedTextBox(
             text: 'I strike quickly, being moved.',
@@ -258,7 +258,7 @@ lines.''',
 
   testGolden(
     'Big upscale',
-    (game) async {
+    (game, tester) async {
       game.addAll([
         TextBoxComponent(
           text: 'quickly',
