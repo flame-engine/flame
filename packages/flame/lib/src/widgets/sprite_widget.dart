@@ -112,7 +112,8 @@ class _SpriteWidgetState extends State<SpriteWidget> {
       oldValue.image.dispose();
     }
 
-    if (oldValue.image != newValue.image || oldValue.src != newValue.src) {
+    if (mounted &&
+        (oldValue.image != newValue.image || oldValue.src != newValue.src)) {
       setState(() {
         _spriteFuture = _initializeFuture();
       });
