@@ -242,7 +242,7 @@ class PositionComponent extends Component
         tmpScale.setValues(1.0, 1.0);
       }
       final angle = c.angle;
-      return (scale.x.isNegative != scale.y.isNegative) ? -angle : angle;
+      return (tmpScale.x.isNegative != tmpScale.y.isNegative) ? -angle : angle;
     }).sum;
   }
 
