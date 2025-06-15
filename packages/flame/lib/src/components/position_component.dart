@@ -232,11 +232,18 @@ class PositionComponent extends Component
   /// The resulting angle after all the ancestors and the components own angle
   /// has been applied.
   double get absoluteAngle {
-    // TODO(spydon): take scale into consideration
+    final tmpScale = Vector2.zero();
     return ancestors(includeSelf: true)
         .whereType<ReadOnlyAngleProvider>()
-        .map((c) => c.angle)
-        .sum;
+        .map((c) {
+      if (c is ReadOnlyScaleProvider) {
+        tmpScale.setFrom((c as ReadOnlyScaleProvider).scale);
+      } else {
+        tmpScale.setValues(1.0, 1.0);
+      }
+      final angle = c.angle;
+      return (scale.x.isNegative != scale.y.isNegative) ? -angle : angle;
+    }).sum;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
@@ -386,15 +393,7 @@ class PositionComponent extends Component
   /// [target] should to be in absolute/world coordinate system.
   ///
   /// See also: [angleTo]
-  void lookAt(Vector2 target) {
-    final angleToTarget = angleTo(target);
-    final absoluteScale = this.absoluteScale;
-    if (absoluteScale.x.isNegative != absoluteScale.y.isNegative) {
-      angle -= angleToTarget;
-    } else {
-      angle += angleToTarget;
-    }
-  }
+  void lookAt(Vector2 target) => angle += angleTo(target);
 
   //#endregion
 
