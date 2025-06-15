@@ -386,7 +386,15 @@ class PositionComponent extends Component
   /// [target] should to be in absolute/world coordinate system.
   ///
   /// See also: [angleTo]
-  void lookAt(Vector2 target) => angle += angleTo(target);
+  void lookAt(Vector2 target) {
+    final angleToTarget = angleTo(target);
+    final absoluteScale = this.absoluteScale;
+    if (absoluteScale.x.isNegative != absoluteScale.y.isNegative) {
+      angle -= angleToTarget;
+    } else {
+      angle += angleToTarget;
+    }
+  }
 
   //#endregion
 
