@@ -1148,6 +1148,84 @@ void main() {
         expect(child.toAbsoluteRect(), const Rect.fromLTWH(7, 13, 1, 1));
       });
     });
+
+    group('absoluteAngle', () {
+      test('absoluteAngle with no parent', () {
+        final component = PositionComponent();
+        expect(component.absoluteAngle, 0.0);
+        component.angle = pi / 2;
+        expect(component.absoluteAngle, pi / 2);
+      });
+
+      testWithFlameGame('absoluteAngle with parent', (game) async {
+        final parent = PositionComponent()..angle = pi / 4;
+        final child = PositionComponent();
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.angle = pi / 2;
+        expect(child.absoluteAngle, 3 * pi / 4);
+      });
+
+      testWithFlameGame('absoluteAngle with parent and child rotated',
+          (game) async {
+        final parent = PositionComponent()..angle = pi / 8;
+        final child = PositionComponent()..angle = pi / 8;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        parent.angle = pi / 4;
+        child.angle = pi / 2;
+        expect(child.absoluteAngle, 3 * pi / 4);
+      });
+
+      testWithFlameGame('absoluteAngle with flipped parent', (game) async {
+        final parent = PositionComponent()..angle = pi / 4;
+        final child = PositionComponent();
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        parent.flipHorizontally();
+        expect(child.absoluteAngle, (-pi / 4) % tau);
+        parent.flipVertically();
+        expect(child.absoluteAngle, pi / 4 + pi);
+      });
+
+      testWithFlameGame('absoluteAngle with flipped child', (game) async {
+        final parent = PositionComponent();
+        final child = PositionComponent()..angle = pi / 4;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.flipHorizontally();
+        expect(child.absoluteAngle, (-pi / 4) % tau);
+        child.flipVertically();
+        expect(child.absoluteAngle, pi / 4 + pi);
+      });
+
+      testWithFlameGame('absoluteAngle with flipped child and parent',
+          (game) async {
+        final parent = PositionComponent()..angle = pi / 8;
+        final child = PositionComponent()..angle = pi / 8;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.flipHorizontally();
+        expect(child.absoluteAngle, 0);
+        parent.flipVertically();
+        expect(child.absoluteAngle, pi);
+      });
+    });
   });
 }
 

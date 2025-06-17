@@ -18,8 +18,9 @@ class LookAtExample extends FlameGame {
 
   LookAtExample() : super(world: _TapWorld());
 
-  late SpriteAnimationComponent _chopper1;
-  late SpriteAnimationComponent _chopper2;
+  late PositionComponent _chopper1;
+  late PositionComponent _chopper2;
+  final List<TextComponent> chopperAngles = [];
 
   @override
   Color backgroundColor() => const Color.fromARGB(255, 96, 145, 112);
@@ -39,25 +40,40 @@ class LookAtExample extends FlameGame {
     // Notice now the nativeAngle is set to pi because the chopper
     // is facing in down/south direction in the original image.
     world.add(
-      _chopper1 = SpriteAnimationComponent(
-        nativeAngle: pi,
-        size: Vector2.all(128),
-        anchor: Anchor.center,
-        animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+      PositionComponent(
+        //scale: Vector2(-1, 1),
+        //angle: 1,
+        position: Vector2(0, 200),
+        children: [
+          _chopper1 = SpriteAnimationComponent(
+            nativeAngle: pi,
+            scale: Vector2(-1, -1),
+            //angle: 1,
+            size: Vector2.all(128),
+            anchor: Anchor.center,
+            animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+          ),
+        ],
       ),
     );
+    print('Chopper 1 ${_chopper1.absoluteAngle}');
 
     // This chopper does not use correct nativeAngle, hence using
     // lookAt on it results in the sprite pointing in incorrect
     // direction visually.
-    world.add(
-      _chopper2 = SpriteAnimationComponent(
-        size: Vector2.all(128),
-        anchor: Anchor.center,
-        animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-        position: Vector2(0, 160),
-      ),
-    );
+    //world.add(
+    //  PositionComponent(
+    //    scale: Vector2(-1, 1),
+    //    position: Vector2(0, 200),
+    //    children: [
+    //      _chopper2 = SpriteAnimationComponent(
+    //        size: Vector2.all(128),
+    //        anchor: Anchor.center,
+    //        animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+    //      ),
+    //    ],
+    //  ),
+    //);
   }
 
   // Just displays some information. No functional contribution to the example.
@@ -77,22 +93,43 @@ class LookAtExample extends FlameGame {
         text: 'nativeAngle = pi',
         textRenderer: shaded,
         anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -70),
+        position: _chopper1.absolutePosition + Vector2(0, -110),
       ),
     );
 
-    world.add(
+    chopperAngles.add(
       TextComponent(
-        text: 'nativeAngle = 0',
+        text: 'absoluteAngle = 0',
         textRenderer: shaded,
         anchor: Anchor.center,
-        position: _chopper2.absolutePosition + Vector2(0, -70),
+        position: _chopper1.absolutePosition + Vector2(0, -80),
       ),
     );
+
+    //world.add(
+    //  TextComponent(
+    //    text: 'nativeAngle = 0',
+    //    textRenderer: shaded,
+    //    anchor: Anchor.center,
+    //    position: _chopper2.absolutePosition + Vector2(0, -110),
+    //  ),
+    //);
+
+    //chopperAngles.add(
+    //  TextComponent(
+    //    text: 'absoluteAngle = 0',
+    //    textRenderer: shaded,
+    //    anchor: Anchor.center,
+    //    position: _chopper2.absolutePosition + Vector2(0, -80),
+    //  ),
+    //);
+
+    world.addAll(chopperAngles);
   }
 }
 
-class _TapWorld extends World with TapCallbacks {
+class _TapWorld extends World
+    with TapCallbacks, HasGameReference<LookAtExample> {
   final CircleComponent _targetComponent = CircleComponent(
     radius: 5,
     anchor: Anchor.center,
@@ -105,9 +142,14 @@ class _TapWorld extends World with TapCallbacks {
       add(_targetComponent);
     }
     _targetComponent.position = event.localPosition;
-    final choppers = children.query<SpriteAnimationComponent>();
-    for (final chopper in choppers) {
-      chopper.lookAt(event.localPosition);
+    final choppers = [
+      game._chopper1,
+      //game._chopper2,
+    ];
+    for (var i = 0; i < choppers.length; i++) {
+      choppers[i].lookAt(event.localPosition);
+      game.chopperAngles[i].text =
+          'absoluteAngle = ${choppers[i].absoluteAngle.toStringAsFixed(2)}';
     }
   }
 }

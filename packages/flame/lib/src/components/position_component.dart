@@ -3,6 +3,8 @@ import 'dart:ui' hide Offset;
 
 import 'package:collection/collection.dart';
 import 'package:flame/camera.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
@@ -229,21 +231,40 @@ class PositionComponent extends Component
     );
   }
 
+  late final Vector2 _accumulatedScale = Vector2.zero();
+
   /// The resulting angle after all the ancestors and the components own angle
   /// has been applied.
   double get absoluteAngle {
-    final tmpScale = Vector2.zero();
-    return ancestors(includeSelf: true)
-        .whereType<ReadOnlyAngleProvider>()
-        .map((c) {
-      if (c is ReadOnlyScaleProvider) {
-        tmpScale.setFrom((c as ReadOnlyScaleProvider).scale);
-      } else {
-        tmpScale.setValues(1.0, 1.0);
+    _accumulatedScale.setValues(1.0, 1.0);
+    final ancestorChain = ancestors(includeSelf: true).toList()..reverse();
+    var accumulatedAngle = 0.0;
+    for (final ancestor in ancestorChain) {
+      final localScale = ancestor is ReadOnlyScaleProvider
+          ? (ancestor as ReadOnlyScaleProvider).scale
+          : null;
+      if (localScale != null) {
+        _accumulatedScale.multiply(localScale);
+        if (localScale.x.isNegative ^ localScale.y.isNegative) {
+          accumulatedAngle *= -1;
+        }
+        if (localScale.y.isNegative) {
+          accumulatedAngle += math.pi;
+        }
       }
-      final angle = c.angle;
-      return (tmpScale.x.isNegative != tmpScale.y.isNegative) ? -angle : angle;
-    }).sum;
+      if (ancestor is ReadOnlyAngleProvider) {
+        final localAngle = (ancestor as ReadOnlyAngleProvider).angle;
+        if (_accumulatedScale.x.isNegative ^ _accumulatedScale.y.isNegative) {
+          accumulatedAngle -= localAngle;
+        } else if (_accumulatedScale.x.isNegative &&
+            _accumulatedScale.y.isNegative) {
+          accumulatedAngle += localAngle;
+        } else {
+          accumulatedAngle += localAngle;
+        }
+      }
+    }
+    return accumulatedAngle % tau;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
@@ -379,11 +400,17 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component, then it is treated
   /// as being north.
   double angleTo(Vector2 target) {
+    final absoluteScale = this.absoluteScale;
+    final flippedX = absoluteScale.x.sign;
+    final flippedY = absoluteScale.y.sign;
+    final flippedSign = flippedX * flippedY;
+
+    final absolutePosition = this.absolutePosition;
     return math.atan2(
           target.x - absolutePosition.x,
           absolutePosition.y - target.y,
         ) -
-        (nativeAngle + absoluteAngle);
+        flippedSign * (nativeAngle + absoluteAngle);
   }
 
   /// Rotates/snaps the component to look at the [target].
