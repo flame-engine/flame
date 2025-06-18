@@ -19,8 +19,9 @@ class LookAtExample extends FlameGame {
   LookAtExample() : super(world: _TapWorld());
 
   late PositionComponent _chopper1;
-  late PositionComponent _chopper2;
+  //late PositionComponent _chopper2;
   final List<TextComponent> chopperAngles = [];
+  final List<TextComponent> chopperAngleTo = [];
 
   @override
   Color backgroundColor() => const Color.fromARGB(255, 96, 145, 112);
@@ -41,13 +42,13 @@ class LookAtExample extends FlameGame {
     // is facing in down/south direction in the original image.
     world.add(
       PositionComponent(
-        //scale: Vector2(-1, 1),
+        scale: Vector2(1, 1),
         //angle: 1,
         position: Vector2(0, 200),
         children: [
           _chopper1 = SpriteAnimationComponent(
-            nativeAngle: pi,
-            scale: Vector2(-1, -1),
+            //nativeAngle: pi,
+            scale: Vector2(-1, 1),
             //angle: 1,
             size: Vector2.all(128),
             anchor: Anchor.center,
@@ -93,13 +94,22 @@ class LookAtExample extends FlameGame {
         text: 'nativeAngle = pi',
         textRenderer: shaded,
         anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -110),
+        position: _chopper1.absolutePosition + Vector2(0, -140),
       ),
     );
 
     chopperAngles.add(
       TextComponent(
         text: 'absoluteAngle = 0',
+        textRenderer: shaded,
+        anchor: Anchor.center,
+        position: _chopper1.absolutePosition + Vector2(0, -110),
+      ),
+    );
+
+    chopperAngleTo.add(
+      TextComponent(
+        text: 'angleTo = 0',
         textRenderer: shaded,
         anchor: Anchor.center,
         position: _chopper1.absolutePosition + Vector2(0, -80),
@@ -124,7 +134,7 @@ class LookAtExample extends FlameGame {
     //  ),
     //);
 
-    world.addAll(chopperAngles);
+    world.addAll([...chopperAngles, ...chopperAngleTo]);
   }
 }
 
@@ -138,6 +148,7 @@ class _TapWorld extends World
 
   @override
   void onTapDown(TapDownEvent event) {
+    print('');
     if (!_targetComponent.isMounted) {
       add(_targetComponent);
     }
@@ -147,6 +158,8 @@ class _TapWorld extends World
       //game._chopper2,
     ];
     for (var i = 0; i < choppers.length; i++) {
+      game.chopperAngleTo[i].text =
+          'angleTo = ${choppers[i].angleTo(_targetComponent.position).toStringAsFixed(2)}';
       choppers[i].lookAt(event.localPosition);
       game.chopperAngles[i].text =
           'absoluteAngle = ${choppers[i].absoluteAngle.toStringAsFixed(2)}';

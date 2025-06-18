@@ -231,41 +231,77 @@ class PositionComponent extends Component
     );
   }
 
-  late final Vector2 _accumulatedScale = Vector2.zero();
-
-  /// The resulting angle after all the ancestors and the components own angle
-  /// has been applied.
+  /// The resulting angle after all the ancestors and the components own angles
+  /// and scales have been applied.
   double get absoluteAngle {
-    _accumulatedScale.setValues(1.0, 1.0);
-    final ancestorChain = ancestors(includeSelf: true).toList()..reverse();
-    var accumulatedAngle = 0.0;
+    var angle = 0.0;
+    var scaleX = 1.0;
+    var scaleY = 1.0;
+
+    final ancestorChain = ancestors(includeSelf: true).toList(growable: false)
+      ..reverse();
+
     for (final ancestor in ancestorChain) {
-      final localScale = ancestor is ReadOnlyScaleProvider
-          ? (ancestor as ReadOnlyScaleProvider).scale
-          : null;
-      if (localScale != null) {
-        _accumulatedScale.multiply(localScale);
-        if (localScale.x.isNegative ^ localScale.y.isNegative) {
-          accumulatedAngle *= -1;
-        }
-        if (localScale.y.isNegative) {
-          accumulatedAngle += math.pi;
-        }
+      if (ancestor is ReadOnlyScaleProvider) {
+        final ancestorScale = (ancestor as ReadOnlyScaleProvider).scale;
+        scaleX *= ancestorScale.x;
+        scaleY *= ancestorScale.y;
       }
+
       if (ancestor is ReadOnlyAngleProvider) {
         final localAngle = (ancestor as ReadOnlyAngleProvider).angle;
-        if (_accumulatedScale.x.isNegative ^ _accumulatedScale.y.isNegative) {
-          accumulatedAngle -= localAngle;
-        } else if (_accumulatedScale.x.isNegative &&
-            _accumulatedScale.y.isNegative) {
-          accumulatedAngle += localAngle;
+        final reflected = scaleX.isNegative ^ scaleY.isNegative;
+        if (scaleX.isNegative) {
+          angle = -math.pi;
+        }
+        if (scaleY.isNegative) {
+          angle = -angle + math.pi;
+        }
+        if (reflected) {
+          angle -= localAngle;
         } else {
-          accumulatedAngle += localAngle;
+          angle += localAngle;
         }
       }
     }
-    return accumulatedAngle % tau;
+
+    return angle % tau;
   }
+
+//  double get absoluteAngle {
+//    _accumulatedScale.setValues(1.0, 1.0);
+//    final ancestorChain = ancestors(includeSelf: true).toList(growable: false)
+//      ..reverse();
+//    var accumulatedAngle = 0.0;
+//    print(ancestorChain.length);
+//    for (final ancestor in ancestorChain) {
+//      final localScale = ancestor is ReadOnlyScaleProvider
+//          ? (ancestor as ReadOnlyScaleProvider).scale
+//          : null;
+//      if (localScale != null) {
+//        _accumulatedScale.multiply(localScale);
+//        if (localScale.x < 0 && localScale.y > 0) {
+//          accumulatedAngle -= math.pi;
+//        }
+//        if (localScale.x.isNegative && localScale.y.isNegative) {
+//          accumulatedAngle += math.pi;
+//        }
+//      }
+//      if (ancestor is ReadOnlyAngleProvider) {
+//        final localAngle = (ancestor as ReadOnlyAngleProvider).angle;
+//        if (_accumulatedScale.x.isNegative ^ _accumulatedScale.y.isNegative) {
+//          accumulatedAngle -= localAngle;
+//        } else if (_accumulatedScale.x.isNegative &&
+//            _accumulatedScale.y.isNegative) {
+//          accumulatedAngle += localAngle;
+//        } else {
+//          accumulatedAngle += localAngle;
+//        }
+//      }
+//      accumulatedAngle %= tau;
+//    }
+//    return accumulatedAngle;
+//  }
 
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
@@ -400,17 +436,13 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component, then it is treated
   /// as being north.
   double angleTo(Vector2 target) {
-    final absoluteScale = this.absoluteScale;
-    final flippedX = absoluteScale.x.sign;
-    final flippedY = absoluteScale.y.sign;
-    final flippedSign = flippedX * flippedY;
-
-    final absolutePosition = this.absolutePosition;
-    return math.atan2(
+    final angleDifference = math.atan2(
           target.x - absolutePosition.x,
           absolutePosition.y - target.y,
         ) -
-        flippedSign * (nativeAngle + absoluteAngle);
+        (nativeAngle + absoluteAngle);
+
+    return angleDifference;
   }
 
   /// Rotates/snaps the component to look at the [target].
