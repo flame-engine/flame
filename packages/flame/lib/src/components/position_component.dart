@@ -1,7 +1,5 @@
 import 'dart:math' as math;
-import 'dart:ui' hide Offset;
 
-import 'package:collection/collection.dart';
 import 'package:flame/camera.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -9,8 +7,6 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/extensions/offset.dart';
-import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame/src/rendering/decorator.dart';
@@ -266,11 +262,13 @@ class PositionComponent extends Component
 
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
-  Vector2 get absoluteScale {
+  Vector2 get absoluteScale => scale.clone()..multiply(_parentAbsoluteScale);
+
+  Vector2 get _parentAbsoluteScale {
     return ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
-          scale.clone(),
-          (totalScale, c) => totalScale..multiply(c.scale),
-        );
+              Vector2.all(1.0),
+              (totalScale, c) => totalScale..multiply(c.scale),
+            );
   }
 
   /// Measure the distance (in parent's coordinate space) between this
@@ -398,66 +396,23 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component, then it is treated
   /// as being north.
   double angleTo(Vector2 target) {
-    //final absoluteScale = this.absoluteScale;
-    //var atanA = target.x - absolutePosition.x;
-    //var atanB = absolutePosition.y - target.y;
-    //if (absoluteScale.x.isNegative) {
-    //  atanA = absolutePosition.x - target.x;
-    //}
-    //if (absoluteScale.y.isNegative) {
-    //  atanB = target.y - absolutePosition.y;
-    //}
-    //var angleDifference =
-    //    math.atan2(atanA, atanB) - (nativeAngle + absoluteAngle);
-    //if (absoluteScale.y.isNegative) {
-    //  angleDifference -= math.pi;
-    //}
-
-    final parentAbsoluteScale =
-        ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
-              Vector2.all(1.0),
-              (totalScale, c) => totalScale..multiply(c.scale),
-            );
-
+    final parentAbsoluteScale = _parentAbsoluteScale;
     final direction = target - absolutePosition;
     final targetAngle = math.atan2(
       direction.x * scale.x.sign,
       -direction.y * scale.y.sign,
     );
-    final angleDifference = targetAngle - absoluteAngle;
+    final angleDifference = targetAngle - absoluteAngle - nativeAngle;
 
-    return ((parentAbsoluteScale.x.isNegative ^
-                parentAbsoluteScale.y.isNegative ^
-                scale.x.isNegative ^
-                scale.y.isNegative)
-            ? -angleDifference
-            : angleDifference) +
-        ((!parentAbsoluteScale.y.isNegative && scale.y.isNegative)
-            ? math.pi
-            : 0.0);
-    return switch ((
-      parentAbsoluteScale.x.isNegative,
-      parentAbsoluteScale.y.isNegative,
-      scale.x.isNegative,
-      scale.y.isNegative,
-    )) {
-      (false, false, false, false) => angleDifference,
-      (false, false, false, true) => -angleDifference + math.pi,
-      (false, false, true, false) => -angleDifference,
-      (false, false, true, true) => angleDifference + math.pi,
-      (false, true, false, false) => -angleDifference,
-      (false, true, false, true) => angleDifference,
-      (false, true, true, false) => angleDifference,
-      (false, true, true, true) => -angleDifference,
-      (true, false, false, false) => -angleDifference,
-      (true, false, false, true) => angleDifference + math.pi,
-      (true, false, true, false) => angleDifference,
-      (true, false, true, true) => -angleDifference + math.pi,
-      (true, true, false, false) => angleDifference,
-      (true, true, false, true) => -angleDifference,
-      (true, true, true, false) => -angleDifference,
-      (true, true, true, true) => angleDifference,
-    };
+    final hasOddFlips = parentAbsoluteScale.x.isNegative ^
+        parentAbsoluteScale.y.isNegative ^
+        scale.x.isNegative ^
+        scale.y.isNegative;
+    final hasSelfYFlip =
+        !parentAbsoluteScale.y.isNegative && scale.y.isNegative;
+
+    return (hasOddFlips ? -1 : 1) * angleDifference +
+        (hasSelfYFlip ? 1 : 0) * math.pi;
   }
 
   /// Rotates/snaps the component to look at the [target].

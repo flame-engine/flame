@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
@@ -7,8 +8,10 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class LookAtExample extends FlameGame {
+class LookAtExample extends FlameGame<_TapWorld>
+    with HasKeyboardHandlerComponents {
   static const description = 'This example demonstrates how a component can be '
       'made to look at a specific target using the lookAt method. Tap anywhere '
       'to change the target point for both the choppers. '
@@ -18,11 +21,9 @@ class LookAtExample extends FlameGame {
 
   LookAtExample() : super(world: _TapWorld());
 
-  late PositionComponent _chopper1;
-  //late PositionComponent _chopper2;
-  final List<TextComponent> chopperAbsoluteScales = [];
-  final List<TextComponent> chopperAngles = [];
-  final List<TextComponent> chopperAngleTo = [];
+  late _ChopperParent _chopper1;
+  late _ChopperParent _chopper2;
+  List<_ChopperParent> get _choppers => [_chopper1, _chopper2];
 
   @override
   Color backgroundColor() => const Color.fromARGB(255, 96, 145, 112);
@@ -35,51 +36,115 @@ class LookAtExample extends FlameGame {
     );
 
     _spawnChoppers(spriteSheet);
-    _spawnInfoText();
   }
 
   void _spawnChoppers(SpriteSheet spriteSheet) {
     // Notice now the nativeAngle is set to pi because the chopper
     // is facing in down/south direction in the original image.
     world.add(
-      PositionComponent(
-        scale: Vector2(1, -1),
-        //angle: 1,
-        position: Vector2(0, 0),
-        children: [
-          _chopper1 = SpriteAnimationComponent(
-            //nativeAngle: pi,
-            scale: Vector2(1, 1),
-            //angle: 1,
-            size: Vector2.all(128),
-            anchor: Anchor.center,
-            animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-          ),
-        ],
+      _chopper1 = _ChopperParent(
+        position: Vector2(0, -200),
+        chopper: SpriteAnimationComponent(
+          nativeAngle: pi,
+          size: Vector2.all(128),
+          anchor: Anchor.center,
+          animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+        ),
       ),
     );
-    print('Chopper 1 ${_chopper1.absoluteAngle}');
 
     // This chopper does not use correct nativeAngle, hence using
     // lookAt on it results in the sprite pointing in incorrect
     // direction visually.
-    //world.add(
-    //  PositionComponent(
-    //    scale: Vector2(-1, 1),
-    //    position: Vector2(0, 200),
-    //    children: [
-    //      _chopper2 = SpriteAnimationComponent(
-    //        size: Vector2.all(128),
-    //        anchor: Anchor.center,
-    //        animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-    //      ),
-    //    ],
-    //  ),
-    //);
+    world.add(
+      _chopper2 = _ChopperParent(
+        position: Vector2(0, 200),
+        chopper: SpriteAnimationComponent(
+          size: Vector2.all(128),
+          anchor: Anchor.center,
+          animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+        ),
+      ),
+    );
+  }
+}
+
+class _TapWorld extends World
+    with TapCallbacks, KeyboardHandler, HasGameReference<LookAtExample> {
+  final CircleComponent target = CircleComponent(
+    radius: 5,
+    anchor: Anchor.center,
+    paint: BasicPalette.black.paint(),
+  );
+
+  int _currentFlipIdx = 0;
+  final _flips = [
+    (Vector2(1, 1), Vector2(1, 1)),
+    (Vector2(1, 1), Vector2(1, -1)),
+    (Vector2(1, 1), Vector2(-1, 1)),
+    (Vector2(1, 1), Vector2(-1, -1)),
+    (Vector2(1, -1), Vector2(1, 1)),
+    (Vector2(1, -1), Vector2(1, -1)),
+    (Vector2(1, -1), Vector2(-1, 1)),
+    (Vector2(1, -1), Vector2(-1, -1)),
+    (Vector2(-1, 1), Vector2(1, 1)),
+    (Vector2(-1, 1), Vector2(1, -1)),
+    (Vector2(-1, 1), Vector2(-1, 1)),
+    (Vector2(-1, 1), Vector2(-1, -1)),
+    (Vector2(-1, -1), Vector2(1, 1)),
+    (Vector2(-1, -1), Vector2(1, -1)),
+    (Vector2(-1, -1), Vector2(-1, 1)),
+    (Vector2(-1, -1), Vector2(-1, -1)),
+  ];
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyDownEvent) {
+      if (keysPressed.contains(LogicalKeyboardKey.keyF)) {
+        _cycleFlips();
+        return true;
+      }
+    }
+    return false;
   }
 
-  // Just displays some information. No functional contribution to the example.
-  void _spawnInfoText() {
+  @override
+  void onTapDown(TapDownEvent event) {
+    _updatePosition(event.localPosition);
+  }
+
+  void _cycleFlips() {
+    _currentFlipIdx = (_currentFlipIdx + 1) % _flips.length;
+    final nextFlip = _flips[_currentFlipIdx];
+    for (final parent in game._choppers) {
+      parent.scale = nextFlip.$1;
+      parent.chopper.scale = nextFlip.$2;
+    }
+  }
+
+  void _updatePosition(Vector2 position) {
+    if (!target.isMounted) {
+      add(target);
+    }
+    target.position = position;
+    for (final parent in game._choppers) {
+      parent.chopper.lookAt(position);
+    }
+  }
+}
+
+class _ChopperParent extends PositionComponent
+    with HasGameReference<LookAtExample> {
+  final PositionComponent chopper;
+  late TextBoxComponent textBox;
+
+  _ChopperParent({
+    required super.position,
+    required this.chopper,
+  }) : super(children: [chopper]);
+
+  @override
+  FutureOr<void> onLoad() {
     final shaded = TextPaint(
       style: TextStyle(
         color: BasicPalette.white.color,
@@ -89,93 +154,41 @@ class LookAtExample extends FlameGame {
         ],
       ),
     );
-
-    world.add(
-      TextComponent(
-        text: 'nativeAngle = pi',
-        textRenderer: shaded,
+    parent!.add(
+      textBox = TextBoxComponent(
+        text: '-',
+        position: position + Vector2(0, -150),
         anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -170),
+        align: Anchor.topCenter,
+        textRenderer: shaded,
+        boxConfig: const TextBoxConfig(
+          maxWidth: 600,
+        ),
       ),
     );
-
-    chopperAbsoluteScales.add(
-      TextComponent(
-        text: 'absoluteScale',
-        textRenderer: shaded,
-        anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -140),
-      ),
-    );
-
-    chopperAngles.add(
-      TextComponent(
-        text: 'absoluteAngle = 0',
-        textRenderer: shaded,
-        anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -110),
-      ),
-    );
-
-    chopperAngleTo.add(
-      TextComponent(
-        text: 'angleTo = 0',
-        textRenderer: shaded,
-        anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -80),
-      ),
-    );
-
-    //world.add(
-    //  TextComponent(
-    //    text: 'nativeAngle = 0',
-    //    textRenderer: shaded,
-    //    anchor: Anchor.center,
-    //    position: _chopper2.absolutePosition + Vector2(0, -110),
-    //  ),
-    //);
-
-    //chopperAngles.add(
-    //  TextComponent(
-    //    text: 'absoluteAngle = 0',
-    //    textRenderer: shaded,
-    //    anchor: Anchor.center,
-    //    position: _chopper2.absolutePosition + Vector2(0, -80),
-    //  ),
-    //);
-
-    world.addAll(
-        [...chopperAngles, ...chopperAngleTo, ...chopperAbsoluteScales]);
+    return super.onLoad();
   }
-}
-
-class _TapWorld extends World
-    with TapCallbacks, HasGameReference<LookAtExample> {
-  final CircleComponent _targetComponent = CircleComponent(
-    radius: 5,
-    anchor: Anchor.center,
-    paint: BasicPalette.black.paint(),
-  );
 
   @override
-  void onTapDown(TapDownEvent event) {
-    print('');
-    if (!_targetComponent.isMounted) {
-      add(_targetComponent);
-    }
-    _targetComponent.position = event.localPosition;
-    final choppers = [
-      game._chopper1,
-      //game._chopper2,
-    ];
-    for (var i = 0; i < choppers.length; i++) {
-      game.chopperAngleTo[i].text =
-          'angleTo = ${choppers[i].angleTo(_targetComponent.position).toStringAsFixed(2)}';
-      choppers[i].lookAt(event.localPosition);
-      game.chopperAngles[i].text =
-          'absoluteAngle = ${choppers[i].absoluteAngle.toStringAsFixed(2)}';
-      game.chopperAbsoluteScales[i].text =
-          'absoluteScale = ${choppers[i].absoluteScale}';
-    }
+  void update(double dt) {
+    final angleTo = chopper.angleTo(game.world.target.position);
+    textBox.text = '''
+      nativeAngle = ${chopper.nativeAngle.toStringAsFixed(2)}
+      angleTo = ${angleTo.toStringAsFixed(2)}
+      absoluteAngle = ${chopper.absoluteAngle.toStringAsFixed(2)}
+      absoluteScale = ${_asSigns(chopper.absoluteScale)} (${_asSigns(absoluteScale)} * ${_asSigns(chopper.scale)})
+    ''';
+  }
+
+  String _asSigns(Vector2 v) {
+    return '[${_asSign(v.x)}, ${_asSign(v.y)}]';
+  }
+
+  String _asSign(double value) {
+    return switch (value.sign) {
+      1 => '+',
+      -1 => '-',
+      _ => '0',
+    };
   }
 }
