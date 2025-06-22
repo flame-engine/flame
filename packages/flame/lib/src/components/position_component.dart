@@ -266,9 +266,9 @@ class PositionComponent extends Component
 
   Vector2 get _parentAbsoluteScale {
     return ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
-              Vector2.all(1.0),
-              (totalScale, c) => totalScale..multiply(c.scale),
-            );
+          Vector2.all(1.0),
+          (totalScale, c) => totalScale..multiply(c.scale),
+        );
   }
 
   /// Measure the distance (in parent's coordinate space) between this

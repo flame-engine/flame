@@ -21,9 +21,7 @@ class LookAtExample extends FlameGame<_TapWorld>
 
   LookAtExample() : super(world: _TapWorld());
 
-  late _ChopperParent _chopper1;
-  late _ChopperParent _chopper2;
-  List<_ChopperParent> get _choppers => [_chopper1, _chopper2];
+  late List<_ChopperParent> _choppers;
 
   @override
   Color backgroundColor() => const Color.fromARGB(255, 96, 145, 112);
@@ -39,10 +37,10 @@ class LookAtExample extends FlameGame<_TapWorld>
   }
 
   void _spawnChoppers(SpriteSheet spriteSheet) {
-    // Notice now the nativeAngle is set to pi because the chopper
-    // is facing in down/south direction in the original image.
-    world.add(
-      _chopper1 = _ChopperParent(
+    _choppers = [
+      // Notice now the nativeAngle is set to pi because the chopper
+      // is facing in down/south direction in the original image.
+      _ChopperParent(
         position: Vector2(0, -200),
         chopper: SpriteAnimationComponent(
           nativeAngle: pi,
@@ -51,13 +49,10 @@ class LookAtExample extends FlameGame<_TapWorld>
           animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
         ),
       ),
-    );
-
-    // This chopper does not use correct nativeAngle, hence using
-    // lookAt on it results in the sprite pointing in incorrect
-    // direction visually.
-    world.add(
-      _chopper2 = _ChopperParent(
+      // This chopper does not use correct nativeAngle, hence using
+      // lookAt on it results in the sprite pointing in incorrect
+      // direction visually.
+      _ChopperParent(
         position: Vector2(0, 200),
         chopper: SpriteAnimationComponent(
           size: Vector2.all(128),
@@ -65,7 +60,8 @@ class LookAtExample extends FlameGame<_TapWorld>
           animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
         ),
       ),
-    );
+    ];
+    world.addAll(_choppers);
   }
 }
 
