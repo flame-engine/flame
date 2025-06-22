@@ -33,8 +33,11 @@ void main() {
         imageNames: ['map-level1.png', 'image1.png'],
         stringNames: ['map.tmx', 'tiles_custom_path/map_custom_path.tmx'],
       );
-      tiled = await TiledComponent.load('map.tmx', Vector2.all(16),
-          key: ComponentKey.named('test'));
+      tiled = await TiledComponent.load(
+        'map.tmx',
+        Vector2.all(16),
+        key: ComponentKey.named('test'),
+      );
     });
 
     test('correct loads the file', () {
