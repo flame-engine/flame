@@ -31,7 +31,7 @@ void main() {
 
     testGolden(
       'text rendering at different scales',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           RectangleComponent(size: Vector2(800, 600)),
           TextBoxComponent(
@@ -59,7 +59,7 @@ void main() {
 
     testGolden(
       'Render text with ligatures',
-      (game) async {
+      (game, tester) async {
         final font = SpriteFont(
           source: await loadImage('sprite_font.png'),
           size: 18,
@@ -120,7 +120,7 @@ void main() {
 
     testGolden(
       'Render text with large src rectangles',
-      (game) async {
+      (game, tester) async {
         final font = SpriteFont(
           source: await loadImage('sprite_font.png'),
           size: 18,
@@ -221,7 +221,7 @@ void main() {
 
     testGolden(
       'Render colored text',
-      (game) async {
+      (game, tester) async {
         const lines = [
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
           'abcdefghijklmnopqrstuvwxyz',

@@ -302,13 +302,13 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   @override
   void dispose() {
-    super.dispose();
     disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
       _focusNode.dispose();
     }
+    super.dispose();
   }
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, KeyEvent event) {

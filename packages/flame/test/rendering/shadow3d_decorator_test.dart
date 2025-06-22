@@ -22,7 +22,7 @@ void main() {
 
     testGolden(
       'shadow behind object',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           _Background(const Color(0xffc9c9c9)),
           _DecoratedRectangle(
@@ -43,7 +43,7 @@ void main() {
 
     testGolden(
       'shadow in front object',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           _Background(const Color(0xffc9c9c9)),
           _DecoratedRectangle(
@@ -67,7 +67,7 @@ void main() {
 
     testGolden(
       'dynamically change shadow properties',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           _Background(const Color(0xffc9c9c9)),
           _DecoratedRectangle(
