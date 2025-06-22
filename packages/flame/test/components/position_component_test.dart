@@ -1184,8 +1184,8 @@ void main() {
       });
 
       testWithFlameGame('absoluteAngle with flipped parent', (game) async {
-        final parent = PositionComponent()..angle = pi / 4;
-        final child = PositionComponent();
+        final parent = _MyDebugComponent(name: 'parent')..angle = pi / 4;
+        final child = _MyDebugComponent(name: 'child');
         parent.add(child);
         game.add(parent);
         await game.ready();
@@ -1221,9 +1221,9 @@ void main() {
 
         expect(child.absoluteAngle, pi / 4);
         child.flipHorizontally();
-        expect(child.absoluteAngle, 0);
+        expect(child.absoluteAngle, (-pi / 4) % tau);
         parent.flipVertically();
-        expect(child.absoluteAngle, pi);
+        expect(child.absoluteAngle, pi / 4 + pi);
       });
     });
   });
@@ -1232,6 +1232,17 @@ void main() {
 class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
 
 class _MyDebugComponent extends PositionComponent {
+  _MyDebugComponent({this.name});
+
+  final String? name;
+
   @override
   bool get debugMode => true;
+
+  @override
+  String toString() {
+    return name != null
+        ? '$name(angle: $angle, scale: $scale)'
+        : super.toString();
+  }
 }

@@ -235,8 +235,8 @@ class PositionComponent extends Component
   /// and scales have been applied.
   double get absoluteAngle {
     var angle = 0.0;
-    var scaleX = 1.0;
-    var scaleY = 1.0;
+    var totalScaleX = 1.0;
+    var totalScaleY = 1.0;
 
     final ancestorChain = ancestors(includeSelf: true).toList(growable: false)
       ..reverse();
@@ -244,69 +244,30 @@ class PositionComponent extends Component
     for (final ancestor in ancestorChain) {
       if (ancestor is ReadOnlyScaleProvider) {
         final ancestorScale = (ancestor as ReadOnlyScaleProvider).scale;
-        scaleX *= ancestorScale.x;
-        scaleY *= ancestorScale.y;
+        totalScaleX *= ancestorScale.x;
+        totalScaleY *= ancestorScale.y;
+        if (ancestorScale.x.isNegative) {
+          angle *= -1;
+        }
+        if (ancestorScale.y.isNegative) {
+          angle -= math.pi - angle;
+        }
       }
 
       if (ancestor is ReadOnlyAngleProvider) {
+        final reflected = totalScaleX.isNegative ^ totalScaleY.isNegative;
         final localAngle = (ancestor as ReadOnlyAngleProvider).angle;
-        final reflected = scaleX.isNegative ^ scaleY.isNegative;
-        if (scaleX.isNegative) {
-          angle = -math.pi;
-        }
-        if (scaleY.isNegative) {
-          angle = -angle + math.pi;
-        }
-        if (reflected) {
-          angle -= localAngle;
-        } else {
-          angle += localAngle;
-        }
+        angle += reflected ? -localAngle : localAngle;
       }
     }
 
     return angle % tau;
   }
 
-//  double get absoluteAngle {
-//    _accumulatedScale.setValues(1.0, 1.0);
-//    final ancestorChain = ancestors(includeSelf: true).toList(growable: false)
-//      ..reverse();
-//    var accumulatedAngle = 0.0;
-//    print(ancestorChain.length);
-//    for (final ancestor in ancestorChain) {
-//      final localScale = ancestor is ReadOnlyScaleProvider
-//          ? (ancestor as ReadOnlyScaleProvider).scale
-//          : null;
-//      if (localScale != null) {
-//        _accumulatedScale.multiply(localScale);
-//        if (localScale.x < 0 && localScale.y > 0) {
-//          accumulatedAngle -= math.pi;
-//        }
-//        if (localScale.x.isNegative && localScale.y.isNegative) {
-//          accumulatedAngle += math.pi;
-//        }
-//      }
-//      if (ancestor is ReadOnlyAngleProvider) {
-//        final localAngle = (ancestor as ReadOnlyAngleProvider).angle;
-//        if (_accumulatedScale.x.isNegative ^ _accumulatedScale.y.isNegative) {
-//          accumulatedAngle -= localAngle;
-//        } else if (_accumulatedScale.x.isNegative &&
-//            _accumulatedScale.y.isNegative) {
-//          accumulatedAngle += localAngle;
-//        } else {
-//          accumulatedAngle += localAngle;
-//        }
-//      }
-//      accumulatedAngle %= tau;
-//    }
-//    return accumulatedAngle;
-//  }
-
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
   Vector2 get absoluteScale {
-    return ancestors().whereType<PositionComponent>().fold<Vector2>(
+    return ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
           scale.clone(),
           (totalScale, c) => totalScale..multiply(c.scale),
         );
