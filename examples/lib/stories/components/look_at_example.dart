@@ -43,13 +43,13 @@ class LookAtExample extends FlameGame {
     // is facing in down/south direction in the original image.
     world.add(
       PositionComponent(
-        scale: Vector2(-1, -1),
+        scale: Vector2(1, -1),
         //angle: 1,
         position: Vector2(0, 0),
         children: [
           _chopper1 = SpriteAnimationComponent(
             //nativeAngle: pi,
-            scale: Vector2(-1, -1),
+            scale: Vector2(1, 1),
             //angle: 1,
             size: Vector2.all(128),
             anchor: Anchor.center,

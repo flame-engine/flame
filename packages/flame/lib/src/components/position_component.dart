@@ -425,9 +425,16 @@ class PositionComponent extends Component
       -direction.y * scale.y.sign,
     );
     final angleDifference = targetAngle - absoluteAngle;
-    final ancestorFlippedRotation =
-        parentAbsoluteScale.x.isNegative ^ parentAbsoluteScale.y.isNegative;
-    final localFlippedRotation = scale.x.isNegative ^ scale.y.isNegative;
+
+    return ((parentAbsoluteScale.x.isNegative ^
+                parentAbsoluteScale.y.isNegative ^
+                scale.x.isNegative ^
+                scale.y.isNegative)
+            ? -angleDifference
+            : angleDifference) +
+        ((!parentAbsoluteScale.y.isNegative && scale.y.isNegative)
+            ? math.pi
+            : 0.0);
     return switch ((
       parentAbsoluteScale.x.isNegative,
       parentAbsoluteScale.y.isNegative,
@@ -451,7 +458,6 @@ class PositionComponent extends Component
       (true, true, true, false) => -angleDifference,
       (true, true, true, true) => angleDifference,
     };
-    return (ancestorFlippedRotation ? -angleDifference : angleDifference);
   }
 
   /// Rotates/snaps the component to look at the [target].
