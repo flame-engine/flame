@@ -33,7 +33,7 @@ void main() {
         imageNames: ['map-level1.png', 'image1.png'],
         stringNames: ['map.tmx', 'tiles_custom_path/map_custom_path.tmx'],
       );
-      tiled = await TiledComponent.load('map.tmx', Vector2.all(16));
+      tiled = await TiledComponent.load('map.tmx', Vector2.all(16), key: ComponentKey.named('test'));
     });
 
     test('correct loads the file', () {
@@ -54,6 +54,10 @@ void main() {
       );
 
       expect(tiled.tileMap.renderableLayers.length, equals(3));
+    });
+
+    test('assigns key', () async {
+      expect(tiled.key, equals(ComponentKey.named('test')));
     });
 
     group('is positionable', () {
@@ -231,10 +235,8 @@ void main() {
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
-            leftTilePixels[i + 1] == 255 &&
-            leftTilePixels[i + 2] == 0 &&
-            leftTilePixels[i + 3] == 255;
+        allGreen &=
+            leftTilePixels[i] == 0 && leftTilePixels[i + 1] == 255 && leftTilePixels[i + 2] == 0 && leftTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
     });
@@ -278,28 +280,20 @@ void main() {
     test('[useAtlas = true] Green tile pixels are in correct spots', () {
       const oneColorRect = 8;
       final leftTilePixels = <int>[];
-      for (var i = 65 * oneColorRect * pixel;
-          i < ((64 * 23) + (oneColorRect * 3)) * pixel;
-          i += 64 * pixel) {
-        leftTilePixels
-            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
+      for (var i = 65 * oneColorRect * pixel; i < ((64 * 23) + (oneColorRect * 3)) * pixel; i += 64 * pixel) {
+        leftTilePixels.addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
-            leftTilePixels[i + 1] == 255 &&
-            leftTilePixels[i + 2] == 0 &&
-            leftTilePixels[i + 3] == 255;
+        allGreen &=
+            leftTilePixels[i] == 0 && leftTilePixels[i + 1] == 255 && leftTilePixels[i + 2] == 0 && leftTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * pixel;
-          i < ((64 * 23) + (8 * 7)) * pixel;
-          i += 64 * pixel) {
-        rightTilePixels
-            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
+      for (var i = 69 * 8 * pixel; i < ((64 * 23) + (8 * 7)) * pixel; i += 64 * pixel) {
+        rightTilePixels.addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
@@ -313,28 +307,20 @@ void main() {
 
     test('[useAtlas = false] Green tile pixels are in correct spots', () {
       final leftTilePixels = <int>[];
-      for (var i = 65 * 8 * pixel;
-          i < ((64 * 23) + (8 * 3)) * pixel;
-          i += 64 * pixel) {
-        leftTilePixels
-            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
+      for (var i = 65 * 8 * pixel; i < ((64 * 23) + (8 * 3)) * pixel; i += 64 * pixel) {
+        leftTilePixels.addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
-            leftTilePixels[i + 1] == 255 &&
-            leftTilePixels[i + 2] == 0 &&
-            leftTilePixels[i + 3] == 255;
+        allGreen &=
+            leftTilePixels[i] == 0 && leftTilePixels[i + 1] == 255 && leftTilePixels[i + 2] == 0 && leftTilePixels[i + 3] == 255;
       }
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * pixel;
-          i < ((64 * 23) + (8 * 7)) * pixel;
-          i += 64 * pixel) {
-        rightTilePixels
-            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
+      for (var i = 69 * 8 * pixel; i < ((64 * 23) + (8 * 7)) * pixel; i += 64 * pixel) {
+        rightTilePixels.addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
       }
 
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
@@ -370,10 +356,7 @@ void main() {
 
       await Flame.images.ready();
 
-      texture = (tiledComponent.tileMap.renderableLayers[0] as FlameTileLayer)
-          .tiledAtlas
-          .batch
-          ?.atlas;
+      texture = (tiledComponent.tileMap.renderableLayers[0] as FlameTileLayer).tiledAtlas.batch?.atlas;
 
       rendered = await renderMapToPng(tiledComponent);
     }
