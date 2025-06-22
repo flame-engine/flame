@@ -17,7 +17,8 @@ import 'package:tiled/tiled.dart';
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
-class TiledComponent<T extends FlameGame> extends PositionComponent with HasGameReference<T> {
+class TiledComponent<T extends FlameGame> extends PositionComponent
+    with HasGameReference<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
