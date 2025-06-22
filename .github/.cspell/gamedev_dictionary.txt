@@ -11,7 +11,6 @@ backgrounded # moving the app to the background
 backgrounding # moving the app to the background
 backpressure # strategy to deal with excess flow of data
 backquote # another word for backtick
-Bezier # Bézier curves are parametric curves used in computer graphics
 bimedian # line segment joining the midpoints of opposite sides of a shape
 bitfield # data structure consisting of adjacent bits
 broadphase # common division of collision detection between broad and narrow phases
@@ -19,10 +18,16 @@ cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
 easings # Easing functions specify the rate of change of a parameter over time
 fullscreen # mode in which a program or app occupies the entire screen with no borders
+glsl # OpenGL Shading Language
 goldens # test files used as reference for Golden Tests
+highp # high float precission setting on glsl fragment shaders
 hitbox # the collision box around objects for the purposes of collision detection
 hitboxes # plural of hitbox
+IDAT # PNG data chunk
+IHDR # PNG header chunk
+IEND # PNG end chunk
 ints # short for integers
+impellerc # Flutter's impeller compiler
 jank # stutter or inconsistent gap or timing
 lerp # short for linear interpolation
 LTRB # left top right bottom
@@ -36,7 +41,9 @@ orientable # can be oriented
 pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
 polyline # a connected series of line segments
+premultiply # premultiply alpha, a technique to optimize rendering
 quadtree # a tree-based data structure where each node has exactly 4 children
+rasterizing
 raycast # act of raycasting
 raycasting # same as raytracing
 raycasts # plural of raycast
@@ -48,8 +55,11 @@ respawn # when the player character dies and is brought back after some time and
 retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
+BGRA # blue green red alpha
 rrect # rounded rect
 scos # cosine of a rotation multiplied by the scale factor
+shaderbundle # a file extension used to bundle shaders for GLSL
+slerp # short for spherical linear interpolation, a method to interpolate quaternions
 spritesheet # a single image packing multiple sprites, normally in a grid
 ssin # sine of a rotation multiplied by the scale factor
 stylesheet # name of a CSS style file
@@ -57,9 +67,11 @@ subfolders # plural of subfolders
 sublist # any sub-set of elements of a given list
 sublists # plural of sublist
 subrange # a range entirely contained on a given range
+struct # a type of data model in programming that aggregates fields
 SVGs # plural of SVG
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
+truecolor # truecolor rendering
 tweening # the process of tween
 unawaited # un-awaited, a future that is not associated with an "await" expression
 viewports # plural of viewport

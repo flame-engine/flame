@@ -57,13 +57,12 @@ Every component that received an `onTapDown` event will eventually receive eithe
 
 ### onLongTapDown
 
-If the user holds their finger down for some time (as configured by the `.longTapDelay` property
-in `MultiTapDispatcher`), "long tap" will be triggered. This event invokes the
-`void onLongTapDown(TapDownEvent)` handler on those components that previously received the
+If the user holds their finger down for some time, "long tap" will be triggered. This event invokes
+the `void onLongTapDown(TapDownEvent)` handler on those components that previously received the
 `onTapDown` event.
 
-By default, the `.longTapDelay` is set to 300 milliseconds, what may be different of the system default.
-You can change this value by setting the `TapConfig.longTapDelay` value.
+By default, the `.longTapDelay` is set to 300 milliseconds, what may be different of the system
+default. You can change this value by setting the `TapConfig.longTapDelay` value.
 It may also be useful for specific accessibility needs.
 
 

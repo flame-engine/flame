@@ -12,7 +12,7 @@ class Modulo extends NumExpression {
   final NumExpression _lhs;
   final NumExpression _rhs;
 
-  /// Static constructor, used by <parser.dart>
+  /// Static constructor, used by parse.dart
   factory Modulo.make(
     Expression lhs,
     Expression rhs,

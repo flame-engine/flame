@@ -1,20 +1,21 @@
 name: flame_rive_example
+resolution: workspace
 description: A testbed for flame_rive
 publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.19.0
-  flame_rive: ^1.10.3
+  flame: ^1.29.0
+  flame_rive: ^1.10.15
   flutter:
     sdk: flutter
-  rive: ^0.12.3
+  rive: ^0.13.20
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^1.4.0
   flutter_test:
     sdk: flutter
 

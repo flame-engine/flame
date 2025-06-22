@@ -1,18 +1,21 @@
 name: klondike
+resolution: workspace
 description: Klondike tutorial
 version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.19.0
+  flame: ^1.29.0
   flutter:
     sdk: flutter
+  web: ^1.1.0
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^1.4.0
+
 flutter:
   assets:
     - assets/images/

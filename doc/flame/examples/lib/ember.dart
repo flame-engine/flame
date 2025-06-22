@@ -5,8 +5,8 @@ import 'package:flame/flame.dart';
 
 class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {
   EmberPlayer({
-    required super.position,
     required super.size,
+    super.position,
     void Function(EmberPlayer player)? onTap,
   })  : _onTap = onTap,
         super();

@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 class _Wrapper extends StatefulWidget {
   const _Wrapper({
     required this.child,
-    // ignore: unused_element
+    // ignore: unused_element, unused_element_parameter
     this.small = false,
   });
 

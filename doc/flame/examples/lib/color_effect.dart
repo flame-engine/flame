@@ -14,23 +14,14 @@ class ColorEffectExample extends FlameGame {
       position: size / 2,
       size: size / 4,
       onTap: (ember) {
-        if (reset = !reset) {
-          ember.add(
-            ColorEffect(
-              const Color(0xFF00FF00),
-              EffectController(duration: 1.5),
-              opacityTo: 0.6,
-            ),
-          );
-        } else {
-          ember.add(
-            ColorEffect(
-              const Color(0xFF1039DB),
-              EffectController(duration: 1.5),
-              opacityTo: 0.6,
-            ),
-          );
-        }
+        ember.add(
+          ColorEffect(
+            reset ? const Color(0xFF1039DB) : const Color(0xFF00FF00),
+            EffectController(duration: 1.5),
+            opacityTo: 0.6,
+          ),
+        );
+        reset = !reset;
       },
     )..anchor = Anchor.center;
 

@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 class JoystickPlayer extends SpriteComponent
-    with HasGameRef, CollisionCallbacks {
+    with HasGameReference, CollisionCallbacks {
   /// Pixels/s
   double maxSpeed = 300.0;
   late final Vector2 _lastSize = size.clone();

@@ -92,8 +92,8 @@ class BodyComponent<T extends Forge2DGame> extends Component
   @override
   void renderTree(Canvas canvas) {
     final matrix = _transformMatrix;
-    if (matrix.m14 != body.position.x ||
-        matrix.m24 != body.position.y ||
+    if (matrix.m41 != body.position.x ||
+        matrix.m42 != body.position.y ||
         _lastAngle != angle) {
       matrix.setIdentity();
       matrix.translate(body.position.x, body.position.y);
@@ -101,7 +101,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
       _lastAngle = angle;
     }
     canvas.save();
-    canvas.transform(matrix.storage);
+    canvas.transform32(matrix.storage);
     super.renderTree(canvas);
     canvas.restore();
   }

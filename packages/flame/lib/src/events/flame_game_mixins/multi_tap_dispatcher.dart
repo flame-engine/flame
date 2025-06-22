@@ -22,7 +22,6 @@ class MultiTapDispatcherKey implements ComponentKey {
       other is MultiTapDispatcherKey && other.hashCode == hashCode;
 }
 
-@internal
 class MultiTapDispatcher extends Component implements MultiTapListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};

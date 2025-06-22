@@ -47,7 +47,7 @@ void main() {
 
     testGolden(
       'Clipping behavior',
-      (game) async {
+      (game, tester) async {
         final world = World();
         final camera = CameraComponent(
           world: world,

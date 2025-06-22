@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/recycled_queue.dart';
 import 'package:meta/meta.dart';
@@ -12,30 +14,30 @@ class ComponentTreeRoot extends Component {
   ComponentTreeRoot({
     super.children,
     super.key,
-  })  : _queue = RecycledQueue(_LifecycleEvent.new),
-        _blocked = <int>{},
-        _componentsToRebalance = <Component>{};
+  })  : queue = RecycledQueue(LifecycleEvent.new),
+        _blocked = <int>{};
 
-  final RecycledQueue<_LifecycleEvent> _queue;
+  @internal
+  final RecycledQueue<LifecycleEvent> queue;
   final Set<int> _blocked;
-  final Set<Component> _componentsToRebalance;
   late final Map<ComponentKey, Component> _index = {};
+  Completer<void>? _lifecycleEventsCompleter;
 
   @internal
   void enqueueAdd(Component child, Component parent) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.add
+    queue.addLast()
+      ..kind = LifecycleEventKind.add
       ..child = child
       ..parent = parent;
   }
 
   @internal
   void dequeueAdd(Component child, Component parent) {
-    for (final event in _queue) {
-      if (event.kind == _LifecycleEventKind.add &&
+    for (final event in queue) {
+      if (event.kind == LifecycleEventKind.add &&
           event.child == child &&
           event.parent == parent) {
-        event.kind = _LifecycleEventKind.unknown;
+        event.kind = LifecycleEventKind.unknown;
         return;
       }
     }
@@ -46,42 +48,82 @@ class ComponentTreeRoot extends Component {
 
   @internal
   void enqueueRemove(Component child, Component parent) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.remove
+    queue.addLast()
+      ..kind = LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
   }
 
   @internal
   void dequeueRemove(Component child) {
-    for (final event in _queue) {
-      if (event.kind == _LifecycleEventKind.remove && event.child == child) {
-        event.kind = _LifecycleEventKind.unknown;
+    for (final event in queue) {
+      if (event.kind == LifecycleEventKind.remove && event.child == child) {
+        event.kind = LifecycleEventKind.unknown;
       }
     }
   }
 
   @internal
   void enqueueMove(Component child, Component newParent) {
-    _queue.addLast()
-      ..kind = _LifecycleEventKind.move
+    queue.addLast()
+      ..kind = LifecycleEventKind.move
       ..child = child
       ..parent = newParent;
   }
 
   @internal
-  void enqueueRebalance(Component parent) {
-    _componentsToRebalance.add(parent);
+  void enqueuePriorityChange(
+    Component parent,
+    Component child,
+  ) {
+    queue.addLast()
+      ..kind = LifecycleEventKind.rebalance
+      ..child = child
+      ..parent = parent;
   }
 
-  bool get hasLifecycleEvents => _queue.isNotEmpty;
+  bool get hasLifecycleEvents => queue.isNotEmpty;
+
+  /// A future that will complete once all lifecycle events have been
+  /// processed.
+  ///
+  /// If there are no lifecycle events to be processed ([hasLifecycleEvents]
+  /// is `false`), then this future returns immediately.
+  ///
+  /// This is useful when you modify the component tree
+  /// (by adding, moving or removing a component) and you want to make sure
+  /// you react to the changed state, not the current one.
+  /// Remember, methods like [Component.add] don't act immediately and instead
+  /// enqueue their action. This action also cannot be awaited
+  /// with something like `await world.add(something)` since that future
+  /// completes _before_ the lifecycle events are processed.
+  ///
+  /// Example usage:
+  ///
+  /// ```dart
+  /// player.inventory.addAll(enemy.inventory.children);
+  /// await game.lifecycleEventsProcessed;
+  /// updateUi(player.inventory);
+  /// ```
+  Future<void> get lifecycleEventsProcessed {
+    return !hasLifecycleEvents
+        ? Future.value()
+        : (_lifecycleEventsCompleter ??= Completer<void>()).future;
+  }
 
   void processLifecycleEvents() {
+    // reorder events to process later grouped by parent
+    final reorderParents = <Component>{};
+    LifecycleEventStatus handleReorderEvent(Component parent) {
+      reorderParents.add(parent);
+      return LifecycleEventStatus.done;
+    }
+
     assert(_blocked.isEmpty);
     var repeatLoop = true;
     while (repeatLoop) {
       repeatLoop = false;
-      for (final event in _queue) {
+      for (final event in queue) {
         final child = event.child!;
         final parent = event.parent!;
         if (_blocked.contains(identityHashCode(child)) ||
@@ -90,16 +132,16 @@ class ComponentTreeRoot extends Component {
         }
 
         final status = switch (event.kind) {
-          _LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
-          _LifecycleEventKind.remove =>
-            child.handleLifecycleEventRemove(parent),
-          _LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
-          _LifecycleEventKind.unknown => LifecycleEventStatus.done,
+          LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
+          LifecycleEventKind.remove => child.handleLifecycleEventRemove(parent),
+          LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
+          LifecycleEventKind.rebalance => handleReorderEvent(parent),
+          LifecycleEventKind.unknown => LifecycleEventStatus.done,
         };
 
         switch (status) {
           case LifecycleEventStatus.done:
-            _queue.removeCurrent();
+            queue.removeCurrent();
             repeatLoop = true;
           case LifecycleEventStatus.block:
             _blocked.add(identityHashCode(child));
@@ -109,13 +151,15 @@ class ComponentTreeRoot extends Component {
       }
       _blocked.clear();
     }
-  }
 
-  void processRebalanceEvents() {
-    for (final component in _componentsToRebalance) {
-      component.children.reorder();
+    for (final parent in reorderParents) {
+      parent.rebalanceChildren();
     }
-    _componentsToRebalance.clear();
+
+    if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
+      _lifecycleEventsCompleter!.complete();
+      _lifecycleEventsCompleter = null;
+    }
   }
 
   @mustCallSuper
@@ -123,12 +167,12 @@ class ComponentTreeRoot extends Component {
   @internal
   void handleResize(Vector2 size) {
     super.handleResize(size);
-    _queue.forEach((event) {
-      if ((event.kind == _LifecycleEventKind.add) &&
+    for (final event in queue) {
+      if ((event.kind == LifecycleEventKind.add) &&
           (event.child!.isLoading || event.child!.isLoaded)) {
         event.child!.onGameResize(size);
       }
-    });
+    }
   }
 
   @mustCallSuper
@@ -167,21 +211,24 @@ enum LifecycleEventStatus {
   done,
 }
 
-enum _LifecycleEventKind {
+@internal
+enum LifecycleEventKind {
   unknown,
   add,
   remove,
   move,
+  rebalance,
 }
 
-class _LifecycleEvent implements Disposable {
-  _LifecycleEventKind kind = _LifecycleEventKind.unknown;
+@visibleForTesting
+class LifecycleEvent implements Disposable {
+  LifecycleEventKind kind = LifecycleEventKind.unknown;
   Component? child;
   Component? parent;
 
   @override
   void dispose() {
-    kind = _LifecycleEventKind.unknown;
+    kind = LifecycleEventKind.unknown;
     child = null;
     parent = null;
   }

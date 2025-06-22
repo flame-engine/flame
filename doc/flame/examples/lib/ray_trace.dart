@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class RayTraceExample extends FlameGame
     with HasCollisionDetection, TapDetector {
-  Paint paint = Paint()..color = Colors.red.withOpacity(0.6);
+  Paint paint = Paint()..color = Colors.red.withValues(alpha: 0.6);
   bool isClicked = false;
 
   Vector2 get origin => canvasSize / 2;

@@ -21,6 +21,8 @@ class DocumentStyle extends FlameTextStyle {
     InlineTextStyle? boldText,
     InlineTextStyle? italicText,
     InlineTextStyle? codeText,
+    InlineTextStyle? strikethroughText,
+    Map<String, InlineTextStyle>? customStyles,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -33,6 +35,11 @@ class DocumentStyle extends FlameTextStyle {
         _italicText =
             FlameTextStyle.merge(ItalicTextNode.defaultStyle, italicText),
         _codeText = FlameTextStyle.merge(CodeTextNode.defaultStyle, codeText),
+        _strikethroughText = FlameTextStyle.merge(
+          StrikethroughTextNode.defaultStyle,
+          strikethroughText,
+        ),
+        _customStyles = customStyles,
         _paragraph =
             FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
         _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
@@ -46,6 +53,8 @@ class DocumentStyle extends FlameTextStyle {
   final InlineTextStyle? _boldText;
   final InlineTextStyle? _italicText;
   final InlineTextStyle? _codeText;
+  final InlineTextStyle? _strikethroughText;
+  final Map<String, InlineTextStyle>? _customStyles;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -98,6 +107,11 @@ class DocumentStyle extends FlameTextStyle {
   InlineTextStyle get boldText => _boldText!;
   InlineTextStyle get italicText => _italicText!;
   InlineTextStyle get codeText => _codeText!;
+  InlineTextStyle get strikethroughText => _strikethroughText!;
+
+  InlineTextStyle? getCustomStyle(String className) {
+    return _customStyles?[className];
+  }
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;
@@ -122,6 +136,10 @@ class DocumentStyle extends FlameTextStyle {
       boldText: FlameTextStyle.merge(_boldText, other.boldText),
       italicText: FlameTextStyle.merge(_italicText, other.italicText),
       codeText: FlameTextStyle.merge(_codeText, other.codeText),
+      strikethroughText: FlameTextStyle.merge(
+        _strikethroughText,
+        other.strikethroughText,
+      ),
       background: merge(background, other.background) as BackgroundStyle?,
       paragraph: merge(paragraph, other.paragraph) as BlockStyle?,
       header1: merge(header1, other.header1) as BlockStyle?,

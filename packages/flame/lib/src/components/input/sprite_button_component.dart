@@ -47,12 +47,16 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
 
   set button(Sprite value) {
     _button = value;
-    updateSprite(ButtonState.up, value);
+    if (isLoaded) {
+      updateSprite(ButtonState.up, value);
+    }
   }
 
   set buttonDown(Sprite value) {
     _buttonDown = value;
-    updateSprite(ButtonState.down, value);
+    if (isLoaded) {
+      updateSprite(ButtonState.down, value);
+    }
   }
 
   @override
@@ -61,8 +65,11 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
       _button != null,
       'The button sprite has to be set either in onLoad or in the constructor',
     );
+    if (size.isZero()) {
+      size = _button!.originalSize;
+    }
     sprites = {
-      ButtonState.up: button,
+      ButtonState.up: _button!,
       ButtonState.down: buttonDown,
     };
     super.onMount();

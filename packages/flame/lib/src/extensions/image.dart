@@ -37,6 +37,45 @@ extension ImageExtension on Image {
     return (await toByteData())!.buffer.asUint8List();
   }
 
+  Future<Image> transformPixels(
+    Color Function(Color) transform, {
+    bool reversePremultipliedAlpha = true,
+  }) async {
+    final pixelData = await pixelsInUint8();
+    final newPixelData = Uint8List(pixelData.length);
+
+    for (var i = 0; i < pixelData.length; i += 4) {
+      final r = pixelData[i + 0] / 255;
+      final g = pixelData[i + 1] / 255;
+      final b = pixelData[i + 2] / 255;
+      final a = pixelData[i + 3] / 255;
+
+      final d = a == 0 || !reversePremultipliedAlpha ? 1 : a;
+
+      // Reverse the pre-multiplied alpha.
+      final color = Color.from(
+        alpha: a,
+        red: r / d,
+        green: g / d,
+        blue: b / d,
+      );
+
+      final newColor = a == 0 ? color : transform(color);
+
+      final newR = newColor.r;
+      final newG = newColor.g;
+      final newB = newColor.b;
+
+      // Pre-multiply the alpha back into the new color.
+      newPixelData[i + 0] = (newR * d * 255).round();
+      newPixelData[i + 1] = (newG * d * 255).round();
+      newPixelData[i + 2] = (newB * d * 255).round();
+      newPixelData[i + 3] = pixelData[i + 3];
+    }
+
+    return fromPixels(newPixelData, width, height);
+  }
+
   /// Returns the bounding [Rect] of the image.
   Rect getBoundingRect() => Vector2.zero() & size;
 
@@ -46,51 +85,31 @@ extension ImageExtension on Image {
   /// Change each pixel's color to be darker and return a new [Image].
   ///
   /// The [amount] is a double value between 0 and 1.
-  Future<Image> darken(double amount) async {
+  Future<Image> darken(
+    double amount, {
+    bool reversePremultipliedAlpha = true,
+  }) async {
     assert(amount >= 0 && amount <= 1);
 
-    final pixelData = await pixelsInUint8();
-    final newPixelData = Uint8List(pixelData.length);
-
-    for (var i = 0; i < pixelData.length; i += 4) {
-      final color = Color.fromARGB(
-        pixelData[i + 3],
-        pixelData[i + 0],
-        pixelData[i + 1],
-        pixelData[i + 2],
-      ).darken(amount);
-
-      newPixelData[i] = color.red;
-      newPixelData[i + 1] = color.green;
-      newPixelData[i + 2] = color.blue;
-      newPixelData[i + 3] = color.alpha;
-    }
-    return fromPixels(newPixelData, width, height);
+    return transformPixels(
+      (color) => color.darken(amount),
+      reversePremultipliedAlpha: reversePremultipliedAlpha,
+    );
   }
 
   /// Change each pixel's color to be brighter and return a new [Image].
   ///
   /// The [amount] is a double value between 0 and 1.
-  Future<Image> brighten(double amount) async {
+  Future<Image> brighten(
+    double amount, {
+    bool reversePremultipliedAlpha = false,
+  }) async {
     assert(amount >= 0 && amount <= 1);
 
-    final pixelData = await pixelsInUint8();
-    final newPixelData = Uint8List(pixelData.length);
-
-    for (var i = 0; i < pixelData.length; i += 4) {
-      final color = Color.fromARGB(
-        pixelData[i + 3],
-        pixelData[i + 0],
-        pixelData[i + 1],
-        pixelData[i + 2],
-      ).brighten(amount);
-
-      newPixelData[i] = color.red;
-      newPixelData[i + 1] = color.green;
-      newPixelData[i + 2] = color.blue;
-      newPixelData[i + 3] = color.alpha;
-    }
-    return fromPixels(newPixelData, width, height);
+    return transformPixels(
+      (color) => color.brighten(amount),
+      reversePremultipliedAlpha: reversePremultipliedAlpha,
+    );
   }
 
   /// Resizes this image to the given [newSize].

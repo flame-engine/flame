@@ -1,15 +1,16 @@
 # Flame
 
-- [File Structure](structure.md)
+- [Getting Started](../README.md)
 - [Game Widget](game_widget.md)
-- [Game Loop](game.md)
+- [The game class](game.md)
+- [Assets Structure](structure.md)
 - [Components](components.md)
+- [Inputs](inputs/inputs.md)
+- [Camera](camera.md)
+- [Effects](effects.md)
+- [Collision Detection](collision_detection.md)
 - [Router](router.md)
 - [Platforms](platforms.md)
-- [Collision Detection](collision_detection.md)
-- [Effects](effects.md)
-- [Camera Component](camera_component.md)
-- [Inputs](inputs/inputs.md)
 - [Rendering](rendering/rendering.md)
 - [Layout](layout/layout.md)
 - [Overlays](overlays.md)
@@ -18,16 +19,17 @@
 ```{toctree}
 :hidden:
 
-File Structure       <structure.md>
+Getting Started      <../README.md>
 Game Widget          <game_widget.md>
-Game Loop            <game.md>
+The game class       <game.md>
+Assets Structure     <structure.md>
 Components           <components.md>
+Inputs               <inputs/inputs.md>
+Camera               <camera.md>
+Effects              <effects.md>
+Collision Detection  <collision_detection.md>
 Router               <router.md>
 Platforms            <platforms.md>
-Collision Detection  <collision_detection.md>
-Effects              <effects.md>
-Camera Component     <camera_component.md>
-Inputs               <inputs/inputs.md>
 Rendering            <rendering/rendering.md>
 Layout               <layout/layout.md>
 Overlays             <overlays.md>

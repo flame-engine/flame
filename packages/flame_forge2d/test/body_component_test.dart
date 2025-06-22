@@ -6,7 +6,6 @@ import 'package:flame/components.dart'
     show Anchor, ComponentKey, PositionComponent;
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';

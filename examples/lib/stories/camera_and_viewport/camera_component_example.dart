@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart' show OffsetExtension;
+import 'package:flame/extensions.dart' show OffsetExtension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
-class CameraComponentExample extends FlameGame with PanDetector {
+class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
   static const description = '''
     This example shows how a camera can be dynamically added into a game using
     a CameraComponent.
@@ -17,6 +17,8 @@ class CameraComponentExample extends FlameGame with PanDetector {
     Click and hold the mouse to bring up a magnifying glass, then have a better
     look at the world underneath! 
   ''';
+
+  CameraComponentExample() : super(world: AntWorld());
 
   late final CameraComponent magnifyingGlass;
   late final Vector2 center;
@@ -28,13 +30,11 @@ class CameraComponentExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    final world = AntWorld();
-    await add(world);
-    final camera = CameraComponent(world: world);
-    await add(camera);
-    final offset = world.curve.boundingRect().center;
-    center = offset.toVector2();
-    camera.viewfinder.position = Vector2(center.x, center.y);
+    world.loaded.then((_) {
+      final offset = world.curve.boundingRect().center;
+      center = offset.toVector2();
+      camera.viewfinder.position = Vector2(center.x, center.y);
+    });
 
     magnifyingGlass =
         CameraComponent(world: world, viewport: CircularViewport(radius));
@@ -116,13 +116,13 @@ class Bezel extends PositionComponent {
               const Radius.circular(5.0),
             ),
           ))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
     connector = (Path()
           ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
     specularHighlight = (Path()
           ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+        .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
 
     glassPaint = Paint()..color = const Color(0x1400ffae);
     rimBorderPaint = Paint()

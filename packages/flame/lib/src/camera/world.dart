@@ -3,8 +3,7 @@ import 'dart:ui';
 import 'package:flame/src/camera/camera_component.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
-import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// The root component for all game world elements.
 ///
@@ -25,8 +24,10 @@ class World extends Component implements CoordinateTransform {
   @override
   void renderTree(Canvas canvas) {}
 
-  /// Internal rendering method invoked by the [CameraComponent].
-  @internal
+  /// The rendering method invoked by the [CameraComponent].
+  ///
+  /// If you want to do changes to the rendering of the world, this is the
+  /// method that you want to override, not [renderTree].
   void renderFromCamera(Canvas canvas) {
     assert(CameraComponent.currentCamera != null);
     super.renderTree(canvas);

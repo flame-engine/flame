@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/painting.dart' show HSLColor;
+
 export 'dart:ui' show Color;
 
 extension ColorExtension on Color {
@@ -12,13 +14,12 @@ extension ColorExtension on Color {
   Color darken(double amount) {
     assert(amount >= 0 && amount <= 1);
 
-    final f = 1 - amount;
-    return Color.fromARGB(
-      alpha,
-      (red * f).round(),
-      (green * f).round(),
-      (blue * f).round(),
-    );
+    final hsl = HSLColor.fromColor(this);
+    return hsl
+        .withLightness(
+          clampDouble(hsl.lightness * (1 - amount), 0.0, 1.0),
+        )
+        .toColor();
   }
 
   /// Brighten the shade of the color by the [amount].
@@ -29,12 +30,12 @@ extension ColorExtension on Color {
   Color brighten(double amount) {
     assert(amount >= 0 && amount <= 1);
 
-    return Color.fromARGB(
-      alpha,
-      red + ((255 - red) * amount).round(),
-      green + ((255 - green) * amount).round(),
-      blue + ((255 - blue) * amount).round(),
-    );
+    final hsl = HSLColor.fromColor(this);
+    return hsl
+        .withLightness(
+          clampDouble(hsl.lightness + (1 - hsl.lightness) * amount, 0.0, 1.0),
+        )
+        .toColor();
   }
 
   // used as an example hex color code on the documentation below

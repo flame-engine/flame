@@ -8,7 +8,7 @@ import 'package:flame_tiled/src/rectangle_bin_packer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tiled/tiled.dart';
 
-bool _defaultTilesetPackingFilter(_) => true;
+bool _defaultTilesetPackingFilter(Tileset _) => true;
 
 /// One image atlas for all Tiled image sets in a map.
 ///

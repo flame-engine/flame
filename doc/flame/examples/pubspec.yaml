@@ -1,22 +1,27 @@
 name: doc_flame_examples
+resolution: workspace
 description: Documentation examples
 version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
-  flutter: ">=3.22.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1"
 
 dependencies:
-  flame: ^1.19.0
-  flame_rive: ^1.10.3
+  flame: ^1.29.0
+  flame_rive: ^1.10.15
   flutter:
     sdk: flutter
+  flutter_shaders:
+  web: ^1.1.0
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^1.4.0
 
 flutter:
+  shaders:
+    - packages/flutter_shaders/shaders/pixelation.frag
   assets:
     - assets/
     - assets/images/

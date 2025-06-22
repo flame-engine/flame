@@ -468,7 +468,7 @@ class Parallax {
   final _delta = Vector2.zero();
 
   void update(double dt) {
-    layers.forEach((layer) {
+    for (final layer in layers) {
       layer.update(
         _delta
           ..setFrom(baseVelocity)
@@ -476,7 +476,7 @@ class Parallax {
           ..scale(dt),
         dt,
       );
-    });
+    }
   }
 
   /// Note that this method only should be used if all of your layers should

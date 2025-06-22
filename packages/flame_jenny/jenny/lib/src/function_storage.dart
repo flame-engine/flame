@@ -89,7 +89,7 @@ class FunctionStorage {
   }
 
   /// Returns a builder capable of creating function expressions. This method
-  /// is used by <parse.dart>.
+  /// is used by parse.dart.
   @internal
   FunctionBuilder? builderForFunction(String name) {
     if (!hasFunction(name)) {

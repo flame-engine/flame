@@ -3,9 +3,11 @@ import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/effects/color_effect_example.dart';
 import 'package:examples/stories/effects/dual_effect_removal_example.dart';
 import 'package:examples/stories/effects/effect_controllers_example.dart';
+import 'package:examples/stories/effects/function_effect_example.dart';
 import 'package:examples/stories/effects/move_effect_example.dart';
 import 'package:examples/stories/effects/opacity_effect_example.dart';
 import 'package:examples/stories/effects/remove_effect_example.dart';
+import 'package:examples/stories/effects/rotate_around_effect_example.dart';
 import 'package:examples/stories/effects/rotate_effect_example.dart';
 import 'package:examples/stories/effects/scale_effect_example.dart';
 import 'package:examples/stories/effects/sequence_effect_example.dart';
@@ -31,6 +33,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: RotateEffectExample()),
       codeLink: baseLink('effects/rotate_effect_example.dart'),
       info: RotateEffectExample.description,
+    )
+    ..add(
+      'Rotate Around Effect',
+      (_) => GameWidget(game: RotateAroundEffectExample()),
+      codeLink: baseLink('effects/rotate_around_effect_example.dart'),
+      info: RotateAroundEffectExample.description,
     )
     ..add(
       'Size Effect',
@@ -67,6 +75,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: RemoveEffectExample()),
       codeLink: baseLink('effects/remove_effect_example.dart'),
       info: RemoveEffectExample.description,
+    )
+    ..add(
+      'Function Effect',
+      (_) => GameWidget(game: FunctionEffectExample()),
+      codeLink: baseLink('effects/function_effect_example.dart'),
+      info: FunctionEffectExample.description,
     )
     ..add(
       'EffectControllers',

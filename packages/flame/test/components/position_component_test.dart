@@ -15,8 +15,8 @@ void main() {
       test('get/set x/y or position', () {
         final component = PositionComponent();
         component.position.setValues(2.2, 3.4);
-        expect(component.x, 2.2);
-        expect(component.y, 3.4);
+        expect(component.x, closeTo(2.2, toleranceFloat32(2.2)));
+        expect(component.y, closeTo(3.4, toleranceFloat32(3.4)));
 
         component.position = Vector2(1.0, 0.0);
         expect(component.x, 1.0);
@@ -24,14 +24,18 @@ void main() {
 
         component.x = 3.1;
         component.y = -2.2;
-        expect(component.position, Vector2(3.1, -2.2));
+        final value = Vector2(3.1, -2.2);
+        expect(
+          component.position,
+          closeToVector(value, toleranceVector2Float32(value)),
+        );
       });
 
       test('get/set width/height or size', () {
         final component = PositionComponent();
         component.size.setValues(2.2, 3.4);
-        expect(component.size.x, 2.2);
-        expect(component.size.y, 3.4);
+        expect(component.size.x, closeTo(2.2, toleranceFloat32(2.2)));
+        expect(component.size.y, closeTo(3.4, toleranceFloat32(3.4)));
 
         component.size = Vector2(1.0, 0.0);
         expect(component.width, 1.0);
@@ -39,7 +43,11 @@ void main() {
 
         component.width = 2.1;
         component.height = 3.3;
-        expect(component.size, Vector2(2.1, 3.3));
+        final value = Vector2(2.1, 3.3);
+        expect(
+          component.size,
+          closeToVector(value, toleranceVector2Float32(value)),
+        );
       });
 
       test('get/set rect', () {
@@ -221,15 +229,35 @@ void main() {
           component.add(RectangleHitbox());
           await game.ensureAdd(component);
 
-          expect(component.containsPoint(Vector2(1, 1)), true);
-          expect(component.containsPoint(Vector2(1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, 1)), true);
+          expect(
+            component.containsPoint(
+              Vector2(prevFloat32(1.0), prevFloat32(1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(prevFloat32(1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
+            ),
+            isTrue,
+          );
         },
       );
 
       testWithFlameGame(
-        'component with anchor bottomRight contains point on edge',
+        'component with anchor bottomRight contains point close to edge',
         (game) async {
           final component = _MyHitboxComponent();
           component.position.setValues(1, 1);
@@ -238,10 +266,33 @@ void main() {
           component.add(RectangleHitbox());
           await game.ensureAdd(component);
 
-          expect(component.containsPoint(Vector2(1, 1)), true);
-          expect(component.containsPoint(Vector2(1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, 1)), true);
+          expect(
+            component.containsPoint(
+              Vector2(
+                prevFloat32(1.0),
+                prevFloat32(1.0),
+              ),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(prevFloat32(1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
+            ),
+            isTrue,
+          );
         },
       );
 
@@ -286,17 +337,6 @@ void main() {
           expect(component.containsPoint(Vector2(2.6, 1.5)), false);
         },
       );
-
-      test('component with zero size does not contain point', () {
-        final component = PositionComponent();
-        component.position.setValues(2.0, 2.0);
-        component.size.setValues(0.0, 0.0);
-        component.angle = 0.0;
-        component.anchor = Anchor.center;
-
-        final point = Vector2(2.0, 2.0);
-        expect(component.containsPoint(point), false);
-      });
 
       test('component with zero size does not contain point', () {
         final component = PositionComponent();
@@ -553,40 +593,88 @@ void main() {
 
         component.flipVerticallyAroundCenter();
         // Same position after one vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         // Same position after flipping back the vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         // Same position after one horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back the horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         component.flipVerticallyAroundCenter();
         // Same position after flipping both horizontally and vertically.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both horizontally and vertically in
         // the reverse order.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
       });
 
       test('isHorizontallyFlipped', () {
@@ -645,8 +733,8 @@ void main() {
           final expectedX = 50 + 5 * (0.8 * cosA - 0.6 * sinA);
           final expectedY = 20 - 5 * (0.6 * cosA + 0.8 * sinA);
           final topRight = component.positionOf(Vector2(8, 0));
-          expect(topRight.x, closeTo(expectedX, 1e-13));
-          expect(topRight.y, closeTo(expectedY, 1e-13));
+          expect(topRight.x, closeTo(expectedX, toleranceFloat32(expectedX)));
+          expect(topRight.y, closeTo(expectedY, toleranceFloat32(expectedY)));
         }
       });
 
@@ -679,8 +767,16 @@ void main() {
           final globalY = (rnd.nextDouble() - 0.1) * 200;
           final localPoint = child.absoluteToLocal(Vector2(globalX, globalY));
           final globalPoint = child.absolutePositionOf(localPoint);
-          expect(globalPoint.x, closeTo(globalX, 1e-10));
-          expect(globalPoint.y, closeTo(globalY, 1e-10));
+          expect(
+            globalPoint,
+            closeToVector(
+              Vector2(globalX, globalY),
+              toleranceVector2Float32(Vector2(globalX, globalY)) +
+                  toleranceVector2Float32(parent.position) +
+                  toleranceVector2Float32(globalPoint) +
+                  toleranceVector2Float32(localPoint),
+            ),
+          );
         }
       });
 
@@ -1004,13 +1100,33 @@ void main() {
         for (var i = 0; i < 10; i++) {
           final a = (i / 10) * tau / 4;
           component.angle = a;
+          final componentRect = component.toRect();
           expect(
-            component.toRect(),
-            Rect.fromLTRB(
+            componentRect.left,
+            closeTo(
               -h * sin(a),
+              toleranceFloat32(componentRect.left),
+            ),
+          );
+          expect(
+            componentRect.top,
+            closeTo(
               0,
+              toleranceFloat32(componentRect.top),
+            ),
+          );
+          expect(
+            componentRect.right,
+            closeTo(
               w * cos(a),
+              toleranceFloat32(componentRect.right),
+            ),
+          );
+          expect(
+            componentRect.bottom,
+            closeTo(
               w * sin(a) + h * cos(a),
+              toleranceFloat32(componentRect.bottom),
             ),
           );
         }

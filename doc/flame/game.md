@@ -1,10 +1,11 @@
 # FlameGame
 
+The base of almost all Flame games is the `FlameGame` class, this is the root of your component
+tree. We refer to this component-based system as the Flame Component System (FCS). Throughout the
+documentation, FCS is used to reference this system.
+
 The `FlameGame` class implements a `Component` based `Game`. It has a tree of components
 and calls the `update` and `render` methods of all components that have been added to the game.
-
-We refer to this component-based system as the Flame Component System (FCS). Throughout the
-documentation, FCS is used to reference this system.
 
 Components can be added to the `FlameGame` directly in the constructor with the named `children`
 argument, or from anywhere else with the `add`/`addAll` methods. Most of the time however, you want
@@ -55,6 +56,9 @@ constructor.
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
 The first can be used if you just want to remove one component, and the second can be used when you
 want to remove a list of components. These methods exist on all `Component`s, including the world.
+
+The `FlameGame` has a built-in `World` called `world` and a `CameraComponent` instance called
+`camera`, you can read more about those in the [Camera section](camera.md).
 
 
 ## Game Loop

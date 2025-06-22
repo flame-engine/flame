@@ -432,6 +432,43 @@ class MyComponent extends PositionComponent with HasVisibility {
 ```
 
 
+### Render Contexts
+
+If you want a parent component to pass render-specific properties down its children tree, you
+can override the `renderContext` property on the parent component. You can return a custom
+class that inherits from `RenderContext`, and then use `findRenderContext` on the children
+while rendering. Render Contexts are stored as a stack and propagated whenever the render
+tree is navigated for rendering.
+
+For example:
+
+```dart
+class IntContext extends ComponentRenderContext {
+  int value;
+
+  IntContext(this.value);
+}
+
+class ParentWithContext extends Component {
+  @override
+  IntContext renderContext = IntContext(42);
+}
+
+class ChildReadsContext extends Component {
+  @override
+  void render(Canvas canvas) {
+    final context = findRenderContext<IntContext>();
+    // context.value available
+  }
+}
+```
+
+Each component will have access to the context of any parent that is above it in the
+component tree. If multiple components add the contexts matching the selected type
+`T`, the "closest" one will be returned (though typically you would create a unique
+context type for each component).
+
+
 ## PositionComponent
 
 This class represents a positioned object on the screen, being a floating rectangle, a rotating
@@ -705,6 +742,17 @@ final animationTicker = SpriteAnimationTicker(animation)
   };
 ```
 
+To reset the animation to the first frame when the component is removed, you can set
+`resetOnRemove` to `true`:
+
+```dart
+SpriteAnimationComponent(
+  animation: animation,
+  size: Vector2.all(64.0),
+  resetOnRemove: true,
+);
+```
+
 
 ## SpriteAnimationGroupComponent
 
@@ -821,9 +869,16 @@ spawn components along the edges of the shape set the `within` argument to false
 This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
 within the defined circle:
 
-The `factory` function takes an `int` as an argument, which is the index of the component that is
-being spawned, so if for example 4 components have been spawned already the 5th component will have
-the index 4, since the indexing starts at 0.
+The component supports two types of factories. The `factory` returns a single component and the
+`multiFactory` returns a list of components that are added in a single step.
+
+The factory functions takes an `int` as an argument, which is the number of components that have
+been spawned, so if for example 4 components have been spawned already the 5th call of the factory
+method will be called with the `amount=4`, since the counting starts at 0 for the first call.
+
+The `factory` with a single component is for backward compatibility, so you should use the
+`multiFactory` if in doubt. A single component `factory` will be wrapped internally to return a
+single item list and then used as the `multiFactory`.
 
 ```dart
 SpawnComponent(
@@ -1070,9 +1125,9 @@ For example you could create a diamond shapes polygon like this:
 void main() {
   PolygonComponent.relative(
     [
-      Vector2(0.0, 1.0), // Middle of top wall
+      Vector2(0.0, -1.0), // Middle of top wall
       Vector2(1.0, 0.0), // Middle of right wall
-      Vector2(0.0, -1.0), // Middle of bottom wall
+      Vector2(0.0, 1.0), // Middle of bottom wall
       Vector2(-1.0, 0.0), // Middle of left wall
     ],
     size: Vector2.all(100),
@@ -1089,9 +1144,6 @@ the center of the polygon.
 
 In the image you can see how the polygon shape formed by the purple arrows is defined by the red
 arrows.
-
-Remember to define the lists in a counter clockwise manner (if you think in the screen coordinate
-system where the y-axis is flipped, otherwise it is clockwise).
 
 
 ### RectangleComponent
@@ -1325,7 +1377,7 @@ class Player extends SpriteComponent with Notifier {
 Then our hud component could look like:
 
 ```dart
-class Hud extends PositionComponent with HasGameRef {
+class Hud extends PositionComponent with HasGameReference {
 
   @override
   void onLoad() {

@@ -9,7 +9,7 @@ void main() {
   group('HasDecorator', () {
     testGolden(
       'Component rendering with and without a Decorator',
-      (game) async {
+      (game, tester) async {
         await game.add(
           _DecoratedComponent(
             position: Vector2.all(25),

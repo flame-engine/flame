@@ -1,17 +1,18 @@
 name: flame_network_assets_example
+resolution: workspace
 description: A flame network assets example.
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
 
 dependencies:
-  flame: ^1.19.0
-  flame_network_assets: ^0.3.3
+  flame: ^1.29.0
+  flame_network_assets: ^0.3.3+12
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.2.1
+  flame_lint: ^1.4.0

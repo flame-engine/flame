@@ -35,6 +35,7 @@ There are multiple effects provided by Flame, and you can also
 - [`MoveByEffect`](#movebyeffect)
 - [`MoveToEffect`](#movetoeffect)
 - [`MoveAlongPathEffect`](#movealongpatheffect)
+- [`RotateAroundEffect`](#rotatearoundeffect)
 - [`RotateEffect.by`](#rotateeffectby)
 - [`RotateEffect.to`](#rotateeffectto)
 - [`ScaleEffect.by`](#scaleeffectby)
@@ -48,6 +49,7 @@ There are multiple effects provided by Flame, and you can also
 - [`ColorEffect`](#coloreffect)
 - [`SequenceEffect`](#sequenceeffect)
 - [`RemoveEffect`](#removeeffect)
+- [`FunctionEffect`](#functioneffect)
 
 An `EffectController` is an object that describes how the effect should evolve over time. If you
 think of the initial value of the effect as 0% progress, and the final value as 100% progress, then
@@ -175,6 +177,29 @@ curve drawn on the canvas.
 Another flag `oriented: true` instructs the target not only move along the curve, but also rotate
 itself in the direction the curve is facing at each point. With this flag the effect becomes both
 the move- and the rotate- effect at the same time.
+
+
+### `RotateAroundEffect`
+
+Rotates the target clockwise by the specified angle relative to its current orientation around
+the specified center. The angle is in radians. For example, the following effect will rotate the
+target 90º (=[tau]/4 in radians) clockwise around (100, 100).
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: rotate_around_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = RotateAroundEffect(
+  tau/4,
+  center: Vector2(100, 100),
+  EffectController(duration: 2),
+);
+```
 
 
 ### `RotateEffect.by`
@@ -519,7 +544,7 @@ final effect = RemoveEffect(delay: 3.0);
 ```
 
 
-## ColorEffect
+### ColorEffect
 
 This effect will change the base color of the paint, causing the rendered component to be tinted by
 the provided color between a provided range.
@@ -538,7 +563,7 @@ Usage example:
 final effect = ColorEffect(
   const Color(0xFF00FF00),
   EffectController(duration: 1.5),
-  opacityFrom = 0.2,
+  opacityFrom: 0.2,
   opacityTo: 0.8,
 );
 ```
@@ -549,6 +574,43 @@ applied to the component. In this example the effect will start with 20% and wil
 **Note:** Due to how this effect is implemented, and how Flutter's `ColorFilter` class works, this
 effect can't be mixed with other `ColorEffect`s, when more than one is added to the component, only
 the last one will have effect.
+
+
+### `FunctionEffect`
+
+The `FunctionEffect` class is a very generic Effect that allows you to do almost anything without
+having to define a new effect.
+
+It runs a function that takes the target and the progress of the effect and then the user can
+decide what to do with that input.
+
+This could for example be used to make game state changes that happen over time, but that isn't
+necessarily visual, like most other effects are.
+
+In the following example we have a `PlayerState` enum that we want to change over time. We want to
+change the state to `yawn` when the progress is over 50% and then back to `idle` when the progress
+is over 80%.
+
+```dart
+enum PlayerState {
+  idle,
+  yawn,
+}
+
+final effect = FunctionEffect<SpriteAnimationGroupComponent<PlayerState>>(
+  (target, progress) {
+    if (progress > 0.5) {
+      target.current = PlayerState.yawn;
+    } else if(progress > 0.8) {
+      target.current = PlayerState.idle;
+    }
+  },
+  EffectController(
+    duration: 10,
+    infinite: true,
+  ),
+);
+```
 
 
 ## Creating new effects

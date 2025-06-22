@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/src/sprite_sheet.dart';
 import 'package:meta/meta.dart';
 
-/// This is just a pair of <int, int>.
+/// This is just a pair of [int, int].
 ///
 /// Represents a position in a matrix, or in this case, on the tilemap.
 @immutable

@@ -1,3 +1,51 @@
+## 0.1.3+12
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+11
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+10
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+9
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+8
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+7
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 0.1.3+6
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 0.1.3+5
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+4
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+
+## 0.1.3+3
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+2
+
+ - Update a dependency to the latest release.
+
+## 0.1.3+1
+
+ - Update a dependency to the latest release.
+
 ## 0.1.3
 
  - **FIX**: Add nativeAngle to constructors where it makes sense ([#3197](https://github.com/flame-engine/flame/issues/3197)). ([e8704934](https://github.com/flame-engine/flame/commit/e8704934b19d9ed1982d35ce62819f01ac3de189))

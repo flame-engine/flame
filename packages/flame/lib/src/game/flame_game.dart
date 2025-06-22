@@ -162,7 +162,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     for (final component in children) {
       component.updateTree(dt);
     }
-    processRebalanceEvents();
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -186,7 +185,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
     handleResize(size);
-    children.forEach((child) => child.onParentResize(size));
+    for (final child in children) {
+      child.onParentResize(size);
+    }
   }
 
   /// Ensure that all pending tree operations finish.

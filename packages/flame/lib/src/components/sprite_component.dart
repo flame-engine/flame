@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite.dart';
@@ -11,9 +10,7 @@ export '../sprite.dart';
 /// angle.
 ///
 /// This a commonly used subclass of [Component].
-class SpriteComponent extends PositionComponent
-    with HasPaint
-    implements SizeProvider {
+class SpriteComponent extends PositionComponent with HasPaint {
   /// When set to true, the component is auto-resized to match the
   /// size of underlying sprite.
   bool _autoResize;
@@ -34,6 +31,7 @@ class SpriteComponent extends PositionComponent
     super.anchor,
     super.children,
     super.priority,
+    this.bleed,
     super.key,
   })  : assert(
           (size == null) == (autoResize ?? size == null),
@@ -66,6 +64,7 @@ class SpriteComponent extends PositionComponent
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
+    double? bleed,
   }) : this(
           sprite: Sprite(
             image,
@@ -82,6 +81,7 @@ class SpriteComponent extends PositionComponent
           anchor: anchor,
           children: children,
           priority: priority,
+          bleed: bleed,
           key: key,
         );
 
@@ -109,6 +109,8 @@ class SpriteComponent extends PositionComponent
     _resizeToSprite();
   }
 
+  double? bleed;
+
   @override
   @mustCallSuper
   void onMount() {
@@ -125,6 +127,7 @@ class SpriteComponent extends PositionComponent
       canvas,
       size: size,
       overridePaint: paint,
+      bleed: bleed,
     );
   }
 

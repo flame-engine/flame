@@ -1,3 +1,51 @@
+## 1.10.15
+
+ - Update a dependency to the latest release.
+
+## 1.10.14
+
+ - Update a dependency to the latest release.
+
+## 1.10.13
+
+ - Update a dependency to the latest release.
+
+## 1.10.12
+
+ - **FIX**: Bump Rive version and skip tests ([#3544](https://github.com/flame-engine/flame/issues/3544)). ([a3a7dd51](https://github.com/flame-engine/flame/commit/a3a7dd51faee57d74e89fbc29e7581ed44459832))
+
+## 1.10.11
+
+ - Update a dependency to the latest release.
+
+## 1.10.10
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 1.10.9
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.10.8
+
+ - Update a dependency to the latest release.
+
+## 1.10.7
+
+ - Update a dependency to the latest release.
+
+## 1.10.6
+
+ - Update a dependency to the latest release.
+
+## 1.10.5
+
+ - Update a dependency to the latest release.
+
+## 1.10.4
+
+ - Update a dependency to the latest release.
+
 ## 1.10.3
 
  - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))

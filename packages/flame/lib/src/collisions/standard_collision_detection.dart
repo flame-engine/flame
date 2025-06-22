@@ -167,7 +167,11 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
   }) sync* {
-    out?.forEach((e) => e.reset());
+    if (out != null) {
+      for (final result in out) {
+        result.reset();
+      }
+    }
     var currentRay = ray;
     for (var i = 0; i < maxDepth; i++) {
       final hasResultObject = (out?.length ?? 0) > i;

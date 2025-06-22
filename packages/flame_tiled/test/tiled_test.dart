@@ -1076,4 +1076,35 @@ void main() {
       });
     }
   });
+
+  group('RenderableTiledMap.TileData', () {
+    late RenderableTiledMap renderableTiledMap;
+
+    setUp(() async {
+      final bundle = TestAssetBundle(
+        imageNames: ['4_color_sprite.png'],
+        stringNames: ['deleted_layer_map.tmx'],
+      );
+      renderableTiledMap = await RenderableTiledMap.fromFile(
+        'deleted_layer_map.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+    });
+
+    test('same TileData is found by layerId and layerIndex', () {
+      final tileData1 = renderableTiledMap.getTileData(layerId: 6, x: 5, y: 3);
+      final tileData2 =
+          renderableTiledMap.getTileDataByLayerIndex(layerIndex: 4, x: 5, y: 3);
+      expect(tileData1, isNotNull);
+      expect(tileData2, isNotNull);
+      expect(tileData1, equals(tileData2));
+    });
+
+    test('returns null for non-existent layer', () {
+      expect(renderableTiledMap.getTileData(layerId: 3, x: 1, y: 1), isNull);
+      expect(renderableTiledMap.getTileData(layerId: 5, x: 1, y: 1), isNull);
+    });
+  });
 }

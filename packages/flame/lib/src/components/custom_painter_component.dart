@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flutter/widgets.dart';
 
 /// A [PositionComponent] that renders a [CustomPainter] at the designated
@@ -11,7 +10,7 @@ import 'package:flutter/widgets.dart';
 ///
 /// Note that given the active rendering nature of a game, `shouldRepaint` is
 /// ignored by this component.
-class CustomPainterComponent extends PositionComponent implements SizeProvider {
+class CustomPainterComponent extends PositionComponent {
   /// The [CustomPainter] used to render this component
   CustomPainter? painter;
 

@@ -17,7 +17,7 @@ around trying not to hit them.
   Ray2? ray;
   Ray2? reflection;
   Vector2 origin = Vector2(250, 100);
-  Paint paint = Paint()..color = Colors.amber.withOpacity(0.6);
+  Paint paint = Paint()..color = Colors.amber.withValues(alpha: 0.6);
   final speed = 100;
   final inertia = 3.0;
   final safetyDistance = 50;

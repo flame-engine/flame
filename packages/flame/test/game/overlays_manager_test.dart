@@ -99,11 +99,36 @@ void main() {
       expect(overlays.activeOverlays.length, 1);
     });
 
+    test('can toggle an overlay', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test', (ctx, game) => Container());
+      final added = overlays.toggle('test');
+      expect(added, true);
+      expect(overlays.isActive('test'), true);
+
+      final removed = overlays.toggle('test');
+      expect(removed, true);
+      expect(overlays.isActive('test'), false);
+      expect(overlays.activeOverlays.length, 0);
+    });
+
     test('can add multiple overlays at once', () {
       final overlays = FlameGame().overlays
         ..addEntry('test1', (ctx, game) => Container())
         ..addEntry('test2', (ctx, game) => Container());
       overlays.addAll(['test1', 'test2']);
+      expect(overlays.isActive('test1'), true);
+      expect(overlays.isActive('test2'), true);
+      expect(overlays.activeOverlays.length, 2);
+    });
+
+    test('can add multiple overlays with priorities', () {
+      final overlays = FlameGame().overlays
+        ..addEntry('test1', (ctx, game) => Container())
+        ..addEntry('test2', (ctx, game) => Container());
+      overlays.add('test1', priority: 1);
+      overlays.add('test2');
+      expect(overlays.activeOverlays, ['test2', 'test1']);
       expect(overlays.isActive('test1'), true);
       expect(overlays.isActive('test2'), true);
       expect(overlays.activeOverlays.length, 2);

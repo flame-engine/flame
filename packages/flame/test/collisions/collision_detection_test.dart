@@ -417,6 +417,23 @@ void main() {
         reason: 'Wrong number of intersections',
       );
     });
+
+    test('Rectangle should intersect with tilted polygon', () {
+      final polygonA = RectangleComponent.square(
+        size: 5,
+        position: Vector2(-25, 0),
+        anchor: Anchor.center,
+      );
+      const bottomDisplacement = 1 / 18;
+      final polygonB = PolygonComponent([
+        Vector2(-25, -25),
+        Vector2(55, -25),
+        Vector2(55 + bottomDisplacement, 25),
+        Vector2(-25 + bottomDisplacement, 25),
+      ]);
+      final intersections = geometry.intersections(polygonA, polygonB);
+      expect(intersections, isNotEmpty);
+    });
   });
 
   group('Rectangle intersections tests', () {
@@ -1176,7 +1193,7 @@ void main() {
         // Extended cast
         collisionSystem.collisionDetection.raycast(
           ray,
-          maxDistance: Vector2.all(10).length,
+          maxDistance: Vector2.all(nextFloat32(10)).length,
           out: result,
         );
         expect(result.hitbox?.parent, world.children.first);
@@ -1803,6 +1820,31 @@ void main() {
         final reflectionRay2 = results[1].reflectionRay;
         expect(reflectionRay2?.origin, Vector2(50, 0));
         expect(reflectionRay2?.direction, Vector2(1, 1)..normalize());
+      },
+      'make sure that ray does not escape circle hitbox': (game) async {
+        final world = (game as FlameGame).world;
+        final circle = CircleComponent(
+          position: Vector2(0, 0),
+          radius: 5,
+          anchor: Anchor.center,
+        )..add(CircleHitbox());
+        await world.ensureAdd(circle);
+        final ray = Ray2(
+          origin: Vector2(0, 0),
+          direction: Vector2(1.0, 0),
+        );
+        final results = game.collisionDetection.raytrace(ray);
+        expect(results.length, 10);
+        expect(results.first.isActive, isTrue);
+        expect(results.first.isInsideHitbox, isTrue);
+        expect(
+          results.first.intersectionPoint,
+          Vector2(5, 0),
+        );
+        final reflectionRay = results.first.reflectionRay;
+        expect(reflectionRay?.origin, Vector2(5, 0));
+        expect(reflectionRay?.direction, Vector2(-1, 0)..normalize());
+        expect(results.first.normal, Vector2(-1, 0));
       },
     });
   });

@@ -11,21 +11,13 @@ class SizeByEffectGame extends FlameGame {
       position: size / 2,
       size: Vector2(45, 40),
       onTap: (ember) {
-        if (reset = !reset) {
-          ember.add(
-            SizeEffect.by(
-              Vector2(-15, 30),
-              EffectController(duration: 0.75),
-            ),
-          );
-        } else {
-          ember.add(
-            SizeEffect.by(
-              Vector2(15, -30),
-              EffectController(duration: 0.75),
-            ),
-          );
-        }
+        ember.add(
+          SizeEffect.by(
+            reset ? Vector2(-15, 30) : Vector2(15, -30),
+            EffectController(duration: 0.75),
+          ),
+        );
+        reset = !reset;
       },
     )..anchor = Anchor.center;
 
