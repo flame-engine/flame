@@ -903,14 +903,21 @@ void main() {
           final target = targets.elementAt(i);
           final angle = expectedAngles.elementAt(i);
 
+          final result = component.angleTo(target);
           expectDouble(
-            component.angleTo(target),
-            angle - component.angle,
+            result,
+            (angle - component.angle) % tau,
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle % tau,
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -931,12 +938,18 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            angle - component.angle,
+            (angle - component.angle) % tau,
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle % tau,
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -971,12 +984,18 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            angle - component.angle,
+            (angle - component.angle) % tau,
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle % tau,
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -987,7 +1006,88 @@ void main() {
 
         component.nativeAngle = 3 * pi / 2;
         component.lookAt(component.absolutePosition);
-        expectDouble(component.angle, -component.nativeAngle, epsilon: 1e-10);
+        expectDouble(
+          component.angle,
+          -component.nativeAngle % tau,
+          epsilon: 1e-10,
+        );
+      });
+
+      test('lookAt with parental flips', () {
+        final child = PositionComponent();
+        final wrapper = PositionComponent(
+          children: [child],
+        );
+
+        final flips = [
+          (Vector2(1, 1), Vector2(1, 1)),
+          (Vector2(1, 1), Vector2(1, -1)),
+          (Vector2(1, 1), Vector2(-1, 1)),
+          (Vector2(1, 1), Vector2(-1, -1)),
+          (Vector2(1, -1), Vector2(1, 1)),
+          (Vector2(1, -1), Vector2(1, -1)),
+          (Vector2(1, -1), Vector2(-1, 1)),
+          (Vector2(1, -1), Vector2(-1, -1)),
+          (Vector2(-1, 1), Vector2(1, 1)),
+          (Vector2(-1, 1), Vector2(1, -1)),
+          (Vector2(-1, 1), Vector2(-1, 1)),
+          (Vector2(-1, 1), Vector2(-1, -1)),
+          (Vector2(-1, -1), Vector2(1, 1)),
+          (Vector2(-1, -1), Vector2(1, -1)),
+          (Vector2(-1, -1), Vector2(-1, 1)),
+          (Vector2(-1, -1), Vector2(-1, -1)),
+        ];
+
+        final notableAngles = List.generate(8, (i) => i * tau / 8);
+        final expectedResults = [
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          0, 7, 6, 5, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, 7, 6, 5, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+          4, 5, 6, 7, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, 5, 6, 7, //
+        ];
+        var idx = 0;
+        for (final flip in flips) {
+          wrapper.scale = flip.$1;
+          child.scale = flip.$2;
+
+          for (final angle in notableAngles) {
+            final target = Vector2(0, -1)..rotate(angle);
+            expectDouble(
+              child.angleTo(target),
+              expectedResults[idx++] * tau / 8,
+              epsilon: 1e-10,
+              reason: 'angleTo with flip $flip, angle $angle, target $target',
+            );
+          }
+        }
       });
     });
 

@@ -396,8 +396,14 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component, then it is treated
   /// as being north.
   double angleTo(Vector2 target) {
-    final parentAbsoluteScale = _parentAbsoluteScale;
     final direction = target - absolutePosition;
+    if (direction.isZero()) {
+      // If the target coincides with the component, we treat it as being
+      // north.
+      return -nativeAngle % tau;
+    }
+
+    final parentAbsoluteScale = _parentAbsoluteScale;
     final targetAngle = math.atan2(
       direction.x * scale.x.sign,
       -direction.y * scale.y.sign,
@@ -411,8 +417,9 @@ class PositionComponent extends Component
     final hasSelfYFlip =
         !parentAbsoluteScale.y.isNegative && scale.y.isNegative;
 
-    return (hasOddFlips ? -1 : 1) * angleDifference +
+    final result = (hasOddFlips ? -1 : 1) * angleDifference +
         (hasSelfYFlip ? 1 : 0) * math.pi;
+    return result % tau;
   }
 
   /// Rotates/snaps the component to look at the [target].
@@ -422,7 +429,10 @@ class PositionComponent extends Component
   /// [target] should to be in absolute/world coordinate system.
   ///
   /// See also: [angleTo]
-  void lookAt(Vector2 target) => angle += angleTo(target);
+  void lookAt(Vector2 target) {
+    // TODO(luan): consider enforcing the normalization on the angle setter
+    angle = (angle + angleTo(target)) % tau;
+  }
 
   //#endregion
 
