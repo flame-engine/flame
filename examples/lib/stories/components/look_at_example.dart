@@ -48,7 +48,7 @@ class LookAtExample extends FlameGame {
         children: [
           _chopper1 = SpriteAnimationComponent(
             //nativeAngle: pi,
-            scale: Vector2(-1, 1),
+            scale: Vector2(1, 1),
             //angle: 1,
             size: Vector2.all(128),
             anchor: Anchor.center,

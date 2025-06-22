@@ -387,9 +387,10 @@ class PositionComponent extends Component
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
   /// Returns the angle formed by component's orientation vector and a vector
-  /// starting at component's absolute position and ending at [target]. This
-  /// angle is measured in clockwise direction. [target] should be in absolute/world
-  /// coordinate system.
+  /// starting at component's absolute position and ending at [target]. I.e.
+  /// how much the current component need to rotate to face the target. This
+  /// angle is measured in clockwise direction. [target] should be in
+  /// absolute/world coordinate system.
   ///
   /// Uses [nativeAngle] to decide the orientation direction of the component.
   /// See [lookAt] to make the component instantly rotate towards target.
@@ -397,13 +398,23 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component, then it is treated
   /// as being north.
   double angleTo(Vector2 target) {
-    final angleDifference = math.atan2(
-          target.x - absolutePosition.x,
-          absolutePosition.y - target.y,
-        ) -
-        (nativeAngle + absoluteAngle);
-
-    return angleDifference;
+    final absoluteScale = this.absoluteScale;
+    var atanA = target.x - absolutePosition.x;
+    var atanB = absolutePosition.y - target.y;
+    if (absoluteScale.x.isNegative) {
+      atanA = absolutePosition.x - target.x;
+    }
+    if (absoluteScale.y.isNegative) {
+      atanB = target.y - absolutePosition.y;
+    }
+    var angleDifference =
+        math.atan2(atanA, atanB) - (nativeAngle + absoluteAngle);
+    if (absoluteScale.y.isNegative) {
+      angleDifference -= math.pi;
+    }
+    final flippedRotation =
+        absoluteScale.x.isNegative ^ absoluteScale.y.isNegative;
+    return (flippedRotation ? -angleDifference : angleDifference);
   }
 
   /// Rotates/snaps the component to look at the [target].
