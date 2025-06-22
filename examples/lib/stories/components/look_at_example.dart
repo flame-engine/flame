@@ -20,6 +20,7 @@ class LookAtExample extends FlameGame {
 
   late PositionComponent _chopper1;
   //late PositionComponent _chopper2;
+  final List<TextComponent> chopperAbsoluteScales = [];
   final List<TextComponent> chopperAngles = [];
   final List<TextComponent> chopperAngleTo = [];
 
@@ -42,13 +43,13 @@ class LookAtExample extends FlameGame {
     // is facing in down/south direction in the original image.
     world.add(
       PositionComponent(
-        scale: Vector2(1, 1),
+        scale: Vector2(-1, -1),
         //angle: 1,
-        position: Vector2(0, 200),
+        position: Vector2(0, 0),
         children: [
           _chopper1 = SpriteAnimationComponent(
             //nativeAngle: pi,
-            scale: Vector2(1, 1),
+            scale: Vector2(-1, -1),
             //angle: 1,
             size: Vector2.all(128),
             anchor: Anchor.center,
@@ -94,6 +95,15 @@ class LookAtExample extends FlameGame {
         text: 'nativeAngle = pi',
         textRenderer: shaded,
         anchor: Anchor.center,
+        position: _chopper1.absolutePosition + Vector2(0, -170),
+      ),
+    );
+
+    chopperAbsoluteScales.add(
+      TextComponent(
+        text: 'absoluteScale',
+        textRenderer: shaded,
+        anchor: Anchor.center,
         position: _chopper1.absolutePosition + Vector2(0, -140),
       ),
     );
@@ -134,7 +144,8 @@ class LookAtExample extends FlameGame {
     //  ),
     //);
 
-    world.addAll([...chopperAngles, ...chopperAngleTo]);
+    world.addAll(
+        [...chopperAngles, ...chopperAngleTo, ...chopperAbsoluteScales]);
   }
 }
 
@@ -163,6 +174,8 @@ class _TapWorld extends World
       choppers[i].lookAt(event.localPosition);
       game.chopperAngles[i].text =
           'absoluteAngle = ${choppers[i].absoluteAngle.toStringAsFixed(2)}';
+      game.chopperAbsoluteScales[i].text =
+          'absoluteScale = ${choppers[i].absoluteScale}';
     }
   }
 }

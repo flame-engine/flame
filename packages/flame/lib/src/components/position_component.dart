@@ -398,23 +398,60 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component, then it is treated
   /// as being north.
   double angleTo(Vector2 target) {
-    final absoluteScale = this.absoluteScale;
-    var atanA = target.x - absolutePosition.x;
-    var atanB = absolutePosition.y - target.y;
-    if (absoluteScale.x.isNegative) {
-      atanA = absolutePosition.x - target.x;
-    }
-    if (absoluteScale.y.isNegative) {
-      atanB = target.y - absolutePosition.y;
-    }
-    var angleDifference =
-        math.atan2(atanA, atanB) - (nativeAngle + absoluteAngle);
-    if (absoluteScale.y.isNegative) {
-      angleDifference -= math.pi;
-    }
-    final flippedRotation =
-        absoluteScale.x.isNegative ^ absoluteScale.y.isNegative;
-    return (flippedRotation ? -angleDifference : angleDifference);
+    //final absoluteScale = this.absoluteScale;
+    //var atanA = target.x - absolutePosition.x;
+    //var atanB = absolutePosition.y - target.y;
+    //if (absoluteScale.x.isNegative) {
+    //  atanA = absolutePosition.x - target.x;
+    //}
+    //if (absoluteScale.y.isNegative) {
+    //  atanB = target.y - absolutePosition.y;
+    //}
+    //var angleDifference =
+    //    math.atan2(atanA, atanB) - (nativeAngle + absoluteAngle);
+    //if (absoluteScale.y.isNegative) {
+    //  angleDifference -= math.pi;
+    //}
+
+    final parentAbsoluteScale =
+        ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
+              Vector2.all(1.0),
+              (totalScale, c) => totalScale..multiply(c.scale),
+            );
+
+    final direction = target - absolutePosition;
+    final targetAngle = math.atan2(
+      direction.x * scale.x.sign,
+      -direction.y * scale.y.sign,
+    );
+    final angleDifference = targetAngle - absoluteAngle;
+    final ancestorFlippedRotation =
+        parentAbsoluteScale.x.isNegative ^ parentAbsoluteScale.y.isNegative;
+    final localFlippedRotation = scale.x.isNegative ^ scale.y.isNegative;
+    return switch ((
+      parentAbsoluteScale.x.isNegative,
+      parentAbsoluteScale.y.isNegative,
+      scale.x.isNegative,
+      scale.y.isNegative,
+    )) {
+      (false, false, false, false) => angleDifference,
+      (false, false, false, true) => -angleDifference + math.pi,
+      (false, false, true, false) => -angleDifference,
+      (false, false, true, true) => angleDifference + math.pi,
+      (false, true, false, false) => -angleDifference,
+      (false, true, false, true) => angleDifference,
+      (false, true, true, false) => angleDifference,
+      (false, true, true, true) => -angleDifference,
+      (true, false, false, false) => -angleDifference,
+      (true, false, false, true) => angleDifference + math.pi,
+      (true, false, true, false) => angleDifference,
+      (true, false, true, true) => -angleDifference + math.pi,
+      (true, true, false, false) => angleDifference,
+      (true, true, false, true) => -angleDifference,
+      (true, true, true, false) => -angleDifference,
+      (true, true, true, true) => angleDifference,
+    };
+    return (ancestorFlippedRotation ? -angleDifference : angleDifference);
   }
 
   /// Rotates/snaps the component to look at the [target].
