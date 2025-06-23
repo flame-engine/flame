@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/rotate_effect.dart';
 import 'package:flame_test/flame_test.dart';
@@ -59,13 +60,13 @@ void main() {
 
       final effect = RotateEffect.by(1, EffectController(duration: 1));
       component.add(effect..removeOnFinish = false);
-      for (var i = 0; i < 5; i++) {
-        expect(component.angle, i);
+      for (var i = 0.0; i < 5; i++) {
+        expect(component.angle, i.toNormalizedAngle());
         // After each reset the object will be rotated by 1 radian relative to
         // its orientation at the start of the effect
         effect.reset();
         game.update(1);
-        expect(component.angle, i + 1);
+        expect(component.angle, (i + 1.0).toNormalizedAngle());
       }
     });
 
@@ -110,7 +111,7 @@ void main() {
       for (var i = 0; i < 10; i++) {
         game.update(1);
       }
-      expect(component.angle, closeTo(5, 1e-15));
+      expect(component.angle, closeTo(5.0.toNormalizedAngle(), 1e-15));
       expect(component.children.length, 0);
     });
 

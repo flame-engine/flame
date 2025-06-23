@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
@@ -906,7 +907,7 @@ void main() {
           final result = component.angleTo(target);
           expectDouble(
             result,
-            (angle - component.angle) % tau,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
             reason: 'angleTo $i ($angle)',
           );
@@ -914,7 +915,7 @@ void main() {
           component.lookAt(target);
           expectDouble(
             component.angle,
-            angle % tau,
+            angle.toNormalizedAngle(),
             epsilon: 1e-10,
             reason: 'lookAt $i ($angle)',
           );
@@ -930,7 +931,7 @@ void main() {
           Vector2(-1, 0),
           Vector2.all(-50),
         ];
-        final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
+        final expectedAngles = [pi / 2, pi / 4, pi, -3 * pi / 4];
 
         for (var i = 0; i < targets.length; ++i) {
           final target = targets.elementAt(i);
@@ -938,7 +939,7 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            (angle - component.angle) % tau,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
             reason: 'angleTo $i ($angle)',
           );
@@ -946,7 +947,7 @@ void main() {
           component.lookAt(target);
           expectDouble(
             component.angle,
-            angle % tau,
+            angle.toNormalizedAngle(),
             epsilon: 1e-10,
             reason: 'lookAt $i ($angle)',
           );
@@ -984,7 +985,7 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            (angle - component.angle) % tau,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
             reason: 'angleTo $i ($angle)',
           );
@@ -992,7 +993,7 @@ void main() {
           component.lookAt(target);
           expectDouble(
             component.angle,
-            angle % tau,
+            angle.toNormalizedAngle(),
             epsilon: 1e-10,
             reason: 'lookAt $i ($angle)',
           );
@@ -1008,7 +1009,7 @@ void main() {
         component.lookAt(component.absolutePosition);
         expectDouble(
           component.angle,
-          -component.nativeAngle % tau,
+          -component.nativeAngle.toNormalizedAngle(),
           epsilon: 1e-10,
         );
       });
@@ -1040,38 +1041,38 @@ void main() {
 
         final notableAngles = List.generate(8, (i) => i * tau / 8);
         final expectedResults = [
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          0, 7, 6, 5, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, 7, 6, 5, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
-          4, 5, 6, 7, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, 5, 6, 7, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, -4, -3, -2, -1, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
         ];
         var idx = 0;
         for (final flip in flips) {

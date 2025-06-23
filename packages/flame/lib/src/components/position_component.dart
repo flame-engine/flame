@@ -146,7 +146,7 @@ class PositionComponent extends Component
   @override
   double get angle => transform.angle;
   @override
-  set angle(double a) => transform.angle = a;
+  set angle(double a) => transform.angle = a.toNormalizedAngle();
 
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
@@ -393,13 +393,13 @@ class PositionComponent extends Component
   /// Uses [nativeAngle] to decide the orientation direction of the component.
   /// See [lookAt] to make the component instantly rotate towards target.
   ///
-  /// Note: If target coincides with the current component, then it is treated
-  /// as being north.
+  /// Note: If target coincides with the current component's position, then it
+  /// is treated as being north.
   double angleTo(Vector2 target) {
     final direction = target - absolutePosition;
     if (direction.isZero()) {
-      // If the target coincides with the component, we treat it as being
-      // north.
+      // If the target coincides with the component's position, we treat it as
+      // being north.
       return -nativeAngle % tau;
     }
 
@@ -419,7 +419,7 @@ class PositionComponent extends Component
 
     final result = (hasOddFlips ? -1 : 1) * angleDifference +
         (hasSelfYFlip ? 1 : 0) * math.pi;
-    return result % tau;
+    return result.toNormalizedAngle();
   }
 
   /// Rotates/snaps the component to look at the [target].
@@ -430,8 +430,7 @@ class PositionComponent extends Component
   ///
   /// See also: [angleTo]
   void lookAt(Vector2 target) {
-    // TODO(luan): consider enforcing the normalization on the angle setter
-    angle = (angle + angleTo(target)) % tau;
+    angle += angleTo(target);
   }
 
   //#endregion
