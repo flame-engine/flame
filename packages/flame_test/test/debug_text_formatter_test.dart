@@ -9,7 +9,7 @@ void main() {
   group('DebugTextFormatter', () {
     testGolden(
       'Render debug text',
-      (game) async {
+      (game, tester) async {
         game.add(
           _TextElementsComponent([
             DebugTextRenderer().format('one two  three')..translate(5, 5),

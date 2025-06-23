@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
@@ -29,6 +30,42 @@ class RasterSpriteComponent extends SpriteComponent {
     super.bleed,
     super.key,
   });
+
+  RasterSpriteComponent.fromImage(
+    Image image, {
+    Vector2? srcPosition,
+    Vector2? srcSize,
+    bool? autoResize,
+    Paint? paint,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    double nativeAngle = 0,
+    Anchor? anchor,
+    Iterable<Component>? children,
+    int? priority,
+    ComponentKey? key,
+    double? bleed,
+  }) : this(
+          baseSprite: Sprite(
+            image,
+            srcPosition: srcPosition,
+            srcSize: srcSize,
+          ),
+          autoResize: autoResize,
+          paint: paint,
+          position: position,
+          size: size,
+          scale: scale,
+          angle: angle,
+          nativeAngle: nativeAngle,
+          anchor: anchor,
+          children: children,
+          priority: priority,
+          bleed: bleed,
+          key: key,
+        );
 
   /// The base sprite to be rasterized.
   final Sprite baseSprite;

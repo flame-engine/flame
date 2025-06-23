@@ -66,7 +66,7 @@ void main() {
 
     testGolden(
       'can render a batch with blend mode',
-      (game) async {
+      (game, tester) async {
         final spriteSheet = await loadImage('alphabet.png');
         final spriteBatch = SpriteBatch(spriteSheet);
 
@@ -97,7 +97,7 @@ void main() {
 
     testGolden(
       'can render a batch without blend mode',
-      (game) async {
+      (game, tester) async {
         final spriteSheet = await loadImage('alphabet.png');
         final spriteBatch = SpriteBatch(spriteSheet);
 

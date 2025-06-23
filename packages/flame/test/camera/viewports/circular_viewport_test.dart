@@ -14,7 +14,7 @@ void main() {
     // should be centered within the image, and has no anti-aliasing.
     testGolden(
       'elliptical viewport',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,
@@ -30,7 +30,7 @@ void main() {
     // Same as before, but the position is set with an anchor.
     testGolden(
       'elliptical viewport with anchor',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,
@@ -47,7 +47,7 @@ void main() {
     // Renders magenta border around the viewport's edge behind the world.
     testGolden(
       'circular viewport with debug mode',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,
@@ -65,7 +65,7 @@ void main() {
     // that the new clip mask matches what we'd expect.
     testGolden(
       'circular viewport after resize',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,
@@ -83,7 +83,7 @@ void main() {
     // The cross-hair should render in the center of the viewport.
     testGolden(
       'circular viewport with a HUD element',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final viewport = CircularViewport(20)..position = Vector2(5, 5);
         final camera = CameraComponent(world: world, viewport: viewport);
@@ -100,7 +100,7 @@ void main() {
     // Should not be visible.
     testGolden(
       'circular viewport with debug mode',
-      (game) async {
+      (game, tester) async {
         final world = _MyWorld();
         final camera = CameraComponent(
           world: world,

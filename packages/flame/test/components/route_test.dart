@@ -295,7 +295,7 @@ void main() {
 
     testGolden(
       'Rendering of opaque routes',
-      (game) async {
+      (game, tester) async {
         final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
@@ -323,7 +323,7 @@ void main() {
 
     testGolden(
       'Rendering of transparent routes',
-      (game) async {
+      (game, tester) async {
         final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
@@ -352,7 +352,7 @@ void main() {
 
     testGolden(
       'Rendering of transparent routes with decorators',
-      (game) async {
+      (game, tester) async {
         final router = RouterComponent(
           initialRoute: 'initial',
           routes: {
@@ -384,7 +384,7 @@ void main() {
 
     testGolden(
       'Rendering effect can be removed',
-      (game) async {
+      (game, tester) async {
         final router = RouterComponent(
           initialRoute: 'initial',
           routes: {

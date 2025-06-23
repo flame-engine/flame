@@ -9,7 +9,7 @@ void main() {
   group('AdvancedButtonComponent', () {
     testGolden(
       'label renders correctly',
-      (game) async {
+      (game, tester) async {
         await game.add(
           AdvancedButtonComponent(
             defaultSkin: RectangleComponent(size: Vector2(40, 20)),
