@@ -22,7 +22,7 @@ class SpeedEffectController extends EffectController
 
   final DurationEffectController _child;
   final double speed;
-  late MeasurableEffect _parentEffect;
+  MeasurableEffect? _parentEffect;
 
   /// Note that this controller's [started] property is true even if the
   /// controller is not initialized yet. This is because we want the [Effect]
@@ -47,7 +47,9 @@ class SpeedEffectController extends EffectController
   /// is over.
   @override
   double get duration {
-    return _initialized ? child.duration : _parentEffect.measure() / speed;
+    return _initialized
+        ? child.duration
+        : (_parentEffect?.measure() ?? double.nan) / speed;
   }
 
   @override
