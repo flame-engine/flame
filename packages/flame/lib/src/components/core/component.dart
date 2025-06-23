@@ -915,7 +915,7 @@ class Component {
     if (_parent == null) {
       parent._children?.remove(this);
     } else {
-      _remove();
+      _remove(parent);
       assert(_parent == null);
     }
     return LifecycleEventStatus.done;
@@ -923,8 +923,9 @@ class Component {
 
   @internal
   LifecycleEventStatus handleLifecycleEventMove(Component newParent) {
-    if (_parent != null) {
-      _remove();
+    final parent = _parent;
+    if (parent != null) {
+      _remove(parent);
     }
     if (newParent.isMounted) {
       _parent = newParent;
@@ -1059,10 +1060,8 @@ class Component {
     _removeCompleter = null;
   }
 
-  void _remove() {
-    assert(_parent != null, 'Trying to remove a component with no parent');
-
-    _parent!._internalChildren.remove(this);
+  void _remove(Component parent) {
+    parent._internalChildren.remove(this);
     propagateToChildren(
       (Component component) {
         component
