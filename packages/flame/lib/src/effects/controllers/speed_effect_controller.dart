@@ -22,7 +22,7 @@ class SpeedEffectController extends EffectController
 
   final DurationEffectController _child;
   final double speed;
-  late MeasurableEffect _parentEffect;
+  MeasurableEffect? _parentEffect;
 
   /// Note that this controller's [started] property is true even if the
   /// controller is not initialized yet. This is because we want the [Effect]
@@ -39,8 +39,18 @@ class SpeedEffectController extends EffectController
   @override
   bool get completed => child.completed;
 
+  /// The duration of the effect.
+  ///
+  /// If this is called before the effect has started, it might not have the
+  /// correct duration when it is later used, for example if you're using a
+  /// [DelayedEffectController] and then the component moves before the delay
+  /// is over.
   @override
-  double? get duration => _initialized ? child.duration : double.nan;
+  double get duration {
+    return _initialized
+        ? child.duration
+        : (_parentEffect?.measure() ?? double.nan) / speed;
+  }
 
   @override
   double get progress => child.progress;
@@ -48,13 +58,8 @@ class SpeedEffectController extends EffectController
   @override
   double advance(double dt) {
     if (!_initialized) {
+      child.duration = duration;
       _initialized = true;
-      final measure = _parentEffect.measure();
-      assert(
-        measure >= 0,
-        'negative measure returned by ${_parentEffect.runtimeType}: $measure',
-      );
-      child.duration = measure / speed;
     }
     return child.advance(dt);
   }
