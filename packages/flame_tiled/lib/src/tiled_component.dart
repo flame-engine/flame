@@ -119,6 +119,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     Paint Function(double opacity)? layerPaintFactory,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
+    ComponentKey? key,
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -137,6 +138,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         atlasPackingSpacingY: atlasPackingSpacingY,
       ),
       priority: priority,
+      key: key,
     );
   }
 
