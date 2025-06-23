@@ -107,13 +107,9 @@ abstract class EffectController {
       'Either duration or speed must be specified',
     );
     assert(
-      !(duration != null && speed != null),
-      'Both duration and speed cannot be specified at the same time',
-    );
-    assert(
-      !(reverseDuration != null && reverseSpeed != null),
-      'Both reverseDuration and reverseSpeed cannot be specified at the '
-      'same time',
+      !((duration != null || reverseDuration != null) &&
+          (speed != null || reverseSpeed != null)),
+      'Both duration and speed arguments cannot be specified at the same time',
     );
     assert(
       (speed ?? 1) > 0,
