@@ -229,6 +229,9 @@ class PositionComponent extends Component
 
   /// The resulting angle after all the ancestors and the components own angles
   /// and scales have been applied.
+  ///
+  /// Do note that this angle isn't normalized, but you can normalize it by
+  /// calling `absoluteAngle.toNormalizedAngle()` afterwards.
   double get absoluteAngle {
     var angle = 0.0;
     var totalScaleX = 1.0;
@@ -257,7 +260,7 @@ class PositionComponent extends Component
       }
     }
 
-    return angle.toNormalizedAngle();
+    return angle;
   }
 
   /// The resulting scale after all the ancestors and the components own scale
