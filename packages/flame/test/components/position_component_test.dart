@@ -1041,10 +1041,10 @@ void main() {
         final notableAngles = List.generate(8, (i) => i * tau / 8);
         final expectedResults = [
           0, 1, 2, 3, 4, -3, -2, -1, //
-          4, -3, -2, -1, 0, 1, 2, 3, //
-          0, 1, 2, 3, 4, -3, -2, -1, //
           -4, -3, -2, -1, 0, 1, 2, 3, //
-          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
           0, -1, -2, -3, -4, 3, 2, 1, //
           -4, 3, 2, 1, 0, -1, -2, -3, //
           0, -1, -2, -3, 4, 3, 2, 1, //
@@ -1052,25 +1052,25 @@ void main() {
           4, 3, 2, 1, 0, -1, -2, -3, //
           0, -1, -2, -3, -4, 3, 2, 1, //
           4, 3, 2, 1, 0, -1, -2, -3, //
-          -4, -3, -2, -1, 0, 1, 2, 3, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, 4, -3, -2, -1, //
           4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, -4, -3, -2, -1, //
           0, 1, 2, 3, 4, -3, -2, -1, //
-          4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, 4, -3, -2, -1, //
-          4, -3, -2, -1, 0, 1, 2, 3, //
-          4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
           0, -1, -2, -3, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
           0, -1, -2, -3, 4, 3, 2, 1, //
           0, -1, -2, -3, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
           0, -1, -2, -3, 4, 3, 2, 1, //
-          4, 3, 2, 1, 0, -1, -2, -3, //
-          4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, 4, -3, -2, -1, //
-          4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, 4, -3, -2, -1, //
         ];
         var idx = 0;
@@ -1080,6 +1080,7 @@ void main() {
 
           for (final angle in notableAngles) {
             final target = Vector2(0, -1)..rotate(angle);
+            print(idx);
             expectDouble(
               child.angleTo(target),
               expectedResults[idx++] * tau / 8,
@@ -1292,9 +1293,9 @@ void main() {
 
         expect(child.absoluteAngle, pi / 4);
         parent.flipHorizontally();
-        expect(child.absoluteAngle, (-pi / 4) % tau);
+        expect(child.absoluteAngle, -pi / 4);
         parent.flipVertically();
-        expect(child.absoluteAngle, pi / 4 + pi);
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
       });
 
       testWithFlameGame('absoluteAngle with flipped child', (game) async {
@@ -1306,9 +1307,9 @@ void main() {
 
         expect(child.absoluteAngle, pi / 4);
         child.flipHorizontally();
-        expect(child.absoluteAngle, (-pi / 4) % tau);
+        expect(child.absoluteAngle, -pi / 4);
         child.flipVertically();
-        expect(child.absoluteAngle, pi / 4 + pi);
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
       });
 
       testWithFlameGame('absoluteAngle with flipped child and parent',
@@ -1321,9 +1322,9 @@ void main() {
 
         expect(child.absoluteAngle, pi / 4);
         child.flipHorizontally();
-        expect(child.absoluteAngle, (-pi / 4) % tau);
+        expect(child.absoluteAngle, -pi / 4);
         parent.flipVertically();
-        expect(child.absoluteAngle, pi / 4 + pi);
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
       });
     });
   });
