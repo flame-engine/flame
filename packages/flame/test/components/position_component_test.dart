@@ -1080,7 +1080,6 @@ void main() {
 
           for (final angle in notableAngles) {
             final target = Vector2(0, -1)..rotate(angle);
-            print(idx);
             expectDouble(
               child.angleTo(target),
               expectedResults[idx++] * tau / 8,
