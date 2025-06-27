@@ -26,6 +26,7 @@ class SpawnComponent extends Component {
     required double period,
     PositionComponent Function(int amount)? factory,
     List<PositionComponent> Function(int amount)? multiFactory,
+    this.spawnCount,
     this.area,
     this.within = true,
     this.selfPositioning = false,
@@ -55,6 +56,7 @@ class SpawnComponent extends Component {
     required double this.maxPeriod,
     PositionComponent Function(int amount)? factory,
     List<PositionComponent> Function(int amount)? multiFactory,
+    this.spawnCount,
     this.area,
     this.within = true,
     this.selfPositioning = false,
@@ -109,6 +111,13 @@ class SpawnComponent extends Component {
 
   /// The area where the components should be spawned.
   Shape? area;
+
+  /// The amount of components that should be spawned until the [SpawnComponent]
+  /// is removed from its parent.
+  ///
+  /// Do note that it is possible to overshoot the [spawnCount] for one tick if
+  /// the [multiFactory] returns more components than expected.
+  int? spawnCount;
 
   /// Whether the random point should be within the [area] or along its edges.
   bool within;
@@ -197,6 +206,10 @@ class SpawnComponent extends Component {
         parent?.addAll(components);
         updatePeriod();
         amount += components.length;
+        if (spawnCount != null && amount >= spawnCount!) {
+          timer.stop();
+          removeFromParent();
+        }
       },
       autoStart: autoStart,
       tickWhenLoaded: spawnWhenLoaded,
