@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
@@ -903,14 +903,21 @@ void main() {
           final target = targets.elementAt(i);
           final angle = expectedAngles.elementAt(i);
 
+          final result = component.angleTo(target);
           expectDouble(
-            component.angleTo(target),
-            angle - component.angle,
+            result,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle.toNormalizedAngle(),
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -923,7 +930,7 @@ void main() {
           Vector2(-1, 0),
           Vector2.all(-50),
         ];
-        final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
+        final expectedAngles = [pi / 2, pi / 4, pi, -3 * pi / 4];
 
         for (var i = 0; i < targets.length; ++i) {
           final target = targets.elementAt(i);
@@ -931,12 +938,18 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            angle - component.angle,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle.toNormalizedAngle(),
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -971,12 +984,18 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            angle - component.angle,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle.toNormalizedAngle(),
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -987,7 +1006,88 @@ void main() {
 
         component.nativeAngle = 3 * pi / 2;
         component.lookAt(component.absolutePosition);
-        expectDouble(component.angle, -component.nativeAngle, epsilon: 1e-10);
+        expectDouble(
+          component.angle,
+          -component.nativeAngle.toNormalizedAngle(),
+          epsilon: 1e-10,
+        );
+      });
+
+      test('lookAt with parental flips', () {
+        final child = PositionComponent();
+        final wrapper = PositionComponent(
+          children: [child],
+        );
+
+        final flips = [
+          (Vector2(1, 1), Vector2(1, 1)),
+          (Vector2(1, 1), Vector2(1, -1)),
+          (Vector2(1, 1), Vector2(-1, 1)),
+          (Vector2(1, 1), Vector2(-1, -1)),
+          (Vector2(1, -1), Vector2(1, 1)),
+          (Vector2(1, -1), Vector2(1, -1)),
+          (Vector2(1, -1), Vector2(-1, 1)),
+          (Vector2(1, -1), Vector2(-1, -1)),
+          (Vector2(-1, 1), Vector2(1, 1)),
+          (Vector2(-1, 1), Vector2(1, -1)),
+          (Vector2(-1, 1), Vector2(-1, 1)),
+          (Vector2(-1, 1), Vector2(-1, -1)),
+          (Vector2(-1, -1), Vector2(1, 1)),
+          (Vector2(-1, -1), Vector2(1, -1)),
+          (Vector2(-1, -1), Vector2(-1, 1)),
+          (Vector2(-1, -1), Vector2(-1, -1)),
+        ];
+
+        final notableAngles = List.generate(8, (i) => i * tau / 8);
+        final expectedResults = [
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, -4, -3, -2, -1, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+        ];
+        var idx = 0;
+        for (final flip in flips) {
+          wrapper.scale = flip.$1;
+          child.scale = flip.$2;
+
+          for (final angle in notableAngles) {
+            final target = Vector2(0, -1)..rotate(angle);
+            expectDouble(
+              child.angleTo(target),
+              expectedResults[idx++] * tau / 8,
+              epsilon: 1e-10,
+              reason: 'angleTo with flip $flip, angle $angle, target $target',
+            );
+          }
+        }
       });
     });
 
@@ -1148,12 +1248,101 @@ void main() {
         expect(child.toAbsoluteRect(), const Rect.fromLTWH(7, 13, 1, 1));
       });
     });
+
+    group('absoluteAngle', () {
+      test('absoluteAngle with no parent', () {
+        final component = PositionComponent();
+        expect(component.absoluteAngle, 0.0);
+        component.angle = pi / 2;
+        expect(component.absoluteAngle, pi / 2);
+      });
+
+      testWithFlameGame('absoluteAngle with parent', (game) async {
+        final parent = PositionComponent()..angle = pi / 4;
+        final child = PositionComponent();
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.angle = pi / 2;
+        expect(child.absoluteAngle, 3 * pi / 4);
+      });
+
+      testWithFlameGame('absoluteAngle with parent and child rotated',
+          (game) async {
+        final parent = PositionComponent()..angle = pi / 8;
+        final child = PositionComponent()..angle = pi / 8;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        parent.angle = pi / 4;
+        child.angle = pi / 2;
+        expect(child.absoluteAngle, 3 * pi / 4);
+      });
+
+      testWithFlameGame('absoluteAngle with flipped parent', (game) async {
+        final parent = _MyDebugComponent(name: 'parent')..angle = pi / 4;
+        final child = _MyDebugComponent(name: 'child');
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        parent.flipHorizontally();
+        expect(child.absoluteAngle, -pi / 4);
+        parent.flipVertically();
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
+      });
+
+      testWithFlameGame('absoluteAngle with flipped child', (game) async {
+        final parent = PositionComponent();
+        final child = PositionComponent()..angle = pi / 4;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.flipHorizontally();
+        expect(child.absoluteAngle, -pi / 4);
+        child.flipVertically();
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
+      });
+
+      testWithFlameGame('absoluteAngle with flipped child and parent',
+          (game) async {
+        final parent = PositionComponent()..angle = pi / 8;
+        final child = PositionComponent()..angle = pi / 8;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.flipHorizontally();
+        expect(child.absoluteAngle, -pi / 4);
+        parent.flipVertically();
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
+      });
+    });
   });
 }
 
 class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
 
 class _MyDebugComponent extends PositionComponent {
+  _MyDebugComponent({this.name});
+
+  final String? name;
+
   @override
   bool get debugMode => true;
+
+  @override
+  String toString() {
+    return name != null
+        ? '$name(angle: $angle, scale: $scale)'
+        : super.toString();
+  }
 }

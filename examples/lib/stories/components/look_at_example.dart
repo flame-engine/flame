@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
@@ -7,8 +8,10 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class LookAtExample extends FlameGame {
+class LookAtExample extends FlameGame<_TapWorld>
+    with HasKeyboardHandlerComponents {
   static const description = 'This example demonstrates how a component can be '
       'made to look at a specific target using the lookAt method. Tap anywhere '
       'to change the target point for both the choppers. '
@@ -18,8 +21,7 @@ class LookAtExample extends FlameGame {
 
   LookAtExample() : super(world: _TapWorld());
 
-  late SpriteAnimationComponent _chopper1;
-  late SpriteAnimationComponent _chopper2;
+  late List<_ChopperParent> _choppers;
 
   @override
   Color backgroundColor() => const Color.fromARGB(255, 96, 145, 112);
@@ -32,36 +34,113 @@ class LookAtExample extends FlameGame {
     );
 
     _spawnChoppers(spriteSheet);
-    _spawnInfoText();
   }
 
   void _spawnChoppers(SpriteSheet spriteSheet) {
-    // Notice now the nativeAngle is set to pi because the chopper
-    // is facing in down/south direction in the original image.
-    world.add(
-      _chopper1 = SpriteAnimationComponent(
-        nativeAngle: pi,
-        size: Vector2.all(128),
-        anchor: Anchor.center,
-        animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+    _choppers = [
+      // Notice now the nativeAngle is set to pi because the chopper
+      // is facing in down/south direction in the original image.
+      _ChopperParent(
+        position: Vector2(0, -200),
+        chopper: SpriteAnimationComponent(
+          nativeAngle: pi,
+          size: Vector2.all(128),
+          anchor: Anchor.center,
+          animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+        ),
       ),
-    );
+      // This chopper does not use correct nativeAngle, hence using
+      // lookAt on it results in the sprite pointing in incorrect
+      // direction visually.
+      _ChopperParent(
+        position: Vector2(0, 200),
+        chopper: SpriteAnimationComponent(
+          size: Vector2.all(128),
+          anchor: Anchor.center,
+          animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
+        ),
+      ),
+    ];
+    world.addAll(_choppers);
+  }
+}
 
-    // This chopper does not use correct nativeAngle, hence using
-    // lookAt on it results in the sprite pointing in incorrect
-    // direction visually.
-    world.add(
-      _chopper2 = SpriteAnimationComponent(
-        size: Vector2.all(128),
-        anchor: Anchor.center,
-        animation: spriteSheet.createAnimation(row: 0, stepTime: 0.05),
-        position: Vector2(0, 160),
-      ),
-    );
+class _TapWorld extends World
+    with TapCallbacks, KeyboardHandler, HasGameReference<LookAtExample> {
+  final CircleComponent target = CircleComponent(
+    radius: 5,
+    anchor: Anchor.center,
+    paint: BasicPalette.black.paint(),
+  );
+
+  int _currentFlipIdx = 0;
+  final _flips = [
+    (Vector2(1, 1), Vector2(1, 1)),
+    (Vector2(1, 1), Vector2(1, -1)),
+    (Vector2(1, 1), Vector2(-1, 1)),
+    (Vector2(1, 1), Vector2(-1, -1)),
+    (Vector2(1, -1), Vector2(1, 1)),
+    (Vector2(1, -1), Vector2(1, -1)),
+    (Vector2(1, -1), Vector2(-1, 1)),
+    (Vector2(1, -1), Vector2(-1, -1)),
+    (Vector2(-1, 1), Vector2(1, 1)),
+    (Vector2(-1, 1), Vector2(1, -1)),
+    (Vector2(-1, 1), Vector2(-1, 1)),
+    (Vector2(-1, 1), Vector2(-1, -1)),
+    (Vector2(-1, -1), Vector2(1, 1)),
+    (Vector2(-1, -1), Vector2(1, -1)),
+    (Vector2(-1, -1), Vector2(-1, 1)),
+    (Vector2(-1, -1), Vector2(-1, -1)),
+  ];
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyDownEvent) {
+      if (keysPressed.contains(LogicalKeyboardKey.keyF)) {
+        _cycleFlips();
+        return true;
+      }
+    }
+    return false;
   }
 
-  // Just displays some information. No functional contribution to the example.
-  void _spawnInfoText() {
+  @override
+  void onTapDown(TapDownEvent event) {
+    _updatePosition(event.localPosition);
+  }
+
+  void _cycleFlips() {
+    _currentFlipIdx = (_currentFlipIdx + 1) % _flips.length;
+    final nextFlip = _flips[_currentFlipIdx];
+    for (final parent in game._choppers) {
+      parent.scale = nextFlip.$1;
+      parent.chopper.scale = nextFlip.$2;
+    }
+  }
+
+  void _updatePosition(Vector2 position) {
+    if (!target.isMounted) {
+      add(target);
+    }
+    target.position = position;
+    for (final parent in game._choppers) {
+      parent.chopper.lookAt(position);
+    }
+  }
+}
+
+class _ChopperParent extends PositionComponent
+    with HasGameReference<LookAtExample> {
+  final PositionComponent chopper;
+  late TextBoxComponent textBox;
+
+  _ChopperParent({
+    required super.position,
+    required this.chopper,
+  }) : super(children: [chopper]);
+
+  @override
+  FutureOr<void> onLoad() {
     final shaded = TextPaint(
       style: TextStyle(
         color: BasicPalette.white.color,
@@ -71,43 +150,41 @@ class LookAtExample extends FlameGame {
         ],
       ),
     );
-
-    world.add(
-      TextComponent(
-        text: 'nativeAngle = pi',
-        textRenderer: shaded,
+    parent!.add(
+      textBox = TextBoxComponent(
+        text: '-',
+        position: position + Vector2(0, -150),
         anchor: Anchor.center,
-        position: _chopper1.absolutePosition + Vector2(0, -70),
+        align: Anchor.topCenter,
+        textRenderer: shaded,
+        boxConfig: const TextBoxConfig(
+          maxWidth: 600,
+        ),
       ),
     );
-
-    world.add(
-      TextComponent(
-        text: 'nativeAngle = 0',
-        textRenderer: shaded,
-        anchor: Anchor.center,
-        position: _chopper2.absolutePosition + Vector2(0, -70),
-      ),
-    );
+    return super.onLoad();
   }
-}
-
-class _TapWorld extends World with TapCallbacks {
-  final CircleComponent _targetComponent = CircleComponent(
-    radius: 5,
-    anchor: Anchor.center,
-    paint: BasicPalette.black.paint(),
-  );
 
   @override
-  void onTapDown(TapDownEvent event) {
-    if (!_targetComponent.isMounted) {
-      add(_targetComponent);
-    }
-    _targetComponent.position = event.localPosition;
-    final choppers = children.query<SpriteAnimationComponent>();
-    for (final chopper in choppers) {
-      chopper.lookAt(event.localPosition);
-    }
+  void update(double dt) {
+    final angleTo = chopper.angleTo(game.world.target.position);
+    textBox.text = '''
+      nativeAngle = ${chopper.nativeAngle.toStringAsFixed(2)}
+      angleTo = ${angleTo.toStringAsFixed(2)}
+      absoluteAngle = ${chopper.absoluteAngle.toStringAsFixed(2)}
+      absoluteScale = ${_asSigns(chopper.absoluteScale)} (${_asSigns(absoluteScale)} * ${_asSigns(chopper.scale)})
+    ''';
+  }
+
+  String _asSigns(Vector2 v) {
+    return '[${_asSign(v.x)}, ${_asSign(v.y)}]';
+  }
+
+  String _asSign(double value) {
+    return switch (value.sign) {
+      1 => '+',
+      -1 => '-',
+      _ => '0',
+    };
   }
 }

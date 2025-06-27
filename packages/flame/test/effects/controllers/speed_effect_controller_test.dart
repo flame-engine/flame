@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -100,7 +99,7 @@ void main() {
 
         expect(effect.controller.duration, tau);
         game.update(tau);
-        expect(component.angle, closeTo(tau, 1e-15));
+        expect(component.angle, closeTo(tau.toNormalizedAngle(), 1e-15));
       });
 
       testWithFlameGame('reset', (game) async {
