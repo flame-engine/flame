@@ -396,7 +396,10 @@ class PositionComponent extends Component
   /// Note: If target coincides with the current component's position, then it
   /// is treated as being north.
   double angleTo(Vector2 target) {
-    final direction = target - absolutePosition;
+    final rotationPosition = anchor != Anchor.center
+        ? absolutePositionOfAnchor(Anchor.center)
+        : absolutePosition;
+    final direction = target - rotationPosition;
     if (direction.isZero()) {
       // If the target coincides with the component's position, we treat it as
       // being north.
