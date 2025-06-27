@@ -257,7 +257,7 @@ class PositionComponent extends Component
       }
     }
 
-    return angle % tau;
+    return angle.toNormalizedAngle();
   }
 
   /// The resulting scale after all the ancestors and the components own scale
