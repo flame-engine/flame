@@ -26,6 +26,7 @@ class SpawnComponent extends Component {
     required double period,
     PositionComponent Function(int amount)? factory,
     List<PositionComponent> Function(int amount)? multiFactory,
+    this.target,
     this.spawnCount,
     this.area,
     this.within = true,
@@ -56,6 +57,7 @@ class SpawnComponent extends Component {
     required double this.maxPeriod,
     PositionComponent Function(int amount)? factory,
     List<PositionComponent> Function(int amount)? multiFactory,
+    this.target,
     this.spawnCount,
     this.area,
     this.within = true,
@@ -112,6 +114,12 @@ class SpawnComponent extends Component {
   /// The area where the components should be spawned.
   Shape? area;
 
+  /// The component that the spawned components should be added to.
+  ///
+  /// If not set, the components will be added to the parent of the
+  /// [SpawnComponent].
+  Component? target;
+
   /// The amount of components that should be spawned until the [SpawnComponent]
   /// is removed from its parent.
   ///
@@ -165,22 +173,44 @@ class SpawnComponent extends Component {
   @override
   FutureOr<void> onLoad() async {
     if (area == null && !selfPositioning) {
-      final parentPosition =
+      final Vector2? maybeProvidedPosition;
+      if (target != null) {
+        if (target is ReadOnlyPositionProvider) {
+          maybeProvidedPosition = (target! as PositionProvider).position;
+        } else {
+          maybeProvidedPosition = Vector2.zero();
+        }
+      } else {
+        maybeProvidedPosition = null;
+      }
+      final targetPosition = maybeProvidedPosition ??
           ancestors().whereType<PositionProvider>().firstOrNull?.position ??
-              Vector2.zero();
-      final parentSize =
+          Vector2.zero();
+
+      final Vector2? maybeProvidedSize;
+      if (target != null) {
+        assert(
+          target is ReadOnlySizeProvider,
+          'The SpawnComponent needs a target with a size if area is not '
+          'provided.',
+        );
+        maybeProvidedSize = (target! as PositionProvider).position;
+      } else {
+        maybeProvidedSize = null;
+      }
+      final targetSize = maybeProvidedSize ??
           ancestors().whereType<ReadOnlySizeProvider>().firstOrNull?.size ??
-              Vector2.zero();
+          Vector2.zero();
       assert(
-        !parentSize.isZero(),
-        'The SpawnComponent needs an ancestor with a size if area is not '
-        'provided.',
+        !targetSize.isZero(),
+        'The SpawnComponent needs an ancestor or target with a size if area is '
+        'not provided.',
       );
       area = Rectangle.fromLTWH(
-        parentPosition.x,
-        parentPosition.y,
-        parentSize.x,
-        parentSize.y,
+        targetPosition.x,
+        targetPosition.y,
+        targetSize.x,
+        targetSize.y,
       );
     }
 
@@ -203,7 +233,7 @@ class SpawnComponent extends Component {
             );
           }
         }
-        parent?.addAll(components);
+        (target ?? parent)?.addAll(components);
         updatePeriod();
         amount += components.length;
         if (spawnCount != null && amount >= spawnCount!) {

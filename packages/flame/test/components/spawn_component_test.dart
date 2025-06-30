@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -178,6 +179,7 @@ void main() {
         isTrue,
       );
     });
+
     testWithFlameGame('Can self position multiple components', (game) async {
       final random = Random(0);
       final spawn = SpawnComponent(
@@ -400,6 +402,142 @@ void main() {
         expect(spawn.isMounted, isFalse);
       },
     );
+
+    group('With target', () {
+      testWithFlameGame(
+        'Spawns within target bounds',
+        (game) async {
+          final target = PositionComponent(
+            size: Vector2(200, 200),
+            position: Vector2(50, 50),
+          );
+          final spawn = SpawnComponent(
+            factory: (_) => PositionComponent(),
+            period: 1,
+            target: target,
+          );
+          await game.ensureAdd(target);
+          await game.ensureAdd(spawn);
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(1));
+          expect(
+            target.children.query<PositionComponent>().every(
+                  (c) => target.toAbsoluteRect().containsPoint(c.position),
+                ),
+            isTrue,
+          );
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(2));
+          expect(
+            target.children.query<PositionComponent>().every(
+                  (c) => target.toAbsoluteRect().containsPoint(c.position),
+                ),
+            isTrue,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Spawns multiple components within target bounds',
+        (game) async {
+          final target = PositionComponent(
+            size: Vector2(200, 200),
+            position: Vector2(50, 50),
+          );
+          final spawn = SpawnComponent(
+            multiFactory: (_) => [
+              PositionComponent(),
+              PositionComponent(),
+              PositionComponent(),
+            ],
+            period: 1,
+            target: target,
+          );
+          await game.ensureAdd(target);
+          await game.ensureAdd(spawn);
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(3));
+          expect(
+            target.children.query<PositionComponent>().every(
+                  (c) => target.toAbsoluteRect().containsPoint(c.position),
+                ),
+            isTrue,
+          );
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(6));
+          expect(
+            target.children.query<PositionComponent>().every(
+                  (c) => target.toAbsoluteRect().containsPoint(c.position),
+                ),
+            isTrue,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Spawns components with selfPositioning within target bounds',
+        (game) async {
+          final target = PositionComponent(
+            size: Vector2(200, 200),
+            position: Vector2(50, 50),
+          );
+          final spawn = SpawnComponent(
+            factory: (_) => PositionComponent(position: Vector2(100, 100)),
+            period: 1,
+            target: target,
+            selfPositioning: true,
+          );
+          await game.ensureAdd(target);
+          await game.ensureAdd(spawn);
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(1));
+          expect(
+            target.children.query<PositionComponent>().every(
+                  (c) => c.position == Vector2(100, 100),
+                ),
+            isTrue,
+          );
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(2));
+          expect(
+            target.children.query<PositionComponent>().every(
+                  (c) => c.position == Vector2(100, 100),
+                ),
+            isTrue,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Throws assertion when target is set without area',
+        (game) async {
+          final target = Component();
+
+          expectLater(
+            game.ensureAdd(
+              SpawnComponent(
+                factory: (_) => PositionComponent(),
+                period: 1,
+                target: target,
+              ),
+            ),
+            throwsA(isA<AssertionError>()),
+          );
+        },
+      );
+    });
   });
 }
 
