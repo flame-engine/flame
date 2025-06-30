@@ -1,3 +1,20 @@
+## 1.30.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: `angleTo` and `lookAt` should consider parental transformations ([#3629](https://github.com/flame-engine/flame/issues/3629)). ([e6f3d105](https://github.com/flame-engine/flame/commit/e6f3d105577cd346d377aaaed42d4ceb93aec077))
+ - **FIX**: `angleTo`, `absoluteAngle` and the `angle` setter now returns normalized angles between `[-pi, pi]` ([#3629](https://github.com/flame-engine/flame/issues/3629)). ([e6f3d105](https://github.com/flame-engine/flame/commit/e6f3d105577cd346d377aaaed42d4ceb93aec077))
+ - **FIX**: Delay should work with SpeedEffectControllers ([#3618](https://github.com/flame-engine/flame/issues/3618)). ([bfbb49f5](https://github.com/flame-engine/flame/commit/bfbb49f5b6aac4f69c8602cd20a457e95fe02973))
+ - **FIX**: Pass in intended parent to remove ([#3626](https://github.com/flame-engine/flame/issues/3626)). ([7a05f74d](https://github.com/flame-engine/flame/commit/7a05f74dff7c3dbac96d8c8eb52ad7f0625266a1))
+ - **FIX**: Call `super.onDispose` last and check `mounted` before `setState` ([#3623](https://github.com/flame-engine/flame/issues/3623)). ([3d2716c1](https://github.com/flame-engine/flame/commit/3d2716c1fb2b64d363dbc8e9aea852723e909710))
+ - **FIX**: Angled line intersections should work with 32-bit vectors ([#3617](https://github.com/flame-engine/flame/issues/3617)). ([e32bff45](https://github.com/flame-engine/flame/commit/e32bff455c0f5715c1a7018f865b44b2410ed7db))
+ - **FIX**: PostProcessComponent should size dynamically ([#3611](https://github.com/flame-engine/flame/issues/3611)). ([baecb861](https://github.com/flame-engine/flame/commit/baecb86186a1bff7f21d804e7867f894d2f9d23c))
+ - **FEAT**: Add `target` argument to `SpawnComponent` ([#3635](https://github.com/flame-engine/flame/issues/3635)). ([3747e1e8](https://github.com/flame-engine/flame/commit/3747e1e8bd1f4bde3c6b64fff0f336690f9da6c8))
+ - **FEAT**: Add `spawnCount` to `SpawnComponent` ([#3634](https://github.com/flame-engine/flame/issues/3634)). ([f377d7e7](https://github.com/flame-engine/flame/commit/f377d7e702892836a5fded1c8d4f648682e69e50))
+ - **FEAT**: Adding RasterSpriteComponent.fromImage constructor ([#3627](https://github.com/flame-engine/flame/issues/3627)). ([74a84ba7](https://github.com/flame-engine/flame/commit/74a84ba7c159631296961eec994179e227ccd1d3))
+ - **FEAT**: Implement measure to fix ghost lines and graphical artifacts in Sprites ([#3590](https://github.com/flame-engine/flame/issues/3590)). ([6fd36bc1](https://github.com/flame-engine/flame/commit/6fd36bc1d883d61621806fba54a792dc6924c4e8))
+ - **BREAKING** **FEAT**: Pass `WidgetTester` for `testGolden` prepare function ([#3624](https://github.com/flame-engine/flame/issues/3624)). ([10509326](https://github.com/flame-engine/flame/commit/105093266431408db0f9e74042e03e2234d9b22e))
+
 ## 1.29.0
 
 > Note: This release has breaking changes.
