@@ -3,6 +3,102 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-06-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.30.0`](#flame---v1300)
+ - [`flame_sprite_fusion` - `v0.2.0`](#flame_sprite_fusion---v020)
+ - [`flame_test` - `v2.0.0`](#flame_test---v200)
+
+Packages with other changes:
+
+ - [`flame_svg` - `v1.11.13`](#flame_svg---v11113)
+ - [`flame_texturepacker` - `v4.4.0`](#flame_texturepacker---v440)
+ - [`flame_tiled` - `v3.0.4`](#flame_tiled---v304)
+ - [`flame_behavior_tree` - `v0.1.3+13`](#flame_behavior_tree---v01313)
+ - [`flame_oxygen` - `v0.2.3+13`](#flame_oxygen---v02313)
+ - [`flame_isolate` - `v0.6.2+13`](#flame_isolate---v06213)
+ - [`flame_fire_atlas` - `v1.8.8`](#flame_fire_atlas---v188)
+ - [`flame_audio` - `v2.11.7`](#flame_audio---v2117)
+ - [`flame_spine` - `v0.2.2+13`](#flame_spine---v02213)
+ - [`flame_bloc` - `v1.12.14`](#flame_bloc---v11214)
+ - [`flame_kenney_xml` - `v0.1.1+13`](#flame_kenney_xml---v01113)
+ - [`flame_lottie` - `v0.4.2+13`](#flame_lottie---v04213)
+ - [`flame_markdown` - `v0.2.4+6`](#flame_markdown---v0246)
+ - [`flame_console` - `v0.1.2+9`](#flame_console---v0129)
+ - [`flame_rive` - `v1.10.16`](#flame_rive---v11016)
+ - [`flame_forge2d` - `v0.19.0+3`](#flame_forge2d---v01903)
+ - [`flame_noise` - `v0.3.2+13`](#flame_noise---v03213)
+ - [`flame_riverpod` - `v5.4.16`](#flame_riverpod---v5416)
+ - [`flame_network_assets` - `v0.3.3+13`](#flame_network_assets---v03313)
+ - [`flame_3d` - `v0.1.0-dev.13`](#flame_3d---v010-dev13)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+13`
+ - `flame_oxygen` - `v0.2.3+13`
+ - `flame_isolate` - `v0.6.2+13`
+ - `flame_fire_atlas` - `v1.8.8`
+ - `flame_audio` - `v2.11.7`
+ - `flame_spine` - `v0.2.2+13`
+ - `flame_bloc` - `v1.12.14`
+ - `flame_kenney_xml` - `v0.1.1+13`
+ - `flame_lottie` - `v0.4.2+13`
+ - `flame_markdown` - `v0.2.4+6`
+ - `flame_console` - `v0.1.2+9`
+ - `flame_rive` - `v1.10.16`
+ - `flame_forge2d` - `v0.19.0+3`
+ - `flame_noise` - `v0.3.2+13`
+ - `flame_riverpod` - `v5.4.16`
+ - `flame_network_assets` - `v0.3.3+13`
+ - `flame_3d` - `v0.1.0-dev.13`
+
+---
+
+#### `flame` - `v1.30.0`
+
+ - **FIX**: `angleTo` and `lookAt` should consider parental transformations ([#3629](https://github.com/flame-engine/flame/issues/3629)). ([e6f3d105](https://github.com/flame-engine/flame/commit/e6f3d105577cd346d377aaaed42d4ceb93aec077))
+ - **FIX**: `angleTo`, `absoluteAngle` and the `angle` setter now returns normalized angles between `[-pi, pi]` ([#3629](https://github.com/flame-engine/flame/issues/3629)). ([e6f3d105](https://github.com/flame-engine/flame/commit/e6f3d105577cd346d377aaaed42d4ceb93aec077))
+ - **FIX**: Delay should work with SpeedEffectControllers ([#3618](https://github.com/flame-engine/flame/issues/3618)). ([bfbb49f5](https://github.com/flame-engine/flame/commit/bfbb49f5b6aac4f69c8602cd20a457e95fe02973))
+ - **FIX**: Pass in intended parent to remove ([#3626](https://github.com/flame-engine/flame/issues/3626)). ([7a05f74d](https://github.com/flame-engine/flame/commit/7a05f74dff7c3dbac96d8c8eb52ad7f0625266a1))
+ - **FIX**: Call `super.onDispose` last and check `mounted` before `setState` ([#3623](https://github.com/flame-engine/flame/issues/3623)). ([3d2716c1](https://github.com/flame-engine/flame/commit/3d2716c1fb2b64d363dbc8e9aea852723e909710))
+ - **FIX**: Angled line intersections should work with 32-bit vectors ([#3617](https://github.com/flame-engine/flame/issues/3617)). ([e32bff45](https://github.com/flame-engine/flame/commit/e32bff455c0f5715c1a7018f865b44b2410ed7db))
+ - **FIX**: PostProcessComponent should size dynamically ([#3611](https://github.com/flame-engine/flame/issues/3611)). ([baecb861](https://github.com/flame-engine/flame/commit/baecb86186a1bff7f21d804e7867f894d2f9d23c))
+ - **FEAT**: Add `target` argument to `SpawnComponent` ([#3635](https://github.com/flame-engine/flame/issues/3635)). ([3747e1e8](https://github.com/flame-engine/flame/commit/3747e1e8bd1f4bde3c6b64fff0f336690f9da6c8))
+ - **FEAT**: Add `spawnCount` to `SpawnComponent` ([#3634](https://github.com/flame-engine/flame/issues/3634)). ([f377d7e7](https://github.com/flame-engine/flame/commit/f377d7e702892836a5fded1c8d4f648682e69e50))
+ - **FEAT**: Adding RasterSpriteComponent.fromImage constructor ([#3627](https://github.com/flame-engine/flame/issues/3627)). ([74a84ba7](https://github.com/flame-engine/flame/commit/74a84ba7c159631296961eec994179e227ccd1d3))
+ - **FEAT**: Implement measure to fix ghost lines and graphical artifacts in Sprites ([#3590](https://github.com/flame-engine/flame/issues/3590)). ([6fd36bc1](https://github.com/flame-engine/flame/commit/6fd36bc1d883d61621806fba54a792dc6924c4e8))
+ - **BREAKING** **FEAT**: Pass `WidgetTester` for `testGolden` prepare function ([#3624](https://github.com/flame-engine/flame/issues/3624)). ([10509326](https://github.com/flame-engine/flame/commit/105093266431408db0f9e74042e03e2234d9b22e))
+
+#### `flame_sprite_fusion` - `v0.2.0`
+
+ - **BREAKING** **FEAT**: Pass `WidgetTester` for `testGolden` prepare function ([#3624](https://github.com/flame-engine/flame/issues/3624)). ([10509326](https://github.com/flame-engine/flame/commit/105093266431408db0f9e74042e03e2234d9b22e))
+
+#### `flame_test` - `v2.0.0`
+
+ - **BREAKING** **FEAT**: Pass `WidgetTester` for `testGolden` prepare function ([#3624](https://github.com/flame-engine/flame/issues/3624)). ([10509326](https://github.com/flame-engine/flame/commit/105093266431408db0f9e74042e03e2234d9b22e))
+
+#### `flame_svg` - `v1.11.13`
+
+ - **FIX**: Calculate zoom ratio before rendering svg ([#3616](https://github.com/flame-engine/flame/issues/3616)). ([f8b7ef82](https://github.com/flame-engine/flame/commit/f8b7ef82b7fc54af7171c94ae2112b18cebb236a))
+
+#### `flame_texturepacker` - `v4.4.0`
+
+ - **FEAT**: Implement measure to fix ghost lines and graphical artifacts in Sprites ([#3590](https://github.com/flame-engine/flame/issues/3590)). ([6fd36bc1](https://github.com/flame-engine/flame/commit/6fd36bc1d883d61621806fba54a792dc6924c4e8))
+
+#### `flame_tiled` - `v3.0.4`
+
+ - **FIX**: Add optional key parameter to TiledComponent.load method ([#3630](https://github.com/flame-engine/flame/issues/3630)). ([5a27746e](https://github.com/flame-engine/flame/commit/5a27746ee4dbab17565472133274dd1308525978))
+ - **FIX**: PostProcessComponent should size dynamically ([#3611](https://github.com/flame-engine/flame/issues/3611)). ([baecb861](https://github.com/flame-engine/flame/commit/baecb86186a1bff7f21d804e7867f894d2f9d23c))
+
+
 ## 2025-05-23
 
 ### Changes

@@ -1,3 +1,9 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Pass `WidgetTester` for `testGolden` prepare function ([#3624](https://github.com/flame-engine/flame/issues/3624)). ([10509326](https://github.com/flame-engine/flame/commit/105093266431408db0f9e74042e03e2234d9b22e))
+
 ## 0.1.3+12
 
  - Update a dependency to the latest release.
