@@ -880,6 +880,14 @@ The `factory` with a single component is for backward compatibility, so you shou
 `multiFactory` if in doubt. A single component `factory` will be wrapped internally to return a
 single item list and then used as the `multiFactory`.
 
+If you only want to spawn a certain amount of components, you can use the `spawnCount` argument,
+and once the limit is reached the `SpawnComponent` will stop spawning and remove itself.
+
+By default, the `SpawnComponent` will spawn components to its parent, but if you want to spawn
+components to another component you can set the `target` argument. Remember that it should be a
+`Component` that has a size if you don't use the `area` or `selfPositioning` arguments.
+
+
 ```dart
 SpawnComponent(
   factory: (i) => MyComponent(size: Vector2(10, 20)),
