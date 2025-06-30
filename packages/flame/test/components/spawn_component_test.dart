@@ -314,5 +314,93 @@ void main() {
       game.update(0);
       expect(world.children.length, 3);
     });
+
+    testWithFlameGame(
+      'Stops spawning after reaching spawnCount',
+      (game) async {
+        final random = Random(0);
+        final spawn = SpawnComponent(
+          factory: (_) => _CountComponent(),
+          period: 1,
+          spawnCount: 3,
+          random: random,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+
+        // Simulate updates to reach the spawnCount limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(1),
+        );
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(2),
+        );
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(3),
+        );
+
+        // Ensure no more components are spawned after reaching the limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(3),
+        );
+        expect(spawn.isMounted, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'Stops spawning multiple components after reaching spawnCount',
+      (game) async {
+        final random = Random(0);
+        final spawn = SpawnComponent(
+          multiFactory: (_) => [
+            _CountComponent(),
+            _CountComponent(),
+            _CountComponent(),
+          ],
+          period: 1,
+          spawnCount: 6,
+          random: random,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+
+        // Simulate updates to reach the spawnCount limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(3),
+        );
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(6),
+        );
+
+        // Ensure no more components are spawned after reaching the limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(6),
+        );
+        expect(spawn.isMounted, isFalse);
+      },
+    );
   });
 }
+
+class _CountComponent extends PositionComponent {}
