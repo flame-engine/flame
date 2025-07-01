@@ -272,12 +272,14 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @override
   @mustCallSuper
   void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
     switch (state) {
       case AppLifecycleState.resumed:
       case AppLifecycleState.inactive:
         if (_pausedBecauseBackgrounded) {
           resumeEngine();
         }
+        break;
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
@@ -285,6 +287,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
           pauseEngine();
           _pausedBecauseBackgrounded = true;
         }
+        break;
     }
   }
 
