@@ -110,6 +110,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @internal
   void mount() {
     super.mount();
+    if (_pausedBecauseBackgrounded) {
+      resumeEngine();
+    }
     setMounted();
   }
 
