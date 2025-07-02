@@ -230,13 +230,10 @@ abstract class LayoutComponent extends PositionComponent {
     switch (mainAxisAlignment) {
       case MainAxisAlignment.spaceEvenly:
         numberOfGaps = children.length + 1;
-        break;
       case MainAxisAlignment.spaceAround:
         numberOfGaps = children.length;
-        break;
       case MainAxisAlignment.spaceBetween:
         numberOfGaps = children.length - 1;
-        break;
       default:
         // this should never happen because of
         // the guard at the start of this method.
