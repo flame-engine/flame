@@ -36,5 +36,6 @@ class RowComponent extends LayoutComponent {
     super.size,
     super.position,
     super.children,
+    super.priority,
   }) : super(direction: Direction.horizontal);
 }
