@@ -68,6 +68,7 @@ abstract class LayoutComponent extends PositionComponent {
     required super.position,
     required super.size,
     required super.children,
+    super.priority,
   })  : _crossAxisAlignment = crossAxisAlignment,
         _mainAxisAlignment = mainAxisAlignment,
         _gap = gap,
