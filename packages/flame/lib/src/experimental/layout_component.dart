@@ -226,19 +226,15 @@ abstract class LayoutComponent extends PositionComponent {
       return;
     }
 
-    final int numberOfGaps;
-    switch (mainAxisAlignment) {
-      case MainAxisAlignment.spaceEvenly:
-        numberOfGaps = children.length + 1;
-      case MainAxisAlignment.spaceAround:
-        numberOfGaps = children.length;
-      case MainAxisAlignment.spaceBetween:
-        numberOfGaps = children.length - 1;
-      default:
+    final numberOfGaps = switch (mainAxisAlignment) {
+      MainAxisAlignment.spaceEvenly => children.length + 1,
+      MainAxisAlignment.spaceAround => children.length,
+      MainAxisAlignment.spaceBetween => children.length - 1,
+      _ =>
         // this should never happen because of
         // the guard at the start of this method.
-        throw Exception('Unexpected call to _gapOverride');
-    }
+        throw Exception('Unexpected call to _gapOverride'),
+    };
     _gap = freeSpace / numberOfGaps;
   }
 
