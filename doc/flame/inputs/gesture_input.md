@@ -151,9 +151,8 @@ on scale events:
       clampZoom();
     } else {
       final delta = info.delta.global;
-      camera.viewfinder.position.translate(-delta.x, -delta.y);
+      camera.moveBy(-delta);
     }
-  }
   }
 ```
 

@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -57,8 +58,16 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
       camera.viewfinder.zoom = startZoom * currentScale.y;
       clampZoom();
     } else {
-      final delta = info.delta.global;
-      camera.viewfinder.position.translate(-delta.x, -delta.y);
+      var zoom = camera.viewfinder.zoom;
+      final viewport = camera.viewport;
+      if (viewport is ReadOnlyScaleProvider) {
+        zoom *= (viewport as ReadOnlyScaleProvider).scale.y;
+      }
+
+      final delta = info.delta.global
+        ..negate()
+        ..scale(zoom);
+      camera.moveBy(delta);
     }
   }
 }
