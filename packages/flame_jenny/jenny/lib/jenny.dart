@@ -6,8 +6,11 @@ export 'src/dialogue_view.dart' show DialogueView;
 export 'src/errors.dart' show SyntaxError, NameError, TypeError, DialogueError;
 export 'src/function_storage.dart' show FunctionStorage;
 export 'src/localization.dart' show Localization, localizationInfo;
+export 'src/structure/commands/command.dart' show Command;
+export 'src/structure/commands/jump_command.dart' show JumpCommand;
 export 'src/structure/commands/user_defined_command.dart'
     show UserDefinedCommand;
+export 'src/structure/commands/visit_command.dart' show VisitCommand;
 export 'src/structure/dialogue_choice.dart' show DialogueChoice;
 export 'src/structure/dialogue_line.dart' show DialogueLine;
 export 'src/structure/dialogue_option.dart' show DialogueOption;
