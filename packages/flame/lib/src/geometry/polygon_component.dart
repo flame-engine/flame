@@ -151,7 +151,7 @@ class PolygonComponent extends ShapeComponent {
 
   /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
-    final scale = absoluteScale;
+    final scale = absoluteScale..absolute();
     final angle = absoluteAngle;
     final position = absoluteTopLeftPosition;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
