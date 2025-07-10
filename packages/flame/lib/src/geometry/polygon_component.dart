@@ -151,7 +151,9 @@ class PolygonComponent extends ShapeComponent {
 
   /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
-    final scale = absoluteScale..absolute();
+    final scale = absoluteScale;
+    final shouldReverse = scale.y.isNegative ^ scale.x.isNegative;
+    scale.absolute();
     final angle = absoluteAngle;
     final position = absoluteTopLeftPosition;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
@@ -168,7 +170,7 @@ class PolygonComponent extends ShapeComponent {
           ..add(position)
           ..rotate(angle, center: position);
       }
-      if (scale.y.isNegative || scale.x.isNegative) {
+      if (shouldReverse) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
         _reverseList(_globalVertices);
