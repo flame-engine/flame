@@ -191,6 +191,12 @@ void main() {
         position.rotate(math.pi / 2, center: center);
         expect(position, closeToVector(Vector2(4.0, -3.0)));
       });
+
+      test('rotate - with center as itself', () {
+        final v = Vector2(1, 0);
+        v.rotate(0.01, center: v.clone());
+        expect(v, Vector2(1, 0));
+      });
     });
 
     group('Scaling', () {
