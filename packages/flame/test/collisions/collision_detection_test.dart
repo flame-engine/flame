@@ -462,6 +462,67 @@ void main() {
         reason: 'Wrong number of intersections',
       );
     });
+
+    test('flipped rectangle intersection', () {
+      final rectangleA = RectangleComponent(
+        position: Vector2.zero(),
+        size: Vector2.all(4),
+      );
+      final rectangleB = RectangleComponent(
+        position: Vector2.all(2),
+        size: Vector2.all(4),
+      );
+      final intersections = geometry.intersections(rectangleA, rectangleB);
+      expect(
+        intersections,
+        containsAll([
+          Vector2(2, 4),
+          Vector2(4, 2),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        intersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+
+      rectangleB.flipVerticallyAroundCenter();
+      final flippedIntersections =
+          geometry.intersections(rectangleA, rectangleB);
+
+      expect(
+        flippedIntersections,
+        containsAll([
+          Vector2(2, 4),
+          Vector2(4, 2),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        flippedIntersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+
+      rectangleB.flipHorizontallyAroundCenter();
+      final doubleFlippedIntersections =
+          geometry.intersections(rectangleA, rectangleB);
+
+      expect(
+        doubleFlippedIntersections,
+        containsAll([
+          Vector2(2, 4),
+          Vector2(4, 2),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        doubleFlippedIntersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+    });
   });
 
   group('Circle intersections tests', () {

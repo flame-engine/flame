@@ -153,8 +153,7 @@ class PolygonComponent extends ShapeComponent {
   List<Vector2> globalVertices() {
     final scale = absoluteScale;
     final shouldReverse = scale.y.isNegative ^ scale.x.isNegative;
-    scale.absolute();
-    final angle = absoluteAngle;
+    final angle = absoluteAncestorAngle + this.angle;
     final position = absoluteTopLeftPosition;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
