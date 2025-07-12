@@ -462,6 +462,198 @@ void main() {
         reason: 'Wrong number of intersections',
       );
     });
+
+    test('flipped rectangle intersection', () {
+      final rectangleA = RectangleComponent(
+        position: Vector2.zero(),
+        size: Vector2.all(4),
+      );
+      final rectangleB = RectangleComponent(
+        position: Vector2.all(2),
+        size: Vector2.all(4),
+      );
+      final intersections = geometry.intersections(rectangleA, rectangleB);
+      expect(
+        intersections,
+        containsAll([
+          Vector2(2, 4),
+          Vector2(4, 2),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        intersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+
+      rectangleB.flipVerticallyAroundCenter();
+      final flippedIntersections =
+          geometry.intersections(rectangleA, rectangleB);
+
+      expect(
+        flippedIntersections,
+        containsAll([
+          Vector2(2, 4),
+          Vector2(4, 2),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        flippedIntersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+
+      rectangleB.flipHorizontallyAroundCenter();
+      final doubleFlippedIntersections =
+          geometry.intersections(rectangleA, rectangleB);
+
+      expect(
+        doubleFlippedIntersections,
+        containsAll([
+          Vector2(2, 4),
+          Vector2(4, 2),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        doubleFlippedIntersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+    });
+
+    test('vertically flipped and angled rectangle intersections', () {
+      final rectangleA = RectangleComponent(
+        position: Vector2.all(4),
+        size: Vector2.all(4),
+        angle: tau / 4,
+        anchor: Anchor.center,
+      );
+      final rectangleB = RectangleComponent(
+        position: Vector2.all(4),
+        size: Vector2.all(4),
+      );
+      final intersections = geometry.intersections(rectangleA, rectangleB);
+      expect(
+        intersections,
+        containsAll([
+          Vector2(4, 6),
+          Vector2(6, 4),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        intersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+
+      rectangleB.flipVerticallyAroundCenter();
+      final flippedIntersections =
+          geometry.intersections(rectangleA, rectangleB);
+
+      expect(
+        flippedIntersections,
+        containsAll([
+          Vector2(4, 6),
+          Vector2(6, 4),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        flippedIntersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+
+      rectangleB.flipHorizontallyAroundCenter();
+      final doubleFlippedIntersections =
+          geometry.intersections(rectangleA, rectangleB);
+
+      expect(
+        doubleFlippedIntersections,
+        containsAll([
+          Vector2(4, 6),
+          Vector2(6, 4),
+        ]),
+        reason: 'Missed intersections',
+      );
+      expect(
+        doubleFlippedIntersections,
+        hasLength(2),
+        reason: 'Wrong number of intersections',
+      );
+    });
+
+    testWithFlameGame(
+      'horizontally flipped and angled rectangle intersections with parents',
+      (game) async {
+        final rectangleA = RectangleHitbox();
+        final rectangleB = RectangleHitbox();
+        final parentA = RectangleComponent(
+          position: Vector2(1, 0),
+          size: Vector2.all(4),
+          children: [rectangleA],
+        )..flipHorizontallyAroundCenter();
+        final parentB = RectangleComponent(
+          position: Vector2(2, 1),
+          size: Vector2.all(4),
+          children: [rectangleB],
+        );
+        await game.ensureAddAll([parentA, parentB]);
+
+        final intersections = geometry.intersections(rectangleA, rectangleB);
+        expect(
+          intersections,
+          containsAll([
+            Vector2(5, 1),
+            Vector2(2, 4),
+          ]),
+          reason: 'Missed intersections',
+        );
+        expect(
+          intersections,
+          hasLength(2),
+          reason: 'Wrong number of intersections',
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'flipped and angled rectangle intersections with parents',
+      (game) async {
+        final rectangleA = RectangleHitbox();
+        final rectangleB = RectangleHitbox();
+        final parentA = RectangleComponent(
+          position: Vector2(1, 0),
+          size: Vector2.all(4),
+          children: [rectangleA],
+        )..flipVerticallyAroundCenter();
+        final parentB = RectangleComponent(
+          position: Vector2(2, 1),
+          size: Vector2.all(4),
+          children: [rectangleB],
+        );
+        await game.ensureAddAll([parentA, parentB]);
+
+        final intersections = geometry.intersections(rectangleA, rectangleB);
+        expect(
+          intersections,
+          containsAll([
+            Vector2(5, 1),
+            Vector2(2, 4),
+          ]),
+          reason: 'Missed intersections',
+        );
+        expect(
+          intersections,
+          hasLength(2),
+          reason: 'Wrong number of intersections',
+        );
+      },
+    );
   });
 
   group('Circle intersections tests', () {
