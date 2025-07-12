@@ -586,6 +586,40 @@ void main() {
         reason: 'Wrong number of intersections',
       );
     });
+
+    testWithFlameGame(
+      'flipped and angled rectangle intersections with parents',
+      (game) async {
+        final rectangleA = RectangleHitbox();
+        final rectangleB = RectangleHitbox();
+        final parentA = RectangleComponent(
+          position: Vector2(1, 0),
+          size: Vector2.all(4),
+          children: [rectangleA],
+        )..flipVerticallyAroundCenter();
+        final parentB = RectangleComponent(
+          position: Vector2(2, 1),
+          size: Vector2.all(4),
+          children: [rectangleB],
+        );
+        await game.ensureAddAll([parentA, parentB]);
+
+        final intersections = geometry.intersections(rectangleA, rectangleB);
+        expect(
+          intersections,
+          containsAll([
+            Vector2(5, 1),
+            Vector2(2, 4),
+          ]),
+          reason: 'Missed intersections',
+        );
+        expect(
+          intersections,
+          hasLength(2),
+          reason: 'Wrong number of intersections',
+        );
+      },
+    );
   });
 
   group('Circle intersections tests', () {
