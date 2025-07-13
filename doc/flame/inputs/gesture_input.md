@@ -150,8 +150,9 @@ on scale events:
       camera.viewfinder.zoom = startZoom * currentScale.y;
       clampZoom();
     } else {
-      final delta = info.delta.global;
-      camera.moveBy(-delta);
+      final zoom = camera.viewfinder.zoom;
+      final delta = (info.delta.global..negate()) / zoom;
+      camera.moveBy(delta);
     }
   }
 ```
