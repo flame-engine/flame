@@ -9,15 +9,6 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
     On mobile: use scale gesture to zoom in and out.
   ''';
 
-  ZoomExample({
-    required Vector2 viewportResolution,
-  }) : super(
-          camera: CameraComponent.withFixedResolution(
-            width: viewportResolution.x,
-            height: viewportResolution.y,
-          ),
-        );
-
   @override
   Future<void> onLoad() async {
     final flameSprite = await loadSprite('flame.png');
@@ -57,8 +48,9 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
       camera.viewfinder.zoom = startZoom * currentScale.y;
       clampZoom();
     } else {
-      final delta = info.delta.global;
-      camera.viewfinder.position.translate(-delta.x, -delta.y);
+      final zoom = camera.viewfinder.zoom;
+      final delta = (info.delta.global..negate()) / zoom;
+      camera.moveBy(delta);
     }
   }
 }
