@@ -31,12 +31,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
       'Zoom',
       (context) {
         return GameWidget(
-          game: ZoomExample(
-            viewportResolution: Vector2(
-              context.numberProperty('viewport width', 500),
-              context.numberProperty('viewport height', 500),
-            ),
-          ),
+          game: ZoomExample(),
         );
       },
       codeLink: baseLink('camera_and_viewport/zoom_example.dart'),
