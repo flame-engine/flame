@@ -103,7 +103,7 @@ class TexturePackerAtlas {
   /// string comparison to find the region, so the result should be cached
   /// rather than calling this method multiple times.
   TexturePackerSprite? findSpriteByName(String name) {
-    return sprites.firstWhereOrNull((e) => e.name == name);
+    return sprites.firstWhereOrNull((e) => e.region.name == name);
   }
 
   /// Returns the first region found with the specified name and index.
@@ -111,7 +111,7 @@ class TexturePackerAtlas {
   /// should be cached rather than calling this method multiple times.
   TexturePackerSprite? findSpriteByNameIndex(String name, int index) {
     return sprites.firstWhereOrNull(
-      (sprite) => sprite.name == name && sprite.index == index,
+      (sprite) => sprite.region.name == name && sprite.region.index == index,
     );
   }
 
@@ -120,7 +120,7 @@ class TexturePackerAtlas {
   /// the result should be cached rather than calling this method multiple
   /// times.
   List<TexturePackerSprite> findSpritesByName(String name) {
-    return sprites.where((sprite) => sprite.name == name).toList();
+    return sprites.where((sprite) => sprite.region.name == name).toList();
   }
 }
 
@@ -271,6 +271,7 @@ Future<TextureAtlasData> _parse(
         final region = Region();
         region.page = page;
         region.name = line.trim();
+
         while (true) {
           line = iterator.moveNextAndGet();
           if (line == null) {
@@ -280,6 +281,10 @@ Future<TextureAtlasData> _parse(
           if (count == 0) {
             break;
           }
+
+          // check if index is present
+          print(entry);
+
           switch (entry[0]) {
             case 'xy':
               region.left = double.parse(entry[1]);
@@ -296,13 +301,21 @@ Future<TextureAtlasData> _parse(
               region.offsetX = double.parse(entry[1]);
               region.offsetY = double.parse(entry[2]);
             case 'orig':
-              region.originalWidth = double.parse(entry[1]);
-              region.originalHeight = double.parse(entry[2]);
+              region.originalWidth = double.parse(entry[1]) == 0
+                  ? region.width
+                  : double.parse(entry[1]);
+              region.originalHeight = double.parse(entry[2]) == 0
+                  ? region.height
+                  : double.parse(entry[2]);
             case 'offsets':
               region.offsetX = double.parse(entry[1]);
               region.offsetY = double.parse(entry[2]);
-              region.originalWidth = double.parse(entry[3]);
-              region.originalHeight = double.parse(entry[4]);
+              region.originalWidth = double.parse(entry[3]) == 0
+                  ? region.width
+                  : double.parse(entry[3]);
+              region.originalHeight = double.parse(entry[4]) == 0
+                  ? region.height
+                  : double.parse(entry[4]);
             case 'rotate':
               final value = entry[1];
 
@@ -322,10 +335,6 @@ Future<TextureAtlasData> _parse(
                 hasIndexes = true;
               }
           }
-        }
-        if (region.originalWidth == 0 && region.originalHeight == 0) {
-          region.originalWidth = region.width;
-          region.originalHeight = region.height;
         }
 
         regions.add(region);
