@@ -282,9 +282,6 @@ Future<TextureAtlasData> _parse(
             break;
           }
 
-          // check if index is present
-          print(entry);
-
           switch (entry[0]) {
             case 'xy':
               region.left = double.parse(entry[1]);
