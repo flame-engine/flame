@@ -1,3 +1,7 @@
+## 1.4.1
+
+ - **FIX**: Remove unnecessary breaks ([#3638](https://github.com/flame-engine/flame/issues/3638)). ([ea29929c](https://github.com/flame-engine/flame/commit/ea29929cd86ed00407f2d2aa69dcf6f34ffc5bbd))
+
 ## 1.4.0
 
  - **FEAT**: Preserve trailing commas in Dart ^3.8.0 ([#3607](https://github.com/flame-engine/flame/issues/3607)). ([433829cb](https://github.com/flame-engine/flame/commit/433829cbdaafa9b1e9f0250b68f5143ec1a4d562))

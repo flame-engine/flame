@@ -1,3 +1,7 @@
+## 1.11.14
+
+ - Update a dependency to the latest release.
+
 ## 1.11.13
 
  - **FIX**: Calculate zoom ratio before rendering svg ([#3616](https://github.com/flame-engine/flame/issues/3616)). ([f8b7ef82](https://github.com/flame-engine/flame/commit/f8b7ef82b7fc54af7171c94ae2112b18cebb236a))
