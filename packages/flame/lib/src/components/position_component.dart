@@ -229,7 +229,14 @@ class PositionComponent extends Component
 
   /// The resulting angle after all the ancestors and the components own angles
   /// and scales have been applied.
-  double get absoluteAngle {
+  double get absoluteAngle => _absoluteAngle();
+
+  /// The resulting angle after all the ancestors and the components own angles
+  /// and scales have been applied, but without reflecting the angle
+  /// if the component is flipped.
+  double get absoluteAngleWithoutReflection => _absoluteAngle(reflect: false);
+
+  double _absoluteAngle({bool reflect = true}) {
     var angle = 0.0;
     var totalScaleX = 1.0;
     var totalScaleY = 1.0;
@@ -245,7 +252,7 @@ class PositionComponent extends Component
         if (ancestorScale.x.isNegative) {
           angle *= -1;
         }
-        if (ancestorScale.y.isNegative) {
+        if (ancestorScale.y.isNegative && reflect) {
           angle -= math.pi - angle;
         }
       }
