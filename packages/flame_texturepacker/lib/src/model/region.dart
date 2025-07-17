@@ -14,11 +14,13 @@ class Region {
   final String name;
 
   /// Ultra-compact data storage using bit packing.
-  /// Each value uses 12 bits (supports 0-4095), with some values packed together.
-  /// Format: [left|top, width|height, offsetX|offsetY, originalWidth, originalHeight]
+  /// Uses 12 bits (supports 0-4095) with some values packed together.
+  /// Format:
+  /// [left|top, width|height, offsetX|offsetY, originalWidth, originalHeight]
   final Uint16List _packedData;
 
-  /// Packed rotation data: bits 0-8 for degrees, bit 9 for rotate flag, bits 10-31 for index
+  /// Packed rotation data:
+  /// bits 0-8 for degrees, bit 9 for rotate flag, bits 10-31 for index
   final int _rotationAndIndex;
 
   static const int _maxValue = 4095; // 12 bits max

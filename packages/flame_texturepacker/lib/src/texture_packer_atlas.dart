@@ -11,11 +11,23 @@ import 'package:flame_texturepacker/src/model/region.dart';
 import 'package:flame_texturepacker/src/texture_packer_sprite.dart';
 import 'package:flutter/painting.dart';
 
+/// A texture atlas that contains a collection of [TexturePackerSprite]s.
+///
+/// This class provides methods to load and query sprites from a texture atlas
+/// created by TexturePacker or similar tools.
 class TexturePackerAtlas {
+  /// List of all sprites contained in this atlas.
   final List<TexturePackerSprite> sprites;
 
+  /// Creates a new [TexturePackerAtlas] with the given [sprites].
   TexturePackerAtlas(this.sprites);
 
+  /// Creates a [TexturePackerAtlas] from parsed atlas data.
+  ///
+  /// [atlasData] - The parsed atlas data containing pages and regions
+  /// [whiteList] - Optional list of sprite names to include.
+  ///               If empty, all sprites are included
+  /// [useOriginalSize] - Use original sprite dimensions before packing or not.
   factory TexturePackerAtlas.fromAtlas(
     TextureAtlasData atlasData, {
     List<String> whiteList = const [],
@@ -39,6 +51,18 @@ class TexturePackerAtlas {
     );
   }
 
+  /// Loads a texture atlas from a file path.
+  ///
+  /// [path] - The path to the atlas file
+  /// [fromStorage] - Load from device storage (true) or assets (false)
+  /// [useOriginalSize] - Use original sprite dimensions before packing or not.
+  /// [images] - Optional Images cache to use for loading textures
+  /// [assetsPrefix] - Prefix for asset paths (default: 'images')
+  /// [assets] - Optional AssetsCache to use for loading assets
+  /// [whiteList] - Optional list of sprite names to include.
+  ///               If empty, all sprites are included
+  ///
+  /// Returns a [Future] that completes with the loaded [TexturePackerAtlas].
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
@@ -68,6 +92,14 @@ class TexturePackerAtlas {
     );
   }
 
+  /// Loads atlas data without creating a [TexturePackerAtlas] instance.
+  ///
+  /// [path] - The path to the atlas file
+  /// [fromStorage] - Load from device storage (true) or assets (false)
+  /// [images] - Optional Images cache to use for loading textures
+  /// [assetsPrefix] - Prefix for asset paths (default: 'images')
+  ///
+  /// Returns a [Future] that completes with the raw [TextureAtlasData].
   static Future<TextureAtlasData> loadAtlas(
     String path, {
     bool fromStorage = false,
@@ -81,18 +113,36 @@ class TexturePackerAtlas {
     }
   }
 
+  /// Finds a sprite by its name.
+  ///
+  /// [name] - The name of the sprite to find
+  ///
+  /// Returns the first [TexturePackerSprite] with the given name
+  /// or null if not found.
   TexturePackerSprite? findSpriteByName(String name) {
     return sprites.firstWhereOrNull(
       (e) => e.region.name == name,
     );
   }
 
+  /// Finds a sprite by its name and index.
+  ///
+  /// [name] - The name of the sprite to find
+  /// [index] - The index of the sprite to find
+  ///
+  /// Returns the [TexturePackerSprite] with the given name and index
+  /// or null if not found.
   TexturePackerSprite? findSpriteByNameIndex(String name, int index) {
     return sprites.firstWhereOrNull(
       (sprite) => sprite.region.name == name && sprite.region.index == index,
     );
   }
 
+  /// Finds all sprites with the given name.
+  ///
+  /// [name] - The name of the sprites to find
+  ///
+  /// Returns a list of all [TexturePackerSprite]s with the given name.
   List<TexturePackerSprite> findSpritesByName(String name) {
     return sprites
         .where(
@@ -102,6 +152,15 @@ class TexturePackerAtlas {
   }
 }
 
+/// Loads texture atlas data from application assets.
+///
+/// [path] - The path to the atlas file
+/// [assetsPrefix] - Prefix for asset paths
+/// [images] - Optional Images cache to use for loading textures
+/// [assets] - Optional AssetsCache to use for loading assets
+///
+/// Returns a [Future] that completes with the loaded [TextureAtlasData].
+/// Throws an [Exception] if loading fails.
 Future<TextureAtlasData> _fromAssets(
   String path, {
   required String assetsPrefix,
@@ -124,6 +183,13 @@ Future<TextureAtlasData> _fromAssets(
   }
 }
 
+/// Loads texture atlas data from device storage.
+///
+/// [path] - The path to the atlas file
+/// [images] - Optional Images cache to use for loading textures
+///
+/// Returns a [Future] that completes with the loaded [TextureAtlasData].
+/// Throws an [Exception] if loading fails.
 Future<TextureAtlasData> _fromStorage(
   String path, {
   Images? images,
@@ -142,6 +208,15 @@ Future<TextureAtlasData> _fromStorage(
   }
 }
 
+/// Parses a texture atlas file and returns the atlas data.
+///
+/// [path] - The path to the atlas file
+/// [fromStorage] - Whether to load from device storage (true) or assets (false)
+/// [images] - Optional Images cache to use for loading textures
+/// [assets] - Optional AssetsCache to use for loading assets
+/// [assetsPrefix] - Prefix for asset paths (required when fromStorage is false)
+///
+/// Returns a [Future] that completes with the parsed [TextureAtlasData].
 Future<TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
@@ -190,6 +265,14 @@ Future<TextureAtlasData> _parse(
   return (pages: pages, regions: regions);
 }
 
+/// Parses a page definition from the atlas file.
+///
+/// [it] - The iterator over atlas file lines
+/// [path] - The path to the atlas file
+/// [fromStorage] - Whether loading from device storage
+/// [images] - Images cache to use for loading textures
+///
+/// Returns a [Future] that completes with the parsed [Page].
 Future<Page> _parsePage(
   _LookaheadIterator it,
   String path,
@@ -216,6 +299,10 @@ Future<Page> _parsePage(
   return page;
 }
 
+/// Parses page properties from the atlas file.
+///
+/// [it] - The iterator over atlas file lines
+/// [page] - The page to populate with properties
 void _parsePageProperties(_LookaheadIterator it, Page page) {
   while (true) {
     final line = it.peek();
@@ -234,23 +321,25 @@ void _parsePageProperties(_LookaheadIterator it, Page page) {
       case 'size':
         page.width = int.parse(entry[1]);
         page.height = int.parse(entry[2]);
-        break;
       case 'filter':
         page.minFilter = entry[1];
         page.magFilter = entry[2];
-        break;
       case 'format':
         page.format = entry[1];
-        break;
       case 'repeat':
         page.repeat = entry[1];
-        break;
     }
 
     it.next();
   }
 }
 
+/// Parses a region definition from the atlas file.
+///
+/// [it] - The iterator over atlas file lines
+/// [page] - The page this region belongs to
+///
+/// Returns the parsed [Region].
 Region _parseRegion(_LookaheadIterator it, Page page) {
   final name = it.next()!.trim();
   final values = <String, List<String>>{};
@@ -324,6 +413,11 @@ Region _parseRegion(_LookaheadIterator it, Page page) {
   );
 }
 
+/// Finds the next non-empty line in the iterator.
+///
+/// [it] - The iterator over atlas file lines
+///
+/// Returns the next non-empty line, or null if none found.
 String? _nextNonEmpty(_LookaheadIterator it) {
   while (!it.isDone) {
     final line = it.peek();
@@ -338,6 +432,11 @@ String? _nextNonEmpty(_LookaheadIterator it) {
   return null;
 }
 
+/// Parses rotation degrees from a string value.
+///
+/// [value] - The string value to parse ('true', 'false', or numeric string)
+///
+/// Returns the rotation in degrees (0, 90, or parsed integer value).
 int _parseDegrees(String? value) {
   if (value == null) {
     return 0;
@@ -354,6 +453,11 @@ int _parseDegrees(String? value) {
   return int.parse(value);
 }
 
+/// Parses a single entry line from the atlas file.
+///
+/// [line] - The line to parse
+///
+/// Returns a record containing the count of parsed values and the entry list.
 ({int count, List<String> entry}) _readEntry(String line) {
   final trimmedLine = line.trim();
 
@@ -387,24 +491,42 @@ int _parseDegrees(String? value) {
   }
 }
 
+/// A lookahead iterator that allows peeking at the next value without consuming
+///
+/// This is useful for parsing where you need to check the next line
+/// before deciding whether to consume it.
 class _LookaheadIterator {
+  /// The underlying iterator.
   final Iterator<String> _it;
+
+  /// The current lookahead value.
   String? _lookahead;
 
+  /// Creates a new lookahead iterator wrapping the given iterator.
+  ///
+  /// [_it] - The iterator to wrap
   _LookaheadIterator(this._it) {
     _advance();
   }
 
+  /// Returns the next value without consuming it.
+  ///
+  /// Returns null if there are no more values.
   String? peek() => _lookahead;
 
+  /// Consumes and returns the next value.
+  ///
+  /// Returns null if there are no more values.
   String? next() {
     final current = _lookahead;
     _advance();
     return current;
   }
 
+  /// Whether the iterator has reached the end.
   bool get isDone => _lookahead == null;
 
+  /// Advances the iterator to the next value.
   void _advance() {
     if (_it.moveNext()) {
       _lookahead = _it.current;
@@ -414,4 +536,9 @@ class _LookaheadIterator {
   }
 }
 
+/// Type definition for texture atlas data containing pages and regions.
+///
+/// This is a record type with two fields:
+/// - [List<Page> pages]: List of texture pages
+/// - [List<Region> regions]: List of sprite regions
 typedef TextureAtlasData = ({List<Page> pages, List<Region> regions});
