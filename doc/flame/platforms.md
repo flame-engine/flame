@@ -113,10 +113,10 @@ the top right corner to create your page project.
 
 ![Cloudflare add menu screenshot](../images/add_button.png)
 
-Next follow the steps to connect your repository, you can choose between GitHub, GitLab.
+Next follow the steps to connect your repository, you can choose between GitHub and GitLab.
 
-You should them be presented with a screen to configure your project name, which should be
-pre-filled with the name of your repository, and the production branch, which should also
+You should then be presented with a screen to configure your project name, which should be
+pre-filled with the name of your repository, and the production branch, which will also
 be pre-filled with `main`.
 
 Scrolling down you will see the build settings panel, which should look like this:
