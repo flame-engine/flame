@@ -99,7 +99,8 @@ Further instructions can be found on
 ## Deploy your game to Cloudflare Pages
 
 ```{note}
-Automated deployment to Cloudflare Pages is only available for GitHub and GitLab repositories.
+Automated deployment to Cloudflare Pages is only available for GitHub and GitLab
+repositories.
 ```
 
 [Cloudflare pages](https://pages.cloudflare.com/) is another interesting option to host your
@@ -127,10 +128,14 @@ Leave the `Framework preset` as `None` since Flutter is not supported out of the
 Then on the `Build command` field, enter the following command:
 
 ```shell
-if cd flutter; then git pull && cd ..; else git clone https://github.com/flutter/flutter.git; fi && ../flutter/bin/flutter doctor && ../flutter/bin/flutter clean && ../flutter/bin/flutter build web --release
+if cd flutter; then git pull && cd ..;else
+git clone https://github.com/flutter/flutter.git; fi &&
+../flutter/bin/flutter doctor && ../flutter/bin/flutter clean &&
+../flutter/bin/flutter build web --release
 ```
 
-It should be entered as a single line, but below you can see it split into multiple lines for better readability:
+It should be entered as a single line, but below you can see it split into multiple lines for
+better readability:
 
 ```shell
 if cd flutter; then
