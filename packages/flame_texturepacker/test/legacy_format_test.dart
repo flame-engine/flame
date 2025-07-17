@@ -50,16 +50,16 @@ void main() {
       );
 
       final jumpSprite = atlas.findSpriteByName('robot_jump')!;
-      expect(jumpSprite.rotate, true);
-      expect(jumpSprite.name, 'robot_jump');
+      expect(jumpSprite.region.rotate, true);
+      expect(jumpSprite.region.name, 'robot_jump');
+      expect(jumpSprite.region.height, 256);
+      expect(jumpSprite.region.width, 192);
+      expect(jumpSprite.region.index, -1);
+      expect(jumpSprite.region.offsetY, 0);
+      expect(jumpSprite.region.offsetX, 0);
+      expect(jumpSprite.region.originalWidth, 192);
+      expect(jumpSprite.region.originalHeight, 256);
       expect(jumpSprite.srcPosition, Vector2(196, 260));
-      expect(jumpSprite.packedHeight, 256);
-      expect(jumpSprite.packedWidth, 192);
-      expect(jumpSprite.index, -1);
-      expect(jumpSprite.offsetY, 0);
-      expect(jumpSprite.offsetX, 0);
-      expect(jumpSprite.originalWidth, 192);
-      expect(jumpSprite.originalHeight, 256);
       expect(jumpSprite.src, const Rect.fromLTWH(196, 260, 256, 192));
       expect(jumpSprite.srcSize, Vector2(192, 256));
       expect(jumpSprite.originalSize, Vector2(192, 256));
@@ -67,16 +67,16 @@ void main() {
       expect(jumpSprite.angle, math.pi / 2);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
-      expect(walkSprite.rotate, false);
-      expect(walkSprite.name, 'robot_walk');
+      expect(walkSprite.region.rotate, false);
+      expect(walkSprite.region.name, 'robot_walk');
+      expect(walkSprite.region.height, 256);
+      expect(walkSprite.region.width, 192);
+      expect(walkSprite.region.index, 0);
+      expect(walkSprite.region.offsetY, 0);
+      expect(walkSprite.region.offsetX, 0);
+      expect(walkSprite.region.originalWidth, 192);
+      expect(walkSprite.region.originalHeight, 256);
       expect(walkSprite.srcPosition, Vector2(2, 196));
-      expect(walkSprite.packedHeight, 256);
-      expect(walkSprite.packedWidth, 192);
-      expect(walkSprite.index, 0);
-      expect(walkSprite.offsetY, 0);
-      expect(walkSprite.offsetX, 0);
-      expect(walkSprite.originalWidth, 192);
-      expect(walkSprite.originalHeight, 256);
       expect(walkSprite.src, const Rect.fromLTWH(2, 196, 192, 256));
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
@@ -91,16 +91,16 @@ void main() {
       );
 
       final idleSprite = atlas.findSpriteByName('robot_idle')!;
-      expect(idleSprite.rotate, false);
-      expect(idleSprite.name, 'robot_idle');
+      expect(idleSprite.region.rotate, false);
+      expect(idleSprite.region.name, 'robot_idle');
+      expect(idleSprite.region.height, 182);
+      expect(idleSprite.region.width, 130);
+      expect(idleSprite.region.index, -1);
+      expect(idleSprite.region.offsetY, 0);
+      expect(idleSprite.region.offsetX, 31);
+      expect(idleSprite.region.originalWidth, 192);
+      expect(idleSprite.region.originalHeight, 256);
       expect(idleSprite.srcPosition, Vector2(0, 310));
-      expect(idleSprite.packedHeight, 182);
-      expect(idleSprite.packedWidth, 130);
-      expect(idleSprite.index, -1);
-      expect(idleSprite.offsetY, 0);
-      expect(idleSprite.offsetX, 31);
-      expect(idleSprite.originalWidth, 192);
-      expect(idleSprite.originalHeight, 256);
       expect(idleSprite.src, const Rect.fromLTWH(0, 310, 130, 182));
       expect(idleSprite.srcSize, Vector2(192, 256));
       expect(idleSprite.originalSize, Vector2(192, 256));
@@ -115,16 +115,16 @@ void main() {
       expect(idleSpritePackedSize.angle, 0);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
-      expect(walkSprite.rotate, true);
-      expect(walkSprite.name, 'robot_walk');
+      expect(walkSprite.region.rotate, true);
+      expect(walkSprite.region.name, 'robot_walk');
+      expect(walkSprite.region.height, 183);
+      expect(walkSprite.region.width, 150);
+      expect(walkSprite.region.index, 0);
+      expect(walkSprite.region.offsetY, 2);
+      expect(walkSprite.region.offsetX, 14);
+      expect(walkSprite.region.originalWidth, 192);
+      expect(walkSprite.region.originalHeight, 256);
       expect(walkSprite.srcPosition, Vector2(0, 0));
-      expect(walkSprite.packedHeight, 183);
-      expect(walkSprite.packedWidth, 150);
-      expect(walkSprite.index, 0);
-      expect(walkSprite.offsetY, 2);
-      expect(walkSprite.offsetX, 14);
-      expect(walkSprite.originalWidth, 192);
-      expect(walkSprite.originalHeight, 256);
       expect(walkSprite.src, const Rect.fromLTWH(0, 0, 183, 150));
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
@@ -186,16 +186,16 @@ void main() {
       );
 
       final jumpSprite = atlas.findSpriteByName('robot_jump')!;
-      expect(jumpSprite.rotate, false);
-      expect(jumpSprite.name, 'robot_jump');
+      expect(jumpSprite.region.rotate, false);
+      expect(jumpSprite.region.name, 'robot_jump');
+      expect(jumpSprite.region.height, 256);
+      expect(jumpSprite.region.width, 192);
+      expect(jumpSprite.region.index, -1);
+      expect(jumpSprite.region.offsetY, 0);
+      expect(jumpSprite.region.offsetX, 0);
+      expect(jumpSprite.region.originalWidth, 192);
+      expect(jumpSprite.region.originalHeight, 256);
       expect(jumpSprite.srcPosition, Vector2(196, 518));
-      expect(jumpSprite.packedHeight, 256);
-      expect(jumpSprite.packedWidth, 192);
-      expect(jumpSprite.index, -1);
-      expect(jumpSprite.offsetY, 0);
-      expect(jumpSprite.offsetX, 0);
-      expect(jumpSprite.originalWidth, 192);
-      expect(jumpSprite.originalHeight, 256);
       expect(jumpSprite.src, const Rect.fromLTWH(196, 518, 192, 256));
       expect(jumpSprite.srcSize, Vector2(192, 256));
       expect(jumpSprite.originalSize, Vector2(192, 256));
@@ -203,16 +203,16 @@ void main() {
       expect(jumpSprite.angle, 0);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
-      expect(walkSprite.rotate, false);
-      expect(walkSprite.name, 'robot_walk');
+      expect(walkSprite.region.rotate, false);
+      expect(walkSprite.region.name, 'robot_walk');
+      expect(walkSprite.region.height, 256);
+      expect(walkSprite.region.width, 192);
+      expect(walkSprite.region.index, 0);
+      expect(walkSprite.region.offsetY, 0);
+      expect(walkSprite.region.offsetX, 0);
+      expect(walkSprite.region.originalWidth, 192);
+      expect(walkSprite.region.originalHeight, 256);
       expect(walkSprite.srcPosition, Vector2(2, 518));
-      expect(walkSprite.packedHeight, 256);
-      expect(walkSprite.packedWidth, 192);
-      expect(walkSprite.index, 0);
-      expect(walkSprite.offsetY, 0);
-      expect(walkSprite.offsetX, 0);
-      expect(walkSprite.originalWidth, 192);
-      expect(walkSprite.originalHeight, 256);
       expect(walkSprite.src, const Rect.fromLTWH(2, 518, 192, 256));
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
@@ -227,16 +227,16 @@ void main() {
       );
 
       final idleSprite = atlas.findSpriteByName('robot_idle')!;
-      expect(idleSprite.rotate, false);
-      expect(idleSprite.name, 'robot_idle');
+      expect(idleSprite.region.rotate, false);
+      expect(idleSprite.region.name, 'robot_idle');
+      expect(idleSprite.region.height, 182);
+      expect(idleSprite.region.width, 130);
+      expect(idleSprite.region.index, -1);
+      expect(idleSprite.region.offsetY, 0);
+      expect(idleSprite.region.offsetX, 31);
+      expect(idleSprite.region.originalWidth, 192);
+      expect(idleSprite.region.originalHeight, 256);
       expect(idleSprite.srcPosition, Vector2(0, 160));
-      expect(idleSprite.packedHeight, 182);
-      expect(idleSprite.packedWidth, 130);
-      expect(idleSprite.index, -1);
-      expect(idleSprite.offsetY, 0);
-      expect(idleSprite.offsetX, 31);
-      expect(idleSprite.originalWidth, 192);
-      expect(idleSprite.originalHeight, 256);
       expect(idleSprite.src, const Rect.fromLTWH(0, 160, 130, 182));
       expect(idleSprite.srcSize, Vector2(192, 256));
       expect(idleSprite.originalSize, Vector2(192, 256));
@@ -251,16 +251,16 @@ void main() {
       expect(idleSpritePackedSize.angle, 0);
 
       final walkSprite = atlas.findSpriteByName('robot_walk')!;
-      expect(walkSprite.rotate, true);
-      expect(walkSprite.name, 'robot_walk');
+      expect(walkSprite.region.rotate, true);
+      expect(walkSprite.region.name, 'robot_walk');
+      expect(walkSprite.region.height, 183);
+      expect(walkSprite.region.width, 150);
+      expect(walkSprite.region.index, 0);
+      expect(walkSprite.region.offsetY, 2);
+      expect(walkSprite.region.offsetX, 14);
+      expect(walkSprite.region.originalWidth, 192);
+      expect(walkSprite.region.originalHeight, 256);
       expect(walkSprite.srcPosition, Vector2(191, 367));
-      expect(walkSprite.packedHeight, 183);
-      expect(walkSprite.packedWidth, 150);
-      expect(walkSprite.index, 0);
-      expect(walkSprite.offsetY, 2);
-      expect(walkSprite.offsetX, 14);
-      expect(walkSprite.originalWidth, 192);
-      expect(walkSprite.originalHeight, 256);
       expect(walkSprite.src, const Rect.fromLTWH(191, 367, 183, 150));
       expect(walkSprite.srcSize, Vector2(192, 256));
       expect(walkSprite.originalSize, Vector2(192, 256));
@@ -290,7 +290,7 @@ void main() {
         size: Vector2(384, 512),
       );
 
-      expect(sprite.rotate, false);
+      expect(sprite.region.rotate, false);
       expect(sprite.offset, Vector2.zero());
       expect(sprite.originalSize, Vector2(192, 256));
       expect(sprite.srcSize, Vector2(192, 256));
@@ -311,7 +311,7 @@ void main() {
         size: Vector2(384, 512),
       );
 
-      expect(sprite.rotate, true);
+      expect(sprite.region.rotate, true);
       expect(sprite.offset, Vector2(14, 2));
       expect(sprite.originalSize, Vector2(192, 256));
       expect(sprite.srcSize, Vector2(192, 256));

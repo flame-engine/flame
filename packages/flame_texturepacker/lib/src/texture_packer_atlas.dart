@@ -12,22 +12,10 @@ import 'package:flame_texturepacker/src/texture_packer_sprite.dart';
 import 'package:flutter/painting.dart';
 
 class TexturePackerAtlas {
-  /// The sprites contained in this atlas.
   final List<TexturePackerSprite> sprites;
 
   TexturePackerAtlas(this.sprites);
 
-  /// Loads all the sprites from the passed in [TextureAtlasData] and constructs
-  /// a new instance.
-  ///
-  /// Use [whiteList] to filter the sprites to be loaded. This can
-  /// significantly reduce the memory usage if only a few sprites are needed.
-  /// If the list is empty, all sprites will be loaded. The filter is case
-  /// sensitive and will load all sprites in a directory if you wish.
-  ///
-  /// If [useOriginalSize] is true, the sprites loaded will use original size
-  /// instead of the packed size. For animation sprites, load with origin size
-  /// is recommended for a smooth result.
   factory TexturePackerAtlas.fromAtlas(
     TextureAtlasData atlasData, {
     List<String> whiteList = const [],
@@ -36,23 +24,21 @@ class TexturePackerAtlas {
     return TexturePackerAtlas(
       atlasData.regions
           .where(
-            (e) =>
-                whiteList.isEmpty ||
-                whiteList.any((key) => e.name.contains(key)),
+            (e) {
+              return whiteList.isEmpty ||
+                  whiteList.any((key) => e.name.contains(key));
+            },
           )
-          .map((e) => TexturePackerSprite(e, useOriginalSize: useOriginalSize))
+          .map(
+            (e) => TexturePackerSprite(
+              e,
+              useOriginalSize: useOriginalSize,
+            ),
+          )
           .toList(),
     );
   }
 
-  /// Loads all the sprites from the atlas that resides on the [path] and
-  /// returns a new [TexturePackerAtlas].
-  /// If [fromStorage] is true, the atlas will be loaded from the device's
-  /// storage instead of the assets folder.
-  ///
-  /// If [useOriginalSize] is true, the sprites loaded will use original size
-  /// instead of the packed size. For animation sprites, load with origin size
-  /// is recommended for a smooth result.
   static Future<TexturePackerAtlas> load(
     String path, {
     bool fromStorage = false,
@@ -82,10 +68,6 @@ class TexturePackerAtlas {
     );
   }
 
-  /// Loads the atlas that resides on the [path] and
-  /// returns a new [TextureAtlasData].
-  /// If [fromStorage] is true, the atlas will be loaded from the device's
-  /// storage instead of the assets folder.
   static Future<TextureAtlasData> loadAtlas(
     String path, {
     bool fromStorage = false,
@@ -99,33 +81,27 @@ class TexturePackerAtlas {
     }
   }
 
-  /// Returns the first region found with the specified name. This method uses
-  /// string comparison to find the region, so the result should be cached
-  /// rather than calling this method multiple times.
   TexturePackerSprite? findSpriteByName(String name) {
-    return sprites.firstWhereOrNull((e) => e.region.name == name);
+    return sprites.firstWhereOrNull(
+      (e) => e.region.name == name,
+    );
   }
 
-  /// Returns the first region found with the specified name and index.
-  /// This method uses string comparison to find the region, so the result
-  /// should be cached rather than calling this method multiple times.
   TexturePackerSprite? findSpriteByNameIndex(String name, int index) {
     return sprites.firstWhereOrNull(
       (sprite) => sprite.region.name == name && sprite.region.index == index,
     );
   }
 
-  /// Returns all regions with the specified name, ordered by smallest to
-  /// largest index. This method uses string comparison to find the regions, so
-  /// the result should be cached rather than calling this method multiple
-  /// times.
   List<TexturePackerSprite> findSpritesByName(String name) {
-    return sprites.where((sprite) => sprite.region.name == name).toList();
+    return sprites
+        .where(
+          (sprite) => sprite.region.name == name,
+        )
+        .toList();
   }
 }
 
-/// Loads images from the assets folder.
-/// Uses the [path] to find the image directory.
 Future<TextureAtlasData> _fromAssets(
   String path, {
   required String assetsPrefix,
@@ -142,16 +118,12 @@ Future<TextureAtlasData> _fromAssets(
     );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
-      Exception(
-        'Error loading $assetsPrefix$path from assets: $e',
-      ),
+      Exception('Error loading $assetsPrefix$path from assets: $e'),
       stack,
     );
   }
 }
 
-/// Loads images from the device's storage.
-/// Uses the [path] to find the image directory.
 Future<TextureAtlasData> _fromStorage(
   String path, {
   Images? images,
@@ -170,11 +142,6 @@ Future<TextureAtlasData> _fromStorage(
   }
 }
 
-/// Parses the atlas file and loads the images.
-/// Uses the [path] to find the image directory.
-/// Atlas will be loaded from the device's storage if [fromStorage] is true.
-/// Otherwise, it will be loaded from the assets folder.
-/// Returns a [TextureAtlasData] containing the pages and regions.
 Future<TextureAtlasData> _parse(
   String path, {
   required bool fromStorage,
@@ -184,176 +151,207 @@ Future<TextureAtlasData> _parse(
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
-  final String fileAsString;
-
-  if (fromStorage) {
-    fileAsString = await XFile(path).readAsString();
-  } else {
-    assert(
-      assetsPrefix != null,
-      'When reading from storage, the assetsPrefix needs to be provided.',
-    );
-    fileAsString =
-        await (assets ?? Flame.assets).readFile('$assetsPrefix/$path');
-  }
-
-  final iterator = LineSplitter.split(fileAsString).iterator;
-  var line = iterator.moveNextAndGet();
   var hasIndexes = false;
 
-  while (true) {
-    if (line == null) {
-      break;
-    }
+  final fileContent = fromStorage
+      ? await XFile(path).readAsString()
+      : await (assets ?? Flame.assets).readFile('${assetsPrefix!}/$path');
 
-    if (line.isEmpty) {
-      line = iterator.moveNextAndGet();
-    }
+  final lines = LineSplitter.split(fileContent).toList();
+  final it = _LookaheadIterator(lines.iterator);
 
-    Page? page;
+  images ??= Flame.images;
 
-    while (true) {
-      if (line == null) {
-        break;
+  while (_nextNonEmpty(it) != null) {
+    final page = await _parsePage(it, path, fromStorage, images);
+    pages.add(page);
+
+    while (it.peek()?.isNotEmpty ?? false) {
+      final region = _parseRegion(it, page);
+
+      if (region.index != -1) {
+        hasIndexes = true;
       }
 
-      if (line.isEmpty) {
-        page = null;
-        line = iterator.moveNextAndGet();
-      } else if (page == null) {
-        page = Page();
-        page.textureFile = line;
-        final parentPath = (path.split('/')..removeLast()).join('/');
-        final texturePath = parentPath.isEmpty ? line : '$parentPath/$line';
-
-        images ??= Flame.images;
-        if (fromStorage) {
-          try {
-            final textureFile = XFile(texturePath);
-            final bytes = await textureFile.readAsBytes();
-            final decodedBytes = await decodeImageFromList(bytes);
-            images.add(texturePath, decodedBytes);
-            page.texture = images.fromCache(texturePath);
-          } on Exception catch (e, stack) {
-            Error.throwWithStackTrace(
-              Exception('Could not add storage file to Flame cache. $e'),
-              stack,
-            );
-          }
-        } else {
-          page.texture = await images.load(texturePath);
-        }
-
-        while (true) {
-          line = iterator.moveNextAndGet();
-          if (line == null) {
-            break;
-          }
-          final (:count, :entry) = _readEntry(line);
-          if (count == 0) {
-            break;
-          }
-          switch (entry[0]) {
-            case 'size':
-              page.width = int.parse(entry[1]);
-              page.height = int.parse(entry[2]);
-            case 'filter':
-              page.minFilter = entry[1];
-              page.magFilter = entry[2];
-            case 'format':
-              page.format = entry[1];
-            case 'repeat':
-              page.repeat = entry[1];
-          }
-        }
-        pages.add(page);
-      } else {
-        final region = Region();
-        region.page = page;
-        region.name = line.trim();
-
-        while (true) {
-          line = iterator.moveNextAndGet();
-          if (line == null) {
-            break;
-          }
-          final (:count, :entry) = _readEntry(line);
-          if (count == 0) {
-            break;
-          }
-
-          switch (entry[0]) {
-            case 'xy':
-              region.left = double.parse(entry[1]);
-              region.top = double.parse(entry[2]);
-            case 'size':
-              region.width = double.parse(entry[1]);
-              region.height = double.parse(entry[2]);
-            case 'bounds':
-              region.left = double.parse(entry[1]);
-              region.top = double.parse(entry[2]);
-              region.width = double.parse(entry[3]);
-              region.height = double.parse(entry[4]);
-            case 'offset':
-              region.offsetX = double.parse(entry[1]);
-              region.offsetY = double.parse(entry[2]);
-            case 'orig':
-              region.originalWidth = double.parse(entry[1]) == 0
-                  ? region.width
-                  : double.parse(entry[1]);
-              region.originalHeight = double.parse(entry[2]) == 0
-                  ? region.height
-                  : double.parse(entry[2]);
-            case 'offsets':
-              region.offsetX = double.parse(entry[1]);
-              region.offsetY = double.parse(entry[2]);
-              region.originalWidth = double.parse(entry[3]) == 0
-                  ? region.width
-                  : double.parse(entry[3]);
-              region.originalHeight = double.parse(entry[4]) == 0
-                  ? region.height
-                  : double.parse(entry[4]);
-            case 'rotate':
-              final value = entry[1];
-
-              if (value == 'true') {
-                region.degrees = 90;
-              } else if (value == 'false') {
-                region.degrees = 0;
-              } else {
-                region.degrees = int.parse(value);
-              }
-
-              region.rotate = region.degrees == 90;
-            case 'index':
-              region.index = int.parse(entry[1]);
-
-              if (region.index != -1) {
-                hasIndexes = true;
-              }
-          }
-        }
-
-        regions.add(region);
-      }
+      regions.add(region);
     }
   }
 
   if (hasIndexes) {
-    regions.sort((region1, region2) {
-      var i1 = region1.index;
-      if (i1 == -1) {
-        i1 = double.maxFinite.toInt();
-      }
-      var i2 = region2.index;
-      if (i2 == -1) {
-        i2 = double.maxFinite.toInt();
-      }
-      return i1 - i2;
-    });
+    regions.sort(
+      (a, b) {
+        final i1 = a.index == -1 ? double.maxFinite.toInt() : a.index;
+        final i2 = b.index == -1 ? double.maxFinite.toInt() : b.index;
+        return i1 - i2;
+      },
+    );
   }
 
   return (pages: pages, regions: regions);
+}
+
+Future<Page> _parsePage(
+  _LookaheadIterator it,
+  String path,
+  bool fromStorage,
+  Images images,
+) async {
+  final page = Page();
+  page.textureFile = it.next()!;
+
+  final parentPath = (path.split('/')..removeLast()).join('/');
+  final texturePath =
+      parentPath.isEmpty ? page.textureFile : '$parentPath/${page.textureFile}';
+
+  if (fromStorage) {
+    final bytes = await XFile(texturePath).readAsBytes();
+    final image = await decodeImageFromList(bytes);
+    images.add(texturePath, image);
+    page.texture = images.fromCache(texturePath);
+  } else {
+    page.texture = await images.load(texturePath);
+  }
+
+  _parsePageProperties(it, page);
+  return page;
+}
+
+void _parsePageProperties(_LookaheadIterator it, Page page) {
+  while (true) {
+    final line = it.peek();
+
+    if (line == null || line.isEmpty) {
+      break;
+    }
+
+    final (:count, :entry) = _readEntry(line);
+
+    if (count == 0) {
+      break;
+    }
+
+    switch (entry[0]) {
+      case 'size':
+        page.width = int.parse(entry[1]);
+        page.height = int.parse(entry[2]);
+        break;
+      case 'filter':
+        page.minFilter = entry[1];
+        page.magFilter = entry[2];
+        break;
+      case 'format':
+        page.format = entry[1];
+        break;
+      case 'repeat':
+        page.repeat = entry[1];
+        break;
+    }
+
+    it.next();
+  }
+}
+
+Region _parseRegion(_LookaheadIterator it, Page page) {
+  final name = it.next()!.trim();
+  final values = <String, List<String>>{};
+
+  while (true) {
+    final line = it.peek();
+
+    if (line == null || line.isEmpty) {
+      break;
+    }
+
+    final (:count, :entry) = _readEntry(line);
+
+    if (count == 0) {
+      break;
+    }
+
+    values[entry[0]] = entry.sublist(1);
+    it.next();
+  }
+
+  final xy = values['xy'];
+  final size = values['size'];
+  final bounds = values['bounds'];
+  final offset = values['offset'];
+  final orig = values['orig'];
+  final offsets = values['offsets'];
+  final rotate = values['rotate'];
+  final index = values['index'];
+
+  final offsetOrNull = offsets ?? offset;
+
+  final offsetX = offsetOrNull != null ? double.parse(offsetOrNull[0]) : 0.0;
+
+  final offsetY = offsetOrNull != null ? double.parse(offsetOrNull[1]) : 0.0;
+
+  final origWidth = offsets != null
+      ? double.parse(offsets[2])
+      : (orig != null ? double.parse(orig[0]) : 0.0);
+
+  final originalWidth = origWidth == 0.0 ? null : origWidth;
+
+  final origHeight = offsets != null
+      ? double.parse(offsets[3])
+      : (orig != null ? double.parse(orig[1]) : 0.0);
+
+  final originalHeight = origHeight == 0.0 ? null : origHeight;
+
+  return Region(
+    page: page,
+    name: name,
+    left: bounds != null
+        ? double.parse(bounds[0])
+        : (xy != null ? double.parse(xy[0]) : 0.0),
+    top: bounds != null
+        ? double.parse(bounds[1])
+        : (xy != null ? double.parse(xy[1]) : 0.0),
+    width: bounds != null
+        ? double.parse(bounds[2])
+        : (size != null ? double.parse(size[0]) : 0.0),
+    height: bounds != null
+        ? double.parse(bounds[3])
+        : (size != null ? double.parse(size[1]) : 0.0),
+    offsetX: offsetX,
+    offsetY: offsetY,
+    originalWidth: originalWidth,
+    originalHeight: originalHeight,
+    degrees: _parseDegrees(rotate?.first),
+    rotate: _parseDegrees(rotate?.first) == 90,
+    index: index != null ? int.parse(index[0]) : -1,
+  );
+}
+
+String? _nextNonEmpty(_LookaheadIterator it) {
+  while (!it.isDone) {
+    final line = it.peek();
+
+    if (line != null && line.isNotEmpty) {
+      return line;
+    }
+
+    it.next();
+  }
+
+  return null;
+}
+
+int _parseDegrees(String? value) {
+  if (value == null) {
+    return 0;
+  }
+
+  if (value == 'true') {
+    return 90;
+  }
+
+  if (value == 'false') {
+    return 0;
+  }
+
+  return int.parse(value);
 }
 
 ({int count, List<String> entry}) _readEntry(String line) {
@@ -389,14 +387,31 @@ Future<TextureAtlasData> _parse(
   }
 }
 
-typedef TextureAtlasData = ({List<Page> pages, List<Region> regions});
+class _LookaheadIterator {
+  final Iterator<String> _it;
+  String? _lookahead;
 
-extension _IteratorExtension on Iterator<String> {
-  String? moveNextAndGet() {
-    if (moveNext()) {
-      return current;
+  _LookaheadIterator(this._it) {
+    _advance();
+  }
+
+  String? peek() => _lookahead;
+
+  String? next() {
+    final current = _lookahead;
+    _advance();
+    return current;
+  }
+
+  bool get isDone => _lookahead == null;
+
+  void _advance() {
+    if (_it.moveNext()) {
+      _lookahead = _it.current;
+    } else {
+      _lookahead = null;
     }
-
-    return null;
   }
 }
+
+typedef TextureAtlasData = ({List<Page> pages, List<Region> regions});
