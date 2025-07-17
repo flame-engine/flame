@@ -96,6 +96,70 @@ Further instructions can be found on
 [itch.io](https://itch.io/docs/creators/html5#getting-started/zip-file).
 
 
+## Deploy your game to Cloudflare Pages
+
+```{note}
+Automated deployment to Cloudflare Pages is only available for GitHub and GitLab
+repositories.
+```
+
+[Cloudflare pages](https://pages.cloudflare.com/) is another interesting option to host your
+Flame game online.
+
+Setting up an automated deployment on it is super simple and can be achieved in a few steps:
+
+First, create your account on Cloudflare, and once you are logged in, use the `+ Add` button on
+the top right corner to create your page project.
+
+![Cloudflare add menu screenshot](../images/add_button.png)
+
+Next follow the steps to connect your repository, you can choose between GitHub and GitLab.
+
+You should then be presented with a screen to configure your project name, which should be
+pre-filled with the name of your repository, and the production branch, which will also
+be pre-filled with `main`.
+
+Scrolling down you will see the build settings panel, which should look like this:
+
+![Cloudflare build settings screenshot](../images/build_form.png)
+
+Leave the `Framework preset` as `None` since Flutter is not supported out of the box.
+
+Then on the `Build command` field, enter the following command:
+
+```shell
+if cd flutter; then git pull && cd ..;else
+git clone https://github.com/flutter/flutter.git; fi &&
+../flutter/bin/flutter doctor && ../flutter/bin/flutter clean &&
+../flutter/bin/flutter build web --release
+```
+
+It should be entered as a single line, but below you can see it split into multiple lines for
+better readability:
+
+```shell
+if cd flutter; then
+  git pull && cd ..
+else
+  git clone https://github.com/flutter/flutter.git
+fi
+../flutter/bin/flutter doctor
+../flutter/bin/flutter clean
+../flutter/bin/flutter build web --release
+```
+
+Some people might prefer to create a bash script in the root of their repository with the above
+commands and use it instead of entering the commands directly in the field, so it is up to you.
+
+Set the Build output directory to `build/web`.
+
+If needed use the advanced options to set environment variables.
+
+Finally, click on the `Save and Deploy` button to start the deployment and that is it. You should
+have automation ready to deploy your game to Cloudflare Pages every time you push to your
+repository.
+
+
 ### Web support
 
 When using Flame on the web some methods may not work. For example `Flame.device.setOrientation` and
