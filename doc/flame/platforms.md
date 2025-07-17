@@ -159,6 +159,7 @@ Finally, click on the `Save and Deploy` button to start the deployment and that 
 have automation ready to deploy your game to Cloudflare Pages every time you push to your
 repository.
 
+
 ### Web support
 
 When using Flame on the web some methods may not work. For example `Flame.device.setOrientation` and
