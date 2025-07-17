@@ -38,6 +38,11 @@ flutter pub add flame_texturepacker
 ## Usage
 
 
+### Limitations
+
+In order to optimize memory as much as possible, this package only works with max texture sizes of 4096x4096px.
+
+
 ### Asset Storage
 
 Drop generated atlas file and sprite sheet images into the `assets/images/` and link the files in your
@@ -126,7 +131,8 @@ Note: Sprites used in this example can be found OpenGameArt [here][4].
 ## Credits
 
 Thanks to [Jonas Fröber][5] for the original implementation.
-Thanks to [Gnarhard][6] for the feature to load an atlas file from a device's storage and whitelisting.
+Thanks to [Gnarhard][6] for the feature to load an atlas file from a device's storage,
+sprite whitelisting, and memory optimizations.
 
 [1]: https://www.codeandweb.com/texturepacker 'Code & Web Texture Packer'
 [2]: https://github.com/crashinvaders/gdx-texture-packer-gui 'Gdx Texture Packer'
