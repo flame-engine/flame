@@ -38,6 +38,7 @@ flutter pub add flame_texturepacker
 ## Usage
 
 ### Limitations
+
 In order to optimize memory as much as possible, this package only works with max texture sizes of 4096x4096px.
 
 
