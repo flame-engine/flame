@@ -316,6 +316,11 @@ A `SpriteBatchComponent` is also available for your convenience.
 See how to use it in the
 [SpriteBatch examples](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_batch_example.dart)
 
+When using a SpriteBatch to render animations, it's helpful to set a unique ID of the `BatchItem`
+related to the frame of your animation to make replacing and removing frames more reliable. When
+replacing a `BatchItem`, you can use the `findIndexById` to retrieve the associated index
+for replacement.
+
 
 ## ImageComposition
 
