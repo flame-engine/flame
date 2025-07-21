@@ -20,7 +20,8 @@ final class Region {
   /// Original dimensions as 16-bit unsigned integers (width, height)
   final Uint16List _originalData;
 
-  /// Packed rotation data: bits 0-8 for degrees, bit 9 for rotate flag, bits 10-31 for index
+  /// Packed rotation data: bits 0-8 for degrees, bit 9 for rotate flag,
+  /// bits 10-31 for index
   final int _rotationAndIndex;
 
   /// Creates a new [Region] with the given properties.
