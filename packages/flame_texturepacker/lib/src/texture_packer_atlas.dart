@@ -1,5 +1,6 @@
 library flame_texturepacker;
 
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
@@ -232,17 +233,27 @@ Future<TextureAtlasData> _parse(
       ? await XFile(path).readAsString()
       : await (assets ?? Flame.assets).readFile('${assetsPrefix!}/$path');
 
-  final lines = LineSplitter.split(fileContent).toList();
-  final it = _LookaheadIterator(lines.iterator);
+  final lines = LineSplitter.split(fileContent)
+      .where((line) => line.trim().isNotEmpty)
+      .toList();
 
+  final lineQueue = ListQueue<String>.from(lines);
   images ??= Flame.images;
 
-  while (_nextNonEmpty(it) != null) {
-    final page = await _parsePage(it, path, fromStorage, images);
+  while (lineQueue.isNotEmpty) {
+    final page = await _parsePage(lineQueue, path, fromStorage, images);
     pages.add(page);
 
-    while (it.peek()?.isNotEmpty ?? false) {
-      final region = _parseRegion(it, page);
+    // Parse regions for this page until we hit another page or end of file
+    while (lineQueue.isNotEmpty) {
+      final line = lineQueue.first.trim();
+
+      // Check if this line looks like a texture file (has file extension)
+      if (_isTextureFile(line)) {
+        break; // This is a new page, break out of region parsing
+      }
+
+      final region = _parseRegion(lineQueue, page);
 
       if (region.index != -1) {
         hasIndexes = true;
@@ -265,22 +276,42 @@ Future<TextureAtlasData> _parse(
   return (pages: pages, regions: regions);
 }
 
+/// Checks if a line represents a texture file (page) rather than a region name.
+///
+/// [line] - The line to check
+///
+/// Returns true if the line looks like a texture file path.
+bool _isTextureFile(String line) {
+  final trimmed = line.trim();
+
+  // Check for common image file extensions
+  const imageExtensions = ['.png', '.jpg', '.jpeg', '.bmp', '.tga', '.webp'];
+
+  for (final ext in imageExtensions) {
+    if (trimmed.toLowerCase().endsWith(ext)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 /// Parses a page definition from the atlas file.
 ///
-/// [it] - The iterator over atlas file lines
+/// [lineQueue] - Queue of remaining lines to parse
 /// [path] - The path to the atlas file
 /// [fromStorage] - Whether loading from device storage
 /// [images] - Images cache to use for loading textures
 ///
 /// Returns a [Future] that completes with the parsed [Page].
 Future<Page> _parsePage(
-  _LookaheadIterator it,
+  ListQueue<String> lineQueue,
   String path,
   bool fromStorage,
   Images images,
 ) async {
   final page = Page();
-  page.textureFile = it.next()!;
+  page.textureFile = lineQueue.removeFirst();
 
   final parentPath = (path.split('/')..removeLast()).join('/');
   final texturePath =
@@ -295,59 +326,62 @@ Future<Page> _parsePage(
     page.texture = await images.load(texturePath);
   }
 
-  _parsePageProperties(it, page);
+  _parsePageProperties(lineQueue, page);
+
   return page;
 }
 
 /// Parses page properties from the atlas file.
 ///
-/// [it] - The iterator over atlas file lines
+/// [lineQueue] - Queue of remaining lines to parse
 /// [page] - The page to populate with properties
-void _parsePageProperties(_LookaheadIterator it, Page page) {
-  while (true) {
-    final line = it.peek();
-
-    if (line == null || line.isEmpty) {
-      break;
-    }
-
+void _parsePageProperties(ListQueue<String> lineQueue, Page page) {
+  while (lineQueue.isNotEmpty) {
+    final line = lineQueue.first;
     final (:count, :entry) = _readEntry(line);
 
     if (count == 0) {
       break;
     }
 
+    // Check if this is a known page property
     switch (entry[0]) {
       case 'size':
         page.width = int.parse(entry[1]);
         page.height = int.parse(entry[2]);
+        lineQueue.removeFirst();
       case 'filter':
         page.minFilter = entry[1];
         page.magFilter = entry[2];
+        lineQueue.removeFirst();
       case 'format':
         page.format = entry[1];
+        lineQueue.removeFirst();
       case 'repeat':
         page.repeat = entry[1];
+        lineQueue.removeFirst();
+      default:
+        // Not a page property, stop parsing page properties
+        break;
     }
-
-    it.next();
   }
 }
 
 /// Parses a region definition from the atlas file.
 ///
-/// [it] - The iterator over atlas file lines
+/// [lineQueue] - Queue of remaining lines to parse
 /// [page] - The page this region belongs to
 ///
 /// Returns the parsed [Region].
-Region _parseRegion(_LookaheadIterator it, Page page) {
-  final name = it.next()!.trim();
+Region _parseRegion(ListQueue<String> lineQueue, Page page) {
+  final name = lineQueue.removeFirst().trim();
   final values = <String, List<String>>{};
 
-  while (true) {
-    final line = it.peek();
+  while (lineQueue.isNotEmpty) {
+    final line = lineQueue.first.trim();
 
-    if (line == null || line.isEmpty) {
+    // If this looks like a texture file, stop parsing this region
+    if (_isTextureFile(line)) {
       break;
     }
 
@@ -358,7 +392,7 @@ Region _parseRegion(_LookaheadIterator it, Page page) {
     }
 
     values[entry[0]] = entry.sublist(1);
-    it.next();
+    lineQueue.removeFirst();
   }
 
   final xy = values['xy'];
@@ -373,7 +407,6 @@ Region _parseRegion(_LookaheadIterator it, Page page) {
   final offsetOrNull = offsets ?? offset;
 
   final offsetX = offsetOrNull != null ? double.parse(offsetOrNull[0]) : 0.0;
-
   final offsetY = offsetOrNull != null ? double.parse(offsetOrNull[1]) : 0.0;
 
   final origWidth = offsets != null
@@ -411,25 +444,6 @@ Region _parseRegion(_LookaheadIterator it, Page page) {
     rotate: _parseDegrees(rotate?.first) == 90,
     index: index != null ? int.parse(index[0]) : -1,
   );
-}
-
-/// Finds the next non-empty line in the iterator.
-///
-/// [it] - The iterator over atlas file lines
-///
-/// Returns the next non-empty line, or null if none found.
-String? _nextNonEmpty(_LookaheadIterator it) {
-  while (!it.isDone) {
-    final line = it.peek();
-
-    if (line != null && line.isNotEmpty) {
-      return line;
-    }
-
-    it.next();
-  }
-
-  return null;
 }
 
 /// Parses rotation degrees from a string value.
@@ -487,51 +501,6 @@ int _parseDegrees(String? value) {
 
     if (i == 4) {
       return (count: 4, entry: entry);
-    }
-  }
-}
-
-/// A lookahead iterator that allows peeking at the next value without consuming
-///
-/// This is useful for parsing where you need to check the next line
-/// before deciding whether to consume it.
-class _LookaheadIterator {
-  /// The underlying iterator.
-  final Iterator<String> _it;
-
-  /// The current lookahead value.
-  String? _lookahead;
-
-  /// Creates a new lookahead iterator wrapping the given iterator.
-  ///
-  /// [_it] - The iterator to wrap
-  _LookaheadIterator(this._it) {
-    _advance();
-  }
-
-  /// Returns the next value without consuming it.
-  ///
-  /// Returns null if there are no more values.
-  String? peek() => _lookahead;
-
-  /// Consumes and returns the next value.
-  ///
-  /// Returns null if there are no more values.
-  String? next() {
-    final current = _lookahead;
-    _advance();
-    return current;
-  }
-
-  /// Whether the iterator has reached the end.
-  bool get isDone => _lookahead == null;
-
-  /// Advances the iterator to the next value.
-  void _advance() {
-    if (_it.moveNext()) {
-      _lookahead = _it.current;
-    } else {
-      _lookahead = null;
     }
   }
 }
