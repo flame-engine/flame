@@ -426,11 +426,13 @@ class RenderableTiledMap {
     }
   }
 
-  RenderableLayer? getRenderableLayer(String name) {
-    final int idx = renderableLayers.indexWhere((e) => e.layer.name == name);
-    if (idx == -1) return null;
-    return renderableLayers[idx];
-  }
+  /// Returns a [RenderableLayer] with given [name] from all the layers
+  /// of this map. If no such layer is found, null is returned.
+  RenderableLayer? getRenderableLayer(String name) =>
+      switch (renderableLayers.indexWhere((e) => e.layer.name == name)) {
+        -1 => null,
+        final int idx => renderableLayers[idx],
+      };
 
   void update(double dt) {
     // First, update animation frames.

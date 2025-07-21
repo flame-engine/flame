@@ -49,20 +49,21 @@ class TiledGame extends FlameGame {
     // We are 100% sure that an object layer named `AnimatedCoins`
     // exists in the example `map.tmx`.
     for (final object in objectGroup!.objects) {
-      final sprite = SpriteAnimationComponent(
-        size: Vector2.all(20.0),
-        anchor: Anchor.center,
-        position: Vector2(object.x, object.y),
-        animation: SpriteAnimation.fromFrameData(
-          coins,
-          SpriteAnimationData.sequenced(
-            amount: 8,
-            stepTime: 0.15,
-            textureSize: Vector2.all(20),
+      groundLayer?.add(
+        SpriteAnimationComponent(
+          size: Vector2.all(20.0),
+          anchor: Anchor.center,
+          position: Vector2(object.x, object.y),
+          animation: SpriteAnimation.fromFrameData(
+            coins,
+            SpriteAnimationData.sequenced(
+              amount: 8,
+              stepTime: 0.15,
+              textureSize: Vector2.all(20),
+            ),
           ),
         ),
       );
-      groundLayer?.add(sprite);
     }
   }
 }

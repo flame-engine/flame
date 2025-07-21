@@ -172,14 +172,8 @@ class UnsupportedLayer extends RenderableLayer {
   });
 
   @override
-  void render(Canvas canvas, CameraComponent? camera) {}
-
-  @override
   void handleResize(Vector2 canvasSize) {}
 
   @override
   void refreshCache() {}
-
-  @override
-  void update(double dt) {}
 }

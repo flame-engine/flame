@@ -131,9 +131,4 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
 
   @override
   void refreshCache() {}
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-  }
 }
