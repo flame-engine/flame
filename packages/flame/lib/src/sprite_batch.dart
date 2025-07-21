@@ -37,10 +37,14 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
+    this.id,
     Color? color,
     this.flip = false,
   })  : paint = Paint()..color = color ?? const Color(0x00000000),
         destination = Offset.zero & source.size;
+
+  /// Optional identifier for the batch item.
+  final String? id;
 
   /// The source rectangle on the [SpriteBatch.atlas].
   final Rect source;
@@ -143,6 +147,13 @@ class SpriteBatch {
   }
 
   FlippedAtlasStatus _flippedAtlasStatus = FlippedAtlasStatus.none;
+
+  /// A map to keep track of the index of each batch item by its id.
+  final Map<String, int> _idToIndex = {};
+
+  /// Returns all ids currently in the batch (excluding nulls).
+  Iterable<String> get ids =>
+      _batchItems.where((item) => item.id != null).map((item) => item.id!);
 
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
@@ -300,8 +311,10 @@ class SpriteBatch {
     RSTransform? transform,
     bool flip = false,
     Color? color,
+    String? id,
   }) {
     final batchItem = BatchItem(
+      id: id,
       source: source,
       transform: transform ??= defaultTransform ?? RSTransform(1, 0, 0, 0),
       flip: flip,
@@ -385,12 +398,101 @@ class SpriteBatch {
     );
   }
 
+  /// Finds the index of the batch item with the given [id].
+  int? findIndexById(String id) {
+    if (_idToIndex.containsKey(id)) {
+      return _idToIndex[id];
+    }
+    for (var i = 0; i < _batchItems.length; i++) {
+      if (_batchItems[i].id == id) {
+        _idToIndex[id] = i; // repair mapping
+        return i;
+      }
+    }
+    return null;
+  }
+
+  /// Removes a batch item by its [id].
+  void removeById(String id) {
+    final index = _idToIndex[id];
+    if (index == null) {
+      return;
+    }
+
+    removeAt(index);
+    _idToIndex.remove(id);
+
+    // adjust indices > removed index
+    _idToIndex.updateAll((key, idx) => idx > index ? idx - 1 : idx);
+  }
+
+  /// Removes a batch item at the given [index].
+  void removeAt(int index) {
+    if (index < 0 || index >= length) {
+      throw ArgumentError('Index out of bounds: $index');
+    }
+
+    _batchItems.removeAt(index);
+    _sources.removeAt(index);
+    _transforms.removeAt(index);
+    _colors.removeAt(index);
+  }
+
+  /// Adds a new batch item with the given [id].
+  int addWithId(
+    String id, {
+    required Rect source,
+    RSTransform? transform,
+    bool flip = false,
+    Color? color,
+  }) {
+    final idx = findIndexById(id);
+    if (idx != null) {
+      replace(idx, source: source, transform: transform, color: color);
+      return idx;
+    }
+
+    final item = BatchItem(
+      id: id,
+      source: source,
+      transform: transform ?? defaultTransform ?? RSTransform(1, 0, 0, 0),
+      flip: flip,
+      color: color ?? defaultColor,
+    );
+
+    _batchItems.add(item);
+    _sources.add(item.source);
+    _transforms.add(item.transform);
+    _colors.add(color ?? _defaultColor);
+
+    final newIdx = _batchItems.length - 1;
+    _idToIndex[id] = newIdx;
+
+    return newIdx;
+  }
+
+  /// Replaces the batch item identified by [id] with new data.
+
+  void replaceById(
+    String id, {
+    Rect? source,
+    Color? color,
+    RSTransform? transform,
+  }) {
+    final index = _idToIndex[id];
+    if (index == null) {
+      throw ArgumentError('No BatchItem found with id: $id');
+    }
+    replace(index, source: source, color: color, transform: transform);
+  }
+
   /// Clear the SpriteBatch so it can be reused.
   void clear() {
     _sources.clear();
     _transforms.clear();
     _colors.clear();
     _batchItems.clear();
+    _idToIndex.clear();
   }
 
   // Used to not create new Paint objects in [render] and
