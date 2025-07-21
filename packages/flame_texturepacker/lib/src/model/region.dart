@@ -13,18 +13,15 @@ final class Region {
   /// excluded: underscores denote special instructions to the texture packer.
   final String name;
 
-  /// Ultra-compact data storage using bit packing.
-  /// Uses 12 bits (supports 0-4095) with some values packed together.
-  /// Format:
-  /// [left|top, width|height, offsetX|offsetY, originalWidth, originalHeight]
+  /// Packed position, size, and offsets as 16-bit unsigned integers.
+  /// Format: [left, top, width, height, offsetX, offsetY]
   final Uint16List _packedData;
 
-  /// Packed rotation data:
-  /// bits 0-8 for degrees, bit 9 for rotate flag, bits 10-31 for index
-  final int _rotationAndIndex;
+  /// Original dimensions as 16-bit unsigned integers (width, height)
+  final Uint16List _originalData;
 
-  static const int _maxValue = 4095; // 12 bits max
-  static const int _bitMask = 0xFFF; // 12 bits mask
+  /// Packed rotation data: bits 0-8 for degrees, bit 9 for rotate flag, bits 10-31 for index
+  final int _rotationAndIndex;
 
   /// Creates a new [Region] with the given properties.
   Region({
@@ -41,66 +38,54 @@ final class Region {
     int degrees = 0,
     bool rotate = false,
     int index = -1,
-  })  : assert(left >= 0 && left <= _maxValue, 'left must be 0-4095'),
-        assert(top >= 0 && top <= _maxValue, 'top must be 0-4095'),
-        assert(width >= 0 && width <= _maxValue, 'width must be 0-4095'),
-        assert(height >= 0 && height <= _maxValue, 'height must be 0-4095'),
-        assert(offsetX >= 0 && offsetX <= _maxValue, 'offsetX must be 0-4095'),
-        assert(offsetY >= 0 && offsetY <= _maxValue, 'offsetY must be 0-4095'),
+  })  : assert(left >= 0 && left <= 65535, 'left must be 0-65535'),
+        assert(top >= 0 && top <= 65535, 'top must be 0-65535'),
+        assert(width >= 0 && width <= 65535, 'width must be 0-65535'),
+        assert(height >= 0 && height <= 65535, 'height must be 0-65535'),
+        assert(offsetX >= 0 && offsetX <= 65535, 'offsetX must be 0-65535'),
+        assert(offsetY >= 0 && offsetY <= 65535, 'offsetY must be 0-65535'),
         _packedData = Uint16List.fromList([
-          // Pack left (12 bits) + top first 4 bits
-          (left.toInt() & _bitMask) | ((top.toInt() & 0xF) << 12),
-          // Pack top remaining 8 bits + width first 8 bits
-          ((top.toInt() >> 4) & 0xFF) | ((width.toInt() & 0xFF) << 8),
-          // Pack width remaining 4 bits + height (12 bits)
-          ((width.toInt() >> 8) & 0xF) | ((height.toInt() & _bitMask) << 4),
-          // Pack offsetX (12 bits) + offsetY first 4 bits
-          (offsetX.toInt() & _bitMask) | ((offsetY.toInt() & 0xF) << 12),
-          // Pack offsetY remaining 8 bits + originalWidth first 8 bits
-          ((offsetY.toInt() >> 4) & 0xFF) |
-              (((originalWidth ?? width).toInt() & 0xFF) << 8),
-          // Pack originalWidth remaining 4 bits + originalHeight (12 bits)
-          (((originalWidth ?? width).toInt() >> 8) & 0xF) |
-              (((originalHeight ?? height).toInt() & _bitMask) << 4),
+          left.toInt(),
+          top.toInt(),
+          width.toInt(),
+          height.toInt(),
+          offsetX.toInt(),
+          offsetY.toInt(),
+        ]),
+        _originalData = Uint16List.fromList([
+          (originalWidth ?? width).toInt(),
+          (originalHeight ?? height).toInt(),
         ]),
         _rotationAndIndex = (degrees & 0x1FF) |
             ((rotate ? 1 : 0) << 9) |
             ((index + 1) << 10); // +1 to handle -1 index
 
   /// The left position of the region in the texture atlas.
-  double get left => (_packedData[0] & _bitMask).toDouble();
+  double get left => _packedData[0].toDouble();
 
   /// The top position of the region in the texture atlas.
-  double get top =>
-      (((_packedData[0] >> 12) & 0xF) | ((_packedData[1] & 0xFF) << 4))
-          .toDouble();
+  double get top => _packedData[1].toDouble();
 
   /// The width of the image, after whitespace was removed for packing.
-  double get width =>
-      (((_packedData[1] >> 8) & 0xFF) | ((_packedData[2] & 0xF) << 8))
-          .toDouble();
+  double get width => _packedData[2].toDouble();
 
   /// The height of the image, after whitespace was removed for packing.
-  double get height => ((_packedData[2] >> 4) & _bitMask).toDouble();
+  double get height => _packedData[3].toDouble();
 
   /// The offset from the left of the original image to the left of the packed
   /// image, after whitespace was removed for packing.
-  double get offsetX => (_packedData[3] & _bitMask).toDouble();
+  double get offsetX => _packedData[4].toDouble();
 
   /// The offset from the bottom of the original image to the bottom of the
   /// packed image, after whitespace was removed for packing.
-  double get offsetY =>
-      (((_packedData[3] >> 12) & 0xF) | ((_packedData[4] & 0xFF) << 4))
-          .toDouble();
+  double get offsetY => _packedData[5].toDouble();
 
   /// The width of the image, before whitespace was removed and rotation was
   /// applied for packing.
-  double get originalWidth =>
-      (((_packedData[4] >> 8) & 0xFF) | ((_packedData[5] & 0xF) << 8))
-          .toDouble();
+  double get originalWidth => _originalData[0].toDouble();
 
   /// The height of the image, before whitespace was removed for packing.
-  double get originalHeight => ((_packedData[5] >> 4) & _bitMask).toDouble();
+  double get originalHeight => _originalData[1].toDouble();
 
   /// The degrees the region has been rotated, counter clockwise between 0 and
   /// 359. Most atlas region handling deals only with 0 or 90 degree rotation
