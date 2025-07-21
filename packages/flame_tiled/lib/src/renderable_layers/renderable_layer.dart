@@ -12,7 +12,6 @@ import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
-@internal
 abstract class RenderableLayer<T extends Layer> {
   final T layer;
   final Vector2 destTileSize;
