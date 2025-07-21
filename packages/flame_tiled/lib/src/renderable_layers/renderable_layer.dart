@@ -12,25 +12,26 @@ import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
-abstract class RenderableLayer<T extends Layer> {
+abstract class RenderableLayer<T extends Layer> extends PositionComponent
+    with HasPaint<RenderableLayer<T>> {
   final T layer;
   final Vector2 destTileSize;
   final TiledMap map;
-  final List<HasPaint<Object>> paintables = [];
-
-  /// The parent [Group] layer (if it exists)
-  final GroupLayer? parent;
+  final CameraComponent? camera;
 
   /// The [FilterQuality] that should be used by all the layers.
   final FilterQuality filterQuality;
 
   RenderableLayer({
     required this.layer,
-    required this.parent,
+    required Component? parent,
     required this.map,
+    required this.camera,
     required this.destTileSize,
     FilterQuality? filterQuality,
-  }) : filterQuality = filterQuality ?? FilterQuality.none;
+  }) : filterQuality = filterQuality ?? FilterQuality.none {
+    this.parent = parent;
+  }
 
   /// [load] is a factory method to create [RenderableLayer] by type of [layer].
   static Future<RenderableLayer> load({
@@ -50,6 +51,7 @@ abstract class RenderableLayer<T extends Layer> {
       return FlameTileLayer.load(
         layer: layer,
         parent: parent,
+        camera: camera,
         map: map,
         destTileSize: destTileSize,
         animationFrames: animationFrames,
@@ -71,6 +73,8 @@ abstract class RenderableLayer<T extends Layer> {
     } else if (layer is ObjectGroup) {
       return ObjectLayer.load(
         layer,
+        parent,
+        camera,
         map,
         destTileSize,
         filterQuality,
@@ -80,6 +84,7 @@ abstract class RenderableLayer<T extends Layer> {
       return GroupLayer(
         layer: groupLayer,
         parent: parent,
+        camera: camera,
         map: map,
         destTileSize: destTileSize,
         filterQuality: filterQuality,
@@ -89,6 +94,7 @@ abstract class RenderableLayer<T extends Layer> {
     return UnsupportedLayer(
       layer: layer,
       parent: parent,
+      camera: camera,
       map: map,
       destTileSize: destTileSize,
     );
@@ -96,39 +102,41 @@ abstract class RenderableLayer<T extends Layer> {
 
   bool get visible => layer.visible;
 
-  @mustCallSuper
-  void render(Canvas canvas, CameraComponent? camera) {
-    for (final p in paintables) {
-      p.renderTree(canvas);
-    }
-  }
-
-  void handleResize(Vector2 canvasSize);
-
   void refreshCache();
-
-  @mustCallSuper
-  void update(double dt) {
-    for (final p in paintables) {
-      p.updateTree(dt);
-    }
-  }
-
-  void add(HasPaint<Object> paintable) => paintables.add(paintable);
-  bool remove(HasPaint<Object> paintable) => paintables.remove(paintable);
 
   double get scaleX => destTileSize.x / map.tileWidth;
   double get scaleY => destTileSize.y / map.tileHeight;
 
-  late double offsetX = layer.offsetX * scaleX + (parent?.offsetX ?? 0);
+  late double offsetX = layer.offsetX * scaleX +
+      switch (parent) {
+        final GroupLayer p => p.offsetX,
+        _ => 0,
+      };
 
-  late double offsetY = layer.offsetY * scaleY + (parent?.offsetY ?? 0);
+  late double offsetY = layer.offsetY * scaleY +
+      switch (parent) {
+        final GroupLayer p => p.offsetY,
+        _ => 0,
+      };
 
-  late double opacity = layer.opacity * (parent?.opacity ?? 1);
+  @override
+  late double opacity = layer.opacity *
+      switch (parent) {
+        final GroupLayer p => p.opacity,
+        _ => 1,
+      };
 
-  late double parallaxX = layer.parallaxX * (parent?.parallaxX ?? 1);
+  late double parallaxX = layer.parallaxX *
+      switch (parent) {
+        final GroupLayer p => p.parallaxX,
+        _ => 1,
+      };
 
-  late double parallaxY = layer.parallaxY * (parent?.parallaxY ?? 1);
+  late double parallaxY = layer.parallaxY *
+      switch (parent) {
+        final GroupLayer p => p.parallaxY,
+        _ => 1,
+      };
 
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera
@@ -165,13 +173,11 @@ abstract class RenderableLayer<T extends Layer> {
 class UnsupportedLayer extends RenderableLayer {
   UnsupportedLayer({
     required super.layer,
-    required super.parent,
     required super.map,
+    required super.parent,
+    required super.camera,
     required super.destTileSize,
   });
-
-  @override
-  void handleResize(Vector2 canvasSize) {}
 
   @override
   void refreshCache() {}

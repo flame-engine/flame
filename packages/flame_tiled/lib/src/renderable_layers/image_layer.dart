@@ -20,6 +20,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   FlameImageLayer({
     required super.layer,
     required super.parent,
+    required super.camera,
     required super.map,
     required super.destTileSize,
     required Image image,
@@ -29,18 +30,19 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   }
 
   @override
-  void handleResize(Vector2 canvasSize) {
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
     _canvasSize.setFrom(canvasSize);
   }
 
   @override
-  void render(Canvas canvas, CameraComponent? camera) {
+  void render(Canvas canvas) {
     canvas.save();
 
     canvas.translate(offsetX, offsetY);
 
     if (camera != null) {
-      applyParallaxOffset(canvas, camera);
+      applyParallaxOffset(canvas, camera!);
     }
 
     _resizePaintArea(camera);
@@ -56,8 +58,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     );
 
     canvas.restore();
-
-    super.render(canvas, camera);
   }
 
   void _resizePaintArea(CameraComponent? camera) {
@@ -122,6 +122,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     return FlameImageLayer(
       layer: layer,
       parent: parent,
+      camera: camera,
       map: map,
       destTileSize: destTileSize,
       filterQuality: filterQuality,

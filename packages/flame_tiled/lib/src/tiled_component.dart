@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -12,14 +11,14 @@ import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 /// {@template _tiled_component}
-/// A Flame [Component] to render a Tiled TiledMap.
+/// An API to
 ///
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
 /// {@endtemplate}
 class TiledComponent<T extends FlameGame> extends PositionComponent
     with HasGameReference<T> {
-  /// Map instance of this component.
+  /// Map component instance which manages and draws layers.
   RenderableTiledMap tileMap;
 
   /// This property **cannot** be reassigned at runtime. To make the
@@ -66,27 +65,8 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         );
 
   @override
-  Future<void>? onLoad() async {
-    super.onLoad();
-    // Automatically use the first attached CameraComponent camera if it's not
-    // already set..
-    tileMap.camera ??= game.children.query<CameraComponent>().firstOrNull;
-  }
-
-  @override
-  void update(double dt) {
-    tileMap.update(dt);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    tileMap.render(canvas);
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    tileMap.handleResize(size);
+  Future<void> onLoad() async {
+    await add(tileMap);
   }
 
   /// Loads a [TiledComponent] from a file.

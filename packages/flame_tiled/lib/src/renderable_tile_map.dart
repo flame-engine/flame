@@ -4,6 +4,7 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
 import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
@@ -37,7 +38,8 @@ Paint _defaultLayerPaintFactory(double opacity) =>
 ///  - [Layer.parallaxY] (only supported if a [CameraComponent] is supplied)
 ///
 /// {@endtemplate}
-class RenderableTiledMap {
+class RenderableTiledMap<T extends FlameGame> extends Component
+    with HasPaint, HasGameReference<T> {
   /// [TiledMap] instance for this map.
   final TiledMap map;
 
@@ -73,6 +75,8 @@ class RenderableTiledMap {
     } else {
       _backgroundPaint = null;
     }
+
+    addAll(renderableLayers);
   }
 
   /// Changes the visibility of the corresponding layer, if different
@@ -167,7 +171,7 @@ class RenderableTiledMap {
         // else descend and ask for named children.
         tiles.addAll(
           _tileStack(
-            layer.children,
+            layer.children.whereType<RenderableLayer>().toList(),
             x,
             y,
             named: named,
@@ -368,17 +372,19 @@ class RenderableTiledMap {
       );
 
       if (layer is Group && renderableLayer is GroupLayer) {
-        renderableLayer.children = await _renderableLayers(
-          layer.layers,
-          renderableLayer,
-          map,
-          destTileSize,
-          camera,
-          animationFrames,
-          atlas: atlas,
-          ignoreFlip: ignoreFlip,
-          images: images,
-          layerPaintFactory: layerPaintFactory,
+        await renderableLayer.addAll(
+          await _renderableLayers(
+            layer.layers,
+            renderableLayer,
+            map,
+            destTileSize,
+            camera,
+            animationFrames,
+            atlas: atlas,
+            ignoreFlip: ignoreFlip,
+            images: images,
+            layerPaintFactory: layerPaintFactory,
+          ),
         );
       }
 
@@ -388,10 +394,21 @@ class RenderableTiledMap {
     return Future.wait(layerLoaders);
   }
 
+  @override
+  Future<void>? onLoad() async {
+    super.onLoad();
+    // Automatically use the first attached CameraComponent camera if it's not
+    // already set..
+    camera ??= game.children.query<CameraComponent>().firstOrNull;
+  }
+
   /// Handle game resize and propagate it to renderable layers
-  void handleResize(Vector2 canvasSize) {
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
+
     for (final layer in renderableLayers) {
-      layer.handleResize(canvasSize);
+      layer.onGameResize(canvasSize);
     }
   }
 
@@ -402,25 +419,22 @@ class RenderableTiledMap {
     }
   }
 
-  /// Renders each renderable layer in the same order specified by the Tiled map
+  /// Renders the background and then calls super.
+  @override
   void render(Canvas c) {
     if (_backgroundPaint != null) {
       c.drawPaint(_backgroundPaint);
     }
 
-    // Paint each layer in reverse order, because the last layers should be
-    // rendered beneath the first layers
-    for (final layer in renderableLayers.where((l) => l.visible)) {
-      layer.render(c, camera);
-    }
+    super.render(c);
   }
 
   /// Returns a layer of type [T] with given [name] from all the layers
   /// of this map. If no such layer is found, null is returned.
-  T? getLayer<T extends Layer>(String name) {
+  L? getLayer<L extends Layer>(String name) {
     try {
       // layerByName will searches recursively starting with tiled.dart v0.8.5
-      return map.layerByName(name) as T;
+      return map.layerByName(name) as L;
     } on ArgumentError {
       return null;
     }
@@ -434,15 +448,13 @@ class RenderableTiledMap {
         final int idx => renderableLayers[idx],
       };
 
+  @override
   void update(double dt) {
-    // First, update animation frames.
+    // Updatees tile frame animations.
     for (final frame in animationFrames.values) {
       frame.update(dt);
     }
 
-    // Then every layer.
-    for (final layer in renderableLayers) {
-      layer.update(dt);
-    }
+    super.update(dt);
   }
 }
