@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 /// Represents a region within the texture packer atlas.
 @immutable
-class Region {
+final class Region {
   /// The page in the texture pack this region belongs to.
   final Page page;
 
