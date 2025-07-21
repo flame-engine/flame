@@ -17,6 +17,8 @@ class SpriteBatchComponent extends Component {
     this.cullRect,
     this.paint,
     super.key,
+    super.children,
+    super.priority,
   });
 
   @override
