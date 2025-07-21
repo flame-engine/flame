@@ -263,6 +263,7 @@ class SpriteBatch {
   /// At least one of the parameters must be different from null.
   void replace(
     int index, {
+    String? id,
     Rect? source,
     Color? color,
     RSTransform? transform,
@@ -278,6 +279,7 @@ class SpriteBatch {
 
     final currentBatchItem = _batchItems[index];
     final newBatchItem = BatchItem(
+      id: id ?? currentBatchItem.id,
       source: source ?? currentBatchItem.source,
       transform: transform ?? currentBatchItem.transform,
       color: color ?? currentBatchItem.paint.color,
@@ -285,10 +287,15 @@ class SpriteBatch {
     );
 
     _batchItems[index] = newBatchItem;
-
     _sources[index] = newBatchItem.source;
     _transforms[index] = newBatchItem.transform;
     _colors[index] = color ?? _defaultColor;
+
+    if (id == null) {
+      return;
+    }
+
+    _idToIndex[id] = index;
   }
 
   /// Add a new batch item using a RSTransform.
@@ -340,6 +347,13 @@ class SpriteBatch {
     );
     _transforms.add(batchItem.transform);
     _colors.add(color ?? _defaultColor);
+
+    if (id == null) {
+      return;
+    }
+
+    final newIdx = _batchItems.length - 1;
+    _idToIndex[id] = newIdx;
   }
 
   /// Add a new batch item.
@@ -362,6 +376,7 @@ class SpriteBatch {
   /// method instead.
   void add({
     required Rect source,
+    String? id,
     double scale = 1.0,
     Vector2? anchor,
     double rotation = 0,
@@ -395,6 +410,7 @@ class SpriteBatch {
       transform: transform,
       flip: flip,
       color: color,
+      id: id,
     );
   }
 
@@ -436,54 +452,6 @@ class SpriteBatch {
     _sources.removeAt(index);
     _transforms.removeAt(index);
     _colors.removeAt(index);
-  }
-
-  /// Adds a new batch item with the given [id].
-  int addWithId(
-    String id, {
-    required Rect source,
-    RSTransform? transform,
-    bool flip = false,
-    Color? color,
-  }) {
-    final idx = findIndexById(id);
-    if (idx != null) {
-      replace(idx, source: source, transform: transform, color: color);
-      return idx;
-    }
-
-    final item = BatchItem(
-      id: id,
-      source: source,
-      transform: transform ?? defaultTransform ?? RSTransform(1, 0, 0, 0),
-      flip: flip,
-      color: color ?? defaultColor,
-    );
-
-    _batchItems.add(item);
-    _sources.add(item.source);
-    _transforms.add(item.transform);
-    _colors.add(color ?? _defaultColor);
-
-    final newIdx = _batchItems.length - 1;
-    _idToIndex[id] = newIdx;
-
-    return newIdx;
-  }
-
-  /// Replaces the batch item identified by [id] with new data.
-
-  void replaceById(
-    String id, {
-    Rect? source,
-    Color? color,
-    RSTransform? transform,
-  }) {
-    final index = _idToIndex[id];
-    if (index == null) {
-      throw ArgumentError('No BatchItem found with id: $id');
-    }
-    replace(index, source: source, color: color, transform: transform);
   }
 
   /// Clear the SpriteBatch so it can be reused.
