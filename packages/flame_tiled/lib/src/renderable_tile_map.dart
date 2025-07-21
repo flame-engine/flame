@@ -426,6 +426,12 @@ class RenderableTiledMap {
     }
   }
 
+  RenderableLayer? getRenderableLayer(String name) {
+    final int idx = renderableLayers.indexWhere((e) => e.layer.name == name);
+    if (idx == -1) return null;
+    return renderableLayers[idx];
+  }
+
   void update(double dt) {
     // First, update animation frames.
     for (final frame in animationFrames.values) {

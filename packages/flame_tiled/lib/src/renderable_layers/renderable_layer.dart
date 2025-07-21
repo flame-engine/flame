@@ -17,6 +17,7 @@ abstract class RenderableLayer<T extends Layer> {
   final T layer;
   final Vector2 destTileSize;
   final TiledMap map;
+  final List<HasPaint<Object>> paintables = [];
 
   /// The parent [Group] layer (if it exists)
   final GroupLayer? parent;
@@ -96,13 +97,26 @@ abstract class RenderableLayer<T extends Layer> {
 
   bool get visible => layer.visible;
 
-  void render(Canvas canvas, CameraComponent? camera);
+  @mustCallSuper
+  void render(Canvas canvas, CameraComponent? camera) {
+    for (final p in paintables) {
+      p.renderTree(canvas);
+    }
+  }
 
   void handleResize(Vector2 canvasSize);
 
   void refreshCache();
 
-  void update(double dt);
+  @mustCallSuper
+  void update(double dt) {
+    for (final p in paintables) {
+      p.updateTree(dt);
+    }
+  }
+
+  void add(HasPaint<Object> paintable) => paintables.add(paintable);
+  bool remove(HasPaint<Object> paintable) => paintables.remove(paintable);
 
   double get scaleX => destTileSize.x / map.tileWidth;
   double get scaleY => destTileSize.y / map.tileHeight;

@@ -56,6 +56,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     );
 
     canvas.restore();
+
+    super.render(canvas, camera);
   }
 
   void _resizePaintArea(CameraComponent? camera) {
@@ -131,5 +133,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   void refreshCache() {}
 
   @override
-  void update(double dt) {}
+  void update(double dt) {
+    super.update(dt);
+  }
 }

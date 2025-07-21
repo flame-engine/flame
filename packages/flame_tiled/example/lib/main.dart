@@ -27,7 +27,7 @@ class TiledGame extends FlameGame {
       ..anchor = Anchor.topLeft
       ..add(
         MoveToEffect(
-          Vector2(1000, 0),
+          Vector2(320, 180),
           EffectController(
             duration: 10,
             alternate: true,
@@ -43,23 +43,26 @@ class TiledGame extends FlameGame {
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
     final coins = await Flame.images.load('coins.png');
 
+    // Add sprites behind the ground decoration layer.
+    final groundLayer = mapComponent.tileMap.getRenderableLayer('Ground');
+
     // We are 100% sure that an object layer named `AnimatedCoins`
     // exists in the example `map.tmx`.
     for (final object in objectGroup!.objects) {
-      world.add(
-        SpriteAnimationComponent(
-          size: Vector2.all(20.0),
-          position: Vector2(object.x, object.y),
-          animation: SpriteAnimation.fromFrameData(
-            coins,
-            SpriteAnimationData.sequenced(
-              amount: 8,
-              stepTime: 0.15,
-              textureSize: Vector2.all(20),
-            ),
+      final sprite = SpriteAnimationComponent(
+        size: Vector2.all(20.0),
+        anchor: Anchor.center,
+        position: Vector2(object.x, object.y),
+        animation: SpriteAnimation.fromFrameData(
+          coins,
+          SpriteAnimationData.sequenced(
+            amount: 8,
+            stepTime: 0.15,
+            textureSize: Vector2.all(20),
           ),
         ),
       );
+      groundLayer?.add(sprite);
     }
   }
 }

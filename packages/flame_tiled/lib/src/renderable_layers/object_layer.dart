@@ -18,7 +18,8 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
 
   @override
   void render(Canvas canvas, CameraComponent? camera) {
-    // nothing to do
+    // Nothing to do besides call super.
+    super.render(canvas, camera);
   }
 
   // ignore non-renderable layers when looping over the layers to render
@@ -47,5 +48,7 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
   void refreshCache() {}
 
   @override
-  void update(double dt) {}
+  void update(double dt) {
+    super.update(dt);
+  }
 }

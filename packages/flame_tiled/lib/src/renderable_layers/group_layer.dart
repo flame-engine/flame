@@ -39,6 +39,7 @@ class GroupLayer extends RenderableLayer<Group> {
     for (final child in children) {
       child.render(canvas, camera);
     }
+    super.render(canvas, camera);
   }
 
   @override
@@ -46,5 +47,7 @@ class GroupLayer extends RenderableLayer<Group> {
     for (final child in children) {
       child.update(dt);
     }
+
+    super.update(dt);
   }
 }

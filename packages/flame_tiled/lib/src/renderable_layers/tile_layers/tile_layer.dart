@@ -124,6 +124,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     for (final animation in animations) {
       animation.update(dt);
     }
+
+    super.update(dt);
   }
 
   @override
@@ -139,6 +141,8 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     }
     tiledAtlas.batch!.render(canvas, paint: _layerPaint);
     canvas.restore();
+
+    super.render(canvas, camera);
   }
 
   @override
