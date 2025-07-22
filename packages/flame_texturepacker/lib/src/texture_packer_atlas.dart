@@ -233,9 +233,8 @@ Future<TextureAtlasData> _parse(
       ? await XFile(path).readAsString()
       : await (assets ?? Flame.assets).readFile('${assetsPrefix!}/$path');
 
-  final lines = LineSplitter.split(fileContent)
-      .where((line) => line.trim().isNotEmpty)
-      .toList();
+  final lines =
+      LineSplitter.split(fileContent).where((line) => line.trim().isNotEmpty);
 
   final lineQueue = ListQueue<String>.from(lines);
   images ??= Flame.images;
@@ -266,8 +265,8 @@ Future<TextureAtlasData> _parse(
   if (hasIndexes) {
     regions.sort(
       (a, b) {
-        final i1 = a.index == -1 ? double.maxFinite.toInt() : a.index;
-        final i2 = b.index == -1 ? double.maxFinite.toInt() : b.index;
+        final i1 = a.index == -1 ? 0x7FFFFFFF : a.index;
+        final i2 = b.index == -1 ? 0x7FFFFFFF : b.index;
         return i1 - i2;
       },
     );
@@ -409,17 +408,17 @@ Region _parseRegion(ListQueue<String> lineQueue, Page page) {
   final offsetX = offsetOrNull != null ? double.parse(offsetOrNull[0]) : 0.0;
   final offsetY = offsetOrNull != null ? double.parse(offsetOrNull[1]) : 0.0;
 
-  final origWidth = offsets != null
+  final originalWidth = offsets != null
       ? double.parse(offsets[2])
       : (orig != null ? double.parse(orig[0]) : 0.0);
 
-  final originalWidth = origWidth == 0.0 ? null : origWidth;
+  final finalOriginalWidth = originalWidth == 0.0 ? null : originalWidth;
 
-  final origHeight = offsets != null
+  final originalHeight = offsets != null
       ? double.parse(offsets[3])
       : (orig != null ? double.parse(orig[1]) : 0.0);
 
-  final originalHeight = origHeight == 0.0 ? null : origHeight;
+  final finalOriginalHeight = originalHeight == 0.0 ? null : originalHeight;
 
   return Region(
     page: page,
@@ -438,8 +437,8 @@ Region _parseRegion(ListQueue<String> lineQueue, Page page) {
         : (size != null ? double.parse(size[1]) : 0.0),
     offsetX: offsetX,
     offsetY: offsetY,
-    originalWidth: originalWidth,
-    originalHeight: originalHeight,
+    originalWidth: finalOriginalWidth,
+    originalHeight: finalOriginalHeight,
     degrees: _parseDegrees(rotate?.first),
     rotate: _parseDegrees(rotate?.first) == 90,
     index: index != null ? int.parse(index[0]) : -1,
