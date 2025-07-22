@@ -1,0 +1,293 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(LoveableQuest());
+}
+
+class LoveableQuest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Loveable Quest',
+      theme: ThemeData(primarySwatch: Colors.pink),
+      home: PlayerInputScreen(),
+    );
+  }
+}
+
+class PlayerInputScreen extends StatefulWidget {
+  @override
+  _PlayerInputScreenState createState() => _PlayerInputScreenState();
+}
+
+class _PlayerInputScreenState extends State<PlayerInputScreen> {
+  final _playerController = TextEditingController();
+  final _loverController = TextEditingController();
+  final _placeController = TextEditingController();
+
+  void startGame() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameScreen(
+          playerName: _playerController.text,
+          loverName: _loverController.text,
+          memorablePlace: _placeController.text,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Loveable Quest')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _playerController,
+              decoration: InputDecoration(labelText: 'Таны нэр'),
+            ),
+            TextField(
+              controller: _loverController,
+              decoration: InputDecoration(labelText: 'Хайртай хүний нэр'),
+            ),
+            TextField(
+              controller: _placeController,
+              decoration: InputDecoration(labelText: 'Дурсамжтай газар'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: startGame,
+              child: Text('Тоглоом эхлүүлэх'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GameScreen extends StatefulWidget {
+  final String playerName;
+  final String loverName;
+  final String memorablePlace;
+
+  GameScreen({required this.playerName, required this.loverName, required this.memorablePlace});
+
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  int stage = 0;
+  String message = '';
+
+  List<Map<String, dynamic>> get stages => [
+    {
+      'lockName': 'Дурсамжийн Түгжээ',
+      'question': 'Та хоёр хамгийн анх хаана уулзсан бэ?',
+      'options': ['Зайсан', 'Төв талбай', widget.memorablePlace],
+      'answer': widget.memorablePlace
+    },
+    {
+      'lockName': 'Сэтгэлийн Түгжээ',
+      'question': '${widget.loverName}-ийн дуртай зүйл аль нь вэ?',
+      'options': ['Кофе уух', 'Ном унших', 'Кино үзэх'],
+      'answer': 'Ном унших'
+    },
+    {
+      'lockName': 'Хайрын Түгжээ',
+      'question': '${widget.loverName}-ийн дуртай үг аль нь вэ?',
+      'options': ['Би чамд хайртай', 'Чи миний ертөнц', 'Чи бол миний амьдралын адал явдал'],
+      'answer': 'Чи бол миний амьдралын адал явдал'
+    }
+  ];
+
+  void handleAnswer(String option) {
+    if (option == stages[stage]['answer']) {
+      setState(() {
+        if (stage < stages.length - 1) {
+          stage++;
+          message = 'Түгжээ тайлагдлаа! Дараагийн шат руу.';
+        } else {
+          message = 'Бүх түгжээ тайлагдлаа! Хайртай хүнээ ${widget.memorablePlace} дээр уулзаарай!';
+        }
+      });
+    } else {
+      setState(() {
+        message = 'Буруу хариулт, дахин оролдоно уу.';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var currentStage = stages[stage];
+    return Scaffold(
+      appBar: AppBar(title: Text(currentStage['lockName'])),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(currentStage['question'], style: TextStyle(fontSize: 18)),
+            ...currentStage['options'].map<Widget>((opt) => ElevatedButton(
+              onPressed: () => handleAnswer(opt),
+              child: Text(opt),
+            )),
+            SizedBox(height: 20),
+            Text(message, style: TextStyle(color: Colors.pink, fontSize: 16)),
+          ],
+        ),
+      ),
+    );
+  }
+}import 'package:flutter/material.dart';
+
+void main() {
+  runApp(LoveableQuest());
+}
+
+class LoveableQuest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Loveable Quest',
+      theme: ThemeData(primarySwatch: Colors.pink),
+      home: PlayerInputScreen(),
+    );
+  }
+}
+
+class PlayerInputScreen extends StatefulWidget {
+  @override
+  _PlayerInputScreenState createState() => _PlayerInputScreenState();
+}
+
+class _PlayerInputScreenState extends State<PlayerInputScreen> {
+  final _playerController = TextEditingController();
+  final _loverController = TextEditingController();
+  final _placeController = TextEditingController();
+
+  void startGame() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameScreen(
+          playerName: _playerController.text,
+          loverName: _loverController.text,
+          memorablePlace: _placeController.text,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Loveable Quest')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _playerController,
+              decoration: InputDecoration(labelText: 'Таны нэр'),
+            ),
+            TextField(
+              controller: _loverController,
+              decoration: InputDecoration(labelText: 'Хайртай хүний нэр'),
+            ),
+            TextField(
+              controller: _placeController,
+              decoration: InputDecoration(labelText: 'Дурсамжтай газар'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: startGame,
+              child: Text('Тоглоом эхлүүлэх'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class GameScreen extends StatefulWidget {
+  final String playerName;
+  final String loverName;
+  final String memorablePlace;
+
+  GameScreen({required this.playerName, required this.loverName, required this.memorablePlace});
+
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  int stage = 0;
+  String message = '';
+
+  List<Map<String, dynamic>> get stages => [
+    {
+      'lockName': 'Дурсамжийн Түгжээ',
+      'question': 'Та хоёр хамгийн анх хаана уулзсан бэ?',
+      'options': ['Зайсан', 'Төв талбай', widget.memorablePlace],
+      'answer': widget.memorablePlace
+    },
+    {
+      'lockName': 'Сэтгэлийн Түгжээ',
+      'question': '${widget.loverName}-ийн дуртай зүйл аль нь вэ?',
+      'options': ['Кофе уух', 'Ном унших', 'Кино үзэх'],
+      'answer': 'Ном унших'
+    },
+    {
+      'lockName': 'Хайрын Түгжээ',
+      'question': '${widget.loverName}-ийн дуртай үг аль нь вэ?',
+      'options': ['Би чамд хайртай', 'Чи миний ертөнц', 'Чи бол миний амьдралын адал явдал'],
+      'answer': 'Чи бол миний амьдралын адал явдал'
+    }
+  ];
+
+  void handleAnswer(String option) {
+    if (option == stages[stage]['answer']) {
+      setState(() {
+        if (stage < stages.length - 1) {
+          stage++;
+          message = 'Түгжээ тайлагдлаа! Дараагийн шат руу.';
+        } else {
+          message = 'Бүх түгжээ тайлагдлаа! Хайртай хүнээ ${widget.memorablePlace} дээр уулзаарай!';
+        }
+      });
+    } else {
+      setState(() {
+        message = 'Буруу хариулт, дахин оролдоно уу.';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var currentStage = stages[stage];
+    return Scaffold(
+      appBar: AppBar(title: Text(currentStage['lockName'])),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(currentStage['question'], style: TextStyle(fontSize: 18)),
+            ...currentStage['options'].map<Widget>((opt) => ElevatedButton(
+              onPressed: () => handleAnswer(opt),
+              child: Text(opt),
+            )),
+            SizedBox(height: 20),
+            Text(message, style: TextStyle(color: Colors.pink, fontSize: 16)),
+          ],
+        ),
+      ),
+    );
+  }
+}
