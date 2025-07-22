@@ -24,10 +24,11 @@ class GroupLayer extends RenderableLayer<Group> {
 
   @override
   void renderTree(Canvas canvas) {
-    super.render(canvas);
-    for (final child in children) {
-      child.render(canvas);
+    if (visible == false) {
+      return;
     }
+
+    super.renderTree(canvas);
   }
 
   @override

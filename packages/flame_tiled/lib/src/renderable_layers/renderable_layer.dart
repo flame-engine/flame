@@ -167,6 +167,15 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
 
     canvas.translate(x, y);
   }
+
+  // Only render if this layer is [visible].
+  @override
+  void renderTree(Canvas c) {
+    if (!visible) {
+      return;
+    }
+    super.renderTree(c);
+  }
 }
 
 @internal
