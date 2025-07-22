@@ -175,6 +175,15 @@ abstract class LayoutComponent extends PositionComponent {
 
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (child is! PositionComponent) {
+      return;
+    }
+    // setupSizeListeners(), but for a single child
+    if (type == ChildrenChangeType.added && shrinkWrap) {
+      child.size.addListener(layoutChildren);
+    } else {
+      child.size.removeListener(layoutChildren);
+    }
     layoutChildren();
   }
 
