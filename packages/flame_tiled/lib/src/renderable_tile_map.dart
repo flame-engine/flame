@@ -396,7 +396,7 @@ class RenderableTiledMap<T extends FlameGame> extends Component
 
   @override
   Future<void>? onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     // Automatically use the first attached CameraComponent camera if it's not
     // already set..
     camera ??= game.children.query<CameraComponent>().firstOrNull;

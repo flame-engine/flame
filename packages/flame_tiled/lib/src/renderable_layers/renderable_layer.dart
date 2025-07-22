@@ -7,9 +7,9 @@ import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/image_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
+import 'package:flame_tiled/src/renderable_layers/tile_layers/unsupported_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
-import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 abstract class RenderableLayer<T extends Layer> extends PositionComponent
@@ -176,18 +176,4 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     }
     super.renderTree(c);
   }
-}
-
-@internal
-class UnsupportedLayer extends RenderableLayer {
-  UnsupportedLayer({
-    required super.layer,
-    required super.map,
-    required super.parent,
-    required super.camera,
-    required super.destTileSize,
-  });
-
-  @override
-  void refreshCache() {}
 }
