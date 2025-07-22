@@ -343,26 +343,23 @@ void _parsePageProperties(ListQueue<String> lineQueue, Page page) {
       break;
     }
 
-    // Check if this is a known page property
     switch (entry[0]) {
       case 'size':
         page.width = int.parse(entry[1]);
         page.height = int.parse(entry[2]);
-        lineQueue.removeFirst();
       case 'filter':
         page.minFilter = entry[1];
         page.magFilter = entry[2];
-        lineQueue.removeFirst();
       case 'format':
         page.format = entry[1];
-        lineQueue.removeFirst();
       case 'repeat':
         page.repeat = entry[1];
-        lineQueue.removeFirst();
       default:
-        // Not a page property, stop parsing page properties
+        // Unknown property, consume and stop
         break;
     }
+
+    lineQueue.removeFirst();
   }
 }
 
