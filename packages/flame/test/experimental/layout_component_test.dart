@@ -325,5 +325,36 @@ void main() {
         },
       });
     });
+    group('children', () {
+      runLayoutComponentTestRegistry(
+        {
+          'size responds when children are added and then resized':
+              (game, direction) async {
+            final circle = CircleComponent(radius: 20);
+            final rectangle2 = RectangleComponent(size: Vector2(100, 50));
+            // final rectangle2 = RectangleComponent(size: Vector2(200, 70));
+            final layoutComponent = LayoutComponent.fromDirection(
+              direction,
+              shrinkWrap: true,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+            );
+            await game.ensureAdd(layoutComponent);
+            expect(layoutComponent.size, Vector2.zero());
+            await layoutComponent.ensureAddAll([
+              circle,
+              rectangle2,
+            ]);
+            rectangle2.size = Vector2(200, 70);
+            expect(
+              layoutComponent.size,
+              switch (direction) {
+                Direction.horizontal => Vector2(40 + 200, 70),
+                Direction.vertical => Vector2(200, 70 + 40),
+              },
+            );
+          },
+        },
+      );
+    });
   });
 }
