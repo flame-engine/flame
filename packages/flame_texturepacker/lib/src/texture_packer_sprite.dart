@@ -32,8 +32,8 @@ class TexturePackerSprite extends Sprite {
   /// Region object for [clone] function, don't modify this object properties.
   final Region region;
 
-  // /// If true, use [originalWidth] and [originalHeight] as size; otherwise use
-  // /// [width] and [height] as size.
+  /// If true, use [originalWidth] and [originalHeight] as size; otherwise use
+  /// [width] and [height] as size.
   final bool useOriginalSize;
 
   /// The [degrees] field (angle) represented as radians.
