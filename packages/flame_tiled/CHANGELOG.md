@@ -1,8 +1,8 @@
 ## 1.21.1
 
-- **FEAT**: Enable Tiled layers to respect component ordering for overlays and underlays. e.g. Foreground tiles obsuring sprites. 
+- **FEAT**: Enable Tiled layers to respect component ordering for overlays and underlays. e.g. Foreground tiles obscure sprites. 
 - `RenderableLayer` is now a part of the public API.
-- `RenderableLayer` is now a `Component`. All rendering and update methods modified to integrate naturally into the Flame lifecycle.
+- `RenderableLayer` is now a `Component` with `HasPaint` and `Position` traits. All render and update methods modified to integrate naturally into the Flame lifecycle.
 - `RenderableTiledMap` has method `RenderableLayer? getRenderableLayer(String name)` to return the Flame component by name. 
   - e.g. `mapComponent.tileMap.getRenderableLayer('Ground')`
 - Expanded the example map to be larger and placed coins beneath one of the layers to demonstrate this effect.

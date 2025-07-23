@@ -450,7 +450,7 @@ class RenderableTiledMap<T extends FlameGame> extends Component
 
   @override
   void update(double dt) {
-    // Updatees tile frame animations.
+    // Update any Tiled animations for tiles.
     for (final frame in animationFrames.values) {
       frame.update(dt);
     }

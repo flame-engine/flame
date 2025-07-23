@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 /// {@template _tiled_component}
-/// An API to
+/// A Flame [Component] to render a Tiled TiledMap.
 ///
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
 /// Sprite Batches.
