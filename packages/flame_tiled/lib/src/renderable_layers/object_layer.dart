@@ -16,10 +16,6 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
     super.filterQuality,
   });
 
-  // ignore non-renderable layers when looping over the layers to render
-  @override
-  bool get visible => false;
-
   static Future<ObjectLayer> load(
     ObjectGroup layer,
     Component? parent,

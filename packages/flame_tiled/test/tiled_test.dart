@@ -24,6 +24,7 @@ void main() {
   ///   RGBA [255, 255, 0 255] => Yellow.
   const pixel = 4;
   TestWidgetsFlutterBinding.ensureInitialized();
+  final game = FlameGame();
 
   setUp(TiledAtlas.atlasMap.clear);
   group('TiledComponent', () {
@@ -169,6 +170,8 @@ void main() {
         bundle: bundle,
         images: Images(bundle: bundle),
       );
+      await game.add(overlapMap);
+
       final canvasRecorder = PictureRecorder();
       final canvas = Canvas(canvasRecorder);
       overlapMap.render(canvas);

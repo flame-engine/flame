@@ -355,9 +355,7 @@ class RenderableTiledMap<T extends FlameGame> extends Component
     bool? ignoreFlip,
     Images? images,
   }) {
-    final visibleLayers = layers.where((layer) => layer.visible);
-
-    final layerLoaders = visibleLayers.map((layer) async {
+    final layerLoaders = layers.map((layer) async {
       final renderableLayer = await RenderableLayer.load(
         layer: layer,
         parent: parent,

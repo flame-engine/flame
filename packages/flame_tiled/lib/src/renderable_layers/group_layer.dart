@@ -24,7 +24,7 @@ class GroupLayer extends RenderableLayer<Group> {
 
   @override
   void renderTree(Canvas canvas) {
-    if (visible == false) {
+    if (!visible) {
       return;
     }
 
