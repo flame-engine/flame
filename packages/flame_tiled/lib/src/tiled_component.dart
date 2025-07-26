@@ -66,6 +66,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
+
+    // Add our renderable tile map
     await add(tileMap);
   }
 

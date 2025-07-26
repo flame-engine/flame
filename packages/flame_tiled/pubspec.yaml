@@ -27,6 +27,7 @@ dependencies:
 dev_dependencies:
   dartdoc: ^8.0.8
   flame_lint: ^1.2.1
+  flame_test: ^1.17.2
   flutter_test:
     sdk: flutter
   test: any

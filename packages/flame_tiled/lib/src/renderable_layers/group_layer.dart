@@ -21,22 +21,4 @@ class GroupLayer extends RenderableLayer<Group> {
       sub.refreshCache();
     }
   }
-
-  @override
-  void renderTree(Canvas canvas) {
-    if (!visible) {
-      return;
-    }
-
-    super.renderTree(canvas);
-  }
-
-  @override
-  void updateTree(double dt) {
-    super.update(dt);
-
-    for (final child in children) {
-      child.update(dt);
-    }
-  }
 }

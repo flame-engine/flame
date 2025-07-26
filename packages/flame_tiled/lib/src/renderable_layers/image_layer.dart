@@ -40,11 +40,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     canvas.save();
 
     canvas.translate(offsetX, offsetY);
-
-    if (camera != null) {
-      applyParallaxOffset(canvas, camera!);
-    }
-
+    //applyParallaxOffset(canvas);
     _resizePaintArea(camera);
 
     paintImage(

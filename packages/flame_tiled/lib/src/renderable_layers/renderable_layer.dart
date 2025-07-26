@@ -120,7 +120,8 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
       };
 
   @override
-  late double opacity = layer.opacity *
+  double get opacity =>
+      layer.opacity *
       switch (parent) {
         final GroupLayer p => p.opacity,
         _ => 1,
@@ -142,12 +143,12 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// parallax positioning and scroll for the layer and the current camera
   /// position.
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
-  void applyParallaxOffset(Canvas canvas, CameraComponent camera) {
-    final anchor = camera.viewfinder.anchor;
-    final cameraX = camera.viewfinder.position.x;
-    final cameraY = camera.viewfinder.position.y;
-    final viewportCenterX = camera.viewport.size.x * anchor.x;
-    final viewportCenterY = camera.viewport.size.y * anchor.y;
+  void applyParallaxOffset(Canvas canvas) {
+    final anchor = camera?.viewfinder.anchor ?? Anchor.center;
+    final cameraX = camera?.viewfinder.position.x ?? 0.0;
+    final cameraY = camera?.viewfinder.position.y ?? 0.0;
+    final viewportCenterX = camera?.viewport.size.x ?? 0.0 * anchor.x;
+    final viewportCenterY = camera?.viewport.size.y ?? 0.0 * anchor.y;
 
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset the
@@ -155,8 +156,8 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     var x = (1 - parallaxX) * viewportCenterX;
     var y = (1 - parallaxY) * viewportCenterY;
     // Compensate the offset for zoom.
-    x /= camera.viewfinder.zoom;
-    y /= camera.viewfinder.zoom;
+    x /= camera?.viewfinder.zoom ?? 1.0;
+    y /= camera?.viewfinder.zoom ?? 1.0;
     // Scale to tile space.
     x /= destTileSize.x;
     y /= destTileSize.y;
@@ -174,6 +175,9 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     if (!visible) {
       return;
     }
+    c.save();
+    applyParallaxOffset(c);
     super.renderTree(c);
+    c.restore();
   }
 }
