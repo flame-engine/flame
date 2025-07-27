@@ -151,8 +151,8 @@ class SpriteBatch {
   /// A map to keep track of the index of each batch item by its id.
   final Map<String, int> _idToIndex = {};
 
-  /// Returns all ids currently in the batch (excluding nulls).
-  Iterable<String> get ids => _batchItems.map((item) => item.id!);
+  /// Returns all current ids
+  Iterable<String> get ids => _idToIndex.keys;
 
   /// List of all the existing batch items.
   final _batchItems = <BatchItem>[];
