@@ -148,43 +148,83 @@ class SpriteBatch {
 
   FlippedAtlasStatus _flippedAtlasStatus = FlippedAtlasStatus.none;
 
-  /// A map to keep track of the index of each batch item by its id.
+  /// Stack of available (freed) indices using ListQueue as a stack.
+  final Queue<int> _freeIndices = Queue<int>();
+
+  /// Returns the total number of indices that have been allocated.
+  int get allocatedCount => _nextIndex;
+
+  /// Returns the number of currently free indices.
+  int get freeCount => _freeIndices.length;
+
+  /// The next index to allocate if no free indices are available.
+  int _nextIndex = 0;
+
+  /// A map to keep track of the logical index of each batch item by its id.
   final Map<String, int> _idToIndex = {};
 
   /// Returns all current ids
   Iterable<String> get ids => _idToIndex.keys;
 
-  /// List of all the existing batch items.
-  final _batchItems = <BatchItem>[];
+  /// Sparse array of batch items, indexed by allocated indices.
+  final Map<int, BatchItem> _batchItems = {};
 
-  /// The sources to use on the [atlas].
-  final _sources = <Rect>[];
+  /// Returns the number of indices currently in use.
+  int get usedCount => _nextIndex - _freeIndices.length;
 
-  /// The sources list shouldn't be modified directly, that is why an
-  /// [UnmodifiableListView] is used. If you want to add sources use the
-  /// [add] or [addTransform] method.
-  UnmodifiableListView<Rect> get sources {
-    return UnmodifiableListView<Rect>(_sources);
+  /// Allocates a new index, reusing freed indices when possible.
+  int _allocateIndex() {
+    if (_freeIndices.isNotEmpty) {
+      return _freeIndices.removeFirst();
+    }
+    return _nextIndex++;
   }
 
-  /// The transforms that should be applied on the [_sources].
-  final _transforms = <RSTransform>[];
-
-  /// The transforms list shouldn't be modified directly, that is why an
-  /// [UnmodifiableListView] is used. If you want to add transforms use the
-  /// [add] or [addTransform] method.
-  UnmodifiableListView<RSTransform> get transforms {
-    return UnmodifiableListView<RSTransform>(_transforms);
+  /// Frees an index to be reused later.
+  void _freeIndex(int index) {
+    _freeIndices.addFirst(index);
   }
 
-  /// The background color for the [_sources].
-  final _colors = <Color>[];
+  /// The sources to use on the [atlas], stored sparsely.
+  final Map<int, Rect> _sources = {};
 
-  /// The colors list shouldn't be modified directly, that is why an
-  /// [UnmodifiableListView] is used. If you want to add colors use the
-  /// [add] or [addTransform] method.
-  UnmodifiableListView<Color> get colors {
-    return UnmodifiableListView<Color>(_colors);
+  /// Returns a compact list of sources for rendering.
+  List<Rect> get sources {
+    final result = <Rect>[];
+    for (var i = 0; i < _nextIndex; i++) {
+      if (_sources.containsKey(i)) {
+        result.add(_sources[i]!);
+      }
+    }
+    return result;
+  }
+
+  /// The transforms that should be applied on the [_sources], stored sparsely.
+  final Map<int, RSTransform> _transforms = {};
+
+  /// Returns a compact list of transforms for rendering.
+  List<RSTransform> get transforms {
+    final result = <RSTransform>[];
+    for (var i = 0; i < _nextIndex; i++) {
+      if (_transforms.containsKey(i)) {
+        result.add(_transforms[i]!);
+      }
+    }
+    return result;
+  }
+
+  /// The background color for the [_sources], stored sparsely.
+  final Map<int, Color> _colors = {};
+
+  /// Returns a compact list of colors for rendering.
+  List<Color> get colors {
+    final result = <Color>[];
+    for (var i = 0; i < _nextIndex; i++) {
+      if (_colors.containsKey(i)) {
+        result.add(_colors[i]!);
+      }
+    }
+    return result;
   }
 
   /// The atlas used by the [SpriteBatch].
@@ -253,12 +293,13 @@ class SpriteBatch {
     return picture.toImageSafe(image.width * 2, image.height);
   }
 
-  int get length => _sources.length;
+  /// Returns the number of active batch items.
+  int get length => _batchItems.length;
 
   /// Replace provided values of a batch item at the [index], when a parameter
   /// is not provided, the original value of the batch item will be used.
   ///
-  /// Throws an [ArgumentError] if the [index] is out of bounds.
+  /// Throws an [ArgumentError] if the [index] doesn't exist.
   /// At least one of the parameters must be different from null.
   void replace(
     int index, {
@@ -272,11 +313,11 @@ class SpriteBatch {
       'At least one of the parameters must be different from null.',
     );
 
-    if (index < 0 || index >= length) {
-      throw ArgumentError('Index out of bounds: $index');
+    if (!_batchItems.containsKey(index)) {
+      throw ArgumentError('Index does not exist: $index');
     }
 
-    final currentBatchItem = _batchItems[index];
+    final currentBatchItem = _batchItems[index]!;
     final newBatchItem = BatchItem(
       id: id ?? currentBatchItem.id,
       source: source ?? currentBatchItem.source,
@@ -290,11 +331,9 @@ class SpriteBatch {
     _transforms[index] = newBatchItem.transform;
     _colors[index] = color ?? _defaultColor;
 
-    if (id == null) {
-      return;
+    if (id != null) {
+      _idToIndex[id] = index;
     }
-
-    _idToIndex[id] = index;
   }
 
   /// Add a new batch item using a RSTransform.
@@ -312,13 +351,14 @@ class SpriteBatch {
   /// cosine of the rotation so that they can be reused over multiple calls to
   /// this constructor, it may be more efficient to directly use this method
   /// instead.
-  void addTransform({
+  int addTransform({
     required Rect source,
     RSTransform? transform,
     bool flip = false,
     Color? color,
     String? id,
   }) {
+    final index = _allocateIndex();
     final batchItem = BatchItem(
       id: id,
       source: source,
@@ -331,28 +371,25 @@ class SpriteBatch {
       _makeFlippedAtlas();
     }
 
-    _batchItems.add(batchItem);
-    _sources.add(
-      flip
-          ? Rect.fromLTWH(
-              // The atlas is twice as wide when the flipped atlas is generated.
-              (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
-                  source.right,
-              source.top,
-              source.width,
-              source.height,
-            )
-          : batchItem.source,
-    );
-    _transforms.add(batchItem.transform);
-    _colors.add(color ?? _defaultColor);
+    _batchItems[index] = batchItem;
+    _sources[index] = flip
+        ? Rect.fromLTWH(
+            // The atlas is twice as wide when the flipped atlas is generated.
+            (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
+                source.right,
+            source.top,
+            source.width,
+            source.height,
+          )
+        : batchItem.source;
+    _transforms[index] = batchItem.transform;
+    _colors[index] = color ?? _defaultColor;
 
-    if (id == null) {
-      return;
+    if (id != null) {
+      _idToIndex[id] = index;
     }
 
-    final newIdx = _batchItems.length - 1;
-    _idToIndex[id] = newIdx;
+    return index;
   }
 
   /// Add a new batch item.
@@ -373,7 +410,7 @@ class SpriteBatch {
   /// multiple [RSTransform] objects,
   /// it may be more efficient to directly use the more direct [addTransform]
   /// method instead.
-  void add({
+  int add({
     required Rect source,
     String? id,
     double scale = 1.0,
@@ -404,7 +441,7 @@ class SpriteBatch {
       );
     }
 
-    addTransform(
+    return addTransform(
       source: source,
       transform: transform,
       flip: flip,
@@ -414,18 +451,7 @@ class SpriteBatch {
   }
 
   /// Finds the index of the batch item with the given [id].
-  int? findIndexById(String id) {
-    if (_idToIndex.containsKey(id)) {
-      return _idToIndex[id];
-    }
-    for (var i = 0; i < _batchItems.length; i++) {
-      if (_batchItems[i].id == id) {
-        _idToIndex[id] = i; // repair mapping
-        return i;
-      }
-    }
-    return null;
-  }
+  int? findIndexById(String id) => _idToIndex[id];
 
   /// Removes a batch item by its [id].
   void removeById(String id) {
@@ -436,21 +462,19 @@ class SpriteBatch {
 
     removeAt(index);
     _idToIndex.remove(id);
-
-    // adjust indices > removed index
-    _idToIndex.updateAll((key, idx) => idx > index ? idx - 1 : idx);
   }
 
   /// Removes a batch item at the given [index].
   void removeAt(int index) {
-    if (index < 0 || index >= length) {
-      throw ArgumentError('Index out of bounds: $index');
+    if (!_batchItems.containsKey(index)) {
+      throw ArgumentError('Index does not exist: $index');
     }
 
-    _batchItems.removeAt(index);
-    _sources.removeAt(index);
-    _transforms.removeAt(index);
-    _colors.removeAt(index);
+    _batchItems.remove(index);
+    _sources.remove(index);
+    _transforms.remove(index);
+    _colors.remove(index);
+    _freeIndex(index);
   }
 
   /// Clear the SpriteBatch so it can be reused.
@@ -460,6 +484,8 @@ class SpriteBatch {
     _colors.clear();
     _batchItems.clear();
     _idToIndex.clear();
+    _freeIndices.clear();
+    _nextIndex = 0;
   }
 
   // Used to not create new Paint objects in [render] and
@@ -478,7 +504,11 @@ class SpriteBatch {
 
     final renderPaint = paint ?? _emptyPaint;
 
-    final hasNoColors = _colors.every((c) => c == _defaultColor);
+    final sourcesList = sources;
+    final transformsList = transforms;
+    final colorsList = colors;
+
+    final hasNoColors = colorsList.every((c) => c == _defaultColor);
     final actualBlendMode = blendMode ?? defaultBlendMode;
     if (!hasNoColors && actualBlendMode == null) {
       throw 'When setting any colors, a blend mode must be provided.';
@@ -487,15 +517,16 @@ class SpriteBatch {
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
-        _transforms,
-        _sources,
-        hasNoColors ? null : _colors,
+        transformsList,
+        sourcesList,
+        hasNoColors ? null : colorsList,
         actualBlendMode,
         cullRect,
         renderPaint,
       );
     } else {
-      for (final batchItem in _batchItems) {
+      for (final index in _batchItems.keys) {
+        final batchItem = _batchItems[index]!;
         renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
 
         canvas
