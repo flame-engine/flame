@@ -1,7 +1,7 @@
 name: jenny
 resolution: workspace
 description: YarnSpinner narrative game tools equivalent for Dart.
-version: 1.4.0
+version: 1.5.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_jenny/jenny
 funding:
   - https://opencollective.com/blue-fire
@@ -20,5 +20,5 @@ dependencies:
 
 dev_dependencies:
   dartdoc: ^8.0.8
-  flame_lint: ^1.4.0
+  flame_lint: ^1.4.1
   test: any

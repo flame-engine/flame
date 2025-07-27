@@ -3,6 +3,88 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-07-13
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.30.1`](#flame---v1301)
+ - [`flame_lint` - `v1.4.1`](#flame_lint---v141)
+ - [`jenny` - `v1.5.0`](#jenny---v150)
+ - [`flame_behavior_tree` - `v0.1.3+14`](#flame_behavior_tree---v01314)
+ - [`flame_test` - `v2.0.1`](#flame_test---v201)
+ - [`flame_tiled` - `v3.0.5`](#flame_tiled---v305)
+ - [`flame_oxygen` - `v0.2.3+14`](#flame_oxygen---v02314)
+ - [`flame_isolate` - `v0.6.2+14`](#flame_isolate---v06214)
+ - [`flame_texturepacker` - `v4.4.1`](#flame_texturepacker---v441)
+ - [`flame_sprite_fusion` - `v0.2.0+1`](#flame_sprite_fusion---v0201)
+ - [`flame_fire_atlas` - `v1.8.9`](#flame_fire_atlas---v189)
+ - [`flame_audio` - `v2.11.8`](#flame_audio---v2118)
+ - [`flame_spine` - `v0.2.2+14`](#flame_spine---v02214)
+ - [`flame_bloc` - `v1.12.15`](#flame_bloc---v11215)
+ - [`flame_kenney_xml` - `v0.1.1+14`](#flame_kenney_xml---v01114)
+ - [`flame_lottie` - `v0.4.2+14`](#flame_lottie---v04214)
+ - [`flame_markdown` - `v0.2.4+7`](#flame_markdown---v0247)
+ - [`flame_console` - `v0.1.2+10`](#flame_console---v01210)
+ - [`flame_rive` - `v1.10.17`](#flame_rive---v11017)
+ - [`flame_forge2d` - `v0.19.0+4`](#flame_forge2d---v01904)
+ - [`flame_noise` - `v0.3.2+14`](#flame_noise---v03214)
+ - [`flame_riverpod` - `v5.4.17`](#flame_riverpod---v5417)
+ - [`flame_svg` - `v1.11.14`](#flame_svg---v11114)
+ - [`flame_network_assets` - `v0.3.3+14`](#flame_network_assets---v03314)
+ - [`flame_3d` - `v0.1.0-dev.14`](#flame_3d---v010-dev14)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+14`
+ - `flame_test` - `v2.0.1`
+ - `flame_tiled` - `v3.0.5`
+ - `flame_oxygen` - `v0.2.3+14`
+ - `flame_isolate` - `v0.6.2+14`
+ - `flame_texturepacker` - `v4.4.1`
+ - `flame_sprite_fusion` - `v0.2.0+1`
+ - `flame_fire_atlas` - `v1.8.9`
+ - `flame_audio` - `v2.11.8`
+ - `flame_spine` - `v0.2.2+14`
+ - `flame_bloc` - `v1.12.15`
+ - `flame_kenney_xml` - `v0.1.1+14`
+ - `flame_lottie` - `v0.4.2+14`
+ - `flame_markdown` - `v0.2.4+7`
+ - `flame_console` - `v0.1.2+10`
+ - `flame_rive` - `v1.10.17`
+ - `flame_forge2d` - `v0.19.0+4`
+ - `flame_noise` - `v0.3.2+14`
+ - `flame_riverpod` - `v5.4.17`
+ - `flame_svg` - `v1.11.14`
+ - `flame_network_assets` - `v0.3.3+14`
+ - `flame_3d` - `v0.1.0-dev.14`
+
+---
+
+#### `flame` - `v1.30.1`
+
+ - **FIX**: Hitboxes with vertically flipped ancestor should not reflect angle for vertices ([#3642](https://github.com/flame-engine/flame/issues/3642)). ([7e8d3a98](https://github.com/flame-engine/flame/commit/7e8d3a9885f77da12456b148cd1f425395a00f71))
+ - **FIX**: Remove unnecessary breaks ([#3638](https://github.com/flame-engine/flame/issues/3638)). ([ea29929c](https://github.com/flame-engine/flame/commit/ea29929cd86ed00407f2d2aa69dcf6f34ffc5bbd))
+ - **FEAT**: Adding priority to layout components ([#3639](https://github.com/flame-engine/flame/issues/3639)). ([2eff267d](https://github.com/flame-engine/flame/commit/2eff267d795fbfbf9f5b3215b6dca4a2da9864e1))
+
+#### `flame_lint` - `v1.4.1`
+
+ - **FIX**: Remove unnecessary breaks ([#3638](https://github.com/flame-engine/flame/issues/3638)). ([ea29929c](https://github.com/flame-engine/flame/commit/ea29929cd86ed00407f2d2aa69dcf6f34ffc5bbd))
+
+#### `jenny` - `v1.5.0`
+
+ - **FEAT**: Expose additional flame_jenny Command classes ([#3641](https://github.com/flame-engine/flame/issues/3641)). ([8ef2587d](https://github.com/flame-engine/flame/commit/8ef2587de4a1bef1d745cc1f5a626a7e84c6230c))
+
+
 ## 2025-06-30
 
 ### Changes

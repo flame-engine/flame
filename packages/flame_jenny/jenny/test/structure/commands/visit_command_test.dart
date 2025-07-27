@@ -1,7 +1,6 @@
 import 'package:jenny/jenny.dart';
 import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
-import 'package:jenny/src/structure/commands/visit_command.dart';
 import 'package:test/test.dart';
 
 import '../../test_scenario.dart';

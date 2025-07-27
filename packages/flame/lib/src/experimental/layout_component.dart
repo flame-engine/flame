@@ -68,6 +68,7 @@ abstract class LayoutComponent extends PositionComponent {
     required super.position,
     required super.size,
     required super.children,
+    super.priority,
   })  : _crossAxisAlignment = crossAxisAlignment,
         _mainAxisAlignment = mainAxisAlignment,
         _gap = gap,
@@ -174,6 +175,15 @@ abstract class LayoutComponent extends PositionComponent {
 
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (child is! PositionComponent) {
+      return;
+    }
+    // setupSizeListeners(), but for a single child
+    if (type == ChildrenChangeType.added && shrinkWrap) {
+      child.size.addListener(layoutChildren);
+    } else {
+      child.size.removeListener(layoutChildren);
+    }
     layoutChildren();
   }
 
@@ -226,22 +236,15 @@ abstract class LayoutComponent extends PositionComponent {
       return;
     }
 
-    final int numberOfGaps;
-    switch (mainAxisAlignment) {
-      case MainAxisAlignment.spaceEvenly:
-        numberOfGaps = children.length + 1;
-        break;
-      case MainAxisAlignment.spaceAround:
-        numberOfGaps = children.length;
-        break;
-      case MainAxisAlignment.spaceBetween:
-        numberOfGaps = children.length - 1;
-        break;
-      default:
+    final numberOfGaps = switch (mainAxisAlignment) {
+      MainAxisAlignment.spaceEvenly => children.length + 1,
+      MainAxisAlignment.spaceAround => children.length,
+      MainAxisAlignment.spaceBetween => children.length - 1,
+      _ =>
         // this should never happen because of
         // the guard at the start of this method.
-        throw Exception('Unexpected call to _gapOverride');
-    }
+        throw Exception('Unexpected call to _gapOverride'),
+    };
     _gap = freeSpace / numberOfGaps;
   }
 

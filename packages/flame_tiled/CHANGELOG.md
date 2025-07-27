@@ -1,3 +1,7 @@
+## 3.0.5
+
+ - Update a dependency to the latest release.
+
 ## 3.0.4
 
  - **FIX**: Add optional key parameter to TiledComponent.load method ([#3630](https://github.com/flame-engine/flame/issues/3630)). ([5a27746e](https://github.com/flame-engine/flame/commit/5a27746ee4dbab17565472133274dd1308525978))
