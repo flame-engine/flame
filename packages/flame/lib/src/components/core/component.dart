@@ -661,14 +661,14 @@ class Component {
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
-    final futures = <Future<void>>[];
+    late final List<Future<void>>? futures;
     for (final component in components) {
       final future = add(component);
       if (future is Future) {
-        futures.add(future);
+        (futures ??= []).add(future);
       }
     }
-    return Future.wait(futures);
+    return futures == null ? Future.value() : Future.wait(futures);
   }
 
   FutureOr<void> _addChild(Component child) {
