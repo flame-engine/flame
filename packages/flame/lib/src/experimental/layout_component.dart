@@ -33,18 +33,17 @@ enum Direction {
 ///  - the [size] parameter is changed
 ///  - the [mainAxisAlignment] parameter is changed
 ///  - the [crossAxisAlignment] parameter is changed
-///  - the [shrinkWrap] parameter is changed
 ///
 /// Property interactions and gotchas
 ///  - [gap] is ignored when the [mainAxisAlignment] is set to one of:
 ///    - [MainAxisAlignment.spaceAround]
 ///    - [MainAxisAlignment.spaceBetween]
 ///    - [MainAxisAlignment.spaceEvenly]
-///  - Setting the [shrinkWrap] property to true is a reversal of constraints.
+///  - [size] can be set to null to activate shrink-wrap mode.
 ///    Instead of top-down sizing and layout, LayoutComponent derives its size
-///    from its children. In this context, certain layout options become
-///    meaningless. The following are the behaviors you should note:
-///    - Ignore [size].
+///    from its children via [inherentSize]. In this mode, certain layout
+///    options become meaningless. The following are the behaviors you should
+///    note:
 ///    - [mainAxisAlignment] acts like [MainAxisAlignment.start], regardless
 ///      of its original value.
 ///    - [crossAxisAlignment] acts like [CrossAxisAlignment.start], only if
@@ -64,16 +63,18 @@ abstract class LayoutComponent extends PositionComponent {
     required CrossAxisAlignment crossAxisAlignment,
     required MainAxisAlignment mainAxisAlignment,
     required double gap,
-    required bool shrinkWrap,
     required super.position,
-    required super.size,
+    required Vector2? size,
     required super.children,
     super.priority,
   })  : _crossAxisAlignment = crossAxisAlignment,
         _mainAxisAlignment = mainAxisAlignment,
-        _gap = gap,
-        _shrinkWrap = shrinkWrap {
-    setupSizeListeners();
+        _gap = gap {
+    // use the size setter rather than invoke [layoutChildren] because the
+    // latter needs the intent to shrinkwrap pre-set by [_shrinkWrapMode].
+    // At the time of construction, [_shrinkWrapMode] only has its default
+    // value.
+    this.size = size;
   }
 
   factory LayoutComponent.fromDirection(
@@ -81,7 +82,6 @@ abstract class LayoutComponent extends PositionComponent {
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     double gap = 0.0,
-    bool shrinkWrap = false,
     Vector2? position,
     Vector2? size,
     Iterable<Component> children = const [],
@@ -92,7 +92,6 @@ abstract class LayoutComponent extends PositionComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
-          shrinkWrap: shrinkWrap,
           position: position,
           size: size,
           children: children,
@@ -102,7 +101,6 @@ abstract class LayoutComponent extends PositionComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
-          shrinkWrap: shrinkWrap,
           position: position,
           size: size,
           children: children,
@@ -110,26 +108,64 @@ abstract class LayoutComponent extends PositionComponent {
     }
   }
 
-  final Direction direction;
-
-  bool _shrinkWrap;
-
-  bool get shrinkWrap => _shrinkWrap;
-
-  set shrinkWrap(bool newShrinkWrap) {
-    _shrinkWrap = newShrinkWrap;
-    setupSizeListeners();
-    layoutChildren();
+  /// This size setter is nullable unlike its superclass, to allow this
+  /// [LayoutComponent] to shrink-wrap its children. In other words, it sets
+  /// the size to [inherentSize]. This setter also records the intent to
+  /// shrink-wrap via the [_shrinkWrapMode] property, so that [layoutChildren]
+  /// knows whether or not to invoke this setter.
+  ///
+  /// Internally, this [size] setter should only ever be invoked upon
+  /// construction, and inside [layoutChildren] to make it easier to track and
+  /// reason about.
+  ///
+  /// Externally, this [size] setter is designed as an API, so a library user
+  /// should feel free to use this.
+  @override
+  set size(Vector2? newSize) {
+    final shrinkWrapMode = newSize == null;
+    if (_shrinkWrapMode != shrinkWrapMode) {
+      // We only invoke this when [_shrinkWrapMode]'s value is changing.
+      // This is so we can avoid accumulation of listeners on the children.
+      _setupSizeListeners(_shrinkWrapMode);
+    }
+    _shrinkWrapMode = shrinkWrapMode;
+    // we use [super.size] to benefit from the superclass's notifier mechanisms.
+    if (newSize == null) {
+      super.size = inherentSize;
+    } else {
+      super.size = newSize;
+    }
+    // We might be tempted to use [layoutChildren], but recall that we already
+    // have listeners attached to size via [setupSizeListeners].
+    _layoutMainAxis();
+    _layoutCrossAxis();
   }
 
-  void setupSizeListeners() {
-    if (_shrinkWrap) {
-      size.removeListener(layoutChildren);
+  final Direction direction;
+
+  bool _shrinkWrapMode = false;
+
+  /// Attaches or removes size listeners from [positionChildren], depending on
+  /// the mode of operation. [_shrinkWrapMode] is a property accessible to this
+  /// function, so technically we can access the property directly from within
+  /// the function, but because this function is very sensitive to the value of
+  /// this property, as a safety measure we are making it explicitly a function
+  /// of [shrinkWrapMode].
+  ///
+  /// Previously, this method also attached or removed a listener on the
+  /// component [size] itself, but now that [size] is being overloaded to
+  /// signal intent to shrink wrap, the layout methods are invoked directly
+  /// from the [size] setter itself.
+  void _setupSizeListeners(bool shrinkWrapMode) {
+    if (shrinkWrapMode) {
+      // In shrink wrap mode, since sizing is bottom-up, the children have the
+      // listener and trigger layout.
       for (final child in positionChildren) {
         child.size.addListener(layoutChildren);
       }
     } else {
-      size.addListener(layoutChildren);
+      // In explicit sizing mode, since sizing is top-down, remove the listeners
+      // from the children.
       for (final child in positionChildren) {
         child.size.removeListener(layoutChildren);
       }
@@ -139,7 +175,7 @@ abstract class LayoutComponent extends PositionComponent {
   CrossAxisAlignment _crossAxisAlignment;
 
   CrossAxisAlignment get crossAxisAlignment {
-    if (shrinkWrap && _crossAxisAlignment == CrossAxisAlignment.stretch) {
+    if (_shrinkWrapMode && _crossAxisAlignment == CrossAxisAlignment.stretch) {
       return CrossAxisAlignment.start;
     }
     return _crossAxisAlignment;
@@ -153,7 +189,7 @@ abstract class LayoutComponent extends PositionComponent {
   MainAxisAlignment _mainAxisAlignment;
 
   MainAxisAlignment get mainAxisAlignment {
-    if (shrinkWrap) {
+    if (_shrinkWrapMode) {
       return MainAxisAlignment.start;
     }
     return _mainAxisAlignment;
@@ -179,7 +215,7 @@ abstract class LayoutComponent extends PositionComponent {
       return;
     }
     // setupSizeListeners(), but for a single child
-    if (type == ChildrenChangeType.added && shrinkWrap) {
+    if (type == ChildrenChangeType.added && _shrinkWrapMode) {
       child.size.addListener(layoutChildren);
     } else {
       child.size.removeListener(layoutChildren);
@@ -187,9 +223,11 @@ abstract class LayoutComponent extends PositionComponent {
     layoutChildren();
   }
 
+  /// Sets the size of this [LayoutComponent], then lays out the children
+  /// along both main and cross axes.
   void layoutChildren() {
-    if (shrinkWrap) {
-      size.setFrom(inherentSize);
+    if (_shrinkWrapMode) {
+      size = null;
     }
     _layoutMainAxis();
     _layoutCrossAxis();
@@ -340,7 +378,8 @@ abstract class LayoutComponent extends PositionComponent {
   /// [inherentSize]. This is because all [crossAxisAlignment] transformations
   /// fall within the largestCrossAxisLength, while [mainAxisAlignment] is
   /// entirely ignored in all cases where [inherentSize] is needed.
-  /// This means that [inherentSize] should be used *before* [layoutChildren].
+  /// This means that [inherentSize] should be used either *before* or at the
+  /// start of [layoutChildren].
   Vector2 get inherentSize {
     // Used at multiple points, cache to avoid recalculating each invocation
     final positionChildren = this.positionChildren;

@@ -29,7 +29,6 @@ layouts to reflect the chosen values.
     );
 
     final mainAxisControls = RowComponent(
-      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'MainAxisAlignment:'),
@@ -45,7 +44,6 @@ layouts to reflect the chosen values.
       ],
     );
     final crossAxisControls = RowComponent(
-      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'CrossAxisAlignment:'),
@@ -60,24 +58,7 @@ layouts to reflect the chosen values.
         }),
       ],
     );
-    final shrinkWrapControls = RowComponent(
-      shrinkWrap: true,
-      gap: 16,
-      children: [
-        TextComponent(text: 'ShrinkWrap:'),
-        ...[false, true].map((shrinkWrap) {
-          return ButtonComponent(
-            button: TextComponent(text: shrinkWrap.toString()),
-            onPressed: () {
-              rowDemo.shrinkWrap = shrinkWrap;
-              columnDemo.shrinkWrap = shrinkWrap;
-            },
-          );
-        }),
-      ],
-    );
     final gapControls = RowComponent(
-      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'Gap:'),
@@ -93,11 +74,10 @@ layouts to reflect the chosen values.
       ],
     );
     final sizeControls = RowComponent(
-      shrinkWrap: true,
       gap: 16,
       children: [
         TextComponent(text: 'Size:'),
-        ...[defaultSize, Vector2(1080, 600)].map((layoutSize) {
+        ...[defaultSize, Vector2(1080, 600), null].map((layoutSize) {
           return ButtonComponent(
             button: TextComponent(text: layoutSize.toString()),
             onPressed: () {
@@ -111,7 +91,6 @@ layouts to reflect the chosen values.
     final rootColumnComponent = ColumnComponent(
       position: Vector2(48, 48),
       gap: 24,
-      shrinkWrap: true,
       children: [
         TextComponent(
           text:
@@ -126,7 +105,6 @@ layouts to reflect the chosen values.
         ),
         mainAxisControls,
         crossAxisControls,
-        shrinkWrapControls,
         gapControls,
         sizeControls,
         rowDemo,
