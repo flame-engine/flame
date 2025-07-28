@@ -154,12 +154,12 @@ abstract class LayoutComponent extends PositionComponent {
   ///
   /// Previously, this method also attached or removed a listener on the
   /// component [size] itself, but now that [size] is being overloaded to
-  /// signal intent to shrink wrap, the relayout methods are invoked directly
+  /// signal intent to shrink wrap, the layout methods are invoked directly
   /// from the [size] setter itself.
   void _setupSizeListeners(bool shrinkWrapMode) {
     if (shrinkWrapMode) {
       // In shrink wrap mode, since sizing is bottom-up, the children have the
-      // listener and trigger relayout.
+      // listener and trigger layout.
       for (final child in positionChildren) {
         child.size.addListener(layoutChildren);
       }
