@@ -56,5 +56,31 @@ void main() {
         padding.topLeft.toVector2(),
       );
     });
+    testWithFlameGame('properly shrinkwraps and positions after padding is set',
+        (game) async {
+      final circle = CircleComponent(radius: 20);
+      final paddingComponent = PaddingComponent(child: circle);
+      await game.ensureAdd(paddingComponent);
+      expect(
+        paddingComponent.size,
+        circle.size,
+      );
+      const padding = EdgeInsets.symmetric(
+        vertical: 16,
+        horizontal: 24,
+      );
+      paddingComponent.padding = padding;
+      expect(
+        paddingComponent.size,
+        Vector2(
+          circle.size.x + padding.horizontal,
+          circle.size.y + padding.vertical,
+        ),
+      );
+      expect(
+        paddingComponent.child?.topLeftPosition,
+        padding.topLeft.toVector2(),
+      );
+    });
   });
 }

@@ -5,15 +5,23 @@ import 'package:flutter/rendering.dart';
 
 class PaddingComponent extends LayoutComponent {
   PaddingComponent({
-    required this.padding,
+    EdgeInsets? padding,
     super.anchor,
     super.position,
     PositionComponent? child,
-  }) : super(size: null) {
+  })  : _padding = padding ?? EdgeInsets.zero,
+        super(size: null) {
     this.child = child;
   }
 
-  final EdgeInsets padding;
+  EdgeInsets _padding;
+
+  EdgeInsets get padding => _padding;
+
+  set padding(EdgeInsets value) {
+    _padding = value;
+    layoutChildren();
+  }
 
   PositionComponent? _child;
 
