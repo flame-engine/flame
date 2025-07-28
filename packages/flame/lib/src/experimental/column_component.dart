@@ -1,4 +1,4 @@
-import 'package:flame/src/experimental/layout_component.dart';
+import 'package:flame/src/experimental/linear_layout_component.dart';
 import 'package:flutter/rendering.dart';
 
 /// ColumnComponent is a layout component that arranges its children in a
@@ -29,7 +29,7 @@ import 'package:flutter/rendering.dart';
 ///   ],
 /// );
 /// ```
-class ColumnComponent extends LayoutComponent {
+class ColumnComponent extends LinearLayoutComponent {
   ColumnComponent({
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,

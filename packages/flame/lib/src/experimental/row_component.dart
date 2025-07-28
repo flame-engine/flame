@@ -1,4 +1,4 @@
-import 'package:flame/src/experimental/layout_component.dart';
+import 'package:flame/src/experimental/linear_layout_component.dart';
 import 'package:flutter/rendering.dart';
 
 /// RowComponent is a layout component that arranges its children in a
@@ -29,7 +29,7 @@ import 'package:flutter/rendering.dart';
 ///   ],
 /// );
 /// ```
-class RowComponent extends LayoutComponent {
+class RowComponent extends LinearLayoutComponent {
   RowComponent({
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,
