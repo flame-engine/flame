@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('PaddingComponent', () {
-    testWithFlameGame('properly shrinkwraps and positions child', (game) async {
+    testWithFlameGame('properly sizes self and positions child', (game) async {
       const padding = EdgeInsets.all(16);
       final circle = CircleComponent(radius: 20);
       final paddingComponent = PaddingComponent(
@@ -27,7 +27,7 @@ void main() {
         padding.topLeft.toVector2(),
       );
     });
-    testWithFlameGame('properly shrinkwraps and positions after child is set',
+    testWithFlameGame('properly sizes self and positions after child is set',
         (game) async {
       const padding = EdgeInsets.all(16);
       final circle = CircleComponent(radius: 20);
@@ -56,7 +56,7 @@ void main() {
         padding.topLeft.toVector2(),
       );
     });
-    testWithFlameGame('properly shrinkwraps and positions after padding is set',
+    testWithFlameGame('properly sizes self and positions after padding is set',
         (game) async {
       final circle = CircleComponent(radius: 20);
       final paddingComponent = PaddingComponent(child: circle);
