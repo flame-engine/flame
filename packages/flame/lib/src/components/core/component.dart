@@ -661,7 +661,7 @@ class Component {
 
   /// A convenience method to [add] multiple children at once.
   Future<void> addAll(Iterable<Component> components) {
-    late final List<Future<void>>? futures;
+    List<Future<void>>? futures;
     for (final component in components) {
       final future = add(component);
       if (future is Future) {
