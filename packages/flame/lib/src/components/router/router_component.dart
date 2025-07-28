@@ -81,6 +81,16 @@ class RouterComponent extends Component {
     return _routeStack.length >= 2 ? _routeStack[_routeStack.length - 2] : null;
   }
 
+  /// Returns whether the current route can be popped.
+  ///
+  /// Returns `true` if there are at least 2 routes in the stack, meaning the
+  /// current route can be popped without removing the last remaining route.
+  /// Returns `false` if there is only one route left, as the router must
+  /// maintain at least one route on the stack.
+  bool canPop() {
+    return _routeStack.length > 1;
+  }
+
   /// Puts the route [name] on top of the navigation stack.
   ///
   /// If the route is already in the stack, it will be simply moved to the top.
