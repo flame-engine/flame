@@ -88,6 +88,27 @@ layouts to reflect the chosen values.
         }),
       ],
     );
+    final paddingControls = RowComponent(
+      gap: 16,
+      children: [
+        TextComponent(text: 'Padding:'),
+        ...[
+          EdgeInsets.zero,
+          const EdgeInsets.all(16),
+          const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+        ].map((padding) {
+          return ButtonComponent(
+            button: TextComponent(text: padding.toString()),
+            onPressed: () {
+              rowDemo.children.query<PaddingComponent>().first.padding =
+                  padding;
+              columnDemo.children.query<PaddingComponent>().first.padding =
+                  padding;
+            },
+          );
+        }),
+      ],
+    );
     final rootColumnComponent = ColumnComponent(
       position: Vector2(48, 48),
       gap: 24,
@@ -107,6 +128,7 @@ layouts to reflect the chosen values.
         crossAxisControls,
         gapControls,
         sizeControls,
+        paddingControls,
         rowDemo,
         columnDemo,
       ],
@@ -125,9 +147,12 @@ layouts to reflect the chosen values.
       TextComponent(
         text: 'Perhaps a bit longer text',
       ),
-      CircleComponent(
-        radius: 48,
-        paint: Paint()..color = Colors.blue,
+      PaddingComponent(
+        padding: EdgeInsets.zero,
+        child: CircleComponent(
+          radius: 48,
+          paint: Paint()..color = Colors.blue,
+        ),
       ),
     ];
   }
