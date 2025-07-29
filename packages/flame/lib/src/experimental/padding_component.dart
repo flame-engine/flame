@@ -51,7 +51,9 @@ class PaddingComponent extends LayoutComponent {
 
     if (!shrinkWrapMode) {
       throw Exception(
-          'Unexpected state: PaddingComponent should always be in shrinkWrapMode.');
+        // ignore: lines_longer_than_80_chars
+        'Unexpected state: PaddingComponent should always be in shrinkWrapMode.',
+      );
     }
     size.setFrom(inherentSize);
   }

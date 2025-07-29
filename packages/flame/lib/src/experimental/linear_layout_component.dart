@@ -224,10 +224,11 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
     /// - Zero when [MainAxisAlignment.start].
     /// - [LinearLayoutComponent.size] when [MainAxisAlignment.end] and
-    /// [MainAxisAlignment.spaceBetween]
+    ///   [MainAxisAlignment.spaceBetween]
     /// - Half of free space when [MainAxisAlignment.center]
     /// - [LinearLayoutComponent.gap] when [MainAxisAlignment.spaceEvenly]
-    /// - Half of [LinearLayoutComponent.gap] when [MainAxisAlignment.spaceAround]
+    /// - Half of [LinearLayoutComponent.gap] when
+    ///   [MainAxisAlignment.spaceAround]
     Offset initialOffset = Offset.zero,
 
     /// true if laying out from the end (bottom/right)
