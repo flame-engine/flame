@@ -170,14 +170,14 @@ class GraphicsDevice {
         gpu.StorageMode.devicePrivate,
         size.width.toInt(),
         size.height.toInt(),
-      );
+      )!;
 
       final depthTexture = _gpuContext.createTexture(
         gpu.StorageMode.deviceTransient,
         size.width.toInt(),
         size.height.toInt(),
         format: _gpuContext.defaultDepthStencilFormat,
-      );
+      )!;
 
       _renderTarget = gpu.RenderTarget.singleColor(
         gpu.ColorAttachment(
