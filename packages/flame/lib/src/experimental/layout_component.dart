@@ -1,13 +1,14 @@
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:meta/meta.dart';
 
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required super.position,
     required Vector2? size,
+    required super.anchor,
+    required super.priority,
     super.children,
-    super.anchor,
-    super.priority,
   }) {
     // use the size setter rather than invoke [layoutChildren] because the
     // latter needs the intent to shrinkwrap pre-set by [_shrinkWrapMode].
@@ -62,17 +63,10 @@ abstract class LayoutComponent extends PositionComponent {
   /// signal intent to shrink wrap, the layout methods are invoked directly
   /// from the [size] setter itself.
   void _setupSizeListeners(bool shrinkWrapMode) {
-    if (shrinkWrapMode) {
-      // In shrink wrap mode, since sizing is bottom-up, the children have the
-      // listener and trigger layout.
-      for (final child in positionChildren) {
+    for (final child in positionChildren) {
+      child.size.removeListener(layoutChildren);
+      if (shrinkWrapMode) {
         child.size.addListener(layoutChildren);
-      }
-    } else {
-      // In explicit sizing mode, since sizing is top-down, remove the listeners
-      // from the children.
-      for (final child in positionChildren) {
-        child.size.removeListener(layoutChildren);
       }
     }
   }
@@ -91,8 +85,14 @@ abstract class LayoutComponent extends PositionComponent {
     layoutChildren();
   }
 
-  /// Sets the size of this [LayoutComponent], then lays out the children
-  /// along both main and cross axes.
+  /// The method to refresh the layout, triggered by various events.
+  /// (e.g. [onChildrenChanged], size changes on both this component and its
+  /// children)
+  ///
+  /// By default, simply sets [size] to null, which sets [size] to
+  /// [inherentSize] under the hood.
+  ///
+  /// Override this method for any specific layout needs.
   void layoutChildren() {
     if (shrinkWrapMode) {
       size = null;
@@ -104,5 +104,8 @@ abstract class LayoutComponent extends PositionComponent {
   List<PositionComponent> get positionChildren =>
       children.whereType<PositionComponent>().toList();
 
+  /// The smallest possible size this component can possibly have, as a
+  /// container of other components, and given whatever constraints any
+  /// subclass of [LayoutComponent] may prescribe.
   Vector2 get inherentSize;
 }

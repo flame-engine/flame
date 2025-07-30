@@ -12,6 +12,7 @@
 library experimental;
 
 export 'src/experimental/column_component.dart' show ColumnComponent;
+export 'src/experimental/expanded_component.dart' show ExpandedComponent;
 export 'src/experimental/geometry/shapes/circle.dart' show Circle;
 export 'src/experimental/geometry/shapes/polygon.dart' show Polygon;
 export 'src/experimental/geometry/shapes/rectangle.dart' show Rectangle;
@@ -23,3 +24,5 @@ export 'src/experimental/linear_layout_component.dart'
     show LinearLayoutComponent, Direction;
 export 'src/experimental/padding_component.dart' show PaddingComponent;
 export 'src/experimental/row_component.dart' show RowComponent;
+export 'src/experimental/single_layout_component.dart'
+    show SingleLayoutComponent;

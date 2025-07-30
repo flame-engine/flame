@@ -350,6 +350,27 @@ void main() {
               },
             );
           },
+          'ExpandedComponent among children are sized correctly':
+              (game, direction) async {
+            final circle = CircleComponent(radius: 20);
+            final rectangle2 = RectangleComponent(size: Vector2(100, 50));
+            final expandedComponent = ExpandedComponent(child: rectangle2);
+            // final rectangle2 = RectangleComponent(size: Vector2(200, 70));
+            final layoutComponent = LinearLayoutComponent.fromDirection(
+              direction,
+              size: Vector2(200, 100),
+              children: [circle, expandedComponent],
+            );
+            await game.ensureAdd(layoutComponent);
+            expect(
+              expandedComponent.size,
+              switch (direction) {
+                Direction.horizontal => Vector2(200 - 40, 50),
+                Direction.vertical => Vector2(100, 100 - 40),
+              },
+            );
+            expect(expandedComponent.child?.size, expandedComponent.size);
+          },
         },
       );
     });

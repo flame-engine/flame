@@ -36,7 +36,8 @@ class ColumnComponent extends LinearLayoutComponent {
     super.gap = 0.0,
     super.size,
     super.position,
-    super.children,
+    super.anchor,
     super.priority,
+    super.children,
   }) : super(direction: Direction.vertical);
 }
