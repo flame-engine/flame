@@ -64,7 +64,6 @@ enum Direction {
 ///    [PositionComponent]s, using [CrossAxisAlignment.stretch] "permanently"
 ///    changes the sizes of the children. Subsequent changes to
 ///    [crossAxisAlignment] will work with the new sizes of the children.
-
 abstract class LinearLayoutComponent extends LayoutComponent {
   LinearLayoutComponent({
     required this.direction,

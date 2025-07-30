@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:meta/meta.dart';
 
 abstract class LayoutComponent extends PositionComponent {
