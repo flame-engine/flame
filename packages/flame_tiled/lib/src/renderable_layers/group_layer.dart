@@ -1,4 +1,3 @@
-import 'package:flame/extensions.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';

@@ -498,18 +498,16 @@ void main() {
         stringNames: ['map.tmx'],
       );
 
+      final camera = game.camera;
       component = await TiledComponent.load(
         'map.tmx',
         Vector2(16, 16),
         bundle: Flame.bundle,
         images: Images(bundle: Flame.bundle),
+        camera: camera,
       );
 
-      // Need to initialize a game and call `onLoad` and `onGameResize` to
-      // get the camera and canvas sizes all initialized
-      game.onGameResize(mapSizePx);
-      final camera = game.camera;
-      await game.world.add(component);
+      await game.world.ensureAdd(component);
       camera.viewfinder.position = Vector2(150, 20);
       camera.viewport.size = mapSizePx.clone();
       game.onGameResize(mapSizePx);
@@ -980,9 +978,10 @@ void main() {
             size,
             bundle: bundle,
             images: Images(bundle: bundle),
+            camera: game.camera,
           );
           map = component.tileMap;
-          await game.add(component);
+          await game.ensureAdd(component);
           await game.ready();
         }
 

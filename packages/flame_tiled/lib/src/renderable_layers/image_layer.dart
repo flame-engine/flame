@@ -8,6 +8,7 @@ import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
+import 'dart:math';
 
 @internal
 class FlameImageLayer extends RenderableLayer<ImageLayer> {
@@ -38,11 +39,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   @override
   void render(Canvas canvas) {
     canvas.save();
-
-    canvas.translate(offsetX, offsetY);
-    //applyParallaxOffset(canvas);
     _resizePaintArea(camera);
-
     paintImage(
       canvas: canvas,
       rect: _paintArea,
@@ -60,14 +57,17 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // Track the maximum amount the canvas could have been translated
     // for this layer so we can calculate how many extra images to draw
     if (camera != null) {
-      _maxTranslation.x =
-          offsetX.abs() + camera.viewfinder.position.x.abs() * parallaxX;
-      _maxTranslation.y =
-          offsetY.abs() + camera.viewfinder.position.y.abs() * parallaxY;
+      _maxTranslation.x = offsetX - camera.viewfinder.position.x * parallaxX;
+      _maxTranslation.y = offsetY - camera.viewfinder.position.y * parallaxY;
     } else {
-      _maxTranslation.x = offsetX.abs();
-      _maxTranslation.y = offsetY.abs();
+      _maxTranslation.x = offsetX;
+      _maxTranslation.y = offsetY;
     }
+
+    final virtualSize = camera?.viewport.virtualSize;
+    final destSize = virtualSize ?? _canvasSize;
+    final imageW = _image.size.x;
+    final imageH = _image.size.y;
 
     // When the image is being repeated, make sure the _paintArea rect is
     // big enough that it repeats off the edge of the canvas in both positive
@@ -75,22 +75,48 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // Also, make sure the rect's left and top are only moved by exactly the
     // image's length along that axis (width or height) so that with repeats
     // it still matches up with its initial layer offsets.
-
     if (_repeat == ImageRepeat.repeatX || _repeat == ImageRepeat.repeat) {
-      final xImages = (_maxTranslation.x / _image.size.x).ceil();
-      _paintArea.left = -_image.size.x * xImages;
-      _paintArea.right = _canvasSize.x + _image.size.x * xImages;
+      final (left, right) = _calculatePaintRange(
+        translation: _maxTranslation.x,
+        destSize: destSize.x,
+        imageSideLen: imageW,
+      );
+      _paintArea
+        ..left = left
+        ..right = right;
+
+      // The canvas will already be shifted by the parent component's
+      // render step. Account for this offset to match expectations while
+      // also respect camera bounds, if any. This prevents scaling the
+      // painted image down when the window resizes to small values.
+      final worldRect = camera?.viewfinder.visibleWorldRect ?? Rect.zero;
+      _paintArea.left += worldRect.left - super.cachedLayerOffset.x;
+      _paintArea.right += worldRect.right - super.cachedLayerOffset.x;
     } else {
+      // Simply draw the full width of the image.
       _paintArea.left = 0;
-      _paintArea.right = _canvasSize.x;
+      _paintArea.right = imageW;
     }
     if (_repeat == ImageRepeat.repeatY || _repeat == ImageRepeat.repeat) {
-      final yImages = (_maxTranslation.y / _image.size.y).ceil();
-      _paintArea.top = -_image.size.y * yImages;
-      _paintArea.bottom = _canvasSize.y + _image.size.y * yImages;
+      final (top, bottom) = _calculatePaintRange(
+        translation: _maxTranslation.y,
+        destSize: destSize.y,
+        imageSideLen: imageH,
+      );
+      _paintArea
+        ..top = top
+        ..bottom = bottom;
+      // The canvas will already be shifted by the parent component's
+      // render step. Account for this offset to match expectations while
+      // also respect camera bounds, if any. This prevents scaling the
+      // painted image down when the window resizes to small values.
+      final worldRect = camera?.viewfinder.visibleWorldRect ?? Rect.zero;
+      _paintArea.top += worldRect.top - super.cachedLayerOffset.y;
+      _paintArea.bottom += worldRect.bottom - super.cachedLayerOffset.y;
     } else {
+      // Simply draw the full height of the image.
       _paintArea.top = 0;
-      _paintArea.bottom = _canvasSize.y;
+      _paintArea.bottom = imageH;
     }
   }
 
@@ -104,6 +130,41 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     } else {
       _repeat = ImageRepeat.noRepeat;
     }
+  }
+
+  // As an optimization, the [_paintArea] rect can be positioned in a
+  // particular way that reduces the time spent on computation and clip steps
+  // in flutter when drawing infinitely across an axis. This method accounts
+  // for the destination canvas size, camera viewport size, and the exact
+  // coverage of the image w.r.t. [translation].
+  // This is achieved by wrapping the rect coordinates around [destSize]
+  // after calculating the image coverage with [imageSideLen] and adding the
+  // unseen portion of the image in the span of the wrap range, if any.
+  (double min, double max) _calculatePaintRange({
+    required double translation,
+    required double destSize,
+    required double imageSideLen,
+  }) {
+    // What portion of the image is seen.
+    final seen = destSize / imageSideLen;
+
+    // Integer count of whole images to draw.
+    final imageCount = seen.ceil();
+
+    // Calculate unseen part of image(s).
+    final unseen = (imageCount - seen) * imageSideLen;
+
+    // Wrap around the target axis w.r.t. parallax.
+    final wrapPoint = translation.ceil() % (destSize + unseen).toInt();
+
+    // Partition the _paintArea into two parts.
+    final part = (wrapPoint / imageSideLen).ceil();
+
+    // Return the range where the centroid is the wrap point.
+    return (
+      wrapPoint - (part * imageSideLen),
+      wrapPoint + (imageSideLen * (imageCount - part)),
+    );
   }
 
   static Future<FlameImageLayer> load({

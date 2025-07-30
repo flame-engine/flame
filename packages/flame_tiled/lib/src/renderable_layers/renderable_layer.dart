@@ -22,6 +22,11 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// The [FilterQuality] that should be used by all the layers.
   final FilterQuality filterQuality;
 
+  /// Cached canvas translation used in parallax effects.
+  /// This field needs to be read in the case of repeated textures
+  /// as part of an optimization.
+  Vector2 cachedLayerOffset = Vector2.zero();
+
   RenderableLayer({
     required this.layer,
     required Component? parent,
@@ -147,8 +152,8 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     final anchor = camera?.viewfinder.anchor ?? Anchor.center;
     final cameraX = camera?.viewfinder.position.x ?? 0.0;
     final cameraY = camera?.viewfinder.position.y ?? 0.0;
-    final viewportCenterX = camera?.viewport.size.x ?? 0.0 * anchor.x;
-    final viewportCenterY = camera?.viewport.size.y ?? 0.0 * anchor.y;
+    final viewportCenterX = (camera?.viewport.virtualSize.x ?? 0.0) * anchor.x;
+    final viewportCenterY = (camera?.viewport.virtualSize.y ?? 0.0) * anchor.y;
 
     // Due to how Tiled treats the center of the view as the reference
     // point for parallax positioning (see Tiled docs), we need to offset the
@@ -166,6 +171,11 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     x += cameraX - (cameraX * parallaxX);
     y += cameraY - (cameraY * parallaxY);
 
+    // Apply layer offset.
+    x += offsetX;
+    y += offsetY;
+
+    cachedLayerOffset = Vector2(x, y);
     canvas.translate(x, y);
   }
 

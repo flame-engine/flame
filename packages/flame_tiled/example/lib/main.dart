@@ -37,7 +37,7 @@ class TiledGame extends FlameGame {
       );
 
     mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
-    world.add(mapComponent);
+    await world.add(mapComponent);
 
     final objectGroup =
         mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
