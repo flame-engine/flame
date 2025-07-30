@@ -361,8 +361,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// start of [layoutChildren].
   @override
   Vector2 get inherentSize {
-    // TODO(livtanong): inherentSize is used at multiple points; cache to avoid
-    // recalculating each invocation
     final positionChildren = this.positionChildren;
     final crossAxisVectorIndex = direction.crossAxisVectorIndex;
     final mainAxisVectorIndex = direction.mainAxisVectorIndex;
