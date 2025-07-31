@@ -36,6 +36,8 @@ layouts to reflect the chosen values.
       size: defaultSize,
     );
 
+    final demos = [rowDemo, columnDemo];
+
     final mainAxisControls = RowComponent(
       gap: 16,
       children: [
@@ -44,8 +46,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: mainAxisAlignment.name),
             onPressed: () {
-              rowDemo.mainAxisAlignment = mainAxisAlignment;
-              columnDemo.mainAxisAlignment = mainAxisAlignment;
+              demos.forEach(
+                (demo) => demo.mainAxisAlignment = mainAxisAlignment,
+              );
             },
           );
         }),
@@ -59,8 +62,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: crossAxisAlignment.name),
             onPressed: () {
-              rowDemo.crossAxisAlignment = crossAxisAlignment;
-              columnDemo.crossAxisAlignment = crossAxisAlignment;
+              demos.forEach(
+                (demo) => demo.crossAxisAlignment = crossAxisAlignment,
+              );
             },
           );
         }),
@@ -74,8 +78,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: 'Gap = $gap'),
             onPressed: () {
-              rowDemo.gap = gap;
-              columnDemo.gap = gap;
+              demos.forEach(
+                (demo) => demo.gap = gap,
+              );
             },
           );
         }),
@@ -89,8 +94,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: layoutSize.toString()),
             onPressed: () {
-              rowDemo.size = layoutSize;
-              columnDemo.size = layoutSize;
+              demos.forEach(
+                (demo) => demo.size = layoutSize,
+              );
             },
           );
         }),
@@ -108,8 +114,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: padding.toString()),
             onPressed: () {
-              rowDemo.padding = padding;
-              columnDemo.padding = padding;
+              demos.forEach(
+                (demo) => demo.padding = padding,
+              );
             },
           );
         }),
@@ -122,15 +129,17 @@ layouts to reflect the chosen values.
         ButtonComponent(
           button: TextComponent(text: 'No ExpandedComponent'),
           onPressed: () {
-            rowDemo.expandedMode = false;
-            columnDemo.expandedMode = false;
+            demos.forEach(
+              (demo) => demo.expandedMode = false,
+            );
           },
         ),
         ButtonComponent(
           button: TextComponent(text: 'Wrapped with ExpandedComponent'),
           onPressed: () {
-            rowDemo.expandedMode = true;
-            columnDemo.expandedMode = true;
+            demos.forEach(
+              (demo) => demo.expandedMode = true,
+            );
           },
         ),
       ],
@@ -156,8 +165,7 @@ layouts to reflect the chosen values.
         sizeControls,
         paddingControls,
         wrapperControls,
-        rowDemo,
-        columnDemo,
+        ...demos,
       ],
     );
     world.add(
