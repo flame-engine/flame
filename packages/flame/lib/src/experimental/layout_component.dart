@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
+    required super.key,
     required super.position,
     required Vector2? size,
     required super.anchor,

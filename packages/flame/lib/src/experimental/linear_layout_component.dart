@@ -66,6 +66,7 @@ enum Direction {
 ///    [crossAxisAlignment] will work with the new sizes of the children.
 abstract class LinearLayoutComponent extends LayoutComponent {
   LinearLayoutComponent({
+    required super.key,
     required this.direction,
     required CrossAxisAlignment crossAxisAlignment,
     required MainAxisAlignment mainAxisAlignment,
@@ -226,7 +227,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     }
     final unoccupiedSpace = availableSpace - _mainAxisOccupiedSpace;
     final freeSpace = unoccupiedSpace - gapSpace;
-
     // If the accessor `[]` operator is implemented for Offset,
     // can directly work with Offset rather than Vector2.
     final initialOffsetVector = Vector2.zero();
@@ -248,7 +248,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
   /// Expands any [ExpandedComponent] found among [components] to maximize,
   /// between themselves, the [freeSpace] available along a [direction].
-  static void _mainAxisSizing({
+  void _mainAxisSizing({
     required List<PositionComponent> components,
     required Direction direction,
     required double freeSpace,
@@ -267,7 +267,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     final spacePerExpandedComponent = freeSpace / expandedComponents.length;
     for (final expandedComponent in expandedComponents) {
       expandedComponent.setSizeComponent(
-          direction.mainAxisVectorIndex, spacePerExpandedComponent);
+        direction.mainAxisVectorIndex,
+        spacePerExpandedComponent,
+      );
     }
   }
 
@@ -333,11 +335,17 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       component.topLeftPosition.setFrom(newPosition);
 
       // Stretch is the only CrossAxisAlignment that involves resizing
-      if (crossAxisAlignment == CrossAxisAlignment.stretch) {
-        component.size[crossAxisVectorIndex] = size[crossAxisVectorIndex];
-      } else if (component is ExpandedComponent) {
+      if (component is ExpandedComponent) {
+        // Special invocation specifically for ExpandedComponents
         component.setSizeComponent(
-            crossAxisVectorIndex, component.inherentSize[crossAxisVectorIndex]);
+          crossAxisVectorIndex,
+          (crossAxisAlignment == CrossAxisAlignment.stretch)
+              ? size[crossAxisVectorIndex]
+              : component.inherentSize[crossAxisVectorIndex],
+        );
+      } else if (crossAxisAlignment == CrossAxisAlignment.stretch) {
+        // Normal components
+        component.size[crossAxisVectorIndex] = size[crossAxisVectorIndex];
       }
     }
   }

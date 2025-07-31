@@ -15,6 +15,7 @@ import 'package:flutter/rendering.dart';
 /// cause the layout to refresh.
 class PaddingComponent extends SingleLayoutComponent {
   PaddingComponent({
+    super.key,
     EdgeInsets? padding,
     super.anchor,
     super.position,

@@ -3,6 +3,7 @@ import 'package:flame/experimental.dart';
 
 abstract class SingleLayoutComponent extends LayoutComponent {
   SingleLayoutComponent({
+    required super.key,
     required super.position,
     required super.size,
     required super.anchor,

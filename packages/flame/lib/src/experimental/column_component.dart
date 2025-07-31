@@ -31,6 +31,7 @@ import 'package:flutter/rendering.dart';
 /// ```
 class ColumnComponent extends LinearLayoutComponent {
   ColumnComponent({
+    super.key,
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,
     super.gap = 0.0,

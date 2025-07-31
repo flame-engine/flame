@@ -19,6 +19,7 @@ import 'package:flame/experimental.dart';
 class ExpandedComponent extends SingleLayoutComponent
     with ParentIsA<LinearLayoutComponent> {
   ExpandedComponent({
+    super.key,
     super.position,
     super.size,
     super.anchor,
