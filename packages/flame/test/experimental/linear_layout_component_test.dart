@@ -185,6 +185,42 @@ void main() {
                   expectedGap,
             );
           },
+          'set mainAxisAlignment to spaceEvenly then end':
+              (game, direction) async {
+            final circle = CircleComponent(radius: 20);
+            final rectangle = RectangleComponent(size: Vector2(100, 50));
+            final text = TextComponent(text: 'testing');
+            final layoutComponentSize = Vector2.all(500);
+            final layoutComponent = LinearLayoutComponent.fromDirection(
+              direction,
+              children: [circle, rectangle, text],
+              size: layoutComponentSize,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            );
+            await game.ensureAdd(layoutComponent);
+            final mainAxis = direction.mainAxis;
+            final occupiedSpace =
+                [circle.size, rectangle.size, text.size].map(mainAxis).sum;
+            final expectedGap =
+                (mainAxis(layoutComponentSize) - occupiedSpace) / 4;
+            expect(layoutComponent.gap, expectedGap);
+            expect(mainAxis(circle.position), expectedGap);
+            expect(
+              mainAxis(rectangle.position),
+              mainAxis(circle.position) + mainAxis(circle.size) + expectedGap,
+            );
+            expect(
+              mainAxis(text.position),
+              mainAxis(rectangle.position) +
+                  mainAxis(rectangle.size) +
+                  expectedGap,
+            );
+            layoutComponent.mainAxisAlignment = MainAxisAlignment.end;
+            expect(
+              mainAxis(text.positionOfAnchor(Anchor.bottomRight)),
+              mainAxis(layoutComponentSize),
+            );
+          },
         },
       );
     });
