@@ -53,20 +53,21 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   }
 
   void _resizePaintArea(CameraComponent? camera) {
-    // Track the maximum amount the canvas could have been translated
-    // for this layer so we can calculate how many extra images to draw
-    if (camera != null) {
-      _maxTranslation.x = offsetX - camera.viewfinder.position.x * parallaxX;
-      _maxTranslation.y = offsetY - camera.viewfinder.position.y * parallaxY;
-    } else {
-      _maxTranslation.x = offsetX;
-      _maxTranslation.y = offsetY;
-    }
-
     final visibleWorldRect = camera?.visibleWorldRect ?? Rect.zero;
     final destSize = camera?.viewport.virtualSize ?? _canvasSize;
     final imageW = _image.size.x;
     final imageH = _image.size.y;
+
+    // Track the maximum amount the canvas could have been translated
+    // for this layer so we can calculate the wrap point within the
+    // paint area.
+    _maxTranslation.x = offsetX - (visibleWorldRect.left * parallaxX);
+    _maxTranslation.y = offsetY - (visibleWorldRect.top * parallaxY);
+
+    /*
+        _maxTranslation.x = offsetX - camera.viewfinder.position.x * parallaxX;
+     _maxTranslation.y = offsetY - camera.viewfinder.position.y * parallaxY;
+*/
 
     // When the image is being repeated, make sure the _paintArea rect is
     // big enough that it repeats off the edge of the canvas in both positive
@@ -140,6 +141,10 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required double imageSideLen,
     required double layerOffset,
   }) {
+    // Prevent DBZ error.
+    if (imageSideLen < 1) {
+      return (0, 0);
+    }
     // What portion of the image is seen.
     final seen = destSize / imageSideLen;
 
@@ -156,7 +161,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     final part = (wrapPoint / imageSideLen).ceil();
 
     return (
-      wrapPoint - (part * imageSideLen) - layerOffset,
+      wrapPoint - (imageSideLen * part) - layerOffset,
       wrapPoint + (imageSideLen * (imageCount - part)) - layerOffset,
     );
   }
