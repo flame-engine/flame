@@ -20,8 +20,8 @@ class PaddingComponent extends SingleLayoutComponent {
     super.position,
     super.priority,
     super.child,
-  })  : _padding = padding ?? EdgeInsets.zero,
-        super(size: null);
+    super.size,
+  }) : _padding = padding ?? EdgeInsets.zero;
   EdgeInsets _padding;
 
   EdgeInsets get padding => _padding;
@@ -33,7 +33,7 @@ class PaddingComponent extends SingleLayoutComponent {
 
   @override
   void layoutChildren() {
-    size = null;
+    super.layoutChildren();
     final child = this.child;
     if (child == null) {
       return;
