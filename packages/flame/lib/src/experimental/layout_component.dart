@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/src/experimental/expanded_component.dart';
 import 'package:meta/meta.dart';
 
 abstract class LayoutComponent extends PositionComponent {
@@ -34,7 +35,7 @@ abstract class LayoutComponent extends PositionComponent {
     if (shrinkWrapMode != newShrinkWrapMode) {
       // We only invoke this when [_shrinkWrapMode]'s value is changing.
       // This is so we can avoid accumulation of listeners on the children.
-      _setupSizeListeners(newShrinkWrapMode);
+      _setupChildSizeListeners(newShrinkWrapMode);
     }
     shrinkWrapMode = newShrinkWrapMode;
     // we use [super.size] to benefit from the superclass's notifier mechanisms.
@@ -43,8 +44,8 @@ abstract class LayoutComponent extends PositionComponent {
     } else {
       super.size = newSize;
     }
-    // We might be tempted to use [layoutChildren], but recall that we already
-    // have listeners attached to size via [setupSizeListeners].
+    // We might be tempted to invoke [layoutChildren], but depending on the
+    // needs of the component, we may want to attach a listener to [size].
   }
 
   @protected
@@ -61,7 +62,7 @@ abstract class LayoutComponent extends PositionComponent {
   /// component [size] itself, but now that [size] is being overloaded to
   /// signal intent to shrink wrap, the layout methods are invoked directly
   /// from the [size] setter itself.
-  void _setupSizeListeners(bool shrinkWrapMode) {
+  void _setupChildSizeListeners(bool shrinkWrapMode) {
     for (final child in positionChildren) {
       child.size.removeListener(layoutChildren);
       if (shrinkWrapMode) {
@@ -75,8 +76,16 @@ abstract class LayoutComponent extends PositionComponent {
     if (child is! PositionComponent) {
       return;
     }
-    // setupSizeListeners(), but for a single child
-    if (type == ChildrenChangeType.added && shrinkWrapMode) {
+    if (type == ChildrenChangeType.added &&
+        ( // We always want to listen if shrinkWrapMode
+            shrinkWrapMode ||
+                (
+                    // We want to listen if the child is LayoutComponent because
+                    // its dimensions may change over time
+                    child is LayoutComponent &&
+                        // ... except for ExpandedComponent, because flow is
+                        // inverted specifically for this case.
+                        child is! ExpandedComponent))) {
       child.size.addListener(layoutChildren);
     } else {
       child.size.removeListener(layoutChildren);
@@ -93,7 +102,7 @@ abstract class LayoutComponent extends PositionComponent {
   ///
   /// Override this method for any specific layout needs.
   void layoutChildren() {
-    if (shrinkWrapMode) {
+    if (shrinkWrapMode && size != inherentSize) {
       size = null;
     }
   }
