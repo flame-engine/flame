@@ -31,20 +31,14 @@ class ExpandedComponent extends SingleLayoutComponent
   final bool inflateChild;
 
   @override
-  set size(Vector2? newSize) {
-    super.size = newSize;
+  void onMount() {
+    super.onMount();
+    size.addListener(resizeChild);
+  }
 
-    final child = this.child;
-    if (inflateChild && child != null) {
-      // We want to set the child's size.
-      // BUT it'll trigger the child size listener and trigger [layoutChildren]
-      // which will trigger [parent.layoutChildren()], which will set [size],
-      // resulting in an infinite loop.
-      // So, we have to first remove the listener, then reattach it afterwards.
-      child.size.removeListener(layoutChildren);
-      child.size = size;
-      child.size.addListener(layoutChildren);
-    }
+  @override
+  void onRemove() {
+    size.removeListener(resizeChild);
   }
 
   @override
@@ -65,5 +59,19 @@ class ExpandedComponent extends SingleLayoutComponent
   @override
   void layoutChildren() {
     parent.layoutChildren();
+  }
+
+  void resizeChild() {
+    final child = this.child;
+    if (inflateChild && child != null) {
+      // We want to set the child's size.
+      // BUT it'll trigger the child size listener and trigger [layoutChildren]
+      // which will trigger [parent.layoutChildren()], which will set [size],
+      // resulting in an infinite loop.
+      // So, we have to first remove the listener, then reattach it afterwards.
+      child.size.removeListener(layoutChildren);
+      child.size = size;
+      child.size.addListener(layoutChildren);
+    }
   }
 }
