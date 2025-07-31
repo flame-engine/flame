@@ -140,17 +140,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     layoutChildren();
   }
 
-  @override
-  set size(Vector2? newSize) {
-    super.size = newSize;
-
-    if (!shrinkWrapMode) {
-      // For the case where the size of this LayoutComponent is explicitly
-      // changed, and therefore the children have to be laid out again.
-      layoutChildren();
-    }
-  }
-
   /// This reflects the value set explicitly and naively, without considering
   /// the various values of [mainAxisAlignment].
   double _gap;
@@ -172,8 +161,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
     final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     final availableSpace = size[mainAxisVectorIndex];
-    final unoccupiedSpace =
-        availableSpace - _mainAxisOccupiedSpace(includeExpanded: true);
+    final unoccupiedSpace = availableSpace - _mainAxisOccupiedSpace;
     final numberOfGaps = switch (mainAxisAlignment) {
       MainAxisAlignment.spaceEvenly => children.length + 1,
       MainAxisAlignment.spaceAround => children.length,
@@ -191,6 +179,26 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     layoutChildren();
   }
 
+  int get numberOfGaps {
+    return switch (mainAxisAlignment) {
+      MainAxisAlignment.spaceEvenly => children.length + 1,
+      MainAxisAlignment.spaceAround => children.length,
+      MainAxisAlignment.spaceBetween => children.length - 1,
+      _ => children.length - 1,
+    };
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    size.addListener(layoutChildren);
+  }
+
+  @override
+  void onRemove() {
+    size.removeListener(layoutChildren);
+  }
+
   /// Sets the size of this [LinearLayoutComponent], then lays out the children
   /// along both main and cross axes.
   @override
@@ -203,9 +211,20 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   void _layoutMainAxis() {
     final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     final availableSpace = size[mainAxisVectorIndex];
-    final unoccupiedSpace =
-        availableSpace - _mainAxisOccupiedSpace(includeExpanded: false);
-    final gapSpace = gap * (positionChildren.length - 1);
+    final nonExpandingOccupiedSpace = positionChildren
+        .where((child) => child is! ExpandedComponent)
+        .map((child) => child.size[mainAxisVectorIndex])
+        .sum;
+    final gapSpace = numberOfGaps * gap;
+
+    if (!shrinkWrapMode) {
+      _mainAxisSizing(
+        components: positionChildren,
+        direction: direction,
+        freeSpace: availableSpace - nonExpandingOccupiedSpace - gapSpace,
+      );
+    }
+    final unoccupiedSpace = availableSpace - _mainAxisOccupiedSpace;
     final freeSpace = unoccupiedSpace - gapSpace;
 
     // If the accessor `[]` operator is implemented for Offset,
@@ -219,19 +238,11 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       MainAxisAlignment.end => freeSpace,
       MainAxisAlignment.center => freeSpace / 2,
     };
-    if (!shrinkWrapMode) {
-      _mainAxisSizing(
-        components: positionChildren,
-        direction: direction,
-        freeSpace: freeSpace,
-      );
-    }
     _mainAxisPositioning(
       components: positionChildren,
       gap: gap,
       direction: direction,
       initialOffset: initialOffsetVector.toOffset(),
-      // reverse: mainAxisAlignment == MainAxisAlignment.end,
     );
   }
 
@@ -257,7 +268,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     for (final expandedComponent in expandedComponents) {
       final newSize = Vector2.copy(expandedComponent.inherentSize);
       newSize[direction.mainAxisVectorIndex] = spacePerExpandedComponent;
-      expandedComponent.size = newSize;
+      expandedComponent.size.setFrom(newSize);
     }
   }
 
@@ -337,14 +348,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// The total space along the main axis occupied by the [positionChildren]
   /// without the [gap]s. This is so named because we expect to
   /// implement crossAxisOccupiedSpace for shrink wrapping.
-  /// set [includeExpanded] to false when calculating free space for
-  /// [_mainAxisSizing].
-  double _mainAxisOccupiedSpace({required bool includeExpanded}) {
+  double get _mainAxisOccupiedSpace {
     return positionChildren.map((child) {
       if (child is ExpandedComponent) {
-        if (!includeExpanded) {
-          return 0.0;
-        }
         // Because ExpandedComponent size can be their expanded state
         // and thus the occupied space will be inflated.
         return child.inherentSize[direction.mainAxisVectorIndex];
