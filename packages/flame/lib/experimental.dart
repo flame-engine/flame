@@ -19,4 +19,7 @@ export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
     show RoundedRectangle;
 export 'src/experimental/geometry/shapes/shape.dart' show Shape;
 export 'src/experimental/layout_component.dart' show LayoutComponent;
+export 'src/experimental/linear_layout_component.dart'
+    show LinearLayoutComponent, Direction;
+export 'src/experimental/padding_component.dart' show PaddingComponent;
 export 'src/experimental/row_component.dart' show RowComponent;

@@ -38,7 +38,6 @@ commands work.
     add(dialogueControllerComponent);
     add(
       ColumnComponent(
-        shrinkWrap: true,
         children: [
           onCommandLabel,
           onCommandFinishLabel,
