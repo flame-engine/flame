@@ -166,6 +166,23 @@ layouts to reflect the chosen values.
         paddingControls,
         wrapperControls,
         ...demos,
+        ColumnComponent(
+          size: Vector2(600, 400),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ExpandedComponent(
+              child: RectangleComponent(
+                paint: Paint()..color = Colors.purple,
+              ),
+            ),
+            RowComponent(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextComponent(text: 'test'),
+              ],
+            ),
+          ],
+        ),
       ],
     );
     world.add(

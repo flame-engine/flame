@@ -266,9 +266,8 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
     final spacePerExpandedComponent = freeSpace / expandedComponents.length;
     for (final expandedComponent in expandedComponents) {
-      final newSize = Vector2.copy(expandedComponent.inherentSize);
-      newSize[direction.mainAxisVectorIndex] = spacePerExpandedComponent;
-      expandedComponent.size.setFrom(newSize);
+      expandedComponent.setSizeComponent(
+          direction.mainAxisVectorIndex, spacePerExpandedComponent);
     }
   }
 
@@ -317,7 +316,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     final crossAxisVectorIndex = direction.crossAxisVectorIndex;
     final positionChildren = this.positionChildren;
     final newPosition = Vector2.zero();
-    final newSize = Vector2.zero();
     // There is no need to track index because cross axis positioning is
     // not influenced by sibling components.
     for (final component in positionChildren) {
@@ -336,11 +334,10 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
       // Stretch is the only CrossAxisAlignment that involves resizing
       if (crossAxisAlignment == CrossAxisAlignment.stretch) {
-        newSize.setFrom(component.size);
-        newSize[crossAxisVectorIndex] = size[crossAxisVectorIndex];
-        // Don't use setFrom because children might have their own resizing
-        // logic, such as a nested LayoutComponent.
-        component.size = newSize;
+        component.size[crossAxisVectorIndex] = size[crossAxisVectorIndex];
+      } else if (component is ExpandedComponent) {
+        component.setSizeComponent(
+            crossAxisVectorIndex, component.inherentSize[crossAxisVectorIndex]);
       }
     }
   }

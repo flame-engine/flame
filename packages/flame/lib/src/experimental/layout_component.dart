@@ -78,14 +78,20 @@ abstract class LayoutComponent extends PositionComponent {
     }
     if (type == ChildrenChangeType.added &&
         ( // We always want to listen if shrinkWrapMode
-            shrinkWrapMode ||
-                (
-                    // We want to listen if the child is LayoutComponent because
-                    // its dimensions may change over time
-                    child is LayoutComponent &&
-                        // ... except for ExpandedComponent, because flow is
-                        // inverted specifically for this case.
-                        child is! ExpandedComponent))) {
+            shrinkWrapMode
+        // WARNING: uncommenting this fixes some things like refreshing
+        // layout after a child PaddingComponent updates its padding
+        // (and therefore size), this will also cause a stack overflow
+        // when dealing with
+        // ||
+        // (
+        //     // We want to listen if the child is LayoutComponent because
+        //     // its dimensions may change over time
+        //     child is LayoutComponent &&
+        //         // ... except for ExpandedComponent, because flow is
+        //         // inverted specifically for this case.
+        //         child is! ExpandedComponent)
+        )) {
       child.size.addListener(layoutChildren);
     } else {
       child.size.removeListener(layoutChildren);

@@ -31,17 +31,6 @@ class ExpandedComponent extends SingleLayoutComponent
   final bool inflateChild;
 
   @override
-  void onMount() {
-    super.onMount();
-    size.addListener(resizeChild);
-  }
-
-  @override
-  void onRemove() {
-    size.removeListener(resizeChild);
-  }
-
-  @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     if (child is! PositionComponent) {
       return;
@@ -61,7 +50,13 @@ class ExpandedComponent extends SingleLayoutComponent
     parent.layoutChildren();
   }
 
-  void resizeChild() {
+  /// As of this writing, there's no clean way to both set just one component
+  /// of [size], and do the same for the size of [child]. This is essential
+  /// for proper layouting logic.
+  /// If listeners are relied upon, the entire size gets set, even if just one
+  /// component is set, resulting in listeners competing with each other.
+  void setSizeComponent(int vectorIndex, double length) {
+    size[vectorIndex] = length;
     final child = this.child;
     if (inflateChild && child != null) {
       // We want to set the child's size.
@@ -70,7 +65,7 @@ class ExpandedComponent extends SingleLayoutComponent
       // resulting in an infinite loop.
       // So, we have to first remove the listener, then reattach it afterwards.
       child.size.removeListener(layoutChildren);
-      child.size.setFrom(size);
+      child.size[vectorIndex] = length;
       child.size.addListener(layoutChildren);
     }
   }
