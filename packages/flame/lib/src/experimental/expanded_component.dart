@@ -70,7 +70,7 @@ class ExpandedComponent extends SingleLayoutComponent
       // resulting in an infinite loop.
       // So, we have to first remove the listener, then reattach it afterwards.
       child.size.removeListener(layoutChildren);
-      child.size = size;
+      child.size.setFrom(size);
       child.size.addListener(layoutChildren);
     }
   }
