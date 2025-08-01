@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d/src/graphics/gpu_context_wrapper.dart';
 import 'package:flame_3d/src/graphics/joints_info.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
@@ -166,18 +167,19 @@ class GraphicsDevice {
     if (_previousSize != size) {
       _previousSize = size;
 
-      final colorTexture = _gpuContext.createTexture(
+      final gpuContext = GpuContextWrapper(_gpuContext);
+      final colorTexture = gpuContext.createTexture(
         gpu.StorageMode.devicePrivate,
         size.width.toInt(),
         size.height.toInt(),
-      )!;
+      );
 
-      final depthTexture = _gpuContext.createTexture(
+      final depthTexture = gpuContext.createTexture(
         gpu.StorageMode.deviceTransient,
         size.width.toInt(),
         size.height.toInt(),
         format: _gpuContext.defaultDepthStencilFormat,
-      )!;
+      );
 
       _renderTarget = gpu.RenderTarget.singleColor(
         gpu.ColorAttachment(
