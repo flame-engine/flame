@@ -20,20 +20,24 @@ layouts to reflect the chosen values.
 
     final defaultSize = Vector2(900, 300);
     final rowDemo = LayoutDemo(
+      key: ComponentKey.named('row_demo'),
       direction: Direction.horizontal,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       gap: 0,
       position: Vector2.zero(),
-      size: defaultSize,
+      layoutWidth: defaultSize.x,
+      layoutHeight: defaultSize.y,
     );
     final columnDemo = LayoutDemo(
+      key: ComponentKey.named('column_demo'),
       direction: Direction.vertical,
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       gap: 0,
       position: Vector2.zero(),
-      size: defaultSize,
+      layoutWidth: defaultSize.x,
+      layoutHeight: defaultSize.y,
     );
 
     final demos = [rowDemo, columnDemo];
@@ -95,7 +99,10 @@ layouts to reflect the chosen values.
             button: TextComponent(text: layoutSize.toString()),
             onPressed: () {
               demos.forEach(
-                (demo) => demo.size = layoutSize,
+                (demo) {
+                  demo.layoutWidth = layoutSize?.x;
+                  demo.layoutHeight = layoutSize?.y;
+                },
               );
             },
           );
@@ -167,7 +174,8 @@ layouts to reflect the chosen values.
         wrapperControls,
         ...demos,
         ColumnComponent(
-          size: Vector2(600, 400),
+          layoutWidth: 600,
+          layoutHeight: 400,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ExpandedComponent(
@@ -208,7 +216,9 @@ class LayoutDemo extends LinearLayoutComponent {
     required super.mainAxisAlignment,
     required super.gap,
     required super.position,
-    required super.size,
+    super.layoutHeight,
+    super.layoutWidth,
+    super.key,
   }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
 
   bool _expandedMode = false;
@@ -227,12 +237,12 @@ class LayoutDemo extends LinearLayoutComponent {
 
   set padding(EdgeInsets value) {
     _padding = value;
-    removeAll(children.toList());
-    addAll(createComponentList(expandedMode: expandedMode, padding: padding));
+    paddingComponent?.padding = padding;
   }
 
   @override
   FutureOr<void> onLoad() {
+    super.onLoad();
     addAll(createComponentList(expandedMode: expandedMode, padding: padding));
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
@@ -28,7 +30,8 @@ enum Direction {
 
 /// Superclass for linear layouts.
 /// A re-layout is performed when
-///  - a change in this component's children takes place
+///  - [children] are added or removed
+///  - some types of [children] are resized
 ///  - the [gap] parameter is changed
 ///  - the [size] parameter is changed
 ///  - the [mainAxisAlignment] parameter is changed
@@ -41,7 +44,7 @@ enum Direction {
 ///    - [MainAxisAlignment.spaceEvenly]
 ///  - [size] can be set to null to activate shrink-wrap mode.
 ///    Instead of top-down sizing and layout, LayoutComponent derives its size
-///    from its children via [inherentSize]. In this mode, certain layout
+///    from its children via [intrinsicSize]. In this mode, certain layout
 ///    options become meaningless. The following are the behaviors you should
 ///    note:
 ///    - [mainAxisAlignment] acts like [MainAxisAlignment.start], regardless
@@ -49,7 +52,7 @@ enum Direction {
 ///    - [crossAxisAlignment] acts like [CrossAxisAlignment.start], only if
 ///      its value is [CrossAxisAlignment.stretch].
 ///    - [ExpandedComponent]s no longer expand, and their size is set to their
-///      [inherentSize], which is simply the size of their respective children.
+///      [intrinsicSize], which is simply the size of their respective children.
 ///  - The existence of an [ExpandedComponent] among the [children]
 ///    automatically disables [MainAxisAlignment.spaceAround],
 ///    [MainAxisAlignment.spaceBetween], and [MainAxisAlignment.spaceEvenly],
@@ -71,8 +74,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     required CrossAxisAlignment crossAxisAlignment,
     required MainAxisAlignment mainAxisAlignment,
     required double gap,
+    required super.layoutWidth,
+    required super.layoutHeight,
     required super.position,
-    required super.size,
     required super.priority,
     required super.anchor,
     required super.children,
@@ -86,6 +90,8 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     double gap = 0.0,
     Vector2? position,
+    // double? layoutWidth,
+    // double? layoutHeight,
     Vector2? size,
     Iterable<Component> children = const [],
   }) {
@@ -95,8 +101,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
+          layoutWidth: size?.x,
+          layoutHeight: size?.y,
           position: position,
-          size: size,
           children: children,
         );
       case Direction.vertical:
@@ -104,8 +111,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
+          layoutWidth: size?.x,
+          layoutHeight: size?.y,
           position: position,
-          size: size,
           children: children,
         );
     }
@@ -116,9 +124,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   CrossAxisAlignment _crossAxisAlignment;
 
   CrossAxisAlignment get crossAxisAlignment {
-    if (shrinkWrapMode && _crossAxisAlignment == CrossAxisAlignment.stretch) {
-      return CrossAxisAlignment.start;
-    }
     return _crossAxisAlignment;
   }
 
@@ -130,7 +135,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   MainAxisAlignment _mainAxisAlignment;
 
   MainAxisAlignment get mainAxisAlignment {
-    if (shrinkWrapMode) {
+    if (shrinkWrappedIn(direction.mainAxisVectorIndex)) {
       return MainAxisAlignment.start;
     }
     return _mainAxisAlignment;
@@ -190,6 +195,20 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   }
 
   @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    if (child is! PositionComponent) {
+      return;
+    }
+    // A child can be added, and indeed, can be later resized.
+    if (type == ChildrenChangeType.added && child is! ExpandedComponent) {
+      child.size.addListener(layoutChildren);
+    } else {
+      child.size.removeListener(layoutChildren);
+    }
+    layoutChildren();
+  }
+
+  @override
   void onMount() {
     super.onMount();
     size.addListener(layoutChildren);
@@ -204,7 +223,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// along both main and cross axes.
   @override
   void layoutChildren() {
-    super.layoutChildren();
     _layoutMainAxis();
     _layoutCrossAxis();
   }
@@ -218,13 +236,12 @@ abstract class LinearLayoutComponent extends LayoutComponent {
         .sum;
     final gapSpace = numberOfGaps * gap;
 
-    if (!shrinkWrapMode) {
-      _mainAxisSizing(
-        components: positionChildren,
-        direction: direction,
-        freeSpace: availableSpace - nonExpandingOccupiedSpace - gapSpace,
-      );
-    }
+    _mainAxisSizing(
+      components: positionChildren,
+      direction: direction,
+      freeSpace: availableSpace - nonExpandingOccupiedSpace - gapSpace,
+    );
+
     final unoccupiedSpace = availableSpace - _mainAxisOccupiedSpace;
     final freeSpace = unoccupiedSpace - gapSpace;
     // If the accessor `[]` operator is implemented for Offset,
@@ -238,6 +255,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       MainAxisAlignment.end => freeSpace,
       MainAxisAlignment.center => freeSpace / 2,
     };
+
     _mainAxisPositioning(
       components: positionChildren,
       gap: gap,
@@ -253,29 +271,34 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     required Direction direction,
     required double freeSpace,
   }) {
-    if (freeSpace <= 0) {
-      // There isn't actual any free space to expand or whatnot, sizing is
-      // standard.
-      return;
-    }
+    final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     final expandedComponents = components.whereType<ExpandedComponent>();
-    if (expandedComponents.isEmpty) {
-      // There's actually no reason to perform any main axis sizing.
+    if (
+        // Meaningless if this is shrinkWrapped.
+        shrinkWrappedIn(direction.mainAxisVectorIndex) ||
+            // There isn't actual any free space to expand or whatnot, sizing is
+            // standard.
+            freeSpace <= 0 ||
+            // There's actually no reason to perform any main axis sizing.
+            expandedComponents.isEmpty) {
       return;
     }
 
     final spacePerExpandedComponent = freeSpace / expandedComponents.length;
     for (final expandedComponent in expandedComponents) {
-      expandedComponent.setSizeComponent(
-        direction.mainAxisVectorIndex,
-        spacePerExpandedComponent,
-      );
+      if (expandedComponent.layoutAxisLength(mainAxisVectorIndex) !=
+          spacePerExpandedComponent) {
+        expandedComponent.setLayoutAxisLength(
+          mainAxisVectorIndex,
+          spacePerExpandedComponent,
+        );
+      }
     }
   }
 
   /// Positions [components] linearly starting from [initialOffset], spaced
   /// [gap] apart, along a [direction].
-  static void _mainAxisPositioning({
+  void _mainAxisPositioning({
     required List<PositionComponent> components,
 
     /// The gap between [components]
@@ -298,18 +321,13 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       if (previousChild == null) {
         reference = initialOffset.toVector2();
       } else {
-        final previousChildSize = (previousChild is ExpandedComponent)
-            ? previousChild.inherentSize
-            : previousChild.size;
+        final previousChildSize = previousChild.size;
         reference = previousChild.topLeftPosition +
             previousChildSize +
             Vector2.all(gap);
       }
-      final newPosition = Vector2.zero();
-      // We never work with a crossAxisVectorIndex because we're laying out only
-      // the main axis.
-      newPosition[mainAxisVectorIndex] = reference[mainAxisVectorIndex];
-      component.topLeftPosition.setFrom(newPosition);
+      component.topLeftPosition[mainAxisVectorIndex] =
+          reference[mainAxisVectorIndex];
       previousChild = component;
     }
   }
@@ -333,19 +351,40 @@ abstract class LinearLayoutComponent extends LayoutComponent {
         CrossAxisAlignment.baseline => 0,
       };
       component.topLeftPosition.setFrom(newPosition);
+    }
+    _crossAxisSizing(
+      components: positionChildren,
+      crossAxisAlignment: crossAxisAlignment,
+      direction: direction,
+      crossAxisLength: size[crossAxisVectorIndex],
+    );
+  }
 
-      // Stretch is the only CrossAxisAlignment that involves resizing
-      if (component is ExpandedComponent) {
-        // Special invocation specifically for ExpandedComponents
-        component.setSizeComponent(
-          crossAxisVectorIndex,
-          (crossAxisAlignment == CrossAxisAlignment.stretch)
-              ? size[crossAxisVectorIndex]
-              : component.inherentSize[crossAxisVectorIndex],
-        );
-      } else if (crossAxisAlignment == CrossAxisAlignment.stretch) {
-        // Normal components
-        component.size[crossAxisVectorIndex] = size[crossAxisVectorIndex];
+  void _crossAxisSizing({
+    required List<PositionComponent> components,
+    required CrossAxisAlignment crossAxisAlignment,
+    required Direction direction,
+    required double crossAxisLength,
+  }) {
+    final crossAxisVectorIndex = direction.crossAxisVectorIndex;
+    for (final component in components) {
+      if (crossAxisAlignment != CrossAxisAlignment.stretch) {
+        continue;
+      }
+      if (component is LayoutComponent) {
+        // Don't set value if the value is already correct.
+        if (component.layoutAxisLength(crossAxisVectorIndex) !=
+            crossAxisLength) {
+          component.setLayoutAxisLength(
+            crossAxisVectorIndex,
+            crossAxisLength,
+          );
+        }
+      } else {
+        // Don't set value if the value is already correct.
+        if (component.size[crossAxisVectorIndex] != crossAxisLength) {
+          component.size[crossAxisVectorIndex] = crossAxisLength;
+        }
       }
     }
   }
@@ -358,20 +397,20 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       if (child is ExpandedComponent) {
         // Because ExpandedComponent size can be their expanded state
         // and thus the occupied space will be inflated.
-        return child.inherentSize[direction.mainAxisVectorIndex];
+        return child.intrinsicSize[direction.mainAxisVectorIndex];
       }
       return child.size[direction.mainAxisVectorIndex];
     }).sum;
   }
 
   /// Any positioning done in [layoutChildren] should not affect the
-  /// [inherentSize]. This is because all [crossAxisAlignment] transformations
+  /// [intrinsicSize]. This is because all [crossAxisAlignment] transformations
   /// fall within the largestCrossAxisLength, while [mainAxisAlignment] is
-  /// entirely ignored in all cases where [inherentSize] is needed.
-  /// This means that [inherentSize] should be used either *before* or at the
+  /// entirely ignored in all cases where [intrinsicSize] is needed.
+  /// This means that [intrinsicSize] should be used either *before* or at the
   /// start of [layoutChildren].
   @override
-  Vector2 get inherentSize {
+  Vector2 get intrinsicSize {
     final positionChildren = this.positionChildren;
     final crossAxisVectorIndex = direction.crossAxisVectorIndex;
     final mainAxisVectorIndex = direction.mainAxisVectorIndex;
@@ -380,7 +419,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     }
     final largestCrossAxisLength = positionChildren.map((component) {
       if (component is ExpandedComponent) {
-        return component.inherentSize[crossAxisVectorIndex];
+        return component.intrinsicSize[crossAxisVectorIndex];
       } else {
         return component.size[crossAxisVectorIndex];
       }
@@ -392,7 +431,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     final cumulativeMainAxisLength = ((positionChildren.length - 1) * gap) +
         positionChildren.map((component) {
           if (component is ExpandedComponent) {
-            return component.inherentSize[mainAxisVectorIndex];
+            return component.intrinsicSize[mainAxisVectorIndex];
           } else {
             return component.size[mainAxisVectorIndex];
           }

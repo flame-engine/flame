@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
@@ -20,9 +21,11 @@ class PaddingComponent extends SingleLayoutComponent {
     super.anchor,
     super.position,
     super.priority,
+    super.layoutWidth,
+    super.layoutHeight,
     super.child,
-    super.size,
   }) : _padding = padding ?? EdgeInsets.zero;
+
   EdgeInsets _padding;
 
   EdgeInsets get padding => _padding;
@@ -34,7 +37,10 @@ class PaddingComponent extends SingleLayoutComponent {
 
   @override
   void layoutChildren() {
-    super.layoutChildren();
+    // Only resets to null if it's already null. This way, we avoid overwriting
+    // an explicit width/height.
+    layoutWidth ??= null;
+    layoutHeight ??= null;
     final child = this.child;
     if (child == null) {
       return;
@@ -44,7 +50,7 @@ class PaddingComponent extends SingleLayoutComponent {
   }
 
   @override
-  Vector2 get inherentSize {
+  Vector2 get intrinsicSize {
     final childWidth = child?.size.x ?? 0;
     final childHeight = child?.size.y ?? 0;
     return Vector2(

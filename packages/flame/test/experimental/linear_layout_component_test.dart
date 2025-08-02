@@ -312,8 +312,9 @@ void main() {
           );
           await game.ensureAdd(layoutComponent);
           expect(layoutComponent.size, layoutComponentSize);
-          layoutComponent.size = null;
-          expect(layoutComponent.size, layoutComponent.inherentSize);
+          layoutComponent.layoutWidth = null;
+          layoutComponent.layoutHeight = null;
+          expect(layoutComponent.size, layoutComponent.intrinsicSize);
         },
         'size=null ignores mainAxisAlignment': (game, direction) async {
           final circle = CircleComponent(radius: 20);

@@ -12,7 +12,7 @@ import 'package:flutter/rendering.dart';
 ///
 /// If [size] is non-null, behaves as normal explicit sizing.
 /// If [size] is null, sets the size to the minimum size that containing all
-/// the children. This is similar to setting the [size] to [inherentSize], but
+/// the children. This is similar to setting the [size] to [intrinsicSize], but
 /// the distinct in that sizing will respond to changes in children, other
 /// properties, etc...
 ///
@@ -35,7 +35,8 @@ class ColumnComponent extends LinearLayoutComponent {
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,
     super.gap = 0.0,
-    super.size,
+    super.layoutWidth,
+    super.layoutHeight,
     super.position,
     super.anchor,
     super.priority,

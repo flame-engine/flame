@@ -5,9 +5,10 @@ abstract class SingleLayoutComponent extends LayoutComponent {
   SingleLayoutComponent({
     required super.key,
     required super.position,
-    required super.size,
     required super.anchor,
     required super.priority,
+    required super.layoutWidth,
+    required super.layoutHeight,
     required PositionComponent? child,
   }) {
     this.child = child;
@@ -31,5 +32,5 @@ abstract class SingleLayoutComponent extends LayoutComponent {
   }
 
   @override
-  Vector2 get inherentSize => child?.size ?? Vector2.zero();
+  Vector2 get intrinsicSize => child?.size ?? Vector2.zero();
 }
