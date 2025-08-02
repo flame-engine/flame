@@ -14,16 +14,17 @@ import 'package:flutter/rendering.dart';
 ///
 /// You may set [padding] as well as the [child] after the fact, and it will
 /// cause the layout to refresh.
-class PaddingComponent extends LayoutComponent {
+class PaddingComponent extends SingleLayoutComponent {
   PaddingComponent({
+    super.key,
     EdgeInsets? padding,
     super.anchor,
     super.position,
-    PositionComponent? child,
-  })  : _padding = padding ?? EdgeInsets.zero,
-        super(size: null) {
-    this.child = child;
-  }
+    super.priority,
+    super.layoutWidth,
+    super.layoutHeight,
+    super.child,
+  }) : _padding = padding ?? EdgeInsets.zero;
 
   EdgeInsets _padding;
 
@@ -34,43 +35,22 @@ class PaddingComponent extends LayoutComponent {
     layoutChildren();
   }
 
-  PositionComponent? _child;
-
-  /// The component that will be positioned by this component. The [child] will
-  /// be automatically mounted to the current component.
-  PositionComponent? get child => _child;
-
-  set child(PositionComponent? value) {
-    final oldChild = _child;
-    if (oldChild?.parent == this) {
-      oldChild?.removeFromParent();
-    }
-    _child = value;
-    if (value != null) {
-      add(value);
-    }
-  }
-
   @override
   void layoutChildren() {
+    // Only resets to null if it's already null. This way, we avoid overwriting
+    // an explicit width/height.
+    layoutWidth ??= null;
+    layoutHeight ??= null;
     final child = this.child;
     if (child == null) {
       return;
     }
     // Regardless of shrinkwrap or size, top left padding is set.
     child.topLeftPosition.setFrom(padding.topLeft.toVector2());
-
-    if (!shrinkWrapMode) {
-      throw Exception(
-        // ignore: lines_longer_than_80_chars
-        'Unexpected state: PaddingComponent should always be in shrinkWrapMode.',
-      );
-    }
-    size.setFrom(inherentSize);
   }
 
   @override
-  Vector2 get inherentSize {
+  Vector2 get intrinsicSize {
     final childWidth = child?.size.x ?? 0;
     final childHeight = child?.size.y ?? 0;
     return Vector2(

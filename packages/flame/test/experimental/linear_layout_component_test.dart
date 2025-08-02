@@ -185,6 +185,42 @@ void main() {
                   expectedGap,
             );
           },
+          'set mainAxisAlignment to spaceEvenly then end':
+              (game, direction) async {
+            final circle = CircleComponent(radius: 20);
+            final rectangle = RectangleComponent(size: Vector2(100, 50));
+            final text = TextComponent(text: 'testing');
+            final layoutComponentSize = Vector2.all(500);
+            final layoutComponent = LinearLayoutComponent.fromDirection(
+              direction,
+              children: [circle, rectangle, text],
+              size: layoutComponentSize,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            );
+            await game.ensureAdd(layoutComponent);
+            final mainAxis = direction.mainAxis;
+            final occupiedSpace =
+                [circle.size, rectangle.size, text.size].map(mainAxis).sum;
+            final expectedGap =
+                (mainAxis(layoutComponentSize) - occupiedSpace) / 4;
+            expect(layoutComponent.gap, expectedGap);
+            expect(mainAxis(circle.position), expectedGap);
+            expect(
+              mainAxis(rectangle.position),
+              mainAxis(circle.position) + mainAxis(circle.size) + expectedGap,
+            );
+            expect(
+              mainAxis(text.position),
+              mainAxis(rectangle.position) +
+                  mainAxis(rectangle.size) +
+                  expectedGap,
+            );
+            layoutComponent.mainAxisAlignment = MainAxisAlignment.end;
+            expect(
+              mainAxis(text.positionOfAnchor(Anchor.bottomRight)),
+              mainAxis(layoutComponentSize),
+            );
+          },
         },
       );
     });
@@ -276,8 +312,9 @@ void main() {
           );
           await game.ensureAdd(layoutComponent);
           expect(layoutComponent.size, layoutComponentSize);
-          layoutComponent.size = null;
-          expect(layoutComponent.size, layoutComponent.inherentSize);
+          layoutComponent.layoutWidth = null;
+          layoutComponent.layoutHeight = null;
+          expect(layoutComponent.size, layoutComponent.intrinsicSize);
         },
         'size=null ignores mainAxisAlignment': (game, direction) async {
           final circle = CircleComponent(radius: 20);
@@ -349,6 +386,26 @@ void main() {
                 Direction.vertical => Vector2(200, 70 + 40),
               },
             );
+          },
+          'ExpandedComponent among children are sized correctly':
+              (game, direction) async {
+            final circle = CircleComponent(radius: 20);
+            final rectangle = RectangleComponent(size: Vector2(100, 50));
+            final expandedComponent = ExpandedComponent(child: rectangle);
+            final layoutComponent = LinearLayoutComponent.fromDirection(
+              direction,
+              size: Vector2(200, 100),
+              children: [circle, expandedComponent],
+            );
+            await game.ensureAdd(layoutComponent);
+            expect(
+              expandedComponent.size,
+              switch (direction) {
+                Direction.horizontal => Vector2(200 - 40, 50),
+                Direction.vertical => Vector2(100, 100 - 40),
+              },
+            );
+            expect(expandedComponent.child?.size, expandedComponent.size);
           },
         },
       );

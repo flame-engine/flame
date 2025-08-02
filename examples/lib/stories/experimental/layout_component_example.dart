@@ -19,14 +19,28 @@ layouts to reflect the chosen values.
     camera.viewfinder.anchor = Anchor.topLeft;
 
     final defaultSize = Vector2(900, 300);
-    final rowDemo = RowComponent(
-      size: defaultSize,
-      children: createComponentList(),
+    final rowDemo = LayoutDemo(
+      key: ComponentKey.named('row_demo'),
+      direction: Direction.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      gap: 0,
+      position: Vector2.zero(),
+      layoutWidth: defaultSize.x,
+      layoutHeight: defaultSize.y,
     );
-    final columnDemo = ColumnComponent(
-      size: defaultSize,
-      children: createComponentList(),
+    final columnDemo = LayoutDemo(
+      key: ComponentKey.named('column_demo'),
+      direction: Direction.vertical,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      gap: 0,
+      position: Vector2.zero(),
+      layoutWidth: defaultSize.x,
+      layoutHeight: defaultSize.y,
     );
+
+    final demos = [rowDemo, columnDemo];
 
     final mainAxisControls = RowComponent(
       gap: 16,
@@ -36,8 +50,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: mainAxisAlignment.name),
             onPressed: () {
-              rowDemo.mainAxisAlignment = mainAxisAlignment;
-              columnDemo.mainAxisAlignment = mainAxisAlignment;
+              demos.forEach(
+                (demo) => demo.mainAxisAlignment = mainAxisAlignment,
+              );
             },
           );
         }),
@@ -51,8 +66,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: crossAxisAlignment.name),
             onPressed: () {
-              rowDemo.crossAxisAlignment = crossAxisAlignment;
-              columnDemo.crossAxisAlignment = crossAxisAlignment;
+              demos.forEach(
+                (demo) => demo.crossAxisAlignment = crossAxisAlignment,
+              );
             },
           );
         }),
@@ -66,8 +82,9 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: 'Gap = $gap'),
             onPressed: () {
-              rowDemo.gap = gap;
-              columnDemo.gap = gap;
+              demos.forEach(
+                (demo) => demo.gap = gap,
+              );
             },
           );
         }),
@@ -81,8 +98,12 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: layoutSize.toString()),
             onPressed: () {
-              rowDemo.size = layoutSize;
-              columnDemo.size = layoutSize;
+              demos.forEach(
+                (demo) {
+                  demo.layoutWidth = layoutSize?.x;
+                  demo.layoutHeight = layoutSize?.y;
+                },
+              );
             },
           );
         }),
@@ -100,13 +121,34 @@ layouts to reflect the chosen values.
           return ButtonComponent(
             button: TextComponent(text: padding.toString()),
             onPressed: () {
-              rowDemo.children.query<PaddingComponent>().first.padding =
-                  padding;
-              columnDemo.children.query<PaddingComponent>().first.padding =
-                  padding;
+              demos.forEach(
+                (demo) => demo.padding = padding,
+              );
             },
           );
         }),
+      ],
+    );
+    final wrapperControls = RowComponent(
+      gap: 16,
+      children: [
+        TextComponent(text: 'Wrapper:'),
+        ButtonComponent(
+          button: TextComponent(text: 'No ExpandedComponent'),
+          onPressed: () {
+            demos.forEach(
+              (demo) => demo.expandedMode = false,
+            );
+          },
+        ),
+        ButtonComponent(
+          button: TextComponent(text: 'Wrapped with ExpandedComponent'),
+          onPressed: () {
+            demos.forEach(
+              (demo) => demo.expandedMode = true,
+            );
+          },
+        ),
       ],
     );
     final rootColumnComponent = ColumnComponent(
@@ -129,32 +171,31 @@ layouts to reflect the chosen values.
         gapControls,
         sizeControls,
         paddingControls,
-        rowDemo,
-        columnDemo,
+        wrapperControls,
+        ...demos,
+        ColumnComponent(
+          layoutWidth: 600,
+          layoutHeight: 400,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ExpandedComponent(
+              child: RectangleComponent(
+                paint: Paint()..color = Colors.purple,
+              ),
+            ),
+            RowComponent(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextComponent(text: 'test'),
+              ],
+            ),
+          ],
+        ),
       ],
     );
     world.add(
       rootColumnComponent,
     );
-  }
-
-  /// This needs to be a method rather than a static list
-  /// because each of these components needs to be recreated.
-  /// Otherwise, they'll be operated on by reference and re-parented.
-  List<Component> createComponentList() {
-    return [
-      TextComponent(text: 'Some short text'),
-      TextComponent(
-        text: 'Perhaps a bit longer text',
-      ),
-      PaddingComponent(
-        padding: EdgeInsets.zero,
-        child: CircleComponent(
-          radius: 48,
-          paint: Paint()..color = Colors.blue,
-        ),
-      ),
-    ];
   }
 
   @override
@@ -166,4 +207,89 @@ layouts to reflect the chosen values.
   // This is intentional for this example, so the user can see the bounding
   // boxes without us having to render RectangleComponents.
   bool get debugMode => true;
+}
+
+class LayoutDemo extends LinearLayoutComponent {
+  LayoutDemo({
+    required super.direction,
+    required super.crossAxisAlignment,
+    required super.mainAxisAlignment,
+    required super.gap,
+    required super.position,
+    super.layoutHeight,
+    super.layoutWidth,
+    super.key,
+  }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
+
+  bool _expandedMode = false;
+
+  bool get expandedMode => _expandedMode;
+
+  set expandedMode(bool value) {
+    _expandedMode = value;
+    removeAll(children.toList());
+    addAll(createComponentList(expandedMode: expandedMode, padding: padding));
+  }
+
+  EdgeInsets _padding = EdgeInsets.zero;
+
+  EdgeInsets get padding => _padding;
+
+  set padding(EdgeInsets value) {
+    _padding = value;
+    paddingComponent?.padding = padding;
+  }
+
+  @override
+  FutureOr<void> onLoad() {
+    super.onLoad();
+    addAll(createComponentList(expandedMode: expandedMode, padding: padding));
+  }
+
+  PaddingComponent? get paddingComponent {
+    return descendants().whereType<PaddingComponent>().firstOrNull;
+    // return children.query<PaddingComponent>().firstOrNull;
+  }
+
+  /// This needs to be a method rather than a static list
+  /// because each of these components needs to be recreated.
+  /// Otherwise, they'll be operated on by reference and re-parented.
+  static List<Component> createComponentList({
+    required bool expandedMode,
+    required EdgeInsets padding,
+  }) {
+    return [
+      TextComponent(text: 'Some short text'),
+      if (expandedMode)
+        ExpandedComponent(
+          child: RectangleComponent(
+            size: Vector2(100, 70),
+            paint: Paint()..color = Colors.amber,
+          ),
+        )
+      else
+        RectangleComponent(
+          size: Vector2(100, 70),
+          paint: Paint()..color = Colors.amber,
+        ),
+      if (expandedMode)
+        ExpandedComponent(
+          child: PaddingComponent(
+            padding: padding,
+            child: RectangleComponent(
+              size: Vector2(96, 96),
+              paint: Paint()..color = Colors.blue,
+            ),
+          ),
+        )
+      else
+        PaddingComponent(
+          padding: padding,
+          child: RectangleComponent(
+            size: Vector2(96, 96),
+            paint: Paint()..color = Colors.blue,
+          ),
+        ),
+    ];
+  }
 }
