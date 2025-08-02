@@ -53,3 +53,5 @@ examples/**/.gitignore
 **/example/macos
 **/example/windows
 **/example/web
+
+.metadata
