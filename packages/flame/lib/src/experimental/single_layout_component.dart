@@ -7,8 +7,7 @@ abstract class SingleLayoutComponent extends LayoutComponent {
     required super.position,
     required super.anchor,
     required super.priority,
-    required super.layoutWidth,
-    required super.layoutHeight,
+    required super.size,
     required PositionComponent? child,
   }) {
     this.child = child;

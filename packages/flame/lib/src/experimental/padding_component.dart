@@ -21,8 +21,7 @@ class PaddingComponent extends SingleLayoutComponent {
     super.anchor,
     super.position,
     super.priority,
-    super.layoutWidth,
-    super.layoutHeight,
+    super.size,
     super.child,
   }) : _padding = padding ?? EdgeInsets.zero;
 
@@ -39,8 +38,7 @@ class PaddingComponent extends SingleLayoutComponent {
   void layoutChildren() {
     // Only resets to null if it's already null. This way, we avoid overwriting
     // an explicit width/height.
-    layoutWidth ??= null;
-    layoutHeight ??= null;
+    resetSize();
     final child = this.child;
     if (child == null) {
       return;

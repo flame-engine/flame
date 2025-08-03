@@ -26,8 +26,7 @@ layouts to reflect the chosen values.
       mainAxisAlignment: MainAxisAlignment.start,
       gap: 0,
       position: Vector2.zero(),
-      layoutWidth: defaultSize.x,
-      layoutHeight: defaultSize.y,
+      size: NullableVector2.fromVector2(defaultSize),
     );
     final columnDemo = LayoutDemo(
       key: ComponentKey.named('column_demo'),
@@ -36,8 +35,7 @@ layouts to reflect the chosen values.
       mainAxisAlignment: MainAxisAlignment.start,
       gap: 0,
       position: Vector2.zero(),
-      layoutWidth: defaultSize.x,
-      layoutHeight: defaultSize.y,
+      size: NullableVector2.fromVector2(defaultSize),
     );
 
     final demos = [rowDemo, columnDemo];
@@ -100,8 +98,7 @@ layouts to reflect the chosen values.
             onPressed: () {
               demos.forEach(
                 (demo) {
-                  demo.layoutWidth = layoutSize?.x;
-                  demo.layoutHeight = layoutSize?.y;
+                  demo.layoutSize = NullableVector2.fromVector2(layoutSize);
                 },
               );
             },
@@ -174,16 +171,18 @@ layouts to reflect the chosen values.
         wrapperControls,
         ...demos,
         ColumnComponent(
-          layoutWidth: 600,
-          layoutHeight: 400,
+          key: ComponentKey.named("alice"),
+          size: NullableVector2(600, 400),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ExpandedComponent(
+              key: ComponentKey.named("bob"),
               child: RectangleComponent(
                 paint: Paint()..color = Colors.purple,
               ),
             ),
             RowComponent(
+              key: ComponentKey.named("charlie"),
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextComponent(text: 'test'),
@@ -216,8 +215,7 @@ class LayoutDemo extends LinearLayoutComponent {
     required super.mainAxisAlignment,
     required super.gap,
     required super.position,
-    super.layoutHeight,
-    super.layoutWidth,
+    super.size,
     super.key,
   }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
 

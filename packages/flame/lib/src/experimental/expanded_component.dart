@@ -25,7 +25,7 @@ class ExpandedComponent extends SingleLayoutComponent
     super.priority,
     this.inflateChild = true,
     super.child,
-  }) : super(layoutWidth: null, layoutHeight: null);
+  }) : super(size: null);
 
   /// Whether or not this [ExpandedComponent] will set [child]'s size to its own
   final bool inflateChild;
@@ -33,6 +33,7 @@ class ExpandedComponent extends SingleLayoutComponent
   @override
   void setLayoutAxisLength(int axisIndex, double? value) {
     super.setLayoutAxisLength(axisIndex, value);
+    // layoutSize[axisIndex] = value;
     final child = this.child;
     if (inflateChild && child != null && value != null) {
       // We want to set the child's size.
@@ -52,4 +53,24 @@ class ExpandedComponent extends SingleLayoutComponent
   void layoutChildren() {
     parent.layoutChildren();
   }
+
+  // @override
+  // void resetSize() {
+  //   super.resetSize();
+  //   final child = this.child;
+  //   print(
+  //       "expandedcomponent layoutSize changed. size: $size layoutSize: $layoutSize");
+  //   if (inflateChild && child != null) {
+  //     // We want to set the child's size.
+  //     // BUT it'll trigger the child size listener and trigger [layoutChildren]
+  //     // which will trigger [parent.layoutChildren()], which will set [size],
+  //     // resulting in an infinite loop.
+  //     // So, we have to first remove the listener, then reattach it afterwards.
+  //     if (child is LayoutComponent) {
+  //       child.layoutSize = layoutSize;
+  //     } else {
+  //       child.size = size;
+  //     }
+  //   }
+  // }
 }

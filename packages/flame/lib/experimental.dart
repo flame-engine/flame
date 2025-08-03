@@ -22,6 +22,9 @@ export 'src/experimental/geometry/shapes/shape.dart' show Shape;
 export 'src/experimental/layout_component.dart' show LayoutComponent;
 export 'src/experimental/linear_layout_component.dart'
     show LinearLayoutComponent, Direction;
+export 'src/experimental/notifying_nullable_vector_2.dart'
+    show NotifyingNullableVector2;
+export 'src/experimental/nullable_vector_2.dart' show NullableVector2;
 export 'src/experimental/padding_component.dart' show PaddingComponent;
 export 'src/experimental/row_component.dart' show RowComponent;
 export 'src/experimental/single_layout_component.dart'

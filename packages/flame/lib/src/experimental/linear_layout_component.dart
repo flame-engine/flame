@@ -74,8 +74,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     required CrossAxisAlignment crossAxisAlignment,
     required MainAxisAlignment mainAxisAlignment,
     required double gap,
-    required super.layoutWidth,
-    required super.layoutHeight,
+    required super.size,
     required super.position,
     required super.priority,
     required super.anchor,
@@ -101,8 +100,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
-          layoutWidth: size?.x,
-          layoutHeight: size?.y,
+          size: NullableVector2.fromVector2(size),
           position: position,
           children: children,
         );
@@ -111,8 +109,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
-          layoutWidth: size?.x,
-          layoutHeight: size?.y,
+          size: NullableVector2.fromVector2(size),
           position: position,
           children: children,
         );
@@ -286,7 +283,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
     final spacePerExpandedComponent = freeSpace / expandedComponents.length;
     for (final expandedComponent in expandedComponents) {
-      if (expandedComponent.layoutAxisLength(mainAxisVectorIndex) !=
+      if (expandedComponent.layoutSize[mainAxisVectorIndex] !=
           spacePerExpandedComponent) {
         expandedComponent.setLayoutAxisLength(
           mainAxisVectorIndex,
@@ -373,8 +370,8 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       }
       if (component is LayoutComponent) {
         // Don't set value if the value is already correct.
-        if (component.layoutAxisLength(crossAxisVectorIndex) !=
-            crossAxisLength) {
+        if (component.layoutSize[crossAxisVectorIndex] != crossAxisLength) {
+          // component.layoutSize[crossAxisVectorIndex] = crossAxisLength;
           component.setLayoutAxisLength(
             crossAxisVectorIndex,
             crossAxisLength,

@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/experimental/expanded_component.dart';
+import 'package:flame/src/experimental/notifying_nullable_vector_2.dart';
 import 'package:flame/src/experimental/nullable_vector_2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:meta/meta.dart';
@@ -8,67 +9,64 @@ abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required super.key,
     required super.position,
-    required double? layoutWidth,
-    required double? layoutHeight,
+    required NullableVector2? size,
     required super.anchor,
     required super.priority,
     super.children,
-  }) {
-    this.layoutWidth = layoutWidth;
-    this.layoutHeight = layoutHeight;
+  }) : _layoutSize = size ?? NullableVector2.blank() {
+    // layoutSize.addListener(resetSize);
+    resetSize();
   }
 
-  double? _layoutWidth;
+  final NullableVector2 _layoutSize;
 
-  double? get layoutWidth => _layoutWidth;
+  NullableVector2 get layoutSize => _layoutSize;
 
-  set layoutWidth(double? value) {
-    _layoutWidth = value;
-    width = value ?? intrinsicSize.x;
-  }
-
-  double? _layoutHeight;
-
-  double? get layoutHeight => _layoutHeight;
-
-  set layoutHeight(double? value) {
-    _layoutHeight = value;
-    height = value ?? intrinsicSize.y;
-  }
-
-  /// Reset the size of this [LayoutComponent] to either the layout dimensions
-  /// or the [intrinsicSize].
-  void resetSize() {
-    width = layoutWidth ?? intrinsicSize.x;
-    height = layoutHeight ?? intrinsicSize.y;
+  /// Clobbers current [_layoutSize]. Avoid using within layout logic.
+  /// Instead, use [setLayoutAxisLength], as it allows selective setting of
+  /// vector components, and subsequently selective setting of the
+  /// size components.
+  set layoutSize(NullableVector2? newLayoutSize) {
+    _layoutSize.setFrom(newLayoutSize);
+    resetSize();
   }
 
   /// A helper function to set the appropriate layout dimension based on
-  /// [axisIndex].
+  /// [axisIndex]. This is needed because currently there's no other way, at the
+  /// [LayoutComponent] level, to selective set width or height without setting
+  /// both.
   /// e.g. if [axisIndex] is 1, then that's the y axis.
+  ///
+  /// We cannot, for example, extend the accessor assignment of NullableVector2
+  /// to trigger some extra functionality (i.e. setting height/width) when the
+  /// accessor is set.
+  ///
+  /// We also cannot use listeners at the moment, because listeners are
+  /// triggered when either height/width are set, when we need things to happen
+  /// *only* when height or width are set. Current functionality results in
+  /// a race condition.
   void setLayoutAxisLength(int axisIndex, double? value) {
     switch (axisIndex) {
       case 0:
-        layoutWidth = value;
+        _layoutSize.x = value;
+        width = _layoutSize.x ?? intrinsicSize.x;
       case 1:
-        layoutHeight = value;
+        _layoutSize.y = value;
+        height = _layoutSize.y ?? intrinsicSize.y;
       default:
         throw Exception('Unsupported axisIndex: $axisIndex');
     }
   }
 
-  /// returns the layout dimension based on the [axisIndex].
-  /// e.g. if [axisIndex] is 0, then that's the x axis.
-  double? layoutAxisLength(int axisIndex) {
-    return switch (axisIndex) {
-      0 => layoutWidth,
-      1 => layoutHeight,
-      _ => throw Exception('Unsupported axisIndex: $axisIndex')
-    };
+  /// Reset the size of this [LayoutComponent] to either the layout dimensions
+  /// or the [intrinsicSize].
+  void resetSize() {
+    width = _layoutSize.x ?? intrinsicSize.x;
+    height = _layoutSize.y ?? intrinsicSize.y;
   }
 
   bool shrinkWrappedIn(int index) {
-    return layoutAxisLength(index) == null;
+    return layoutSize[index] == null;
   }
 
   /// This size setter is nullable unlike its superclass, to allow this
