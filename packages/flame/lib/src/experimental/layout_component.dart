@@ -9,11 +9,13 @@ abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required super.key,
     required super.position,
-    required NullableVector2? size,
+    required Vector2? size,
     required super.anchor,
     required super.priority,
     super.children,
-  }) : _layoutSize = size ?? NullableVector2.blank() {
+  }) : _layoutSize = size == null
+            ? NullableVector2.blank()
+            : NullableVector2.fromVector2(size) {
     // layoutSize.addListener(resetSize);
     resetSize();
   }

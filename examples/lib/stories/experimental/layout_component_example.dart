@@ -26,7 +26,7 @@ layouts to reflect the chosen values.
       mainAxisAlignment: MainAxisAlignment.start,
       gap: 0,
       position: Vector2.zero(),
-      size: NullableVector2.fromVector2(defaultSize),
+      size: defaultSize,
     );
     final columnDemo = LayoutDemo(
       key: ComponentKey.named('column_demo'),
@@ -35,7 +35,7 @@ layouts to reflect the chosen values.
       mainAxisAlignment: MainAxisAlignment.start,
       gap: 0,
       position: Vector2.zero(),
-      size: NullableVector2.fromVector2(defaultSize),
+      size: defaultSize,
     );
 
     final demos = [rowDemo, columnDemo];
@@ -172,7 +172,7 @@ layouts to reflect the chosen values.
         ...demos,
         ColumnComponent(
           key: ComponentKey.named("alice"),
-          size: NullableVector2(600, 400),
+          size: Vector2(600, 400),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ExpandedComponent(

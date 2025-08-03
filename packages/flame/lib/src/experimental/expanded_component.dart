@@ -51,6 +51,7 @@ class ExpandedComponent extends SingleLayoutComponent
 
   @override
   void layoutChildren() {
+    resetSize();
     parent.layoutChildren();
   }
 

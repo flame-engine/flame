@@ -100,7 +100,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
-          size: NullableVector2.fromVector2(size),
+          size: size,
           position: position,
           children: children,
         );
@@ -109,7 +109,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           crossAxisAlignment: crossAxisAlignment,
           mainAxisAlignment: mainAxisAlignment,
           gap: gap,
-          size: NullableVector2.fromVector2(size),
+          size: size,
           position: position,
           children: children,
         );
@@ -126,7 +126,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
   set crossAxisAlignment(CrossAxisAlignment value) {
     _crossAxisAlignment = value;
-    layoutChildren();
+    _layoutCrossAxis();
   }
 
   MainAxisAlignment _mainAxisAlignment;
@@ -140,7 +140,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
   set mainAxisAlignment(MainAxisAlignment value) {
     _mainAxisAlignment = value;
-    layoutChildren();
+    _layoutMainAxis();
   }
 
   /// This reflects the value set explicitly and naively, without considering
