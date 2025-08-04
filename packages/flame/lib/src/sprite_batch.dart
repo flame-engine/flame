@@ -185,46 +185,62 @@ class SpriteBatch {
     _freeIndices.addFirst(index);
   }
 
-  /// The sources to use on the [atlas], stored sparsely.
+  /// The sources to use on the [atlas].
   final Map<int, Rect> _sources = {};
 
-  /// Returns a compact list of sources for rendering.
-  List<Rect> get sources {
-    final result = <Rect>[];
-    for (var i = 0; i < _nextIndex; i++) {
-      if (_sources.containsKey(i)) {
-        result.add(_sources[i]!);
-      }
-    }
-    return result;
-  }
-
-  /// The transforms that should be applied on the [_sources], stored sparsely.
+  /// The transforms that should be applied on the [_sources].
   final Map<int, RSTransform> _transforms = {};
 
-  /// Returns a compact list of transforms for rendering.
-  List<RSTransform> get transforms {
-    final result = <RSTransform>[];
-    for (var i = 0; i < _nextIndex; i++) {
-      if (_transforms.containsKey(i)) {
-        result.add(_transforms[i]!);
-      }
-    }
-    return result;
-  }
-
-  /// The background color for the [_sources], stored sparsely.
+  /// The colors to use for each batch item.
   final Map<int, Color> _colors = {};
 
-  /// Returns a compact list of colors for rendering.
+  /// Whether the render lists are dirty and need to be rebuilt.
+  bool _dirty = true;
+
+  /// The lists used for rendering the batch items.
+  final List<Rect> _sourcesList = [];
+
+  /// The transforms used for rendering the batch items.
+  final List<RSTransform> _transformsList = [];
+
+  /// The colors used for rendering the batch items.
+  final List<Color> _colorsList = [];
+
+  List<Rect> get sources {
+    if (_dirty) {
+      _rebuildRenderLists();
+    }
+    return _sourcesList;
+  }
+
+  List<RSTransform> get transforms {
+    if (_dirty) {
+      _rebuildRenderLists();
+    }
+    return _transformsList;
+  }
+
   List<Color> get colors {
-    final result = <Color>[];
+    if (_dirty) {
+      _rebuildRenderLists();
+    }
+    return _colorsList;
+  }
+
+  void _rebuildRenderLists() {
+    _sourcesList.clear();
+    _transformsList.clear();
+    _colorsList.clear();
+
     for (var i = 0; i < _nextIndex; i++) {
-      if (_colors.containsKey(i)) {
-        result.add(_colors[i]!);
+      if (_batchItems.containsKey(i)) {
+        _sourcesList.add(_sources[i]!);
+        _transformsList.add(_transforms[i]!);
+        _colorsList.add(_colors[i]!);
       }
     }
-    return result;
+
+    _dirty = false;
   }
 
   /// The atlas used by the [SpriteBatch].
@@ -334,6 +350,8 @@ class SpriteBatch {
     if (id != null) {
       _idToIndex[id] = index;
     }
+
+    _dirty = true;
   }
 
   /// Add a new batch item using a RSTransform.
@@ -388,6 +406,8 @@ class SpriteBatch {
     if (id != null) {
       _idToIndex[id] = index;
     }
+
+    _dirty = true;
 
     return index;
   }
@@ -462,6 +482,7 @@ class SpriteBatch {
 
     removeAt(index);
     _idToIndex.remove(id);
+    _dirty = true;
   }
 
   /// Removes a batch item at the given [index].
@@ -475,6 +496,7 @@ class SpriteBatch {
     _transforms.remove(index);
     _colors.remove(index);
     _freeIndex(index);
+    _dirty = true;
   }
 
   /// Clear the SpriteBatch so it can be reused.
@@ -486,6 +508,7 @@ class SpriteBatch {
     _idToIndex.clear();
     _freeIndices.clear();
     _nextIndex = 0;
+    _dirty = true;
   }
 
   // Used to not create new Paint objects in [render] and
@@ -504,11 +527,7 @@ class SpriteBatch {
 
     final renderPaint = paint ?? _emptyPaint;
 
-    final sourcesList = sources;
-    final transformsList = transforms;
-    final colorsList = colors;
-
-    final hasNoColors = colorsList.every((c) => c == _defaultColor);
+    final hasNoColors = colors.every((c) => c == _defaultColor);
     final actualBlendMode = blendMode ?? defaultBlendMode;
     if (!hasNoColors && actualBlendMode == null) {
       throw 'When setting any colors, a blend mode must be provided.';
@@ -517,9 +536,9 @@ class SpriteBatch {
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
-        transformsList,
-        sourcesList,
-        hasNoColors ? null : colorsList,
+        transforms,
+        sources,
+        hasNoColors ? null : colors,
         actualBlendMode,
         cullRect,
         renderPaint,
