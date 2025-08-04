@@ -171,18 +171,18 @@ layouts to reflect the chosen values.
         wrapperControls,
         ...demos,
         ColumnComponent(
-          key: ComponentKey.named("alice"),
+          key: ComponentKey.named('alice'),
           size: Vector2(600, 400),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ExpandedComponent(
-              key: ComponentKey.named("bob"),
+              key: ComponentKey.named('bob'),
               child: RectangleComponent(
                 paint: Paint()..color = Colors.purple,
               ),
             ),
             RowComponent(
-              key: ComponentKey.named("charlie"),
+              key: ComponentKey.named('charlie'),
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextComponent(text: 'test'),
