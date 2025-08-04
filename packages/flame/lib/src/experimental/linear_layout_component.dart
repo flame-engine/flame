@@ -49,8 +49,8 @@ enum Direction {
 ///    note:
 ///    - [mainAxisAlignment] acts like [MainAxisAlignment.start], regardless
 ///      of its original value.
-///    - [crossAxisAlignment] acts like [CrossAxisAlignment.start], only if
-///      its value is [CrossAxisAlignment.stretch].
+///    - [crossAxisAlignment] will cause all children to have the same length
+///      along the cross-axis, equal to the largest child in that axis.
 ///    - [ExpandedComponent]s no longer expand, and their size is set to their
 ///      [intrinsicSize], which is simply the size of their respective children.
 ///  - The existence of an [ExpandedComponent] among the [children]
@@ -196,13 +196,34 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     if (child is! PositionComponent) {
       return;
     }
+
+    void childResizeListener() {
+      onChildResize(child);
+    }
+
     // A child can be added, and indeed, can be later resized.
     if (type == ChildrenChangeType.added && child is! ExpandedComponent) {
-      child.size.addListener(layoutChildren);
+      child.size.addListener(childResizeListener);
     } else {
-      child.size.removeListener(layoutChildren);
+      child.size.removeListener(childResizeListener);
     }
-    layoutChildren();
+    childResizeListener();
+  }
+
+  void onChildResize(PositionComponent child) {
+    if (child is! LayoutComponent) {
+      resetSize();
+      layoutChildren();
+      return;
+    }
+    if (child.shrinkWrappedIn(direction.mainAxisVectorIndex)) {
+      resetSize();
+      _layoutMainAxis();
+    }
+    if (child.shrinkWrappedIn(direction.crossAxisVectorIndex)) {
+      resetSize();
+      _layoutCrossAxis();
+    }
   }
 
   @override
@@ -216,10 +237,10 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     size.removeListener(layoutChildren);
   }
 
-  /// Sets the size of this [LinearLayoutComponent], then lays out the children
-  /// along both main and cross axes.
+  /// Lays out the children along both main and cross axes.
   @override
   void layoutChildren() {
+    // resetSize();
     _layoutMainAxis();
     _layoutCrossAxis();
   }

@@ -300,7 +300,7 @@ void main() {
 
     group('size', () {
       runLinearLayoutComponentTestRegistry({
-        'size=null sets size to inherentSize': (game, direction) async {
+        'size=null sets size to intrinsicSize': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
@@ -344,7 +344,7 @@ void main() {
           layoutComponent.crossAxisAlignment = CrossAxisAlignment.start;
           expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.start);
         },
-        "size=null doesn't respect CrossAxisAlignment.stretch":
+        'size=null with CrossAxisAlignment.stretch expands children as usual':
             (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
@@ -355,7 +355,19 @@ void main() {
             crossAxisAlignment: CrossAxisAlignment.stretch,
           );
           await game.ensureAdd(layoutComponent);
-          expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.start);
+          final crossAxisLengths = layoutComponent.positionChildren.map(
+            (component) => component.size[direction.crossAxisVectorIndex],
+          );
+          // All the cross axis lengths are the same
+          expect(
+            crossAxisLengths
+                .every((length) => length == crossAxisLengths.first),
+            true,
+          );
+          expect(
+            crossAxisLengths.first,
+            layoutComponent.size[direction.crossAxisVectorIndex],
+          );
         },
       });
     });
@@ -365,19 +377,17 @@ void main() {
           'size responds when children are added and then resized':
               (game, direction) async {
             final circle = CircleComponent(radius: 20);
-            final rectangle2 = RectangleComponent(size: Vector2(100, 50));
-            // final rectangle2 = RectangleComponent(size: Vector2(200, 70));
+            final rectangle = RectangleComponent(size: Vector2(100, 50));
             final layoutComponent = LinearLayoutComponent.fromDirection(
               direction,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
             );
             await game.ensureAdd(layoutComponent);
             expect(layoutComponent.size, Vector2.zero());
             await layoutComponent.ensureAddAll([
               circle,
-              rectangle2,
+              rectangle,
             ]);
-            rectangle2.size = Vector2(200, 70);
+            rectangle.size = Vector2(200, 70);
             expect(
               layoutComponent.size,
               switch (direction) {
