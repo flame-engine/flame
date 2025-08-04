@@ -67,31 +67,6 @@ abstract class LayoutComponent extends PositionComponent {
     return layoutSize[index] == null;
   }
 
-  /// Internally, this [size] setter should only ever be invoked upon
-  /// construction, and inside [layoutChildren] to make it easier to track and
-  /// reason about.
-  ///
-  /// Externally, this [size] setter is designed as an API, so a library user
-  /// should feel free to use this.
-  // @override
-  // set size(Vector2? newSize) {
-  //   final newShrinkWrapMode = newSize == null;
-  //   if (shrinkWrapMode != newShrinkWrapMode) {
-  //     // We only invoke this when [_shrinkWrapMode]'s value is changing.
-  //     // This is so we can avoid accumulation of listeners on the children.
-  //     _setupChildSizeListeners(newShrinkWrapMode);
-  //   }
-  //   shrinkWrapMode = newShrinkWrapMode;
-  //   // we use [super.size] to benefit from the superclass's notifier mechanisms.
-  //   if (newSize == null) {
-  //     super.size = intrinsicSize;
-  //   } else {
-  //     super.size = newSize;
-  //   }
-  //   // We might be tempted to invoke [layoutChildren], but depending on the
-  //   // needs of the component, we may want to attach a listener to [size].
-  // }
-
   @override
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     if (child is! PositionComponent) {
