@@ -211,17 +211,15 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   }
 
   void onChildResize(PositionComponent child) {
+    resetSize();
     if (child is! LayoutComponent) {
-      resetSize();
       layoutChildren();
       return;
     }
     if (child.shrinkWrappedIn(direction.mainAxisVectorIndex)) {
-      resetSize();
       _layoutMainAxis();
     }
     if (child.shrinkWrappedIn(direction.crossAxisVectorIndex)) {
-      resetSize();
       _layoutCrossAxis();
     }
   }
