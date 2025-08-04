@@ -1,9 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/experimental/expanded_component.dart';
-import 'package:flame/src/experimental/notifying_nullable_vector_2.dart';
 import 'package:flame/src/experimental/nullable_vector_2.dart';
-import 'package:flame/src/game/notifying_vector2.dart';
-import 'package:meta/meta.dart';
 
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
@@ -71,12 +67,6 @@ abstract class LayoutComponent extends PositionComponent {
     return layoutSize[index] == null;
   }
 
-  /// This size setter is nullable unlike its superclass, to allow this
-  /// [LayoutComponent] to shrink-wrap its children. In other words, it sets
-  /// the size to [intrinsicSize]. This setter also records the intent to
-  /// shrink-wrap via the [shrinkWrapMode] property, so that [layoutChildren]
-  /// knows whether or not to invoke this setter.
-  ///
   /// Internally, this [size] setter should only ever be invoked upon
   /// construction, and inside [layoutChildren] to make it easier to track and
   /// reason about.
@@ -100,26 +90,6 @@ abstract class LayoutComponent extends PositionComponent {
   //   }
   //   // We might be tempted to invoke [layoutChildren], but depending on the
   //   // needs of the component, we may want to attach a listener to [size].
-  // }
-
-  /// Attaches or removes size listeners from [positionChildren], depending on
-  /// the mode of operation. [shrinkWrapMode] is a property accessible to this
-  /// function, so technically we can access the property directly from within
-  /// the function, but because this function is very sensitive to the value of
-  /// this property, as a safety measure we are making it explicitly a function
-  /// of [shrinkWrapMode].
-  ///
-  /// Previously, this method also attached or removed a listener on the
-  /// component [size] itself, but now that [size] is being overloaded to
-  /// signal intent to shrink wrap, the layout methods are invoked directly
-  /// from the [size] setter itself.
-  // void _setupChildSizeListeners(bool shrinkWrapMode) {
-  //   for (final child in positionChildren) {
-  //     child.size.removeListener(layoutChildren);
-  //     if (shrinkWrapMode) {
-  //       child.size.addListener(layoutChildren);
-  //     }
-  //   }
   // }
 
   @override
