@@ -15,7 +15,9 @@ void addExperimentalStories(Dashbook dashbook) {
       )
       .add(
         'Layout Components',
-        (_) => GameWidget(game: LayoutComponentExample()),
+        (_) => const GameWidget.controlled(
+          gameFactory: LayoutComponentExample.new,
+        ),
         codeLink: baseLink('experimental/layout_components.dart'),
         info: LayoutComponentExample.description,
       );

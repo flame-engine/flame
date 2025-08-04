@@ -153,15 +153,16 @@ layouts to reflect the chosen values.
       gap: 24,
       children: [
         TextComponent(
-          text:
-              // ignore: lines_longer_than_80_chars
-              'Because this example deals with sizes a lot, we have made it draggable.',
+          text: 'Because this example deals with sizes a lot, we have made it '
+              'draggable.',
         ),
         TextBoxComponent(
           boxConfig: TextBoxConfig(maxWidth: defaultSize.x),
-          text:
-              // ignore: lines_longer_than_80_chars
-              'The root of this example is a shrinkWrapped ColumnComponent. Notice how, when you update the size of the examples, the root component also resizes. This is a demonstration of the fact that shrinkWrapped LayoutComponents listen to changes in the sizes of their children.',
+          text: 'The root of this example is a shrinkWrapped ColumnComponent. '
+              'Notice how, when you update the size of the examples, the root '
+              'component also resizes. This is a demonstration of the fact '
+              'that shrinkWrapped LayoutComponents listen to changes in the '
+              'sizes of their children.',
         ),
         mainAxisControls,
         crossAxisControls,
