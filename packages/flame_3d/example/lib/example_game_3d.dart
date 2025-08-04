@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:example/components/crate.dart';
 import 'package:example/components/player.dart';
+import 'package:example/components/rendered_point_light.dart';
+import 'package:example/components/room_bounds.dart';
 import 'package:example/components/rotating_light.dart';
 import 'package:example/example_camera_3d.dart';
 import 'package:flame/events.dart';
@@ -63,36 +65,13 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
       ),
       RotatingLight(),
 
-      LightComponent.point(
+      RenderedPointLight(
         position: Vector3(0, 0.1, 0),
         color: const Color(0xFFFF00FF),
       ),
-      MeshComponent(
-        mesh: SphereMesh(
-          radius: 0.05,
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              const Color(0xFFFF00FF),
-            ),
-          ),
-        ),
-        position: Vector3(0, 0.1, 0),
-      ),
-
-      LightComponent.point(
+      RenderedPointLight(
         position: Vector3(-2, 3, 2),
         color: const Color(0xFFFF2255),
-      ),
-      MeshComponent(
-        mesh: SphereMesh(
-          radius: 0.05,
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              const Color(0xFFFF2255),
-            ),
-          ),
-        ),
-        position: Vector3(-2, 4, 2),
       ),
 
       // Add the player
@@ -119,57 +98,7 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
         ),
       ),
 
-      // Floor
-      MeshComponent(
-        mesh: PlaneMesh(
-          size: Vector2(32, 32),
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              BasicPalette.gray.color,
-            ),
-          ),
-        ),
-      ),
-
-      // Front wall
-      MeshComponent(
-        position: Vector3(16.5, 2.5, 0),
-        mesh: CuboidMesh(
-          size: Vector3(1, 5, 32),
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              BasicPalette.yellow.color,
-            ),
-          ),
-        ),
-      ),
-
-      // Left wall
-      MeshComponent(
-        position: Vector3(0, 2.5, 16.5),
-        mesh: CuboidMesh(
-          size: Vector3(32, 5, 1),
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              BasicPalette.blue.color,
-            ),
-          ),
-        ),
-      ),
-
-      // Right wall
-      MeshComponent(
-        position: Vector3(0, 2.5, -16.5),
-        mesh: CuboidMesh(
-          size: Vector3(32, 5, 1),
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              BasicPalette.lime.color,
-            ),
-          ),
-          useFaceNormals: false,
-        ),
-      ),
+      RoomBounds(),
     ]);
 
     final rnd = Random();
