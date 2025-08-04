@@ -7,10 +7,10 @@ import 'package:flame/experimental.dart';
 /// [LinearLayoutComponent] to alter its computations and allow it to take up
 /// any free space in the main axis.
 ///
-/// If its [parent] [LinearLayoutComponent] shrinkwraps in the main axis, then
+/// If its [parent] [LinearLayoutComponent] shrink-wraps in the main axis, then
 /// this component isn't expanded.
 ///
-/// ExpandedComponent never tries to shrinkwrap. It only ever reports
+/// ExpandedComponent never tries to shrink-wrap. It only ever reports
 /// [intrinsicSize] to its parent, and receives sizing information from its
 /// parent.
 ///
