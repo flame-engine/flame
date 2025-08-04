@@ -37,10 +37,6 @@ class ExpandedComponent extends SingleLayoutComponent
     final child = this.child;
     if (inflateChild && child != null && value != null) {
       // We want to set the child's size.
-      // BUT it'll trigger the child size listener and trigger [layoutChildren]
-      // which will trigger [parent.layoutChildren()], which will set [size],
-      // resulting in an infinite loop.
-      // So, we have to first remove the listener, then reattach it afterwards.
       if (child is LayoutComponent) {
         child.setLayoutAxisLength(axisIndex, value);
       } else {
