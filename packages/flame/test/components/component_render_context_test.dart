@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
-import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
