@@ -4,19 +4,19 @@ import 'package:flame/experimental.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:test/test.dart';
-import 'layout_component_test_helpers.dart';
+import 'linear_layout_component_test_helpers.dart';
 
 void main() {
-  group('LayoutComponent', () {
+  group('LinearLayoutComponent', () {
     group('mainAxisAlignment', () {
-      runLayoutComponentTestRegistry(
+      runLinearLayoutComponentTestRegistry(
         {
           'mainAxisAlignment = start': (game, direction) async {
             final circle = CircleComponent(radius: 20);
             final rectangle = RectangleComponent(size: Vector2(100, 50));
             final text = TextComponent(text: 'testing');
             await game.ensureAdd(
-              LayoutComponent.fromDirection(
+              LinearLayoutComponent.fromDirection(
                 direction,
                 children: [circle, rectangle, text],
               ),
@@ -38,7 +38,7 @@ void main() {
             final text = TextComponent(text: 'testing');
             final layoutComponentSize = Vector2.all(500);
             await game.ensureAdd(
-              LayoutComponent.fromDirection(
+              LinearLayoutComponent.fromDirection(
                 direction,
                 children: [circle, rectangle, text],
                 size: layoutComponentSize,
@@ -65,7 +65,7 @@ void main() {
             final text = TextComponent(text: 'testing');
             final layoutComponentSize = Vector2.all(500);
             const gap = 20.0;
-            final layoutComponent = LayoutComponent.fromDirection(
+            final layoutComponent = LinearLayoutComponent.fromDirection(
               direction,
               children: [circle, rectangle, text],
               size: layoutComponentSize,
@@ -94,7 +94,7 @@ void main() {
             final rectangle = RectangleComponent(size: Vector2(100, 50));
             final text = TextComponent(text: 'testing');
             final layoutComponentSize = Vector2.all(500);
-            final layoutComponent = LayoutComponent.fromDirection(
+            final layoutComponent = LinearLayoutComponent.fromDirection(
               direction,
               children: [circle, rectangle, text],
               size: layoutComponentSize,
@@ -124,7 +124,7 @@ void main() {
             final rectangle = RectangleComponent(size: Vector2(100, 50));
             final text = TextComponent(text: 'testing');
             final layoutComponentSize = Vector2.all(500);
-            final layoutComponent = LayoutComponent.fromDirection(
+            final layoutComponent = LinearLayoutComponent.fromDirection(
               direction,
               children: [circle, rectangle, text],
               size: layoutComponentSize,
@@ -160,7 +160,7 @@ void main() {
             final rectangle = RectangleComponent(size: Vector2(100, 50));
             final text = TextComponent(text: 'testing');
             final layoutComponentSize = Vector2.all(500);
-            final layoutComponent = LayoutComponent.fromDirection(
+            final layoutComponent = LinearLayoutComponent.fromDirection(
               direction,
               children: [circle, rectangle, text],
               size: layoutComponentSize,
@@ -190,13 +190,13 @@ void main() {
     });
 
     group('crossAxisAlignment', () {
-      runLayoutComponentTestRegistry({
+      runLinearLayoutComponentTestRegistry({
         'crossAlignment = start': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
           final layoutComponentSize = Vector2.all(500);
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
             children: [circle, rectangle, text],
             size: layoutComponentSize,
@@ -212,7 +212,7 @@ void main() {
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
           final layoutComponentSize = Vector2.all(500);
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
             children: [circle, rectangle, text],
             size: layoutComponentSize,
@@ -238,7 +238,7 @@ void main() {
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
           final layoutComponentSize = Vector2.all(500);
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
             children: [circle, rectangle, text],
             size: layoutComponentSize,
@@ -262,43 +262,42 @@ void main() {
       });
     });
 
-    group('shrinkWrap', () {
-      runLayoutComponentTestRegistry({
-        'shrinkWrap=true ignores size': (game, direction) async {
+    group('size', () {
+      runLinearLayoutComponentTestRegistry({
+        'size=null sets size to inherentSize': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
           final layoutComponentSize = Vector2.all(500);
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
-            shrinkWrap: true,
             children: [circle, rectangle, text],
             size: layoutComponentSize,
           );
           await game.ensureAdd(layoutComponent);
+          expect(layoutComponent.size, layoutComponentSize);
+          layoutComponent.size = null;
           expect(layoutComponent.size, layoutComponent.inherentSize);
         },
-        'shrinkWrap=true ignores mainAxisAlignment': (game, direction) async {
+        'size=null ignores mainAxisAlignment': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
-            shrinkWrap: true,
             children: [circle, rectangle, text],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
           );
           await game.ensureAdd(layoutComponent);
           expect(layoutComponent.mainAxisAlignment, MainAxisAlignment.start);
         },
-        'shrinkWrap=true respects supported crossAxisAlignments':
+        'size=null respects supported crossAxisAlignments':
             (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
-            shrinkWrap: true,
             children: [circle, rectangle, text],
             crossAxisAlignment: CrossAxisAlignment.center,
           );
@@ -309,14 +308,13 @@ void main() {
           layoutComponent.crossAxisAlignment = CrossAxisAlignment.start;
           expect(layoutComponent.crossAxisAlignment, CrossAxisAlignment.start);
         },
-        "shrinkWrap=true doesn't respect CrossAxisAlignment.stretch":
+        "size=null doesn't respect CrossAxisAlignment.stretch":
             (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
-          final layoutComponent = LayoutComponent.fromDirection(
+          final layoutComponent = LinearLayoutComponent.fromDirection(
             direction,
-            shrinkWrap: true,
             children: [circle, rectangle, text],
             crossAxisAlignment: CrossAxisAlignment.stretch,
           );
@@ -326,16 +324,15 @@ void main() {
       });
     });
     group('children', () {
-      runLayoutComponentTestRegistry(
+      runLinearLayoutComponentTestRegistry(
         {
           'size responds when children are added and then resized':
               (game, direction) async {
             final circle = CircleComponent(radius: 20);
             final rectangle2 = RectangleComponent(size: Vector2(100, 50));
             // final rectangle2 = RectangleComponent(size: Vector2(200, 70));
-            final layoutComponent = LayoutComponent.fromDirection(
+            final layoutComponent = LinearLayoutComponent.fromDirection(
               direction,
-              shrinkWrap: true,
               crossAxisAlignment: CrossAxisAlignment.stretch,
             );
             await game.ensureAdd(layoutComponent);

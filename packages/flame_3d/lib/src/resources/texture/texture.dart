@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d/src/graphics/gpu_context_wrapper.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// {@template texture}
@@ -23,7 +24,7 @@ class Texture extends Resource<gpu.Texture> {
 
   @override
   gpu.Texture createResource() {
-    return gpu.gpuContext.createTexture(
+    return GpuContextWrapper(gpu.gpuContext).createTexture(
       gpu.StorageMode.hostVisible,
       width,
       height,
