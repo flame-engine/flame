@@ -1,18 +1,13 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:example/components/crate.dart';
 import 'package:example/components/player.dart';
-import 'package:example/components/rendered_point_light.dart';
 import 'package:example/components/room_bounds.dart';
-import 'package:example/components/rotating_light.dart';
 import 'package:example/example_camera_3d.dart';
+import 'package:example/scenarios/boxes_setup.dart';
 import 'package:flame/events.dart';
-import 'package:flame/palette.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
-import 'package:flame_3d/resources.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -60,65 +55,16 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
   @override
   FutureOr<void> onLoad() async {
     world.addAll([
+      RoomBounds(),
       LightComponent.ambient(
         intensity: 1.0,
       ),
-      RotatingLight(),
-
-      RenderedPointLight(
-        position: Vector3(0, 0.1, 0),
-        color: const Color(0xFFFF00FF),
-      ),
-      RenderedPointLight(
-        position: Vector3(-2, 3, 2),
-        color: const Color(0xFFFF2255),
-      ),
-
-      // Add the player
       player = Player(
         position: Vector3(0, 1, 0),
       ),
-
-      // Floating crate
-      Crate(
-        position: Vector3(0, 5, 0),
-        size: Vector3.all(1),
-      ),
-
-      // Floating sphere
-      MeshComponent(
-        position: Vector3(5, 5, 5),
-        mesh: SphereMesh(
-          radius: 1,
-          material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              BasicPalette.green.color,
-            ),
-          ),
-        ),
-      ),
-
-      RoomBounds(),
     ]);
 
-    final rnd = Random();
-    for (var i = 0; i < 20; i++) {
-      final height = rnd.range(1, 12);
-
-      world.add(
-        MeshComponent(
-          position: Vector3(rnd.range(-15, 15), height / 2, rnd.range(-15, 15)),
-          mesh: CuboidMesh(
-            size: Vector3(1, height, 1),
-            material: SpatialMaterial(
-              albedoTexture: ColorTexture(
-                Color.fromRGBO(rnd.iRange(20, 255), rnd.iRange(10, 55), 30, 1),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+    BoxesScenario.instance.setup(this);
   }
 
   @override
@@ -148,10 +94,4 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
     camera.delta.setZero();
     super.onDragCancel(event);
   }
-}
-
-extension on Random {
-  double range(num min, num max) => nextDouble() * (max - min) + min;
-
-  int iRange(int min, int max) => range(min, max).toInt();
 }
