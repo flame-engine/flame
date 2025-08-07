@@ -25,8 +25,6 @@ class BoxesScenario implements GameScenario {
         color: const Color(0xFFFF2255),
       ),
 
-      // Add the player
-
       // Floating crate
       Crate(
         position: Vector3(0, 5, 0),
