@@ -53,7 +53,7 @@ the various ways you can change this layout.
           padding: padding,
           expandedMode: expandedMode,
           size: demoSize.toVector2(),
-        )
+        ),
       ],
     );
     world.add(
