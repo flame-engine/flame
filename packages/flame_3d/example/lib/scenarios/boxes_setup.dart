@@ -11,10 +11,6 @@ import 'package:flame_3d/components.dart';
 import 'package:flame_3d/resources.dart';
 
 class BoxesScenario implements GameScenario {
-  static final BoxesScenario instance = BoxesScenario._();
-
-  BoxesScenario._();
-
   @override
   void setup(ExampleGame3D game) {
     game.world.addAll([
@@ -53,16 +49,25 @@ class BoxesScenario implements GameScenario {
 
     final rnd = Random();
     for (var i = 0; i < 20; i++) {
-      final height = rnd.range(1, 12);
+      final height = rnd.nextDoubleBetween(1, 12);
 
       game.world.add(
         MeshComponent(
-          position: Vector3(rnd.range(-15, 15), height / 2, rnd.range(-15, 15)),
+          position: Vector3(
+            rnd.nextDoubleBetween(-15, 15),
+            height / 2,
+            rnd.nextDoubleBetween(-15, 15),
+          ),
           mesh: CuboidMesh(
             size: Vector3(1, height, 1),
             material: SpatialMaterial(
               albedoTexture: ColorTexture(
-                Color.fromRGBO(rnd.iRange(20, 255), rnd.iRange(10, 55), 30, 1),
+                Color.fromRGBO(
+                  rnd.nextIntBetween(20, 255),
+                  rnd.nextIntBetween(10, 55),
+                  30,
+                  1,
+                ),
               ),
             ),
           ),
@@ -70,10 +75,4 @@ class BoxesScenario implements GameScenario {
       );
     }
   }
-}
-
-extension on Random {
-  double range(num min, num max) => nextDouble() * (max - min) + min;
-
-  int iRange(int min, int max) => range(min, max).toInt();
 }

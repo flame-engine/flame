@@ -4,7 +4,7 @@ import 'package:example/scenarios/boxes_setup.dart';
 abstract class GameScenario {
   void setup(ExampleGame3D game);
 
-  static final Map<String, GameScenario> setups = {
-    'boxes': BoxesScenario.instance,
+  static final Map<String, GameScenario> scenarios = {
+    'boxes': BoxesScenario(),
   };
 }

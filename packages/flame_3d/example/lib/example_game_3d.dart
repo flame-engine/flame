@@ -64,7 +64,7 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
       ),
     ]);
 
-    BoxesScenario.instance.setup(this);
+    BoxesScenario().setup(this);
   }
 
   @override

@@ -17,7 +17,7 @@ class SetupCommand extends FlameConsoleCommand<ExampleGame3D> {
       return ('No scenario name provided.', '');
     }
 
-    final scenario = GameScenario.setups[scenarioName];
+    final scenario = GameScenario.scenarios[scenarioName];
     if (scenario == null) {
       return ('Unknown scenario: $scenarioName', '');
     }
