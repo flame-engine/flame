@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:trex_game/background/cloud.dart';
-import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
 class CloudManager extends PositionComponent with HasGameReference<TRexGame> {
@@ -11,8 +11,8 @@ class CloudManager extends PositionComponent with HasGameReference<TRexGame> {
   void addCloud() {
     final cloudPosition = Vector2(
       game.size.x + Cloud.initialSize.x + 10,
-      ((absolutePosition.y / 2 - (Cloud.maxSkyLevel - Cloud.minSkyLevel)) +
-              random.fromRange(Cloud.minSkyLevel, Cloud.maxSkyLevel)) -
+      (absolutePosition.y / 2 - (Cloud.maxSkyLevel - Cloud.minSkyLevel)) +
+          game.random.nextDoubleBetween(Cloud.minSkyLevel, Cloud.maxSkyLevel) -
           absolutePosition.y,
     );
     add(Cloud(position: cloudPosition));
