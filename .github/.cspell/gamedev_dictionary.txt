@@ -19,6 +19,7 @@ clusterized # past tense of clusterize
 easings # Easing functions specify the rate of change of a parameter over time
 fullscreen # mode in which a program or app occupies the entire screen with no borders
 glsl # OpenGL Shading Language
+gltf # OpenGL Transmission Format, a file format for 3D models
 goldens # test files used as reference for Golden Tests
 highp # high float precission setting on glsl fragment shaders
 hitbox # the collision box around objects for the purposes of collision detection
@@ -69,6 +70,8 @@ sublists # plural of sublist
 subrange # a range entirely contained on a given range
 struct # a type of data model in programming that aggregates fields
 SVGs # plural of SVG
+texel # equivalent of pixel for a texture image, a normalized coordinate system for ease of mapping
+texels # plural of texel
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
 truecolor # truecolor rendering
