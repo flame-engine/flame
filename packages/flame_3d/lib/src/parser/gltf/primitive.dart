@@ -154,7 +154,7 @@ class Primitive extends GltfNode {
             // this must be a 0 weight value that just happens to be id = 0
             return 0.0;
           }
-          return globalToLocalJointMap[e]!.toDouble();
+          return globalToLocalJointMap[idx]!.toDouble();
         }).toList(),
       );
     }).toList();
