@@ -4,6 +4,9 @@ import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/texture.dart';
 
+// cSpell:ignore TEXCOORD
+// (used in GLTF as the key for texture coordinate attributes)
+
 /// Reference to a texture.
 class TextureInfo extends GltfNode {
   /// The reference to the texture.

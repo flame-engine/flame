@@ -1,9 +1,6 @@
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
-// cSpell:ignore TEXCOORD
-// (used in GLTF as the key for texture coordinate attributes)
-
 enum AnimationInterpolation {
   /// The animated values are linearly interpolated between keyframes.
   /// When targeting a rotation, spherical linear interpolation (slerp)
