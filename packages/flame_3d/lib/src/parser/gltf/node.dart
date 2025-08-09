@@ -13,7 +13,7 @@ import 'package:flame_3d/src/parser/gltf/skin.dart';
 ///
 /// A node **MAY** have either a `matrix` or any combination of
 /// `translation`/`rotation`/`scale` (TRS) properties.
-/// TRS properties are converted to matrices and postmultiplied in the
+/// TRS properties are converted to matrices and post-multiplied in the
 /// `T * R * S` order to compose the transformation matrix;
 /// first the scale is applied to the vertices, then the rotation, and then the
 /// translation.

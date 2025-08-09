@@ -7,10 +7,16 @@ abstract class GameScenario {
 
   void setup(ExampleGame3D game);
 
+  static const String defaultScenario = 'models';
+
   static final Map<String, GameScenario> scenarios = {
     'boxes': BoxesScenario(),
     'models': ModelsScenario(),
   };
+
+  static void defaultSetup(ExampleGame3D game) {
+    scenarios[defaultScenario]?.setup(game);
+  }
 
   static Future<void> loadAll() async {
     await Future.wait([

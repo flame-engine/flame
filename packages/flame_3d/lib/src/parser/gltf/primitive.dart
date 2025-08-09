@@ -11,6 +11,8 @@ import 'package:flame_3d/src/parser/gltf/material.dart';
 import 'package:flame_3d/src/parser/gltf/morph_target.dart';
 import 'package:flame_3d/src/parser/gltf/primitive_mode.dart';
 
+// cSpell:ignore TEXCOORD
+// (used in GLTF as the key for texture coordinate attributes)
 class Primitive extends GltfNode {
   /// The topology type of primitives to render.
   final PrimitiveMode mode;
@@ -143,7 +145,12 @@ class Primitive extends GltfNode {
     final localizedJoints = joints.map((joint) {
       return Vector4.array(
         joint.storage.map((e) {
-          if (e == 0.0 && globalToLocalJointMap[e] == null) {
+          final idx = e.toInt();
+          if (idx != e) {
+            throw StateError('Invalid joint index: $e');
+          }
+          // TODO(luan): remove this logic entirely once we support arrays
+          if (e == 0.0 && globalToLocalJointMap[idx] == null) {
             // this must be a 0 weight value that just happens to be id = 0
             return 0.0;
           }

@@ -1,6 +1,9 @@
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
+// cSpell:ignore TEXCOORD
+// (used in GLTF as the key for texture coordinate attributes)
+
 enum AnimationInterpolation {
   /// The animated values are linearly interpolated between keyframes.
   /// When targeting a rotation, spherical linear interpolation (slerp)
@@ -20,7 +23,7 @@ enum AnimationInterpolation {
   /// For each input element, the output stores three elements, an in-tangent,
   /// a spline vertex, and an out-tangent.
   /// There **MUST** be at least two keyframes when using this interpolation.
-  cubicSpline('CUBICSPLINE'),
+  cubicSpline('CUBICSPLINE'), // cSpell:ignore CUBICSPLINE
   ;
 
   final String value;
