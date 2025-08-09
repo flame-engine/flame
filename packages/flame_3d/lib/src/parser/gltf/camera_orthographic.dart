@@ -35,9 +35,9 @@ class CameraOrthographic extends GltfNode {
     Map<String, Object?> map,
   ) : this(
           root: root,
-          xMag: Parser.float(map, 'xmag')!,
-          yMag: Parser.float(map, 'ymag')!,
-          xFar: Parser.float(map, 'zfar')!,
-          zNear: Parser.float(map, 'znear')!,
+          xMag: Parser.float(map, 'xmag')!, // cSpell:ignore xmag
+          yMag: Parser.float(map, 'ymag')!, // cSpell:ignore ymag
+          xFar: Parser.float(map, 'zfar')!, // cSpell:ignore zfar
+          zNear: Parser.float(map, 'znear')!, // cSpell:ignore znear
         );
 }

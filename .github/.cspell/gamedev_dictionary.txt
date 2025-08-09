@@ -34,7 +34,9 @@ lerp # short for linear interpolation
 LTRB # left top right bottom
 LTRBR # left top right bottom radius
 LTWH # left top width height
+metalness # a measure of how much a surface reflects light for the purposes of physically based rendering
 Minkowski # Minkowski sum, a sum of two sets of vectors, A and B, where the result is the sum of each vector pair
+mipmap # a technique used in 3D graphics to create a series of pre-calculated textures at different levels of detail
 multitap # support from a device to recognize many taps at the same time
 netcode # blanket term used to refer to networking in online games
 numpad # the numeric portion of a keyboard

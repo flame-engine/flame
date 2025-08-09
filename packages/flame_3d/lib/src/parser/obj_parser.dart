@@ -60,21 +60,21 @@ class ObjParser extends ModelParser {
             faces[matName]?.add(face);
           } else if (parts.length > 4) {
             // Triangulate
-            // TODO(wolfen): implement triangulation
+            // TODO(wolfenrain): implement triangulation
           }
         // Material library
-        case 'mtllib':
+        case 'mtllib': // cSpell:ignore mtllib
           final relative = (filePath.split('/')..removeLast()).join('/');
           materials.addAll(
             await _parseMaterial('$relative/${parts[0]}'.trim()),
           );
         // Material
-        case 'usemtl':
+        case 'usemtl': // cSpell:ignore usemtl
           matName = parts[0].trim();
 
           if (!faces.containsKey(matName)) {
             if (!materials.containsKey(matName)) {
-              // TODO(wolfen): material not found?
+              // TODO(wolfenrain): material not found?
             }
             faces[matName] = [];
           }
@@ -137,7 +137,7 @@ class ObjParser extends ModelParser {
         case '#':
           continue;
         // Creating a new material
-        case 'newmtl':
+        case 'newmtl': // cSpell:ignore newmtl
           currentMat = SpatialMaterial(
             albedoTexture: ColorTexture(const Color(0xFFFFFFFF)),
           );

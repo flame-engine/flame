@@ -6,7 +6,7 @@ import 'dart:ui';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-// TODO(wolfen): heavily inspired by the Godot one, maybe this should be part
+// TODO(wolfenrain): heavily inspired by the Godot one, maybe this should be part
 // of the core package
 class SurfaceTool {
   final List<Vertex> _vertices = [];
@@ -30,7 +30,7 @@ class SurfaceTool {
     List<Vector2> texCoords, [
     List<Vector3> normals = const [],
     List<Color> colors = const [],
-    // TODO(wolfen): support tangents
+    // TODO(wolfenrain): support tangents
   ]) {
     assert(vertices.length == 3, 'Expected a length of 3 for vertices');
 
@@ -44,7 +44,7 @@ class SurfaceTool {
       if (normals.length > n) {
         setNormal(normals[n]);
       }
-      // TODO(wolfen): tangents
+      // TODO(wolfenrain): tangents
       addVertex(vertices[n]);
     }
 
