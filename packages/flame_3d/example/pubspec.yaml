@@ -22,3 +22,4 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/objects/
