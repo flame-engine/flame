@@ -61,6 +61,33 @@ void main() {
       );
     });
 
+    test('can add a batch item with an id', () {
+      final image = _MockImage();
+      final spriteBatch = SpriteBatch(image);
+      spriteBatch.add(source: Rect.zero, id: 'item1');
+
+      final batchItem = spriteBatch.findIndexById('item1');
+
+      expect(batchItem, isNotNull);
+    });
+
+    test('can replace a batch item with an id', () {
+      final image = _MockImage();
+      final spriteBatch = SpriteBatch(image);
+      spriteBatch.add(source: Rect.zero, id: 'item1');
+
+      spriteBatch.replace(
+        spriteBatch.findIndexById('item1')!,
+        source: const Rect.fromLTWH(1, 1, 1, 1),
+        id: 'item2',
+      );
+
+      final batchItem = spriteBatch.findIndexById('item2');
+
+      expect(batchItem, isNotNull);
+      expect(spriteBatch.sources.first, const Rect.fromLTWH(1, 1, 1, 1));
+    });
+
     const margin = 2.0;
     const tileSize = 6.0;
 
