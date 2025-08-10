@@ -9,8 +9,9 @@ class RiveExampleGame extends FlameGame with TapDetector {
 
   @override
   Future<void> onLoad() async {
-    final skillsArtboard =
-        await loadArtboard(RiveFile.asset('assets/skills.riv'));
+    final skillsArtboard = await loadArtboard(
+      RiveFile.asset('assets/skills.riv'),
+    );
 
     final controller = StateMachineController.fromArtboard(
       skillsArtboard,

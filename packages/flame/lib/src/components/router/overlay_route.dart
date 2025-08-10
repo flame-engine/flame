@@ -19,14 +19,14 @@ class OverlayRoute extends Route {
   /// registered with the Game's map of overlay builders when this route is
   /// first activated.
   OverlayRoute(OverlayBuilder builder, {super.transparent = true})
-      : _builder = builder,
-        super(null);
+    : _builder = builder,
+      super(null);
 
   /// An overlay route that corresponds to an overlay that was already declared
   /// within GameWidget's `overlayBuilderMap`.
   OverlayRoute.existing({super.transparent = true})
-      : _builder = null,
-        super(null);
+    : _builder = null,
+      super(null);
 
   final OverlayBuilder? _builder;
 

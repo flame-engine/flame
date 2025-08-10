@@ -22,12 +22,12 @@ class StaticComponentsExample extends FlameGame
   StaticComponentsExample({
     required Vector2 viewportResolution,
   }) : super(
-          camera: CameraComponent.withFixedResolution(
-            width: viewportResolution.x,
-            height: viewportResolution.y,
-          ),
-          world: _StaticComponentWorld(),
-        );
+         camera: CameraComponent.withFixedResolution(
+           width: viewportResolution.x,
+           height: viewportResolution.y,
+         ),
+         world: _StaticComponentWorld(),
+       );
 
   @override
   Future<void> onLoad() async {

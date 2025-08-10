@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
@@ -22,6 +23,7 @@ class TRexGame extends FlameGame
     to survive, the more points you get.
   ''';
 
+  final Random random = Random();
   late final Image spriteImage;
 
   @override

@@ -22,8 +22,8 @@ class LightingInfo {
     }
 
     shader.setUint('LightsInfo.numLights', numLights);
-    for (final (idx, light) in pointLights.indexed) {
-      light.apply(idx, shader);
+    for (final (index, light) in pointLights.indexed) {
+      light.apply(index, shader);
     }
   }
 

@@ -53,10 +53,10 @@ class Shader {
   });
 
   Shader.vertex({required String asset, required List<UniformSlot> slots})
-      : this(asset: asset, name: 'TextureVertex', slots: slots);
+    : this(asset: asset, name: 'TextureVertex', slots: slots);
 
   Shader.fragment({required String asset, required List<UniformSlot> slots})
-      : this(asset: asset, name: 'TextureFragment', slots: slots);
+    : this(asset: asset, name: 'TextureFragment', slots: slots);
 
   /// Set a [Texture] at the given [key] on the buffer.
   void setTexture(String key, Texture texture) => _setTypedValue(key, texture);
@@ -114,22 +114,24 @@ class Shader {
     final groups = parseKey(key);
 
     final object = groups[0]; // e.g. Light, albedoTexture
-    final idx = _maybeParseInt(groups[1]); // e.g. 2 (optional)
+    final index = _maybeParseInt(groups[1]); // e.g. 2 (optional)
     final field = groups[2]; // e.g. position (optional)
 
     if (object == null) {
       throw StateError('Uniform "$key" is missing an object');
     }
 
-    final instance = instances.putIfAbsent(object, () {
-      final slot = slots.firstWhere(
-        (e) => e.name == object,
-        orElse: () => throw StateError('Uniform "$object" is unmapped'),
-      );
-      return slot.create();
-    }) as UniformInstance<K, T>;
+    final instance =
+        instances.putIfAbsent(object, () {
+              final slot = slots.firstWhere(
+                (e) => e.name == object,
+                orElse: () => throw StateError('Uniform "$object" is unmapped'),
+              );
+              return slot.create();
+            })
+            as UniformInstance<K, T>;
 
-    final k = instance.makeKey(idx, field);
+    final k = instance.makeKey(index, field);
     instance.set(k, value);
   }
 

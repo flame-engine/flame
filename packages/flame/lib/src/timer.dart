@@ -24,11 +24,11 @@ class Timer {
     this.repeat = false,
     bool autoStart = true,
     this.tickCount,
-  })  : assert(
-          tickCount == null || tickCount > 0,
-          'tickCount must be null or bigger than 0',
-        ),
-        _running = autoStart;
+  }) : assert(
+         tickCount == null || tickCount > 0,
+         'tickCount must be null or bigger than 0',
+       ),
+       _running = autoStart;
 
   /// The current amount of seconds that has passed on this iteration
   double get current => _current;

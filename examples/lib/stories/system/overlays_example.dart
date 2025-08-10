@@ -24,8 +24,8 @@ class OverlaysExample extends FlameGame with TapDetector {
 
     add(
       SpriteAnimationComponent(
-        animation: animation,
-      )
+          animation: animation,
+        )
         ..position.y = size.y / 2
         ..position.x = 100
         ..anchor = Anchor.center
@@ -96,10 +96,10 @@ Widget overlayBuilder(DashbookContext ctx) {
     game: OverlaysExample()..paused = true,
     overlayBuilderMap: {
       'PauseMenu': (context, game) => _pauseMenuBuilder(
-            context,
-            game,
-            () => game.onTap(),
-          ),
+        context,
+        game,
+        () => game.onTap(),
+      ),
       'SecondaryMenu': _secondaryMenuBuilder,
     },
     initialActiveOverlays: const ['PauseMenu'],

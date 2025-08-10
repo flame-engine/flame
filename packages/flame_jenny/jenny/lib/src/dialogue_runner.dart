@@ -39,8 +39,8 @@ class DialogueRunner {
   DialogueRunner({
     required YarnProject yarnProject,
     required List<DialogueView> dialogueViews,
-  })  : project = yarnProject,
-        _dialogueViews = dialogueViews;
+  }) : project = yarnProject,
+       _dialogueViews = dialogueViews;
 
   final List<DialogueView> _dialogueViews;
   _LineDeliveryPipeline? _linePipeline;
@@ -255,8 +255,8 @@ class DialogueRunner {
 
 class _LineDeliveryPipeline {
   _LineDeliveryPipeline(this.line, this.views)
-      : _completer = Completer(),
-        _futures = List.generate(views.length, (i) => null, growable: false);
+    : _completer = Completer(),
+      _futures = List.generate(views.length, (i) => null, growable: false);
 
   final DialogueLine line;
   final List<DialogueView> views;

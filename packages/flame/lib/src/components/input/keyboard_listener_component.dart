@@ -17,8 +17,8 @@ class KeyboardListenerComponent extends Component with KeyboardHandler {
     Map<LogicalKeyboardKey, KeyHandlerCallback> keyUp = const {},
     Map<LogicalKeyboardKey, KeyHandlerCallback> keyDown = const {},
     super.key,
-  })  : _keyUp = keyUp,
-        _keyDown = keyDown;
+  }) : _keyUp = keyUp,
+       _keyDown = keyDown;
 
   final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyUp;
   final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyDown;

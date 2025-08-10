@@ -15,13 +15,13 @@ around a fixed point.
 ''';
 
   RotateAroundEffectExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          ),
-          world: _RotateAroundEffectWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        ),
+        world: _RotateAroundEffectWorld(),
+      );
 }
 
 class _RotateAroundEffectWorld extends World {
@@ -30,19 +30,20 @@ class _RotateAroundEffectWorld extends World {
     add(_GlowingBall(position: Vector2.zero(), radius: 30));
     final rotatingBalls = List.generate(
       4,
-      (i) => _GlowingBall(
-        position: Vector2(100 + 10.0 * i, 0),
-        radius: 10,
-      )..add(
-          RotateAroundEffect(
-            tau,
-            center: Vector2.zero(),
-            EffectController(
-              speed: 0.4 + 1.02 * i,
-              infinite: true,
+      (i) =>
+          _GlowingBall(
+            position: Vector2(100 + 10.0 * i, 0),
+            radius: 10,
+          )..add(
+            RotateAroundEffect(
+              tau,
+              center: Vector2.zero(),
+              EffectController(
+                speed: 0.4 + 1.02 * i,
+                infinite: true,
+              ),
             ),
           ),
-        ),
     );
     addAll(rotatingBalls);
   }

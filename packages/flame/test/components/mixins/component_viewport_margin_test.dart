@@ -30,7 +30,8 @@ void main() {
 
         final actualNewPosition = component.position.toOffset();
 
-        final expectedNewPosition = game.size.toOffset() +
+        final expectedNewPosition =
+            game.size.toOffset() +
             margin.bottomRight -
             componentSize.toOffset();
 

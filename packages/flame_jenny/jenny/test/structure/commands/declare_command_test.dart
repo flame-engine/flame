@@ -116,28 +116,34 @@ void main() {
       test('missing variable name', () {
         expect(
           () => YarnProject()..parse('<<declare foo>>'),
-          hasSyntaxError('SyntaxError: variable name expected\n'
-              '>  at line 1 column 11:\n'
-              '>  <<declare foo>>\n'
-              '>            ^\n'),
+          hasSyntaxError(
+            'SyntaxError: variable name expected\n'
+            '>  at line 1 column 11:\n'
+            '>  <<declare foo>>\n'
+            '>            ^\n',
+          ),
         );
       });
 
       test('no assignment', () {
         expect(
           () => YarnProject()..parse(r'<<declare $error>>'),
-          hasSyntaxError('SyntaxError: expected `= value` or `as Type`\n'
-              '>  at line 1 column 17:\n'
-              '>  <<declare \$error>>\n'
-              '>                  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: expected `= value` or `as Type`\n'
+            '>  at line 1 column 17:\n'
+            '>  <<declare \$error>>\n'
+            '>                  ^\n',
+          ),
         );
       });
 
       test('variable redeclaration', () {
         expect(
           () => YarnProject()
-            ..parse('<<declare \$error = 0>>\n'
-                '<<declare \$error = 1>>\n'),
+            ..parse(
+              '<<declare \$error = 0>>\n'
+              '<<declare \$error = 1>>\n',
+            ),
           hasNameError(
             'NameError: variable \$error has already been declared\n'
             '>  at line 2 column 11:\n'

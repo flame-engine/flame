@@ -51,12 +51,14 @@ void main() {
       test('node with tags', () {
         // cSpell:ignore Montagues, Capulets
         final yarn = YarnProject();
-        yarn.parse('title: Romeo_v_Juliette\n'
-            'requires: Montagues and Capulets\n'
-            '\n'
-            '// comment\n'
-            'location: fair Verona\n'
-            '---\n===\n');
+        yarn.parse(
+          'title: Romeo_v_Juliette\n'
+          'requires: Montagues and Capulets\n'
+          '\n'
+          '// comment\n'
+          'location: fair Verona\n'
+          '---\n===\n',
+        );
         final node = yarn.nodes['Romeo_v_Juliette'];
         expect(node, isNotNull);
         expect(node!.title, 'Romeo_v_Juliette');
@@ -68,44 +70,54 @@ void main() {
       test('multiple colons', () {
         expect(
           () => YarnProject().parse('title:: Hamlet\n---\n===\n'),
-          hasSyntaxError('SyntaxError: unexpected token\n'
-              '>  at line 1 column 7:\n'
-              '>  title:: Hamlet\n'
-              '>        ^\n'),
+          hasSyntaxError(
+            'SyntaxError: unexpected token\n'
+            '>  at line 1 column 7:\n'
+            '>  title:: Hamlet\n'
+            '>        ^\n',
+          ),
         );
       });
 
       test('node without a title', () {
         expect(
           () => YarnProject().parse('Title: Despicable Me!\n---\n===\n'),
-          hasSyntaxError('SyntaxError: node does not have a title\n'
-              '>  at line 2 column 1:\n'
-              '>  ---\n'
-              '>  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: node does not have a title\n'
+            '>  at line 2 column 1:\n'
+            '>  ---\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('node with multiple titles', () {
         expect(
-          () => YarnProject().parse('\n'
-              'title: one\n'
-              'keyword: value\n'
-              'title: two\n'
-              '---\n===\n'),
-          hasSyntaxError('SyntaxError: a node can only have one title\n'
-              '>  at line 4 column 1:\n'
-              '>  title: two\n'
-              '>  ^\n'),
+          () => YarnProject().parse(
+            '\n'
+            'title: one\n'
+            'keyword: value\n'
+            'title: two\n'
+            '---\n===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: a node can only have one title\n'
+            '>  at line 4 column 1:\n'
+            '>  title: two\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('multiple nodes with same titles', () {
         expect(
-          () => YarnProject().parse('\n'
-              'title: xyz\n'
-              '---\n===\n'
-              'title: xyz\n'
-              '---\n===\n'),
+          () => YarnProject().parse(
+            '\n'
+            'title: xyz\n'
+            '---\n===\n'
+            'title: xyz\n'
+            '---\n===\n',
+          ),
           hasNameError(
             'NameError: node with title "xyz" has already been defined\n'
             '>  at line 5 column 1:\n'
@@ -174,10 +186,12 @@ void main() {
       test('indent in a body', () {
         expect(
           () => YarnProject().parse('title:a\n---\n    hi\n===\n'),
-          hasSyntaxError('SyntaxError: unexpected indent\n'
-              '>  at line 3 column 1:\n'
-              '>      hi\n'
-              '>  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: unexpected indent\n'
+            '>  at line 3 column 1:\n'
+            '>      hi\n'
+            '>  ^\n',
+          ),
         );
       });
     });
@@ -185,12 +199,14 @@ void main() {
     group('parseStatementList', () {
       test('multiple lines', () {
         final yarn = YarnProject()
-          ..parse('title: test\n'
-              '---\n'
-              'Jupyter\n'
-              'Saturn\n\n'
-              'Uranus  // LOL\n'
-              '===\n');
+          ..parse(
+            'title: test\n'
+            '---\n'
+            'Jupyter\n'
+            'Saturn\n\n'
+            'Uranus  // LOL\n'
+            '===\n',
+          );
         final lines = yarn.nodes['test']!.lines;
         expect(lines.length, 3);
         for (var i = 0; i < 3; i++) {
@@ -238,9 +254,11 @@ void main() {
 
       test('line starting with an escaped character', () {
         final yarn = YarnProject()
-          ..parse('title:A\n---\n'
-              '\\{ curly text \\}\n'
-              '===\n');
+          ..parse(
+            'title:A\n---\n'
+            '\\{ curly text \\}\n'
+            '===\n',
+          );
         expect(
           (yarn.nodes['A']!.lines[0] as DialogueLine).text,
           '{ curly text }',
@@ -251,20 +269,23 @@ void main() {
         expect(
           () => YarnProject().parse('title:A\n---\nz <<if true>>\n===\n'),
           hasSyntaxError(
-              'SyntaxError: commands are not allowed on a dialogue line\n'
-              '>  at line 3 column 3:\n'
-              '>  z <<if true>>\n'
-              '>    ^\n'),
+            'SyntaxError: commands are not allowed on a dialogue line\n'
+            '>  at line 3 column 3:\n'
+            '>  z <<if true>>\n'
+            '>    ^\n',
+          ),
         );
       });
 
       test('line with no content but a hashtag', () {
         expect(
           () => YarnProject().parse('title:A\n---\n#tag\n===\n'),
-          hasSyntaxError('SyntaxError: unexpected token\n'
-              '>  at line 3 column 1:\n'
-              '>  #tag\n'
-              '>  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: unexpected token\n'
+            '>  at line 3 column 1:\n'
+            '>  #tag\n'
+            '>  ^\n',
+          ),
         );
       });
     });
@@ -272,11 +293,13 @@ void main() {
     group('parseOption', () {
       test('simple options', () {
         final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '-> Alpha\n'
-              '-> Beta\n'
-              '->    Gamma\n'
-              '===\n');
+          ..parse(
+            'title: test\n---\n'
+            '-> Alpha\n'
+            '-> Beta\n'
+            '->    Gamma\n'
+            '===\n',
+          );
         final node = yarn.nodes['test']!;
         expect(node.lines.length, 1);
         final choiceSet = node.lines.first as DialogueChoice;
@@ -294,10 +317,12 @@ void main() {
       test('speakers in options', () {
         final yarn = YarnProject()
           ..strictCharacterNames = false
-          ..parse('title:A\n---\n'
-              '-> Alice: Hello!\n'
-              '-> Bob: Hi: there!\n'
-              '===\n');
+          ..parse(
+            'title:A\n---\n'
+            '-> Alice: Hello!\n'
+            '-> Bob: Hi: there!\n'
+            '===\n',
+          );
         final node = yarn.nodes['A']!;
         final choice = node.lines[0] as DialogueChoice;
         final option0 = choice.options[0];
@@ -311,13 +336,15 @@ void main() {
 
       test('option with a followup dialogue', () {
         final yarn = YarnProject()
-          ..parse('title:A\n---\n'
-              '-> choice one\n'
-              '    Nice one, James!\n'
-              '    Back to ya!\n'
-              '-> choice two\n'
-              '    My condolences...\n'
-              '===\n');
+          ..parse(
+            'title:A\n---\n'
+            '-> choice one\n'
+            '    Nice one, James!\n'
+            '    Back to ya!\n'
+            '-> choice two\n'
+            '    My condolences...\n'
+            '===\n',
+          );
         final node = yarn.nodes['A']!;
         final choiceSet = node.lines[0] as DialogueChoice;
         expect(choiceSet.options.length, 2);
@@ -349,10 +376,11 @@ void main() {
             'title:A\n---\n-> ok! <<stop>>\n===\n',
           ),
           hasSyntaxError(
-              'SyntaxError: only "if" command is allowed for an option\n'
-              '>  at line 3 column 10:\n'
-              '>  -> ok! <<stop>>\n'
-              '>           ^\n'),
+            'SyntaxError: only "if" command is allowed for an option\n'
+            '>  at line 3 column 10:\n'
+            '>  -> ok! <<stop>>\n'
+            '>           ^\n',
+          ),
         );
       });
 
@@ -363,10 +391,12 @@ void main() {
             '-> ok! <<if 42 % 2>>\n'
             '===\n',
           ),
-          hasTypeError('TypeError: the condition in "if" should be boolean\n'
-              '>  at line 3 column 13:\n'
-              '>  -> ok! <<if 42 % 2>>\n'
-              '>              ^\n'),
+          hasTypeError(
+            'TypeError: the condition in "if" should be boolean\n'
+            '>  at line 3 column 13:\n'
+            '>  -> ok! <<if 42 % 2>>\n'
+            '>              ^\n',
+          ),
         );
       });
 
@@ -378,11 +408,12 @@ void main() {
             '===\n',
           ),
           hasSyntaxError(
-              'SyntaxError: multiple commands are not allowed on an option '
-              'line\n'
-              '>  at line 3 column 20:\n'
-              '>  -> ok! <<if true>> <<if false>>\n'
-              '>                     ^\n'),
+            'SyntaxError: multiple commands are not allowed on an option '
+            'line\n'
+            '>  at line 3 column 20:\n'
+            '>  -> ok! <<if true>> <<if false>>\n'
+            '>                     ^\n',
+          ),
         );
       });
     });
@@ -397,11 +428,13 @@ void main() {
 
       test('complicated expressions', () {
         final yarn = YarnProject()
-          ..parse('title: test\n---\n'
-              '{(4 - 5)}\n'
-              '{ 2 + 7 * 3 - 1 }\n'
-              '{ 44 / (3 - 1) % 15 }\n'
-              '===\n');
+          ..parse(
+            'title: test\n---\n'
+            '{(4 - 5)}\n'
+            '{ 2 + 7 * 3 - 1 }\n'
+            '{ 44 / (3 - 1) % 15 }\n'
+            '===\n',
+          );
         final node = yarn.nodes['test']!;
         expect(node.lines.length, 3);
         expect(
@@ -441,10 +474,12 @@ void main() {
             '{ 1 + * 5 }\n'
             '===\n',
           ),
-          hasSyntaxError('SyntaxError: unexpected expression\n'
-              '>  at line 3 column 7:\n'
-              '>  { 1 + * 5 }\n'
-              '>        ^\n'),
+          hasSyntaxError(
+            'SyntaxError: unexpected expression\n'
+            '>  at line 3 column 7:\n'
+            '>  { 1 + * 5 }\n'
+            '>        ^\n',
+          ),
         );
       });
 
@@ -455,10 +490,12 @@ void main() {
             '{ (12 }\n'
             '===\n',
           ),
-          hasSyntaxError('SyntaxError: missing closing ")"\n'
-              '>  at line 3 column 7:\n'
-              '>  { (12 }\n'
-              '>        ^\n'),
+          hasSyntaxError(
+            'SyntaxError: missing closing ")"\n'
+            '>  at line 3 column 7:\n'
+            '>  { (12 }\n'
+            '>        ^\n',
+          ),
         );
       });
 
@@ -469,10 +506,12 @@ void main() {
             '{ random_range(1, 3 ()) }\n'
             '===\n',
           ),
-          hasSyntaxError('SyntaxError: unexpected token\n'
-              '>  at line 3 column 21:\n'
-              '>  { random_range(1, 3 ()) }\n'
-              '>                      ^\n'),
+          hasSyntaxError(
+            'SyntaxError: unexpected token\n'
+            '>  at line 3 column 21:\n'
+            '>  { random_range(1, 3 ()) }\n'
+            '>                      ^\n',
+          ),
         );
       });
     });
@@ -480,13 +519,15 @@ void main() {
     group('parseCommand', () {
       test('<<if>>', () {
         final yarn = YarnProject()
-          ..parse('title:A\n---\n'
-              '<<if 2 > 0>>\n'
-              '  First!\n'
-              '<<else>>\n'
-              '  Second\n'
-              '<<endif>>\n'
-              '===\n');
+          ..parse(
+            'title:A\n---\n'
+            '<<if 2 > 0>>\n'
+            '  First!\n'
+            '<<else>>\n'
+            '  Second\n'
+            '<<endif>>\n'
+            '===\n',
+          );
         final node = yarn.nodes['A']!;
         expect(node.lines.length, 1);
         expect(node.lines[0], isA<IfCommand>());
@@ -507,15 +548,17 @@ void main() {
 
       test('<<elseif>>s', () {
         final yarn = YarnProject()
-          ..parse('title:A\n---\n'
-              '<<if true>>\n'
-              '  First!\n'
-              '<<elseif false>>\n'
-              '  Second\n'
-              '<<elseif true>>\n'
-              '  Third\n'
-              '<<endif>>\n'
-              '===\n');
+          ..parse(
+            'title:A\n---\n'
+            '<<if true>>\n'
+            '  First!\n'
+            '<<elseif false>>\n'
+            '  Second\n'
+            '<<elseif true>>\n'
+            '  Third\n'
+            '<<endif>>\n'
+            '===\n',
+          );
         final node = yarn.nodes['A']!;
         final command = node.lines[0] as IfCommand;
         expect(command.ifs.length, 3);
@@ -527,77 +570,95 @@ void main() {
       test('no <<endif>> 1', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if true>>\n'
-                '  ha\n'
-                '===\n'),
-          hasSyntaxError('SyntaxError: <<endif>> expected\n'
-              '>  at line 5 column 1:\n'
-              '>  ===\n'
-              '>  ^\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<if true>>\n'
+              '  ha\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: <<endif>> expected\n'
+            '>  at line 5 column 1:\n'
+            '>  ===\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('no <<endif>> 2', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if true>>\n'
-                '<<stop>>\n'
-                '===\n'),
-          hasSyntaxError('SyntaxError: <<endif>> expected\n'
-              '>  at line 4 column 1:\n'
-              '>  <<stop>>\n'
-              '>  ^\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<if true>>\n'
+              '<<stop>>\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: <<endif>> expected\n'
+            '>  at line 4 column 1:\n'
+            '>  <<stop>>\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('double <<else>>', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if true>>\n'
-                '<<else>>\n'
-                '<<else>>\n'
-                '<<endif>>\n'
-                '===\n'),
-          hasSyntaxError('SyntaxError: only one <<else>> is allowed\n'
-              '>  at line 5 column 1:\n'
-              '>  <<else>>\n'
-              '>  ^\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<if true>>\n'
+              '<<else>>\n'
+              '<<else>>\n'
+              '<<endif>>\n'
+              '===\n',
+            ),
+          hasSyntaxError(
+            'SyntaxError: only one <<else>> is allowed\n'
+            '>  at line 5 column 1:\n'
+            '>  <<else>>\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('no indentation in <<if>>', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if true>>\n'
-                'text\n'
-                '<<endif>>\n'
-                '===\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<if true>>\n'
+              'text\n'
+              '<<endif>>\n'
+              '===\n',
+            ),
           hasSyntaxError(
-              'SyntaxError: the body of the <<if>> command must be indented\n'
-              '>  at line 4 column 1:\n'
-              '>  text\n'
-              '>  ^\n'),
+            'SyntaxError: the body of the <<if>> command must be indented\n'
+            '>  at line 4 column 1:\n'
+            '>  text\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('no indentation in <<else>>', () {
         expect(
           () => YarnProject()
-            ..parse('title:A\n---\n'
-                '<<if true>>\n'
-                '<<else>>\n'
-                'text\n'
-                '<<endif>>\n'
-                '===\n'),
+            ..parse(
+              'title:A\n---\n'
+              '<<if true>>\n'
+              '<<else>>\n'
+              'text\n'
+              '<<endif>>\n'
+              '===\n',
+            ),
           hasSyntaxError(
-              'SyntaxError: the body of the <<else>> command must be indented\n'
-              '>  at line 5 column 1:\n'
-              '>  text\n'
-              '>  ^\n'),
+            'SyntaxError: the body of the <<else>> command must be indented\n'
+            '>  at line 5 column 1:\n'
+            '>  text\n'
+            '>  ^\n',
+          ),
         );
       });
 
@@ -609,10 +670,12 @@ void main() {
               '<<wait 1>> <<wait 2>>\n'
               '===\n',
             ),
-          hasSyntaxError('SyntaxError: expected end of line\n'
-              '>  at line 3 column 12:\n'
-              '>  <<wait 1>> <<wait 2>>\n'
-              '>             ^\n'),
+          hasSyntaxError(
+            'SyntaxError: expected end of line\n'
+            '>  at line 3 column 12:\n'
+            '>  <<wait 1>> <<wait 2>>\n'
+            '>             ^\n',
+          ),
         );
       });
     });
@@ -620,9 +683,11 @@ void main() {
     group('parseMarkupTag', () {
       test('parse simple markup tag', () {
         final yarn = YarnProject()
-          ..parse('title: A\n---\n'
-              'Hello, [big]world[/big]!\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            'Hello, [big]world[/big]!\n'
+            '===\n',
+          );
         expect(yarn.nodes['A']!.lines.length, 1);
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         expect(line.text, 'Hello, world!');
@@ -638,9 +703,11 @@ void main() {
 
       test('parse self-closing tag', () {
         final yarn = YarnProject()
-          ..parse('title: A\n---\n'
-              'Hello, [wave /] world!\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            'Hello, [wave /] world!\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         final attribute = line.attributes[0];
         // Note that the space after the tag was removed
@@ -654,9 +721,11 @@ void main() {
       test('parse nested tags', () {
         final yarn = YarnProject()
           ..strictCharacterNames = false
-          ..parse('title: A\n---\n'
-              'Warning: [a]Spinning [b][c]Je[/c]nny[/b][/a]\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            'Warning: [a]Spinning [b][c]Je[/c]nny[/b][/a]\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         expect(line.character, isA<Character>());
         expect(line.character!.name, 'Warning');
@@ -676,9 +745,11 @@ void main() {
 
       test('markup tags at start of line', () {
         final yarn = YarnProject()
-          ..parse('title: A\n---\n'
-              '[blue]wave[/blue]\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            '[blue]wave[/blue]\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         final attribute = line.attributes[0];
         expect(line.text, 'wave');
@@ -689,9 +760,11 @@ void main() {
 
       test('close-all tag [/]', () {
         final yarn = YarnProject()
-          ..parse('title: A\n---\n'
-              '[a][b][c] hello [/]\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            '[a][b][c] hello [/]\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         expect(line.text, ' hello ');
         for (final attribute in line.attributes) {
@@ -703,9 +776,11 @@ void main() {
 
       test('markup tag with parameters', () {
         final yarn = YarnProject()
-          ..parse('title: A\n---\n'
-              '[color r=0 g=false b=100 name="BLUE"]wave[/color]\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            '[color r=0 g=false b=100 name="BLUE"]wave[/color]\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         final attr = line.attributes[0];
         expect(line.text, 'wave');
@@ -724,9 +799,11 @@ void main() {
 
       test('markup tag with bare parameters', () {
         final yarn = YarnProject()
-          ..parse('title: A\n---\n'
-              '[color blue]wave[/color]\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            '[color blue]wave[/color]\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         final attr = line.attributes[0];
         expect(attr.parameters, isNotNull);
@@ -738,9 +815,11 @@ void main() {
       test('markup tags with inline expressions', () {
         final yarn = YarnProject()
           ..variables.setVariable(r'$x', 'world')
-          ..parse('title: A\n---\n'
-              'Hello [color]{\$x}[/color]\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            'Hello [color]{\$x}[/color]\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         line.evaluate();
         expect(line.text, 'Hello world');
@@ -764,9 +843,11 @@ void main() {
           ..variables.setVariable(r'$x', 'citizen')
           ..variables.setVariable(r'$y', 'Paradise City')
           ..variables.setVariable(r'$z', '...')
-          ..parse('title: A\n---\n'
-              'Hello {\$x}, and [color]{\$w} to {\$y}[/color] {\$z}\n'
-              '===\n');
+          ..parse(
+            'title: A\n---\n'
+            'Hello {\$x}, and [color]{\$w} to {\$y}[/color] {\$z}\n'
+            '===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         line.evaluate();
         expect(line.text, 'Hello citizen, and welcome to Paradise City ...');
@@ -795,9 +876,11 @@ void main() {
           ..variables.setVariable(r'$x', 'arbitrary ')
           ..variables.setVariable(r'$y', 'text')
           ..variables.setVariable(r'$z', '?')
-          ..parse('title: A\n---\n'
-              r'{$w}[wavy]{$x}{$y}[/]{$z}'
-              '\n===\n');
+          ..parse(
+            'title: A\n---\n'
+            r'{$w}[wavy]{$x}{$y}[/]{$z}'
+            '\n===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         line.evaluate();
         expect(line.text, 'some arbitrary text?');
@@ -812,9 +895,11 @@ void main() {
           ..variables.setVariable(r'$x1', 'One')
           ..variables.setVariable(r'$x2', 'Double')
           ..variables.setVariable(r'$x3', 'Three')
-          ..parse('title: A\n---\n'
-              r'{$x1}[a/]{$x2}[b/]{$x3}'
-              '\n===\n');
+          ..parse(
+            'title: A\n---\n'
+            r'{$x1}[a/]{$x2}[b/]{$x3}'
+            '\n===\n',
+          );
         final line = yarn.nodes['A']!.lines[0] as DialogueLine;
         line.evaluate();
         expect(line.text, 'OneDoubleThree');

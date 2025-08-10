@@ -63,11 +63,11 @@ void main() {
         late _InventoryReader component;
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-          children: [
-            component = _InventoryReader(),
-          ],
-        );
+              value: bloc,
+              children: [
+                component = _InventoryReader(),
+              ],
+            );
         await game.ensureAdd(provider);
 
         expect(component.bloc, bloc);
@@ -80,11 +80,11 @@ void main() {
           late _InventoryListener component;
           final provider =
               FlameBlocProvider<InventoryCubit, InventoryState>.value(
-            value: bloc,
-            children: [
-              component = _InventoryListener(),
-            ],
-          );
+                value: bloc,
+                children: [
+                  component = _InventoryListener(),
+                ],
+              );
           await game.ensureAdd(provider);
           expect(component.lastState, equals(InventoryState.sword));
         },
@@ -94,11 +94,11 @@ void main() {
         late _InventoryListener component;
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-          children: [
-            component = _InventoryListener(),
-          ],
-        );
+              value: bloc,
+              children: [
+                component = _InventoryListener(),
+              ],
+            );
         await game.ensureAdd(provider);
 
         bloc.selectBow();
@@ -128,8 +128,8 @@ void main() {
         final bloc = InventoryCubit();
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-        );
+              value: bloc,
+            );
         await game.ensureAdd(provider);
         expect(provider.bloc.isClosed, isFalse);
 

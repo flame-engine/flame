@@ -9,7 +9,7 @@ import 'package:flame/src/rendering/decorator.dart';
 /// This decorator is used internally by the [PositionComponent].
 class Transform2DDecorator extends Decorator {
   Transform2DDecorator([Transform2D? transform])
-      : transform2d = transform ?? Transform2D();
+    : transform2d = transform ?? Transform2D();
 
   final Transform2D transform2d;
 

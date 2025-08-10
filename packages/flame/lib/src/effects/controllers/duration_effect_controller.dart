@@ -12,9 +12,9 @@ import 'package:meta/meta.dart';
 /// [duration] value.
 abstract class DurationEffectController extends EffectController {
   DurationEffectController(this.duration)
-      : assert(duration >= 0, 'Duration cannot be negative: $duration'),
-        _timer = 0,
-        super.empty();
+    : assert(duration >= 0, 'Duration cannot be negative: $duration'),
+      _timer = 0,
+      super.empty();
 
   double _timer;
 

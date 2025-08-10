@@ -1,4 +1,4 @@
-import 'package:flame/src/experimental/layout_component.dart';
+import 'package:flame/src/experimental/linear_layout_component.dart';
 import 'package:flutter/rendering.dart';
 
 /// ColumnComponent is a layout component that arranges its children in a
@@ -10,9 +10,11 @@ import 'package:flutter/rendering.dart';
 /// [mainAxisAlignment], while their alignment along the horizontal axis is
 /// controlled by [crossAxisAlignment].
 ///
-/// If [shrinkWrap] is set to true, the size of the column will shrink its size
-/// fit its children. Otherwise, the size of the column will be determined by
-/// the [size] parameter or the size of its parent.
+/// If [size] is non-null, behaves as normal explicit sizing.
+/// If [size] is null, sets the size to the minimum size that containing all
+/// the children. This is similar to setting the [size] to [inherentSize], but
+/// the distinct in that sizing will respond to changes in children, other
+/// properties, etc...
 ///
 /// Example usage:
 /// ```dart
@@ -27,12 +29,11 @@ import 'package:flutter/rendering.dart';
 ///   ],
 /// );
 /// ```
-class ColumnComponent extends LayoutComponent {
+class ColumnComponent extends LinearLayoutComponent {
   ColumnComponent({
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,
     super.gap = 0.0,
-    super.shrinkWrap = false,
     super.size,
     super.position,
     super.children,

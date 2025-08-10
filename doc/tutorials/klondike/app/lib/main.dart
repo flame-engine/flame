@@ -17,10 +17,10 @@ void main() {
     'step4' => step4.main(),
     'step5' => step5.main(),
     _ => runApp(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Text('Error=> unknown page name "$page"'),
-        ),
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: Text('Error=> unknown page name "$page"'),
       ),
+    ),
   };
 }

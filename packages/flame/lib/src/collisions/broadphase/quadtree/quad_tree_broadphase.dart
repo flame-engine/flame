@@ -3,15 +3,17 @@ import 'dart:collection';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 
-typedef ExternalBroadphaseCheck = bool Function(
-  ShapeHitbox first,
-  ShapeHitbox second,
-);
+typedef ExternalBroadphaseCheck =
+    bool Function(
+      ShapeHitbox first,
+      ShapeHitbox second,
+    );
 
-typedef ExternalMinDistanceCheck = bool Function(
-  Vector2 activeItemCenter,
-  Vector2 potentialCenter,
-);
+typedef ExternalMinDistanceCheck =
+    bool Function(
+      Vector2 activeItemCenter,
+      Vector2 potentialCenter,
+    );
 
 /// Performs Quad Tree broadphase check.
 ///
@@ -25,10 +27,10 @@ class QuadTreeBroadphase extends Broadphase<ShapeHitbox> {
     int maxObjects = 25,
     int maxDepth = 10,
   }) : tree = QuadTree<ShapeHitbox>(
-          mainBoxSize: mainBoxSize,
-          maxObjects: maxObjects,
-          maxDepth: maxDepth,
-        );
+         mainBoxSize: mainBoxSize,
+         maxObjects: maxObjects,
+         maxDepth: maxDepth,
+       );
 
   final QuadTree<ShapeHitbox> tree;
 

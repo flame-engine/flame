@@ -51,7 +51,8 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
         Worker(
           mapPositions[0] ~/ mapSizeX,
           mapPositions.removeAt(0) % mapSizeY,
-          speed: Random().nextDouble() * (workerMaxSpeed - workerMinSpeed) +
+          speed:
+              Random().nextDouble() * (workerMaxSpeed - workerMinSpeed) +
               workerMinSpeed,
         ),
     ];
@@ -91,9 +92,9 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
   }
 
   PathFinderData get pathFinderData => PathFinderData.fromWorld(
-        terrain: _terrain,
-        worldObjects: game.worldObjects,
-      );
+    terrain: _terrain,
+    worldObjects: game.worldObjects,
+  );
 
   Terrain tileAtPosition(int x, int y) {
     return _terrain[IntVector2(x, y)]!;

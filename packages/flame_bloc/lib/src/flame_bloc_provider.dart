@@ -15,8 +15,8 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
     required B Function() create,
     List<Component>? children,
     super.key,
-  })  : _bloc = create(),
-        _created = true {
+  }) : _bloc = create(),
+       _created = true {
     _addChildren(children);
   }
 
@@ -27,8 +27,8 @@ class FlameBlocProvider<B extends BlocBase<S>, S> extends Component {
   FlameBlocProvider.value({
     required B value,
     List<Component>? children,
-  })  : _bloc = value,
-        _created = false {
+  }) : _bloc = value,
+       _created = false {
     _addChildren(children);
   }
 

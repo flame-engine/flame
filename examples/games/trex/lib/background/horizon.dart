@@ -66,7 +66,8 @@ class Horizon extends PositionComponent with HasGameReference<TRexGame> {
 
   List<SpriteComponent> _generateLines() {
     final number = 1 + (game.size.x / lineSize.x).ceil() - groundLayers.length;
-    final lastX = (groundLayers.lastOrNull?.x ?? 0) +
+    final lastX =
+        (groundLayers.lastOrNull?.x ?? 0) +
         (groundLayers.lastOrNull?.width ?? 0);
     return List.generate(
       max(number, 0),

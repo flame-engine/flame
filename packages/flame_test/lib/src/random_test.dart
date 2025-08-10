@@ -58,10 +58,11 @@ void testRandom(
   }
 }
 
-typedef TestWidgetsCallback = Future<void> Function(
-  Random random,
-  WidgetTester widgetTester,
-);
+typedef TestWidgetsCallback =
+    Future<void> Function(
+      Random random,
+      WidgetTester widgetTester,
+    );
 
 /// This function is equivalent to `testWidgets(name, body)`, except that
 /// it is better suited for randomized testing: it will create a Random

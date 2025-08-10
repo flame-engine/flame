@@ -28,10 +28,10 @@ class _Chars {
 class CustomAttributeSyntax extends LinkSyntax {
   /// Creates a new custom attribute syntax.
   CustomAttributeSyntax()
-      : super(
-          pattern: r'\[',
-          startCharacter: _Chars.leftBracket,
-        );
+    : super(
+        pattern: r'\[',
+        startCharacter: _Chars.leftBracket,
+      );
 
   @override
   Iterable<Node>? close(

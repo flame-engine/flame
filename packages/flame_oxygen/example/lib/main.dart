@@ -33,11 +33,11 @@ class ExampleGame extends OxygenGame {
     final random = Random();
     for (var i = 0; i < 10; i++) {
       createEntity(
-        name: 'Entity $i',
-        position: size / 2,
-        size: Vector2.all(64),
-        angle: 0,
-      )
+          name: 'Entity $i',
+          position: size / 2,
+          size: Vector2.all(64),
+          angle: 0,
+        )
         ..add<SpriteComponent, SpriteInit>(
           SpriteInit(await loadSprite('pizza.png')),
         )

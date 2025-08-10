@@ -44,7 +44,8 @@ mixin ComponentViewportMargin<T extends FlameGame>
         Anchor.topLeft,
         scaledSize,
       );
-      final bottomRight = bounds -
+      final bottomRight =
+          bounds -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.bottomRight,

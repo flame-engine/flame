@@ -21,11 +21,11 @@ void main() {
     'step5' => step5.main(),
     'step6' => step6.main(),
     _ => runApp(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Text('''Error: unknown page. Pass "step{1,6}" as a GET param; 
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: Text('''Error: unknown page. Pass "step{1,6}" as a GET param; 
 e.g: ${web.window.location}?step1'''),
-        ),
       ),
+    ),
   };
 }

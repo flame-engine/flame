@@ -78,19 +78,24 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   void onMount() {
     super.onMount();
-    _hitboxParent = ancestors().firstWhere(
-      (c) => c is PositionComponent && c is! CompositeHitbox,
-      orElse: () {
-        throw StateError('A ShapeHitbox needs a PositionComponent ancestor');
-      },
-    ) as PositionComponent;
+    _hitboxParent =
+        ancestors().firstWhere(
+              (c) => c is PositionComponent && c is! CompositeHitbox,
+              orElse: () {
+                throw StateError(
+                  'A ShapeHitbox needs a PositionComponent ancestor',
+                );
+              },
+            )
+            as PositionComponent;
 
     _transformListener = () {
       _validAabb = false;
       onAabbChanged?.call();
     };
-    final positionComponents =
-        ancestors(includeSelf: true).whereType<PositionComponent>();
+    final positionComponents = ancestors(
+      includeSelf: true,
+    ).whereType<PositionComponent>();
     for (final ancestor in positionComponents) {
       _transformAncestors.add(ancestor.transform);
       ancestor.transform.addListener(_transformListener);
@@ -241,14 +246,17 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   bool onComponentTypeCheck(PositionComponent other) {
     final otherHitboxParent = (other as ShapeHitbox).hitboxParent;
 
-    final thisCanCollideWithOther = (hitboxParent is! CollisionCallbacks) ||
-        (hitboxParent as CollisionCallbacks)
-            .onComponentTypeCheck(otherHitboxParent);
+    final thisCanCollideWithOther =
+        (hitboxParent is! CollisionCallbacks) ||
+        (hitboxParent as CollisionCallbacks).onComponentTypeCheck(
+          otherHitboxParent,
+        );
 
     final otherCanCollideWithThis =
         (otherHitboxParent is! CollisionCallbacks) ||
-            (otherHitboxParent as CollisionCallbacks)
-                .onComponentTypeCheck(hitboxParent);
+        (otherHitboxParent as CollisionCallbacks).onComponentTypeCheck(
+          hitboxParent,
+        );
 
     return thisCanCollideWithOther && otherCanCollideWithThis;
   }
@@ -262,5 +270,5 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   @override
   CollisionEndCallback<ShapeHitbox>? onCollisionEndCallback;
 
-//#endregion
+  //#endregion
 }

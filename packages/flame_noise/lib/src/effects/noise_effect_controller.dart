@@ -20,8 +20,8 @@ class NoiseEffectController extends DurationEffectController {
     required double duration,
     this.taperingCurve = Curves.easeInOutCubic,
     Noise2? noise,
-  })  : noise = noise ?? PerlinNoise(),
-        super(duration);
+  }) : noise = noise ?? PerlinNoise(),
+       super(duration);
 
   @override
   double get progress {

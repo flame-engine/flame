@@ -80,10 +80,10 @@ class GameHud extends StatelessWidget {
 
 class Enemy extends CircleComponent with TapCallbacks, Notifier {
   Enemy({super.position})
-      : super(
-          radius: 20,
-          paint: Paint()..color = const Color(0xFFFF0000),
-        );
+    : super(
+        radius: 20,
+        paint: Paint()..color = const Color(0xFFFF0000),
+      );
 
   @override
   void onTapUp(_) {

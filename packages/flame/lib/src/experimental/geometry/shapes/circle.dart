@@ -18,9 +18,9 @@ import 'package:flame/src/math/random_fallback.dart';
 /// this is currently not implemented.
 class Circle extends Shape {
   Circle(Vector2 center, double radius)
-      : assert(radius >= 0, 'Radius cannot be negative: $radius'),
-        _center = center.clone(),
-        _radius = radius;
+    : assert(radius >= 0, 'Radius cannot be negative: $radius'),
+      _center = center.clone(),
+      _radius = radius;
 
   @override
   Vector2 get center => _center;

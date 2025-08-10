@@ -21,9 +21,9 @@ class SpriteBatchLoadExample extends FlameGame {
 class MySpriteBatchComponent extends SpriteBatchComponent
     with HasGameReference<SpriteBatchLoadExample> {
   MySpriteBatchComponent()
-      : super(
-          blendMode: BlendMode.srcOver,
-        );
+    : super(
+        blendMode: BlendMode.srcOver,
+      );
 
   @override
   Future<void> onLoad() async {

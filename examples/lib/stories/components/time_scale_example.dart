@@ -15,12 +15,12 @@ class TimeScaleExample extends FlameGame
       'This example shows how time scale can be used to control game speed.';
 
   TimeScaleExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 640,
-            height: 360,
-          ),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 640,
+          height: 360,
+        ),
+      );
 
   final gameSpeedText = TextComponent(
     text: 'Time Scale: 1',
@@ -82,8 +82,8 @@ class _Chopper extends SpriteAnimationComponent
     super.size,
     super.angle,
     super.anchor,
-  })  : _moveDirection = Vector2(0, 1)..rotate(angle ?? 0),
-        _initialPosition = position?.clone() ?? Vector2.zero();
+  }) : _moveDirection = Vector2(0, 1)..rotate(angle ?? 0),
+       _initialPosition = position?.clone() ?? Vector2.zero();
 
   final Vector2 _moveDirection;
   final _speed = 80.0;

@@ -10,9 +10,11 @@ void main() {
   group('UserDefinedCommand', () {
     test('tokenization', () {
       expect(
-        tokenize('---\n---\n'
-            '<<hello world {\$exclamation}>>\n'
-            '==='),
+        tokenize(
+          '---\n---\n'
+          '<<hello world {\$exclamation}>>\n'
+          '===',
+        ),
         const [
           Token.startHeader,
           Token.endHeader,
@@ -33,9 +35,11 @@ void main() {
     test('parse simple dialogue command', () {
       final project = YarnProject()
         ..commands.addOrphanedCommand('hello')
-        ..parse('title: start\n---\n'
-            '<<hello world {"A" + "B"}>>\n'
-            '===');
+        ..parse(
+          'title: start\n---\n'
+          '<<hello world {"A" + "B"}>>\n'
+          '===',
+        );
       expect(project.nodes['start']!.lines.length, 1);
       expect(project.nodes['start']!.lines[0], isA<UserDefinedCommand>());
       final cmd = project.nodes['start']!.lines[0] as UserDefinedCommand;
@@ -52,9 +56,11 @@ void main() {
           x = a;
           y = b;
         })
-        ..parse('title: start\n---\n'
-            '<<hello 3 world>>\n'
-            '===');
+        ..parse(
+          'title: start\n---\n'
+          '<<hello 3 world>>\n'
+          '===',
+        );
       final runner = DialogueRunner(yarnProject: project, dialogueViews: []);
       expect(project.nodes['start']!.lines.length, 1);
       expect(project.nodes['start']!.lines[0], isA<UserDefinedCommand>());

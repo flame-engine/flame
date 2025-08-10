@@ -6,7 +6,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
@@ -420,9 +419,10 @@ class Component {
     bool Function(T) handler, {
     bool includeSelf = false,
   }) {
-    return descendants(reversed: true, includeSelf: includeSelf)
-        .whereType<T>()
-        .every(handler);
+    return descendants(
+      reversed: true,
+      includeSelf: includeSelf,
+    ).whereType<T>().every(handler);
   }
 
   @internal
@@ -1139,7 +1139,8 @@ class Component {
     if (!_debugPaintCache.isCacheValid([debugColor])) {
       final paint = Paint()
         ..color = debugColor
-        ..strokeWidth = 0 // hairline-width
+        ..strokeWidth =
+            0 // hairline-width
         ..style = PaintingStyle.stroke;
       _debugPaintCache.updateCache(paint, [debugColor]);
     }

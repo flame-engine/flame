@@ -111,12 +111,11 @@ void main() {
       game.render(canvas); // this should render the cache
       expect(
         canvas,
-        MockCanvas(mode: AssertionMode.containsAnyOrder)
-          ..drawImage(
-            null,
-            Offset.zero,
-            BasicPalette.white.paint(),
-          ),
+        MockCanvas(mode: AssertionMode.containsAnyOrder)..drawImage(
+          null,
+          Offset.zero,
+          BasicPalette.white.paint(),
+        ),
       );
     });
 
@@ -156,28 +155,30 @@ void main() {
     );
 
     testWithFlameGame(
-        'TextBoxComponent notifies if a new line is added and requires space',
-        (game) async {
-      var lineSize = 0.0;
-      final textBoxComponent = TextBoxComponent(
-        size: Vector2(50, 50),
-        text: '''This 
+      'TextBoxComponent notifies if a new line is added and requires space',
+      (game) async {
+        var lineSize = 0.0;
+        final textBoxComponent = TextBoxComponent(
+          size: Vector2(50, 50),
+          text: '''This 
 test
 has
 five
 lines.''',
-      );
-      expect(textBoxComponent.newLinePositionNotifier.value, equals(0));
+        );
+        expect(textBoxComponent.newLinePositionNotifier.value, equals(0));
 
-      textBoxComponent.newLinePositionNotifier.addListener(() {
-        lineSize += textBoxComponent.newLinePositionNotifier.value;
-      });
-      await game.ensureAdd(textBoxComponent);
-      expect(lineSize, greaterThan(0));
-    });
+        textBoxComponent.newLinePositionNotifier.addListener(() {
+          lineSize += textBoxComponent.newLinePositionNotifier.value;
+        });
+        await game.ensureAdd(textBoxComponent);
+        expect(lineSize, greaterThan(0));
+      },
+    );
 
-    testWithFlameGame('TextBoxComponent skips to the end of text',
-        (game) async {
+    testWithFlameGame('TextBoxComponent skips to the end of text', (
+      game,
+    ) async {
       final textBoxComponent1 = TextBoxComponent(
         text: 'aaa',
         boxConfig: const TextBoxConfig(timePerChar: 1.0),
@@ -229,21 +230,24 @@ lines.''',
           ),
           _FramedTextBox(
             // cSpell:ignore runn'st (old english)
-            text: 'To move is to stir, and to be valiant is to stand. '
+            text:
+                'To move is to stir, and to be valiant is to stand. '
                 "Therefore, if thou art moved, thou runn'st away.",
             position: Vector2(10, 370),
             size: Vector2(390, 220),
             align: Anchor.bottomRight,
           ),
           _FramedTextBox(
-            text: 'A dog of that house shall move me to stand. I will take '
+            text:
+                'A dog of that house shall move me to stand. I will take '
                 'the wall of any man or maid of Montague‘s.',
             position: Vector2(410, 10),
             size: Vector2(380, 300),
             align: Anchor.center,
           ),
           _FramedTextBox(
-            text: 'That shows thee a weak slave; for the weakest goes to the '
+            text:
+                'That shows thee a weak slave; for the weakest goes to the '
                 'wall.',
             position: Vector2(410, 320) + Vector2(380, 270),
             size: Vector2(380, 270),
@@ -279,8 +283,8 @@ class _FramedTextBox extends TextBoxComponent {
     super.size,
     super.anchor,
   }) : super(
-          textRenderer: DebugTextRenderer(fontSize: 22),
-        );
+         textRenderer: DebugTextRenderer(fontSize: 22),
+       );
 
   final Paint _borderPaint = Paint()
     ..style = PaintingStyle.stroke

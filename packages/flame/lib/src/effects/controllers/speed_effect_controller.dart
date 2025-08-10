@@ -16,9 +16,9 @@ import 'package:flame/src/effects/measurable_effect.dart';
 class SpeedEffectController extends EffectController
     with HasSingleChildEffectController<DurationEffectController> {
   SpeedEffectController(DurationEffectController child, {required this.speed})
-      : assert(speed > 0, 'Speed must be positive: $speed'),
-        _child = child,
-        super.empty();
+    : assert(speed > 0, 'Speed must be positive: $speed'),
+      _child = child,
+      super.empty();
 
   final DurationEffectController _child;
   final double speed;

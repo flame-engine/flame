@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final gameControllerProvider =
     StateNotifierProvider<_GameController, _GameState>(
-  (ref) => _GameController(),
-);
+      (ref) => _GameController(),
+    );
 
 @immutable
 class _GameState {

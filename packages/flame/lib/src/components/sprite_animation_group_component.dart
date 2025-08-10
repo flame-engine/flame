@@ -54,20 +54,20 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     super.key,
-  })  : assert(
-          (size == null) == (autoResize ?? size == null),
-          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-        ),
-        _current = current,
-        _animations = animations,
-        _autoResize = autoResize ?? size == null,
-        _animationTickers = animations != null
-            ? Map.fromEntries(
-                animations.entries
-                    .map((e) => MapEntry(e.key, e.value.createTicker()))
-                    .toList(),
-              )
-            : null {
+  }) : assert(
+         (size == null) == (autoResize ?? size == null),
+         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+       ),
+       _current = current,
+       _animations = animations,
+       _autoResize = autoResize ?? size == null,
+       _animationTickers = animations != null
+           ? Map.fromEntries(
+               animations.entries
+                   .map((e) => MapEntry(e.key, e.value.createTicker()))
+                   .toList(),
+             )
+           : null {
     if (paint != null) {
       this.paint = paint;
     }
@@ -102,30 +102,30 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
     int? priority,
     ComponentKey? key,
   }) : this(
-          animations: data.map((key, value) {
-            return MapEntry(
-              key,
-              SpriteAnimation.fromFrameData(
-                image,
-                value,
-              ),
-            );
-          }),
-          current: current,
-          autoResize: autoResize,
-          removeOnFinish: removeOnFinish,
-          autoResetTicker: autoResetTicker,
-          playing: playing,
-          paint: paint,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          nativeAngle: nativeAngle,
-          priority: priority,
-          key: key,
-        );
+         animations: data.map((key, value) {
+           return MapEntry(
+             key,
+             SpriteAnimation.fromFrameData(
+               image,
+               value,
+             ),
+           );
+         }),
+         current: current,
+         autoResize: autoResize,
+         removeOnFinish: removeOnFinish,
+         autoResetTicker: autoResetTicker,
+         playing: playing,
+         paint: paint,
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         anchor: anchor,
+         nativeAngle: nativeAngle,
+         priority: priority,
+         key: key,
+       );
 
   SpriteAnimation? get animation => _animations?[current];
   SpriteAnimationTicker? get animationTicker => _animationTickers?[current];
@@ -201,10 +201,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     animationTicker?.getSprite().render(
-          canvas,
-          size: size,
-          overridePaint: paint,
-        );
+      canvas,
+      size: size,
+      overridePaint: paint,
+    );
   }
 
   @mustCallSuper

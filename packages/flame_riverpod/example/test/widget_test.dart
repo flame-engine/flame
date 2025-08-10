@@ -6,8 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Test equality of Flutter Text Widget and Flame Text Component',
-      (widgetTester) async {
+  testWidgets('Test equality of Flutter Text Widget and Flame Text Component', (
+    widgetTester,
+  ) async {
     await widgetTester.pumpWidget(
       const ProviderScope(child: MyApp()),
     );
@@ -26,15 +27,17 @@ void main() {
     // separate [Text] widget.
     expect(flutterCounterTextFinder, findsNWidgets(2));
 
-    final flutterCounterTextWidgets =
-        widgetTester.widgetList(flutterCounterTextFinder);
+    final flutterCounterTextWidgets = widgetTester.widgetList(
+      flutterCounterTextFinder,
+    );
 
     // Expect RiverpodAwareGameWidget to exist
     final riverpodGameWidgetFinder = find.byType(RiverpodAwareGameWidget);
     expect(riverpodGameWidgetFinder, findsOneWidget);
 
-    final gameWidget = widgetTester.widget(riverpodGameWidgetFinder)
-        as RiverpodAwareGameWidget;
+    final gameWidget =
+        widgetTester.widget(riverpodGameWidgetFinder)
+            as RiverpodAwareGameWidget;
 
     // GameWidget contains a FutureBuilder, which calls setState when a Future
     // completes. We therefore need to pump / re-render the widget to ensure
@@ -59,11 +62,12 @@ void main() {
 
     // Current count of the stream from the [Text] widget. This is best
     // retrieved after all pumps.
-    final flutterCounterTextWidgetOfInterest =
-        flutterCounterTextWidgets.elementAt(1);
+    final flutterCounterTextWidgetOfInterest = flutterCounterTextWidgets
+        .elementAt(1);
 
-    final currentCount =
-        int.parse((flutterCounterTextWidgetOfInterest as Text).data!);
+    final currentCount = int.parse(
+      (flutterCounterTextWidgetOfInterest as Text).data!,
+    );
 
     // Expect equality (in the presented string value)
     // of the Text Component and the Text Widget

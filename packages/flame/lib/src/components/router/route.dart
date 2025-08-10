@@ -27,9 +27,9 @@ class Route extends PositionComponent
     Component Function()? loadingBuilder,
     this.transparent = false,
     this.maintainState = true,
-  })  : _builder = builder,
-        _loadingBuilder = loadingBuilder,
-        _renderEffect = Decorator();
+  }) : _builder = builder,
+       _loadingBuilder = loadingBuilder,
+       _renderEffect = Decorator();
 
   /// If true, then the route below this one will continue to be rendered when
   /// this route becomes active. If false, then this route is assumed to

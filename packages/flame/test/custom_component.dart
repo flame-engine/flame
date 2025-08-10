@@ -15,12 +15,12 @@ class CustomComponent extends Component {
     void Function(CustomComponent, Canvas)? onRender,
     super.priority,
     super.children,
-  })  : _onGameResize = onGameResize,
-        _onLoad = onLoad,
-        _onMount = onMount,
-        _onRemove = onRemove,
-        _onUpdate = onUpdate,
-        _onRender = onRender;
+  }) : _onGameResize = onGameResize,
+       _onLoad = onLoad,
+       _onMount = onMount,
+       _onRemove = onRemove,
+       _onUpdate = onUpdate,
+       _onRender = onRender;
 
   final void Function(CustomComponent, Vector2)? _onGameResize;
   final FutureOr<void> Function(CustomComponent)? _onLoad;

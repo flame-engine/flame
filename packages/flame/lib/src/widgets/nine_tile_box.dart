@@ -22,10 +22,10 @@ class _Painter extends CustomPainter {
     required this.tileSize,
     required this.destTileSize,
   }) : _nineTileBox = non_widget.NineTileBox(
-          Sprite(image),
-          tileSize: tileSize.toInt(),
-          destTileSize: destTileSize.toInt(),
-        );
+         Sprite(image),
+         tileSize: tileSize.toInt(),
+         destTileSize: destTileSize.toInt(),
+       );
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -67,9 +67,9 @@ class NineTileBoxWidget extends StatefulWidget {
     this.child,
     this.padding,
     super.key,
-  })  : _imageFuture = image,
-        errorBuilder = null,
-        loadingBuilder = null;
+  }) : _imageFuture = image,
+       errorBuilder = null,
+       loadingBuilder = null;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///

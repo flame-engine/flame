@@ -49,13 +49,14 @@ void main() {
       'Clipping behavior',
       (game, tester) async {
         final world = World();
-        final camera = CameraComponent(
-          world: world,
-          viewport: FixedSizeViewport(500, 200),
-        )
-          ..viewport.position = Vector2(400, 300)
-          ..viewport.anchor = Anchor.center
-          ..viewfinder.position = Vector2.zero();
+        final camera =
+            CameraComponent(
+                world: world,
+                viewport: FixedSizeViewport(500, 200),
+              )
+              ..viewport.position = Vector2(400, 300)
+              ..viewport.anchor = Anchor.center
+              ..viewfinder.position = Vector2.zero();
         world.add(
           CircleComponent(
             position: Vector2.zero(),

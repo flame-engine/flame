@@ -15,8 +15,9 @@ Future<void> main() async {
   final image = await generateImage();
 
   group('SpriteButton', () {
-    testWidgets('has no FutureBuilder when passed an animation',
-        (tester) async {
+    testWidgets('has no FutureBuilder when passed an animation', (
+      tester,
+    ) async {
       final sprite1 = Sprite(image);
       final sprite2 = Sprite(image);
 
