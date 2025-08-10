@@ -419,9 +419,10 @@ class Component {
     bool Function(T) handler, {
     bool includeSelf = false,
   }) {
-    return descendants(reversed: true, includeSelf: includeSelf)
-        .whereType<T>()
-        .every(handler);
+    return descendants(
+      reversed: true,
+      includeSelf: includeSelf,
+    ).whereType<T>().every(handler);
   }
 
   @internal
@@ -1138,7 +1139,8 @@ class Component {
     if (!_debugPaintCache.isCacheValid([debugColor])) {
       final paint = Paint()
         ..color = debugColor
-        ..strokeWidth = 0 // hairline-width
+        ..strokeWidth =
+            0 // hairline-width
         ..style = PaintingStyle.stroke;
       _debugPaintCache.updateCache(paint, [debugColor]);
     }

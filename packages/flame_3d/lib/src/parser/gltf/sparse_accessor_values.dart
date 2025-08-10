@@ -29,8 +29,8 @@ class SparseAccessorValues extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          bufferView: Parser.ref(root, map, 'bufferView')!,
-          byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
-        );
+        root: root,
+        bufferView: Parser.ref(root, map, 'bufferView')!,
+        byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
+      );
 }

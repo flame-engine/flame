@@ -23,17 +23,17 @@ class ModelNode {
   });
 
   List<int> get dependencies => [
-        if (parentNodeIndex != null) parentNodeIndex!,
-        ...joints.values.map((e) => e.nodeIndex),
-      ];
+    if (parentNodeIndex != null) parentNodeIndex!,
+    ...joints.values.map((e) => e.nodeIndex),
+  ];
 
   ModelNode.simple({
     required this.nodeIndex,
     required this.mesh,
-  })  : name = null,
-        parentNodeIndex = null,
-        transform = Matrix4.identity(),
-        joints = {};
+  }) : name = null,
+       parentNodeIndex = null,
+       transform = Matrix4.identity(),
+       joints = {};
 
   void processNode(
     Map<int, ProcessedNode> processedNodes,
@@ -71,24 +71,26 @@ class ModelNode {
         continue;
       }
 
-      final jointTransforms = (globalToLocalJointMap.entries.toList()
-            ..sort(Comparing.on((a) => a.value)))
-          .map((e) => e.key)
-          .map((jointIndex) {
-        final joint = joints[jointIndex];
-        if (joint == null) {
-          throw StateError('Missing joint $jointIndex');
-        }
+      final jointTransforms =
+          (globalToLocalJointMap.entries.toList()
+                ..sort(Comparing.on((a) => a.value)))
+              .map((e) => e.key)
+              .map((jointIndex) {
+                final joint = joints[jointIndex];
+                if (joint == null) {
+                  throw StateError('Missing joint $jointIndex');
+                }
 
-        final jointNodeIndex = joint.nodeIndex;
-        final jointNode = processedNodes[jointNodeIndex];
+                final jointNodeIndex = joint.nodeIndex;
+                final jointNode = processedNodes[jointNodeIndex];
 
-        final transform = Matrix4.identity()
-          ..multiply(jointNode?.combinedTransform ?? Matrix4.identity())
-          ..multiply(joint.inverseBindMatrix);
+                final transform = Matrix4.identity()
+                  ..multiply(jointNode?.combinedTransform ?? Matrix4.identity())
+                  ..multiply(joint.inverseBindMatrix);
 
-        return transform;
-      }).toList();
+                return transform;
+              })
+              .toList();
 
       jointTransformsPerSurface[index] = jointTransforms;
     }

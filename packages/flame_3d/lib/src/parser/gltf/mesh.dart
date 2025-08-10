@@ -25,11 +25,11 @@ class Mesh extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          primitives:
-              Parser.objectList(root, map, 'primitives', Primitive.parse) ?? [],
-          weights: Parser.floatList(map, 'weights'),
-        );
+        root: root,
+        primitives:
+            Parser.objectList(root, map, 'primitives', Primitive.parse) ?? [],
+        weights: Parser.floatList(map, 'weights'),
+      );
 
   // TODO(luan): remove the transform parameter
   flame_3d.Mesh toFlameMesh([Matrix4? transform]) {

@@ -175,8 +175,9 @@ class Parser {
     Map<String, Object?> map,
     String key,
   ) {
-    return (map[key] as Map<String, Object?>?)
-        ?.map((key, value) => MapEntry(key, value! as int));
+    return (map[key] as Map<String, Object?>?)?.map(
+      (key, value) => MapEntry(key, value! as int),
+    );
   }
 }
 

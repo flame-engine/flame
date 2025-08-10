@@ -10,9 +10,9 @@ class FlameGame3D<W extends World3D, C extends CameraComponent3D>
     W? world,
     C? camera,
   }) : super(
-          world: world ?? World3D(clearColor: const Color(0xFFFFFFFF)) as W,
-          camera: camera ?? CameraComponent3D() as C,
-        );
+         world: world ?? World3D(clearColor: const Color(0xFFFFFFFF)) as W,
+         camera: camera ?? CameraComponent3D() as C,
+       );
 
   @override
   C get camera => super.camera as C;

@@ -20,12 +20,12 @@ class CrystalBallGame extends FlameGame<CrystalBallGameWorld>
   CrystalBallGame({
     required this.preloadedPrograms,
   }) : super(
-          camera: CameraComponent.withFixedResolution(
-            width: kCameraSize.x,
-            height: kCameraSize.y,
-          ),
-          world: CrystalBallGameWorld(),
-        ) {
+         camera: CameraComponent.withFixedResolution(
+           width: kCameraSize.x,
+           height: kCameraSize.y,
+         ),
+         world: CrystalBallGameWorld(),
+       ) {
     camera.postProcess = PostProcessGroup(
       postProcesses: [
         PostProcessSequentialGroup(

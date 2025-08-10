@@ -28,8 +28,10 @@ class PaintDecorator extends Decorator {
   final _paint = Paint();
 
   void addBlur(double amount, [double? amountY]) {
-    _paint.imageFilter =
-        ImageFilter.blur(sigmaX: amount, sigmaY: amountY ?? amount);
+    _paint.imageFilter = ImageFilter.blur(
+      sigmaX: amount,
+      sigmaY: amountY ?? amount,
+    );
   }
 
   @override

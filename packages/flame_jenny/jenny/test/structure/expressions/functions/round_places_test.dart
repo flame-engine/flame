@@ -44,8 +44,9 @@ void main() {
 
     test('too many arguments', () {
       expect(
-        () => YarnProject()
-          ..parse('title:A\n---\n{round_places(3, 6, 1, 7)}\n===\n'),
+        () =>
+            YarnProject()
+              ..parse('title:A\n---\n{round_places(3, 6, 1, 7)}\n===\n'),
         hasTypeError(
           'TypeError: function round_places() requires two arguments\n'
           '>  at line 3 column 21:\n'
@@ -57,8 +58,9 @@ void main() {
 
     test('first argument not numeric', () {
       expect(
-        () => YarnProject()
-          ..parse('title:A\n---\n{round_places("one", 1)}\n===\n'),
+        () =>
+            YarnProject()
+              ..parse('title:A\n---\n{round_places("one", 1)}\n===\n'),
         hasTypeError(
           'TypeError: first argument in round_places() should be numeric\n'
           '>  at line 3 column 15:\n'
@@ -70,8 +72,9 @@ void main() {
 
     test('second argument not numeric', () {
       expect(
-        () => YarnProject()
-          ..parse('title:A\n---\n{round_places(3, "one")}\n===\n'),
+        () =>
+            YarnProject()
+              ..parse('title:A\n---\n{round_places(3, "one")}\n===\n'),
         hasTypeError(
           'TypeError: second argument in round_places() should be numeric\n'
           '>  at line 3 column 18:\n'

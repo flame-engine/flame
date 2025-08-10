@@ -38,12 +38,12 @@ class PolygonComponent extends ShapeComponent {
     super.paintLayers,
     super.key,
     bool? shrinkToBounds,
-  })  : assert(
-          _vertices.length > 2,
-          'Number of vertices are too few to create a polygon',
-        ),
-        shrinkToBounds = shrinkToBounds ?? size == null,
-        manuallyPositioned = position != null {
+  }) : assert(
+         _vertices.length > 2,
+         'Number of vertices are too few to create a polygon',
+       ),
+       shrinkToBounds = shrinkToBounds ?? size == null,
+       manuallyPositioned = position != null {
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
@@ -80,18 +80,18 @@ class PolygonComponent extends ShapeComponent {
     ComponentKey? key,
     List<Component>? children,
   }) : this(
-          normalsToVertices(relation, parentSize),
-          position: position,
-          angle: angle,
-          anchor: anchor,
-          scale: scale,
-          priority: priority,
-          paint: paint,
-          paintLayers: paintLayers,
-          shrinkToBounds: shrinkToBounds,
-          key: key,
-          children: children,
-        );
+         normalsToVertices(relation, parentSize),
+         position: position,
+         angle: angle,
+         anchor: anchor,
+         scale: scale,
+         priority: priority,
+         paint: paint,
+         paintLayers: paintLayers,
+         shrinkToBounds: shrinkToBounds,
+         key: key,
+         children: children,
+       );
 
   @internal
   static List<Vector2> normalsToVertices(

@@ -163,8 +163,5 @@ class Face {
   final List<int> texCoord;
   final List<int> normal;
 
-  Face.empty()
-      : vertex = [],
-        texCoord = [],
-        normal = [];
+  Face.empty() : vertex = [], texCoord = [], normal = [];
 }

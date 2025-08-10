@@ -46,8 +46,9 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   @override
   PostProcessComponentRenderContext<T> get renderContext => _renderContext;
 
-  final _renderContext =
-      PostProcessComponentRenderContext<T>(postProcess: null);
+  final _renderContext = PostProcessComponentRenderContext<T>(
+    postProcess: null,
+  );
 
   final T postProcess;
 
@@ -89,8 +90,10 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
     final boundingBox = rectChildren
         .map((child) => child.toRect())
         .reduce((a, b) => a.expandToInclude(b));
-    (_maybeBoundingSize ??= NotifyingVector2.zero())
-        .setValues(boundingBox.width, boundingBox.height);
+    (_maybeBoundingSize ??= NotifyingVector2.zero()).setValues(
+      boundingBox.width,
+      boundingBox.height,
+    );
   }
 
   @override

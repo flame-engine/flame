@@ -26,9 +26,9 @@ class NormalTextureInfo extends TextureInfo {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          index: Parser.ref(root, map, 'index')!,
-          texCoord: Parser.integer(map, 'texCoord'),
-          scale: Parser.float(map, 'scale') ?? 1.0,
-        );
+        root: root,
+        index: Parser.ref(root, map, 'index')!,
+        texCoord: Parser.integer(map, 'texCoord'),
+        scale: Parser.float(map, 'scale') ?? 1.0,
+      );
 }

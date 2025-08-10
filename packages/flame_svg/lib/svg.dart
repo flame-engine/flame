@@ -13,9 +13,14 @@ class Svg {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
   Svg(this.pictureInfo, {double? pixelRatio})
-      : pixelRatio = pixelRatio ??
-            WidgetsBinding
-                .instance.platformDispatcher.views.first.devicePixelRatio;
+    : pixelRatio =
+          pixelRatio ??
+          WidgetsBinding
+              .instance
+              .platformDispatcher
+              .views
+              .first
+              .devicePixelRatio;
 
   /// The [PictureInfo] that this [Svg] represents.
   final PictureInfo pictureInfo;

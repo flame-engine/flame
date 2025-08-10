@@ -35,8 +35,8 @@ class RouterComponent extends Component {
     this.onUnknownRoute,
     super.key,
     super.priority = 0x7fffffff,
-  })  : _routes = routes,
-        _routeFactories = routeFactories ?? {} {
+  }) : _routes = routes,
+       _routeFactories = routeFactories ?? {} {
     routes.forEach((name, route) => route.name = name);
   }
 

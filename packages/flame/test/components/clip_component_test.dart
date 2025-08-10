@@ -5,11 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 class _Rectangle extends RectangleComponent {
   _Rectangle()
-      : super(
-          size: Vector2(200, 200),
-          anchor: Anchor.center,
-          paint: Paint()..color = Colors.blue,
-        );
+    : super(
+        size: Vector2(200, 200),
+        anchor: Anchor.center,
+        paint: Paint()..color = Colors.blue,
+      );
 }
 
 void main() {

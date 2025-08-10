@@ -196,7 +196,8 @@ void main() {
           expect(
             actualPursuer,
             closeToVector(targetPosition, tolerance),
-            reason: 'Pursuer position should be close to target position'
+            reason:
+                'Pursuer position should be close to target position'
                 ' at iteration $i',
           );
         }

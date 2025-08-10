@@ -17,12 +17,12 @@ class LineMetrics {
     double? ascent,
     double? descent,
     double? height,
-  })  : _left = left,
-        _baseline = baseline,
-        _width = width,
-        _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
-        _descent =
-            descent ?? (height == null ? 0 : height - (ascent ?? height)) {
+  }) : _left = left,
+       _baseline = baseline,
+       _width = width,
+       _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
+       _descent =
+           descent ?? (height == null ? 0 : height - (ascent ?? height)) {
     _updateSize();
   }
 
@@ -102,6 +102,7 @@ class LineMetrics {
   Rect toRect() => Rect.fromLTWH(left, top, width, height);
 
   @override
-  String toString() => 'LineMetrics(left: $left, baseline: $baseline, '
+  String toString() =>
+      'LineMetrics(left: $left, baseline: $baseline, '
       'width: $width, ascent: $ascent, descent: $descent)';
 }

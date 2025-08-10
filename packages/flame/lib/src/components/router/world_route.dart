@@ -69,12 +69,12 @@ class WorldRoute extends Route {
   @override
   @internal
   void addRenderEffect(Decorator effect) => UnimplementedError(
-        'WorldRoute does not support render effects',
-      );
+    'WorldRoute does not support render effects',
+  );
 
   @override
   @internal
   void removeRenderEffect() => UnimplementedError(
-        'WorldRoute does not support render effects',
-      );
+    'WorldRoute does not support render effects',
+  );
 }

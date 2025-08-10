@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 
 class DragEndEvent extends Event {
   DragEndEvent(this.pointerId, DragEndDetails details)
-      : velocity = details.velocity.pixelsPerSecond.toVector2();
+    : velocity = details.velocity.pixelsPerSecond.toVector2();
 
   final int pointerId;
 

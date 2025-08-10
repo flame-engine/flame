@@ -42,13 +42,13 @@ class BufferView extends GltfNode with GltfNodeWithData<Uint8List> {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          buffer: Parser.ref(root, map, 'buffer')!,
-          byteLength: Parser.integer(map, 'byteLength')!,
-          byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
-          byteStride: Parser.integer(map, 'byteStride'),
-          target: BufferViewTarget.parse(map, 'target'),
-        );
+        root: root,
+        buffer: Parser.ref(root, map, 'buffer')!,
+        byteLength: Parser.integer(map, 'byteLength')!,
+        byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
+        byteStride: Parser.integer(map, 'byteStride'),
+        target: BufferViewTarget.parse(map, 'target'),
+      );
 
   @override
   Future<Uint8List> loadData() async {

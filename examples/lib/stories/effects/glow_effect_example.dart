@@ -25,15 +25,15 @@ class GlowEffectExample extends FlameGame with TapDetector {
         position: Vector2(300, 400),
         paint: paint,
       )..add(
-          GlowEffect(
-            10.0,
-            EffectController(
-              duration: 3,
-              reverseDuration: 1.5,
-              infinite: true,
-            ),
+        GlowEffect(
+          10.0,
+          EffectController(
+            duration: 3,
+            reverseDuration: 1.5,
+            infinite: true,
           ),
         ),
+      ),
     );
   }
 }

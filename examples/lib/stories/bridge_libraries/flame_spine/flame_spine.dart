@@ -11,8 +11,9 @@ void addFlameSpineExamples(Dashbook dashbook) {
       (_) => GameWidget(
         game: FlameSpineExample(),
       ),
-      codeLink:
-          baseLink('bridge_libraries/flame_spine/basic_spine_example.dart'),
+      codeLink: baseLink(
+        'bridge_libraries/flame_spine/basic_spine_example.dart',
+      ),
       info: FlameSpineExample.description,
     )
     ..add(

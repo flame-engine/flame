@@ -16,10 +16,10 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
   late final Player player;
 
   ExampleGame3D()
-      : super(
-          world: World3D(clearColor: const Color(0xFFFFFFFF)),
-          camera: ExampleCamera3D(),
-        );
+    : super(
+        world: World3D(clearColor: const Color(0xFFFFFFFF)),
+        camera: ExampleCamera3D(),
+      );
 
   @override
   KeyEventResult onKeyEvent(

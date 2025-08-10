@@ -33,9 +33,9 @@ class SparseAccessorIndices extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          bufferView: Parser.ref(root, map, 'bufferView')!,
-          byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
-          componentType: ComponentType.parse(map, 'componentType')!,
-        );
+        root: root,
+        bufferView: Parser.ref(root, map, 'bufferView')!,
+        byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
+        componentType: ComponentType.parse(map, 'componentType')!,
+      );
 }

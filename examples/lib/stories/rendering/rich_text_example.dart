@@ -50,8 +50,9 @@ class RichTextExample extends FlameGame {
       ),
       ParagraphNode.group([
         PlainTextNode(
-            'Suddenly, like a lump of submerged wreckage breaking the surface '
-            'of water, the thought burst into his mind: '),
+          'Suddenly, like a lump of submerged wreckage breaking the surface '
+          'of water, the thought burst into his mind: ',
+        ),
         ItalicTextNode.group([
           PlainTextNode('"It doesn\'t really happen. We imagine it. It is '),
           BoldTextNode.simple('hallucination'),

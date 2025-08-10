@@ -42,11 +42,11 @@ class Square extends RectangleComponent with TapCallbacks {
   static final Paint blue = BasicPalette.blue.paint();
 
   Square(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(squareSize),
-          anchor: Anchor.center,
-        );
+    : super(
+        position: position,
+        size: Vector2.all(squareSize),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {

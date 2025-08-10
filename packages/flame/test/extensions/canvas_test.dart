@@ -42,8 +42,7 @@ void main() {
       verify(canvas.restore).called(1);
     });
 
-    test(
-        'renderRotated saves, translates, rotates, draws, translatesBack'
+    test('renderRotated saves, translates, rotates, draws, translatesBack'
         ' and then restores', () {
       final canvas = _MocktailCanvas();
       when(canvas.save).thenReturn(null);

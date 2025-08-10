@@ -74,8 +74,10 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     addAll(cards);
     add(baseCard);
 
-    playAreaSize =
-        Vector2(7 * cardSpaceWidth + cardGap, 4 * cardSpaceHeight + topGap);
+    playAreaSize = Vector2(
+      7 * cardSpaceWidth + cardGap,
+      4 * cardSpaceHeight + topGap,
+    );
     final gameMidX = playAreaSize.x / 2;
 
     addButton('New deal', gameMidX, Action.newDeal);

@@ -5,8 +5,8 @@ import 'package:flame/effects.dart';
 class InfiniteEffectController extends EffectController
     with HasSingleChildEffectController {
   InfiniteEffectController(EffectController child)
-      : _child = child,
-        super.empty();
+    : _child = child,
+      super.empty();
 
   final EffectController _child;
 

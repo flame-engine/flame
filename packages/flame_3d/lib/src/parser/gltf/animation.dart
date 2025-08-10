@@ -32,21 +32,21 @@ class Animation extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          name: Parser.string(map, 'name'),
-          channels: Parser.objectList(
-            root,
-            map,
-            'channels',
-            AnimationChannel.parse,
-          )!,
-          samplers: Parser.objectList(
-            root,
-            map,
-            'samplers',
-            AnimationSampler.parse,
-          )!,
-        );
+        root: root,
+        name: Parser.string(map, 'name'),
+        channels: Parser.objectList(
+          root,
+          map,
+          'channels',
+          AnimationChannel.parse,
+        )!,
+        samplers: Parser.objectList(
+          root,
+          map,
+          'samplers',
+          AnimationSampler.parse,
+        )!,
+      );
 
   ModelAnimation toFlameAnimation() {
     final controllers = <int, List<AnimationController>>{};
@@ -57,24 +57,26 @@ class Animation extends GltfNode {
       final times = sampler.input.get().typedData();
       final values = sampler.output.get();
 
-      final spline = switch (path) {
-        AnimationPath.translation => TranslationAnimationSpline.from(
-            interpolation: sampler.interpolation,
-            times: times,
-            values: values.asVector3().typedData(),
-          ),
-        AnimationPath.scale => ScaleAnimationSpline.from(
-            interpolation: sampler.interpolation,
-            times: times,
-            values: values.asVector3().typedData(),
-          ),
-        AnimationPath.rotation => RotationAnimationSpline.from(
-            interpolation: sampler.interpolation,
-            times: times,
-            values: values.asQuaternion().typedData(),
-          ),
-        AnimationPath.weights => throw UnimplementedError(),
-      } as AnimationSpline;
+      final spline =
+          switch (path) {
+                AnimationPath.translation => TranslationAnimationSpline.from(
+                  interpolation: sampler.interpolation,
+                  times: times,
+                  values: values.asVector3().typedData(),
+                ),
+                AnimationPath.scale => ScaleAnimationSpline.from(
+                  interpolation: sampler.interpolation,
+                  times: times,
+                  values: values.asVector3().typedData(),
+                ),
+                AnimationPath.rotation => RotationAnimationSpline.from(
+                  interpolation: sampler.interpolation,
+                  times: times,
+                  values: values.asQuaternion().typedData(),
+                ),
+                AnimationPath.weights => throw UnimplementedError(),
+              }
+              as AnimationSpline;
 
       final nodeIdx = channel.target.node.index;
       (controllers[nodeIdx] ??= []).add(

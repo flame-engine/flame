@@ -75,9 +75,9 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
     final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
     resourceSizeInByes = sizeInBytes;
     return GpuContextWrapper(gpu.gpuContext).createDeviceBuffer(
-      gpu.StorageMode.hostVisible,
-      sizeInBytes,
-    )
+        gpu.StorageMode.hostVisible,
+        sizeInBytes,
+      )
       ..overwrite(_vertices.asByteData())
       ..overwrite(
         _indices.asByteData(),

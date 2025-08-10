@@ -30,11 +30,11 @@ class Sampler extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          magFilter: MagFilter.parse(map, 'magFilter') ?? MagFilter.linear,
-          minFilter: MinFilter.parse(map, 'minFilter') ??
-              MinFilter.nearestMipmapLinear,
-          wrapS: WrapMode.parse(map, 'wrapS') ?? WrapMode.repeat,
-          wrapT: WrapMode.parse(map, 'wrapT') ?? WrapMode.repeat,
-        );
+        root: root,
+        magFilter: MagFilter.parse(map, 'magFilter') ?? MagFilter.linear,
+        minFilter:
+            MinFilter.parse(map, 'minFilter') ?? MinFilter.nearestMipmapLinear,
+        wrapS: WrapMode.parse(map, 'wrapS') ?? WrapMode.repeat,
+        wrapT: WrapMode.parse(map, 'wrapT') ?? WrapMode.repeat,
+      );
 }

@@ -47,17 +47,20 @@ void main() {
     });
 
     testWithGame(
-        'check that onViewportResize is called with game CameraComponent', () {
-      return FlameGame(
-        camera: CameraComponent(viewport: _MyMaxViewport()),
-      );
-    }, (game) async {
-      final viewport = game.camera.viewport;
-      expect(viewport, isA<_MyMaxViewport>());
-      expect((viewport as _MyMaxViewport).onViewportResizeCalled, 3);
-      game.onGameResize(Vector2(200, 200));
-      expect(viewport.onViewportResizeCalled, 5);
-    });
+      'check that onViewportResize is called with game CameraComponent',
+      () {
+        return FlameGame(
+          camera: CameraComponent(viewport: _MyMaxViewport()),
+        );
+      },
+      (game) async {
+        final viewport = game.camera.viewport;
+        expect(viewport, isA<_MyMaxViewport>());
+        expect((viewport as _MyMaxViewport).onViewportResizeCalled, 3);
+        game.onGameResize(Vector2(200, 200));
+        expect(viewport.onViewportResizeCalled, 5);
+      },
+    );
   });
 }
 

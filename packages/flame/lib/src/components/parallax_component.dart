@@ -76,11 +76,11 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     super.children,
     super.priority,
     super.key,
-  })  : _parallax = parallax,
-        isFullscreen = size == null && !(parallax?.isSized ?? false),
-        super(
-          size: size ?? ((parallax?.isSized ?? false) ? parallax?.size : null),
-        );
+  }) : _parallax = parallax,
+       isFullscreen = size == null && !(parallax?.isSized ?? false),
+       super(
+         size: size ?? ((parallax?.isSized ?? false) ? parallax?.size : null),
+       );
 
   @mustCallSuper
   @override

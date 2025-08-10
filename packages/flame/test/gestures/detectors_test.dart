@@ -286,8 +286,10 @@ void main() {
     longPressGame.testGameWidget(
       'can register moving longPress',
       setUp: (game, tester) async {
-        final gesture =
-            await tester.startGesture(const Offset(10, 10), pointer: 7);
+        final gesture = await tester.startGesture(
+          const Offset(10, 10),
+          pointer: 7,
+        );
 
         await Future<void>.delayed(kLongPressTimeout);
 
@@ -305,8 +307,10 @@ void main() {
     longPressGame.testGameWidget(
       'can register longPressCancel',
       setUp: (game, tester) async {
-        final gesture =
-            await tester.startGesture(const Offset(10, 10), pointer: 7);
+        final gesture = await tester.startGesture(
+          const Offset(10, 10),
+          pointer: 7,
+        );
 
         await gesture.moveTo(const Offset(20, 10));
 
@@ -742,8 +746,9 @@ void main() {
     mouseMoveGame.testGameWidget(
       'Can register Mouse movements',
       setUp: (game, tester) async {
-        final gesture =
-            await tester.createGesture(kind: PointerDeviceKind.mouse);
+        final gesture = await tester.createGesture(
+          kind: PointerDeviceKind.mouse,
+        );
         await gesture.addPointer(location: Offset.zero);
         await gesture.moveTo(const Offset(10, 10));
       },
@@ -762,8 +767,9 @@ void main() {
         const scrollEventLocation = Offset(0, 300);
         final testPointer = TestPointer(1, PointerDeviceKind.mouse);
         testPointer.hover(scrollEventLocation);
-        await tester
-            .sendEventToBinding(testPointer.scroll(const Offset(0.0, -300.0)));
+        await tester.sendEventToBinding(
+          testPointer.scroll(const Offset(0.0, -300.0)),
+        );
 
         expect(game.registeredScrolling, isTrue);
       },

@@ -59,8 +59,10 @@ void main() {
     group('intersectsWithAabb2', () {
       test('Ray from the east', () {
         final direction = Vector2(1.0, 0.0);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(Aabb2.minMax(Vector2(1, -1), Vector2(2, 1))),
           isTrue,
@@ -69,8 +71,10 @@ void main() {
 
       test('Ray from the north', () {
         final direction = Vector2(0.0, 1.0);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(Aabb2.minMax(Vector2(-1, 1), Vector2(1, 2))),
           isTrue,
@@ -79,8 +83,10 @@ void main() {
 
       test('Ray from the west', () {
         final direction = Vector2(-1.0, 0.0);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(
             Aabb2.minMax(Vector2(-2, -1), Vector2(-1, 1)),
@@ -91,8 +97,10 @@ void main() {
 
       test('Ray from the south', () {
         final direction = Vector2(0.0, -1.0);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(
             Aabb2.minMax(Vector2(-1, -2), Vector2(1, -1)),
@@ -103,8 +111,10 @@ void main() {
 
       test('Ray from the northEast', () {
         final direction = Vector2(0.5, 0.5);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(Aabb2.minMax(Vector2(1, 1), Vector2(2, 2))),
           isTrue,
@@ -113,8 +123,10 @@ void main() {
 
       test('Ray from the northWest', () {
         final direction = Vector2(-0.5, 0.5);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(Aabb2.minMax(Vector2(-2, 1), Vector2(-1, 2))),
           isTrue,
@@ -123,8 +135,10 @@ void main() {
 
       test('Ray from the southWest', () {
         final direction = Vector2(-0.5, -0.5);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(
             Aabb2.minMax(Vector2(-2, -2), Vector2(-1, -1)),
@@ -135,8 +149,10 @@ void main() {
 
       test('Ray from the southEast', () {
         final direction = Vector2(0.5, -0.5);
-        final ray =
-            Ray2(origin: Vector2.zero(), direction: direction.normalized());
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: direction.normalized(),
+        );
         expect(
           ray.intersectsWithAabb2(Aabb2.minMax(Vector2(1, -2), Vector2(2, -1))),
           isTrue,
@@ -150,8 +166,10 @@ void main() {
           const numberOfDirections = 16;
           for (var i = 0; i < numberOfDirections; i++) {
             direction.rotate(tau * (i / numberOfDirections));
-            final ray =
-                Ray2(origin: Vector2.all(5), direction: direction.normalized());
+            final ray = Ray2(
+              origin: Vector2.all(5),
+              direction: direction.normalized(),
+            );
             final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
             expect(
               ray.intersectsWithAabb2(aabb2),
@@ -171,8 +189,10 @@ void main() {
             final angle =
                 (tau / 2 - 2 * epsilon) * (i / numberOfDirections) + epsilon;
             direction.rotate(angle);
-            final ray =
-                Ray2(origin: Vector2(10, 5), direction: direction.normalized());
+            final ray = Ray2(
+              origin: Vector2(10, 5),
+              direction: direction.normalized(),
+            );
             final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
             expect(
               ray.intersectsWithAabb2(aabb2),
@@ -192,8 +212,10 @@ void main() {
             final angle =
                 (tau / 2 - 2 * epsilon) * (i / numberOfDirections) + epsilon;
             direction.rotate(-angle);
-            final ray =
-                Ray2(origin: Vector2(10, 5), direction: direction.normalized());
+            final ray = Ray2(
+              origin: Vector2(10, 5),
+              direction: direction.normalized(),
+            );
             final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
             expect(
               ray.intersectsWithAabb2(aabb2),
@@ -206,15 +228,19 @@ void main() {
       test(
         'Rays that originates and follows a box edge does intersects',
         () {
-          final rayVertical =
-              Ray2(origin: Vector2(10, 5), direction: Vector2(0, 1));
+          final rayVertical = Ray2(
+            origin: Vector2(10, 5),
+            direction: Vector2(0, 1),
+          );
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
           expect(
             rayVertical.intersectsWithAabb2(aabb2),
             isTrue,
           );
-          final rayHorizontal =
-              Ray2(origin: Vector2(5, 0), direction: Vector2(1, 0));
+          final rayHorizontal = Ray2(
+            origin: Vector2(5, 0),
+            direction: Vector2(1, 0),
+          );
           expect(
             rayHorizontal.intersectsWithAabb2(aabb2),
             isTrue,
@@ -225,15 +251,19 @@ void main() {
       test(
         'Rays that originates in a corner intersects',
         () {
-          final rayZero =
-              Ray2(origin: Vector2.zero(), direction: Vector2(0, 1));
+          final rayZero = Ray2(
+            origin: Vector2.zero(),
+            direction: Vector2(0, 1),
+          );
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
           expect(
             rayZero.intersectsWithAabb2(aabb2),
             isTrue,
           );
-          final rayTen =
-              Ray2(origin: Vector2.all(10), direction: Vector2(0, -1));
+          final rayTen = Ray2(
+            origin: Vector2.all(10),
+            direction: Vector2(0, -1),
+          );
           expect(
             rayTen.intersectsWithAabb2(aabb2),
             isTrue,
@@ -245,8 +275,10 @@ void main() {
         'Ray in the opposite direction does not intersect',
         () {
           final direction = Vector2(1, 0);
-          final ray =
-              Ray2(origin: Vector2(15, 5), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(15, 5),
+            direction: direction.normalized(),
+          );
           final aabb2 = Aabb2.minMax(Vector2.zero(), Vector2.all(10));
           expect(
             ray.intersectsWithAabb2(aabb2),
@@ -261,8 +293,10 @@ void main() {
         'Correct intersection point length on ray going east',
         () {
           final direction = Vector2(1, 0);
-          final ray =
-              Ray2(origin: Vector2(5, 5), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 5),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(10, 0), Vector2.all(10));
           expect(ray.lineSegmentIntersection(segment), 5);
         },
@@ -272,8 +306,10 @@ void main() {
         'Correct intersection point length on ray going west',
         () {
           final direction = Vector2(-1, 0);
-          final ray =
-              Ray2(origin: Vector2(5, 5), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 5),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 0), Vector2(0, 10));
           expect(ray.lineSegmentIntersection(segment), 5);
         },
@@ -283,8 +319,10 @@ void main() {
         'Correct intersection point length on ray going south',
         () {
           final direction = Vector2(0, 1);
-          final ray =
-              Ray2(origin: Vector2(5, 5), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 5),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 10), Vector2(10, 10));
           expect(ray.lineSegmentIntersection(segment), 5);
         },
@@ -294,8 +332,10 @@ void main() {
         'Correct intersection point length on ray going north',
         () {
           final direction = Vector2(0, -1);
-          final ray =
-              Ray2(origin: Vector2(5, 5), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 5),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
           expect(ray.lineSegmentIntersection(segment), 5);
         },
@@ -305,8 +345,10 @@ void main() {
         'Origin as intersection point when ray originates on segment',
         () {
           final direction = Vector2(0, -1);
-          final ray =
-              Ray2(origin: Vector2(5, 0), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 0),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
           expect(ray.lineSegmentIntersection(segment), 0);
         },
@@ -316,8 +358,10 @@ void main() {
         'No intersection when ray is parallel and originates on segment',
         () {
           final direction = Vector2(1, 0);
-          final ray =
-              Ray2(origin: Vector2(5, 0), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 0),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
           expect(ray.lineSegmentIntersection(segment), null);
         },
@@ -327,8 +371,10 @@ void main() {
         'No intersection point when ray is parallel to the segment',
         () {
           final direction = Vector2(1, 0);
-          final ray =
-              Ray2(origin: Vector2(-5, 0), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(-5, 0),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
           expect(ray.lineSegmentIntersection(segment), null);
         },
@@ -338,8 +384,10 @@ void main() {
         'No intersection point when ray is parallel without intersection',
         () {
           final direction = Vector2(1, 0);
-          final ray =
-              Ray2(origin: Vector2(5, 5), direction: direction.normalized());
+          final ray = Ray2(
+            origin: Vector2(5, 5),
+            direction: direction.normalized(),
+          );
           final segment = LineSegment(Vector2(0, 0), Vector2(10, 0));
           expect(ray.lineSegmentIntersection(segment), null);
         },

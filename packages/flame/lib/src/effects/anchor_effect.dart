@@ -32,14 +32,13 @@ abstract class AnchorEffect extends Effect
     AnchorProvider? target,
     void Function()? onComplete,
     ComponentKey? key,
-  }) =>
-      AnchorByEffect(
-        offset,
-        controller,
-        target: target,
-        onComplete: onComplete,
-        key: key,
-      );
+  }) => AnchorByEffect(
+    offset,
+    controller,
+    target: target,
+    onComplete: onComplete,
+    key: key,
+  );
 
   factory AnchorEffect.to(
     Anchor destination,
@@ -47,12 +46,11 @@ abstract class AnchorEffect extends Effect
     AnchorProvider? target,
     void Function()? onComplete,
     ComponentKey? key,
-  }) =>
-      AnchorToEffect(
-        destination,
-        controller,
-        target: target,
-        onComplete: onComplete,
-        key: key,
-      );
+  }) => AnchorToEffect(
+    destination,
+    controller,
+    target: target,
+    onComplete: onComplete,
+    key: key,
+  );
 }

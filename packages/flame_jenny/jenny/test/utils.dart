@@ -21,8 +21,11 @@ Matcher hasTypeError(String message) {
 
 Matcher hasDialogueError(String message) {
   return throwsA(
-    isA<DialogueError>()
-        .having((e) => e.toString(), 'toString', 'DialogueError: $message'),
+    isA<DialogueError>().having(
+      (e) => e.toString(),
+      'toString',
+      'DialogueError: $message',
+    ),
   );
 }
 

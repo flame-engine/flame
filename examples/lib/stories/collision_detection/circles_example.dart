@@ -12,10 +12,10 @@ class CirclesExample extends FlameGame {
   ''';
 
   CirclesExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(width: 600, height: 400),
-          world: MyWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(width: 600, height: 400),
+        world: MyWorld(),
+      );
 }
 
 class MyWorld extends World with TapCallbacks, HasCollisionDetection {
@@ -30,7 +30,7 @@ class MyWorld extends World with TapCallbacks, HasCollisionDetection {
 class MyCollidable extends PositionComponent
     with HasGameReference<CirclesExample>, CollisionCallbacks {
   MyCollidable({super.position})
-      : super(size: Vector2.all(30), anchor: Anchor.center);
+    : super(size: Vector2.all(30), anchor: Anchor.center);
 
   late Vector2 velocity;
   final _collisionColor = Colors.amber;

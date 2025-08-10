@@ -109,8 +109,9 @@ Uri findEngineArtifactsDir({String? dartPath}) {
   }
   // We should now have a path of `/path/to/flutter/bin/cache/`.
 
-  final engineArtifactsDir = cacheDir
-      .resolve('./artifacts/engine/'); // Note: The final slash is important.
+  final engineArtifactsDir = cacheDir.resolve(
+    './artifacts/engine/',
+  ); // Note: The final slash is important.
 
   return engineArtifactsDir;
 }

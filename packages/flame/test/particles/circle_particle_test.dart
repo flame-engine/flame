@@ -20,22 +20,23 @@ void main() {
     });
 
     testWithFlameGame(
-        'Consider composing this with other Particle to achieve needed effects',
-        (game) async {
-      final childParticle = CircleParticle(
-        paint: Paint()..color = Colors.red,
-        lifespan: 2,
-      );
+      'Consider composing this with other Particle to achieve needed effects',
+      (game) async {
+        final childParticle = CircleParticle(
+          paint: Paint()..color = Colors.red,
+          lifespan: 2,
+        );
 
-      final component = ParticleSystemComponent(
-        particle: childParticle,
-      );
+        final component = ParticleSystemComponent(
+          particle: childParticle,
+        );
 
-      game.add(component);
-      await game.ready();
-      game.update(1);
+        game.add(component);
+        await game.ready();
+        game.update(1);
 
-      expect(childParticle.progress, 0.5);
-    });
+        expect(childParticle.progress, 0.5);
+      },
+    );
   });
 }

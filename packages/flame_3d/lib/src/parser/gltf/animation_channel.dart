@@ -20,8 +20,8 @@ class AnimationChannel extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          sampler: Parser.integer(map, 'sampler')!,
-          target: Parser.object(root, map, 'target', AnimationTarget.parse)!,
-        );
+        root: root,
+        sampler: Parser.integer(map, 'sampler')!,
+        target: Parser.object(root, map, 'target', AnimationTarget.parse)!,
+      );
 }

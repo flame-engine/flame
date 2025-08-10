@@ -85,8 +85,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   // Notifies when a new line is rendered with the position of the new line.
   @internal
-  final ValueNotifier<double> newLinePositionNotifier =
-      ValueNotifier<double>(0);
+  final ValueNotifier<double> newLinePositionNotifier = ValueNotifier<double>(
+    0,
+  );
 
   double _currentLinePosition = 0.0;
   bool _isOnCompleteExecuted = false;
@@ -111,11 +112,12 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.priority,
     this.onComplete,
     super.key,
-  })  : boxConfig = boxConfig ?? const TextBoxConfig(),
-        _fixedSize = size != null,
-        align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ??
-            PlatformDispatcher.instance.views.first.devicePixelRatio;
+  }) : boxConfig = boxConfig ?? const TextBoxConfig(),
+       _fixedSize = size != null,
+       align = align ?? Anchor.topLeft,
+       pixelRatio =
+           pixelRatio ??
+           PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
@@ -169,8 +171,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final maxBoxWidth = _fixedSize ? width : boxConfig.maxWidth;
     for (final word in text.split(' ')) {
       final wordLines = word.split('\n');
-      final possibleLine =
-          lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
+      final possibleLine = lines.isEmpty
+          ? wordLines[0]
+          : '${lines.last} ${wordLines[0]}';
       final metrics = textRenderer.getLineMetrics(possibleLine);
       lineHeight = max(lineHeight, metrics.height);
 
@@ -244,14 +247,17 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       var totalCharCount = 0;
       final cachedCurrentChar = currentChar;
       final cachedCurrentLine = currentLine;
-      final textWidth = lines.sublist(0, cachedCurrentLine + 1).map((line) {
-        final charCount = (i < cachedCurrentLine)
-            ? line.length
-            : (cachedCurrentChar - totalCharCount);
-        totalCharCount += line.length;
-        i++;
-        return getLineWidth(line, charCount);
-      }).reduce(math.max);
+      final textWidth = lines
+          .sublist(0, cachedCurrentLine + 1)
+          .map((line) {
+            final charCount = (i < cachedCurrentLine)
+                ? line.length
+                : (cachedCurrentChar - totalCharCount);
+            totalCharCount += line.length;
+            i++;
+            return getLineWidth(line, charCount);
+          })
+          .reduce(math.max);
       return Vector2(
         textWidth + boxConfig.margins.horizontal,
         _lineHeight * lines.length + boxConfig.margins.vertical,
@@ -282,9 +288,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     c.scale(pixelRatio);
     _fullRender(c);
     return recorder.endRecording().toImageSafe(
-          scaledSize.x.ceil(),
-          scaledSize.y.ceil(),
-        );
+      scaledSize.x.ceil(),
+      scaledSize.y.ceil(),
+    );
   }
 
   /// Override this method to provide a custom background to the text box.

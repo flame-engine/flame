@@ -7,10 +7,10 @@ import 'package:flutter/services.dart';
 class InputHandler extends PositionComponent
     with TapCallbacks, HasGameReference<CrystalBallGame> {
   InputHandler()
-      : super(
-          anchor: Anchor.center,
-          size: kCameraSize,
-        );
+    : super(
+        anchor: Anchor.center,
+        size: kCameraSize,
+      );
 
   @override
   Future<void> onLoad() async {
