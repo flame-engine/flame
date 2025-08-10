@@ -90,7 +90,7 @@ Future<void> main() async {
         animationTicker1.onStart = () => animation1Started = true;
         animationTicker2.onStart = () => animation2Started = true;
 
-        for (var idx = 0; idx < executionCount; idx++) {
+        for (var index = 0; index < executionCount; index++) {
           animation1Started = false;
           animation2Started = false;
 

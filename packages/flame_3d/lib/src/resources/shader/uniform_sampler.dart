@@ -25,5 +25,5 @@ class UniformSampler extends UniformInstance<void, Texture> {
   Texture createResource() => texture!;
 
   @override
-  void makeKey(int? idx, String? field) {}
+  void makeKey(int? index, String? field) {}
 }

@@ -514,8 +514,8 @@ void _expectGroup(
   expect(node, isA<GroupTextNode>());
   final group = node as GroupTextNode;
   expect(group.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[index]);
   }
 }
 
@@ -524,8 +524,8 @@ void _expectDocument(
   List<void Function(BlockNode)> expectChildren,
 ) {
   expect(root.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(root.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(root.children[index]);
   }
 }
 
@@ -538,8 +538,8 @@ void _expectElementGroup(
   expect(element, isA<GroupElement>());
   final group = element as GroupElement;
   expect(group.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[index]);
   }
 }
 
@@ -550,8 +550,8 @@ void _expectElementGroupText(
   expect(element, isA<GroupTextElement>());
   final group = element as GroupTextElement;
   expect(group.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[index]);
   }
 }
 
