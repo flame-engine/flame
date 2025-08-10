@@ -1079,7 +1079,7 @@ void main() {
           -4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, 4, -3, -2, -1, //
         ];
-        var idx = 0;
+        var index = 0;
         for (final flip in flips) {
           wrapper.scale = flip.$1;
           child.scale = flip.$2;
@@ -1088,7 +1088,7 @@ void main() {
             final target = Vector2(0, -1)..rotate(angle);
             expectDouble(
               child.angleTo(target),
-              expectedResults[idx++] * tau / 8,
+              expectedResults[index++] * tau / 8,
               epsilon: 1e-10,
               reason: 'angleTo with flip $flip, angle $angle, target $target',
             );

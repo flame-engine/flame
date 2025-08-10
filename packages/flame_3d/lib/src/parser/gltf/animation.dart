@@ -78,8 +78,8 @@ class Animation extends GltfNode {
               }
               as AnimationSpline;
 
-      final nodeIdx = channel.target.node.index;
-      (controllers[nodeIdx] ??= []).add(
+      final nodeIndex = channel.target.node.index;
+      (controllers[nodeIndex] ??= []).add(
         AnimationController(
           animation: spline,
         ),

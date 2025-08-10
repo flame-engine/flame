@@ -55,9 +55,9 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
   }
 
   @override
-  String makeKey(int? idx, String? field) {
-    if (idx != null) {
-      throw StateError('idx is not supported for ${slot.name}');
+  String makeKey(int? index, String? field) {
+    if (index != null) {
+      throw StateError('index is not supported for ${slot.name}');
     }
     if (field == null) {
       throw StateError('field is required for ${slot.name}');

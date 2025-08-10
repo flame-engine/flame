@@ -74,7 +74,7 @@ class _TapWorld extends World
     paint: BasicPalette.black.paint(),
   );
 
-  int _currentFlipIdx = 0;
+  int _currentFlipIndex = 0;
   final _flips = [
     (Vector2(1, 1), Vector2(1, 1)),
     (Vector2(1, 1), Vector2(1, -1)),
@@ -111,8 +111,8 @@ class _TapWorld extends World
   }
 
   void _cycleFlips() {
-    _currentFlipIdx = (_currentFlipIdx + 1) % _flips.length;
-    final nextFlip = _flips[_currentFlipIdx];
+    _currentFlipIndex = (_currentFlipIndex + 1) % _flips.length;
+    final nextFlip = _flips[_currentFlipIndex];
     for (final parent in game._choppers) {
       parent.scale = nextFlip.$1;
       parent.chopper.scale = nextFlip.$2;

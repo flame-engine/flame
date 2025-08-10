@@ -7,7 +7,7 @@ class JointsInfo {
   /// Joints for the current surface
   List<Matrix4> jointTransforms = [];
 
-  void setSurface(int surfaceIdx) {
-    jointTransforms = jointTransformsPerSurface[surfaceIdx] ?? [];
+  void setSurface(int surfaceIndex) {
+    jointTransforms = jointTransformsPerSurface[surfaceIndex] ?? [];
   }
 }

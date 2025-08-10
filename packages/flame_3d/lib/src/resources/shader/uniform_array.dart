@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
-typedef UniformArrayKey = ({int idx, String field});
+typedef UniformArrayKey = ({int index, String field});
 
 /// {@template uniform_value}
 /// Instance of a uniform array. Represented by a [ByteBuffer].
@@ -36,18 +36,20 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
     return Float32List.fromList(data).buffer;
   }
 
-  Map<int, ({int hash, List<double> data})> _get(int idx) {
-    while (idx >= _storage.length) {
+  Map<int, ({int hash, List<double> data})> _get(int index) {
+    while (index >= _storage.length) {
       _storage.add(HashMap());
     }
-    return _storage[idx];
+    return _storage[index];
   }
 
-  List<double>? get(int idx, String key) => _get(idx)[slot.indexOf(key)]?.data;
+  List<double>? get(int index, String key) {
+    return _get(index)[slot.indexOf(key)]?.data;
+  }
 
   @override
   void set(UniformArrayKey key, ByteBuffer buffer) {
-    final storage = _get(key.idx);
+    final storage = _get(key.index);
     final index = slot.indexOf(key.field);
 
     // Ensure that we are only setting new data if the hash has changed.
@@ -65,15 +67,15 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
   }
 
   @override
-  UniformArrayKey makeKey(int? idx, String? field) {
-    if (idx == null) {
-      throw StateError('idx is required for ${slot.name}');
+  UniformArrayKey makeKey(int? index, String? field) {
+    if (index == null) {
+      throw StateError('index is required for ${slot.name}');
     }
     if (field == null) {
       throw StateError('field is required for ${slot.name}');
     }
 
-    return (idx: idx, field: field);
+    return (index: index, field: field);
   }
 
   @override
