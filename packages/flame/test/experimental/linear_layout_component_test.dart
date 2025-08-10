@@ -354,7 +354,6 @@ void main() {
               (game, direction) async {
                 final circle = CircleComponent(radius: 20);
                 final rectangle2 = RectangleComponent(size: Vector2(100, 50));
-                // final rectangle2 = RectangleComponent(size: Vector2(200, 70));
                 final layoutComponent = LinearLayoutComponent.fromDirection(
                   direction,
                   crossAxisAlignment: CrossAxisAlignment.stretch,

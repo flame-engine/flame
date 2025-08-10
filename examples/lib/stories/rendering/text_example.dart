@@ -31,8 +31,8 @@ class TextExample extends FlameGame {
         MyTextBox(
             '"This is our world now. The world of the electron and the switch; '
             'the beauty of the baud. We exist without nationality, skin color, '
-            'or religious bias. You wage wars, murder, cheat, lie to us and try '
-            "to make us believe it's for our own good, yet we're the "
+            'or religious bias. You wage wars, murder, cheat, lie to us and '
+            "try to make us believe it's for our own good, yet we're the "
             'criminals. Yes, I am a criminal. My crime is that of curiosity."',
           )
           ..anchor = Anchor.bottomLeft
