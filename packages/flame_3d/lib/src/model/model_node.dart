@@ -23,8 +23,8 @@ class ModelNode {
   });
 
   List<int> get dependencies => [
-    if (parentNodeIndex != null) parentNodeIndex!,
-    ...joints.values.map((e) => e.nodeIndex),
+    ?parentNodeIndex,
+    for (final joint in joints.values) joint.nodeIndex,
   ];
 
   ModelNode.simple({
