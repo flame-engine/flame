@@ -31,8 +31,9 @@ void main() {
     test('test m43', () => expect(matrix4.m43, matrix4.storage[14]));
     test('test m44', () => expect(matrix4.m44, matrix4.storage[15]));
 
-    testRandom('translate2 calls translate on the matrix with a vector',
-        (Random r) {
+    testRandom('translate2 calls translate on the matrix with a vector', (
+      Random r,
+    ) {
       final matrix4 = _MockMatrix4();
       final v = Vector2(r.nextDouble(), r.nextDouble());
       matrix4.translate2(v);

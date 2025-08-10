@@ -41,16 +41,19 @@ void main() {
     test('non-boolean condition in <<if>>', () {
       expect(
         () => YarnProject()
-          ..parse('title:A\n---\n'
-              '<<if "true">>\n'
-              '    text\n'
-              '<<endif>>\n'
-              '===\n'),
+          ..parse(
+            'title:A\n---\n'
+            '<<if "true">>\n'
+            '    text\n'
+            '<<endif>>\n'
+            '===\n',
+          ),
         hasTypeError(
-            'TypeError: expression in an <<if>> command must be boolean\n'
-            '>  at line 3 column 6:\n'
-            '>  <<if "true">>\n'
-            '>       ^\n'),
+          'TypeError: expression in an <<if>> command must be boolean\n'
+          '>  at line 3 column 6:\n'
+          '>  <<if "true">>\n'
+          '>       ^\n',
+        ),
       );
     });
 

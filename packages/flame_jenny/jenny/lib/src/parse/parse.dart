@@ -3,14 +3,11 @@ import 'package:jenny/src/parse/token.dart';
 import 'package:jenny/src/parse/tokenize.dart';
 import 'package:jenny/src/structure/block.dart';
 import 'package:jenny/src/structure/commands/character_command.dart';
-import 'package:jenny/src/structure/commands/command.dart';
 import 'package:jenny/src/structure/commands/declare_command.dart';
 import 'package:jenny/src/structure/commands/if_command.dart';
-import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:jenny/src/structure/commands/local_command.dart';
 import 'package:jenny/src/structure/commands/set_command.dart';
 import 'package:jenny/src/structure/commands/stop_command.dart';
-import 'package:jenny/src/structure/commands/visit_command.dart';
 import 'package:jenny/src/structure/commands/wait_command.dart';
 import 'package:jenny/src/structure/dialogue_entry.dart';
 import 'package:jenny/src/structure/expressions/expression.dart';
@@ -574,8 +571,9 @@ class _Parser {
     } else {
       nameError('variable $variableName has not been declared');
     }
-    final variableExpression =
-        variableStorage.getVariableAsExpression(variableName);
+    final variableExpression = variableStorage.getVariableAsExpression(
+      variableName,
+    );
     position += 1;
 
     final assignmentToken = peekToken();
@@ -633,7 +631,7 @@ class _Parser {
       nameError(
         isLocal
             ? 'variable $variableName shadows a global variable with the '
-                'same name'
+                  'same name'
             : 'variable $variableName has already been declared',
       );
     }

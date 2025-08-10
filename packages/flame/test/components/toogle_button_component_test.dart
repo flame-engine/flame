@@ -74,8 +74,9 @@ void main() {
           size: componentSize,
         ),
       );
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
@@ -116,8 +117,9 @@ void main() {
         ),
       );
       button.isDisabled = true;
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
@@ -157,8 +159,9 @@ void main() {
           size: componentSize,
         ),
       );
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 

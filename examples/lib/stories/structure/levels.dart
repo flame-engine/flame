@@ -62,13 +62,12 @@ class ResettableLevel extends Level {
   @override
   Future<void> onLoad() async {
     add(
-      Ember()
-        ..add(
-          ScaleEffect.by(
-            Vector2.all(3),
-            EffectController(duration: 1, alternate: true, infinite: true),
-          ),
+      Ember()..add(
+        ScaleEffect.by(
+          Vector2.all(3),
+          EffectController(duration: 1, alternate: true, infinite: true),
         ),
+      ),
     );
     game.header.text = 'Resettable';
   }
@@ -110,19 +109,19 @@ class Level extends World with HasGameReference<LevelsExample>, TapCallbacks {
 
 class LevelButton extends ButtonComponent {
   LevelButton(String text, {super.onPressed, super.position})
-      : super(
-          button: ButtonBackground(Colors.white),
-          buttonDown: ButtonBackground(Colors.orangeAccent),
-          children: [
-            TextComponent(
-              text: text,
-              position: Vector2(60, 20),
-              anchor: Anchor.center,
-            ),
-          ],
-          size: Vector2(120, 40),
-          anchor: Anchor.center,
-        );
+    : super(
+        button: ButtonBackground(Colors.white),
+        buttonDown: ButtonBackground(Colors.orangeAccent),
+        children: [
+          TextComponent(
+            text: text,
+            position: Vector2(60, 20),
+            anchor: Anchor.center,
+          ),
+        ],
+        size: Vector2(120, 40),
+        anchor: Anchor.center,
+      );
 }
 
 class ButtonBackground extends PositionComponent with HasAncestor<LevelButton> {

@@ -20,17 +20,17 @@ class ColorEffectExample extends FlameGame with TapDetector {
         position: Vector2(180, 230),
         size: Vector2.all(100),
       )..add(
-          ColorEffect(
-            Colors.blue,
-            EffectController(
-              duration: 1.5,
-              reverseDuration: 1.5,
-              infinite: true,
-            ),
-            // Means, applies from 0% to 80% of the color
-            opacityTo: 0.8,
+        ColorEffect(
+          Colors.blue,
+          EffectController(
+            duration: 1.5,
+            reverseDuration: 1.5,
+            infinite: true,
           ),
+          // Means, applies from 0% to 80% of the color
+          opacityTo: 0.8,
         ),
+      ),
     );
   }
 }

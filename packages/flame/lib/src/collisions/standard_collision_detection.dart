@@ -13,7 +13,7 @@ import 'package:flame/geometry.dart';
 class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     extends CollisionDetection<ShapeHitbox, B> {
   StandardCollisionDetection({B? broadphase})
-      : super(broadphase: broadphase ?? Sweep<ShapeHitbox>() as B);
+    : super(broadphase: broadphase ?? Sweep<ShapeHitbox>() as B);
 
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
@@ -90,8 +90,10 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       if (!item.aabb.intersectsWithAabb2(_temporaryRayAabb)) {
         continue;
       }
-      final currentResult =
-          item.rayIntersection(ray, out: _temporaryRaycastResult);
+      final currentResult = item.rayIntersection(
+        ray,
+        out: _temporaryRaycastResult,
+      );
       final possiblyFirstResult = !(finalResult?.isActive ?? false);
       if (currentResult != null &&
           (possiblyFirstResult ||
@@ -175,8 +177,9 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     var currentRay = ray;
     for (var i = 0; i < maxDepth; i++) {
       final hasResultObject = (out?.length ?? 0) > i;
-      final storeResult =
-          hasResultObject ? out![i] : RaycastResult<ShapeHitbox>();
+      final storeResult = hasResultObject
+          ? out![i]
+          : RaycastResult<ShapeHitbox>();
       final currentResult = raycast(
         currentRay,
         hitboxFilter: hitboxFilter,

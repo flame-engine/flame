@@ -107,10 +107,10 @@ abstract class ParallaxRenderer {
     Alignment? alignment,
     LayerFill? fill,
     FilterQuality? filterQuality,
-  })  : repeat = repeat ?? ImageRepeat.repeatX,
-        alignment = alignment ?? Alignment.bottomLeft,
-        fill = fill ?? LayerFill.height,
-        filterQuality = filterQuality ?? FilterQuality.low;
+  }) : repeat = repeat ?? ImageRepeat.repeatX,
+       alignment = alignment ?? Alignment.bottomLeft,
+       fill = fill ?? LayerFill.height,
+       filterQuality = filterQuality ?? FilterQuality.low;
 
   void update(double dt);
 
@@ -203,10 +203,14 @@ class ParallaxAnimation extends ParallaxRenderer {
   }) async {
     images ??= Flame.images;
 
-    final animation =
-        await SpriteAnimation.load(path, animationData, images: images);
-    final prerenderedFrames =
-        animation.frames.map((frame) => frame.sprite.toImageSync()).toList();
+    final animation = await SpriteAnimation.load(
+      path,
+      animationData,
+      images: images,
+    );
+    final prerenderedFrames = animation.frames
+        .map((frame) => frame.sprite.toImageSync())
+        .toList();
 
     return ParallaxAnimation(
       animation,
@@ -510,11 +514,11 @@ class Parallax {
     final velocityDelta = velocityMultiplierDelta ?? Vector2.all(1.0);
     final layers = await Future.wait<ParallaxLayer>(
       dataList.mapIndexed((depth, data) async {
-        final velocityMultiplier =
-            List.filled(depth, velocityDelta).fold<Vector2>(
-          velocityDelta,
-          (previousValue, delta) => previousValue.clone()..multiply(delta),
-        );
+        final velocityMultiplier = List.filled(depth, velocityDelta)
+            .fold<Vector2>(
+              velocityDelta,
+              (previousValue, delta) => previousValue.clone()..multiply(delta),
+            );
         final renderer = await data.load(
           repeat,
           alignment,

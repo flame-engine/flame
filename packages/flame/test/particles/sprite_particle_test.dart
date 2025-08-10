@@ -24,22 +24,23 @@ Future<void> main() async {
 
     final sprite = Sprite(image);
     testWithFlameGame(
-        'SpriteParticle allows easily embed Flames Sprite into the effect',
-        (game) async {
-      final particle = SpriteParticle(
-        sprite: sprite,
-        size: Vector2(50, 50),
-        lifespan: 2,
-      );
+      'SpriteParticle allows easily embed Flames Sprite into the effect',
+      (game) async {
+        final particle = SpriteParticle(
+          sprite: sprite,
+          size: Vector2(50, 50),
+          lifespan: 2,
+        );
 
-      final component = ParticleSystemComponent(
-        particle: particle,
-      );
+        final component = ParticleSystemComponent(
+          particle: particle,
+        );
 
-      game.add(component);
-      await game.ready();
-      game.update(1);
-      expect(particle.progress, 0.5);
-    });
+        game.add(component);
+        await game.ready();
+        game.update(1);
+        expect(particle.progress, 0.5);
+      },
+    );
   });
 }

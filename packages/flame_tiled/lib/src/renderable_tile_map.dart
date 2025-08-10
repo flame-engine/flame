@@ -210,7 +210,8 @@ class RenderableTiledMap {
             y,
             named: named,
             ids: ids,
-            all: all ||
+            all:
+                all ||
                 named.contains(layer.layer.name) ||
                 ids.contains(layer.layer.id),
           ),
@@ -257,8 +258,9 @@ class RenderableTiledMap {
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
   }) async {
-    final contents =
-        await (bundle ?? Flame.bundle).loadString('$prefix$fileName');
+    final contents = await (bundle ?? Flame.bundle).loadString(
+      '$prefix$fileName',
+    );
     return fromString(
       contents,
       destTileSize,

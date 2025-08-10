@@ -93,5 +93,41 @@ void main() {
         );
       },
     );
+
+    testWidgets(
+      'render sharply with viewfinder zoom',
+      (tester) async {
+        addTearDown(() async {
+          await tester.binding.setSurfaceSize(null);
+        });
+
+        final flameSvg = await _parseSvgFromTestFile(
+          'test/_resources/hand.svg',
+        );
+
+        tester.view.devicePixelRatio = 1;
+        await tester.binding.setSurfaceSize(const Size(100, 100));
+
+        await tester.pumpWidget(
+          MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Transform.scale(
+              scale: 2,
+              child: CustomPaint(
+                painter: _SvgPainter(flameSvg),
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            './_goldens/render_sharply_with_viewfinder_zoom.png',
+          ),
+        );
+      },
+    );
   });
 }

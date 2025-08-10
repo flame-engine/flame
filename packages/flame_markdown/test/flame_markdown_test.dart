@@ -27,14 +27,14 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-              (el) => _expectElementTextPainter(
-                    el,
-                    'Hello world!',
-                    const TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-            ]),
+          (el) => _expectElementTextPainter(
+            el,
+            'Hello world!',
+            const TextStyle(
+              fontSize: 12,
+            ),
+          ),
+        ]),
       ]);
     });
 
@@ -43,13 +43,13 @@ void main() {
 
       _expectDocument(doc, [
         (node) => _expectParagraph(node, (p) {
-              _expectGroup(p, [
-                (node) => _expectBold(node, 'Flame'),
-                (node) => _expectPlain(node, ': Hello, '),
-                (node) => _expectItalic(node, 'world'),
-                (node) => _expectPlain(node, '!'),
-              ]);
-            }),
+          _expectGroup(p, [
+            (node) => _expectBold(node, 'Flame'),
+            (node) => _expectPlain(node, ': Hello, '),
+            (node) => _expectItalic(node, 'world'),
+            (node) => _expectPlain(node, '!'),
+          ]);
+        }),
       ]);
 
       final element = doc.format(
@@ -69,39 +69,39 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-              (el) => _expectElementGroupText(el, [
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'Flame',
-                          const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          ': Hello, ',
-                          const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'world',
-                          const TextStyle(
-                            fontSize: 12,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          '!',
-                          const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                  ]),
-            ]),
+          (el) => _expectElementGroupText(el, [
+            (el) => _expectElementTextPainter(
+              el,
+              'Flame',
+              const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              ': Hello, ',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              'world',
+              const TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              '!',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ]),
+        ]),
       ]);
     });
 
@@ -110,11 +110,11 @@ void main() {
 
       _expectDocument(doc, [
         (node) => _expectParagraph(node, (p) {
-              _expectGroup(p, [
-                (node) => _expectPlain(node, 'Flame: '),
-                (node) => _expectCode(node, 'var game = FlameGame();'),
-              ]);
-            }),
+          _expectGroup(p, [
+            (node) => _expectPlain(node, 'Flame: '),
+            (node) => _expectCode(node, 'var game = FlameGame();'),
+          ]);
+        }),
       ]);
 
       final element = doc.format(
@@ -131,24 +131,24 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-              (el) => _expectElementGroupText(el, [
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'Flame: ',
-                          const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'var game = FlameGame();',
-                          const TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'monospace',
-                          ),
-                        ),
-                  ]),
-            ]),
+          (el) => _expectElementGroupText(el, [
+            (el) => _expectElementTextPainter(
+              el,
+              'Flame: ',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              'var game = FlameGame();',
+              const TextStyle(
+                fontSize: 12,
+                fontFamily: 'monospace',
+              ),
+            ),
+          ]),
+        ]),
       ]);
     });
 
@@ -159,16 +159,16 @@ void main() {
 
       _expectDocument(doc, [
         (node) => _expectParagraph(node, (p) {
-              _expectBoldGroup(p, [
-                (node) => _expectPlain(node, 'This '),
-                (node) => _expectItalicGroup(node, [
-                      (node) => _expectPlain(node, 'is '),
-                      (node) => _expectCode(node, 'code'),
-                      (node) => _expectPlain(node, ' inside italics'),
-                    ]),
-                (node) => _expectPlain(node, ' inside bold.'),
-              ]);
-            }),
+          _expectBoldGroup(p, [
+            (node) => _expectPlain(node, 'This '),
+            (node) => _expectItalicGroup(node, [
+              (node) => _expectPlain(node, 'is '),
+              (node) => _expectCode(node, 'code'),
+              (node) => _expectPlain(node, ' inside italics'),
+            ]),
+            (node) => _expectPlain(node, ' inside bold.'),
+          ]);
+        }),
       ]);
 
       final element = doc.format(
@@ -191,55 +191,55 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-              (el) => _expectElementGroupText(el, [
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'This ',
-                          const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                    (el) => _expectElementGroupText(el, [
-                          (el) => _expectElementTextPainter(
-                                el,
-                                'is ',
-                                const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                          (el) => _expectElementTextPainter(
-                                el,
-                                'code',
-                                const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  fontFamily: 'monospace',
-                                ),
-                              ),
-                          (el) => _expectElementTextPainter(
-                                el,
-                                ' inside italics',
-                                const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                        ]),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          ' inside bold.',
-                          const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                  ]),
+          (el) => _expectElementGroupText(el, [
+            (el) => _expectElementTextPainter(
+              el,
+              'This ',
+              const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            (el) => _expectElementGroupText(el, [
+              (el) => _expectElementTextPainter(
+                el,
+                'is ',
+                const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              (el) => _expectElementTextPainter(
+                el,
+                'code',
+                const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: 'monospace',
+                ),
+              ),
+              (el) => _expectElementTextPainter(
+                el,
+                ' inside italics',
+                const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
             ]),
+            (el) => _expectElementTextPainter(
+              el,
+              ' inside bold.',
+              const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ]),
+        ]),
       ]);
     });
 
@@ -264,46 +264,47 @@ void main() {
     });
 
     test('several paragraphs with header', () {
-      final markdown =
-          File('example/assets/fire_and_ice.md').readAsStringSync();
+      final markdown = File(
+        'example/assets/fire_and_ice.md',
+      ).readAsStringSync();
       final doc = FlameMarkdown.toDocument(markdown);
 
       _expectDocument(doc, [
         (node) => _expectHeader(node, 1, 'Fire & Ice'),
         (node) => _expectParagraph(node, (p) {
-              _expectGroup(p, [
-                (node) => _expectPlain(
-                      node,
-                      // note: strike-trough is only parsed if enabled
-                      'Some say the world will ~~end~~ in ',
-                    ),
-                (node) => _expectBold(node, 'fire'),
-                (node) => _expectPlain(node, ','),
-              ]);
-            }),
+          _expectGroup(p, [
+            (node) => _expectPlain(
+              node,
+              // note: strike-trough is only parsed if enabled
+              'Some say the world will ~~end~~ in ',
+            ),
+            (node) => _expectBold(node, 'fire'),
+            (node) => _expectPlain(node, ','),
+          ]);
+        }),
         (node) => _expectParagraph(
-              node,
-              (p) => _expectGroup(p, [
-                (node) => _expectPlain(node, 'Some say in '),
-                (node) => _expectItalic(node, 'ice'),
-                (node) => _expectPlain(node, '.'),
-              ]),
-            ),
+          node,
+          (p) => _expectGroup(p, [
+            (node) => _expectPlain(node, 'Some say in '),
+            (node) => _expectItalic(node, 'ice'),
+            (node) => _expectPlain(node, '.'),
+          ]),
+        ),
         (node) => _expectSimpleParagraph(
-              node,
-              "From what I've tasted of >desire<,",
-            ),
+          node,
+          "From what I've tasted of >desire<,",
+        ),
         (node) => _expectParagraph(node, (p) {
-              _expectGroup(p, [
-                (node) => _expectPlain(node, 'I hold with those who favor '),
-                (node) => _expectBold(node, 'fire'),
-                (node) => _expectPlain(node, '.'),
-              ]);
-            }),
+          _expectGroup(p, [
+            (node) => _expectPlain(node, 'I hold with those who favor '),
+            (node) => _expectBold(node, 'fire'),
+            (node) => _expectPlain(node, '.'),
+          ]);
+        }),
         // note: custom attribute is only parsed if enabled
         (node) => _expectParagraph(node, (p) {
-              _expectPlain(p, '[- by Robert Frost]{.author}');
-            }),
+          _expectPlain(p, '[- by Robert Frost]{.author}');
+        }),
       ]);
     });
 
@@ -321,12 +322,12 @@ void main() {
 
       _expectDocument(doc, [
         (node) => _expectParagraph(node, (p) {
-              _expectGroup(p, [
-                (node) => _expectPlain(node, 'Flame '),
-                (node) => _expectStrikethrough(node, 'will be'),
-                (node) => _expectPlain(node, ' is a great game engine!'),
-              ]);
-            }),
+          _expectGroup(p, [
+            (node) => _expectPlain(node, 'Flame '),
+            (node) => _expectStrikethrough(node, 'will be'),
+            (node) => _expectPlain(node, ' is a great game engine!'),
+          ]);
+        }),
       ]);
     });
 
@@ -345,14 +346,14 @@ void main() {
 
       _expectDocument(doc, [
         (node) => _expectParagraph(node, (p) {
-              _expectGroup(p, [
-                (node) => _expectPlain(node, 'This one will be '),
-                (node) => _expectCustom(node, 'red', styleName: 'red'),
-                (node) => _expectPlain(node, ' and this one will be '),
-                (node) => _expectCustom(node, 'blue', styleName: 'blue'),
-                (node) => _expectPlain(node, '.'),
-              ]);
-            }),
+          _expectGroup(p, [
+            (node) => _expectPlain(node, 'This one will be '),
+            (node) => _expectCustom(node, 'red', styleName: 'red'),
+            (node) => _expectPlain(node, ' and this one will be '),
+            (node) => _expectCustom(node, 'blue', styleName: 'blue'),
+            (node) => _expectPlain(node, '.'),
+          ]);
+        }),
       ]);
 
       final element = doc.format(
@@ -374,46 +375,46 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-              (el) => _expectElementGroupText(el, [
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'This one will be ',
-                          const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'red',
-                          const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFFF0000),
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          ' and this one will be ',
-                          const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          'blue',
-                          const TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFF0000FF),
-                          ),
-                        ),
-                    (el) => _expectElementTextPainter(
-                          el,
-                          '.',
-                          const TextStyle(
-                            fontSize: 12,
-                          ),
-                        ),
-                  ]),
-            ]),
+          (el) => _expectElementGroupText(el, [
+            (el) => _expectElementTextPainter(
+              el,
+              'This one will be ',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              'red',
+              const TextStyle(
+                fontSize: 12,
+                color: Color(0xFFFF0000),
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              ' and this one will be ',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              'blue',
+              const TextStyle(
+                fontSize: 12,
+                color: Color(0xFF0000FF),
+              ),
+            ),
+            (el) => _expectElementTextPainter(
+              el,
+              '.',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ]),
+        ]),
       ]);
     });
   });
@@ -513,8 +514,8 @@ void _expectGroup(
   expect(node, isA<GroupTextNode>());
   final group = node as GroupTextNode;
   expect(group.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[index]);
   }
 }
 
@@ -523,8 +524,8 @@ void _expectDocument(
   List<void Function(BlockNode)> expectChildren,
 ) {
   expect(root.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(root.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(root.children[index]);
   }
 }
 
@@ -537,8 +538,8 @@ void _expectElementGroup(
   expect(element, isA<GroupElement>());
   final group = element as GroupElement;
   expect(group.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[index]);
   }
 }
 
@@ -549,8 +550,8 @@ void _expectElementGroupText(
   expect(element, isA<GroupTextElement>());
   final group = element as GroupTextElement;
   expect(group.children, hasLength(expectChildren.length));
-  for (final (idx, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[idx]);
+  for (final (index, expectChild) in expectChildren.indexed) {
+    expectChild(group.children[index]);
   }
 }
 

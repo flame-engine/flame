@@ -6,9 +6,9 @@ mixin ColonistsObject on PositionComponent {
   IntVector2 get tileSize;
 
   IntVector2 get tilePosition => IntVector2(
-        x ~/ Constants.tileSize,
-        y ~/ Constants.tileSize,
-      );
+    x ~/ Constants.tileSize,
+    y ~/ Constants.tileSize,
+  );
 }
 
 abstract class StaticColonistsObject extends SpriteComponent
@@ -22,9 +22,9 @@ abstract class StaticColonistsObject extends SpriteComponent
 
   @override
   IntVector2 get tilePosition => IntVector2(
-        x ~/ Constants.tileSize,
-        y ~/ Constants.tileSize,
-      );
+    x ~/ Constants.tileSize,
+    y ~/ Constants.tileSize,
+  );
 
   StaticColonistsObject(int x, int y) {
     sprite = objectSprite;

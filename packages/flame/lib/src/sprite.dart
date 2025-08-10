@@ -62,6 +62,40 @@ class Sprite {
     src = (position ?? Vector2.zero()).toPositionedRect(srcSize);
   }
 
+  String _createRasterizeCacheKey() {
+    return '${image.hashCode}-${srcPosition.x}-'
+        '${srcPosition.y}-${srcSize.x}-${srcSize.y}';
+  }
+
+  /// Returns a new [Sprite] where the image in memory is just the region
+  /// defined by the original sprite.
+  ///
+  /// If the [images] argument is passed it will be used to cache the
+  /// rasterized image, otherwise the global [Flame.images] will be used.
+  /// If the [cacheKey] is passed in, that will be the key for the cached image,
+  /// otherwise the hash code of the rasterized image will be used as the key.
+  Future<Sprite> rasterize({String? cacheKey, Images? images}) async {
+    final key = cacheKey ?? _createRasterizeCacheKey();
+
+    final imagesCache = images ?? Flame.images;
+
+    if (imagesCache.containsKey(key)) {
+      final cachedImage = imagesCache.fromCache(key);
+      return Sprite(
+        cachedImage,
+        srcSize: srcSize,
+      );
+    }
+
+    final rasterizedImage = await toImage();
+    imagesCache.add(key, rasterizedImage);
+
+    return Sprite(
+      rasterizedImage,
+      srcSize: srcSize,
+    );
+  }
+
   /// Same as [render], but takes both the position and the size as a single
   /// [Rect].
   ///
@@ -101,6 +135,7 @@ class Sprite {
     Vector2? size,
     Anchor anchor = Anchor.topLeft,
     Paint? overridePaint,
+    double? bleed,
   }) {
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
@@ -114,6 +149,13 @@ class Sprite {
       _tmpRenderPosition.x - (anchor.x * _tmpRenderSize.x),
       _tmpRenderPosition.y - (anchor.y * _tmpRenderSize.y),
     );
+
+    if (bleed != null) {
+      _tmpRenderPosition.x -= bleed;
+      _tmpRenderPosition.y -= bleed;
+      _tmpRenderSize.x += bleed * 2;
+      _tmpRenderSize.y += bleed * 2;
+    }
 
     final drawRect = _tmpRenderPosition.toPositionedRect(_tmpRenderSize);
     final drawPaint = overridePaint ?? paint;

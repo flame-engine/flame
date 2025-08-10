@@ -100,12 +100,12 @@ void main() {
 
         expect(
           router.routes.values.whereType<_TestRoute>().every(
-                (e) =>
-                    e.onPopTimes == 0 &&
-                    e.didPopTimes == 0 &&
-                    (e.name == initialRouteName ||
-                        (e.onPushTimes == 0 && e.didPushTimes == 0)),
-              ),
+            (e) =>
+                e.onPopTimes == 0 &&
+                e.didPopTimes == 0 &&
+                (e.name == initialRouteName ||
+                    (e.onPushTimes == 0 && e.didPushTimes == 0)),
+          ),
           isTrue,
         );
 
@@ -314,6 +314,33 @@ void main() {
         router.pop,
         failsAssert('Cannot pop the last route from the Router'),
       );
+    });
+
+    testWithFlameGame('canPop returns correct value', (game) async {
+      final router = RouterComponent(
+        routes: {
+          'A': Route(_ComponentA.new),
+          'B': Route(_ComponentB.new),
+        },
+        initialRoute: 'A',
+      )..addToParent(game);
+      await game.ready();
+
+      // Should return false when only one route is on the stack
+      expect(router.canPop(), false);
+      expect(router.stack.length, 1);
+
+      // Should return true when multiple routes are on the stack
+      router.pushNamed('B');
+      await game.ready();
+      expect(router.canPop(), true);
+      expect(router.stack.length, 2);
+
+      // Should return false again after popping back to one route
+      router.pop();
+      await game.ready();
+      expect(router.canPop(), false);
+      expect(router.stack.length, 1);
     });
 
     testWithFlameGame('popUntilNamed', (game) async {

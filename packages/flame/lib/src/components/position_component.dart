@@ -1,14 +1,12 @@
 import 'dart:math' as math;
-import 'dart:ui' hide Offset;
 
-import 'package:collection/collection.dart';
 import 'package:flame/camera.dart';
+import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/coordinate_transform.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:flame/src/extensions/offset.dart';
-import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame/src/rendering/decorator.dart';
@@ -82,9 +80,9 @@ class PositionComponent extends Component
     super.children,
     super.priority,
     super.key,
-  })  : transform = Transform2D(),
-        _anchor = anchor ?? Anchor.topLeft,
-        _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
+  }) : transform = Transform2D(),
+       _anchor = anchor ?? Anchor.topLeft,
+       _size = NotifyingVector2.copy(size ?? Vector2.zero()) {
     decorator = Transform2DDecorator(transform);
     if (position != null) {
       transform.position = position;
@@ -148,7 +146,7 @@ class PositionComponent extends Component
   @override
   double get angle => transform.angle;
   @override
-  set angle(double a) => transform.angle = a;
+  set angle(double a) => transform.angle = a.toNormalizedAngle();
 
   /// The scale factor of this component. The scale can be different along
   /// the X and Y dimensions. A scale greater than 1 makes the component
@@ -229,23 +227,55 @@ class PositionComponent extends Component
     );
   }
 
-  /// The resulting angle after all the ancestors and the components own angle
-  /// has been applied.
-  double get absoluteAngle {
-    // TODO(spydon): take scale into consideration
-    return ancestors(includeSelf: true)
-        .whereType<ReadOnlyAngleProvider>()
-        .map((c) => c.angle)
-        .sum;
+  /// The resulting angle after all the ancestors and the components own angles
+  /// and scales have been applied.
+  double get absoluteAngle => _absoluteAngle();
+
+  /// The resulting angle after all the ancestors and the components own angles
+  /// and scales have been applied, but without reflecting the angle
+  /// if the component is flipped.
+  double get absoluteAngleWithoutReflection => _absoluteAngle(reflect: false);
+
+  double _absoluteAngle({bool reflect = true}) {
+    var angle = 0.0;
+    var totalScaleX = 1.0;
+    var totalScaleY = 1.0;
+
+    final ancestorChain = ancestors(includeSelf: true).toList(growable: false)
+      ..reverse();
+
+    for (final ancestor in ancestorChain) {
+      if (ancestor is ReadOnlyScaleProvider) {
+        final ancestorScale = (ancestor as ReadOnlyScaleProvider).scale;
+        totalScaleX *= ancestorScale.x;
+        totalScaleY *= ancestorScale.y;
+        if (ancestorScale.x.isNegative) {
+          angle *= -1;
+        }
+        if (ancestorScale.y.isNegative && reflect) {
+          angle -= math.pi - angle;
+        }
+      }
+
+      if (ancestor is ReadOnlyAngleProvider) {
+        final reflected = totalScaleX.isNegative ^ totalScaleY.isNegative;
+        final localAngle = (ancestor as ReadOnlyAngleProvider).angle;
+        angle += reflected ? -localAngle : localAngle;
+      }
+    }
+
+    return angle.toNormalizedAngle();
   }
 
   /// The resulting scale after all the ancestors and the components own scale
   /// has been applied.
-  Vector2 get absoluteScale {
-    return ancestors().whereType<PositionComponent>().fold<Vector2>(
-          scale.clone(),
-          (totalScale, c) => totalScale..multiply(c.scale),
-        );
+  Vector2 get absoluteScale => scale.clone()..multiply(_parentAbsoluteScale);
+
+  Vector2 get _parentAbsoluteScale {
+    return ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
+      Vector2.all(1.0),
+      (totalScale, c) => totalScale..multiply(c.scale),
+    );
   }
 
   /// Measure the distance (in parent's coordinate space) between this
@@ -362,21 +392,43 @@ class PositionComponent extends Component
   Vector2 get absoluteCenter => absolutePositionOfAnchor(Anchor.center);
 
   /// Returns the angle formed by component's orientation vector and a vector
-  /// starting at component's absolute position and ending at [target]. This
-  /// angle is measured in clockwise direction. [target] should be in absolute/world
-  /// coordinate system.
+  /// starting at component's absolute position and ending at [target]. I.e.
+  /// how much the current component need to rotate to face the target. This
+  /// angle is measured in clockwise direction. [target] should be in
+  /// absolute/world coordinate system.
   ///
   /// Uses [nativeAngle] to decide the orientation direction of the component.
   /// See [lookAt] to make the component instantly rotate towards target.
   ///
-  /// Note: If target coincides with the current component, then it is treated
-  /// as being north.
+  /// Note: If target coincides with the current component's position, then it
+  /// is treated as being north.
   double angleTo(Vector2 target) {
-    return math.atan2(
-          target.x - absolutePosition.x,
-          absolutePosition.y - target.y,
-        ) -
-        (nativeAngle + absoluteAngle);
+    final direction = target - absolutePosition;
+    if (direction.isZero()) {
+      // If the target coincides with the component's position, we treat it as
+      // being north.
+      return -nativeAngle % tau;
+    }
+
+    final parentAbsoluteScale = _parentAbsoluteScale;
+    final targetAngle = math.atan2(
+      direction.x * scale.x.sign,
+      -direction.y * scale.y.sign,
+    );
+    final angleDifference = targetAngle - absoluteAngle - nativeAngle;
+
+    final hasOddFlips =
+        parentAbsoluteScale.x.isNegative ^
+        parentAbsoluteScale.y.isNegative ^
+        scale.x.isNegative ^
+        scale.y.isNegative;
+    final hasSelfYFlip =
+        !parentAbsoluteScale.y.isNegative && scale.y.isNegative;
+
+    final result =
+        (hasOddFlips ? -1 : 1) * angleDifference +
+        (hasSelfYFlip ? 1 : 0) * math.pi;
+    return result.toNormalizedAngle();
   }
 
   /// Rotates/snaps the component to look at the [target].
@@ -386,7 +438,9 @@ class PositionComponent extends Component
   /// [target] should to be in absolute/world coordinate system.
   ///
   /// See also: [angleTo]
-  void lookAt(Vector2 target) => angle += angleTo(target);
+  void lookAt(Vector2 target) {
+    angle += angleTo(target);
+  }
 
   //#endregion
 

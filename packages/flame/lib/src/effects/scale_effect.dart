@@ -28,13 +28,12 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
     EffectController controller, {
     void Function()? onComplete,
     ComponentKey? key,
-  }) =>
-      _ScaleToEffect(
-        targetScale,
-        controller,
-        onComplete: onComplete,
-        key: key,
-      );
+  }) => _ScaleToEffect(
+    targetScale,
+    controller,
+    onComplete: onComplete,
+    key: key,
+  );
 
   final Vector2 _scaleFactor;
   late Vector2 _scaleDelta;
@@ -63,12 +62,12 @@ class _ScaleToEffect extends ScaleEffect {
     EffectController controller, {
     void Function()? onComplete,
     super.key,
-  })  : _targetScale = targetScale.clone(),
-        super.by(
-          Vector2.zero(),
-          controller,
-          onComplete: onComplete,
-        );
+  }) : _targetScale = targetScale.clone(),
+       super.by(
+         Vector2.zero(),
+         controller,
+         onComplete: onComplete,
+       );
 
   @override
   void onStart() {

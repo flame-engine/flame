@@ -83,15 +83,15 @@ class RateRoute extends ValueRoute<int>
 
 class DialogBackground extends RectangleComponent with TapCallbacks {
   DialogBackground({super.position, super.size, super.children})
-      : super(
-          anchor: Anchor.center,
-          paint: Paint()..color = const Color(0xee858585),
-        );
+    : super(
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xee858585),
+      );
 }
 
 class Star extends PositionComponent with TapCallbacks {
   Star({required this.value, required this.radius, super.position})
-      : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
+    : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
 
   final int value;
   final double radius;

@@ -27,8 +27,8 @@ class PauseResumeExample extends FlameGame with TapDetector, DoubleTapDetector {
 
     add(
       SpriteAnimationComponent(
-        animation: animation,
-      )
+          animation: animation,
+        )
         ..position = size / 2
         ..anchor = Anchor.center
         ..size = Vector2.all(100),

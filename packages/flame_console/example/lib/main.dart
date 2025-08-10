@@ -32,13 +32,12 @@ class _MyGameAppState extends State<MyGameApp> {
         game: _game,
         overlayBuilderMap: {
           'console': (BuildContext context, MyGame game) => FlameConsoleView(
-                game: game,
-                customCommands:
-                    customCommandsProvider.map((it) => it()).toList(),
-                onClose: () {
-                  _game.overlays.remove('console');
-                },
-              ),
+            game: game,
+            customCommands: customCommandsProvider.map((it) => it()).toList(),
+            onClose: () {
+              _game.overlays.remove('console');
+            },
+          ),
         },
       ),
       floatingActionButton: FloatingActionButton(

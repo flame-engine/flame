@@ -9,7 +9,7 @@ void main() {
   group('AdvancedButtonComponent', () {
     testGolden(
       'label renders correctly',
-      (game) async {
+      (game, tester) async {
         await game.add(
           AdvancedButtonComponent(
             defaultSkin: RectangleComponent(size: Vector2(40, 20)),
@@ -99,8 +99,9 @@ void main() {
           size: componentSize,
         ),
       );
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
@@ -145,8 +146,9 @@ void main() {
         ),
       );
       button.isDisabled = true;
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 

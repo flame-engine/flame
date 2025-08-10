@@ -33,7 +33,7 @@ import 'package:flutter/services.dart';
 /// is removed from the component tree.
 class HardwareKeyboardDetector extends Component {
   HardwareKeyboardDetector({void Function(KeyEvent)? onKeyEvent})
-      : _onKeyEvent = onKeyEvent;
+    : _onKeyEvent = onKeyEvent;
 
   final List<PhysicalKeyboardKey> _physicalKeys = [];
   Set<LogicalKeyboardKey> _logicalKeys = {};

@@ -25,8 +25,12 @@ class ImageParticle extends Particle {
     final destHeight = size?.y ?? srcHeight;
 
     src = Rect.fromLTWH(0, 0, srcWidth, srcHeight);
-    dest =
-        Rect.fromLTWH(-destWidth / 2, -destHeight / 2, destWidth, destHeight);
+    dest = Rect.fromLTWH(
+      -destWidth / 2,
+      -destHeight / 2,
+      destWidth,
+      destHeight,
+    );
   }
 
   @override

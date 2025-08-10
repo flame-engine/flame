@@ -12,14 +12,14 @@ class ExampleCamera3D extends CameraComponent3D
   Vector2 delta = Vector2.zero();
 
   ExampleCamera3D()
-      : super(
-          position: Vector3(0, 2, 4),
-          projection: CameraProjection.perspective,
-          viewport: FixedResolutionViewport(
-            resolution: v64.Vector2(800, 600),
-          ),
-          hudComponents: [SimpleHud()],
-        );
+    : super(
+        position: Vector3(0, 2, 4),
+        projection: CameraProjection.perspective,
+        viewport: FixedResolutionViewport(
+          resolution: v64.Vector2(800, 600),
+        ),
+        hudComponents: [SimpleHud()],
+      );
 
   CameraMode get mode => _mode;
 

@@ -35,8 +35,8 @@ class RouterComponent extends Component {
     this.onUnknownRoute,
     super.key,
     super.priority = 0x7fffffff,
-  })  : _routes = routes,
-        _routeFactories = routeFactories ?? {} {
+  }) : _routes = routes,
+       _routeFactories = routeFactories ?? {} {
     routes.forEach((name, route) => route.name = name);
   }
 
@@ -79,6 +79,16 @@ class RouterComponent extends Component {
   /// Returns the route that is below the current topmost route, if it exists.
   Route? get previousRoute {
     return _routeStack.length >= 2 ? _routeStack[_routeStack.length - 2] : null;
+  }
+
+  /// Returns whether the current route can be popped.
+  ///
+  /// Returns `true` if there are at least 2 routes in the stack, meaning the
+  /// current route can be popped without removing the last remaining route.
+  /// Returns `false` if there is only one route left, as the router must
+  /// maintain at least one route on the stack.
+  bool canPop() {
+    return _routeStack.length > 1;
   }
 
   /// Puts the route [name] on top of the navigation stack.

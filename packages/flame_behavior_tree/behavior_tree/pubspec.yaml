@@ -9,12 +9,12 @@ funding:
   - https://patreon.com/bluefireoss
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   meta: ^1.12.0
 
 dev_dependencies:
-  flame_lint: ^1.4.0
+  flame_lint: ^1.4.1
   mocktail: ^1.0.4
   test: any

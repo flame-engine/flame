@@ -16,5 +16,5 @@ abstract class UniformInstance<K, T> extends Resource<T?> {
 
   void set(K key, T value);
 
-  K makeKey(int? idx, String? field);
+  K makeKey(int? index, String? field);
 }

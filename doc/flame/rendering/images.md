@@ -197,6 +197,110 @@ Here is a complete
 [example using sprite as widgets](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/widgets/sprite_widget_example.dart).
 
 
+### Sprite Bleeding
+
+In some cases when rendering sprites next to each other, when the edges of the sprites are touching,
+you may see a rendering artifact called "ghost lines" between them.
+
+This happens especially when the sprites are positioned in coordinates that are not whole numbers,
+or when scaling is applied to the canvas.
+
+Those lines appear because floating-point numbers aren't 100% accurate in computer science. Due
+to rounding errors, even though the sprites are supposed to be touching, they are not rendered that
+way.
+
+One way to avoid this is to use a technique called "bleeding", which consists of adding a very small
+margin to the edges of the sprites, so that when they are rendered, they will overlap a bit and thus
+avoid rendering the ghost lines.
+
+Flame provides a way to do this by using the `bleed` parameter in the `Sprite` render method. This
+is a double value that represents the amount of bleeding to be applied to the edges of the sprite.
+
+For example, if you do:
+
+```dart
+final image = await images.load('player.png');
+final playerFrame = Sprite(
+  image,
+  srcPosition: Vector2(32.0, 0),
+  srcSize: Vector2(16.0, 16.0),
+);
+playerFrame.render(canvas, 16.0, 16.0, bleed: 1.0);
+```
+
+The sprite will be rendered with a bleed amount of 1.0, meaning that it will have
+a value of 1 pixels added to each edge of the sprite.
+
+For users of the `SpriteComponent`, using the bleeding feature is also quite simple, it is just
+a matter of passing a value to the `bleed` attribute in the component constructor:
+
+```dart
+final sprite = Sprite(...);
+
+final spriteComponent = SpriteComponent(
+  sprite: sprite,
+  size: Vector2.all(16.0),
+  bleed: 1.0, // bleed value
+);
+```
+
+Note that the amount of the bleed value depends on the size of the sprite, so a bleed value of 1.0
+might not make much difference for a sprite of 100x100.
+
+
+### Sprite Rasterization
+
+Rasterizing a sprite is the process of extracting the selected area of the image from that sprite,
+storing it in memory, and returning a new Sprite that contains that rasterized image.
+
+That can be used for a variety of reasons, one of the most useful ones is to avoid texture leaking
+when using a sprite sheet.
+
+Texture leaking can happen for the same reason as in the issue explained above (floating point
+rounding errors), and it causes parts outside of a sprite selection to also be rendered.
+
+Extracting the sprite selection and rasterizing it before rendering is a way to avoid this issue,
+since it then renders an image that only contains the selected area.
+
+Example of using a `RasterSpriteComponent`:
+
+```dart
+final sprite = await Sprite.load('flame.png');
+final rasterSpriteComponent = RasterSpriteComponent(
+  sprite: sprite,
+  size: Vector2.all(16.0),
+);
+```
+
+When using the `RasterSpriteComponent`, it will automatically rasterize the sprite when it is
+loaded.
+
+If you need to rasterize a sprite manually, you can use the `Sprite.rasterize` method:
+
+```dart
+final image = await images.load('player.png');
+final playerFrame = Sprite(
+  image,
+  srcPosition: Vector2(32.0, 0),
+  srcSize: Vector2(16.0, 16.0),
+);
+
+final rasterizedSprite = await playerFrame.rasterize();
+```
+
+By default, the `rasterize` method will use `Flame.images` to cache the rasterized image,
+auto generating a key based on the sprite's source position and size. If you want to use a custom
+key for the rasterized image, or use a different cache object, you can pass it as an optional
+parameter:
+
+```dart
+final rasterizedSprite = await playerFrame.rasterize(
+  cacheKey: 'custom_key_for_rasterized_image',
+  images: Images(),
+);
+```
+
+
 ## SpriteBatch
 
 If you have a sprite sheet (also called an image atlas, which is an image with smaller images

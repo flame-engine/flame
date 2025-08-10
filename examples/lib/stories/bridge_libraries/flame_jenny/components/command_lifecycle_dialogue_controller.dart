@@ -10,7 +10,7 @@ class CommandLifecycleDialogueController extends DialogueControllerComponent {
   });
   final FutureOr<void> Function(UserDefinedCommand command) onCommandOverride;
   final FutureOr<void> Function(UserDefinedCommand command)
-      onCommandFinishOverride;
+  onCommandFinishOverride;
 
   @override
   FutureOr<void> onCommand(UserDefinedCommand command) async {

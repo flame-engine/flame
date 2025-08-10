@@ -25,20 +25,21 @@ commands work.
     final yarnProject = YarnProject();
     final dialogueControllerComponent = CommandLifecycleDialogueController(
       onCommandOverride: (command) async {
-        final exampleVariable =
-            yarnProject.variables.getVariable(r'$exampleVariable');
+        final exampleVariable = yarnProject.variables.getVariable(
+          r'$exampleVariable',
+        );
         onCommandLabel.text = 'onCommand: $exampleVariable';
       },
       onCommandFinishOverride: (command) async {
-        final exampleVariable =
-            yarnProject.variables.getVariable(r'$exampleVariable');
+        final exampleVariable = yarnProject.variables.getVariable(
+          r'$exampleVariable',
+        );
         onCommandFinishLabel.text = 'onCommandFinish: $exampleVariable';
       },
     );
     add(dialogueControllerComponent);
     add(
       ColumnComponent(
-        shrinkWrap: true,
         children: [
           onCommandLabel,
           onCommandFinishLabel,

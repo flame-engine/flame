@@ -31,12 +31,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
       'Zoom',
       (context) {
         return GameWidget(
-          game: ZoomExample(
-            viewportResolution: Vector2(
-              context.numberProperty('viewport width', 500),
-              context.numberProperty('viewport height', 500),
-            ),
-          ),
+          game: ZoomExample(),
         );
       },
       codeLink: baseLink('camera_and_viewport/zoom_example.dart'),
@@ -90,8 +85,9 @@ void addCameraAndViewportStories(Dashbook dashbook) {
     ..add(
       'Follow and World bounds',
       (_) => GameWidget(game: CameraFollowAndWorldBoundsExample()),
-      codeLink:
-          baseLink('camera_and_viewport/camera_follow_and_world_bounds.dart'),
+      codeLink: baseLink(
+        'camera_and_viewport/camera_follow_and_world_bounds.dart',
+      ),
       info: CameraFollowAndWorldBoundsExample.description,
     );
 }

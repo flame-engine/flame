@@ -12,10 +12,10 @@ class SpriteBodyExample extends Forge2DGame {
   ''';
 
   SpriteBodyExample()
-      : super(
-          gravity: Vector2(0, 10.0),
-          world: SpriteBodyWorld(),
-        );
+    : super(
+        gravity: Vector2(0, 10.0),
+        world: SpriteBodyWorld(),
+      );
 }
 
 class SpriteBodyWorld extends Forge2DWorld

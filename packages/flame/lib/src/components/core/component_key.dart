@@ -1,7 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:meta/meta.dart';
 
-var _idx = 0;
+var _index = 0;
 
 /// A key that can be used to identify a component and later
 /// retrieve it from its [FlameGame] ancestor.
@@ -12,7 +12,7 @@ class ComponentKey {
 
   /// Creates a key that is unique, each instance will only
   /// be equal to itself.
-  ComponentKey.unique() : _internalHash = _idx++;
+  ComponentKey.unique() : _internalHash = _index++;
 
   final int _internalHash;
 

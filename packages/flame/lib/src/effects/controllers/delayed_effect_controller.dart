@@ -5,10 +5,10 @@ import 'package:flame/effects.dart';
 class DelayedEffectController extends EffectController
     with HasSingleChildEffectController {
   DelayedEffectController(EffectController child, {required this.delay})
-      : assert(delay >= 0, 'Delay must be non-negative: $delay'),
-        _child = child,
-        _timer = 0,
-        super.empty();
+    : assert(delay >= 0, 'Delay must be non-negative: $delay'),
+      _child = child,
+      _timer = 0,
+      super.empty();
 
   final EffectController _child;
   final double delay;
@@ -31,8 +31,8 @@ class DelayedEffectController extends EffectController
 
   @override
   double? get duration {
-    final d = _child.duration;
-    return d == null ? null : d + delay;
+    final childDuration = _child.duration;
+    return childDuration == null ? null : childDuration + delay;
   }
 
   @override
@@ -41,7 +41,7 @@ class DelayedEffectController extends EffectController
       return _child.advance(dt);
     }
     _timer += dt;
-    if (_timer > delay) {
+    if (_timer >= delay) {
       final t = _child.advance(_timer - delay);
       _timer = delay;
       return t;

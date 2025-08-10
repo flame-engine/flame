@@ -1,3 +1,12 @@
+## 3.0.5
+
+ - Update a dependency to the latest release.
+
+## 3.0.4
+
+ - **FIX**: Add optional key parameter to TiledComponent.load method ([#3630](https://github.com/flame-engine/flame/issues/3630)). ([5a27746e](https://github.com/flame-engine/flame/commit/5a27746ee4dbab17565472133274dd1308525978))
+ - **FIX**: PostProcessComponent should size dynamically ([#3611](https://github.com/flame-engine/flame/issues/3611)). ([baecb861](https://github.com/flame-engine/flame/commit/baecb86186a1bff7f21d804e7867f894d2f9d23c))
+
 ## 3.0.3
 
  - Update a dependency to the latest release.

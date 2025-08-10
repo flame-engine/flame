@@ -23,9 +23,9 @@ class VariableStorage {
       num() => NumericVariable(name, this),
       bool() => BooleanVariable(name, this),
       _ => throw DialogueError(
-          'Cannot convert variable $name with type ${value.runtimeType} to '
-          'an expression',
-        ),
+        'Cannot convert variable $name with type ${value.runtimeType} to '
+        'an expression',
+      ),
     };
   }
 

@@ -79,8 +79,8 @@ void main() {
       var called = 0;
 
       game.componentsNotifier<PositionComponent>().addListener(
-            () => parentCalled++,
-          );
+        () => parentCalled++,
+      );
       game.componentsNotifier<_Enemy>().addListener(() => called++);
 
       expect(game.notifiers.length, equals(2));

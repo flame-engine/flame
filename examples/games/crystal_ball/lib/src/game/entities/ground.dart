@@ -17,37 +17,37 @@ class Rectangle extends PositionComponent
         ParentIsA<Ground>,
         HasGameReference<CrystalBallGame> {
   Rectangle(double y)
-      : super(
-          anchor: Anchor.topCenter,
-          position: Vector2(0, y),
-          size: Vector2(
-            kCameraSize.x,
-            kCameraSize.y / 2,
+    : super(
+        anchor: Anchor.topCenter,
+        position: Vector2(0, y),
+        size: Vector2(
+          kCameraSize.x,
+          kCameraSize.y / 2,
+        ),
+        children: [
+          RectangleHitbox(
+            size: Vector2(
+              kCameraSize.x,
+              kCameraSize.y / 2,
+            ),
           ),
-          children: [
+          RectangleHitbox(
+            position: Vector2(0, kPlayerRadius),
+            size: Vector2(
+              kCameraSize.x,
+              kCameraSize.y / 2,
+            ),
+          ),
+          for (var i = 2; i < 30; i++)
             RectangleHitbox(
+              position: Vector2(0, kPlayerRadius * i),
               size: Vector2(
                 kCameraSize.x,
                 kCameraSize.y / 2,
               ),
             ),
-            RectangleHitbox(
-              position: Vector2(0, kPlayerRadius),
-              size: Vector2(
-                kCameraSize.x,
-                kCameraSize.y / 2,
-              ),
-            ),
-            for (var i = 2; i < 30; i++)
-              RectangleHitbox(
-                position: Vector2(0, kPlayerRadius * i),
-                size: Vector2(
-                  kCameraSize.x,
-                  kCameraSize.y / 2,
-                ),
-              ),
-          ],
-        );
+        ],
+      );
 
   double get topEdge => absolutePositionOfAnchor(Anchor.topCenter).y;
 }

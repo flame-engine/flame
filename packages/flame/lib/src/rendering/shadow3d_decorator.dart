@@ -27,14 +27,14 @@ class Shadow3DDecorator extends Decorator {
     double? blur,
     double? opacity,
     Color? baseColor,
-  })  : _base = base?.clone() ?? Vector2.zero(),
-        _ascent = ascent ?? 0,
-        _angle = angle ?? -1.4,
-        _shift = xShift ?? 100.0,
-        _scale = yScale ?? 1.0,
-        _blur = blur ?? 0,
-        _opacity = opacity ?? 0.6,
-        _baseColor = baseColor ?? BasicPalette.black.color;
+  }) : _base = base?.clone() ?? Vector2.zero(),
+       _ascent = ascent ?? 0,
+       _angle = angle ?? -1.4,
+       _shift = xShift ?? 100.0,
+       _scale = yScale ?? 1.0,
+       _blur = blur ?? 0,
+       _opacity = opacity ?? 0.6,
+       _baseColor = baseColor ?? BasicPalette.black.color;
 
   /// Coordinates of the point where the component "touches the ground". If the
   /// component is airborne (i.e. [ascent] is non-zero), then this should be the

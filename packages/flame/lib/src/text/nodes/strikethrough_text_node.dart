@@ -13,7 +13,7 @@ class StrikethroughTextNode extends InlineTextNode {
   StrikethroughTextNode.simple(String text) : child = PlainTextNode(text);
 
   StrikethroughTextNode.group(List<InlineTextNode> children)
-      : child = GroupTextNode(children);
+    : child = GroupTextNode(children);
 
   final InlineTextNode child;
 

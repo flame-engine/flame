@@ -16,8 +16,7 @@ class DecimalFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('decimal', DecimalFn.new, args, errorFn);
+  ) => num1Builder('decimal', DecimalFn.new, args, errorFn);
 
   @override
   num get value {

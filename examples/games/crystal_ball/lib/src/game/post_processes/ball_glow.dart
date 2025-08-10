@@ -20,15 +20,16 @@ class BallGlow extends PostProcessComponent<BallGlowPostProcess>
   }) : super(postProcess: BallGlowPostProcess());
 
   @override
-  Future<void> onLoad() async {
+  Future<void> onLoad() {
     postProcess.world = game.world;
-    await super.onLoad();
+    return super.onLoad();
   }
 
   @override
   void update(double dt) {
     position = game.world.cameraTarget.position;
     size = game.size;
+    super.update(dt);
   }
 }
 
@@ -59,8 +60,12 @@ class BallGlowPostProcess extends PostProcess {
     Vector2 size,
     Canvas canvas,
   ) {
-    final origin =
-        world.findGame()!.camera.visibleWorldRect.topLeft.toVector2();
+    final origin = world
+        .findGame()!
+        .camera
+        .visibleWorldRect
+        .topLeft
+        .toVector2();
     final theBall = world.theBall;
     final ballPosition = theBall.absolutePosition;
     final uvBall = (ballPosition - origin)..divide(kCameraSize);

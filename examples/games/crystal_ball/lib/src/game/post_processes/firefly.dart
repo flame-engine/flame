@@ -33,8 +33,9 @@ class FireflyPostProcess extends PostProcess {
 
       final groundPosition =
           world.ground.rectangle.absolutePosition + Vector2(0, 1800);
-      final globalGroundPosition =
-          camera.viewfinder.localToGlobal(groundPosition);
+      final globalGroundPosition = camera.viewfinder.localToGlobal(
+        groundPosition,
+      );
       final uvGround = globalGroundPosition.y / size.y;
 
       final cameraVerticalPos = world.cameraTarget.position.clone()

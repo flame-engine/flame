@@ -20,8 +20,8 @@ class PositionProviderImpl implements PositionProvider {
   PositionProviderImpl({
     Vector2 Function()? getValue,
     void Function(Vector2)? setValue,
-  })  : _getter = getValue,
-        _setter = setValue;
+  }) : _getter = getValue,
+       _setter = setValue;
 
   final Vector2 Function()? _getter;
   final void Function(Vector2)? _setter;

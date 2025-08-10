@@ -9,7 +9,7 @@ void main() {
   group('HasDecorator', () {
     testGolden(
       'Component rendering with and without a Decorator',
-      (game) async {
+      (game, tester) async {
         await game.add(
           _DecoratedComponent(
             position: Vector2.all(25),
@@ -31,7 +31,7 @@ void main() {
 
 class _DecoratedComponent extends PositionComponent {
   _DecoratedComponent({super.position, super.size})
-      : super(anchor: Anchor.center);
+    : super(anchor: Anchor.center);
 
   final paint = Paint()..color = const Color(0xff30ccd2);
 

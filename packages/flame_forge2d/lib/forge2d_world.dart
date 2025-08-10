@@ -12,7 +12,7 @@ class Forge2DWorld extends World {
     forge2d.ContactListener? contactListener,
     super.children,
   }) : physicsWorld = forge2d.World(gravity ?? defaultGravity)
-          ..setContactListener(contactListener ?? WorldContactListener());
+         ..setContactListener(contactListener ?? WorldContactListener());
 
   static final Vector2 defaultGravity = Vector2(0, 10.0);
 

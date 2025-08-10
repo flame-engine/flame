@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
@@ -34,9 +35,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionComponent>().every(
+          (c) => shape.containsPoint(c.position),
+        ),
         isTrue,
       );
     });
@@ -50,8 +51,11 @@ void main() {
           size: Vector2.all(200),
         );
         final spawn = SpawnComponent(
-          multiFactory: (_) =>
-              [PositionComponent(), PositionComponent(), PositionComponent()],
+          multiFactory: (_) => [
+            PositionComponent(),
+            PositionComponent(),
+            PositionComponent(),
+          ],
           period: 1,
           area: shape,
           random: random,
@@ -71,9 +75,9 @@ void main() {
           game.update(random.nextDouble());
         }
         expect(
-          world.children
-              .query<PositionComponent>()
-              .every((c) => shape.containsPoint(c.position)),
+          world.children.query<PositionComponent>().every(
+            (c) => shape.containsPoint(c.position),
+          ),
           isTrue,
         );
       },
@@ -104,9 +108,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionComponent>().every(
+          (c) => shape.containsPoint(c.position),
+        ),
         isTrue,
       );
     });
@@ -142,9 +146,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionComponent>().every(
+          (c) => shape.containsPoint(c.position),
+        ),
         isTrue,
       );
     });
@@ -172,12 +176,13 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => c.position == Vector2.all(1000)),
+        world.children.query<PositionComponent>().every(
+          (c) => c.position == Vector2.all(1000),
+        ),
         isTrue,
       );
     });
+
     testWithFlameGame('Can self position multiple components', (game) async {
       final random = Random(0);
       final spawn = SpawnComponent(
@@ -205,9 +210,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => c.position == Vector2.all(1000)),
+        world.children.query<PositionComponent>().every(
+          (c) => c.position == Vector2.all(1000),
+        ),
         isTrue,
       );
     });
@@ -291,8 +296,9 @@ void main() {
       },
     );
 
-    testWithFlameGame('Spawns components within irregular period',
-        (game) async {
+    testWithFlameGame('Spawns components within irregular period', (
+      game,
+    ) async {
       final random = Random(0);
       // The first two periods will be ~4.3 and ~3.85
       final spawn = SpawnComponent.periodRange(
@@ -314,5 +320,229 @@ void main() {
       game.update(0);
       expect(world.children.length, 3);
     });
+
+    testWithFlameGame(
+      'Stops spawning after reaching spawnCount',
+      (game) async {
+        final random = Random(0);
+        final spawn = SpawnComponent(
+          factory: (_) => _CountComponent(),
+          period: 1,
+          spawnCount: 3,
+          random: random,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+
+        // Simulate updates to reach the spawnCount limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(1),
+        );
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(2),
+        );
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(3),
+        );
+
+        // Ensure no more components are spawned after reaching the limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(3),
+        );
+        expect(spawn.isMounted, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'Stops spawning multiple components after reaching spawnCount',
+      (game) async {
+        final random = Random(0);
+        final spawn = SpawnComponent(
+          multiFactory: (_) => [
+            _CountComponent(),
+            _CountComponent(),
+            _CountComponent(),
+          ],
+          period: 1,
+          spawnCount: 6,
+          random: random,
+        );
+        final world = game.world;
+        await world.ensureAdd(spawn);
+
+        // Simulate updates to reach the spawnCount limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(3),
+        );
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(6),
+        );
+
+        // Ensure no more components are spawned after reaching the limit
+        game.update(1.0);
+        game.update(0.0);
+        expect(
+          world.children.whereType<_CountComponent>().toList(),
+          hasLength(6),
+        );
+        expect(spawn.isMounted, isFalse);
+      },
+    );
+
+    group('With target', () {
+      testWithFlameGame(
+        'Spawns within target bounds',
+        (game) async {
+          final target = PositionComponent(
+            size: Vector2(200, 200),
+            position: Vector2(50, 50),
+          );
+          final spawn = SpawnComponent(
+            factory: (_) => PositionComponent(),
+            period: 1,
+            target: target,
+          );
+          await game.ensureAdd(target);
+          await game.ensureAdd(spawn);
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(1));
+          expect(
+            target.children.query<PositionComponent>().every(
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
+            isTrue,
+          );
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(2));
+          expect(
+            target.children.query<PositionComponent>().every(
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
+            isTrue,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Spawns multiple components within target bounds',
+        (game) async {
+          final target = PositionComponent(
+            size: Vector2(200, 200),
+            position: Vector2(50, 50),
+          );
+          final spawn = SpawnComponent(
+            multiFactory: (_) => [
+              PositionComponent(),
+              PositionComponent(),
+              PositionComponent(),
+            ],
+            period: 1,
+            target: target,
+          );
+          await game.ensureAdd(target);
+          await game.ensureAdd(spawn);
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(3));
+          expect(
+            target.children.query<PositionComponent>().every(
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
+            isTrue,
+          );
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(6));
+          expect(
+            target.children.query<PositionComponent>().every(
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
+            isTrue,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Spawns components with selfPositioning within target bounds',
+        (game) async {
+          final target = PositionComponent(
+            size: Vector2(200, 200),
+            position: Vector2(50, 50),
+          );
+          final spawn = SpawnComponent(
+            factory: (_) => PositionComponent(position: Vector2(100, 100)),
+            period: 1,
+            target: target,
+            selfPositioning: true,
+          );
+          await game.ensureAdd(target);
+          await game.ensureAdd(spawn);
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(1));
+          expect(
+            target.children.query<PositionComponent>().every(
+              (c) => c.position == Vector2(100, 100),
+            ),
+            isTrue,
+          );
+
+          game.update(1.0);
+          game.update(0.0);
+          expect(target.children.whereType<PositionComponent>(), hasLength(2));
+          expect(
+            target.children.query<PositionComponent>().every(
+              (c) => c.position == Vector2(100, 100),
+            ),
+            isTrue,
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'Throws assertion when target is set without area',
+        (game) async {
+          final target = Component();
+
+          expectLater(
+            game.ensureAdd(
+              SpawnComponent(
+                factory: (_) => PositionComponent(),
+                period: 1,
+                target: target,
+              ),
+            ),
+            throwsA(isA<AssertionError>()),
+          );
+        },
+      );
+    });
   });
 }
+
+class _CountComponent extends PositionComponent {}

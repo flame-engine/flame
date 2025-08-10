@@ -230,9 +230,9 @@ class _MultiPaintOpacityProvider<T extends Object> implements OpacityProvider {
     if (includeLayers) {
       final paintLayersInternal = target.paintLayersInternal;
       for (var i = 0; i < (paintLayersInternal?.length ?? 0); ++i) {
-        paintLayersInternal![i].color = paintLayersInternal[i]
-            .color
-            .withValues(alpha: value * _layerOpacityRatios![i]);
+        paintLayersInternal![i].color = paintLayersInternal[i].color.withValues(
+          alpha: value * _layerOpacityRatios![i],
+        );
       }
     }
   }

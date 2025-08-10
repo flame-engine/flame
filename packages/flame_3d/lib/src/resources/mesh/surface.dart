@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d/src/graphics/gpu_context_wrapper.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 enum PrimitiveType {
@@ -73,10 +74,10 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
   gpu.DeviceBuffer? createResource() {
     final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
     resourceSizeInByes = sizeInBytes;
-    return gpu.gpuContext.createDeviceBuffer(
-      gpu.StorageMode.hostVisible,
-      sizeInBytes,
-    )
+    return GpuContextWrapper(gpu.gpuContext).createDeviceBuffer(
+        gpu.StorageMode.hostVisible,
+        sizeInBytes,
+      )
       ..overwrite(_vertices.asByteData())
       ..overwrite(
         _indices.asByteData(),

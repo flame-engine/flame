@@ -157,7 +157,7 @@ void main() {
         'Should respect transforms',
         game: _SnapshotTestGame(),
         size: Vector2(200, 200),
-        (game) async {
+        (game, tester) async {
           final snapshotComponent =
               (game as _SnapshotTestGame).snapshotComponent;
 

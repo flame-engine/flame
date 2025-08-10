@@ -38,11 +38,11 @@ abstract class Component3D extends Component with HasWorldReference<World3D> {
     Vector3? scale,
     Quaternion? rotation,
     List<Component3D> children = const [],
-  })  : transform = Transform3D()
-          ..position = position ?? Vector3.zero()
-          ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
-          ..scale = scale ?? Vector3.all(1),
-        super(children: children);
+  }) : transform = Transform3D()
+         ..position = position ?? Vector3.zero()
+         ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
+         ..scale = scale ?? Vector3.all(1),
+       super(children: children);
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The

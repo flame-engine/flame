@@ -29,12 +29,12 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
     super.anchor,
     super.children,
     super.priority,
-  })  : _button = button,
-        _buttonDown = buttonDown,
-        super(
-          current: ButtonState.up,
-          size: size ?? button?.originalSize,
-        );
+  }) : _button = button,
+       _buttonDown = buttonDown,
+       super(
+         current: ButtonState.up,
+         size: size ?? button?.originalSize,
+       );
 
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;
