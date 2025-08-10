@@ -15,6 +15,7 @@ class Player extends MeshComponent
     with HasGameReference<ExampleGame3D>, KeyboardHandler {
   final Vector2 _input = Vector2.zero();
 
+  bool isRunning = false;
   double speedY = 0.0;
 
   double _lookAngle = 0.0;
@@ -39,6 +40,13 @@ class Player extends MeshComponent
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final shiftKeys = {
+      LogicalKeyboardKey.shift,
+      LogicalKeyboardKey.shiftLeft,
+      LogicalKeyboardKey.shiftRight,
+    };
+    isRunning = shiftKeys.any(keysPressed.contains);
+
     final isDown = event is KeyDownEvent || event is KeyRepeatEvent;
     if (isDown && event.logicalKey == LogicalKeyboardKey.space) {
       jump();
@@ -69,7 +77,10 @@ class Player extends MeshComponent
   void _handleMovement(double dt) {
     lookAngle += -_input.x * _rotationSpeed * dt;
 
-    final movement = lookAt.scaled(-_input.y * _walkingSpeed * dt);
+    final runningModifier = isRunning ? 2.5 : 1.0;
+    final movement = lookAt.scaled(
+      -_input.y * runningModifier * _walkingSpeed * dt,
+    );
     position.add(movement);
 
     if (speedY != 0 || position.y > _floorHeight) {
