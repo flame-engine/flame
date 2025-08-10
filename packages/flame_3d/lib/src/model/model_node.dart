@@ -1,7 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flame_3d/src/model/animation_state.dart';
-import 'package:ordered_set/comparing.dart';
 
 /// A node wraps over a mesh as part of a 3D model, including its joints and
 /// local transformations.
@@ -72,8 +72,7 @@ class ModelNode {
       }
 
       final jointTransforms =
-          (globalToLocalJointMap.entries.toList()
-                ..sort(Comparing.on((a) => a.value)))
+          (globalToLocalJointMap.entries..sortedBy((e) => e.value))
               .map((e) => e.key)
               .map((jointIndex) {
                 final joint = joints[jointIndex];
