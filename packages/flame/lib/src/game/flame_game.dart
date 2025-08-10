@@ -282,7 +282,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         if (_pausedBecauseBackgrounded) {
           resumeEngine();
         }
-        break;
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
@@ -290,7 +289,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
           pauseEngine();
           _pausedBecauseBackgrounded = true;
         }
-        break;
     }
   }
 
