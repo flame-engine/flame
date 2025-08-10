@@ -65,7 +65,7 @@ class ModelNode {
   ) {
     final jointTransformsPerSurface = <int, List<Matrix4>>{};
     final surfaces = mesh?.surfaces ?? [];
-    for (final (idx, surface) in surfaces.indexed) {
+    for (final (index, surface) in surfaces.indexed) {
       final globalToLocalJointMap = surface.jointMap;
       if (globalToLocalJointMap == null) {
         continue;
@@ -90,7 +90,7 @@ class ModelNode {
         return transform;
       }).toList();
 
-      jointTransformsPerSurface[idx] = jointTransforms;
+      jointTransformsPerSurface[index] = jointTransforms;
     }
 
     return jointTransformsPerSurface;

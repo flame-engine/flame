@@ -28,8 +28,8 @@ class ModelComponent extends Object3D {
   @override
   void bind(GraphicsDevice device) {
     final nodes = model.processNodes(_animation);
-    for (final MapEntry(key: idx, value: node) in nodes.entries) {
-      if (_hiddenNodes.contains(idx)) {
+    for (final MapEntry(key: index, value: node) in nodes.entries) {
+      if (_hiddenNodes.contains(index)) {
         continue;
       }
 
@@ -62,8 +62,8 @@ class ModelComponent extends Object3D {
     _animation.startAnimation(animation, resetClock: resetClock);
   }
 
-  void playAnimationByIdx(int idx, {bool resetClock = true}) {
-    final animation = model.animations[idx];
+  void playAnimationByIndex(int index, {bool resetClock = true}) {
+    final animation = model.animations[index];
     _animation.startAnimation(animation, resetClock: resetClock);
   }
 

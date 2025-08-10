@@ -4,8 +4,7 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 enum WrapMode {
   clampToEdge('CLAMP_TO_EDGE', 33071),
   mirroredRepeat('MIRRORED_REPEAT', 33648),
-  repeat('REPEAT', 10497),
-  ;
+  repeat('REPEAT', 10497);
 
   final String name;
   final int value;

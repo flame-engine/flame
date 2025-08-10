@@ -145,16 +145,16 @@ class Primitive extends GltfNode {
     final localizedJoints = joints.map((joint) {
       return Vector4.array(
         joint.storage.map((e) {
-          final idx = e.toInt();
-          if (idx != e) {
+          final index = e.toInt();
+          if (index != e) {
             throw StateError('Invalid joint index: $e');
           }
           // TODO(luan): remove this logic entirely once we support arrays
-          if (e == 0.0 && globalToLocalJointMap[idx] == null) {
+          if (e == 0.0 && globalToLocalJointMap[index] == null) {
             // this must be a 0 weight value that just happens to be id = 0
             return 0.0;
           }
-          return globalToLocalJointMap[idx]!.toDouble();
+          return globalToLocalJointMap[index]!.toDouble();
         }).toList(),
       );
     }).toList();

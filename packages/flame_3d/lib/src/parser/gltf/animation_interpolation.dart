@@ -21,8 +21,7 @@ enum AnimationInterpolation {
   /// For each input element, the output stores three elements, an in-tangent,
   /// a spline vertex, and an out-tangent.
   /// There **MUST** be at least two keyframes when using this interpolation.
-  cubicSpline('CUBICSPLINE'), // cSpell:ignore CUBICSPLINE
-  ;
+  cubicSpline('CUBICSPLINE'); // cSpell:ignore CUBICSPLINE
 
   final String value;
 

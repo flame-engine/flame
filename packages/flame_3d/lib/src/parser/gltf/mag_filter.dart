@@ -3,8 +3,7 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 /// Magnification filter. Valid values correspond to WebGL enums.
 enum MagFilter {
   nearest('NEAREST', 9728),
-  linear('LINEAR', 9729),
-  ;
+  linear('LINEAR', 9729);
 
   final String name;
   final int value;

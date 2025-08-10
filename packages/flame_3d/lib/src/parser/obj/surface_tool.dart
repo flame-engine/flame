@@ -80,13 +80,13 @@ class SurfaceTool {
     _vertices.clear();
 
     for (final vertex in oldVertices) {
-      var idx = indexMap[vertex];
-      if (idx == null) {
-        idx = indexMap.length;
+      var index = indexMap[vertex];
+      if (index == null) {
+        index = indexMap.length;
         _vertices.add(vertex);
-        indexMap[vertex] = idx;
+        indexMap[vertex] = index;
       }
-      _indices.add(idx);
+      _indices.add(index);
     }
   }
 

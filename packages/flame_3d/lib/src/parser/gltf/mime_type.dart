@@ -3,8 +3,7 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 enum MimeType {
   jpeg('image/jpeg'),
   png('image/png'),
-  string('string'),
-  ;
+  string('string');
 
   final String value;
 

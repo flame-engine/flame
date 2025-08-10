@@ -7,8 +7,7 @@ enum MinFilter {
   nearestMipmapNearest('NEAREST_MIPMAP_NEAREST', 9984),
   linearMipmapNearest('LINEAR_MIPMAP_NEAREST', 9985),
   nearestMipmapLinear('NEAREST_MIPMAP_LINEAR', 9986),
-  linearMipmapLinear('LINEAR_MIPMAP_LINEAR', 9987),
-  ;
+  linearMipmapLinear('LINEAR_MIPMAP_LINEAR', 9987);
 
   final String name;
   final int value;

@@ -55,11 +55,11 @@ class Model {
     final adjacencyMap = <int, Set<int>>{};
 
     for (final node in nodes.values) {
-      final idx = node.nodeIndex;
+      final index = node.nodeIndex;
       final deps = node.dependencies;
-      inDegree[idx] = deps.length;
+      inDegree[index] = deps.length;
       for (final dep in deps) {
-        (adjacencyMap[dep] ??= {}).add(idx);
+        (adjacencyMap[dep] ??= {}).add(index);
       }
     }
 
@@ -68,10 +68,10 @@ class Model {
     );
 
     while (queue.isNotEmpty) {
-      final idx = queue.removeFirst();
-      final node = nodes[idx]!;
+      final index = queue.removeFirst();
+      final node = nodes[index]!;
       node.processNode(processedNodes, animation);
-      final adjacency = adjacencyMap[idx] ?? {};
+      final adjacency = adjacencyMap[index] ?? {};
       for (final dependency in adjacency) {
         inDegree[dependency] = inDegree[dependency]! - 1;
         if (inDegree[dependency] == 0) {

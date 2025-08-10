@@ -13,7 +13,7 @@ typedef AnimationKeyframe<T> = ({double time, T value});
 /// * position ([TranslationAnimationSpline]),
 /// * angle ([RotationAnimationSpline]),
 /// * scale ([ScaleAnimationSpline]).
-sealed class AnimationSpline<T> {
+abstract class AnimationSpline<T> {
   final AnimationInterpolation interpolation;
   final List<AnimationKeyframe<T>> values;
 

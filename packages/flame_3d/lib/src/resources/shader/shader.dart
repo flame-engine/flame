@@ -114,7 +114,7 @@ class Shader {
     final groups = parseKey(key);
 
     final object = groups[0]; // e.g. Light, albedoTexture
-    final idx = _maybeParseInt(groups[1]); // e.g. 2 (optional)
+    final index = _maybeParseInt(groups[1]); // e.g. 2 (optional)
     final field = groups[2]; // e.g. position (optional)
 
     if (object == null) {
@@ -129,7 +129,7 @@ class Shader {
       return slot.create();
     }) as UniformInstance<K, T>;
 
-    final k = instance.makeKey(idx, field);
+    final k = instance.makeKey(index, field);
     instance.set(k, value);
   }
 

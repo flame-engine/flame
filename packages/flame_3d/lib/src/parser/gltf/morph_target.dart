@@ -34,8 +34,7 @@ class MorphTarget extends GltfNode {
 enum MorphTargetType {
   position('POSITION'),
   normal('NORMAL'),
-  tangent('TANGENT'),
-  ;
+  tangent('TANGENT');
 
   final String value;
 

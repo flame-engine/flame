@@ -15,8 +15,7 @@ enum AlphaMode {
   /// The alpha value is used to composite the source and destination areas.
   /// The rendered output is combined with the background using the normal
   /// painting operation (i.e. the Porter and Duff over operator).
-  blend('BLEND'),
-  ;
+  blend('BLEND');
 
   final String value;
 
