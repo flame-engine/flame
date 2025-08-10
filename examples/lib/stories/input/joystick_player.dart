@@ -12,7 +12,7 @@ class JoystickPlayer extends SpriteComponent
   final JoystickComponent joystick;
 
   JoystickPlayer(this.joystick)
-      : super(size: Vector2.all(100.0), anchor: Anchor.center);
+    : super(size: Vector2.all(100.0), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

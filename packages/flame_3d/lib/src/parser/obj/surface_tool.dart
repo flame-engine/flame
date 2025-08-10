@@ -93,13 +93,12 @@ class SurfaceTool {
   Mesh apply([Mesh? mesh]) {
     index();
     mesh ??= Mesh();
-    return mesh
-      ..addSurface(
-        Surface(
-          vertices: _vertices,
-          indices: _indices,
-          material: _lastMaterial,
-        ),
-      );
+    return mesh..addSurface(
+      Surface(
+        vertices: _vertices,
+        indices: _indices,
+        material: _lastMaterial,
+      ),
+    );
   }
 }

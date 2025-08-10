@@ -123,8 +123,9 @@ void main() {
       expect(rect.intersectsSegment(under, nearUnder), false);
     });
 
-    testRandom('intersectsLineSegment is the same as intersectsSegment',
-        (Random r) {
+    testRandom('intersectsLineSegment is the same as intersectsSegment', (
+      Random r,
+    ) {
       final rect = Rect.fromLTWH(
         r.nextDouble(),
         r.nextDouble(),
@@ -138,37 +139,39 @@ void main() {
     });
 
     testRandom(
-        'toVertices returns an array of [topLeft, topRight, bottomRight, '
-        'bottomLeft]', (Random r) {
-      final left = r.nextDouble();
-      final top = r.nextDouble();
-      final right = r.nextDouble();
-      final bottom = r.nextDouble();
+      'toVertices returns an array of [topLeft, topRight, bottomRight, '
+      'bottomLeft]',
+      (Random r) {
+        final left = r.nextDouble();
+        final top = r.nextDouble();
+        final right = r.nextDouble();
+        final bottom = r.nextDouble();
 
-      final rect = Rect.fromLTRB(left, top, right, bottom);
-      final vertices = rect.toVertices();
-      expect(vertices.length, 4);
-      expect(
-        vertices[0],
-        Vector2(left, top),
-        reason: 'topLeft value is not right',
-      );
-      expect(
-        vertices[1],
-        Vector2(right, top),
-        reason: 'topRight value is not right',
-      );
-      expect(
-        vertices[2],
-        Vector2(right, bottom),
-        reason: 'bottomRight value is not right',
-      );
-      expect(
-        vertices[3],
-        Vector2(left, bottom),
-        reason: 'bottomLeft value is not right',
-      );
-    });
+        final rect = Rect.fromLTRB(left, top, right, bottom);
+        final vertices = rect.toVertices();
+        expect(vertices.length, 4);
+        expect(
+          vertices[0],
+          Vector2(left, top),
+          reason: 'topLeft value is not right',
+        );
+        expect(
+          vertices[1],
+          Vector2(right, top),
+          reason: 'topRight value is not right',
+        );
+        expect(
+          vertices[2],
+          Vector2(right, bottom),
+          reason: 'bottomRight value is not right',
+        );
+        expect(
+          vertices[3],
+          Vector2(left, bottom),
+          reason: 'bottomLeft value is not right',
+        );
+      },
+    );
     test('test transform', () {
       final matrix4 = Matrix4.translation(Vector3(10, 10, 0));
       const input = Rect.fromLTWH(0, 0, 10, 10);

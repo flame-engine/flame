@@ -327,7 +327,8 @@ class ParticlesExample extends FlameGame {
   Particle acceleratedParticles() {
     return Particle.generate(
       generator: (i) => AcceleratedParticle(
-        speed: Vector2(
+        speed:
+            Vector2(
               rnd.nextDouble() * 600 - 300,
               -rnd.nextDouble() * 600,
             ) *
@@ -432,8 +433,9 @@ class ParticlesExample extends FlameGame {
             renderer: (canvas, particle) {
               final paint = randomElement(paints);
               // Override the color to dynamically update opacity
-              paint.color =
-                  paint.color.withValues(alpha: 1 - particle.progress);
+              paint.color = paint.color.withValues(
+                alpha: 1 - particle.progress,
+              );
 
               canvas.drawCircle(
                 Offset.zero,

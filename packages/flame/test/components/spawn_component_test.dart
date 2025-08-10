@@ -35,9 +35,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionComponent>().every(
+          (c) => shape.containsPoint(c.position),
+        ),
         isTrue,
       );
     });
@@ -51,8 +51,11 @@ void main() {
           size: Vector2.all(200),
         );
         final spawn = SpawnComponent(
-          multiFactory: (_) =>
-              [PositionComponent(), PositionComponent(), PositionComponent()],
+          multiFactory: (_) => [
+            PositionComponent(),
+            PositionComponent(),
+            PositionComponent(),
+          ],
           period: 1,
           area: shape,
           random: random,
@@ -72,9 +75,9 @@ void main() {
           game.update(random.nextDouble());
         }
         expect(
-          world.children
-              .query<PositionComponent>()
-              .every((c) => shape.containsPoint(c.position)),
+          world.children.query<PositionComponent>().every(
+            (c) => shape.containsPoint(c.position),
+          ),
           isTrue,
         );
       },
@@ -105,9 +108,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionComponent>().every(
+          (c) => shape.containsPoint(c.position),
+        ),
         isTrue,
       );
     });
@@ -143,9 +146,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => shape.containsPoint(c.position)),
+        world.children.query<PositionComponent>().every(
+          (c) => shape.containsPoint(c.position),
+        ),
         isTrue,
       );
     });
@@ -173,9 +176,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => c.position == Vector2.all(1000)),
+        world.children.query<PositionComponent>().every(
+          (c) => c.position == Vector2.all(1000),
+        ),
         isTrue,
       );
     });
@@ -207,9 +210,9 @@ void main() {
         game.update(random.nextDouble());
       }
       expect(
-        world.children
-            .query<PositionComponent>()
-            .every((c) => c.position == Vector2.all(1000)),
+        world.children.query<PositionComponent>().every(
+          (c) => c.position == Vector2.all(1000),
+        ),
         isTrue,
       );
     });
@@ -293,8 +296,9 @@ void main() {
       },
     );
 
-    testWithFlameGame('Spawns components within irregular period',
-        (game) async {
+    testWithFlameGame('Spawns components within irregular period', (
+      game,
+    ) async {
       final random = Random(0);
       // The first two periods will be ~4.3 and ~3.85
       final spawn = SpawnComponent.periodRange(
@@ -424,8 +428,8 @@ void main() {
           expect(target.children.whereType<PositionComponent>(), hasLength(1));
           expect(
             target.children.query<PositionComponent>().every(
-                  (c) => target.toAbsoluteRect().containsPoint(c.position),
-                ),
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
             isTrue,
           );
 
@@ -434,8 +438,8 @@ void main() {
           expect(target.children.whereType<PositionComponent>(), hasLength(2));
           expect(
             target.children.query<PositionComponent>().every(
-                  (c) => target.toAbsoluteRect().containsPoint(c.position),
-                ),
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
             isTrue,
           );
         },
@@ -465,8 +469,8 @@ void main() {
           expect(target.children.whereType<PositionComponent>(), hasLength(3));
           expect(
             target.children.query<PositionComponent>().every(
-                  (c) => target.toAbsoluteRect().containsPoint(c.position),
-                ),
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
             isTrue,
           );
 
@@ -475,8 +479,8 @@ void main() {
           expect(target.children.whereType<PositionComponent>(), hasLength(6));
           expect(
             target.children.query<PositionComponent>().every(
-                  (c) => target.toAbsoluteRect().containsPoint(c.position),
-                ),
+              (c) => target.toAbsoluteRect().containsPoint(c.position),
+            ),
             isTrue,
           );
         },
@@ -503,8 +507,8 @@ void main() {
           expect(target.children.whereType<PositionComponent>(), hasLength(1));
           expect(
             target.children.query<PositionComponent>().every(
-                  (c) => c.position == Vector2(100, 100),
-                ),
+              (c) => c.position == Vector2(100, 100),
+            ),
             isTrue,
           );
 
@@ -513,8 +517,8 @@ void main() {
           expect(target.children.whereType<PositionComponent>(), hasLength(2));
           expect(
             target.children.query<PositionComponent>().every(
-                  (c) => c.position == Vector2(100, 100),
-                ),
+              (c) => c.position == Vector2(100, 100),
+            ),
             isTrue,
           );
         },

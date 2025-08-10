@@ -12,8 +12,7 @@ class FloorFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('floor', FloorFn.new, args, errorFn);
+  ) => num1Builder('floor', FloorFn.new, args, errorFn);
 
   @override
   num get value => arg.value.floor();

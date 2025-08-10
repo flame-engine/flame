@@ -10,20 +10,20 @@ class BackgroundStyle extends FlameTextStyle {
     Color? borderColor,
     double? borderRadius,
     double? borderWidth,
-  })  : assert(
-          paint == null || color == null,
-          'Parameters `paint` and `color` are exclusive',
-        ),
-        borderWidths = EdgeInsets.all(borderWidth ?? 0),
-        borderRadius = borderRadius ?? 0,
-        backgroundPaint =
-            paint ?? (color != null ? (Paint()..color = color) : null),
-        borderPaint = borderColor != null
-            ? (Paint()
-              ..color = borderColor
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = borderWidth ?? 0)
-            : null;
+  }) : assert(
+         paint == null || color == null,
+         'Parameters `paint` and `color` are exclusive',
+       ),
+       borderWidths = EdgeInsets.all(borderWidth ?? 0),
+       borderRadius = borderRadius ?? 0,
+       backgroundPaint =
+           paint ?? (color != null ? (Paint()..color = color) : null),
+       borderPaint = borderColor != null
+           ? (Paint()
+               ..color = borderColor
+               ..style = PaintingStyle.stroke
+               ..strokeWidth = borderWidth ?? 0)
+           : null;
 
   final Paint? backgroundPaint;
   final Paint? borderPaint;

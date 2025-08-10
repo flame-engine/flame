@@ -30,10 +30,11 @@ class AnimationSampler extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          input: Parser.ref(root, map, 'input')!,
-          interpolation: AnimationInterpolation.parse(map, 'interpolation') ??
-              AnimationInterpolation.linear,
-          output: Parser.ref(root, map, 'output')!,
-        );
+        root: root,
+        input: Parser.ref(root, map, 'input')!,
+        interpolation:
+            AnimationInterpolation.parse(map, 'interpolation') ??
+            AnimationInterpolation.linear,
+        output: Parser.ref(root, map, 'output')!,
+      );
 }

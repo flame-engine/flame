@@ -46,10 +46,10 @@ class DialogueLine extends DialogueEntry {
     required LineContent content,
     Character? character,
     List<String>? tags,
-  })  : _content = content,
-        _character = character,
-        _tags = tags,
-        _value = content.isConst ? content.text : null;
+  }) : _content = content,
+       _character = character,
+       _tags = tags,
+       _value = content.isConst ? content.text : null;
 
   final Character? _character;
   final List<String>? _tags;

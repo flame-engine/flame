@@ -101,11 +101,15 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
 class Trail extends Component {
   Trail(Vector2 origin)
-      : _paths = [Path()..moveTo(origin.x, origin.y)],
-        _opacities = [1],
-        _lastPoint = origin.clone(),
-        _color =
-            HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
+    : _paths = [Path()..moveTo(origin.x, origin.y)],
+      _opacities = [1],
+      _lastPoint = origin.clone(),
+      _color = HSLColor.fromAHSL(
+        1,
+        random.nextDouble() * 360,
+        1,
+        0.8,
+      ).toColor();
 
   final List<Path> _paths;
   final List<double> _opacities;

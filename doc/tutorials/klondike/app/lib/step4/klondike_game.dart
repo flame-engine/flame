@@ -26,8 +26,9 @@ class KlondikeGame extends FlameGame {
     await Flame.images.load('klondike-sprites.png');
 
     final stock = StockPile(position: Vector2(cardGap, cardGap));
-    final waste =
-        WastePile(position: Vector2(cardWidth + 2 * cardGap, cardGap));
+    final waste = WastePile(
+      position: Vector2(cardWidth + 2 * cardGap, cardGap),
+    );
     final foundations = List.generate(
       4,
       (i) => FoundationPile(
@@ -50,8 +51,10 @@ class KlondikeGame extends FlameGame {
     world.addAll(foundations);
     world.addAll(piles);
 
-    camera.viewfinder.visibleGameSize =
-        Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap);
+    camera.viewfinder.visibleGameSize = Vector2(
+      cardWidth * 7 + cardGap * 8,
+      4 * cardHeight + 3 * cardGap,
+    );
     camera.viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0);
     camera.viewfinder.anchor = Anchor.topCenter;
 

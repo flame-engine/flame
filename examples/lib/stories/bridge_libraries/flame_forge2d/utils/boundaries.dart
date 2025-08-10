@@ -22,7 +22,7 @@ class Wall extends BodyComponent {
   final double strokeWidth;
 
   Wall(this.start, this.end, {double? strokeWidth})
-      : strokeWidth = strokeWidth ?? 1;
+    : strokeWidth = strokeWidth ?? 1;
 
   @override
   Body createBody() {

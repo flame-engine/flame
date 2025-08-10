@@ -193,8 +193,9 @@ Future<TextureAtlasData> _parse(
       assetsPrefix != null,
       'When reading from storage, the assetsPrefix needs to be provided.',
     );
-    fileAsString =
-        await (assets ?? Flame.assets).readFile('$assetsPrefix/$path');
+    fileAsString = await (assets ?? Flame.assets).readFile(
+      '$assetsPrefix/$path',
+    );
   }
 
   final iterator = LineSplitter.split(fileAsString).iterator;
@@ -366,7 +367,7 @@ Future<TextureAtlasData> _parse(
   final entry = <String>[];
   entry.add(trimmedLine.substring(0, colonIndex).trim());
 
-  for (var i = 1, lastMatch = colonIndex + 1;; i++) {
+  for (var i = 1, lastMatch = colonIndex + 1; ; i++) {
     final commaIndex = trimmedLine.indexOf(',', lastMatch);
 
     if (commaIndex == -1) {

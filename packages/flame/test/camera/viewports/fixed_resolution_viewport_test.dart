@@ -21,22 +21,23 @@ void main() {
     });
 
     testWithFlameGame(
-        'children components receive virtualSize in onParentResize',
-        (game) async {
-      final fixedResolution = Vector2(800, 600);
-      final viewport = FixedResolutionViewport(resolution: fixedResolution);
-      game.camera.viewport = viewport;
+      'children components receive virtualSize in onParentResize',
+      (game) async {
+        final fixedResolution = Vector2(800, 600);
+        final viewport = FixedResolutionViewport(resolution: fixedResolution);
+        game.camera.viewport = viewport;
 
-      final child = _OnParentResizeTesterComponent();
-      await child.addToParent(viewport);
+        final child = _OnParentResizeTesterComponent();
+        await child.addToParent(viewport);
 
-      await game.ready();
+        await game.ready();
 
-      expect(child._parentSize, fixedResolution);
+        expect(child._parentSize, fixedResolution);
 
-      game.onGameResize(Vector2(400, 300));
-      expect(child._parentSize, fixedResolution);
-    });
+        game.onGameResize(Vector2(400, 300));
+        expect(child._parentSize, fixedResolution);
+      },
+    );
   });
 }
 

@@ -21,14 +21,14 @@ class MorphTarget extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          attributes: map.map(
-            (key, value) => MapEntry(
-              MorphTargetType.valueOf(key),
-              GltfRef<RawAccessor>(root: root, index: value! as int),
-            ),
+        root: root,
+        attributes: map.map(
+          (key, value) => MapEntry(
+            MorphTargetType.valueOf(key),
+            GltfRef<RawAccessor>(root: root, index: value! as int),
           ),
-        );
+        ),
+      );
 }
 
 enum MorphTargetType {

@@ -14,7 +14,7 @@ class DominoExample extends Forge2DGame {
   ''';
 
   DominoExample()
-      : super(gravity: Vector2(0, 10.0), world: DominoExampleWorld());
+    : super(gravity: Vector2(0, 10.0), world: DominoExampleWorld());
 }
 
 class DominoExampleWorld extends Forge2DWorld

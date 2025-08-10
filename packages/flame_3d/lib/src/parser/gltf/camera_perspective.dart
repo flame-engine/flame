@@ -34,10 +34,10 @@ class CameraPerspective extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          aspectRatio: Parser.float(map, 'aspectRatio'),
-          yFov: Parser.float(map, 'yfov')!, // cSpell:ignore yfov
-          zFar: Parser.float(map, 'zfar'), // cSpell:ignore zfar
-          zNear: Parser.float(map, 'znear')!, // cSpell:ignore znear
-        );
+        root: root,
+        aspectRatio: Parser.float(map, 'aspectRatio'),
+        yFov: Parser.float(map, 'yfov')!, // cSpell:ignore yfov
+        zFar: Parser.float(map, 'zfar'), // cSpell:ignore zfar
+        zNear: Parser.float(map, 'znear')!, // cSpell:ignore znear
+      );
 }

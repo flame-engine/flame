@@ -27,8 +27,8 @@ abstract class AnimationSpline<T> {
     required List<double> times,
     required List<T> values,
   }) : values = List.generate(times.length, (index) {
-          return (time: times[index], value: values[index]);
-        });
+         return (time: times[index], value: values[index]);
+       });
 
   T lerp(T a, T b, double t);
   void transform(Matrix4 matrix, T value);

@@ -67,9 +67,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     required super.children,
     required super.size,
     super.priority,
-  })  : _crossAxisAlignment = crossAxisAlignment,
-        _mainAxisAlignment = mainAxisAlignment,
-        _gap = gap;
+  }) : _crossAxisAlignment = crossAxisAlignment,
+       _mainAxisAlignment = mainAxisAlignment,
+       _gap = gap;
 
   factory LinearLayoutComponent.fromDirection(
     Direction direction, {
@@ -237,17 +237,18 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     final mainAxisVectorIndex = direction.mainAxisVectorIndex;
     final componentList = reverse ? components.reversed : components;
     for (final (index, component) in componentList.indexed) {
-      final previousChild =
-          index > 0 ? componentList.elementAt(index - 1) : null;
+      final previousChild = index > 0
+          ? componentList.elementAt(index - 1)
+          : null;
       final reference = previousChild == null
           // Essentially the same as start, but gap is set.
           ? initialOffset.toVector2()
           // The "end" at any loop other than the first is the previous
           // child's top left position minus the gap.
           : previousChild.topLeftPosition +
-              (reverse
-                  ? -Vector2.all(gap)
-                  : previousChild.size + Vector2.all(gap));
+                (reverse
+                    ? -Vector2.all(gap)
+                    : previousChild.size + Vector2.all(gap));
       final positionOffset = reverse ? component.size : Vector2.zero();
       final newPosition = Vector2.zero();
       newPosition[mainAxisVectorIndex] =
@@ -325,7 +326,8 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     // This should only apply when mainAxisAlignment is start, center, or end.
     // spaceAround, spaceBetween, and spaceEvenly requires the size as a
     // constraint.
-    final cumulativeMainAxisLength = ((positionChildren.length - 1) * gap) +
+    final cumulativeMainAxisLength =
+        ((positionChildren.length - 1) * gap) +
         positionChildren
             .map((component) => component.size[mainAxisVectorIndex])
             .sum;

@@ -19,9 +19,9 @@ class Scene extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          nodes: Parser.refList<Node>(root, map, 'nodes')!,
-        );
+        root: root,
+        nodes: Parser.refList<Node>(root, map, 'nodes')!,
+      );
 
   Map<int, ModelNode> toFlameNodes() {
     final nodes = <int, ModelNode>{};

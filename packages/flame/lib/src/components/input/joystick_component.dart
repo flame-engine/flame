@@ -54,18 +54,18 @@ class JoystickComponent extends PositionComponent
     super.children,
     super.priority,
     super.key,
-  })  : assert(
-          size != null || background != null,
-          'Either size or background must be defined',
-        ),
-        assert(
-          (knob?.position.isZero() ?? true) &&
-              (background?.position.isZero() ?? true),
-          'Positions should not be set for the knob or the background',
-        ),
-        super(
-          size: background?.size ?? Vector2.all(size ?? 0),
-        ) {
+  }) : assert(
+         size != null || background != null,
+         'Either size or background must be defined',
+       ),
+       assert(
+         (knob?.position.isZero() ?? true) &&
+             (background?.position.isZero() ?? true),
+         'Positions should not be set for the knob or the background',
+       ),
+       super(
+         size: background?.size ?? Vector2.all(size ?? 0),
+       ) {
     this.margin = margin;
     this.knobRadius = knobRadius ?? this.size.x / 2;
   }

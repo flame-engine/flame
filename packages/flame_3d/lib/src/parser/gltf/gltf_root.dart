@@ -78,28 +78,29 @@ class GltfRoot {
 
   T resolve<T extends GltfNode>(int index) {
     return switch (T) {
-      const (Scene) => scenes[index],
-      const (Node) => nodes[index],
-      const (Mesh) => meshes[index],
-      const (Material) => materials[index],
-      const (Camera) => cameras[index],
-      const (Skin) => skins[index],
-      const (BufferView) => bufferViews[index],
-      const (Buffer) => buffers[index],
-      const (Texture) => textures[index],
-      const (Animation) => animations[index],
-      const (Sampler) => samplers[index],
-      const (Image) => images[index],
-      const (IntAccessor) => accessors[index].asInt(),
-      const (FloatAccessor) => accessors[index].asFloat(),
-      const (Vector2Accessor) => accessors[index].asVector2(),
-      const (Vector3Accessor) => accessors[index].asVector3(),
-      const (Vector4Accessor) => accessors[index].asVector4(),
-      const (QuaternionAccessor) => accessors[index].asQuaternion(),
-      const (Matrix4Accessor) => accessors[index].asMatrix4(),
-      const (RawAccessor) => accessors[index],
-      _ => throw UnimplementedError('Cannot resolve type $T')
-    } as T;
+          const (Scene) => scenes[index],
+          const (Node) => nodes[index],
+          const (Mesh) => meshes[index],
+          const (Material) => materials[index],
+          const (Camera) => cameras[index],
+          const (Skin) => skins[index],
+          const (BufferView) => bufferViews[index],
+          const (Buffer) => buffers[index],
+          const (Texture) => textures[index],
+          const (Animation) => animations[index],
+          const (Sampler) => samplers[index],
+          const (Image) => images[index],
+          const (IntAccessor) => accessors[index].asInt(),
+          const (FloatAccessor) => accessors[index].asFloat(),
+          const (Vector2Accessor) => accessors[index].asVector2(),
+          const (Vector3Accessor) => accessors[index].asVector3(),
+          const (Vector4Accessor) => accessors[index].asVector4(),
+          const (QuaternionAccessor) => accessors[index].asQuaternion(),
+          const (Matrix4Accessor) => accessors[index].asMatrix4(),
+          const (RawAccessor) => accessors[index],
+          _ => throw UnimplementedError('Cannot resolve type $T'),
+        }
+        as T;
   }
 
   static Future<GltfRoot> from({
@@ -150,8 +151,9 @@ class GltfRoot {
   Model toFlameModel([int? scene]) {
     return Model(
       nodes: toFlameNodes(scene),
-      animations:
-          animations.map((animation) => animation.toFlameAnimation()).toList(),
+      animations: animations
+          .map((animation) => animation.toFlameAnimation())
+          .toList(),
     );
   }
 }

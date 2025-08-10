@@ -10,10 +10,10 @@ import 'package:flutter/gestures.dart';
 /// This is a [PositionEvent], where the position is the point of touch.
 class DragStartEvent extends PositionEvent {
   DragStartEvent(this.pointerId, super.game, DragStartDetails details)
-      : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-        super(
-          devicePosition: details.globalPosition.toVector2(),
-        );
+    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
+      super(
+        devicePosition: details.globalPosition.toVector2(),
+      );
 
   /// The unique identifier of the drag event.
   ///
@@ -25,7 +25,8 @@ class DragStartEvent extends PositionEvent {
   final PointerDeviceKind deviceKind;
 
   @override
-  String toString() => 'DragStartEvent(canvasPosition: $canvasPosition, '
+  String toString() =>
+      'DragStartEvent(canvasPosition: $canvasPosition, '
       'devicePosition: $devicePosition, '
       'pointedId: $pointerId, deviceKind: $deviceKind)';
 }

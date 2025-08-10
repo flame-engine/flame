@@ -63,8 +63,8 @@ class _RotateToEffect extends RotateEffect {
     EffectController controller, {
     void Function()? onComplete,
     super.key,
-  })  : _destinationAngle = angle,
-        super.by(0, controller, onComplete: onComplete);
+  }) : _destinationAngle = angle,
+       super.by(0, controller, onComplete: onComplete);
 
   final double _destinationAngle;
 

@@ -27,15 +27,15 @@ class Player extends MeshComponent
   Vector3 get lookAt => Vector3(sin(_lookAngle), 0.0, cos(_lookAngle));
 
   Player({required Vector3 position})
-      : super(
-          position: position,
-          mesh: CuboidMesh(
-            size: Vector3(1, 2, 1),
-            material: SpatialMaterial(
-              albedoTexture: ColorTexture(BasicPalette.yellow.color),
-            ),
+    : super(
+        position: position,
+        mesh: CuboidMesh(
+          size: Vector3(1, 2, 1),
+          material: SpatialMaterial(
+            albedoTexture: ColorTexture(BasicPalette.yellow.color),
           ),
-        );
+        ),
+      );
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {

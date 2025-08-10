@@ -19,11 +19,13 @@ void main() {
         expect(tokenize('// hello'), const <Token>[]);
         expect(tokenize('// world\n\n'), [Token.newline, Token.newline]);
         expect(
-          tokenize('\n'
-              '//--------------------\n'
-              '// BOILER PLATE       \n'
-              '//--------------------\n'
-              '\n'),
+          tokenize(
+            '\n'
+            '//--------------------\n'
+            '// BOILER PLATE       \n'
+            '//--------------------\n'
+            '\n',
+          ),
           const [
             Token.newline,
             Token.newline,
@@ -37,10 +39,12 @@ void main() {
       test('only header separator', () {
         expect(
           () => tokenize('---\n'),
-          hasSyntaxError('SyntaxError: incomplete node body\n'
-              '>  at line 2 column 1:\n'
-              '>  \n'
-              '>  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: incomplete node body\n'
+            '>  at line 2 column 1:\n'
+            '>  \n'
+            '>  ^\n',
+          ),
         );
       });
 
@@ -82,31 +86,36 @@ void main() {
 
       test('simple header', () {
         expect(
-            tokenize('\n'
-                'title: node: 1\n'
-                '\n'
-                '---\n===\n'),
-            const [
-              Token.newline,
-              Token.startHeader,
-              Token.id('title'),
-              Token.colon,
-              Token.text('node: 1'),
-              Token.newline,
-              Token.newline,
-              Token.endHeader,
-              Token.startBody,
-              Token.endBody,
-            ]);
+          tokenize(
+            '\n'
+            'title: node: 1\n'
+            '\n'
+            '---\n===\n',
+          ),
+          const [
+            Token.newline,
+            Token.startHeader,
+            Token.id('title'),
+            Token.colon,
+            Token.text('node: 1'),
+            Token.newline,
+            Token.newline,
+            Token.endHeader,
+            Token.startBody,
+            Token.endBody,
+          ],
+        );
       });
 
       test('multi-line header', () {
         expect(
-          tokenize('\n'
-              'title: Some Long title\n'
-              'title : Another title\n'
-              'some_other_keyword:1\n'
-              '---\n===\n'),
+          tokenize(
+            '\n'
+            'title: Some Long title\n'
+            'title : Another title\n'
+            'some_other_keyword:1\n'
+            '---\n===\n',
+          ),
           const [
             Token.newline,
             Token.startHeader,
@@ -188,30 +197,36 @@ void main() {
       test('extra whitespace', () {
         expect(
           () => tokenize('  title: this\n---\n===\n'),
-          hasSyntaxError('SyntaxError: unexpected indentation\n'
-              '>  at line 1 column 3:\n'
-              '>    title: this\n'
-              '>    ^\n'),
+          hasSyntaxError(
+            'SyntaxError: unexpected indentation\n'
+            '>  at line 1 column 3:\n'
+            '>    title: this\n'
+            '>    ^\n',
+          ),
         );
       });
 
       test('without id', () {
         expect(
           () => tokenize(':\n---\n===\n'),
-          hasSyntaxError('SyntaxError: expected end-of-header marker "---"\n'
-              '>  at line 1 column 1:\n'
-              '>  :\n'
-              '>  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: expected end-of-header marker "---"\n'
+            '>  at line 1 column 1:\n'
+            '>  :\n'
+            '>  ^\n',
+          ),
         );
       });
 
       test('short separator', () {
         expect(
           () => tokenize('--\n===\n'),
-          hasSyntaxError('SyntaxError: expected end-of-header marker "---"\n'
-              '>  at line 1 column 1:\n'
-              '>  --\n'
-              '>  ^\n'),
+          hasSyntaxError(
+            'SyntaxError: expected end-of-header marker "---"\n'
+            '>  at line 1 column 1:\n'
+            '>  --\n'
+            '>  ^\n',
+          ),
         );
       });
 
@@ -275,11 +290,13 @@ void main() {
 
       test('whitespace in body', () {
         expect(
-          tokenize('---\n---\n'
-              '\n'
-              '   \t  \r\n'
-              ' // also could be some comments here\n'
-              '==='),
+          tokenize(
+            '---\n---\n'
+            '\n'
+            '   \t  \r\n'
+            ' // also could be some comments here\n'
+            '===',
+          ),
           [
             Token.startHeader,
             Token.endHeader,
@@ -294,12 +311,14 @@ void main() {
 
       test('indentation', () {
         expect(
-          tokenize('---\n---\n'
-              '  alpha\n'
-              '   beta\n'
-              '\t     gamma\n'
-              '  delta\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '  alpha\n'
+            '   beta\n'
+            '\t     gamma\n'
+            '  delta\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -325,25 +344,31 @@ void main() {
 
       test('invalid indentation', () {
         expect(
-          () => tokenize('---\n---\n'
-              ' alpha\n'
-              '     beta\n'
-              '  gamma\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: inconsistent indentation\n'
-              '>  at line 5 column 3:\n'
-              '>    gamma\n'
-              '>    ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            ' alpha\n'
+            '     beta\n'
+            '  gamma\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: inconsistent indentation\n'
+            '>  at line 5 column 3:\n'
+            '>    gamma\n'
+            '>    ^\n',
+          ),
         );
       });
 
       test('de-indents at end of body', () {
         expect(
-          tokenize('---\n---\n'
-              'one\n'
-              '  two\n'
-              '    three\n'
-              '==='),
+          tokenize(
+            '---\n---\n'
+            'one\n'
+            '  two\n'
+            '    three\n'
+            '===',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -366,10 +391,12 @@ void main() {
       test('invalid body end', () {
         expect(
           () => tokenize('---\n---\n===='),
-          hasSyntaxError('SyntaxError: incomplete node body\n'
-              '>  at line 3 column 5:\n'
-              '>  ====\n'
-              '>      ^\n'),
+          hasSyntaxError(
+            'SyntaxError: incomplete node body\n'
+            '>  at line 3 column 5:\n'
+            '>  ====\n'
+            '>      ^\n',
+          ),
         );
       });
     });
@@ -377,10 +404,12 @@ void main() {
     group('modeNodeBodyLine', () {
       test('option lines', () {
         expect(
-          tokenize('---\n---\n'
-              '->something\n'
-              '  -> other\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '->something\n'
+            '  -> other\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -400,10 +429,12 @@ void main() {
 
       test('commands', () {
         expect(
-          tokenize('---\n---\n'
-              '<< >>\n'
-              '<< stop >>\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '<< >>\n'
+            '<< stop >>\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -423,13 +454,15 @@ void main() {
       test('line speakers', () {
         // cSpell:ignore Пан_Голова, Ḟḷḁṃḙ
         expect(
-          tokenize('---\n---\n'
-              'Marge: Hello!\n'
-              'Mr Smith: You too\n'
-              'Пан_Голова :...\n'
-              'Ḟḷḁṃḙ: // nothing\n'
-              '𐀆𒐰ï︮𒐜   :::\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'Marge: Hello!\n'
+            'Mr Smith: You too\n'
+            'Пан_Голова :...\n'
+            'Ḟḷḁṃḙ: // nothing\n'
+            '𐀆𒐰ï︮𒐜   :::\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -458,9 +491,11 @@ void main() {
 
       test('repeated arrow', () {
         expect(
-          tokenize('---\n---\n'
-              '-> -> -> \n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '-> -> -> \n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -476,9 +511,11 @@ void main() {
 
       test('repeated character name', () {
         expect(
-          tokenize('---\n---\n'
-              'Pig: Horse: Moo!\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'Pig: Horse: Moo!\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -494,9 +531,11 @@ void main() {
 
       test('line with hash tags', () {
         expect(
-          tokenize('---\n---\n'
-              'Some text #with-tag\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'Some text #with-tag\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -513,10 +552,12 @@ void main() {
     group('modeText', () {
       test('text with comment', () {
         expect(
-          tokenize('---\n---\n'
-              'some text // here be dragons\n'
-              'other text   \t\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'some text // here be dragons\n'
+            'other text   \t\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -532,14 +573,16 @@ void main() {
 
       test('escape sequences', () {
         expect(
-          tokenize('---\n---\n'
-              r'\<\{ inside \}\>'
-              '\n'
-              'very long \\\n'
-              '  text\n'
-              'line with a newline:\\n ok\n'
-              '\\-> text with arrow\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            r'\<\{ inside \}\>'
+            '\n'
+            'very long \\\n'
+            '  text\n'
+            'line with a newline:\\n ok\n'
+            '\\-> text with arrow\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -567,10 +610,12 @@ void main() {
 
       test('escaped colon', () {
         expect(
-          tokenize('---\n---\n'
-              'One\\: two\n'
-              'One two three\\:\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'One\\: two\n'
+            'One two three\\:\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -589,29 +634,36 @@ void main() {
 
       test('">>" sequence', () {
         expect(
-            tokenize('---\n---\n'
-                '>> hello\n'
-                '===\n'),
-            const [
-              Token.startHeader,
-              Token.endHeader,
-              Token.startBody,
-              Token.text('>>'),
-              Token.text(' hello'),
-              Token.newline,
-              Token.endBody,
-            ]);
+          tokenize(
+            '---\n---\n'
+            '>> hello\n'
+            '===\n',
+          ),
+          const [
+            Token.startHeader,
+            Token.endHeader,
+            Token.startBody,
+            Token.text('>>'),
+            Token.text(' hello'),
+            Token.newline,
+            Token.endBody,
+          ],
+        );
       });
 
       test('invalid escape sequence', () {
         expect(
-          () => tokenize('---\n---\n'
-              'some text \\a\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: invalid escape sequence\n'
-              '>  at line 3 column 12:\n'
-              '>  some text \\a\n'
-              '>             ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            'some text \\a\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: invalid escape sequence\n'
+            '>  at line 3 column 12:\n'
+            '>  some text \\a\n'
+            '>             ^\n',
+          ),
         );
       });
 
@@ -620,19 +672,22 @@ void main() {
           expect(
             () => tokenize('---\n---\ntext $ch\n'),
             hasSyntaxError(
-                'SyntaxError: special character needs to be escaped\n'
-                '>  at line 3 column 6:\n'
-                '>  text $ch\n'
-                '>       ^\n'),
+              'SyntaxError: special character needs to be escaped\n'
+              '>  at line 3 column 6:\n'
+              '>  text $ch\n'
+              '>       ^\n',
+            ),
           );
         }
       });
 
       test('expressions', () {
         expect(
-          tokenize('---\n---\n'
-              '{ } // noop\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '{ } // noop\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -649,9 +704,11 @@ void main() {
     group('modeExpression', () {
       test('expression with assorted tokens', () {
         expect(
-          tokenize('---\n---\n'
-              '{ \$x += 33 - 7/random() }\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '{ \$x += 33 - 7/random() }\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -675,9 +732,11 @@ void main() {
 
       test('expression with keywords', () {
         expect(
-          tokenize('---\n---\n'
-              '{ true * false as String }\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '{ true * false as String }\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -697,11 +756,13 @@ void main() {
 
       test('expression with strings', () {
         expect(
-          tokenize('---\n---\n'
-              '{ \$x = "hello" + ", world" }\n'
-              '{ "one\' two", \'"\' }\n'
-              '{ "last \\\' \\" \\\\ one\\n" }\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '{ \$x = "hello" + ", world" }\n'
+            '{ "one\' two", \'"\' }\n'
+            '{ "last \\\' \\" \\\\ one\\n" }\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -731,9 +792,11 @@ void main() {
 
       test('expression with numbers', () {
         expect(
-          tokenize('---\n---\n'
-              '{ 0 -1  239444  0.5  17.1  2.  3.1415926535 111}\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '{ 0 -1  239444  0.5  17.1  2.  3.1415926535 111}\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -757,9 +820,11 @@ void main() {
 
       test('close command within a plain text expression', () {
         expect(
-          tokenize('---\n---\n'
-              '{ a >> b }\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '{ a >> b }\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -778,39 +843,50 @@ void main() {
 
       test('invalid variable name', () {
         expect(
-          () => tokenize('---\n---\n'
-              '{ \$a = \$7b }\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: invalid variable name\n'
-              '>  at line 3 column 8:\n'
-              '>  { \$a = \$7b }\n'
-              '>         ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '{ \$a = \$7b }\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: invalid variable name\n'
+            '>  at line 3 column 8:\n'
+            '>  { \$a = \$7b }\n'
+            '>         ^\n',
+          ),
         );
       });
 
       test('unicode variable names', () {
         // cSpell:ignore эксперимент
         expect(
-          () => tokenize('---\n---\n'
-              '{ \$эксперимент }\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: invalid variable name\n'
-              '>  at line 3 column 3:\n'
-              '>  { \$эксперимент }\n'
-              '>    ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '{ \$эксперимент }\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: invalid variable name\n'
+            '>  at line 3 column 3:\n'
+            '>  { \$эксперимент }\n'
+            '>    ^\n',
+          ),
         );
       });
 
       test('invalid string', () {
         expect(
-          () => tokenize('---\n---\n'
-              '{ "starting... }\n'
-              '===\n'),
+          () => tokenize(
+            '---\n---\n'
+            '{ "starting... }\n'
+            '===\n',
+          ),
           hasSyntaxError(
-              'SyntaxError: unexpected end of line while parsing a string\n'
-              '>  at line 3 column 17:\n'
-              '>  { "starting... }\n'
-              '>                  ^\n'),
+            'SyntaxError: unexpected end of line while parsing a string\n'
+            '>  at line 3 column 17:\n'
+            '>  { "starting... }\n'
+            '>                  ^\n',
+          ),
         );
       });
     });
@@ -818,13 +894,15 @@ void main() {
     group('modeCommand', () {
       test('normal commands', () {
         expect(
-          tokenize('---\n---\n'
-              '<< stop >>\n'
-              '<< fullStop >>\n'
-              '<< jump places >>\n'
-              '<<wait 2>>\n'
-              '<< set \$n = 2 >>  // simple\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '<< stop >>\n'
+            '<< fullStop >>\n'
+            '<< jump places >>\n'
+            '<<wait 2>>\n'
+            '<< set \$n = 2 >>  // simple\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -865,11 +943,13 @@ void main() {
 
       test('if-else', () {
         expect(
-          tokenize('---\n---\n'
-              '<<if \$gold_amount < 10>>\n'
-              "    Baker: Well, you can't afford one!\n"
-              '<<endif>>\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '<<if \$gold_amount < 10>>\n'
+            "    Baker: Well, you can't afford one!\n"
+            '<<endif>>\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -900,9 +980,11 @@ void main() {
 
       test('user-defined commands', () {
         expect(
-          tokenize('---\n---\n'
-              '<<hello one two three>>\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '<<hello one two three>>\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -919,25 +1001,33 @@ void main() {
 
       test('closing brace', () {
         expect(
-          () => tokenize('---\n---\n'
-              '<< hello } >>\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: special character needs to be escaped\n'
-              '>  at line 3 column 10:\n'
-              '>  << hello } >>\n'
-              '>           ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '<< hello } >>\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: special character needs to be escaped\n'
+            '>  at line 3 column 10:\n'
+            '>  << hello } >>\n'
+            '>           ^\n',
+          ),
         );
       });
 
       test('incomplete command', () {
         expect(
-          () => tokenize('---\n---\n'
-              '<< stop\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: missing command close token ">>"\n'
-              '>  at line 3 column 8:\n'
-              '>  << stop\n'
-              '>         ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '<< stop\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: missing command close token ">>"\n'
+            '>  at line 3 column 8:\n'
+            '>  << stop\n'
+            '>         ^\n',
+          ),
         );
       });
     });
@@ -995,9 +1085,11 @@ void main() {
 
       test('tokenize complex markup tag', () {
         expect(
-          tokenize('---\n---\n'
-              'One [red shade=12 hex="#ff0000"]color[/red]\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'One [red shade=12 hex="#ff0000"]color[/red]\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1025,9 +1117,11 @@ void main() {
 
       test('whitespace after self-closing command', () {
         expect(
-          tokenize('---\n---\n'
-              'Hello [yes/] world!\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'Hello [yes/] world!\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1060,10 +1154,12 @@ void main() {
     group('modeTextEnd', () {
       test('hashtags in lines', () {
         expect(
-          tokenize('---\n---\n'
-              'line1 #tag #some:other@tag! // whatever\n'
-              'line2 { 33 } #here-be-dragons//2\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'line1 #tag #some:other@tag! // whatever\n'
+            'line2 { 33 } #here-be-dragons//2\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1085,9 +1181,11 @@ void main() {
 
       test('comments in lines', () {
         expect(
-          tokenize('---\n---\n'
-              'line1 // whatever\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'line1 // whatever\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1101,10 +1199,12 @@ void main() {
 
       test('commands in lines', () {
         expect(
-          tokenize('---\n---\n'
-              '-> Sure I am! The boss knows me! <<if \$reputation > 10>>\n'
-              '-> Please?\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '-> Sure I am! The boss knows me! <<if \$reputation > 10>>\n'
+            '-> Please?\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1130,9 +1230,11 @@ void main() {
 
       test('multiple commands and hashtags', () {
         expect(
-          tokenize('---\n---\n'
-              '#one <<two>> <<stop>> #four\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            '#one <<two>> <<stop>> #four\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1153,9 +1255,11 @@ void main() {
 
       test('text with escaped content', () {
         expect(
-          tokenize('---\n---\n'
-              'One \\{ two\n'
-              '===\n'),
+          tokenize(
+            '---\n---\n'
+            'One \\{ two\n'
+            '===\n',
+          ),
           const [
             Token.startHeader,
             Token.endHeader,
@@ -1175,44 +1279,56 @@ void main() {
     group('errors', () {
       test('long line, error near the start', () {
         expect(
-          () => tokenize('---\n---\n'
-              '<<set alpha beta gamma delta epsilon ~ zeta eta theta iota '
-              'kappa lambda mu nu xi omicron pi rho sigma tau >>\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: invalid token\n'
-              '>  at line 3 column 38:\n'
-              '>  <<set alpha beta gamma delta epsilon ~ zeta eta theta iota '
-              'kappa lambda mu...\n'
-              '>                                       ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '<<set alpha beta gamma delta epsilon ~ zeta eta theta iota '
+            'kappa lambda mu nu xi omicron pi rho sigma tau >>\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: invalid token\n'
+            '>  at line 3 column 38:\n'
+            '>  <<set alpha beta gamma delta epsilon ~ zeta eta theta iota '
+            'kappa lambda mu...\n'
+            '>                                       ^\n',
+          ),
         );
       });
 
       test('long line, error near the end', () {
         expect(
-          () => tokenize('---\n---\n'
-              '<<set alpha beta gamma delta epsilon zeta eta theta iota kappa '
-              'lambda mu nu xi omicron pi rho @ sigma tau upsilon phi chi>>\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: invalid token\n'
-              '>  at line 3 column 95:\n'
-              '>  ...theta iota kappa lambda mu nu xi omicron pi rho @ sigma '
-              'tau upsilon phi chi>>\n'
-              '>                                                     ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '<<set alpha beta gamma delta epsilon zeta eta theta iota kappa '
+            'lambda mu nu xi omicron pi rho @ sigma tau upsilon phi chi>>\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: invalid token\n'
+            '>  at line 3 column 95:\n'
+            '>  ...theta iota kappa lambda mu nu xi omicron pi rho @ sigma '
+            'tau upsilon phi chi>>\n'
+            '>                                                     ^\n',
+          ),
         );
       });
 
       test('long line, error in the middle', () {
         expect(
-          () => tokenize('---\n---\n'
-              '<<set alpha beta gamma delta epsilon zeta eta theta iota kappa '
-              'lambda ` mu nu xi omicron pi rho sigma tau upsilon phi chi psi '
-              'omega>>\n'
-              '===\n'),
-          hasSyntaxError('SyntaxError: invalid token\n'
-              '>  at line 3 column 71:\n'
-              '>  ...on zeta eta theta iota kappa lambda ` mu nu xi omicron '
-              'pi rho sigma tau...\n'
-              '>                                         ^\n'),
+          () => tokenize(
+            '---\n---\n'
+            '<<set alpha beta gamma delta epsilon zeta eta theta iota kappa '
+            'lambda ` mu nu xi omicron pi rho sigma tau upsilon phi chi psi '
+            'omega>>\n'
+            '===\n',
+          ),
+          hasSyntaxError(
+            'SyntaxError: invalid token\n'
+            '>  at line 3 column 71:\n'
+            '>  ...on zeta eta theta iota kappa lambda ` mu nu xi omicron '
+            'pi rho sigma tau...\n'
+            '>                                         ^\n',
+          ),
         );
       });
 

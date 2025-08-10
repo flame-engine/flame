@@ -18,13 +18,13 @@ class Model {
 
   Model.simple({
     required Mesh mesh,
-  })  : nodes = {
-          0: ModelNode.simple(
-            nodeIndex: 0,
-            mesh: mesh,
-          ),
-        },
-        animations = [];
+  }) : nodes = {
+         0: ModelNode.simple(
+           nodeIndex: 0,
+           mesh: mesh,
+         ),
+       },
+       animations = [];
 
   Aabb3 get aabb => _aabb ??= _calculateBoundingBox();
   Aabb3? _aabb;

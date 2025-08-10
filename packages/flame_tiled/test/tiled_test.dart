@@ -215,7 +215,8 @@ void main() {
 
       var allRed = true;
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allRed &= rightTilePixels[i] == 255 &&
+        allRed &=
+            rightTilePixels[i] == 255 &&
             rightTilePixels[i + 1] == 0 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
@@ -239,7 +240,8 @@ void main() {
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
+        allGreen &=
+            leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
             leftTilePixels[i + 3] == 255;
@@ -286,16 +288,20 @@ void main() {
     test('[useAtlas = true] Green tile pixels are in correct spots', () {
       const oneColorRect = 8;
       final leftTilePixels = <int>[];
-      for (var i = 65 * oneColorRect * pixel;
-          i < ((64 * 23) + (oneColorRect * 3)) * pixel;
-          i += 64 * pixel) {
-        leftTilePixels
-            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 65 * oneColorRect * pixel;
+        i < ((64 * 23) + (oneColorRect * 3)) * pixel;
+        i += 64 * pixel
+      ) {
+        leftTilePixels.addAll(
+          pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
+        allGreen &=
+            leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
             leftTilePixels[i + 3] == 255;
@@ -303,15 +309,19 @@ void main() {
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * pixel;
-          i < ((64 * 23) + (8 * 7)) * pixel;
-          i += 64 * pixel) {
-        rightTilePixels
-            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 69 * 8 * pixel;
+        i < ((64 * 23) + (8 * 7)) * pixel;
+        i += 64 * pixel
+      ) {
+        rightTilePixels.addAll(
+          pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allGreen &= rightTilePixels[i] == 0 &&
+        allGreen &=
+            rightTilePixels[i] == 0 &&
             rightTilePixels[i + 1] == 255 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
@@ -321,16 +331,20 @@ void main() {
 
     test('[useAtlas = false] Green tile pixels are in correct spots', () {
       final leftTilePixels = <int>[];
-      for (var i = 65 * 8 * pixel;
-          i < ((64 * 23) + (8 * 3)) * pixel;
-          i += 64 * pixel) {
-        leftTilePixels
-            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 65 * 8 * pixel;
+        i < ((64 * 23) + (8 * 3)) * pixel;
+        i += 64 * pixel
+      ) {
+        leftTilePixels.addAll(
+          pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
+        allGreen &=
+            leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
             leftTilePixels[i + 3] == 255;
@@ -338,15 +352,19 @@ void main() {
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * pixel;
-          i < ((64 * 23) + (8 * 7)) * pixel;
-          i += 64 * pixel) {
-        rightTilePixels
-            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 69 * 8 * pixel;
+        i < ((64 * 23) + (8 * 7)) * pixel;
+        i += 64 * pixel
+      ) {
+        rightTilePixels.addAll(
+          pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allGreen &= rightTilePixels[i] == 0 &&
+        allGreen &=
+            rightTilePixels[i] == 0 &&
             rightTilePixels[i + 1] == 255 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
@@ -1098,8 +1116,11 @@ void main() {
 
     test('same TileData is found by layerId and layerIndex', () {
       final tileData1 = renderableTiledMap.getTileData(layerId: 6, x: 5, y: 3);
-      final tileData2 =
-          renderableTiledMap.getTileDataByLayerIndex(layerIndex: 4, x: 5, y: 3);
+      final tileData2 = renderableTiledMap.getTileDataByLayerIndex(
+        layerIndex: 4,
+        x: 5,
+        y: 3,
+      );
       expect(tileData1, isNotNull);
       expect(tileData2, isNotNull);
       expect(tileData1, equals(tileData2));

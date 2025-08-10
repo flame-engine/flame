@@ -4,8 +4,9 @@ import 'package:flame_devtools/repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final selectedTreeNodeProvider =
-    StateProvider<TreeNode<ComponentTreeNode>?>((_) => null);
+final selectedTreeNodeProvider = StateProvider<TreeNode<ComponentTreeNode>?>(
+  (_) => null,
+);
 
 // This is in a separate provider due to the fact that the tree can't keep
 // track of whether it has been changed or not since the nodes don't implement
@@ -16,8 +17,9 @@ final loadedTreeModelProvider = StateProvider<ComponentTreeModel>(
 
 final componentTreeLoaderProvider = FutureProvider<void>((ref) async {
   final previousTreeModel = ref.watch(loadedTreeModelProvider);
-  final updatedModel =
-      await ComponentTreeModel.refreshComponentTree(previousTreeModel);
+  final updatedModel = await ComponentTreeModel.refreshComponentTree(
+    previousTreeModel,
+  );
   if (updatedModel != null) {
     ref.read(loadedTreeModelProvider.notifier).state = updatedModel;
   }

@@ -32,9 +32,9 @@ class Skin extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          inverseBindMatrices: Parser.ref(root, map, 'inverseBindMatrices'),
-          skeleton: Parser.ref(root, map, 'skeleton'),
-          joints: Parser.refList<Node>(root, map, 'joints') ?? [],
-        );
+        root: root,
+        inverseBindMatrices: Parser.ref(root, map, 'inverseBindMatrices'),
+        skeleton: Parser.ref(root, map, 'skeleton'),
+        joints: Parser.refList<Node>(root, map, 'joints') ?? [],
+      );
 }

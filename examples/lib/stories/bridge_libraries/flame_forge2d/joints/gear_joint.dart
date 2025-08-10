@@ -28,8 +28,11 @@ class GearJointWorld extends Forge2DWorld with HasGameReference<Forge2DGame> {
   Future<void> onLoad() async {
     super.onLoad();
 
-    final box =
-        DraggableBox(startPosition: boxAnchor, width: boxWidth, height: 20);
+    final box = DraggableBox(
+      startPosition: boxAnchor,
+      width: boxWidth,
+      height: 20,
+    );
     add(box);
 
     final ball1Anchor = boxAnchor - Vector2(boxWidth / 2 + ball1Radius, 0);

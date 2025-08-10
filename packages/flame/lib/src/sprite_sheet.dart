@@ -49,8 +49,8 @@ class SpriteSheet {
     required this.srcSize,
     this.margin = 0,
     this.spacing = 0,
-  })  : columns = (image.width - 2 * margin + spacing) ~/ (srcSize.x + spacing),
-        rows = (image.height - 2 * margin + spacing) ~/ (srcSize.y + spacing);
+  }) : columns = (image.width - 2 * margin + spacing) ~/ (srcSize.x + spacing),
+       rows = (image.height - 2 * margin + spacing) ~/ (srcSize.y + spacing);
 
   SpriteSheet.fromColumnsAndRows({
     required this.image,
@@ -59,9 +59,9 @@ class SpriteSheet {
     this.spacing = 0,
     this.margin = 0,
   }) : srcSize = Vector2(
-          (image.width - 2 * margin - (columns - 1) * spacing) / columns,
-          (image.height - 2 * margin - (rows - 1) * spacing) / rows,
-        );
+         (image.width - 2 * margin - (columns - 1) * spacing) / columns,
+         (image.height - 2 * margin - (rows - 1) * spacing) / rows,
+       );
 
   /// Gets the sprite in the position (row, column) on the sprite sheet grid.
   ///
@@ -126,9 +126,10 @@ class SpriteSheet {
   }) {
     to ??= columns;
 
-    return List<int>.generate(to - from, (i) => from + i)
-        .map((e) => getSprite(row, e))
-        .toList();
+    return List<int>.generate(
+      to - from,
+      (i) => from + i,
+    ).map((e) => getSprite(row, e)).toList();
   }
 
   /// Creates a [SpriteAnimation] from this SpriteSheet, using the sequence

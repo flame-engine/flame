@@ -27,9 +27,10 @@ abstract class Event {
     Component rootComponent,
     void Function(T component) eventHandler,
   ) {
-    for (final child in rootComponent
-        .descendants(reversed: true, includeSelf: true)
-        .whereType<T>()) {
+    for (final child
+        in rootComponent
+            .descendants(reversed: true, includeSelf: true)
+            .whereType<T>()) {
       continuePropagation = false;
       eventHandler(child);
       if (!continuePropagation) {

@@ -38,11 +38,11 @@ class RectangleComponent extends PolygonComponent {
     super.key,
   }) : super(sizeToVertices(Vector2.all(size), anchor)) {
     this.size.addListener(
-          () => refreshVertices(
-            newVertices: sizeToVertices(this.size, anchor),
-            shrinkToBoundsOverride: false,
-          ),
-        );
+      () => refreshVertices(
+        newVertices: sizeToVertices(this.size, anchor),
+        shrinkToBoundsOverride: false,
+      ),
+    );
   }
 
   /// With this constructor you define the [RectangleComponent] in relation to
@@ -63,11 +63,11 @@ class RectangleComponent extends PolygonComponent {
     super.key,
     super.children,
   }) : super.relative([
-          relation.clone(),
-          Vector2(relation.x, -relation.y),
-          -relation,
-          Vector2(-relation.x, relation.y),
-        ]) {
+         relation.clone(),
+         Vector2(relation.x, -relation.y),
+         -relation,
+         Vector2(-relation.x, relation.y),
+       ]) {
     size.addListener(
       () => refreshVertices(
         newVertices: sizeToVertices(size, anchor),

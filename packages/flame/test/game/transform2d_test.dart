@@ -24,15 +24,16 @@ void main() {
     const epsilon = 1 / (1 << 23);
 
     // Calculate indicative condition number
-    final matrixNorm =
-        math.sqrt(m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5]);
+    final matrixNorm = math.sqrt(
+      m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5],
+    );
 
     double conditionFactor;
     if (det.abs() > 1e-10) {
       // Calculate condition number
       final invMatrixNorm =
           math.sqrt(m[5] * m[5] + m[1] * m[1] + m[4] * m[4] + m[0] * m[0]) /
-              det.abs();
+          det.abs();
       conditionFactor = matrixNorm * invMatrixNorm;
     } else {
       // For ~singular matrices, small input change -> large output change
@@ -46,7 +47,8 @@ void main() {
     const double numOperations = 14;
 
     // Standard deviation (1-σ)
-    final sigma = epsilon *
+    final sigma =
+        epsilon *
         math.sqrt(numVariables) *
         math.sqrt(numOperations) *
         conditionFactor;
@@ -237,10 +239,13 @@ void main() {
           );
         }
         // Check round-trip conversion between local and global
-        final point1 =
-            Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
-        final point2 =
-            transform2d.globalToLocal(transform2d.localToGlobal(point1));
+        final point1 = Vector2(
+          (rnd.nextDouble() - 0.5) * 5,
+          (rnd.nextDouble() - 0.5) * 5,
+        );
+        final point2 = transform2d.globalToLocal(
+          transform2d.localToGlobal(point1),
+        );
 
         final tolerance = transform2dRoundTripUncertainty(transform2d, point1);
         expect(

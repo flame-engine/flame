@@ -11,7 +11,7 @@ class EnemyComponent extends SpriteAnimationComponent
   bool destroyed = false;
 
   EnemyComponent(double x, double y)
-      : super(position: Vector2(x, y), size: Vector2.all(25)) {
+    : super(position: Vector2(x, y), size: Vector2.all(25)) {
     add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 

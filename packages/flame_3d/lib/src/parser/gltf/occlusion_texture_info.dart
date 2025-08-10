@@ -26,9 +26,9 @@ class OcclusionTextureInfo extends TextureInfo {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          index: Parser.ref(root, map, 'index')!,
-          texCoord: Parser.integer(map, 'texCoord'),
-          strength: Parser.float(map, 'strength') ?? 1.0,
-        );
+        root: root,
+        index: Parser.ref(root, map, 'index')!,
+        texCoord: Parser.integer(map, 'texCoord'),
+        strength: Parser.float(map, 'strength') ?? 1.0,
+      );
 }

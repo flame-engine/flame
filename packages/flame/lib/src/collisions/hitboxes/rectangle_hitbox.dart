@@ -35,10 +35,10 @@ class RectangleHitbox extends RectangleComponent
     super.anchor,
     bool isSolid = false,
     CollisionType collisionType = CollisionType.active,
-  })  : shouldFillParent = false,
-        super.relative(
-          shrinkToBounds: true,
-        ) {
+  }) : shouldFillParent = false,
+       super.relative(
+         shrinkToBounds: true,
+       ) {
     this.isSolid = isSolid;
     this.collisionType = collisionType;
   }

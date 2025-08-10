@@ -54,10 +54,12 @@ void main() {
 
     test('visited() with an unknown node', () {
       final yarn = YarnProject()
-        ..parse('title:A\n'
-            '---\n'
-            '{visited("Africa")}\n'
-            '===\n');
+        ..parse(
+          'title:A\n'
+          '---\n'
+          '{visited("Africa")}\n'
+          '===\n',
+        );
       final line = yarn.nodes['A']!.lines.first as DialogueLine;
       expect(
         line.evaluate,
@@ -79,8 +81,9 @@ void main() {
 
     test('too many arguments', () {
       expect(
-        () => YarnProject()
-          ..parse('title:A\n---\n{visited("Start", "Finish")}\n===\n'),
+        () =>
+            YarnProject()
+              ..parse('title:A\n---\n{visited("Start", "Finish")}\n===\n'),
         hasTypeError(
           'TypeError: function visited() requires a single argument\n'
           '>  at line 3 column 19:\n'

@@ -15,7 +15,7 @@ class RevoluteJointExample extends Forge2DGame {
   ''';
 
   RevoluteJointExample()
-      : super(gravity: Vector2(0, 10.0), world: RevoluteJointWorld());
+    : super(gravity: Vector2(0, 10.0), world: RevoluteJointWorld());
 }
 
 class RevoluteJointWorld extends Forge2DWorld

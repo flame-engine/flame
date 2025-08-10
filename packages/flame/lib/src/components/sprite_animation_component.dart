@@ -46,12 +46,12 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     super.key,
-  })  : assert(
-          (size == null) == (autoResize ?? size == null),
-          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-        ),
-        _autoResize = autoResize ?? size == null,
-        _animationTicker = animation?.createTicker() {
+  }) : assert(
+         (size == null) == (autoResize ?? size == null),
+         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+       ),
+       _autoResize = autoResize ?? size == null,
+       _animationTicker = animation?.createTicker() {
     if (paint != null) {
       this.paint = paint;
     }
@@ -85,22 +85,22 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
     int? priority,
     ComponentKey? key,
   }) : this(
-          animation: SpriteAnimation.fromFrameData(image, data),
-          autoResize: autoResize,
-          removeOnFinish: removeOnFinish,
-          playing: playing,
-          resetOnRemove: resetOnRemove,
-          paint: paint,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          nativeAngle: nativeAngle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          key: key,
-        );
+         animation: SpriteAnimation.fromFrameData(image, data),
+         autoResize: autoResize,
+         removeOnFinish: removeOnFinish,
+         playing: playing,
+         resetOnRemove: resetOnRemove,
+         paint: paint,
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         nativeAngle: nativeAngle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         key: key,
+       );
 
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
@@ -135,10 +135,10 @@ class SpriteAnimationComponent extends PositionComponent with HasPaint {
   @override
   void render(Canvas canvas) {
     _animationTicker?.getSprite().render(
-          canvas,
-          size: size,
-          overridePaint: paint,
-        );
+      canvas,
+      size: size,
+      overridePaint: paint,
+    );
   }
 
   @mustCallSuper

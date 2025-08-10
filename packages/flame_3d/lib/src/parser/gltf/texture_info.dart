@@ -31,10 +31,10 @@ class TextureInfo extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          index: Parser.ref(root, map, 'index')!,
-          texCoord: Parser.integer(map, 'texCoord'),
-        );
+        root: root,
+        index: Parser.ref(root, map, 'index')!,
+        texCoord: Parser.integer(map, 'texCoord'),
+      );
 
   flame_3d.Texture toFlameTexture() {
     return index.get().toFlameTexture();

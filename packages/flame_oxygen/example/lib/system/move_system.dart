@@ -36,11 +36,11 @@ class MoveSystem extends System with UpdateSystem, GameRef<ExampleGame> {
         velocity.setFrom(-velocity);
 
         game!.createEntity(
-          name: '${entity.name} says',
-          position: position + size / 2,
-          size: Vector2.zero(),
-          anchor: Anchor.topCenter,
-        )
+            name: '${entity.name} says',
+            position: position + size / 2,
+            size: Vector2.zero(),
+            anchor: Anchor.topCenter,
+          )
           ..add<TextComponent, TextInit>(
             TextInit(
               'Kawabunga',

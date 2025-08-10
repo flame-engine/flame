@@ -62,23 +62,23 @@ class PBRMetallicRoughness extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          baseColorFactor: Parser.vector4(root, map, 'baseColorFactor'),
-          baseColorTexture: Parser.object(
-            root,
-            map,
-            'baseColorTexture',
-            TextureInfo.parse,
-          ),
-          metallicFactor: Parser.float(map, 'metallicFactor') ?? 1.0,
-          roughnessFactor: Parser.float(map, 'roughnessFactor') ?? 1.0,
-          metallicRoughnessTexture: Parser.object(
-            root,
-            map,
-            'metallicRoughnessTexture',
-            TextureInfo.parse,
-          ),
-        );
+        root: root,
+        baseColorFactor: Parser.vector4(root, map, 'baseColorFactor'),
+        baseColorTexture: Parser.object(
+          root,
+          map,
+          'baseColorTexture',
+          TextureInfo.parse,
+        ),
+        metallicFactor: Parser.float(map, 'metallicFactor') ?? 1.0,
+        roughnessFactor: Parser.float(map, 'roughnessFactor') ?? 1.0,
+        metallicRoughnessTexture: Parser.object(
+          root,
+          map,
+          'metallicRoughnessTexture',
+          TextureInfo.parse,
+        ),
+      );
 
   flame_3d.SpatialMaterial? toFlameSpatialMaterial() {
     return flame_3d.SpatialMaterial(

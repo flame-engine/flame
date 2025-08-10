@@ -26,7 +26,7 @@ class Polygon extends Shape {
   /// the polygon is convex or not. With this flag the user promises that the
   /// vertices are already in the correct CCW order.
   Polygon(this._vertices, {bool? convex})
-      : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
+    : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
     _initializeEdges();
     if (convex == null) {
       _ensureProperOrientation();
@@ -51,11 +51,13 @@ class Polygon extends Shape {
   late List<Vector2> _edges;
   void _initializeEdges() {
     var previousVertex = _vertices.last;
-    _edges = _vertices.map((Vector2 vertex) {
-      final edge = vertex - previousVertex;
-      previousVertex = vertex;
-      return edge;
-    }).toList(growable: false);
+    _edges = _vertices
+        .map((Vector2 vertex) {
+          final edge = vertex - previousVertex;
+          previousVertex = vertex;
+          return edge;
+        })
+        .toList(growable: false);
   }
 
   /// Checks whether the vertices are listed in the CCW order, and if not

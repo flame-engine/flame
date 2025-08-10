@@ -10,38 +10,38 @@ class SpatialMaterial extends Material {
     Color albedoColor = const Color(0xFFFFFFFF),
     this.metallic = 0.8,
     this.roughness = 0.6,
-  })  : albedoTexture = albedoTexture ?? Texture.standard,
-        super(
-          vertexShader: Shader.vertex(
-            asset:
-                'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-            slots: [
-              UniformSlot.value('VertexInfo', {
-                'model',
-                'view',
-                'projection',
-              }),
-              UniformSlot.value(
-                'JointMatrices',
-                List.generate(_maxJoints, (index) => 'joint$index').toSet(),
-              ),
-            ],
-          ),
-          fragmentShader: Shader.fragment(
-            asset:
-                'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-            slots: [
-              UniformSlot.sampler('albedoTexture'),
-              UniformSlot.value('Material', {
-                'albedoColor',
-                'metallic',
-                'roughness',
-              }),
-              ...LightingInfo.shaderSlots,
-              UniformSlot.value('Camera', {'position'}),
-            ],
-          ),
-        ) {
+  }) : albedoTexture = albedoTexture ?? Texture.standard,
+       super(
+         vertexShader: Shader.vertex(
+           asset:
+               'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+           slots: [
+             UniformSlot.value('VertexInfo', {
+               'model',
+               'view',
+               'projection',
+             }),
+             UniformSlot.value(
+               'JointMatrices',
+               List.generate(_maxJoints, (index) => 'joint$index').toSet(),
+             ),
+           ],
+         ),
+         fragmentShader: Shader.fragment(
+           asset:
+               'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+           slots: [
+             UniformSlot.sampler('albedoTexture'),
+             UniformSlot.value('Material', {
+               'albedoColor',
+               'metallic',
+               'roughness',
+             }),
+             ...LightingInfo.shaderSlots,
+             UniformSlot.value('Camera', {'position'}),
+           ],
+         ),
+       ) {
     this.albedoColor = albedoColor;
   }
 

@@ -19,8 +19,8 @@ class Buffer extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          byteLength: Parser.integer(map, 'byteLength')!,
-          uri: Parser.string(map, 'uri'),
-        );
+        root: root,
+        byteLength: Parser.integer(map, 'byteLength')!,
+        uri: Parser.string(map, 'uri'),
+      );
 }

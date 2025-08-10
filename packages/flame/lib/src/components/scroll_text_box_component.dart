@@ -43,11 +43,11 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     super.key,
     List<Component>? children,
     void Function()? onComplete,
-  })  : assert(
-          size.x > 0 && size.y > 0,
-          'size must have positive dimensions: $size',
-        ),
-        super(size: size) {
+  }) : assert(
+         size.x > 0 && size.y > 0,
+         'size must have positive dimensions: $size',
+       ),
+       super(size: size) {
     final marginTop = boxConfig?.margins.top ?? 0;
     final marginBottom = boxConfig?.margins.bottom ?? 0;
     final innerMargins = EdgeInsets.fromLTRB(0, marginTop, 0, marginBottom);
@@ -125,10 +125,10 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     double super.angle = 0.0,
     super.onComplete,
   }) : super(
-          text: text ?? '',
-          textRenderer: textRenderer ?? TextPaint(),
-          boxConfig: boxConfig ?? const TextBoxConfig(),
-        );
+         text: text ?? '',
+         textRenderer: textRenderer ?? TextPaint(),
+         boxConfig: boxConfig ?? const TextBoxConfig(),
+       );
 
   @override
   Future<void> onLoad() {

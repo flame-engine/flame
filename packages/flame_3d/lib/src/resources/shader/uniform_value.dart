@@ -24,8 +24,9 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
     final entries = _storage.entries.toList()..sort(Comparing.on((c) => c.key));
     final data = entries.fold<List<double>>([], (p, e) {
       if (previousIndex + 1 != e.key) {
-        final field =
-            slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
+        final field = slot.fields.indexed.firstWhere(
+          (e) => e.$1 == previousIndex + 1,
+        );
         throw StateError('Uniform ${slot.name}.${field.$2} was not set');
       }
       previousIndex = e.key;

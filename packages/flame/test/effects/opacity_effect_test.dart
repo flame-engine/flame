@@ -160,8 +160,9 @@ void main() {
 
         // Repeat the test 3 times
         for (var i = 0; i < 3; ++i) {
-          await component
-              .add(OpacityEffect.fadeOut(EffectController(duration: 3)));
+          await component.add(
+            OpacityEffect.fadeOut(EffectController(duration: 3)),
+          );
 
           var timeElapsed = 0.0;
           while (timeElapsed < 3) {
@@ -236,8 +237,9 @@ void main() {
         );
         await game.ensureAdd(component);
 
-        await component
-            .add(OpacityEffect.fadeOut(EffectController(duration: 1)));
+        await component.add(
+          OpacityEffect.fadeOut(EffectController(duration: 1)),
+        );
 
         game.update(1);
 
@@ -260,20 +262,17 @@ void main() {
         final component = _CustomPaintComponent<_PaintTypes>(
           {
             _PaintTypes.paint1: BasicPalette.red.paint()
-              ..color = BasicPalette.green
-                  .paint()
-                  .color
-                  .withValues(alpha: redInitialOpacity),
+              ..color = BasicPalette.green.paint().color.withValues(
+                alpha: redInitialOpacity,
+              ),
             _PaintTypes.paint2: BasicPalette.green.paint()
-              ..color = BasicPalette.green
-                  .paint()
-                  .color
-                  .withValues(alpha: greenInitialOpacity),
+              ..color = BasicPalette.green.paint().color.withValues(
+                alpha: greenInitialOpacity,
+              ),
             _PaintTypes.paint3: BasicPalette.blue.paint()
-              ..color = BasicPalette.blue
-                  .paint()
-                  .color
-                  .withValues(alpha: blueInitialOpacity),
+              ..color = BasicPalette.blue.paint().color.withValues(
+                alpha: blueInitialOpacity,
+              ),
           },
         );
         await game.ensureAdd(component);
@@ -314,20 +313,17 @@ void main() {
         final component = _CustomPaintComponent<_PaintTypes>(
           {
             _PaintTypes.paint1: BasicPalette.red.paint()
-              ..color = BasicPalette.green
-                  .paint()
-                  .color
-                  .withValues(alpha: redInitialOpacity),
+              ..color = BasicPalette.green.paint().color.withValues(
+                alpha: redInitialOpacity,
+              ),
             _PaintTypes.paint2: BasicPalette.green.paint()
-              ..color = BasicPalette.green
-                  .paint()
-                  .color
-                  .withValues(alpha: greenInitialOpacity),
+              ..color = BasicPalette.green.paint().color.withValues(
+                alpha: greenInitialOpacity,
+              ),
             _PaintTypes.paint3: BasicPalette.blue.paint()
-              ..color = BasicPalette.blue
-                  .paint()
-                  .color
-                  .withValues(alpha: blueInitialOpacity),
+              ..color = BasicPalette.blue.paint().color.withValues(
+                alpha: blueInitialOpacity,
+              ),
           },
         );
         await game.ensureAdd(component);

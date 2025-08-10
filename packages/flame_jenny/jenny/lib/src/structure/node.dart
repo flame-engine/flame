@@ -9,9 +9,9 @@ class Node extends Iterable<DialogueEntry> {
     required Block content,
     Map<String, String>? tags,
     VariableStorage? variables,
-  })  : _content = content,
-        _tags = tags,
-        _variables = variables;
+  }) : _content = content,
+       _tags = tags,
+       _variables = variables;
 
   final String title;
   final Map<String, String>? _tags;
