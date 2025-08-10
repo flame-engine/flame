@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+/// Each data chunk in a GLB file.
 class GlbChunk {
   final int length;
   final String type;

@@ -1,6 +1,7 @@
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
+/// Interpolation algorithm.
 enum AnimationInterpolation {
   /// The animated values are linearly interpolated between keyframes.
   /// When targeting a rotation, spherical linear interpolation (slerp)

@@ -1,5 +1,6 @@
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
+/// The name of the node's TRS property to modify.
 enum AnimationPath {
   translation('translation'),
   rotation('rotation'),

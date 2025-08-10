@@ -1,6 +1,8 @@
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/model/model_animation.dart';
 
+/// Couples an immutable [ModelAnimation] (animation data) with a clock, which
+/// allows it to be ticked by the game loop and sampled for rendering.
 class AnimationState {
   ModelAnimation? animationRef;
   double clock = 0.0;

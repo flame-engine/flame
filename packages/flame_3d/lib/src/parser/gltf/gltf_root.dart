@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flame/flame.dart';
-import 'package:flame_3d/src/model/model.dart';
+import 'package:flame_3d/model.dart';
 import 'package:flame_3d/src/parser/gltf/accessor.dart';
 import 'package:flame_3d/src/parser/gltf/animation.dart';
 import 'package:flame_3d/src/parser/gltf/buffer.dart';
@@ -21,6 +21,7 @@ import 'package:flame_3d/src/parser/gltf/scene.dart';
 import 'package:flame_3d/src/parser/gltf/skin.dart';
 import 'package:flame_3d/src/parser/gltf/texture.dart';
 
+/// The root schema of a GLTF file.
 class GltfRoot {
   /// Path prefix used to resolve relative paths.
   final String _prefix;

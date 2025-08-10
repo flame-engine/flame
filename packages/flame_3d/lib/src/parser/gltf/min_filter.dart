@@ -1,6 +1,6 @@
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 
-/// Magnification filter. Valid values correspond to WebGL enums.
+/// Minification filter. Valid values correspond to WebGL enums.
 enum MinFilter {
   nearest('NEAREST', 9728),
   linear('LINEAR', 9729),

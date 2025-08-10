@@ -54,6 +54,8 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
 
   @override
   FutureOr<void> onLoad() async {
+    await GameScenario.loadAll();
+
     world.addAll([
       RoomBounds(),
       LightComponent.ambient(

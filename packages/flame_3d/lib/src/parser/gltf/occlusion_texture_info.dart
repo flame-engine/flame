@@ -2,6 +2,7 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/texture_info.dart';
 
+/// The occlusion texture.
 class OcclusionTextureInfo extends TextureInfo {
   /// A scalar parameter controlling the amount of occlusion applied.
   ///

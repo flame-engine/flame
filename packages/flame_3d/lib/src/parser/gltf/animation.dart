@@ -5,6 +5,7 @@ import 'package:flame_3d/src/parser/gltf/animation_sampler.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 
+/// A keyframe animation.
 class Animation extends GltfNode {
   final String? name;
 

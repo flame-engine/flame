@@ -1,5 +1,5 @@
 import 'package:flame_3d/core.dart';
-import 'package:flame_3d/src/model/model.dart';
+import 'package:flame_3d/model.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';

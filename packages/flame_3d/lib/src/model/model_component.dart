@@ -5,6 +5,8 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/src/model/animation_state.dart';
 import 'package:flame_3d/src/model/model.dart';
 
+/// A component wrapper over a 3D [Model], using the [AnimationState] to keep
+/// track and manage its animations.
 class ModelComponent extends Object3D {
   final Model model;
 
@@ -34,7 +36,6 @@ class ModelComponent extends Object3D {
       final mesh = node.node.mesh;
       if (mesh != null) {
         device.jointsInfo.jointTransformsPerSurface = node.jointTransforms;
-        // ignore: invalid_use_of_internal_member
         world.device
           ..model.setFrom(transformMatrix.multiplied(node.combinedTransform))
           ..bindMesh(mesh);

@@ -7,7 +7,7 @@ abstract class GameScenario {
 
   void setup(ExampleGame3D game);
 
-  static const String defaultScenario = 'models';
+  static const String defaultScenario = 'boxes';
 
   static final Map<String, GameScenario> scenarios = {
     'boxes': BoxesScenario(),

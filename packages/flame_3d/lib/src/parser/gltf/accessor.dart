@@ -7,6 +7,8 @@ import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/sparse_accessor.dart';
 
+/// A untyped GLTF accessor; it is typically wrapped into a specific accessor
+/// type on the data model. This provides the backing implementation.
 class RawAccessor extends GltfNode {
   /// The reference to the buffer view.
   /// When undefined, the accessor **MUST** be initialized with zeros; `sparse`

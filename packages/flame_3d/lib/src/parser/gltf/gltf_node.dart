@@ -2,6 +2,9 @@ import 'package:flame_3d/core.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 
+/// A base class for all data classes representing the GLTF schema.
+/// It holds a reference to the [GltfRoot] that contains it, which allows
+/// for [GltfRef]s to be resolved.
 abstract class GltfNode {
   final GltfRoot root;
 
@@ -10,6 +13,8 @@ abstract class GltfNode {
   });
 }
 
+/// A helper utility class to group different methods for parsing GLTF data
+/// into data classes.
 class Parser {
   Parser._();
 
