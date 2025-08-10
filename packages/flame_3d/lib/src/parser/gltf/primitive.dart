@@ -13,6 +13,8 @@ import 'package:flame_3d/src/parser/gltf/primitive_mode.dart';
 
 // cSpell:ignore TEXCOORD
 // (used in GLTF as the key for texture coordinate attributes)
+
+/// Geometry to be rendered with the given material.
 class Primitive extends GltfNode {
   /// The topology type of primitives to render.
   final PrimitiveMode mode;

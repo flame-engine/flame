@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flame_console/flame_console.dart';
 import 'package:flutter/widgets.dart';
 
-void main() async {
+void main() {
   runApp(
     GameWidget.controlled(
       gameFactory: ExampleGame3D.new,

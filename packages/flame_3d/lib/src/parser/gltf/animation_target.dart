@@ -4,6 +4,7 @@ import 'package:flame_3d/src/parser/gltf/gltf_ref.dart';
 import 'package:flame_3d/src/parser/gltf/gltf_root.dart';
 import 'package:flame_3d/src/parser/gltf/node.dart';
 
+/// The descriptor of the animated property.
 class AnimationTarget extends GltfNode {
   /// The reference to the node to animate. When undefined, the animated object
   /// **MAY** be defined by an extension.
