@@ -17,25 +17,31 @@ Future<void> main() async {
     });
 
     testWithFlameGame(
-        'renders post process with the bounding box of the children',
-        (game) async {
-      final postProcess = PostProcessComponent(
-        postProcess: PostProcessGroup(postProcesses: []),
-        children: [
-          PositionComponent(size: Vector2.all(50)),
-          PositionComponent(position: Vector2.all(100), size: Vector2.all(50)),
-        ],
-      );
-      await game.ensureAdd(postProcess);
+      'renders post process with the bounding box of the children',
+      (game) async {
+        final postProcess = PostProcessComponent(
+          postProcess: PostProcessGroup(postProcesses: []),
+          children: [
+            PositionComponent(size: Vector2.all(50)),
+            PositionComponent(
+              position: Vector2.all(100),
+              size: Vector2.all(50),
+            ),
+          ],
+        );
+        await game.ensureAdd(postProcess);
 
-      expect(game.children, contains(postProcess));
-      expect(postProcess.size, Vector2.all(150));
-    });
+        expect(game.children, contains(postProcess));
+        expect(postProcess.size, Vector2.all(150));
+      },
+    );
 
     testWithFlameGame('changes size when children change', (game) async {
       final componentA = PositionComponent(size: Vector2.all(50));
-      final componentB =
-          PositionComponent(position: Vector2.all(100), size: Vector2.all(50));
+      final componentB = PositionComponent(
+        position: Vector2.all(100),
+        size: Vector2.all(50),
+      );
       final postProcess = PostProcessComponent(
         postProcess: PostProcessGroup(postProcesses: []),
         children: [componentA, componentB],

@@ -30,19 +30,19 @@ class SparseAccessor extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          count: Parser.integer(map, 'count') ?? 0,
-          indices: Parser.object(
-            root,
-            map,
-            'indices',
-            SparseAccessorIndices.parse,
-          )!,
-          values: Parser.object(
-            root,
-            map,
-            'values',
-            SparseAccessorValues.parse,
-          )!,
-        );
+        root: root,
+        count: Parser.integer(map, 'count') ?? 0,
+        indices: Parser.object(
+          root,
+          map,
+          'indices',
+          SparseAccessorIndices.parse,
+        )!,
+        values: Parser.object(
+          root,
+          map,
+          'values',
+          SparseAccessorValues.parse,
+        )!,
+      );
 }

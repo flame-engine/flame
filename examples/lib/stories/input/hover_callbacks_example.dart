@@ -37,11 +37,11 @@ class HoverSquare extends PositionComponent with HoverCallbacks {
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
   HoverSquare(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(100),
-          anchor: Anchor.center,
-        );
+    : super(
+        position: position,
+        size: Vector2.all(100),
+        anchor: Anchor.center,
+      );
 
   @override
   void render(Canvas canvas) {

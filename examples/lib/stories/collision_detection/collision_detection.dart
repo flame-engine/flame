@@ -19,8 +19,9 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     ..add(
       'Collidable AnimationComponent',
       (_) => GameWidget(game: CollidableAnimationExample()),
-      codeLink:
-          baseLink('collision_detection/collidable_animation_example.dart'),
+      codeLink: baseLink(
+        'collision_detection/collidable_animation_example.dart',
+      ),
       info: CollidableAnimationExample.description,
     )
     ..add(
@@ -74,8 +75,9 @@ void addCollisionDetectionStories(Dashbook dashbook) {
     ..add(
       'Raycasting Max Distance',
       (_) => GameWidget(game: RaycastMaxDistanceExample()),
-      codeLink:
-          baseLink('collision_detection/raycast_max_distance_example.dart'),
+      codeLink: baseLink(
+        'collision_detection/raycast_max_distance_example.dart',
+      ),
       info: RaycastMaxDistanceExample.description,
     )
     ..add(

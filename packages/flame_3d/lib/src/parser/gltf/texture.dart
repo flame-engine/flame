@@ -43,15 +43,15 @@ class Texture extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          format: TextureFormat.parse(map, 'format') ?? TextureFormat.rgba,
-          internalFormat:
-              TextureFormat.parse(map, 'internalFormat') ?? TextureFormat.rgba,
-          sampler: Parser.ref<Sampler>(root, map, 'sampler'),
-          source: Parser.ref<Image>(root, map, 'source')!,
-          target: TextureTarget.parse(map, 'target') ?? TextureTarget.texture2d,
-          type: TextureType.parse(map, 'type') ?? TextureType.unsignedByte,
-        );
+        root: root,
+        format: TextureFormat.parse(map, 'format') ?? TextureFormat.rgba,
+        internalFormat:
+            TextureFormat.parse(map, 'internalFormat') ?? TextureFormat.rgba,
+        sampler: Parser.ref<Sampler>(root, map, 'sampler'),
+        source: Parser.ref<Image>(root, map, 'source')!,
+        target: TextureTarget.parse(map, 'target') ?? TextureTarget.texture2d,
+        type: TextureType.parse(map, 'type') ?? TextureType.unsignedByte,
+      );
 
   flame_3d.Texture toFlameTexture() {
     // TODO(luan): consider other parameters, such as sampler, type, etc

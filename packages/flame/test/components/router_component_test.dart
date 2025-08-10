@@ -100,12 +100,12 @@ void main() {
 
         expect(
           router.routes.values.whereType<_TestRoute>().every(
-                (e) =>
-                    e.onPopTimes == 0 &&
-                    e.didPopTimes == 0 &&
-                    (e.name == initialRouteName ||
-                        (e.onPushTimes == 0 && e.didPushTimes == 0)),
-              ),
+            (e) =>
+                e.onPopTimes == 0 &&
+                e.didPopTimes == 0 &&
+                (e.name == initialRouteName ||
+                    (e.onPushTimes == 0 && e.didPushTimes == 0)),
+          ),
           isTrue,
         );
 

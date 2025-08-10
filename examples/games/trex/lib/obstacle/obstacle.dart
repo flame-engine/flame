@@ -29,8 +29,8 @@ class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
   }
 
   double computeGap(double gapCoefficient, double speed) {
-    final minGap =
-        (width * speed * settings.minGap * gapCoefficient).roundToDouble();
+    final minGap = (width * speed * settings.minGap * gapCoefficient)
+        .roundToDouble();
     final maxGap = (minGap * _maxGapCoefficient).roundToDouble();
     return game.random.nextDoubleBetween(minGap, maxGap);
   }

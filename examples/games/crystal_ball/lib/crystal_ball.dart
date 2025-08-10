@@ -21,17 +21,18 @@ and the glowing effect of the crystal ball.
 
 class _CrystalBallWidgetState extends State<CrystalBallWidget> {
   // PreloadedPrograms is a simple data class that holds the preloaded
-  late final Future<PreloadedPrograms> preloadedPrograms = Future.wait([
-    FragmentProgram.fromAsset('packages/crystal_ball/shaders/ground.frag'),
-    FragmentProgram.fromAsset('packages/crystal_ball/shaders/fog.frag'),
-    FragmentProgram.fromAsset('packages/crystal_ball/shaders/firefly.frag'),
-  ]).then(
-    (l) => (
-      waterFragmentProgram: l[0],
-      fogFragmentProgram: l[1],
-      fireflyFragmentProgram: l[2],
-    ),
-  );
+  late final Future<PreloadedPrograms> preloadedPrograms =
+      Future.wait([
+        FragmentProgram.fromAsset('packages/crystal_ball/shaders/ground.frag'),
+        FragmentProgram.fromAsset('packages/crystal_ball/shaders/fog.frag'),
+        FragmentProgram.fromAsset('packages/crystal_ball/shaders/firefly.frag'),
+      ]).then(
+        (l) => (
+          waterFragmentProgram: l[0],
+          fogFragmentProgram: l[1],
+          fireflyFragmentProgram: l[2],
+        ),
+      );
 
   CrystalBallGame? game;
 

@@ -92,21 +92,25 @@ void main() {
     );
 
     testWithGame<_ParallaxGame>(
-        'can have fullscreen ParallaxComponent', _ParallaxGame.new,
-        (game) async {
-      expect(game.parallaxComponent.size, game.size);
-    });
+      'can have fullscreen ParallaxComponent',
+      _ParallaxGame.new,
+      (game) async {
+        expect(game.parallaxComponent.size, game.size);
+      },
+    );
 
     testWithGame<_SlowLoadParallaxGame>(
-        'can have layers with different loading times',
-        _SlowLoadParallaxGame.new, (game) async {
-      final parallax = game.parallaxComponent.parallax!;
-      var lastLength = 0.0;
-      for (final layer in parallax.layers) {
-        final velocityLength = layer.velocityMultiplier.length;
-        expect(velocityLength > lastLength, isTrue);
-        lastLength = velocityLength;
-      }
-    });
+      'can have layers with different loading times',
+      _SlowLoadParallaxGame.new,
+      (game) async {
+        final parallax = game.parallaxComponent.parallax!;
+        var lastLength = 0.0;
+        for (final layer in parallax.layers) {
+          final velocityLength = layer.velocityMultiplier.length;
+          expect(velocityLength > lastLength, isTrue);
+          lastLength = velocityLength;
+        }
+      },
+    );
   });
 }

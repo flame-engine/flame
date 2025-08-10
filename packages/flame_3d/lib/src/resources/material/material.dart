@@ -11,8 +11,8 @@ abstract class Material extends Resource<gpu.RenderPipeline> {
   Material({
     required Shader vertexShader,
     required Shader fragmentShader,
-  })  : _vertexShader = vertexShader,
-        _fragmentShader = fragmentShader;
+  }) : _vertexShader = vertexShader,
+       _fragmentShader = fragmentShader;
 
   @override
   gpu.RenderPipeline createResource() {

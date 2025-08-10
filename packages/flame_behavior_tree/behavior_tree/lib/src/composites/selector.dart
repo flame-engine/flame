@@ -4,7 +4,7 @@ import 'package:behavior_tree/behavior_tree.dart';
 class Selector extends BaseNode implements NodeInterface {
   /// Creates a selector node for given [children] nodes.
   Selector({List<NodeInterface>? children})
-      : _children = children ?? <NodeInterface>[];
+    : _children = children ?? <NodeInterface>[];
 
   final List<NodeInterface> _children;
 

@@ -35,17 +35,17 @@ class SpawnComponent extends Component {
     this.spawnWhenLoaded = false,
     Random? random,
     super.key,
-  })  : assert(
-          !(selfPositioning && area != null),
-          "Don't set an area when you are using selfPositioning=true",
-        ),
-        assert(
-          (factory != null) ^ (multiFactory != null),
-          'You need to provide either a factory or a multiFactory, not both.',
-        ),
-        _period = period,
-        multiFactory = multiFactory ?? _wrapFactory(factory!),
-        _random = random ?? randomFallback;
+  }) : assert(
+         !(selfPositioning && area != null),
+         "Don't set an area when you are using selfPositioning=true",
+       ),
+       assert(
+         (factory != null) ^ (multiFactory != null),
+         'You need to provide either a factory or a multiFactory, not both.',
+       ),
+       _period = period,
+       multiFactory = multiFactory ?? _wrapFactory(factory!),
+       _random = random ?? randomFallback;
 
   /// Use this constructor if you want your components to spawn within an
   /// interval time range.
@@ -66,14 +66,15 @@ class SpawnComponent extends Component {
     this.spawnWhenLoaded = false,
     Random? random,
     super.key,
-  })  : assert(
-          !(selfPositioning && area != null),
-          "Don't set an area when you are using selfPositioning=true",
-        ),
-        _period = minPeriod +
-            (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
-        multiFactory = multiFactory ?? _wrapFactory(factory!),
-        _random = random ?? randomFallback;
+  }) : assert(
+         !(selfPositioning && area != null),
+         "Don't set an area when you are using selfPositioning=true",
+       ),
+       _period =
+           minPeriod +
+           (random ?? randomFallback).nextDouble() * (maxPeriod - minPeriod),
+       multiFactory = multiFactory ?? _wrapFactory(factory!),
+       _random = random ?? randomFallback;
 
   /// The function used to create a new component to spawn.
   ///
@@ -86,14 +87,14 @@ class SpawnComponent extends Component {
   /// factory getter wraps it again to return the first element of the list and
   /// fails when the list is empty!
   PositionComponent Function(int amount) get factory => (int amount) {
-        final result = multiFactory.call(amount);
-        assert(
-          result.isNotEmpty,
-          'The factory call yielded no result, which is required when calling'
-          ' the single result factory',
-        );
-        return result.elementAt(0);
-      };
+    final result = multiFactory.call(amount);
+    assert(
+      result.isNotEmpty,
+      'The factory call yielded no result, which is required when calling'
+      ' the single result factory',
+    );
+    return result.elementAt(0);
+  };
 
   set factory(PositionComponent Function(int amount) newFactory) {
     multiFactory = _wrapFactory(newFactory);
@@ -183,7 +184,8 @@ class SpawnComponent extends Component {
       } else {
         maybeProvidedPosition = null;
       }
-      final targetPosition = maybeProvidedPosition ??
+      final targetPosition =
+          maybeProvidedPosition ??
           ancestors().whereType<PositionProvider>().firstOrNull?.position ??
           Vector2.zero();
 
@@ -198,7 +200,8 @@ class SpawnComponent extends Component {
       } else {
         maybeProvidedSize = null;
       }
-      final targetSize = maybeProvidedSize ??
+      final targetSize =
+          maybeProvidedSize ??
           ancestors().whereType<ReadOnlySizeProvider>().firstOrNull?.size ??
           Vector2.zero();
       assert(

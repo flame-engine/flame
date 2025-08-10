@@ -31,9 +31,7 @@ class CameraFollowAndWorldBoundsExample extends FlameGame
 }
 
 class Ground extends PositionComponent {
-  Ground()
-      : pebbles = [],
-        super(size: Vector2(1000, 30)) {
+  Ground() : pebbles = [], super(size: Vector2(1000, 30)) {
     final random = Random();
     for (var i = 0; i < 25; i++) {
       pebbles.add(
@@ -67,19 +65,19 @@ class Ground extends PositionComponent {
 
 class Player extends PositionComponent with KeyboardHandler {
   Player()
-      : body = Path()
-          ..moveTo(10, 0)
-          ..cubicTo(17, 0, 28, 20, 10, 20)
-          ..cubicTo(-8, 20, 3, 0, 10, 0)
-          ..close(),
-        eyes = Path()
-          ..addOval(const Rect.fromLTWH(12.5, 9, 4, 6))
-          ..addOval(const Rect.fromLTWH(6.5, 9, 4, 6)),
-        pupils = Path()
-          ..addOval(const Rect.fromLTWH(14, 11, 2, 2))
-          ..addOval(const Rect.fromLTWH(8, 11, 2, 2)),
-        velocity = Vector2.zero(),
-        super(size: Vector2(20, 20), anchor: Anchor.bottomCenter);
+    : body = Path()
+        ..moveTo(10, 0)
+        ..cubicTo(17, 0, 28, 20, 10, 20)
+        ..cubicTo(-8, 20, 3, 0, 10, 0)
+        ..close(),
+      eyes = Path()
+        ..addOval(const Rect.fromLTWH(12.5, 9, 4, 6))
+        ..addOval(const Rect.fromLTWH(6.5, 9, 4, 6)),
+      pupils = Path()
+        ..addOval(const Rect.fromLTWH(14, 11, 2, 2))
+        ..addOval(const Rect.fromLTWH(8, 11, 2, 2)),
+      velocity = Vector2.zero(),
+      super(size: Vector2(20, 20), anchor: Anchor.bottomCenter);
 
   final Path body;
   final Path eyes;
@@ -144,11 +142,14 @@ class Player extends PositionComponent with KeyboardHandler {
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is KeyDownEvent;
-    final keyLeft = (event.logicalKey == LogicalKeyboardKey.arrowLeft) ||
+    final keyLeft =
+        (event.logicalKey == LogicalKeyboardKey.arrowLeft) ||
         (event.logicalKey == LogicalKeyboardKey.keyA);
-    final keyRight = (event.logicalKey == LogicalKeyboardKey.arrowRight) ||
+    final keyRight =
+        (event.logicalKey == LogicalKeyboardKey.arrowRight) ||
         (event.logicalKey == LogicalKeyboardKey.keyD);
-    final keyUp = (event.logicalKey == LogicalKeyboardKey.arrowUp) ||
+    final keyUp =
+        (event.logicalKey == LogicalKeyboardKey.arrowUp) ||
         (event.logicalKey == LogicalKeyboardKey.keyW);
 
     if (isKeyDown) {
@@ -161,9 +162,11 @@ class Player extends PositionComponent with KeyboardHandler {
         nJumpsLeft -= 1;
       }
     } else {
-      final hasLeft = keysPressed.contains(LogicalKeyboardKey.arrowLeft) ||
+      final hasLeft =
+          keysPressed.contains(LogicalKeyboardKey.arrowLeft) ||
           keysPressed.contains(LogicalKeyboardKey.keyA);
-      final hasRight = keysPressed.contains(LogicalKeyboardKey.arrowRight) ||
+      final hasRight =
+          keysPressed.contains(LogicalKeyboardKey.arrowRight) ||
           keysPressed.contains(LogicalKeyboardKey.keyD);
       if (hasLeft && hasRight) {
         // Leave the current speed unchanged

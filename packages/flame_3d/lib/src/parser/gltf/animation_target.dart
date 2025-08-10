@@ -30,8 +30,8 @@ class AnimationTarget extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          node: Parser.ref(root, map, 'node')!,
-          path: AnimationPath.parse(map, 'path')!,
-        );
+        root: root,
+        node: Parser.ref(root, map, 'node')!,
+        path: AnimationPath.parse(map, 'path')!,
+      );
 }

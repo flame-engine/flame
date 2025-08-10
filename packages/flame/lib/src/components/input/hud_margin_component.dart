@@ -27,9 +27,9 @@ class HudMarginComponent extends PositionComponent {
     super.priority,
     super.key,
   }) : assert(
-          margin != null || position != null,
-          'Either margin or position must be defined',
-        );
+         margin != null || position != null,
+         'Either margin or position must be defined',
+       );
 
   /// Instead of setting a position of the [HudMarginComponent] a margin
   /// from the edges of the viewport can be used instead.
@@ -57,7 +57,8 @@ class HudMarginComponent extends PositionComponent {
         Anchor.topLeft,
         scaledSize,
       );
-      final bottomRight = sizeProvider.size -
+      final bottomRight =
+          sizeProvider.size -
           anchor.toOtherAnchorPosition(
             position,
             Anchor.bottomRight,

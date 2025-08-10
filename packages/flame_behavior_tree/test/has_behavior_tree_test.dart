@@ -51,8 +51,9 @@ void main() {
       'updates without errors with a valid tree.',
       (game) async {
         final component = _BehaviorTreeComponent()
-          ..treeRoot =
-              Sequence(children: [alwaysSuccess, alwaysFailure, alwaysRunning]);
+          ..treeRoot = Sequence(
+            children: [alwaysSuccess, alwaysFailure, alwaysRunning],
+          );
 
         expect(() async => await game.add(component), returnsNormally);
 
@@ -69,8 +70,9 @@ void main() {
       'tree updates at a slower rate.',
       (game) async {
         final component = _BehaviorTreeComponent()
-          ..treeRoot =
-              Sequence(children: [alwaysSuccess, alwaysFailure, alwaysRunning])
+          ..treeRoot = Sequence(
+            children: [alwaysSuccess, alwaysFailure, alwaysRunning],
+          )
           ..tickInterval = 1;
 
         await game.add(component);

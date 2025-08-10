@@ -46,11 +46,13 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     horizontalDirection = 0;
-    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyA) ||
+    horizontalDirection +=
+        (keysPressed.contains(LogicalKeyboardKey.keyA) ||
             keysPressed.contains(LogicalKeyboardKey.arrowLeft))
         ? -1
         : 0;
-    horizontalDirection += (keysPressed.contains(LogicalKeyboardKey.keyD) ||
+    horizontalDirection +=
+        (keysPressed.contains(LogicalKeyboardKey.keyD) ||
             keysPressed.contains(LogicalKeyboardKey.arrowRight))
         ? 1
         : 0;
@@ -114,7 +116,8 @@ class EmberPlayer extends SpriteAnimationComponent
     if (other is GroundBlock || other is PlatformBlock) {
       if (intersectionPoints.length == 2) {
         // Calculate the collision normal and separation distance.
-        final mid = (intersectionPoints.elementAt(0) +
+        final mid =
+            (intersectionPoints.elementAt(0) +
                 intersectionPoints.elementAt(1)) /
             2;
 
@@ -154,12 +157,13 @@ class EmberPlayer extends SpriteAnimationComponent
     }
     add(
       OpacityEffect.fadeOut(
-        EffectController(
-          alternate: true,
-          duration: 0.1,
-          repeatCount: 5,
-        ),
-      )..onComplete = () {
+          EffectController(
+            alternate: true,
+            duration: 0.1,
+            repeatCount: 5,
+          ),
+        )
+        ..onComplete = () {
           hitByEnemy = false;
         },
     );

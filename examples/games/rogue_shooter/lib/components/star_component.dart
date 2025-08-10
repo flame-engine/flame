@@ -4,7 +4,7 @@ class StarComponent extends SpriteAnimationComponent with HasGameReference {
   static const speed = 10;
 
   StarComponent({super.animation, super.position})
-      : super(size: Vector2.all(20));
+    : super(size: Vector2.all(20));
 
   @override
   void update(double dt) {

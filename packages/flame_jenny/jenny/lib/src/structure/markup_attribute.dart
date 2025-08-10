@@ -9,12 +9,12 @@ class MarkupAttribute {
     int startSubIndex = 0,
     int endSubIndex = 1,
     Map<String, Expression>? parameters,
-  ])  : _startTextPosition = startTextPosition + startSubIndex * _subFactor,
-        _endTextPosition = endTextPosition + endSubIndex * _subFactor,
-        _start = 0,
-        _end = 0,
-        _parameterExpressions = parameters,
-        _parameterValues = parameters == null ? null : <String, dynamic>{} {
+  ]) : _startTextPosition = startTextPosition + startSubIndex * _subFactor,
+       _endTextPosition = endTextPosition + endSubIndex * _subFactor,
+       _start = 0,
+       _end = 0,
+       _parameterExpressions = parameters,
+       _parameterValues = parameters == null ? null : <String, dynamic>{} {
     reset();
   }
 

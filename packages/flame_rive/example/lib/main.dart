@@ -10,8 +10,9 @@ void main() {
 class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final skillsArtboard =
-        await loadArtboard(RiveFile.asset('assets/skills.riv'));
+    final skillsArtboard = await loadArtboard(
+      RiveFile.asset('assets/skills.riv'),
+    );
     add(SkillsAnimationComponent(skillsArtboard));
   }
 }

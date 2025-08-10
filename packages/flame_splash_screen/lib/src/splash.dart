@@ -72,7 +72,8 @@ class FlameSplashScreenState extends State<FlameSplashScreen> {
   @override
   void didUpdateWidget(FlameSplashScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final hasStepsChanged = widget.showBefore != oldWidget.showBefore ||
+    final hasStepsChanged =
+        widget.showBefore != oldWidget.showBefore ||
         widget.showAfter != oldWidget.showAfter ||
         widget.theme.logoBuilder != oldWidget.theme.logoBuilder;
     if (hasStepsChanged &&

@@ -54,8 +54,10 @@ void main() {
     testWithFlameGame(
       'properly re-positions with FixedResolutionViewport',
       (game) async {
-        game.camera =
-            CameraComponent.withFixedResolution(width: 100, height: 200);
+        game.camera = CameraComponent.withFixedResolution(
+          width: 100,
+          height: 200,
+        );
         game.onGameResize(Vector2(100, 200));
         final joystick = JoystickComponent(
           knob: CircleComponent(radius: 5.0),

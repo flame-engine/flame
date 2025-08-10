@@ -176,7 +176,8 @@ abstract class EffectController {
     if (hasReverse) {
       final reverseIsLinear =
           reverseCurve == Curves.linear || ((reverseCurve == null) && isLinear);
-      final reverseHasDuration = (reverseDuration != null) ||
+      final reverseHasDuration =
+          (reverseDuration != null) ||
           (reverseSpeed == null && duration != null);
       if (reverseIsLinear) {
         items.add(
@@ -214,8 +215,9 @@ abstract class EffectController {
     }
 
     assert(items.isNotEmpty);
-    var controller =
-        items.length == 1 ? items[0] : SequenceEffectController(items);
+    var controller = items.length == 1
+        ? items[0]
+        : SequenceEffectController(items);
     if (infinite) {
       controller = InfiniteEffectController(controller);
     }

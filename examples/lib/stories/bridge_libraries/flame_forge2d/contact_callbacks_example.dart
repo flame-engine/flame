@@ -15,7 +15,7 @@ class ContactCallbacksExample extends Forge2DGame {
   ''';
 
   ContactCallbacksExample()
-      : super(gravity: Vector2(0, 10.0), world: ContactCallbackWorld());
+    : super(gravity: Vector2(0, 10.0), world: ContactCallbackWorld());
 }
 
 class ContactCallbackWorld extends Forge2DWorld

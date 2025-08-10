@@ -9,7 +9,7 @@ class BulletComponent extends SpriteAnimationComponent
   final Vector2 deltaPosition = Vector2.zero();
 
   BulletComponent({required super.position, super.angle})
-      : super(size: Vector2(10, 20), anchor: Anchor.center);
+    : super(size: Vector2(10, 20), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

@@ -22,10 +22,10 @@ import 'dart:math';
 class RecycledQueue<T extends Disposable> extends Iterable<T>
     implements Iterator<T> {
   RecycledQueue(this.factory, {int initialCapacity = 8})
-      : _elements = List.generate(initialCapacity, (i) => factory()),
-        _startIndex = -1,
-        _endIndex = -1,
-        _currentIndex = -1;
+    : _elements = List.generate(initialCapacity, (i) => factory()),
+      _startIndex = -1,
+      _endIndex = -1,
+      _currentIndex = -1;
 
   /// Function for creating new elements in the queue.
   final T Function() factory;
@@ -76,8 +76,8 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
     return isEmpty
         ? 0
         : _endIndex >= _startIndex
-            ? _endIndex - _startIndex + 1
-            : _elements.length - _startIndex + _endIndex + 1;
+        ? _endIndex - _startIndex + 1
+        : _elements.length - _startIndex + _endIndex + 1;
   }
 
   @override
@@ -237,8 +237,8 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
       return (i == _endIndex)
           ? -1
           : (i == _elements.length - 1)
-              ? 0
-              : i + 1;
+          ? 0
+          : i + 1;
     }
 
     while (i != -1) {

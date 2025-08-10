@@ -27,8 +27,8 @@ class ForegroundFogPostProcess extends PostProcess {
 
   @override
   void postProcess(Vector2 size, Canvas canvas) {
-    final origin =
-        CameraComponent.currentCamera!.visibleWorldRect.topLeft.toVector2();
+    final origin = CameraComponent.currentCamera!.visibleWorldRect.topLeft
+        .toVector2();
 
     shader.setFloatUniforms((value) {
       value.setVector(size);

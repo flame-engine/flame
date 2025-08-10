@@ -27,9 +27,9 @@ class AcceleratedParticle extends CurvedParticle with SingleChildParticle {
     Vector2? speed,
     Vector2? position,
     super.lifespan,
-  })  : acceleration = acceleration ?? Vector2.zero(),
-        position = position ?? Vector2.zero(),
-        speed = speed ?? Vector2.zero();
+  }) : acceleration = acceleration ?? Vector2.zero(),
+       position = position ?? Vector2.zero(),
+       speed = speed ?? Vector2.zero();
 
   @override
   void render(Canvas canvas) {

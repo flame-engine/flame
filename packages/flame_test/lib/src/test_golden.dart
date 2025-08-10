@@ -41,7 +41,8 @@ void testGolden(
   testWidgets(
     testName,
     (tester) async {
-      final gameInstance = game ??
+      final gameInstance =
+          game ??
           (backgroundColor != null
               ? GameWithBackgroundColor(backgroundColor)
               : FlameGame());
@@ -76,10 +77,11 @@ void testGolden(
   );
 }
 
-typedef PrepareFunction = Future<void> Function(
-  FlameGame game,
-  WidgetTester tester,
-);
+typedef PrepareFunction =
+    Future<void> Function(
+      FlameGame game,
+      WidgetTester tester,
+    );
 
 class GameWithBackgroundColor extends FlameGame {
   final Color _backgroundColor;

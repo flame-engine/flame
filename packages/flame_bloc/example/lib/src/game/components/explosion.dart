@@ -5,11 +5,11 @@ import 'package:flame_bloc_example/src/game/game.dart';
 class ExplosionComponent extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   ExplosionComponent(double x, double y)
-      : super(
-          position: Vector2(x, y),
-          size: Vector2.all(50),
-          removeOnFinish: true,
-        );
+    : super(
+        position: Vector2(x, y),
+        size: Vector2.all(50),
+        removeOnFinish: true,
+      );
 
   @override
   Future<void> onLoad() async {

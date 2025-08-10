@@ -34,8 +34,9 @@ void main() {
 
     test('load atlas from assets', () async {
       final bundle = _MockAssetBundle();
-      when(() => bundle.loadString(any()))
-          .thenAnswer((_) async => File(atlasPath).readAsString());
+      when(
+        () => bundle.loadString(any()),
+      ).thenAnswer((_) async => File(atlasPath).readAsString());
       when(() => bundle.load(any())).thenAnswer(
         (_) async => ByteData.sublistView(
           File(atlasImage1).readAsBytesSync(),

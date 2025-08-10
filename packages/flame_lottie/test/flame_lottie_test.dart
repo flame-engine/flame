@@ -27,8 +27,9 @@ void main() {
   testWithFlameGame(
     'Load composition as AssetBundle and use loadLottie function by library',
     (game) async {
-      final logoData =
-          Future.value(_bytesForFile('example/assets/LottieLogo1.json'));
+      final logoData = Future.value(
+        _bytesForFile('example/assets/LottieLogo1.json'),
+      );
 
       final mockAsset = _FakeAssetBundle({'logo.json': logoData});
 

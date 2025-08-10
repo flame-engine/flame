@@ -4,10 +4,7 @@ import 'dart:typed_data';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
-typedef UniformArrayKey = ({
-  int idx,
-  String field,
-});
+typedef UniformArrayKey = ({int idx, String field});
 
 /// {@template uniform_value}
 /// Instance of a uniform array. Represented by a [ByteBuffer].
@@ -25,8 +22,9 @@ class UniformArray extends UniformInstance<UniformArrayKey, ByteBuffer> {
       var previousIndex = -1;
       for (final entry in element.entries) {
         if (previousIndex + 1 != entry.key) {
-          final field =
-              slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
+          final field = slot.fields.indexed.firstWhere(
+            (e) => e.$1 == previousIndex + 1,
+          );
           throw StateError(
             'Uniform ${slot.name}.${field.$2} was not set',
           );

@@ -33,13 +33,13 @@ class SpriteComponent extends PositionComponent with HasPaint {
     super.priority,
     this.bleed,
     super.key,
-  })  : assert(
-          (size == null) == (autoResize ?? size == null),
-          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-        ),
-        _autoResize = autoResize ?? size == null,
-        _sprite = sprite,
-        super(size: size ?? sprite?.srcSize) {
+  }) : assert(
+         (size == null) == (autoResize ?? size == null),
+         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+       ),
+       _autoResize = autoResize ?? size == null,
+       _sprite = sprite,
+       super(size: size ?? sprite?.srcSize) {
     if (paint != null) {
       this.paint = paint;
     }
@@ -66,24 +66,24 @@ class SpriteComponent extends PositionComponent with HasPaint {
     ComponentKey? key,
     double? bleed,
   }) : this(
-          sprite: Sprite(
-            image,
-            srcPosition: srcPosition,
-            srcSize: srcSize,
-          ),
-          autoResize: autoResize,
-          paint: paint,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          nativeAngle: nativeAngle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          bleed: bleed,
-          key: key,
-        );
+         sprite: Sprite(
+           image,
+           srcPosition: srcPosition,
+           srcSize: srcSize,
+         ),
+         autoResize: autoResize,
+         paint: paint,
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         nativeAngle: nativeAngle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         bleed: bleed,
+         key: key,
+       );
 
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;

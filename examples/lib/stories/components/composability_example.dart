@@ -35,11 +35,11 @@ class ParentSquare extends RectangleComponent with HasGameReference {
     ..style = PaintingStyle.stroke;
 
   ParentSquare(Vector2 position, Vector2 size)
-      : super(
-          position: position,
-          size: size,
-          paint: defaultPaint,
-        );
+    : super(
+        position: position,
+        size: size,
+        paint: defaultPaint,
+      );
 
   @override
   Future<void> onLoad() async {

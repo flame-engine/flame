@@ -37,8 +37,10 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       }
     }
     if (crossings > 0) {
-      final intersectionPoint =
-          ray.point(closestDistance, out: out?.intersectionPoint);
+      final intersectionPoint = ray.point(
+        closestDistance,
+        out: out?.intersectionPoint,
+      );
       // This is "from" to "to" since it is defined ccw in the canvas
       // coordinate system
       _temporaryNormal
@@ -57,20 +59,19 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
             ..setFrom(ray.direction)
             ..reflect(_temporaryNormal);
 
-      final reflectionRay = (out?.reflectionRay
-            ?..setWith(
-              origin: intersectionPoint,
-              direction: reflectionDirection,
-            )) ??
+      final reflectionRay =
+          (out?.reflectionRay?..setWith(
+            origin: intersectionPoint,
+            direction: reflectionDirection,
+          )) ??
           Ray2(origin: intersectionPoint, direction: reflectionDirection);
-      return (out ?? RaycastResult<ShapeHitbox>())
-        ..setWith(
-          hitbox: this as T,
-          reflectionRay: reflectionRay,
-          normal: _temporaryNormal,
-          distance: closestDistance,
-          isInsideHitbox: isInsideHitbox,
-        );
+      return (out ?? RaycastResult<ShapeHitbox>())..setWith(
+        hitbox: this as T,
+        reflectionRay: reflectionRay,
+        normal: _temporaryNormal,
+        distance: closestDistance,
+        isInsideHitbox: isInsideHitbox,
+      );
     }
     out?.reset();
     return null;

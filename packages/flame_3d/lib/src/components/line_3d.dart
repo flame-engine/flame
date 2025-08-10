@@ -11,12 +11,12 @@ class Line3D extends MeshComponent {
     required double height,
     required Color color,
   }) : super(
-          mesh: CylinderMesh(
-            radius: radius,
-            height: height,
-            material: SpatialMaterial()..albedoColor = color,
-          ),
-        );
+         mesh: CylinderMesh(
+           radius: radius,
+           height: height,
+           material: SpatialMaterial()..albedoColor = color,
+         ),
+       );
 
   factory Line3D.generate({
     required Vector3 start,
@@ -78,8 +78,8 @@ class Line3D extends MeshComponent {
   }
 
   static Matrix4 _rotateAroundPoint(Matrix4 rotation, Vector3 point) {
-    return Matrix4.translation(point)
-        .multiplied(rotation)
-        .multiplied(Matrix4.translation(-point));
+    return Matrix4.translation(
+      point,
+    ).multiplied(rotation).multiplied(Matrix4.translation(-point));
   }
 }

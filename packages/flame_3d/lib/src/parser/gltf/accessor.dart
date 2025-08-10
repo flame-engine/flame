@@ -92,9 +92,11 @@ class RawAccessor extends GltfNode {
       );
     }
 
-    for (var cursor = byteOffset;
-        cursor < bytes.lengthInBytes;
-        cursor += step) {
+    for (
+      var cursor = byteOffset;
+      cursor < bytes.lengthInBytes;
+      cursor += step
+    ) {
       yield componentType.parseData(byteData, cursor: cursor);
     }
   }
@@ -151,9 +153,9 @@ class RawAccessor extends GltfNode {
   Vector3Accessor asVector3() => Vector3Accessor(root: root, accessor: this);
   Vector4Accessor asVector4() => Vector4Accessor(root: root, accessor: this);
   QuaternionAccessor asQuaternion() => QuaternionAccessor(
-        root: root,
-        accessor: this,
-      );
+    root: root,
+    accessor: this,
+  );
   Matrix4Accessor asMatrix4() => Matrix4Accessor(root: root, accessor: this);
 
   RawAccessor({
@@ -173,17 +175,17 @@ class RawAccessor extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          bufferView: Parser.ref(root, map, 'bufferView')!,
-          byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
-          componentType: ComponentType.parse(map, 'componentType')!,
-          normalized: Parser.boolean(map, 'normalized') ?? false,
-          count: Parser.integer(map, 'count')!,
-          type: AccessorType.parse(map, 'type')!,
-          max: Parser.floatList(map, 'max'),
-          min: Parser.floatList(map, 'min'),
-          sparse: Parser.object(root, map, 'sparse', SparseAccessor.parse),
-        );
+        root: root,
+        bufferView: Parser.ref(root, map, 'bufferView')!,
+        byteOffset: Parser.integer(map, 'byteOffset') ?? 0,
+        componentType: ComponentType.parse(map, 'componentType')!,
+        normalized: Parser.boolean(map, 'normalized') ?? false,
+        count: Parser.integer(map, 'count')!,
+        type: AccessorType.parse(map, 'type')!,
+        max: Parser.floatList(map, 'max'),
+        min: Parser.floatList(map, 'min'),
+        sparse: Parser.object(root, map, 'sparse', SparseAccessor.parse),
+      );
 }
 
 abstract class TypedAccessor<T> extends GltfNode {

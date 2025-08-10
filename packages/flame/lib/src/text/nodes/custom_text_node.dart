@@ -8,13 +8,14 @@ class CustomInlineTextNode extends InlineTextNode {
   CustomInlineTextNode(this.child, {required this.styleName});
 
   CustomInlineTextNode.simple(String text, {required this.styleName})
-      : child = PlainTextNode(text);
+    : child = PlainTextNode(text);
 
   final InlineTextNode child;
 
   @override
   void fillStyles(DocumentStyle stylesheet, InlineTextStyle parentTextStyle) {
-    style = FlameTextStyle.merge(
+    style =
+        FlameTextStyle.merge(
           parentTextStyle,
           stylesheet.getCustomStyle(styleName),
         ) ??

@@ -39,11 +39,11 @@ class Image extends GltfNode with GltfNodeWithData<flame3d.ImageTexture> {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          uri: Parser.string(map, 'uri'),
-          mimeType: MimeType.parse(map, 'mimeType'),
-          bufferView: Parser.ref(root, map, 'bufferView'),
-        );
+        root: root,
+        uri: Parser.string(map, 'uri'),
+        mimeType: MimeType.parse(map, 'mimeType'),
+        bufferView: Parser.ref(root, map, 'bufferView'),
+      );
 
   Future<Uint8List> data() async {
     final uri = this.uri;

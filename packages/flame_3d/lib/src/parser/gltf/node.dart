@@ -88,20 +88,20 @@ class Node extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          camera: Parser.ref(root, map, 'camera'),
-          children: Parser.refList(root, map, 'children') ?? [],
-          skeletons: Parser.refList(root, map, 'skeletons') ?? [],
-          skin: Parser.ref(root, map, 'skin'),
-          jointName: Parser.string(map, 'jointName'),
-          matrix: Parser.matrix4(root, map, 'matrix'),
-          mesh: Parser.ref(root, map, 'mesh'),
-          rotation: Parser.quaternion(root, map, 'rotation'),
-          scale: Parser.vector3(root, map, 'scale'),
-          translation: Parser.vector3(root, map, 'translation'),
-          weights: Parser.floatList(map, 'weights'),
-          name: Parser.string(map, 'name'),
-        );
+        root: root,
+        camera: Parser.ref(root, map, 'camera'),
+        children: Parser.refList(root, map, 'children') ?? [],
+        skeletons: Parser.refList(root, map, 'skeletons') ?? [],
+        skin: Parser.ref(root, map, 'skin'),
+        jointName: Parser.string(map, 'jointName'),
+        matrix: Parser.matrix4(root, map, 'matrix'),
+        mesh: Parser.ref(root, map, 'mesh'),
+        rotation: Parser.quaternion(root, map, 'rotation'),
+        scale: Parser.vector3(root, map, 'scale'),
+        translation: Parser.vector3(root, map, 'translation'),
+        weights: Parser.floatList(map, 'weights'),
+        name: Parser.string(map, 'name'),
+      );
 
   Matrix4? get _trs {
     if (translation == null && rotation == null && scale == null) {

@@ -16,14 +16,14 @@ class GlowEffectExample extends FlameGame {
         anchor: Anchor.center,
         paint: paint,
       )..add(
-          GlowEffect(
-            10.0,
-            EffectController(
-              duration: 2,
-              infinite: true,
-            ),
+        GlowEffect(
+          10.0,
+          EffectController(
+            duration: 2,
+            infinite: true,
           ),
         ),
+      ),
     );
   }
 }

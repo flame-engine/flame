@@ -12,7 +12,8 @@ import 'package:flutter/services.dart';
 
 class LookAtExample extends FlameGame<_TapWorld>
     with HasKeyboardHandlerComponents {
-  static const description = 'This example demonstrates how a component can be '
+  static const description =
+      'This example demonstrates how a component can be '
       'made to look at a specific target using the lookAt method. Tap anywhere '
       'to change the target point for both the choppers. '
       'It also shows how nativeAngle can be used to make the component '
@@ -168,7 +169,8 @@ class _ChopperParent extends PositionComponent
   @override
   void update(double dt) {
     final angleTo = chopper.angleTo(game.world.target.position);
-    textBox.text = '''
+    textBox.text =
+        '''
       nativeAngle = ${chopper.nativeAngle.toStringAsFixed(2)}
       angleTo = ${angleTo.toStringAsFixed(2)}
       absoluteAngle = ${chopper.absoluteAngle.toStringAsFixed(2)}

@@ -62,11 +62,11 @@ class AnimatedComponent extends SpriteAnimationComponent
     Vector2 size, {
     double angle = -pi / 4,
   }) : super(
-          position: position,
-          size: size,
-          angle: angle,
-          anchor: Anchor.center,
-        );
+         position: position,
+         size: size,
+         angle: angle,
+         anchor: Anchor.center,
+       );
 
   @override
   Future<void> onLoad() async {
@@ -82,15 +82,15 @@ class AnimatedComponent extends SpriteAnimationComponent
       ..style = PaintingStyle.stroke;
     add(
       PolygonHitbox.relative(
-        [
-          Vector2(0.0, -1.0),
-          Vector2(-1.0, -0.1),
-          Vector2(-0.2, 0.4),
-          Vector2(0.2, 0.4),
-          Vector2(1.0, -0.1),
-        ],
-        parentSize: size,
-      )
+          [
+            Vector2(0.0, -1.0),
+            Vector2(-1.0, -0.1),
+            Vector2(-0.2, 0.4),
+            Vector2(0.2, 0.4),
+            Vector2(1.0, -0.1),
+          ],
+          parentSize: size,
+        )
         ..paint = hitboxPaint
         ..renderShape = true,
     );

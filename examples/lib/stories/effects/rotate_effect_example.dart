@@ -18,13 +18,13 @@ class RotateEffectExample extends FlameGame {
   ''';
 
   RotateEffectExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          ),
-          world: _RotateEffectWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        ),
+        world: _RotateEffectWorld(),
+      );
 }
 
 class _RotateEffectWorld extends World {
@@ -79,11 +79,11 @@ class _RotateEffectWorld extends World {
 
 class Compass extends PositionComponent {
   Compass({required double size})
-      : _radius = size / 2,
-        super(
-          size: Vector2.all(size),
-          anchor: Anchor.center,
-        );
+    : _radius = size / 2,
+      super(
+        size: Vector2.all(size),
+        anchor: Anchor.center,
+      );
 
   late PositionComponent arrow;
   late PositionComponent rim;
@@ -130,10 +130,10 @@ class Compass extends PositionComponent {
 
 class CompassArrow extends PositionComponent {
   CompassArrow({required double width, required double radius})
-      : assert(width <= radius, 'The width is larger than the radius'),
-        _radius = radius,
-        _width = width,
-        super(size: Vector2(width, 2 * radius), anchor: Anchor.center);
+    : assert(width <= radius, 'The width is larger than the radius'),
+      _radius = radius,
+      _width = width,
+      super(size: Vector2(width, 2 * radius), anchor: Anchor.center);
 
   final double _radius;
   final double _width;
@@ -165,13 +165,13 @@ class CompassArrow extends PositionComponent {
 
 class CompassRim extends PositionComponent {
   CompassRim({required double radius, required double width})
-      : assert(radius > width, 'The width is larger than the radius'),
-        _radius = radius,
-        _width = width,
-        super(
-          size: Vector2.all(2 * radius),
-          anchor: Anchor.center,
-        );
+    : assert(radius > width, 'The width is larger than the radius'),
+      _radius = radius,
+      _width = width,
+      super(
+        size: Vector2.all(2 * radius),
+        anchor: Anchor.center,
+      );
 
   static const int numberOfNotches = 144;
   final double _radius;

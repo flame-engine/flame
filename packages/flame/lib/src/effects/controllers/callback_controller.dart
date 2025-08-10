@@ -11,8 +11,8 @@ class CallbackController extends DurationEffectController {
   /// ensure that this progress level is contiguous with respect to the progress
   /// of the overall effect.
   CallbackController(this.callback, {required double progress})
-      : _progress = progress,
-        super(0.0);
+    : _progress = progress,
+      super(0.0);
 
   final VoidCallback callback;
   final double _progress;

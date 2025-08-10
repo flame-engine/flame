@@ -67,11 +67,13 @@ void main() {
     test('DialogueViews with delays', () async {
       final yarn = YarnProject()
         ..strictCharacterNames = false
-        ..parse('title: The Robot and the Mattress\n'
-            '---\n'
-            'Zem: Hello, robot\n'
-            'Marvin: Blah\n'
-            '===\n');
+        ..parse(
+          'title: The Robot and the Mattress\n'
+          '---\n'
+          'Zem: Hello, robot\n'
+          'Marvin: Blah\n'
+          '===\n',
+        );
       final events = <String>[];
       final view1 = _DelayedDialogueView(
         target: events,
@@ -123,14 +125,16 @@ void main() {
 
     test('dialogue with choices', () async {
       final yarn = YarnProject()
-        ..parse('title: X\n---\n'
-            'Question?\n'
-            '-> Hi there\n'
-            '-> Howdy\n'
-            '   Greetings to you too\n'
-            '-> Yo! <<if false>>\n'
-            'Kk-thx-bye\n'
-            '===\n');
+        ..parse(
+          'title: X\n---\n'
+          'Question?\n'
+          '-> Hi there\n'
+          '-> Howdy\n'
+          '   Greetings to you too\n'
+          '-> Yo! <<if false>>\n'
+          'Kk-thx-bye\n'
+          '===\n',
+        );
       final view = _RecordingDialogueView(choices: [1]);
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
       await dialogue.startDialogue('X');
@@ -174,10 +178,12 @@ void main() {
 
     test('invalid dialogue choices', () async {
       final yarn = YarnProject()
-        ..parse('title:A\n---\n'
-            '-> Only one\n'
-            '-> Only two <<if false>>\n'
-            '===\n');
+        ..parse(
+          'title:A\n---\n'
+          '-> Only one\n'
+          '-> Only two <<if false>>\n'
+          '===\n',
+        );
       final view = _RecordingDialogueView(choices: [2, 1]);
       final dialogue = DialogueRunner(yarnProject: yarn, dialogueViews: [view]);
       await expectLater(
@@ -359,9 +365,9 @@ class _RecordingDialogueView extends DialogueView {
     List<String>? target,
     String? name,
     List<int>? choices,
-  })  : events = target ?? [],
-        name = name ?? '*',
-        choices = choices ?? [];
+  }) : events = target ?? [],
+       name = name ?? '*',
+       choices = choices ?? [];
 
   final List<String> events;
   final String name;

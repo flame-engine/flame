@@ -58,21 +58,21 @@ class EmberQuestGame extends FlameGame
     for (final block in segments[segmentIndex]) {
       final component = switch (block.blockType) {
         const (GroundBlock) => GroundBlock(
-            gridPosition: block.gridPosition,
-            xOffset: xPositionOffset,
-          ),
+          gridPosition: block.gridPosition,
+          xOffset: xPositionOffset,
+        ),
         const (PlatformBlock) => PlatformBlock(
-            gridPosition: block.gridPosition,
-            xOffset: xPositionOffset,
-          ),
+          gridPosition: block.gridPosition,
+          xOffset: xPositionOffset,
+        ),
         const (Star) => Star(
-            gridPosition: block.gridPosition,
-            xOffset: xPositionOffset,
-          ),
+          gridPosition: block.gridPosition,
+          xOffset: xPositionOffset,
+        ),
         const (WaterEnemy) => WaterEnemy(
-            gridPosition: block.gridPosition,
-            xOffset: xPositionOffset,
-          ),
+          gridPosition: block.gridPosition,
+          xOffset: xPositionOffset,
+        ),
         _ => throw UnimplementedError(),
       };
       world.add(component);

@@ -71,11 +71,13 @@ class Primitive extends GltfNode {
     assert(mode == PrimitiveMode.triangles);
 
     final positions = this.positions!.get().typedData();
-    final indices = this.indices?.get().typedData() ??
+    final indices =
+        this.indices?.get().typedData() ??
         // for non-indexed geometries
         List.generate(positions.length, (i) => i);
     final texCoords = this.texCoords?.get().typedData();
-    final normals = this.normals?.get().typedData() ??
+    final normals =
+        this.normals?.get().typedData() ??
         flame_3d.Vertex.calculateVertexNormals(positions, indices);
 
     Vector3? process(Vector3? v) {
@@ -114,7 +116,8 @@ class Primitive extends GltfNode {
       vertices: vertices.toList(),
       indices: indices,
       jointMap: jointData.jointMap,
-      material: material?.get().toFlameMaterial() ??
+      material:
+          material?.get().toFlameMaterial() ??
           flame_3d.SpatialMaterial(
             albedoColor: const Color(0xFFFF00FF),
           ),
@@ -172,19 +175,20 @@ class Primitive extends GltfNode {
     GltfRoot root,
     Map<String, Object?> map,
   ) : this(
-          root: root,
-          mode: PrimitiveMode.parse(map, 'mode') ?? PrimitiveMode.triangles,
-          attributes: Parser.mapInt(map, 'attributes') ?? {},
-          indices: Parser.ref(root, map, 'indices'),
-          material: Parser.ref(root, map, 'material'),
-          targets: Parser.objectList<MorphTarget>(
-                root,
-                map,
-                'targets',
-                MorphTarget.parse,
-              ) ??
-              [],
-        );
+        root: root,
+        mode: PrimitiveMode.parse(map, 'mode') ?? PrimitiveMode.triangles,
+        attributes: Parser.mapInt(map, 'attributes') ?? {},
+        indices: Parser.ref(root, map, 'indices'),
+        material: Parser.ref(root, map, 'material'),
+        targets:
+            Parser.objectList<MorphTarget>(
+              root,
+              map,
+              'targets',
+              MorphTarget.parse,
+            ) ??
+            [],
+      );
 }
 
 class JointData {

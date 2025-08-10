@@ -26,14 +26,14 @@ class FollowBehavior extends Component {
     this.verticalOnly = false,
     super.priority,
     super.key,
-  })  : _target = target,
-        _owner = owner,
-        _speed = maxSpeed,
-        assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
-        assert(
-          !(horizontalOnly && verticalOnly),
-          'The behavior cannot be both horizontalOnly and verticalOnly',
-        );
+  }) : _target = target,
+       _owner = owner,
+       _speed = maxSpeed,
+       assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
+       assert(
+         !(horizontalOnly && verticalOnly),
+         'The behavior cannot be both horizontalOnly and verticalOnly',
+       );
 
   ReadOnlyPositionProvider get target => _target;
   final ReadOnlyPositionProvider _target;

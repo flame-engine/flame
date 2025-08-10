@@ -14,10 +14,10 @@ class ShadowProcessor extends LayerProcessor {
     double opacity = 0.9,
     Color color = const Color(0xFF000000),
   }) : _shadowPaint = Paint()
-          ..colorFilter = ColorFilter.mode(
-            color.withValues(alpha: opacity),
-            BlendMode.srcATop,
-          );
+         ..colorFilter = ColorFilter.mode(
+           color.withValues(alpha: opacity),
+           BlendMode.srcATop,
+         );
 
   @override
   void process(Picture pic, Canvas canvas) {
