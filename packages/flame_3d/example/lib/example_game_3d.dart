@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:example/components/player.dart';
 import 'package:example/components/room_bounds.dart';
 import 'package:example/example_camera_3d.dart';
-import 'package:example/scenarios/boxes_setup.dart';
+import 'package:example/scenarios/game_scenario.dart';
 import 'package:flame/events.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
@@ -54,6 +54,8 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
 
   @override
   FutureOr<void> onLoad() async {
+    await GameScenario.loadAll();
+
     world.addAll([
       RoomBounds(),
       LightComponent.ambient(
@@ -64,7 +66,7 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
       ),
     ]);
 
-    BoxesScenario().setup(this);
+    GameScenario.defaultSetup(this);
   }
 
   @override

@@ -23,7 +23,7 @@ class SpatialMaterial extends Material {
               }),
               UniformSlot.value(
                 'JointMatrices',
-                List.generate(_maxJoints, (idx) => 'joint$idx').toSet(),
+                List.generate(_maxJoints, (index) => 'joint$index').toSet(),
               ),
             ],
           ),
@@ -85,8 +85,8 @@ class SpatialMaterial extends Material {
         ' found ${jointTransforms.length}',
       );
     }
-    for (final (idx, transform) in jointTransforms.indexed) {
-      vertexShader.setMatrix4('JointMatrices.joint$idx', transform);
+    for (final (index, transform) in jointTransforms.indexed) {
+      vertexShader.setMatrix4('JointMatrices.joint$index', transform);
     }
   }
 
