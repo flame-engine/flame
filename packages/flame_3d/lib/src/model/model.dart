@@ -41,11 +41,11 @@ class Model {
   }
 
   Set<String> get animationNames {
-    return animations.map((e) => e.name).nonNulls.toSet();
+    return {for (final animation in animations) ?animation.name};
   }
 
   Set<String> get nodeNames {
-    return nodes.values.map((e) => e.name).nonNulls.toSet();
+    return {for (final node in nodes.values) ?node.name};
   }
 
   Map<int, ProcessedNode> processNodes(AnimationState animation) {
@@ -64,7 +64,10 @@ class Model {
     }
 
     final queue = Queue<int>.from(
-      nodes.values.map((e) => e.nodeIndex).where((e) => inDegree[e] == 0),
+      [
+        for (final node in nodes.values)
+          if (inDegree[node.nodeIndex] == 0) node.nodeIndex,
+      ],
     );
 
     while (queue.isNotEmpty) {
