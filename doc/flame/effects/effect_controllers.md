@@ -225,7 +225,7 @@ the units are radians.
 ```dart
 final speedController = SpeedEffectController(LinearEffectController(0), speed: 1);
 final controller = EffectController(speed: 1); // same as speedController
-```gg
+```
 
 
 ## `DelayedEffectController`

@@ -1,7 +1,7 @@
 # Color Effects
 
 Color effects are used to change the color of a component over time. They can be used to tint a component,
-change its opacity, or apply a color filter. 
+change its opacity, or apply a color filter.
 
 
 ## ColorEffect
