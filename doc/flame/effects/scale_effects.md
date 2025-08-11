@@ -14,7 +14,7 @@ This effect will change the target's scale by the specified amount. For example,
 the component to grow 50% larger:
 
  ```{flutter-app}
- :sources: ../../flame/examples
+ :sources: ../flame/examples
  :page: scale_by_effect
  :show: widget code infobox
  :width: 180
@@ -34,7 +34,7 @@ final effect = ScaleEffect.by(
 This effect works similar to `ScaleEffect.by`, but sets the absolute value of the target's scale.
 
  ```{flutter-app}
- :sources: ../../flame/examples
+ :sources: ../flame/examples
  :page: scale_to_effect
  :show: widget code infobox
  :width: 180

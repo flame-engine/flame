@@ -11,7 +11,7 @@ This effect applies to a `PositionComponent` and shifts it by a prescribed `offs
 offset is relative to the current position of the target:
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: move_by_effect
 :show: widget code infobox
 :width: 180
@@ -38,7 +38,7 @@ This effect moves a `PositionComponent` from its current position to the specifi
 point in a straight line.
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: move_to_effect
 :show: widget code infobox
 :width: 180
@@ -63,7 +63,7 @@ recommended to start a path at `Vector2.zero()` in order to avoid sudden jumps i
 position.
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: move_along_path_effect
 :show: widget code infobox
 :width: 180

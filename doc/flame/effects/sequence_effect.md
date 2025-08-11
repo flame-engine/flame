@@ -7,7 +7,7 @@ The sequence effect can also be alternating (the sequence will first run forward
 backward); and also repeat a certain predetermined number of times, or infinitely.
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: sequence_effect
 :show: widget code infobox
 :width: 180

@@ -12,7 +12,7 @@ the provided color between a provided range.
 Usage example:
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: color_effect
 :show: widget code infobox
 :width: 180
@@ -42,7 +42,7 @@ This effect will change the opacity of the target over time to the specified alp
 It can only be applied to components that implement the `OpacityProvider`.
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: opacity_to_effect
 :show: widget code infobox
 :width: 180
@@ -63,7 +63,7 @@ and for multiple paintIds and `opacityProviderOfList` can be used.
 
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: opacity_effect_with_target
 :show: widget code infobox
 :width: 180
@@ -91,7 +91,7 @@ This effect will change the opacity of the target relative to the specified alph
 the following effect will change the opacity of the target by `90%`:
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: opacity_by_effect
 :show: widget code infobox
 :width: 180
@@ -120,7 +120,7 @@ This effect will apply the glowing shade around target relative to the specified
 will apply the glowing shade around target by strength of `10`:
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: glow_effect
 :show: widget code infobox
 :width: 180
