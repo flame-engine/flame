@@ -15,7 +15,7 @@ if the target has size `Vector2(100, 100)`, then after the following effect is a
 course, the new size will be `Vector2(120, 50)`:
 
  ```{flutter-app}
- :sources: ../../flame/examples
+ :sources: ../flame/examples
  :page: size_by_effect
  :show: widget code infobox
  :width: 180
@@ -47,7 +47,7 @@ Changes the size of the target component to the specified size. Target size cann
 
 
  ```{flutter-app}
- :sources: ../../flame/examples
+ :sources: ../flame/examples
  :page: size_to_effect
  :show: widget code infobox
  :width: 180

@@ -10,7 +10,7 @@ Changes the location of the target's anchor by the specified offset. This effect
 using `AnchorEffect.by()`.
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: anchor_by_effect
 :show: widget code infobox
 :width: 180
@@ -31,7 +31,7 @@ Changes the location of the target's anchor. This effect can also be created usi
 `AnchorEffect.to()`.
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: anchor_to_effect
 :show: widget code infobox
 :width: 180
