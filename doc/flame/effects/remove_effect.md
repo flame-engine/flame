@@ -4,7 +4,7 @@ This is a simple effect that can be attached to a component causing it to be rem
 tree after the specified delay has passed:
 
 ```{flutter-app}
-:sources: ../../flame/examples
+:sources: ../flame/examples
 :page: remove_effect
 :show: widget code infobox
 :width: 180
