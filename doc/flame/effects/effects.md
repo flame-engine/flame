@@ -102,15 +102,17 @@ without interfering with each other.
 
 - [Examples of various effects](https://examples.flame-engine.org/).
 
-
 ```{toctree}
 :hidden:
 
-Tap Events                <tap_events.md>
-Drag Events               <drag_events.md>
-Gesture Input             <gesture_input.md>
-Keyboard Input            <keyboard_input.md>
-Other Inputs              <other_inputs.md>
-Pointer Events            <pointer_events.md>
-HardwareKeyboardDetector  <hardware_keyboard_detector.md>
+Effect Controllers        <effect_controllers.md>
+Move Effects              <move_effects.md>
+Rotate Effects            <rotate_effects.md>
+Scale Effects             <scale_effects.md>
+Size Effects              <size_effects.md>
+Anchor Effects            <anchor_effects.md>
+Color Effects             <color_effects.md>
+Sequence Effect           <sequence_effect.md>
+Remove Effect             <remove_effect.md>
+Function Effect           <function_effect.md>
 ```
