@@ -210,17 +210,21 @@ be the subclass of `DurationEffectController`.
 
 The `SpeedEffectController` can only be applied to effects for which the notion of speed is
 well-defined. Such effects must implement the `MeasurableEffect` interface. For example, the
-following effects qualify: [`MoveByEffect`](#movebyeffect), [`MoveToEffect`](#movetoeffect),
-[`MoveAlongPathEffect`](#movealongpatheffect), [`RotateEffect.by`](#rotateeffectby),
-[`RotateEffect.to`](#rotateeffectto).
+following effects qualify:
+
+ - [`MoveByEffect`](move_effects.md#movebyeffect)
+ - [`MoveToEffect`](move_effects.md#movetoeffect)
+ - [`MoveAlongPathEffect`](move_effects.md#movealongpatheffect)
+ - [`RotateEffect.by`](rotate_effects.md#rotateeffectby)
+ - [`RotateEffect.to`](rotate_effects.md#rotateeffectto)
 
 The parameter `speed` is in units per second, where the notion of a "unit" depends on the target
 effect. For example, for move effects, they refer to the distance traveled; for rotation effects
 the units are radians.
 
 ```dart
-final ec1 = SpeedEffectController(LinearEffectController(0), speed: 1);
-final ec2 = EffectController(speed: 1); // same as ec1
+final speedController = SpeedEffectController(LinearEffectController(0), speed: 1);
+final controller = EffectController(speed: 1); // same as speedController
 ```
 
 
