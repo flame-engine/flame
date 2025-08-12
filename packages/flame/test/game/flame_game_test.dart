@@ -314,6 +314,29 @@ void main() {
   });
 
   group('pauseWhenBackgrounded:', () {
+    testWidgets(
+      'game resumes when widget is rebuilt',
+      (tester) async {
+        final game = FlameGame();
+
+        await tester.pumpWidget(GameWidget(game: game));
+        expect(game.paused, isFalse);
+        expect(game.isPausedOnBackground, isFalse);
+
+        await tester.pumpWidget(Container());
+        expect(game.paused, isTrue);
+        expect(game.isPausedOnBackground, isTrue);
+
+        await tester.pumpWidget(GameWidget(game: game));
+        expect(game.paused, isFalse, reason: 'Game should resume on remount');
+        expect(
+          game.isPausedOnBackground,
+          isFalse,
+          reason: 'Background pause flag should be cleared on remount resume',
+        );
+      },
+    );
+
     testWithFlameGame('true', (game) async {
       game.pauseWhenBackgrounded = true;
 

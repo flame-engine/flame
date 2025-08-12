@@ -110,6 +110,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @internal
   void mount() {
     super.mount();
+    if (_pausedBecauseBackgrounded) {
+      resumeEngine();
+    }
     setMounted();
   }
 
@@ -266,9 +269,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   bool pauseWhenBackgrounded = true;
   bool _pausedBecauseBackgrounded = false;
 
+  @visibleForTesting
+  bool get isPausedOnBackground => _pausedBecauseBackgrounded;
+
   @override
   @mustCallSuper
   void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
     switch (state) {
       case AppLifecycleState.resumed:
       case AppLifecycleState.inactive:
