@@ -320,15 +320,14 @@ void main() {
         final game = FlameGame();
 
         await tester.pumpWidget(GameWidget(game: game));
-        game.lifecycleStateChange(AppLifecycleState.paused);
-        await tester.pump();
+        expect(game.paused, isFalse);
+        expect(game.isPausedOnBackground, isFalse);
 
+        await tester.pumpWidget(Container());
         expect(game.paused, isTrue);
         expect(game.isPausedOnBackground, isTrue);
 
         await tester.pumpWidget(GameWidget(game: game));
-        await tester.pump();
-
         expect(game.paused, isFalse, reason: 'Game should resume on remount');
         expect(
           game.isPausedOnBackground,
