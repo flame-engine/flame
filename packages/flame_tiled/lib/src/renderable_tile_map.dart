@@ -417,7 +417,7 @@ class RenderableTiledMap<T extends FlameGame> extends Component
     }
   }
 
-  /// Renders the background and then calls super.
+  /// Fills canvas with [_backgroundPaint] and then calls super.
   @override
   void render(Canvas c) {
     if (_backgroundPaint != null) {

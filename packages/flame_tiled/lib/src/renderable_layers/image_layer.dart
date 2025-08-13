@@ -61,8 +61,10 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // Track the maximum amount the canvas could have been translated
     // for this layer so we can calculate the wrap point within the
     // paint area.
-    _maxTranslation.x = offsetX - (visibleWorldRect.left * parallaxX);
-    _maxTranslation.y = offsetY - (visibleWorldRect.top * parallaxY);
+    _maxTranslation.x = cachedLayerOffset.x;
+    // offsetX; //- (visibleWorldRect.left * parallaxX);
+    _maxTranslation.y = cachedLayerOffset.y;
+    // offsetY; //- (visibleWorldRect.top * parallaxY);
 
     /*
         _maxTranslation.x = offsetX - camera.viewfinder.position.x * parallaxX;
@@ -190,6 +192,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   void refreshCache() {}
 }
 
+/// Provide tuples with addition.
 extension _PrivRangeTupleHelper on (double, double) {
   (double, double) operator +((double, double) other) =>
       ($1 + other.$1, $2 + other.$2);

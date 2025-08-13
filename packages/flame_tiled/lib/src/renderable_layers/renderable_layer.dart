@@ -154,29 +154,21 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     final cameraY = camera?.viewfinder.position.y ?? 0.0;
     final viewportCenterX = (camera?.viewport.virtualSize.x ?? 0.0) * anchor.x;
     final viewportCenterY = (camera?.viewport.virtualSize.y ?? 0.0) * anchor.y;
+    final topLeftX = cameraX - viewportCenterX;
+    final topLeftY = cameraY - viewportCenterY;
 
-    // Due to how Tiled treats the center of the view as the reference
-    // point for parallax positioning (see Tiled docs), we need to offset the
-    // entire layer
-    var x = (1 - parallaxX) * viewportCenterX;
-    var y = (1 - parallaxY) * viewportCenterY;
-    // Compensate the offset for zoom.
-    x /= camera?.viewfinder.zoom ?? 1.0;
-    y /= camera?.viewfinder.zoom ?? 1.0;
-    // Scale to tile space.
-    x /= destTileSize.x;
-    y /= destTileSize.y;
+    final double initOffsetX = viewportCenterX * parallaxX;
+    final double initOffsetY = viewportCenterY * parallaxY;
 
-    // Now add the scroll for the current camera position
-    x += cameraX - (cameraX * parallaxX);
-    y += cameraY - (cameraY * parallaxY);
-
-    // Apply layer offset.
-    x += offsetX;
-    y += offsetY;
+    // Use the complement of the parallax coefficient in order to account for
+    // the camera applying its transformations earlier in the render cycle
+    // of Flame. This adjustment draws the layers correctly w.r.t. their own
+    // offset and parallax values.
+    final double x = offsetX + (cameraX * (1.0 - parallaxX));
+    final double y = offsetY + (cameraY * (1.0 - parallaxY));
 
     cachedLayerOffset = Vector2(x, y);
-    canvas.translate(x, y);
+    canvas.translate(cachedLayerOffset.x, cachedLayerOffset.y);
   }
 
   // Only render if this layer is [visible].
