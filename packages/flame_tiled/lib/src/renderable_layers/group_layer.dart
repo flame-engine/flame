@@ -16,9 +16,9 @@ class GroupLayer extends RenderableLayer<Group> {
 
   @override
   void refreshCache() {
-    final sublayers = children.whereType<RenderableLayer>();
-    for (final sub in sublayers) {
-      sub.refreshCache();
+    final childLayers = children.whereType<RenderableLayer>();
+    for (final child in childLayers) {
+      child.refreshCache();
     }
   }
 }
