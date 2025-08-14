@@ -1,7 +1,13 @@
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:meta/meta.dart';
 
-// Represents a [RenderableLayer] that cannot be parsed by this package.
+/// An instance of this class represents a [RenderableLayer] that could not be
+/// parsed by this package.
+///
+/// Because every [RenderableLayer]'s offsets are accumulated and used by their
+/// down-stream child components during rendering, an [UnsupportedLayer]
+/// must be retained in the component tree. In this way, offsets can propogate
+/// correctly even if this package lacks features in newer Tiled versions.
 @internal
 class UnsupportedLayer extends RenderableLayer {
   UnsupportedLayer({
