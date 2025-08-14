@@ -71,7 +71,8 @@ void main() {
       expect(tiled.tileMap.renderableLayers.length, equals(3));
     });
 
-    test('assigns key', () async {
+    testWithFlameGame('assigns key', (game) async {
+      await setUp(game);
       expect(tiled.key, equals(ComponentKey.named('test')));
     });
 

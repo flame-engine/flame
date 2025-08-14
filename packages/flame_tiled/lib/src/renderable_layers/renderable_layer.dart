@@ -124,13 +124,15 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   double get scaleX => destTileSize.x / map.tileWidth;
   double get scaleY => destTileSize.y / map.tileHeight;
 
-  late double offsetX = layer.offsetX * scaleX +
+  late double offsetX =
+      layer.offsetX * scaleX +
       switch (parent) {
         final GroupLayer p => p.offsetX,
         _ => 0,
       };
 
-  late double offsetY = layer.offsetY * scaleY +
+  late double offsetY =
+      layer.offsetY * scaleY +
       switch (parent) {
         final GroupLayer p => p.offsetY,
         _ => 0,
@@ -144,13 +146,15 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
         _ => 1,
       };
 
-  late double parallaxX = layer.parallaxX *
+  late double parallaxX =
+      layer.parallaxX *
       switch (parent) {
         final GroupLayer p => p.parallaxX,
         _ => 1,
       };
 
-  late double parallaxY = layer.parallaxY *
+  late double parallaxY =
+      layer.parallaxY *
       switch (parent) {
         final GroupLayer p => p.parallaxY,
         _ => 1,

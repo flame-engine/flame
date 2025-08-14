@@ -65,7 +65,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // image's length along that axis (width or height) so that with repeats
     // it still matches up with its initial layer offsets.
     if (_repeat == ImageRepeat.repeatX || _repeat == ImageRepeat.repeat) {
-      final (left, right) = _calculatePaintRange(
+      final (left, right) =
+          _calculatePaintRange(
             destSize: destSize.x,
             imageSideLen: imageW,
             layerOffset: cachedLayerOffset.x,
@@ -81,7 +82,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       _paintArea.right = imageW;
     }
     if (_repeat == ImageRepeat.repeatY || _repeat == ImageRepeat.repeat) {
-      final (top, bottom) = _calculatePaintRange(
+      final (top, bottom) =
+          _calculatePaintRange(
             destSize: destSize.y,
             imageSideLen: imageH,
             layerOffset: cachedLayerOffset.y,
