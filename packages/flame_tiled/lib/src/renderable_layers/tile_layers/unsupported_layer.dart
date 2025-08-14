@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 ///
 /// Because every [RenderableLayer]'s offsets are accumulated and used by their
 /// down-stream child components during rendering, an [UnsupportedLayer]
-/// must be retained in the component tree. In this way, offsets can propogate
+/// must be retained in the component tree. In this way, offsets can propagate
 /// correctly even if this package lacks features in newer Tiled versions.
 @internal
 class UnsupportedLayer extends RenderableLayer {
