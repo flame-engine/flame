@@ -15,7 +15,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   late final ImageRepeat _repeat;
   final MutableRect _paintArea = MutableRect.fromLTRB(0, 0, 0, 0);
   final Vector2 _canvasSize = Vector2.zero();
-  final Vector2 _maxTranslation = Vector2.zero();
 
   FlameImageLayer({
     required super.layer,
@@ -59,19 +58,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     final imageW = _image.size.x;
     final imageH = _image.size.y;
 
-    // Track the maximum amount the canvas could have been translated
-    // for this layer so we can calculate the wrap point within the
-    // paint area.
-    _maxTranslation.x = cachedLayerOffset.x;
-    // offsetX; //- (visibleWorldRect.left * parallaxX);
-    _maxTranslation.y = cachedLayerOffset.y;
-    // offsetY; //- (visibleWorldRect.top * parallaxY);
-
-    /*
-        _maxTranslation.x = offsetX - camera.viewfinder.position.x * parallaxX;
-     _maxTranslation.y = offsetY - camera.viewfinder.position.y * parallaxY;
-*/
-
     // When the image is being repeated, make sure the _paintArea rect is
     // big enough that it repeats off the edge of the canvas in both positive
     // and negative directions on that axis (Tiled repeats forever on an axis).
@@ -80,7 +66,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // it still matches up with its initial layer offsets.
     if (_repeat == ImageRepeat.repeatX || _repeat == ImageRepeat.repeat) {
       final (left, right) = _calculatePaintRange(
-            translation: _maxTranslation.x,
             destSize: destSize.x,
             imageSideLen: imageW,
             layerOffset: cachedLayerOffset.x,
@@ -97,7 +82,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     }
     if (_repeat == ImageRepeat.repeatY || _repeat == ImageRepeat.repeat) {
       final (top, bottom) = _calculatePaintRange(
-            translation: _maxTranslation.y,
             destSize: destSize.y,
             imageSideLen: imageH,
             layerOffset: cachedLayerOffset.y,
@@ -130,16 +114,15 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   // particular way that reduces the time spent on computation and clip steps
   // in flutter when drawing infinitely across an axis. This method accounts
   // for the destination canvas size, camera viewport size, and the exact
-  // coverage of the image w.r.t. [translation].
+  // coverage of the image w.r.t. translation.
   // This is achieved by wrapping the rect coordinates around [destSize]
   // after calculating the image coverage with [imageSideLen] and adding the
   // unseen portion of the image in the span of the wrap range, if any.
   //
   // The return tuple value is the range where its centroid is the wrap point
-  // plus the [layerOffset] which shifts the range to account for earlier
-  // transformations applied to the canvas.
+  // plus the [layerOffset] which is the accumulation of all translations
+  // applied to this layer earlier in the render pipeline.
   (double min, double max) _calculatePaintRange({
-    required double translation,
     required double destSize,
     required double imageSideLen,
     required double layerOffset,
@@ -158,7 +141,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     final unseen = (imageCount - seen) * imageSideLen;
 
     // Wrap around the target axis w.r.t. parallax.
-    final wrapPoint = translation.ceil() % (destSize + unseen).toInt();
+    final wrapPoint = layerOffset.ceil() % (destSize + unseen).toInt();
 
     // Partition the _paintArea into two parts.
     final part = (wrapPoint / imageSideLen).ceil();

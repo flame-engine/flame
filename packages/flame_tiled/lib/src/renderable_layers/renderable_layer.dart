@@ -173,17 +173,14 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     final viewportCenterX = (camera?.viewport.size.x ?? 0) * anchor.x;
     final viewportCenterY = (camera?.viewport.size.y ?? 0) * anchor.y;
 
-    //final x = offsetX + (cameraX * (1.0 - parallaxX));
-    //final y = offsetY + (cameraY * (1.0 - parallaxY));
     var x = (1.0 - parallaxX) * viewportCenterX;
     var y = (1.0 - parallaxY) * viewportCenterY;
     x /= zoom;
     y /= zoom;
     x += offsetX + cameraX - (cameraX * parallaxX);
     y += offsetY + cameraY - (cameraY * parallaxY);
-    //cachedLayerOffset = Vector2(x / zoom, y / zoom);
-    cachedLayerOffset = Vector2(x, y);
 
+    cachedLayerOffset = Vector2(x, y);
     canvas.translate(cachedLayerOffset.x, cachedLayerOffset.y);
   }
 

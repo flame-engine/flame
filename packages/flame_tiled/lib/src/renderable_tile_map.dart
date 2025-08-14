@@ -394,7 +394,6 @@ class RenderableTiledMap<T extends FlameGame> extends Component
 
   @override
   Future<void>? onLoad() async {
-    await super.onLoad();
     // Automatically use the first attached CameraComponent camera if it's not
     // already set..
     camera ??= game.children.query<CameraComponent>().firstOrNull;
@@ -423,23 +422,23 @@ class RenderableTiledMap<T extends FlameGame> extends Component
     if (_backgroundPaint != null) {
       c.drawPaint(_backgroundPaint);
     }
-
     super.render(c);
   }
 
-  /// Returns a layer of type [T] with given [name] from all the layers
+  /// Returns a [Layer] of type [L] with given [name] from all the layers
   /// of this map. If no such layer is found, null is returned.
   L? getLayer<L extends Layer>(String name) {
     try {
-      // layerByName will searches recursively starting with tiled.dart v0.8.5
+      // layerByName searches recursively starting with tiled.dart v0.8.5
       return map.layerByName(name) as L;
     } on ArgumentError {
       return null;
     }
   }
 
-  /// Returns a [RenderableLayer] with given [name] from all the layers
-  /// of this map. If no such layer is found, null is returned.
+  /// Returns a [RenderableLayer] with given [name] from all the
+  /// [renderableLayers] tracked by this component.
+  /// If no such layer is found, null is returned.
   RenderableLayer? getRenderableLayer(String name) =>
       switch (renderableLayers.indexWhere((e) => e.layer.name == name)) {
         -1 => null,
