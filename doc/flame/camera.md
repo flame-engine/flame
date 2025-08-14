@@ -267,7 +267,7 @@ if (!camera.canSee(component)) {
 
 ### Post processing
 
-[Post processing](post_processing.md) is a technique used in game development to apply visual
+[Post processing](rendering/post_processing.md) is a technique used in game development to apply visual
 effects to a component tree after it has been rendered. This can be added to the camera via the
 `postProcess` property.
 
@@ -285,4 +285,4 @@ camera.postProcess = PostProcessGroup(
 );
 ```
 
-Read more about this on [Post processing](post_processing.md).
+Read more about this on [Post processing](rendering/post_processing.md).
