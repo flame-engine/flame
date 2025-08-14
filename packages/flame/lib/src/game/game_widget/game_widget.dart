@@ -189,14 +189,14 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   late T currentGame;
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
-        final game = currentGame;
-        assert(game.hasLayout);
-        await game.load();
-        game.mount();
-        if (!game.paused) {
-          game.update(0);
-        }
-      })();
+    final game = currentGame;
+    assert(game.hasLayout);
+    await game.load();
+    game.mount();
+    if (!game.paused) {
+      game.update(0);
+    }
+  })();
 
   Future<void>? _loaderFuture;
 
@@ -302,13 +302,13 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   @override
   void dispose() {
-    super.dispose();
     disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
     // for disposing it
     if (widget.focusNode == null) {
       _focusNode.dispose();
     }
+    super.dispose();
   }
 
   KeyEventResult _handleKeyEvent(FocusNode focusNode, KeyEvent event) {
@@ -342,8 +342,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         'not receive events',
       );
 
-      internalGameWidget =
-          currentGame.gestureDetectors.build(internalGameWidget);
+      internalGameWidget = currentGame.gestureDetectors.build(
+        internalGameWidget,
+      );
 
       if (hasMouseDetectors(currentGame)) {
         internalGameWidget = applyMouseDetectors(
@@ -442,9 +443,10 @@ typedef GameLoadingWidgetBuilder = Widget Function(BuildContext);
 
 typedef GameErrorWidgetBuilder = Widget Function(BuildContext, Object error);
 
-typedef OverlayWidgetBuilder<T extends Game> = Widget Function(
-  BuildContext context,
-  T game,
-);
+typedef OverlayWidgetBuilder<T extends Game> =
+    Widget Function(
+      BuildContext context,
+      T game,
+    );
 
 typedef GameFactory<T extends Game> = T Function();

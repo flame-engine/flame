@@ -11,7 +11,7 @@ void main() {
   group('HasVisibility', () {
     testGolden(
       'Render a Component with isVisible set to false',
-      (game) async {
+      (game, tester) async {
         game.add(_MyComponent()..mySprite.isVisible = false);
       },
       size: Vector2(300, 400),

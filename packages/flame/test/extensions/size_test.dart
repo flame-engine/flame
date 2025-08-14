@@ -10,8 +10,16 @@ void main() {
       final size = Size(r.nextDouble(), r.nextDouble());
       final vector2 = size.toVector2();
 
-      expect(vector2.x, size.width, reason: 'x width does not match');
-      expect(vector2.y, size.height, reason: 'y height does not match');
+      expect(
+        vector2.x,
+        closeTo(size.width, 1e-6),
+        reason: 'x width does not match',
+      );
+      expect(
+        vector2.y,
+        closeTo(size.height, 1e-6),
+        reason: 'y height does not match',
+      );
     });
 
     testRandom('toOffset has dx to size.width and dy to size.dy', (Random r) {
@@ -31,15 +39,20 @@ void main() {
     });
 
     testRandom(
-        'toRect has left to 0, top to 0, width: size.dx and height: size.dy',
-        (Random r) {
-      final size = Size(r.nextDouble(), r.nextDouble());
-      final rect = size.toRect();
+      'toRect has left to 0, top to 0, width: size.dx and height: size.dy',
+      (Random r) {
+        final size = Size(r.nextDouble(), r.nextDouble());
+        final rect = size.toRect();
 
-      expect(rect.left, 0, reason: 'left should be 0 as init');
-      expect(rect.top, 0, reason: 'top should be 0 as init');
-      expect(rect.width, size.width, reason: 'width width does not match');
-      expect(rect.height, size.height, reason: 'height height does not match');
-    });
+        expect(rect.left, 0, reason: 'left should be 0 as init');
+        expect(rect.top, 0, reason: 'top should be 0 as init');
+        expect(rect.width, size.width, reason: 'width width does not match');
+        expect(
+          rect.height,
+          size.height,
+          reason: 'height height does not match',
+        );
+      },
+    );
   });
 }

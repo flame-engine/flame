@@ -11,10 +11,9 @@ Adds support for <a href="https://github.com/rive-app/rive-flutter">Rive animati
 
 <p align="center">
   <a title="Pub" href="https://pub.dev/packages/flame_rive" ><img src="https://img.shields.io/pub/v/flame_rive.svg?style=popout" /></a>
-  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push"/></a>
+  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/actions/workflows/cicd.yml/badge.svg?branch=main&event=push"/></a>
   <a title="Discord" href="https://discord.gg/pxrBmy4"><img src="https://img.shields.io/discord/509714518008528896.svg"/></a>
   <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
-  <a title="AI Assist" href="https://app.commanddash.io/agent/flame_engine"><img src="https://img.shields.io/badge/AI-Code%20Assist-EB9FDA.svg"></a>
 </p>
 
 ---

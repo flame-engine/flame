@@ -25,10 +25,10 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
   ''';
 
   MultipleShapesExample()
-      : super(
-          world: MultiShapesWorld(),
-          camera: CameraComponent()..viewfinder.anchor = Anchor.topLeft,
-        );
+    : super(
+        world: MultiShapesWorld(),
+        camera: CameraComponent()..viewfinder.anchor = Anchor.topLeft,
+      );
 }
 
 class MultiShapesWorld extends World with HasGameReference {
@@ -67,7 +67,8 @@ class MultiShapesWorld extends World with HasGameReference {
     ScreenHitbox screenHitbox,
   ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
-    final isXOverflow = lastCollidable.position.x +
+    final isXOverflow =
+        lastCollidable.position.x +
             lastCollidable.size.x / 2 +
             _distance.x +
             collidableSize.x >
@@ -94,8 +95,8 @@ abstract class MyCollidable extends PositionComponent
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
-  final Color _defaultColor = Colors.blue.withOpacity(0.8);
-  final Color _collisionColor = Colors.green.withOpacity(0.8);
+  final Color _defaultColor = Colors.blue.withValues(alpha: 0.8);
+  final Color _collisionColor = Colors.green.withValues(alpha: 0.8);
   late final Paint _dragIndicatorPaint;
   final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
@@ -219,11 +220,11 @@ class CollidableCircle extends MyCollidable {
 class SnowmanPart extends CircleHitbox {
   @override
   final renderShape = true;
-  final startColor = Colors.white.withOpacity(0.8);
+  final startColor = Colors.white.withValues(alpha: 0.8);
   final Color hitColor;
 
   SnowmanPart(double radius, Vector2 position, this.hitColor)
-      : super(radius: radius, position: position, anchor: Anchor.center) {
+    : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
   }
 
@@ -234,7 +235,7 @@ class SnowmanPart extends CircleHitbox {
     if (other.hitboxParent is ScreenHitbox) {
       paint.color = startColor;
     } else {
-      paint.color = hitColor.withOpacity(0.8);
+      paint.color = hitColor.withValues(alpha: 0.8);
     }
   }
 
@@ -288,12 +289,23 @@ MyCollidable randomCollidable(
   final rotationSpeed = 0.5 - rng.nextDouble();
   final shapeType = Shapes.values[rng.nextInt(Shapes.values.length)];
   return switch (shapeType) {
-    Shapes.circle => CollidableCircle(position, size, velocity, screenHitbox)
-      ..rotationSpeed = rotationSpeed,
-    Shapes.rectangle =>
-      CollidableRectangle(position, size, velocity, screenHitbox)
-        ..rotationSpeed = rotationSpeed,
-    Shapes.polygon => CollidablePolygon(position, size, velocity, screenHitbox)
-      ..rotationSpeed = rotationSpeed,
+    Shapes.circle => CollidableCircle(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
+    Shapes.rectangle => CollidableRectangle(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
+    Shapes.polygon => CollidablePolygon(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
   };
 }

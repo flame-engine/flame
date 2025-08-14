@@ -1,5 +1,6 @@
+import 'package:flame_test/src/is_close_to_vector.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// Returns a matcher which checks if the argument is a vector within distance
 /// [epsilon] of [vector]. For example:
@@ -9,35 +10,15 @@ import 'package:vector_math/vector_math_64.dart';
 /// expect(position, closeToVector(expectedPosition, 1e-10));
 /// ```
 Matcher closeToVector(Vector2 vector, [double epsilon = 1e-15]) {
-  return _IsCloseTo(vector, epsilon);
+  return _IsCloseToVector2(vector, epsilon);
 }
 
-class _IsCloseTo extends Matcher {
-  const _IsCloseTo(this._value, this._epsilon);
-
-  final Vector2 _value;
-  final double _epsilon;
+class _IsCloseToVector2 extends IsCloseToVector<Vector2> {
+  const _IsCloseToVector2(super.value, super.epsilon);
 
   @override
-  bool matches(dynamic item, Map matchState) {
-    return (item is Vector2) && (item - _value).length <= _epsilon;
-  }
+  double dist(Vector2 a, Vector2 b) => (a - b).length;
 
   @override
-  Description describe(Description description) => description
-      .add('a Vector2 object within $_epsilon of (${_value.x}, ${_value.y})');
-
-  @override
-  Description describeMismatch(
-    dynamic item,
-    Description mismatchDescription,
-    Map matchState,
-    bool verbose,
-  ) {
-    if (item is! Vector2) {
-      return mismatchDescription.add('is not an instance of Vector2');
-    }
-    final distance = (item - _value).length;
-    return mismatchDescription.add('is at distance $distance');
-  }
+  List<double> storage(Vector2 value) => value.storage;
 }

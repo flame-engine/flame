@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart' show OffsetExtension;
+import 'package:flame/extensions.dart' show OffsetExtension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
-class CameraComponentExample extends FlameGame with PanDetector {
+class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
   static const description = '''
     This example shows how a camera can be dynamically added into a game using
     a CameraComponent.
@@ -17,6 +17,8 @@ class CameraComponentExample extends FlameGame with PanDetector {
     Click and hold the mouse to bring up a magnifying glass, then have a better
     look at the world underneath! 
   ''';
+
+  CameraComponentExample() : super(world: AntWorld());
 
   late final CameraComponent magnifyingGlass;
   late final Vector2 center;
@@ -28,16 +30,16 @@ class CameraComponentExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    final world = AntWorld();
-    await add(world);
-    final camera = CameraComponent(world: world);
-    await add(camera);
-    final offset = world.curve.boundingRect().center;
-    center = offset.toVector2();
-    camera.viewfinder.position = Vector2(center.x, center.y);
+    world.loaded.then((_) {
+      final offset = world.curve.boundingRect().center;
+      center = offset.toVector2();
+      camera.viewfinder.position = Vector2(center.x, center.y);
+    });
 
-    magnifyingGlass =
-        CameraComponent(world: world, viewport: CircularViewport(radius));
+    magnifyingGlass = CameraComponent(
+      world: world,
+      viewport: CircularViewport(radius),
+    );
     magnifyingGlass.viewport.add(Bezel(radius));
     magnifyingGlass.viewfinder.zoom = zoom;
   }
@@ -77,10 +79,10 @@ class CameraComponentExample extends FlameGame with PanDetector {
 
 class Bezel extends PositionComponent {
   Bezel(this.radius)
-      : super(
-          size: Vector2.all(2 * radius),
-          position: Vector2.all(radius),
-        );
+    : super(
+        size: Vector2.all(2 * radius),
+        position: Vector2.all(radius),
+      );
 
   final double radius;
   late final Path rim;
@@ -106,23 +108,27 @@ class Bezel extends PositionComponent {
     rimBorder = Path()
       ..addOval(Rect.fromLTRB(-outer, -outer, outer, outer))
       ..addOval(Rect.fromLTRB(-inner, -inner, inner, inner));
-    handle = (Path()
-          ..addRRect(
-            RRect.fromLTRBR(
-              radius,
-              -handleWidth / 2,
-              handleLength + radius,
-              handleWidth / 2,
-              const Radius.circular(5.0),
-            ),
-          ))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
-    connector = (Path()
-          ..addArc(Rect.fromLTRB(-outer, -outer, outer, outer), -0.22, 0.44))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
-    specularHighlight = (Path()
-          ..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
-        .transform((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    handle =
+        (Path()..addRRect(
+              RRect.fromLTRBR(
+                radius,
+                -handleWidth / 2,
+                handleLength + radius,
+                handleWidth / 2,
+                const Radius.circular(5.0),
+              ),
+            ))
+            .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    connector =
+        (Path()..addArc(
+              Rect.fromLTRB(-outer, -outer, outer, outer),
+              -0.22,
+              0.44,
+            ))
+            .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
+    specularHighlight =
+        (Path()..addOval(Rect.fromLTWH(-radius * 0.8, -8, 16, radius * 0.3)))
+            .transform32((Matrix4.identity()..rotateZ(pi / 4)).storage);
 
     glassPaint = Paint()..color = const Color(0x1400ffae);
     rimBorderPaint = Paint()
@@ -428,8 +434,9 @@ class Ant extends PositionComponent {
       'nextIndex is outside of the bounds of travelPath',
     );
     final nextPosition = travelPath[nextIndex];
-    var nextAngle =
-        angle = -(nextPosition - position).angleToSigned(Vector2(0, -1));
+    var nextAngle = angle = -(nextPosition - position).angleToSigned(
+      Vector2(0, -1),
+    );
     if (nextAngle - angle > tau / 2) {
       nextAngle -= tau;
     }
@@ -481,9 +488,9 @@ class InsectLeg {
     this.l2,
     this.l3, {
     required bool mirrorBendDirection,
-  })  : dir = mirrorBendDirection ? -1 : 1,
-        path = Path(),
-        foot = Vector2.zero() {
+  }) : dir = mirrorBendDirection ? -1 : 1,
+       path = Path(),
+       foot = Vector2.zero() {
     final ok = placeFoot(Vector2(x1, y1));
     assert(ok, 'The foot was not properly placed');
   }

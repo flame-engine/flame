@@ -21,6 +21,8 @@ class DocumentStyle extends FlameTextStyle {
     InlineTextStyle? boldText,
     InlineTextStyle? italicText,
     InlineTextStyle? codeText,
+    InlineTextStyle? strikethroughText,
+    Map<String, InlineTextStyle>? customStyles,
     BlockStyle? paragraph,
     BlockStyle? header1,
     BlockStyle? header2,
@@ -28,24 +30,32 @@ class DocumentStyle extends FlameTextStyle {
     BlockStyle? header4,
     BlockStyle? header5,
     BlockStyle? header6,
-  })  : _text = FlameTextStyle.merge(DocumentStyle.defaultTextStyle, text),
-        _boldText = FlameTextStyle.merge(BoldTextNode.defaultStyle, boldText),
-        _italicText =
-            FlameTextStyle.merge(ItalicTextNode.defaultStyle, italicText),
-        _codeText = FlameTextStyle.merge(CodeTextNode.defaultStyle, codeText),
-        _paragraph =
-            FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
-        _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
-        _header2 = FlameTextStyle.merge(HeaderNode.defaultStyleH2, header2),
-        _header3 = FlameTextStyle.merge(HeaderNode.defaultStyleH3, header3),
-        _header4 = FlameTextStyle.merge(HeaderNode.defaultStyleH4, header4),
-        _header5 = FlameTextStyle.merge(HeaderNode.defaultStyleH5, header5),
-        _header6 = FlameTextStyle.merge(HeaderNode.defaultStyleH6, header6);
+  }) : _text = FlameTextStyle.merge(DocumentStyle.defaultTextStyle, text),
+       _boldText = FlameTextStyle.merge(BoldTextNode.defaultStyle, boldText),
+       _italicText = FlameTextStyle.merge(
+         ItalicTextNode.defaultStyle,
+         italicText,
+       ),
+       _codeText = FlameTextStyle.merge(CodeTextNode.defaultStyle, codeText),
+       _strikethroughText = FlameTextStyle.merge(
+         StrikethroughTextNode.defaultStyle,
+         strikethroughText,
+       ),
+       _customStyles = customStyles,
+       _paragraph = FlameTextStyle.merge(ParagraphNode.defaultStyle, paragraph),
+       _header1 = FlameTextStyle.merge(HeaderNode.defaultStyleH1, header1),
+       _header2 = FlameTextStyle.merge(HeaderNode.defaultStyleH2, header2),
+       _header3 = FlameTextStyle.merge(HeaderNode.defaultStyleH3, header3),
+       _header4 = FlameTextStyle.merge(HeaderNode.defaultStyleH4, header4),
+       _header5 = FlameTextStyle.merge(HeaderNode.defaultStyleH5, header5),
+       _header6 = FlameTextStyle.merge(HeaderNode.defaultStyleH6, header6);
 
   final InlineTextStyle? _text;
   final InlineTextStyle? _boldText;
   final InlineTextStyle? _italicText;
   final InlineTextStyle? _codeText;
+  final InlineTextStyle? _strikethroughText;
+  final Map<String, InlineTextStyle>? _customStyles;
   final BlockStyle? _paragraph;
   final BlockStyle? _header1;
   final BlockStyle? _header2;
@@ -98,6 +108,11 @@ class DocumentStyle extends FlameTextStyle {
   InlineTextStyle get boldText => _boldText!;
   InlineTextStyle get italicText => _italicText!;
   InlineTextStyle get codeText => _codeText!;
+  InlineTextStyle get strikethroughText => _strikethroughText!;
+
+  InlineTextStyle? getCustomStyle(String className) {
+    return _customStyles?[className];
+  }
 
   /// Style for [ParagraphNode]s.
   BlockStyle get paragraph => _paragraph!;
@@ -122,6 +137,10 @@ class DocumentStyle extends FlameTextStyle {
       boldText: FlameTextStyle.merge(_boldText, other.boldText),
       italicText: FlameTextStyle.merge(_italicText, other.italicText),
       codeText: FlameTextStyle.merge(_codeText, other.codeText),
+      strikethroughText: FlameTextStyle.merge(
+        _strikethroughText,
+        other.strikethroughText,
+      ),
       background: merge(background, other.background) as BackgroundStyle?,
       paragraph: merge(paragraph, other.paragraph) as BlockStyle?,
       header1: merge(header1, other.header1) as BlockStyle?,
@@ -134,7 +153,7 @@ class DocumentStyle extends FlameTextStyle {
   }
 
   final Map<FlameTextStyle, Map<FlameTextStyle, FlameTextStyle>>
-      _mergedStylesCache = {};
+  _mergedStylesCache = {};
 
   /// Merges two [FlameTextStyle]s together, preferring the properties of
   /// [style2] if present, falling back to the properties of [style1].
@@ -144,8 +163,9 @@ class DocumentStyle extends FlameTextStyle {
     } else if (style2 == null) {
       return style1;
     } else {
-      return (_mergedStylesCache[style1] ??= {})[style2] ??=
-          style1.copyWith(style2);
+      return (_mergedStylesCache[style1] ??= {})[style2] ??= style1.copyWith(
+        style2,
+      );
     }
   }
 }

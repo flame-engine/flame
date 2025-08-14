@@ -25,6 +25,8 @@ by providing an `overlayBuilderMap`.
   overlays.add(pauseOverlayIdentifier);
   // Marks 'PauseMenu' to not be rendered. 
   overlays.remove(pauseOverlayIdentifier);
+  // Toggles the 'PauseMenu' overlay.
+  overlays.toggle(pauseOverlayIdentifier);
 ```
 
 ```dart

@@ -18,9 +18,9 @@ class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
 
   @override
   void onGameResize(Vector2 size) {
-    children
-        .query<DoubleTappableEmber>()
-        .forEach((element) => element.removeFromParent());
+    children.query<DoubleTappableEmber>().forEach(
+      (element) => element.removeFromParent(),
+    );
     add(DoubleTappableEmber(position: size / 2));
 
     super.onGameResize(size);
@@ -43,10 +43,10 @@ class DoubleTappableEmber extends Ember with DoubleTapCallbacks {
   bool debugMode = true;
 
   DoubleTappableEmber({Vector2? position})
-      : super(
-          position: position ?? Vector2.all(100),
-          size: Vector2.all(100),
-        );
+    : super(
+        position: position ?? Vector2.all(100),
+        size: Vector2.all(100),
+      );
 
   @override
   void onDoubleTapUp(DoubleTapEvent event) {

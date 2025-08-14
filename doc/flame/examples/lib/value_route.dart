@@ -26,13 +26,14 @@ class HomePage extends Component with HasGameReference<ValueRouteExample> {
     add(
       RoundedButton(
         text: 'Rate me',
+        position: game.size / 2,
         action: () async {
           final score = await game.router.pushAndWait(RateRoute());
           firstChild<TextComponent>()!.text = 'Score: $score';
         },
         color: const Color(0xff758f9a),
         borderColor: const Color(0xff60d5ff),
-      )..position = game.size / 2,
+      ),
     );
     add(
       TextComponent(
@@ -60,7 +61,7 @@ class RateRoute extends ValueRoute<int>
       children: [
         RoundedButton(
           text: 'Ok',
-          position: position = Vector2(size.x / 2, 100),
+          position: Vector2(size.x / 2, 100),
           action: () {
             completeWith(
               descendants().where((c) => c is Star && c.active).length,
@@ -82,15 +83,15 @@ class RateRoute extends ValueRoute<int>
 
 class DialogBackground extends RectangleComponent with TapCallbacks {
   DialogBackground({super.position, super.size, super.children})
-      : super(
-          anchor: Anchor.center,
-          paint: Paint()..color = const Color(0xee858585),
-        );
+    : super(
+        anchor: Anchor.center,
+        paint: Paint()..color = const Color(0xee858585),
+      );
 }
 
 class Star extends PositionComponent with TapCallbacks {
   Star({required this.value, required this.radius, super.position})
-      : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
+    : super(size: Vector2.all(2 * radius), anchor: Anchor.center);
 
   final int value;
   final double radius;

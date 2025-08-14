@@ -1,7 +1,9 @@
 import 'dart:ui';
 
+import 'package:flame/src/extensions/canvas.dart';
+import 'package:flame/src/palette.dart';
 import 'package:flame/src/rendering/decorator.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// [Shadow3DDecorator] casts a realistic-looking shadow from the component
 /// onto the ground.
@@ -24,13 +26,15 @@ class Shadow3DDecorator extends Decorator {
     double? yScale,
     double? blur,
     double? opacity,
-  })  : _base = base?.clone() ?? Vector2.zero(),
-        _ascent = ascent ?? 0,
-        _angle = angle ?? -1.4,
-        _shift = xShift ?? 100.0,
-        _scale = yScale ?? 1.0,
-        _blur = blur ?? 0,
-        _opacity = opacity ?? 0.6;
+    Color? baseColor,
+  }) : _base = base?.clone() ?? Vector2.zero(),
+       _ascent = ascent ?? 0,
+       _angle = angle ?? -1.4,
+       _shift = xShift ?? 100.0,
+       _scale = yScale ?? 1.0,
+       _blur = blur ?? 0,
+       _opacity = opacity ?? 0.6,
+       _baseColor = baseColor ?? BasicPalette.black.color;
 
   /// Coordinates of the point where the component "touches the ground". If the
   /// component is airborne (i.e. [ascent] is non-zero), then this should be the
@@ -117,10 +121,18 @@ class Shadow3DDecorator extends Decorator {
     _paint = null;
   }
 
+  /// Shadow's base color before opacity. This defaults to pitch-black.
+  Color get baseColor => _baseColor;
+  Color _baseColor;
+  set baseColor(Color value) {
+    _baseColor = value;
+    _paint = null;
+  }
+
   Paint? _paint;
   Paint _makePaint() {
     final paint = Paint();
-    final color = Color.fromRGBO(0, 0, 0, opacity);
+    final color = baseColor.withValues(alpha: opacity);
     paint.colorFilter = ColorFilter.mode(color, BlendMode.srcIn);
     if (_blur > 0) {
       paint.imageFilter = ImageFilter.blur(sigmaX: blur, sigmaY: blur / _scale);
@@ -145,7 +157,7 @@ class Shadow3DDecorator extends Decorator {
 
     canvas.saveLayer(null, _paint!);
     canvas.translate(base.x + _shift, base.y);
-    canvas.transform(_transformMatrix!.storage);
+    canvas.transform32(_transformMatrix!.storage);
     draw(canvas);
     canvas.restore();
     draw(canvas);

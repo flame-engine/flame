@@ -8,20 +8,19 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   Forge2DGame({
     Forge2DWorld? world,
     CameraComponent? camera,
-    @Deprecated('Use the `camera` argument instead')
-    CameraComponent? cameraComponent,
     Vector2? gravity,
     ContactListener? contactListener,
     double zoom = 10,
   }) : super(
-          world: ((world?..gravity = gravity ?? world.gravity) ??
-              Forge2DWorld(
-                gravity: gravity,
-                contactListener: contactListener,
-              )) as T,
-          camera: (camera ?? cameraComponent ?? CameraComponent())
-            ..viewfinder.zoom = zoom,
-        );
+         world:
+             ((world?..gravity = gravity ?? world.gravity) ??
+                     Forge2DWorld(
+                       gravity: gravity,
+                       contactListener: contactListener,
+                     ))
+                 as T,
+         camera: (camera ?? CameraComponent())..viewfinder.zoom = zoom,
+       );
 
   /// Takes a point in world coordinates and returns it in screen coordinates.
   Vector2 worldToScreen(Vector2 position) {

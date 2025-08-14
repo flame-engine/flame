@@ -31,10 +31,10 @@ abstract class Effect extends Component {
     this.controller, {
     this.onComplete,
     super.key,
-  })  : removeOnFinish = true,
-        _paused = false,
-        _started = false,
-        _finished = false {
+  }) : removeOnFinish = true,
+       _paused = false,
+       _started = false,
+       _finished = false {
     controller.onMount(this);
   }
 
@@ -213,5 +213,5 @@ abstract class Effect extends Component {
   /// This is a main method that MUST be implemented in every derived class.
   void apply(double progress);
 
-//#endregion
+  //#endregion
 }

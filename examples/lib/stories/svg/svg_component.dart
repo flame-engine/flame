@@ -36,11 +36,11 @@ class Player extends SvgComponent with HasGameReference<SvgComponentExample> {
 class Background extends SvgComponent
     with HasGameReference<SvgComponentExample> {
   Background()
-      : super(
-          priority: 1,
-          size: Vector2(745, 415),
-          anchor: Anchor.center,
-        );
+    : super(
+        priority: 1,
+        size: Vector2(745, 415),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void>? onLoad() async {
@@ -52,11 +52,11 @@ class Background extends SvgComponent
 
 class Balloons extends SvgComponent with HasGameReference<SvgComponentExample> {
   Balloons({super.position})
-      : super(
-          priority: 2,
-          size: Vector2(75, 125),
-          anchor: Anchor.center,
-        );
+    : super(
+        priority: 2,
+        size: Vector2(75, 125),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void>? onLoad() async {
@@ -77,13 +77,13 @@ class SvgComponentExample extends FlameGame {
   ''';
 
   SvgComponentExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          ),
-          world: _SvgComponentWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        ),
+        world: _SvgComponentWorld(),
+      );
 }
 
 class _SvgComponentWorld extends World with TapCallbacks, DoubleTapCallbacks {

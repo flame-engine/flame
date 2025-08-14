@@ -31,14 +31,14 @@ class _GestureHitboxesWorld extends World with TapCallbacks {
       Shapes.circle => CircleHitbox(),
       Shapes.rectangle => RectangleHitbox(),
       Shapes.polygon => PolygonHitbox.relative(
-          [
-            -Vector2.random(_rng),
-            Vector2.random(_rng)..x *= -1,
-            Vector2.random(_rng),
-            Vector2.random(_rng)..y *= -1,
-          ],
-          parentSize: shapeSize,
-        ),
+        [
+          -Vector2.random(_rng),
+          Vector2.random(_rng)..x *= -1,
+          Vector2.random(_rng),
+          Vector2.random(_rng)..y *= -1,
+        ],
+        parentSize: shapeSize,
+      ),
     };
     return MyShapeComponent(
       hitbox: hitbox,

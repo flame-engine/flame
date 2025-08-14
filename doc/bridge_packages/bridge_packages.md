@@ -10,6 +10,12 @@ Play multiple audio files simultaneously (bridge package for [AudioPlayers]).
 A predictable state management library (bridge package for [Bloc]).
 :::
 
+:::{package} flame_console
+
+A terminal overlay for Flame games which allows developers to debug and interact
+with their games.
+:::
+
 :::{package} flame_fire_atlas
 
 Create texture atlases for games (bridge package for [FireAtlas]).

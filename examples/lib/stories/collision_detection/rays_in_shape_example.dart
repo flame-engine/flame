@@ -21,13 +21,13 @@ shape it will be gray.
 ''';
 
   RaysInShapeExample()
-      : super(
-          world: RaysInShapeWorld(),
-          camera: CameraComponent.withFixedResolution(
-            width: playArea.width,
-            height: playArea.height,
-          ),
-        );
+    : super(
+        world: RaysInShapeWorld(),
+        camera: CameraComponent.withFixedResolution(
+          width: playArea.width,
+          height: playArea.height,
+        ),
+      );
 }
 
 final whiteStroke = Paint()
@@ -55,13 +55,14 @@ class RaysInShapeWorld extends World
   List<Ray2> _rays = [];
 
   List<Ray2> randomRays(int count) => List<Ray2>.generate(
-        count,
-        (index) => Ray2(
-          origin: (Vector2.random(_rng)) * playArea.size.width -
-              playArea.size.toVector2() / 2,
-          direction: (Vector2.random(_rng) - Vector2(0.5, 0.5)).normalized(),
-        ),
-      );
+    count,
+    (index) => Ray2(
+      origin:
+          (Vector2.random(_rng)) * playArea.size.width -
+          playArea.size.toVector2() / 2,
+      direction: (Vector2.random(_rng) - Vector2(0.5, 0.5)).normalized(),
+    ),
+  );
 
   int _componentIndex = 0;
 
@@ -84,16 +85,16 @@ class RaysInShapeWorld extends World
       position: Vector2.zero(),
       children: [
         PolygonHitbox.relative(
-          [
-            Vector2(-0.7, -1),
-            Vector2(1, -0.4),
-            Vector2(0.3, 1),
-            Vector2(-1, 0.6),
-          ],
-          parentSize: Vector2(100, 100),
-          anchor: Anchor.center,
-          position: Vector2.zero(),
-        )
+            [
+              Vector2(-0.7, -1),
+              Vector2(1, -0.4),
+              Vector2(0.3, 1),
+              Vector2(-1, 0.6),
+            ],
+            parentSize: Vector2(100, 100),
+            anchor: Anchor.center,
+            position: Vector2.zero(),
+          )
           ..paint = whiteStroke
           ..renderShape = true,
       ],

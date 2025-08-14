@@ -23,8 +23,9 @@ abstract class PositionEvent extends LocationContextEvent<Vector2> {
   /// to the game canvas.
   ///
   /// This could be considered the Flame-level global position.
-  late final Vector2 canvasPosition =
-      _game.convertGlobalToLocalCoordinate(devicePosition);
+  late final Vector2 canvasPosition = _game.convertGlobalToLocalCoordinate(
+    devicePosition,
+  );
 
   /// Event position in the local coordinate space of the current component.
   ///

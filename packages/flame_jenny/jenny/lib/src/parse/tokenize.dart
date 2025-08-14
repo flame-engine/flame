@@ -30,18 +30,18 @@ List<Token> tokenize(String input, {int addErrorTokenAtIndex = -2}) {
 ///     produce the same output.
 class _Lexer {
   _Lexer(this.text, this.addErrorTokenAtIndex)
-      : position = 0,
-        lineNumber = 1,
-        lineStart = 0,
-        tokens = [],
-        modeStack = [],
-        indentStack = [],
-        assert(
-          commandTokens.length ==
-              simpleCommands.length +
-                  bareExpressionCommands.length +
-                  nodeTargetingCommands.length,
-        );
+    : position = 0,
+      lineNumber = 1,
+      lineStart = 0,
+      tokens = [],
+      modeStack = [],
+      indentStack = [],
+      assert(
+        commandTokens.length ==
+            simpleCommands.length +
+                bareExpressionCommands.length +
+                nodeTargetingCommands.length,
+      );
 
   final String text;
   final List<Token> tokens;
@@ -239,8 +239,10 @@ class _Lexer {
                     (eatId() ||
                         (eatExpressionStart() &&
                             pushMode(modeTextExpression)) ||
-                        error('an ID or an expression in curly braces '
-                            'expected'))) ||
+                        error(
+                          'an ID or an expression in curly braces '
+                          'expected',
+                        ))) ||
                 (tokens.last.isCommand && // user-defined commands
                     pushMode(modeCommandText)))) ||
         (eatCommandEnd() && popMode(modeCommand)) ||

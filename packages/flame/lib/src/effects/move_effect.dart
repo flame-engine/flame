@@ -32,14 +32,13 @@ abstract class MoveEffect extends Effect
     PositionProvider? target,
     void Function()? onComplete,
     ComponentKey? key,
-  }) =>
-      MoveByEffect(
-        offset,
-        controller,
-        target: target,
-        onComplete: onComplete,
-        key: key,
-      );
+  }) => MoveByEffect(
+    offset,
+    controller,
+    target: target,
+    onComplete: onComplete,
+    key: key,
+  );
 
   factory MoveEffect.to(
     Vector2 destination,
@@ -47,12 +46,11 @@ abstract class MoveEffect extends Effect
     PositionProvider? target,
     void Function()? onComplete,
     ComponentKey? key,
-  }) =>
-      MoveToEffect(
-        destination,
-        controller,
-        target: target,
-        onComplete: onComplete,
-        key: key,
-      );
+  }) => MoveToEffect(
+    destination,
+    controller,
+    target: target,
+    onComplete: onComplete,
+    key: key,
+  );
 }

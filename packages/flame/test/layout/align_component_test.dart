@@ -26,7 +26,7 @@ void main() {
 
     testGolden(
       'Align placement: golden',
-      (game) async {
+      (game, tester) async {
         final stroke = Paint()
           ..style = PaintingStyle.stroke
           ..strokeWidth = 5.0

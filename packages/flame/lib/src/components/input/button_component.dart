@@ -34,8 +34,8 @@ class ButtonComponent extends PositionComponent with TapCallbacks {
     super.children,
     super.priority,
   }) : super(
-          size: size ?? button?.size,
-        );
+         size: size ?? button?.size,
+       );
 
   @override
   @mustCallSuper
@@ -45,6 +45,9 @@ class ButtonComponent extends PositionComponent with TapCallbacks {
       button != null,
       'The button has to either be passed in as an argument or set in onLoad',
     );
+    if (size.isZero()) {
+      size = button!.size;
+    }
     if (!contains(button!)) {
       add(button!);
     }

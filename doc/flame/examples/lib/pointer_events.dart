@@ -23,16 +23,19 @@ class HoverTarget extends PositionComponent with HoverCallbacks {
   static final Random _random = Random();
 
   HoverTarget(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(50),
-          anchor: Anchor.center,
-        );
+    : super(
+        position: position,
+        size: Vector2.all(50),
+        anchor: Anchor.center,
+      );
 
   final _paint = Paint()
-    ..color = HSLColor.fromAHSL(1, _random.nextDouble() * 360, 1, 0.8)
-        .toColor()
-        .withOpacity(0.5);
+    ..color = HSLColor.fromAHSL(
+      1,
+      _random.nextDouble() * 360,
+      1,
+      0.8,
+    ).toColor().withValues(alpha: 0.5);
 
   @override
   void render(Canvas canvas) {
@@ -41,11 +44,11 @@ class HoverTarget extends PositionComponent with HoverCallbacks {
 
   @override
   void onHoverEnter() {
-    _paint.color = _paint.color.withOpacity(1);
+    _paint.color = _paint.color.withValues(alpha: 1);
   }
 
   @override
   void onHoverExit() {
-    _paint.color = _paint.color.withOpacity(0.5);
+    _paint.color = _paint.color.withValues(alpha: 0.5);
   }
 }

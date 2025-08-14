@@ -11,7 +11,7 @@ void main() {
   group('Sprite', () {
     testGolden(
       'Render with anchor',
-      (game) async {
+      (game, tester) async {
         game.add(_MyComponent()..position = Vector2.all(25));
       },
       goldenFile: '_goldens/sprite_test_1.png',

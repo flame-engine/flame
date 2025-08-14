@@ -32,7 +32,7 @@ Orthogonal | Hexagonal             |  Isomorphic
 ![An example of an orthogonal map](../../images/orthogonal.png)|![An example of hexagonal map](../../images/pointy_hex_even.png) |  ![An example of isomorphic map](../../images/tile_stack_single_move.png)
 
 An example of how to use the API can be found
-[here](https://github.com/flame-engine/flame_tiled/tree/main/example).
+[here](https://github.com/flame-engine/flame/tree/main/packages/flame_tiled/example).
 
 
 ### TileStack

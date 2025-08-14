@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final componentTreeProvider =
     StateNotifierProvider<ComponentTreeObserver, ComponentTreeState>((ref) {
-  final gameState = ref.watch(gameControllerProvider);
-  return ComponentTreeObserver(gameState.game as FlameGame?);
-});
+      final gameState = ref.watch(gameControllerProvider);
+      return ComponentTreeObserver(gameState.game as FlameGame?);
+    });
 
 @immutable
 class ComponentTreeNode {
@@ -41,9 +41,9 @@ class ComponentTreeNode {
 @immutable
 class ComponentTreeState {
   ComponentTreeState(Component? rootComponent)
-      : root = rootComponent == null
-            ? null
-            : ComponentTreeNode.fromComponent(rootComponent);
+    : root = rootComponent == null
+          ? null
+          : ComponentTreeNode.fromComponent(rootComponent);
 
   final ComponentTreeNode? root;
 
@@ -57,7 +57,7 @@ class ComponentTreeState {
 
 class ComponentTreeObserver extends StateNotifier<ComponentTreeState> {
   ComponentTreeObserver(Component? rootComponent)
-      : super(ComponentTreeState(rootComponent)) {
+    : super(ComponentTreeState(rootComponent)) {
     if (rootComponent != null) {
       _refresh();
     }

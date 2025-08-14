@@ -80,5 +80,23 @@ void main() {
       timer.update(1.1);
       expect(timer.finished, false);
     });
+
+    test('when tickCount is provided, tick only the provided amount', () {
+      var count = 0;
+      final timer = Timer(
+        1,
+        repeat: true,
+        tickCount: 2,
+        onTick: () {
+          count++;
+        },
+      );
+      timer.update(1.1);
+      timer.update(1.1);
+      timer.update(1.1);
+
+      expect(count, equals(2));
+      expect(timer.finished, isTrue);
+    });
   });
 }

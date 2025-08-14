@@ -6,7 +6,6 @@ draggables
 focusable
 gamepad
 gamepads
-gameplay
 gapless
 grayscale
 hoverable
@@ -24,10 +23,13 @@ prerendered
 pressable
 ptero # short for pterodactyl
 rebalance
+rebalancing
 refreshable
 renderable
 rescan
+strikethrough # of a text with a horizontal line across
 tappable
 tappables
 toolset
 underutilize
+endianness

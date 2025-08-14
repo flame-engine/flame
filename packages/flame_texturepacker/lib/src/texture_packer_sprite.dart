@@ -12,25 +12,25 @@ import 'package:flame_texturepacker/src/model/region.dart';
 class TexturePackerSprite extends Sprite {
   /// {@macro _texture_packer_sprite}
   TexturePackerSprite(Region region, {this.useOriginalSize = true})
-      : _region = region,
-        name = region.name,
-        index = region.index,
-        offsetX = region.offsetX,
-        offsetY = region.offsetY,
-        packedWidth = region.width,
-        packedHeight = region.height,
-        originalWidth = region.originalWidth,
-        originalHeight = region.originalHeight,
-        rotate = region.rotate,
-        degrees = region.degrees,
-        super(
-          region.page.texture,
-          srcPosition: Vector2(region.left, region.top),
-          srcSize: Vector2(
-            useOriginalSize ? region.originalWidth : region.width,
-            useOriginalSize ? region.originalHeight : region.height,
-          ),
-        ) {
+    : _region = region,
+      name = region.name,
+      index = region.index,
+      offsetX = region.offsetX,
+      offsetY = region.offsetY,
+      packedWidth = region.width,
+      packedHeight = region.height,
+      originalWidth = region.originalWidth,
+      originalHeight = region.originalHeight,
+      rotate = region.rotate,
+      degrees = region.degrees,
+      super(
+        region.page.texture,
+        srcPosition: Vector2(region.left, region.top),
+        srcSize: Vector2(
+          useOriginalSize ? region.originalWidth : region.width,
+          useOriginalSize ? region.originalHeight : region.height,
+        ),
+      ) {
     if (region.rotate) {
       final transform = Transform2D()..angle = math.pi / 2;
       _decorator = Transform2DDecorator(transform);
@@ -148,6 +148,7 @@ class TexturePackerSprite extends Sprite {
     Vector2? size,
     Anchor anchor = Anchor.topLeft,
     Paint? overridePaint,
+    double? bleed,
   }) {
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
@@ -211,6 +212,7 @@ class TexturePackerSprite extends Sprite {
         position: _tmpRenderPosition,
         size: _tmpRenderSize,
         overridePaint: overridePaint,
+        bleed: bleed,
       ),
       canvas,
     );

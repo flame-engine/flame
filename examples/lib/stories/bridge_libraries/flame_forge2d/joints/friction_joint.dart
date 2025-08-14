@@ -11,7 +11,7 @@ class FrictionJointExample extends Forge2DGame {
   ''';
 
   FrictionJointExample()
-      : super(gravity: Vector2.all(0), world: FrictionJointWorld());
+    : super(gravity: Vector2.all(0), world: FrictionJointWorld());
 }
 
 class FrictionJointWorld extends Forge2DWorld

@@ -22,26 +22,26 @@ class SpawnComponentWorld extends World with TapCallbacks {
     final position = info.localPosition;
     final shape = switch (shapeType) {
       Shapes.rectangle => Rectangle.fromCenter(
-          center: position,
-          size: Vector2.all(200),
-        ),
+        center: position,
+        size: Vector2.all(200),
+      ),
       Shapes.circle => Circle(position, 150),
       Shapes.polygon => Polygon(
-          [
-            Vector2(-1.0, 0.0),
-            Vector2(-0.8, 0.6),
-            Vector2(0.0, 1.0),
-            Vector2(0.6, 0.9),
-            Vector2(1.0, 0.0),
-            Vector2(0.3, -0.2),
-            Vector2(0.0, -1.0),
-            Vector2(-0.8, -0.5),
-          ].map((vertex) {
-            return vertex
-              ..scale(200)
-              ..add(position);
-          }).toList(),
-        ),
+        [
+          Vector2(-1.0, 0.0),
+          Vector2(-0.8, 0.6),
+          Vector2(0.0, 1.0),
+          Vector2(0.6, 0.9),
+          Vector2(1.0, 0.0),
+          Vector2(0.3, -0.2),
+          Vector2(0.0, -1.0),
+          Vector2(-0.8, -0.5),
+        ].map((vertex) {
+          return vertex
+            ..scale(200)
+            ..add(position);
+        }).toList(),
+      ),
     };
 
     add(

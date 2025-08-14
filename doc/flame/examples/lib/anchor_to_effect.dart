@@ -10,21 +10,12 @@ class AnchorToEffectGame extends FlameGame {
       size: 60,
       position: canvasSize / 2,
       onTap: (flower) {
-        if (flower.anchor == Anchor.center) {
-          flower.add(
-            AnchorToEffect(
-              Anchor.bottomLeft,
-              EffectController(speed: 1),
-            ),
-          );
-        } else {
-          flower.add(
-            AnchorToEffect(
-              Anchor.center,
-              EffectController(speed: 1),
-            ),
-          );
-        }
+        flower.add(
+          AnchorToEffect(
+            flower.anchor == Anchor.center ? Anchor.bottomLeft : Anchor.center,
+            EffectController(speed: 1),
+          ),
+        );
       },
     );
     add(flower);

@@ -38,16 +38,16 @@ class ClipComponent extends PositionComponent {
     int? priority,
     ComponentKey? key,
   }) : this(
-          builder: (size) => Circle(size / 2, size.x / 2),
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          key: key,
-        );
+         builder: (size) => Circle(size / 2, size.x / 2),
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         key: key,
+       );
 
   /// {@macro rectangle_clip_component}
   ///
@@ -62,16 +62,16 @@ class ClipComponent extends PositionComponent {
     int? priority,
     ComponentKey? key,
   }) : this(
-          builder: (size) => Rectangle.fromRect(size.toRect()),
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          key: key,
-        );
+         builder: (size) => Rectangle.fromRect(size.toRect()),
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         key: key,
+       );
 
   /// {@macro polygon_clip_component}
   ///
@@ -87,16 +87,16 @@ class ClipComponent extends PositionComponent {
     int? priority,
     ComponentKey? key,
   }) : this(
-          builder: _polygonShapeBuilder(points),
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          key: key,
-        );
+         builder: _polygonShapeBuilder(points),
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         key: key,
+       );
 
   late Path _path;
   late Shape _shape;

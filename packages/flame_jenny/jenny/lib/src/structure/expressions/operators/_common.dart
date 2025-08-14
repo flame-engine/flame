@@ -16,15 +16,16 @@ import 'package:jenny/src/structure/expressions/operators/subtract.dart';
 import 'package:jenny/src/structure/expressions/operators/xor.dart';
 
 typedef ErrorFn = Never Function(String message, [int? position]);
-typedef BinaryOperatorBuilder = Expression Function(
-  Expression lhs,
-  Expression rhs,
-  int operatorPosition,
-  ErrorFn errorFn,
-);
+typedef BinaryOperatorBuilder =
+    Expression Function(
+      Expression lhs,
+      Expression rhs,
+      int operatorPosition,
+      ErrorFn errorFn,
+    );
 
 /// Static constructor of expressions involving binary operators. Used by
-/// <parser.dart>.
+/// parse.dart.
 Expression makeBinaryOpExpression(
   Token operator,
   Expression lhs,

@@ -46,7 +46,7 @@ class MyGame extends FlameGame {
   }
 }
 
-class Player extends SpriteComponent with HasGameRef {
+class Player extends SpriteComponent with HasGameReference {
   Player(this.joystick)
     : super(
         anchor: Anchor.center,
@@ -139,7 +139,7 @@ else which isn't a pure sprite.
 ## Gamepad
 
 Flame has a dedicated plugin to support external game controllers (gamepads).
-Find more information in the [Gamepads repository](https://github.com/flame-engine/gamepad).
+Find more information in the [Gamepads repository](https://github.com/flame-engine/gamepads).
 
 
 ## AdvancedButtonComponent

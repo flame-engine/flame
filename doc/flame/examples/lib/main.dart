@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:doc_flame_examples/anchor.dart';
 import 'package:doc_flame_examples/anchor_by_effect.dart';
 import 'package:doc_flame_examples/anchor_to_effect.dart';
@@ -19,10 +17,12 @@ import 'package:doc_flame_examples/opacity_by_effect.dart';
 import 'package:doc_flame_examples/opacity_effect_with_target.dart';
 import 'package:doc_flame_examples/opacity_to_effect.dart';
 import 'package:doc_flame_examples/pointer_events.dart';
+import 'package:doc_flame_examples/post_process.dart';
 import 'package:doc_flame_examples/ray_cast.dart';
 import 'package:doc_flame_examples/ray_trace.dart';
 import 'package:doc_flame_examples/remove_effect.dart';
 import 'package:doc_flame_examples/rive_example.dart';
+import 'package:doc_flame_examples/rotate_around_effect.dart';
 import 'package:doc_flame_examples/rotate_by_effect.dart';
 import 'package:doc_flame_examples/rotate_to_effect.dart';
 import 'package:doc_flame_examples/router.dart';
@@ -36,6 +36,7 @@ import 'package:doc_flame_examples/time_scale.dart';
 import 'package:doc_flame_examples/value_route.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
+import 'package:web/web.dart' as web;
 
 final routes = <String, Game Function()>{
   'anchor_by_effect': AnchorByEffectGame.new,
@@ -57,10 +58,12 @@ final routes = <String, Game Function()>{
   'opacity_effect_with_target': OpacityEffectWithTargetGame.new,
   'opacity_to_effect': OpacityToEffectGame.new,
   'pointer_events': PointerEventsGame.new,
+  'post_process': PostProcessGame.new,
   'ray_cast': RayCastExample.new,
   'ray_trace': RayTraceExample.new,
   'remove_effect': RemoveEffectGame.new,
   'rive_example': RiveExampleGame.new,
+  'rotate_around_effect': RotateAroundEffectGame.new,
   'rotate_by_effect': RotateByEffectGame.new,
   'rotate_to_effect': RotateToEffectGame.new,
   'router': RouterGame.new,
@@ -75,7 +78,7 @@ final routes = <String, Game Function()>{
 };
 
 void main() {
-  var page = window.location.search ?? '';
+  var page = web.window.location.search;
   if (page.startsWith('?')) {
     page = page.substring(1);
   }
@@ -104,7 +107,7 @@ class _IndexRoute extends StatelessWidget {
           const Text('Select an option below:'),
           ...routes.keys.map((route) {
             return GestureDetector(
-              onTap: () => window.location.replace('/?$route'),
+              onTap: () => web.window.location.replace('/?$route'),
               child: Text(route),
             );
           }),

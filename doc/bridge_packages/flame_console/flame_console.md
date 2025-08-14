@@ -24,7 +24,7 @@ Widget build(BuildContext context) {
     body: GameWidget(
       game: _game,
       overlayBuilderMap: {
-        'console': (BuildContext context, MyGame game) => ConsoleView(
+        'console': (BuildContext context, MyGame game) => FlameConsoleView(
               game: game,
               onClose: () {
                 _game.overlays.remove('console');
@@ -56,24 +56,22 @@ Widget build(BuildContext context) {
 
 ## Custom commands
 
- Custom commands can be created by extending the `ConsoleCommand` class and adding them to the
+ Custom commands can be created by extending the `FlameConsoleCommand` class and adding them to the
  the `customCommands` list in the `ConsoleView` widget.
 
  ```dart
-class MyCustomCommand extends ConsoleCommand<MyGame> {
-  MyCustomCommand();
-
+class MyCustomCommand extends FlameConsoleCommand<MyGame> {
   @override
   String get name => 'my_command';
 
   @override
   String get description => 'Description of my command';
 
-  // The execute method is supposed to return a tuple where the first
-  // element is an error message in case of failure, and the second
+  // The execute method should return a tuple where the first
+  // element is an error message (in case of failure), and the second
   // element is the output of the command.
   @override
-  (String?, String) execute(MyGame game, List<String> args) {
+  (String?, String) execute(MyGame game, ArgResults args) {
     // do something on the game
     return (null, 'Hello World');
   }
@@ -85,10 +83,10 @@ Then when creating the `ConsoleView` widget, add the custom command to the `cust
 ```dart
 ConsoleView(
   game: game,
+  customCommands: [MyCustomCommand()],
   onClose: () {
     _game.overlays.remove('console');
   },
-  customCommands: [MyCustomCommand()],
 ),
 ```
 

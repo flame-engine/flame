@@ -44,8 +44,8 @@ mixin class ContactCallbacks {
   void Function(Object other, Contact contact)? onEndContact;
 
   void Function(Object other, Contact contact, Manifold oldManifold)?
-      onPreSolve;
+  onPreSolve;
 
   void Function(Object other, Contact contact, ContactImpulse impulse)?
-      onPostSolve;
+  onPostSolve;
 }

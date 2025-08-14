@@ -1,5 +1,4 @@
 import 'package:jenny/jenny.dart';
-import 'package:jenny/src/structure/commands/jump_command.dart';
 import 'package:test/test.dart';
 
 import '../../test_scenario.dart';
@@ -10,10 +9,12 @@ void main() {
     test('<<jump>> command', () {
       final yarn = YarnProject()
         ..variables.setVariable(r'$target', 'DOWN')
-        ..parse('title:A\n---\n'
-            '<<jump UP>>\n'
-            '<<jump {\$target}>>\n'
-            '===\n');
+        ..parse(
+          'title:A\n---\n'
+          '<<jump UP>>\n'
+          '<<jump {\$target}>>\n'
+          '===\n',
+        );
       final node = yarn.nodes['A']!;
       expect(node.lines.length, 2);
       expect(node.lines[0], isA<JumpCommand>());
@@ -114,8 +115,10 @@ void main() {
           '===\n',
         );
       expect(
-        () => DialogueRunner(yarnProject: yarn, dialogueViews: [])
-            .startDialogue('A'),
+        () => DialogueRunner(
+          yarnProject: yarn,
+          dialogueViews: [],
+        ).startDialogue('A'),
         hasNameError('NameError: Node "Up" could not be found'),
       );
     });

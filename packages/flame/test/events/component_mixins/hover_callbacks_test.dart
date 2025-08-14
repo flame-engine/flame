@@ -1,20 +1,20 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/pointer_move_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('HoverCallbacks', () {
     testWithFlameGame(
-        'make sure HoverCallbacks components can be added to a FlameGame',
-        (game) async {
-      await game.ensureAdd(_HoverCallbacksComponent());
-      await game.ready();
+      'make sure HoverCallbacks components can be added to a FlameGame',
+      (game) async {
+        await game.ensureAdd(_HoverCallbacksComponent());
+        await game.ready();
 
-      _hasDispatcher(game);
-    });
+        _hasDispatcher(game);
+      },
+    );
 
     testWithFlameGame('receive hover events', (game) async {
       final component = _HoverCallbacksComponent(
@@ -58,11 +58,11 @@ void main() {
 
 void _mouseEvent(FlameGame game, Vector2 position) {
   game.firstChild<PointerMoveDispatcher>()!.onMouseMove(
-        createMouseMoveEvent(
-          game: game,
-          position: position,
-        ),
-      );
+    createMouseMoveEvent(
+      game: game,
+      position: position,
+    ),
+  );
 }
 
 void _hasDispatcher(FlameGame game) {

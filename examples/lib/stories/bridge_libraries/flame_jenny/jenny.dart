@@ -1,6 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/stories/bridge_libraries/flame_jenny/commons/commons.dart';
 import 'package:examples/stories/bridge_libraries/flame_jenny/jenny_advanced_example.dart';
+import 'package:examples/stories/bridge_libraries/flame_jenny/jenny_command_lifecycle_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_jenny/jenny_simple_example.dart';
 import 'package:flame/game.dart';
 
@@ -17,5 +18,11 @@ void addFlameJennyExample(Dashbook dashbook) {
       (_) => GameWidget(game: JennyAdvancedExample()),
       codeLink: baseLink('jenny_advanced_example.dart'),
       info: JennyAdvancedExample.description,
+    )
+    ..add(
+      'Command Lifecycle example',
+      (_) => GameWidget(game: JennyCommandLifecycleExample()),
+      codeLink: baseLink('jenny_command_lifecycle_example.dart'),
+      info: JennyCommandLifecycleExample.description,
     );
 }

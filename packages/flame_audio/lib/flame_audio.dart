@@ -1,5 +1,4 @@
 import 'package:audioplayers/audioplayers.dart';
-
 import 'package:flame_audio/bgm.dart';
 
 export 'package:audioplayers/audioplayers.dart';
@@ -49,9 +48,12 @@ class FlameAudio {
     String file,
     double volume,
     ReleaseMode releaseMode,
-    PlayerMode playerMode,
-  ) async {
+    PlayerMode playerMode, {
+    required AudioContext? audioContext,
+  }) async {
     final player = AudioPlayer()..audioCache = audioCache;
+    audioContext ??= _defaultAudioContext;
+    await player.setAudioContext(audioContext);
     await player.setReleaseMode(releaseMode);
     await player.play(
       AssetSource(file),
@@ -62,33 +64,48 @@ class FlameAudio {
   }
 
   /// Plays a single run of the given [file], with a given [volume].
-  static Future<AudioPlayer> play(String file, {double volume = 1.0}) {
+  static Future<AudioPlayer> play(
+    String file, {
+    double volume = 1.0,
+    AudioContext? audioContext,
+  }) {
     return _preparePlayer(
       file,
       volume,
       ReleaseMode.release,
       PlayerMode.lowLatency,
+      audioContext: audioContext,
     );
   }
 
   /// Plays, and keeps looping the given [file].
-  static Future<AudioPlayer> loop(String file, {double volume = 1.0}) {
+  static Future<AudioPlayer> loop(
+    String file, {
+    double volume = 1.0,
+    AudioContext? audioContext,
+  }) {
     return _preparePlayer(
       file,
       volume,
       ReleaseMode.loop,
       PlayerMode.lowLatency,
+      audioContext: audioContext,
     );
   }
 
   /// Plays a single run of the given file [file]
   /// This method supports long audio files
-  static Future<AudioPlayer> playLongAudio(String file, {double volume = 1.0}) {
+  static Future<AudioPlayer> playLongAudio(
+    String file, {
+    double volume = 1.0,
+    AudioContext? audioContext,
+  }) {
     return _preparePlayer(
       file,
       volume,
       ReleaseMode.release,
       PlayerMode.mediaPlayer,
+      audioContext: audioContext,
     );
   }
 
@@ -98,12 +115,17 @@ class FlameAudio {
   /// NOTE: Length audio files on Android have an audio gap between loop
   /// iterations, this happens due to limitations on Android's native media
   /// player features. If you need a gapless loop, prefer the loop method.
-  static Future<AudioPlayer> loopLongAudio(String file, {double volume = 1.0}) {
+  static Future<AudioPlayer> loopLongAudio(
+    String file, {
+    double volume = 1.0,
+    AudioContext? audioContext,
+  }) {
     return _preparePlayer(
       file,
       volume,
       ReleaseMode.loop,
       PlayerMode.mediaPlayer,
+      audioContext: audioContext,
     );
   }
 
@@ -112,12 +134,19 @@ class FlameAudio {
     String sound, {
     required int maxPlayers,
     int minPlayers = 1,
-  }) {
+    AudioContext? audioContext,
+  }) async {
+    audioContext ??= _defaultAudioContext;
     return AudioPool.create(
       source: AssetSource(sound),
       audioCache: audioCache,
       minPlayers: minPlayers,
       maxPlayers: maxPlayers,
+      audioContext: audioContext,
     );
   }
+
+  static final AudioContext _defaultAudioContext = AudioContextConfig(
+    focus: AudioContextConfigFocus.mixWithOthers,
+  ).build();
 }

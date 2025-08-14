@@ -99,11 +99,11 @@ class _OpacityToEffect extends OpacityEffect {
     void Function()? onComplete,
     super.key,
   }) : super.by(
-          0.0,
-          controller,
-          target: target,
-          onComplete: onComplete,
-        );
+         0.0,
+         controller,
+         target: target,
+         onComplete: onComplete,
+       );
 
   @override
   void onStart() {

@@ -7,7 +7,7 @@ class ParagraphNode extends TextBlockNode {
   ParagraphNode.simple(String text) : super(PlainTextNode(text));
 
   ParagraphNode.group(List<InlineTextNode> fragments)
-      : super(GroupTextNode(fragments));
+    : super(GroupTextNode(fragments));
 
   static const defaultStyle = BlockStyle(
     margin: EdgeInsets.all(6),

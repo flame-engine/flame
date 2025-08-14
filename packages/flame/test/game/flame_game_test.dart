@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -315,6 +314,29 @@ void main() {
   });
 
   group('pauseWhenBackgrounded:', () {
+    testWidgets(
+      'game resumes when widget is rebuilt',
+      (tester) async {
+        final game = FlameGame();
+
+        await tester.pumpWidget(GameWidget(game: game));
+        expect(game.paused, isFalse);
+        expect(game.isPausedOnBackground, isFalse);
+
+        await tester.pumpWidget(Container());
+        expect(game.paused, isTrue);
+        expect(game.isPausedOnBackground, isTrue);
+
+        await tester.pumpWidget(GameWidget(game: game));
+        expect(game.paused, isFalse, reason: 'Game should resume on remount');
+        expect(
+          game.isPausedOnBackground,
+          isFalse,
+          reason: 'Background pause flag should be cleared on remount resume',
+        );
+      },
+    );
+
     testWithFlameGame('true', (game) async {
       game.pauseWhenBackgrounded = true;
 
@@ -421,7 +443,7 @@ class _MyTappableComponent extends _MyComponent with TapCallbacks {
   }
 }
 
-class _MyComponent extends PositionComponent with HasGameRef {
+class _MyComponent extends PositionComponent with HasGameReference {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;

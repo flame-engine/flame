@@ -132,21 +132,27 @@ For example you could do something like this if you want to move the camera on p
 on scale events:
 
 ```dart
+  void clampZoom() {
+    camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 3.0);
+  }
+
   late double startZoom;
 
   @override
   void onScaleStart(_) {
-    startZoom = camera.zoom;
+    startZoom = camera.viewfinder.zoom;
   }
 
   @override
   void onScaleUpdate(ScaleUpdateInfo info) {
     final currentScale = info.scale.global;
     if (!currentScale.isIdentity()) {
-      camera.zoom = startZoom * currentScale.y;
+      camera.viewfinder.zoom = startZoom * currentScale.y;
+      clampZoom();
     } else {
-      camera.translateBy(-info.delta.global);
-      camera.snap();
+      final zoom = camera.viewfinder.zoom;
+      final delta = (info.delta.global..negate()) / zoom;
+      camera.moveBy(delta);
     }
   }
 ```

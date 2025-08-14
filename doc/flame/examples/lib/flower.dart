@@ -14,8 +14,8 @@ class Flower extends PositionComponent
     void Function(Flower)? onTap,
     Decorator? decorator,
     super.position,
-  })  : _onTap = onTap,
-        super(size: Vector2.all(size), anchor: Anchor.center) {
+  }) : _onTap = onTap,
+       super(size: Vector2.all(size), anchor: Anchor.center) {
     this.decorator.addLast(decorator);
     final radius = size * 0.38;
     _paths.add(_makePath(radius * 1.4, 6, -0.05, 0.8));

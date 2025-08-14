@@ -179,8 +179,10 @@ void main() {
 
       await tester.pump();
       expect(events, ['onGameResize']); // no onRemove
-      final game =
-          tester.allWidgets.whereType<GameWidget<_MyGame>>().first.game;
+      final game = tester.allWidgets
+          .whereType<GameWidget<_MyGame>>()
+          .first
+          .game;
       expect(game?.children, everyElement((Component c) => c.parent == game));
     });
 

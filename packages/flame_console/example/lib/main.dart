@@ -1,5 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flame_console/flame_console.dart';
+import 'package:flame_console_example/commands/commands.dart';
 import 'package:flame_console_example/game.dart';
 import 'package:flutter/material.dart';
 
@@ -30,12 +31,13 @@ class _MyGameAppState extends State<MyGameApp> {
       body: GameWidget(
         game: _game,
         overlayBuilderMap: {
-          'console': (BuildContext context, MyGame game) => ConsoleView(
-                game: game,
-                onClose: () {
-                  _game.overlays.remove('console');
-                },
-              ),
+          'console': (BuildContext context, MyGame game) => FlameConsoleView(
+            game: game,
+            customCommands: customCommandsProvider.map((it) => it()).toList(),
+            onClose: () {
+              _game.overlays.remove('console');
+            },
+          ),
         },
       ),
       floatingActionButton: FloatingActionButton(

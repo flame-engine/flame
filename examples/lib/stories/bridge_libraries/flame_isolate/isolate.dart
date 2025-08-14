@@ -4,7 +4,9 @@ import 'package:examples/stories/bridge_libraries/flame_isolate/simple_isolate_e
 import 'package:flame/game.dart';
 
 void addFlameIsolateExample(Dashbook dashbook) {
-  dashbook.storiesOf('FlameIsolate').add(
+  dashbook
+      .storiesOf('FlameIsolate')
+      .add(
         'Simple isolate example',
         (_) => GameWidget(
           game: SimpleIsolateExample(),

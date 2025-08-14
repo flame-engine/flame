@@ -58,6 +58,7 @@ class AlignComponent extends PositionComponent {
     this.widthFactor,
     this.heightFactor,
     this.keepChildAnchor = false,
+    super.priority,
   }) {
     this.alignment = alignment;
     this.child = child;

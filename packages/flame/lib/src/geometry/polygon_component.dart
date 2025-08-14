@@ -38,12 +38,12 @@ class PolygonComponent extends ShapeComponent {
     super.paintLayers,
     super.key,
     bool? shrinkToBounds,
-  })  : assert(
-          _vertices.length > 2,
-          'Number of vertices are too few to create a polygon',
-        ),
-        shrinkToBounds = shrinkToBounds ?? size == null,
-        manuallyPositioned = position != null {
+  }) : assert(
+         _vertices.length > 2,
+         'Number of vertices are too few to create a polygon',
+       ),
+       shrinkToBounds = shrinkToBounds ?? size == null,
+       manuallyPositioned = position != null {
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
@@ -80,18 +80,18 @@ class PolygonComponent extends ShapeComponent {
     ComponentKey? key,
     List<Component>? children,
   }) : this(
-          normalsToVertices(relation, parentSize),
-          position: position,
-          angle: angle,
-          anchor: anchor,
-          scale: scale,
-          priority: priority,
-          paint: paint,
-          paintLayers: paintLayers,
-          shrinkToBounds: shrinkToBounds,
-          key: key,
-          children: children,
-        );
+         normalsToVertices(relation, parentSize),
+         position: position,
+         angle: angle,
+         anchor: anchor,
+         scale: scale,
+         priority: priority,
+         paint: paint,
+         paintLayers: paintLayers,
+         shrinkToBounds: shrinkToBounds,
+         key: key,
+         children: children,
+       );
 
   @internal
   static List<Vector2> normalsToVertices(
@@ -152,7 +152,8 @@ class PolygonComponent extends ShapeComponent {
   /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
     final scale = absoluteScale;
-    final angle = absoluteAngle;
+    final shouldReverse = scale.y.isNegative ^ scale.x.isNegative;
+    final angle = absoluteAngleWithoutReflection;
     final position = absoluteTopLeftPosition;
     if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
       position,
@@ -168,7 +169,7 @@ class PolygonComponent extends ShapeComponent {
           ..add(position)
           ..rotate(angle, center: position);
       }
-      if (scale.y.isNegative || scale.x.isNegative) {
+      if (shouldReverse) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
         _reverseList(_globalVertices);

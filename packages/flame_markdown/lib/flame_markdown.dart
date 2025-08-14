@@ -26,7 +26,13 @@ class FlameMarkdown {
   }
 
   static List<Node> _parse(String markdown, {Document? document}) {
-    return (document ?? Document()).parse(markdown);
+    return (document ?? _defaultDocument()).parse(markdown);
+  }
+
+  static Document _defaultDocument() {
+    return Document(
+      encodeHtml: false,
+    );
   }
 
   static TextNode _convertNode(Node node) {
@@ -45,19 +51,34 @@ class FlameMarkdown {
         .map(_castCheck<InlineTextNode>)
         .toList();
     final child = _groupInlineChildren(children);
+
+    final customClassName = element.attributes['class'];
+    if (customClassName != null) {
+      if (element.tag != 'span') {
+        throw Exception(
+          'Invalid markdown structure: '
+          'Only <span> elements can have custom classes',
+        );
+      }
+      return CustomInlineTextNode(child, styleName: customClassName);
+    }
+
     return switch (element.tag) {
-      'h1' => HeaderNode(child, level: 1),
-      'h2' => HeaderNode(child, level: 2),
-      'h3' => HeaderNode(child, level: 3),
-      'h4' => HeaderNode(child, level: 4),
-      'h5' => HeaderNode(child, level: 5),
-      'h6' => HeaderNode(child, level: 6),
-      'p' => ParagraphNode(child),
-      'em' || 'i' => ItalicTextNode(child),
-      'strong' || 'b' => BoldTextNode(child),
-      'code' => CodeTextNode(child),
-      _ => throw Exception('Unknown element tag: ${element.tag}'),
-    } as TextNode;
+          'span' => child,
+          'h1' => HeaderNode(child, level: 1),
+          'h2' => HeaderNode(child, level: 2),
+          'h3' => HeaderNode(child, level: 3),
+          'h4' => HeaderNode(child, level: 4),
+          'h5' => HeaderNode(child, level: 5),
+          'h6' => HeaderNode(child, level: 6),
+          'p' => ParagraphNode(child),
+          'em' || 'i' => ItalicTextNode(child),
+          'strong' || 'b' => BoldTextNode(child),
+          'code' => CodeTextNode(child),
+          'del' => StrikethroughTextNode(child),
+          _ => throw Exception('Unknown element tag: ${element.tag}'),
+        }
+        as TextNode;
   }
 
   static PlainTextNode _convertText(Text text) {

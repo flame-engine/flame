@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame_test/flame_test.dart';
@@ -15,8 +15,8 @@ void main() {
       test('get/set x/y or position', () {
         final component = PositionComponent();
         component.position.setValues(2.2, 3.4);
-        expect(component.x, 2.2);
-        expect(component.y, 3.4);
+        expect(component.x, closeTo(2.2, toleranceFloat32(2.2)));
+        expect(component.y, closeTo(3.4, toleranceFloat32(3.4)));
 
         component.position = Vector2(1.0, 0.0);
         expect(component.x, 1.0);
@@ -24,14 +24,18 @@ void main() {
 
         component.x = 3.1;
         component.y = -2.2;
-        expect(component.position, Vector2(3.1, -2.2));
+        final value = Vector2(3.1, -2.2);
+        expect(
+          component.position,
+          closeToVector(value, toleranceVector2Float32(value)),
+        );
       });
 
       test('get/set width/height or size', () {
         final component = PositionComponent();
         component.size.setValues(2.2, 3.4);
-        expect(component.size.x, 2.2);
-        expect(component.size.y, 3.4);
+        expect(component.size.x, closeTo(2.2, toleranceFloat32(2.2)));
+        expect(component.size.y, closeTo(3.4, toleranceFloat32(3.4)));
 
         component.size = Vector2(1.0, 0.0);
         expect(component.width, 1.0);
@@ -39,7 +43,11 @@ void main() {
 
         component.width = 2.1;
         component.height = 3.3;
-        expect(component.size, Vector2(2.1, 3.3));
+        final value = Vector2(2.1, 3.3);
+        expect(
+          component.size,
+          closeToVector(value, toleranceVector2Float32(value)),
+        );
       });
 
       test('get/set rect', () {
@@ -163,8 +171,9 @@ void main() {
         expect(component.containsPoint(point), true);
       });
 
-      testWithFlameGame('component with hitbox with position contains point',
-          (game) async {
+      testWithFlameGame('component with hitbox with position contains point', (
+        game,
+      ) async {
         final component = _MyHitboxComponent();
         component.position.setValues(1.0, 1.0);
         component.anchor = Anchor.topLeft;
@@ -186,30 +195,33 @@ void main() {
         expect(component.containsPoint(point), true);
       });
 
-      testWithFlameGame('component with hitbox with position just misses point',
-          (game) async {
-        final component = _MyHitboxComponent();
-        component.position.setValues(1.0, 1.0);
-        component.anchor = Anchor.topLeft;
-        component.size.setValues(2.0, 2.0);
-        final hitbox = PolygonHitbox(
-          [
-            Vector2(1, 0),
-            Vector2(0, -1),
-            Vector2(-1, 0),
-            Vector2(0, 1),
-          ],
-          position: Vector2(5, 6),
-        );
-        component.add(hitbox);
-        await game.ensureAdd(component);
+      testWithFlameGame(
+        'component with hitbox with position just misses point',
+        (game) async {
+          final component = _MyHitboxComponent();
+          component.position.setValues(1.0, 1.0);
+          component.anchor = Anchor.topLeft;
+          component.size.setValues(2.0, 2.0);
+          final hitbox = PolygonHitbox(
+            [
+              Vector2(1, 0),
+              Vector2(0, -1),
+              Vector2(-1, 0),
+              Vector2(0, 1),
+            ],
+            position: Vector2(5, 6),
+          );
+          component.add(hitbox);
+          await game.ensureAdd(component);
 
-        final point = component.position +
-            (component.size / 4) -
-            Vector2(0.01, 0) +
-            hitbox.position;
-        expect(component.containsPoint(point), false);
-      });
+          final point =
+              component.position +
+              (component.size / 4) -
+              Vector2(0.01, 0) +
+              hitbox.position;
+          expect(component.containsPoint(point), false);
+        },
+      );
 
       testWithFlameGame(
         'component with anchor topLeft contains point on edge',
@@ -221,15 +233,35 @@ void main() {
           component.add(RectangleHitbox());
           await game.ensureAdd(component);
 
-          expect(component.containsPoint(Vector2(1, 1)), true);
-          expect(component.containsPoint(Vector2(1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, 1)), true);
+          expect(
+            component.containsPoint(
+              Vector2(prevFloat32(1.0), prevFloat32(1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(prevFloat32(1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
+            ),
+            isTrue,
+          );
         },
       );
 
       testWithFlameGame(
-        'component with anchor bottomRight contains point on edge',
+        'component with anchor bottomRight contains point close to edge',
         (game) async {
           final component = _MyHitboxComponent();
           component.position.setValues(1, 1);
@@ -238,10 +270,33 @@ void main() {
           component.add(RectangleHitbox());
           await game.ensureAdd(component);
 
-          expect(component.containsPoint(Vector2(1, 1)), true);
-          expect(component.containsPoint(Vector2(1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, -1)), true);
-          expect(component.containsPoint(Vector2(-1, 1)), true);
+          expect(
+            component.containsPoint(
+              Vector2(
+                prevFloat32(1.0),
+                prevFloat32(1.0),
+              ),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(prevFloat32(1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), nextFloat32(-1.0)),
+            ),
+            isTrue,
+          );
+          expect(
+            component.containsPoint(
+              Vector2(nextFloat32(-1.0), prevFloat32(1.0)),
+            ),
+            isTrue,
+          );
         },
       );
 
@@ -286,17 +341,6 @@ void main() {
           expect(component.containsPoint(Vector2(2.6, 1.5)), false);
         },
       );
-
-      test('component with zero size does not contain point', () {
-        final component = PositionComponent();
-        component.position.setValues(2.0, 2.0);
-        component.size.setValues(0.0, 0.0);
-        component.angle = 0.0;
-        component.anchor = Anchor.center;
-
-        final point = Vector2(2.0, 2.0);
-        expect(component.containsPoint(point), false);
-      });
 
       test('component with zero size does not contain point', () {
         final component = PositionComponent();
@@ -553,40 +597,88 @@ void main() {
 
         component.flipVerticallyAroundCenter();
         // Same position after one vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         // Same position after flipping back the vertical flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         // Same position after one horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back the horizontal flip.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both vertically and horizontally.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipHorizontallyAroundCenter();
         component.flipVerticallyAroundCenter();
         // Same position after flipping both horizontally and vertically.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
 
         component.flipVerticallyAroundCenter();
         component.flipHorizontallyAroundCenter();
         // Same position after flipping back both horizontally and vertically in
         // the reverse order.
-        expect(component.center, closeToVector(centerPosition, 1e-14));
+        expect(
+          component.center,
+          closeToVector(
+            centerPosition,
+            toleranceVector2Float32(centerPosition),
+          ),
+        );
       });
 
       test('isHorizontallyFlipped', () {
@@ -645,8 +737,8 @@ void main() {
           final expectedX = 50 + 5 * (0.8 * cosA - 0.6 * sinA);
           final expectedY = 20 - 5 * (0.6 * cosA + 0.8 * sinA);
           final topRight = component.positionOf(Vector2(8, 0));
-          expect(topRight.x, closeTo(expectedX, 1e-13));
-          expect(topRight.y, closeTo(expectedY, 1e-13));
+          expect(topRight.x, closeTo(expectedX, toleranceFloat32(expectedX)));
+          expect(topRight.y, closeTo(expectedY, toleranceFloat32(expectedY)));
         }
       });
 
@@ -679,8 +771,16 @@ void main() {
           final globalY = (rnd.nextDouble() - 0.1) * 200;
           final localPoint = child.absoluteToLocal(Vector2(globalX, globalY));
           final globalPoint = child.absolutePositionOf(localPoint);
-          expect(globalPoint.x, closeTo(globalX, 1e-10));
-          expect(globalPoint.y, closeTo(globalY, 1e-10));
+          expect(
+            globalPoint,
+            closeToVector(
+              Vector2(globalX, globalY),
+              toleranceVector2Float32(Vector2(globalX, globalY)) +
+                  toleranceVector2Float32(parent.position) +
+                  toleranceVector2Float32(globalPoint) +
+                  toleranceVector2Float32(localPoint),
+            ),
+          );
         }
       });
 
@@ -772,8 +872,10 @@ void main() {
 
       testWithFlameGame('auxiliary getters/setters', (game) async {
         final parent = PositionComponent(position: Vector2(12, 19));
-        final child =
-            PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
+        final child = PositionComponent(
+          position: Vector2(11, -1),
+          size: Vector2(4, 6),
+        );
         parent.add(child);
         game.add(parent);
         await game.ready();
@@ -807,14 +909,21 @@ void main() {
           final target = targets.elementAt(i);
           final angle = expectedAngles.elementAt(i);
 
+          final result = component.angleTo(target);
           expectDouble(
-            component.angleTo(target),
-            angle - component.angle,
+            result,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle.toNormalizedAngle(),
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -827,7 +936,7 @@ void main() {
           Vector2(-1, 0),
           Vector2.all(-50),
         ];
-        final expectedAngles = [pi / 2, (pi / 4), -pi, (-3 * pi / 4)];
+        final expectedAngles = [pi / 2, pi / 4, pi, -3 * pi / 4];
 
         for (var i = 0; i < targets.length; ++i) {
           final target = targets.elementAt(i);
@@ -835,12 +944,18 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            angle - component.angle,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle.toNormalizedAngle(),
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -875,12 +990,18 @@ void main() {
 
           expectDouble(
             component.angleTo(target),
-            angle - component.angle,
+            (angle - component.angle).toNormalizedAngle(),
             epsilon: 1e-10,
+            reason: 'angleTo $i ($angle)',
           );
 
           component.lookAt(target);
-          expectDouble(component.angle, angle, epsilon: 1e-10);
+          expectDouble(
+            component.angle,
+            angle.toNormalizedAngle(),
+            epsilon: 1e-10,
+            reason: 'lookAt $i ($angle)',
+          );
         }
       });
 
@@ -891,7 +1012,88 @@ void main() {
 
         component.nativeAngle = 3 * pi / 2;
         component.lookAt(component.absolutePosition);
-        expectDouble(component.angle, -component.nativeAngle, epsilon: 1e-10);
+        expectDouble(
+          component.angle,
+          -component.nativeAngle.toNormalizedAngle(),
+          epsilon: 1e-10,
+        );
+      });
+
+      test('lookAt with parental flips', () {
+        final child = PositionComponent();
+        final wrapper = PositionComponent(
+          children: [child],
+        );
+
+        final flips = [
+          (Vector2(1, 1), Vector2(1, 1)),
+          (Vector2(1, 1), Vector2(1, -1)),
+          (Vector2(1, 1), Vector2(-1, 1)),
+          (Vector2(1, 1), Vector2(-1, -1)),
+          (Vector2(1, -1), Vector2(1, 1)),
+          (Vector2(1, -1), Vector2(1, -1)),
+          (Vector2(1, -1), Vector2(-1, 1)),
+          (Vector2(1, -1), Vector2(-1, -1)),
+          (Vector2(-1, 1), Vector2(1, 1)),
+          (Vector2(-1, 1), Vector2(1, -1)),
+          (Vector2(-1, 1), Vector2(-1, 1)),
+          (Vector2(-1, 1), Vector2(-1, -1)),
+          (Vector2(-1, -1), Vector2(1, 1)),
+          (Vector2(-1, -1), Vector2(1, -1)),
+          (Vector2(-1, -1), Vector2(-1, 1)),
+          (Vector2(-1, -1), Vector2(-1, -1)),
+        ];
+
+        final notableAngles = List.generate(8, (i) => i * tau / 8);
+        final expectedResults = [
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, -4, 3, 2, 1, //
+          4, 3, 2, 1, 0, -1, -2, -3, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, -4, -3, -2, -1, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          0, -1, -2, -3, 4, 3, 2, 1, //
+          -4, 3, 2, 1, 0, -1, -2, -3, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+          -4, -3, -2, -1, 0, 1, 2, 3, //
+          0, 1, 2, 3, 4, -3, -2, -1, //
+        ];
+        var index = 0;
+        for (final flip in flips) {
+          wrapper.scale = flip.$1;
+          child.scale = flip.$2;
+
+          for (final angle in notableAngles) {
+            final target = Vector2(0, -1)..rotate(angle);
+            expectDouble(
+              child.angleTo(target),
+              expectedResults[index++] * tau / 8,
+              epsilon: 1e-10,
+              reason: 'angleTo with flip $flip, angle $angle, target $target',
+            );
+          }
+        }
       });
     });
 
@@ -1004,13 +1206,33 @@ void main() {
         for (var i = 0; i < 10; i++) {
           final a = (i / 10) * tau / 4;
           component.angle = a;
+          final componentRect = component.toRect();
           expect(
-            component.toRect(),
-            Rect.fromLTRB(
+            componentRect.left,
+            closeTo(
               -h * sin(a),
+              toleranceFloat32(componentRect.left),
+            ),
+          );
+          expect(
+            componentRect.top,
+            closeTo(
               0,
+              toleranceFloat32(componentRect.top),
+            ),
+          );
+          expect(
+            componentRect.right,
+            closeTo(
               w * cos(a),
+              toleranceFloat32(componentRect.right),
+            ),
+          );
+          expect(
+            componentRect.bottom,
+            closeTo(
               w * sin(a) + h * cos(a),
+              toleranceFloat32(componentRect.bottom),
             ),
           );
         }
@@ -1032,12 +1254,103 @@ void main() {
         expect(child.toAbsoluteRect(), const Rect.fromLTWH(7, 13, 1, 1));
       });
     });
+
+    group('absoluteAngle', () {
+      test('absoluteAngle with no parent', () {
+        final component = PositionComponent();
+        expect(component.absoluteAngle, 0.0);
+        component.angle = pi / 2;
+        expect(component.absoluteAngle, pi / 2);
+      });
+
+      testWithFlameGame('absoluteAngle with parent', (game) async {
+        final parent = PositionComponent()..angle = pi / 4;
+        final child = PositionComponent();
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.angle = pi / 2;
+        expect(child.absoluteAngle, 3 * pi / 4);
+      });
+
+      testWithFlameGame('absoluteAngle with parent and child rotated', (
+        game,
+      ) async {
+        final parent = PositionComponent()..angle = pi / 8;
+        final child = PositionComponent()..angle = pi / 8;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        parent.angle = pi / 4;
+        child.angle = pi / 2;
+        expect(child.absoluteAngle, 3 * pi / 4);
+      });
+
+      testWithFlameGame('absoluteAngle with flipped parent', (game) async {
+        final parent = _MyDebugComponent(name: 'parent')..angle = pi / 4;
+        final child = _MyDebugComponent(name: 'child');
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        parent.flipHorizontally();
+        expect(child.absoluteAngle, -pi / 4);
+        parent.flipVertically();
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
+      });
+
+      testWithFlameGame('absoluteAngle with flipped child', (game) async {
+        final parent = PositionComponent();
+        final child = PositionComponent()..angle = pi / 4;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.flipHorizontally();
+        expect(child.absoluteAngle, -pi / 4);
+        child.flipVertically();
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
+      });
+
+      testWithFlameGame('absoluteAngle with flipped child and parent', (
+        game,
+      ) async {
+        final parent = PositionComponent()..angle = pi / 8;
+        final child = PositionComponent()..angle = pi / 8;
+        parent.add(child);
+        game.add(parent);
+        await game.ready();
+
+        expect(child.absoluteAngle, pi / 4);
+        child.flipHorizontally();
+        expect(child.absoluteAngle, -pi / 4);
+        parent.flipVertically();
+        expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
+      });
+    });
   });
 }
 
 class _MyHitboxComponent extends PositionComponent with GestureHitboxes {}
 
 class _MyDebugComponent extends PositionComponent {
+  _MyDebugComponent({this.name});
+
+  final String? name;
+
   @override
   bool get debugMode => true;
+
+  @override
+  String toString() {
+    return name != null
+        ? '$name(angle: $angle, scale: $scale)'
+        : super.toString();
+  }
 }

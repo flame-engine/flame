@@ -2,7 +2,8 @@ import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// A [MoveEffect] that moves its target towards the given destination point.
 ///
@@ -25,14 +26,22 @@ class MoveToEffect extends MoveEffect {
     PositionProvider? target,
     void Function()? onComplete,
     super.key,
-  })  : _destination = destination.clone(),
-        _offset = Vector2.zero(),
-        super(controller, target, onComplete: onComplete);
+  }) : _destination = destination.clone(),
+       _offset = Vector2.zero(),
+       super(controller, target, onComplete: onComplete);
 
   final Vector2 _destination;
   final Vector2 _offset;
 
   @override
+  @mustCallSuper
+  void onMount() {
+    super.onMount();
+    _offset.setFrom(_destination - target.position);
+  }
+
+  @override
+  @mustCallSuper
   void onStart() {
     _offset.setFrom(_destination - target.position);
   }

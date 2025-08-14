@@ -1,3 +1,51 @@
+## 1.11.14
+
+ - Update a dependency to the latest release.
+
+## 1.11.13
+
+ - **FIX**: Calculate zoom ratio before rendering svg ([#3616](https://github.com/flame-engine/flame/issues/3616)). ([f8b7ef82](https://github.com/flame-engine/flame/commit/f8b7ef82b7fc54af7171c94ae2112b18cebb236a))
+
+## 1.11.12
+
+ - Update a dependency to the latest release.
+
+## 1.11.11
+
+ - Update a dependency to the latest release.
+
+## 1.11.10
+
+ - **FIX**: SvgComponent should use `drawImage` on first render too ([#3549](https://github.com/flame-engine/flame/issues/3549)). ([91721a6b](https://github.com/flame-engine/flame/commit/91721a6b7b2ecda338d64d3c982e448e9cd71122))
+
+## 1.11.9
+
+ - Update a dependency to the latest release.
+
+## 1.11.8
+
+ - Update a dependency to the latest release.
+
+## 1.11.7
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 1.11.6
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.11.5
+
+ - Update a dependency to the latest release.
+
+## 1.11.4
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+
+## 1.11.3
+
+ - Update a dependency to the latest release.
+
 ## 1.11.2
 
  - Update a dependency to the latest release.

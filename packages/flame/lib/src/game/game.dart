@@ -32,8 +32,9 @@ abstract mixin class Game {
 
   /// Used internally by various mixins that need to use gesture detection
   /// functionality in Flutter.
-  late final GestureDetectorBuilder gestureDetectors =
-      GestureDetectorBuilder(refreshWidget)..initializeGestures(this);
+  late final GestureDetectorBuilder gestureDetectors = GestureDetectorBuilder(
+    refreshWidget,
+  )..initializeGestures(this);
 
   /// Set by the PointerMoveDispatcher to receive mouse events from the
   /// game widget.

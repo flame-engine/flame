@@ -38,9 +38,9 @@ class TestAssetBundle extends CachingAssetBundle {
         'No $fileName found in the TestAssetBundle. Did you forget to add it?',
       );
     }
-    return File(fileName)
-        .readAsBytes()
-        .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer));
+    return File(fileName).readAsBytes().then(
+      (bytes) => ByteData.view(Uint8List.fromList(bytes).buffer),
+    );
   }
 
   @override

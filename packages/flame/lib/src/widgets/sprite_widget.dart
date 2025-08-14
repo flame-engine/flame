@@ -29,6 +29,9 @@ class SpriteWidget extends StatefulWidget {
   /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
+  /// If the Sprite should be rasterized or not.
+  final bool rasterize;
+
   final FutureOr<Sprite> _spriteFuture;
 
   /// renders the [sprite] as a Widget.
@@ -41,6 +44,7 @@ class SpriteWidget extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.paint,
+    this.rasterize = false,
     super.key,
   }) : _spriteFuture = sprite;
 
@@ -60,40 +64,74 @@ class SpriteWidget extends StatefulWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.paint,
+    this.rasterize = false,
     super.key,
   }) : _spriteFuture = Sprite.load(
-          path,
-          srcSize: srcSize,
-          srcPosition: srcPosition,
-          images: images,
-        );
+         path,
+         srcSize: srcSize,
+         srcPosition: srcPosition,
+         images: images,
+       );
 
   @override
   State<SpriteWidget> createState() => _SpriteWidgetState();
 }
 
 class _SpriteWidgetState extends State<SpriteWidget> {
-  late FutureOr<Sprite> _spriteFuture = widget._spriteFuture;
+  late FutureOr<Sprite> _spriteFuture = _initializeFuture();
+
+  FutureOr<Sprite> _initializeFuture() async {
+    if (!widget.rasterize) {
+      return widget._spriteFuture;
+    }
+
+    final sprite = await widget._spriteFuture;
+    return sprite.rasterize();
+  }
 
   @override
   void didUpdateWidget(covariant SpriteWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    _updateSprite(oldWidget._spriteFuture, widget._spriteFuture);
+    _updateSprite(
+      widget.rasterize || oldWidget.rasterize,
+      oldWidget._spriteFuture,
+      widget._spriteFuture,
+    );
   }
 
   Future<void> _updateSprite(
+    bool rasterize,
     FutureOr<Sprite> oldFutureValue,
     FutureOr<Sprite> newFutureValue,
   ) async {
     final oldValue = await oldFutureValue;
     final newValue = await newFutureValue;
 
-    if (oldValue.image != newValue.image || oldValue.src != newValue.src) {
+    if (rasterize && oldValue.image != newValue.image) {
+      oldValue.image.dispose();
+    }
+
+    if (mounted &&
+        (oldValue.image != newValue.image || oldValue.src != newValue.src)) {
       setState(() {
-        _spriteFuture = newFutureValue;
+        _spriteFuture = _initializeFuture();
       });
     }
+  }
+
+  Future<void> _disposeImage() async {
+    final value = await _spriteFuture;
+    value.image.dispose();
+  }
+
+  @override
+  void dispose() {
+    if (widget.rasterize) {
+      _disposeImage();
+    }
+
+    super.dispose();
   }
 
   @override

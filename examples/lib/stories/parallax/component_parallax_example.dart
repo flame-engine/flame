@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
@@ -7,12 +8,16 @@ import 'package:flame/parallax.dart';
 class ComponentParallaxExample extends FlameGame {
   static const String description = '''
     Shows how to do initiation and loading of assets from within an extended
-    `ParallaxComponent`,
+    `ParallaxComponent`. This example uses a `FixedResolutionViewport` which
+    the `ParallaxComponent` is fullscreen within.
   ''';
 
   @override
   Future<void> onLoad() async {
-    add(MyParallaxComponent());
+    camera.viewport = FixedResolutionViewport(
+      resolution: Vector2(800, 600),
+    );
+    camera.viewport.add(MyParallaxComponent());
   }
 }
 

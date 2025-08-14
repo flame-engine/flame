@@ -101,11 +101,15 @@ class DragTarget extends PositionComponent with DragCallbacks {
 
 class Trail extends Component {
   Trail(Vector2 origin)
-      : _paths = [Path()..moveTo(origin.x, origin.y)],
-        _opacities = [1],
-        _lastPoint = origin.clone(),
-        _color =
-            HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
+    : _paths = [Path()..moveTo(origin.x, origin.y)],
+      _opacities = [1],
+      _lastPoint = origin.clone(),
+      _color = HSLColor.fromAHSL(
+        1,
+        random.nextDouble() * 360,
+        1,
+        0.8,
+      ).toColor();
 
   final List<Path> _paths;
   final List<double> _opacities;
@@ -127,7 +131,7 @@ class Trail extends Component {
       final path = _paths[i];
       final opacity = _opacities[i];
       if (opacity > 0) {
-        _linePaint.color = _color.withOpacity(opacity);
+        _linePaint.color = _color.withValues(alpha: opacity);
         _linePaint.strokeWidth = lineWidth * opacity;
         canvas.drawPath(path, _linePaint);
       }
@@ -216,11 +220,11 @@ class Star extends PositionComponent with DragCallbacks {
   @override
   void render(Canvas canvas) {
     if (isDragged) {
-      _paint.color = color.withOpacity(0.5);
+      _paint.color = color.withValues(alpha: 0.5);
       canvas.drawPath(_path, _paint);
       canvas.drawPath(_path, _borderPaint);
     } else {
-      _paint.color = color.withOpacity(1);
+      _paint.color = color.withValues(alpha: 1);
       canvas.drawPath(_path, _shadowPaint);
       canvas.drawPath(_path, _paint);
     }

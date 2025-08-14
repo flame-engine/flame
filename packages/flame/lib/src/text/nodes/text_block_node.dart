@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/text.dart';
 import 'package:meta/meta.dart';
 
@@ -43,7 +42,8 @@ abstract class TextBlockNode extends BlockNode {
         final metrics = element.metrics;
         assert(metrics.left == 0 && metrics.baseline == 0);
 
-        final dx = horizontalOffset +
+        final dx =
+            horizontalOffset +
             (contentWidth - metrics.width) * _relativeOffset(textAlign);
         final dy = verticalOffset + metrics.ascent;
         element.translate(dx, dy);
@@ -72,8 +72,8 @@ abstract class TextBlockNode extends BlockNode {
       TextAlign.end => 1,
       // Not supported by Flame
       TextAlign.justify => throw UnimplementedError(
-          'The text rendering pipeline cannot justify text.',
-        ),
+        'The text rendering pipeline cannot justify text.',
+      ),
     };
   }
 }

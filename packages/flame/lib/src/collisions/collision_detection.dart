@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 ///
 /// If the [HasCollisionDetection] mixin is added to the game, [run] is called
 /// every tick to check for collisions.
-abstract class CollisionDetection<T extends Hitbox<T>,
-    B extends Broadphase<T>> {
+abstract class CollisionDetection<
+  T extends Hitbox<T>,
+  B extends Broadphase<T>
+> {
   final B broadphase;
 
   List<T> get items => broadphase.items;

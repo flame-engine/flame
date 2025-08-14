@@ -1,0 +1,7 @@
+<<character Jenny>>
+<<declare $exampleVariable = "foo">>
+title: command_lifecycle
+---
+Jenny: The variable starts out as foo, then becomes bar.
+<<exampleCommand bar>>
+===

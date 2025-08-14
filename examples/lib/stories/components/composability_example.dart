@@ -30,16 +30,16 @@ class ComposabilityExample extends FlameGame {
   }
 }
 
-class ParentSquare extends RectangleComponent with HasGameRef {
+class ParentSquare extends RectangleComponent with HasGameReference {
   static final defaultPaint = BasicPalette.white.paint()
     ..style = PaintingStyle.stroke;
 
   ParentSquare(Vector2 position, Vector2 size)
-      : super(
-          position: position,
-          size: size,
-          paint: defaultPaint,
-        );
+    : super(
+        position: position,
+        size: size,
+        paint: defaultPaint,
+      );
 
   @override
   Future<void> onLoad() async {

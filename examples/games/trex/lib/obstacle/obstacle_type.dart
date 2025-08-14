@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unused_element_parameter
 
 import 'dart:ui';
 
@@ -91,15 +91,15 @@ class ObstacleTypeSettings {
   Sprite sprite(Image spriteImage) {
     return switch (type) {
       ObstacleType.cactusSmall => Sprite(
-          spriteImage,
-          srcPosition: Vector2(446.0, 2.0),
-          srcSize: size,
-        ),
+        spriteImage,
+        srcPosition: Vector2(446.0, 2.0),
+        srcSize: size,
+      ),
       ObstacleType.cactusLarge => Sprite(
-          spriteImage,
-          srcPosition: Vector2(652.0, 2.0),
-          srcSize: size,
-        ),
+        spriteImage,
+        srcPosition: Vector2(652.0, 2.0),
+        srcSize: size,
+      ),
     };
   }
 }

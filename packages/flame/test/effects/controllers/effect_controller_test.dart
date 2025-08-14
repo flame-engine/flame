@@ -361,7 +361,8 @@ void main() {
         expect(
           () => EffectController(duration: 1, speed: 1),
           failsAssert(
-            'Both duration and speed cannot be specified at the same time',
+            'Both duration and speed arguments cannot be specified at the same '
+            'time',
           ),
         );
       });
@@ -374,8 +375,8 @@ void main() {
             reverseSpeed: 1,
           ),
           failsAssert(
-            'Both reverseDuration and reverseSpeed cannot be specified at the '
-            'same time',
+            'Both duration and speed arguments cannot be specified at the same '
+            'time',
           ),
         );
       });

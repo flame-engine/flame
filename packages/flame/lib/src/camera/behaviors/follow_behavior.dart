@@ -3,7 +3,7 @@ import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/position_component.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// This behavior will make the [owner] follow the [target].
 ///
@@ -26,14 +26,14 @@ class FollowBehavior extends Component {
     this.verticalOnly = false,
     super.priority,
     super.key,
-  })  : _target = target,
-        _owner = owner,
-        _speed = maxSpeed,
-        assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
-        assert(
-          !(horizontalOnly && verticalOnly),
-          'The behavior cannot be both horizontalOnly and verticalOnly',
-        );
+  }) : _target = target,
+       _owner = owner,
+       _speed = maxSpeed,
+       assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
+       assert(
+         !(horizontalOnly && verticalOnly),
+         'The behavior cannot be both horizontalOnly and verticalOnly',
+       );
 
   ReadOnlyPositionProvider get target => _target;
   final ReadOnlyPositionProvider _target;

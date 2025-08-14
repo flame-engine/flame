@@ -229,8 +229,10 @@ class Player extends SpriteComponent
     Set<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
-    final myCenter =
-        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
+    final myCenter = Vector2(
+      position.x + tileSize / 2,
+      position.y + tileSize / 2,
+    );
     if (other is GameCollidable) {
       final diffX = myCenter.x - other.cachedCenter.x;
       if (diffX < 0) {
@@ -348,8 +350,10 @@ mixin GameCollidable on PositionComponent {
   }
 
   void initCenter() {
-    cachedCenter =
-        Vector2(position.x + tileSize / 2, position.y + tileSize / 2);
+    cachedCenter = Vector2(
+      position.x + tileSize / 2,
+      position.y + tileSize / 2,
+    );
   }
 
   late final Vector2 cachedCenter;
@@ -430,4 +434,5 @@ class QuadTreeDebugComponent extends PositionComponent with HasPaint {
     }
   }
 }
+
 //#endregion

@@ -5,15 +5,15 @@ import 'package:flame/game.dart';
 
 class ResizingRectangle extends RectangleComponent {
   ResizingRectangle()
-      : super(
-          paint: Paint()..color = const Color(0xFFFE4813),
-        );
+    : super(
+        paint: Paint()..color = const Color(0xFFFE4813),
+      );
 
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
 
-    this.size = size * .4;
+    this.size = size * 0.4;
   }
 }
 

@@ -14,14 +14,14 @@ class QuadTreeCollisionDetection
     int maxObjects = 25,
     int maxDepth = 10,
   }) : super(
-          broadphase: QuadTreeBroadphase(
-            mainBoxSize: mapDimensions,
-            maxObjects: maxObjects,
-            maxDepth: maxDepth,
-            broadphaseCheck: onComponentTypeCheck,
-            minimumDistanceCheck: minimumDistanceCheck,
-          ),
-        );
+         broadphase: QuadTreeBroadphase(
+           mainBoxSize: mapDimensions,
+           maxObjects: maxObjects,
+           maxDepth: maxDepth,
+           broadphaseCheck: onComponentTypeCheck,
+           minimumDistanceCheck: minimumDistanceCheck,
+         ),
+       );
 
   final _listenerCollisionType = <ShapeHitbox, VoidCallback>{};
   final _scheduledUpdate = <ShapeHitbox>{};

@@ -54,53 +54,66 @@ void main() {
     });
 
     test('darken colors each pixel darker', () async {
-      const originalColor = Color.fromARGB(193, 135, 73, 73);
+      const transparentColor = Color.fromARGB(0, 255, 0, 255);
+      const originalColor = Color.fromARGB(255, 135, 73, 73);
       final pixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) => _colorBit(index, originalColor),
+          (index) => _colorBit(
+            index,
+            index < 200 ? transparentColor : originalColor,
+          ),
         ),
       );
       final image = await ImageExtension.fromPixels(pixels, 10, 10);
 
       const darkenAmount = 0.5;
-      final originalDarkenImage = await image.darken(darkenAmount);
-      final originalDarkenPixelsList =
-          await originalDarkenImage.pixelsInUint8();
+      final actualDarkenedImage = await image.darken(darkenAmount);
+      final actualDarkenedPixels = await actualDarkenedImage.pixelsInUint8();
 
-      final darkenColor = originalColor.darken(darkenAmount);
+      final darkenedColor = originalColor.darken(darkenAmount);
       final expectedDarkenPixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) => _colorBit(index, darkenColor),
+          (index) => _colorBit(
+            index,
+            index < 200 ? transparentColor : darkenedColor,
+          ),
         ),
       );
-      expect(originalDarkenPixelsList, expectedDarkenPixels);
+      expect(actualDarkenedPixels, expectedDarkenPixels);
     });
 
     test('brighten colors each pixel brighter', () async {
-      const originalColor = Color.fromARGB(193, 135, 73, 73);
+      const transparentColor = Color.fromARGB(0, 255, 0, 255);
+      const originalColor = Color.fromARGB(255, 255, 0, 0);
+
       final pixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) => _colorBit(index, originalColor),
+          (index) => _colorBit(
+            index,
+            index < 200 ? transparentColor : originalColor,
+          ),
         ),
       );
       final image = await ImageExtension.fromPixels(pixels, 10, 10);
 
       const brightenAmount = 0.5;
-      final originalBrightenImage = await image.brighten(brightenAmount);
-      final originalBrightenPixelsList =
-          await originalBrightenImage.pixelsInUint8();
+      final brightenedImage = await image.brighten(brightenAmount);
+      final actualBrightenedPixels = await brightenedImage.pixelsInUint8();
 
       final brightenColor = originalColor.brighten(brightenAmount);
       final expectedBrightenPixels = Uint8List.fromList(
         List<int>.generate(
           100 * 4,
-          (index) => _colorBit(index, brightenColor),
+          (index) => _colorBit(
+            index,
+            index < 200 ? transparentColor : brightenColor,
+          ),
         ),
       );
-      expect(originalBrightenPixelsList, expectedBrightenPixels);
+      expect(actualBrightenedPixels, expectedBrightenPixels);
     });
 
     test('resize resizes the image', () async {
@@ -121,10 +134,10 @@ void main() {
 
 int _colorBit(int index, Color color) {
   return switch (index % 4) {
-    0 => color.red,
-    1 => color.green,
-    2 => color.blue,
-    3 => color.alpha,
+    0 => (color.r * 255).round(),
+    1 => (color.g * 255).round(),
+    2 => (color.b * 255).round(),
+    3 => (color.a * 255).round(),
     _ => throw UnimplementedError(),
   };
 }

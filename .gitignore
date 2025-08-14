@@ -37,6 +37,7 @@ desktop/
 coverage/
 pubspec.lock
 pubspec_overrides.yaml
+.fvmrc
 
 # Sphinx related
 __pycache__/
@@ -52,3 +53,5 @@ examples/**/.gitignore
 **/example/macos
 **/example/windows
 **/example/web
+
+.metadata

@@ -1,6 +1,6 @@
 import 'package:flame_test/src/close_to_vector.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
   group('closeToVector', () {
@@ -13,7 +13,7 @@ void main() {
       expect(Vector2(13, 14), closeToVector(Vector2(10, 10), 5));
     });
 
-    test('fails on type mismatch', () {
+    test('fails on type mismatch - double', () {
       try {
         expect(3.14, closeToVector(Vector2.zero()));
       } on TestFailure catch (e) {
@@ -22,6 +22,32 @@ void main() {
           contains('Expected: a Vector2 object within 1e-15 of (0.0, 0.0)'),
         );
         expect(e.message, contains('Actual: <3.14>'));
+        expect(e.message, contains('Which: is not an instance of Vector2'));
+      }
+    });
+
+    test('fails on type mismatch - vector3', () {
+      try {
+        expect(Vector3(1, 2, 3), closeToVector(Vector2.zero()));
+      } on TestFailure catch (e) {
+        expect(
+          e.message,
+          contains('Expected: a Vector2 object within 1e-15 of (0.0, 0.0)'),
+        );
+        expect(e.message, contains('Actual: Vector3:<[1.0,2.0,3.0]>'));
+        expect(e.message, contains('Which: is not an instance of Vector2'));
+      }
+    });
+
+    test('fails on type mismatch - vector4', () {
+      try {
+        expect(Vector4(1, 2, 3, 4), closeToVector(Vector2.zero()));
+      } on TestFailure catch (e) {
+        expect(
+          e.message,
+          contains('Expected: a Vector2 object within 1e-15 of (0.0, 0.0)'),
+        );
+        expect(e.message, contains('Actual: Vector4:<1.0,2.0,3.0,4.0>'));
         expect(e.message, contains('Which: is not an instance of Vector2'));
       }
     });

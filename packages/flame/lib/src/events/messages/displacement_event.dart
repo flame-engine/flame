@@ -6,10 +6,7 @@ import 'package:flame/src/game/game.dart';
 ///
 /// This represents a user event that has a start and end locations, as the
 /// ones that are represented by a [DisplacementEvent].
-typedef DisplacementContext = ({
-  Vector2 start,
-  Vector2 end,
-});
+typedef DisplacementContext = ({Vector2 start, Vector2 end});
 
 extension DisplacementContextDelta on DisplacementContext {
   /// Displacement delta
@@ -32,24 +29,6 @@ abstract class DisplacementEvent
   });
   final Game _game;
 
-  @Deprecated(
-    'use deviceStartPosition instead; will be removed in version 1.12.0',
-  )
-  late final Vector2 devicePosition = deviceStartPosition;
-
-  @Deprecated(
-    'use canvasStartPosition instead; will be removed in version 1.12.0',
-  )
-  late final Vector2 canvasPosition = canvasStartPosition;
-
-  @Deprecated(
-    'use localStartPosition instead; will be removed in version 1.12.0',
-  )
-  Vector2 get localPosition => localStartPosition;
-
-  @Deprecated('use localDelta instead; will be removed in version 1.12.0')
-  Vector2 get delta => localDelta;
-
   /// Event start position in the coordinate space of the device -- either the
   /// phone, or the browser window, or the app.
   ///
@@ -62,8 +41,9 @@ abstract class DisplacementEvent
   /// relative to the game canvas.
   ///
   /// This could be considered the Flame-level global position.
-  late final Vector2 canvasStartPosition =
-      _game.convertGlobalToLocalCoordinate(deviceStartPosition);
+  late final Vector2 canvasStartPosition = _game.convertGlobalToLocalCoordinate(
+    deviceStartPosition,
+  );
 
   /// Event start position in the local coordinate space of the current
   /// component.
@@ -85,8 +65,9 @@ abstract class DisplacementEvent
   /// relative to the game canvas.
   ///
   /// This could be considered the Flame-level global position.
-  late final Vector2 canvasEndPosition =
-      _game.convertGlobalToLocalCoordinate(deviceEndPosition);
+  late final Vector2 canvasEndPosition = _game.convertGlobalToLocalCoordinate(
+    deviceEndPosition,
+  );
 
   /// Event end position in the local coordinate space of the current
   /// component.

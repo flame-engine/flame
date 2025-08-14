@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:ordered_set/mapping_ordered_set.dart';
+import 'package:ordered_set/ordered_set.dart';
 
 import '../custom_component.dart';
 
@@ -78,8 +83,9 @@ void main() {
         },
       );
 
-      testWithFlameGame('remove parent of child that has removed set',
-          (game) async {
+      testWithFlameGame('remove parent of child that has removed set', (
+        game,
+      ) async {
         final parent = _LifecycleComponent('parent')..addToParent(game);
         final child = _LifecycleComponent('child')..addToParent(parent);
         await game.ready();
@@ -267,7 +273,7 @@ void main() {
           expect(parent.isMounted, false);
           expect(child.isMounted, false);
           expect(parent.parent, isNull);
-          expect(child.parent, isNull);
+          expect(child.parent, isNotNull);
 
           await game.world.add(parent);
           await game.ready();
@@ -277,6 +283,36 @@ void main() {
           expect(parent.parent, game.world);
           expect(parent.parent?.parent, game);
           expect(child.parent, parent);
+        },
+      );
+
+      testWithFlameGame(
+        'Parent removal should not lead to null parent of descendants',
+        (game) async {
+          final parent = _LifecycleComponent('parent');
+          final child = _LifecycleComponent('child')..addToParent(parent);
+          final grandChild = _LifecycleComponent('grandchild')
+            ..addToParent(child);
+          await game.world.add(parent);
+          await game.ready();
+
+          expect(parent.isMounted, true);
+          expect(child.isMounted, true);
+          expect(grandChild.isMounted, true);
+          expect(parent.parent, game.world);
+          expect(parent.parent?.parent, game);
+          expect(child.parent, parent);
+          expect(grandChild.parent, child);
+
+          parent.removeFromParent();
+          await game.ready();
+
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(grandChild.isMounted, false);
+          expect(parent.parent, isNull);
+          expect(child.parent, isNotNull);
+          expect(grandChild.parent, isNotNull);
         },
       );
 
@@ -340,16 +376,18 @@ void main() {
           expect(game.hasLifecycleEvents, isFalse);
         });
 
-        testWithFlameGame("doesn't block when there are no events",
-            (game) async {
+        testWithFlameGame("doesn't block when there are no events", (
+          game,
+        ) async {
           await game.ready();
           expect(game.hasLifecycleEvents, isFalse);
           await game.lifecycleEventsProcessed;
           expect(game.hasLifecycleEvents, isFalse);
         });
 
-        testWithFlameGame('guarantees addition even with heavy onLoad',
-            (game) async {
+        testWithFlameGame('guarantees addition even with heavy onLoad', (
+          game,
+        ) async {
           await game.ready();
           final component = _SlowComponent('heavy', 0.1);
           final child = _SlowComponent('child', 0.1);
@@ -646,13 +684,29 @@ void main() {
 
         // Timeout is added because processLifecycleEvents of ComponentTreeRoot
         // gets blocked in such cases.
-        expect(game.ready().timeout(const Duration(seconds: 2)), completes);
+
+        // Expect the ready future to complete
+        await expectLater(
+          game.ready().timeout(const Duration(seconds: 2)),
+          completes,
+        );
+        expect(game.hasLifecycleEvents, isFalse);
 
         // Adding the parent again should eventually mount the child as well.
         await game.add(parent);
         await game.ready();
         expect(child.isMounted, true);
       });
+
+      testWithFlameGame(
+        "can remove component's children before adding the parent",
+        (game) async {
+          final c = _ComponentWithChildrenRemoveAll();
+          game.add(c);
+
+          await game.ready();
+        },
+      );
     });
 
     group('Removing components', () {
@@ -931,8 +985,9 @@ void main() {
           game.update(0);
           expect(game.world.children.length, 5);
           expect(
-            game.world.children
-                .every((c) => (c as _IdentifiableComponent).id.isOdd),
+            game.world.children.every(
+              (c) => (c as _IdentifiableComponent).id.isOdd,
+            ),
             true,
           );
         },
@@ -948,6 +1003,22 @@ void main() {
             },
             returnsNormally,
           );
+        },
+      );
+
+      testWithFlameGame(
+        'A removed child should be able to be removed from onRemove',
+        (game) async {
+          final parent = _RemoveAllChildrenComponent();
+          final child = _LifecycleComponent('child')..addToParent(parent);
+          await game.world.add(parent);
+          await game.ready();
+          parent.removeFromParent();
+          game.update(0);
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(child.parent, parent);
+          expect(parent.parent, isNull);
         },
       );
     });
@@ -997,6 +1068,109 @@ void main() {
         expect(game.world.children.toList(), [parent, child]);
         expect(parent.children.toList(), isEmpty);
       });
+    });
+
+    group('Rebalancing components', () {
+      testWithFlameGame(
+        'rebalance is correctly queued',
+        (game) async {
+          final c = Component();
+          await game.world.ensureAdd(c);
+
+          c.priority = 10;
+          expect(c.priority, 10);
+          expect(
+            game.queue.any(
+              (e) =>
+                  e.child == c &&
+                  e.parent == game.world &&
+                  e.kind == LifecycleEventKind.rebalance,
+            ),
+            isTrue,
+          );
+
+          await game.ready();
+          expect(c.priority, 10);
+          expect(game.queue.isEmpty, isTrue);
+        },
+      );
+
+      testWithFlameGame(
+        'the order of children is not changed until after rebalance',
+        (game) async {
+          final c1 = Component(priority: 2);
+          final c2 = Component(priority: 1);
+          await game.world.ensureAddAll([c1, c2]);
+
+          c1.priority = 0;
+          expect(c1.priority, 0);
+          expect(c2.priority, 1);
+          expect(
+            game.world.children.toList(),
+            [c2, c1],
+          );
+
+          game.update(0);
+          expect(c1.priority, 0);
+          expect(c2.priority, 1);
+          expect(
+            game.world.children.toList(),
+            [c1, c2],
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'async rebalance, add and remove have no race condition',
+        (game) async {
+          final r = Random(69420);
+          for (var i = 0; i < 10; i++) {
+            game.world.add(Component());
+          }
+
+          Future<void> add() async {
+            final white = Component();
+            game.world.add(white);
+            await Future.delayed(
+              const Duration(milliseconds: 300),
+              white.removeFromParent,
+            );
+          }
+
+          Future<void> rebalance() async {
+            game.world.children.forEach((it) {
+              it.priority = r.nextInt(1_000);
+            });
+          }
+
+          var completed = 0;
+          var total = 0;
+          void waitFor(int milliseconds, Future<void> Function() fn) {
+            total++;
+            Future.delayed(
+              Duration(milliseconds: milliseconds),
+              fn,
+            ).whenComplete(() => completed++);
+          }
+
+          Future<void> start() async {
+            for (var i = 0; i < 100; i++) {
+              waitFor(17 * i, rebalance);
+              waitFor(31 * i, add);
+            }
+          }
+
+          waitFor(0, start);
+
+          while (completed < total || game.hasLifecycleEvents) {
+            game.update(0);
+            await Future.delayed(const Duration(milliseconds: 1));
+          }
+
+          await game.ready();
+          expect(game.world.children.length, 10);
+        },
+      );
     });
 
     group('descendants()', () {
@@ -1279,8 +1453,9 @@ void main() {
     });
 
     group('findRootGame()', () {
-      testWithFlameGame('finds root game in nested game structure',
-          (game) async {
+      testWithFlameGame('finds root game in nested game structure', (
+        game,
+      ) async {
         final component = Component();
         await game.ensureAdd(
           FlameGame(
@@ -1292,8 +1467,9 @@ void main() {
         expect(component.findRootGame(), game);
       });
 
-      testWithFlameGame('finds root game in non-nested game structure',
-          (game) async {
+      testWithFlameGame('finds root game in non-nested game structure', (
+        game,
+      ) async {
         final component = Component();
         await game.ensureAdd(component);
         expect(component.findRootGame(), game);
@@ -1305,13 +1481,19 @@ void main() {
         final component0 = Component();
         expect(component0.children.strictMode, false);
 
-        Component.childrenFactory = () => ComponentSet(strictMode: true);
+        Component.childrenFactory = () => OrderedSet.mapping<num, Component>(
+          (e) => e.priority,
+          // ignore: avoid_redundant_argument_values
+          strictMode: true,
+        );
         final component1 = Component();
         final component2 = Component();
         component1.add(component2);
         component2.add(Component());
-        expect(component1.children.strictMode, true);
-        expect(component2.children.strictMode, true);
+        expect(component1.children, isInstanceOf<MappingOrderedSet>());
+        expect(component1.children.strictMode, isTrue);
+        expect(component2.children, isInstanceOf<MappingOrderedSet>());
+        expect(component2.children.strictMode, isTrue);
       });
 
       testWithFlameGame('initially same debugMode as parent', (game) async {
@@ -1803,4 +1985,22 @@ FlameTester<_DetachableFlameGame> _myDetachableGame({required bool open}) {
       await tester.pumpWidget(_Wrapper(open: open, child: gameWidget));
     },
   );
+}
+
+class _ComponentWithChildrenRemoveAll extends Component {
+  @override
+  void onMount() {
+    super.onMount();
+
+    add(Component());
+    removeAll(children);
+  }
+}
+
+class _RemoveAllChildrenComponent extends Component {
+  @override
+  void onRemove() {
+    super.onMount();
+    removeAll(children);
+  }
 }

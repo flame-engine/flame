@@ -41,12 +41,12 @@ class SpriteAnimationParticle extends Particle {
   @override
   void render(Canvas canvas) {
     animationTicker.getSprite().render(
-          canvas,
-          position: position,
-          size: size,
-          anchor: anchor,
-          overridePaint: overridePaint,
-        );
+      canvas,
+      position: position,
+      size: size,
+      anchor: anchor,
+      overridePaint: overridePaint,
+    );
   }
 
   @override

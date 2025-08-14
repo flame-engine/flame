@@ -23,13 +23,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     super.children,
     W? world,
     CameraComponent? camera,
-  })  : assert(
-          world != null || W == World,
-          'The generics type $W does not conform to the type of '
-          '${world?.runtimeType ?? 'World'}.',
-        ),
-        _world = world ?? World() as W,
-        _camera = camera ?? CameraComponent() {
+  }) : assert(
+         world != null || W == World,
+         'The generics type $W does not conform to the type of '
+         '${world?.runtimeType ?? 'World'}.',
+       ),
+       _world = world ?? World() as W,
+       _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
@@ -110,6 +110,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @internal
   void mount() {
     super.mount();
+    if (_pausedBecauseBackgrounded) {
+      resumeEngine();
+    }
     setMounted();
   }
 
@@ -162,7 +165,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     for (final component in children) {
       component.updateTree(dt);
     }
-    processRebalanceEvents();
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -186,7 +188,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
     handleResize(size);
-    children.forEach((child) => child.onParentResize(size));
+    for (final child in children) {
+      child.onParentResize(size);
+    }
   }
 
   /// Ensure that all pending tree operations finish.
@@ -265,9 +269,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   bool pauseWhenBackgrounded = true;
   bool _pausedBecauseBackgrounded = false;
 
+  @visibleForTesting
+  bool get isPausedOnBackground => _pausedBecauseBackgrounded;
+
   @override
   @mustCallSuper
   void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
     switch (state) {
       case AppLifecycleState.resumed:
       case AppLifecycleState.inactive:

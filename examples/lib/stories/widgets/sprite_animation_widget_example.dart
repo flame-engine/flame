@@ -21,13 +21,14 @@ Widget spriteAnimationWidgetBuilder(DashbookContext ctx) {
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),
       ),
-      paint: paintList[paintChoices.indexOf(
-        ctx.listProperty(
-          'paint',
-          'none',
-          paintChoices,
-        ),
-      )],
+      paint:
+          paintList[paintChoices.indexOf(
+            ctx.listProperty(
+              'paint',
+              'none',
+              paintChoices,
+            ),
+          )],
     ),
   );
 }

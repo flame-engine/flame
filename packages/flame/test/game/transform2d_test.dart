@@ -2,10 +2,66 @@ import 'dart:math' as math;
 
 import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 void main() {
+  // Implementation of statistical error propagation based on
+  // Tellinghuisen, J. (2001). Statistical Error Propagation.
+  // https://pubs.acs.org/doi/10.1021/jp003484u
+  // Note: this function is only applicable to the globalToLocal 2D transform
+  // round trip.
+  double transform2dRoundTripUncertainty(
+    Transform2D transform,
+    Vector2 point,
+  ) {
+    final m = transform.transformMatrix.storage;
+    // Calculate the determinant
+    final det = m[0] * m[5] - m[1] * m[4];
+
+    // Base uncertainty
+    const epsilon = 1 / (1 << 23);
+
+    // Calculate indicative condition number
+    final matrixNorm = math.sqrt(
+      m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5],
+    );
+
+    double conditionFactor;
+    if (det.abs() > 1e-10) {
+      // Calculate condition number
+      final invMatrixNorm =
+          math.sqrt(m[5] * m[5] + m[1] * m[1] + m[4] * m[4] + m[0] * m[0]) /
+          det.abs();
+      conditionFactor = matrixNorm * invMatrixNorm;
+    } else {
+      // For ~singular matrices, small input change -> large output change
+      conditionFactor = 1e6;
+    }
+
+    // Statistical error propagation
+    // There are 8 variables (point + matrix elements)
+    const double numVariables = 8;
+    // In the round trip there's approx 14 ops
+    const double numOperations = 14;
+
+    // Standard deviation (1-σ)
+    final sigma =
+        epsilon *
+        math.sqrt(numVariables) *
+        math.sqrt(numOperations) *
+        conditionFactor;
+
+    // 99.7 CI + small low-value tolerance
+    final tolerance = 3 * sigma + epsilon;
+
+    // Adjust for relative precision
+    final magnitude = math.max(1.0, math.max(point.x.abs(), point.y.abs()));
+
+    return tolerance * magnitude;
+  }
+
   group('Transform2D', () {
     test('basic construction', () {
       final t = Transform2D()
@@ -44,8 +100,8 @@ void main() {
       expect(notified, 3);
 
       t.position.setFrom(Vector2(7, 2.2));
-      expect(t.x, 7);
-      expect(t.y, 2.2);
+      expect(t.x, closeTo(7, toleranceFloat32(7)));
+      expect(t.y, closeTo(2.2, toleranceFloat32(2.2)));
       expect(notified, 4);
 
       t.position.setZero();
@@ -144,8 +200,7 @@ void main() {
       expect(t.localToGlobal(one), Vector2(1, 1));
     });
 
-    test('random', () {
-      final rnd = math.Random();
+    testRandom('random', (math.Random rnd) {
       for (var i = 0; i < 20; i++) {
         final translation = Vector2(
           rnd.nextDouble() * 10,
@@ -170,19 +225,36 @@ void main() {
           ..rotateZ(rotation)
           ..scale(scale.x, scale.y, 1)
           ..translate(offset.x, offset.y);
+
         for (var k = 0; k < 16; k++) {
           expect(
             transform2d.transformMatrix.storage[k],
-            closeTo(matrix4.storage[k], 1e-10),
+            closeTo(
+              matrix4.storage[k],
+              toleranceVector2Float32(translation) +
+                  toleranceFloat32(rotation) +
+                  toleranceVector2Float32(scale) +
+                  toleranceVector2Float32(offset),
+            ),
           );
         }
         // Check round-trip conversion between local and global
-        final point1 =
-            Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
-        final point2 =
-            transform2d.globalToLocal(transform2d.localToGlobal(point1));
-        expect(point1.x, closeTo(point2.x, 1e-10));
-        expect(point1.y, closeTo(point2.y, 1e-10));
+        final point1 = Vector2(
+          (rnd.nextDouble() - 0.5) * 5,
+          (rnd.nextDouble() - 0.5) * 5,
+        );
+        final point2 = transform2d.globalToLocal(
+          transform2d.localToGlobal(point1),
+        );
+
+        final tolerance = transform2dRoundTripUncertainty(transform2d, point1);
+        expect(
+          point1,
+          closeToVector(
+            point2,
+            tolerance,
+          ),
+        );
       }
     });
 
@@ -194,8 +266,11 @@ void main() {
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.angleDegrees = 60;
-      expect(t.localToGlobal(point).x, closeTo(1 / 2, 1e-10));
-      expect(t.localToGlobal(point).y, closeTo(math.sqrt(3) / 2, 1e-10));
+      expect(t.localToGlobal(point).x, closeTo(1 / 2, toleranceFloat32(1 / 2)));
+      expect(
+        t.localToGlobal(point).y,
+        closeTo(math.sqrt(3) / 2, toleranceFloat32(math.sqrt(3) / 2)),
+      );
       expect(t.globalToLocal(point), Vector2(0, 0));
 
       t.scale = Vector2(0, 1);

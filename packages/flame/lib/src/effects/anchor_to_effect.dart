@@ -2,7 +2,7 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/effects/anchor_effect.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// An effect that moves the target's anchor to the specified value.
 ///
@@ -16,8 +16,8 @@ class AnchorToEffect extends AnchorEffect {
     AnchorProvider? target,
     void Function()? onComplete,
     super.key,
-  })  : _destination = destination,
-        super(controller, target, onComplete: onComplete);
+  }) : _destination = destination,
+       super(controller, target, onComplete: onComplete);
 
   final Anchor _destination;
   late Vector2 _offset;

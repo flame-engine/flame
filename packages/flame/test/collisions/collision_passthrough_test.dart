@@ -14,9 +14,11 @@ void main() {
     runCollisionTestRegistry({
       'Passing collisions to parent': (game) async {
         final passthrough = _Passthrough();
-        final hitboxParent =
-            TestBlock(Vector2.zero(), Vector2.all(10), addTestHitbox: false)
-              ..add(passthrough);
+        final hitboxParent = TestBlock(
+          Vector2.zero(),
+          Vector2.all(10),
+          addTestHitbox: false,
+        )..add(passthrough);
         final collisionBlock = TestBlock(Vector2.all(1), Vector2.all(10));
         game.add(collisionBlock);
         game.add(hitboxParent);
