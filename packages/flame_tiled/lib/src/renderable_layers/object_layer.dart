@@ -13,6 +13,7 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
     required super.camera,
     required super.map,
     required super.destTileSize,
+    required super.layerPaintFactory,
     super.filterQuality,
   });
 
@@ -22,6 +23,7 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
     CameraComponent? camera,
     TiledMap map,
     Vector2 destTileSize,
+    Paint Function(double opacity) layerPaintFactory,
     FilterQuality? filterQuality,
   ) async {
     return ObjectLayer(
@@ -30,6 +32,7 @@ class ObjectLayer extends RenderableLayer<ObjectGroup> {
       camera: camera,
       map: map,
       destTileSize: destTileSize,
+      layerPaintFactory: layerPaintFactory,
       filterQuality: filterQuality,
     );
   }

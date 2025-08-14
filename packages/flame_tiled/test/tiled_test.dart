@@ -832,9 +832,7 @@ void main() {
     late TiledComponent component;
     final size = Vector2(256, 128);
 
-    Future<void> setupMap(
-      Vector2 destTileSize,
-    ) async {
+    Future<void> setupMap(Vector2 destTileSize) async {
       final bundle = TestAssetBundle(
         imageNames: [
           'isometric_spritesheet.png',
@@ -1070,21 +1068,21 @@ void main() {
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_0.png'),
           );
 
-          component.update(0.18);
+          component.updateTree(0.18);
           pngData = await renderMapToPng(component);
           await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_1.png'),
           );
 
-          component.update(0.18);
+          component.updateTree(0.18);
           pngData = await renderMapToPng(component);
           await expectLater(
             pngData,
             matchesGoldenFile('goldens/dungeon_animation_${mapType}_2.png'),
           );
 
-          component.update(0.18);
+          component.updateTree(0.18);
           pngData = await renderMapToPng(component);
           await expectLater(
             pngData,

@@ -10,6 +10,7 @@ class UnsupportedLayer extends RenderableLayer {
     required super.parent,
     required super.camera,
     required super.destTileSize,
+    required super.layerPaintFactory,
   });
 
   @override

@@ -10,6 +10,7 @@ class GroupLayer extends RenderableLayer<Group> {
     required super.camera,
     required super.map,
     required super.destTileSize,
+    required super.layerPaintFactory,
     super.filterQuality,
   });
 

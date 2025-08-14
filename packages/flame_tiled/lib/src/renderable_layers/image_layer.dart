@@ -24,6 +24,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required super.map,
     required super.destTileSize,
     required Image image,
+    required super.layerPaintFactory,
     super.filterQuality,
   }) : _image = image {
     _initImageRepeat();
@@ -174,6 +175,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required CameraComponent? camera,
     required TiledMap map,
     required Vector2 destTileSize,
+    required Paint Function(double opacity) layerPaintFactory,
     FilterQuality? filterQuality,
     Images? images,
   }) async {
@@ -184,6 +186,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       map: map,
       destTileSize: destTileSize,
       filterQuality: filterQuality,
+      layerPaintFactory: layerPaintFactory,
       image: await (images ?? Flame.images).load(layer.image.source!),
     );
   }

@@ -31,15 +31,11 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  @override
-  late Paint paint = layerPaintFactory(opacity);
-
   final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
   final bool ignoreFlip;
-  Paint Function(double opacity) layerPaintFactory;
 
   FlameTileLayer({
     required super.layer,
@@ -50,7 +46,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required this.tiledAtlas,
     required this.animationFrames,
     required this.ignoreFlip,
-    required this.layerPaintFactory,
+    required super.layerPaintFactory,
     super.filterQuality,
   });
 
@@ -137,12 +133,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     if (tiledAtlas.batch == null) {
       return;
     }
-
-    canvas.save();
-    //canvas.translate(offsetX, offsetY);
-    //applyParallaxOffset(canvas);
     tiledAtlas.batch!.render(canvas, paint: paint);
-    canvas.restore();
   }
 
   @protected

@@ -24,8 +24,16 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
 
   /// Cached canvas translation used in parallax effects.
   /// This field needs to be read in the case of repeated textures
-  /// as part of an optimization.
+  /// as an optimization step.
   Vector2 cachedLayerOffset = Vector2.zero();
+
+  /// Given the layer's [opacity], compute [Paint] for drawing.
+  /// This is useful if your layer requires translucency or other effects.
+  Paint Function(double opacity) layerPaintFactory;
+
+  /// A read on [paint] will compute the value from [layerPaintFactory].
+  @override
+  Paint get paint => layerPaintFactory(opacity);
 
   RenderableLayer({
     required this.layer,
@@ -33,6 +41,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     required this.map,
     required this.camera,
     required this.destTileSize,
+    required this.layerPaintFactory,
     FilterQuality? filterQuality,
   }) : filterQuality = filterQuality ?? FilterQuality.none {
     this.parent = parent;
@@ -73,6 +82,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
         map: map,
         destTileSize: destTileSize,
         filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
         images: images,
       );
     } else if (layer is ObjectGroup) {
@@ -82,17 +92,18 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
         camera,
         map,
         destTileSize,
+        layerPaintFactory,
         filterQuality,
       );
     } else if (layer is Group) {
-      final groupLayer = layer;
       return GroupLayer(
-        layer: groupLayer,
+        layer: layer,
         parent: parent,
         camera: camera,
         map: map,
         destTileSize: destTileSize,
         filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
       );
     }
 
@@ -102,6 +113,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
       camera: camera,
       map: map,
       destTileSize: destTileSize,
+      layerPaintFactory: layerPaintFactory,
     );
   }
 
@@ -149,25 +161,29 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// position.
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
   void applyParallaxOffset(Canvas canvas) {
-    final anchor = camera?.viewfinder.anchor ?? Anchor.center;
-    final cameraX = camera?.viewfinder.position.x ?? 0.0;
-    final cameraY = camera?.viewfinder.position.y ?? 0.0;
-    final viewportCenterX = (camera?.viewport.virtualSize.x ?? 0.0) * anchor.x;
-    final viewportCenterY = (camera?.viewport.virtualSize.y ?? 0.0) * anchor.y;
-    final topLeftX = cameraX - viewportCenterX;
-    final topLeftY = cameraY - viewportCenterY;
-
-    final double initOffsetX = viewportCenterX * parallaxX;
-    final double initOffsetY = viewportCenterY * parallaxY;
+    final viewfinder = camera?.viewfinder;
+    final cameraX = viewfinder?.position.x ?? 0.0;
+    final cameraY = viewfinder?.position.y ?? 0.0;
+    final zoom = viewfinder?.zoom ?? 1.0;
 
     // Use the complement of the parallax coefficient in order to account for
     // the camera applying its transformations earlier in the render cycle
     // of Flame. This adjustment draws the layers correctly w.r.t. their own
     // offset and parallax values.
-    final double x = offsetX + (cameraX * (1.0 - parallaxX));
-    final double y = offsetY + (cameraY * (1.0 - parallaxY));
+    final viewportCenterX = (camera?.viewport.size.x ?? 0) * anchor.x;
+    final viewportCenterY = (camera?.viewport.size.y ?? 0) * anchor.y;
 
+    //final x = offsetX + (cameraX * (1.0 - parallaxX));
+    //final y = offsetY + (cameraY * (1.0 - parallaxY));
+    var x = (1.0 - parallaxX) * viewportCenterX;
+    var y = (1.0 - parallaxY) * viewportCenterY;
+    x /= zoom;
+    y /= zoom;
+    x += offsetX + cameraX - (cameraX * parallaxX);
+    y += offsetY + cameraY - (cameraY * parallaxY);
+    //cachedLayerOffset = Vector2(x / zoom, y / zoom);
     cachedLayerOffset = Vector2(x, y);
+
     canvas.translate(cachedLayerOffset.x, cachedLayerOffset.y);
   }
 
