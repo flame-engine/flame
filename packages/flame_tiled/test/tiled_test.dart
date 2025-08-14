@@ -11,7 +11,7 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart'
     hide expect, group, setUp, isInstanceOf, expectLater;
-import 'package:test/test.dart';
+import 'package:test/test.dart' hide test;
 
 import 'test_asset_bundle.dart';
 import 'test_image_utils.dart';
@@ -41,23 +41,25 @@ void main() {
         images: Images(bundle: Flame.bundle),
         key: ComponentKey.named('test'),
       );
-    });
+    }
 
     testWithFlameGame('correct loads the file', (game) async {
       await setUp(game);
       expect(tiled.tileMap.renderableLayers.length, equals(4));
     });
 
-    testWithFlameGame('component atlases returns the loaded atlases',
-        (game) async {
+    testWithFlameGame('component atlases returns the loaded atlases', (
+      game,
+    ) async {
       await setUp(game);
       final atlases = tiled.atlases();
       expect(atlases, hasLength(1));
       expect(atlases.first.$1, equals('map-level1.png'));
     });
 
-    testWithFlameGame('correct loads the file, with different prefix',
-        (game) async {
+    testWithFlameGame('correct loads the file, with different prefix', (
+      game,
+    ) async {
       await setUp(game);
       tiled = await TiledComponent.load(
         'map_custom_path.tmx',
@@ -74,8 +76,9 @@ void main() {
     });
 
     group('is positionable', () {
-      testWithFlameGame('size, width, and height are readable - not writable',
-          (game) async {
+      testWithFlameGame('size, width, and height are readable - not writable', (
+        game,
+      ) async {
         await setUp(game);
         expect(tiled.size, Vector2(512.0, 2048.0));
         expect(tiled.width, 512);
@@ -138,8 +141,9 @@ void main() {
     );
   });
 
-  testWithFlameGame('correctly loads external tileset with custom path',
-      (game) async {
+  testWithFlameGame('correctly loads external tileset with custom path', (
+    game,
+  ) async {
     // Flame.bundle is a global static. Updating these in tests can lead to
     // odd errors if you're trying to debug.
     Flame.bundle = TestAssetBundle(
@@ -307,99 +311,101 @@ void main() {
     }
 
     testWithFlameGame(
-        '[useAtlas = true] Green tile pixels are in correct spots',
-        (game) async {
-      await setUp(game);
+      '[useAtlas = true] Green tile pixels are in correct spots',
+      (game) async {
+        await setUp(game);
 
-      const oneColorRect = 8;
-      final leftTilePixels = <int>[];
-      for (
-        var i = 65 * oneColorRect * pixel;
-        i < ((64 * 23) + (oneColorRect * 3)) * pixel;
-        i += 64 * pixel
-      ) {
-        leftTilePixels.addAll(
-          pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
-        );
-      }
+        const oneColorRect = 8;
+        final leftTilePixels = <int>[];
+        for (
+          var i = 65 * oneColorRect * pixel;
+          i < ((64 * 23) + (oneColorRect * 3)) * pixel;
+          i += 64 * pixel
+        ) {
+          leftTilePixels.addAll(
+            pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
+          );
+        }
 
-      var allGreen = true;
-      for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &=
-            leftTilePixels[i] == 0 &&
-            leftTilePixels[i + 1] == 255 &&
-            leftTilePixels[i + 2] == 0 &&
-            leftTilePixels[i + 3] == 255;
-      }
-      expect(allGreen, true);
+        var allGreen = true;
+        for (var i = 0; i < leftTilePixels.length; i += pixel) {
+          allGreen &=
+              leftTilePixels[i] == 0 &&
+              leftTilePixels[i + 1] == 255 &&
+              leftTilePixels[i + 2] == 0 &&
+              leftTilePixels[i + 3] == 255;
+        }
+        expect(allGreen, true);
 
-      final rightTilePixels = <int>[];
-      for (
-        var i = 69 * 8 * pixel;
-        i < ((64 * 23) + (8 * 7)) * pixel;
-        i += 64 * pixel
-      ) {
-        rightTilePixels.addAll(
-          pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
-        );
-      }
+        final rightTilePixels = <int>[];
+        for (
+          var i = 69 * 8 * pixel;
+          i < ((64 * 23) + (8 * 7)) * pixel;
+          i += 64 * pixel
+        ) {
+          rightTilePixels.addAll(
+            pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
+          );
+        }
 
-      for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allGreen &=
-            rightTilePixels[i] == 0 &&
-            rightTilePixels[i + 1] == 255 &&
-            rightTilePixels[i + 2] == 0 &&
-            rightTilePixels[i + 3] == 255;
-      }
-      expect(allGreen, true);
-    });
+        for (var i = 0; i < rightTilePixels.length; i += pixel) {
+          allGreen &=
+              rightTilePixels[i] == 0 &&
+              rightTilePixels[i + 1] == 255 &&
+              rightTilePixels[i + 2] == 0 &&
+              rightTilePixels[i + 3] == 255;
+        }
+        expect(allGreen, true);
+      },
+    );
 
     testWithFlameGame(
-        '[useAtlas = false] Green tile pixels are in correct spots',
-        (game) async {
-      await setUp(game);
+      '[useAtlas = false] Green tile pixels are in correct spots',
+      (game) async {
+        await setUp(game);
 
-      final leftTilePixels = <int>[];
-      for (
-        var i = 65 * 8 * pixel;
-        i < ((64 * 23) + (8 * 3)) * pixel;
-        i += 64 * pixel
-      ) {
-        leftTilePixels.addAll(
-          pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
-        );
-      }
+        final leftTilePixels = <int>[];
+        for (
+          var i = 65 * 8 * pixel;
+          i < ((64 * 23) + (8 * 3)) * pixel;
+          i += 64 * pixel
+        ) {
+          leftTilePixels.addAll(
+            pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
+          );
+        }
 
-      var allGreen = true;
-      for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &=
-            leftTilePixels[i] == 0 &&
-            leftTilePixels[i + 1] == 255 &&
-            leftTilePixels[i + 2] == 0 &&
-            leftTilePixels[i + 3] == 255;
-      }
-      expect(allGreen, true);
+        var allGreen = true;
+        for (var i = 0; i < leftTilePixels.length; i += pixel) {
+          allGreen &=
+              leftTilePixels[i] == 0 &&
+              leftTilePixels[i + 1] == 255 &&
+              leftTilePixels[i + 2] == 0 &&
+              leftTilePixels[i + 3] == 255;
+        }
+        expect(allGreen, true);
 
-      final rightTilePixels = <int>[];
-      for (
-        var i = 69 * 8 * pixel;
-        i < ((64 * 23) + (8 * 7)) * pixel;
-        i += 64 * pixel
-      ) {
-        rightTilePixels.addAll(
-          pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
-        );
-      }
+        final rightTilePixels = <int>[];
+        for (
+          var i = 69 * 8 * pixel;
+          i < ((64 * 23) + (8 * 7)) * pixel;
+          i += 64 * pixel
+        ) {
+          rightTilePixels.addAll(
+            pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
+          );
+        }
 
-      for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allGreen &=
-            rightTilePixels[i] == 0 &&
-            rightTilePixels[i + 1] == 255 &&
-            rightTilePixels[i + 2] == 0 &&
-            rightTilePixels[i + 3] == 255;
-      }
-      expect(allGreen, true);
-    });
+        for (var i = 0; i < rightTilePixels.length; i += pixel) {
+          allGreen &=
+              rightTilePixels[i] == 0 &&
+              rightTilePixels[i + 1] == 255 &&
+              rightTilePixels[i + 2] == 0 &&
+              rightTilePixels[i + 3] == 255;
+        }
+        expect(allGreen, true);
+      },
+    );
   });
 
   group('ignoring flip makes different texture and rendering result', () {
@@ -1006,8 +1012,9 @@ void main() {
           await game.ready();
         }
 
-        testWithFlameGame('handle single frame animations ($mapType)',
-            (game) async {
+        testWithFlameGame('handle single frame animations ($mapType)', (
+          game,
+        ) async {
           await setUp(game);
 
           expect(map.renderableLayers.first is FlameTileLayer, true);
@@ -1025,8 +1032,9 @@ void main() {
           expect(layer.animations.first.frames.sources, hasLength(1));
         });
 
-        testWithFlameGame('handle single frame animations ($mapType)',
-            (game) async {
+        testWithFlameGame('handle single frame animations ($mapType)', (
+          game,
+        ) async {
           await setUp(game);
 
           expect(
