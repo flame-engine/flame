@@ -77,4 +77,35 @@ extension Matrix4Extension on Matrix4 {
     }
     return transform2(out);
   }
+
+  // TODO(spydon): Remove once min version is 3.35.0
+  void translateByDouble(
+    double x,
+    double y,
+    double z,
+    double w,
+  ) {
+    storage[12] += (x * m11) + (y * m21) + (z * m31) + (w * m41);
+    storage[13] += (x * m12) + (y * m22) + (z * m32) + (w * m42);
+    storage[14] += (x * m13) + (y * m23) + (z * m33) + (w * m43);
+    storage[15] += (x * m14) + (y * m24) + (z * m34) + (w * m44);
+  }
+
+  // TODO(spydon): Remove once min version is 3.35.0
+  void scaleByDouble(
+    double x,
+    double y,
+    double z,
+  ) {
+    storage[0] *= x;
+    storage[5] *= y;
+    storage[10] *= z;
+  }
+
+  // TODO(spydon): Remove once min version is 3.35.0
+  void scaleByVector3(Vector3 vector) {
+    storage[0] *= vector.x;
+    storage[5] *= vector.y;
+    storage[10] *= vector.z;
+  }
 }
