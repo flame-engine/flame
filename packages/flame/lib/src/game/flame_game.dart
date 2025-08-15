@@ -7,7 +7,6 @@ import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
 ///

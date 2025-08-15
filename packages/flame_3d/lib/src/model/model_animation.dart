@@ -87,7 +87,7 @@ class ScaleAnimationSpline extends AnimationSpline<Vector3> {
 
   @override
   void transform(Matrix4 matrix, Vector3 value) {
-    matrix.scale(value);
+    matrix.scaleByVector3(value);
   }
 }
 

@@ -79,9 +79,9 @@ class BatchItem {
           0,
           1, //
         )
-        ..translate(source.width / 2, source.height / 2)
+        ..translateByDouble(source.width / 2, source.height / 2, 0.0, 0.0)
         ..rotateY(flip ? pi : 0)
-        ..translate(-source.width / 2, -source.height / 2);
+        ..translateByDouble(-source.width / 2, -source.height / 2, 0.0, 0.0);
 
   /// Paint object used for the web.
   final Paint paint;

@@ -53,7 +53,7 @@ extension Matrix4Extension on Matrix4 {
 
   /// Translate this matrix by a [Vector2].
   void translate2(Vector2 vector) {
-    return translate(vector.x, vector.y);
+    return translateByDouble(vector.x, vector.y, 0.0, 0.0);
   }
 
   /// Transform [position] of type [Vector2] using the transformation defined by
@@ -76,12 +76,5 @@ extension Matrix4Extension on Matrix4 {
       out.setFrom(position);
     }
     return transform2(out);
-  }
-
-  /// Create a scaled matrix.
-  ///
-  /// Scale by a [Vector3], [Vector4], or x,y,z
-  static Matrix4 scale(dynamic x, [double? y, double? z]) {
-    return Matrix4.identity()..scale(x, y, z);
   }
 }

@@ -23,7 +23,7 @@ dependencies:
     sdk: flutter
   meta: ^1.12.0
   ordered_set: ^8.0.0
-  vector_math: ^2.1.4
+  vector_math: ^2.2.0
 
 dev_dependencies:
   benchmark_harness: ^2.3.1

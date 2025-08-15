@@ -37,7 +37,7 @@ void main() {
       final matrix4 = _MockMatrix4();
       final v = Vector2(r.nextDouble(), r.nextDouble());
       matrix4.translate2(v);
-      verify(() => matrix4.translate(v.x, v.y)).called(1);
+      verify(() => matrix4.translateByDouble(v.x, v.y, 0.0, 0.0)).called(1);
     });
 
     group('transformed2', () {
@@ -66,39 +66,6 @@ void main() {
         expect(Vector2.copy(input), closeToVector(input));
         expect(result, closeToVector(Vector2(10, 20)));
       });
-    });
-
-    testRandom('scale returns identity scaled', (Random r) {
-      final x = r.nextDouble();
-      final y = r.nextDouble();
-      final z = r.nextDouble();
-
-      final xScaledMatrix = Matrix4Extension.scale(x);
-      final xScaledIdentity = Matrix4.fromList([
-        x, 0, 0, 0, // first row
-        0, x, 0, 0, // second row
-        0, 0, x, 0, // third row
-        0, 0, 0, 1, // fourth row
-      ]);
-      expect(xScaledMatrix, xScaledIdentity);
-
-      final xyScaledMatrix = Matrix4Extension.scale(x, y);
-      final xyScaledIdentity = Matrix4.fromList([
-        x, 0, 0, 0, // first row
-        0, y, 0, 0, // second row
-        0, 0, x, 0, // third row
-        0, 0, 0, 1, // fourth row
-      ]);
-      expect(xyScaledMatrix, xyScaledIdentity);
-
-      final xyzScaledMatrix = Matrix4Extension.scale(x, y, z);
-      final xyzScaledIdentity = Matrix4.fromList([
-        x, 0, 0, 0, // first row
-        0, y, 0, 0, // second row
-        0, 0, z, 0, // third row
-        0, 0, 0, 1, // fourth row
-      ]);
-      expect(xyzScaledMatrix, xyzScaledIdentity);
     });
   });
 }

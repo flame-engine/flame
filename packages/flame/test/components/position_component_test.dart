@@ -798,11 +798,13 @@ void main() {
           component.angle = angle;
 
           final transform = Matrix4.identity()
-            ..translate(x, y)
+            ..translateByDouble(x, y, 0.0, 0.0)
             ..rotateZ(angle)
-            ..translate(
+            ..translateByDouble(
               -component.anchor.x * component.width,
               -component.anchor.y * component.height,
+              0.0,
+              0.0,
             );
           for (var j = 0; j < 16; j++) {
             expect(component.transformMatrix[j], closeTo(transform[j], 1e-13));

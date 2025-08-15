@@ -86,7 +86,7 @@ melos:
         flutter: ">=3.27.1"
       dependencies:
         meta: ^1.12.0
-        vector_math: ^2.1.4
+        vector_math: ^2.2.0
       dev_dependencies:
         dartdoc: ^8.0.8
         mocktail: ^1.0.4
