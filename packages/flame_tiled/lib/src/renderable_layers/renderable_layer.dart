@@ -156,7 +156,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     };
     final parentParallax = switch (parent) {
       final GroupLayer p => p.absoluteParallax,
-      _ => Vector2(1.0, 1.0),
+      _ => Vector2.zero(),
     };
     final parallaxLocality = Vector2(
       layer.parallaxX * parentParallax.x,
@@ -164,7 +164,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     );
 
     // Calculate our local parallax.
-    double calcParallax(double cam, double parallax) => cam - (cam * parallax);
+    double calcParallax(double cam, double parallax) => cam * parallax;
     final localParallax =
         Vector2(
           calcParallax(cameraX, layer.parallaxX),
@@ -172,14 +172,14 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
         ) /
         zoom;
 
-    absoluteParallax = localParallax + parallaxLocality;
-    absoluteOffset = parentOffset + Vector2(offsetX, offsetY);
-
-    // Adjustment term for canvas translation below.
+    // Adjustment term for parallax locality.
     final delta = switch (parent is GroupLayer) {
-      true => parentParallax - localParallax,
+      true => (localParallax + parallaxLocality) - parentParallax,
       false => Vector2.zero(),
     };
+
+    absoluteParallax = localParallax + parallaxLocality;
+    absoluteOffset = parentOffset + Vector2(offsetX, offsetY);
 
     // Strictly apply local translations in our render step.
     //
@@ -189,8 +189,8 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     // scene graph render by Flame produces the same visuals as painting layers
     //using absolute values in a traditional composite renderer.
     canvas.translate(
-      offsetX + localParallax.x + delta.x,
-      offsetY + localParallax.y + delta.y,
+      (cameraX + offsetX) - (localParallax.x + delta.x),
+      (cameraY + offsetY) - (localParallax.y + delta.y),
     );
   }
 

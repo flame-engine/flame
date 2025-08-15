@@ -50,26 +50,31 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   }
 
   void _resizePaintArea(CameraComponent? camera) {
-    final displacement = absoluteParallax + absoluteOffset;
     final visibleWorldRect = camera?.visibleWorldRect ?? Rect.zero;
     final destSize = camera?.viewport.virtualSize ?? _canvasSize;
     final imageW = _image.size.x;
     final imageH = _image.size.y;
 
-    // When the image is being repeated, make sure the _paintArea rect is
-    // big enough that it repeats off the edge of the canvas in both positive
-    // and negative directions on that axis (Tiled repeats forever on an axis).
-    // Also, make sure the rect's left and top are only moved by exactly the
-    // image's length along that axis (width or height) so that with repeats
-    // it still matches up with its initial layer offsets.
+    // In order to recover the displacement w.r.t. the canvas translation,
+    // subtract the center view vector to this accumulated offset vector.
+    // B/c we will wrap the image along the axis infinitely, add the negative
+    // of the accumulated offset in order to cancel out the layer translation
+    // and bake the offset value into the total parallax term instead.
+    final center = visibleWorldRect.center.toVector2();
+    final displacement = absoluteParallax - center - absoluteOffset;
+    final parallax = absoluteOffset + absoluteParallax;
+
+    /// [_calculatePaintRange] ensures the _paintArea rect is
+    /// big enough that it repeats off the edge of the canvas in both positive
+    /// and negative directions on that axis (Tiled repeats forever on an axis).
     if (_repeat == ImageRepeat.repeatX || _repeat == ImageRepeat.repeat) {
       final (left, right) =
           _calculatePaintRange(
             destSize: destSize.x,
             imageSideLen: imageW.toInt(),
-            parallax: absoluteParallax.x.round(),
+            parallax: parallax.x.round(),
             displacement: displacement.x.round(),
-          ) + // Apply camera left/right to range.
+          ) +
           (visibleWorldRect.left, visibleWorldRect.right);
 
       _paintArea
@@ -85,9 +90,9 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
           _calculatePaintRange(
             destSize: destSize.y,
             imageSideLen: imageH.toInt(),
-            parallax: absoluteParallax.y.round(),
+            parallax: (absoluteOffset + absoluteParallax).y.round(),
             displacement: displacement.y.round(),
-          ) + // Apply camera top/bottom to range.
+          ) +
           (visibleWorldRect.top, visibleWorldRect.bottom);
 
       _paintArea
@@ -116,13 +121,13 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   // particular way that reduces the time spent on computation and clip steps
   // in flutter when drawing infinitely across an axis. This method accounts
   // for the destination canvas size, camera viewport size, and the exact
-  // coverage of the image w.r.t. [parallax].
+  // coverage of the image w.r.t. translation.
   // This is achieved by wrapping the rect coordinates around [destSize]
   // after calculating the image coverage with [imageSideLen] and adding the
   // unseen portion of the image in the span of the wrap range, if any.
   //
   // The return tuple value is the range where its centroid is the wrap point
-  // minus the [displacement] which is the accumulation of all translations
+  // plus the [displacement] which is the accumulation of all translations
   // applied to this layer earlier in the render pipeline.
   (double min, double max) _calculatePaintRange({
     required double destSize,
@@ -143,16 +148,20 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // Calculate unseen part of image(s).
     final unseen = (imageCount - seen) * imageSideLen;
 
-    // Wrap around the target axis w.r.t. parallax.
-    final wrapPoint = (displacement + parallax) % (destSize + unseen).ceil();
+    // Wrap around the target axis w.r.t. negative parallax.
+    final coverage = (destSize + unseen).ceil();
+    final wrapPoint = coverage - (parallax % coverage) - 1;
 
     // Partition the _paintArea into two parts.
     final part = (wrapPoint / imageSideLen).ceil();
 
-    return (
-      wrapPoint - (imageSideLen * part) - displacement,
-      wrapPoint + (imageSideLen * (imageCount - part)) - displacement,
-    ).toDouble();
+    // Add displacement to the wrap range to account for the
+    // canvas translations pushing the layer further away from
+    // where this wrap is expected to be seen in the viewport.
+    final min = wrapPoint - (imageSideLen * part) + displacement;
+    final max = wrapPoint + (imageSideLen * (imageCount - part)) + displacement;
+
+    return (min.toDouble(), max.toDouble());
   }
 
   static Future<FlameImageLayer> load({
@@ -185,9 +194,4 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
 extension _PrivRangeTupleDouble on (double, double) {
   (double, double) operator +((double, double) other) =>
       ($1 + other.$1, $2 + other.$2);
-}
-
-/// Provides tuples of ints to doubles.
-extension _PrivRangeTupleInt on (int, int) {
-  (double, double) toDouble() => ($1.toDouble(), $2.toDouble());
 }
