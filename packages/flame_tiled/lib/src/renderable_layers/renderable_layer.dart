@@ -22,10 +22,14 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// The [FilterQuality] that should be used by all the layers.
   final FilterQuality filterQuality;
 
-  /// Cached canvas translation used in parallax effects.
+  /// The total canvas translation used in parallax effects.
   /// This field needs to be read in the case of repeated textures
   /// as an optimization step.
-  Vector2 cachedLocalParallax = Vector2.zero();
+  Vector2 absoluteParallax = Vector2.zero();
+
+  /// The total offsets computed from our [Layer.offsetX] and [Layer.offsetY]
+  /// and all parent layer offsets, if any.
+  Vector2 absoluteOffset = Vector2.zero();
 
   /// Given the layer's [opacity], compute [Paint] for drawing.
   /// This is useful if your layer requires translucency or other effects.
@@ -145,28 +149,48 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     final cameraY = viewfinder?.position.y ?? 0;
     final zoom = viewfinder?.zoom ?? 1.0;
 
-    final x = cameraX - (cameraX * layer.parallaxX);
-    final y = cameraY - (cameraY * layer.parallaxY);
+    // Discover parent layer terms used for the calculations below.
+    final parentOffset = switch (parent) {
+      final GroupLayer p => p.absoluteOffset,
+      _ => Vector2.zero(),
+    };
+    final parentParallax = switch (parent) {
+      final GroupLayer p => p.absoluteParallax,
+      _ => Vector2(1.0, 1.0),
+    };
+    final parallaxLocality = Vector2(
+      layer.parallaxX * parentParallax.x,
+      layer.parallaxY * parentParallax.y,
+    );
 
-    final deltaX =
-        layer.parallaxX *
-        switch (parent) {
-          final GroupLayer p => p.cachedLocalParallax.x,
-          _ => 0,
-        };
+    // Calculate our local parallax.
+    double calcParallax(double cam, double parallax) => cam - (cam * parallax);
+    final localParallax =
+        Vector2(
+          calcParallax(cameraX, layer.parallaxX),
+          calcParallax(cameraY, layer.parallaxY),
+        ) /
+        zoom;
 
-    final deltaY =
-        layer.parallaxY *
-        switch (parent) {
-          final GroupLayer p => p.cachedLocalParallax.y,
-          _ => 0,
-        };
+    absoluteParallax = localParallax + parallaxLocality;
+    absoluteOffset = parentOffset + Vector2(offsetX, offsetY);
 
-    cachedLocalParallax = Vector2(deltaX + x / zoom, deltaY + y / zoom);
+    // Adjustment term for canvas translation below.
+    final delta = switch (parent is GroupLayer) {
+      true => parentParallax - localParallax,
+      false => Vector2.zero(),
+    };
 
+    // Strictly apply local translations in our render step.
+    //
+    // Explanation:
+    // B/c sum of all local translations w.r.t. parallax locality is equal to the
+    // products of all absolute parallax values followed by translation, the
+    // scene graph render by Flame produces the same visuals as painting layers
+    //using absolute values in a traditional composite renderer.
     canvas.translate(
-      offsetX + cachedLocalParallax.x,
-      offsetY + cachedLocalParallax.y,
+      offsetX + localParallax.x + delta.x,
+      offsetY + localParallax.y + delta.y,
     );
   }
 
