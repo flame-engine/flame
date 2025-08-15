@@ -7,6 +7,7 @@ import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
+// ignore: unnecessary_import
 import 'package:vector_math/vector_math.dart';
 
 void main() {
