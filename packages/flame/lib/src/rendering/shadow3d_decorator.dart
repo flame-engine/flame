@@ -1,8 +1,10 @@
 import 'dart:ui';
 
-import 'package:flame/src/extensions/canvas.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/src/palette.dart';
 import 'package:flame/src/rendering/decorator.dart';
+// TODO(spydon): Remove this import when flutter version is updated to 3.35.0
+// ignore: unnecessary_import
 import 'package:vector_math/vector_math.dart';
 
 /// [Shadow3DDecorator] casts a realistic-looking shadow from the component
