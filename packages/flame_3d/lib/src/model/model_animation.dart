@@ -1,5 +1,9 @@
 import 'dart:math';
 
+// TODO(spydon): Remove this import once Flutter 3.35.0 is the minimum version.
+// ignore: unnecessary_import
+import 'package:flame/extensions.dart';
+// ignore: unnecessary_import
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/model.dart';
 import 'package:flame_3d/src/parser/gltf/animation_interpolation.dart';
@@ -87,7 +91,7 @@ class ScaleAnimationSpline extends AnimationSpline<Vector3> {
 
   @override
   void transform(Matrix4 matrix, Vector3 value) {
-    matrix.scale(value);
+    matrix.scaleByVector3(value);
   }
 }
 

@@ -42,7 +42,7 @@ class ComponentRef implements WidgetRef {
   }
 
   @override
-  State refresh<State>(Refreshable<State> provider) {
+  T refresh<T>(Refreshable<T> provider) {
     return _container!.refresh(provider);
   }
 

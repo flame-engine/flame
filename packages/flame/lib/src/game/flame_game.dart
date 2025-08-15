@@ -7,6 +7,8 @@ import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/foundation.dart';
+// TODO(spydon): Remove this import when flutter version is updated to 3.35.0
+// ignore: unnecessary_import
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].

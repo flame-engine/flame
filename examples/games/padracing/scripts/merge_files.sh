@@ -17,7 +17,7 @@ grep -v import < main.dart > tmp.dart
 LC_COLLATE=c sort -u imports.dart | grep -v padracing > imports_tmp.dart
 cat imports_tmp.dart tmp.dart > main.dart
 rm tmp.dart imports_tmp.dart imports.dart
-echo '//ignore_for_file: avoid_web_libraries_in_flutter' >> main.dart
+echo '// ignore_for_file: avoid_web_libraries_in_flutter' >> main.dart
 dart format main.dart
 
 if command -v xclip &> /dev/null
@@ -29,4 +29,3 @@ then
     echo "Copied with wl-copy"
     wl-copy < main.dart
 fi
-

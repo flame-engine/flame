@@ -1,8 +1,10 @@
 import 'dart:ui';
 
-import 'package:flame/src/extensions/canvas.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/src/palette.dart';
 import 'package:flame/src/rendering/decorator.dart';
+// TODO(spydon): Remove this import when flutter version is updated to 3.35.0
+// ignore: unnecessary_import
 import 'package:vector_math/vector_math.dart';
 
 /// [Shadow3DDecorator] casts a realistic-looking shadow from the component
@@ -143,11 +145,16 @@ class Shadow3DDecorator extends Decorator {
   Matrix4? _transformMatrix;
   Matrix4 _makeTransform() {
     return Matrix4.identity()
-      ..translate(0.0, 0.0, _scale * _ascent)
+      ..translateByDouble(0.0, 0.0, _scale * _ascent, 1.0)
       ..setEntry(3, 2, 0.001)
       ..rotateX(_angle)
-      ..scale(1.0, _scale)
-      ..translate(-base.x - _shift, -base.y - _scale * _ascent);
+      ..scaleByDouble(1.0, _scale, 1.0, 1.0)
+      ..translateByDouble(
+        -base.x - _shift,
+        -base.y - _scale * _ascent,
+        0.0,
+        1.0,
+      );
   }
 
   @override
