@@ -96,7 +96,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
         matrix.m42 != body.position.y ||
         _lastAngle != angle) {
       matrix.setIdentity();
-      matrix.translateByDouble(body.position.x, body.position.y, 0.0, 0.0);
+      matrix.translateByDouble(body.position.x, body.position.y, 0.0, 1.0);
       matrix.rotateZ(angle);
       _lastAngle = angle;
     }

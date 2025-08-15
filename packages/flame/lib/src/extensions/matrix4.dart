@@ -53,7 +53,7 @@ extension Matrix4Extension on Matrix4 {
 
   /// Translate this matrix by a [Vector2].
   void translate2(Vector2 vector) {
-    return translateByDouble(vector.x, vector.y, 0.0, 0.0);
+    return translateByDouble(vector.x, vector.y, 0.0, 1.0);
   }
 
   /// Transform [position] of type [Vector2] using the transformation defined by

@@ -37,7 +37,7 @@ void main() {
       final matrix4 = _MockMatrix4();
       final v = Vector2(r.nextDouble(), r.nextDouble());
       matrix4.translate2(v);
-      verify(() => matrix4.translateByDouble(v.x, v.y, 0.0, 0.0)).called(1);
+      verify(() => matrix4.translateByDouble(v.x, v.y, 0.0, 1.0)).called(1);
     });
 
     group('transformed2', () {

@@ -221,10 +221,10 @@ void main() {
           ..scale = scale
           ..offset = offset;
         final matrix4 = Matrix4.identity()
-          ..translateByDouble(translation.x, translation.y, 0.0, 0.0)
+          ..translateByDouble(translation.x, translation.y, 0.0, 1.0)
           ..rotateZ(rotation)
           ..scaleByDouble(scale.x, scale.y, 1.0, 1.0)
-          ..translateByDouble(offset.x, offset.y, 0.0, 0.0);
+          ..translateByDouble(offset.x, offset.y, 0.0, 1.0);
 
         for (var k = 0; k < 16; k++) {
           expect(
