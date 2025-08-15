@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -30,15 +27,6 @@ void main() {
     test('test m42', () => expect(matrix4.m42, matrix4.storage[13]));
     test('test m43', () => expect(matrix4.m43, matrix4.storage[14]));
     test('test m44', () => expect(matrix4.m44, matrix4.storage[15]));
-
-    testRandom('translate2 calls translate on the matrix with a vector', (
-      Random r,
-    ) {
-      final matrix4 = _MockMatrix4();
-      final v = Vector2(r.nextDouble(), r.nextDouble());
-      matrix4.translate2(v);
-      verify(() => matrix4.translateByDouble(v.x, v.y, 0.0, 1.0)).called(1);
-    });
 
     group('transformed2', () {
       test('Without out', () {
@@ -69,5 +57,3 @@ void main() {
     });
   });
 }
-
-class _MockMatrix4 extends Mock implements Matrix4 {}

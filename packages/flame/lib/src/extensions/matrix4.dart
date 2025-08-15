@@ -52,6 +52,10 @@ extension Matrix4Extension on Matrix4 {
   double get m44 => storage[15];
 
   /// Translate this matrix by a [Vector2].
+  @Deprecated(
+    'Use translateByDouble or translateByVector2 instead. '
+    'This will be removed in a Flame 1.32.0.',
+  )
   void translate2(Vector2 vector) {
     return translateByDouble(vector.x, vector.y, 0.0, 1.0);
   }
