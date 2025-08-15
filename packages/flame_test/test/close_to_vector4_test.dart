@@ -83,9 +83,12 @@ void main() {
         );
         expect(
           e.message,
-          contains('Actual: Vector4:<101.0,217.0,100.0,0.0>'),
+          contains('Actual: Vector4:<[101.0,217.0,100.0,0.0]>'),
         );
-        expect(e.message, contains('Which: is at distance 3.3166247903554'));
+        expect(
+          e.message,
+          contains('Which: is at distance 3.3166247903554'),
+        );
       }
     });
   });
