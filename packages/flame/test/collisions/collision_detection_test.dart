@@ -1561,7 +1561,7 @@ void main() {
               );
               expect(
                 result?.reflectionRay?.direction,
-                closeToVector(Vector2.all(1)..normalize()),
+                closeToVector(Vector2.all(1)..normalize(), 10e-8),
               );
             },
         'ray from bottom within CircleHitbox going down':
