@@ -25,7 +25,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// Cached canvas translation used in parallax effects.
   /// This field needs to be read in the case of repeated textures
   /// as an optimization step.
-  Vector2 cachedLayerOffset = Vector2.zero();
+  Vector2 cachedLocalParallax = Vector2.zero();
 
   /// Given the layer's [opacity], compute [Paint] for drawing.
   /// This is useful if your layer requires translucency or other effects.
@@ -121,23 +121,6 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
 
   void refreshCache();
 
-  double get scaleX => destTileSize.x / map.tileWidth;
-  double get scaleY => destTileSize.y / map.tileHeight;
-
-  late double offsetX =
-      layer.offsetX * scaleX +
-      switch (parent) {
-        final GroupLayer p => p.offsetX,
-        _ => 0,
-      };
-
-  late double offsetY =
-      layer.offsetY * scaleY +
-      switch (parent) {
-        final GroupLayer p => p.offsetY,
-        _ => 0,
-      };
-
   @override
   double get opacity =>
       layer.opacity *
@@ -146,19 +129,11 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
         _ => 1,
       };
 
-  late double parallaxX =
-      layer.parallaxX *
-      switch (parent) {
-        final GroupLayer p => p.parallaxX,
-        _ => 1,
-      };
+  double get scaleX => destTileSize.x / map.tileWidth;
+  double get scaleY => destTileSize.y / map.tileHeight;
 
-  late double parallaxY =
-      layer.parallaxY *
-      switch (parent) {
-        final GroupLayer p => p.parallaxY,
-        _ => 1,
-      };
+  late double offsetX = layer.offsetX * scaleX;
+  late double offsetY = layer.offsetY * scaleY;
 
   /// Calculates the offset we need to apply to the canvas to compensate for
   /// parallax positioning and scroll for the layer and the current camera
@@ -166,26 +141,33 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// https://doc.mapeditor.org/en/latest/manual/layers/#parallax-scrolling-factor
   void applyParallaxOffset(Canvas canvas) {
     final viewfinder = camera?.viewfinder;
-    final cameraX = viewfinder?.position.x ?? 0.0;
-    final cameraY = viewfinder?.position.y ?? 0.0;
+    final cameraX = viewfinder?.position.x ?? 0;
+    final cameraY = viewfinder?.position.y ?? 0;
     final zoom = viewfinder?.zoom ?? 1.0;
 
-    // Use the complement of the parallax coefficient in order to account for
-    // the camera applying its transformations earlier in the render cycle
-    // of Flame. This adjustment draws the layers correctly w.r.t. their own
-    // offset and parallax values.
-    final viewportCenterX = (camera?.viewport.size.x ?? 0) * anchor.x;
-    final viewportCenterY = (camera?.viewport.size.y ?? 0) * anchor.y;
+    final x = cameraX - (cameraX * layer.parallaxX);
+    final y = cameraY - (cameraY * layer.parallaxY);
 
-    var x = (1.0 - parallaxX) * viewportCenterX;
-    var y = (1.0 - parallaxY) * viewportCenterY;
-    x /= zoom;
-    y /= zoom;
-    x += offsetX + cameraX - (cameraX * parallaxX);
-    y += offsetY + cameraY - (cameraY * parallaxY);
+    final deltaX =
+        layer.parallaxX *
+        switch (parent) {
+          final GroupLayer p => p.cachedLocalParallax.x,
+          _ => 0,
+        };
 
-    cachedLayerOffset = Vector2(x, y);
-    canvas.translate(cachedLayerOffset.x, cachedLayerOffset.y);
+    final deltaY =
+        layer.parallaxY *
+        switch (parent) {
+          final GroupLayer p => p.cachedLocalParallax.y,
+          _ => 0,
+        };
+
+    cachedLocalParallax = Vector2(deltaX + x / zoom, deltaY + y / zoom);
+
+    canvas.translate(
+      offsetX + cachedLocalParallax.x,
+      offsetY + cachedLocalParallax.y,
+    );
   }
 
   // Only render if this layer is [visible].

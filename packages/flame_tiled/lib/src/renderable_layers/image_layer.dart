@@ -37,7 +37,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
 
   @override
   void render(Canvas canvas) {
-    canvas.save();
     _resizePaintArea(camera);
     paintImage(
       canvas: canvas,
@@ -48,8 +47,6 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       repeat: _repeat,
       filterQuality: filterQuality,
     );
-
-    canvas.restore();
   }
 
   void _resizePaintArea(CameraComponent? camera) {
@@ -68,8 +65,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       final (left, right) =
           _calculatePaintRange(
             destSize: destSize.x,
-            imageSideLen: imageW,
-            layerOffset: cachedLayerOffset.x,
+            imageSideLen: imageW.toInt(),
+            layerOffset: cachedLocalParallax.x.round(),
           ) + // Apply camera left/right to range.
           (visibleWorldRect.left, visibleWorldRect.right);
 
@@ -85,8 +82,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       final (top, bottom) =
           _calculatePaintRange(
             destSize: destSize.y,
-            imageSideLen: imageH,
-            layerOffset: cachedLayerOffset.y,
+            imageSideLen: imageH.toInt(),
+            layerOffset: cachedLocalParallax.y.round(),
           ) + // Apply camera top/bottom to range.
           (visibleWorldRect.top, visibleWorldRect.bottom);
 
@@ -126,8 +123,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   // applied to this layer earlier in the render pipeline.
   (double min, double max) _calculatePaintRange({
     required double destSize,
-    required double imageSideLen,
-    required double layerOffset,
+    required int imageSideLen,
+    required int layerOffset,
   }) {
     // Prevent DBZ error.
     if (imageSideLen < 1) {
@@ -143,7 +140,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     final unseen = (imageCount - seen) * imageSideLen;
 
     // Wrap around the target axis w.r.t. parallax.
-    final wrapPoint = layerOffset.ceil() % (destSize + unseen).toInt();
+    final wrapPoint = layerOffset % (destSize + unseen).ceil();
 
     // Partition the _paintArea into two parts.
     final part = (wrapPoint / imageSideLen).ceil();
@@ -151,7 +148,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     return (
       wrapPoint - (imageSideLen * part) - layerOffset,
       wrapPoint + (imageSideLen * (imageCount - part)) - layerOffset,
-    );
+    ).toDouble();
   }
 
   static Future<FlameImageLayer> load({
@@ -181,7 +178,12 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
 }
 
 /// Provide tuples with addition.
-extension _PrivRangeTupleHelper on (double, double) {
+extension _PrivRangeTupleDouble on (double, double) {
   (double, double) operator +((double, double) other) =>
       ($1 + other.$1, $2 + other.$2);
+}
+
+/// Provides tuples of ints to doubles.
+extension _PrivRangeTupleInt on (int, int) {
+  (double, double) toDouble() => ($1.toDouble(), $2.toDouble());
 }
