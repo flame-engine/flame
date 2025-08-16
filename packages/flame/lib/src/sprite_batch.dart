@@ -275,6 +275,14 @@ class SpriteBatch {
     _batchItems[index] = newBatchItem;
   }
 
+  /// Returns the [BatchItem] at the given [index].
+  BatchItem getBatchItem(int index) {
+    if (!_batchItems.containsKey(index)) {
+      throw ArgumentError('Index does not exist: $index');
+    }
+    return _batchItems[index]!;
+  }
+
   /// Add a new batch item using a RSTransform.
   ///
   /// The [source] parameter is the source location on the [atlas].
