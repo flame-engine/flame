@@ -17,7 +17,10 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   final T layer;
   final Vector2 destTileSize;
   final TiledMap map;
-  final CameraComponent? camera;
+
+  /// A [camera] is only required if using parallax effects.
+  /// If one exists in the game tree, [camera] will be assigned to it [onLoad].
+  CameraComponent? camera;
 
   /// The [FilterQuality] that should be used by all the layers.
   final FilterQuality filterQuality;
@@ -25,11 +28,11 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
   /// The total canvas translation used in parallax effects.
   /// This field needs to be read in the case of repeated textures
   /// as an optimization step.
-  Vector2 absoluteParallax = Vector2.zero();
+  Vector2 totalParallax = Vector2.zero();
 
   /// The total offsets computed from our [Layer.offsetX] and [Layer.offsetY]
   /// and all parent layer offsets, if any.
-  Vector2 absoluteOffset = Vector2.zero();
+  Vector2 totalOffset = Vector2.zero();
 
   /// Given the layer's [opacity], compute [Paint] for drawing.
   /// This is useful if your layer requires translucency or other effects.
@@ -151,11 +154,11 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
 
     // Discover parent layer terms used for the calculations below.
     final parentOffset = switch (parent) {
-      final GroupLayer p => p.absoluteOffset,
+      final GroupLayer p => p.totalOffset,
       _ => Vector2.zero(),
     };
     final parentParallax = switch (parent) {
-      final GroupLayer p => p.absoluteParallax,
+      final GroupLayer p => p.totalParallax,
       _ => Vector2.zero(),
     };
     final parallaxLocality = Vector2(
@@ -178,8 +181,8 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
       false => Vector2.zero(),
     };
 
-    absoluteParallax = localParallax + parallaxLocality;
-    absoluteOffset = parentOffset + Vector2(offsetX, offsetY);
+    totalParallax = localParallax + parallaxLocality;
+    totalOffset = parentOffset + Vector2(offsetX, offsetY);
 
     // Strictly apply local translations in our render step.
     //

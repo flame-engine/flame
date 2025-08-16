@@ -52,17 +52,17 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   void _resizePaintArea(CameraComponent? camera) {
     final visibleWorldRect = camera?.visibleWorldRect ?? Rect.zero;
     final destSize = camera?.viewport.virtualSize ?? _canvasSize;
+    final focus = camera?.viewfinder.position ?? Vector2.zero();
     final imageW = _image.size.x;
     final imageH = _image.size.y;
 
-    // In order to recover the displacement w.r.t. the canvas translation,
-    // subtract the center view vector to this accumulated offset vector.
-    // B/c we will wrap the image along the axis infinitely, add the negative
-    // of the accumulated offset in order to cancel out the layer translation
-    // and bake the offset value into the total parallax term instead.
-    final center = visibleWorldRect.center.toVector2();
-    final displacement = absoluteParallax - center - absoluteOffset;
-    final parallax = absoluteOffset + absoluteParallax;
+    // For infinite painting, we need to recover the displacement term
+    // from the canvas translation.
+    final displacement = totalParallax - focus - totalOffset;
+
+    // If this image repeats across an axis infinitely, bake the offset
+    // into the parallax value instead.
+    final parallax = (destSize * 0.5) + totalOffset - totalParallax;
 
     /// [_calculatePaintRange] ensures the _paintArea rect is
     /// big enough that it repeats off the edge of the canvas in both positive
@@ -90,7 +90,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
           _calculatePaintRange(
             destSize: destSize.y,
             imageSideLen: imageH.toInt(),
-            parallax: (absoluteOffset + absoluteParallax).y.round(),
+            parallax: parallax.y.round(),
             displacement: displacement.y.round(),
           ) +
           (visibleWorldRect.top, visibleWorldRect.bottom);
@@ -148,9 +148,9 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // Calculate unseen part of image(s).
     final unseen = (imageCount - seen) * imageSideLen;
 
-    // Wrap around the target axis w.r.t. negative parallax.
+    // Wrap around the destination size.
     final coverage = (destSize + unseen).ceil();
-    final wrapPoint = coverage - (parallax % coverage) - 1;
+    final wrapPoint = parallax % coverage;
 
     // Partition the _paintArea into two parts.
     final part = (wrapPoint / imageSideLen).ceil();

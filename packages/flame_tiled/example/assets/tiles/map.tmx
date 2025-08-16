@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.6" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#3a889e" nextlayerid="10" nextobjectid="26">
+<map version="1.8" tiledversion="1.8.6" orientation="orthogonal" renderorder="right-down" width="80" height="80" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#3a889e" nextlayerid="11" nextobjectid="26">
  <tileset firstgid="1" name="level_standard_tileset" tilewidth="16" tileheight="16" tilecount="640" columns="32">
   <image source="../images/level_standard_tileset.png" width="512" height="320"/>
  </tileset>
@@ -78,4 +78,7 @@
    <ellipse/>
   </object>
  </objectgroup>
+ <imagelayer id="10" name="Snow" repeatx="1" repeaty="1">
+  <image source="../images/snow.png" width="64" height="64"/>
+ </imagelayer>
 </map>

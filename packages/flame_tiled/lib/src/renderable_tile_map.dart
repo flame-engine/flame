@@ -52,10 +52,10 @@ class RenderableTiledMap<T extends FlameGame> extends Component
   final Vector2 destTileSize;
 
   /// Camera used for determining the current viewport for layer rendering.
-  /// Optional, but required for parallax support
+  /// Optional, but required for parallax support.
   CameraComponent? camera;
 
-  /// Paint for the map's background color, if there is one
+  /// Paint for the map's background color, if there is one.
   late final Paint? _backgroundPaint;
 
   final Map<Tile, TileFrames> animationFrames;
@@ -437,6 +437,11 @@ class RenderableTiledMap<T extends FlameGame> extends Component
     // Automatically use the first attached CameraComponent camera if it's not
     // already set..
     camera ??= game.children.query<CameraComponent>().firstOrNull;
+
+    // Provide camera to layers
+    for (final layer in renderableLayers) {
+      layer.camera = camera;
+    }
   }
 
   /// Handle game resize and propagate it to renderable layers
