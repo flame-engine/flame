@@ -13,6 +13,7 @@ class OrthogonalTileLayer extends FlameTileLayer {
     required super.layer,
     required super.parent,
     required super.map,
+    required super.camera,
     required super.destTileSize,
     required super.tiledAtlas,
     required super.animationFrames,
