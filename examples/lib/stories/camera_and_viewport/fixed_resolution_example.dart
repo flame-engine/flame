@@ -19,10 +19,10 @@ class FixedResolutionExample extends FlameGame
   ''';
 
   FixedResolutionExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(width: 600, height: 1024),
-          world: FixedResolutionWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(width: 600, height: 1024),
+        world: FixedResolutionWorld(),
+      );
 
   @override
   Future<void> onLoad() async {
@@ -118,25 +118,25 @@ class TextButton extends ButtonComponent {
     super.anchor,
     TextRenderer? textRenderer,
   }) : super(
-          button: RectangleComponent(
-            size: Vector2(200, 100),
-            paint: Paint()
-              ..color = Colors.orange
-              ..strokeWidth = 2
-              ..style = PaintingStyle.stroke,
-          ),
-          buttonDown: RectangleComponent(
-            size: Vector2(200, 100),
-            paint: Paint()
-              ..color = BasicPalette.orange.color.withValues(alpha: 0.5),
-          ),
-          children: [
-            TextComponent(
-              text: text,
-              textRenderer: textRenderer,
-              position: Vector2(100, 50),
-              anchor: Anchor.center,
-            ),
-          ],
-        );
+         button: RectangleComponent(
+           size: Vector2(200, 100),
+           paint: Paint()
+             ..color = Colors.orange
+             ..strokeWidth = 2
+             ..style = PaintingStyle.stroke,
+         ),
+         buttonDown: RectangleComponent(
+           size: Vector2(200, 100),
+           paint: Paint()
+             ..color = BasicPalette.orange.color.withValues(alpha: 0.5),
+         ),
+         children: [
+           TextComponent(
+             text: text,
+             textRenderer: textRenderer,
+             position: Vector2(100, 50),
+             anchor: Anchor.center,
+           ),
+         ],
+       );
 }

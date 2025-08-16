@@ -11,13 +11,15 @@ void main() {
       expect(controller.child, equals(childController));
     });
 
-    test('setToStart should call setToStart on the child effect controller',
-        () {
-      final childController = _MockEffectController();
-      final controller = _TestEffectController(childController);
-      controller.setToStart();
-      verify(childController.setToStart).called(1);
-    });
+    test(
+      'setToStart should call setToStart on the child effect controller',
+      () {
+        final childController = _MockEffectController();
+        final controller = _TestEffectController(childController);
+        controller.setToStart();
+        verify(childController.setToStart).called(1);
+      },
+    );
 
     test('setToEnd should call setToEnd on the child effect controller', () {
       final childController = _MockEffectController();

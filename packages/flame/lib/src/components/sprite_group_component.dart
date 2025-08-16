@@ -39,14 +39,14 @@ class SpriteGroupComponent<T> extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     super.key,
-  })  : assert(
-          (size == null) == (autoResize ?? size == null),
-          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-        ),
-        _current = current,
-        _sprites = sprites,
-        _autoResize = autoResize ?? size == null,
-        super(size: size ?? sprites?[current]?.srcSize) {
+  }) : assert(
+         (size == null) == (autoResize ?? size == null),
+         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+       ),
+       _current = current,
+       _sprites = sprites,
+       _autoResize = autoResize ?? size == null,
+       super(size: size ?? sprites?[current]?.srcSize) {
     if (paint != null) {
       this.paint = paint;
     }

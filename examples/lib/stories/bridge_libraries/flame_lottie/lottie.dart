@@ -4,7 +4,9 @@ import 'package:examples/stories/bridge_libraries/flame_lottie/lottie_animation_
 import 'package:flame/game.dart';
 
 void addFlameLottieExample(Dashbook dashbook) {
-  dashbook.storiesOf('FlameLottie').add(
+  dashbook
+      .storiesOf('FlameLottie')
+      .add(
         'Lottie Animation example',
         (_) => GameWidget(
           game: LottieAnimationExample(),

@@ -332,8 +332,11 @@ class QuadTreeNodeDebugInfo {
 }
 
 class QuadTreeNode<T extends Hitbox<T>> {
-  final List<QuadTreeNode?> children =
-      List.generate(4, (index) => null, growable: false);
+  final List<QuadTreeNode?> children = List.generate(
+    4,
+    (index) => null,
+    growable: false,
+  );
 
   List<T> hitboxes = <T>[];
 

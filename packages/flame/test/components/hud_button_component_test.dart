@@ -51,7 +51,8 @@ void main() {
       tapDispatcher.handleTapDown(
         1,
         TapDownDetails(
-          globalPosition: initialGameSize.toOffset() +
+          globalPosition:
+              initialGameSize.toOffset() +
               margin.bottomRight -
               const Offset(1, 1),
         ),
@@ -73,7 +74,8 @@ void main() {
       tapDispatcher.handleTapDown(
         1,
         TapDownDetails(
-          globalPosition: initialGameSize.toOffset() +
+          globalPosition:
+              initialGameSize.toOffset() +
               margin.bottomRight -
               const Offset(1, 1),
         ),
@@ -103,8 +105,9 @@ void main() {
           margin: margin,
         ),
       );
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 

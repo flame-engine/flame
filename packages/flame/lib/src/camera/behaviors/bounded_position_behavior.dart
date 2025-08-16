@@ -24,11 +24,11 @@ class BoundedPositionBehavior extends Component {
     double precision = 0.5,
     super.priority,
     super.key,
-  })  : assert(precision > 0, 'Precision must be positive: $precision'),
-        _bounds = bounds,
-        _target = target,
-        _previousPosition = Vector2.zero(),
-        _precision = precision;
+  }) : assert(precision > 0, 'Precision must be positive: $precision'),
+       _bounds = bounds,
+       _target = target,
+       _previousPosition = Vector2.zero(),
+       _precision = precision;
 
   /// The region within which the target's position must be kept.
   Shape get bounds => _bounds;

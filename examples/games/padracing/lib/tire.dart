@@ -15,12 +15,12 @@ class Tire extends BodyComponent<PadRacingGame> {
     required this.jointDef,
     this.isTurnableTire = false,
   }) : super(
-          paint: Paint()
-            ..color = car.paint.color
-            ..strokeWidth = 0.2
-            ..style = PaintingStyle.stroke,
-          priority: 2,
-        );
+         paint: Paint()
+           ..color = car.paint.color
+           ..strokeWidth = 0.2
+           ..style = PaintingStyle.stroke,
+         priority: 2,
+       );
 
   static const double _backTireMaxDriveForce = 300.0;
   static const double _frontTireMaxDriveForce = 600.0;
@@ -39,10 +39,12 @@ class Tire extends BodyComponent<PadRacingGame> {
 
   final Set<LogicalKeyboardKey> pressedKeys;
 
-  late final double _maxDriveForce =
-      isFrontTire ? _frontTireMaxDriveForce : _backTireMaxDriveForce;
-  late final double _maxLateralImpulse =
-      isFrontTire ? _frontTireMaxLateralImpulse : _backTireMaxLateralImpulse;
+  late final double _maxDriveForce = isFrontTire
+      ? _frontTireMaxDriveForce
+      : _backTireMaxDriveForce;
+  late final double _maxLateralImpulse = isFrontTire
+      ? _frontTireMaxLateralImpulse
+      : _backTireMaxLateralImpulse;
 
   // Make mutable if ice or something should be implemented
   final double _currentTraction = 1.0;
@@ -165,8 +167,10 @@ class Tire extends BodyComponent<PadRacingGame> {
     if (isTurnableTire && isTurning) {
       final turnPerTimeStep = _turnSpeedPerSecond * dt;
       final angleNow = joint.jointAngle();
-      final angleToTurn =
-          (desiredAngle - angleNow).clamp(-turnPerTimeStep, turnPerTimeStep);
+      final angleToTurn = (desiredAngle - angleNow).clamp(
+        -turnPerTimeStep,
+        turnPerTimeStep,
+      );
       final angle = angleNow + angleToTurn;
       joint.setLimits(angle, angle);
     } else {

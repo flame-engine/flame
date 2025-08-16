@@ -38,7 +38,7 @@ class PlayerComponent extends SpriteAnimationComponent
   late Timer bulletCreator;
 
   PlayerComponent()
-      : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
+    : super(size: Vector2(50, 75), position: Vector2(100, 500)) {
     bulletCreator = Timer(0.5, repeat: true, onTick: _createBullet);
 
     add(RectangleHitbox());

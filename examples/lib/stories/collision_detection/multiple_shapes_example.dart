@@ -25,10 +25,10 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
   ''';
 
   MultipleShapesExample()
-      : super(
-          world: MultiShapesWorld(),
-          camera: CameraComponent()..viewfinder.anchor = Anchor.topLeft,
-        );
+    : super(
+        world: MultiShapesWorld(),
+        camera: CameraComponent()..viewfinder.anchor = Anchor.topLeft,
+      );
 }
 
 class MultiShapesWorld extends World with HasGameReference {
@@ -67,7 +67,8 @@ class MultiShapesWorld extends World with HasGameReference {
     ScreenHitbox screenHitbox,
   ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
-    final isXOverflow = lastCollidable.position.x +
+    final isXOverflow =
+        lastCollidable.position.x +
             lastCollidable.size.x / 2 +
             _distance.x +
             collidableSize.x >
@@ -223,7 +224,7 @@ class SnowmanPart extends CircleHitbox {
   final Color hitColor;
 
   SnowmanPart(double radius, Vector2 position, this.hitColor)
-      : super(radius: radius, position: position, anchor: Anchor.center) {
+    : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
   }
 
@@ -288,12 +289,23 @@ MyCollidable randomCollidable(
   final rotationSpeed = 0.5 - rng.nextDouble();
   final shapeType = Shapes.values[rng.nextInt(Shapes.values.length)];
   return switch (shapeType) {
-    Shapes.circle => CollidableCircle(position, size, velocity, screenHitbox)
-      ..rotationSpeed = rotationSpeed,
-    Shapes.rectangle =>
-      CollidableRectangle(position, size, velocity, screenHitbox)
-        ..rotationSpeed = rotationSpeed,
-    Shapes.polygon => CollidablePolygon(position, size, velocity, screenHitbox)
-      ..rotationSpeed = rotationSpeed,
+    Shapes.circle => CollidableCircle(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
+    Shapes.rectangle => CollidableRectangle(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
+    Shapes.polygon => CollidablePolygon(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
   };
 }

@@ -9,7 +9,7 @@ on:
 
 
 env:
-  FLUTTER_MIN_VERSION: '3.27.1'
+  FLUTTER_MIN_VERSION: '3.32.0'
 
 jobs:
   # BEGIN LINTING STAGE
@@ -29,11 +29,10 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
-      - run: melos exec --ignore=flame_3d dart analyze .
-      #- name: "Analyze with lowest supported version"
-      #  uses: invertase/github-action-dart-analyzer@v3
-      #  with:
-      #    fatal-infos: true
+      - name: "Analyze with lowest supported version"
+        uses: invertase/github-action-dart-analyzer@v3
+        with:
+          fatal-infos: true
 
   analyze-latest:
     runs-on: ubuntu-latest

@@ -93,16 +93,18 @@ Future<void> main() async {
 
         await tester.pumpAndSettle();
 
-        var internalSpriteWidgetFinder = tester
-            .widget<InternalSpriteWidget>(find.byType(InternalSpriteWidget));
+        var internalSpriteWidgetFinder = tester.widget<InternalSpriteWidget>(
+          find.byType(InternalSpriteWidget),
+        );
 
         expect(internalSpriteWidgetFinder.sprite.srcPosition, Vector2(0, 0));
 
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
-        internalSpriteWidgetFinder = tester
-            .widget<InternalSpriteWidget>(find.byType(InternalSpriteWidget));
+        internalSpriteWidgetFinder = tester.widget<InternalSpriteWidget>(
+          find.byType(InternalSpriteWidget),
+        );
 
         expect(internalSpriteWidgetFinder.sprite.srcPosition, Vector2(10, 10));
       });

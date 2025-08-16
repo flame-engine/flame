@@ -17,8 +17,8 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  })  : _text = text ?? '',
-        _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>() {
+  }) : _text = text ?? '',
+       _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>() {
     updateBounds();
   }
 

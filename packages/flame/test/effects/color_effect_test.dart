@@ -28,9 +28,11 @@ void main() {
       game.update(0.5);
       expect(
         component.paint.colorFilter.toString(),
-        equals('ColorFilter.mode(Color(alpha: 0.5000, red: 0.9569, green: '
-            '0.2627, blue: 0.2118, colorSpace: ColorSpace.sRGB), '
-            'BlendMode.srcATop)'),
+        equals(
+          'ColorFilter.mode(Color(alpha: 0.5000, red: 0.9569, green: '
+          '0.2627, blue: 0.2118, colorSpace: ColorSpace.sRGB), '
+          'BlendMode.srcATop)',
+        ),
       );
     });
 

@@ -115,11 +115,10 @@ class PathLine extends ShapeComponent {
   }
 
   static Path _toPath(List<Vector2> points) {
-    return Path()
-      ..addPolygon(
-        points.map((p) => p.toOffset()).toList(growable: false),
-        false,
-      );
+    return Path()..addPolygon(
+      points.map((p) => p.toOffset()).toList(growable: false),
+      false,
+    );
   }
 
   void getGone() {

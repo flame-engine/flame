@@ -17,8 +17,10 @@ void main() {
 
     test('progression', () {
       final ec = SineEffectController(period: 3);
-      final expectedProgress =
-          List<double>.generate(101, (i) => sin(i * 0.01 * 2 * pi));
+      final expectedProgress = List<double>.generate(
+        101,
+        (i) => sin(i * 0.01 * 2 * pi),
+      );
       for (final p in expectedProgress) {
         expect(ec.progress, closeTo(p, 2e-14));
         ec.advance(0.01 * 3);

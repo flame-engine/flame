@@ -60,8 +60,12 @@ class BallGlowPostProcess extends PostProcess {
     Vector2 size,
     Canvas canvas,
   ) {
-    final origin =
-        world.findGame()!.camera.visibleWorldRect.topLeft.toVector2();
+    final origin = world
+        .findGame()!
+        .camera
+        .visibleWorldRect
+        .topLeft
+        .toVector2();
     final theBall = world.theBall;
     final ballPosition = theBall.absolutePosition;
     final uvBall = (ballPosition - origin)..divide(kCameraSize);

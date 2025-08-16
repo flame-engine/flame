@@ -8,11 +8,11 @@ class PointerMoveEvent extends PositionEvent {
     this.pointerId,
     super.game,
     flutter.PointerHoverEvent rawEvent,
-  )   : timestamp = rawEvent.timeStamp,
-        delta = rawEvent.delta.toVector2(),
-        super(
-          devicePosition: rawEvent.position.toVector2(),
-        );
+  ) : timestamp = rawEvent.timeStamp,
+      delta = rawEvent.delta.toVector2(),
+      super(
+        devicePosition: rawEvent.position.toVector2(),
+      );
 
   final int pointerId;
   final Duration timestamp;
@@ -26,7 +26,8 @@ class PointerMoveEvent extends PositionEvent {
   }
 
   @override
-  String toString() => 'PointerMoveEvent(devicePosition: $devicePosition, '
+  String toString() =>
+      'PointerMoveEvent(devicePosition: $devicePosition, '
       'canvasPosition: $canvasPosition, '
       'delta: $delta, '
       'pointerId: $pointerId, timestamp: $timestamp)';

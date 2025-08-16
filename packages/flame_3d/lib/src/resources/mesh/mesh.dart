@@ -24,8 +24,8 @@ class Mesh extends Resource<void> {
   int get vertexCount => _surfaces.fold(0, (p, e) => p + e.vertexCount);
 
   void bind(GraphicsDevice device) {
-    for (final (idx, surface) in _surfaces.indexed) {
-      device.jointsInfo.setSurface(idx);
+    for (final (index, surface) in _surfaces.indexed) {
+      device.jointsInfo.setSurface(index);
       device.bindSurface(surface);
     }
   }

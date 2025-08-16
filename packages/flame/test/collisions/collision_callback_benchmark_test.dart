@@ -13,10 +13,10 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
   static int collisionCounter = 0;
 
   _TestBlock(Vector2 position, Vector2 size, this.velocity)
-      : super(
-          position: position,
-          size: size,
-        ) {
+    : super(
+        position: position,
+        size: size,
+      ) {
     add(CircleHitbox());
   }
 
@@ -62,7 +62,8 @@ void main() {
         for (var i = 0; i < ticks; i++) {
           game.update(1 / 60);
         }
-        final totalTime = DateTime.now().millisecondsSinceEpoch -
+        final totalTime =
+            DateTime.now().millisecondsSinceEpoch -
             startTime.millisecondsSinceEpoch;
         // ignore:avoid_print
         print(

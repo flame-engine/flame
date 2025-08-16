@@ -48,24 +48,24 @@ class RasterSpriteComponent extends SpriteComponent {
     ComponentKey? key,
     double? bleed,
   }) : this(
-          baseSprite: Sprite(
-            image,
-            srcPosition: srcPosition,
-            srcSize: srcSize,
-          ),
-          autoResize: autoResize,
-          paint: paint,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          nativeAngle: nativeAngle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          bleed: bleed,
-          key: key,
-        );
+         baseSprite: Sprite(
+           image,
+           srcPosition: srcPosition,
+           srcSize: srcSize,
+         ),
+         autoResize: autoResize,
+         paint: paint,
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         nativeAngle: nativeAngle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         bleed: bleed,
+         key: key,
+       );
 
   /// The base sprite to be rasterized.
   final Sprite baseSprite;

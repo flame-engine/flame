@@ -32,8 +32,8 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     super.anchor,
     bool isSolid = false,
     CollisionType collisionType = CollisionType.active,
-  })  : shouldFillParent = false,
-        super.relative() {
+  }) : shouldFillParent = false,
+       super.relative() {
     this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
@@ -108,11 +108,11 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
             ..setFrom(ray.direction)
             ..reflect(_temporaryNormal);
 
-      final reflectionRay = (out?.reflectionRay
-            ?..setWith(
-              origin: intersectionPoint,
-              direction: reflectionDirection,
-            )) ??
+      final reflectionRay =
+          (out?.reflectionRay?..setWith(
+            origin: intersectionPoint,
+            direction: reflectionDirection,
+          )) ??
           Ray2(
             origin: intersectionPoint,
             direction: reflectionDirection,

@@ -8,8 +8,8 @@ class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {
     required super.size,
     super.position,
     void Function(EmberPlayer player)? onTap,
-  })  : _onTap = onTap,
-        super();
+  }) : _onTap = onTap,
+       super();
 
   Vector2 velocity = Vector2(0, 0);
   final void Function(EmberPlayer player)? _onTap;

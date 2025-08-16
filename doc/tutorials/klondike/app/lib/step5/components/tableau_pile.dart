@@ -111,7 +111,8 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   void calculateHitArea() {
-    height = KlondikeGame.cardHeight * 1.5 +
+    height =
+        KlondikeGame.cardHeight * 1.5 +
         (_cards.length < 2 ? 0.0 : _cards.last.y - _cards.first.y);
   }
 

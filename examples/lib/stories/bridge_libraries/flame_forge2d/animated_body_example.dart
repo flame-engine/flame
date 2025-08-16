@@ -15,10 +15,10 @@ class AnimatedBodyExample extends Forge2DGame {
   ''';
 
   AnimatedBodyExample()
-      : super(
-          gravity: Vector2.zero(),
-          world: AnimatedBodyWorld(),
-        );
+    : super(
+        gravity: Vector2.zero(),
+        world: AnimatedBodyWorld(),
+      );
 }
 
 class AnimatedBodyWorld extends Forge2DWorld

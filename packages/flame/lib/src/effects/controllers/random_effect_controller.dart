@@ -15,9 +15,9 @@ import 'package:flame/effects.dart';
 class RandomEffectController extends EffectController
     with HasSingleChildEffectController<DurationEffectController> {
   RandomEffectController(DurationEffectController child, this.randomGenerator)
-      : assert(!child.isInfinite, 'Child cannot be infinite'),
-        _child = child,
-        super.empty() {
+    : assert(!child.isInfinite, 'Child cannot be infinite'),
+      _child = child,
+      super.empty() {
     _initializeDuration();
   }
 

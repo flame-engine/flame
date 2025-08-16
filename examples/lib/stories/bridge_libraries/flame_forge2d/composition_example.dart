@@ -28,12 +28,12 @@ class CompositionExample extends Forge2DGame {
 
 class TappableText extends TextComponent with TapCallbacks {
   TappableText(Vector2 position)
-      : super(
-          text: 'A normal tappable Flame component',
-          textRenderer: TextPaint(style: _textStyle),
-          position: position,
-          anchor: Anchor.center,
-        );
+    : super(
+        text: 'A normal tappable Flame component',
+        textRenderer: TextPaint(style: _textStyle),
+        position: position,
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {

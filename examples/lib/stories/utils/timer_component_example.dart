@@ -37,10 +37,10 @@ class RenderedTimeComponent extends TimerComponent {
   final double yOffset;
 
   RenderedTimeComponent(double period, {this.yOffset = 150})
-      : super(
-          period: period,
-          removeOnFinish: true,
-        );
+    : super(
+        period: period,
+        removeOnFinish: true,
+      );
 
   @override
   void render(Canvas canvas) {

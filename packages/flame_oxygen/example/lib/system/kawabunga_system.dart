@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 class KawabungaSystem extends BaseSystem with UpdateSystem {
   @override
   List<Filter<Component>> get filters => [
-        Has<TextComponent>(),
-        Has<TimerComponent>(),
-      ];
+    Has<TextComponent>(),
+    Has<TimerComponent>(),
+  ];
 
   @override
   void renderEntity(Canvas canvas, Entity entity) {
@@ -16,8 +16,9 @@ class KawabungaSystem extends BaseSystem with UpdateSystem {
     final textComponent = entity.get<TextComponent>()!;
     final textRenderer = TextPaint(
       style: textComponent.style.copyWith(
-        color:
-            textComponent.style.color!.withValues(alpha: 1 - timer.percentage),
+        color: textComponent.style.color!.withValues(
+          alpha: 1 - timer.percentage,
+        ),
       ),
     );
 

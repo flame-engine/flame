@@ -571,8 +571,9 @@ class _Parser {
     } else {
       nameError('variable $variableName has not been declared');
     }
-    final variableExpression =
-        variableStorage.getVariableAsExpression(variableName);
+    final variableExpression = variableStorage.getVariableAsExpression(
+      variableName,
+    );
     position += 1;
 
     final assignmentToken = peekToken();
@@ -630,7 +631,7 @@ class _Parser {
       nameError(
         isLocal
             ? 'variable $variableName shadows a global variable with the '
-                'same name'
+                  'same name'
             : 'variable $variableName has already been declared',
       );
     }

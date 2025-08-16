@@ -67,11 +67,11 @@ class SpriteWidget extends StatefulWidget {
     this.rasterize = false,
     super.key,
   }) : _spriteFuture = Sprite.load(
-          path,
-          srcSize: srcSize,
-          srcPosition: srcPosition,
-          images: images,
-        );
+         path,
+         srcSize: srcSize,
+         srcPosition: srcPosition,
+         images: images,
+       );
 
   @override
   State<SpriteWidget> createState() => _SpriteWidgetState();

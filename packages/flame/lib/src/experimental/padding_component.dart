@@ -20,8 +20,8 @@ class PaddingComponent extends LayoutComponent {
     super.anchor,
     super.position,
     PositionComponent? child,
-  })  : _padding = padding ?? EdgeInsets.zero,
-        super(size: null) {
+  }) : _padding = padding ?? EdgeInsets.zero,
+       super(size: null) {
     this.child = child;
   }
 

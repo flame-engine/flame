@@ -1,9 +1,9 @@
 import 'dart:collection';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:ordered_set/comparing.dart';
 
 /// {@template uniform_value}
 /// Instance of a uniform value. Represented by a [ByteBuffer].
@@ -21,11 +21,12 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
   ByteBuffer createResource() {
     var previousIndex = -1;
 
-    final entries = _storage.entries.toList()..sort(Comparing.on((c) => c.key));
+    final entries = _storage.entries.sortedBy((c) => c.key);
     final data = entries.fold<List<double>>([], (p, e) {
       if (previousIndex + 1 != e.key) {
-        final field =
-            slot.fields.indexed.firstWhere((e) => e.$1 == previousIndex + 1);
+        final field = slot.fields.indexed.firstWhere(
+          (e) => e.$1 == previousIndex + 1,
+        );
         throw StateError('Uniform ${slot.name}.${field.$2} was not set');
       }
       previousIndex = e.key;
@@ -54,9 +55,9 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
   }
 
   @override
-  String makeKey(int? idx, String? field) {
-    if (idx != null) {
-      throw StateError('idx is not supported for ${slot.name}');
+  String makeKey(int? index, String? field) {
+    if (index != null) {
+      throw StateError('index is not supported for ${slot.name}');
     }
     if (field == null) {
       throw StateError('field is required for ${slot.name}');

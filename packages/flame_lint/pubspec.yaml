@@ -12,10 +12,10 @@ topics:
   - lints
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  lints: ^5.1.1
+  lints: ^6.0.0
 
 dev_dependencies:
   dartdoc: ^8.0.8

@@ -33,8 +33,8 @@ class RemoveEffectGame extends FlameGame with TapDetector {
 
   @override
   void update(double dt) {
-    textComponent.text =
-        (effect.controller.progress * delayTime).toStringAsFixed(2);
+    textComponent.text = (effect.controller.progress * delayTime)
+        .toStringAsFixed(2);
     super.update(dt);
   }
 }

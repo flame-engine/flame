@@ -86,9 +86,9 @@ class SpriteAnimationData {
     int? amountPerRow,
     Vector2? texturePosition,
     this.loop = true,
-  })  : assert(amountPerRow == null || amount >= amountPerRow),
-        assert(start <= end && start >= 0 && end <= amount),
-        assert(stepTimes.length >= end - start + 1) {
+  }) : assert(amountPerRow == null || amount >= amountPerRow),
+       assert(start <= end && start >= 0 && end <= amount),
+       assert(stepTimes.length >= end - start + 1) {
     amountPerRow ??= amount;
     texturePosition ??= Vector2.zero();
     frames = List<SpriteAnimationFrameData>.generate(end - start + 1, (index) {
@@ -142,11 +142,11 @@ class SpriteAnimationFrame {
 /// time.
 class SpriteAnimation {
   SpriteAnimation(this.frames, {this.loop = true})
-      : assert(frames.isNotEmpty, 'There must be at least one animation frame'),
-        assert(
-          frames.every((frame) => frame.stepTime > 0),
-          'All frames must have positive durations',
-        );
+    : assert(frames.isNotEmpty, 'There must be at least one animation frame'),
+      assert(
+        frames.every((frame) => frame.stepTime > 0),
+        'All frames must have positive durations',
+      );
 
   /// Create animation from a list of [sprites] all having the same transition
   /// time [stepTime].

@@ -6,13 +6,13 @@ import 'package:meta/meta.dart';
 
 class TextPainterTextElement extends InlineTextElement {
   TextPainterTextElement(this._textPainter)
-      : _box = LineMetrics(
-          ascent: _textPainter.computeDistanceToActualBaseline(
-            flutter.TextBaseline.alphabetic,
-          ),
-          width: _textPainter.width,
-          height: _textPainter.height,
-        );
+    : _box = LineMetrics(
+        ascent: _textPainter.computeDistanceToActualBaseline(
+          flutter.TextBaseline.alphabetic,
+        ),
+        width: _textPainter.width,
+        height: _textPainter.height,
+      );
 
   final flutter.TextPainter _textPainter;
   final LineMetrics _box;

@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 
 class TappableEmber extends Ember with TapCallbacks {
   TappableEmber({required Vector2 position, required Vector2 size})
-      : super(position: position, size: size);
+    : super(position: position, size: size);
 
   @override
   bool onTapDown(TapDownEvent event) {

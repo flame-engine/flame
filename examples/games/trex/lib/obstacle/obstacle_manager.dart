@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:trex_game/obstacle/obstacle.dart';
 import 'package:trex_game/obstacle/obstacle_type.dart';
-import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
 class ObstacleManager extends Component with HasGameReference<TRexGame> {
@@ -37,7 +37,7 @@ class ObstacleManager extends Component with HasGameReference<TRexGame> {
     if (speed == 0) {
       return;
     }
-    var settings = random.nextBool()
+    var settings = game.random.nextBool()
         ? ObstacleTypeSettings.cactusSmall
         : ObstacleTypeSettings.cactusLarge;
     if (duplicateObstacleCheck(settings.type) || speed < settings.allowedAt) {
@@ -72,7 +72,9 @@ class ObstacleManager extends Component with HasGameReference<TRexGame> {
 
   int _groupSize(ObstacleTypeSettings settings) {
     if (game.currentSpeed > settings.multipleAt) {
-      return random.fromRange(1.0, ObstacleTypeSettings.maxGroupSize).floor();
+      return game.random
+          .nextDoubleBetween(1.0, ObstacleTypeSettings.maxGroupSize)
+          .floor();
     } else {
       return 1;
     }

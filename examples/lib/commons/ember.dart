@@ -5,10 +5,10 @@ import 'package:meta/meta.dart';
 class Ember<T extends FlameGame> extends SpriteAnimationComponent
     with HasGameReference<T> {
   Ember({super.position, Vector2? size, super.priority, super.key})
-      : super(
-          size: size ?? Vector2.all(50),
-          anchor: Anchor.center,
-        );
+    : super(
+        size: size ?? Vector2.all(50),
+        anchor: Anchor.center,
+      );
 
   @mustCallSuper
   @override

@@ -17,11 +17,11 @@ class RaycastResult<T extends Hitbox<T>> {
     Vector2? normal,
     double? distance,
     bool isInsideHitbox = false,
-  })  : _isInsideHitbox = isInsideHitbox,
-        _hitbox = hitbox,
-        _reflectionRay = reflectionRay ?? Ray2.zero(),
-        _normal = normal ?? Vector2.zero(),
-        _distance = distance ?? double.maxFinite;
+  }) : _isInsideHitbox = isInsideHitbox,
+       _hitbox = hitbox,
+       _reflectionRay = reflectionRay ?? Ray2.zero(),
+       _normal = normal ?? Vector2.zero(),
+       _distance = distance ?? double.maxFinite;
 
   /// Whether this result has active results in it.
   ///

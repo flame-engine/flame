@@ -10,7 +10,6 @@ import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
-import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
@@ -59,14 +58,14 @@ class CameraComponent extends Component {
     List<Component>? hudComponents,
     super.children,
     super.key,
-  })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        _viewfinder = viewfinder ?? Viewfinder(),
-        _backdrop = backdrop ?? Component(),
-        // The priority is set to the max here to avoid some bugs for the users,
-        // if they for example would add any components that modify positions
-        // before the CameraComponent, since it then will render the positions
-        // of the last tick each tick.
-        super(priority: 0x7fffffff) {
+  }) : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
+       _viewfinder = viewfinder ?? Viewfinder(),
+       _backdrop = backdrop ?? Component(),
+       // The priority is set to the max here to avoid some bugs for the users,
+       // if they for example would add any components that modify positions
+       // before the CameraComponent, since it then will render the positions
+       // of the last tick each tick.
+       super(priority: 0x7fffffff) {
     children.register<PostProcessComponent>();
     addAll([_backdrop, _viewport, _viewfinder]);
   }
@@ -90,14 +89,14 @@ class CameraComponent extends Component {
     Iterable<Component>? children,
     ComponentKey? key,
   }) : this(
-          world: world,
-          viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
-          viewfinder: viewfinder ?? Viewfinder(),
-          backdrop: backdrop,
-          hudComponents: hudComponents,
-          children: children,
-          key: key,
-        );
+         world: world,
+         viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
+         viewfinder: viewfinder ?? Viewfinder(),
+         backdrop: backdrop,
+         hudComponents: hudComponents,
+         children: children,
+         key: key,
+       );
 
   /// The [viewport] is the "window" through which the game world is observed.
   ///
@@ -256,8 +255,10 @@ class CameraComponent extends Component {
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
-    final viewfinderPosition =
-        viewfinder.localToGlobal(position, output: output);
+    final viewfinderPosition = viewfinder.localToGlobal(
+      position,
+      output: output,
+    );
     return viewport.localToGlobal(viewfinderPosition, output: output);
   }
 
@@ -395,8 +396,8 @@ class CameraComponent extends Component {
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
-    final viewPortAwareBoundsBehavior =
-        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
+    final viewPortAwareBoundsBehavior = viewfinder
+        .firstChild<ViewportAwareBoundsBehavior>();
 
     if (bounds == null) {
       // When bounds is null, all bounds-related components need to be dropped.
@@ -443,8 +444,9 @@ class CameraComponent extends Component {
           // in this exact cycle but did not mount into the tree.
           // We must wait for that component to mount first in order for
           // ViewportAwareBoundsBehavior to correctly affect the camera.
-          boundedBehaviorFuture
-              .whenComplete(() => _addViewPortAwareBoundsBehavior(bounds));
+          boundedBehaviorFuture.whenComplete(
+            () => _addViewPortAwareBoundsBehavior(bounds),
+          );
       }
     } else {
       viewPortAwareBoundsBehavior.boundsShape = bounds;
@@ -501,10 +503,10 @@ class CameraComponent extends Component {
   PostProcess? get postProcess =>
       children.query<PostProcessComponent>().firstOrNull?.postProcess;
   set postProcess(PostProcess? postProcess) {
-    final postProcessComponents =
-        children.query<PostProcessComponent>().toList();
-    final queuedPostProcessAdds = findGame()
-        ?.queue
+    final postProcessComponents = children
+        .query<PostProcessComponent>()
+        .toList();
+    final queuedPostProcessAdds = findGame()?.queue
         .where(
           (event) =>
               event.kind == LifecycleEventKind.add &&

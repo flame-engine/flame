@@ -6,8 +6,8 @@ class DoubleTapDownEvent extends PositionEvent {
   final PointerDeviceKind deviceKind;
 
   DoubleTapDownEvent(super.game, TapDownDetails details)
-      : deviceKind = details.kind ?? PointerDeviceKind.unknown,
-        super(
-          devicePosition: details.globalPosition.toVector2(),
-        );
+    : deviceKind = details.kind ?? PointerDeviceKind.unknown,
+      super(
+        devicePosition: details.globalPosition.toVector2(),
+      );
 }

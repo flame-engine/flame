@@ -11,7 +11,7 @@ import 'package:flame/src/effects/controllers/duration_effect_controller.dart';
 /// 0->1->0 over a short period of time, then pauses, and this sequence repeats.
 class PauseEffectController extends DurationEffectController {
   PauseEffectController(super.duration, {required double progress})
-      : _progress = progress;
+    : _progress = progress;
 
   final double _progress;
 

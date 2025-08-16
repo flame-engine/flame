@@ -37,8 +37,11 @@ abstract class ColumnNode extends BlockNode {
     final blockHeight = children.isEmpty
         ? padding.vertical
         : verticalOffset + collapseMargin(currentMargin, padding.bottom);
-    final background =
-        makeBackground(style.background, blockWidth, blockHeight);
+    final background = makeBackground(
+      style.background,
+      blockWidth,
+      blockHeight,
+    );
     if (background != null) {
       out.insert(0, background);
     }

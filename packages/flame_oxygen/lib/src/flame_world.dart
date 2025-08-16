@@ -28,6 +28,6 @@ class FlameWorld extends World {
 
   @override
   void execute(double delta) => throw Exception(
-        'FlameWorld.execute is not supported in flame_oxygen',
-      );
+    'FlameWorld.execute is not supported in flame_oxygen',
+  );
 }

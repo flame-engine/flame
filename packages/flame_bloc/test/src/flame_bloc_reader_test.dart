@@ -17,8 +17,8 @@ void main() {
         final bloc = InventoryCubit();
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-        );
+              value: bloc,
+            );
         await game.ensureAdd(provider);
 
         final component = _PlayerReader();

@@ -10,7 +10,7 @@ class ItalicTextNode extends InlineTextNode {
   ItalicTextNode.simple(String text) : child = PlainTextNode(text);
 
   ItalicTextNode.group(List<InlineTextNode> children)
-      : child = GroupTextNode(children);
+    : child = GroupTextNode(children);
 
   final InlineTextNode child;
 

@@ -19,11 +19,11 @@ class GameStatsState extends Equatable {
   });
 
   const GameStatsState.empty()
-      : this(
-          score: 0,
-          lives: 3,
-          status: GameStatus.initial,
-        );
+    : this(
+        score: 0,
+        lives: 3,
+        status: GameStatus.initial,
+      );
 
   GameStatsState copyWith({
     int? score,

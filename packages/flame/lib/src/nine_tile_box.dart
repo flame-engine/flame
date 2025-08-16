@@ -41,7 +41,7 @@ class NineTileBox {
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used
   /// instead (so no scaling happens).
   NineTileBox(this.sprite, {int? tileSize, int? destTileSize})
-      : tileSize = tileSize ?? sprite.src.width ~/ 3 {
+    : tileSize = tileSize ?? sprite.src.width ~/ 3 {
     this.destTileSize = destTileSize ?? this.tileSize;
     final centerEdge = this.tileSize.toDouble();
     center = Rect.fromLTWH(centerEdge, centerEdge, centerEdge, centerEdge);

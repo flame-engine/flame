@@ -12,8 +12,7 @@ class RoundFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('round', RoundFn.new, args, errorFn);
+  ) => num1Builder('round', RoundFn.new, args, errorFn);
 
   @override
   num get value => arg.value.round();

@@ -15,9 +15,9 @@ class FlameBlocListener<B extends BlocBase<S>, S> extends Component
     B? bloc,
     bool Function(S previousState, S newState)? listenWhen,
     super.key,
-  })  : _onNewState = onNewState,
-        _onInitialState = onInitialState,
-        _listenWhen = listenWhen {
+  }) : _onNewState = onNewState,
+       _onInitialState = onInitialState,
+       _listenWhen = listenWhen {
     if (bloc != null) {
       this.bloc = bloc;
     }

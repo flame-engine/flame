@@ -16,15 +16,15 @@ class TheBall extends PositionComponent
   TheBall({
     required Vector2 super.position,
   }) : super(
-          anchor: Anchor.center,
-          priority: 100000,
-          children: [
-            CircleHitbox(
-              radius: kPlayerRadius,
-              anchor: Anchor.center,
-            ),
-          ],
-        );
+         anchor: Anchor.center,
+         priority: 100000,
+         children: [
+           CircleHitbox(
+             radius: kPlayerRadius,
+             anchor: Anchor.center,
+           ),
+         ],
+       );
 
   final Vector2 velocity = Vector2.zero();
 

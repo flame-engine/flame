@@ -7,7 +7,7 @@
 - [Components](components.md)
 - [Inputs](inputs/inputs.md)
 - [Camera](camera.md)
-- [Effects](effects.md)
+- [Effects](effects/effects.md)
 - [Collision Detection](collision_detection.md)
 - [Router](router.md)
 - [Platforms](platforms.md)
@@ -26,7 +26,7 @@ Assets Structure     <structure.md>
 Components           <components.md>
 Inputs               <inputs/inputs.md>
 Camera               <camera.md>
-Effects              <effects.md>
+Effects              <effects/effects.md>
 Collision Detection  <collision_detection.md>
 Router               <router.md>
 Platforms            <platforms.md>

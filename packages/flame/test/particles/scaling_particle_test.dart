@@ -6,8 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ScalingParticle', () {
-    testWithFlameGame(
-        'A particle which scale its child over the lifespan '
+    testWithFlameGame('A particle which scale its child over the lifespan '
         'between 1 and a provided scale', (game) async {
       final paint = Paint()..color = Colors.red;
       final rect = ComputedParticle(

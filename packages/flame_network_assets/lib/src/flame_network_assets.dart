@@ -10,10 +10,11 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// Function signature used by Flame Network Assets to fetch assets.
-typedef GetAssetFunction = Future<FlameAssetResponse> Function(
-  String url, {
-  Map<String, String>? headers,
-});
+typedef GetAssetFunction =
+    Future<FlameAssetResponse> Function(
+      String url, {
+      Map<String, String>? headers,
+    });
 
 /// Function signature used by Flame Network Assets to decode assets from a
 /// raw format.
@@ -88,20 +89,20 @@ abstract class FlameNetworkAssets<T> {
     GetAppDirectoryFunction? getAppDirectory,
     this.cacheInMemory = true,
     this.cacheInStorage = true,
-  })  : _isWeb = kIsWeb,
-        _decode = decodeAsset,
-        _encode = encodeAsset {
-    _get = get ??
+  }) : _isWeb = kIsWeb,
+       _decode = decodeAsset,
+       _encode = encodeAsset {
+    _get =
+        get ??
         (
           String url, {
           Map<String, String>? headers,
-        }) =>
-            http.get(Uri.parse(url), headers: headers).then((response) {
-              return FlameAssetResponse(
-                statusCode: response.statusCode,
-                bytes: response.bodyBytes,
-              );
-            });
+        }) => http.get(Uri.parse(url), headers: headers).then((response) {
+          return FlameAssetResponse(
+            statusCode: response.statusCode,
+            bytes: response.bodyBytes,
+          );
+        });
 
     _getAppDirectory = getAppDirectory ?? getApplicationDocumentsDirectory;
   }

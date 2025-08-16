@@ -7,8 +7,9 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  final withMultiTouchFragDetector =
-      GameTester(_MultiTouchDragDetectorGame.new);
+  final withMultiTouchFragDetector = GameTester(
+    _MultiTouchDragDetectorGame.new,
+  );
 
   group('MultiTouchDragDetector', () {
     testWidgets(

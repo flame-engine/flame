@@ -13,7 +13,7 @@ class MotorJointExample extends Forge2DGame {
   ''';
 
   MotorJointExample()
-      : super(gravity: Vector2.zero(), world: MotorJointWorld());
+    : super(gravity: Vector2.zero(), world: MotorJointWorld());
 }
 
 class MotorJointWorld extends Forge2DWorld with TapCallbacks {

@@ -13,8 +13,7 @@ class DecFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('dec', DecFn.new, args, errorFn);
+  ) => num1Builder('dec', DecFn.new, args, errorFn);
 
   @override
   num get value {

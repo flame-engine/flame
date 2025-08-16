@@ -85,8 +85,9 @@ void addCameraAndViewportStories(Dashbook dashbook) {
     ..add(
       'Follow and World bounds',
       (_) => GameWidget(game: CameraFollowAndWorldBoundsExample()),
-      codeLink:
-          baseLink('camera_and_viewport/camera_follow_and_world_bounds.dart'),
+      codeLink: baseLink(
+        'camera_and_viewport/camera_follow_and_world_bounds.dart',
+      ),
       info: CameraFollowAndWorldBoundsExample.description,
     );
 }

@@ -44,8 +44,8 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.onComplete,
     this.paint,
     super.key,
-  })  : _animationFuture = animation,
-        _animationTicker = animationTicker;
+  }) : _animationFuture = animation,
+       _animationTicker = animationTicker;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -64,8 +64,8 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.onComplete,
     this.paint,
     super.key,
-  })  : _animationFuture = SpriteAnimation.load(path, data, images: images),
-        _animationTicker = null;
+  }) : _animationFuture = SpriteAnimation.load(path, data, images: images),
+       _animationTicker = null;
 
   @override
   State<SpriteAnimationWidget> createState() => _SpriteAnimationWidgetState();
@@ -96,7 +96,8 @@ class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
     final oldValue = await oldFutureValue;
     final newValue = await newFutureValue;
 
-    final areFramesDifferent = oldValue != newValue ||
+    final areFramesDifferent =
+        oldValue != newValue ||
         oldValue.frames.length != newValue.frames.length ||
         oldValue.frames.fold(
           true,

@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/post_process.dart';
 import 'package:flame/src/camera/camera_component.dart';
-import 'package:flame/src/components/core/component_render_context.dart';
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:meta/meta.dart';
 
@@ -47,8 +46,9 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
   @override
   PostProcessComponentRenderContext<T> get renderContext => _renderContext;
 
-  final _renderContext =
-      PostProcessComponentRenderContext<T>(postProcess: null);
+  final _renderContext = PostProcessComponentRenderContext<T>(
+    postProcess: null,
+  );
 
   final T postProcess;
 
@@ -90,8 +90,10 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
     final boundingBox = rectChildren
         .map((child) => child.toRect())
         .reduce((a, b) => a.expandToInclude(b));
-    (_maybeBoundingSize ??= NotifyingVector2.zero())
-        .setValues(boundingBox.width, boundingBox.height);
+    (_maybeBoundingSize ??= NotifyingVector2.zero()).setValues(
+      boundingBox.width,
+      boundingBox.height,
+    );
   }
 
   @override

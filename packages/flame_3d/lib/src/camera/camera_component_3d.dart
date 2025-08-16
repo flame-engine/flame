@@ -20,10 +20,10 @@ class CameraComponent3D extends CameraComponent {
     super.viewfinder,
     super.backdrop,
     super.hudComponents,
-  })  : position = position?.clone() ?? Vector3.zero(),
-        rotation = rotation ?? Quaternion.identity(),
-        target = target?.clone() ?? Vector3(0, 0, -1),
-        _up = up?.clone() ?? Vector3(0, 1, 0);
+  }) : position = position?.clone() ?? Vector3.zero(),
+       rotation = rotation ?? Quaternion.identity(),
+       target = target?.clone() ?? Vector3(0, 0, -1),
+       _up = up?.clone() ?? Vector3(0, 1, 0);
 
   @override
   World3D? get world => super.world as World3D?;
@@ -68,21 +68,21 @@ class CameraComponent3D extends CameraComponent {
 
   /// The projection matrix of the camera.
   Matrix4 get projectionMatrix => switch (projection) {
-        CameraProjection.perspective => _projectionMatrix
-          ..setAsPerspective(
-            fovY,
-            viewport.virtualSize.x / viewport.virtualSize.y,
-            distanceNear,
-            distanceFar,
-          ),
-        CameraProjection.orthographic => _projectionMatrix
-          ..setAsOrthographic(
-            fovY,
-            viewport.virtualSize.x / viewport.virtualSize.y,
-            distanceNear,
-            distanceFar,
-          )
-      };
+    CameraProjection.perspective =>
+      _projectionMatrix..setAsPerspective(
+        fovY,
+        viewport.virtualSize.x / viewport.virtualSize.y,
+        distanceNear,
+        distanceFar,
+      ),
+    CameraProjection.orthographic =>
+      _projectionMatrix..setAsOrthographic(
+        fovY,
+        viewport.virtualSize.x / viewport.virtualSize.y,
+        distanceNear,
+        distanceFar,
+      ),
+  };
   final Matrix4 _projectionMatrix = Matrix4.zero();
 
   /// The view projection matrix used for rendering.

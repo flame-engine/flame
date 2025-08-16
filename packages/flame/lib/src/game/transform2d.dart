@@ -37,12 +37,12 @@ class Transform2D extends ChangeNotifier {
   final NotifyingVector2 _offset;
 
   Transform2D()
-      : _transformMatrix = Matrix4.identity(),
-        _recalculate = true,
-        _angle = 0,
-        _position = NotifyingVector2.zero(),
-        _scale = NotifyingVector2.all(1),
-        _offset = NotifyingVector2.zero() {
+    : _transformMatrix = Matrix4.identity(),
+      _recalculate = true,
+      _angle = 0,
+      _position = NotifyingVector2.zero(),
+      _scale = NotifyingVector2.all(1),
+      _offset = NotifyingVector2.zero() {
     _position.addListener(_markAsModified);
     _scale.addListener(_markAsModified);
     _offset.addListener(_markAsModified);
