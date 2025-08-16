@@ -16,9 +16,9 @@ void main() {
     test('can add to the batch', () {
       final image = _MockImage();
       final spriteBatch = SpriteBatch(image);
-      spriteBatch.add(source: Rect.zero);
+      final index = spriteBatch.add(source: Rect.zero);
 
-      expect(spriteBatch.transforms, hasLength(1));
+      expect(spriteBatch.getBatchItem(index), isNotNull);
     });
 
     test('can replace the color of a batch', () {
@@ -28,8 +28,13 @@ void main() {
 
       spriteBatch.replace(0, color: Colors.red);
 
-      expect(spriteBatch.colors, hasLength(1));
-      expect(spriteBatch.colors.first, Colors.red);
+      final batchItem = spriteBatch.getBatchItem(0);
+
+      /// Use .closeTo() to avoid floating point rounding errors.
+      expect(batchItem.paint.color.a, closeTo(Colors.red.a, 0.001));
+      expect(batchItem.paint.color.r, closeTo(Colors.red.r, 0.001));
+      expect(batchItem.paint.color.g, closeTo(Colors.red.g, 0.001));
+      expect(batchItem.paint.color.b, closeTo(Colors.red.b, 0.001));
     });
 
     test('can replace the source of a batch', () {
@@ -38,9 +43,9 @@ void main() {
       spriteBatch.add(source: Rect.zero);
 
       spriteBatch.replace(0, source: const Rect.fromLTWH(1, 1, 1, 1));
+      final batchItem = spriteBatch.getBatchItem(0);
 
-      expect(spriteBatch.sources, hasLength(1));
-      expect(spriteBatch.sources.first, const Rect.fromLTWH(1, 1, 1, 1));
+      expect(batchItem.source, const Rect.fromLTWH(1, 1, 1, 1));
     });
 
     test('can replace the transform of a batch', () {
@@ -49,43 +54,16 @@ void main() {
       spriteBatch.add(source: Rect.zero);
 
       spriteBatch.replace(0, transform: RSTransform(1, 1, 1, 1));
+      final batchItem = spriteBatch.getBatchItem(0);
 
-      expect(spriteBatch.transforms, hasLength(1));
       expect(
-        spriteBatch.transforms.first,
+        batchItem.transform,
         isA<RSTransform>()
             .having((t) => t.scos, 'scos', 1)
             .having((t) => t.ssin, 'ssin', 1)
             .having((t) => t.tx, 'tx', 1)
             .having((t) => t.ty, 'ty', 1),
       );
-    });
-
-    test('can add a batch item with an id', () {
-      final image = _MockImage();
-      final spriteBatch = SpriteBatch(image);
-      spriteBatch.add(source: Rect.zero, id: 'item1');
-
-      final batchItem = spriteBatch.findIndexById('item1');
-
-      expect(batchItem, isNotNull);
-    });
-
-    test('can replace a batch item with an id', () {
-      final image = _MockImage();
-      final spriteBatch = SpriteBatch(image);
-      spriteBatch.add(source: Rect.zero, id: 'item1');
-
-      spriteBatch.replace(
-        spriteBatch.findIndexById('item1')!,
-        source: const Rect.fromLTWH(1, 1, 1, 1),
-        id: 'item2',
-      );
-
-      final batchItem = spriteBatch.findIndexById('item2');
-
-      expect(batchItem, isNotNull);
-      expect(spriteBatch.sources.first, const Rect.fromLTWH(1, 1, 1, 1));
     });
 
     const margin = 2.0;
