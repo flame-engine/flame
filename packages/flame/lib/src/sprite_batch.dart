@@ -430,23 +430,24 @@ class SpriteBatch {
     }
 
     final renderPaint = paint ?? _emptyPaint;
-    final transforms = _batchItems.values
-        .map((e) => e.transform)
-        .toList(growable: false);
-    final sources = _batchItems.values
-        .map((e) => e.source)
-        .toList(growable: false);
-    final colors = _batchItems.values
-        .map((e) => e.paint.color)
-        .toList(growable: false);
-
-    final hasNoColors = colors.every((c) => c == _defaultColor);
-    final actualBlendMode = blendMode ?? defaultBlendMode;
-    if (!hasNoColors && actualBlendMode == null) {
-      throw 'When setting any colors, a blend mode must be provided.';
-    }
 
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
+      final transforms = _batchItems.values
+          .map((e) => e.transform)
+          .toList(growable: false);
+      final sources = _batchItems.values
+          .map((e) => e.source)
+          .toList(growable: false);
+      final colors = _batchItems.values
+          .map((e) => e.paint.color)
+          .toList(growable: false);
+
+      final hasNoColors = colors.every((c) => c == _defaultColor);
+      final actualBlendMode = blendMode ?? defaultBlendMode;
+      if (!hasNoColors && actualBlendMode == null) {
+        throw 'When setting any colors, a blend mode must be provided.';
+      }
+
       canvas.drawAtlas(
         atlas,
         transforms,
