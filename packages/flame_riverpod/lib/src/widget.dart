@@ -199,7 +199,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   }
 
   @override
-  State refresh<State>(Refreshable<State> provider) {
+  S refresh<S>(Refreshable<S> provider) {
     _assertNotDisposed();
     return ProviderScope.containerOf(context, listen: false).refresh(provider);
   }

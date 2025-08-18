@@ -112,11 +112,13 @@ void main() {
             '0.0, 0.0, 0.0, 0.0)',
           ),
         );
-        expect(e.message, contains('Actual: '));
-        expect(e.message, contains('Matrix4:<[0] 101.0,0.0,0.0,0.0\n'));
-        expect(e.message, contains('[1] 217.0,0.0,0.0,0.0\n'));
-        expect(e.message, contains('[2] 100.0,0.0,0.0,0.0\n'));
-        expect(e.message, contains('[3] 0.0,0.0,0.0,0.0\n'));
+        expect(
+          e.message,
+          contains('Actual: Matrix4:<[0] [101.0,0.0,0.0,0.0]\n'),
+        );
+        expect(e.message, contains('[1] [217.0,0.0,0.0,0.0]\n'));
+        expect(e.message, contains('[2] [100.0,0.0,0.0,0.0]\n'));
+        expect(e.message, contains('[3] [0.0,0.0,0.0,0.0]\n'));
         expect(
           e.message,
           contains(
