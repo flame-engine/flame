@@ -430,12 +430,15 @@ class SpriteBatch {
     }
 
     final renderPaint = paint ?? _emptyPaint;
-    final transforms =
-        _batchItems.values.map((e) => e.transform).toList(growable: false);
-    final sources =
-        _batchItems.values.map((e) => e.source).toList(growable: false);
-    final colors =
-        _batchItems.values.map((e) => e.paint.color).toList(growable: false);
+    final transforms = _batchItems.values
+        .map((e) => e.transform)
+        .toList(growable: false);
+    final sources = _batchItems.values
+        .map((e) => e.source)
+        .toList(growable: false);
+    final colors = _batchItems.values
+        .map((e) => e.paint.color)
+        .toList(growable: false);
 
     final hasNoColors = colors.every((c) => c == _defaultColor);
     final actualBlendMode = blendMode ?? defaultBlendMode;
