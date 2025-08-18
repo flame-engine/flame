@@ -52,8 +52,12 @@ extension Matrix4Extension on Matrix4 {
   double get m44 => storage[15];
 
   /// Translate this matrix by a [Vector2].
+  @Deprecated(
+    'Use translateByDouble or translateByVector2 instead. '
+    'This will be removed in a Flame 1.32.0.',
+  )
   void translate2(Vector2 vector) {
-    return translate(vector.x, vector.y);
+    return translateByDouble(vector.x, vector.y, 0.0, 1.0);
   }
 
   /// Transform [position] of type [Vector2] using the transformation defined by
@@ -78,10 +82,52 @@ extension Matrix4Extension on Matrix4 {
     return transform2(out);
   }
 
-  /// Create a scaled matrix.
-  ///
-  /// Scale by a [Vector3], [Vector4], or x,y,z
-  static Matrix4 scale(dynamic x, [double? y, double? z]) {
-    return Matrix4.identity()..scale(x, y, z);
+  // TODO(spydon): Remove once min version is 3.35.0
+  void translateByDouble(double tx, double ty, double tz, double tw) {
+    final t1 =
+        storage[0] * tx + storage[4] * ty + storage[8] * tz + storage[12] * tw;
+    storage[12] = t1;
+
+    final t2 =
+        storage[1] * tx + storage[5] * ty + storage[9] * tz + storage[13] * tw;
+    storage[13] = t2;
+
+    final t3 =
+        storage[2] * tx + storage[6] * ty + storage[10] * tz + storage[14] * tw;
+    storage[14] = t3;
+
+    final t4 =
+        storage[3] * tx + storage[7] * ty + storage[11] * tz + storage[15] * tw;
+    storage[15] = t4;
+  }
+
+  // TODO(spydon): Remove once min version is 3.35.0
+  void scaleByDouble(double sx, double sy, double sz, double sw) {
+    storage[0] *= sx;
+    storage[1] *= sx;
+    storage[2] *= sx;
+    storage[3] *= sx;
+    storage[4] *= sy;
+    storage[5] *= sy;
+    storage[6] *= sy;
+    storage[7] *= sy;
+    storage[8] *= sz;
+    storage[9] *= sz;
+    storage[10] *= sz;
+    storage[11] *= sz;
+    storage[12] *= sw;
+    storage[13] *= sw;
+    storage[14] *= sw;
+    storage[15] *= sw;
+  }
+
+  // TODO(spydon): Remove once min version is 3.35.0
+  void scaleByVector3(Vector3 vector) {
+    scaleByDouble(
+      vector.x,
+      vector.y,
+      vector.z,
+      1.0,
+    );
   }
 }
