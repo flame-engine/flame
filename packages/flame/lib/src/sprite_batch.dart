@@ -13,8 +13,8 @@ extension SpriteBatchExtension on Game {
   /// its options.
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
-    Color? defaultColor,
-    BlendMode? defaultBlendMode,
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? imageCache,
     bool useAtlas = true,
@@ -122,10 +122,10 @@ enum FlippedAtlasStatus {
 class SpriteBatch {
   SpriteBatch(
     this.atlas, {
+    this.defaultColor = const Color(0x00000000),
+    this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
-    this.defaultColor,
-    this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
   }) : _imageCache = imageCache,
@@ -136,10 +136,10 @@ class SpriteBatch {
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteBatch> load(
     String path, {
+    Color defaultColor = const Color(0x00000000),
+    BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
-    Color? defaultColor,
-    BlendMode? defaultBlendMode,
     bool useAtlas = true,
   }) async {
     final imagesCache = images ?? Flame.images;
@@ -170,6 +170,9 @@ class SpriteBatch {
 
   /// Sparse array of batch items, indexed by allocated indices.
   final Map<int, BatchItem> _batchItems = {};
+
+  /// Returns the number of active batch items.
+  int get length => _batchItems.length;
 
   /// Returns the number of indices currently in use.
   int get usedCount => _nextIndex - _freeIndices.length;
@@ -232,6 +235,12 @@ class SpriteBatch {
   /// Does this batch contain any operations?
   bool get isEmpty => _batchItems.isEmpty;
 
+  // Used to not create new Paint objects in [render] and
+  // [generateFlippedAtlas].
+  final _emptyPaint = Paint();
+
+  static const _defaultColor = Color(0x00000000);
+
   Future<void> _makeFlippedAtlas() async {
     _flippedAtlasStatus = FlippedAtlasStatus.generating;
     final key = '$imageKey#with-flips';
@@ -252,9 +261,6 @@ class SpriteBatch {
     final picture = recorder.endRecording();
     return picture.toImageSafe(image.width * 2, image.height);
   }
-
-  /// Returns the number of active batch items.
-  int get length => _batchItems.length;
 
   /// Replace provided values of a batch item at the [index], when a parameter
   /// is not provided, the original value of the batch item will be used.
@@ -415,10 +421,6 @@ class SpriteBatch {
     _nextIndex = 0;
   }
 
-  // Used to not create new Paint objects in [render] and
-  // [generateFlippedAtlas].
-  final _emptyPaint = Paint();
-
   void render(
     Canvas canvas, {
     BlendMode? blendMode,
@@ -429,7 +431,7 @@ class SpriteBatch {
       return;
     }
 
-    final renderPaint = paint ?? _emptyPaint;
+    paint ??= _emptyPaint;
 
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       final transforms = _batchItems.values
@@ -455,12 +457,12 @@ class SpriteBatch {
         hasNoColors ? null : colors,
         actualBlendMode,
         cullRect,
-        renderPaint,
+        paint,
       );
     } else {
       for (final index in _batchItems.keys) {
         final batchItem = _batchItems[index]!;
-        renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
+        paint.blendMode = blendMode ?? paint.blendMode;
 
         canvas
           ..save()
@@ -470,12 +472,10 @@ class SpriteBatch {
             atlas,
             batchItem.source,
             batchItem.destination,
-            renderPaint,
+            paint,
           )
           ..restore();
       }
     }
   }
-
-  static const _defaultColor = Color(0x00000000);
 }
