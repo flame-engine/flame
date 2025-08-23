@@ -286,8 +286,8 @@ bool _isTextureFile(String line) {
   // Check for common image file extensions
   const imageExtensions = ['.png', '.jpg', '.jpeg', '.bmp', '.tga', '.webp'];
 
-  for (final ext in imageExtensions) {
-    if (trimmed.toLowerCase().endsWith(ext)) {
+  for (final extension in imageExtensions) {
+    if (trimmed.toLowerCase().endsWith(extension)) {
       return true;
     }
   }
