@@ -3,6 +3,101 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-08-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.31.0`](#flame---v1310)
+ - [`flame_texturepacker` - `v5.0.0`](#flame_texturepacker---v500)
+
+Packages with other changes:
+
+ - [`flame_3d` - `v0.1.0`](#flame_3d---v010)
+ - [`flame_lint` - `v1.4.2`](#flame_lint---v142)
+ - [`flame_behavior_tree` - `v0.1.3+15`](#flame_behavior_tree---v01315)
+ - [`flame_test` - `v2.0.2`](#flame_test---v202)
+ - [`flame_tiled` - `v3.0.6`](#flame_tiled---v306)
+ - [`flame_oxygen` - `v0.2.3+15`](#flame_oxygen---v02315)
+ - [`flame_isolate` - `v0.6.2+15`](#flame_isolate---v06215)
+ - [`flame_sprite_fusion` - `v0.2.0+2`](#flame_sprite_fusion---v0202)
+ - [`flame_fire_atlas` - `v1.8.10`](#flame_fire_atlas---v1810)
+ - [`flame_audio` - `v2.11.9`](#flame_audio---v2119)
+ - [`flame_spine` - `v0.2.2+15`](#flame_spine---v02215)
+ - [`flame_bloc` - `v1.12.16`](#flame_bloc---v11216)
+ - [`flame_kenney_xml` - `v0.1.1+15`](#flame_kenney_xml---v01115)
+ - [`flame_lottie` - `v0.4.2+15`](#flame_lottie---v04215)
+ - [`flame_markdown` - `v0.2.4+8`](#flame_markdown---v0248)
+ - [`flame_console` - `v0.1.2+11`](#flame_console---v01211)
+ - [`flame_rive` - `v1.10.18`](#flame_rive---v11018)
+ - [`flame_forge2d` - `v0.19.0+5`](#flame_forge2d---v01905)
+ - [`flame_noise` - `v0.3.2+15`](#flame_noise---v03215)
+ - [`flame_riverpod` - `v5.4.18`](#flame_riverpod---v5418)
+ - [`flame_svg` - `v1.11.15`](#flame_svg---v11115)
+ - [`flame_network_assets` - `v0.3.3+15`](#flame_network_assets---v03315)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+15`
+ - `flame_test` - `v2.0.2`
+ - `flame_tiled` - `v3.0.6`
+ - `flame_oxygen` - `v0.2.3+15`
+ - `flame_isolate` - `v0.6.2+15`
+ - `flame_sprite_fusion` - `v0.2.0+2`
+ - `flame_fire_atlas` - `v1.8.10`
+ - `flame_audio` - `v2.11.9`
+ - `flame_spine` - `v0.2.2+15`
+ - `flame_bloc` - `v1.12.16`
+ - `flame_kenney_xml` - `v0.1.1+15`
+ - `flame_lottie` - `v0.4.2+15`
+ - `flame_markdown` - `v0.2.4+8`
+ - `flame_console` - `v0.1.2+11`
+ - `flame_rive` - `v1.10.18`
+ - `flame_forge2d` - `v0.19.0+5`
+ - `flame_noise` - `v0.3.2+15`
+ - `flame_riverpod` - `v5.4.18`
+ - `flame_svg` - `v1.11.15`
+ - `flame_network_assets` - `v0.3.3+15`
+
+---
+
+#### `flame` - `v1.31.0`
+
+ - **FIX**: Resume engine on mount if paused by backgrounding ([#3631](https://github.com/flame-engine/flame/issues/3631)) ([#3637](https://github.com/flame-engine/flame/issues/3637)). ([b556dc35](https://github.com/flame-engine/flame/commit/b556dc3557d4b655d605c8e2b3744cafd0635841))
+ - **FIX**: Export `ComponentRenderContext` ([#3669](https://github.com/flame-engine/flame/issues/3669)). ([086096ca](https://github.com/flame-engine/flame/commit/086096ca73236aaea79a2651cb9e3fa8b6211d50))
+ - **FIX**: The `ParallaxComponent` should respect the `virtualSize` ([#3666](https://github.com/flame-engine/flame/issues/3666)). ([9f29c785](https://github.com/flame-engine/flame/commit/9f29c785a1e17428d3a59965b2bf484267c4b2a8))
+ - **FIX**: Attach layout listeners to new children ([#3648](https://github.com/flame-engine/flame/issues/3648)). ([4821ec2c](https://github.com/flame-engine/flame/commit/4821ec2ca9cccbf8017d0b539373f599d168c45c))
+ - **FEAT**: Add support for model parsing and rendering in flame_3d, including skeletal animations ([#3675](https://github.com/flame-engine/flame/issues/3675)). ([cc58aef5](https://github.com/flame-engine/flame/commit/cc58aef5b53f208fb1cbb116bfb9f9af9a351e8e))
+ - **FEAT**: Add Random extensions ([#3672](https://github.com/flame-engine/flame/issues/3672)). ([50e5f296](https://github.com/flame-engine/flame/commit/50e5f29610e9bcc8d939d1e86b5c8bc398516eb1))
+ - **FEAT**: Padding component ([#3661](https://github.com/flame-engine/flame/issues/3661)). ([6c953a28](https://github.com/flame-engine/flame/commit/6c953a2862b46c66b91785c5d481385567596adb))
+ - **FEAT**: Add canPop to RouterComponent ([#3659](https://github.com/flame-engine/flame/issues/3659)). ([6bd3b48f](https://github.com/flame-engine/flame/commit/6bd3b48ff34c92b221b8a66ac951238d7e6176e0))
+ - **FEAT**: Add children and priority to SpriteBatchComponent ([#3649](https://github.com/flame-engine/flame/issues/3649)). ([97b9ba83](https://github.com/flame-engine/flame/commit/97b9ba837e094d79f9e8d8c1ed413717b9d11663))
+ - **BREAKING** **REFACTOR**: Remove shrinkwrap ([#3660](https://github.com/flame-engine/flame/issues/3660)). ([e8860f62](https://github.com/flame-engine/flame/commit/e8860f622acaf7df97ca8fcfbdf94fdae26d5921))
+
+#### `flame_texturepacker` - `v5.0.0`
+
+ - **BREAKING** **PERF**: TexturePacker optimizations ([#3647](https://github.com/flame-engine/flame/issues/3647)). ([5cc2eedb](https://github.com/flame-engine/flame/commit/5cc2eedb1cb17f249c97889ba924e763f83d774e))
+
+#### `flame_3d` - `v0.1.0`
+
+ - **REFACTOR**: Add collections library to flame_3d ([#3680](https://github.com/flame-engine/flame/issues/3680)). ([89e5e58e](https://github.com/flame-engine/flame/commit/89e5e58efb580ec267a0dca78a3a0f320203d4ee))
+ - **FIX**: Update flame_3d to support both old and newer Flutter APIs ([#3663](https://github.com/flame-engine/flame/issues/3663)). ([d9f1fe7f](https://github.com/flame-engine/flame/commit/d9f1fe7f9abd8f0307ecc22ff24d3b492e9ca332))
+ - **FEAT**: Add ability to run on flame_3d example ([#3679](https://github.com/flame-engine/flame/issues/3679)). ([801692bf](https://github.com/flame-engine/flame/commit/801692bfa1226e01f1540166a8140ab42e36ed87))
+ - **FEAT**: Add support for model parsing and rendering in flame_3d, including skeletal animations ([#3675](https://github.com/flame-engine/flame/issues/3675)). ([cc58aef5](https://github.com/flame-engine/flame/commit/cc58aef5b53f208fb1cbb116bfb9f9af9a351e8e))
+ - **FEAT**: Add setup command to flame_3d example ([#3671](https://github.com/flame-engine/flame/issues/3671)). ([2f5ba87b](https://github.com/flame-engine/flame/commit/2f5ba87be8068b12c2604b79f7db9c1f3307a4b6))
+ - **FEAT**: Organize components and add destroy command to flame_3d example ([#3665](https://github.com/flame-engine/flame/issues/3665)). ([d5915752](https://github.com/flame-engine/flame/commit/d591575263d8b13aee862efe05842001aa60f89d))
+ - **FEAT**: Add keybind to jump on flame_3d example ([#3664](https://github.com/flame-engine/flame/issues/3664)). ([7be0bccd](https://github.com/flame-engine/flame/commit/7be0bccda0040bfc3734f90b6bca7d5e99455bee))
+
+#### `flame_lint` - `v1.4.2`
+
+ - **FIX**: Update flame_lint to use lints 6.0.0 ([#3612](https://github.com/flame-engine/flame/issues/3612)). ([ba5f6789](https://github.com/flame-engine/flame/commit/ba5f6789bed68e4cc7ca95584e35ed62d0111da2))
+
+
 ## 2025-07-13
 
 ### Changes

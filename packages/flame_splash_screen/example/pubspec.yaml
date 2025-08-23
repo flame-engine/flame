@@ -15,7 +15,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.4.1
+  flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter
 
