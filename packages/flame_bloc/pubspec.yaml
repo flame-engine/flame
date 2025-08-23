@@ -12,8 +12,8 @@ topics:
   - state-management
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
-  flutter: ">=3.27.1"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   bloc: ">=8.1.1 <10.0.0"

@@ -69,7 +69,7 @@ class HierarchyViewState extends ConsumerState<ConsumerStatefulWidget> {
 
 class _ListItem extends StatelessWidget {
   _ListItem(this.state, this.node, this.indent, {required this.isFirst})
-      : super(key: ObjectKey(node.component));
+    : super(key: ObjectKey(node.component));
 
   final HierarchyViewState state;
   final ComponentTreeNode node;

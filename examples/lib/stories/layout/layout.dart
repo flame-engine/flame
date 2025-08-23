@@ -4,7 +4,9 @@ import 'package:examples/stories/layout/align_component.dart';
 import 'package:flame/game.dart';
 
 void addLayoutStories(Dashbook dashbook) {
-  dashbook.storiesOf('Layout').add(
+  dashbook
+      .storiesOf('Layout')
+      .add(
         'AlignComponent',
         (_) => GameWidget(game: AlignComponentExample()),
         codeLink: baseLink('layout/align_component.dart'),

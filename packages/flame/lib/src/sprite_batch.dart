@@ -39,8 +39,8 @@ class BatchItem {
     required this.transform,
     Color? color,
     this.flip = false,
-  })  : paint = Paint()..color = color ?? const Color(0x00000000),
-        destination = Offset.zero & source.size;
+  }) : paint = Paint()..color = color ?? const Color(0x00000000),
+       destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
   final Rect source;
@@ -60,15 +60,28 @@ class BatchItem {
   ///
   /// Since [Canvas.drawAtlas] is not supported on the web we also
   /// build a `Matrix4` based on the [transform] and [flip] values.
-  late final Matrix4 matrix = Matrix4(
-    transform.scos, transform.ssin, 0, 0, //
-    -transform.ssin, transform.scos, 0, 0, //
-    0, 0, 0, 0, //
-    transform.tx, transform.ty, 0, 1, //
-  )
-    ..translate(source.width / 2, source.height / 2)
-    ..rotateY(flip ? pi : 0)
-    ..translate(-source.width / 2, -source.height / 2);
+  late final Matrix4 matrix =
+      Matrix4(
+          transform.scos,
+          transform.ssin,
+          0,
+          0, //
+          -transform.ssin,
+          transform.scos,
+          0,
+          0, //
+          0,
+          0,
+          0,
+          0, //
+          transform.tx,
+          transform.ty,
+          0,
+          1, //
+        )
+        ..translateByDouble(source.width / 2, source.height / 2, 0.0, 1.0)
+        ..rotateY(flip ? pi : 0)
+        ..translateByDouble(-source.width / 2, -source.height / 2, 0.0, 1.0);
 
   /// Paint object used for the web.
   final Paint paint;
@@ -83,8 +96,7 @@ enum FlippedAtlasStatus {
   generating,
 
   /// The flipped atlas image has been generated.
-  generated,
-  ;
+  generated;
 
   bool get isNone => this == FlippedAtlasStatus.none;
   bool get isGenerating => this == FlippedAtlasStatus.generating;
@@ -116,8 +128,8 @@ class SpriteBatch {
     this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
-  })  : _imageCache = imageCache,
-        _imageKey = imageKey;
+  }) : _imageCache = imageCache,
+       _imageKey = imageKey;
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///

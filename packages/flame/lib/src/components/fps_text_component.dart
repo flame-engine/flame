@@ -14,10 +14,10 @@ class FpsTextComponent<T extends TextRenderer> extends TextComponent {
     super.angle,
     super.anchor,
     int? priority,
-  })  : fpsComponent = FpsComponent(windowSize: windowSize),
-        super(
-          priority: priority ?? double.maxFinite.toInt(),
-        ) {
+  }) : fpsComponent = FpsComponent(windowSize: windowSize),
+       super(
+         priority: priority ?? double.maxFinite.toInt(),
+       ) {
     add(fpsComponent);
   }
 

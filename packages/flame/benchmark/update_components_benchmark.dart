@@ -18,7 +18,7 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   late final Set<int> _inputTicks;
 
   UpdateComponentsBenchmark(this.random)
-      : super('Updating Components Benchmark');
+    : super('Updating Components Benchmark');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -34,8 +34,9 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
 
     await _game.ready();
 
-    _components =
-        _game.children.whereType<_BenchmarkComponent>().toList(growable: false);
+    _components = _game.children.whereType<_BenchmarkComponent>().toList(
+      growable: false,
+    );
 
     _dts = List.generate(_amountTicks, (_) => random.nextDouble());
     _inputTicks = List.generate(
@@ -46,8 +47,8 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
 
   @override
   Future<void> run() async {
-    for (final (idx, dt) in _dts.indexed) {
-      if (_inputTicks.contains(idx)) {
+    for (final (index, dt) in _dts.indexed) {
+      if (_inputTicks.contains(index)) {
         _components[random.nextInt(_amountComponents)].input(
           xDirection: random.nextInt(3) - 1,
           doJump: random.nextBool(),

@@ -5,10 +5,10 @@ import 'package:flame/effects.dart';
 class DelayedEffectController extends EffectController
     with HasSingleChildEffectController {
   DelayedEffectController(EffectController child, {required this.delay})
-      : assert(delay >= 0, 'Delay must be non-negative: $delay'),
-        _child = child,
-        _timer = 0,
-        super.empty();
+    : assert(delay >= 0, 'Delay must be non-negative: $delay'),
+      _child = child,
+      _timer = 0,
+      super.empty();
 
   final EffectController _child;
   final double delay;

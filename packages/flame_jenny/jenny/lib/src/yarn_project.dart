@@ -20,12 +20,12 @@ import 'package:meta/meta.dart';
 ///
 class YarnProject {
   YarnProject()
-      : nodes = <String, Node>{},
-        variables = VariableStorage(),
-        functions = FunctionStorage(),
-        commands = CommandStorage(),
-        characters = CharacterStorage(),
-        random = Random() {
+    : nodes = <String, Node>{},
+      variables = VariableStorage(),
+      functions = FunctionStorage(),
+      commands = CommandStorage(),
+      characters = CharacterStorage(),
+      random = Random() {
     locale = 'en';
   }
 

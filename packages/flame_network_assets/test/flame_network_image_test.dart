@@ -67,8 +67,9 @@ void main() {
 
       final pngImage = await image.toByteData(format: ImageByteFormat.png);
 
-      when(() => httpClient.get(any(), headers: any(named: 'headers')))
-          .thenAnswer(
+      when(
+        () => httpClient.get(any(), headers: any(named: 'headers')),
+      ).thenAnswer(
         (_) async => FlameAssetResponse(
           statusCode: 200,
           bytes: pngImage!.buffer.asUint8List(),

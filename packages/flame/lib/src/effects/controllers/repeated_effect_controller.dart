@@ -8,11 +8,11 @@ import 'package:flame/effects.dart';
 class RepeatedEffectController extends EffectController
     with HasSingleChildEffectController {
   RepeatedEffectController(EffectController child, this.repeatCount)
-      : assert(repeatCount > 0, 'repeatCount must be positive'),
-        assert(!child.isInfinite, 'child cannot be infinite'),
-        _child = child,
-        _remainingCount = repeatCount,
-        super.empty();
+    : assert(repeatCount > 0, 'repeatCount must be positive'),
+      assert(!child.isInfinite, 'child cannot be infinite'),
+      _child = child,
+      _remainingCount = repeatCount,
+      super.empty();
 
   final EffectController _child;
   final int repeatCount;

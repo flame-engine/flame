@@ -8,7 +8,8 @@ import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 
 class ParticlesInteractiveExample extends FlameGame with PanDetector {
-  static const description = 'An example which shows how '
+  static const description =
+      'An example which shows how '
       'ParticleSystemComponent can be added in runtime '
       'following an event, in this example, the mouse '
       'dragging';
@@ -21,13 +22,13 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
     required Color from,
     required Color to,
     required double zoom,
-  })  : colorTween = ColorTween(begin: from, end: to),
-        super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          )..viewfinder.zoom = zoom,
-        );
+  }) : colorTween = ColorTween(begin: from, end: to),
+       super(
+         camera: CameraComponent.withFixedResolution(
+           width: 400,
+           height: 600,
+         )..viewfinder.zoom = zoom,
+       );
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
@@ -39,7 +40,8 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           generator: (i) {
             return AcceleratedParticle(
               lifespan: 2,
-              speed: Vector2(
+              speed:
+                  Vector2(
                     noise.transform(random.nextDouble()),
                     noise.transform(random.nextDouble()),
                   ) *

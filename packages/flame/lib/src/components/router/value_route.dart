@@ -18,9 +18,9 @@ import 'package:meta/meta.dart';
 /// [_defaultValue] will be used.
 abstract class ValueRoute<T> extends Route {
   ValueRoute({required T value, super.transparent})
-      : _defaultValue = value,
-        _completer = Completer<T>(),
-        super(null);
+    : _defaultValue = value,
+      _completer = Completer<T>(),
+      super(null);
 
   final T _defaultValue;
   final Completer<T> _completer;

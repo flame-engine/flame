@@ -12,8 +12,8 @@ class BlockStyle extends FlameTextStyle {
     this.background,
     this.text,
     this.textAlign,
-  })  : _margin = margin,
-        _padding = padding;
+  }) : _margin = margin,
+       _padding = padding;
 
   final EdgeInsets? _margin;
   final EdgeInsets? _padding;

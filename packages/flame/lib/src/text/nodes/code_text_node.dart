@@ -8,7 +8,7 @@ class CodeTextNode extends InlineTextNode {
   CodeTextNode.simple(String text) : child = PlainTextNode(text);
 
   CodeTextNode.group(List<InlineTextNode> children)
-      : child = GroupTextNode(children);
+    : child = GroupTextNode(children);
 
   final InlineTextNode child;
 

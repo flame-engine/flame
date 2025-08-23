@@ -38,15 +38,15 @@ The robot will switch between running and idle animations over the duration of
 
     final functionEffect =
         FunctionEffect<SpriteAnimationGroupComponent<RobotState>>(
-      (target, progress) {
-        if (progress > 0.7) {
-          target.current = RobotState.idle;
-        } else if (progress > 0.3) {
-          target.current = RobotState.running;
-        }
-      },
-      EffectController(duration: 10.0, infinite: true),
-    );
+          (target, progress) {
+            if (progress > 0.7) {
+              target.current = RobotState.idle;
+            } else if (progress > 0.3) {
+              target.current = RobotState.running;
+            }
+          },
+          EffectController(duration: 10.0, infinite: true),
+        );
     final component = SpriteAnimationGroupComponent<RobotState>(
       animations: {
         RobotState.running: running,

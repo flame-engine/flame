@@ -89,8 +89,9 @@ class OverlayManager {
   /// Hides multiple overlays specified in [overlayNames].
   void removeAll(Iterable<String> overlayNames) {
     final initialCount = _activeOverlays.length;
-    _activeOverlays
-        .removeWhere((overlay) => overlayNames.contains(overlay.name));
+    _activeOverlays.removeWhere(
+      (overlay) => overlayNames.contains(overlay.name),
+    );
     if (_activeOverlays.length != initialCount) {
       _game.refreshWidget(isInternalRefresh: false);
     }
@@ -131,10 +132,11 @@ class OverlayManager {
   }
 }
 
-typedef OverlayBuilderFunction = Widget Function(
-  BuildContext context,
-  Game game,
-);
+typedef OverlayBuilderFunction =
+    Widget Function(
+      BuildContext context,
+      Game game,
+    );
 
 @immutable
 class _OverlayData {

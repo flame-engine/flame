@@ -8,9 +8,9 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameReference<TRexGame>, CollisionCallbacks {
   Player() : super(size: Vector2(90, 88));
 
-  final double gravity = 1;
+  final double gravity = 0.85;
 
-  final double initialJumpVelocity = -15.0;
+  final double initialJumpVelocity = -16;
   final double introDuration = 1500.0;
   final double startXPosition = 50;
 

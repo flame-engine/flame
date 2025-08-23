@@ -54,10 +54,12 @@ void main() {
         srcSize: Vector2(50, 50),
       );
 
-      final animationTicker = spriteSheet.createAnimationWithVariableStepTimes(
-        row: 1,
-        stepTimes: [2.0, 3.0],
-      ).createTicker();
+      final animationTicker = spriteSheet
+          .createAnimationWithVariableStepTimes(
+            row: 1,
+            stepTimes: [2.0, 3.0],
+          )
+          .createTicker();
 
       expect(animationTicker.totalDuration(), 5.0);
     });

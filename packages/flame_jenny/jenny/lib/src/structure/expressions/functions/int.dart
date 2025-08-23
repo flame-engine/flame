@@ -12,8 +12,7 @@ class IntFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('int', IntFn.new, args, errorFn);
+  ) => num1Builder('int', IntFn.new, args, errorFn);
 
   @override
   num get value => arg.value.truncate();

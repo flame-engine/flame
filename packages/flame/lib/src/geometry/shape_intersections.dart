@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 
-abstract class Intersections<T1 extends ShapeComponent,
-    T2 extends ShapeComponent> {
+abstract class Intersections<
+  T1 extends ShapeComponent,
+  T2 extends ShapeComponent
+> {
   Set<Vector2> intersect(T1 shapeA, T2 shapeB);
 
   bool supportsShapes(ShapeComponent shapeA, ShapeComponent shapeB) {
@@ -54,8 +56,8 @@ class PolygonPolygonIntersections
       final outerShape = polygonA.containsPoint(polygonB.globalVertices().first)
           ? polygonA
           : (polygonB.containsPoint(polygonA.globalVertices().first)
-              ? polygonB
-              : null);
+                ? polygonB
+                : null);
       if (outerShape != null && outerShape.isSolid) {
         final innerShape = outerShape == polygonA ? polygonB : polygonA;
         return {innerShape.absoluteCenter};
@@ -142,10 +144,12 @@ class CircleCircleIntersections
       // and we get those points by calculating the [delta] from the
       // [centerPoint] to the intersection points.
       // The result is then [centerPoint] +- [delta].
-      final lengthA = (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
+      final lengthA =
+          (pow(radiusA, 2) - pow(radiusB, 2) + pow(distance, 2)) /
           (2 * distance);
       final lengthB = sqrt((pow(radiusA, 2) - pow(lengthA, 2)).abs());
-      final centerPoint = shapeA.absoluteCenter +
+      final centerPoint =
+          shapeA.absoluteCenter +
           (shapeB.absoluteCenter - shapeA.absoluteCenter) * lengthA / distance;
       final delta = Vector2(
         lengthB *

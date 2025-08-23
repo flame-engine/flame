@@ -10,6 +10,7 @@ export 'src/extensions/offset.dart';
 export 'src/extensions/paint.dart';
 export 'src/extensions/path.dart';
 export 'src/extensions/picture.dart';
+export 'src/extensions/random.dart';
 export 'src/extensions/rect.dart';
 export 'src/extensions/rectangle.dart';
 export 'src/extensions/size.dart';

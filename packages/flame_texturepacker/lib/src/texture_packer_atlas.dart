@@ -484,7 +484,7 @@ int _parseDegrees(String? value) {
   final entry = <String>[];
   entry.add(trimmedLine.substring(0, colonIndex).trim());
 
-  for (var i = 1, lastMatch = colonIndex + 1;; i++) {
+  for (var i = 1, lastMatch = colonIndex + 1; ; i++) {
     final commaIndex = trimmedLine.indexOf(',', lastMatch);
 
     if (commaIndex == -1) {

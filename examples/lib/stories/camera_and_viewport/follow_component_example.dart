@@ -24,12 +24,12 @@ class FollowComponentExample extends FlameGame
   ''';
 
   FollowComponentExample({required this.viewportResolution})
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: viewportResolution.x,
-            height: viewportResolution.y,
-          ),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: viewportResolution.x,
+          height: viewportResolution.y,
+        ),
+      );
 
   late MovableEmber ember;
   final Vector2 viewportResolution;
@@ -182,12 +182,12 @@ class Map extends Component {
 
 class Rock extends SpriteComponent with HasGameReference, TapCallbacks {
   Rock(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(50),
-          priority: 1,
-          anchor: Anchor.center,
-        );
+    : super(
+        position: position,
+        size: Vector2.all(50),
+        priority: 1,
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {

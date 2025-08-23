@@ -1,9 +1,13 @@
 import 'dart:math' as math;
 
+// TODO(spydon): Remove this import once Flutter 3.35.0 is the minimum version.
+// ignore: unnecessary_import
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
+// ignore: unnecessary_import
 import 'package:vector_math/vector_math.dart';
 
 void main() {
@@ -24,15 +28,16 @@ void main() {
     const epsilon = 1 / (1 << 23);
 
     // Calculate indicative condition number
-    final matrixNorm =
-        math.sqrt(m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5]);
+    final matrixNorm = math.sqrt(
+      m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5],
+    );
 
     double conditionFactor;
     if (det.abs() > 1e-10) {
       // Calculate condition number
       final invMatrixNorm =
           math.sqrt(m[5] * m[5] + m[1] * m[1] + m[4] * m[4] + m[0] * m[0]) /
-              det.abs();
+          det.abs();
       conditionFactor = matrixNorm * invMatrixNorm;
     } else {
       // For ~singular matrices, small input change -> large output change
@@ -46,7 +51,8 @@ void main() {
     const double numOperations = 14;
 
     // Standard deviation (1-σ)
-    final sigma = epsilon *
+    final sigma =
+        epsilon *
         math.sqrt(numVariables) *
         math.sqrt(numOperations) *
         conditionFactor;
@@ -219,10 +225,10 @@ void main() {
           ..scale = scale
           ..offset = offset;
         final matrix4 = Matrix4.identity()
-          ..translate(translation.x, translation.y)
+          ..translateByDouble(translation.x, translation.y, 0.0, 1.0)
           ..rotateZ(rotation)
-          ..scale(scale.x, scale.y, 1)
-          ..translate(offset.x, offset.y);
+          ..scaleByDouble(scale.x, scale.y, 1.0, 1.0)
+          ..translateByDouble(offset.x, offset.y, 0.0, 1.0);
 
         for (var k = 0; k < 16; k++) {
           expect(
@@ -237,10 +243,13 @@ void main() {
           );
         }
         // Check round-trip conversion between local and global
-        final point1 =
-            Vector2((rnd.nextDouble() - 0.5) * 5, (rnd.nextDouble() - 0.5) * 5);
-        final point2 =
-            transform2d.globalToLocal(transform2d.localToGlobal(point1));
+        final point1 = Vector2(
+          (rnd.nextDouble() - 0.5) * 5,
+          (rnd.nextDouble() - 0.5) * 5,
+        );
+        final point2 = transform2d.globalToLocal(
+          transform2d.localToGlobal(point1),
+        );
 
         final tolerance = transform2dRoundTripUncertainty(transform2d, point1);
         expect(

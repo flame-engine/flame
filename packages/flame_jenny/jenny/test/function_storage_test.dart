@@ -205,9 +205,10 @@ void main() {
           ),
         );
         expect(
-          () => YarnProject()
-              .functions
-              .addFunction1('test', (int x) => x > 0 ? x : null),
+          () => YarnProject().functions.addFunction1(
+            'test',
+            (int x) => x > 0 ? x : null,
+          ),
           hasTypeError(
             'TypeError: Unsupported return type <int?>, expected one of: '
             'bool, int, double, num, or String',
@@ -233,8 +234,10 @@ void main() {
 
       test('misplaced YarnProject argument', () {
         expect(
-          () => FunctionStorage()
-              .addFunction2('test', (int x, YarnProject yarn) => 0),
+          () => FunctionStorage().addFunction2(
+            'test',
+            (int x, YarnProject yarn) => 0,
+          ),
           hasTypeError(
             'TypeError: Argument of type YarnProject must be the first in a '
             'function',

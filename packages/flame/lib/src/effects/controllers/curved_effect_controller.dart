@@ -5,8 +5,8 @@ import 'package:flutter/animation.dart';
 /// [curve]. The [duration] cannot be 0.
 class CurvedEffectController extends DurationEffectController {
   CurvedEffectController(super.duration, Curve curve)
-      : assert(duration > 0, 'Duration must be positive: $duration'),
-        _curve = curve;
+    : assert(duration > 0, 'Duration must be positive: $duration'),
+      _curve = curve;
 
   Curve get curve => _curve;
   final Curve _curve;

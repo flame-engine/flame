@@ -43,24 +43,24 @@ class ComponentTreeNode {
   );
 
   ComponentTreeNode.fromComponent(Component component)
-      : this(
-          component.hashCode,
-          component.runtimeType.toString(),
-          component.toString(),
-          component is PositionComponent,
-          component.children.map(ComponentTreeNode.fromComponent).toList(),
-        );
+    : this(
+        component.hashCode,
+        component.runtimeType.toString(),
+        component.toString(),
+        component is PositionComponent,
+        component.children.map(ComponentTreeNode.fromComponent).toList(),
+      );
 
   ComponentTreeNode.fromJson(Map<String, dynamic> json)
-      : this(
-          json['id'] as int,
-          json['name'] as String,
-          json['toString'] as String,
-          json['isPositionComponent'] as bool,
-          (json['children'] as List)
-              .map((e) => ComponentTreeNode.fromJson(e as Map<String, dynamic>))
-              .toList(),
-        );
+    : this(
+        json['id'] as int,
+        json['name'] as String,
+        json['toString'] as String,
+        json['isPositionComponent'] as bool,
+        (json['children'] as List)
+            .map((e) => ComponentTreeNode.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
 
   Map<String, dynamic> toJson() {
     return {

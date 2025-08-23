@@ -74,10 +74,10 @@ class SpriteButton extends StatelessWidget {
     this.loadingBuilder,
     super.key,
   }) : _buttonsFuture = [
-          sprite,
-          pressedSprite,
-          if (disabledSprite != null) disabledSprite,
-        ];
+         sprite,
+         pressedSprite,
+         if (disabledSprite != null) disabledSprite,
+       ];
 
   SpriteButton.future({
     required Future<Sprite> sprite,
@@ -98,10 +98,10 @@ class SpriteButton extends StatelessWidget {
     this.loadingBuilder,
     super.key,
   }) : _buttonsFuture = Future.wait([
-          sprite,
-          pressedSprite,
-          if (disabledSprite != null) disabledSprite,
-        ]);
+         sprite,
+         pressedSprite,
+         if (disabledSprite != null) disabledSprite,
+       ]);
 
   /// Loads the images from the asset [path] and [pressedPath] and renders
   /// it as a widget.
@@ -129,49 +129,50 @@ class SpriteButton extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     super.key,
-  }) : _buttonsFuture = (images ?? Flame.images).containsKey(path) &&
-                (images ?? Flame.images).containsKey(pressedPath) &&
-                (disabledPath == null ||
-                    (images ?? Flame.images).containsKey(disabledPath))
-            ? [
-                Sprite(
-                  (images ?? Flame.images).fromCache(path),
-                  srcPosition: srcPosition,
-                  srcSize: srcSize,
-                ),
-                Sprite(
-                  (images ?? Flame.images).fromCache(pressedPath),
-                  srcPosition: pressedSrcPosition,
-                  srcSize: pressedSrcSize,
-                ),
-                if (disabledPath != null)
-                  Sprite(
-                    (images ?? Flame.images).fromCache(disabledPath),
-                    srcPosition: disabledSrcPosition,
-                    srcSize: disabledSrcSize,
-                  ),
-              ]
-            : Future.wait([
-                Sprite.load(
-                  path,
-                  srcPosition: srcPosition,
-                  srcSize: srcSize,
-                  images: images,
-                ),
-                Sprite.load(
-                  pressedPath,
-                  srcPosition: pressedSrcPosition,
-                  srcSize: pressedSrcSize,
-                  images: images,
-                ),
-                if (disabledPath != null)
-                  Sprite.load(
-                    disabledPath,
-                    srcPosition: disabledSrcPosition,
-                    srcSize: disabledSrcSize,
-                    images: images,
-                  ),
-              ]);
+  }) : _buttonsFuture =
+           (images ?? Flame.images).containsKey(path) &&
+               (images ?? Flame.images).containsKey(pressedPath) &&
+               (disabledPath == null ||
+                   (images ?? Flame.images).containsKey(disabledPath))
+           ? [
+               Sprite(
+                 (images ?? Flame.images).fromCache(path),
+                 srcPosition: srcPosition,
+                 srcSize: srcSize,
+               ),
+               Sprite(
+                 (images ?? Flame.images).fromCache(pressedPath),
+                 srcPosition: pressedSrcPosition,
+                 srcSize: pressedSrcSize,
+               ),
+               if (disabledPath != null)
+                 Sprite(
+                   (images ?? Flame.images).fromCache(disabledPath),
+                   srcPosition: disabledSrcPosition,
+                   srcSize: disabledSrcSize,
+                 ),
+             ]
+           : Future.wait([
+               Sprite.load(
+                 path,
+                 srcPosition: srcPosition,
+                 srcSize: srcSize,
+                 images: images,
+               ),
+               Sprite.load(
+                 pressedPath,
+                 srcPosition: pressedSrcPosition,
+                 srcSize: pressedSrcSize,
+                 images: images,
+               ),
+               if (disabledPath != null)
+                 Sprite.load(
+                   disabledPath,
+                   srcPosition: disabledSrcPosition,
+                   srcSize: disabledSrcSize,
+                   images: images,
+                 ),
+             ]);
 
   @override
   Widget build(BuildContext context) {

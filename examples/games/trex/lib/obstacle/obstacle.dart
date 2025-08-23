@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:trex_game/obstacle/obstacle_type.dart';
-import 'package:trex_game/random_extension.dart';
 import 'package:trex_game/trex_game.dart';
 
 class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
@@ -29,10 +29,10 @@ class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
   }
 
   double computeGap(double gapCoefficient, double speed) {
-    final minGap =
-        (width * speed * settings.minGap * gapCoefficient).roundToDouble();
+    final minGap = (width * speed * settings.minGap * gapCoefficient)
+        .roundToDouble();
     final maxGap = (minGap * _maxGapCoefficient).roundToDouble();
-    return random.fromRange(minGap, maxGap);
+    return game.random.nextDoubleBetween(minGap, maxGap);
   }
 
   @override

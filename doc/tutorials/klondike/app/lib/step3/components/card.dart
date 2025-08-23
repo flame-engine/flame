@@ -8,10 +8,10 @@ import '../suit.dart';
 
 class Card extends PositionComponent {
   Card(int intRank, int intSuit)
-      : rank = Rank.fromInt(intRank),
-        suit = Suit.fromInt(intSuit),
-        _faceUp = false,
-        super(size: KlondikeGame.cardSize);
+    : rank = Rank.fromInt(intRank),
+      suit = Suit.fromInt(intSuit),
+      _faceUp = false,
+      super(size: KlondikeGame.cardSize);
 
   final Rank rank;
   final Suit suit;

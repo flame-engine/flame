@@ -12,8 +12,9 @@ Future<void> main() async {
   final image = await generateImage();
 
   group('NineTileBoxWidget', () {
-    testWidgets('has no FutureBuilder when passed an animation',
-        (tester) async {
+    testWidgets('has no FutureBuilder when passed an animation', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         NineTileBoxWidget(
           image: image,
@@ -108,16 +109,18 @@ Future<void> main() async {
 
         await tester.pumpAndSettle();
 
-        var internalWidget = tester
-            .widget<InternalNineTileBox>(find.byType(InternalNineTileBox));
+        var internalWidget = tester.widget<InternalNineTileBox>(
+          find.byType(InternalNineTileBox),
+        );
 
         expect(internalWidget.image, image);
 
         await tester.tap(find.byType(ElevatedButton));
         await tester.pumpAndSettle();
 
-        internalWidget = tester
-            .widget<InternalNineTileBox>(find.byType(InternalNineTileBox));
+        internalWidget = tester.widget<InternalNineTileBox>(
+          find.byType(InternalNineTileBox),
+        );
 
         expect(internalWidget.image, image2);
       });

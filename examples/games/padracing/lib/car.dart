@@ -11,10 +11,10 @@ import 'package:padracing/tire.dart';
 
 class Car extends BodyComponent<PadRacingGame> {
   Car({required this.playerNumber, required this.cameraComponent})
-      : super(
-          priority: 3,
-          paint: Paint()..color = colors[playerNumber],
-        );
+    : super(
+        priority: 3,
+        paint: Paint()..color = colors[playerNumber],
+      );
 
   static final colors = [
     GameColors.green.color,

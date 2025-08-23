@@ -21,8 +21,8 @@ class Bgm extends WidgetsBindingObserver {
 
   /// {@macro _bgm}
   Bgm({AudioCache? audioCache})
-      : audioPlayer = AudioPlayer()
-          ..audioCache = audioCache ?? AudioCache.instance;
+    : audioPlayer = AudioPlayer()
+        ..audioCache = audioCache ?? AudioCache.instance;
 
   /// Registers a [WidgetsBinding] observer.
   ///

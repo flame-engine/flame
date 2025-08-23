@@ -9,12 +9,12 @@ class FlameSplashController {
     Duration waitDuration = const Duration(seconds: 2),
     Duration fadeOutDuration = const Duration(milliseconds: 450),
     this.autoStart = true,
-  })  : stepController = FlameSplashControllerStep(0),
-        durations = FlameSplashDurations(
-          fadeInDuration,
-          waitDuration,
-          fadeOutDuration,
-        );
+  }) : stepController = FlameSplashControllerStep(0),
+       durations = FlameSplashDurations(
+         fadeInDuration,
+         waitDuration,
+         fadeOutDuration,
+       );
 
   /// Defines if you want to start the animations right after widget mount.
   final bool autoStart;

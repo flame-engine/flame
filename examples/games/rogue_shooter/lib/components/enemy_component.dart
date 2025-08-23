@@ -9,7 +9,7 @@ class EnemyComponent extends SpriteAnimationComponent
   static final Vector2 initialSize = Vector2.all(25);
 
   EnemyComponent({required super.position})
-      : super(size: initialSize, anchor: Anchor.center);
+    : super(size: initialSize, anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {

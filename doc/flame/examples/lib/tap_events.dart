@@ -63,8 +63,12 @@ class TapTarget extends PositionComponent with TapCallbacks {
 
 class ExpandingCircle extends Component {
   ExpandingCircle(this._center)
-      : _baseColor =
-            HSLColor.fromAHSL(1, random.nextDouble() * 360, 1, 0.8).toColor();
+    : _baseColor = HSLColor.fromAHSL(
+        1,
+        random.nextDouble() * 360,
+        1,
+        0.8,
+      ).toColor();
 
   final Color _baseColor;
   final Vector2 _center;

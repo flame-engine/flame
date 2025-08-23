@@ -13,8 +13,7 @@ class IncFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('inc', IncFn.new, args, errorFn);
+  ) => num1Builder('inc', IncFn.new, args, errorFn);
 
   @override
   num get value {

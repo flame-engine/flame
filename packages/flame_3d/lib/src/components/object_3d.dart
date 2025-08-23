@@ -46,8 +46,7 @@ abstract class Object3D extends Component3D {
     //
     // Note(wolfenrain): we should optimize this in the long run it currently
     // sucks.
-    priority = -(CameraComponent3D.currentCamera!.position - position)
-        .length
+    priority = -(CameraComponent3D.currentCamera!.position - position).length
         .abs()
         .toInt();
 

@@ -31,26 +31,26 @@ class Glyph {
     double? srcTop,
     double? srcRight,
     double? srcBottom,
-  })  : assert((width ?? 0) >= 0, 'The `width` parameter cannot be negative'),
-        assert((height ?? 0) >= 0, 'The `height` parameter cannot be negative'),
-        assert(
-          (srcLeft == null &&
-                  srcTop == null &&
-                  srcRight == null &&
-                  srcBottom == null) ||
-              (srcLeft != null &&
-                  srcTop != null &&
-                  srcRight != null &&
-                  srcBottom != null),
-          'Either all or none of parameters `srcLeft`, `srcTop`, `srcRight` '
-          'and `srcBottom` must be specified',
-        ),
-        width = width ?? -1,
-        height = height ?? -1,
-        srcLeft = srcLeft ?? -1,
-        srcTop = srcTop ?? -1,
-        srcRight = srcRight ?? -1,
-        srcBottom = srcBottom ?? -1;
+  }) : assert((width ?? 0) >= 0, 'The `width` parameter cannot be negative'),
+       assert((height ?? 0) >= 0, 'The `height` parameter cannot be negative'),
+       assert(
+         (srcLeft == null &&
+                 srcTop == null &&
+                 srcRight == null &&
+                 srcBottom == null) ||
+             (srcLeft != null &&
+                 srcTop != null &&
+                 srcRight != null &&
+                 srcBottom != null),
+         'Either all or none of parameters `srcLeft`, `srcTop`, `srcRight` '
+         'and `srcBottom` must be specified',
+       ),
+       width = width ?? -1,
+       height = height ?? -1,
+       srcLeft = srcLeft ?? -1,
+       srcTop = srcTop ?? -1,
+       srcRight = srcRight ?? -1,
+       srcBottom = srcBottom ?? -1;
 
   final String char;
   final double left;

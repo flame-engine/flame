@@ -86,12 +86,12 @@ class RoundedButton extends PositionComponent with TapCallbacks {
     super.position,
     super.anchor = Anchor.center,
   }) : _textDrawable = TextPaint(
-          style: const TextStyle(
-            fontSize: 20,
-            color: Color(0xFF000000),
-            fontWeight: FontWeight.w800,
-          ),
-        ).toTextPainter(text) {
+         style: const TextStyle(
+           fontSize: 20,
+           color: Color(0xFF000000),
+           fontWeight: FontWeight.w800,
+         ),
+       ).toTextPainter(text) {
     size = Vector2(150, 40);
     _textOffset = Offset(
       (size.x - _textDrawable.width) / 2,
@@ -179,15 +179,15 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
 
 class BackButton extends SimpleButton with HasGameReference<RouterGame> {
   BackButton()
-      : super(
-          Path()
-            ..moveTo(22, 8)
-            ..lineTo(10, 20)
-            ..lineTo(22, 32)
-            ..moveTo(12, 20)
-            ..lineTo(34, 20),
-          position: Vector2.all(10),
-        );
+    : super(
+        Path()
+          ..moveTo(22, 8)
+          ..lineTo(10, 20)
+          ..lineTo(22, 32)
+          ..moveTo(12, 20)
+          ..lineTo(34, 20),
+        position: Vector2.all(10),
+      );
 
   @override
   void action() => game.router.pop();
@@ -195,14 +195,14 @@ class BackButton extends SimpleButton with HasGameReference<RouterGame> {
 
 class PauseButton extends SimpleButton with HasGameReference<RouterGame> {
   PauseButton()
-      : super(
-          Path()
-            ..moveTo(14, 10)
-            ..lineTo(14, 30)
-            ..moveTo(26, 10)
-            ..lineTo(26, 30),
-          position: Vector2(60, 10),
-        );
+    : super(
+        Path()
+          ..moveTo(14, 10)
+          ..lineTo(14, 30)
+          ..moveTo(26, 10)
+          ..lineTo(26, 30),
+        position: Vector2(60, 10),
+      );
 
   bool isPaused = false;
 
@@ -345,10 +345,10 @@ class Orbit extends PositionComponent {
     required this.planet,
     required this.revolutionPeriod,
     double initialAngle = 0,
-  })  : _paint = Paint()
-          ..style = PaintingStyle.stroke
-          ..color = const Color(0x888888aa),
-        _angle = initialAngle {
+  }) : _paint = Paint()
+         ..style = PaintingStyle.stroke
+         ..color = const Color(0x888888aa),
+       _angle = initialAngle {
     add(planet);
   }
 

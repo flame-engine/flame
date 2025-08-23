@@ -10,7 +10,7 @@ class BoldTextNode extends InlineTextNode {
   BoldTextNode.simple(String text) : child = PlainTextNode(text);
 
   BoldTextNode.group(List<InlineTextNode> children)
-      : child = GroupTextNode(children);
+    : child = GroupTextNode(children);
 
   final InlineTextNode child;
 

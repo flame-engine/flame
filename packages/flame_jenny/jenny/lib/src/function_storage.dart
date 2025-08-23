@@ -59,8 +59,10 @@ class FunctionStorage {
   /// Registers a two-argument function [fn] with the given [name].
   void addFunction2<T0, T1, T2>(String name, T0 Function(T1, T2) fn) {
     _checkName(name);
-    _functions[name] =
-        Udf(name, T0, [T1, T2], (args) => fn(args[0] as T1, args[1] as T2));
+    _functions[name] = Udf(name, T0, [
+      T1,
+      T2,
+    ], (args) => fn(args[0] as T1, args[1] as T2));
   }
 
   /// Registers a three-argument function [fn] with the given [name].
@@ -142,10 +144,10 @@ class FunctionStorage {
 @internal
 class Udf {
   Udf(this.name, Type returnType, List<Type> types, this._wrappedFn)
-      : _returnType = _convertReturnType(returnType),
-        _argumentTypes = _convertArgumentTypes(types),
-        _nOptionalArguments = _countOptionalArguments(types),
-        _preparedArguments = List<dynamic>.filled(types.length, null);
+    : _returnType = _convertReturnType(returnType),
+      _argumentTypes = _convertArgumentTypes(types),
+      _nOptionalArguments = _countOptionalArguments(types),
+      _preparedArguments = List<dynamic>.filled(types.length, null);
 
   final String name;
   final ExpressionType _returnType;
@@ -189,7 +191,8 @@ class Udf {
     for (var i = 0; i < args.length; i++) {
       final argType = args[i].expression.type;
       final expectedType = _argumentTypes[i + i0];
-      final typesAreCompatible = false ||
+      final typesAreCompatible =
+          false ||
           (argType == ExpressionType.boolean &&
               expectedType == _Type.boolean) ||
           (argType == ExpressionType.numeric &&
@@ -281,7 +284,8 @@ class Udf {
   static int _countOptionalArguments(List<Type> types) {
     var nOptionalArguments = 0;
     for (final type in types) {
-      final isOptional = false ||
+      final isOptional =
+          false ||
           (type == _maybeInt) ||
           (type == _maybeBool) ||
           (type == _maybeDouble) ||

@@ -23,13 +23,13 @@ class MoveEffectExample extends FlameGame {
   ''';
 
   MoveEffectExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          )..viewfinder.anchor = Anchor.topLeft,
-          world: _MoveEffectWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        )..viewfinder.anchor = Anchor.topLeft,
+        world: _MoveEffectWorld(),
+      );
 }
 
 class _MoveEffectWorld extends World {
@@ -52,25 +52,25 @@ class _MoveEffectWorld extends World {
         size: 20,
         paint: paint1,
       )..add(
-          MoveEffect.to(
-            Vector2(380, 50),
-            EffectController(
-              duration: 3,
-              reverseDuration: 3,
-              infinite: true,
-              curve: Curves.easeOut,
-            ),
+        MoveEffect.to(
+          Vector2(380, 50),
+          EffectController(
+            duration: 3,
+            reverseDuration: 3,
+            infinite: true,
+            curve: Curves.easeOut,
           ),
         ),
+      ),
     );
 
     // Green square, moving and jumping
     add(
       RectangleComponent.square(
-        position: Vector2(20, 150),
-        size: 20,
-        paint: paint2,
-      )
+          position: Vector2(20, 150),
+          size: 20,
+          paint: paint2,
+        )
         ..add(
           MoveEffect.to(
             Vector2(380, 150),
@@ -103,27 +103,27 @@ class _MoveEffectWorld extends World {
         position: Vector2(40, 240),
         paint: paint3,
       )..add(
-          SequenceEffect(
-            [
-              MoveEffect.by(
-                Vector2(5, 0),
-                NoiseEffectController(
-                  duration: 1,
-                  noise: PerlinNoise(frequency: 20),
-                ),
+        SequenceEffect(
+          [
+            MoveEffect.by(
+              Vector2(5, 0),
+              NoiseEffectController(
+                duration: 1,
+                noise: PerlinNoise(frequency: 20),
               ),
-              MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
-              MoveEffect.by(
-                Vector2(0, 10),
-                NoiseEffectController(
-                  duration: 1,
-                  noise: PerlinNoise(frequency: 10),
-                ),
+            ),
+            MoveEffect.by(Vector2.zero(), LinearEffectController(2)),
+            MoveEffect.by(
+              Vector2(0, 10),
+              NoiseEffectController(
+                duration: 1,
+                noise: PerlinNoise(frequency: 10),
               ),
-            ],
-            infinite: true,
-          ),
+            ),
+          ],
+          infinite: true,
         ),
+      ),
     );
 
     // A circle of moving rectangles.

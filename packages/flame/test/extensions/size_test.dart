@@ -39,15 +39,20 @@ void main() {
     });
 
     testRandom(
-        'toRect has left to 0, top to 0, width: size.dx and height: size.dy',
-        (Random r) {
-      final size = Size(r.nextDouble(), r.nextDouble());
-      final rect = size.toRect();
+      'toRect has left to 0, top to 0, width: size.dx and height: size.dy',
+      (Random r) {
+        final size = Size(r.nextDouble(), r.nextDouble());
+        final rect = size.toRect();
 
-      expect(rect.left, 0, reason: 'left should be 0 as init');
-      expect(rect.top, 0, reason: 'top should be 0 as init');
-      expect(rect.width, size.width, reason: 'width width does not match');
-      expect(rect.height, size.height, reason: 'height height does not match');
-    });
+        expect(rect.left, 0, reason: 'left should be 0 as init');
+        expect(rect.top, 0, reason: 'top should be 0 as init');
+        expect(rect.width, size.width, reason: 'width width does not match');
+        expect(
+          rect.height,
+          size.height,
+          reason: 'height height does not match',
+        );
+      },
+    );
   });
 }

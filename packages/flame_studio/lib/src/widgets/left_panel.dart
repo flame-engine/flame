@@ -44,5 +44,6 @@ class _WidthNotifier extends StateNotifier<double> {
   }
 }
 
-final leftPanelWidthProvider =
-    StateNotifierProvider<_WidthNotifier, double>((ref) => _WidthNotifier());
+final leftPanelWidthProvider = StateNotifierProvider<_WidthNotifier, double>(
+  (ref) => _WidthNotifier(),
+);

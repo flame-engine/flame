@@ -64,20 +64,21 @@ class FlameMarkdown {
     }
 
     return switch (element.tag) {
-      'span' => child,
-      'h1' => HeaderNode(child, level: 1),
-      'h2' => HeaderNode(child, level: 2),
-      'h3' => HeaderNode(child, level: 3),
-      'h4' => HeaderNode(child, level: 4),
-      'h5' => HeaderNode(child, level: 5),
-      'h6' => HeaderNode(child, level: 6),
-      'p' => ParagraphNode(child),
-      'em' || 'i' => ItalicTextNode(child),
-      'strong' || 'b' => BoldTextNode(child),
-      'code' => CodeTextNode(child),
-      'del' => StrikethroughTextNode(child),
-      _ => throw Exception('Unknown element tag: ${element.tag}'),
-    } as TextNode;
+          'span' => child,
+          'h1' => HeaderNode(child, level: 1),
+          'h2' => HeaderNode(child, level: 2),
+          'h3' => HeaderNode(child, level: 3),
+          'h4' => HeaderNode(child, level: 4),
+          'h5' => HeaderNode(child, level: 5),
+          'h6' => HeaderNode(child, level: 6),
+          'p' => ParagraphNode(child),
+          'em' || 'i' => ItalicTextNode(child),
+          'strong' || 'b' => BoldTextNode(child),
+          'code' => CodeTextNode(child),
+          'del' => StrikethroughTextNode(child),
+          _ => throw Exception('Unknown element tag: ${element.tag}'),
+        }
+        as TextNode;
   }
 
   static PlainTextNode _convertText(Text text) {
