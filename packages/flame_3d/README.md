@@ -69,7 +69,7 @@ In order to use flame_3d, you will need to ensure a few things. Firstly, the onl
 have explicitly tested so far for support were Android, iOS, and macOS.
 
 Then, you need to enable Impeller, if not already enabled by default. For example, for macOS, add
-the following to the `Info.plist` in your `macos/` directory:
+the following to the generated `macos/runner/Info.plist` directory:
 
 ```xml
 <dict>
@@ -82,15 +82,15 @@ the following to the `Info.plist` in your `macos/` directory:
 You can also run Flutter with the flag:
 
 ```bash
-flutter run --enable-impeller
+flutter run --enable-flutter-gpu
 ```
 
 Now everything is set up you can start doing some 3D magic! You can check out the
 [example](https://github.com/flame-engine/flame/tree/main/packages/flame_3d/example) to see how you
 can set up a simple 3D environment using Flame.
 
-Also check out the [flame_3d_extras](https://github.com/luanpotter/flame_3d_extras) package for more
-utilities and helpers not yet merged into `flame_3d`.
+Also check our more advanced examples, [Collect the Donut](https://github.com/luanpotter/collect_the_donut)
+and [Defend the Donut](https://github.com/flame-engine/defend_the_donut).
 
 
 ## Building shaders
