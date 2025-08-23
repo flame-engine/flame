@@ -233,8 +233,9 @@ Future<TextureAtlasData> _parse(
       ? await XFile(path).readAsString()
       : await (assets ?? Flame.assets).readFile('${assetsPrefix!}/$path');
 
-  final lines =
-      LineSplitter.split(fileContent).where((line) => line.trim().isNotEmpty);
+  final lines = LineSplitter.split(
+    fileContent,
+  ).where((line) => line.trim().isNotEmpty);
 
   final lineQueue = ListQueue<String>.from(lines);
   images ??= Flame.images;
@@ -313,8 +314,9 @@ Future<Page> _parsePage(
   page.textureFile = lineQueue.removeFirst();
 
   final parentPath = (path.split('/')..removeLast()).join('/');
-  final texturePath =
-      parentPath.isEmpty ? page.textureFile : '$parentPath/${page.textureFile}';
+  final texturePath = parentPath.isEmpty
+      ? page.textureFile
+      : '$parentPath/${page.textureFile}';
 
   if (fromStorage) {
     final bytes = await XFile(texturePath).readAsBytes();

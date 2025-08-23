@@ -13,14 +13,14 @@ import 'package:flutter/material.dart';
 class TexturePackerSprite extends Sprite {
   /// {@macro _texture_packer_sprite}
   TexturePackerSprite(this.region, {this.useOriginalSize = true})
-      : super(
-          region.page.texture,
-          srcPosition: Vector2(region.left, region.top),
-          srcSize: Vector2(
-            useOriginalSize ? region.originalWidth : region.width,
-            useOriginalSize ? region.originalHeight : region.height,
-          ),
-        ) {
+    : super(
+        region.page.texture,
+        srcPosition: Vector2(region.left, region.top),
+        srcSize: Vector2(
+          useOriginalSize ? region.originalWidth : region.width,
+          useOriginalSize ? region.originalHeight : region.height,
+        ),
+      ) {
     if (region.rotate) {
       final transform = Transform2D()..angle = math.pi / 2;
       _decorator = Transform2DDecorator(transform);
@@ -54,9 +54,9 @@ class TexturePackerSprite extends Sprite {
   Vector2 get _packedSize => Vector2(region.width, region.height);
 
   Vector2 get _originalSize => Vector2(
-        region.originalWidth,
-        region.originalHeight,
-      );
+    region.originalWidth,
+    region.originalHeight,
+  );
 
   Vector2 get offset => useOriginalSize ? _offset : Vector2.zero();
 

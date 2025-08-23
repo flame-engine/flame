@@ -71,6 +71,6 @@ final class Region {
     this.degrees = 0,
     this.rotate = false,
     this.index = -1,
-  })  : originalWidth = originalWidth ?? width,
-        originalHeight = originalHeight ?? height;
+  }) : originalWidth = originalWidth ?? width,
+       originalHeight = originalHeight ?? height;
 }
