@@ -9,7 +9,7 @@ Future<Uint8List> renderMapToPng(
 ) async {
   final canvasRecorder = PictureRecorder();
   final canvas = Canvas(canvasRecorder);
-  component.tileMap.render(canvas);
+  component.tileMap.renderTree(canvas);
   final picture = canvasRecorder.endRecording();
 
   final size = component.size;
