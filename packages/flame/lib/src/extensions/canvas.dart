@@ -30,6 +30,13 @@ extension CanvasExtension on Canvas {
     drawRect(rect, paint ?? BasicPalette.magenta.paint());
   }
 
+  /// Renders a line between [p1] and [p2] using the provided [paint].
+  ///
+  /// Equivalent to [drawLine] but using [Vector2] instead of [Offset].
+  void renderLine(Vector2 p1, Vector2 p2, Paint paint) {
+    drawLine(p1.toOffset(), p2.toOffset(), paint);
+  }
+
   /// Utility method to render stuff on a specific place in an isolated way.
   ///
   /// Some render methods don't allow to pass a vector.
