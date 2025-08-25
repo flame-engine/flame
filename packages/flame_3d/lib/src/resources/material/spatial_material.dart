@@ -6,8 +6,8 @@ import 'package:flame_3d/resources.dart';
 
 class SpatialMaterial extends Material {
   SpatialMaterial({
+    this.albedoColor = const Color(0xFFFFFFFF),
     Texture? albedoTexture,
-    Color albedoColor = const Color(0xFFFFFFFF),
     this.metallic = 0.8,
     this.roughness = 0.6,
   }) : albedoTexture = albedoTexture ?? Texture.standard,
@@ -41,19 +41,10 @@ class SpatialMaterial extends Material {
              UniformSlot.value('Camera', {'position'}),
            ],
          ),
-       ) {
-    this.albedoColor = albedoColor;
-  }
+       );
 
   /// The material's base color.
-  Color get albedoColor => _albedoColor;
-  set albedoColor(Color color) {
-    _albedoColor = color;
-    _albedoCache.copyFromArray(color.storage);
-  }
-
-  late Color _albedoColor;
-  final Vector3 _albedoCache = Vector3.zero();
+  Color albedoColor;
 
   /// The texture that will be multiplied by [albedoColor].
   Texture albedoTexture;
@@ -94,7 +85,7 @@ class SpatialMaterial extends Material {
     _applyLights(device);
     fragmentShader
       ..setTexture('albedoTexture', albedoTexture)
-      ..setVector3('Material.albedoColor', _albedoCache)
+      ..setColor('Material.albedoColor', albedoColor)
       ..setFloat('Material.metallic', metallic)
       ..setFloat('Material.roughness', roughness);
   }
