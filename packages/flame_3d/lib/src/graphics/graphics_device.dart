@@ -118,9 +118,7 @@ class GraphicsDevice {
   /// Bind a [surface].
   void bindSurface(Surface surface) {
     _renderPass.clearBindings();
-    if (surface.material != null) {
-      bindMaterial(surface.material!);
-    }
+    bindMaterial(surface.material);
 
     _renderPass.bindVertexBuffer(
       gpu.BufferView(
