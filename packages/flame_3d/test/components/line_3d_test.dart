@@ -1,7 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame_3d/components.dart';
 import 'package:flame_3d/core.dart';
-import 'package:flame_3d/src/components/line_3d.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
