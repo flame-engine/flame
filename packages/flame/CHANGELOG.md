@@ -1,3 +1,8 @@
+## 1.32.0
+
+ - **REFACTOR**: Move MutableRSTransform out of flame_tiled package and into flame package ([#3695](https://github.com/flame-engine/flame/issues/3695)). ([7d644dd8](https://github.com/flame-engine/flame/commit/7d644dd84ce27e292b53f7310967393cf4c60618))
+ - **FEAT**: Add renderLine helper to canvas extensions ([#3697](https://github.com/flame-engine/flame/issues/3697)). ([7ede916f](https://github.com/flame-engine/flame/commit/7ede916f77f20d8c1b0c89627800214dba9facec))
+
 ## 1.31.0
 
 > Note: This release has breaking changes.

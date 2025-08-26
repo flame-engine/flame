@@ -1,3 +1,12 @@
+## 0.1.1
+
+ - **FIX**: Cleanup and make OBJ parser more resilient ([#3702](https://github.com/flame-engine/flame/issues/3702)). ([b96421d5](https://github.com/flame-engine/flame/commit/b96421d5035393d764a9ec34aeba8db380222f45))
+ - **FIX**: Fix color to byte conversion for shaders ([#3700](https://github.com/flame-engine/flame/issues/3700)). ([2426c06b](https://github.com/flame-engine/flame/commit/2426c06b799797720c9df8fbd73e337422654d00))
+ - **FIX**: Add fallback default material to avoid crashes ([#3701](https://github.com/flame-engine/flame/issues/3701)). ([8e6b04e3](https://github.com/flame-engine/flame/commit/8e6b04e38855b6fae6761a9f8d20c82c6bff6d76))
+ - **FIX**: Expose Line3D on components.dart ([#3698](https://github.com/flame-engine/flame/issues/3698)). ([d58d7b54](https://github.com/flame-engine/flame/commit/d58d7b5482f646e4536160449f4a17317b8aff2b))
+ - **FEAT**: Introduce cone mesh ([#3699](https://github.com/flame-engine/flame/issues/3699)). ([874a97fe](https://github.com/flame-engine/flame/commit/874a97fe421dadbed9f3825c8562f8bd7e6c95c9))
+ - **DOCS**: Update instructions on how to use flame_3d ([#3696](https://github.com/flame-engine/flame/issues/3696)). ([11cc2a8f](https://github.com/flame-engine/flame/commit/11cc2a8fae0f1c17106f91ef1ac319e6f8e39036))
+
 ## 0.1.0
 
  - **REFACTOR**: Add collections library to flame_3d ([#3680](https://github.com/flame-engine/flame/issues/3680)). ([89e5e58e](https://github.com/flame-engine/flame/commit/89e5e58efb580ec267a0dca78a3a0f320203d4ee))
