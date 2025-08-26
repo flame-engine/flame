@@ -1,7 +1,7 @@
 name: flame_test
 resolution: workspace
 description: A package with classes to help testing applications using Flame
-version: 2.0.2
+version: 2.0.3
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_test
 funding:
   - https://opencollective.com/blue-fire
@@ -17,7 +17,7 @@ environment:
   flutter: ">=3.32.0"
 
 dependencies:
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
   flutter_test:

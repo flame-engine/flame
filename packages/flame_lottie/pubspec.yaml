@@ -1,7 +1,7 @@
 name: flame_lottie
 resolution: workspace
 description: Flame wrapper for Lottie by AirBnB. This package implements a bridge between Lottie and Flame, allowing to load and display Lottie animations.
-version: 0.4.2+15
+version: 0.4.2+16
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_lottie
 funding:
   - https://opencollective.com/blue-fire
@@ -17,13 +17,13 @@ environment:
   flutter: ">=3.32.0"
 
 dependencies:
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
   lottie: ^3.1.2
 
 dev_dependencies:
   flame_lint: ^1.4.2
-  flame_test: ^2.0.2
+  flame_test: ^2.0.3
   flutter_test:
     sdk: flutter

@@ -1,7 +1,7 @@
 name: flame
 resolution: workspace
 description: A minimalist Flutter game engine, provides a nice set of somewhat independent modules you can choose from.
-version: 1.31.0
+version: 1.32.0
 homepage: https://github.com/flame-engine/flame
 funding:
   - https://opencollective.com/blue-fire
@@ -30,7 +30,7 @@ dev_dependencies:
   canvas_test: ^0.2.0
   dartdoc: ^8.0.8
   flame_lint: ^1.4.2
-  flame_test: ^2.0.2
+  flame_test: ^2.0.3
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
