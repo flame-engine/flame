@@ -1,7 +1,7 @@
 name: flame_kenney_xml
 resolution: workspace
 description: "Support for Kenney XML spritesheets for the Flame game engine. This package parses XML files produced by Kenney."
-version: 0.1.1+15
+version: 0.1.1+16
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_kenney_xml
 funding:
   - https://opencollective.com/blue-fire
@@ -18,7 +18,7 @@ environment:
   flutter: ">=3.32.0"
 
 dependencies:
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
   xml: ^6.5.0

@@ -12,8 +12,8 @@ environment:
 
 dependencies:
   collection: ^1.18.0
-  flame: ^1.31.0
-  flame_isolate: ^0.6.2+15
+  flame: ^1.32.0
+  flame_isolate: ^0.6.2+16
   flutter:
     sdk: flutter
   quiver: ^3.2.1

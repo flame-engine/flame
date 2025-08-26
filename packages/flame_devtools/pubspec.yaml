@@ -11,7 +11,7 @@ dependencies:
   animated_tree_view: ^2.3.0
   devtools_app_shared: ^0.3.1
   devtools_extensions: ^0.3.1
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.6.1

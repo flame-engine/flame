@@ -1,7 +1,7 @@
 name: flame_spine
 resolution: workspace
 description: Spine support for the Flame game engine. This uses the spine_flutter package and provides wrappers and components to be used inside Flame.
-version: 0.2.2+15
+version: 0.2.2+16
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_spine
 funding:
   - https://opencollective.com/blue-fire
@@ -17,7 +17,7 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
   spine_flutter: ^4.2.33
