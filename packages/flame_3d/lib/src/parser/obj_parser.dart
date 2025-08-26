@@ -7,6 +7,9 @@ import 'package:flame_3d/src/model/model.dart';
 import 'package:flame_3d/src/parser/model_parser.dart';
 import 'package:flame_3d/src/parser/obj/surface_tool.dart';
 
+// These are keywords used in the OBJ syntax.
+// cSpell:ignore usemtl newmtl mtllib
+
 class ObjParser extends ModelParser {
   @override
   Future<Model> parseModel(String filePath) async {
@@ -22,7 +25,9 @@ class ObjParser extends ModelParser {
 
     final lines = (await Flame.assets.readFile(filePath)).split('\n');
 
-    var matName = 'default';
+    // if not material is specified, this will be used, and the default
+    // material will be applied.
+    var matName = '__default__';
 
     final materials = <String, SpatialMaterial>{};
     for (final line in lines) {
@@ -48,33 +53,38 @@ class ObjParser extends ModelParser {
 
             final face = Face.empty();
             for (final value in parts) {
+              // format is <vertex/texture/normal>, with vertex and normal being optional
               final indices = value.split('/');
               face.vertex.add(int.parse(indices[0]) - 1);
-              if (indices[1].isNotEmpty) {
-                face.texCoord.add(int.parse(indices[1]) - 1);
-              }
-              if (indices.length > 2) {
-                face.normal.add(int.parse(indices[2]) - 1);
+              if (indices.length > 1) {
+                if (indices[1].isNotEmpty) {
+                  face.texCoord.add(int.parse(indices[1]) - 1);
+                }
+                if (indices.length > 2) {
+                  face.normal.add(int.parse(indices[2]) - 1);
+                }
               }
             }
-            faces[matName]?.add(face);
+            (faces[matName] ??= []).add(face);
           } else if (parts.length > 4) {
-            // Triangulate
-            // TODO(wolfenrain): implement triangulation
+            // TODO(luan): implement triangulation
+            throw UnimplementedError(
+              'Triangulation not implemented for ObjParser',
+            );
           }
         // Material library
-        case 'mtllib': // cSpell:ignore mtllib
+        case 'mtllib':
           final relative = (filePath.split('/')..removeLast()).join('/');
           materials.addAll(
             await _parseMaterial('$relative/${parts[0]}'.trim()),
           );
         // Material
-        case 'usemtl': // cSpell:ignore usemtl
+        case 'usemtl':
           matName = parts[0].trim();
 
           if (!faces.containsKey(matName)) {
             if (!materials.containsKey(matName)) {
-              // TODO(wolfenrain): material not found?
+              throw AssertionError('Material not found: $matName');
             }
             faces[matName] = [];
           }
@@ -83,7 +93,8 @@ class ObjParser extends ModelParser {
 
     var mesh = applyTo ?? Mesh();
     for (final materialGroup in faces.keys) {
-      final surface = SurfaceTool()..setMaterial(materials[materialGroup]!);
+      final material = materials[materialGroup] ?? Material.defaultMaterial;
+      final surface = SurfaceTool()..setMaterial(material);
 
       for (final face in faces[materialGroup]!) {
         if (face.vertex.length == 3) {
@@ -137,18 +148,18 @@ class ObjParser extends ModelParser {
         case '#':
           continue;
         // Creating a new material
-        case 'newmtl': // cSpell:ignore newmtl
+        case 'newmtl':
           currentMat = SpatialMaterial(
             albedoTexture: ColorTexture(const Color(0xFFFFFFFF)),
           );
           materials[parts[0].trim()] = currentMat;
         // Diffuse color
         case 'Kd':
-          currentMat?.albedoColor = Color.fromARGB(
-            255,
-            (double.parse(parts[0]) * 255).toInt(),
-            (double.parse(parts[1]) * 255).toInt(),
-            (double.parse(parts[2]) * 255).toInt(),
+          currentMat?.albedoColor = Color.from(
+            alpha: 1.0,
+            red: double.parse(parts[0]),
+            green: double.parse(parts[1]),
+            blue: double.parse(parts[2]),
           );
       }
     }
