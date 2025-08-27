@@ -12,25 +12,6 @@ Flame keeps it support on the stable channel. The dev, beta and master channel s
 don't support them. This means that issues happening outside the stable channel are not a priority.
 
 
-## Flame web
-
-To use Flame on web you need to make sure your game is using the CanvasKit/[Skia](https://skia.org/)
-renderer. This will increase performance on the web, as it will use the `canvas` element instead of
-separate DOM elements.
-
-To run your game using skia, use the following command:
-
-```shell
-flutter run -d chrome --web-renderer canvaskit
-```
-
-To build the game for production, using skia, use the following:
-
-```shell
-flutter build web --release --web-renderer canvaskit
-```
-
-
 ## Deploy your game to GitHub Pages
 
 One easy way to deploy your game online, is to use [GitHub Pages](https://pages.github.com/).

@@ -16,7 +16,6 @@ padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/
 Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
 riverpod # A state management library for Flutter https://github.com/rrousselGit/riverpod
 skel # Extension for skeleton files from Spine https://en.esotericsoftware.com/spine-in-depth
-Skia # Skia is an open source 2D graphics library used by Flutter https://github.com/google/skia
 spineboy # Name of a famous character used as an example for Spine https://en.esotericsoftware.com/spine-examples-spineboy
 spineboys # Plural of spineboy
 Spritecow # A handy tool for locating sprites within a spritesheet http://www.spritecow.com/
