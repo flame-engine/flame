@@ -1,5 +1,6 @@
 import 'package:example/example_game_3d.dart';
 import 'package:example/scenarios/boxes_scenario.dart';
+import 'package:example/scenarios/colors_scenario.dart';
 import 'package:example/scenarios/models_scenario.dart';
 
 abstract class GameScenario {
@@ -11,6 +12,7 @@ abstract class GameScenario {
 
   static final Map<String, GameScenario> scenarios = {
     'boxes': BoxesScenario(),
+    'colors': ColorsScenario(),
     'models': ModelsScenario(),
   };
 

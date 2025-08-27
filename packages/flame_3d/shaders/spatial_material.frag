@@ -18,7 +18,7 @@ uniform sampler2D albedoTexture;  // Albedo texture
 // material info
 
 uniform Material {
-  vec3 albedoColor;
+  vec4 albedoColor;
   float metallic;
   float roughness;
 } material;
@@ -26,7 +26,7 @@ uniform Material {
 // light info
 
 uniform AmbientLight {
-  vec3 color;
+  vec4 color;
   float intensity;
 } ambientLight;
 
@@ -42,19 +42,19 @@ uniform LightsInfo {
 
 uniform Light0 {
   vec3 position;
-  vec3 color;
+  vec4 color;
   float intensity;
 } light0;
 
 uniform Light1 {
   vec3 position;
-  vec3 color;
+  vec4 color;
   float intensity;
 } light1;
 
 uniform Light2 {
   vec3 position;
-  vec3 color;
+  vec4 color;
   float intensity;
 } light2;
 
@@ -138,10 +138,10 @@ void main() {
   vec3 normal = normalize(fragNormal);
   vec3 viewDir = normalize(camera.position - fragPosition);
 
-  vec3 baseColor = material.albedoColor;
+  vec3 baseColor = material.albedoColor.rgb;
   baseColor *= texture(albedoTexture, fragTexCoord).rgb;
 
-  vec3 baseAmbient = vec3(0.03) * baseColor * ambientLight.color * ambientLight.intensity;
+  vec3 baseAmbient = vec3(0.03) * baseColor * ambientLight.color.rgb * ambientLight.intensity;
   vec3 ao = vec3(1.0); // white - no ambient occlusion for now
   vec3 ambient = baseAmbient * baseColor * ao;
 
@@ -152,7 +152,7 @@ void main() {
 
   if (lightsInfo.numLights > 0) {
     vec3 light0Pos = light0.position;
-    vec3 light0Color = light0.color;
+    vec3 light0Color = light0.color.rgb;
     float light0Intensity = light0.intensity;
 
     lo += processLight(light0Pos, light0Color, light0Intensity, baseColor, normal, viewDir, diffuse);
@@ -160,7 +160,7 @@ void main() {
 
   if (lightsInfo.numLights > 1) {
     vec3 light1Pos = light1.position;
-    vec3 light1Color = light1.color;
+    vec3 light1Color = light1.color.rgb;
     float light1Intensity = light1.intensity;
 
     lo += processLight(light1Pos, light1Color, light1Intensity, baseColor, normal, viewDir, diffuse);
@@ -168,7 +168,7 @@ void main() {
 
   if (lightsInfo.numLights > 2) {
     vec3 light2Pos = light2.position;
-    vec3 light2Color = light2.color;
+    vec3 light2Color = light2.color.rgb;
     float light2Intensity = light2.intensity;
 
     lo += processLight(light2Pos, light2Color, light2Intensity, baseColor, normal, viewDir, diffuse);
