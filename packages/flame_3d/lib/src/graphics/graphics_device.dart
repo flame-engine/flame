@@ -153,7 +153,6 @@ class GraphicsDevice {
 
   /// Bind a uniform [slot] to the [buffer].
   void bindUniform(gpu.UniformSlot slot, ByteBuffer buffer) {
-    print('BINDING UNIFORM ${slot.uniformName} has ${buffer.asByteData().lengthInBytes} (but slot size is ${slot.sizeInBytes})');
     _renderPass.bindUniform(slot, _hostBuffer.emplace(buffer.asByteData()));
   }
 
