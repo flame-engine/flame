@@ -47,8 +47,8 @@ void main() {
     // Statistical error propagation
     // There are 8 variables (point + matrix elements)
     const double numVariables = 8;
-    // In the round trip there's approx 14 ops
-    const double numOperations = 14;
+    // In the round trip there's approx 14? ops
+    const double numOperations = 15;
 
     // Standard deviation (1-σ)
     final sigma =
