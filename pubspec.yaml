@@ -157,6 +157,12 @@ melos:
       run: melos run test:select --no-select
       description: Run all Flutter tests in this project.
 
+    test:seeded:
+      run: melos exec -c 1 -- flutter test --dart-define=RANDOM_SEED=$RANDOM_SEED
+      packageFilters:
+        dirExists: test
+      description: Run `flutter test` for selected packages with a seed for random tests. Set the RANDOM_SEED environment variable to a specific value to reproduce a test run.
+
     coverage:
       steps:
         - melos exec -- flutter test --coverage
