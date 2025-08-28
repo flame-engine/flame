@@ -1,3 +1,8 @@
+## 0.1.1+1
+
+ - **FIX**: When parsing OBJs with no normals, fallback to normal generation ([#3708](https://github.com/flame-engine/flame/issues/3708)). ([a59ccaa3](https://github.com/flame-engine/flame/commit/a59ccaa341a562c25ad54f4af567b160084e06d8))
+ - **FIX**: Update compiled shaderbundle for flame_3d and add color example ([#3704](https://github.com/flame-engine/flame/issues/3704)). ([a1070d97](https://github.com/flame-engine/flame/commit/a1070d975fd3af52d44f3febb13dd97afd4990a6))
+
 ## 0.1.1
 
  - **FIX**: Cleanup and make OBJ parser more resilient ([#3702](https://github.com/flame-engine/flame/issues/3702)). ([b96421d5](https://github.com/flame-engine/flame/commit/b96421d5035393d764a9ec34aeba8db380222f45))
