@@ -13,13 +13,19 @@ class SurfaceTool {
   final List<int> _indices = [];
 
   Color _lastColor = const Color(0xFFFFFFFF);
-  final Vector3 _lastNormal = Vector3.zero();
+  Vector3? _lastNormal;
   final Vector2 _lastTexCoord = Vector2.zero();
   Material _lastMaterial = SpatialMaterial();
 
   void setColor(Color color) => _lastColor = color;
 
-  void setNormal(Vector3 normal) => _lastNormal.setFrom(normal);
+  void setNormal(Vector3? normal) {
+    if (normal == null) {
+      _lastNormal = null;
+    } else {
+      (_lastNormal ??= Vector3.zero()).setFrom(normal);
+    }
+  }
 
   void setTexCoord(Vector2 texCoord) => _lastTexCoord.setFrom(texCoord);
 
@@ -43,6 +49,8 @@ class SurfaceTool {
       }
       if (normals.length > n) {
         setNormal(normals[n]);
+      } else {
+        setNormal(null);
       }
       // TODO(wolfenrain): tangents
       addVertex(vertices[n]);
