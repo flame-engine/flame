@@ -73,13 +73,15 @@ the following to the generated `macos/runner/Info.plist` directory:
 
 ```xml
 <dict>
-    ...
- <key>FLTEnableImpeller</key>
- <true/>
+  ...
+  <key>FLTEnableImpeller</key>
+  <true/>
+  <key>FLTEnableFlutterGPU</key>
+  <true/>
 </dict>
 ```
 
-You can also run Flutter with the flag:
+Alternatively, you can run Flutter with this flag instead:
 
 ```bash
 flutter run --enable-flutter-gpu
