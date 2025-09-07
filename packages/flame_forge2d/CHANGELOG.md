@@ -1,3 +1,7 @@
+## 0.19.1
+
+ - **FIX**: Use correct `Forge2DWorld` in `onRemove` ([#3713](https://github.com/flame-engine/flame/issues/3713)). ([140833d1](https://github.com/flame-engine/flame/commit/140833d1eacf6b756f81f0452ec237c6991f2ae0))
+
 ## 0.19.0+6
 
  - Update a dependency to the latest release.
