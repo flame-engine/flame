@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-09-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.19.1`](#flame_forge2d---v0191)
+ - [`flame_3d` - `v0.1.1+2`](#flame_3d---v0112)
+
+---
+
+#### `flame_forge2d` - `v0.19.1`
+
+ - **FIX**: Use correct `Forge2DWorld` in `onRemove` ([#3713](https://github.com/flame-engine/flame/issues/3713)). ([140833d1](https://github.com/flame-engine/flame/commit/140833d1eacf6b756f81f0452ec237c6991f2ae0))
+
+#### `flame_3d` - `v0.1.1+2`
+
+ - **DOCS**: Update README.md of flame_3d with newer instructions ([#3711](https://github.com/flame-engine/flame/issues/3711)). ([ad7dc059](https://github.com/flame-engine/flame/commit/ad7dc059f2f97e7bc78a74bdff149b26adb22fbc))
+
+
 ## 2025-08-28
 
 ### Changes
