@@ -48,6 +48,20 @@ A simple `Forge2DGame` implementation example can be seen in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example).
 
 
+## Forge2DWorld
+
+The `Forge2DWorld` is a the world that all your [`BodyComponent`]s live in. In the `Forge2DGame`
+there is a `Forge2DWorld` instance called `world` by default, which is where you should add your
+`BodyComponent`s.
+
+If you want to swap between worlds you can create your own `Forge2DWorld` instance and assign it
+to the `Forge2DGame` instance's `world` property, `game.world = Forge2DWorld()`.
+
+If you would like to re-use a world later and have it keep its physics state you have to make sure
+that the bodies aren't destroyed when the world is removed from the game. You can do this by
+setting `world.destroyOnRemove` to false, like `game.world.destroyOnRemove = false;`.
+
+
 ## BodyComponent
 
 The `BodyComponent` is a wrapper for the `Forge2D` body, which is the body that the physics engine
