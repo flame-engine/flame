@@ -3,7 +3,6 @@
 [![ci][ci_badge]][ci_link]
 [![coverage][coverage_badge]][ci_link]
 [![pub package][pub_badge]][pub_link]
-[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
 [![Powered by Flame][flame_badge_link]]([flame_link])
 
@@ -46,8 +45,6 @@ View the full documentation [here][flame_behaviors_documentation].
 [license_link]: https://opensource.org/licenses/MIT
 [pub_badge]: https://img.shields.io/pub/v/flame_behaviors.svg
 [pub_link]: https://pub.dartlang.org/packages/flame_behaviors
-[very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
-[very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
 [flame_badge_link]: https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg
 [flame_link]: https://flame-engine.org
