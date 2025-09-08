@@ -19,6 +19,14 @@ class Forge2DWorld extends World {
   final forge2d.World physicsWorld;
 
   @override
+  void onMount() {
+    super.onMount();
+    for (final body in physicsWorld.bodies) {
+      body.setAwake(true);
+    }
+  }
+
+  @override
   void update(double dt) {
     physicsWorld.stepDt(dt);
   }
