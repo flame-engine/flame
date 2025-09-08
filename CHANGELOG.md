@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-09-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.19.2`](#flame_forge2d---v0192)
+
+---
+
+#### `flame_forge2d` - `v0.19.2`
+
+ - **FEAT**: Allow bodies to not be destroyed when the world is removed from the component tree ([#3716](https://github.com/flame-engine/flame/issues/3716)). ([7d18fd3d](https://github.com/flame-engine/flame/commit/7d18fd3d1cf076bce7032eb60dbfd7777643539d))
+
+
 ## 2025-09-07
 
 ### Changes
