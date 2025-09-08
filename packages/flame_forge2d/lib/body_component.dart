@@ -74,13 +74,13 @@ class BodyComponent<T extends Forge2DGame> extends Component
   Future<void> onLoad() async {
     await super.onLoad();
     world = game.world;
-    body = createBody();
   }
 
   @override
   void onMount() {
     super.onMount();
     world = game.world;
+    body = createBody();
   }
 
   late Forge2DWorld world;
