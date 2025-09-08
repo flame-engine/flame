@@ -12,14 +12,17 @@ Developed with 💙 and 🔥 by [Very Good Ventures][very_good_ventures_link] �
 
 ---
 
+
 ## Quick Start 🚀
+
 
 ### Installing 🧑‍💻
 
-In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to your 
+In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to your
 project.
 
 > **Note**: Flame Behaviors requires Flame `">=1.10.0 <2.0.0"`
+
 
 ### Adding the package
 
@@ -28,11 +31,13 @@ project.
 flutter pub add flame_behaviors
 ```
 
+
 ## Creating Entities and Behaviors
 
-Use Flame Behaviors to define your entities in your game and their behavioral aspects. Or follow 
-the [Introduction to Flame Behaviors][flame_behaviors_article] article to get you familiar with 
+Use Flame Behaviors to define your entities in your game and their behavioral aspects. Or follow
+the [Introduction to Flame Behaviors][flame_behaviors_article] article to get you familiar with
 the concepts!
+
 
 ## Documentation 📝
 
@@ -47,7 +52,6 @@ View the full documentation [here][flame_behaviors_documentation].
 [pub_link]: https://pub.dartlang.org/packages/flame_behaviors
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
 [flame_badge_link]: https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg
-[flame_link]: https://flame-engine.org
 [flame_package_link]: https://pub.dev/packages/flame
 [flame_behaviors_article]: https://verygood.ventures/blog/build-games-with-flame-behaviors
 [flame_behaviors_documentation]: https://github.com/VeryGoodOpenSource/flame_behaviors/tree/main/docs
