@@ -14,11 +14,7 @@ abstract class CollisionBehavior<
 >
     extends Behavior<Parent> {
   /// {@macro collision_behavior}
-  CollisionBehavior({
-    super.children,
-    super.priority,
-    super.key,
-  });
+  CollisionBehavior({super.children, super.priority, super.key});
 
   /// Check if the given component is an instance of [Collider].
   bool isValid(Component c) => c is Collider;
@@ -34,8 +30,8 @@ abstract class CollisionBehavior<
 
   /// Whether the object is currently colliding with another [Collider] or not.
   bool get isColliding {
-    final propagatingCollisionBehavior =
-        parent.findBehavior<PropagatingCollisionBehavior>();
+    final propagatingCollisionBehavior = parent
+        .findBehavior<PropagatingCollisionBehavior>();
 
     return propagatingCollisionBehavior.activeCollisions
         .map(propagatingCollisionBehavior.findEntity)
@@ -76,11 +72,8 @@ class PropagatingCollisionBehavior<Parent extends EntityMixin>
     extends Behavior<Parent>
     with CollisionCallbacks {
   /// {@macro propagating_collision_behavior}
-  PropagatingCollisionBehavior(
-    this._hitbox, {
-    super.priority,
-    super.key,
-  }) : super(children: [_hitbox]);
+  PropagatingCollisionBehavior(this._hitbox, {super.priority, super.key})
+    : super(children: [_hitbox]);
 
   final ShapeHitbox _hitbox;
 

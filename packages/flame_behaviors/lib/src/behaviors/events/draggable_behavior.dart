@@ -8,9 +8,5 @@ abstract class DraggableBehavior<Parent extends EntityMixin>
     extends Behavior<Parent>
     with DragCallbacks {
   /// {@macro draggable_behavior}
-  DraggableBehavior({
-    super.children,
-    super.priority,
-    super.key,
-  });
+  DraggableBehavior({super.children, super.priority, super.key});
 }

@@ -14,18 +14,18 @@ class Circle extends PositionedEntity with HasPaint {
     super.position,
     super.size,
   }) : super(
-          anchor: Anchor.center,
-          behaviors: [
-            PropagatingCollisionBehavior(CircleHitbox()),
-            CircleCollisionBehavior(),
-            RectangleCollisionBehavior(),
-            ScreenCollidingBehavior(),
-            MovingBehavior(velocity: velocity),
-            RotatingBehavior(rotationSpeed: rotationSpeed),
-            TappingBehavior(),
-            DraggingBehavior(),
-          ],
-        );
+         anchor: Anchor.center,
+         behaviors: [
+           PropagatingCollisionBehavior(CircleHitbox()),
+           CircleCollisionBehavior(),
+           RectangleCollisionBehavior(),
+           ScreenCollidingBehavior(),
+           MovingBehavior(velocity: velocity),
+           RotatingBehavior(rotationSpeed: rotationSpeed),
+           TappingBehavior(),
+           DraggingBehavior(),
+         ],
+       );
 
   final defaultColor = Colors.blue.withValues(alpha: 0.8);
 

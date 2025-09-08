@@ -8,9 +8,5 @@ abstract class TappableBehavior<Parent extends EntityMixin>
     extends Behavior<Parent>
     with TapCallbacks {
   /// {@macro tappable_behavior}
-  TappableBehavior({
-    super.children,
-    super.priority,
-    super.key,
-  });
+  TappableBehavior({super.children, super.priority, super.key});
 }

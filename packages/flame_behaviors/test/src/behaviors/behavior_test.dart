@@ -86,9 +86,7 @@ void main() {
 
       setUp(() {
         testBehavior = _TestBehavior();
-        testEntity = _TestEntity(
-          behaviors: [testBehavior],
-        );
+        testEntity = _TestEntity(behaviors: [testBehavior]);
       });
 
       flameGame.testGameWidget(

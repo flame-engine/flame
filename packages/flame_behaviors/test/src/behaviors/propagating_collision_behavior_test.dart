@@ -9,15 +9,11 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _EntityA extends PositionedEntity {
-  _EntityA({
-    super.behaviors,
-  }) : super(size: Vector2.all(16));
+  _EntityA({super.behaviors}) : super(size: Vector2.all(16));
 }
 
 class _EntityB extends PositionedEntity {
-  _EntityB({
-    super.behaviors,
-  }) : super(size: Vector2.all(16));
+  _EntityB({super.behaviors}) : super(size: Vector2.all(16));
 }
 
 class _EntityC extends PositionedEntity {
@@ -89,8 +85,8 @@ void main() {
       },
       verify: (game, tester) async {
         final entityA = game.firstChild<_EntityA>()!;
-        final collisionBehaviorAtoB =
-            entityA.firstChild<_CollisionBehaviorAtoB>()!;
+        final collisionBehaviorAtoB = entityA
+            .firstChild<_CollisionBehaviorAtoB>()!;
 
         game.update(0);
 
@@ -118,8 +114,8 @@ void main() {
       },
       verify: (game, tester) async {
         final entityA = game.firstChild<_EntityA>()!;
-        final collisionBehaviorAtoC =
-            entityA.firstChild<_CollisionBehaviorAtoC>()!;
+        final collisionBehaviorAtoC = entityA
+            .firstChild<_CollisionBehaviorAtoC>()!;
 
         game.update(0);
 
@@ -141,8 +137,8 @@ void main() {
       },
       verify: (game, tester) async {
         final entityA = game.firstChild<_EntityA>()!;
-        final propagatingCollisionBehavior =
-            entityA.firstChild<PropagatingCollisionBehavior>()!;
+        final propagatingCollisionBehavior = entityA
+            .firstChild<PropagatingCollisionBehavior>()!;
 
         expect(
           entityA.findBehavior<PropagatingCollisionBehavior>(),
@@ -169,13 +165,10 @@ void main() {
           RectangleHitbox(),
         );
 
-        await expectLater(
-          () async {
-            await entity.add(propagatingCollisionBehavior);
-            game.update(0);
-          },
-          failsAssert('parent must be a PositionComponent'),
-        );
+        await expectLater(() async {
+          await entity.add(propagatingCollisionBehavior);
+          game.update(0);
+        }, failsAssert('parent must be a PositionComponent'));
       },
     );
 
@@ -199,11 +192,11 @@ void main() {
       verify: (game, tester) async {
         final entityA = game.firstChild<_EntityA>()!;
         final entityB = game.firstChild<_EntityB>()!;
-        final collisionBehaviorAtoB =
-            entityA.firstChild<_CollisionBehaviorAtoB>()!;
+        final collisionBehaviorAtoB = entityA
+            .firstChild<_CollisionBehaviorAtoB>()!;
 
-        final collisionPropagatingBehavior =
-            entityA.findBehavior<PropagatingCollisionBehavior>();
+        final collisionPropagatingBehavior = entityA
+            .findBehavior<PropagatingCollisionBehavior>();
 
         game.update(0);
 
@@ -243,9 +236,7 @@ void main() {
 
           final positionComponent = PositionComponent(
             size: Vector2.all(16),
-            children: [
-              RectangleHitbox(),
-            ],
+            children: [RectangleHitbox()],
           );
 
           await game.ensureAdd(entityA);
@@ -254,12 +245,12 @@ void main() {
         },
         verify: (game, tester) async {
           final entityA = game.firstChild<_EntityA>()!;
-          final collisionBehaviorAtoB =
-              entityA.firstChild<_CollisionBehaviorAtoB>()!;
-          final collisionBehaviorAtoC =
-              entityA.firstChild<_CollisionBehaviorAtoC>()!;
-          final collisionBehaviorAtoComponent =
-              entityA.firstChild<_CollisionBehaviorAtoComponent>()!;
+          final collisionBehaviorAtoB = entityA
+              .firstChild<_CollisionBehaviorAtoB>()!;
+          final collisionBehaviorAtoC = entityA
+              .firstChild<_CollisionBehaviorAtoC>()!;
+          final collisionBehaviorAtoComponent = entityA
+              .firstChild<_CollisionBehaviorAtoComponent>()!;
 
           game.update(0);
 
@@ -289,8 +280,8 @@ void main() {
         },
         verify: (game, tester) async {
           final entityA = game.firstChild<_EntityA>()!;
-          final collisionBehaviorAtoB =
-              entityA.firstChild<_CollisionBehaviorAtoB>()!;
+          final collisionBehaviorAtoB = entityA
+              .firstChild<_CollisionBehaviorAtoB>()!;
 
           game.update(0);
 
@@ -329,12 +320,12 @@ void main() {
         },
         verify: (game, tester) async {
           final entityA = game.firstChild<_EntityA>()!;
-          final collisionBehaviorAtoB =
-              entityA.firstChild<_CollisionBehaviorAtoB>()!;
-          final collisionBehaviorAtoC =
-              entityA.firstChild<_CollisionBehaviorAtoC>()!;
-          final collisionBehaviorAtoComponent =
-              entityA.firstChild<_CollisionBehaviorAtoComponent>()!;
+          final collisionBehaviorAtoB = entityA
+              .firstChild<_CollisionBehaviorAtoB>()!;
+          final collisionBehaviorAtoC = entityA
+              .firstChild<_CollisionBehaviorAtoC>()!;
+          final collisionBehaviorAtoComponent = entityA
+              .firstChild<_CollisionBehaviorAtoComponent>()!;
 
           final entityB = game.firstChild<_EntityB>()!;
           final positionComponent = game.firstChild<PositionComponent>()!;

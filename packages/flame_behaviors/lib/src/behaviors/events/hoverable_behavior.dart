@@ -12,9 +12,5 @@ abstract class HoverableBehavior<Parent extends EntityMixin>
     extends Behavior<Parent>
     with HoverCallbacks {
   /// {@macro hoverable_behavior}
-  HoverableBehavior({
-    super.children,
-    super.priority,
-    super.key,
-  });
+  HoverableBehavior({super.children, super.priority, super.key});
 }

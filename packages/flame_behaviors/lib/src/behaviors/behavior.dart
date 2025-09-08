@@ -13,11 +13,7 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 abstract class Behavior<Parent extends EntityMixin> extends Component
     with ParentIsA<Parent> {
   /// {@macro behavior}
-  Behavior({
-    super.children,
-    super.priority,
-    super.key,
-  });
+  Behavior({super.children, super.priority, super.key});
 
   @override
   FutureOr<void> add(Component component) {

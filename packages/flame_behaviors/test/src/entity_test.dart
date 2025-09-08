@@ -8,9 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../helpers/helpers.dart';
 
 class _TestEntity extends Entity {
-  _TestEntity({
-    super.behaviors,
-  });
+  _TestEntity({super.behaviors});
 }
 
 class _TestBehavior extends Behavior<_TestEntity> {}

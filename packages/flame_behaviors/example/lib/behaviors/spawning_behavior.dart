@@ -32,17 +32,17 @@ class SpawningBehavior extends TappableBehavior<ExampleGame> {
 
     return switch (shapeType) {
       Shapes.circle => Circle(
-          position: position,
-          size: size,
-          velocity: velocity,
-          rotationSpeed: rotationSpeed,
-        ),
+        position: position,
+        size: size,
+        velocity: velocity,
+        rotationSpeed: rotationSpeed,
+      ),
       Shapes.rectangle => Rectangle(
-          position: position,
-          size: size,
-          velocity: velocity,
-          rotationSpeed: rotationSpeed,
-        ),
+        position: position,
+        size: size,
+        velocity: velocity,
+        rotationSpeed: rotationSpeed,
+      ),
     };
   }
 }
