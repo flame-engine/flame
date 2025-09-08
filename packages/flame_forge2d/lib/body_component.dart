@@ -74,13 +74,13 @@ class BodyComponent<T extends Forge2DGame> extends Component
   Future<void> onLoad() async {
     await super.onLoad();
     world = game.world;
+    body = createBody();
   }
 
   @override
   void onMount() {
     super.onMount();
     world = game.world;
-    body = createBody();
   }
 
   late Forge2DWorld world;
@@ -221,7 +221,9 @@ class BodyComponent<T extends Forge2DGame> extends Component
 
   @override
   void onRemove() {
-    world.destroyBody(body);
+    if (!world.isRemoving || world.destroyBodiesOnRemove) {
+      world.destroyBody(body);
+    }
     super.onRemove();
   }
 }

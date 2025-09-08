@@ -18,6 +18,12 @@ class Forge2DWorld extends World {
 
   final forge2d.World physicsWorld;
 
+  /// If true, all bodies will be destroyed when the world is removed from
+  /// the component tree.
+  /// Set this to false if you want to keep the bodies state for later, if
+  /// you for example plan to add the world back to the component tree.
+  bool destroyBodiesOnRemove = true;
+
   @override
   void onMount() {
     super.onMount();
