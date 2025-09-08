@@ -7,41 +7,39 @@ class _TestForge2DWorld extends Forge2DWorld {
 }
 
 void main() {
-  testWithFlameGame(
+  testWithGame(
     'Bodies are destroyed after world is removed when destroyBodiesOnRemove is '
     'true',
+    () => Forge2DGame(world: _TestForge2DWorld()),
     (game) async {
-      final world = _TestForge2DWorld();
-      game.add(world);
       await game.ready();
       final bodyDef = BodyDef()..type = BodyType.dynamic;
       final component = BodyComponent(bodyDef: bodyDef);
-      world.add(component);
-      await game.ready();
+      await game.world.ensureAdd(component);
       final body = component.body;
 
-      world.removeFromParent();
+      game.world.removeFromParent();
       await game.ready();
-      expect(world.physicsWorld.bodies, isNot(contains(body)));
+      expect(game.world.physicsWorld.bodies, isNot(contains(body)));
     },
   );
 
-  testWithFlameGame(
+  testWithGame(
     'Bodies are not destroyed after world is removed when '
     'destroyBodiesOnRemove is false',
+    () => Forge2DGame(
+      world: _TestForge2DWorld()..destroyBodiesOnRemove = false,
+    ),
     (game) async {
-      final world = _TestForge2DWorld()..destroyBodiesOnRemove = false;
-      game.add(world);
       await game.ready();
       final bodyDef = BodyDef()..type = BodyType.dynamic;
       final component = BodyComponent(bodyDef: bodyDef);
-      world.add(component);
-      await game.ready();
+      await game.world.ensureAdd(component);
       final body = component.body;
 
-      world.removeFromParent();
+      game.world.removeFromParent();
       await game.ready();
-      expect(world.physicsWorld.bodies, contains(body));
+      expect(game.world.physicsWorld.bodies, contains(body));
     },
   );
 }
