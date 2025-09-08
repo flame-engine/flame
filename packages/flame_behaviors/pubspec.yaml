@@ -1,10 +1,7 @@
 name: flame_behaviors
 description: Flame Behaviors applies separation of concerns to game logic in the form of Entities and Behaviors, built by Very Good Ventures.
 version: 1.2.0
-homepage: https://github.com/VeryGoodOpenSource/flame_behaviors
-repository: https://github.com/VeryGoodOpenSource/flame_behaviors
-issue_tracker: https://github.com/VeryGoodOpenSource/flame_behaviors/issues
-documentation: https://github.com/VeryGoodOpenSource/flame_behaviors/tree/main/docs
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_behaviors
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
