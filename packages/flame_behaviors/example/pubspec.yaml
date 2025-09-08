@@ -1,4 +1,5 @@
-name: example
+name: flame_behaviors_example
+resolution: workspace
 description: A Very Good Example for the Flame Behavior Pattern.
 version: 1.0.0+1
 publish_to: none
