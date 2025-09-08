@@ -1,0 +1,17 @@
+name: example
+description: A Very Good Example for the Flame Behavior Pattern.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flame: ^1.18.0
+  flame_behaviors:
+    path: ../
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  very_good_analysis: ^9.0.0
