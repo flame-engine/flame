@@ -9,10 +9,10 @@ environment:
 
 dependencies:
   flame: ^1.18.0
-  flame_behaviors:
-    path: ../
+  flame_behaviors: ^1.2.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  very_good_analysis: ^9.0.0
+  flame_lint: ^1.4.2
+
