@@ -105,7 +105,7 @@ framework.
 
 The Flame Engine's top sponsors:
 
-[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Invertase](./media/invertase.jpeg)](https://invertase.io/)
 
 Do you or your company want to sponsor Flame?
 Check out our [OpenCollective page](https://opencollective.com/blue-fire), which is also mentioned
