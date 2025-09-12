@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:example/example_game_3d.dart';
 import 'package:flame/components.dart';
 import 'package:flame/text.dart';
 import 'package:flame_3d/camera.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
 
 const _width = 1.2;
 const _color = Color(0xFFFFFFFF);
