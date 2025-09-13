@@ -1,8 +1,8 @@
-import 'package:example/example_game_3d.dart';
-import 'package:example/scenarios/game_scenario.dart';
 import 'package:flame_3d/core.dart';
 import 'package:flame_3d/model.dart';
 import 'package:flame_3d/parser.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
+import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
 class ModelsScenario implements GameScenario {
   late final Model model;

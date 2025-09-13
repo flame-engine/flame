@@ -1,7 +1,5 @@
 import 'dart:math';
 
-import 'package:example/example_game_3d.dart';
-import 'package:example/keyboard_utils.dart';
 import 'package:flame/components.dart' show HasGameReference, KeyboardHandler;
 import 'package:flame/geometry.dart';
 import 'package:flame/input.dart';
@@ -9,6 +7,8 @@ import 'package:flame/palette.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
+import 'package:flame_3d_example/keyboard_utils.dart';
 import 'package:flutter/services.dart';
 
 class Player extends MeshComponent

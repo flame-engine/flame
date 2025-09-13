@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:example/components/player.dart';
-import 'package:example/components/room_bounds.dart';
-import 'package:example/example_camera_3d.dart';
-import 'package:example/scenarios/game_scenario.dart';
 import 'package:flame/events.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
+import 'package:flame_3d_example/components/player.dart';
+import 'package:flame_3d_example/components/room_bounds.dart';
+import 'package:flame_3d_example/example_camera_3d.dart';
+import 'package:flame_3d_example/scenarios/game_scenario.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 

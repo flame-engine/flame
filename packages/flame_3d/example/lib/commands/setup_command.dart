@@ -1,6 +1,6 @@
-import 'package:example/commands/destroy_command.dart';
-import 'package:example/example_game_3d.dart';
-import 'package:example/scenarios/game_scenario.dart';
+import 'package:flame_3d_example/commands/destroy_command.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
+import 'package:flame_3d_example/scenarios/game_scenario.dart';
 import 'package:flame_console/flame_console.dart';
 
 class SetupCommand extends FlameConsoleCommand<ExampleGame3D> {
