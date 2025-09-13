@@ -1,4 +1,4 @@
-name: flame_workspace
+name: _
 repository: https://github.com/flame-engine/flame
 workspace:
   - doc/flame/examples
@@ -68,7 +68,7 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^7.0.0-dev.9
+  melos: ^7.0.0-dev.10
 
 melos:
   command:
