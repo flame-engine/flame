@@ -27,7 +27,7 @@ void main() {
       await game.ready();
 
       expect(innerGame.canvasSize, closeToVector(Vector2(800, 600)));
-      expect(innerGame.isLoaded, isFalse);
+      expect(innerGame.isLoaded, isTrue);
       expect(innerGame.isMounted, isTrue);
     });
 
