@@ -1196,4 +1196,60 @@ void main() {
       expect(renderableTiledMap.getTileData(layerId: 5, x: 1, y: 1), isNull);
     });
   });
+
+  group('parallax rendering', () {
+    late TiledComponent component;
+
+    Future<void> setupMap(FlameGame game, Vector2 offset) async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: [
+          'images/diamond.png',
+          'images/box2.png',
+          'map-level1.png',
+        ],
+        stringNames: [
+          'parallax_test.tmx',
+          'tiles/samelevel_tileset_1.tsx',
+        ],
+      );
+      await Flame.images.ready();
+      game.camera = CameraComponent(); /* CameraComponent.withFixedResolution(
+        width: 320,
+        height: 320,
+      );*/
+
+      //game.camera.viewfinder.zoom = 0.5;
+
+      component = await TiledComponent.load(
+        'parallax_test.tmx',
+        Vector2.all(16.0),
+        images: Images(bundle: Flame.bundle),
+      );
+      await game.world.ensureAdd(component);
+      await game.ready();
+      game.camera.viewfinder.position += offset;
+      game.updateTree(0.166);
+      await game.lifecycleEventsProcessed;
+    }
+
+    testWithFlameGame('no camera offset', (game) async {
+      await setupMap(game, Vector2.zero());
+      final pngData = await renderMapToPng(component, useGameCamera: true);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/parallax_rendering_offset_none.png'),
+      );
+    });
+
+    testWithFlameGame('some camera offset', (game) async {
+      await setupMap(game, Vector2(496, 272));
+      final pngData = await renderMapToPng(component, useGameCamera: true);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/parallax_rendering_offset_some.png'),
+      );
+    });
+  });
 }

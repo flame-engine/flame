@@ -54,8 +54,20 @@ class Transform2D extends ChangeNotifier {
     ..scale = other.scale
     ..offset = other.offset;
 
+  factory Transform2D.fromInverse(Transform2D other) {
+    final t = other.clone();
+    t.angle = -t.angle;
+    t.position = -t.position;
+    t.scale = Vector2(1.0 / t.scale.x, 1.0 / t.scale.y);
+    t.offset = -t.offset;
+    return t;
+  }
+
   /// Clone of this.
   Transform2D clone() => Transform2D.copy(this);
+
+  /// Inverse of this.
+  Transform2D inverse() => Transform2D.fromInverse(this);
 
   /// Set this to the values of the [other] [Transform2D].
   void setFrom(Transform2D other) {

@@ -5,16 +5,37 @@ import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 Future<Uint8List> renderMapToPng(
-  TiledComponent component,
-) async {
+  TiledComponent component, {
+  bool? useGameCamera,
+}) async {
   final canvasRecorder = PictureRecorder();
-  final canvas = Canvas(canvasRecorder);
-  component.tileMap.renderTree(canvas);
-  final picture = canvasRecorder.endRecording();
+  late final Canvas canvas;
 
-  final size = component.size;
-  // Map size is now 320 wide, but it has 1 extra tile of height because
-  // its actually double-height tiles.
+  final Vector2 size;
+  if (useGameCamera ?? false) {
+    final game = component.game;
+    final camera = game.camera;
+    final viewport = camera.viewport;
+    canvas = Canvas(canvasRecorder);
+
+    canvas.translate(
+      -(viewport.position.x - viewport.anchor.x * viewport.size.x),
+      -(viewport.position.y - viewport.anchor.y * viewport.size.y),
+    );
+
+    //final oldPos = camera.viewfinder.position;
+    //camera.viewfinder.position = -oldPos;
+    canvas.transform2D(camera.viewfinder.transform.inverse());
+    //camera.viewfinder.position = oldPos;
+
+    camera.renderTree(canvas);
+    size = component.size;
+  } else {
+    canvas = Canvas(canvasRecorder);
+    component.tileMap.renderTree(canvas);
+    size = component.size;
+  }
+  final picture = canvasRecorder.endRecording();
   final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
   return imageToPng(image);
 }

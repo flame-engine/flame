@@ -190,7 +190,7 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent
     // B/c sum of all local translations w.r.t. parallax locality is equal to the
     // products of all absolute parallax values followed by translation, the
     // scene graph render by Flame produces the same visuals as painting layers
-    //using absolute values in a traditional composite renderer.
+    // using absolute values in a traditional composite renderer.
     canvas.translate(
       (cameraX + offsetX) - (localParallax.x + delta.x),
       (cameraY + offsetY) - (localParallax.y + delta.y),
