@@ -6,6 +6,8 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
+Map<Color, Float32List> _colorBytesCache = {};
+
 /// {@template shader_resource}
 ///
 /// {@endtemplate}
@@ -89,7 +91,8 @@ class Shader {
   /// Set a [Matrix4] at the given [key] on the buffer.
   void setMatrix4(String key, Matrix4 matrix) => _setValue(key, matrix.storage);
 
-  void setColor(String key, Color color) => _setValue(key, color.storage);
+  void setColor(String key, Color color) =>
+      _setValue(key, _colorBytesCache.putIfAbsent(color, () => color.storage));
 
   void bind(GraphicsDevice device) {
     for (final slot in slots) {

@@ -58,7 +58,7 @@ class Rotate3DDecorator extends Decorator {
       ..rotateX(angleX)
       ..rotateY(angleY)
       ..rotateZ(angleZ)
-      ..translate(-center.x, -center.y);
+      ..translateByDouble(-center.x, -center.y, 0.0, 1.0);
     canvas.transform32(matrix.storage);
     draw(canvas);
     canvas.restore();

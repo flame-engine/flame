@@ -1,3 +1,4 @@
+export 'mesh/cone_mesh.dart';
 export 'mesh/cuboid_mesh.dart';
 export 'mesh/cylinder_mesh.dart';
 export 'mesh/mesh.dart';

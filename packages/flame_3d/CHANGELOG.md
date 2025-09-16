@@ -1,3 +1,31 @@
+## 0.1.1+2
+
+ - **DOCS**: Update README.md of flame_3d with newer instructions ([#3711](https://github.com/flame-engine/flame/issues/3711)). ([ad7dc059](https://github.com/flame-engine/flame/commit/ad7dc059f2f97e7bc78a74bdff149b26adb22fbc))
+
+## 0.1.1+1
+
+ - **FIX**: When parsing OBJs with no normals, fallback to normal generation ([#3708](https://github.com/flame-engine/flame/issues/3708)). ([a59ccaa3](https://github.com/flame-engine/flame/commit/a59ccaa341a562c25ad54f4af567b160084e06d8))
+ - **FIX**: Update compiled shaderbundle for flame_3d and add color example ([#3704](https://github.com/flame-engine/flame/issues/3704)). ([a1070d97](https://github.com/flame-engine/flame/commit/a1070d975fd3af52d44f3febb13dd97afd4990a6))
+
+## 0.1.1
+
+ - **FIX**: Cleanup and make OBJ parser more resilient ([#3702](https://github.com/flame-engine/flame/issues/3702)). ([b96421d5](https://github.com/flame-engine/flame/commit/b96421d5035393d764a9ec34aeba8db380222f45))
+ - **FIX**: Fix color to byte conversion for shaders ([#3700](https://github.com/flame-engine/flame/issues/3700)). ([2426c06b](https://github.com/flame-engine/flame/commit/2426c06b799797720c9df8fbd73e337422654d00))
+ - **FIX**: Add fallback default material to avoid crashes ([#3701](https://github.com/flame-engine/flame/issues/3701)). ([8e6b04e3](https://github.com/flame-engine/flame/commit/8e6b04e38855b6fae6761a9f8d20c82c6bff6d76))
+ - **FIX**: Expose Line3D on components.dart ([#3698](https://github.com/flame-engine/flame/issues/3698)). ([d58d7b54](https://github.com/flame-engine/flame/commit/d58d7b5482f646e4536160449f4a17317b8aff2b))
+ - **FEAT**: Introduce cone mesh ([#3699](https://github.com/flame-engine/flame/issues/3699)). ([874a97fe](https://github.com/flame-engine/flame/commit/874a97fe421dadbed9f3825c8562f8bd7e6c95c9))
+ - **DOCS**: Update instructions on how to use flame_3d ([#3696](https://github.com/flame-engine/flame/issues/3696)). ([11cc2a8f](https://github.com/flame-engine/flame/commit/11cc2a8fae0f1c17106f91ef1ac319e6f8e39036))
+
+## 0.1.0
+
+ - **REFACTOR**: Add collections library to flame_3d ([#3680](https://github.com/flame-engine/flame/issues/3680)). ([89e5e58e](https://github.com/flame-engine/flame/commit/89e5e58efb580ec267a0dca78a3a0f320203d4ee))
+ - **FIX**: Update flame_3d to support both old and newer Flutter APIs ([#3663](https://github.com/flame-engine/flame/issues/3663)). ([d9f1fe7f](https://github.com/flame-engine/flame/commit/d9f1fe7f9abd8f0307ecc22ff24d3b492e9ca332))
+ - **FEAT**: Add ability to run on flame_3d example ([#3679](https://github.com/flame-engine/flame/issues/3679)). ([801692bf](https://github.com/flame-engine/flame/commit/801692bfa1226e01f1540166a8140ab42e36ed87))
+ - **FEAT**: Add support for model parsing and rendering in flame_3d, including skeletal animations ([#3675](https://github.com/flame-engine/flame/issues/3675)). ([cc58aef5](https://github.com/flame-engine/flame/commit/cc58aef5b53f208fb1cbb116bfb9f9af9a351e8e))
+ - **FEAT**: Add setup command to flame_3d example ([#3671](https://github.com/flame-engine/flame/issues/3671)). ([2f5ba87b](https://github.com/flame-engine/flame/commit/2f5ba87be8068b12c2604b79f7db9c1f3307a4b6))
+ - **FEAT**: Organize components and add destroy command to flame_3d example ([#3665](https://github.com/flame-engine/flame/issues/3665)). ([d5915752](https://github.com/flame-engine/flame/commit/d591575263d8b13aee862efe05842001aa60f89d))
+ - **FEAT**: Add keybind to jump on flame_3d example ([#3664](https://github.com/flame-engine/flame/issues/3664)). ([7be0bccd](https://github.com/flame-engine/flame/commit/7be0bccda0040bfc3734f90b6bca7d5e99455bee))
+
 ## 0.1.0-dev.14
 
  - Update a dependency to the latest release.
