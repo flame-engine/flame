@@ -14,11 +14,11 @@ class Line {
   const Line(this.a, this.b, this.c);
 
   Line.fromPoints(Vector2 p1, Vector2 p2)
-      : this(
-          p2.y - p1.y,
-          p1.x - p2.x,
-          p2.y * p1.x - p1.y * p2.x,
-        );
+    : this(
+        p2.y - p1.y,
+        p1.x - p2.x,
+        p2.y * p1.x - p1.y * p2.x,
+      );
 
   /// Returns an empty list if there is no intersection
   /// If the lines are concurrent it returns one point in the list.

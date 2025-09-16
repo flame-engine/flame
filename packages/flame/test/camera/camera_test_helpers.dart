@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 class CrossHair extends PositionComponent {
   CrossHair({super.size, super.position, this.color = const Color(0xFFFF0000)})
-      : super(anchor: Anchor.center);
+    : super(anchor: Anchor.center);
 
   final Color color;
   Paint get _paint => Paint()

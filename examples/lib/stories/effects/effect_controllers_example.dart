@@ -21,13 +21,13 @@ class EffectControllersExample extends FlameGame {
   ''';
 
   EffectControllersExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          ),
-          world: _EffectControllerWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        ),
+        world: _EffectControllerWorld(),
+      );
 }
 
 class _EffectControllerWorld extends World {
@@ -38,11 +38,11 @@ class _EffectControllerWorld extends World {
         position: Vector2(-140, 0),
         size: 20,
       )..add(
-          MoveEffect.by(
-            Vector2(0, 20),
-            InfiniteEffectController(ZigzagEffectController(period: 1)),
-          ),
+        MoveEffect.by(
+          Vector2(0, 20),
+          InfiniteEffectController(ZigzagEffectController(period: 1)),
         ),
+      ),
     );
     add(
       RectangleComponent.square(
@@ -50,15 +50,15 @@ class _EffectControllerWorld extends World {
         size: 20,
         paint: Paint()..color = const Color(0xffffbc63),
       )..addAll([
-          MoveEffect.by(
-            Vector2(0, 20),
-            InfiniteEffectController(ZigzagEffectController(period: 8 / 7)),
-          ),
-          MoveEffect.by(
-            Vector2(10, 0),
-            InfiniteEffectController(ZigzagEffectController(period: 2 / 3)),
-          ),
-        ]),
+        MoveEffect.by(
+          Vector2(0, 20),
+          InfiniteEffectController(ZigzagEffectController(period: 8 / 7)),
+        ),
+        MoveEffect.by(
+          Vector2(10, 0),
+          InfiniteEffectController(ZigzagEffectController(period: 2 / 3)),
+        ),
+      ]),
     );
 
     add(
@@ -67,11 +67,11 @@ class _EffectControllerWorld extends World {
         size: 20,
         paint: Paint()..color = const Color(0xffbeff63),
       )..add(
-          MoveEffect.by(
-            Vector2(0, 20),
-            InfiniteEffectController(SineEffectController(period: 1)),
-          ),
+        MoveEffect.by(
+          Vector2(0, 20),
+          InfiniteEffectController(SineEffectController(period: 1)),
         ),
+      ),
     );
     add(
       RectangleComponent.square(
@@ -79,16 +79,16 @@ class _EffectControllerWorld extends World {
         size: 10,
         paint: Paint()..color = const Color(0xffb663ff),
       )..addAll([
-          MoveEffect.by(
-            Vector2(0, 20),
-            InfiniteEffectController(SineEffectController(period: 1))
-              ..advance(0.25),
-          ),
-          MoveEffect.by(
-            Vector2(10, 0),
-            InfiniteEffectController(SineEffectController(period: 1)),
-          ),
-        ]),
+        MoveEffect.by(
+          Vector2(0, 20),
+          InfiniteEffectController(SineEffectController(period: 1))
+            ..advance(0.25),
+        ),
+        MoveEffect.by(
+          Vector2(10, 0),
+          InfiniteEffectController(SineEffectController(period: 1)),
+        ),
+      ]),
     );
   }
 }

@@ -1,4 +1,4 @@
-name: flame_workspace
+name: _
 repository: https://github.com/flame-engine/flame
 workspace:
   - doc/flame/examples
@@ -65,10 +65,10 @@ workspace:
   - examples
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^7.0.0-dev.7
+  melos: ^7.0.0-dev.10
 
 melos:
   command:
@@ -82,8 +82,8 @@ melos:
 
     bootstrap:
       environment:
-        sdk: ">=3.6.0 <4.0.0"
-        flutter: ">=3.27.1"
+        sdk: ">=3.8.0 <4.0.0"
+        flutter: ">=3.32.0"
       dependencies:
         meta: ^1.12.0
         vector_math: ^2.1.4
@@ -156,6 +156,12 @@ melos:
     test:
       run: melos run test:select --no-select
       description: Run all Flutter tests in this project.
+
+    test:seeded:
+      run: melos exec -c 1 -- flutter test --dart-define=RANDOM_SEED=$RANDOM_SEED
+      packageFilters:
+        dirExists: test
+      description: Run `flutter test` for selected packages with a seed for random tests. Set the RANDOM_SEED environment variable to a specific value to reproduce a test run.
 
     coverage:
       steps:

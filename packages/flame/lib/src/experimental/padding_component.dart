@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flutter/rendering.dart';
@@ -20,9 +21,11 @@ class PaddingComponent extends SingleLayoutComponent {
     super.anchor,
     super.position,
     super.priority,
-    super.size,
-    super.child,
-  }) : _padding = padding ?? EdgeInsets.zero;
+    PositionComponent? child,
+  })  : _padding = padding ?? EdgeInsets.zero,
+        super(size: null, child: null) {
+    this.child = child;
+  }
 
   EdgeInsets _padding;
 

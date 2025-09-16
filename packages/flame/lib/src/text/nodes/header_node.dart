@@ -7,7 +7,7 @@ class HeaderNode extends TextBlockNode {
   HeaderNode(super.child, {required this.level});
 
   HeaderNode.simple(String text, {required this.level})
-      : super(PlainTextNode(text));
+    : super(PlainTextNode(text));
 
   final int level;
 

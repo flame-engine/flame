@@ -7,39 +7,40 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ComputedParticle', () {
     testWithFlameGame(
-        'Particle container which delegates rendering particle on each frame',
-        (game) async {
-      final cellSize = game.size / 5.0;
-      final halfCellSize = cellSize / 2;
+      'Particle container which delegates rendering particle on each frame',
+      (game) async {
+        final cellSize = game.size / 5.0;
+        final halfCellSize = cellSize / 2;
 
-      final particle = ComputedParticle(
-        renderer: (canvas, particle) {
-          canvas.drawCircle(
-            Offset.zero,
-            particle.progress * halfCellSize.x,
-            Paint()
-              ..color = Color.lerp(
-                Colors.red,
-                Colors.blue,
-                particle.progress,
-              )!,
-          );
-        },
-        lifespan: 2,
-      );
+        final particle = ComputedParticle(
+          renderer: (canvas, particle) {
+            canvas.drawCircle(
+              Offset.zero,
+              particle.progress * halfCellSize.x,
+              Paint()
+                ..color = Color.lerp(
+                  Colors.red,
+                  Colors.blue,
+                  particle.progress,
+                )!,
+            );
+          },
+          lifespan: 2,
+        );
 
-      final component = ParticleSystemComponent(
-        particle: particle,
-      );
+        final component = ParticleSystemComponent(
+          particle: particle,
+        );
 
-      game.add(component);
-      await game.ready();
-      game.update(1);
-      expect(particle.progress, 0.5);
+        game.add(component);
+        await game.ready();
+        game.update(1);
+        expect(particle.progress, 0.5);
 
-      game.update(1);
-      expect(particle.progress, 1);
-    });
+        game.update(1);
+        expect(particle.progress, 1);
+      },
+    );
 
     testWithFlameGame('Particle to use custom tweening', (game) async {
       final cellSize = game.size / 5.0;

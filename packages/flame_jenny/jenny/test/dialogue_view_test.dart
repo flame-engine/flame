@@ -257,8 +257,9 @@ class _RecordingDialogueView extends DialogueView {
 
   @override
   Future<int> onChoiceStart(DialogueChoice choice) async {
-    final options =
-        [for (final option in choice.options) '[-> ${option.text}]'].join();
+    final options = [
+      for (final option in choice.options) '[-> ${option.text}]',
+    ].join();
     events.add('onChoiceStart($options)');
     return 1;
   }
@@ -331,8 +332,9 @@ class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
 
   @override
   Future<int> onChoiceStart(DialogueChoice choice) async {
-    final options =
-        [for (final option in choice.options) '[-> ${option.text}]'].join();
+    final options = [
+      for (final option in choice.options) '[-> ${option.text}]',
+    ].join();
     events.add('onChoiceStart($options)');
     return 1;
   }

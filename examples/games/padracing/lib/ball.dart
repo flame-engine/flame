@@ -88,10 +88,11 @@ List<Ball> createBalls(Vector2 trackSize, List<Wall> walls, Ball bigBall) {
     );
     final touchesBall =
         ball.initialPosition.distanceTo(bigBall.initialPosition) <
-            ball.radius + bigBall.radius;
+        ball.radius + bigBall.radius;
     if (!touchesBall) {
-      final touchesWall =
-          walls.any((wall) => wall.asRect.overlaps(ball.asRect));
+      final touchesWall = walls.any(
+        (wall) => wall.asRect.overlaps(ball.asRect),
+      );
       if (!touchesWall) {
         balls.add(ball);
       }

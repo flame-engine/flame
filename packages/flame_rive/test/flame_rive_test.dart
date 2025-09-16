@@ -74,8 +74,9 @@ void main() {
       });
 
       group('RiveAnimation', () {
-        testWithFlameGame('Does not Animate when no controller is attach',
-            (game) async {
+        testWithFlameGame('Does not Animate when no controller is attach', (
+          game,
+        ) async {
           final skillsArtboard = await loadArtboard(riveFile);
           final riveComponent = _RiveComponent(artboard: skillsArtboard);
 

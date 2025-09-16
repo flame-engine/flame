@@ -4,7 +4,7 @@ import 'dart:ui' show Rect;
 class MutableRect extends Rect {
   /// Construct a rectangle from its left, top, right, and bottom edges.
   MutableRect.fromLTRB(this.left, this.top, this.right, this.bottom)
-      : super.fromLTRB(left, top, right, bottom);
+    : super.fromLTRB(left, top, right, bottom);
 
   /// Create a new instance from [other].
   factory MutableRect.fromRect(Rect other) =>

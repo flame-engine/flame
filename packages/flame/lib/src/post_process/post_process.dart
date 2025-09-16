@@ -54,8 +54,9 @@ import 'package:meta/meta.dart';
 ///   context from within a component during rendering
 abstract class PostProcess {
   PostProcess({double? pixelRatio})
-      : pixelRatio = pixelRatio ??
-            PlatformDispatcher.instance.views.first.devicePixelRatio;
+    : pixelRatio =
+          pixelRatio ??
+          PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// The pixel ratio of the screen. This is used to scale the image generated
   /// by  [rasterizeSubtree] to the correct size.

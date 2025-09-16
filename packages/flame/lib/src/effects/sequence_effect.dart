@@ -53,20 +53,20 @@ class SequenceEffect extends Effect {
     int repeatCount = 1,
     super.onComplete,
     super.key,
-  })  : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
-        assert(
-          !(infinite && repeatCount != 1),
-          'Parameters infinite and repeatCount cannot be specified '
-          'simultaneously',
-        ),
-        super(
-          _createController(
-            effects: effects,
-            alternate: alternate,
-            infinite: infinite,
-            repeatCount: repeatCount,
-          ),
-        ) {
+  }) : assert(effects.isNotEmpty, 'The list of effects cannot be empty'),
+       assert(
+         !(infinite && repeatCount != 1),
+         'Parameters infinite and repeatCount cannot be specified '
+         'simultaneously',
+       ),
+       super(
+         _createController(
+           effects: effects,
+           alternate: alternate,
+           infinite: infinite,
+           repeatCount: repeatCount,
+         ),
+       ) {
     addAll(effects);
   }
 

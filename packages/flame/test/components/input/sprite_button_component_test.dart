@@ -106,8 +106,9 @@ Future<void> main() async {
         ),
       );
 
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 
@@ -249,8 +250,9 @@ Future<void> main() async {
       expect(component.current, _ButtonState.up);
     });
 
-    testWithFlameGame('correctly registers taps onGameResize (custom button)',
-        (game) async {
+    testWithFlameGame('correctly registers taps onGameResize (custom button)', (
+      game,
+    ) async {
       final initialGameSize = Vector2.all(100);
       final componentSize = Vector2.all(10);
       final buttonPosition = Vector2.all(100);
@@ -281,8 +283,9 @@ Future<void> main() async {
         ),
       );
 
-      final previousPosition =
-          button.positionOfAnchor(Anchor.center).toOffset();
+      final previousPosition = button
+          .positionOfAnchor(Anchor.center)
+          .toOffset();
       game.onGameResize(initialGameSize * 2);
       final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
 

@@ -31,8 +31,10 @@ class KlondikeGame extends FlameGame {
       4,
       (i) => Foundation()
         ..size = cardSize
-        ..position =
-            Vector2((i + 3) * (cardWidth + cardGap) + cardGap, cardGap),
+        ..position = Vector2(
+          (i + 3) * (cardWidth + cardGap) + cardGap,
+          cardGap,
+        ),
     );
     final piles = List.generate(
       7,
@@ -49,8 +51,10 @@ class KlondikeGame extends FlameGame {
     world.addAll(foundations);
     world.addAll(piles);
 
-    camera.viewfinder.visibleGameSize =
-        Vector2(cardWidth * 7 + cardGap * 8, 4 * cardHeight + 3 * cardGap);
+    camera.viewfinder.visibleGameSize = Vector2(
+      cardWidth * 7 + cardGap * 8,
+      4 * cardHeight + 3 * cardGap,
+    );
     camera.viewfinder.position = Vector2(cardWidth * 3.5 + cardGap * 4, 0);
     camera.viewfinder.anchor = Anchor.topCenter;
 

@@ -7,6 +7,8 @@ import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/foundation.dart';
+// TODO(spydon): Remove this import when flutter version is updated to 3.35.0
+// ignore: unnecessary_import
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -23,13 +25,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     super.children,
     W? world,
     CameraComponent? camera,
-  })  : assert(
-          world != null || W == World,
-          'The generics type $W does not conform to the type of '
-          '${world?.runtimeType ?? 'World'}.',
-        ),
-        _world = world ?? World() as W,
-        _camera = camera ?? CameraComponent() {
+  }) : assert(
+         world != null || W == World,
+         'The generics type $W does not conform to the type of '
+         '${world?.runtimeType ?? 'World'}.',
+       ),
+       _world = world ?? World() as W,
+       _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
@@ -110,6 +112,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @internal
   void mount() {
     super.mount();
+    if (_pausedBecauseBackgrounded) {
+      resumeEngine();
+    }
     setMounted();
   }
 
@@ -266,9 +271,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   bool pauseWhenBackgrounded = true;
   bool _pausedBecauseBackgrounded = false;
 
+  @visibleForTesting
+  bool get isPausedOnBackground => _pausedBecauseBackgrounded;
+
   @override
   @mustCallSuper
   void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
     switch (state) {
       case AppLifecycleState.resumed:
       case AppLifecycleState.inactive:

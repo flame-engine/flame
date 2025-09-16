@@ -21,9 +21,9 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
   ''';
 
   JoystickAdvancedExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(width: 1200, height: 800),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(width: 1200, height: 800),
+      );
 
   late final JoystickPlayer player;
   late final JoystickComponent joystick;
@@ -200,8 +200,10 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
   void update(double dt) {
     super.update(dt);
     speedText.text = 'Speed: ${(joystick.intensity * player.maxSpeed).round()}';
-    final direction =
-        joystick.direction.toString().replaceAll('JoystickDirection.', '');
+    final direction = joystick.direction.toString().replaceAll(
+      'JoystickDirection.',
+      '',
+    );
     directionText.text = 'Direction: $direction';
   }
 }

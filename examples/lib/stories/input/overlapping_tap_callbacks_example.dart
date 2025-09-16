@@ -26,13 +26,13 @@ class OverlappingTapCallbacksExample extends FlameGame {
 
 class TapCallbacksSquare extends RectangleComponent with TapCallbacks {
   TapCallbacksSquare({Vector2? position, this.continuePropagation = false})
-      : super(
-          position: position ?? Vector2.all(100),
-          size: Vector2.all(100),
-          paint: continuePropagation
-              ? (Paint()..color = Colors.green.withValues(alpha: 0.9))
-              : PaintExtension.random(withAlpha: 0.9, base: 100),
-        );
+    : super(
+        position: position ?? Vector2.all(100),
+        size: Vector2.all(100),
+        paint: continuePropagation
+            ? (Paint()..color = Colors.green.withValues(alpha: 0.9))
+            : PaintExtension.random(withAlpha: 0.9, base: 100),
+      );
 
   final bool continuePropagation;
 

@@ -105,7 +105,7 @@ framework.
 
 The Flame Engine's top sponsors:
 
-[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Invertase](./media/invertase.jpeg)](https://invertase.io/)
 
 Do you or your company want to sponsor Flame?
 Check out our [OpenCollective page](https://opencollective.com/blue-fire), which is also mentioned
@@ -145,9 +145,9 @@ badges:
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
 ```txt
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 ```
 
 

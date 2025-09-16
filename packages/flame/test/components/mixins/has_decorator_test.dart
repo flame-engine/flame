@@ -31,7 +31,7 @@ void main() {
 
 class _DecoratedComponent extends PositionComponent {
   _DecoratedComponent({super.position, super.size})
-      : super(anchor: Anchor.center);
+    : super(anchor: Anchor.center);
 
   final paint = Paint()..color = const Color(0xff30ccd2);
 

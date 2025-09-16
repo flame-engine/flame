@@ -1,11 +1,11 @@
-import 'package:example/components/crate.dart';
-import 'package:example/components/player.dart';
-import 'package:example/components/rendered_point_light.dart';
-import 'package:example/components/room_bounds.dart';
-import 'package:example/example_game_3d.dart';
 import 'package:flame/components.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
+import 'package:flame_3d_example/components/crate.dart';
+import 'package:flame_3d_example/components/player.dart';
+import 'package:flame_3d_example/components/rendered_point_light.dart';
+import 'package:flame_3d_example/components/room_bounds.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_console/flame_console.dart';
 
 class DestroyCommand extends FlameConsoleCommand<ExampleGame3D> {
@@ -21,13 +21,13 @@ class DestroyCommand extends FlameConsoleCommand<ExampleGame3D> {
     for (final arg in args.arguments) {
       switch (arg) {
         case '@all':
-          count += _destroyMatching(game, (e) => true);
+          count += destroyMatching(game, (e) => true);
         case '@crate':
-          count += _destroyMatching(game, (e) => e is Crate);
+          count += destroyMatching(game, (e) => e is Crate);
         case '@light':
-          count += _destroyMatching(game, (e) => e is RenderedPointLight);
+          count += destroyMatching(game, (e) => e is RenderedPointLight);
         case '@mesh':
-          count += _destroyMatching(game, (e) => e is MeshComponent);
+          count += destroyMatching(game, (e) => e is MeshComponent);
         default:
           return ('Invalid argument: $arg', '');
       }
@@ -35,7 +35,7 @@ class DestroyCommand extends FlameConsoleCommand<ExampleGame3D> {
     return (null, '$count objects were destroyed.');
   }
 
-  bool _ignoredComponents(Component component) {
+  static bool _ignoredComponents(Component component) {
     return switch (component) {
       Player() => true,
       CameraComponent3D() => true,
@@ -44,7 +44,10 @@ class DestroyCommand extends FlameConsoleCommand<ExampleGame3D> {
     };
   }
 
-  int _destroyMatching(ExampleGame3D game, bool Function(Component) predicate) {
+  static int destroyMatching(
+    ExampleGame3D game,
+    bool Function(Component) predicate,
+  ) {
     final toDestroy = game.world.children
         .where((element) => !_ignoredComponents(element))
         .where(predicate)

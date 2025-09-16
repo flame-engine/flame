@@ -133,14 +133,14 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
           ..paint.style = PaintingStyle.stroke;
     final cameras = List.generate(numberOfPlayers, (i) {
       return CameraComponent(
-        world: world,
-        viewport: FixedSizeViewport(viewportSize.x, viewportSize.y)
-          ..position = alignedVector(
-            longMultiplier: i == 0 ? 0.0 : 1 / (i + 1),
-            shortMultiplier: 0.0,
-          )
-          ..add(viewportRimGenerator()),
-      )
+          world: world,
+          viewport: FixedSizeViewport(viewportSize.x, viewportSize.y)
+            ..position = alignedVector(
+              longMultiplier: i == 0 ? 0.0 : 1 / (i + 1),
+              shortMultiplier: 0.0,
+            )
+            ..add(viewportRimGenerator()),
+        )
         ..viewfinder.anchor = Anchor.center
         ..viewfinder.zoom = playZoom;
     });
@@ -149,13 +149,13 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
     const mapCameraZoom = 0.5;
     final mapCameras = List.generate(numberOfPlayers, (i) {
       return CameraComponent(
-        world: world,
-        viewport: FixedSizeViewport(mapCameraSize.x, mapCameraSize.y)
-          ..position = Vector2(
-            viewportSize.x - mapCameraSize.x * mapCameraZoom - 50,
-            50,
-          ),
-      )
+          world: world,
+          viewport: FixedSizeViewport(mapCameraSize.x, mapCameraSize.y)
+            ..position = Vector2(
+              viewportSize.x - mapCameraSize.x * mapCameraZoom - 50,
+              50,
+            ),
+        )
         ..viewfinder.anchor = Anchor.topLeft
         ..viewfinder.zoom = mapCameraZoom;
     });

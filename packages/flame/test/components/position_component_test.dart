@@ -171,8 +171,9 @@ void main() {
         expect(component.containsPoint(point), true);
       });
 
-      testWithFlameGame('component with hitbox with position contains point',
-          (game) async {
+      testWithFlameGame('component with hitbox with position contains point', (
+        game,
+      ) async {
         final component = _MyHitboxComponent();
         component.position.setValues(1.0, 1.0);
         component.anchor = Anchor.topLeft;
@@ -194,30 +195,33 @@ void main() {
         expect(component.containsPoint(point), true);
       });
 
-      testWithFlameGame('component with hitbox with position just misses point',
-          (game) async {
-        final component = _MyHitboxComponent();
-        component.position.setValues(1.0, 1.0);
-        component.anchor = Anchor.topLeft;
-        component.size.setValues(2.0, 2.0);
-        final hitbox = PolygonHitbox(
-          [
-            Vector2(1, 0),
-            Vector2(0, -1),
-            Vector2(-1, 0),
-            Vector2(0, 1),
-          ],
-          position: Vector2(5, 6),
-        );
-        component.add(hitbox);
-        await game.ensureAdd(component);
+      testWithFlameGame(
+        'component with hitbox with position just misses point',
+        (game) async {
+          final component = _MyHitboxComponent();
+          component.position.setValues(1.0, 1.0);
+          component.anchor = Anchor.topLeft;
+          component.size.setValues(2.0, 2.0);
+          final hitbox = PolygonHitbox(
+            [
+              Vector2(1, 0),
+              Vector2(0, -1),
+              Vector2(-1, 0),
+              Vector2(0, 1),
+            ],
+            position: Vector2(5, 6),
+          );
+          component.add(hitbox);
+          await game.ensureAdd(component);
 
-        final point = component.position +
-            (component.size / 4) -
-            Vector2(0.01, 0) +
-            hitbox.position;
-        expect(component.containsPoint(point), false);
-      });
+          final point =
+              component.position +
+              (component.size / 4) -
+              Vector2(0.01, 0) +
+              hitbox.position;
+          expect(component.containsPoint(point), false);
+        },
+      );
 
       testWithFlameGame(
         'component with anchor topLeft contains point on edge',
@@ -794,11 +798,13 @@ void main() {
           component.angle = angle;
 
           final transform = Matrix4.identity()
-            ..translate(x, y)
+            ..translateByDouble(x, y, 0.0, 1.0)
             ..rotateZ(angle)
-            ..translate(
+            ..translateByDouble(
               -component.anchor.x * component.width,
               -component.anchor.y * component.height,
+              0.0,
+              1.0,
             );
           for (var j = 0; j < 16; j++) {
             expect(component.transformMatrix[j], closeTo(transform[j], 1e-13));
@@ -868,8 +874,10 @@ void main() {
 
       testWithFlameGame('auxiliary getters/setters', (game) async {
         final parent = PositionComponent(position: Vector2(12, 19));
-        final child =
-            PositionComponent(position: Vector2(11, -1), size: Vector2(4, 6));
+        final child = PositionComponent(
+          position: Vector2(11, -1),
+          size: Vector2(4, 6),
+        );
         parent.add(child);
         game.add(parent);
         await game.ready();
@@ -1073,7 +1081,7 @@ void main() {
           -4, -3, -2, -1, 0, 1, 2, 3, //
           0, 1, 2, 3, 4, -3, -2, -1, //
         ];
-        var idx = 0;
+        var index = 0;
         for (final flip in flips) {
           wrapper.scale = flip.$1;
           child.scale = flip.$2;
@@ -1082,7 +1090,7 @@ void main() {
             final target = Vector2(0, -1)..rotate(angle);
             expectDouble(
               child.angleTo(target),
-              expectedResults[idx++] * tau / 8,
+              expectedResults[index++] * tau / 8,
               epsilon: 1e-10,
               reason: 'angleTo with flip $flip, angle $angle, target $target',
             );
@@ -1269,8 +1277,9 @@ void main() {
         expect(child.absoluteAngle, 3 * pi / 4);
       });
 
-      testWithFlameGame('absoluteAngle with parent and child rotated',
-          (game) async {
+      testWithFlameGame('absoluteAngle with parent and child rotated', (
+        game,
+      ) async {
         final parent = PositionComponent()..angle = pi / 8;
         final child = PositionComponent()..angle = pi / 8;
         parent.add(child);
@@ -1311,8 +1320,9 @@ void main() {
         expect(child.absoluteAngle, (pi / 4 + pi).toNormalizedAngle());
       });
 
-      testWithFlameGame('absoluteAngle with flipped child and parent',
-          (game) async {
+      testWithFlameGame('absoluteAngle with flipped child and parent', (
+        game,
+      ) async {
         final parent = PositionComponent()..angle = pi / 8;
         final child = PositionComponent()..angle = pi / 8;
         parent.add(child);

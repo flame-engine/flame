@@ -1,9 +1,9 @@
-import 'package:example/components/player.dart';
-import 'package:example/components/simple_hud.dart';
-import 'package:example/example_game_3d.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart' as v64 show Vector2;
 import 'package:flame_3d/camera.dart';
+import 'package:flame_3d_example/components/player.dart';
+import 'package:flame_3d_example/components/simple_hud.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
 
 class ExampleCamera3D extends CameraComponent3D
     with HasGameReference<ExampleGame3D> {
@@ -12,14 +12,14 @@ class ExampleCamera3D extends CameraComponent3D
   Vector2 delta = Vector2.zero();
 
   ExampleCamera3D()
-      : super(
-          position: Vector3(0, 2, 4),
-          projection: CameraProjection.perspective,
-          viewport: FixedResolutionViewport(
-            resolution: v64.Vector2(800, 600),
-          ),
-          hudComponents: [SimpleHud()],
-        );
+    : super(
+        position: Vector3(0, 2, 4),
+        projection: CameraProjection.perspective,
+        viewport: FixedResolutionViewport(
+          resolution: v64.Vector2(800, 600),
+        ),
+        hudComponents: [SimpleHud()],
+      );
 
   CameraMode get mode => _mode;
 

@@ -42,8 +42,10 @@ class CommandStorage {
   /// Registers a 2-arguments function [fn] as a custom yarn command [name].
   void addCommand2<T1, T2>(String name, FutureOr<void> Function(T1, T2) fn) {
     _checkName(name);
-    _commands[name] =
-        _Cmd(name, [T1, T2], (List args) => fn(args[0] as T1, args[1] as T2));
+    _commands[name] = _Cmd(name, [
+      T1,
+      T2,
+    ], (List args) => fn(args[0] as T1, args[1] as T2));
   }
 
   /// Registers a 3-arguments function [fn] as a custom yarn command [name].
@@ -163,10 +165,11 @@ class CommandStorage {
 /// dynamically from the Yarn runtime.
 class _Cmd {
   _Cmd(this.name, List<Type> types, this._wrappedFn)
-      : _signature = _unpackTypes(types),
-        _arguments = List<dynamic>.filled(types.length, null) {
-    numTrailingBooleans =
-        _signature.reversed.takeWhile((type) => type == _Type.boolean).length;
+    : _signature = _unpackTypes(types),
+      _arguments = List<dynamic>.filled(types.length, null) {
+    numTrailingBooleans = _signature.reversed
+        .takeWhile((type) => type == _Type.boolean)
+        .length;
   }
 
   final String name;

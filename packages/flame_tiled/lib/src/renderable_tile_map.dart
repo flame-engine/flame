@@ -5,9 +5,9 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/rendering.dart';
 import 'package:flame_tiled/src/extensions.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
-import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
@@ -210,7 +210,8 @@ class RenderableTiledMap {
             y,
             named: named,
             ids: ids,
-            all: all ||
+            all:
+                all ||
                 named.contains(layer.layer.name) ||
                 ids.contains(layer.layer.id),
           ),
@@ -257,8 +258,9 @@ class RenderableTiledMap {
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
   }) async {
-    final contents =
-        await (bundle ?? Flame.bundle).loadString('$prefix$fileName');
+    final contents = await (bundle ?? Flame.bundle).loadString(
+      '$prefix$fileName',
+    );
     return fromString(
       contents,
       destTileSize,

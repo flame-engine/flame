@@ -327,22 +327,29 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     /// - Half of [LinearLayoutComponent.gap] when
     ///   [MainAxisAlignment.spaceAround]
     required Offset initialOffset,
+
+    /// true if laying out from the end (bottom/right)
+    bool reverse = false,
   }) {
     final mainAxisVectorIndex = direction.mainAxisVectorIndex;
-    PositionComponent? previousChild;
-    for (final component in components) {
-      late final Vector2 reference;
-      if (previousChild == null) {
-        reference = initialOffset.toVector2();
-      } else {
-        final previousChildSize = previousChild.size;
-        reference = previousChild.topLeftPosition +
-            previousChildSize +
-            Vector2.all(gap);
-      }
-      component.topLeftPosition[mainAxisVectorIndex] =
-          reference[mainAxisVectorIndex];
-      previousChild = component;
+    final componentList = reverse ? components.reversed : components;
+    for (final (index, component) in componentList.indexed) {
+      final previousChild =
+          index > 0 ? componentList.elementAt(index - 1) : null;
+      final reference = previousChild == null
+          // Essentially the same as start, but gap is set.
+          ? initialOffset.toVector2()
+          // The "end" at any loop other than the first is the previous
+          // child's top left position minus the gap.
+          : previousChild.topLeftPosition +
+              (reverse
+                  ? -Vector2.all(gap)
+                  : previousChild.size + Vector2.all(gap));
+      final positionOffset = reverse ? component.size : Vector2.zero();
+      final newPosition = Vector2.zero();
+      newPosition[mainAxisVectorIndex] =
+          (reference - positionOffset)[mainAxisVectorIndex];
+      component.topLeftPosition.setFrom(newPosition);
     }
   }
 

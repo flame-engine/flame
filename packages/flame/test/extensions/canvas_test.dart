@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/extensions.dart';
 import 'package:mocktail/mocktail.dart';
@@ -18,12 +20,23 @@ void main() {
       canvas.translateVector(Vector2(1, 2));
       verify(() => canvas.translate(1, 2)).called(1);
     });
+
     test('renderPoint', () {
       final canvas = MockCanvas();
       canvas.renderPoint(Vector2.all(10.0), size: 2);
       expect(
         canvas,
         MockCanvas()..drawRect(const Rect.fromLTWH(9, 9, 2, 2)),
+      );
+    });
+
+    test('renderLine', () {
+      final canvas = MockCanvas();
+      final paint = Paint()..color = const Color(0xFFFF00FF);
+      canvas.renderLine(Vector2.all(1), Vector2(3, 0), paint);
+      expect(
+        canvas,
+        MockCanvas()..drawLine(const Offset(1, 1), const Offset(3, 0), paint),
       );
     });
 
@@ -42,8 +55,7 @@ void main() {
       verify(canvas.restore).called(1);
     });
 
-    test(
-        'renderRotated saves, translates, rotates, draws, translatesBack'
+    test('renderRotated saves, translates, rotates, draws, translatesBack'
         ' and then restores', () {
       final canvas = _MocktailCanvas();
       when(canvas.save).thenReturn(null);

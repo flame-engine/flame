@@ -14,8 +14,8 @@ class ComponentTreeRoot extends Component {
   ComponentTreeRoot({
     super.children,
     super.key,
-  })  : queue = RecycledQueue(LifecycleEvent.new),
-        _blocked = <int>{};
+  }) : queue = RecycledQueue(LifecycleEvent.new),
+       _blocked = <int>{};
 
   @internal
   final RecycledQueue<LifecycleEvent> queue;

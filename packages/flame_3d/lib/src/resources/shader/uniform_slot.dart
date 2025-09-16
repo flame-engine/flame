@@ -10,7 +10,7 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 /// {@endtemplate}
 class UniformSlot extends Resource<gpu.UniformSlot?> {
   UniformSlot._(this.name, this.fields, this._instanceCreator)
-      : _fieldIndices = {for (var (index, key) in fields.indexed) key: index};
+    : _fieldIndices = {for (var (index, key) in fields.indexed) key: index};
 
   /// {@macro uniform_slot}
   ///
@@ -18,7 +18,7 @@ class UniformSlot extends Resource<gpu.UniformSlot?> {
   ///
   /// The [fields] should be defined in order as they appear in the struct.
   UniformSlot.value(String name, Set<String> fields)
-      : this._(name, fields, UniformValue.new);
+    : this._(name, fields, UniformValue.new);
 
   /// {@macro uniform_slot}
   ///
@@ -26,7 +26,7 @@ class UniformSlot extends Resource<gpu.UniformSlot?> {
   ///
   /// The [fields] should be defined in order as they appear in the struct.
   UniformSlot.array(String name, Set<String> fields)
-      : this._(name, fields, UniformArray.new);
+    : this._(name, fields, UniformArray.new);
 
   /// {@macro uniform_slot}
   ///

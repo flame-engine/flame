@@ -12,8 +12,7 @@ class CeilFn extends NumExpression {
     List<FunctionArgument> args,
     YarnProject yarnProject,
     ErrorFn errorFn,
-  ) =>
-      num1Builder('ceil', CeilFn.new, args, errorFn);
+  ) => num1Builder('ceil', CeilFn.new, args, errorFn);
 
   @override
   num get value => arg.value.ceil();

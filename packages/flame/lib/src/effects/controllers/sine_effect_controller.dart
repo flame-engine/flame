@@ -13,8 +13,8 @@ import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
 /// order to create longer waves.
 class SineEffectController extends DurationEffectController {
   SineEffectController({required double period})
-      : assert(period > 0, 'Period must be positive: $period'),
-        super(period);
+    : assert(period > 0, 'Period must be positive: $period'),
+      super(period);
 
   @override
   double get progress {

@@ -47,7 +47,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   var _dependencies =
       <ProviderListenable<Object?>, ProviderSubscription<Object?>>{};
   Map<ProviderListenable<Object?>, ProviderSubscription<Object?>>?
-      _oldDependencies;
+  _oldDependencies;
   final _listeners = <ProviderSubscription<Object?>>[];
   List<_ListenManual<Object?>>? _manualListeners;
 
@@ -150,20 +150,21 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   Res watch<Res>(ProviderListenable<Res> target) {
     _assertNotDisposed();
     return _dependencies.putIfAbsent(target, () {
-      final oldDependency = _oldDependencies?.remove(target);
+          final oldDependency = _oldDependencies?.remove(target);
 
-      if (oldDependency != null) {
-        return oldDependency;
-      }
+          if (oldDependency != null) {
+            return oldDependency;
+          }
 
-      return _container.listen<Res>(
-        target,
-        // setState call has been replaced with forceBuild,
-        // to prevent setState calls while the widget is
-        // building, which throws a framework error.
-        (_, __) => forceBuild(),
-      );
-    }).read() as Res;
+          return _container.listen<Res>(
+            target,
+            // setState call has been replaced with forceBuild,
+            // to prevent setState calls while the widget is
+            // building, which throws a framework error.
+            (_, __) => forceBuild(),
+          );
+        }).read()
+        as Res;
   }
 
   @override
@@ -198,7 +199,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   }
 
   @override
-  State refresh<State>(Refreshable<State> provider) {
+  S refresh<S>(Refreshable<S> provider) {
     _assertNotDisposed();
     return ProviderScope.containerOf(context, listen: false).refresh(provider);
   }

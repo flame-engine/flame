@@ -16,8 +16,8 @@ class AnchorToEffect extends AnchorEffect {
     AnchorProvider? target,
     void Function()? onComplete,
     super.key,
-  })  : _destination = destination,
-        super(controller, target, onComplete: onComplete);
+  }) : _destination = destination,
+       super(controller, target, onComplete: onComplete);
 
   final Anchor _destination;
   late Vector2 _offset;

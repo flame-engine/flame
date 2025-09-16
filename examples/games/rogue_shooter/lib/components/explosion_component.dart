@@ -3,11 +3,11 @@ import 'package:flame/components.dart';
 class ExplosionComponent extends SpriteAnimationComponent
     with HasGameReference {
   ExplosionComponent({super.position})
-      : super(
-          size: Vector2.all(50),
-          anchor: Anchor.center,
-          removeOnFinish: true,
-        );
+    : super(
+        size: Vector2.all(50),
+        anchor: Anchor.center,
+        removeOnFinish: true,
+      );
 
   @override
   Future<void> onLoad() async {

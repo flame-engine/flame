@@ -56,7 +56,7 @@ void main() {
             'Expected: a Vector3 object within 1e-15 of (0.0, 0.0, 0.0)',
           ),
         );
-        expect(e.message, contains('Actual: Vector4:<1.0,2.0,3.0,4.0>'));
+        expect(e.message, contains('Actual: Vector4:<[1.0,2.0,3.0,4.0]>'));
         expect(e.message, contains('Which: is not an instance of Vector3'));
       }
     });

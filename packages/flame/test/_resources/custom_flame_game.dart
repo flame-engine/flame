@@ -5,8 +5,8 @@ class CustomFlameGame extends FlameGame {
     super.children,
     Future<void>? Function(FlameGame)? onLoad,
     void Function(FlameGame)? onMount,
-  })  : _onLoad = onLoad,
-        _onMount = onMount;
+  }) : _onLoad = onLoad,
+       _onMount = onMount;
 
   final Future<void>? Function(FlameGame)? _onLoad;
   final void Function(FlameGame)? _onMount;

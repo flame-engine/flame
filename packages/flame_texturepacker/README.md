@@ -126,7 +126,8 @@ Note: Sprites used in this example can be found OpenGameArt [here][4].
 ## Credits
 
 Thanks to [Jonas Fröber][5] for the original implementation.
-Thanks to [Gnarhard][6] for the feature to load an atlas file from a device's storage and whitelisting.
+Thanks to [Gnarhard][6] for the feature to load an atlas file from a device's storage,
+sprite whitelisting, and memory optimizations.
 
 [1]: https://www.codeandweb.com/texturepacker 'Code & Web Texture Packer'
 [2]: https://github.com/crashinvaders/gdx-texture-packer-gui 'Gdx Texture Packer'

@@ -6,6 +6,8 @@ import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
+Map<Color, Float32List> _colorBytesCache = {};
+
 /// {@template shader_resource}
 ///
 /// {@endtemplate}
@@ -53,10 +55,10 @@ class Shader {
   });
 
   Shader.vertex({required String asset, required List<UniformSlot> slots})
-      : this(asset: asset, name: 'TextureVertex', slots: slots);
+    : this(asset: asset, name: 'TextureVertex', slots: slots);
 
   Shader.fragment({required String asset, required List<UniformSlot> slots})
-      : this(asset: asset, name: 'TextureFragment', slots: slots);
+    : this(asset: asset, name: 'TextureFragment', slots: slots);
 
   /// Set a [Texture] at the given [key] on the buffer.
   void setTexture(String key, Texture texture) => _setTypedValue(key, texture);
@@ -89,7 +91,8 @@ class Shader {
   /// Set a [Matrix4] at the given [key] on the buffer.
   void setMatrix4(String key, Matrix4 matrix) => _setValue(key, matrix.storage);
 
-  void setColor(String key, Color color) => _setValue(key, color.storage);
+  void setColor(String key, Color color) =>
+      _setValue(key, _colorBytesCache.putIfAbsent(color, () => color.storage));
 
   void bind(GraphicsDevice device) {
     for (final slot in slots) {
@@ -114,22 +117,24 @@ class Shader {
     final groups = parseKey(key);
 
     final object = groups[0]; // e.g. Light, albedoTexture
-    final idx = _maybeParseInt(groups[1]); // e.g. 2 (optional)
+    final index = _maybeParseInt(groups[1]); // e.g. 2 (optional)
     final field = groups[2]; // e.g. position (optional)
 
     if (object == null) {
       throw StateError('Uniform "$key" is missing an object');
     }
 
-    final instance = instances.putIfAbsent(object, () {
-      final slot = slots.firstWhere(
-        (e) => e.name == object,
-        orElse: () => throw StateError('Uniform "$object" is unmapped'),
-      );
-      return slot.create();
-    }) as UniformInstance<K, T>;
+    final instance =
+        instances.putIfAbsent(object, () {
+              final slot = slots.firstWhere(
+                (e) => e.name == object,
+                orElse: () => throw StateError('Uniform "$object" is unmapped'),
+              );
+              return slot.create();
+            })
+            as UniformInstance<K, T>;
 
-    final k = instance.makeKey(idx, field);
+    final k = instance.makeKey(index, field);
     instance.set(k, value);
   }
 

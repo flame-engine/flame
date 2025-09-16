@@ -16,9 +16,9 @@ void main() {
             DebugTextRenderer().format(' x ')..translate(5, 25),
             DebugTextRenderer().format('  ')..translate(5, 45),
             DebugTextRenderer().format('')..translate(25, 45),
-            DebugTextRenderer(color: const Color(0xFFFF88AA))
-                .format('Flame Engine')
-              ..translate(5, 65),
+            DebugTextRenderer(
+              color: const Color(0xFFFF88AA),
+            ).format('Flame Engine')..translate(5, 65),
             DebugTextRenderer(fontWeight: FontWeight.bold).format('Blue Fire')
               ..translate(5, 85),
             DebugTextRenderer(fontWeight: FontWeight.w900).format('Blue Fire')
@@ -29,8 +29,7 @@ void main() {
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,
               color: const Color(0xFF0088FF),
-            ).format('a b c d e f g h i')
-              ..translate(5, 145),
+            ).format('a b c d e f g h i')..translate(5, 145),
             DebugTextRenderer(fontSize: 10).format('www.flame-engine.org')
               ..translate(5, 165),
           ]),

@@ -43,8 +43,10 @@ void main() {
 
     group('applied to various effects', () {
       testWithFlameGame('speed on MoveEffect', (game) async {
-        final effect =
-            MoveEffect.to(Vector2(8, 12), EffectController(speed: 1));
+        final effect = MoveEffect.to(
+          Vector2(8, 12),
+          EffectController(speed: 1),
+        );
         final component = PositionComponent(position: Vector2(5, 8));
         component.add(effect);
         await game.ensureAdd(component);

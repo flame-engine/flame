@@ -49,8 +49,9 @@ class Token {
   static const operatorDivide = Token._(TokenType.operatorDivide);
   static const operatorDivideAssign = Token._(TokenType.operatorDivideAssign);
   static const operatorEqual = Token._(TokenType.operatorEqual);
-  static const operatorGreaterOrEqual =
-      Token._(TokenType.operatorGreaterOrEqual);
+  static const operatorGreaterOrEqual = Token._(
+    TokenType.operatorGreaterOrEqual,
+  );
   static const operatorGreaterThan = Token._(TokenType.operatorGreaterThan);
   static const operatorLessOrEqual = Token._(TokenType.operatorLessOrEqual);
   static const operatorLessThan = Token._(TokenType.operatorLessThan);
@@ -59,8 +60,9 @@ class Token {
   static const operatorModulo = Token._(TokenType.operatorModulo);
   static const operatorModuloAssign = Token._(TokenType.operatorModuloAssign);
   static const operatorMultiply = Token._(TokenType.operatorMultiply);
-  static const operatorMultiplyAssign =
-      Token._(TokenType.operatorMultiplyAssign);
+  static const operatorMultiplyAssign = Token._(
+    TokenType.operatorMultiplyAssign,
+  );
   static const operatorNotEqual = Token._(TokenType.operatorNotEqual);
   static const operatorNot = Token._(TokenType.operatorNot);
   static const operatorOr = Token._(TokenType.operatorOr);

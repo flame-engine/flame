@@ -18,10 +18,22 @@ void main() {
       );
       expect(
         Matrix4(
-          -14, 99, -99, 0, //
-          0, 0, 0, 0, //
-          1e-20, -1e-16, 0, 0, //
-          0, 0, 0, 0, //
+          -14,
+          99,
+          -99,
+          0, //
+          0,
+          0,
+          0,
+          0, //
+          1e-20,
+          -1e-16,
+          0,
+          0, //
+          0,
+          0,
+          0,
+          0, //
         ),
         closeToMatrix4(
           Matrix4.columns(
@@ -100,11 +112,13 @@ void main() {
             '0.0, 0.0, 0.0, 0.0)',
           ),
         );
-        expect(e.message, contains('Actual: '));
-        expect(e.message, contains('Matrix4:<[0] 101.0,0.0,0.0,0.0\n'));
-        expect(e.message, contains('[1] 217.0,0.0,0.0,0.0\n'));
-        expect(e.message, contains('[2] 100.0,0.0,0.0,0.0\n'));
-        expect(e.message, contains('[3] 0.0,0.0,0.0,0.0\n'));
+        expect(
+          e.message,
+          contains('Actual: Matrix4:<[0] [101.0,0.0,0.0,0.0]\n'),
+        );
+        expect(e.message, contains('[1] [217.0,0.0,0.0,0.0]\n'));
+        expect(e.message, contains('[2] [100.0,0.0,0.0,0.0]\n'));
+        expect(e.message, contains('[3] [0.0,0.0,0.0,0.0]\n'));
         expect(
           e.message,
           contains(

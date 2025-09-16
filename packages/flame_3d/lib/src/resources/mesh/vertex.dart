@@ -20,19 +20,19 @@ class Vertex {
     Vector3? normal,
     Vector4? joints,
     Vector4? weights,
-  })  : position = position.immutable,
-        texCoord = texCoord.immutable,
-        normal = normal?.immutable,
-        joints = joints?.immutable,
-        weights = weights?.immutable,
-        _storage = Float32List.fromList([
-          ...position.storage, // 1, 2, 3
-          ...texCoord.storage, // 4, 5
-          ...[color.r, color.g, color.b, color.a], // 6, 7, 8, 9
-          ...(normal ?? Vector3.zero()).storage, // 10, 11, 12
-          ...(joints ?? Vector4.zero()).storage, // 13, 14, 15, 16
-          ...(weights ?? Vector4.zero()).storage, // 17, 18, 19, 20
-        ]);
+  }) : position = position.immutable,
+       texCoord = texCoord.immutable,
+       normal = normal?.immutable,
+       joints = joints?.immutable,
+       weights = weights?.immutable,
+       _storage = Float32List.fromList([
+         ...position.storage, // 1, 2, 3
+         ...texCoord.storage, // 4, 5
+         ...[color.r, color.g, color.b, color.a], // 6, 7, 8, 9
+         ...(normal ?? Vector3.zero()).storage, // 10, 11, 12
+         ...(joints ?? Vector4.zero()).storage, // 13, 14, 15, 16
+         ...(weights ?? Vector4.zero()).storage, // 17, 18, 19, 20
+       ]);
 
   Float32List get storage => _storage;
   final Float32List _storage;
@@ -67,13 +67,13 @@ class Vertex {
 
   @override
   int get hashCode => Object.hashAll([
-        position,
-        texCoord,
-        normal,
-        color,
-        joints,
-        weights,
-      ]);
+    position,
+    texCoord,
+    normal,
+    color,
+    joints,
+    weights,
+  ]);
 
   Vertex copyWith({
     Vector3? position,

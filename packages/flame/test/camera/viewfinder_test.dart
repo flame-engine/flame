@@ -213,18 +213,19 @@ void main() {
     });
 
     testWithFlameGame(
-        'can change visibleGameSize directly with FixedAspectRatioViewport',
-        (game) async {
-      final world = World()..addToParent(game);
-      final cameraComponent = CameraComponent(
-        world: world,
-        viewport: FixedAspectRatioViewport(aspectRatio: 0.2),
-      )..addToParent(game);
-      expect(
-        () => cameraComponent.viewfinder.visibleGameSize = Vector2(100, 100),
-        returnsNormally,
-      );
-    });
+      'can change visibleGameSize directly with FixedAspectRatioViewport',
+      (game) async {
+        final world = World()..addToParent(game);
+        final cameraComponent = CameraComponent(
+          world: world,
+          viewport: FixedAspectRatioViewport(aspectRatio: 0.2),
+        )..addToParent(game);
+        expect(
+          () => cameraComponent.viewfinder.visibleGameSize = Vector2(100, 100),
+          returnsNormally,
+        );
+      },
+    );
   });
 }
 

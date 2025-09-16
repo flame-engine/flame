@@ -38,17 +38,17 @@ class SequenceEffectExample extends FlameGame {
 
 class Player extends PositionComponent {
   Player()
-      : path = Path()
-          ..lineTo(40, 20)
-          ..lineTo(0, 40)
-          ..quadraticBezierTo(8, 20, 0, 0)
-          ..close(),
-        bodyPaint = Paint()..color = const Color(0x887F99B3),
-        borderPaint = Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..color = const Color(0xFFFFFD9A),
-        super(anchor: Anchor.center, size: Vector2(40, 40));
+    : path = Path()
+        ..lineTo(40, 20)
+        ..lineTo(0, 40)
+        ..quadraticBezierTo(8, 20, 0, 0)
+        ..close(),
+      bodyPaint = Paint()..color = const Color(0x887F99B3),
+      borderPaint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3
+        ..color = const Color(0xFFFFFD9A),
+      super(anchor: Anchor.center, size: Vector2(40, 40));
 
   final Path path;
   final Paint borderPaint;

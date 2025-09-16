@@ -1,3 +1,13 @@
+## 5.0.1
+
+ - Update a dependency to the latest release.
+
+## 5.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **PERF**: TexturePacker optimizations ([#3647](https://github.com/flame-engine/flame/issues/3647)). ([5cc2eedb](https://github.com/flame-engine/flame/commit/5cc2eedb1cb17f249c97889ba924e763f83d774e))
+
 ## 4.4.1
 
  - Update a dependency to the latest release.

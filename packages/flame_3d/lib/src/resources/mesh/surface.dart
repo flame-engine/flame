@@ -18,13 +18,13 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
   Surface({
     required List<Vertex> vertices,
     required List<int> indices,
-    this.material,
+    Material? material,
     this.jointMap,
     /**
      * If `true`, the normals will be calculated if they are not provided.
      */
     bool calculateNormals = true,
-  }) {
+  }) : material = material ?? Material.defaultMaterial {
     final normalizedVertices = _normalize(
       vertices: vertices,
       indices: indices,
@@ -44,7 +44,7 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
     _calculateAabb(normalizedVertices);
   }
 
-  Material? material;
+  Material material;
   Map<int, int>? jointMap;
 
   Aabb3 get aabb => _aabb;
@@ -75,9 +75,9 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
     final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
     resourceSizeInByes = sizeInBytes;
     return GpuContextWrapper(gpu.gpuContext).createDeviceBuffer(
-      gpu.StorageMode.hostVisible,
-      sizeInBytes,
-    )
+        gpu.StorageMode.hostVisible,
+        sizeInBytes,
+      )
       ..overwrite(_vertices.asByteData())
       ..overwrite(
         _indices.asByteData(),

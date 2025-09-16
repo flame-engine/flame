@@ -83,8 +83,9 @@ void main() {
         },
       );
 
-      testWithFlameGame('remove parent of child that has removed set',
-          (game) async {
+      testWithFlameGame('remove parent of child that has removed set', (
+        game,
+      ) async {
         final parent = _LifecycleComponent('parent')..addToParent(game);
         final child = _LifecycleComponent('child')..addToParent(parent);
         await game.ready();
@@ -375,16 +376,18 @@ void main() {
           expect(game.hasLifecycleEvents, isFalse);
         });
 
-        testWithFlameGame("doesn't block when there are no events",
-            (game) async {
+        testWithFlameGame("doesn't block when there are no events", (
+          game,
+        ) async {
           await game.ready();
           expect(game.hasLifecycleEvents, isFalse);
           await game.lifecycleEventsProcessed;
           expect(game.hasLifecycleEvents, isFalse);
         });
 
-        testWithFlameGame('guarantees addition even with heavy onLoad',
-            (game) async {
+        testWithFlameGame('guarantees addition even with heavy onLoad', (
+          game,
+        ) async {
           await game.ready();
           final component = _SlowComponent('heavy', 0.1);
           final child = _SlowComponent('child', 0.1);
@@ -982,8 +985,9 @@ void main() {
           game.update(0);
           expect(game.world.children.length, 5);
           expect(
-            game.world.children
-                .every((c) => (c as _IdentifiableComponent).id.isOdd),
+            game.world.children.every(
+              (c) => (c as _IdentifiableComponent).id.isOdd,
+            ),
             true,
           );
         },
@@ -1143,8 +1147,10 @@ void main() {
           var total = 0;
           void waitFor(int milliseconds, Future<void> Function() fn) {
             total++;
-            Future.delayed(Duration(milliseconds: milliseconds), fn)
-                .whenComplete(() => completed++);
+            Future.delayed(
+              Duration(milliseconds: milliseconds),
+              fn,
+            ).whenComplete(() => completed++);
           }
 
           Future<void> start() async {
@@ -1447,8 +1453,9 @@ void main() {
     });
 
     group('findRootGame()', () {
-      testWithFlameGame('finds root game in nested game structure',
-          (game) async {
+      testWithFlameGame('finds root game in nested game structure', (
+        game,
+      ) async {
         final component = Component();
         await game.ensureAdd(
           FlameGame(
@@ -1460,8 +1467,9 @@ void main() {
         expect(component.findRootGame(), game);
       });
 
-      testWithFlameGame('finds root game in non-nested game structure',
-          (game) async {
+      testWithFlameGame('finds root game in non-nested game structure', (
+        game,
+      ) async {
         final component = Component();
         await game.ensureAdd(component);
         expect(component.findRootGame(), game);
@@ -1474,10 +1482,10 @@ void main() {
         expect(component0.children.strictMode, false);
 
         Component.childrenFactory = () => OrderedSet.mapping<num, Component>(
-              (e) => e.priority,
-              // ignore: avoid_redundant_argument_values
-              strictMode: true,
-            );
+          (e) => e.priority,
+          // ignore: avoid_redundant_argument_values
+          strictMode: true,
+        );
         final component1 = Component();
         final component2 = Component();
         component1.add(component2);

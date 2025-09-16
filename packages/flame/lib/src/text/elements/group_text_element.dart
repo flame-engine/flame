@@ -6,9 +6,9 @@ import 'package:meta/meta.dart';
 
 class GroupTextElement extends InlineTextElement {
   GroupTextElement(List<InlineTextElement> children)
-      : assert(children.isNotEmpty, 'The children list cannot be empty'),
-        _children = children,
-        _metrics = _computeMetrics(children);
+    : assert(children.isNotEmpty, 'The children list cannot be empty'),
+      _children = children,
+      _metrics = _computeMetrics(children);
 
   final List<InlineTextElement> _children;
   final LineMetrics _metrics;

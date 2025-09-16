@@ -1,5 +1,6 @@
 # Rendering
 
+- [Post Processing and Shaders](post_processing.md)
 - [Colors and Palette](palette.md)
 - [Decorators](decorators.md)
 - [Images, Sprites and Animations](images.md)
@@ -10,6 +11,7 @@
 ```{toctree}
 :hidden:
 
+Post Processing and Shaders     <post_processing.md>
 Colors and Palette              <palette.md>
 Decorators                      <decorators.md>
 Images, Sprites and Animations  <images.md>

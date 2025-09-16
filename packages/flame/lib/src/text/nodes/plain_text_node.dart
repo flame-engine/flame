@@ -18,8 +18,8 @@ class PlainTextNode extends InlineTextNode {
 
 class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
   _PlainTextLayoutBuilder(this.node)
-      : renderer = node.style.asTextRenderer(),
-        words = node.text.split(' ');
+    : renderer = node.style.asTextRenderer(),
+      words = node.text.split(' ');
 
   final PlainTextNode node;
   final TextRenderer renderer;
