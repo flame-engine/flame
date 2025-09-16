@@ -15,6 +15,6 @@ extension TiledObjectHelpers on TiledObject {
 
 extension ColorDataExtension on ColorData {
   /// Returns the color as a dart:ui Color.
-  /// New line
+  /// New pretty line
   Color toColor() => Color.fromARGB(alpha, red, green, blue);
 }
