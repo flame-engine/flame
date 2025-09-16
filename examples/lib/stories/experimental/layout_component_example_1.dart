@@ -41,8 +41,10 @@ the various ways you can change this layout.
       gap: 24,
       children: [
         TextComponent(
-          text: 'Because this example deals with sizes a lot, we have made it '
-              'draggable.',
+          text:
+              'Because this example deals with sizes a lot, we have made it '
+              'draggable. Note that the blue square has a PaddingComponent '
+              'around it.',
         ),
         LayoutDemo1(
           direction: direction,
@@ -83,9 +85,9 @@ class LayoutDemo1 extends LinearLayoutComponent {
     required bool expandedMode,
     super.size,
     super.key,
-  })  : _padding = padding,
-        _expandedMode = expandedMode,
-        super(anchor: Anchor.topLeft, priority: 0, children: []);
+  }) : _padding = padding,
+       _expandedMode = expandedMode,
+       super(anchor: Anchor.topLeft, priority: 0, children: []);
 
   bool _expandedMode = false;
 
@@ -114,7 +116,6 @@ class LayoutDemo1 extends LinearLayoutComponent {
 
   PaddingComponent? get paddingComponent {
     return descendants().whereType<PaddingComponent>().firstOrNull;
-    // return children.query<PaddingComponent>().firstOrNull;
   }
 
   /// This needs to be a method rather than a static list

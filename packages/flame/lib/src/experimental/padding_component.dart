@@ -22,8 +22,8 @@ class PaddingComponent extends SingleLayoutComponent {
     super.position,
     super.priority,
     PositionComponent? child,
-  })  : _padding = padding ?? EdgeInsets.zero,
-        super(size: null, child: null) {
+  }) : _padding = padding ?? EdgeInsets.zero,
+       super(size: null, child: null) {
     this.child = child;
   }
 

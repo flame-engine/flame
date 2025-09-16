@@ -18,73 +18,79 @@ void addExperimentalStories(Dashbook dashbook) {
         info: ShapesExample.description,
       )
       .add(
-    'Layout Components 1',
-    (DashbookContext context) {
-      return GameWidget(
-        game: LayoutComponentExample1(
-          mainAxisAlignment: context.listProperty(
-            'MainAxisAlignment',
-            MainAxisAlignment.values.first,
-            MainAxisAlignment.values,
-          ),
-          crossAxisAlignment: context.listProperty(
-            'CrossAxisAlignment',
-            CrossAxisAlignment.values.first,
-            CrossAxisAlignment.values,
-          ),
-          direction: context.listProperty(
-            'Direction',
-            Direction.values.first,
-            Direction.values,
-          ),
-          gap: context.numberProperty('Gap', 0),
-          demoSize: context.optionsProperty<LayoutComponentExampleSize>(
-            'Size',
-            LayoutComponentExampleSize.small,
-            LayoutComponentExampleSize.values.map((exampleSize) {
-              return PropertyOption(exampleSize.name, exampleSize);
-            }).toList(),
-          ),
-          padding: context.edgeInsetsProperty('Padding', EdgeInsets.zero),
-          expandedMode:
-              context.boolProperty('Wrap with ExpandedComponent', false),
-        ),
+        'Layout Components 1',
+        (DashbookContext context) {
+          return GameWidget(
+            game: LayoutComponentExample1(
+              mainAxisAlignment: context.listProperty(
+                'MainAxisAlignment',
+                MainAxisAlignment.values.first,
+                MainAxisAlignment.values,
+              ),
+              crossAxisAlignment: context.listProperty(
+                'CrossAxisAlignment',
+                CrossAxisAlignment.values.first,
+                CrossAxisAlignment.values,
+              ),
+              direction: context.listProperty(
+                'Direction',
+                Direction.values.first,
+                Direction.values,
+              ),
+              gap: context.numberProperty('Gap', 0),
+              demoSize: context.optionsProperty<LayoutComponentExampleSize>(
+                'Size',
+                LayoutComponentExampleSize.small,
+                LayoutComponentExampleSize.values.map((exampleSize) {
+                  return PropertyOption(exampleSize.name, exampleSize);
+                }).toList(),
+              ),
+              padding: context.edgeInsetsProperty(
+                'Padding',
+                const EdgeInsets.all(10),
+              ),
+              expandedMode: context.boolProperty(
+                'Wrap with ExpandedComponent',
+                false,
+              ),
+            ),
+          );
+        },
+        codeLink: baseLink('experimental/layout_components.dart'),
+        info: LayoutComponentExample2.description,
+      )
+      .add(
+        'Layout Components 2',
+        (DashbookContext context) {
+          return GameWidget(
+            game: LayoutComponentExample2(
+              mainAxisAlignment: context.listProperty(
+                'MainAxisAlignment',
+                MainAxisAlignment.values.first,
+                MainAxisAlignment.values,
+              ),
+              crossAxisAlignment: context.listProperty(
+                'CrossAxisAlignment',
+                CrossAxisAlignment.stretch,
+                CrossAxisAlignment.values,
+              ),
+              direction: context.listProperty(
+                'Direction',
+                Direction.values.first,
+                Direction.values,
+              ),
+              gap: context.numberProperty('Gap', 0),
+              demoSize: context.optionsProperty<LayoutComponentExampleSize>(
+                'Size',
+                LayoutComponentExampleSize.small,
+                LayoutComponentExampleSize.values.map((exampleSize) {
+                  return PropertyOption(exampleSize.name, exampleSize);
+                }).toList(),
+              ),
+            ),
+          );
+        },
+        codeLink: baseLink('experimental/layout_components.dart'),
+        info: LayoutComponentExample2.description,
       );
-    },
-    codeLink: baseLink('experimental/layout_components.dart'),
-    info: LayoutComponentExample2.description,
-  ).add(
-    'Layout Components 2',
-    (DashbookContext context) {
-      return GameWidget(
-        game: LayoutComponentExample2(
-          mainAxisAlignment: context.listProperty(
-            'MainAxisAlignment',
-            MainAxisAlignment.values.first,
-            MainAxisAlignment.values,
-          ),
-          crossAxisAlignment: context.listProperty(
-            'CrossAxisAlignment',
-            CrossAxisAlignment.stretch,
-            CrossAxisAlignment.values,
-          ),
-          direction: context.listProperty(
-            'Direction',
-            Direction.values.first,
-            Direction.values,
-          ),
-          gap: context.numberProperty('Gap', 0),
-          demoSize: context.optionsProperty<LayoutComponentExampleSize>(
-            'Size',
-            LayoutComponentExampleSize.small,
-            LayoutComponentExampleSize.values.map((exampleSize) {
-              return PropertyOption(exampleSize.name, exampleSize);
-            }).toList(),
-          ),
-        ),
-      );
-    },
-    codeLink: baseLink('experimental/layout_components.dart'),
-    info: LayoutComponentExample2.description,
-  );
 }

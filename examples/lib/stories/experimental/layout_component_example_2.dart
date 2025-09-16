@@ -39,7 +39,8 @@ the various ways you can change this layout.
       gap: 24,
       children: [
         TextComponent(
-          text: 'Because this example deals with sizes a lot, we have made it '
+          text:
+              'Because this example deals with sizes a lot, we have made it '
               'draggable.',
         ),
         LayoutDemo2(
@@ -91,7 +92,6 @@ class LayoutDemo2 extends LinearLayoutComponent {
 
   PaddingComponent? get paddingComponent {
     return descendants().whereType<PaddingComponent>().firstOrNull;
-    // return children.query<PaddingComponent>().firstOrNull;
   }
 
   /// This needs to be a method rather than a static list

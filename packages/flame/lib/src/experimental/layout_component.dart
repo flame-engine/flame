@@ -10,9 +10,8 @@ abstract class LayoutComponent extends PositionComponent {
     required super.priority,
     super.children,
   }) : _layoutSize = size == null
-            ? NullableVector2.blank()
-            : NullableVector2.fromVector2(size) {
-    // layoutSize.addListener(resetSize);
+           ? NullableVector2.blank()
+           : NullableVector2.fromVector2(size) {
     resetSize();
   }
 
