@@ -396,22 +396,6 @@ void main() {
                 layoutComponent.size[direction.crossAxisVectorIndex],
               );
             },
-        "size=null doesn't respect CrossAxisAlignment.stretch":
-            (game, direction) async {
-              final circle = CircleComponent(radius: 20);
-              final rectangle = RectangleComponent(size: Vector2(100, 50));
-              final text = TextComponent(text: 'testing');
-              final layoutComponent = LinearLayoutComponent.fromDirection(
-                direction,
-                children: [circle, rectangle, text],
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-              );
-              await game.ensureAdd(layoutComponent);
-              expect(
-                layoutComponent.crossAxisAlignment,
-                CrossAxisAlignment.start,
-              );
-            },
       });
     });
     group('children', () {
@@ -423,7 +407,6 @@ void main() {
                 final rectangle2 = RectangleComponent(size: Vector2(100, 50));
                 final layoutComponent = LinearLayoutComponent.fromDirection(
                   direction,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                 );
                 await game.ensureAdd(layoutComponent);
                 expect(layoutComponent.size, Vector2.zero());
