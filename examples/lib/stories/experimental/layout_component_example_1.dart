@@ -127,36 +127,40 @@ class LayoutDemo1 extends LinearLayoutComponent {
   }) {
     return [
       TextComponent(text: 'Some short text'),
-      if (expandedMode)
-        ExpandedComponent(
-          child: RectangleComponent(
-            size: Vector2(100, 70),
-            paint: Paint()..color = Colors.amber,
-          ),
-        )
-      else
-        RectangleComponent(
+      componentWrapper(
+        builder: (child) {
+          if (!expandedMode) {
+            return child;
+          }
+          return ExpandedComponent(child: child);
+        },
+        child: RectangleComponent(
           size: Vector2(100, 70),
           paint: Paint()..color = Colors.amber,
         ),
-      if (expandedMode)
-        ExpandedComponent(
-          child: PaddingComponent(
-            padding: padding,
-            child: RectangleComponent(
-              size: Vector2(96, 96),
-              paint: Paint()..color = Colors.blue,
-            ),
-          ),
-        )
-      else
-        PaddingComponent(
+      ),
+      componentWrapper(
+        builder: (child) {
+          if (!expandedMode) {
+            return child;
+          }
+          return ExpandedComponent(child: child);
+        },
+        child: PaddingComponent(
           padding: padding,
           child: RectangleComponent(
             size: Vector2(96, 96),
             paint: Paint()..color = Colors.blue,
           ),
         ),
+      ),
     ];
+  }
+
+  static Component componentWrapper({
+    required Component Function(PositionComponent child) builder,
+    required PositionComponent child,
+  }) {
+    return builder(child);
   }
 }
