@@ -5,8 +5,9 @@ import 'package:flutter/rendering.dart';
 
 /// A padding component akin to Flutter's Padding widget.
 /// Use [padding] as you would Flutter's counterpart.
-/// In general, do not set the size of this widget explicitly, because it is
-/// only designed to shrink or expand to its child's dimensions, plus padding.
+/// While this component is designed to shrink or expand to its child's
+/// dimensions, it is fine to set its size explicitly. The child will simply be
+/// offset by the padding dimensions.
 ///
 /// Set the child of this component with [child]. Avoid using [add] directly on
 /// an instance of [PaddingComponent] because its behavior is undefined with
@@ -21,9 +22,10 @@ class PaddingComponent extends SingleLayoutComponent {
     super.anchor,
     super.position,
     super.priority,
+    super.size,
     PositionComponent? child,
   }) : _padding = padding ?? EdgeInsets.zero,
-       super(size: null, child: null) {
+       super(child: null) {
     this.child = child;
   }
 
