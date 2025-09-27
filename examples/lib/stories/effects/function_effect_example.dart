@@ -1,14 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
 enum RobotState {
   idle,
   running,
 }
 
-class FunctionEffectExample extends FlameGame with TapDetector {
+class FunctionEffectExample extends FlameGame with TapCallbacks {
   static const String description = '''
 This example shows how to use the FunctionEffect to create custom effects.
 

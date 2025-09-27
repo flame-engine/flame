@@ -1,9 +1,10 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
 class NineTileBoxCustomGridExample extends FlameGame
-    with TapDetector, DoubleTapDetector {
+    with TapCallbacks, DoubleTapDetector {
   static const String description = '''
     If you want to create a background for something that can stretch you can
     use the `NineTileBox` which is showcased here. In this example a custom
@@ -35,7 +36,7 @@ class NineTileBoxCustomGridExample extends FlameGame
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     nineTileBoxComponent.scale.scale(1.2);
   }
 
