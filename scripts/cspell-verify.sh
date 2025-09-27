@@ -43,7 +43,8 @@ for file in "$tmp_dir"/*; do
         touch "$dictionary_dir/$(basename "$file")"
     fi
 done
-cspell --dot --no-progress --unique --words-only "**/*.{md,dart}" | lowercase | sort -f > $word_list  || exit 1
+
+./scripts/cspell-run.sh --dot --unique --words-only | lowercase | sort -f > $word_list  || exit 1
 rm -r "$dictionary_dir"
 mv "$tmp_dir" "$dictionary_dir"
 
