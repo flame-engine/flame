@@ -1,9 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
 fix=$([[ "$*" == *--fix* ]] && echo true || echo false)
 
-function sort_fn() {
-    sort --ignore-case -C
+function sort_check_fn() {
+    sort -f -c
+}
+
+function sort_run_fn() {
+    sort -f
 }
 
 function sort_dictionary() {
@@ -11,7 +16,7 @@ function sort_dictionary() {
     local tmp_file=$(mktemp)
 
     head -n 1 "$file" > "$tmp_file"
-    tail -n +2 "$file" | sort_fn >> "$tmp_file"
+    tail -n +2 "$file" | sort_run_fn >> "$tmp_file"
     mv "$tmp_file" "$file"
 }
 
@@ -46,9 +51,11 @@ error=0
 for file in .github/.cspell/*.txt; do
     echo "Processing dictionary '$file'..."
 
-    violation=$(awk '!/^#/' "$file" | sort_fn 2>&1 || true)
+    violation=$(awk '!/^\s*(#|$)/' "$file" | sort_check_fn 2>&1 || true)
     if [ -n "$violation" ]; then
-        echo "Error: The dictionary '$file' is not in alphabetical order. First violation: '$violation'" >&2
+        # Extract only the line content after the last ': '
+        violation_line=$(echo "$violation" | sed 's/.*: //')
+        echo "Error: The dictionary '$file' is not in alphabetical order. First violation: '$violation_line'" >&2
         error=1
         if $fix; then
             echo "Fixing the dictionary '$file'"
