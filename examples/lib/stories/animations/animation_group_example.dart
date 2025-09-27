@@ -1,15 +1,15 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
 enum RobotState {
   idle,
   running,
 }
 
-class AnimationGroupExample extends FlameGame with TapDetector {
+class AnimationGroupExample extends FlameGame with TapCallbacks {
   static const description = '''
     This example shows how to create a component that can be switched between
     different states to change the animation that is playing.\n\n
@@ -59,7 +59,7 @@ class AnimationGroupExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapCancel() {
+  void onTapCancel(_) {
     robot.current = RobotState.idle;
   }
 

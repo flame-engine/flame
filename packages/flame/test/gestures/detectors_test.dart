@@ -777,6 +777,8 @@ void main() {
   });
 }
 
+// testing the deprecated TapDetector mixin
+// ignore: deprecated_member_use_from_same_package
 class _TapDetectorGame extends FlameGame with TapDetector {
   bool hasOnTapUp = false;
   bool hasOnTapDown = false;

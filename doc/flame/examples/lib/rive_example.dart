@@ -4,7 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
-class RiveExampleGame extends FlameGame with TapDetector {
+class RiveExampleGame extends FlameGame with TapCallbacks {
   late SMIInput<double>? levelInput;
 
   @override
@@ -26,8 +26,7 @@ class RiveExampleGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
-    super.onTap();
+  void onTapDown(_) {
     if (levelInput != null) {
       levelInput!.value = (levelInput!.value + 1) % 3;
     }

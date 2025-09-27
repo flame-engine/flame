@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +11,7 @@ void main() {
   runApp(GameWidget(game: game));
 }
 
-class ExampleGame extends FlameGame with TapDetector {
+class ExampleGame extends FlameGame with TapCallbacks {
   late FireAtlas _atlas;
 
   @override
@@ -53,7 +52,7 @@ class ExampleGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapUp(TapUpInfo info) {
+  void onTapUp(TapUpEvent event) {
     add(
       SpriteAnimationComponent(
           size: Vector2(100, 100),
@@ -61,7 +60,7 @@ class ExampleGame extends FlameGame with TapDetector {
           removeOnFinish: true,
         )
         ..anchor = Anchor.center
-        ..position = info.eventPosition.widget,
+        ..position = event.canvasPosition,
     );
   }
 }
