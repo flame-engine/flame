@@ -3,13 +3,13 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/animation.dart';
 
-class ScaleEffectExample extends FlameGame with TapDetector {
+class ScaleEffectExample extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example you can tap the screen and the component will scale up or
     down, depending on its current state.
@@ -56,7 +56,7 @@ class ScaleEffectExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     final s = grow ? 3.0 : 1.0;
 
     grow = !grow;
