@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -e
 
 fix=$([[ "$*" == *--fix* ]] && echo true || echo false)
 
