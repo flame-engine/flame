@@ -3,7 +3,8 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class PauseResumeExample extends FlameGame with TapCallbacks, DoubleTapDetector {
+class PauseResumeExample extends FlameGame
+    with TapCallbacks, DoubleTapDetector {
   static const description = '''
     Demonstrate how to use the pause and resume engine methods and paused
     attribute.

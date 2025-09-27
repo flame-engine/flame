@@ -9,10 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaytraceExample extends FlameGame
-    with
-        HasCollisionDetection,
-        MouseMovementDetector,
-        TapCallbacks {
+    with HasCollisionDetection, MouseMovementDetector, TapCallbacks {
   static const description = '''
 In this example the raytrace functionality is showcased.
 Click to start sending out a ray which will bounce around to visualize how it
