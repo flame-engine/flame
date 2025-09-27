@@ -2,14 +2,13 @@
 bloodlust
 collidable
 collidables
-draggables
+endianness
 focusable
 gamepad
 gamepads
 gapless
 grayscale
 hoverable
-hoverables
 inactives
 layouting
 microtask
@@ -29,7 +28,5 @@ renderable
 rescan
 strikethrough # of a text with a horizontal line across
 tappable
-tappables
 toolset
 underutilize
-endianness

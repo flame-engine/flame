@@ -114,10 +114,10 @@ you can do so using npm or yarn:
 npm install -g cspell
 ```
 
-Then you can run it with the following arguments:
+Then you can run it using the provided script:
 
 ```bash
-cspell --no-progress -c .github/cspell.json "**/*.{md,dart}"
+./scripts/cspell-run.sh
 ```
 
 
