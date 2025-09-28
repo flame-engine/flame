@@ -9,7 +9,6 @@ emberquest # Ember Quest, our platformer tutorial game
 Hermione # A character from the book Harry Potter
 Kawabunga # Word expressing exhilaration, of unclear origins but popularized by the show Teenage Mutant Ninja Turtles
 Kenobi # Eminent Jedi Master, General of the Republic Army, Obi-Wan Kenobi
-Mocktail # A library for Dart that automatically creates mocks for tests https://github.com/felangel/mocktail
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter
 Overmind # A character in the game StarCraft
 padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/tree/main/examples/games/padracing
