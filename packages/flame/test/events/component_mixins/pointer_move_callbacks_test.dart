@@ -97,6 +97,7 @@ mixin _PointerMoveInspector on PointerMoveCallbacks {
 
   @override
   void onPointerMove(PointerMoveEvent event) {
+    expect(event.raw, isNotNull);
     receivedEventsAt.add(event.localPosition);
   }
 }

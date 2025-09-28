@@ -7,8 +7,9 @@ import 'package:flame/src/game/game.dart';
 ///
 /// This class includes properties that describe the position where the event
 /// has occurred.
-abstract class PositionEvent extends LocationContextEvent<Vector2> {
-  PositionEvent(this._game, {required this.devicePosition});
+abstract class PositionEvent<R> extends LocationContextEvent<Vector2, R> {
+  PositionEvent(this._game, {required this.devicePosition, required super.raw});
+
   final Game _game;
 
   /// Event position in the coordinate space of the device -- either the phone,
