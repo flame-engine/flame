@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert' show base64, json;
+import 'dart:convert' show base64;
 import 'dart:ui';
 
 import 'package:flame/src/flame.dart';
@@ -141,9 +141,9 @@ class Images {
   /// Loads all images in the [prefix]ed path that are matching the specified
   /// pattern.
   Future<List<Image>> loadAllFromPattern(Pattern pattern) async {
-    final manifestContent = await bundle.loadString('AssetManifest.json');
-    final manifestMap = json.decode(manifestContent) as Map<String, dynamic>;
-    final imagePaths = manifestMap.keys
+    final manifest = await AssetManifest.loadFromAssetBundle(bundle);
+    final imagePaths = manifest
+        .listAssets()
         .where((path) {
           return path.startsWith(_prefix) &&
               path.toLowerCase().contains(pattern);
