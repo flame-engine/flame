@@ -30,7 +30,7 @@ please read these instructions carefully.
   - You can also join us on [Discord] to discuss some initials thoughts.
 - If you'd like to implement the new feature, please wait for feedback from the project maintainers
    before spending too much time writing the code. In some cases, enhancements may not align well
-   with the project future development direction.
+   with the project's future development direction.
 - Implement the code for the new feature and please read the [How To](#how-to-contribute).
 
 
@@ -184,6 +184,10 @@ Allowed types are:
 
 If you introduce a **breaking change** the conventional commit type MUST end with an exclamation
 mark (e.g. `feat!: Remove the position argument from PositionComponent`).
+
+The sentence of the commit (after the `:`) should start with a verb in the present tense; as a rule
+of thumb, think that the commit message will complete the sentence "This commit will ...".
+For example, "Add support for ..." or "Fix bug with ...".
 
 Examples of PR titles:
 
