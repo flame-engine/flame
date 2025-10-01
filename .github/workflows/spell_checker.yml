@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: npm -g install cspell@8.8.2
+      - run: npm -g install cspell@9.2.1
       # spell check
       - run: ./scripts/cspell-run.sh
       # verify dictionary words are sorted and not orphan

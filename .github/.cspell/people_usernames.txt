@@ -9,16 +9,16 @@ fröber # github.com/Brixto
 gnarhard # github.com/gnarhard
 kenney # kenney.nl
 Klingsbo # github.com/spydon
+luan # github.com/luanpotter
 luanpotter # github.com/luanpotter
 Lukas # github.com/spydon
 pgainullin # github.com/pgainullin 
 Schnurber # github.com/schnurber 
-subosito # github.com/subosito
 spydon # github.com/spydon
 stpasha # github.com/stpasha
+subosito # github.com/subosito
 tavian # tavianator.com
 Tellinghuisen # Author of Statistical Error Propagation (2001)
 videon # github.com/markvideon
 wolfenrain # github.com/wolfenrain
 xaha # github.com/xvrh
-luan # github.com/luanpotter
