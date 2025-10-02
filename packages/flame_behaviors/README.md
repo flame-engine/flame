@@ -20,7 +20,7 @@ Flame Behaviors applies separation of concerns to game logic in the form of Enti
 <!-- markdownlint-enable MD013 -->
 
 <!-- markdownlint-disable-next-line MD002 -->
-# Flame Behaviors
+# flame_behaviors
 
 
 Flame Behaviors applies separation of concerns to game logic in the form of Entities and Behaviors.
