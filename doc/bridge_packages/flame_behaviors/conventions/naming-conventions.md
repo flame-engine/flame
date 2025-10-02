@@ -6,11 +6,11 @@ optional. Feel free to use whatever naming conventions you prefer.
 ## Entities
 
 
-### Anatomy
+### Anatomy of entities
 
 `Type (name)`
 
-### Examples
+### Examples of entities
 
 ✅ **Good**
 
@@ -35,12 +35,12 @@ class BulletEntity extends Entity {}
 ## Behaviors
 
 
-### Anatomy
+### Anatomy of behaviors
 
 `Verb (action)` + `Behavior`
 
 
-### Examples
+### Examples of behaviors
 
 ✅ **Good**
 
