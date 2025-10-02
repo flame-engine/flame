@@ -16,7 +16,6 @@ class MyTappableBehavior extends TappableBehavior<MyEntity> {
 }
 ```
 
-
 ## DraggableBehavior
 
 The `DraggableBehavior` allows developers to use the [drag events][flame_drag_docs] from Flame on their entities.

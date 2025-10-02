@@ -81,7 +81,7 @@ class MySpecificBehavior extends Behavior<MyEntity> {
 
 ### Behavior Composition
 
-Each behavior can have its own `Component`s for adding extra functionality related to the behavior. 
+Each behavior can have its own `Component`s for adding extra functionality related to the behavior.
 For instance a `TimerComponent` can implement a time-based behavioral activity:
 
 ```dart
@@ -103,10 +103,12 @@ behaves therefore, a behavior can't have its own `Behavior`s.
 ## What's Next
 
 The following sections will show you how to use Flame Behaviors for common game development tasks:
+
 - [Handling Game Input][input_behaviors_link]
 - [Handling Collisions][collision_behaviors_link]
 
 Flame Behaviors also provides some conventions on how to name and organize your code:
+
 - [Naming Conventions][naming_conventions_link]
 - [Code Conventions][code_conventions_link]
 

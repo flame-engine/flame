@@ -49,12 +49,12 @@ class Player extends Entity {
 
 ## Behaviors
 
-Behaviors should only contain code related to the behavioral logic it describes. Behaviors should 
+Behaviors should only contain code related to the behavioral logic it describes. Behaviors should
 never do any direct rendering.
 
-A behavior is allowed to have its own components for adding extra functionality related to the 
+A behavior is allowed to have its own components for adding extra functionality related to the
 behavior. For example, a behavior that makes an entity jump could have a `TimerComponent` to ensure
-that the entity can only jump once every 0.5 seconds. And that behavior can also use a 
+that the entity can only jump once every 0.5 seconds. And that behavior can also use a
 `KeyboardHandler` mixin to listen for the jump key to trigger the jump. Any logic that is not
 related to the behavior should not be in the behavior.
 
