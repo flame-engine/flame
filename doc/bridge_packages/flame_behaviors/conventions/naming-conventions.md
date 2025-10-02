@@ -3,12 +3,14 @@
 > **Note**: The following naming conventions are simply recommendations and are completely
 optional. Feel free to use whatever naming conventions you prefer.
 
+
 ## Entities
 
 
 ### Anatomy of entities
 
 `Type (name)`
+
 
 ### Examples of entities
 
@@ -31,6 +33,7 @@ class EnemyEntity extends Entity {}
 
 class BulletEntity extends Entity {}
 ```
+
 
 ## Behaviors
 
