@@ -3,11 +3,13 @@
 > **Note**: The following coding conventions are simply recommendations and are completely
 optional. Feel free to use whatever coding conventions you prefer.
 
+
 ## Entities
 
 Entities should not contain any behavioral logic, instead they should be composed of behaviors. This
 allows for more flexible and reusable code. Entities should not do any direct rendering, instead they
 should add child components to handle the visualization of the entity.
+
 
 #### Examples
 
@@ -47,6 +49,7 @@ class Player extends Entity {
 }
 ```
 
+
 ## Behaviors
 
 Behaviors should only contain code related to the behavioral logic it describes. Behaviors should
@@ -57,6 +60,7 @@ behavior. For example, a behavior that makes an entity jump could have a `TimerC
 that the entity can only jump once every 0.5 seconds. And that behavior can also use a
 `KeyboardHandler` mixin to listen for the jump key to trigger the jump. Any logic that is not
 related to the behavior should not be in the behavior.
+
 
 #### Examples
 

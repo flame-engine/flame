@@ -1,11 +1,13 @@
 # Getting Started 🚀
 
+
 ## Prerequisites 📝
 
 In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to
 your project.
 
 > **Note**: Flame Behaviors requires Flame `">=1.10.0 <2.0.0"`
+
 
 ## Installing 🧑‍💻
 
@@ -15,6 +17,7 @@ Let's start by adding the [`flame_behaviors`][flame_behaviors_package_link] pack
 # 📦 Add the flame_behaviors package from pub.dev to your project
 flutter pub add flame_behaviors
 ```
+
 
 ## Entity
 
@@ -27,6 +30,7 @@ class MyEntity extends Entity {
   MyEntity() : super(behaviors: [MyBehavior()]);
 }
 ```
+
 
 ### Types of Entities
 
@@ -61,6 +65,7 @@ class MyGame extends FlameGame with EntityMixin {
 }
 ```
 
+
 ## Behavior
 
 A behavior is a component that defines how an entity behaves. It can be attached to any component
@@ -78,6 +83,7 @@ class MySpecificBehavior extends Behavior<MyEntity> {
   ...
 }
 ```
+
 
 ### Behavior Composition
 
@@ -99,6 +105,7 @@ class MyBehavior extends Behavior {
 
 **Note**: A `Behavior` is a non-visual component that describes how a visual component (Entity)
 behaves therefore, a behavior can't have its own `Behavior`s.
+
 
 ## What's Next
 
