@@ -29,9 +29,13 @@ A good use case of this collisional behavior pattern can be seen in the `flame_b
 [example](https://github.com/flame-engine/flame/tree/main/packages/flame_behaviors/example)
 
 ```dart
-class MyEntityCollisionBehavior extends CollisionBehavior<MyCollidingEntity, MyParentEntity> {
+class MyEntityCollisionBehavior
+    extends CollisionBehavior<MyCollidingEntity, MyParentEntity> {
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, MyCollidingEntity other) {
+  void onCollisionStart(
+    Set<Vector2> intersectionPoints,
+    MyCollidingEntity other,
+  ) {
     // We are starting colliding with MyCollidingEntity
   }
 

@@ -1,6 +1,5 @@
 # Getting Started 🚀
 
-
 ## Prerequisites 📝
 
 In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to
@@ -30,7 +29,6 @@ class MyEntity extends Entity {
   MyEntity() : super(behaviors: [MyBehavior()]);
 }
 ```
-
 
 ### Types of Entities
 

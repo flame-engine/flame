@@ -3,7 +3,6 @@
 > **Note**: The following naming conventions are simply recommendations and are completely
 optional. Feel free to use whatever naming conventions you prefer.
 
-
 ## Entities
 
 
@@ -11,8 +10,7 @@ optional. Feel free to use whatever naming conventions you prefer.
 
 `Type (name)`
 
-
-#### Examples
+### Examples
 
 ✅ **Good**
 
@@ -34,7 +32,6 @@ class EnemyEntity extends Entity {}
 class BulletEntity extends Entity {}
 ```
 
-
 ## Behaviors
 
 
@@ -43,7 +40,7 @@ class BulletEntity extends Entity {}
 `Verb (action)` + `Behavior`
 
 
-#### Examples
+### Examples
 
 ✅ **Good**
 

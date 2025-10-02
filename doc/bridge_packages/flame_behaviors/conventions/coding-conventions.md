@@ -10,8 +10,7 @@ Entities should not contain any behavioral logic, instead they should be compose
 allows for more flexible and reusable code. Entities should not do any direct rendering, instead they
 should add child components to handle the visualization of the entity.
 
-
-#### Examples
+### Examples
 
 ✅ **Good**
 
@@ -61,8 +60,7 @@ that the entity can only jump once every 0.5 seconds. And that behavior can also
 `KeyboardHandler` mixin to listen for the jump key to trigger the jump. Any logic that is not
 related to the behavior should not be in the behavior.
 
-
-#### Examples
+### Examples
 
 ✅ **Good**
 
