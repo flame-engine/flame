@@ -20,10 +20,11 @@ extension DisplacementContextDelta on DisplacementContext {
 /// This class includes properties that describe both positions where the event
 /// has occurred (start and end) and the delta (i.e. displacement) represented
 /// by the event.
-abstract class DisplacementEvent
-    extends LocationContextEvent<DisplacementContext> {
+abstract class DisplacementEvent<R>
+    extends LocationContextEvent<DisplacementContext, R> {
   DisplacementEvent(
     this._game, {
+    required super.raw,
     required this.deviceStartPosition,
     required this.deviceEndPosition,
   });
