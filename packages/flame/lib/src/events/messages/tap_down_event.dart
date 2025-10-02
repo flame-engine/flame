@@ -12,10 +12,11 @@ import 'package:flutter/gestures.dart';
 ///
 /// In order for a component to be eligible to receive this event, it must add
 /// the [TapCallbacks] mixin.
-class TapDownEvent extends PositionEvent {
+class TapDownEvent extends PositionEvent<TapDownDetails> {
   TapDownEvent(this.pointerId, super.game, TapDownDetails details)
     : deviceKind = details.kind ?? PointerDeviceKind.unknown,
       super(
+        raw: details,
         devicePosition: details.globalPosition.toVector2(),
       );
 
