@@ -1,5 +1,6 @@
 import 'package:flame/events.dart' hide PointerMoveEvent;
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -777,6 +778,8 @@ void main() {
   });
 }
 
+// testing the deprecated TapDetector mixin
+// ignore: deprecated_member_use_from_same_package
 class _TapDetectorGame extends FlameGame with TapDetector {
   bool hasOnTapUp = false;
   bool hasOnTapDown = false;
