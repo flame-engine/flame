@@ -37,9 +37,9 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
-    Color? color,
+    this.color = const Color(0x00000000),
     this.flip = false,
-  }) : paint = Paint()..color = color ?? const Color(0x00000000),
+  }) : paint = Paint()..color = color,
        destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
@@ -85,6 +85,9 @@ class BatchItem {
 
   /// Paint object used for the web.
   final Paint paint;
+
+  /// The color of the batch item.
+  final Color color;
 }
 
 @internal
@@ -122,10 +125,10 @@ enum FlippedAtlasStatus {
 class SpriteBatch {
   SpriteBatch(
     this.atlas, {
-    this.defaultColor = const Color(0x00000000),
-    this.defaultBlendMode = BlendMode.srcOver,
     this.defaultTransform,
     this.useAtlas = true,
+    this.defaultColor = const Color(0x00000000),
+    this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
   }) : _imageCache = imageCache,
@@ -136,17 +139,17 @@ class SpriteBatch {
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteBatch> load(
     String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
     RSTransform? defaultTransform,
     Images? images,
+    Color? defaultColor,
+    BlendMode? defaultBlendMode,
     bool useAtlas = true,
   }) async {
     final imagesCache = images ?? Flame.images;
     return SpriteBatch(
       await imagesCache.load(path),
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
-      defaultColor: defaultColor,
+      defaultColor: defaultColor ?? const Color(0x00000000),
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
       imageCache: imagesCache,
@@ -211,7 +214,7 @@ class SpriteBatch {
       'image[${identityHashCode(atlas)}]';
 
   /// The default color, used as a background color for a [BatchItem].
-  final Color? defaultColor;
+  final Color defaultColor;
 
   /// The default transform, used when a transform was not supplied for a
   /// [BatchItem].
@@ -238,8 +241,6 @@ class SpriteBatch {
   // Used to not create new Paint objects in [render] and
   // [generateFlippedAtlas].
   final _emptyPaint = Paint();
-
-  static const _defaultColor = Color(0x00000000);
 
   Future<void> _makeFlippedAtlas() async {
     _flippedAtlasStatus = FlippedAtlasStatus.generating;
@@ -441,10 +442,10 @@ class SpriteBatch {
           .map((e) => e.source)
           .toList(growable: false);
       final colors = _batchItems.values
-          .map((e) => e.paint.color)
+          .map((e) => e.color)
           .toList(growable: false);
 
-      final hasNoColors = colors.every((c) => c == _defaultColor);
+      final hasNoColors = colors.every((c) => c == defaultColor);
       final actualBlendMode = blendMode ?? defaultBlendMode;
       if (!hasNoColors && actualBlendMode == null) {
         throw 'When setting any colors, a blend mode must be provided.';
