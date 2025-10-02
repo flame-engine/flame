@@ -35,8 +35,8 @@ Developed with 💙 and 🔥 by [Very Good Ventures][very_good_ventures_link] �
 
 ### Installing 🧑‍💻
 
-In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to your
-project.
+In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to
+your project.
 
 > **Note**: Flame Behaviors requires Flame `">=1.10.0 <2.0.0"`
 
@@ -58,6 +58,9 @@ the concepts!
 
 ## Documentation 📝
 
-View the full documentation [here][flame_behaviors_documentation].
+View the [full documentation][flame_behaviors_documentation].
 
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
+[flame_package_link]: https://pub.dev/packages/flame
+[flame_behaviors_article]: https://verygood.ventures/blog/build-games-with-flame-behaviors
+[flame_behaviors_documentation]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/getting-started.md
