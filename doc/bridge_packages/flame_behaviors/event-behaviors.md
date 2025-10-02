@@ -1,12 +1,14 @@
 # Event Behaviors ⌨
 
 The `flame_behaviors` package also provides event behaviors. These behaviors are a layer over the
-existing Flame event mixins for components. These behaviors will trigger when the user interacts with their parent entity. So these events are always relative to the parent entity.
+existing Flame event mixins for components. These behaviors will trigger when the user interacts
+with their parent entity. So these events are always relative to the parent entity.
 
 
 ## TappableBehavior
 
-The `TappableBehavior` allows developers to use the [tap events][flame_tap_docs] from Flame on their entities.
+The `TappableBehavior` allows developers to use the [tap events][flame_tap_docs] from Flame on
+their entities.
 
 ```dart
 class MyTappableBehavior extends TappableBehavior<MyEntity> {
@@ -20,7 +22,8 @@ class MyTappableBehavior extends TappableBehavior<MyEntity> {
 
 ## DraggableBehavior
 
-The `DraggableBehavior` allows developers to use the [drag events][flame_drag_docs] from Flame on their entities.
+The `DraggableBehavior` allows developers to use the [drag events][flame_drag_docs] from Flame on
+their entities.
 
 ```dart
 class MyDraggableBehavior extends DraggableBehavior<MyEntity> {
