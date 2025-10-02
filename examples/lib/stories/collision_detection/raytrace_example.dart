@@ -9,11 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaytraceExample extends FlameGame
-    with
-        HasCollisionDetection,
-        TapDetector,
-        MouseMovementDetector,
-        TapDetector {
+    with HasCollisionDetection, MouseMovementDetector, TapCallbacks {
   static const description = '''
 In this example the raytrace functionality is showcased.
 Click to start sending out a ray which will bounce around to visualize how it
@@ -54,8 +50,9 @@ bounce on will appear.
 
   bool isClicked = false;
   final extraChildren = <Component>[];
+
   @override
-  void onTap() {
+  void onTapDown(_) {
     if (!isClicked) {
       isClicked = true;
       return;

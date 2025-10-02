@@ -1,10 +1,10 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-class CustomPainterExample extends FlameGame with TapDetector {
+class CustomPainterExample extends FlameGame with TapCallbacks {
   static const description = '''
     Example demonstration of how to use the CustomPainterComponent.
 
@@ -19,7 +19,7 @@ class CustomPainterExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     if (overlays.isActive('Smiley')) {
       overlays.remove('Smiley');
     } else {

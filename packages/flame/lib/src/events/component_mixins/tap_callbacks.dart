@@ -10,6 +10,9 @@ import 'package:meta/meta.dart';
 /// In addition to adding this mixin, the component must also implement the
 /// [containsLocalPoint] method -- the component will only be considered
 /// "tapped" if the point where the tap has occurred is inside the component.
+///
+/// Note that FlameGame _is_ a [Component] and does implement
+/// [containsLocalPoint]; so this can be used at the game level.
 mixin TapCallbacks on Component {
   void onTapDown(TapDownEvent event) {}
   void onLongTapDown(TapDownEvent event) {}
