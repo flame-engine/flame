@@ -1,5 +1,6 @@
 # 2. Start Coding
 
+
 ## The Plan
 
 Now that we have the assets loaded and a very rough idea of what classes we will need, we need to
@@ -27,6 +28,7 @@ level game. As you make your way through this tutorial, you will see how we
 could modify the level code to have an end. I will add a note in that section
 to explain the appropriate mechanics.
 ```
+
 
 ## Loading Assets
 
@@ -63,6 +65,7 @@ only load the files once, but allow us to access them as many times as needed wi
 the game. `await images.loadAll()` takes a list of the file names that are found in `assets/images`
 and loads them to cache.
 
+
 ## Scaffolding
 
 So now that we have our game file, let's prepare the `main.dart` file to receive our newly created
@@ -84,6 +87,7 @@ void main() {
 ```
 
 You can run this file and you should just have a blank screen now. Let's get Ember loaded!
+
 
 ## CameraComponent and World
 
@@ -115,6 +119,7 @@ class EmberQuestGame extends FlameGame {
   }
 }
 ```
+
 
 ## Ember Time
 
@@ -194,6 +199,7 @@ class EmberQuestGame extends FlameGame {
 ```
 
 Run your game now and you should now see Ember flickering in the lower left-hand corner.
+
 
 ## Building Blocks
 
