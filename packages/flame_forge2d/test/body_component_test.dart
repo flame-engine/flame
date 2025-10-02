@@ -480,5 +480,64 @@ void main() {
         expect(component.tapCount, 2);
       });
     });
+
+    testWithGame(
+      'BodyComponent.world consistency in onRemove',
+      Forge2DGame.new,
+      (game) async {
+        final bodyDef = BodyDef();
+        final body = game.world.createBody(bodyDef);
+        final shape = CircleShape()..radius = 5;
+        body.createFixture(FixtureDef(shape));
+
+        final component = _ConsistentBodyComponent(bodyDef: bodyDef);
+        await game.world.add(component);
+        await game.ready();
+        component.removeFromParent();
+        await game.ready();
+
+        // Verify that the world is the same in onMount and onRemove
+        expect(component.onMountWorld, equals(component.onRemoveWorld));
+      },
+    );
+
+    testWithGame(
+      'BodyComponent.world consistency in onRemove with world change',
+      Forge2DGame.new,
+      (game) async {
+        final bodyDef = BodyDef();
+        final body = game.world.createBody(bodyDef);
+        final shape = CircleShape()..radius = 5;
+        body.createFixture(FixtureDef(shape));
+
+        final component = _ConsistentBodyComponent(bodyDef: bodyDef);
+        await game.world.add(component);
+        await game.ready();
+        game.world = Forge2DWorld();
+        await game.ready();
+
+        // Verify that the world is the same in onMount and onRemove
+        expect(component.onMountWorld, equals(component.onRemoveWorld));
+      },
+    );
   });
+}
+
+class _ConsistentBodyComponent extends BodyComponent {
+  _ConsistentBodyComponent({super.bodyDef});
+
+  Forge2DWorld? onMountWorld;
+  Forge2DWorld? onRemoveWorld;
+
+  @override
+  void onMount() {
+    super.onMount();
+    onMountWorld = world;
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    onRemoveWorld = world;
+  }
 }

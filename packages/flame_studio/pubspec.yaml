@@ -15,7 +15,7 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6

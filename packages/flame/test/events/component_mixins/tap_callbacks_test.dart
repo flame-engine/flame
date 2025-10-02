@@ -485,18 +485,21 @@ mixin _TapCounter on TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     tapDownEvent++;
   }
 
   @override
   void onLongTapDown(TapDownEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     longTapDownEvent++;
   }
 
   @override
   void onTapUp(TapUpEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     tapUpEvent++;
   }

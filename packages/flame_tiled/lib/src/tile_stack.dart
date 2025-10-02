@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame_tiled/src/mutable_transform.dart';
+import 'package:flame/rendering.dart';
 
 /// A select group of tiles from RenderableTiledMap that can be animated.
 ///

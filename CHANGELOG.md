@@ -3,6 +3,157 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-09-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.19.2`](#flame_forge2d---v0192)
+
+---
+
+#### `flame_forge2d` - `v0.19.2`
+
+ - **FEAT**: Allow bodies to not be destroyed when the world is removed from the component tree ([#3716](https://github.com/flame-engine/flame/issues/3716)). ([7d18fd3d](https://github.com/flame-engine/flame/commit/7d18fd3d1cf076bce7032eb60dbfd7777643539d))
+
+
+## 2025-09-07
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_forge2d` - `v0.19.1`](#flame_forge2d---v0191)
+ - [`flame_3d` - `v0.1.1+2`](#flame_3d---v0112)
+
+---
+
+#### `flame_forge2d` - `v0.19.1`
+
+ - **FIX**: Use correct `Forge2DWorld` in `onRemove` ([#3713](https://github.com/flame-engine/flame/issues/3713)). ([140833d1](https://github.com/flame-engine/flame/commit/140833d1eacf6b756f81f0452ec237c6991f2ae0))
+
+#### `flame_3d` - `v0.1.1+2`
+
+ - **DOCS**: Update README.md of flame_3d with newer instructions ([#3711](https://github.com/flame-engine/flame/issues/3711)). ([ad7dc059](https://github.com/flame-engine/flame/commit/ad7dc059f2f97e7bc78a74bdff149b26adb22fbc))
+
+
+## 2025-08-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_3d` - `v0.1.1+1`](#flame_3d---v0111)
+
+---
+
+#### `flame_3d` - `v0.1.1+1`
+
+ - **FIX**: When parsing OBJs with no normals, fallback to normal generation ([#3708](https://github.com/flame-engine/flame/issues/3708)). ([a59ccaa3](https://github.com/flame-engine/flame/commit/a59ccaa341a562c25ad54f4af567b160084e06d8))
+ - **FIX**: Update compiled shaderbundle for flame_3d and add color example ([#3704](https://github.com/flame-engine/flame/issues/3704)). ([a1070d97](https://github.com/flame-engine/flame/commit/a1070d975fd3af52d44f3febb13dd97afd4990a6))
+
+
+## 2025-08-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.32.0`](#flame---v1320)
+ - [`flame_3d` - `v0.1.1`](#flame_3d---v011)
+ - [`flame_tiled` - `v3.0.7`](#flame_tiled---v307)
+ - [`flame_behavior_tree` - `v0.1.3+16`](#flame_behavior_tree---v01316)
+ - [`flame_test` - `v2.0.3`](#flame_test---v203)
+ - [`flame_oxygen` - `v0.2.3+16`](#flame_oxygen---v02316)
+ - [`flame_isolate` - `v0.6.2+16`](#flame_isolate---v06216)
+ - [`flame_texturepacker` - `v5.0.1`](#flame_texturepacker---v501)
+ - [`flame_sprite_fusion` - `v0.2.0+3`](#flame_sprite_fusion---v0203)
+ - [`flame_fire_atlas` - `v1.8.11`](#flame_fire_atlas---v1811)
+ - [`flame_audio` - `v2.11.10`](#flame_audio---v21110)
+ - [`flame_spine` - `v0.2.2+16`](#flame_spine---v02216)
+ - [`flame_bloc` - `v1.12.17`](#flame_bloc---v11217)
+ - [`flame_kenney_xml` - `v0.1.1+16`](#flame_kenney_xml---v01116)
+ - [`flame_lottie` - `v0.4.2+16`](#flame_lottie---v04216)
+ - [`flame_markdown` - `v0.2.4+9`](#flame_markdown---v0249)
+ - [`flame_console` - `v0.1.2+12`](#flame_console---v01212)
+ - [`flame_rive` - `v1.10.19`](#flame_rive---v11019)
+ - [`flame_forge2d` - `v0.19.0+6`](#flame_forge2d---v01906)
+ - [`flame_noise` - `v0.3.2+16`](#flame_noise---v03216)
+ - [`flame_riverpod` - `v5.4.19`](#flame_riverpod---v5419)
+ - [`flame_svg` - `v1.11.16`](#flame_svg---v11116)
+ - [`flame_network_assets` - `v0.3.3+16`](#flame_network_assets---v03316)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+16`
+ - `flame_test` - `v2.0.3`
+ - `flame_oxygen` - `v0.2.3+16`
+ - `flame_isolate` - `v0.6.2+16`
+ - `flame_texturepacker` - `v5.0.1`
+ - `flame_sprite_fusion` - `v0.2.0+3`
+ - `flame_fire_atlas` - `v1.8.11`
+ - `flame_audio` - `v2.11.10`
+ - `flame_spine` - `v0.2.2+16`
+ - `flame_bloc` - `v1.12.17`
+ - `flame_kenney_xml` - `v0.1.1+16`
+ - `flame_lottie` - `v0.4.2+16`
+ - `flame_markdown` - `v0.2.4+9`
+ - `flame_console` - `v0.1.2+12`
+ - `flame_rive` - `v1.10.19`
+ - `flame_forge2d` - `v0.19.0+6`
+ - `flame_noise` - `v0.3.2+16`
+ - `flame_riverpod` - `v5.4.19`
+ - `flame_svg` - `v1.11.16`
+ - `flame_network_assets` - `v0.3.3+16`
+
+---
+
+#### `flame` - `v1.32.0`
+
+ - **REFACTOR**: Move MutableRSTransform out of flame_tiled package and into flame package ([#3695](https://github.com/flame-engine/flame/issues/3695)). ([7d644dd8](https://github.com/flame-engine/flame/commit/7d644dd84ce27e292b53f7310967393cf4c60618))
+ - **FEAT**: Add renderLine helper to canvas extensions ([#3697](https://github.com/flame-engine/flame/issues/3697)). ([7ede916f](https://github.com/flame-engine/flame/commit/7ede916f77f20d8c1b0c89627800214dba9facec))
+
+#### `flame_3d` - `v0.1.1`
+
+ - **FIX**: Cleanup and make OBJ parser more resilient ([#3702](https://github.com/flame-engine/flame/issues/3702)). ([b96421d5](https://github.com/flame-engine/flame/commit/b96421d5035393d764a9ec34aeba8db380222f45))
+ - **FIX**: Fix color to byte conversion for shaders ([#3700](https://github.com/flame-engine/flame/issues/3700)). ([2426c06b](https://github.com/flame-engine/flame/commit/2426c06b799797720c9df8fbd73e337422654d00))
+ - **FIX**: Add fallback default material to avoid crashes ([#3701](https://github.com/flame-engine/flame/issues/3701)). ([8e6b04e3](https://github.com/flame-engine/flame/commit/8e6b04e38855b6fae6761a9f8d20c82c6bff6d76))
+ - **FIX**: Expose Line3D on components.dart ([#3698](https://github.com/flame-engine/flame/issues/3698)). ([d58d7b54](https://github.com/flame-engine/flame/commit/d58d7b5482f646e4536160449f4a17317b8aff2b))
+ - **FEAT**: Introduce cone mesh ([#3699](https://github.com/flame-engine/flame/issues/3699)). ([874a97fe](https://github.com/flame-engine/flame/commit/874a97fe421dadbed9f3825c8562f8bd7e6c95c9))
+ - **DOCS**: Update instructions on how to use flame_3d ([#3696](https://github.com/flame-engine/flame/issues/3696)). ([11cc2a8f](https://github.com/flame-engine/flame/commit/11cc2a8fae0f1c17106f91ef1ac319e6f8e39036))
+
+#### `flame_tiled` - `v3.0.7`
+
+ - **REFACTOR**: Move MutableRSTransform out of flame_tiled package and into flame package ([#3695](https://github.com/flame-engine/flame/issues/3695)). ([7d644dd8](https://github.com/flame-engine/flame/commit/7d644dd84ce27e292b53f7310967393cf4c60618))
+
+
 ## 2025-08-23
 
 ### Changes

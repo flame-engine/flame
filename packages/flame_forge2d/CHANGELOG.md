@@ -1,3 +1,15 @@
+## 0.19.2
+
+ - **FEAT**: Allow bodies to not be destroyed when the world is removed from the component tree ([#3716](https://github.com/flame-engine/flame/issues/3716)). ([7d18fd3d](https://github.com/flame-engine/flame/commit/7d18fd3d1cf076bce7032eb60dbfd7777643539d))
+
+## 0.19.1
+
+ - **FIX**: Use correct `Forge2DWorld` in `onRemove` ([#3713](https://github.com/flame-engine/flame/issues/3713)). ([140833d1](https://github.com/flame-engine/flame/commit/140833d1eacf6b756f81f0452ec237c6991f2ae0))
+
+## 0.19.0+6
+
+ - Update a dependency to the latest release.
+
 ## 0.19.0+5
 
  - Update a dependency to the latest release.

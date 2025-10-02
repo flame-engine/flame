@@ -1,11 +1,11 @@
-import 'package:example/components/crate.dart';
-import 'package:example/components/player.dart';
-import 'package:example/components/rendered_point_light.dart';
-import 'package:example/components/room_bounds.dart';
-import 'package:example/example_game_3d.dart';
 import 'package:flame/components.dart';
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
+import 'package:flame_3d_example/components/crate.dart';
+import 'package:flame_3d_example/components/player.dart';
+import 'package:flame_3d_example/components/rendered_point_light.dart';
+import 'package:flame_3d_example/components/room_bounds.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_console/flame_console.dart';
 
 class DestroyCommand extends FlameConsoleCommand<ExampleGame3D> {

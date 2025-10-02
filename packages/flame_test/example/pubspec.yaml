@@ -9,13 +9,13 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.31.0
+  flame: ^1.32.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flame_lint: ^1.4.2
-  flame_test: ^2.0.2
+  flame_test: ^2.0.3
   flutter_test:
     sdk: flutter
   test: any
