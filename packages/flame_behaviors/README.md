@@ -1,10 +1,27 @@
+<!-- markdownlint-disable MD013 -->
+<p align="center">
+  <a href="https://flame-engine.org">
+    <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
+  </a>
+</p>
+
+<p align="center">
+Flame Behaviors applies separation of concerns to game logic in the form of Entities and Behaviors.
+</p>
+
+<p align="center">
+  <a title="Pub" href="https://pub.dev/packages/flame_behaviors" ><img src="https://img.shields.io/pub/v/flame_behaviors.svg?style=popout" /></a>
+  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/actions/workflows/cicd.yml/badge.svg?branch=main&event=push"/></a>
+  <a title="Discord" href="https://discord.gg/pxrBmy4"><img src="https://img.shields.io/discord/509714518008528896.svg"/></a>
+  <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
+</p>
+
+---
+<!-- markdownlint-enable MD013 -->
+
+<!-- markdownlint-disable-next-line MD002 -->
 # Flame Behaviors
 
-[![ci][ci_badge]][ci_link]
-[![coverage][coverage_badge]][ci_link]
-[![pub package][pub_badge]][pub_link]
-[![License: MIT][license_badge]][license_link]
-[![Powered by Flame][flame_badge_link]]([flame_link])
 
 Flame Behaviors applies separation of concerns to game logic in the form of Entities and Behaviors.
 
@@ -43,15 +60,4 @@ the concepts!
 
 View the full documentation [here][flame_behaviors_documentation].
 
-[ci_badge]: https://github.com/VeryGoodOpenSource/flame_behaviors/workflows/flame_behaviors/badge.svg
-[ci_link]: https://github.com/VeryGoodOpenSource/flame_behaviors/actions
-[coverage_badge]: https://raw.githubusercontent.com/VeryGoodOpenSource/flame_behaviors/main/coverage_badge.svg
-[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[license_link]: https://opensource.org/licenses/MIT
-[pub_badge]: https://img.shields.io/pub/v/flame_behaviors.svg
-[pub_link]: https://pub.dartlang.org/packages/flame_behaviors
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
-[flame_badge_link]: https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg
-[flame_package_link]: https://pub.dev/packages/flame
-[flame_behaviors_article]: https://verygood.ventures/blog/build-games-with-flame-behaviors
-[flame_behaviors_documentation]: https://github.com/VeryGoodOpenSource/flame_behaviors/tree/main/docs
