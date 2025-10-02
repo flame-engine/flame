@@ -119,12 +119,14 @@ mixin _TapCounter on TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
+    expect(event.raw, isNotNull);
     event.continuePropagation = true;
     tapDownEvent++;
   }
 
   @override
   void onTapUp(TapUpEvent event) {
+    expect(event.raw, isNotNull);
     event.continuePropagation = true;
     tapUpEvent++;
   }
