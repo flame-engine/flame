@@ -221,7 +221,9 @@ class BodyComponent<T extends Forge2DGame> extends Component
 
   @override
   void onRemove() {
-    world.destroyBody(body);
+    if (!world.isRemoving || world.destroyBodiesOnRemove) {
+      world.destroyBody(body);
+    }
     super.onRemove();
   }
 }

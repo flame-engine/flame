@@ -15,7 +15,7 @@ dependencies:
   dashbook: ^0.1.16
   flame: ^1.32.0
   flame_audio: ^2.11.10
-  flame_forge2d: ^0.19.1
+  flame_forge2d: ^0.19.2
   flame_isolate: ^0.6.2+16
   flame_lottie: ^0.4.2+16
   flame_noise: ^0.3.2+16

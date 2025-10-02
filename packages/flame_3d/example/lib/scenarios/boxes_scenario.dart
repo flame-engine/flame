@@ -1,14 +1,14 @@
 import 'dart:math';
 
-import 'package:example/components/crate.dart';
-import 'package:example/components/rendered_point_light.dart';
-import 'package:example/components/rotating_light.dart';
-import 'package:example/example_game_3d.dart';
-import 'package:example/scenarios/game_scenario.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/resources.dart';
+import 'package:flame_3d_example/components/crate.dart';
+import 'package:flame_3d_example/components/rendered_point_light.dart';
+import 'package:flame_3d_example/components/rotating_light.dart';
+import 'package:flame_3d_example/example_game_3d.dart';
+import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
 class BoxesScenario implements GameScenario {
   @override

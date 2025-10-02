@@ -1,7 +1,7 @@
 name: flame_forge2d
 resolution: workspace
 description: Forge2D (Box2D) support for the Flame game engine. This uses the forge2d package and provides wrappers and components to be used inside Flame.
-version: 0.19.1
+version: 0.19.2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d
 funding:
   - https://opencollective.com/blue-fire

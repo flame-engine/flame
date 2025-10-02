@@ -2,18 +2,12 @@
 bloodlust
 collidable
 collidables
-draggables
-focusable
-gamepad
 gamepads
-gapless
 grayscale
 hoverable
-hoverables
 Hoverables
 inactives
 layouting
-microtask
 orientable
 platformer
 positionable
@@ -23,14 +17,8 @@ prerender
 prerendered
 pressable
 ptero # short for pterodactyl
-rebalance
-rebalancing
 refreshable
 renderable
 rescan
-strikethrough # of a text with a horizontal line across
 tappable
-tappables
-toolset
 underutilize
-endianness
