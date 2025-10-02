@@ -1,10 +1,10 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-class OverlaysExample extends FlameGame with TapDetector {
+class OverlaysExample extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how the overlays system can be used.\n\n
     If you tap the canvas the game will start and if you tap it again it will
@@ -37,7 +37,11 @@ class OverlaysExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
+    toggleMenu();
+  }
+
+  void toggleMenu() {
     if (overlays.isActive('PauseMenu')) {
       overlays.remove('PauseMenu');
       resumeEngine();
@@ -98,7 +102,7 @@ Widget overlayBuilder(DashbookContext ctx) {
       'PauseMenu': (context, game) => _pauseMenuBuilder(
         context,
         game,
-        () => game.onTap(),
+        () => game.toggleMenu(),
       ),
       'SecondaryMenu': _secondaryMenuBuilder,
     },

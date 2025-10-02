@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/animation.dart';
 
-class SizeEffectExample extends FlameGame with TapDetector {
+class SizeEffectExample extends FlameGame with TapCallbacks {
   static const String description = '''
     The `SizeEffect` changes the size of the component, the sizes of the
     children will stay the same.
@@ -31,7 +31,7 @@ class SizeEffectExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     shape.add(
       SizeEffect.to(
         Vector2.all(grow ? 300.0 : 100.0),
