@@ -660,15 +660,17 @@ class Component {
   FutureOr<void> addToParent(Component parent) => parent._addChild(this);
 
   /// A convenience method to [add] multiple children at once.
-  Future<void> addAll(Iterable<Component> components) {
-    final futures = <Future<void>>[];
+  Future<void> addAll(Iterable<Component> components) async {
+    List<Future<void>>? futures;
     for (final component in components) {
       final future = add(component);
       if (future is Future) {
-        futures.add(future);
+        (futures ??= []).add(future);
       }
     }
-    return Future.wait(futures);
+    if (futures != null) {
+      await Future.wait(futures);
+    }
   }
 
   FutureOr<void> _addChild(Component child) {
