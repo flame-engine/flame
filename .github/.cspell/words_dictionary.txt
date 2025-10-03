@@ -5,6 +5,7 @@ collidables
 gamepads
 grayscale
 hoverable
+Hoverables
 inactives
 layouting
 orientable
