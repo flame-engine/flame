@@ -3,8 +3,6 @@ import 'package:flame/extensions.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
-import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/hexagonal_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/isometric_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/orthogonal_tile_layer.dart';
@@ -33,30 +31,30 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  late final _layerPaint = layerPaintFactory(opacity);
   final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
   final Map<Tile, TileFrames> animationFrames;
   final bool ignoreFlip;
-  Paint Function(double opacity) layerPaintFactory;
 
   FlameTileLayer({
     required super.layer,
     required super.parent,
+    required super.camera,
     required super.map,
     required super.destTileSize,
     required this.tiledAtlas,
     required this.animationFrames,
     required this.ignoreFlip,
-    required this.layerPaintFactory,
+    required super.layerPaintFactory,
     super.filterQuality,
   });
 
   /// {@macro flame_tile_layer}
   static FlameTileLayer load({
     required TileLayer layer,
-    required GroupLayer? parent,
+    required Component? parent,
+    required CameraComponent? camera,
     required TiledMap map,
     required Vector2 destTileSize,
     required Map<Tile, TileFrames> animationFrames,
@@ -76,6 +74,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
         layer: layer,
         parent: parent,
         map: map,
+        camera: camera,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
         animationFrames: animationFrames,
@@ -87,6 +86,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
         layer: layer,
         parent: parent,
         map: map,
+        camera: camera,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
         animationFrames: animationFrames,
@@ -98,6 +98,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
         layer: layer,
         parent: parent,
         map: map,
+        camera: camera,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
         animationFrames: animationFrames,
@@ -109,6 +110,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
         layer: layer,
         parent: parent,
         map: map,
+        camera: camera,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
         animationFrames: animationFrames,
@@ -127,22 +129,12 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   }
 
   @override
-  void render(Canvas canvas, CameraComponent? camera) {
+  void render(Canvas canvas) {
     if (tiledAtlas.batch == null) {
       return;
     }
-
-    canvas.save();
-    canvas.translate(offsetX, offsetY);
-    if (camera != null) {
-      applyParallaxOffset(canvas, camera);
-    }
-    tiledAtlas.batch!.render(canvas, paint: _layerPaint);
-    canvas.restore();
+    tiledAtlas.batch!.render(canvas, paint: paint);
   }
-
-  @override
-  void handleResize(Vector2 canvasSize) {}
 
   @protected
   void addAnimation(Tile tile, Tileset tileset, MutableRect source) {

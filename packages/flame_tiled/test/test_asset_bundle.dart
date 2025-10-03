@@ -23,7 +23,17 @@ class TestAssetBundle extends CachingAssetBundle {
 
       imgName = parts.sublist(index + 1).join('/');
 
-      fileName = key.replaceFirst('assets/images/', 'test/assets/');
+      parts.removeAt(index);
+
+      // Tileset files are one more path deeper than their images
+      switch (parts.indexOf('tiles')) {
+        case == -1:
+          break;
+        case final int idx:
+          parts.removeAt(idx);
+      }
+
+      fileName = parts.join('/').replaceFirst('assets/images/', 'test/assets/');
     } else {
       final pattern = RegExp(r'assets/images/(\.\./)*');
       final split = key.split('/');
