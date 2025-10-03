@@ -10,7 +10,7 @@ void main() async {
   runApp(const GameWidget.controlled(gameFactory: SpineExample.new));
 }
 
-class SpineExample extends FlameGame with TapDetector {
+class SpineExample extends FlameGame with TapCallbacks {
   late final SpineComponent spineboy;
 
   final states = [
@@ -46,7 +46,7 @@ class SpineExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     _stateIndex = (_stateIndex + 1) % states.length;
     spineboy.animationState.setAnimationByName(0, states[_stateIndex], true);
   }

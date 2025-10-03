@@ -47,7 +47,6 @@ export 'src/gestures/detectors.dart'
         ScrollDetector,
         TertiaryTapDetector,
         SecondaryTapDetector,
-        TapDetector,
         VerticalDragDetector;
 export 'src/gestures/events.dart'
     show
