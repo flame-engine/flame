@@ -197,6 +197,47 @@ void main() {
                   expectedGap,
             );
           },
+          'set mainAxisAlignment to spaceEvenly then end':
+              (game, direction) async {
+                final circle = CircleComponent(radius: 20);
+                final rectangle = RectangleComponent(size: Vector2(100, 50));
+                final text = TextComponent(text: 'testing');
+                final layoutComponentSize = Vector2.all(500);
+                final layoutComponent = LinearLayoutComponent.fromDirection(
+                  direction,
+                  children: [circle, rectangle, text],
+                  size: layoutComponentSize,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                );
+                await game.ensureAdd(layoutComponent);
+                final mainAxis = direction.mainAxis;
+                final occupiedSpace = [
+                  circle.size,
+                  rectangle.size,
+                  text.size,
+                ].map(mainAxis).sum;
+                final expectedGap =
+                    (mainAxis(layoutComponentSize) - occupiedSpace) / 4;
+                expect(layoutComponent.gap, expectedGap);
+                expect(mainAxis(circle.position), expectedGap);
+                expect(
+                  mainAxis(rectangle.position),
+                  mainAxis(circle.position) +
+                      mainAxis(circle.size) +
+                      expectedGap,
+                );
+                expect(
+                  mainAxis(text.position),
+                  mainAxis(rectangle.position) +
+                      mainAxis(rectangle.size) +
+                      expectedGap,
+                );
+                layoutComponent.mainAxisAlignment = MainAxisAlignment.end;
+                expect(
+                  mainAxis(text.positionOfAnchor(Anchor.bottomRight)),
+                  mainAxis(layoutComponentSize),
+                );
+              },
         },
       );
     });
@@ -276,7 +317,7 @@ void main() {
 
     group('size', () {
       runLinearLayoutComponentTestRegistry({
-        'size=null sets size to inherentSize': (game, direction) async {
+        'size=null sets size to intrinsicSize': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
@@ -288,8 +329,8 @@ void main() {
           );
           await game.ensureAdd(layoutComponent);
           expect(layoutComponent.size, layoutComponentSize);
-          layoutComponent.size = null;
-          expect(layoutComponent.size, layoutComponent.inherentSize);
+          layoutComponent.layoutSize = null;
+          expect(layoutComponent.size, layoutComponent.intrinsicSize);
         },
         'size=null ignores mainAxisAlignment': (game, direction) async {
           final circle = CircleComponent(radius: 20);
@@ -329,7 +370,7 @@ void main() {
                 CrossAxisAlignment.start,
               );
             },
-        "size=null doesn't respect CrossAxisAlignment.stretch":
+        'size=null with CrossAxisAlignment.stretch expands children as usual':
             (game, direction) async {
               final circle = CircleComponent(radius: 20);
               final rectangle = RectangleComponent(size: Vector2(100, 50));
@@ -340,9 +381,19 @@ void main() {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
               );
               await game.ensureAdd(layoutComponent);
+              final crossAxisLengths = layoutComponent.positionChildren.map(
+                (component) => component.size[direction.crossAxisVectorIndex],
+              );
+              // All the cross axis lengths are the same
               expect(
-                layoutComponent.crossAxisAlignment,
-                CrossAxisAlignment.start,
+                crossAxisLengths.every(
+                  (length) => length == crossAxisLengths.first,
+                ),
+                true,
+              );
+              expect(
+                crossAxisLengths.first,
+                layoutComponent.size[direction.crossAxisVectorIndex],
               );
             },
       });
@@ -356,7 +407,6 @@ void main() {
                 final rectangle2 = RectangleComponent(size: Vector2(100, 50));
                 final layoutComponent = LinearLayoutComponent.fromDirection(
                   direction,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
                 );
                 await game.ensureAdd(layoutComponent);
                 expect(layoutComponent.size, Vector2.zero());
@@ -372,6 +422,26 @@ void main() {
                     Direction.vertical => Vector2(200, 70 + 40),
                   },
                 );
+              },
+          'ExpandedComponent among children are sized correctly':
+              (game, direction) async {
+                final circle = CircleComponent(radius: 20);
+                final rectangle = RectangleComponent(size: Vector2(100, 50));
+                final expandedComponent = ExpandedComponent(child: rectangle);
+                final layoutComponent = LinearLayoutComponent.fromDirection(
+                  direction,
+                  size: Vector2(200, 100),
+                  children: [circle, expandedComponent],
+                );
+                await game.ensureAdd(layoutComponent);
+                expect(
+                  expandedComponent.size,
+                  switch (direction) {
+                    Direction.horizontal => Vector2(200 - 40, 50),
+                    Direction.vertical => Vector2(100, 100 - 40),
+                  },
+                );
+                expect(expandedComponent.child?.size, expandedComponent.size);
               },
         },
       );
