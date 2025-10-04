@@ -75,7 +75,7 @@ class AssetsCache {
   }
 
   /// This method provides synchronous access to cached assets, similar to
-  /// [Images.fromCache].
+  /// [AssetsCache.fromCache].
   T fromCache<T>(String fileName) {
     final asset = _files[fileName];
     assert(
@@ -87,7 +87,7 @@ class AssetsCache {
     assert(
       asset!.value is T,
       'Tried to access asset "$fileName" as type $T, but it was loaded as '
-      '${asset!.value.runtimeType}. Make sure to use the correct type when '
+      '${asset.value.runtimeType}. Make sure to use the correct type when '
       'calling fromCache<T>()',
     );
     return asset!.value as T;
