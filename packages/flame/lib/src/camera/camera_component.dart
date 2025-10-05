@@ -45,7 +45,6 @@ import 'package:flame/src/game/flame_game.dart';
 /// added to the viewfinder will be rendered as if they were part of the world.
 /// That is, they will be affected both by the viewport and the viewfinder.
 ///
-///
 /// A [PostProcess] can be applied to the camera, which will affect the
 /// rendering of the world. This is useful for applying effects such as bloom,
 /// blur, or other fragment shader effects to the world. See [postProcess] for
