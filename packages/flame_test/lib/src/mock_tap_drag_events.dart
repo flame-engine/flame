@@ -38,6 +38,38 @@ TapUpEvent createTapUpEvents({
   );
 }
 
+SecondaryTapDownEvent createSecondaryTapDownEvents({
+  required Game game,
+  PointerDeviceKind? kind,
+  Offset? globalPosition,
+  Offset? localPosition,
+}) {
+  return SecondaryTapDownEvent(
+    game,
+    TapDownDetails(
+      localPosition: localPosition ?? Offset.zero,
+      globalPosition: globalPosition ?? Offset.zero,
+      kind: kind ?? PointerDeviceKind.touch,
+    ),
+  );
+}
+
+SecondaryTapUpEvent createSecondaryTapUpEvents({
+  required Game game,
+  PointerDeviceKind? kind,
+  Offset? globalPosition,
+  Offset? localPosition,
+}) {
+  return SecondaryTapUpEvent(
+    game,
+    TapUpDetails(
+      localPosition: localPosition ?? Offset.zero,
+      globalPosition: globalPosition ?? Offset.zero,
+      kind: kind ?? PointerDeviceKind.touch,
+    ),
+  );
+}
+
 DragStartEvent createDragStartEvents({
   required Game game,
   int? pointerId,
