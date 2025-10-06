@@ -153,9 +153,10 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// Otherwise, returns the value of gap based on the expected behavior of
   /// [mainAxisAlignment].
   double get gap {
-    if ( // mainAxisAlignment is not an alignment that can override gaps
-    !gapOverridingAlignments.contains(mainAxisAlignment) ||
-        // There are [ExpandedComponent]s among the children
+    // mainAxisAlignment is not an alignment that can override gaps
+    // OR
+    // There are [ExpandedComponent]s among the children
+    if (!gapOverridingAlignments.contains(mainAxisAlignment) ||
         children.query<ExpandedComponent>().isNotEmpty) {
       return _gap;
     }
