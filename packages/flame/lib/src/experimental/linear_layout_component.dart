@@ -246,10 +246,13 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   void _layoutMainAxis() {
     final mainAxisVectorIndex = direction.mainAxis.axisIndex;
     final availableSpace = size[mainAxisVectorIndex];
-    final nonExpandingOccupiedSpace = positionChildren
-        .where((child) => child is! ExpandedComponent)
-        .map((child) => child.size[mainAxisVectorIndex])
-        .sum;
+    final nonExpandingOccupiedSpace = positionChildren.fold<double>(
+      0.0,
+      (sum, child) =>
+          child is ExpandedComponent
+              ? sum
+              : sum + child.size[mainAxisVectorIndex],
+    );
     final gapSpace = numberOfGaps * gap;
 
     _mainAxisSizing(
