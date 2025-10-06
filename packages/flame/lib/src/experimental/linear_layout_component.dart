@@ -246,10 +246,9 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     final availableSpace = size[mainAxisVectorIndex];
     final nonExpandingOccupiedSpace = positionChildren.fold<double>(
       0.0,
-      (sum, child) =>
-          child is ExpandedComponent
-              ? sum
-              : sum + child.size[mainAxisVectorIndex],
+      (sum, child) => child is ExpandedComponent
+          ? sum
+          : sum + child.size[mainAxisVectorIndex],
     );
     final gapSpace = numberOfGaps * gap;
 
@@ -290,13 +289,12 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   }) {
     final mainAxisVectorIndex = direction.mainAxis.axisIndex;
     final expandedComponents = components.whereType<ExpandedComponent>();
-    if (
-    // Meaningless if this is shrinkWrapped.
-    shrinkWrappedIn(direction.mainAxis) ||
-        // There isn't actual any free space to expand or whatnot, sizing is
-        // standard.
+    // Abort if:
+    // Shrink-wrapped (because meaningless to do any main axis calculation)
+    // OR, There isn't any free space to expand
+    // OR, There are no expanded components to grow
+    if (shrinkWrappedIn(direction.mainAxis) ||
         freeSpace <= 0 ||
-        // There's actually no reason to perform any main axis sizing.
         expandedComponents.isEmpty) {
       return;
     }
