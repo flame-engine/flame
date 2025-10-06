@@ -32,15 +32,15 @@ class ExpandedComponent extends SingleLayoutComponent
   final bool inflateChild;
 
   @override
-  void setLayoutAxisLength(int axisIndex, double? value) {
-    super.setLayoutAxisLength(axisIndex, value);
+  void setLayoutAxisLength(LayoutAxis axis, double? value) {
+    super.setLayoutAxisLength(axis, value);
     final child = this.child;
     if (inflateChild && child != null && value != null) {
       // We want to set the child's size.
       if (child is LayoutComponent) {
-        child.setLayoutAxisLength(axisIndex, value);
+        child.setLayoutAxisLength(axis, value);
       } else {
-        child.size[axisIndex] = value;
+        child.size[axis.axisIndex] = value;
       }
     }
   }

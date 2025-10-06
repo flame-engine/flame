@@ -21,15 +21,15 @@ void main() {
                 children: [circle, rectangle, text],
               ),
             );
-            expect(direction.mainAxis(circle.position), 0);
+            expect(direction.mainAxisValue(circle.position), 0);
             expect(
-              direction.mainAxis(rectangle.position),
-              direction.mainAxis(circle.size),
+              direction.mainAxisValue(rectangle.position),
+              direction.mainAxisValue(circle.size),
             );
             expect(
-              direction.mainAxis(text.position),
-              direction.mainAxis(rectangle.position) +
-                  direction.mainAxis(rectangle.size),
+              direction.mainAxisValue(text.position),
+              direction.mainAxisValue(rectangle.position) +
+                  direction.mainAxisValue(rectangle.size),
             );
           },
           'mainAxisAlignment = end': (game, direction) async {
@@ -45,18 +45,18 @@ void main() {
                 mainAxisAlignment: MainAxisAlignment.end,
               ),
             );
-            final mainAxis = direction.mainAxis;
+            final mainAxisValue = direction.mainAxisValue;
             expect(
-              mainAxis(text.position),
-              mainAxis(layoutComponentSize) - mainAxis(text.size),
+              mainAxisValue(text.position),
+              mainAxisValue(layoutComponentSize) - mainAxisValue(text.size),
             );
             expect(
-              mainAxis(rectangle.position),
-              mainAxis(text.position) - mainAxis(rectangle.size),
+              mainAxisValue(rectangle.position),
+              mainAxisValue(text.position) - mainAxisValue(rectangle.size),
             );
             expect(
-              mainAxis(circle.position),
-              mainAxis(rectangle.position) - mainAxis(circle.size),
+              mainAxisValue(circle.position),
+              mainAxisValue(rectangle.position) - mainAxisValue(circle.size),
             );
           },
           'mainAxisAlignment = center, gap = 20': (game, direction) async {
@@ -73,23 +73,28 @@ void main() {
               gap: gap,
             );
             await game.ensureAdd(layoutComponent);
-            final mainAxis = direction.mainAxis;
+            final mainAxisValue = direction.mainAxisValue;
             final occupiedSpace = [
               circle.size,
               rectangle.size,
               text.size,
-            ].map(mainAxis).sum;
+            ].map(mainAxisValue).sum;
             const gapSpace = gap * 2;
             final centerOffset =
-                (mainAxis(layoutComponentSize) - occupiedSpace - gapSpace) / 2;
-            expect(mainAxis(circle.position), centerOffset);
+                (mainAxisValue(layoutComponentSize) -
+                    occupiedSpace -
+                    gapSpace) /
+                2;
+            expect(mainAxisValue(circle.position), centerOffset);
             expect(
-              mainAxis(rectangle.position),
-              mainAxis(circle.position) + mainAxis(circle.size) + gap,
+              mainAxisValue(rectangle.position),
+              mainAxisValue(circle.position) + mainAxisValue(circle.size) + gap,
             );
             expect(
-              mainAxis(text.position),
-              mainAxis(rectangle.position) + mainAxis(rectangle.size) + gap,
+              mainAxisValue(text.position),
+              mainAxisValue(rectangle.position) +
+                  mainAxisValue(rectangle.size) +
+                  gap,
             );
           },
           'mainAxisAlignment = spaceBetween': (game, direction) async {
@@ -104,24 +109,24 @@ void main() {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
             );
             await game.ensureAdd(layoutComponent);
-            final mainAxis = direction.mainAxis;
+            final mainAxisValue = direction.mainAxisValue;
             final occupiedSpace = [
               circle.size,
               rectangle.size,
               text.size,
-            ].map(mainAxis).sum;
+            ].map(mainAxisValue).sum;
             final expectedGap =
-                (mainAxis(layoutComponentSize) - occupiedSpace) / 2;
+                (mainAxisValue(layoutComponentSize) - occupiedSpace) / 2;
             expect(layoutComponent.gap, expectedGap);
-            expect(mainAxis(circle.position), 0);
+            expect(mainAxisValue(circle.position), 0);
             expect(
-              mainAxis(rectangle.position),
-              mainAxis(circle.size) + expectedGap,
+              mainAxisValue(rectangle.position),
+              mainAxisValue(circle.size) + expectedGap,
             );
             expect(
-              mainAxis(text.position),
-              mainAxis(rectangle.position) +
-                  mainAxis(rectangle.size) +
+              mainAxisValue(text.position),
+              mainAxisValue(rectangle.position) +
+                  mainAxisValue(rectangle.size) +
                   expectedGap,
             );
           },
@@ -137,28 +142,33 @@ void main() {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
             );
             await game.ensureAdd(layoutComponent);
-            final mainAxis = direction.mainAxis;
+            final mainAxisValue = direction.mainAxisValue;
             final occupiedSpace = [
               circle.size,
               rectangle.size,
               text.size,
-            ].map(mainAxis).sum;
+            ].map(mainAxisValue).sum;
             final expectedGap =
-                (mainAxis(layoutComponentSize) - occupiedSpace) / 3;
+                (mainAxisValue(layoutComponentSize) - occupiedSpace) / 3;
             expect(layoutComponent.gap, expectedGap);
-            expect(mainAxis(circle.position), closeTo(expectedGap / 2, 1e-4));
             expect(
-              mainAxis(rectangle.position),
+              mainAxisValue(circle.position),
+              closeTo(expectedGap / 2, 1e-4),
+            );
+            expect(
+              mainAxisValue(rectangle.position),
               closeTo(
-                mainAxis(circle.position) + mainAxis(circle.size) + expectedGap,
+                mainAxisValue(circle.position) +
+                    mainAxisValue(circle.size) +
+                    expectedGap,
                 1e-4,
               ),
             );
             expect(
-              mainAxis(text.position),
+              mainAxisValue(text.position),
               closeTo(
-                mainAxis(rectangle.position) +
-                    mainAxis(rectangle.size) +
+                mainAxisValue(rectangle.position) +
+                    mainAxisValue(rectangle.size) +
                     expectedGap,
                 1e-4,
               ),
@@ -176,24 +186,26 @@ void main() {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             );
             await game.ensureAdd(layoutComponent);
-            final mainAxis = direction.mainAxis;
+            final mainAxisValue = direction.mainAxisValue;
             final occupiedSpace = [
               circle.size,
               rectangle.size,
               text.size,
-            ].map(mainAxis).sum;
+            ].map(mainAxisValue).sum;
             final expectedGap =
-                (mainAxis(layoutComponentSize) - occupiedSpace) / 4;
+                (mainAxisValue(layoutComponentSize) - occupiedSpace) / 4;
             expect(layoutComponent.gap, expectedGap);
-            expect(mainAxis(circle.position), expectedGap);
+            expect(mainAxisValue(circle.position), expectedGap);
             expect(
-              mainAxis(rectangle.position),
-              mainAxis(circle.position) + mainAxis(circle.size) + expectedGap,
+              mainAxisValue(rectangle.position),
+              mainAxisValue(circle.position) +
+                  mainAxisValue(circle.size) +
+                  expectedGap,
             );
             expect(
-              mainAxis(text.position),
-              mainAxis(rectangle.position) +
-                  mainAxis(rectangle.size) +
+              mainAxisValue(text.position),
+              mainAxisValue(rectangle.position) +
+                  mainAxisValue(rectangle.size) +
                   expectedGap,
             );
           },
@@ -210,32 +222,32 @@ void main() {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 );
                 await game.ensureAdd(layoutComponent);
-                final mainAxis = direction.mainAxis;
+                final mainAxisValue = direction.mainAxisValue;
                 final occupiedSpace = [
                   circle.size,
                   rectangle.size,
                   text.size,
-                ].map(mainAxis).sum;
+                ].map(mainAxisValue).sum;
                 final expectedGap =
-                    (mainAxis(layoutComponentSize) - occupiedSpace) / 4;
+                    (mainAxisValue(layoutComponentSize) - occupiedSpace) / 4;
                 expect(layoutComponent.gap, expectedGap);
-                expect(mainAxis(circle.position), expectedGap);
+                expect(mainAxisValue(circle.position), expectedGap);
                 expect(
-                  mainAxis(rectangle.position),
-                  mainAxis(circle.position) +
-                      mainAxis(circle.size) +
+                  mainAxisValue(rectangle.position),
+                  mainAxisValue(circle.position) +
+                      mainAxisValue(circle.size) +
                       expectedGap,
                 );
                 expect(
-                  mainAxis(text.position),
-                  mainAxis(rectangle.position) +
-                      mainAxis(rectangle.size) +
+                  mainAxisValue(text.position),
+                  mainAxisValue(rectangle.position) +
+                      mainAxisValue(rectangle.size) +
                       expectedGap,
                 );
                 layoutComponent.mainAxisAlignment = MainAxisAlignment.end;
                 expect(
-                  mainAxis(text.positionOfAnchor(Anchor.bottomRight)),
-                  mainAxis(layoutComponentSize),
+                  mainAxisValue(text.positionOfAnchor(Anchor.bottomRight)),
+                  mainAxisValue(layoutComponentSize),
                 );
               },
         },
@@ -255,10 +267,10 @@ void main() {
             size: layoutComponentSize,
           );
           await game.ensureAdd(layoutComponent);
-          final crossAxis = direction.crossAxis;
-          expect(crossAxis(circle.position), 0);
-          expect(crossAxis(rectangle.position), 0);
-          expect(crossAxis(text.position), 0);
+          final crossAxisValue = direction.crossAxisValue;
+          expect(crossAxisValue(circle.position), 0);
+          expect(crossAxisValue(rectangle.position), 0);
+          expect(crossAxisValue(text.position), 0);
         },
         'crossAlignment = center': (game, direction) async {
           final circle = CircleComponent(radius: 20);
@@ -272,18 +284,23 @@ void main() {
             crossAxisAlignment: CrossAxisAlignment.center,
           );
           await game.ensureAdd(layoutComponent);
-          final crossAxis = direction.crossAxis;
+          final crossAxisValue = direction.crossAxisValue;
           expect(
-            crossAxis(circle.position),
-            (crossAxis(layoutComponentSize) - crossAxis(circle.size)) / 2,
+            crossAxisValue(circle.position),
+            (crossAxisValue(layoutComponentSize) -
+                    crossAxisValue(circle.size)) /
+                2,
           );
           expect(
-            crossAxis(rectangle.position),
-            (crossAxis(layoutComponentSize) - crossAxis(rectangle.size)) / 2,
+            crossAxisValue(rectangle.position),
+            (crossAxisValue(layoutComponentSize) -
+                    crossAxisValue(rectangle.size)) /
+                2,
           );
           expect(
-            crossAxis(text.position),
-            (crossAxis(layoutComponentSize) - crossAxis(text.size)) / 2,
+            crossAxisValue(text.position),
+            (crossAxisValue(layoutComponentSize) - crossAxisValue(text.size)) /
+                2,
           );
         },
         'crossAlignment = end': (game, direction) async {
@@ -298,18 +315,19 @@ void main() {
             crossAxisAlignment: CrossAxisAlignment.end,
           );
           await game.ensureAdd(layoutComponent);
-          final crossAxis = direction.crossAxis;
+          final crossAxisValue = direction.crossAxisValue;
           expect(
-            crossAxis(circle.position),
-            crossAxis(layoutComponentSize) - crossAxis(circle.size),
+            crossAxisValue(circle.position),
+            crossAxisValue(layoutComponentSize) - crossAxisValue(circle.size),
           );
           expect(
-            crossAxis(rectangle.position),
-            crossAxis(layoutComponentSize) - crossAxis(rectangle.size),
+            crossAxisValue(rectangle.position),
+            crossAxisValue(layoutComponentSize) -
+                crossAxisValue(rectangle.size),
           );
           expect(
-            crossAxis(text.position),
-            crossAxis(layoutComponentSize) - crossAxis(text.size),
+            crossAxisValue(text.position),
+            crossAxisValue(layoutComponentSize) - crossAxisValue(text.size),
           );
         },
       });
@@ -382,7 +400,7 @@ void main() {
               );
               await game.ensureAdd(layoutComponent);
               final crossAxisLengths = layoutComponent.positionChildren.map(
-                (component) => component.size[direction.crossAxisVectorIndex],
+                (component) => component.size[direction.crossAxis.axisIndex],
               );
               // All the cross axis lengths are the same
               expect(
@@ -393,7 +411,7 @@ void main() {
               );
               expect(
                 crossAxisLengths.first,
-                layoutComponent.size[direction.crossAxisVectorIndex],
+                layoutComponent.size[direction.crossAxis.axisIndex],
               );
             },
       });

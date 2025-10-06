@@ -19,7 +19,8 @@ export 'src/experimental/geometry/shapes/rectangle.dart' show Rectangle;
 export 'src/experimental/geometry/shapes/rounded_rectangle.dart'
     show RoundedRectangle;
 export 'src/experimental/geometry/shapes/shape.dart' show Shape;
-export 'src/experimental/layout_component.dart' show LayoutComponent;
+export 'src/experimental/layout_component.dart'
+    show LayoutComponent, LayoutAxis;
 export 'src/experimental/linear_layout_component.dart'
     show LinearLayoutComponent, Direction;
 export 'src/experimental/nullable_vector_2.dart' show NullableVector2;

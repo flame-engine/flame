@@ -1,6 +1,16 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/experimental/nullable_vector_2.dart';
 
+enum LayoutAxis {
+  x(0),
+  y(1);
+
+  const LayoutAxis(this.axisIndex);
+
+  /// Necessary for use with LinearLayoutComponent's Direction
+  final int axisIndex;
+}
+
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
     required super.key,
@@ -29,10 +39,10 @@ abstract class LayoutComponent extends PositionComponent {
   }
 
   /// A helper function to set the appropriate layout dimension based on
-  /// [axisIndex]. This is needed because currently there's no other way, at the
+  /// [axis]. This is needed because currently there's no other way, at the
   /// [LayoutComponent] level, to selective set width or height without setting
   /// both.
-  /// e.g. if [axisIndex] is 1, then that's the y axis.
+  /// e.g. if [axis] is 1, then that's the y axis.
   ///
   /// We cannot, for example, extend the accessor assignment of NullableVector2
   /// to trigger some extra functionality (i.e. setting height/width) when the
@@ -42,16 +52,14 @@ abstract class LayoutComponent extends PositionComponent {
   /// triggered when either height/width are set, when we need things to happen
   /// *only* when height or width are set. Current functionality results in
   /// a race condition.
-  void setLayoutAxisLength(int axisIndex, double? value) {
-    switch (axisIndex) {
-      case 0:
+  void setLayoutAxisLength(LayoutAxis axis, double? value) {
+    switch (axis) {
+      case LayoutAxis.x:
         _layoutSize.x = value;
         width = _layoutSize.x ?? intrinsicSize.x;
-      case 1:
+      case LayoutAxis.y:
         _layoutSize.y = value;
         height = _layoutSize.y ?? intrinsicSize.y;
-      default:
-        throw Exception('Unsupported axisIndex: $axisIndex');
     }
   }
 
@@ -62,8 +70,8 @@ abstract class LayoutComponent extends PositionComponent {
     height = _layoutSize.y ?? intrinsicSize.y;
   }
 
-  bool shrinkWrappedIn(int index) {
-    return layoutSize[index] == null;
+  bool shrinkWrappedIn(LayoutAxis axis) {
+    return layoutSize[axis.axisIndex] == null;
   }
 
   @override
