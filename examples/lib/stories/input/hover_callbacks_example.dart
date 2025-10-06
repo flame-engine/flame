@@ -32,7 +32,7 @@ class HoverCallbacksWorld extends World with TapCallbacks {
   }
 }
 
-class HoverSquare extends PositionComponent with HoverCallbacks {
+class HoverSquare extends RectangleComponent with HoverCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
@@ -44,7 +44,5 @@ class HoverSquare extends PositionComponent with HoverCallbacks {
       );
 
   @override
-  void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), isHovered ? _grey : _white);
-  }
+  Paint get paint => isHovered ? _grey : _white;
 }
