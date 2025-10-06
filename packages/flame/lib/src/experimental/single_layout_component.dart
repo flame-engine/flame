@@ -1,6 +1,12 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 
+/// A common abstract class for [LayoutComponent]s that are designed to work
+/// with only a single [child]. This includes components like
+/// [ExpandedComponent] and [PaddingComponent], and can possibly be used to
+/// refactor AlignComponent.
+///
+/// Setting [child] automatically reparents and adds.
 abstract class SingleLayoutComponent extends LayoutComponent {
   SingleLayoutComponent({
     required super.key,
