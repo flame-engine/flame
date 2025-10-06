@@ -13,8 +13,8 @@ import 'package:flame/src/events/messages/tap_down_event.dart';
 ///    moved away from the point of contact.
 ///
 /// The [TapCancelEvent] will only occur if there was a previous [TapDownEvent].
-class TapCancelEvent extends Event {
-  TapCancelEvent(this.pointerId);
+class TapCancelEvent extends Event<void> {
+  TapCancelEvent(this.pointerId) : super(raw: null);
 
   /// The id of the event that has been cancelled. This id corresponds to the
   /// id of the previous [TapDownEvent].

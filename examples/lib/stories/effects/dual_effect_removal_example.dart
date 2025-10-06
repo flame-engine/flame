@@ -1,10 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
-class DualEffectRemovalExample extends FlameGame with TapDetector {
+class DualEffectRemovalExample extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how a dual effect can be used and removed.
     To remove an effect, tap anywhere on the screen and the first tap will
@@ -48,7 +48,7 @@ class DualEffectRemovalExample extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     // apply(0) sends the animation to its initial starting state.
     // If this isn't called, the effect would be removed and leave the
     // component at its current state.

@@ -6,6 +6,8 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 class MyGame extends FlameGame with HasKeyboardHandlerComponents {
   @override
@@ -86,5 +88,22 @@ class MyGame extends FlameGame with HasKeyboardHandlerComponents {
         ],
       ),
     ]);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    if (!overlays.isActive('console')) {
+      if (event is KeyDownEvent) {
+        final key = event.logicalKey;
+        if (key == LogicalKeyboardKey.backquote) {
+          overlays.add('console');
+          return KeyEventResult.handled;
+        }
+      }
+    }
+    return super.onKeyEvent(event, keysPressed);
   }
 }

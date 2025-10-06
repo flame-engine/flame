@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart' hide Animation;
@@ -18,7 +17,7 @@ void main() {
 /// 2. Uses a custom AudioPool for extremely efficient audio loading and pooling
 /// for tapping elsewhere.
 /// 3. Uses the Bgm utility for background music.
-class AudioGame extends FlameGame with TapDetector {
+class AudioGame extends FlameGame with TapCallbacks {
   static final Paint black = BasicPalette.black.paint();
   static final Paint gray = const PaletteEntry(Color(0xFFCCCCCC)).paint();
   static final TextPaint text = TextPaint(
@@ -75,8 +74,8 @@ class AudioGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
-    if (button.containsPoint(info.eventPosition.widget)) {
+  void onTapDown(TapDownEvent event) {
+    if (button.containsPoint(event.canvasPosition)) {
       fireTwo();
     } else {
       fireOne();
