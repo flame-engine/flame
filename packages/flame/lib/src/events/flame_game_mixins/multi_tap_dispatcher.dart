@@ -154,7 +154,9 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @override
   void onMount() {
     game.gestureDetectors.add<MultiTapGestureRecognizer>(
-      MultiTapGestureRecognizer.new,
+      () => MultiTapGestureRecognizer(
+        allowedButtonsFilter: (buttons) => buttons == kPrimaryButton,
+      ),
       (MultiTapGestureRecognizer instance) {
         instance.longTapDelay = Duration(
           milliseconds: (longTapDelay * 1000).toInt(),
