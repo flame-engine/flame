@@ -6,7 +6,8 @@ import 'package:flame/experimental.dart';
 /// [ExpandedComponent] and [PaddingComponent], and can possibly be used to
 /// refactor AlignComponent.
 ///
-/// Setting [child] automatically reparents and adds.
+/// Setting [child] automatically manages removing the old child from this
+/// component, as well as adding the new child to this component.
 abstract class SingleLayoutComponent extends LayoutComponent {
   SingleLayoutComponent({
     required super.key,
