@@ -89,8 +89,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     double gap = 0.0,
     Vector2? position,
-    // double? layoutWidth,
-    // double? layoutHeight,
     Vector2? size,
     Iterable<Component> children = const [],
   }) {
