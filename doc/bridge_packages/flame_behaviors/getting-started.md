@@ -103,8 +103,9 @@ class MyBehavior extends Behavior {
 }
 ```
 
-**Note**: A `Behavior` is a non-visual component that describes how a visual component (Entity)
-behaves therefore, a behavior can't have its own `Behavior`s.
+> [!NOTE]
+> A `Behavior` is a non-visual component that describes how a visual component (Entity)
+> behaves therefore, a behavior can't have its own `Behavior`s.
 
 
 ## What's Next
