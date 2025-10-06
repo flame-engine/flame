@@ -1,6 +1,3 @@
-// Not needed for test files
-// ignore_for_file: cascade_invocations
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';

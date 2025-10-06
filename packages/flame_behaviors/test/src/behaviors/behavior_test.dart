@@ -1,6 +1,3 @@
-// Not needed for test files
-// ignore_for_file: cascade_invocations, deprecated_member_use_from_same_package
-
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_test/flame_test.dart';
@@ -40,9 +37,9 @@ void main() {
         final entity = game.firstChild<_TestEntity>()!;
         final behavior = entity.firstChild<_TestBehavior>()!;
 
-        expect(behavior.containsPoint(Vector2.zero()), isTrue);
-        expect(behavior.containsPoint(Vector2(31, 31)), isTrue);
-        expect(behavior.containsPoint(Vector2(32, 32)), isFalse);
+        expect(behavior.containsLocalPoint(Vector2.zero()), isTrue);
+        expect(behavior.containsLocalPoint(Vector2(31, 31)), isTrue);
+        expect(behavior.containsLocalPoint(Vector2(32, 32)), isFalse);
       },
     );
 
