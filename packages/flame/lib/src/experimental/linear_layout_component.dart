@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
@@ -416,12 +418,12 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// implement crossAxisOccupiedSpace for shrink wrapping.
   double get _mainAxisOccupiedSpace {
     return positionChildren.fold(0.0, (sum, child) {
-      if (child is ExpandedComponent) {
-        // Because ExpandedComponent size can be their expanded state
-        // and thus the occupied space will be inflated.
-        return sum + child.intrinsicSize[direction.mainAxis.axisIndex];
-      }
-      return sum + child.size[direction.mainAxis.axisIndex];
+      // Because ExpandedComponent size can be their expanded state
+      // and thus the occupied space will be inflated.
+      final mainAxisLength = child is ExpandedComponent
+          ? child.intrinsicSize[direction.mainAxis.axisIndex]
+          : child.size[direction.mainAxis.axisIndex];
+      return sum + mainAxisLength;
     });
   }
 
@@ -439,13 +441,12 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     if (positionChildren.isEmpty) {
       return Vector2.zero();
     }
-    final largestCrossAxisLength = positionChildren.map((component) {
-      if (component is ExpandedComponent) {
-        return component.intrinsicSize[crossAxisVectorIndex];
-      } else {
-        return component.size[crossAxisVectorIndex];
-      }
-    }).max;
+    final largestCrossAxisLength = positionChildren.fold(0.0, (largest, child) {
+      final crossAxisLength = child is ExpandedComponent
+          ? child.intrinsicSize[crossAxisVectorIndex]
+          : child.size[crossAxisVectorIndex];
+      return max(largest, crossAxisLength);
+    });
     // This is tricky because it depends on the mainAxisAlignment.
     // This should only apply when mainAxisAlignment is start, center, or end.
     // spaceAround, spaceBetween, and spaceEvenly requires the size as a
