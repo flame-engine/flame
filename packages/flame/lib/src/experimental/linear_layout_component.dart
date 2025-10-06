@@ -453,13 +453,12 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     // constraint.
     final cumulativeMainAxisLength =
         ((positionChildren.length - 1) * gap) +
-        positionChildren.map((component) {
-          if (component is ExpandedComponent) {
-            return component.intrinsicSize[mainAxisVectorIndex];
-          } else {
-            return component.size[mainAxisVectorIndex];
-          }
-        }).sum;
+        positionChildren.fold(0.0, (sum, child) {
+          final mainAxisLength = child is ExpandedComponent
+              ? child.intrinsicSize[mainAxisVectorIndex]
+              : child.size[mainAxisVectorIndex];
+          return sum + mainAxisLength;
+        });
     final out = Vector2.zero();
     out[mainAxisVectorIndex] = cumulativeMainAxisLength;
     out[crossAxisVectorIndex] = largestCrossAxisLength;
