@@ -42,6 +42,8 @@ class NullableVector2 {
     y = other?.y;
   }
 
+  /// Because [NullableVector2]'s axis components are nullable, [fallback] is
+  /// necessary to fill in the appropriate values in case [x] or [y] is null.
   Vector2 toVector(Vector2 fallback) {
     return Vector2(x ?? fallback.x, y ?? fallback.y);
   }
