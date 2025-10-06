@@ -20,7 +20,7 @@ class SecondaryTapCallbacksExample extends FlameGame {
   }
 }
 
-class TappableSquare extends PositionComponent
+class TappableSquare extends RectangleComponent
     with TapCallbacks, SecondaryTapCallbacks {
   static final Paint _red = BasicPalette.red.paint();
   static final Paint _blue = BasicPalette.blue.paint();
@@ -29,18 +29,18 @@ class TappableSquare extends PositionComponent
   );
 
   int counter = 0;
-  Paint _paint = _red;
 
   TappableSquare({Vector2? position})
     : super(
         position: position ?? Vector2.all(100),
         size: Vector2.all(100),
+        paint: _red,
         anchor: Anchor.center,
       );
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), _paint);
+    super.render(canvas);
     _text.render(
       canvas,
       '$counter',
@@ -51,13 +51,13 @@ class TappableSquare extends PositionComponent
 
   @override
   void onTapDown(_) {
-    _paint = _red;
+    paint = _red;
     counter++;
   }
 
   @override
   void onSecondaryTapDown(_) {
-    _paint = _blue;
+    paint = _blue;
     counter++;
   }
 }
