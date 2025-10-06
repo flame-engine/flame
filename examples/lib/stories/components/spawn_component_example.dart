@@ -4,10 +4,9 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/math.dart';
 
-class SpawnComponentExample extends FlameGame with TapDetector {
+class SpawnComponentExample extends FlameGame {
   static const String description =
       'Tap on the screen to start spawning Embers within different shapes.';
 

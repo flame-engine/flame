@@ -22,4 +22,7 @@ class ComponentKey {
   @override
   bool operator ==(Object other) =>
       other is ComponentKey && other._internalHash == _internalHash;
+
+  @override
+  String toString() => 'ComponentKey($_internalHash)';
 }

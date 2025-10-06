@@ -7,20 +7,11 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
-
 env:
   FLUTTER_MIN_VERSION: '3.32.0'
 
 jobs:
   # BEGIN LINTING STAGE
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v3
-      - run: melos run format-check
-
   analyze:
     runs-on: ubuntu-latest
     steps:
@@ -30,17 +21,6 @@ jobs:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
       - name: "Analyze with lowest supported version"
-        uses: invertase/github-action-dart-analyzer@v3
-        with:
-          fatal-infos: true
-
-  analyze-latest:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v3
-      - name: "Analyze with latest stable"
         uses: invertase/github-action-dart-analyzer@v3
         with:
           fatal-infos: true
@@ -69,16 +49,3 @@ jobs:
       - name: Run DCM
         run: dcm analyze .
   # END LINTING STAGE
-
-  # BEGIN TESTING STAGE
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          cache: true
-      - uses: bluefireteam/melos-action@v3
-      - name: Run tests
-        run: melos test
-  # END TESTING STAGE

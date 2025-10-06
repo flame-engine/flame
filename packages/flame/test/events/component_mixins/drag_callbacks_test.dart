@@ -406,6 +406,7 @@ mixin _DragCounter on DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
+    expect(event.raw, isNotNull);
     event.handled = true;
     dragStartEvent++;
     if (_wasDragged != isDragged) {
@@ -416,6 +417,7 @@ mixin _DragCounter on DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     dragUpdateEvent++;
   }
@@ -423,6 +425,7 @@ mixin _DragCounter on DragCallbacks {
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
+    expect(event.raw, isNotNull);
     event.handled = true;
     dragEndEvent++;
     if (_wasDragged != isDragged) {
