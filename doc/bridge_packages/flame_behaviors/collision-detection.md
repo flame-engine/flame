@@ -46,14 +46,14 @@ class MyEntityCollisionBehavior
 }
 
 class MyParentEntity extends Entity {
-  MyParentEntity() : super(
-          behaviors: [
-            PropagatingCollisionBehavior(RectangleHitbox()),
-            MyEntityCollisionBehavior(),
-          ],
-        );
-  
-  ...
+  MyParentEntity()
+    : super(
+        behaviors: [
+          PropagatingCollisionBehavior(RectangleHitbox()),
+          MyEntityCollisionBehavior(),
+        ],
+      );
+   ...   
 }
 ```
 
