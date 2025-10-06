@@ -42,17 +42,16 @@ abstract class LayoutComponent extends PositionComponent {
   /// [axis]. This is needed because currently there's no other way, at the
   /// [LayoutComponent] level, to selective set width or height without setting
   /// both.
-  /// e.g. if [axis] is 1, then that's the y axis.
-  ///
-  /// We cannot, for example, extend the accessor assignment of NullableVector2
-  /// to trigger some extra functionality (i.e. setting height/width) when the
-  /// accessor is set.
-  ///
-  /// We also cannot use listeners at the moment, because listeners are
-  /// triggered when either height/width are set, when we need things to happen
-  /// *only* when height or width are set. Current functionality results in
-  /// a race condition.
+  /// e.g. if [axis] is [LayoutAxis.y], then that's the y axis.
   void setLayoutAxisLength(LayoutAxis axis, double? value) {
+    // This is necessary because we cannot extend the accessor assignment of
+    // NullableVector2 to trigger some extra functionality
+    // (i.e. setting height/width) when the accessor is set.
+    //
+    // We also cannot use listeners at the moment, because listeners are
+    // triggered when either height/width are set, when we need things to happen
+    // *only* when height or width are set. Current functionality results in
+    // a race condition.
     switch (axis) {
       case LayoutAxis.x:
         _layoutSize.x = value;
