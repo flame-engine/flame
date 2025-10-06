@@ -397,7 +397,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       if (component is LayoutComponent) {
         // Don't set value if the value is already correct.
         if (component.layoutSize[crossAxisVectorIndex] != crossAxisLength) {
-          // component.layoutSize[crossAxisVectorIndex] = crossAxisLength;
           component.setLayoutAxisLength(
             direction.crossAxis,
             crossAxisLength,
