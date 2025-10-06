@@ -415,14 +415,14 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// without the [gap]s. This is so named because we expect to
   /// implement crossAxisOccupiedSpace for shrink wrapping.
   double get _mainAxisOccupiedSpace {
-    return positionChildren.map((child) {
+    return positionChildren.fold(0.0, (sum, child) {
       if (child is ExpandedComponent) {
         // Because ExpandedComponent size can be their expanded state
         // and thus the occupied space will be inflated.
-        return child.intrinsicSize[direction.mainAxis.axisIndex];
+        return sum + child.intrinsicSize[direction.mainAxis.axisIndex];
       }
-      return child.size[direction.mainAxis.axisIndex];
-    }).sum;
+      return sum + child.size[direction.mainAxis.axisIndex];
+    });
   }
 
   /// Any positioning done in [layoutChildren] should not affect the
