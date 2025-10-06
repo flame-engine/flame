@@ -237,7 +237,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   /// Lays out the children along both main and cross axes.
   @override
   void layoutChildren() {
-    // resetSize();
     _layoutMainAxis();
     _layoutCrossAxis();
   }
