@@ -1,7 +1,8 @@
 # Coding Conventions
 
-> **Note**: The following coding conventions are simply recommendations and are completely
-optional. Feel free to use whatever coding conventions you prefer.
+> [!Note]
+> The following coding conventions are simply recommendations and are completely
+> optional. Feel free to use whatever coding conventions you prefer.
 
 
 ## Entities
