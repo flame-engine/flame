@@ -1,7 +1,8 @@
 # Naming Conventions
 
-> **Note**: The following naming conventions are simply recommendations and are completely
-optional. Feel free to use whatever naming conventions you prefer.
+> [!Note]
+> The following naming conventions are simply recommendations and are completely
+> optional. Feel free to use whatever naming conventions you prefer.
 
 
 ## Entities
