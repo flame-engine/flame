@@ -90,9 +90,6 @@ abstract class LayoutComponent extends PositionComponent {
   /// (e.g. [onChildrenChanged], size changes on both this component and its
   /// children)
   ///
-  /// By default, simply sets [size] to null, which sets [size] to
-  /// [intrinsicSize] under the hood.
-  ///
   /// Override this method for any specific layout needs.
   void layoutChildren();
 
