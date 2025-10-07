@@ -1,5 +1,4 @@
-import 'package:flame/src/events/game_mixins/multi_touch_drag_detector.dart';
-import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
+import 'package:flame/events.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 

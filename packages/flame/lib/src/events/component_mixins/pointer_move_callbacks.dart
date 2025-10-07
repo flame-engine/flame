@@ -1,5 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/components/core/component.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive
