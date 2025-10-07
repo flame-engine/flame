@@ -1,3 +1,13 @@
+## 3.0.8
+
+- **FEAT**: Enable Tiled layers to respect component ordering for overlays and underlays. e.g. Foreground tiles obscure sprites. 
+- `RenderableLayer` is now a part of the public API.
+- `RenderableLayer` is now a `Component` with `HasPaint` and `Position` traits. All render and update methods modified to integrate naturally into the Flame lifecycle.
+- `RenderableTiledMap` has method `RenderableLayer? getRenderableLayer(String name)` to return the Flame component by name. 
+  - e.g. `mapComponent.tileMap.getRenderableLayer('Ground')`
+- Expanded the example map to be larger and placed coins beneath one of the layers to demonstrate this effect.
+- Adjusted the camera move effect to better show-case this example map as the previous one poorly scrolled too far away.
+
 ## 3.0.7
 
  - **REFACTOR**: Move MutableRSTransform out of flame_tiled package and into flame package ([#3695](https://github.com/flame-engine/flame/issues/3695)). ([7d644dd8](https://github.com/flame-engine/flame/commit/7d644dd84ce27e292b53f7310967393cf4c60618))

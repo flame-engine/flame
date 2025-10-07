@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.0" orientation="orthogonal" renderorder="right-down" width="32" height="128" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#fdea18" nextlayerid="5" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.6" orientation="orthogonal" renderorder="right-down" width="32" height="128" tilewidth="16" tileheight="16" infinite="0" backgroundcolor="#fdea18" nextlayerid="5" nextobjectid="1">
  <tileset firstgid="1" name="level1" tilewidth="16" tileheight="16" tilecount="136" columns="17">
-  <image source="map-level1.png" width="272" height="128"/>
+  <image source="../map-level1.png" width="272" height="128"/>
   <tile id="64">
    <properties>
     <property name="type" value="sky"/>
@@ -26,6 +26,6 @@
   </layer>
  </group>
  <imagelayer id="4" name="Sky artifact" opacity="0.2" offsetx="400" offsety="0" repeaty="1">
-  <image source="image1.png" width="32" height="32"/>
+  <image source="../image1.png" width="32" height="32"/>
  </imagelayer>
 </map>

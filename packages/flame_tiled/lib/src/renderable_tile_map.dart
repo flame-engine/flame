@@ -5,6 +5,7 @@ import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_tiled/src/extensions.dart';
 import 'package:flame_tiled/src/flame_tsx_provider.dart';
@@ -39,7 +40,8 @@ Paint _defaultLayerPaintFactory(double opacity) =>
 ///  - [Layer.parallaxY] (only supported if a [CameraComponent] is supplied)
 ///
 /// {@endtemplate}
-class RenderableTiledMap {
+class RenderableTiledMap<T extends FlameGame> extends Component
+    with HasPaint, HasGameReference<T> {
   /// [TiledMap] instance for this map.
   final TiledMap map;
 
@@ -50,10 +52,10 @@ class RenderableTiledMap {
   final Vector2 destTileSize;
 
   /// Camera used for determining the current viewport for layer rendering.
-  /// Optional, but required for parallax support
+  /// Optional, but required for parallax support.
   CameraComponent? camera;
 
-  /// Paint for the map's background color, if there is one
+  /// Paint for the map's background color, if there is one.
   late final Paint? _backgroundPaint;
 
   final Map<Tile, TileFrames> animationFrames;
@@ -75,6 +77,8 @@ class RenderableTiledMap {
     } else {
       _backgroundPaint = null;
     }
+
+    addAll(renderableLayers);
   }
 
   /// Changes the visibility of the corresponding layer, if different
@@ -205,7 +209,7 @@ class RenderableTiledMap {
         // else descend and ask for named children.
         tiles.addAll(
           _tileStack(
-            layer.children,
+            layer.children.whereType<RenderableLayer>().toList(),
             x,
             y,
             named: named,
@@ -391,9 +395,7 @@ class RenderableTiledMap {
     bool? ignoreFlip,
     Images? images,
   }) {
-    final visibleLayers = layers.where((layer) => layer.visible);
-
-    final layerLoaders = visibleLayers.map((layer) async {
+    final layerLoaders = layers.map((layer) async {
       final renderableLayer = await RenderableLayer.load(
         layer: layer,
         parent: parent,
@@ -408,17 +410,19 @@ class RenderableTiledMap {
       );
 
       if (layer is Group && renderableLayer is GroupLayer) {
-        renderableLayer.children = await _renderableLayers(
-          layer.layers,
-          renderableLayer,
-          map,
-          destTileSize,
-          camera,
-          animationFrames,
-          atlas: atlas,
-          ignoreFlip: ignoreFlip,
-          images: images,
-          layerPaintFactory: layerPaintFactory,
+        await renderableLayer.addAll(
+          await _renderableLayers(
+            layer.layers,
+            renderableLayer,
+            map,
+            destTileSize,
+            camera,
+            animationFrames,
+            atlas: atlas,
+            ignoreFlip: ignoreFlip,
+            images: images,
+            layerPaintFactory: layerPaintFactory,
+          ),
         );
       }
 
@@ -428,10 +432,25 @@ class RenderableTiledMap {
     return Future.wait(layerLoaders);
   }
 
-  /// Handle game resize and propagate it to renderable layers
-  void handleResize(Vector2 canvasSize) {
+  @override
+  Future<void>? onLoad() async {
+    // Automatically use the first attached CameraComponent camera if it's not
+    // already set..
+    camera ??= game.children.query<CameraComponent>().firstOrNull;
+
+    // Provide camera to layers
     for (final layer in renderableLayers) {
-      layer.handleResize(canvasSize);
+      layer.camera = camera;
+    }
+  }
+
+  /// Handle game resize and propagate it to renderable layers
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
+
+    for (final layer in renderableLayers) {
+      layer.onGameResize(canvasSize);
     }
   }
 
@@ -442,39 +461,42 @@ class RenderableTiledMap {
     }
   }
 
-  /// Renders each renderable layer in the same order specified by the Tiled map
+  /// Fills canvas with [_backgroundPaint] and then calls super.
+  @override
   void render(Canvas c) {
     if (_backgroundPaint != null) {
       c.drawPaint(_backgroundPaint);
     }
-
-    // Paint each layer in reverse order, because the last layers should be
-    // rendered beneath the first layers
-    for (final layer in renderableLayers.where((l) => l.visible)) {
-      layer.render(c, camera);
-    }
+    super.render(c);
   }
 
-  /// Returns a layer of type [T] with given [name] from all the layers
+  /// Returns a [Layer] of type [L] with given [name] from all the layers
   /// of this map. If no such layer is found, null is returned.
-  T? getLayer<T extends Layer>(String name) {
+  L? getLayer<L extends Layer>(String name) {
     try {
-      // layerByName will searches recursively starting with tiled.dart v0.8.5
-      return map.layerByName(name) as T;
+      // layerByName searches recursively starting with tiled.dart v0.8.5
+      return map.layerByName(name) as L;
     } on ArgumentError {
       return null;
     }
   }
 
+  /// Returns a [RenderableLayer] with given [name] from all the
+  /// [renderableLayers] tracked by this component.
+  /// If no such layer is found, null is returned.
+  RenderableLayer? getRenderableLayer(String name) =>
+      switch (renderableLayers.indexWhere((e) => e.layer.name == name)) {
+        -1 => null,
+        final int idx => renderableLayers[idx],
+      };
+
+  @override
   void update(double dt) {
-    // First, update animation frames.
+    // Update any Tiled animations for tiles.
     for (final frame in animationFrames.values) {
       frame.update(dt);
     }
 
-    // Then every layer.
-    for (final layer in renderableLayers) {
-      layer.update(dt);
-    }
+    super.update(dt);
   }
 }

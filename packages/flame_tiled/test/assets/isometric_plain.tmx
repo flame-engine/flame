@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="staggered" renderorder="right-down" width="2" height="5" tilewidth="128" tileheight="74" infinite="0" staggeraxis="y" staggerindex="odd" nextlayerid="3" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.6" orientation="staggered" renderorder="right-down" width="2" height="5" tilewidth="128" tileheight="74" infinite="0" staggeraxis="y" staggerindex="odd" nextlayerid="3" nextobjectid="1">
  <tileset firstgid="1" source="tiles/isometric_plain_1.tsx"/>
  <tileset firstgid="7" name="isometric_plain_2" tilewidth="128" tileheight="74" tilecount="3" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
