@@ -1,12 +1,6 @@
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/core/component_key.dart';
-import 'package:flame/src/events/component_mixins/drag_callbacks.dart';
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
-import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
-import 'package:flame/src/events/messages/drag_cancel_event.dart';
-import 'package:flame/src/events/messages/drag_end_event.dart';
-import 'package:flame/src/events/messages/drag_start_event.dart';
-import 'package:flame/src/events/messages/drag_update_event.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
