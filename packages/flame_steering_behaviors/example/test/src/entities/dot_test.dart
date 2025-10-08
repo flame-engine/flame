@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:example/src/entities/entities.dart';
-import 'package:example/src/example_game.dart';
 import 'package:flame/components.dart';
 import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
+import 'package:flame_steering_behaviors_example/src/entities/entities.dart';
+import 'package:flame_steering_behaviors_example/src/example_game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -36,7 +36,6 @@ void main() {
 
     test('has correct max velocity', () {
       final dot = Dot(position: Vector2.zero(), random: random);
-
       expect(dot.maxVelocity, equals(10 * relativeValue));
     });
   });

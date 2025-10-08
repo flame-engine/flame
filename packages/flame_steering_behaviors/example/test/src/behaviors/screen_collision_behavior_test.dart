@@ -1,10 +1,7 @@
-// Not needed for test files
-// ignore_for_file: cascade_invocation
-
-import 'package:example/src/behaviors/behaviors.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
+import 'package:flame_steering_behaviors_example/src/behaviors/behaviors.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -14,9 +11,7 @@ import '../../helpers/helpers.dart';
 class _MockScreenHitbox extends Mock implements ScreenHitbox {}
 
 class _TestEntity extends PositionedEntity {
-  _TestEntity({
-    super.position,
-  }) : super(size: Vector2.all(50));
+  _TestEntity({super.position}) : super(size: Vector2.all(50));
 }
 
 void main() {

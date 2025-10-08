@@ -1,17 +1,17 @@
-import 'package:example/src/entities/entities.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flame_steering_behaviors_example/src/entities/entities.dart';
 
 const relativeValue = 16.0;
 
 class ExampleGame extends FlameGame with HasCollisionDetection {
   ExampleGame()
-      : super(
-          children: [
-            FpsTextComponent(position: Vector2.zero()),
-            ScreenHitbox(),
-          ],
-        );
+    : super(
+        children: [
+          FpsTextComponent(position: Vector2.zero()),
+          ScreenHitbox(),
+        ],
+      );
 
   @override
   Future<void> onLoad() async {

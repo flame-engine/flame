@@ -1,24 +1,23 @@
 name: flame_steering_behaviors
-description: Flame Steering Behaviors brings steering algorithms to the behavior pattern, built by Very Good Ventures.
+resolution: workspace
+description: Flame Steering Behaviors brings steering algorithms to the behavior pattern, originally built by Very Good Ventures.
 version: 0.2.0
-homepage: https://github.com/VeryGoodOpenSource/flame_behaviors
-repository: https://github.com/VeryGoodOpenSource/flame_behaviors
-issue_tracker: https://github.com/VeryGoodOpenSource/flame_behaviors/issues
-documentation: https://github.com/VeryGoodOpenSource/flame_behaviors/tree/main/docs
+homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_steering_behaviors
 
 environment:
-  sdk: ^3.5.0
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
-  flame: ^1.19.0
+  flame: ^1.32.0
   flame_behaviors: ^1.2.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_test: ^1.17.0
+  flame_lint: ^1.4.2
+  flame_test: ^2.0.3
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
-  very_good_analysis: ^9.0.0
 
