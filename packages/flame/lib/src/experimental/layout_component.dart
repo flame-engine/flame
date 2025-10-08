@@ -33,9 +33,9 @@ abstract class LayoutComponent extends PositionComponent {
   /// Instead, use [setLayoutAxisLength], as it allows selective setting of
   /// vector components, and subsequently selective setting of the
   /// size components.
-  void setLayoutSize(double? newLayoutSizeX, double? newLayoutSizeY) {
-    _layoutSizeX = newLayoutSizeX;
-    _layoutSizeY = newLayoutSizeY;
+  void setLayoutSize(double? layoutSizeX, double? layoutSizeY) {
+    _layoutSizeX = layoutSizeX;
+    _layoutSizeY = layoutSizeY;
     resetSize();
   }
 
