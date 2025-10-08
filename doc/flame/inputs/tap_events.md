@@ -170,6 +170,34 @@ class MyComponent extends Component with TapCallbacks {
 ```
 
 
+### SecondaryTapCallbacks
+
+In addition to the primary tap events (i.e. left mouse button on desktop), Flame also supports
+secondary tap events (i.e. right mouse button on desktop). To receive these events, add the
+`SecondaryTapCallbacks` mixin to your `PositionComponent`.
+
+```dart
+class MyComponent extends PositionComponent with SecondaryTapCallbacks {
+  @override
+  void onSecondaryTapUp(SecondaryTapUpEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onSecondaryTapCancel(SecondaryTapCancelEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onSecondaryTapDown(SecondaryTapDownEvent event) {
+    /// Do something
+  }
+```
+
+You can extend both `TapCallbacks` and `SecondaryTapCallbacks` in the same component to
+receive both primary and secondary tap events.
+
+
 ### DoubleTapCallbacks
 
 Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the

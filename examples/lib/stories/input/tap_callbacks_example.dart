@@ -18,7 +18,7 @@ class TapCallbacksExample extends FlameGame {
   }
 }
 
-class TappableSquare extends PositionComponent with TapCallbacks {
+class TappableSquare extends RectangleComponent with TapCallbacks {
   static final Paint _white = Paint()..color = const Color(0xFFFFFFFF);
   static final Paint _grey = Paint()..color = const Color(0xFFA5A5A5);
 
@@ -31,9 +31,7 @@ class TappableSquare extends PositionComponent with TapCallbacks {
       );
 
   @override
-  void render(Canvas canvas) {
-    canvas.drawRect(size.toRect(), _beenPressed ? _grey : _white);
-  }
+  Paint get paint => _beenPressed ? _grey : _white;
 
   @override
   void onTapUp(_) {

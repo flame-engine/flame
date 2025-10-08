@@ -1,9 +1,6 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/component_mixins/double_tap_callbacks.dart';
-import 'package:flame/src/events/messages/double_tap_cancel_event.dart';
-import 'package:flame/src/events/messages/double_tap_down_event.dart';
-import 'package:flame/src/events/messages/double_tap_event.dart';
 import 'package:flutter/gestures.dart';
 
 class DoubleTapDispatcherKey implements ComponentKey {

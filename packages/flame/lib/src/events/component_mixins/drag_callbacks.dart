@@ -1,9 +1,5 @@
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
-import 'package:flame/src/events/messages/drag_cancel_event.dart';
-import 'package:flame/src/events/messages/drag_end_event.dart';
-import 'package:flame/src/events/messages/drag_start_event.dart';
-import 'package:flame/src/events/messages/drag_update_event.dart';
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive drag events.
