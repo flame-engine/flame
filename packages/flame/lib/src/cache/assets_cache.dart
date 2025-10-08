@@ -73,6 +73,29 @@ class AssetsCache {
     final bytes = Uint8List.view(data.buffer);
     return _BinaryAsset(bytes);
   }
+
+  /// This method provides synchronous access to cached assets, similar to
+  /// [AssetsCache.fromCache].
+  T fromCache<T>(String fileName) {
+    final asset = _files[fileName];
+    assert(
+      asset != null,
+      'Tried to access an asset "$fileName" that does not exist in the cache. '
+      'Make sure to load the asset using readFile(), readBinaryFile(), or '
+      'readJson() before accessing it with fromCache()',
+    );
+    if (T == Map<String, dynamic>) {
+      return jsonDecode(asset!.value as String) as T;
+    }
+
+    assert(
+      asset!.value is T,
+      'Tried to access asset "$fileName" as type $T, but it was loaded as '
+      '${asset.value.runtimeType}. Make sure to use the correct type when '
+      'calling fromCache<T>()',
+    );
+    return asset!.value as T;
+  }
 }
 
 class _Asset<T> {
