@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/experimental/nullable_vector_2.dart';
 
 enum LayoutAxis {
   x(0),
@@ -19,22 +18,24 @@ abstract class LayoutComponent extends PositionComponent {
     required super.anchor,
     required super.priority,
     super.children,
-  }) : _layoutSize = size == null
-           ? NullableVector2.blank()
-           : NullableVector2.fromVector2(size) {
+  }) : _layoutSizeX = size?.x,
+       _layoutSizeY = size?.y {
     resetSize();
   }
 
-  final NullableVector2 _layoutSize;
+  double? _layoutSizeX;
+  double? _layoutSizeY;
 
-  NullableVector2 get layoutSize => _layoutSize;
+  double? get layoutSizeX => _layoutSizeX;
+  double? get layoutSizeY => _layoutSizeY;
 
-  /// Clobbers current [_layoutSize]. Avoid using within layout logic.
+  /// Avoid using within layout logic.
   /// Instead, use [setLayoutAxisLength], as it allows selective setting of
   /// vector components, and subsequently selective setting of the
   /// size components.
-  set layoutSize(NullableVector2? newLayoutSize) {
-    _layoutSize.setFrom(newLayoutSize);
+  void setLayoutSize(double? newLayoutSizeX, double? newLayoutSizeY) {
+    _layoutSizeX = newLayoutSizeX;
+    _layoutSizeY = newLayoutSizeY;
     resetSize();
   }
 
@@ -54,23 +55,26 @@ abstract class LayoutComponent extends PositionComponent {
     // a race condition.
     switch (axis) {
       case LayoutAxis.x:
-        _layoutSize.x = value;
-        width = _layoutSize.x ?? intrinsicSize.x;
+        _layoutSizeX = value;
+        width = _layoutSizeX ?? intrinsicSize.x;
       case LayoutAxis.y:
-        _layoutSize.y = value;
-        height = _layoutSize.y ?? intrinsicSize.y;
+        _layoutSizeY = value;
+        height = _layoutSizeY ?? intrinsicSize.y;
     }
   }
 
   /// Reset the size of this [LayoutComponent] to either the layout dimensions
   /// or the [intrinsicSize].
   void resetSize() {
-    width = _layoutSize.x ?? intrinsicSize.x;
-    height = _layoutSize.y ?? intrinsicSize.y;
+    width = _layoutSizeX ?? intrinsicSize.x;
+    height = _layoutSizeY ?? intrinsicSize.y;
   }
 
   bool shrinkWrappedIn(LayoutAxis axis) {
-    return layoutSize[axis.axisIndex] == null;
+    return switch (axis) {
+      LayoutAxis.x => layoutSizeX == null,
+      LayoutAxis.y => layoutSizeY == null,
+    };
   }
 
   @override
@@ -102,4 +106,12 @@ abstract class LayoutComponent extends PositionComponent {
   /// container of other components, and given whatever constraints any
   /// subclass of [LayoutComponent] may prescribe.
   Vector2 get intrinsicSize;
+}
+
+typedef LayoutSize = ({double? x, double? y});
+
+extension LayoutSizeExtension on LayoutSize {
+  LayoutSize copyWith({double? x, double? y}) {
+    return (x: x ?? this.x, y: y ?? this.y);
+  }
 }

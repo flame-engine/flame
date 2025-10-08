@@ -347,7 +347,7 @@ void main() {
           );
           await game.ensureAdd(layoutComponent);
           expect(layoutComponent.size, layoutComponentSize);
-          layoutComponent.layoutSize = null;
+          layoutComponent.setLayoutSize(null, null);
           expect(layoutComponent.size, layoutComponent.intrinsicSize);
         },
         'size=null ignores mainAxisAlignment': (game, direction) async {

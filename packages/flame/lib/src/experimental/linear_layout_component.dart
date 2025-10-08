@@ -288,7 +288,6 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     required Direction direction,
     required double freeSpace,
   }) {
-    final mainAxisVectorIndex = direction.mainAxis.axisIndex;
     final expandedComponents = components.whereType<ExpandedComponent>();
     // Abort if:
     // Shrink-wrapped (because meaningless to do any main axis calculation)
@@ -302,8 +301,11 @@ abstract class LinearLayoutComponent extends LayoutComponent {
 
     final spacePerExpandedComponent = freeSpace / expandedComponents.length;
     for (final expandedComponent in expandedComponents) {
-      if (expandedComponent.layoutSize[mainAxisVectorIndex] !=
-          spacePerExpandedComponent) {
+      final layoutAxisLength = switch (direction.mainAxis) {
+        LayoutAxis.x => expandedComponent.layoutSizeX,
+        LayoutAxis.y => expandedComponent.layoutSizeY,
+      };
+      if (layoutAxisLength != spacePerExpandedComponent) {
         expandedComponent.setLayoutAxisLength(
           direction.mainAxis,
           spacePerExpandedComponent,
@@ -396,8 +398,12 @@ abstract class LinearLayoutComponent extends LayoutComponent {
         continue;
       }
       if (component is LayoutComponent) {
+        final layoutAxisLength = switch (direction.mainAxis) {
+          LayoutAxis.x => component.layoutSizeX,
+          LayoutAxis.y => component.layoutSizeY,
+        };
         // Don't set value if the value is already correct.
-        if (component.layoutSize[crossAxisVectorIndex] != crossAxisLength) {
+        if (layoutAxisLength != crossAxisLength) {
           component.setLayoutAxisLength(
             direction.crossAxis,
             crossAxisLength,
