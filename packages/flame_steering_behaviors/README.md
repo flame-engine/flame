@@ -1,22 +1,34 @@
-# Steering Behaviors
+<!-- markdownlint-disable MD013 -->
+<p align="center">
+  <a href="https://flame-engine.org">
+    <img alt="flame" width="200px" src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png">
+  </a>
+</p>
 
-[![Very Good Ventures][logo_white]][very_good_ventures_link_dark]
-[![Very Good Ventures][logo_black]][very_good_ventures_link_light]
+<p align="center">
+An implementation of steering behaviors for Flame Behaviors.
+</p>
 
-Developed with 💙 by [Very Good Ventures][very_good_ventures_link] 🦄
-
-[![ci][ci_badge]][ci_link]
-[![coverage][coverage_badge]][ci_link]
-[![pub package][pub_badge]][pub_link]
-[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
-[![License: MIT][license_badge]][license_link]
-[![Powered by Flame][flame_badge_link]]([flame_link])
+<p align="center">
+  <a title="Pub" href="https://pub.dev/packages/flame_behaviors" ><img src="https://img.shields.io/pub/v/flame_behaviors.svg?style=popout" /></a>
+  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/actions/workflows/cicd.yml/badge.svg?branch=main&event=push"/></a>
+  <a title="Discord" href="https://discord.gg/pxrBmy4"><img src="https://img.shields.io/discord/509714518008528896.svg"/></a>
+  <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
+</p>
 
 ---
+<!-- markdownlint-enable MD013 -->
+
+<!-- markdownlint-disable-next-line MD002 -->
+# steering_behaviors
+
 
 An implementation of steering behaviors for Flame Behaviors. 
 See [Steering Behaviors For Autonomous Characters](https://www.red3d.com/cwr/steer/) by 
 [Craig Reynolds](https://www.red3d.com/cwr/) for an in-depth explanation
+
+Developed with 💙 and 🔥 by [Very Good Ventures][very_good_ventures_link] 🦄
+
 
 ---
 
@@ -51,17 +63,17 @@ Each algorithm defined by this project is available as a `Behavior` and you can 
 
 ```dart
 class MyEntity extends Entity with Steerable {
-  MyEntity() : super(
-    behaviors: [
-      WanderBehavior(
-        circleDistance: 200,
-        maximumAngle: 45 * degrees2Radians,
-        startingAngle: 0,
-      )
-    ]
-  );
-
-  ...
+  MyEntity()
+    : super(
+        behaviors: [
+          WanderBehavior(
+            circleDistance: 200,
+            maximumAngle: 45 * degrees2Radians,
+            startingAngle: 0,
+          ),
+        ],
+      );
+      ...
 }
 ```
 
@@ -87,19 +99,7 @@ class MyEntity extends Entity with Steerable {
 }
 ```
 
-[ci_badge]: https://github.com/VeryGoodOpenSource/flame_behaviors/workflows/flame_steering_behaviors/badge.svg
-[ci_link]: https://github.com/VeryGoodOpenSource/flame_behaviors/actions
-[coverage_badge]: https://raw.githubusercontent.com/VeryGoodOpenSource/flame_behaviors/main/coverage_badge.svg
-[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[license_link]: https://opensource.org/licenses/MIT
-[logo_black]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png#gh-light-mode-only
-[logo_white]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_white.png#gh-dark-mode-only
-[pub_badge]: https://img.shields.io/pub/v/flame_steering_behaviors.svg
-[pub_link]: https://pub.dartlang.org/packages/flame_steering_behaviors
-[very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
-[very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
+
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
-[very_good_ventures_link_dark]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI#gh-dark-mode-only
-[very_good_ventures_link_light]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI#gh-light-mode-only
-[flame_badge_link]: https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg
-[flame_link]: https://flame-engine.org
+
+

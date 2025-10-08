@@ -1,5 +1,5 @@
 /// Flame Steering Behaviors brings steering algorithms to the behavior pattern,
-/// built by Very Good Ventures.
+/// originally built by Very Good Ventures.
 library;
 
 export 'src/behaviors/behaviors.dart';
