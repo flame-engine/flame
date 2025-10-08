@@ -1,4 +1,4 @@
-name: Flame
+name: _
 repository: https://github.com/flame-engine/flame
 workspace:
   - doc/flame/examples
