@@ -107,11 +107,3 @@ abstract class LayoutComponent extends PositionComponent {
   /// subclass of [LayoutComponent] may prescribe.
   Vector2 get intrinsicSize;
 }
-
-typedef LayoutSize = ({double? x, double? y});
-
-extension LayoutSizeExtension on LayoutSize {
-  LayoutSize copyWith({double? x, double? y}) {
-    return (x: x ?? this.x, y: y ?? this.y);
-  }
-}
