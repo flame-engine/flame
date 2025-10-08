@@ -90,5 +90,51 @@ void main() {
       expect(result, equals('Two ducks'));
       verify(() => bundle.loadString('assets/duck_count')).called(1);
     });
+
+    group('fromCache', () {
+      test('returns cached string asset', () async {
+        final assetsCache = AssetsCache(prefix: '');
+        final fileName = fixture('test_text_file.txt').path;
+
+        await assetsCache.readFile(fileName);
+
+        final result = assetsCache.fromCache<String>(fileName);
+        expect(
+          result,
+          equals(
+            'This is sample text file for AssetsCache Unit testing.',
+          ),
+        );
+      });
+
+      test('returns cached binary asset', () async {
+        final assetsCache = AssetsCache(prefix: '');
+        final fileName = fixture('cave_ace.fa').path;
+
+        await assetsCache.readBinaryFile(fileName);
+        final result = assetsCache.fromCache<Uint8List>(fileName);
+        expect(result, isA<Uint8List>());
+      });
+
+      test('returns cached json asset', () async {
+        final assetsCache = AssetsCache(prefix: '');
+        final fileName = fixture('chopper.json').path;
+        final file = await assetsCache.readJson(fileName);
+        expect(file, isA<Map<String, dynamic>>());
+
+        await assetsCache.readJson(fileName);
+        final result = assetsCache.fromCache<Map<String, dynamic>>(fileName);
+        expect(result, isA<Map<String, dynamic>>());
+      });
+
+      test('throws assertion when asset not in cache', () {
+        final assetsCache = AssetsCache(prefix: '');
+
+        expect(
+          () => assetsCache.fromCache<String>('nonexistent.txt'),
+          throwsA(isA<AssertionError>()),
+        );
+      });
+    });
   });
 }
