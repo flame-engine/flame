@@ -258,6 +258,11 @@ class RenderableTiledMap {
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
   }) async {
+    assert(
+      !fileName.contains(RegExp(r'[/\\]')),
+      'fileName should not contain path separators, use prefix to specify a '
+      'path.',
+    );
     final contents = await (bundle ?? Flame.bundle).loadString(
       '$prefix$fileName',
     );
