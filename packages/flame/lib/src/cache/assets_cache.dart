@@ -59,8 +59,14 @@ class AssetsCache {
 
   /// Reads a json file from the assets folder.
   Future<Map<String, dynamic>> readJson(String fileName) async {
-    final content = await readFile(fileName);
-    return jsonDecode(content) as Map<String, dynamic>;
+    if (!_files.containsKey(fileName)) {
+      _files[fileName] = await _readJson(fileName);
+    }
+    assert(
+      _files[fileName] is _JsonAsset,
+      '"$fileName" was previously loaded as a different type',
+    );
+    return (_files[fileName]! as _JsonAsset).value;
   }
 
   Future<_StringAsset> _readFile(String fileName) async {
@@ -74,6 +80,12 @@ class AssetsCache {
     return _BinaryAsset(bytes);
   }
 
+  Future<_JsonAsset> _readJson(String fileName) async {
+    final string = await bundle.loadString('$prefix$fileName');
+    final json = jsonDecode(string) as Map<String, dynamic>;
+    return _JsonAsset(json);
+  }
+
   /// This method provides synchronous access to cached assets, similar to
   /// [AssetsCache.fromCache].
   T fromCache<T>(String fileName) {
@@ -84,21 +96,18 @@ class AssetsCache {
       'Make sure to load the asset using readFile(), readBinaryFile(), or '
       'readJson() before accessing it with fromCache()',
     );
-    if (T == Map<String, dynamic>) {
-      return jsonDecode(asset!.value as String) as T;
-    }
-
     assert(
       asset!.value is T,
       'Tried to access asset "$fileName" as type $T, but it was loaded as '
       '${asset.value.runtimeType}. Make sure to use the correct type when '
       'calling fromCache<T>()',
     );
+
     return asset!.value as T;
   }
 }
 
-class _Asset<T> {
+sealed class _Asset<T> {
   T value;
   _Asset(this.value);
 }
@@ -109,4 +118,8 @@ class _StringAsset extends _Asset<String> {
 
 class _BinaryAsset extends _Asset<Uint8List> {
   _BinaryAsset(super.value);
+}
+
+class _JsonAsset extends _Asset<Map<String, dynamic>> {
+  _JsonAsset(super.value);
 }
