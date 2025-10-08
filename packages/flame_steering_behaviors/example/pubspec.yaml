@@ -1,6 +1,6 @@
 name: flame_steering_behaviors_example
 resolution: workspace
-description: A Very Good Example for steering behaviors.
+description: An example of using the flame_steering_behaviors package.
 version: 1.0.0+1
 publish_to: none
 
