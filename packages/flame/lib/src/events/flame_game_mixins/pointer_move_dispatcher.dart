@@ -1,6 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/core/component_key.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart' as flutter;

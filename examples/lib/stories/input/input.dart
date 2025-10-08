@@ -16,6 +16,7 @@ import 'package:examples/stories/input/multitap_advanced_example.dart';
 import 'package:examples/stories/input/multitap_example.dart';
 import 'package:examples/stories/input/overlapping_tap_callbacks_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
+import 'package:examples/stories/input/secondary_tap_callbacks_example.dart';
 import 'package:examples/stories/input/tap_callbacks_example.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: TapCallbacksExample()),
       codeLink: baseLink('input/tap_callbacks_example.dart'),
       info: TapCallbacksExample.description,
+    )
+    ..add(
+      'SecondaryTapCallbacks',
+      (_) => GameWidget(game: SecondaryTapCallbacksExample()),
+      codeLink: baseLink('input/secondary_tap_callbacks_example.dart'),
+      info: SecondaryTapCallbacksExample.description,
     )
     ..add(
       'DragCallbacks',

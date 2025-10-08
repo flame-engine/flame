@@ -1,8 +1,5 @@
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
-import 'package:flame/src/events/messages/tap_cancel_event.dart';
-import 'package:flame/src/events/messages/tap_down_event.dart';
-import 'package:flame/src/events/messages/tap_up_event.dart';
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive tap events.
