@@ -13,8 +13,8 @@ class WanderBehavior<Parent extends Steerable>
     required this.maximumAngle,
     required double startingAngle,
     Random? random,
-  })  : _angle = startingAngle,
-        random = random ?? Random();
+  }) : _angle = startingAngle,
+       random = random ?? Random();
 
   /// The distance to the circle center of the next target.
   final double circleDistance;

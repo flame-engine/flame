@@ -5,4 +5,5 @@ import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 /// Abstract base class for steering behaviors.
 /// {@endtemplate}
 abstract class SteeringBehavior<Parent extends Steerable>
-    extends Behavior<Parent> with Steering {}
+    extends Behavior<Parent>
+    with Steering {}

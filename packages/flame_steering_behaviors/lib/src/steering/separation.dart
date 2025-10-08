@@ -31,7 +31,8 @@ class Separation extends SteeringCore {
       final direction = entity.position - parent.position;
       final dist = direction.length;
       if (dist < maxDistance) {
-        final strength = maxAcceleration *
+        final strength =
+            maxAcceleration *
             (maxDistance - dist) /
             (maxDistance - entity.size.x - parent.size.x);
 
