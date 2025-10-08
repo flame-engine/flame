@@ -84,6 +84,10 @@ class AssetsCache {
       'Make sure to load the asset using readFile(), readBinaryFile(), or '
       'readJson() before accessing it with fromCache()',
     );
+    if (T == Map<String, dynamic>) {
+      return jsonDecode(asset!.value as String) as T;
+    }
+
     assert(
       asset!.value is T,
       'Tried to access asset "$fileName" as type $T, but it was loaded as '
