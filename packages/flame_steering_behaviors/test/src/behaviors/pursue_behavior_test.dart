@@ -1,6 +1,3 @@
-// Not needed for test files
-// ignore_for_file: cascade_invocations
-
 import 'package:flame/extensions.dart';
 import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
 import 'package:flame_test/flame_test.dart';
