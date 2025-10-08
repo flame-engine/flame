@@ -23,8 +23,8 @@ An implementation of steering behaviors for Flame Behaviors.
 # steering_behaviors
 
 
-An implementation of steering behaviors for Flame Behaviors. 
-See [Steering Behaviors For Autonomous Characters](https://www.red3d.com/cwr/steer/) by 
+An implementation of steering behaviors for Flame Behaviors.
+See [Steering Behaviors For Autonomous Characters](https://www.red3d.com/cwr/steer/) by
 [Craig Reynolds](https://www.red3d.com/cwr/) for an in-depth explanation
 
 Developed with 💙 and 🔥 by [Very Good Ventures][very_good_ventures_link] 🦄
@@ -32,19 +32,26 @@ Developed with 💙 and 🔥 by [Very Good Ventures][very_good_ventures_link] �
 
 ---
 
+
 ## Installation 💻
 
-```
+```sh
 flutter pub add flame_steering_behaviors
 ```
 
+
 ## Usage ✨
 
-This package is built on top of the [`flame_behaviors`](https://pub.dev/packages/flame_behaviors), if you are not yet familiar with it, we recommend reading up on the documentation of that package first.
+This package is built on top of the
+[`flame_behaviors`](https://pub.dev/packages/flame_behaviors), if you are not
+yet familiar with it, we recommend reading up on the documentation of that
+package first.
+
 
 ### Steerable
 
-If you want to apply steering behaviors to your entities you have to add the `Steerable` mixin to your entity class:
+If you want to apply steering behaviors to your entities you have to add the
+`Steerable` mixin to your entity class:
 
 ```dart
 class MyEntity extends Entity with Steerable {
@@ -55,11 +62,16 @@ class MyEntity extends Entity with Steerable {
 }
 ```
 
-The `Steerable` mixin provides a `velocity` value to your entity, this velocity will then be applied on each update cycle to your entity until the velocity becomes zero.
+The `Steerable` mixin provides a `velocity` value to your entity, this
+velocity will then be applied on each update cycle to your entity until the
+velocity becomes zero.
+
 
 ### Steering Behaviors
 
-Each algorithm defined by this project is available as a `Behavior` and you can add them to your [steerable](#steerable) entities as you would with any behavior:
+Each algorithm defined by this project is available as a `Behavior` and you
+can add them to your [steerable](#steerable) entities as you would with any
+behavior:
 
 ```dart
 class MyEntity extends Entity with Steerable {
@@ -77,7 +89,9 @@ class MyEntity extends Entity with Steerable {
 }
 ```
 
-Some steering behaviors require information that is not always available on entity creation, when that happens we recommend using the entity's `onLoad` method:
+Some steering behaviors require information that is not always available on
+entity creation, when that happens we recommend using the entity's `onLoad`
+method:
 
 ```dart
 class MyEntity extends Entity with Steerable {
@@ -101,5 +115,4 @@ class MyEntity extends Entity with Steerable {
 
 
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI
-
 
