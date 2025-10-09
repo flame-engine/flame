@@ -1,0 +1,22 @@
+name: flame_steering_behaviors_example
+resolution: workspace
+description: An example of using the flame_steering_behaviors package.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flame: ^1.32.0
+  flame_behaviors: ^1.2.0
+  flame_steering_behaviors: ^0.2.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.4.2
+  flame_test: ^2.0.3
+  flutter_test:
+    sdk: flutter
+  mocktail: ^1.0.4

@@ -23,6 +23,8 @@ workspace:
   - packages/flame_lint
   - packages/flame_sprite_fusion
   - packages/flame_sprite_fusion/example
+  - packages/flame_steering_behaviors
+  - packages/flame_steering_behaviors/example
   - packages/flame_devtools
   - packages/flame_fire_atlas
   - packages/flame_fire_atlas/example
