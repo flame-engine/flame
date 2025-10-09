@@ -34,7 +34,7 @@ void main() {
 
         final steering = flee.getSteering(parent);
 
-        expect(steering.length, equals(50));
+        expect(steering.length, closeTo(50, 0.01));
         expect(steering, closeToVector(Vector2(35.35, 35.35), 0.01));
       },
     );
