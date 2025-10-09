@@ -14,7 +14,8 @@ void main() {
 
     flameTester.testGameWidget(
       'generates the correct components',
-      setUp: (game, tester) async {
+      verify: (game, tester) async {
+        await tester.pump();
         expect(game.firstChild<FpsTextComponent>(), isNotNull);
         expect(game.firstChild<ScreenHitbox>(), isNotNull);
         expect(game.children.whereType<Dot>().length, equals(100));
