@@ -10,8 +10,7 @@ environment:
 dependencies:
   flame: ^1.18.0
   flame_behaviors: ^1.2.0
-  flame_steering_behaviors:
-    path: ../
+  flame_steering_behaviors: ^1.32.0
   flutter:
     sdk: flutter
 
