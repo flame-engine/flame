@@ -1,5 +1,0 @@
-include: package:flame_lint/analysis_options_with_dcm.yaml
-
-linter:
-  rules:
-    avoid_web_libraries_in_flutter: false
