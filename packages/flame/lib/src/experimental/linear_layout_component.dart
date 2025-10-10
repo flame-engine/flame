@@ -131,7 +131,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   MainAxisAlignment _mainAxisAlignment;
 
   MainAxisAlignment get mainAxisAlignment {
-    if (shrinkWrappedIn(direction.mainAxis)) {
+    if (isShrinkWrappedIn(direction.mainAxis)) {
       return MainAxisAlignment.start;
     }
     return _mainAxisAlignment;
@@ -216,10 +216,10 @@ abstract class LinearLayoutComponent extends LayoutComponent {
       layoutChildren();
       return;
     }
-    if (child.shrinkWrappedIn(direction.mainAxis)) {
+    if (child.isShrinkWrappedIn(direction.mainAxis)) {
       _layoutMainAxis();
     }
-    if (child.shrinkWrappedIn(direction.crossAxis)) {
+    if (child.isShrinkWrappedIn(direction.crossAxis)) {
       _layoutCrossAxis();
     }
   }
@@ -293,7 +293,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     // Shrink-wrapped (because meaningless to do any main axis calculation)
     // OR, There isn't any free space to expand
     // OR, There are no expanded components to grow
-    if (shrinkWrappedIn(direction.mainAxis) ||
+    if (isShrinkWrappedIn(direction.mainAxis) ||
         freeSpace <= 0 ||
         expandedComponents.isEmpty) {
       return;

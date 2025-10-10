@@ -70,7 +70,7 @@ abstract class LayoutComponent extends PositionComponent {
     height = _layoutSizeY ?? intrinsicSize.y;
   }
 
-  bool shrinkWrappedIn(LayoutAxis axis) {
+  bool isShrinkWrappedIn(LayoutAxis axis) {
     return switch (axis) {
       LayoutAxis.x => layoutSizeX == null,
       LayoutAxis.y => layoutSizeY == null,
