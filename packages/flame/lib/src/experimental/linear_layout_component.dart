@@ -92,6 +92,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
     Vector2? position,
     Vector2? size,
     Iterable<Component> children = const [],
+    ComponentKey? key,
   }) {
     switch (direction) {
       case Direction.horizontal:
@@ -102,6 +103,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           size: size,
           position: position,
           children: children,
+          key: key,
         );
       case Direction.vertical:
         return ColumnComponent(
@@ -111,6 +113,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
           size: size,
           position: position,
           children: children,
+          key: key,
         );
     }
   }
