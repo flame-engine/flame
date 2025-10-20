@@ -37,6 +37,7 @@ desktop/
 coverage/
 pubspec.lock
 pubspec_overrides.yaml
+devtools_options.yaml
 
 # Sphinx related
 __pycache__/
