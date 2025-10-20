@@ -398,7 +398,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
         continue;
       }
       if (component is LayoutComponent) {
-        final layoutAxisLength = switch (direction.mainAxis) {
+        final layoutAxisLength = switch (direction.crossAxis) {
           LayoutAxis.x => component.layoutSizeX,
           LayoutAxis.y => component.layoutSizeY,
         };
