@@ -34,5 +34,5 @@ class MyDraggableBehavior extends DraggableBehavior<MyEntity> {
 }
 ```
 
-[flame_drag_docs]: https://docs.flame-engine.org/1.10.0/flame/inputs/drag_events.html
-[flame_tap_docs]: https://docs.flame-engine.org/1.10.0/flame/inputs/tap_events.html
+[flame_drag_docs]: https://docs.flame-engine.org/latest/flame/inputs/drag_events.html
+[flame_tap_docs]: https://docs.flame-engine.org/latest/flame/inputs/tap_events.html

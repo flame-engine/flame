@@ -1,6 +1,6 @@
 # Collision Detection 💥
 
-Flame comes with a powerful built-in [collision detection system](https://docs.flame-engine.org/1.10.0/flame/collision_detection.html),
+Flame comes with a powerful built-in [collision detection system](https://docs.flame-engine.org/latest/flame/collision_detection.html),
 but this API is not strongly typed. Components always get the colliding component as a
 `PositionComponent` and developers need to manually check what type of class it is.
 
