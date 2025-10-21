@@ -110,7 +110,7 @@ class MyBehavior extends Behavior {
 
 ## What's Next
 
-The following sections will show you how to use Flame Behaviors for common game development tasks: 
+The following sections will show you how to use Flame Behaviors for common game development tasks:
 
 - [Handling Game Input](event-behaviors.md)
 - [Handling Collisions](collision-detection.md)
