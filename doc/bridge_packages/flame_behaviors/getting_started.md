@@ -6,7 +6,7 @@
 In order to use Flame Behaviors you must have the [Flame package][flame_package_link] added to
 your project.
 
-> **Note**: Flame Behaviors requires Flame `">=latest <2.0.0"`
+> **Note**: Flame Behaviors requires Flame `">=1.10.0 <2.0.0"`
 
 
 ## Installing 🧑‍💻
@@ -110,22 +110,18 @@ class MyBehavior extends Behavior {
 
 ## What's Next
 
-The following sections will show you how to use Flame Behaviors for common game development tasks:
+The following sections will show you how to use Flame Behaviors for common game development tasks: 
 
-- [Handling Game Input][input_behaviors_link]
-- [Handling Collisions][collision_behaviors_link]
+- [Handling Game Input](event-behaviors.md)
+- [Handling Collisions](collision-detection.md)
 
 Flame Behaviors also provides some conventions on how to name and organize your code:
 
-- [Naming Conventions][naming_conventions_link]
-- [Code Conventions][code_conventions_link]
+- [Naming Conventions](conventions/naming-conventions.md)
+- [Code Conventions](conventions/coding-conventions.md)
 
 To learn more about how to use Flame Behaviors, check out our [article][article_link].
 
 [flame_package_link]: https://pub.dev/packages/flame
 [flame_behaviors_package_link]: https://pub.dev/packages/flame_behaviors
 [article_link]: https://verygood.ventures/blog/build-games-with-flame-behaviors
-[input_behaviors_link]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/event-behaviors.md
-[naming_conventions_link]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/conventions/naming-conventions.md
-[code_conventions_link]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/conventions/coding-conventions.md
-[collision_behaviors_link]: https://github.com/flame-engine/flame/blob/main/doc/bridge_packages/flame_behaviors/collision-detection.md
