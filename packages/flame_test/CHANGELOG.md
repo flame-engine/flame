@@ -1,3 +1,9 @@
+## 3.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Support secondary taps (right click) on new callbacks system ([#3741](https://github.com/flame-engine/flame/issues/3741)). ([46bd3856](https://github.com/flame-engine/flame/commit/46bd385675ae781c4614d997e4792f53fc43271d))
+
 ## 2.0.3
 
  - Update a dependency to the latest release.

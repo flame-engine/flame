@@ -13,15 +13,15 @@ environment:
 dependencies:
   crystal_ball: ^0.1.0
   dashbook: ^0.1.16
-  flame: ^1.32.0
-  flame_audio: ^2.11.10
-  flame_forge2d: ^0.19.2
-  flame_isolate: ^0.6.2+16
-  flame_lottie: ^0.4.2+16
-  flame_noise: ^0.3.2+16
-  flame_spine: ^0.2.2+16
-  flame_svg: ^1.11.16
-  flame_tiled: ^3.0.7
+  flame: ^2.0.0
+  flame_audio: ^2.11.11
+  flame_forge2d: ^0.19.2+1
+  flame_isolate: ^0.6.2+17
+  flame_lottie: ^0.4.2+17
+  flame_noise: ^0.3.2+17
+  flame_spine: ^0.2.2+17
+  flame_svg: ^1.11.17
+  flame_tiled: ^3.0.8
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1

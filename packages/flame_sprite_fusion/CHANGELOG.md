@@ -1,3 +1,7 @@
+## 0.2.1
+
+ - **FEAT**: Add `hasAttribute` and `getAttribute` methods for `SpriteFusionTileData` ([#3751](https://github.com/flame-engine/flame/issues/3751)). ([17aeb93b](https://github.com/flame-engine/flame/commit/17aeb93b6f0e1bab11f6e237446811824e512b77))
+
 ## 0.2.0+3
 
  - Update a dependency to the latest release.

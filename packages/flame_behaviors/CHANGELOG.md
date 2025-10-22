@@ -1,3 +1,7 @@
+## 1.3.0
+
+ - **FEAT**: Add flame_behaviors package ([#3717](https://github.com/flame-engine/flame/issues/3717)). ([e950d79e](https://github.com/flame-engine/flame/commit/e950d79e56bf5902f2a48367a1e899e9b8903dc4))
+
 # [1.2.0](https://github.com/VeryGoodOpenSource/flame_behaviors/compare/flame_behaviors-v1.1.0...flame_behaviors-v1.2.0) (2024-08-27)
 
 - chore: tighten dependencies ([#64](https://github.com/VeryGoodOpenSource/flame_behaviors/pull/64))
