@@ -1,3 +1,20 @@
+## 1.33.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Re-organize internal event imports ([#3742](https://github.com/flame-engine/flame/issues/3742)). ([7523e014](https://github.com/flame-engine/flame/commit/7523e014706a2a368eebf4843379d470c5924c68))
+ - **PERF**: `addAll` shouldn't create unnecessary growing lists ([#3737](https://github.com/flame-engine/flame/issues/3737)). ([d1fa9d0d](https://github.com/flame-engine/flame/commit/d1fa9d0d5491264fbf4bb2b7e0c731597e8c0fb5))
+ - **FIX**: Store json maps directly in AssetsCache ([#3746](https://github.com/flame-engine/flame/issues/3746)). ([8a9f493f](https://github.com/flame-engine/flame/commit/8a9f493fdddf68ba2889f19be71eb9e91071190f))
+ - **FIX**: Unique `ComponentKey` toString ([#3739](https://github.com/flame-engine/flame/issues/3739)). ([9a4a8f20](https://github.com/flame-engine/flame/commit/9a4a8f20ff0ad20625ae7db7aca0ca683e4db417))
+ - **FIX**: Depreciated AssetManifest.json switched to AssetManifest API ([#3734](https://github.com/flame-engine/flame/issues/3734)). ([a2bd9827](https://github.com/flame-engine/flame/commit/a2bd982764b8e59830e86ba8a07239cedc1bad1c))
+ - **FEAT**: Dummy commit. ([8f7437d3](https://github.com/flame-engine/flame/commit/8f7437d3a468a9708f47da8863454e843bbbf72c))
+ - **FEAT**: Added fromCache method to AssetsCache ([#3740](https://github.com/flame-engine/flame/issues/3740)). ([33a7123f](https://github.com/flame-engine/flame/commit/33a7123ff9538f222534379a35d9a1074102a3fd))
+ - **FEAT**: Add a "raw" field to access the underlying Flutter event in the new event system ([#3731](https://github.com/flame-engine/flame/issues/3731)). ([36eb3929](https://github.com/flame-engine/flame/commit/36eb3929aa44451c1d6aa986a305c436cfa93349))
+ - **DOCS**: Layout components ([#3752](https://github.com/flame-engine/flame/issues/3752)). ([0aa145bb](https://github.com/flame-engine/flame/commit/0aa145bbbd6decfa121080b1cf223e9e799c1ac4))
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+ - **BREAKING** **FEAT**: Implements ExpandedComponent ([#3662](https://github.com/flame-engine/flame/issues/3662)). ([212ed354](https://github.com/flame-engine/flame/commit/212ed354d7704915a7585424e216ca83300c9530))
+ - **BREAKING** **FEAT**: Support secondary taps (right click) on new callbacks system ([#3741](https://github.com/flame-engine/flame/issues/3741)). ([46bd3856](https://github.com/flame-engine/flame/commit/46bd385675ae781c4614d997e4792f53fc43271d))
+
 ## 1.32.0
 
  - **REFACTOR**: Move MutableRSTransform out of flame_tiled package and into flame package ([#3695](https://github.com/flame-engine/flame/issues/3695)). ([7d644dd8](https://github.com/flame-engine/flame/commit/7d644dd84ce27e292b53f7310967393cf4c60618))

@@ -1,3 +1,7 @@
+## 0.1.2+13
+
+ - **DOCS**: Add console with backtick on flame_console example ([#3743](https://github.com/flame-engine/flame/issues/3743)). ([8534a557](https://github.com/flame-engine/flame/commit/8534a5574083ba3478979a1a619bf67820062bf1))
+
 ## 0.1.2+12
 
  - Update a dependency to the latest release.

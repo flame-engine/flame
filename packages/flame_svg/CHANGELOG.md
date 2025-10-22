@@ -1,3 +1,7 @@
+## 1.11.17
+
+ - Update a dependency to the latest release.
+
 ## 1.11.16
 
  - Update a dependency to the latest release.
