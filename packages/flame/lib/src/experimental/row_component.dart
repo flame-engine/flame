@@ -1,6 +1,8 @@
 import 'package:flame/src/experimental/linear_layout_component.dart';
 import 'package:flutter/rendering.dart';
 
+/// Warning: Experimental. API and behavior may change.
+///
 /// RowComponent is a layout component that arranges its children in a
 /// horizontal row.
 ///
@@ -13,7 +15,7 @@ import 'package:flutter/rendering.dart';
 /// If [size] is non-null, behaves as normal explicit sizing.
 /// If [size] is null, sets the size to the minimum size that containing all
 /// the children. This is similar to setting the [size] to [intrinsicSize], but
-/// the distinct in that sizing will respond to changes in children, other
+/// distinct in that sizing will respond to changes in children, other
 /// properties, etc...
 ///
 /// Example usage:
