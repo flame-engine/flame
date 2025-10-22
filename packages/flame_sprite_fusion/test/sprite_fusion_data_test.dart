@@ -23,6 +23,118 @@ void main() {
       expect(tileData.x, map['x']);
       expect(tileData.y, map['y']);
     });
+
+    test('hasAttribute returns false when attributes is null', () {
+      final tileData = SpriteFusionTileData(id: 1, x: 0, y: 0);
+
+      expect(tileData.hasAttribute('anyKey'), false);
+    });
+
+    test('hasAttribute returns false when attribute does not exist', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'existingKey': 'value'},
+      );
+
+      expect(tileData.hasAttribute('nonExistentKey'), false);
+    });
+
+    test('hasAttribute returns true when attribute exists', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'type': 'grass', 'walkable': true},
+      );
+
+      expect(tileData.hasAttribute('type'), true);
+      expect(tileData.hasAttribute('walkable'), true);
+    });
+
+    test('getAttribute returns null when attributes is null', () {
+      final tileData = SpriteFusionTileData(id: 1, x: 0, y: 0);
+
+      expect(tileData.getAttribute<String>('anyKey'), null);
+    });
+
+    test('getAttribute returns null when attribute does not exist', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'existingKey': 'value'},
+      );
+
+      expect(tileData.getAttribute<String>('nonExistentKey'), null);
+    });
+
+    test('getAttribute returns correct value for String type', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'type': 'grass'},
+      );
+
+      expect(tileData.getAttribute<String>('type'), 'grass');
+    });
+
+    test('getAttribute returns correct value for bool type', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'walkable': true, 'blocking': false},
+      );
+
+      expect(tileData.getAttribute<bool>('walkable'), true);
+      expect(tileData.getAttribute<bool>('blocking'), false);
+    });
+
+    test('getAttribute returns correct value for int type', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'damage': 10, 'health': 100},
+      );
+
+      expect(tileData.getAttribute<int>('damage'), 10);
+      expect(tileData.getAttribute<int>('health'), 100);
+    });
+
+    test('getAttribute returns correct value for double type', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {'speed': 1.5, 'multiplier': 2.75},
+      );
+
+      expect(tileData.getAttribute<double>('speed'), 1.5);
+      expect(tileData.getAttribute<double>('multiplier'), 2.75);
+    });
+
+    test('getAttribute with multiple attributes', () {
+      final tileData = SpriteFusionTileData(
+        id: 1,
+        x: 0,
+        y: 0,
+        attributes: {
+          'type': 'grass',
+          'walkable': true,
+          'damage': 0,
+          'speed': 1.0,
+        },
+      );
+
+      expect(tileData.getAttribute<String>('type'), 'grass');
+      expect(tileData.getAttribute<bool>('walkable'), true);
+      expect(tileData.getAttribute<int>('damage'), 0);
+      expect(tileData.getAttribute<double>('speed'), 1.0);
+    });
   });
 
   group('SpriteFusionLayerData', () {
