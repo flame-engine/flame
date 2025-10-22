@@ -1,6 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 
+/// Warning: Experimental. API and behavior may change.
+///
 /// Works similarly to flutter's Expanded widget.
 /// This component must be a direct child of a [LinearLayoutComponent].
 /// While this component does not do much on its own, it allows its parent
