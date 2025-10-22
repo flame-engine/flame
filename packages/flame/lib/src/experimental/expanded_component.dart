@@ -19,6 +19,18 @@ import 'package:flame/experimental.dart';
 /// However, it does need to report to its parent when its child changes size.
 /// This is less important along the main-axis, and more important along the
 /// cross-axis.
+///
+/// Example usage:
+/// ```dart
+/// ColumnComponent(
+///   children: [
+///     ExpandedComponent(
+///       child: TextComponent(text: 'foo'),
+///     );
+///     TextComponent(text: 'bar')
+///   ],
+/// );
+/// ```
 class ExpandedComponent extends SingleLayoutComponent
     with ParentIsA<LinearLayoutComponent> {
   ExpandedComponent({
