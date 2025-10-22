@@ -15,6 +15,14 @@ import 'package:flutter/rendering.dart';
 ///
 /// You may set [padding] as well as the [child] after the fact, and it will
 /// cause the layout to refresh.
+///
+/// Example usage:
+/// ```dart
+/// PaddingComponent(
+///   padding: EdgeInsets.all(10),
+///   child: TextComponent(text: 'bar')
+/// );
+/// ```
 class PaddingComponent extends SingleLayoutComponent {
   PaddingComponent({
     super.key,
