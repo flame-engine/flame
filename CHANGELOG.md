@@ -3,6 +3,120 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v1.33.0`](#flame---v1330)
+ - [`flame_test` - `v2.1.0`](#flame_test---v210)
+
+Packages with other changes:
+
+ - [`flame_audio` - `v2.11.11`](#flame_audio---v21111)
+ - [`flame_behaviors` - `v1.3.0`](#flame_behaviors---v130)
+ - [`flame_console` - `v0.1.2+13`](#flame_console---v01213)
+ - [`flame_fire_atlas` - `v1.8.12`](#flame_fire_atlas---v1812)
+ - [`flame_network_assets` - `v0.3.3+17`](#flame_network_assets---v03317)
+ - [`flame_spine` - `v0.2.2+17`](#flame_spine---v02217)
+ - [`flame_sprite_fusion` - `v0.2.1`](#flame_sprite_fusion---v021)
+ - [`flame_steering_behaviors` - `v0.2.1`](#flame_steering_behaviors---v021)
+ - [`flame_tiled` - `v3.0.8`](#flame_tiled---v308)
+ - [`flame_behavior_tree` - `v0.1.3+17`](#flame_behavior_tree---v01317)
+ - [`flame_oxygen` - `v0.2.3+17`](#flame_oxygen---v02317)
+ - [`flame_isolate` - `v0.6.2+17`](#flame_isolate---v06217)
+ - [`flame_texturepacker` - `v5.0.2`](#flame_texturepacker---v502)
+ - [`flame_bloc` - `v1.12.18`](#flame_bloc---v11218)
+ - [`flame_kenney_xml` - `v0.1.1+17`](#flame_kenney_xml---v01117)
+ - [`flame_lottie` - `v0.4.2+17`](#flame_lottie---v04217)
+ - [`flame_markdown` - `v0.2.4+10`](#flame_markdown---v02410)
+ - [`flame_rive` - `v1.10.20`](#flame_rive---v11020)
+ - [`flame_forge2d` - `v0.19.2+1`](#flame_forge2d---v01921)
+ - [`flame_noise` - `v0.3.2+17`](#flame_noise---v03217)
+ - [`flame_riverpod` - `v5.4.20`](#flame_riverpod---v5420)
+ - [`flame_svg` - `v1.11.17`](#flame_svg---v11117)
+ - [`flame_3d` - `v0.1.1+3`](#flame_3d---v0113)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.3+17`
+ - `flame_oxygen` - `v0.2.3+17`
+ - `flame_isolate` - `v0.6.2+17`
+ - `flame_texturepacker` - `v5.0.2`
+ - `flame_bloc` - `v1.12.18`
+ - `flame_kenney_xml` - `v0.1.1+17`
+ - `flame_lottie` - `v0.4.2+17`
+ - `flame_markdown` - `v0.2.4+10`
+ - `flame_rive` - `v1.10.20`
+ - `flame_forge2d` - `v0.19.2+1`
+ - `flame_noise` - `v0.3.2+17`
+ - `flame_riverpod` - `v5.4.20`
+ - `flame_svg` - `v1.11.17`
+ - `flame_3d` - `v0.1.1+3`
+
+---
+
+#### `flame` - `v1.33.0`
+
+ - **REFACTOR**: Re-organize internal event imports ([#3742](https://github.com/flame-engine/flame/issues/3742)). ([7523e014](https://github.com/flame-engine/flame/commit/7523e014706a2a368eebf4843379d470c5924c68))
+ - **PERF**: `addAll` shouldn't create unnecessary growing lists ([#3737](https://github.com/flame-engine/flame/issues/3737)). ([d1fa9d0d](https://github.com/flame-engine/flame/commit/d1fa9d0d5491264fbf4bb2b7e0c731597e8c0fb5))
+ - **FIX**: Store json maps directly in AssetsCache ([#3746](https://github.com/flame-engine/flame/issues/3746)). ([8a9f493f](https://github.com/flame-engine/flame/commit/8a9f493fdddf68ba2889f19be71eb9e91071190f))
+ - **FIX**: Unique `ComponentKey` toString ([#3739](https://github.com/flame-engine/flame/issues/3739)). ([9a4a8f20](https://github.com/flame-engine/flame/commit/9a4a8f20ff0ad20625ae7db7aca0ca683e4db417))
+ - **FIX**: Depreciated AssetManifest.json switched to AssetManifest API ([#3734](https://github.com/flame-engine/flame/issues/3734)). ([a2bd9827](https://github.com/flame-engine/flame/commit/a2bd982764b8e59830e86ba8a07239cedc1bad1c))
+ - **FEAT**: Dummy commit. ([8f7437d3](https://github.com/flame-engine/flame/commit/8f7437d3a468a9708f47da8863454e843bbbf72c))
+ - **FEAT**: Added fromCache method to AssetsCache ([#3740](https://github.com/flame-engine/flame/issues/3740)). ([33a7123f](https://github.com/flame-engine/flame/commit/33a7123ff9538f222534379a35d9a1074102a3fd))
+ - **FEAT**: Add a "raw" field to access the underlying Flutter event in the new event system ([#3731](https://github.com/flame-engine/flame/issues/3731)). ([36eb3929](https://github.com/flame-engine/flame/commit/36eb3929aa44451c1d6aa986a305c436cfa93349))
+ - **DOCS**: Layout components ([#3752](https://github.com/flame-engine/flame/issues/3752)). ([0aa145bb](https://github.com/flame-engine/flame/commit/0aa145bbbd6decfa121080b1cf223e9e799c1ac4))
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+ - **BREAKING** **FEAT**: Implements ExpandedComponent ([#3662](https://github.com/flame-engine/flame/issues/3662)). ([212ed354](https://github.com/flame-engine/flame/commit/212ed354d7704915a7585424e216ca83300c9530))
+ - **BREAKING** **FEAT**: Support secondary taps (right click) on new callbacks system ([#3741](https://github.com/flame-engine/flame/issues/3741)). ([46bd3856](https://github.com/flame-engine/flame/commit/46bd385675ae781c4614d997e4792f53fc43271d))
+
+#### `flame_test` - `v2.1.0`
+
+ - **BREAKING** **FEAT**: Support secondary taps (right click) on new callbacks system ([#3741](https://github.com/flame-engine/flame/issues/3741)). ([46bd3856](https://github.com/flame-engine/flame/commit/46bd385675ae781c4614d997e4792f53fc43271d))
+
+#### `flame_audio` - `v2.11.11`
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
+#### `flame_behaviors` - `v1.3.0`
+
+ - **FEAT**: Add flame_behaviors package ([#3717](https://github.com/flame-engine/flame/issues/3717)). ([e950d79e](https://github.com/flame-engine/flame/commit/e950d79e56bf5902f2a48367a1e899e9b8903dc4))
+
+#### `flame_console` - `v0.1.2+13`
+
+ - **DOCS**: Add console with backtick on flame_console example ([#3743](https://github.com/flame-engine/flame/issues/3743)). ([8534a557](https://github.com/flame-engine/flame/commit/8534a5574083ba3478979a1a619bf67820062bf1))
+
+#### `flame_fire_atlas` - `v1.8.12`
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
+#### `flame_network_assets` - `v0.3.3+17`
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
+#### `flame_spine` - `v0.2.2+17`
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
+#### `flame_sprite_fusion` - `v0.2.1`
+
+ - **FEAT**: Add `hasAttribute` and `getAttribute` methods for `SpriteFusionTileData` ([#3751](https://github.com/flame-engine/flame/issues/3751)). ([17aeb93b](https://github.com/flame-engine/flame/commit/17aeb93b6f0e1bab11f6e237446811824e512b77))
+
+#### `flame_steering_behaviors` - `v0.2.1`
+
+ - **FEAT**: Add flame_steering_behaviors package ([#3748](https://github.com/flame-engine/flame/issues/3748)). ([2d4f0d43](https://github.com/flame-engine/flame/commit/2d4f0d43ef472b5a473cde3fc97579b8a1c0a9fc))
+
+#### `flame_tiled` - `v3.0.8`
+
+ - **FIX**: Show assertion when tiled file is loaded in the wrong way ([#3747](https://github.com/flame-engine/flame/issues/3747)). ([3efedc46](https://github.com/flame-engine/flame/commit/3efedc4653fa33cb239a38cc6ac8c999bcd25a7f))
+
+
 ## 2025-09-08
 
 ### Changes
