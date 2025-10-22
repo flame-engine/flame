@@ -1,3 +1,7 @@
+## 0.2.2+17
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
 ## 0.2.2+16
 
  - Update a dependency to the latest release.
