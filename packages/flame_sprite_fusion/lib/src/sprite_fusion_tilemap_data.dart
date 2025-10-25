@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame_sprite_fusion/flame_sprite_fusion.dart';
 
 /// A class that holds the data of the tilemap from a sprite fusion.
@@ -35,5 +36,13 @@ class SpriteFusionTilemapData {
           )
           .toList(growable: false),
     );
+  }
+
+  /// Gets a layer by its [name].
+  ///
+  /// Returns the first layer found with the given name.
+  /// For multiple layers with the same name, use [layers] property directly.
+  SpriteFusionLayerData? getLayerByName(String name) {
+    return layers.firstWhereOrNull((layer) => layer.name == name);
   }
 }
