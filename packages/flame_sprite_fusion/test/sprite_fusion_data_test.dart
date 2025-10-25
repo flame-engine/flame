@@ -234,5 +234,90 @@ void main() {
       expect(tileData.tileSize, map['tileSize']);
       expect(tileData.layers.length, 2);
     });
+
+    test('getLayerByName returns the correct layer', () {
+      final tilemapData = SpriteFusionTilemapData(
+        mapWidth: 10,
+        mapHeight: 10,
+        tileSize: 32,
+        layers: [
+          SpriteFusionLayerData(
+            name: 'background',
+            tiles: [],
+            collider: false,
+          ),
+          SpriteFusionLayerData(
+            name: 'foreground',
+            tiles: [],
+            collider: true,
+          ),
+        ],
+      );
+
+      final layer = tilemapData.getLayerByName('foreground');
+
+      expect(layer, isNotNull);
+      expect(layer?.name, 'foreground');
+      expect(layer?.collider, true);
+    });
+
+    test('getLayerByName returns null for non-existent layer', () {
+      final tilemapData = SpriteFusionTilemapData(
+        mapWidth: 10,
+        mapHeight: 10,
+        tileSize: 32,
+        layers: [
+          SpriteFusionLayerData(
+            name: 'background',
+            tiles: [],
+            collider: false,
+          ),
+        ],
+      );
+
+      final layer = tilemapData.getLayerByName('nonExistent');
+
+      expect(layer, isNull);
+    });
+
+    test('getLayerByName returns first layer when multiple have same name', () {
+      final tilemapData = SpriteFusionTilemapData(
+        mapWidth: 10,
+        mapHeight: 10,
+        tileSize: 32,
+        layers: [
+          SpriteFusionLayerData(
+            name: 'duplicate',
+            tiles: [SpriteFusionTileData(id: 1, x: 0, y: 0)],
+            collider: false,
+          ),
+          SpriteFusionLayerData(
+            name: 'duplicate',
+            tiles: [SpriteFusionTileData(id: 2, x: 1, y: 1)],
+            collider: true,
+          ),
+        ],
+      );
+
+      final layer = tilemapData.getLayerByName('duplicate');
+
+      expect(layer, isNotNull);
+      expect(layer?.name, 'duplicate');
+      expect(layer?.collider, false);
+      expect(layer?.tiles.first.id, 1);
+    });
+
+    test('getLayerByName returns null for empty layers list', () {
+      final tilemapData = SpriteFusionTilemapData(
+        mapWidth: 10,
+        mapHeight: 10,
+        tileSize: 32,
+        layers: [],
+      );
+
+      final layer = tilemapData.getLayerByName('anyLayer');
+
+      expect(layer, isNull);
+    });
   });
 }
