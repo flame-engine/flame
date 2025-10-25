@@ -301,7 +301,7 @@ class WalkTowardsDoorInsideTask extends BaseNode {
   @override
   void tick() {
     final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
-    
+
     if (!isAtTheDoor) {
       blackboard?.set('isMoving', true);
 
@@ -332,7 +332,7 @@ class StepOutTheDoorTask extends BaseNode {
   @override
   void tick() {
     final isInside = blackboard?.get<bool>('isInside') ?? false;
-    
+
     if (isInside) {
       blackboard?.set('isMoving', true);
       agent.add(
@@ -397,7 +397,7 @@ class WalkTowardsDoorOutsideTask extends BaseNode {
   @override
   void tick() {
     final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
-    
+
     if (!isAtTheDoor) {
       blackboard?.set('isMoving', true);
       agent.add(
@@ -425,8 +425,9 @@ class WalkTowardsCenterOfTheHouseTask extends BaseNode {
 
   @override
   void tick() {
-    final isAtCenterOfHouse = blackboard?.get<bool>('isAtCenterOfHouse') ?? false;
-    
+    final isAtCenterOfHouse =
+        blackboard?.get<bool>('isAtCenterOfHouse') ?? false;
+
     if (!isAtCenterOfHouse) {
       blackboard?.set('isMoving', true);
       blackboard?.set('isInside', true);
