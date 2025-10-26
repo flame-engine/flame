@@ -26,14 +26,13 @@ abstract class BaseNode implements NodeInterface {
   /// lives in the component, not in the tree nodes themselves.
   ///
   /// Example:
+  /// In a Flame component with HasBehaviorTree
   /// ```dart
-  /// // In a Flame component with HasBehaviorTree
   /// blackboard = Blackboard();
   /// blackboard.set('health', 100);
   /// treeRoot = Sequence(children: [...]);
-  ///
-  /// All nodes in the tree can now access the blackboard
   /// ```
+  /// All nodes in the tree can now access the blackboard
   Blackboard? get blackboard {
     // If we have a provider (we're the root), get it from there.
     // Otherwise, query our parent.
