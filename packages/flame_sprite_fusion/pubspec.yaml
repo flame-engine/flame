@@ -1,7 +1,7 @@
 name: flame_sprite_fusion
 resolution: workspace
 description: "Sprite Fusion support for the Flame game engine. This package parses and renders tilemaps exported from Sprite Fusion tool."
-version: 0.2.1
+version: 0.2.2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_sprite_fusion
 funding:
   - https://opencollective.com/blue-fire

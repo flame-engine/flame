@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-10-29
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_sprite_fusion` - `v0.2.2`](#flame_sprite_fusion---v022)
+
+---
+
+#### `flame_sprite_fusion` - `v0.2.2`
+
+ - **FEAT**: Add `getLayerByName` to `SpriteFusionTilemapData` ([#3755](https://github.com/flame-engine/flame/issues/3755)). ([9a6ca27b](https://github.com/flame-engine/flame/commit/9a6ca27b42715c0b9ae52885ab8c94bed3819c11))
+
+
 ## 2025-10-22
 
 ### Changes
