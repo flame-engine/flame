@@ -15,9 +15,14 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`behavior_tree` - `v0.1.4`](#behavior_tree---v014)
  - [`flame_sprite_fusion` - `v0.2.2`](#flame_sprite_fusion---v022)
 
 ---
+
+#### `behavior_tree` - `v0.1.4`
+
+ - **CHORE**: Bump dependencies.
 
 #### `flame_sprite_fusion` - `v0.2.2`
 
