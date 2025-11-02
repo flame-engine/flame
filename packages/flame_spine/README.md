@@ -16,6 +16,7 @@ conditions of the Spine Runtime License Agreement (see the LICENSE file).
 **In particular, in order to use `flame_spine` you are required to obtain a valid Spine Editor
 License.**
 
+
 ## Spine 4.2 vs Spine 4.3
 
 Make sure that you are using the right version of `flame_spine` for your current version of the
