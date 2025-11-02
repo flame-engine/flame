@@ -30,7 +30,11 @@ class SharedDataSpineExample extends FlameGame with TapCallbacks {
     // atlas.
     final rng = Random();
     for (var i = 0; i < 100; i++) {
-      final drawable = SkeletonDrawableFlutter(cachedAtlas, cachedSkeletonData, false);
+      final drawable = SkeletonDrawableFlutter(
+        cachedAtlas,
+        cachedSkeletonData,
+        false,
+      );
       final scale = 0.1 + rng.nextDouble() * 0.2;
       final position = Vector2.random(rng)..multiply(size);
       final spineboy = SpineComponent(
