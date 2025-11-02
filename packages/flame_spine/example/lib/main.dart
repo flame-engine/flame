@@ -41,14 +41,14 @@ class SpineExample extends FlameGame with TapCallbacks {
     );
 
     // Set the "walk" animation on track 0 in looping mode
-    spineboy.animationState.setAnimationByName(0, 'walk', true);
+    spineboy.animationState.setAnimation(0, 'walk', true);
     await add(spineboy);
   }
 
   @override
   void onTapDown(_) {
     _stateIndex = (_stateIndex + 1) % states.length;
-    spineboy.animationState.setAnimationByName(0, states[_stateIndex], true);
+    spineboy.animationState.setAnimation(0, states[_stateIndex], true);
   }
 
   @override
