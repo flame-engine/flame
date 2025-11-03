@@ -15,3 +15,14 @@ conditions of the Spine Runtime License Agreement (see the LICENSE file).
 
 **In particular, in order to use `flame_spine` you are required to obtain a valid Spine Editor
 License.**
+
+
+## Spine 4.2 vs Spine 4.3
+
+Make sure that you are using the right version of `flame_spine` for your current version of the
+Spine Editor.
+
+For Spine 4.2, `v0.2.2` is the last release. Spine 4.3 support begins with `v0.3.0`.
+
+To migrate from 4.2 to 4.3 models, make sure to re-export any existing 4.2 models through the 4.3
+Spine Editor, and follow the `spine_flutter` [migration guide](https://pub.dev/packages/spine_flutter/changelog).
