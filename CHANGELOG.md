@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-11-03
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_spine` - `v0.3.0`](#flame_spine---v030)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `flame_spine` - `v0.3.0`
+
+ - **BREAKING** **FEAT**: Support Spine 4.3 ([#3760](https://github.com/flame-engine/flame/issues/3760)). ([17bc40c3](https://github.com/flame-engine/flame/commit/17bc40c361471fde35b360671cccef115ed0b4bc))
+
+
 ## 2025-10-29
 
 ### Changes
