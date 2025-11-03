@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   flame: ^1.33.0
-  flame_sprite_fusion: ^0.2.1
+  flame_sprite_fusion: ^0.2.2
   flutter:
     sdk: flutter
 
