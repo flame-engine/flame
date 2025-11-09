@@ -1144,7 +1144,7 @@ void main() {
 ```
 
 The vertices in the example defines percentages of the length from the center to the edge of the
-screen in both x and y axis, so for our first item in our list (`Vector2(0.0, 1.0)`) we are pointing
+screen in both x and y axis, so for our first item in our list (`Vector2(0.0, -1.0)`) we are pointing
 on the middle of the top wall of the bounding box, since the coordinate system here is defined from
 the center of the polygon.
 
@@ -1173,8 +1173,8 @@ void main() {
 ```
 
 Dart also already has an excellent way to create rectangles and that class is called `Rect`, you can
-create a Flame `RectangleComponent` from a `Rect` by using the `Rectangle.fromRect` factory, and
-just like when setting the vertices of the `PolygonComponent`, your rectangle will be sized
+create a Flame `RectangleComponent` from a `Rect` by using the `RectangleComponent.fromRect` factory,
+and just like when setting the vertices of the `PolygonComponent`, your rectangle will be sized
 according to the `Rect` if you use this constructor.
 
 The following would create a `RectangleComponent` with its top left corner in `(10, 10)` and a size
