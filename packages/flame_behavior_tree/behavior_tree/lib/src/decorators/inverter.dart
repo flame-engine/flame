@@ -5,6 +5,7 @@ import 'package:behavior_tree/behavior_tree.dart';
 class Inverter extends BaseNode implements NodeInterface {
   /// Creates an inverter node for given [child] node.
   Inverter(this.child) {
+    setParent(child);
     _invertStatus();
   }
 

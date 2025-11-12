@@ -10,10 +10,17 @@ import 'package:flutter/foundation.dart';
 /// via [treeRoot]. The update frequency of the tree can be reduced by
 /// increasing [tickInterval]. By default, the tree will be updated on every
 /// update of the component.
-mixin HasBehaviorTree<T extends NodeInterface> on Component {
+///
+/// An optional [blackboard] can be provided to share data between nodes in
+/// the behavior tree. The blackboard is stored in this component and accessed
+/// by nodes through their parent chain, so it doesn't need to be stored in
+/// each node.
+mixin HasBehaviorTree<T extends NodeInterface> on Component
+    implements BlackboardProvider {
   T? _treeRoot;
   Timer? _timer;
   double _tickInterval = 0;
+  Blackboard? _blackboard;
 
   /// The delay between any two ticks of the behavior tree.
   double get tickInterval => _tickInterval;
@@ -30,10 +37,30 @@ mixin HasBehaviorTree<T extends NodeInterface> on Component {
     }
   }
 
+  /// The blackboard for sharing data between nodes.
+  ///
+  /// If not set, nodes will receive null when they access the blackboard.
+  /// Create a blackboard and assign it to enable data sharing:
+  ///
+  /// ```dart
+  /// blackboard = Blackboard();
+  /// blackboard.set('health', 100);
+  /// ```
+  ///
+  /// The blackboard is stored in this component and accessed by nodes
+  /// through their parent chain, eliminating the need to store it in each node.
+  @override
+  Blackboard? get blackboard => _blackboard;
+  set blackboard(Blackboard? value) => _blackboard = value;
+
   /// The root node of the behavior tree.
   T get treeRoot => _treeRoot!;
   set treeRoot(T value) {
     _treeRoot = value;
+    // Set this component as the blackboard provider for the root node
+    if (value is BaseNode) {
+      value.blackboardProvider = this;
+    }
     _timer?.onTick = _treeRoot!.tick;
   }
 
