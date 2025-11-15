@@ -607,7 +607,9 @@ by the function by sending them in as a list with the `out` argument.
 ## Comparison to Forge2D
 
 If you want to have a full-blown physics engine in your game we recommend that you use
-Forge2D by adding [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) as a dependency.
+Forge2D by adding
+[flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d)
+as a dependency.
 But if you have a simpler use-case and just want to check for collisions of components and improve
 the accuracy of gestures, Flame's built-in collision detection will serve you very well.
 
