@@ -32,22 +32,22 @@ class _LineBetweenPointers {
 }
 
 /// Unique key for the [MultiScaleDispatcher] so the game can identify it.
-class MultiScaleDispatcherKey implements ComponentKey {
-  const MultiScaleDispatcherKey();
+class ScaleDispatcherKey implements ComponentKey {
+  const ScaleDispatcherKey();
 
   @override
   int get hashCode => 31650892; // arbitrary unique number
 
   @override
   bool operator ==(Object other) =>
-      other is MultiScaleDispatcherKey && other.hashCode == hashCode;
+      other is ScaleDispatcherKey && other.hashCode == hashCode;
 }
 
 /// A component that dispatches scale (pinch/zoom) events to components
 /// implementing [ScaleCallbacks]. It will be attached to
 /// the [FlameGame] instance automatically whenever any [ScaleCallbacks]
 /// components are mounted into the component tree.
-class MultiScaleDispatcher extends Component implements ScaleListener {
+class ScaleDispatcher extends Component implements ScaleListener {
   /// Records all components currently being scaled, keyed by pointerId.
   final Set<TaggedComponent<ScaleCallbacks>> _records = {};
 
