@@ -30,7 +30,7 @@ example at the root of your game class, like the built-in `World` is.
 Then, a [CameraComponent](#cameracomponent) class that "looks at" the [World](#world). The
 `CameraComponent` has a [Viewport](#viewport) and a [Viewfinder](#viewfinder)
 inside of it, allowing both the flexibility of rendering the world at any place
-on the screen, and also control the viewing location and angle. The
+on the screen, and also controlling the viewing location and angle. The
 `CameraComponent` also contains a [backdrop](#backdrop) component which is
 statically rendered below the world.
 
