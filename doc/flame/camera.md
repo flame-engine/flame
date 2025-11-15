@@ -34,6 +34,7 @@ on the screen, and also controlling the viewing location and angle. The
 `CameraComponent` also contains a [backdrop](#backdrop) component which is
 statically rendered below the world.
 
+
 ## World
 
 This component should be used to host all other components that comprise your
