@@ -62,6 +62,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   _LineBetweenPointers? _lineAtFirstUpdate;
 
+  MultiDragDispatcher? _multiDragDispatcher;
+
   /// Called when the user starts a scale gesture.
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
@@ -303,20 +305,32 @@ class ScaleDispatcher extends Component implements ScaleListener {
           ..onEnd = handleScaleEnd;
       },
     );
+
     final existingDispatcher = game.findByKey(const MultiDragDispatcherKey());
     if (existingDispatcher != null) {
-      listenToDragDispatcher(existingDispatcher as MultiDragDispatcher);
-    } else {
-      // If the MultiDragDispatcher wasn't already added we add it
-      // ourselves here.
-      final game = findRootGame()!;
-      final dispatcher = MultiDragDispatcher();
-      game.registerKey(const MultiDragDispatcherKey(), dispatcher);
-      game.add(dispatcher);
-      listenToDragDispatcher(dispatcher);
+      _attachMultiDragDispatcher(existingDispatcher as MultiDragDispatcher);
     }
 
     super.onMount();
+  }
+
+  @override
+  void onChildrenChanged(Component child, ChildrenChangeType type) {
+    super.onChildrenChanged(child, type);
+
+    // 2. Si un nouvel enfant est ajouté au parent
+    if (type == ChildrenChangeType.added && child is MultiDragDispatcher) {
+      _attachMultiDragDispatcher(child);
+    }
+  }
+
+  void _attachMultiDragDispatcher(MultiDragDispatcher newDispatcher) {
+    if (_multiDragDispatcher != null){
+      return;
+    } 
+
+    _multiDragDispatcher = newDispatcher;
+    listenToDragDispatcher(newDispatcher);
   }
 
   @override
