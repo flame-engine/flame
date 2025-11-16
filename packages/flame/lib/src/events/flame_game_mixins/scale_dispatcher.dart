@@ -324,9 +324,9 @@ class ScaleDispatcher extends Component implements ScaleListener {
   }
 
   void _attachMultiDragDispatcher(MultiDragDispatcher newDispatcher) {
-    if (_multiDragDispatcher != null){
+    if (_multiDragDispatcher != null) {
       return;
-    } 
+    }
 
     _multiDragDispatcher = newDispatcher;
     listenToDragDispatcher(newDispatcher);
