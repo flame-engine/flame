@@ -318,7 +318,6 @@ class ScaleDispatcher extends Component implements ScaleListener {
   void onChildrenChanged(Component child, ChildrenChangeType type) {
     super.onChildrenChanged(child, type);
 
-    // 2. Si un nouvel enfant est ajouté au parent
     if (type == ChildrenChangeType.added && child is MultiDragDispatcher) {
       _attachMultiDragDispatcher(child);
     }
