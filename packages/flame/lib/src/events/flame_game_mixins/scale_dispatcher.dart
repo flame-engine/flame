@@ -94,8 +94,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
     // Also deliver to components that started the scale but weren't under
     // the pointer this frame
-    // TODO: Currently, the id passed to the scale
-    // events is always 0, so maybe not relevant.
+    // Currently, the id passed to the scale
+    // events is always 0, so maybe it's not relevant.
     for (final record in _records) {
       if (record.pointerId == event.pointerId && !updated.contains(record)) {
         record.component.onScaleUpdate(event);
@@ -160,7 +160,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
     // and rotation data.
     _lineAtFirstUpdate ??= _currentLine;
 
-    // TODO: Do we also need to recompute local focal point,
+
+    // Do we also need to recompute local focal point,
     // local relative to what ?
     return ScaleUpdateDetails(
       focalPoint: _computeFocalPoint(details),
