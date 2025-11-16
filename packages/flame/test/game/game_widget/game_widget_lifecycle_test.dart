@@ -96,7 +96,7 @@ class _GamePageState extends State<_GamePage> {
           ),
           Positioned(
             top: 0,
-            right: 0,
+            left: 0,
             child: ElevatedButton(
               child: const Text('Back'),
               onPressed: () {
