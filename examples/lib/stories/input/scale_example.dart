@@ -12,7 +12,7 @@ class ScaleExample extends FlameGame {
   late RectangleComponent rect;
   late TextComponent debugText;
 
-  late InteractiveRectangle interect;
+  late InteractiveRectangle interactiveRectangle;
   Vector2 zoomCenter = Vector2.zero();
   double startingZoom = 1;
 
@@ -35,28 +35,28 @@ class ScaleExample extends FlameGame {
     );
 
     if (addScaleOnlyRectangle) {
-      final interect2 = ScaleOnlyRectangle(
+      final scaleOnlyRectangle = ScaleOnlyRectangle(
         position: Vector2(0, 0),
         size: Vector2.all(150),
       );
-      world.add(interect2);
+      world.add(scaleOnlyRectangle);
     }
     if (addDragOnlyRectangle) {
-      final interect3 = DragOnlyRectangle(
+      final dragOnlyRectangle = DragOnlyRectangle(
         position: Vector2(-200, -200),
         size: Vector2.all(150),
         color: Colors.green,
       );
-      world.add(interect3);
+      world.add(dragOnlyRectangle);
     }
 
     if (addScaleDragRectangle) {
-      interect = InteractiveRectangle(
+      interactiveRectangle = InteractiveRectangle(
         position: Vector2(200, 200),
         size: Vector2.all(150),
         color: Colors.red,
       );
-      world.add(interect);
+      world.add(interactiveRectangle);
     }
 
     camera.viewport.add(debugText);

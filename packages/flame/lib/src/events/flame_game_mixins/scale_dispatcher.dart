@@ -94,7 +94,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
     // Also deliver to components that started the scale but weren't under
     // the pointer this frame
-    // TODO(stilnat): Currently, the id passed to the scale
+    // TODO: Currently, the id passed to the scale
     // events is always 0, so maybe not relevant.
     for (final record in _records) {
       if (record.pointerId == event.pointerId && !updated.contains(record)) {
@@ -160,7 +160,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
     // and rotation data.
     _lineAtFirstUpdate ??= _currentLine;
 
-    // TODO(stilnat): Do we also need to recompute local focal point,
+    // TODO: Do we also need to recompute local focal point,
     // local relative to what ?
     return ScaleUpdateDetails(
       focalPoint: _computeFocalPoint(details),
@@ -215,7 +215,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
   /// Compute the scale of the scale gesture using the initial
   /// line formed between the two pointers that form the scale gesture,
   /// and the subsequent lines they form as they move. The scale factor
-  /// is just lenght of current line over lenght of initial line.
+  /// is just length of current line over length of initial line.
   double _computeScale(ScaleUpdateDetails details) {
     if (lastDragUpdate == null ||
         _currentLine == null ||
@@ -237,8 +237,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
   /// Compute the vertical scale of the scale gesture using the initial
   /// line formed between the two pointers that form the scale gesture,
   /// and the subsequent lines they form as they move. The scale factor
-  /// is just lenght of current line vertical part over
-  /// lenght of initial line part.
+  /// is just length of current line vertical part over
+  /// length of initial line part.
   double _computeVerticalScale(ScaleUpdateDetails details) {
     if (lastDragUpdate == null ||
         _currentLine == null ||
@@ -261,8 +261,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
   /// Compute the vertical scale of the scale gesture using the initial
   /// line formed between the two pointers that form the scale gesture,
   /// and the subsequent lines they form as they move. The scale factor
-  /// is just lenght of current line horizontal part over
-  /// lenght of initial line part.
+  /// is just length of current line horizontal part over
+  /// length of initial line part.
   double _computeHorizontalScale(ScaleUpdateDetails details) {
     if (lastDragUpdate == null ||
         _currentLine == null ||
