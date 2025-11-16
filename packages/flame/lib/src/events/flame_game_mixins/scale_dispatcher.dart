@@ -31,7 +31,7 @@ class _LineBetweenPointers {
   final Offset pointerEndLocation;
 }
 
-/// Unique key for the [MultiScaleDispatcher] so the game can identify it.
+/// Unique key for the [ScaleDispatcher] so the game can identify it.
 class ScaleDispatcherKey implements ComponentKey {
   const ScaleDispatcherKey();
 

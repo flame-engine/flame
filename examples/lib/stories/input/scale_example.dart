@@ -4,7 +4,6 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-
 void main() {
   runApp(GameWidget(game: ScaleExample()));
 }
@@ -35,28 +34,28 @@ class ScaleExample extends FlameGame {
       position: Vector2(50, 50),
     );
 
-    if(addScaleOnlyRectangle){
+    if (addScaleOnlyRectangle) {
       final interect2 = ScaleOnlyRectangle(
-            position: Vector2(0, 0),
-            size: Vector2.all(150),
-          );
+        position: Vector2(0, 0),
+        size: Vector2.all(150),
+      );
       world.add(interect2);
     }
-    if(addDragOnlyRectangle){
+    if (addDragOnlyRectangle) {
       final interect3 = DragOnlyRectangle(
-            position: Vector2(-200, -200),
-            size: Vector2.all(150),
-            color: Colors.green,
-          );
+        position: Vector2(-200, -200),
+        size: Vector2.all(150),
+        color: Colors.green,
+      );
       world.add(interect3);
     }
 
-    if(addScaleDragRectangle){
+    if (addScaleDragRectangle) {
       interect = InteractiveRectangle(
-            position: Vector2(200, 200),
-            size: Vector2.all(150),
-            color: Colors.red,
-          );
+        position: Vector2(200, 200),
+        size: Vector2.all(150),
+        color: Colors.red,
+      );
       world.add(interect);
     }
 
@@ -67,10 +66,10 @@ class ScaleExample extends FlameGame {
   void update(double dt) {
     super.update(dt);
 
-    if(addCameraRotation){
+    if (addCameraRotation) {
       camera.viewfinder.angle += 0.001;
     }
-    if(addZoom){
+    if (addZoom) {
       debugText.text = '${camera.viewfinder.zoom}';
       camera.viewfinder.zoom += 0.001;
     }
@@ -99,13 +98,13 @@ class InteractiveRectangle extends RectangleComponent
 
   @override
   Future<void> onLoad() async {
-      final text = TextComponent(
+    final text = TextComponent(
       text: 'drag + scale',
       textRenderer: TextPaint(
         style: const TextStyle(fontSize: 25, color: Colors.white),
       ),
-      position: size/2,
-      anchor: Anchor.center
+      position: size / 2,
+      anchor: Anchor.center,
     );
     add(text);
   }
@@ -120,7 +119,7 @@ class InteractiveRectangle extends RectangleComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    if (isScaling){
+    if (isScaling) {
       return;
     }
     final rotated = event.canvasDelta.clone()
@@ -174,8 +173,8 @@ class InteractiveRectangle extends RectangleComponent
 }
 
 /// A rectangle that only responds to drag
-class DragOnlyRectangle extends RectangleComponent 
-  with DragCallbacks, HasGameReference<FlameGame> {
+class DragOnlyRectangle extends RectangleComponent
+    with DragCallbacks, HasGameReference<FlameGame> {
   DragOnlyRectangle({
     required Vector2 position,
     required Vector2 size,
@@ -188,15 +187,15 @@ class DragOnlyRectangle extends RectangleComponent
          paint: Paint()..color = color,
        );
 
-    @override
+  @override
   Future<void> onLoad() async {
-      final text = TextComponent(
+    final text = TextComponent(
       text: 'drag',
       textRenderer: TextPaint(
         style: const TextStyle(fontSize: 25, color: Colors.white),
       ),
-      position: size/2,
-      anchor: Anchor.center
+      position: size / 2,
+      anchor: Anchor.center,
     );
     add(text);
   }
@@ -240,13 +239,13 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
 
   @override
   Future<void> onLoad() async {
-      final text = TextComponent(
+    final text = TextComponent(
       text: 'scale',
       textRenderer: TextPaint(
         style: const TextStyle(fontSize: 25, color: Colors.white),
       ),
-      position: size/2,
-      anchor: Anchor.center
+      position: size / 2,
+      anchor: Anchor.center,
     );
     add(text);
   }
@@ -293,4 +292,3 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
     debugPrint('Scale ended with velocity ${event.velocity}');
   }
 }
-
