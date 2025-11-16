@@ -160,7 +160,6 @@ class ScaleDispatcher extends Component implements ScaleListener {
     // and rotation data.
     _lineAtFirstUpdate ??= _currentLine;
 
-
     // Do we also need to recompute local focal point,
     // local relative to what ?
     return ScaleUpdateDetails(
