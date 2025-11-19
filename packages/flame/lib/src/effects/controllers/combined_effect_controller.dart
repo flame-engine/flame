@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/src/effects/controllers/effect_controller.dart';
-import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
-import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 
 class CombinedEffectController extends EffectController {
