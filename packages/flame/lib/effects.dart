@@ -4,6 +4,7 @@ export 'src/effects/anchor_to_effect.dart' show AnchorToEffect;
 export 'src/effects/color_effect.dart';
 export 'src/effects/combined_effect.dart';
 export 'src/effects/component_effect.dart';
+export 'src/effects/controllers/combined_effect_controller.dart';
 export 'src/effects/controllers/curved_effect_controller.dart';
 export 'src/effects/controllers/delayed_effect_controller.dart';
 export 'src/effects/controllers/duration_effect_controller.dart';
