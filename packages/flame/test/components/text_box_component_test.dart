@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -62,6 +61,20 @@ void main() {
         c.boxConfig,
         secondConfig,
       );
+    });
+
+    test('maxWidth causes text reflow', () async {
+      const firstConfig = TextBoxConfig();
+      const secondConfig = TextBoxConfig(maxWidth: 640);
+      final c = TextBoxComponent(
+        text: 'The quick brown fox jumps over the lazy dog.',
+        boxConfig: firstConfig,
+        textRenderer: TextPaint(
+          style: const TextStyle(fontSize: 10),
+        ),
+      );
+      c.boxConfig = secondConfig;
+      expect(c.lines.length, 1);
     });
 
     test('skip method sets boxConfig timePerChar to 0', () {
