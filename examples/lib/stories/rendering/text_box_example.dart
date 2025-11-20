@@ -50,15 +50,20 @@ class TextBoxExample extends FlameGame {
     );
   }
 
-  static const lipsum =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at '
-      'ante ornare, eleifend purus sollicitudin, imperdiet metus. Vestibulum '
-      'egestas tortor in ipsum lacinia molestie. Donec at sapien placerat, '
-      'dignissim eros et, eleifend erat. Interdum et malesuada fames ac ante '
-      'ipsum primis in faucibus. Donec blandit risus non purus fringilla '
-      'accumsan. Proin ornare eleifend risus, in placerat augue semper id. '
-      'Phasellus eu ex neque. Integer dignissim elit non augue cursus laoreet '
-      'et eu nulla. Pellentesque vitae interdum nunc, sit amet facilisis dui. '
-      'Suspendisse in augue ut velit varius aliquam. Aenean in orci laoreet, '
-      'blandit purus at, tempor purus. Suspendisse potenti.';
+  static const sampleText =
+      'In a bustling city, a small team of developers set out to create '
+      'a mobile game using the Flame engine for Flutter. Their goal was '
+      'simple: to create an engaging, easy-to-play game that could reach '
+      'a wide audience on both iOS and Android platforms. '
+      'After weeks of brainstorming, they decided on a concept: '
+      'a fast-paced, endless runner game set in a whimsical, '
+      'ever-changing world. They named it "Swift Dash." '
+      "Using Flutter's versatility and the Flame engine's "
+      'capabilities, the team crafted a game with vibrant graphics, '
+      'smooth animations, and responsive controls. '
+      'The game featured a character dashing through various landscapes, '
+      'dodging obstacles, and collecting points. '
+      'As they launched "Swift Dash," the team was anxious but hopeful. '
+      'To their delight, the game was well-received. Players loved its '
+      'simplicity and charm, and the game quickly gained popularity.';
 }
