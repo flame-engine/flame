@@ -15,10 +15,11 @@ enum TextBoxConfigMaxWidth {
 }
 
 class TextBoxExample extends FlameGame {
-  static const String description = 'Some TextBoxComponent behaviors';
+  static const String description =
+      'TextBoxComponent reflows text when boxConfig.maxWidth is changed';
 
   final textBoxComponent = TextBoxComponent(
-    text: 'The quick brown fox jumps over the lazy dog.',
+    text: sampleText,
   )..debugMode = true;
 
   TextBoxConfigMaxWidth currentWidth = TextBoxConfigMaxWidth.small;
