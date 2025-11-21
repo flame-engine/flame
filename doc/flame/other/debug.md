@@ -47,8 +47,7 @@ commonly want to show the current FPS somewhere when the `FpsComponent` is used.
 ### ChildCounterComponent
 
 `ChildCounterComponent` is a component that renders the number of children of
-type `T` from a component (`target`) every second. So for example:
-
+type `T` from a component (`target`) every second.
 So for example, the following will render the number of `SpriteAnimationComponent` that are
 children of the game `world`:
 
