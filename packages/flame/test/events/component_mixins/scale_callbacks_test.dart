@@ -110,7 +110,7 @@ void main() {
     await tester.pumpWidget(GameWidget(game: game));
     await tester.pump();
 
-    await zoomFrom(
+    await _zoomFrom(
       tester,
       startLocation1: const Offset(180, 150),
       offset1: const Offset(15, 2),
@@ -136,7 +136,7 @@ void main() {
       await tester.pump();
       expect(component.isMounted, isTrue);
 
-      await zoomFrom(
+      await _zoomFrom(
         tester,
         startLocation1: const Offset(250, 200),
         offset1: const Offset(15, 2),
@@ -170,7 +170,7 @@ void main() {
       expect(game.children.length, equals(3));
       expect(game.isMounted, isTrue);
 
-      await zoomFrom(
+      await _zoomFrom(
         tester,
         startLocation1: const Offset(50, 100),
         offset1: const Offset(15, 2),
@@ -198,7 +198,7 @@ void main() {
       await tester.pump();
 
       // Inside component
-      await zoomFrom(
+      await _zoomFrom(
         tester,
         startLocation1: const Offset(180, 100),
         offset1: const Offset(15, 2),
@@ -209,7 +209,7 @@ void main() {
       expect(component.isScaledStateChange, equals(4));
 
       // Outside component
-      await zoomFrom(
+      await _zoomFrom(
         tester,
         startLocation1: const Offset(330, 300),
         offset1: const Offset(15, 2),
@@ -240,7 +240,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        await zoomFrom(
+        await _zoomFrom(
           tester,
           startLocation1: const Offset(80, 50),
           offset1: const Offset(15, 2),
@@ -268,7 +268,7 @@ void main() {
         await tester.pump();
 
         const center = Offset(115, 115);
-        await tester.timedZoomFrom(
+        await tester._timedZoomFrom(
           center.translate(-10, 0),
           const Offset(-30, 0),
           center.translate(10, 0),
@@ -312,7 +312,7 @@ void main() {
       final canvasSize = game.canvasSize;
 
       final center = (canvasSize / 2).toOffset();
-      await tester.timedZoomFrom(
+      await tester._timedZoomFrom(
         center.translate(-1, 0),
         const Offset(-20, 0),
         center.translate(1, 0),
@@ -355,7 +355,7 @@ void main() {
       final canvasSize = game.canvasSize;
 
       final center = (canvasSize / 2).toOffset();
-      await tester.timedZoomFrom(
+      await tester._timedZoomFrom(
         center.translate(-1, 0),
         const Offset(0, 20),
         center.translate(1, 0),
@@ -375,31 +375,33 @@ void main() {
       }
     },
   );
+
 }
 
-Future<void> zoomFrom(
-  WidgetTester tester, {
-  required Offset startLocation1,
-  required Offset offset1,
-  required Offset startLocation2,
-  required Offset offset2,
-}) async {
-  // Start two gestures on opposite sides of that center
-  final gesture1 = await tester.startGesture(startLocation1);
-  final gesture2 = await tester.startGesture(startLocation2);
 
-  await tester.pump();
+  Future<void> _zoomFrom(
+    WidgetTester tester, {
+    required Offset startLocation1,
+    required Offset offset1,
+    required Offset startLocation2,
+    required Offset offset2,
+  }) async {
+    // Start two gestures on opposite sides of that center
+    final gesture1 = await tester.startGesture(startLocation1);
+    final gesture2 = await tester.startGesture(startLocation2);
 
-  await gesture1.moveBy(offset1);
-  await gesture2.moveBy(offset2);
-  await tester.pump();
+    await tester.pump();
 
-  // release fingers
-  await gesture1.up();
-  await gesture2.up();
+    await gesture1.moveBy(offset1);
+    await gesture2.moveBy(offset2);
+    await tester.pump();
 
-  await tester.pump();
-}
+    // release fingers
+    await gesture1.up();
+    await gesture2.up();
+
+    await tester.pump();
+  }
 
 mixin _ScaleCounter on ScaleCallbacks {
   int scaleStartEvent = 0;
@@ -446,8 +448,8 @@ mixin _ScaleCounter on ScaleCallbacks {
 // Posted by Alexander
 // Retrieved 2025-11-19, License - CC BY-SA 4.0
 
-extension ZoomTesting on WidgetTester {
-  Future<void> timedZoomFrom(
+extension _ZoomTesting on WidgetTester {
+  Future<void> _timedZoomFrom(
     Offset startLocation1,
     Offset offset1,
     Offset startLocation2,
