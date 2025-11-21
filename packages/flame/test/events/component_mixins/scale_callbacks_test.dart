@@ -375,33 +375,31 @@ void main() {
       }
     },
   );
-
 }
 
+Future<void> _zoomFrom(
+  WidgetTester tester, {
+  required Offset startLocation1,
+  required Offset offset1,
+  required Offset startLocation2,
+  required Offset offset2,
+}) async {
+  // Start two gestures on opposite sides of that center
+  final gesture1 = await tester.startGesture(startLocation1);
+  final gesture2 = await tester.startGesture(startLocation2);
 
-  Future<void> _zoomFrom(
-    WidgetTester tester, {
-    required Offset startLocation1,
-    required Offset offset1,
-    required Offset startLocation2,
-    required Offset offset2,
-  }) async {
-    // Start two gestures on opposite sides of that center
-    final gesture1 = await tester.startGesture(startLocation1);
-    final gesture2 = await tester.startGesture(startLocation2);
+  await tester.pump();
 
-    await tester.pump();
+  await gesture1.moveBy(offset1);
+  await gesture2.moveBy(offset2);
+  await tester.pump();
 
-    await gesture1.moveBy(offset1);
-    await gesture2.moveBy(offset2);
-    await tester.pump();
+  // release fingers
+  await gesture1.up();
+  await gesture2.up();
 
-    // release fingers
-    await gesture1.up();
-    await gesture2.up();
-
-    await tester.pump();
-  }
+  await tester.pump();
+}
 
 mixin _ScaleCounter on ScaleCallbacks {
   int scaleStartEvent = 0;
