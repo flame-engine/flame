@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart' hide PointerMoveEvent;
@@ -293,7 +292,7 @@ void main() {
           height: resolution.y,
         ),
       );
-      var scales = [];
+      final scales = [];
 
       game.camera.viewfinder.zoom = 3;
 
@@ -460,7 +459,7 @@ extension ZoomTesting on WidgetTester {
   }) {
     assert(intervals > 1);
     pointer ??= nextPointer;
-    var pointer2 = pointer + 1;
+    final pointer2 = pointer + 1;
     final timeStamps = <Duration>[
       for (int t = 0; t <= intervals; t += 1) duration * t ~/ intervals,
     ];

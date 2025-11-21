@@ -147,7 +147,7 @@ ScaleUpdateEvent createScaleUpdateEvents({
       verticalScale: verticalScale ?? 1,
       rotation: rotation ?? 0,
       pointerCount: pointerCount ?? 1,
-      focalPointDelta: focalPointDelta ?? Offset.zero
+      focalPointDelta: focalPointDelta ?? Offset.zero,
     ),
   );
 }
