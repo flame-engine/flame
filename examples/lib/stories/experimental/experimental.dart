@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/experimental/layout_component_example_1.dart';
 import 'package:examples/stories/experimental/layout_component_example_2.dart';
+import 'package:examples/stories/experimental/layout_component_example_3.dart';
 import 'package:examples/stories/experimental/layout_component_example_size.dart';
 import 'package:examples/stories/experimental/shapes.dart';
 import 'package:flame/experimental.dart';
@@ -57,7 +58,7 @@ void addExperimentalStories(Dashbook dashbook) {
           );
         },
         codeLink: baseLink('experimental/layout_components.dart'),
-        info: LayoutComponentExample2.description,
+        info: LayoutComponentExample1.description,
       )
       .add(
         'Layout Components 2',
@@ -92,5 +93,23 @@ void addExperimentalStories(Dashbook dashbook) {
         },
         codeLink: baseLink('experimental/layout_components.dart'),
         info: LayoutComponentExample2.description,
+      )
+      .add(
+        'Layout Components 3',
+        (DashbookContext context) {
+          return GameWidget(
+            game: LayoutComponentExample3(
+              demoSize: context.optionsProperty<LayoutComponentExampleSize>(
+                'Size',
+                LayoutComponentExampleSize.small,
+                LayoutComponentExampleSize.values.map((exampleSize) {
+                  return PropertyOption(exampleSize.name, exampleSize);
+                }).toList(),
+              ),
+            ),
+          );
+        },
+        codeLink: baseLink('experimental/layout_components.dart'),
+        info: LayoutComponentExample3.description,
       );
 }

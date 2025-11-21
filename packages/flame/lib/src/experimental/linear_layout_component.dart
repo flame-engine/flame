@@ -417,6 +417,15 @@ abstract class LinearLayoutComponent extends LayoutComponent {
         if (component.size[crossAxisVectorIndex] != crossAxisLength) {
           component.size[crossAxisVectorIndex] = crossAxisLength;
         }
+
+        if (direction == Direction.vertical &&
+            component is TextBoxComponent &&
+            component.boxConfig.maxWidth != crossAxisLength) {
+          final originalBoxConfig = component.boxConfig;
+          component.boxConfig = originalBoxConfig.copyWith(
+            maxWidth: crossAxisLength,
+          );
+        }
       }
     }
   }

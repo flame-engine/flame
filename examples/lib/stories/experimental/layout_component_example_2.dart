@@ -7,8 +7,6 @@ import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-enum LayoutComponentExampleLayout { layout1, layout2 }
-
 class LayoutComponentExample2 extends FlameGame with DragCallbacks {
   LayoutComponentExample2({
     required this.direction,
