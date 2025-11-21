@@ -443,8 +443,8 @@ mixin _ScaleCounter on ScaleCallbacks {
   }
 }
 
-// Source - https://stackoverflow.com/a
-// Posted by Alexander Marochko
+// Source - https://stackoverflow.com/a/75171528
+// Posted by Alexander
 // Retrieved 2025-11-19, License - CC BY-SA 4.0
 
 extension ZoomTesting on WidgetTester {
