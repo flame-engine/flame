@@ -111,11 +111,12 @@ void main() {
     await tester.pumpWidget(GameWidget(game: game));
     await tester.pump();
 
-    await performPinchGesture(
+    await zoomFrom(
       tester,
-      center: const Offset(150, 150),
-      startSeparation: const Offset(30, 0),
-      moveDelta: const Offset(15, 2),
+      startLocation1: const Offset(180, 150),
+      offset1: const Offset(15, 2),
+      startLocation2: const Offset(120, 150),
+      offset2: const Offset(-15, -2),
     );
 
     expect(game.children.length, equals(4));
@@ -136,11 +137,12 @@ void main() {
       await tester.pump();
       expect(component.isMounted, isTrue);
 
-      await performPinchGesture(
+      await zoomFrom(
         tester,
-        center: const Offset(200, 200),
-        startSeparation: const Offset(50, 0),
-        moveDelta: const Offset(15, 2),
+        startLocation1: const Offset(250, 200),
+        offset1: const Offset(15, 2),
+        startLocation2: const Offset(150, 200),
+        offset2: const Offset(-15, -2),
       );
 
       expect(component.scaleStartEvent, equals(0));
@@ -169,11 +171,12 @@ void main() {
       expect(game.children.length, equals(3));
       expect(game.isMounted, isTrue);
 
-      await performPinchGesture(
+      await zoomFrom(
         tester,
-        center: const Offset(100, 100),
-        startSeparation: const Offset(50, 0),
-        moveDelta: const Offset(15, 2),
+        startLocation1: const Offset(50, 100),
+        offset1: const Offset(15, 2),
+        startLocation2: const Offset(150, 100),
+        offset2: const Offset(-15, -2),
       );
 
       expect(game.scaleStartEvent, equals(2));
@@ -183,7 +186,7 @@ void main() {
   );
 
   testWidgets(
-    'isDragged is changed',
+    'isScaled is changed',
     (tester) async {
       final component = _ScaleCallbacksComponent()
         ..size = Vector2.all(100)
@@ -196,28 +199,31 @@ void main() {
       await tester.pump();
 
       // Inside component
-      await performPinchGesture(
+      await zoomFrom(
         tester,
-        center: const Offset(150, 150),
-        startSeparation: const Offset(30, 0),
-        moveDelta: const Offset(15, 2),
+        startLocation1: const Offset(180, 100),
+        offset1: const Offset(15, 2),
+        startLocation2: const Offset(120, 100),
+        offset2: const Offset(-15, -2),
       );
 
       expect(component.isScaledStateChange, equals(4));
 
       // Outside component
-      await performPinchGesture(
+      await zoomFrom(
         tester,
-        center: const Offset(300, 300),
-        startSeparation: const Offset(30, 0),
-        moveDelta: const Offset(15, 2),
+        startLocation1: const Offset(330, 300),
+        offset1: const Offset(15, 2),
+        startLocation2: const Offset(270, 300),
+        offset2: const Offset(-15, -2),
       );
+
       expect(component.isScaledStateChange, equals(4));
     },
   );
-  group('HasDraggableComponents', () {
+  group('HasScalableComponents', () {
     testWidgets(
-      'drag event does not affect more than one component',
+      'scale event does not affect more than one component',
       (tester) async {
         var nEvents = 0;
         final game = FlameGame(
@@ -235,13 +241,13 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        await performPinchGesture(
+        await zoomFrom(
           tester,
-          center: const Offset(50, 50),
-          startSeparation: const Offset(30, 0),
-          moveDelta: const Offset(15, 2),
+          startLocation1: const Offset(80, 50),
+          offset1: const Offset(15, 2),
+          startLocation2: const Offset(20, 50),
+          offset2: const Offset(-15, -2),
         );
-
         expect(nEvents, 0);
       },
     );
@@ -372,20 +378,21 @@ void main() {
   );
 }
 
-Future<void> performPinchGesture(
+Future<void> zoomFrom(
   WidgetTester tester, {
-  Offset center = Offset.zero,
-  Offset startSeparation = const Offset(50, 0),
-  Offset moveDelta = const Offset(15, 2),
+  required Offset startLocation1,
+  required Offset offset1,
+  required Offset startLocation2,
+  required Offset offset2,
 }) async {
   // Start two gestures on opposite sides of that center
-  final gesture1 = await tester.startGesture(center - startSeparation);
-  final gesture2 = await tester.startGesture(center + startSeparation);
+  final gesture1 = await tester.startGesture(startLocation1);
+  final gesture2 = await tester.startGesture(startLocation2);
 
   await tester.pump();
 
-  await gesture1.moveBy(moveDelta);
-  await gesture2.moveBy(-moveDelta);
+  await gesture1.moveBy(offset1);
+  await gesture2.moveBy(offset2);
   await tester.pump();
 
   // release fingers
