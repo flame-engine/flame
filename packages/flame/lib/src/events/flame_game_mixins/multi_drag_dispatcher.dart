@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
@@ -25,6 +27,30 @@ class MultiDragDispatcherKey implements ComponentKey {
 class MultiDragDispatcher extends Component implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
+
+  final _dragUpdateController = StreamController<DragUpdateEvent>.broadcast(
+    sync: true,
+  );
+
+  Stream<DragUpdateEvent> get onUpdate => _dragUpdateController.stream;
+
+  final _dragStartController = StreamController<DragStartEvent>.broadcast(
+    sync: true,
+  );
+
+  Stream<DragStartEvent> get onStart => _dragStartController.stream;
+
+  final _dragEndController = StreamController<DragEndEvent>.broadcast(
+    sync: true,
+  );
+
+  Stream<DragEndEvent> get onEnd => _dragEndController.stream;
+
+  final _dragCancelController = StreamController<DragCancelEvent>.broadcast(
+    sync: true,
+  );
+
+  Stream<DragCancelEvent> get onCancel => _dragCancelController.stream;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -108,25 +134,33 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
-    onDragStart(DragStartEvent(pointerId, game, details));
+    final event = DragStartEvent(pointerId, game, details);
+    onDragStart(event);
+    _dragStartController.add(event);
   }
 
   @internal
   @override
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
-    onDragUpdate(DragUpdateEvent(pointerId, game, details));
+    final event = DragUpdateEvent(pointerId, game, details);
+    onDragUpdate(event);
+    _dragUpdateController.add(event);
   }
 
   @internal
   @override
   void handleDragEnd(int pointerId, DragEndDetails details) {
-    onDragEnd(DragEndEvent(pointerId, details));
+    final event = DragEndEvent(pointerId, details);
+    onDragEnd(event);
+    _dragEndController.add(event);
   }
 
   @internal
   @override
   void handleDragCancel(int pointerId) {
-    onDragCancel(DragCancelEvent(pointerId));
+    final event = DragCancelEvent(pointerId);
+    onDragCancel(event);
+    _dragCancelController.add(event);
   }
 
   //#endregion
@@ -145,6 +179,10 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   void onRemove() {
     game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
     game.unregisterKey(const MultiDragDispatcherKey());
+    _dragUpdateController.close();
+    _dragCancelController.close();
+    _dragStartController.close();
+    _dragEndController.close();
   }
 
   @override
