@@ -416,9 +416,9 @@ mixin _ScaleCounter on ScaleCallbacks {
     expect(event.raw, isNotNull);
     event.handled = true;
     scaleStartEvent++;
-    if (_wasScaled != isScaled) {
+    if (_wasScaled != isScaling) {
       ++isScaledStateChange;
-      _wasScaled = isScaled;
+      _wasScaled = isScaling;
     }
   }
 
@@ -435,9 +435,9 @@ mixin _ScaleCounter on ScaleCallbacks {
     expect(event.raw, isNotNull);
     event.handled = true;
     scaleEndEvent++;
-    if (_wasScaled != isScaled) {
+    if (_wasScaled != isScaling) {
       ++isScaledStateChange;
-      _wasScaled = isScaled;
+      _wasScaled = isScaling;
     }
   }
 }
