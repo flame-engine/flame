@@ -68,6 +68,11 @@ enum Direction {
 ///    [PositionComponent]s, using [CrossAxisAlignment.stretch] "permanently"
 ///    changes the sizes of the children. Subsequent changes to
 ///    [crossAxisAlignment] will work with the new sizes of the children.
+///  - When [crossAxisAlignment] is set to [CrossAxisAlignment.stretch], and the
+///    [direction] is set to [Direction.vertical], sets any child
+///    [TextBoxComponent]'s [TextBoxComponent.boxConfig] to a copy such that
+///    [TextBoxConfig.maxWidth] is set to whatever value any other child's width
+///    would be set to.
 abstract class LinearLayoutComponent extends LayoutComponent {
   LinearLayoutComponent({
     required super.key,
@@ -416,6 +421,15 @@ abstract class LinearLayoutComponent extends LayoutComponent {
         // Don't set value if the value is already correct.
         if (component.size[crossAxisVectorIndex] != crossAxisLength) {
           component.size[crossAxisVectorIndex] = crossAxisLength;
+        }
+
+        if (direction == Direction.vertical &&
+            component is TextBoxComponent &&
+            component.boxConfig.maxWidth != crossAxisLength) {
+          final originalBoxConfig = component.boxConfig;
+          component.boxConfig = originalBoxConfig.copyWith(
+            maxWidth: crossAxisLength,
+          );
         }
       }
     }
