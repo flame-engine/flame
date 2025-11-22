@@ -3,7 +3,6 @@
 **Scale events** occur when the user moves two fingers in a pinch in, or in a pinch out move.
 Only one single scale gesture can occur at the same time.
 
-
 For those components that you want to respond to scale events, add the `ScaleCallbacks` mixin.
 
 - This mixin adds three overridable methods to your component: `onScaleStart`, `onScaleUpdate`,
@@ -175,7 +174,6 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
 
 
 ## Scale and drag gestures interactions
-
 
 A multi drag gesture can sometimes look exactly like a scale gesture.
 This is the case for instance, if you try to move two components toward each other at the same time.
