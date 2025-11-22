@@ -67,11 +67,11 @@ class ScaleExample extends FlameGame {
     super.update(dt);
 
     if (addCameraRotation) {
-      camera.viewfinder.angle += 0.001;
+      camera.viewfinder.angle += 0.1 * dt;
     }
     if (addZoom) {
       debugText.text = '${camera.viewfinder.zoom}';
-      camera.viewfinder.zoom += 0.001;
+      camera.viewfinder.zoom += 0.1 * dt;
     }
   }
 }
