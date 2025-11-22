@@ -41,8 +41,8 @@ gets added into the component tree, before the `onMount`.
 The `onParentResize` method is similar: it is also called when the component is mounted into the
 component tree, and also whenever the parent of the current component changes its size.
 
-The `onRemove` method can be overridden to run code before the component is removed from the game,
-it is only run once even if the component is removed both by using the parents remove method and
+The `onRemove` method can be overridden to run code before the component is removed from the game.
+It is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
@@ -125,7 +125,7 @@ for example `PositionComponent`.
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
 
-Example of usage, where visibility of two components are handled by a wrapper:
+Here's an example where visibility of two components are handled by a wrapper:
 
 ```dart
 class GameOverPanel extends PositionComponent {
@@ -561,7 +561,7 @@ final p1 = component.position;
 final p2 = component.positionOfAnchor(Anchor.bottomRight);
 ```
 
-A common pitfall when using `anchor` is confusing it for as being the attachment point for children
+A common pitfall when using `anchor` is confusing it as being the attachment point for children
 components. For example, setting `anchor` to `Anchor.center` for a parent component does not mean
 that the children components will be placed w.r.t the center of parent.
 
@@ -687,13 +687,13 @@ Future<void> onLoad() async {
 }
 ```
 
-All animation components internally maintains a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
+All animation components internally maintain a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
 This allows multiple components to share the same animation object.
 
 Example:
 
 ```dart
-final sprites = [/*You sprite list here*/];
+final sprites = [/*Your sprite list here*/];
 final animation = SpriteAnimation.spriteList(sprites, stepTime: 0.01);
 
 final animationTicker = SpriteAnimationTicker(animation);

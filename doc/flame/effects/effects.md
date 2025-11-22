@@ -68,6 +68,7 @@ There are multiple pre-built effects provided by Flame, and you can also
 - [`OpacityByEffect`](color_effects.md#opacitybyeffect)
 - [`ColorEffect`](color_effects.md#coloreffect)
 - [`SequenceEffect`](sequence_effect.md)
+- [`CombinedEffect`](combined_effect.md)
 - [`RemoveEffect`](remove_effect.md)
 - [`FunctionEffect`](function_effect.md)
 
@@ -113,6 +114,7 @@ Size Effects              <size_effects.md>
 Anchor Effects            <anchor_effects.md>
 Color Effects             <color_effects.md>
 Sequence Effect           <sequence_effect.md>
+Combined Effect           <combined_effect.md>
 Remove Effect             <remove_effect.md>
 Function Effect           <function_effect.md>
 ```

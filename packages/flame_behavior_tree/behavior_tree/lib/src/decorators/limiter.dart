@@ -13,6 +13,7 @@ class Limiter extends BaseNode implements NodeInterface {
     this.limit, {
     NodeStatus? statusAfterLimit,
   }) : _statusAfterLimit = statusAfterLimit {
+    setParent(child);
     status = (_tickCount < limit)
         ? child.status
         : _statusAfterLimit ?? child.status;
