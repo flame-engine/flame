@@ -176,7 +176,6 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
 
 ## Scale and drag gestures interactions
 
-
 A multi drag gesture can sometimes look exactly like a scale gesture.
 This is the case for instance, if you try to move two components toward each other at the same time.
 If you added both a component using ScaleCallbacks and
