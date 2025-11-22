@@ -2,6 +2,8 @@
 library behavior_tree;
 
 export 'src/base_node.dart';
+export 'src/blackboard.dart';
+export 'src/blackboard_provider.dart';
 export 'src/composites/selector.dart';
 export 'src/composites/sequence.dart';
 export 'src/decorators/inverter.dart';

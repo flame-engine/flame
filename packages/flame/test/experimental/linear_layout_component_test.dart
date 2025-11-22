@@ -256,7 +256,7 @@ void main() {
 
     group('crossAxisAlignment', () {
       runLinearLayoutComponentTestRegistry({
-        'crossAlignment = start': (game, direction) async {
+        'crossAxisAlignment = start': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
@@ -272,7 +272,7 @@ void main() {
           expect(crossAxisValue(rectangle.position), 0);
           expect(crossAxisValue(text.position), 0);
         },
-        'crossAlignment = center': (game, direction) async {
+        'crossAxisAlignment = center': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
@@ -303,7 +303,7 @@ void main() {
                 2,
           );
         },
-        'crossAlignment = end': (game, direction) async {
+        'crossAxisAlignment = end': (game, direction) async {
           final circle = CircleComponent(radius: 20);
           final rectangle = RectangleComponent(size: Vector2(100, 50));
           final text = TextComponent(text: 'testing');
@@ -461,6 +461,26 @@ void main() {
                 );
                 expect(expandedComponent.child?.size, expandedComponent.size);
               },
+        },
+      );
+    });
+
+    group('special behaviors', () {
+      testWithFlameGame(
+        'ColumnComponent with crossAxisAlignment = stretch, will set '
+        'TextBoxComponent child maxWidth',
+        (game) async {
+          final textBoxComponent = TextBoxComponent(
+            text: 'The quick brown fox jumps over the lazy dog.',
+          );
+          final layoutComponentSize = Vector2.all(500);
+          final layoutComponent = ColumnComponent(
+            size: layoutComponentSize,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [textBoxComponent],
+          );
+          await game.ensureAdd(layoutComponent);
+          expect(textBoxComponent.boxConfig.maxWidth, layoutComponent.width);
         },
       );
     });
