@@ -103,3 +103,51 @@ DragUpdateEvent createDragUpdateEvents({
     ),
   );
 }
+
+ScaleStartEvent createScaleStartEvents({
+  required Game game,
+  int? pointerId,
+  PointerDeviceKind? kind,
+  Offset? focalPoint,
+  Offset? localFocalPoint,
+  int? pointerCount,
+}) {
+  return ScaleStartEvent(
+    pointerId ?? 1,
+    game,
+    ScaleStartDetails(
+      focalPoint: focalPoint ?? Offset.zero,
+      localFocalPoint: localFocalPoint ?? Offset.zero,
+      pointerCount: pointerCount ?? 1,
+    ),
+  );
+}
+
+ScaleUpdateEvent createScaleUpdateEvents({
+  required Game game,
+  int? pointerId,
+  PointerDeviceKind? kind,
+  Offset? localFocalPoint,
+  Offset? focalPoint,
+  double? scale,
+  double? horizontalScale,
+  double? verticalScale,
+  double? rotation,
+  int? pointerCount,
+  Offset? focalPointDelta,
+}) {
+  return ScaleUpdateEvent(
+    pointerId ?? 1,
+    game,
+    ScaleUpdateDetails(
+      localFocalPoint: localFocalPoint ?? Offset.zero,
+      focalPoint: focalPoint ?? Offset.zero,
+      scale: scale ?? 1,
+      horizontalScale: horizontalScale ?? 1,
+      verticalScale: verticalScale ?? 1,
+      rotation: rotation ?? 0,
+      pointerCount: pointerCount ?? 1,
+      focalPointDelta: focalPointDelta ?? Offset.zero,
+    ),
+  );
+}
