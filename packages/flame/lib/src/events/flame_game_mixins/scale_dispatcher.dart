@@ -225,13 +225,14 @@ class ScaleDispatcher extends Component implements ScaleListener {
       return 1.0;
     }
 
-    final currentLineDistance = _currentLine!.pointerStartLocation
-        .toVector2()
-        .distanceTo(_currentLine!.pointerEndLocation.toVector2());
+    final currentLineDistance =
+        (_currentLine!.pointerStartLocation - _currentLine!.pointerEndLocation)
+            .distance;
 
-    final firstLineDistance = _lineAtFirstUpdate!.pointerStartLocation
-        .toVector2()
-        .distanceTo(_lineAtFirstUpdate!.pointerEndLocation.toVector2());
+    final firstLineDistance =
+        (_lineAtFirstUpdate!.pointerStartLocation -
+                _lineAtFirstUpdate!.pointerEndLocation)
+            .distance;
 
     return currentLineDistance / firstLineDistance;
   }
