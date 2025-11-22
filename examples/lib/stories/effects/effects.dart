@@ -1,6 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/effects/color_effect_example.dart';
+import 'package:examples/stories/effects/combined_effect_example.dart';
 import 'package:examples/stories/effects/dual_effect_removal_example.dart';
 import 'package:examples/stories/effects/effect_controllers_example.dart';
 import 'package:examples/stories/effects/function_effect_example.dart';
@@ -69,6 +70,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: SequenceEffectExample()),
       codeLink: baseLink('effects/sequence_effect_example.dart'),
       info: SequenceEffectExample.description,
+    )
+    ..add(
+      'Combined Effect',
+      (_) => GameWidget(game: CombinedEffectExample()),
+      codeLink: baseLink('effects/combined_effect_example.dart'),
+      info: CombinedEffectExample.description,
     )
     ..add(
       'Remove Effect',

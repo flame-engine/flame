@@ -33,8 +33,9 @@ import 'package:flutter/widgets.dart';
 ///
 /// In addition to hosting a [Game] instance, the `GameWidget` also provides
 /// some structural support, with the following features:
+///
 /// - [loadingBuilder] to display something while the game is loading;
-/// - [errorBuilder] which will be shows if the game throws an error;
+/// - [errorBuilder] shown if the game throws an error;
 /// - [backgroundBuilder] to draw some decoration behind the game;
 /// - [overlayBuilderMap] to draw one or more widgets on top of the game.
 ///

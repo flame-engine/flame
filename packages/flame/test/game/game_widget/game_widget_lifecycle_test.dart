@@ -96,7 +96,7 @@ class _GamePageState extends State<_GamePage> {
           ),
           Positioned(
             top: 0,
-            right: 0,
+            left: 0,
             child: ElevatedButton(
               child: const Text('Back'),
               onPressed: () {
@@ -261,18 +261,13 @@ void main() {
       await tester.tap(find.text('Play'));
 
       await tester.pump();
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 16), EnginePhase.paint);
 
       await tester.tap(find.text('Back'));
 
       // This ensures that Flame is not running anymore after the navigation
       // happens, if it was, then the pumpAndSettle would break with a timeout
       await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Play'));
-
-      await tester.pump();
-      await tester.pump();
 
       expect(
         events,
@@ -283,14 +278,34 @@ void main() {
           'update',
           'render',
           'update',
+          'render',
+          'update',
           'onRemove',
           'onDispose',
-          'onGameResize',
-          'onMount',
-          'update',
-          'render',
         ],
       );
+
+      await tester.tap(find.text('Play'));
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 16), EnginePhase.paint);
+
+      expect(events, [
+        'onGameResize',
+        'onLoad',
+        'onMount',
+        'update',
+        'render',
+        'update',
+        'render',
+        'update',
+        'onRemove',
+        'onDispose',
+        'onGameResize',
+        'onMount',
+        'update',
+        'render',
+      ]);
     });
   });
 }
