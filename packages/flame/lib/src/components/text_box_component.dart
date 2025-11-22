@@ -65,7 +65,21 @@ class TextBoxConfig {
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.medium;
-  TextBoxConfig boxConfig;
+  TextBoxConfig _boxConfig;
+
+  TextBoxConfig get boxConfig => _boxConfig;
+
+  set boxConfig(TextBoxConfig value) {
+    final oldConfig = _boxConfig;
+    _boxConfig = value;
+    if (oldConfig.maxWidth != value.maxWidth) {
+      // This call is necessary to reflow the text for any change in
+      // TextBoxConfig maxWidth.
+      updateBounds();
+    }
+    redraw();
+  }
+
   final double pixelRatio;
 
   @visibleForTesting
@@ -112,7 +126,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.priority,
     this.onComplete,
     super.key,
-  }) : boxConfig = boxConfig ?? const TextBoxConfig(),
+  }) : _boxConfig = boxConfig ?? const TextBoxConfig(),
        _fixedSize = size != null,
        align = align ?? Anchor.topLeft,
        pixelRatio =
@@ -215,10 +229,15 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     return lines.map((e) => e.length).sum;
   }
 
+  /// The index of the character that should be appearing given the fact that
+  /// [TextBoxComponent] can build up its text per character at the rate
+  /// dictated by [TextBoxConfig.timePerChar] in [boxConfig].
+  /// If the timePerChar is 0, then returns the last possible character index.
   int get currentChar => boxConfig.timePerChar == 0.0
       ? _actualTextLength
       : math.min(_lifeTime ~/ boxConfig.timePerChar, _actualTextLength);
 
+  /// The index of the line that [currentChar] belongs to.
   int get currentLine {
     var totalCharCount = 0;
     final cachedCurrentChar = currentChar;
