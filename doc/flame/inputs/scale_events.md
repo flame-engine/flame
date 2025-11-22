@@ -58,7 +58,7 @@ if the user moves their finger away from the component, the property `event.loca
 return a point whose coordinates are NaNs. Likewise, the `event.renderingTrace` in this case will be
 empty. However, the `canvasPosition` and `devicePosition` properties of the event will be valid.
 
-In addition, the `ScaleUpdateEvent` will contain `focalPointDelta` -- 
+In addition, the `ScaleUpdateEvent` will contain `focalPointDelta` --
 the amount the focal point has moved since the
 previous `onScaleUpdate`, or since the `onScaleStart` if this is the first scale-update after a scale-
 start.
@@ -180,7 +180,7 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
 A multi drag gesture can sometimes look exactly like a scale gesture.
 This is the case for instance, if you try to move two components toward each other at the same time.
 If you added both a component using ScaleCallbacks and
-one using DragCallbacks (or one using both), this issue will arise. 
+one using DragCallbacks (or one using both), this issue will arise.
 The Scale gesture will win over the drag gesture
 and prevent your user to perform the multi drag gesture as they wanted. This is a limitation
 with the current implementation that devs need to be aware of.
