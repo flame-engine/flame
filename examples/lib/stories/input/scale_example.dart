@@ -250,7 +250,7 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
     add(text);
   }
 
-  bool isScaling = false;
+  bool isDoingScaling = false;
   double initialAngle = 0;
   Vector2 initialScale = Vector2.all(1);
   double lastScale = 1.0;
@@ -259,7 +259,7 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
   @override
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
-    isScaling = true;
+    isDoingScaling = true;
     initialAngle = angle;
     initialScale = scale;
     lastScale = 1.0;
@@ -288,7 +288,7 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
   @override
   void onScaleEnd(ScaleEndEvent event) {
     super.onScaleEnd(event);
-    isScaling = false;
+    isDoingScaling = false;
     debugPrint('Scale ended with velocity ${event.velocity}');
   }
 }

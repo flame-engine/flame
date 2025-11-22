@@ -4,21 +4,21 @@ import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:flutter/foundation.dart';
 
 mixin ScaleCallbacks on Component {
-  bool _isScaled = false;
+  bool _isScaling = false;
 
   /// Returns true while the component is being scaled.
-  bool get isScaled => _isScaled;
+  bool get isScaling => _isScaling;
 
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
-    _isScaled = true;
+    _isScaling = true;
   }
 
   void onScaleUpdate(ScaleUpdateEvent event) {}
 
   @mustCallSuper
   void onScaleEnd(ScaleEndEvent event) {
-    _isScaled = false;
+    _isScaling = false;
   }
 
   @override
