@@ -6,6 +6,7 @@ import 'package:flame/game.dart';
 import 'package:flame/src/events/interfaces/scale_listener.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
