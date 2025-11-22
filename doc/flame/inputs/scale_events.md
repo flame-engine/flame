@@ -35,8 +35,9 @@ topmost component at the focal point (the point at the center of the line formed
  with the `ScaleCallbacks` mixin. However, by setting the flag
 `event.continuePropagation` to true, you can allow the event to propagate to the components below.
 
-The `ScaleStartEvent` object associated with this event will contain the coordinate of the first focal point
-recognised by the scale gesture recogniser. This point is available in multiple coordinate system:
+The `ScaleStartEvent` object associated with this event will contain
+the coordinate of the first focal point
+recognized by the scale gesture recognizer. This point is available in multiple coordinate system:
 `devicePosition` is given in the coordinate system of the entire device, `canvasPosition` is in the
 coordinate system of the game widget, and `localPosition` provides the position in the component's
 local coordinate system.
@@ -57,17 +58,18 @@ if the user moves their finger away from the component, the property `event.loca
 return a point whose coordinates are NaNs. Likewise, the `event.renderingTrace` in this case will be
 empty. However, the `canvasPosition` and `devicePosition` properties of the event will be valid.
 
-In addition, the `ScaleUpdateEvent` will contain `focalPointDelta` -- the amount the focal point has moved since the
+In addition, the `ScaleUpdateEvent` will contain `focalPointDelta` -- 
+the amount the focal point has moved since the
 previous `onScaleUpdate`, or since the `onScaleStart` if this is the first scale-update after a scale-
 start.
 
 The `event.timestamp` property measures the time elapsed since the beginning of the scale. It can be
 used, for example, to compute the speed of the movement.
 
-The `event.rotation` property measures the angle of rotation in radians, between the line formed 
+The `event.rotation` property measures the angle of rotation in radians, between the line formed
 from the two fingers at the start, and the line formed when this event is called.
 
-The `event.scale` property measures the ratio of length between the line formed 
+The `event.scale` property measures the ratio of length between the line formed
 from the two fingers at the start, and the line formed when this event is called.
 
 
@@ -75,6 +77,7 @@ from the two fingers at the start, and the line formed when this event is called
 
 This event is fired when the user lifts their finger and thus stops the scale gesture. There is no
 position associated with this event.
+
 
 ## Mixins
 
@@ -170,8 +173,14 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
 
 ```
 
+
 ## Scale and drag gestures interactions
 
-A multi drag gesture can sometimes look exactly like a scale gesture. This is the case for instance, if you try to move two components toward each other at the same time.
-If you added both a component using ScaleCallbacks and one using DragCallbacks (or one using both), this issue will arise. The Scale gesture will win over the drag gesture
-and prevent your user to perform the multi drag gesture as they wanted. This is a limitation with the current implementation that devs need to be aware of.
+
+A multi drag gesture can sometimes look exactly like a scale gesture.
+This is the case for instance, if you try to move two components toward each other at the same time.
+If you added both a component using ScaleCallbacks and
+one using DragCallbacks (or one using both), this issue will arise. 
+The Scale gesture will win over the drag gesture
+and prevent your user to perform the multi drag gesture as they wanted. This is a limitation
+with the current implementation that devs need to be aware of.
