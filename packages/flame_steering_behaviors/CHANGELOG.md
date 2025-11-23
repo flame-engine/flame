@@ -1,3 +1,7 @@
+## 0.2.1+1
+
+ - Update a dependency to the latest release.
+
 ## 0.2.1
 
  - **FEAT**: Add flame_steering_behaviors package ([#3748](https://github.com/flame-engine/flame/issues/3748)). ([2d4f0d43](https://github.com/flame-engine/flame/commit/2d4f0d43ef472b5a473cde3fc97579b8a1c0a9fc))

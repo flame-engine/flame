@@ -1,3 +1,7 @@
+## 3.0.9
+
+ - Update a dependency to the latest release.
+
 ## 3.0.8
 
  - **FIX**: Show assertion when tiled file is loaded in the wrong way ([#3747](https://github.com/flame-engine/flame/issues/3747)). ([3efedc46](https://github.com/flame-engine/flame/commit/3efedc4653fa33cb239a38cc6ac8c999bcd25a7f))

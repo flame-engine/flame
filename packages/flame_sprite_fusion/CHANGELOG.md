@@ -1,3 +1,7 @@
+## 0.2.2+1
+
+ - Update a dependency to the latest release.
+
 ## 0.2.2
 
  - **FEAT**: Add `getLayerByName` to `SpriteFusionTilemapData` ([#3755](https://github.com/flame-engine/flame/issues/3755)). ([9a6ca27b](https://github.com/flame-engine/flame/commit/9a6ca27b42715c0b9ae52885ab8c94bed3819c11))
