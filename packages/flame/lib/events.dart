@@ -5,6 +5,7 @@ export 'src/events/component_mixins/hover_callbacks.dart' show HoverCallbacks;
 export 'src/events/component_mixins/pointer_move_callbacks.dart'
     show PointerMoveCallbacks;
 export 'src/events/component_mixins/scale_callbacks.dart' show ScaleCallbacks;
+export 'src/events/component_mixins/scale_drag_callbacks.dart' show ScaleDragCallbacks;
 export 'src/events/component_mixins/secondary_tap_callbacks.dart'
     show SecondaryTapCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
@@ -12,6 +13,8 @@ export 'src/events/flame_game_mixins/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
 export 'src/events/flame_game_mixins/multi_drag_dispatcher.dart'
     show MultiDragDispatcher, MultiDragDispatcherKey;
+export 'src/events/flame_game_mixins/scale_drag_dispatcher.dart'
+    show MultiDragScaleDispatcher, MultiDragScaleDispatcherKey;
 export 'src/events/flame_game_mixins/multi_tap_dispatcher.dart'
     show MultiTapDispatcher, MultiTapDispatcherKey;
 export 'src/events/flame_game_mixins/pointer_move_dispatcher.dart'
