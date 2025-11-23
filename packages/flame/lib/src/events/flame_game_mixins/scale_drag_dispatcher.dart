@@ -239,7 +239,7 @@ class MultiDragScaleDispatcher extends Component implements MultiDragListener, S
     game.gestureDetectors.add<MultiDragScaleGestureRecognizer>(
       MultiDragScaleGestureRecognizer.new,
       (MultiDragScaleGestureRecognizer instance) {
-        instance.onDragStart = (Offset point) => FlameDragAdapter(this, point);
+        instance.onStart = (Offset point) => FlameDragAdapter(this, point);
         instance.onScaleStart = handleScaleStart;
         instance.onScaleUpdate = handleScaleUpdate;
         instance.onScaleEnd = handleScaleEnd;
