@@ -1,3 +1,7 @@
+## 2.2.0
+
+ - **FEAT**: Add scaling gesture for components ([#3770](https://github.com/flame-engine/flame/issues/3770)). ([f413eddb](https://github.com/flame-engine/flame/commit/f413eddbf1581f30087ba53f9516e22e035bda7a))
+
 ## 2.1.0
 
 > Note: This release has breaking changes.
