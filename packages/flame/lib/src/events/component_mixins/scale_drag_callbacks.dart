@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_game_mixins/scale_drag_dispatcher.dart';
+import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
 mixin ScaleDragCallbacks on Component {
@@ -14,13 +15,18 @@ mixin ScaleDragCallbacks on Component {
 
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
+    debugPrint("[ScaleDragCallbacks] on scale start");
     _isScaling = true;
   }
-
-  void onScaleUpdate(ScaleUpdateEvent event) {}
+  
+  @mustCallSuper
+  void onScaleUpdate(ScaleUpdateEvent event) {
+     debugPrint("[ScaleDragCallbacks] on scale update");
+  }
 
   @mustCallSuper
   void onScaleEnd(ScaleEndEvent event) {
+     debugPrint("[ScaleDragCallbacks] on scale end");
     _isScaling = false;
   }
 
@@ -35,6 +41,7 @@ mixin ScaleDragCallbacks on Component {
   /// [onDragStart], even if the point of touch moves outside of the boundaries
   /// of the component. In the latter case `event.localPosition` will contain a
   /// NaN point.
+  @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {}
 
   /// The drag event has ended.
