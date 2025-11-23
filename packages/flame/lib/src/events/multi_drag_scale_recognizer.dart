@@ -154,47 +154,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
         });
       }
     }
-
-    // End scale gesture if we drop below 2 pointers
-    if (_scaleGestureActive && _pointers.length < 2) {
-      if (onScaleEnd != null) {
-        final Velocity velocity = _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
-        
-        if (_isFlingGesture(velocity)) {
-          final Offset pixelsPerSecond = velocity.pixelsPerSecond;
-          if (pixelsPerSecond.distanceSquared > kMaxFlingVelocity * kMaxFlingVelocity) {
-            final Velocity clampedVelocity = Velocity(
-              pixelsPerSecond: (pixelsPerSecond / pixelsPerSecond.distance) * kMaxFlingVelocity,
-            );
-            invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
-              ScaleEndDetails(
-                velocity: clampedVelocity,
-                scaleVelocity: velocity.pixelsPerSecond.dx,
-                pointerCount: pointerCount,
-              ),
-            ));
-          } else {
-            invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
-              ScaleEndDetails(
-                velocity: velocity,
-                scaleVelocity: velocity.pixelsPerSecond.dx,
-                pointerCount: pointerCount,
-              ),
-            ));
-          }
-        } else {
-          invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
-            ScaleEndDetails(
-              scaleVelocity: velocity.pixelsPerSecond.dx,
-              pointerCount: pointerCount,
-            ),
-          ));
-        }
-      }
-      
-      _scaleGestureActive = false;
-      _scaleVelocityTracker = null;
-    }
   }
 
   void _update() {
@@ -324,8 +283,54 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     if (!_pointers.containsKey(pointer)) {
       return;
     }
+    
+    // Check if we need to end the scale gesture before removing the pointer
+    final bool hadTwoOrMorePointers = _pointers.length >= 2;
+    final bool willHaveFewerThanTwo = _pointers.length - 1 < 2;
+    
     GestureBinding.instance.pointerRouter.removeRoute(pointer, _handleEvent);
     _pointers.remove(pointer)!._dispose();
+    
+    // End scale gesture if we just dropped below 2 pointers
+    if (_scaleGestureActive && hadTwoOrMorePointers && willHaveFewerThanTwo) {
+      if (onScaleEnd != null) {
+        final Velocity velocity = _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
+        
+        if (_isFlingGesture(velocity)) {
+          final Offset pixelsPerSecond = velocity.pixelsPerSecond;
+          if (pixelsPerSecond.distanceSquared > kMaxFlingVelocity * kMaxFlingVelocity) {
+            final Velocity clampedVelocity = Velocity(
+              pixelsPerSecond: (pixelsPerSecond / pixelsPerSecond.distance) * kMaxFlingVelocity,
+            );
+            invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
+              ScaleEndDetails(
+                velocity: clampedVelocity,
+                scaleVelocity: velocity.pixelsPerSecond.dx,
+                pointerCount: _pointers.length,
+              ),
+            ));
+          } else {
+            invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
+              ScaleEndDetails(
+                velocity: velocity,
+                scaleVelocity: velocity.pixelsPerSecond.dx,
+                pointerCount: _pointers.length,
+              ),
+            ));
+          }
+        } else {
+          invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
+            ScaleEndDetails(
+              scaleVelocity: velocity.pixelsPerSecond.dx,
+              pointerCount: _pointers.length,
+            ),
+          ));
+        }
+      }
+      
+      _scaleGestureActive = false;
+      _scaleVelocityTracker = null;
+    }
   }
 
   @override
@@ -357,7 +362,7 @@ class _DragPointerState {
   final PointerDeviceKind kind;
   
   Offset currentPosition;
-  Offset? _lastPosition;
+
   late VelocityTracker velocityTracker;
   GestureArenaEntry? _arenaEntry;
   Drag? _drag;
