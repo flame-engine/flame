@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -29,11 +27,6 @@ class ScaleDispatcher extends Component implements ScaleListener {
   final Set<TaggedComponent<ScaleCallbacks>> _records = {};
 
   FlameGame get game => parent! as FlameGame;
-
-  /// Store the last drag events
-  DragStartDetails? lastDragStart;
-  DragUpdateDetails? lastDragUpdate;
-  DragEndDetails? lastDragEnd;
 
   bool _shouldBeRemoved = false;
 
@@ -132,7 +125,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
   void onMount() {
     if(_tryRemoving()){
     return;
-    };
+    }
     game.gestureDetectors.add<ScaleGestureRecognizer>(
       ScaleGestureRecognizer.new,
       (ScaleGestureRecognizer instance) {

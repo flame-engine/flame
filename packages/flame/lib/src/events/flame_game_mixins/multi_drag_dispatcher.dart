@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
@@ -165,7 +163,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     if(_tryRemoving()){
     return;
     };
-    
+
     debugPrint("mount multi drag gesture recognizer");
     game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,

@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('ScaleCallbacks', () {
     testWithFlameGame(
-      'make sure ScaleDragCallback components can be added to a FlameGame',
+      'make sure components can be added to a FlameGame',
       (game) async {
         await game.add(_ScaleDragCallbacksComponent());
         await game.ready();
@@ -371,6 +371,182 @@ void main() {
       expect(component.dragEndEvent, equals(2));
     },
   );
+
+    testWidgets(
+    '''adding drag component after scale component 
+    upgrade dispatcher to multiDragScaleDispatcher''',
+    (tester) async {
+      final resolution = Vector2(80, 60);
+      final game = FlameGame(
+        camera: CameraComponent.withFixedResolution(
+          width: resolution.x,
+          height: resolution.y,
+        ),
+      );
+
+      final scaleComponent = _ScaleWithCallbacksComponent();
+      await game.world.add(scaleComponent);
+      await tester.pumpWidget(GameWidget(game: game));
+      await tester.pump(Durations.short1);
+
+      final dragComponent = _DragWithCallbacksComponent();
+      await game.world.add(dragComponent);
+
+      await tester.pump();
+      await tester.pump();
+
+      expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
+    },
+  );
+
+  testWidgets(
+    '''adding scale component after drag
+     component allows current dragging to continue''',
+    (tester) async {
+      final resolution = Vector2(80, 60);
+      final game = FlameGame(
+        camera: CameraComponent.withFixedResolution(
+          width: resolution.x,
+          height: resolution.y,
+        ),
+      );
+      final dragComponent = _DragWithCallbacksComponent(
+        position: Vector2.all(-5),
+        size: Vector2.all(10),
+      );
+
+      await game.world.add(dragComponent);
+      await tester.pumpWidget(GameWidget(game: game));
+      await tester.pump();
+
+      Future<void> injectScale() async {
+      final scaleComponent = _ScaleWithCallbacksComponent();
+      await game.world.add(scaleComponent);
+      await tester.pump();
+      expect(dragComponent.isDragged, true); 
+    }
+
+    final center = (game.canvasSize / 2).toOffset();
+
+      await dragWithInjection(
+        tester,
+        center,
+        const Offset(20, 0),
+        const Duration(milliseconds: 200),
+        injectScale, // ajout à mi-chemin
+      );
+    },
+  );
+
+    testWidgets(
+    '''adding drag component after scale
+     component allows current scaling to continue''',
+    (tester) async {
+      final resolution = Vector2(80, 60);
+      final game = FlameGame(
+        camera: CameraComponent.withFixedResolution(
+          width: resolution.x,
+          height: resolution.y,
+        ),
+      );
+      final scaleComponent = _ScaleWithCallbacksComponent(
+        position: Vector2.all(-5),
+        size: Vector2.all(10),
+      );
+
+      await game.world.add(scaleComponent);
+      await tester.pumpWidget(GameWidget(game: game));
+      await tester.pump();
+
+      Future<void> injectDrag() async {
+      final dragComponent = _DragWithCallbacksComponent();
+      await game.world.add(dragComponent);
+      await tester.pump();
+      expect(scaleComponent.isScaling, true); 
+    }
+
+    final center = (game.canvasSize / 2).toOffset();
+    
+    await _zoomFromWithInjection(
+            tester,
+            startLocation1: center.translate(-3, 0),
+            offset1: const Offset(15, 2),
+            startLocation2:  center.translate(3, 0),
+            offset2: const Offset(-15, -2), 
+            duration: const Duration(milliseconds: 200), 
+            onHalfway: injectDrag,
+          );
+    },
+  );
+
+}
+
+
+
+Future<void> dragWithInjection(
+  WidgetTester tester,
+  Offset start,
+  Offset delta,
+  Duration duration,
+  Future<void> Function() onHalfway,
+  {int steps = 20}
+) async {
+  final gesture = await tester.startGesture(start);
+  final dt = duration ~/ steps;
+
+  for (var i = 0; i < steps; i++) {
+    if (i == steps ~/ 2) {
+      // On est au milieu : injecte ton scale component
+      await onHalfway();
+    }
+
+    final t = (i + 1) / steps;
+    await gesture.moveTo(start + delta * t);
+    await tester.pump(dt);
+  }
+
+  await gesture.up();
+  await tester.pump();
+}
+
+Future<void> _zoomFromWithInjection(
+  WidgetTester tester, {
+  required Offset startLocation1,
+  required Offset offset1,
+  required Offset startLocation2,
+  required Offset offset2,
+  required Duration duration,
+  required Future<void> Function() onHalfway,
+  int steps = 20,
+}) async {
+  // Start both fingers
+  final gesture1 = await tester.startGesture(startLocation1);
+  final gesture2 = await tester.startGesture(startLocation2);
+
+  await tester.pump();
+
+  final dt = duration ~/ steps;
+
+  for (var i = 0; i < steps; i++) {
+    // Inject custom logic at halfway
+    if (i == steps ~/ 2) {
+      await onHalfway();
+      await tester.pump();
+    }
+
+    final t = (i + 1) / steps;
+
+    await gesture1.moveTo(startLocation1 + offset1 * t);
+    await gesture2.moveTo(startLocation2 + offset2 * t);
+
+    await tester.pump(dt);
+  }
+
+  // Release both gestures
+  await gesture1.up();
+  await gesture2.up();
+
+  await tester.pump();
 }
 
 Future<void> _zoomFrom(
@@ -397,8 +573,6 @@ Future<void> _zoomFrom(
   await tester.pump();
 }
 
-/*class _ScaleDragCallbacksComponent extends PositionComponent
-    with ScaleDragCallbacks, _ScaleDragCounter {}*/
 class _ScaleDragCallbacksComponent extends PositionComponent
     with ScaleCallbacks, DragCallbacks,  _ScaleCounter, _DragCounter {}
 
@@ -530,7 +704,6 @@ mixin _ScaleCounter on ScaleCallbacks {
   @override
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
-     debugPrint("_ScaleCounter.onScaleStart called!");
     expect(event.raw, isNotNull);
     event.handled = true;
     scaleStartEvent++;
@@ -562,86 +735,73 @@ mixin _ScaleCounter on ScaleCallbacks {
 
 }
 
-mixin _ScaleDragCounter on ScaleDragCallbacks {
-  int scaleStartEvent = 0;
-  int scaleUpdateEvent = 0;
-  int scaleEndEvent = 0;
+class _DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
+  _DragWithCallbacksComponent({
+    void Function(DragStartEvent)? onDragStart,
+    void Function(DragUpdateEvent)? onDragUpdate,
+    void Function(DragEndEvent)? onDragEnd,
+    super.position,
+    super.size,
+  }) : _onDragStart = onDragStart,
+       _onDragUpdate = onDragUpdate,
+       _onDragEnd = onDragEnd;
 
-  int isScaledStateChange = 0;
-
-  bool _wasScaled = false;
-
-  @override
-  void onScaleStart(ScaleStartEvent event) {
-    super.onScaleStart(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    scaleStartEvent++;
-    if (_wasScaled != isScaling) {
-      ++isScaledStateChange;
-      _wasScaled = isScaling;
-    }
-  }
-
-  @override
-  void onScaleUpdate(ScaleUpdateEvent event) {
-    super.onScaleUpdate(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    scaleUpdateEvent++;
-  }
-
-  @override
-  void onScaleEnd(ScaleEndEvent event) {
-    super.onScaleEnd(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    scaleEndEvent++;
-    if (_wasScaled != isScaling) {
-      ++isScaledStateChange;
-      _wasScaled = isScaling;
-    }
-  }
-    int dragStartEvent = 0;
-  int dragUpdateEvent = 0;
-  int dragEndEvent = 0;
-  int dragCancelEvent = 0;
-  int isDraggedStateChange = 0;
-
-  bool _wasDragged = false;
+  final void Function(DragStartEvent)? _onDragStart;
+  final void Function(DragUpdateEvent)? _onDragUpdate;
+  final void Function(DragEndEvent)? _onDragEnd;
 
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    dragStartEvent++;
-    if (_wasDragged != isDragged) {
-      ++isDraggedStateChange;
-      _wasDragged = isDragged;
-    }
+    return _onDragStart?.call(event);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    super.onDragUpdate(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    dragUpdateEvent++;
+    return _onDragUpdate?.call(event);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    dragEndEvent++;
-    if (_wasDragged != isDragged) {
-      ++isDraggedStateChange;
-      _wasDragged = isDragged;
-    }
+    return _onDragEnd?.call(event);
   }
 }
+
+class _ScaleWithCallbacksComponent extends PositionComponent
+    with ScaleCallbacks {
+  _ScaleWithCallbacksComponent({
+    void Function(ScaleStartEvent)? onScaleStart,
+    void Function(ScaleUpdateEvent)? onScaleUpdate,
+    void Function(ScaleEndEvent)? onScaleEnd,
+    super.position,
+    super.size,
+  }) : _onScaleStart = onScaleStart,
+       _onScaleUpdate = onScaleUpdate,
+       _onScaleEnd = onScaleEnd;
+
+  final void Function(ScaleStartEvent)? _onScaleStart;
+  final void Function(ScaleUpdateEvent)? _onScaleUpdate;
+  final void Function(ScaleEndEvent)? _onScaleEnd;
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    return _onScaleStart?.call(event);
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    return _onScaleUpdate?.call(event);
+  }
+
+  @override
+  void onScaleEnd(ScaleEndEvent event) {
+    super.onScaleEnd(event);
+    return _onScaleEnd?.call(event);
+  }
+}
+
 
 // Source - https://stackoverflow.com/a/75171528
 // Posted by Alexander

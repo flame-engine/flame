@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
@@ -8,7 +6,6 @@ import 'package:flame/src/events/multi_drag_scale_recognizer.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -48,7 +45,6 @@ class MultiDragScaleDispatcher extends Component
   /// that may occur simultaneously.
   @mustCallSuper
   void onDragStart(DragStartEvent event) {
-    debugPrint("dispatcher on drag start");
     event.deliverAtPoint(
       rootComponent: game,
       eventHandler: (DragCallbacks component) {
@@ -203,7 +199,6 @@ class MultiDragScaleDispatcher extends Component
 
   @override
   void onMount() {
-    debugPrint("mount scale drag gesture recognizer");
     game.gestureDetectors.add<MultiDragScaleGestureRecognizer>(
       MultiDragScaleGestureRecognizer.new,
       (MultiDragScaleGestureRecognizer instance) {
