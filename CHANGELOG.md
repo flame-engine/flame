@@ -3,6 +3,101 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-11-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`behavior_tree` - `v0.1.5`](#behavior_tree---v015)
+ - [`flame` - `v1.34.0`](#flame---v1340)
+ - [`flame_behavior_tree` - `v0.1.4`](#flame_behavior_tree---v014)
+ - [`flame_network_assets` - `v0.3.3+18`](#flame_network_assets---v03318)
+ - [`flame_spine` - `v0.3.0+1`](#flame_spine---v0301)
+ - [`flame_test` - `v2.2.0`](#flame_test---v220)
+ - [`flame_behaviors` - `v1.3.1`](#flame_behaviors---v131)
+ - [`flame_tiled` - `v3.0.9`](#flame_tiled---v309)
+ - [`flame_oxygen` - `v0.2.3+18`](#flame_oxygen---v02318)
+ - [`flame_isolate` - `v0.6.2+18`](#flame_isolate---v06218)
+ - [`flame_texturepacker` - `v5.0.3`](#flame_texturepacker---v503)
+ - [`flame_sprite_fusion` - `v0.2.2+1`](#flame_sprite_fusion---v0221)
+ - [`flame_steering_behaviors` - `v0.2.1+1`](#flame_steering_behaviors---v0211)
+ - [`flame_fire_atlas` - `v1.8.13`](#flame_fire_atlas---v1813)
+ - [`flame_audio` - `v2.11.12`](#flame_audio---v21112)
+ - [`flame_bloc` - `v1.12.19`](#flame_bloc---v11219)
+ - [`flame_kenney_xml` - `v0.1.1+18`](#flame_kenney_xml---v01118)
+ - [`flame_lottie` - `v0.4.2+18`](#flame_lottie---v04218)
+ - [`flame_markdown` - `v0.2.4+11`](#flame_markdown---v02411)
+ - [`flame_console` - `v0.1.2+14`](#flame_console---v01214)
+ - [`flame_rive` - `v1.10.21`](#flame_rive---v11021)
+ - [`flame_forge2d` - `v0.19.2+2`](#flame_forge2d---v01922)
+ - [`flame_noise` - `v0.3.2+18`](#flame_noise---v03218)
+ - [`flame_riverpod` - `v5.4.21`](#flame_riverpod---v5421)
+ - [`flame_svg` - `v1.11.18`](#flame_svg---v11118)
+ - [`flame_3d` - `v0.1.1+4`](#flame_3d---v0114)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behaviors` - `v1.3.1`
+ - `flame_tiled` - `v3.0.9`
+ - `flame_oxygen` - `v0.2.3+18`
+ - `flame_isolate` - `v0.6.2+18`
+ - `flame_texturepacker` - `v5.0.3`
+ - `flame_sprite_fusion` - `v0.2.2+1`
+ - `flame_steering_behaviors` - `v0.2.1+1`
+ - `flame_fire_atlas` - `v1.8.13`
+ - `flame_audio` - `v2.11.12`
+ - `flame_bloc` - `v1.12.19`
+ - `flame_kenney_xml` - `v0.1.1+18`
+ - `flame_lottie` - `v0.4.2+18`
+ - `flame_markdown` - `v0.2.4+11`
+ - `flame_console` - `v0.1.2+14`
+ - `flame_rive` - `v1.10.21`
+ - `flame_forge2d` - `v0.19.2+2`
+ - `flame_noise` - `v0.3.2+18`
+ - `flame_riverpod` - `v5.4.21`
+ - `flame_svg` - `v1.11.18`
+ - `flame_3d` - `v0.1.1+4`
+
+---
+
+#### `behavior_tree` - `v0.1.5`
+
+ - **FEAT**: Add `Blackboard` support for behavior trees ([#3756](https://github.com/flame-engine/flame/issues/3756)). ([955411d3](https://github.com/flame-engine/flame/commit/955411d34a6e85e25524b52938146578fa4aa3e3))
+
+#### `flame` - `v1.34.0`
+
+ - **FEAT**: Add scaling gesture for components ([#3770](https://github.com/flame-engine/flame/issues/3770)). ([f413eddb](https://github.com/flame-engine/flame/commit/f413eddbf1581f30087ba53f9516e22e035bda7a))
+ - **FEAT**: Linear layout component text box component ([#3779](https://github.com/flame-engine/flame/issues/3779)). ([476680d7](https://github.com/flame-engine/flame/commit/476680d7b699be7ffd4e3c3421e6f27659a66420))
+ - **FEAT**: TextBoxComponent updateBounds on set boxConfig ([#3777](https://github.com/flame-engine/flame/issues/3777)). ([eefb2f9e](https://github.com/flame-engine/flame/commit/eefb2f9e966a4ead5bcf0d3985314609166609f1))
+ - **FEAT**: Add the `CombinedEffect` that bundles many effects together in one ([#3776](https://github.com/flame-engine/flame/issues/3776)). ([77869f57](https://github.com/flame-engine/flame/commit/77869f573df8b0eb1ce02de8f2b896286768bc6f))
+ - **DOCS**: Fix documentation typos ([#3769](https://github.com/flame-engine/flame/issues/3769)). ([db74da15](https://github.com/flame-engine/flame/commit/db74da154b309e7544f5242c49d56717e385c5fc))
+
+#### `flame_behavior_tree` - `v0.1.4`
+
+ - **FEAT**: Add `Blackboard` support for behavior trees ([#3756](https://github.com/flame-engine/flame/issues/3756)). ([955411d3](https://github.com/flame-engine/flame/commit/955411d34a6e85e25524b52938146578fa4aa3e3))
+
+#### `flame_network_assets` - `v0.3.3+18`
+
+ - **FIX**: Not re-encode image when saving ([#3780](https://github.com/flame-engine/flame/issues/3780)). ([30a344cf](https://github.com/flame-engine/flame/commit/30a344cfae78c6608713d4b194f3112e47068adf))
+
+#### `flame_spine` - `v0.3.0+1`
+
+ - **DOCS**: Updated flame_spine documentation ([#3763](https://github.com/flame-engine/flame/issues/3763)). ([3c721d91](https://github.com/flame-engine/flame/commit/3c721d91f3e3514c79e77b8e2e37a641305a2e04))
+
+#### `flame_test` - `v2.2.0`
+
+ - **FEAT**: Add scaling gesture for components ([#3770](https://github.com/flame-engine/flame/issues/3770)). ([f413eddb](https://github.com/flame-engine/flame/commit/f413eddbf1581f30087ba53f9516e22e035bda7a))
+
+
 ## 2025-11-03
 
 ### Changes

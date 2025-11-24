@@ -1,3 +1,11 @@
+## 1.34.0
+
+ - **FEAT**: Add scaling gesture for components ([#3770](https://github.com/flame-engine/flame/issues/3770)). ([f413eddb](https://github.com/flame-engine/flame/commit/f413eddbf1581f30087ba53f9516e22e035bda7a))
+ - **FEAT**: Linear layout component text box component ([#3779](https://github.com/flame-engine/flame/issues/3779)). ([476680d7](https://github.com/flame-engine/flame/commit/476680d7b699be7ffd4e3c3421e6f27659a66420))
+ - **FEAT**: TextBoxComponent updateBounds on set boxConfig ([#3777](https://github.com/flame-engine/flame/issues/3777)). ([eefb2f9e](https://github.com/flame-engine/flame/commit/eefb2f9e966a4ead5bcf0d3985314609166609f1))
+ - **FEAT**: Add the `CombinedEffect` that bundles many effects together in one ([#3776](https://github.com/flame-engine/flame/issues/3776)). ([77869f57](https://github.com/flame-engine/flame/commit/77869f573df8b0eb1ce02de8f2b896286768bc6f))
+ - **DOCS**: Fix documentation typos ([#3769](https://github.com/flame-engine/flame/issues/3769)). ([db74da15](https://github.com/flame-engine/flame/commit/db74da154b309e7544f5242c49d56717e385c5fc))
+
 ## 1.33.0
 
 > Note: This release has breaking changes.
