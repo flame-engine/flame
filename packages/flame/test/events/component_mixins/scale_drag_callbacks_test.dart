@@ -20,7 +20,7 @@ void main() {
   });
 
   testWithFlameGame(
-    '''scale event start, update and end on component 
+    '''scale and drag events start, update and end on component 
   with both scale and drag mixins ''',
     (game) async {
       final component = _ScaleDragCallbacksComponent()
@@ -29,9 +29,10 @@ void main() {
         ..width = 10
         ..height = 10;
       await game.ensureAdd(component);
-      final dispatcher = game.firstChild<ScaleCallbacks>()!;
+      final scaleCallback = game.firstChild<ScaleCallbacks>()!;
+      final dragCallback = game.firstChild<DragCallbacks>()!;
 
-      dispatcher.onScaleStart(
+      scaleCallback.onScaleStart(
         createScaleStartEvents(
           game: game,
           localFocalPoint: const Offset(12, 12),
@@ -42,7 +43,7 @@ void main() {
       expect(component.scaleUpdateEvent, 0);
       expect(component.scaleEndEvent, 0);
 
-      dispatcher.onScaleUpdate(
+      scaleCallback.onScaleUpdate(
         createScaleUpdateEvents(
           game: game,
           localFocalPoint: const Offset(15, 15),
@@ -53,13 +54,38 @@ void main() {
       expect(game.containsLocalPoint(Vector2(9, 9)), isTrue);
       expect(component.scaleUpdateEvent, equals(1));
 
-      dispatcher.onScaleEnd(ScaleEndEvent(1, ScaleEndDetails()));
+      scaleCallback.onScaleEnd(ScaleEndEvent(1, ScaleEndDetails()));
       expect(component.scaleEndEvent, equals(1));
+
+      dragCallback.onDragStart(
+        createDragStartEvents(
+          game: game,
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      );
+      expect(component.dragStartEvent, 1);
+      expect(component.dragUpdateEvent, 0);
+      expect(component.dragEndEvent, 0);
+
+      dragCallback.onDragUpdate(
+        createDragUpdateEvents(
+          game: game,
+          localPosition: const Offset(15, 15),
+          globalPosition: const Offset(15, 15),
+        ),
+      );
+
+      expect(game.containsLocalPoint(Vector2(9, 9)), isTrue);
+      expect(component.dragUpdateEvent, equals(1));
+
+      dragCallback.onDragEnd(DragEndEvent(1, DragEndDetails()));
+      expect(component.dragEndEvent, equals(1));
     },
   );
 
   testWithFlameGame(
-    'scale event update not called without onScaleStart',
+    'scale and drag events update not called without onStart',
     (game) async {
       final component = _ScaleDragCallbacksComponent()
         ..x = 10
@@ -79,10 +105,23 @@ void main() {
         ),
       );
       expect(component.scaleUpdateEvent, equals(0));
+      expect(component.dragStartEvent, equals(0));
+      expect(component.dragUpdateEvent, equals(0));
+
+      dispatcher.onDragUpdate(
+        createDragUpdateEvents(
+          game: game,
+          localPosition: const Offset(15, 15),
+          globalPosition: const Offset(15, 15),
+        ),
+      );
+      expect(component.dragUpdateEvent, equals(0));
     },
   );
 
-  testWidgets('scale correctly registered handled event', (tester) async {
+  testWidgets('scale and drag correctly registered handled event', (
+    tester,
+  ) async {
     final component = _ScaleDragCallbacksComponent()
       ..x = 100
       ..y = 100
@@ -109,10 +148,15 @@ void main() {
     expect(component.scaleStartEvent, equals(1));
     expect(component.scaleUpdateEvent, greaterThan(0));
     expect(component.scaleEndEvent, equals(1));
+
+    expect(component.dragStartEvent, equals(2));
+    expect(component.dragUpdateEvent, greaterThan(0));
+    expect(component.dragEndEvent, equals(2));
+    expect(component.dragCancelEvent, equals(0));
   });
 
   testWidgets(
-    'scale outside of component is not registered as handled',
+    'scale and outside of component is not registered as handled',
     (tester) async {
       final component = _ScaleDragCallbacksComponent()..size = Vector2.all(100);
       final game = FlameGame(children: [component]);
@@ -132,6 +176,9 @@ void main() {
       expect(component.scaleStartEvent, equals(0));
       expect(component.scaleUpdateEvent, equals(0));
       expect(component.scaleEndEvent, equals(0));
+      expect(component.dragStartEvent, equals(0));
+      expect(component.dragUpdateEvent, equals(0));
+      expect(component.dragEndEvent, equals(0));
     },
   );
 
@@ -146,7 +193,7 @@ void main() {
   );
 
   testWidgets(
-    'scale correctly registered handled event directly on FlameGame',
+    'scale and drag correctly registered handled event directly on FlameGame',
     (tester) async {
       final game = _ScaleDragCallbacksGame()..onGameResize(Vector2.all(300));
       await tester.pumpWidget(GameWidget(game: game));
@@ -168,11 +215,15 @@ void main() {
       expect(game.scaleStartEvent, equals(1));
       expect(game.scaleUpdateEvent, greaterThan(0));
       expect(game.scaleEndEvent, equals(1));
+      expect(game.dragStartEvent, equals(2));
+      expect(game.dragUpdateEvent, greaterThan(0));
+      expect(game.dragEndEvent, equals(2));
+      expect(game.dragCancelEvent, equals(0));
     },
   );
 
   testWidgets(
-    'isScaled is changed',
+    'isScaling and isDragged is changed',
     (tester) async {
       final component = _ScaleDragCallbacksComponent()
         ..size = Vector2.all(100)
@@ -194,6 +245,7 @@ void main() {
       );
 
       expect(component.isScaledStateChange, equals(2));
+      expect(component.isDraggedStateChange, equals(2));
 
       // Outside component
       await _zoomFrom(
@@ -205,12 +257,13 @@ void main() {
       );
 
       expect(component.isScaledStateChange, equals(2));
+      expect(component.isDraggedStateChange, equals(2));
     },
   );
 
   group('HasScaleAndDragMixins', () {
     testWidgets(
-      'scale event does not affect more than one component',
+      'scale and drag events does not affect more than one component',
       (tester) async {
         var nEvents = 0;
         final game = FlameGame(
@@ -220,6 +273,9 @@ void main() {
               onScaleStart: (e) => nEvents++,
               onScaleUpdate: (e) => nEvents++,
               onScaleEnd: (e) => nEvents++,
+              onDragStart: (e) => nEvents++,
+              onDragEnd: (e) => nEvents++,
+              onDragUpdate: (e) => nEvents++,
             ),
             _SimpleScaleDragCallbacksComponent(size: Vector2.all(200))
               ..priority = 10,
@@ -240,14 +296,16 @@ void main() {
     );
 
     testWidgets(
-      'scale event can move outside the component bounds and still fire',
+      'scale and drag event can move outside the component bounds and fire',
       (tester) async {
-        var nEvents = 0;
+        var nScaleEvents = 0;
+        var nDragEvents = 0;
         const intervals = 50;
         final component = _ScaleDragWithCallbacksComponent(
           size: Vector2.all(30),
           position: Vector2.all(100),
-          onScaleUpdate: (e) => nEvents++,
+          onScaleUpdate: (e) => nScaleEvents++,
+          onDragUpdate: (e) => nDragEvents++,
         );
         final game = FlameGame(
           children: [component],
@@ -264,53 +322,152 @@ void main() {
           const Duration(milliseconds: 300),
           intervals: intervals,
         );
-        expect(nEvents, intervals * 2 + 2);
+        expect(nScaleEvents, intervals * 2 + 2);
+        expect(nDragEvents, intervals * 2 + 2);
+      },
+    );
+
+    testWidgets(
+      'scale event scale factor respects camera & zoom',
+      (tester) async {
+        final resolution = Vector2(80, 60);
+        final game = FlameGame(
+          camera: CameraComponent.withFixedResolution(
+            width: resolution.x,
+            height: resolution.y,
+          ),
+        );
+        final scales = [];
+
+        game.camera.viewfinder.zoom = 3;
+
+        await game.world.add(
+          _ScaleDragWithCallbacksComponent(
+            position: Vector2.all(-5),
+            size: Vector2.all(10),
+            onScaleUpdate: (event) {
+              scales.add(event.scale);
+            },
+          ),
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+
+        final canvasSize = game.canvasSize;
+
+        final center = (canvasSize / 2).toOffset();
+        await tester._timedZoomFrom(
+          center.translate(-1, 0),
+          const Offset(-20, 0),
+          center.translate(1, 0),
+          const Offset(20, 0),
+          const Duration(milliseconds: 300),
+          intervals: 10,
+        );
+
+        expect(scales.skip(1), List.generate(21, (i) => i + 1));
+      },
+    );
+
+    testWidgets(
+      'drag event delta respects camera & zoom',
+      (tester) async {
+        // canvas size is 800x600 so this means a 10x logical scale across
+        // both dimensions
+        final resolution = Vector2(80, 60);
+        final game = FlameGame(
+          camera: CameraComponent.withFixedResolution(
+            width: resolution.x,
+            height: resolution.y,
+          ),
+        );
+
+        game.camera.viewfinder.zoom = 2;
+
+        final deltas = <Vector2>[];
+        await game.world.add(
+          _ScaleDragWithCallbacksComponent(
+            position: Vector2.all(-5),
+            size: Vector2.all(10),
+            onDragUpdate: (event) => deltas.add(event.localDelta),
+          ),
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+
+        final canvasSize = game.canvasSize;
+        await tester.dragFrom(
+          (canvasSize / 2).toOffset(),
+          Offset(canvasSize.x / 10, 0),
+        );
+        final totalDelta = deltas.reduce((a, b) => a + b);
+        expect(totalDelta, Vector2(4, 0));
+      },
+    );
+
+    testWidgets(
+      'drag event delta respects widget positioning',
+      (tester) async {
+        // canvas size is 800x600 so this means a 10x logical scale across
+        // both dimensions
+        final resolution = Vector2(80, 60);
+        final game = FlameGame(
+          camera: CameraComponent.withFixedResolution(
+            width: resolution.x,
+            height: resolution.y,
+          ),
+        );
+
+        game.camera.viewfinder.zoom = 1 / 2;
+
+        final deltas = <Vector2>[];
+        await game.world.add(
+          _ScaleDragWithCallbacksComponent(
+            position: Vector2.all(-5),
+            size: Vector2.all(10),
+            onDragUpdate: (event) => deltas.add(event.localDelta),
+          ),
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Stack(
+              children: [
+                Positioned(
+                  left: 100.0,
+                  top: 200.0,
+                  width: 800,
+                  height: 600,
+                  child: GameWidget(game: game),
+                ),
+              ],
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        final canvasSize = game.canvasSize;
+
+        // no offset
+        await tester.dragFrom(
+          (canvasSize / 2).toOffset(),
+          Offset(canvasSize.x / 10, 0),
+        );
+        expect(deltas, isEmpty);
+
+        // accounting for offset
+        await tester.dragFrom(
+          (canvasSize / 2 + Vector2(100, 200)).toOffset(),
+          Offset(canvasSize.x / 10, 0),
+        );
+        expect(deltas, isNotEmpty);
+        final totalDelta = deltas.reduce((a, b) => a + b);
+        expect(totalDelta, Vector2(16, 0));
       },
     );
   });
-
-  testWidgets(
-    'scale event scale respects camera & zoom',
-    (tester) async {
-      final resolution = Vector2(80, 60);
-      final game = FlameGame(
-        camera: CameraComponent.withFixedResolution(
-          width: resolution.x,
-          height: resolution.y,
-        ),
-      );
-      final scales = [];
-
-      game.camera.viewfinder.zoom = 3;
-
-      await game.world.add(
-        _ScaleDragWithCallbacksComponent(
-          position: Vector2.all(-5),
-          size: Vector2.all(10),
-          onScaleUpdate: (event) {
-            scales.add(event.scale);
-          },
-        ),
-      );
-      await tester.pumpWidget(GameWidget(game: game));
-      await tester.pump();
-      await tester.pump();
-
-      final canvasSize = game.canvasSize;
-
-      final center = (canvasSize / 2).toOffset();
-      await tester._timedZoomFrom(
-        center.translate(-1, 0),
-        const Offset(-20, 0),
-        center.translate(1, 0),
-        const Offset(20, 0),
-        const Duration(milliseconds: 300),
-        intervals: 10,
-      );
-
-      expect(scales.skip(1), List.generate(21, (i) => i + 1));
-    },
-  );
 
   group('ScaleAndDragInteractions', () {
     testWidgets(

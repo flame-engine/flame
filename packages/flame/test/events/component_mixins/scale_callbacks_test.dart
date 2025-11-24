@@ -283,7 +283,7 @@ void main() {
   });
 
   testWidgets(
-    'scale event scale respects camera & zoom',
+    'scale event scale factor respects camera & zoom',
     (tester) async {
       final resolution = Vector2(80, 60);
       final game = FlameGame(
