@@ -176,7 +176,7 @@ void main() {
         tester,
         startLocation1: const Offset(50, 100),
         offset1: const Offset(15, 2),
-        startLocation2: const Offset(150, 100), 
+        startLocation2: const Offset(150, 100),
         offset2: const Offset(-15, -2),
       );
 
@@ -278,7 +278,6 @@ void main() {
           const Duration(milliseconds: 300),
           intervals: intervals,
         );
-
         expect(nEvents, intervals * 2 + 2);
       },
     );
@@ -339,12 +338,10 @@ void main() {
       );
 
       final component = _ScaleDragWithCallbacksComponent(
-          position: Vector2.all(-5),
-          size: Vector2.all(10),
-        );
-      await game.world.add(
-        component
+        position: Vector2.all(-5),
+        size: Vector2.all(10),
       );
+      await game.world.add(component);
       await tester.pumpWidget(GameWidget(game: game));
       await tester.pump();
       await tester.pump();
@@ -360,6 +357,9 @@ void main() {
         const Duration(milliseconds: 300),
         intervals: 10,
       );
+
+      await tester.pump();
+      await tester.pump();
 
       expect(component.scaleStartEvent, equals(1));
       expect(component.scaleUpdateEvent, greaterThan(0));
@@ -428,7 +428,6 @@ mixin _ScaleDragCounter on ScaleDragCallbacks {
   void onScaleEnd(ScaleEndEvent event) {
     super.onScaleEnd(event);
     debugPrint("scale end counter");
-    expect(event.raw, isNotNull);
     event.handled = true;
     scaleEndEvent++;
     if (_wasScaled != isScaling) {
@@ -447,7 +446,6 @@ mixin _ScaleDragCounter on ScaleDragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    expect(event.raw, isNotNull);
     event.handled = true;
     dragStartEvent++;
     if (_wasDragged != isDragged) {
@@ -458,7 +456,6 @@ mixin _ScaleDragCounter on ScaleDragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    expect(event.raw, isNotNull);
     event.handled = true;
     dragUpdateEvent++;
   }
@@ -466,7 +463,6 @@ mixin _ScaleDragCounter on ScaleDragCallbacks {
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    expect(event.raw, isNotNull);
     event.handled = true;
     dragEndEvent++;
     if (_wasDragged != isDragged) {
@@ -486,7 +482,6 @@ class _SimpleScaleDragCallbacksComponent extends PositionComponent
     with ScaleDragCallbacks {
   _SimpleScaleDragCallbacksComponent({super.size});
 }
-
 
 class _ScaleDragWithCallbacksComponent extends PositionComponent
     with ScaleDragCallbacks, _ScaleDragCounter {

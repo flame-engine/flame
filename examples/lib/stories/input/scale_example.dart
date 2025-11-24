@@ -16,7 +16,7 @@ class MyDrag extends Drag {
     // This specific finger moved by details.delta
     print('This finger moved: ${details.delta}');
   }
-  
+
   @override
   void end(DragEndDetails details) {
     print('This finger lifted');
@@ -37,7 +37,6 @@ class ScaleExample extends FlameGame {
   final bool addZoom = false;
   final bool addCameraRotation = false;
 
-    
   Drag onDragStart(Offset initialPosition) {
     debugPrint('Drag started');
     return MyDrag();
@@ -54,16 +53,15 @@ class ScaleExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     camera.viewfinder.zoom = 1;
-      (parent! as FlameGame).gestureDetectors.add<MultiDragScaleGestureRecognizer>(
-      MultiDragScaleGestureRecognizer.new,
-      (MultiDragScaleGestureRecognizer instance) {
-        instance
-          ..onDragStart = onDragStart
-          ..onScaleUpdate = onScaleUpdate;
-      },
-    );
-
-    
+    (parent! as FlameGame).gestureDetectors
+        .add<MultiDragScaleGestureRecognizer>(
+          MultiDragScaleGestureRecognizer.new,
+          (MultiDragScaleGestureRecognizer instance) {
+            instance
+              ..onDragStart = onDragStart
+              ..onScaleUpdate = onScaleUpdate;
+          },
+        );
 
     debugText = TextComponent(
       text: 'hello',
@@ -332,9 +330,9 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
   }
 }
 
-/// A gesture recognizer that can recognize both individual pointer drags 
+/// A gesture recognizer that can recognize both individual pointer drags
 /// and scale gestures simultaneously.
-/// 
+///
 /// This recognizer tracks each pointer individually (like ImmediateMultiDragGestureRecognizer)
 /// while also tracking the overall scale gesture (like ScaleGestureRecognizer).
 /// When 2+ pointers are down, both drag callbacks (per pointer) and scale callbacks fire.
@@ -397,14 +395,16 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
 
   int get pointerCount => _pointerLocations.length;
 
-  double get _pointerScaleFactor => 
+  double get _pointerScaleFactor =>
       _initialSpan > 0.0 ? _currentSpan / _initialSpan : 1.0;
 
-  double get _pointerHorizontalScaleFactor =>
-      _initialHorizontalSpan > 0.0 ? _currentHorizontalSpan / _initialHorizontalSpan : 1.0;
+  double get _pointerHorizontalScaleFactor => _initialHorizontalSpan > 0.0
+      ? _currentHorizontalSpan / _initialHorizontalSpan
+      : 1.0;
 
-  double get _pointerVerticalScaleFactor =>
-      _initialVerticalSpan > 0.0 ? _currentVerticalSpan / _initialVerticalSpan : 1.0;
+  double get _pointerVerticalScaleFactor => _initialVerticalSpan > 0.0
+      ? _currentVerticalSpan / _initialVerticalSpan
+      : 1.0;
 
   @override
   void addAllowedPointer(PointerDownEvent event) {
@@ -435,23 +435,28 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
       if (!event.synthesized) {
         tracker.addPosition(event.timeStamp, event.position);
       }
-      
+
       final Offset lastPosition = _lastPointerPositions[event.pointer]!;
       final Offset delta = event.position - lastPosition;
       _lastPointerPositions[event.pointer] = event.position;
-      
+
       // Update individual drag
       final Drag? drag = _activeDrags[event.pointer];
       if (drag != null) {
-        drag.update(DragUpdateDetails(
-          globalPosition: event.position,
-          delta: delta,
-          primaryDelta: delta.dy,
-          sourceTimeStamp: event.timeStamp,
-          localPosition: PointerEvent.transformPosition(event.transform, event.position),
-        ));
+        drag.update(
+          DragUpdateDetails(
+            globalPosition: event.position,
+            delta: delta,
+            primaryDelta: delta.dy,
+            sourceTimeStamp: event.timeStamp,
+            localPosition: PointerEvent.transformPosition(
+              event.transform,
+              event.position,
+            ),
+          ),
+        );
       }
-      
+
       _pointerLocations[event.pointer] = event.position;
       shouldStartIfAccepted = true;
       _lastTransform = event.transform;
@@ -467,16 +472,18 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
       if (drag != null) {
         final VelocityTracker tracker = _velocityTrackers[event.pointer]!;
         if (event is PointerUpEvent) {
-          drag.end(DragEndDetails(
-            velocity: tracker.getVelocity(),
-            primaryVelocity: tracker.getVelocity().pixelsPerSecond.dy,
-          ));
+          drag.end(
+            DragEndDetails(
+              velocity: tracker.getVelocity(),
+              primaryVelocity: tracker.getVelocity().pixelsPerSecond.dy,
+            ),
+          );
         } else {
           drag.cancel();
         }
         _activeDrags.remove(event.pointer);
       }
-      
+
       _pointerLocations.remove(event.pointer);
       _initialPointerLocations.remove(event.pointer);
       _lastPointerPositions.remove(event.pointer);
@@ -508,12 +515,16 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
 
     if (previousFocalPoint == null) {
       _localFocalPoint = PointerEvent.transformPosition(
-          _lastTransform, _currentFocalPoint!);
+        _lastTransform,
+        _currentFocalPoint!,
+      );
       _delta = Offset.zero;
     } else {
       final Offset localPreviousFocalPoint = _localFocalPoint;
       _localFocalPoint = PointerEvent.transformPosition(
-          _lastTransform, _currentFocalPoint!);
+        _lastTransform,
+        _currentFocalPoint!,
+      );
       _delta = _localFocalPoint - localPreviousFocalPoint;
     }
 
@@ -531,10 +542,11 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
     double totalHorizontalDeviation = 0.0;
     double totalVerticalDeviation = 0.0;
     for (final int pointer in _pointerLocations.keys) {
-      totalDeviation += (pointerFocalPoint - _pointerLocations[pointer]!).distance;
-      totalHorizontalDeviation += 
+      totalDeviation +=
+          (pointerFocalPoint - _pointerLocations[pointer]!).distance;
+      totalHorizontalDeviation +=
           (pointerFocalPoint.dx - _pointerLocations[pointer]!.dx).abs();
-      totalVerticalDeviation += 
+      totalVerticalDeviation +=
           (pointerFocalPoint.dy - _pointerLocations[pointer]!.dy).abs();
     }
     _currentSpan = count > 0 ? totalDeviation / count : 0.0;
@@ -581,35 +593,48 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
         if (onScaleEnd != null) {
           final VelocityTracker tracker = _velocityTrackers[pointer]!;
           Velocity velocity = tracker.getVelocity();
-          
+
           if (_isFlingGesture(velocity)) {
             final Offset pixelsPerSecond = velocity.pixelsPerSecond;
-            if (pixelsPerSecond.distanceSquared > 
+            if (pixelsPerSecond.distanceSquared >
                 kMaxFlingVelocity * kMaxFlingVelocity) {
               velocity = Velocity(
-                pixelsPerSecond: 
-                    (pixelsPerSecond / pixelsPerSecond.distance) * kMaxFlingVelocity,
+                pixelsPerSecond:
+                    (pixelsPerSecond / pixelsPerSecond.distance) *
+                    kMaxFlingVelocity,
               );
             }
-            invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
-              ScaleEndDetails(
-                velocity: velocity,
-                scaleVelocity: _scaleVelocityTracker?.getVelocity().pixelsPerSecond.dx ?? -1,
-                pointerCount: pointerCount,
+            invokeCallback<void>(
+              'onScaleEnd',
+              () => onScaleEnd!(
+                ScaleEndDetails(
+                  velocity: velocity,
+                  scaleVelocity:
+                      _scaleVelocityTracker?.getVelocity().pixelsPerSecond.dx ??
+                      -1,
+                  pointerCount: pointerCount,
+                ),
               ),
-            ));
+            );
           } else {
-            invokeCallback<void>('onScaleEnd', () => onScaleEnd!(
-              ScaleEndDetails(
-                scaleVelocity: _scaleVelocityTracker?.getVelocity().pixelsPerSecond.dx ?? -1,
-                pointerCount: pointerCount,
+            invokeCallback<void>(
+              'onScaleEnd',
+              () => onScaleEnd!(
+                ScaleEndDetails(
+                  scaleVelocity:
+                      _scaleVelocityTracker?.getVelocity().pixelsPerSecond.dx ??
+                      -1,
+                  pointerCount: pointerCount,
+                ),
               ),
-            ));
+            );
           }
         }
         _scaleGestureActive = false;
         _state = _GestureState.accepted;
-        _scaleVelocityTracker = VelocityTracker.withKind(PointerDeviceKind.touch);
+        _scaleVelocityTracker = VelocityTracker.withKind(
+          PointerDeviceKind.touch,
+        );
         return false;
       }
     }
@@ -626,11 +651,11 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
     if (_state == _GestureState.possible) {
       // Check if we should start accepting gestures
       bool shouldAccept = false;
-      
+
       if (_pointerLocations.length >= 2) {
         final double spanDelta = (_currentSpan - _initialSpan).abs();
         final double scaleFactor = _pointerScaleFactor;
-        
+
         if (spanDelta > computeScaleSlop(event.kind) ||
             math.max(scaleFactor, 1.0 / scaleFactor) > scaleThreshold) {
           shouldAccept = true;
@@ -640,12 +665,12 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
         final Offset initialPosition = _initialPointerLocations[pointer]!;
         final Offset currentPosition = _pointerLocations[pointer]!;
         final double distance = (currentPosition - initialPosition).distance;
-        
+
         if (distance > computePanSlop(event.kind, gestureSettings)) {
           shouldAccept = true;
         }
       }
-      
+
       if (shouldAccept) {
         resolve(GestureDisposition.accepted);
       }
@@ -655,14 +680,14 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
 
     if (_state == _GestureState.accepted && shouldStartIfAccepted) {
       _state = _GestureState.started;
-      
+
       // Start individual drags for all pointers that don't have one yet
       for (final int pointer in _pointerLocations.keys) {
         if (!_activeDrags.containsKey(pointer)) {
           _startDragForPointer(pointer);
         }
       }
-      
+
       // Start scale gesture if we have 2+ pointers
       if (_pointerLocations.length >= 2 && !_scaleGestureActive) {
         _scaleGestureActive = true;
@@ -675,20 +700,24 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
       // Update scale gesture if active
       if (_scaleGestureActive && _pointerLocations.length >= 2) {
         _scaleVelocityTracker?.addPosition(
-            event.timeStamp, Offset(_pointerScaleFactor, 0));
+          event.timeStamp,
+          Offset(_pointerScaleFactor, 0),
+        );
         if (onScaleUpdate != null) {
           invokeCallback<void>('onScaleUpdate', () {
-            onScaleUpdate!(ScaleUpdateDetails(
-              scale: _pointerScaleFactor,
-              horizontalScale: _pointerHorizontalScaleFactor,
-              verticalScale: _pointerVerticalScaleFactor,
-              focalPoint: _currentFocalPoint!,
-              localFocalPoint: _localFocalPoint,
-              rotation: _computeRotationFactor(),
-              pointerCount: pointerCount,
-              focalPointDelta: _delta,
-              sourceTimeStamp: event.timeStamp,
-            ));
+            onScaleUpdate!(
+              ScaleUpdateDetails(
+                scale: _pointerScaleFactor,
+                horizontalScale: _pointerHorizontalScaleFactor,
+                verticalScale: _pointerVerticalScaleFactor,
+                focalPoint: _currentFocalPoint!,
+                localFocalPoint: _localFocalPoint,
+                rotation: _computeRotationFactor(),
+                pointerCount: pointerCount,
+                focalPointDelta: _delta,
+                sourceTimeStamp: event.timeStamp,
+              ),
+            );
           });
         }
       } else if (!_scaleGestureActive && _pointerLocations.length >= 2) {
@@ -713,12 +742,14 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
   void _dispatchOnScaleStartCallback() {
     if (onScaleStart != null) {
       invokeCallback<void>('onScaleStart', () {
-        onScaleStart!(ScaleStartDetails(
-          focalPoint: _currentFocalPoint!,
-          localFocalPoint: _localFocalPoint,
-          pointerCount: pointerCount,
-          sourceTimeStamp: _initialScaleEventTimestamp,
-        ));
+        onScaleStart!(
+          ScaleStartDetails(
+            focalPoint: _currentFocalPoint!,
+            localFocalPoint: _localFocalPoint,
+            pointerCount: pointerCount,
+            sourceTimeStamp: _initialScaleEventTimestamp,
+          ),
+        );
       });
     }
   }
@@ -753,16 +784,16 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
   void acceptGesture(int pointer) {
     if (_state == _GestureState.possible) {
       _state = _GestureState.started;
-      
+
       // Start drag for this pointer
       _startDragForPointer(pointer);
-      
+
       // Start scale gesture if we have 2+ pointers
       if (_pointerLocations.length >= 2 && !_scaleGestureActive) {
         _scaleGestureActive = true;
         _dispatchOnScaleStartCallback();
       }
-      
+
       if (dragStartBehavior == DragStartBehavior.start) {
         _initialFocalPoint = _currentFocalPoint!;
         _initialSpan = _currentSpan;
@@ -780,7 +811,7 @@ class MultiDragScaleGestureRecognizer extends OneSequenceGestureRecognizer {
       drag.cancel();
       _activeDrags.remove(pointer);
     }
-    
+
     _pointerLocations.remove(pointer);
     _initialPointerLocations.remove(pointer);
     _lastPointerPositions.remove(pointer);

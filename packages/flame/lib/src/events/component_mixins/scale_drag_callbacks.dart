@@ -18,15 +18,15 @@ mixin ScaleDragCallbacks on Component {
     debugPrint("[ScaleDragCallbacks] on scale start");
     _isScaling = true;
   }
-  
+
   @mustCallSuper
   void onScaleUpdate(ScaleUpdateEvent event) {
-     debugPrint("[ScaleDragCallbacks] on scale update");
+    debugPrint("[ScaleDragCallbacks] on scale update");
   }
 
   @mustCallSuper
   void onScaleEnd(ScaleEndEvent event) {
-     debugPrint("[ScaleDragCallbacks] on scale end");
+    debugPrint("[ScaleDragCallbacks] on scale end");
     _isScaling = false;
   }
 

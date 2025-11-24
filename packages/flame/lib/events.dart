@@ -5,7 +5,8 @@ export 'src/events/component_mixins/hover_callbacks.dart' show HoverCallbacks;
 export 'src/events/component_mixins/pointer_move_callbacks.dart'
     show PointerMoveCallbacks;
 export 'src/events/component_mixins/scale_callbacks.dart' show ScaleCallbacks;
-export 'src/events/component_mixins/scale_drag_callbacks.dart' show ScaleDragCallbacks;
+export 'src/events/component_mixins/scale_drag_callbacks.dart'
+    show ScaleDragCallbacks;
 export 'src/events/component_mixins/secondary_tap_callbacks.dart'
     show SecondaryTapCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;

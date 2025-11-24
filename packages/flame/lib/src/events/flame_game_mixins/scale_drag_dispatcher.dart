@@ -27,7 +27,8 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
 /// [DragCallbacks] components in the component tree. It will be attached to
 /// the [FlameGame] instance automatically whenever any [DragCallbacks]
 /// components are mounted into the component tree.
-class MultiDragScaleDispatcher extends Component implements MultiDragListener, ScaleListener {
+class MultiDragScaleDispatcher extends Component
+    implements MultiDragListener, ScaleListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<ScaleDragCallbacks>> _records = {};
 
@@ -230,7 +231,6 @@ class MultiDragScaleDispatcher extends Component implements MultiDragListener, S
   void handleScaleEnd(ScaleEndDetails details) {
     onScaleEnd(ScaleEndEvent(0, details));
   }
-  
 
   //#endregion
 
@@ -259,7 +259,7 @@ class MultiDragScaleDispatcher extends Component implements MultiDragListener, S
 
   @override
   GameRenderBox get renderBox => game.renderBox;
-  
+
   @override
   void handleDragCancel(int pointerId) {
     // TODO: implement handleDragCancel
