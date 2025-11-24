@@ -7,6 +7,7 @@ import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 class MultiDragDispatcherKey implements ComponentKey {
@@ -147,18 +148,25 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
      _tryRemoving();
   }
 
-  void _tryRemoving(){
+  bool _tryRemoving(){
     // there's no more fingers
     // that started dragging before _shouldBeRemoved flag was set to true.
-    if(_records.isEmpty && _shouldBeRemoved){
+    if(_records.isEmpty && _shouldBeRemoved && isMounted){
       removeFromParent();
+      return true;
     }
+    return false;
   }
 
   //#endregion
 
   @override
   void onMount() {
+    if(_tryRemoving()){
+    return;
+    };
+    
+    debugPrint("mount multi drag gesture recognizer");
     game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {

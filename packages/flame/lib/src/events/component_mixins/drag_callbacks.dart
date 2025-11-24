@@ -62,14 +62,26 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-
+    
     final game = findRootGame()!;
     final scaleDispatcher = game.findByKey(const ScaleDispatcherKey());
     final multiDragDispatcher = game.findByKey(const MultiDragDispatcherKey());
     final multiDragScaleDispatcher = game.findByKey(const MultiDragScaleDispatcherKey());
 
-    // If MultiDragScaleDispatcher already exists, we're good
-    if (multiDragScaleDispatcher != null || multiDragDispatcher != null) return;
+    // If MultiDragScaleDispatcher already exists, we're done
+    if (multiDragScaleDispatcher != null) return;
+    
+    // If MultiDragDispatcher exists but component has ScaleCallbacks, upgrade it
+    if (multiDragDispatcher != null && this is ScaleCallbacks) {
+      final dispatcher = MultiDragScaleDispatcher();
+      game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+      game.add(dispatcher);
+      //(multiDragDispatcher as MultiDragDispatcher).markForRemoval();
+      return;
+    }
+    
+    // If MultiDragDispatcher exists and no ScaleCallbacks, we're done
+    if (multiDragDispatcher != null) return;
 
     if (scaleDispatcher == null && multiDragDispatcher == null) {
       // Check if component also has ScaleCallbacks
@@ -83,10 +95,11 @@ mixin DragCallbacks on Component {
         game.add(dispatcher);
       }
     } else if (scaleDispatcher != null && multiDragDispatcher == null) {
+      // Upgrade ScaleDispatcher to MultiDragScaleDispatcher
       final dispatcher = MultiDragScaleDispatcher();
       game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
       game.add(dispatcher);
-      (scaleDispatcher as ScaleDispatcher).markForRemoval();
+      //(scaleDispatcher as ScaleDispatcher).markForRemoval();
     }
   }
 }
