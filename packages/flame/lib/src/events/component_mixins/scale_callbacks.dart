@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
 import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:flutter/foundation.dart';
 
@@ -12,7 +11,6 @@ mixin ScaleCallbacks on Component {
 
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
-    debugPrint("ScaleCallbacks.onScaleStart called!");
     _isScaling = true;
   }
 
@@ -28,16 +26,22 @@ mixin ScaleCallbacks on Component {
   void onMount() {
     super.onMount();
     // Skip if DragCallbacks will handle it
-    if (this is DragCallbacks) return;
-    
+    if (this is DragCallbacks) {
+      return;
+    }
+
     final game = findRootGame()!;
     final scaleDispatcher = game.findByKey(const ScaleDispatcherKey());
     final multiDragDispatcher = game.findByKey(const MultiDragDispatcherKey());
-    final multiDragScaleDispatcher = game.findByKey(const MultiDragScaleDispatcherKey());
+    final multiDragScaleDispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    );
 
     // If MultiDragScaleDispatcher exists, DragCallbacks already handled it
-    if (multiDragScaleDispatcher != null) return;
-    
+    if (multiDragScaleDispatcher != null) {
+      return;
+    }
+
     if (scaleDispatcher == null && multiDragDispatcher == null) {
       final dispatcher = ScaleDispatcher();
       game.registerKey(const ScaleDispatcherKey(), dispatcher);
@@ -46,7 +50,7 @@ mixin ScaleCallbacks on Component {
       final dispatcher = MultiDragScaleDispatcher();
       game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
       game.add(dispatcher);
-      //(multiDragDispatcher as MultiDragDispatcher).markForRemoval();
+      (multiDragDispatcher as MultiDragDispatcher).markForRemoval();
     }
   }
 }

@@ -106,15 +106,15 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   //#endregion
 
-  void markForRemoval(){
+  void markForRemoval() {
     _shouldBeRemoved = true;
-     _tryRemoving();
+    _tryRemoving();
   }
 
-  bool _tryRemoving(){
+  bool _tryRemoving() {
     // there's no more fingers
     // that started dragging before _shouldBeRemoved flag was set to true.
-    if(_records.isEmpty && _shouldBeRemoved && isMounted){
+    if (_records.isEmpty && _shouldBeRemoved && isMounted) {
       removeFromParent();
       return true;
     }
@@ -123,8 +123,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   @override
   void onMount() {
-    if(_tryRemoving()){
-    return;
+    if (_tryRemoving()) {
+      return;
     }
     game.gestureDetectors.add<ScaleGestureRecognizer>(
       ScaleGestureRecognizer.new,

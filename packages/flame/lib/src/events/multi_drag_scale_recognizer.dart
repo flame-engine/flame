@@ -89,8 +89,9 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     );
     _pointers[event.pointer] = state;
     GestureBinding.instance.pointerRouter.addRoute(event.pointer, _handleEvent);
-    state._setArenaEntry(
-      GestureBinding.instance.gestureArena.add(event.pointer, this),
+    state.arenaEntry = GestureBinding.instance.gestureArena.add(
+      event.pointer,
+      this,
     );
 
     // Initialize scale tracking when first pointer is added
@@ -105,7 +106,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
   void _handleEvent(PointerEvent event) {
     assert(_pointers.containsKey(event.pointer));
-    final _DragPointerState state = _pointers[event.pointer]!;
+    final state = _pointers[event.pointer]!;
 
     if (event is PointerMoveEvent) {
       state._move(event);
@@ -199,14 +200,13 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     // End scale gesture if we drop below 2 pointers
     if (_scaleGestureActive && _pointers.length < 2) {
       if (onScaleEnd != null) {
-        final Velocity velocity =
-            _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
+        final velocity = _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
 
         if (_isFlingGesture(velocity)) {
-          final Offset pixelsPerSecond = velocity.pixelsPerSecond;
+          final pixelsPerSecond = velocity.pixelsPerSecond;
           if (pixelsPerSecond.distanceSquared >
               kMaxFlingVelocity * kMaxFlingVelocity) {
-            final Velocity clampedVelocity = Velocity(
+            final clampedVelocity = Velocity(
               pixelsPerSecond:
                   (pixelsPerSecond / pixelsPerSecond.distance) *
                   kMaxFlingVelocity,
@@ -256,11 +256,11 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       return;
     }
 
-    final double spanDelta = (_currentSpan - _initialSpan).abs();
-    final double scaleFactor = _pointerScaleFactor;
+    final spanDelta = (_currentSpan - _initialSpan).abs();
+    final scaleFactor = _pointerScaleFactor;
 
     // Get the kind from any pointer state
-    final PointerDeviceKind kind = _pointers.values.first.kind;
+    final kind = _pointers.values.first.kind;
 
     // If we detect a scale gesture, accept all pointer gestures
     if (spanDelta > computeScaleSlop(kind) ||
@@ -274,11 +274,11 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   }
 
   void _update() {
-    final Offset? previousFocalPoint = _currentFocalPoint;
+    final previousFocalPoint = _currentFocalPoint;
 
     // Compute the focal point
-    Offset focalPoint = Offset.zero;
-    for (final _DragPointerState state in _pointers.values) {
+    var focalPoint = Offset.zero;
+    for (final state in _pointers.values) {
       focalPoint += state.currentPosition;
     }
     _currentFocalPoint = _pointers.isEmpty
@@ -292,7 +292,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       );
       _delta = Offset.zero;
     } else {
-      final Offset localPreviousFocalPoint = _localFocalPoint;
+      final localPreviousFocalPoint = _localFocalPoint;
       _localFocalPoint = PointerEvent.transformPosition(
         _lastTransform,
         _currentFocalPoint!,
@@ -300,9 +300,9 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       _delta = _localFocalPoint - localPreviousFocalPoint;
     }
 
-    final int count = _pointers.length;
-    Offset pointerFocalPoint = Offset.zero;
-    for (final _DragPointerState state in _pointers.values) {
+    final count = _pointers.length;
+    var pointerFocalPoint = Offset.zero;
+    for (final state in _pointers.values) {
       pointerFocalPoint += state.currentPosition;
     }
     if (count > 0) {
@@ -310,10 +310,10 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     }
 
     // Calculate span
-    double totalDeviation = 0.0;
-    double totalHorizontalDeviation = 0.0;
-    double totalVerticalDeviation = 0.0;
-    for (final _DragPointerState state in _pointers.values) {
+    var totalDeviation = 0.0;
+    var totalHorizontalDeviation = 0.0;
+    var totalVerticalDeviation = 0.0;
+    for (final state in _pointers.values) {
       totalDeviation += (pointerFocalPoint - state.currentPosition).distance;
       totalHorizontalDeviation +=
           (pointerFocalPoint.dx - state.currentPosition.dx).abs();
@@ -326,8 +326,8 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   }
 
   void _updateLines() {
-    final int count = _pointers.length;
-    final List<int> pointerIds = _pointers.keys.toList();
+    final count = _pointers.length;
+    final pointerIds = _pointers.keys.toList();
 
     if (count < 2) {
       _initialLine = _currentLine;
@@ -352,20 +352,20 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   }
 
   double _computeRotationFactor() {
-    double factor = 0.0;
+    var factor = 0.0;
     if (_initialLine != null && _currentLine != null) {
-      final double fx = _initialLine!.pointerStartLocation.dx;
-      final double fy = _initialLine!.pointerStartLocation.dy;
-      final double sx = _initialLine!.pointerEndLocation.dx;
-      final double sy = _initialLine!.pointerEndLocation.dy;
+      final fx = _initialLine!.pointerStartLocation.dx;
+      final fy = _initialLine!.pointerStartLocation.dy;
+      final sx = _initialLine!.pointerEndLocation.dx;
+      final sy = _initialLine!.pointerEndLocation.dy;
 
-      final double nfx = _currentLine!.pointerStartLocation.dx;
-      final double nfy = _currentLine!.pointerStartLocation.dy;
-      final double nsx = _currentLine!.pointerEndLocation.dx;
-      final double nsy = _currentLine!.pointerEndLocation.dy;
+      final nfx = _currentLine!.pointerStartLocation.dx;
+      final nfy = _currentLine!.pointerStartLocation.dy;
+      final nsx = _currentLine!.pointerEndLocation.dx;
+      final nsy = _currentLine!.pointerEndLocation.dy;
 
-      final double angle1 = math.atan2(fy - sy, fx - sx);
-      final double angle2 = math.atan2(nfy - nsy, nfx - nsx);
+      final angle1 = math.atan2(fy - sy, fx - sx);
+      final angle2 = math.atan2(nfy - nsy, nfx - nsx);
 
       factor = angle2 - angle1;
     }
@@ -373,7 +373,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   }
 
   bool _isFlingGesture(Velocity velocity) {
-    final double speedSquared = velocity.pixelsPerSecond.distanceSquared;
+    final speedSquared = velocity.pixelsPerSecond.distanceSquared;
     return speedSquared > kMinFlingVelocity * kMinFlingVelocity;
   }
 
@@ -390,7 +390,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
   @override
   void acceptGesture(int pointer) {
-    final _DragPointerState? state = _pointers[pointer];
+    final state = _pointers[pointer];
     if (state == null) {
       return; // Already removed
     }
@@ -399,7 +399,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
   @override
   void rejectGesture(int pointer) {
-    final _DragPointerState? state = _pointers[pointer];
+    final state = _pointers[pointer];
     if (state != null) {
       state._rejected();
       _removeState(pointer);
@@ -416,8 +416,8 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
   @override
   void dispose() {
-    final List<int> pointers = _pointers.keys.toList();
-    for (final int pointer in pointers) {
+    final pointers = _pointers.keys.toList();
+    for (final pointer in pointers) {
       _removeState(pointer);
     }
     assert(_pointers.isEmpty);
@@ -448,7 +448,7 @@ class _DragPointerState {
   Drag? _drag;
   bool _resolved = false;
 
-  void _setArenaEntry(GestureArenaEntry entry) {
+  set arenaEntry(GestureArenaEntry entry) {
     _arenaEntry = entry;
   }
 
@@ -457,12 +457,13 @@ class _DragPointerState {
       velocityTracker.addPosition(event.timeStamp, event.position);
     }
 
-    final Offset delta = event.position - currentPosition;
+    final delta = event.position - currentPosition;
     currentPosition = event.position;
 
     if (!_resolved) {
-      // Check if we should resolve the gesture based on individual pointer movement
-      final double distance = (currentPosition - initialPosition).distance;
+      // Check if we should resolve the gesture based on individual
+      // pointer movement
+      final distance = (currentPosition - initialPosition).distance;
       if (distance > computePanSlop(kind, recognizer.gestureSettings)) {
         _arenaEntry?.resolve(GestureDisposition.accepted);
       }

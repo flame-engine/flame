@@ -111,7 +111,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
-    if(_shouldBeRemoved){
+    if (_shouldBeRemoved) {
       return;
     }
     final event = DragStartEvent(pointerId, game, details);
@@ -141,15 +141,15 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     _tryRemoving();
   }
 
-  void markForRemoval(){
+  void markForRemoval() {
     _shouldBeRemoved = true;
-     _tryRemoving();
+    _tryRemoving();
   }
 
-  bool _tryRemoving(){
+  bool _tryRemoving() {
     // there's no more fingers
     // that started dragging before _shouldBeRemoved flag was set to true.
-    if(_records.isEmpty && _shouldBeRemoved && isMounted){
+    if (_records.isEmpty && _shouldBeRemoved && isMounted) {
       removeFromParent();
       return true;
     }
@@ -160,11 +160,10 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   @override
   void onMount() {
-    if(_tryRemoving()){
-    return;
-    };
+    if (_tryRemoving()) {
+      return;
+    }
 
-    debugPrint("mount multi drag gesture recognizer");
     game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {

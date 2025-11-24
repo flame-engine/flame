@@ -29,8 +29,6 @@ class MultiDragScaleDispatcher extends Component
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
-
-
   FlameGame get game => parent! as FlameGame;
 
   /// Called when the user initiates a drag gesture, for example by touching the
@@ -97,6 +95,17 @@ class MultiDragScaleDispatcher extends Component
     });
   }
 
+  @mustCallSuper
+  void onDragCancel(DragCancelEvent event) {
+    _records.removeWhere((record) {
+      if (record.pointerId == event.pointerId) {
+        record.component.onDragCancel(event);
+        return true;
+      }
+      return false;
+    });
+  }
+
   //#region MultiDragListener API
 
   @internal
@@ -118,6 +127,13 @@ class MultiDragScaleDispatcher extends Component
   void handleDragEnd(int pointerId, DragEndDetails details) {
     final event = DragEndEvent(pointerId, details);
     onDragEnd(event);
+  }
+
+  @internal
+  @override
+  void handleDragCancel(int pointerId) {
+    final event = DragCancelEvent(pointerId);
+    onDragCancel(event);
   }
 
   final Set<TaggedComponent<ScaleCallbacks>> _scaleRecords = {};
@@ -218,9 +234,4 @@ class MultiDragScaleDispatcher extends Component
 
   @override
   GameRenderBox get renderBox => game.renderBox;
-
-  @override
-  void handleDragCancel(int pointerId) {
-    // TODO: implement handleDragCancel
-  }
 }
