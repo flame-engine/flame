@@ -28,31 +28,9 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
-  final _dragUpdateController = StreamController<DragUpdateEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragUpdateEvent> get onUpdate => _dragUpdateController.stream;
-
-  final _dragStartController = StreamController<DragStartEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragStartEvent> get onStart => _dragStartController.stream;
-
-  final _dragEndController = StreamController<DragEndEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragEndEvent> get onEnd => _dragEndController.stream;
-
-  final _dragCancelController = StreamController<DragCancelEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragCancelEvent> get onCancel => _dragCancelController.stream;
-
   FlameGame get game => parent! as FlameGame;
+
+  bool _shouldBeRemoved = false;
 
   /// Called when the user initiates a drag gesture, for example by touching the
   /// screen and then moving the finger.
@@ -134,9 +112,11 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
+    if(_shouldBeRemoved){
+      return;
+    }
     final event = DragStartEvent(pointerId, game, details);
     onDragStart(event);
-    _dragStartController.add(event);
   }
 
   @internal
@@ -144,7 +124,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
     final event = DragUpdateEvent(pointerId, game, details);
     onDragUpdate(event);
-    _dragUpdateController.add(event);
   }
 
   @internal
@@ -152,7 +131,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   void handleDragEnd(int pointerId, DragEndDetails details) {
     final event = DragEndEvent(pointerId, details);
     onDragEnd(event);
-    _dragEndController.add(event);
+    _tryRemoving();
   }
 
   @internal
@@ -160,7 +139,20 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   void handleDragCancel(int pointerId) {
     final event = DragCancelEvent(pointerId);
     onDragCancel(event);
-    _dragCancelController.add(event);
+    _tryRemoving();
+  }
+
+  void markForRemoval(){
+    _shouldBeRemoved = true;
+     _tryRemoving();
+  }
+
+  void _tryRemoving(){
+    // there's no more fingers
+    // that started dragging before _shouldBeRemoved flag was set to true.
+    if(_records.isEmpty && _shouldBeRemoved){
+      removeFromParent();
+    }
   }
 
   //#endregion
@@ -179,10 +171,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   void onRemove() {
     game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
     game.unregisterKey(const MultiDragDispatcherKey());
-    _dragUpdateController.close();
-    _dragCancelController.close();
-    _dragStartController.close();
-    _dragEndController.close();
   }
 
   @override
