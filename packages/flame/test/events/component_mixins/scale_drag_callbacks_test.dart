@@ -47,7 +47,7 @@ void main() {
       ..width = 10
       ..height = 10;
     await game.ensureAdd(component);
-    final dispatcher = game.firstChild<ScaleDragCallbacks>()!;
+    final dispatcher = game.firstChild<ScaleCallbacks>()!;
 
     dispatcher.onScaleStart(
       createScaleStartEvents(
@@ -171,6 +171,8 @@ void main() {
       await tester.pump();
       expect(game.children.length, equals(3));
       expect(game.isMounted, isTrue);
+      await tester.pump();
+      await tester.pump();
 
       await _zoomFrom(
         tester,
@@ -395,96 +397,21 @@ Future<void> _zoomFrom(
   await tester.pump();
 }
 
-mixin _ScaleDragCounter on ScaleDragCallbacks {
-  int scaleStartEvent = 0;
-  int scaleUpdateEvent = 0;
-  int scaleEndEvent = 0;
-
-  int isScaledStateChange = 0;
-
-  bool _wasScaled = false;
-
-  @override
-  void onScaleStart(ScaleStartEvent event) {
-    super.onScaleStart(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    scaleStartEvent++;
-    if (_wasScaled != isScaling) {
-      ++isScaledStateChange;
-      _wasScaled = isScaling;
-    }
-  }
-
-  @override
-  void onScaleUpdate(ScaleUpdateEvent event) {
-    super.onScaleUpdate(event);
-    expect(event.raw, isNotNull);
-    event.handled = true;
-    scaleUpdateEvent++;
-  }
-
-  @override
-  void onScaleEnd(ScaleEndEvent event) {
-    super.onScaleEnd(event);
-    debugPrint("scale end counter");
-    event.handled = true;
-    scaleEndEvent++;
-    if (_wasScaled != isScaling) {
-      ++isScaledStateChange;
-      _wasScaled = isScaling;
-    }
-  }
-
-  bool _wasDragged = false;
-  int dragStartEvent = 0;
-  int dragUpdateEvent = 0;
-  int dragEndEvent = 0;
-  int dragCancelEvent = 0;
-  int isDraggedStateChange = 0;
-
-  @override
-  void onDragStart(DragStartEvent event) {
-    super.onDragStart(event);
-    event.handled = true;
-    dragStartEvent++;
-    if (_wasDragged != isDragged) {
-      ++isDraggedStateChange;
-      _wasDragged = isDragged;
-    }
-  }
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    event.handled = true;
-    dragUpdateEvent++;
-  }
-
-  @override
-  void onDragEnd(DragEndEvent event) {
-    super.onDragEnd(event);
-    event.handled = true;
-    dragEndEvent++;
-    if (_wasDragged != isDragged) {
-      ++isDraggedStateChange;
-      _wasDragged = isDragged;
-    }
-  }
-}
-
+/*class _ScaleDragCallbacksComponent extends PositionComponent
+    with ScaleDragCallbacks, _ScaleDragCounter {}*/
 class _ScaleDragCallbacksComponent extends PositionComponent
-    with ScaleDragCallbacks, _ScaleDragCounter {}
+    with ScaleCallbacks, DragCallbacks,  _ScaleCounter, _DragCounter {}
 
 class _ScaleDragCallbacksGame extends FlameGame
-    with ScaleDragCallbacks, _ScaleDragCounter {}
+    with ScaleCallbacks, DragCallbacks,  _ScaleCounter, _DragCounter {}
 
 class _SimpleScaleDragCallbacksComponent extends PositionComponent
-    with ScaleDragCallbacks {
+    with ScaleCallbacks, DragCallbacks {
   _SimpleScaleDragCallbacksComponent({super.size});
 }
 
 class _ScaleDragWithCallbacksComponent extends PositionComponent
-    with ScaleDragCallbacks, _ScaleDragCounter {
+    with ScaleCallbacks, DragCallbacks, _ScaleCounter, _DragCounter {
   _ScaleDragWithCallbacksComponent({
     void Function(ScaleStartEvent)? onScaleStart,
     void Function(ScaleUpdateEvent)? onScaleUpdate,
@@ -542,6 +469,177 @@ class _ScaleDragWithCallbacksComponent extends PositionComponent
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
     return _onDragEnd?.call(event);
+  }
+}
+
+mixin _DragCounter on DragCallbacks {
+  int dragStartEvent = 0;
+  int dragUpdateEvent = 0;
+  int dragEndEvent = 0;
+  int dragCancelEvent = 0;
+  int isDraggedStateChange = 0;
+
+  bool _wasDragged = false;
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    event.handled = true;
+    dragStartEvent++;
+    if (_wasDragged != isDragged) {
+      ++isDraggedStateChange;
+      _wasDragged = isDragged;
+    }
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    super.onDragUpdate(event);
+    event.handled = true;
+    dragUpdateEvent++;
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    event.handled = true;
+    dragEndEvent++;
+    if (_wasDragged != isDragged) {
+      ++isDraggedStateChange;
+      _wasDragged = isDragged;
+    }
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    event.handled = true;
+    dragCancelEvent++;
+  }
+}
+
+mixin _ScaleCounter on ScaleCallbacks {
+  int scaleStartEvent = 0;
+  int scaleUpdateEvent = 0;
+  int scaleEndEvent = 0;
+
+  int isScaledStateChange = 0;
+
+  bool _wasScaled = false;
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+     debugPrint("_ScaleCounter.onScaleStart called!");
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    scaleStartEvent++;
+    if (_wasScaled != isScaling) {
+      ++isScaledStateChange;
+      _wasScaled = isScaling;
+    }
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    super.onScaleUpdate(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    scaleUpdateEvent++;
+  }
+
+  @override
+  void onScaleEnd(ScaleEndEvent event) {
+    super.onScaleEnd(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    scaleEndEvent++;
+    if (_wasScaled != isScaling) {
+      ++isScaledStateChange;
+      _wasScaled = isScaling;
+    }
+  }
+
+}
+
+mixin _ScaleDragCounter on ScaleDragCallbacks {
+  int scaleStartEvent = 0;
+  int scaleUpdateEvent = 0;
+  int scaleEndEvent = 0;
+
+  int isScaledStateChange = 0;
+
+  bool _wasScaled = false;
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    scaleStartEvent++;
+    if (_wasScaled != isScaling) {
+      ++isScaledStateChange;
+      _wasScaled = isScaling;
+    }
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    super.onScaleUpdate(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    scaleUpdateEvent++;
+  }
+
+  @override
+  void onScaleEnd(ScaleEndEvent event) {
+    super.onScaleEnd(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    scaleEndEvent++;
+    if (_wasScaled != isScaling) {
+      ++isScaledStateChange;
+      _wasScaled = isScaling;
+    }
+  }
+    int dragStartEvent = 0;
+  int dragUpdateEvent = 0;
+  int dragEndEvent = 0;
+  int dragCancelEvent = 0;
+  int isDraggedStateChange = 0;
+
+  bool _wasDragged = false;
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    dragStartEvent++;
+    if (_wasDragged != isDragged) {
+      ++isDraggedStateChange;
+      _wasDragged = isDragged;
+    }
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    super.onDragUpdate(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    dragUpdateEvent++;
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    expect(event.raw, isNotNull);
+    event.handled = true;
+    dragEndEvent++;
+    if (_wasDragged != isDragged) {
+      ++isDraggedStateChange;
+      _wasDragged = isDragged;
+    }
   }
 }
 

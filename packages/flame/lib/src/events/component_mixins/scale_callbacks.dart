@@ -12,6 +12,7 @@ mixin ScaleCallbacks on Component {
 
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
+    debugPrint("ScaleCallbacks.onScaleStart called!");
     _isScaling = true;
   }
 
@@ -32,6 +33,10 @@ mixin ScaleCallbacks on Component {
     final game = findRootGame()!;
     final scaleDispatcher = game.findByKey(const ScaleDispatcherKey());
     final multiDragDispatcher = game.findByKey(const MultiDragDispatcherKey());
+    final multiDragScaleDispatcher = game.findByKey(const MultiDragScaleDispatcherKey());
+
+    // If MultiDragScaleDispatcher exists, DragCallbacks already handled it
+    if (multiDragScaleDispatcher != null) return;
     
     if (scaleDispatcher == null && multiDragDispatcher == null) {
       final dispatcher = ScaleDispatcher();

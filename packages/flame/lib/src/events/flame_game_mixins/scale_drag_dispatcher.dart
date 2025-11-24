@@ -30,31 +30,9 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
 class MultiDragScaleDispatcher extends Component
     implements MultiDragListener, ScaleListener {
   /// The record of all components currently being touched.
-  final Set<TaggedComponent<ScaleDragCallbacks>> _records = {};
+  final Set<TaggedComponent<DragCallbacks>> _records = {};
 
-  final _dragUpdateController = StreamController<DragUpdateEvent>.broadcast(
-    sync: true,
-  );
 
-  Stream<DragUpdateEvent> get onUpdate => _dragUpdateController.stream;
-
-  final _dragStartController = StreamController<DragStartEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragStartEvent> get onStart => _dragStartController.stream;
-
-  final _dragEndController = StreamController<DragEndEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragEndEvent> get onEnd => _dragEndController.stream;
-
-  final _dragCancelController = StreamController<DragCancelEvent>.broadcast(
-    sync: true,
-  );
-
-  Stream<DragCancelEvent> get onCancel => _dragCancelController.stream;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -73,7 +51,7 @@ class MultiDragScaleDispatcher extends Component
     debugPrint("dispatcher on drag start");
     event.deliverAtPoint(
       rootComponent: game,
-      eventHandler: (ScaleDragCallbacks component) {
+      eventHandler: (DragCallbacks component) {
         _records.add(TaggedComponent(event.pointerId, component));
         component.onDragStart(event);
       },
@@ -88,11 +66,11 @@ class MultiDragScaleDispatcher extends Component
   /// delivered, however its `event.localPosition` property will contain NaNs.
   @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {
-    final updated = <TaggedComponent<ScaleDragCallbacks>>{};
+    final updated = <TaggedComponent<DragCallbacks>>{};
     event.deliverAtPoint(
       rootComponent: game,
       deliverToAll: true,
-      eventHandler: (ScaleDragCallbacks component) {
+      eventHandler: (DragCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_records.contains(record)) {
           component.onDragUpdate(event);
@@ -130,7 +108,6 @@ class MultiDragScaleDispatcher extends Component
   void handleDragStart(int pointerId, DragStartDetails details) {
     final event = DragStartEvent(pointerId, game, details);
     onDragStart(event);
-    _dragStartController.add(event);
   }
 
   @internal
@@ -138,7 +115,6 @@ class MultiDragScaleDispatcher extends Component
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
     final event = DragUpdateEvent(pointerId, game, details);
     onDragUpdate(event);
-    _dragUpdateController.add(event);
   }
 
   @internal
@@ -146,17 +122,16 @@ class MultiDragScaleDispatcher extends Component
   void handleDragEnd(int pointerId, DragEndDetails details) {
     final event = DragEndEvent(pointerId, details);
     onDragEnd(event);
-    _dragEndController.add(event);
   }
 
-  final Set<TaggedComponent<ScaleDragCallbacks>> _scaleRecords = {};
+  final Set<TaggedComponent<ScaleCallbacks>> _scaleRecords = {};
 
   /// Called when the user starts a scale gesture.
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
     event.deliverAtPoint(
       rootComponent: game,
-      eventHandler: (ScaleDragCallbacks component) {
+      eventHandler: (ScaleCallbacks component) {
         _scaleRecords.add(TaggedComponent(event.pointerId, component));
         component.onScaleStart(event);
       },
@@ -166,13 +141,13 @@ class MultiDragScaleDispatcher extends Component
   /// Called continuously as the user updates the scale gesture.
   @mustCallSuper
   void onScaleUpdate(ScaleUpdateEvent event) {
-    final updated = <TaggedComponent<ScaleDragCallbacks>>{};
+    final updated = <TaggedComponent<ScaleCallbacks>>{};
 
     // Deliver to components under the pointer
     event.deliverAtPoint(
       rootComponent: game,
       deliverToAll: true,
-      eventHandler: (ScaleDragCallbacks component) {
+      eventHandler: (ScaleCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_scaleRecords.contains(record)) {
           component.onScaleUpdate(event);
@@ -215,15 +190,7 @@ class MultiDragScaleDispatcher extends Component
   @internal
   @override
   void handleScaleUpdate(ScaleUpdateDetails details) {
-    if (details.pointerCount != 1) {
-      onScaleUpdate(ScaleUpdateEvent(0, game, details));
-      return;
-    }
-
-    /*final newDetails = _buildNewUpdateDetails(details);
-    if (newDetails != null) {
-      onScaleUpdate(ScaleUpdateEvent(0, game, newDetails));
-    }*/
+    onScaleUpdate(ScaleUpdateEvent(0, game, details));
   }
 
   @internal
@@ -236,6 +203,7 @@ class MultiDragScaleDispatcher extends Component
 
   @override
   void onMount() {
+    debugPrint("mount scale drag gesture recognizer");
     game.gestureDetectors.add<MultiDragScaleGestureRecognizer>(
       MultiDragScaleGestureRecognizer.new,
       (MultiDragScaleGestureRecognizer instance) {
@@ -251,10 +219,6 @@ class MultiDragScaleDispatcher extends Component
   void onRemove() {
     game.gestureDetectors.remove<MultiDragScaleGestureRecognizer>();
     game.unregisterKey(const MultiDragScaleDispatcherKey());
-    _dragUpdateController.close();
-    _dragCancelController.close();
-    _dragStartController.close();
-    _dragEndController.close();
   }
 
   @override
