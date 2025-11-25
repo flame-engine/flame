@@ -110,7 +110,7 @@ void main() {
     await tester.pumpWidget(GameWidget(game: game));
     await tester.pump();
 
-    await zoomFrom(
+    await tester.zoomFrom(
       tester,
       startLocation1: const Offset(180, 150),
       offset1: const Offset(15, 2),
@@ -136,7 +136,7 @@ void main() {
       await tester.pump();
       expect(component.isMounted, isTrue);
 
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(250, 200),
         offset1: const Offset(15, 2),
@@ -170,7 +170,7 @@ void main() {
       expect(game.children.length, equals(3));
       expect(game.isMounted, isTrue);
 
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(50, 100),
         offset1: const Offset(15, 2),
@@ -198,7 +198,7 @@ void main() {
       await tester.pump();
 
       // Inside component
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(180, 100),
         offset1: const Offset(15, 2),
@@ -209,7 +209,7 @@ void main() {
       expect(component.isScaledStateChange, equals(4));
 
       // Outside component
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(330, 300),
         offset1: const Offset(15, 2),
@@ -240,7 +240,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        await zoomFrom(
+        await tester.zoomFrom(
           tester,
           startLocation1: const Offset(80, 50),
           offset1: const Offset(15, 2),
