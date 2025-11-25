@@ -132,7 +132,7 @@ void main() {
     await tester.pumpWidget(GameWidget(game: game));
     await tester.pump();
 
-    await zoomFrom(
+    await tester.zoomFrom(
       tester,
       startLocation1: const Offset(180, 150),
       offset1: const Offset(15, 2),
@@ -165,7 +165,7 @@ void main() {
       await tester.pump();
       expect(component.isMounted, isTrue);
 
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(250, 200),
         offset1: const Offset(15, 2),
@@ -204,7 +204,7 @@ void main() {
       await tester.pump();
       await tester.pump();
 
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(50, 100),
         offset1: const Offset(15, 2),
@@ -236,7 +236,7 @@ void main() {
       await tester.pump();
 
       // Inside component
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(180, 100),
         offset1: const Offset(15, 2),
@@ -248,7 +248,7 @@ void main() {
       expect(component.isDraggedStateChange, equals(2));
 
       // Outside component
-      await zoomFrom(
+      await tester.zoomFrom(
         tester,
         startLocation1: const Offset(330, 300),
         offset1: const Offset(15, 2),
@@ -284,7 +284,7 @@ void main() {
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
-        await zoomFrom(
+        await tester.zoomFrom(
           tester,
           startLocation1: const Offset(80, 50),
           offset1: const Offset(15, 2),
@@ -569,7 +569,7 @@ void main() {
 
         final center = (game.canvasSize / 2).toOffset();
 
-        await dragWithInjection(
+        await tester.dragWithInjection(
           tester,
           center,
           const Offset(20, 0),
@@ -608,7 +608,7 @@ void main() {
 
         final center = (game.canvasSize / 2).toOffset();
 
-        await _zoomFromWithInjection(
+        await tester.zoomFromWithInjection(
           tester,
           startLocation1: center.translate(-3, 0),
           offset1: const Offset(15, 2),
@@ -620,69 +620,4 @@ void main() {
       },
     );
   });
-}
-
-Future<void> dragWithInjection(
-  WidgetTester tester,
-  Offset start,
-  Offset delta,
-  Duration duration,
-  Future<void> Function() onHalfway, {
-  int steps = 20,
-}) async {
-  final gesture = await tester.startGesture(start);
-  final dt = duration ~/ steps;
-
-  for (var i = 0; i < steps; i++) {
-    if (i == steps ~/ 2) {
-      await onHalfway();
-    }
-
-    final t = (i + 1) / steps;
-    await gesture.moveTo(start + delta * t);
-    await tester.pump(dt);
-  }
-
-  await gesture.up();
-  await tester.pump();
-}
-
-Future<void> _zoomFromWithInjection(
-  WidgetTester tester, {
-  required Offset startLocation1,
-  required Offset offset1,
-  required Offset startLocation2,
-  required Offset offset2,
-  required Duration duration,
-  required Future<void> Function() onHalfway,
-  int steps = 20,
-}) async {
-  // Start both fingers
-  final gesture1 = await tester.startGesture(startLocation1);
-  final gesture2 = await tester.startGesture(startLocation2);
-
-  await tester.pump();
-
-  final dt = duration ~/ steps;
-
-  for (var i = 0; i < steps; i++) {
-    // Inject custom logic at halfway
-    if (i == steps ~/ 2) {
-      await onHalfway();
-      await tester.pump();
-    }
-
-    final t = (i + 1) / steps;
-
-    await gesture1.moveTo(startLocation1 + offset1 * t);
-    await gesture2.moveTo(startLocation2 + offset2 * t);
-
-    await tester.pump(dt);
-  }
-
-  // Release both gestures
-  await gesture1.up();
-  await gesture2.up();
-
-  await tester.pump();
 }
