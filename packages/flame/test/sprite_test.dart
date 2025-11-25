@@ -11,16 +11,16 @@ void main() {
   group('Sprite', () {
     testGolden(
       'Render with anchor',
-      (game) async {
-        game.add(MyComponent()..position = Vector2.all(25));
+      (game, tester) async {
+        game.add(_MyComponent()..position = Vector2.all(25));
       },
       goldenFile: '_goldens/sprite_test_1.png',
     );
   });
 }
 
-class MyComponent extends PositionComponent {
-  MyComponent() : super(size: Vector2(200, 400));
+class _MyComponent extends PositionComponent {
+  _MyComponent() : super(size: Vector2(200, 400));
   late final Sprite sprite;
 
   @override

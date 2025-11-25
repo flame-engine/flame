@@ -1,3 +1,88 @@
+## 1.11.18
+
+ - Update a dependency to the latest release.
+
+## 1.11.17
+
+ - Update a dependency to the latest release.
+
+## 1.11.16
+
+ - Update a dependency to the latest release.
+
+## 1.11.15
+
+ - Update a dependency to the latest release.
+
+## 1.11.14
+
+ - Update a dependency to the latest release.
+
+## 1.11.13
+
+ - **FIX**: Calculate zoom ratio before rendering svg ([#3616](https://github.com/flame-engine/flame/issues/3616)). ([f8b7ef82](https://github.com/flame-engine/flame/commit/f8b7ef82b7fc54af7171c94ae2112b18cebb236a))
+
+## 1.11.12
+
+ - Update a dependency to the latest release.
+
+## 1.11.11
+
+ - Update a dependency to the latest release.
+
+## 1.11.10
+
+ - **FIX**: SvgComponent should use `drawImage` on first render too ([#3549](https://github.com/flame-engine/flame/issues/3549)). ([91721a6b](https://github.com/flame-engine/flame/commit/91721a6b7b2ecda338d64d3c982e448e9cd71122))
+
+## 1.11.9
+
+ - Update a dependency to the latest release.
+
+## 1.11.8
+
+ - Update a dependency to the latest release.
+
+## 1.11.7
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 1.11.6
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.11.5
+
+ - Update a dependency to the latest release.
+
+## 1.11.4
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+
+## 1.11.3
+
+ - Update a dependency to the latest release.
+
+## 1.11.2
+
+ - Update a dependency to the latest release.
+
+## 1.11.1
+
+ - Update a dependency to the latest release.
+
+## 1.11.0
+
+ - **FEAT**: Fixing tests on flutter 3.24.0 ([#3259](https://github.com/flame-engine/flame/issues/3259)). ([bf9a2481](https://github.com/flame-engine/flame/commit/bf9a2481fbeb77413a26ae96b57843ca51411f9f))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+## 1.10.2
+
+ - Update a dependency to the latest release.
+
+## 1.10.1
+
+ - Update a dependency to the latest release.
+
 ## 1.10.0
 
 > Note: This release has breaking changes.

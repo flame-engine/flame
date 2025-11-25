@@ -1,6 +1,5 @@
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/core/component_key.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart' as flutter;
@@ -10,7 +9,6 @@ import 'package:meta/meta.dart';
 /// [PointerMoveCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
 /// [PointerMoveCallbacks] components are mounted into the component tree.
-@internal
 class PointerMoveDispatcher extends Component {
   /// The record of all components currently being hovered.
   final Set<TaggedComponent<PointerMoveCallbacks>> _records = {};

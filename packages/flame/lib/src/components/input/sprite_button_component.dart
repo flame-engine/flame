@@ -29,12 +29,12 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
     super.anchor,
     super.children,
     super.priority,
-  })  : _button = button,
-        _buttonDown = buttonDown,
-        super(
-          current: ButtonState.up,
-          size: size ?? button?.originalSize,
-        );
+  }) : _button = button,
+       _buttonDown = buttonDown,
+       super(
+         current: ButtonState.up,
+         size: size ?? button?.originalSize,
+       );
 
   /// Callback for what should happen when the button is pressed.
   void Function()? onPressed;
@@ -47,12 +47,16 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
 
   set button(Sprite value) {
     _button = value;
-    sprites?[ButtonState.up] = value;
+    if (isLoaded) {
+      updateSprite(ButtonState.up, value);
+    }
   }
 
   set buttonDown(Sprite value) {
     _buttonDown = value;
-    sprites?[ButtonState.down] = value;
+    if (isLoaded) {
+      updateSprite(ButtonState.down, value);
+    }
   }
 
   @override
@@ -61,8 +65,11 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
       _button != null,
       'The button sprite has to be set either in onLoad or in the constructor',
     );
+    if (size.isZero()) {
+      size = _button!.originalSize;
+    }
     sprites = {
-      ButtonState.up: button,
+      ButtonState.up: _button!,
       ButtonState.down: buttonDown,
     };
     super.onMount();

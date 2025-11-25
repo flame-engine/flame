@@ -60,10 +60,10 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 class Player extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Player()
-      : super(
-          size: Vector2(100, 150),
-          anchor: Anchor.center,
-        );
+    : super(
+        size: Vector2(100, 150),
+        anchor: Anchor.center,
+      );
 
   late final SpawnComponent _bulletSpawner;
 
@@ -75,7 +75,7 @@ class Player extends SpriteAnimationComponent
       'player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: .2,
+        stepTime: 0.2,
         textureSize: Vector2(32, 48),
       ),
     );
@@ -83,11 +83,12 @@ class Player extends SpriteAnimationComponent
     position = game.size / 2;
 
     _bulletSpawner = SpawnComponent(
-      period: .2,
+      period: 0.2,
       selfPositioning: true,
       factory: (index) {
         return Bullet(
-          position: position +
+          position:
+              position +
               Vector2(
                 0,
                 -height / 2,
@@ -118,9 +119,9 @@ class Bullet extends SpriteAnimationComponent
   Bullet({
     super.position,
   }) : super(
-          size: Vector2(25, 50),
-          anchor: Anchor.center,
-        );
+         size: Vector2(25, 50),
+         anchor: Anchor.center,
+       );
 
   @override
   Future<void> onLoad() async {
@@ -130,7 +131,7 @@ class Bullet extends SpriteAnimationComponent
       'bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: .2,
+        stepTime: 0.2,
         textureSize: Vector2(8, 16),
       ),
     );
@@ -153,9 +154,9 @@ class Enemy extends SpriteAnimationComponent
   Enemy({
     super.position,
   }) : super(
-          size: Vector2.all(enemySize),
-          anchor: Anchor.center,
-        );
+         size: Vector2.all(enemySize),
+         anchor: Anchor.center,
+       );
 
   static const enemySize = 50.0;
 
@@ -167,7 +168,7 @@ class Enemy extends SpriteAnimationComponent
       'enemy.png',
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: .2,
+        stepTime: 0.2,
         textureSize: Vector2.all(16),
       ),
     );

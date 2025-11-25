@@ -1,4 +1,5 @@
 name: flame_studio
+resolution: workspace
 description: An IDE-like environment for developing and debugging Flame games.
 version: 0.0.0
 publish_to: none
@@ -9,19 +10,19 @@ funding:
   - https://patreon.com/bluefireoss
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.16.0
+  flame: ^1.34.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.3.6
-  meta: ^1.9.1
+  meta: ^1.12.0
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter
   test: any

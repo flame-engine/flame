@@ -57,7 +57,7 @@ abstract class Particle {
   Particle({
     double? lifespan,
   }) {
-    setLifespan(lifespan ?? .5);
+    setLifespan(lifespan ?? 0.5);
   }
 
   /// Getter for the current lifespan of this [Particle].
@@ -181,7 +181,12 @@ abstract class Particle {
   /// Wraps this particle with a [ScalingParticle].
   ///
   /// Allows for changing the size of this particle and/or its children.
-  ScalingParticle scaling({double to = 0}) {
-    return ScalingParticle(to: to, child: this, lifespan: _lifespan);
+  ScalingParticle scaling({double to = 0, Curve curve = Curves.linear}) {
+    return ScalingParticle(
+      to: to,
+      child: this,
+      lifespan: _lifespan,
+      curve: curve,
+    );
   }
 }

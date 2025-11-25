@@ -3,7 +3,7 @@
 Flame offers a basic, yet robust and extendable particle system. The core concept of this system is
 the `Particle` class, which is very similar in its behavior to the `ParticleSystemComponent`.
 
-The most basic usage of a `Particle` with `FlameGame` would look as following:
+The most basic usage of a `Particle` with `FlameGame` would look as in the following:
 
 ```dart
 import 'package:flame/components.dart';
@@ -103,8 +103,8 @@ game.add(
 );
 ```
 
-You can find more examples of how to use different built-in particles in various combinations
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
+See more [examples of how to use built-in particles in various
+combinations](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
 
 
 ## Lifecycle
@@ -160,11 +160,10 @@ Flame ships with a few built-in `Particle` behaviors:
 - The `ComponentParticle` renders Flame `Component` within a `Particle` effect
 - The `FlareParticle` renders Flare animation within a `Particle` effect
 
-More examples of how to use these behaviors together are available
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
-All the implementations are available in the
-[particles](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles) folder
-on the Flame repository.
+See more [examples of how to use built-in Particle behaviors
+together](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
+All the implementations are available in the [particles folder on the
+Flame repository.](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles)
 
 
 ## TranslatedParticle
@@ -251,7 +250,7 @@ game.add(
   ParticleSystemComponent(
     particle: CircleParticle(
       radius: game.size.x / 2,
-      paint: Paint()..color = Colors.red.withOpacity(.5),
+      paint: Paint()..color = Colors.red.withValues(alpha: .5),
     ),
   ),
 );
@@ -310,6 +309,7 @@ game.add(
     particle: ScalingParticle(
       lifespan: 2,
       to: 0,
+      curve: Curves.easeIn,
       child: CircleParticle(
         radius: 2.0,
         paint: Paint()..color = Colors.red,

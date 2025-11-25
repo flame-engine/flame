@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockParticle extends Mock implements CircleParticle {}
+class _MockParticle extends Mock implements CircleParticle {}
 
 void main() {
   group('CircleParticle', () {
     test('Should render this Particle to given Canvas', () {
-      final particle = MockParticle();
+      final particle = _MockParticle();
 
       final canvas = MockCanvas();
       ParticleSystemComponent(particle: particle).render(canvas);
@@ -20,22 +20,23 @@ void main() {
     });
 
     testWithFlameGame(
-        'Consider composing this with other Particle to achieve needed effects',
-        (game) async {
-      final childParticle = CircleParticle(
-        paint: Paint()..color = Colors.red,
-        lifespan: 2,
-      );
+      'Consider composing this with other Particle to achieve needed effects',
+      (game) async {
+        final childParticle = CircleParticle(
+          paint: Paint()..color = Colors.red,
+          lifespan: 2,
+        );
 
-      final component = ParticleSystemComponent(
-        particle: childParticle,
-      );
+        final component = ParticleSystemComponent(
+          particle: childParticle,
+        );
 
-      game.add(component);
-      await game.ready();
-      game.update(1);
+        game.add(component);
+        await game.ready();
+        game.update(1);
 
-      expect(childParticle.progress, 0.5);
-    });
+        expect(childParticle.progress, 0.5);
+      },
+    );
   });
 }

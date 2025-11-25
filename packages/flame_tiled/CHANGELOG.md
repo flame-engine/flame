@@ -1,3 +1,96 @@
+## 3.0.9
+
+ - Update a dependency to the latest release.
+
+## 3.0.8
+
+ - **FIX**: Show assertion when tiled file is loaded in the wrong way ([#3747](https://github.com/flame-engine/flame/issues/3747)). ([3efedc46](https://github.com/flame-engine/flame/commit/3efedc4653fa33cb239a38cc6ac8c999bcd25a7f))
+
+## 3.0.7
+
+ - **REFACTOR**: Move MutableRSTransform out of flame_tiled package and into flame package ([#3695](https://github.com/flame-engine/flame/issues/3695)). ([7d644dd8](https://github.com/flame-engine/flame/commit/7d644dd84ce27e292b53f7310967393cf4c60618))
+
+## 3.0.6
+
+ - Update a dependency to the latest release.
+
+## 3.0.5
+
+ - Update a dependency to the latest release.
+
+## 3.0.4
+
+ - **FIX**: Add optional key parameter to TiledComponent.load method ([#3630](https://github.com/flame-engine/flame/issues/3630)). ([5a27746e](https://github.com/flame-engine/flame/commit/5a27746ee4dbab17565472133274dd1308525978))
+ - **FIX**: PostProcessComponent should size dynamically ([#3611](https://github.com/flame-engine/flame/issues/3611)). ([baecb861](https://github.com/flame-engine/flame/commit/baecb86186a1bff7f21d804e7867f894d2f9d23c))
+
+## 3.0.3
+
+ - Update a dependency to the latest release.
+
+## 3.0.2
+
+ - Update a dependency to the latest release.
+
+## 3.0.1
+
+ - Update a dependency to the latest release.
+
+## 3.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Add APIs to get TileData by layer index ([#3539](https://github.com/flame-engine/flame/issues/3539)). ([4676b1b7](https://github.com/flame-engine/flame/commit/4676b1b7a5aefe7a958de55b1d209e554c9b02a6))
+
+## 2.0.3
+
+ - Update a dependency to the latest release.
+
+## 2.0.2
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 2.0.1
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FIX**: Bump tiled to 0.11.0 and add ColorData extension (#3473).
+
+## 1.21.2
+
+ - **REFACTOR**: Fix lint issues from latest flutter release ([#3390](https://github.com/flame-engine/flame/issues/3390)). ([978ad31b](https://github.com/flame-engine/flame/commit/978ad31b429d1801097b0db385a600c85a157867))
+
+## 1.21.1
+
+ - Update a dependency to the latest release.
+
+## 1.21.0
+
+ - **FEAT**: Add a getter for images cache keys ([#3324](https://github.com/flame-engine/flame/issues/3324)). ([7746f2f8](https://github.com/flame-engine/flame/commit/7746f2f867092c19222a40aec2b66dc80558dccb))
+
+## 1.20.4
+
+ - Update a dependency to the latest release.
+
+## 1.20.3
+
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+## 1.20.2
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
+## 1.20.1
+
+ - **FIX**: Respect tile offset when drawing tiles ([#3112](https://github.com/flame-engine/flame/issues/3112)). ([e3477474](https://github.com/flame-engine/flame/commit/e34774743038bc75fec14afc3c753fa997e71577))
+
+## 1.20.0
+
+ - **FEAT**: Export `TileAtlas` from `flame_tiled` package ([#3049](https://github.com/flame-engine/flame/issues/3049)). ([41e9e4e3](https://github.com/flame-engine/flame/commit/41e9e4e38c643b07a3a7269b1cd8d3fa60cbeebb))
+
 ## 1.19.0
 
 > Note: This release has breaking changes.

@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -138,10 +137,10 @@ void main() {
 
           // prepare transform
           final matrix = Matrix4.identity();
-          matrix.translate(100.0, 100.0);
+          matrix.translateByDouble(100.0, 100.0, 0.0, 1.0);
           matrix.rotateZ(-pi / 4);
-          matrix.scale(1.5, 1.5);
-          matrix.translate(-100.0, -100.0);
+          matrix.scaleByDouble(1.5, 1.5, 1.0, 1.0);
+          matrix.translateByDouble(-100.0, -100.0, 0.0, 1.0);
 
           // Check that a snapshot has been generated
           expect(snapshotComponent.takeSnapshotCalled, equals(1));
@@ -158,7 +157,7 @@ void main() {
         'Should respect transforms',
         game: _SnapshotTestGame(),
         size: Vector2(200, 200),
-        (game) async {
+        (game, tester) async {
           final snapshotComponent =
               (game as _SnapshotTestGame).snapshotComponent;
 

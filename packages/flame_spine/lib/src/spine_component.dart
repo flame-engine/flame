@@ -6,7 +6,7 @@ import 'package:spine_flutter/spine_flutter.dart';
 
 class SpineComponent extends PositionComponent {
   final BoundsProvider _boundsProvider;
-  final SkeletonDrawable _drawable;
+  final SkeletonDrawableFlutter _drawable;
   late final Bounds _bounds;
   final bool _ownsDrawable;
 
@@ -21,8 +21,8 @@ class SpineComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  })  : _ownsDrawable = ownsDrawable,
-        _boundsProvider = boundsProvider {
+  }) : _ownsDrawable = ownsDrawable,
+       _boundsProvider = boundsProvider {
     _drawable.update(0);
     _bounds = _boundsProvider.computeBounds(_drawable);
     size = Vector2(_bounds.width, _bounds.height);
@@ -41,7 +41,7 @@ class SpineComponent extends PositionComponent {
     int? priority,
   }) async {
     return SpineComponent(
-      await SkeletonDrawable.fromAsset(
+      await SkeletonDrawableFlutter.fromAsset(
         atlasFile,
         skeletonFile,
         bundle: bundle,

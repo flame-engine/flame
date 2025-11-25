@@ -46,6 +46,7 @@ void main() {
           'onLineStart(Last line)',
           'onLineFinish(Last line)',
           'onCommand(<<Command(myCommand)>>)',
+          'onCommandFinish(<<Command(myCommand)>>)',
           'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
@@ -90,6 +91,7 @@ void main() {
           'onLineStart(Last line)',
           'onLineFinish(Last line)',
           'onCommand(<<Command(myCommand)>>)',
+          'onCommandFinish(<<Command(myCommand)>>)',
           'onNodeFinish(Start)',
           'onDialogueFinish()',
         ],
@@ -255,8 +257,9 @@ class _RecordingDialogueView extends DialogueView {
 
   @override
   Future<int> onChoiceStart(DialogueChoice choice) async {
-    final options =
-        [for (final option in choice.options) '[-> ${option.text}]'].join();
+    final options = [
+      for (final option in choice.options) '[-> ${option.text}]',
+    ].join();
     events.add('onChoiceStart($options)');
     return 1;
   }
@@ -269,6 +272,11 @@ class _RecordingDialogueView extends DialogueView {
   @override
   FutureOr<void> onCommand(UserDefinedCommand command) {
     events.add('onCommand(<<$command>>)');
+  }
+
+  @override
+  FutureOr<void> onCommandFinish(UserDefinedCommand command) {
+    events.add('onCommandFinish(<<$command>>)');
   }
 
   @override
@@ -324,8 +332,9 @@ class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
 
   @override
   Future<int> onChoiceStart(DialogueChoice choice) async {
-    final options =
-        [for (final option in choice.options) '[-> ${option.text}]'].join();
+    final options = [
+      for (final option in choice.options) '[-> ${option.text}]',
+    ].join();
     events.add('onChoiceStart($options)');
     return 1;
   }
@@ -338,6 +347,11 @@ class _RecordingDialogueViewAsMixin extends _SomeOtherBaseClass
   @override
   FutureOr<void> onCommand(UserDefinedCommand command) {
     events.add('onCommand(<<$command>>)');
+  }
+
+  @override
+  FutureOr<void> onCommandFinish(UserDefinedCommand command) {
+    events.add('onCommandFinish(<<$command>>)');
   }
 
   @override

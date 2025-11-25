@@ -18,7 +18,8 @@ A Flutter-based game engine.
 
 <p align="center">
   <a title="Pub" href="https://pub.dev/packages/flame"><img src="https://img.shields.io/pub/v/flame.svg?style=popout"/></a>
-  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/workflows/cicd/badge.svg?branch=main&event=push"/></a>
+  <a title="Shorebird CI" href="https://console.shorebird.dev/ci"><img src="https://api.shorebird.dev/api/v1/github/flame-engine/flame/badge.svg"/></a>
+  <a title="Test" href="https://github.com/flame-engine/flame/actions?query=workflow%3Acicd+branch%3Amain"><img src="https://github.com/flame-engine/flame/actions/workflows/cicd.yml/badge.svg?branch=main&event=push"/></a>
   <a title="Discord" href="https://discord.gg/pxrBmy4"><img src="https://img.shields.io/discord/509714518008528896.svg"/></a>
   <a title="Melos" href="https://github.com/invertase/melos"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg"/></a>
 </p>
@@ -105,9 +106,7 @@ framework.
 
 The Flame Engine's top sponsors:
 
-[![Very Good Ventures](https://raw.githubusercontent.com/flame-engine/flame/main/media/unicorn_two_toned.png)](https://verygood.ventures/)
-
-[![Cypher Stack](https://raw.githubusercontent.com/flame-engine/flame/main/media/logo_cypherstack.png)](https://cypherstack.com/)
+[![Invertase](./media/invertase.jpeg)](https://invertase.io/)
 
 Do you or your company want to sponsor Flame?
 Check out our [OpenCollective page](https://opencollective.com/blue-fire), which is also mentioned
@@ -147,9 +146,9 @@ badges:
 [![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 
 ```txt
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=flat-square)](https://flame-engine.org)
-[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-orange.svg?style=for-the-badge)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=flat-square)](https://flame-engine.org)
+[![Powered by Flame](https://img.shields.io/badge/Powered%20by-%F0%9F%94%A5-272727.svg?style=for-the-badge)](https://flame-engine.org)
 ```
 
 
@@ -161,6 +160,8 @@ look at it as soon as possible.
 Do you want to contribute with a PR? PRs are always welcome, just make sure to create it from the
 correct branch (main) and follow the [checklist](.github/pull_request_template.md) which will
 appear when you open the PR.
+
+Also, before you start, make sure to read our [Contributing Guide](CONTRIBUTING.md).
 
 For bigger changes, or if in doubt, make sure to talk about your contribution to the team. Either
 via an issue, GitHub discussion, or reach out to the team either using the

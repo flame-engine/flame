@@ -15,8 +15,12 @@ import 'package:flame/text.dart';
 abstract class FlameTextStyle {
   const FlameTextStyle();
 
+  /// Creates a new [FlameTextStyle], preferring the properties of [other]
+  /// if present, falling back to the properties of `this`.
   FlameTextStyle copyWith(covariant FlameTextStyle other);
 
+  /// Merges two [FlameTextStyle]s together, preferring the properties of
+  /// [style2] if present, falling back to the properties of [style1].
   static T? merge<T extends FlameTextStyle>(T? style1, T? style2) {
     if (style1 == null) {
       return style2;

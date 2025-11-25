@@ -1,19 +1,21 @@
 name: flame_markdown_example
+resolution: workspace
 description: Simple project to showcase the usage of flame_markdown
 publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_markdown: ^0.2.0
+  flame: ^1.34.0
+  flame_markdown: ^0.2.4+11
   flutter:
     sdk: flutter
+  markdown: ^7.3.0
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
 
 flutter:
   uses-material-design: false

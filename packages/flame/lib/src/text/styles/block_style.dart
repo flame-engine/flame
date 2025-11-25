@@ -11,13 +11,15 @@ class BlockStyle extends FlameTextStyle {
     EdgeInsets? padding,
     this.background,
     this.text,
-  })  : _margin = margin,
-        _padding = padding;
+    this.textAlign,
+  }) : _margin = margin,
+       _padding = padding;
 
   final EdgeInsets? _margin;
   final EdgeInsets? _padding;
   final BackgroundStyle? background;
   final InlineTextStyle? text;
+  final TextAlign? textAlign;
 
   EdgeInsets get margin => _margin ?? EdgeInsets.zero;
   EdgeInsets get padding => _padding ?? EdgeInsets.zero;
@@ -29,6 +31,7 @@ class BlockStyle extends FlameTextStyle {
       padding: other._padding ?? _padding,
       background: other.background ?? background,
       text: FlameTextStyle.merge(text, other.text),
+      textAlign: other.textAlign ?? textAlign,
     );
   }
 }

@@ -1,5 +1,3 @@
-pubspec.lock
-
 # Miscellaneous
 *.class
 *.bak
@@ -35,10 +33,11 @@ macos/
 windows/
 linux/
 desktop/
-build/
+**/build/
 coverage/
 pubspec.lock
 pubspec_overrides.yaml
+devtools_options.yaml
 
 # Sphinx related
 __pycache__/
@@ -54,3 +53,9 @@ examples/**/.gitignore
 **/example/macos
 **/example/windows
 **/example/web
+
+.metadata
+
+# FVM
+.fvm/
+.fvmrc

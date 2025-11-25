@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/post_process.dart';
 import 'package:flame/src/camera/behaviors/bounded_position_behavior.dart';
 import 'package:flame/src/camera/behaviors/follow_behavior.dart';
 import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
@@ -7,6 +10,7 @@ import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
+import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
@@ -40,6 +44,12 @@ import 'package:flame/src/game/flame_game.dart';
 /// mask. Such components will be rendered on top of the viewport. Components
 /// added to the viewfinder will be rendered as if they were part of the world.
 /// That is, they will be affected both by the viewport and the viewfinder.
+///
+///
+/// A [PostProcess] can be applied to the camera, which will affect the
+/// rendering of the world. This is useful for applying effects such as bloom,
+/// blur, or other fragment shader effects to the world. See [postProcess] for
+/// more information.
 class CameraComponent extends Component {
   CameraComponent({
     this.world,
@@ -47,14 +57,17 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
-  })  : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
-        _viewfinder = viewfinder ?? Viewfinder(),
-        _backdrop = backdrop ?? Component(),
-        // The priority is set to the max here to avoid some bugs for the users,
-        // if they for example would add any components that modify positions
-        // before the CameraComponent, since it then will render the positions
-        // of the last tick each tick.
-        super(priority: 0x7fffffff) {
+    super.children,
+    super.key,
+  }) : _viewport = (viewport ?? MaxViewport())..addAll(hudComponents ?? []),
+       _viewfinder = viewfinder ?? Viewfinder(),
+       _backdrop = backdrop ?? Component(),
+       // The priority is set to the max here to avoid some bugs for the users,
+       // if they for example would add any components that modify positions
+       // before the CameraComponent, since it then will render the positions
+       // of the last tick each tick.
+       super(priority: 0x7fffffff) {
+    children.register<PostProcessComponent>();
     addAll([_backdrop, _viewport, _viewfinder]);
   }
 
@@ -74,13 +87,17 @@ class CameraComponent extends Component {
     Viewfinder? viewfinder,
     Component? backdrop,
     List<Component>? hudComponents,
+    Iterable<Component>? children,
+    ComponentKey? key,
   }) : this(
-          world: world,
-          viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
-          viewfinder: viewfinder ?? Viewfinder(),
-          backdrop: backdrop,
-          hudComponents: hudComponents,
-        );
+         world: world,
+         viewport: FixedResolutionViewport(resolution: Vector2(width, height)),
+         viewfinder: viewfinder ?? Viewfinder(),
+         backdrop: backdrop,
+         hudComponents: hudComponents,
+         children: children,
+         key: key,
+       );
 
   /// The [viewport] is the "window" through which the game world is observed.
   ///
@@ -186,11 +203,34 @@ class CameraComponent extends Component {
       canvas.save();
       try {
         currentCameras.add(this);
-        canvas.transform2D(viewfinder.transform);
-        world!.renderFromCamera(canvas);
-        // Render the viewfinder elements, which will be in front of the world,
-        // but with the same transforms applied to them.
-        viewfinder.renderTree(canvas);
+        void renderWorld(Canvas canvas) {
+          canvas.transform2D(viewfinder.transform);
+          world!.renderFromCamera(canvas);
+
+          // Render the viewfinder elements, which will be in front of
+          // the world,
+          // but with the same transforms applied to them.
+          viewfinder.renderTree(canvas);
+        }
+
+        final postProcessors = children.query<PostProcessComponent>();
+        if (postProcessors.isNotEmpty) {
+          assert(
+            postProcessors.length == 1,
+            'Only one post process component is allowed per camera.',
+          );
+          final postProcessor = postProcessors.first.postProcess;
+          postProcessor.render(
+            canvas,
+            viewport.virtualSize,
+            renderWorld,
+            (context) {
+              renderContext.currentPostProcess = context;
+            },
+          );
+        } else {
+          renderWorld(canvas);
+        }
       } finally {
         currentCameras.removeLast();
       }
@@ -216,8 +256,10 @@ class CameraComponent extends Component {
   ///
   /// Opposite of [globalToLocal].
   Vector2 localToGlobal(Vector2 position, {Vector2? output}) {
-    final viewfinderPosition =
-        viewfinder.localToGlobal(position, output: output);
+    final viewfinderPosition = viewfinder.localToGlobal(
+      position,
+      output: output,
+    );
     return viewport.localToGlobal(viewfinderPosition, output: output);
   }
 
@@ -355,31 +397,69 @@ class CameraComponent extends Component {
   /// [Circle] shapes.
   void setBounds(Shape? bounds, {bool considerViewport = false}) {
     final boundedBehavior = viewfinder.firstChild<BoundedPositionBehavior>();
-    final viewPortAwareBoundsBehavior =
-        viewfinder.firstChild<ViewportAwareBoundsBehavior>();
+    final viewPortAwareBoundsBehavior = viewfinder
+        .firstChild<ViewportAwareBoundsBehavior>();
+
     if (bounds == null) {
+      // When bounds is null, all bounds-related components need to be dropped.
       boundedBehavior?.removeFromParent();
       viewPortAwareBoundsBehavior?.removeFromParent();
       return;
     }
+
+    Future<void>? boundedBehaviorFuture;
     if (boundedBehavior == null) {
+      final BoundedPositionBehavior ref;
       viewfinder.add(
-        BoundedPositionBehavior(bounds: bounds, priority: 1000),
+        ref = BoundedPositionBehavior(
+          bounds: bounds,
+          priority: 1000,
+        ),
       );
+
+      boundedBehaviorFuture = ref.mounted;
     } else {
       boundedBehavior.bounds = bounds;
     }
-    if (considerViewport) {
-      if (viewPortAwareBoundsBehavior == null) {
-        viewfinder.add(
-          ViewportAwareBoundsBehavior(boundsShape: bounds),
-        );
-      } else {
-        viewPortAwareBoundsBehavior.boundsShape = bounds;
+
+    if (!considerViewport) {
+      // Edge case: remove pre-existing viewport aware components.
+      viewPortAwareBoundsBehavior?.removeFromParent();
+      return;
+    }
+
+    // Param `considerViewPort` was true and we have a bounds.
+    // Add a ViewportAwareBoundsBehavior component with
+    // our desired bounds shape or update the boundsShape if the
+    // component already exists.
+    if (viewPortAwareBoundsBehavior == null) {
+      switch (boundedBehaviorFuture) {
+        case null:
+          // This represents the case when BoundedPositionBehavior was mounted
+          // earlier in another cycle. This allows us to immediately add the
+          // ViewportAwareBoundsBehavior component which will subsequently adapt
+          // the camera to the virtual resolution this frame.
+          _addViewPortAwareBoundsBehavior(bounds);
+        case _:
+          // This represents the case when BoundedPositionBehavior was added
+          // in this exact cycle but did not mount into the tree.
+          // We must wait for that component to mount first in order for
+          // ViewportAwareBoundsBehavior to correctly affect the camera.
+          boundedBehaviorFuture.whenComplete(
+            () => _addViewPortAwareBoundsBehavior(bounds),
+          );
       }
     } else {
-      viewPortAwareBoundsBehavior?.removeFromParent();
+      viewPortAwareBoundsBehavior.boundsShape = bounds;
     }
+  }
+
+  void _addViewPortAwareBoundsBehavior(Shape bounds) {
+    viewfinder.add(
+      ViewportAwareBoundsBehavior(
+        boundsShape: bounds,
+      ),
+    );
   }
 
   /// Returns true if this camera is able to see the [component].
@@ -393,7 +473,7 @@ class CameraComponent extends Component {
   /// the world to which the given [component] belongs (if any). This means, in
   /// such cases, any component overlapping the [visibleWorldRect] will be
   /// reported as visible, even if it is not part of the [world] this camera is
-  /// currently looking at. This can be changed by passing the the component's
+  /// currently looking at. This can be changed by passing the component's
   /// world as [componentWorld].
   bool canSee(PositionComponent component, {World? componentWorld}) {
     if (!(world?.isMounted ?? false) ||
@@ -404,4 +484,43 @@ class CameraComponent extends Component {
 
     return visibleWorldRect.overlaps(component.toAbsoluteRect());
   }
+
+  @override
+  final CameraRenderContext renderContext = CameraRenderContext();
+
+  /// A [PostProcess] that is applied to the world of a camera.
+  ///
+  /// Do note that only one [postProcess] can be active on the camera at once.
+  /// If the [postProcess] is set to null, the previous post process will
+  /// be removed.
+  /// If the [postProcess] is set to not null, it will be added to the camera,
+  /// and any previously active post process will be removed.
+  ///
+  /// See also:
+  /// - [PostProcess] for the base class for post processes and more information
+  /// about how to create them.
+  /// - [PostProcessComponent] for a component that can be used to apply a
+  /// post process to a specific component.
+  PostProcess? get postProcess =>
+      children.query<PostProcessComponent>().firstOrNull?.postProcess;
+  set postProcess(PostProcess? postProcess) {
+    final postProcessComponents = children
+        .query<PostProcessComponent>()
+        .toList();
+    final queuedPostProcessAdds = findGame()?.queue
+        .where(
+          (event) =>
+              event.kind == LifecycleEventKind.add &&
+              event.child is PostProcessComponent,
+        )
+        .map((event) => event.child!);
+    removeAll([...postProcessComponents, ...?queuedPostProcessAdds]);
+    if (postProcess != null) {
+      add(PostProcessComponent(postProcess: postProcess));
+    }
+  }
+}
+
+class CameraRenderContext extends ComponentRenderContext {
+  PostProcess? currentPostProcess;
 }

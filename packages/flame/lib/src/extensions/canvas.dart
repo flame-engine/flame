@@ -1,6 +1,8 @@
+import 'dart:typed_data' show Float32List;
 import 'dart:ui';
 
 import 'package:flame/palette.dart';
+import 'package:flame/src/cache/matrix_pool.dart' show canvasTransform;
 import 'package:flame/src/extensions/vector2.dart';
 import 'package:flame/src/game/transform2d.dart';
 
@@ -26,6 +28,13 @@ extension CanvasExtension on Canvas {
   }) {
     final rect = (point - Vector2.all(size / 2)) & Vector2.all(size);
     drawRect(rect, paint ?? BasicPalette.magenta.paint());
+  }
+
+  /// Renders a line between [p1] and [p2] using the provided [paint].
+  ///
+  /// Equivalent to [drawLine] but using [Vector2] instead of [Offset].
+  void renderLine(Vector2 p1, Vector2 p2, Paint paint) {
+    drawLine(p1.toOffset(), p2.toOffset(), paint);
   }
 
   /// Utility method to render stuff on a specific place in an isolated way.
@@ -59,6 +68,10 @@ extension CanvasExtension on Canvas {
 
   /// Use the [Transform2D] object to [transform] the canvas.
   void transform2D(Transform2D transform2D) {
-    transform(transform2D.transformMatrix.storage);
+    transform32(transform2D.transformMatrix.storage);
+  }
+
+  void transform32(Float32List matrix4) {
+    canvasTransform(this, matrix4);
   }
 }

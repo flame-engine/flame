@@ -57,10 +57,13 @@ Every component that received an `onTapDown` event will eventually receive eithe
 
 ### onLongTapDown
 
-If the user holds their finger down for some time (as configured by the `.longTapDelay` property
-in `MultiTapDispatcher`), "long tap" will be triggered. This event invokes the
-`void onLongTapDown(TapDownEvent)` handler on those components that previously received the
+If the user holds their finger down for some time, "long tap" will be triggered. This event invokes
+the `void onLongTapDown(TapDownEvent)` handler on those components that previously received the
 `onTapDown` event.
+
+By default, the `.longTapDelay` is set to 300 milliseconds, what may be different of the system
+default. You can change this value by setting the `TapConfig.longTapDelay` value.
+It may also be useful for specific accessibility needs.
 
 
 ### onTapUp
@@ -165,6 +168,34 @@ class MyComponent extends Component with TapCallbacks {
   }
 }
 ```
+
+
+### SecondaryTapCallbacks
+
+In addition to the primary tap events (i.e. left mouse button on desktop), Flame also supports
+secondary tap events (i.e. right mouse button on desktop). To receive these events, add the
+`SecondaryTapCallbacks` mixin to your `PositionComponent`.
+
+```dart
+class MyComponent extends PositionComponent with SecondaryTapCallbacks {
+  @override
+  void onSecondaryTapUp(SecondaryTapUpEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onSecondaryTapCancel(SecondaryTapCancelEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onSecondaryTapDown(SecondaryTapDownEvent event) {
+    /// Do something
+  }
+```
+
+You can extend both `TapCallbacks` and `SecondaryTapCallbacks` in the same component to
+receive both primary and secondary tap events.
 
 
 ### DoubleTapCallbacks

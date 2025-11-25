@@ -1,24 +1,28 @@
 name: flame_noise
+resolution: workspace
 description: Integrate the fast_noise package into Flame
-version: 0.3.0
+version: 0.3.2+18
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_noise
 funding:
   - https://opencollective.com/blue-fire
   - https://github.com/sponsors/bluefireteam
   - https://patreon.com/bluefireoss
+topics:
+  - flame
+  - noise
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
   fast_noise: ^2.0.0
-  flame: ^1.16.0
+  flame: ^1.34.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  dartdoc: ^6.3.0
-  flame_lint: ^1.1.2
-  flame_test: ^1.16.0
+  dartdoc: ^8.0.8
+  flame_lint: ^1.4.2
+  flame_test: ^2.2.0
   test: any

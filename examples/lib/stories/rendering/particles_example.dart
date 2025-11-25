@@ -169,7 +169,7 @@ class ParticlesExample extends FlameGame {
     return Particle.generate(
       count: 5,
       generator: (i) => MovingParticle(
-        to: randomCellVector2()..scale(.5),
+        to: randomCellVector2()..scale(0.5),
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.deepOrange,
@@ -185,7 +185,7 @@ class ParticlesExample extends FlameGame {
       count: 5,
       generator: (i) => MovingParticle(
         curve: Curves.easeOutQuad,
-        to: randomCellVector2()..scale(.5),
+        to: randomCellVector2()..scale(0.5),
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.deepPurple,
@@ -203,8 +203,8 @@ class ParticlesExample extends FlameGame {
     return Particle.generate(
       count: 5,
       generator: (i) => MovingParticle(
-        curve: const Interval(.2, .6, curve: Curves.easeInOutCubic),
-        to: randomCellVector2()..scale(.5),
+        curve: const Interval(0.2, 0.6, curve: Curves.easeInOutCubic),
+        to: randomCellVector2()..scale(0.5),
         child: CircleParticle(
           radius: 5 + rnd.nextDouble() * 5,
           paint: Paint()..color = Colors.greenAccent,
@@ -269,8 +269,8 @@ class ParticlesExample extends FlameGame {
 
     return Particle.generate(
       generator: (i) => MovingParticle(
-        curve: Interval(rnd.nextDouble() * .1, rnd.nextDouble() * .8 + .1),
-        to: randomCellVector2()..scale(.5),
+        curve: Interval(rnd.nextDouble() * 0.1, rnd.nextDouble() * 0.8 + 0.1),
+        to: randomCellVector2()..scale(0.5),
         child: reusableParticle!,
       ),
     );
@@ -328,7 +328,11 @@ class ParticlesExample extends FlameGame {
     return Particle.generate(
       generator: (i) => AcceleratedParticle(
         speed:
-            Vector2(rnd.nextDouble() * 600 - 300, -rnd.nextDouble() * 600) * .2,
+            Vector2(
+              rnd.nextDouble() * 600 - 300,
+              -rnd.nextDouble() * 600,
+            ) *
+            0.2,
         acceleration: Vector2(0, 200),
         child: rotatingImage(initialAngle: rnd.nextDouble() * pi),
       ),
@@ -373,7 +377,7 @@ class ParticlesExample extends FlameGame {
   Particle spriteParticle() {
     return SpriteParticle(
       sprite: Sprite(images.fromCache('zap.png')),
-      size: cellSize * .5,
+      size: cellSize * 0.5,
     );
   }
 
@@ -392,8 +396,8 @@ class ParticlesExample extends FlameGame {
   /// which is independent from the parent [Particle].
   Particle componentParticle() {
     return MovingParticle(
-      from: -halfCellSize * .2,
-      to: halfCellSize * .2,
+      from: -halfCellSize * 0.2,
+      to: halfCellSize * 0.2,
       curve: SineCurve(),
       child: ComponentParticle(component: trafficLight),
     );
@@ -429,13 +433,15 @@ class ParticlesExample extends FlameGame {
             renderer: (canvas, particle) {
               final paint = randomElement(paints);
               // Override the color to dynamically update opacity
-              paint.color = paint.color.withOpacity(1 - particle.progress);
+              paint.color = paint.color.withValues(
+                alpha: 1 - particle.progress,
+              );
 
               canvas.drawCircle(
                 Offset.zero,
                 // Closer to the end of lifespan particles
                 // will turn into larger glaring circles
-                rnd.nextDouble() * particle.progress > .6
+                rnd.nextDouble() * particle.progress > 0.6
                     ? rnd.nextDouble() * (50 * particle.progress)
                     : 2 + (3 * particle.progress),
                 paint,

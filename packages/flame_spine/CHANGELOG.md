@@ -1,3 +1,91 @@
+## 0.3.0+1
+
+ - **DOCS**: Updated flame_spine documentation ([#3763](https://github.com/flame-engine/flame/issues/3763)). ([3c721d91](https://github.com/flame-engine/flame/commit/3c721d91f3e3514c79e77b8e2e37a641305a2e04))
+
+## 0.3.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Support Spine 4.3 ([#3760](https://github.com/flame-engine/flame/issues/3760)). ([17bc40c3](https://github.com/flame-engine/flame/commit/17bc40c361471fde35b360671cccef115ed0b4bc))
+
+## 0.2.2+17
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
+## 0.2.2+16
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+15
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+14
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+13
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+12
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+11
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+10
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+9
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+8
+
+ - **FIX**: Bump spine version and update example files ([#3534](https://github.com/flame-engine/flame/issues/3534)). ([f346e3f6](https://github.com/flame-engine/flame/commit/f346e3f67793f2ebece3f11c1f440c5d485bf959))
+
+## 0.2.2+7
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+6
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+5
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+4
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+3
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+2
+
+ - Update a dependency to the latest release.
+
+## 0.2.2+1
+
+ - Update a dependency to the latest release.
+
+## 0.2.2
+
+ - **DOCS**: Homepage link typo for flame_spine ([#3277](https://github.com/flame-engine/flame/issues/3277)). ([f76355f1](https://github.com/flame-engine/flame/commit/f76355f151a61fa0eddb5356b7e2a7c27b96c221))
+
+## 0.2.1
+
+## 0.2.0+1
+
+ - Update a dependency to the latest release.
+
 ## 0.2.0
 
 > Note: This release has breaking changes.

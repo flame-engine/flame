@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../inventory_cubit.dart';
 import '../player_cubit.dart';
 
-class PlayerListener extends Component
+class _PlayerListener extends Component
     with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerState? last;
   @override
@@ -25,7 +25,7 @@ class PlayerListener extends Component
   }
 }
 
-class SadPlayerListener extends Component
+class _SadPlayerListener extends Component
     with FlameBlocListenable<PlayerCubit, PlayerState> {
   PlayerState? last;
 
@@ -57,11 +57,11 @@ void main() {
         final bloc = InventoryCubit();
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-        );
+              value: bloc,
+            );
         await game.ensureAdd(provider);
 
-        final component = PlayerListener();
+        final component = _PlayerListener();
         expect(() => provider.ensureAdd(component), throwsAssertionError);
       },
     );
@@ -70,7 +70,7 @@ void main() {
       'throws assertion error when the bloc set multiple times',
       (game) async {
         final bloc = PlayerCubit();
-        final component = PlayerListener()..bloc = bloc;
+        final component = _PlayerListener()..bloc = bloc;
         expect(() => component.bloc = bloc, throwsAssertionError);
       },
     );
@@ -84,7 +84,7 @@ void main() {
         );
         await game.ensureAdd(provider);
 
-        final component = PlayerListener();
+        final component = _PlayerListener();
         await provider.ensureAdd(component);
 
         component.removeFromParent();
@@ -105,7 +105,7 @@ void main() {
         );
         await game.ensureAdd(provider);
 
-        final component = SadPlayerListener();
+        final component = _SadPlayerListener();
         await provider.ensureAdd(component);
 
         bloc.kill();
@@ -123,7 +123,7 @@ void main() {
         );
         await game.ensureAdd(provider);
 
-        final component = PlayerListener();
+        final component = _PlayerListener();
         await provider.ensureAdd(component);
 
         expect(component.bloc, bloc);
@@ -131,90 +131,90 @@ void main() {
     );
 
     testWithFlameGame(
-        'successfully revisit previously visited route with bloc listener',
-        (game) async {
-      var playerPushCalled = 0;
-      var playerPopCalled = 0;
-      var sadPushCalled = 0;
-      var sadPopCalled = 0;
-      final router = RouterComponent(
-        routes: {
-          'start': Route(Component.new),
-          'playerRoute': CustomBlocRoute(
-            onPush: (self, prevRoute) {
-              playerPushCalled++;
-            },
-            onPop: (self, prevRoute) {
-              playerPopCalled++;
-            },
-            build: (self) => PlayerListener(),
-          ),
-          'sadRoute': CustomBlocRoute(
-            onPush: (self, prevRoute) {
-              sadPushCalled++;
-            },
-            onPop: (self, prevRoute) {
-              sadPopCalled++;
-            },
-            build: (self) => SadPlayerListener(),
-          ),
-        },
-        initialRoute: 'start',
-      );
+      'successfully revisit previously visited route with bloc listener',
+      (game) async {
+        var playerPushCalled = 0;
+        var playerPopCalled = 0;
+        var sadPushCalled = 0;
+        var sadPopCalled = 0;
+        final router = RouterComponent(
+          routes: {
+            'start': Route(Component.new),
+            'playerRoute': _CustomBlocRoute(
+              onPush: (self, prevRoute) {
+                playerPushCalled++;
+              },
+              onPop: (self, prevRoute) {
+                playerPopCalled++;
+              },
+              build: (self) => _PlayerListener(),
+            ),
+            'sadRoute': _CustomBlocRoute(
+              onPush: (self, prevRoute) {
+                sadPushCalled++;
+              },
+              onPop: (self, prevRoute) {
+                sadPopCalled++;
+              },
+              build: (self) => _SadPlayerListener(),
+            ),
+          },
+          initialRoute: 'start',
+        );
 
-      final bloc = PlayerCubit();
-      final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
-        value: bloc,
-        children: [router],
-      );
+        final bloc = PlayerCubit();
+        final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
+          value: bloc,
+          children: [router],
+        );
 
-      await game.ensureAdd(provider);
+        await game.ensureAdd(provider);
 
-      //Visit routes first time
-      router.pushNamed('playerRoute');
-      await game.ready();
-      expect(router.currentRoute.name, 'playerRoute');
-      expect(playerPushCalled, 1);
-      router.pop();
-      await game.ready();
-      expect(playerPushCalled, 1);
-      expect(playerPopCalled, 1);
-      router.pushNamed('sadRoute');
-      await game.ready();
-      expect(sadPushCalled, 1);
-      expect(router.currentRoute.name, 'sadRoute');
-      router.pop();
+        //Visit routes first time
+        router.pushNamed('playerRoute');
+        await game.ready();
+        expect(router.currentRoute.name, 'playerRoute');
+        expect(playerPushCalled, 1);
+        router.pop();
+        await game.ready();
+        expect(playerPushCalled, 1);
+        expect(playerPopCalled, 1);
+        router.pushNamed('sadRoute');
+        await game.ready();
+        expect(sadPushCalled, 1);
+        expect(router.currentRoute.name, 'sadRoute');
+        router.pop();
 
-      //Revisit playerRoute
-      await game.ready();
-      expect(sadPushCalled, 1);
-      expect(sadPopCalled, 1);
-      router.pushNamed('playerRoute');
+        //Revisit playerRoute
+        await game.ready();
+        expect(sadPushCalled, 1);
+        expect(sadPopCalled, 1);
+        router.pushNamed('playerRoute');
 
-      await game.ready();
-      expect(playerPushCalled, 2);
-      router.pop();
+        await game.ready();
+        expect(playerPushCalled, 2);
+        router.pop();
 
-      //Revisit sadRoute
-      await game.ready();
-      router.pushNamed('sadRoute');
-      await game.ready();
-      expect(sadPushCalled, 2);
-    });
+        //Revisit sadRoute
+        await game.ready();
+        router.pushNamed('sadRoute');
+        await game.ready();
+        expect(sadPushCalled, 2);
+      },
+    );
   });
 }
 
-class CustomBlocRoute extends Route {
-  CustomBlocRoute({
+class _CustomBlocRoute extends Route {
+  _CustomBlocRoute({
     Component Function()? builder,
-    super.transparent,
     void Function(Route, Route?)? onPush,
     void Function(Route, Route)? onPop,
     Component Function(Route)? build,
-  })  : _onPush = onPush,
-        _onPop = onPop,
-        _build = build,
-        super(builder);
+  }) : _onPush = onPush,
+       _onPop = onPop,
+       _build = build,
+       super(builder);
 
   final void Function(Route, Route?)? _onPush;
   final void Function(Route, Route)? _onPop;

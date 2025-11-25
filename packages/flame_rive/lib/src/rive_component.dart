@@ -29,13 +29,13 @@ class RiveComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  })  : _renderer = RiveArtboardRenderer(
-          antialiasing: antialiasing,
-          fit: fit,
-          alignment: alignment,
-          artboard: artboard,
-        ),
-        super(size: size ?? Vector2(artboard.width, artboard.height)) {
+  }) : _renderer = RiveArtboardRenderer(
+         antialiasing: antialiasing,
+         fit: fit,
+         alignment: alignment,
+         artboard: artboard,
+       ),
+       super(size: size ?? Vector2(artboard.width, artboard.height)) {
     void updateRenderSize() {
       _renderSize = this.size.toSize();
     }
@@ -93,10 +93,12 @@ class RiveArtboardRenderer {
       return;
     }
 
-    final x = -1 * bounds[0] -
+    final x =
+        -1 * bounds[0] -
         contentWidth / 2.0 -
         (alignment.x * contentWidth / 2.0);
-    final y = -1 * bounds[1] -
+    final y =
+        -1 * bounds[1] -
         contentHeight / 2.0 -
         (alignment.y * contentHeight / 2.0);
 
@@ -112,33 +114,32 @@ class RiveArtboardRenderer {
       case BoxFit.fill:
         scaleX = size.width / contentWidth;
         scaleY = size.height / contentHeight;
-        break;
       case BoxFit.contain:
-        final minScale =
-            min(size.width / contentWidth, size.height / contentHeight);
+        final minScale = min(
+          size.width / contentWidth,
+          size.height / contentHeight,
+        );
         scaleX = scaleY = minScale;
-        break;
       case BoxFit.cover:
-        final maxScale =
-            max(size.width / contentWidth, size.height / contentHeight);
+        final maxScale = max(
+          size.width / contentWidth,
+          size.height / contentHeight,
+        );
         scaleX = scaleY = maxScale;
-        break;
       case BoxFit.fitHeight:
         final minScale = size.height / contentHeight;
         scaleX = scaleY = minScale;
-        break;
       case BoxFit.fitWidth:
         final minScale = size.width / contentWidth;
         scaleX = scaleY = minScale;
-        break;
       case BoxFit.none:
         scaleX = scaleY = 1.0;
-        break;
       case BoxFit.scaleDown:
-        final minScale =
-            min(size.width / contentWidth, size.height / contentHeight);
+        final minScale = min(
+          size.width / contentWidth,
+          size.height / contentHeight,
+        );
         scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
-        break;
     }
 
     Mat2D.setIdentity(_transform);

@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('SizeEffect', () {
     testWithFlameGame('relative', (game) async {
-      final component = ResizableComponent();
+      final component = _ResizableComponent();
       await game.ensureAdd(component);
 
       component.size = Vector2.all(1.0);
@@ -30,7 +30,7 @@ void main() {
     });
 
     testWithFlameGame('absolute', (game) async {
-      final component = ResizableComponent();
+      final component = _ResizableComponent();
       await game.ensureAdd(component);
 
       component.size = Vector2.all(1.0);
@@ -52,7 +52,7 @@ void main() {
     });
 
     testWithFlameGame('reset relative', (game) async {
-      final component = ResizableComponent();
+      final component = _ResizableComponent();
       await game.ensureAdd(component);
 
       final effect = SizeEffect.by(
@@ -72,7 +72,7 @@ void main() {
     });
 
     testWithFlameGame('reset absolute', (game) async {
-      final component = ResizableComponent();
+      final component = _ResizableComponent();
       await game.ensureAdd(component);
 
       final effect = SizeEffect.to(
@@ -91,7 +91,7 @@ void main() {
     });
 
     testWithFlameGame('size composition', (game) async {
-      final component = ResizableComponent();
+      final component = _ResizableComponent();
       await game.ensureAdd(component);
 
       await component.add(
@@ -122,7 +122,7 @@ void main() {
 
     testRandom('a very long size change', (Random rng) async {
       final game = await initializeFlameGame();
-      final component = ResizableComponent();
+      final component = _ResizableComponent();
       await game.ensureAdd(component);
 
       final effect = SizeEffect.by(
@@ -136,17 +136,23 @@ void main() {
       await component.add(effect);
 
       var totalTime = 0.0;
+      var tolerance = toleranceFloat32(0);
       while (totalTime < 999.9) {
         final dt = rng.nextDouble() * 0.02;
         totalTime += dt;
         game.update(dt);
+        // cumulative floating point error
+        tolerance += toleranceVector2Float32(component.size);
       }
       game.update(1000 - totalTime);
       // Typically, `component.size` could accumulate numeric discrepancy on the
       // order of 1e-11 .. 1e-12 by now.
-      expect(component.size, closeToVector(Vector2(0, 0), 1e-10));
+      expect(
+        component.size,
+        closeToVector(Vector2(0, 0), tolerance),
+      );
     });
   });
 }
 
-class ResizableComponent extends PositionComponent implements SizeProvider {}
+class _ResizableComponent extends PositionComponent implements SizeProvider {}

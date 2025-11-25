@@ -1,18 +1,21 @@
-import 'package:flame/src/effects/controllers/effect_controller.dart';
-import 'package:flame/src/effects/effect.dart';
+import 'package:flame/effects.dart';
 
 /// An effect controller that waits for [delay] seconds before running the
 /// child controller. While waiting, the progress will be reported at 0.
-class DelayedEffectController extends EffectController {
+class DelayedEffectController extends EffectController
+    with HasSingleChildEffectController {
   DelayedEffectController(EffectController child, {required this.delay})
-      : assert(delay >= 0, 'Delay must be non-negative: $delay'),
-        _child = child,
-        _timer = 0,
-        super.empty();
+    : assert(delay >= 0, 'Delay must be non-negative: $delay'),
+      _child = child,
+      _timer = 0,
+      super.empty();
 
   final EffectController _child;
   final double delay;
   double _timer;
+
+  @override
+  EffectController get child => _child;
 
   @override
   bool get isRandom => _child.isRandom;
@@ -28,8 +31,8 @@ class DelayedEffectController extends EffectController {
 
   @override
   double? get duration {
-    final d = _child.duration;
-    return d == null ? null : d + delay;
+    final childDuration = _child.duration;
+    return childDuration == null ? null : childDuration + delay;
   }
 
   @override
@@ -38,7 +41,7 @@ class DelayedEffectController extends EffectController {
       return _child.advance(dt);
     }
     _timer += dt;
-    if (_timer > delay) {
+    if (_timer >= delay) {
       final t = _child.advance(_timer - delay);
       _timer = delay;
       return t;
@@ -65,14 +68,12 @@ class DelayedEffectController extends EffectController {
   @override
   void setToStart() {
     _timer = 0;
+    super.setToStart();
   }
 
   @override
   void setToEnd() {
     _timer = delay;
-    _child.setToEnd();
+    super.setToEnd();
   }
-
-  @override
-  void onMount(Effect parent) => _child.onMount(parent);
 }

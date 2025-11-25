@@ -13,12 +13,12 @@ class TiledGame extends FlameGame {
   late TiledComponent mapComponent;
 
   TiledGame()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 16 * 28,
-            height: 16 * 14,
-          ),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 16 * 28,
+          height: 16 * 14,
+        ),
+      );
 
   @override
   Future<void> onLoad() async {
@@ -39,8 +39,9 @@ class TiledGame extends FlameGame {
     mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
     world.add(mapComponent);
 
-    final objectGroup =
-        mapComponent.tileMap.getLayer<ObjectGroup>('AnimatedCoins');
+    final objectGroup = mapComponent.tileMap.getLayer<ObjectGroup>(
+      'AnimatedCoins',
+    );
     final coins = await Flame.images.load('coins.png');
 
     // We are 100% sure that an object layer named `AnimatedCoins`
@@ -54,7 +55,7 @@ class TiledGame extends FlameGame {
             coins,
             SpriteAnimationData.sequenced(
               amount: 8,
-              stepTime: .15,
+              stepTime: 0.15,
               textureSize: Vector2.all(20),
             ),
           ),

@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_spine/flame_spine.dart';
 
-class FlameSpineExample extends FlameGame with TapDetector {
+class FlameSpineExample extends FlameGame with TapCallbacks {
   static const String description = '''
     This example shows how to load a Spine animation. Tap on the screen to try
     different states of the animation.
@@ -40,14 +40,14 @@ class FlameSpineExample extends FlameGame with TapDetector {
     );
 
     // Set the "walk" animation on track 0 in looping mode
-    spineboy.animationState.setAnimationByName(0, 'walk', true);
+    spineboy.animationState.setAnimation(0, 'walk', true);
     await add(spineboy);
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     _stateIndex = (_stateIndex + 1) % states.length;
-    spineboy.animationState.setAnimationByName(0, states[_stateIndex], true);
+    spineboy.animationState.setAnimation(0, states[_stateIndex], true);
   }
 
   @override

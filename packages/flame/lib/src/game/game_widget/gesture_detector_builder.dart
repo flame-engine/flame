@@ -1,4 +1,5 @@
 import 'package:flame/events.dart';
+import 'package:flame/input.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -16,8 +17,10 @@ class GestureDetectorBuilder {
   ) {
     final count = _counters[T];
     if (count == null) {
-      _gestures[T] =
-          GestureRecognizerFactoryWithHandlers<T>(constructor, initializer);
+      _gestures[T] = GestureRecognizerFactoryWithHandlers<T>(
+        constructor,
+        initializer,
+      );
       _onChange?.call();
     }
     _counters[T] = (count ?? 0) + 1;
@@ -46,12 +49,16 @@ class GestureDetectorBuilder {
   }
 
   void initializeGestures(Game game) {
+    // support for deprecated detectors
+    // ignore: deprecated_member_use_from_same_package
     if (game is TapDetector ||
         game is SecondaryTapDetector ||
         game is TertiaryTapDetector) {
       add(
         TapGestureRecognizer.new,
         (TapGestureRecognizer instance) {
+          // support for deprecated detectors
+          // ignore: deprecated_member_use_from_same_package
           if (game is TapDetector) {
             instance.onTap = game.onTap;
             instance.onTapCancel = game.onTapCancel;
@@ -189,7 +196,7 @@ Widget applyMouseDetectors(Game game, Widget child) {
     ),
     onPointerSignal: (event) =>
         game is ScrollDetector && event is PointerScrollEvent
-            ? game.onScroll(PointerScrollInfo.fromDetails(game, event))
-            : null,
+        ? game.onScroll(PointerScrollInfo.fromDetails(game, event))
+        : null,
   );
 }

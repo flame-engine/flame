@@ -14,7 +14,7 @@ void main() {
     });
 
     test('Throw assertion error on non-positive step time', () {
-      final sprite = MockSprite();
+      final sprite = _MockSprite();
       expect(
         () => SpriteAnimation.spriteList([sprite], stepTime: 0),
         failsAssert('All frames must have positive durations'),
@@ -29,9 +29,12 @@ void main() {
     });
 
     test('Throw assertion error when setting non-positive step time', () {
-      final sprite = MockSprite();
-      final animation =
-          SpriteAnimation.spriteList([sprite, sprite, sprite], stepTime: 1);
+      final sprite = _MockSprite();
+      final animation = SpriteAnimation.spriteList([
+        sprite,
+        sprite,
+        sprite,
+      ], stepTime: 1);
       expect(
         () => animation.stepTime = 0,
         failsAssert('Step time must be positive'),
@@ -85,4 +88,4 @@ void main() {
   });
 }
 
-class MockSprite extends Mock implements Sprite {}
+class _MockSprite extends Mock implements Sprite {}

@@ -1,38 +1,26 @@
-import 'dart:html'; // ignore: avoid_web_libraries_in_flutter
 import 'package:flutter/widgets.dart';
+import 'package:web/web.dart' as web;
+
 import 'step2/main.dart' as step2;
 import 'step3/main.dart' as step3;
 import 'step4/main.dart' as step4;
 import 'step5/main.dart' as step5;
 
 void main() {
-  var page = window.location.search ?? '';
+  var page = web.window.location.search;
   if (page.startsWith('?')) {
     page = page.substring(1);
   }
-  switch (page) {
-    case 'step2':
-      step2.main();
-      break;
-
-    case 'step3':
-      step3.main();
-      break;
-
-    case 'step4':
-      step4.main();
-      break;
-
-    case 'step5':
-      step5.main();
-      break;
-
-    default:
-      runApp(
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Text('Error: unknown page name "$page"'),
-        ),
-      );
-  }
+  return switch (page) {
+    'step2' => step2.main(),
+    'step3' => step3.main(),
+    'step4' => step4.main(),
+    'step5' => step5.main(),
+    _ => runApp(
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: Text('Error=> unknown page name "$page"'),
+      ),
+    ),
+  };
 }

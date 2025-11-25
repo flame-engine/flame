@@ -60,6 +60,23 @@ class Selection {
       h: json['h'] as int,
     );
   }
+
+  /// Copies this instance with a new id.
+  Selection copyWith({
+    String? id,
+    int? x,
+    int? y,
+    int? w,
+    int? h,
+  }) {
+    return Selection(
+      id: id ?? this.id,
+      x: x ?? this.x,
+      y: y ?? this.y,
+      w: w ?? this.w,
+      h: h ?? this.h,
+    );
+  }
 }
 
 /// {@template _base_selection}
@@ -73,7 +90,7 @@ abstract class BaseSelection {
   final Selection _info;
 
   /// {@macro _base_selection}
-  BaseSelection(this._info);
+  BaseSelection(this._info, {this.group});
 
   /// The id of the selection.
   String get id => _info.id;
@@ -90,6 +107,18 @@ abstract class BaseSelection {
   /// The height of the selection.
   int get h => _info.h;
 
+  /// A group that this selection belongs to.
+  final String? group;
+
+  /// The selection information.
+  Selection get selection => _info;
+
+  /// Copies this instance with a new group.
+  BaseSelection copyWithGroup(String? group);
+
+  /// Copies this instance with a new selection info.
+  BaseSelection copyWithInfo(Selection info);
+
   /// Returns this instance as a json.
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{}
@@ -97,7 +126,8 @@ abstract class BaseSelection {
       ..['x'] = x
       ..['y'] = y
       ..['w'] = w
-      ..['h'] = h;
+      ..['h'] = h
+      ..['group'] = group;
 
     return json;
   }
@@ -110,19 +140,33 @@ class SpriteSelection extends BaseSelection {
   /// {@macro _sprite_selection}
   SpriteSelection({
     required Selection info,
+    super.group,
   }) : super(info);
 
   /// Creates a [SpriteSelection] from [json].
   @override
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
-    return SpriteSelection(info: info);
+    final group = json['group'] as String?;
+    return SpriteSelection(info: info, group: group);
   }
 
   /// Returns this instance as a json.
   @override
   Map<String, dynamic> toJson() {
     return super.toJson()..['type'] = 'sprite';
+  }
+
+  /// Copies this instance with a new group.
+  @override
+  SpriteSelection copyWithGroup(String? group) {
+    return SpriteSelection(info: _info, group: group);
+  }
+
+  /// Copies this instance with a new info.
+  @override
+  SpriteSelection copyWithInfo(Selection info) {
+    return SpriteSelection(info: info, group: group);
   }
 }
 
@@ -145,18 +189,21 @@ class AnimationSelection extends BaseSelection {
     required this.frameCount,
     required this.stepTime,
     required this.loop,
+    super.group,
   }) : super(info);
 
   /// Creates a [AnimationSelection] from [json].
   @override
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
+    final group = json['group'] as String?;
 
     return AnimationSelection(
       info: info,
       frameCount: json['frameCount'] as int,
       stepTime: json['stepTime'] as double,
       loop: json['loop'] as bool,
+      group: group,
     );
   }
 
@@ -168,6 +215,30 @@ class AnimationSelection extends BaseSelection {
       ..['stepTime'] = stepTime
       ..['loop'] = loop
       ..['type'] = 'animation';
+  }
+
+  /// Copies this instance with a new group.
+  @override
+  AnimationSelection copyWithGroup(String? group) {
+    return AnimationSelection(
+      info: _info,
+      frameCount: frameCount,
+      stepTime: stepTime,
+      loop: loop,
+      group: group,
+    );
+  }
+
+  /// Copies this instance with a new info.
+  @override
+  AnimationSelection copyWithInfo(Selection info) {
+    return AnimationSelection(
+      info: info,
+      frameCount: frameCount,
+      stepTime: stepTime,
+      loop: loop,
+      group: group,
+    );
   }
 }
 
@@ -304,12 +375,7 @@ class FireAtlas {
       return stringBytes;
     }
 
-    final gzipBytes = GZipEncoder().encode(stringBytes);
-
-    if (gzipBytes == null) {
-      throw 'Generated an empty file';
-    }
-    return gzipBytes;
+    return const GZipEncoder().encode(stringBytes);
   }
 
   /// Reads a [FireAtlas] instance from a json file.
@@ -318,7 +384,7 @@ class FireAtlas {
 
   /// Reads a [FireAtlas] instance from a byte array.
   factory FireAtlas.deserializeBytes(List<int> bytes) {
-    final unzippedBytes = GZipDecoder().decodeBytes(bytes);
+    final unzippedBytes = const GZipDecoder().decodeBytes(bytes);
     final unzippedString = utf8.decode(unzippedBytes);
     return FireAtlas.deserializeJson(
       jsonDecode(unzippedString) as Map<String, dynamic>,
@@ -398,4 +464,9 @@ class FireAtlas {
       loop: selection.loop,
     );
   }
+
+  /// Returns the atlas image.
+  ///
+  /// Throws if called before the image is loaded.
+  Image get image => _assertImageLoaded();
 }

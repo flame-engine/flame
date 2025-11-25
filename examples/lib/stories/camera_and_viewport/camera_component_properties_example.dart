@@ -22,13 +22,14 @@ class CameraComponentPropertiesExample extends FlameGame {
   ''';
 
   CameraComponentPropertiesExample()
-      : super(
-          camera: CameraComponent(
-            viewport: FixedSizeViewport(200, 200)..add(ViewportFrame()),
-          )
-            ..viewfinder.zoom = 5
-            ..viewfinder.anchor = const Anchor(0.25, 0.75),
-        );
+    : super(
+        camera:
+            CameraComponent(
+                viewport: FixedSizeViewport(200, 200)..add(ViewportFrame()),
+              )
+              ..viewfinder.zoom = 5
+              ..viewfinder.anchor = const Anchor(0.25, 0.75),
+      );
 
   late RectangleComponent _cullRect;
 
@@ -128,15 +129,15 @@ class Background extends Component with TapCallbacks {
 
 class ExpandingCircle extends CircleComponent {
   ExpandingCircle(Offset center)
-      : super(
-          position: Vector2(center.dx, center.dy),
-          anchor: Anchor.center,
-          radius: 0,
-          paint: Paint()
-            ..color = const Color(0xffffffff)
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1,
-        );
+    : super(
+        position: Vector2(center.dx, center.dy),
+        anchor: Anchor.center,
+        radius: 0,
+        paint: Paint()
+          ..color = const Color(0xffffffff)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1,
+      );
 
   static const maxRadius = 50;
 
@@ -147,7 +148,7 @@ class ExpandingCircle extends CircleComponent {
       removeFromParent();
     } else {
       final opacity = 1 - radius / maxRadius;
-      paint.color = const Color(0xffffffff).withOpacity(opacity);
+      paint.color = const Color(0xffffffff).withValues(alpha: opacity);
     }
   }
 }

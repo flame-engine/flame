@@ -9,10 +9,10 @@ void main() {
   group('Rotate3DDecorator', () {
     testGolden(
       'Rotation around X axis',
-      (game) async {
+      (game, tester) async {
         for (var angle = 0.0; angle <= 1.5; angle += 0.5) {
           game.add(
-            DecoratedRectangle(
+            _DecoratedRectangle(
               position: Vector2(20, 30),
               size: Vector2(60, 100),
               paint: Paint()..color = const Color(0x9dde0445),
@@ -31,10 +31,10 @@ void main() {
 
     testGolden(
       'Rotation around Y axis',
-      (game) async {
+      (game, tester) async {
         for (var angle = 0.0; angle <= 1.5; angle += 0.5) {
           game.add(
-            DecoratedRectangle(
+            _DecoratedRectangle(
               position: Vector2(20, 30),
               size: Vector2(60, 100),
               paint: Paint()..color = const Color(0x9dde0445),
@@ -53,9 +53,9 @@ void main() {
 
     testGolden(
       'Rotation around all axes',
-      (game) async {
+      (game, tester) async {
         game.add(
-          DecoratedRectangle(
+          _DecoratedRectangle(
             position: Vector2(20, 30),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xff199f2b),
@@ -92,8 +92,8 @@ void main() {
   });
 }
 
-class DecoratedRectangle extends RectangleComponent {
-  DecoratedRectangle({
+class _DecoratedRectangle extends RectangleComponent {
+  _DecoratedRectangle({
     super.position,
     super.size,
     super.paint,

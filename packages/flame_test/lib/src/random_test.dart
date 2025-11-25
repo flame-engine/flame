@@ -7,6 +7,26 @@ final _seedGenerator = Random();
 // Maximum value allowed for `Random.nextInt()`
 const _maxSeed = 1 << 32;
 
+/// Get the random seed for a test. If the [seed] parameter is passed in,
+/// it takes precedence. Otherwise, if the environment variable
+/// `RANDOM_SEED` is set, it is used. If neither is set, returns null.
+/// Note: When using this, the `random_test_test` will fail because it will
+/// use the same seed for all tests. This is expected.
+int? seedFromEnvironment(int? seed) {
+  if (seed != null) {
+    return seed;
+  }
+
+  // ignore: do_not_use_environment
+  const seedString = String.fromEnvironment(
+    'RANDOM_SEED',
+  );
+  if (seedString.isEmpty) {
+    return null;
+  }
+  return int.tryParse(seedString);
+}
+
 /// This function is equivalent to `test(name, body)`, except that it is
 /// better suited for randomized testing: it will create a Random
 /// generator and pass it to the test body, but also record the seed
@@ -43,6 +63,7 @@ void testRandom(
   int repeatCount = 1,
 }) {
   assert(repeatCount > 0, 'repeatCount needs to be a positive number');
+  seed = seedFromEnvironment(seed);
   for (var i = 0; i < repeatCount; i++) {
     final seed0 = seed ?? _seedGenerator.nextInt(_maxSeed);
     test(
@@ -58,10 +79,11 @@ void testRandom(
   }
 }
 
-typedef TestWidgetsCallback = Future<void> Function(
-  Random random,
-  WidgetTester widgetTester,
-);
+typedef TestWidgetsCallback =
+    Future<void> Function(
+      Random random,
+      WidgetTester widgetTester,
+    );
 
 /// This function is equivalent to `testWidgets(name, body)`, except that
 /// it is better suited for randomized testing: it will create a Random

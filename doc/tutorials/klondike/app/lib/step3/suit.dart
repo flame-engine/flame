@@ -13,7 +13,7 @@ class Suit {
   }
 
   Suit._(this.value, this.label, double x, double y, double w, double h)
-      : sprite = klondikeSprite(x, y, w, h);
+    : sprite = klondikeSprite(x, y, w, h);
 
   final int value;
   final String label;

@@ -1,14 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(GameWidget(game: GlowEffectExample()));
 }
 
-class GlowEffectExample extends FlameGame with TapDetector {
+class GlowEffectExample extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how the `GlowEffect` can be used.
   ''';
@@ -25,15 +25,15 @@ class GlowEffectExample extends FlameGame with TapDetector {
         position: Vector2(300, 400),
         paint: paint,
       )..add(
-          GlowEffect(
-            10.0,
-            EffectController(
-              duration: 3,
-              reverseDuration: 1.5,
-              infinite: true,
-            ),
+        GlowEffect(
+          10.0,
+          EffectController(
+            duration: 3,
+            reverseDuration: 1.5,
+            infinite: true,
           ),
         ),
+      ),
     );
   }
 }

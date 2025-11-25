@@ -8,9 +8,8 @@ This diagram might look intimidating, but don't worry, it is not as complex as i
 
 ## Component
 
-All components inherit from the abstract class `Component` and all components can have other
-`Component`s as children. This is the base of what we call the Flame Component System, or FCS for
-short.
+All components inherit from the `Component` class and can have other `Component`s as children.
+This is the base of what we call the Flame Component System, or FCS for short.
 
 Children can be added either with the `add(Component c)` method or directly in the constructor.
 
@@ -42,8 +41,8 @@ gets added into the component tree, before the `onMount`.
 The `onParentResize` method is similar: it is also called when the component is mounted into the
 component tree, and also whenever the parent of the current component changes its size.
 
-The `onRemove` method can be overridden to run code before the component is removed from the game,
-it is only run once even if the component is removed both by using the parents remove method and
+The `onRemove` method can be overridden to run code before the component is removed from the game.
+It is only run once even if the component is removed both by using the parents remove method and
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
@@ -126,7 +125,7 @@ for example `PositionComponent`.
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
 
-Example of usage, where visibility of two components are handled by a wrapper:
+Here's an example where visibility of two components are handled by a wrapper:
 
 ```dart
 class GameOverPanel extends PositionComponent {
@@ -360,37 +359,6 @@ void onDragUpdate(DragUpdateInfo info) {
 ```
 
 
-### PositionType
-
-```{note}
-If you are using the `CameraComponent` you should not use `PositionType`, but
-instead adding your components directly to the viewport for example if you
-want to use them as a HUD.
-```
-
-If you want to create a HUD (Head-up display) or another component that isn't positioned in relation
-to the game coordinates, you can change the `PositionType` of the component.
-The default `PositionType` is `positionType = PositionType.game` and that can be changed to
-either `PositionType.viewport` or `PositionType.widget` depending on how you want to position
-the component.
-
-- `PositionType.game` (Default) - Respects camera and viewport.
-- `PositionType.viewport` - Respects viewport only (ignores camera).
-- `PositionType.widget` - Position in relation to the coordinate system of the Flutter game
-   widget (i.e. the raw canvas).
-
-Most of your components will probably be positioned according to `PositionType.game`, since you
-want them to respect the `Camera` and the `Viewport`. But quite often you want for example buttons
-and text to always show on the screen, no matter if you move the camera, then you want to use
-`PositionType.viewport`. In some rare cases you want to use `PositionType.widget` to position
-your widgets, when you don't want the component to respect the camera nor the viewport; this could
-for example be for controls or joysticks that would not be ergonomic to use if they had to stay
-within the viewport.
-
-Do note that this setting is only respected if the component is added directly to the root
-`FlameGame` and not as a child component of another component.
-
-
 ### Visibility of components
 
 The recommended way to hide or show a component is usually to add or remove it from the tree
@@ -462,6 +430,43 @@ class MyComponent extends PositionComponent with HasVisibility {
   }
 }
 ```
+
+
+### Render Contexts
+
+If you want a parent component to pass render-specific properties down its children tree, you
+can override the `renderContext` property on the parent component. You can return a custom
+class that inherits from `RenderContext`, and then use `findRenderContext` on the children
+while rendering. Render Contexts are stored as a stack and propagated whenever the render
+tree is navigated for rendering.
+
+For example:
+
+```dart
+class IntContext extends ComponentRenderContext {
+  int value;
+
+  IntContext(this.value);
+}
+
+class ParentWithContext extends Component {
+  @override
+  IntContext renderContext = IntContext(42);
+}
+
+class ChildReadsContext extends Component {
+  @override
+  void render(Canvas canvas) {
+    final context = findRenderContext<IntContext>();
+    // context.value available
+  }
+}
+```
+
+Each component will have access to the context of any parent that is above it in the
+component tree. If multiple components add the contexts matching the selected type
+`T`, the "closest" one will be returned (though typically you would create a unique
+context type for each component).
 
 
 ## PositionComponent
@@ -556,7 +561,7 @@ final p1 = component.position;
 final p2 = component.positionOfAnchor(Anchor.bottomRight);
 ```
 
-A common pitfall when using `anchor` is confusing it for as being the attachment point for children
+A common pitfall when using `anchor` is confusing it as being the attachment point for children
 components. For example, setting `anchor` to `Anchor.center` for a parent component does not mean
 that the children components will be placed w.r.t the center of parent.
 
@@ -682,13 +687,13 @@ Future<void> onLoad() async {
 }
 ```
 
-All animation components internally maintains a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
+All animation components internally maintain a `SpriteAnimationTicker` which ticks the `SpriteAnimation`.
 This allows multiple components to share the same animation object.
 
 Example:
 
 ```dart
-final sprites = [/*You sprite list here*/];
+final sprites = [/*Your sprite list here*/];
 final animation = SpriteAnimation.spriteList(sprites, stepTime: 0.01);
 
 final animationTicker = SpriteAnimationTicker(animation);
@@ -735,6 +740,17 @@ final animationTicker = SpriteAnimationTicker(animation)
       // Do something for the second frame.
     }
   };
+```
+
+To reset the animation to the first frame when the component is removed, you can set
+`resetOnRemove` to `true`:
+
+```dart
+SpriteAnimationComponent(
+  animation: animation,
+  size: Vector2.all(64.0),
+  resetOnRemove: true,
+);
 ```
 
 
@@ -853,9 +869,24 @@ spawn components along the edges of the shape set the `within` argument to false
 This would for example spawn new components of the type `MyComponent` every 0.5 seconds randomly
 within the defined circle:
 
-The `factory` function takes an `int` as an argument, which is the index of the component that is
-being spawned, so if for example 4 components have been spawned already the 5th component will have
-the index 4, since the indexing starts at 0.
+The component supports two types of factories. The `factory` returns a single component and the
+`multiFactory` returns a list of components that are added in a single step.
+
+The factory functions takes an `int` as an argument, which is the number of components that have
+been spawned, so if for example 4 components have been spawned already the 5th call of the factory
+method will be called with the `amount=4`, since the counting starts at 0 for the first call.
+
+The `factory` with a single component is for backward compatibility, so you should use the
+`multiFactory` if in doubt. A single component `factory` will be wrapped internally to return a
+single item list and then used as the `multiFactory`.
+
+If you only want to spawn a certain amount of components, you can use the `spawnCount` argument,
+and once the limit is reached the `SpawnComponent` will stop spawning and remove itself.
+
+By default, the `SpawnComponent` will spawn components to its parent, but if you want to spawn
+components to another component you can set the `target` argument. Remember that it should be a
+`Component` that has a size if you don't use the `area` or `selfPositioning` arguments.
+
 
 ```dart
 SpawnComponent(
@@ -1102,9 +1133,9 @@ For example you could create a diamond shapes polygon like this:
 void main() {
   PolygonComponent.relative(
     [
-      Vector2(0.0, 1.0), // Middle of top wall
+      Vector2(0.0, -1.0), // Middle of top wall
       Vector2(1.0, 0.0), // Middle of right wall
-      Vector2(0.0, -1.0), // Middle of bottom wall
+      Vector2(0.0, 1.0), // Middle of bottom wall
       Vector2(-1.0, 0.0), // Middle of left wall
     ],
     size: Vector2.all(100),
@@ -1113,7 +1144,7 @@ void main() {
 ```
 
 The vertices in the example defines percentages of the length from the center to the edge of the
-screen in both x and y axis, so for our first item in our list (`Vector2(0.0, 1.0)`) we are pointing
+screen in both x and y axis, so for our first item in our list (`Vector2(0.0, -1.0)`) we are pointing
 on the middle of the top wall of the bounding box, since the coordinate system here is defined from
 the center of the polygon.
 
@@ -1121,9 +1152,6 @@ the center of the polygon.
 
 In the image you can see how the polygon shape formed by the purple arrows is defined by the red
 arrows.
-
-Remember to define the lists in a counter clockwise manner (if you think in the screen coordinate
-system where the y-axis is flipped, otherwise it is clockwise).
 
 
 ### RectangleComponent
@@ -1145,8 +1173,8 @@ void main() {
 ```
 
 Dart also already has an excellent way to create rectangles and that class is called `Rect`, you can
-create a Flame `RectangleComponent` from a `Rect` by using the `Rectangle.fromRect` factory, and
-just like when setting the vertices of the `PolygonComponent`, your rectangle will be sized
+create a Flame `RectangleComponent` from a `Rect` by using the `RectangleComponent.fromRect` factory,
+and just like when setting the vertices of the `PolygonComponent`, your rectangle will be sized
 according to the `Rect` if you use this constructor.
 
 The following would create a `RectangleComponent` with its top left corner in `(10, 10)` and a size
@@ -1231,7 +1259,7 @@ A simple example on how to use it:
 // Creates a tileset, the block ids are automatically assigned sequentially
 // starting at 0, from left to right and then top to bottom.
 final tilesetImage = await images.load('tileset.png');
-final tileset = IsometricTileset(tilesetImage, 32);
+final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
 // Each element is a block id, -1 means nothing
 final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];
 add(IsometricTileMapComponent(tileset, matrix));
@@ -1254,7 +1282,7 @@ This is an example of how a quarter-length map looks like:
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
 selector. The code can be found
 [here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
-and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric%20Tile%20Map).
+and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric_Tile_Map).
 
 
 ## NineTileBoxComponent
@@ -1357,7 +1385,7 @@ class Player extends SpriteComponent with Notifier {
 Then our hud component could look like:
 
 ```dart
-class Hud extends PositionComponent with HasGameRef {
+class Hud extends PositionComponent with HasGameReference {
 
   @override
   void onLoad() {

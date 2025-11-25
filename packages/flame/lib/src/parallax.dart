@@ -107,10 +107,10 @@ abstract class ParallaxRenderer {
     Alignment? alignment,
     LayerFill? fill,
     FilterQuality? filterQuality,
-  })  : repeat = repeat ?? ImageRepeat.repeatX,
-        alignment = alignment ?? Alignment.bottomLeft,
-        fill = fill ?? LayerFill.height,
-        filterQuality = filterQuality ?? FilterQuality.low;
+  }) : repeat = repeat ?? ImageRepeat.repeatX,
+       alignment = alignment ?? Alignment.bottomLeft,
+       fill = fill ?? LayerFill.height,
+       filterQuality = filterQuality ?? FilterQuality.low;
 
   void update(double dt);
 
@@ -189,7 +189,7 @@ class ParallaxAnimation extends ParallaxRenderer {
   ///
   /// _IMPORTANT_: This method pre render all the frames of the animation into
   /// image instances so it can be used inside the parallax. Just keep that in
-  /// mind when using animations in in parallax, the over use of it, or the use
+  /// mind when using animations in parallax, the over use of it, or the use
   /// of big animations (be it in number of frames or the size of the images)
   /// can lead to high use of memory.
   static Future<ParallaxAnimation> load(
@@ -203,10 +203,14 @@ class ParallaxAnimation extends ParallaxRenderer {
   }) async {
     images ??= Flame.images;
 
-    final animation =
-        await SpriteAnimation.load(path, animationData, images: images);
-    final prerenderedFrames =
-        animation.frames.map((frame) => frame.sprite.toImageSync()).toList();
+    final animation = await SpriteAnimation.load(
+      path,
+      animationData,
+      images: images,
+    );
+    final prerenderedFrames = animation.frames
+        .map((frame) => frame.sprite.toImageSync())
+        .toList();
 
     return ParallaxAnimation(
       animation,
@@ -250,14 +254,11 @@ class ParallaxLayer {
 
   void resize(Vector2 size) {
     double scale(LayerFill fill) {
-      switch (fill) {
-        case LayerFill.height:
-          return parallaxRenderer.image.height / size.y;
-        case LayerFill.width:
-          return parallaxRenderer.image.width / size.x;
-        default:
-          return _scale;
-      }
+      return switch (fill) {
+        LayerFill.height => parallaxRenderer.image.height / size.y,
+        LayerFill.width => parallaxRenderer.image.width / size.x,
+        _ => _scale,
+      };
     }
 
     _scale = scale(parallaxRenderer.fill);
@@ -299,15 +300,11 @@ class ParallaxLayer {
     switch (parallaxRenderer.repeat) {
       case ImageRepeat.repeat:
         _scroll.setValues(_scroll.x % 1, _scroll.y % 1);
-        break;
       case ImageRepeat.repeatX:
         _scroll.setValues(_scroll.x % 1, _scroll.y);
-        break;
       case ImageRepeat.repeatY:
         _scroll.setValues(_scroll.x, _scroll.y % 1);
-        break;
       case ImageRepeat.noRepeat:
-        break;
     }
 
     _paintArea = Rect.fromLTWH(
@@ -475,7 +472,7 @@ class Parallax {
   final _delta = Vector2.zero();
 
   void update(double dt) {
-    layers.forEach((layer) {
+    for (final layer in layers) {
       layer.update(
         _delta
           ..setFrom(baseVelocity)
@@ -483,7 +480,7 @@ class Parallax {
           ..scale(dt),
         dt,
       );
-    });
+    }
   }
 
   /// Note that this method only should be used if all of your layers should
@@ -517,11 +514,11 @@ class Parallax {
     final velocityDelta = velocityMultiplierDelta ?? Vector2.all(1.0);
     final layers = await Future.wait<ParallaxLayer>(
       dataList.mapIndexed((depth, data) async {
-        final velocityMultiplier =
-            List.filled(depth, velocityDelta).fold<Vector2>(
-          velocityDelta,
-          (previousValue, delta) => previousValue.clone()..multiply(delta),
-        );
+        final velocityMultiplier = List.filled(depth, velocityDelta)
+            .fold<Vector2>(
+              velocityDelta,
+              (previousValue, delta) => previousValue.clone()..multiply(delta),
+            );
         final renderer = await data.load(
           repeat,
           alignment,

@@ -1,18 +1,19 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/events/messages/position_event.dart';
-import 'package:flutter/gestures.dart' as flutter;
+import 'package:flutter/services.dart';
 
-class PointerMoveEvent extends PositionEvent {
+class PointerMoveEvent extends PositionEvent<PointerHoverEvent> {
   PointerMoveEvent(
     this.pointerId,
     super.game,
-    flutter.PointerHoverEvent rawEvent,
-  )   : timestamp = rawEvent.timeStamp,
-        delta = rawEvent.delta.toVector2(),
-        super(
-          devicePosition: rawEvent.position.toVector2(),
-        );
+    PointerHoverEvent rawEvent,
+  ) : timestamp = rawEvent.timeStamp,
+      delta = rawEvent.delta.toVector2(),
+      super(
+        raw: rawEvent,
+        devicePosition: rawEvent.position.toVector2(),
+      );
 
   final int pointerId;
   final Duration timestamp;
@@ -26,14 +27,15 @@ class PointerMoveEvent extends PositionEvent {
   }
 
   @override
-  String toString() => 'PointerMoveEvent(devicePosition: $devicePosition, '
+  String toString() =>
+      'PointerMoveEvent(devicePosition: $devicePosition, '
       'canvasPosition: $canvasPosition, '
       'delta: $delta, '
       'pointerId: $pointerId, timestamp: $timestamp)';
 
   factory PointerMoveEvent.fromPointerHoverEvent(
     Game game,
-    flutter.PointerHoverEvent event,
+    PointerHoverEvent event,
   ) {
     return PointerMoveEvent(
       event.pointer,

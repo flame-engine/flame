@@ -1,4 +1,5 @@
 name: examples
+resolution: workspace
 description: A set of small examples showcasing each feature provided by the Flame Engine.
 homepage: https://github.com/flame-engine/flame/tree/main/examples
 publish_to: "none"
@@ -6,31 +7,34 @@ publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
-  dashbook: ^0.1.12
-  flame: ^1.16.0
-  flame_audio: ^2.10.0
-  flame_forge2d: ^0.17.0
-  flame_isolate: ^0.6.0
-  flame_lottie: ^0.4.0
-  flame_noise: ^0.3.0
-  flame_spine: ^0.2.0
-  flame_svg: ^1.10.0
-  flame_tiled: ^1.19.0
+  crystal_ball: ^0.1.0
+  dashbook: ^0.1.16
+  flame: ^1.34.0
+  flame_audio: ^2.11.12
+  flame_forge2d: ^0.19.2+2
+  flame_isolate: ^0.6.2+18
+  flame_lottie: ^0.4.2+18
+  flame_noise: ^0.3.2+18
+  flame_spine: ^0.3.0+1
+  flame_svg: ^1.11.18
+  flame_tiled: ^3.0.9
   flutter:
     sdk: flutter
-  google_fonts: ^4.0.4
-  meta: ^1.9.1
+  google_fonts: ^6.2.1
+  jenny: ^1.5.0
+  meta: ^1.12.0
   padracing: ^1.0.0
-  provider: ^6.0.5
+  provider: ^6.1.2
   rogue_shooter: ^0.1.0
   trex_game: ^0.1.0
+  web: ^1.1.0
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
   test: any
 
 flutter:
@@ -49,3 +53,5 @@ flutter:
     - assets/tiles/
     - assets/audio/music/
     - assets/audio/sfx/
+    - assets/yarn/
+    

@@ -1,10 +1,11 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/sprite_sheet.dart';
 import 'package:meta/meta.dart';
 
-/// This is just a pair of <int, int>.
+/// This is just a pair of [int, int].
 ///
 /// Represents a position in a matrix, or in this case, on the tilemap.
 @immutable
@@ -57,6 +58,10 @@ class IsometricTileMapComponent extends PositionComponent {
   /// Where the tileset's image is stored.
   Sprite _renderSprite;
 
+  /// Displacement applied so that the origin of the component
+  /// matches the origin of the AABB.
+  final Vector2 _offset = Vector2.zero();
+
   IsometricTileMapComponent(
     this.tileset,
     this.matrix, {
@@ -70,7 +75,9 @@ class IsometricTileMapComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _renderSprite = Sprite(tileset.image);
+  }) : _renderSprite = Sprite(tileset.image) {
+    _recomputeSizeAndOffset();
+  }
 
   /// This is the size the tiles will be drawn (either original or overwritten).
   Vector2 get effectiveTileSize => destTileSize ?? tileset.srcSize;
@@ -101,6 +108,11 @@ class IsometricTileMapComponent extends PositionComponent {
     }
   }
 
+  @override
+  void update(double dt) {
+    _recomputeSizeAndOffset();
+  }
+
   /// Get the position in which a block is rendered in, in the isometric space.
   ///
   /// This does not include the (x,y) PositionComponent offset!
@@ -124,7 +136,9 @@ class IsometricTileMapComponent extends PositionComponent {
     final cartesianPosition = _cartesianPositionCache
       ..setValues(i.toDouble(), j.toDouble())
       ..multiply(halfTile);
-    return cartToIso(cartesianPosition)..sub(halfTile);
+    return cartToIso(cartesianPosition)
+      ..add(_offset)
+      ..sub(halfTile);
   }
 
   /// Get the position of the center of the surface of the isometric tile in
@@ -133,11 +147,10 @@ class IsometricTileMapComponent extends PositionComponent {
   /// This is the opposite of [getBlock].
   Vector2 getBlockCenterPosition(Block block) {
     final tile = effectiveTileSize;
-    return getBlockRenderPosition(block)
-      ..translate(
-        (tile.x / 2) * scale.x,
-        (tile.y - effectiveTileHeight - tile.y / 4) * scale.y,
-      );
+    return getBlockRenderPosition(block)..translate(
+      (tile.x / 2) * scale.x,
+      (tile.y - effectiveTileHeight - tile.y / 4) * scale.y,
+    );
   }
 
   /// Converts a coordinate from the isometric space to the cartesian space.
@@ -168,6 +181,7 @@ class IsometricTileMapComponent extends PositionComponent {
     final multiplier = 1 - halfTile.y / (2 * effectiveTileHeight * scale.x);
     final iso = _getBlockIsoCache
       ..setFrom(p)
+      ..sub(_offset)
       ..sub(position)
       ..translate(halfTile.x, halfTile.y * multiplier);
     final cart = isoToCart(iso);
@@ -209,5 +223,19 @@ class IsometricTileMapComponent extends PositionComponent {
         block.y < matrix.length &&
         block.x >= 0 &&
         block.x < matrix[block.y].length;
+  }
+
+  void _recomputeSizeAndOffset() {
+    final width = matrix.fold<int>(
+      0,
+      (previousValue, element) => max(previousValue, element.length),
+    );
+    final height = matrix.length;
+
+    size.x = effectiveTileSize.x * width;
+    size.y = effectiveTileSize.y * height / 2 + effectiveTileHeight;
+
+    _offset.x = size.x / 2;
+    _offset.y = effectiveTileHeight;
   }
 }

@@ -12,21 +12,15 @@ class MoveAlongPathEffectGame extends FlameGame {
       size: 60,
       position: canvasSize / 2,
       onTap: (flower) {
-        if (reset = !reset) {
-          flower.add(
-            MoveAlongPathEffect(
-              Path()..quadraticBezierTo(100, 0, 50, -50),
-              EffectController(duration: 1.5),
-            ),
-          );
-        } else {
-          flower.add(
-            MoveAlongPathEffect(
-              Path()..quadraticBezierTo(-100, 0, -50, 50),
-              EffectController(duration: 1.5),
-            ),
-          );
-        }
+        flower.add(
+          MoveAlongPathEffect(
+            reset
+                ? (Path()..quadraticBezierTo(-100, 0, -50, 50))
+                : (Path()..quadraticBezierTo(100, 0, 50, -50)),
+            EffectController(duration: 1.5),
+          ),
+        );
+        reset = !reset;
       },
     );
     add(flower);

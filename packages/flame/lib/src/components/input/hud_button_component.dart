@@ -24,8 +24,8 @@ class HudButtonComponent extends ButtonComponent
     super.children,
     super.priority,
   }) : super(
-          size: size ?? button?.size,
-        ) {
+         size: size ?? button?.size,
+       ) {
     this.margin = margin;
   }
 }

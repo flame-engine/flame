@@ -71,8 +71,8 @@ class CircleShuffler extends BodyComponent {
       final fixtureDef = FixtureDef(
         shape,
         density: 50.0,
-        friction: .1,
-        restitution: .9,
+        friction: 0.1,
+        restitution: 0.9,
       );
 
       body.createFixture(fixtureDef);

@@ -5,11 +5,11 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockImage extends Mock implements Image {}
+class _MockImage extends Mock implements Image {}
 
 void main() {
   group('SpriteSheet', () {
-    late final Image image = MockImage();
+    late final Image image = _MockImage();
     when(() => image.width).thenReturn(100);
     when(() => image.height).thenReturn(100);
 
@@ -54,10 +54,12 @@ void main() {
         srcSize: Vector2(50, 50),
       );
 
-      final animationTicker = spriteSheet.createAnimationWithVariableStepTimes(
-        row: 1,
-        stepTimes: [2.0, 3.0],
-      ).createTicker();
+      final animationTicker = spriteSheet
+          .createAnimationWithVariableStepTimes(
+            row: 1,
+            stepTimes: [2.0, 3.0],
+          )
+          .createTicker();
 
       expect(animationTicker.totalDuration(), 5.0);
     });

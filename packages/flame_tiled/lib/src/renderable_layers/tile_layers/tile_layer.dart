@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
-import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/hexagonal_tile_layer.dart';
@@ -10,7 +10,6 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/isometric_tile_lay
 import 'package:flame_tiled/src/renderable_layers/tile_layers/orthogonal_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/staggered_tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
-import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
@@ -72,56 +71,52 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
       throw StateError('Map orientation should be present');
     }
 
-    switch (mapOrientation) {
-      case MapOrientation.isometric:
-        return IsometricTileLayer(
-          layer: layer,
-          parent: parent,
-          map: map,
-          destTileSize: destTileSize,
-          tiledAtlas: atlas,
-          animationFrames: animationFrames,
-          ignoreFlip: ignoreFlip,
-          filterQuality: filterQuality,
-          layerPaintFactory: layerPaintFactory,
-        );
-      case MapOrientation.staggered:
-        return StaggeredTileLayer(
-          layer: layer,
-          parent: parent,
-          map: map,
-          destTileSize: destTileSize,
-          tiledAtlas: atlas,
-          animationFrames: animationFrames,
-          ignoreFlip: ignoreFlip,
-          filterQuality: filterQuality,
-          layerPaintFactory: layerPaintFactory,
-        );
-      case MapOrientation.hexagonal:
-        return HexagonalTileLayer(
-          layer: layer,
-          parent: parent,
-          map: map,
-          destTileSize: destTileSize,
-          tiledAtlas: atlas,
-          animationFrames: animationFrames,
-          ignoreFlip: ignoreFlip,
-          filterQuality: filterQuality,
-          layerPaintFactory: layerPaintFactory,
-        );
-      case MapOrientation.orthogonal:
-        return OrthogonalTileLayer(
-          layer: layer,
-          parent: parent,
-          map: map,
-          destTileSize: destTileSize,
-          tiledAtlas: atlas,
-          animationFrames: animationFrames,
-          ignoreFlip: ignoreFlip,
-          filterQuality: filterQuality,
-          layerPaintFactory: layerPaintFactory,
-        );
-    }
+    return switch (mapOrientation) {
+      MapOrientation.isometric => IsometricTileLayer(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        tiledAtlas: atlas,
+        animationFrames: animationFrames,
+        ignoreFlip: ignoreFlip,
+        filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
+      ),
+      MapOrientation.staggered => StaggeredTileLayer(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        tiledAtlas: atlas,
+        animationFrames: animationFrames,
+        ignoreFlip: ignoreFlip,
+        filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
+      ),
+      MapOrientation.hexagonal => HexagonalTileLayer(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        tiledAtlas: atlas,
+        animationFrames: animationFrames,
+        ignoreFlip: ignoreFlip,
+        filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
+      ),
+      MapOrientation.orthogonal => OrthogonalTileLayer(
+        layer: layer,
+        parent: parent,
+        map: map,
+        destTileSize: destTileSize,
+        tiledAtlas: atlas,
+        animationFrames: animationFrames,
+        ignoreFlip: ignoreFlip,
+        filterQuality: filterQuality,
+        layerPaintFactory: layerPaintFactory,
+      ),
+    };
   }
 
   @override

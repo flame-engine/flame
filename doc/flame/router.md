@@ -28,7 +28,9 @@ Each page in the router can be either transparent or opaque. If a page is opaque
 below it in the stack are not rendered and do not receive pointer events (such as taps or drags).
 On the contrary, if a page is transparent, then the page below it will be rendered and receive
 events normally. Such transparent pages are useful for implementing modal dialogs, inventory or
-dialogue UIs, etc.
+dialogue UIs, etc. If you want your route to be visually transparent but for the routes below it
+to not receive events, make sure to add a background component to your route that captures the
+events by using one of the [event capturing mixins](inputs/inputs.md).
 
 Usage example:
 
@@ -86,6 +88,46 @@ and the `builder` function is called each time the route is activated.
 
 The current route can be replaced using `pushReplacementNamed` or `pushReplacement`.  Each method
 simply executes `pop` on the current route and then `pushNamed` or `pushRoute`.
+
+
+## WorldRoute
+
+The **WorldRoute** is a special route that allows setting active game worlds via the router.
+This type of route can for example be used for swapping levels implemented as separate worlds in
+your game.
+
+By default, the `WorldRoute` will replace the current world with the new one and by default it will
+keep the state of the world after being popped from the stack. If you want the world to be recreated
+each time the route is activated, set `maintainState` to `false`.
+
+If you are not using the built-in `CameraComponent` you can pass in the camera that you want to use
+explicitly in the constructor.
+
+```dart
+final router = RouterComponent(
+  routes: {
+    'level1': WorldRoute(MyWorld1.new),
+    'level2': WorldRoute(MyWorld2.new, maintainState: false),
+  },
+);
+
+class MyWorld1 extends World {
+  @override
+  Future<void> onLoad() async {
+    add(BackgroundComponent());
+    add(PlayerComponent());
+  }
+}
+
+class MyWorld2 extends World {
+   @override
+   Future<void> onLoad() async {
+      add(BackgroundComponent());
+      add(PlayerComponent());
+      add(EnemyComponent());
+   }
+}
+```
 
 
 ## OverlayRoute

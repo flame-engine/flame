@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
-export 'package:vector_math/vector_math_64.dart' hide Colors;
+export 'package:vector_math/vector_math.dart' hide Colors;
 
 extension Vector2Extension on Vector2 {
   /// This is a reusable vector that can be used within the [Vector2Extension]
@@ -191,6 +191,14 @@ extension Vector2Extension on Vector2 {
 
   /// Modulo/Remainder
   Vector2 operator %(Vector2 mod) => Vector2(x % mod.x, y % mod.y);
+
+  /// Stringifies the Vector2 with a maximum precision of [maxPrecision].
+  String toStringWithMaxPrecision(int maxPrecision) {
+    final precision = pow(10, maxPrecision);
+    final truncatedX = (x * precision).truncate() / precision;
+    final truncatedY = (y * precision).truncate() / precision;
+    return 'Vector2($truncatedX, $truncatedY)';
+  }
 
   /// Create a Vector2 with ints as input
   static Vector2 fromInts(int x, int y) => Vector2(x.toDouble(), y.toDouble());

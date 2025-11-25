@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/src/text/common/utils.dart';
-import 'package:flame/src/text/elements/group_element.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 

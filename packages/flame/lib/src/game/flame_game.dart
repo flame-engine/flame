@@ -3,8 +3,12 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
+import 'package:flutter/foundation.dart';
+// TODO(spydon): Remove this import when flutter version is updated to 3.35.0
+// ignore: unnecessary_import
 import 'package:meta/meta.dart';
 
 /// This is a more complete and opinionated implementation of [Game].
@@ -21,18 +25,23 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     super.children,
     W? world,
     CameraComponent? camera,
-  })  : assert(
-          world != null || W == World,
-          'The generics type $W does not conform to the type of '
-          '${world?.runtimeType ?? 'World'}.',
-        ),
-        _world = world ?? World() as W,
-        _camera = camera ?? CameraComponent() {
+  }) : assert(
+         world != null || W == World,
+         'The generics type $W does not conform to the type of '
+         '${world?.runtimeType ?? 'World'}.',
+       ),
+       _world = world ?? World() as W,
+       _camera = camera ?? CameraComponent() {
     assert(
       Component.staticGameInstance == null,
       '$this instantiated, while another game ${Component.staticGameInstance} '
       'declares itself to be a singleton',
     );
+
+    if (kDebugMode) {
+      DevToolsService.initWithGame(this);
+    }
+
     _camera.world = _world;
     add(_camera);
     add(_world);
@@ -103,6 +112,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @internal
   void mount() {
     super.mount();
+    if (_pausedBecauseBackgrounded) {
+      resumeEngine();
+    }
     setMounted();
   }
 
@@ -131,7 +143,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @override
   void renderTree(Canvas canvas) {
     if (parent != null) {
-      renderTree(canvas);
+      render(canvas);
     }
     for (final component in children) {
       component.renderTree(canvas);
@@ -155,7 +167,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     for (final component in children) {
       component.updateTree(dt);
     }
-    processRebalanceEvents();
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -179,7 +190,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     // there is no way to explicitly call the [Component]'s implementation,
     // we propagate the event to [FlameGame]'s children manually.
     handleResize(size);
-    children.forEach((child) => child.onParentResize(size));
+    for (final child in children) {
+      child.onParentResize(size);
+    }
   }
 
   /// Ensure that all pending tree operations finish.
@@ -258,9 +271,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   bool pauseWhenBackgrounded = true;
   bool _pausedBecauseBackgrounded = false;
 
+  @visibleForTesting
+  bool get isPausedOnBackground => _pausedBecauseBackgrounded;
+
   @override
   @mustCallSuper
   void lifecycleStateChange(AppLifecycleState state) {
+    super.lifecycleStateChange(state);
     switch (state) {
       case AppLifecycleState.resumed:
       case AppLifecycleState.inactive:

@@ -73,7 +73,7 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 
 ```
 
-The `HeartHealthComponent` is just a [SpriteGroupComponent](../../flame/components.md#spritegroup)
+The `HeartHealthComponent` is just a [SpriteGroupComponent](../../flame/components.md#spritegroupcomponent)
 that uses the heart images that were created early on. The unique thing that is being done, is when
 the component is created, it requires a `heartNumber`, so in the `update` method, we check to see if
 the `game.health` is less than the `heartNumber` and if so, change the state of the component to

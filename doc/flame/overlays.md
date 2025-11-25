@@ -16,11 +16,17 @@ by providing an `overlayBuilderMap`.
 ```dart
   // Inside your game:
   final pauseOverlayIdentifier = 'PauseMenu';
+  final secondaryOverlayIdentifier = 'SecondaryMenu';
 
-  // Marks 'PauseMenu' to be rendered.
+  // Marks 'SecondaryMenu' to be rendered.
+  overlays.add(secondaryOverlayIdentifier, priority: 1);
+  // Marks 'PauseMenu' to be rendered. Priority = 0 by default 
+  // which means the 'PauseMenu' will be displayed under the 'SecondaryMenu'
   overlays.add(pauseOverlayIdentifier);
-  // Marks 'PauseMenu' to not be rendered.
+  // Marks 'PauseMenu' to not be rendered. 
   overlays.remove(pauseOverlayIdentifier);
+  // Toggles the 'PauseMenu' overlay.
+  overlays.toggle(pauseOverlayIdentifier);
 ```
 
 ```dart
@@ -34,6 +40,9 @@ Widget build(BuildContext context) {
       'PauseMenu': (BuildContext context, MyGame game) {
         return Text('A pause menu');
       },
+      'SecondaryMenu': (BuildContext context, MyGame game) {
+        return Text('A secondary menu');
+      },
     },
   );
 }
@@ -42,5 +51,4 @@ Widget build(BuildContext context) {
 The order of rendering for an overlay is determined by the order of the keys in the
 `overlayBuilderMap`.
 
-An example of this feature can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).
+See an [example of the Overlays feature](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/system/overlays_example.dart).

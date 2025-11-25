@@ -6,10 +6,11 @@ class RemoveEffect extends ComponentEffect {
   RemoveEffect({
     double delay = 0.0,
     void Function()? onComplete,
+    super.key,
   }) : super(
-          LinearEffectController(delay),
-          onComplete: onComplete,
-        );
+         LinearEffectController(delay),
+         onComplete: onComplete,
+       );
 
   @override
   void apply(double progress) {

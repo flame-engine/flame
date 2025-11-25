@@ -7,7 +7,13 @@ import 'package:meta/meta.dart';
 /// This base class offers only simple common functionality; please see the
 /// concrete [Event] subclasses for the information about each individual event
 /// and the circumstances when they occur.
-abstract class Event {
+///
+/// The type parameter [R] represents the type of the original Flutter raw event
+/// that triggered this Flame event.
+abstract class Event<R> {
+  /// The original Flutter raw event that triggered this Flame event.
+  R raw;
+
   /// Flag that can be used to indicate that the event was handled by one of the
   /// components.
   ///
@@ -22,14 +28,17 @@ abstract class Event {
   /// components.
   bool continuePropagation = false;
 
+  Event({required this.raw});
+
   @internal
   void deliverToComponents<T extends Component>(
     Component rootComponent,
     void Function(T component) eventHandler,
   ) {
-    for (final child in rootComponent
-        .descendants(reversed: true, includeSelf: true)
-        .whereType<T>()) {
+    for (final child
+        in rootComponent
+            .descendants(reversed: true, includeSelf: true)
+            .whereType<T>()) {
       continuePropagation = false;
       eventHandler(child);
       if (!continuePropagation) {

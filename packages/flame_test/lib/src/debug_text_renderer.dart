@@ -87,8 +87,12 @@ class _DebugTextElement extends InlineTextElement {
         i1 += 1;
       }
       rects.add(
-        Rect.fromLTRB(i0 * charWidth, 0, i1 * charWidth, charHeight)
-            .deflate(paint.strokeWidth / 2),
+        Rect.fromLTRB(
+          i0 * charWidth,
+          0,
+          i1 * charWidth,
+          charHeight,
+        ).deflate(paint.strokeWidth / 2),
       );
       i0 = i1;
     }

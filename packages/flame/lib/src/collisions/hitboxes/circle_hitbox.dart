@@ -32,8 +32,8 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     super.anchor,
     bool isSolid = false,
     CollisionType collisionType = CollisionType.active,
-  })  : shouldFillParent = false,
-        super.relative() {
+  }) : shouldFillParent = false,
+       super.relative() {
     this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
@@ -44,10 +44,11 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     // the parent size and the radius is defined from the shortest side.
   }
 
-  late final _temporaryLineSegment = LineSegment.zero();
-  late final _temporaryNormal = Vector2.zero();
-  late final _temporaryCenter = Vector2.zero();
-  late final _temporaryAbsoluteCenter = Vector2.zero();
+  static final _temporaryLineSegment = LineSegment.zero();
+  static final _temporaryNormal = Vector2.zero();
+  static final _temporaryCenter = Vector2.zero();
+  static final _temporaryAbsoluteCenter = Vector2.zero();
+  static final _temporaryOrigin = Vector2.zero();
 
   @override
   RaycastResult<ShapeHitbox>? rayIntersection(
@@ -56,6 +57,13 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
   }) {
     var isInsideHitbox = false;
     _temporaryLineSegment.from.setFrom(ray.origin);
+    // Adding a small value to the origin to avoid the ray to be on the edge
+    // of the circle and then directly intersecting and causing the reflecting
+    // ray to go in the wrong direction.
+    _temporaryOrigin.setValues(
+      ray.origin.x + ray.direction.x * 0.00001,
+      ray.origin.y + ray.direction.y * 0.00001,
+    );
     _temporaryAbsoluteCenter.setFrom(absoluteCenter);
     _temporaryCenter
       ..setFrom(_temporaryAbsoluteCenter)
@@ -73,7 +81,8 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
         ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
     }
 
-    if (_temporaryLineSegment.to.length2 < radius * radius) {
+    if (_temporaryOrigin.distanceToSquared(_temporaryAbsoluteCenter) <
+        radius * radius) {
       _temporaryLineSegment.to.scaleTo(2 * radius);
       isInsideHitbox = true;
     }
@@ -99,12 +108,15 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
             ..setFrom(ray.direction)
             ..reflect(_temporaryNormal);
 
-      final reflectionRay = (out?.reflectionRay
-            ?..setWith(
-              origin: intersectionPoint,
-              direction: reflectionDirection,
-            )) ??
-          Ray2(origin: intersectionPoint, direction: reflectionDirection);
+      final reflectionRay =
+          (out?.reflectionRay?..setWith(
+            origin: intersectionPoint,
+            direction: reflectionDirection,
+          )) ??
+          Ray2(
+            origin: intersectionPoint,
+            direction: reflectionDirection,
+          );
 
       result.setWith(
         hitbox: this,

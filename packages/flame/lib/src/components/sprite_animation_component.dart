@@ -1,15 +1,12 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:meta/meta.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationComponent extends PositionComponent
-    with HasPaint
-    implements SizeProvider {
+class SpriteAnimationComponent extends PositionComponent with HasPaint {
   /// The animation ticker used for updating [animation].
   SpriteAnimationTicker? _animationTicker;
 
@@ -24,6 +21,10 @@ class SpriteAnimationComponent extends PositionComponent
   /// Whether the animation is paused or playing.
   bool playing;
 
+  /// Whether to reset the animation when the component is removed from the
+  /// component tree.
+  bool resetOnRemove;
+
   /// When set to true, the component is auto-resized to match the
   /// size of current animation sprite.
   bool _autoResize;
@@ -34,6 +35,7 @@ class SpriteAnimationComponent extends PositionComponent
     bool? autoResize,
     this.removeOnFinish = false,
     this.playing = true,
+    this.resetOnRemove = false,
     Paint? paint,
     super.position,
     super.size,
@@ -44,12 +46,12 @@ class SpriteAnimationComponent extends PositionComponent
     super.children,
     super.priority,
     super.key,
-  })  : assert(
-          (size == null) == (autoResize ?? size == null),
-          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-        ),
-        _autoResize = autoResize ?? size == null,
-        _animationTicker = animation?.createTicker() {
+  }) : assert(
+         (size == null) == (autoResize ?? size == null),
+         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+       ),
+       _autoResize = autoResize ?? size == null,
+       _animationTicker = animation?.createTicker() {
     if (paint != null) {
       this.paint = paint;
     }
@@ -71,30 +73,34 @@ class SpriteAnimationComponent extends PositionComponent
     bool? autoResize,
     bool removeOnFinish = false,
     bool playing = true,
+    bool resetOnRemove = false,
     Paint? paint,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
     double? angle,
+    double nativeAngle = 0,
     Anchor? anchor,
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
   }) : this(
-          animation: SpriteAnimation.fromFrameData(image, data),
-          autoResize: autoResize,
-          removeOnFinish: removeOnFinish,
-          playing: playing,
-          paint: paint,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          children: children,
-          priority: priority,
-          key: key,
-        );
+         animation: SpriteAnimation.fromFrameData(image, data),
+         autoResize: autoResize,
+         removeOnFinish: removeOnFinish,
+         playing: playing,
+         resetOnRemove: resetOnRemove,
+         paint: paint,
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         nativeAngle: nativeAngle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         key: key,
+       );
 
   /// Returns current value of auto resize flag.
   bool get autoResize => _autoResize;
@@ -129,10 +135,10 @@ class SpriteAnimationComponent extends PositionComponent
   @override
   void render(Canvas canvas) {
     _animationTicker?.getSprite().render(
-          canvas,
-          size: size,
-          overridePaint: paint,
-        );
+      canvas,
+      size: size,
+      overridePaint: paint,
+    );
   }
 
   @mustCallSuper
@@ -169,6 +175,14 @@ class SpriteAnimationComponent extends PositionComponent
   void _handleAutoResizeState() {
     if (_autoResize && (!_isAutoResizing)) {
       _autoResize = false;
+    }
+  }
+
+  @override
+  void onRemove() {
+    super.onRemove();
+    if (resetOnRemove) {
+      _animationTicker?.reset();
     }
   }
 }

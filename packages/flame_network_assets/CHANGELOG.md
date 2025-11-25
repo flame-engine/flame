@@ -1,3 +1,83 @@
+## 0.3.3+18
+
+ - **FIX**: Not re-encode image when saving ([#3780](https://github.com/flame-engine/flame/issues/3780)). ([30a344cf](https://github.com/flame-engine/flame/commit/30a344cfae78c6608713d4b194f3112e47068adf))
+
+## 0.3.3+17
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
+## 0.3.3+16
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+15
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+14
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+13
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+12
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+11
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+10
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+9
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+8
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+7
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+6
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+5
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+4
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+3
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+2
+
+ - Update a dependency to the latest release.
+
+## 0.3.3+1
+
+ - Update a dependency to the latest release.
+
+## 0.3.3
+
+## 0.3.2
+
+## 0.3.1
+
+ - **FEAT**: Update http dependency on flame_network_assets ([#3084](https://github.com/flame-engine/flame/issues/3084)). ([e3e755c6](https://github.com/flame-engine/flame/commit/e3e755c6dec35f36b4a42893afeea5f64ff025b7))
+
 ## 0.3.0
 
 > Note: This release has breaking changes.

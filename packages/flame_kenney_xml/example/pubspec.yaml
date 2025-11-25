@@ -1,0 +1,24 @@
+name: flame_kenney_xml_example
+resolution: workspace
+description: "An example for the `XmlSpriteSheet` used to load kenney.nl assets."
+
+publish_to: "none"
+
+version: 1.0.0
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  flame: ^1.34.0
+  flame_kenney_xml: ^0.1.1+18
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.4.2
+
+flutter:
+  assets:
+    - assets/
+    - assets/images/

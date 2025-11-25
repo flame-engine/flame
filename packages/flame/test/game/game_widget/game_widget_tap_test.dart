@@ -5,6 +5,8 @@ import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+// testing the deprecated TapDetector
+// ignore: deprecated_member_use_from_same_package
 class _TapGame extends FlameGame with TapDetector {
   bool tapRegistered = false;
 

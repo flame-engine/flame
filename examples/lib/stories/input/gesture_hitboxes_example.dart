@@ -27,21 +27,19 @@ class _GestureHitboxesWorld extends World with TapCallbacks {
     final shapeSize =
         Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
-    ShapeHitbox hitbox;
-    switch (shapeType) {
-      case Shapes.circle:
-        hitbox = CircleHitbox();
-      case Shapes.rectangle:
-        hitbox = RectangleHitbox();
-      case Shapes.polygon:
-        final points = [
+    final hitbox = switch (shapeType) {
+      Shapes.circle => CircleHitbox(),
+      Shapes.rectangle => RectangleHitbox(),
+      Shapes.polygon => PolygonHitbox.relative(
+        [
           -Vector2.random(_rng),
           Vector2.random(_rng)..x *= -1,
           Vector2.random(_rng),
           Vector2.random(_rng)..y *= -1,
-        ];
-        hitbox = PolygonHitbox.relative(points, parentSize: shapeSize);
-    }
+        ],
+        parentSize: shapeSize,
+      ),
+    };
     return MyShapeComponent(
       hitbox: hitbox,
       position: position,

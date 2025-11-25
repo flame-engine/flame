@@ -13,13 +13,13 @@ class RemoveEffectExample extends FlameGame {
   ''';
 
   RemoveEffectExample()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          )..viewfinder.anchor = Anchor.topLeft,
-          world: _RemoveEffectWorld(),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        )..viewfinder.anchor = Anchor.topLeft,
+        world: _RemoveEffectWorld(),
+      );
 }
 
 class _RemoveEffectWorld extends World {
@@ -35,7 +35,7 @@ class _RemoveEffectWorld extends World {
 
 class _RandomCircle extends CircleComponent with TapCallbacks {
   _RandomCircle(double radius, {super.position, super.paint})
-      : super(radius: radius);
+    : super(radius: radius);
 
   factory _RandomCircle.random(Random rng) {
     final radius = rng.nextDouble() * 30 + 10;

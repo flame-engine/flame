@@ -39,8 +39,8 @@ class BatchItem {
     required this.transform,
     Color? color,
     this.flip = false,
-  })  : paint = Paint()..color = color ?? const Color(0x00000000),
-        destination = Offset.zero & source.size;
+  }) : paint = Paint()..color = color ?? const Color(0x00000000),
+       destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
   final Rect source;
@@ -60,15 +60,28 @@ class BatchItem {
   ///
   /// Since [Canvas.drawAtlas] is not supported on the web we also
   /// build a `Matrix4` based on the [transform] and [flip] values.
-  late final Matrix4 matrix = Matrix4(
-    transform.scos, transform.ssin, 0, 0, //
-    -transform.ssin, transform.scos, 0, 0, //
-    0, 0, 0, 0, //
-    transform.tx, transform.ty, 0, 1, //
-  )
-    ..translate(source.width / 2, source.height / 2)
-    ..rotateY(flip ? pi : 0)
-    ..translate(-source.width / 2, -source.height / 2);
+  late final Matrix4 matrix =
+      Matrix4(
+          transform.scos,
+          transform.ssin,
+          0,
+          0, //
+          -transform.ssin,
+          transform.scos,
+          0,
+          0, //
+          0,
+          0,
+          0,
+          0, //
+          transform.tx,
+          transform.ty,
+          0,
+          1, //
+        )
+        ..translateByDouble(source.width / 2, source.height / 2, 0.0, 1.0)
+        ..rotateY(flip ? pi : 0)
+        ..translateByDouble(-source.width / 2, -source.height / 2, 0.0, 1.0);
 
   /// Paint object used for the web.
   final Paint paint;
@@ -83,8 +96,7 @@ enum FlippedAtlasStatus {
   generating,
 
   /// The flipped atlas image has been generated.
-  generated,
-  ;
+  generated;
 
   bool get isNone => this == FlippedAtlasStatus.none;
   bool get isGenerating => this == FlippedAtlasStatus.generating;
@@ -116,8 +128,8 @@ class SpriteBatch {
     this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
-  })  : _imageCache = imageCache,
-        _imageKey = imageKey;
+  }) : _imageCache = imageCache,
+       _imageKey = imageKey;
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///
@@ -243,6 +255,43 @@ class SpriteBatch {
     return picture.toImageSafe(image.width * 2, image.height);
   }
 
+  int get length => _sources.length;
+
+  /// Replace provided values of a batch item at the [index], when a parameter
+  /// is not provided, the original value of the batch item will be used.
+  ///
+  /// Throws an [ArgumentError] if the [index] is out of bounds.
+  /// At least one of the parameters must be different from null.
+  void replace(
+    int index, {
+    Rect? source,
+    Color? color,
+    RSTransform? transform,
+  }) {
+    assert(
+      source != null || color != null || transform != null,
+      'At least one of the parameters must be different from null.',
+    );
+
+    if (index < 0 || index >= length) {
+      throw ArgumentError('Index out of bounds: $index');
+    }
+
+    final currentBatchItem = _batchItems[index];
+    final newBatchItem = BatchItem(
+      source: source ?? currentBatchItem.source,
+      transform: transform ?? currentBatchItem.transform,
+      color: color ?? currentBatchItem.paint.color,
+      flip: currentBatchItem.flip,
+    );
+
+    _batchItems[index] = newBatchItem;
+
+    _sources[index] = newBatchItem.source;
+    _transforms[index] = newBatchItem.transform;
+    _colors[index] = color ?? _defaultColor;
+  }
+
   /// Add a new batch item using a RSTransform.
   ///
   /// The [source] parameter is the source location on the [atlas].
@@ -289,9 +338,7 @@ class SpriteBatch {
           : batchItem.source,
     );
     _transforms.add(batchItem.transform);
-    if (color != null) {
-      _colors.add(color);
-    }
+    _colors.add(color ?? _defaultColor);
   }
 
   /// Add a new batch item.
@@ -374,13 +421,19 @@ class SpriteBatch {
 
     final renderPaint = paint ?? _emptyPaint;
 
+    final hasNoColors = _colors.every((c) => c == _defaultColor);
+    final actualBlendMode = blendMode ?? defaultBlendMode;
+    if (!hasNoColors && actualBlendMode == null) {
+      throw 'When setting any colors, a blend mode must be provided.';
+    }
+
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
       canvas.drawAtlas(
         atlas,
         _transforms,
         _sources,
-        _colors.isEmpty ? null : _colors,
-        blendMode ?? defaultBlendMode,
+        hasNoColors ? null : _colors,
+        actualBlendMode,
         cullRect,
         renderPaint,
       );
@@ -390,7 +443,7 @@ class SpriteBatch {
 
         canvas
           ..save()
-          ..transform(batchItem.matrix.storage)
+          ..transform32(batchItem.matrix.storage)
           ..drawRect(batchItem.destination, batchItem.paint)
           ..drawImageRect(
             atlas,
@@ -402,4 +455,6 @@ class SpriteBatch {
       }
     }
   }
+
+  static const _defaultColor = Color(0x00000000);
 }

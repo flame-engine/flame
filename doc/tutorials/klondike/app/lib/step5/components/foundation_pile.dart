@@ -9,8 +9,8 @@ import 'card.dart';
 
 class FoundationPile extends PositionComponent implements Pile {
   FoundationPile(int intSuit, this.checkWin, {super.position})
-      : suit = Suit.fromInt(intSuit),
-        super(size: KlondikeGame.cardSize);
+    : suit = Suit.fromInt(intSuit),
+      super(size: KlondikeGame.cardSize);
 
   final VoidCallback checkWin;
 

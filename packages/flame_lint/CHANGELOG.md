@@ -1,3 +1,36 @@
+## 1.4.2
+
+ - **FIX**: Update flame_lint to use lints 6.0.0 ([#3612](https://github.com/flame-engine/flame/issues/3612)). ([ba5f6789](https://github.com/flame-engine/flame/commit/ba5f6789bed68e4cc7ca95584e35ed62d0111da2))
+
+## 1.4.1
+
+ - **FIX**: Remove unnecessary breaks ([#3638](https://github.com/flame-engine/flame/issues/3638)). ([ea29929c](https://github.com/flame-engine/flame/commit/ea29929cd86ed00407f2d2aa69dcf6f34ffc5bbd))
+
+## 1.4.0
+
+ - **FEAT**: Preserve trailing commas in Dart ^3.8.0 ([#3607](https://github.com/flame-engine/flame/issues/3607)). ([433829cb](https://github.com/flame-engine/flame/commit/433829cbdaafa9b1e9f0250b68f5143ec1a4d562))
+
+## 1.3.0
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
+## 1.2.3
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 1.2.2
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.2.1
+
+ - **FIX**: Update version of lints to comply with new pub requirements ([#3223](https://github.com/flame-engine/flame/issues/3223)). ([1b0bee72](https://github.com/flame-engine/flame/commit/1b0bee726b5937f73d4be5e304bc8780aa3ca6f0))
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+## 1.2.0
+
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+
 ## 1.1.2
 
  - **FIX**: Minor issues due Flutter 3.16 ([#2856](https://github.com/flame-engine/flame/issues/2856)). ([d51cd584](https://github.com/flame-engine/flame/commit/d51cd584c71a27c242c2f4600282cf8359daaa17))

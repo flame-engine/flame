@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -7,7 +6,6 @@ import 'package:flame/src/experimental/geometry/shapes/polygon.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:flame/src/math/random_fallback.dart';
-import 'package:flutter/cupertino.dart';
 
 /// An axis-aligned rectangle.
 ///
@@ -39,7 +37,7 @@ class Rectangle extends Shape {
   }
 
   Rectangle.fromLTWH(double left, double top, double width, double height)
-      : this.fromLTRB(left, top, left + width, top + height);
+    : this.fromLTRB(left, top, left + width, top + height);
 
   /// Constructs a [Rectangle] from two opposite corners. The points can be in
   /// any disposition to each other.
@@ -149,11 +147,10 @@ class Rectangle extends Shape {
 
   @override
   Vector2 nearestPoint(Vector2 point) {
-    return _tmpResult
-      ..setValues(
-        (point.x).clamp(_left, _right),
-        (point.y).clamp(_top, _bottom),
-      );
+    return _tmpResult..setValues(
+      (point.x).clamp(_left, _right),
+      (point.y).clamp(_top, _bottom),
+    );
   }
 
   Rect toRect() => Rect.fromLTWH(left, top, width, height);

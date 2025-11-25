@@ -7,6 +7,7 @@ import 'package:examples/stories/rendering/nine_tile_box_example.dart';
 import 'package:examples/stories/rendering/particles_example.dart';
 import 'package:examples/stories/rendering/particles_interactive_example.dart';
 import 'package:examples/stories/rendering/rich_text_example.dart';
+import 'package:examples/stories/rendering/text_box_example.dart';
 import 'package:examples/stories/rendering/text_example.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,11 @@ void addRenderingStories(Dashbook dashbook) {
     )
     ..add(
       'Isometric Tile Map',
-      (_) => GameWidget(game: IsometricTileMapExample()),
+      (context) => GameWidget(
+        game: IsometricTileMapExample(
+          halfSize: context.boolProperty('Half size', true),
+        ),
+      ),
       codeLink: baseLink('rendering/isometric_tile_map_example.dart'),
       info: IsometricTileMapExample.description,
     )
@@ -63,8 +68,26 @@ void addRenderingStories(Dashbook dashbook) {
     )
     ..add(
       'Rich Text',
-      (_) => GameWidget(game: RichTextExample()),
+      (context) => GameWidget(
+        game: RichTextExample(
+          textAlign: context.listProperty(
+            'Text align',
+            TextAlign.left,
+            TextAlign.values,
+          ),
+        ),
+      ),
       codeLink: baseLink('rendering/rich_text_example.dart'),
       info: RichTextExample.description,
+    )
+    ..add(
+      'TextBoxComponent',
+      (context) {
+        return GameWidget(
+          game: TextBoxExample(),
+        );
+      },
+      codeLink: baseLink('rendering/text_box_example.dart'),
+      info: TextBoxExample.description,
     );
 }

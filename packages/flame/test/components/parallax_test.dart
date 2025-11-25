@@ -27,9 +27,9 @@ class _ParallaxGame extends FlameGame {
   }
 }
 
-class MockImages extends Mock implements Images {}
+class _MockImages extends Mock implements Images {}
 
-class MockImage extends Mock implements Image {
+class _MockImage extends Mock implements Image {
   @override
   int get height => 100;
 
@@ -47,14 +47,14 @@ class _SlowLoadParallaxGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final mockImageCache = MockImages();
+    final mockImageCache = _MockImages();
 
     void createMockAnswer(int imageNumber, int time) {
       when(() => mockImageCache.load('$imageNumber.png')).thenAnswer(
         (_) {
           return Future<Image>.delayed(
             Duration(milliseconds: time * 100),
-            () => Future.value(MockImage()),
+            () => Future.value(_MockImage()),
           );
         },
       );
@@ -92,21 +92,25 @@ void main() {
     );
 
     testWithGame<_ParallaxGame>(
-        'can have fullscreen ParallaxComponent', _ParallaxGame.new,
-        (game) async {
-      expect(game.parallaxComponent.size, game.size);
-    });
+      'can have fullscreen ParallaxComponent',
+      _ParallaxGame.new,
+      (game) async {
+        expect(game.parallaxComponent.size, game.size);
+      },
+    );
 
     testWithGame<_SlowLoadParallaxGame>(
-        'can have layers with different loading times',
-        _SlowLoadParallaxGame.new, (game) async {
-      final parallax = game.parallaxComponent.parallax!;
-      var lastLength = 0.0;
-      for (final layer in parallax.layers) {
-        final velocityLength = layer.velocityMultiplier.length;
-        expect(velocityLength > lastLength, isTrue);
-        lastLength = velocityLength;
-      }
-    });
+      'can have layers with different loading times',
+      _SlowLoadParallaxGame.new,
+      (game) async {
+        final parallax = game.parallaxComponent.parallax!;
+        var lastLength = 0.0;
+        for (final layer in parallax.layers) {
+          final velocityLength = layer.velocityMultiplier.length;
+          expect(velocityLength > lastLength, isTrue);
+          lastLength = velocityLength;
+        }
+      },
+    );
   });
 }

@@ -1,3 +1,23 @@
+## 1.5.0
+
+ - **FEAT**: Expose additional flame_jenny Command classes ([#3641](https://github.com/flame-engine/flame/issues/3641)). ([8ef2587d](https://github.com/flame-engine/flame/commit/8ef2587de4a1bef1d745cc1f5a626a7e84c6230c))
+
+## 1.4.0
+
+ - **FEAT**(Jenny): Add onCommandFinish lifecycle method to DialogueView ([#3600](https://github.com/flame-engine/flame/issues/3600)). ([bd5a4ca6](https://github.com/flame-engine/flame/commit/bd5a4ca68a46feb6734a70d5320bb7bf23b782d5))
+
+## 1.3.3
+
+ - **FEAT**: Bump to new lint package ([#3545](https://github.com/flame-engine/flame/issues/3545)). ([bf6ee518](https://github.com/flame-engine/flame/commit/bf6ee51897591b7ad6e5f9da2193b1eeeaf026f4))
+
+## 1.3.2
+
+ - **FIX**: Fix analyze issue on main ([#3265](https://github.com/flame-engine/flame/issues/3265)). ([f60b6e13](https://github.com/flame-engine/flame/commit/f60b6e134177495bcfd0f405a50f9e0e666b8b42))
+
+## 1.3.1
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+
 ## 1.3.0
 
  - **FEAT**: Add new methods to CommandStorage to support more arguments ([#3035](https://github.com/flame-engine/flame/issues/3035)). ([21922620](https://github.com/flame-engine/flame/commit/219226201a8d0c6e301c388299277be95b585c0e))

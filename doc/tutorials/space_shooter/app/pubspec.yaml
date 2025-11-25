@@ -1,4 +1,5 @@
 name: tutorials_space_shooter
+resolution: workspace
 description: Flame Space Shooter Tutorial
 
 publish_to: 'none'
@@ -6,15 +7,16 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
+  flame: ^1.34.0
   flutter:
     sdk: flutter
+  web: ^1.1.0
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter
 

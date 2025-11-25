@@ -1,20 +1,21 @@
 name: flame_test_example
+resolution: workspace
 description: Example of how to test with the flame_test package
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
+  flame: ^1.34.0
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
-  flame_test: ^1.16.0
+  flame_lint: ^1.4.2
+  flame_test: ^2.2.0
   flutter_test:
     sdk: flutter
   test: any

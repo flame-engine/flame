@@ -16,12 +16,5 @@ class FlameNetworkImages extends FlameNetworkAssets<Image> {
     super.getAppDirectory,
     super.cacheInMemory,
     super.cacheInStorage,
-  }) : super(
-          decodeAsset: decodeImageFromList,
-          encodeAsset: (Image image) async {
-            final data = await image.toByteData(format: ImageByteFormat.png);
-
-            return data!.buffer.asUint8List();
-          },
-        );
+  }) : super(decodeAsset: decodeImageFromList);
 }

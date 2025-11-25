@@ -21,6 +21,7 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
     super.controller, {
     SizeProvider? target,
     super.onComplete,
+    super.key,
   }) : _offset = offset.clone() {
     this.target = target;
   }
@@ -35,8 +36,13 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
     Vector2 targetSize,
     EffectController controller, {
     void Function()? onComplete,
-  }) =>
-      _SizeToEffect(targetSize, controller, onComplete: onComplete);
+    ComponentKey? key,
+  }) => _SizeToEffect(
+    targetSize,
+    controller,
+    onComplete: onComplete,
+    key: key,
+  );
 
   Vector2 _offset;
 
@@ -56,12 +62,13 @@ class _SizeToEffect extends SizeEffect {
     Vector2 targetSize,
     EffectController controller, {
     void Function()? onComplete,
-  })  : _targetSize = targetSize.clone(),
-        super.by(
-          Vector2.zero(),
-          controller,
-          onComplete: onComplete,
-        );
+    super.key,
+  }) : _targetSize = targetSize.clone(),
+       super.by(
+         Vector2.zero(),
+         controller,
+         onComplete: onComplete,
+       );
 
   @override
   void onStart() {

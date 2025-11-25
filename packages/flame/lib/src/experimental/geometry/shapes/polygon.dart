@@ -26,7 +26,7 @@ class Polygon extends Shape {
   /// the polygon is convex or not. With this flag the user promises that the
   /// vertices are already in the correct CCW order.
   Polygon(this._vertices, {bool? convex})
-      : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
+    : assert(_vertices.length >= 3, 'At least 3 vertices are required') {
     _initializeEdges();
     if (convex == null) {
       _ensureProperOrientation();
@@ -51,11 +51,13 @@ class Polygon extends Shape {
   late List<Vector2> _edges;
   void _initializeEdges() {
     var previousVertex = _vertices.last;
-    _edges = _vertices.map((Vector2 vertex) {
-      final edge = vertex - previousVertex;
-      previousVertex = vertex;
-      return edge;
-    }).toList(growable: false);
+    _edges = _vertices
+        .map((Vector2 vertex) {
+          final edge = vertex - previousVertex;
+          previousVertex = vertex;
+          return edge;
+        })
+        .toList(growable: false);
   }
 
   /// Checks whether the vertices are listed in the CCW order, and if not
@@ -65,7 +67,7 @@ class Polygon extends Shape {
     var nInteriorAngles = 0;
     var nExteriorAngles = 0;
     var previousEdge = _edges.last;
-    _edges.forEach((edge) {
+    for (final edge in _edges) {
       final crossProduct = edge.cross(previousEdge);
       previousEdge = edge;
       // A straight angle counts as both internal and external
@@ -75,7 +77,7 @@ class Polygon extends Shape {
       if (crossProduct <= 0) {
         nExteriorAngles++;
       }
-    });
+    }
     if (nInteriorAngles < nExteriorAngles) {
       _reverseVertices();
       _initializeEdges();
@@ -116,7 +118,9 @@ class Polygon extends Shape {
   Aabb2? _aabb;
   Aabb2 _calculateAabb() {
     final aabb = Aabb2.minMax(_vertices.first, _vertices.first);
-    _vertices.forEach(aabb.hullPoint);
+    for (final vertex in _vertices) {
+      aabb.hullPoint(vertex);
+    }
     return aabb;
   }
 

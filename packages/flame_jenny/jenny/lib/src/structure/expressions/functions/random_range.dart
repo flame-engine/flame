@@ -12,7 +12,7 @@ class RandomRangeFn extends NumExpression {
   final NumExpression _b;
   final YarnProject _yarn;
 
-  /// Static constructor, used by <parse.dart>.
+  /// Static constructor, used by parse.dart.
   static Expression make(
     List<FunctionArgument> args,
     YarnProject yarnProject,

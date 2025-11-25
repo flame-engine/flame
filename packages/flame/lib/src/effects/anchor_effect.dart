@@ -1,4 +1,4 @@
-import 'package:flame/src/anchor.dart';
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/anchor_by_effect.dart';
 import 'package:flame/src/effects/anchor_to_effect.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
@@ -6,7 +6,6 @@ import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/effects/effect_target.dart';
 import 'package:flame/src/effects/measurable_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// Base class for effects that affect the `anchor` of their targets.
 ///
@@ -22,6 +21,7 @@ abstract class AnchorEffect extends Effect
     super.controller,
     AnchorProvider? target, {
     super.onComplete,
+    super.key,
   }) {
     this.target = target;
   }
@@ -31,24 +31,26 @@ abstract class AnchorEffect extends Effect
     EffectController controller, {
     AnchorProvider? target,
     void Function()? onComplete,
-  }) =>
-      AnchorByEffect(
-        offset,
-        controller,
-        target: target,
-        onComplete: onComplete,
-      );
+    ComponentKey? key,
+  }) => AnchorByEffect(
+    offset,
+    controller,
+    target: target,
+    onComplete: onComplete,
+    key: key,
+  );
 
   factory AnchorEffect.to(
     Anchor destination,
     EffectController controller, {
     AnchorProvider? target,
     void Function()? onComplete,
-  }) =>
-      AnchorToEffect(
-        destination,
-        controller,
-        target: target,
-        onComplete: onComplete,
-      );
+    ComponentKey? key,
+  }) => AnchorToEffect(
+    destination,
+    controller,
+    target: target,
+    onComplete: onComplete,
+    key: key,
+  );
 }

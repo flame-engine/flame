@@ -1,3 +1,85 @@
+## 0.3.2+18
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+17
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+16
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+15
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+14
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+13
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+12
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+11
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+10
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+9
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+8
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+7
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 0.3.2+6
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 0.3.2+5
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+4
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+3
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+2
+
+ - Update a dependency to the latest release.
+
+## 0.3.2+1
+
+ - Update a dependency to the latest release.
+
+## 0.3.2
+
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+## 0.3.1
+
+## 0.3.0+1
+
+ - Update a dependency to the latest release.
+
 ## 0.3.0
 
 > Note: This release has breaking changes.

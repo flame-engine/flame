@@ -5,14 +5,14 @@ import 'package:flame/src/effects/effect.dart';
 /// another.
 class SequenceEffectController extends EffectController {
   SequenceEffectController(List<EffectController> controllers)
-      : assert(controllers.isNotEmpty, 'List of controllers cannot be empty'),
-        assert(
-          !controllers.any((c) => c.isInfinite),
-          'Children controllers cannot be infinite',
-        ),
-        children = controllers,
-        _currentIndex = 0,
-        super.empty();
+    : assert(controllers.isNotEmpty, 'List of controllers cannot be empty'),
+      assert(
+        !controllers.any((c) => c.isInfinite),
+        'Children controllers cannot be infinite',
+      ),
+      children = controllers,
+      _currentIndex = 0,
+      super.empty();
 
   /// Individual controllers in the sequence.
   final List<EffectController> children;

@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:ordered_set/mapping_ordered_set.dart';
+import 'package:ordered_set/ordered_set.dart';
 import 'package:test/test.dart';
 
 import '../custom_component.dart';
@@ -20,23 +22,6 @@ void main() {
         priorityComponents.shuffle();
         await game.ensureAddAll(priorityComponents);
         componentsSorted(game.children);
-      },
-    );
-
-    testWithFlameGame(
-      'changing priority should reorder component list',
-      (game) async {
-        final firstComponent = _PriorityComponent(-1);
-        final priorityComponents = List.generate(10, _PriorityComponent.new)
-          ..add(firstComponent);
-        priorityComponents.shuffle();
-        final components = game.world.children;
-        await game.world.ensureAddAll(priorityComponents);
-        componentsSorted(components);
-        expect(components.first, firstComponent);
-        firstComponent.priority = 11;
-        game.update(0);
-        expect(components.last, firstComponent);
       },
     );
 
@@ -166,6 +151,7 @@ void main() {
 
         a.priority = 10;
         game.update(0);
+        await game.ready();
 
         componentsSorted(game.children);
         componentsSorted(a.children);
@@ -180,6 +166,7 @@ void main() {
         c1.priority = 10;
         a2.priority = 0;
         game.update(0);
+        await game.ready();
 
         a.assertCalled(1);
         b.assertCalled(0);
@@ -194,6 +181,7 @@ void main() {
         b1.priority = 2;
         a1.priority = 1; // no-op!
         game.update(0);
+        await game.ready();
 
         a.assertCalled(0);
         b.assertCalled(1);
@@ -234,7 +222,10 @@ void main() {
 
       expect(parent.priority, 0);
       expect(child.priority, 0);
+
       game.update(0.1);
+      await game.ready();
+
       expect(parent.priority, 10);
       expect(child.priority, 0);
       expect(renderEvents, isEmpty);
@@ -244,13 +235,15 @@ void main() {
   });
 }
 
-class _SpyComponentSet extends ComponentSet {
+class _SpyComponentSet extends MappingOrderedSet<num, Component> {
   int callCount = 0;
 
+  _SpyComponentSet() : super((e) => e.priority);
+
   @override
-  void reorder() {
+  void rebalanceAll() {
     callCount++;
-    super.reorder();
+    super.rebalanceAll();
   }
 }
 
@@ -262,7 +255,7 @@ class _ParentWithReorderSpy extends Component {
   _ParentWithReorderSpy(int priority) : super(priority: priority);
 
   @override
-  ComponentSet createComponentSet() => _SpyComponentSet();
+  OrderedSet<Component> createComponentSet() => _SpyComponentSet();
 
   void assertCalled(int n) {
     final componentSet = children as _SpyComponentSet;

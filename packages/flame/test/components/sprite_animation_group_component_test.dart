@@ -45,11 +45,22 @@ Future<void> main() async {
       component.current = _AnimationState.running;
       expect(component.animation, animation2);
     });
+
+    test('Asserts that map contains key', () {
+      expect(
+        () {
+          SpriteAnimationGroupComponent<String>(animations: {}).current =
+              'non-existent-key';
+        },
+        failsAssert('Animation not found for key: non-existent-key'),
+      );
+    });
   });
 
   group('SpriteAnimationGroupComponent.shouldRemove', () {
-    testWithFlameGame('removeOnFinish is true and there is no any state yet',
-        (game) async {
+    testWithFlameGame('removeOnFinish is true and there is no any state yet', (
+      game,
+    ) async {
       final animation = SpriteAnimation.spriteList(
         [
           Sprite(image),
@@ -106,97 +117,100 @@ Future<void> main() async {
     );
 
     testWithFlameGame(
-        'removeOnFinish is true and current animation#loop is true',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        // ignore: avoid_redundant_argument_values
-        loop: true,
-      );
-      final component = SpriteAnimationGroupComponent<_AnimationState>(
-        animations: {_AnimationState.idle: animation},
-        removeOnFinish: {_AnimationState.idle: true},
-        current: _AnimationState.idle,
-      );
+      'removeOnFinish is true and current animation#loop is true',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          // ignore: avoid_redundant_argument_values
+          loop: true,
+        );
+        final component = SpriteAnimationGroupComponent<_AnimationState>(
+          animations: {_AnimationState.idle: animation},
+          removeOnFinish: {_AnimationState.idle: true},
+          current: _AnimationState.idle,
+        );
 
-      final world = game.world;
-      await world.ensureAdd(component);
-      expect(component.parent, world);
-      expect(world.children.length, 1);
+        final world = game.world;
+        await world.ensureAdd(component);
+        expect(component.parent, world);
+        expect(world.children.length, 1);
 
-      game.update(2);
-      expect(component.parent, world);
+        game.update(2);
+        expect(component.parent, world);
 
-      // runs a cycle to remove the component, but failed
-      game.update(0.1);
-      expect(world.children.length, 1);
-    });
-
-    testWithFlameGame(
-        'removeOnFinish is false and current animation#loop is false',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        loop: false,
-      );
-      final component = SpriteAnimationGroupComponent<_AnimationState>(
-        animations: {_AnimationState.idle: animation},
-        current: _AnimationState.idle,
-        // when omitted, removeOnFinish is false for all states
-      );
-
-      final world = game.world;
-      await world.ensureAdd(component);
-      expect(component.parent, world);
-      expect(world.children.length, 1);
-
-      game.update(2);
-      expect(component.parent, world);
-
-      // runs a cycle to remove the component, but failed
-      game.update(0.1);
-      expect(world.children.length, 1);
-    });
+        // runs a cycle to remove the component, but failed
+        game.update(0.1);
+        expect(world.children.length, 1);
+      },
+    );
 
     testWithFlameGame(
-        'removeOnFinish is false and current animation#loop is true',
-        (game) async {
-      final animation = SpriteAnimation.spriteList(
-        [
-          Sprite(image),
-          Sprite(image),
-        ],
-        stepTime: 1,
-        // ignore: avoid_redundant_argument_values
-        loop: true,
-      );
-      final component = SpriteAnimationGroupComponent<_AnimationState>(
-        animations: {_AnimationState.idle: animation},
-        // when omitted, removeOnFinish is false for all states
-        current: _AnimationState.idle,
-      );
+      'removeOnFinish is false and current animation#loop is false',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          loop: false,
+        );
+        final component = SpriteAnimationGroupComponent<_AnimationState>(
+          animations: {_AnimationState.idle: animation},
+          current: _AnimationState.idle,
+          // when omitted, removeOnFinish is false for all states
+        );
 
-      final world = game.world;
-      await world.ensureAdd(component);
+        final world = game.world;
+        await world.ensureAdd(component);
+        expect(component.parent, world);
+        expect(world.children.length, 1);
 
-      expect(component.parent, world);
-      expect(world.children.length, 1);
+        game.update(2);
+        expect(component.parent, world);
 
-      game.update(2);
-      expect(component.parent, world);
+        // runs a cycle to remove the component, but failed
+        game.update(0.1);
+        expect(world.children.length, 1);
+      },
+    );
 
-      // runs a cycle to remove the component, but failed
-      game.update(0.1);
-      expect(world.children.length, 1);
-    });
+    testWithFlameGame(
+      'removeOnFinish is false and current animation#loop is true',
+      (game) async {
+        final animation = SpriteAnimation.spriteList(
+          [
+            Sprite(image),
+            Sprite(image),
+          ],
+          stepTime: 1,
+          // ignore: avoid_redundant_argument_values
+          loop: true,
+        );
+        final component = SpriteAnimationGroupComponent<_AnimationState>(
+          animations: {_AnimationState.idle: animation},
+          // when omitted, removeOnFinish is false for all states
+          current: _AnimationState.idle,
+        );
+
+        final world = game.world;
+        await world.ensureAdd(component);
+
+        expect(component.parent, world);
+        expect(world.children.length, 1);
+
+        game.update(2);
+        expect(component.parent, world);
+
+        // runs a cycle to remove the component, but failed
+        game.update(0.1);
+        expect(world.children.length, 1);
+      },
+    );
   });
 
   group('SpriteAnimationGroupComponent.currentAnimationNotifier', () {

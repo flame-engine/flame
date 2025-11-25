@@ -4,7 +4,7 @@ import 'package:flame/text.dart';
 
 class RectElement extends TextElement {
   RectElement(double width, double height, this._paint)
-      : _rect = Rect.fromLTWH(0, 0, width, height);
+    : _rect = Rect.fromLTWH(0, 0, width, height);
 
   Rect _rect;
   final Paint _paint;
@@ -18,4 +18,7 @@ class RectElement extends TextElement {
   void draw(Canvas canvas) {
     canvas.drawRect(_rect, _paint);
   }
+
+  @override
+  Rect get boundingBox => _rect;
 }

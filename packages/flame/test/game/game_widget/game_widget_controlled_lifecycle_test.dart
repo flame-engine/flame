@@ -63,7 +63,7 @@ class _GamePage extends StatelessWidget {
           ),
           Positioned(
             top: 0,
-            right: 0,
+            left: 0,
             child: ElevatedButton(
               child: const Text('Back'),
               onPressed: () {
@@ -179,8 +179,10 @@ void main() {
 
       await tester.pump();
       expect(events, ['onGameResize']); // no onRemove
-      final game =
-          tester.allWidgets.whereType<GameWidget<_MyGame>>().first.game;
+      final game = tester.allWidgets
+          .whereType<GameWidget<_MyGame>>()
+          .first
+          .game;
       expect(game?.children, everyElement((Component c) => c.parent == game));
     });
 

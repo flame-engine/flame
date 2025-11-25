@@ -1,15 +1,12 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/sprite_animation_ticker.dart';
 import 'package:flutter/foundation.dart';
 
 export '../sprite_animation.dart';
 
-class SpriteAnimationGroupComponent<T> extends PositionComponent
-    with HasPaint
-    implements SizeProvider {
+class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
   /// Key with the current playing animation
   T? _current;
 
@@ -57,20 +54,20 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     super.children,
     super.priority,
     super.key,
-  })  : assert(
-          (size == null) == (autoResize ?? size == null),
-          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
-        ),
-        _current = current,
-        _animations = animations,
-        _autoResize = autoResize ?? size == null,
-        _animationTickers = animations != null
-            ? Map.fromEntries(
-                animations.entries
-                    .map((e) => MapEntry(e.key, e.value.createTicker()))
-                    .toList(),
-              )
-            : null {
+  }) : assert(
+         (size == null) == (autoResize ?? size == null),
+         '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
+       ),
+       _current = current,
+       _animations = animations,
+       _autoResize = autoResize ?? size == null,
+       _animationTickers = animations != null
+           ? Map.fromEntries(
+               animations.entries
+                   .map((e) => MapEntry(e.key, e.value.createTicker()))
+                   .toList(),
+             )
+           : null {
     if (paint != null) {
       this.paint = paint;
     }
@@ -100,33 +97,35 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
     Vector2? size,
     Vector2? scale,
     double? angle,
+    double nativeAngle = 0,
     Anchor? anchor,
     int? priority,
     ComponentKey? key,
   }) : this(
-          animations: data.map((key, value) {
-            return MapEntry(
-              key,
-              SpriteAnimation.fromFrameData(
-                image,
-                value,
-              ),
-            );
-          }),
-          current: current,
-          autoResize: autoResize,
-          removeOnFinish: removeOnFinish,
-          autoResetTicker: autoResetTicker,
-          playing: playing,
-          paint: paint,
-          position: position,
-          size: size,
-          scale: scale,
-          angle: angle,
-          anchor: anchor,
-          priority: priority,
-          key: key,
-        );
+         animations: data.map((key, value) {
+           return MapEntry(
+             key,
+             SpriteAnimation.fromFrameData(
+               image,
+               value,
+             ),
+           );
+         }),
+         current: current,
+         autoResize: autoResize,
+         removeOnFinish: removeOnFinish,
+         autoResetTicker: autoResetTicker,
+         playing: playing,
+         paint: paint,
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         anchor: anchor,
+         nativeAngle: nativeAngle,
+         priority: priority,
+         key: key,
+       );
 
   SpriteAnimation? get animation => _animations?[current];
   SpriteAnimationTicker? get animationTicker => _animationTickers?[current];
@@ -134,10 +133,16 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   /// Returns the current group state.
   T? get current => _current;
 
-  /// The the group state to given state.
+  /// The group state to given state.
   ///
   /// Will update [size] if [autoResize] is true.
   set current(T? value) {
+    assert(_animations != null, 'Animations not set');
+    assert(
+      _animations!.keys.contains(value),
+      'Animation not found for key: $value',
+    );
+
     final changed = value != current;
     _current = value;
     _resizeToSprite();
@@ -151,7 +156,11 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   }
 
   /// Returns the map of animation state and their corresponding animations.
-  Map<T, SpriteAnimation>? get animations => _animations;
+  ///
+  /// If you want to change the contents of the map use the animations setter
+  /// and pass in a new map of animations.
+  Map<T, SpriteAnimation>? get animations =>
+      _animations != null ? Map.unmodifiable(_animations!) : null;
 
   /// Sets the given [value] as new animation state map.
   set animations(Map<T, SpriteAnimation>? value) {
@@ -192,10 +201,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent
   @override
   void render(Canvas canvas) {
     animationTicker?.getSprite().render(
-          canvas,
-          size: size,
-          overridePaint: paint,
-        );
+      canvas,
+      size: size,
+      overridePaint: paint,
+    );
   }
 
   @mustCallSuper

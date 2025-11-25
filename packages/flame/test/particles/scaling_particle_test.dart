@@ -6,8 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('ScalingParticle', () {
-    testWithFlameGame(
-        'A particle which scale its child over the lifespan '
+    testWithFlameGame('A particle which scale its child over the lifespan '
         'between 1 and a provided scale', (game) async {
       final paint = Paint()..color = Colors.red;
       final rect = ComputedParticle(
@@ -18,7 +17,7 @@ void main() {
         ),
       );
 
-      final particle = rect.scaling(to: .5);
+      final particle = rect.scaling(to: 0.5, curve: Curves.easeIn);
 
       final component = ParticleSystemComponent(
         particle: particle,
@@ -28,7 +27,9 @@ void main() {
       await game.ready();
       game.update(1);
 
-      expect(particle.scale, .75);
+      expect(particle.scale, 0.841796875);
+      expect(particle.curve, Curves.easeIn);
+      expect(particle.progress, 0.31640625);
       expect(particle.child, isInstanceOf<ComputedParticle>());
       expect(particle.child.progress, 0.5);
     });

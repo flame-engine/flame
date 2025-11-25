@@ -1,19 +1,20 @@
 name: flame_spine_example
+resolution: workspace
 description: An example of using a flame_spine component
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_spine: ^0.2.0
+  flame: ^1.34.0
+  flame_spine: ^0.3.0+1
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter
 

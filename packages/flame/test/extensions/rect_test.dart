@@ -67,7 +67,7 @@ void main() {
     });
 
     test('test containsPoint calls contains on Rect', () {
-      final rect = MockRect();
+      final rect = _MockRect();
       final point = Vector2.zero();
 
       // mock contains result, but check it is called
@@ -81,9 +81,9 @@ void main() {
       // create points left, above, right and under
 
       // y position [0, 1] but left to rect's left
-      final left = Vector2(-.5, r.nextDouble() * 1);
+      final left = Vector2(-0.5, r.nextDouble() * 1);
       // x position [0, 1] but above rect's top
-      final above = Vector2(r.nextDouble() * 1, -.5);
+      final above = Vector2(r.nextDouble() * 1, -0.5);
       // y position [0, 1] but right to rect's right
       final right = Vector2(1.5, r.nextDouble() * 1);
       // x position [0, 1] but under rect's bottom
@@ -96,22 +96,22 @@ void main() {
       expect(rect.intersectsSegment(under, above), true);
 
       // above the rect and left to rect's left
-      final aboveLeft = Vector2(-.5, r.nextDouble() * 1 - 1);
+      final aboveLeft = Vector2(-0.5, r.nextDouble() * 1 - 1);
       // above the rect and left to rect's left
       final aboveRight = Vector2(1.5, r.nextDouble() * 1 - 1);
       // under the rect and right to rect's right
       final underRight = Vector2(1.5, r.nextDouble() * 1 + 1);
       // under the rect and left to rect's left
-      final underLeft = Vector2(-.5, r.nextDouble() * 1 + 1);
+      final underLeft = Vector2(-0.5, r.nextDouble() * 1 + 1);
       expect(rect.intersectsSegment(aboveLeft, aboveRight), false);
       expect(rect.intersectsSegment(aboveLeft, underLeft), false);
       expect(rect.intersectsSegment(underLeft, underRight), false);
       expect(rect.intersectsSegment(underRight, aboveRight), false);
 
       // any y position but left to rect's left
-      final nearLeft = Vector2(-.25, r.nextDouble() * 256);
+      final nearLeft = Vector2(-0.25, r.nextDouble() * 256);
       // any x position but above rect's top
-      final nearAbove = Vector2(r.nextDouble() * 256, -.25);
+      final nearAbove = Vector2(r.nextDouble() * 256, -0.25);
       // any y position but right to rect's right
       final nearRight = Vector2(1.25, r.nextDouble() * 256);
       // any x position but under rect's bottom
@@ -123,8 +123,9 @@ void main() {
       expect(rect.intersectsSegment(under, nearUnder), false);
     });
 
-    testRandom('intersectsLineSegment is the same as intersectsSegment',
-        (Random r) {
+    testRandom('intersectsLineSegment is the same as intersectsSegment', (
+      Random r,
+    ) {
       final rect = Rect.fromLTWH(
         r.nextDouble(),
         r.nextDouble(),
@@ -138,37 +139,39 @@ void main() {
     });
 
     testRandom(
-        'toVertices returns an array of [topLeft, topRight, bottomRight, '
-        'bottomLeft]', (Random r) {
-      final left = r.nextDouble();
-      final top = r.nextDouble();
-      final right = r.nextDouble();
-      final bottom = r.nextDouble();
+      'toVertices returns an array of [topLeft, topRight, bottomRight, '
+      'bottomLeft]',
+      (Random r) {
+        final left = r.nextDouble();
+        final top = r.nextDouble();
+        final right = r.nextDouble();
+        final bottom = r.nextDouble();
 
-      final rect = Rect.fromLTRB(left, top, right, bottom);
-      final vertices = rect.toVertices();
-      expect(vertices.length, 4);
-      expect(
-        vertices[0],
-        Vector2(left, top),
-        reason: 'topLeft value is not right',
-      );
-      expect(
-        vertices[1],
-        Vector2(right, top),
-        reason: 'topRight value is not right',
-      );
-      expect(
-        vertices[2],
-        Vector2(right, bottom),
-        reason: 'bottomRight value is not right',
-      );
-      expect(
-        vertices[3],
-        Vector2(left, bottom),
-        reason: 'bottomLeft value is not right',
-      );
-    });
+        final rect = Rect.fromLTRB(left, top, right, bottom);
+        final vertices = rect.toVertices();
+        expect(vertices.length, 4);
+        expect(
+          vertices[0],
+          Vector2(left, top),
+          reason: 'topLeft value is not right',
+        );
+        expect(
+          vertices[1],
+          Vector2(right, top),
+          reason: 'topRight value is not right',
+        );
+        expect(
+          vertices[2],
+          Vector2(right, bottom),
+          reason: 'bottomRight value is not right',
+        );
+        expect(
+          vertices[3],
+          Vector2(left, bottom),
+          reason: 'bottomLeft value is not right',
+        );
+      },
+    );
     test('test transform', () {
       final matrix4 = Matrix4.translation(Vector3(10, 10, 0));
       const input = Rect.fromLTWH(0, 0, 10, 10);
@@ -227,4 +230,4 @@ void main() {
   });
 }
 
-class MockRect extends Mock implements Rect {}
+class _MockRect extends Mock implements Rect {}

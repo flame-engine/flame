@@ -9,8 +9,8 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RayTraceExample extends FlameGame
-    with HasCollisionDetection, TapDetector {
-  Paint paint = Paint()..color = Colors.red.withOpacity(0.6);
+    with HasCollisionDetection, TapCallbacks {
+  Paint paint = Paint()..color = Colors.red.withValues(alpha: 0.6);
   bool isClicked = false;
 
   Vector2 get origin => canvasSize / 2;
@@ -79,8 +79,7 @@ class RayTraceExample extends FlameGame
   }
 
   @override
-  void onTap() {
-    super.onTap();
+  void onTapUp(TapUpEvent event) {
     if (!isClicked) {
       isClicked = true;
       return;

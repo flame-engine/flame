@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -120,12 +119,14 @@ mixin _TapCounter on TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
+    expect(event.raw, isNotNull);
     event.continuePropagation = true;
     tapDownEvent++;
   }
 
   @override
   void onTapUp(TapUpEvent event) {
+    expect(event.raw, isNotNull);
     event.continuePropagation = true;
     tapUpEvent++;
   }
@@ -140,5 +141,5 @@ mixin _TapCounter on TapCallbacks {
 class _IgnoreTapCallbacksComponent extends PositionComponent
     with TapCallbacks, _TapCounter, IgnoreEvents {
   _IgnoreTapCallbacksComponent({super.position, super.children})
-      : super(size: Vector2.all(10));
+    : super(size: Vector2.all(10));
 }

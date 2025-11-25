@@ -1,19 +1,19 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('TapCallbacks', () {
     testWithFlameGame(
-        'make sure TapCallback components can be added to a FlameGame',
-        (game) async {
-      await game.ensureAdd(_TapCallbacksComponent());
-      await game.ready();
-      expect(game.children.toList()[2], isA<MultiTapDispatcher>());
-    });
+      'make sure TapCallback components can be added to a FlameGame',
+      (game) async {
+        await game.ensureAdd(_TapCallbacksComponent());
+        await game.ready();
+        expect(game.children.toList()[2], isA<MultiTapDispatcher>());
+      },
+    );
 
     testWithFlameGame('tap event start', (game) async {
       final component = _TapCallbacksComponent()
@@ -26,12 +26,12 @@ void main() {
 
       expect(game.children.whereType<MultiTapDispatcher>().length, equals(1));
       game.firstChild<MultiTapDispatcher>()!.onTapDown(
-            createTapDownEvents(
-              game: game,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
-          );
+        createTapDownEvents(
+          game: game,
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      );
       expect(component.containsLocalPoint(Vector2(10, 10)), false);
     });
 
@@ -450,10 +450,10 @@ class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
     void Function(TapDownEvent)? onLongTapDown,
     void Function(TapUpEvent)? onTapUp,
     void Function(TapCancelEvent)? onTapCancel,
-  })  : _onTapDown = onTapDown,
-        _onLongTapDown = onLongTapDown,
-        _onTapUp = onTapUp,
-        _onTapCancel = onTapCancel;
+  }) : _onTapDown = onTapDown,
+       _onLongTapDown = onLongTapDown,
+       _onTapUp = onTapUp,
+       _onTapCancel = onTapCancel;
 
   final void Function(TapDownEvent)? _onTapDown;
   final void Function(TapDownEvent)? _onLongTapDown;
@@ -485,18 +485,21 @@ mixin _TapCounter on TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     tapDownEvent++;
   }
 
   @override
   void onLongTapDown(TapDownEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     longTapDownEvent++;
   }
 
   @override
   void onTapUp(TapUpEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     tapUpEvent++;
   }

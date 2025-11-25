@@ -16,6 +16,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/revolute_
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/rope_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/weld_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
+import 'package:examples/stories/bridge_libraries/flame_jenny/jenny.dart';
 import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
 import 'package:examples/stories/bridge_libraries/flame_spine/flame_spine.dart';
 import 'package:examples/stories/camera_and_viewport/camera_and_viewport.dart';
@@ -29,6 +30,7 @@ import 'package:examples/stories/input/input.dart';
 import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
 import 'package:examples/stories/rendering/rendering.dart';
+import 'package:examples/stories/router/router.dart';
 import 'package:examples/stories/sprites/sprites.dart';
 import 'package:examples/stories/structure/structure.dart';
 import 'package:examples/stories/svg/svg.dart';
@@ -87,6 +89,7 @@ void runAsDashbook() {
   addLayoutStories(dashbook);
   addParallaxStories(dashbook);
   addRenderingStories(dashbook);
+  addRouterStories(dashbook);
   addTiledStories(dashbook);
   addSpritesStories(dashbook);
   addSvgStories(dashbook);
@@ -98,6 +101,7 @@ void runAsDashbook() {
   // Bridge package examples
   addForge2DStories(dashbook);
   addFlameIsolateExample(dashbook);
+  addFlameJennyExample(dashbook);
   addFlameLottieExample(dashbook);
   addFlameSpineExamples(dashbook);
 

@@ -31,13 +31,14 @@ class MoveAlongPathEffect extends MoveEffect {
     bool oriented = false,
     PositionProvider? target,
     void Function()? onComplete,
-  })  : _isAbsolute = absolute,
-        _followDirection = oriented,
-        super(
-          controller,
-          target,
-          onComplete: onComplete,
-        ) {
+    super.key,
+  }) : _isAbsolute = absolute,
+       _followDirection = oriented,
+       super(
+         controller,
+         target,
+         onComplete: onComplete,
+       ) {
     final metrics = path.computeMetrics().toList();
     if (metrics.length != 1) {
       throw ArgumentError(

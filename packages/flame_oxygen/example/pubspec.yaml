@@ -1,4 +1,5 @@
 name: flame_oxygen_example
+resolution: workspace
 description: Flame Oxygen example
 
 publish_to: 'none'
@@ -6,16 +7,16 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_oxygen: ^0.2.0
+  flame: ^1.34.0
+  flame_oxygen: ^0.2.3+18
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
 flutter:
   uses-material-design: true
   assets:

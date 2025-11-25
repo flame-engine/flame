@@ -3,13 +3,14 @@ import 'dart:ui';
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
+/// An [InlineTextNode] representing bold text.
 class BoldTextNode extends InlineTextNode {
   BoldTextNode(this.child);
 
   BoldTextNode.simple(String text) : child = PlainTextNode(text);
 
   BoldTextNode.group(List<InlineTextNode> children)
-      : child = GroupTextNode(children);
+    : child = GroupTextNode(children);
 
   final InlineTextNode child;
 

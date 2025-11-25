@@ -39,10 +39,10 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 class Player extends SpriteAnimationComponent
     with HasGameReference<SpaceShooterGame> {
   Player()
-      : super(
-          size: Vector2(100, 150),
-          anchor: Anchor.center,
-        );
+    : super(
+        size: Vector2(100, 150),
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {
@@ -52,7 +52,7 @@ class Player extends SpriteAnimationComponent
       'player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
-        stepTime: .2,
+        stepTime: 0.2,
         textureSize: Vector2(32, 48),
       ),
     );

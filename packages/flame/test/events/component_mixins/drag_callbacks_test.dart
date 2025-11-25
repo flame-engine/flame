@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,12 +27,12 @@ void main() {
 
       expect(game.children.whereType<MultiDragDispatcher>().length, 1);
       game.firstChild<MultiDragDispatcher>()!.onDragStart(
-            createDragStartEvents(
-              game: game,
-              localPosition: const Offset(12, 12),
-              globalPosition: const Offset(12, 12),
-            ),
-          );
+        createDragStartEvents(
+          game: game,
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      );
       expect(component.containsLocalPoint(Vector2(10, 10)), false);
     });
 
@@ -407,6 +406,7 @@ mixin _DragCounter on DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
+    expect(event.raw, isNotNull);
     event.handled = true;
     dragStartEvent++;
     if (_wasDragged != isDragged) {
@@ -417,6 +417,7 @@ mixin _DragCounter on DragCallbacks {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    expect(event.raw, isNotNull);
     event.handled = true;
     dragUpdateEvent++;
   }
@@ -424,6 +425,7 @@ mixin _DragCounter on DragCallbacks {
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
+    expect(event.raw, isNotNull);
     event.handled = true;
     dragEndEvent++;
     if (_wasDragged != isDragged) {
@@ -452,9 +454,9 @@ class _DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
     void Function(DragEndEvent)? onDragEnd,
     super.position,
     super.size,
-  })  : _onDragStart = onDragStart,
-        _onDragUpdate = onDragUpdate,
-        _onDragEnd = onDragEnd;
+  }) : _onDragStart = onDragStart,
+       _onDragUpdate = onDragUpdate,
+       _onDragEnd = onDragEnd;
 
   final void Function(DragStartEvent)? _onDragStart;
   final void Function(DragUpdateEvent)? _onDragUpdate;

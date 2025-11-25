@@ -7,7 +7,6 @@ import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
-import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -34,7 +33,11 @@ void main() {
         imageNames: ['map-level1.png', 'image1.png'],
         stringNames: ['map.tmx', 'tiles_custom_path/map_custom_path.tmx'],
       );
-      tiled = await TiledComponent.load('map.tmx', Vector2.all(16));
+      tiled = await TiledComponent.load(
+        'map.tmx',
+        Vector2.all(16),
+        key: ComponentKey.named('test'),
+      );
     });
 
     test('correct loads the file', () {
@@ -55,6 +58,20 @@ void main() {
       );
 
       expect(tiled.tileMap.renderableLayers.length, equals(3));
+    });
+
+    test('throws assertion error if fileName contains a path', () async {
+      expectLater(
+        TiledComponent.load(
+          'path/to/map.tmx',
+          Vector2.all(16),
+        ),
+        throwsAssertionError,
+      );
+    });
+
+    test('assigns key', () async {
+      expect(tiled.key, equals(ComponentKey.named('test')));
     });
 
     group('is positionable', () {
@@ -208,7 +225,8 @@ void main() {
 
       var allRed = true;
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allRed &= rightTilePixels[i] == 255 &&
+        allRed &=
+            rightTilePixels[i] == 255 &&
             rightTilePixels[i + 1] == 0 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
@@ -232,7 +250,8 @@ void main() {
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
+        allGreen &=
+            leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
             leftTilePixels[i + 3] == 255;
@@ -279,16 +298,20 @@ void main() {
     test('[useAtlas = true] Green tile pixels are in correct spots', () {
       const oneColorRect = 8;
       final leftTilePixels = <int>[];
-      for (var i = 65 * oneColorRect * pixel;
-          i < ((64 * 23) + (oneColorRect * 3)) * pixel;
-          i += 64 * pixel) {
-        leftTilePixels
-            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 65 * oneColorRect * pixel;
+        i < ((64 * 23) + (oneColorRect * 3)) * pixel;
+        i += 64 * pixel
+      ) {
+        leftTilePixels.addAll(
+          pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
+        allGreen &=
+            leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
             leftTilePixels[i + 3] == 255;
@@ -296,15 +319,19 @@ void main() {
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * pixel;
-          i < ((64 * 23) + (8 * 7)) * pixel;
-          i += 64 * pixel) {
-        rightTilePixels
-            .addAll(pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 69 * 8 * pixel;
+        i < ((64 * 23) + (8 * 7)) * pixel;
+        i += 64 * pixel
+      ) {
+        rightTilePixels.addAll(
+          pixelsAfterFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allGreen &= rightTilePixels[i] == 0 &&
+        allGreen &=
+            rightTilePixels[i] == 0 &&
             rightTilePixels[i + 1] == 255 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
@@ -314,16 +341,20 @@ void main() {
 
     test('[useAtlas = false] Green tile pixels are in correct spots', () {
       final leftTilePixels = <int>[];
-      for (var i = 65 * 8 * pixel;
-          i < ((64 * 23) + (8 * 3)) * pixel;
-          i += 64 * pixel) {
-        leftTilePixels
-            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 65 * 8 * pixel;
+        i < ((64 * 23) + (8 * 3)) * pixel;
+        i += 64 * pixel
+      ) {
+        leftTilePixels.addAll(
+          pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       var allGreen = true;
       for (var i = 0; i < leftTilePixels.length; i += pixel) {
-        allGreen &= leftTilePixels[i] == 0 &&
+        allGreen &=
+            leftTilePixels[i] == 0 &&
             leftTilePixels[i + 1] == 255 &&
             leftTilePixels[i + 2] == 0 &&
             leftTilePixels[i + 3] == 255;
@@ -331,15 +362,19 @@ void main() {
       expect(allGreen, true);
 
       final rightTilePixels = <int>[];
-      for (var i = 69 * 8 * pixel;
-          i < ((64 * 23) + (8 * 7)) * pixel;
-          i += 64 * pixel) {
-        rightTilePixels
-            .addAll(pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)));
+      for (
+        var i = 69 * 8 * pixel;
+        i < ((64 * 23) + (8 * 7)) * pixel;
+        i += 64 * pixel
+      ) {
+        rightTilePixels.addAll(
+          pixelsBeforeFlipApplied.getRange(i, i + (16 * pixel)),
+        );
       }
 
       for (var i = 0; i < rightTilePixels.length; i += pixel) {
-        allGreen &= rightTilePixels[i] == 0 &&
+        allGreen &=
+            rightTilePixels[i] == 0 &&
             rightTilePixels[i + 1] == 255 &&
             rightTilePixels[i + 2] == 0 &&
             rightTilePixels[i + 3] == 255;
@@ -603,6 +638,99 @@ void main() {
       final pngData = await renderMapToPng(component);
 
       expect(pngData, matchesGoldenFile('goldens/pointy_hex_odd.png'));
+    });
+  });
+
+  group('tile offset', () {
+    late TiledComponent component;
+
+    Future<TiledComponent> setupMap(
+      String tmxFile,
+      String imageFile,
+      Vector2 destTileSize,
+    ) async {
+      final bundle = TestAssetBundle(
+        imageNames: [
+          imageFile,
+        ],
+        stringNames: [tmxFile],
+      );
+      return component = await TiledComponent.load(
+        tmxFile,
+        destTileSize,
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+    }
+
+    test('tile offset hexagonal', () async {
+      await setupMap(
+        // flame tiled currently does not support hexagon side length property,
+        // to use export from Tiled, tweak that value
+        'test_tile_offset_hexagonal.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(40, 28));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_hexagonal.png'),
+      );
+    });
+
+    test('tile offset isometric', () async {
+      await setupMap(
+        'test_tile_offset_isometric.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(32, 32));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_isometric.png'),
+      );
+    });
+
+    test('tile offset orthogonal', () async {
+      await setupMap(
+        'test_tile_offset_orthogonal.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(32, 32));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_orthogonal.png'),
+      );
+    });
+
+    test('tile offset staggered', () async {
+      await setupMap(
+        'test_tile_offset_staggered.tmx',
+        '4_color_sprite.png',
+        Vector2(16, 16),
+      );
+
+      expect(component.size, Vector2(40, 24));
+
+      final pngData = await renderMapToPng(component);
+
+      expect(
+        pngData,
+        matchesGoldenFile('goldens/test_tile_offset_staggered.png'),
+      );
     });
   });
 
@@ -877,27 +1005,27 @@ void main() {
 
           final waterAnimation = layer.animations.first;
           final spikeAnimation = layer.animations.last;
-          expect(waterAnimation.frames.durations, [.18, .17, .15]);
-          expect(spikeAnimation.frames.durations, [.176, .176, .176, .176]);
+          expect(waterAnimation.frames.durations, [0.18, 0.17, 0.15]);
+          expect(spikeAnimation.frames.durations, [0.176, 0.176, 0.176, 0.176]);
 
-          map.update(.177);
+          map.update(0.177);
           expect(waterAnimation.frame, 0);
-          expect(waterAnimation.frames.frameTime, .177);
+          expect(waterAnimation.frames.frameTime, 0.177);
           expect(
             waterAnimation.batchedSource.toRect(),
             waterAnimation.frames.sources[0],
           );
 
           expect(spikeAnimation.frame, 1);
-          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(.001));
+          expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.001));
           expect(
             spikeAnimation.batchedSource.toRect(),
             spikeAnimation.frames.sources[1],
           );
 
-          map.update(.003);
+          map.update(0.003);
           expect(waterAnimation.frame, 1);
-          expect(waterAnimation.frames.frameTime, moreOrLessEquals(.0));
+          expect(waterAnimation.frames.frameTime, moreOrLessEquals(0.0));
           expect(spikeAnimation.frame, 1);
           expect(spikeAnimation.frames.frameTime, moreOrLessEquals(0.004));
 
@@ -978,5 +1106,39 @@ void main() {
         });
       });
     }
+  });
+
+  group('RenderableTiledMap.TileData', () {
+    late RenderableTiledMap renderableTiledMap;
+
+    setUp(() async {
+      final bundle = TestAssetBundle(
+        imageNames: ['4_color_sprite.png'],
+        stringNames: ['deleted_layer_map.tmx'],
+      );
+      renderableTiledMap = await RenderableTiledMap.fromFile(
+        'deleted_layer_map.tmx',
+        Vector2.all(16),
+        bundle: bundle,
+        images: Images(bundle: bundle),
+      );
+    });
+
+    test('same TileData is found by layerId and layerIndex', () {
+      final tileData1 = renderableTiledMap.getTileData(layerId: 6, x: 5, y: 3);
+      final tileData2 = renderableTiledMap.getTileDataByLayerIndex(
+        layerIndex: 4,
+        x: 5,
+        y: 3,
+      );
+      expect(tileData1, isNotNull);
+      expect(tileData2, isNotNull);
+      expect(tileData1, equals(tileData2));
+    });
+
+    test('returns null for non-existent layer', () {
+      expect(renderableTiledMap.getTileData(layerId: 3, x: 1, y: 1), isNull);
+      expect(renderableTiledMap.getTileData(layerId: 5, x: 1, y: 1), isNull);
+    });
   });
 }

@@ -75,12 +75,14 @@ class WorkerOvermind extends Component
     final shortestQueue = min(idleWorkers.length, _queuedTasks.length);
 
     // I know this is not proper handling of lists, but this is just for demo
-    final localQueue = _queuedTasks
-        .map((task) => task.first.tilePosition)
-        .toList(growable: false)
-      ..shuffle();
-    final subQueue =
-        localQueue.getRange(0, shortestQueue).toList(growable: false);
+    final localQueue =
+        _queuedTasks
+            .map((task) => task.first.tilePosition)
+            .toList(growable: false)
+          ..shuffle();
+    final subQueue = localQueue
+        .getRange(0, shortestQueue)
+        .toList(growable: false);
 
     // Commented out since I want to keep jobs in queue for demo
     // _queuedTasks.removeRange(0, shortestQueue);
@@ -95,26 +97,19 @@ class WorkerOvermind extends Component
           pathFinderData: game.pathFinderData,
         );
 
-        final List<List<IntVector2>> paths;
-        switch (isolateHud.computeType) {
-          case ComputeType.isolate:
-            paths = await isolateCompute(
-              _calculateWork,
-              calculateWorkData,
-            );
-            break;
-          case ComputeType.synchronous:
-            paths = _calculateWork(
-              calculateWorkData,
-            );
-            break;
-          case ComputeType.compute:
-            paths = await compute(
-              _calculateWork,
-              calculateWorkData,
-            );
-            break;
-        }
+        final paths = switch (isolateHud.computeType) {
+          ComputeType.isolate => await isolateCompute(
+            _calculateWork,
+            calculateWorkData,
+          ),
+          ComputeType.synchronous => _calculateWork(
+            calculateWorkData,
+          ),
+          ComputeType.compute => await compute(
+            _calculateWork,
+            calculateWorkData,
+          ),
+        };
 
         for (var i = 0; i < paths.length; i++) {
           idleWorkers[i].issueWork(

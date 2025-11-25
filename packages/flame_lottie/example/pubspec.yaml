@@ -1,21 +1,21 @@
 name: flame_lottie_example
+resolution: workspace
 description: An example for flame_lottie. The example shows how load a Lottie animation and add it to a flame game.
-
 publish_to: 'none'
 version: 0.0.1+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_lottie: ^0.4.0
+  flame: ^1.34.0
+  flame_lottie: ^0.4.2+18
   flutter:
     sdk: flutter
   lottie:
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
 
 flutter:
   uses-material-design: true

@@ -14,50 +14,22 @@ class RouterGame extends FlameGame {
     add(
       router = RouterComponent(
         routes: {
-          'splash': Route(SplashScreenPage.new),
           'home': Route(StartPage.new),
-          'level1': Route(Level1Page.new),
-          'level2': Route(Level2Page.new),
+          'level1': WorldRoute(Level1Page.new),
+          'level2': WorldRoute(Level2Page.new, maintainState: false),
           'pause': PauseRoute(),
         },
-        initialRoute: 'splash',
+        initialRoute: 'home',
       ),
     );
   }
-}
-
-class SplashScreenPage extends Component
-    with TapCallbacks, HasGameReference<RouterGame> {
-  @override
-  Future<void> onLoad() async {
-    addAll([
-      Background(const Color(0xff282828)),
-      TextBoxComponent(
-        text: '[Router demo]',
-        textRenderer: TextPaint(
-          style: const TextStyle(
-            color: Color(0x66ffffff),
-            fontSize: 16,
-          ),
-        ),
-        align: Anchor.center,
-        size: game.canvasSize,
-      ),
-    ]);
-  }
-
-  @override
-  bool containsLocalPoint(Vector2 point) => true;
-
-  @override
-  void onTapUp(TapUpEvent event) => game.router.pushNamed('home');
 }
 
 class StartPage extends Component with HasGameReference<RouterGame> {
   StartPage() {
     addAll([
       _logo = TextComponent(
-        text: 'Syzygy',
+        text: 'Your Game',
         textRenderer: TextPaint(
           style: const TextStyle(
             fontSize: 64,
@@ -111,14 +83,15 @@ class RoundedButton extends PositionComponent with TapCallbacks {
     required this.action,
     required Color color,
     required Color borderColor,
+    super.position,
     super.anchor = Anchor.center,
   }) : _textDrawable = TextPaint(
-          style: const TextStyle(
-            fontSize: 20,
-            color: Color(0xFF000000),
-            fontWeight: FontWeight.w800,
-          ),
-        ).toTextPainter(text) {
+         style: const TextStyle(
+           fontSize: 20,
+           color: Color(0xFF000000),
+           fontWeight: FontWeight.w800,
+         ),
+       ).toTextPainter(text) {
     size = Vector2(150, 40);
     _textOffset = Offset(
       (size.x - _textDrawable.width) / 2,
@@ -206,15 +179,15 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
 
 class BackButton extends SimpleButton with HasGameReference<RouterGame> {
   BackButton()
-      : super(
-          Path()
-            ..moveTo(22, 8)
-            ..lineTo(10, 20)
-            ..lineTo(22, 32)
-            ..moveTo(12, 20)
-            ..lineTo(34, 20),
-          position: Vector2.all(10),
-        );
+    : super(
+        Path()
+          ..moveTo(22, 8)
+          ..lineTo(10, 20)
+          ..lineTo(22, 32)
+          ..moveTo(12, 20)
+          ..lineTo(34, 20),
+        position: Vector2.all(10),
+      );
 
   @override
   void action() => game.router.pop();
@@ -222,30 +195,36 @@ class BackButton extends SimpleButton with HasGameReference<RouterGame> {
 
 class PauseButton extends SimpleButton with HasGameReference<RouterGame> {
   PauseButton()
-      : super(
-          Path()
-            ..moveTo(14, 10)
-            ..lineTo(14, 30)
-            ..moveTo(26, 10)
-            ..lineTo(26, 30),
-          position: Vector2(60, 10),
-        );
+    : super(
+        Path()
+          ..moveTo(14, 10)
+          ..lineTo(14, 30)
+          ..moveTo(26, 10)
+          ..lineTo(26, 30),
+        position: Vector2(60, 10),
+      );
+
+  bool isPaused = false;
+
   @override
-  void action() => game.router.pushNamed('pause');
+  void action() {
+    if (isPaused) {
+      game.router.pop();
+    } else {
+      game.router.pushNamed('pause');
+    }
+    isPaused = !isPaused;
+  }
 }
 
-class Level1Page extends Component {
+class Level1Page extends DecoratedWorld with HasGameReference {
   @override
   Future<void> onLoad() async {
-    final game = findGame()!;
     addAll([
       Background(const Color(0xbb2a074f)),
-      BackButton(),
-      PauseButton(),
       Planet(
         radius: 25,
         color: const Color(0xfffff188),
-        position: game.size / 2,
         children: [
           Orbit(
             radius: 110,
@@ -266,20 +245,33 @@ class Level1Page extends Component {
       ),
     ]);
   }
-}
 
-class Level2Page extends Component {
+  final hudComponents = <Component>[];
+
   @override
-  Future<void> onLoad() async {
-    final game = findGame()!;
-    addAll([
-      Background(const Color(0xff052b44)),
+  void onMount() {
+    hudComponents.addAll([
       BackButton(),
       PauseButton(),
+    ]);
+    game.camera.viewport.addAll(hudComponents);
+  }
+
+  @override
+  void onRemove() {
+    game.camera.viewport.removeAll(hudComponents);
+    super.onRemove();
+  }
+}
+
+class Level2Page extends DecoratedWorld with HasGameReference {
+  @override
+  Future<void> onLoad() async {
+    addAll([
+      Background(const Color(0xff052b44)),
       Planet(
         radius: 30,
         color: const Color(0xFFFFFFff),
-        position: game.size / 2,
         children: [
           Orbit(
             radius: 60,
@@ -310,6 +302,23 @@ class Level2Page extends Component {
       ),
     ]);
   }
+
+  final hudComponents = <Component>[];
+
+  @override
+  void onMount() {
+    hudComponents.addAll([
+      BackButton(),
+      PauseButton(),
+    ]);
+    game.camera.viewport.addAll(hudComponents);
+  }
+
+  @override
+  void onRemove() {
+    game.camera.viewport.removeAll(hudComponents);
+    super.onRemove();
+  }
 }
 
 class Planet extends PositionComponent {
@@ -336,10 +345,10 @@ class Orbit extends PositionComponent {
     required this.planet,
     required this.revolutionPeriod,
     double initialAngle = 0,
-  })  : _paint = Paint()
-          ..style = PaintingStyle.stroke
-          ..color = const Color(0x888888aa),
-        _angle = initialAngle {
+  }) : _paint = Paint()
+         ..style = PaintingStyle.stroke
+         ..color = const Color(0x888888aa),
+       _angle = initialAngle {
     add(planet);
   }
 
@@ -366,18 +375,19 @@ class PauseRoute extends Route {
 
   @override
   void onPush(Route? previousRoute) {
-    previousRoute!
-      ..stopTime()
-      ..addRenderEffect(
-        PaintDecorator.grayscale(opacity: 0.5)..addBlur(3.0),
-      );
+    if (previousRoute is WorldRoute && previousRoute.world is DecoratedWorld) {
+      (previousRoute.world! as DecoratedWorld).timeScale = 0;
+      (previousRoute.world! as DecoratedWorld).decorator =
+          PaintDecorator.grayscale(opacity: 0.5)..addBlur(3.0);
+    }
   }
 
   @override
   void onPop(Route nextRoute) {
-    nextRoute
-      ..resumeTime()
-      ..removeRenderEffect();
+    if (nextRoute is WorldRoute && nextRoute.world is DecoratedWorld) {
+      (nextRoute.world! as DecoratedWorld).timeScale = 1;
+      (nextRoute.world! as DecoratedWorld).decorator = null;
+    }
   }
 }
 
@@ -410,4 +420,17 @@ class PausePage extends Component
 
   @override
   void onTapUp(TapUpEvent event) => game.router.pop();
+}
+
+class DecoratedWorld extends World with HasTimeScale {
+  PaintDecorator? decorator;
+
+  @override
+  void renderFromCamera(Canvas canvas) {
+    if (decorator == null) {
+      super.renderFromCamera(canvas);
+    } else {
+      decorator!.applyChain(super.renderFromCamera, canvas);
+    }
+  }
 }

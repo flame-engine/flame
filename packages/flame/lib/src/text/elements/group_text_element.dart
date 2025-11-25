@@ -2,18 +2,22 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/text.dart';
+import 'package:meta/meta.dart';
 
 class GroupTextElement extends InlineTextElement {
   GroupTextElement(List<InlineTextElement> children)
-      : assert(children.isNotEmpty, 'The children list cannot be empty'),
-        _children = children,
-        _metrics = _computeMetrics(children);
+    : assert(children.isNotEmpty, 'The children list cannot be empty'),
+      _children = children,
+      _metrics = _computeMetrics(children);
 
   final List<InlineTextElement> _children;
   final LineMetrics _metrics;
 
   @override
   LineMetrics get metrics => _metrics;
+
+  @visibleForTesting
+  List<InlineTextElement> get children => List.unmodifiable(_children);
 
   @override
   void draw(Canvas canvas) {

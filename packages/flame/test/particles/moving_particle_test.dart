@@ -9,27 +9,28 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('MovingParticle', () {
     testWithFlameGame(
-        'Particle which is moving from one predefined position to another one',
-        (game) async {
-      final childParticle = CircleParticle(
-        paint: Paint()..color = Colors.red,
-        lifespan: 2,
-      );
+      'Particle which is moving from one predefined position to another one',
+      (game) async {
+        final childParticle = CircleParticle(
+          paint: Paint()..color = Colors.red,
+          lifespan: 2,
+        );
 
-      final particle = MovingParticle(
-        from: Vector2(-20, -20),
-        to: Vector2(20, 20),
-        child: childParticle,
-      );
+        final particle = MovingParticle(
+          from: Vector2(-20, -20),
+          to: Vector2(20, 20),
+          child: childParticle,
+        );
 
-      final component = ParticleSystemComponent(
-        particle: particle,
-      );
+        final component = ParticleSystemComponent(
+          particle: particle,
+        );
 
-      game.add(component);
-      await game.ready();
-      game.update(1);
-      expect(particle.progress, 1.0);
-    });
+        game.add(component);
+        await game.ready();
+        game.update(1);
+        expect(particle.progress, 1.0);
+      },
+    );
   });
 }

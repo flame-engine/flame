@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 /// Change the opacity of a component over time.
@@ -13,6 +14,7 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     super.controller, {
     OpacityProvider? target,
     super.onComplete,
+    super.key,
   }) : _opacityOffset = offset {
     this.target = target;
   }
@@ -23,12 +25,14 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     EffectController controller, {
     OpacityProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) {
     return _OpacityToEffect(
       targetOpacity,
       controller,
       target: target,
       onComplete: onComplete,
+      key: key,
     );
   }
 
@@ -36,12 +40,14 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     EffectController controller, {
     OpacityProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) {
     return _OpacityToEffect(
       1.0,
       controller,
       target: target,
       onComplete: onComplete,
+      key: key,
     );
   }
 
@@ -49,12 +55,14 @@ class OpacityEffect extends Effect with EffectTarget<OpacityProvider> {
     EffectController controller, {
     OpacityProvider? target,
     void Function()? onComplete,
+    ComponentKey? key,
   }) {
     return _OpacityToEffect(
       0.0,
       controller,
       target: target,
       onComplete: onComplete,
+      key: key,
     );
   }
 
@@ -89,12 +97,13 @@ class _OpacityToEffect extends OpacityEffect {
     EffectController controller, {
     OpacityProvider? target,
     void Function()? onComplete,
+    super.key,
   }) : super.by(
-          0.0,
-          controller,
-          target: target,
-          onComplete: onComplete,
-        );
+         0.0,
+         controller,
+         target: target,
+         onComplete: onComplete,
+       );
 
   @override
   void onStart() {

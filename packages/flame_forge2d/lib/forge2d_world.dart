@@ -12,11 +12,17 @@ class Forge2DWorld extends World {
     forge2d.ContactListener? contactListener,
     super.children,
   }) : physicsWorld = forge2d.World(gravity ?? defaultGravity)
-          ..setContactListener(contactListener ?? WorldContactListener());
+         ..setContactListener(contactListener ?? WorldContactListener());
 
   static final Vector2 defaultGravity = Vector2(0, 10.0);
 
   final forge2d.World physicsWorld;
+
+  /// If true, all bodies will be destroyed when the world is removed from
+  /// the component tree.
+  /// Set this to false if you want to keep the bodies state for later, if
+  /// you for example plan to add the world back to the component tree.
+  bool destroyBodiesOnRemove = true;
 
   @override
   void update(double dt) {

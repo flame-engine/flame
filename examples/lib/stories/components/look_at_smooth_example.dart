@@ -10,7 +10,8 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
 class LookAtSmoothExample extends FlameGame {
-  static const description = 'This example demonstrates how a component can be '
+  static const description =
+      'This example demonstrates how a component can be '
       'made to smoothly rotate towards a target using the angleTo method. '
       'Tap anywhere to change the target point for both the choppers. '
       'It also shows how nativeAngle can be used to make the component '

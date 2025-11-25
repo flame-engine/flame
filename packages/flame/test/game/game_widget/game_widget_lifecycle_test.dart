@@ -96,7 +96,7 @@ class _GamePageState extends State<_GamePage> {
           ),
           Positioned(
             top: 0,
-            right: 0,
+            left: 0,
             child: ElevatedButton(
               child: const Text('Back'),
               onPressed: () {
@@ -214,14 +214,28 @@ void main() {
       final events = <String>[];
       await tester.pumpWidget(_MyContainer(events));
 
+      // This ensures that the game is attached.
+      await tester.pump();
+
       events.clear();
       final state = tester.state<_MyContainerState>(find.byType(_MyContainer));
       state.causeResize();
 
       await tester.pump();
-      expect(events, ['onGameResize', 'update', 'render']); // no onRemove
-      final game =
-          tester.allWidgets.whereType<GameWidget<_MyGame>>().first.game;
+      expect(
+        events,
+        [
+          // additional because of the initial pump to ensure attachment
+          'update',
+          'onGameResize',
+          'update',
+          'render',
+        ],
+      ); // no onRemove
+      final game = tester.allWidgets
+          .whereType<GameWidget<_MyGame>>()
+          .first
+          .game;
       expect(game?.children, everyElement((Component c) => c.parent == game));
     });
 
@@ -247,18 +261,13 @@ void main() {
       await tester.tap(find.text('Play'));
 
       await tester.pump();
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 16), EnginePhase.paint);
 
       await tester.tap(find.text('Back'));
 
       // This ensures that Flame is not running anymore after the navigation
       // happens, if it was, then the pumpAndSettle would break with a timeout
       await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Play'));
-
-      await tester.pump();
-      await tester.pump();
 
       expect(
         events,
@@ -269,14 +278,34 @@ void main() {
           'update',
           'render',
           'update',
+          'render',
+          'update',
           'onRemove',
           'onDispose',
-          'onGameResize',
-          'onMount',
-          'update',
-          'render',
         ],
       );
+
+      await tester.tap(find.text('Play'));
+
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 16), EnginePhase.paint);
+
+      expect(events, [
+        'onGameResize',
+        'onLoad',
+        'onMount',
+        'update',
+        'render',
+        'update',
+        'render',
+        'update',
+        'onRemove',
+        'onDispose',
+        'onGameResize',
+        'onMount',
+        'update',
+        'render',
+      ]);
     });
   });
 }

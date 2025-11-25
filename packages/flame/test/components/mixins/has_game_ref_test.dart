@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
@@ -19,7 +21,7 @@ class _FooComponent extends Component with HasGameRef<_MyGame> {
 
 class _BarComponent extends Component with HasGameRef<_MyGame> {}
 
-class MockFlameGame extends Mock implements _MyGame {}
+class _MockFlameGame extends Mock implements _MyGame {}
 
 void main() {
   group('HasGameRef', () {
@@ -34,9 +36,9 @@ void main() {
       final component = _BarComponent();
       await game.ensureAdd(component);
 
-      component.game = MockFlameGame();
+      component.game = _MockFlameGame();
 
-      expect(component.gameRef, isA<MockFlameGame>());
+      expect(component.gameRef, isA<_MockFlameGame>());
     });
   });
 }

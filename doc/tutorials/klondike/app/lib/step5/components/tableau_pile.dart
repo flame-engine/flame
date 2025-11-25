@@ -12,7 +12,7 @@ class TableauPile extends PositionComponent implements Pile {
   /// Which cards are currently placed onto this pile.
   final List<Card> _cards = [];
   final Vector2 _fanOffset1 = Vector2(0, KlondikeGame.cardHeight * 0.05);
-  final Vector2 _fanOffset2 = Vector2(0, KlondikeGame.cardHeight * 0.20);
+  final Vector2 _fanOffset2 = Vector2(0, KlondikeGame.cardHeight * 0.2);
 
   //#region Pile API
 
@@ -111,7 +111,8 @@ class TableauPile extends PositionComponent implements Pile {
   }
 
   void calculateHitArea() {
-    height = KlondikeGame.cardHeight * 1.5 +
+    height =
+        KlondikeGame.cardHeight * 1.5 +
         (_cards.length < 2 ? 0.0 : _cards.last.y - _cards.first.y);
   }
 

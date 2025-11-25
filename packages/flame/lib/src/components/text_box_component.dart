@@ -37,19 +37,49 @@ class TextBoxConfig {
   /// beginning (both width and height).
   final bool growingBox;
 
-  TextBoxConfig({
+  const TextBoxConfig({
     this.maxWidth = 200.0,
     this.margins = const EdgeInsets.all(8.0),
     this.timePerChar = 0.0,
     this.dismissDelay,
     this.growingBox = false,
   });
+
+  TextBoxConfig copyWith({
+    double? maxWidth,
+    EdgeInsets? margins,
+    double? timePerChar,
+    double? dismissDelay,
+    bool? growingBox,
+  }) {
+    return TextBoxConfig(
+      maxWidth: maxWidth ?? this.maxWidth,
+      margins: margins ?? this.margins,
+      timePerChar: timePerChar ?? this.timePerChar,
+      dismissDelay: dismissDelay ?? this.dismissDelay,
+      growingBox: growingBox ?? this.growingBox,
+    );
+  }
 }
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   static final Paint _imagePaint = BasicPalette.white.paint()
     ..filterQuality = FilterQuality.medium;
-  final TextBoxConfig _boxConfig;
+  TextBoxConfig _boxConfig;
+
+  TextBoxConfig get boxConfig => _boxConfig;
+
+  set boxConfig(TextBoxConfig value) {
+    final oldConfig = _boxConfig;
+    _boxConfig = value;
+    if (oldConfig.maxWidth != value.maxWidth) {
+      // This call is necessary to reflow the text for any change in
+      // TextBoxConfig maxWidth.
+      updateBounds();
+    }
+    redraw();
+  }
+
   final double pixelRatio;
 
   @visibleForTesting
@@ -64,7 +94,21 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @visibleForTesting
   Image? cache;
 
-  TextBoxConfig get boxConfig => _boxConfig;
+  /// Notifies when a new line is rendered.
+  final ValueNotifier<int> newLineNotifier = ValueNotifier<int>(0);
+
+  // Notifies when a new line is rendered with the position of the new line.
+  @internal
+  final ValueNotifier<double> newLinePositionNotifier = ValueNotifier<double>(
+    0,
+  );
+
+  double _currentLinePosition = 0.0;
+  bool _isOnCompleteExecuted = false;
+
+  /// Callback function to be executed after all text is displayed.
+  void Function()? onComplete;
+
   double get lineHeight => _lineHeight;
 
   TextBoxComponent({
@@ -80,12 +124,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.anchor,
     super.children,
     super.priority,
+    this.onComplete,
     super.key,
-  })  : _boxConfig = boxConfig ?? TextBoxConfig(),
-        _fixedSize = size != null,
-        align = align ?? Anchor.topLeft,
-        pixelRatio = pixelRatio ??
-            PlatformDispatcher.instance.views.first.devicePixelRatio;
+  }) : _boxConfig = boxConfig ?? const TextBoxConfig(),
+       _fixedSize = size != null,
+       align = align ?? Anchor.topLeft,
+       pixelRatio =
+           pixelRatio ??
+           PlatformDispatcher.instance.views.first.devicePixelRatio;
 
   /// Alignment of the text within its bounding box.
   ///
@@ -136,17 +182,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   void updateBounds() {
     lines.clear();
     var lineHeight = 0.0;
-    final maxBoxWidth = _fixedSize ? width : _boxConfig.maxWidth;
-    text.split(' ').forEach((word) {
+    final maxBoxWidth = _fixedSize ? width : boxConfig.maxWidth;
+    for (final word in text.split(' ')) {
       final wordLines = word.split('\n');
-      final possibleLine =
-          lines.isEmpty ? wordLines[0] : '${lines.last} ${wordLines[0]}';
+      final possibleLine = lines.isEmpty
+          ? wordLines[0]
+          : '${lines.last} ${wordLines[0]}';
       final metrics = textRenderer.getLineMetrics(possibleLine);
       lineHeight = max(lineHeight, metrics.height);
 
       _updateMaxWidth(metrics.width);
       final bool canAppend;
-      if (metrics.width <= maxBoxWidth - _boxConfig.margins.horizontal) {
+      if (metrics.width <= maxBoxWidth - boxConfig.margins.horizontal) {
         canAppend = lines.isNotEmpty;
       } else {
         canAppend = lines.isNotEmpty && lines.last == '';
@@ -161,7 +208,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       } else {
         lines.addAll(wordLines);
       }
-    });
+    }
     _totalLines = lines.length;
     _lineHeight = lineHeight;
     size = _recomputeSize();
@@ -173,19 +220,24 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
   }
 
-  double get totalCharTime => text.length * _boxConfig.timePerChar;
+  double get totalCharTime => text.length * boxConfig.timePerChar;
 
   bool get finished =>
-      _lifeTime >= totalCharTime + (_boxConfig.dismissDelay ?? 0);
+      _lifeTime >= totalCharTime + (boxConfig.dismissDelay ?? 0);
 
   int get _actualTextLength {
     return lines.map((e) => e.length).sum;
   }
 
-  int get currentChar => _boxConfig.timePerChar == 0.0
+  /// The index of the character that should be appearing given the fact that
+  /// [TextBoxComponent] can build up its text per character at the rate
+  /// dictated by [TextBoxConfig.timePerChar] in [boxConfig].
+  /// If the timePerChar is 0, then returns the last possible character index.
+  int get currentChar => boxConfig.timePerChar == 0.0
       ? _actualTextLength
-      : math.min(_lifeTime ~/ _boxConfig.timePerChar, _actualTextLength);
+      : math.min(_lifeTime ~/ boxConfig.timePerChar, _actualTextLength);
 
+  /// The index of the line that [currentChar] belongs to.
   int get currentLine {
     var totalCharCount = 0;
     final cachedCurrentChar = currentChar;
@@ -209,27 +261,30 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   Vector2 _recomputeSize() {
     if (_fixedSize) {
       return size;
-    } else if (_boxConfig.growingBox) {
+    } else if (boxConfig.growingBox) {
       var i = 0;
       var totalCharCount = 0;
       final cachedCurrentChar = currentChar;
       final cachedCurrentLine = currentLine;
-      final textWidth = lines.sublist(0, cachedCurrentLine + 1).map((line) {
-        final charCount = (i < cachedCurrentLine)
-            ? line.length
-            : (cachedCurrentChar - totalCharCount);
-        totalCharCount += line.length;
-        i++;
-        return getLineWidth(line, charCount);
-      }).reduce(math.max);
+      final textWidth = lines
+          .sublist(0, cachedCurrentLine + 1)
+          .map((line) {
+            final charCount = (i < cachedCurrentLine)
+                ? line.length
+                : (cachedCurrentChar - totalCharCount);
+            totalCharCount += line.length;
+            i++;
+            return getLineWidth(line, charCount);
+          })
+          .reduce(math.max);
       return Vector2(
-        textWidth + _boxConfig.margins.horizontal,
-        _lineHeight * lines.length + _boxConfig.margins.vertical,
+        textWidth + boxConfig.margins.horizontal,
+        _lineHeight * lines.length + boxConfig.margins.vertical,
       );
     } else {
       return Vector2(
-        _boxConfig.maxWidth + _boxConfig.margins.horizontal,
-        _lineHeight * _totalLines + _boxConfig.margins.vertical,
+        boxConfig.maxWidth + boxConfig.margins.horizontal,
+        _lineHeight * _totalLines + boxConfig.margins.vertical,
       );
     }
   }
@@ -252,9 +307,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     c.scale(pixelRatio);
     _fullRender(c);
     return recorder.endRecording().toImageSafe(
-          scaledSize.x.ceil(),
-          scaledSize.y.ceil(),
-        );
+      scaledSize.x.ceil(),
+      scaledSize.y.ceil(),
+    );
   }
 
   /// Override this method to provide a custom background to the text box.
@@ -284,7 +339,11 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
             i * _lineHeight,
       );
       textElement.render(canvas, position);
-
+      if (position.y > _currentLinePosition) {
+        _currentLinePosition = position.y;
+        newLineNotifier.value = newLineNotifier.value + 1;
+        newLinePositionNotifier.value = _currentLinePosition + _lineHeight;
+      }
       charCount += lines[i].length;
     }
   }
@@ -318,8 +377,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _previousChar = currentChar;
 
-    if (_boxConfig.dismissDelay != null && finished) {
-      removeFromParent();
+    if (finished) {
+      if (!_isOnCompleteExecuted) {
+        _isOnCompleteExecuted = true;
+        onComplete?.call();
+      }
+      if (boxConfig.dismissDelay != null) {
+        removeFromParent();
+      }
     }
   }
 
@@ -329,5 +394,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     super.onRemove();
     cache?.dispose();
     cache = null;
+  }
+
+  /// Force [TextBoxComponent] to display [text] in its entirety.
+  ///
+  /// It is possible that in the future, one may want to revert timePerChar or
+  /// even the old [boxConfig] value to its previous value once [onComplete]
+  /// is called. Such a case might be when a new value of [text] is set.
+  /// However, this is non-trivial task, so this implementation is intentionally
+  /// kept simple.
+  /// If this behavior is needed, the user can simply add the code for setting
+  /// [boxConfig] by themselves in [onComplete].
+  void skip() {
+    boxConfig = boxConfig.copyWith(timePerChar: 0);
   }
 }

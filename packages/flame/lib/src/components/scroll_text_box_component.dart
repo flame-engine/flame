@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
 
 /// [ScrollTextBoxComponent] configures the layout and interactivity of a
@@ -15,6 +16,7 @@ import 'package:flutter/painting.dart';
 /// capabilities.
 class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   late final _ScrollTextBoxComponent<T> _scrollTextBoxComponent;
+  late final ValueNotifier<int> newLineNotifier;
 
   /// Constructor for [ScrollTextBoxComponent].
   /// - [size]: Specifies the size of the text box.
@@ -22,6 +24,7 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
   /// - [text]: The text content to be displayed.
   /// - [textRenderer]: Handles the rendering of the text.
   /// - [boxConfig]: Configuration for the text box appearance.
+  /// - [onComplete]: Callback will be executed after all text is displayed.
   /// - Other parameters include alignment, pixel ratio, and positioning
   ///   settings.
   /// An assertion ensures that the [size] has positive dimensions.
@@ -39,16 +42,17 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     super.priority,
     super.key,
     List<Component>? children,
-  })  : assert(
-          size.x > 0 && size.y > 0,
-          'size must have positive dimensions: $size',
-        ),
-        super(size: size) {
+    void Function()? onComplete,
+  }) : assert(
+         size.x > 0 && size.y > 0,
+         'size must have positive dimensions: $size',
+       ),
+       super(size: size) {
     final marginTop = boxConfig?.margins.top ?? 0;
     final marginBottom = boxConfig?.margins.bottom ?? 0;
     final innerMargins = EdgeInsets.fromLTRB(0, marginTop, 0, marginBottom);
 
-    boxConfig ??= TextBoxConfig();
+    boxConfig ??= const TextBoxConfig();
     boxConfig = TextBoxConfig(
       timePerChar: boxConfig.timePerChar,
       dismissDelay: boxConfig.dismissDelay,
@@ -61,14 +65,16 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
         0,
       ),
     );
-
     _scrollTextBoxComponent = _ScrollTextBoxComponent<T>(
       text: text,
       textRenderer: textRenderer,
       boxConfig: boxConfig,
       align: align,
       pixelRatio: pixelRatio,
+      onComplete: onComplete,
     );
+    newLineNotifier = _scrollTextBoxComponent.newLineNotifier;
+
     _scrollTextBoxComponent.setOwnerComponent = this;
     // Integrates the [ClipComponent] for managing
     // the text box's scrollable area.
@@ -101,11 +107,12 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
 class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     with DragCallbacks {
   double scrollBoundsY = 0.0;
-  int _linesScrolled = 0;
 
   late final ClipComponent clipComponent;
 
   late ScrollTextBoxComponent<TextRenderer> _owner;
+
+  bool _isOnCompleteExecuted = false;
 
   _ScrollTextBoxComponent({
     String? text,
@@ -116,34 +123,39 @@ class _ScrollTextBoxComponent<T extends TextRenderer> extends TextBoxComponent
     super.position,
     super.scale,
     double super.angle = 0.0,
+    super.onComplete,
   }) : super(
-          text: text ?? '',
-          textRenderer: textRenderer ?? TextPaint(),
-          boxConfig: boxConfig ?? TextBoxConfig(),
-        );
+         text: text ?? '',
+         textRenderer: textRenderer ?? TextPaint(),
+         boxConfig: boxConfig ?? const TextBoxConfig(),
+       );
 
   @override
   Future<void> onLoad() {
     clipComponent = parent! as ClipComponent;
+    newLinePositionNotifier.addListener(() {
+      if (newLinePositionNotifier.value > clipComponent.size.y) {
+        position.y = -newLinePositionNotifier.value + clipComponent.size.y;
+      }
+    });
     return super.onLoad();
   }
 
   @override
-  Future<void> redraw() async {
-    if ((currentLine + 1 - _linesScrolled) * lineHeight >
-        clipComponent.size.y) {
-      _linesScrolled++;
-      position.y -= lineHeight;
-      scrollBoundsY = -position.y;
+  void update(double dt) {
+    if (!_isOnCompleteExecuted && finished) {
+      _isOnCompleteExecuted = true;
+      scrollBoundsY = clipComponent.size.y - size.y;
     }
-    await super.redraw();
+
+    super.update(dt);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (finished && _linesScrolled > 0) {
+    if (finished && scrollBoundsY < 0) {
       position.y += event.localDelta.y;
-      position.y = position.y.clamp(-scrollBoundsY, 0);
+      position.y = position.y.clamp(scrollBoundsY, 0);
     }
   }
 

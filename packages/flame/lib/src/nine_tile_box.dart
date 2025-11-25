@@ -41,7 +41,7 @@ class NineTileBox {
   /// If [destTileSize] is not provided, the evaluated [tileSize] is used
   /// instead (so no scaling happens).
   NineTileBox(this.sprite, {int? tileSize, int? destTileSize})
-      : tileSize = tileSize ?? sprite.src.width ~/ 3 {
+    : tileSize = tileSize ?? sprite.src.width ~/ 3 {
     this.destTileSize = destTileSize ?? this.tileSize;
     final centerEdge = this.tileSize.toDouble();
     center = Rect.fromLTWH(centerEdge, centerEdge, centerEdge, centerEdge);
@@ -154,17 +154,22 @@ class NineTileBox {
   }
 
   /// Renders this nine box with the dimensions provided by [dst].
-  void drawRect(Canvas c, [Rect? dst]) {
-    c.drawImageNine(sprite.image, center, dst ?? _dst, _whitePaint);
+  void drawRect(Canvas c, [Rect? dst, Paint? overridePaint]) {
+    c.drawImageNine(
+      sprite.image,
+      center,
+      dst ?? _dst,
+      overridePaint ?? _whitePaint,
+    );
   }
 
   /// Renders this nine box as a rectangle at [position] with size [size].
-  void draw(Canvas c, Vector2 position, Vector2 size) {
+  void draw(Canvas c, Vector2 position, Vector2 size, [Paint? overridePaint]) {
     c.drawImageNine(
       sprite.image,
       center,
       Rect.fromLTWH(position.x, position.y, size.x, size.y),
-      _whitePaint,
+      overridePaint ?? _whitePaint,
     );
   }
 }

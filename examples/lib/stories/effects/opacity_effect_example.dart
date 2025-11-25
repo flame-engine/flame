@@ -1,10 +1,10 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
-class OpacityEffectExample extends FlameGame with TapDetector {
+class OpacityEffectExample extends FlameGame with TapCallbacks {
   static const String description = '''
     In this example we show how the `OpacityEffect` can be used in two ways.
     The left Ember will constantly pulse in and out of opacity and the right
@@ -29,20 +29,20 @@ class OpacityEffectExample extends FlameGame with TapDetector {
         position: Vector2(180, 230),
         size: Vector2.all(100),
       )..add(
-          OpacityEffect.fadeOut(
-            EffectController(
-              duration: 1.5,
-              reverseDuration: 1.5,
-              infinite: true,
-            ),
+        OpacityEffect.fadeOut(
+          EffectController(
+            duration: 1.5,
+            reverseDuration: 1.5,
+            infinite: true,
           ),
         ),
+      ),
     );
   }
 
   @override
-  void onTap() {
-    final opacity = sprite.paint.color.opacity;
+  void onTapDown(_) {
+    final opacity = sprite.paint.color.a;
     if (opacity >= 0.5) {
       sprite.add(OpacityEffect.fadeOut(EffectController(duration: 1)));
     } else {

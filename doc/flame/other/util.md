@@ -5,6 +5,13 @@ On this page you can find documentation for some utility classes and methods.
 
 ## Device Class
 
+```{warning}
+Many methods in this class only work on mobile platforms (Android and iOS).
+
+Using these methods on other platforms will not have any effect and you will
+get a warning printed on your console when running in debug mode.
+```
+
 This class can be accessed from `Flame.device` and it has some methods that can be used to control
 the state of the device, for instance you can change the screen orientation and set whether the
 application should be fullscreen or not.
@@ -57,7 +64,6 @@ Countdown example:
 ```dart
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
 class MyGame extends Game {
@@ -92,7 +98,6 @@ Interval example:
 ```dart
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
 class MyGame extends Game {
@@ -146,6 +151,12 @@ class MyFlameGame extends FlameGame {
 }
 ```
 
+```{note}
+A `Timer` or `TimerComponent` can repeat indefinitely by providing the
+`repeat: true` argument or it can be repeated a certain number of
+times by using the `tickCount` argument together with `repeat: true`.
+```
+
 
 ## Time Scale
 
@@ -157,10 +168,16 @@ To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mi
 to any Flame `Component` and exposes a simple get/set API for `timeScale`. The default value of
 `timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
 time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
-it tick at half the speed as compared to real life time.
+it tick at half the speed as compared to real life time. This mixin also provides `pause` and `resume`
+methods, which can be used instead of manually setting the timeScale to 0 and 1 respectively.
 
 Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
 so will allow controlling time scale for all the component of the game from a single place.
+
+```{note}
+HasTimeScale cannot control the movement of BodyComponent from flame_forge2d individually.
+It is only useful if the whole Game or Forge2DWorld is to be time scaled.
+```
 
 ```{flutter-app}
 :sources: ../flame/examples

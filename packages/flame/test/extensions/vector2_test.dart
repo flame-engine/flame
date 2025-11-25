@@ -7,16 +7,18 @@ import 'package:test/test.dart';
 
 void main() {
   group('Vector2Extension', () {
-    testRandom('Converting a vector to an offset matches x/dx and y/dy',
-        (Random r) {
+    testRandom('Converting a vector to an offset matches x/dx and y/dy', (
+      Random r,
+    ) {
       final vector = Vector2(r.nextDouble(), r.nextDouble());
       final offset = vector.toOffset();
       expectDouble(offset.dx, vector.x, reason: 'dx and x are not matching');
       expectDouble(offset.dy, vector.y, reason: 'dy and y are not matching');
     });
 
-    testRandom('Converting a vector to a Size matches x/width and y/height',
-        (Random r) {
+    testRandom('Converting a vector to a Size matches x/width and y/height', (
+      Random r,
+    ) {
       final vector = Vector2(r.nextDouble(), r.nextDouble());
       final size = vector.toSize();
       expectDouble(
@@ -31,8 +33,9 @@ void main() {
       );
     });
 
-    testRandom('Converting a vector to a Point matches x/x and y/y',
-        (Random r) {
+    testRandom('Converting a vector to a Point matches x/x and y/y', (
+      Random r,
+    ) {
       final vector = Vector2(r.nextDouble(), r.nextDouble());
       final point = vector.toPoint();
       expectDouble(
@@ -58,8 +61,9 @@ void main() {
       expect(actual.right, expected.right);
     });
 
-    testRandom('toPositionedRect creates a rect with correct coordinates',
-        (Random r) {
+    testRandom('toPositionedRect creates a rect with correct coordinates', (
+      Random r,
+    ) {
       final v1 = Vector2(r.nextDouble(), r.nextDouble());
       final size = Vector2(r.nextDouble(), r.nextDouble());
       final rect = v1.toPositionedRect(size);
@@ -106,8 +110,9 @@ void main() {
       expect(vNotZero.isZero(), false, reason: '(x,x) is not zero');
     });
 
-    testRandom('isIdentity returns true with 1,1 and false otherwise',
-        (Random r) {
+    testRandom('isIdentity returns true with 1,1 and false otherwise', (
+      Random r,
+    ) {
       // nextDouble is never 1
       final vIdentity = Vector2(1, 1);
       final vIdentityX = Vector2(1, r.nextDouble());
@@ -191,6 +196,12 @@ void main() {
         position.rotate(math.pi / 2, center: center);
         expect(position, closeToVector(Vector2(4.0, -3.0)));
       });
+
+      test('rotate - with center as itself', () {
+        final v = Vector2(1, 0);
+        v.rotate(0.01, center: v.clone());
+        expect(v, Vector2(1, 0));
+      });
     });
 
     group('Scaling', () {
@@ -221,12 +232,12 @@ void main() {
 
       test('clamp length max', () {
         final v = Vector2(1, 0)..clampLength(0.5, 0.8);
-        expect(v.length, 0.8);
+        expect(v.length, closeTo(0.8, 1e-6));
       });
 
       test('clamp negative vector', () {
         final v = Vector2(-1, -1)..clampLength(0.5, 0.8);
-        expect(v.length, 0.8);
+        expect(v.length, closeTo(0.8, 1e-6));
       });
 
       test('no effect on vector in range', () {
@@ -291,12 +302,6 @@ void main() {
     });
 
     group('inversion', () {
-      test('invert', () {
-        final v = Vector2.all(1);
-        v.invert();
-        expect(v, Vector2.all(-1));
-      });
-
       test('inverted', () {
         final v = Vector2.all(1);
         final w = v.inverted();
@@ -381,17 +386,41 @@ void main() {
     });
 
     testRandom('fromInts created a vector with x y', (Random r) {
-      var x = r.nextInt(1 << 32);
-      var y = r.nextInt(1 << 32);
+      var x = r.nextInt(1 << 31);
+      var y = r.nextInt(1 << 31);
       var vector = Vector2Extension.fromInts(x, y);
-      expectDouble(vector.x, x.toDouble());
-      expectDouble(vector.y, y.toDouble());
+      expect(
+        vector.x,
+        closeTo(
+          x.toDouble(),
+          nextFloat32(x.toDouble()) - prevFloat32(x.toDouble()),
+        ),
+      );
+      expect(
+        vector.y,
+        closeTo(
+          y.toDouble(),
+          nextFloat32(y.toDouble()) - prevFloat32(y.toDouble()),
+        ),
+      );
 
-      x = -r.nextInt(1 << 32);
-      y = -r.nextInt(1 << 32);
+      x = -r.nextInt(1 << 31);
+      y = -r.nextInt(1 << 31);
       vector = Vector2Extension.fromInts(x, y);
-      expectDouble(vector.x, x.toDouble());
-      expectDouble(vector.y, y.toDouble());
+      expect(
+        vector.x,
+        closeTo(
+          x.toDouble(),
+          nextFloat32(x.toDouble()) - prevFloat32(x.toDouble()),
+        ),
+      );
+      expect(
+        vector.y,
+        closeTo(
+          y.toDouble(),
+          nextFloat32(y.toDouble()) - prevFloat32(y.toDouble()),
+        ),
+      );
     });
 
     test('identity() creator is identity', () {
@@ -419,8 +448,9 @@ void main() {
       );
     });
 
-    testRandom('Cloning a vector gives a vector with the exact same x and y',
-        (Random r) {
+    testRandom('Cloning a vector gives a vector with the exact same x and y', (
+      Random r,
+    ) {
       final original = Vector2(r.nextDouble(), r.nextDouble());
       final clone = original.clone();
 
@@ -488,10 +518,20 @@ void main() {
       expectDouble(p2.length, math.sqrt(2));
       expect(p2.x, p2.y);
     });
+
+    test('toStringWithMaxPrecision', () {
+      final p1 = Vector2(1.123456789, 2.123456789);
+      expect(p1.toStringWithMaxPrecision(2), 'Vector2(1.12, 2.12)');
+      final p2 = Vector2(1, 2.123456789);
+      expect(p2.toStringWithMaxPrecision(3), 'Vector2(1.0, 2.123)');
+      final p3 = Vector2(-1, -2.123456789);
+      expect(p3.toStringWithMaxPrecision(3), 'Vector2(-1.0, -2.123)');
+    });
   });
 
-  testRandom('Creating a Vector2 fromRadians points to the correct direction',
-      (Random r) {
+  testRandom('Creating a Vector2 fromRadians points to the correct direction', (
+    Random r,
+  ) {
     // See more on https://en.wikipedia.org/wiki/Rotation_matrix
     // TL;DR;
     // (x', y') = (x cos(p) - y sin(p) , x sin(p) + y cos(p))
@@ -513,8 +553,9 @@ void main() {
     expectDouble(pointingVector.y, -math.cos(angleInRadians));
   });
 
-  testRandom('Creating a Vector2 fromDegrees points to the correct direction',
-      (Random r) {
+  testRandom('Creating a Vector2 fromDegrees points to the correct direction', (
+    Random r,
+  ) {
     // See more on https://en.wikipedia.org/wiki/Rotation_matrix
     // TL;DR;
     // (x', y') = (x cos(p) - y sin(p) , x sin(p) + y cos(p))

@@ -1,8 +1,8 @@
+import 'package:flame/components.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/effect.dart';
 import 'package:flame/src/effects/effect_target.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// Scale a component.
 ///
@@ -20,18 +20,20 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
     Vector2 scaleFactor,
     super.controller, {
     super.onComplete,
+    super.key,
   }) : _scaleFactor = scaleFactor.clone();
 
   factory ScaleEffect.to(
     Vector2 targetScale,
     EffectController controller, {
     void Function()? onComplete,
-  }) =>
-      _ScaleToEffect(
-        targetScale,
-        controller,
-        onComplete: onComplete,
-      );
+    ComponentKey? key,
+  }) => _ScaleToEffect(
+    targetScale,
+    controller,
+    onComplete: onComplete,
+    key: key,
+  );
 
   final Vector2 _scaleFactor;
   late Vector2 _scaleDelta;
@@ -59,12 +61,13 @@ class _ScaleToEffect extends ScaleEffect {
     Vector2 targetScale,
     EffectController controller, {
     void Function()? onComplete,
-  })  : _targetScale = targetScale.clone(),
-        super.by(
-          Vector2.zero(),
-          controller,
-          onComplete: onComplete,
-        );
+    super.key,
+  }) : _targetScale = targetScale.clone(),
+       super.by(
+         Vector2.zero(),
+         controller,
+         onComplete: onComplete,
+       );
 
   @override
   void onStart() {

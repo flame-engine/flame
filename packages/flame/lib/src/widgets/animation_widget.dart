@@ -11,7 +11,7 @@ import 'package:flutter/material.dart' hide Animation;
 export '../sprite_animation.dart';
 
 /// A [StatelessWidget] that renders a [SpriteAnimation]
-class SpriteAnimationWidget extends StatelessWidget {
+class SpriteAnimationWidget extends StatefulWidget {
   /// The positioning [Anchor].
   final Anchor anchor;
 
@@ -30,6 +30,10 @@ class SpriteAnimationWidget extends StatelessWidget {
   /// A callback that is called when the animation completes.
   final VoidCallback? onComplete;
 
+  /// A custom [Paint] to be used when rendering the sprite.
+  /// When omitted the default paint from the [Sprite] class will be used.
+  final Paint? paint;
+
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
     required SpriteAnimationTicker animationTicker,
@@ -38,9 +42,10 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.onComplete,
+    this.paint,
     super.key,
-  })  : _animationFuture = animation,
-        _animationTicker = animationTicker;
+  }) : _animationFuture = animation,
+       _animationTicker = animationTicker;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -57,9 +62,61 @@ class SpriteAnimationWidget extends StatelessWidget {
     this.errorBuilder,
     this.loadingBuilder,
     this.onComplete,
+    this.paint,
     super.key,
-  })  : _animationFuture = SpriteAnimation.load(path, data, images: images),
-        _animationTicker = null;
+  }) : _animationFuture = SpriteAnimation.load(path, data, images: images),
+       _animationTicker = null;
+
+  @override
+  State<SpriteAnimationWidget> createState() => _SpriteAnimationWidgetState();
+}
+
+class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
+  late FutureOr<SpriteAnimation> _animationFuture = widget._animationFuture;
+  late SpriteAnimationTicker? _animationTicker = widget._animationTicker;
+
+  @override
+  void didUpdateWidget(covariant SpriteAnimationWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _updateAnimation(
+      oldWidget._animationFuture,
+      widget._animationFuture,
+      oldWidget._animationTicker,
+      widget._animationTicker,
+    );
+  }
+
+  Future<void> _updateAnimation(
+    FutureOr<SpriteAnimation> oldFutureValue,
+    FutureOr<SpriteAnimation> newFutureValue,
+    SpriteAnimationTicker? oldTicker,
+    SpriteAnimationTicker? newTicker,
+  ) async {
+    final oldValue = await oldFutureValue;
+    final newValue = await newFutureValue;
+
+    final areFramesDifferent =
+        oldValue != newValue ||
+        oldValue.frames.length != newValue.frames.length ||
+        oldValue.frames.fold(
+          true,
+          (previous, frame) {
+            final newFrame = newValue.frames[oldValue.frames.indexOf(frame)];
+
+            return previous &&
+                (frame.sprite.image == newFrame.sprite.image ||
+                    frame.sprite.src == newFrame.sprite.src);
+          },
+        );
+
+    if (mounted && (areFramesDifferent || oldTicker != newTicker)) {
+      setState(() {
+        _animationFuture = newFutureValue;
+        _animationTicker = newTicker;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,17 +124,18 @@ class SpriteAnimationWidget extends StatelessWidget {
       future: _animationFuture,
       builder: (_, spriteAnimation) {
         final ticker = _animationTicker ?? spriteAnimation.createTicker();
-        ticker.completed.then((_) => onComplete?.call());
+        ticker.completed.then((_) => widget.onComplete?.call());
 
         return InternalSpriteAnimationWidget(
           animation: spriteAnimation,
           animationTicker: ticker,
-          anchor: anchor,
-          playing: playing,
+          anchor: widget.anchor,
+          playing: widget.playing,
+          paint: widget.paint,
         );
       },
-      errorBuilder: errorBuilder,
-      loadingBuilder: loadingBuilder,
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }
@@ -97,11 +155,14 @@ class InternalSpriteAnimationWidget extends StatefulWidget {
   /// Should the [animation] be playing or not
   final bool playing;
 
+  final Paint? paint;
+
   const InternalSpriteAnimationWidget({
     required this.animation,
     required this.animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
+    this.paint,
     super.key,
   });
 
@@ -171,7 +232,7 @@ class _InternalSpriteAnimationWidgetState
     widget.animationTicker.update(dt);
     final frameIndexAfterTick = widget.animationTicker.currentIndex;
 
-    if (frameIndexBeforeTick != frameIndexAfterTick) {
+    if (mounted && frameIndexBeforeTick != frameIndexAfterTick) {
       setState(() {});
     }
     _lastUpdated = now;
@@ -193,6 +254,7 @@ class _InternalSpriteAnimationWidgetState
       painter: SpritePainter(
         widget.animationTicker.getSprite(),
         widget.anchor,
+        widget.paint,
       ),
     );
   }

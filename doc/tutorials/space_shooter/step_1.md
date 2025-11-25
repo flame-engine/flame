@@ -35,6 +35,7 @@ implemented as follows:
 
 ```dart
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
 class Player extends PositionComponent {
   static final _paint = Paint()..color = Colors.white;
@@ -87,3 +88,5 @@ game class, insert it into the Flutter widget tree, and render a simple componen
 :page: step1
 :show: popup code
 ```
+
+[Next step: Controlling the player and adding some graphics](./step_2.md)

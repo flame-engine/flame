@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/src/camera/behaviors/viewport_aware_bounds_behavior.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/transform2d.dart';
 import 'package:meta/meta.dart';
@@ -22,6 +23,10 @@ class Viewfinder extends Component
         PositionProvider,
         ScaleProvider,
         CoordinateTransform {
+  Viewfinder({
+    super.key,
+  });
+
   /// Transform matrix used by the viewfinder.
   final Transform2D transform = Transform2D();
 
@@ -79,6 +84,18 @@ class Viewfinder extends Component
     _anchor = value;
     onViewportResize();
   }
+
+  /// The [considerViewport] flag is read-only and cannot be set except through
+  /// [CameraComponent.setBounds] as an optional parameter.
+  ///
+  /// If this value is true, a child component [ViewportAwareBoundsBehavior]
+  /// exists whose purpose is to keep the viewfinder's visible area in bounds
+  /// of the viewport w.r.t. the bounds shape.
+  ///
+  /// If this value is false, then no child [ViewportAwareBoundsBehavior]
+  /// will be present. False is the initial value.
+  bool get considerViewport =>
+      firstChild<ViewportAwareBoundsBehavior>() != null;
 
   /// Reference to the parent camera.
   CameraComponent get camera => parent! as CameraComponent;

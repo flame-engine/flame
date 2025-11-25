@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/game/notifying_vector2.dart';
 import 'package:flutter/foundation.dart';
-import 'package:vector_math/vector_math_64.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// This class describes a generic 2D transform, which is a combination of
 /// translations, rotations, reflections and scaling. These transforms are
@@ -37,12 +37,12 @@ class Transform2D extends ChangeNotifier {
   final NotifyingVector2 _offset;
 
   Transform2D()
-      : _transformMatrix = Matrix4.identity(),
-        _recalculate = true,
-        _angle = 0,
-        _position = NotifyingVector2.zero(),
-        _scale = NotifyingVector2.all(1),
-        _offset = NotifyingVector2.zero() {
+    : _transformMatrix = Matrix4.identity(),
+      _recalculate = true,
+      _angle = 0,
+      _position = NotifyingVector2.zero(),
+      _scale = NotifyingVector2.all(1),
+      _offset = NotifyingVector2.zero() {
     _position.addListener(_markAsModified);
     _scale.addListener(_markAsModified);
     _offset.addListener(_markAsModified);

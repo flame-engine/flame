@@ -4,8 +4,10 @@ import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/text.dart';
+import 'package:flame_markdown/custom_attribute_syntax.dart';
 import 'package:flame_markdown/flame_markdown.dart';
 import 'package:flutter/widgets.dart' hide Animation;
+import 'package:markdown/markdown.dart';
 
 void main() {
   runApp(GameWidget(game: MarkdownGame()));
@@ -19,9 +21,25 @@ class MarkdownGame extends FlameGame {
     final markdown = await Flame.assets.readFile('fire_and_ice.md');
     await add(
       TextElementComponent.fromDocument(
-        document: FlameMarkdown.toDocument(markdown),
+        document: FlameMarkdown.toDocument(
+          markdown,
+          document: Document(
+            encodeHtml: false,
+            inlineSyntaxes: [
+              StrikethroughSyntax(),
+              CustomAttributeSyntax(),
+            ],
+          ),
+        ),
         style: DocumentStyle(
           padding: const EdgeInsets.all(16),
+          customStyles: {
+            'author': InlineTextStyle(
+              color: const Color(0xFF888888),
+              fontSize: 16,
+              fontStyle: FontStyle.italic,
+            ),
+          },
         ),
         size: size,
       ),

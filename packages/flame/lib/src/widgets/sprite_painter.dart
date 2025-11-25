@@ -8,16 +8,18 @@ import 'package:flutter/widgets.dart';
 class SpritePainter extends CustomPainter {
   final Sprite _sprite;
   final Anchor _anchor;
+  final Paint? _paint;
   final double _angle;
 
-  SpritePainter(this._sprite, this._anchor, {double angle = 0})
-      : _angle = angle;
+  SpritePainter(this._sprite, this._anchor, this._paint, {double angle = 0})
+    : _angle = angle;
 
   @override
   bool shouldRepaint(SpritePainter oldDelegate) {
     return oldDelegate._sprite != _sprite ||
         oldDelegate._anchor != _anchor ||
-        oldDelegate._angle != _angle;
+        oldDelegate._angle != _angle ||
+        oldDelegate._paint != _paint;
   }
 
   @override
@@ -33,12 +35,16 @@ class SpritePainter extends CustomPainter {
     canvas.translateVector(boxAnchorPosition..sub(spriteAnchorPosition));
 
     if (_angle == 0) {
-      _sprite.render(canvas, size: paintSize);
+      _sprite.render(canvas, size: paintSize, overridePaint: _paint);
     } else {
       canvas.renderRotated(
         _angle,
         spriteAnchorPosition,
-        (canvas) => _sprite.render(canvas, size: paintSize),
+        (canvas) => _sprite.render(
+          canvas,
+          size: paintSize,
+          overridePaint: _paint,
+        ),
       );
     }
   }

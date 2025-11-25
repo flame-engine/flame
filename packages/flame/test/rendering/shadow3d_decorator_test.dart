@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,14 +17,15 @@ void main() {
       expect(decorator.yScale, 1.0);
       expect(decorator.blur, 0.0);
       expect(decorator.opacity, 0.6);
+      expect(decorator.baseColor, BasicPalette.black.color);
     });
 
     testGolden(
       'shadow behind object',
-      (game) async {
+      (game, tester) async {
         game.addAll([
-          Background(const Color(0xffc9c9c9)),
-          DecoratedRectangle(
+          _Background(const Color(0xffc9c9c9)),
+          _DecoratedRectangle(
             position: Vector2(20, 30),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
@@ -41,10 +43,10 @@ void main() {
 
     testGolden(
       'shadow in front object',
-      (game) async {
+      (game, tester) async {
         game.addAll([
-          Background(const Color(0xffc9c9c9)),
-          DecoratedRectangle(
+          _Background(const Color(0xffc9c9c9)),
+          _DecoratedRectangle(
             position: Vector2(60, 20),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
@@ -65,10 +67,10 @@ void main() {
 
     testGolden(
       'dynamically change shadow properties',
-      (game) async {
+      (game, tester) async {
         game.addAll([
-          Background(const Color(0xffc9c9c9)),
-          DecoratedRectangle(
+          _Background(const Color(0xffc9c9c9)),
+          _DecoratedRectangle(
             position: Vector2(60, 20),
             size: Vector2(60, 100),
             paint: Paint()..color = const Color(0xcc199f2b),
@@ -79,7 +81,8 @@ void main() {
               ..xShift = 250.0
               ..yScale = 1.5
               ..opacity = 0.4
-              ..blur = 1.0,
+              ..blur = 1.0
+              ..baseColor = BasicPalette.red.color,
           ),
         ]);
       },
@@ -89,8 +92,8 @@ void main() {
   });
 }
 
-class DecoratedRectangle extends RectangleComponent {
-  DecoratedRectangle({
+class _DecoratedRectangle extends RectangleComponent {
+  _DecoratedRectangle({
     super.position,
     super.size,
     super.paint,
@@ -100,8 +103,8 @@ class DecoratedRectangle extends RectangleComponent {
   }
 }
 
-class Background extends Component {
-  Background(this.color);
+class _Background extends Component {
+  _Background(this.color);
   final Color color;
 
   @override

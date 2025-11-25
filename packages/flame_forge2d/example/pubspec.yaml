@@ -1,4 +1,5 @@
 name: flame_forge2d_example
+resolution: workspace
 description: Flame Forge2D (box2d) samples
 
 publish_to: 'none'
@@ -6,18 +7,17 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0"
 
 dependencies:
-  dashbook: ^0.1.12
-  flame: ^1.16.0
-  flame_forge2d: ^0.17.0
+  flame: ^1.34.0
+  flame_forge2d: ^0.19.2+2
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter
 

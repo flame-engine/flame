@@ -1,4 +1,5 @@
 name: flame_audio_example
+resolution: workspace
 description: Simple project to showcase the usage of flame_audio
 
 publish_to: 'none'
@@ -6,16 +7,16 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.16.0
-  flame_audio: ^2.10.0
+  flame: ^1.34.0
+  flame_audio: ^2.11.12
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  flame_lint: ^1.1.2
+  flame_lint: ^1.4.2
 
 flutter:
   assets:

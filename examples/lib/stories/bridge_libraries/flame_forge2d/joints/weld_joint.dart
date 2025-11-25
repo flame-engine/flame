@@ -54,11 +54,12 @@ class WeldJointWorld extends Forge2DWorld
     // screen space then gives us the coordinates of the upper left corner in
     // world space.
     final halfSize = game.screenToWorld(Vector2.zero())..absolute();
-    final sectionWidth = ((leftPillar.center.x.abs() +
-                rightPillar.center.x.abs() +
-                pillarWidth) /
-            sectionsCount)
-        .ceilToDouble();
+    final sectionWidth =
+        ((leftPillar.center.x.abs() +
+                    rightPillar.center.x.abs() +
+                    pillarWidth) /
+                sectionsCount)
+            .ceilToDouble();
     Body? prevSection;
 
     for (var i = 0; i < sectionsCount; i++) {

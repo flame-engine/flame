@@ -2,15 +2,15 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-class Enemy extends PositionComponent with Notifier {}
+class _Enemy extends PositionComponent with Notifier {}
 
 void main() {
   group('ComponentsNotifier', () {
     testWithFlameGame('correctly have the initial value', (game) async {
-      await game.ensureAdd(Enemy());
-      await game.ensureAdd(Enemy());
+      await game.ensureAdd(_Enemy());
+      await game.ensureAdd(_Enemy());
 
-      final notifier = game.componentsNotifier<Enemy>();
+      final notifier = game.componentsNotifier<_Enemy>();
 
       expect(notifier.components.length, equals(2));
     });
@@ -18,9 +18,9 @@ void main() {
     testWithFlameGame('notifies when a component is added', (game) async {
       var called = 0;
 
-      game.componentsNotifier<Enemy>().addListener(() => called++);
+      game.componentsNotifier<_Enemy>().addListener(() => called++);
 
-      await game.ensureAdd(Enemy());
+      await game.ensureAdd(_Enemy());
 
       expect(called, equals(1));
     });
@@ -28,10 +28,10 @@ void main() {
     testWithFlameGame('notifies when a component is added', (game) async {
       var called = 0;
 
-      final component = Enemy();
+      final component = _Enemy();
       await game.ensureAdd(component);
 
-      game.componentsNotifier<Enemy>().addListener(() => called++);
+      game.componentsNotifier<_Enemy>().addListener(() => called++);
 
       component.removeFromParent();
       await game.ready();
@@ -44,10 +44,10 @@ void main() {
       (game) async {
         var called = 0;
 
-        final component = Enemy();
+        final component = _Enemy();
         await game.ensureAdd(component);
 
-        game.componentsNotifier<Enemy>().addListener(() => called++);
+        game.componentsNotifier<_Enemy>().addListener(() => called++);
 
         component.notifyListeners();
 
@@ -59,7 +59,7 @@ void main() {
       'lazy initializes the notifier',
       (game) async {
         expect(game.notifiers, isEmpty);
-        game.componentsNotifier<Enemy>();
+        game.componentsNotifier<_Enemy>();
         expect(game.notifiers, isNotEmpty);
       },
     );
@@ -68,8 +68,8 @@ void main() {
       'do not add the same type',
       (game) async {
         expect(game.notifiers, isEmpty);
-        game.componentsNotifier<Enemy>();
-        game.componentsNotifier<Enemy>();
+        game.componentsNotifier<_Enemy>();
+        game.componentsNotifier<_Enemy>();
         expect(game.notifiers.length, equals(1));
       },
     );
@@ -79,13 +79,13 @@ void main() {
       var called = 0;
 
       game.componentsNotifier<PositionComponent>().addListener(
-            () => parentCalled++,
-          );
-      game.componentsNotifier<Enemy>().addListener(() => called++);
+        () => parentCalled++,
+      );
+      game.componentsNotifier<_Enemy>().addListener(() => called++);
 
       expect(game.notifiers.length, equals(2));
 
-      await game.ensureAdd(Enemy());
+      await game.ensureAdd(_Enemy());
 
       expect(called, equals(1));
       expect(parentCalled, equals(1));

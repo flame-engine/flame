@@ -482,7 +482,7 @@ joint.getCurrentLengthB()
 
 ```{warning}
 `PulleyJoint` can get a bit troublesome by itself. They often work better when
-combined with prismatic joints. You should also cover the the anchor points 
+combined with prismatic joints. You should also cover the anchor points 
 with static shapes to prevent one side from going to zero length.
 ```
 

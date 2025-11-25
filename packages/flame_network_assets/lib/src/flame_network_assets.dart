@@ -10,10 +10,11 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 /// Function signature used by Flame Network Assets to fetch assets.
-typedef GetAssetFunction = Future<FlameAssetResponse> Function(
-  String url, {
-  Map<String, String>? headers,
-});
+typedef GetAssetFunction =
+    Future<FlameAssetResponse> Function(
+      String url, {
+      Map<String, String>? headers,
+    });
 
 /// Function signature used by Flame Network Assets to decode assets from a
 /// raw format.
@@ -71,8 +72,9 @@ abstract class FlameNetworkAssets<T> {
   ///
   /// - [decodeAsset] a [DecodeAssetFunction] responsible for decoding the asset
   /// from its raw format.
-  /// - [encodeAsset] a [EncodeAssetFunction] responsible for encoding the asset
-  /// to its raw format.
+  /// - [encodeAsset] is an optional [EncodeAssetFunction] responsible for
+  /// encoding the asset to its raw format, if omitted the raw bytes from the
+  /// response will be cached.
   /// - [get] is an optional [GetAssetFunction], if omitted [http.get] is used
   /// by default.
   /// - [getAppDirectory] is an optional [GetAppDirectoryFunction], if omitted
@@ -83,25 +85,25 @@ abstract class FlameNetworkAssets<T> {
   /// (true by default).
   FlameNetworkAssets({
     required DecodeAssetFunction<T> decodeAsset,
-    required EncodeAssetFunction<T> encodeAsset,
+    EncodeAssetFunction<T>? encodeAsset,
     GetAssetFunction? get,
     GetAppDirectoryFunction? getAppDirectory,
     this.cacheInMemory = true,
     this.cacheInStorage = true,
-  })  : _isWeb = kIsWeb,
-        _decode = decodeAsset,
-        _encode = encodeAsset {
-    _get = get ??
+  }) : _isWeb = kIsWeb,
+       _decode = decodeAsset,
+       _encode = encodeAsset {
+    _get =
+        get ??
         (
           String url, {
           Map<String, String>? headers,
-        }) =>
-            http.get(Uri.parse(url), headers: headers).then((response) {
-              return FlameAssetResponse(
-                statusCode: response.statusCode,
-                bytes: response.bodyBytes,
-              );
-            });
+        }) => http.get(Uri.parse(url), headers: headers).then((response) {
+          return FlameAssetResponse(
+            statusCode: response.statusCode,
+            bytes: response.bodyBytes,
+          );
+        });
 
     _getAppDirectory = getAppDirectory ?? getApplicationDocumentsDirectory;
   }
@@ -109,7 +111,7 @@ abstract class FlameNetworkAssets<T> {
   late final GetAssetFunction _get;
   late final GetAppDirectoryFunction _getAppDirectory;
   final DecodeAssetFunction<T> _decode;
-  final EncodeAssetFunction<T> _encode;
+  final EncodeAssetFunction<T>? _encode;
 
   /// Flag indicating if files will be cached in memory.
   final bool cacheInMemory;
@@ -157,7 +159,11 @@ abstract class FlameNetworkAssets<T> {
       }
 
       if (!_isWeb && cacheInStorage) {
-        unawaited(_saveAssetInLocalStorage(id, image));
+        if (_encode == null) {
+          unawaited(_saveBytesInLocalStorage(id, response.bytes));
+        } else {
+          unawaited(_saveAssetInLocalStorage(id, image));
+        }
       }
 
       return image;
@@ -189,7 +195,16 @@ abstract class FlameNetworkAssets<T> {
       final appDir = await _getAppDirectory();
       final file = File(path.join(appDir.path, id));
 
-      await file.writeAsBytes(await _encode(asset));
+      await file.writeAsBytes(await _encode!(asset));
+    } on Exception catch (_) {}
+  }
+
+  Future<void> _saveBytesInLocalStorage(String id, Uint8List bytesData) async {
+    try {
+      final appDir = await _getAppDirectory();
+      final file = File(path.join(appDir.path, id));
+
+      await file.writeAsBytes(bytesData);
     } on Exception catch (_) {}
   }
 }

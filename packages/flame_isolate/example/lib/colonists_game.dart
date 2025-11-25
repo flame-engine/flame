@@ -18,12 +18,12 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
   final PositionComponent _cameraPosition = PositionComponent();
   late final GameMap _currentMap;
   ColonistsGame()
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: 400,
-            height: 600,
-          ),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: 400,
+          height: 600,
+        ),
+      );
 
   @override
   Future<void> onLoad() async {

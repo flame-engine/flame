@@ -12,18 +12,12 @@ export '../sprite.dart';
 
 /// A [StatelessWidget] which renders a Sprite
 /// To render an animation, use [SpriteAnimationWidget].
-class SpriteWidget extends StatelessWidget {
+class SpriteWidget extends StatefulWidget {
   /// The positioning [Anchor]
   final Anchor anchor;
 
   /// The angle to rotate this [Sprite], in rad. (default = 0)
   final double angle;
-
-  /// Holds the position of the sprite on the image
-  final Vector2? srcPosition;
-
-  /// Holds the size of the sprite on the image
-  final Vector2? srcSize;
 
   /// A builder function that is called if the loading fails
   final WidgetBuilder? errorBuilder;
@@ -31,16 +25,26 @@ class SpriteWidget extends StatelessWidget {
   /// A builder function that is called while the loading is on the way
   final WidgetBuilder? loadingBuilder;
 
+  /// A custom [Paint] to be used when rendering the sprite.
+  /// When omitted the default paint from the [Sprite] class will be used.
+  final Paint? paint;
+
+  /// If the Sprite should be rasterized or not.
+  final bool rasterize;
+
   final FutureOr<Sprite> _spriteFuture;
 
+  /// renders the [sprite] as a Widget.
+  ///
+  /// To change the source size and position, see [Sprite.new]
   const SpriteWidget({
     required Sprite sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-    this.srcPosition,
-    this.srcSize,
     this.errorBuilder,
     this.loadingBuilder,
+    this.paint,
+    this.rasterize = false,
     super.key,
   }) : _spriteFuture = sprite;
 
@@ -55,17 +59,80 @@ class SpriteWidget extends StatelessWidget {
     Images? images,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
-    this.srcPosition,
-    this.srcSize,
+    Vector2? srcPosition,
+    Vector2? srcSize,
     this.errorBuilder,
     this.loadingBuilder,
+    this.paint,
+    this.rasterize = false,
     super.key,
   }) : _spriteFuture = Sprite.load(
-          path,
-          srcSize: srcSize,
-          srcPosition: srcPosition,
-          images: images,
-        );
+         path,
+         srcSize: srcSize,
+         srcPosition: srcPosition,
+         images: images,
+       );
+
+  @override
+  State<SpriteWidget> createState() => _SpriteWidgetState();
+}
+
+class _SpriteWidgetState extends State<SpriteWidget> {
+  late FutureOr<Sprite> _spriteFuture = _initializeFuture();
+
+  FutureOr<Sprite> _initializeFuture() async {
+    if (!widget.rasterize) {
+      return widget._spriteFuture;
+    }
+
+    final sprite = await widget._spriteFuture;
+    return sprite.rasterize();
+  }
+
+  @override
+  void didUpdateWidget(covariant SpriteWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    _updateSprite(
+      widget.rasterize || oldWidget.rasterize,
+      oldWidget._spriteFuture,
+      widget._spriteFuture,
+    );
+  }
+
+  Future<void> _updateSprite(
+    bool rasterize,
+    FutureOr<Sprite> oldFutureValue,
+    FutureOr<Sprite> newFutureValue,
+  ) async {
+    final oldValue = await oldFutureValue;
+    final newValue = await newFutureValue;
+
+    if (rasterize && oldValue.image != newValue.image) {
+      oldValue.image.dispose();
+    }
+
+    if (mounted &&
+        (oldValue.image != newValue.image || oldValue.src != newValue.src)) {
+      setState(() {
+        _spriteFuture = _initializeFuture();
+      });
+    }
+  }
+
+  Future<void> _disposeImage() async {
+    final value = await _spriteFuture;
+    value.image.dispose();
+  }
+
+  @override
+  void dispose() {
+    if (widget.rasterize) {
+      _disposeImage();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +141,13 @@ class SpriteWidget extends StatelessWidget {
       builder: (_, sprite) {
         return InternalSpriteWidget(
           sprite: sprite,
-          anchor: anchor,
-          angle: angle,
+          anchor: widget.anchor,
+          angle: widget.angle,
+          paint: widget.paint,
         );
       },
-      errorBuilder: errorBuilder,
-      loadingBuilder: loadingBuilder,
+      errorBuilder: widget.errorBuilder,
+      loadingBuilder: widget.loadingBuilder,
     );
   }
 }
@@ -96,17 +164,20 @@ class InternalSpriteWidget extends StatelessWidget {
   /// The angle to rotate this [sprite], in rad. (default = 0)
   final double angle;
 
+  final Paint? paint;
+
   const InternalSpriteWidget({
     required this.sprite,
     this.anchor = Anchor.topLeft,
     this.angle = 0,
+    this.paint,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: SpritePainter(sprite, anchor, angle: angle),
+      painter: SpritePainter(sprite, anchor, paint, angle: angle),
       size: sprite.srcSize.toSize(),
     );
   }

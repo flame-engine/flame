@@ -15,18 +15,24 @@ class SpriteSheetExample extends FlameGame {
       srcSize: Vector2(16.0, 18.0),
     );
 
-    final vampireAnimation =
-        spriteSheet.createAnimation(row: 0, stepTime: 0.1, to: 7);
-
-    final ghostAnimation =
-        spriteSheet.createAnimation(row: 1, stepTime: 0.1, to: 7);
-
-    final ghostAnimationVariableStepTimes =
-        spriteSheet.createAnimationWithVariableStepTimes(
-      row: 1,
+    final vampireAnimation = spriteSheet.createAnimation(
+      row: 0,
+      stepTime: 0.1,
       to: 7,
-      stepTimes: [0.1, 0.1, 0.3, 0.3, 0.5, 0.3, 0.1],
     );
+
+    final ghostAnimation = spriteSheet.createAnimation(
+      row: 1,
+      stepTime: 0.1,
+      to: 7,
+    );
+
+    final ghostAnimationVariableStepTimes = spriteSheet
+        .createAnimationWithVariableStepTimes(
+          row: 1,
+          to: 7,
+          stepTimes: [0.1, 0.1, 0.3, 0.3, 0.5, 0.3, 0.1],
+        );
 
     final customVampireAnimation = SpriteAnimation.fromFrameData(
       spriteSheet.image,

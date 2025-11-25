@@ -10,7 +10,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaycastLightExample extends FlameGame
-    with HasCollisionDetection, TapDetector, MouseMovementDetector {
+    with HasCollisionDetection, TapCallbacks, MouseMovementDetector {
   static const description = '''
 In this example the raycast functionality is showcased by using it as a light
 source, if you move the mouse around the canvas the rays will be cast from its
@@ -28,8 +28,8 @@ with with mouse.
   Paint tapPaint = Paint();
 
   final _colorTween = ColorTween(
-    begin: Colors.blue.withOpacity(0.2),
-    end: Colors.red.withOpacity(0.2),
+    begin: Colors.blue.withValues(alpha: 0.2),
+    end: Colors.red.withValues(alpha: 0.2),
   );
 
   static const numberOfRays = 2000;
@@ -88,9 +88,8 @@ with with mouse.
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
-    super.onTapDown(info);
-    final origin = info.eventPosition.widget;
+  void onTapDown(TapDownEvent event) {
+    final origin = event.canvasPosition;
     isTapOriginCasted = origin == tapOrigin;
     tapOrigin = origin;
   }

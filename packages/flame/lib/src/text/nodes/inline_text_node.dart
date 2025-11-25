@@ -7,6 +7,9 @@ import 'package:flame/text.dart';
 /// * PlainTextNode - just a string of plain text, no special formatting.
 /// * BoldTextNode - bolded string
 /// * ItalicTextNode - italic string
+/// * CodeTextNode - inline code string
+/// * StrikethroughTextNode - strikethrough string
+/// * CustomTextNode - applies arbitrary attributes to a span of text
 /// * GroupTextNode - collection of multiple [InlineTextNode]'s to be joined one
 ///                   after the other.
 abstract class InlineTextNode extends TextNode<InlineTextStyle> {
@@ -20,6 +23,9 @@ abstract class InlineTextNode extends TextNode<InlineTextStyle> {
 }
 
 abstract class TextNodeLayoutBuilder {
-  InlineTextElement? layOutNextLine(double availableWidth);
+  InlineTextElement? layOutNextLine(
+    double availableWidth, {
+    required bool isStartOfLine,
+  });
   bool get isDone;
 }

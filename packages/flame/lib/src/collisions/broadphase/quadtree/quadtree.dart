@@ -332,8 +332,11 @@ class QuadTreeNodeDebugInfo {
 }
 
 class QuadTreeNode<T extends Hitbox<T>> {
-  final List<QuadTreeNode?> children =
-      List.generate(4, (index) => null, growable: false);
+  final List<QuadTreeNode?> children = List.generate(
+    4,
+    (index) => null,
+    growable: false,
+  );
 
   List<T> hitboxes = <T>[];
 
@@ -369,18 +372,13 @@ enum _QuadTreeZone {
   const _QuadTreeZone(this.value);
 
   factory _QuadTreeZone.fromIndex(int i) {
-    switch (i) {
-      case 0:
-        return _QuadTreeZone.topLeft;
-      case 1:
-        return _QuadTreeZone.topRight;
-      case 2:
-        return _QuadTreeZone.bottomLeft;
-      case 3:
-        return _QuadTreeZone.bottomRight;
-      default:
-        return _QuadTreeZone.root;
-    }
+    return switch (i) {
+      0 => _QuadTreeZone.topLeft,
+      1 => _QuadTreeZone.topRight,
+      2 => _QuadTreeZone.bottomLeft,
+      3 => _QuadTreeZone.bottomRight,
+      _ => _QuadTreeZone.root,
+    };
   }
 
   final int value;

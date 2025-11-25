@@ -1,7 +1,6 @@
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -93,6 +92,7 @@ void main() {
         expect(atlas.key, 'images/green.png');
 
         expect(images.containsKey('images/green.png'), isTrue);
+        expect(images.keys, hasLength(1));
 
         expect(
           await imageToPng(atlas.atlas!),
@@ -207,42 +207,43 @@ void main() {
       });
 
       test(
-          '''Two maps with a same tileset but different tile alignment should be rendered differently''',
-          () async {
-        final components = await Future.wait([
-          TiledComponent.load(
-            'single_tile_map_1.tmx',
-            Vector2(16, 16),
-            bundle: bundle,
-            images: Images(bundle: bundle),
-          ),
-          TiledComponent.load(
-            'single_tile_map_2.tmx',
-            Vector2(16, 16),
-            bundle: bundle,
-            images: Images(bundle: bundle),
-          ),
-        ]);
+        '''Two maps with a same tileset but different tile alignment should be rendered differently''',
+        () async {
+          final components = await Future.wait([
+            TiledComponent.load(
+              'single_tile_map_1.tmx',
+              Vector2(16, 16),
+              bundle: bundle,
+              images: Images(bundle: bundle),
+            ),
+            TiledComponent.load(
+              'single_tile_map_2.tmx',
+              Vector2(16, 16),
+              bundle: bundle,
+              images: Images(bundle: bundle),
+            ),
+          ]);
 
-        final atlas = TiledAtlas.atlasMap.values.first;
-        final imageRendered_1 = renderMapToPng(components[0]);
-        final imageRendered_2 = renderMapToPng(components[1]);
+          final atlas = TiledAtlas.atlasMap.values.first;
+          final imageRendered_1 = renderMapToPng(components[0]);
+          final imageRendered_2 = renderMapToPng(components[1]);
 
-        expect(TiledAtlas.atlasMap.length, 1);
-        expect(
-          await imageToPng(atlas.atlas!),
-          matchesGoldenFile('goldens/single_tile_atlas.png'),
-        );
-        expect(imageRendered_1, isNot(same(imageRendered_2)));
-        expect(
-          imageRendered_1,
-          matchesGoldenFile('goldens/single_tile_map_1.png'),
-        );
-        expect(
-          imageRendered_2,
-          matchesGoldenFile('goldens/single_tile_map_2.png'),
-        );
-      });
+          expect(TiledAtlas.atlasMap.length, 1);
+          expect(
+            await imageToPng(atlas.atlas!),
+            matchesGoldenFile('goldens/single_tile_atlas.png'),
+          );
+          expect(imageRendered_1, isNot(same(imageRendered_2)));
+          expect(
+            imageRendered_1,
+            matchesGoldenFile('goldens/single_tile_map_1.png'),
+          );
+          expect(
+            imageRendered_2,
+            matchesGoldenFile('goldens/single_tile_map_2.png'),
+          );
+        },
+      );
     });
   });
 }

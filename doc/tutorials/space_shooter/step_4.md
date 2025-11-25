@@ -3,11 +3,10 @@
 For this next step we will add a very important feature to any space shooter game, shooting!
 
 Here is how we will implement it: since we already control our space ship by dragging on the screen
-with the mouse/fingers, we will make the ship auto shoot when the player stars the dragging and
-stops shooting when the gesture/input has ended.
+with the mouse/fingers, we will make the ship auto shoot when the player starts dragging and
+stop shooting when the gesture/input has ended.
 
-So let's start, to begin let's first create a `Bullet` component that will represent the
-shots in the game.
+First, let's create a `Bullet` component that will represent the shots in the game.
 
 ```dart
 class Bullet extends SpriteAnimationComponent
@@ -78,8 +77,8 @@ in the y axis means getting closer to `0` since the top left corner of the scree
 completely off the screen and it can be removed.
 
 Right, we now have a `Bullet` class ready, so lets start to implement the action of shooting.
-First thing, let's create two empty methods in the `Player` class, `startShooting` and
-`stopShooting`.
+First thing, let's create two empty methods in the `Player` class, `startShooting()` and
+`stopShooting()`.
 
 ```dart
 class Player extends SpriteAnimationComponent
@@ -97,8 +96,8 @@ class Player extends SpriteAnimationComponent
 }
 ```
 
-And let's hook into those methods from the game class, we will do that by using the `onPanStart`
-and `onPanEnd` methods from the `PanDetector` mixin that we already have been using for the ship
+And let's hook into those methods from the game class by using the `onPanStart()`
+and `onPanEnd()` methods from the `PanDetector` mixin that we already have been using for the ship
 movement:
 
 ```dart
@@ -146,15 +145,7 @@ class Player extends SpriteAnimationComponent
       period: .2,
       selfPositioning: true,
       factory: (index) {
-        return Bullet(
-          position: position +
-              Vector2(
-                0,
-                -height / 2,
-              ),
-        );
-
-        return bullet;
+        return Bullet(position: position + Vector2(0, -height / 2));
       },
       autoStart: false,
     );
@@ -183,17 +174,17 @@ to be an variable accessible to the whole component since we will be accessing i
 `startShooting` and `stopShooting` methods.
 - We initialize our `_bulletSpawner` in the `onLoad` method. In the first argument, `period`, we set
 how much time in seconds it will take between calls, and we choose `.2` seconds for now.
-- We set `selfPositioning: true` so the spawn component don't try to position the created
-component itself since we want to handle that ourselves to make the bullets spawn out of the ship.
-- The `factory` attribute receives a function that will be called every time the `period` is reached.
-and must return the create component.
-- Then we set that it should not auto start by default.
+- We set `selfPositioning: true` so the spawn component doesn't try to position the created component
+since we want to handle that ourselves to make the bullets spawn out of the ship.
+- The `factory` attribute receives a function that will be called every time the `period` is  
+reached and return the created component.
+- We set `autoStart: false` so it does not start by default.
 - Finally we add the `_bulletSpawner` to our component, so it can be processed in the game loop.
 - Note how the `_bulletSpawner` is added to the game instead of the player, since the bullets
 are part of the whole game and not the player itself.
 
-With the `_bulletSpawner` all setup, the only missing piece now is to start the
-`_bulletSpawner.timer` at `startShooting` and stop it in the `stopShooting`!
+With the `_bulletSpawner` all set up, the only missing piece now is starting the
+`_bulletSpawner.timer` in `startShooting()` and stopping it in the `stopShooting()`!
 
 And that closes this step, putting us real close to a real game!
 
@@ -202,3 +193,5 @@ And that closes this step, putting us real close to a real game!
 :page: step4
 :show: popup code
 ```
+
+[Next step: Adding Enemies](./step_5.md)

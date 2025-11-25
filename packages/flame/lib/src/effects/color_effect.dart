@@ -23,15 +23,16 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     double opacityTo = 1,
     this.paintId,
     void Function()? onComplete,
-  })  : assert(
-          opacityFrom >= 0 &&
-              opacityFrom <= 1 &&
-              opacityTo >= 0 &&
-              opacityTo <= 1,
-          'Opacity value should be between 0 and 1',
-        ),
-        _tween = Tween(begin: opacityFrom, end: opacityTo),
-        super(controller, onComplete: onComplete);
+    super.key,
+  }) : assert(
+         opacityFrom >= 0 &&
+             opacityFrom <= 1 &&
+             opacityTo >= 0 &&
+             opacityTo <= 1,
+         'Opacity value should be between 0 and 1',
+       ),
+       _tween = Tween(begin: opacityFrom, end: opacityTo),
+       super(controller, onComplete: onComplete);
 
   @override
   Future<void> onMount() async {
@@ -42,11 +43,8 @@ class ColorEffect extends ComponentEffect<HasPaint> {
 
   @override
   void apply(double progress) {
-    final currentColor = color.withOpacity(
-      // Currently there is a bug when opacity is 0 in the color filter.
-      // "Expected a value of type 'SkDeletable', but got one of type 'Null'"
-      // https://github.com/flutter/flutter/issues/89433
-      max(_tween.transform(progress), 1 / 255),
+    final currentColor = color.withValues(
+      alpha: min(max(_tween.transform(progress), 0), 1),
     );
     target.tint(currentColor, paintId: paintId);
   }

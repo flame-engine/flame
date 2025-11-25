@@ -4,7 +4,9 @@ import 'package:examples/stories/svg/svg_component.dart';
 import 'package:flame/game.dart';
 
 void addSvgStories(Dashbook dashbook) {
-  dashbook.storiesOf('Svg').add(
+  dashbook
+      .storiesOf('Svg')
+      .add(
         'Svg Component',
         (_) => GameWidget(game: SvgComponentExample()),
         codeLink: baseLink('svg/svg_component.dart'),

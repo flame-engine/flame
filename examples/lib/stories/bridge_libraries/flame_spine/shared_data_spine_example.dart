@@ -4,22 +4,22 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_spine/flame_spine.dart';
 
-class SharedDataSpineExample extends FlameGame with TapDetector {
+class SharedDataSpineExample extends FlameGame with TapCallbacks {
   static const String description = '''
     This example shows how to preload assets and share data between Spine
     components.
   ''';
 
-  late final SkeletonData cachedSkeletonData;
-  late final Atlas cachedAtlas;
+  late final SkeletonDataFlutter cachedSkeletonData;
+  late final AtlasFlutter cachedAtlas;
   late final List<SpineComponent> spineboys = [];
 
   @override
   Future<void> onLoad() async {
     await initSpineFlutter();
     // Pre-load the atlas and skeleton data once.
-    cachedAtlas = await Atlas.fromAsset('assets/spine/spineboy.atlas');
-    cachedSkeletonData = await SkeletonData.fromAsset(
+    cachedAtlas = await AtlasFlutter.fromAsset('assets/spine/spineboy.atlas');
+    cachedSkeletonData = await SkeletonDataFlutter.fromAsset(
       cachedAtlas,
       'assets/spine/spineboy-pro.skel',
     );
@@ -30,7 +30,11 @@ class SharedDataSpineExample extends FlameGame with TapDetector {
     // atlas.
     final rng = Random();
     for (var i = 0; i < 100; i++) {
-      final drawable = SkeletonDrawable(cachedAtlas, cachedSkeletonData, false);
+      final drawable = SkeletonDrawableFlutter(
+        cachedAtlas,
+        cachedSkeletonData,
+        false,
+      );
       final scale = 0.1 + rng.nextDouble() * 0.2;
       final position = Vector2.random(rng)..multiply(size);
       final spineboy = SpineComponent(
@@ -38,19 +42,19 @@ class SharedDataSpineExample extends FlameGame with TapDetector {
         scale: Vector2.all(scale),
         position: position,
       );
-      spineboy.animationState.setAnimationByName(0, 'walk', true);
+      spineboy.animationState.setAnimation(0, 'walk', true);
       spineboys.add(spineboy);
     }
     await addAll(spineboys);
   }
 
   @override
-  void onTap() {
+  void onTapDown(_) {
     for (final spineboy in spineboys) {
-      spineboy.animationState.setAnimationByName(0, 'jump', false);
+      spineboy.animationState.setAnimation(0, 'jump', false);
       spineboy.animationState.setListener((type, track, event) {
         if (type == EventType.complete) {
-          spineboy.animationState.setAnimationByName(0, 'walk', true);
+          spineboy.animationState.setAnimation(0, 'walk', true);
         }
       });
     }

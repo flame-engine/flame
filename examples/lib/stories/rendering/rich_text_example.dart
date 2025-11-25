@@ -4,6 +4,10 @@ import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 
 class RichTextExample extends FlameGame {
+  final TextAlign textAlign;
+
+  RichTextExample({this.textAlign = TextAlign.left});
+
   static const String description =
       'A non-interactive example of how to render rich text in Flame.';
 
@@ -23,10 +27,14 @@ class RichTextExample extends FlameGame {
       ),
       paragraph: BlockStyle(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        textAlign: textAlign,
         background: BackgroundStyle(
           color: const Color(0xFF004D40),
           borderColor: const Color(0xFFAAAAAA),
         ),
+      ),
+      header1: BlockStyle(
+        textAlign: textAlign,
       ),
     );
     final document = DocumentRoot([
@@ -42,22 +50,33 @@ class RichTextExample extends FlameGame {
       ),
       ParagraphNode.group([
         PlainTextNode(
-            'Suddenly, like a lump of submerged wreckage breaking the surface '
-            'of water, the thought burst into his mind: '),
+          'Suddenly, like a lump of submerged wreckage breaking the surface '
+          'of water, the thought burst into his mind: ',
+        ),
         ItalicTextNode.group([
           PlainTextNode('"It doesn\'t really happen. We imagine it. It is '),
           BoldTextNode.simple('hallucination'),
           PlainTextNode('."'),
         ]),
       ]),
-      ParagraphNode.simple(
-        'He pushed the thought under instantly. The fallacy was obvious. It '
-        'presupposed that somewhere or other, outside oneself, there was a '
-        '"real" world where "real" things happened. But how could there be '
-        'such a world? What knowledge have we of anything, save through our '
-        'own minds? All happenings are in the mind. Whatever happens in all '
-        'minds, truly happens.',
-      ),
+      ParagraphNode.group([
+        PlainTextNode(
+          'He pushed the thought under instantly. The fallacy was obvious. It '
+          'presupposed that somewhere or other, outside oneself, there was a '
+          '"',
+        ),
+        CodeTextNode.simple('real'),
+        PlainTextNode(
+          '" world where "',
+        ),
+        CodeTextNode.simple('real'),
+        PlainTextNode(
+          '" things happened. But how could there be '
+          'such a world? What knowledge have we of anything, save through our '
+          'own minds? All happenings are in the mind. Whatever happens in all '
+          'minds, truly happens.',
+        ),
+      ]),
     ]);
 
     add(

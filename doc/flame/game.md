@@ -1,10 +1,11 @@
 # FlameGame
 
+The base of almost all Flame games is the `FlameGame` class, this is the root of your component
+tree. We refer to this component-based system as the Flame Component System (FCS). Throughout the
+documentation, FCS is used to reference this system.
+
 The `FlameGame` class implements a `Component` based `Game`. It has a tree of components
 and calls the `update` and `render` methods of all components that have been added to the game.
-
-We refer to this component-based system as the Flame Component System (FCS). Throughout the
-documentation, FCS is used to reference this system.
 
 Components can be added to the `FlameGame` directly in the constructor with the named `children`
 argument, or from anywhere else with the `add`/`addAll` methods. Most of the time however, you want
@@ -55,6 +56,9 @@ constructor.
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
 The first can be used if you just want to remove one component, and the second can be used when you
 want to remove a list of components. These methods exist on all `Component`s, including the world.
+
+The `FlameGame` has a built-in `World` called `world` and a `CameraComponent` instance called
+`camera`, you can read more about those in the [Camera section](camera.md).
 
 
 ## Game Loop
@@ -244,3 +248,18 @@ class MyGame extends FlameGame {
 
 On the current Flutter stable (3.13), this flag is effectively ignored on
 non-mobile platforms including the web.
+
+
+## HasPerformanceTracker mixin
+
+While optimizing a game, it can be useful to track the time it took for the game to update and render
+each frame. This data can help in detecting areas of the code that are running hot. It can also help
+in detecting visual areas of the game that are taking the most time to render.
+
+To get the update and render times, just add the `HasPerformanceTracker` mixin to the game class.
+
+```dart
+class MyGame extends FlameGame with HasPerformanceTracker {
+  // access `updateTime` and `renderTime` getters.
+}
+```

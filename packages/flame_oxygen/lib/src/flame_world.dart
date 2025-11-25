@@ -23,10 +23,11 @@ class FlameWorld extends World {
       system.update(delta);
     }
     entityManager.processRemovedEntities();
+    entityManager.processRemovedComponents();
   }
 
   @override
   void execute(double delta) => throw Exception(
-        'FlameWorld.execute is not supported in flame_oxygen',
-      );
+    'FlameWorld.execute is not supported in flame_oxygen',
+  );
 }

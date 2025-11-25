@@ -1,3 +1,89 @@
+## 1.12.19
+
+ - Update a dependency to the latest release.
+
+## 1.12.18
+
+ - Update a dependency to the latest release.
+
+## 1.12.17
+
+ - Update a dependency to the latest release.
+
+## 1.12.16
+
+ - Update a dependency to the latest release.
+
+## 1.12.15
+
+ - Update a dependency to the latest release.
+
+## 1.12.14
+
+ - Update a dependency to the latest release.
+
+## 1.12.13
+
+ - Update a dependency to the latest release.
+
+## 1.12.12
+
+ - Update a dependency to the latest release.
+
+## 1.12.11
+
+ - Update a dependency to the latest release.
+
+## 1.12.10
+
+ - Update a dependency to the latest release.
+
+## 1.12.9
+
+ - Update a dependency to the latest release.
+
+## 1.12.8
+
+ - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))
+
+## 1.12.7
+
+ - **DOCS**: Remove AI assist badges ([#3477](https://github.com/flame-engine/flame/issues/3477)). ([51d7fbc0](https://github.com/flame-engine/flame/commit/51d7fbc06d88adec2e0238c9c4738893b807ec80))
+
+## 1.12.6
+
+ - Update a dependency to the latest release.
+
+## 1.12.5
+
+ - Update a dependency to the latest release.
+
+## 1.12.4
+
+ - Update a dependency to the latest release.
+
+## 1.12.3
+
+ - Update a dependency to the latest release.
+
+## 1.12.2
+
+ - Update a dependency to the latest release.
+
+## 1.12.1
+
+ - **DOCS**: Add AI assist badge to readme(s) ([#3226](https://github.com/flame-engine/flame/issues/3226)). ([380d6aa9](https://github.com/flame-engine/flame/commit/380d6aa946d6b852c55f4ebbfce53d2087287fa2))
+
+## 1.12.0
+
+ - **REFACTOR**: Modernize switch; use switch-expressions and no break; ([#3133](https://github.com/flame-engine/flame/issues/3133)). ([b283b82f](https://github.com/flame-engine/flame/commit/b283b82f6cfa7e7f2ce5ff7f657e6569667183d4))
+ - **FIX**: Call `super.onLoad` from `FlameBlockReader` ([#3175](https://github.com/flame-engine/flame/issues/3175)). ([349f7bd7](https://github.com/flame-engine/flame/commit/349f7bd71437abad666d05f973b6983970ccd0c6))
+ - **FEAT**: Expand flame_lint to respect required pub.dev checks ([#3139](https://github.com/flame-engine/flame/issues/3139)). ([6e80bf5e](https://github.com/flame-engine/flame/commit/6e80bf5e679d1cdeeb9362d4103690b0b381161d))
+
+## 1.11.1
+
+ - Update a dependency to the latest release.
+
 ## 1.11.0
 
 > Note: This release has breaking changes.

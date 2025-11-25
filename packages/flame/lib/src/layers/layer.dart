@@ -14,16 +14,21 @@ abstract class Layer {
 
   @mustCallSuper
   void render(Canvas canvas, {double x = 0.0, double y = 0.0}) {
-    if (_picture == null) {
+    final picture = _picture;
+    if (picture == null) {
       return;
     }
 
     canvas.save();
     canvas.translate(x, y);
 
-    preProcessors.forEach((p) => p.process(_picture!, canvas));
-    canvas.drawPicture(_picture!);
-    postProcessors.forEach((p) => p.process(_picture!, canvas));
+    for (final p in preProcessors) {
+      p.process(picture, canvas);
+    }
+    canvas.drawPicture(picture);
+    for (final p in postProcessors) {
+      p.process(picture, canvas);
+    }
     canvas.restore();
   }
 

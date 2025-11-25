@@ -116,10 +116,12 @@ void main() {
 
     test('visit_count() with an unknown node', () {
       final yarn = YarnProject()
-        ..parse('title:A\n'
-            '---\n'
-            '{visit_count("Africa")}\n'
-            '===\n');
+        ..parse(
+          'title:A\n'
+          '---\n'
+          '{visit_count("Africa")}\n'
+          '===\n',
+        );
       final line = yarn.nodes['A']!.lines.first as DialogueLine;
       expect(
         line.evaluate,
@@ -141,8 +143,9 @@ void main() {
 
     test('too many arguments', () {
       expect(
-        () => YarnProject()
-          ..parse('title:A\n---\n{visit_count("Start", "Finish")}\n===\n'),
+        () =>
+            YarnProject()
+              ..parse('title:A\n---\n{visit_count("Start", "Finish")}\n===\n'),
         hasTypeError(
           'TypeError: function visit_count() requires a single argument\n'
           '>  at line 3 column 23:\n'

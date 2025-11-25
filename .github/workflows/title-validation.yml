@@ -13,7 +13,7 @@ jobs:
     name: Validate PR title
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@v5
+      - uses: amannn/action-semantic-pull-request@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -29,6 +29,6 @@ jobs:
             revert
             style
             test
-          subjectPattern: ^[A-Z].+$
+          subjectPattern: ^[^a-z].+$
           subjectPatternError: |
-            The subject of the PR must begin with an uppercase letter.
+            The subject of the PR can't begin with a lowercase letter.

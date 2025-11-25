@@ -4,7 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
-class RemoveEffectGame extends FlameGame with TapDetector {
+class RemoveEffectGame extends FlameGame with TapCallbacks {
   static const double delayTime = 3;
   late EmberPlayer ember;
   late TextComponent textComponent;
@@ -22,7 +22,7 @@ class RemoveEffectGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTap() {
+  void onTapUp(TapUpEvent event) {
     if (children.contains(ember)) {
       ember.add(effect);
     } else {
@@ -33,8 +33,8 @@ class RemoveEffectGame extends FlameGame with TapDetector {
 
   @override
   void update(double dt) {
-    textComponent.text =
-        (effect.controller.progress * delayTime).toStringAsFixed(2);
+    textComponent.text = (effect.controller.progress * delayTime)
+        .toStringAsFixed(2);
     super.update(dt);
   }
 }

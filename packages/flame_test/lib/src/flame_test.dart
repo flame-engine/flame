@@ -45,21 +45,25 @@ extension FlameGameExtension on Component {
 typedef GameCreateFunction<T extends Game> = T Function();
 typedef VerifyFunction<T extends Game> = dynamic Function(T);
 
-typedef GameWidgetCreateFunction<T extends Game> = GameWidget<T> Function(
-  T game,
-);
-typedef WidgetVerifyFunction<T extends Game> = Future<void> Function(
-  T,
-  WidgetTester,
-);
-typedef WidgetSetupFunction<T extends Game> = Future<void> Function(
-  T,
-  WidgetTester,
-);
-typedef PumpWidgetFunction<T extends Game> = Future<void> Function(
-  GameWidget<T>,
-  WidgetTester tester,
-);
+typedef GameWidgetCreateFunction<T extends Game> =
+    GameWidget<T> Function(
+      T game,
+    );
+typedef WidgetVerifyFunction<T extends Game> =
+    Future<void> Function(
+      T,
+      WidgetTester,
+    );
+typedef WidgetSetupFunction<T extends Game> =
+    Future<void> Function(
+      T,
+      WidgetTester,
+    );
+typedef PumpWidgetFunction<T extends Game> =
+    Future<void> Function(
+      GameWidget<T>,
+      WidgetTester tester,
+    );
 
 /// Customize this class with your specific Game type [T] and a custom
 /// provider `() -> T`, plus some additional configurations including a game
@@ -120,7 +124,8 @@ class GameTester<T extends Game> {
           final gameWidget =
               createGameWidget?.call(game) ?? GameWidget(game: game);
 
-          final pump = pumpWidget ??
+          final pump =
+              pumpWidget ??
               (GameWidget<T> pumpWidget, WidgetTester tester) =>
                   tester.pumpWidget(pumpWidget);
 

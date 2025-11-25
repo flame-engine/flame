@@ -12,9 +12,9 @@ import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
 /// order to create longer zigzags.
 class ZigzagEffectController extends DurationEffectController {
   ZigzagEffectController({required double period})
-      : assert(period > 0, 'Period must be positive: $period'),
-        _quarterPeriod = period / 4,
-        super(period);
+    : assert(period > 0, 'Period must be positive: $period'),
+      _quarterPeriod = period / 4,
+      super(period);
 
   final double _quarterPeriod;
 

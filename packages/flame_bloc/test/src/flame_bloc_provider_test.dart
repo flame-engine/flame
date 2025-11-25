@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../inventory_cubit.dart';
 
-class InventoryReader extends Component
+class _InventoryReader extends Component
     with FlameBlocReader<InventoryCubit, InventoryState> {}
 
-class InventoryListener extends Component
+class _InventoryListener extends Component
     with FlameBlocListenable<InventoryCubit, InventoryState> {
   InventoryState? lastState;
 
@@ -35,7 +35,7 @@ void main() {
       );
       await game.ensureAdd(provider);
 
-      final component = InventoryReader();
+      final component = _InventoryReader();
       await provider.ensureAdd(component);
 
       expect(component.bloc, bloc);
@@ -48,7 +48,7 @@ void main() {
       );
       await game.ensureAdd(provider);
 
-      final component = InventoryListener();
+      final component = _InventoryListener();
       await provider.ensureAdd(component);
 
       bloc.selectBow();
@@ -60,14 +60,14 @@ void main() {
       testWithFlameGame('Provides a bloc down on the tree', (game) async {
         final bloc = InventoryCubit();
 
-        late InventoryReader component;
+        late _InventoryReader component;
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-          children: [
-            component = InventoryReader(),
-          ],
-        );
+              value: bloc,
+              children: [
+                component = _InventoryReader(),
+              ],
+            );
         await game.ensureAdd(provider);
 
         expect(component.bloc, bloc);
@@ -77,28 +77,28 @@ void main() {
         'initial state is used to properly track last state',
         (game) async {
           final bloc = InventoryCubit();
-          late InventoryListener component;
+          late _InventoryListener component;
           final provider =
               FlameBlocProvider<InventoryCubit, InventoryState>.value(
-            value: bloc,
-            children: [
-              component = InventoryListener(),
-            ],
-          );
+                value: bloc,
+                children: [
+                  component = _InventoryListener(),
+                ],
+              );
           await game.ensureAdd(provider);
           expect(component.lastState, equals(InventoryState.sword));
         },
       );
       testWithFlameGame('can listen to new state changes', (game) async {
         final bloc = InventoryCubit();
-        late InventoryListener component;
+        late _InventoryListener component;
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-          children: [
-            component = InventoryListener(),
-          ],
-        );
+              value: bloc,
+              children: [
+                component = _InventoryListener(),
+              ],
+            );
         await game.ensureAdd(provider);
 
         bloc.selectBow();
@@ -128,8 +128,8 @@ void main() {
         final bloc = InventoryCubit();
         final provider =
             FlameBlocProvider<InventoryCubit, InventoryState>.value(
-          value: bloc,
-        );
+              value: bloc,
+            );
         await game.ensureAdd(provider);
         expect(provider.bloc.isClosed, isFalse);
 

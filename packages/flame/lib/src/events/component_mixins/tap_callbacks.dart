@@ -1,8 +1,5 @@
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
-import 'package:flame/src/events/messages/tap_cancel_event.dart';
-import 'package:flame/src/events/messages/tap_down_event.dart';
-import 'package:flame/src/events/messages/tap_up_event.dart';
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive tap events.
@@ -10,6 +7,9 @@ import 'package:meta/meta.dart';
 /// In addition to adding this mixin, the component must also implement the
 /// [containsLocalPoint] method -- the component will only be considered
 /// "tapped" if the point where the tap has occurred is inside the component.
+///
+/// Note that FlameGame _is_ a [Component] and does implement
+/// [containsLocalPoint]; so this can be used at the game level.
 mixin TapCallbacks on Component {
   void onTapDown(TapDownEvent event) {}
   void onLongTapDown(TapDownEvent event) {}

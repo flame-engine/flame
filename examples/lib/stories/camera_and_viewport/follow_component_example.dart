@@ -24,12 +24,12 @@ class FollowComponentExample extends FlameGame
   ''';
 
   FollowComponentExample({required this.viewportResolution})
-      : super(
-          camera: CameraComponent.withFixedResolution(
-            width: viewportResolution.x,
-            height: viewportResolution.y,
-          ),
-        );
+    : super(
+        camera: CameraComponent.withFixedResolution(
+          width: viewportResolution.x,
+          height: viewportResolution.y,
+        ),
+      );
 
   late MovableEmber ember;
   final Vector2 viewportResolution;
@@ -101,6 +101,9 @@ class MovableEmber extends Ember<FollowComponentExample>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyRepeatEvent) {
+      return super.onKeyEvent(event, keysPressed);
+    }
     final isKeyDown = event is KeyDownEvent;
 
     final bool handled;
@@ -177,14 +180,14 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
+class Rock extends SpriteComponent with HasGameReference, TapCallbacks {
   Rock(Vector2 position)
-      : super(
-          position: position,
-          size: Vector2.all(50),
-          priority: 1,
-          anchor: Anchor.center,
-        );
+    : super(
+        position: position,
+        size: Vector2.all(50),
+        priority: 1,
+        anchor: Anchor.center,
+      );
 
   @override
   Future<void> onLoad() async {

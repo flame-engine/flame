@@ -11,7 +11,7 @@ import '../_resources/load_image.dart';
 void main() {
   group('SpriteFontRenderer', () {
     test('creating SpriteFontRenderer', () async {
-      final renderer = await createRenderer();
+      final renderer = await _createRenderer();
       expect(renderer.font.source, isA<Image>());
       expect(renderer.font.size, 6);
       expect(renderer.scale, 1.0);
@@ -31,23 +31,23 @@ void main() {
 
     testGolden(
       'text rendering at different scales',
-      (game) async {
+      (game, tester) async {
         game.addAll([
           RectangleComponent(size: Vector2(800, 600)),
           TextBoxComponent(
-            text: textSample,
-            textRenderer: await createRenderer(letterSpacing: 1),
-            boxConfig: TextBoxConfig(maxWidth: 800),
+            text: _textSample,
+            textRenderer: await _createRenderer(letterSpacing: 1),
+            boxConfig: const TextBoxConfig(maxWidth: 800),
           ),
           TextBoxComponent(
-            text: textSample,
-            textRenderer: await createRenderer(scale: 2),
-            boxConfig: TextBoxConfig(maxWidth: 800),
+            text: _textSample,
+            textRenderer: await _createRenderer(scale: 2),
+            boxConfig: const TextBoxConfig(maxWidth: 800),
             position: Vector2(0, 100),
           ),
           TextComponent(
             text: 'FLAME',
-            textRenderer: (await createRenderer(scale: 25))
+            textRenderer: (await _createRenderer(scale: 25))
               ..paint.color = const Color(0x44000000),
             position: Vector2(400, 500),
             anchor: Anchor.center,
@@ -59,7 +59,7 @@ void main() {
 
     testGolden(
       'Render text with ligatures',
-      (game) async {
+      (game, tester) async {
         final font = SpriteFont(
           source: await loadImage('sprite_font.png'),
           size: 18,
@@ -120,7 +120,7 @@ void main() {
 
     testGolden(
       'Render text with large src rectangles',
-      (game) async {
+      (game, tester) async {
         final font = SpriteFont(
           source: await loadImage('sprite_font.png'),
           size: 18,
@@ -221,7 +221,7 @@ void main() {
 
     testGolden(
       'Render colored text',
-      (game) async {
+      (game, tester) async {
         const lines = [
           'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
           'abcdefghijklmnopqrstuvwxyz',
@@ -267,7 +267,8 @@ void main() {
   });
 }
 
-const textSample = 'We hold these truths to be self-evident, that all men are '
+const _textSample =
+    'We hold these truths to be self-evident, that all men are '
     'created equal, that they are endowed by their Creator with certain '
     'unalienable Rights, that among these are Life, Liberty and the pursuit of '
     'Happiness. — That to secure these rights, Governments are instituted '
@@ -286,7 +287,7 @@ const textSample = 'We hold these truths to be self-evident, that all men are '
     'their right, it is their duty, to throw off such Government, and to '
     'provide new Guards for their future security.';
 
-Future<SpriteFontRenderer> createRenderer({
+Future<SpriteFontRenderer> _createRenderer({
   double scale = 1,
   double letterSpacing = 0,
 }) async {

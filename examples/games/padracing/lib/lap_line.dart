@@ -11,7 +11,7 @@ import 'package:padracing/game_colors.dart';
 
 class LapLine extends BodyComponent with ContactCallbacks {
   LapLine(this.id, this.initialPosition, this.size, {required this.isFinish})
-      : super(priority: 1);
+    : super(priority: 1);
 
   final int id;
   final bool isFinish;
@@ -31,7 +31,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
   @override
   Body createBody() {
     paint.color = (isFinish ? GameColors.green.color : GameColors.green.color)
-      ..withOpacity(0.5);
+      ..withValues(alpha: 0.5);
     paint
       ..style = PaintingStyle.fill
       ..shader = Gradient.radial(
@@ -94,8 +94,9 @@ class LapLine extends BodyComponent with ContactCallbacks {
       other.lapNotifier.value++;
       other.passedStartControl.clear();
     } else if (!isFinish) {
-      other.passedStartControl
-          .removeWhere((passedControl) => passedControl.id > id);
+      other.passedStartControl.removeWhere(
+        (passedControl) => passedControl.id > id,
+      );
       other.passedStartControl.add(this);
     }
   }

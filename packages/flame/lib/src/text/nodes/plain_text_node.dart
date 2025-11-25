@@ -1,6 +1,7 @@
 import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
+/// An [InlineTextNode] representing plain text.
 class PlainTextNode extends InlineTextNode {
   PlainTextNode(this.text);
 
@@ -17,8 +18,8 @@ class PlainTextNode extends InlineTextNode {
 
 class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
   _PlainTextLayoutBuilder(this.node)
-      : renderer = node.style.asTextRenderer(),
-        words = node.text.split(' ');
+    : renderer = node.style.asTextRenderer(),
+      words = node.text.split(' ');
 
   final PlainTextNode node;
   final TextRenderer renderer;
@@ -30,11 +31,15 @@ class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
   bool get isDone => index1 > words.length;
 
   @override
-  InlineTextElement? layOutNextLine(double availableWidth) {
+  InlineTextElement? layOutNextLine(
+    double availableWidth, {
+    required bool isStartOfLine,
+  }) {
     InlineTextElement? tentativeLine;
     int? tentativeIndex0;
     while (index1 <= words.length) {
-      final textPiece = words.sublist(index0, index1).join(' ');
+      final prependSpace = index0 == 0 || isStartOfLine ? '' : ' ';
+      final textPiece = prependSpace + words.sublist(index0, index1).join(' ');
       final formattedPiece = renderer.format(textPiece);
       if (formattedPiece.metrics.width > availableWidth) {
         break;

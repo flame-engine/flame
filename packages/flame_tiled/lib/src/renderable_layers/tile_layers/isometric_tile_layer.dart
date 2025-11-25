@@ -1,7 +1,7 @@
 import 'package:flame/extensions.dart';
+import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
-import 'package:flame_tiled/src/mutable_transform.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:meta/meta.dart';
 
@@ -71,6 +71,9 @@ class IsometricTileLayer extends FlameTileLayer {
 
         offsetX = halfDestinationTile.x * (tx - ty) + isometricXShift;
         offsetY = halfDestinationTile.y * (tx + ty) + isometricYShift;
+
+        offsetX += tileset.tileOffset?.x ?? 0;
+        offsetY += tileset.tileOffset?.y ?? 0;
 
         final scos = flips.cos * scale;
         final ssin = flips.sin * scale;

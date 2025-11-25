@@ -8,7 +8,7 @@ import 'package:flame_tiled/src/rectangle_bin_packer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tiled/tiled.dart';
 
-bool _defaultTilesetPackingFilter(_) => true;
+bool _defaultTilesetPackingFilter(Tileset _) => true;
 
 /// One image atlas for all Tiled image sets in a map.
 ///
@@ -40,12 +40,12 @@ class TiledAtlas {
     required this.key,
     this.useAtlas = true,
   }) : batch = atlas == null
-            ? null
-            : SpriteBatch(
-                atlas,
-                imageKey: key,
-                useAtlas: useAtlas,
-              );
+           ? null
+           : SpriteBatch(
+               atlas,
+               imageKey: key,
+               useAtlas: useAtlas,
+             );
 
   /// Returns whether or not this atlas contains [source].
   bool contains(String? source) => offsets.containsKey(source);
@@ -53,11 +53,11 @@ class TiledAtlas {
   /// Create a new atlas from this object with the intent of getting a new
   /// [SpriteBatch].
   TiledAtlas clone() => TiledAtlas._(
-        atlas: atlas?.clone(),
-        offsets: offsets,
-        key: key,
-        useAtlas: useAtlas,
-      );
+    atlas: atlas?.clone(),
+    offsets: offsets,
+    key: key,
+    useAtlas: useAtlas,
+  );
 
   /// Maps of tilesets compiled to [TiledAtlas].
   ///

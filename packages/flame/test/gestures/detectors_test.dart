@@ -1,5 +1,6 @@
 import 'package:flame/events.dart' hide PointerMoveEvent;
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -286,8 +287,10 @@ void main() {
     longPressGame.testGameWidget(
       'can register moving longPress',
       setUp: (game, tester) async {
-        final gesture =
-            await tester.startGesture(const Offset(10, 10), pointer: 7);
+        final gesture = await tester.startGesture(
+          const Offset(10, 10),
+          pointer: 7,
+        );
 
         await Future<void>.delayed(kLongPressTimeout);
 
@@ -305,8 +308,10 @@ void main() {
     longPressGame.testGameWidget(
       'can register longPressCancel',
       setUp: (game, tester) async {
-        final gesture =
-            await tester.startGesture(const Offset(10, 10), pointer: 7);
+        final gesture = await tester.startGesture(
+          const Offset(10, 10),
+          pointer: 7,
+        );
 
         await gesture.moveTo(const Offset(20, 10));
 
@@ -556,7 +561,7 @@ void main() {
         game.handleForcePressStart(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .4,
+            pressure: 0.4,
           ),
         );
 
@@ -573,7 +578,7 @@ void main() {
         game.handleForcePressUpdate(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .7,
+            pressure: 0.7,
           ),
         );
 
@@ -590,7 +595,7 @@ void main() {
         game.handleForcePressPeak(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .9,
+            pressure: 0.9,
           ),
         );
 
@@ -607,7 +612,7 @@ void main() {
         game.handleForcePressEnd(
           ForcePressDetails(
             globalPosition: const Offset(10, 10),
-            pressure: .2,
+            pressure: 0.2,
           ),
         );
         expect(game.forcePressEnded, equals(1));
@@ -742,8 +747,9 @@ void main() {
     mouseMoveGame.testGameWidget(
       'Can register Mouse movements',
       setUp: (game, tester) async {
-        final gesture =
-            await tester.createGesture(kind: PointerDeviceKind.mouse);
+        final gesture = await tester.createGesture(
+          kind: PointerDeviceKind.mouse,
+        );
         await gesture.addPointer(location: Offset.zero);
         await gesture.moveTo(const Offset(10, 10));
       },
@@ -762,8 +768,9 @@ void main() {
         const scrollEventLocation = Offset(0, 300);
         final testPointer = TestPointer(1, PointerDeviceKind.mouse);
         testPointer.hover(scrollEventLocation);
-        await tester
-            .sendEventToBinding(testPointer.scroll(const Offset(0.0, -300.0)));
+        await tester.sendEventToBinding(
+          testPointer.scroll(const Offset(0.0, -300.0)),
+        );
 
         expect(game.registeredScrolling, isTrue);
       },
@@ -771,6 +778,8 @@ void main() {
   });
 }
 
+// testing the deprecated TapDetector mixin
+// ignore: deprecated_member_use_from_same_package
 class _TapDetectorGame extends FlameGame with TapDetector {
   bool hasOnTapUp = false;
   bool hasOnTapDown = false;

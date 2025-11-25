@@ -21,23 +21,30 @@ class Bgm extends WidgetsBindingObserver {
 
   /// {@macro _bgm}
   Bgm({AudioCache? audioCache})
-      : audioPlayer = AudioPlayer()
-          ..audioCache = audioCache ?? AudioCache.instance;
+    : audioPlayer = AudioPlayer()
+        ..audioCache = audioCache ?? AudioCache.instance;
 
   /// Registers a [WidgetsBinding] observer.
   ///
   /// This must be called for auto-pause and resume to work properly.
-  void initialize() {
+  Future<void> initialize({AudioContext? audioContext}) async {
     if (_isRegistered) {
       return;
     }
     _isRegistered = true;
+
+    // Avoid requesting audio focus
+    audioContext ??= AudioContextConfig(
+      focus: AudioContextConfigFocus.mixWithOthers,
+    ).build();
+    await audioPlayer.setAudioContext(audioContext);
+
     WidgetsBinding.instance.addObserver(this);
   }
 
   /// Dispose the [WidgetsBinding] observer.
-  void dispose() {
-    audioPlayer.dispose();
+  Future<void> dispose() async {
+    await audioPlayer.dispose();
     if (!_isRegistered) {
       return;
     }

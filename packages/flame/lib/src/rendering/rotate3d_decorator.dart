@@ -1,8 +1,6 @@
-import 'dart:ui';
-
+import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/rendering/decorator.dart';
-import 'package:vector_math/vector_math_64.dart';
 
 /// [Rotate3DDecorator] treats the underlying component as if it was a flat
 /// sheet of paper, and applies a 3D rotation to it.
@@ -60,8 +58,8 @@ class Rotate3DDecorator extends Decorator {
       ..rotateX(angleX)
       ..rotateY(angleY)
       ..rotateZ(angleZ)
-      ..translate(-center.x, -center.y);
-    canvas.transform(matrix.storage);
+      ..translateByDouble(-center.x, -center.y, 0.0, 1.0);
+    canvas.transform32(matrix.storage);
     draw(canvas);
     canvas.restore();
   }
