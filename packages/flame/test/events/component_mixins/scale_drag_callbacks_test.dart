@@ -574,7 +574,7 @@ void main() {
           center,
           const Offset(20, 0),
           const Duration(milliseconds: 200),
-          injectScale, // ajout à mi-chemin
+          injectScale,
         );
       },
     );
@@ -635,7 +635,6 @@ Future<void> dragWithInjection(
 
   for (var i = 0; i < steps; i++) {
     if (i == steps ~/ 2) {
-      // On est au milieu : injecte ton scale component
       await onHalfway();
     }
 
