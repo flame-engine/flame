@@ -3,7 +3,6 @@
 **Scale events** occur when the user moves two fingers in a pinch in, or in a pinch out move.
 Only one single scale gesture can occur at the same time.
 
-
 For those components that you want to respond to scale events, add the `ScaleCallbacks` mixin.
 
 - This mixin adds three overridable methods to your component: `onScaleStart`, `onScaleUpdate`,
