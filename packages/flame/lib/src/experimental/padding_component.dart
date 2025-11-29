@@ -31,6 +31,7 @@ class PaddingComponent extends SingleLayoutComponent {
     super.position,
     super.priority,
     super.size,
+    super.inflateChild = false,
     PositionComponent? child,
   }) : _padding = padding ?? EdgeInsets.zero,
        super(child: null) {
@@ -48,15 +49,33 @@ class PaddingComponent extends SingleLayoutComponent {
 
   @override
   void layoutChildren() {
-    // Only resets to null if it's already null. This way, we avoid overwriting
-    // an explicit width/height.
     resetSize();
+    syncChildSize();
     final child = this.child;
     if (child == null) {
       return;
     }
     // Regardless of shrinkwrap or size, top left padding is set.
     child.topLeftPosition.setFrom(padding.topLeft.toVector2());
+  }
+
+  void syncChildSize() {
+    if (!inflateChild) {
+      return;
+    }
+    final child = this.child;
+    if (child == null) {
+      return;
+    }
+    final deflatedSize = padding.deflateSize(size.toSize()).toVector2();
+    if (child.size == deflatedSize) {
+      return;
+    }
+    if (child is LayoutComponent) {
+      child.setLayoutSize(deflatedSize.x, deflatedSize.y);
+    } else {
+      child.size = deflatedSize;
+    }
   }
 
   @override

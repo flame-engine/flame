@@ -15,10 +15,13 @@ abstract class SingleLayoutComponent extends LayoutComponent {
     required super.anchor,
     required super.priority,
     required super.size,
+    required this.inflateChild,
     required PositionComponent? child,
   }) {
     this.child = child;
   }
+
+  final bool inflateChild;
 
   PositionComponent? _child;
 
