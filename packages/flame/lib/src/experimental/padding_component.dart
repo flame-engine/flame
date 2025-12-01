@@ -16,6 +16,10 @@ import 'package:flutter/rendering.dart';
 /// You may set [padding] as well as the [child] after the fact, and it will
 /// cause the layout to refresh.
 ///
+/// If [inflateChild] is true, [resetSize] sets the child's size to fill up
+/// available space via [_syncChildSize]. If the child is a [LayoutComponent]
+/// descendant, then [resetSize] uses the [LayoutComponent.setLayoutSize].
+///
 /// Example usage:
 /// ```dart
 /// PaddingComponent(
@@ -50,7 +54,7 @@ class PaddingComponent extends SingleLayoutComponent {
   @override
   void layoutChildren() {
     resetSize();
-    syncChildSize();
+    // syncChildSize();
     final child = this.child;
     if (child == null) {
       return;
@@ -59,7 +63,7 @@ class PaddingComponent extends SingleLayoutComponent {
     child.topLeftPosition.setFrom(padding.topLeft.toVector2());
   }
 
-  void syncChildSize() {
+  void _syncChildSize() {
     if (!inflateChild) {
       return;
     }
@@ -76,6 +80,12 @@ class PaddingComponent extends SingleLayoutComponent {
     } else {
       child.size = deflatedSize;
     }
+  }
+
+  @override
+  void resetSize() {
+    super.resetSize();
+    _syncChildSize();
   }
 
   @override

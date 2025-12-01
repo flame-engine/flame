@@ -6,6 +6,10 @@ import 'package:flame/experimental.dart';
 /// [ExpandedComponent] and [PaddingComponent], and can possibly be used to
 /// refactor AlignComponent.
 ///
+/// [inflateChild] is simply a flag that signals whether the underlying layout
+/// machinery should alter its child's size. It's up to this class's subclasses
+/// to make use of this flag.
+///
 /// Setting [child] automatically manages removing the old child from this
 /// component, as well as adding the new child to this component.
 abstract class SingleLayoutComponent extends LayoutComponent {
