@@ -408,4 +408,15 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   void skip() {
     boxConfig = boxConfig.copyWith(timePerChar: 0);
   }
+
+  /// Rewind the typewriter effect to start from the first character again.
+  ///
+  /// Useful for reusing this component when changing lines so that the next
+  /// line does not show immediately.
+  /// Also resets the [onComplete] call state which will be called again
+  /// when the line is finished.
+  void resetAnimation() {
+    _lifeTime = 0;
+    _isOnCompleteExecuted = false;
+  }
 }
