@@ -44,6 +44,32 @@ abstract class SingleLayoutComponent extends LayoutComponent {
     }
   }
 
+  void _syncChildSize() {
+    if (!inflateChild) {
+      return;
+    }
+    final child = this.child;
+    if (child == null) {
+      return;
+    }
+    if (child.size == availableSize) {
+      return;
+    }
+    if (child is LayoutComponent) {
+      child.setLayoutSize(availableSize.x, availableSize.y);
+    } else {
+      child.size = availableSize;
+    }
+  }
+
+  @override
+  void resetSize() {
+    super.resetSize();
+    _syncChildSize();
+  }
+
+  Vector2 get availableSize => size;
+
   @override
   Vector2 get intrinsicSize => child?.size ?? Vector2.zero();
 }

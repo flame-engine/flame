@@ -54,7 +54,6 @@ class PaddingComponent extends SingleLayoutComponent {
   @override
   void layoutChildren() {
     resetSize();
-    // syncChildSize();
     final child = this.child;
     if (child == null) {
       return;
@@ -63,29 +62,9 @@ class PaddingComponent extends SingleLayoutComponent {
     child.topLeftPosition.setFrom(padding.topLeft.toVector2());
   }
 
-  void _syncChildSize() {
-    if (!inflateChild) {
-      return;
-    }
-    final child = this.child;
-    if (child == null) {
-      return;
-    }
-    final deflatedSize = padding.deflateSize(size.toSize()).toVector2();
-    if (child.size == deflatedSize) {
-      return;
-    }
-    if (child is LayoutComponent) {
-      child.setLayoutSize(deflatedSize.x, deflatedSize.y);
-    } else {
-      child.size = deflatedSize;
-    }
-  }
-
   @override
-  void resetSize() {
-    super.resetSize();
-    _syncChildSize();
+  Vector2 get availableSize {
+    return padding.deflateSize(size.toSize()).toVector2();
   }
 
   @override
