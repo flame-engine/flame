@@ -44,7 +44,7 @@ abstract class SingleLayoutComponent extends LayoutComponent {
     }
   }
 
-  void _syncChildSize() {
+  void syncChildSize() {
     if (!inflateChild) {
       return;
     }
@@ -65,7 +65,7 @@ abstract class SingleLayoutComponent extends LayoutComponent {
   @override
   void resetSize() {
     super.resetSize();
-    _syncChildSize();
+    syncChildSize();
   }
 
   Vector2 get availableSize => size;

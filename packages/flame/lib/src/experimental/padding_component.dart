@@ -17,7 +17,7 @@ import 'package:flutter/rendering.dart';
 /// cause the layout to refresh.
 ///
 /// If [inflateChild] is true, [resetSize] sets the child's size to fill up
-/// available space via [_syncChildSize]. If the child is a [LayoutComponent]
+/// available space via [syncChildSize]. If the child is a [LayoutComponent]
 /// descendant, then [resetSize] uses the [LayoutComponent.setLayoutSize].
 ///
 /// Example usage:
