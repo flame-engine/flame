@@ -85,5 +85,26 @@ void main() {
         );
       },
     );
+    testWithFlameGame(
+      'properly sets child size when inflateChild is true',
+      (game) async {
+        final rectangle = RectangleComponent();
+        const padding = EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 24,
+        );
+        final paddingComponent = PaddingComponent(
+          padding: padding,
+          size: Vector2(100, 200),
+          inflateChild: true,
+          child: rectangle,
+        );
+        await game.ensureAdd(paddingComponent);
+        expect(
+          rectangle.size,
+          Vector2(100 - padding.horizontal, 200 - padding.vertical),
+        );
+      },
+    );
   });
 }
