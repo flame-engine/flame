@@ -25,11 +25,32 @@ mixin ScaleCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
+    // Skip if DragCallbacks will handle it
+    if (this is DragCallbacks) {
+      return;
+    }
+
     final game = findRootGame()!;
-    if (game.findByKey(const ScaleDispatcherKey()) == null) {
+    final scaleDispatcher = game.findByKey(const ScaleDispatcherKey());
+    final multiDragDispatcher = game.findByKey(const MultiDragDispatcherKey());
+    final multiDragScaleDispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    );
+
+    // If MultiDragScaleDispatcher exists, DragCallbacks already handled it
+    if (multiDragScaleDispatcher != null) {
+      return;
+    }
+
+    if (scaleDispatcher == null && multiDragDispatcher == null) {
       final dispatcher = ScaleDispatcher();
       game.registerKey(const ScaleDispatcherKey(), dispatcher);
       game.add(dispatcher);
+    } else if (scaleDispatcher == null && multiDragDispatcher != null) {
+      final dispatcher = MultiDragScaleDispatcher();
+      game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+      game.add(dispatcher);
+      (multiDragDispatcher as MultiDragDispatcher).markForRemoval();
     }
   }
 }
