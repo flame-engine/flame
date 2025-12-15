@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_studio/src/core/game_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 final componentTreeProvider =
     StateNotifierProvider<ComponentTreeObserver, ComponentTreeState>((ref) {

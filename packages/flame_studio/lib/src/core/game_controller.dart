@@ -1,6 +1,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 final gameControllerProvider =
     StateNotifierProvider<_GameController, _GameState>(
