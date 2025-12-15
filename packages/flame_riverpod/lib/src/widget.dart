@@ -238,4 +238,3 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
     return sub;
   }
 }
-
