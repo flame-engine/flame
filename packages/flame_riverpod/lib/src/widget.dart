@@ -36,8 +36,7 @@ class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
   GameWidgetState<T> createState() => RiverpodAwareGameWidgetState<T>();
 }
 
-class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
-    implements WidgetRef {
+class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T> {
   RiverpodGameMixin get game => widget.game! as RiverpodGameMixin;
 
   bool _isForceBuilding = false;
@@ -49,7 +48,7 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
   Map<ProviderListenable<Object?>, ProviderSubscription<Object?>>?
   _oldDependencies;
   final _listeners = <ProviderSubscription<Object?>>[];
-  List<_ListenManual<Object?>>? _manualListeners;
+  List<ProviderSubscription<Object?>>? _manualListeners;
 
   /// Rebuilds the [RiverpodAwareGameWidget] by calling [setState].
   /// As it is undesirable to call [setState] while the widget may be building,
@@ -146,7 +145,6 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
     }
   }
 
-  @override
   Res watch<Res>(ProviderListenable<Res> target) {
     _assertNotDisposed();
     return _dependencies.putIfAbsent(target, () {
@@ -167,7 +165,6 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
         as Res;
   }
 
-  @override
   void listen<U>(
     ProviderListenable<U> provider,
     void Function(U? previous, U value) listener, {
@@ -186,31 +183,26 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
     _listeners.add(sub);
   }
 
-  @override
   bool exists(ProviderBase<Object?> provider) {
     _assertNotDisposed();
     return ProviderScope.containerOf(context, listen: false).exists(provider);
   }
 
-  @override
   Res read<Res>(ProviderListenable<Res> provider) {
     _assertNotDisposed();
     return ProviderScope.containerOf(context, listen: false).read(provider);
   }
 
-  @override
   S refresh<S>(Refreshable<S> provider) {
     _assertNotDisposed();
     return ProviderScope.containerOf(context, listen: false).refresh(provider);
   }
 
-  @override
   void invalidate(ProviderOrFamily provider) {
     _assertNotDisposed();
     _container.invalidate(provider);
   }
 
-  @override
   ProviderSubscription<Res> listenManual<Res>(
     ProviderListenable<Res> provider,
     void Function(Res? previous, Res next) listener, {
@@ -224,43 +216,26 @@ class RiverpodAwareGameWidgetState<T extends Game> extends GameWidgetState<T>
     // be used inside initState.
     final container = ProviderScope.containerOf(context, listen: false);
 
-    final sub = _ListenManual(
-      container,
-      container.listen(
-        provider,
-        listener,
-        onError: onError,
-        fireImmediately: fireImmediately,
-      ),
-      this,
+    final sub = container.listen<Res>(
+      provider,
+      listener,
+      onError: onError,
+      fireImmediately: fireImmediately,
+      // ignore: invalid_use_of_internal_member, from riverpod
     );
+
+    // Hook-up on onClose to avoid memory leaks.
+    final previousOnClose = sub.impl.onClose;
+    sub.impl.onClose = () {
+      previousOnClose?.call();
+      // If the subscription is closed, we remove it from the manual listeners
+      // so that it doesn't leak.
+      _manualListeners?.remove(sub);
+    };
+
     listeners.add(sub);
 
     return sub;
   }
 }
 
-class _ListenManual<T> extends ProviderSubscription<T> {
-  _ListenManual(super.source, this._subscription, this._element);
-
-  final ProviderSubscription<T> _subscription;
-  final RiverpodAwareGameWidgetState _element;
-
-  @override
-  void close() {
-    if (!closed) {
-      _subscription.close();
-      _element._manualListeners?.remove(this);
-    }
-    super.close();
-  }
-
-  @override
-  T read() => _subscription.read();
-
-  @override
-  bool get closed => _subscription.closed;
-
-  @override
-  Node get source => _subscription.source;
-}
