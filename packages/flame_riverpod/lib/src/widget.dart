@@ -11,7 +11,7 @@ import 'package:riverpod/src/framework.dart';
 /// access to Riverpod [Provider]s.
 ///
 /// The corresponding [State] object ([RiverpodAwareGameWidgetState]) assumes
-/// responsibilities associated with [ConsumerStatefulElement] in
+/// responsibilities associated with ConsumerStatefulElement in
 /// `flutter_riverpod`.
 class RiverpodAwareGameWidget<T extends Game> extends GameWidget<T> {
   RiverpodAwareGameWidget({
