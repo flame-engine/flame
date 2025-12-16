@@ -13,7 +13,7 @@ and can improve loading speed and rendering performance.
 
 Add  *flame_texturepacker* to your project:
 
-```
+```shell
 flutter pub add flame_texturepacker
 ```
 
@@ -25,6 +25,7 @@ import 'package:flame_texturepacker/flame_texturepacker.dart';
 
 
 ## Usage
+
 
 ### Loading from Assets
 
@@ -83,7 +84,8 @@ final sprite = atlas.findSpriteByNameIndex('robot_walk', 0);
 This is particularly useful for creating animations from indexed sprites:
 
 ```dart
-// Get all sprites with the name 'robot_walk' (e.g., robot_walk_0, robot_walk_1, etc.)
+// Get all sprites with the name 'robot_walk'
+// (e.g., robot_walk_0, robot_walk_1, etc.)
 final walkingSprites = atlas.findSpritesByName('robot_walk');
 
 // Create an animation from the sprite list
@@ -98,6 +100,7 @@ add(SpriteAnimationComponent(animation: walkingAnimation));
 
 
 ## Advanced Options
+
 
 ### Whitelist Filtering
 
