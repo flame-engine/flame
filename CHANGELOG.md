@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-12-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame_riverpod` - `v5.5.0`](#flame_riverpod---v550)
+
+---
+
+#### `flame_riverpod` - `v5.5.0`
+
+ - **FEAT**: Riverpod 3.0 in flame_riverpod ([#3789](https://github.com/flame-engine/flame/issues/3789)). ([57f7f9d8](https://github.com/flame-engine/flame/commit/57f7f9d8b30632717fdf894321758a26d4985907))
+
+
 ## 2025-11-23
 
 ### Changes
