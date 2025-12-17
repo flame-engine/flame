@@ -4,25 +4,23 @@ import 'package:flame/game.dart';
 import 'package:flame_riverpod/src/widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 
-class ComponentRef implements WidgetRef {
+class ComponentRef {
   ComponentRef({required this.game});
 
   RiverpodGameMixin? game;
 
-  @override
   BuildContext get context => game!.buildContext!;
 
   RiverpodAwareGameWidgetState? get _container {
     return game?.widgetKey?.currentState;
   }
 
-  @override
   Res watch<Res>(ProviderListenable<Res> target) {
     return _container!.watch(target);
   }
 
-  @override
   void listen<T>(
     ProviderListenable<T> provider,
     void Function(T? previous, T value) listener, {
@@ -31,27 +29,22 @@ class ComponentRef implements WidgetRef {
     _container!.listen(provider, listener, onError: onError);
   }
 
-  @override
   bool exists(ProviderBase<Object?> provider) {
     return _container!.exists(provider);
   }
 
-  @override
   T read<T>(ProviderListenable<T> provider) {
     return _container!.read(provider);
   }
 
-  @override
   T refresh<T>(Refreshable<T> provider) {
     return _container!.refresh(provider);
   }
 
-  @override
   void invalidate(ProviderOrFamily provider) {
     _container!.invalidate(provider);
   }
 
-  @override
   ProviderSubscription<T> listenManual<T>(
     ProviderListenable<T> provider,
     void Function(T? previous, T next) listener, {
