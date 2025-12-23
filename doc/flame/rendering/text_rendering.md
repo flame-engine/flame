@@ -89,6 +89,12 @@ If you want to change the margins of the box use the `margins` variable in the `
 Finally, if you want to simulate a "typing" effect, by showing each character of the string one by
 one as if being typed in real-time, you can provide the `boxConfig.timePerChar` parameter.
 
+To control the typing effect, call `skip` to show the entire text at once, and `resetAnimation` to
+reset the typing effect back to the beginning without having to recreate the component. Do note
+that `skip` sets `boxConfig.timePerChar` to `0` so when attempting to replay the typing effect
+after calling `skip`, make sure to re-set the `boxConfig.timePerChar` right before or after
+calling `resetAnimation`.
+
 Example usage:
 
 ```dart
