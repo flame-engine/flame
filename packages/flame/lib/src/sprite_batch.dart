@@ -13,8 +13,8 @@ extension SpriteBatchExtension on Game {
   /// its options.
   Future<SpriteBatch> loadSpriteBatch(
     String path, {
-    Color defaultColor = const Color(0x00000000),
-    BlendMode defaultBlendMode = BlendMode.srcOver,
+    Color? defaultColor,
+    BlendMode? defaultBlendMode,
     RSTransform? defaultTransform,
     Images? imageCache,
     bool useAtlas = true,
@@ -37,30 +37,34 @@ class BatchItem {
   BatchItem({
     required this.source,
     required this.transform,
-    this.color = const Color(0x00000000),
+    Color? color,
     this.flip = false,
-  }) : paint = Paint()..color = color,
+  }) : color = color ?? const Color(0x00000000),
+       paint = Paint()..color = color ?? const Color(0x00000000),
        destination = Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
-  final Rect source;
+  Rect source;
 
   /// The destination rectangle for the Canvas.
   ///
   /// It will be transformed by [matrix].
-  final Rect destination;
+  Rect destination;
 
   /// The transform values for this batch item.
-  final RSTransform transform;
+  RSTransform transform;
 
   /// The flip value for this batch item.
-  final bool flip;
+  bool flip;
+
+  /// The color of the batch item (used for building the drawAtlas color list).
+  Color color;
 
   /// Fallback matrix for the web.
   ///
   /// Since [Canvas.drawAtlas] is not supported on the web we also
   /// build a `Matrix4` based on the [transform] and [flip] values.
-  late final Matrix4 matrix =
+  late Matrix4 matrix =
       Matrix4(
           transform.scos,
           transform.ssin,
@@ -79,15 +83,12 @@ class BatchItem {
           0,
           1, //
         )
-        ..translateByDouble(source.width / 2, source.height / 2, 0.0, 1.0)
+        ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
         ..rotateY(flip ? pi : 0)
-        ..translateByDouble(-source.width / 2, -source.height / 2, 0.0, 1.0);
+        ..translateByDouble(-source.width / 2, -source.height / 2, 1, 1);
 
   /// Paint object used for the web.
-  final Paint paint;
-
-  /// The color of the batch item.
-  final Color color;
+  Paint paint;
 }
 
 @internal
@@ -127,7 +128,7 @@ class SpriteBatch {
     this.atlas, {
     this.defaultTransform,
     this.useAtlas = true,
-    this.defaultColor = const Color(0x00000000),
+    this.defaultColor,
     this.defaultBlendMode,
     Images? imageCache,
     String? imageKey,
@@ -149,7 +150,7 @@ class SpriteBatch {
     return SpriteBatch(
       await imagesCache.load(path),
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
-      defaultColor: defaultColor ?? const Color(0x00000000),
+      defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,
       useAtlas: useAtlas,
       imageCache: imagesCache,
@@ -159,38 +160,55 @@ class SpriteBatch {
 
   FlippedAtlasStatus _flippedAtlasStatus = FlippedAtlasStatus.none;
 
-  /// Stack of available (freed) indices using ListQueue as a stack.
-  final Queue<int> _freeIndices = Queue<int>();
+  final List<BatchItem> _batchItems = <BatchItem>[];
+  final List<Rect> _sources = <Rect>[];
+  final List<RSTransform> _transforms = <RSTransform>[];
+  final List<Color> _colors = <Color>[];
 
-  /// Returns the total number of indices that have been allocated.
-  int get allocatedCount => _nextIndex;
-
-  /// Returns the number of currently free indices.
-  int get freeCount => _freeIndices.length;
-
-  /// The next index to allocate if no free indices are available.
-  int _nextIndex = 0;
-
-  /// Sparse array of batch items, indexed by allocated indices.
-  final Map<int, BatchItem> _batchItems = {};
-
-  /// Returns the number of active batch items.
-  int get length => _batchItems.length;
-
-  /// Returns the number of indices currently in use.
-  int get usedCount => _nextIndex - _freeIndices.length;
-
-  /// Allocates a new index, reusing freed indices when possible.
-  int _allocateIndex() {
-    if (_freeIndices.isNotEmpty) {
-      return _freeIndices.removeFirst();
-    }
-    return _nextIndex++;
+  UnmodifiableListView<Rect> get sources {
+    return UnmodifiableListView<Rect>(_sources);
   }
 
-  /// Frees an index to be reused later.
-  void _freeIndex(int index) {
-    _freeIndices.addFirst(index);
+  UnmodifiableListView<RSTransform> get transforms {
+    return UnmodifiableListView<RSTransform>(_transforms);
+  }
+
+  UnmodifiableListView<Color> get colors {
+    return UnmodifiableListView<Color>(_colors);
+  }
+
+  /// Handle/index management (free list strategy).
+  final Queue<int> _freeHandles = Queue<int>();
+
+  /// The next handle to allocate if there are no free handles.
+  int _nextHandle = 0;
+
+  /// Map handle -> dense slot index.
+  final Map<int, int> _handleToSlot = <int, int>{};
+
+  /// Reverse map: dense slot -> handle.
+  final List<int> _slotToHandle = <int>[];
+
+  /// The total number of allocated handles.
+  int get allocatedCount => _nextHandle;
+
+  /// The number of free handles.
+  int get freeCount => _freeHandles.length;
+
+  /// The number of used handles.
+  int get usedCount => _handleToSlot.length;
+
+  /// Allocates a new handle.
+  int _allocateHandle() {
+    if (_freeHandles.isNotEmpty) {
+      return _freeHandles.removeFirst();
+    }
+    return _nextHandle++;
+  }
+
+  /// Frees a handle for future reuse.
+  void _freeHandle(int handle) {
+    _freeHandles.addFirst(handle);
   }
 
   /// The atlas used by the [SpriteBatch].
@@ -213,8 +231,10 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// The default color, used as a background color for a [BatchItem].
-  final Color defaultColor;
+  /// The default color, used as a background color for a [BatchItem] (web path).
+  ///
+  /// Note: The drawAtlas color list uses [_defaultColor] unless an explicit per-item color is provided.
+  final Color? defaultColor;
 
   /// The default transform, used when a transform was not supplied for a
   /// [BatchItem].
@@ -263,10 +283,33 @@ class SpriteBatch {
     return picture.toImageSafe(image.width * 2, image.height);
   }
 
-  /// Replace provided values of a batch item at the [index], when a parameter
-  /// is not provided, the original value of the batch item will be used.
-  ///
-  /// Throws an [ArgumentError] if the [index] doesn't exist.
+  /// Resolves the source rectangle for the atlas, taking into account if a
+  /// flipped atlas is being used.
+  Rect _resolveSourceForAtlas(BatchItem batchItem) {
+    if (!batchItem.flip) {
+      return batchItem.source;
+    }
+
+    // The atlas is twice as wide when the flipped atlas is generated.
+    final atlasWidthMultiplier = _flippedAtlasStatus.isGenerated ? 1 : 2;
+    return Rect.fromLTWH(
+      (atlas.width * atlasWidthMultiplier) - batchItem.source.right,
+      batchItem.source.top,
+      batchItem.source.width,
+      batchItem.source.height,
+    );
+  }
+
+  /// Ensures that the given [handle] exists and returns its slot.
+  int _requireSlot(int handle) {
+    final slot = _handleToSlot[handle];
+    if (slot == null) {
+      throw ArgumentError('Index does not exist: $handle');
+    }
+    return slot;
+  }
+
+  /// Replaces the parameters of the batch item at the given [index].
   /// At least one of the parameters must be different from null.
   void replace(
     int index, {
@@ -279,27 +322,27 @@ class SpriteBatch {
       'At least one of the parameters must be different from null.',
     );
 
-    if (!_batchItems.containsKey(index)) {
-      throw ArgumentError('Index does not exist: $index');
+    final slot = _requireSlot(index);
+    final currentBatchItem = _batchItems[slot];
+
+    currentBatchItem.source = source ?? currentBatchItem.source;
+    currentBatchItem.transform = transform ?? currentBatchItem.transform;
+    if (color != null) {
+      currentBatchItem.color = color;
+      currentBatchItem.paint.color = color;
     }
 
-    final currentBatchItem = _batchItems[index]!;
-    final newBatchItem = BatchItem(
-      source: source ?? currentBatchItem.source,
-      transform: transform ?? currentBatchItem.transform,
-      color: color ?? currentBatchItem.paint.color,
-      flip: currentBatchItem.flip,
-    );
+    _sources[slot] = _resolveSourceForAtlas(currentBatchItem);
+    _transforms[slot] = currentBatchItem.transform;
 
-    _batchItems[index] = newBatchItem;
+    // Preserve old semantics: only explicit item colors affect the drawAtlas list.
+    _colors[slot] = color ?? _defaultColor;
   }
 
-  /// Returns the [BatchItem] at the given [index].
+  /// Gets the [BatchItem] at the given [index].
   BatchItem getBatchItem(int index) {
-    if (!_batchItems.containsKey(index)) {
-      throw ArgumentError('Index does not exist: $index');
-    }
-    return _batchItems[index]!;
+    final slot = _requireSlot(index);
+    return _batchItems[slot];
   }
 
   /// Add a new batch item using a RSTransform.
@@ -323,18 +366,10 @@ class SpriteBatch {
     bool flip = false,
     Color? color,
   }) {
-    final index = _allocateIndex();
+    final handle = _allocateHandle();
+
     final batchItem = BatchItem(
-      source: flip
-          ? Rect.fromLTWH(
-              // The atlas is twice as wide when the flipped atlas is generated.
-              (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
-                  source.right,
-              source.top,
-              source.width,
-              source.height,
-            )
-          : source,
+      source: source,
       transform: transform ??= defaultTransform ?? RSTransform(1, 0, 0, 0),
       flip: flip,
       color: color ?? defaultColor,
@@ -344,9 +379,19 @@ class SpriteBatch {
       _makeFlippedAtlas();
     }
 
-    _batchItems[index] = batchItem;
+    final slot = _batchItems.length;
 
-    return index;
+    _handleToSlot[handle] = slot;
+    _slotToHandle.add(handle);
+
+    _batchItems.add(batchItem);
+    _sources.add(_resolveSourceForAtlas(batchItem));
+    _transforms.add(batchItem.transform);
+
+    // Preserve old semantics: if color is not explicitly provided, store transparent.
+    _colors.add(color ?? _defaultColor);
+
+    return handle;
   }
 
   /// Add a new batch item.
@@ -405,21 +450,46 @@ class SpriteBatch {
     );
   }
 
-  /// Removes a batch item at the given [index].
+  /// Removes the batch item at the given [index].
   void removeAt(int index) {
-    if (!_batchItems.containsKey(index)) {
-      throw ArgumentError('Index does not exist: $index');
+    final slot = _requireSlot(index);
+
+    final lastSlot = _batchItems.length - 1;
+    final removedHandle = _slotToHandle[slot];
+
+    if (slot != lastSlot) {
+      // Move last -> slot.
+      _batchItems[slot] = _batchItems[lastSlot];
+      _sources[slot] = _sources[lastSlot];
+      _transforms[slot] = _transforms[lastSlot];
+      _colors[slot] = _colors[lastSlot];
+
+      final movedHandle = _slotToHandle[lastSlot];
+      _slotToHandle[slot] = movedHandle;
+      _handleToSlot[movedHandle] = slot;
     }
 
-    _batchItems.remove(index);
-    _freeIndex(index);
+    _batchItems.removeLast();
+    _sources.removeLast();
+    _transforms.removeLast();
+    _colors.removeLast();
+    _slotToHandle.removeLast();
+
+    _handleToSlot.remove(removedHandle);
+    _freeHandle(removedHandle);
   }
 
   /// Clear the SpriteBatch so it can be reused.
   void clear() {
+    _sources.clear();
+    _transforms.clear();
+    _colors.clear();
     _batchItems.clear();
-    _freeIndices.clear();
-    _nextIndex = 0;
+
+    _handleToSlot.clear();
+    _slotToHandle.clear();
+    _freeHandles.clear();
+    _nextHandle = 0;
   }
 
   void render(
@@ -432,38 +502,28 @@ class SpriteBatch {
       return;
     }
 
-    paint ??= _emptyPaint;
+    final renderPaint = paint ?? _emptyPaint;
+
+    final hasNoColors = _colors.every((c) => c == _defaultColor);
+    final actualBlendMode = blendMode ?? defaultBlendMode;
+
+    if (!hasNoColors && actualBlendMode == null) {
+      throw 'When setting any colors, a blend mode must be provided.';
+    }
 
     if (useAtlas && !_flippedAtlasStatus.isGenerating) {
-      final transforms = _batchItems.values
-          .map((e) => e.transform)
-          .toList(growable: false);
-      final sources = _batchItems.values
-          .map((e) => e.source)
-          .toList(growable: false);
-      final colors = _batchItems.values
-          .map((e) => e.color)
-          .toList(growable: false);
-
-      final hasNoColors = colors.every((c) => c == defaultColor);
-      final actualBlendMode = blendMode ?? defaultBlendMode;
-      if (!hasNoColors && actualBlendMode == null) {
-        throw 'When setting any colors, a blend mode must be provided.';
-      }
-
       canvas.drawAtlas(
         atlas,
-        transforms,
-        sources,
-        hasNoColors ? null : colors,
+        _transforms,
+        _sources,
+        hasNoColors ? null : _colors,
         actualBlendMode,
         cullRect,
-        paint,
+        renderPaint,
       );
     } else {
-      for (final index in _batchItems.keys) {
-        final batchItem = _batchItems[index]!;
-        paint.blendMode = blendMode ?? paint.blendMode;
+      for (final batchItem in _batchItems) {
+        renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
 
         canvas
           ..save()
@@ -473,10 +533,12 @@ class SpriteBatch {
             atlas,
             batchItem.source,
             batchItem.destination,
-            paint,
+            renderPaint,
           )
           ..restore();
       }
     }
   }
+
+  static const _defaultColor = Color(0x00000000);
 }
