@@ -1,6 +1,7 @@
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_effect.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
+import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math.dart';
 
 /// A [MoveEffect] that moves its target by the specified offset vector.
@@ -36,6 +37,11 @@ class MoveByEffect extends MoveEffect {
     _scaledOffset.setFrom(_offset);
     _scaledOffset.scale(dProgress);
     target.position.add(_scaledOffset);
+  }
+
+  @mustCallSuper
+  void updateOffset(Vector2 newOffset) {
+    _offset.setFrom(newOffset);
   }
 
   @override
