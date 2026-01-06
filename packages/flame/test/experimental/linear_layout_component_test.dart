@@ -487,11 +487,6 @@ void main() {
         'setLayoutSize and setLayoutAxisLength each notify once',
         (game) async {
           final layoutComponent = ColumnComponent();
-          // final paddingComponent = PaddingComponent(
-          //   size: Vector2.all(200),
-          //   inflateChild: true,
-          //   child: layoutComponent,
-          // );
           await game.ensureAdd(layoutComponent);
           var setLayoutSizeCallCount = 0;
           var setLayoutAxisLengthCallCount = 0;
