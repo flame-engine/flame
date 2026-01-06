@@ -289,7 +289,7 @@ void main() {
         images: Images(bundle: bundle),
       );
 
-      pixelsBeforeFlipApplied = await renderMap();
+      await renderMap();
       await Flame.images.ready();
       pixelsAfterFlipApplied = await renderMap();
     });
