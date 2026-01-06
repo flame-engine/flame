@@ -37,6 +37,7 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
 
   final Vector2 _scaleFactor;
   late Vector2 _scaleDelta;
+  final Vector2 _scaledScaleDelta = Vector2.zero();
 
   @override
   void onStart() {
@@ -49,7 +50,9 @@ class ScaleEffect extends Effect with EffectTarget<ScaleProvider> {
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.scale += _scaleDelta * dProgress;
+    _scaledScaleDelta.setFrom(_scaleDelta);
+    _scaledScaleDelta.scale(dProgress);
+    target.scale.add(_scaledScaleDelta);
   }
 }
 
@@ -71,6 +74,7 @@ class _ScaleToEffect extends ScaleEffect {
 
   @override
   void onStart() {
-    _scaleDelta = _targetScale - target.scale;
+    _scaleDelta = _targetScale;
+    _scaleDelta.sub(target.scale);
   }
 }
