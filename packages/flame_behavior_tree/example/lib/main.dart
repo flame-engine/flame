@@ -132,138 +132,54 @@ class Agent extends PositionComponent with HasBehaviorTree {
   }
 
   void _setupBehaviorTree() {
-    var isInside = false;
-    var isAtTheDoor = false;
-    var isAtCenterOfHouse = false;
-    var isMoving = false;
-    var wantsToGoOutside = false;
+    // Initialize blackboard with agent state
+    blackboard = Blackboard();
+    blackboard!.set('isInside', false);
+    blackboard!.set('isAtTheDoor', false);
+    blackboard!.set('isAtCenterOfHouse', false);
+    blackboard!.set('isMoving', false);
+    blackboard!.set('wantsToGoOutside', false);
 
-    final walkTowardsDoorInside = Task(() {
-      if (!isAtTheDoor) {
-        isMoving = true;
-
-        add(
-          MoveEffect.to(
-            door.absolutePosition + Vector2(door.size.x * 0.8, -15),
-            EffectController(
-              duration: 3,
-              curve: Curves.easeInOut,
-            ),
-            onComplete: () {
-              isMoving = false;
-              isAtTheDoor = true;
-              isAtCenterOfHouse = false;
-            },
-          ),
-        );
-      }
-      return isAtTheDoor ? NodeStatus.success : NodeStatus.running;
-    });
-
-    final stepOutTheDoor = Task(() {
-      if (isInside) {
-        isMoving = true;
-        add(
-          MoveEffect.to(
-            door.absolutePosition + Vector2(door.size.x * 0.5, 10),
-            EffectController(
-              duration: 2,
-              curve: Curves.easeInOut,
-            ),
-            onComplete: () {
-              isMoving = false;
-              isInside = false;
-            },
-          ),
-        );
-      }
-      return !isInside ? NodeStatus.success : NodeStatus.running;
-    });
-
-    final walkTowardsInitialPosition = Task(
-      () {
-        if (isAtTheDoor) {
-          isMoving = true;
-          isAtTheDoor = false;
-
-          add(
-            MoveEffect.to(
-              _startPosition,
-              EffectController(
-                duration: 3,
-                curve: Curves.easeInOut,
-              ),
-              onComplete: () {
-                isMoving = false;
-                wantsToGoOutside = false;
-              },
-            ),
-          );
-        }
-
-        return !wantsToGoOutside ? NodeStatus.success : NodeStatus.running;
-      },
+    final walkTowardsDoorInside = WalkTowardsDoorInsideTask(
+      door: door,
+      agent: this,
     );
 
-    final walkTowardsDoorOutside = Task(() {
-      if (!isAtTheDoor) {
-        isMoving = true;
-        add(
-          MoveEffect.to(
-            door.absolutePosition + Vector2(door.size.x * 0.5, 10),
-            EffectController(
-              duration: 3,
-              curve: Curves.easeInOut,
-            ),
-            onComplete: () {
-              isMoving = false;
-              isAtTheDoor = true;
-            },
-          ),
-        );
-      }
-      return isAtTheDoor ? NodeStatus.success : NodeStatus.running;
-    });
+    final stepOutTheDoor = StepOutTheDoorTask(
+      door: door,
+      agent: this,
+    );
 
-    final walkTowardsCenterOfTheHouse = Task(() {
-      if (!isAtCenterOfHouse) {
-        isMoving = true;
-        isInside = true;
+    final walkTowardsInitialPosition = WalkTowardsInitialPositionTask(
+      startPosition: _startPosition,
+      agent: this,
+    );
 
-        add(
-          MoveEffect.to(
-            house.absoluteCenter,
-            EffectController(
-              duration: 3,
-              curve: Curves.easeInOut,
-            ),
-            onComplete: () {
-              isMoving = false;
-              wantsToGoOutside = true;
-              isAtTheDoor = false;
-              isAtCenterOfHouse = true;
-            },
-          ),
-        );
-      }
-      return isInside ? NodeStatus.success : NodeStatus.running;
-    });
+    final walkTowardsDoorOutside = WalkTowardsDoorOutsideTask(
+      door: door,
+      agent: this,
+    );
 
-    final checkIfDoorIsOpen = Condition(() => door.isOpen);
+    final walkTowardsCenterOfTheHouse = WalkTowardsCenterOfTheHouseTask(
+      house: house,
+      agent: this,
+    );
 
-    final knockTheDoor = Task(() {
-      door.knock();
-      return NodeStatus.success;
-    });
+    final checkIfDoorIsOpen = CheckIfDoorIsOpenCondition(door);
+    final knockTheDoor = KnockTheDoorTask(door);
+    final checkIfMoving = CheckMovingCondition();
+    final checkWantsToGoOutside = CheckWantsToGoOutsideCondition();
+    final checkIsInside = CheckIsInsideCondition();
+    final checkIsOutside = CheckIsOutsideCondition();
 
     final goOutsideSequence = Sequence(
       children: [
-        Condition(() => wantsToGoOutside),
+        checkWantsToGoOutside,
         Selector(
           children: [
             Sequence(
               children: [
-                Condition(() => isInside),
+                checkIsInside,
                 walkTowardsDoorInside,
                 Selector(
                   children: [
@@ -286,12 +202,12 @@ class Agent extends PositionComponent with HasBehaviorTree {
 
     final goInsideSequence = Sequence(
       children: [
-        Condition(() => !wantsToGoOutside),
+        Inverter(checkWantsToGoOutside),
         Selector(
           children: [
             Sequence(
               children: [
-                Condition(() => !isInside),
+                checkIsOutside,
                 walkTowardsDoorOutside,
                 Selector(
                   children: [
@@ -313,11 +229,227 @@ class Agent extends PositionComponent with HasBehaviorTree {
 
     treeRoot = Selector(
       children: [
-        Condition(() => isMoving),
+        checkIfMoving,
         goOutsideSequence,
         goInsideSequence,
       ],
     );
     tickInterval = 2;
+  }
+}
+
+// Custom behavior tree nodes that use the blackboard
+
+class CheckMovingCondition extends BaseNode {
+  @override
+  void tick() {
+    final isMoving = blackboard?.get<bool>('isMoving') ?? false;
+    status = isMoving ? NodeStatus.success : NodeStatus.failure;
+  }
+}
+
+class CheckWantsToGoOutsideCondition extends BaseNode {
+  @override
+  void tick() {
+    final wantsToGoOutside = blackboard?.get<bool>('wantsToGoOutside') ?? false;
+    status = wantsToGoOutside ? NodeStatus.success : NodeStatus.failure;
+  }
+}
+
+class CheckIsInsideCondition extends BaseNode {
+  @override
+  void tick() {
+    final isInside = blackboard?.get<bool>('isInside') ?? false;
+    status = isInside ? NodeStatus.success : NodeStatus.failure;
+  }
+}
+
+class CheckIsOutsideCondition extends BaseNode {
+  @override
+  void tick() {
+    final isInside = blackboard?.get<bool>('isInside') ?? false;
+    status = !isInside ? NodeStatus.success : NodeStatus.failure;
+  }
+}
+
+class CheckIfDoorIsOpenCondition extends BaseNode {
+  CheckIfDoorIsOpenCondition(this.door);
+  final Door door;
+
+  @override
+  void tick() {
+    status = door.isOpen ? NodeStatus.success : NodeStatus.failure;
+  }
+}
+
+class KnockTheDoorTask extends BaseNode {
+  KnockTheDoorTask(this.door);
+  final Door door;
+
+  @override
+  void tick() {
+    door.knock();
+    status = NodeStatus.success;
+  }
+}
+
+class WalkTowardsDoorInsideTask extends BaseNode {
+  WalkTowardsDoorInsideTask({required this.door, required this.agent});
+  final Door door;
+  final Agent agent;
+
+  @override
+  void tick() {
+    final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
+
+    if (!isAtTheDoor) {
+      blackboard?.set('isMoving', true);
+
+      agent.add(
+        MoveEffect.to(
+          door.absolutePosition + Vector2(door.size.x * 0.8, -15),
+          EffectController(
+            duration: 3,
+            curve: Curves.easeInOut,
+          ),
+          onComplete: () {
+            blackboard?.set('isMoving', false);
+            blackboard?.set('isAtTheDoor', true);
+            blackboard?.set('isAtCenterOfHouse', false);
+          },
+        ),
+      );
+    }
+    status = isAtTheDoor ? NodeStatus.success : NodeStatus.running;
+  }
+}
+
+class StepOutTheDoorTask extends BaseNode {
+  StepOutTheDoorTask({required this.door, required this.agent});
+  final Door door;
+  final Agent agent;
+
+  @override
+  void tick() {
+    final isInside = blackboard?.get<bool>('isInside') ?? false;
+
+    if (isInside) {
+      blackboard?.set('isMoving', true);
+      agent.add(
+        MoveEffect.to(
+          door.absolutePosition + Vector2(door.size.x * 0.5, 10),
+          EffectController(
+            duration: 2,
+            curve: Curves.easeInOut,
+          ),
+          onComplete: () {
+            blackboard?.set('isMoving', false);
+            blackboard?.set('isInside', false);
+          },
+        ),
+      );
+    }
+    status = !isInside ? NodeStatus.success : NodeStatus.running;
+  }
+}
+
+class WalkTowardsInitialPositionTask extends BaseNode {
+  WalkTowardsInitialPositionTask({
+    required this.startPosition,
+    required this.agent,
+  });
+  final Vector2 startPosition;
+  final Agent agent;
+
+  @override
+  void tick() {
+    final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
+    final wantsToGoOutside = blackboard?.get<bool>('wantsToGoOutside') ?? false;
+
+    if (isAtTheDoor) {
+      blackboard?.set('isMoving', true);
+      blackboard?.set('isAtTheDoor', false);
+
+      agent.add(
+        MoveEffect.to(
+          startPosition,
+          EffectController(
+            duration: 3,
+            curve: Curves.easeInOut,
+          ),
+          onComplete: () {
+            blackboard?.set('isMoving', false);
+            blackboard?.set('wantsToGoOutside', false);
+          },
+        ),
+      );
+    }
+
+    status = !wantsToGoOutside ? NodeStatus.success : NodeStatus.running;
+  }
+}
+
+class WalkTowardsDoorOutsideTask extends BaseNode {
+  WalkTowardsDoorOutsideTask({required this.door, required this.agent});
+  final Door door;
+  final Agent agent;
+
+  @override
+  void tick() {
+    final isAtTheDoor = blackboard?.get<bool>('isAtTheDoor') ?? false;
+
+    if (!isAtTheDoor) {
+      blackboard?.set('isMoving', true);
+      agent.add(
+        MoveEffect.to(
+          door.absolutePosition + Vector2(door.size.x * 0.5, 10),
+          EffectController(
+            duration: 3,
+            curve: Curves.easeInOut,
+          ),
+          onComplete: () {
+            blackboard?.set('isMoving', false);
+            blackboard?.set('isAtTheDoor', true);
+          },
+        ),
+      );
+    }
+    status = isAtTheDoor ? NodeStatus.success : NodeStatus.running;
+  }
+}
+
+class WalkTowardsCenterOfTheHouseTask extends BaseNode {
+  WalkTowardsCenterOfTheHouseTask({required this.house, required this.agent});
+  final PositionComponent house;
+  final Agent agent;
+
+  @override
+  void tick() {
+    final isAtCenterOfHouse =
+        blackboard?.get<bool>('isAtCenterOfHouse') ?? false;
+
+    if (!isAtCenterOfHouse) {
+      blackboard?.set('isMoving', true);
+      blackboard?.set('isInside', true);
+
+      agent.add(
+        MoveEffect.to(
+          house.absoluteCenter,
+          EffectController(
+            duration: 3,
+            curve: Curves.easeInOut,
+          ),
+          onComplete: () {
+            blackboard?.set('isMoving', false);
+            blackboard?.set('wantsToGoOutside', true);
+            blackboard?.set('isAtTheDoor', false);
+            blackboard?.set('isAtCenterOfHouse', true);
+          },
+        ),
+      );
+    }
+    status = (blackboard?.get<bool>('isInside') ?? false)
+        ? NodeStatus.success
+        : NodeStatus.running;
   }
 }

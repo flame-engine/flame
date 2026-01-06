@@ -1,80 +1,91 @@
 import 'package:flame/components.dart';
-import 'package:meta/meta.dart';
+
+enum LayoutAxis {
+  x(0),
+  y(1);
+
+  const LayoutAxis(this.axisIndex);
+
+  /// Necessary for use with LinearLayoutComponent's Direction
+  final int axisIndex;
+}
 
 abstract class LayoutComponent extends PositionComponent {
   LayoutComponent({
+    required super.key,
     required super.position,
     required Vector2? size,
+    required super.anchor,
+    required super.priority,
     super.children,
-    super.anchor,
-    super.priority,
-  }) {
-    // use the size setter rather than invoke [layoutChildren] because the
-    // latter needs the intent to shrinkwrap pre-set by [_shrinkWrapMode].
-    // At the time of construction, [_shrinkWrapMode] only has its default
-    // value.
-    this.size = size;
+  }) : _layoutSizeX = size?.x,
+       _layoutSizeY = size?.y {
+    resetSize();
   }
 
-  /// This size setter is nullable unlike its superclass, to allow this
-  /// [LayoutComponent] to shrink-wrap its children. In other words, it sets
-  /// the size to [inherentSize]. This setter also records the intent to
-  /// shrink-wrap via the [shrinkWrapMode] property, so that [layoutChildren]
-  /// knows whether or not to invoke this setter.
+  double? _layoutSizeX;
+  double? _layoutSizeY;
+
+  double? get layoutSizeX => _layoutSizeX;
+  double? get layoutSizeY => _layoutSizeY;
+
+  /// Sets both layout axes at the same time, and consequently, sets the [size]
+  /// in one go.
+  /// If you intend to only selectively set one axis length at a time, use
+  /// [setLayoutAxisLength].
   ///
-  /// Internally, this [size] setter should only ever be invoked upon
-  /// construction, and inside [layoutChildren] to make it easier to track and
-  /// reason about.
-  ///
-  /// Externally, this [size] setter is designed as an API, so a library user
-  /// should feel free to use this.
-  @override
-  set size(Vector2? newSize) {
-    final newShrinkWrapMode = newSize == null;
-    if (shrinkWrapMode != newShrinkWrapMode) {
-      // We only invoke this when [_shrinkWrapMode]'s value is changing.
-      // This is so we can avoid accumulation of listeners on the children.
-      _setupSizeListeners(newShrinkWrapMode);
-    }
-    shrinkWrapMode = newShrinkWrapMode;
-    // we use [super.size] to benefit from the superclass's notifier mechanisms.
-    if (newSize == null) {
-      super.size = inherentSize;
-    } else {
-      super.size = newSize;
-    }
-    // We might be tempted to use [layoutChildren], but recall that we already
-    // have listeners attached to size via [setupSizeListeners].
+  /// This is *not* equivalent to calling [setLayoutAxisLength] for both
+  /// axes. Doing so would result size listeners being called twice: once for
+  /// the x axis, and again for the y axis.
+  void setLayoutSize(double? layoutSizeX, double? layoutSizeY) {
+    _layoutSizeX = layoutSizeX;
+    _layoutSizeY = layoutSizeY;
+    resetSize();
   }
 
-  @protected
-  bool shrinkWrapMode = false;
-
-  /// Attaches or removes size listeners from [positionChildren], depending on
-  /// the mode of operation. [shrinkWrapMode] is a property accessible to this
-  /// function, so technically we can access the property directly from within
-  /// the function, but because this function is very sensitive to the value of
-  /// this property, as a safety measure we are making it explicitly a function
-  /// of [shrinkWrapMode].
+  /// Sets the appropriate layout dimension based on [axis]. This is needed
+  /// because currently there's no other way, at the [LayoutComponent] level,
+  /// to selectively set width or height without setting both.
+  /// e.g. to set Y axis to 100, `setLayoutAxisLength(LayoutAxis.y, 100)`
   ///
-  /// Previously, this method also attached or removed a listener on the
-  /// component [size] itself, but now that [size] is being overloaded to
-  /// signal intent to shrink wrap, the layout methods are invoked directly
-  /// from the [size] setter itself.
-  void _setupSizeListeners(bool shrinkWrapMode) {
-    if (shrinkWrapMode) {
-      // In shrink wrap mode, since sizing is bottom-up, the children have the
-      // listener and trigger layout.
-      for (final child in positionChildren) {
-        child.size.addListener(layoutChildren);
-      }
-    } else {
-      // In explicit sizing mode, since sizing is top-down, remove the listeners
-      // from the children.
-      for (final child in positionChildren) {
-        child.size.removeListener(layoutChildren);
-      }
+  /// If you intend to set both axes at the same time, use [setLayoutSize]
+  ///
+  /// This is *not* equivalent to calling [setLayoutSize] with one of the axes
+  /// set to null. Doing so would actually set the axis to the intrinsic length
+  /// of that dimension.
+  void setLayoutAxisLength(LayoutAxis axis, double? value) {
+    // This is necessary because we cannot extend the accessor assignment of
+    // NullableVector2 to trigger some extra functionality
+    // (i.e. setting height/width) when the accessor is set.
+    //
+    // We also cannot use listeners at the moment, because listeners are
+    // triggered when either height/width are set, when we need things to happen
+    // *only* when height or width are set. Current functionality results in
+    // a race condition.
+    switch (axis) {
+      case LayoutAxis.x:
+        _layoutSizeX = value;
+        width = _layoutSizeX ?? intrinsicSize.x;
+      case LayoutAxis.y:
+        _layoutSizeY = value;
+        height = _layoutSizeY ?? intrinsicSize.y;
     }
+  }
+
+  /// Reset the size of this [LayoutComponent] to either the layout dimensions
+  /// or the [intrinsicSize].
+  void resetSize() {
+    size.setValues(
+      _layoutSizeX ?? intrinsicSize.x,
+      _layoutSizeY ?? intrinsicSize.y,
+    );
+  }
+
+  bool isShrinkWrappedIn(LayoutAxis axis) {
+    return switch (axis) {
+      LayoutAxis.x => layoutSizeX == null,
+      LayoutAxis.y => layoutSizeY == null,
+    };
   }
 
   @override
@@ -82,8 +93,7 @@ abstract class LayoutComponent extends PositionComponent {
     if (child is! PositionComponent) {
       return;
     }
-    // setupSizeListeners(), but for a single child
-    if (type == ChildrenChangeType.added && shrinkWrapMode) {
+    if (type == ChildrenChangeType.added) {
       child.size.addListener(layoutChildren);
     } else {
       child.size.removeListener(layoutChildren);
@@ -91,18 +101,20 @@ abstract class LayoutComponent extends PositionComponent {
     layoutChildren();
   }
 
-  /// Sets the size of this [LayoutComponent], then lays out the children
-  /// along both main and cross axes.
-  void layoutChildren() {
-    if (shrinkWrapMode) {
-      size = null;
-    }
-  }
+  /// The method to refresh the layout, triggered by various events.
+  /// (e.g. [onChildrenChanged], size changes on both this component and its
+  /// children)
+  ///
+  /// Override this method for any specific layout needs.
+  void layoutChildren();
 
   /// A helper property to get only the [PositionComponent]s
   /// among the [children].
   List<PositionComponent> get positionChildren =>
       children.whereType<PositionComponent>().toList();
 
-  Vector2 get inherentSize;
+  /// The smallest possible size this component can possibly have, as a
+  /// container of other components, and given whatever constraints any
+  /// subclass of [LayoutComponent] may prescribe.
+  Vector2 get intrinsicSize;
 }

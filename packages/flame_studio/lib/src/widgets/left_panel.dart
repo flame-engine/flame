@@ -2,6 +2,7 @@ import 'package:flame_studio/src/core/theme.dart';
 import 'package:flame_studio/src/widgets/panels/hierarchy_view.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 class LeftPanel extends ConsumerWidget {
   const LeftPanel({super.key});

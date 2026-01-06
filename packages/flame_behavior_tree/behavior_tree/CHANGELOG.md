@@ -1,3 +1,10 @@
+## 0.1.5
+
+ - **FEAT**: Add `Blackboard` support for behavior trees ([#3756](https://github.com/flame-engine/flame/issues/3756)). ([955411d3](https://github.com/flame-engine/flame/commit/955411d34a6e85e25524b52938146578fa4aa3e3))
+
+## 0.1.4
+ - **CHORE**: Bump dependencies
+
 ## 0.1.3+2
 
  - **DOCS**: Fix workflow status badge paths ([#3517](https://github.com/flame-engine/flame/issues/3517)). ([149f16fe](https://github.com/flame-engine/flame/commit/149f16fe29f1fb14b3612964b2226c9c5c7daf95))

@@ -1,3 +1,11 @@
+## 0.1.4
+
+ - **FEAT**: Add `Blackboard` support for behavior trees ([#3756](https://github.com/flame-engine/flame/issues/3756)). ([955411d3](https://github.com/flame-engine/flame/commit/955411d34a6e85e25524b52938146578fa4aa3e3))
+
+## 0.1.3+17
+
+ - Update a dependency to the latest release.
+
 ## 0.1.3+16
 
  - Update a dependency to the latest release.

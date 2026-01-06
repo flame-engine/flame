@@ -1,3 +1,11 @@
+## 0.1.1+4
+
+ - Update a dependency to the latest release.
+
+## 0.1.1+3
+
+ - Update a dependency to the latest release.
+
 ## 0.1.1+2
 
  - **DOCS**: Update README.md of flame_3d with newer instructions ([#3711](https://github.com/flame-engine/flame/issues/3711)). ([ad7dc059](https://github.com/flame-engine/flame/commit/ad7dc059f2f97e7bc78a74bdff149b26adb22fbc))

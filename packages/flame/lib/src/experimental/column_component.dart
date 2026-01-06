@@ -1,6 +1,8 @@
 import 'package:flame/src/experimental/linear_layout_component.dart';
 import 'package:flutter/rendering.dart';
 
+/// Warning: Experimental. API and behavior may change.
+///
 /// ColumnComponent is a layout component that arranges its children in a
 /// vertical column.
 ///
@@ -12,8 +14,8 @@ import 'package:flutter/rendering.dart';
 ///
 /// If [size] is non-null, behaves as normal explicit sizing.
 /// If [size] is null, sets the size to the minimum size that containing all
-/// the children. This is similar to setting the [size] to [inherentSize], but
-/// the distinct in that sizing will respond to changes in children, other
+/// the children. This is similar to setting the [size] to [intrinsicSize], but
+/// distinct in that sizing will respond to changes in children, other
 /// properties, etc...
 ///
 /// Example usage:
@@ -31,12 +33,14 @@ import 'package:flutter/rendering.dart';
 /// ```
 class ColumnComponent extends LinearLayoutComponent {
   ColumnComponent({
+    super.key,
     super.mainAxisAlignment = MainAxisAlignment.start,
     super.crossAxisAlignment = CrossAxisAlignment.start,
     super.gap = 0.0,
     super.size,
     super.position,
-    super.children,
+    super.anchor,
     super.priority,
+    super.children,
   }) : super(direction: Direction.vertical);
 }

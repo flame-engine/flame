@@ -1,8 +1,18 @@
 # Bridge Packages
 
+:::{package} flame_3d [WIP]
+
+Uses Flutter GPU / Impeller low-level level access to provide an ergonomic and **very experimental**
+3D rendering engine on top of Flame.
+
 :::{package} flame_audio
 
 Play multiple audio files simultaneously (bridge package for [AudioPlayers]).
+:::
+
+:::{package} flame_behaviors
+
+Apply separation of concerns to game logic in the form of Entities and Behaviors.
 :::
 
 :::{package} flame_bloc
@@ -71,6 +81,12 @@ Add the "Powered by Flame" splash screen.
 Draw SVG files in Flutter (bridge package for [flutter_svg]).
 :::
 
+:::{package} flame_texturepacker
+
+Load sprite sheets created by TexturePacker tool (bridge package for
+[TexturePacker]).
+:::
+
 :::{package} flame_tiled
 
 2D tilemap level editor (bridge package for [Tiled]).
@@ -84,6 +100,7 @@ Draw SVG files in Flutter (bridge package for [flutter_svg]).
 [Rive]: https://rive.app/
 [Riverpod]: https://github.com/rrousselGit/riverpod
 [Spine]: https://pub.dev/packages/spine_flutter
+[TexturePacker]: https://www.codeandweb.com/texturepacker
 [Tiled]: https://www.mapeditor.org/
 [flutter_svg]: https://github.com/dnfield/flutter_svg
 
@@ -92,6 +109,7 @@ Draw SVG files in Flutter (bridge package for [flutter_svg]).
 :hidden:
 
 flame_audio                 <flame_audio/flame_audio.md>
+flame_behaviors             <flame_behaviors/flame_behaviors.md>
 flame_bloc                  <flame_bloc/flame_bloc.md>
 flame_fire_atlas            <flame_fire_atlas/flame_fire_atlas.md>
 flame_forge2d               <flame_forge2d/flame_forge2d.md>
@@ -104,5 +122,6 @@ flame_riverpod              <flame_riverpod/flame_riverpod.md>
 flame_splash_screen         <flame_splash_screen/flame_splash_screen.md>
 flame_spine                 <flame_spine/flame_spine.md>
 flame_svg                   <flame_svg/flame_svg.md>
+flame_texturepacker         <flame_texturepacker/flame_texturepacker.md>
 flame_tiled                 <flame_tiled/flame_tiled.md>
 ```

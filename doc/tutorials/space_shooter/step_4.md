@@ -145,15 +145,7 @@ class Player extends SpriteAnimationComponent
       period: .2,
       selfPositioning: true,
       factory: (index) {
-        return Bullet(
-          position: position +
-              Vector2(
-                0,
-                -height / 2,
-              ),
-        );
-
-        return bullet;
+        return Bullet(position: position + Vector2(0, -height / 2));
       },
       autoStart: false,
     );

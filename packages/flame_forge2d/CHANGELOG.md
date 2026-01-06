@@ -1,3 +1,11 @@
+## 0.19.2+2
+
+ - Update a dependency to the latest release.
+
+## 0.19.2+1
+
+ - Update a dependency to the latest release.
+
 ## 0.19.2
 
  - **FEAT**: Allow bodies to not be destroyed when the world is removed from the component tree ([#3716](https://github.com/flame-engine/flame/issues/3716)). ([7d18fd3d](https://github.com/flame-engine/flame/commit/7d18fd3d1cf076bce7032eb60dbfd7777643539d))

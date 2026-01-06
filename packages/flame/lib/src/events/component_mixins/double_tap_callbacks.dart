@@ -1,8 +1,5 @@
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/double_tap_dispatcher.dart';
-import 'package:flame/src/events/messages/double_tap_cancel_event.dart';
-import 'package:flame/src/events/messages/double_tap_down_event.dart';
-import 'package:flame/src/events/messages/double_tap_event.dart';
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 
 /// [DoubleTapCallbacks] adds the ability to receive double-tap events in a
 /// component.

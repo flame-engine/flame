@@ -1,11 +1,7 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/component_mixins/tap_callbacks.dart';
-import 'package:flame/src/events/interfaces/multi_tap_listener.dart';
-import 'package:flame/src/events/messages/tap_cancel_event.dart';
-import 'package:flame/src/events/messages/tap_down_event.dart';
-import 'package:flame/src/events/messages/tap_up_event.dart';
+import 'package:flame/events.dart';
+import 'package:flame/input.dart';
 import 'package:flame/src/events/tagged_component.dart';
-import 'package:flame/src/events/tap_config.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
@@ -154,7 +150,9 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
   @override
   void onMount() {
     game.gestureDetectors.add<MultiTapGestureRecognizer>(
-      MultiTapGestureRecognizer.new,
+      () => MultiTapGestureRecognizer(
+        allowedButtonsFilter: (buttons) => buttons == kPrimaryButton,
+      ),
       (MultiTapGestureRecognizer instance) {
         instance.longTapDelay = Duration(
           milliseconds: (longTapDelay * 1000).toInt(),

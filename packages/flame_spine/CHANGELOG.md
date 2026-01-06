@@ -1,3 +1,17 @@
+## 0.3.0+1
+
+ - **DOCS**: Updated flame_spine documentation ([#3763](https://github.com/flame-engine/flame/issues/3763)). ([3c721d91](https://github.com/flame-engine/flame/commit/3c721d91f3e3514c79e77b8e2e37a641305a2e04))
+
+## 0.3.0
+
+> Note: This release has breaking changes.
+
+ - **BREAKING** **FEAT**: Support Spine 4.3 ([#3760](https://github.com/flame-engine/flame/issues/3760)). ([17bc40c3](https://github.com/flame-engine/flame/commit/17bc40c361471fde35b360671cccef115ed0b4bc))
+
+## 0.2.2+17
+
+ - **DOCS**: Deprecate TapDetector in favour of TapCallbacks ([#2886](https://github.com/flame-engine/flame/issues/2886)). ([b173697b](https://github.com/flame-engine/flame/commit/b173697bfb7ea61287251c43cd3c9d2fdb448fe3))
+
 ## 0.2.2+16
 
  - Update a dependency to the latest release.

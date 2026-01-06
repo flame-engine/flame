@@ -5,6 +5,8 @@ workspace:
   - doc/tutorials/klondike/app
   - doc/tutorials/space_shooter/app
   - doc/tutorials/platformer/app
+  - packages/flame_behaviors
+  - packages/flame_behaviors/example
   - packages/flame_behavior_tree
   - packages/flame_behavior_tree/behavior_tree
   - packages/flame_behavior_tree/example
@@ -21,6 +23,8 @@ workspace:
   - packages/flame_lint
   - packages/flame_sprite_fusion
   - packages/flame_sprite_fusion/example
+  - packages/flame_steering_behaviors
+  - packages/flame_steering_behaviors/example
   - packages/flame_devtools
   - packages/flame_fire_atlas
   - packages/flame_fire_atlas/example

@@ -60,6 +60,16 @@ void main() {
       expect(tiled.tileMap.renderableLayers.length, equals(3));
     });
 
+    test('throws assertion error if fileName contains a path', () async {
+      expectLater(
+        TiledComponent.load(
+          'path/to/map.tmx',
+          Vector2.all(16),
+        ),
+        throwsAssertionError,
+      );
+    });
+
     test('assigns key', () async {
       expect(tiled.key, equals(ComponentKey.named('test')));
     });

@@ -1,9 +1,8 @@
-import 'dart:ui';
-
 import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -62,6 +61,20 @@ void main() {
         c.boxConfig,
         secondConfig,
       );
+    });
+
+    test('maxWidth causes text reflow', () async {
+      const firstConfig = TextBoxConfig();
+      const secondConfig = TextBoxConfig(maxWidth: 640);
+      final c = TextBoxComponent(
+        text: 'The quick brown fox jumps over the lazy dog.',
+        boxConfig: firstConfig,
+        textRenderer: TextPaint(
+          style: const TextStyle(fontSize: 10),
+        ),
+      );
+      c.boxConfig = secondConfig;
+      expect(c.lines.length, 1);
     });
 
     test('skip method sets boxConfig timePerChar to 0', () {
@@ -205,6 +218,35 @@ lines.''',
       textBoxComponent2.skip();
       expect(textBoxComponent2.finished, true);
     });
+
+    testWithFlameGame(
+      'TextBoxComponent resets animation to the start of text',
+      (
+        game,
+      ) async {
+        final textBoxComponent1 = TextBoxComponent(
+          text: 'aaa',
+          boxConfig: const TextBoxConfig(timePerChar: 1.0),
+        );
+        await game.ensureAdd(textBoxComponent1);
+        // forward time by 2.5 seconds
+        game.update(2.5);
+        expect(textBoxComponent1.finished, false);
+        // flush
+        game.update(0.6);
+        expect(textBoxComponent1.finished, true);
+        // reset animation
+        textBoxComponent1.resetAnimation();
+        // 'finished' state should reset immediately
+        expect(textBoxComponent1.finished, false);
+        expect(textBoxComponent1.currentChar, 0);
+        expect(textBoxComponent1.currentLine, 0);
+        game.update(2.5);
+        expect(textBoxComponent1.finished, false);
+        game.update(0.6);
+        expect(textBoxComponent1.finished, true);
+      },
+    );
 
     testGolden(
       'Alignment options',
