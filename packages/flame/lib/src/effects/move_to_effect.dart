@@ -27,29 +27,33 @@ class MoveToEffect extends MoveEffect {
     void Function()? onComplete,
     super.key,
   }) : _destination = destination.clone(),
-       _offset = Vector2.zero(),
        super(controller, target, onComplete: onComplete);
 
   final Vector2 _destination;
-  final Vector2 _offset;
+  final Vector2 _offset = Vector2.zero();
+  final Vector2 _scaledOffset = Vector2.zero();
 
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
-    _offset.setFrom(_destination - target.position);
+    _offset.setFrom(_destination);
+    _offset.sub(target.position);
   }
 
   @override
   @mustCallSuper
   void onStart() {
-    _offset.setFrom(_destination - target.position);
+    _offset.setFrom(_destination);
+    _offset.sub(target.position);
   }
 
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
+    _scaledOffset.setFrom(_offset);
+    _scaledOffset.scale(dProgress);
+    target.position.add(_scaledOffset);
   }
 
   @override
