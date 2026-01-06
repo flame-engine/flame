@@ -48,6 +48,13 @@ class MoveToEffect extends MoveEffect {
     _offset.sub(target.position);
   }
 
+  @mustCallSuper
+  void updateDestination(Vector2 newDestination) {
+    _destination.setFrom(newDestination);
+    _offset.setFrom(_destination);
+    _offset.sub(target.position);
+  }
+
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
