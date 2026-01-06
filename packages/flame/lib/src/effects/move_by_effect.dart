@@ -28,11 +28,14 @@ class MoveByEffect extends MoveEffect {
        super(controller, target, onComplete: onComplete);
 
   final Vector2 _offset;
+  final Vector2 _scaledOffset = Vector2.zero();
 
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.position += _offset * dProgress;
+    _scaledOffset.setFrom(_offset);
+    _scaledOffset.scale(dProgress);
+    target.position.add(_scaledOffset);
   }
 
   @override
