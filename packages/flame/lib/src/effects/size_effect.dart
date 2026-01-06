@@ -44,12 +44,15 @@ class SizeEffect extends Effect with EffectTarget<SizeProvider> {
     key: key,
   );
 
-  Vector2 _offset;
+  final Vector2 _offset;
+  final Vector2 _scaledOffset = Vector2.zero();
 
   @override
   void apply(double progress) {
     final dProgress = progress - previousProgress;
-    target.size += _offset * dProgress;
+    _scaledOffset.setFrom(_offset);
+    _scaledOffset.scale(dProgress);
+    target.size.add(_scaledOffset);
     target.size.clampScalar(0, double.infinity);
   }
 }
@@ -72,6 +75,7 @@ class _SizeToEffect extends SizeEffect {
 
   @override
   void onStart() {
-    _offset = _targetSize - target.size;
+    _offset.setFrom(_targetSize);
+    _offset.sub(target.size);
   }
 }
