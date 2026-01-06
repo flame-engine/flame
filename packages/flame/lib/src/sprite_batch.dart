@@ -231,9 +231,10 @@ class SpriteBatch {
       imageCache.findKeyForImage(atlas) ??
       'image[${identityHashCode(atlas)}]';
 
-  /// The default color, used as a background color for a [BatchItem] (web path).
+  /// The default color, used as a background color for a [BatchItem] on web.
   ///
-  /// Note: The drawAtlas color list uses [_defaultColor] unless an explicit per-item color is provided.
+  /// Note: The drawAtlas color list uses [_defaultColor]
+  /// unless an explicit per-item color is provided.
   final Color? defaultColor;
 
   /// The default transform, used when a transform was not supplied for a
@@ -335,7 +336,7 @@ class SpriteBatch {
     _sources[slot] = _resolveSourceForAtlas(currentBatchItem);
     _transforms[slot] = currentBatchItem.transform;
 
-    // Preserve old semantics: only explicit item colors affect the drawAtlas list.
+    // If color is not explicitly provided, store transparent.
     _colors[slot] = color ?? _defaultColor;
   }
 
@@ -388,7 +389,7 @@ class SpriteBatch {
     _sources.add(_resolveSourceForAtlas(batchItem));
     _transforms.add(batchItem.transform);
 
-    // Preserve old semantics: if color is not explicitly provided, store transparent.
+    // If color is not explicitly provided, store transparent.
     _colors.add(color ?? _defaultColor);
 
     return handle;
