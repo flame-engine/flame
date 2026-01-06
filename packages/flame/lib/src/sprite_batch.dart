@@ -442,7 +442,16 @@ class SpriteBatch {
           .map((e) => e.source)
           .toList(growable: false);
       final colors = _batchItems.values
-          .map((e) => e.color)
+          .map((e) => e.flip
+              ? Rect.fromLTWH(
+                  // The atlas is twice as wide when the flipped atlas is generated.
+                  (atlas.width * (_flippedAtlasStatus.isGenerated ? 1 : 2)) -
+                      e.source.right,
+                  e.source.top,
+                  e.source.width,
+                  e.source.height,
+                )
+              : e.source)
           .toList(growable: false);
 
       final hasNoColors = colors.every((c) => c == defaultColor);
