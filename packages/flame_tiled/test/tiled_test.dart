@@ -261,7 +261,6 @@ void main() {
   });
 
   group('Flipped and rotated tiles render correctly with sprite batch:', () {
-    late Uint8List pixelsBeforeFlipApplied;
     late Uint8List pixelsAfterFlipApplied;
     late RenderableTiledMap overlapMap;
 
