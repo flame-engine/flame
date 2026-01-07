@@ -29,21 +29,30 @@ abstract class LayoutComponent extends PositionComponent {
   double? get layoutSizeX => _layoutSizeX;
   double? get layoutSizeY => _layoutSizeY;
 
-  /// Avoid using within layout logic.
-  /// Instead, use [setLayoutAxisLength], as it allows selective setting of
-  /// vector components, and subsequently selective setting of the
-  /// size components.
+  /// Sets both layout axes at the same time, and consequently, sets the [size]
+  /// in one go.
+  /// If you intend to only selectively set one axis length at a time, use
+  /// [setLayoutAxisLength].
+  ///
+  /// This is *not* equivalent to calling [setLayoutAxisLength] for both
+  /// axes. Doing so would result size listeners being called twice: once for
+  /// the x axis, and again for the y axis.
   void setLayoutSize(double? layoutSizeX, double? layoutSizeY) {
     _layoutSizeX = layoutSizeX;
     _layoutSizeY = layoutSizeY;
     resetSize();
   }
 
-  /// A helper function to set the appropriate layout dimension based on
-  /// [axis]. This is needed because currently there's no other way, at the
-  /// [LayoutComponent] level, to selective set width or height without setting
-  /// both.
-  /// e.g. if [axis] is [LayoutAxis.y], then that's the y axis.
+  /// Sets the appropriate layout dimension based on [axis]. This is needed
+  /// because currently there's no other way, at the [LayoutComponent] level,
+  /// to selectively set width or height without setting both.
+  /// e.g. to set Y axis to 100, `setLayoutAxisLength(LayoutAxis.y, 100)`
+  ///
+  /// If you intend to set both axes at the same time, use [setLayoutSize]
+  ///
+  /// This is *not* equivalent to calling [setLayoutSize] with one of the axes
+  /// set to null. Doing so would actually set the axis to the intrinsic length
+  /// of that dimension.
   void setLayoutAxisLength(LayoutAxis axis, double? value) {
     // This is necessary because we cannot extend the accessor assignment of
     // NullableVector2 to trigger some extra functionality
@@ -66,8 +75,10 @@ abstract class LayoutComponent extends PositionComponent {
   /// Reset the size of this [LayoutComponent] to either the layout dimensions
   /// or the [intrinsicSize].
   void resetSize() {
-    width = _layoutSizeX ?? intrinsicSize.x;
-    height = _layoutSizeY ?? intrinsicSize.y;
+    size.setValues(
+      _layoutSizeX ?? intrinsicSize.x,
+      _layoutSizeY ?? intrinsicSize.y,
+    );
   }
 
   bool isShrinkWrappedIn(LayoutAxis axis) {
