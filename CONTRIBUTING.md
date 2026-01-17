@@ -90,6 +90,11 @@ To install Melos, run the following command from your terminal:
 flutter pub global activate melos
 ```
 
+```{note}
+If the download destination path contains non UTF-8 character(s) the generated .bat files can not run by default. (for example: á, é, ő etc.)  
+To solve this, open the file(s) mentioned in the error messages, and replace undecodable characters ('�') to create valid path, then save the .bat file(s) and run the commands again.
+```
+
 Next, at the root of your locally cloned repository bootstrap the projects dependencies:
 
 ```shell
