@@ -17,7 +17,7 @@ import 'package:flame/events.dart';
 class SwordSpritePostProcessed extends PostProcessComponent with HoverCallbacks {
     //... omitted for brevity
 }
-``` 
+```
 
 After that add one private field and the two function to react to hover enter
 and exit into the class.  
@@ -96,7 +96,8 @@ with HoverCallbacks
     super.onChildrenChanged( component, changeType);
   }
   
-  // I have to recalculate the size property manually, it was not working without it
+  // I have to recalculate the size property manually,
+  // it was not working without it
   // Even if the code is the similar in the super class.
   void _recalculateBoundingSize() {
     final Vector2 boundingBox = Vector2.zero();

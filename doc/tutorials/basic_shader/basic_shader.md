@@ -24,7 +24,7 @@ like ```.png``` files.
 ```
 
 *Created by Kornél (Hoodead) Lapu, at 2025.12.22.*  
-You can reach the standalone repository 
+You can reach the standalone repository
 [here at Github](https://github.com/kornellapu/basic_shader_tutorial).
 
 ---

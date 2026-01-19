@@ -7,7 +7,8 @@
 Let's create the component where we render our sprite and apply the shader.  
 
 For clarity and some modularity I separated the sprite into two classes:  
-- one for having a standard sprite class (purpose: general sprite and event handling)  
+
+- one for having a standard sprite class (purpose: general sprite and event handling)
 - one for applying a post process as a wrapper class (purpose: specific shader application)
 
 Now if I want to modify the shader of the sword only, I dont have to modify the
@@ -58,7 +59,8 @@ together afterwards via import*) create another class:
 //... 
 import 'package:flame/post_process.dart';
 
-import 'package:basic_shader_tutorial/outline_postprocess.dart'; // We will create this later
+// We will create this file later
+import 'package:basic_shader_tutorial/outline_postprocess.dart';
 //... 
 
 class SwordSpritePostProcessed extends PostProcessComponent{

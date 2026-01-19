@@ -3,7 +3,7 @@
 
 
 ## 2.0 Foundations
- 
+
 These are the first steps of creating a new Flame game from scratch.  
 Similar to Flame [Getting Started](https://docs.flame-engine.org/latest/#id1)
 guide.  
