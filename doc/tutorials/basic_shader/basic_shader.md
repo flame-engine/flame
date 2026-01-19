@@ -1,11 +1,11 @@
 # Basic shader tutorial
 
 This tutorial will give you a brief understanding how to create and use basic shaders on
-```SpriteComponents``` with ```PostProcess``` and ```PostProcessComponent``` 
+```SpriteComponents``` with ```PostProcess``` and ```PostProcessComponent```
 using Dart/Flutter and Flame Engine frameworks.  
 
 My intention was to keep this tutorial as beginner friendly as possible.  
-So the tutorial starts at the installation and preparation of a Flame game 
+So the tutorial starts at the installation and preparation of a Flame game
 (feel free to skip any steps, what you don't need).  
 Then goes through creating three classes (other than the game and world) and then
 wire them together.  
@@ -35,12 +35,13 @@ You can reach the standalone repository
 
 ---
 
-#### **Author's notes:**  
 
-*I have met a curious mind through 
-[Flame Engine's Discord server](https://discord.gg/pxrBmy4), who wanted to use 
+## Author's notes
+
+*I have met a curious mind through
+[Flame Engine's Discord server](https://discord.gg/pxrBmy4), who wanted to use
 shaders with Flame Engine.  
-Well, that was two of us who could use some basic shader knowledge in Flame, so 
+Well, that was two of us who could use some basic shader knowledge in Flame, so
 I decided to capture what was my solution, to share with others.*  
 
 *Please keep in mind, there can be better solutions to **your** specific needs.  

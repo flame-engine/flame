@@ -1,13 +1,16 @@
 # Appendix A - User input
 
-This section we will add a Flame ```mixin``` to handle some mouse hover events 
+This section we will add a Flame ```mixin``` to handle some mouse hover events
 and change the underlying shader behaviour.  
 
+
 ## **A.1** **Event handling**  
-Open the ```sword_component.dart``` file or where your 
+
+Open the ```sword_component.dart``` file or where your
 ```PostProcessComponent``` is located.  
 Add the ```HoverCallbacks``` mixin to the class, to have something like this:
-```dart 
+
+```dart
 //... other imports
 import 'package:flame/events.dart';
 
@@ -16,11 +19,11 @@ class SwordSpritePostProcessed extends PostProcessComponent with HoverCallbacks 
 }
 ``` 
 
-After that add one private field and the two function to react to hover enter 
+After that add one private field and the two function to react to hover enter
 and exit into the class.  
 (The cancel event should be handled too but for clarity, I omitted).  
 
-```dart  
+```dart
 Color? _originalPostProcessColor;
 
 @override
@@ -42,23 +45,23 @@ void onHoverExit() {
 ```
 
 At this point the solution was not working for me with these modifications.  
-  
-As I debugged, I found out the size property of ```PostProcessComponent``` was 
-not handled as I expected, though the value of size property was not a zero 
+
+As I debugged, I found out the size property of ```PostProcessComponent``` was
+not handled as I expected, though the value of size property was not a zero
 vector at runtime.  
 
-I decided to elevate some part of the code from ```PostProcessComponent``` 
+I decided to elevate some part of the code from ```PostProcessComponent```
 into ```SwordSpritePostProcessed``` and handle the children changing there.  
 
-After I explicitly set the size property it was working as intended, attached 
-to ```onChildrenChanged``` event to let it work with multiple children 
+After I explicitly set the size property it was working as intended, attached
+to ```onChildrenChanged``` event to let it work with multiple children
 (but not tested that part).  
 
 After that the expected bounding box became the target.  
 
 At the end the ```sword_component.dart``` file became this:
-```dart
 
+```dart
 import 'dart:async';
 
 import 'package:flame/components.dart';
@@ -142,14 +145,13 @@ class SwordSprite extends SpriteComponent{
     return super.onLoad();
   }
 }
-
 ```
 
-The result is, when you hover over the sprite bounding box, the outline shader 
+The result is, when you hover over the sprite bounding box, the outline shader
 changes to blue, because we set that in the hover event.  
 If the mouse exits the box, then it is resetted to the original color.  
 
 This is how it should look like:  
-![GIF of hovering the mouse on-off](../../images/tutorials/basic_shader/hover_demo.gif)
+![GIF of mouse hover](../../images/tutorials/basic_shader/hover_demo.gif)
 
 That is the end of Appendix A.

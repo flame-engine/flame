@@ -1,51 +1,53 @@
 # Shader
 
-## **5.0** **Considerations**
 
-In this section we will create the fragment (pixel) shader program which runs 
+## 5.0 Considerations
+
+In this section we will create the fragment (pixel) shader program which runs
 on the GPU, then add as a resource.  
 
-It is important to note, we are going to program the GPU, so this code will 
+It is important to note, we are going to program the GPU, so this code will
 need a little bit of different thinking from what we did before.  
 
 ```{note}
 The reason is that, **the fragment shader runs for each pixel**.  
 *Pff.. and?*  
-Well that means, you should not excessively branch or loop, because it will 
+Well that means, you should not excessively branch or loop, because it will
 be calculated, iterated, or be checked for each pixel in each frame.  
-I am serious, 
-a 1K screen (like mine) has 1920 * 1080 pixels => 2 073 600 pixels in full 
+I am serious,
+a 1K screen (like mine) has 1920 * 1080 pixels => 2 073 600 pixels in full
 screen mode.  
-A for loop of 16*16 will create 256 * 2 073 600 => 530 841 600 iterations 
+A for loop of 16*16 will create 256 * 2 073 600 => 530 841 600 iterations
 per frame in worst case.  
-That means with 30 FPS, it is ___15 925 248 000___ calls per seconds, for a 
+That means with 30 FPS, it is ___15 925 248 000___ calls per seconds, for a
 relatively simple shader with minimum settings.  
 *Yikes..*  
 So please be mindful what are you doing and how in your shader.  
-You can think of it like, it *nearly* has 
-[O<sup>2</sup>](https://en.wikipedia.org/wiki/Big_O_notation) scale, 
-because of the "per pixel" execution, where the input size is based on 
-the width and height of the screen. 
-``` 
+You can think of it like, it *nearly* has
+[O<sup>2</sup>](https://en.wikipedia.org/wiki/Big_O_notation) scale,
+because of the "per pixel" execution, where the input size is based on
+the width and height of the screen.
+```
 
 ```{note}
 Also the shader optimization is out of the scope of this tutorial.  
 But there are guards, to escape as early as possible.  
 
-Instead of square root, it would be a better solution 
-to compare squared values only.
+Instead of square root, it would be a better solution to compare squared
+values only.
 ```
 
 Everything is ready to create the GLSL based shader.  
 
 
-## **5.1** **Shader code**  
+## 5.1 Shader code
 
 Create new directory at ```\assets\shaders``` and a file named ```outline.frag```.  
 For example, in my project it looks like this:  
 ```C:\Projects\basic_shader_tutorial\assets\shaders\outline.frag```  
 
 Open the ```outline.frag``` file and add the following lines:  
+
 ```glsl
 #version 460 core
 
@@ -110,28 +112,29 @@ void main() {
 
 *So.. what does this shader do?*  
 Grabbing each transparent pixel and checking: is it next to an opaque pixel?  
-If yes, then color it as the outline color (passed in as an uniform variable), 
+If yes, then color it as the outline color (passed in as an uniform variable),
 else it will be full transparent.  
 
-That is why the transparency of the ```.png``` image was important in the 
-beginning (at Setup section).
+That is why the transparency of the ```.png``` image was important in the
+beginning (at Setup section).  
 
 ```{note}
 The loop of a GLSL shader accepts only a compile time constant.  
-So as far as I know we can not use the outline width, because that is a 
+So as far as I know we can not use the outline width, because that is a
 uniform, which are not present in the shader at compile time.  
-This is altering the shader behaviour if the outline uniform is set to a 
-bigger value than this shader sampler distance. It should be set accordingly 
+This is altering the shader behaviour if the outline uniform is set to a
+bigger value than this shader sampler distance. It should be set accordingly
 and manually in the shader too.
 ```
 
 
-## **5.2** **Shader resource**  
+## 5.2 Shader resource
 
-To let the flutter linking process know about this shader asset we have to add 
+To let the flutter linking process know about this shader asset we have to add
 it to the ```pubspec.yaml``` file before compilation.
 
 Open the ```pubspec.yaml``` and write the following lines under what we already added:
+
 ```yaml
 #... still omitted for brevity
 
@@ -152,12 +155,12 @@ Execute ```flutter run```, then choose your platform.
 
 *Tadaa!*  
 You should see two sprites in the window.  
-The left is without an outline, the right one is with a colored outline from 
-the shader.
+The left is without an outline, the right one is with a colored outline from
+the shader.  
 
 ![Image of the reference and the shader](../../images/tutorials/basic_shader/final_result.png)
 
 We are done with the basic shader tutorial.  
 *Yippyy!*  
 
-It's time for you to experiment!  
+It's time for you to experiment!
