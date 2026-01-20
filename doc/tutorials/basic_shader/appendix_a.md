@@ -153,6 +153,6 @@ changes to blue, because we set the uniform variable in the hover event.
 If the mouse exits the box, then it will change back to the original color.  
 
 This is how it should look like:  
-![GIF of mouse hover](../../images/tutorials/basic_shader/hover_demo.gif)
+![GIF of mouse hover](../../images/tutorials/basic_shader/hover_demo.webp)
 
 That is the end of Appendix A.
