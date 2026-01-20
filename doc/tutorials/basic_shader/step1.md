@@ -28,6 +28,8 @@ directory:
 ```flutter create .```  
 Now you have a new flutter project.  
 
+<!--- cspell:ignore Yeey -->
+
 *Yeey!*
 
 
@@ -45,6 +47,8 @@ from GeForceLegend, but it is really up to your preferences.
 
 
 ## 1.2 Image resource
+
+<!--- cspell:ignore lapu -->
 
 I will use an image (sword.png) created by
 [lapu_land__](https://www.instagram.com/lapu_land__/).  
