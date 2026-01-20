@@ -88,7 +88,7 @@ void main() {
       float distance = sqrt(float( x*x + y*y ));
       if (distance > uOutlineWidth) continue;
       
-      // Sample the offseted pixel from the current pixel (uv)
+      // Sample the shifted pixel from the current pixel (uv)
       vec2 offset = vec2(float(x), float(y)) * texelSize;
       vec4 sampleColor = texture(uTexture, uv + offset);
       
