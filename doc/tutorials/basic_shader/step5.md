@@ -88,7 +88,7 @@ void main() {
       float distance = sqrt(float( x*x + y*y ));
       if (distance > uOutlineWidth) continue;
       
-      // Sample the offsetted pixel from the current pixel (uv)
+      // Sample the offseted pixel from the current pixel (uv)
       vec2 offset = vec2(float(x), float(y)) * texelSize;
       vec4 sampleColor = texture(uTexture, uv + offset);
       
@@ -122,7 +122,7 @@ beginning (at Setup section).
 The loop of a GLSL shader accepts only a compile time constant.  
 So as far as I know we can not use the outline width, because that is a
 uniform, which are not present in the shader at compile time.  
-This is altering the shader behaviour if the outline uniform is set to a
+This is altering the shader behavior if the outline uniform is set to a
 bigger value than this shader sampler distance. It should be set accordingly
 and manually in the shader too.
 ```

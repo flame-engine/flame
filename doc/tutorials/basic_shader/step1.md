@@ -18,7 +18,7 @@ or the community online.
 ```
 
 At the end of installation you should have a working project.  
-If you dont have it or you already installed then, create a folder for your
+If you don't have it or you already installed then, create a folder for your
 project, I will use this for example:  
 ```C:\Projects\basic_shader_tutorial```  
 Open your folder in VS Code.  
@@ -57,7 +57,7 @@ The important part is to have **transparent background** in the ```.png```
 file.  
 
 Create the folder where it suits you best.  
-Copy the choosen file under your assets folder in the project, something like
+Copy the chosen file under your assets folder in the project, something like
 this: ```C:\Projects\basic_shader_tutorial\assets\images\sword.png```  
 
 Do not forget to add the containing folder to assets in ```pubspec.yaml``` and

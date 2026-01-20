@@ -41,6 +41,6 @@ The console will contain the *"The world is MINE!"* message, maybe you have to
 scroll a little bit upwards, because of the printed flutter commands and
 messages.  
 
-Allright, here we have an empty but working application.  
+Alright, here we have an empty but working application.  
 
 In the next step we will create the sprite component and it's settings.

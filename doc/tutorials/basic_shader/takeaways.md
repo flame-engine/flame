@@ -10,13 +10,13 @@ in Flame Engine, where:
   - connecting shaders to Flame components and holding game logic, and user
   handling user inputs
 - post process layer: ```PostProcess```
-  - the link between components and holding runtime settings, behaviour
+  - the link between components and holding runtime settings, behavior
   logic, updating uniforms for shaders
 - the GLSL shader: ```.frag``` file
   - the core shader code
 
 There is an optional step to take this tutorial a little bit further:
-altering shader behaviour from the component when user input arrives.  
+altering shader behavior from the component when user input arrives.  
 Check Appendix A.
 
 

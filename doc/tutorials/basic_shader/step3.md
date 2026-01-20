@@ -11,7 +11,7 @@ For clarity and some modularity I separated the sprite into two classes:
 - one for having a standard sprite class (purpose: general sprite and event handling)
 - one for applying a post process as a wrapper class (purpose: specific shader application)
 
-Now if I want to modify the shader of the sword only, I dont have to modify the
+Now if I want to modify the shader of the sword only, I don't have to modify the
 underlying sprite class or  
 I can "freely" modify the sprite and add input event mixins to it or add other
 children, if it is a composite sprite. In these cases only one class has to be

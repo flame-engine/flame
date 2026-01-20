@@ -12,7 +12,7 @@ be modifiable in runtime, for example enabling and disabling effects.
 
 ```{note}
 Also I created an extension for Color to Vector4 conversion, this should be
-in a "utility" class to be accessable to other classes too without referencing
+in a "utility" class to be accessible to other classes too without referencing
 this specific file.  
 For clarity I omitted creating a new file.
 ```

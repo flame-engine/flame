@@ -1,7 +1,7 @@
 # Appendix A - User input
 
 This section we will add a Flame ```mixin``` to handle some mouse hover events
-and change the underlying shader behaviour.  
+and change the underlying shader behavior.  
 
 
 ## **A.1** **Event handling**  
@@ -149,8 +149,8 @@ class SwordSprite extends SpriteComponent{
 ```
 
 The result is, when you hover over the sprite bounding box, the outline shader
-changes to blue, because we set that in the hover event.  
-If the mouse exits the box, then it is resetted to the original color.  
+changes to blue, because we set the uniform variable in the hover event.  
+If the mouse exits the box, then it will change back to the original color.  
 
 This is how it should look like:  
 ![GIF of mouse hover](../../images/tutorials/basic_shader/hover_demo.gif)

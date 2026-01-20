@@ -16,7 +16,8 @@ The basic tutorial consists of 5 steps.
 In there, we will create a simple outline shader for sprites which
 has a transparent layer as background.  
 
-The appendix consits of one section, which is about adding user input response.
+The appendix consists of one section, which is about adding user input
+response.
 
 ```{note}
 This tutorial intended to work on images with transparent background,
