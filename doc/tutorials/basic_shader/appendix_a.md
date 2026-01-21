@@ -21,7 +21,7 @@ class SwordSpritePostProcessed extends PostProcessComponent with HoverCallbacks 
 
 After that add one private field and the two function to react to hover enter
 and exit into the class.  
-(The cancel event should be handled too but for clarity, I omitted).  
+(The cancel event should be handled too but for clarity, I omitted it).  
 
 ```dart
 Color? _originalPostProcessColor;
