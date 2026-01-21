@@ -153,18 +153,14 @@ Now run the application.
 Open the console (`Ctrl + J`).  
 Execute `flutter run`, then choose your platform.  
 
-<!--- cspell:ignore Tadaa -->
-
-*Tadaa!*  
+*Voila!*  
 You should see two sprites in the window.  
 The left is without an outline, the right one is with a colored outline from
 the shader.  
 
 ![Image of the reference and the shader](../../images/tutorials/basic_shader/final_result.png)
 
-<!--- cspell:ignore Yippyy -->
-
 We are done with the basic shader tutorial.  
-*Yippyy!*  
+*Cool!*  
 
 It's time for you to experiment!

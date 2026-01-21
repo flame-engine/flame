@@ -28,9 +28,7 @@ directory:
 `flutter create .`  
 Now you have a new flutter project.  
 
-<!--- cspell:ignore Yeey -->
-
-*Yeey!*
+*Nice!*
 
 
 ## 1.1 Extensions
