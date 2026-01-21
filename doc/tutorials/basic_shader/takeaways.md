@@ -29,9 +29,8 @@ solution to your needs, happy coding!
 If you found some errors or mistakes please let me know through Github or Discord
 and I will look after them and update the tutorial accordingly.
 
-The repository of this tutorial is available
-[here](https://github.com/kornellapu/basic_shader_tutorial),
-and it is set to the end of the basic tutorial.  
+The standalone repository of this tutorial is available through Github.  
+That is set to the end of the basic tutorial.  
 The Appendix files are present, but commented out.  
 
 ```{note}
