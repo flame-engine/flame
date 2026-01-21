@@ -48,9 +48,6 @@ For example, in my project it looks like this:
 
 Open the `outline.frag` file and add the following lines:  
 
-<!--- cspell:ignore mediump -->
-<!--- cspell:ignore texel -->
-
 ```glsl
 #version 460 core
 
