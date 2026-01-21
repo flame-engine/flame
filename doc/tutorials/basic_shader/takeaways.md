@@ -39,13 +39,9 @@ After downloading the repo, it is possible that you have to run
 `flutter create .` from the root folder, to reinitialize it.
 ```
 
-<!--- cspell:ignore Kornél -->
-<!--- cspell:ignore Hoodead -->
-<!--- cspell:ignore Lapu -->
-
 And if you are using any part of the shader codes, please credit me as:  
 **Kornél (Hoodead) Lapu**  
 Thanks in advance!
 
-Also don't forget to support the superb Flame Engine community.  
+Don't forget to support the superb Flame Engine community.  
 Cheers!

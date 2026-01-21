@@ -24,13 +24,9 @@ This tutorial intended to work on images with transparent background,
 like `.png` files.
 ```
 
-<!--- cspell:ignore Kornél -->
-<!--- cspell:ignore Hoodead -->
-<!--- cspell:ignore Lapu -->
-
 *Created by Kornél (Hoodead) Lapu, at 2025.12.22.*  
-You can reach the standalone repository
-[here at Github](https://github.com/kornellapu/basic_shader_tutorial).
+In addition to this tutorial, a standalone code repository is available
+through Github.
 
 ---
 *I was using the following versions, when initially created the tutorial:  
