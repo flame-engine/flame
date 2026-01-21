@@ -7,8 +7,12 @@ erickzanardo # github.com/erickzanardo
 feroult # github.com/feroult 
 fröber # github.com/Brixto
 gnarhard # github.com/gnarhard
+Hoodead # github.com/kornellapu
 kenney # kenney.nl
 Klingsbo # github.com/spydon
+Kornél # github.com/kornellapu
+Lapu # github.com/kornellapu
+lapu # Artist of reference art (basic shader tutorial)
 luan # github.com/luanpotter
 luanpotter # github.com/luanpotter
 Lukas # github.com/spydon
