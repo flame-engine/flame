@@ -1,14 +1,14 @@
 # Appendix A - User input
 
-This section we will add a Flame ```mixin``` to handle some mouse hover events
+This section we will add a Flame `mixin` to handle some mouse hover events
 and change the underlying shader behavior.  
 
 
 ## **A.1** **Event handling**  
 
-Open the ```sword_component.dart``` file or where your
-```PostProcessComponent``` is located.  
-Add the ```HoverCallbacks``` mixin to the class, to have something like this:
+Open the `sword_component.dart` file or where your
+`PostProcessComponent` is located.  
+Add the `HoverCallbacks` mixin to the class, to have something like this:
 
 ```dart
 //... other imports
@@ -46,20 +46,20 @@ void onHoverExit() {
 
 At this point the solution was not working for me with these modifications.  
 
-As I debugged, I found out the size property of ```PostProcessComponent``` was
+As I debugged, I found out the size property of `PostProcessComponent` was
 not handled as I expected, though the value of size property was not a zero
 vector at runtime.  
 
-I decided to elevate some part of the code from ```PostProcessComponent```
-into ```SwordSpritePostProcessed``` and handle the children changing there.  
+I decided to elevate some part of the code from `PostProcessComponent`
+into `SwordSpritePostProcessed` and handle the children changing there.  
 
 After I explicitly set the size property it was working as intended, attached
-to ```onChildrenChanged``` event to let it work with multiple children
+to `onChildrenChanged` event to let it work with multiple children
 (but not tested that part).  
 
 After that the expected bounding box became the target.  
 
-At the end the ```sword_component.dart``` file became this:
+At the end the `sword_component.dart` file became this:
 
 ```dart
 import 'dart:async';

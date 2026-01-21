@@ -6,13 +6,13 @@
 According to my logic, there are three layers of using shaders
 in Flame Engine, where:
 
-- the component layer: ```SpriteComponent``` and ```PostProcessComponent```
+- the component layer: `SpriteComponent` and `PostProcessComponent`
   - connecting shaders to Flame components and holding game logic, and user
   handling user inputs
-- post process layer: ```PostProcess```
+- post process layer: `PostProcess`
   - the link between components and holding runtime settings, behavior
   logic, updating uniforms for shaders
-- the GLSL shader: ```.frag``` file
+- the GLSL shader: `.frag` file
   - the core shader code
 
 There is an optional step to take this tutorial a little bit further:
@@ -36,7 +36,7 @@ The Appendix files are present, but commented out.
 
 ```{note}
 After downloading the repo, it is possible that you have to run
-```flutter create .``` from the root folder, to reinitialize it.
+`flutter create .` from the root folder, to reinitialize it.
 ```
 
 <!--- cspell:ignore Kornél -->

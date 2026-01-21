@@ -42,11 +42,11 @@ Everything is ready to create the GLSL based shader.
 
 ## 5.1 Shader code
 
-Create new directory at ```\assets\shaders``` and a file named ```outline.frag```.  
+Create new directory at `\assets\shaders` and a file named `outline.frag`.  
 For example, in my project it looks like this:  
-```C:\Projects\basic_shader_tutorial\assets\shaders\outline.frag```  
+`C:\Projects\basic_shader_tutorial\assets\shaders\outline.frag`  
 
-Open the ```outline.frag``` file and add the following lines:  
+Open the `outline.frag` file and add the following lines:  
 
 <!--- cspell:ignore mediump -->
 <!--- cspell:ignore texel -->
@@ -118,7 +118,7 @@ Grabbing each transparent pixel and checking: is it next to an opaque pixel?
 If yes, then color it as the outline color (passed in as an uniform variable),
 else it will be full transparent.  
 
-That is why the transparency of the ```.png``` image was important in the
+That is why the transparency of the `.png` image was important in the
 beginning (at Setup section).  
 
 ```{note}
@@ -134,9 +134,9 @@ and manually in the shader too.
 ## 5.2 Shader resource
 
 To let the flutter linking process know about this shader asset we have to add
-it to the ```pubspec.yaml``` file before compilation.
+it to the `pubspec.yaml` file before compilation.
 
-Open the ```pubspec.yaml``` and write the following lines under what we already added:
+Open the `pubspec.yaml` and write the following lines under what we already added:
 
 ```yaml
 #... still omitted for brevity
@@ -149,12 +149,12 @@ flutter:
     - assets/shaders/outline.frag
 ```
 
-Save it and let the automatic ```pub get``` command to run.  
+Save it and let the automatic `pub get` command to run.  
 Now the resource will be loaded when the project is next compiled.  
 
 Now run the application.  
-Open the console (```Ctrl + J```).  
-Execute ```flutter run```, then choose your platform.  
+Open the console (`Ctrl + J`).  
+Execute `flutter run`, then choose your platform.  
 
 <!--- cspell:ignore Tadaa -->
 

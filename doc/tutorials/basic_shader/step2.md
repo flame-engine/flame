@@ -8,7 +8,7 @@ These are the first steps of creating a new Flame game from scratch.
 Similar to Flame [Getting Started](https://docs.flame-engine.org/latest/#id1)
 guide.  
 
-Replace the whole ```main.dart``` file with the following:  
+Replace the whole `main.dart` file with the following:  
 
 ```dart
 import 'package:flutter/widgets.dart';
@@ -32,8 +32,8 @@ class MyWorld extends World {
 }
 ```
 
-Save and run it from the VS Code terminal (```Ctrl + J```).  
-The command is: ```flutter run```, then choose your device from the available
+Save and run it from the VS Code terminal (`Ctrl + J`).  
+The command is: `flutter run`, then choose your device from the available
 list.  
 
 You should see a black background in a new window.  

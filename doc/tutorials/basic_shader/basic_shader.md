@@ -1,7 +1,7 @@
 # Basic shader tutorial
 
 This tutorial will give you a brief understanding how to create and use basic shaders on
-```SpriteComponents``` with ```PostProcess``` and ```PostProcessComponent```
+`SpriteComponents` with `PostProcess` and `PostProcessComponent`
 using Dart/Flutter and Flame Engine frameworks.  
 
 My intention was to keep this tutorial as beginner friendly as possible.  
@@ -21,7 +21,7 @@ response.
 
 ```{note}
 This tutorial intended to work on images with transparent background,
-like ```.png``` files.
+like `.png` files.
 ```
 
 <!--- cspell:ignore Kornél -->

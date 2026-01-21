@@ -20,12 +20,12 @@ or the community online.
 At the end of installation you should have a working project.  
 If you don't have it or you already installed then, create a folder for your
 project, I will use this for example:  
-```C:\Projects\basic_shader_tutorial```  
+`C:\Projects\basic_shader_tutorial`  
 Open your folder in VS Code.  
-Press ```Ctr + J``` to open terminal window in VS Code.  
+Press `Ctr + J` to open terminal window in VS Code.  
 Execute the following commands, to create new flutter project in current
 directory:  
-```flutter create .```  
+`flutter create .`  
 Now you have a new flutter project.  
 
 <!--- cspell:ignore Yeey -->
@@ -38,7 +38,7 @@ Now you have a new flutter project.
 While installing through VS Code you are asked to install extensions for Dart
 and Flutter, I recommend it to add one.  
 
-Also we need something to work with fragment (aka pixel) shaders in ```.frag```
+Also we need something to work with fragment (aka pixel) shaders in `.frag`
 files, so we need some GLSL highlight or linting. I suggest you to go ahead and
 download one from the Extensions tab in VS Code.  
 I used a syntax highlighter:
@@ -57,14 +57,14 @@ I will use an image (sword.png) created by
 
 If you fancy about to add your own resource, don't hesitate and I also
 encourage you, to do so.  
-The important part is to have **transparent background** in the ```.png```
+The important part is to have **transparent background** in the `.png`
 file.  
 
 Create the folder where it suits you best.  
 Copy the chosen file under your assets folder in the project, something like
-this: ```C:\Projects\basic_shader_tutorial\assets\images\sword.png```  
+this: `C:\Projects\basic_shader_tutorial\assets\images\sword.png`  
 
-Do not forget to add the containing folder to assets in ```pubspec.yaml``` and
+Do not forget to add the containing folder to assets in `pubspec.yaml` and
 save:  
 
 ```yaml

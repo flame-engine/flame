@@ -30,7 +30,7 @@ after the tutorial concluded.
 
 ## 3.1 Sprite
 
-Create a new file named ```sword_component.dart```
+Create a new file named `sword_component.dart`
 (*or instead of "sword" use what you have of course*):  
 
 ```dart
@@ -75,7 +75,7 @@ class SwordSpritePostProcessed extends PostProcessComponent{
 
 ## 3.3 Result
 
-So the final ```sword_component.dart``` file looks like this:  
+So the final `sword_component.dart` file looks like this:  
 
 ```dart
 import 'dart:async';
@@ -104,7 +104,7 @@ class SwordSprite extends SpriteComponent{
 }
 ```
 
-Here you will get a syntax error because ```OutlinePostProcess()``` does not
+Here you will get a syntax error because `OutlinePostProcess()` does not
 exists nor the imported package.. yet!  
 
 Let's create those in the next step!
