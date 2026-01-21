@@ -11,8 +11,8 @@ Hoodead # github.com/kornellapu
 kenney # kenney.nl
 Klingsbo # github.com/spydon
 Kornél # github.com/kornellapu
-Lapu # github.com/kornellapu
 lapu # Artist of reference art (basic shader tutorial)
+Lapu # github.com/kornellapu
 luan # github.com/luanpotter
 luanpotter # github.com/luanpotter
 Lukas # github.com/spydon
