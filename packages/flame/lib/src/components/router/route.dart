@@ -143,7 +143,7 @@ class Route extends PositionComponent
   /// Adds the [_loadingPage] to the parent and invoked by [didPush] , when
   /// [_loadingBuilder] is specified
   Future<void> _addLoadingPage() async {
-    (_loadingPage ??= _loadingBuilder!())..addToParent(this);
+    (_loadingPage ??= _loadingBuilder!()).addToParent(this);
     await _loadingPage!.loaded;
     await add(_page!);
     await _page!.loaded;
