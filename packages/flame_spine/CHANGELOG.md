@@ -1,3 +1,7 @@
+## 0.3.0+2
+
+ - Update a dependency to the latest release.
+
 ## 0.3.0+1
 
  - **DOCS**: Updated flame_spine documentation ([#3763](https://github.com/flame-engine/flame/issues/3763)). ([3c721d91](https://github.com/flame-engine/flame/commit/3c721d91f3e3514c79e77b8e2e37a641305a2e04))

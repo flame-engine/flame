@@ -8,8 +8,8 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.34.0
-  flame_tiled: ^3.0.9
+  flame: ^1.35.0
+  flame_tiled: ^3.0.10
   flutter:
     sdk: flutter
 

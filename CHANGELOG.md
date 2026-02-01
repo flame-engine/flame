@@ -3,6 +3,87 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-02-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.35.0`](#flame---v1350)
+ - [`flame_tiled` - `v3.0.10`](#flame_tiled---v3010)
+ - [`flame_behaviors` - `v1.3.2`](#flame_behaviors---v132)
+ - [`flame_behavior_tree` - `v0.1.4+1`](#flame_behavior_tree---v0141)
+ - [`flame_test` - `v2.2.1`](#flame_test---v221)
+ - [`flame_oxygen` - `v0.2.3+19`](#flame_oxygen---v02319)
+ - [`flame_isolate` - `v0.6.2+19`](#flame_isolate---v06219)
+ - [`flame_texturepacker` - `v5.0.4`](#flame_texturepacker---v504)
+ - [`flame_sprite_fusion` - `v0.2.2+2`](#flame_sprite_fusion---v0222)
+ - [`flame_steering_behaviors` - `v0.2.1+2`](#flame_steering_behaviors---v0212)
+ - [`flame_fire_atlas` - `v1.8.14`](#flame_fire_atlas---v1814)
+ - [`flame_audio` - `v2.11.13`](#flame_audio---v21113)
+ - [`flame_spine` - `v0.3.0+2`](#flame_spine---v0302)
+ - [`flame_bloc` - `v1.12.20`](#flame_bloc---v11220)
+ - [`flame_kenney_xml` - `v0.1.1+19`](#flame_kenney_xml---v01119)
+ - [`flame_lottie` - `v0.4.2+19`](#flame_lottie---v04219)
+ - [`flame_markdown` - `v0.2.4+12`](#flame_markdown---v02412)
+ - [`flame_console` - `v0.1.2+15`](#flame_console---v01215)
+ - [`flame_rive` - `v1.10.22`](#flame_rive---v11022)
+ - [`flame_forge2d` - `v0.19.2+3`](#flame_forge2d---v01923)
+ - [`flame_noise` - `v0.3.2+19`](#flame_noise---v03219)
+ - [`flame_riverpod` - `v5.5.1`](#flame_riverpod---v551)
+ - [`flame_svg` - `v1.11.19`](#flame_svg---v11119)
+ - [`flame_network_assets` - `v0.3.3+19`](#flame_network_assets---v03319)
+ - [`flame_3d` - `v0.1.1+5`](#flame_3d---v0115)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behaviors` - `v1.3.2`
+ - `flame_behavior_tree` - `v0.1.4+1`
+ - `flame_test` - `v2.2.1`
+ - `flame_oxygen` - `v0.2.3+19`
+ - `flame_isolate` - `v0.6.2+19`
+ - `flame_texturepacker` - `v5.0.4`
+ - `flame_sprite_fusion` - `v0.2.2+2`
+ - `flame_steering_behaviors` - `v0.2.1+2`
+ - `flame_fire_atlas` - `v1.8.14`
+ - `flame_audio` - `v2.11.13`
+ - `flame_spine` - `v0.3.0+2`
+ - `flame_bloc` - `v1.12.20`
+ - `flame_kenney_xml` - `v0.1.1+19`
+ - `flame_lottie` - `v0.4.2+19`
+ - `flame_markdown` - `v0.2.4+12`
+ - `flame_console` - `v0.1.2+15`
+ - `flame_rive` - `v1.10.22`
+ - `flame_forge2d` - `v0.19.2+3`
+ - `flame_noise` - `v0.3.2+19`
+ - `flame_riverpod` - `v5.5.1`
+ - `flame_svg` - `v1.11.19`
+ - `flame_network_assets` - `v0.3.3+19`
+ - `flame_3d` - `v0.1.1+5`
+
+---
+
+#### `flame` - `v1.35.0`
+
+ - **FIX**: Loading page should always be possible to add to route ([#3800](https://github.com/flame-engine/flame/issues/3800)). ([a2f5df11](https://github.com/flame-engine/flame/commit/a2f5df113293525d3c5cc6626c5fea05a02350c2))
+ - **FIX**: Reimplement setLayoutSize to only notify once ([#3796](https://github.com/flame-engine/flame/issues/3796)). ([97f8bebe](https://github.com/flame-engine/flame/commit/97f8bebecaf5bb9a8018c85220609b2d9d67524a))
+ - **FEAT**: Use a Free List Strategy on BatchItem indexes within SpriteBatch and return index from .add() ([#3650](https://github.com/flame-engine/flame/issues/3650)). ([8d77c84e](https://github.com/flame-engine/flame/commit/8d77c84e0c05d0b5b6ca57187bd0ee39e94c752f))
+ - **FEAT**: Add TextBoxComponent.resetAnimation ([#3787](https://github.com/flame-engine/flame/issues/3787)). ([33fb10c0](https://github.com/flame-engine/flame/commit/33fb10c02a83354030fe0a278c16869f5940941a))
+ - **FEAT**: Implement padding component inflateChild ([#3785](https://github.com/flame-engine/flame/issues/3785)). ([9ac53a69](https://github.com/flame-engine/flame/commit/9ac53a69e468a3e3ff073db94c1c5df57997c4f1))
+
+#### `flame_tiled` - `v3.0.10`
+
+ - **FIX**: Image layer paint area fix ([#3783](https://github.com/flame-engine/flame/issues/3783)). ([437d4bec](https://github.com/flame-engine/flame/commit/437d4becb5752e8429f67297b08ceeb2b971388c))
+
+
 ## 2025-12-17
 
 ### Changes

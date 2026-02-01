@@ -1,3 +1,7 @@
+## 0.3.3+19
+
+ - Update a dependency to the latest release.
+
 ## 0.3.3+18
 
  - **FIX**: Not re-encode image when saving ([#3780](https://github.com/flame-engine/flame/issues/3780)). ([30a344cf](https://github.com/flame-engine/flame/commit/30a344cfae78c6608713d4b194f3112e47068adf))
