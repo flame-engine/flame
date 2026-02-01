@@ -1,3 +1,11 @@
+## 1.35.0
+
+ - **FIX**: Loading page should always be possible to add to route ([#3800](https://github.com/flame-engine/flame/issues/3800)). ([a2f5df11](https://github.com/flame-engine/flame/commit/a2f5df113293525d3c5cc6626c5fea05a02350c2))
+ - **FIX**: Reimplement setLayoutSize to only notify once ([#3796](https://github.com/flame-engine/flame/issues/3796)). ([97f8bebe](https://github.com/flame-engine/flame/commit/97f8bebecaf5bb9a8018c85220609b2d9d67524a))
+ - **FEAT**: Use a Free List Strategy on BatchItem indexes within SpriteBatch and return index from .add() ([#3650](https://github.com/flame-engine/flame/issues/3650)). ([8d77c84e](https://github.com/flame-engine/flame/commit/8d77c84e0c05d0b5b6ca57187bd0ee39e94c752f))
+ - **FEAT**: Add TextBoxComponent.resetAnimation ([#3787](https://github.com/flame-engine/flame/issues/3787)). ([33fb10c0](https://github.com/flame-engine/flame/commit/33fb10c02a83354030fe0a278c16869f5940941a))
+ - **FEAT**: Implement padding component inflateChild ([#3785](https://github.com/flame-engine/flame/issues/3785)). ([9ac53a69](https://github.com/flame-engine/flame/commit/9ac53a69e468a3e3ff073db94c1c5df57997c4f1))
+
 ## 1.34.0
 
  - **FEAT**: Add scaling gesture for components ([#3770](https://github.com/flame-engine/flame/issues/3770)). ([f413eddb](https://github.com/flame-engine/flame/commit/f413eddbf1581f30087ba53f9516e22e035bda7a))

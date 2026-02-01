@@ -1,3 +1,7 @@
+## 5.5.1
+
+ - Update a dependency to the latest release.
+
 ## 5.5.0
 
  - **FEAT**: Riverpod 3.0 in flame_riverpod ([#3789](https://github.com/flame-engine/flame/issues/3789)). ([57f7f9d8](https://github.com/flame-engine/flame/commit/57f7f9d8b30632717fdf894321758a26d4985907))
