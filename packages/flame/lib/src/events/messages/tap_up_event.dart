@@ -1,5 +1,6 @@
 import 'package:flame/extensions.dart';
 import 'package:flame/src/events/messages/position_event.dart';
+import 'package:flame/src/events/messages/tap_cancel_event.dart';
 import 'package:flame/src/events/messages/tap_down_event.dart';
 import 'package:flutter/gestures.dart';
 
@@ -22,6 +23,8 @@ class TapUpEvent extends PositionEvent<TapUpDetails> {
   final int pointerId;
 
   final PointerDeviceKind deviceKind;
+
+  TapCancelEvent toTapCancel() => TapCancelEvent(pointerId);
 
   @override
   String toString() =>
