@@ -181,6 +181,35 @@ void main() {
       },
     );
 
+    testWidgets(
+      'tap that starts and ends in different positions'
+      ' inside the component is handled',
+      (tester) async {
+        final component = _TapCallbacksComponent()
+          ..x = 10
+          ..y = 10
+          ..width = 10
+          ..height = 10;
+        final game = FlameGame(children: [component]);
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+        expect(component.isMounted, isTrue);
+
+        final gesture = await tester.startGesture(const Offset(10, 10));
+        await tester.pump(const Duration(milliseconds: 500));
+        await gesture.moveTo(const Offset(10, 11));
+        await tester.pump(const Duration(milliseconds: 500));
+        await gesture.up();
+
+        await tester.pump();
+
+        expect(component.tapDownEvent, equals(1));
+        expect(component.tapUpEvent, equals(1));
+        expect(component.tapCancelEvent, equals(0));
+      },
+    );
+
     testWithGame(
       'make sure the FlameGame can registers TapCallback on itself',
       _TapCallbacksGame.new,
