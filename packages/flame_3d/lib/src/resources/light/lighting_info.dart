@@ -16,9 +16,8 @@ class LightingInfo {
   void _applyPointLights(Shader shader) {
     final pointLights = lights.where((e) => e.source is PointLight);
     final numLights = pointLights.length;
-    if (numLights > 3) {
-      // temporary, until we support dynamic arrays
-      throw Exception('At most 3 point lights are allowed');
+    if (numLights > maxLights) {
+      throw Exception('At most $maxLights point lights are allowed');
     }
 
     shader.setUint('LightsInfo.numLights', numLights);
@@ -39,10 +38,13 @@ class LightingInfo {
   }
 
   static List<UniformSlot> shaderSlots = [
+    UniformSlot.array('Light', {'position', 'color', 'intensity'}),
     UniformSlot.value('AmbientLight', {'color', 'intensity'}),
     UniformSlot.value('LightsInfo', {'numLights'}),
-    UniformSlot.value('Light0', {'position', 'color', 'intensity'}),
-    UniformSlot.value('Light1', {'position', 'color', 'intensity'}),
-    UniformSlot.value('Light2', {'position', 'color', 'intensity'}),
   ];
+
+  /// The maximum number of point lights supported by the shader.
+  /// Since we use fixed-length arrays in the shader, we cannot support an
+  /// arbitrary number of lights.
+  static const maxLights = 8;
 }
