@@ -1,3 +1,7 @@
+## 1.35.1
+
+ - **FIX**: Cancel taps that start inside the component and end outside ([#3805](https://github.com/flame-engine/flame/issues/3805)). ([ebcdb81c](https://github.com/flame-engine/flame/commit/ebcdb81c83b0aa23906d1c652bad2bfadd5add71))
+
 ## 1.35.0
 
  - **FIX**: Loading page should always be possible to add to route ([#3800](https://github.com/flame-engine/flame/issues/3800)). ([a2f5df11](https://github.com/flame-engine/flame/commit/a2f5df113293525d3c5cc6626c5fea05a02350c2))

@@ -1,7 +1,7 @@
 name: flame_behavior_tree
 resolution: workspace
 description: A bridge package that integrates behavior_tree package with flame.
-version: 0.1.4+1
+version: 0.1.4+2
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_behavior_tree
 funding:
   - https://opencollective.com/blue-fire
@@ -16,13 +16,13 @@ environment:
 
 dependencies:
   behavior_tree: ^0.1.5
-  flame: ^1.35.0
+  flame: ^1.35.1
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flame_lint: ^1.4.2
-  flame_test: ^2.2.1
+  flame_test: ^2.2.2
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
