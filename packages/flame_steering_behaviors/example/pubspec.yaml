@@ -8,15 +8,15 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.35.0
-  flame_behaviors: ^1.3.2
-  flame_steering_behaviors: ^0.2.1+2
+  flame: ^1.35.1
+  flame_behaviors: ^1.3.3
+  flame_steering_behaviors: ^0.2.1+3
   flutter:
     sdk: flutter
 
 dev_dependencies:
   flame_lint: ^1.4.2
-  flame_test: ^2.2.1
+  flame_test: ^2.2.2
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4

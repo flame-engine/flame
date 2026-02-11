@@ -3,6 +3,80 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-02-11
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.35.1`](#flame---v1351)
+ - [`flame_behaviors` - `v1.3.3`](#flame_behaviors---v133)
+ - [`flame_behavior_tree` - `v0.1.4+2`](#flame_behavior_tree---v0142)
+ - [`flame_test` - `v2.2.2`](#flame_test---v222)
+ - [`flame_tiled` - `v3.0.11`](#flame_tiled---v3011)
+ - [`flame_oxygen` - `v0.2.3+20`](#flame_oxygen---v02320)
+ - [`flame_isolate` - `v0.6.2+20`](#flame_isolate---v06220)
+ - [`flame_texturepacker` - `v5.0.5`](#flame_texturepacker---v505)
+ - [`flame_sprite_fusion` - `v0.2.2+3`](#flame_sprite_fusion---v0223)
+ - [`flame_steering_behaviors` - `v0.2.1+3`](#flame_steering_behaviors---v0213)
+ - [`flame_fire_atlas` - `v1.8.15`](#flame_fire_atlas---v1815)
+ - [`flame_audio` - `v2.11.14`](#flame_audio---v21114)
+ - [`flame_spine` - `v0.3.0+3`](#flame_spine---v0303)
+ - [`flame_bloc` - `v1.12.21`](#flame_bloc---v11221)
+ - [`flame_kenney_xml` - `v0.1.1+20`](#flame_kenney_xml---v01120)
+ - [`flame_lottie` - `v0.4.2+20`](#flame_lottie---v04220)
+ - [`flame_markdown` - `v0.2.4+13`](#flame_markdown---v02413)
+ - [`flame_console` - `v0.1.2+16`](#flame_console---v01216)
+ - [`flame_rive` - `v1.10.23`](#flame_rive---v11023)
+ - [`flame_forge2d` - `v0.19.2+4`](#flame_forge2d---v01924)
+ - [`flame_noise` - `v0.3.2+20`](#flame_noise---v03220)
+ - [`flame_riverpod` - `v5.5.2`](#flame_riverpod---v552)
+ - [`flame_svg` - `v1.11.20`](#flame_svg---v11120)
+ - [`flame_network_assets` - `v0.3.3+20`](#flame_network_assets---v03320)
+ - [`flame_3d` - `v0.1.1+6`](#flame_3d---v0116)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behaviors` - `v1.3.3`
+ - `flame_behavior_tree` - `v0.1.4+2`
+ - `flame_test` - `v2.2.2`
+ - `flame_tiled` - `v3.0.11`
+ - `flame_oxygen` - `v0.2.3+20`
+ - `flame_isolate` - `v0.6.2+20`
+ - `flame_texturepacker` - `v5.0.5`
+ - `flame_sprite_fusion` - `v0.2.2+3`
+ - `flame_steering_behaviors` - `v0.2.1+3`
+ - `flame_fire_atlas` - `v1.8.15`
+ - `flame_audio` - `v2.11.14`
+ - `flame_spine` - `v0.3.0+3`
+ - `flame_bloc` - `v1.12.21`
+ - `flame_kenney_xml` - `v0.1.1+20`
+ - `flame_lottie` - `v0.4.2+20`
+ - `flame_markdown` - `v0.2.4+13`
+ - `flame_console` - `v0.1.2+16`
+ - `flame_rive` - `v1.10.23`
+ - `flame_forge2d` - `v0.19.2+4`
+ - `flame_noise` - `v0.3.2+20`
+ - `flame_riverpod` - `v5.5.2`
+ - `flame_svg` - `v1.11.20`
+ - `flame_network_assets` - `v0.3.3+20`
+ - `flame_3d` - `v0.1.1+6`
+
+---
+
+#### `flame` - `v1.35.1`
+
+ - **FIX**: Cancel taps that start inside the component and end outside ([#3805](https://github.com/flame-engine/flame/issues/3805)). ([ebcdb81c](https://github.com/flame-engine/flame/commit/ebcdb81c83b0aa23906d1c652bad2bfadd5add71))
+
+
 ## 2026-02-01
 
 ### Changes

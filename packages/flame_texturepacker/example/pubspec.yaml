@@ -9,8 +9,8 @@ environment:
   flutter: ">=3.32.0"
 
 dependencies:
-  flame: ^1.35.0
-  flame_texturepacker: ^5.0.4
+  flame: ^1.35.1
+  flame_texturepacker: ^5.0.5
   flutter:
     sdk: flutter
 

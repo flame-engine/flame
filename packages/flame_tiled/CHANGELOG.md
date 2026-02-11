@@ -1,3 +1,7 @@
+## 3.0.11
+
+ - Update a dependency to the latest release.
+
 ## 3.0.10
 
  - **FIX**: Image layer paint area fix ([#3783](https://github.com/flame-engine/flame/issues/3783)). ([437d4bec](https://github.com/flame-engine/flame/commit/437d4becb5752e8429f67297b08ceeb2b971388c))

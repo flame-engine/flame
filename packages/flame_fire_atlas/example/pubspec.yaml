@@ -10,8 +10,8 @@ environment:
   sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
-  flame: ^1.35.0
-  flame_fire_atlas: ^1.8.14
+  flame: ^1.35.1
+  flame_fire_atlas: ^1.8.15
   flutter:
     sdk: flutter
 
