@@ -63,9 +63,9 @@ void testRandom(
   int repeatCount = 1,
 }) {
   assert(repeatCount > 0, 'repeatCount needs to be a positive number');
-  seed = seedFromEnvironment(seed);
+  final resolvedSeed = seedFromEnvironment(seed);
   for (var i = 0; i < repeatCount; i++) {
-    final seed0 = seed ?? _seedGenerator.nextInt(_maxSeed);
+    final seed0 = resolvedSeed ?? _seedGenerator.nextInt(_maxSeed);
     test(
       '$name [seed=$seed0]',
       () => body(Random(seed0)),
