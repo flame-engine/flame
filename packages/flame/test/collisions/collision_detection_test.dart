@@ -2228,7 +2228,8 @@ void main() {
                 result,
                 isNull,
                 reason:
-                    'Ray should miss the unscaled CircleHitbox at this position',
+                    'Ray should miss the unscaled CircleHitbox at this '
+                    'position',
               );
             },
         'ray from within scaled CircleHitbox': (collisionSystem) async {
