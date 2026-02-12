@@ -11,8 +11,8 @@ topics:
   - flame
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   flame: ^1.35.1
@@ -21,5 +21,5 @@ dependencies:
   oxygen: ^0.3.1
 
 dev_dependencies:
-  dartdoc: ^8.0.8
+  dartdoc: ^9.0.0
   flame_lint: ^1.4.2

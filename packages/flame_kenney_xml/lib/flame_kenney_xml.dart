@@ -16,6 +16,7 @@ class XmlSpriteSheet {
     required String xml,
   }) {
     final document = XmlDocument.parse(xml);
+    // ignore: experimental_member_use
     for (final node in document.xpath('//TextureAtlas/SubTexture')) {
       final name = node.getAttribute('name')!;
       final x = double.parse(node.getAttribute('x')!);

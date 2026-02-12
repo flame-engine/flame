@@ -13,8 +13,8 @@ topics:
   - network-assets
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   dev: ^1.0.0
@@ -26,7 +26,7 @@ dependencies:
   path_provider: ^2.0.15
 
 dev_dependencies:
-  dartdoc: ^8.0.8
+  dartdoc: ^9.0.0
   flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter

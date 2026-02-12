@@ -12,8 +12,8 @@ topics:
   - noise
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   fast_noise: ^2.0.0
@@ -22,7 +22,7 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  dartdoc: ^8.0.8
+  dartdoc: ^9.0.0
   flame_lint: ^1.4.2
   flame_test: ^2.2.2
   test: any
