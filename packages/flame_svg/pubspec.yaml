@@ -23,7 +23,7 @@ dependencies:
   flutter_svg: ^2.0.5
 
 dev_dependencies:
-  dartdoc: ^8.0.8
+  dartdoc: ^9.0.0
   flame_lint: ^1.4.2
   flutter_test:
     sdk: flutter

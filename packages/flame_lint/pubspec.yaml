@@ -18,4 +18,4 @@ dependencies:
   lints: ^6.0.0
 
 dev_dependencies:
-  dartdoc: ^8.0.8
+  dartdoc: ^9.0.0
