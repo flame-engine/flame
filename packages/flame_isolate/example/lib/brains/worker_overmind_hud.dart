@@ -6,7 +6,8 @@ import 'package:flutter/rendering.dart';
 enum ComputeType {
   isolate('Running in isolate'),
   compute('Running in compute function'),
-  synchronous('Running synchronously');
+  synchronous('Running synchronously')
+  ;
 
   final String description;
 

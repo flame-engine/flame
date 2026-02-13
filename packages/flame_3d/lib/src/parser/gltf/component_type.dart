@@ -9,7 +9,8 @@ enum ComponentType {
   short(value: 5122, byteSize: 2),
   unsignedShort(value: 5123, byteSize: 2),
   unsignedInt(value: 5125, byteSize: 4),
-  float(value: 5126, byteSize: 4);
+  float(value: 5126, byteSize: 4)
+  ;
 
   final int value;
   final int byteSize;

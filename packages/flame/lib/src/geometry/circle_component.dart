@@ -129,7 +129,8 @@ class CircleComponent extends ShapeComponent {
       ..sub(absoluteCenter); // from - absoluteCenter
     final a = _delta21.length2;
     final b = 2 * _delta21.dot(_delta10);
-    final c = _delta10.length2 - radius * radius;
+    final effectiveRadius = scaledRadius;
+    final c = _delta10.length2 - effectiveRadius * effectiveRadius;
 
     return solveQuadratic(a, b, c)
         .where((t) => t > 0 && t <= 1)

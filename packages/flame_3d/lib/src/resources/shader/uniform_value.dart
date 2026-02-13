@@ -139,7 +139,8 @@ enum _UniformValueType {
     baseAlignmentBytes: 16,
     sizeBytes: 64,
     paddedComponentCount: 16,
-  );
+  )
+  ;
 
   const _UniformValueType({
     required this.componentCount,

@@ -15,7 +15,8 @@ enum MoveDirection {
   downLeft(isLeft: true), // 5
   upLeft(isLeft: true), // 6
   left(isLeft: true), // 7
-  downRight(isLeft: false); // 8
+  downRight(isLeft: false)
+  ; // 8
 
   final bool isLeft;
 

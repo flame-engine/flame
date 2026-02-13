@@ -367,7 +367,8 @@ enum _QuadTreeZone {
   topLeft(0),
   topRight(1),
   bottomLeft(2),
-  bottomRight(3);
+  bottomRight(3)
+  ;
 
   const _QuadTreeZone(this.value);
 

@@ -5,7 +5,8 @@ enum AnimationPath {
   translation('translation'),
   rotation('rotation'),
   scale('scale'),
-  weights('weights');
+  weights('weights')
+  ;
 
   final String value;
 

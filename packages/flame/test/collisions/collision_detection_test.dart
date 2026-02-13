@@ -2083,6 +2083,247 @@ void main() {
       },
     });
   });
+
+  group('Scaled CircleHitbox', () {
+    group('Circle-Circle intersections with scale', () {
+      test('scaled circles collide when unscaled would not', () {
+        final circleA = CircleComponent(
+          radius: 1.0,
+          position: Vector2.zero(),
+          anchor: Anchor.center,
+          scale: Vector2.all(3),
+        );
+        final circleB = CircleComponent(
+          radius: 1.0,
+          position: Vector2(4, 0),
+          anchor: Anchor.center,
+        );
+        // Without scale: distance=4, radiusA+radiusB=2 -> no collision.
+        // With scale: scaledRadiusA=3, so 3+1=4 -> should just touch.
+        final intersections = geometry.intersections(circleA, circleB);
+        expect(
+          intersections.isNotEmpty,
+          isTrue,
+          reason: 'Scaled circle should intersect with the other circle',
+        );
+      });
+
+      test('unscaled circles that just miss do not collide', () {
+        final circleA = CircleComponent(
+          radius: 1.0,
+          position: Vector2.zero(),
+          anchor: Anchor.center,
+        );
+        final circleB = CircleComponent(
+          radius: 1.0,
+          position: Vector2(4, 0),
+          anchor: Anchor.center,
+        );
+        final intersections = geometry.intersections(circleA, circleB);
+        expect(
+          intersections.isEmpty,
+          isTrue,
+          reason: 'Unscaled circles should not collide at this distance',
+        );
+      });
+
+      test('both circles scaled', () {
+        final circleA = CircleComponent(
+          radius: 1.0,
+          position: Vector2.zero(),
+          anchor: Anchor.center,
+          scale: Vector2.all(2),
+        );
+        final circleB = CircleComponent(
+          radius: 1.0,
+          position: Vector2(3, 0),
+          anchor: Anchor.center,
+          scale: Vector2.all(2),
+        );
+        // scaledRadiusA=2, scaledRadiusB=2, distance=3 -> 2+2=4 > 3 -> collide
+        final intersections = geometry.intersections(circleA, circleB);
+        expect(
+          intersections.isNotEmpty,
+          isTrue,
+          reason: 'Both scaled circles should collide',
+        );
+      });
+    });
+
+    group('Circle-Polygon intersections with scale', () {
+      test('scaled circle intersects polygon when unscaled would not', () {
+        final circle = CircleComponent(
+          radius: 1.0,
+          position: Vector2.zero(),
+          anchor: Anchor.center,
+          scale: Vector2.all(3),
+        );
+        final polygon = PolygonComponent(
+          [
+            Vector2(2, -1),
+            Vector2(3, -1),
+            Vector2(3, 1),
+            Vector2(2, 1),
+          ],
+          anchor: Anchor.center,
+        );
+        // Without scale: radius=1, polygon starts at x=2 -> no intersection.
+        // With scale: scaledRadius=3 -> circle extends to x=3 -> intersects.
+        final intersections = geometry.intersections(circle, polygon);
+        expect(
+          intersections.isNotEmpty,
+          isTrue,
+          reason:
+              'Scaled circle should intersect polygon that unscaled would miss',
+        );
+      });
+    });
+
+    group('Raycasting with scaled CircleHitbox', () {
+      runCollisionTestRegistry({
+        'ray hits scaled CircleHitbox': (collisionSystem) async {
+          final game = collisionSystem as FlameGame;
+          final world = game.world;
+          await world.ensureAddAll([
+            PositionComponent(
+              position: Vector2.zero(),
+              size: Vector2.all(10),
+              scale: Vector2.all(2),
+            )..add(CircleHitbox()),
+          ]);
+          await game.ready();
+          // Scaled radius is 10 (5 * 2), center at (10, 10).
+          // A ray from (25, 10) going left should hit the scaled circle.
+          final ray = Ray2(
+            origin: Vector2(25, 10),
+            direction: Vector2(-1, 0),
+          );
+          final result = collisionSystem.collisionDetection.raycast(ray);
+          expect(
+            result?.hitbox?.parent,
+            world.children.first,
+            reason: 'Ray should hit the scaled CircleHitbox',
+          );
+        },
+        'ray misses unscaled CircleHitbox at same distance':
+            (collisionSystem) async {
+              final game = collisionSystem as FlameGame;
+              final world = game.world;
+              await world.ensureAddAll([
+                PositionComponent(
+                  position: Vector2.zero(),
+                  size: Vector2.all(10),
+                )..add(CircleHitbox()),
+              ]);
+              await game.ready();
+              // Unscaled radius is 5, center at (5, 5).
+              // A ray at y=5 from x=25 going left would hit at x=10, but
+              // let's shoot from outside the unscaled range at a tangent.
+              final ray = Ray2(
+                origin: Vector2(25, 12),
+                direction: Vector2(-1, 0),
+              );
+              final result = collisionSystem.collisionDetection.raycast(ray);
+              expect(
+                result,
+                isNull,
+                reason:
+                    'Ray should miss the unscaled CircleHitbox at this '
+                    'position',
+              );
+            },
+        'ray from within scaled CircleHitbox': (collisionSystem) async {
+          final game = collisionSystem as FlameGame;
+          final world = game.world;
+          await world.ensureAddAll([
+            PositionComponent(
+              position: Vector2.zero(),
+              size: Vector2.all(10),
+              scale: Vector2.all(3),
+            )..add(CircleHitbox()),
+          ]);
+          await game.ready();
+          // Scaled radius is 15 (5 * 3), center at (15, 15).
+          // A point at (20, 15) is inside the scaled circle (dist=5 < 15).
+          final ray = Ray2(
+            origin: Vector2(20, 15),
+            direction: Vector2(1, 0),
+          );
+          final result = collisionSystem.collisionDetection.raycast(ray);
+          expect(
+            result?.hitbox?.parent,
+            world.children.first,
+            reason: 'Ray from within scaled CircleHitbox should hit',
+          );
+          expect(
+            result?.isInsideHitbox,
+            isTrue,
+            reason: 'Ray origin should be detected as inside the hitbox',
+          );
+        },
+      });
+    });
+
+    group('Collision callbacks with scaled CircleHitbox', () {
+      runCollisionTestRegistry({
+        'scaled circle hitboxes trigger collision callbacks': (game) async {
+          final componentA = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+            scale: Vector2.all(2),
+          );
+          final componentB = PositionComponent(
+            position: Vector2(15, 0),
+            size: Vector2.all(10),
+          );
+          final hitboxA = CircleHitbox();
+          final hitboxB = CircleHitbox();
+          await componentA.add(hitboxA);
+          await componentB.add(hitboxB);
+          await game.ensureAddAll([componentA, componentB]);
+          // componentA: center=(10,10), scaledRadius=10
+          // componentB: center=(20,5), scaledRadius=5
+          // distance = sqrt(100+25)=~11.18, sum of radii=15 -> should collide
+          game.update(0);
+          expect(
+            hitboxA.isColliding,
+            isTrue,
+            reason: 'Scaled CircleHitbox A should be colliding',
+          );
+          expect(
+            hitboxB.isColliding,
+            isTrue,
+            reason: 'CircleHitbox B should be colliding with scaled A',
+          );
+        },
+        'unscaled circle hitboxes do not collide at same distance':
+            (game) async {
+              final componentA = PositionComponent(
+                position: Vector2.zero(),
+                size: Vector2.all(10),
+              );
+              final componentB = PositionComponent(
+                position: Vector2(15, 0),
+                size: Vector2.all(10),
+              );
+              final hitboxA = CircleHitbox();
+              final hitboxB = CircleHitbox();
+              await componentA.add(hitboxA);
+              await componentB.add(hitboxB);
+              await game.ensureAddAll([componentA, componentB]);
+              // componentA: center=(5,5), radius=5
+              // componentB: center=(20,5), radius=5
+              // distance = 15, sum of radii=10 -> should NOT collide
+              game.update(0);
+              expect(
+                hitboxA.isColliding,
+                isFalse,
+                reason: 'Unscaled CircleHitbox A should not be colliding',
+              );
+            },
+      });
+    });
+  });
 }
 
 class _CollisionDetectionGame extends FlameGame with HasCollisionDetection {}
