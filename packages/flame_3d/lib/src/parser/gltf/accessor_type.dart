@@ -8,7 +8,8 @@ enum AccessorType {
   vec4('VEC4', 4),
   mat2('MAT2', 4),
   mat3('MAT3', 9),
-  mat4('MAT4', 16);
+  mat4('MAT4', 16)
+  ;
 
   final String name;
   final int size;

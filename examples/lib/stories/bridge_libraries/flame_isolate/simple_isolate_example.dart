@@ -59,7 +59,8 @@ class SimpleIsolateExample extends FlameGame {
 
 enum ComputeType {
   isolate('Running in isolate'),
-  synchronous('Running synchronously');
+  synchronous('Running synchronously')
+  ;
 
   final String description;
 
