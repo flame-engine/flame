@@ -1,7 +1,0 @@
-include: package:flame_lint/analysis_options_with_dcm.yaml
-
-linter:
-  rules:
-    always_use_package_imports: false
-    prefer_relative_imports: true
-    

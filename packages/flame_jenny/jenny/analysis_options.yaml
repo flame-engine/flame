@@ -1,7 +1,0 @@
-include: package:flame_lint/analysis_options_with_dcm.yaml
-
-linter:
-  rules:
-    avoid_equals_and_hash_code_on_mutable_classes: false
-    hash_and_equals: false
-    unawaited_futures: true
