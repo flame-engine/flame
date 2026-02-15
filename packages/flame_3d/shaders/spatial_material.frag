@@ -143,7 +143,7 @@ void main() {
 
   vec3 baseAmbient = vec3(0.03) * baseColor * ambientLight.color.rgb * ambientLight.intensity;
   vec3 ao = vec3(1.0); // white - no ambient occlusion for now
-  vec3 ambient = baseAmbient * baseColor * ao;
+  vec3 ambient = baseAmbient * ao;
 
   vec3 f0 = vec3(0.04);
   vec3 diffuse = mix(f0, baseColor, material.metallic);
