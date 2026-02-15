@@ -26,6 +26,7 @@ jank # stutter or inconsistent gap or timing
 lerp # short for linear interpolation
 LTRBR # left top right bottom radius
 LTWH # left top width height
+mediump # medium GLSL float precision
 metalness # a measure of how much a surface reflects light for the purposes of physically based rendering
 Minkowski # Minkowski sum, a sum of two sets of vectors, A and B, where the result is the sum of each vector pair
 multitap # support from a device to recognize many taps at the same time
@@ -48,6 +49,7 @@ subfolders # plural of subfolders
 sublists # plural of sublist
 subrange # a range entirely contained on a given range
 SVGs # plural of SVG
+texel # texture pixel (unit of texture map)
 texels # plural of texel
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
