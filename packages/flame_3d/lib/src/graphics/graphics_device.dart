@@ -84,9 +84,9 @@ class GraphicsDevice {
       ..setColorBlendEnable(true)
       ..setColorBlendEquation(
         gpu.ColorBlendEquation(
-          sourceAlphaBlendFactor: blendState == BlendState.alphaBlend
+          destinationAlphaBlendFactor: blendState == BlendState.alphaBlend
               ? gpu.BlendFactor.oneMinusSourceAlpha
-              : gpu.BlendFactor.one,
+              : gpu.BlendFactor.zero,
         ),
       )
       ..setDepthWriteEnable(depthStencilState == DepthStencilState.depthRead)
