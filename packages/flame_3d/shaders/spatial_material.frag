@@ -31,7 +31,7 @@ uniform AmbientLight {
 } ambientLight;
 
 uniform LightsInfo {
-  uint numLights;
+  float numLights;
 } lightsInfo;
 
 // uniform Light {
