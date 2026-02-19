@@ -126,6 +126,18 @@ abstract mixin class Game {
   /// of a FlameGame, to receive components.
   bool get hasLayout => _size != null;
 
+  /// Whether the game has an event-handling component at the given [position].
+  ///
+  /// Used by [GameRenderBox] for hit testing to determine if pointer events
+  /// should be consumed by the game or passed through to Flutter widgets
+  /// behind it.
+  ///
+  /// The default returns `true`, meaning games that directly extend [Game]
+  /// will catch all events on their entire surface. [FlameGame] overrides this
+  /// to only report a hit when a component with event callbacks
+  /// (e.g. [TapCallbacks]) exists at the given position.
+  bool containsEventHandlerAt(Vector2 position) => true;
+
   /// Returns the game background color.
   /// By default it will return a black color.
   /// It cannot be changed at runtime, because the game widget does not get

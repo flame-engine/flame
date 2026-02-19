@@ -1,3 +1,4 @@
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/game/game_loop.dart';
 import 'package:flutter/rendering.dart';
@@ -120,6 +121,11 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     }
     game.update(dt);
     markNeedsPaint();
+  }
+
+  @override
+  bool hitTestSelf(Offset position) {
+    return game.containsEventHandlerAt(position.toVector2());
   }
 
   @override
