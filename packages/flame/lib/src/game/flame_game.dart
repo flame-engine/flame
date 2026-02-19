@@ -162,7 +162,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   void updateTree(double dt) {
-    _componentsAtPointCache = null;
+    _componentsAtPointCache.clear();
     processLifecycleEvents();
     if (parent != null) {
       update(dt);
@@ -227,23 +227,20 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y < canvasSize.y;
   }
 
-  // Cache for componentsAtPoint results from hit testing, to avoid redundant
-  // tree traversals during event delivery for the same pointer event.
-  // The cache is consumed on first use and cleared each update as a safety net.
-  List<(Component, List<Vector2>)>? _componentsAtPointCache;
-  double _cachedPointX = 0;
-  double _cachedPointY = 0;
+  // Cache for componentsAtPoint results from hit testing, keyed by position.
+  // Supports multiple simultaneous touches. Each entry is consumed on first
+  // use and the entire map is cleared each update as a safety net.
+  final Map<(double, double), List<(Component, List<Vector2>)>>
+      _componentsAtPointCache = {};
 
   @override
   Iterable<Component> componentsAtPoint(
     Vector2 point, [
     List<Vector2>? nestedPoints,
   ]) sync* {
-    final cache = _componentsAtPointCache;
-    if (cache != null &&
-        _cachedPointX == point.x &&
-        _cachedPointY == point.y) {
-      _componentsAtPointCache = null;
+    final key = (point.x, point.y);
+    final cache = _componentsAtPointCache.remove(key);
+    if (cache != null) {
       for (final (component, trace) in cache) {
         if (nestedPoints != null) {
           nestedPoints
@@ -296,9 +293,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     }
 
     if (found) {
-      _componentsAtPointCache = cache;
-      _cachedPointX = position.x;
-      _cachedPointY = position.y;
+      _componentsAtPointCache[(position.x, position.y)] = cache;
     }
 
     return found;
