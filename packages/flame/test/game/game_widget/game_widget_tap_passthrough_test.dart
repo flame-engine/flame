@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -62,7 +60,10 @@ void main() {
                     ),
                   ),
                   Positioned.fill(
-                    child: GameWidget(game: game),
+                    child: GameWidget(
+                      game: game,
+                      behavior: HitTestBehavior.deferToChild,
+                    ),
                   ),
                 ],
               ),
@@ -100,7 +101,10 @@ void main() {
                     ),
                   ),
                   Positioned.fill(
-                    child: GameWidget(game: game),
+                    child: GameWidget(
+                      game: game,
+                      behavior: HitTestBehavior.deferToChild,
+                    ),
                   ),
                 ],
               ),
@@ -143,7 +147,10 @@ void main() {
                     ),
                   ),
                   Positioned.fill(
-                    child: GameWidget(game: game),
+                    child: GameWidget(
+                      game: game,
+                      behavior: HitTestBehavior.deferToChild,
+                    ),
                   ),
                 ],
               ),
@@ -163,6 +170,85 @@ void main() {
         expect(buttonTapped, isTrue);
       },
     );
+    testWidgets(
+      'translucent behavior delivers events to both game component and '
+      'widget behind',
+      (tester) async {
+        var pointerDownReceived = false;
+        final component = _TappableComponent()
+          ..size = Vector2(800, 600)
+          ..position = Vector2.zero();
+        final game = _TransparentGame()..add(component);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Listener(
+                      onPointerDown: (_) => pointerDownReceived = true,
+                      child: const ColoredBox(color: Color(0xFF0000FF)),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: GameWidget(
+                      game: game,
+                      behavior: HitTestBehavior.translucent,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+        expect(component.isMounted, isTrue);
+
+        await tester.tapAt(const Offset(400, 300));
+        await tester.pump(const Duration(milliseconds: 100));
+
+        expect(component.tapDownCount, equals(1));
+        expect(pointerDownReceived, isTrue);
+      },
+    );
+
+    testWidgets(
+      'opaque behavior blocks taps from reaching widgets behind',
+      (tester) async {
+        var buttonTapped = false;
+        final game = _TransparentGame();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () => buttonTapped = true,
+                      child: const Text('Tap me'),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: GameWidget(game: game),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        await tester.tap(find.text('Tap me'), warnIfMissed: false);
+        await tester.pump();
+
+        expect(buttonTapped, isFalse);
+      },
+    );
+
     testWidgets(
       'componentsAtPoint is not called redundantly during hit testing',
       (tester) async {

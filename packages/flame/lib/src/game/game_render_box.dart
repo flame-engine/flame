@@ -12,15 +12,22 @@ class RenderGameWidget extends LeafRenderObjectWidget {
   const RenderGameWidget({
     required this.game,
     required this.addRepaintBoundary,
+    required this.behavior,
     super.key,
   });
 
   final Game game;
   final bool addRepaintBoundary;
+  final HitTestBehavior behavior;
 
   @override
   RenderBox createRenderObject(BuildContext context) {
-    return GameRenderBox(game, context, isRepaintBoundary: addRepaintBoundary);
+    return GameRenderBox(
+      game,
+      context,
+      isRepaintBoundary: addRepaintBoundary,
+      behavior: behavior,
+    );
   }
 
   @override
@@ -28,7 +35,8 @@ class RenderGameWidget extends LeafRenderObjectWidget {
     renderObject
       ..game = game
       ..buildContext = context
-      ..isRepaintBoundary = addRepaintBoundary;
+      ..isRepaintBoundary = addRepaintBoundary
+      ..behavior = behavior;
   }
 }
 
@@ -37,6 +45,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
     this._game,
     this.buildContext, {
     required bool isRepaintBoundary,
+    this.behavior = HitTestBehavior.opaque,
   }) : _isRepaintBoundary = isRepaintBoundary;
 
   GameLoop? gameLoop;
@@ -76,6 +85,8 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   @override
   bool get isRepaintBoundary => _isRepaintBoundary;
+
+  HitTestBehavior behavior;
 
   @override
   bool get sizedByParent => true;
@@ -125,6 +136,9 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   @override
   bool hitTestSelf(Offset position) {
+    if (behavior == HitTestBehavior.opaque) {
+      return true;
+    }
     return game.containsEventHandlerAt(position.toVector2());
   }
 
