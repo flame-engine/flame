@@ -68,8 +68,9 @@ behind the game. Tapping a game component that uses `TapCallbacks` will be handl
 instead.
 
 ```{note}
-When using `deferToChild` or `translucent`, `FlameGame` determines whether a position has an
-interactive component by traversing the component tree via `componentsAtPoint`. Games that
-directly extend the low-level `Game` class report a hit on their entire surface by default; override
+When using `deferToChild` or `translucent`, `FlameGame` determines whether a
+position has an interactive component by traversing the component tree via
+`componentsAtPoint`. Games that directly extend the low-level `Game` class
+report a hit on their entire surface by default; override
 `containsEventHandlerAt` to customize this.
 ```
