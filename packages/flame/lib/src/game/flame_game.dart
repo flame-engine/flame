@@ -162,6 +162,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   void updateTree(double dt) {
+    _componentsAtPointCache = null;
     processLifecycleEvents();
     if (parent != null) {
       update(dt);
@@ -226,6 +227,36 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y < canvasSize.y;
   }
 
+  // Cache for componentsAtPoint results from hit testing, to avoid redundant
+  // tree traversals during event delivery for the same pointer event.
+  // The cache is consumed on first use and cleared each update as a safety net.
+  List<(Component, List<Vector2>)>? _componentsAtPointCache;
+  double _cachedPointX = 0;
+  double _cachedPointY = 0;
+
+  @override
+  Iterable<Component> componentsAtPoint(
+    Vector2 point, [
+    List<Vector2>? nestedPoints,
+  ]) sync* {
+    final cache = _componentsAtPointCache;
+    if (cache != null &&
+        _cachedPointX == point.x &&
+        _cachedPointY == point.y) {
+      _componentsAtPointCache = null;
+      for (final (component, trace) in cache) {
+        if (nestedPoints != null) {
+          nestedPoints
+            ..clear()
+            ..addAll(trace);
+        }
+        yield component;
+      }
+      return;
+    }
+    yield* super.componentsAtPoint(point, nestedPoints);
+  }
+
   @override
   bool containsEventHandlerAt(Vector2 position) {
     // Deprecated game-level detector mixins handle events for the entire
@@ -245,16 +276,32 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         this is MultiTouchDragDetector) {
       return true;
     }
-    for (final component in componentsAtPoint(position)) {
-      if (component is TapCallbacks ||
-          component is DragCallbacks ||
-          component is DoubleTapCallbacks ||
-          component is ScaleCallbacks ||
-          component is SecondaryTapCallbacks) {
-        return true;
+
+    // Traverse the component tree via the base Component implementation,
+    // caching the results so that the subsequent event delivery call to
+    // componentsAtPoint can replay them without a second traversal.
+    final cache = <(Component, List<Vector2>)>[];
+    final trace = <Vector2>[];
+    var found = false;
+    for (final component in super.componentsAtPoint(position, trace)) {
+      cache.add((component, List<Vector2>.of(trace)));
+      if (!found &&
+          (component is TapCallbacks ||
+              component is DragCallbacks ||
+              component is DoubleTapCallbacks ||
+              component is ScaleCallbacks ||
+              component is SecondaryTapCallbacks)) {
+        found = true;
       }
     }
-    return false;
+
+    if (found) {
+      _componentsAtPointCache = cache;
+      _cachedPointX = position.x;
+      _cachedPointY = position.y;
+    }
+
+    return found;
   }
 
   /// Returns the current time in seconds with microseconds precision.
