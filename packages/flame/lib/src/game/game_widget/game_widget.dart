@@ -369,10 +369,13 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           onKeyEvent: _handleKeyEvent,
           child: MouseRegion(
             cursor: currentGame.mouseCursor,
+            opaque: false,
             child: Directionality(
               textDirection: textDir,
-              child: ColoredBox(
-                color: currentGame.backgroundColor(),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: currentGame.backgroundColor(),
+                ),
                 child: LayoutBuilder(
                   builder: (_, BoxConstraints constraints) {
                     return _protectedBuild(() {
