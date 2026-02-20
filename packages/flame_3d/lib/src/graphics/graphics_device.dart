@@ -84,6 +84,7 @@ class GraphicsDevice {
       ..setColorBlendEnable(true)
       ..setColorBlendEquation(
         gpu.ColorBlendEquation(
+          sourceAlphaBlendFactor: gpu.BlendFactor.one,
           destinationAlphaBlendFactor: blendState == BlendState.alphaBlend
               ? gpu.BlendFactor.oneMinusSourceAlpha
               : gpu.BlendFactor.zero,
