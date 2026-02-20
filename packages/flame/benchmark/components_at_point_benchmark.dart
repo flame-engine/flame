@@ -12,6 +12,7 @@ const _gameSize = 800.0;
 /// Baseline: no hit testing, just two componentsAtPoint calls per position
 /// (tap down + tap up delivery). Represents pre-PR behavior where the game
 /// caught all events without checking which component was hit.
+/// See PR: https://github.com/flame-engine/flame/pull/3815
 class BaselineBenchmark extends AsyncBenchmarkBase {
   final Random random;
 
