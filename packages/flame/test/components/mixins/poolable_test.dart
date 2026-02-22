@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/components/mixins/poolable.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 

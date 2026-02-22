@@ -1,5 +1,4 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/components/component_pool.dart';
 
 /// A mixin for components that can be pooled and reused.
 ///

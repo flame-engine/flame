@@ -2,10 +2,11 @@ import 'package:flame/src/components/mixins/poolable.dart';
 
 /// A pool for managing reusable components that implement the [Poolable] mixin.
 ///
-/// This class allows you to acquire and release components efficiently, reducing
-/// the overhead of creating and destroying components frequently. When a
-/// component is released back to the pool, it is reset to its initial state
-/// using the [Poolable.reset] method before being made available for reuse.
+/// This class allows you to acquire and release components efficiently,
+/// reducing the overhead of creating and destroying components frequently. 
+/// When a component is released back to the pool, it is reset to its initial
+/// state using the [Poolable.reset] method before being made available for
+/// reuse.
 ///
 /// Example usage:
 /// ```dart
