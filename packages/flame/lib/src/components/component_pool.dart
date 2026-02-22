@@ -25,8 +25,12 @@ import 'package:flame/src/components/mixins/poolable.dart';
 /// properly released back to the pool when they are no longer needed.
 class ComponentPool<T extends Poolable> {
   final T Function() _factory;
-  final int _maxSize;
   final List<T> _available = [];
+
+  /// The maximum number of components that can be stored in the pool. If the
+  /// pool reaches this limit, additional components released back to the pool
+  /// will be discarded.
+  final int maxSize;
 
   /// Creates a new component pool with the specified factory, maximum size, and
   /// initial size. The [factory] is a function that creates new instances of
@@ -38,25 +42,27 @@ class ComponentPool<T extends Poolable> {
   /// will be created and added to the pool.
   ComponentPool({
     required T Function() factory,
-    int maxSize = 100,
+    this.maxSize = 100,
     int initialSize = 0,
-  }) : _factory = factory,
-       _maxSize = maxSize {
+  }) : _factory = factory {
     for (var i = 0; i < initialSize && i < maxSize; i++) {
-      _available.add(_create());
+      _available.add(_factory());
     }
   }
 
-  T _create() {
-    return _factory();
-  }
+  /// The number of components currently available in the pool for acquisition.
+  ///
+  /// This does not include components that are currently in use (i.e., those
+  /// that have been acquired but not yet released). It only counts the
+  /// components that are ready to be acquired.
+  int get availableCount => _available.length;
 
   /// Acquires a component from the pool. If the pool is empty, a new component
   /// is created using the factory function. Otherwise, the last available
   /// component is removed from the pool and returned.
   T acquire() {
     if (_available.isEmpty) {
-      return _create();
+      return _factory();
     }
     return _available.removeLast();
   }
@@ -80,14 +86,15 @@ class ComponentPool<T extends Poolable> {
 
     component.reset();
 
-    if (_available.length < _maxSize) {
+    if (_available.length < maxSize) {
       _available.add(component);
     }
   }
 
   /// Clears all available components from the pool. This can be useful if you
-  /// want to free up memory or reset the pool state. Note that this does not
-  /// affect components that are currently in use.
+  /// want to free up memory or reset the pool state. 
+  /// 
+  /// Note: This does not affect components that are currently in use.
   void clear() {
     _available.clear();
   }
