@@ -92,8 +92,8 @@ class ComponentPool<T extends Poolable> {
   }
 
   /// Clears all available components from the pool. This can be useful if you
-  /// want to free up memory or reset the pool state. 
-  /// 
+  /// want to free up memory or reset the pool state.
+  ///
   /// Note: This does not affect components that are currently in use.
   void clear() {
     _available.clear();
