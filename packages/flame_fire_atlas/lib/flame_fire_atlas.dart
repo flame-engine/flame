@@ -144,7 +144,6 @@ class SpriteSelection extends BaseSelection {
   }) : super(info);
 
   /// Creates a [SpriteSelection] from [json].
-  @override
   factory SpriteSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
     final group = json['group'] as String?;
@@ -193,7 +192,6 @@ class AnimationSelection extends BaseSelection {
   }) : super(info);
 
   /// Creates a [AnimationSelection] from [json].
-  @override
   factory AnimationSelection.fromJson(Map<String, dynamic> json) {
     final info = Selection.fromJson(json);
     final group = json['group'] as String?;
