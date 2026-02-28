@@ -112,46 +112,14 @@ frequently can impact performance. For components that are spawned and removed r
 (like bullets, particles, or enemies), object pooling is an effective optimization technique.
 
 Object pooling reuses objects instead of constantly creating and destroying them. Flame
-provides the `ComponentPool` class and the `Poolable` mixin to make object pooling easy
-and efficient.
-
-
-### Poolable Mixin
-
-The `Poolable` mixin is used to mark components that can be pooled and reused. Any component
-that uses this mixin must implement the `reset()` method, which resets the component to its
-initial state so it can be reused.
-
-Example:
-
-```dart
-class Bullet extends SpriteComponent with Poolable {
-  Vector2 velocity = Vector2.zero();
-  double damage = 10.0;
-
-  @override
-  void reset() {
-    position.setZero();
-    size.setZero();
-    velocity.setZero();
-    damage = 10.0;
-    // Reset any other properties to their initial state
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    position.add(velocity * dt);
-  }
-}
-```
+provides the `ComponentPool` class to make object pooling easy and efficient.
 
 
 ### ComponentPool
 
-The `ComponentPool` class manages a pool of reusable components. It handles the lifecycle of
-pooled components, including acquiring them when needed and releasing them back to the pool
-when they're no longer in use.
+The `ComponentPool` class manages a pool of reusable components. It automatically handles
+the component lifecycle: when a pooled component is removed from its parent, it is
+returned to the pool for reuse.
 
 **Creating a pool:**
 
@@ -173,7 +141,7 @@ class MyGame extends FlameGame {
 **Acquiring components from the pool:**
 
 When you need a component, use `acquire()` to get one from the pool. If the pool is empty,
-a new component will be created automatically.
+a new component will be created automatically using the factory function.
 
 ```dart
 void spawnBullet(Vector2 position, Vector2 velocity) {
@@ -184,30 +152,39 @@ void spawnBullet(Vector2 position, Vector2 velocity) {
 }
 ```
 
-**Releasing components back to the pool:**
+**Returning components to the pool:**
 
-When a component is no longer needed, release it back to the pool using `release()`. This
-will automatically remove the component from the game tree if it's mounted, reset it using
-the `reset()` method, and add it back to the pool for reuse.
+Components are returned to the pool **automatically** when they are removed from the game
+tree. Simply call `removeFromParent()` on the component — there is no manual release step.
 
 ```dart
-class Bullet extends SpriteComponent with Poolable {
-  // ... other code ...
+class Bullet extends SpriteComponent with CollisionCallbacks {
+  Vector2 velocity = Vector2.zero();
 
   @override
   void update(double dt) {
     super.update(dt);
     position.add(velocity * dt);
 
-    // Remove bullet if it goes off screen
+    // Remove bullet if it goes off screen — automatically returned to pool
     if (position.x < -100 || position.x > game.size.x + 100) {
-      game.bulletPool.release(this);
+      removeFromParent();
     }
   }
 
-  void onCollision() {
-    // Release back to pool when bullet hits something
-    game.bulletPool.release(this);
+  @override
+  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
+    super.onCollisionStart(points, other);
+    // Return to pool on collision — no manual release needed
+    removeFromParent();
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    // Reset visual/internal state here so the component is clean when reused.
+    // Caller-configured state (position, velocity) should NOT be reset here
+    // because it is set between acquire() and add().
   }
 }
 ```
@@ -239,17 +216,21 @@ Clearing only affects components currently in the pool. Components that are in u
 
 ### Best Practices
 
-1. **Always release components**: Make sure every acquired component is eventually released
-   back to the pool to prevent memory leaks.
+1. **No special mixin needed**: Any `Component` subclass can be pooled. Just pass a factory
+   function to `ComponentPool` and you're ready to go.
 
-2. **Reset thoroughly**: Implement `reset()` carefully to reset all component properties to
-   their initial state. Missing properties can cause bugs when components are reused.
+2. **Use `onMount` to reset internal state**: Reset visual or internal properties (e.g.
+   animation frame, bounce phase) in `onMount()`. Do not reset caller-configured state
+   (like position or velocity) there, since those are set between `acquire()` and `add()`.
 
-3. **Set appropriate pool sizes**: Set `maxSize` based on your game's needs. Too small and
+3. **Just call `removeFromParent()`**: Components are returned to the pool automatically
+   when removed. There is no manual release method to call.
+
+4. **Set appropriate pool sizes**: Set `maxSize` based on your game's needs. Too small and
    you'll create new objects frequently; too large and you'll waste memory.
 
-4. **Use initialSize for warm-up**: Set `initialSize` to pre-create commonly used components,
-   reducing frame drops during gameplay.
+5. **Use `initialSize` for warm-up**: Set `initialSize` to pre-create commonly used
+   components, reducing frame drops during gameplay.
 
-5. **Pool behavior is LIFO**: The pool uses a stack (Last In First Out) internally, meaning
-   the most recently released component will be the next one acquired.
+6. **Pool behavior is LIFO**: The pool uses a stack (Last In, First Out) internally, meaning
+   the most recently returned component will be the next one acquired.
