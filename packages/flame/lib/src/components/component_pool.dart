@@ -1,12 +1,12 @@
-import 'package:flame/src/components/mixins/poolable.dart';
+import 'package:flame/components.dart';
 
-/// A pool for managing reusable components that implement the [Poolable] mixin.
+/// A pool for managing reusable components.
 ///
-/// This class allows you to acquire and release components efficiently,
-/// reducing the overhead of creating and destroying components frequently. 
-/// When a component is released back to the pool, it is reset to its initial
-/// state using the [Poolable.reset] method before being made available for
-/// reuse.
+/// This class allows you to efficiently reuse components, reducing the overhead
+/// of creating and destroying them frequently. The pool automatically manages
+/// component lifecycle by listening to the component's [Component.removed]
+/// future, returning components to the pool when they are removed from their
+/// parent.
 ///
 /// Example usage:
 /// ```dart
@@ -15,16 +15,24 @@ import 'package:flame/src/components/mixins/poolable.dart';
 ///   maxSize: 50,
 ///   initialSize: 10,
 /// );
-/// ```
-/// In this example, a pool of `MyBullet` components is created with a maximum
-/// size of 50 and an initial size of 10. You can acquire bullets from the pool
-/// when needed and release them back to the pool when they are no longer in
-/// use.
 ///
-/// Note: The pool does not automatically manage the lifecycle of components, so
-/// it is the responsibility of the developer to ensure that components are
-/// properly released back to the pool when they are no longer needed.
-class ComponentPool<T extends Poolable> {
+/// // Acquire a bullet from the pool
+/// final bullet = bulletPool.acquire();
+/// // Configure the bullet as needed
+/// bullet.position = Vector2(10, 20);
+/// bullet.velocity = Vector2(100, 0);
+/// // Add it to the game
+/// game.add(bullet);
+///
+/// // Later, when the bullet should be destroyed:
+/// bullet.removeFromParent(); // Automatically returns to pool
+/// ```
+///
+/// The pool automatically returns components when they are removed from their
+/// parent, so you don't need to manually release them. Simply call
+/// [Component.removeFromParent] when the component should be destroyed, and it
+/// will be automatically returned to the pool for reuse.
+class ComponentPool<T extends Component> {
   final T Function() _factory;
   final List<T> _available = [];
 
@@ -54,40 +62,38 @@ class ComponentPool<T extends Poolable> {
   /// The number of components currently available in the pool for acquisition.
   ///
   /// This does not include components that are currently in use (i.e., those
-  /// that have been acquired but not yet released). It only counts the
-  /// components that are ready to be acquired.
+  /// that have been acquired but not yet returned to the pool). It only counts
+  /// the components that are ready to be acquired.
   int get availableCount => _available.length;
 
   /// Acquires a component from the pool. If the pool is empty, a new component
   /// is created using the factory function. Otherwise, the last available
   /// component is removed from the pool and returned.
+  ///
+  /// A listener is automatically attached that will return the component to
+  /// the pool when it is removed from its parent. The listener waits for the
+  /// component to be [Component.mounted] first, then listens for
+  /// [Component.removed]. This ensures recycled components (whose `removed`
+  /// future is already completed) don't get immediately returned to the pool
+  /// before they have a chance to mount.
+  ///
+  /// Just call [Component.removeFromParent] when done with the component.
   T acquire() {
-    if (_available.isEmpty) {
-      return _factory();
-    }
-    return _available.removeLast();
+    final component = _available.isEmpty ? _factory() : _available.removeLast();
+    component.mounted.then((_) {
+      component.removed.then((_) => _release(component));
+    });
+    return component;
   }
 
-  /// Releases a component back to the pool. The component is reset to its
-  /// initial state using the [Poolable.reset] method before being added back
-  /// to the pool. If the pool has reached its maximum size, the component will
-  /// not be added back to the pool and will be discarded.
+  /// Returns a component to the pool. This is called automatically when
+  /// a component's [Component.removed] future completes (i.e., after it has
+  /// been removed from its parent).
   ///
-  /// If the component is currently mounted in the game, it will be removed from
-  /// its parent before being reset and added back to the pool. This ensures
-  /// that the component is properly removed from the component tree before
-  /// being reused.
-  Future<void> release(T component) async {
-    if (component.isMounted) {
-      if (!component.isRemoving) {
-        component.removeFromParent();
-      }
-      await component.removed;
-    }
-
-    component.reset();
-
-    if (_available.length < maxSize) {
+  /// The component is only added back to the pool if the pool has not reached
+  /// its [maxSize].
+  void _release(T component) {
+    if (!_available.contains(component) && _available.length < maxSize) {
       _available.add(component);
     }
   }
