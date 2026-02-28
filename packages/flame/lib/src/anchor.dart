@@ -69,6 +69,17 @@ class Anchor {
     return _valueNames[this] ?? 'Anchor($x, $y)';
   }
 
+  /// Returns the anchor on the opposite side of this anchor.
+  Anchor get opposite => Anchor(1 - x, 1 - y);
+
+  @override
+  bool operator ==(Object other) {
+    return other is Anchor && x == other.x && y == other.y;
+  }
+
+  @override
+  int get hashCode => x.hashCode * 31 + y.hashCode;
+
   /// Returns a string representation of this Anchor.
   ///
   /// This is the same as `name` and should be used only for debugging or
@@ -108,12 +119,4 @@ class Anchor {
       return Anchor(double.parse(matches![0]!), double.parse(matches[1]!));
     }
   }
-
-  @override
-  bool operator ==(Object other) {
-    return other is Anchor && x == other.x && y == other.y;
-  }
-
-  @override
-  int get hashCode => x.hashCode * 31 + y.hashCode;
 }

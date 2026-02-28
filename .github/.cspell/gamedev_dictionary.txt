@@ -12,6 +12,7 @@ bitfield # data structure consisting of adjacent bits
 broadphase # common division of collision detection between broad and narrow phases
 cathetus # the non-hypotenuse sides of a right triangle
 clusterized # past tense of clusterize
+gles # OpenGL for Embedded Systems
 glsl # OpenGL Shading Language
 gltf # OpenGL Transmission Format, a file format for 3D models
 goldens # test files used as reference for Golden Tests

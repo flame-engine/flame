@@ -21,7 +21,9 @@ class LightingInfo {
       throw Exception('At most 3 point lights are allowed');
     }
 
-    shader.setUint('LightsInfo.numLights', numLights);
+    // NOTE: using floats because Android GLES does not support integer uniforms
+    // Refer to https://github.com/flutter/engine/pull/55329
+    shader.setFloat('LightsInfo.numLights', numLights.toDouble());
     for (final (index, light) in pointLights.indexed) {
       light.apply(index, shader);
     }

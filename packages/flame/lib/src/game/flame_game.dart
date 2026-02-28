@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
+import 'package:flame/input.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -222,6 +224,37 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y >= 0 &&
         point.x < canvasSize.x &&
         point.y < canvasSize.y;
+  }
+
+  @override
+  bool containsEventHandlerAt(Vector2 position) {
+    // Deprecated game-level detector mixins handle events for the entire
+    // game surface, so any in-bounds point is a hit.
+    // ignore: deprecated_member_use_from_same_package
+    if (this is TapDetector ||
+        this is SecondaryTapDetector ||
+        this is TertiaryTapDetector ||
+        this is DoubleTapDetector ||
+        this is LongPressDetector ||
+        this is VerticalDragDetector ||
+        this is HorizontalDragDetector ||
+        this is ForcePressDetector ||
+        this is PanDetector ||
+        this is ScaleDetector ||
+        this is MultiTapListener ||
+        this is MultiTouchDragDetector) {
+      return true;
+    }
+    for (final component in super.componentsAtPoint(position)) {
+      if (component is TapCallbacks ||
+          component is DragCallbacks ||
+          component is DoubleTapCallbacks ||
+          component is ScaleCallbacks ||
+          component is SecondaryTapCallbacks) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// Returns the current time in seconds with microseconds precision.
