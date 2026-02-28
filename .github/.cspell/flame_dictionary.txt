@@ -12,7 +12,6 @@ Kenobi # Eminent Jedi Master, General of the Republic Army, Obi-Wan Kenobi
 Nakama # An open-source server designed to power modern games and apps https://github.com/Allan-Nava/nakama-flutter
 Overmind # A character in the game StarCraft
 padracing # A pad racing game by BlueFire https://github.com/flame-engine/flame/tree/main/examples/games/padracing
-Poolable # A mixin for components that can be used with ComponentPool
 Prosser # A character from the book The Hitchhiker's Guide to the Galaxy
 riverpod # A state management library for Flutter https://github.com/rrousselGit/riverpod
 spineboy # Name of a famous character used as an example for Spine https://en.esotericsoftware.com/spine-examples-spineboy
