@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class ComponentPoolExample extends FlameGame {
   static const String description =
-      'Tap on the screen to spawn a burst of pooled bullets. '
-      'Watch the stats to see active vs pooled bullets and observe '
+      'Tap on the screen to spawn a burst of pooled balls. '
+      'Watch the stats to see active vs pooled balls and observe '
       'how the pool efficiently reuses objects.';
 
   static const gameWidth = 800.0;
@@ -16,7 +16,7 @@ class ComponentPoolExample extends FlameGame {
 
   ComponentPoolExample()
     : super(
-        world: _BulletWorld(),
+        world: _BallWorld(),
         camera: CameraComponent.withFixedResolution(
           width: gameWidth,
           height: gameHeight,
@@ -26,12 +26,12 @@ class ComponentPoolExample extends FlameGame {
   }
 }
 
-class _BulletWorld extends World with TapCallbacks {
-  late final ComponentPool<_PooledBullet> bulletPool;
+class _BallWorld extends World with TapCallbacks {
+  late final ComponentPool<_PooledBall> ballPool;
   late final _StatsDisplay statsDisplay;
   final Random _random = Random();
 
-  static const bulletsPerTap = 12;
+  static const ballsPerTap = 12;
 
   @override
   Future<void> onLoad() async {
@@ -47,15 +47,15 @@ class _BulletWorld extends World with TapCallbacks {
     );
 
     // Create a pool with a larger initial size to handle bursts
-    // and a maximum size to accommodate multiple bullet bursts
-    bulletPool = ComponentPool<_PooledBullet>(
-      factory: _PooledBullet.new,
+    // and a maximum size to accommodate multiple ball bursts
+    ballPool = ComponentPool<_PooledBall>(
+      factory: _PooledBall.new,
       initialSize: 30,
       maxSize: 200,
     );
 
     // Add a stats display to show pool information
-    statsDisplay = _StatsDisplay(pool: bulletPool);
+    statsDisplay = _StatsDisplay(pool: ballPool);
     await add(statsDisplay);
   }
 
@@ -63,54 +63,95 @@ class _BulletWorld extends World with TapCallbacks {
   void onTapDown(TapDownEvent event) {
     final tapPosition = event.localPosition;
 
-    for (var i = 0; i < bulletsPerTap; i++) {
-      final bullet = bulletPool.acquire();
-      bullet.position.setFrom(tapPosition);
+    for (var i = 0; i < ballsPerTap; i++) {
+      final ball = ballPool.acquire();
+      ball.position.setFrom(tapPosition);
 
-      // Create a spread pattern - bullets go out in all directions
-      final angle = (i / bulletsPerTap) * 2 * pi;
+      // Create a spread pattern - balls go out in all directions
+      final angle = (i / ballsPerTap) * 2 * pi;
       final speed = 150.0 + _random.nextDouble() * 100;
-      bullet.velocity = Vector2(cos(angle) * speed, sin(angle) * speed);
+      ball.velocity = Vector2(cos(angle) * speed, sin(angle) * speed);
 
       // Add slight random variation to velocity
-      bullet.velocity.add(
+      ball.velocity.add(
         Vector2(
           (_random.nextDouble() - 0.5) * 30,
           (_random.nextDouble() - 0.5) * 30,
         ),
       );
 
-      add(bullet);
+      add(ball);
     }
   }
 }
 
-/// A simple bullet component that can be pooled.
-class _PooledBullet extends CircleComponent
-    with Poolable, HasGameReference, ParentIsA<_BulletWorld> {
-  Vector2 velocity = Vector2.zero();
+/// A ball component that can be pooled.
+///
+/// Uses two child [CircleComponent]s for visuals: a shadow (rendered first via
+/// lower priority) and the ball itself on top. A bouncing scale effect
+/// simulates the ball bouncing up and down as it travels outward.
+class _PooledBall extends PositionComponent
+    with HasGameReference, ParentIsA<_BallWorld> {
+  static const _radius = 4.0;
+  static const _bounceSpeed = 8.0;
+  static const _maxShadowOffset = 16.0;
 
-  _PooledBullet()
-    : super(
-        radius: 4,
-        paint: Paint()
-          ..color = Colors.yellowAccent
-          ..style = PaintingStyle.fill,
-      );
+  Vector2 velocity = Vector2.zero();
+  double _bouncePhase = 0;
+
+  late final CircleComponent _shadow;
+  late final CircleComponent _ball;
+
+  _PooledBall() : super(anchor: Anchor.center);
 
   @override
-  void reset() {
-    // Reset all properties to their initial state
-    position.setZero();
-    velocity.setZero();
-    angle = 0;
+  Future<void> onLoad() async {
+    _shadow = CircleComponent(
+      radius: _radius,
+      anchor: Anchor.center,
+      position: Vector2(0, _maxShadowOffset),
+      priority: 0,
+      paint: Paint()
+        ..color = Colors.black.withValues(alpha: 0.6),
+    );
+
+    _ball = CircleComponent(
+      radius: _radius,
+      anchor: Anchor.center,
+      priority: 1,
+      paint: Paint()
+        ..color = Colors.yellowAccent
+        ..style = PaintingStyle.fill,
+    );
+
+    addAll([_shadow, _ball]);
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    // Only reset internal visual state — velocity and position are set by the
+    // caller between acquire() and add(), so we must not touch them here.
+    _bouncePhase = 0;
+    _ball.scale = Vector2.all(1);
   }
 
   @override
   void update(double dt) {
     position.add(velocity * dt);
+    _bouncePhase += dt * _bounceSpeed;
 
-    // Check if bullet is outside the game bounds
+    // t ranges from 0 (ground) to 1 (peak of bounce)
+    final t = (1 + sin(_bouncePhase)) / 2;
+
+    // Ball grows as it "rises" toward the camera
+    _ball.scale = Vector2.all(1.0 + 0.5 * t);
+
+    // Shadow drifts down and shrinks as ball rises away from ground
+    _shadow.position.y = _maxShadowOffset * t;
+    _shadow.scale = Vector2.all(1.0 - 0.2 * t);
+
+    // Check if ball is outside the game bounds
     final isOutOfBounds =
         position.x < 0 ||
         position.x > ComponentPoolExample.gameWidth ||
@@ -118,27 +159,15 @@ class _PooledBullet extends CircleComponent
         position.y > ComponentPoolExample.gameHeight;
 
     if (isOutOfBounds) {
-      parent.bulletPool.release(this);
+      removeFromParent();
     }
-  }
-
-  @override
-  void render(Canvas canvas) {
-    // Draw a glow effect
-    final glowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.3)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
-    canvas.drawCircle(Offset.zero, radius * 2, glowPaint);
-
-    // Draw the main bullet
-    super.render(canvas);
   }
 }
 
-/// Displays statistics about the bullet pool.
-class _StatsDisplay extends TextComponent with ParentIsA<_BulletWorld> {
-  final ComponentPool<_PooledBullet> pool;
-  int _activeBullets = 0;
+/// Displays statistics about the ball pool.
+class _StatsDisplay extends TextComponent with ParentIsA<_BallWorld> {
+  final ComponentPool<_PooledBall> pool;
+  int _activeBalls = 0;
 
   _StatsDisplay({required this.pool})
     : super(
@@ -162,12 +191,12 @@ class _StatsDisplay extends TextComponent with ParentIsA<_BulletWorld> {
   void update(double dt) {
     super.update(dt);
 
-    // Count active bullets (in the world but not in the pool)
-    _activeBullets = parent.children.whereType<_PooledBullet>().length;
+    // Count active balls (in the world but not in the pool)
+    _activeBalls = parent.children.whereType<_PooledBall>().length;
 
     text =
-        'Active Bullets: $_activeBullets\n'
+        'Active Balls: $_activeBalls\n'
         'In Pool (Ready): ${pool.availableCount}\n'
-        '\nTap to spawn ${_BulletWorld.bulletsPerTap} bullets!';
+        '\nTap to spawn ${_BallWorld.ballsPerTap} balls!';
   }
 }
