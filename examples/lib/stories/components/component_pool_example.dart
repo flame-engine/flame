@@ -111,8 +111,7 @@ class _PooledBall extends PositionComponent
       anchor: Anchor.center,
       position: Vector2(0, _maxShadowOffset),
       priority: 0,
-      paint: Paint()
-        ..color = Colors.black.withValues(alpha: 0.6),
+      paint: Paint()..color = Colors.black.withValues(alpha: 0.6),
     );
 
     _ball = CircleComponent(

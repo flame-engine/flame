@@ -214,8 +214,11 @@ void main() {
           final fresh = pool.acquire();
 
           expect(
-            [component1, component2, component3]
-                .every((c) => !identical(c, fresh)),
+            [
+              component1,
+              component2,
+              component3,
+            ].every((c) => !identical(c, fresh)),
             true,
           );
         },
