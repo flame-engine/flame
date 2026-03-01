@@ -130,9 +130,11 @@ This is an example of what a quarter-length map looks like:
 ![An example of a isometric map with selector](../../images/isometric.png)
 
 Flame's Example app contains a more in-depth example, featuring how to parse coordinates to make a
-selector. The code can be found
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart),
-and a live version can be seen [here](https://examples.flame-engine.org/#/Rendering_Isometric_Tile_Map).
+selector. The
+[source code](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/isometric_tile_map_example.dart)
+is available on GitHub, and a
+[live version](https://examples.flame-engine.org/#/Rendering_Isometric_Tile_Map)
+can be viewed in the browser.
 
 
 ## NineTileBoxComponent
@@ -255,8 +257,8 @@ class Hud extends PositionComponent with HasGameReference {
 `ComponentsNotifier`s can also come in handy to rebuild widgets when state changes inside a
 `FlameGame`, to help with that Flame provides a `ComponentsNotifierBuilder` widget.
 
-To see an example of its use check the running example
-[here](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/components_notifier_example.dart).
+To see an example of its use, check the
+[ComponentsNotifier example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/components_notifier_example.dart).
 
 
 ## ClipComponent

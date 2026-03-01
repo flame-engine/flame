@@ -223,8 +223,10 @@ effect. For example, for move effects, they refer to the distance traveled; for 
 the units are radians.
 
 ```dart
-final speedController = SpeedEffectController(LinearEffectController(0), speed: 1);
-final controller = EffectController(speed: 1); // same as speedController
+final speedController =
+    SpeedEffectController(LinearEffectController(0), speed: 1);
+final controller =
+    EffectController(speed: 1); // same as speedController
 ```
 
 

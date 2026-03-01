@@ -484,9 +484,10 @@ will be returned (though typically you would create a unique context type for ea
 
 Flame provides a set of effects that can be applied to a certain type of components. These effects
 can be used to animate some properties of your components, like position or dimensions. You can
-check the list of those effects [here](../effects/effects.md).
+check the [list of available effects](../effects/effects.md).
 
-Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);
+Examples of the running effects can be found in the
+[effects examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects).
 
 ```{toctree}
 :hidden:
