@@ -78,6 +78,28 @@ void main() {
         ],
       );
 
+      final relativePathSingleImageMap = TiledMap(
+        height: 1,
+        tileHeight: 1,
+        tileWidth: 1,
+        width: 1,
+        tilesets: [
+          Tileset(
+            // Simulate an external TSX tileset referenced by the map.
+            source: 'tiles/isometric_plain_1.tsx',
+            tileWidth: 128,
+            tileHeight: 74,
+            tileCount: 1,
+            // Simulate an image path that is relative to the TSX file.
+            image: const TiledImage(
+              source: '../images/green.png',
+              width: 128,
+              height: 74,
+            ),
+          ),
+        ],
+      );
+
       test('returns single image atlas for simple map', () async {
         final images = Images(bundle: bundle);
         final atlas = await TiledAtlas.fromTiledMap(
@@ -99,6 +121,21 @@ void main() {
           matchesGoldenFile('goldens/single_atlas.png'),
         );
       });
+
+      test(
+        'single image tileset with relative image path loads correctly',
+        () async {
+          final images = Images(bundle: bundle);
+          final atlas = await TiledAtlas.fromTiledMap(
+            relativePathSingleImageMap,
+            images: images,
+          );
+
+          expect(atlas.offsets, hasLength(1));
+          expect(atlas.atlas, isNotNull);
+          expect(atlas.key, '../images/green.png');
+        },
+      );
 
       test('returns cached atlas', () async {
         final atlas1 = await TiledAtlas.fromTiledMap(
