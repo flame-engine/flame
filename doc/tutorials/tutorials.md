@@ -5,7 +5,7 @@ The following are tutorials that are maintained with every release of Flame.
 - [](bare_flame_game.md) -- this tutorial focuses on setting up your environment for making a new
   Flame game. This "initial state" is assumed as a starting point for all other tutorials.
 
-- [](basic_shader/basic_shader.md) -- in this tutorial, we will build an apply an outline
+- [](basic_shader/basic_shader.md) -- in this tutorial, we will build and apply an outline
   shader on sprite components.
 
 - [](klondike/klondike.md) -- in this tutorial, we will build the Klondike

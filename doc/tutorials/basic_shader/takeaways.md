@@ -4,10 +4,10 @@
 ## Conclusion
 
 According to my logic, there are three layers of using shaders
-in Flame Engine, where:
+in the Flame engine, where:
 
 - the component layer: `SpriteComponent` and `PostProcessComponent`
-  - connecting shaders to Flame components and holding game logic, and user
+  - connecting shaders to Flame components and holding game logic, and
   handling user inputs
 - post process layer: `PostProcess`
   - the link between components and holding runtime settings, behavior
@@ -15,32 +15,12 @@ in Flame Engine, where:
 - the GLSL shader: `.frag` file
   - the core shader code
 
-There is an optional step to take this tutorial a little bit further:
-altering shader behavior from the component when user input arrives.  
-Check Appendix A.
-
 
 ## Closure
 
-I hope this tutorial helped you to understand the basics!  
+I hope this tutorial helped you to understand the basics!
 Don't forget, if you know better solutions: go for it! You can tweak this
-solution to your needs, happy coding!  
+solution to your needs, happy coding!
 
-If you found some errors or mistakes please let me know through Github or Discord
-and I will look after them and update the tutorial accordingly.
-
-The standalone repository of this tutorial is available through Github.  
-That is set to the end of the basic tutorial.  
-The Appendix files are present, but commented out.  
-
-```{note}
-After downloading the repo, it is possible that you have to run
-`flutter create .` from the root folder, to reinitialize it.
-```
-
-And if you are using any part of the shader codes, please credit me as:  
-**Kornél (Hoodead) Lapu**  
-Thanks in advance!
-
-Don't forget to support the superb Flame Engine community.  
-Cheers!
+If you found some errors or mistakes please let us know through GitHub or Discord
+and we will update the tutorial accordingly.

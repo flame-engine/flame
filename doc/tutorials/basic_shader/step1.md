@@ -1,79 +1,121 @@
+# Sprite Component
 
-# Setup
 
+## 1.0 Architecture and Responsibilities
 
-## 1.0 Tools
+Let's create the component where we render our sprite and apply the shader.
 
-First of all you need to install the frameworks.  
-You can find the instructions of installing Flutter
-[here](https://docs.flutter.dev/install/with-vs-code)
-and after that for Flame Engine
-[here](https://docs.flame-engine.org/latest/#installation).  
+For clarity and some modularity I separated the sprite into two classes:
+
+- one for having a standard sprite class (purpose: general sprite and event handling)
+- one for applying a post process as a wrapper class (purpose: specific shader application)
+
+Now if I want to modify the shader of the sword only, I don't have to modify the
+underlying sprite class or I can "freely" modify the sprite and add input event mixins to
+it or add other children, if it is a composite sprite. In these cases only one class has
+to be modified, when these features are added.
+
+These are intended to be the application of
+[Single Responsibility](https://en.wikipedia.org/wiki/Single-responsibility_principle) and
+[Low Coupling](https://en.wikipedia.org/wiki/Coupling_(computer_programming))
+programming principles.
 
 ```{note}
-I am using Microsoft Windows OS and Visual Studio Code for development, the
-links are for this setup.  
-To setup development on other platforms, you can consult the documentation
-or the community online.  
+Feel free to modify the code and experiment with different approaches
+after the tutorial is concluded.
 ```
 
-At the end of installation you should have a working project.  
-If you don't have it or you already installed then, create a folder for your
-project, I will use this for example:  
-`C:\Projects\basic_shader_tutorial`  
-Open your folder in VS Code.  
-Press `Ctr + J` to open terminal window in VS Code.  
-Execute the following commands, to create new flutter project in current
-directory:  
-`flutter create .`  
-Now you have a new flutter project.  
 
-*Nice!*
+## 1.1 Image resource
 
+For this tutorial we need an image with a transparent background to apply the outline
+shader to. Create an `assets/images/` directory in your project and add your `.png` image
+there.
 
-## 1.1 Extensions
-
-While installing through VS Code you are asked to install extensions for Dart
-and Flutter, I recommend it to add one.  
-
-Also we need something to work with fragment (aka pixel) shaders in `.frag`
-files, so we need some GLSL highlight or linting. I suggest you to go ahead and
-download one from the Extensions tab in VS Code.  
-I used a syntax highlighter:
-[GLSL Syntax for VS Code](https://marketplace.visualstudio.com/items?itemName=GeForceLegend.vscode-glsl)
-from GeForceLegend, but it is really up to your preferences.  
-
-
-## 1.2 Image resource
-
-I will use an image (sword.png) created by
-[lapu_land__](https://www.instagram.com/lapu_land__/).  
-
-![Image of a drawn sword](../../images/tutorials/basic_shader/sword.png)  
-
-If you fancy about to add your own resource, don't hesitate and I also
-encourage you, to do so.  
-The important part is to have **transparent background** in the `.png`
-file.  
-
-Create the folder where it suits you best.  
-Copy the chosen file under your assets folder in the project, something like
-this: `C:\Projects\basic_shader_tutorial\assets\images\sword.png`  
-
-Do not forget to add the containing folder to assets in `pubspec.yaml` and
-save:  
+Do not forget to add the containing folder to assets in `pubspec.yaml` and save:
 
 ```yaml
-#... omitted for brevity
-
-flutter:  
-  assets:  
-    - "assets/images/"  
+flutter:
+  assets:
+    - assets/images/
 ```
 
-</br>
 
-Pretty much that's it for the **Setup**.  
-We are working with vanilla Flame Engine settings, with nearly vanilla VS Code.  
+## 1.2 Sprite
 
-In the next step we will create the wireframe of the Flame game.
+Create a new file named `sword_component.dart`
+(*or instead of "sword" use what you have of course*):
+
+```dart
+import 'dart:async';
+
+import 'package:flame/components.dart';
+
+class SwordSprite extends SpriteComponent {
+  @override
+  Future<void> onLoad() async {
+    sprite = await Sprite.load('sword.png');
+    size = sprite!.srcSize;
+
+    return super.onLoad();
+  }
+}
+```
+
+
+## 1.3 Wrapper
+
+Here comes the wrapper class for applying shaders and post process. In the same file
+(*or in a separate one if you prefer*) create another class:
+
+```dart
+import 'package:flame/components.dart';
+import 'package:flame/post_process.dart';
+
+import 'package:basic_shader_tutorial/outline_postprocess.dart';
+
+class SwordSpritePostProcessed extends PostProcessComponent {
+  SwordSpritePostProcessed({super.position, super.anchor})
+    : super(
+        children: [SwordSprite()],
+        postProcess: OutlinePostProcess(anchor: anchor ?? Anchor.topLeft),
+      );
+}
+```
+
+
+## 1.4 Result
+
+So the final `sword_component.dart` file looks like this:
+
+```dart
+import 'dart:async';
+
+import 'package:flame/components.dart';
+import 'package:flame/post_process.dart';
+
+import 'package:basic_shader_tutorial/outline_postprocess.dart';
+
+class SwordSpritePostProcessed extends PostProcessComponent {
+  SwordSpritePostProcessed({super.position, super.anchor})
+    : super(
+        children: [SwordSprite()],
+        postProcess: OutlinePostProcess(anchor: anchor ?? Anchor.topLeft),
+      );
+}
+
+class SwordSprite extends SpriteComponent {
+  @override
+  Future<void> onLoad() async {
+    sprite = await Sprite.load('sword.png');
+    size = sprite!.srcSize;
+
+    return super.onLoad();
+  }
+}
+```
+
+Here you will get a syntax error because `OutlinePostProcess()` does not
+exist nor the imported package.. yet!
+
+Let's create those in the next step!
