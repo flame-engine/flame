@@ -120,6 +120,23 @@ Clean-up of children and resources in a `FlameGame` is not done automatically
 and must be explicitly added to the `onRemove` call.
 ```
 
+### dispose()
+
+As a convenience, `FlameGame` provides a `dispose()` method that handles all of the common cleanup
+in a single call:
+
+```dart
+  game.dispose();
+```
+
+This removes all children from the game (triggering `onRemove` on every component in the tree),
+processes all pending lifecycle events, and clears the `images` and `assets` caches.
+
+The difference between `dispose()` and `onRemove` is that `dispose()` is a method you call
+explicitly to perform cleanup, while `onRemove` is a lifecycle callback that is invoked
+automatically when the game is removed from a `GameWidget`. You can use `dispose()` from within
+`onRemove`, or call it independently whenever you need to reset the game state.
+
 
 ## Debug mode
 

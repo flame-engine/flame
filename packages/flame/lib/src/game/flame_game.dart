@@ -338,4 +338,19 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     _pausedBecauseBackgrounded = false;
     super.resumeEngine();
   }
+
+  /// Removes all children from the game and clears all caches.
+  ///
+  /// This will call [onRemove] on all components in the tree, clear
+  /// the [images] and [assets] caches, and process all pending
+  /// lifecycle events.
+  ///
+  /// After calling this method, the game is in a clean state with no
+  /// components or cached resources.
+  void dispose() {
+    removeAll(children);
+    processLifecycleEvents();
+    images.clearCache();
+    assets.clearCache();
+  }
 }
