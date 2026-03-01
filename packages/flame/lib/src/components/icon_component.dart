@@ -41,6 +41,12 @@ class IconComponent extends PositionComponent with HasPaint {
   /// Whether the icon needs to be re-rasterized on the next [update].
   bool _needsRasterize = false;
 
+  /// Cached source rect (image dimensions), updated when the image changes.
+  Rect _srcRect = Rect.zero;
+
+  /// Cached destination rect (component size), updated via a size listener.
+  Rect _dstRect = Rect.zero;
+
   /// Creates an [IconComponent] that renders [icon] as a Flame component.
   ///
   /// - [icon]: The [IconData] to render (e.g., `Icons.star`).
@@ -67,6 +73,8 @@ class IconComponent extends PositionComponent with HasPaint {
     if (paint != null) {
       this.paint = paint;
     }
+    _dstRect = this.size.toRect();
+    this.size.addListener(_updateDstRect);
   }
 
   /// The icon to render.
@@ -92,8 +100,10 @@ class IconComponent extends PositionComponent with HasPaint {
   @override
   @mustCallSuper
   Future<void> onLoad() async {
+    await super.onLoad();
     if (_icon != null) {
       image = await _rasterizeIcon();
+      _updateSrcRect();
     }
   }
 
@@ -127,13 +137,8 @@ class IconComponent extends PositionComponent with HasPaint {
     }
     canvas.drawImageRect(
       cachedImage,
-      Rect.fromLTWH(
-        0,
-        0,
-        cachedImage.width.toDouble(),
-        cachedImage.height.toDouble(),
-      ),
-      size.toRect(),
+      _srcRect,
+      _dstRect,
       paint,
     );
   }
@@ -142,6 +147,7 @@ class IconComponent extends PositionComponent with HasPaint {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
+    size.removeListener(_updateDstRect);
     image?.dispose();
     image = null;
   }
@@ -200,7 +206,24 @@ class IconComponent extends PositionComponent with HasPaint {
     if (_icon != null) {
       _rasterizeIcon().then((newImage) {
         image = newImage;
+        _updateSrcRect();
       });
     }
+  }
+
+  void _updateSrcRect() {
+    final img = image;
+    if (img != null) {
+      _srcRect = Rect.fromLTWH(
+        0,
+        0,
+        img.width.toDouble(),
+        img.height.toDouble(),
+      );
+    }
+  }
+
+  void _updateDstRect() {
+    _dstRect = size.toRect();
   }
 }
