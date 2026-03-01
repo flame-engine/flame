@@ -6,7 +6,7 @@ also serving as the root of the component tree. If you are familiar with Flutter
 `FlameGame` as the equivalent of `MaterialApp`: the top-level entry point that everything else
 hangs off of.
 
-The base of almost all Flame games is the `FlameGame` class, this is the root of your component
+The base of almost all Flame games is the `FlameGame` class. It is the root of your component
 tree. We refer to this component-based system as the Flame Component System (FCS). Throughout the
 documentation, FCS is used to reference this system.
 
@@ -15,7 +15,7 @@ and calls the `update` and `render` methods of all components that have been add
 
 Components can be added to the `FlameGame` directly in the constructor with the named `children`
 argument, or from anywhere else with the `add`/`addAll` methods. Most of the time however, you want
-to add your children to a `World`, the default world exist under `FlameGame.world` and you add
+to add your children to a `World`, the default world exists under `FlameGame.world` and you add
 components to it just like you would to any other component.
 
 A simple `FlameGame` implementation that adds two components, one in `onLoad` and one directly in
@@ -90,7 +90,7 @@ constructor.
 
 To remove components from the list on a `FlameGame` the `remove` or `removeAll` methods can be used.
 The first can be used if you just want to remove one component, and the second can be used when you
-want to remove a list of components. These methods exist on all `Component`s, including the world.
+want to remove a list of components. These methods exist on all `Component`s, including the `World`.
 
 The `FlameGame` has a built-in `World` called `world` and a `CameraComponent` instance called
 `camera`, you can read more about those in the [Camera section](camera.md).
@@ -102,7 +102,7 @@ The `GameLoop` module is a simple abstraction of the game loop concept. Basicall
 built upon two methods:
 
 - The render method takes the canvas for drawing the current state of the game.
-- The update method receives the delta time in microseconds since the last update and allows you to
+- The update method receives the delta time in seconds since the last update and allows you to
   move to the next state.
 
 The `GameLoop` is used by all of Flame's `Game` implementations.
@@ -111,7 +111,7 @@ The `GameLoop` is used by all of Flame's `Game` implementations.
 ## Resizing
 
 Every time the game needs to be resized, for example when the orientation is changed, `FlameGame`
-will call all of the `Component`s `onGameResize` methods and it will also pass this information to
+will call all of the `Component`'s `onGameResize` methods and it will also pass this information to
 the camera and viewport.
 
 The `FlameGame.camera` controls which point in the coordinate space that should be at the anchor of
@@ -127,11 +127,11 @@ The `FlameGame` lifecycle callbacks, `onLoad`, `render`, etc. are called in the 
 
 When a `FlameGame` is first added to a `GameWidget` the lifecycle methods `onGameResize`, `onLoad`
 and `onMount` will be called in that order. Then `update` and `render` are called in sequence for
-every game tick.  If the `FlameGame` is removed from the `GameWidget`  then `onRemove` is called.
+every game tick. If the `FlameGame` is removed from the `GameWidget` then `onRemove` is called.
 If the `FlameGame` is added to a new `GameWidget` the sequence repeats from `onGameResize`.
 
 ```{note}
-The order of `onGameResize`and `onLoad` are reversed from that of other
+The order of `onGameResize` and `onLoad` are reversed from that of other
 `Component`s. This is to allow game element sizes to be calculated before
 resources are loaded or generated.
 ```
@@ -243,7 +243,7 @@ The `Game` class allows for more freedom of how to implement things, but you
 are also missing out on all of the built-in features in Flame if you use it.
 ```
 
-An example of how a `Game` implementation could look like is:
+An example of what a `Game` implementation could look like:
 
 ```dart
 class MyGameSubClass extends Game {
@@ -279,10 +279,9 @@ A Flame `Game` can be paused and resumed in two ways:
 When pausing a `Game`, the `GameLoop` is effectively paused, meaning that no updates or new renders
 will happen until it is resumed.
 
-While the game is paused, it is possible to advanced it frame by frame using the `stepEngine`
-method.
-It might not be much useful in the final game, but can be very helpful in inspecting game state step
-by step during the development cycle.
+While the game is paused, it is possible to advance it frame by frame using the `stepEngine`
+method. It might not be very useful in the final game, but it can be very helpful for inspecting
+game state step by step during the development cycle.
 
 
 ### Backgrounding

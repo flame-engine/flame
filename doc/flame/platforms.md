@@ -4,26 +4,27 @@ One of Flame's biggest advantages is that it inherits Flutter's cross-platform r
 codebase can produce games for phones, desktops, and the web. This section covers platform
 support details and shows how to deploy your finished game to popular hosting services.
 
-Since Flame runs on top of Flutter, so its supported platforms depend on which platforms that are
+Since Flame runs on top of Flutter, its supported platforms depend on which platforms are
 supported by Flutter.
 
-At the moment, Flame supports web, mobile(Android and iOS) and desktop (Windows, MacOS and Linux).
+At the moment, Flame supports web, mobile (Android and iOS) and desktop (Windows, macOS and Linux).
 
 
 ## Flutter channels
 
-Flame keeps it support on the stable channel. The dev, beta and master channel should work, but we
-don't support them. This means that issues happening outside the stable channel are not a priority.
+Flame keeps its support on the stable channel. The dev, beta and master channels should work,
+but we don't support them. This means that issues happening outside the stable channel are not
+a priority.
 
 
 ## Deploy your game to GitHub Pages
 
-One easy way to deploy your game online, is to use [GitHub Pages](https://pages.github.com/).
+One easy way to deploy your game online is to use [GitHub Pages](https://pages.github.com/).
 It is a cool feature from GitHub, by which you can easily host web content from your repository.
 
 Here we will explain the easiest way to get your game hosted using GitHub pages.
 
-First thing, lets create the branch where your deployed files will live:
+First, let's create the branch where your deployed files will live:
 
 ```shell
 git checkout -b gh-pages
@@ -61,7 +62,7 @@ Be sure to change `NAME_OF_YOUR_REPOSITORY` to the name of your GitHub repositor
 Now, whenever you push something to the `main` branch, the action will run and update your
 deployed game.
 
-The game should be available at an URL like this:
+The game should be available at a URL like this:
 `https://YOUR_GITHUB_USERNAME.github.io/NAME_OF_YOUR_REPOSITORY/`
 
 
@@ -150,10 +151,10 @@ repository.
 When using Flame on the web some methods may not work. For example `Flame.device.setOrientation` and
 `Flame.device.fullScreen` won't work on web, they can be called, but nothing will happen.
 
-Another example: pre caching audio using `flame_audio` package also doesn't work due to Audioplayers
-not supporting it on web. This can be worked around by using the `http` package, and requesting a
-get to the audio file, that will make the browser cache the file producing the same effect as on
-mobile.
+Another example: pre-caching audio using the `flame_audio` package also doesn't work due to
+Audioplayers not supporting it on web. This can be worked around by using the `http` package,
+and requesting a get to the audio file, that will make the browser cache the file producing the
+same effect as on mobile.
 
 If you want to create instances of `ui.Image` on the web you can use our
 `Flame.images.decodeImageFromPixels` method. This wraps the `decodeImageFromPixels` from the `ui`

@@ -64,7 +64,7 @@ class PauseRoute extends Route { ... }
 Use `hide Route` if any of your imported packages export
 another class called `Route`
 
-eg: `import 'package:flutter/material.dart' hide Route;`
+e.g.: `import 'package:flutter/material.dart' hide Route;`
 ```
 
 
@@ -76,13 +76,13 @@ eg: `import 'package:flutter/material.dart' hide Route;`
 The **Route** component holds information about the content of a particular page. `Route`s are
 mounted as children to the `RouterComponent`.
 
-The main property of a `Route` is its `builder` -- the function that creates the component with
+The main property of a `Route` is its `builder`, the function that creates the component with
 the content of its page.
 
-In addition, the routes can be either transparent or opaque (default). An opaque prevents the route
-below it from rendering or receiving pointer events, a transparent route doesn't. As a rule of
-thumb, declare the route opaque if it is full-screen, and transparent if it is supposed to cover
-only a part of the screen.
+In addition, the routes can be either transparent or opaque (default). An opaque route prevents
+the route below it from rendering or receiving pointer events, while a transparent route does
+not. As a rule of thumb, declare the route opaque if it is full-screen, and transparent if it
+is supposed to cover only a part of the screen.
 
 By default, routes maintain the state of the page component after being popped from the stack
 and the `builder` function is only called the first time a route is activated. Setting
@@ -160,7 +160,7 @@ final router = RouterComponent(
 Overlays that were defined within the `GameWidget` don't even need to be declared within the routes
 map beforehand: the `RouterComponent.pushOverlay()` method can do it for you. Once an overlay route
 was registered, it can be activated either via the regular `.pushNamed()` method, or via the
-`.pushOverlay()` -- the two methods will do exactly the same, though you can use the second one to
+`.pushOverlay()`. The two methods will do exactly the same, though you can use the second one to
 make it more clear in your code that an overlay is being added instead of a regular route.
 
 The current overlay can be replaced using `pushReplacementOverlay`.  This method executes

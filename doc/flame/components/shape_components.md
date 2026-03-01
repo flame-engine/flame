@@ -21,7 +21,7 @@ with the collision detection system, where you want to use the
 A `PolygonComponent` is created by giving it a list of points in the constructor, called vertices.
 This list will be transformed into a polygon with a size, which can still be scaled and rotated.
 
-For example, this would create a square going from (50, 50) to (100, 100), with it's center in
+For example, this would create a square going from (50, 50) to (100, 100), with its center in
 (75, 75):
 
 ```dart
@@ -38,7 +38,7 @@ void main() {
 A `PolygonComponent` can also be created with a list of relative vertices, which are points defined
 in relation to the given size, most often the size of the intended parent.
 
-For example you could create a diamond shapes polygon like this:
+For example you could create a diamond-shaped polygon like this:
 
 ```dart
 void main() {
@@ -54,7 +54,7 @@ void main() {
 }
 ```
 
-The vertices in the example defines percentages of the length from the center to the edge of the
+The vertices in the example define percentages of the length from the center to the edge of the
 screen in both x and y axis, so for our first item in our list (`Vector2(0.0, -1.0)`) we are
 pointing on the middle of the top wall of the bounding box, since the coordinate system here is
 defined from
@@ -136,7 +136,7 @@ void main() {
 
 ## CircleComponent
 
-If you know how long your circle's position and/or how long the radius is going to be from the start
+If you know your circle's position and/or how long the radius is going to be from the start
 you can use the optional arguments `radius` and `position` to set those.
 
 The following would create a `CircleComponent` with its center in `(100, 100)` with a radius of 5,
@@ -149,7 +149,7 @@ void main() {
 ```
 
 When creating a `CircleComponent` with the `relative` constructor you can define how long the
-radius is in comparison to the shortest edge of the of the bounding box defined by `size`.
+radius is in comparison to the shortest edge of the bounding box defined by `size`.
 
 The following example would result in a `CircleComponent` that defines a circle with a radius of 40
 (a diameter of 80).

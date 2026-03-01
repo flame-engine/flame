@@ -179,8 +179,8 @@ final robot = SpriteAnimationGroupComponent<RobotState>(
 robot.current = RobotState.running;
 ```
 
-As this component works with multiple `SpriteAnimation`s, naturally it needs equal number of
-animation tickers to make all those animation tick. Use `animationsTickers` getter to access a map
+As this component works with multiple `SpriteAnimation`s, naturally it needs an equal number of
+animation tickers to make all those animations tick. Use `animationsTickers` getter to access a map
 containing tickers for each animation state. This can be useful if you want to register callbacks
 for `onStart`, `onComplete` and `onFrame`.
 

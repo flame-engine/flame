@@ -46,7 +46,7 @@ statically rendered below the world.
 
 This component should be used to host all other components that comprise your
 game world. The main property of the `World` class is that it does not render
-through traditional means -- instead it is rendered by one or more
+through traditional means; instead it is rendered by one or more
 [CameraComponent](#cameracomponent)s to "look at" the world. In the `FlameGame` class there is
 one `World` called `world` which is added by default and paired together with
 the default `CameraComponent` called `camera`.
@@ -89,7 +89,7 @@ which is paired together with the default `world`, so you don't need to create
 or add your own `CameraComponent` if your game doesn't need to.
 
 A `CameraComponent` has two other components inside: a [Viewport](#viewport) and a
-[Viewfinder](#viewfinder), those components are always children of a camera.
+[Viewfinder](#viewfinder). Those components are always children of a camera.
 
 The `FlameGame` class has a `camera` field in its constructor, so you can set
 what type of default camera that you want, like this camera with a
@@ -155,14 +155,14 @@ components.
 
 The following viewports are available:
 
-- `MaxViewport` (default) -- this viewport expands to the maximum size allowed
+- `MaxViewport` (default): this viewport expands to the maximum size allowed
     by the game, i.e. it will be equal to the size of the game canvas.
-- `FixedResolutionViewport` -- keeps the resolution and aspect ratio fixed, with black bars on the
+- `FixedResolutionViewport`: keeps the resolution and aspect ratio fixed, with black bars on the
     sides if it doesn't match the aspect ratio.
-- `FixedSizeViewport` -- a simple rectangular viewport with predefined size.
-- `FixedAspectRatioViewport` -- a rectangular viewport which expands to fit
+- `FixedSizeViewport`: a simple rectangular viewport with predefined size.
+- `FixedAspectRatioViewport`: a rectangular viewport which expands to fit
     into the game canvas, but preserving its aspect ratio.
-- `CircularViewport` -- a viewport in the shape of a circle, fixed size.
+- `CircularViewport`: a viewport in the shape of a circle, fixed size.
 
 
 If you add children to the `Viewport` they will appear as static HUDs in front of the world.

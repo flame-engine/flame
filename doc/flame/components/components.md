@@ -55,7 +55,7 @@ The `onParentResize` method is similar: it is also called when the component is 
 component tree, and also whenever the parent of the current component changes its size.
 
 The `onRemove` method can be overridden to run code before the component is removed from the game.
-It is only run once even if the component is removed both by using the parents remove method and
+It is only run once even if the component is removed both by using the parent's remove method and
 the `Component` remove method.
 
 The `onLoad` method can be overridden to run asynchronous initialization code for the component,
@@ -63,7 +63,7 @@ like loading an image for example. This method is executed before `onGameResize`
 `onMount`. This method is guaranteed to execute only once during the lifetime of the component, so
 you can think of it as an "asynchronous constructor".
 
-The `onMount` method runs every time when the component is mounted into a game tree. This means that
+The `onMount` method runs every time the component is mounted into a game tree. This means that
 you should not initialize `late final` variables here, since this method might run several times
 throughout the component's lifetime. This method will only run if the parent is already mounted.
 If the parent is not mounted yet, then this method will wait in a queue (this will have no effect
@@ -71,10 +71,10 @@ on the rest of the game engine).
 
 The `onChildrenChanged` method can be overridden if it's needed to detect changes in a parent's
 children. This method is called whenever a child is added to or removed from a parent (this includes
-if a child is changing its parent). Its parameters contain the targeting child and the type of
+if a child is changing its parent). Its parameters contain the target child and the type of
 change it went through (`added` or `removed`).
 
-A component lifecycle state can be checked by a series of getters:
+A component's lifecycle state can be checked by a series of getters:
 
 - `isLoaded`: Returns a bool with the current loaded state.
 - `loaded`: Returns a future that will complete once the component has finished loading.
@@ -138,7 +138,7 @@ for example `PositionComponent`.
 When you have child components on a component every time the parent is updated and rendered, all the
 children are rendered and updated with the same conditions.
 
-Here's an example where visibility of two components are handled by a wrapper:
+Here's an example where the visibility of two components is handled by a wrapper:
 
 ```dart
 class GameOverPanel extends PositionComponent {
@@ -166,7 +166,7 @@ class GameOverPanel extends PositionComponent {
 }
 ```
 
-There are two methods for adding children components to your component. First,
+There are two methods for adding child components to your component. First,
 you have methods `add()`, `addAll()`, and `addToParent()`, which can be used
 at any time during the game. Traditionally, children will be created and added
 from the component's `onLoad()` method, but it is also common to add new
@@ -197,7 +197,7 @@ The two approaches can be combined freely: the children specified within the
 constructor will be added first, and then any additional child components
 after.
 
-Note that the children added via either methods are only guaranteed to be
+Note that the children added via either method are only guaranteed to be
 available eventually: after they are loaded and mounted. We can only assure
 that they will appear in the children list in the same order as they were
 scheduled for addition.
@@ -227,7 +227,7 @@ ancestor of the correct type an assertion error will be thrown.
 
 ### Ensuring a component has a given parent
 
-When a component requires to be added to a specific parent type the
+When a component needs to be added to a specific parent type, the
 `ParentIsA` mixin can be used to enforce a strongly typed parent.
 
 Example:
@@ -248,8 +248,8 @@ an assertion error will be thrown.
 
 ### Ensuring a component has a given ancestor
 
-When a component requires to have a specific ancestor type somewhere in the
-component tree, `HasAncestor` mixin can be used to enforce that relationship.
+When a component needs to have a specific ancestor type somewhere in the
+component tree, the `HasAncestor` mixin can be used to enforce that relationship.
 
 The mixin exposes the `ancestor` field that will be of the given type.
 
@@ -322,7 +322,7 @@ The children that have been added to a component live in a `QueryableOrderedSet`
 used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
 queries will have to be registered with `children.register` before a query can be used.
 
-If you know in compile time that you later will run a query of a specific type it is recommended to
+If you know at compile time that you later will run a query of a specific type it is recommended to
 register the query, no matter if the `strictMode` is set to `true` or `false`, since there are some
 performance benefits to gain from it. The `register` call is usually done in `onLoad`.
 
@@ -404,7 +404,7 @@ These behaviors are not always desirable.
 An alternative method to show and hide a component is to use the `HasVisibility` mixin, which may
 be used on any class that inherits from `Component`. This mixin introduces the `isVisible` property.
 Simply set `isVisible` to `false` to hide the component, and `true` to show it again, without
-removing it from the tree. This affects the visibility of the component and all it's descendants
+removing it from the tree. This affects the visibility of the component and all its descendants
 (children).
 
 ```dart
@@ -449,7 +449,7 @@ class MyComponent extends PositionComponent with HasVisibility {
 
 ### Render Contexts
 
-If you want a parent component to pass render-specific properties down its children tree, you
+If you want a parent component to pass render-specific properties down to its children tree, you
 can override the `renderContext` property on the parent component. You can return a custom
 class that inherits from `RenderContext`, and then use `findRenderContext` on the children
 while rendering. Render Contexts are stored as a stack and propagated whenever the render
@@ -486,7 +486,7 @@ context type for each component).
 
 ## Effects
 
-Flame provides a set of effects that can be applied to a certain type of components, these effects
+Flame provides a set of effects that can be applied to a certain type of components. These effects
 can be used to animate some properties of your components, like position or dimensions.
 You can check the list of those effects [here](../effects/effects.md).
 

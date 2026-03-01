@@ -6,7 +6,7 @@ sprites, animations, shapes, and your own custom components. It mirrors the conc
 [`Positioned`](https://api.flutter.dev/flutter/widgets/Positioned-class.html) widget in Flutter, but
 in a game-oriented coordinate system.
 
-This class represents a positioned object on the screen, being a floating rectangle, a rotating
+This class represents a positioned object on the screen, be it a floating rectangle, a rotating
 sprite, or anything else with position and size. It can also represent a group of positioned
 components if children are added to it.
 
@@ -30,7 +30,7 @@ The `size` is *not* in relation to the parent of the component.
 
 The `scale` is how much the component and its children should be scaled. Since it is represented
 by a `Vector2`, you can scale in a uniform way by changing `x` and `y` with the same amount, or in a
-non-uniform way, by change `x` or `y` by different amounts.
+non-uniform way, by changing `x` or `y` by different amounts.
 
 
 ## Angle
@@ -45,12 +45,12 @@ The `nativeAngle` is an angle in radians, measured clockwise, representing the d
 of the component. It can be used to define the direction in which the component is facing when
 [angle](#angle) is zero.
 
-It is specially helpful when making a sprite based component look at a specific target. If the
+It is especially helpful when making a sprite based component look at a specific target. If the
 original image of the sprite is not facing in the up/north direction, the calculated angle to make
 the component look at the target will need some offset to make it look correct. For such cases,
-`nativeAngle` can be used to let the component know what direction the original image is faces.
+`nativeAngle` can be used to let the component know what direction the original image is facing.
 
-An example could be a bullet image pointing in east direction. In this case `nativeAngle` can be set
+An example could be a bullet image pointing in the east direction. In this case `nativeAngle` can be set
 to pi/2 radians. Following are some common directions and their corresponding native angle values.
 
 Direction | Native Angle | In degrees
@@ -80,9 +80,9 @@ rotated around the anchor, so in this case around the center of the component. Y
 as the point within the component by which Flame "grabs" it.
 
 When `position` or `absolutePosition` of a component is queried, the returned coordinates are that
-of the `anchor` of the component. In case if you want to find the position of a specific anchor
+of the `anchor` of the component. In case you want to find the position of a specific anchor
 point of a component which is not actually the `anchor` of that component, you can use the
-`positionOfAnchor` and `absolutePositionOfAnchor` method.
+`positionOfAnchor` and `absolutePositionOfAnchor` methods.
 
 ```dart
 final comp = PositionComponent(
@@ -111,7 +111,7 @@ corner of its parent component, irrespective of their
 ## PositionComponent children
 
 All children of the `PositionComponent` will be transformed in relation to the parent, which means
-that the `position`, `angle` and `scale` will be relative to the parents state.
+that the `position`, `angle` and `scale` will be relative to the parent's state.
 So if you, for example, wanted to position a child in the center of the parent you would do this:
 
 ```dart
@@ -144,7 +144,7 @@ component should be rendered. To handle where and how your component should be r
 If you want to know where on the screen the bounding box of the component is you can use the
 `toRect` method.
 
-In the event that you want to change the direction of your components rendering, you can also use
+In the event that you want to change the direction of your component's rendering, you can also use
 `flipHorizontally()` and `flipVertically()` to flip anything drawn to canvas during
 `render(Canvas canvas)`, around the anchor point. These methods are available on all
 `PositionComponent` objects, and are especially useful on `SpriteComponent` and

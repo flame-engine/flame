@@ -10,10 +10,10 @@ will be handled correctly by Flame, and you can even keep track of the events by
 For those components that you want to respond to drags, add the `DragCallbacks` mixin.
 
 - This mixin adds four overridable methods to your component: `onDragStart`, `onDragUpdate`,
-  `onDragEnd`, and `onDragCancel`. By default, these methods do nothing -- they need to be
-  overridden in order to perform any function.
+  `onDragEnd`, and `onDragCancel`. By default, these methods do nothing; they need to be overridden
+  in order to perform any function.
 - In addition, the component must implement the `containsLocalPoint()` method (already implemented
-  in `PositionComponent`, so most of the time you don't need to do anything here) -- this method
+  in `PositionComponent`, so most of the time you don't need to do anything here). This method
   allows Flame to know whether the event occurred within the component or not.
 
 ```dart
@@ -71,9 +71,9 @@ if the user moves their finger away from the component, the property `event.loca
 return a point whose coordinates are NaNs. Likewise, the `event.renderingTrace` in this case will be
 empty. However, the `canvasPosition` and `devicePosition` properties of the event will be valid.
 
-In addition, the `DragUpdateEvent` will contain `delta` -- the amount the finger has moved since the
-previous `onDragUpdate`, or since the `onDragStart` if this is the first drag-update after a drag-
-start.
+In addition, the `DragUpdateEvent` will contain `delta`, the amount the finger has moved since
+the previous `onDragUpdate`, or since the `onDragStart` if this is the first drag-update after
+a drag-start.
 
 The `event.timestamp` property measures the time elapsed since the beginning of the drag. It can be
 used, for example, to compute the speed of the movement.

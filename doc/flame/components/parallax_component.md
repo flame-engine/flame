@@ -48,7 +48,7 @@ This creates a static background. If you want a moving parallax (which is the wh
 parallax), you can do it in a few different ways depending on how fine-grained you want to set the
 settings for each layer.
 
-They simplest way is to set the named optional parameters `baseVelocity` and
+The simplest way is to set the named optional parameters `baseVelocity` and
 `velocityMultiplierDelta` in the `load` helper function. For example if you want to move your
 background images along the X-axis with a faster speed the "closer" the image is:
 
@@ -120,7 +120,7 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 );
 ```
 
-- The stars image in this example will be repeatedly drawn in both axis, align in the center and be
+- The stars image in this example will be repeatedly drawn in both axes, align in the center and be
  scaled to fill the screen width.
 - The planets image will be repeated in Y-axis, aligned to the bottom left of the screen and not be
  scaled.
@@ -129,18 +129,18 @@ final parallaxComponent = ParallaxComponent.fromParallax(
 
 Once you are done setting up your `ParallaxComponent`, add it to the game like with any other
 component (`game.add(parallaxComponent`).
-Also, don't forget to add you images to the `pubspec.yaml` file as assets or they wont be found.
+Also, don't forget to add your images to the `pubspec.yaml` file as assets or they won't be found.
 
-The `Parallax` file contains an extension of the game which adds `loadParallax`, `loadParallaxLayer`
-, `loadParallaxImage` and `loadParallaxAnimation` so that it automatically uses your game's image
-cache instead of the global one. The same goes for the `ParallaxComponent` file, but that provides
-`loadParallaxComponent`.
+The `Parallax` file contains an extension of the game which adds `loadParallax`,
+`loadParallaxLayer`, `loadParallaxImage` and `loadParallaxAnimation` so that it automatically
+uses your game's image cache instead of the global one. The same goes for the `ParallaxComponent`
+file, but that provides `loadParallaxComponent`.
 
 If you want a fullscreen `ParallaxComponent` simply omit the `size` argument and it will take the
 size of the game, it will also resize to fullscreen when the game changes size or orientation.
 
 Flame provides two kinds of `ParallaxRenderer`: `ParallaxImage` and `ParallaxAnimation`,
-`ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as it's name implies, an
+`ParallaxImage` is a static image renderer and `ParallaxAnimation` is, as its name implies, an
 animation and frame based renderer.
 It is also possible to create custom renderers by extending the `ParallaxRenderer` class.
 

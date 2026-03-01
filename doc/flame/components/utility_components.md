@@ -24,7 +24,7 @@ within the defined circle:
 The component supports two types of factories. The `factory` returns a single component and the
 `multiFactory` returns a list of components that are added in a single step.
 
-The factory functions takes an `int` as an argument, which is the number of components that have
+The factory functions take an `int` as an argument, which is the number of components that have
 been spawned, so if for example 4 components have been spawned already the 5th call of the factory
 method will be called with the `amount=4`, since the counting starts at 0 for the first call.
 
@@ -62,7 +62,7 @@ SpawnComponent.periodRange(
 );
 ```
 
-If you want to set the position yourself within the `factory` function, you can use set
+If you want to set the position yourself within the `factory` function, you can set
 `selfPositioning = true` in the constructors and you will be able to set the positions yourself and
 ignore the `area` argument.
 
@@ -81,7 +81,7 @@ SpawnComponent(
 **Note**: To use SVG with Flame, use the [`flame_svg`](https://github.com/flame-engine/flame_svg)
 package.
 
-This component uses an instance of `Svg` class to represent a Component that has a svg that is
+This component uses an instance of `Svg` class to represent a Component that has an SVG that is
 rendered in the game:
 
 ```dart
@@ -125,7 +125,7 @@ the height colored in the darker tone:
 
 ![An example of how to determine the tileHeight](../../images/tile-height-example.png)
 
-This is an example of how a quarter-length map looks like:
+This is an example of what a quarter-length map looks like:
 
 ![An example of a isometric map with selector](../../images/isometric.png)
 
@@ -139,7 +139,7 @@ and a live version can be seen [here](https://examples.flame-engine.org/#/Render
 
 A Nine Tile Box is a rectangle drawn using a grid sprite.
 
-The grid sprite is a 3x3 grid and with 9 blocks, representing the 4 corners, the 4 sides and the
+The grid sprite is a 3x3 grid with 9 blocks, representing the 4 corners, the 4 sides and the
 middle.
 
 The corners are drawn at the same size, the sides are stretched on the side direction and the middle
@@ -158,7 +158,7 @@ for details on how to use it.
 A `CustomPainter` is a Flutter class used with the `CustomPaint` widget to render custom
 shapes inside a Flutter application.
 
-Flame provides a component that can render a `CustomPainter` called `CustomPainterComponent`, it
+Flame provides a component that can render a `CustomPainter` called `CustomPainterComponent`. It
 receives a custom painter and renders it on the game canvas.
 
 This can be used for sharing custom rendering logic between your Flame game, and your Flutter
@@ -179,7 +179,7 @@ that Flame provides the `ComponentsNotifier`, which is an implementation of a
 `ChangeNotifier` that notifies listeners every time a component is added, removed or manually
 changed.
 
-For example, lets say that we want to show a game over text when the player's lives reach zero.
+For example, let's say that we want to show a game over text when the player's lives reach zero.
 
 To make the component automatically report when new instances are added or removed, the `Notifier`
 mixin can be applied to the component class:
@@ -213,9 +213,9 @@ class MyGame extends FlameGame {
 }
 ```
 
-A `Notifier` component can also manually notify its listeners that something changed. Lets expand
-the example above to make a hud component to blink when the player has half of their health. In
-order to do so, we need that the `Player` component notify a change manually, example:
+A `Notifier` component can also manually notify its listeners that something changed. Let's expand
+the example above to make a HUD component blink when the player has half of their health. In
+order to do so, we need the `Player` component to notify a change manually:
 
 ```dart
 class Player extends SpriteComponent with Notifier {
@@ -268,9 +268,9 @@ if the component itself or any child of the `ClipComponent` renders outside of t
 A `ClipComponent` receives a builder function that should return the `Shape` that will define the
 clipped area, based on its size.
 
-To make it easier to use that component, there are three factories that offers common shapes:
+To make it easier to use that component, there are three factories that offer common shapes:
 
-- `ClipComponent.rectangle`: Clips the area in the form a rectangle based on its size.
+- `ClipComponent.rectangle`: Clips the area in the form of a rectangle based on its size.
 - `ClipComponent.circle`: Clips the area in the form of a circle based on its size.
 - `ClipComponent.polygon`:  Clips the area in the form of a polygon based on the points received
 in the constructor.
