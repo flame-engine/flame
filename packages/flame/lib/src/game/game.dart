@@ -246,6 +246,12 @@ abstract mixin class Game {
   /// do cleanups to avoid memory leaks.
   void onRemove() {}
 
+  /// Called when Flutter's hot reload is triggered.
+  ///
+  /// [FlameGame] overrides this to propagate the notification
+  /// to all components in the component tree.
+  void onHotReload() {}
+
   /// Called when the GameWidget is disposed by Flutter.
   void onDispose() {}
 

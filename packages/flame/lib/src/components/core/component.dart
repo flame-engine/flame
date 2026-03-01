@@ -958,6 +958,28 @@ class Component {
     }
   }
 
+  /// Called when Flutter's hot reload is triggered.
+  ///
+  /// Override this method to reload assets, recalculate cached values,
+  /// or perform other actions in response to hot reload.
+  ///
+  /// This is only called in debug mode.
+  @mustCallSuper
+  void onHotReload() => handleHotReload();
+
+  @mustCallSuper
+  @internal
+  void handleHotReload() {
+    final children = _children;
+    if (children != null) {
+      for (final child in children) {
+        if (child.isLoading || child.isLoaded) {
+          child.onHotReload();
+        }
+      }
+    }
+  }
+
   FutureOr<void> _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);

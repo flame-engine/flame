@@ -197,6 +197,19 @@ class ComponentTreeRoot extends Component {
   }
 
   @mustCallSuper
+  @override
+  @internal
+  void handleHotReload() {
+    super.handleHotReload();
+    for (final event in queue) {
+      if ((event.kind == LifecycleEventKind.add) &&
+          (event.child!.isLoading || event.child!.isLoaded)) {
+        event.child!.onHotReload();
+      }
+    }
+  }
+
+  @mustCallSuper
   @internal
   void registerKey(ComponentKey key, Component component) {
     assert(!_index.containsKey(key), 'Key $key is already registered');
