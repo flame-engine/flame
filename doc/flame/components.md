@@ -862,6 +862,7 @@ is rasterized to an image once during `onLoad()` and then drawn each frame using
 image rather than as text, all paint-based effects work out of the box — including `tint()`,
 `setOpacity()`, `ColorEffect`, `OpacityEffect`, `GlowEffect`, and custom `ColorFilter`s.
 
+
 ### Basic usage
 
 ```dart
@@ -880,6 +881,7 @@ class MyGame extends FlameGame {
   }
 }
 ```
+
 
 ### Tinting and effects
 
@@ -908,6 +910,7 @@ final icon = IconComponent(
 );
 ```
 
+
 ### Constructor parameters
 
 - `icon` — The `IconData` to render (e.g., `Icons.star`, `Icons.favorite`).
@@ -916,6 +919,7 @@ final icon = IconComponent(
 - `size` — The display size of the component. Defaults to `Vector2.all(iconSize)` if not provided.
 - `paint` — Optional `Paint` for rendering effects.
 - All standard `PositionComponent` parameters (`position`, `scale`, `angle`, `anchor`, etc.).
+
 
 ### Changing the icon at runtime
 
