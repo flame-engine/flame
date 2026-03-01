@@ -34,6 +34,7 @@ multitap # support from a device to recognize many taps at the same time
 orientable # can be oriented
 pathfinding # computer algorithm to find the best path through a world or maze
 perlin # Perlin Noise, a type of noise generating algorithm
+platformers # plural of platformer, a genre of video game
 quadtree # a tree-based data structure where each node has exactly 4 children
 rasterizing
 respawn # when the player character dies and is brought back after some time and penalties
@@ -41,6 +42,7 @@ respawned # past tense of respawn
 retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
+scrollers # plural of scroller, a genre of video game
 scos # cosine of a rotation multiplied by the scale factor
 shaderbundle # a file extension used to bundle shaders for GLSL
 slerp # short for spherical linear interpolation, a method to interpolate quaternions
