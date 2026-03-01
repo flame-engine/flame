@@ -228,9 +228,9 @@ Example:
 class PlayerComponent extends SpriteGroupComponent<ButtonState>
     with HasGameReference<SpriteGroupExample>, TapCallbacks {
   @override
-  Future<void>? onLoad() async {
-    final pressedSprite = await gameRef.loadSprite(/* omitted */);
-    final unpressedSprite = await gameRef.loadSprite(/* omitted */);
+  Future<void> onLoad() async {
+    final pressedSprite = await game.loadSprite(/* omitted */);
+    final unpressedSprite = await game.loadSprite(/* omitted */);
 
     sprites = {
       ButtonState.pressed: pressedSprite,

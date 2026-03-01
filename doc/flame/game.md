@@ -298,8 +298,7 @@ class MyGame extends FlameGame {
 }
 ```
 
-On the current Flutter stable (3.13), this flag is effectively ignored on
-non-mobile platforms including the web.
+This flag currently only works on Android and iOS.
 
 
 ## HasPerformanceTracker mixin

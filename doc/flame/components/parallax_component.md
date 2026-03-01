@@ -29,7 +29,7 @@ A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 class MyParallaxComponent extends ParallaxComponent<MyGame> {
   @override
   Future<void> onLoad() async {
-    parallax = await gameRef.loadParallax([
+    parallax = await game.loadParallax([
       ParallaxImageData('bg.png'),
       ParallaxImageData('trees.png'),
     ]);

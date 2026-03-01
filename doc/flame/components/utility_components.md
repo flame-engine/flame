@@ -239,7 +239,7 @@ class Hud extends PositionComponent with HasGameReference {
 
   @override
   void onLoad() {
-    final playerNotifier = gameRef.componentsNotifier<Player>()
+    final playerNotifier = game.componentsNotifier<Player>()
         ..addListener(() {
           final player = playerNotifier.single;
           if (player != null) {
