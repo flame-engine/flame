@@ -63,6 +63,27 @@ class ComponentTreeRoot extends Component {
     }
   }
 
+  /// Finds all children in [candidates] that have a pending REMOVE event,
+  /// cancels those events, and adds the matched children to [result].
+  ///
+  /// Scans the queue once in O(Q) time. Safe to call during queue iteration.
+  @internal
+  void cancelQueuedRemoves(
+    List<Component> candidates,
+    Set<Component> result,
+  ) {
+    final candidateSet = candidates.toSet();
+    queue.forEachWhere(
+      (event) =>
+          event.kind == LifecycleEventKind.remove &&
+          candidateSet.contains(event.child),
+      (event) {
+        result.add(event.child!);
+        event.kind = LifecycleEventKind.unknown;
+      },
+    );
+  }
+
   @internal
   void enqueueMove(Component child, Component newParent) {
     queue.addLast()

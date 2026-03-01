@@ -187,6 +187,28 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
     }
   }
 
+  /// Calls [action] for each element matching [test] by directly traversing
+  /// the internal storage. Unlike iteration, this can be safely called while
+  /// another iteration is in progress.
+  void forEachWhere(bool Function(T) test, void Function(T) action) {
+    if (isEmpty) {
+      return;
+    }
+    var i = _startIndex;
+    while (true) {
+      if (!_indicesToRemove.contains(i) && test(_elements[i])) {
+        action(_elements[i]);
+      }
+      if (i == _endIndex) {
+        break;
+      }
+      i += 1;
+      if (i == _elements.length) {
+        i = 0;
+      }
+    }
+  }
+
   @override
   Iterator<T> get iterator {
     _garbageCollect();
