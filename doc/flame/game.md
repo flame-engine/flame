@@ -120,6 +120,7 @@ Clean-up of children and resources in a `FlameGame` is not done automatically
 and must be explicitly added to the `onRemove` call.
 ```
 
+
 ### dispose()
 
 As a convenience, `FlameGame` provides a `dispose()` method that handles all of the common cleanup
