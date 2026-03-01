@@ -1007,9 +1007,27 @@ void main() {
       );
 
       testWithFlameGame(
-        'A removed child should be able to be removed from onRemove',
+        'removeAll(children) in onRemove detaches children',
         (game) async {
           final parent = _RemoveAllChildrenComponent();
+          final child = _LifecycleComponent('child')..addToParent(parent);
+          await game.world.add(parent);
+          await game.ready();
+          parent.removeFromParent();
+          game.update(0);
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(child.parent, isNull);
+          expect(parent.children.length, 0);
+          expect(parent.parent, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'children retain parent when ancestor is removed without explicit '
+        'child removal',
+        (game) async {
+          final parent = Component();
           final child = _LifecycleComponent('child')..addToParent(parent);
           await game.world.add(parent);
           await game.ready();
@@ -2000,7 +2018,7 @@ class _ComponentWithChildrenRemoveAll extends Component {
 class _RemoveAllChildrenComponent extends Component {
   @override
   void onRemove() {
-    super.onMount();
+    super.onRemove();
     removeAll(children);
   }
 }

@@ -743,6 +743,13 @@ class Component {
       } else if (!child.isRemoved) {
         root.dequeueAdd(child, this);
         child._parent = null;
+      } else if (isRemoving) {
+        // This parent is being removed from the tree, and the child was
+        // already marked as removed during ancestor removal propagation.
+        // The child is now being explicitly removed by user code (e.g.
+        // via removeAll(children) in onRemove), so detach it.
+        _internalChildren.remove(child);
+        child._parent = null;
       }
     } else {
       _children?.remove(child);
