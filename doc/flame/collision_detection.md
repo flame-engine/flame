@@ -274,20 +274,20 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `PolygonHitbox` has the same constructors as the [](components/shape_components.md#polygoncomponent), see that
-section for documentation regarding those.
+The `PolygonHitbox` has the same constructors as the [](components/shape_components.md#polygoncomponent),
+see that section for documentation regarding those.
 
 
 ### RectangleHitbox
 
-The `RectangleHitbox` has the same constructors as the [](components/shape_components.md#rectanglecomponent), see
-that section for documentation regarding those.
+The `RectangleHitbox` has the same constructors as the [](components/shape_components.md#rectanglecomponent),
+see that section for documentation regarding those.
 
 
 ### CircleHitbox
 
-The `CircleHitbox` has the same constructors as the [](components/shape_components.md#circlecomponent), see that
-section for documentation regarding those.
+The `CircleHitbox` has the same constructors as the [](components/shape_components.md#circlecomponent),
+see that section for documentation regarding those.
 
 
 ## ScreenHitbox

@@ -50,8 +50,9 @@ original image of the sprite is not facing in the up/north direction, the calcul
 the component look at the target will need some offset to make it look correct. For such cases,
 `nativeAngle` can be used to let the component know what direction the original image is facing.
 
-An example could be a bullet image pointing in the east direction. In this case `nativeAngle` can be set
-to pi/2 radians. Following are some common directions and their corresponding native angle values.
+An example could be a bullet image pointing in the east direction. In this case `nativeAngle` can
+be set to pi/2 radians. Following are some common directions and their corresponding native
+angle values.
 
 Direction | Native Angle | In degrees
 ----------|--------------|-------------
