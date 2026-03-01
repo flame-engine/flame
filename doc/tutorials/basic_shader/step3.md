@@ -3,23 +3,22 @@
 
 ## Considerations
 
-In this section we will create the fragment (pixel) shader program which runs
-on the GPU, then add it as a resource.
+In this section we will create the fragment (pixel) shader program which runs on the GPU, then add
+it as a resource.
 
-It is important to note, we are going to program the GPU, so this code will
-need a little bit of different thinking from what we did before.
+It is important to note, we are going to program the GPU, so this code will need a little bit of
+different thinking from what we did before.
 
 ```{note}
-The fragment shader runs for each pixel. Be mindful of branching and looping as
-operations scale linearly with pixel count and loop iterations per frame.
+The fragment shader runs for each pixel. Be mindful of branching and looping as operations scale
+linearly with pixel count and loop iterations per frame.
 ```
 
 ```{note}
-Shader optimization is out of the scope of this tutorial.
-But there are guards to escape as early as possible.
+Shader optimization is out of the scope of this tutorial. But there are guards to escape as early
+as possible.
 
-Instead of square root, it would be a better solution to compare squared
-values only.
+Instead of square root, it would be a better solution to compare squared values only.
 ```
 
 Everything is ready to create the GLSL based shader.
@@ -93,25 +92,23 @@ void main() {
 }
 ```
 
-*So.. what does this shader do?*
-Grabbing each transparent pixel and checking: is it next to an opaque pixel?
-If yes, then color it as the outline color (passed in as a uniform variable),
-else it will be full transparent.
+*So.. what does this shader do?* Grabbing each transparent pixel and checking: is it next to an
+opaque pixel? If yes, then color it as the outline color (passed in as a uniform variable), else it
+will be full transparent.
 
-That is why the transparency of the `.png` image was important in the
-beginning.
+That is why the transparency of the `.png` image was important in the beginning.
 
 ```{note}
-The loop of a GLSL shader accepts only a compile time constant.
-So the outline width uniform cannot be used as the loop bound. This means
-`MAX_SAMPLE_DISTANCE` should be set accordingly in the shader code.
+The loop of a GLSL shader accepts only a compile time constant. So the outline width uniform
+cannot be used as the loop bound. This means `MAX_SAMPLE_DISTANCE` should be set accordingly in
+the shader code.
 ```
 
 
 ## Shader resource
 
-To let Flutter know about this shader asset we have to add
-it to the `pubspec.yaml` file before compilation.
+To let Flutter know about this shader asset we have to add it to the `pubspec.yaml` file before
+compilation.
 
 Open the `pubspec.yaml` and write the following lines under what we already added:
 
@@ -123,19 +120,16 @@ flutter:
     - assets/shaders/outline.frag
 ```
 
-Save it and let the automatic `pub get` command run.
-Now the resource will be loaded when the project is next compiled.
+Save it and let the automatic `pub get` command run. Now the resource will be loaded when the
+project is next compiled.
 
 Run the application.
 
-*Voila!*
-You should see two sprites in the window.
-The left is without an outline, the right one is with a colored outline from
-the shader.
+*Voila!* You should see two sprites in the window. The left is without an outline, the right one
+is with a colored outline from the shader.
 
 ![Image of the reference and the shader](../../images/tutorials/basic_shader/final_result.png)
 
-We are done with the basic shader tutorial.
-*Cool!*
+We are done with the basic shader tutorial. *Cool!*
 
 It's time for you to experiment!

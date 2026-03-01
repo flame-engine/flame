@@ -1,14 +1,13 @@
 # 4. User Input
 
-In this section we will add a Flame `mixin` to handle some mouse hover events
-and change the underlying shader behavior.
+In this section we will add a Flame `mixin` to handle some mouse hover events and change the
+underlying shader behavior.
 
 
 ## Event handling
 
-Open the `sword_component.dart` file or where your
-`PostProcessComponent` is located.
-Add the `HoverCallbacks` mixin to the class, to have something like this:
+Open the `sword_component.dart` file or where your `PostProcessComponent` is located. Add the
+`HoverCallbacks` mixin to the class, to have something like this:
 
 ```dart
 import 'package:flame/events.dart';
@@ -19,9 +18,8 @@ class SwordSpritePostProcessed extends PostProcessComponent
 }
 ```
 
-After that add one private field and the two functions to react to hover enter
-and exit into the class.
-(The cancel event should be handled too but for clarity, I omitted it).
+After that add one private field and the two functions to react to hover enter and exit into the
+class. (The cancel event should be handled too but for clarity, I omitted it).
 
 ```dart
 Color? _originalPostProcessColor;
@@ -121,9 +119,9 @@ class SwordSprite extends SpriteComponent {
 }
 ```
 
-The result is, when you hover over the sprite bounding box, the outline shader
-changes to blue, because we set the uniform variable in the hover event.
-If the mouse exits the box, then it will change back to the original color.
+The result is, when you hover over the sprite bounding box, the outline shader changes to blue,
+because we set the uniform variable in the hover event. If the mouse exits the box, then it will
+change back to the original color.
 
 This is how it should look:
 ![GIF of mouse hover](../../images/tutorials/basic_shader/hover_demo.webp)

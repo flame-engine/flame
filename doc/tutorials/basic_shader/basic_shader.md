@@ -1,8 +1,8 @@
 # Basic shader tutorial
 
 This tutorial will give you a brief understanding of how to create and use basic shaders on
-`SpriteComponent`s with `PostProcess` and `PostProcessComponent`
-using Dart/Flutter and the Flame engine.
+`SpriteComponent`s with `PostProcess` and `PostProcessComponent` using Dart/Flutter and the Flame
+engine.
 
 This tutorial assumes that you have a working Flame project set up. If you don't, please follow
 the [](bare_flame_game.md) tutorial first.
@@ -11,8 +11,7 @@ The tutorial consists of 4 steps. We will create a simple outline shader for spr
 transparent background layer.
 
 ```{note}
-This tutorial is intended to work on images with transparent background,
-like `.png` files.
+This tutorial is intended to work on images with transparent background, like `.png` files.
 ```
 
 *Created by Kornél (Hoodead) Lapu.*

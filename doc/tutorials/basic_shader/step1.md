@@ -10,10 +10,10 @@ For clarity and some modularity, I separated the sprite into two classes:
 - one for having a standard sprite class (purpose: general sprite and event handling)
 - one for applying a post process as a wrapper class (purpose: specific shader application)
 
-Now if I want to modify the shader of the sword only, I don't have to modify the
-underlying sprite class or I can "freely" modify the sprite and add input event mixins to
-it or add other children, if it is a composite sprite. In these cases only one class has
-to be modified, when these features are added.
+Now if I want to modify the shader of the sword only, I don't have to modify the underlying sprite
+class or I can "freely" modify the sprite and add input event mixins to it or add other children,
+if it is a composite sprite. In these cases only one class has to be modified, when these features
+are added.
 
 These are intended to be the application of
 [Single Responsibility](https://en.wikipedia.org/wiki/Single-responsibility_principle) and
@@ -21,16 +21,15 @@ These are intended to be the application of
 programming principles.
 
 ```{note}
-Feel free to modify the code and experiment with different approaches
-after the tutorial is concluded.
+Feel free to modify the code and experiment with different approaches after the tutorial is
+concluded.
 ```
 
 
 ## Image resource
 
-For this tutorial we need an image with a transparent background to apply the outline
-shader to. Create an `assets/images/` directory in your project and add your `.png` image
-there.
+For this tutorial we need an image with a transparent background to apply the outline shader to.
+Create an `assets/images/` directory in your project and add your `.png` image there.
 
 Do not forget to add the containing folder to assets in `pubspec.yaml` and save:
 
@@ -43,8 +42,8 @@ flutter:
 
 ## Sprite
 
-Create a new file named `sword_component.dart`
-(*or instead of "sword" use what you have of course*):
+Create a new file named `sword_component.dart` (*or instead of "sword" use what you have of
+course*):
 
 ```dart
 import 'package:flame/components.dart';
@@ -61,8 +60,8 @@ class SwordSprite extends SpriteComponent {
 
 ## Wrapper
 
-Here comes the wrapper class for applying shaders and post process. In the same file
-(*or in a separate one if you prefer*) create another class:
+Here comes the wrapper class for applying shaders and post process. In the same file (*or in a
+separate one if you prefer*) create another class:
 
 ```dart
 import 'package:flame/components.dart';
@@ -107,7 +106,7 @@ class SwordSprite extends SpriteComponent {
 }
 ```
 
-Here you will get a syntax error because `OutlinePostProcess()` does not
-exist nor the imported package.. yet!
+Here you will get a syntax error because `OutlinePostProcess()` does not exist nor the imported
+package.. yet!
 
 Let's create those in the next step!
