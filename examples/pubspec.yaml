@@ -24,7 +24,7 @@ dependencies:
   flame_tiled: ^3.0.11
   flutter:
     sdk: flutter
-  google_fonts: ^6.2.1
+  google_fonts: ^8.0.2
   jenny: ^1.5.0
   meta: ^1.12.0
   padracing: ^1.0.0

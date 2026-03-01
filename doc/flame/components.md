@@ -854,6 +854,92 @@ class PlayerComponent extends SpriteGroupComponent<ButtonState>
 ```
 
 
+## IconComponent
+
+`IconComponent` renders a Flutter `IconData` (such as `Icons.star`) as a Flame component. The icon
+is rasterized to an image once during `onLoad()` and then drawn each frame using
+`canvas.drawImageRect()` with the component's `Paint`. Because the icon is rendered as a cached
+image rather than as text, all paint-based effects work out of the box — including `tint()`,
+`setOpacity()`, `ColorEffect`, `OpacityEffect`, `GlowEffect`, and custom `ColorFilter`s.
+
+
+### Basic usage
+
+```dart
+import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
+
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    final star = IconComponent(
+      icon: Icons.star,
+      iconSize: 64,
+      position: Vector2(100, 100),
+    );
+    add(star);
+  }
+}
+```
+
+
+### Tinting and effects
+
+The icon is rasterized in white, which allows you to tint it to any color using
+`HasPaint` methods:
+
+```dart
+// Tint the icon gold
+final star = IconComponent(
+  icon: Icons.star,
+  iconSize: 64,
+  position: Vector2(100, 100),
+)..tint(const Color(0xFFFFD700));
+
+// Set opacity
+star.setOpacity(0.5);
+
+// Or use a custom paint
+final icon = IconComponent(
+  icon: Icons.favorite,
+  iconSize: 48,
+  paint: Paint()..colorFilter = const ColorFilter.mode(
+    Color(0xFFFF0000),
+    BlendMode.srcATop,
+  ),
+);
+```
+
+
+### Constructor parameters
+
+- `icon` — The `IconData` to render (e.g., `Icons.star`, `Icons.favorite`).
+- `iconSize` — The resolution at which the icon is rasterized (default `64`). This is independent
+  of the component's display `size`.
+- `size` — The display size of the component. Defaults to `Vector2.all(iconSize)` if not provided.
+- `paint` — Optional `Paint` for rendering effects.
+- All standard `PositionComponent` parameters (`position`, `scale`, `angle`, `anchor`, etc.).
+
+
+### Changing the icon at runtime
+
+Both the `icon` and `iconSize` properties can be changed after creation. The component will
+automatically re-rasterize the icon on the next frame:
+
+```dart
+final iconComponent = IconComponent(
+  icon: Icons.play_arrow,
+  iconSize: 64,
+);
+
+// Later, swap the icon
+iconComponent.icon = Icons.pause;
+
+// Or change the rasterization resolution
+iconComponent.iconSize = 128;
+```
+
+
 ## SpawnComponent
 
 This component is a non-visual component that spawns other components inside of the parent of the

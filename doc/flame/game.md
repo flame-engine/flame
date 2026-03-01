@@ -45,6 +45,35 @@ void main() {
 }
 ```
 
+
+## Custom World type
+
+`FlameGame` has a generic type parameter `W` that defaults to `World`. By specifying a custom world
+type, the `world` getter on your game will return your specific world type directly, without needing
+to cast it.
+
+This is useful when you have a custom `World` subclass and want to access its properties or methods
+from within your game class:
+
+```dart
+class MyWorld extends World {
+  int score = 0;
+}
+
+class MyGame extends FlameGame<MyWorld> {
+  MyGame() : super(world: MyWorld());
+
+  void incrementScore() {
+    // No cast needed — `world` is already typed as `MyWorld`.
+    world.score++;
+  }
+}
+```
+
+When using this generic parameter, you **must** pass a matching world instance to the `super`
+constructor. If the generic type is specified but no world is provided, a runtime assertion error
+will be thrown.
+
 ```{note}
 If you instantiate your game in a build method your game will be rebuilt every
 time the Flutter tree gets rebuilt, which usually is more often than you'd like.
@@ -119,6 +148,24 @@ The `onRemove` callback can be used to clean up children and cached data:
 Clean-up of children and resources in a `FlameGame` is not done automatically
 and must be explicitly added to the `onRemove` call.
 ```
+
+
+### dispose()
+
+As a convenience, `FlameGame` provides a `dispose()` method that handles all of the common cleanup
+in a single call:
+
+```dart
+  game.dispose();
+```
+
+This removes all children from the game (triggering `onRemove` on every component in the tree),
+processes all pending lifecycle events, and clears the `images` and `assets` caches.
+
+The difference between `dispose()` and `onRemove` is that `dispose()` is a method you call
+explicitly to perform cleanup, while `onRemove` is a lifecycle callback that is invoked
+automatically when the game is removed from a `GameWidget`. You can use `dispose()` from within
+`onRemove`, or call it independently whenever you need to reset the game state.
 
 
 ## Debug mode

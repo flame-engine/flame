@@ -7,6 +7,7 @@ import 'package:examples/stories/components/components_notifier_provider_example
 import 'package:examples/stories/components/composability_example.dart';
 import 'package:examples/stories/components/debug_example.dart';
 import 'package:examples/stories/components/has_visibility_example.dart';
+import 'package:examples/stories/components/icon_component_example.dart';
 import 'package:examples/stories/components/keys_example.dart';
 import 'package:examples/stories/components/look_at_example.dart';
 import 'package:examples/stories/components/look_at_smooth_example.dart';
@@ -97,6 +98,12 @@ void addComponentsStories(Dashbook dashbook) {
       (_) => const KeysExampleWidget(),
       codeLink: baseLink('components/keys_example.dart'),
       info: KeysExampleWidget.description,
+    )
+    ..add(
+      'Icon Component',
+      (_) => GameWidget(game: IconComponentExample()),
+      codeLink: baseLink('components/icon_component_example.dart'),
+      info: IconComponentExample.description,
     )
     ..add(
       'HasVisibility',
