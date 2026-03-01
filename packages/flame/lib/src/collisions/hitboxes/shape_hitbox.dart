@@ -125,6 +125,18 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       hitboxParent.size.removeListener(_parentSizeListener!);
     }
     _transformAncestors.forEach((t) => t.removeListener(_transformListener));
+
+    // End all active collisions before removing from collision detection.
+    // This ensures the parent component's activeCollisions is properly cleaned
+    // up during processLifecycleEvents(), before collisionDetection.run()
+    // processes new collisions in the same tick.
+    if (_activeCollisions != null && _activeCollisions!.isNotEmpty) {
+      for (final other in _activeCollisions!.toList()) {
+        onCollisionEnd(other);
+        other.onCollisionEnd(this);
+      }
+    }
+
     _collisionDetection?.remove(this);
     super.onRemove();
   }
