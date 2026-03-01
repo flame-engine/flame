@@ -1,25 +1,23 @@
 # 4. User Input
 
-In this section we will add a Flame `mixin` to handle some mouse hover events and change the
-underlying shader behavior.
+In this step we add mouse hover support so the outline color changes when the cursor enters the
+sprite.
 
 
 ## Event handling
 
-Open the `sword_component.dart` file or where your `PostProcessComponent` is located. Add the
-`HoverCallbacks` mixin to the class, to have something like this:
+Open `sword_component.dart` and add the `HoverCallbacks` mixin to `OutlinedSwordSprite`:
 
 ```dart
 import 'package:flame/events.dart';
 
-class SwordSpritePostProcessed extends PostProcessComponent
+class OutlinedSwordSprite extends PostProcessComponent
     with HoverCallbacks {
   // ...
 }
 ```
 
-After that add one private field and the two functions to react to hover enter and exit into the
-class. (The cancel event should be handled too but for clarity, I omitted it).
+Then add a field to store the original color, and override the hover callbacks to swap it:
 
 ```dart
 Color? _originalPostProcessColor;
@@ -46,7 +44,7 @@ void onHoverExit() {
 
 ## Full solution
 
-At the end the `sword_component.dart` file becomes this:
+The final `sword_component.dart` with hover support:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -57,9 +55,9 @@ import 'package:flame/post_process.dart';
 
 import 'package:basic_shader_tutorial/outline_postprocess.dart';
 
-class SwordSpritePostProcessed extends PostProcessComponent
+class OutlinedSwordSprite extends PostProcessComponent
     with HoverCallbacks {
-  SwordSpritePostProcessed({super.position, super.anchor})
+  OutlinedSwordSprite({super.position, super.anchor})
     : super(
         children: [SwordSprite()],
         postProcess: OutlinePostProcess(anchor: anchor ?? Anchor.topLeft),
@@ -119,9 +117,7 @@ class SwordSprite extends SpriteComponent {
 }
 ```
 
-The result is, when you hover over the sprite bounding box, the outline shader changes to blue,
-because we set the uniform variable in the hover event. If the mouse exits the box, then it will
-change back to the original color.
+When you hover over the sprite, the outline turns blue. When the cursor leaves, it reverts to the
+original color.
 
-This is how it should look:
 ![GIF of mouse hover](../../images/tutorials/basic_shader/hover_demo.webp)

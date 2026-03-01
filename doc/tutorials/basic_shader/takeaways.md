@@ -3,21 +3,18 @@
 
 ## Conclusion
 
-According to my logic, there are three layers of using shaders in the Flame engine, where:
+There are three layers involved when using shaders in Flame:
 
-- the component layer: `SpriteComponent` and `PostProcessComponent`
-  - connecting shaders to Flame components and holding game logic, and handling user inputs
-- post process layer: `PostProcess`
-  - the link between components and holding runtime settings, behavior logic, updating uniforms
-  for shaders
-- the GLSL shader: `.frag` file
-  - the core shader code
+- **Component layer** (`SpriteComponent` and `PostProcessComponent`): connects shaders to Flame
+  components, holds game logic and handles user input.
+- **Post process layer** (`PostProcess`): bridges components and shaders, manages runtime settings
+  and updates uniforms each frame.
+- **GLSL shader** (`.frag` file): the GPU program that determines the final pixel colors.
 
 
 ## Closure
 
-I hope this tutorial helped you to understand the basics! Don't forget, if you know better
-solutions: go for it! You can tweak this solution to your needs, happy coding!
+We hope this tutorial helped you understand the basics of using shaders in Flame. Feel free to
+tweak the code to suit your needs, happy coding!
 
-If you found some errors or mistakes please let us know through GitHub or Discord and we will
-update the tutorial accordingly.
+If you find any errors or have suggestions, please let us know through GitHub or Discord.

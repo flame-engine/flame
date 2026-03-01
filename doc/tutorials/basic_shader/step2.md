@@ -3,20 +3,15 @@
 
 ## Responsibility
 
-Here we are preparing for shaders. The `PostProcess` class is the handler of the fragment (pixel)
-shader, and this class is responsible for creating shader resources and for keeping the uniform
-variables updated. We can also store shader "settings" here (through uniforms) if you want them to
-be modifiable at runtime, for example enabling and disabling effects.
-
-```{note}
-A `Color` to `Vector4` conversion extension is also created here. In a real project, this should
-be in a utility file to be accessible to other classes.
-```
+The `PostProcess` class manages the fragment (pixel) shader. It is responsible for loading the
+shader program, creating GPU resources, and keeping uniform variables up to date each frame. You
+can also expose runtime settings through uniforms, for example to enable or disable effects.
 
 
 ## Post process
 
-We create the missing class in a new file, name it `outline_postprocess.dart`:
+Create a new file named `outline_postprocess.dart`. This class loads the shader program in
+`onLoad()` and passes uniform values to the GPU each frame in `postProcess()`:
 
 ```dart
 import 'dart:ui';
@@ -78,26 +73,17 @@ class OutlinePostProcess extends PostProcess {
 }
 ```
 
-Once the imports are correct, the syntax error from the previous step will go away.
+With this file in place, the syntax error from the previous step will go away.
 
-The outline should be "under" the image, so I added the `PostProcessComponent` as the parent of
-the `SpriteComponent`, which would mean the post process (shader) is rendered first, and then the
-`SpriteComponent` with the image overwriting the layer of the shader.
-
-Using any kind of `PostProcessComponent` will "overwrite" the rendering order and the post process
-will decide what the final color of the rendered pixels will be (you can check out the added hints
-for the class and its source code for details).
-
-This structure allows us to simply use `rasterizeSubtree()`, which will implicitly rasterize all
-added children.
+Since the `PostProcessComponent` is the parent of the `SpriteComponent`, the post process renders
+first and the sprite is drawn on top. The `rasterizeSubtree()` call captures all children into an
+image that the shader can sample from.
 
 
 ## Usage
 
-We created the components and post process classes but we did not add any of those to the game
-itself.
-
-Go to `main.dart` and add two components to the world with a little positional offset:
+Now we need to wire everything together. Open `main.dart` and add both a plain sprite and an
+outlined sprite to the world so we can compare them side by side:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -130,7 +116,7 @@ class MyWorld extends World {
     );
 
     add(
-      SwordSpritePostProcessed(
+      OutlinedSwordSprite(
         position: Vector2(200, 0),
         anchor: Anchor.center,
       ),
@@ -139,19 +125,11 @@ class MyWorld extends World {
 }
 ```
 
-In the new `main.dart` I replaced the `FlameGame` with a custom class where I override the
-background color, because I have a black-and-white image. You can change it to suit your images
-too.
+Here we use a custom `FlameGame` subclass to override the background color. Adjust the positions
+and color to suit your own images.
 
-Also change the position of components based on the size of your images and window size.
-
-Run the application.
-
-What? There is only one sprite? Why? You may ask, my fellow tutorial buddy. The reason is printed
-early in the console, if you wish to trace it.
-
-There is no such file what we would like to load as a shader file in `OutlinePostProcess`:
+Run the application. You should see only one sprite, the outlined one is missing. The console
+will show why:
 `[...] Unhandled Exception: Exception: Asset 'assets/shaders/outline.frag' not found [...]`
 
-There won't be more missing files after the next section. In the next step we will create the
-shader itself.
+We haven't created the shader file yet. Let's do that in the next step.

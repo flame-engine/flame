@@ -3,32 +3,25 @@
 
 ## Considerations
 
-In this section we will create the fragment (pixel) shader program which runs on the GPU, then add
-it as a resource.
+In this section we will create the fragment (pixel) shader program that runs on the GPU.
 
-It is important to note, we are going to program the GPU, so this code will need a little bit of
-different thinking from what we did before.
+Keep in mind that shader code requires different thinking from regular Dart code, since the
+fragment shader runs once per pixel, every frame.
 
 ```{note}
-The fragment shader runs for each pixel. Be mindful of branching and looping as operations scale
-linearly with pixel count and loop iterations per frame.
+Be mindful of branching and looping in shaders, as operations scale linearly with pixel count and
+loop iterations per frame.
 ```
 
 ```{note}
-Shader optimization is out of the scope of this tutorial. But there are guards to escape as early
-as possible.
-
-Instead of square root, it would be a better solution to compare squared values only.
+Shader optimization is out of scope for this tutorial. As a quick example, comparing squared
+distances instead of using `sqrt` would be more efficient.
 ```
-
-Everything is ready to create the GLSL based shader.
 
 
 ## Shader code
 
-Create a new directory at `assets/shaders/` and a file named `outline.frag`.
-
-Open the `outline.frag` file and add the following lines:
+Create a new directory at `assets/shaders/` and a file named `outline.frag`:
 
 ```glsl
 #version 460 core
@@ -92,25 +85,20 @@ void main() {
 }
 ```
 
-*So.. what does this shader do?* Grabbing each transparent pixel and checking: is it next to an
-opaque pixel? If yes, then color it as the outline color (passed in as a uniform variable), else it
-will be full transparent.
-
-That is why the transparency of the `.png` image was important in the beginning.
+For each transparent pixel, the shader checks whether any nearby pixel is opaque. If so, it
+colors the pixel with the outline color (passed in as a uniform). Otherwise, it stays fully
+transparent. This is why transparent `.png` images are required.
 
 ```{note}
-The loop of a GLSL shader accepts only a compile time constant. So the outline width uniform
-cannot be used as the loop bound. This means `MAX_SAMPLE_DISTANCE` should be set accordingly in
-the shader code.
+GLSL loop bounds must be compile-time constants, so the `uOutlineWidth` uniform cannot be used
+directly. Make sure `MAX_SAMPLE_DISTANCE` is at least as large as the outline width you set in
+Dart.
 ```
 
 
 ## Shader resource
 
-To let Flutter know about this shader asset we have to add it to the `pubspec.yaml` file before
-compilation.
-
-Open the `pubspec.yaml` and write the following lines under what we already added:
+Register the shader in `pubspec.yaml` so Flutter bundles it at build time:
 
 ```yaml
 flutter:
@@ -120,16 +108,8 @@ flutter:
     - assets/shaders/outline.frag
 ```
 
-Save it and let the automatic `pub get` command run. Now the resource will be loaded when the
-project is next compiled.
-
-Run the application.
-
-*Voila!* You should see two sprites in the window. The left is without an outline, the right one
-is with a colored outline from the shader.
+Run the application. You should now see two sprites: one plain and one with a colored outline.
 
 ![Image of the reference and the shader](../../images/tutorials/basic_shader/final_result.png)
 
-We are done with the basic shader tutorial. *Cool!*
-
-It's time for you to experiment!
+The basic shader is working. It's time to experiment!
