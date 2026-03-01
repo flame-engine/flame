@@ -166,14 +166,13 @@ class GameOverPanel extends PositionComponent {
 }
 ```
 
-There are two methods for adding child components to your component. First,
-you have methods `add()`, `addAll()`, and `addToParent()`, which can be used
-at any time during the game. Traditionally, children will be created and added
-from the component's `onLoad()` method, but it is also common to add new
-children during the course of the game.
+There are two methods for adding child components to your component. First, you have methods
+`add()`, `addAll()`, and `addToParent()`, which can be used at any time during the game.
+Traditionally, children will be created and added from the component's `onLoad()` method, but it
+is also common to add new children during the course of the game.
 
-The second method is to use the `children:` parameter in the component's
-constructor. This approach more closely resembles the standard Flutter API:
+The second method is to use the `children:` parameter in the component's constructor. This
+approach more closely resembles the standard Flutter API:
 
 ```dart
 class MyGame extends FlameGame {
@@ -193,20 +192,18 @@ class MyGame extends FlameGame {
 }
 ```
 
-The two approaches can be combined freely: the children specified within the
-constructor will be added first, and then any additional child components
-after.
+The two approaches can be combined freely: the children specified within the constructor will be
+added first, and then any additional child components after.
 
-Note that the children added via either method are only guaranteed to be
-available eventually: after they are loaded and mounted. We can only assure
-that they will appear in the children list in the same order as they were
-scheduled for addition.
+Note that the children added via either method are only guaranteed to be available eventually:
+after they are loaded and mounted. We can only assure that they will appear in the children list
+in the same order as they were scheduled for addition.
 
 
 ### Access to the World from a Component
 
-If a component that has a `World` as an ancestor and requires access to that `World` object, one can
-use the `HasWorldReference` mixin.
+If a component that has a `World` as an ancestor and requires access to that `World` object, one
+can use the `HasWorldReference` mixin.
 
 Example:
 
@@ -221,14 +218,14 @@ class MyComponent extends Component with HasWorldReference<MyWorld>,
 }
 ```
 
-If you try to access `world` from a component that doesn't have a `World`
-ancestor of the correct type an assertion error will be thrown.
+If you try to access `world` from a component that doesn't have a `World` ancestor of the
+correct type an assertion error will be thrown.
 
 
 ### Ensuring a component has a given parent
 
-When a component needs to be added to a specific parent type, the
-`ParentIsA` mixin can be used to enforce a strongly typed parent.
+When a component needs to be added to a specific parent type, the `ParentIsA` mixin can be used
+to enforce a strongly typed parent.
 
 Example:
 
@@ -242,14 +239,14 @@ class MyComponent extends Component with ParentIsA<MyParentComponent> {
 }
 ```
 
-If you try to add `MyComponent` to a parent that is not `MyParentComponent`,
-an assertion error will be thrown.
+If you try to add `MyComponent` to a parent that is not `MyParentComponent`, an assertion error
+will be thrown.
 
 
 ### Ensuring a component has a given ancestor
 
-When a component needs to have a specific ancestor type somewhere in the
-component tree, the `HasAncestor` mixin can be used to enforce that relationship.
+When a component needs to have a specific ancestor type somewhere in the component tree, the
+`HasAncestor` mixin can be used to enforce that relationship.
 
 The mixin exposes the `ancestor` field that will be of the given type.
 
@@ -265,14 +262,14 @@ class MyComponent extends Component with HasAncestor<MyAncestorComponent> {
 }
 ```
 
-If you try to add `MyComponent` to a tree that does not contain `MyAncestorComponent`,
-an assertion error will be thrown.
+If you try to add `MyComponent` to a tree that does not contain `MyAncestorComponent`, an
+assertion error will be thrown.
 
 
 ### Component Keys
 
-Components can have an identification key that allows them to be retrieved from the component tree,
-from any point of the tree.
+Components can have an identification key that allows them to be retrieved from the component
+tree, from any point of the tree.
 
 To register a component with a key, simply pass a key to the `key` argument on the component's
 constructor:
@@ -335,8 +332,8 @@ void onLoad() {
 }
 ```
 
-In the example above a query is registered for `PositionComponent`s, and an example of how to query
-the registered component type can be seen below.
+In the example above a query is registered for `PositionComponent`s, and an example of how to
+query the registered component type can be seen below.
 
 ```dart
 @override
@@ -353,8 +350,8 @@ on the screen. The returned value is an iterable of components, but you can also
 coordinates of the initial point in each component's local coordinate space by providing a writable
 `List<Vector2>` as a second parameter.
 
-The iterable retrieves the components in the front-to-back order, i.e. first the components in the
-front, followed by the components in the back.
+The iterable retrieves the components in the front-to-back order, i.e. first the components in
+the front, followed by the components in the back.
 
 This method can only return components that implement the method `containsLocalPoint()`. The
 `PositionComponent` (which is the base class for many components in Flame) provides such an
@@ -376,8 +373,8 @@ void onDragUpdate(DragUpdateInfo info) {
 
 ### Visibility of components
 
-The recommended way to hide or show a component is usually to add or remove it from the tree
-using the `add` and `remove` methods.
+The recommended way to hide or show a component is usually to add or remove it from the tree using
+the `add` and `remove` methods.
 
 However, adding and removing components from the tree will trigger lifecycle steps for that
 component (such as calling `onRemove` and `onMount`). It is also an asynchronous process and care
@@ -450,10 +447,10 @@ class MyComponent extends PositionComponent with HasVisibility {
 ### Render Contexts
 
 If you want a parent component to pass render-specific properties down to its children tree, you
-can override the `renderContext` property on the parent component. You can return a custom
-class that inherits from `RenderContext`, and then use `findRenderContext` on the children
-while rendering. Render Contexts are stored as a stack and propagated whenever the render
-tree is navigated for rendering.
+can override the `renderContext` property on the parent component. You can return a custom class
+that inherits from `RenderContext`, and then use `findRenderContext` on the children while
+rendering. Render Contexts are stored as a stack and propagated whenever the render tree is
+navigated for rendering.
 
 For example:
 
@@ -478,17 +475,16 @@ class ChildReadsContext extends Component {
 }
 ```
 
-Each component will have access to the context of any parent that is above it in the
-component tree. If multiple components add the contexts matching the selected type
-`T`, the "closest" one will be returned (though typically you would create a unique
-context type for each component).
+Each component will have access to the context of any parent that is above it in the component
+tree. If multiple components add the contexts matching the selected type `T`, the "closest" one
+will be returned (though typically you would create a unique context type for each component).
 
 
 ## Effects
 
 Flame provides a set of effects that can be applied to a certain type of components. These effects
-can be used to animate some properties of your components, like position or dimensions.
-You can check the list of those effects [here](../effects/effects.md).
+can be used to animate some properties of your components, like position or dimensions. You can
+check the list of those effects [here](../effects/effects.md).
 
 Examples of the running effects can be found [here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/effects);
 
