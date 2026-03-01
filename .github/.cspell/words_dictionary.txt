@@ -17,8 +17,11 @@ prerender
 prerendered
 pressable
 ptero # short for pterodactyl
+rasterizes
 refreshable
 renderable
+rerasterize
 rescan
+Roboto
 tappable
 underutilize
