@@ -1020,6 +1020,7 @@ class Component {
 
   /// Used by [_reAddChildren].
   static final List<Component> _tmpChildren = [];
+  static final Set<Component> _tmpPendingRemoves = {};
 
   /// At the end of mounting, we remove all children components and then re-add
   /// them one-by-one. The reason for this is that before the current component
@@ -1033,11 +1034,17 @@ class Component {
       assert(_tmpChildren.isEmpty);
       _tmpChildren.addAll(_children!);
       _children!.clear();
+      assert(_tmpPendingRemoves.isEmpty);
+      findGame()?.cancelQueuedRemoves(_tmpChildren, _tmpPendingRemoves);
       for (final child in _tmpChildren) {
         child._parent = null;
+        if (_tmpPendingRemoves.contains(child)) {
+          continue;
+        }
         _addChild(child);
       }
       _tmpChildren.clear();
+      _tmpPendingRemoves.clear();
     }
   }
 
