@@ -11,7 +11,8 @@ The tutorial consists of 4 steps. We will create a simple outline shader for spr
 transparent background layer.
 
 ```{note}
-This tutorial is intended to work on images with transparent background, like `.png` files.
+This tutorial is intended to work on images with transparent
+background, like `.png` files.
 ```
 
 *Created by Kornél (Hoodead) Lapu.*

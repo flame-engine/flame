@@ -9,13 +9,14 @@ Keep in mind that shader code requires different thinking from regular Dart code
 fragment shader runs once per pixel, every frame.
 
 ```{note}
-Be mindful of branching and looping in shaders, as operations scale linearly with pixel count and
-loop iterations per frame.
+Be mindful of branching and looping in shaders, as operations
+scale linearly with pixel count and loop iterations per frame.
 ```
 
 ```{note}
-Shader optimization is out of scope for this tutorial. As a quick example, comparing squared
-distances instead of using `sqrt` would be more efficient.
+Shader optimization is out of scope for this tutorial. As a
+quick example, comparing squared distances instead of using
+`sqrt` would be more efficient.
 ```
 
 
@@ -59,7 +60,7 @@ void main() {
     for (int y = -MAX_SAMPLE_DISTANCE; y <= MAX_SAMPLE_DISTANCE; y++) {
       if (x == 0 && y == 0) continue;
 
-      // Checking the real distance, instead of square based (manhattan) distance
+      // Check real distance instead of manhattan distance
       float distance = sqrt(float( x*x + y*y ));
       if (distance > uOutlineWidth) continue;
 
@@ -73,7 +74,7 @@ void main() {
         break;
       }
     }
-    // Also break out from outer loop, if found a solid color next to current pixel
+    // Break out from outer loop too
     if (foundOpaqueNearby) break;
   }
 
@@ -90,9 +91,10 @@ colors the pixel with the outline color (passed in as a uniform). Otherwise, it 
 transparent. This is why transparent `.png` images are required.
 
 ```{note}
-GLSL loop bounds must be compile-time constants, so the `uOutlineWidth` uniform cannot be used
-directly. Make sure `MAX_SAMPLE_DISTANCE` is at least as large as the outline width you set in
-Dart.
+GLSL loop bounds must be compile-time constants, so the
+`uOutlineWidth` uniform cannot be used directly. Make sure
+`MAX_SAMPLE_DISTANCE` is at least as large as the outline
+width you set in Dart.
 ```
 
 
