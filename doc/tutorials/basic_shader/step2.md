@@ -1,14 +1,14 @@
-# Outline Post Process
+# 2. Outline Post Process
 
 
-## 2.0 Responsibility
+## Responsibility
 
 Here we are preparing for shaders.
 The `PostProcess` class is the handler of the fragment (pixel) shader, and this
 class is responsible for creating shader resources and for keeping the uniform
 variables updated.
-We also can store shader "settings" here (through uniforms) if you want it to
-be modifiable in runtime, for example enabling and disabling effects.
+We can also store shader "settings" here (through uniforms) if you want them to
+be modifiable at runtime, for example enabling and disabling effects.
 
 ```{note}
 A `Color` to `Vector4` conversion extension is also created here. In a real project,
@@ -16,7 +16,7 @@ this should be in a utility file to be accessible to other classes.
 ```
 
 
-## 2.1 Post process
+## Post process
 
 We create the missing class in a new file, name it `outline_postprocess.dart`:
 
@@ -48,7 +48,7 @@ class OutlinePostProcess extends PostProcess {
   late final FragmentProgram _fragmentProgram;
   late final FragmentShader _fragmentShader =
       _fragmentProgram.fragmentShader();
-  late final Paint myPaint = Paint()..shader = _fragmentShader;
+  late final Paint _myPaint = Paint()..shader = _fragmentShader;
 
   @override
   Future<void> onLoad() async {
@@ -74,13 +74,13 @@ class OutlinePostProcess extends PostProcess {
     canvas
       ..save()
       ..translate(-size.x * anchor.x, -size.y * anchor.y)
-      ..drawRect(Offset.zero & size.toSize(), myPaint)
+      ..drawRect(Offset.zero & size.toSize(), _myPaint)
       ..restore();
   }
 }
 ```
 
-Okay so if the linking/importing is right the syntax error will go away.
+Once the imports are correct, the syntax error from the previous step will go away.
 
 The outline should be "under" the image, so I added the
 `PostProcessComponent` as the parent of the `SpriteComponent`, which
@@ -96,7 +96,7 @@ This structure allows us to simply use `rasterizeSubtree()`, which
 will implicitly rasterize all added children.
 
 
-## 2.2 Usage
+## Usage
 
 We created the components and post process classes but we did not
 add any of those to the game itself.

@@ -1,11 +1,11 @@
-# Sprite Component
+# 1. Sprite Component
 
 
-## 1.0 Architecture and Responsibilities
+## Architecture and Responsibilities
 
 Let's create the component where we render our sprite and apply the shader.
 
-For clarity and some modularity I separated the sprite into two classes:
+For clarity and some modularity, I separated the sprite into two classes:
 
 - one for having a standard sprite class (purpose: general sprite and event handling)
 - one for applying a post process as a wrapper class (purpose: specific shader application)
@@ -26,7 +26,7 @@ after the tutorial is concluded.
 ```
 
 
-## 1.1 Image resource
+## Image resource
 
 For this tutorial we need an image with a transparent background to apply the outline
 shader to. Create an `assets/images/` directory in your project and add your `.png` image
@@ -41,14 +41,12 @@ flutter:
 ```
 
 
-## 1.2 Sprite
+## Sprite
 
 Create a new file named `sword_component.dart`
 (*or instead of "sword" use what you have of course*):
 
 ```dart
-import 'dart:async';
-
 import 'package:flame/components.dart';
 
 class SwordSprite extends SpriteComponent {
@@ -56,14 +54,12 @@ class SwordSprite extends SpriteComponent {
   Future<void> onLoad() async {
     sprite = await Sprite.load('sword.png');
     size = sprite!.srcSize;
-
-    return super.onLoad();
   }
 }
 ```
 
 
-## 1.3 Wrapper
+## Wrapper
 
 Here comes the wrapper class for applying shaders and post process. In the same file
 (*or in a separate one if you prefer*) create another class:
@@ -84,13 +80,11 @@ class SwordSpritePostProcessed extends PostProcessComponent {
 ```
 
 
-## 1.4 Result
+## Result
 
 So the final `sword_component.dart` file looks like this:
 
 ```dart
-import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame/post_process.dart';
 
@@ -109,8 +103,6 @@ class SwordSprite extends SpriteComponent {
   Future<void> onLoad() async {
     sprite = await Sprite.load('sword.png');
     size = sprite!.srcSize;
-
-    return super.onLoad();
   }
 }
 ```

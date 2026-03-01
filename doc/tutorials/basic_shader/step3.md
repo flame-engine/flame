@@ -1,7 +1,7 @@
-# Shader
+# 3. Shader
 
 
-## 3.0 Considerations
+## Considerations
 
 In this section we will create the fragment (pixel) shader program which runs
 on the GPU, then add it as a resource.
@@ -16,7 +16,7 @@ operations scale linearly with pixel count and loop iterations per frame.
 
 ```{note}
 Shader optimization is out of the scope of this tutorial.
-But there are guards, to escape as early as possible.
+But there are guards to escape as early as possible.
 
 Instead of square root, it would be a better solution to compare squared
 values only.
@@ -25,7 +25,7 @@ values only.
 Everything is ready to create the GLSL based shader.
 
 
-## 3.1 Shader code
+## Shader code
 
 Create a new directory at `assets/shaders/` and a file named `outline.frag`.
 
@@ -108,7 +108,7 @@ So the outline width uniform cannot be used as the loop bound. This means
 ```
 
 
-## 3.2 Shader resource
+## Shader resource
 
 To let Flutter know about this shader asset we have to add
 it to the `pubspec.yaml` file before compilation.
