@@ -42,8 +42,8 @@ respawned # past tense of respawn
 retarget # to direct (something) toward a different target
 RGBA # red green blue alpha
 RGBO # red green blue opacity
-scrollers # plural of scroller, a genre of video game
 scos # cosine of a rotation multiplied by the scale factor
+scrollers # plural of scroller, a genre of video game
 shaderbundle # a file extension used to bundle shaders for GLSL
 slerp # short for spherical linear interpolation, a method to interpolate quaternions
 spritesheet # a single image packing multiple sprites, normally in a grid
