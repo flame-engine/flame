@@ -1,8 +1,8 @@
 # Post Processing and Shaders
 
 Post processing is a technique used in game development to apply visual effects to a component tree
-after it has been rendered. Once a frame is rendered — either directly or rasterized into an
-image—post processing can modify or enhance the visuals.
+after it has been rendered. Once a frame is rendered, either directly or rasterized into an
+image, post processing can modify or enhance the visuals.
 
 Post processing leverages fragment shaders to create dynamic visual effects such as blur, bloom,
 color grading, distortion, and lighting adjustments.

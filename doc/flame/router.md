@@ -12,9 +12,11 @@ visual effects to the content of the page below it.
 
 # RouterComponent
 
-The **RouterComponent**'s job is to manage navigation across multiple screens within the game. It is
-similar in spirit to Flutter's [Navigator][Flutter Navigator] class, except that it works with Flame
-components instead of Flutter widgets.
+Most games consist of more than a single screen: there is a main menu, a settings page, the
+gameplay screen, pop-up dialogs, and so on. Managing the transitions between these screens can
+quickly become messy. The `RouterComponent` solves this by providing a stack-based navigation
+model, similar in spirit to Flutter's [Navigator][Flutter Navigator] class, except that it works
+with Flame components instead of Flutter widgets.
 
 A typical game will usually consist of multiple pages: the splash screen, the starting menu page,
 the settings page, credits, the main game page, several pop-ups, etc. The router will organize
@@ -59,7 +61,8 @@ class PauseRoute extends Route { ... }
 ```
 
 ```{note}
-Use `hide Route` if any of your imported packages export another class called `Route`
+Use `hide Route` if any of your imported packages export
+another class called `Route`
 
 eg: `import 'package:flutter/material.dart' hide Route;`
 ```

@@ -1,5 +1,11 @@
 # FlameGame
 
+Every game needs a central object that owns the game loop, the continuous cycle of updating state
+and rendering frames that drives all real-time games. In Flame, `FlameGame` fills that role while
+also serving as the root of the component tree. If you are familiar with Flutter, think of
+`FlameGame` as the equivalent of `MaterialApp`: the top-level entry point that everything else
+hangs off of.
+
 The base of almost all Flame games is the `FlameGame` class, this is the root of your component
 tree. We refer to this component-based system as the Flame Component System (FCS). Throughout the
 documentation, FCS is used to reference this system.
@@ -64,7 +70,7 @@ class MyGame extends FlameGame<MyWorld> {
   MyGame() : super(world: MyWorld());
 
   void incrementScore() {
-    // No cast needed — `world` is already typed as `MyWorld`.
+    // No cast needed, `world` is already typed as `MyWorld`.
     world.score++;
   }
 }
@@ -299,8 +305,9 @@ non-mobile platforms including the web.
 
 ## HasPerformanceTracker mixin
 
-While optimizing a game, it can be useful to track the time it took for the game to update and render
-each frame. This data can help in detecting areas of the code that are running hot. It can also help
+While optimizing a game, it can be useful to track the time it took for the game to update and
+render each frame. This data can help in detecting areas of the code that are running hot. It can
+also help
 in detecting visual areas of the game that are taking the most time to render.
 
 To get the update and render times, just add the `HasPerformanceTracker` mixin to the game class.

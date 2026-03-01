@@ -1,5 +1,9 @@
 # Supported Platforms
 
+One of Flame's biggest advantages is that it inherits Flutter's cross-platform reach. A single
+codebase can produce games for phones, desktops, and the web. This section covers platform
+support details and shows how to deploy your finished game to popular hosting services.
+
 Since Flame runs on top of Flutter, so its supported platforms depend on which platforms that are
 supported by Flutter.
 
@@ -25,8 +29,8 @@ First thing, lets create the branch where your deployed files will live:
 git checkout -b gh-pages
 ```
 
-This branch can be created from `main` or any other place, it doesn't matter much. After you push that
-branch go back to your `main` branch.
+This branch can be created from `main` or any other place, it doesn't matter much. After you push
+that branch go back to your `main` branch.
 
 Now you should add the [flutter-gh-pages](https://github.com/bluefireteam/flutter-gh-pages)
 action to your repository, you can do that by creating a file `gh-pages.yaml` under the folder

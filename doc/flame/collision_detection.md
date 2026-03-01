@@ -1,5 +1,10 @@
 # Collision Detection
 
+Almost every game needs to know when objects touch or overlap. Without collision detection a player
+could walk through walls, bullets would pass through enemies, and coins could never be collected.
+Flame provides a built-in collision detection system so you can focus on what *happens* when objects
+collide rather than writing the intersection math yourself.
+
 Collision detection is needed in most games to detect and act upon two components intersecting each
 other. For example an arrow hitting an enemy or the player picking up a coin.
 
@@ -217,7 +222,7 @@ class MySpecialHitbox extends RectangleHitbox {
 ```
 
 You can read more about how the different shapes are defined in the
-[ShapeComponents](components.md#shapecomponents) section.
+[ShapeComponents](components/shape_components.md) section.
 
 Remember that you can add as many `ShapeHitbox`s as you want to your `PositionComponent` to make up
 more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
@@ -270,19 +275,19 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `PolygonHitbox` has the same constructors as the [](components.md#polygoncomponent), see that
+The `PolygonHitbox` has the same constructors as the [](components/shape_components.md#polygoncomponent), see that
 section for documentation regarding those.
 
 
 ### RectangleHitbox
 
-The `RectangleHitbox` has the same constructors as the [](components.md#rectanglecomponent), see
+The `RectangleHitbox` has the same constructors as the [](components/shape_components.md#rectanglecomponent), see
 that section for documentation regarding those.
 
 
 ### CircleHitbox
 
-The `CircleHitbox` has the same constructors as the [](components.md#circlecomponent), see that
+The `CircleHitbox` has the same constructors as the [](components/shape_components.md#circlecomponent), see that
 section for documentation regarding those.
 
 
@@ -386,9 +391,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       // do NOT collide with Player or Water
       return false;
     }
-    // Just return true if you're not interested in the parent's type check result.
-    // Or call super and you will be able to override the result with the parent's
-    // result.
+    // Just return true if you're not interested in
+    // the parent's type check result. Or call super
+    // to override the result with the parent's result.
     return super.onComponentTypeCheck(other);
   }
 

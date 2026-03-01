@@ -1,5 +1,12 @@
 # Camera & World
 
+In most games the world is larger than what fits on screen at once. The camera controls which
+portion of the game world is visible and how it is projected onto the player's display, handling
+panning, zooming, and following characters. This is similar to how a
+[`Viewport`](https://api.flutter.dev/flutter/rendering/RenderViewport-class.html) in Flutter determines
+which part of a scrollable area is visible, but tailored for the free-form 2D coordinate space of
+a game.
+
 Example of a simple game structure:
 
 ```text
@@ -124,8 +131,8 @@ final camera = CameraComponent.withFixedResolution(
 );
 ```
 
-This will create a camera with a viewport centered in the middle of the screen, taking as much
-space as possible while still maintaining the 4:3 (800x600) aspect ratio, and showing a game world region
+This will create a camera with a viewport centered in the middle of the screen, taking as much space
+as possible while still maintaining the 4:3 (800x600) aspect ratio, and showing a game world region
 of size 800 x 600.
 
 A "fixed resolution" is very simple to work with, but it will underutilize the user's available

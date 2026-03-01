@@ -1,5 +1,11 @@
 # Game Widget
 
+The `GameWidget` is the bridge between Flutter and Flame. Since Flame games are not Flutter widgets
+by themselves, the `GameWidget` wraps a `Game` instance and places it into the Flutter widget tree,
+just like any other [widget](https://docs.flutter.dev/get-started/fundamentals/widgets). This lets
+you combine a full-screen game with Flutter UI elements (navigation bars, overlays, dialogs) or
+embed a game as only part of your app's layout.
+
 ```{dartdoc}
 :package: flame
 :symbol: GameWidget
@@ -29,9 +35,9 @@ There are three possible values from Flutter's `HitTestBehavior`:
   top of Flutter UI and you want the underlying widgets to remain interactive in areas the game
   doesn't need to handle.
 
-- **`HitTestBehavior.translucent`**: The game receives events where it has event-handling components,
-  but always allows widgets behind it to be hit-tested as well. Both the game and the widgets behind
-  it can receive the same event.
+- **`HitTestBehavior.translucent`**: The game receives events where it has event-handling
+  components, but always allows widgets behind it to be hit-tested as well. Both the game and the
+  widgets behind it can receive the same event.
 
 
 ### Allowing taps to pass through

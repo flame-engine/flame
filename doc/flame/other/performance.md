@@ -155,7 +155,7 @@ void spawnBullet(Vector2 position, Vector2 velocity) {
 **Returning components to the pool:**
 
 Components are returned to the pool **automatically** when they are removed from the game
-tree. Simply call `removeFromParent()` on the component — there is no manual release step.
+tree. Simply call `removeFromParent()` on the component. There is no manual release step.
 
 ```dart
 class Bullet extends SpriteComponent with CollisionCallbacks {
@@ -166,7 +166,7 @@ class Bullet extends SpriteComponent with CollisionCallbacks {
     super.update(dt);
     position.add(velocity * dt);
 
-    // Remove bullet if it goes off screen — automatically returned to pool
+    // Remove bullet if it goes off screen. Automatically returned to pool.
     if (position.x < -100 || position.x > game.size.x + 100) {
       removeFromParent();
     }
@@ -175,7 +175,7 @@ class Bullet extends SpriteComponent with CollisionCallbacks {
   @override
   void onCollisionStart(Set<Vector2> points, PositionComponent other) {
     super.onCollisionStart(points, other);
-    // Return to pool on collision — no manual release needed
+    // Return to pool on collision. No manual release needed.
     removeFromParent();
   }
 

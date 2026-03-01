@@ -195,6 +195,6 @@ chain `A -> B -> C` will be created. In practice, it means that the entire chain
 from its root, which usually is `component.decorator`.
 
 
-[Component]: ../../flame/components.md#component
+[Component]: ../components/components.md#component
 [Effect]: ../../flame/effects.md
 [HasDecorator]: #hasdecorator-mixin
