@@ -20,6 +20,23 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
+///
+/// The type parameter [W] allows you to specify a custom [World] subclass so
+/// that the [world] getter returns your specific type without casting. For
+/// example:
+///
+/// ```dart
+/// class MyWorld extends World {
+///   int score = 0;
+/// }
+///
+/// class MyGame extends FlameGame<MyWorld> {
+///   MyGame() : super(world: MyWorld());
+/// }
+/// ```
+///
+/// When [W] is specified, a matching world instance **must** be passed to the
+/// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
     with Game
     implements ReadOnlySizeProvider {

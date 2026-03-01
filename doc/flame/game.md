@@ -45,6 +45,35 @@ void main() {
 }
 ```
 
+
+## Custom World type
+
+`FlameGame` has a generic type parameter `W` that defaults to `World`. By specifying a custom world
+type, the `world` getter on your game will return your specific world type directly, without needing
+to cast it.
+
+This is useful when you have a custom `World` subclass and want to access its properties or methods
+from within your game class:
+
+```dart
+class MyWorld extends World {
+  int score = 0;
+}
+
+class MyGame extends FlameGame<MyWorld> {
+  MyGame() : super(world: MyWorld());
+
+  void incrementScore() {
+    // No cast needed — `world` is already typed as `MyWorld`.
+    world.score++;
+  }
+}
+```
+
+When using this generic parameter, you **must** pass a matching world instance to the `super`
+constructor. If the generic type is specified but no world is provided, a runtime assertion error
+will be thrown.
+
 ```{note}
 If you instantiate your game in a build method your game will be rebuilt every
 time the Flutter tree gets rebuilt, which usually is more often than you'd like.
