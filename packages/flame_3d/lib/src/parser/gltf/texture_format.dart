@@ -6,7 +6,8 @@ enum TextureFormat {
   rgb('RGB', 6407),
   rgba('RGBA', 6408),
   luminance('LUMINANCE', 6409),
-  luminanceAlpha('LUMINANCE_ALPHA', 6410);
+  luminanceAlpha('LUMINANCE_ALPHA', 6410)
+  ;
 
   final String name;
   final int value;

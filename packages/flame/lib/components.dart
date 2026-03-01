@@ -7,6 +7,7 @@ export 'src/camera/world.dart' show World;
 export 'src/collisions/has_collision_detection.dart';
 export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/clip_component.dart';
+export 'src/components/component_pool.dart';
 export 'src/components/components_notifier.dart';
 export 'src/components/core/component.dart';
 export 'src/components/core/component_key.dart';

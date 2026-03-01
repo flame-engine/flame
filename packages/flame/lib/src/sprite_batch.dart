@@ -100,7 +100,8 @@ enum FlippedAtlasStatus {
   generating,
 
   /// The flipped atlas image has been generated.
-  generated;
+  generated
+  ;
 
   bool get isNone => this == FlippedAtlasStatus.none;
   bool get isGenerating => this == FlippedAtlasStatus.generating;

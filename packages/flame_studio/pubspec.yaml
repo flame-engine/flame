@@ -10,12 +10,12 @@ funding:
   - https://patreon.com/bluefireoss
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
-  flutter: ">=3.32.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.34.0
+  flame: ^1.35.1
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.0.3

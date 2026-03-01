@@ -69,10 +69,10 @@ workspace:
   - examples
 
 environment:
-  sdk: ">=3.8.0 <4.0.0"
+  sdk: ">=3.11.0 <4.0.0"
 
 dev_dependencies:
-  melos: ^7.0.0-dev.10
+  melos: ^7.4.0
 
 melos:
   command:
@@ -86,13 +86,13 @@ melos:
 
     bootstrap:
       environment:
-        sdk: ">=3.8.0 <4.0.0"
-        flutter: ">=3.32.0"
+        sdk: ">=3.11.0 <4.0.0"
+        flutter: ">=3.41.0"
       dependencies:
         meta: ^1.12.0
         vector_math: ^2.1.4
       dev_dependencies:
-        dartdoc: ^8.0.8
+        dartdoc: ^9.0.0
         mocktail: ^1.0.4
         test: any
 

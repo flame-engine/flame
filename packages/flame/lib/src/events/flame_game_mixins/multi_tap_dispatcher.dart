@@ -87,6 +87,8 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
       },
       deliverToAll: true,
     );
+
+    _tapCancelImpl(event.toTapCancel());
   }
 
   /// Called when there was an [onTapDown] event previously, but the [onTapUp]

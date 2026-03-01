@@ -7,7 +7,8 @@ import 'package:flame/input.dart';
 
 enum TextBoxConfigMaxWidth {
   small(200),
-  large(640);
+  large(640)
+  ;
 
   const TextBoxConfigMaxWidth(this.value);
 

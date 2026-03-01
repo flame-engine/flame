@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
@@ -125,6 +127,18 @@ abstract mixin class Game {
   /// Once this is true, the game is ready to have its size used or in the case
   /// of a FlameGame, to receive components.
   bool get hasLayout => _size != null;
+
+  /// Whether the game has an event-handling component at the given [position].
+  ///
+  /// Used by [GameRenderBox] for hit testing to determine if pointer events
+  /// should be consumed by the game or passed through to Flutter widgets
+  /// behind it.
+  ///
+  /// The default returns `true`, meaning games that directly extend [Game]
+  /// will catch all events on their entire surface. [FlameGame] overrides this
+  /// to only report a hit when a component with event callbacks
+  /// (e.g. [TapCallbacks]) exists at the given position.
+  bool containsEventHandlerAt(Vector2 position) => true;
 
   /// Returns the game background color.
   /// By default it will return a black color.

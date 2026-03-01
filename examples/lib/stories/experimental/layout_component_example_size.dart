@@ -3,7 +3,8 @@ import 'package:flame/components.dart';
 enum LayoutComponentExampleSize {
   shrinkWrap(null, null),
   small(640, 480),
-  large(1080, 720);
+  large(1080, 720)
+  ;
 
   const LayoutComponentExampleSize(
     this.x,

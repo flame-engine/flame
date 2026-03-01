@@ -103,3 +103,134 @@ It is up to the developers to decide which hitboxes can be made passive based on
 the rules of the game. For example, the Rogue Shooter game in Flame's examples uses
 passive hitbox for enemies instead of the bullets. 
 ```
+
+
+## Object Pooling
+
+As mentioned in the "Object creation per frame" section, creating and destroying objects
+frequently can impact performance. For components that are spawned and removed repeatedly
+(like bullets, particles, or enemies), object pooling is an effective optimization technique.
+
+Object pooling reuses objects instead of constantly creating and destroying them. Flame
+provides the `ComponentPool` class to make object pooling easy and efficient.
+
+
+### ComponentPool
+
+The `ComponentPool` class manages a pool of reusable components. It automatically handles
+the component lifecycle: when a pooled component is removed from its parent, it is
+returned to the pool for reuse.
+
+**Creating a pool:**
+
+```dart
+class MyGame extends FlameGame {
+  late final ComponentPool<Bullet> bulletPool;
+
+  @override
+  Future<void> onLoad() async {
+    bulletPool = ComponentPool<Bullet>(
+      factory: () => Bullet(),
+      maxSize: 50,      // Maximum number of bullets to keep in the pool
+      initialSize: 10,  // Pre-create 10 bullets for immediate use
+    );
+  }
+}
+```
+
+**Acquiring components from the pool:**
+
+When you need a component, use `acquire()` to get one from the pool. If the pool is empty,
+a new component will be created automatically using the factory function.
+
+```dart
+void spawnBullet(Vector2 position, Vector2 velocity) {
+  final bullet = bulletPool.acquire();
+  bullet.position.setFrom(position);
+  bullet.velocity.setFrom(velocity);
+  world.add(bullet);
+}
+```
+
+**Returning components to the pool:**
+
+Components are returned to the pool **automatically** when they are removed from the game
+tree. Simply call `removeFromParent()` on the component — there is no manual release step.
+
+```dart
+class Bullet extends SpriteComponent with CollisionCallbacks {
+  Vector2 velocity = Vector2.zero();
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    position.add(velocity * dt);
+
+    // Remove bullet if it goes off screen — automatically returned to pool
+    if (position.x < -100 || position.x > game.size.x + 100) {
+      removeFromParent();
+    }
+  }
+
+  @override
+  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
+    super.onCollisionStart(points, other);
+    // Return to pool on collision — no manual release needed
+    removeFromParent();
+  }
+
+  @override
+  void onMount() {
+    super.onMount();
+    // Reset visual/internal state here so the component is clean when reused.
+    // Caller-configured state (position, velocity) should NOT be reset here
+    // because it is set between acquire() and add().
+  }
+}
+```
+
+
+### Pool Management
+
+**Checking available components:**
+
+You can check how many components are currently available in the pool:
+
+```dart
+print('Available bullets: ${bulletPool.availableCount}');
+```
+
+**Clearing the pool:**
+
+If you need to free up memory or reset the pool, you can clear all available components:
+
+```dart
+bulletPool.clear();
+```
+
+```{note}
+Clearing only affects components currently in the pool. Components that are in use
+(acquired but not yet released) are not affected.
+```
+
+
+### Best Practices
+
+1. **No special mixin needed**: Any `Component` subclass can be pooled. Just pass a factory
+   function to `ComponentPool` and you're ready to go.
+
+2. **Use `onMount` to reset internal state**: Reset visual or internal properties (e.g.
+   animation frame, bounce phase) in `onMount()`. Do not reset caller-configured state
+   (like position or velocity) there, since those are set between `acquire()` and `add()`.
+
+3. **Just call `removeFromParent()`**: Components are returned to the pool automatically
+   when removed. There is no manual release method to call.
+
+4. **Set appropriate pool sizes**: Set `maxSize` based on your game's needs. Too small and
+   you'll create new objects frequently; too large and you'll waste memory.
+
+5. **Use `initialSize` for warm-up**: Set `initialSize` to pre-create commonly used
+   components, reducing frame drops during gameplay.
+
+6. **Pool behavior is LIFO**: The pool uses a stack (Last In, First Out) internally, meaning
+   the most recently returned component will be the next one acquired.
