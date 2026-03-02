@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fast_noise/fast_noise.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/animation.dart' show Curve, Curves;
@@ -13,6 +15,10 @@ import 'package:flutter/animation.dart' show Curve, Curves;
 /// the magnitude and the direction of shaking is controlled by the effect's
 /// `offset`.
 class NoiseEffectController extends DurationEffectController {
+  /// Square root of 2 is used as the y-offset for noise sampling to avoid
+  /// landing on integer lattice points where Perlin noise returns 0.
+  static const _noiseYOffset = sqrt2;
+
   final Curve taperingCurve;
   final Noise2 noise;
 
@@ -27,6 +33,6 @@ class NoiseEffectController extends DurationEffectController {
   double get progress {
     final x = timer / duration;
     final amplitude = taperingCurve.transform(1 - x);
-    return noise.getNoise2(x, 1) * amplitude;
+    return noise.getNoise2(timer, _noiseYOffset) * amplitude;
   }
 }
