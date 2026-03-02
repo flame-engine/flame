@@ -113,6 +113,54 @@ method must be implemented manually.
 If your component is a part of a larger hierarchy, then it will only receive drag events if its
 ancestors have all implemented the `containsLocalPoint` correctly.
 
+
+### isDragged
+
+The `DragCallbacks` mixin provides an `isDragged` getter that returns `true` while the component is
+actively being dragged. This is set to `true` at `onDragStart` and back to `false` at `onDragEnd`.
+It can be used, for example, to change the component's visual appearance during a drag.
+
+
+## Combining with ScaleCallbacks
+
+A component can use both `DragCallbacks` and `ScaleCallbacks` at the same time. When both mixins are
+present, single-finger gestures produce drag events and two-finger gestures produce both drag and
+scale events. This is useful for components that should be draggable with one finger and
+pinch-zoomable or rotatable with two fingers.
+
+```dart
+class InteractiveRect extends RectangleComponent
+    with ScaleCallbacks, DragCallbacks {
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    position += event.localDelta;
+  }
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    // store initial angle/scale for relative updates
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    angle = initialAngle + event.rotation;
+  }
+}
+```
+
+
+### Dynamic addition
+
+Components with different callback types can be added to the game at any time. For example, you can
+start with only `DragCallbacks` components and later add a `ScaleCallbacks` component. Flame will
+automatically reconfigure the gesture handling so that both types work correctly. Any gestures that
+are already in progress (e.g. an ongoing drag) will continue uninterrupted during this transition.
+
+See also [Scale Events — Combining with DragCallbacks](scale_events.md#combining-with-dragcallbacks).
+
+
 ```dart
 class MyComponent extends PositionComponent with DragCallbacks {
   MyComponent({super.size});
