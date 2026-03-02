@@ -241,10 +241,21 @@ class PositionComponent extends Component
     var totalScaleX = 1.0;
     var totalScaleY = 1.0;
 
-    final ancestorChain = ancestors(includeSelf: true).toList(growable: false)
-      ..reverse();
+    // Optimization: Use a simple while loop to build the parent chain.
+    // This avoids using ancestors() which allocates iterators and
+    // intermediate lists.
+    // (e.g., .toList().reverse()) on every call.
+    var current = this is Component ? this as Component : null;
+    final chain = <Component>[];
+    while (current != null) {
+      chain.add(current);
+      current = current.parent;
+    }
 
-    for (final ancestor in ancestorChain) {
+    // Traverse the chain from top-down to correctly calculate
+    // the absolute angle.
+    for (var i = chain.length - 1; i >= 0; i--) {
+      final ancestor = chain[i];
       if (ancestor is ReadOnlyScaleProvider) {
         final ancestorScale = (ancestor as ReadOnlyScaleProvider).scale;
         totalScaleX *= ancestorScale.x;
@@ -267,15 +278,30 @@ class PositionComponent extends Component
     return angle.toNormalizedAngle();
   }
 
-  /// The resulting scale after all the ancestors and the components own scale
-  /// has been applied.
-  Vector2 get absoluteScale => scale.clone()..multiply(_parentAbsoluteScale);
+  Vector2 get absoluteScale {
+    // Optimization: Directly traverse parents with a loop to avoid
+    // collection allocations (whereType, fold, etc.) and Vector2 cloning.
+    final result = Vector2.all(1.0);
+    var current = parent;
+    while (current != null) {
+      if (current is ReadOnlyScaleProvider) {
+        result.multiply((current as ReadOnlyScaleProvider).scale);
+      }
+      current = current.parent;
+    }
+    return result..multiply(scale);
+  }
 
   Vector2 get _parentAbsoluteScale {
-    return ancestors().whereType<ReadOnlyScaleProvider>().fold<Vector2>(
-      Vector2.all(1.0),
-      (totalScale, c) => totalScale..multiply(c.scale),
-    );
+    final result = Vector2.all(1.0);
+    var current = parent;
+    while (current != null) {
+      if (current is ReadOnlyScaleProvider) {
+        result.multiply((current as ReadOnlyScaleProvider).scale);
+      }
+      current = current.parent;
+    }
+    return result;
   }
 
   /// Measure the distance (in parent's coordinate space) between this
@@ -358,14 +384,20 @@ class PositionComponent extends Component
   /// on the screen lies within this [PositionComponent], and where
   /// exactly it hits.
   Vector2 absoluteToLocal(Vector2 point) {
-    var c = parent;
-    while (c != null) {
-      if (c is PositionComponent) {
-        return toLocal(c.absoluteToLocal(point));
+    var ancestor = parent;
+    final chain = <PositionComponent>[];
+    while (ancestor != null) {
+      if (ancestor is PositionComponent) {
+        chain.add(ancestor as PositionComponent);
       }
-      c = c.parent;
+      ancestor = ancestor.parent;
     }
-    return toLocal(point);
+
+    var result = point;
+    for (var i = chain.length - 1; i >= 0; i--) {
+      result = chain[i].toLocal(result);
+    }
+    return toLocal(result);
   }
 
   /// The top-left corner's position in the parent's coordinates.
@@ -551,9 +583,25 @@ class PositionComponent extends Component
     } else {
       final topRight = projector(Anchor.topRight);
       final bottomLeft = projector(Anchor.bottomLeft);
-      final xs = [topLeft.x, topRight.x, bottomLeft.x, bottomRight.x]..sort();
-      final ys = [topLeft.y, topRight.y, bottomLeft.y, bottomRight.y]..sort();
-      return Rect.fromLTRB(xs.first, ys.first, xs.last, ys.last);
+
+      final minX = math.min(
+        math.min(topLeft.x, bottomRight.x),
+        math.min(topRight.x, bottomLeft.x),
+      );
+      final maxX = math.max(
+        math.max(topLeft.x, bottomRight.x),
+        math.max(topRight.x, bottomLeft.x),
+      );
+      final minY = math.min(
+        math.min(topLeft.y, bottomRight.y),
+        math.min(topRight.y, bottomLeft.y),
+      );
+      final maxY = math.max(
+        math.max(topLeft.y, bottomRight.y),
+        math.max(topRight.y, bottomLeft.y),
+      );
+
+      return Rect.fromLTRB(minX, minY, maxX, maxY);
     }
   }
 

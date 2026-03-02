@@ -91,8 +91,8 @@ class _BenchmarkComponent extends PositionComponent {
   void update(double dt) {
     super.update(dt);
 
-    position.add(velocity * dt);
-    velocity.add(Vector2(0, 10 * dt));
+    position.addScaled(velocity, dt);
+    velocity.y += 10 * dt;
 
     if (position.y > _groundY) {
       position.y = _groundY;

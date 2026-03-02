@@ -50,7 +50,9 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
             _potentials[prospect.hash] = prospect;
           }
         } else {
-          _active.remove(activeItem);
+          // Optimization: removeAt(i) is more efficient than remove(item)
+          // as it avoids searching the list for the item index.
+          _active.removeAt(i);
         }
       }
       _active.add(item);

@@ -16,13 +16,18 @@ abstract class CollisionDetection<
 
   List<T> get items => broadphase.items;
   final _lastPotentials = <CollisionProspect<T>>[];
+  final _potentialHashes = <int>{};
   final collisionsCompletedNotifier = CollisionDetectionCompletionNotifier();
 
   CollisionDetection({required this.broadphase});
 
   void add(T item) => broadphase.add(item);
 
-  void addAll(Iterable<T> items) => items.forEach(add);
+  void addAll(Iterable<T> items) {
+    for (final item in items) {
+      add(item);
+    }
+  }
 
   /// Removes the [item] from the collision detection, if you just want to
   /// temporarily inactivate it you can set
@@ -30,13 +35,20 @@ abstract class CollisionDetection<
   void remove(T item) => broadphase.remove(item);
 
   /// Removes all [items] from the collision detection, see [remove].
-  void removeAll(Iterable<T> items) => items.forEach(remove);
+  void removeAll(Iterable<T> items) {
+    for (final item in items) {
+      remove(item);
+    }
+  }
 
   /// Run collision detection for the current state of [items].
   void run() {
     broadphase.update();
     final potentials = broadphase.query();
-    final hashes = Set.unmodifiable(potentials.map((p) => p.hash));
+    _potentialHashes.clear();
+    for (final p in potentials) {
+      _potentialHashes.add(p.hash);
+    }
 
     for (final potential in potentials) {
       final itemA = potential.a;
@@ -60,7 +72,7 @@ abstract class CollisionDetection<
     // Handles callbacks for an ended collision that the broadphase didn't
     // report as a potential collision anymore.
     for (final prospect in _lastPotentials) {
-      if (!hashes.contains(prospect.hash) &&
+      if (!_potentialHashes.contains(prospect.hash) &&
           prospect.a.collidingWith(prospect.b)) {
         handleCollisionEnd(prospect.a, prospect.b);
       }

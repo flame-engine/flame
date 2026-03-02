@@ -11,6 +11,8 @@
 .history
 .vscode/
 .venv/
+.tool-versions
+.gitignore
 
 # IntelliJ related
 *.iml

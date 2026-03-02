@@ -32,6 +32,10 @@ class Transform2D extends ChangeNotifier {
   final Matrix4 _transformMatrix;
   bool _recalculate;
   double _angle;
+  // Cashed trigonometric values to avoid repeated math.cos/math.sin calls
+  // when the angle hasn't changed.
+  double _cosA;
+  double _sinA;
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
   final NotifyingVector2 _offset;
@@ -40,6 +44,8 @@ class Transform2D extends ChangeNotifier {
     : _transformMatrix = Matrix4.identity(),
       _recalculate = true,
       _angle = 0,
+      _cosA = 1.0,
+      _sinA = 0.0,
       _position = NotifyingVector2.zero(),
       _scale = NotifyingVector2.all(1),
       _offset = NotifyingVector2.zero() {
@@ -106,8 +112,13 @@ class Transform2D extends ChangeNotifier {
   /// the angle is negative then the rotation is counterclockwise.
   double get angle => _angle;
   set angle(double a) {
-    _angle = a;
-    _markAsModified();
+    if (_angle != a) {
+      _angle = a;
+      // Recalculate and cache trigonometric values only when angle changes.
+      _cosA = math.cos(a);
+      _sinA = math.sin(a);
+      _markAsModified();
+    }
   }
 
   /// Similar to [angle], but uses degrees instead of radians.
@@ -163,12 +174,12 @@ class Transform2D extends ChangeNotifier {
       //       .. scale(_scale.x, _scale.y, 1)
       //       .. translate(_offset.x, _offset.y);
       final m = _transformMatrix.storage;
-      final cosA = math.cos(_angle);
-      final sinA = math.sin(_angle);
-      m[0] = cosA * _scale.x;
-      m[1] = sinA * _scale.x;
-      m[4] = -sinA * _scale.y;
-      m[5] = cosA * _scale.y;
+      // Optimization: Using cached cos/sin values to reduce CPU overhead
+      // in the transformation matrix recalculation.
+      m[0] = _cosA * _scale.x;
+      m[1] = _sinA * _scale.x;
+      m[4] = -_sinA * _scale.y;
+      m[5] = _cosA * _scale.y;
       m[12] = _position.x + m[0] * _offset.x + m[4] * _offset.y;
       m[13] = _position.y + m[1] * _offset.x + m[5] * _offset.y;
       _recalculate = false;

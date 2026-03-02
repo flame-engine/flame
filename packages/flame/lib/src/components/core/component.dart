@@ -585,20 +585,15 @@ class Component {
     }
 
     render(canvas);
+
+    // Optimization: Children directly use the shared static _renderContexts
+    // stack. This avoids copying context lists (O(Depth)) for every
+    // component in the tree, significantly reducing allocations.
+    // drastically reducing object allocations during the render cycle.
     final children = _children;
     if (children != null) {
       for (final child in children) {
-        final hasContext = _renderContexts.isNotEmpty;
-        if (hasContext) {
-          child._renderContexts.addAll(_renderContexts);
-        }
         child.renderTree(canvas);
-        if (hasContext) {
-          child._renderContexts.removeRange(
-            _renderContexts.length,
-            child._renderContexts.length,
-          );
-        }
       }
     }
 
@@ -1109,14 +1104,22 @@ class Component {
 
   //#region Context
 
-  final QueueList<ComponentRenderContext> _renderContexts = QueueList();
+  // Shared static stack for efficient render context lookup without
+  // per-child allocations.
+  static final QueueList<ComponentRenderContext> _renderContexts = QueueList();
 
   /// Override this method if you want your component to provide a custom
   /// render context to all its children (recursively).
   ComponentRenderContext? get renderContext => null;
 
   T? findRenderContext<T extends ComponentRenderContext>() {
-    return _renderContexts.whereType<T>().lastOrNull;
+    for (var i = _renderContexts.length - 1; i >= 0; i--) {
+      final context = _renderContexts[i];
+      if (context is T) {
+        return context;
+      }
+    }
+    return null;
   }
 
   //#endregion

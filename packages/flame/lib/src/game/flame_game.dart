@@ -274,11 +274,17 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     return false;
   }
 
+  // Monoatomic stopwatch for efficient and high-precision time tracking
+  // across game ticks.
+  static final Stopwatch _stopwatch = Stopwatch()..start();
+
   /// Returns the current time in seconds with microseconds precision.
   ///
   /// This is compatible with the `dt` value used in the [update] method.
   double currentTime() {
-    return DateTime.now().microsecondsSinceEpoch.toDouble() /
+    // Optimization: Use Stopwatch for high-precision, low-overhead
+    // monotonic time.
+    return _stopwatch.elapsedMicroseconds.toDouble() /
         Duration.microsecondsPerSecond;
   }
 
