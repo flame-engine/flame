@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -57,6 +58,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.addRepaintBoundary = true,
+    this.behavior = HitTestBehavior.opaque,
     super.key,
   }) : gameFactory = null {
     _initializeGame(game!);
@@ -93,6 +95,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
     this.autofocus = true,
     this.mouseCursor,
     this.addRepaintBoundary = true,
+    this.behavior = HitTestBehavior.opaque,
     super.key,
   }) : game = null;
 
@@ -161,6 +164,18 @@ class GameWidget<T extends Game> extends StatefulWidget {
   /// Whether the game should assume the behavior of a [RepaintBoundary],
   /// defaults to `true`.
   final bool addRepaintBoundary;
+
+  /// How the game widget behaves during hit testing.
+  ///
+  /// - [HitTestBehavior.opaque] (default): the game absorbs all pointer
+  ///   events on its surface, preventing widgets behind it from receiving them.
+  /// - [HitTestBehavior.deferToChild]: the game only intercepts events at
+  ///   positions where a component with event callbacks (e.g. [TapCallbacks])
+  ///   exists. Events at other positions pass through to widgets behind.
+  /// - [HitTestBehavior.translucent]: the game receives events where it has
+  ///   event-handling components, but always allows widgets behind it to be
+  ///   hit-tested as well.
+  final HitTestBehavior behavior;
 
   /// Renders a [game] in a flutter widget tree alongside widgets overlays.
   ///
@@ -276,6 +291,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     currentGame.removeGameStateListener(_onGameStateChange);
     currentGame.lifecycleStateChange(AppLifecycleState.paused);
     currentGame.finalizeRemoval();
+    currentGame.widgetBuildContext = null;
     if (callGameOnDispose) {
       currentGame.onDispose();
     }
@@ -299,6 +315,12 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       disposeCurrentGame();
       initCurrentGame();
     }
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    currentGame.onHotReload();
   }
 
   @override
@@ -334,6 +356,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       Widget? internalGameWidget = RenderGameWidget(
         game: currentGame,
         addRepaintBoundary: widget.addRepaintBoundary,
+        behavior: widget.behavior,
       );
 
       assert(
@@ -369,12 +392,15 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
           onKeyEvent: _handleKeyEvent,
           child: MouseRegion(
             cursor: currentGame.mouseCursor,
+            opaque: widget.behavior == HitTestBehavior.opaque,
             child: Directionality(
               textDirection: textDir,
-              child: ColoredBox(
-                color: currentGame.backgroundColor(),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: currentGame.backgroundColor(),
+                ),
                 child: LayoutBuilder(
-                  builder: (_, BoxConstraints constraints) {
+                  builder: (layoutContext, BoxConstraints constraints) {
                     return _protectedBuild(() {
                       final size = constraints.biggest.toVector2();
                       if (size.isZero()) {
@@ -382,6 +408,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             Container();
                       }
                       currentGame.onGameResize(size);
+                      currentGame.widgetBuildContext = layoutContext;
                       // This should only be called if the game has already been
                       // loaded (in the case of resizing for example), since
                       // update otherwise should be called after onMount.

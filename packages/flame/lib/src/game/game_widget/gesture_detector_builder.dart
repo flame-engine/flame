@@ -43,7 +43,7 @@ class GestureDetectorBuilder {
     }
     return RawGestureDetector(
       gestures: _gestures,
-      behavior: HitTestBehavior.opaque,
+      behavior: HitTestBehavior.deferToChild,
       child: child,
     );
   }

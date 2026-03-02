@@ -79,6 +79,7 @@ mixin FlameTailoredIsolate<Q, R> on Component {
     Q message, {
     String? debugLabel,
   }) {
+    // ignore: experimental_member_use
     return _isolate!.computeStream(callback, message, debugLabel: debugLabel);
   }
 }

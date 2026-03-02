@@ -16,9 +16,11 @@ one representing one frame, and the animation effect is achieved by rendering on
 the other over a time frame.
 
 To better visualize this, this is the animation that we will be using, note how the image holds 4
-individual images (or frames).
+individual images (or frames). Right-click the image below, choose "Save as...", and store it as
+`player.png` in your `assets/images/` folder (replacing the static `player-sprite.png` we used
+before):
 
-![](app/assets/images/player.png)
+![player](app/assets/images/player.png)
 
 Flame provides us with a specialized classes to deal with such images: `SpriteAnimation` and its component
 wrapper `SpriteAnimationComponent` and changing our `Player` component to be an animation is quite
@@ -80,7 +82,14 @@ of the game a lot. If you want to read more about Parallax Scrolling, check this
 from [Wikipedia](https://en.wikipedia.org/wiki/Parallax_scrolling).
 
 Flame provides classes to implement parallax scrolling out of the box, these classes are `Parallax` and
-`ParallaxComponent`, so lets take a look at how we can add that new feature to the game:
+`ParallaxComponent`. We will need three star layer images for our parallax background. Right-click
+each image below, choose "Save as...", and store them in your `assets/images/` folder:
+
+- `stars_0.png` (farthest layer): ![stars_0](app/assets/images/stars_0.png)
+- `stars_1.png` (middle layer): ![stars_1](app/assets/images/stars_1.png)
+- `stars_2.png` (closest layer): ![stars_2](app/assets/images/stars_2.png)
+
+Now lets take a look at how we can add that new feature to the game:
 
 ```dart
 import 'package:flame/components.dart';

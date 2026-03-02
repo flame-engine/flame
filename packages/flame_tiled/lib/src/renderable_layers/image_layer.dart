@@ -14,8 +14,8 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
   final Image _image;
   late final ImageRepeat _repeat;
   final MutableRect _paintArea = MutableRect.fromLTRB(0, 0, 0, 0);
-  final Vector2 _canvasSize = Vector2.zero();
   final Vector2 _maxTranslation = Vector2.zero();
+  late final Vector2 _mapSize;
 
   FlameImageLayer({
     required super.layer,
@@ -25,13 +25,15 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required Image image,
     super.filterQuality,
   }) : _image = image {
+    _mapSize = Vector2(
+      map.width * destTileSize.x,
+      map.height * destTileSize.y,
+    );
     _initImageRepeat();
   }
 
   @override
-  void handleResize(Vector2 canvasSize) {
-    _canvasSize.setFrom(canvasSize);
-  }
+  void handleResize(Vector2 canvasSize) {}
 
   @override
   void render(Canvas canvas, CameraComponent? camera) {
@@ -79,20 +81,22 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     // it still matches up with its initial layer offsets.
 
     if (_repeat == ImageRepeat.repeatX || _repeat == ImageRepeat.repeat) {
-      final xImages = (_maxTranslation.x / _image.size.x).ceil();
+      // Calculate images needed for max translation and map size
+      final xImages = ((_maxTranslation.x + _mapSize.x) / _image.size.x).ceil();
       _paintArea.left = -_image.size.x * xImages;
-      _paintArea.right = _canvasSize.x + _image.size.x * xImages;
+      _paintArea.right = _image.size.x * xImages;
     } else {
       _paintArea.left = 0;
-      _paintArea.right = _canvasSize.x;
+      _paintArea.right = _mapSize.x;
     }
     if (_repeat == ImageRepeat.repeatY || _repeat == ImageRepeat.repeat) {
-      final yImages = (_maxTranslation.y / _image.size.y).ceil();
+      // Calculate images needed for max translation and map size
+      final yImages = ((_maxTranslation.y + _mapSize.y) / _image.size.y).ceil();
       _paintArea.top = -_image.size.y * yImages;
-      _paintArea.bottom = _canvasSize.y + _image.size.y * yImages;
+      _paintArea.bottom = _image.size.y * yImages;
     } else {
       _paintArea.top = 0;
-      _paintArea.bottom = _canvasSize.y;
+      _paintArea.bottom = _mapSize.y;
     }
   }
 

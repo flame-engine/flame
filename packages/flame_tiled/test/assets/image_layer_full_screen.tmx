@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down"
+    width="15" height="15" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5"
+    nextobjectid="1">
+    <imagelayer id="1" name="BackgroundImage">
+        <image source="Tileset_Hexagonal_PointyTop_60x52_60x80.png" width="240" height="240" />
+    </imagelayer>
+    <imagelayer id="2" name="GreenSprite" offsetx="112" offsety="112">
+        <image source="green_sprite.png" width="16" height="16" />
+    </imagelayer>
+    <imagelayer id="3" name="RedSprite" offsetx="224" offsety="0">
+        <image source="red_sprite.png" width="16" height="16" />
+    </imagelayer>
+    <imagelayer id="4" name="Gear" offsetx="16" offsety="144">
+        <image source="images/gear.png" width="128" height="74" />
+    </imagelayer>
+</map>

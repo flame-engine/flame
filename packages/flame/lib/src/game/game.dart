@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/flame.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
@@ -56,11 +58,18 @@ abstract mixin class Game {
   GameRenderBox get renderBox => _gameRenderBox!;
   GameRenderBox? _gameRenderBox;
 
+  /// Build context set by [GameWidgetState] before the game is fully
+  /// attached to the render tree. This allows components to access the
+  /// build context during [onLoad] and [onMount].
+  @internal
+  BuildContext? widgetBuildContext;
+
   /// Currently attached build context. Can be null if not attached.
-  BuildContext? get buildContext => _gameRenderBox?.buildContext;
+  BuildContext? get buildContext =>
+      _gameRenderBox?.buildContext ?? widgetBuildContext;
 
   /// Whether the game widget was attached to the Flutter tree.
-  bool get isAttached => buildContext != null;
+  bool get isAttached => _gameRenderBox != null;
 
   /// Current size of the game as provided by the framework; it will be null if
   /// layout has not been computed yet.
@@ -125,6 +134,18 @@ abstract mixin class Game {
   /// Once this is true, the game is ready to have its size used or in the case
   /// of a FlameGame, to receive components.
   bool get hasLayout => _size != null;
+
+  /// Whether the game has an event-handling component at the given [position].
+  ///
+  /// Used by [GameRenderBox] for hit testing to determine if pointer events
+  /// should be consumed by the game or passed through to Flutter widgets
+  /// behind it.
+  ///
+  /// The default returns `true`, meaning games that directly extend [Game]
+  /// will catch all events on their entire surface. [FlameGame] overrides this
+  /// to only report a hit when a component with event callbacks
+  /// (e.g. [TapCallbacks]) exists at the given position.
+  bool containsEventHandlerAt(Vector2 position) => true;
 
   /// Returns the game background color.
   /// By default it will return a black color.
@@ -231,6 +252,12 @@ abstract mixin class Game {
   /// but before it is actually removed. See the docs for an example on how to
   /// do cleanups to avoid memory leaks.
   void onRemove() {}
+
+  /// Called when Flutter's hot reload is triggered.
+  ///
+  /// [FlameGame] overrides this to propagate the notification
+  /// to all components in the component tree.
+  void onHotReload() {}
 
   /// Called when the GameWidget is disposed by Flutter.
   void onDispose() {}

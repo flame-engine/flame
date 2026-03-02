@@ -99,6 +99,7 @@ network.
 framework.
 - [flame_rive][flame_rive] for [Rive][rive]: Create interactive animations.
 - [flame_svg][flame_svg] for [flutter_svg][flutter_svg]: Draw SVG files in Flutter.
+- [flame_texturepacker][flame_texturepacker]: Load and use sprite sheets generated with [TexturePacker][texturepacker]
 - [flame_tiled][flame_tiled] for [Tiled][tiled]: 2D tile map level editor.
 
 
@@ -194,5 +195,7 @@ via an issue, GitHub discussion, or reach out to the team either using the
 [rive]: https://rive.app/
 [flame_svg]: https://github.com/flame-engine/flame/tree/main/packages/flame_svg
 [flutter_svg]: https://github.com/dnfield/flutter_svg
+[flame_texturepacker]: https://github.com/flame-engine/flame/tree/main/packages/flame_texturepacker
+[texturepacker]: https://www.codeandweb.com/texturepacker
 [flame_tiled]: https://github.com/flame-engine/flame/tree/main/packages/flame_tiled
 [tiled]: https://www.mapeditor.org/

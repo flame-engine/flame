@@ -209,6 +209,91 @@ void main() {
       });
 
       testWithFlameGame(
+        'removed children are not re-added when parent is moved',
+        (game) async {
+          final grandParent1 = Component();
+          final grandParent2 = Component();
+          final parent = Component();
+          final child = Component();
+          parent.add(child);
+          await game.world.ensureAdd(grandParent1);
+          await game.world.ensureAdd(grandParent2);
+          await grandParent1.ensureAdd(parent);
+
+          expect(parent.children.length, 1);
+          expect(child.parent, parent);
+
+          // In the same tick: move parent and remove child
+          parent.parent = grandParent2;
+          parent.remove(child);
+          game.update(0);
+          await game.ready();
+
+          expect(parent.children.length, 0);
+          expect(child.parent, isNull);
+          expect(child.isMounted, false);
+        },
+      );
+
+      testWithFlameGame(
+        'removed children are not re-added when parent is moved '
+        '(remove before move)',
+        (game) async {
+          final grandParent1 = Component();
+          final grandParent2 = Component();
+          final parent = Component();
+          final child = Component();
+          parent.add(child);
+          await game.world.ensureAdd(grandParent1);
+          await game.world.ensureAdd(grandParent2);
+          await grandParent1.ensureAdd(parent);
+
+          expect(parent.children.length, 1);
+          expect(child.parent, parent);
+
+          // In the same tick: remove child then move parent
+          parent.remove(child);
+          parent.parent = grandParent2;
+          game.update(0);
+          await game.ready();
+
+          expect(parent.children.length, 0);
+          expect(child.parent, isNull);
+          expect(child.isMounted, false);
+        },
+      );
+
+      testWithFlameGame(
+        'only removed children are skipped when parent is moved',
+        (game) async {
+          final grandParent1 = Component();
+          final grandParent2 = Component();
+          final parent = Component();
+          final child1 = Component();
+          final child2 = Component();
+          parent.add(child1);
+          parent.add(child2);
+          await game.world.ensureAdd(grandParent1);
+          await game.world.ensureAdd(grandParent2);
+          await grandParent1.ensureAdd(parent);
+
+          expect(parent.children.length, 2);
+
+          // Move parent and remove only child1
+          parent.parent = grandParent2;
+          parent.remove(child1);
+          game.update(0);
+          await game.ready();
+
+          expect(parent.children.length, 1);
+          expect(child1.parent, isNull);
+          expect(child1.isMounted, false);
+          expect(child2.parent, parent);
+          expect(child2.isMounted, true);
+        },
+      );
+
+      testWithFlameGame(
         'components added in correct order even with different load times',
         (game) async {
           final a = _SlowComponent('A', 0.1);
@@ -1007,9 +1092,27 @@ void main() {
       );
 
       testWithFlameGame(
-        'A removed child should be able to be removed from onRemove',
+        'removeAll(children) in onRemove detaches children',
         (game) async {
           final parent = _RemoveAllChildrenComponent();
+          final child = _LifecycleComponent('child')..addToParent(parent);
+          await game.world.add(parent);
+          await game.ready();
+          parent.removeFromParent();
+          game.update(0);
+          expect(parent.isMounted, false);
+          expect(child.isMounted, false);
+          expect(child.parent, isNull);
+          expect(parent.children.length, 0);
+          expect(parent.parent, isNull);
+        },
+      );
+
+      testWithFlameGame(
+        'children retain parent when ancestor is removed without explicit '
+        'child removal',
+        (game) async {
+          final parent = Component();
           final child = _LifecycleComponent('child')..addToParent(parent);
           await game.world.add(parent);
           await game.ready();
@@ -2000,7 +2103,7 @@ class _ComponentWithChildrenRemoveAll extends Component {
 class _RemoveAllChildrenComponent extends Component {
   @override
   void onRemove() {
-    super.onMount();
+    super.onRemove();
     removeAll(children);
   }
 }

@@ -101,7 +101,12 @@ If you run the game now you will finally be able to defeat the enemies crawling 
 
 To add some final touches, let's add some explosion animations to introduce more action to the game!
 
-First, let's create the explosion class:
+First, we need an explosion sprite sheet. Right-click the image below, choose "Save as...", and
+store it as `explosion.png` in your `assets/images/` folder:
+
+![explosion](app/assets/images/explosion.png)
+
+Now let's create the explosion class:
 
 ```dart
 class Explosion extends SpriteAnimationComponent

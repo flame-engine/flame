@@ -613,6 +613,45 @@ void main() {
     },
   });
 
+  runCollisionTestRegistry({
+    'parent isColliding is consistent when hitbox is replaced': (game) async {
+      // Regression test for https://github.com/flame-engine/flame/issues/3417
+      // When a hitbox is removed and a new one added to the same parent,
+      // the parent's isColliding should correctly reflect the new collision.
+      final obstacle = TestBlock(
+        Vector2.all(5),
+        Vector2.all(10),
+        type: CollisionType.passive,
+      );
+      final player = TestBlock(
+        Vector2.zero(),
+        Vector2.all(10),
+        addTestHitbox: false,
+      );
+      await game.ensureAddAll([obstacle, player]);
+
+      // Add first hitbox that collides with obstacle.
+      final hitboxA = TestHitbox();
+      player.add(hitboxA);
+      game.update(0);
+
+      expect(player.isColliding, isTrue);
+      expect(player.startCounter, 1);
+
+      // Remove old hitbox and add new one that also collides.
+      player.remove(hitboxA);
+      final hitboxB = TestHitbox();
+      player.add(hitboxB);
+      game.update(0);
+
+      // The parent should still report as colliding since the new hitbox
+      // collides with the obstacle.
+      expect(player.isColliding, isTrue);
+      expect(player.startCounter, 2);
+      expect(player.endCounter, 1);
+    },
+  });
+
   group('ComponentTypeCheck(only supported in the QuadTree)', () {
     testQuadTreeCollisionDetectionGame(
       'makes the correct Component type start to collide',

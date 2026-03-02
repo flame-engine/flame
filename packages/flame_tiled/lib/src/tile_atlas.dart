@@ -161,9 +161,12 @@ class TiledAtlas {
     }
 
     if (imageList.length == 1) {
+      final mappedEntry = mappedImageList.first;
+      final resolvedImageSource = mappedEntry.$1;
+      final tiledImage = mappedEntry.$2;
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final image = (await imagesInstance.load(key)).clone();
+      final image = (await imagesInstance.load(resolvedImageSource)).clone();
 
       // There could be a special case that a concurrent call to this method
       // passes the check `if (atlasMap.containsKey(key))` due to the async call
@@ -171,7 +174,7 @@ class TiledAtlas {
       // block to prevent unintended reuse.
       return atlasMap[key] = TiledAtlas._(
         atlas: image,
-        offsets: {key: Offset.zero},
+        offsets: {tiledImage.source!: Offset.zero},
         key: key,
         useAtlas: useAtlas,
       );

@@ -16,6 +16,7 @@ class LayoutComponentExample1 extends FlameGame with DragCallbacks {
     required this.demoSize,
     required this.padding,
     required this.expandedMode,
+    required this.paddingInflateChild,
   });
 
   static const String description = '''
@@ -31,6 +32,7 @@ the various ways you can change this layout.
   final LayoutComponentExampleSize demoSize;
   final EdgeInsets padding;
   final bool expandedMode;
+  final bool paddingInflateChild;
 
   @override
   FutureOr<void> onLoad() {
@@ -54,6 +56,7 @@ the various ways you can change this layout.
           position: Vector2.zero(),
           padding: padding,
           expandedMode: expandedMode,
+          paddingInflateChild: paddingInflateChild,
           size: demoSize.toVector2(),
         ),
       ],
@@ -83,6 +86,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
     required super.position,
     required EdgeInsets padding,
     required bool expandedMode,
+    required this.paddingInflateChild,
     super.size,
     super.key,
   }) : _padding = padding,
@@ -96,7 +100,13 @@ class LayoutDemo1 extends LinearLayoutComponent {
   set expandedMode(bool value) {
     _expandedMode = value;
     removeAll(children.toList());
-    addAll(createComponentList(expandedMode: expandedMode, padding: padding));
+    addAll(
+      createComponentList(
+        expandedMode: expandedMode,
+        padding: padding,
+        inflateChild: paddingInflateChild,
+      ),
+    );
   }
 
   EdgeInsets _padding = EdgeInsets.zero;
@@ -108,10 +118,18 @@ class LayoutDemo1 extends LinearLayoutComponent {
     paddingComponent?.padding = padding;
   }
 
+  final bool paddingInflateChild;
+
   @override
   FutureOr<void> onLoad() {
     super.onLoad();
-    addAll(createComponentList(expandedMode: expandedMode, padding: padding));
+    addAll(
+      createComponentList(
+        expandedMode: expandedMode,
+        padding: padding,
+        inflateChild: paddingInflateChild,
+      ),
+    );
   }
 
   PaddingComponent? get paddingComponent {
@@ -124,6 +142,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
   static List<Component> createComponentList({
     required bool expandedMode,
     required EdgeInsets padding,
+    required bool inflateChild,
   }) {
     return [
       TextComponent(text: 'Some short text'),
@@ -143,6 +162,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
         ExpandedComponent(
           child: PaddingComponent(
             padding: padding,
+            inflateChild: inflateChild,
             child: RectangleComponent(
               size: Vector2(96, 96),
               paint: Paint()..color = Colors.blue,
@@ -152,6 +172,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
       else
         PaddingComponent(
           padding: padding,
+          inflateChild: inflateChild,
           child: RectangleComponent(
             size: Vector2(96, 96),
             paint: Paint()..color = Colors.blue,

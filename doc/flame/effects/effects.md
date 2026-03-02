@@ -1,5 +1,11 @@
 # Effects
 
+In game development, smoothly animating properties over time (moving a character, fading an element,
+scaling a power-up) is a constant need. Writing manual interpolation code in every `update` method
+is repetitive and error-prone. Effects provide a declarative way to describe these time-based
+changes: you attach an effect to a component, and it automatically handles the animation, then
+removes itself when finished.
+
 An effect is a special component that can attach to another component in order to modify its
 properties or appearance.
 

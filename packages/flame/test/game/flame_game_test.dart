@@ -410,6 +410,49 @@ void main() {
         expect(game.paused, isFalse);
       },
     );
+
+    group('dispose', () {
+      testWithFlameGame(
+        'removes all children from the game',
+        (game) async {
+          final component1 = _MyComponent();
+          final component2 = _MyComponent();
+          game.world.addAll([component1, component2]);
+          await game.ready();
+
+          expect(game.world.children.length, 2);
+
+          game.dispose();
+
+          expect(game.children.length, 0);
+        },
+      );
+
+      testWithFlameGame(
+        'calls onRemove on all components in the tree',
+        (game) async {
+          final component = _MyComponent();
+          game.world.add(component);
+          await game.ready();
+
+          expect(component.onRemoveCallCounter, 0);
+
+          game.dispose();
+
+          expect(component.onRemoveCallCounter, 1);
+        },
+      );
+
+      testWithFlameGame(
+        'clears image and asset caches',
+        (game) async {
+          game.dispose();
+
+          expect(game.images.keys, isEmpty);
+          expect(game.assets.cacheCount, 0);
+        },
+      );
+    });
   });
 }
 

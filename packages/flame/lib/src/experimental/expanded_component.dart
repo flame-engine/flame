@@ -38,12 +38,9 @@ class ExpandedComponent extends SingleLayoutComponent
     super.position,
     super.anchor,
     super.priority,
-    this.inflateChild = true,
+    super.inflateChild = true,
     super.child,
   }) : super(size: null);
-
-  /// Whether or not this [ExpandedComponent] will set [child]'s size to its own
-  final bool inflateChild;
 
   @override
   void setLayoutAxisLength(LayoutAxis axis, double? value) {

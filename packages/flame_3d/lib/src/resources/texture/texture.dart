@@ -32,6 +32,7 @@ class Texture extends Resource<gpu.Texture> {
         PixelFormat.rgba8888 => gpu.PixelFormat.r8g8b8a8UNormInt,
         PixelFormat.bgra8888 => gpu.PixelFormat.b8g8r8a8UNormInt,
         PixelFormat.rgbaFloat32 => gpu.PixelFormat.r32g32b32a32Float,
+        _ => throw UnsupportedError('Unsupported pixel format: $format'),
       },
     )..overwrite(sourceData);
   }

@@ -54,6 +54,10 @@ void addExperimentalStories(Dashbook dashbook) {
                 'Wrap with ExpandedComponent',
                 false,
               ),
+              paddingInflateChild: context.boolProperty(
+                'Padding Component inflates child',
+                false,
+              ),
             ),
           );
         },

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
+import 'package:flame/input.dart';
 import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -18,6 +20,23 @@ import 'package:meta/meta.dart';
 ///
 /// This is the recommended base class to use for most games made with Flame.
 /// It is based on the Flame Component System (also known as FCS).
+///
+/// The type parameter [W] allows you to specify a custom [World] subclass so
+/// that the [world] getter returns your specific type without casting. For
+/// example:
+///
+/// ```dart
+/// class MyWorld extends World {
+///   int score = 0;
+/// }
+///
+/// class MyGame extends FlameGame<MyWorld> {
+///   MyGame() : super(world: MyWorld());
+/// }
+/// ```
+///
+/// When [W] is specified, a matching world instance **must** be passed to the
+/// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
     with Game
     implements ReadOnlySizeProvider {
@@ -224,6 +243,37 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y < canvasSize.y;
   }
 
+  @override
+  bool containsEventHandlerAt(Vector2 position) {
+    // Deprecated game-level detector mixins handle events for the entire
+    // game surface, so any in-bounds point is a hit.
+    // ignore: deprecated_member_use_from_same_package
+    if (this is TapDetector ||
+        this is SecondaryTapDetector ||
+        this is TertiaryTapDetector ||
+        this is DoubleTapDetector ||
+        this is LongPressDetector ||
+        this is VerticalDragDetector ||
+        this is HorizontalDragDetector ||
+        this is ForcePressDetector ||
+        this is PanDetector ||
+        this is ScaleDetector ||
+        this is MultiTapListener ||
+        this is MultiTouchDragDetector) {
+      return true;
+    }
+    for (final component in super.componentsAtPoint(position)) {
+      if (component is TapCallbacks ||
+          component is DragCallbacks ||
+          component is DoubleTapCallbacks ||
+          component is ScaleCallbacks ||
+          component is SecondaryTapCallbacks) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /// Returns the current time in seconds with microseconds precision.
   ///
   /// This is compatible with the `dt` value used in the [update] method.
@@ -304,5 +354,27 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   void resumeEngine() {
     _pausedBecauseBackgrounded = false;
     super.resumeEngine();
+  }
+
+  @override
+  @mustCallSuper
+  void onHotReload() {
+    super.onHotReload();
+    handleHotReload();
+  }
+
+  /// Removes all children from the game and clears all caches.
+  ///
+  /// This will call [onRemove] on all components in the tree, clear
+  /// the [images] and [assets] caches, and process all pending
+  /// lifecycle events.
+  ///
+  /// After calling this method, the game is in a clean state with no
+  /// components or cached resources.
+  void dispose() {
+    removeAll(children);
+    processLifecycleEvents();
+    images.clearCache();
+    assets.clearCache();
   }
 }

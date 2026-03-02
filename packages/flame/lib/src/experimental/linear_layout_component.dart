@@ -7,7 +7,8 @@ import 'package:flutter/rendering.dart';
 
 enum Direction {
   horizontal,
-  vertical;
+  vertical
+  ;
 
   /// A getter for returning the [LayoutAxis] whose [LayoutAxis.axisIndex] can
   /// be used with [Vector2]s to get the corresponding axis values.

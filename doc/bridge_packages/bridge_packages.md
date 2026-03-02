@@ -81,6 +81,12 @@ Add the "Powered by Flame" splash screen.
 Draw SVG files in Flutter (bridge package for [flutter_svg]).
 :::
 
+:::{package} flame_texturepacker
+
+Load sprite sheets created by TexturePacker tool (bridge package for
+[TexturePacker]).
+:::
+
 :::{package} flame_tiled
 
 2D tilemap level editor (bridge package for [Tiled]).
@@ -94,6 +100,7 @@ Draw SVG files in Flutter (bridge package for [flutter_svg]).
 [Rive]: https://rive.app/
 [Riverpod]: https://github.com/rrousselGit/riverpod
 [Spine]: https://pub.dev/packages/spine_flutter
+[TexturePacker]: https://www.codeandweb.com/texturepacker
 [Tiled]: https://www.mapeditor.org/
 [flutter_svg]: https://github.com/dnfield/flutter_svg
 
@@ -115,5 +122,6 @@ flame_riverpod              <flame_riverpod/flame_riverpod.md>
 flame_splash_screen         <flame_splash_screen/flame_splash_screen.md>
 flame_spine                 <flame_spine/flame_spine.md>
 flame_svg                   <flame_svg/flame_svg.md>
+flame_texturepacker         <flame_texturepacker/flame_texturepacker.md>
 flame_tiled                 <flame_tiled/flame_tiled.md>
 ```

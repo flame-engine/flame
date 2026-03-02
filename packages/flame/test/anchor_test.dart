@@ -50,5 +50,12 @@ void main() {
       );
       expect(topLeft, position - size / 2);
     });
+
+    test('opposite anchor', () {
+      expect(Anchor.topCenter.opposite, Anchor.bottomCenter);
+      expect(Anchor.topLeft.opposite, Anchor.bottomRight);
+      expect(Anchor.center.opposite, Anchor.center);
+      expect(const Anchor(0.2, 0.3).opposite, const Anchor(0.8, 0.7));
+    });
   });
 }

@@ -102,8 +102,8 @@ class CircleCircleIntersections
     final centerA = shapeA.absoluteCenter;
     final centerB = shapeB.absoluteCenter;
     final distance = centerA.distanceTo(centerB);
-    final radiusA = shapeA.radius;
-    final radiusB = shapeB.radius;
+    final radiusA = shapeA.scaledRadius;
+    final radiusB = shapeB.scaledRadius;
     if (distance > radiusA + radiusB) {
       // Since the circles are too far away from each other to intersect we
       // return the empty set.

@@ -34,7 +34,7 @@ class _DebugTextElement extends InlineTextElement {
     paint
       ..color = style.color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0 * (style.fontWeight.index + 1) / 4;
+      ..strokeWidth = 2.0 * (style.fontWeight.value / 100) / 4;
     metrics = LineMetrics(
       width: text.length * charWidth,
       ascent: charHeight * (style.lineHeight + 1) / 2,

@@ -3,7 +3,8 @@ import 'package:flame_3d/src/parser/gltf/gltf_node.dart';
 /// The target that the WebGL buffer should be bound to.
 enum BufferViewTarget {
   arrayBuffer(34962),
-  elementArrayBuffer(34963);
+  elementArrayBuffer(34963)
+  ;
 
   final int value;
 

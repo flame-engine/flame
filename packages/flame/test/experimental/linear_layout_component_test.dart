@@ -483,6 +483,36 @@ void main() {
           expect(textBoxComponent.boxConfig.maxWidth, layoutComponent.width);
         },
       );
+      testWithFlameGame(
+        'setLayoutSize and setLayoutAxisLength each notify once',
+        (game) async {
+          final layoutComponent = ColumnComponent();
+          await game.ensureAdd(layoutComponent);
+          var setLayoutSizeCallCount = 0;
+          var setLayoutAxisLengthCallCount = 0;
+          void firstListener() {
+            setLayoutSizeCallCount += 1;
+          }
+
+          void secondListener() {
+            setLayoutAxisLengthCallCount += 1;
+          }
+
+          layoutComponent.size.addListener(firstListener);
+          layoutComponent.setLayoutSize(100, 100);
+          await game.lifecycleEventsProcessed;
+          layoutComponent.size.removeListener(firstListener);
+          expect(setLayoutSizeCallCount, 1);
+          expect(layoutComponent.size, Vector2(100, 100));
+
+          layoutComponent.size.addListener(secondListener);
+          layoutComponent.setLayoutAxisLength(LayoutAxis.x, 200);
+          await game.lifecycleEventsProcessed;
+          layoutComponent.size.removeListener(secondListener);
+          expect(setLayoutAxisLengthCallCount, 1);
+          expect(layoutComponent.size, Vector2(200, 100));
+        },
+      );
     });
   });
 }

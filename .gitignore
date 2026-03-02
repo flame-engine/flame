@@ -59,3 +59,7 @@ examples/**/.gitignore
 # FVM
 .fvm/
 .fvmrc
+
+# LLM
+.claude/
+.cursor/

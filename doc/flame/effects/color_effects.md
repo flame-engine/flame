@@ -105,8 +105,9 @@ final effect = OpacityEffect.by(
 );
 ```
 
-Currently this effect can only be applied to components that have a `HasPaint` mixin. If the target component
-uses multiple paints, the effect can target any individual color using the `paintId` parameter.
+Currently this effect can only be applied to components that have a `HasPaint` mixin. If the
+target component uses multiple paints, the effect can target any individual color using the
+`paintId` parameter.
 
 
 ## GlowEffect

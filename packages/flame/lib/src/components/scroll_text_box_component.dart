@@ -52,23 +52,23 @@ class ScrollTextBoxComponent<T extends TextRenderer> extends PositionComponent {
     final marginBottom = boxConfig?.margins.bottom ?? 0;
     final innerMargins = EdgeInsets.fromLTRB(0, marginTop, 0, marginBottom);
 
-    boxConfig ??= const TextBoxConfig();
-    boxConfig = TextBoxConfig(
-      timePerChar: boxConfig.timePerChar,
-      dismissDelay: boxConfig.dismissDelay,
-      growingBox: boxConfig.growingBox,
+    var resolvedBoxConfig = boxConfig ?? const TextBoxConfig();
+    resolvedBoxConfig = TextBoxConfig(
+      timePerChar: resolvedBoxConfig.timePerChar,
+      dismissDelay: resolvedBoxConfig.dismissDelay,
+      growingBox: resolvedBoxConfig.growingBox,
       maxWidth: size.x,
       margins: EdgeInsets.fromLTRB(
-        boxConfig.margins.left,
+        resolvedBoxConfig.margins.left,
         0,
-        boxConfig.margins.right,
+        resolvedBoxConfig.margins.right,
         0,
       ),
     );
     _scrollTextBoxComponent = _ScrollTextBoxComponent<T>(
       text: text,
       textRenderer: textRenderer,
-      boxConfig: boxConfig,
+      boxConfig: resolvedBoxConfig,
       align: align,
       pixelRatio: pixelRatio,
       onComplete: onComplete,
