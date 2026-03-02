@@ -54,7 +54,7 @@ class FlatCollisionBenchmark extends AsyncBenchmarkBase {
 
 /// Benchmarks collision detection with nested hierarchies where children have
 /// hitboxes and parents have non-uniform scale/rotation. This exercises the
-/// globalVertices() and AABB computation codepaths.
+/// globalVertices() and AABB computation code paths.
 class NestedCollisionBenchmark extends AsyncBenchmarkBase {
   final Random random;
 
