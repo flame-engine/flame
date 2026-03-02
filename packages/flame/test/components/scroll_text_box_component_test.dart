@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/text.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -82,6 +83,12 @@ test
 has
 five
 lines.''',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            fontSize: 8,
+            fontFamily: 'monospace',
+          ),
+        ),
       );
       expect(scrollComponent.newLineNotifier.value, equals(0));
 
