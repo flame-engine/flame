@@ -155,6 +155,7 @@ Clean-up of children and resources in a `FlameGame` is not done automatically
 and must be explicitly added to the `onRemove` call.
 ```
 
+
 ### onHotReload
 
 When Flutter's hot reload is triggered (debug mode only), the `GameWidget` calls `onHotReload` on
