@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -2321,6 +2323,130 @@ void main() {
                 reason: 'Unscaled CircleHitbox A should not be colliding',
               );
             },
+      });
+    });
+
+    group('Hitboxes with parent non-uniform scale and rotation', () {
+      runCollisionTestRegistry({
+        'parent non-uniform scale (2,1) + child rotation pi/2':
+            (game) async {
+          // Parent scaled (2,1) with child rotated 90 degrees.
+          // The correct transform produces global vertices at roughly
+          // (0,0), (-20,0), (-20,10), (0,10).
+          final parent = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+            scale: Vector2(2, 1),
+          );
+          final child = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+            angle: pi / 2,
+          );
+          final hitboxA = RectangleHitbox();
+          await child.add(hitboxA);
+          await parent.add(child);
+
+          // Block from (-2,3) to (2,7) straddles the right edge at x=0.
+          final blockComp = PositionComponent(
+            position: Vector2(-2, 3),
+            size: Vector2.all(4),
+          );
+          final hitboxB = RectangleHitbox();
+          await blockComp.add(hitboxB);
+
+          await game.ensureAddAll([parent, blockComp]);
+          game.update(0);
+          expect(
+            hitboxA.isColliding,
+            isTrue,
+            reason:
+                'Hitbox with parent non-uniform scale and child rotation '
+                'should collide with correctly positioned block',
+          );
+        },
+        'parent flip (-1,1) + child rotation + polygon hitbox':
+            (game) async {
+          // Parent flipped on x-axis, child rotated 45 degrees.
+          // Produces a diamond at roughly (30,0),(23,7),(30,14),(37,7).
+          final parent = PositionComponent(
+            position: Vector2(30, 0),
+            size: Vector2.all(10),
+            scale: Vector2(-1, 1),
+          );
+          final child = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+            angle: pi / 4,
+          );
+          final hitbox = PolygonHitbox([
+            Vector2(0, 0),
+            Vector2(10, 0),
+            Vector2(10, 10),
+            Vector2(0, 10),
+          ]);
+          await child.add(hitbox);
+          await parent.add(child);
+
+          // Block from (21,5) to (25,9) straddles the left edge.
+          final blockComp = PositionComponent(
+            position: Vector2(21, 5),
+            size: Vector2.all(4),
+          );
+          final hitboxB = RectangleHitbox();
+          await blockComp.add(hitboxB);
+
+          await game.ensureAddAll([parent, blockComp]);
+          game.update(0);
+          expect(
+            hitbox.isColliding,
+            isTrue,
+            reason:
+                'Flipped parent + rotated child polygon hitbox should '
+                'collide correctly',
+          );
+        },
+        'nested 3-level hierarchy: grandparent scale + parent rotation + '
+            'child hitbox': (game) async {
+          // Grandparent scaled (2,1), parent rotated 90 degrees at (5,5).
+          // Produces global vertices at (-10,5),(-10,15),(10,15),(10,5).
+          final grandparent = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(20),
+            scale: Vector2(2, 1),
+          );
+          final midParent = PositionComponent(
+            position: Vector2(5, 5),
+            size: Vector2.all(10),
+            angle: pi / 2,
+          );
+          final child = PositionComponent(
+            position: Vector2.zero(),
+            size: Vector2.all(10),
+          );
+          final hitbox = RectangleHitbox();
+          await child.add(hitbox);
+          await midParent.add(child);
+          await grandparent.add(midParent);
+
+          // Block from (-12,8) to (-8,12) straddles the left edge at x=-10.
+          final blockComp = PositionComponent(
+            position: Vector2(-12, 8),
+            size: Vector2.all(4),
+          );
+          final hitboxB = RectangleHitbox();
+          await blockComp.add(hitboxB);
+
+          await game.ensureAddAll([grandparent, blockComp]);
+          game.update(0);
+          expect(
+            hitbox.isColliding,
+            isTrue,
+            reason:
+                '3-level nested hierarchy with scale + rotation should '
+                'produce correct collision detection',
+          );
+        },
       });
     });
   });

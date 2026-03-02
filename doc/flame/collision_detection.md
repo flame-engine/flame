@@ -25,8 +25,6 @@ that overshoot each other into account. This could happen when they either move 
 `update` is called with a large delta time (for example if your app is not in the foreground).
 This behavior is called tunneling.
 
-Also note that the collision detection system has a limitation that makes it not work properly if
-you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
 
 
 ## Mixins

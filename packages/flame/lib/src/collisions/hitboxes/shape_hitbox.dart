@@ -189,7 +189,12 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   /// parents boundaries.
   void fillParent();
 
-  Aabb2 _recalculateAabb() {
+  /// Computes the axis-aligned bounding box for this hitbox.
+  ///
+  /// Subclasses can override this to provide a tighter AABB. The default
+  /// implementation uses the absolute scaled size and rotation.
+  @protected
+  void computeAabb(Aabb2 aabb) {
     final size = absoluteScaledSize;
     // This has double.minPositive since a point on the edge of the AABB is
     // currently counted as outside.
@@ -198,10 +203,15 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       size.y / 2 + _extentEpsilon,
     );
     _rotationMatrix.setRotationZ(absoluteAngle);
-    _validAabb = true;
-    return _aabb
+    aabb
       ..setCenterAndHalfExtents(absoluteCenter, _halfExtents)
       ..rotate(_rotationMatrix);
+  }
+
+  Aabb2 _recalculateAabb() {
+    computeAabb(_aabb);
+    _validAabb = true;
+    return _aabb;
   }
 
   //#region CollisionCallbacks methods
