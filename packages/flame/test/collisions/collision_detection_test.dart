@@ -2328,8 +2328,7 @@ void main() {
 
     group('Hitboxes with parent non-uniform scale and rotation', () {
       runCollisionTestRegistry({
-        'parent non-uniform scale (2,1) + child rotation pi/2':
-            (game) async {
+        'parent non-uniform scale (2,1) + child rotation pi/2': (game) async {
           // Parent scaled (2,1) with child rotated 90 degrees.
           // The correct transform produces global vertices at roughly
           // (0,0), (-20,0), (-20,10), (0,10).
@@ -2365,8 +2364,7 @@ void main() {
                 'should collide with correctly positioned block',
           );
         },
-        'parent flip (-1,1) + child rotation + polygon hitbox':
-            (game) async {
+        'parent flip (-1,1) + child rotation + polygon hitbox': (game) async {
           // Parent flipped on x-axis, child rotated 45 degrees.
           // Produces a diamond at roughly (30,0),(23,7),(30,14),(37,7).
           final parent = PositionComponent(

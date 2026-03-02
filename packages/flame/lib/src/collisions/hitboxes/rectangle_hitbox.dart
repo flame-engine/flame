@@ -2,7 +2,6 @@
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/src/geometry/polygon_ray_intersection.dart';
 import 'package:meta/meta.dart';
 
@@ -59,10 +58,18 @@ class RectangleHitbox extends RectangleComponent
     var maxY = vertices[0].y;
     for (var i = 1; i < vertices.length; i++) {
       final v = vertices[i];
-      if (v.x < minX) minX = v.x;
-      if (v.y < minY) minY = v.y;
-      if (v.x > maxX) maxX = v.x;
-      if (v.y > maxY) maxY = v.y;
+      if (v.x < minX) {
+        minX = v.x;
+      }
+      if (v.y < minY) {
+        minY = v.y;
+      }
+      if (v.x > maxX) {
+        maxX = v.x;
+      }
+      if (v.y > maxY) {
+        maxY = v.y;
+      }
     }
     // Add a small epsilon since points on the AABB edge are counted as outside.
     const epsilon = 0.000000000000001;
