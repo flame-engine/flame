@@ -126,7 +126,7 @@ It can be used, for example, to change the component's visual appearance during 
 A component can use both `DragCallbacks` and `ScaleCallbacks` at the same time. When both mixins are
 present, single-finger gestures produce drag events and two-finger gestures produce both drag and
 scale events. This is useful for components that should be draggable with one finger and
-pinch-zoomable or rotatable with two fingers.
+pinch-to-zoom or rotatable with two fingers.
 
 ```dart
 class InteractiveRect extends RectangleComponent

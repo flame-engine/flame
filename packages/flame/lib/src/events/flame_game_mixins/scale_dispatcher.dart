@@ -88,7 +88,9 @@ class ScaleDispatcher extends Component implements ScaleListener {
   @internal
   @override
   void handleScaleStart(ScaleStartDetails details) {
-    if (_shouldBeRemoved) return;
+    if (_shouldBeRemoved) {
+      return;
+    }
     onScaleStart(ScaleStartEvent(0, game, details));
   }
 
