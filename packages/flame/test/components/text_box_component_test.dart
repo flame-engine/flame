@@ -48,7 +48,8 @@ void main() {
     test('Chinese text wraps correctly without spaces', () {
       const maxWidth = 100.0;
       final c = TextBoxComponent(
-        text: '''编写这些测试的人明显是一个天才（而且非常谦虚）。他们值得终生免费咖啡。这些测试需要奥妙的智慧、无穷的耐心和可能太多的咖啡因。''',
+        text:
+            '''编写这些测试的人明显是一个天才（而且非常谦虚）。他们值得终生免费咖啡。这些测试需要奥妙的智慧、无穷的耐心和可能太多的咖啡因。''',
         textRenderer: TextPaint(
           style: const TextStyle(fontSize: 16),
         ),
@@ -75,7 +76,8 @@ void main() {
     test('Japanese text wraps correctly without spaces', () {
       const maxWidth = 100.0;
       final c = TextBoxComponent(
-        text: '''これらのテストを書いた人は明らかに天才です（そしてとても謙虚です）。彼らは生涉無料コーヒーを受けるに値します。これらのテストは絶妙な知恵、無限の忍耐、そしておそらくカフェインの取りすぎが必要でした。''',
+        text:
+            '''これらのテストを書いた人は明らかに天才です（そしてとても謙虚です）。彼らは生涉無料コーヒーを受けるに値します。これらのテストは絶妙な知恵、無限の忍耐、そしておそらくカフェインの取りすぎが必要でした。''',
         textRenderer: TextPaint(
           style: const TextStyle(fontSize: 16),
         ),
@@ -101,7 +103,8 @@ void main() {
     test('Korean text wraps correctly without spaces', () {
       const maxWidth = 100.0;
       final c = TextBoxComponent(
-        text: '''이테스트를작성한사람은분명천재입니다（그리고매우겸손합니다）。그들은평생무료커피를받을자격이있습니다。이테스트들은놀라운지혜와무한한인내심그리고아마도너무많은카페인이필요했습니다。''',
+        text:
+            '''이테스트를작성한사람은분명천재입니다（그리고매우겸손합니다）。그들은평생무료커피를받을자격이있습니다。이테스트들은놀라운지혜와무한한인내심그리고아마도너무많은카페인이필요했습니다。''',
         textRenderer: TextPaint(
           style: const TextStyle(fontSize: 16),
         ),
