@@ -356,6 +356,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     super.resumeEngine();
   }
 
+  @override
+  @mustCallSuper
+  void onHotReload() {
+    super.onHotReload();
+    handleHotReload();
+  }
+
   /// Removes all children from the game and clears all caches.
   ///
   /// This will call [onRemove] on all components in the tree, clear

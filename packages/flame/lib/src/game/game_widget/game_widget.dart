@@ -317,6 +317,12 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
   }
 
   @override
+  void reassemble() {
+    super.reassemble();
+    currentGame.onHotReload();
+  }
+
+  @override
   void dispose() {
     disposeCurrentGame(callGameOnDispose: true);
     // If we received a focus node from the user, they are responsible
