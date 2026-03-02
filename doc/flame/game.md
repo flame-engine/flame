@@ -155,6 +155,30 @@ Clean-up of children and resources in a `FlameGame` is not done automatically
 and must be explicitly added to the `onRemove` call.
 ```
 
+### onHotReload
+
+When Flutter's hot reload is triggered (debug mode only), the `GameWidget` calls `onHotReload` on
+the `FlameGame`, which automatically propagates the notification to every component in the tree that
+is loading or loaded. Override this method on any component to reload assets, refresh cached values,
+or react to source code changes during development:
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  void onHotReload() {
+    // Refresh game-level state affected by code changes.
+    super.onHotReload();
+  }
+}
+```
+
+```{note}
+`onHotReload` is only called in debug mode. Components that are still in the
+lifecycle queue (loading but not yet mounted) also receive the notification.
+Always call `super.onHotReload()` so the event continues to propagate to
+children.
+```
+
 
 ### dispose()
 

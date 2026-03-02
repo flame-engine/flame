@@ -74,6 +74,23 @@ children. This method is called whenever a child is added to or removed from a p
 if a child is changing its parent). Its parameters contain the target child and the type of
 change it went through (`added` or `removed`).
 
+The `onHotReload` method is called on every component in the tree when Flutter's hot reload is
+triggered (debug mode only). Override this method to reload assets, recalculate cached values, or
+perform other actions in response to code changes during development. The notification propagates
+automatically to all children that are loading or loaded, so you must call `super.onHotReload()`
+in your override:
+
+```dart
+class MyComponent extends Component {
+  @override
+  void onHotReload() {
+    super.onHotReload();
+    // Re-read values that may have changed in source code.
+    _cachedValue = _computeExpensiveValue();
+  }
+}
+```
+
 A component's lifecycle state can be checked by a series of getters:
 
 - `isLoaded`: Returns a bool with the current loaded state.
