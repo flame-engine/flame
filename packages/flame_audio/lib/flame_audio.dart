@@ -61,7 +61,9 @@ class FlameAudio {
     audioContext ??= _defaultAudioContext;
     await player.setAudioContext(audioContext);
     await player.setReleaseMode(releaseMode);
-    final path = package == null ? file : 'packages/$package/${audioCache.prefix}$file';
+    final path = package == null
+        ? file
+        : 'packages/$package/${audioCache.prefix}$file';
     await player.play(
       AssetSource(path),
       volume: volume,
@@ -153,7 +155,9 @@ class FlameAudio {
     String? package,
   }) async {
     audioContext ??= _defaultAudioContext;
-    final path = package == null ? sound : 'packages/$package/${audioCache.prefix}$sound';
+    final path = package == null
+        ? sound
+        : 'packages/$package/${audioCache.prefix}$sound';
     return AudioPool.create(
       source: AssetSource(path),
       audioCache: package == null ? audioCache : audioCacheFactory(prefix: ''),

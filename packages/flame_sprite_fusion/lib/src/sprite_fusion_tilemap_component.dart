@@ -85,7 +85,9 @@ class SpriteFusionTilemapComponent extends PositionComponent {
     ComponentKey? key,
     String? package,
   }) async {
-    final prefix = package == null ? tilemapPrefix : 'packages/$package/$tilemapPrefix';
+    final prefix = package == null
+        ? tilemapPrefix
+        : 'packages/$package/$tilemapPrefix';
     final content = await (assetBundle ?? Flame.bundle).loadString(
       '$prefix$mapJsonFile',
     );

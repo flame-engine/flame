@@ -60,7 +60,10 @@ class AssetsCache {
   }
 
   /// Reads a json file from the assets folder.
-  Future<Map<String, dynamic>> readJson(String fileName, {String? package}) async {
+  Future<Map<String, dynamic>> readJson(
+    String fileName, {
+    String? package,
+  }) async {
     final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
     if (!_files.containsKey(cacheKey)) {
       _files[cacheKey] = await _readJson(fileName, package: package);

@@ -133,8 +133,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
         package: package,
       ),
     );
-    }
-
+  }
 
   @override
   void refreshCache() {}

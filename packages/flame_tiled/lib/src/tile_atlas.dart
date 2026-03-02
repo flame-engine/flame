@@ -167,8 +167,10 @@ class TiledAtlas {
       final tiledImage = mappedEntry.$2;
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final image = (await imagesInstance.load(resolvedImageSource, package: package))
-          .clone();
+      final image = (await imagesInstance.load(
+        resolvedImageSource,
+        package: package,
+      )).clone();
 
       // There could be a special case that a concurrent call to this method
       // passes the check `if (atlasMap.containsKey(key))` due to the async call
@@ -215,7 +217,10 @@ class TiledAtlas {
       final tiledImage = entry.$2;
       final tileImageSource = entry.$1;
 
-      final image = await imagesInstance.load(tileImageSource, package: package);
+      final image = await imagesInstance.load(
+        tileImageSource,
+        package: package,
+      );
       final rect = bin.pack(
         image.width.toDouble() + spacingX,
         image.height.toDouble() + spacingY,

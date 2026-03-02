@@ -242,8 +242,10 @@ Future<TextureAtlasData> _parse(
 
   final fileContent = fromStorage
       ? await XFile(path).readAsString()
-      : await (assets ?? Flame.assets)
-          .readFile('${assetsPrefix!}/$path', package: package);
+      : await (assets ?? Flame.assets).readFile(
+          '${assetsPrefix!}/$path',
+          package: package,
+        );
 
   final lines = LineSplitter.split(
     fileContent,
@@ -253,7 +255,13 @@ Future<TextureAtlasData> _parse(
   images ??= Flame.images;
 
   while (lineQueue.isNotEmpty) {
-    final page = await _parsePage(lineQueue, path, fromStorage, images, package);
+    final page = await _parsePage(
+      lineQueue,
+      path,
+      fromStorage,
+      images,
+      package,
+    );
     pages.add(page);
 
     // Parse regions for this page until we hit another page or end of file

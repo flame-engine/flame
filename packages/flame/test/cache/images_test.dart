@@ -162,8 +162,9 @@ void main() {
       final images = Images(bundle: bundle);
       await images.load('pixel.png', package: 'my_pkg');
 
-      verify(() => bundle.load('packages/my_pkg/assets/images/pixel.png'))
-          .called(1);
+      verify(
+        () => bundle.load('packages/my_pkg/assets/images/pixel.png'),
+      ).called(1);
     });
 
     test('can have its bundle overridden', () async {
