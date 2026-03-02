@@ -58,11 +58,18 @@ abstract mixin class Game {
   GameRenderBox get renderBox => _gameRenderBox!;
   GameRenderBox? _gameRenderBox;
 
+  /// Build context set by [GameWidgetState] before the game is fully
+  /// attached to the render tree. This allows components to access the
+  /// build context during [onLoad] and [onMount].
+  @internal
+  BuildContext? widgetBuildContext;
+
   /// Currently attached build context. Can be null if not attached.
-  BuildContext? get buildContext => _gameRenderBox?.buildContext;
+  BuildContext? get buildContext =>
+      _gameRenderBox?.buildContext ?? widgetBuildContext;
 
   /// Whether the game widget was attached to the Flutter tree.
-  bool get isAttached => buildContext != null;
+  bool get isAttached => _gameRenderBox != null;
 
   /// Current size of the game as provided by the framework; it will be null if
   /// layout has not been computed yet.

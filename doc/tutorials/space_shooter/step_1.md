@@ -83,6 +83,35 @@ our life way easier if you want to center the component on the screen.
 And that is it for this first part! In this first step, we learned the basics of how to create a
 game class, insert it into the Flutter widget tree, and render a simple component.
 
+
+## Preparing the assets folder
+
+Before we move on, let's prepare our project for the graphics we will be using in the next steps.
+Games need assets such as images, sprites, and animations, and our Space Shooter is no exception.
+
+First, create an `assets/images/` folder at the root of your project. Then tell Flutter about it
+by adding the following lines to your `pubspec.yaml`:
+
+```yaml
+flutter:
+  assets:
+    - assets/images/
+```
+
+Your project structure should look like this:
+
+```text
+space_shooter/
+ ├─assets/
+ │  └─images/
+ ├─lib/
+ │  └─main.dart
+ └─pubspec.yaml
+```
+
+In the following steps, we will provide the image files that need to be saved into the
+`assets/images/` folder. Make sure to save each one as you encounter it.
+
 ```{flutter-app}
 :sources: ../tutorials/space_shooter/app
 :page: step1

@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
@@ -429,4 +430,66 @@ void main() {
       expect(overlayKeyEvents, [LogicalKeyboardKey.keyA]);
     });
   });
+
+  group('buildContext availability', () {
+    testWidgets(
+      'buildContext is available during onLoad',
+      (tester) async {
+        final game = _GameWithBuildContextCheck();
+        await tester.pumpWidget(GameWidget(game: game));
+        await game.toBeLoaded();
+        await tester.pump();
+
+        expect(
+          game.buildContextDuringOnLoad,
+          isNotNull,
+          reason: 'buildContext should be available during onLoad',
+        );
+      },
+    );
+
+    testWidgets(
+      'buildContext is available for child components during onLoad',
+      (tester) async {
+        final game = _GameWithComponentBuildContextCheck();
+        await tester.pumpWidget(GameWidget(game: game));
+        await game.toBeLoaded();
+        await tester.pump();
+
+        expect(
+          game.component.buildContextDuringOnLoad,
+          isNotNull,
+          reason:
+              'buildContext should be available to components during onLoad',
+        );
+      },
+    );
+  });
+}
+
+class _GameWithBuildContextCheck extends FlameGame {
+  BuildContext? buildContextDuringOnLoad;
+
+  @override
+  Future<void> onLoad() async {
+    buildContextDuringOnLoad = buildContext;
+  }
+}
+
+class _ComponentWithBuildContextCheck extends Component {
+  BuildContext? buildContextDuringOnLoad;
+
+  @override
+  void onLoad() {
+    buildContextDuringOnLoad = findGame()!.buildContext;
+  }
+}
+
+class _GameWithComponentBuildContextCheck extends FlameGame {
+  final component = _ComponentWithBuildContextCheck();
+
+  @override
+  Future<void> onLoad() async {
+    add(component);
+  }
 }

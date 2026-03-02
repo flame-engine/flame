@@ -6,7 +6,11 @@ Here is how we will implement it: since we already control our space ship by dra
 with the mouse/fingers, we will make the ship auto shoot when the player starts dragging and
 stop shooting when the gesture/input has ended.
 
-First, let's create a `Bullet` component that will represent the shots in the game.
+First, let's create a `Bullet` component that will represent the shots in the game. We need a
+bullet sprite for it. Right-click the image below, choose "Save as...", and store it as
+`bullet.png` in your `assets/images/` folder:
+
+![bullet](app/assets/images/bullet.png)
 
 ```dart
 class Bullet extends SpriteAnimationComponent

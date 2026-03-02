@@ -85,7 +85,12 @@ the `Sprite` class.
 `Sprite` inside a `FlameGame`, we should use the `SpriteComponent` class, which wraps the `Sprite`
 features into a component.
 
-So let's refactor our current implementation, first, we can replace our inheritance from
+Before we write the code, we need the player sprite image. Right-click the image below, choose
+"Save as...", and store it as `player-sprite.png` in your `assets/images/` folder:
+
+![player-sprite](app/assets/images/player-sprite.png)
+
+Now let's refactor our current implementation, first, we can replace our inheritance from
 `PositionComponent` to `SpriteComponent` (which is a component that extends from
 `PositionComponent`) and load the sprite:
 

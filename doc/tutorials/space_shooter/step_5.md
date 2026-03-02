@@ -3,7 +3,10 @@
 Now that the starship is able to shoot, we need something for the player to shoot at! So for
 this step we will work on adding enemies to the game.
 
-First, let's create an `Enemy` class that will represent the enemies in game:
+First, let's create an `Enemy` class that will represent the enemies in game. Right-click the
+image below, choose "Save as...", and store it as `enemy.png` in your `assets/images/` folder:
+
+![enemy](app/assets/images/enemy.png)
 
 ```dart
 class Enemy extends SpriteAnimationComponent
