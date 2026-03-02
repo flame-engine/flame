@@ -65,12 +65,14 @@ class SpriteWidget extends StatefulWidget {
     this.loadingBuilder,
     this.paint,
     this.rasterize = false,
+    String? package,
     super.key,
   }) : _spriteFuture = Sprite.load(
          path,
          srcSize: srcSize,
          srcPosition: srcPosition,
          images: images,
+         package: package,
        );
 
   @override

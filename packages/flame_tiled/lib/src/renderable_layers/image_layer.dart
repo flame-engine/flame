@@ -120,6 +120,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required Vector2 destTileSize,
     FilterQuality? filterQuality,
     Images? images,
+    String? package,
   }) async {
     return FlameImageLayer(
       layer: layer,
@@ -127,9 +128,13 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       map: map,
       destTileSize: destTileSize,
       filterQuality: filterQuality,
-      image: await (images ?? Flame.images).load(layer.image.source!),
+      image: await (images ?? Flame.images).load(
+        layer.image.source!,
+        package: package,
+      ),
     );
-  }
+    }
+
 
   @override
   void refreshCache() {}

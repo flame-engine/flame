@@ -72,6 +72,7 @@ class TexturePackerAtlas {
     String assetsPrefix = 'images',
     AssetsCache? assets,
     List<String> whiteList = const [],
+    String? package,
   }) async {
     final TextureAtlasData atlasData;
 
@@ -83,6 +84,7 @@ class TexturePackerAtlas {
         images: images,
         assets: assets,
         assetsPrefix: assetsPrefix,
+        package: package,
       );
     }
 
@@ -106,11 +108,17 @@ class TexturePackerAtlas {
     bool fromStorage = false,
     Images? images,
     String assetsPrefix = 'images',
+    String? package,
   }) async {
     if (fromStorage) {
       return _fromStorage(path, images: images);
     } else {
-      return _fromAssets(path, images: images, assetsPrefix: assetsPrefix);
+      return _fromAssets(
+        path,
+        images: images,
+        assetsPrefix: assetsPrefix,
+        package: package,
+      );
     }
   }
 
@@ -167,6 +175,7 @@ Future<TextureAtlasData> _fromAssets(
   required String assetsPrefix,
   Images? images,
   AssetsCache? assets,
+  String? package,
 }) async {
   try {
     return await _parse(
@@ -175,6 +184,7 @@ Future<TextureAtlasData> _fromAssets(
       images: images,
       assets: assets,
       assetsPrefix: assetsPrefix,
+      package: package,
     );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
@@ -224,6 +234,7 @@ Future<TextureAtlasData> _parse(
   Images? images,
   AssetsCache? assets,
   String? assetsPrefix,
+  String? package,
 }) async {
   final pages = <Page>[];
   final regions = <Region>[];
@@ -231,7 +242,8 @@ Future<TextureAtlasData> _parse(
 
   final fileContent = fromStorage
       ? await XFile(path).readAsString()
-      : await (assets ?? Flame.assets).readFile('${assetsPrefix!}/$path');
+      : await (assets ?? Flame.assets)
+          .readFile('${assetsPrefix!}/$path', package: package);
 
   final lines = LineSplitter.split(
     fileContent,
@@ -241,7 +253,7 @@ Future<TextureAtlasData> _parse(
   images ??= Flame.images;
 
   while (lineQueue.isNotEmpty) {
-    final page = await _parsePage(lineQueue, path, fromStorage, images);
+    final page = await _parsePage(lineQueue, path, fromStorage, images, package);
     pages.add(page);
 
     // Parse regions for this page until we hit another page or end of file
@@ -309,6 +321,7 @@ Future<Page> _parsePage(
   String path,
   bool fromStorage,
   Images images,
+  String? package,
 ) async {
   final page = Page();
   page.textureFile = lineQueue.removeFirst();
@@ -324,7 +337,7 @@ Future<Page> _parsePage(
     images.add(texturePath, image);
     page.texture = images.fromCache(texturePath);
   } else {
-    page.texture = await images.load(texturePath);
+    page.texture = await images.load(texturePath, package: package);
   }
 
   _parsePageProperties(lineQueue, page);

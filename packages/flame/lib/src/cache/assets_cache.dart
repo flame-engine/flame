@@ -34,55 +34,60 @@ class AssetsCache {
   int get cacheCount => _files.length;
 
   /// Reads a file from assets folder.
-  Future<String> readFile(String fileName) async {
-    if (!_files.containsKey(fileName)) {
-      _files[fileName] = await _readFile(fileName);
+  Future<String> readFile(String fileName, {String? package}) async {
+    final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
+    if (!_files.containsKey(cacheKey)) {
+      _files[cacheKey] = await _readFile(fileName, package: package);
     }
     assert(
-      _files[fileName] is _StringAsset,
-      '"$fileName" was previously loaded as a binary file',
+      _files[cacheKey] is _StringAsset,
+      '"$cacheKey" was previously loaded as a binary file',
     );
-    return (_files[fileName]! as _StringAsset).value;
+    return (_files[cacheKey]! as _StringAsset).value;
   }
 
   /// Reads a binary file from assets folder.
-  Future<Uint8List> readBinaryFile(String fileName) async {
-    if (!_files.containsKey(fileName)) {
-      _files[fileName] = await _readBinary(fileName);
+  Future<Uint8List> readBinaryFile(String fileName, {String? package}) async {
+    final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
+    if (!_files.containsKey(cacheKey)) {
+      _files[cacheKey] = await _readBinary(fileName, package: package);
     }
     assert(
-      _files[fileName] is _BinaryAsset,
-      '"$fileName" was previously loaded as a text file',
+      _files[cacheKey] is _BinaryAsset,
+      '"$cacheKey" was previously loaded as a text file',
     );
-    return (_files[fileName]! as _BinaryAsset).value;
+    return (_files[cacheKey]! as _BinaryAsset).value;
   }
 
   /// Reads a json file from the assets folder.
-  Future<Map<String, dynamic>> readJson(String fileName) async {
-    if (!_files.containsKey(fileName)) {
-      _files[fileName] = await _readJson(fileName);
+  Future<Map<String, dynamic>> readJson(String fileName, {String? package}) async {
+    final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
+    if (!_files.containsKey(cacheKey)) {
+      _files[cacheKey] = await _readJson(fileName, package: package);
     }
     assert(
-      _files[fileName] is _JsonAsset,
-      '"$fileName" was previously loaded as a different type',
+      _files[cacheKey] is _JsonAsset,
+      '"$cacheKey" was previously loaded as a different type',
     );
-    return (_files[fileName]! as _JsonAsset).value;
+    return (_files[cacheKey]! as _JsonAsset).value;
   }
 
-  Future<_StringAsset> _readFile(String fileName) async {
-    final string = await bundle.loadString('$prefix$fileName');
+  Future<_StringAsset> _readFile(String fileName, {String? package}) async {
+    final fullPrefix = package == null ? prefix : 'packages/$package/$prefix';
+    final string = await bundle.loadString('$fullPrefix$fileName');
     return _StringAsset(string);
   }
 
-  Future<_BinaryAsset> _readBinary(String fileName) async {
-    final data = await bundle.load('$prefix$fileName');
+  Future<_BinaryAsset> _readBinary(String fileName, {String? package}) async {
+    final fullPrefix = package == null ? prefix : 'packages/$package/$prefix';
+    final data = await bundle.load('$fullPrefix$fileName');
     final bytes = Uint8List.view(data.buffer);
     return _BinaryAsset(bytes);
   }
 
-  Future<_JsonAsset> _readJson(String fileName) async {
-    final string = await bundle.loadString('$prefix$fileName');
-    final json = jsonDecode(string) as Map<String, dynamic>;
+  Future<_JsonAsset> _readJson(String fileName, {String? package}) async {
+    final string = await _readFile(fileName, package: package);
+    final json = jsonDecode(string.value) as Map<String, dynamic>;
     return _JsonAsset(json);
   }
 
