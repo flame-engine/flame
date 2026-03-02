@@ -300,26 +300,19 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       _delta = _localFocalPoint - localPreviousFocalPoint;
     }
 
-    final count = _pointers.length;
-    var pointerFocalPoint = Offset.zero;
-    for (final state in _pointers.values) {
-      pointerFocalPoint += state.currentPosition;
-    }
-    if (count > 0) {
-      pointerFocalPoint = pointerFocalPoint / count.toDouble();
-    }
-
-    // Calculate span
+    // Calculate span using the already-computed focal point
     var totalDeviation = 0.0;
     var totalHorizontalDeviation = 0.0;
     var totalVerticalDeviation = 0.0;
     for (final state in _pointers.values) {
-      totalDeviation += (pointerFocalPoint - state.currentPosition).distance;
+      totalDeviation +=
+          (_currentFocalPoint! - state.currentPosition).distance;
       totalHorizontalDeviation +=
-          (pointerFocalPoint.dx - state.currentPosition.dx).abs();
+          (_currentFocalPoint!.dx - state.currentPosition.dx).abs();
       totalVerticalDeviation +=
-          (pointerFocalPoint.dy - state.currentPosition.dy).abs();
+          (_currentFocalPoint!.dy - state.currentPosition.dy).abs();
     }
+    final count = _pointers.length;
     _currentSpan = count > 0 ? totalDeviation / count : 0.0;
     _currentHorizontalSpan = count > 0 ? totalHorizontalDeviation / count : 0.0;
     _currentVerticalSpan = count > 0 ? totalVerticalDeviation / count : 0.0;

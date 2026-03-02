@@ -88,6 +88,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
   @internal
   @override
   void handleScaleStart(ScaleStartDetails details) {
+    if (_shouldBeRemoved) return;
     onScaleStart(ScaleStartEvent(0, game, details));
   }
 
@@ -141,6 +142,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
   @override
   void onRemove() {
     game.gestureDetectors.remove<ScaleGestureRecognizer>();
+    game.unregisterKey(const ScaleDispatcherKey());
     super.onRemove();
   }
 }

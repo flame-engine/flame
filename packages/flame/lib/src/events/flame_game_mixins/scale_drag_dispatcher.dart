@@ -13,17 +13,17 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
   const MultiDragScaleDispatcherKey();
 
   @override
-  int get hashCode => 91604875; // 'MultiDragDispatcherKey' as hashCode
+  int get hashCode => 91604875; // 'MultiDragScaleDispatcherKey' as hashCode
 
   @override
   bool operator ==(Object other) =>
       other is MultiDragScaleDispatcherKey && other.hashCode == hashCode;
 }
 
-/// **MultiDragDispatcher** facilitates dispatching of drag events to the
-/// [DragCallbacks] components in the component tree. It will be attached to
-/// the [FlameGame] instance automatically whenever any [DragCallbacks]
-/// components are mounted into the component tree.
+/// **MultiDragScaleDispatcher** facilitates dispatching of both drag and scale
+/// events to the [DragCallbacks] and [ScaleCallbacks] components in the
+/// component tree. It will be attached to the [FlameGame] instance
+/// automatically when both callback types are needed.
 class MultiDragScaleDispatcher extends Component
     implements MultiDragListener, ScaleListener {
   /// The record of all components currently being touched.

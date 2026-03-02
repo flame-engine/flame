@@ -318,95 +318,91 @@ extension ZoomTesting on WidgetTester {
       await handlePointerEventRecord(records);
     });
   }
-  Future<void> zoomFrom(
-  WidgetTester tester, {
-  required Offset startLocation1,
-  required Offset offset1,
-  required Offset startLocation2,
-  required Offset offset2,
-}) async {
-  // Start two gestures on opposite sides of that center
-  final gesture1 = await tester.startGesture(startLocation1);
-  final gesture2 = await tester.startGesture(startLocation2);
+  Future<void> zoomFrom({
+    required Offset startLocation1,
+    required Offset offset1,
+    required Offset startLocation2,
+    required Offset offset2,
+  }) async {
+    // Start two gestures on opposite sides of that center
+    final gesture1 = await startGesture(startLocation1);
+    final gesture2 = await startGesture(startLocation2);
 
-  await tester.pump();
+    await pump();
 
-  await gesture1.moveBy(offset1);
-  await gesture2.moveBy(offset2);
-  await tester.pump();
+    await gesture1.moveBy(offset1);
+    await gesture2.moveBy(offset2);
+    await pump();
 
-  // release fingers
-  await gesture1.up();
-  await gesture2.up();
+    // release fingers
+    await gesture1.up();
+    await gesture2.up();
 
-  await tester.pump();
-}
-
-Future<void> dragWithInjection(
-  WidgetTester tester,
-  Offset start,
-  Offset delta,
-  Duration duration,
-  Future<void> Function() onHalfway, {
-  int steps = 20,
-}) async {
-  final gesture = await tester.startGesture(start);
-  final dt = duration ~/ steps;
-
-  for (var i = 0; i < steps; i++) {
-    if (i == steps ~/ 2) {
-      await onHalfway();
-    }
-
-    final t = (i + 1) / steps;
-    await gesture.moveTo(start + delta * t);
-    await tester.pump(dt);
+    await pump();
   }
 
-  await gesture.up();
-  await tester.pump();
-}
+  Future<void> dragWithInjection(
+    Offset start,
+    Offset delta,
+    Duration duration,
+    Future<void> Function() onHalfway, {
+    int steps = 20,
+  }) async {
+    final gesture = await startGesture(start);
+    final dt = duration ~/ steps;
 
-Future<void> zoomFromWithInjection(
-  WidgetTester tester, {
-  required Offset startLocation1,
-  required Offset offset1,
-  required Offset startLocation2,
-  required Offset offset2,
-  required Duration duration,
-  required Future<void> Function() onHalfway,
-  int steps = 20,
-}) async {
-  // Start both fingers
-  final gesture1 = await tester.startGesture(startLocation1);
-  final gesture2 = await tester.startGesture(startLocation2);
+    for (var i = 0; i < steps; i++) {
+      if (i == steps ~/ 2) {
+        await onHalfway();
+      }
 
-  await tester.pump();
-
-  final dt = duration ~/ steps;
-
-  for (var i = 0; i < steps; i++) {
-    // Inject custom logic at halfway
-    if (i == steps ~/ 2) {
-      await onHalfway();
-      await tester.pump();
+      final t = (i + 1) / steps;
+      await gesture.moveTo(start + delta * t);
+      await pump(dt);
     }
 
-    final t = (i + 1) / steps;
-
-    await gesture1.moveTo(startLocation1 + offset1 * t);
-    await gesture2.moveTo(startLocation2 + offset2 * t);
-
-    await tester.pump(dt);
+    await gesture.up();
+    await pump();
   }
 
-  // Release both gestures
-  await gesture1.up();
-  await gesture2.up();
+  Future<void> zoomFromWithInjection({
+    required Offset startLocation1,
+    required Offset offset1,
+    required Offset startLocation2,
+    required Offset offset2,
+    required Duration duration,
+    required Future<void> Function() onHalfway,
+    int steps = 20,
+  }) async {
+    // Start both fingers
+    final gesture1 = await startGesture(startLocation1);
+    final gesture2 = await startGesture(startLocation2);
 
-  await tester.pump();
-}
+    await pump();
 
+    final dt = duration ~/ steps;
+
+    for (var i = 0; i < steps; i++) {
+      // Inject custom logic at halfway
+      if (i == steps ~/ 2) {
+        await onHalfway();
+        await pump();
+      }
+
+      final t = (i + 1) / steps;
+
+      await gesture1.moveTo(startLocation1 + offset1 * t);
+      await gesture2.moveTo(startLocation2 + offset2 * t);
+
+      await pump(dt);
+    }
+
+    // Release both gestures
+    await gesture1.up();
+    await gesture2.up();
+
+    await pump();
+  }
 }
 
 

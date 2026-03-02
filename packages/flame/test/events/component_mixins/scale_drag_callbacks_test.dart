@@ -133,7 +133,6 @@ void main() {
     await tester.pump();
 
     await tester.zoomFrom(
-      tester,
       startLocation1: const Offset(180, 150),
       offset1: const Offset(15, 2),
       startLocation2: const Offset(120, 150),
@@ -166,7 +165,6 @@ void main() {
       expect(component.isMounted, isTrue);
 
       await tester.zoomFrom(
-        tester,
         startLocation1: const Offset(250, 200),
         offset1: const Offset(15, 2),
         startLocation2: const Offset(150, 200),
@@ -205,7 +203,6 @@ void main() {
       await tester.pump();
 
       await tester.zoomFrom(
-        tester,
         startLocation1: const Offset(50, 100),
         offset1: const Offset(15, 2),
         startLocation2: const Offset(150, 100),
@@ -237,7 +234,6 @@ void main() {
 
       // Inside component
       await tester.zoomFrom(
-        tester,
         startLocation1: const Offset(180, 100),
         offset1: const Offset(15, 2),
         startLocation2: const Offset(120, 100),
@@ -249,7 +245,6 @@ void main() {
 
       // Outside component
       await tester.zoomFrom(
-        tester,
         startLocation1: const Offset(330, 300),
         offset1: const Offset(15, 2),
         startLocation2: const Offset(270, 300),
@@ -285,7 +280,6 @@ void main() {
         await tester.pump();
         await tester.pump();
         await tester.zoomFrom(
-          tester,
           startLocation1: const Offset(80, 50),
           offset1: const Offset(15, 2),
           startLocation2: const Offset(20, 50),
@@ -570,7 +564,6 @@ void main() {
         final center = (game.canvasSize / 2).toOffset();
 
         await tester.dragWithInjection(
-          tester,
           center,
           const Offset(20, 0),
           const Duration(milliseconds: 200),
@@ -609,7 +602,6 @@ void main() {
         final center = (game.canvasSize / 2).toOffset();
 
         await tester.zoomFromWithInjection(
-          tester,
           startLocation1: center.translate(-3, 0),
           offset1: const Offset(15, 2),
           startLocation2: center.translate(3, 0),
