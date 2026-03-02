@@ -291,6 +291,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     currentGame.removeGameStateListener(_onGameStateChange);
     currentGame.lifecycleStateChange(AppLifecycleState.paused);
     currentGame.finalizeRemoval();
+    currentGame.widgetBuildContext = null;
     if (callGameOnDispose) {
       currentGame.onDispose();
     }
@@ -399,7 +400,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                   color: currentGame.backgroundColor(),
                 ),
                 child: LayoutBuilder(
-                  builder: (_, BoxConstraints constraints) {
+                  builder: (layoutContext, BoxConstraints constraints) {
                     return _protectedBuild(() {
                       final size = constraints.biggest.toVector2();
                       if (size.isZero()) {
@@ -407,6 +408,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                             Container();
                       }
                       currentGame.onGameResize(size);
+                      currentGame.widgetBuildContext = layoutContext;
                       // This should only be called if the game has already been
                       // loaded (in the case of resizing for example), since
                       // update otherwise should be called after onMount.
