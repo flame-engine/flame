@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart' hide PointerMoveEvent;
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart' hide PointerMoveEvent;
+import 'package:flutter/material.dart';
 
 class DynamicScaleDragExample extends FlameGame {
   static const String description = '''
@@ -145,10 +145,10 @@ class _Button extends PositionComponent with TapCallbacks {
     required super.position,
     required Color color,
     required VoidCallback onPressed,
-  })  : _color = color,
-        _onPressed = onPressed,
-        _text = text,
-        super(size: Vector2(100, 30));
+  }) : _color = color,
+       _onPressed = onPressed,
+       _text = text,
+       super(size: Vector2(100, 30));
 
   final Color _color;
   final VoidCallback _onPressed;
@@ -189,13 +189,13 @@ class _DragBox extends RectangleComponent
     required String label,
     required Vector2 position,
     required Color color,
-  })  : _label = label,
-        super(
-          position: position,
-          size: Vector2.all(120),
-          anchor: Anchor.center,
-          paint: Paint()..color = color,
-        );
+  }) : _label = label,
+       super(
+         position: position,
+         size: Vector2.all(120),
+         anchor: Anchor.center,
+         paint: Paint()..color = color,
+       );
 
   final String _label;
 
@@ -225,13 +225,13 @@ class _ScaleBox extends RectangleComponent with ScaleCallbacks {
     required String label,
     required Vector2 position,
     required Color color,
-  })  : _label = label,
-        super(
-          position: position,
-          size: Vector2.all(120),
-          anchor: Anchor.center,
-          paint: Paint()..color = color,
-        );
+  }) : _label = label,
+       super(
+         position: position,
+         size: Vector2.all(120),
+         anchor: Anchor.center,
+         paint: Paint()..color = color,
+       );
 
   final String _label;
   double _initialAngle = 0;
@@ -277,13 +277,13 @@ class _DragScaleBox extends RectangleComponent
     required String label,
     required Vector2 position,
     required Color color,
-  })  : _label = label,
-        super(
-          position: position,
-          size: Vector2.all(120),
-          anchor: Anchor.center,
-          paint: Paint()..color = color,
-        );
+  }) : _label = label,
+       super(
+         position: position,
+         size: Vector2.all(120),
+         anchor: Anchor.center,
+         paint: Paint()..color = color,
+       );
 
   final String _label;
   double _initialAngle = 0;

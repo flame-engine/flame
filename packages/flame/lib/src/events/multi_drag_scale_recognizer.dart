@@ -305,8 +305,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     var totalHorizontalDeviation = 0.0;
     var totalVerticalDeviation = 0.0;
     for (final state in _pointers.values) {
-      totalDeviation +=
-          (_currentFocalPoint! - state.currentPosition).distance;
+      totalDeviation += (_currentFocalPoint! - state.currentPosition).distance;
       totalHorizontalDeviation +=
           (_currentFocalPoint!.dx - state.currentPosition.dx).abs();
       totalVerticalDeviation +=

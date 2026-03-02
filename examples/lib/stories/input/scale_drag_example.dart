@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:flame/components.dart' hide Matrix4;
+import 'package:flame/components.dart';
 import 'package:flame/events.dart' hide PointerMoveEvent;
-import 'package:flame/game.dart' hide Matrix4;
-import 'package:flutter/material.dart' hide PointerMoveEvent, Matrix4;
+import 'package:flame/game.dart';
+import 'package:flutter/material.dart' hide PointerMoveEvent;
 
 void main() {
   runApp(GameWidget(game: ScaleExample()));

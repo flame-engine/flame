@@ -318,6 +318,7 @@ extension ZoomTesting on WidgetTester {
       await handlePointerEventRecord(records);
     });
   }
+
   Future<void> zoomFrom({
     required Offset startLocation1,
     required Offset offset1,
@@ -404,8 +405,6 @@ extension ZoomTesting on WidgetTester {
     await pump();
   }
 }
-
-
 
 class ScaleCallbacksComponent extends PositionComponent
     with ScaleCallbacks, ScaleCounter {}
