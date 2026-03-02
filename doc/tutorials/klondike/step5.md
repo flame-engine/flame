@@ -19,7 +19,7 @@ play. The topics to be covered are:
 The Klondike patience game (or solitaire game in the USA) has two main variants: Draw 3 and Draw 1.
 Currently the Klondike Flame Game is Draw 3, which is a lot more difficult than Draw 1, because
 although you can see 3 cards, you can only move one of them and that move changes the "phase" of
-other cards. So different cards are going to become available — not easy.
+other cards. So different cards are going to become available, not easy.
 
 In Klondike Draw 1 just one card at a time is drawn from the Stock and shown, so every card in it is
 available, and you can go through the Stock as many times as you like, just as in Klondike Draw 3.
@@ -274,7 +274,7 @@ for `reverseDuration: time / 2`. Everything is reversed: the view of the card ex
 into 2-D of its 3-D position. Wow! That's a lot of work for a little EffectController!
 
 We are not there yet! If you were to run just the `add()` part of the code, you would see some
-ugly things happening. Yeah, yeah, been there, done that — when I was preparing this code!
+ugly things happening. Yeah, yeah, been there, done that... when I was preparing this code!
 First off, the card shrinks to a line at its left. That is because all cards in this game have
 an `Anchor` at `topLeft`, which is the point used to set the card's `position`. We would like
 the card to flip around its vertical center-line. Easy, just set `anchor = Anchor.topCenter`
@@ -330,7 +330,7 @@ dilemma by using two definitions of "face-up": a Model type and a View type. The
 used in rendering and animation (i.e. what appears on the screen) and the Model version in the logic
 of the game, the gameplay and its error-checks. That way, we do not have to revise all the logic
 of the Piles in this game in order to animate some of it. A more complex game might benefit from
-separating the Model and the View during the design and early coding stages — even into
+separating the Model and the View during the design and early coding stages, even into
 separate classes. In this game we are using just a little separation of Model and View. The
 `_isAnimatedFlip` variable is `true` while there is an animated flip going on, otherwise `false`,
 and the `Card` class's `flip()` function is expanded to:
@@ -583,7 +583,7 @@ now includes some animation:
 
 First we implement the `Action` value for this game. In the very first game, the KlondikeGame class
 sets defaults of `Action.newDeal` and `klondikeDraw = 1`, but after that the player can select an
-action by pressing and releasing a button and KlondikeWorld saves it in KlondikeGame — or the player
+action by pressing and releasing a button and KlondikeWorld saves it in KlondikeGame, or the player
 wins the game, in which case `Action.newDeal` is selected and saved automatically. The action
 usually generates and saves a new seed, but that is skipped if we have `Action.sameDeal`. Then we
 shuffle the cards, using whatever `seed` applies.
@@ -677,7 +677,7 @@ Step 2 Scaffolding.
 ## Winning the game
 
 You win the game when all cards in all suits, Ace to King, have been moved to the Foundation Piles,
-13 cards in each pile. The game now has code to recognize that event — an `isFull` test added to
+13 cards in each pile. The game now has code to recognize that event: an `isFull` test added to
 the `FoundationPile`'s `acquireCard()` method, a callback to `KlondikeWorld` and a test as
 to whether all four Foundations are full. Here is the code:
 
@@ -729,7 +729,7 @@ It is often possible to calculate whether you can win from a given position of t
 Klondike game, or could have won but missed a vital move. It is frequently possible to calculate
 whether the initial deal is winnable: a percentage of Klondike deals are not. But all that is far
 beyond the scope of this Tutorial, so for now it is up to the player to work out whether to keep
-playing and try to win — or give up and press one of the buttons.
+playing and try to win, or give up and press one of the buttons.
 
 
 ## Ending a game and re-starting it
@@ -769,7 +769,7 @@ The `letsCelebrate()` method ends with similar code, but forces a new deal:
 ## The `Have fun` button
 
 When you win the Klondike Game, the `letsCelebrate()` method puts on a little display. To save you
-having to play and win a whole game before you see it — **and** to test the method, we have
+having to play and win a whole game before you see it (**and** to test the method), we have
 provided the `Have fun` button. Of course a real game could not have such a button...
 
 Well, this is it! The game is now more playable.

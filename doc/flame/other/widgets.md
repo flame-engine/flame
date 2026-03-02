@@ -7,8 +7,8 @@ mind.
 Here you can find all the available widgets provided by Flame.
 
 You can also see all the widgets showcased inside a
-[Dashbook](https://github.com/bluefireteam/dashbook) sandbox
-[here](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets)
+[Dashbook](https://github.com/bluefireteam/dashbook) sandbox in the
+[widgets examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/widgets).
 
 
 ## NineTileBoxWidget
@@ -23,8 +23,8 @@ is expanded both ways.
 
 The `NineTileBoxWidget` implements a `Container` using that standard. This pattern is also
 implemented as a component in the `NineTileBoxComponent` so that you can add this feature directly
-to your `FlameGame`. To get to know more about this, check the component docs
-[here](../components.md#ninetileboxcomponent).
+to your `FlameGame`. To learn more, check the
+[NineTileBoxComponent docs](../components/utility_components.md#ninetileboxcomponent).
 
 Here you can find an example of how to use it (without using the `NineTileBoxComponent`):
 
@@ -34,7 +34,7 @@ import 'package:flame/widgets';
 NineTileBoxWidget(
     image: image, // dart:ui image instance
     tileSize: 16, // The width/height of the tile on your grid image
-    destTileSize: 50, // The dimensions to be used when drawing the tile on the canvas
+    destTileSize: 50, // The dimensions for the tile on canvas
     child: SomeWidget(), // Any Flutter widget
 )
 ```

@@ -64,7 +64,7 @@ void main() {
 
 In Flame we provide a concept called the Flame Component System (FCS), which is a way to organize
 your game objects in a way that makes it easy to manage them. You can read more about it in the
-[Components](flame/components.md) section.
+[Components](flame/components/components.md) section.
 
 When you want to start a new game you either have to extend the `FlameGame` class or the `World`
 class. The `FlameGame` is the root of your game and is responsible for managing the game loop and
@@ -126,7 +126,7 @@ overridden the `onLoad` method to set the sprite of the component to a sprite th
 image file called `player.png`. The image has to be in the `assets/images` directory in your project
 (see the [Assets Directory Structure](flame/structure.md)) and you have to add it to the
 [assets section](https://docs.flutter.dev/ui/assets/assets-and-images) of your `pubspec.yaml` file.
-In this class we also set the size of the component to 200x200 and the [anchor](flame/components.md#anchor)
+In this class we also set the size of the component to 200x200 and the [anchor](flame/components/position_component.md#anchor)
 to the center of the component by sending them to the `super` constructor. We also let the user of
 the `Player` class set the position of the component when creating it
 (`Player(position: Vector2(0, 0))`).

@@ -4,7 +4,7 @@
 - [Game Widget](game_widget.md)
 - [The game class](game.md)
 - [Assets Structure](structure.md)
-- [Components](components.md)
+- [Components](components/components.md)
 - [Inputs](inputs/inputs.md)
 - [Camera](camera.md)
 - [Effects](effects/effects.md)
@@ -23,7 +23,7 @@ Getting Started      <../README.md>
 Game Widget          <game_widget.md>
 The game class       <game.md>
 Assets Structure     <structure.md>
-Components           <components.md>
+Components           <components/components.md>
 Inputs               <inputs/inputs.md>
 Camera               <camera.md>
 Effects              <effects/effects.md>

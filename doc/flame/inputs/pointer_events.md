@@ -32,7 +32,7 @@ By default, each of these methods does nothing, they need to be overridden in or
 function.
 
 In addition, the component must implement the `containsLocalPoint()` method (already implemented in
-`PositionComponent`, so most of the time you don't need to do anything here) -- this method allows
+`PositionComponent`, so most of the time you don't need to do anything here). This method allows
 Flame to know whether the event occurred within the component or not.
 
 Note that only mouse events happening within your component will be proxied along. However,

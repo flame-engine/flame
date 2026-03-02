@@ -6,10 +6,10 @@ Only one single scale gesture can occur at the same time.
 For those components that you want to respond to scale events, add the `ScaleCallbacks` mixin.
 
 - This mixin adds three overridable methods to your component: `onScaleStart`, `onScaleUpdate`,
-  `onScaleEnd`. By default, these methods do nothing -- they need to be
-  overridden in order to perform any function.
+  `onScaleEnd`. By default, these methods do nothing; they need to be overridden in order to
+  perform any function.
 - In addition, the component must implement the `containsLocalPoint()` method (already implemented
-  in `PositionComponent`, so most of the time you don't need to do anything here) -- this method
+  in `PositionComponent`, so most of the time you don't need to do anything here). This method
   allows Flame to know whether the event occurred within the component or not.
 
 ```dart
