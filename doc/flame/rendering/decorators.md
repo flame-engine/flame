@@ -185,16 +185,16 @@ an alternative logic for how the component shall be positioned on the screen.
 
 It is possible to apply several decorators simultaneously to the same component: the `Decorator`
 class supports chaining. That is, if you have an existing decorator on a component and you want to
-add another one, then you can call `component.decorator.addLast(newDecorator)` -- this will add
+add another one, then you can call `component.decorator.addLast(newDecorator)`. This will add
 the new decorator at the end of the existing chain. The method `removeLast()` can remove that
 decorator later.
 
 Several decorators can be chain that way. For example, if `A` is an initial decorator, then
-`A.addLast(B)` can be followed by either `A.addLast(C)` or `B.addLast(C)` -- and in both cases the
+`A.addLast(B)` can be followed by either `A.addLast(C)` or `B.addLast(C)`, and in both cases the
 chain `A -> B -> C` will be created. In practice, it means that the entire chain can be manipulated
 from its root, which usually is `component.decorator`.
 
 
-[Component]: ../../flame/components.md#component
+[Component]: ../components/components.md#component
 [Effect]: ../../flame/effects.md
 [HasDecorator]: #hasdecorator-mixin

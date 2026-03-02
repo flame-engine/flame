@@ -1,5 +1,10 @@
 # Overlays
 
+Games often need to display Flutter widgets on top of the game canvas for things like pause menus,
+score displays, or chat interfaces. Because Flame games live inside a Flutter widget tree, you can
+layer any Flutter widget over the game surface. The Overlays API makes this especially convenient
+by letting you toggle named widget overlays on and off from within your game code.
+
 Since a Flame game can be wrapped in a widget, it is quite easy to use it alongside other Flutter
 widgets in your tree. However, if you want to easily show widgets on top of your Flame game, like
 messages, menu screens or something of that nature, you can use the Widgets Overlay API to make

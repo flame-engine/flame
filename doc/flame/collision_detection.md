@@ -1,24 +1,29 @@
 # Collision Detection
 
+Almost every game needs to know when objects touch or overlap. Without collision detection a player
+could walk through walls, bullets would pass through enemies, and coins could never be collected.
+Flame provides a built-in collision detection system so you can focus on what *happens* when objects
+collide rather than writing the intersection math yourself.
+
 Collision detection is needed in most games to detect and act upon two components intersecting each
-other. For example an arrow hitting an enemy or the player picking up a coin.
+other. For example, an arrow hitting an enemy or the player picking up a coin.
 
 In most collision detection systems you use something called hitboxes to create more precise
 bounding boxes of your components. In Flame the hitboxes are areas of the component that can react
-to collisions (and make [gesture input](inputs/gesture_input.md#gesturehitboxes)) more accurate.
+to collisions and make [gesture input](inputs/gesture_input.md#gesturehitboxes) more accurate.
 
 The collision detection system supports three different types of shapes that you can build hitboxes
-from, these shapes are Polygon, Rectangle and Circle. Multiple hitbox can be added
-to a component to form the area which can be used to either detect collisions
-or whether it contains a point or not,
-the latter is very useful for accurate gesture detection. The collision detection does not handle
-what should happen when two hitboxes collide, so it is up to the user to implement what will happen
-when for example two `PositionComponent`s have intersecting hitboxes.
+from, these shapes are Polygon, Rectangle and Circle. Multiple hitboxes can be added to a
+component to form the area which can be used to either detect collisions or determine whether it
+contains a point. The latter is very useful for accurate gesture detection. The collision
+detection does not handle what should happen when two hitboxes collide, so it is up to the user
+to implement what will happen when for example two `PositionComponent`s have intersecting
+hitboxes.
 
 Do note that the built-in collision detection system does not take collisions between two hitboxes
-that overshoot each other into account, this could happen when they either move very fast or
-`update` being called with a large delta time (for example if your app is not in the foreground).
-This behavior is called tunneling, if you want to read more about it.
+that overshoot each other into account. This could happen when they either move very fast or
+`update` is called with a large delta time (for example if your app is not in the foreground).
+This behavior is called tunneling.
 
 Also note that the collision detection system has a limitation that makes it not work properly if
 you have certain types of combinations of flips and scales of the ancestors of the hitboxes.
@@ -104,7 +109,7 @@ The set of points is where the edges of the hitboxes intersect.
 Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
 `onCollisionStart` and `onCollisionEnd` methods, which are called when two components and hitboxes
-starts or stops colliding with each other.
+start or stop colliding with each other.
 
 When a `PositionComponent` (and hitbox) starts to collide with another `PositionComponent`
 both `onCollisionStart` and `onCollision` are called, so if you don't need to do something specific
@@ -172,11 +177,10 @@ class MyComponent extends PositionComponent {
 ```
 
 If you don't add any arguments to the hitbox, like above, the hitbox will try to fill its parent as
-much as possible. Except for having the hitboxes trying to fill their parents,
-there are two ways to
-initiate hitboxes and it is with the normal constructor where you define the hitbox by itself, with
-a size and a position etc. The other way is to use the `relative` constructor which defines the
-hitbox in relation to the size of its intended parent.
+much as possible. Apart from having the hitboxes fill their parents, there are two ways to
+initialize hitboxes. One is with the normal constructor where you define the hitbox by itself,
+with a size and a position etc. The other way is to use the `relative` constructor which defines
+the hitbox in relation to the size of its intended parent.
 
 
 In some specific cases you might want to handle collisions only between hitboxes, without
@@ -217,7 +221,7 @@ class MySpecialHitbox extends RectangleHitbox {
 ```
 
 You can read more about how the different shapes are defined in the
-[ShapeComponents](components.md#shapecomponents) section.
+[ShapeComponents](components/shape_components.md) section.
 
 Remember that you can add as many `ShapeHitbox`s as you want to your `PositionComponent` to make up
 more complex areas. For example a snowman with a hat could be represented by three `CircleHitbox`s
@@ -256,7 +260,7 @@ about at the moment but that might later come back in to view so they are not co
 from the game.
 
 These are just examples of how you could use these types, there will be a lot more use cases for
-them so don't doubt to use them even if your use case isn't listed here.
+them so don't hesitate to use them even if your use case isn't listed here.
 
 
 ### PolygonHitbox
@@ -270,20 +274,20 @@ default calculated from the size of the collidable that they are attached to, bu
 polygon can be made in an infinite number of ways inside of a bounding box you have to add the
 definition in the constructor for this shape.
 
-The `PolygonHitbox` has the same constructors as the [](components.md#polygoncomponent), see that
-section for documentation regarding those.
+The `PolygonHitbox` has the same constructors as the [](components/shape_components.md#polygoncomponent),
+see that section for documentation regarding those.
 
 
 ### RectangleHitbox
 
-The `RectangleHitbox` has the same constructors as the [](components.md#rectanglecomponent), see
-that section for documentation regarding those.
+The `RectangleHitbox` has the same constructors as the [](components/shape_components.md#rectanglecomponent),
+see that section for documentation regarding those.
 
 
 ### CircleHitbox
 
-The `CircleHitbox` has the same constructors as the [](components.md#circlecomponent), see that
-section for documentation regarding those.
+The `CircleHitbox` has the same constructors as the [](components/shape_components.md#circlecomponent),
+see that section for documentation regarding those.
 
 
 ## ScreenHitbox
@@ -315,7 +319,7 @@ worry about the broad phase system that is used, so if the standard implementati
 enough for you, you probably don't have to read this section.
 
 A broad phase is the first step of collision detection where potential collisions are calculated.
-Calculating these potential collisions is faster than to checking the intersections exactly,
+Calculating these potential collisions is faster than checking the intersections exactly,
 and it removes the need to check all hitboxes against each other and
 therefore avoiding O(n²).
 
@@ -386,9 +390,9 @@ class Bullet extends PositionComponent with CollisionCallbacks {
       // do NOT collide with Player or Water
       return false;
     }
-    // Just return true if you're not interested in the parent's type check result.
-    // Or call super and you will be able to override the result with the parent's
-    // result.
+    // Just return true if you're not interested in
+    // the parent's type check result. Or call super
+    // to override the result with the parent's result.
     return super.onComponentTypeCheck(other);
   }
 
@@ -470,7 +474,7 @@ range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class,
-or with the `HasGameReference` Mixin from other components as well.
+or with the `HasGameReference` mixin from other components as well.
 
 Example:
 
@@ -505,10 +509,10 @@ The result from this operation will either be `null` if the ray didn't hit anyth
 
 - Which hitbox the ray hit
 - The intersection point of the collision
-- The reflection ray, i.e. how the ray would reflect on the hitbox that it hix
+- The reflection ray, i.e. how the ray would reflect on the hitbox that it hit
 - The normal of the collision, i.e. a vector perpendicular to the face of the hitbox that it hits
 
-If you are concerned about performance you can pre create a `RaycastResult` object that you send in
+If you are concerned about performance you can pre-create a `RaycastResult` object that you send in
 to the method with the `out` argument, this will make it possible for the method to reuse this
 object instead of creating a new one for each iteration. This can be good if you do a lot of
 ray casting in your `update` methods.
@@ -587,7 +591,7 @@ class MyGame extends FlameGame with HasCollisionDetection {
 ```
 
 In the example above we send out a ray from (0, 100) diagonally down to the right
-and we say that we want it the bounce on at most 100 hitboxes,
+and we say that we want it to bounce on at most 100 hitboxes,
 it doesn't necessarily have to get 100 results since at
 some point one of the reflection rays might not hit a hitbox and then the method is done.
 
@@ -613,14 +617,13 @@ as a dependency.
 But if you have a simpler use-case and just want to check for collisions of components and improve
 the accuracy of gestures, Flame's built-in collision detection will serve you very well.
 
-If you have the following needs you should at least consider to use
-[Forge2D](https://github.com/flame-engine/forge2d):
+If you have the following needs you should at least consider using [Forge2D](https://github.com/flame-engine/forge2d):
 
-- Interacting realistic forces
+- Realistic interacting forces
 - Particle systems that can interact with other bodies
 - Joints between bodies
 
-It is a good idea to just use the Flame collision detection system if you on the other hand only
+On the other hand, it is a good idea to just use the Flame collision detection system if you only
 need some of the following things (since it is simpler to not involve Forge2D):
 
 - The ability to act on some of your components colliding

@@ -1,5 +1,10 @@
 # Assets Directory Structure
 
+Games rely heavily on external assets like images for sprites, audio files for sound effects, and
+tile maps for levels. Organizing these files consistently ensures that Flame's built-in loaders
+(and Flutter's own [asset system](https://docs.flutter.dev/ui/assets/assets-and-images)) can find
+them without extra configuration.
+
 Flame has a proposed structure for your project that includes the standard Flutter `assets`
 directory in addition to some children: `audio`, `images` and `tiles`.
 
@@ -58,5 +63,5 @@ global ones provided by Flame.
 
 Additionally, `AssetsCache` and `Images` can receive a custom
 [`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html).
-This can be used to make Flame look for assets in a different location other the `rootBundle`,
+This can be used to make Flame look for assets in a different location other than the `rootBundle`,
 like the file system for example.
