@@ -181,8 +181,65 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @internal
   void updateBounds() {
     lines.clear();
-    var lineHeight = 0.0;
     final maxBoxWidth = _fixedSize ? width : boxConfig.maxWidth;
+    final availableWidth = maxBoxWidth - boxConfig.margins.horizontal;
+
+    // Use Flutter's TextPainter for proper text layout when available.
+    // This correctly handles CJK languages and other scripts that don't
+    // use spaces for word boundaries.
+    if (textRenderer is TextPaint) {
+      _updateBoundsWithTextPainter(availableWidth);
+    } else {
+      // Fallback to the original space-based splitting for other renderers
+      _updateBoundsWordBased(availableWidth);
+    }
+
+    size = _recomputeSize();
+  }
+
+  void _updateBoundsWithTextPainter(double availableWidth) {
+    final textPaint = textRenderer as TextPaint;
+    final textPainter = textPaint.toTextPainter(text);
+    textPainter.layout(maxWidth: availableWidth);
+
+    // Extract lines from the laid out text using line boundaries
+    final lineMetricsList = textPainter.computeLineMetrics();
+    var lineHeight = 0.0;
+    var offset = 0;
+
+    while (offset < text.length) {
+      final range = textPainter.getLineBoundary(TextPosition(offset: offset));
+      var lineText = text.substring(range.start, range.end);
+
+      // Don't include the trailing newline character in the line text
+      if (lineText.endsWith('\n')) {
+        lineText = lineText.substring(0, lineText.length - 1);
+      }
+
+      lines.add(lineText);
+
+      // Update max width based on actual line width
+      final actualLineMetrics = textRenderer.getLineMetrics(lineText);
+      _updateMaxWidth(actualLineMetrics.width);
+
+      // Move to the next line
+      offset = range.end;
+      if (offset < text.length && text[offset] == '\n') {
+        offset++; // Skip the newline character
+      }
+    }
+
+    // Get line height from the metrics
+    if (lineMetricsList.isNotEmpty) {
+      lineHeight = lineMetricsList.first.height;
+    }
+
+    _lineHeight = lineHeight;
+    _totalLines = lines.length;
+  }
+
+  void _updateBoundsWordBased(double availableWidth) {
+    var lineHeight = 0.0;
     for (final word in text.split(' ')) {
       final wordLines = word.split('\n');
       final possibleLine = lines.isEmpty
@@ -193,7 +250,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
       _updateMaxWidth(metrics.width);
       final bool canAppend;
-      if (metrics.width <= maxBoxWidth - boxConfig.margins.horizontal) {
+      if (metrics.width <= availableWidth) {
         canAppend = lines.isNotEmpty;
       } else {
         canAppend = lines.isNotEmpty && lines.last == '';
@@ -211,7 +268,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _totalLines = lines.length;
     _lineHeight = lineHeight;
-    size = _recomputeSize();
   }
 
   void _updateMaxWidth(double w) {
