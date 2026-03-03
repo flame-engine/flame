@@ -13,8 +13,8 @@ and in the pub.dev [installation instructions](https://pub.dev/packages/flame_ri
 
 First, start with adding the `animation.riv` file to the assets folder. Then load the artboard of
 the animation to the game using the `loadArtboard` method. After that, create the
-`StateMachine` from the artboard and advance it in your component's `update` method.
-Then you can create a `RiveComponent` using that artboard.
+`StateMachine` from the artboard and pass it to the `RiveComponent`. The component will
+automatically advance the state machine for you.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -32,29 +32,18 @@ class RiveExampleGame extends FlameGame {
       File.asset('assets/skills.riv', riveFactory: Factory.flutter),
     );
 
-    add(MyRiveComponent(skillsArtboard));
-  }
-}
-
-class MyRiveComponent extends RiveComponent {
-  MyRiveComponent(Artboard artboard) : super(artboard: artboard, size: Vector2.all(550));
-
-  StateMachine? _stateMachine;
-
-  @override
-  void onLoad() {
-    _stateMachine = artboard.stateMachine("Designer's Test");
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    _stateMachine?.advanceAndApply(dt);
+    add(
+      RiveComponent(
+        artboard: skillsArtboard,
+        stateMachine: skillsArtboard.stateMachine("Designer's Test"),
+        size: Vector2.all(550),
+      ),
+    );
   }
 }
 ```
 
-You can use the state machine to manage the state of animation.
+You can use the state machine to manage the state of animation via data binding.
 Check out the example for more information.
 
 

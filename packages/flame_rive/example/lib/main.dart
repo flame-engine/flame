@@ -23,9 +23,12 @@ class RiveExampleGame extends FlameGame {
 }
 
 class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
-  SkillsAnimationComponent(Artboard artboard) : super(artboard: artboard);
+  SkillsAnimationComponent(Artboard artboard)
+    : super(
+        artboard: artboard,
+        stateMachine: artboard.stateMachine("Designer's Test"),
+      );
 
-  StateMachine? _stateMachine;
   ViewModelInstanceNumber? _levelInput;
 
   @override
@@ -36,19 +39,12 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
 
   @override
   void onLoad() {
-    _stateMachine = artboard.stateMachine("Designer's Test");
-    if (_stateMachine != null) {
-      _levelInput = _stateMachine!.boundRuntimeViewModelInstance?.number(
+    if (stateMachine != null) {
+      _levelInput = stateMachine!.boundRuntimeViewModelInstance?.number(
         'Level',
       );
       _levelInput?.value = 0;
     }
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    _stateMachine?.advanceAndApply(dt);
   }
 
   @override

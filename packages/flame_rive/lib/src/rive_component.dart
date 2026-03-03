@@ -6,11 +6,13 @@ import 'package:rive/rive.dart';
 
 class RiveComponent extends PositionComponent {
   final Artboard artboard;
+  final StateMachine? stateMachine;
   final RiveArtboardRenderer _renderer;
   late Size _renderSize;
 
   RiveComponent({
     required this.artboard,
+    this.stateMachine,
     bool antialiasing = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
@@ -51,7 +53,11 @@ class RiveComponent extends PositionComponent {
 
   @override
   void update(double dt) {
-    _renderer.advance(dt);
+    if (stateMachine != null) {
+      stateMachine!.advanceAndApply(dt);
+    } else {
+      _renderer.advance(dt);
+    }
   }
 }
 
