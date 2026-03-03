@@ -42,10 +42,10 @@ class RiveExampleGame extends FlameGame with TapCallbacks {
   @override
   void onTapDown(_) {
     if (coinInput != null) {
-      coinInput!.value = (coinInput!.value + 10).clamp(0, 1000);
+      coinInput!.value = (coinInput!.value + 10) % 1001;
     }
     if (gemInput != null) {
-      gemInput!.value = (gemInput!.value + 1).clamp(0, 1000);
+      gemInput!.value = (gemInput!.value + 1) % 1001;
     }
   }
 }

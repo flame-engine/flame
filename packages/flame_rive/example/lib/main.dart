@@ -72,15 +72,15 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
     // Right side decrements lives
     if (event.localPosition.x > size.x / 2) {
       if (_livesInput != null) {
-        _livesInput!.value = (_livesInput!.value - 1).clamp(0, 100);
+        _livesInput!.value = (_livesInput!.value - 10) % 101;
       }
     } else if (event.localPosition.y < size.y / 2) {
       if (_coinInput != null) {
-        _coinInput!.value = (_coinInput!.value + 10).clamp(0, 1000);
+        _coinInput!.value = (_coinInput!.value + 10) % 1001;
       }
     } else {
       if (_gemInput != null) {
-        _gemInput!.value = (_gemInput!.value + 1).clamp(0, 1000);
+        _gemInput!.value = (_gemInput!.value + 1) % 1001;
       }
     }
   }
