@@ -21,7 +21,7 @@ class RiveExampleGame extends FlameGame {
     ).then((file) => file!);
 
     final artboard = await loadArtboard(file);
-    final stateMachine = artboard.defaultStateMachine();
+    final stateMachine = artboard.stateMachine('State Machine 1');
 
     if (stateMachine != null) {
       final viewModel = file.defaultArtboardViewModel(artboard);
@@ -70,8 +70,6 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Top half increments coins, bottom half increments gems
-    // Right side decrements lives
     if (event.localPosition.x > size.x / 2) {
       if (_livesInput != null) {
         _livesInput!.value = (_livesInput!.value - 10) % 101;
