@@ -31,6 +31,7 @@ import 'package:vector_math/vector_math.dart';
 class Transform2D extends ChangeNotifier {
   final Matrix4 _transformMatrix;
   bool _recalculate;
+  bool _isBatchUpdating = false;
   double _angle;
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
@@ -59,10 +60,13 @@ class Transform2D extends ChangeNotifier {
 
   /// Set this to the values of the [other] [Transform2D].
   void setFrom(Transform2D other) {
+    _isBatchUpdating = true;
     angle = other.angle;
     position = other.position;
     scale = other.scale;
     offset = other.offset;
+    _isBatchUpdating = false;
+    notifyListeners();
   }
 
   /// Check whether this transform is equal to [other], up to the given
@@ -176,6 +180,43 @@ class Transform2D extends ChangeNotifier {
     return _transformMatrix;
   }
 
+  set transformMatrix(Matrix4 value) {
+    assert(
+      value.storage[2] == 0 &&
+          value.storage[3] == 0 &&
+          value.storage[6] == 0 &&
+          value.storage[7] == 0 &&
+          value.storage[8] == 0 &&
+          value.storage[9] == 0 &&
+          value.storage[10] == 1 &&
+          value.storage[11] == 0 &&
+          value.storage[14] == 0 &&
+          value.storage[15] == 1,
+      'The provided matrix is not a valid 2D transformation',
+    );
+    _transformMatrix.setFrom(value);
+    _recalculate = false;
+
+    final storage = _transformMatrix.storage;
+    _isBatchUpdating = true;
+    final determinant = storage[0] * storage[5] - storage[1] * storage[4];
+    _scale.x = math.sqrt(storage[0] * storage[0] + storage[1] * storage[1]);
+    if (_scale.x == 0) {
+      _angle = math.atan2(-storage[4], storage[5]);
+      _scale.y = math.sqrt(storage[4] * storage[4] + storage[5] * storage[5]);
+    } else {
+      _angle = math.atan2(storage[1], storage[0]);
+      _scale.y = determinant / _scale.x;
+    }
+
+    _position.x =
+        storage[12] - (storage[0] * _offset.x + storage[4] * _offset.y);
+    _position.y =
+        storage[13] - (storage[1] * _offset.x + storage[5] * _offset.y);
+    _isBatchUpdating = false;
+    notifyListeners();
+  }
+
   /// Transform [point] from local coordinates into the parent coordinate space.
   /// Effectively, this function applies the current transform to [point].
   ///
@@ -232,6 +273,8 @@ class Transform2D extends ChangeNotifier {
 
   void _markAsModified() {
     _recalculate = true;
-    notifyListeners();
+    if (!_isBatchUpdating) {
+      notifyListeners();
+    }
   }
 }

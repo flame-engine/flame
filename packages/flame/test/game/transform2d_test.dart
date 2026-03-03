@@ -280,5 +280,57 @@ void main() {
       t.scale = Vector2(0, 1);
       expect(t.globalToLocal(point), Vector2(0, 0));
     });
+
+    group('transformMatrix setter', () {
+      test('setting transformMatrix updates properties', () {
+        final transform = Transform2D();
+        final matrix = Matrix4.identity()
+          ..translateByDouble(10.0, 20.0, 0.0, 1.0)
+          ..rotateZ(0.5)
+          ..scaleByDouble(2.0, 3.0, 1.0, 1.0);
+
+        transform.transformMatrix = matrix;
+
+        expect(transform.position.x, closeTo(10.0, 1e-7));
+        expect(transform.position.y, closeTo(20.0, 1e-7));
+        expect(transform.angle, closeTo(0.5, 1e-7));
+        expect(transform.scale.x, closeTo(2.0, 1e-7));
+        expect(transform.scale.y, closeTo(3.0, 1e-7));
+        expect(transform.offset.x, 0.0);
+        expect(transform.offset.y, 0.0);
+      });
+
+      test('setting transformMatrix with offset', () {
+        final transform = Transform2D();
+        transform.offset = Vector2(5, 5);
+
+        // Matrix that corresponds to:
+        // translate(10, 20) -> rotateZ(0) -> scale(1, 1) -> translate(5, 5)
+        // which is effectively translate(15, 25)
+        final matrix = Matrix4.identity()
+          ..translateByDouble(15.0, 25.0, 0.0, 1.0);
+
+        transform.transformMatrix = matrix;
+
+        // If we preserve offset(5, 5), then position should be (10, 20)
+        expect(transform.offset, Vector2(5, 5));
+        expect(transform.position.x, closeTo(10.0, 1e-7));
+        expect(transform.position.y, closeTo(20.0, 1e-7));
+        expect(transform.angle, closeTo(0.0, 1e-7));
+        expect(transform.scale.x, closeTo(1.0, 1e-7));
+        expect(transform.scale.y, closeTo(1.0, 1e-7));
+      });
+
+      test('setting transformMatrix triggers notification only once', () {
+        final transform = Transform2D();
+        var notifications = 0;
+        transform.addListener(() => notifications++);
+
+        transform.transformMatrix = Matrix4.identity()
+          ..translateByDouble(10.0, 10.0, 0.0, 1.0);
+
+        expect(notifications, 1);
+      });
+    });
   });
 }
