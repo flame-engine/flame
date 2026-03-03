@@ -26,7 +26,7 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   SkillsAnimationComponent(Artboard artboard) : super(artboard: artboard);
 
   StateMachine? _stateMachine;
-  NumberInput? _levelInput;
+  ViewModelInstanceNumber? _levelInput;
 
   @override
   void onGameResize(Vector2 size) {
@@ -38,7 +38,9 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   void onLoad() {
     _stateMachine = artboard.stateMachine("Designer's Test");
     if (_stateMachine != null) {
-      _levelInput = _stateMachine!.input('Level') as NumberInput?;
+      _levelInput = _stateMachine!.boundRuntimeViewModelInstance?.number(
+        'Level',
+      );
       _levelInput?.value = 0;
     }
   }
