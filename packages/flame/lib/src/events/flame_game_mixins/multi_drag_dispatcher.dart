@@ -166,7 +166,12 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
-        instance.onStart = (Offset point) => FlameDragAdapter(this, point);
+        instance.onStart = (Offset point) {
+          if (_shouldBeRemoved) {
+            return null;
+          }
+          return FlameDragAdapter(this, point);
+        };
       },
     );
   }
