@@ -305,7 +305,15 @@ class _DragScaleBox extends RectangleComponent
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    position += event.localDelta;
+    // Transform localDelta from the component's rotated/scaled local space
+    // back to parent space so drag works correctly when rotated.
+    final d = event.localDelta;
+    final c = cos(angle);
+    final s = sin(angle);
+    position += Vector2(
+      c * scale.x * d.x - s * scale.y * d.y,
+      s * scale.x * d.x + c * scale.y * d.y,
+    );
   }
 
   @override
