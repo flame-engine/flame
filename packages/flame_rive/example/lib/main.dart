@@ -11,10 +11,13 @@ void main() async {
 
 class RiveExampleGame extends FlameGame {
   @override
+  Color backgroundColor() => const Color(0xFF444444);
+
+  @override
   Future<void> onLoad() async {
     final file = await File.asset(
       'assets/rewards.riv',
-      riveFactory: Factory.rive,
+      riveFactory: Factory.flutter,
     ).then((file) => file!);
 
     final artboard = await loadArtboard(file);
@@ -41,7 +44,9 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
         stateMachine: stateMachine,
       );
 
-  ViewModelInstanceNumber? _amountInput;
+  ViewModelInstanceNumber? _coinInput;
+  ViewModelInstanceNumber? _gemInput;
+  ViewModelInstanceNumber? _livesInput;
 
   @override
   void onGameResize(Vector2 size) {
@@ -54,15 +59,29 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
     if (stateMachine != null) {
       final vmi = stateMachine!.boundRuntimeViewModelInstance;
       if (vmi != null) {
-        _amountInput = vmi.viewModel('Coin')?.number('Item_Value');
+        _coinInput = vmi.viewModel('Coin')?.number('Item_Value');
+        _gemInput = vmi.viewModel('Gem')?.number('Item_Value');
+        _livesInput = vmi.viewModel('Energy_Bar')?.number('Lives');
       }
     }
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    if (_amountInput != null) {
-      _amountInput!.value = (_amountInput!.value + 100) % 1000;
+    // Top half increments coins, bottom half increments gems
+    // Right side decrements lives
+    if (event.localPosition.x > size.x / 2) {
+      if (_livesInput != null) {
+        _livesInput!.value = (_livesInput!.value - 1).clamp(0, 100);
+      }
+    } else if (event.localPosition.y < size.y / 2) {
+      if (_coinInput != null) {
+        _coinInput!.value = (_coinInput!.value + 10).clamp(0, 1000);
+      }
+    } else {
+      if (_gemInput != null) {
+        _gemInput!.value = (_gemInput!.value + 1).clamp(0, 1000);
+      }
     }
   }
 }
