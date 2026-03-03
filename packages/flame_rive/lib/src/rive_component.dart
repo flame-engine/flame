@@ -23,8 +23,6 @@ class RiveComponent extends PositionComponent {
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
     bool clipToBounds = false,
-
-    // position component arguments
     super.position,
 
     /// The logical size of the component.
