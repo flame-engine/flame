@@ -13,8 +13,8 @@ and in the pub.dev [installation instructions](https://pub.dev/packages/flame_ri
 
 First, start with adding the `animation.riv` file to the assets folder. Then load the artboard of
 the animation to the game using the `loadArtboard` method. After that, create the
-`StateMachineController` from the artboard and add a controller to it. Then you can create a
-`RiveComponent` using that artboard.
+`StateMachine` from the artboard and advance it in your component's `update` method.
+Then you can create a `RiveComponent` using that artboard.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -28,22 +28,33 @@ the animation to the game using the `loadArtboard` method. After that, create th
 class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final skillsArtboard =
-    await loadArtboard(RiveFile.asset('assets/skills.riv'));
-
-    final controller = StateMachineController.fromArtboard(
-      skillsArtboard,
-      "Designer's Test",
+    final skillsArtboard = await loadArtboard(
+      File.asset('assets/skills.riv', riveFactory: Factory.flutter),
     );
 
-    skillsArtboard.addController(controller!);
+    add(MyRiveComponent(skillsArtboard));
+  }
+}
 
-    add(RiveComponent(artboard: skillsArtboard, size: Vector2.all(550)));
+class MyRiveComponent extends RiveComponent {
+  MyRiveComponent(Artboard artboard) : super(artboard: artboard, size: Vector2.all(550));
+
+  StateMachine? _stateMachine;
+
+  @override
+  void onLoad() {
+    _stateMachine = artboard.stateMachine("Designer's Test");
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    _stateMachine?.advanceAndApply(dt);
   }
 }
 ```
 
-You can use the controller to manage the state of animation.
+You can use the state machine to manage the state of animation.
 Check out the example for more information.
 
 
@@ -51,4 +62,3 @@ Check out the example for more information.
 
 You can check an example
 [here](https://github.com/flame-engine/flame/tree/main/packages/flame_rive/example).
-

@@ -3,7 +3,9 @@ import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await RiveNative.init();
   runApp(const GameWidget.controlled(gameFactory: RiveExampleGame.new));
 }
 
@@ -11,7 +13,10 @@ class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final skillsArtboard = await loadArtboard(
-      RiveFile.asset('assets/skills.riv'),
+      File.asset(
+        'assets/skills.riv',
+        riveFactory: Factory.flutter,
+      ).then((file) => file!),
     );
     add(SkillsAnimationComponent(skillsArtboard));
   }
@@ -20,7 +25,8 @@ class RiveExampleGame extends FlameGame {
 class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   SkillsAnimationComponent(Artboard artboard) : super(artboard: artboard);
 
-  SMIInput<double>? _levelInput;
+  StateMachine? _stateMachine;
+  NumberInput? _levelInput;
 
   @override
   void onGameResize(Vector2 size) {
@@ -30,15 +36,17 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
 
   @override
   void onLoad() {
-    final controller = StateMachineController.fromArtboard(
-      artboard,
-      "Designer's Test",
-    );
-    if (controller != null) {
-      artboard.addController(controller);
-      _levelInput = controller.findInput<double>('Level');
+    _stateMachine = artboard.stateMachine("Designer's Test");
+    if (_stateMachine != null) {
+      _levelInput = _stateMachine!.number('Level');
       _levelInput?.value = 0;
     }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    _stateMachine?.advanceAndApply(dt);
   }
 
   @override
