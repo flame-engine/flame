@@ -1,3 +1,5 @@
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
@@ -37,7 +39,7 @@ class RiveExampleGame extends FlameGame {
   }
 }
 
-class RewardsComponent extends RiveComponent with TapCallbacks {
+class RewardsComponent extends RiveComponent {
   RewardsComponent(Artboard artboard, StateMachine? stateMachine)
     : super(
         artboard: artboard,
@@ -48,14 +50,32 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
   ViewModelInstanceNumber? _gemInput;
   ViewModelInstanceNumber? _livesInput;
 
+  late final RewardsArea _livesArea;
+  late final RewardsArea _coinArea;
+  late final RewardsArea _gemArea;
+
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     this.size = size;
+    if (isLoaded) {
+      _updateAreas();
+    }
+  }
+
+  void _updateAreas() {
+    _livesArea.position = Vector2(size.x / 2, 0);
+    _livesArea.size = Vector2(size.x / 2, size.y);
+
+    _coinArea.position = Vector2.zero();
+    _coinArea.size = Vector2(size.x / 2, size.y / 2);
+
+    _gemArea.position = Vector2(0, size.y / 2);
+    _gemArea.size = Vector2(size.x / 2, size.y / 2);
   }
 
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
     if (stateMachine != null) {
       final viewModelInstance = stateMachine!.boundRuntimeViewModelInstance;
       if (viewModelInstance != null) {
@@ -66,22 +86,51 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
             ?.number('Lives');
       }
     }
+
+    add(
+      _livesArea = RewardsArea(
+        onTap: () {
+          if (_livesInput != null) {
+            _livesInput!.value = (_livesInput!.value - 10) % 101;
+          }
+        },
+      ),
+    );
+    add(
+      _coinArea = RewardsArea(
+        onTap: () {
+          if (_coinInput != null) {
+            _coinInput!.value = (_coinInput!.value + 10) % 1001;
+          }
+        },
+      ),
+    );
+    add(
+      _gemArea = RewardsArea(
+        onTap: () {
+          if (_gemInput != null) {
+            _gemInput!.value = (_gemInput!.value + 1) % 1001;
+          }
+        },
+      ),
+    );
+    _updateAreas();
+  }
+}
+
+class RewardsArea extends PositionComponent with TapCallbacks, GestureHitboxes {
+  RewardsArea({
+    required this.onTap,
+  });
+
+  final VoidCallback onTap;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(RectangleHitbox());
   }
 
   @override
-  void onTapDown(TapDownEvent event) {
-    if (event.localPosition.x > size.x / 2) {
-      if (_livesInput != null) {
-        _livesInput!.value = (_livesInput!.value - 10) % 101;
-      }
-    } else if (event.localPosition.y < size.y / 2) {
-      if (_coinInput != null) {
-        _coinInput!.value = (_coinInput!.value + 10) % 1001;
-      }
-    } else {
-      if (_gemInput != null) {
-        _gemInput!.value = (_gemInput!.value + 1) % 1001;
-      }
-    }
-  }
+  void onTapDown(TapDownEvent event) => onTap();
 }
