@@ -91,6 +91,21 @@ void main() {
       verify(() => bundle.loadString('assets/duck_count')).called(1);
     });
 
+    test('loads from a package', () async {
+      final bundle = _MockAssetBundle();
+      when(
+        () => bundle.loadString(any()),
+      ).thenAnswer((_) async => 'Three ducks');
+
+      final cache = AssetsCache(bundle: bundle);
+
+      final result = await cache.readFile('duck_count', package: 'my_pkg');
+      expect(result, equals('Three ducks'));
+      verify(
+        () => bundle.loadString('packages/my_pkg/assets/duck_count'),
+      ).called(1);
+    });
+
     group('fromCache', () {
       test('returns cached string asset', () async {
         final assetsCache = AssetsCache(prefix: '');

@@ -38,9 +38,10 @@ class Svg {
     String fileName, {
     AssetsCache? cache,
     double? pixelRatio,
+    String? package,
   }) async {
     cache ??= Flame.assets;
-    final svgString = await cache.readFile(fileName);
+    final svgString = await cache.readFile(fileName, package: package);
     return Svg.loadFromString(svgString, pixelRatio: pixelRatio);
   }
 
@@ -148,5 +149,6 @@ class Svg {
 /// Provides a loading method for [Svg] on the [Game] class.
 extension SvgLoader on Game {
   /// Loads an [Svg] using the [Game]'s own asset loader.
-  Future<Svg> loadSvg(String fileName) => Svg.load(fileName, cache: assets);
+  Future<Svg> loadSvg(String fileName, {String? package}) =>
+      Svg.load(fileName, cache: assets, package: package);
 }

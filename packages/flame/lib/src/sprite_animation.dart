@@ -241,9 +241,10 @@ class SpriteAnimation {
     String src,
     SpriteAnimationData data, {
     Images? images,
+    String? package,
   }) async {
     final imagesCache = images ?? Flame.images;
-    final image = await imagesCache.load(src);
+    final image = await imagesCache.load(src, package: package);
     return SpriteAnimation.fromFrameData(image, data);
   }
 

@@ -50,13 +50,22 @@ class FlameAudio {
     ReleaseMode releaseMode,
     PlayerMode playerMode, {
     required AudioContext? audioContext,
+    String? package,
   }) async {
-    final player = AudioPlayer()..audioCache = audioCache;
+    final player = AudioPlayer();
+    if (package != null) {
+      player.audioCache = audioCacheFactory(prefix: '');
+    } else {
+      player.audioCache = audioCache;
+    }
     audioContext ??= _defaultAudioContext;
     await player.setAudioContext(audioContext);
     await player.setReleaseMode(releaseMode);
+    final path = package == null
+        ? file
+        : 'packages/$package/${audioCache.prefix}$file';
     await player.play(
-      AssetSource(file),
+      AssetSource(path),
       volume: volume,
       mode: playerMode,
     );
@@ -68,6 +77,7 @@ class FlameAudio {
     String file, {
     double volume = 1.0,
     AudioContext? audioContext,
+    String? package,
   }) {
     return _preparePlayer(
       file,
@@ -75,6 +85,7 @@ class FlameAudio {
       ReleaseMode.release,
       PlayerMode.lowLatency,
       audioContext: audioContext,
+      package: package,
     );
   }
 
@@ -83,6 +94,7 @@ class FlameAudio {
     String file, {
     double volume = 1.0,
     AudioContext? audioContext,
+    String? package,
   }) {
     return _preparePlayer(
       file,
@@ -90,6 +102,7 @@ class FlameAudio {
       ReleaseMode.loop,
       PlayerMode.lowLatency,
       audioContext: audioContext,
+      package: package,
     );
   }
 
@@ -99,6 +112,7 @@ class FlameAudio {
     String file, {
     double volume = 1.0,
     AudioContext? audioContext,
+    String? package,
   }) {
     return _preparePlayer(
       file,
@@ -106,6 +120,7 @@ class FlameAudio {
       ReleaseMode.release,
       PlayerMode.mediaPlayer,
       audioContext: audioContext,
+      package: package,
     );
   }
 
@@ -119,6 +134,7 @@ class FlameAudio {
     String file, {
     double volume = 1.0,
     AudioContext? audioContext,
+    String? package,
   }) {
     return _preparePlayer(
       file,
@@ -126,6 +142,7 @@ class FlameAudio {
       ReleaseMode.loop,
       PlayerMode.mediaPlayer,
       audioContext: audioContext,
+      package: package,
     );
   }
 
@@ -135,11 +152,15 @@ class FlameAudio {
     required int maxPlayers,
     int minPlayers = 1,
     AudioContext? audioContext,
+    String? package,
   }) async {
     audioContext ??= _defaultAudioContext;
+    final path = package == null
+        ? sound
+        : 'packages/$package/${audioCache.prefix}$sound';
     return AudioPool.create(
-      source: AssetSource(sound),
-      audioCache: audioCache,
+      source: AssetSource(path),
+      audioCache: package == null ? audioCache : audioCacheFactory(prefix: ''),
       minPlayers: minPlayers,
       maxPlayers: maxPlayers,
       audioContext: audioContext,

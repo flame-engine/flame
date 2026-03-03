@@ -59,11 +59,25 @@ class Bgm extends WidgetsBindingObserver {
   ///
   /// It is safe to call this function even when a current BGM track is
   /// playing.
-  Future<void> play(String fileName, {double volume = 1}) async {
+  Future<void> play(
+    String fileName, {
+    double volume = 1,
+    String? package,
+  }) async {
     await audioPlayer.release();
     await audioPlayer.setReleaseMode(ReleaseMode.loop);
     await audioPlayer.setVolume(volume);
-    await audioPlayer.setSource(AssetSource(fileName));
+    final path = package == null
+        ? fileName
+        : 'packages/$package/${audioPlayer.audioCache.prefix}$fileName';
+    if (package != null) {
+      final originalPrefix = audioPlayer.audioCache.prefix;
+      audioPlayer.audioCache.prefix = '';
+      await audioPlayer.setSource(AssetSource(path));
+      audioPlayer.audioCache.prefix = originalPrefix;
+    } else {
+      await audioPlayer.setSource(AssetSource(path));
+    }
     await audioPlayer.resume();
     isPlaying = true;
   }
