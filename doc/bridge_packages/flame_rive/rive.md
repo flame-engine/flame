@@ -16,6 +16,9 @@ the animation to the game using the `loadArtboard` method. After that, create th
 `StateMachine` from the artboard and pass it to the `RiveComponent`. The component will
 automatically advance the state machine for you.
 
+Interactivity should be handled via [Data Binding](https://rive.app/docs/runtimes/data-binding)
+instead of state machine inputs, as they are deprecated in Rive 0.14.x.
+
 ```{flutter-app}
 :sources: ../flame/examples
 :page: rive_example
@@ -28,14 +31,30 @@ automatically advance the state machine for you.
 class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final skillsArtboard = await loadArtboard(
-      File.asset('assets/skills.riv', riveFactory: Factory.flutter),
+    final file = await File.asset(
+      'assets/rewards.riv', 
+      riveFactory: Factory.rive,
     );
+
+    final artboard = await loadArtboard(file!);
+    final stateMachine = artboard.defaultStateMachine();
+
+    if (stateMachine != null) {
+      final viewModel = file.defaultArtboardViewModel(artboard);
+      if (viewModel != null) {
+        final vmi = viewModel.createDefaultInstance();
+        if (vmi != null) {
+          stateMachine.bindViewModelInstance(vmi);
+          // Access properties via the ViewModelInstance
+          // final coinAmount = vmi.viewModel('Coin')?.number('Amount');
+        }
+      }
+    }
 
     add(
       RiveComponent(
-        artboard: skillsArtboard,
-        stateMachine: skillsArtboard.stateMachine("Designer's Test"),
+        artboard: artboard,
+        stateMachine: stateMachine,
         size: Vector2.all(550),
       ),
     );

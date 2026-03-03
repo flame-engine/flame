@@ -12,24 +12,36 @@ void main() async {
 class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final skillsArtboard = await loadArtboard(
-      File.asset(
-        'assets/skills.riv',
-        riveFactory: Factory.flutter,
-      ).then((file) => file!),
-    );
-    add(SkillsAnimationComponent(skillsArtboard));
+    final file = await File.asset(
+      'assets/rewards.riv',
+      riveFactory: Factory.rive,
+    ).then((file) => file!);
+
+    final artboard = await loadArtboard(file);
+    final stateMachine = artboard.defaultStateMachine();
+
+    if (stateMachine != null) {
+      final viewModel = file.defaultArtboardViewModel(artboard);
+      if (viewModel != null) {
+        final vmi = viewModel.createDefaultInstance();
+        if (vmi != null) {
+          stateMachine.bindViewModelInstance(vmi);
+        }
+      }
+    }
+
+    add(RewardsComponent(artboard, stateMachine));
   }
 }
 
-class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
-  SkillsAnimationComponent(Artboard artboard)
+class RewardsComponent extends RiveComponent with TapCallbacks {
+  RewardsComponent(Artboard artboard, StateMachine? stateMachine)
     : super(
         artboard: artboard,
-        stateMachine: artboard.stateMachine("Designer's Test"),
+        stateMachine: stateMachine,
       );
 
-  NumberInput? _levelInput;
+  ViewModelInstanceNumber? _amountInput;
 
   @override
   void onGameResize(Vector2 size) {
@@ -40,18 +52,17 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   @override
   void onLoad() {
     if (stateMachine != null) {
-      // ignore: deprecated_member_use
-      _levelInput = stateMachine!.number('Level');
-      _levelInput?.value = 0;
+      final vmi = stateMachine!.boundRuntimeViewModelInstance;
+      if (vmi != null) {
+        _amountInput = vmi.viewModel('Coin')?.number('Item_Value');
+      }
     }
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    final levelInput = _levelInput;
-    if (levelInput == null) {
-      return;
+    if (_amountInput != null) {
+      _amountInput!.value = (_amountInput!.value + 100) % 1000;
     }
-    levelInput.value = (levelInput.value + 1) % 3;
   }
 }
