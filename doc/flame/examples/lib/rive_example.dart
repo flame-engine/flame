@@ -5,7 +5,7 @@ import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
 class RiveExampleGame extends FlameGame with TapCallbacks {
-  ViewModelInstanceNumber? levelInput;
+  NumberInput? levelInput;
 
   @override
   Future<void> onLoad() async {
@@ -18,7 +18,8 @@ class RiveExampleGame extends FlameGame with TapCallbacks {
 
     final stateMachine = skillsArtboard.stateMachine("Designer's Test");
     if (stateMachine != null) {
-      levelInput = stateMachine.boundRuntimeViewModelInstance?.number('Level');
+      // ignore: deprecated_member_use
+      levelInput = stateMachine.number('Level');
     }
 
     add(
