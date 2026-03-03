@@ -42,11 +42,11 @@ class RiveExampleGame extends FlameGame {
     if (stateMachine != null) {
       final viewModel = file.defaultArtboardViewModel(artboard);
       if (viewModel != null) {
-        final vmi = viewModel.createDefaultInstance();
-        if (vmi != null) {
-          stateMachine.bindViewModelInstance(vmi);
-          // Access properties via the ViewModelInstance
-          // final coinAmount = vmi.viewModel('Coin')?.number('Amount');
+        final viewModelInstance = viewModel.createDefaultInstance();
+        if (viewModelInstance != null) {
+          stateMachine.bindViewModelInstance(viewModelInstance);
+          // Access properties via the viewModelInstance
+          // final coinAmount = viewModelInstance.viewModel('Coin')?.number('Amount');
         }
       }
     }

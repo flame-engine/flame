@@ -26,9 +26,9 @@ class RiveExampleGame extends FlameGame {
     if (stateMachine != null) {
       final viewModel = file.defaultArtboardViewModel(artboard);
       if (viewModel != null) {
-        final vmi = viewModel.createDefaultInstance();
-        if (vmi != null) {
-          stateMachine.bindViewModelInstance(vmi);
+        final viewModelInstance = viewModel.createDefaultInstance();
+        if (viewModelInstance != null) {
+          stateMachine.bindViewModelInstance(viewModelInstance);
         }
       }
     }
@@ -57,11 +57,13 @@ class RewardsComponent extends RiveComponent with TapCallbacks {
   @override
   void onLoad() {
     if (stateMachine != null) {
-      final vmi = stateMachine!.boundRuntimeViewModelInstance;
-      if (vmi != null) {
-        _coinInput = vmi.viewModel('Coin')?.number('Item_Value');
-        _gemInput = vmi.viewModel('Gem')?.number('Item_Value');
-        _livesInput = vmi.viewModel('Energy_Bar')?.number('Lives');
+      final viewModelInstance = stateMachine!.boundRuntimeViewModelInstance;
+      if (viewModelInstance != null) {
+        _coinInput = viewModelInstance.viewModel('Coin')?.number('Item_Value');
+        _gemInput = viewModelInstance.viewModel('Gem')?.number('Item_Value');
+        _livesInput = viewModelInstance
+            .viewModel('Energy_Bar')
+            ?.number('Lives');
       }
     }
   }

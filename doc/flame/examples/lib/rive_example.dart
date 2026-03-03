@@ -21,11 +21,11 @@ class RiveExampleGame extends FlameGame with TapCallbacks {
     if (stateMachine != null) {
       final viewModel = file.defaultArtboardViewModel(artboard);
       if (viewModel != null) {
-        final vmi = viewModel.createDefaultInstance();
-        if (vmi != null) {
-          stateMachine.bindViewModelInstance(vmi);
-          coinInput = vmi.viewModel('Coin')?.number('Item_Value');
-          gemInput = vmi.viewModel('Gem')?.number('Item_Value');
+        final viewModelInstance = viewModel.createDefaultInstance();
+        if (viewModelInstance != null) {
+          stateMachine.bindViewModelInstance(viewModelInstance);
+          coinInput = viewModelInstance.viewModel('Coin')?.number('Item_Value');
+          gemInput = viewModelInstance.viewModel('Gem')?.number('Item_Value');
         }
       }
     }
