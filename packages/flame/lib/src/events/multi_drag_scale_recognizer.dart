@@ -16,7 +16,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     super.debugOwner,
     super.supportedDevices,
     AllowedButtonsFilter? allowedButtonsFilter,
-    this.dragStartBehavior = DragStartBehavior.down,
     this.scaleThreshold = 1.05,
   }) : super(
          allowedButtonsFilter:
@@ -26,9 +25,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   // Accept the input if, and only if, [kPrimaryButton] is pressed.
   static bool _defaultButtonAcceptBehavior(int buttons) =>
       buttons == kPrimaryButton;
-
-  /// Determines what point is used as the starting point in all calculations.
-  final DragStartBehavior dragStartBehavior;
 
   /// The threshold for determining when a scale gesture has occurred.
   /// Default is 1.05 (5% change in scale).
