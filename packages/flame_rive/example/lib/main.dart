@@ -38,7 +38,7 @@ class SkillsAnimationComponent extends RiveComponent with TapCallbacks {
   void onLoad() {
     _stateMachine = artboard.stateMachine("Designer's Test");
     if (_stateMachine != null) {
-      _levelInput = _stateMachine!.findSMI<NumberInput>('Level');
+      _levelInput = _stateMachine!.input('Level') as NumberInput?;
       _levelInput?.value = 0;
     }
   }
