@@ -232,15 +232,13 @@ class ScaleDragWithCallbacksComponent extends PositionComponent
   }
 }
 
-// Source - https://stackoverflow.com/a/75171528
-// Posted by Alexander
-// Retrieved 2025-11-19, License - CC BY-SA 4.0
-
 extension ZoomTesting on WidgetTester {
+  /// Simulates a timed two-finger pinch/zoom gesture by generating pointer
+  /// event records with accurate timestamps for both pointers.
   Future<void> timedZoomFrom(
-    Offset startLocation1,
+    Offset start1,
     Offset offset1,
-    Offset startLocation2,
+    Offset start2,
     Offset offset2,
     Duration duration, {
     int? pointer,
@@ -248,72 +246,57 @@ extension ZoomTesting on WidgetTester {
     int intervals = 30,
   }) {
     assert(intervals > 1);
-    pointer ??= nextPointer;
-    final pointer2 = pointer + 1;
-    final timeStamps = <Duration>[
-      for (int t = 0; t <= intervals; t += 1) duration * t ~/ intervals,
-    ];
-    final offsets1 = <Offset>[
-      startLocation1,
-      for (int t = 0; t <= intervals; t += 1)
-        startLocation1 + offset1 * (t / intervals),
-    ];
-    final offsets2 = <Offset>[
-      startLocation2,
-      for (int t = 0; t <= intervals; t += 1)
-        startLocation2 + offset2 * (t / intervals),
-    ];
+    final p1 = pointer ?? nextPointer;
+    final p2 = p1 + 1;
+
     final records = <PointerEventRecord>[
-      PointerEventRecord(Duration.zero, <PointerEvent>[
-        PointerAddedEvent(
-          position: startLocation1,
-        ),
-        PointerAddedEvent(
-          position: startLocation2,
-        ),
-        PointerDownEvent(
-          position: startLocation1,
-          pointer: pointer,
-          buttons: buttons,
-        ),
-        PointerDownEvent(
-          position: startLocation2,
-          pointer: pointer2,
-          buttons: buttons,
-        ),
-      ]),
-      ...<PointerEventRecord>[
-        for (int t = 0; t <= intervals; t += 1)
-          PointerEventRecord(timeStamps[t], <PointerEvent>[
-            PointerMoveEvent(
-              timeStamp: timeStamps[t],
-              position: offsets1[t + 1],
-              delta: offsets1[t + 1] - offsets1[t],
-              pointer: pointer,
-              buttons: buttons,
-            ),
-            PointerMoveEvent(
-              timeStamp: timeStamps[t],
-              position: offsets2[t + 1],
-              delta: offsets2[t + 1] - offsets2[t],
-              pointer: pointer2,
-              buttons: buttons,
-            ),
-          ]),
-      ],
-      PointerEventRecord(duration, <PointerEvent>[
-        PointerUpEvent(
-          timeStamp: duration,
-          position: offsets1.last,
-          pointer: pointer,
-        ),
-        PointerUpEvent(
-          timeStamp: duration,
-          position: offsets2.last,
-          pointer: pointer2,
-        ),
+      // Both pointers land simultaneously at t=0.
+      PointerEventRecord(Duration.zero, [
+        PointerAddedEvent(position: start1),
+        PointerAddedEvent(position: start2),
+        PointerDownEvent(position: start1, pointer: p1, buttons: buttons),
+        PointerDownEvent(position: start2, pointer: p2, buttons: buttons),
       ]),
     ];
+
+    // Generate interleaved move events for both pointers at each step.
+    var prev1 = start1;
+    var prev2 = start2;
+    for (var step = 0; step <= intervals; step++) {
+      final t = step / intervals;
+      final ts = duration * step ~/ intervals;
+      final pos1 = start1 + offset1 * t;
+      final pos2 = start2 + offset2 * t;
+      records.add(
+        PointerEventRecord(ts, [
+          PointerMoveEvent(
+            timeStamp: ts,
+            position: pos1,
+            delta: pos1 - prev1,
+            pointer: p1,
+            buttons: buttons,
+          ),
+          PointerMoveEvent(
+            timeStamp: ts,
+            position: pos2,
+            delta: pos2 - prev2,
+            pointer: p2,
+            buttons: buttons,
+          ),
+        ]),
+      );
+      prev1 = pos1;
+      prev2 = pos2;
+    }
+
+    // Both pointers lift at the end.
+    records.add(
+      PointerEventRecord(duration, [
+        PointerUpEvent(timeStamp: duration, position: prev1, pointer: p1),
+        PointerUpEvent(timeStamp: duration, position: prev2, pointer: p2),
+      ]),
+    );
+
     return TestAsyncUtils.guard<void>(() async {
       await handlePointerEventRecord(records);
     });
