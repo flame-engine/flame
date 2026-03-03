@@ -303,12 +303,11 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       );
       _delta = Offset.zero;
     } else {
-      final localPreviousFocalPoint = _localFocalPoint;
       _localFocalPoint = PointerEvent.transformPosition(
         _lastTransform,
         _currentFocalPoint!,
       );
-      _delta = _localFocalPoint - localPreviousFocalPoint;
+      _delta = _currentFocalPoint! - previousFocalPoint;
     }
 
     // Calculate span using the already-computed focal point
