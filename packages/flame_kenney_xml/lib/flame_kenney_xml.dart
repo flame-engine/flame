@@ -36,9 +36,16 @@ class XmlSpriteSheet {
     required String xmlPath,
     Images? imageCache,
     AssetsCache? assetsCache,
+    String? package,
   }) async {
-    final image = await (imageCache ?? Flame.images).load(imagePath);
-    final xml = await (assetsCache ?? Flame.assets).readFile(xmlPath);
+    final image = await (imageCache ?? Flame.images).load(
+      imagePath,
+      package: package,
+    );
+    final xml = await (assetsCache ?? Flame.assets).readFile(
+      xmlPath,
+      package: package,
+    );
     return XmlSpriteSheet(image: image, xml: xml);
   }
 

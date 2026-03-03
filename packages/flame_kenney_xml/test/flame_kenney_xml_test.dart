@@ -15,14 +15,14 @@ class _MockImage extends Mock implements Image {
 
 class _MockImages extends Mock implements Images {
   @override
-  Future<Image> load(String fileName, {String? key}) async {
+  Future<Image> load(String fileName, {String? key, String? package}) async {
     return _MockImage();
   }
 }
 
 class _MockAssetsCache extends Mock implements AssetsCache {
   @override
-  Future<String> readFile(String fileName) async {
+  Future<String> readFile(String fileName, {String? package}) async {
     return '''
     <TextureAtlas imagePath="spritesheet.png">
       <SubTexture name="sprite1" x="0" y="0" width="32" height="32"/>

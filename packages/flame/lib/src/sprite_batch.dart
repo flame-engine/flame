@@ -18,6 +18,7 @@ extension SpriteBatchExtension on Game {
     RSTransform? defaultTransform,
     Images? imageCache,
     bool useAtlas = true,
+    String? package,
   }) {
     return SpriteBatch.load(
       path,
@@ -26,6 +27,7 @@ extension SpriteBatchExtension on Game {
       defaultTransform: defaultTransform,
       images: imageCache ?? images,
       useAtlas: useAtlas,
+      package: package,
     );
   }
 }
@@ -146,10 +148,11 @@ class SpriteBatch {
     Color? defaultColor,
     BlendMode? defaultBlendMode,
     bool useAtlas = true,
+    String? package,
   }) async {
     final imagesCache = images ?? Flame.images;
     return SpriteBatch(
-      await imagesCache.load(path),
+      await imagesCache.load(path, package: package),
       defaultTransform: defaultTransform ?? RSTransform(1, 0, 0, 0),
       defaultColor: defaultColor,
       defaultBlendMode: defaultBlendMode,

@@ -63,8 +63,14 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.loadingBuilder,
     this.onComplete,
     this.paint,
+    String? package,
     super.key,
-  }) : _animationFuture = SpriteAnimation.load(path, data, images: images),
+  }) : _animationFuture = SpriteAnimation.load(
+         path,
+         data,
+         images: images,
+         package: package,
+       ),
        _animationTicker = null;
 
   @override
