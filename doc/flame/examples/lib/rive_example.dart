@@ -5,24 +5,30 @@ import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
 class RiveExampleGame extends FlameGame with TapCallbacks {
-  late SMIInput<double>? levelInput;
+  StateMachine? stateMachine;
+  NumberInput? levelInput;
 
   @override
   Future<void> onLoad() async {
     final skillsArtboard = await loadArtboard(
-      RiveFile.asset('assets/skills.riv'),
+      File.asset(
+        'assets/skills.riv',
+        riveFactory: Factory.flutter,
+      ).then((file) => file!),
     );
 
-    final controller = StateMachineController.fromArtboard(
-      skillsArtboard,
-      "Designer's Test",
-    );
-
-    skillsArtboard.addController(controller!);
-
-    levelInput = controller.findInput<double>('Level');
+    stateMachine = skillsArtboard.stateMachine("Designer's Test");
+    if (stateMachine != null) {
+      levelInput = stateMachine!.number('Level');
+    }
 
     add(RiveComponent(artboard: skillsArtboard, size: canvasSize));
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    stateMachine?.advanceAndApply(dt);
   }
 
   @override
