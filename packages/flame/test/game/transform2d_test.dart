@@ -326,8 +326,8 @@ void main() {
         var notifications = 0;
         transform.addListener(() => notifications++);
 
-        transform.transformMatrix =
-            Matrix4.identity()..translateByDouble(10.0, 10.0, 0.0, 1.0);
+        transform.transformMatrix = Matrix4.identity()
+          ..translateByDouble(10.0, 10.0, 0.0, 1.0);
 
         expect(notifications, 1);
       });
