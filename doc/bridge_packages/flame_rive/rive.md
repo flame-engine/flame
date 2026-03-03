@@ -45,8 +45,9 @@ class RiveExampleGame extends FlameGame {
         final viewModelInstance = viewModel.createDefaultInstance();
         if (viewModelInstance != null) {
           stateMachine.bindViewModelInstance(viewModelInstance);
-          // Access properties via the viewModelInstance
-          // final coinAmount = viewModelInstance.viewModel('Coin')?.number('Amount');
+          final coinAmount =
+              viewModelInstance.viewModel('Coin')?.number('Item_Value');
+          coinAmount?.value = 100;
         }
       }
     }
