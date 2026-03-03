@@ -246,54 +246,70 @@ extension ZoomTesting on WidgetTester {
     int intervals = 30,
   }) {
     assert(intervals > 1);
-    final p1 = pointer ?? nextPointer;
-    final p2 = p1 + 1;
+    final pointer1 = pointer ?? nextPointer;
+    final pointer2 = pointer1 + 1;
 
     final records = <PointerEventRecord>[
       // Both pointers land simultaneously at t=0.
       PointerEventRecord(Duration.zero, [
         PointerAddedEvent(position: start1),
         PointerAddedEvent(position: start2),
-        PointerDownEvent(position: start1, pointer: p1, buttons: buttons),
-        PointerDownEvent(position: start2, pointer: p2, buttons: buttons),
+        PointerDownEvent(
+          position: start1,
+          pointer: pointer1,
+          buttons: buttons,
+        ),
+        PointerDownEvent(
+          position: start2,
+          pointer: pointer2,
+          buttons: buttons,
+        ),
       ]),
     ];
 
     // Generate interleaved move events for both pointers at each step.
-    var prev1 = start1;
-    var prev2 = start2;
+    var previousPosition1 = start1;
+    var previousPosition2 = start2;
     for (var step = 0; step <= intervals; step++) {
-      final t = step / intervals;
-      final ts = duration * step ~/ intervals;
-      final pos1 = start1 + offset1 * t;
-      final pos2 = start2 + offset2 * t;
+      final progress = step / intervals;
+      final timeStamp = duration * step ~/ intervals;
+      final position1 = start1 + offset1 * progress;
+      final position2 = start2 + offset2 * progress;
       records.add(
-        PointerEventRecord(ts, [
+        PointerEventRecord(timeStamp, [
           PointerMoveEvent(
-            timeStamp: ts,
-            position: pos1,
-            delta: pos1 - prev1,
-            pointer: p1,
+            timeStamp: timeStamp,
+            position: position1,
+            delta: position1 - previousPosition1,
+            pointer: pointer1,
             buttons: buttons,
           ),
           PointerMoveEvent(
-            timeStamp: ts,
-            position: pos2,
-            delta: pos2 - prev2,
-            pointer: p2,
+            timeStamp: timeStamp,
+            position: position2,
+            delta: position2 - previousPosition2,
+            pointer: pointer2,
             buttons: buttons,
           ),
         ]),
       );
-      prev1 = pos1;
-      prev2 = pos2;
+      previousPosition1 = position1;
+      previousPosition2 = position2;
     }
 
     // Both pointers lift at the end.
     records.add(
       PointerEventRecord(duration, [
-        PointerUpEvent(timeStamp: duration, position: prev1, pointer: p1),
-        PointerUpEvent(timeStamp: duration, position: prev2, pointer: p2),
+        PointerUpEvent(
+          timeStamp: duration,
+          position: previousPosition1,
+          pointer: pointer1,
+        ),
+        PointerUpEvent(
+          timeStamp: duration,
+          position: previousPosition2,
+          pointer: pointer2,
+        ),
       ]),
     );
 
