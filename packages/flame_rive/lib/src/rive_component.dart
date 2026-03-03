@@ -7,8 +7,14 @@ import 'package:rive/rive.dart';
 class RiveComponent extends PositionComponent {
   final Artboard artboard;
   final StateMachine? stateMachine;
-  final RiveArtboardRenderer _renderer;
+  final Alignment _alignment;
+  final bool _clipToBounds;
+  final Fit _riveFit;
+  final Paint? _layerPaint;
+
   late Size _renderSize;
+  AABB _frame = AABB();
+  Size _frameSize = Size.zero;
 
   RiveComponent({
     required this.artboard,
@@ -30,13 +36,10 @@ class RiveComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _renderer = RiveArtboardRenderer(
-         antialiasing: antialiasing,
-         fit: fit,
-         alignment: alignment,
-         artboard: artboard,
-         clipToBounds: clipToBounds,
-       ),
+  }) : _alignment = alignment,
+       _clipToBounds = clipToBounds,
+       _riveFit = _toRiveFit(fit),
+       _layerPaint = antialiasing ? null : (Paint()..isAntiAlias = false),
        super(size: size ?? Vector2(artboard.width, artboard.height)) {
     void updateRenderSize() {
       _renderSize = this.size.toSize();
@@ -48,63 +51,31 @@ class RiveComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    _renderer.render(canvas, _renderSize);
-  }
-
-  @override
-  void update(double dt) {
-    if (stateMachine != null) {
-      stateMachine!.advanceAndApply(dt);
-    } else {
-      _renderer.advance(dt);
-    }
-  }
-}
-
-class RiveArtboardRenderer {
-  final Artboard artboard;
-  final Alignment alignment;
-  final bool clipToBounds;
-  final Fit _riveFit;
-  final Paint? _layerPaint;
-
-  AABB _frame = AABB();
-  Size _frameSize = Size.zero;
-
-  RiveArtboardRenderer({
-    required bool antialiasing,
-    required BoxFit fit,
-    required this.alignment,
-    required this.artboard,
-    required this.clipToBounds,
-  }) : _riveFit = _toRiveFit(fit),
-       _layerPaint = antialiasing ? null : (Paint()..isAntiAlias = false);
-
-  void advance(double dt) {
-    artboard.advance(dt);
-  }
-
-  void render(Canvas canvas, Size size) {
     canvas.save();
 
-    if (clipToBounds) {
-      canvas.clipRect(Offset.zero & size);
+    if (_clipToBounds) {
+      canvas.clipRect(Offset.zero & _renderSize);
     }
 
     if (_layerPaint != null) {
-      canvas.saveLayer(Offset.zero & size, _layerPaint);
+      canvas.saveLayer(Offset.zero & _renderSize, _layerPaint);
     }
 
     final renderer = Renderer.make(canvas);
     try {
-      if (_frameSize != size) {
-        _frameSize = size;
-        _frame = AABB.fromValues(0, 0, size.width, size.height);
+      if (_frameSize != _renderSize) {
+        _frameSize = _renderSize;
+        _frame = AABB.fromValues(
+          0,
+          0,
+          _renderSize.width,
+          _renderSize.height,
+        );
       }
 
       renderer.align(
         _riveFit,
-        alignment,
+        _alignment,
         _frame,
         artboard.bounds,
         1.0,
@@ -116,6 +87,15 @@ class RiveArtboardRenderer {
         canvas.restore();
       }
       canvas.restore();
+    }
+  }
+
+  @override
+  void update(double dt) {
+    if (stateMachine != null) {
+      stateMachine!.advanceAndApply(dt);
+    } else {
+      artboard.advance(dt);
     }
   }
 
