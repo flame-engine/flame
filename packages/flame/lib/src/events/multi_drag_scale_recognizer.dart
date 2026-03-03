@@ -147,7 +147,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       _initialVerticalSpan = _currentVerticalSpan;
       _initialLine = _currentLine;
       _initialScaleEventTimestamp = event.timeStamp;
-      _scaleVelocityTracker = VelocityTracker.withKind(PointerDeviceKind.touch);
+      _scaleVelocityTracker = VelocityTracker.withKind(event.kind);
 
       if (onScaleStart != null) {
         invokeCallback<void>('onScaleStart', () {
