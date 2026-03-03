@@ -63,84 +63,71 @@ class RiveComponent extends PositionComponent {
 
 class RiveArtboardRenderer {
   final Artboard artboard;
-  final bool antialiasing;
-  final BoxFit fit;
   final Alignment alignment;
   final bool clipToBounds;
+  final Fit _riveFit;
+  final Paint? _layerPaint;
+
+  AABB _frame = AABB();
+  Size _frameSize = Size.zero;
 
   RiveArtboardRenderer({
-    required this.antialiasing,
-    required this.fit,
+    required bool antialiasing,
+    required BoxFit fit,
     required this.alignment,
     required this.artboard,
     required this.clipToBounds,
-  });
+  }) : _riveFit = _toRiveFit(fit),
+       _layerPaint = antialiasing ? null : (Paint()..isAntiAlias = false);
 
   void advance(double dt) {
     artboard.advance(dt);
   }
 
   void render(Canvas canvas, Size size) {
-    _paint(canvas, size);
-  }
-
-  void _paint(Canvas canvas, Size size) {
     canvas.save();
 
     if (clipToBounds) {
       canvas.clipRect(Offset.zero & size);
     }
 
-    if (!antialiasing) {
-      canvas.saveLayer(
-        Offset.zero & size,
-        Paint()..isAntiAlias = false,
-      );
+    if (_layerPaint != null) {
+      canvas.saveLayer(Offset.zero & size, _layerPaint);
     }
 
     final renderer = Renderer.make(canvas);
     try {
-      final artboardBounds = artboard.bounds;
-      final frame = AABB.fromValues(0, 0, size.width, size.height);
-
-      // Convert BoxFit to Rive Fit
-      final riveFit = _toRiveFit(fit);
+      if (_frameSize != size) {
+        _frameSize = size;
+        _frame = AABB.fromValues(0, 0, size.width, size.height);
+      }
 
       renderer.align(
-        riveFit,
+        _riveFit,
         alignment,
-        frame,
-        artboardBounds,
+        _frame,
+        artboard.bounds,
         1.0,
       );
       artboard.draw(renderer);
     } finally {
       renderer.dispose();
-      if (!antialiasing) {
+      if (_layerPaint != null) {
         canvas.restore();
       }
       canvas.restore();
     }
   }
 
-  Fit _toRiveFit(BoxFit fit) {
-    switch (fit) {
-      case BoxFit.fill:
-        return Fit.fill;
-      case BoxFit.contain:
-        return Fit.contain;
-      case BoxFit.cover:
-        return Fit.cover;
-      case BoxFit.fitHeight:
-        return Fit.fitHeight;
-      case BoxFit.fitWidth:
-        return Fit.fitWidth;
-      case BoxFit.none:
-        return Fit.none;
-      case BoxFit.scaleDown:
-        return Fit.scaleDown;
-    }
-  }
+  static Fit _toRiveFit(BoxFit fit) => switch (fit) {
+    BoxFit.fill => Fit.fill,
+    BoxFit.contain => Fit.contain,
+    BoxFit.cover => Fit.cover,
+    BoxFit.fitHeight => Fit.fitHeight,
+    BoxFit.fitWidth => Fit.fitWidth,
+    BoxFit.none => Fit.none,
+    BoxFit.scaleDown => Fit.scaleDown,
+  };
 }
 
 /// Loads the Artboard from the specified Rive File.
