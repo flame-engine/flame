@@ -19,8 +19,7 @@ class RiveExampleGame extends FlameGame with TapCallbacks {
 
     stateMachine = skillsArtboard.stateMachine("Designer's Test");
     if (stateMachine != null) {
-      // ignore: deprecated_member_use
-      levelInput = stateMachine!.number('Level');
+      levelInput = stateMachine!.findSMI<NumberInput>('Level');
     }
 
     add(RiveComponent(artboard: skillsArtboard, size: canvasSize));

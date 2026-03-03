@@ -75,7 +75,7 @@ void main() {
       });
 
       group('RiveAnimation', () {
-        testWithFlameGame('Does not Animate when no controller is attach', (
+        testWithFlameGame('Does not Animate when no controller is attached', (
           game,
         ) async {
           final skillsArtboard = await loadArtboard(riveFile);
@@ -83,14 +83,9 @@ void main() {
 
           game.add(riveComponent);
           await game.ready();
-
-          // Check if the current artboard has animation
-          // expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
-          // Check if this artboard is attach to any RiveAnimationController
-          // expect(riveComponent.artboard.animationControllers.isEmpty, isTrue);
         });
 
-        testWithFlameGame('Animate when controller is attach', (game) async {
+        testWithFlameGame('Animate when controller is attached', (game) async {
           final skillsArtboard = await loadArtboard(riveFile);
           final riveComponent = _RiveComponentWithAnimation(
             artboard: skillsArtboard,
@@ -98,40 +93,6 @@ void main() {
 
           game.add(riveComponent);
           await game.ready();
-
-          // Check if this artboard has animation
-          // expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
-          // Check if this artboard is attach to any RiveAnimationController
-          // expect(
-          //   riveComponent.artboard.animationControllers.isEmpty,
-          //   isFalse,
-          // );
-          // Check if the attach RiveAnimationController is active
-          // expect(
-          //   riveComponent.artboard.animationControllers.first.isActive,
-          //   isTrue,
-          // );
-        });
-      });
-
-      group('Antialiasing', () {
-        test('Default value', () async {
-          // final skillsArtboard = await loadArtboard(riveFile);
-          // final riveComponent = RiveComponent(
-          //   artboard: skillsArtboard,
-          // );
-
-          // expect(riveComponent.artboard.antialiasing, isTrue);
-        });
-
-        test('Can change to false', () async {
-          // final skillsArtboard = await loadArtboard(riveFile);
-          // final riveComponent = RiveComponent(
-          //   artboard: skillsArtboard,
-          //   antialiasing: false,
-          // );
-
-          // expect(riveComponent.artboard.antialiasing, isFalse);
         });
       });
 
@@ -166,17 +127,6 @@ class _RiveComponent extends RiveComponent {
 
 class _RiveComponentWithAnimation extends RiveComponent {
   _RiveComponentWithAnimation({required super.artboard});
-
-  @override
-  Future<void>? onLoad() async {
-    // final controller = StateMachineController.fromArtboard(
-    //   artboard,
-    //   "Designer's Test",
-    // );
-    // if (controller != null) {
-    //   artboard.addController(controller);
-    // }
-  }
 }
 
 class _RiveComponentWithTappable extends RiveComponent with TapCallbacks {
