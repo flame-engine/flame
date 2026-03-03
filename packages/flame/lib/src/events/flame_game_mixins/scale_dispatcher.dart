@@ -109,14 +109,24 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   //#endregion
 
+  /// Marks this dispatcher for removal after all active gestures end.
+  ///
+  /// This is called during a dispatcher upgrade (e.g. when a
+  /// [DragCallbacks] component is added and the system upgrades from
+  /// [ScaleDispatcher] to [MultiDragScaleDispatcher]).
+  ///
+  /// Active gestures continue to be delivered until they complete
+  /// naturally, at which point the dispatcher removes itself. During this
+  /// overlap window, new gestures are rejected by the
+  /// [handleScaleStart] guard.
   void markForRemoval() {
     _shouldBeRemoved = true;
     _tryRemoving();
   }
 
   bool _tryRemoving() {
-    // there's no more fingers
-    // that started dragging before _shouldBeRemoved flag was set to true.
+    // There are no more active gestures that started before
+    // _shouldBeRemoved flag was set to true.
     if (_records.isEmpty && _shouldBeRemoved && isMounted) {
       removeFromParent();
       return true;

@@ -140,6 +140,19 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
     _tryRemoving();
   }
 
+  /// Marks this dispatcher for removal after all active gestures end.
+  ///
+  /// This is called during a dispatcher upgrade (e.g. when a
+  /// [ScaleCallbacks] component is added and the system upgrades from
+  /// [MultiDragDispatcher] to [MultiDragScaleDispatcher]).
+  ///
+  /// Active gestures continue to be delivered until the user lifts their
+  /// finger, at which point the dispatcher removes itself. During this
+  /// overlap window, new gestures are silently dropped: the old
+  /// [ImmediateMultiDragGestureRecognizer] still wins the gesture arena
+  /// (it accepts immediately), but the `onStart` callback returns null
+  /// so no [FlameDragAdapter] is created. The new dispatcher's recognizer
+  /// is rejected by the arena for those pointers.
   void markForRemoval() {
     _shouldBeRemoved = true;
     _tryRemoving();
