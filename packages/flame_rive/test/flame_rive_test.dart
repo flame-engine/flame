@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'utils.dart';
@@ -105,7 +102,10 @@ void main() {
           // Check if this artboard has animation
           // expect(riveComponent.artboard.animations.isNotEmpty, isTrue);
           // Check if this artboard is attach to any RiveAnimationController
-          // expect(riveComponent.artboard.animationControllers.isEmpty, isFalse);
+          // expect(
+          //   riveComponent.artboard.animationControllers.isEmpty,
+          //   isFalse,
+          // );
           // Check if the attach RiveAnimationController is active
           // expect(
           //   riveComponent.artboard.animationControllers.first.isActive,
