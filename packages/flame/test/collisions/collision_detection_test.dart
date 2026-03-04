@@ -2129,32 +2129,31 @@ void main() {
       // PolygonRayIntersection mixin which has the same reflect() pattern and
       // therefore the same bug.
       'RectangleHitbox raycast does not throw when '
-          'incident direction has drift':
-          (game) async {
-            final world = (game as FlameGame).world;
-            // Rectangle positioned so a ray from the origin pointing
-            // right will hit it.
-            final rect = RectangleComponent(
-              position: Vector2(20, -5),
-              size: Vector2(10, 10),
-            )..add(RectangleHitbox());
-            await world.ensureAdd(rect);
+          'incident direction has drift': (game) async {
+        final world = (game as FlameGame).world;
+        // Rectangle positioned so a ray from the origin pointing
+        // right will hit it.
+        final rect = RectangleComponent(
+          position: Vector2(20, -5),
+          size: Vector2(10, 10),
+        )..add(RectangleHitbox());
+        await world.ensureAdd(rect);
 
-            final ray = Ray2(
-              origin: Vector2.zero(),
-              direction: Vector2(1, 0),
-            );
-            // Same drift injection as the CircleHitbox test above.
-            ray.direction.setValues(sqrt(1.0 + 2e-6), 0.0);
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: Vector2(1, 0),
+        );
+        // Same drift injection as the CircleHitbox test above.
+        ray.direction.setValues(sqrt(1.0 + 2e-6), 0.0);
 
-            expect(
-              () => game.collisionDetection.raycast(ray),
-              returnsNormally,
-              reason:
-                  'raycast on a RectangleHitbox must not throw when the ray '
-                  'direction has accumulated normalization drift',
-            );
-          },
+        expect(
+          () => game.collisionDetection.raycast(ray),
+          returnsNormally,
+          reason:
+              'raycast on a RectangleHitbox must not throw when the ray '
+              'direction has accumulated normalization drift',
+        );
+      },
     });
   });
 
