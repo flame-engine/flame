@@ -58,6 +58,9 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
           (out?.reflectionRay?.direction ?? Vector2.zero())
             ..setFrom(ray.direction)
             ..reflect(_temporaryNormal);
+      // reflect() can introduce sub-epsilon drift via catastrophic cancellation;
+      // normalize to keep Ray2's unit-length assertion satisfied.
+      reflectionDirection.normalize();
 
       final reflectionRay =
           (out?.reflectionRay?..setWith(
