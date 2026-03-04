@@ -142,9 +142,7 @@ bounce on will appear.
     rayPaint.color = _colorTween.transform(0.5 + (sin(_timePassed) / 2))!;
     if (origin != null) {
       _ray.origin.setFrom(origin!);
-      _ray.direction
-        ..setValues(1, 1)
-        ..normalize();
+      _ray.direction = (Vector2(1, 1)..normalize());
       collisionDetection
           .raytrace(
             _ray,
