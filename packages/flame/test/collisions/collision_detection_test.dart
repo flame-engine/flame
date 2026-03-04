@@ -2092,8 +2092,8 @@ void main() {
       'CircleHitbox raycast does not throw when incident direction has drift':
           (game) async {
             final world = (game as FlameGame).world;
-            // Circle at (0, 20) r=10, anchor center — a ray from origin pointing
-            // up will hit it at (0, 10).
+            // Circle at (0, 20) r=10, anchor center — a ray from the
+            // origin pointing up will hit it at (0, 10).
             final circle = CircleComponent(
               position: Vector2(0, 20),
               radius: 10,
@@ -2106,16 +2106,16 @@ void main() {
               origin: Vector2.zero(),
               direction: Vector2(0, 1),
             );
-            // Inject a direction whose length² is above the 1e-6 threshold by
-            // writing directly to the direction vector, bypassing the Ray2 setter
-            // (which would otherwise reject it). This simulates the drift that
-            // builds up across many bounces in a real raytrace session.
-            // length² = (sqrt(1 + 2e-6))² = 1 + 2e-6, which is above 1 + 1e-6.
+            // Inject a direction whose length² exceeds the 1e-6 threshold
+            // by writing to the direction vector directly, bypassing the
+            // Ray2 setter (which would reject it). This simulates the drift
+            // that builds up across many bounces in a real raytrace session.
+            // length² = (sqrt(1+2e-6))² = 1+2e-6, just above 1+1e-6.
             ray.direction.setValues(0.0, sqrt(1.0 + 2e-6));
 
             // Without the fix, reflect() passes the drifted direction to
-            // Ray2.setWith, which fires the assertion. With the fix, normalize()
-            // corrects the length before it reaches Ray2.
+            // Ray2.setWith, which fires the assertion. With the fix,
+            // normalize() corrects the length before it reaches Ray2.
             expect(
               () => game.collisionDetection.raycast(ray),
               returnsNormally,
@@ -2128,10 +2128,12 @@ void main() {
       // Same regression test for RectangleHitbox. RectangleHitbox uses the
       // PolygonRayIntersection mixin which has the same reflect() pattern and
       // therefore the same bug.
-      'RectangleHitbox raycast does not throw when incident direction has drift':
+      'RectangleHitbox raycast does not throw when '
+          'incident direction has drift':
           (game) async {
             final world = (game as FlameGame).world;
-            // Rectangle positioned so a ray from the origin pointing right hits it.
+            // Rectangle positioned so a ray from the origin pointing
+            // right will hit it.
             final rect = RectangleComponent(
               position: Vector2(20, -5),
               size: Vector2(10, 10),
