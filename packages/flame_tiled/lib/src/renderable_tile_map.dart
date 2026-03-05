@@ -90,6 +90,23 @@ class RenderableTiledMap {
     return map.layers[layerId].visible;
   }
 
+  /// Changes the opacity of the layer at [layerIndex] to [opacity].
+  ///
+  /// [opacity] must be between 0.0 (fully transparent) and 1.0 (fully opaque).
+  void setLayerOpacity(int layerIndex, {required double opacity}) {
+    assert(
+      opacity >= 0.0 && opacity <= 1.0,
+      'opacity must be between 0.0 and 1.0',
+    );
+    final renderableLayer = renderableLayers[layerIndex];
+    renderableLayer.opacity = opacity;
+  }
+
+  /// Gets the opacity of the layer at [layerIndex].
+  double getLayerOpacity(int layerIndex) {
+    return renderableLayers[layerIndex].opacity;
+  }
+
   /// Changes the Gid of the corresponding layer at the given layerId,
   /// if different
   void setTileData({

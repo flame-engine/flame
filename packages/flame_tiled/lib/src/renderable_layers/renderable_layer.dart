@@ -113,7 +113,20 @@ abstract class RenderableLayer<T extends Layer> {
 
   late double offsetY = layer.offsetY * scaleY + (parent?.offsetY ?? 0);
 
-  late double opacity = layer.opacity * (parent?.opacity ?? 1);
+  double get opacity => layer.opacity * (parent?.opacity ?? 1);
+
+  set opacity(double value) {
+    layer.opacity = value;
+    onOpacityChanged();
+  }
+
+  /// Called after [opacity] is changed.
+  ///
+  /// Override to react to opacity updates (e.g. to rebuild a cached paint).
+  /// When overriding inside a container layer, propagate the call to children
+  /// so that descendant layers with cached paints are also updated.
+  @protected
+  void onOpacityChanged() {}
 
   late double parallaxX = layer.parallaxX * (parent?.parallaxX ?? 1);
 
