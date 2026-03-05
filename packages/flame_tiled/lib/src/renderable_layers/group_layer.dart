@@ -47,4 +47,11 @@ class GroupLayer extends RenderableLayer<Group> {
       child.update(dt);
     }
   }
+
+  @override
+  void onOpacityChanged() {
+    for (final child in children) {
+      child.onOpacityChanged();
+    }
+  }
 }
