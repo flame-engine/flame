@@ -2063,6 +2063,97 @@ void main() {
         expect(reflectionRay?.direction, Vector2(-1, 0)..normalize());
         expect(results.first.normal, Vector2(-1, 0));
       },
+
+      // Regression test for a crash in CircleHitbox.rayIntersection.
+      //
+      // After each bounce, raytrace() reuses the same RaycastResult object
+      // from the `out` list. The reflected direction from one bounce becomes
+      // the incident direction for the next. Each call to reflect() introduces
+      // a tiny floating-point rounding error, so after many bounces the
+      // direction vector's length drifts slightly away from 1.0.
+      //
+      // Ray2 requires directions to have length² within 1e-6 of 1.0. Once the
+      // drift exceeds that threshold, the next call to Ray2.setWith (which
+      // stores the reflected direction into the next ray) fires an assertion:
+      //   'direction must be normalized'
+      //
+      // Concrete values from a live failure:
+      //   incidentDir.length2   = 1.0000009335  (just under the threshold)
+      //   reflectionDir.length2 = 1.0000010253  (just over — assertion fires)
+      //
+      // To reproduce this deterministically in a test, we inject a direction
+      // that is already above the threshold by writing directly to the
+      // direction vector (bypassing the Ray2 setter, which would reject it).
+      // reflect() then preserves the drift and passes it to setWith, which
+      // triggers the assertion.
+      //
+      // The fix is to call normalize() on the reflected direction before
+      // passing it to Ray2, so the drift is corrected on every bounce.
+      'CircleHitbox raycast does not throw when incident direction has drift':
+          (game) async {
+            final world = (game as FlameGame).world;
+            // Circle at (0, 20) r=10, anchor center — a ray from the
+            // origin pointing up will hit it at (0, 10).
+            final circle = CircleComponent(
+              position: Vector2(0, 20),
+              radius: 10,
+              anchor: Anchor.center,
+            )..add(CircleHitbox());
+            await world.ensureAdd(circle);
+
+            // Start with a valid unit direction so Ray2 accepts it.
+            final ray = Ray2(
+              origin: Vector2.zero(),
+              direction: Vector2(0, 1),
+            );
+            // Inject a direction whose length² exceeds the 1e-6 threshold
+            // by writing to the direction vector directly, bypassing the
+            // Ray2 setter (which would reject it). This simulates the drift
+            // that builds up across many bounces in a real raytrace session.
+            // length² = (sqrt(1+2e-6))² = 1+2e-6, just above 1+1e-6.
+            ray.direction.setValues(0.0, sqrt(1.0 + 2e-6));
+
+            // Without the fix, reflect() passes the drifted direction to
+            // Ray2.setWith, which fires the assertion. With the fix,
+            // normalize() corrects the length before it reaches Ray2.
+            expect(
+              () => game.collisionDetection.raycast(ray),
+              returnsNormally,
+              reason:
+                  'raycast on a CircleHitbox must not throw when the ray '
+                  'direction has accumulated normalization drift',
+            );
+          },
+
+      // Same regression test for RectangleHitbox. RectangleHitbox uses the
+      // PolygonRayIntersection mixin which has the same reflect() pattern and
+      // therefore the same bug.
+      'RectangleHitbox raycast does not throw when '
+          'incident direction has drift': (game) async {
+        final world = (game as FlameGame).world;
+        // Rectangle positioned so a ray from the origin pointing
+        // right will hit it.
+        final rect = RectangleComponent(
+          position: Vector2(20, -5),
+          size: Vector2(10, 10),
+        )..add(RectangleHitbox());
+        await world.ensureAdd(rect);
+
+        final ray = Ray2(
+          origin: Vector2.zero(),
+          direction: Vector2(1, 0),
+        );
+        // Same drift injection as the CircleHitbox test above.
+        ray.direction.setValues(sqrt(1.0 + 2e-6), 0.0);
+
+        expect(
+          () => game.collisionDetection.raycast(ray),
+          returnsNormally,
+          reason:
+              'raycast on a RectangleHitbox must not throw when the ray '
+              'direction has accumulated normalization drift',
+        );
+      },
     });
   });
 

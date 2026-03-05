@@ -131,6 +131,7 @@ bounce on will appear.
   }
 
   final Ray2 _ray = Ray2.zero();
+  final _rayDirection = Vector2(1, 1)..normalize();
   var _timePassed = 0.0;
 
   @override
@@ -142,9 +143,7 @@ bounce on will appear.
     rayPaint.color = _colorTween.transform(0.5 + (sin(_timePassed) / 2))!;
     if (origin != null) {
       _ray.origin.setFrom(origin!);
-      _ray.direction
-        ..setValues(1, 1)
-        ..normalize();
+      _ray.direction = _rayDirection;
       collisionDetection
           .raytrace(
             _ray,

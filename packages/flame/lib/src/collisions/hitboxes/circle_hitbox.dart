@@ -108,6 +108,9 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
           (out?.reflectionRay?.direction ?? Vector2.zero())
             ..setFrom(ray.direction)
             ..reflect(_temporaryNormal);
+      // Reflect() can introduce sub-epsilon drift. Normalize to keep Ray2's
+      // unit-length assertion satisfied.
+      reflectionDirection.normalize();
 
       final reflectionRay =
           (out?.reflectionRay?..setWith(
