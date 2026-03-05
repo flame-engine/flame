@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/src/math/solve_quadratic.dart';
-import 'package:meta/meta.dart';
 
 class CircleComponent extends ShapeComponent {
   /// With this constructor you can create your [CircleComponent] from a radius
@@ -21,7 +20,10 @@ class CircleComponent extends ShapeComponent {
     super.paint,
     super.paintLayers,
     super.key,
-  }) : super(size: Vector2.all((radius ?? 0) * 2));
+  }) : super(size: Vector2.all((radius ?? 0) * 2)) {
+    _updateCenterOffset();
+    size.addListener(_updateCenterOffset);
+  }
 
   /// With this constructor you define the [CircleComponent] in relation to the
   /// [parentSize]. For example having a [relation] of 0.5 would create a circle
@@ -37,17 +39,16 @@ class CircleComponent extends ShapeComponent {
     super.paintLayers,
     super.children,
     super.key,
-  }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y)));
-
-  @override
-  @mustCallSuper
-  Future<void> onLoad() async {
-    void updateCenterOffset() => _centerOffset = Offset(size.x / 2, size.y / 2);
-    size.addListener(updateCenterOffset);
-    updateCenterOffset();
+  }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y))) {
+    _updateCenterOffset();
+    size.addListener(_updateCenterOffset);
   }
 
-  late Offset _centerOffset;
+  Offset _centerOffset = Offset.zero;
+
+  void _updateCenterOffset() {
+    _centerOffset = Offset(size.x / 2, size.y / 2);
+  }
 
   /// Get the radius of the circle before scaling.
   double get radius {

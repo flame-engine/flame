@@ -45,8 +45,8 @@ void main() {
           size: 20,
           margin: const EdgeInsets.only(left: 20, bottom: 20),
         );
-        joystick.mounted.then((_) => game.onGameResize(Vector2(200, 100)));
         await game.ensureAdd(joystick);
+        game.onGameResize(Vector2(200, 100));
         expect(joystick.position, Vector2(30, 70));
       },
     );
