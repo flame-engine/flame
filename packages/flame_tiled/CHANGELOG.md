@@ -1,3 +1,10 @@
+## 3.1.0
+
+ - **FIX**: Use resolved path when loading single-image tilesets ([#3826](https://github.com/flame-engine/flame/issues/3826)). ([bbdff923](https://github.com/flame-engine/flame/commit/bbdff9230f96ab18ee83a1a0ffab5b4d7f4a43bf))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Add dynamic layer opacity support to flame_tiled ([#3843](https://github.com/flame-engine/flame/issues/3843)). ([b1702997](https://github.com/flame-engine/flame/commit/b17029977b3c5890fe6794942a0553eb3f21ff8d))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
 ## 3.0.11
 
  - Update a dependency to the latest release.

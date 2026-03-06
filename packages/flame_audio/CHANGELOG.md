@@ -1,3 +1,8 @@
+## 2.12.0
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
 ## 2.11.14
 
  - Update a dependency to the latest release.

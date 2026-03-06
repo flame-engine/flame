@@ -1,3 +1,27 @@
+## 1.36.0
+
+ - **FIX**: Ray direction normalization drift issues ([#3841](https://github.com/flame-engine/flame/issues/3841)). ([b8e2bab5](https://github.com/flame-engine/flame/commit/b8e2bab58fbfb1b817dd294db3d2389097d31a2d))
+ - **FIX**: Initialize center offset in `CircleComponent` ctor ([#3842](https://github.com/flame-engine/flame/issues/3842)). ([a0d2a5f3](https://github.com/flame-engine/flame/commit/a0d2a5f3a2db6ca2b0c25c93ca48fe12a4bdbc11))
+ - **FIX**: Resolve `fontPackage` in `IconComponent` (`_rasterizeIcon`) ([#3838](https://github.com/flame-engine/flame/issues/3838)). ([cdb2a0dd](https://github.com/flame-engine/flame/commit/cdb2a0ddf8ec6db733c904696a17ceeaed2e7b5f))
+ - **FIX**: Hitboxes now correctly account for parent scale and rotation ([#3834](https://github.com/flame-engine/flame/issues/3834)). ([57adcd60](https://github.com/flame-engine/flame/commit/57adcd60970efb2dbf4f52e396a4e78a51e47be8))
+ - **FIX**: Make `buildContext` available during `onLoad` and `onMount` ([#3833](https://github.com/flame-engine/flame/issues/3833)). ([60bfcb30](https://github.com/flame-engine/flame/commit/60bfcb30e7751ee65caa6425d79bbd7bb82ae3ed))
+ - **FIX**: Add CJK wrapping for `TextBoxComponent` ([#3830](https://github.com/flame-engine/flame/issues/3830)). ([7f41c261](https://github.com/flame-engine/flame/commit/7f41c2614e1669398bb08858df30270d75dced68))
+ - **FIX**: Prevent removed children from being re-added when parent is moved ([#3824](https://github.com/flame-engine/flame/issues/3824)). ([8e77bc2d](https://github.com/flame-engine/flame/commit/8e77bc2d87300a52c03177fb187c4e35b810acc4))
+ - **FIX**: Make `removeAll(children)` work in `onRemove` ([#3823](https://github.com/flame-engine/flame/issues/3823)). ([ff760230](https://github.com/flame-engine/flame/commit/ff760230881f2a27f9d3a9462fc831c460d7ffc3))
+ - **FIX**: End active collisions in ShapeHitbox.onRemove to fix inconsistent isColliding ([#3821](https://github.com/flame-engine/flame/issues/3821)). ([bc81e7fd](https://github.com/flame-engine/flame/commit/bc81e7fd96c1ec5ffad210d6d027894f6faef77b))
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Add `clampDouble` to `Vector2Extension` and its tests ([#3840](https://github.com/flame-engine/flame/issues/3840)). ([6c6ccf31](https://github.com/flame-engine/flame/commit/6c6ccf317f3f397edf30a61c90ed00d087a96e9a))
+ - **FEAT**: Add `transformMatrix` setter to `Transform2D` ([#3836](https://github.com/flame-engine/flame/issues/3836)). ([957ff2e0](https://github.com/flame-engine/flame/commit/957ff2e085f03ab43f40f4213d94730b52e2cfc6))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+ - **FEAT**: Propagate Flutter hot reload through the component tree ([#3828](https://github.com/flame-engine/flame/issues/3828)). ([c44643f1](https://github.com/flame-engine/flame/commit/c44643f1afdf9890d9890d6653f7429366e7f03b))
+ - **FEAT**: Add an IconComponent that renders IconData ([#3820](https://github.com/flame-engine/flame/issues/3820)). ([97931a59](https://github.com/flame-engine/flame/commit/97931a59361c51c433d366fecb30b7867813c521))
+ - **FEAT**: Add `dispose()` method to `FlameGame` ([#3825](https://github.com/flame-engine/flame/issues/3825)). ([aa5a27b7](https://github.com/flame-engine/flame/commit/aa5a27b791c4bd5a3ab64ee73b34feefedb8b210))
+ - **FEAT**: Add object pooling support with `ComponentPool` ([#3816](https://github.com/flame-engine/flame/issues/3816)). ([46802fab](https://github.com/flame-engine/flame/commit/46802fab4705ae8d1ff2a61660b2d80450f6075e))
+ - **FEAT**: Add opposite method to Anchor ([#3817](https://github.com/flame-engine/flame/issues/3817)). ([1ffd59f0](https://github.com/flame-engine/flame/commit/1ffd59f09f90d17980b70e494ce585d676888b57))
+ - **FEAT**: HitTestBehavior for GameWidget ([#3815](https://github.com/flame-engine/flame/issues/3815)). ([b888d4e2](https://github.com/flame-engine/flame/commit/b888d4e2d7ea95694a0c5f83e2fa68f8cee67069))
+ - **DOCS**: Document FlameGame<W extends World> generic type parameter ([#3822](https://github.com/flame-engine/flame/issues/3822)). ([00a66123](https://github.com/flame-engine/flame/commit/00a66123d84d305e66953f1a85e66c46c8e0c4fc))
+
 ## 1.35.1
 
  - **FIX**: Cancel taps that start inside the component and end outside ([#3805](https://github.com/flame-engine/flame/issues/3805)). ([ebcdb81c](https://github.com/flame-engine/flame/commit/ebcdb81c83b0aa23906d1c652bad2bfadd5add71))

@@ -1,3 +1,8 @@
+## 0.6.2+21
+
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
 ## 0.6.2+20
 
  - Update a dependency to the latest release.

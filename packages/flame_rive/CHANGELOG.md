@@ -1,3 +1,8 @@
+## 1.11.0
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Rive 0.14 support ([#3839](https://github.com/flame-engine/flame/issues/3839)). ([8b245181](https://github.com/flame-engine/flame/commit/8b2451813672c25d1783447b966fd2f739492b65))
+
 ## 1.10.23
 
  - Update a dependency to the latest release.
