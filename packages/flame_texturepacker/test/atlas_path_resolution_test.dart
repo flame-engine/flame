@@ -157,7 +157,7 @@ sprite1
       'should correctly parse region names with .png and extracted indexes',
       () async {
         final assets = AssetsCache(bundle: bundle);
-        final complexAtlasContent = '''
+        const complexAtlasContent = '''
 knight.png
 size: 64, 64
 filter: Nearest, Nearest

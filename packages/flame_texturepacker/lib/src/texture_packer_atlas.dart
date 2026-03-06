@@ -265,7 +265,8 @@ Future<TextureAtlasData> _parse(
     var currentPackage = package;
     var finalPath = fullPath;
 
-    // Check for package path in the full path (which may already include assetsPrefix)
+    // Check for package path in the full path
+    //(which may already include assetsPrefix)
     const packageKeyword = 'packages/';
     final packageIndex = finalPath.indexOf(packageKeyword);
     if (packageIndex != -1) {
@@ -273,7 +274,8 @@ Future<TextureAtlasData> _parse(
       final parts = subPath.split('/');
       if (parts.length > 1) {
         currentPackage ??= parts[0];
-        // Clean the path by removing everything up to and including the package name
+        // Clean the path by removing everything up to
+        //and including the package name
         finalPath = parts.sublist(1).join('/');
       }
     }
@@ -313,10 +315,12 @@ Future<TextureAtlasData> _parse(
     while (lineQueue.isNotEmpty) {
       final line = lineQueue.first.trim();
 
-      // Check if this line looks like a texture file (has file extension)
+      // Check if this line looks like a texture file
+      // (has file extension)
       if (_isTextureFile(line)) {
         // Peek at the next line to see if it's a region or a new page.
-        // Regions are followed by properties like 'bounds:', 'rotate:', 'xy:', 'offsets:'.
+        // Regions are followed by properties
+        // like 'bounds:', 'rotate:', 'xy:', 'offsets:'.
         // Pages are followed by 'size:', 'format:', 'filter:', 'repeat:'.
         if (lineQueue.length > 1) {
           final nextLine = lineQueue.elementAt(1).trim();
@@ -522,6 +526,7 @@ Region _parseRegion(ListQueue<String> lineQueue, Page page) {
     try {
       extractedIndex = int.parse(indexMatch.group(1)!);
       name = name.substring(0, indexMatch.start);
+      // ignore: avoid_catches_without_on_clauses
     } catch (_) {
       // Ignore parsing errors for very large numbers
     }
