@@ -188,7 +188,7 @@ Future<TextureAtlasData> _fromAssets(
     );
   } on Exception catch (e, stack) {
     Error.throwWithStackTrace(
-      Exception('Error loading $assetsPrefix$path from assets: $e'),
+      Exception('Error loading $path (prefix: $assetsPrefix) from assets: $e'),
       stack,
     );
   }
@@ -240,12 +240,33 @@ Future<TextureAtlasData> _parse(
   final regions = <Region>[];
   var hasIndexes = false;
 
-  final fileContent = fromStorage
-      ? await XFile(path).readAsString()
-      : await (assets ?? Flame.assets).readFile(
-          '${assetsPrefix!}/$path',
-          package: package,
-        );
+  final String fileContent;
+  if (fromStorage) {
+    fileContent = await XFile(path).readAsString();
+  } else {
+    final prefix = (assetsPrefix ?? '').trim();
+    var cleanPath = path.trim();
+
+    if (cleanPath.startsWith('/')) {
+      cleanPath = cleanPath.substring(1);
+    }
+
+    String fullPath;
+    if (prefix.isEmpty) {
+      fullPath = cleanPath;
+    } else {
+      if (prefix.endsWith('/')) {
+        fullPath = '$prefix$cleanPath';
+      } else {
+        fullPath = '$prefix/$cleanPath';
+      }
+    }
+
+    fileContent = await (assets ?? Flame.assets).readFile(
+      fullPath,
+      package: package,
+    );
+  }
 
   final lines = LineSplitter.split(
     fileContent,
@@ -261,6 +282,8 @@ Future<TextureAtlasData> _parse(
       fromStorage,
       images,
       package,
+      assetsPrefix: assetsPrefix,
+      assets: assets,
     );
     pages.add(page);
 
@@ -329,8 +352,10 @@ Future<Page> _parsePage(
   String path,
   bool fromStorage,
   Images images,
-  String? package,
-) async {
+  String? package, {
+  String? assetsPrefix,
+  AssetsCache? assets,
+}) async {
   final page = Page();
   page.textureFile = lineQueue.removeFirst();
 
@@ -345,7 +370,25 @@ Future<Page> _parsePage(
     images.add(texturePath, image);
     page.texture = images.fromCache(texturePath);
   } else {
-    page.texture = await images.load(texturePath, package: package);
+    final prefix = (assetsPrefix ?? '').trim();
+    var cleanPath = texturePath.trim();
+
+    if (cleanPath.startsWith('/')) {
+      cleanPath = cleanPath.substring(1);
+    }
+
+    String fullTexturePath;
+    if (prefix.isEmpty) {
+      fullTexturePath = cleanPath;
+    } else {
+      if (prefix.endsWith('/')) {
+        fullTexturePath = '$prefix$cleanPath';
+      } else {
+        fullTexturePath = '$prefix/$cleanPath';
+      }
+    }
+
+    page.texture = await images.load(fullTexturePath, package: package);
   }
 
   _parsePageProperties(lineQueue, page);
