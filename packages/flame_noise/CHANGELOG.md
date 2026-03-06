@@ -1,3 +1,8 @@
+## 0.3.2+21
+
+ - **FIX**: `NoiseEffectController` producing zero progress on some platforms ([#3831](https://github.com/flame-engine/flame/issues/3831)). ([5d88832f](https://github.com/flame-engine/flame/commit/5d88832fa522a6880beeecb617b565aebcb703e7))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
 ## 0.3.2+20
 
  - Update a dependency to the latest release.

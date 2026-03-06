@@ -1,3 +1,7 @@
+## 1.4.3
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
 ## 1.4.2
 
  - **FIX**: Update flame_lint to use lints 6.0.0 ([#3612](https://github.com/flame-engine/flame/issues/3612)). ([ba5f6789](https://github.com/flame-engine/flame/commit/ba5f6789bed68e4cc7ca95584e35ed62d0111da2))

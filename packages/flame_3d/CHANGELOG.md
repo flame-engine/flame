@@ -1,3 +1,11 @@
+## 0.1.1+7
+
+ - **FIX**(flame_3d): Use float for numLights uniform to fix GLES crash ([#3810](https://github.com/flame-engine/flame/issues/3810)). ([f241ebd6](https://github.com/flame-engine/flame/commit/f241ebd6d73caa43387972cffeb609af2909ac2f))
+ - **FIX**(flame_3d): Fix alpha blend factors for transparent background compositing ([#3812](https://github.com/flame-engine/flame/issues/3812)). ([8d7212a1](https://github.com/flame-engine/flame/commit/8d7212a1c79d561330131ea794a0ed318c3945f8))
+ - **FIX**(flame_3d): Remove duplicate baseColor multiply in ambient calculation ([#3814](https://github.com/flame-engine/flame/issues/3814)). ([080bde7f](https://github.com/flame-engine/flame/commit/080bde7f4c14c9f4f91e09d9bf6e737f75449351))
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
 ## 0.1.1+6
 
  - Update a dependency to the latest release.

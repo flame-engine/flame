@@ -9,15 +9,15 @@ environment:
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.35.1
-  flame_forge2d: ^0.19.2+4
+  flame: ^1.36.0
+  flame_forge2d: ^0.19.2+5
   flutter:
     sdk: flutter
   google_fonts: ^8.0.2
   url_launcher: ^6.1.11
 
 dev_dependencies:
-  flame_lint: ^1.4.2
+  flame_lint: ^1.4.3
   flutter_test:
     sdk: flutter
 
