@@ -257,7 +257,7 @@ void main() {
       );
 
       testWithFlameGame(
-        'mismatched size-to-source aspect ratio falls back to individual rendering',
+        '''mismatched size-to-source aspect ratio falls back to individual rendering''',
         (game) async {
           final group = _AutoBatchGroup();
           await game.ensureAdd(group);
@@ -526,7 +526,7 @@ void main() {
 
     group('render order', () {
       testWithFlameGame(
-        'eligible children flush before a non-eligible sibling at same priority',
+        '''eligible children flush before a non-eligible sibling at same priority''',
         (game) async {
           final group = _AutoBatchGroup();
           await game.ensureAdd(group);

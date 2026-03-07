@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
+import 'package:flame/rendering.dart';
 import 'package:flame/src/collisions/hitboxes/shape_hitbox.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/mixins/has_decorator.dart';
@@ -17,9 +19,11 @@ import 'package:meta/meta.dart';
 /// group.
 ///
 /// Eligible children must be [SpriteComponent] or [SpriteAnimationComponent]
-/// leaf nodes with uniform scale and no extra decorators or snapshot caching.
-/// All other children fall back to their individual [Component.renderTree]
-/// calls, and render order (z-order by priority) is fully preserved.
+/// instances with uniform scale and no extra decorators or snapshot caching.
+/// They may either be leaf nodes or have only [ShapeHitbox] children, which
+/// are ignored for batching. All other children fall back to their individual
+/// [Component.renderTree] calls, and render order (z-order by priority) is
+/// fully preserved.
 ///
 /// Usage:
 /// ```dart
@@ -36,7 +40,7 @@ mixin HasAutoBatchedChildren on Component {
   bool batchingEnabled = true;
 
   // Accumulators keyed by atlas identity hash.
-  final Map<int, _BatchAccumulator> _accumulators = {};
+  final Map<Image, _BatchAccumulator> _accumulators = {};
 
   // The priority of the child group currently being accumulated.
   int? _currentPriority;
@@ -67,7 +71,15 @@ mixin HasAutoBatchedChildren on Component {
 
     final batchInfo = _tryGetBatchInfo(child);
     if (batchInfo != null) {
-      _accumulateChild(canvas, child as PositionComponent, batchInfo);
+      _accumulateChild(child as PositionComponent, batchInfo);
+      if (child.debugMode) {
+        for (final hitbox in child.children.whereType<ShapeHitbox>()) {
+          canvas.save();
+          canvas.transform2D(child.transform);
+          hitbox.renderDebugMode(canvas);
+          canvas.restore();
+        }
+      }
     } else {
       // Non-eligible child: flush any pending batch first so that the child
       // renders after already-accumulated sprites (same priority group).
@@ -92,13 +104,10 @@ mixin HasAutoBatchedChildren on Component {
   }
 
   /// Accumulates [child] for batching based on [info].
-  void _accumulateChild(
-    Canvas canvas,
-    PositionComponent child,
-    _BatchInfo info,
-  ) {
-    final accumulator = _accumulators[identityHashCode(info.image)] ??=
-        _BatchAccumulator(info.image);
+  void _accumulateChild(PositionComponent child, _BatchInfo info) {
+    final accumulator = _accumulators[info.image] ??= _BatchAccumulator(
+      info.image,
+    );
     accumulator.accumulate(
       info.sourceRect,
       _toRSTransform(child, info.sourceRect),
@@ -127,26 +136,30 @@ mixin HasAutoBatchedChildren on Component {
   /// Combines type, state, and transform eligibility checks with source
   /// extraction so the call site never needs to call both separately.
   static _BatchInfo? _tryGetBatchInfo(Component component) {
+    if (!component.isMounted) {
+      return null;
+    }
+
+    // Decorators other than the built-in Transform2DDecorator are unsupported.
+    if (component is HasDecorator && component.decorator != null) {
+      return null;
+    }
+
     if (component is! SpriteComponent &&
         component is! SpriteAnimationComponent) {
       return null;
     }
 
     final positionComponent = component as PositionComponent;
+    final decorator = positionComponent.decorator;
 
-    if (!positionComponent.isMounted) {
+    if (decorator is! Transform2DDecorator || !decorator.isLastDecorator) {
       return null;
     }
 
     // Allow children that produce no visible output in non-debug mode
     // (e.g. physics hitboxes) — they can be safely skipped during batching.
     if (positionComponent.children.any((child) => child is! ShapeHitbox)) {
-      return null;
-    }
-
-    // Decorators other than the built-in Transform2DDecorator are unsupported.
-    if (positionComponent is HasDecorator &&
-        (positionComponent as HasDecorator).decorator != null) {
       return null;
     }
 
@@ -168,7 +181,13 @@ mixin HasAutoBatchedChildren on Component {
     if (paint.colorFilter != null ||
         paint.shader != null ||
         paint.imageFilter != null ||
-        paint.maskFilter != null) {
+        paint.maskFilter != null ||
+        // SpriteBatch's render() always uses BlendMode.srcOver, so any other
+        // blend mode would be ignored and could lead to unexpected results.
+        // We could support batching by blend mode (e.g., using a tuple as the
+        // batch key (Image, BlendMode)), but that would be a more complex
+        // change. For now, it's safer to just exclude non-srcOver blend modes.
+        paint.blendMode != BlendMode.srcOver) {
       return null;
     }
 

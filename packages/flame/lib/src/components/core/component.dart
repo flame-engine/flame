@@ -587,14 +587,16 @@ class Component {
   /// cleans them up afterwards.
   @protected
   void renderChild(Canvas canvas, Component child) {
+    int? originalLength;
     final hasContext = _renderContexts.isNotEmpty;
     if (hasContext) {
+      originalLength = child._renderContexts.length;
       child._renderContexts.addAll(_renderContexts);
     }
     child.renderTree(canvas);
     if (hasContext) {
       child._renderContexts.removeRange(
-        _renderContexts.length,
+        originalLength!,
         child._renderContexts.length,
       );
     }

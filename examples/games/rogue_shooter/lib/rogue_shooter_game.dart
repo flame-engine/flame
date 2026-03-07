@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:rogue_shooter/components/enemy_creator.dart';
 import 'package:rogue_shooter/components/player_component.dart';
