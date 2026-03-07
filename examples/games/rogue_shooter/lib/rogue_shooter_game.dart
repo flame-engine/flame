@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/text.dart';
 import 'package:flutter/services.dart';
 import 'package:rogue_shooter/components/enemy_creator.dart';
 import 'package:rogue_shooter/components/player_component.dart';
@@ -28,6 +29,14 @@ class RogueShooterGame extends FlameGame
   late final BatchGroup starGroup;
   late final BatchGroup explosionGroup;
 
+  static final _textStyleRed = TextPaint(
+    style: TextPaint.defaultTextStyle.copyWith(color: const Color(0xFFFF0000)),
+  );
+
+  static final _textStyleGreen = TextPaint(
+    style: TextPaint.defaultTextStyle.copyWith(color: const Color(0xFF00FF00)),
+  );
+
   final _updateTime = TextComponent(
     text: 'Update time: 0ms',
     position: Vector2(0, 0),
@@ -43,6 +52,7 @@ class RogueShooterGame extends FlameGame
   final TextComponent _batchingText = TextComponent(
     position: Vector2(0, 50),
     priority: 1,
+    textRenderer: _textStyleRed,
   );
 
   int _score = 0;
@@ -113,6 +123,10 @@ class RogueShooterGame extends FlameGame
   void _updateBatchingLabel() {
     _batchingText.text =
         'Batching: ${batchingEnabled ? "ON" : "OFF"}  [press B to toggle]';
+
+    _batchingText.textRenderer = TextPaint(
+      style: batchingEnabled ? _textStyleGreen.style : _textStyleRed.style,
+    );
   }
 
   @override
