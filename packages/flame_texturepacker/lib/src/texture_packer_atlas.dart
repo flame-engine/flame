@@ -262,9 +262,33 @@ Future<TextureAtlasData> _parse(
       }
     }
 
+    var currentPackage = package;
+    var finalPath = fullPath;
+
+    // Check for package path in the full path
+    //(which may already include assetsPrefix)
+    const packageKeyword = 'packages/';
+    final packageIndex = finalPath.indexOf(packageKeyword);
+    if (packageIndex != -1) {
+      final subPath = finalPath.substring(packageIndex + packageKeyword.length);
+      final parts = subPath.split('/');
+      if (parts.length > 1) {
+        currentPackage ??= parts[0];
+        // Clean the path by removing everything up to
+        //and including the package name
+        finalPath = parts.sublist(1).join('/');
+      }
+    }
+
+    // AssetsCache also prepends its own prefix (usually 'assets/')
+    final assetsCachePrefix = (assets ?? Flame.assets).prefix;
+    if (finalPath.startsWith(assetsCachePrefix)) {
+      finalPath = finalPath.replaceFirst(assetsCachePrefix, '');
+    }
+
     fileContent = await (assets ?? Flame.assets).readFile(
-      fullPath,
-      package: package,
+      finalPath,
+      package: currentPackage,
     );
   }
 
@@ -291,8 +315,34 @@ Future<TextureAtlasData> _parse(
     while (lineQueue.isNotEmpty) {
       final line = lineQueue.first.trim();
 
-      // Check if this line looks like a texture file (has file extension)
+      // Check if this line looks like a texture file
+      // (has file extension)
       if (_isTextureFile(line)) {
+        // Peek at the next line to see if it's a region or a new page.
+        // Regions are followed by properties
+        // like 'bounds:', 'rotate:', 'xy:', 'offsets:'.
+        // Pages are followed by 'size:', 'format:', 'filter:', 'repeat:'.
+        if (lineQueue.length > 1) {
+          final nextLine = lineQueue.elementAt(1).trim();
+          final isRegionProperty =
+              nextLine.startsWith('bounds:') ||
+              nextLine.startsWith('rotate:') ||
+              nextLine.startsWith('xy:') ||
+              nextLine.startsWith('offsets:') ||
+              nextLine.startsWith('orig:') ||
+              nextLine.startsWith('offset:') ||
+              nextLine.startsWith('index:');
+
+          if (isRegionProperty) {
+            // This is a region name that happens to have a file extension.
+            final region = _parseRegion(lineQueue, page);
+            if (region.index != -1) {
+              hasIndexes = true;
+            }
+            regions.add(region);
+            continue;
+          }
+        }
         break; // This is a new page, break out of region parsing
       }
 
@@ -388,7 +438,29 @@ Future<Page> _parsePage(
       }
     }
 
-    page.texture = await images.load(fullTexturePath, package: package);
+    var currentPackage = package;
+    var finalTexturePath = fullTexturePath;
+
+    const packageKeyword = 'packages/';
+    final packageIndex = finalTexturePath.indexOf(packageKeyword);
+    if (packageIndex != -1) {
+      final subPath = finalTexturePath.substring(
+        packageIndex + packageKeyword.length,
+      );
+      final parts = subPath.split('/');
+      if (parts.length > 1) {
+        currentPackage ??= parts[0];
+        finalTexturePath = parts.sublist(1).join('/');
+      }
+    }
+
+    // Images cache also prepends its own prefix (usually 'assets/images/')
+    final imagesPrefix = images.prefix;
+    if (finalTexturePath.startsWith(imagesPrefix)) {
+      finalTexturePath = finalTexturePath.replaceFirst(imagesPrefix, '');
+    }
+
+    page.texture = await images.load(finalTexturePath, package: currentPackage);
   }
 
   _parsePageProperties(lineQueue, page);
@@ -436,7 +508,30 @@ void _parsePageProperties(ListQueue<String> lineQueue, Page page) {
 ///
 /// Returns the parsed [Region].
 Region _parseRegion(ListQueue<String> lineQueue, Page page) {
-  final name = lineQueue.removeFirst().trim();
+  var name = lineQueue.removeFirst().trim();
+  var extractedIndex = -1;
+
+  // Attempt to extract index and clean name if it follows patterns like
+  // 'name_01.png' or 'name_01'
+  final extensionMatch = RegExp(
+    r'\.(png|jpg|jpeg|bmp|tga|webp)$',
+    caseSensitive: false,
+  ).firstMatch(name);
+  if (extensionMatch != null) {
+    name = name.substring(0, extensionMatch.start);
+  }
+
+  final indexMatch = RegExp(r'_(\d+)$').firstMatch(name);
+  if (indexMatch != null) {
+    try {
+      extractedIndex = int.parse(indexMatch.group(1)!);
+      name = name.substring(0, indexMatch.start);
+      // ignore: avoid_catches_without_on_clauses
+    } catch (_) {
+      // Ignore parsing errors for very large numbers
+    }
+  }
+
   final values = <String, List<String>>{};
 
   while (lineQueue.isNotEmpty) {
@@ -504,7 +599,7 @@ Region _parseRegion(ListQueue<String> lineQueue, Page page) {
     originalHeight: finalOriginalHeight,
     degrees: _parseDegrees(rotate?.first),
     rotate: _parseDegrees(rotate?.first) == 90,
-    index: index != null ? int.parse(index[0]) : -1,
+    index: index != null ? int.parse(index[0]) : extractedIndex,
   );
 }
 

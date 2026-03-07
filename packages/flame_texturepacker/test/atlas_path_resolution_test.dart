@@ -44,6 +44,8 @@ sprite1
       when(
         () => images.load(any(), package: any(named: 'package')),
       ).thenAnswer((_) async => FakeImage());
+
+      when(() => images.prefix).thenReturn('assets/images/');
     });
 
     test('should resolve paths correctly with leading slashes', () async {
@@ -124,5 +126,64 @@ sprite1
         () => images.load('images/test.png', package: 'my_package'),
       ).called(1);
     });
+
+    test(
+      'should auto-detect package from path if package parameter is null',
+      () async {
+        final assets = AssetsCache(bundle: bundle);
+
+        await TexturePackerAtlas.load(
+          'packages/custom_package/assets/images/atlas_name.atlas',
+          assets: assets,
+          images: images,
+        );
+
+        // Verify bundle call extracted 'custom_package' and cleaned the path
+        verify(
+          () => bundle.loadString(
+            'packages/custom_package/assets/images/atlas_name.atlas',
+            cache: any(named: 'cache'),
+          ),
+        ).called(1);
+
+        // Verify images.load also uses the extracted package
+        verify(
+          () => images.load('test.png', package: 'custom_package'),
+        ).called(1);
+      },
+    );
+
+    test(
+      'should correctly parse region names with .png and extracted indexes',
+      () async {
+        final assets = AssetsCache(bundle: bundle);
+        const complexAtlasContent = '''
+knight.png
+size: 64, 64
+filter: Nearest, Nearest
+repeat: none
+knight_walk_01.png
+  bounds: 0, 0, 32, 32
+knight_walk_02.png
+  bounds: 32, 0, 32, 32
+''';
+
+        when(
+          () => bundle.loadString(any(), cache: any(named: 'cache')),
+        ).thenAnswer((_) async => complexAtlasContent);
+
+        final atlas = await TexturePackerAtlas.load(
+          'knight.atlas',
+          assets: assets,
+          images: images,
+        );
+
+        expect(atlas.sprites.length, 2);
+        expect(atlas.sprites[0].region.name, 'knight_walk');
+        expect(atlas.sprites[0].region.index, 1);
+        expect(atlas.sprites[1].region.name, 'knight_walk');
+        expect(atlas.sprites[1].region.index, 2);
+      },
+    );
   });
 }
