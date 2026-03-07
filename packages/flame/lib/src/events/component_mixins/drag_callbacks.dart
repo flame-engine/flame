@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive drag events.
@@ -61,11 +62,51 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
+
     final game = findRootGame()!;
-    if (game.findByKey(const MultiDragDispatcherKey()) == null) {
-      final dispatcher = MultiDragDispatcher();
-      game.registerKey(const MultiDragDispatcherKey(), dispatcher);
+    final scaleDispatcher = game.findByKey(const ScaleDispatcherKey());
+    final multiDragDispatcher = game.findByKey(const MultiDragDispatcherKey());
+    final multiDragScaleDispatcher = game.findByKey(
+      const MultiDragScaleDispatcherKey(),
+    );
+
+    // If MultiDragScaleDispatcher already exists, we're done
+    if (multiDragScaleDispatcher != null) {
+      return;
+    }
+
+    // If MultiDragDispatcher exists but component has ScaleCallbacks,
+    // upgrade it
+    if (multiDragDispatcher != null && this is ScaleCallbacks) {
+      final dispatcher = MultiDragScaleDispatcher();
+      game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
       game.add(dispatcher);
+      (multiDragDispatcher as MultiDragDispatcher).markForRemoval();
+      return;
+    }
+
+    // If MultiDragDispatcher exists and no ScaleCallbacks, we're done
+    if (multiDragDispatcher != null) {
+      return;
+    }
+
+    if (scaleDispatcher == null && multiDragDispatcher == null) {
+      // Check if component also has ScaleCallbacks
+      if (this is ScaleCallbacks) {
+        final dispatcher = MultiDragScaleDispatcher();
+        game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+        game.add(dispatcher);
+      } else {
+        final dispatcher = MultiDragDispatcher();
+        game.registerKey(const MultiDragDispatcherKey(), dispatcher);
+        game.add(dispatcher);
+      }
+    } else if (scaleDispatcher != null && multiDragDispatcher == null) {
+      // Upgrade ScaleDispatcher to MultiDragScaleDispatcher
+      final dispatcher = MultiDragScaleDispatcher();
+      game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+      game.add(dispatcher);
+      (scaleDispatcher as ScaleDispatcher).markForRemoval();
     }
   }
 }

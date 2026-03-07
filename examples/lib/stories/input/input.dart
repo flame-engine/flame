@@ -3,6 +3,7 @@ import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/input/advanced_button_example.dart';
 import 'package:examples/stories/input/double_tap_callbacks_example.dart';
 import 'package:examples/stories/input/drag_callbacks_example.dart';
+import 'package:examples/stories/input/dynamic_scale_drag_example.dart';
 import 'package:examples/stories/input/gesture_hitboxes_example.dart';
 import 'package:examples/stories/input/hardware_keyboard_example.dart';
 import 'package:examples/stories/input/hover_callbacks_example.dart';
@@ -143,5 +144,11 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: AdvancedButtonExample()),
       codeLink: baseLink('input/advanced_button_example.dart'),
       info: AdvancedButtonExample.description,
+    )
+    ..add(
+      'Dynamic Scale & Drag',
+      (_) => GameWidget(game: DynamicScaleDragExample()),
+      codeLink: baseLink('input/dynamic_scale_drag_example.dart'),
+      info: DynamicScaleDragExample.description,
     );
 }

@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
+import 'package:flame/events.dart' hide PointerMoveEvent;
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PointerMoveEvent;
 
 void main() {
   runApp(GameWidget(game: ScaleExample()));
@@ -16,7 +16,7 @@ class ScaleExample extends FlameGame {
   Vector2 zoomCenter = Vector2.zero();
   double startingZoom = 1;
 
-  final bool addScaleOnlyRectangle = true;
+  final bool addScaleOnlyRectangle = false;
   final bool addDragOnlyRectangle = true;
   final bool addScaleDragRectangle = true;
   final bool addZoom = false;
@@ -52,7 +52,7 @@ class ScaleExample extends FlameGame {
 
     if (addScaleDragRectangle) {
       interactiveRectangle = InteractiveRectangle(
-        position: Vector2(200, 200),
+        position: Vector2(100, 100),
         size: Vector2.all(150),
         color: Colors.red,
       );
@@ -119,9 +119,6 @@ class InteractiveRectangle extends RectangleComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    if (isScaling) {
-      return;
-    }
     final rotated = event.canvasDelta.clone()
       ..rotate(game.camera.viewfinder.angle);
     position.add(rotated);
@@ -210,7 +207,6 @@ class DragOnlyRectangle extends RectangleComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    debugPrint('On Drag update');
     final rotated = event.canvasDelta.clone()
       ..rotate(game.camera.viewfinder.angle);
     position.add(rotated);
