@@ -578,6 +578,35 @@ class Component {
 
   void render(Canvas canvas) {}
 
+  /// Renders a single [child] component onto [canvas].
+  ///
+  /// Override this method (instead of [renderTree]) when you need to intercept
+  /// per-child rendering — for example, to accumulate draw calls for batching.
+  /// The default implementation propagates the parent's render contexts into
+  /// the child before delegating to the child's [Component.renderTree], and
+  /// cleans them up afterwards.
+  @protected
+  void renderChild(Canvas canvas, Component child) {
+    final hasContext = _renderContexts.isNotEmpty;
+    if (hasContext) {
+      child._renderContexts.addAll(_renderContexts);
+    }
+    child.renderTree(canvas);
+    if (hasContext) {
+      child._renderContexts.removeRange(
+        _renderContexts.length,
+        child._renderContexts.length,
+      );
+    }
+  }
+
+  /// Called once after all children have been rendered in [renderTree].
+  ///
+  /// Override to flush any state accumulated across [renderChild] calls
+  /// (e.g. a pending sprite batch).
+  @protected
+  void afterChildrenRendered(Canvas canvas) {}
+
   void renderTree(Canvas canvas) {
     final context = renderContext;
     if (context != null) {
@@ -588,18 +617,9 @@ class Component {
     final children = _children;
     if (children != null) {
       for (final child in children) {
-        final hasContext = _renderContexts.isNotEmpty;
-        if (hasContext) {
-          child._renderContexts.addAll(_renderContexts);
-        }
-        child.renderTree(canvas);
-        if (hasContext) {
-          child._renderContexts.removeRange(
-            _renderContexts.length,
-            child._renderContexts.length,
-          );
-        }
+        renderChild(canvas, child);
       }
+      afterChildrenRendered(canvas);
     }
 
     // Any debug rendering should be rendered on top of everything
