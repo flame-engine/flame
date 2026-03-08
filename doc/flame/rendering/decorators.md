@@ -157,6 +157,29 @@ limitation is that the shadows are flat and cannot interact with the environment
 decorator cannot handle shadows that fall onto walls or other vertical structures.
 
 
+### HueDecorator
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: decorator_hue
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+This decorator shifts the hue of the underlying component by the specified angle in radians.
+
+```dart
+final decorator = HueDecorator(tau / 4);
+```
+
+Possible uses:
+
+- alternative color schemes for enemies ("palette swapping");
+- environmental changes (e.g., world turning purple/surreal);
+- power-up indicators.
+
+
 ## Using decorators
 
 

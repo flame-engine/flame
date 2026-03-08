@@ -1,6 +1,7 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/rendering/flip_sprite_example.dart';
+import 'package:examples/stories/rendering/hue_decorator_example.dart';
 import 'package:examples/stories/rendering/isometric_tile_map_example.dart';
 import 'package:examples/stories/rendering/layers_example.dart';
 import 'package:examples/stories/rendering/nine_tile_box_example.dart';
@@ -14,6 +15,12 @@ import 'package:flutter/material.dart';
 
 void addRenderingStories(Dashbook dashbook) {
   dashbook.storiesOf('Rendering')
+    ..add(
+      'Hue Decorator',
+      (_) => GameWidget(game: HueDecoratorExample()),
+      codeLink: baseLink('rendering/hue_decorator_example.dart'),
+      info: HueDecoratorExample.description,
+    )
     ..add(
       'Text',
       (_) => GameWidget(game: TextExample()),
