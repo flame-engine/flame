@@ -136,3 +136,24 @@ final effect = GlowEffect(
 ```
 
 Currently this effect can only be applied to components that have a `HasPaint` mixin.
+
+
+## HueEffect
+
+This effect will rotate the hue of the target over time. It can only be applied to components that
+implement the `PaintProvider`.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: hue_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = HueEffect(
+  2 * tau,
+  EffectController(duration: 3),
+);
+```

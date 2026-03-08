@@ -5,6 +5,7 @@ import 'package:examples/stories/effects/combined_effect_example.dart';
 import 'package:examples/stories/effects/dual_effect_removal_example.dart';
 import 'package:examples/stories/effects/effect_controllers_example.dart';
 import 'package:examples/stories/effects/function_effect_example.dart';
+import 'package:examples/stories/effects/hue_effect_example.dart';
 import 'package:examples/stories/effects/move_effect_example.dart';
 import 'package:examples/stories/effects/opacity_effect_example.dart';
 import 'package:examples/stories/effects/remove_effect_example.dart';
@@ -58,6 +59,12 @@ void addEffectsStories(Dashbook dashbook) {
       (_) => GameWidget(game: OpacityEffectExample()),
       codeLink: baseLink('effects/opacity_effect_example.dart'),
       info: OpacityEffectExample.description,
+    )
+    ..add(
+      'Hue Effect',
+      (_) => GameWidget(game: HueEffectExample()),
+      codeLink: baseLink('effects/hue_effect_example.dart'),
+      info: HueEffectExample.description,
     )
     ..add(
       'Color Effect',

@@ -25,6 +25,7 @@ export 'src/effects/effect.dart';
 export 'src/effects/effect_target.dart';
 export 'src/effects/function_effect.dart';
 export 'src/effects/glow_effect.dart';
+export 'src/effects/hue_effect.dart';
 export 'src/effects/move_along_path_effect.dart';
 export 'src/effects/move_by_effect.dart';
 export 'src/effects/move_effect.dart';

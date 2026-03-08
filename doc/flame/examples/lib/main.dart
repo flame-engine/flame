@@ -10,6 +10,8 @@ import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
 import 'package:doc_flame_examples/glow_effect.dart';
+import 'package:doc_flame_examples/hue_decorator.dart';
+import 'package:doc_flame_examples/hue_effect.dart';
 import 'package:doc_flame_examples/move_along_path_effect.dart';
 import 'package:doc_flame_examples/move_by_effect.dart';
 import 'package:doc_flame_examples/move_to_effect.dart';
@@ -49,8 +51,10 @@ final routes = <String, Game Function()>{
   'decorator_rotate3d': DecoratorRotate3DGame.new,
   'decorator_shadow3d': DecoratorShadowGame.new,
   'decorator_tint': DecoratorTintGame.new,
+  'decorator_hue': HueDecoratorGame.new,
   'drag_events': DragEventsGame.new,
   'glow_effect': GlowEffectExample.new,
+  'hue_effect': HueEffectExample.new,
   'move_along_path_effect': MoveAlongPathEffectGame.new,
   'move_by_effect': MoveByEffectGame.new,
   'move_to_effect': MoveToEffectGame.new,
