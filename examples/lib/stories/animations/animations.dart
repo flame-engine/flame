@@ -4,6 +4,7 @@ import 'package:examples/stories/animations/animation_group_example.dart';
 import 'package:examples/stories/animations/aseprite_example.dart';
 import 'package:examples/stories/animations/basic_animation_example.dart';
 import 'package:examples/stories/animations/benchmark_example.dart';
+import 'package:examples/stories/animations/unified_animation_example.dart';
 import 'package:flame/game.dart';
 
 void addAnimationStories(Dashbook dashbook) {
@@ -31,5 +32,11 @@ void addAnimationStories(Dashbook dashbook) {
       (_) => GameWidget(game: BenchmarkExample()),
       codeLink: baseLink('animations/benchmark_example.dart'),
       info: BenchmarkExample.description,
+    )
+    ..add(
+      'Unified Animation',
+      (_) => GameWidget(game: UnifiedAnimationExample()),
+      codeLink: baseLink('animations/unified_animation_example.dart'),
+      info: UnifiedAnimationExample.description,
     );
 }
