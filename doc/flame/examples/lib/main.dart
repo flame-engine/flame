@@ -5,11 +5,13 @@ import 'package:doc_flame_examples/collision_detection.dart';
 import 'package:doc_flame_examples/color_effect.dart';
 import 'package:doc_flame_examples/decorator_blur.dart';
 import 'package:doc_flame_examples/decorator_grayscale.dart';
+import 'package:doc_flame_examples/decorator_hue.dart';
 import 'package:doc_flame_examples/decorator_rotate3d.dart';
 import 'package:doc_flame_examples/decorator_shadow3d.dart';
 import 'package:doc_flame_examples/decorator_tint.dart';
 import 'package:doc_flame_examples/drag_events.dart';
 import 'package:doc_flame_examples/glow_effect.dart';
+import 'package:doc_flame_examples/hue_effect.dart';
 import 'package:doc_flame_examples/move_along_path_effect.dart';
 import 'package:doc_flame_examples/move_by_effect.dart';
 import 'package:doc_flame_examples/move_to_effect.dart';
@@ -39,18 +41,20 @@ import 'package:flutter/widgets.dart';
 import 'package:web/web.dart' as web;
 
 final routes = <String, Game Function()>{
+  'anchor': AnchorGame.new,
   'anchor_by_effect': AnchorByEffectGame.new,
   'anchor_to_effect': AnchorToEffectGame.new,
-  'anchor': AnchorGame.new,
   'collision_detection': CollisionDetectionGame.new,
   'color_effect': ColorEffectExample.new,
   'decorator_blur': DecoratorBlurGame.new,
   'decorator_grayscale': DecoratorGrayscaleGame.new,
+  'decorator_hue': DecoratorHueGame.new,
   'decorator_rotate3d': DecoratorRotate3DGame.new,
   'decorator_shadow3d': DecoratorShadowGame.new,
   'decorator_tint': DecoratorTintGame.new,
   'drag_events': DragEventsGame.new,
   'glow_effect': GlowEffectExample.new,
+  'hue_effect': HueEffectExample.new,
   'move_along_path_effect': MoveAlongPathEffectGame.new,
   'move_by_effect': MoveByEffectGame.new,
   'move_to_effect': MoveToEffectGame.new,

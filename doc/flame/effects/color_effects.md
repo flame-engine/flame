@@ -136,3 +136,44 @@ final effect = GlowEffect(
 ```
 
 Currently this effect can only be applied to components that have a `HasPaint` mixin.
+
+
+## `HueToEffect`
+
+This effect will change the hue of the target over time to the specified angle in radians.
+It can only be applied to components that implement the `HueProvider`.
+
+```dart
+final effect = HueEffect.to(
+  pi / 2,
+  EffectController(duration: 3),
+);
+```
+
+## `HueByEffect`
+
+This effect will rotate the hue of the target relative by the specified angle in radians.
+It can only be applied to components that implement the `HueProvider`.
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: hue_effect
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+```dart
+final effect = HueEffect.by(
+  2 * tau,
+  EffectController(duration: 3),
+);
+```
+
+Both effects can target any component implementing `HueProvider`. The `HasPaint` mixin
+implements `HueProvider` and handles the necessary `ColorFilter` updates automatically.
+
+> [!TIP]
+> **Performance Note**: `HueEffect` is extremely efficient because it modifies the `Paint`'s
+> `colorFilter` directly. If you have many components, prefer this effect over the `HueDecorator`,
+> which uses `saveLayer()` and has much higher overhead.
