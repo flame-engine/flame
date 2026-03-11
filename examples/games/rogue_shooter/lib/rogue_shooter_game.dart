@@ -8,7 +8,7 @@ import 'package:rogue_shooter/components/star_background_creator.dart';
 
 class RogueShooterGame extends FlameGame
     with
-        PanDetector,
+        DragCallbacks,
         HasCollisionDetection,
         HasPerformanceTracker,
         HasKeyboardHandlerComponents {
@@ -129,23 +129,27 @@ class RogueShooterGame extends FlameGame
   }
 
   @override
-  void onPanStart(_) {
+  void onDragStart(DragStartEvent event) {
     _player.beginFire();
+    super.onDragStart(event);
   }
 
   @override
-  void onPanEnd(_) {
+  void onDragEnd(DragEndEvent event) {
     _player.stopFire();
+    super.onDragEnd(event);
   }
 
   @override
-  void onPanCancel() {
+  void onDragCancel(DragCancelEvent event) {
     _player.stopFire();
+    super.onDragCancel(event);
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    _player.position += info.delta.global;
+  void onDragUpdate(DragUpdateEvent event) {
+    _player.position += event.canvasDelta;
+    super.onDragUpdate(event);
   }
 
   void increaseScore() {
