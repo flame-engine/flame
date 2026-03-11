@@ -536,7 +536,7 @@ bulletGroup.add(BulletSpriteComponent(...));
 ```
 
 
-#### Rouge Shooter Example
+#### Rogue Shooter Example
 
-See the [Rouge Shooter game example](https://examples.flame-engine.org/#/Sample_Games_Rogue_Shooter)
+See the [Rogue Shooter game example](https://examples.flame-engine.org/#/Sample_Games_Rogue_Shooter)
 for a real-world usage of this mixin.
