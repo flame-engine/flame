@@ -220,18 +220,19 @@ mixin HasAutoBatchedChildren on Component {
     // RSTransform encodes a 2D transform as a single rotation + uniform scale,
     // meaning scaleX and scaleY must be identical. When rendering a sprite,
     // the implied scale factors are:
-    //   scaleX = size.x / srcW
-    //   scaleY = size.y / srcH
-    // For these to be equal: size.x / srcW == size.y / srcH
-    //                  i.e.: size.x * srcH == size.y * srcW
-    // We use cross-multiplication (instead of division) to avoid a srcW/srcH
+    //   scaleX = size.x / sourceWidth
+    //   scaleY = size.y / sourceHeight
+    // For these to be equal: size.x / sourceWidth == size.y / sourceHeight
+    //                  i.e.: size.x * sourceHeight == size.y * sourceWidth
+    // We use cross-multiplication (instead of division) to avoid a sourceWidth/sourceHeight
     // zero-guard, and keep the tolerance (0.5) in absolute pixel-area units
     // so it stays stable regardless of sprite dimensions.
-    final srcW = sourceInfo.$2.width;
-    final srcH = sourceInfo.$2.height;
-    if (srcW <= 0 ||
-        srcH <= 0 ||
-        (positionComponent.size.x * srcH - positionComponent.size.y * srcW)
+    final sourceWidth = sourceInfo.$2.width;
+    final sourceHeight = sourceInfo.$2.height;
+    if (sourceWidth <= 0 ||
+        sourceHeight <= 0 ||
+        (positionComponent.size.x * sourceHeight -
+                    positionComponent.size.y * sourceWidth)
                 .abs() >
             0.5) {
       return null;
@@ -247,30 +248,30 @@ mixin HasAutoBatchedChildren on Component {
     return _BatchInfo(sourceInfo.$1, sourceInfo.$2, batchColor);
   }
 
-  /// Builds an [RSTransform] for [c] in parent-local coordinate space.
+  /// Builds an [RSTransform] for [component] in parent-local coordinate space.
   ///
   /// The effective scale is `c.scale.x × (c.size.x / src.width)` — the
   /// component's own scale combined with the source-to-size stretch factor.
   /// The anchor is expressed in source-rect coordinates so that
   /// [PositionComponent.position] maps to where [PositionComponent.anchor]
   /// lands in parent space.
-  static RSTransform _toRSTransform(PositionComponent c, Rect src) {
+  static RSTransform _toRSTransform(PositionComponent component, Rect source) {
     // Effective (uniform) scale = component scale × size-to-source stretch.
-    final effectiveScale = c.scale.x * c.size.x / src.width;
-    final totalAngle = c.angle + c.nativeAngle;
+    final effectiveScale = component.scale.x * component.size.x / source.width;
+    final totalAngle = component.angle + component.nativeAngle;
     final cosA = math.cos(totalAngle) * effectiveScale;
     final sinA = math.sin(totalAngle) * effectiveScale;
 
     // Anchor expressed in source-rect coordinates.
-    final anchorX = c.anchor.x * src.width;
-    final anchorY = c.anchor.y * src.height;
+    final anchorX = component.anchor.x * source.width;
+    final anchorY = component.anchor.y * source.height;
 
     // position is where the anchor maps to in parent space.
     return RSTransform(
       cosA,
       sinA,
-      c.position.x - cosA * anchorX + sinA * anchorY,
-      c.position.y - sinA * anchorX - cosA * anchorY,
+      component.position.x - cosA * anchorX + sinA * anchorY,
+      component.position.y - sinA * anchorX - cosA * anchorY,
     );
   }
 }
