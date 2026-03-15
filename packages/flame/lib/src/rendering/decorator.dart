@@ -27,6 +27,12 @@ import 'package:meta/meta.dart';
 /// - [Rotate3DDecorator]
 /// - [Shadow3DDecorator]
 /// - [Transform2DDecorator]
+///
+/// **Performance Note**: Decorators
+/// that use `canvas.saveLayer()` (like `HueDecorator`) have
+/// significant overhead compared to direct [Paint]
+/// manipulation (like `HueEffect`).
+/// Prefer shader-driven Effects for high-density rendering.
 class Decorator {
   /// The next decorator in the chain, or null if there is none.
   Decorator? _next;
@@ -43,8 +49,12 @@ class Decorator {
     );
   }
 
+  /// Updates the decorator and all subsequent decorators in the chain.
+  void update(double dt) {
+    _next?.update(dt);
+  }
+
   /// Applies visual effect while [draw]ing on the [canvas].
-  ///
   /// The default implementation is a no-op; all other non-trivial decorators
   /// transform the canvas before drawing, or perform some other adjustments.
   ///
