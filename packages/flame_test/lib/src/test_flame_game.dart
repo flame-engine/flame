@@ -24,7 +24,7 @@ import 'package:meta/meta.dart';
 /// standard [FlameGame]. If you want to have any other game instance, use the
 /// [testWithGame] function.
 @isTest
-Future<void> testWithFlameGame(
+void testWithFlameGame(
   String testName,
   AsyncGameFunction<FlameGame> testBody, {
   Timeout? timeout,
@@ -63,7 +63,7 @@ Future<void> testWithFlameGame(
 /// );
 /// ```
 @isTest
-Future<void> testWithGame<T extends FlameGame>(
+void testWithGame<T extends FlameGame>(
   String testName,
   CreateFunction<T> create,
   AsyncGameFunction<T> testBody, {
@@ -72,7 +72,7 @@ Future<void> testWithGame<T extends FlameGame>(
   dynamic skip,
   Map<String, dynamic>? onPlatform,
   int? retry,
-}) async {
+}) {
   test(
     testName,
     () async {
