@@ -3,37 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/src/sprite_sheet.dart';
-import 'package:meta/meta.dart';
-
-/// This is just a pair of [int, int].
-///
-/// Represents a position in a matrix, or in this case, on the tilemap.
-@immutable
-class Block {
-  /// x coordinate in the matrix.
-  final int x;
-
-  /// y coordinate in the matrix.
-  final int y;
-
-  const Block(this.x, this.y);
-
-  @override
-  String toString() => '($x, $y)';
-
-  Vector2 toVector2() => Vector2Extension.fromInts(x, y);
-
-  @override
-  bool operator ==(Object other) {
-    if (other is! Block) {
-      return false;
-    }
-    return other.x == x && other.y == y;
-  }
-
-  @override
-  int get hashCode => Object.hash(x, y);
-}
 
 /// This component renders a tilemap, represented by an int matrix, given a
 /// tileset, in which the integers are the block ids.
