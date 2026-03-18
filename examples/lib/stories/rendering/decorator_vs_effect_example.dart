@@ -8,18 +8,18 @@ import 'package:flutter/widgets.dart';
 
 class DecoratorVsEffectExample extends FlameGame {
   static const String description = '''
-  This example demonstrates the difference between using an `Effect` and a 
-  `Decorator` for group transparency.
+This example demonstrates the difference between using an `Effect` and a
+`Decorator` for group transparency.
 
-  1. Top (OpacityEffect): 
-  Opacity is applied to EACH child individually. 
-  Note the "double-exposure" where the sprites overlap.
-    
-  2. Bottom (Decorator): 
-  The entire group is flattened into a layer first using `saveLayer`, 
-  and then transparency is applied to the whole layer.
-  Note how the overlapping area is uniform.
-  ''';
+1. Top (OpacityEffect):
+Opacity is applied to EACH child individually.
+Note the "double-exposure" where the sprites overlap.
+
+2. Bottom (Decorator):
+The entire group is flattened into a layer first using `saveLayer`,
+and then transparency is applied to the whole layer.
+Note how the overlapping area is uniform.
+''';
 
   @override
   Future<void> onLoad() async {

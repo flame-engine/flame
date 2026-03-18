@@ -16,29 +16,31 @@ Applying a Decorator to a component can have a significant performance overhead,
 it involves `canvas.saveLayer()`.
 
 - **Decorators**: Use `canvas.saveLayer()` by default to isolate rendering and apply
-  filters. This requires off-screen buffer allocation and GPU context switches. This is 
-  computationally expensive but essential for correct visual composition of complex 
+  filters. This requires off-screen buffer allocation and GPU context switches. This is
+  computationally expensive but essential for correct visual composition of complex
   objects (see below).
-- **Effects** (e.g., `OpacityEffect`, `ColorEffect`): Modify the component's properties or `Paint` directly. These are extremely fast and hardware-accelerated, but they apply to each child individually.
+- **Effects** (e.g., `OpacityEffect`, `ColorEffect`): Modify the component's properties
+  or `Paint` directly. These are extremely fast and hardware-accelerated, but they apply
+  to each child individually.
 
 ### Decorators vs Effects: Visual Composition
 
-The key difference lies in how they handle composite objects (components with multiple 
+The key difference lies in how they handle composite objects (components with multiple
 overlapping children):
 
-1. **Effects (Individual Blend)**: If you apply an `OpacityEffect` to a parent component, 
-   Flame will render each child with that opacity. If children overlap, you will see 
-   through them to the background and to other children, creating a "double-exposure" 
+1. **Effects (Individual Blend)**: If you apply an `OpacityEffect` to a parent component,
+   Flame will render each child with that opacity. If children overlap, you will see
+   through them to the background and to other children, creating a "double-exposure"
    look.
-2. **Decorators (Group Blend)**: Because decorators use `saveLayer`, they render the 
-   entire subtree into a flat buffer first, and then apply the effect to that 
-   buffer. This results in a uniform appearance where overlaps are not visible, 
+2. **Decorators (Group Blend)**: Because decorators use `saveLayer`, they render the
+   entire subtree into a flat buffer first, and then apply the effect to that
+   buffer. This results in a uniform appearance where overlaps are not visible,
    making the group look like a single solid object.
 
 **Recommendation**:
-- Use **Effects** for simple property animations and high-performance color shifts on 
+- Use **Effects** for simple property animations and high-performance color shifts on
   large numbers of units.
-- Use **Decorators** for advanced post-processing (blurs, tints) and when you need 
+- Use **Decorators** for advanced post-processing (blurs, tints) and when you need
   to treat a group of components as a single visual unit.
 
 

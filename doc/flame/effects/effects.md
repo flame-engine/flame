@@ -107,13 +107,13 @@ without interfering with each other.
 
 ## Effects vs Decorators
 
-While effects and decorators can sometimes achieve similar visual results (like changing opacity 
+While effects and decorators can sometimes achieve similar visual results (like changing opacity
 or color), they have different performance and visual characteristics:
 
-- **Effects** are fast and generally change a property on a single component. When applied to 
+- **Effects** are fast and generally change a property on a single component. When applied to
   a group, they affect each child individually.
-- **Decorators** are more powerful but slower. They use `saveLayer` to flatten a whole 
-  component subtree into a single layer before applying an effect. This is essential for 
+- **Decorators** are more powerful but slower. They use `saveLayer` to flatten a whole
+  component subtree into a single layer before applying an effect. This is essential for
   correctly rendering composite objects with transparency or complex filters.
 
 See the [Decorators documentation](../rendering/decorators.md) for a more detailed comparison.

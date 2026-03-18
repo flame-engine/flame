@@ -8,13 +8,13 @@ import 'package:flame/rendering.dart';
 
 class DecoratorHueExample extends FlameGame with TapCallbacks {
   static const String description = '''
-  This example demonstrates the usage of `HueDecorator` to shift the 
-  colors of a component.
+This example demonstrates the usage of `HueDecorator` to shift the
+colors of a component.
 
-  Basic `HueDecorator` shifting the hue of an Ember component. 
-  
-  Click to cycle through hue shifts.
-  ''';
+Basic `HueDecorator` shifting the hue of an Ember component.
+
+Click to cycle through hue shifts.
+''';
 
   late final HueDecorator decorator;
   int step = 0;
@@ -23,25 +23,22 @@ class DecoratorHueExample extends FlameGame with TapCallbacks {
   Future<void> onLoad() async {
     decorator = HueDecorator();
     world.add(
-      _buildItem('HueDecorator', decorator),
+      PositionComponent(
+        size: Vector2(150, 120),
+        anchor: Anchor.center,
+        children: [
+          Ember(
+            size: Vector2.all(80),
+            position: Vector2(75, 40),
+          ),
+          TextComponent(
+            text: 'HueDecorator',
+            position: Vector2(75, 100),
+            anchor: Anchor.center,
+          ),
+        ],
+      )..decorator.addLast(decorator),
     );
-  }
-
-  PositionComponent _buildItem(String title, HueDecorator decorator) {
-    return PositionComponent(
-      size: Vector2(150, 120),
-      children: [
-        Ember(
-          size: Vector2.all(80),
-          position: Vector2(75, 40),
-        ),
-        TextComponent(
-          text: title,
-          position: Vector2(75, 100),
-          anchor: Anchor.center,
-        ),
-      ],
-    )..decorator.addLast(decorator);
   }
 
   @override

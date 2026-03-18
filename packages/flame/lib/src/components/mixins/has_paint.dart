@@ -148,10 +148,15 @@ mixin HasPaint<T extends Object> on Component
   void _updateColorFilter() {
     final filter = _hue == 0
         ? null
-        : ColorFilter.matrix(HueDecorator.hueMatrix(_hue));
+        : ColorFilter.matrix(hueRotationMatrix(_hue));
     paint.colorFilter = filter;
     for (final paint in _paints.values) {
       paint.colorFilter = filter;
+    }
+    if (paintLayersInternal != null) {
+      for (final layerPaint in paintLayersInternal!) {
+        layerPaint.colorFilter = filter;
+      }
     }
   }
 

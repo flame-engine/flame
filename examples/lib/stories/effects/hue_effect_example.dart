@@ -8,7 +8,7 @@ class HueEffectExample extends FlameGame {
   static const String description = '''
 In this example we show how the `HueEffect` can be used.
 Ember will shift its hue over time.
-  ''';
+''';
 
   @override
   Future<void> onLoad() async {

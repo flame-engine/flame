@@ -165,7 +165,7 @@ It can only be applied to components that implement the `HueProvider`.
 
 ```dart
 final effect = HueEffect.by(
-  2 * tau,
+  2 * pi,
   EffectController(duration: 3),
 );
 ```

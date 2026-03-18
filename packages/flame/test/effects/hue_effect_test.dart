@@ -48,6 +48,57 @@ void main() {
       expect(component.paint.colorFilter, isNull);
     });
   });
+
+  group('HueToEffect', () {
+    testWithFlameGame('animates hue to target angle', (game) async {
+      final component = _PaintComponent();
+      await game.ensureAdd(component);
+      await component.add(
+        HueEffect.to(pi, EffectController(duration: 1)),
+      );
+
+      game.update(0);
+      expect(component.hue, 0.0);
+
+      game.update(0.5);
+      expect(component.hue, closeTo(pi / 2, 0.001));
+
+      game.update(0.5);
+      expect(component.hue, closeTo(pi, 0.001));
+    });
+
+    testWithFlameGame('computes delta from current hue', (game) async {
+      final component = _PaintComponent();
+      component.hue = pi / 4;
+      await game.ensureAdd(component);
+      await component.add(
+        HueEffect.to(pi, EffectController(duration: 1)),
+      );
+
+      game.update(0);
+      expect(component.hue, closeTo(pi / 4, 0.001));
+
+      game.update(1);
+      expect(component.hue, closeTo(pi, 0.001));
+    });
+
+    testWithFlameGame('applies color filter', (game) async {
+      final component = _PaintComponent();
+      await game.ensureAdd(component);
+      await component.add(
+        HueEffect.to(pi / 2, EffectController(duration: 1)),
+      );
+
+      game.update(0);
+      expect(component.paint.colorFilter, isNull);
+
+      game.update(0.5);
+      expect(component.paint.colorFilter, isNotNull);
+
+      game.update(0.5);
+      expect(component.paint.colorFilter, isNotNull);
+    });
+  });
 }
 
 class _PaintComponent extends Component with HasPaint {}

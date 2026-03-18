@@ -9,7 +9,7 @@ void addDecoratorStories(Dashbook dashbook) {
     ..add(
       'Decorator Hue',
       (_) => GameWidget(game: DecoratorHueExample()),
-      codeLink: baseLink('rendering/hue_decorator_example.dart'),
+      codeLink: baseLink('rendering/decorator_hue_example.dart'),
       info: DecoratorHueExample.description,
     )
     ..add(

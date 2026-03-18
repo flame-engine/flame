@@ -10,7 +10,7 @@ class HueToEffect extends HueEffect {
     super.onComplete,
     super.key,
   }) : _destinationAngle = angle,
-       _angle = 0 {
+       _angle = 0.0 {
     this.target = target;
   }
 
