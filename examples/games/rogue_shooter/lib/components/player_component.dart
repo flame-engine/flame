@@ -3,9 +3,10 @@ import 'package:flame/components.dart';
 import 'package:rogue_shooter/components/bullet_component.dart';
 import 'package:rogue_shooter/components/enemy_component.dart';
 import 'package:rogue_shooter/components/explosion_component.dart';
+import 'package:rogue_shooter/rogue_shooter_game.dart';
 
 class PlayerComponent extends SpriteAnimationComponent
-    with HasGameReference, CollisionCallbacks {
+    with HasGameReference<RogueShooterGame>, CollisionCallbacks {
   late TimerComponent bulletCreator;
 
   PlayerComponent() : super(size: Vector2(50, 75), anchor: Anchor.center);
@@ -34,7 +35,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   final _bulletAngles = [0.5, 0.3, 0.0, -0.5, -0.3];
   void _createBullet() {
-    game.addAll(
+    game.bulletGroup.addAll(
       _bulletAngles.map(
         (angle) => BulletComponent(
           position: position + Vector2(0, -size.y / 2),
@@ -53,7 +54,7 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   void takeHit() {
-    game.add(ExplosionComponent(position: position));
+    game.explosionGroup.add(ExplosionComponent(position: position));
   }
 
   @override

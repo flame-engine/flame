@@ -25,6 +25,8 @@ export 'src/components/mixins/component_viewport_margin.dart';
 export 'src/components/mixins/coordinate_transform.dart';
 export 'src/components/mixins/gesture_hitboxes.dart';
 export 'src/components/mixins/has_ancestor.dart';
+export 'src/components/mixins/has_auto_batched_children.dart'
+    show HasAutoBatchedChildren;
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
 // ignore: deprecated_member_use_from_same_package
 export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
@@ -60,5 +62,6 @@ export 'src/geometry/circle_component.dart';
 export 'src/geometry/polygon_component.dart';
 export 'src/geometry/rectangle_component.dart';
 export 'src/geometry/shape_component.dart';
+export 'src/math/block.dart';
 export 'src/text/renderers/text_paint.dart';
 export 'src/timer.dart';

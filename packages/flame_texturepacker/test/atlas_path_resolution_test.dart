@@ -123,7 +123,7 @@ sprite1
 
       // Verify images.load call also includes the package
       verify(
-        () => images.load('images/test.png', package: 'my_package'),
+        () => images.load('test.png', package: 'my_package'),
       ).called(1);
     });
 
@@ -149,6 +149,57 @@ sprite1
         // Verify images.load also uses the extracted package
         verify(
           () => images.load('test.png', package: 'custom_package'),
+        ).called(1);
+      },
+    );
+
+    test(
+      'should load correctly when full assets/ path is provided with empty prefix',
+      () async {
+        final assets = AssetsCache(bundle: bundle);
+
+        await TexturePackerAtlas.load(
+          'assets/images/atlas_name.atlas',
+          assetsPrefix: '',
+          assets: assets,
+          images: images,
+        );
+
+        verify(
+          () => bundle.loadString(
+            'assets/images/atlas_name.atlas',
+            cache: any(named: 'cache'),
+          ),
+        ).called(1);
+      },
+    );
+
+    test(
+      'should handle redundant images/ prefix in atlas file for page images',
+      () async {
+        final assets = AssetsCache(bundle: bundle);
+        const redundantAtlasContent = '''
+images/test.png
+size: 64, 64
+filter: Nearest, Nearest
+repeat: none
+sprite1
+  bounds: 0, 0, 32, 32
+''';
+
+        when(
+          () => bundle.loadString(any(), cache: any(named: 'cache')),
+        ).thenAnswer((_) async => redundantAtlasContent);
+
+        await TexturePackerAtlas.load(
+          'atlas_name.atlas',
+          assets: assets,
+          images: images,
+        );
+
+        // Verify images.load call strips the redundant 'images/' from inside the atlas
+        verify(
+          () => images.load('test.png', package: any(named: 'package')),
         ).called(1);
       },
     );
