@@ -173,9 +173,6 @@ void main() {
         expect(blockB.activeCollisions.length, 0);
       },
       'correct collisions with many involved collidables': (game) async {
-        // Skip this test until it can be made non-flaky.
-        return;
-        // ignore: dead_code
         final rng = Random(0);
         List<TestBlock> generateBlocks(CollisionType type) {
           return List.generate(
