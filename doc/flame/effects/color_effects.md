@@ -150,6 +150,7 @@ final effect = HueEffect.to(
 );
 ```
 
+
 ## `HueByEffect`
 
 This effect will rotate the hue of the target relative by the specified angle in radians.

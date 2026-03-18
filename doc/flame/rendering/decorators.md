@@ -23,6 +23,7 @@ it involves `canvas.saveLayer()`.
   or `Paint` directly. These are extremely fast and hardware-accelerated, but they apply
   to each child individually.
 
+
 ### Decorators vs Effects: Visual Composition
 
 The key difference lies in how they handle composite objects (components with multiple
@@ -38,6 +39,7 @@ overlapping children):
    making the group look like a single solid object.
 
 **Recommendation**:
+
 - Use **Effects** for simple property animations and high-performance color shifts on
   large numbers of units.
 - Use **Decorators** for advanced post-processing (blurs, tints) and when you need
