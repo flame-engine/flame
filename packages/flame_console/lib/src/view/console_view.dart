@@ -57,11 +57,11 @@ class FlameConsoleView<G extends FlameGame> extends StatefulWidget {
 class _ConsoleKeyboardHandler extends Component with KeyboardHandler {
   _ConsoleKeyboardHandler(this._onKeyEvent);
 
-  final void Function(KeyEvent) _onKeyEvent;
+  final KeyEventResult Function(KeyEvent, Set<LogicalKeyboardKey>) _onKeyEvent;
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    _onKeyEvent(event);
+    _onKeyEvent(event, keysPressed);
     return false;
   }
 }
