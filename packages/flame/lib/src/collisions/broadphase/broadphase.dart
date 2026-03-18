@@ -67,7 +67,7 @@ class CollisionProspect<T> {
   int _hash;
 
   CollisionProspect(this._a, this._b)
-      : _hash = _pairHash(_a.hashCode, _b.hashCode);
+    : _hash = _pairHash(_a.hashCode, _b.hashCode);
 
   /// Computes a hash for an unordered pair of hash codes that is much less
   /// likely to collide than a simple XOR.
