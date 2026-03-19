@@ -141,12 +141,12 @@ void main() {
   vec3 baseColor = material.albedoColor.rgb;
   baseColor *= texture(albedoTexture, fragTexCoord).rgb;
 
-  vec3 baseAmbient = vec3(0.03) * baseColor * ambientLight.color.rgb * ambientLight.intensity;
-  vec3 ao = vec3(1.0); // white - no ambient occlusion for now
-  vec3 ambient = baseAmbient * ao;
-
   vec3 f0 = vec3(0.04);
   vec3 diffuse = mix(f0, baseColor, material.metallic);
+
+  vec3 kS = fresnelSchlick(max(dot(normal, viewDir), 0.0), diffuse);
+  vec3 kD = (vec3(1.0) - kS) * (1.0 - material.metallic);
+  vec3 ambient = kD * baseColor * ambientLight.color.rgb * ambientLight.intensity;
 
   vec3 lo = vec3(0.0);
 
