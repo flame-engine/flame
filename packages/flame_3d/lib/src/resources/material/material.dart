@@ -41,5 +41,8 @@ abstract class Material extends Resource<gpu.RenderPipeline> {
     recreateResource = true;
   }
 
+  /// Face culling mode for this material. Defaults to [CullMode.backFace].
+  CullMode cullMode = CullMode.backFace;
+
   void bind(GraphicsDevice device) {}
 }
