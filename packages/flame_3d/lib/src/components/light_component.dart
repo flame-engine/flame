@@ -45,6 +45,7 @@ class LightComponent extends Component3D {
 
   @override
   void onMount() {
+    super.onMount();
     assert(
       parent is World3D,
       'Lights must be added to the root of the World3D',
