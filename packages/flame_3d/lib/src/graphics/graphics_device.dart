@@ -24,7 +24,7 @@ enum DepthStencilState {
 ///
 /// Assign to [Material.cullMode] to control per-material culling.
 enum CullMode {
-  /// No culling — both front and back faces are rendered.
+  /// No culling, both front and back faces are rendered.
   none,
 
   /// Cull front-facing triangles (render only back faces).
