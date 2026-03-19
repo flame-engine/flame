@@ -5,7 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_texturepacker/src/model/region.dart';
-import 'package:flutter/material.dart';
 
 /// {@template _texture_packer_sprite}
 /// A [Sprite] extracted from a texture packer file.
@@ -14,7 +13,7 @@ class TexturePackerSprite extends Sprite {
   /// {@macro _texture_packer_sprite}
   TexturePackerSprite(this.region, {this.useOriginalSize = true})
     : super(
-        region.page.texture,
+        region.page.texture ?? _emptyImage,
         srcPosition: Vector2(region.left, region.top),
         srcSize: Vector2(
           useOriginalSize ? region.originalWidth : region.width,
@@ -102,6 +101,12 @@ class TexturePackerSprite extends Sprite {
     Paint? overridePaint,
     double? bleed,
   }) {
+    if (!region.page.isLoaded) {
+      throw StateError(
+        'Texture for page "${region.page.textureFile}" has not been loaded. '
+        'Call loadAtlasDataImages() before rendering.',
+      );
+    }
     if (position != null) {
       _tmpRenderPosition.setFrom(position);
     } else {
@@ -168,5 +173,15 @@ class TexturePackerSprite extends Sprite {
       ),
       canvas,
     );
+  }
+
+  /// Placeholder image used when texture is not yet loaded.
+  static final Image _emptyImage = _createEmptyImage();
+
+  static Image _createEmptyImage() {
+    final recorder = PictureRecorder();
+    Canvas(recorder);
+    final picture = recorder.endRecording();
+    return picture.toImageSync(1, 1);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 
 /// The [Broadphase] class is used to make collision detection more efficient
@@ -64,14 +66,21 @@ class CollisionProspect<T> {
   int get hash => _hash;
   int _hash;
 
-  CollisionProspect(this._a, this._b) : _hash = _a.hashCode ^ _b.hashCode;
+  CollisionProspect(this._a, this._b)
+    : _hash = _pairHash(_a.hashCode, _b.hashCode);
+
+  /// Computes a hash for an unordered pair of hash codes that is much less
+  /// likely to collide than a simple XOR.
+  static int _pairHash(int h1, int h2) {
+    return Object.hash(min(h1, h2), max(h1, h2));
+  }
 
   /// Sets the prospect to contain [a] and [b] instead of what it previously
   /// contained.
   void set(T a, T b) {
     _a = a;
     _b = b;
-    _hash = a.hashCode ^ b.hashCode;
+    _hash = _pairHash(a.hashCode, b.hashCode);
   }
 
   /// Sets the prospect to contain the content of [other].
