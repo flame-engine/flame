@@ -1,4 +1,5 @@
 export 'src/rendering/decorator.dart' show Decorator;
+export 'src/rendering/hue_decorator.dart' show HueDecorator, hueRotationMatrix;
 export 'src/rendering/mutable_transform.dart' show MutableRSTransform;
 export 'src/rendering/paint_decorator.dart' show PaintDecorator;
 export 'src/rendering/rotate3d_decorator.dart' show Rotate3DDecorator;
