@@ -29,6 +29,7 @@ import 'package:examples/stories/image/image.dart';
 import 'package:examples/stories/input/input.dart';
 import 'package:examples/stories/layout/layout.dart';
 import 'package:examples/stories/parallax/parallax.dart';
+import 'package:examples/stories/rendering/decorators.dart';
 import 'package:examples/stories/rendering/rendering.dart';
 import 'package:examples/stories/router/router.dart';
 import 'package:examples/stories/sprites/sprites.dart';
@@ -83,6 +84,7 @@ void runAsDashbook() {
   addCameraAndViewportStories(dashbook);
   addCollisionDetectionStories(dashbook);
   addComponentsStories(dashbook);
+  addDecoratorStories(dashbook);
   addEffectsStories(dashbook);
   addExperimentalStories(dashbook);
   addInputStories(dashbook);
