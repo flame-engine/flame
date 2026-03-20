@@ -3,6 +3,10 @@
 flame_typled provides integration between [Typled](https://pub.dev/packages/typled) sprite atlases
 and Flame.
 
+Typled is simple text based format to map sprite sheets, tile sets and tile maps. It provides a dart
+package to parse the text files into usable dart models and an application to allow visualization of
+the files.
+
 Import the `TypledSpriteAtlas` class from `'package:flame_typled/flame_typled.dart'` and load your
 atlas:
 

@@ -26,4 +26,8 @@ Adds support for loading <a href="https://pub.dev/packages/typled">Typled</a> sp
 
 Package to add Typled sprite atlas support Flame's sprites.
 
+Typled is simple text based format to map sprite sheets, tile sets and tile maps. It provides a dart
+package to parse the text files into usable dart models and an application to allow visualization of
+the files.
+
 More [here](https://docs.flame-engine.org/main/bridge_packages/flame_typled/flame_typled.html).

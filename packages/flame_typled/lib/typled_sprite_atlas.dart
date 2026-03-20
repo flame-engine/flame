@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:typled/typled.dart';
 
@@ -71,9 +73,10 @@ class TypledSpriteAtlas {
   /// without edge-repeated padding.
   static Future<TypledSpriteAtlas> load(
     String path, {
+    AssetsCache? cache,
     bool disablePadding = false,
   }) async {
-    final atlas = await _loadAtlas(path);
+    final atlas = await _loadAtlas(path, cache: cache);
     final originalImage = await Flame.images.load(atlas.imagePath);
     const padding = 2;
     final image = disablePadding
@@ -193,7 +196,29 @@ class TypledSpriteAtlas {
     return picture.toImage(newWidth, newHeight);
   }
 
-  static Future<TypledAtlas> _loadAtlas(String path) async {
-    return TypledAtlas.parse(await Flame.assets.readFile(path));
+  static Future<TypledAtlas> _loadAtlas(
+    String path, {
+    AssetsCache? cache,
+  }) async {
+    return TypledAtlas.parse(await (cache ?? Flame.assets).readFile(path));
+  }
+}
+
+/// Extension on [Game] to provide convenience methods for loading
+/// a [TypledSpriteAtlas].
+extension TypledSpriteAtlasGameExtension on Game {
+  /// Loads a [TypledSpriteAtlas] from the given asset [path].
+  ///
+  /// When [disablePadding] is `true`, the original image is used as-is
+  /// without edge-repeated padding.
+  Future<TypledSpriteAtlas> loadTypledAtlas(
+    String path, {
+    bool disablePadding = false,
+  }) async {
+    return TypledSpriteAtlas.load(
+      path,
+      cache: assets,
+      disablePadding: disablePadding,
+    );
   }
 }
