@@ -25,6 +25,7 @@ abstract class Object3D extends Component3D {
     super.position,
     super.scale,
     super.rotation,
+    super.children,
   });
 
   @override

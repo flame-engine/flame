@@ -42,12 +42,41 @@ abstract class Component3D extends Component with HasWorldReference<World3D> {
          ..position = position ?? Vector3.zero()
          ..rotation = rotation ?? Quaternion.euler(0, 0, 0)
          ..scale = scale ?? Vector3.all(1),
-       super(children: children);
+       super(children: children) {
+    this.children.register<Component3D>();
+    _childComponents = this.children.query<Component3D>();
+    transform.addListener(_onTransformChanged);
+  }
+
+  late final Iterable<Component3D> _childComponents;
 
   /// The total transformation matrix for the component. This matrix combines
   /// translation, rotation and scale transforms into a single entity. The
   /// matrix is cached and gets recalculated only as necessary.
   Matrix4 get transformMatrix => transform.transformMatrix;
+
+  /// The world-space transformation matrix, accounting for all ancestor
+  /// [Component3D]s.
+  ///
+  /// The result is cached and only recomputed when this component's or an
+  /// ancestor's transform changes.
+  Matrix4 get worldTransformMatrix {
+    if (!_worldTransformDirty) {
+      return _worldTransformMatrix;
+    }
+    _worldTransformDirty = false;
+
+    final p = parent;
+    if (p is Component3D) {
+      return _worldTransformMatrix
+        ..setFrom(p.worldTransformMatrix)
+        ..multiply(transformMatrix);
+    }
+    return _worldTransformMatrix..setFrom(transformMatrix);
+  }
+
+  final Matrix4 _worldTransformMatrix = Matrix4.identity();
+  bool _worldTransformDirty = true;
 
   /// The position of this component's anchor on the screen.
   NotifyingVector3 get position => transform.position;
@@ -80,4 +109,28 @@ abstract class Component3D extends Component with HasWorldReference<World3D> {
   /// Measure the distance (in parent's coordinate space) between this
   /// component's anchor and the [other] component's anchor.
   double distance(Component3D other) => position.distanceTo(other.position);
+
+  @override
+  void onMount() {
+    super.onMount();
+    _markWorldTransformDirty();
+  }
+
+  /// Mark this component's world transform as needing recomputation.
+  ///
+  /// This propagates down to child [Component3D]s so the entire subtree
+  /// stays consistent.
+  void _markWorldTransformDirty() {
+    if (_worldTransformDirty) {
+      return;
+    }
+    _worldTransformDirty = true;
+    for (final child in _childComponents) {
+      child._markWorldTransformDirty();
+    }
+  }
+
+  void _onTransformChanged() {
+    _markWorldTransformDirty();
+  }
 }
