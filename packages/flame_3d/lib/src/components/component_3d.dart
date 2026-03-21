@@ -2,6 +2,7 @@ import 'package:flame/components.dart' show Component, HasWorldReference;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
+import 'package:meta/meta.dart';
 
 /// {@template component_3d}
 /// [Component3D] is a base class for any concept that lives in 3D space.
@@ -110,10 +111,76 @@ abstract class Component3D extends Component with HasWorldReference<World3D> {
   /// component's anchor and the [other] component's anchor.
   double distance(Component3D other) => position.distanceTo(other.position);
 
+  /// The world-space axis-aligned bounding box for this component and all its
+  /// [Component3D] children.
+  ///
+  /// Subclasses with geometry (e.g. [MeshComponent]) override
+  /// [computeLocalAabb] to include their own mesh bounds.
+  Aabb3 get aabb {
+    if (_aabbDirty) {
+      _recomputeAabb();
+      _aabbDirty = false;
+    }
+    return _cachedAabb;
+  }
+
+  final Aabb3 _cachedAabb = Aabb3();
+  bool _aabbDirty = true;
+
+  /// Compute the local-space AABB for this component's own geometry.
+  ///
+  /// The base implementation returns `null` (no geometry). Subclasses with
+  /// geometry should override this to return their mesh/model AABB.
+  @protected
+  Aabb3? computeLocalAabb() => null;
+
   @override
   void onMount() {
     super.onMount();
     _markWorldTransformDirty();
+  }
+
+  void _recomputeAabb() {
+    final localAabb = computeLocalAabb();
+    var initialized = false;
+
+    if (localAabb != null) {
+      _cachedAabb
+        ..setFrom(localAabb)
+        ..transform(worldTransformMatrix);
+      initialized = true;
+    }
+
+    for (final child in _childComponents) {
+      if (initialized) {
+        _cachedAabb.hull(child.aabb);
+      } else {
+        _cachedAabb.setFrom(child.aabb);
+        initialized = true;
+      }
+    }
+
+    if (!initialized) {
+      // No geometry and no children, so degenerate to point at position.
+      _cachedAabb
+        ..min.setFrom(position)
+        ..max.setFrom(position);
+    }
+  }
+
+  /// Mark this component's AABB as needing recomputation.
+  ///
+  /// This propagates up to parent [Component3D]s so the entire hierarchy
+  /// stays consistent.
+  void markAabbDirty() {
+    if (_aabbDirty) {
+      return;
+    }
+    _aabbDirty = true;
+
+    if (parent case final Component3D parent) {
+      parent.markAabbDirty();
+    }
   }
 
   /// Mark this component's world transform as needing recomputation.
@@ -132,5 +199,6 @@ abstract class Component3D extends Component with HasWorldReference<World3D> {
 
   void _onTransformChanged() {
     _markWorldTransformDirty();
+    markAabbDirty();
   }
 }

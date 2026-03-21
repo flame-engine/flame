@@ -20,10 +20,8 @@ class ModelComponent extends Object3D {
     super.scale,
   });
 
-  Aabb3 get aabb => _aabb
-    ..setFrom(model.aabb)
-    ..transform(transformMatrix);
-  final Aabb3 _aabb = Aabb3();
+  @override
+  Aabb3? computeLocalAabb() => model.aabb;
 
   @override
   void bind(GraphicsDevice device) {
