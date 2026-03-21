@@ -21,6 +21,7 @@ Supabase # Supabase, one of our sponsors https://supabase.com/
 terminui # A terminal UI library for Flutter
 texturepacker # a packed spritesheet format
 Tilemap # What tile maps are called within Tiled
+typled # A grid map and sprite sheet tool https://github.com/erickzanardo/typled
 vantablack # brand name for a famous super-black ink known as the darkest ever made
 Weasley # Ron Weasley, a character from the book Harry Potter
 Wyrmsun # An open-source real-time strategy game https://www.indiedb.com/games/wyrmsun

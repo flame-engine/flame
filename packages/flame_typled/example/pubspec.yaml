@@ -1,0 +1,25 @@
+name: flame_typled_example
+resolution: workspace
+description: "An example for the TypledSpriteAtlas."
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+dependencies:
+  flame: ^1.36.0
+  flame_typled: ^0.1.0
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.4.3
+
+flutter:
+  uses-material-design: false
+  assets:
+    - assets/images/
+    - assets/
