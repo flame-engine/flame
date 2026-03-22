@@ -33,8 +33,8 @@ class ModelComponent extends Object3D {
 
       final mesh = node.node.mesh;
       if (mesh != null) {
-        device.jointsInfo.jointTransformsPerSurface = node.jointTransforms;
-        world.device
+        device
+          ..jointsInfo.jointTransformsPerSurface = node.jointTransforms
           ..model.setFrom(
             worldTransformMatrix.multiplied(node.combinedTransform),
           )
