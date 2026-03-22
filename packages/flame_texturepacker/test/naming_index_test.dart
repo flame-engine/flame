@@ -36,7 +36,7 @@ void main() {
       return atlasData.regions;
     }
 
-    test('Pattern image1', () async {
+    test('Name with trailing digits is preserved as-is', () async {
       final regions = await createAndLoadRegions('''
 test.png
 size: 64, 64
@@ -50,11 +50,11 @@ image1
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image1');
+      expect(regions.first.index, -1);
     });
 
-    test('Pattern image01', () async {
+    test('Name with zero-padded trailing digits is preserved', () async {
       final regions = await createAndLoadRegions('''
 test.png
 size: 64, 64
@@ -68,11 +68,11 @@ image01
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image01');
+      expect(regions.first.index, -1);
     });
 
-    test('Pattern image_1', () async {
+    test('Name with underscore and digit is preserved', () async {
       final regions = await createAndLoadRegions('''
 test.png
 size: 64, 64
@@ -86,11 +86,11 @@ image_1
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image_1');
+      expect(regions.first.index, -1);
     });
 
-    test('Pattern image_01', () async {
+    test('Name with underscore and zero-padded digit is preserved', () async {
       final regions = await createAndLoadRegions('''
 test.png
 size: 64, 64
@@ -104,11 +104,11 @@ image_01
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image_01');
+      expect(regions.first.index, -1);
     });
 
-    test('Pattern image001', () async {
+    test('Name with triple-zero-padded digit is preserved', () async {
       final regions = await createAndLoadRegions('''
 test.png
 size: 64, 64
@@ -122,11 +122,11 @@ image001
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image001');
+      expect(regions.first.index, -1);
     });
 
-    test('Index field overrides name-based index if positive', () async {
+    test('Explicit index field is used when present', () async {
       final regions = await createAndLoadRegions('''
 test.png
 size: 64, 64
@@ -141,7 +141,7 @@ image_01
   offset: 0, 0
   index: 5
 ''');
-      expect(regions.first.name, 'image');
+      expect(regions.first.name, 'image_01');
       expect(regions.first.index, 5);
     });
   });

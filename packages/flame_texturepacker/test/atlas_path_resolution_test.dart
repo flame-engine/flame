@@ -258,7 +258,7 @@ sprite1
     );
 
     test(
-      'should correctly parse region names with .png and extracted indexes',
+      'should preserve region names with trailing digits (no index stripping)',
       () async {
         final assets = AssetsCache(bundle: bundle);
         const complexAtlasContent = '''
@@ -282,11 +282,48 @@ knight_walk_02.png
           images: images,
         );
 
+        // Names should be preserved as-is (minus .png extension).
+        // Index only comes from the explicit 'index:' field in the atlas.
+        expect(atlas.sprites.length, 2);
+        expect(atlas.sprites[0].region.name, 'knight_walk_01');
+        expect(atlas.sprites[0].region.index, -1);
+        expect(atlas.sprites[1].region.name, 'knight_walk_02');
+        expect(atlas.sprites[1].region.index, -1);
+      },
+    );
+
+    test(
+      'should use explicit index field from atlas',
+      () async {
+        final assets = AssetsCache(bundle: bundle);
+        const indexedAtlasContent = '''
+knight.png
+size: 64, 64
+filter: Nearest, Nearest
+repeat: none
+knight_walk
+  bounds: 0, 0, 32, 32
+  index: 0
+knight_walk
+  bounds: 32, 0, 32, 32
+  index: 1
+''';
+
+        when(
+          () => bundle.loadString(any(), cache: any(named: 'cache')),
+        ).thenAnswer((_) async => indexedAtlasContent);
+
+        final atlas = await TexturePackerAtlas.load(
+          'knight.atlas',
+          assets: assets,
+          images: images,
+        );
+
         expect(atlas.sprites.length, 2);
         expect(atlas.sprites[0].region.name, 'knight_walk');
-        expect(atlas.sprites[0].region.index, 1);
+        expect(atlas.sprites[0].region.index, 0);
         expect(atlas.sprites[1].region.name, 'knight_walk');
-        expect(atlas.sprites[1].region.index, 2);
+        expect(atlas.sprites[1].region.index, 1);
       },
     );
   });
