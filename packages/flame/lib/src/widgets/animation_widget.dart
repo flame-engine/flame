@@ -34,6 +34,10 @@ class SpriteAnimationWidget extends StatefulWidget {
   /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
+  /// The size of the widget. If null, the size will be derived from the
+  /// animation.
+  final Size? size;
+
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
     required SpriteAnimationTicker animationTicker,
@@ -43,6 +47,7 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.loadingBuilder,
     this.onComplete,
     this.paint,
+    this.size,
     super.key,
   }) : _animationFuture = animation,
        _animationTicker = animationTicker;
@@ -63,6 +68,7 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.loadingBuilder,
     this.onComplete,
     this.paint,
+    this.size,
     String? package,
     super.key,
   }) : _animationFuture = SpriteAnimation.load(
@@ -132,13 +138,20 @@ class _SpriteAnimationWidgetState extends State<SpriteAnimationWidget> {
         final ticker = _animationTicker ?? spriteAnimation.createTicker();
         ticker.completed.then((_) => widget.onComplete?.call());
 
-        return InternalSpriteAnimationWidget(
+        final internalWidget = InternalSpriteAnimationWidget(
           animation: spriteAnimation,
           animationTicker: ticker,
           anchor: widget.anchor,
           playing: widget.playing,
           paint: widget.paint,
         );
+        if (widget.size != null) {
+          return SizedBox.fromSize(
+            size: widget.size,
+            child: internalWidget,
+          );
+        }
+        return internalWidget;
       },
       errorBuilder: widget.errorBuilder,
       loadingBuilder: widget.loadingBuilder,
