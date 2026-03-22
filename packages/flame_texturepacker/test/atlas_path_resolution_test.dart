@@ -85,6 +85,59 @@ sprite1
       ).called(1);
     });
 
+    test('should not apply assetsPrefix to image paths loaded via Images',
+        () async {
+      final assets = AssetsCache(bundle: bundle);
+
+      await TexturePackerAtlas.load(
+        'atlas_name.atlas',
+        assets: assets,
+        images: images,
+      );
+
+      // assetsPrefix is for Flame.assets (prefix 'assets/'), NOT for
+      // Flame.images (prefix 'assets/images/'). The image path must be
+      // relative to Flame.images's prefix, without assetsPrefix applied.
+      verify(
+        () => images.load('test.png', package: any(named: 'package')),
+      ).called(1);
+    });
+
+    test(
+      'should not double-prefix image paths in subdirectories',
+      () async {
+        final assets = AssetsCache(bundle: bundle);
+        const subDirAtlasContent = '''
+textures.png
+size: 64, 64
+filter: Nearest, Nearest
+repeat: none
+sprite1
+  bounds: 0, 0, 32, 32
+''';
+
+        when(
+          () => bundle.loadString(any(), cache: any(named: 'cache')),
+        ).thenAnswer((_) async => subDirAtlasContent);
+
+        await TexturePackerAtlas.load(
+          'packs/atlas_name.atlas',
+          assets: assets,
+          images: images,
+        );
+
+        // The image path should be 'packs/textures.png' (parent dir + filename),
+        // NOT 'images/packs/textures.png' which would cause Flame.images to
+        // resolve 'assets/images/images/packs/textures.png'.
+        verify(
+          () => images.load(
+            'packs/textures.png',
+            package: any(named: 'package'),
+          ),
+        ).called(1);
+      },
+    );
+
     test('should handle assetsPrefix WITHOUT trailing slash', () async {
       final assets = AssetsCache(bundle: bundle);
 
