@@ -32,7 +32,7 @@ class SpriteWidget extends StatefulWidget {
   /// If the Sprite should be rasterized or not.
   final bool rasterize;
 
-  /// The size of the widget. If null, the size will be derived from the sprite.
+  /// The size of the widget. If null, the widget will fill the available space.
   final Size? size;
 
   final FutureOr<Sprite> _spriteFuture;

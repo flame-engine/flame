@@ -34,8 +34,7 @@ class SpriteAnimationWidget extends StatefulWidget {
   /// When omitted the default paint from the [Sprite] class will be used.
   final Paint? paint;
 
-  /// The size of the widget. If null, the size will be derived from the
-  /// animation.
+  /// The size of the widget. If null, the widget will fill the available space.
   final Size? size;
 
   const SpriteAnimationWidget({
