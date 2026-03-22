@@ -128,16 +128,6 @@ abstract class TexturePackerParser {
         img.add(texturePath, image);
         page.texture = img.fromCache(texturePath);
       } else {
-        final prefix = (assetsPrefix ?? '').trim();
-        if (prefix.isNotEmpty &&
-            !texturePath.contains('packages/') &&
-            !texturePath.startsWith('assets/')) {
-          final effectivePrefix = prefix.endsWith('/') ? prefix : '$prefix/';
-          if (!texturePath.startsWith(effectivePrefix)) {
-            texturePath = '$effectivePrefix$texturePath';
-          }
-        }
-
         final resolved = resolvePath(texturePath, package);
         final assetsCachePrefix = (assets ?? Flame.assets).prefix;
 
