@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 
@@ -54,22 +53,22 @@ class SpatialMaterial extends Material {
   double roughness;
 
   @override
-  void bind(GraphicsDevice device) {
-    _bindVertexInfo(device);
-    _bindJointMatrices(device);
-    _bindMaterial(device);
-    _bindCamera(device);
+  void apply(covariant RenderContext3D context) {
+    _bindVertexInfo(context);
+    _bindJointMatrices(context);
+    _bindMaterial(context);
+    _bindCamera(context);
   }
 
-  void _bindVertexInfo(GraphicsDevice device) {
+  void _bindVertexInfo(RenderContext3D context) {
     vertexShader
-      ..setMatrix4('VertexInfo.model', device.model)
-      ..setMatrix4('VertexInfo.view', device.view)
-      ..setMatrix4('VertexInfo.projection', device.projection);
+      ..setMatrix4('VertexInfo.model', context.model)
+      ..setMatrix4('VertexInfo.view', context.view)
+      ..setMatrix4('VertexInfo.projection', context.projection);
   }
 
-  void _bindJointMatrices(GraphicsDevice device) {
-    final jointTransforms = device.jointsInfo.jointTransforms;
+  void _bindJointMatrices(RenderContext3D context) {
+    final jointTransforms = context.jointsInfo.jointTransforms;
     if (jointTransforms.length > _maxJoints) {
       throw Exception(
         'At most $_maxJoints joints per surface are supported;'
@@ -81,8 +80,8 @@ class SpatialMaterial extends Material {
     }
   }
 
-  void _bindMaterial(GraphicsDevice device) {
-    _applyLights(device);
+  void _bindMaterial(RenderContext3D context) {
+    context.lightingInfo.apply(fragmentShader);
     fragmentShader
       ..setTexture('albedoTexture', albedoTexture)
       ..setColor('Material.albedoColor', albedoColor)
@@ -90,14 +89,8 @@ class SpatialMaterial extends Material {
       ..setFloat('Material.roughness', roughness);
   }
 
-  void _bindCamera(GraphicsDevice device) {
-    final invertedView = Matrix4.inverted(device.view);
-    final cameraPosition = invertedView.transform3(Vector3.zero());
-    fragmentShader.setVector3('Camera.position', cameraPosition);
-  }
-
-  void _applyLights(GraphicsDevice device) {
-    device.lightingInfo.apply(fragmentShader);
+  void _bindCamera(RenderContext3D context) {
+    fragmentShader.setVector3('Camera.position', context.cameraPosition);
   }
 
   static const _maxJoints = 16;

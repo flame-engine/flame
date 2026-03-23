@@ -24,7 +24,7 @@ class ModelComponent extends Object3D {
   Aabb3? computeLocalAabb() => model.aabb;
 
   @override
-  void bind(GraphicsDevice device) {
+  void draw(covariant RenderContext3D context) {
     final nodes = model.processNodes(_animation);
     for (final MapEntry(key: index, value: node) in nodes.entries) {
       if (_hiddenNodes.contains(index)) {
@@ -33,12 +33,12 @@ class ModelComponent extends Object3D {
 
       final mesh = node.node.mesh;
       if (mesh != null) {
-        device
+        context
           ..jointsInfo.jointTransformsPerSurface = node.jointTransforms
           ..model.setFrom(
             worldTransformMatrix.multiplied(node.combinedTransform),
           )
-          ..bindMesh(mesh);
+          ..drawMesh(mesh);
       }
     }
   }

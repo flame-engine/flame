@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flame_3d/src/graphics/gpu_context_wrapper.dart';
-import 'package:flame_3d/src/graphics/joints_info.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 enum BlendState {
@@ -59,24 +58,7 @@ class GraphicsDevice {
   late gpu.RenderPass _renderPass;
   late gpu.RenderTarget _renderTarget;
 
-  Matrix4 get model => _modelMatrix;
-  final Matrix4 _modelMatrix = Matrix4.zero();
-
-  Matrix4 get view => _viewMatrix;
-  final Matrix4 _viewMatrix = Matrix4.zero();
-
-  Matrix4 get projection => _projectionMatrix;
-  final Matrix4 _projectionMatrix = Matrix4.zero();
-
   Size _previousSize = Size.zero;
-
-  /// Must be set by the rendering pipeline before elements are bound.
-  /// Can be accessed by elements in their bind method.
-  final JointsInfo jointsInfo = JointsInfo();
-
-  /// Must be set by the rendering pipeline before elements are bound.
-  /// Can be accessed by elements in their bind method.
-  final LightingInfo lightingInfo = LightingInfo();
 
   /// Begin a new rendering batch.
   ///
@@ -126,16 +108,15 @@ class GraphicsDevice {
     _renderPass.clearBindings();
   }
 
-  /// Bind a [mesh].
-  void bindMesh(Mesh mesh) {
-    mesh.bind(this);
+  /// Bind a render [pipeline] with the given [cullMode].
+  void bindPipeline(gpu.RenderPipeline pipeline, CullMode cullMode) {
+    _renderPass
+      ..bindPipeline(pipeline)
+      ..setCullMode(gpu.CullMode.values[cullMode.index]);
   }
 
-  /// Bind a [surface].
-  void bindSurface(Surface surface) {
-    _renderPass.clearBindings();
-    bindMaterial(surface.material);
-
+  /// Bind a [surface]'s geometry (vertex/index buffers) and draw.
+  void bindGeometry(Surface surface) {
     _renderPass.bindVertexBuffer(
       gpu.BufferView(
         surface.resource!,
@@ -156,17 +137,6 @@ class GraphicsDevice {
     );
 
     _renderPass.draw();
-  }
-
-  /// Bind a [material] and set up the buffer correctly.
-  void bindMaterial(Material material) {
-    _renderPass
-      ..bindPipeline(material.resource)
-      ..setCullMode(gpu.CullMode.values[material.cullMode.index]);
-
-    material.bind(this);
-    material.vertexShader.bind(this);
-    material.fragmentShader.bind(this);
   }
 
   /// Bind a uniform [slot] to the [buffer].

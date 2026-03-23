@@ -10,8 +10,8 @@ import 'package:flame_3d/resources.dart';
 /// {@template object_3d}
 /// [Object3D]s are the basic building blocks for a 3D [FlameGame].
 ///
-/// It is an object that is positioned in 3D space and can be bind to be
-/// rendered by a [GraphicsDevice].
+/// It is an object that is positioned in 3D space and can be drawn by a
+/// [RenderContext].
 ///
 /// However, it has no visual representation of its own (except in
 /// debug mode). It is common, therefore, to derive from this class
@@ -61,23 +61,13 @@ abstract class Object3D extends Component3D {
     _ancestorFullyInside = wasAncestorFullyInside;
 
     if (cullResult == CullResult.inside || shouldCull(camera!)) {
-      // We set the priority to the distance between the camera and the object.
-      // This ensures that our rendering is done in a specific order allowing
-      // for alpha blending.
-      //
-      // Note(wolfenrain): we should optimize this in the long run it currently
-      // sucks.
-      priority = -(CameraComponent3D.currentCamera!.position - position).length
-          .abs()
-          .toInt();
-
-      bind(world.device);
+      world.context.submitDraw(this, worldTransformMatrix);
     } else {
       world.culled++;
     }
   }
 
-  void bind(GraphicsDevice device);
+  void draw(RenderContext context);
 
   bool shouldCull(CameraComponent3D camera) {
     return camera.frustum.containsVector3(position);

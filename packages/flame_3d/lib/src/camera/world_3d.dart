@@ -20,13 +20,13 @@ class World3D extends flame.World with flame.HasGameReference {
     super.children,
     super.priority,
     Color clearColor = const Color(0x00000000),
-  }) : device = GraphicsDevice(clearValue: clearColor) {
+  }) : context = RenderContext3D(GraphicsDevice(clearValue: clearColor)) {
     children.register<LightComponent>();
   }
 
-  /// The graphical device attached to this world.
+  /// The 3D render context attached to this world.
   @internal
-  final GraphicsDevice device;
+  final RenderContext3D context;
 
   Iterable<Light> get lights =>
       children.query<LightComponent>().map((component) => component.light);
@@ -45,20 +45,18 @@ class World3D extends flame.World with flame.HasGameReference {
       viewport.virtualSize.y * devicePixelRatio,
     );
 
-    device
-      // Set the view matrix
-      ..view.setFrom(camera.viewMatrix)
-      // Set the projection matrix
-      ..projection.setFrom(camera.projectionMatrix)
-      ..begin(size);
+    context
+      ..setCamera(camera.viewMatrix, camera.projectionMatrix)
+      ..device.begin(size);
 
     culled = 0;
 
-    _prepareDevice();
+    _prepareContext();
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
+    context.flush();
 
-    final image = device.end();
+    final image = context.device.end();
     canvas.drawImageRect(
       image,
       Offset.zero & size,
@@ -70,8 +68,8 @@ class World3D extends flame.World with flame.HasGameReference {
   }
 
   // TODO(luan): consider making this a fixed-size array later
-  void _prepareDevice() {
-    device.lightingInfo.lights = lights;
+  void _prepareContext() {
+    context.lightingInfo.lights = lights;
   }
 
   // TODO(wolfenrain): this is only here for testing purposes

@@ -1,8 +1,8 @@
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flame_3d/src/camera/camera_component_3d.dart';
-import 'package:flame_3d/src/graphics/graphics_device.dart';
 
 /// {@template mesh_component}
 /// An [Object3D] that renders a [Mesh] at the [position] with the [rotation]
@@ -27,10 +27,10 @@ class MeshComponent extends Object3D {
   Aabb3? computeLocalAabb() => mesh.aabb;
 
   @override
-  void bind(GraphicsDevice device) {
-    device
+  void draw(covariant RenderContext3D context) {
+    context
       ..model.setFrom(worldTransformMatrix)
-      ..bindMesh(mesh);
+      ..drawMesh(mesh);
   }
 
   @override
