@@ -118,7 +118,7 @@ class OverlayManager {
   /// [priority] is used to sort widgets for [buildCurrentOverlayWidgets]
   /// The smaller the priority, the sooner your component will be build
   /// (see [add] for more details).
-  bool setActive(String overlayName, bool active, {int priority = 0}) {
+  bool setActive(String overlayName, {required bool active, int priority = 0}) {
     if (active == isActive(overlayName)) {
       return false;
     }
