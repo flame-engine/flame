@@ -30,6 +30,8 @@ class UniformSlot extends Resource<gpu.UniformSlot?> {
 
   gpu.UniformSlot? _uniformSlot;
 
+  bool get isCompiled => _uniformSlot != null;
+
   set uniformSlot(gpu.UniformSlot value) {
     _uniformSlot = value;
     recreateResource = true;
