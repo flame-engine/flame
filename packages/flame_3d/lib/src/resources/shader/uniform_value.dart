@@ -47,8 +47,7 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
 
   void operator []=(String key, Float32List data) {
     assert(
-      !slot.isCompiled ||
-          slot.resource!.getMemberOffsetInBytes(key) != null,
+      !slot.isCompiled || slot.resource!.getMemberOffsetInBytes(key) != null,
       'Field "$key" not found in uniform "${slot.name}"',
     );
 
