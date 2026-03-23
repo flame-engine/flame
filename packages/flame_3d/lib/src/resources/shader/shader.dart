@@ -139,7 +139,7 @@ class Shader {
   }
 
   static Float32List _encodeUint32(int value, Endian endian) {
-    return (ByteData(16)..setUint32(0, value, endian)).buffer.asFloat32List();
+    return (ByteData(4)..setUint32(0, value, endian)).buffer.asFloat32List();
   }
 
   static Float32List _encodeFloat32(double value) {

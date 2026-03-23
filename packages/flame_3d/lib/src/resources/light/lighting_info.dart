@@ -41,10 +41,10 @@ class LightingInfo {
   }
 
   static List<UniformSlot> shaderSlots = [
-    UniformSlot.value('AmbientLight', {'color', 'intensity'}),
-    UniformSlot.value('LightsInfo', {'numLights'}),
-    UniformSlot.value('Light0', {'position', 'color', 'intensity'}),
-    UniformSlot.value('Light1', {'position', 'color', 'intensity'}),
-    UniformSlot.value('Light2', {'position', 'color', 'intensity'}),
+    UniformSlot.value('AmbientLight'),
+    UniformSlot.value('LightsInfo'),
+    UniformSlot.value('Light0'),
+    UniformSlot.value('Light1'),
+    UniformSlot.value('Light2'),
   ];
 }
