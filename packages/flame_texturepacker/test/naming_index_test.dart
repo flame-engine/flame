@@ -50,8 +50,8 @@ image1
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image1');
+      expect(regions.first.index, -1);
     });
 
     test('Pattern image01', () async {
@@ -68,8 +68,8 @@ image01
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image01');
+      expect(regions.first.index, -1);
     });
 
     test('Pattern image_1', () async {
@@ -86,8 +86,8 @@ image_1
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image_1');
+      expect(regions.first.index, -1);
     });
 
     test('Pattern image_01', () async {
@@ -104,8 +104,8 @@ image_01
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image_01');
+      expect(regions.first.index, -1);
     });
 
     test('Pattern image001', () async {
@@ -122,8 +122,8 @@ image001
   orig: 32, 32
   offset: 0, 0
 ''');
-      expect(regions.first.name, 'image');
-      expect(regions.first.index, 1);
+      expect(regions.first.name, 'image001');
+      expect(regions.first.index, -1);
     });
 
     test('Index field overrides name-based index if positive', () async {
@@ -143,6 +143,44 @@ image_01
 ''');
       expect(regions.first.name, 'image');
       expect(regions.first.index, 5);
+    });
+    test('Fuzzy match for animations without index field', () async {
+      final atlasFile = File('${tempDir.path}/test_fuzzy.atlas');
+      await atlasFile.writeAsString('''
+test_fuzzy.png
+size: 64, 64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+image1
+  rotate: false
+  xy: 0, 0
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+image2
+  rotate: false
+  xy: 32, 32
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+''');
+
+      final imageFile = File('${tempDir.path}/test_fuzzy.png');
+      final realPngBytes = await File(
+        'test/assets/whitelist/whitelist_test.png',
+      ).readAsBytes();
+      await imageFile.writeAsBytes(realPngBytes);
+
+      final atlas = await TexturePackerAtlas.load(
+        atlasFile.path,
+        fromStorage: true,
+      );
+
+      final sprites = atlas.findSpritesByName('image');
+      expect(sprites.length, 2);
+      expect(sprites[0].region.name, 'image1');
+      expect(sprites[1].region.name, 'image2');
     });
   });
 }

@@ -230,10 +230,10 @@ knight_walk_02.png
         );
 
         expect(atlas.sprites.length, 2);
-        expect(atlas.sprites[0].region.name, 'knight_walk');
-        expect(atlas.sprites[0].region.index, 1);
-        expect(atlas.sprites[1].region.name, 'knight_walk');
-        expect(atlas.sprites[1].region.index, 2);
+        expect(atlas.sprites[0].region.name, 'knight_walk_01');
+        expect(atlas.sprites[0].region.index, -1);
+        expect(atlas.sprites[1].region.name, 'knight_walk_02');
+        expect(atlas.sprites[1].region.index, -1);
       },
     );
   });

@@ -120,8 +120,6 @@ class TexturePackerAtlas {
           fromStorage: fromStorage,
           images: images,
           package: package,
-          assetsPrefix: assetsPrefix,
-          assets: assets,
         );
       }
       return atlasData;
@@ -164,12 +162,51 @@ class TexturePackerAtlas {
   /// [name] - The name of the sprites to find
   ///
   /// Returns a list of all [TexturePackerSprite]s with the given name.
+  /// If no exact match is found, it attempts to find sprites that look like
+  /// indexed animation frames (e.g., "walk1", "walk_2") for that name.
   List<TexturePackerSprite> findSpritesByName(String name) {
-    return sprites
+    // 1. Try exact match (handles explicit index grouping)
+    final exactMatches = sprites
         .where(
           (sprite) => sprite.region.name == name,
         )
         .toList();
+
+    if (exactMatches.isNotEmpty) {
+      return exactMatches
+        ..sort((a, b) => a.region.index.compareTo(b.region.index));
+    }
+
+    // 2. Try fuzzy match for unstripped animation frames (e.g. walk1, walk_2)
+    final fuzzyMatches = sprites.where((sprite) {
+      final sName = sprite.region.name;
+      if (!sName.startsWith(name)) {
+        return false;
+      }
+      final tail = sName.substring(name.length);
+      return RegExp(r'^_?\d+$').hasMatch(tail);
+    }).toList();
+
+    if (fuzzyMatches.isNotEmpty) {
+      fuzzyMatches.sort((a, b) {
+        // Use region.index if available (from explicit index: line)
+        if (a.region.index != -1 && b.region.index != -1) {
+          return a.region.index.compareTo(b.region.index);
+        }
+        // Otherwise extract from trailing digits of the name
+        final aIdx = _parseTrailingIndex(a.region.name);
+        final bIdx = _parseTrailingIndex(b.region.name);
+        return aIdx.compareTo(bIdx);
+      });
+      return fuzzyMatches;
+    }
+
+    return [];
+  }
+
+  int _parseTrailingIndex(String name) {
+    final match = RegExp(r'(\d+)$').firstMatch(name);
+    return match != null ? int.parse(match.group(1)!) : -1;
   }
 
   /// Creates a [SpriteAnimation] from sprites with the given name.

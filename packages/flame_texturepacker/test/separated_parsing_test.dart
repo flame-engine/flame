@@ -30,6 +30,7 @@ sprite1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: 1
 ''';
 
     test('should parse atlas metadata without loading images', () async {
@@ -99,12 +100,14 @@ walk_0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: 0
 walk_1
   rotate: false
   xy: 32, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: 1
 ''';
       final atlasFile = File('${tempDir.path}/anim.atlas');
       await atlasFile.writeAsString(animationAtlas);

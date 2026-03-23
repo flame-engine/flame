@@ -112,13 +112,11 @@ abstract class TexturePackerParser {
     required bool fromStorage,
     Images? images,
     String? package,
-    String? assetsPrefix,
-    AssetsCache? assets,
   }) async {
     final img = images ?? Flame.images;
     for (final page in atlasData.pages) {
       final parentPath = (path.split('/')..removeLast()).join('/');
-      var texturePath = parentPath.isEmpty
+      final texturePath = parentPath.isEmpty
           ? page.textureFile
           : '$parentPath/${page.textureFile}';
 
@@ -128,31 +126,33 @@ abstract class TexturePackerParser {
         img.add(texturePath, image);
         page.texture = img.fromCache(texturePath);
       } else {
-        final prefix = (assetsPrefix ?? '').trim();
-        if (prefix.isNotEmpty &&
-            !texturePath.contains('packages/') &&
-            !texturePath.startsWith('assets/')) {
-          final effectivePrefix = prefix.endsWith('/') ? prefix : '$prefix/';
-          if (!texturePath.startsWith(effectivePrefix)) {
-            texturePath = '$effectivePrefix$texturePath';
+        final resolved = resolvePath(texturePath, package);
+
+        var finalTexturePath = resolved.path;
+
+        // Strip img.prefix if it exists at the start of finalTexturePath
+        if (img.prefix.isNotEmpty) {
+          final cleanPrefix = img.prefix.endsWith('/')
+              ? img.prefix
+              : '${img.prefix}/';
+          if (finalTexturePath.startsWith(cleanPrefix)) {
+            finalTexturePath = finalTexturePath.substring(cleanPrefix.length);
+          } else {
+            // Also check for partial overlap if prefix is e.g. 'assets/images/'
+            // and path is 'images/texture.png'
+            final parts = cleanPrefix.split('/')..removeWhere((e) => e.isEmpty);
+            for (var i = 0; i < parts.length; i++) {
+              final subPrefix = parts.sublist(i).join('/');
+              if (subPrefix.isNotEmpty &&
+                  finalTexturePath.startsWith('$subPrefix/')) {
+                finalTexturePath = finalTexturePath.substring(
+                  subPrefix.length + 1,
+                );
+                break;
+              }
+            }
           }
         }
-
-        final resolved = resolvePath(texturePath, package);
-        final assetsCachePrefix = (assets ?? Flame.assets).prefix;
-
-        String toRelative(String p) => p.startsWith(assetsCachePrefix)
-            ? p.substring(assetsCachePrefix.length)
-            : p;
-
-        final relativePath = toRelative(resolved.path);
-        final relativePrefix = toRelative(img.prefix);
-
-        final finalTexturePath =
-            (relativePrefix.isNotEmpty &&
-                relativePath.startsWith(relativePrefix))
-            ? relativePath.substring(relativePrefix.length)
-            : relativePath;
 
         page.texture = await img.load(
           finalTexturePath,
@@ -204,23 +204,6 @@ abstract class TexturePackerParser {
     }
 
     final nameBeforeIndex = name;
-
-    final indexMatch = RegExp(r'(_?)(\d+)$').firstMatch(name);
-    if (indexMatch != null) {
-      try {
-        extractedIndex = int.parse(indexMatch.group(2)!);
-        name = name.substring(0, indexMatch.start);
-      } on FormatException catch (e, stack) {
-        Error.throwWithStackTrace(
-          FormatException(
-            'Failed to parse index from sprite name "$name". '
-            'Ensure the numeric suffix fits within an integer range.',
-          ),
-          stack,
-        );
-      }
-    }
-
     final values = <String, List<String>>{};
 
     while (lineQueue.isNotEmpty) {
@@ -272,7 +255,14 @@ abstract class TexturePackerParser {
     final finalOriginalHeight = originalHeight == 0.0 ? null : originalHeight;
 
     final finalIndex = index != null ? int.parse(index[0]) : extractedIndex;
-    final finalName = finalIndex == -1 ? nameBeforeIndex : name;
+    var finalName = nameBeforeIndex;
+
+    if (index != null && finalIndex != -1) {
+      final indexMatch = RegExp(r'(_?)(\d+)$').firstMatch(finalName);
+      if (indexMatch != null) {
+        finalName = finalName.substring(0, indexMatch.start);
+      }
+    }
 
     return Region(
       page: page,
