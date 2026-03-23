@@ -56,8 +56,7 @@ void addWidgetsStories(Dashbook dashbook) {
       spriteWidgetWithSizeBuilder,
       codeLink: baseLink('widgets/sprite_widget_example.dart'),
       info: '''
-        Similar as the default example, but using a fixed size directly in the
-         widget.
+Similar as the default example, but using a fixed size directly in the widget.
       ''',
     )
     ..add(
@@ -85,8 +84,7 @@ void addWidgetsStories(Dashbook dashbook) {
       spriteAnimationWithSizeWidgetBuilder,
       codeLink: baseLink('widgets/sprite_animation_widget_example.dart'),
       info: '''
-        Similar as the default example, but using a fixed size directly in the
-         widget.
+Similar as the default example, but using a fixed size directly in the widget.
       ''',
     )
     ..add(
