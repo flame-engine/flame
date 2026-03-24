@@ -9,6 +9,9 @@ import 'package:flame_3d/resources.dart';
 ///
 /// The `[]` operator can be used to set the raw data of a field. If the data is
 /// different from the last set it will recalculated the [resource].
+///
+/// Both scalar fields (`'fieldName'`) and array elements (`'fieldName[index]'`)
+/// are supported. Array element offsets are computed using std140 stride rules.
 /// {@endtemplate}
 class UniformValue extends UniformInstance<String, ByteBuffer> {
   /// {@macro uniform_value}
@@ -25,11 +28,19 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
     }
 
     final buffer = ByteData(sizeInBytes);
-    for (final MapEntry(key: field, value: entry) in _storage.entries) {
-      final offset = gpuSlot.getMemberOffsetInBytes(field);
-      if (offset == null) {
+    for (final MapEntry(:key, value: entry) in _storage.entries) {
+      final (field, index) = _parseMemberKey(key);
+
+      final memberOffset = gpuSlot.getMemberOffsetInBytes(field);
+      if (memberOffset == null) {
         throw StateError('Field "$field" not found in uniform "${slot.name}"');
       }
+
+      final stride = _std140ArrayStride(entry.data.lengthInBytes);
+      final offset = switch (index) {
+        final i? => memberOffset + i * stride,
+        _ => memberOffset,
+      };
 
       final bytes = entry.data.buffer.asUint8List(
         entry.data.offsetInBytes,
@@ -46,9 +57,10 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
   Float32List? operator [](String key) => _storage[key]?.data;
 
   void operator []=(String key, Float32List data) {
+    final (field, _) = _parseMemberKey(key);
     assert(
-      !slot.isCompiled || slot.resource!.getMemberOffsetInBytes(key) != null,
-      'Field "$key" not found in uniform "${slot.name}"',
+      !slot.isCompiled || slot.resource!.getMemberOffsetInBytes(field) != null,
+      'Field "$field" not found in uniform "${slot.name}"',
     );
 
     final hash = Object.hashAll(data);
@@ -62,13 +74,12 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
 
   @override
   String makeKey(int? index, String? field) {
-    if (index != null) {
-      throw StateError('index is not supported for ${slot.name}');
-    }
     if (field == null) {
       throw StateError('field is required for ${slot.name}');
     }
-
+    if (index != null) {
+      return '$field[$index]';
+    }
     return field;
   }
 
@@ -80,5 +91,24 @@ class UniformValue extends UniformInstance<String, ByteBuffer> {
   @override
   void set(String key, ByteBuffer value) {
     this[key] = value.asFloat32List();
+  }
+
+  /// Parse a storage key into member name and the array index (if any):
+  /// - `"positions[0]"` becomes `("positions", 0)`
+  /// - `"numLights"` becomes `("numLights", null)`
+  static (String name, int? index) _parseMemberKey(String key) {
+    final bracket = key.indexOf('[');
+    if (bracket == -1) {
+      return (key, null);
+    }
+
+    final name = key.substring(0, bracket);
+    final index = int.parse(key.substring(bracket + 1, key.length - 1));
+    return (name, index);
+  }
+
+  /// Std140 array element stride: round up to 16-byte boundary.
+  static int _std140ArrayStride(int elementBytes) {
+    return (elementBytes + 15) & ~15;
   }
 }

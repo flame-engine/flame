@@ -65,7 +65,7 @@ class SpatialMaterial extends Material {
       );
     }
     for (final (index, transform) in jointTransforms.indexed) {
-      vertexShader.setMatrix4('JointMatrices.joint$index', transform);
+      vertexShader.setMatrix4('JointMatrices.joints[$index]', transform);
     }
   }
 

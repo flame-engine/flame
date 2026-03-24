@@ -38,10 +38,17 @@ void main() {
       );
 
       // Simple struct field
-      expect(shader.parseKey('Foo.bar'), ['Foo', null, 'bar']);
+      expect(shader.parseKey('Foo.bar'), ['Foo', 'bar', null]);
 
       // Direct name (sampler)
       expect(shader.parseKey('albedoTexture'), ['albedoTexture', null, null]);
+
+      // Array index
+      expect(shader.parseKey('Lights.position[0]'), [
+        'Lights',
+        'position',
+        '0',
+      ]);
     });
   });
 }
