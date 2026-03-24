@@ -16,14 +16,13 @@ class LightingInfo {
   void _applyPointLights(Shader shader) {
     final pointLights = lights.where((e) => e.source is PointLight);
     final numLights = pointLights.length;
-    if (numLights > 3) {
-      // temporary, until we support dynamic arrays
-      throw Exception('At most 3 point lights are allowed');
+    if (numLights > _maxPointLights) {
+      throw Exception('At most $_maxPointLights point lights are allowed');
     }
 
     // NOTE: using floats because Android GLES does not support integer uniforms
     // Refer to https://github.com/flutter/engine/pull/55329
-    shader.setFloat('LightsInfo.numLights', numLights.toDouble());
+    shader.setFloat('Lights.numLights', numLights.toDouble());
     for (final (index, light) in pointLights.indexed) {
       light.apply(index, shader);
     }
@@ -40,11 +39,10 @@ class LightingInfo {
     return ambient.first.source as AmbientLight;
   }
 
+  static const _maxPointLights = 8;
+
   static List<UniformSlot> shaderSlots = [
     UniformSlot.value('AmbientLight'),
-    UniformSlot.value('LightsInfo'),
-    UniformSlot.value('Light0'),
-    UniformSlot.value('Light1'),
-    UniformSlot.value('Light2'),
+    UniformSlot.value('Lights'),
   ];
 }

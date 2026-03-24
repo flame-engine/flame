@@ -106,8 +106,9 @@ class Shader {
   }
 
   List<String?> parseKey(String key) {
-    // examples: albedoTexture, Light[2].position, or Foo.bar
-    final regex = RegExp(r'^(\w+)(?:\[(\d+)\])?(?:\.(\w+))?$');
+    // examples: albedoTexture, Lights.positions[0], JointMatrices.joints[5],
+    // Foo.bar
+    final regex = RegExp(r'^(\w+)(?:\.(\w+))?(?:\[(\d+)\])?$');
     return regex.firstMatch(key)?.groups([1, 2, 3]) ?? [];
   }
 
@@ -116,9 +117,9 @@ class Shader {
   void _setTypedValue<K, T>(String key, T value) {
     final groups = parseKey(key);
 
-    final object = groups[0]; // e.g. Light, albedoTexture
-    final index = _maybeParseInt(groups[1]); // e.g. 2 (optional)
-    final field = groups[2]; // e.g. position (optional)
+    final object = groups[0]; // e.g. Lights, albedoTexture
+    final field = groups[1]; // e.g. positions (optional)
+    final index = _maybeParseInt(groups[2]); // e.g. 0 (optional)
 
     if (object == null) {
       throw StateError('Uniform "$key" is missing an object');
