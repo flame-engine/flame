@@ -41,8 +41,5 @@ class LightingInfo {
 
   static const _maxPointLights = 8;
 
-  static List<UniformSlot> shaderSlots = [
-    UniformSlot.value('AmbientLight'),
-    UniformSlot.value('Lights'),
-  ];
+  static const uniformNames = ['AmbientLight', 'Lights'];
 }
