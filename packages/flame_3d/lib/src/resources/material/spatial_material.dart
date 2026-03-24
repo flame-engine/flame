@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' hide FragmentShader;
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
@@ -12,22 +12,18 @@ class SpatialMaterial extends Material {
     this.roughness = 0.6,
   }) : albedoTexture = albedoTexture ?? Texture.standard,
        super(
-         vertexShader: Shader.vertex(
-           asset:
-               'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-           slots: [
-             UniformSlot.value('VertexInfo'),
-             UniformSlot.value('JointMatrices'),
-           ],
+         vertexShader: VertexShader.fromAsset(
+           'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+           slots: ['VertexInfo', 'JointMatrices'],
          ),
-         fragmentShader: Shader.fragment(
-           asset:
-               'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+         fragmentShader: FragmentShader.fromAsset(
+           'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
            slots: [
-             UniformSlot.sampler('albedoTexture'),
-             UniformSlot.value('Material'),
-             ...LightingInfo.shaderSlots,
-             UniformSlot.value('Camera'),
+             'albedoTexture',
+             'Material',
+             'AmbientLight',
+             'Lights',
+             'Camera',
            ],
          ),
        );
