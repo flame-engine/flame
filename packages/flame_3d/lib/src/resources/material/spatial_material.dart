@@ -15,15 +15,8 @@ class SpatialMaterial extends Material {
            asset:
                'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
            slots: [
-             UniformSlot.value('VertexInfo', {
-               'model',
-               'view',
-               'projection',
-             }),
-             UniformSlot.value(
-               'JointMatrices',
-               List.generate(_maxJoints, (index) => 'joint$index').toSet(),
-             ),
+             UniformSlot.value('VertexInfo'),
+             UniformSlot.value('JointMatrices'),
            ],
          ),
          fragmentShader: Shader.fragment(
@@ -31,13 +24,9 @@ class SpatialMaterial extends Material {
                'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
            slots: [
              UniformSlot.sampler('albedoTexture'),
-             UniformSlot.value('Material', {
-               'albedoColor',
-               'metallic',
-               'roughness',
-             }),
+             UniformSlot.value('Material'),
              ...LightingInfo.shaderSlots,
-             UniformSlot.value('Camera', {'position'}),
+             UniformSlot.value('Camera'),
            ],
          ),
        );
