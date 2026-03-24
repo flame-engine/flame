@@ -14,45 +14,55 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 /// Uniform values are set by string key (`'VertexInfo.model'`,
 /// `'Lights.positions[0]'`, `'someColor'`) and are automatically packed
 /// into GPU buffers using shader reflection for layout.
+///
+/// Samplers are auto-detected at compile time via [gpu.UniformSlot.sizeInBytes]
+/// returning `null` — no need to declare them separately.
 /// {@endtemplate}
 class Shader extends Resource<gpu.Shader> {
   /// Load a [Shader] from asset.
   Shader.fromAsset(
     String assetName, {
     required String entryPoint,
-    List<String> uniforms = const [],
-    List<String> samplers = const [],
+    List<String> slots = const [],
   }) : this._(
          _assetLibrary(assetName),
          entryPoint: entryPoint,
-         uniforms: uniforms,
-         samplers: samplers,
+         slots: slots,
        );
 
   Shader._(
     this._getShader, {
     required this.entryPoint,
-    required this.uniforms,
-    required this.samplers,
+    required this.slots,
   });
 
   /// The shader entry point name within the bundle.
   final String entryPoint;
 
-  /// Names of struct uniform blocks (e.g., `['VertexInfo', 'Material']`).
-  final List<String> uniforms;
-
-  /// Names of sampler uniforms (e.g., `['albedoTexture']`).
-  final List<String> samplers;
+  /// Names of all uniform slots — both struct blocks and samplers.
+  ///
+  /// The type of each slot is auto-detected at compile time:
+  /// struct blocks have a non-null [gpu.UniformSlot.sizeInBytes],
+  /// samplers return `null`.
+  final List<String> slots;
 
   final gpu.Shader Function(String key) _getShader;
 
   final Map<String, gpu.UniformSlot> _slots = {};
-  final Map<String, _UniformData> _uniforms = {};
-  final Map<String, Texture> _textures = {};
+  final Map<String, _SlotBinding> _bindings = {};
 
   /// Set a [Texture] at the given [key].
-  void setTexture(String key, Texture texture) => _textures[key] = texture;
+  void setTexture(String key, Texture texture) {
+    final binding = switch (_bindings.putIfAbsent(
+      key,
+      () => _TextureBinding(_slots[key]!, texture),
+    )) {
+      final _TextureBinding binding => binding,
+      _ => throw StateError('Slot "$key" is a uniform block, not a sampler'),
+    };
+
+    binding.texture = texture;
+  }
 
   /// Set a [Vector2] at the given [key].
   void setVector2(String key, Vector2 vector) => _set(key, vector.storage);
@@ -88,17 +98,12 @@ class Shader extends Resource<gpu.Shader> {
 
   /// Bind all uniform data and textures to the [device].
   void bind(GraphicsDevice device) {
-    for (final name in uniforms) {
-      final data = _uniforms[name];
-      if (data != null) {
-        device.bindUniform(_slots[name]!, data.toByteBuffer());
-      }
-    }
-
-    for (final name in samplers) {
-      final texture = _textures[name];
-      if (texture != null) {
-        device.bindTexture(_slots[name]!, texture);
+    for (final MapEntry(:key, :value) in _bindings.entries) {
+      switch (value) {
+        case _UniformBinding(:final toByteBuffer):
+          device.bindUniform(_slots[key]!, toByteBuffer());
+        case _TextureBinding(:final texture):
+          device.bindTexture(_slots[key]!, texture);
       }
     }
   }
@@ -107,11 +112,10 @@ class Shader extends Resource<gpu.Shader> {
   gpu.Shader createResource() {
     // Always clear up old data to prevent memory leaks.
     _slots.clear();
-    _uniforms.clear();
-    _textures.clear();
+    _bindings.clear();
 
     final shader = _getShader(entryPoint);
-    for (final name in [...uniforms, ...samplers]) {
+    for (final name in slots) {
       _slots[name] = shader.getUniformSlot(name);
     }
     return shader;
@@ -119,17 +123,21 @@ class Shader extends Resource<gpu.Shader> {
 
   void _set(String key, Float32List data) {
     final (slot, field, index) = parseKey(key);
-    final uniform = _uniforms.putIfAbsent(
+
+    final binding = switch (_bindings.putIfAbsent(
       slot,
-      () => _UniformData(_slots[slot]!),
-    );
+      () => _UniformBinding(_slots[slot]!),
+    )) {
+      final _UniformBinding binding => binding,
+      _ => throw StateError('Slot "$key" is a sampler block, not a uniform'),
+    };
 
     return switch (field) {
-      final field? => uniform.setField(
+      final field? => binding.setField(
         index != null ? '$field[$index]' : field,
         data,
       ),
-      _ => uniform.setRaw(data),
+      _ => binding.setRaw(data),
     };
   }
 
@@ -166,10 +174,15 @@ class Shader extends Resource<gpu.Shader> {
   }
 }
 
-class _UniformData {
-  _UniformData(this.slot);
+sealed class _SlotBinding {
+  _SlotBinding(this.slot);
 
   final gpu.UniformSlot slot;
+}
+
+class _UniformBinding extends _SlotBinding {
+  _UniformBinding(super.slot);
+
   final Map<String, ({int hash, Float32List data})> _fields = HashMap();
   ({int hash, Float32List data})? _raw;
   ByteBuffer? _cached;
@@ -251,4 +264,10 @@ class _UniformData {
   static int _std140ArrayStride(int elementBytes) {
     return (elementBytes + 15) & ~15;
   }
+}
+
+class _TextureBinding extends _SlotBinding {
+  _TextureBinding(super.slot, this.texture);
+
+  Texture texture;
 }

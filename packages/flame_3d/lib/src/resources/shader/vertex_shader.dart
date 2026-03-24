@@ -12,7 +12,6 @@ class VertexShader extends Shader {
   VertexShader.fromAsset(
     super.assetName, {
     super.entryPoint = 'TextureVertex',
-    super.uniforms = const [],
-    super.samplers = const [],
+    super.slots = const [],
   }) : super.fromAsset();
 }

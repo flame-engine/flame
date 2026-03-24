@@ -3,27 +3,24 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Shader', () {
-    test('can create vertex shader with uniforms', () {
+    test('can create vertex shader with slots', () {
       final shader = VertexShader.fromAsset(
         'none',
-        uniforms: ['VertexInfo', 'JointMatrices'],
+        slots: ['VertexInfo', 'JointMatrices'],
       );
 
       expect(shader.entryPoint, 'TextureVertex');
-      expect(shader.uniforms, ['VertexInfo', 'JointMatrices']);
-      expect(shader.samplers, isEmpty);
+      expect(shader.slots, ['VertexInfo', 'JointMatrices']);
     });
 
-    test('can create fragment shader with uniforms and samplers', () {
+    test('can create fragment shader with slots', () {
       final shader = FragmentShader.fromAsset(
         'none',
-        uniforms: ['Material', 'Camera'],
-        samplers: ['albedoTexture'],
+        slots: ['Material', 'Camera', 'albedoTexture'],
       );
 
       expect(shader.entryPoint, 'TextureFragment');
-      expect(shader.uniforms, ['Material', 'Camera']);
-      expect(shader.samplers, ['albedoTexture']);
+      expect(shader.slots, ['Material', 'Camera', 'albedoTexture']);
     });
 
     test('parses keys correctly', () {

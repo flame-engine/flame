@@ -40,6 +40,4 @@ class LightingInfo {
   }
 
   static const _maxPointLights = 8;
-
-  static const uniformNames = ['AmbientLight', 'Lights'];
 }

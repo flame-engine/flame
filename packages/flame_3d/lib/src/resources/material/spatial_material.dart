@@ -14,13 +14,17 @@ class SpatialMaterial extends Material {
        super(
          vertexShader: VertexShader.fromAsset(
            'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-           uniforms: ['VertexInfo', 'JointMatrices'],
+           slots: ['VertexInfo', 'JointMatrices'],
          ),
          fragmentShader: FragmentShader.fromAsset(
            'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-           uniforms: ['Material', ...LightingInfo.uniformNames, 'Camera'],
-
-           samplers: ['albedoTexture'],
+           slots: [
+             'albedoTexture',
+             'Material',
+             'AmbientLight',
+             'Lights',
+             'Camera',
+           ],
          ),
        );
 

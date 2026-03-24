@@ -11,7 +11,6 @@ class FragmentShader extends Shader {
   FragmentShader.fromAsset(
     super.assetName, {
     super.entryPoint = 'TextureFragment',
-    super.uniforms = const [],
-    super.samplers = const [],
+    super.slots = const [],
   }) : super.fromAsset();
 }
