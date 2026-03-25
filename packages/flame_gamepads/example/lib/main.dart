@@ -23,9 +23,7 @@ class GamepadsGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    camera.viewfinder
-      ..zoom = 0.5
-      ..anchor = Anchor.center;
+    camera.viewfinder.zoom = 0.5;
     camera.moveTo(Vector2(worldSizeX / 2, worldSizeY / 2));
 
     player = PlayerComponent(worldSizeX: worldSizeX, worldSizeY: worldSizeY)
