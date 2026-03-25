@@ -119,7 +119,7 @@ class GraphicsDevice {
   void bindGeometry(Surface surface) {
     _renderPass.bindVertexBuffer(
       gpu.BufferView(
-        surface.resource!,
+        surface.resource,
         offsetInBytes: 0,
         lengthInBytes: surface.verticesBytes,
       ),
@@ -128,7 +128,7 @@ class GraphicsDevice {
 
     _renderPass.bindIndexBuffer(
       gpu.BufferView(
-        surface.resource!,
+        surface.resource,
         offsetInBytes: surface.verticesBytes,
         lengthInBytes: surface.indicesBytes,
       ),
