@@ -36,6 +36,11 @@ Create texture atlases for games (bridge package for [FireAtlas]).
 A Box2D physics engine (bridge package for [Forge2D]).
 :::
 
+:::{package} flame_gamepads
+
+Support gamepad input in your game (bridge package for [gamepads])
+:::
+
 :::{package} flame_isolate
 
 Use isolates to offload heavy computations to another thread.
@@ -101,6 +106,7 @@ Load Typled sprite atlases with edge-repeated padding (bridge package for [Typle
 [Bloc]: https://github.com/felangel/bloc
 [FireAtlas]: https://github.com/flame-engine/fire-atlas
 [Forge2D]: https://github.com/flame-engine/forge2d
+[gamepads]: https://github.com/flame-engine/gamepads
 [Lottie]: https://pub.dev/packages/lottie
 [Rive]: https://rive.app/
 [Riverpod]: https://github.com/rrousselGit/riverpod
