@@ -26,4 +26,5 @@ dev_dependencies:
   flame_lint: ^1.4.3
   flutter_test:
     sdk: flutter
+  gamepads_platform_interface: any
   test: any
