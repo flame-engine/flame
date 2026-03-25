@@ -17,6 +17,7 @@ class MeshComponent extends Object3D {
     super.position,
     super.scale,
     super.rotation,
+    super.children,
   }) : _mesh = mesh;
 
   /// The mesh resource.
