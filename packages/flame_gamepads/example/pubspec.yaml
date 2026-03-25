@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   flame: ^1.36.0
-  flame_gamepads: ^0.0.1
+  flame_gamepads: ^0.1.0
   flutter:
     sdk: flutter
   gamepads: ^0.1.10
