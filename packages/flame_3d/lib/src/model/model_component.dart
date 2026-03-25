@@ -18,6 +18,7 @@ class ModelComponent extends Object3D {
     super.position,
     super.rotation,
     super.scale,
+    super.children,
   });
 
   @override
