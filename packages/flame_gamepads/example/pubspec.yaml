@@ -1,0 +1,24 @@
+name: flame_gamepads_example
+resolution: workspace
+description: Simple project to showcase the usage of flame_gamepads
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+dependencies:
+  flame: ^1.36.0
+  gamepads:
+    git:
+      url: https://github.com/flame-engine/gamepads.git
+      path: packages/gamepads
+      ref: main
+  flame_gamepads: ^0.0.1
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flame_lint: ^1.4.3
+flutter:
+  uses-material-design: true
