@@ -6,7 +6,7 @@ game.
 
 ## GamepadEvents mixin
 
-Add `GamepadEvents` mixin to your component with the `with` keyword and override the
+Add `GamepadCallbacks` mixin to your component with the `with` keyword and override the
 `onGamepadEvent` method to receive callbacks when a gamepad event occurs.
 
 ```dart
