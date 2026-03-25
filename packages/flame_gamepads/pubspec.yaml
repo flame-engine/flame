@@ -1,7 +1,7 @@
 name: flame_gamepads
 resolution: workspace
 description: Flame bindings to work with gamepads package
-version: 0.0.1
+version: 0.1.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_gamepads
 funding:
   - https://opencollective.com/blue-fire
