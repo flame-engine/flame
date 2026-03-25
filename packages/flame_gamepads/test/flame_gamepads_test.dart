@@ -57,7 +57,7 @@ void main() {
       const Duration(seconds: 2),
       onTimeout: () {
         fail('Did not receive gamepad event');
-      }
+      },
     );
     expect(event.gamepadId, '1');
     expect(event.timestamp, millis);
