@@ -14,8 +14,6 @@ class PlayerComponent extends RectangleComponent with GamepadCallbacks {
   double inputX = 0;
   double inputY = 0;
 
-  bool get inputActive => inputX.abs() > deadZone || inputY.abs() > deadZone;
-
   static const deadZone = 0.15;
   static const velocity = 150.0;
 
@@ -29,27 +27,26 @@ class PlayerComponent extends RectangleComponent with GamepadCallbacks {
   void update(double dt) {
     super.update(dt);
 
-    if (inputActive) {
-      final newPosition =
-          position +
-          Vector2(
-            inputX * dt * velocity,
-            -inputY * dt * velocity,
-          );
-      newPosition.clamp(
-        Vector2.zero(),
-        Vector2(worldSizeX - size.x, worldSizeY - size.y),
+    if (inputX != 0.0) {
+      position.x = (position.x + inputX * dt * velocity).clamp(
+        0,
+        worldSizeX - size.x,
       );
-      position = newPosition;
+    }
+    if (inputY != 0.0) {
+      position.y = (position.y - inputY * dt * velocity).clamp(
+        0,
+        worldSizeY - size.y,
+      );
     }
   }
 
   @override
   void onGamepadEvent(NormalizedGamepadEvent event) {
     if (event.axis == GamepadAxis.leftStickX) {
-      inputX = event.value.abs() > deadZone ? event.value : 0;
+      inputX = event.value.abs() > deadZone ? event.value : 0.0;
     } else if (event.axis == GamepadAxis.leftStickY) {
-      inputY = event.value.abs() > deadZone ? event.value : 0;
+      inputY = event.value.abs() > deadZone ? event.value : 0.0;
     }
   }
 }
