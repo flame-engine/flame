@@ -10,7 +10,7 @@ Add `GamepadEvents` mixin to your component with the `with` keyword and override
 `onGamepadEvent` method to receive callbacks when a gamepad event occurs.
 
 ```dart
-class PlayerComponent extends PositionComponent with GamepadEvents {
+class PlayerComponent extends PositionComponent with GamepadCallbacks {
   @override
   void onGamepadEvent(NormalizedGamepadEvent event) {
     if (event.button == GamepadButton.a && event.value != 0) {
