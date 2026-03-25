@@ -25,7 +25,8 @@ class GamepadsGame extends FlameGame {
   Future<void> onLoad() async {
     camera.viewfinder
       ..zoom = 0.5
-      ..anchor = Anchor.topLeft;
+      ..anchor = Anchor.center;
+    camera.moveTo(Vector2(worldSizeX / 2, worldSizeY / 2));
 
     player = PlayerComponent(worldSizeX: worldSizeX, worldSizeY: worldSizeY)
       ..position = Vector2(5 * 16, 5 * 16)
@@ -34,6 +35,10 @@ class GamepadsGame extends FlameGame {
       RectangleComponent()
         ..size = Vector2(worldSizeX, worldSizeY)
         ..setColor(Colors.lightGreen[800]!),
+      TextComponent(text: 'Use left thumbstick on your gamepad to move player')
+        ..position = Vector2(worldSizeX / 2, worldSizeY + 10)
+        ..scale = Vector2.all(0.7)
+        ..anchor = Anchor.topCenter,
       player!,
     ]);
   }
