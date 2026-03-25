@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -61,7 +60,7 @@ class Shader extends Resource<gpu.Shader> {
       _ => throw StateError('Slot "$key" is a uniform block, not a sampler'),
     };
 
-    binding.texture = texture;
+    binding.resource = texture;
   }
 
   /// Set a [Vector2] at the given [key].
@@ -74,14 +73,16 @@ class Shader extends Resource<gpu.Shader> {
   void setVector4(String key, Vector4 vector) => _set(key, vector.storage);
 
   /// Set an [int] (encoded as uint) at the given [key].
-  void setUint(String key, int value) => _set(
-    key,
-    (ByteData(4)..setUint32(0, value, Endian.little)).buffer.asFloat32List(),
-  );
+  void setUint(String key, int value) {
+    _scalarData.setUint32(0, value, Endian.little);
+    return _set(key, _scalarBuf);
+  }
 
   /// Set a [double] at the given [key].
-  void setFloat(String key, double value) =>
-      _set(key, Float32List.fromList([value]));
+  void setFloat(String key, double value) {
+    _scalarData.setFloat32(0, value, Endian.little);
+    return _set(key, _scalarBuf);
+  }
 
   /// Set a [Matrix2] at the given [key].
   void setMatrix2(String key, Matrix2 matrix) => _set(key, matrix.storage);
@@ -100,10 +101,10 @@ class Shader extends Resource<gpu.Shader> {
   void bind(GraphicsDevice device) {
     for (final MapEntry(:key, :value) in _bindings.entries) {
       switch (value) {
-        case _UniformBinding(:final toByteBuffer):
-          device.bindUniform(_slots[key]!, toByteBuffer());
-        case _TextureBinding(:final texture):
-          device.bindTexture(_slots[key]!, texture);
+        case _UniformBinding(:final resource):
+          device.bindUniform(_slots[key]!, resource);
+        case _TextureBinding(:final resource):
+          device.bindTexture(_slots[key]!, resource);
       }
     }
   }
@@ -133,10 +134,7 @@ class Shader extends Resource<gpu.Shader> {
     };
 
     return switch (field) {
-      final field? => binding.setField(
-        index != null ? '$field[$index]' : field,
-        data,
-      ),
+      final field? => binding.setField(field, index, data),
       _ => binding.setRaw(data),
     };
   }
@@ -148,16 +146,25 @@ class Shader extends Resource<gpu.Shader> {
   /// - `'Lights.positions[0]'` becomes `('Lights', 'positions', 0)`
   /// - `'albedoTexture'` becomes `('albedoTexture', null, null)`
   static (String, String?, int?) parseKey(String key) {
-    final match = RegExp(r'^(\w+)(?:\.(\w+))?(?:\[(\d+)\])?$').firstMatch(key);
-    if (match == null) {
-      throw StateError('Invalid uniform key: "$key"');
-    }
+    final match = _keyMatches.putIfAbsent(key, () {
+      final match = _keyRegex.firstMatch(key);
+      if (match == null) {
+        throw StateError('Invalid uniform key: "$key"');
+      }
+      return match;
+    });
 
     final struct = match.group(1)!;
     final member = match.group(2);
     final index = match.group(3);
     return (struct, member, index != null ? int.parse(index) : null);
   }
+
+  static final _keyRegex = RegExp(r'^(\w+)(?:\.(\w+))?(?:\[(\d+)\])?$');
+  static final _keyMatches = <String, RegExpMatch>{};
+
+  static final _scalarData = ByteData(4);
+  static final _scalarBuf = _scalarData.buffer.asFloat32List();
 
   static final Map<Color, Float32List> _colorBytesCache = {};
 
@@ -174,100 +181,60 @@ class Shader extends Resource<gpu.Shader> {
   }
 }
 
-sealed class _SlotBinding {
+sealed class _SlotBinding<T> {
   _SlotBinding(this.slot);
 
   final gpu.UniformSlot slot;
+
+  T get resource;
 }
 
-class _UniformBinding extends _SlotBinding {
-  _UniformBinding(super.slot);
+class _UniformBinding extends _SlotBinding<ByteBuffer> {
+  _UniformBinding(super.slot)
+    : _data = Float32List(slot.sizeInBytes! ~/ Float32List.bytesPerElement);
 
-  final Map<String, ({int hash, Float32List data})> _fields = HashMap();
-  ({int hash, Float32List data})? _raw;
-  ByteBuffer? _cached;
+  @override
+  ByteBuffer get resource => _data.buffer;
 
+  final Float32List _data;
+  final Map<String, int> _memberOffsets = {};
+
+  /// Write a struct member (optionally array-indexed) directly into the buffer.
+  void setField(String member, int? index, Float32List data) {
+    final baseOffset = _memberOffsets.putIfAbsent(
+      member,
+      () {
+        final bytes = slot.getMemberOffsetInBytes(member);
+        if (bytes == null) {
+          throw StateError('Field "$member" not found in uniform struct');
+        }
+        return bytes ~/ Float32List.bytesPerElement;
+      },
+    );
+
+    final offset = switch (index) {
+      final i? => baseOffset + i * _std140ArrayStride(data.length),
+      _ => baseOffset,
+    };
+
+    _data.setRange(offset, offset + data.length, data);
+  }
+
+  /// Write raw data for a standalone (non-struct) uniform.
   void setRaw(Float32List data) {
-    final hash = Object.hashAll(data);
-    if (_raw?.hash == hash) {
-      return;
-    }
-
-    _raw = (hash: hash, data: data);
-    _cached = null;
+    _data.setRange(0, data.length, data);
   }
 
-  void setField(String key, Float32List data) {
-    final hash = Object.hashAll(data);
-    if (_fields[key]?.hash == hash) {
-      return;
-    }
-
-    _fields[key] = (hash: hash, data: data);
-    _cached = null;
-  }
-
-  ByteBuffer toByteBuffer() {
-    if (_cached != null) {
-      return _cached!;
-    }
-
-    // If not null, it is a standalone uniform.
-    if (_raw case final raw?) {
-      return _cached = raw.data.buffer;
-    }
-
-    final sizeInBytes = slot.sizeInBytes;
-    if (sizeInBytes == null) {
-      throw StateError('Uniform struct not found in shader');
-    }
-
-    final buffer = ByteData(sizeInBytes);
-    for (final MapEntry(:key, value: entry) in _fields.entries) {
-      final (member, arrayIndex) = _parseMemberKey(key);
-      final memberOffset = slot.getMemberOffsetInBytes(member);
-      if (memberOffset == null) {
-        throw StateError('Field "$member" not found in uniform struct');
-      }
-
-      final stride = _std140ArrayStride(entry.data.lengthInBytes);
-      final offset = switch (arrayIndex) {
-        final i? => memberOffset + i * stride,
-        _ => memberOffset,
-      };
-
-      final bytes = entry.data.buffer.asUint8List(
-        entry.data.offsetInBytes,
-        entry.data.lengthInBytes,
-      );
-      for (var i = 0; i < bytes.length; i++) {
-        buffer.setUint8(offset + i, bytes[i]);
-      }
-    }
-
-    return _cached = buffer.buffer;
-  }
-
-  /// Parse `"positions[0]"` → `("positions", 0)`,
-  /// `"numLights"` → `("numLights", null)`.
-  static (String name, int? index) _parseMemberKey(String key) {
-    final bracket = key.indexOf('[');
-    if (bracket == -1) {
-      return (key, null);
-    }
-    final name = key.substring(0, bracket);
-    final index = int.parse(key.substring(bracket + 1, key.length - 1));
-    return (name, index);
-  }
-
-  /// Std140 array element stride: round up to 16-byte boundary.
-  static int _std140ArrayStride(int elementBytes) {
-    return (elementBytes + 15) & ~15;
+  /// Std140 array element stride in floats: round up to 4-float (16-byte)
+  /// boundary.
+  static int _std140ArrayStride(int elementFloats) {
+    return (elementFloats + 3) & ~3;
   }
 }
 
-class _TextureBinding extends _SlotBinding {
-  _TextureBinding(super.slot, this.texture);
+class _TextureBinding extends _SlotBinding<Texture> {
+  _TextureBinding(super.slot, this.resource);
 
-  Texture texture;
+  @override
+  Texture resource;
 }
