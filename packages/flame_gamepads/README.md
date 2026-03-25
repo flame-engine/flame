@@ -6,7 +6,7 @@
 </p>
 
 <p align="center">
-Adds support for <a href="https://www.mapeditor.org/">Tiled</a>'s tile maps to your <a href="https://github.com/flame-engine/flame">Flame</a> games.
+Support gamepad input in your game (bridge package for <a href="https://github.com/flame-engine/gamepads">gamepads</a>)
 </p>
 
 <p align="center">
