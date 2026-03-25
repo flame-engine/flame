@@ -61,7 +61,7 @@ class LightComponent extends Component3D {
   @override
   void update(double dt) {
     // NOTE: this ensures the matrix gets computed if need be, so that
-    // the light position moves with it's anecstors.
+    // the light position moves with it's ancestors.
     worldTransformMatrix;
     super.update(dt);
   }
