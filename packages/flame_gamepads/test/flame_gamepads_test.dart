@@ -53,7 +53,12 @@ void main() {
         },
       ),
     );
-    final event = await listener;
+    final event = await listener.timeout(
+      const Duration(seconds: 2),
+      onTimeout: () {
+        fail('Did not receive gamepad event');
+      }
+    );
     expect(event.gamepadId, '1');
     expect(event.timestamp, millis);
     expect(event.rawEvent.type, KeyType.button);
