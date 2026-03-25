@@ -7,22 +7,22 @@ import 'package:gamepads/gamepads.dart';
 mixin GamepadCallbacks on Component {
   void onGamepadEvent(NormalizedGamepadEvent event) {}
 
-  final List<StreamSubscription> _unsubscribe = [];
+  final List<StreamSubscription> _subscriptions = [];
 
   @override
   @mustCallSuper
   void onMount() {
     super.onMount();
-    _unsubscribe.add(Gamepads.normalizedEvents.listen(onGamepadEvent));
+    _subscriptions.add(Gamepads.normalizedEvents.listen(onGamepadEvent));
   }
 
   @override
   @mustCallSuper
   void onRemove() {
-    for (final u in _unsubscribe) {
-      u.cancel();
+    for (final subscription in _subscriptions) {
+      subscription.cancel();
     }
-    _unsubscribe.clear();
+    _subscriptions.clear();
     super.onRemove();
   }
 }
