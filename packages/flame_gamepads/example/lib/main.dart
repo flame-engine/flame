@@ -28,7 +28,7 @@ class GamepadsGame extends FlameGame {
       ..anchor = Anchor.topLeft;
 
     player = PlayerComponent(worldSizeX: worldSizeX, worldSizeY: worldSizeY)
-      ..position = Vector2(5*16, 5*16)
+      ..position = Vector2(5 * 16, 5 * 16)
       ..size = Vector2(16, 16);
     world.addAll([
       RectangleComponent()

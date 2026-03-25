@@ -9,14 +9,10 @@ environment:
 
 dependencies:
   flame: ^1.36.0
-  gamepads:
-    git:
-      url: https://github.com/flame-engine/gamepads.git
-      path: packages/gamepads
-      ref: main
   flame_gamepads: ^0.0.1
   flutter:
     sdk: flutter
+  gamepads: ^0.1.10
 
 dev_dependencies:
   flame_lint: ^1.4.3

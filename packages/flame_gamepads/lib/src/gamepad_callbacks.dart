@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flame/components.dart';
@@ -20,7 +19,7 @@ mixin GamepadCallbacks on Component {
   @override
   @mustCallSuper
   void onRemove() {
-    for (var u in _unsubscribe) {
+    for (final u in _unsubscribe) {
       u.cancel();
     }
     _unsubscribe.clear();
