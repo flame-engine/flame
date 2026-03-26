@@ -30,6 +30,9 @@ class RenderContext3D extends RenderContext {
   final _drawPool = <_DrawEntry>[];
   int _drawCount = 0;
 
+  int get drawCount => _lastDrawCount;
+  int _lastDrawCount = 0;
+
   /// Set camera matrices for this frame.
   void setCamera(Matrix4 viewMatrix, Matrix4 projectionMatrix) {
     _viewMatrix.setFrom(viewMatrix);
@@ -74,6 +77,7 @@ class RenderContext3D extends RenderContext {
       _drawPool[i].object!.draw(this);
       _drawPool[i].object = null;
     }
+    _lastDrawCount = _drawCount;
     _drawCount = 0;
   }
 

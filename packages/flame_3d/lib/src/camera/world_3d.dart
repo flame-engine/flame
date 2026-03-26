@@ -37,8 +37,6 @@ class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
   @internal
   @override
   void renderFromCamera(Canvas canvas) {
-    culled = 0;
-
     final camera = CameraComponent3D.currentCamera!;
     final Viewport(virtualSize: size) = camera.viewport;
 
@@ -62,9 +60,6 @@ class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
     );
     image.dispose();
   }
-
-  // TODO(wolfenrain): this is only here for testing purposes
-  int culled = 0;
 
   static final _paint = Paint();
 }

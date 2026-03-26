@@ -35,7 +35,7 @@ class MeshComponent extends Object3D {
   }
 
   @override
-  bool shouldCull(CameraComponent3D camera) {
+  bool isVisible(CameraComponent3D camera) {
     return camera.frustum.intersectsWithAabb3(aabb);
   }
 }

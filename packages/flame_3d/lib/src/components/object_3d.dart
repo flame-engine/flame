@@ -48,7 +48,6 @@ abstract class Object3D extends Component3D {
 
     // Result is fully outside, skip children and self.
     if (cullResult == CullResult.outside) {
-      world.culled++;
       return;
     }
 
@@ -60,16 +59,14 @@ abstract class Object3D extends Component3D {
     super.renderTree(canvas);
     _ancestorFullyInside = wasAncestorFullyInside;
 
-    if (cullResult == CullResult.inside || shouldCull(camera!)) {
+    if (cullResult == CullResult.inside || isVisible(camera!)) {
       world.context.submitDraw(this, worldTransformMatrix);
-    } else {
-      world.culled++;
     }
   }
 
   void draw(RenderContext context);
 
-  bool shouldCull(CameraComponent3D camera) {
+  bool isVisible(CameraComponent3D camera) {
     return camera.frustum.containsVector3(position);
   }
 }
