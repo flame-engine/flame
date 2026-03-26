@@ -125,6 +125,7 @@ flame_behaviors             <flame_behaviors/flame_behaviors.md>
 flame_bloc                  <flame_bloc/flame_bloc.md>
 flame_fire_atlas            <flame_fire_atlas/flame_fire_atlas.md>
 flame_forge2d               <flame_forge2d/flame_forge2d.md>
+flame_gamepads              <flame_gamepads/flame_gamepads.md>
 flame_isolate               <flame_isolate/flame_isolate.md>
 flame_lottie                <flame_lottie/flame_lottie.md>
 flame_network_assets        <flame_network_assets/flame_network_assets.md>

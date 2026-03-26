@@ -89,6 +89,7 @@ simultaneously.
 - [flame_bloc][flame_bloc] for [Bloc][bloc]: A predictable state management library.
 - [flame_fire_atlas][flame_fire_atlas] for [FireAtlas][fireatlas]: Create texture atlases for games.
 - [flame_forge2d][flame_forge2d] for [Forge2D][forge2d]: A Box2D physics engine.
+- [flame_gamepads][flame_gamepads] - Support gamepad input in your game (bridge package for [gamepads][gamepads])
 - [flame_isolate][flame_isolate] - Makes it easy to use [Flutter Isolates][flutter_isolates] in
 a Flame game.
 - [flame_lint][flame_lint] - Our set of linting (`analysis_options.yaml`) rules.
@@ -183,6 +184,8 @@ via an issue, GitHub discussion, or reach out to the team either using the
 [fireatlas]: https://github.com/flame-engine/fire-atlas
 [flame_forge2d]: https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d
 [forge2d]: https://github.com/flame-engine/forge2d
+[flame_gamepads]: https://github.com/flame-engine/flame/tree/main/packages/flame_gamepads
+[gamepads]: https://github.com/flame-engine/gamepads
 [flame_isolate]: https://github.com/flame-engine/flame/tree/main/packages/flame_isolate
 [flutter_isolates]: https://api.flutter.dev/flutter/dart-isolate/Isolate-class.html
 [flame_lint]: https://github.com/flame-engine/flame/tree/main/packages/flame_lint
