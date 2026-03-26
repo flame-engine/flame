@@ -25,4 +25,5 @@ rerasterize
 rescan
 Roboto
 tappable
+thumbstick
 underutilize

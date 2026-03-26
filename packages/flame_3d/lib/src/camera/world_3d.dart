@@ -20,16 +20,21 @@ class World3D extends flame.World with flame.HasGameReference {
     super.children,
     super.priority,
     Color clearColor = const Color(0x00000000),
-  }) : context = RenderContext3D(GraphicsDevice(clearValue: clearColor)) {
-    children.register<LightComponent>();
-  }
+  }) : context = RenderContext3D(GraphicsDevice(clearValue: clearColor));
 
   /// The 3D render context attached to this world.
   @internal
   final RenderContext3D context;
 
-  Iterable<Light> get lights =>
-      children.query<LightComponent>().map((component) => component.light);
+  final List<Light> _lights = [];
+
+  /// Register a [light] with this world.
+  @internal
+  void addLight(Light light) => _lights.add(light);
+
+  /// Unregister a [light] from this world.
+  @internal
+  void removeLight(Light light) => _lights.remove(light);
 
   final _paint = Paint();
 
@@ -46,12 +51,12 @@ class World3D extends flame.World with flame.HasGameReference {
     );
 
     context
+      ..lights = _lights
       ..setCamera(camera.viewMatrix, camera.projectionMatrix)
       ..device.begin(size);
 
     culled = 0;
 
-    _prepareContext();
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
     context.flush();
@@ -65,11 +70,6 @@ class World3D extends flame.World with flame.HasGameReference {
       _paint,
     );
     image.dispose();
-  }
-
-  // TODO(luan): consider making this a fixed-size array later
-  void _prepareContext() {
-    context.lightingInfo.lights = lights;
   }
 
   // TODO(wolfenrain): this is only here for testing purposes

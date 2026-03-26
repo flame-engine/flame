@@ -66,7 +66,7 @@ class SpatialMaterial extends Material {
   }
 
   void _bindMaterial(RenderContext3D context) {
-    context.lightingInfo.apply(fragmentShader);
+    _applyLights(context);
     fragmentShader
       ..setTexture('albedoTexture', albedoTexture)
       ..setColor('Material.albedoColor', albedoColor)
@@ -76,6 +76,32 @@ class SpatialMaterial extends Material {
 
   void _bindCamera(RenderContext3D context) {
     fragmentShader.setVector3('Camera.position', context.cameraPosition);
+  }
+
+  void _applyLights(RenderContext3D context) {
+    final lights = context.lights;
+
+    // Apply ambient light (at most one, fallback to default).
+    final ambient =
+        lights.map((e) => e.source).whereType<AmbientLight>().firstOrNull ??
+        AmbientLight();
+    fragmentShader
+      ..setColor('AmbientLight.color', ambient.color)
+      ..setFloat('AmbientLight.intensity', ambient.intensity);
+
+    // Apply point lights.
+    final points = lights.where((e) => e.source is PointLight);
+
+    // NOTE: using floats because Android GLES does not support integer uniforms
+    // Refer to https://github.com/flutter/engine/pull/55329
+    fragmentShader.setFloat('Lights.numLights', points.length.toDouble());
+
+    for (final (index, light) in points.indexed) {
+      fragmentShader
+        ..setVector3('Lights.positions[$index]', light.position)
+        ..setColor('Lights.colors[$index]', light.source.color)
+        ..setFloat('Lights.intensities[$index]', light.source.intensity);
+    }
   }
 
   static const _maxJoints = 16;
