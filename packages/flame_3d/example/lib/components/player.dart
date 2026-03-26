@@ -36,6 +36,13 @@ class Player extends MeshComponent
             albedoTexture: ColorTexture(BasicPalette.yellow.color),
           ),
         ),
+        children: [
+          LightComponent.point(
+            position: Vector3(0, 1.5, 0.8),
+            color: BasicPalette.white.color,
+            intensity: 10,
+          ),
+        ],
       );
 
   @override
