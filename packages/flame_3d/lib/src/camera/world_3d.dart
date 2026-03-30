@@ -20,16 +20,21 @@ class World3D extends flame.World with flame.HasGameReference {
     super.children,
     super.priority,
     Color clearColor = const Color(0x00000000),
-  }) : device = GraphicsDevice(clearValue: clearColor) {
-    children.register<LightComponent>();
-  }
+  }) : device = GraphicsDevice(clearValue: clearColor);
 
   /// The graphical device attached to this world.
   @internal
   final GraphicsDevice device;
 
-  Iterable<Light> get lights =>
-      children.query<LightComponent>().map((component) => component.light);
+  final List<Light> _lights = [];
+
+  /// Register a [light] with this world.
+  @internal
+  void addLight(Light light) => _lights.add(light);
+
+  /// Unregister a [light] from this world.
+  @internal
+  void removeLight(Light light) => _lights.remove(light);
 
   final _paint = Paint();
 
@@ -46,6 +51,7 @@ class World3D extends flame.World with flame.HasGameReference {
     );
 
     device
+      ..lights = _lights
       // Set the view matrix
       ..view.setFrom(camera.viewMatrix)
       // Set the projection matrix
@@ -54,7 +60,6 @@ class World3D extends flame.World with flame.HasGameReference {
 
     culled = 0;
 
-    _prepareDevice();
     // ignore: invalid_use_of_internal_member
     super.renderFromCamera(canvas);
 
@@ -67,11 +72,6 @@ class World3D extends flame.World with flame.HasGameReference {
       _paint,
     );
     image.dispose();
-  }
-
-  // TODO(luan): consider making this a fixed-size array later
-  void _prepareDevice() {
-    device.lightingInfo.lights = lights;
   }
 
   // TODO(wolfenrain): this is only here for testing purposes

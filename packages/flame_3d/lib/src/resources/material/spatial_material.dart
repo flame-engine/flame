@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:ui' hide FragmentShader;
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
@@ -12,33 +12,18 @@ class SpatialMaterial extends Material {
     this.roughness = 0.6,
   }) : albedoTexture = albedoTexture ?? Texture.standard,
        super(
-         vertexShader: Shader.vertex(
-           asset:
-               'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
-           slots: [
-             UniformSlot.value('VertexInfo', {
-               'model',
-               'view',
-               'projection',
-             }),
-             UniformSlot.value(
-               'JointMatrices',
-               List.generate(_maxJoints, (index) => 'joint$index').toSet(),
-             ),
-           ],
+         vertexShader: VertexShader.fromAsset(
+           'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+           slots: ['VertexInfo', 'JointMatrices'],
          ),
-         fragmentShader: Shader.fragment(
-           asset:
-               'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
+         fragmentShader: FragmentShader.fromAsset(
+           'packages/flame_3d/assets/shaders/spatial_material.shaderbundle',
            slots: [
-             UniformSlot.sampler('albedoTexture'),
-             UniformSlot.value('Material', {
-               'albedoColor',
-               'metallic',
-               'roughness',
-             }),
-             ...LightingInfo.shaderSlots,
-             UniformSlot.value('Camera', {'position'}),
+             'albedoTexture',
+             'Material',
+             'AmbientLight',
+             'Lights',
+             'Camera',
            ],
          ),
        );
@@ -77,7 +62,7 @@ class SpatialMaterial extends Material {
       );
     }
     for (final (index, transform) in jointTransforms.indexed) {
-      vertexShader.setMatrix4('JointMatrices.joint$index', transform);
+      vertexShader.setMatrix4('JointMatrices.joints[$index]', transform);
     }
   }
 
@@ -97,7 +82,29 @@ class SpatialMaterial extends Material {
   }
 
   void _applyLights(GraphicsDevice device) {
-    device.lightingInfo.apply(fragmentShader);
+    final lights = device.lights;
+
+    // Apply ambient light (at most one, fallback to default).
+    final ambient =
+        lights.map((e) => e.source).whereType<AmbientLight>().firstOrNull ??
+        AmbientLight();
+    fragmentShader
+      ..setColor('AmbientLight.color', ambient.color)
+      ..setFloat('AmbientLight.intensity', ambient.intensity);
+
+    // Apply point lights.
+    final points = lights.where((e) => e.source is PointLight);
+
+    // NOTE: using floats because Android GLES does not support integer uniforms
+    // Refer to https://github.com/flutter/engine/pull/55329
+    fragmentShader.setFloat('Lights.numLights', points.length.toDouble());
+
+    for (final (index, light) in points.indexed) {
+      fragmentShader
+        ..setVector3('Lights.positions[$index]', light.position)
+        ..setColor('Lights.colors[$index]', light.source.color)
+        ..setFloat('Lights.intensities[$index]', light.source.intensity);
+    }
   }
 
   static const _maxJoints = 16;
