@@ -10,8 +10,8 @@ environment:
   sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
-  flame: ^1.36.0
-  flame_typled: ^0.1.0
+  flame: ^1.37.0
+  flame_typled: ^0.1.1
   flutter:
     sdk: flutter
 

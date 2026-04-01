@@ -1,3 +1,7 @@
+## 0.6.2+22
+
+ - Update a dependency to the latest release.
+
 ## 0.6.2+21
 
  - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
