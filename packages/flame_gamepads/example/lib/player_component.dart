@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame_gamepads/flame_callbacks.dart';
+import 'package:flame_gamepads/flame_gamepads.dart';
 import 'package:flutter/material.dart';
 import 'package:gamepads/gamepads.dart';
 
