@@ -100,6 +100,55 @@ method must be implemented manually.
 If your component is a part of a larger hierarchy, then it will only receive scale events if its
 ancestors have all implemented the `containsLocalPoint` correctly.
 
+
+### isScaling
+
+The `ScaleCallbacks` mixin provides an `isScaling` getter that returns `true` while the component is
+actively being scaled. This is set to `true` at the start of `onScaleStart` and back to `false` at
+`onScaleEnd`. It can be used, for example, to change the component's visual appearance during a scale
+gesture.
+
+
+## Combining with DragCallbacks
+
+A component can use both `ScaleCallbacks` and `DragCallbacks` at the same time. When both mixins are
+present, single-finger gestures produce drag events and two-finger gestures produce both scale and
+drag events. This is useful for components that should be draggable with one finger and
+pinch-to-zoom or rotatable with two fingers.
+
+```dart
+class InteractiveRect extends RectangleComponent
+    with ScaleCallbacks, DragCallbacks {
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    position += event.localDelta;
+  }
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    // store initial angle/scale for relative updates
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    angle = initialAngle + event.rotation;
+  }
+}
+```
+
+
+### Dynamic addition
+
+Components with different callback types can be added to the game at any time. For example, you can
+start with only `DragCallbacks` components and later add a `ScaleCallbacks` component. Flame will
+automatically reconfigure the gesture handling so that both types work correctly. Any gestures that
+are already in progress (e.g. an ongoing drag) will continue uninterrupted during this transition.
+
+See also [Drag Events — Combining with ScaleCallbacks](drag_events.md#combining-with-scalecallbacks).
+
+
 ```dart
 class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
   ScaleOnlyRectangle({
@@ -171,14 +220,3 @@ class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
 }
 
 ```
-
-
-## Scale and drag gestures interactions
-
-A multi drag gesture can sometimes look exactly like a scale gesture.
-This is the case for instance, if you try to move two components toward each other at the same time.
-If you added both a component using ScaleCallbacks and
-one using DragCallbacks (or one using both), this issue will arise.
-The Scale gesture will win over the drag gesture
-and prevent your user to perform the multi drag gesture as they wanted. This is a limitation
-with the current implementation that devs need to be aware of.
