@@ -32,6 +32,9 @@ class SpriteWidget extends StatefulWidget {
   /// If the Sprite should be rasterized or not.
   final bool rasterize;
 
+  /// The size of the widget. If null, the widget will fill the available space.
+  final Size? size;
+
   final FutureOr<Sprite> _spriteFuture;
 
   /// renders the [sprite] as a Widget.
@@ -45,6 +48,7 @@ class SpriteWidget extends StatefulWidget {
     this.loadingBuilder,
     this.paint,
     this.rasterize = false,
+    this.size,
     super.key,
   }) : _spriteFuture = sprite;
 
@@ -65,6 +69,7 @@ class SpriteWidget extends StatefulWidget {
     this.loadingBuilder,
     this.paint,
     this.rasterize = false,
+    this.size,
     String? package,
     super.key,
   }) : _spriteFuture = Sprite.load(
@@ -141,12 +146,19 @@ class _SpriteWidgetState extends State<SpriteWidget> {
     return BaseFutureBuilder<Sprite>(
       future: _spriteFuture,
       builder: (_, sprite) {
-        return InternalSpriteWidget(
+        final internalWidget = InternalSpriteWidget(
           sprite: sprite,
           anchor: widget.anchor,
           angle: widget.angle,
           paint: widget.paint,
         );
+        if (widget.size != null) {
+          return SizedBox.fromSize(
+            size: widget.size,
+            child: internalWidget,
+          );
+        }
+        return internalWidget;
       },
       errorBuilder: widget.errorBuilder,
       loadingBuilder: widget.loadingBuilder,

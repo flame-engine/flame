@@ -17,16 +17,15 @@ class MeshComponent extends Object3D {
     super.position,
     super.scale,
     super.rotation,
+    super.children,
   }) : _mesh = mesh;
 
   /// The mesh resource.
   Mesh get mesh => _mesh;
   final Mesh _mesh;
 
-  Aabb3 get aabb => _aabb
-    ..setFrom(mesh.aabb)
-    ..transform(transformMatrix);
-  final Aabb3 _aabb = Aabb3();
+  @override
+  Aabb3? computeLocalAabb() => mesh.aabb;
 
   @override
   void bind(GraphicsDevice device) {
