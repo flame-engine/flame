@@ -180,12 +180,14 @@ class GestureDetectorBuilder {
 bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
       game is ScrollDetector ||
-      game.mouseDetector != null;
+      game.mouseDetector != null ||
+      game.scrollDetector != null;
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
   final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
   final mouseDetector = game.mouseDetector;
+  final scrollDetector = game.scrollDetector;
   return Listener(
     child: MouseRegion(
       child: child,
@@ -194,9 +196,13 @@ Widget applyMouseDetectors(Game game, Widget child) {
         mouseDetector?.call(e);
       },
     ),
-    onPointerSignal: (event) =>
-        game is ScrollDetector && event is PointerScrollEvent
-        ? game.onScroll(PointerScrollInfo.fromDetails(game, event))
-        : null,
+    onPointerSignal: (event) {
+      if (event is PointerScrollEvent) {
+        if (game is ScrollDetector) {
+          game.onScroll(PointerScrollInfo.fromDetails(game, event));
+        }
+        scrollDetector?.call(event);
+      }
+    },
   );
 }
