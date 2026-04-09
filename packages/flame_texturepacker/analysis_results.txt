@@ -1,0 +1,150 @@
+Resolving dependencies in `/Users/today/Desktop/S1RGAME/packages/flame`...
+Downloading packages...
+  _fe_analyzer_shared 96.0.0 (99.0.0 available)
+  analyzer 10.2.0 (12.1.0 available)
+  bloc 8.1.4 (9.2.0 available)
+  dart_style 3.1.7 (3.1.8 available)
+  devtools_app_shared 0.3.1 (0.5.0 available)
+  devtools_extensions 0.3.1 (0.5.0 available)
+  devtools_shared 11.2.1 (12.1.0 available)
+  dtd 2.5.1 (4.0.0 available)
+  flutter_bloc 8.1.6 (9.1.1 available)
+  js 0.6.7 (0.7.2 available)
+  json_rpc_2 3.0.3 (4.1.0 available)
+  meta 1.18.0 (1.18.2 available)
+  test 1.30.0 (1.31.0 available)
+  test_api 0.7.10 (0.7.11 available)
+  test_core 0.6.16 (0.6.17 available)
+  vector_math 2.2.0 (2.3.0 available)
+Got dependencies in `/Users/today/Desktop/S1RGAME/packages/flame`!
+16 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing experimental...                                       
+
+   info • The method '==' should not be overridden in classes not annotated with '@immutable' • lib/src/experimental/bake_analyzer.dart:97:3 • avoid_equals_and_hash_code_on_mutable_classes
+   info • The method 'hashCode' should not be overridden in classes not annotated with '@immutable' • lib/src/experimental/bake_analyzer.dart:113:3 • avoid_equals_and_hash_code_on_mutable_classes
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:148:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:149:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:150:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:151:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:152:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:153:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:154:19 • always_put_required_named_parameters_first
+   info • Required named parameters should be before optional named parameters • lib/src/experimental/bake_analyzer.dart:158:19 • always_put_required_named_parameters_first
+   info • The line length exceeds the 80-character limit • lib/src/experimental/bake_analyzer.dart:162:81 • lines_longer_than_80_chars
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:182:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:183:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:184:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:186:13 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:194:27 • always_put_control_body_on_new_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:196:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:197:13 • omit_local_variable_types
+   info • The value of the argument is redundant because it matches the default value • lib/src/experimental/bake_analyzer.dart:229:24 • avoid_redundant_argument_values
+   info • The expression has no effect and can be removed • lib/src/experimental/bake_analyzer.dart:239:24 • noop_primitive_operations
+   info • The expression has no effect and can be removed • lib/src/experimental/bake_analyzer.dart:240:24 • noop_primitive_operations
+   info • The line length exceeds the 80-character limit • lib/src/experimental/bake_analyzer.dart:251:81 • lines_longer_than_80_chars
+   info • Catch clause should use 'on' to specify the type of exception being caught • lib/src/experimental/bake_analyzer.dart:280:7 • avoid_catches_without_on_clauses
+   info • The value of the argument is redundant because it matches the default value • lib/src/experimental/bake_analyzer.dart:290:20 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value • lib/src/experimental/bake_analyzer.dart:298:21 • avoid_redundant_argument_values
+   info • The value of the argument is redundant because it matches the default value • lib/src/experimental/bake_analyzer.dart:312:53 • avoid_redundant_argument_values
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:313:27 • always_put_control_body_on_new_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:316:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:317:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:319:5 • omit_local_variable_types
+   info • Multiple variables declared on a single line • lib/src/experimental/bake_analyzer.dart:319:19 • avoid_multiple_declarations_per_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:320:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:322:10 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:323:12 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/bake_analyzer.dart:324:15 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:326:25 • always_put_control_body_on_new_line
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:327:25 • always_put_control_body_on_new_line
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:328:25 • always_put_control_body_on_new_line
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:329:25 • always_put_control_body_on_new_line
+   info • Statement should be on a separate line • lib/src/experimental/bake_analyzer.dart:335:17 • always_put_control_body_on_new_line
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/bake_request.dart:4:8 • always_use_package_imports
+   info • The referenced name isn't visible in scope • lib/src/experimental/bake_request.dart:6:49 • comment_references
+   info • The line length exceeds the 80-character limit • lib/src/experimental/bake_request.dart:24:81 • lines_longer_than_80_chars
+   info • The referenced name isn't visible in scope • lib/src/experimental/bake_request.dart:88:58 • comment_references
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas.dart:3:8 • always_use_package_imports
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas.dart:4:8 • always_use_package_imports
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas.dart:5:8 • always_use_package_imports
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas.dart:10:81 • lines_longer_than_80_chars
+   info • The member 'getAnimation' overrides an inherited member but isn't annotated with '@override' • lib/src/experimental/composite_atlas.dart:25:19 • annotate_overrides
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas.dart:48:81 • lines_longer_than_80_chars
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:6:8 • always_use_package_imports
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:8:8 • always_use_package_imports
+   info • Sort directive sections alphabetically • lib/src/experimental/composite_atlas_impl.dart:9:1 • directives_ordering
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:9:8 • always_use_package_imports
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:10:8 • always_use_package_imports
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:11:8 • always_use_package_imports
+   info • Sort directive sections alphabetically • lib/src/experimental/composite_atlas_impl.dart:14:1 • directives_ordering
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:14:8 • always_use_package_imports
+   info • Use 'package:' imports for files in the 'lib' directory • lib/src/experimental/composite_atlas_impl.dart:15:8 • always_use_package_imports
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:56:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:57:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:58:11 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:62:38 • always_put_control_body_on_new_line
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:77:81 • lines_longer_than_80_chars
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:78:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:140:19 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:147:19 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:149:19 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:179:17 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:214:17 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:216:17 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:254:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:255:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:257:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:264:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:265:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:266:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:272:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:313:15 • omit_local_variable_types
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:317:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:384:81 • lines_longer_than_80_chars
+   info • The local variable '_computePixelHash' starts with an underscore • lib/src/experimental/composite_atlas_impl.dart:394:20 • no_leading_underscores_for_local_identifiers
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:412:7 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:413:13 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:414:13 • omit_local_variable_types
+   info • The value of the argument is redundant because it matches the default value • lib/src/experimental/composite_atlas_impl.dart:419:17 • avoid_redundant_argument_values
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:429:14 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:430:16 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:444:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:452:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:458:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:459:11 • omit_local_variable_types
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:467:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:477:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:482:81 • lines_longer_than_80_chars
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:486:11 • omit_local_variable_types
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:488:81 • lines_longer_than_80_chars
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:513:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:516:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:526:11 • omit_local_variable_types
+   info • Local variables should be final • lib/src/experimental/composite_atlas_impl.dart:531:5 • prefer_final_locals
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:534:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:543:7 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:546:41 • always_put_control_body_on_new_line
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:554:81 • lines_longer_than_80_chars
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:717:47 • always_put_control_body_on_new_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:752:11 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:767:29 • always_put_control_body_on_new_line
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:797:29 • always_put_control_body_on_new_line
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:818:32 • always_put_control_body_on_new_line
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:827:81 • lines_longer_than_80_chars
+   info • The line length exceeds the 80-character limit • lib/src/experimental/composite_atlas_impl.dart:830:81 • lines_longer_than_80_chars
+   info • Statement should be on a separate line • lib/src/experimental/composite_atlas_impl.dart:838:22 • always_put_control_body_on_new_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/composite_atlas_impl.dart:839:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:49:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:50:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:51:5 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:53:10 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/packers.dart:77:24 • always_put_control_body_on_new_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:89:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:95:11 • omit_local_variable_types
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:136:10 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/packers.dart:137:20 • always_put_control_body_on_new_line
+   info • Unnecessary type annotation on a local variable • lib/src/experimental/packers.dart:144:14 • omit_local_variable_types
+   info • Statement should be on a separate line • lib/src/experimental/packers.dart:145:24 • always_put_control_body_on_new_line
+
+125 issues found. (ran in 1.2s)
