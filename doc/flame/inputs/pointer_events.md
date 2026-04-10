@@ -117,9 +117,9 @@ The `ScrollEvent` provides:
   down the hit-test list (or the game itself).
 
 Scroll events are delivered to **all** components under the pointer (not just the topmost one),
-so set `continuePropagation = false` if only one component should handle the event.
+unless set `continuePropagation = false` is set to stop it from bubbling further.
 
-You can also mix `ScrollCallbacks` directly into your `FlameGame` to handle scrolls at the
+You can also mix `ScrollCallbacks` directly into your `FlameGame` to handle scrolling at the
 game level.
 
 
