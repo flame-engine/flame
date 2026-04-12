@@ -21,29 +21,53 @@ class SecondaryTapDispatcherKey implements ComponentKey {
 /// automatically whenever any [SecondaryTapCallbacks] are mounted into the
 /// component tree.
 class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
-  final _components = <SecondaryTapCallbacks>{};
+  final _secondaryComponents = <SecondaryTapCallbacks>{};
+  final _tertiaryComponents = <TertiaryTapCallbacks>{};
 
   void _onSecondaryTapDown(SecondaryTapDownEvent event) {
     event.deliverAtPoint(
       rootComponent: game,
       eventHandler: (SecondaryTapCallbacks component) {
-        _components.add(component..onSecondaryTapDown(event));
+        _secondaryComponents.add(component..onSecondaryTapDown(event));
       },
     );
   }
 
   void _onSecondaryTapUp(SecondaryTapUpEvent event) {
-    for (final component in _components) {
+    for (final component in _secondaryComponents) {
       component.onSecondaryTapUp(event);
     }
-    _components.clear();
+    _secondaryComponents.clear();
   }
 
   void _onSecondaryTapCancel(SecondaryTapCancelEvent event) {
-    for (final component in _components) {
+    for (final component in _secondaryComponents) {
       component.onSecondaryTapCancel(event);
     }
-    _components.clear();
+    _secondaryComponents.clear();
+  }
+
+  void _onTertiaryTapDown(TertiaryTapDownEvent event) {
+    event.deliverAtPoint(
+      rootComponent: game,
+      eventHandler: (TertiaryTapCallbacks component) {
+        _tertiaryComponents.add(component..onTertiaryTapDown(event));
+      },
+    );
+  }
+
+  void _onTertiaryTapUp(TertiaryTapUpEvent event) {
+    for (final component in _tertiaryComponents) {
+      component.onTertiaryTapUp(event);
+    }
+    _tertiaryComponents.clear();
+  }
+
+  void _onTertiaryTapCancel(TertiaryTapCancelEvent event) {
+    for (final component in _tertiaryComponents) {
+      component.onTertiaryTapCancel(event);
+    }
+    _tertiaryComponents.clear();
   }
 
   static void addDispatcher(Component component) {
@@ -65,6 +89,12 @@ class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
             _onSecondaryTapCancel(SecondaryTapCancelEvent());
         instance.onSecondaryTapUp = (details) =>
             _onSecondaryTapUp(SecondaryTapUpEvent(game, details));
+        instance.onTertiaryTapDown = (details) =>
+            _onTertiaryTapDown(TertiaryTapDownEvent(game, details));
+        instance.onTertiaryTapCancel = () =>
+            _onTertiaryTapCancel(TertiaryTapCancelEvent());
+        instance.onTertiaryTapUp = (details) =>
+            _onTertiaryTapUp(TertiaryTapUpEvent(game, details));
       },
     );
   }

@@ -11,6 +11,8 @@ export 'src/events/component_mixins/scroll_callbacks.dart' show ScrollCallbacks;
 export 'src/events/component_mixins/secondary_tap_callbacks.dart'
     show SecondaryTapCallbacks;
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
+export 'src/events/component_mixins/tertiary_tap_callbacks.dart'
+    show TertiaryTapCallbacks;
 export 'src/events/flame_game_mixins/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
 export 'src/events/flame_game_mixins/long_press_dispatcher.dart'
@@ -62,6 +64,11 @@ export 'src/events/messages/secondary_tap_up_event.dart'
 export 'src/events/messages/tap_cancel_event.dart' show TapCancelEvent;
 export 'src/events/messages/tap_down_event.dart' show TapDownEvent;
 export 'src/events/messages/tap_up_event.dart' show TapUpEvent;
+export 'src/events/messages/tertiary_tap_cancel_event.dart'
+    show TertiaryTapCancelEvent;
+export 'src/events/messages/tertiary_tap_down_event.dart'
+    show TertiaryTapDownEvent;
+export 'src/events/messages/tertiary_tap_up_event.dart' show TertiaryTapUpEvent;
 export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
 export 'src/gestures/detectors.dart'
