@@ -8,33 +8,30 @@ class GestureDetectorBuilder {
   GestureDetectorBuilder([this._onChange]);
 
   final Map<Type, GestureRecognizerFactory> _gestures = {};
-  final Map<Type, int> _counters = {};
+  final _registrations = _RegistrationMap();
   final void Function()? _onChange;
 
   void add<T extends GestureRecognizer>(
     T Function() constructor,
     void Function(T) initializer,
   ) {
-    final count = _counters[T];
-    if (count == null) {
-      _gestures[T] = GestureRecognizerFactoryWithHandlers<T>(
-        constructor,
-        initializer,
-      );
-      _onChange?.call();
-    }
-    _counters[T] = (count ?? 0) + 1;
+    final registration =
+        _registrations.get<T>() ?? _registrations.put<T>(constructor);
+    registration.initializers.add(initializer);
+    _gestures[T] = registration.buildFactory();
+    _onChange?.call();
   }
 
   void remove<T extends GestureRecognizer>() {
-    final count = _counters[T]!;
-    if (count == 1) {
-      _counters.remove(T);
+    final registration = _registrations.get<T>()!;
+    registration.initializers.removeLast();
+    if (registration.initializers.isEmpty) {
+      _registrations.remove<T>();
       _gestures.remove(T);
-      _onChange?.call();
     } else {
-      _counters[T] = count - 1;
+      _gestures[T] = registration.buildFactory();
     }
+    _onChange?.call();
   }
 
   Widget build(Widget child) {
@@ -205,4 +202,40 @@ Widget applyMouseDetectors(Game game, Widget child) {
       }
     },
   );
+}
+
+class _RegistrationMap {
+  final _map = <Type, _RecognizerRegistration>{};
+
+  _RecognizerRegistration<T>? get<T extends GestureRecognizer>() {
+    return _map[T] as _RecognizerRegistration<T>?;
+  }
+
+  _RecognizerRegistration<T> put<T extends GestureRecognizer>(
+    T Function() constructor,
+  ) {
+    final registration = _RecognizerRegistration<T>(constructor);
+    _map[T] = registration;
+    return registration;
+  }
+
+  void remove<T extends GestureRecognizer>() => _map.remove(T);
+}
+
+class _RecognizerRegistration<T extends GestureRecognizer> {
+  _RecognizerRegistration(this.constructor);
+  final T Function() constructor;
+  final List<void Function(T)> initializers = [];
+
+  GestureRecognizerFactory<T> buildFactory() {
+    final currentInitializers = List<void Function(T)>.of(initializers);
+    return GestureRecognizerFactoryWithHandlers<T>(
+      constructor,
+      (T instance) {
+        for (final init in currentInitializers) {
+          init(instance);
+        }
+      },
+    );
+  }
 }
