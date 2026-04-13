@@ -84,6 +84,7 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {
     final updated = <TaggedComponent<DragCallbacks>>{};
+    // Defer cleanup so stale targets can be cancelled after iteration.
     final stale = <TaggedComponent<DragCallbacks>>{};
     event.deliverAtPoint(
       rootComponent: game,
