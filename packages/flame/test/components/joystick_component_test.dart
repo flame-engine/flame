@@ -121,7 +121,8 @@ void main() {
     );
 
     testWithFlameGame(
-      'does not throw when joystick is removed during an active drag and receives update',
+      'does not throw when joystick is removed '
+      'during an active drag and receives update',
       (game) async {
         final joystick = JoystickComponent(
           knob: CircleComponent(radius: 5.0),
