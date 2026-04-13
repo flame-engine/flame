@@ -294,9 +294,16 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   //#endregion
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const ScaleDispatcherKey(),
+      ScaleDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add<ScaleGestureRecognizer>(
+    game.gestureDetectors.register<ScaleGestureRecognizer>(
       ScaleGestureRecognizer.new,
       (ScaleGestureRecognizer instance) {
         instance
@@ -334,7 +341,7 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<ScaleGestureRecognizer>();
+    game.removeDispatcher<ScaleGestureRecognizer>(const ScaleDispatcherKey());
     super.onRemove();
   }
 

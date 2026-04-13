@@ -186,9 +186,16 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   //#endregion
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const MultiDragDispatcherKey(),
+      MultiDragDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
+    game.gestureDetectors.register<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
         instance.onStart = (Offset point) => FlameDragAdapter(this, point);
@@ -198,8 +205,9 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
-    game.unregisterKey(const MultiDragDispatcherKey());
+    game.removeDispatcher<ImmediateMultiDragGestureRecognizer>(
+      const MultiDragDispatcherKey(),
+    );
     _dragUpdateController.close();
     _dragCancelController.close();
     _dragStartController.close();

@@ -11,6 +11,8 @@ import 'package:meta/meta.dart';
 /// component.
 ///
 /// This mixin is the replacement of the Hoverable mixin.
+///
+/// This callback uses [PointerMoveDispatcher] to route events.
 mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   bool _isHovered = false;
 
@@ -56,6 +58,6 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    PointerMoveCallbacks.onMountHandler(this);
+    PointerMoveDispatcher.addDispatcher(this);
   }
 }

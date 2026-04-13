@@ -123,9 +123,16 @@ class LongPressDispatcher extends Component {
 
   //#endregion
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const LongPressDispatcherKey(),
+      LongPressDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add<LongPressGestureRecognizer>(
+    game.gestureDetectors.register<LongPressGestureRecognizer>(
       LongPressGestureRecognizer.new,
       (LongPressGestureRecognizer instance) {
         instance
@@ -140,8 +147,9 @@ class LongPressDispatcher extends Component {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<LongPressGestureRecognizer>();
-    game.unregisterKey(const LongPressDispatcherKey());
+    game.removeDispatcher<LongPressGestureRecognizer>(
+      const LongPressDispatcherKey(),
+    );
     super.onRemove();
   }
 }

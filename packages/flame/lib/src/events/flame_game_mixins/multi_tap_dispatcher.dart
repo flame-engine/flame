@@ -149,9 +149,16 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   //#endregion
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const MultiTapDispatcherKey(),
+      MultiTapDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add<MultiTapGestureRecognizer>(
+    game.gestureDetectors.register<MultiTapGestureRecognizer>(
       () => MultiTapGestureRecognizer(
         allowedButtonsFilter: (buttons) => buttons == kPrimaryButton,
       ),
@@ -170,8 +177,9 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<MultiTapGestureRecognizer>();
-    game.unregisterKey(const MultiTapDispatcherKey());
+    game.removeDispatcher<MultiTapGestureRecognizer>(
+      const MultiTapDispatcherKey(),
+    );
   }
 
   @override

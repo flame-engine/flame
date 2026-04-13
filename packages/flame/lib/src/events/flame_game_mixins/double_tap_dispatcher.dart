@@ -44,9 +44,16 @@ class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
     _components.clear();
   }
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const DoubleTapDispatcherKey(),
+      DoubleTapDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add(
+    game.gestureDetectors.register<DoubleTapGestureRecognizer>(
       DoubleTapGestureRecognizer.new,
       (DoubleTapGestureRecognizer instance) {
         instance.onDoubleTapDown = (details) =>
@@ -60,7 +67,8 @@ class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<DoubleTapGestureRecognizer>();
-    game.unregisterKey(const DoubleTapDispatcherKey());
+    game.removeDispatcher<DoubleTapGestureRecognizer>(
+      const DoubleTapDispatcherKey(),
+    );
   }
 }

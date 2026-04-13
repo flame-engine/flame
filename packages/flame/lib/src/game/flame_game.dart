@@ -9,6 +9,7 @@ import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 // TODO(spydon): Remove this import when flutter version is updated to 3.35.0
 // ignore: unnecessary_import
 import 'package:meta/meta.dart';
@@ -64,6 +65,28 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     _camera.world = _world;
     add(_camera);
     add(_world);
+  }
+
+  /// Registers a dispatcher component for the given [key] if one does not
+  /// already exist.
+  ///
+  /// If no component is registered under [key], creates one via [create],
+  /// registers it under [key], and adds it to the game.
+  void addDispatcher(ComponentKey key, Component Function() create) {
+    if (findByKey(key) == null) {
+      final dispatcher = create();
+      registerKey(key, dispatcher);
+      add(dispatcher);
+    }
+  }
+
+  /// Removes a gesture-based dispatcher registered under [key].
+  ///
+  /// Unregisters the gesture recognizer of type [R] from the gesture detector
+  /// builder and removes [key] from the component key registry.
+  void removeDispatcher<R extends GestureRecognizer>(ComponentKey key) {
+    gestureDetectors.unregister<R>();
+    unregisterKey(key);
   }
 
   /// The [World] that the [camera] is rendering.

@@ -46,9 +46,16 @@ class SecondaryTapDispatcher extends Component
     _components.clear();
   }
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const SecondaryTapDispatcherKey(),
+      SecondaryTapDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add(
+    game.gestureDetectors.register(
       TapGestureRecognizer.new,
       (TapGestureRecognizer instance) {
         instance.onSecondaryTapDown = (details) =>
@@ -63,7 +70,8 @@ class SecondaryTapDispatcher extends Component
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<TapGestureRecognizer>();
-    game.unregisterKey(const SecondaryTapDispatcherKey());
+    game.removeDispatcher<TapGestureRecognizer>(
+      const SecondaryTapDispatcherKey(),
+    );
   }
 }

@@ -27,6 +27,13 @@ class ScrollDispatcher extends Component {
     onPointerScroll(ScrollEvent.fromPointerScrollEvent(game, event));
   }
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const ScrollDispatcherKey(),
+      ScrollDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
     game.scrollDetector = _handlePointerScroll;

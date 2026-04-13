@@ -5,6 +5,8 @@ import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive
 /// pointer scroll (mouse wheel) events.
+///
+/// This callback uses [ScrollDispatcher] to route events.
 mixin ScrollCallbacks on Component {
   void onScroll(ScrollEvent event) {}
 
@@ -12,16 +14,6 @@ mixin ScrollCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    onMountHandler(this);
-  }
-
-  static void onMountHandler(ScrollCallbacks instance) {
-    final game = instance.findRootGame()!;
-    const key = ScrollDispatcherKey();
-    if (game.findByKey(key) == null) {
-      final dispatcher = ScrollDispatcher();
-      game.registerKey(key, dispatcher);
-      game.add(dispatcher);
-    }
+    ScrollDispatcher.addDispatcher(this);
   }
 }

@@ -45,6 +45,13 @@ class PointerMoveDispatcher extends Component {
     onMouseMove(PointerMoveEvent.fromPointerHoverEvent(game, event));
   }
 
+  static void addDispatcher(Component component) {
+    component.findRootGame()!.addDispatcher(
+      const MouseMoveDispatcherKey(),
+      PointerMoveDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
     game.mouseDetector = _handlePointerMove;
