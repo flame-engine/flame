@@ -84,21 +84,42 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {
     final updated = <TaggedComponent<DragCallbacks>>{};
+    // Defer cleanup so stale targets can be cancelled after iteration.
+    final stale = <TaggedComponent<DragCallbacks>>{};
     event.deliverAtPoint(
       rootComponent: game,
       deliverToAll: true,
       eventHandler: (DragCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_records.contains(record)) {
-          component.onDragUpdate(event);
-          updated.add(record);
+          if (!component.isMounted || component.isRemoving) {
+            stale.add(record);
+          } else {
+            component.onDragUpdate(event);
+            updated.add(record);
+          }
         }
       },
     );
     for (final record in _records) {
-      if (record.pointerId == event.pointerId && !updated.contains(record)) {
-        record.component.onDragUpdate(event);
+      if (record.pointerId != event.pointerId) {
+        continue;
       }
+      final component = record.component;
+      if (!component.isMounted || component.isRemoving) {
+        stale.add(record);
+        continue;
+      }
+      if (!updated.contains(record)) {
+        component.onDragUpdate(event);
+      }
+    }
+    if (stale.isNotEmpty) {
+      final cancelEvent = DragCancelEvent(event.pointerId);
+      for (final record in stale) {
+        record.component.onDragCancel(cancelEvent);
+      }
+      _records.removeAll(stale);
     }
   }
 
