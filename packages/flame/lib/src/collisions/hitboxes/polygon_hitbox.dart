@@ -42,9 +42,9 @@ class PolygonHitbox extends PolygonComponent
 
   /// With this constructor you create a regular (equiangular and equilateral)
   /// polygon hitbox from number of sides and radius.
-  PolygonHitbox.regular(
-    super.sides,
-    super.radius, {
+  PolygonHitbox.regular({
+    required super.sides,
+    required super.radius,
     super.position,
     super.angle,
     super.anchor,

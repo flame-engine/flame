@@ -97,9 +97,9 @@ class PolygonComponent extends ShapeComponent {
   /// polygon from number of sides and radius anywhere in the 2d-space. It will
   /// automatically calculate the [size] of the Polygon (the bounding box) if no
   /// size is given.
-  PolygonComponent.regular(
-    int sides,
-    double radius, {
+  PolygonComponent.regular({
+    required int sides,
+    required double radius,
     Vector2? position,
     Vector2? size,
     Vector2? scale,
