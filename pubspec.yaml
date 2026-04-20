@@ -156,7 +156,7 @@ melos:
       description: Checks whether there are any broken links in the docs.
 
     test:select:
-      run: melos exec -c 1 -- flutter test
+      run: melos exec -c 1 -- flutter test --reporter=json 2>&1 | dart run "$MELOS_ROOT_PATH/scripts/test_formatter.dart"
       packageFilters:
         dirExists: test
       description: Run `flutter test` for selected packages.
