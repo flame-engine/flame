@@ -42,7 +42,7 @@ class PolygonHitbox extends PolygonComponent
 
   /// With this constructor you create a regular (equiangular and equilateral)
   /// polygon hitbox from number of sides and radius.
-  PolygonHitbox.regularPolygon(
+  PolygonHitbox.regular(
     super.sides,
     super.radius, {
     super.position,
@@ -50,7 +50,7 @@ class PolygonHitbox extends PolygonComponent
     super.anchor,
     bool isSolid = false,
     CollisionType collisionType = CollisionType.active,
-  }) : super.regularPolygon() {
+  }) : super.regular() {
     this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
