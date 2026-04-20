@@ -2154,6 +2154,93 @@ void main() {
               'direction has accumulated normalization drift',
         );
       },
+
+      'ray does not escape circle at high depth from center': (game) async {
+        final world = (game as FlameGame).world;
+        final circle = CircleComponent(
+          position: Vector2.all(100),
+          radius: 50,
+          anchor: Anchor.center,
+        )..add(CircleHitbox());
+        await world.ensureAdd(circle);
+
+        final ray = Ray2(
+          origin: Vector2.all(100),
+          direction: Vector2.all(1)..normalize(),
+        );
+        final results = game.collisionDetection
+            .raytrace(ray, maxDepth: 1000)
+            .toList();
+        expect(results.length, 1000);
+
+        final center = Vector2.all(100);
+        for (final result in results) {
+          final dist = result.intersectionPoint!.distanceTo(center);
+          expect(dist, closeTo(50, 0.1));
+          expect(result.isInsideHitbox, isTrue);
+        }
+      },
+
+      'ray does not escape circle at various angles': (game) async {
+        final world = (game as FlameGame).world;
+        final circle = CircleComponent(
+          position: Vector2.zero(),
+          radius: 100,
+          anchor: Anchor.center,
+        )..add(CircleHitbox());
+        await world.ensureAdd(circle);
+
+        for (var angle = 0.1; angle < pi; angle += 0.3) {
+          final ray = Ray2(
+            origin: Vector2.all(10),
+            direction: Vector2(cos(angle), sin(angle)),
+          );
+          final results = game.collisionDetection
+              .raytrace(ray, maxDepth: 500)
+              .toList();
+          expect(
+            results.length,
+            500,
+            reason:
+                'ray escaped at angle $angle after ${results.length} '
+                'bounces',
+          );
+        }
+      },
+
+      'ray bouncing between circle and rotated rectangle does not escape':
+          (game) async {
+            final world = (game as FlameGame).world;
+            // Reproduce the example app layout: a large circle with a rotated
+            // rectangle inside, forcing the ray to bounce between both shapes.
+            final circle = CircleComponent(
+              position: Vector2.all(300),
+              radius: 200,
+              anchor: Anchor.center,
+            )..add(CircleHitbox());
+            final rect = RectangleComponent(
+              position: Vector2(350, 280),
+              size: Vector2(150, 80),
+              angle: tau / 10,
+              anchor: Anchor.center,
+            )..add(RectangleHitbox());
+            await world.ensureAddAll([circle, rect]);
+
+            final ray = Ray2(
+              origin: Vector2(200, 250),
+              direction: Vector2(1, 0.3)..normalize(),
+            );
+            final results = game.collisionDetection
+                .raytrace(ray, maxDepth: 500)
+                .toList();
+            expect(
+              results.length,
+              500,
+              reason:
+                  'ray escaped after ${results.length} bounces between circle '
+                  'and rotated rectangle',
+            );
+          },
     });
   });
 
