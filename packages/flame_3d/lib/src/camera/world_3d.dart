@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart' as flame;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
+import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flutter/widgets.dart' show MediaQuery;
@@ -14,19 +15,16 @@ import 'package:meta/meta.dart';
 /// The primary feature of this component is that it allows [Component3D]s to
 /// render directly to a [GraphicsDevice] instead of the regular rendering.
 /// {@endtemplate}
-class World3D extends flame.World with flame.HasGameReference {
+class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
   /// {@macro world_3d}
   World3D({
     super.children,
     super.priority,
-    Color clearColor = const Color(0x00000000),
-  }) : device = GraphicsDevice(clearValue: clearColor);
-
-  /// The graphical device attached to this world.
-  @internal
-  final GraphicsDevice device;
+  });
 
   final List<Light> _lights = [];
+
+  RenderContext3D get context => game.context;
 
   /// Register a [light] with this world.
   @internal
@@ -36,44 +34,32 @@ class World3D extends flame.World with flame.HasGameReference {
   @internal
   void removeLight(Light light) => _lights.remove(light);
 
-  final _paint = Paint();
-
   @internal
   @override
   void renderFromCamera(Canvas canvas) {
     final camera = CameraComponent3D.currentCamera!;
-    final viewport = camera.viewport;
+    final Viewport(virtualSize: size) = camera.viewport;
 
-    final devicePixelRatio = MediaQuery.of(game.buildContext!).devicePixelRatio;
-    final size = Size(
-      viewport.virtualSize.x * devicePixelRatio,
-      viewport.virtualSize.y * devicePixelRatio,
-    );
+    final pixelRatio = MediaQuery.devicePixelRatioOf(game.buildContext!);
+    final renderSize = Size(size.x * pixelRatio, size.y * pixelRatio);
 
-    device
+    context
       ..lights = _lights
-      // Set the view matrix
-      ..view.setFrom(camera.viewMatrix)
-      // Set the projection matrix
-      ..projection.setFrom(camera.projectionMatrix)
-      ..begin(size);
+      ..setCamera(camera.viewMatrix, camera.projectionMatrix);
 
-    culled = 0;
-
-    // ignore: invalid_use_of_internal_member
+    game.device.beginPass(renderSize);
     super.renderFromCamera(canvas);
+    context.flush();
 
-    final image = device.end();
+    final image = game.device.endPass();
     canvas.drawImageRect(
       image,
-      Offset.zero & size,
-      (-viewport.virtualSize / 2).toOffset() &
-          Size(viewport.virtualSize.x, viewport.virtualSize.y),
+      Offset.zero & renderSize,
+      Offset(-size.x / 2, -size.y / 2) & Size(size.x, size.y),
       _paint,
     );
     image.dispose();
   }
 
-  // TODO(wolfenrain): this is only here for testing purposes
-  int culled = 0;
+  static final _paint = Paint();
 }
