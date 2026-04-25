@@ -341,13 +341,8 @@ class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
 
   @override
   void onRemove() {
-    Dispatcher.removeDispatcher(
-      game,
-      const ScaleDispatcherKey(),
-      unregister: () {
-        game.gestureDetectors.unregister<ScaleGestureRecognizer>();
-      },
-    );
+    game.gestureDetectors.unregister<ScaleGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const ScaleDispatcherKey());
     super.onRemove();
   }
 

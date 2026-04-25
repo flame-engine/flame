@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:flutter/foundation.dart';
 
 abstract class Dispatcher<G extends FlameGame> extends Component
     with HasGameReference<G> {
@@ -18,12 +17,7 @@ abstract class Dispatcher<G extends FlameGame> extends Component
     game.add(dispatcher);
   }
 
-  static void removeDispatcher(
-    FlameGame game,
-    ComponentKey key, {
-    VoidCallback? unregister,
-  }) {
-    unregister?.call();
+  static void removeDispatcher(FlameGame game, ComponentKey key) {
     game.unregisterKey(key);
   }
 }

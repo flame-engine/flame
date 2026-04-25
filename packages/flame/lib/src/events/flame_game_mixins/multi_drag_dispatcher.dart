@@ -206,13 +206,8 @@ class MultiDragDispatcher extends Dispatcher<FlameGame>
 
   @override
   void onRemove() {
-    Dispatcher.removeDispatcher(
-      game,
-      const MultiDragDispatcherKey(),
-      unregister: () {
-        game.gestureDetectors.unregister<ImmediateMultiDragGestureRecognizer>();
-      },
-    );
+    game.gestureDetectors.unregister<ImmediateMultiDragGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const MultiDragDispatcherKey());
     _dragUpdateController.close();
     _dragCancelController.close();
     _dragStartController.close();

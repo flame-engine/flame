@@ -69,12 +69,7 @@ class DoubleTapDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onRemove() {
-    Dispatcher.removeDispatcher(
-      game,
-      const DoubleTapDispatcherKey(),
-      unregister: () {
-        game.gestureDetectors.unregister<DoubleTapGestureRecognizer>();
-      },
-    );
+    game.gestureDetectors.unregister<DoubleTapGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const DoubleTapDispatcherKey());
   }
 }

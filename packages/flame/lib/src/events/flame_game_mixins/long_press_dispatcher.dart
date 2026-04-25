@@ -147,14 +147,8 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onRemove() {
-    Dispatcher.removeDispatcher(
-      game,
-      const LongPressDispatcherKey(),
-      unregister: () {
-        game.gestureDetectors.unregister<LongPressGestureRecognizer>();
-      },
-    );
-    super.onRemove();
+    game.gestureDetectors.unregister<LongPressGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const LongPressDispatcherKey());
   }
 }
 

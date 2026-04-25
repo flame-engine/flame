@@ -71,12 +71,7 @@ class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onRemove() {
-    Dispatcher.removeDispatcher(
-      game,
-      const SecondaryTapDispatcherKey(),
-      unregister: () {
-        game.gestureDetectors.unregister<TapGestureRecognizer>();
-      },
-    );
+    game.gestureDetectors.unregister<TapGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const SecondaryTapDispatcherKey());
   }
 }

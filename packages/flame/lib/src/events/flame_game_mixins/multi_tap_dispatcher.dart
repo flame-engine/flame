@@ -178,13 +178,8 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
 
   @override
   void onRemove() {
-    Dispatcher.removeDispatcher(
-      game,
-      const MultiTapDispatcherKey(),
-      unregister: () {
-        game.gestureDetectors.unregister<MultiTapGestureRecognizer>();
-      },
-    );
+    game.gestureDetectors.unregister<MultiTapGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const MultiTapDispatcherKey());
   }
 
   @override
