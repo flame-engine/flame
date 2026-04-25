@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/events/component_mixins/long_press_callbacks.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/messages/long_press_cancel_event.dart';
 import 'package:flame/src/events/messages/long_press_end_event.dart';
 import 'package:flame/src/events/messages/long_press_move_update_event.dart';
@@ -13,11 +14,9 @@ import 'package:meta/meta.dart';
 /// that use the [LongPressCallbacks] mixin. It will be attached to the
 /// [FlameGame] instance automatically whenever any [LongPressCallbacks]
 /// components are mounted into the component tree.
-class LongPressDispatcher extends Component {
+class LongPressDispatcher extends Dispatcher<FlameGame> {
   /// Records all components currently being long-pressed, keyed by pointerId.
   final Set<TaggedComponent<LongPressCallbacks>> _records = {};
-
-  FlameGame get game => parent! as FlameGame;
 
   /// Monotonically increasing id assigned to each new long press gesture.
   int _nextPointerId = 0;
@@ -124,7 +123,8 @@ class LongPressDispatcher extends Component {
   //#endregion
 
   static void addDispatcher(Component component) {
-    component.findRootGame()!.addDispatcher(
+    Dispatcher.addDispatcher(
+      component,
       const LongPressDispatcherKey(),
       LongPressDispatcher.new,
     );
@@ -147,8 +147,12 @@ class LongPressDispatcher extends Component {
 
   @override
   void onRemove() {
-    game.removeDispatcher<LongPressGestureRecognizer>(
+    Dispatcher.removeDispatcher(
+      game,
       const LongPressDispatcherKey(),
+      unregister: () {
+        game.gestureDetectors.unregister<LongPressGestureRecognizer>();
+      },
     );
     super.onRemove();
   }

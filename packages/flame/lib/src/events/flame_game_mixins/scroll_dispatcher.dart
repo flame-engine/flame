@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/src/events/component_mixins/scroll_callbacks.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/messages/scroll_event.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart' as flutter;
@@ -9,9 +10,7 @@ import 'package:meta/meta.dart';
 /// [ScrollCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
 /// [ScrollCallbacks] components are mounted into the component tree.
-class ScrollDispatcher extends Component {
-  FlameGame get game => parent! as FlameGame;
-
+class ScrollDispatcher extends Dispatcher<FlameGame> {
   @mustCallSuper
   void onPointerScroll(ScrollEvent event) {
     event.deliverAtPoint(
@@ -28,7 +27,8 @@ class ScrollDispatcher extends Component {
   }
 
   static void addDispatcher(Component component) {
-    component.findRootGame()!.addDispatcher(
+    Dispatcher.addDispatcher(
+      component,
       const ScrollDispatcherKey(),
       ScrollDispatcher.new,
     );
@@ -42,7 +42,7 @@ class ScrollDispatcher extends Component {
   @override
   void onRemove() {
     game.scrollDetector = null;
-    game.unregisterKey(const ScrollDispatcherKey());
+    Dispatcher.removeDispatcher(game, const ScrollDispatcherKey());
   }
 }
 

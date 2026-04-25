@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/interfaces/scale_listener.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/game_widget/gesture_detector_builder.dart';
@@ -46,11 +47,9 @@ class ScaleDispatcherKey implements ComponentKey {
 /// implementing [ScaleCallbacks]. It will be attached to
 /// the [FlameGame] instance automatically whenever any [ScaleCallbacks]
 /// components are mounted into the component tree.
-class ScaleDispatcher extends Component implements ScaleListener {
+class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
   /// Records all components currently being scaled, keyed by pointerId.
   final Set<TaggedComponent<ScaleCallbacks>> _records = {};
-
-  FlameGame get game => parent! as FlameGame;
 
   /// Store the last drag events
   DragStartDetails? lastDragStart;
@@ -295,7 +294,8 @@ class ScaleDispatcher extends Component implements ScaleListener {
   //#endregion
 
   static void addDispatcher(Component component) {
-    component.findRootGame()!.addDispatcher(
+    Dispatcher.addDispatcher(
+      component,
       const ScaleDispatcherKey(),
       ScaleDispatcher.new,
     );
@@ -341,7 +341,13 @@ class ScaleDispatcher extends Component implements ScaleListener {
 
   @override
   void onRemove() {
-    game.removeDispatcher<ScaleGestureRecognizer>(const ScaleDispatcherKey());
+    Dispatcher.removeDispatcher(
+      game,
+      const ScaleDispatcherKey(),
+      unregister: () {
+        game.gestureDetectors.unregister<ScaleGestureRecognizer>();
+      },
+    );
     super.onRemove();
   }
 

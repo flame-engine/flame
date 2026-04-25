@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flutter/gestures.dart';
 
 class SecondaryTapDispatcherKey implements ComponentKey {
@@ -19,8 +20,7 @@ class SecondaryTapDispatcherKey implements ComponentKey {
 /// [SecondaryTapCallbacks]. This will be attached to the [FlameGame] instance
 /// automatically whenever any [SecondaryTapCallbacks] are mounted into the
 /// component tree.
-class SecondaryTapDispatcher extends Component
-    with HasGameReference<FlameGame> {
+class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
   final _components = <SecondaryTapCallbacks>{};
 
   void _onSecondaryTapDown(SecondaryTapDownEvent event) {
@@ -47,7 +47,8 @@ class SecondaryTapDispatcher extends Component
   }
 
   static void addDispatcher(Component component) {
-    component.findRootGame()!.addDispatcher(
+    Dispatcher.addDispatcher(
+      component,
       const SecondaryTapDispatcherKey(),
       SecondaryTapDispatcher.new,
     );
@@ -70,8 +71,12 @@ class SecondaryTapDispatcher extends Component
 
   @override
   void onRemove() {
-    game.removeDispatcher<TapGestureRecognizer>(
+    Dispatcher.removeDispatcher(
+      game,
       const SecondaryTapDispatcherKey(),
+      unregister: () {
+        game.gestureDetectors.unregister<TapGestureRecognizer>();
+      },
     );
   }
 }
