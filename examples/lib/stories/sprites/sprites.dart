@@ -2,6 +2,7 @@ import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/sprites/base64_sprite_example.dart';
 import 'package:examples/stories/sprites/basic_sprite_example.dart';
+import 'package:examples/stories/sprites/sprite_batch_bleed_example.dart';
 import 'package:examples/stories/sprites/sprite_batch_example.dart';
 import 'package:examples/stories/sprites/sprite_batch_load_example.dart';
 import 'package:examples/stories/sprites/sprite_group_example.dart';
@@ -39,6 +40,12 @@ void addSpritesStories(Dashbook dashbook) {
       (_) => GameWidget(game: SpriteBatchLoadExample()),
       codeLink: baseLink('sprites/sprite_batch_load_example.dart'),
       info: SpriteBatchLoadExample.description,
+    )
+    ..add(
+      'SpriteBatch Bleed',
+      (_) => GameWidget(game: SpriteBatchBleedExample()),
+      codeLink: baseLink('sprites/sprite_batch_bleed_example.dart'),
+      info: SpriteBatchBleedExample.description,
     )
     ..add(
       'SpriteGroup',
