@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'dart:math' show pi;
+import 'dart:math' show max, pi;
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -42,7 +42,8 @@ class BatchItem {
     Color? color,
     this.flip = false,
     this.bleed = 0,
-  }) : color = color ?? const Color(0x00000000),
+  })  : assert(bleed >= 0, 'Bleed must be non-negative'),
+        color = color ?? const Color(0x00000000),
        paint = Paint()..color = color ?? const Color(0x00000000),
        destination = Offset.zero & source.size;
 
@@ -322,23 +323,26 @@ class SpriteBatch {
     Rect source,
     double bleed,
   ) {
-    if (bleed == 0) {
+    if (bleed <= 0) {
       return transform;
     }
 
     // Scale factors for width and height with bleed
     final scaleX = (source.width + bleed * 2) / source.width;
     final scaleY = (source.height + bleed * 2) / source.height;
+    final scale = max(scaleX, scaleY);
 
-    // Apply scale to the rotation/scale components
-    final scos = transform.scos * scaleX;
-    final ssin = transform.ssin * scaleY;
+    // Apply uniform scale to preserve rotation
+    final scos = transform.scos * scale;
+    final ssin = transform.ssin * scale;
 
-    // Adjust translation to keep centered after scaling
-    // When we scale up, we need to shift back by the bleed amount
-    // adjusted for the current scale and rotation
-    final tx = transform.tx - bleed * scaleX;
-    final ty = transform.ty - bleed * scaleY;
+    // Compute the local offset needed to keep the center fixed after scaling.
+    final localDx = -(scale - 1) * source.width / 2;
+    final localDy = -(scale - 1) * source.height / 2;
+
+    // Rotate the local offset into destination space to adjust translation.
+    final tx = transform.tx + transform.scos * localDx - transform.ssin * localDy;
+    final ty = transform.ty + transform.ssin * localDx + transform.scos * localDy;
 
     return RSTransform(scos, ssin, tx, ty);
   }
