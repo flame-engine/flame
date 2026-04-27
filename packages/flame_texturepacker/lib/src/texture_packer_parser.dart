@@ -118,7 +118,7 @@ abstract class TexturePackerParser {
     final img = images ?? Flame.images;
     for (final page in atlasData.pages) {
       final parentPath = (path.split('/')..removeLast()).join('/');
-      var texturePath = parentPath.isEmpty
+      final texturePath = parentPath.isEmpty
           ? page.textureFile
           : '$parentPath/${page.textureFile}';
 
@@ -128,16 +128,6 @@ abstract class TexturePackerParser {
         img.add(texturePath, image);
         page.texture = img.fromCache(texturePath);
       } else {
-        final prefix = (assetsPrefix ?? '').trim();
-        if (prefix.isNotEmpty &&
-            !texturePath.contains('packages/') &&
-            !texturePath.startsWith('assets/')) {
-          final effectivePrefix = prefix.endsWith('/') ? prefix : '$prefix/';
-          if (!texturePath.startsWith(effectivePrefix)) {
-            texturePath = '$effectivePrefix$texturePath';
-          }
-        }
-
         final resolved = resolvePath(texturePath, package);
         final assetsCachePrefix = (assets ?? Flame.assets).prefix;
 
@@ -193,7 +183,6 @@ abstract class TexturePackerParser {
   static Region _parseRegion(ListQueue<String> lineQueue, Page page) {
     final originalName = lineQueue.removeFirst().trim();
     var name = originalName;
-    var extractedIndex = -1;
 
     final extensionMatch = RegExp(
       r'\.(png|jpg|jpeg|bmp|tga|webp)$',
@@ -201,24 +190,6 @@ abstract class TexturePackerParser {
     ).firstMatch(name);
     if (extensionMatch != null) {
       name = name.substring(0, extensionMatch.start);
-    }
-
-    final nameBeforeIndex = name;
-
-    final indexMatch = RegExp(r'(_?)(\d+)$').firstMatch(name);
-    if (indexMatch != null) {
-      try {
-        extractedIndex = int.parse(indexMatch.group(2)!);
-        name = name.substring(0, indexMatch.start);
-      } on FormatException catch (e, stack) {
-        Error.throwWithStackTrace(
-          FormatException(
-            'Failed to parse index from sprite name "$name". '
-            'Ensure the numeric suffix fits within an integer range.',
-          ),
-          stack,
-        );
-      }
     }
 
     final values = <String, List<String>>{};
@@ -238,11 +209,6 @@ abstract class TexturePackerParser {
 
       values[entry[0]] = entry.sublist(1);
       lineQueue.removeFirst();
-    }
-
-    final indexValue = values['index'];
-    if (indexValue != null) {
-      extractedIndex = int.parse(indexValue[0]);
     }
 
     final xy = values['xy'];
@@ -271,12 +237,11 @@ abstract class TexturePackerParser {
 
     final finalOriginalHeight = originalHeight == 0.0 ? null : originalHeight;
 
-    final finalIndex = index != null ? int.parse(index[0]) : extractedIndex;
-    final finalName = finalIndex == -1 ? nameBeforeIndex : name;
+    final finalIndex = index != null ? int.parse(index[0]) : -1;
 
     return Region(
       page: page,
-      name: finalName,
+      name: name,
       left: bounds != null
           ? double.parse(bounds[0])
           : (xy != null ? double.parse(xy[0]) : 0.0),
