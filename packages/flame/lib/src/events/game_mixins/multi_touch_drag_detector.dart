@@ -44,7 +44,7 @@ mixin MultiTouchDragDetector on Game implements MultiDragListener {
 
   @override
   void mount() {
-    gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
+    gestureDetectors.register<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
         instance.onStart = (Offset point) => FlameDragAdapter(this, point);

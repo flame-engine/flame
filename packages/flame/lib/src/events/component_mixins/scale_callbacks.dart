@@ -3,6 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:flutter/foundation.dart';
 
+/// This callback uses [ScaleDispatcher] to route events.
 mixin ScaleCallbacks on Component {
   bool _isScaling = false;
 
@@ -25,11 +26,6 @@ mixin ScaleCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findRootGame()!;
-    if (game.findByKey(const ScaleDispatcherKey()) == null) {
-      final dispatcher = ScaleDispatcher();
-      game.registerKey(const ScaleDispatcherKey(), dispatcher);
-      game.add(dispatcher);
-    }
+    ScaleDispatcher.addDispatcher(this);
   }
 }

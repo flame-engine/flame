@@ -19,6 +19,8 @@ import 'package:flutter/foundation.dart';
 ///   long press.
 /// - [onLongPressEnd]: called when the pointer is lifted after a long press.
 /// - [onLongPressCancel]: called if the gesture is cancelled before completion.
+///
+/// This callback uses [LongPressDispatcher] to route events.
 mixin LongPressCallbacks on Component {
   bool _isLongPressing = false;
 
@@ -46,11 +48,6 @@ mixin LongPressCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findRootGame()!;
-    if (game.findByKey(const LongPressDispatcherKey()) == null) {
-      final dispatcher = LongPressDispatcher();
-      game.registerKey(const LongPressDispatcherKey(), dispatcher);
-      game.add(dispatcher);
-    }
+    LongPressDispatcher.addDispatcher(this);
   }
 }

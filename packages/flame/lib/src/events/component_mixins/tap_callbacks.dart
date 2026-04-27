@@ -10,6 +10,8 @@ import 'package:meta/meta.dart';
 ///
 /// Note that FlameGame _is_ a [Component] and does implement
 /// [containsLocalPoint]; so this can be used at the game level.
+///
+/// This callback uses [MultiTapDispatcher] to route events.
 mixin TapCallbacks on Component {
   void onTapDown(TapDownEvent event) {}
   void onLongTapDown(TapDownEvent event) {}
@@ -20,11 +22,6 @@ mixin TapCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findRootGame()!;
-    if (game.findByKey(const MultiTapDispatcherKey()) == null) {
-      final dispatcher = MultiTapDispatcher();
-      game.registerKey(const MultiTapDispatcherKey(), dispatcher);
-      game.add(dispatcher);
-    }
+    MultiTapDispatcher.addDispatcher(this);
   }
 }
