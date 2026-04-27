@@ -1,5 +1,5 @@
 import 'dart:collection';
-import 'dart:math' show pi;
+import 'dart:math' show max, pi;
 import 'dart:ui';
 
 import 'package:flame/cache.dart';
@@ -41,7 +41,9 @@ class BatchItem {
     required this.transform,
     Color? color,
     this.flip = false,
-  }) : color = color ?? const Color(0x00000000),
+    this.bleed = 0,
+  })  : assert(bleed >= 0, 'Bleed must be non-negative'),
+        color = color ?? const Color(0x00000000),
        paint = Paint()..color = color ?? const Color(0x00000000),
        destination = Offset.zero & source.size;
 
@@ -58,6 +60,12 @@ class BatchItem {
 
   /// The flip value for this batch item.
   bool flip;
+
+  /// The bleed value for this batch item in pixels.
+  /// When greater than 0, the destination is expanded outward by this amount
+  /// while keeping the source sampling region the same, which helps prevent
+  /// edge artifacts (seams between tiles in a tilemap).
+  double bleed;
 
   /// The color of the batch item (used for building the drawAtlas color list).
   Color color;
@@ -305,6 +313,40 @@ class SpriteBatch {
     );
   }
 
+  /// Computes a transform with bleed applied.
+  ///
+  /// The bleed expands the destination rectangle outward by the bleed amount
+  /// in all directions while keeping the source sampling region unchanged.
+  /// This helps prevent edge artifacts (seams between tiles in a tilemap).
+  static RSTransform _computeBleedTransform(
+    RSTransform transform,
+    Rect source,
+    double bleed,
+  ) {
+    if (bleed <= 0) {
+      return transform;
+    }
+
+    // Scale factors for width and height with bleed
+    final scaleX = (source.width + bleed * 2) / source.width;
+    final scaleY = (source.height + bleed * 2) / source.height;
+    final scale = max(scaleX, scaleY);
+
+    // Apply uniform scale to preserve rotation
+    final scos = transform.scos * scale;
+    final ssin = transform.ssin * scale;
+
+    // Compute the local offset needed to keep the center fixed after scaling.
+    final localDx = -(scale - 1) * source.width / 2;
+    final localDy = -(scale - 1) * source.height / 2;
+
+    // Rotate the local offset into destination space to adjust translation.
+    final tx = transform.tx + transform.scos * localDx - transform.ssin * localDy;
+    final ty = transform.ty + transform.ssin * localDx + transform.scos * localDy;
+
+    return RSTransform(scos, ssin, tx, ty);
+  }
+
   /// Ensures that the given [handle] exists and returns its slot.
   int _requireSlot(int handle) {
     final slot = _handleToSlot[handle];
@@ -338,7 +380,13 @@ class SpriteBatch {
     }
 
     _sources[slot] = _resolveSourceForAtlas(currentBatchItem);
-    _transforms[slot] = currentBatchItem.transform;
+
+    // Apply bleed to the updated transform
+    _transforms[slot] = _computeBleedTransform(
+      currentBatchItem.transform,
+      currentBatchItem.source,
+      currentBatchItem.bleed,
+    );
 
     // If color is not explicitly provided, store transparent.
     _colors[slot] = color ?? _defaultColor;
@@ -360,6 +408,11 @@ class SpriteBatch {
   /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
   ///
+  /// The [bleed] parameter expands the destination rectangle outward by this
+  /// amount in all directions while keeping the source sampling region the
+  /// same. This helps prevent edge artifacts (seams between tiles in a
+  /// tilemap). For best results, the atlas should have padding between sprites.
+  ///
   /// The [add] method may be a simpler way to add a batch item to the batch.
   /// However, if there is a way to factor out the computations of the sine and
   /// cosine of the rotation so that they can be reused over multiple calls to
@@ -370,6 +423,7 @@ class SpriteBatch {
     RSTransform? transform,
     bool flip = false,
     Color? color,
+    double bleed = 0,
   }) {
     final handle = _allocateHandle();
 
@@ -378,6 +432,7 @@ class SpriteBatch {
       transform: transform ??= defaultTransform ?? RSTransform(1, 0, 0, 0),
       flip: flip,
       color: color ?? defaultColor,
+      bleed: bleed,
     );
 
     if (flip && useAtlas && _flippedAtlasStatus.isNone) {
@@ -391,7 +446,14 @@ class SpriteBatch {
 
     _batchItems.add(batchItem);
     _sources.add(_resolveSourceForAtlas(batchItem));
-    _transforms.add(batchItem.transform);
+
+    // Apply bleed to the transform
+    final bleedTransform = _computeBleedTransform(
+      batchItem.transform,
+      batchItem.source,
+      batchItem.bleed,
+    );
+    _transforms.add(bleedTransform);
 
     // If color is not explicitly provided, store transparent.
     _colors.add(color ?? _defaultColor);
@@ -410,6 +472,11 @@ class SpriteBatch {
   /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
   ///
+  /// The [bleed] parameter expands the destination rectangle outward by this
+  /// amount in all directions while keeping the source sampling region the
+  /// same. This helps prevent edge artifacts (seams between tiles in a
+  /// tilemap). For best results, the atlas should have padding between sprites.
+  ///
   /// This method creates a new [RSTransform] based on the given transform
   /// arguments. If many [RSTransform] objects are being created and there is a
   /// way to factor out the computations of the sine and cosine of the rotation
@@ -425,6 +492,7 @@ class SpriteBatch {
     Vector2? offset,
     bool flip = false,
     Color? color,
+    double bleed = 0,
   }) {
     anchor ??= Vector2.zero();
     offset ??= Vector2.zero();
@@ -452,6 +520,7 @@ class SpriteBatch {
       transform: transform,
       flip: flip,
       color: color,
+      bleed: bleed,
     );
   }
 
