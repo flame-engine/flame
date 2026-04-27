@@ -22,9 +22,9 @@ class PolygonComponent extends ShapeComponent {
 
   final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
-  /// With this constructor you create your [PolygonComponent] from positions in
+  /// With this constructor you create your [PolygonComponent] from positions
   /// anywhere in the 2d-space. It will automatically calculate the [size] of
-  /// the Polygon (the bounding box) if no size it given.
+  /// the Polygon (the bounding box) if no size is given.
   PolygonComponent(
     this._vertices, {
     super.position,
@@ -91,6 +91,42 @@ class PolygonComponent extends ShapeComponent {
          shrinkToBounds: shrinkToBounds,
          key: key,
          children: children,
+       );
+
+  /// With this constructor you create a regular (equiangular and equilateral)
+  /// polygon from number of sides and radius anywhere in the 2d-space. It will
+  /// automatically calculate the [size] of the Polygon (the bounding box) if no
+  /// size is given.
+  PolygonComponent.regular({
+    required int sides,
+    required double radius,
+    Vector2? position,
+    Vector2? size,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    Iterable<Component>? children,
+    int? priority,
+    Paint? paint,
+    List<Paint>? paintLayers,
+    ComponentKey? key,
+    bool? shrinkToBounds,
+  }) : this(
+         List.generate(sides, (i) {
+           final angle = 2 * pi * i / sides;
+           return Vector2(radius * cos(angle), radius * sin(angle));
+         }, growable: false),
+         position: position,
+         size: size,
+         scale: scale,
+         angle: angle,
+         anchor: anchor,
+         children: children,
+         priority: priority,
+         paint: paint,
+         paintLayers: paintLayers,
+         key: key,
+         shrinkToBounds: shrinkToBounds,
        );
 
   @internal
