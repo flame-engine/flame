@@ -10,6 +10,7 @@ import 'package:examples/stories/input/joystick_advanced_example.dart';
 import 'package:examples/stories/input/joystick_example.dart';
 import 'package:examples/stories/input/keyboard_example.dart';
 import 'package:examples/stories/input/keyboard_listener_component_example.dart';
+import 'package:examples/stories/input/long_press_example.dart';
 import 'package:examples/stories/input/mouse_cursor_example.dart';
 import 'package:examples/stories/input/mouse_movement_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
@@ -95,6 +96,12 @@ void addInputStories(Dashbook dashbook) {
       ),
       codeLink: baseLink('input/mouse_cursor_example.dart'),
       info: MouseCursorExample.description,
+    )
+    ..add(
+      'Long Press',
+      (_) => GameWidget(game: LongPressExample()),
+      codeLink: baseLink('input/long_press_example.dart'),
+      info: LongPressExample.description,
     )
     ..add(
       'Scroll',

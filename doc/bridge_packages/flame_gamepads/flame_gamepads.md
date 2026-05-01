@@ -1,6 +1,6 @@
 # flame_gamepads
 
-**flame_gamepads** provides helping bridge functionality to use the `gamepads` package in your flame
+**flame_gamepads** provides bridge functionality to use the `gamepads` package in your Flame
 game.
 
 

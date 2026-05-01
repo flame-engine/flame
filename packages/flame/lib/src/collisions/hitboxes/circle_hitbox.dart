@@ -1,5 +1,7 @@
 // ignore_for_file: comment_references
 
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -44,92 +46,101 @@ class CircleHitbox extends CircleComponent with ShapeHitbox {
     // the parent size and the radius is defined from the shortest side.
   }
 
-  static final _temporaryLineSegment = LineSegment.zero();
   static final _temporaryNormal = Vector2.zero();
   static final _temporaryCenter = Vector2.zero();
   static final _temporaryAbsoluteCenter = Vector2.zero();
-  static final _temporaryOrigin = Vector2.zero();
 
   @override
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
   }) {
-    var isInsideHitbox = false;
-    _temporaryLineSegment.from.setFrom(ray.origin);
-    // Adding a small value to the origin to avoid the ray to be on the edge
-    // of the circle and then directly intersecting and causing the reflecting
-    // ray to go in the wrong direction.
-    _temporaryOrigin.setValues(
-      ray.origin.x + ray.direction.x * 0.00001,
-      ray.origin.y + ray.direction.y * 0.00001,
-    );
-    _temporaryAbsoluteCenter.setFrom(absoluteCenter);
-    _temporaryCenter
-      ..setFrom(_temporaryAbsoluteCenter)
-      ..sub(ray.origin);
-
-    if (_temporaryCenter.isZero()) {
-      // If _temporaryCenter is zero, it's projection onto ray.direction
-      // will be zero. In that case, directly use ray.direction as temp
-      // end point of line segment.
-      _temporaryLineSegment.to.setFrom(ray.direction);
-    } else {
-      _temporaryCenter.projection(ray.direction, out: _temporaryLineSegment.to);
-      _temporaryLineSegment.to
-        ..x *= (ray.direction.x.sign * _temporaryLineSegment.to.x.sign)
-        ..y *= (ray.direction.y.sign * _temporaryLineSegment.to.y.sign);
-    }
-
     final effectiveRadius = scaledRadius;
-    if (_temporaryOrigin.distanceToSquared(_temporaryAbsoluteCenter) <
-        effectiveRadius * effectiveRadius) {
-      _temporaryLineSegment.to.scaleTo(2 * effectiveRadius);
-      isInsideHitbox = true;
-    }
-    _temporaryLineSegment.to.add(ray.origin);
-    final intersections = lineSegmentIntersections(_temporaryLineSegment).where(
-      (i) => i.distanceToSquared(ray.origin) > 0.0000001,
-    );
-    if (intersections.isEmpty) {
+    _temporaryAbsoluteCenter.setFrom(absoluteCenter);
+
+    // Solve ray-circle intersection analytically.
+    // Ray: P + t*D where |D| = 1, Circle: |X - C|² = r²
+    // Substituting: t² + bt + c = 0
+    _temporaryCenter
+      ..setFrom(ray.origin)
+      ..sub(_temporaryAbsoluteCenter); // P - C
+    final b = 2 * _temporaryCenter.dot(ray.direction);
+    final c = _temporaryCenter.length2 - effectiveRadius * effectiveRadius;
+
+    final discriminant = b * b - 4 * c;
+    if (discriminant < 0) {
       out?.reset();
       return null;
-    } else {
-      final result = out ?? RaycastResult();
-      final intersectionPoint = intersections.first;
-      _temporaryNormal
-        ..setFrom(intersectionPoint)
-        ..sub(_temporaryAbsoluteCenter)
-        ..normalize();
-      if (isInsideHitbox) {
-        _temporaryNormal.invert();
-      }
-      final reflectionDirection =
-          (out?.reflectionRay?.direction ?? Vector2.zero())
-            ..setFrom(ray.direction)
-            ..reflect(_temporaryNormal);
-      // Reflect() can introduce sub-epsilon drift. Normalize to keep Ray2's
-      // unit-length assertion satisfied.
-      reflectionDirection.normalize();
-
-      final reflectionRay =
-          (out?.reflectionRay?..setWith(
-            origin: intersectionPoint,
-            direction: reflectionDirection,
-          )) ??
-          Ray2(
-            origin: intersectionPoint,
-            direction: reflectionDirection,
-          );
-
-      result.setWith(
-        hitbox: this,
-        reflectionRay: reflectionRay,
-        normal: _temporaryNormal,
-        distance: ray.origin.distanceTo(intersectionPoint),
-        isInsideHitbox: isInsideHitbox,
-      );
-      return result;
     }
+
+    final sqrtDiscriminant = sqrt(discriminant);
+    final t1 = (-b - sqrtDiscriminant) / 2;
+    final t2 = (-b + sqrtDiscriminant) / 2;
+
+    // Use a radius-relative epsilon. Vector2 stores components in Float32List,
+    // so coordinates near the boundary carry ~6 digits of precision. After
+    // reflecting, the stored origin can be off by up to r*1e-4, producing a
+    // spurious near-zero t from recomputing against the same circle.
+    final epsilon = effectiveRadius * 1e-4;
+    final double t;
+    final bool isInsideHitbox;
+    if (t1 > epsilon) {
+      t = t1;
+      isInsideHitbox = false;
+    } else if (t2 > epsilon) {
+      t = t2;
+      isInsideHitbox = true;
+    } else {
+      out?.reset();
+      return null;
+    }
+
+    // Intersection point = origin + t * direction.
+    _temporaryCenter
+      ..setFrom(ray.direction)
+      ..scale(t)
+      ..add(ray.origin);
+
+    // Normal at intersection: direction from center to hit point.
+    _temporaryNormal
+      ..setFrom(_temporaryCenter)
+      ..sub(_temporaryAbsoluteCenter)
+      ..normalize();
+
+    // Snap intersection to exact boundary to prevent numerical drift.
+    _temporaryCenter
+      ..setFrom(_temporaryNormal)
+      ..scale(effectiveRadius)
+      ..add(_temporaryAbsoluteCenter);
+
+    if (isInsideHitbox) {
+      _temporaryNormal.invert();
+    }
+
+    final result = out ?? RaycastResult();
+    final reflectionDirection =
+        (out?.reflectionRay?.direction ?? Vector2.zero())
+          ..setFrom(ray.direction)
+          ..reflect(_temporaryNormal);
+    reflectionDirection.normalize();
+
+    final reflectionRay =
+        (out?.reflectionRay?..setWith(
+          origin: _temporaryCenter,
+          direction: reflectionDirection,
+        )) ??
+        Ray2(
+          origin: _temporaryCenter,
+          direction: reflectionDirection,
+        );
+
+    result.setWith(
+      hitbox: this,
+      reflectionRay: reflectionRay,
+      normal: _temporaryNormal,
+      distance: t, // |D| = 1, so parametric t equals Euclidean distance
+      isInsideHitbox: isInsideHitbox,
+    );
+    return result;
   }
 }

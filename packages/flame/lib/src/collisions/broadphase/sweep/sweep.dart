@@ -7,7 +7,6 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   final List<T> items;
 
   final _active = <T>[];
-  final _potentials = <int, CollisionProspect<T>>{};
   final _prospectPool = ProspectPool<T>();
 
   @override
@@ -24,7 +23,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
   @override
   Iterable<CollisionProspect<T>> query() {
     _active.clear();
-    _potentials.clear();
+    _prospectPool.reset();
 
     for (final item in items) {
       if (item.collisionType == CollisionType.inactive) {
@@ -42,12 +41,7 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
         if (activeBox.max.x >= currentMin) {
           if (item.collisionType == CollisionType.active ||
               activeItem.collisionType == CollisionType.active) {
-            if (_prospectPool.length <= _potentials.length) {
-              _prospectPool.expand(item);
-            }
-            final prospect = _prospectPool[_potentials.length]
-              ..set(item, activeItem);
-            _potentials[prospect.hash] = prospect;
+            _prospectPool.acquire(item, activeItem);
           }
         } else {
           _active.remove(activeItem);
@@ -55,6 +49,6 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
       }
       _active.add(item);
     }
-    return _potentials.values;
+    return _prospectPool;
   }
 }
