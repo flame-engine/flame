@@ -5,53 +5,31 @@ import 'package:flame_behaviors/flame_behaviors.dart';
 /// A [CollisionBehavior] that fires only when the [Parent] entity collides
 /// with a [ScreenHitbox].
 ///
-/// This is a thin specialisation of [CollisionBehavior] that pins the
-/// `Collider` type parameter to [ScreenHitbox] and exposes screen-specific
-/// callbacks that drop the redundant `other` argument (which is always the
-/// [ScreenHitbox]).
-///
-/// Subclass it to react when an entity touches the bounds of the screen,
-/// e.g. to clamp its position, bounce, or remove it from the world.
+/// Pins the `Collider` type parameter of [CollisionBehavior] to
+/// [ScreenHitbox] so subclasses only have to specify their parent entity
+/// type. Override the standard [onCollision], [onCollisionStart], and
+/// [onCollisionEnd] callbacks (now strongly typed to receive a
+/// [ScreenHitbox]) to react to screen-edge interactions — for example to
+/// clamp the entity's position, bounce off the edge, or wrap to the
+/// opposite side using the [ScreenHitbox]'s `position` and `scaledSize`.
 ///
 /// ```dart
-/// class BounceOffScreen extends ScreenCollisionBehavior<MyEntity> {
+/// class WrapAroundScreen extends ScreenCollisionBehavior<MyEntity> {
 ///   @override
-///   void onScreenCollisionStart(Set<Vector2> intersectionPoints) {
-///     parent.velocity.negate();
+///   void onCollisionEnd(ScreenHitbox screen) {
+///     if (parent.position.x > screen.position.x + screen.scaledSize.x) {
+///       parent.position.x = screen.position.x;
+///     }
 ///   }
 /// }
 /// ```
 ///
 /// Adding the behavior still requires the entity to host a
-/// [PropagatingCollisionBehavior] and the game to use a [ScreenHitbox] for
-/// the screen edges.
+/// [PropagatingCollisionBehavior] and the game to register a
+/// [ScreenHitbox] for the screen edges.
 /// {@endtemplate}
 abstract class ScreenCollisionBehavior<Parent extends EntityMixin>
     extends CollisionBehavior<ScreenHitbox, Parent> {
   /// {@macro screen_collision_behavior}
   ScreenCollisionBehavior({super.children, super.priority, super.key});
-
-  /// Called every tick the entity is overlapping the screen edge.
-  void onScreenCollision(Set<Vector2> intersectionPoints) {}
-
-  /// Called the first frame the entity starts overlapping the screen edge.
-  void onScreenCollisionStart(Set<Vector2> intersectionPoints) {}
-
-  /// Called the first frame the entity stops overlapping the screen edge.
-  void onScreenCollisionEnd() {}
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, ScreenHitbox other) {
-    onScreenCollision(intersectionPoints);
-  }
-
-  @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ScreenHitbox other) {
-    onScreenCollisionStart(intersectionPoints);
-  }
-
-  @override
-  void onCollisionEnd(ScreenHitbox other) {
-    onScreenCollisionEnd();
-  }
 }

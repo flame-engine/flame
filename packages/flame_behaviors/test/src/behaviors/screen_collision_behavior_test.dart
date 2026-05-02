@@ -15,21 +15,24 @@ class _TrackingScreenCollisionBehavior
   bool startCalled = false;
   bool collisionCalled = false;
   bool endCalled = false;
-  Set<Vector2> lastStartPoints = const {};
+  ScreenHitbox? lastOther;
 
   @override
-  void onScreenCollisionStart(Set<Vector2> intersectionPoints) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, ScreenHitbox other) {
+    super.onCollisionStart(intersectionPoints, other);
     startCalled = true;
-    lastStartPoints = intersectionPoints;
+    lastOther = other;
   }
 
   @override
-  void onScreenCollision(Set<Vector2> intersectionPoints) {
+  void onCollision(Set<Vector2> intersectionPoints, ScreenHitbox other) {
+    super.onCollision(intersectionPoints, other);
     collisionCalled = true;
   }
 
   @override
-  void onScreenCollisionEnd() {
+  void onCollisionEnd(ScreenHitbox other) {
+    super.onCollisionEnd(other);
     endCalled = true;
   }
 }
@@ -43,11 +46,11 @@ void main() {
 
   group('$ScreenCollisionBehavior', () {
     flameTester.testGameWidget(
-      'fires onScreenCollisionStart when entity touches the screen edge',
+      'fires onCollisionStart when entity touches the screen edge, '
+      'with the ScreenHitbox passed through',
       setUp: (game, tester) async {
         await game.ready();
         final behavior = _TrackingScreenCollisionBehavior();
-        // Position the entity so it overlaps the left screen edge.
         final entity = _Entity(
           behaviors: [
             PropagatingCollisionBehavior(RectangleHitbox()),
@@ -59,19 +62,18 @@ void main() {
       },
       verify: (game, tester) async {
         final entity = game.firstChild<_Entity>()!;
-        final behavior = entity
-            .firstChild<_TrackingScreenCollisionBehavior>()!;
+        final behavior = entity.firstChild<_TrackingScreenCollisionBehavior>()!;
 
         game.update(0);
 
         expect(behavior.startCalled, isTrue);
         expect(behavior.collisionCalled, isTrue);
-        expect(behavior.lastStartPoints, isNotEmpty);
+        expect(behavior.lastOther, isA<ScreenHitbox>());
       },
     );
 
     flameTester.testGameWidget(
-      'fires onScreenCollisionEnd when entity leaves the screen edge',
+      'fires onCollisionEnd when entity leaves the screen edge',
       setUp: (game, tester) async {
         await game.ready();
         final behavior = _TrackingScreenCollisionBehavior();
@@ -86,14 +88,12 @@ void main() {
       },
       verify: (game, tester) async {
         final entity = game.firstChild<_Entity>()!;
-        final behavior = entity
-            .firstChild<_TrackingScreenCollisionBehavior>()!;
+        final behavior = entity.firstChild<_TrackingScreenCollisionBehavior>()!;
 
         game.update(0);
         expect(behavior.startCalled, isTrue);
         expect(behavior.endCalled, isFalse);
 
-        // Move the entity well inside the screen.
         entity.position = game.size / 2;
         game.update(0);
 
@@ -113,7 +113,6 @@ void main() {
           ],
           position: game.size / 2,
         );
-        // A second non-screen entity overlapping the first one.
         final other = _Entity(
           behaviors: [PropagatingCollisionBehavior(RectangleHitbox())],
           position: game.size / 2,
@@ -125,8 +124,7 @@ void main() {
         final entity = game.firstChildWhere<_Entity>(
           (e) => e.firstChild<_TrackingScreenCollisionBehavior>() != null,
         )!;
-        final behavior = entity
-            .firstChild<_TrackingScreenCollisionBehavior>()!;
+        final behavior = entity.firstChild<_TrackingScreenCollisionBehavior>()!;
 
         game.update(0);
 

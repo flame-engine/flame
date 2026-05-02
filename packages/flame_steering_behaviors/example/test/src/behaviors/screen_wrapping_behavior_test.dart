@@ -17,7 +17,7 @@ class _TestEntity extends PositionedEntity {
 void main() {
   final flameTester = FlameTester(TestGame.new);
 
-  group('ScreenCollisionBehavior', () {
+  group('ScreenWrappingBehavior', () {
     late ScreenHitbox screenHitbox;
 
     setUp(() {
@@ -29,13 +29,13 @@ void main() {
     flameTester.testGameWidget(
       'does not move the parent entity',
       setUp: (game, tester) async {
-        final screenCollisionBehavior = ScreenCollisionBehavior();
+        final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity();
 
-        await entity.add(screenCollisionBehavior);
+        await entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
-        screenCollisionBehavior.onCollisionEnd(screenHitbox);
+        screenWrappingBehavior.onCollisionEnd(screenHitbox);
         expect(entity.position, closeToVector(Vector2(0, 0)));
       },
     );
@@ -43,13 +43,13 @@ void main() {
     flameTester.testGameWidget(
       'moves parent entity from top to bottom',
       setUp: (game, tester) async {
-        final screenCollisionBehavior = ScreenCollisionBehavior();
+        final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(-25, 0));
 
-        await entity.add(screenCollisionBehavior);
+        await entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
-        screenCollisionBehavior.onCollisionEnd(screenHitbox);
+        screenWrappingBehavior.onCollisionEnd(screenHitbox);
         expect(entity.position, closeToVector(Vector2(200, 0)));
       },
     );
@@ -57,13 +57,13 @@ void main() {
     flameTester.testGameWidget(
       'moves parent entity from bottom to top',
       setUp: (game, tester) async {
-        final screenCollisionBehavior = ScreenCollisionBehavior();
+        final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(225, 0));
 
-        await entity.add(screenCollisionBehavior);
+        await entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
-        screenCollisionBehavior.onCollisionEnd(screenHitbox);
+        screenWrappingBehavior.onCollisionEnd(screenHitbox);
         expect(entity.position, closeToVector(Vector2(0, 0)));
       },
     );
@@ -71,13 +71,13 @@ void main() {
     flameTester.testGameWidget(
       'moves parent entity from left to right',
       setUp: (game, tester) async {
-        final screenCollisionBehavior = ScreenCollisionBehavior();
+        final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(0, -25));
 
-        await entity.add(screenCollisionBehavior);
+        await entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
-        screenCollisionBehavior.onCollisionEnd(screenHitbox);
+        screenWrappingBehavior.onCollisionEnd(screenHitbox);
         expect(entity.position, closeToVector(Vector2(0, 200)));
       },
     );
@@ -85,13 +85,13 @@ void main() {
     flameTester.testGameWidget(
       'moves parent entity from right to left',
       setUp: (game, tester) async {
-        final screenCollisionBehavior = ScreenCollisionBehavior();
+        final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(0, 225));
 
-        await entity.add(screenCollisionBehavior);
+        await entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
-        screenCollisionBehavior.onCollisionEnd(screenHitbox);
+        screenWrappingBehavior.onCollisionEnd(screenHitbox);
         expect(entity.position, closeToVector(Vector2(0, 0)));
       },
     );
