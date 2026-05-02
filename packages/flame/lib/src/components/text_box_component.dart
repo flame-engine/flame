@@ -423,20 +423,26 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     size = newSize;
   }
 
-  /// Dispose of [image] best-effort, swallowing errors raised when the
-  /// native peer has already been collected.
+  /// Dispose of [image] best-effort, swallowing the two errors that mean
+  /// "the resource is already gone, there is nothing left to free".
   ///
-  /// `Image.dispose` throws a `StateError` if the underlying native peer was
-  /// finalized while the Dart wrapper was still alive (e.g. in low-memory
-  /// scenarios where the engine drops cached image data). Since the image
-  /// resource is already released in that case, the throw provides no value
-  /// to callers and crashes the app — see issue #3724.
+  /// In **release** mode the production crash from issue #3724 is a
+  /// `StateError` ("Bad state: A Dart object attempted to access a native
+  /// peer, but the native peer has been collected (nullptr)") thrown when
+  /// `Image.dispose` accesses the native peer after the engine has dropped
+  /// it under memory pressure.
+  ///
+  /// In **debug** mode `Image.dispose` is guarded by `assert(!_disposed)`,
+  /// so a redundant dispose throws an `AssertionError`. Test environments
+  /// are debug-mode, hence we also catch that flavour to keep the safety
+  /// net consistent across modes.
   static void _safeDispose(Image image) {
     try {
       image.dispose();
-      // ignore: avoid_catches_without_on_clauses
-    } catch (_) {
-      // Native peer already collected; nothing left to free.
+    } on StateError {
+      // Release-mode: native peer already collected; nothing left to free.
+    } on AssertionError {
+      // Debug-mode: image already disposed by a parallel path.
     }
   }
 
