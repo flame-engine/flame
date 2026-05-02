@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -53,6 +54,45 @@ void main() {
       _mouseEvent(game, Vector2.all(20));
       component.checkHoverEventCounts(enter: 2, exit: 2);
     });
+
+    testWidgets(
+      'fires enter and exit while the mouse button is held (regression #2741)',
+      (tester) async {
+        final component = _HoverCallbacksComponent(
+          position: Vector2.all(10),
+          size: Vector2.all(10),
+        );
+        await tester.pumpWidget(
+          GameWidget(game: FlameGame(children: [component])),
+        );
+        await tester.pump();
+
+        final pointer = TestPointer(1, PointerDeviceKind.mouse);
+
+        // Hover into the component — no buttons pressed.
+        await tester.sendEventToBinding(pointer.hover(const Offset(15, 15)));
+        component.checkHoverEventCounts(enter: 1, exit: 0);
+
+        // Press the primary button while hovering.
+        await tester.sendEventToBinding(pointer.down(const Offset(15, 15)));
+
+        // Drag out of the component while still pressed — onHoverExit must
+        // fire even though no PointerHoverEvent is produced during a press.
+        await tester.sendEventToBinding(
+          pointer.move(const Offset(40, 40), buttons: kPrimaryButton),
+        );
+        component.checkHoverEventCounts(enter: 1, exit: 1);
+
+        // Drag back into the component while still pressed — onHoverEnter
+        // must fire again.
+        await tester.sendEventToBinding(
+          pointer.move(const Offset(15, 15), buttons: kPrimaryButton),
+        );
+        component.checkHoverEventCounts(enter: 2, exit: 1);
+
+        await tester.sendEventToBinding(pointer.up());
+      },
+    );
   });
 }
 
