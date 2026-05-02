@@ -2,8 +2,7 @@ import 'package:flame/events.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart' hide PointerMoveEvent;
-import 'package:flutter/gestures.dart' as flutter
-    show PointerMoveEvent;
+import 'package:flutter/gestures.dart' as flutter show PointerMoveEvent;
 import 'package:flutter/widgets.dart';
 
 class GestureDetectorBuilder {
