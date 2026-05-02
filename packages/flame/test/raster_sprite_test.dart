@@ -44,6 +44,34 @@ void main() {
       expect(images.keys, hasLength(2));
     });
 
+    test(
+      'resets srcPosition to zero on the rasterized sprite (regression #3902)',
+      () async {
+        final images = Images();
+        final image = await loadImage('flame.png');
+        images.add('flame.png', image);
+
+        final atlasSprite = await Sprite.load(
+          'flame.png',
+          srcPosition: Vector2(10, 10),
+          srcSize: Vector2(20, 20),
+          images: images,
+        );
+
+        final rasterized = await atlasSprite.rasterize(images: images);
+
+        expect(rasterized.srcPosition, Vector2.zero());
+        expect(rasterized.srcSize, Vector2(20, 20));
+        expect(rasterized.src, const Rect.fromLTWH(0, 0, 20, 20));
+
+        // The cached branch must also produce a sprite with srcPosition (0,0)
+        // — the cached image is already cropped to srcSize.
+        final rasterizedAgain = await atlasSprite.rasterize(images: images);
+        expect(rasterizedAgain.srcPosition, Vector2.zero());
+        expect(rasterizedAgain.src, const Rect.fromLTWH(0, 0, 20, 20));
+      },
+    );
+
     group('when using a custom cache key', () {
       test('adds the image to the cache with the custom key', () async {
         final images = Images();

@@ -84,6 +84,7 @@ class Sprite {
       final cachedImage = imagesCache.fromCache(key);
       return Sprite(
         cachedImage,
+        srcPosition: Vector2.zero(),
         srcSize: srcSize,
       );
     }
@@ -93,6 +94,7 @@ class Sprite {
 
     return Sprite(
       rasterizedImage,
+      srcPosition: Vector2.zero(),
       srcSize: srcSize,
     );
   }
