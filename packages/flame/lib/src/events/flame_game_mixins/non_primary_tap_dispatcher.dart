@@ -4,23 +4,24 @@ import 'package:flame/game.dart';
 import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flutter/gestures.dart';
 
-class SecondaryTapDispatcherKey implements ComponentKey {
-  const SecondaryTapDispatcherKey();
+class NonPrimaryTapDispatcherKey implements ComponentKey {
+  const NonPrimaryTapDispatcherKey();
 
   @override
-  int get hashCode => 'SecondaryTapDispatcherKey'.hashCode;
+  int get hashCode => 'NonPrimaryTapDispatcherKey'.hashCode;
 
   @override
   bool operator ==(Object other) =>
-      other is SecondaryTapDispatcherKey && other.hashCode == hashCode;
+      other is NonPrimaryTapDispatcherKey && other.hashCode == hashCode;
 }
 
-/// [SecondaryTapDispatcher] propagates secondary-tap events (i.e. right mouse
-/// clicks) to every components in the component tree that is mixed with
-/// [SecondaryTapCallbacks]. This will be attached to the [FlameGame] instance
-/// automatically whenever any [SecondaryTapCallbacks] are mounted into the
+/// [NonPrimaryTapDispatcher] propagates non-primary tap events (i.e.
+/// secondary/right and tertiary/middle mouse clicks) to every component in the
+/// component tree that is mixed with [SecondaryTapCallbacks] or
+/// [TertiaryTapCallbacks]. This will be attached to the [FlameGame] instance
+/// automatically whenever any of those callbacks are mounted into the
 /// component tree.
-class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
+class NonPrimaryTapDispatcher extends Dispatcher<FlameGame> {
   final _secondaryComponents = <SecondaryTapCallbacks>{};
   final _tertiaryComponents = <TertiaryTapCallbacks>{};
 
@@ -73,8 +74,8 @@ class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
   static void addDispatcher(Component component) {
     Dispatcher.addDispatcher(
       component,
-      const SecondaryTapDispatcherKey(),
-      SecondaryTapDispatcher.new,
+      const NonPrimaryTapDispatcherKey(),
+      NonPrimaryTapDispatcher.new,
     );
   }
 
@@ -102,6 +103,6 @@ class SecondaryTapDispatcher extends Dispatcher<FlameGame> {
   @override
   void onRemove() {
     game.gestureDetectors.unregister<TapGestureRecognizer>();
-    Dispatcher.removeDispatcher(game, const SecondaryTapDispatcherKey());
+    Dispatcher.removeDispatcher(game, const NonPrimaryTapDispatcherKey());
   }
 }

@@ -179,30 +179,30 @@ void main() {
     );
 
     testWithFlameGame(
-      'SecondaryTapDispatcher is added to game when the callback is mounted',
+      'NonPrimaryTapDispatcher is added to game when the callback is mounted',
       (game) async {
         final component = _TertiaryTapCallbacksComponent();
         await game.add(component);
         await game.ready();
 
-        expect(game.firstChild<SecondaryTapDispatcher>(), isNotNull);
+        expect(game.firstChild<NonPrimaryTapDispatcher>(), isNotNull);
       },
     );
 
     testWithFlameGame(
-      'SecondaryTapDispatcher persists after component is removed',
+      'NonPrimaryTapDispatcher persists after component is removed',
       (game) async {
         final component = _TertiaryTapCallbacksComponent();
         await game.add(component);
         await game.ready();
 
-        expect(game.firstChild<SecondaryTapDispatcher>(), isNotNull);
+        expect(game.firstChild<NonPrimaryTapDispatcher>(), isNotNull);
 
         game.remove(component);
         await game.ready();
 
         // Dispatcher persists even after the component is removed
-        expect(game.firstChild<SecondaryTapDispatcher>(), isNotNull);
+        expect(game.firstChild<NonPrimaryTapDispatcher>(), isNotNull);
       },
     );
   });

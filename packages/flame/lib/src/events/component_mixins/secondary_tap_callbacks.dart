@@ -12,7 +12,7 @@ import 'package:meta/meta.dart';
 /// Note that FlameGame _is_ a [Component] and does implement
 /// [containsLocalPoint]; so this can be used at the game level.
 ///
-/// This callback uses [SecondaryTapDispatcher] to route events.
+/// This callback uses [NonPrimaryTapDispatcher] to route events.
 mixin SecondaryTapCallbacks on Component {
   void onSecondaryTapDown(SecondaryTapDownEvent event) {}
   void onSecondaryTapUp(SecondaryTapUpEvent event) {}
@@ -22,6 +22,6 @@ mixin SecondaryTapCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    SecondaryTapDispatcher.addDispatcher(this);
+    NonPrimaryTapDispatcher.addDispatcher(this);
   }
 }
