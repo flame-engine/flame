@@ -416,13 +416,28 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       // See issue #1618 for details.
       Future.delayed(const Duration(milliseconds: 100), () {
         cachedToRemove.remove(cachedImage);
-        if (isMounted) {
-          cachedImage.dispose();
-        }
+        _safeDispose(cachedImage);
       });
     }
     cache = await _fullRenderAsImage(newSize);
     size = newSize;
+  }
+
+  /// Dispose of [image] best-effort, swallowing errors raised when the
+  /// native peer has already been collected.
+  ///
+  /// `Image.dispose` throws a `StateError` if the underlying native peer was
+  /// finalized while the Dart wrapper was still alive (e.g. in low-memory
+  /// scenarios where the engine drops cached image data). Since the image
+  /// resource is already released in that case, the throw provides no value
+  /// to callers and crashes the app — see issue #3724.
+  static void _safeDispose(Image image) {
+    try {
+      image.dispose();
+      // ignore: avoid_catches_without_on_clauses
+    } catch (_) {
+      // Native peer already collected; nothing left to free.
+    }
   }
 
   @override
@@ -448,7 +463,10 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
   @mustCallSuper
   void onRemove() {
     super.onRemove();
-    cache?.dispose();
+    final cachedImage = cache;
+    if (cachedImage != null) {
+      _safeDispose(cachedImage);
+    }
     cache = null;
   }
 
