@@ -1,8 +1,7 @@
 import 'package:flame/events.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/game/game.dart';
-import 'package:flutter/gestures.dart' hide PointerMoveEvent;
-import 'package:flutter/gestures.dart' as flutter show PointerMoveEvent;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 class GestureDetectorBuilder {
@@ -178,23 +177,21 @@ bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
       game is ScrollDetector ||
       game.mouseDetector != null ||
+      game.mousePressDetector != null ||
       game.scrollDetector != null;
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
   final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
   final mouseDetector = game.mouseDetector;
+  final mousePressDetector = game.mousePressDetector;
   final scrollDetector = game.scrollDetector;
   return Listener(
-    // Flutter's MouseRegion only emits onHover when no buttons are pressed —
-    // during a press the same gesture surfaces as a PointerMoveEvent on the
-    // surrounding Listener. Forward those moves to the same mouse detector
-    // so HoverCallbacks (and similar) keep firing onHoverEnter / onHoverExit
-    // while the mouse is held down. See issue #2741.
-    onPointerMove: mouseDetector == null
-        ? null
-        : (flutter.PointerMoveEvent e) =>
-              mouseDetector(_hoverFromPointerMove(e)),
+    // Forward pointer-down to the dispatcher so it can fire `onHoverCancel`
+    // on hovered HoverCallbacks components — Flutter stops emitting
+    // PointerHoverEvents the moment a button is pressed, so without this hook
+    // the hover state would silently linger. See issue #2741.
+    onPointerDown: mousePressDetector,
     onPointerSignal: (event) {
       if (event is PointerScrollEvent) {
         if (game is ScrollDetector) {
@@ -210,32 +207,5 @@ Widget applyMouseDetectors(Game game, Widget child) {
       },
       child: child,
     ),
-  );
-}
-
-PointerHoverEvent _hoverFromPointerMove(flutter.PointerMoveEvent e) {
-  return PointerHoverEvent(
-    viewId: e.viewId,
-    timeStamp: e.timeStamp,
-    kind: e.kind,
-    pointer: e.pointer,
-    device: e.device,
-    position: e.position,
-    delta: e.delta,
-    buttons: e.buttons,
-    obscured: e.obscured,
-    pressureMin: e.pressureMin,
-    pressureMax: e.pressureMax,
-    distance: e.distance,
-    distanceMax: e.distanceMax,
-    size: e.size,
-    radiusMajor: e.radiusMajor,
-    radiusMinor: e.radiusMinor,
-    radiusMin: e.radiusMin,
-    radiusMax: e.radiusMax,
-    orientation: e.orientation,
-    tilt: e.tilt,
-    synthesized: true,
-    embedderId: e.embedderId,
   );
 }

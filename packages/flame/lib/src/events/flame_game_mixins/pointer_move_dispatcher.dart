@@ -44,6 +44,23 @@ class PointerMoveDispatcher extends Dispatcher<FlameGame> {
     onMouseMove(PointerMoveEvent.fromPointerHoverEvent(game, event));
   }
 
+  /// Cancels the hover on every currently-hovered [HoverCallbacks] tracked by
+  /// this dispatcher when a pointer button is pressed. Flutter routes such
+  /// presses through `Listener.onPointerDown` (not `MouseRegion.onHover`), so
+  /// without this hook hovered components would never learn the hover ended.
+  /// See issue #2741.
+  void _handlePointerPress(flutter.PointerDownEvent _) {
+    final cancelled = <TaggedComponent<PointerMoveCallbacks>>[];
+    for (final record in _records) {
+      final component = record.component;
+      if (component is HoverCallbacks && component.isHovered) {
+        component.cancelHover();
+        cancelled.add(record);
+      }
+    }
+    _records.removeAll(cancelled);
+  }
+
   static void addDispatcher(Component component) {
     Dispatcher.addDispatcher(
       component,
@@ -55,11 +72,13 @@ class PointerMoveDispatcher extends Dispatcher<FlameGame> {
   @override
   void onMount() {
     game.mouseDetector = _handlePointerMove;
+    game.mousePressDetector = _handlePointerPress;
   }
 
   @override
   void onRemove() {
     game.mouseDetector = null;
+    game.mousePressDetector = null;
     Dispatcher.removeDispatcher(game, const MouseMoveDispatcherKey());
   }
 }
