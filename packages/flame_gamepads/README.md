@@ -24,3 +24,6 @@ Support gamepad input in your game (bridge package for <a href="https://github.c
 # flame_gamepads
 
 Package to bridge the `gamepads` library to easy-to-use Flame bindings.
+
+More documentation can be found
+[here](https://docs.flame-engine.org/latest/bridge_packages/flame_gamepads/flame_gamepads.html).

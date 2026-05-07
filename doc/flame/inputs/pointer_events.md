@@ -73,12 +73,60 @@ Note that you can still listen to the "raw" onPointerMove methods for additional
 make sure to call the `super` version to enable the `HoverCallbacks` behavior.
 
 
-### Demo
+### Hover Demo
 
 Play with the demo below to see the pointer hover events in action.
 
 ```{flutter-app}
 :sources: ../flame/examples
 :page: pointer_events
+:show: widget code
+```
+
+
+## ScrollCallbacks
+
+If you want to handle mouse-wheel or trackpad scroll events at the component level, use the
+`ScrollCallbacks` mixin.
+
+```dart
+class ScrollableSquare extends RectangleComponent with ScrollCallbacks {
+  @override
+  void onScroll(ScrollEvent event) {
+    final factor = switch (event.scrollDelta.y.sign) {
+      1 => 0.9,
+      -1 => 1.1,
+      _ => 1.0, // ignore horizontal-only scrolls
+    };
+    scale.scale(factor);
+    scale.clampScalar(0.3, 5.0);
+    event.continuePropagation = false;
+  }
+}
+```
+
+The mixin adds one overridable method:
+
+- `onScroll`: called when a scroll event hits the component.
+
+The `ScrollEvent` provides:
+
+- `scrollDelta`: a `Vector2` with the scroll offset (typically you only need `scrollDelta.y`).
+- `canvasPosition` / `localPosition`: the pointer position in canvas and local coordinates.
+- `continuePropagation`: set to `false` to prevent the event from reaching components further
+  down the hit-test list (or the game itself).
+
+Scroll events are delivered to **all** components under the pointer (not just the topmost one),
+unless set `continuePropagation = false` is set to stop it from bubbling further.
+
+You can also mix `ScrollCallbacks` directly into your `FlameGame` to handle scrolling at the
+game level.
+
+
+### Scroll Demo
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: scroll
 :show: widget code
 ```

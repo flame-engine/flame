@@ -1,3 +1,13 @@
+## 1.37.0
+
+ - **FIX**: Use proper hash combining in CollisionProspect to fix flaky test ([#3864](https://github.com/flame-engine/flame/issues/3864)). ([bff137e5](https://github.com/flame-engine/flame/commit/bff137e5c1c97ae98e867a933f6790aeb349f90f))
+ - **FIX**: Remove async from flame test helpers ([#3860](https://github.com/flame-engine/flame/issues/3860)). ([4e63e93e](https://github.com/flame-engine/flame/commit/4e63e93eb78d5e6e3c48e0cc02577bf2581b0e87))
+ - **FEAT**: Add OverlayManager.setActive() ([#3875](https://github.com/flame-engine/flame/issues/3875)). ([86495694](https://github.com/flame-engine/flame/commit/86495694665cc4e85f7d3a94b05766cc6f6b95ba))
+ - **FEAT**: Adding size to the sprite width and sprite animation widget ([#3870](https://github.com/flame-engine/flame/issues/3870)). ([987e0c54](https://github.com/flame-engine/flame/commit/987e0c54eb3f89b0bd283c91c212e877d377e968))
+ - **FEAT**: Add HueEffect and HueDecorator ([#3852](https://github.com/flame-engine/flame/issues/3852)). ([f393f12b](https://github.com/flame-engine/flame/commit/f393f12b71975151f682adee1fccef0ff367be01))
+ - **FEAT**: Decouple Block from isometric_tile_map_component, add helper methods ([#3859](https://github.com/flame-engine/flame/issues/3859)). ([6d052afd](https://github.com/flame-engine/flame/commit/6d052afd086cd1e6ce28579798ea3874ef6dfd40))
+ - **FEAT**: Add `HasAutoBatchedChildren` mixin ([#3850](https://github.com/flame-engine/flame/issues/3850)). ([a2b7f938](https://github.com/flame-engine/flame/commit/a2b7f9385f993af51b5ce5f5724d2fa9ef058b79))
+
 ## 1.36.0
 
  - **FIX**: Ray direction normalization drift issues ([#3841](https://github.com/flame-engine/flame/issues/3841)). ([b8e2bab5](https://github.com/flame-engine/flame/commit/b8e2bab58fbfb1b817dd294db3d2389097d31a2d))
