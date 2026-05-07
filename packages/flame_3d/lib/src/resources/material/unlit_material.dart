@@ -13,7 +13,7 @@ import 'package:flame_3d/resources.dart';
 /// - 2D canvas content rendered onto 3D surfaces
 /// - UI panels and HUD elements in 3D space
 /// - Emissive/self-lit surfaces
-/// - Skybox and debug rendering
+/// - Sky boxes and debug rendering
 /// {@endtemplate}
 class UnlitMaterial extends Material {
   /// {@macro unlit_material}
