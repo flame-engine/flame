@@ -55,7 +55,7 @@ class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
     canvas.drawImageRect(
       image,
       Offset.zero & renderSize,
-      Offset(-size.x / 2, -size.y / 2) & Size(size.x, size.y),
+      Rect.fromLTWH(-size.x / 2, -size.y / 2, size.x, size.y),
       _paint,
     );
     image.dispose();

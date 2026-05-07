@@ -1,5 +1,5 @@
+import 'package:flame/extensions.dart';
 import 'package:flame_3d/components.dart';
-import 'package:flame_3d/core.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
 import 'package:flame_3d/src/graphics/joints_info.dart';
@@ -47,9 +47,9 @@ class RenderContext3D extends RenderContext {
     // Distance for each object in world space. We dont use
     // Vector3 here as that would be unnecessarily allocating
     // values.
-    final dx = _cameraPosition.x - worldTransform.storage[12];
-    final dy = _cameraPosition.y - worldTransform.storage[13];
-    final dz = _cameraPosition.z - worldTransform.storage[14];
+    final dx = _cameraPosition.x - worldTransform.m41;
+    final dy = _cameraPosition.y - worldTransform.m42;
+    final dz = _cameraPosition.z - worldTransform.m43;
 
     if (_drawCount >= _drawPool.length) {
       _drawPool.add(_DrawEntry());
