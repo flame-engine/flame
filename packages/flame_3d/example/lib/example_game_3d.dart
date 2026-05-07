@@ -7,93 +7,55 @@ import 'package:flame_3d/game.dart';
 import 'package:flame_3d_example/components/player.dart';
 import 'package:flame_3d_example/components/room_bounds.dart';
 import 'package:flame_3d_example/example_camera_3d.dart';
-import 'package:flame_3d_example/scenarios/game_scenario.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
-class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
+/// A common base for examples that use the standard player + camera + room
+/// setup. Subclasses override [onSetup] to populate the world.
+abstract class ExampleGame3D extends FlameGame3D<World3D, PlayerCamera>
     with DragCallbacks, ScrollDetector, HasKeyboardHandlerComponents {
-  late final Player player;
+  ExampleGame3D({Player? player})
+    : player = player ?? Player(position: Vector3(0, 1, 0)),
+      super(world: World3D(), camera: _placeholderCamera);
 
-  ExampleGame3D()
-    : super(
-        world: World3D(),
-        camera: ExampleCamera3D(),
-      );
+  final Player player;
 
-  @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    if (overlays.isActive('console')) {
-      if (event is KeyDownEvent &&
-          event.logicalKey == LogicalKeyboardKey.backquote) {
-        overlays.remove('console');
-      }
-    } else {
-      if (event is KeyDownEvent) {
-        if (event.logicalKey == LogicalKeyboardKey.backquote) {
-          overlays.add('console');
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyR) {
-          camera.reset();
-          player.reset();
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.keyM) {
-          camera.mode = camera.mode == CameraMode.drag
-              ? CameraMode.player
-              : CameraMode.drag;
-          return KeyEventResult.handled;
-        }
-      }
-    }
-
-    return super.onKeyEvent(event, keysPressed);
-  }
+  // FlameGame3D requires a camera at construction. We replace it in onLoad
+  // once the player is available.
+  static final _placeholderPlayer = Player(position: Vector3.zero());
+  static InteractiveCamera get _placeholderCamera =>
+      InteractiveCamera(player: _placeholderPlayer);
 
   @override
   FutureOr<void> onLoad() async {
-    await GameScenario.loadAll();
+    super.camera = InteractiveCamera(player: player);
 
     world.addAll([
       RoomBounds(),
-      LightComponent.ambient(
-        intensity: 1.0,
-      ),
-      player = Player(
-        position: Vector3(0, 1, 0),
-      ),
+      LightComponent.ambient(intensity: 1.0),
+      player,
     ]);
-
-    GameScenario.defaultSetup(this);
+    onSetup();
   }
+
+  void onSetup();
 
   @override
-  void onScroll(PointerScrollInfo info) {
-    const scrollSensitivity = 0.01;
-    final delta = info.scrollDelta.global.y.clamp(-10, 10) * scrollSensitivity;
-
-    camera.distance += delta;
-  }
+  void onScroll(PointerScrollInfo info) => camera.onScroll(info);
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (camera.mode == CameraMode.drag) {
-      camera.delta.setValues(event.deviceDelta.x, event.deviceDelta.y);
-    }
+    camera.onDragUpdate(event);
     super.onDragUpdate(event);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
-    camera.delta.setZero();
+    camera.onDragEnd(event);
     super.onDragEnd(event);
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
-    camera.delta.setZero();
+    camera.onDragCancel(event);
     super.onDragCancel(event);
   }
 }
