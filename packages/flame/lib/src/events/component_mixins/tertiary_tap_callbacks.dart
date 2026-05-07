@@ -2,8 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
-/// This mixin can be added to a [Component] allowing it to receive secondary
-/// tap events (i.e. right mouse clicks).
+/// This mixin can be added to a [Component] allowing it to receive tertiary
+/// tap events (i.e. middle mouse clicks).
 ///
 /// In addition to adding this mixin, the component must also implement the
 /// [containsLocalPoint] method -- the component will only be considered
@@ -13,10 +13,10 @@ import 'package:meta/meta.dart';
 /// [containsLocalPoint]; so this can be used at the game level.
 ///
 /// This callback uses [NonPrimaryTapDispatcher] to route events.
-mixin SecondaryTapCallbacks on Component {
-  void onSecondaryTapDown(SecondaryTapDownEvent event) {}
-  void onSecondaryTapUp(SecondaryTapUpEvent event) {}
-  void onSecondaryTapCancel(SecondaryTapCancelEvent event) {}
+mixin TertiaryTapCallbacks on Component {
+  void onTertiaryTapDown(TertiaryTapDownEvent event) {}
+  void onTertiaryTapUp(TertiaryTapUpEvent event) {}
+  void onTertiaryTapCancel(TertiaryTapCancelEvent event) {}
 
   @override
   @mustCallSuper
