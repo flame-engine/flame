@@ -80,5 +80,5 @@ class _ObjectGroup extends Object3D {
   }) : super(children: children);
 
   @override
-  void bind(GraphicsDevice device) {}
+  void draw(RenderContext context) {}
 }
