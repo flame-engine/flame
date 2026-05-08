@@ -17,7 +17,7 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
 
   ExampleGame3D()
     : super(
-        world: World3D(clearColor: const Color(0xFFFFFFFF)),
+        world: World3D(),
         camera: ExampleCamera3D(),
       );
 
