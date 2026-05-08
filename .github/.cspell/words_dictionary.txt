@@ -26,4 +26,5 @@ rescan
 Roboto
 tappable
 thumbstick
+trackpad
 underutilize

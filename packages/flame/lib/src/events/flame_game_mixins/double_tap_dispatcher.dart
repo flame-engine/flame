@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flutter/gestures.dart';
 
 class DoubleTapDispatcherKey implements ComponentKey {
@@ -18,7 +19,7 @@ class DoubleTapDispatcherKey implements ComponentKey {
 /// the component tree that is mixed with [DoubleTapCallbacks]. This will be
 /// attached to the [FlameGame] instance automatically whenever any
 /// [DoubleTapCallbacks] are mounted into the component tree.
-class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
+class DoubleTapDispatcher extends Dispatcher<FlameGame> {
   final _components = <DoubleTapCallbacks>{};
 
   void _onDoubleTapDown(DoubleTapDownEvent event) {
@@ -44,9 +45,17 @@ class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
     _components.clear();
   }
 
+  static void addDispatcher(Component component) {
+    Dispatcher.addDispatcher(
+      component,
+      const DoubleTapDispatcherKey(),
+      DoubleTapDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add(
+    game.gestureDetectors.register<DoubleTapGestureRecognizer>(
       DoubleTapGestureRecognizer.new,
       (DoubleTapGestureRecognizer instance) {
         instance.onDoubleTapDown = (details) =>
@@ -60,7 +69,7 @@ class DoubleTapDispatcher extends Component with HasGameReference<FlameGame> {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<DoubleTapGestureRecognizer>();
-    game.unregisterKey(const DoubleTapDispatcherKey());
+    game.gestureDetectors.unregister<DoubleTapGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const DoubleTapDispatcherKey());
   }
 }

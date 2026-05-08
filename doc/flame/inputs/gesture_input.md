@@ -19,6 +19,10 @@ of these `mixin`s and its methods:
 
 ## Touch and mouse detectors
 
+```{warning}
+Detectors will be deprecated in the future. Prefer `Callbacks` instead.
+```
+
 ```text
 - TapDetector
   - onTap

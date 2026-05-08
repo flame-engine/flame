@@ -1,49 +1,61 @@
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
+import 'package:flutter/material.dart';
 
-class ScrollExample extends FlameGame with ScrollDetector {
+class ScrollExample extends FlameGame with ScrollCallbacks {
   static const String description = '''
-    In this example we show how to use the `ScrollDetector`.\n\n
-    Scroll within the canvas (both horizontally and vertically) and the white
-    square will move around.
+    In this example we show how to use `ScrollCallbacks`.\n\n
+    Scroll over the colored squares to scale them. Scroll anywhere else on the
+    canvas to pan the camera. Both behaviors use the same `ScrollCallbacks`
+    mixin — on the game for camera movement, and on each square component for
+    scaling.
   ''';
 
-  static const speed = 2000.0;
-  final _size = Vector2.all(50);
-  final _paint = BasicPalette.white.paint();
-
-  Vector2 position = Vector2.all(100);
-  Vector2? target;
-
   @override
-  void onScroll(PointerScrollInfo info) {
-    target = position + info.scrollDelta.global * 5;
+  Future<void> onLoad() async {
+    world.add(
+      ScrollableSquare(
+        paint: BasicPalette.blue.paint(),
+        position: Vector2(-100, 0),
+      ),
+    );
+    world.add(
+      ScrollableSquare(
+        paint: BasicPalette.green.paint(),
+        position: Vector2(100, 0),
+      ),
+    );
   }
 
   @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-    canvas.drawRect(position.toPositionedRect(_size), _paint);
+  void onScroll(ScrollEvent event) {
+    camera.moveBy(event.scrollDelta * 3);
   }
+}
+
+class ScrollableSquare extends RectangleComponent with ScrollCallbacks {
+  ScrollableSquare({required Paint paint, required Vector2 position})
+    : super(
+        position: position,
+        size: Vector2.all(100),
+        paint: paint,
+        anchor: Anchor.center,
+      );
 
   @override
-  void update(double dt) {
-    super.update(dt);
-    final target = this.target;
-    final ds = speed * dt;
-    if (target != null) {
-      if (position != target) {
-        final diff = target - position;
-        if (diff.length < ds) {
-          position.setFrom(target);
-        } else {
-          diff.scaleTo(ds);
-          position.setFrom(position + diff);
-        }
-      }
-    }
+  void onScroll(ScrollEvent event) {
+    // Scroll up to grow, scroll down to shrink
+    final factor = switch (event.scrollDelta.y.sign) {
+      1 => 0.9,
+      -1 => 1.1,
+      _ => 1.0,
+    };
+    scale.scale(factor);
+    scale.clampScalar(0.3, 5.0);
+
+    // Stop propagation so the game-level handler doesn't pick it up
+    event.continuePropagation = false;
   }
 }
