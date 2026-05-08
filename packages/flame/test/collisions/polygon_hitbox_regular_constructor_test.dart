@@ -10,19 +10,20 @@ void main() {
       expect(hitbox.vertices, hasLength(7));
     });
 
-    test('places all vertices at the given radius from the center', () {
+    test('places all vertices at the given radius from local center', () {
       const radius = 12.5;
       final hitbox = PolygonHitbox.regular(sides: 8, radius: radius);
+      final center = Vector2.all(radius);
 
       for (final vertex in hitbox.vertices) {
-        expect(vertex.length, closeTo(radius, 1e-10));
+        expect(vertex.distanceTo(center), closeTo(radius, 1e-8));
       }
     });
 
-    test('uses center anchor by default', () {
+    test('uses top left anchor by default', () {
       final hitbox = PolygonHitbox.regular(sides: 5, radius: 10);
 
-      expect(hitbox.anchor, Anchor.center);
+      expect(hitbox.anchor, Anchor.topLeft);
     });
 
     test('supports custom position and anchor', () {

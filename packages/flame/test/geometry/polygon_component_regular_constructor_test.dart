@@ -9,19 +9,20 @@ void main() {
       expect(component.vertices, hasLength(7));
     });
 
-    test('places all vertices at the given radius from the center', () {
+    test('places all vertices at the given radius from local center', () {
       const radius = 12.5;
       final component = PolygonComponent.regular(sides: 8, radius: radius);
+      final center = Vector2.all(radius);
 
       for (final vertex in component.vertices) {
-        expect(vertex.length, closeTo(radius, 1e-10));
+        expect(vertex.distanceTo(center), closeTo(radius, 1e-8));
       }
     });
 
-    test('uses center anchor by default', () {
+    test('uses top left anchor by default', () {
       final component = PolygonComponent.regular(sides: 5, radius: 10);
 
-      expect(component.anchor, Anchor.center);
+      expect(component.anchor, Anchor.topLeft);
     });
 
     test('supports custom position and anchor', () {

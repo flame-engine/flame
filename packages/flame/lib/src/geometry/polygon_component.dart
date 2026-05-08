@@ -113,7 +113,7 @@ class PolygonComponent extends ShapeComponent {
     bool? shrinkToBounds,
   }) : this(
          List.generate(sides, (i) {
-           final angle = 2 * pi * i / sides;
+           final angle = tau * i / sides;
            return Vector2(radius * cos(angle), radius * sin(angle));
          }, growable: false),
          position: position,
