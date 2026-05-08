@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/core.dart';
+import 'package:flame_3d/resources.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +12,7 @@ void main() {
       final line = Line3D.generate(
         start: Vector3(0, -1, 0),
         end: Vector3(0, 1, 0),
-        color: const Color(0xFFFFFFFF),
+        material: UnlitMaterial(),
       );
 
       expect(
@@ -24,7 +25,7 @@ void main() {
       final line = Line3D.generate(
         start: Vector3(-1, 0, 0),
         end: Vector3(1, 0, 0),
-        color: const Color(0xFFFFFFFF),
+        material: UnlitMaterial(),
       );
 
       expect(
