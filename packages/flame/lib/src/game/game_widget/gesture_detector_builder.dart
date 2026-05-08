@@ -177,21 +177,21 @@ bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
       game is ScrollDetector ||
       game.mouseDetector != null ||
+      game.mousePressDetector != null ||
       game.scrollDetector != null;
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
   final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
   final mouseDetector = game.mouseDetector;
+  final mousePressDetector = game.mousePressDetector;
   final scrollDetector = game.scrollDetector;
   return Listener(
-    child: MouseRegion(
-      child: child,
-      onHover: (PointerHoverEvent e) {
-        mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e));
-        mouseDetector?.call(e);
-      },
-    ),
+    // Forward pointer-down to the dispatcher so it can fire `onHoverCancel`
+    // on hovered HoverCallbacks components — Flutter stops emitting
+    // PointerHoverEvents the moment a button is pressed, so without this hook
+    // the hover state would silently linger. See issue #2741.
+    onPointerDown: mousePressDetector,
     onPointerSignal: (event) {
       if (event is PointerScrollEvent) {
         if (game is ScrollDetector) {
@@ -200,5 +200,12 @@ Widget applyMouseDetectors(Game game, Widget child) {
         scrollDetector?.call(event);
       }
     },
+    child: MouseRegion(
+      onHover: (PointerHoverEvent e) {
+        mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e));
+        mouseDetector?.call(e);
+      },
+      child: child,
+    ),
   );
 }

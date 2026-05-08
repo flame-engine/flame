@@ -23,6 +23,16 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
 
   void onHoverExit() {}
 
+  /// Called when a hover is interrupted because a pointer button was pressed
+  /// while the component was hovered.
+  ///
+  /// Flutter does not emit `PointerHoverEvent`s while a button is held, so the
+  /// hover state ends as soon as the press starts. Override this to react to
+  /// that transition (e.g. clear a hover-driven highlight). After a cancel,
+  /// [onHoverEnter] will fire again only when a fresh button-free hover
+  /// re-enters the area.
+  void onHoverCancel() {}
+
   void _doHoverEnter() {
     _isHovered = true;
     onHoverEnter();
@@ -31,6 +41,16 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   void _doHoverExit() {
     _isHovered = false;
     onHoverExit();
+  }
+
+  /// Called by [PointerMoveDispatcher] when a pointer button is pressed while
+  /// this component is hovered. Not intended to be called by user code.
+  @internal
+  void cancelHover() {
+    if (_isHovered) {
+      _isHovered = false;
+      onHoverCancel();
+    }
   }
 
   @override
