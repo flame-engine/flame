@@ -10,6 +10,8 @@ import 'package:flame/events.dart';
 /// At present, flutter detects only one double-tap events simultaneously.
 /// This means that if you're double-tapping two [DoubleTapCallbacks] located
 /// far away from each other, only one callback will be fired (or none).
+///
+/// This callback uses [DoubleTapDispatcher] to route events.
 mixin DoubleTapCallbacks on Component {
   /// This triggers when the pointer stops contacting the device after the
   /// second tap.
@@ -25,11 +27,6 @@ mixin DoubleTapCallbacks on Component {
   @override
   void onMount() {
     super.onMount();
-    final game = findRootGame()!;
-    if (game.findByKey(const DoubleTapDispatcherKey()) == null) {
-      final dispatcher = DoubleTapDispatcher();
-      game.registerKey(const DoubleTapDispatcherKey(), dispatcher);
-      game.add(dispatcher);
-    }
+    DoubleTapDispatcher.addDispatcher(this);
   }
 }

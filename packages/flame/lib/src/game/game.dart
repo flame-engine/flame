@@ -47,6 +47,18 @@ abstract mixin class Game {
     refreshWidget();
   }
 
+  /// Set by the ScrollDispatcher to receive pointer scroll events from the
+  /// game widget.
+  void Function(PointerScrollEvent event)? get scrollDetector =>
+      _scrollDetector;
+  void Function(PointerScrollEvent event)? _scrollDetector;
+  set scrollDetector(
+    void Function(PointerScrollEvent event)? newScrollDetector,
+  ) {
+    _scrollDetector = newScrollDetector;
+    refreshWidget();
+  }
+
   /// This should update the state of the game.
   void update(double dt);
 

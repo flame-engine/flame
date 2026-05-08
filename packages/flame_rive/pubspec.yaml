@@ -20,7 +20,7 @@ dependencies:
   flame: ^1.37.0
   flutter:
     sdk: flutter
-  rive: ^0.14.0
+  rive: ^0.14.6
 
 dev_dependencies:
   dartdoc: ^9.0.0

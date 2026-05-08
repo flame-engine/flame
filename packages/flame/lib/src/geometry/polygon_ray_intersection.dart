@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/geometry.dart';
@@ -20,12 +22,20 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     LineSegment? closestSegment;
     var crossings = 0;
     var isOverlappingPoint = false;
+    // Float32List (used by Vector2) carries ~7 significant digits. After
+    // reflecting, the stored origin can drift by up to |coord| * 2^-23.
+    // Scale epsilon to the origin's magnitude so we skip self-intersections
+    // without missing real hits.
+    final epsilon =
+        max(
+          1.0,
+          max(ray.origin.x.abs(), ray.origin.y.abs()),
+        ) *
+        1e-4;
     for (var i = 0; i < vertices.length; i++) {
       final lineSegment = getEdge(i, vertices: vertices);
       final distance = ray.lineSegmentIntersection(lineSegment);
-      // Using a small value above 0 just because of rounding errors later that
-      // might cause a ray to go in the wrong direction.
-      if (distance != null && distance > 0.0000000001) {
+      if (distance != null && distance > epsilon) {
         crossings++;
         if (distance < closestDistance) {
           isOverlappingPoint = false;

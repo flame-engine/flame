@@ -10,6 +10,7 @@ import 'package:examples/stories/input/joystick_advanced_example.dart';
 import 'package:examples/stories/input/joystick_example.dart';
 import 'package:examples/stories/input/keyboard_example.dart';
 import 'package:examples/stories/input/keyboard_listener_component_example.dart';
+import 'package:examples/stories/input/long_press_example.dart';
 import 'package:examples/stories/input/mouse_cursor_example.dart';
 import 'package:examples/stories/input/mouse_movement_example.dart';
 import 'package:examples/stories/input/multitap_advanced_example.dart';
@@ -18,6 +19,7 @@ import 'package:examples/stories/input/overlapping_tap_callbacks_example.dart';
 import 'package:examples/stories/input/scroll_example.dart';
 import 'package:examples/stories/input/secondary_tap_callbacks_example.dart';
 import 'package:examples/stories/input/tap_callbacks_example.dart';
+import 'package:examples/stories/input/tertiary_tap_callbacks_example.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +36,12 @@ void addInputStories(Dashbook dashbook) {
       (_) => GameWidget(game: SecondaryTapCallbacksExample()),
       codeLink: baseLink('input/secondary_tap_callbacks_example.dart'),
       info: SecondaryTapCallbacksExample.description,
+    )
+    ..add(
+      'TertiaryTapCallbacks',
+      (_) => GameWidget(game: TertiaryTapCallbacksExample()),
+      codeLink: baseLink('input/tertiary_tap_callbacks_example.dart'),
+      info: TertiaryTapCallbacksExample.description,
     )
     ..add(
       'DragCallbacks',
@@ -95,6 +103,12 @@ void addInputStories(Dashbook dashbook) {
       ),
       codeLink: baseLink('input/mouse_cursor_example.dart'),
       info: MouseCursorExample.description,
+    )
+    ..add(
+      'Long Press',
+      (_) => GameWidget(game: LongPressExample()),
+      codeLink: baseLink('input/long_press_example.dart'),
+      info: LongPressExample.description,
     )
     ..add(
       'Scroll',
