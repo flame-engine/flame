@@ -8,15 +8,15 @@ import 'package:flutter/material.dart';
 class SpriteBatchBleedExample extends FlameGame {
   static const String description = '''
     In this example we show how `bleed` can be used to prevent edge artifacts
-    (seams) between tiles when rendering with `SpriteBatch`. 
-    
+    (seams) between tiles when rendering with `SpriteBatch`.
+
     The top rows show tiles rendered without bleed, where slight gaps or
     color bleeding may appear at the edges.
-    
+
     The bottom rows show the same tiles rendered with bleed, which expands
     the destination rectangle outward while keeping the source region the
     same, eliminating edge artifacts.
-    
+
     The rotated tiles on the right demonstrate that bleed works correctly
     even with rotation, preserving the center point.
   ''';

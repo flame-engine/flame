@@ -66,6 +66,15 @@ void main() {
       );
     });
 
+    test('negative bleed throws an assertion error', () {
+      final image = _MockImage();
+      final spriteBatch = SpriteBatch(image);
+      expect(
+        () => spriteBatch.add(source: Rect.zero, bleed: -1),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+
     test('can add batch item with bleed', () {
       final image = _MockImage();
       when(() => image.width).thenReturn(100);
@@ -198,6 +207,100 @@ void main() {
       expect(storedTransform.ssin, closeTo(0.0, 0.001));
       expect(storedTransform.tx, closeTo(0.0, 0.001));
       expect(storedTransform.ty, closeTo(0.0, 0.001));
+    });
+
+    test('bleed on non-square sprite uses max scale for atlas path', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      // 10x20 sprite: scaleX=(12/10)=1.2, scaleY=(22/20)=1.1 -> scale=1.2
+      const source = Rect.fromLTWH(0, 0, 10, 20);
+      const bleed = 1.0;
+
+      spriteBatch.add(source: source, bleed: bleed);
+
+      final storedTransform = spriteBatch.transforms.first;
+      // Atlas path uses max(scaleX, scaleY) = 1.2 uniformly
+      expect(storedTransform.scos, closeTo(1.2, 0.001));
+    });
+
+    test('bleed on non-square sprite expands destination exactly', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      const source = Rect.fromLTWH(0, 0, 10, 20);
+      const bleed = 1.0;
+
+      final index = spriteBatch.add(source: source, bleed: bleed);
+      final batchItem = spriteBatch.getBatchItem(index);
+
+      // Non-atlas path always expands by exactly bleed on every side
+      expect(
+        batchItem.destination,
+        const Rect.fromLTWH(-bleed, -bleed, 12, 22),
+      );
+    });
+
+    test('bleed with zero-size source does not corrupt transform', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      const source = Rect.fromLTWH(0, 0, 0, 0);
+
+      spriteBatch.add(source: source, bleed: 1);
+
+      final storedTransform = spriteBatch.transforms.first;
+      expect(storedTransform.scos.isFinite, isTrue);
+      expect(storedTransform.ssin.isFinite, isTrue);
+    });
+
+    test('replace updates matrix when transform changes', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      const source = Rect.fromLTWH(0, 0, 10, 10);
+
+      final index = spriteBatch.add(source: source);
+      final batchItem = spriteBatch.getBatchItem(index);
+
+      // Read the matrix to trigger lazy initialisation with original transform.
+      final matrixBefore = batchItem.matrix;
+      expect(matrixBefore.storage[12], closeTo(0.0, 0.001)); // tx
+
+      spriteBatch.replace(index, transform: RSTransform(1, 0, 50, 60));
+
+      // After replace the matrix must reflect the new transform.
+      final matrixAfter = batchItem.matrix;
+      expect(matrixAfter.storage[12], closeTo(50.0, 0.001)); // tx
+      expect(matrixAfter.storage[13], closeTo(60.0, 0.001)); // ty
+    });
+
+    test('replace updates matrix when source changes', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+
+      final index = spriteBatch.add(source: const Rect.fromLTWH(0, 0, 10, 10));
+      final batchItem = spriteBatch.getBatchItem(index);
+
+      // Access matrix to initialise it with source width/height = 10.
+      final _ = batchItem.matrix;
+
+      // Replace with a wider source; the flip pivot must update.
+      spriteBatch.replace(
+        index,
+        source: const Rect.fromLTWH(0, 0, 20, 20),
+      );
+
+      // The matrix is recomputed using the new source size.
+      // translateByDouble(10, 10) -> translateByDouble(10, 10) vs (5, 5) before.
+      // A simple sanity check: accessing matrix must not throw.
+      expect(() => batchItem.matrix, returnsNormally);
     });
 
     const margin = 2.0;

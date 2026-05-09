@@ -57,7 +57,8 @@ class BatchItem {
   /// The source rectangle on the [SpriteBatch.atlas].
   Rect source;
 
-  /// The destination rectangle for the Canvas.
+  /// The destination rectangle for the Canvas, used in the non-atlas rendering
+  /// path.
   ///
   /// It will be transformed by [matrix]. When [bleed] is greater than zero,
   /// this rect extends [bleed] pixels in each direction beyond the source
@@ -71,9 +72,16 @@ class BatchItem {
   bool flip;
 
   /// The bleed value for this batch item in pixels.
-  /// When greater than 0, the destination is expanded outward by this amount
-  /// while keeping the source sampling region the same, which helps prevent
-  /// edge artifacts (seams between tiles in a tilemap).
+  ///
+  /// When greater than 0, the rendered sprite is expanded outward by this
+  /// amount while keeping the source sampling region the same, which helps
+  /// prevent edge artifacts (seams between tiles in a tilemap).
+  ///
+  /// Note: the atlas rendering path ([Canvas.drawAtlas]) applies a uniform
+  /// scale derived from `max(bleedScaleX, bleedScaleY)` to preserve rotation.
+  /// For non-square source rects this means the shorter axis is scaled
+  /// slightly more than the requested [bleed]. The non-atlas path always
+  /// expands by exactly [bleed] pixels on every side.
   double bleed;
 
   /// The color of the batch item (used for building the drawAtlas color list).
@@ -83,28 +91,36 @@ class BatchItem {
   ///
   /// Since [Canvas.drawAtlas] is not supported on the web we also
   /// build a `Matrix4` based on the [transform] and [flip] values.
-  late Matrix4 matrix =
-      Matrix4(
-          transform.scos,
-          transform.ssin,
-          0,
-          0, //
-          -transform.ssin,
-          transform.scos,
-          0,
-          0, //
-          0,
-          0,
-          0,
-          0, //
-          transform.tx,
-          transform.ty,
-          0,
-          1, //
-        )
-        ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
-        ..rotateY(flip ? pi : 0)
-        ..translateByDouble(-source.width / 2, -source.height / 2, 1, 1);
+  /// Recomputed lazily; call [_invalidateMatrix] after mutating [transform] or
+  /// [source].
+  Matrix4? _cachedMatrix;
+
+  Matrix4 get matrix {
+    return _cachedMatrix ??=
+        Matrix4(
+            transform.scos,
+            transform.ssin,
+            0,
+            0, //
+            -transform.ssin,
+            transform.scos,
+            0,
+            0, //
+            0,
+            0,
+            0,
+            0, //
+            transform.tx,
+            transform.ty,
+            0,
+            1, //
+          )
+          ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
+          ..rotateY(flip ? pi : 0)
+          ..translateByDouble(-source.width / 2, -source.height / 2, 1, 1);
+  }
+
+  void _invalidateMatrix() => _cachedMatrix = null;
 
   /// Paint object used for the web.
   Paint paint;
@@ -327,6 +343,10 @@ class SpriteBatch {
   /// The bleed expands the destination rectangle outward by the bleed amount
   /// in all directions while keeping the source sampling region unchanged.
   /// This helps prevent edge artifacts (seams between tiles in a tilemap).
+  ///
+  /// A uniform scale factor derived from `max(bleedScaleX, bleedScaleY)` is
+  /// used so that rotation is preserved. For non-square [source] rects this
+  /// means the shorter axis is scaled slightly beyond the requested [bleed].
   static RSTransform _computeBleedTransform(
     RSTransform transform,
     Rect source,
@@ -336,20 +356,25 @@ class SpriteBatch {
       return transform;
     }
 
-    // Scale factors for width and height with bleed
+    if (source.width <= 0 || source.height <= 0) {
+      return transform;
+    }
+
+    // Scale factors for width and height with bleed; use max for uniform scale
+    // to preserve rotation when width != height.
     final scaleX = (source.width + bleed * 2) / source.width;
     final scaleY = (source.height + bleed * 2) / source.height;
     final scale = max(scaleX, scaleY);
 
-    // Apply uniform scale to preserve rotation
     final scos = transform.scos * scale;
     final ssin = transform.ssin * scale;
 
-    // Compute the local offset needed to keep the center fixed after scaling.
+    // Compute the local delta needed to keep the center fixed after scaling.
     final localDx = -(scale - 1) * source.width / 2;
     final localDy = -(scale - 1) * source.height / 2;
 
-    // Rotate the local offset into destination space to adjust translation.
+    // Transform the local delta to world space using the existing
+    // scale+rotation.
     final tx =
         transform.tx + transform.scos * localDx - transform.ssin * localDy;
     final ty =
@@ -369,6 +394,10 @@ class SpriteBatch {
 
   /// Replaces the parameters of the batch item at the given [index].
   /// At least one of the parameters must be different from null.
+  ///
+  /// Note: the `bleed` value of a batch item cannot be changed after creation.
+  /// To use a different bleed value, remove the item with [removeAt] and add a
+  /// new one with [add].
   void replace(
     int index, {
     Rect? source,
@@ -394,8 +423,12 @@ class SpriteBatch {
               source.height + bleed * 2,
             )
           : Offset.zero & source.size;
+      currentBatchItem._invalidateMatrix();
     }
-    currentBatchItem.transform = transform ?? currentBatchItem.transform;
+    if (transform != null) {
+      currentBatchItem.transform = transform;
+      currentBatchItem._invalidateMatrix();
+    }
     if (color != null) {
       currentBatchItem.color = color;
       currentBatchItem.paint.color = color;
@@ -430,10 +463,14 @@ class SpriteBatch {
   /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
   ///
-  /// The [bleed] parameter expands the destination rectangle outward by this
-  /// amount in all directions while keeping the source sampling region the
-  /// same. This helps prevent edge artifacts (seams between tiles in a
-  /// tilemap). For best results, the atlas should have padding between sprites.
+  /// The [bleed] parameter expands the rendered sprite outward by this amount
+  /// in all directions while keeping the source sampling region the same. This
+  /// helps prevent edge artifacts (seams between tiles in a tilemap). For best
+  /// results, the atlas should have padding between sprites.
+  ///
+  /// Note: when [useAtlas] is true, a uniform scale is applied (see
+  /// [BatchItem.bleed]). For non-square sources the shorter axis is scaled
+  /// slightly more than the exact [bleed] value.
   ///
   /// The [add] method may be a simpler way to add a batch item to the batch.
   /// However, if there is a way to factor out the computations of the sine and
@@ -494,10 +531,14 @@ class SpriteBatch {
   /// The [color] parameter allows you to render a color behind the batch item,
   /// as a background color.
   ///
-  /// The [bleed] parameter expands the destination rectangle outward by this
-  /// amount in all directions while keeping the source sampling region the
-  /// same. This helps prevent edge artifacts (seams between tiles in a
-  /// tilemap). For best results, the atlas should have padding between sprites.
+  /// The [bleed] parameter expands the rendered sprite outward by this amount
+  /// in all directions while keeping the source sampling region the same. This
+  /// helps prevent edge artifacts (seams between tiles in a tilemap). For best
+  /// results, the atlas should have padding between sprites.
+  ///
+  /// Note: when [useAtlas] is true, a uniform scale is applied (see
+  /// [BatchItem.bleed]). For non-square sources the shorter axis is scaled
+  /// slightly more than the exact [bleed] value.
   ///
   /// This method creates a new [RSTransform] based on the given transform
   /// arguments. If many [RSTransform] objects are being created and there is a
@@ -621,10 +662,14 @@ class SpriteBatch {
       for (final batchItem in _batchItems) {
         renderPaint.blendMode = blendMode ?? renderPaint.blendMode;
 
+        // Use the original (non-expanded) rect for the background color so
+        // that per-item colors match the atlas path behavior.
+        final colorRect = Offset.zero & batchItem.source.size;
+
         canvas
           ..save()
           ..transform32(batchItem.matrix.storage)
-          ..drawRect(batchItem.destination, batchItem.paint)
+          ..drawRect(colorRect, batchItem.paint)
           ..drawImageRect(
             atlas,
             batchItem.source,
