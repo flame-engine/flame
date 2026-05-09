@@ -83,6 +83,57 @@ void main() {
       expect(batchItem.bleed, bleed);
     });
 
+    test('bleed expands destination for non-atlas path', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      const source = Rect.fromLTWH(0, 0, 10, 10);
+      const bleed = 2.0;
+
+      final index = spriteBatch.add(source: source, bleed: bleed);
+      final batchItem = spriteBatch.getBatchItem(index);
+
+      expect(
+        batchItem.destination,
+        const Rect.fromLTWH(-bleed, -bleed, 14, 14),
+      );
+    });
+
+    test('zero bleed keeps destination at source size', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      const source = Rect.fromLTWH(0, 0, 10, 10);
+
+      final index = spriteBatch.add(source: source);
+      final batchItem = spriteBatch.getBatchItem(index);
+
+      expect(batchItem.destination, const Rect.fromLTWH(0, 0, 10, 10));
+    });
+
+    test('replace updates destination when source changes with bleed', () {
+      final image = _MockImage();
+      when(() => image.width).thenReturn(100);
+      when(() => image.height).thenReturn(100);
+      final spriteBatch = SpriteBatch(image);
+      const bleed = 2.0;
+
+      final index = spriteBatch.add(
+        source: const Rect.fromLTWH(0, 0, 10, 10),
+        bleed: bleed,
+      );
+
+      spriteBatch.replace(index, source: const Rect.fromLTWH(0, 0, 20, 20));
+      final batchItem = spriteBatch.getBatchItem(index);
+
+      expect(
+        batchItem.destination,
+        const Rect.fromLTWH(-bleed, -bleed, 24, 24),
+      );
+    });
+
     test('bleed scales the transform correctly', () {
       final image = _MockImage();
       when(() => image.width).thenReturn(100);

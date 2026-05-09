@@ -42,17 +42,26 @@ class BatchItem {
     Color? color,
     this.flip = false,
     this.bleed = 0,
-  })  : assert(bleed >= 0, 'Bleed must be non-negative'),
-        color = color ?? const Color(0x00000000),
+  }) : assert(bleed >= 0, 'Bleed must be non-negative'),
+       color = color ?? const Color(0x00000000),
        paint = Paint()..color = color ?? const Color(0x00000000),
-       destination = Offset.zero & source.size;
+       destination = bleed > 0
+           ? Rect.fromLTWH(
+               -bleed,
+               -bleed,
+               source.width + bleed * 2,
+               source.height + bleed * 2,
+             )
+           : Offset.zero & source.size;
 
   /// The source rectangle on the [SpriteBatch.atlas].
   Rect source;
 
   /// The destination rectangle for the Canvas.
   ///
-  /// It will be transformed by [matrix].
+  /// It will be transformed by [matrix]. When [bleed] is greater than zero,
+  /// this rect extends [bleed] pixels in each direction beyond the source
+  /// size to prevent edge artifacts in the non-atlas rendering path.
   Rect destination;
 
   /// The transform values for this batch item.
@@ -341,8 +350,10 @@ class SpriteBatch {
     final localDy = -(scale - 1) * source.height / 2;
 
     // Rotate the local offset into destination space to adjust translation.
-    final tx = transform.tx + transform.scos * localDx - transform.ssin * localDy;
-    final ty = transform.ty + transform.ssin * localDx + transform.scos * localDy;
+    final tx =
+        transform.tx + transform.scos * localDx - transform.ssin * localDy;
+    final ty =
+        transform.ty + transform.ssin * localDx + transform.scos * localDy;
 
     return RSTransform(scos, ssin, tx, ty);
   }
@@ -372,7 +383,18 @@ class SpriteBatch {
     final slot = _requireSlot(index);
     final currentBatchItem = _batchItems[slot];
 
-    currentBatchItem.source = source ?? currentBatchItem.source;
+    if (source != null) {
+      currentBatchItem.source = source;
+      final bleed = currentBatchItem.bleed;
+      currentBatchItem.destination = bleed > 0
+          ? Rect.fromLTWH(
+              -bleed,
+              -bleed,
+              source.width + bleed * 2,
+              source.height + bleed * 2,
+            )
+          : Offset.zero & source.size;
+    }
     currentBatchItem.transform = transform ?? currentBatchItem.transform;
     if (color != null) {
       currentBatchItem.color = color;
