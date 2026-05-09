@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart' as flutter;
@@ -9,11 +10,9 @@ import 'package:meta/meta.dart';
 /// [PointerMoveCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
 /// [PointerMoveCallbacks] components are mounted into the component tree.
-class PointerMoveDispatcher extends Component {
+class PointerMoveDispatcher extends Dispatcher<FlameGame> {
   /// The record of all components currently being hovered.
   final Set<TaggedComponent<PointerMoveCallbacks>> _records = {};
-
-  FlameGame get game => parent! as FlameGame;
 
   @mustCallSuper
   void onMouseMove(PointerMoveEvent event) {
@@ -45,15 +44,42 @@ class PointerMoveDispatcher extends Component {
     onMouseMove(PointerMoveEvent.fromPointerHoverEvent(game, event));
   }
 
+  /// Cancels the hover on every currently-hovered [HoverCallbacks] tracked by
+  /// this dispatcher when a pointer button is pressed. Flutter routes such
+  /// presses through `Listener.onPointerDown` (not `MouseRegion.onHover`), so
+  /// without this hook hovered components would never learn the hover ended.
+  /// See issue #2741.
+  void _handlePointerPress(flutter.PointerDownEvent _) {
+    final cancelled = <TaggedComponent<PointerMoveCallbacks>>[];
+    for (final record in _records) {
+      final component = record.component;
+      if (component is HoverCallbacks && component.isHovered) {
+        component.cancelHover();
+        cancelled.add(record);
+      }
+    }
+    _records.removeAll(cancelled);
+  }
+
+  static void addDispatcher(Component component) {
+    Dispatcher.addDispatcher(
+      component,
+      const MouseMoveDispatcherKey(),
+      PointerMoveDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
     game.mouseDetector = _handlePointerMove;
+    game.mousePressDetector = _handlePointerPress;
   }
 
   @override
   void onRemove() {
     game.mouseDetector = null;
-    game.unregisterKey(const MouseMoveDispatcherKey());
+    game.mousePressDetector = null;
+    Dispatcher.removeDispatcher(game, const MouseMoveDispatcherKey());
   }
 }
 

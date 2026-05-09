@@ -235,6 +235,31 @@ void main() {
     );
 
     testWithFlameGame(
+      'does not throw if the cached image was already disposed '
+      '(regression #3724)',
+      (game) async {
+        final c = TextBoxComponent(text: 'foo bar');
+
+        await game.ensureAdd(c);
+        final imageCache = c.cache;
+        expect(imageCache, isNotNull);
+
+        // Simulate the native peer being collected before our delayed
+        // dispose / onRemove runs by disposing the cached image first.
+        imageCache!.dispose();
+        expect(imageCache.debugDisposed, isTrue);
+
+        // Removing the component must not crash even though dispose() on the
+        // already-disposed image would normally throw a StateError.
+        expect(() {
+          game.remove(c);
+          game.update(0);
+        }, returnsNormally);
+        expect(c.cache, null);
+      },
+    );
+
+    testWithFlameGame(
       'internal image is redrawn when component is re-added',
       (game) async {
         final c = TextBoxComponent(text: 'foo bar');

@@ -47,13 +47,4 @@ mixin MultiTouchTapDetector on Game implements MultiTapListener {
   }
 
   //#endregion
-
-  @override
-  void mount() {
-    gestureDetectors.add<MultiTapGestureRecognizer>(
-      MultiTapGestureRecognizer.new,
-      (MultiTapGestureRecognizer instance) {},
-    );
-    super.mount();
-  }
 }

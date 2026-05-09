@@ -1,3 +1,7 @@
+## 0.3.2+22
+
+ - Update a dependency to the latest release.
+
 ## 0.3.2+21
 
  - **FIX**: `NoiseEffectController` producing zero progress on some platforms ([#3831](https://github.com/flame-engine/flame/issues/3831)). ([5d88832f](https://github.com/flame-engine/flame/commit/5d88832fa522a6880beeecb617b565aebcb703e7))

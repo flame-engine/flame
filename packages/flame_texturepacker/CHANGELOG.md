@@ -1,3 +1,8 @@
+## 5.1.1
+
+ - **REFACTOR**: [flame_texturepacker]  Update package support filed and handle more sprite index patterns ([#3858](https://github.com/flame-engine/flame/issues/3858)). ([bb535013](https://github.com/flame-engine/flame/commit/bb5350133be424d65923a14f10eadfb21a3166e9))
+ - **FIX**: Path Resolution and Region Parsing  ([#3849](https://github.com/flame-engine/flame/issues/3849)). ([f4048a2b](https://github.com/flame-engine/flame/commit/f4048a2b7d8cf5e2373237477c016db4a297e124))
+
 ## 5.1.0
 
  - **REFACTOR**: Asset path resolution/loading in TexturePackerAtlas to correctly handle prefixes and different asset types. ([17fac08d](https://github.com/flame-engine/flame/commit/17fac08d8964991a421cde8f5dd1ace4dc4e9063))

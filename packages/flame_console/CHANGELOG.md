@@ -1,3 +1,7 @@
+## 0.1.3
+
+ - **FEAT**: Update terminui on flame_console ([#3863](https://github.com/flame-engine/flame/issues/3863)). ([6f823cb6](https://github.com/flame-engine/flame/commit/6f823cb6fa88814c518bc095594017b1f34d2054))
+
 ## 0.1.2+17
 
  - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))

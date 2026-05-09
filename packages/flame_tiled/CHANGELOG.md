@@ -1,3 +1,7 @@
+## 3.1.1
+
+ - Update a dependency to the latest release.
+
 ## 3.1.0
 
  - **FIX**: Use resolved path when loading single-image tilesets ([#3826](https://github.com/flame-engine/flame/issues/3826)). ([bbdff923](https://github.com/flame-engine/flame/commit/bbdff9230f96ab18ee83a1a0ffab5b4d7f4a43bf))

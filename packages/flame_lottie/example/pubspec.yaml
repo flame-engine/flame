@@ -8,8 +8,8 @@ environment:
   sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
-  flame: ^1.36.0
-  flame_lottie: ^0.4.2+21
+  flame: ^1.37.0
+  flame_lottie: ^0.4.2+22
   flutter:
     sdk: flutter
   lottie:

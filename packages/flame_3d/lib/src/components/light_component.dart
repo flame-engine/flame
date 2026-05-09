@@ -1,11 +1,11 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/resources.dart';
 
-/// A [Component3D] that represents a light source in the 3D world.
+/// A [Component3D] that represents a light source in 3D space.
 class LightComponent extends Component3D {
   LightComponent({
     required this.source,
@@ -37,7 +37,10 @@ class LightComponent extends Component3D {
   final LightSource source;
 
   late final Light _light = Light(
-    transform: transform,
+    position: Vector3.fromBuffer(
+      worldTransformMatrix.storage.buffer,
+      12 * Float32List.bytesPerElement,
+    ),
     source: source,
   );
 
@@ -46,9 +49,20 @@ class LightComponent extends Component3D {
   @override
   void onMount() {
     super.onMount();
-    assert(
-      parent is World3D,
-      'Lights must be added to the root of the World3D',
-    );
+    world.addLight(_light);
+  }
+
+  @override
+  void onRemove() {
+    world.removeLight(_light);
+    super.onRemove();
+  }
+
+  @override
+  void update(double dt) {
+    // NOTE: this ensures the matrix gets computed if need be, so that
+    // the light position moves with it's ancestors.
+    worldTransformMatrix;
+    super.update(dt);
   }
 }

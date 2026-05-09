@@ -1,3 +1,7 @@
+## 1.8.17
+
+ - Update a dependency to the latest release.
+
 ## 1.8.16
 
  - **FIX**: Fix warnings on flame_fire_atlas.dart ([#3818](https://github.com/flame-engine/flame/issues/3818)). ([458a79a9](https://github.com/flame-engine/flame/commit/458a79a97d63d128ab127fc15616192114dc9448))

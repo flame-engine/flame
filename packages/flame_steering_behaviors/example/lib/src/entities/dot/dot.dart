@@ -21,7 +21,7 @@ class Dot extends PositionedEntity with Steerable {
          ],
          behaviors: [
            PropagatingCollisionBehavior(CircleHitbox()),
-           ScreenCollisionBehavior(),
+           ScreenWrappingBehavior(),
            WanderBehavior(
              circleDistance: 3 * relativeValue,
              maximumAngle: 45 * degrees2Radians,

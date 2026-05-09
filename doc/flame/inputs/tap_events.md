@@ -198,6 +198,33 @@ You can extend both `TapCallbacks` and `SecondaryTapCallbacks` in the same compo
 receive both primary and secondary tap events.
 
 
+### TertiaryTapCallbacks
+
+Flame also supports tertiary tap events (i.e. middle mouse button on desktop). To receive these
+events, add the `TertiaryTapCallbacks` mixin to your `PositionComponent`.
+
+```dart
+class MyComponent extends PositionComponent with TertiaryTapCallbacks {
+  @override
+  void onTertiaryTapUp(TertiaryTapUpEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onTertiaryTapCancel(TertiaryTapCancelEvent event) {
+    /// Do something
+  }
+
+  @override
+  void onTertiaryTapDown(TertiaryTapDownEvent event) {
+    /// Do something
+  }
+```
+
+You can combine `TapCallbacks`, `SecondaryTapCallbacks`, and `TertiaryTapCallbacks` in the same
+component to receive primary, secondary, and tertiary tap events independently.
+
+
 ### DoubleTapCallbacks
 
 Flame also offers a mixin named `DoubleTapCallbacks` to receive a double-tap event from the

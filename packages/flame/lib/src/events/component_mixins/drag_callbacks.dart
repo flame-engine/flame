@@ -10,6 +10,8 @@ import 'package:meta/meta.dart';
 /// the component.
 ///
 /// This mixin is the replacement of the Draggable mixin.
+///
+/// This callback uses [MultiDragDispatcher] to route events.
 mixin DragCallbacks on Component {
   bool _isDragged = false;
 
@@ -61,11 +63,6 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    final game = findRootGame()!;
-    if (game.findByKey(const MultiDragDispatcherKey()) == null) {
-      final dispatcher = MultiDragDispatcher();
-      game.registerKey(const MultiDragDispatcherKey(), dispatcher);
-      game.add(dispatcher);
-    }
+    MultiDragDispatcher.addDispatcher(this);
   }
 }

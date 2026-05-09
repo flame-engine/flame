@@ -1,3 +1,7 @@
+## 2.2.4
+
+ - **FIX**: Remove async from flame test helpers ([#3860](https://github.com/flame-engine/flame/issues/3860)). ([4e63e93e](https://github.com/flame-engine/flame/commit/4e63e93eb78d5e6e3c48e0cc02577bf2581b0e87))
+
 ## 2.2.3
 
  - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))

@@ -10,21 +10,16 @@ import 'package:flame_3d/resources.dart';
 ///
 /// {@endtemplate}
 class Light extends Resource<void> {
-  final Transform3D transform;
+  final Vector3 position;
+
   final LightSource source;
 
   /// {@macro light}
   Light({
-    required this.transform,
+    required this.position,
     required this.source,
   });
 
   @override
   void createResource() {}
-
-  void apply(int index, Shader shader) {
-    shader.setVector3('Light$index.position', transform.position);
-    shader.setColor('Light$index.color', source.color);
-    shader.setFloat('Light$index.intensity', source.intensity);
-  }
 }

@@ -18,15 +18,14 @@ class ModelComponent extends Object3D {
     super.position,
     super.rotation,
     super.scale,
+    super.children,
   });
 
-  Aabb3 get aabb => _aabb
-    ..setFrom(model.aabb)
-    ..transform(transformMatrix);
-  final Aabb3 _aabb = Aabb3();
+  @override
+  Aabb3? computeLocalAabb() => model.aabb;
 
   @override
-  void bind(GraphicsDevice device) {
+  void draw(covariant RenderContext3D context) {
     final nodes = model.processNodes(_animation);
     for (final MapEntry(key: index, value: node) in nodes.entries) {
       if (_hiddenNodes.contains(index)) {
@@ -35,12 +34,12 @@ class ModelComponent extends Object3D {
 
       final mesh = node.node.mesh;
       if (mesh != null) {
-        device.jointsInfo.jointTransformsPerSurface = node.jointTransforms;
-        world.device
+        context
+          ..jointsInfo.jointTransformsPerSurface = node.jointTransforms
           ..model.setFrom(
             worldTransformMatrix.multiplied(node.combinedTransform),
           )
-          ..bindMesh(mesh);
+          ..drawMesh(mesh);
       }
     }
   }
@@ -83,7 +82,7 @@ class ModelComponent extends Object3D {
   }
 
   @override
-  bool shouldCull(CameraComponent3D camera) {
+  bool isVisible(CameraComponent3D camera) {
     // TODO(luan): this actually does not work because of animations
     // it might end up culling something that is actually visible
     return camera.frustum.intersectsWithAabb3(aabb);

@@ -52,6 +52,14 @@ void addWidgetsStories(Dashbook dashbook) {
       ''',
     )
     ..add(
+      'Sprite Widget (with size)',
+      spriteWidgetWithSizeBuilder,
+      codeLink: baseLink('widgets/sprite_widget_example.dart'),
+      info: '''
+Similar as the default example, but using a fixed size directly in the widget.
+      ''',
+    )
+    ..add(
       'Sprite Widget (section of image)',
       partialSpriteWidgetBuilder,
       codeLink: baseLink('widgets/partial_sprite_widget_example.dart'),
@@ -69,6 +77,14 @@ void addWidgetsStories(Dashbook dashbook) {
         If you want to use a sprite animation directly on the flutter widget
         tree you can create a `SpriteAnimationWidget`, don't forget to check out
         the settings on the pen icon.
+      ''',
+    )
+    ..add(
+      'Sprite Animation Widget (with size)',
+      spriteAnimationWithSizeWidgetBuilder,
+      codeLink: baseLink('widgets/sprite_animation_widget_example.dart'),
+      info: '''
+Similar as the default example, but using a fixed size directly in the widget.
       ''',
     )
     ..add(

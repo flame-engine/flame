@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
@@ -24,7 +25,8 @@ class MultiDragDispatcherKey implements ComponentKey {
 /// [DragCallbacks] components in the component tree. It will be attached to
 /// the [FlameGame] instance automatically whenever any [DragCallbacks]
 /// components are mounted into the component tree.
-class MultiDragDispatcher extends Component implements MultiDragListener {
+class MultiDragDispatcher extends Dispatcher<FlameGame>
+    implements MultiDragListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
@@ -51,8 +53,6 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   );
 
   Stream<DragCancelEvent> get onCancel => _dragCancelController.stream;
-
-  FlameGame get game => parent! as FlameGame;
 
   /// Called when the user initiates a drag gesture, for example by touching the
   /// screen and then moving the finger.
@@ -84,21 +84,42 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
   @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {
     final updated = <TaggedComponent<DragCallbacks>>{};
+    // Defer cleanup so stale targets can be cancelled after iteration.
+    final stale = <TaggedComponent<DragCallbacks>>{};
     event.deliverAtPoint(
       rootComponent: game,
       deliverToAll: true,
       eventHandler: (DragCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_records.contains(record)) {
-          component.onDragUpdate(event);
-          updated.add(record);
+          if (!component.isMounted || component.isRemoving) {
+            stale.add(record);
+          } else {
+            component.onDragUpdate(event);
+            updated.add(record);
+          }
         }
       },
     );
     for (final record in _records) {
-      if (record.pointerId == event.pointerId && !updated.contains(record)) {
-        record.component.onDragUpdate(event);
+      if (record.pointerId != event.pointerId) {
+        continue;
       }
+      final component = record.component;
+      if (!component.isMounted || component.isRemoving) {
+        stale.add(record);
+        continue;
+      }
+      if (!updated.contains(record)) {
+        component.onDragUpdate(event);
+      }
+    }
+    if (stale.isNotEmpty) {
+      final cancelEvent = DragCancelEvent(event.pointerId);
+      for (final record in stale) {
+        record.component.onDragCancel(cancelEvent);
+      }
+      _records.removeAll(stale);
     }
   }
 
@@ -165,9 +186,17 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   //#endregion
 
+  static void addDispatcher(Component component) {
+    Dispatcher.addDispatcher(
+      component,
+      const MultiDragDispatcherKey(),
+      MultiDragDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add<ImmediateMultiDragGestureRecognizer>(
+    game.gestureDetectors.register<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
         instance.onStart = (Offset point) => FlameDragAdapter(this, point);
@@ -177,8 +206,8 @@ class MultiDragDispatcher extends Component implements MultiDragListener {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<ImmediateMultiDragGestureRecognizer>();
-    game.unregisterKey(const MultiDragDispatcherKey());
+    game.gestureDetectors.unregister<ImmediateMultiDragGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const MultiDragDispatcherKey());
     _dragUpdateController.close();
     _dragCancelController.close();
     _dragStartController.close();

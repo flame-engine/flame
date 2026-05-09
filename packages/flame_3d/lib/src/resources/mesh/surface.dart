@@ -13,7 +13,7 @@ enum PrimitiveType {
 /// {@template surface}
 /// Base surface [Resource], it describes a single surface to be rendered.
 /// {@endtemplate}
-class Surface extends Resource<gpu.DeviceBuffer?> {
+class Surface extends Resource<gpu.DeviceBuffer> {
   /// {@macro surface}
   Surface({
     required List<Vertex> vertices,
@@ -71,7 +71,7 @@ class Surface extends Resource<gpu.DeviceBuffer?> {
   }
 
   @override
-  gpu.DeviceBuffer? createResource() {
+  gpu.DeviceBuffer createResource() {
     final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
     resourceSizeInByes = sizeInBytes;
     return GpuContextWrapper(gpu.gpuContext).createDeviceBuffer(
