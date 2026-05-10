@@ -197,10 +197,7 @@ void main() {
       final spriteBatch = SpriteBatch(image);
       const source = Rect.fromLTWH(0, 0, 10, 10);
 
-      spriteBatch.add(
-        source: source,
-        bleed: 0,
-      );
+      spriteBatch.add(source: source);
 
       final storedTransform = spriteBatch.transforms.first;
       expect(storedTransform.scos, closeTo(1.0, 0.001));
@@ -248,7 +245,7 @@ void main() {
       when(() => image.width).thenReturn(100);
       when(() => image.height).thenReturn(100);
       final spriteBatch = SpriteBatch(image);
-      const source = Rect.fromLTWH(0, 0, 0, 0);
+      const source = Rect.zero;
 
       spriteBatch.add(source: source, bleed: 1);
 
@@ -298,7 +295,6 @@ void main() {
       );
 
       // The matrix is recomputed using the new source size.
-      // translateByDouble(10, 10) -> translateByDouble(10, 10) vs (5, 5) before.
       // A simple sanity check: accessing matrix must not throw.
       expect(() => batchItem.matrix, returnsNormally);
     });
