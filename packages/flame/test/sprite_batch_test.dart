@@ -264,7 +264,7 @@ void main() {
       final index = spriteBatch.add(source: source);
       final batchItem = spriteBatch.getBatchItem(index);
 
-      // Read the matrix to trigger lazy initialisation with original transform.
+      // Read the matrix to trigger lazy initialization with original transform.
       final matrixBefore = batchItem.matrix;
       expect(matrixBefore.storage[12], closeTo(0.0, 0.001)); // tx
 
@@ -285,7 +285,7 @@ void main() {
       final index = spriteBatch.add(source: const Rect.fromLTWH(0, 0, 10, 10));
       final batchItem = spriteBatch.getBatchItem(index);
 
-      // Access matrix to initialise it with source width/height = 10.
+      // Access matrix to initialize it with source width/height = 10.
       final _ = batchItem.matrix;
 
       // Replace with a wider source; the flip pivot must update.
