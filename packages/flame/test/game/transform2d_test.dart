@@ -21,49 +21,32 @@ void main() {
     Vector2 point,
   ) {
     final m = transform.transformMatrix.storage;
-    // Calculate the determinant
     final det = m[0] * m[5] - m[1] * m[4];
 
-    // Base uncertainty
+    // Float32 machine epsilon: Vector2 and Matrix4 both use Float32List.
     const epsilon = 1 / (1 << 23);
 
-    // Calculate indicative condition number
     final matrixNorm = math.sqrt(
       m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5],
     );
 
-    double conditionFactor;
+    final double invDetAbs;
     if (det.abs() > 1e-10) {
-      // Calculate condition number
-      final invMatrixNorm =
-          math.sqrt(m[5] * m[5] + m[1] * m[1] + m[4] * m[4] + m[0] * m[0]) /
-          det.abs();
-      conditionFactor = matrixNorm * invMatrixNorm;
+      invDetAbs = 1.0 / det.abs();
     } else {
-      // For ~singular matrices, small input change -> large output change
-      conditionFactor = 1e6;
+      invDetAbs = 1e6;
     }
 
-    // Statistical error propagation
-    // There are 8 variables (point + matrix elements)
-    const double numVariables = 8;
-    // In the round trip there's approx 14? ops
-    const double numOperations = 15;
+    // The dominant error is float32 rounding of the intermediate global
+    // Vector2 produced by localToGlobal. A rounding error of ~epsilon*globalMag
+    // is then amplified by the inverse transform's factor matrixNorm/|det|.
+    // This bound uses the actual intermediate magnitude (not just the local
+    // point), which matters when translation is large relative to scale.
+    final globalX = m[0] * point.x + m[4] * point.y + m[12];
+    final globalY = m[1] * point.x + m[5] * point.y + m[13];
+    final globalMagnitude = math.max(globalX.abs(), globalY.abs());
 
-    // Standard deviation (1-σ)
-    final sigma =
-        epsilon *
-        math.sqrt(numVariables) *
-        math.sqrt(numOperations) *
-        conditionFactor;
-
-    // 99.7 CI + small low-value tolerance
-    final tolerance = 3 * sigma + epsilon;
-
-    // Adjust for relative precision
-    final magnitude = math.max(1.0, math.max(point.x.abs(), point.y.abs()));
-
-    return tolerance * magnitude;
+    return 3 * epsilon * globalMagnitude * matrixNorm * invDetAbs + epsilon;
   }
 
   group('Transform2D', () {
