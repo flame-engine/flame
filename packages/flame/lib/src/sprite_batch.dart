@@ -98,24 +98,14 @@ class BatchItem {
   Matrix4 get matrix {
     final cached = _cachedMatrix;
     if (cached != null) return cached;
+    // dart format off
     final result = Matrix4(
-      transform.scos,
-      transform.ssin,
-      0,
-      0,
-      -transform.ssin,
-      transform.scos,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      transform.tx,
-      transform.ty,
-      0,
-      1,
+      transform.scos,  transform.ssin,  0, 0,
+      -transform.ssin, transform.scos,  0, 0,
+      0,               0,               0, 0,
+      transform.tx,    transform.ty,    0, 1,
     );
+    // dart format on
     result
       ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
       ..rotateY(flip ? pi : 0)
