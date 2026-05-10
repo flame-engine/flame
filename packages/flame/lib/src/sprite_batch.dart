@@ -97,7 +97,9 @@ class BatchItem {
 
   Matrix4 get matrix {
     final cached = _cachedMatrix;
-    if (cached != null) return cached;
+    if (cached != null) {
+      return cached;
+    }
     // dart format off
     final result = Matrix4(
       transform.scos,  transform.ssin,  0, 0,
