@@ -1,5 +1,6 @@
 ## 1.37.0
 
+ - **FEAT**: Add `bleed` option to `SpriteBatch` to prevent seam artifacts in tilemaps ([#3871](https://github.com/flame-engine/flame/issues/3871)).
  - **FIX**: Use proper hash combining in CollisionProspect to fix flaky test ([#3864](https://github.com/flame-engine/flame/issues/3864)). ([bff137e5](https://github.com/flame-engine/flame/commit/bff137e5c1c97ae98e867a933f6790aeb349f90f))
  - **FIX**: Remove async from flame test helpers ([#3860](https://github.com/flame-engine/flame/issues/3860)). ([4e63e93e](https://github.com/flame-engine/flame/commit/4e63e93eb78d5e6e3c48e0cc02577bf2581b0e87))
  - **FEAT**: Add OverlayManager.setActive() ([#3875](https://github.com/flame-engine/flame/issues/3875)). ([86495694](https://github.com/flame-engine/flame/commit/86495694665cc4e85f7d3a94b05766cc6f6b95ba))
