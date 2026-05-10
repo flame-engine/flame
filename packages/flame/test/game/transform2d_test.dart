@@ -23,7 +23,7 @@ void main() {
     final m = transform.transformMatrix.storage;
     final det = m[0] * m[5] - m[1] * m[4];
 
-    // Float32 machine epsilon: both Vector2 and Matrix4 use Float32List storage.
+    // Float32 machine epsilon: Vector2 and Matrix4 both use Float32List.
     const epsilon = 1 / (1 << 23);
 
     final matrixNorm = math.sqrt(
