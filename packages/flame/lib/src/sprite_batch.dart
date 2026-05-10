@@ -96,28 +96,27 @@ class BatchItem {
   Matrix4? _cachedMatrix;
 
   Matrix4 get matrix {
-    return _cachedMatrix ??=
-        Matrix4(
-            transform.scos,
-            transform.ssin,
-            0,
-            0, //
-            -transform.ssin,
-            transform.scos,
-            0,
-            0, //
-            0,
-            0,
-            0,
-            0, //
-            transform.tx,
-            transform.ty,
-            0,
-            1, //
-          )
-          ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
-          ..rotateY(flip ? pi : 0)
-          ..translateByDouble(-source.width / 2, -source.height / 2, 1, 1);
+    return _cachedMatrix ??= Matrix4(
+        transform.scos,
+        transform.ssin,
+        0,
+        0, //
+        -transform.ssin,
+        transform.scos,
+        0,
+        0, //
+        0,
+        0,
+        0,
+        0, //
+        transform.tx,
+        transform.ty,
+        0,
+        1, //
+      )
+      ..translateByDouble(source.width / 2, source.height / 2, 1, 1)
+      ..rotateY(flip ? pi : 0)
+      ..translateByDouble(-source.width / 2, -source.height / 2, 1, 1);
   }
 
   void _invalidateMatrix() => _cachedMatrix = null;
