@@ -49,6 +49,17 @@ class _SadPlayerListener extends Component
   }
 }
 
+class _BlocAccessingListener extends Component
+    with FlameBlocListenable<PlayerCubit, PlayerState> {
+  PlayerCubit? initialBloc;
+
+  @override
+  void onInitialState(PlayerState state) {
+    super.onInitialState(state);
+    initialBloc = bloc;
+  }
+}
+
 void main() {
   group('FlameBlocListenable', () {
     testWithFlameGame(
@@ -127,6 +138,22 @@ void main() {
         await provider.ensureAdd(component);
 
         expect(component.bloc, bloc);
+      },
+    );
+
+    testWithFlameGame(
+      'can access bloc in onInitialState',
+      (game) async {
+        final bloc = PlayerCubit();
+        final provider = FlameBlocProvider<PlayerCubit, PlayerState>.value(
+          value: bloc,
+        );
+        await game.ensureAdd(provider);
+
+        final component = _BlocAccessingListener();
+        await provider.ensureAdd(component);
+
+        expect(component.initialBloc, bloc);
       },
     );
 
