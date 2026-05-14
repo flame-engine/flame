@@ -500,7 +500,6 @@ class Component {
   ///
   /// The engine ensures that this method will be called exactly once during
   /// the lifetime of the [Component] object. Do not call this method manually.
-  @mustCallSuper
   FutureOr<void> onLoad() => null;
 
   /// Called when the component is added to its parent.
@@ -528,7 +527,6 @@ class Component {
   /// See also:
   /// - [onRemove] that is called every time the component is removed from the
   /// game tree
-  @mustCallSuper
   void onMount() {}
 
   /// Called right before the component is removed from its parent
@@ -540,7 +538,6 @@ class Component {
   /// is removed before it had a chance to mount), then this callback will not
   /// trigger. Thus, [onRemove] runs if and only if there was a corresponding
   /// [onMount] call before.
-  @mustCallSuper
   void onRemove() {}
 
   /// Called whenever the parent of this component changes size; and also once
@@ -549,7 +546,6 @@ class Component {
   /// The component may change its own size or perform layout in response to
   /// this call. If the component changes size, then it should call
   /// [onParentResize] for all its children.
-  @mustCallSuper
   void onParentResize(Vector2 maxSize) {}
 
   /// This method is called periodically by the game engine to request that your
@@ -578,7 +574,6 @@ class Component {
 
   /// This method will be invoked from lifecycle if [child] has been added
   /// to or removed from its parent children list.
-  @mustCallSuper
   void onChildrenChanged(Component child, ChildrenChangeType type) {}
 
   void render(Canvas canvas) {}
