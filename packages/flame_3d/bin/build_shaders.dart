@@ -46,14 +46,14 @@ Future<List<Directory>> _resolvePackageShaderDirs() async {
       jsonDecode(configFile.readAsStringSync()) as Map<String, dynamic>;
   final packages = (config['packages'] as List).cast<Map<String, dynamic>>();
   final result = <Directory>[];
-  for (final pkg in packages) {
-    final name = pkg['name'] as String;
+  for (final package in packages) {
+    final name = package['name'] as String;
     if (name == 'flutter') {
       // `flutter` ships no shader chunks; its includes come from the engine.
       continue;
     }
 
-    final rootUriRaw = pkg['rootUri'] as String;
+    final rootUriRaw = package['rootUri'] as String;
     final rootUri = configUri.resolve(
       rootUriRaw.endsWith('/') ? rootUriRaw : '$rootUriRaw/',
     );
