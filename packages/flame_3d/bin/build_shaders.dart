@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:isolate';
 
 /// Bundle a shader ('name'.frag & 'name'.vert) into a single shader bundle and
 /// store it in the assets directory.
@@ -8,23 +9,68 @@ import 'dart:io';
 /// Flutter might support auto-bundling themselves but until then we have to
 /// do it manually.
 ///
-/// Note: this script should be run from the root of the package:
-/// packages/flame_3d
+/// Run from the package root whose shaders are being built. When invoked
+/// from a consumer package via `dart run flame_3d:build_shaders`, the
+/// consumer's own `shaders/` is bundled. Every Dart dependency that ships a
+/// top-level `shaders/` directory is added to impellerc's include path under
+/// its package name, so shaders can `#include <pkg_name/foo.glsl>` against
+/// any of them. `<flutter/...>` resolves to the engine builtins.
 void main(List<String> arguments) async {
   final root = Directory.current;
   final assets = Directory.fromUri(root.uri.resolve('assets/shaders'));
   final shaders = Directory.fromUri(root.uri.resolve('shaders'));
+  final packageShaderDirs = await _resolvePackageShaderDirs();
 
-  await compute(assets, shaders);
+  await compute(assets, shaders, packageShaderDirs);
   if (arguments.contains('watch')) {
     stdout.writeln('Running in watch mode');
     shaders.watch(recursive: true).listen((event) {
-      compute(assets, shaders);
+      compute(assets, shaders, packageShaderDirs);
     });
   }
 }
 
-Future<void> compute(Directory assets, Directory shaders) async {
+/// Returns every Dart dependency's top-level `shaders/` directory, so an
+/// `#include <pkg_name/foo.glsl>` can resolve to
+/// `<pkg-root>/shaders/pkg_name/foo.glsl`.
+Future<List<Directory>> _resolvePackageShaderDirs() async {
+  final configUri = await Isolate.packageConfig;
+  if (configUri == null) {
+    throw Exception(
+      'Unable to locate package_config.json. Run `dart pub get` first.',
+    );
+  }
+
+  final configFile = File.fromUri(configUri);
+  final config =
+      jsonDecode(configFile.readAsStringSync()) as Map<String, dynamic>;
+  final packages = (config['packages'] as List).cast<Map<String, dynamic>>();
+  final result = <Directory>[];
+  for (final pkg in packages) {
+    final name = pkg['name'] as String;
+    if (name == 'flutter') {
+      // `flutter` ships no shader chunks; its includes come from the engine.
+      continue;
+    }
+
+    final rootUriRaw = pkg['rootUri'] as String;
+    final rootUri = configUri.resolve(
+      rootUriRaw.endsWith('/') ? rootUriRaw : '$rootUriRaw/',
+    );
+
+    final shaderDir = Directory.fromUri(rootUri.resolve('shaders/'));
+    if (shaderDir.existsSync()) {
+      result.add(shaderDir);
+    }
+  }
+  return result;
+}
+
+Future<void> compute(
+  Directory assets,
+  Directory shaders,
+  List<Directory> packageShaderDirs,
+) async {
   // Delete all the bundled shaders so we can replace them with new ones.
   if (assets.existsSync()) {
     assets.deleteSync(recursive: true);
@@ -44,6 +90,9 @@ Future<void> compute(Directory assets, Directory shaders) async {
       .map((f) => f.path.split(Platform.pathSeparator).last.split('.').first)
       .toSet();
 
+  final impellerC = await findImpellerC();
+  final engineShaderLib = impellerC.resolve('./shader_lib/').toFilePath();
+
   for (final name in uniqueShaders) {
     final bundle = {
       'TextureFragment': {
@@ -57,14 +106,17 @@ Future<void> compute(Directory assets, Directory shaders) async {
     };
 
     stdout.writeln('Computing shader "$name"');
-    final impellerC = await findImpellerC();
     final result = await Process.run(impellerC.toFilePath(), [
       '--sl=${assets.path}${Platform.pathSeparator}$name.shaderbundle',
       '--shader-bundle=${jsonEncode(bundle)}',
+      '--include=${shaders.path}',
+      for (final dir in packageShaderDirs) '--include=${dir.path}',
+      '--include=$engineShaderLib',
     ]);
 
     if (result.exitCode != 0) {
-      return stderr.writeln(result.stderr);
+      stderr.writeln('Failed to compile shader "$name":\n${result.stderr}');
+      exitCode = 1;
     }
   }
 }
@@ -126,7 +178,7 @@ Future<Uri> findImpellerC() async {
   // ignore: do_not_use_environment
   const impellercEnvVar = String.fromEnvironment('IMPELLERC');
   if (impellercEnvVar != '') {
-    if (!doesFileExist(impellercEnvVar)) {
+    if (!File(impellercEnvVar).existsSync()) {
       throw Exception(
         'IMPELLERC environment variable is set, '
         "but it doesn't point to a valid file!",
@@ -147,7 +199,7 @@ Future<Uri> findImpellerC() async {
   final tried = <Uri>[];
   for (final variant in _impellercLocations) {
     final impellercPath = engineArtifactsDir.resolve(variant);
-    if (doesFileExist(impellercPath.toFilePath())) {
+    if (File(impellercPath.toFilePath()).existsSync()) {
       found = impellercPath;
       break;
     }
@@ -160,8 +212,4 @@ Future<Uri> findImpellerC() async {
   }
 
   return found;
-}
-
-bool doesFileExist(String path) {
-  return File(path).existsSync();
 }
