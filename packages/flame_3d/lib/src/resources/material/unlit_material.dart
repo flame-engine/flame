@@ -24,7 +24,7 @@ class UnlitMaterial extends Material {
        super(
          vertexShader: VertexShader.fromAsset(
            'packages/flame_3d/assets/shaders/unlit_material.shaderbundle',
-           slots: ['VertexInfo'],
+           slots: ['VertexInfo', 'JointMatrices'],
          ),
          fragmentShader: FragmentShader.fromAsset(
            'packages/flame_3d/assets/shaders/unlit_material.shaderbundle',
@@ -45,8 +45,21 @@ class UnlitMaterial extends Material {
       ..setMatrix4('VertexInfo.view', context.view)
       ..setMatrix4('VertexInfo.projection', context.projection);
 
+    final jointTransforms = context.jointsInfo.jointTransforms;
+    if (jointTransforms.length > _maxJoints) {
+      throw Exception(
+        'At most $_maxJoints joints per surface are supported;'
+        ' found ${jointTransforms.length}',
+      );
+    }
+    for (final (index, transform) in jointTransforms.indexed) {
+      vertexShader.setMatrix4('JointMatrices.joints[$index]', transform);
+    }
+
     fragmentShader
       ..setTexture('albedoTexture', albedoTexture)
       ..setColor('Material.albedoColor', albedoColor);
   }
+
+  static const _maxJoints = 16;
 }
