@@ -16,19 +16,8 @@ class DynamicScaleDragExample extends FlameGame {
     The system seamlessly handles mixing different interaction types.
   ''';
 
-  late TextComponent dispatcherLabel;
-
   @override
   Future<void> onLoad() async {
-    dispatcherLabel = TextComponent(
-      text: 'Dispatcher: none',
-      textRenderer: TextPaint(
-        style: const TextStyle(fontSize: 18, color: Colors.white),
-      ),
-      position: Vector2(10, 10),
-    );
-    camera.viewport.add(dispatcherLabel);
-
     camera.viewport.add(
       _Button(
         text: '+ Drag',
@@ -112,15 +101,6 @@ class DynamicScaleDragExample extends FlameGame {
       (rng.nextDouble() - 0.5) * 300,
       (rng.nextDouble() - 0.5) * 200,
     );
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    final active = children.whereType<MultiDragScaleDispatcher>().isNotEmpty;
-    dispatcherLabel.text = active
-        ? 'Dispatcher: MultiDragScaleDispatcher'
-        : 'Dispatcher: none';
   }
 }
 
