@@ -25,10 +25,6 @@ class CameraTarget extends PositionComponent
     effectController.duration = duration * 4;
     moveEffect.go(to: to);
   }
-
-  void nudge(Vector2 delta) {
-    moveEffect.nudge(delta);
-  }
 }
 
 class MoveCameraTarget extends Effect with EffectTarget<CameraTarget> {
@@ -58,11 +54,5 @@ class MoveCameraTarget extends Effect with EffectTarget<CameraTarget> {
     reset();
     _to.setFrom(to);
     _from.setFrom(target.position);
-  }
-
-  void nudge(Vector2 delta) {
-    _from.add(delta);
-    _to.add(delta);
-    target.position.add(delta);
   }
 }
