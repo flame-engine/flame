@@ -305,15 +305,13 @@ class _DragScaleBox extends RectangleComponent
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    // Transform localDelta from the component's rotated/scaled local space
-    // back to parent space so drag works correctly when rotated.
-    final d = event.localDelta;
-    final c = cos(angle);
-    final s = sin(angle);
-    position += Vector2(
-      c * scale.x * d.x - s * scale.y * d.y,
-      s * scale.x * d.x + c * scale.y * d.y,
-    );
+    // When a scale gesture is active, translation is handled in onScaleUpdate
+    // via the focal point delta. Applying it here too would double-count the
+    // movement (one call per finger).
+    if (isScaling) {
+      return;
+    }
+    _applyLocalDeltaToPosition(event.localDelta);
   }
 
   @override
@@ -325,6 +323,9 @@ class _DragScaleBox extends RectangleComponent
 
   @override
   void onScaleUpdate(ScaleUpdateEvent event) {
+    // Translate by focal point movement (single authoritative source).
+    _applyLocalDeltaToPosition(event.localDelta);
+
     angle = _initialAngle + event.rotation;
     if (_lastScale != 0) {
       final delta = event.scale / _lastScale;
@@ -332,5 +333,16 @@ class _DragScaleBox extends RectangleComponent
       scale.clamp(Vector2.all(0.5), Vector2.all(3));
     }
     _lastScale = event.scale;
+  }
+
+  void _applyLocalDeltaToPosition(Vector2 d) {
+    // Transform from component local space back to parent space, accounting
+    // for this component's rotation and scale.
+    final c = cos(angle);
+    final s = sin(angle);
+    position += Vector2(
+      c * scale.x * d.x - s * scale.y * d.y,
+      s * scale.x * d.x + c * scale.y * d.y,
+    );
   }
 }
