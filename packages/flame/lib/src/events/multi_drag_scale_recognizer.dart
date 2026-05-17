@@ -4,12 +4,13 @@ import 'package:flutter/gestures.dart';
 /// A gesture recognizer that can recognize both individual pointer drags
 /// and scale gestures simultaneously.
 ///
-/// This recognizer tracks each pointer independently
-/// (like [ImmediateMultiDragGestureRecognizer])
-/// while also tracking the overall
-/// scale gesture (like [ScaleGestureRecognizer]).
-/// Each pointer can drag independently, and when 2+ pointers are down, scale
-/// callbacks also fire.
+/// This recognizer tracks each pointer independently (like Flutter's
+/// ImmediateMultiDragGestureRecognizer) while also tracking the overall scale
+/// gesture (like Flutter's ScaleGestureRecognizer). Each pointer can drag
+/// independently, and when 2+ pointers are down, scale callbacks also fire.
+///
+/// Use [hasDrag] and [hasScale] to enable only the features needed. Both
+/// default to false; the dispatcher sets them via enableDrag/enableScale.
 class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   /// Create a gesture recognizer for tracking multi-drag and scale gestures.
   MultiDragScaleGestureRecognizer({
@@ -30,6 +31,12 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   /// Default is 1.05 (5% change in scale).
   final double scaleThreshold;
 
+  /// Whether drag callbacks should fire. Controlled by the dispatcher.
+  bool hasDrag = false;
+
+  /// Whether scale callbacks should fire. Controlled by the dispatcher.
+  bool hasScale = false;
+
   /// Called when a pointer starts dragging. One callback per pointer.
   /// Return a Drag object to receive updates for this specific pointer.
   GestureMultiDragStartCallback? onStart;
@@ -43,149 +50,126 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   /// Called when a scale gesture ends.
   GestureScaleEndCallback? onScaleEnd;
 
-  final Map<int, _DragPointerState> _pointers = <int, _DragPointerState>{};
-  bool _scaleGestureActive = false;
+  final _DragState _drag = _DragState();
+  final _ScaleState _scale = _ScaleState();
 
-  // Scale-specific fields
-  Offset? _initialFocalPoint;
-  Offset? _currentFocalPoint;
-  double _initialSpan = 0.0;
-  double _currentSpan = 0.0;
-  double _initialHorizontalSpan = 0.0;
-  double _currentHorizontalSpan = 0.0;
-  double _initialVerticalSpan = 0.0;
-  double _currentVerticalSpan = 0.0;
-  Offset _localFocalPoint = Offset.zero;
-  _LineBetweenPointers? _initialLine;
-  _LineBetweenPointers? _currentLine;
-  Matrix4? _lastTransform;
-  Offset _delta = Offset.zero;
-  VelocityTracker? _scaleVelocityTracker;
-  Duration? _initialScaleEventTimestamp;
-
-  int get pointerCount => _pointers.length;
-
-  double get _pointerScaleFactor =>
-      _initialSpan > 0.0 ? _currentSpan / _initialSpan : 1.0;
-
-  double get _pointerHorizontalScaleFactor => _initialHorizontalSpan > 0.0
-      ? _currentHorizontalSpan / _initialHorizontalSpan
-      : 1.0;
-
-  double get _pointerVerticalScaleFactor => _initialVerticalSpan > 0.0
-      ? _currentVerticalSpan / _initialVerticalSpan
-      : 1.0;
+  int get pointerCount => _drag.count;
 
   @override
   void addAllowedPointer(PointerDownEvent event) {
-    assert(!_pointers.containsKey(event.pointer));
-    final state = _DragPointerState(
-      recognizer: this,
-      event: event,
-    );
-    _pointers[event.pointer] = state;
+    assert(!_drag.pointers.containsKey(event.pointer));
+    final state = _DragPointerState(recognizer: this, event: event);
+    _drag.pointers[event.pointer] = state;
     GestureBinding.instance.pointerRouter.addRoute(event.pointer, _handleEvent);
     state.arenaEntry = GestureBinding.instance.gestureArena.add(
       event.pointer,
       this,
     );
 
-    // Initialize scale tracking when first pointer is added
-    if (_pointers.length == 1) {
-      _update();
-      _initialFocalPoint = _currentFocalPoint;
-      _initialSpan = _currentSpan;
-      _initialHorizontalSpan = _currentHorizontalSpan;
-      _initialVerticalSpan = _currentVerticalSpan;
-    } else if (_pointers.length == 2) {
-      // Re-initialize span with actual 2-finger distance so the threshold
-      // check measures movement from this baseline, not from the zero span
-      // of the single-pointer state.
-      _update();
-      _initialSpan = _currentSpan;
-      _initialHorizontalSpan = _currentHorizontalSpan;
-      _initialVerticalSpan = _currentVerticalSpan;
+    if (hasScale) {
+      if (_drag.count == 1) {
+        _updateScaleFields();
+        _scale.initialFocalPoint = _scale.currentFocalPoint;
+        _scale.initialSpan = _scale.currentSpan;
+        _scale.initialHorizontalSpan = _scale.currentHorizontalSpan;
+        _scale.initialVerticalSpan = _scale.currentVerticalSpan;
+      } else if (_drag.count == 2) {
+        // Re-initialize span with actual 2-finger distance so the threshold
+        // check measures movement from this baseline, not from the zero span
+        // of the single-pointer state.
+        _updateScaleFields();
+        _scale.initialSpan = _scale.currentSpan;
+        _scale.initialHorizontalSpan = _scale.currentHorizontalSpan;
+        _scale.initialVerticalSpan = _scale.currentVerticalSpan;
+      }
     }
   }
 
   void _handleEvent(PointerEvent event) {
-    assert(_pointers.containsKey(event.pointer));
-    final state = _pointers[event.pointer]!;
+    assert(_drag.pointers.containsKey(event.pointer));
+    final state = _drag.pointers[event.pointer]!;
 
     if (event is PointerMoveEvent) {
       state._move(event);
-      _updateScale(event);
+      if (hasScale) {
+        _updateScale(event);
+      }
     } else if (event is PointerUpEvent) {
       assert(event.delta == Offset.zero);
       state._up(event);
       _removeState(event.pointer);
-      _updateScaleAfterRemoval(event);
+      if (hasScale) {
+        _scale.lastTransform = event.transform;
+        _updateScaleFields();
+        _updateLines();
+        _endScaleIfNeeded();
+      }
     } else if (event is PointerCancelEvent) {
       assert(event.delta == Offset.zero);
       state._cancel(event);
       _removeState(event.pointer);
-      _updateScaleAfterRemoval(event);
+      if (hasScale) {
+        _scale.lastTransform = event.transform;
+        _updateScaleFields();
+        _updateLines();
+        _endScaleIfNeeded();
+      }
     } else if (event is! PointerDownEvent) {
       assert(false);
     }
   }
 
-  void _updateScale(PointerEvent event) {
-    _lastTransform = event.transform;
-
-    // Update all pointer positions for scale calculation
-    _update();
+  void _updateScale(PointerMoveEvent event) {
+    _scale.lastTransform = event.transform;
+    _updateScaleFields();
     _updateLines();
 
-    // Check if we should accept all gestures based on scale threshold
-    if (_pointers.length >= 2 && !_scaleGestureActive) {
+    if (_drag.count >= 2 && !_scale.active) {
       _checkScaleGestureThreshold();
     }
 
-    // Start scale gesture if we now have 2+ pointers
-    if (!_scaleGestureActive && _pointers.length >= 2) {
-      _scaleGestureActive = true;
-      _initialFocalPoint = _currentFocalPoint;
-      _initialSpan = _currentSpan;
-      _initialHorizontalSpan = _currentHorizontalSpan;
-      _initialVerticalSpan = _currentVerticalSpan;
-      _initialLine = _currentLine;
-      _initialScaleEventTimestamp = event.timeStamp;
-      _scaleVelocityTracker = VelocityTracker.withKind(event.kind);
+    if (!_scale.active && _drag.count >= 2) {
+      _scale.active = true;
+      _scale.initialFocalPoint = _scale.currentFocalPoint;
+      _scale.initialSpan = _scale.currentSpan;
+      _scale.initialHorizontalSpan = _scale.currentHorizontalSpan;
+      _scale.initialVerticalSpan = _scale.currentVerticalSpan;
+      _scale.initialLine = _scale.currentLine;
+      _scale.initialEventTimestamp = event.timeStamp;
+      _scale.velocityTracker = VelocityTracker.withKind(event.kind);
 
       if (onScaleStart != null) {
         invokeCallback<void>('onScaleStart', () {
           onScaleStart!(
             ScaleStartDetails(
-              focalPoint: _currentFocalPoint!,
-              localFocalPoint: _localFocalPoint,
+              focalPoint: _scale.currentFocalPoint!,
+              localFocalPoint: _scale.localFocalPoint,
               pointerCount: pointerCount,
-              sourceTimeStamp: _initialScaleEventTimestamp,
+              sourceTimeStamp: _scale.initialEventTimestamp,
             ),
           );
         });
       }
     }
 
-    // Update scale gesture if active and we still have 2+ pointers
-    if (_scaleGestureActive && _pointers.length >= 2) {
-      _scaleVelocityTracker?.addPosition(
+    if (_scale.active && _drag.count >= 2) {
+      _scale.velocityTracker?.addPosition(
         event.timeStamp,
-        Offset(_pointerScaleFactor, 0),
+        Offset(_scale.scaleFactor, 0),
       );
 
       if (onScaleUpdate != null) {
         invokeCallback<void>('onScaleUpdate', () {
           onScaleUpdate!(
             ScaleUpdateDetails(
-              scale: _pointerScaleFactor,
-              horizontalScale: _pointerHorizontalScaleFactor,
-              verticalScale: _pointerVerticalScaleFactor,
-              focalPoint: _currentFocalPoint!,
-              localFocalPoint: _localFocalPoint,
+              scale: _scale.scaleFactor,
+              horizontalScale: _scale.horizontalScaleFactor,
+              verticalScale: _scale.verticalScaleFactor,
+              focalPoint: _scale.currentFocalPoint!,
+              localFocalPoint: _scale.localFocalPoint,
               rotation: _computeRotationFactor(),
               pointerCount: pointerCount,
-              focalPointDelta: _delta,
+              focalPointDelta: _scale.delta,
               sourceTimeStamp: event.timeStamp,
             ),
           );
@@ -194,22 +178,12 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     }
   }
 
-  void _updateScaleAfterRemoval(PointerEvent event) {
-    _lastTransform = event.transform;
-
-    // Update all pointer positions for scale calculation (after removal)
-    _update();
-    _updateLines();
-
-    _endScaleIfNeeded();
-  }
-
   void _endScaleIfNeeded() {
-    if (!_scaleGestureActive || _pointers.length >= 2) {
+    if (!_scale.active || _drag.count >= 2) {
       return;
     }
     if (onScaleEnd != null) {
-      final velocity = _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
+      final velocity = _scale.velocityTracker?.getVelocity() ?? Velocity.zero;
 
       if (_isFlingGesture(velocity)) {
         final pixelsPerSecond = velocity.pixelsPerSecond;
@@ -255,25 +229,21 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       }
     }
 
-    _scaleGestureActive = false;
-    _scaleVelocityTracker = null;
+    _scale.reset();
   }
 
   void _checkScaleGestureThreshold() {
-    if (_pointers.isEmpty || _initialFocalPoint == null) {
+    if (_drag.pointers.isEmpty || _scale.initialFocalPoint == null) {
       return;
     }
 
-    final spanDelta = (_currentSpan - _initialSpan).abs();
-    final scaleFactor = _pointerScaleFactor;
+    final spanDelta = (_scale.currentSpan - _scale.initialSpan).abs();
+    final scaleFactor = _scale.scaleFactor;
+    final kind = _drag.pointers.values.first.kind;
 
-    // Get the kind from any pointer state
-    final kind = _pointers.values.first.kind;
-
-    // If we detect a scale gesture, accept all pointer gestures
     if (spanDelta > computeScaleSlop(kind) ||
         math.max(scaleFactor, 1.0 / scaleFactor) > scaleThreshold) {
-      for (final state in _pointers.values) {
+      for (final state in _drag.pointers.values) {
         if (!state._resolved) {
           state._arenaEntry?.resolve(GestureDisposition.accepted);
         }
@@ -281,91 +251,93 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     }
   }
 
-  void _update() {
-    final previousFocalPoint = _currentFocalPoint;
+  void _updateScaleFields() {
+    final previousFocalPoint = _scale.currentFocalPoint;
 
-    // Compute the focal point
     var focalPoint = Offset.zero;
-    for (final state in _pointers.values) {
+    for (final state in _drag.pointers.values) {
       focalPoint += state.currentPosition;
     }
-    _currentFocalPoint = _pointers.isEmpty
+    _scale.currentFocalPoint = _drag.pointers.isEmpty
         ? Offset.zero
-        : focalPoint / _pointers.length.toDouble();
+        : focalPoint / _drag.pointers.length.toDouble();
 
     if (previousFocalPoint == null) {
-      _localFocalPoint = PointerEvent.transformPosition(
-        _lastTransform,
-        _currentFocalPoint!,
+      _scale.localFocalPoint = PointerEvent.transformPosition(
+        _scale.lastTransform,
+        _scale.currentFocalPoint!,
       );
-      _delta = Offset.zero;
+      _scale.delta = Offset.zero;
     } else {
-      _localFocalPoint = PointerEvent.transformPosition(
-        _lastTransform,
-        _currentFocalPoint!,
+      _scale.localFocalPoint = PointerEvent.transformPosition(
+        _scale.lastTransform,
+        _scale.currentFocalPoint!,
       );
-      _delta = _currentFocalPoint! - previousFocalPoint;
+      _scale.delta = _scale.currentFocalPoint! - previousFocalPoint;
     }
 
-    // Calculate span using the already-computed focal point
     var totalDeviation = 0.0;
     var totalHorizontalDeviation = 0.0;
     var totalVerticalDeviation = 0.0;
-    for (final state in _pointers.values) {
-      totalDeviation += (_currentFocalPoint! - state.currentPosition).distance;
+    for (final state in _drag.pointers.values) {
+      totalDeviation +=
+          (_scale.currentFocalPoint! - state.currentPosition).distance;
       totalHorizontalDeviation +=
-          (_currentFocalPoint!.dx - state.currentPosition.dx).abs();
+          (_scale.currentFocalPoint!.dx - state.currentPosition.dx).abs();
       totalVerticalDeviation +=
-          (_currentFocalPoint!.dy - state.currentPosition.dy).abs();
+          (_scale.currentFocalPoint!.dy - state.currentPosition.dy).abs();
     }
-    final count = _pointers.length;
-    _currentSpan = count > 0 ? totalDeviation / count : 0.0;
-    _currentHorizontalSpan = count > 0 ? totalHorizontalDeviation / count : 0.0;
-    _currentVerticalSpan = count > 0 ? totalVerticalDeviation / count : 0.0;
+    final count = _drag.pointers.length;
+    _scale.currentSpan = count > 0 ? totalDeviation / count : 0.0;
+    _scale.currentHorizontalSpan = count > 0
+        ? totalHorizontalDeviation / count
+        : 0.0;
+    _scale.currentVerticalSpan = count > 0
+        ? totalVerticalDeviation / count
+        : 0.0;
   }
 
   void _updateLines() {
-    final count = _pointers.length;
-    final pointerIds = _pointers.keys.toList();
+    final count = _drag.pointers.length;
+    final pointerIds = _drag.pointers.keys.toList();
 
     if (count < 2) {
-      _initialLine = _currentLine;
-    } else if (_initialLine != null &&
-        _initialLine!.pointerStartId == pointerIds[0] &&
-        _initialLine!.pointerEndId == pointerIds[1]) {
-      _currentLine = _LineBetweenPointers(
+      _scale.initialLine = _scale.currentLine;
+    } else if (_scale.initialLine != null &&
+        _scale.initialLine!.pointerStartId == pointerIds[0] &&
+        _scale.initialLine!.pointerEndId == pointerIds[1]) {
+      _scale.currentLine = _LineBetweenPointers(
         pointerStartId: pointerIds[0],
-        pointerStartLocation: _pointers[pointerIds[0]]!.currentPosition,
+        pointerStartLocation: _drag.pointers[pointerIds[0]]!.currentPosition,
         pointerEndId: pointerIds[1],
-        pointerEndLocation: _pointers[pointerIds[1]]!.currentPosition,
+        pointerEndLocation: _drag.pointers[pointerIds[1]]!.currentPosition,
       );
     } else {
-      _initialLine = _LineBetweenPointers(
+      _scale.initialLine = _LineBetweenPointers(
         pointerStartId: pointerIds[0],
-        pointerStartLocation: _pointers[pointerIds[0]]!.currentPosition,
+        pointerStartLocation: _drag.pointers[pointerIds[0]]!.currentPosition,
         pointerEndId: pointerIds[1],
-        pointerEndLocation: _pointers[pointerIds[1]]!.currentPosition,
+        pointerEndLocation: _drag.pointers[pointerIds[1]]!.currentPosition,
       );
-      _currentLine = _initialLine;
+      _scale.currentLine = _scale.initialLine;
     }
   }
 
   double _computeRotationFactor() {
     var factor = 0.0;
-    if (_initialLine != null && _currentLine != null) {
-      final fx = _initialLine!.pointerStartLocation.dx;
-      final fy = _initialLine!.pointerStartLocation.dy;
-      final sx = _initialLine!.pointerEndLocation.dx;
-      final sy = _initialLine!.pointerEndLocation.dy;
+    if (_scale.initialLine != null && _scale.currentLine != null) {
+      final fx = _scale.initialLine!.pointerStartLocation.dx;
+      final fy = _scale.initialLine!.pointerStartLocation.dy;
+      final sx = _scale.initialLine!.pointerEndLocation.dx;
+      final sy = _scale.initialLine!.pointerEndLocation.dy;
 
-      final nfx = _currentLine!.pointerStartLocation.dx;
-      final nfy = _currentLine!.pointerStartLocation.dy;
-      final nsx = _currentLine!.pointerEndLocation.dx;
-      final nsy = _currentLine!.pointerEndLocation.dy;
+      final nfx = _scale.currentLine!.pointerStartLocation.dx;
+      final nfy = _scale.currentLine!.pointerStartLocation.dy;
+      final nsx = _scale.currentLine!.pointerEndLocation.dx;
+      final nsy = _scale.currentLine!.pointerEndLocation.dy;
 
       final angle1 = math.atan2(fy - sy, fx - sx);
       final angle2 = math.atan2(nfy - nsy, nfx - nsx);
-
       factor = angle2 - angle1;
     }
     return factor;
@@ -377,57 +349,98 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
   }
 
   Drag? _startDrag(Offset initialPosition, int pointer) {
-    assert(_pointers.containsKey(pointer));
-    Drag? drag;
-    if (onStart != null) {
-      drag = invokeCallback<Drag?>('onStart', () {
-        return onStart!(initialPosition);
-      });
+    assert(_drag.pointers.containsKey(pointer));
+    if (!hasDrag || onStart == null) {
+      return null;
     }
-    return drag;
+    return invokeCallback<Drag?>('onStart', () => onStart!(initialPosition));
   }
 
   @override
   void acceptGesture(int pointer) {
-    final state = _pointers[pointer];
+    final state = _drag.pointers[pointer];
     if (state == null) {
-      return; // Already removed
+      return;
     }
     state._accepted(() => _startDrag(state.initialPosition, pointer));
   }
 
   @override
   void rejectGesture(int pointer) {
-    final state = _pointers[pointer];
+    final state = _drag.pointers[pointer];
     if (state != null) {
       state._rejected();
       _removeState(pointer);
-      _update();
-      _updateLines();
-      _endScaleIfNeeded();
+      if (hasScale) {
+        _updateScaleFields();
+        _updateLines();
+        _endScaleIfNeeded();
+      }
     }
   }
 
   void _removeState(int pointer) {
-    if (!_pointers.containsKey(pointer)) {
+    if (!_drag.pointers.containsKey(pointer)) {
       return;
     }
     GestureBinding.instance.pointerRouter.removeRoute(pointer, _handleEvent);
-    _pointers.remove(pointer)!._dispose();
+    _drag.pointers.remove(pointer)!._dispose();
   }
 
   @override
   void dispose() {
-    final pointers = _pointers.keys.toList();
+    final pointers = _drag.pointers.keys.toList();
     for (final pointer in pointers) {
       _removeState(pointer);
     }
-    assert(_pointers.isEmpty);
+    assert(_drag.pointers.isEmpty);
     super.dispose();
   }
 
   @override
   String get debugDescription => 'multi-drag-scale';
+}
+
+/// Groups per-recognizer drag state. Per-pointer state lives in
+/// [_DragPointerState].
+class _DragState {
+  final Map<int, _DragPointerState> pointers = {};
+  int get count => pointers.length;
+}
+
+/// Groups all scale-tracking state for a [MultiDragScaleGestureRecognizer].
+class _ScaleState {
+  bool active = false;
+  Offset? initialFocalPoint;
+  Offset? currentFocalPoint;
+  double initialSpan = 0.0;
+  double currentSpan = 0.0;
+  double initialHorizontalSpan = 0.0;
+  double currentHorizontalSpan = 0.0;
+  double initialVerticalSpan = 0.0;
+  double currentVerticalSpan = 0.0;
+  Offset localFocalPoint = Offset.zero;
+  _LineBetweenPointers? initialLine;
+  _LineBetweenPointers? currentLine;
+  Matrix4? lastTransform;
+  Offset delta = Offset.zero;
+  VelocityTracker? velocityTracker;
+  Duration? initialEventTimestamp;
+
+  double get scaleFactor => initialSpan > 0.0 ? currentSpan / initialSpan : 1.0;
+
+  double get horizontalScaleFactor => initialHorizontalSpan > 0.0
+      ? currentHorizontalSpan / initialHorizontalSpan
+      : 1.0;
+
+  double get verticalScaleFactor => initialVerticalSpan > 0.0
+      ? currentVerticalSpan / initialVerticalSpan
+      : 1.0;
+
+  void reset() {
+    active = false;
+    velocityTracker = null;
+  }
 }
 
 class _DragPointerState {
@@ -450,6 +463,10 @@ class _DragPointerState {
   Drag? _drag;
   bool _resolved = false;
 
+  // Accumulates deltas before the gesture is accepted so they can be delivered
+  // as a single initial update (matches ImmediateMultiDragGestureRecognizer).
+  Offset _pendingDelta = Offset.zero;
+
   set arenaEntry(GestureArenaEntry entry) {
     _arenaEntry = entry;
   }
@@ -463,20 +480,21 @@ class _DragPointerState {
     currentPosition = event.position;
 
     if (!_resolved) {
-      // Check if we should resolve the gesture based on individual
-      // pointer movement
-      final distance = (currentPosition - initialPosition).distance;
-      if (distance > computePanSlop(kind, recognizer.gestureSettings)) {
+      _pendingDelta += delta;
+      if (!recognizer.hasScale) {
+        // Drag-only mode: accept on any movement. If accepted synchronously,
+        // _accepted fires the initial update with _pendingDelta; no extra
+        // update fires here because we are still in the if(!_resolved) branch.
         _arenaEntry?.resolve(GestureDisposition.accepted);
+      } else {
+        final distance = (currentPosition - initialPosition).distance;
+        if (distance > computePanSlop(kind, recognizer.gestureSettings)) {
+          _arenaEntry?.resolve(GestureDisposition.accepted);
+        } else if (recognizer._drag.count >= 2) {
+          recognizer._checkScaleGestureThreshold();
+        }
       }
-      // Also check if we should resolve based on scale gesture
-      // This happens when multiple pointers are moving
-      else if (recognizer._pointers.length >= 2) {
-        recognizer._checkScaleGestureThreshold();
-      }
-    }
-
-    if (_drag != null) {
+    } else if (_drag != null) {
       _drag!.update(
         DragUpdateDetails(
           globalPosition: event.position,
@@ -493,11 +511,7 @@ class _DragPointerState {
 
   void _up(PointerUpEvent event) {
     if (_drag != null) {
-      _drag!.end(
-        DragEndDetails(
-          velocity: velocityTracker.getVelocity(),
-        ),
-      );
+      _drag!.end(DragEndDetails(velocity: velocityTracker.getVelocity()));
     }
     _resolved = true;
   }
@@ -511,6 +525,20 @@ class _DragPointerState {
     if (!_resolved) {
       _resolved = true;
       _drag = starter();
+      // In drag-only mode, fire an initial update matching
+      // ImmediateMultiDragGestureRecognizer: delta is Offset.zero when
+      // accepted before any moves (via microtask), or the accumulated
+      // pending delta when accepted during a move.
+      // Scale mode skips this to avoid an extra update per pointer.
+      if (_drag != null && !recognizer.hasScale) {
+        _drag!.update(
+          DragUpdateDetails(
+            globalPosition: initialPosition + _pendingDelta,
+            delta: _pendingDelta,
+          ),
+        );
+        _pendingDelta = Offset.zero;
+      }
     }
   }
 

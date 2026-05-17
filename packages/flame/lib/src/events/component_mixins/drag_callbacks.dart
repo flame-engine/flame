@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/events/component_mixins/dispatcher_setup.dart';
 import 'package:meta/meta.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive drag events.
@@ -12,7 +11,7 @@ import 'package:meta/meta.dart';
 ///
 /// This mixin is the replacement of the Draggable mixin.
 ///
-/// This callback uses [MultiDragDispatcher] to route events.
+/// This callback uses [MultiDragScaleDispatcher] to route events.
 mixin DragCallbacks on Component {
   bool _isDragged = false;
 
@@ -64,8 +63,8 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    setupEventDispatcher(
-      findRootGame()!,
+    MultiDragScaleDispatcher.addDispatcher(
+      this,
       hasDrag: true,
       hasScale: this is ScaleCallbacks,
     );

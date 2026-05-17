@@ -20,16 +20,63 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
       other is MultiDragScaleDispatcherKey && other.hashCode == hashCode;
 }
 
-/// **MultiDragScaleDispatcher** facilitates dispatching of both drag and scale
-/// events to the [DragCallbacks] and [ScaleCallbacks] components in the
-/// component tree. It will be attached to the [FlameGame] instance
-/// automatically when both callback types are needed.
+/// Dispatches both drag and scale events to [DragCallbacks] and
+/// [ScaleCallbacks] components. Attached to the [FlameGame] automatically
+/// when either callback type is first mounted.
+///
+/// Use [enableDrag] and [enableScale] (called via [addDispatcher]) to control
+/// which event types are forwarded to the underlying
+/// [MultiDragScaleGestureRecognizer].
 class MultiDragScaleDispatcher extends Component
     implements MultiDragListener, ScaleListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
+  bool _hasDrag = false;
+  bool _hasScale = false;
+  MultiDragScaleGestureRecognizer? _recognizer;
+
   FlameGame get game => parent! as FlameGame;
+
+  /// Enables drag forwarding on the underlying recognizer.
+  ///
+  /// Safe to call before or after [onMount].
+  void enableDrag() {
+    _hasDrag = true;
+    _recognizer?.hasDrag = true;
+  }
+
+  /// Enables scale forwarding on the underlying recognizer.
+  ///
+  /// Safe to call before or after [onMount].
+  void enableScale() {
+    _hasScale = true;
+    _recognizer?.hasScale = true;
+  }
+
+  /// Ensures a [MultiDragScaleDispatcher] is registered on the game that owns
+  /// [component], then enables drag and/or scale as requested.
+  static void addDispatcher(
+    Component component, {
+    required bool hasDrag,
+    required bool hasScale,
+  }) {
+    final game = component.findRootGame()!;
+    var dispatcher =
+        game.findByKey(const MultiDragScaleDispatcherKey())
+            as MultiDragScaleDispatcher?;
+    if (dispatcher == null) {
+      dispatcher = MultiDragScaleDispatcher();
+      game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+      game.add(dispatcher);
+    }
+    if (hasDrag) {
+      dispatcher.enableDrag();
+    }
+    if (hasScale) {
+      dispatcher.enableScale();
+    }
+  }
 
   /// Called when the user initiates a drag gesture, for example by touching the
   /// screen and then moving the finger.
@@ -259,6 +306,9 @@ class MultiDragScaleDispatcher extends Component
     game.gestureDetectors.register<MultiDragScaleGestureRecognizer>(
       MultiDragScaleGestureRecognizer.new,
       (MultiDragScaleGestureRecognizer instance) {
+        _recognizer = instance;
+        instance.hasDrag = _hasDrag;
+        instance.hasScale = _hasScale;
         instance.onStart = (Offset point) => FlameDragAdapter(this, point);
         instance.onScaleStart = handleScaleStart;
         instance.onScaleUpdate = handleScaleUpdate;
@@ -269,6 +319,7 @@ class MultiDragScaleDispatcher extends Component
 
   @override
   void onRemove() {
+    _recognizer = null;
     game.gestureDetectors.unregister<MultiDragScaleGestureRecognizer>();
     game.unregisterKey(const MultiDragScaleDispatcherKey());
   }

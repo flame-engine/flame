@@ -1,6 +1,5 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/events/component_mixins/dispatcher_setup.dart';
 import 'package:flutter/foundation.dart';
 
 /// Mixin for components that respond to scale (pinch/zoom/rotate) gestures.
@@ -26,12 +25,13 @@ mixin ScaleCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    // DragCallbacks.onMount handles the full matrix for combined components.
+    // DragCallbacks.onMount handles the full registration for
+    // combined components.
     if (this is DragCallbacks) {
       return;
     }
-    setupEventDispatcher(
-      findRootGame()!,
+    MultiDragScaleDispatcher.addDispatcher(
+      this,
       hasDrag: false,
       hasScale: true,
     );

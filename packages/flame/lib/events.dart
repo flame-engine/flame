@@ -17,8 +17,6 @@ export 'src/events/flame_game_mixins/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
 export 'src/events/flame_game_mixins/long_press_dispatcher.dart'
     show LongPressDispatcher, LongPressDispatcherKey;
-export 'src/events/flame_game_mixins/multi_drag_dispatcher.dart'
-    show MultiDragDispatcher, MultiDragDispatcherKey;
 export 'src/events/flame_game_mixins/multi_tap_dispatcher.dart'
     show MultiTapDispatcher, MultiTapDispatcherKey;
 export 'src/events/flame_game_mixins/non_primary_tap_dispatcher.dart'

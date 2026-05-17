@@ -14,7 +14,7 @@ void main() {
       (game) async {
         await game.add(DragCallbacksComponent());
         await game.ready();
-        expect(game.children.toList()[2], isA<MultiDragDispatcher>());
+        expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
     );
 
@@ -27,8 +27,8 @@ void main() {
       game.add(component);
       await game.ready();
 
-      expect(game.children.whereType<MultiDragDispatcher>().length, 1);
-      game.firstChild<MultiDragDispatcher>()!.onDragStart(
+      expect(game.children.whereType<MultiDragScaleDispatcher>().length, 1);
+      game.firstChild<MultiDragScaleDispatcher>()!.onDragStart(
         createDragStartEvents(
           game: game,
           localPosition: const Offset(12, 12),
@@ -45,7 +45,7 @@ void main() {
         ..width = 10
         ..height = 10;
       await game.ensureAdd(component);
-      final dispatcher = game.firstChild<MultiDragDispatcher>()!;
+      final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
 
       dispatcher.onDragStart(
         createDragStartEvents(
@@ -82,7 +82,7 @@ void main() {
           ..width = 10
           ..height = 10;
         await game.ensureAdd(component);
-        final dispatcher = game.firstChild<MultiDragDispatcher>()!;
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
 
         dispatcher.onDragStart(
           createDragStartEvents(
@@ -123,7 +123,7 @@ void main() {
           ..width = 10
           ..height = 10;
         await game.ensureAdd(component);
-        final dispatcher = game.firstChild<MultiDragDispatcher>()!;
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
         expect(component.dragStartEvent, equals(0));
         expect(component.dragUpdateEvent, equals(0));
 
@@ -185,7 +185,7 @@ void main() {
       (game) async {
         await game.ready();
         expect(game.children.length, equals(3));
-        expect(game.children.elementAt(1), isA<MultiDragDispatcher>());
+        expect(game.children.elementAt(1), isA<MultiDragScaleDispatcher>());
       },
     );
 
@@ -251,7 +251,7 @@ void main() {
 
         expect(game.children.length, 4);
         expect(game.children.elementAt(1), isA<DragWithCallbacksComponent>());
-        expect(game.children.elementAt(2), isA<MultiDragDispatcher>());
+        expect(game.children.elementAt(2), isA<MultiDragScaleDispatcher>());
 
         // regular drag
         await tester.timedDragFrom(
@@ -292,7 +292,7 @@ void main() {
         await tester.pump();
         await tester.pump();
         expect(game.children.length, 5);
-        expect(game.children.elementAt(3), isA<MultiDragDispatcher>());
+        expect(game.children.elementAt(3), isA<MultiDragScaleDispatcher>());
 
         await tester.timedDragFrom(
           const Offset(20, 20),
@@ -320,7 +320,7 @@ void main() {
         await tester.pump();
         await tester.pump();
         expect(game.children.length, 4);
-        expect(game.children.elementAt(2), isA<MultiDragDispatcher>());
+        expect(game.children.elementAt(2), isA<MultiDragScaleDispatcher>());
 
         await tester.timedDragFrom(
           const Offset(80, 80),
@@ -435,52 +435,4 @@ void main() {
       expect(totalDelta, Vector2(16, 0));
     },
   );
-
-  group('MultiDragDispatcher lifecycle', () {
-    testWithFlameGame(
-      'rejects new gestures after markForRemoval',
-      (game) async {
-        final component = DragCallbacksComponent()
-          ..x = 10
-          ..y = 10
-          ..width = 10
-          ..height = 10;
-        await game.ensureAdd(component);
-        final dispatcher = game.firstChild<MultiDragDispatcher>()!;
-
-        dispatcher.markForRemoval();
-        dispatcher.handleDragStart(
-          1,
-          DragStartDetails(globalPosition: const Offset(12, 12)),
-        );
-        expect(component.dragStartEvent, 0);
-      },
-    );
-
-    testWithFlameGame(
-      'removes itself after last gesture ends when marked',
-      (game) async {
-        final component = DragCallbacksComponent()
-          ..x = 10
-          ..y = 10
-          ..width = 10
-          ..height = 10;
-        await game.ensureAdd(component);
-        final dispatcher = game.firstChild<MultiDragDispatcher>()!;
-
-        dispatcher.handleDragStart(
-          1,
-          DragStartDetails(globalPosition: const Offset(12, 12)),
-        );
-        expect(component.dragStartEvent, 1);
-
-        dispatcher.markForRemoval();
-        expect(dispatcher.isMounted, isTrue);
-
-        dispatcher.handleDragEnd(1, DragEndDetails());
-        game.update(0);
-        expect(game.children.whereType<MultiDragDispatcher>().length, 0);
-      },
-    );
-  });
 }

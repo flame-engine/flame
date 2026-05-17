@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart' hide PointerMoveEvent;
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,7 +15,7 @@ void main() {
       (game) async {
         await game.add(ScaleCallbacksComponent());
         await game.ready();
-        expect(game.children.toList()[2], isA<ScaleDispatcher>());
+        expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
     );
   });
@@ -29,8 +28,8 @@ void main() {
     game.add(component);
     await game.ready();
 
-    expect(game.children.whereType<ScaleDispatcher>().length, 1);
-    game.firstChild<ScaleDispatcher>()!.onScaleStart(
+    expect(game.children.whereType<MultiDragScaleDispatcher>().length, 1);
+    game.firstChild<MultiDragScaleDispatcher>()!.onScaleStart(
       createScaleStartEvents(
         game: game,
         localFocalPoint: const Offset(12, 12),
@@ -47,7 +46,7 @@ void main() {
       ..width = 10
       ..height = 10;
     await game.ensureAdd(component);
-    final dispatcher = game.firstChild<ScaleDispatcher>()!;
+    final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
 
     dispatcher.onScaleStart(
       createScaleStartEvents(
@@ -84,7 +83,7 @@ void main() {
         ..width = 10
         ..height = 10;
       await game.ensureAdd(component);
-      final dispatcher = game.firstChild<ScaleDispatcher>()!;
+      final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
 
       dispatcher.onScaleStart(
         createScaleStartEvents(
@@ -123,7 +122,7 @@ void main() {
         ..width = 10
         ..height = 10;
       await game.ensureAdd(component);
-      final dispatcher = game.firstChild<ScaleDispatcher>()!;
+      final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
       expect(component.scaleStartEvent, equals(0));
       expect(component.scaleUpdateEvent, equals(0));
 
@@ -159,9 +158,9 @@ void main() {
     expect(game.children.length, equals(4));
     expect(component.isMounted, isTrue);
 
-    expect(component.scaleStartEvent, equals(2));
+    expect(component.scaleStartEvent, equals(1));
     expect(component.scaleUpdateEvent, greaterThan(0));
-    expect(component.scaleEndEvent, equals(2));
+    expect(component.scaleEndEvent, equals(1));
   });
 
   testWidgets(
@@ -193,7 +192,7 @@ void main() {
     (game) async {
       await game.ready();
       expect(game.children.length, equals(3));
-      expect(game.children.elementAt(1), isA<ScaleDispatcher>());
+      expect(game.children.elementAt(1), isA<MultiDragScaleDispatcher>());
     },
   );
 
@@ -214,9 +213,9 @@ void main() {
         offset2: const Offset(-15, -2),
       );
 
-      expect(game.scaleStartEvent, equals(2));
+      expect(game.scaleStartEvent, equals(1));
       expect(game.scaleUpdateEvent, greaterThan(0));
-      expect(game.scaleEndEvent, equals(2));
+      expect(game.scaleEndEvent, equals(1));
     },
   );
 
@@ -241,7 +240,7 @@ void main() {
         offset2: const Offset(-15, -2),
       );
 
-      expect(component.isScaledStateChange, equals(4));
+      expect(component.isScaledStateChange, equals(2));
 
       // Outside component
       await tester.zoomFrom(
@@ -251,7 +250,7 @@ void main() {
         offset2: const Offset(-15, -2),
       );
 
-      expect(component.isScaledStateChange, equals(4));
+      expect(component.isScaledStateChange, equals(2));
     },
   );
   group('HasScalableComponents', () {
@@ -408,66 +407,4 @@ void main() {
       }
     },
   );
-
-  group('ScaleDispatcher lifecycle', () {
-    testWithFlameGame(
-      'rejects new gestures after markForRemoval',
-      (game) async {
-        final component = ScaleCallbacksComponent()
-          ..x = 10
-          ..y = 10
-          ..width = 10
-          ..height = 10;
-        await game.ensureAdd(component);
-        final dispatcher = game.firstChild<ScaleDispatcher>()!;
-
-        dispatcher.markForRemoval();
-        dispatcher.handleScaleStart(
-          ScaleStartDetails(focalPoint: const Offset(12, 12)),
-        );
-        expect(component.scaleStartEvent, 0);
-      },
-    );
-
-    testWithFlameGame(
-      'removes itself after last gesture ends when marked',
-      (game) async {
-        final component = ScaleCallbacksComponent()
-          ..x = 10
-          ..y = 10
-          ..width = 10
-          ..height = 10;
-        await game.ensureAdd(component);
-        final dispatcher = game.firstChild<ScaleDispatcher>()!;
-
-        dispatcher.handleScaleStart(
-          ScaleStartDetails(focalPoint: const Offset(12, 12)),
-        );
-        expect(component.scaleStartEvent, 1);
-
-        dispatcher.markForRemoval();
-        expect(dispatcher.isMounted, isTrue);
-
-        dispatcher.handleScaleEnd(ScaleEndDetails());
-        game.update(0);
-        expect(game.children.whereType<ScaleDispatcher>().length, 0);
-      },
-    );
-
-    testWithFlameGame(
-      'can be recreated after removal (unregisterKey works)',
-      (game) async {
-        await game.ensureAdd(ScaleCallbacksComponent());
-        expect(game.children.whereType<ScaleDispatcher>().length, 1);
-
-        final dispatcher = game.firstChild<ScaleDispatcher>()!;
-        dispatcher.markForRemoval();
-        game.update(0);
-        expect(game.children.whereType<ScaleDispatcher>().length, 0);
-
-        await game.ensureAdd(ScaleCallbacksComponent());
-        expect(game.children.whereType<ScaleDispatcher>().length, 1);
-      },
-    );
-  });
 }

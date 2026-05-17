@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -715,7 +714,7 @@ void main() {
 
     testWidgets(
       '''adding drag component after scale component 
-    upgrade dispatcher to multiDragScaleDispatcher''',
+    upgrade dispatcher to multiDragMultiDragScaleDispatcher''',
       (tester) async {
         final resolution = Vector2(80, 60);
         final game = FlameGame(
@@ -818,57 +817,28 @@ void main() {
     );
 
     testWithFlameGame(
-      'upgrade from ScaleDispatcher to MultiDragScaleDispatcher '
-      'marks old for removal',
+      'adding DragCallbacks after ScaleCallbacks reuses the same dispatcher',
       (game) async {
         await game.ensureAdd(ScaleCallbacksComponent());
-        expect(game.children.whereType<ScaleDispatcher>().length, 1);
+        expect(game.children.whereType<MultiDragScaleDispatcher>().length, 1);
 
         await game.ensureAdd(DragCallbacksComponent());
         game.update(0);
 
-        expect(
-          game.children.whereType<MultiDragScaleDispatcher>().length,
-          1,
-        );
-        expect(game.children.whereType<ScaleDispatcher>().length, 0);
+        expect(game.children.whereType<MultiDragScaleDispatcher>().length, 1);
       },
     );
 
     testWithFlameGame(
-      'upgrade from MultiDragDispatcher to MultiDragScaleDispatcher '
-      'marks old for removal',
+      'adding ScaleCallbacks after DragCallbacks reuses the same dispatcher',
       (game) async {
         await game.ensureAdd(DragCallbacksComponent());
-        expect(game.children.whereType<MultiDragDispatcher>().length, 1);
+        expect(game.children.whereType<MultiDragScaleDispatcher>().length, 1);
 
         await game.ensureAdd(ScaleCallbacksComponent());
         game.update(0);
 
-        expect(
-          game.children.whereType<MultiDragScaleDispatcher>().length,
-          1,
-        );
-        expect(game.children.whereType<MultiDragDispatcher>().length, 0);
-      },
-    );
-
-    testWithFlameGame(
-      'adding ScaleCallbacks after DragCallbacks creates '
-      'MultiDragScaleDispatcher with only one dispatcher',
-      (game) async {
-        await game.ensureAdd(DragCallbacksComponent());
-        expect(game.children.whereType<MultiDragDispatcher>().length, 1);
-
-        await game.ensureAdd(ScaleCallbacksComponent());
-        game.update(0);
-
-        expect(
-          game.children.whereType<MultiDragScaleDispatcher>().length,
-          1,
-        );
-        expect(game.children.whereType<MultiDragDispatcher>().length, 0);
-        expect(game.children.whereType<ScaleDispatcher>().length, 0);
+        expect(game.children.whereType<MultiDragScaleDispatcher>().length, 1);
       },
     );
   });
