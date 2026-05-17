@@ -31,19 +31,19 @@ class ScaleExample extends FlameGame {
       textRenderer: TextPaint(
         style: const TextStyle(fontSize: 25, color: Colors.white),
       ),
-      position: Vector2(50, 50),
+      position: Vector2.all(50),
     );
 
     if (addScaleOnlyRectangle) {
       final scaleOnlyRectangle = ScaleOnlyRectangle(
-        position: Vector2(0, 0),
+        position: Vector2.zero(),
         size: Vector2.all(150),
       );
       world.add(scaleOnlyRectangle);
     }
     if (addDragOnlyRectangle) {
       final dragOnlyRectangle = DragOnlyRectangle(
-        position: Vector2(-200, -200),
+        position: Vector2.all(-200),
         size: Vector2.all(150),
         color: Colors.green,
       );
@@ -52,7 +52,7 @@ class ScaleExample extends FlameGame {
 
     if (addScaleDragRectangle) {
       interactiveRectangle = InteractiveRectangle(
-        position: Vector2(100, 100),
+        position: Vector2.all(100),
         size: Vector2.all(150),
         color: Colors.red,
       );
