@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/interfaces/scale_listener.dart';
 import 'package:flame/src/events/multi_drag_scale_recognizer.dart';
 import 'package:flame/src/events/tagged_component.dart';
@@ -27,31 +28,26 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
 /// Use [enableDrag] and [enableScale] (called via [addDispatcher]) to control
 /// which event types are forwarded to the underlying
 /// [MultiDragScaleGestureRecognizer].
-class MultiDragScaleDispatcher extends Component
+class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
     implements MultiDragListener, ScaleListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
-  bool _hasDrag = false;
-  bool _hasScale = false;
   int _dragCount = 0;
   int _scaleCount = 0;
   MultiDragScaleGestureRecognizer? _recognizer;
 
   @visibleForTesting
-  bool get hasDrag => _hasDrag;
+  bool get hasDrag => _dragCount > 0;
 
   @visibleForTesting
-  bool get hasScale => _hasScale;
-
-  FlameGame get game => parent! as FlameGame;
+  bool get hasScale => _scaleCount > 0;
 
   /// Enables drag forwarding on the underlying recognizer.
   ///
   /// Safe to call before or after [onMount].
   void enableDrag() {
     _dragCount++;
-    _hasDrag = true;
     _recognizer?.hasDrag = true;
   }
 
@@ -60,14 +56,12 @@ class MultiDragScaleDispatcher extends Component
   /// Safe to call before or after [onMount].
   void enableScale() {
     _scaleCount++;
-    _hasScale = true;
     _recognizer?.hasScale = true;
   }
 
   void _disableDrag() {
     _dragCount--;
     if (_dragCount == 0) {
-      _hasDrag = false;
       _recognizer?.hasDrag = false;
     }
   }
@@ -75,7 +69,6 @@ class MultiDragScaleDispatcher extends Component
   void _disableScale() {
     _scaleCount--;
     if (_scaleCount == 0) {
-      _hasScale = false;
       _recognizer?.hasScale = false;
     }
   }
@@ -358,8 +351,8 @@ class MultiDragScaleDispatcher extends Component
       MultiDragScaleGestureRecognizer.new,
       (MultiDragScaleGestureRecognizer instance) {
         _recognizer = instance;
-        instance.hasDrag = _hasDrag;
-        instance.hasScale = _hasScale;
+        instance.hasDrag = _dragCount > 0;
+        instance.hasScale = _scaleCount > 0;
         instance.onStart = (Offset point) => FlameDragAdapter(this, point);
         instance.onScaleStart = handleScaleStart;
         instance.onScaleUpdate = handleScaleUpdate;

@@ -66,7 +66,7 @@ mixin DragCallbacks on Component {
     MultiDragScaleDispatcher.addDispatcher(
       this,
       hasDrag: true,
-      hasScale: this is ScaleCallbacks,
+      hasScale: false,
     );
   }
 
@@ -76,7 +76,7 @@ mixin DragCallbacks on Component {
     MultiDragScaleDispatcher.removeDispatcher(
       this,
       hasDrag: true,
-      hasScale: this is ScaleCallbacks,
+      hasScale: false,
     );
     super.onRemove();
   }

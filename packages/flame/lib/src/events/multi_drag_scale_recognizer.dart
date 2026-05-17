@@ -325,16 +325,18 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
   double _computeRotationFactor() {
     var factor = 0.0;
-    if (_scale.initialLine != null && _scale.currentLine != null) {
-      final fx = _scale.initialLine!.pointerStartLocation.dx;
-      final fy = _scale.initialLine!.pointerStartLocation.dy;
-      final sx = _scale.initialLine!.pointerEndLocation.dx;
-      final sy = _scale.initialLine!.pointerEndLocation.dy;
+    final initialLine = _scale.initialLine;
+    final currentLine = _scale.currentLine;
+    if (initialLine != null && currentLine != null) {
+      final fx = initialLine.pointerStartLocation.dx;
+      final fy = initialLine.pointerStartLocation.dy;
+      final sx = initialLine.pointerEndLocation.dx;
+      final sy = initialLine.pointerEndLocation.dy;
 
-      final nfx = _scale.currentLine!.pointerStartLocation.dx;
-      final nfy = _scale.currentLine!.pointerStartLocation.dy;
-      final nsx = _scale.currentLine!.pointerEndLocation.dx;
-      final nsy = _scale.currentLine!.pointerEndLocation.dy;
+      final nfx = currentLine.pointerStartLocation.dx;
+      final nfy = currentLine.pointerStartLocation.dy;
+      final nsx = currentLine.pointerEndLocation.dx;
+      final nsy = currentLine.pointerEndLocation.dy;
 
       final angle1 = math.atan2(fy - sy, fx - sx);
       final angle2 = math.atan2(nfy - nsy, nfx - nsx);

@@ -25,11 +25,6 @@ mixin ScaleCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    // DragCallbacks.onMount handles the full registration for
-    // combined components.
-    if (this is DragCallbacks) {
-      return;
-    }
     MultiDragScaleDispatcher.addDispatcher(
       this,
       hasDrag: false,
@@ -40,11 +35,6 @@ mixin ScaleCallbacks on Component {
   @override
   @mustCallSuper
   void onRemove() {
-    // DragCallbacks.onRemove handles the full cleanup for combined components.
-    if (this is DragCallbacks) {
-      super.onRemove();
-      return;
-    }
     MultiDragScaleDispatcher.removeDispatcher(
       this,
       hasDrag: false,
