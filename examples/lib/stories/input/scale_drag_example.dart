@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart' hide PointerMoveEvent;
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart' hide PointerMoveEvent;
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(GameWidget(game: ScaleExample()));
