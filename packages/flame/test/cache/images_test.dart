@@ -150,6 +150,23 @@ void main() {
       expect(images.fromCache('image2'), isNotNull);
     });
 
+    test('loads from a package', () async {
+      final bundle = _MockAssetBundle();
+      when(() => bundle.load(any())).thenAnswer(
+        (_) async {
+          final list = base64Decode(pixel.split(',').last);
+          return ByteData.view(list.buffer);
+        },
+      );
+
+      final images = Images(bundle: bundle);
+      await images.load('pixel.png', package: 'my_pkg');
+
+      verify(
+        () => bundle.load('packages/my_pkg/assets/images/pixel.png'),
+      ).called(1);
+    });
+
     test('can have its bundle overridden', () async {
       final bundle = _MockAssetBundle();
       when(() => bundle.load(any())).thenAnswer(

@@ -1,3 +1,27 @@
+## 0.2.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**(flame_3d): Optimize allocation time in shaders ([#3881](https://github.com/flame-engine/flame/issues/3881)). ([043d6e8f](https://github.com/flame-engine/flame/commit/043d6e8f4b7b05cf56a313d5033f205c070b11fb))
+ - **REFACTOR**(flame_3d): Simplify uniform slot definitions and allocations ([#3873](https://github.com/flame-engine/flame/issues/3873)). ([9c61971d](https://github.com/flame-engine/flame/commit/9c61971dfca20fc3bb1cd221e5b3e256fcac84ca))
+ - **FIX**(flame_3d): Ensure `children` parameter is passed to constructors in `MeshComponent` and `ModelComponent` ([#3884](https://github.com/flame-engine/flame/issues/3884)). ([adc7658b](https://github.com/flame-engine/flame/commit/adc7658b6a4bce939e3f2e80ba8af3d789b0ce0b))
+ - **FIX**(flame_3d): Ensure proper ambient light calculation in spatial_material shader ([#3866](https://github.com/flame-engine/flame/issues/3866)). ([be8607ac](https://github.com/flame-engine/flame/commit/be8607ac481224ce3746c501af1f089dd0077fc9))
+ - **FEAT**(flame_3d): Allow shader uniform structures use array elements ([#3878](https://github.com/flame-engine/flame/issues/3878)). ([9854f130](https://github.com/flame-engine/flame/commit/9854f130a87b6240611089338ab69555aec3814f))
+ - **FEAT**(flame_3d): Add culling scenario and implement AABB frustum culling logic([#3868](https://github.com/flame-engine/flame/issues/3868)). ([ce1d42ad](https://github.com/flame-engine/flame/commit/ce1d42adfb93ebd2856f001fc624da6f9ea22643))
+ - **FEAT**(flame_3d): Support cull mode on materials ([#3865](https://github.com/flame-engine/flame/issues/3865)). ([e407a6e1](https://github.com/flame-engine/flame/commit/e407a6e16f6849236b1d56061920db72d74763ec))
+ - **BREAKING** **REFACTOR**(flame_3d): Allow `LightComponents` to be nested ([#3883](https://github.com/flame-engine/flame/issues/3883)). ([fbd9b676](https://github.com/flame-engine/flame/commit/fbd9b676fe58978b60f811673a631fad391a3942))
+ - **BREAKING** **REFACTOR**(flame_3d): Simplify shader structure and remove no longer needed uniform classes ([#3880](https://github.com/flame-engine/flame/issues/3880)). ([1d799fdc](https://github.com/flame-engine/flame/commit/1d799fdceca6b750f4fa7161f0865b58fa4ec575))
+ - **BREAKING** **FIX**(flame_3d): Change type on `Surface` to be non-nullable ([#3882](https://github.com/flame-engine/flame/issues/3882)). ([67938373](https://github.com/flame-engine/flame/commit/679383739af4476088953bdfc4dc93635434305c))
+ - **BREAKING** **FEAT**(flame_3d): Allow for nested Component3D by using world matrix calculations ([#3867](https://github.com/flame-engine/flame/issues/3867)). ([48d0a847](https://github.com/flame-engine/flame/commit/48d0a8474b55e7e2e45941f721d889c04e46bdaf))
+
+## 0.1.1+7
+
+ - **FIX**(flame_3d): Use float for numLights uniform to fix GLES crash ([#3810](https://github.com/flame-engine/flame/issues/3810)). ([f241ebd6](https://github.com/flame-engine/flame/commit/f241ebd6d73caa43387972cffeb609af2909ac2f))
+ - **FIX**(flame_3d): Fix alpha blend factors for transparent background compositing ([#3812](https://github.com/flame-engine/flame/issues/3812)). ([8d7212a1](https://github.com/flame-engine/flame/commit/8d7212a1c79d561330131ea794a0ed318c3945f8))
+ - **FIX**(flame_3d): Remove duplicate baseColor multiply in ambient calculation ([#3814](https://github.com/flame-engine/flame/issues/3814)). ([080bde7f](https://github.com/flame-engine/flame/commit/080bde7f4c14c9f4f91e09d9bf6e737f75449351))
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
 ## 0.1.1+6
 
  - Update a dependency to the latest release.

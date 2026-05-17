@@ -246,6 +246,34 @@ void main() {
       });
     });
 
+    group('clampDouble', () {
+      test('clamp x and y', () {
+        final v = Vector2(10.0, 10.0)..clampDouble(0.0, 5.0, 0.0, 5.0);
+        expect(v, Vector2(5.0, 5.0));
+      });
+
+      test('clamp x min and y max', () {
+        final v = Vector2(-10.0, 20.0)..clampDouble(0.0, 5.0, 0.0, 5.0);
+        expect(v, Vector2(0.0, 5.0));
+      });
+
+      test('no effect when in range', () {
+        final v = Vector2(2.5, 2.5)..clampDouble(0.0, 5.0, 0.0, 5.0);
+        expect(v, Vector2(2.5, 2.5));
+      });
+
+      testRandom('clampDouble clamps x and y', (Random r) {
+        final v = Vector2(r.nextDouble() * 100 - 50, r.nextDouble() * 100 - 50);
+        const minX = -10.0;
+        const maxX = 10.0;
+        const minY = -20.0;
+        const maxY = 20.0;
+        v.clampDouble(minX, maxX, minY, maxY);
+        expect(v.x >= minX && v.x <= maxX, true);
+        expect(v.y >= minY && v.y <= maxY, true);
+      });
+    });
+
     group('projection', () {
       test('Project onto longer vector', () {
         final u = Vector2(5, 2);

@@ -1,3 +1,7 @@
+## 0.1.5+1
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
 ## 0.1.5
 
  - **FEAT**: Add `Blackboard` support for behavior trees ([#3756](https://github.com/flame-engine/flame/issues/3756)). ([955411d3](https://github.com/flame-engine/flame/commit/955411d34a6e85e25524b52938146578fa4aa3e3))

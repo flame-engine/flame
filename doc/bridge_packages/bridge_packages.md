@@ -36,6 +36,11 @@ Create texture atlases for games (bridge package for [FireAtlas]).
 A Box2D physics engine (bridge package for [Forge2D]).
 :::
 
+:::{package} flame_gamepads
+
+Support gamepad input in your game (bridge package for [gamepads])
+:::
+
 :::{package} flame_isolate
 
 Use isolates to offload heavy computations to another thread.
@@ -87,6 +92,11 @@ Load sprite sheets created by TexturePacker tool (bridge package for
 [TexturePacker]).
 :::
 
+:::{package} flame_typled
+
+Load Typled sprite atlases with edge-repeated padding (bridge package for [Typled]).
+:::
+
 :::{package} flame_tiled
 
 2D tilemap level editor (bridge package for [Tiled]).
@@ -96,12 +106,14 @@ Load sprite sheets created by TexturePacker tool (bridge package for
 [Bloc]: https://github.com/felangel/bloc
 [FireAtlas]: https://github.com/flame-engine/fire-atlas
 [Forge2D]: https://github.com/flame-engine/forge2d
+[gamepads]: https://github.com/flame-engine/gamepads
 [Lottie]: https://pub.dev/packages/lottie
 [Rive]: https://rive.app/
 [Riverpod]: https://github.com/rrousselGit/riverpod
 [Spine]: https://pub.dev/packages/spine_flutter
 [TexturePacker]: https://www.codeandweb.com/texturepacker
 [Tiled]: https://www.mapeditor.org/
+[Typled]: https://pub.dev/packages/typled
 [flutter_svg]: https://github.com/dnfield/flutter_svg
 
 
@@ -113,6 +125,7 @@ flame_behaviors             <flame_behaviors/flame_behaviors.md>
 flame_bloc                  <flame_bloc/flame_bloc.md>
 flame_fire_atlas            <flame_fire_atlas/flame_fire_atlas.md>
 flame_forge2d               <flame_forge2d/flame_forge2d.md>
+flame_gamepads              <flame_gamepads/flame_gamepads.md>
 flame_isolate               <flame_isolate/flame_isolate.md>
 flame_lottie                <flame_lottie/flame_lottie.md>
 flame_network_assets        <flame_network_assets/flame_network_assets.md>
@@ -124,4 +137,5 @@ flame_spine                 <flame_spine/flame_spine.md>
 flame_svg                   <flame_svg/flame_svg.md>
 flame_texturepacker         <flame_texturepacker/flame_texturepacker.md>
 flame_tiled                 <flame_tiled/flame_tiled.md>
+flame_typled                <flame_typled/flame_typled.md>
 ```

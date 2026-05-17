@@ -117,9 +117,9 @@ class Images {
   /// Loads the specified image with [fileName] into the cache.
   /// By default the key in the cache is the [fileName], if another key is
   /// desired, specify the optional [key] argument.
-  Future<Image> load(String fileName, {String? key}) {
+  Future<Image> load(String fileName, {String? key, String? package}) {
     return (_assets[key ?? fileName] ??= _ImageAsset.future(
-      _fetchToMemory(fileName),
+      _fetchToMemory(fileName, package: package),
     )).retrieveAsync();
   }
 
@@ -181,8 +181,9 @@ class Images {
     return decodeImageFromList(bytes);
   }
 
-  Future<Image> _fetchToMemory(String name) async {
-    final data = await bundle.load('$_prefix$name');
+  Future<Image> _fetchToMemory(String name, {String? package}) async {
+    final prefix = package == null ? _prefix : 'packages/$package/$_prefix';
+    final data = await bundle.load('$prefix$name');
     final bytes = Uint8List.view(data.buffer);
     return decodeImageFromList(bytes);
   }

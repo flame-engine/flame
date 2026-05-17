@@ -1,3 +1,14 @@
+## 5.1.1
+
+ - **REFACTOR**: [flame_texturepacker]  Update package support filed and handle more sprite index patterns ([#3858](https://github.com/flame-engine/flame/issues/3858)). ([bb535013](https://github.com/flame-engine/flame/commit/bb5350133be424d65923a14f10eadfb21a3166e9))
+ - **FIX**: Path Resolution and Region Parsing  ([#3849](https://github.com/flame-engine/flame/issues/3849)). ([f4048a2b](https://github.com/flame-engine/flame/commit/f4048a2b7d8cf5e2373237477c016db4a297e124))
+
+## 5.1.0
+
+ - **REFACTOR**: Asset path resolution/loading in TexturePackerAtlas to correctly handle prefixes and different asset types. ([17fac08d](https://github.com/flame-engine/flame/commit/17fac08d8964991a421cde8f5dd1ace4dc4e9063))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
 ## 5.0.5
 
  - Update a dependency to the latest release.

@@ -90,6 +90,23 @@ class RenderableTiledMap {
     return map.layers[layerId].visible;
   }
 
+  /// Changes the opacity of the layer at [layerIndex] to [opacity].
+  ///
+  /// [opacity] must be between 0.0 (fully transparent) and 1.0 (fully opaque).
+  void setLayerOpacity(int layerIndex, {required double opacity}) {
+    assert(
+      opacity >= 0.0 && opacity <= 1.0,
+      'opacity must be between 0.0 and 1.0',
+    );
+    final renderableLayer = renderableLayers[layerIndex];
+    renderableLayer.opacity = opacity;
+  }
+
+  /// Gets the opacity of the layer at [layerIndex].
+  double getLayerOpacity(int layerIndex) {
+    return renderableLayers[layerIndex].opacity;
+  }
+
   /// Changes the Gid of the corresponding layer at the given layerId,
   /// if different
   void setTileData({
@@ -257,21 +274,23 @@ class RenderableTiledMap {
     Paint Function(double opacity)? layerPaintFactory,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
+    String? package,
   }) async {
     assert(
       !fileName.contains(RegExp(r'[/\\]')),
       'fileName should not contain path separators, use prefix to specify a '
       'path.',
     );
+    final fullPrefix = package == null ? prefix : 'packages/$package/$prefix';
     final contents = await (bundle ?? Flame.bundle).loadString(
-      '$prefix$fileName',
+      '$fullPrefix$fileName',
     );
     return fromString(
       contents,
       destTileSize,
       atlasMaxX: atlasMaxX,
       atlasMaxY: atlasMaxY,
-      prefix: prefix,
+      prefix: fullPrefix,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
@@ -281,6 +300,7 @@ class RenderableTiledMap {
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
       atlasPackingSpacingX: atlasPackingSpacingX,
       atlasPackingSpacingY: atlasPackingSpacingY,
+      package: package,
     );
   }
 
@@ -304,6 +324,7 @@ class RenderableTiledMap {
     Paint Function(double opacity)? layerPaintFactory,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
+    String? package,
   }) async {
     final map = await TiledMap.fromString(
       contents,
@@ -323,6 +344,7 @@ class RenderableTiledMap {
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
       atlasPackingSpacingX: atlasPackingSpacingX,
       atlasPackingSpacingY: atlasPackingSpacingY,
+      package: package,
     );
   }
 
@@ -343,6 +365,7 @@ class RenderableTiledMap {
     Paint Function(double opacity)? layerPaintFactory,
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
+    String? package,
   }) async {
     // We're not going to load animation frames that are never referenced; but
     // we do supply the common cache for all layers in this map, and maintain
@@ -369,10 +392,12 @@ class RenderableTiledMap {
         useAtlas: useAtlas,
         spacingX: atlasPackingSpacingX,
         spacingY: atlasPackingSpacingY,
+        package: package,
       ),
       ignoreFlip: ignoreFlip,
       images: images,
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
+      package: package,
     );
 
     return RenderableTiledMap(
@@ -395,6 +420,7 @@ class RenderableTiledMap {
     required Paint Function(double opacity) layerPaintFactory,
     bool? ignoreFlip,
     Images? images,
+    String? package,
   }) {
     final visibleLayers = layers.where((layer) => layer.visible);
 
@@ -410,6 +436,7 @@ class RenderableTiledMap {
         ignoreFlip: ignoreFlip,
         images: images,
         layerPaintFactory: layerPaintFactory,
+        package: package,
       );
 
       if (layer is Group && renderableLayer is GroupLayer) {
@@ -424,6 +451,7 @@ class RenderableTiledMap {
           ignoreFlip: ignoreFlip,
           images: images,
           layerPaintFactory: layerPaintFactory,
+          package: package,
         );
       }
 

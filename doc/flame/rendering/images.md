@@ -469,3 +469,74 @@ spriteSheet.getSprite(0, 0); // row, column
 
 See a full example of the [`SpriteSheet` class](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/sprites/sprite_sheet_example.dart)
 for more details on how to work with it.
+
+
+## HasAutoBatchedChildren
+
+Flame introduces automatic sprite batching for improved rendering performance via the
+`HasAutoBatchedChildren` mixin. This mixin enables groups of sprite components to be rendered in a
+single draw call per atlas, significantly reducing rendering overhead and improving performance,
+especially when managing many similar sprites.
+
+
+### Purpose
+
+The `HasAutoBatchedChildren` mixin is designed for scenarios where you have a group of sprite or
+animation components (such as enemies, bullets, or particles) that share the same atlas image. By
+batching their rendering, Flame minimizes the number of draw calls, which is a major performance
+bottleneck in graphics applications.
+
+
+### When to Use
+
+Use this mixin when you have many `SpriteComponent` or `SpriteAnimationComponent` children that:
+
+- Use the same atlas image
+- Have uniform scale
+- Do not require custom decorators or snapshot caching
+- Do not have complex paint effects
+
+This is ideal for groups of similar objects, such as enemy waves or particle systems.
+
+
+### How to Use
+
+To enable batching, simply add the mixin to your group component:
+
+```dart
+import 'package:flame/components.dart';
+import 'package:flame/src/components/mixins/has_auto_batched_children.dart';
+
+class EnemyGroup extends PositionComponent with HasAutoBatchedChildren {
+  // Add SpriteComponent or SpriteAnimationComponent children
+}
+```
+
+You can toggle batching at runtime:
+
+```dart
+final group = EnemyGroup();
+group.batchingEnabled = false; // falls back to individual rendering
+```
+
+The mixin works by intercepting per-child rendering (`renderChild`) and post-children rendering
+hooks (`afterChildrenRendered`), accumulating eligible children for batch rendering and flushing
+batches at priority boundaries to preserve correct render order.
+
+
+### Example
+
+```dart
+class BulletGroup extends PositionComponent with HasAutoBatchedChildren {
+  // Add SpriteComponent children representing bullets
+}
+
+// Add bullets to the group
+bulletGroup.add(BulletSpriteComponent(...));
+```
+
+
+#### Rogue Shooter Example
+
+See the [Rogue Shooter game example](https://examples.flame-engine.org/#/Sample_Games_Rogue_Shooter)
+for a real-world usage of this mixin.

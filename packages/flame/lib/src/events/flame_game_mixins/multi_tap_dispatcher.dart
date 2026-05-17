@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/input.dart';
+import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
@@ -18,11 +19,10 @@ class MultiTapDispatcherKey implements ComponentKey {
       other is MultiTapDispatcherKey && other.hashCode == hashCode;
 }
 
-class MultiTapDispatcher extends Component implements MultiTapListener {
+class MultiTapDispatcher extends Dispatcher<FlameGame>
+    implements MultiTapListener {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
-
-  FlameGame get game => parent! as FlameGame;
 
   /// Called when the user touches the device screen within the game canvas,
   /// either with a finger, a stylus, or a mouse.
@@ -149,9 +149,17 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   //#endregion
 
+  static void addDispatcher(Component component) {
+    Dispatcher.addDispatcher(
+      component,
+      const MultiTapDispatcherKey(),
+      MultiTapDispatcher.new,
+    );
+  }
+
   @override
   void onMount() {
-    game.gestureDetectors.add<MultiTapGestureRecognizer>(
+    game.gestureDetectors.register<MultiTapGestureRecognizer>(
       () => MultiTapGestureRecognizer(
         allowedButtonsFilter: (buttons) => buttons == kPrimaryButton,
       ),
@@ -170,8 +178,8 @@ class MultiTapDispatcher extends Component implements MultiTapListener {
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<MultiTapGestureRecognizer>();
-    game.unregisterKey(const MultiTapDispatcherKey());
+    game.gestureDetectors.unregister<MultiTapGestureRecognizer>();
+    Dispatcher.removeDispatcher(game, const MultiTapDispatcherKey());
   }
 
   @override

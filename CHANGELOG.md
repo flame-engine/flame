@@ -3,6 +3,317 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-04-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_3d` - `v0.2.0`](#flame_3d---v020)
+
+Packages with other changes:
+
+ - [`flame` - `v1.37.0`](#flame---v1370)
+ - [`flame_console` - `v0.1.3`](#flame_console---v013)
+ - [`flame_gamepads` - `v0.1.1`](#flame_gamepads---v011)
+ - [`flame_test` - `v2.2.4`](#flame_test---v224)
+ - [`flame_texturepacker` - `v5.1.1`](#flame_texturepacker---v511)
+ - [`flame_typled` - `v0.1.1`](#flame_typled---v011)
+ - [`flame_behaviors` - `v1.3.5`](#flame_behaviors---v135)
+ - [`flame_behavior_tree` - `v0.1.4+4`](#flame_behavior_tree---v0144)
+ - [`flame_tiled` - `v3.1.1`](#flame_tiled---v311)
+ - [`flame_oxygen` - `v0.2.3+22`](#flame_oxygen---v02322)
+ - [`flame_isolate` - `v0.6.2+22`](#flame_isolate---v06222)
+ - [`flame_sprite_fusion` - `v0.2.3+1`](#flame_sprite_fusion---v0231)
+ - [`flame_steering_behaviors` - `v0.2.1+5`](#flame_steering_behaviors---v0215)
+ - [`flame_fire_atlas` - `v1.8.17`](#flame_fire_atlas---v1817)
+ - [`flame_audio` - `v2.12.1`](#flame_audio---v2121)
+ - [`flame_spine` - `v0.3.0+5`](#flame_spine---v0305)
+ - [`flame_bloc` - `v1.12.23`](#flame_bloc---v11223)
+ - [`flame_kenney_xml` - `v0.1.2+1`](#flame_kenney_xml---v0121)
+ - [`flame_lottie` - `v0.4.2+22`](#flame_lottie---v04222)
+ - [`flame_markdown` - `v0.2.4+15`](#flame_markdown---v02415)
+ - [`flame_rive` - `v1.11.1`](#flame_rive---v1111)
+ - [`flame_forge2d` - `v0.19.2+6`](#flame_forge2d---v01926)
+ - [`flame_noise` - `v0.3.2+22`](#flame_noise---v03222)
+ - [`flame_riverpod` - `v5.5.4`](#flame_riverpod---v554)
+ - [`flame_svg` - `v1.12.1`](#flame_svg---v1121)
+ - [`flame_network_assets` - `v0.3.3+22`](#flame_network_assets---v03322)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behaviors` - `v1.3.5`
+ - `flame_behavior_tree` - `v0.1.4+4`
+ - `flame_tiled` - `v3.1.1`
+ - `flame_oxygen` - `v0.2.3+22`
+ - `flame_isolate` - `v0.6.2+22`
+ - `flame_sprite_fusion` - `v0.2.3+1`
+ - `flame_steering_behaviors` - `v0.2.1+5`
+ - `flame_fire_atlas` - `v1.8.17`
+ - `flame_audio` - `v2.12.1`
+ - `flame_spine` - `v0.3.0+5`
+ - `flame_bloc` - `v1.12.23`
+ - `flame_kenney_xml` - `v0.1.2+1`
+ - `flame_lottie` - `v0.4.2+22`
+ - `flame_markdown` - `v0.2.4+15`
+ - `flame_rive` - `v1.11.1`
+ - `flame_forge2d` - `v0.19.2+6`
+ - `flame_noise` - `v0.3.2+22`
+ - `flame_riverpod` - `v5.5.4`
+ - `flame_svg` - `v1.12.1`
+ - `flame_network_assets` - `v0.3.3+22`
+
+---
+
+#### `flame_3d` - `v0.2.0`
+
+ - **REFACTOR**(flame_3d): Optimize allocation time in shaders ([#3881](https://github.com/flame-engine/flame/issues/3881)). ([043d6e8f](https://github.com/flame-engine/flame/commit/043d6e8f4b7b05cf56a313d5033f205c070b11fb))
+ - **REFACTOR**(flame_3d): Simplify uniform slot definitions and allocations ([#3873](https://github.com/flame-engine/flame/issues/3873)). ([9c61971d](https://github.com/flame-engine/flame/commit/9c61971dfca20fc3bb1cd221e5b3e256fcac84ca))
+ - **FIX**(flame_3d): Ensure `children` parameter is passed to constructors in `MeshComponent` and `ModelComponent` ([#3884](https://github.com/flame-engine/flame/issues/3884)). ([adc7658b](https://github.com/flame-engine/flame/commit/adc7658b6a4bce939e3f2e80ba8af3d789b0ce0b))
+ - **FIX**(flame_3d): Ensure proper ambient light calculation in spatial_material shader ([#3866](https://github.com/flame-engine/flame/issues/3866)). ([be8607ac](https://github.com/flame-engine/flame/commit/be8607ac481224ce3746c501af1f089dd0077fc9))
+ - **FEAT**(flame_3d): Allow shader uniform structures use array elements ([#3878](https://github.com/flame-engine/flame/issues/3878)). ([9854f130](https://github.com/flame-engine/flame/commit/9854f130a87b6240611089338ab69555aec3814f))
+ - **FEAT**(flame_3d): Add culling scenario and implement AABB frustum culling logic([#3868](https://github.com/flame-engine/flame/issues/3868)). ([ce1d42ad](https://github.com/flame-engine/flame/commit/ce1d42adfb93ebd2856f001fc624da6f9ea22643))
+ - **FEAT**(flame_3d): Support cull mode on materials ([#3865](https://github.com/flame-engine/flame/issues/3865)). ([e407a6e1](https://github.com/flame-engine/flame/commit/e407a6e16f6849236b1d56061920db72d74763ec))
+ - **BREAKING** **REFACTOR**(flame_3d): Allow `LightComponents` to be nested ([#3883](https://github.com/flame-engine/flame/issues/3883)). ([fbd9b676](https://github.com/flame-engine/flame/commit/fbd9b676fe58978b60f811673a631fad391a3942))
+ - **BREAKING** **REFACTOR**(flame_3d): Simplify shader structure and remove no longer needed uniform classes ([#3880](https://github.com/flame-engine/flame/issues/3880)). ([1d799fdc](https://github.com/flame-engine/flame/commit/1d799fdceca6b750f4fa7161f0865b58fa4ec575))
+ - **BREAKING** **FIX**(flame_3d): Change type on `Surface` to be non-nullable ([#3882](https://github.com/flame-engine/flame/issues/3882)). ([67938373](https://github.com/flame-engine/flame/commit/679383739af4476088953bdfc4dc93635434305c))
+ - **BREAKING** **FEAT**(flame_3d): Allow for nested Component3D by using world matrix calculations ([#3867](https://github.com/flame-engine/flame/issues/3867)). ([48d0a847](https://github.com/flame-engine/flame/commit/48d0a8474b55e7e2e45941f721d889c04e46bdaf))
+
+#### `flame` - `v1.37.0`
+
+ - **FIX**: Use proper hash combining in CollisionProspect to fix flaky test ([#3864](https://github.com/flame-engine/flame/issues/3864)). ([bff137e5](https://github.com/flame-engine/flame/commit/bff137e5c1c97ae98e867a933f6790aeb349f90f))
+ - **FIX**: Remove async from flame test helpers ([#3860](https://github.com/flame-engine/flame/issues/3860)). ([4e63e93e](https://github.com/flame-engine/flame/commit/4e63e93eb78d5e6e3c48e0cc02577bf2581b0e87))
+ - **FEAT**: Add OverlayManager.setActive() ([#3875](https://github.com/flame-engine/flame/issues/3875)). ([86495694](https://github.com/flame-engine/flame/commit/86495694665cc4e85f7d3a94b05766cc6f6b95ba))
+ - **FEAT**: Adding size to the sprite width and sprite animation widget ([#3870](https://github.com/flame-engine/flame/issues/3870)). ([987e0c54](https://github.com/flame-engine/flame/commit/987e0c54eb3f89b0bd283c91c212e877d377e968))
+ - **FEAT**: Add HueEffect and HueDecorator ([#3852](https://github.com/flame-engine/flame/issues/3852)). ([f393f12b](https://github.com/flame-engine/flame/commit/f393f12b71975151f682adee1fccef0ff367be01))
+ - **FEAT**: Decouple Block from isometric_tile_map_component, add helper methods ([#3859](https://github.com/flame-engine/flame/issues/3859)). ([6d052afd](https://github.com/flame-engine/flame/commit/6d052afd086cd1e6ce28579798ea3874ef6dfd40))
+ - **FEAT**: Add `HasAutoBatchedChildren` mixin ([#3850](https://github.com/flame-engine/flame/issues/3850)). ([a2b7f938](https://github.com/flame-engine/flame/commit/a2b7f9385f993af51b5ce5f5724d2fa9ef058b79))
+
+#### `flame_console` - `v0.1.3`
+
+ - **FEAT**: Update terminui on flame_console ([#3863](https://github.com/flame-engine/flame/issues/3863)). ([6f823cb6](https://github.com/flame-engine/flame/commit/6f823cb6fa88814c518bc095594017b1f34d2054))
+
+#### `flame_gamepads` - `v0.1.1`
+
+ - **FIX**: Rename flame_gamepads library file to match package name ([#3888](https://github.com/flame-engine/flame/issues/3888)). ([2fea504a](https://github.com/flame-engine/flame/commit/2fea504a338711d85c7d5591eae44df75786e516))
+ - **FEAT**: New package flame_gamepads ([#3886](https://github.com/flame-engine/flame/issues/3886)). ([8cadff21](https://github.com/flame-engine/flame/commit/8cadff21dface34e681e41332e0bf731f79f129a))
+
+#### `flame_test` - `v2.2.4`
+
+ - **FIX**: Remove async from flame test helpers ([#3860](https://github.com/flame-engine/flame/issues/3860)). ([4e63e93e](https://github.com/flame-engine/flame/commit/4e63e93eb78d5e6e3c48e0cc02577bf2581b0e87))
+
+#### `flame_texturepacker` - `v5.1.1`
+
+ - **REFACTOR**: [flame_texturepacker]  Update package support filed and handle more sprite index patterns ([#3858](https://github.com/flame-engine/flame/issues/3858)). ([bb535013](https://github.com/flame-engine/flame/commit/bb5350133be424d65923a14f10eadfb21a3166e9))
+ - **FIX**: Path Resolution and Region Parsing  ([#3849](https://github.com/flame-engine/flame/issues/3849)). ([f4048a2b](https://github.com/flame-engine/flame/commit/f4048a2b7d8cf5e2373237477c016db4a297e124))
+
+#### `flame_typled` - `v0.1.1`
+
+ - **FEAT**: Introduce flame_typled ([#3862](https://github.com/flame-engine/flame/issues/3862)). ([8986b840](https://github.com/flame-engine/flame/commit/8986b84013d3e7354e96e9fa49aa381c850b134b))
+
+
+## 2026-03-06
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`behavior_tree` - `v0.1.5+1`](#behavior_tree---v0151)
+ - [`flame` - `v1.36.0`](#flame---v1360)
+ - [`flame_3d` - `v0.1.1+7`](#flame_3d---v0117)
+ - [`flame_audio` - `v2.12.0`](#flame_audio---v2120)
+ - [`flame_behavior_tree` - `v0.1.4+3`](#flame_behavior_tree---v0143)
+ - [`flame_behaviors` - `v1.3.4`](#flame_behaviors---v134)
+ - [`flame_bloc` - `v1.12.22`](#flame_bloc---v11222)
+ - [`flame_console` - `v0.1.2+17`](#flame_console---v01217)
+ - [`flame_fire_atlas` - `v1.8.16`](#flame_fire_atlas---v1816)
+ - [`flame_forge2d` - `v0.19.2+5`](#flame_forge2d---v01925)
+ - [`flame_isolate` - `v0.6.2+21`](#flame_isolate---v06221)
+ - [`flame_kenney_xml` - `v0.1.2`](#flame_kenney_xml---v012)
+ - [`flame_lint` - `v1.4.3`](#flame_lint---v143)
+ - [`flame_lottie` - `v0.4.2+21`](#flame_lottie---v04221)
+ - [`flame_markdown` - `v0.2.4+14`](#flame_markdown---v02414)
+ - [`flame_network_assets` - `v0.3.3+21`](#flame_network_assets---v03321)
+ - [`flame_noise` - `v0.3.2+21`](#flame_noise---v03221)
+ - [`flame_oxygen` - `v0.2.3+21`](#flame_oxygen---v02321)
+ - [`flame_rive` - `v1.11.0`](#flame_rive---v1110)
+ - [`flame_riverpod` - `v5.5.3`](#flame_riverpod---v553)
+ - [`flame_spine` - `v0.3.0+4`](#flame_spine---v0304)
+ - [`flame_splash_screen` - `v0.3.1+3`](#flame_splash_screen---v0313)
+ - [`flame_sprite_fusion` - `v0.2.3`](#flame_sprite_fusion---v023)
+ - [`flame_steering_behaviors` - `v0.2.1+4`](#flame_steering_behaviors---v0214)
+ - [`flame_svg` - `v1.12.0`](#flame_svg---v1120)
+ - [`flame_test` - `v2.2.3`](#flame_test---v223)
+ - [`flame_texturepacker` - `v5.1.0`](#flame_texturepacker---v510)
+ - [`flame_tiled` - `v3.1.0`](#flame_tiled---v310)
+ - [`jenny` - `v1.5.1`](#jenny---v151)
+
+---
+
+#### `behavior_tree` - `v0.1.5+1`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame` - `v1.36.0`
+
+ - **FIX**: Ray direction normalization drift issues ([#3841](https://github.com/flame-engine/flame/issues/3841)). ([b8e2bab5](https://github.com/flame-engine/flame/commit/b8e2bab58fbfb1b817dd294db3d2389097d31a2d))
+ - **FIX**: Initialize center offset in `CircleComponent` ctor ([#3842](https://github.com/flame-engine/flame/issues/3842)). ([a0d2a5f3](https://github.com/flame-engine/flame/commit/a0d2a5f3a2db6ca2b0c25c93ca48fe12a4bdbc11))
+ - **FIX**: Resolve `fontPackage` in `IconComponent` (`_rasterizeIcon`) ([#3838](https://github.com/flame-engine/flame/issues/3838)). ([cdb2a0dd](https://github.com/flame-engine/flame/commit/cdb2a0ddf8ec6db733c904696a17ceeaed2e7b5f))
+ - **FIX**: Hitboxes now correctly account for parent scale and rotation ([#3834](https://github.com/flame-engine/flame/issues/3834)). ([57adcd60](https://github.com/flame-engine/flame/commit/57adcd60970efb2dbf4f52e396a4e78a51e47be8))
+ - **FIX**: Make `buildContext` available during `onLoad` and `onMount` ([#3833](https://github.com/flame-engine/flame/issues/3833)). ([60bfcb30](https://github.com/flame-engine/flame/commit/60bfcb30e7751ee65caa6425d79bbd7bb82ae3ed))
+ - **FIX**: Add CJK wrapping for `TextBoxComponent` ([#3830](https://github.com/flame-engine/flame/issues/3830)). ([7f41c261](https://github.com/flame-engine/flame/commit/7f41c2614e1669398bb08858df30270d75dced68))
+ - **FIX**: Prevent removed children from being re-added when parent is moved ([#3824](https://github.com/flame-engine/flame/issues/3824)). ([8e77bc2d](https://github.com/flame-engine/flame/commit/8e77bc2d87300a52c03177fb187c4e35b810acc4))
+ - **FIX**: Make `removeAll(children)` work in `onRemove` ([#3823](https://github.com/flame-engine/flame/issues/3823)). ([ff760230](https://github.com/flame-engine/flame/commit/ff760230881f2a27f9d3a9462fc831c460d7ffc3))
+ - **FIX**: End active collisions in ShapeHitbox.onRemove to fix inconsistent isColliding ([#3821](https://github.com/flame-engine/flame/issues/3821)). ([bc81e7fd](https://github.com/flame-engine/flame/commit/bc81e7fd96c1ec5ffad210d6d027894f6faef77b))
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Add `clampDouble` to `Vector2Extension` and its tests ([#3840](https://github.com/flame-engine/flame/issues/3840)). ([6c6ccf31](https://github.com/flame-engine/flame/commit/6c6ccf317f3f397edf30a61c90ed00d087a96e9a))
+ - **FEAT**: Add `transformMatrix` setter to `Transform2D` ([#3836](https://github.com/flame-engine/flame/issues/3836)). ([957ff2e0](https://github.com/flame-engine/flame/commit/957ff2e085f03ab43f40f4213d94730b52e2cfc6))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+ - **FEAT**: Propagate Flutter hot reload through the component tree ([#3828](https://github.com/flame-engine/flame/issues/3828)). ([c44643f1](https://github.com/flame-engine/flame/commit/c44643f1afdf9890d9890d6653f7429366e7f03b))
+ - **FEAT**: Add an IconComponent that renders IconData ([#3820](https://github.com/flame-engine/flame/issues/3820)). ([97931a59](https://github.com/flame-engine/flame/commit/97931a59361c51c433d366fecb30b7867813c521))
+ - **FEAT**: Add `dispose()` method to `FlameGame` ([#3825](https://github.com/flame-engine/flame/issues/3825)). ([aa5a27b7](https://github.com/flame-engine/flame/commit/aa5a27b791c4bd5a3ab64ee73b34feefedb8b210))
+ - **FEAT**: Add object pooling support with `ComponentPool` ([#3816](https://github.com/flame-engine/flame/issues/3816)). ([46802fab](https://github.com/flame-engine/flame/commit/46802fab4705ae8d1ff2a61660b2d80450f6075e))
+ - **FEAT**: Add opposite method to Anchor ([#3817](https://github.com/flame-engine/flame/issues/3817)). ([1ffd59f0](https://github.com/flame-engine/flame/commit/1ffd59f09f90d17980b70e494ce585d676888b57))
+ - **FEAT**: HitTestBehavior for GameWidget ([#3815](https://github.com/flame-engine/flame/issues/3815)). ([b888d4e2](https://github.com/flame-engine/flame/commit/b888d4e2d7ea95694a0c5f83e2fa68f8cee67069))
+ - **DOCS**: Document FlameGame<W extends World> generic type parameter ([#3822](https://github.com/flame-engine/flame/issues/3822)). ([00a66123](https://github.com/flame-engine/flame/commit/00a66123d84d305e66953f1a85e66c46c8e0c4fc))
+
+#### `flame_3d` - `v0.1.1+7`
+
+ - **FIX**(flame_3d): Use float for numLights uniform to fix GLES crash ([#3810](https://github.com/flame-engine/flame/issues/3810)). ([f241ebd6](https://github.com/flame-engine/flame/commit/f241ebd6d73caa43387972cffeb609af2909ac2f))
+ - **FIX**(flame_3d): Fix alpha blend factors for transparent background compositing ([#3812](https://github.com/flame-engine/flame/issues/3812)). ([8d7212a1](https://github.com/flame-engine/flame/commit/8d7212a1c79d561330131ea794a0ed318c3945f8))
+ - **FIX**(flame_3d): Remove duplicate baseColor multiply in ambient calculation ([#3814](https://github.com/flame-engine/flame/issues/3814)). ([080bde7f](https://github.com/flame-engine/flame/commit/080bde7f4c14c9f4f91e09d9bf6e737f75449351))
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_audio` - `v2.12.0`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
+#### `flame_behavior_tree` - `v0.1.4+3`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_behaviors` - `v1.3.4`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_bloc` - `v1.12.22`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_console` - `v0.1.2+17`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_fire_atlas` - `v1.8.16`
+
+ - **FIX**: Fix warnings on flame_fire_atlas.dart ([#3818](https://github.com/flame-engine/flame/issues/3818)). ([458a79a9](https://github.com/flame-engine/flame/commit/458a79a97d63d128ab127fc15616192114dc9448))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_forge2d` - `v0.19.2+5`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_isolate` - `v0.6.2+21`
+
+ - **FIX**: Use scaledRadius for CircleHitbox collision detection ([#3808](https://github.com/flame-engine/flame/issues/3808)). ([3498c1e5](https://github.com/flame-engine/flame/commit/3498c1e565985ce7d12212e6a625f538da98c362))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_kenney_xml` - `v0.1.2`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
+#### `flame_lint` - `v1.4.3`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_lottie` - `v0.4.2+21`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_markdown` - `v0.2.4+14`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_network_assets` - `v0.3.3+21`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_noise` - `v0.3.2+21`
+
+ - **FIX**: `NoiseEffectController` producing zero progress on some platforms ([#3831](https://github.com/flame-engine/flame/issues/3831)). ([5d88832f](https://github.com/flame-engine/flame/commit/5d88832fa522a6880beeecb617b565aebcb703e7))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_oxygen` - `v0.2.3+21`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_rive` - `v1.11.0`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Rive 0.14 support ([#3839](https://github.com/flame-engine/flame/issues/3839)). ([8b245181](https://github.com/flame-engine/flame/commit/8b2451813672c25d1783447b966fd2f739492b65))
+
+#### `flame_riverpod` - `v5.5.3`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_spine` - `v0.3.0+4`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_splash_screen` - `v0.3.1+3`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_sprite_fusion` - `v0.2.3`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
+#### `flame_steering_behaviors` - `v0.2.1+4`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_svg` - `v1.12.0`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
+#### `flame_test` - `v2.2.3`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+#### `flame_texturepacker` - `v5.1.0`
+
+ - **REFACTOR**: Asset path resolution/loading in TexturePackerAtlas to correctly handle prefixes and different asset types. ([17fac08d](https://github.com/flame-engine/flame/commit/17fac08d8964991a421cde8f5dd1ace4dc4e9063))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
+#### `flame_tiled` - `v3.1.0`
+
+ - **FIX**: Use resolved path when loading single-image tilesets ([#3826](https://github.com/flame-engine/flame/issues/3826)). ([bbdff923](https://github.com/flame-engine/flame/commit/bbdff9230f96ab18ee83a1a0ffab5b4d7f4a43bf))
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+ - **FEAT**: Add dynamic layer opacity support to flame_tiled ([#3843](https://github.com/flame-engine/flame/issues/3843)). ([b1702997](https://github.com/flame-engine/flame/commit/b17029977b3c5890fe6794942a0553eb3f21ff8d))
+ - **FEAT**: Support package argument in asset loading methods and widgets ([#3835](https://github.com/flame-engine/flame/issues/3835)). ([3f6f95b0](https://github.com/flame-engine/flame/commit/3f6f95b0225df9e4035c74de6cfad501e8c45167))
+
+#### `jenny` - `v1.5.1`
+
+ - **FIX**: Bump Flutter min version to 3.41.0 ([#3807](https://github.com/flame-engine/flame/issues/3807)). ([0d505304](https://github.com/flame-engine/flame/commit/0d50530485e5be9ce1c9138a5b437607c7c5c628))
+
+
 ## 2026-02-11
 
 ### Changes

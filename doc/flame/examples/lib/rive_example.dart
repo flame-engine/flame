@@ -5,30 +5,47 @@ import 'package:flame/game.dart';
 import 'package:flame_rive/flame_rive.dart';
 
 class RiveExampleGame extends FlameGame with TapCallbacks {
-  late SMIInput<double>? levelInput;
+  ViewModelInstanceNumber? coinInput;
+  ViewModelInstanceNumber? gemInput;
 
   @override
   Future<void> onLoad() async {
-    final skillsArtboard = await loadArtboard(
-      RiveFile.asset('assets/skills.riv'),
+    final file = await File.asset(
+      'assets/rewards.riv',
+      riveFactory: Factory.flutter,
+    ).then((file) => file!);
+
+    final artboard = await loadArtboard(file);
+    final stateMachine = artboard.defaultStateMachine();
+
+    if (stateMachine != null) {
+      final viewModel = file.defaultArtboardViewModel(artboard);
+      if (viewModel != null) {
+        final viewModelInstance = viewModel.createDefaultInstance();
+        if (viewModelInstance != null) {
+          stateMachine.bindViewModelInstance(viewModelInstance);
+          coinInput = viewModelInstance.viewModel('Coin')?.number('Item_Value');
+          gemInput = viewModelInstance.viewModel('Gem')?.number('Item_Value');
+        }
+      }
+    }
+
+    add(
+      RiveComponent(
+        artboard: artboard,
+        stateMachine: stateMachine,
+        size: canvasSize,
+      ),
     );
-
-    final controller = StateMachineController.fromArtboard(
-      skillsArtboard,
-      "Designer's Test",
-    );
-
-    skillsArtboard.addController(controller!);
-
-    levelInput = controller.findInput<double>('Level');
-
-    add(RiveComponent(artboard: skillsArtboard, size: canvasSize));
   }
 
   @override
   void onTapDown(_) {
-    if (levelInput != null) {
-      levelInput!.value = (levelInput!.value + 1) % 3;
+    if (coinInput != null) {
+      coinInput!.value = (coinInput!.value + 10) % 1001;
+    }
+    if (gemInput != null) {
+      gemInput!.value = (gemInput!.value + 1) % 1001;
     }
   }
 }

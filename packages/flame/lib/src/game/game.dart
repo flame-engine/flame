@@ -47,6 +47,31 @@ abstract mixin class Game {
     refreshWidget();
   }
 
+  /// Set by the PointerMoveDispatcher to receive mouse press events from the
+  /// game widget so it can fire `onHoverCancel` on hovered `HoverCallbacks`
+  /// components when the user presses a button while hovering.
+  void Function(PointerDownEvent event)? get mousePressDetector =>
+      _mousePressDetector;
+  void Function(PointerDownEvent event)? _mousePressDetector;
+  set mousePressDetector(
+    void Function(PointerDownEvent event)? newMousePressDetector,
+  ) {
+    _mousePressDetector = newMousePressDetector;
+    refreshWidget();
+  }
+
+  /// Set by the ScrollDispatcher to receive pointer scroll events from the
+  /// game widget.
+  void Function(PointerScrollEvent event)? get scrollDetector =>
+      _scrollDetector;
+  void Function(PointerScrollEvent event)? _scrollDetector;
+  set scrollDetector(
+    void Function(PointerScrollEvent event)? newScrollDetector,
+  ) {
+    _scrollDetector = newScrollDetector;
+    refreshWidget();
+  }
+
   /// This should update the state of the game.
   void update(double dt);
 

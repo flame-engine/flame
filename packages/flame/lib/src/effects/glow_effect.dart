@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flame/effects.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 
 /// Change the MaskFilter on Paint of a component over time.
 ///

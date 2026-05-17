@@ -94,3 +94,9 @@ abstract class PaintProvider {
   Paint get paint;
   set paint(Paint value);
 }
+
+/// Interface for a component that can be affected by hue effects.
+abstract class HueProvider {
+  double get hue;
+  set hue(double value);
+}

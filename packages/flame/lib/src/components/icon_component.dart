@@ -155,18 +155,22 @@ class IconComponent extends PositionComponent with HasPaint {
   /// Rasterizes the current [icon] to a white [Image].
   Future<Image> _rasterizeIcon() {
     final iconData = _icon!;
+    final fontFamily =
+        iconData.fontFamily != null && iconData.fontPackage != null
+        ? 'packages/${iconData.fontPackage}/${iconData.fontFamily}'
+        : iconData.fontFamily;
     final paragraphBuilder =
         ParagraphBuilder(
             ParagraphStyle(
               fontSize: _iconSize,
-              fontFamily: iconData.fontFamily,
+              fontFamily: fontFamily,
             ),
           )
           ..pushStyle(
             TextStyle(
               color: const Color(0xFFFFFFFF),
               fontSize: _iconSize,
-              fontFamily: iconData.fontFamily,
+              fontFamily: fontFamily,
               fontFamilyFallback: iconData.fontFamilyFallback,
             ),
           )

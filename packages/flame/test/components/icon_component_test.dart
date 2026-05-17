@@ -56,6 +56,21 @@ void main() {
       expect(component.iconSize, 128);
     });
 
+    testWithFlameGame('supports fontPackage', (game) async {
+      const iconWithPackage = IconData(
+        0x41,
+        fontFamily: 'MyFont',
+        fontPackage: 'my_package',
+      );
+      final component = IconComponent(
+        icon: iconWithPackage,
+        iconSize: 32,
+      );
+      await game.ensureAdd(component);
+
+      expect(component.image, isNotNull);
+    });
+
     testWithFlameGame('rasterizes icon on load', (game) async {
       final component = IconComponent(
         icon: _testIcon,

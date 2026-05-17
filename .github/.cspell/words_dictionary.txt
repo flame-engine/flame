@@ -8,6 +8,7 @@ hoverable
 Hoverables
 inactives
 layouting
+NTSC
 orientable
 platformer
 positionable
@@ -24,4 +25,6 @@ rerasterize
 rescan
 Roboto
 tappable
+thumbstick
+trackpad
 underutilize

@@ -215,7 +215,7 @@ class MultiDragScaleDispatcher extends Component
 
   @override
   void onMount() {
-    game.gestureDetectors.add<MultiDragScaleGestureRecognizer>(
+    game.gestureDetectors.register<MultiDragScaleGestureRecognizer>(
       MultiDragScaleGestureRecognizer.new,
       (MultiDragScaleGestureRecognizer instance) {
         instance.onStart = (Offset point) => FlameDragAdapter(this, point);
@@ -228,7 +228,7 @@ class MultiDragScaleDispatcher extends Component
 
   @override
   void onRemove() {
-    game.gestureDetectors.remove<MultiDragScaleGestureRecognizer>();
+    game.gestureDetectors.unregister<MultiDragScaleGestureRecognizer>();
     game.unregisterKey(const MultiDragScaleDispatcherKey());
   }
 

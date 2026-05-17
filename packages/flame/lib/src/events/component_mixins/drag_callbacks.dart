@@ -11,6 +11,8 @@ import 'package:meta/meta.dart';
 /// the component.
 ///
 /// This mixin is the replacement of the Draggable mixin.
+///
+/// This callback uses [MultiDragDispatcher] to route events.
 mixin DragCallbacks on Component {
   bool _isDragged = false;
 

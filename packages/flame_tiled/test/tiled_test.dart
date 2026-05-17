@@ -6,6 +6,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -1139,6 +1140,106 @@ void main() {
     test('returns null for non-existent layer', () {
       expect(renderableTiledMap.getTileData(layerId: 3, x: 1, y: 1), isNull);
       expect(renderableTiledMap.getTileData(layerId: 5, x: 1, y: 1), isNull);
+    });
+  });
+
+  group('RenderableTiledMap.LayerOpacity', () {
+    late RenderableTiledMap renderableTiledMap;
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: ['map-level1.png'],
+        stringNames: ['layers_test.tmx'],
+      );
+      renderableTiledMap = await RenderableTiledMap.fromFile(
+        'layers_test.tmx',
+        Vector2.all(32),
+        bundle: Flame.bundle,
+      );
+    });
+
+    test('getLayerOpacity returns 1.0 by default', () {
+      expect(renderableTiledMap.getLayerOpacity(0), equals(1.0));
+    });
+
+    test('setLayerOpacity changes the layer opacity', () {
+      renderableTiledMap.setLayerOpacity(0, opacity: 0.5);
+      expect(renderableTiledMap.getLayerOpacity(0), equals(0.5));
+    });
+
+    test('setLayerOpacity sets opacity to 0', () {
+      renderableTiledMap.setLayerOpacity(0, opacity: 0.0);
+      expect(renderableTiledMap.getLayerOpacity(0), equals(0.0));
+    });
+
+    test('setLayerOpacity sets opacity to 1', () {
+      renderableTiledMap.setLayerOpacity(0, opacity: 0.25);
+      renderableTiledMap.setLayerOpacity(0, opacity: 1.0);
+      expect(renderableTiledMap.getLayerOpacity(0), equals(1.0));
+    });
+
+    test('setLayerOpacity asserts on out-of-range value', () {
+      expect(
+        () => renderableTiledMap.setLayerOpacity(0, opacity: 1.5),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => renderableTiledMap.setLayerOpacity(0, opacity: -0.1),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+  });
+
+  group('RenderableTiledMap.LayerOpacity nested groups', () {
+    // map.tmx layer structure (renderableLayers indices):
+    //   0: FlameTileLayer  "Ground"          (opacity 1.0)
+    //   1: GroupLayer      "Background"      (opacity 0.8)
+    //      └─ FlameTileLayer "Sky tiles"     (own opacity 0.9, effective 0.72)
+    //   2: FlameImageLayer "Image Layer 2"   (opacity 1.0)
+    //   3: FlameImageLayer "Sky artifact"    (opacity 0.2)
+    late RenderableTiledMap renderableTiledMap;
+
+    setUp(() async {
+      Flame.bundle = TestAssetBundle(
+        imageNames: ['image1.png', 'map-level1.png'],
+        stringNames: ['map.tmx'],
+      );
+      renderableTiledMap = await RenderableTiledMap.fromFile(
+        'map.tmx',
+        Vector2.all(16),
+        bundle: Flame.bundle,
+      );
+    });
+
+    test('child effective opacity is parent * own', () {
+      // GroupLayer opacity=0.8, child TileLayer own opacity=0.9 → 0.72
+      final group = renderableTiledMap.renderableLayers[1] as GroupLayer;
+      final child = group.children.first as FlameTileLayer;
+      expect(child.opacity, closeTo(0.72, 1e-6));
+    });
+
+    test('setting GroupLayer opacity updates child effective opacity', () {
+      // Change group from 0.8→0.5; child own opacity stays 0.9→effective 0.45
+      renderableTiledMap.setLayerOpacity(1, opacity: 0.5);
+      final group = renderableTiledMap.renderableLayers[1] as GroupLayer;
+      expect(group.opacity, equals(0.5));
+      final child = group.children.first as FlameTileLayer;
+      expect(child.opacity, closeTo(0.45, 1e-6));
+    });
+
+    test('setting GroupLayer opacity to 0 makes child fully transparent', () {
+      renderableTiledMap.setLayerOpacity(1, opacity: 0.0);
+      final group = renderableTiledMap.renderableLayers[1] as GroupLayer;
+      final child = group.children.first as FlameTileLayer;
+      expect(child.opacity, equals(0.0));
+    });
+
+    test('sibling layers are not affected by group opacity change', () {
+      renderableTiledMap.setLayerOpacity(1, opacity: 0.1);
+      // "Ground" at index 0 has no parent, so remains 1.0
+      expect(renderableTiledMap.getLayerOpacity(0), equals(1.0));
+      // "Sky artifact" at index 3 is independent
+      expect(renderableTiledMap.getLayerOpacity(3), equals(0.2));
     });
   });
 }

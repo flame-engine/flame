@@ -1,23 +1,28 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flutter/rendering.dart';
-import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 
 class RiveComponent extends PositionComponent {
   final Artboard artboard;
-  final RiveArtboardRenderer _renderer;
+  final StateMachine? stateMachine;
+  final Alignment _alignment;
+  final bool _clipToBounds;
+  final Fit _riveFit;
+  final Paint? _layerPaint;
+
   late Size _renderSize;
+  AABB _frame = AABB();
+  Size _frameSize = Size.zero;
 
   RiveComponent({
     required this.artboard,
+    this.stateMachine,
     bool antialiasing = true,
     BoxFit fit = BoxFit.contain,
     Alignment alignment = Alignment.center,
-
-    // position component arguments
+    bool clipToBounds = false,
     super.position,
 
     /// The logical size of the component.
@@ -29,12 +34,10 @@ class RiveComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _renderer = RiveArtboardRenderer(
-         antialiasing: antialiasing,
-         fit: fit,
-         alignment: alignment,
-         artboard: artboard,
-       ),
+  }) : _alignment = alignment,
+       _clipToBounds = clipToBounds,
+       _riveFit = _toRiveFit(fit),
+       _layerPaint = antialiasing ? null : (Paint()..isAntiAlias = false),
        super(size: size ?? Vector2(artboard.width, artboard.height)) {
     void updateRenderSize() {
       _renderSize = this.size.toSize();
@@ -46,122 +49,63 @@ class RiveComponent extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    _renderer.render(canvas, _renderSize);
+    canvas.save();
+
+    if (_clipToBounds) {
+      canvas.clipRect(Offset.zero & _renderSize);
+    }
+
+    if (_layerPaint != null) {
+      canvas.saveLayer(Offset.zero & _renderSize, _layerPaint);
+    }
+
+    final renderer = Renderer.make(canvas);
+    try {
+      if (_frameSize != _renderSize) {
+        _frameSize = _renderSize;
+        _frame = AABB.fromValues(
+          0,
+          0,
+          _renderSize.width,
+          _renderSize.height,
+        );
+      }
+
+      renderer.align(
+        _riveFit,
+        _alignment,
+        _frame,
+        artboard.bounds,
+        1.0,
+      );
+      artboard.draw(renderer);
+    } finally {
+      renderer.dispose();
+      if (_layerPaint != null) {
+        canvas.restore();
+      }
+      canvas.restore();
+    }
   }
 
   @override
   void update(double dt) {
-    _renderer.advance(dt);
-  }
-}
-
-class RiveArtboardRenderer {
-  final Artboard artboard;
-  final bool antialiasing;
-  final BoxFit fit;
-  final Alignment alignment;
-
-  RiveArtboardRenderer({
-    required this.antialiasing,
-    required this.fit,
-    required this.alignment,
-    required this.artboard,
-  }) {
-    artboard.antialiasing = antialiasing;
-  }
-
-  void advance(double dt) {
-    artboard.advance(dt, nested: true);
-  }
-
-  late final aabb = AABB.fromValues(0, 0, artboard.width, artboard.height);
-
-  void render(Canvas canvas, Size size) {
-    _paint(canvas, aabb, size);
-  }
-
-  final _transform = Mat2D();
-  final _center = Mat2D();
-
-  void _paint(Canvas canvas, AABB bounds, Size size) {
-    const position = Offset.zero;
-
-    final contentWidth = bounds[2] - bounds[0];
-    final contentHeight = bounds[3] - bounds[1];
-
-    if (contentWidth == 0 || contentHeight == 0) {
-      return;
+    if (stateMachine != null) {
+      stateMachine!.advanceAndApply(dt);
+    } else {
+      artboard.advance(dt);
     }
-
-    final x =
-        -1 * bounds[0] -
-        contentWidth / 2.0 -
-        (alignment.x * contentWidth / 2.0);
-    final y =
-        -1 * bounds[1] -
-        contentHeight / 2.0 -
-        (alignment.y * contentHeight / 2.0);
-
-    var scaleX = 1.0;
-    var scaleY = 1.0;
-
-    canvas.save();
-    if (artboard.clip) {
-      canvas.clipRect(position & size);
-    }
-
-    switch (fit) {
-      case BoxFit.fill:
-        scaleX = size.width / contentWidth;
-        scaleY = size.height / contentHeight;
-      case BoxFit.contain:
-        final minScale = min(
-          size.width / contentWidth,
-          size.height / contentHeight,
-        );
-        scaleX = scaleY = minScale;
-      case BoxFit.cover:
-        final maxScale = max(
-          size.width / contentWidth,
-          size.height / contentHeight,
-        );
-        scaleX = scaleY = maxScale;
-      case BoxFit.fitHeight:
-        final minScale = size.height / contentHeight;
-        scaleX = scaleY = minScale;
-      case BoxFit.fitWidth:
-        final minScale = size.width / contentWidth;
-        scaleX = scaleY = minScale;
-      case BoxFit.none:
-        scaleX = scaleY = 1.0;
-      case BoxFit.scaleDown:
-        final minScale = min(
-          size.width / contentWidth,
-          size.height / contentHeight,
-        );
-        scaleX = scaleY = minScale < 1.0 ? minScale : 1.0;
-    }
-
-    Mat2D.setIdentity(_transform);
-    _transform[4] = size.width / 2.0 + (alignment.x * size.width / 2.0);
-    _transform[5] = size.height / 2.0 + (alignment.y * size.height / 2.0);
-    Mat2D.scale(_transform, _transform, Vec2D.fromValues(scaleX, scaleY));
-    Mat2D.setIdentity(_center);
-    _center[4] = x;
-    _center[5] = y;
-    Mat2D.multiply(_transform, _transform, _center);
-
-    canvas.translate(
-      size.width / 2.0 + (alignment.x * size.width / 2.0),
-      size.height / 2.0 + (alignment.y * size.height / 2.0),
-    );
-
-    canvas.scale(scaleX, scaleY);
-    canvas.translate(x, y);
-
-    artboard.draw(canvas);
-    canvas.restore();
   }
+
+  static Fit _toRiveFit(BoxFit fit) => switch (fit) {
+    BoxFit.fill => Fit.fill,
+    BoxFit.contain => Fit.contain,
+    BoxFit.cover => Fit.cover,
+    BoxFit.fitHeight => Fit.fitHeight,
+    BoxFit.fitWidth => Fit.fitWidth,
+    BoxFit.none => Fit.none,
+    BoxFit.scaleDown => Fit.scaleDown,
+  };
 }
 
 /// Loads the Artboard from the specified Rive File.
@@ -170,14 +114,14 @@ class RiveArtboardRenderer {
 /// name, an assertion is triggered if no artboard with that name exists in the
 /// file.
 Future<Artboard> loadArtboard(
-  FutureOr<RiveFile> file, {
+  FutureOr<File> file, {
   String? artboardName,
 }) async {
   final loaded = await file;
   if (artboardName == null) {
-    return loaded.mainArtboard.instance();
+    return loaded.defaultArtboard()!;
   } else {
-    final artboard = loaded.artboardByName(artboardName)?.instance();
+    final artboard = loaded.artboard(artboardName);
     assert(
       artboard != null,
       'No artboard with the specified name exists in the RiveFile',

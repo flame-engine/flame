@@ -33,7 +33,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  late final _layerPaint = layerPaintFactory(opacity);
+  late Paint _layerPaint;
   final TiledAtlas tiledAtlas;
   late List<List<MutableRSTransform?>> transforms;
   final animations = <TileAnimation>[];
@@ -51,7 +51,14 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required this.ignoreFlip,
     required this.layerPaintFactory,
     super.filterQuality,
-  });
+  }) {
+    _layerPaint = layerPaintFactory(opacity);
+  }
+
+  @override
+  void onOpacityChanged() {
+    _layerPaint = layerPaintFactory(opacity);
+  }
 
   /// {@macro flame_tile_layer}
   static FlameTileLayer load({

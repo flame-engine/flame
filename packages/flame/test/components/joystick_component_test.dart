@@ -45,8 +45,8 @@ void main() {
           size: 20,
           margin: const EdgeInsets.only(left: 20, bottom: 20),
         );
-        joystick.mounted.then((_) => game.onGameResize(Vector2(200, 100)));
         await game.ensureAdd(joystick);
+        game.onGameResize(Vector2(200, 100));
         expect(joystick.position, Vector2(30, 70));
       },
     );
@@ -117,6 +117,44 @@ void main() {
         );
         game.update(0);
         expect(joystick.knob!.position, closeToVector(Vector2(20, 10)));
+      },
+    );
+
+    testWithFlameGame(
+      'does not throw when joystick is removed '
+      'during an active drag and receives update',
+      (game) async {
+        final joystick = JoystickComponent(
+          knob: CircleComponent(radius: 5.0),
+          size: 20,
+          margin: const EdgeInsets.only(left: 20, top: 20),
+        );
+        await game.add(joystick);
+        await game.ready();
+        final dragDispatcher = game.firstChild<MultiDragDispatcher>()!;
+
+        dragDispatcher.handleDragStart(
+          1,
+          DragStartDetails(
+            localPosition: const Offset(20, 20),
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+
+        game.remove(joystick);
+        await game.ready();
+
+        expect(
+          () => dragDispatcher.handleDragUpdate(
+            1,
+            DragUpdateDetails(
+              localPosition: const Offset(21, 20),
+              globalPosition: const Offset(21, 20),
+              delta: const Offset(1, 0),
+            ),
+          ),
+          returnsNormally,
+        );
       },
     );
   });

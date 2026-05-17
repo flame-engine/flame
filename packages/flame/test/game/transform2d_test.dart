@@ -21,49 +21,32 @@ void main() {
     Vector2 point,
   ) {
     final m = transform.transformMatrix.storage;
-    // Calculate the determinant
     final det = m[0] * m[5] - m[1] * m[4];
 
-    // Base uncertainty
+    // Float32 machine epsilon: Vector2 and Matrix4 both use Float32List.
     const epsilon = 1 / (1 << 23);
 
-    // Calculate indicative condition number
     final matrixNorm = math.sqrt(
       m[0] * m[0] + m[1] * m[1] + m[4] * m[4] + m[5] * m[5],
     );
 
-    double conditionFactor;
+    final double invDetAbs;
     if (det.abs() > 1e-10) {
-      // Calculate condition number
-      final invMatrixNorm =
-          math.sqrt(m[5] * m[5] + m[1] * m[1] + m[4] * m[4] + m[0] * m[0]) /
-          det.abs();
-      conditionFactor = matrixNorm * invMatrixNorm;
+      invDetAbs = 1.0 / det.abs();
     } else {
-      // For ~singular matrices, small input change -> large output change
-      conditionFactor = 1e6;
+      invDetAbs = 1e6;
     }
 
-    // Statistical error propagation
-    // There are 8 variables (point + matrix elements)
-    const double numVariables = 8;
-    // In the round trip there's approx 14? ops
-    const double numOperations = 15;
+    // The dominant error is float32 rounding of the intermediate global
+    // Vector2 produced by localToGlobal. A rounding error of ~epsilon*globalMag
+    // is then amplified by the inverse transform's factor matrixNorm/|det|.
+    // This bound uses the actual intermediate magnitude (not just the local
+    // point), which matters when translation is large relative to scale.
+    final globalX = m[0] * point.x + m[4] * point.y + m[12];
+    final globalY = m[1] * point.x + m[5] * point.y + m[13];
+    final globalMagnitude = math.max(globalX.abs(), globalY.abs());
 
-    // Standard deviation (1-σ)
-    final sigma =
-        epsilon *
-        math.sqrt(numVariables) *
-        math.sqrt(numOperations) *
-        conditionFactor;
-
-    // 99.7 CI + small low-value tolerance
-    final tolerance = 3 * sigma + epsilon;
-
-    // Adjust for relative precision
-    final magnitude = math.max(1.0, math.max(point.x.abs(), point.y.abs()));
-
-    return tolerance * magnitude;
+    return 3 * epsilon * globalMagnitude * matrixNorm * invDetAbs + epsilon;
   }
 
   group('Transform2D', () {
@@ -279,6 +262,58 @@ void main() {
 
       t.scale = Vector2(0, 1);
       expect(t.globalToLocal(point), Vector2(0, 0));
+    });
+
+    group('transformMatrix setter', () {
+      test('setting transformMatrix updates properties', () {
+        final transform = Transform2D();
+        final matrix = Matrix4.identity()
+          ..translateByDouble(10.0, 20.0, 0.0, 1.0)
+          ..rotateZ(0.5)
+          ..scaleByDouble(2.0, 3.0, 1.0, 1.0);
+
+        transform.transformMatrix = matrix;
+
+        expect(transform.position.x, closeTo(10.0, 1e-7));
+        expect(transform.position.y, closeTo(20.0, 1e-7));
+        expect(transform.angle, closeTo(0.5, 1e-7));
+        expect(transform.scale.x, closeTo(2.0, 1e-7));
+        expect(transform.scale.y, closeTo(3.0, 1e-7));
+        expect(transform.offset.x, 0.0);
+        expect(transform.offset.y, 0.0);
+      });
+
+      test('setting transformMatrix with offset', () {
+        final transform = Transform2D();
+        transform.offset = Vector2(5, 5);
+
+        // Matrix that corresponds to:
+        // translate(10, 20) -> rotateZ(0) -> scale(1, 1) -> translate(5, 5)
+        // which is effectively translate(15, 25)
+        final matrix = Matrix4.identity()
+          ..translateByDouble(15.0, 25.0, 0.0, 1.0);
+
+        transform.transformMatrix = matrix;
+
+        // If we preserve offset(5, 5), then position should be (10, 20)
+        expect(transform.offset, Vector2(5, 5));
+        expect(transform.position.x, closeTo(10.0, 1e-7));
+        expect(transform.position.y, closeTo(20.0, 1e-7));
+        expect(transform.angle, closeTo(0.0, 1e-7));
+        expect(transform.scale.x, closeTo(1.0, 1e-7));
+        expect(transform.scale.y, closeTo(1.0, 1e-7));
+      });
+
+      test('setting transformMatrix triggers notification only once', () {
+        final transform = Transform2D();
+        var notifications = 0;
+        transform.addListener(() => notifications++);
+
+        transform.transformMatrix = Matrix4.identity()
+          ..translateByDouble(10.0, 10.0, 0.0, 1.0);
+
+        expect(notifications, 1);
+      });
     });
   });
 }

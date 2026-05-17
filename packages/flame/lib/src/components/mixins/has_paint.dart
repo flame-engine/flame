@@ -3,8 +3,8 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/palette.dart';
+import 'package:flame/src/rendering/hue_decorator.dart';
 import 'package:meta/meta.dart';
 
 /// Adds a collection of paints and paint layers to a component
@@ -16,11 +16,13 @@ import 'package:meta/meta.dart';
 /// [paintLayers] paints should be drawn in list order during the render. The
 /// main Paint is the first element.
 mixin HasPaint<T extends Object> on Component
-    implements OpacityProvider, PaintProvider {
+    implements OpacityProvider, PaintProvider, HueProvider {
   late final Map<T, Paint> _paints = {};
 
   @override
   Paint paint = BasicPalette.white.paint();
+
+  double _hue = 0.0;
 
   @internal
   List<Paint>? paintLayersInternal;
@@ -128,6 +130,33 @@ mixin HasPaint<T extends Object> on Component
     paint.color = paint.color.withValues(alpha: value);
     for (final paint in _paints.values) {
       paint.color = paint.color.withValues(alpha: value);
+    }
+  }
+
+  @override
+  double get hue => _hue;
+
+  @override
+  set hue(double value) {
+    if (_hue == value) {
+      return;
+    }
+    _hue = value;
+    _updateColorFilter();
+  }
+
+  void _updateColorFilter() {
+    final filter = _hue == 0
+        ? null
+        : ColorFilter.matrix(hueRotationMatrix(_hue));
+    paint.colorFilter = filter;
+    for (final paint in _paints.values) {
+      paint.colorFilter = filter;
+    }
+    if (paintLayersInternal != null) {
+      for (final layerPaint in paintLayersInternal!) {
+        layerPaint.colorFilter = filter;
+      }
     }
   }
 

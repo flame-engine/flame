@@ -115,6 +115,13 @@ extension Vector2Extension on Vector2 {
     y = y.clamp(min.y, max.y);
   }
 
+  /// Clamps this vector so that it is within or equals to the bounds defined by
+  /// ([minX], [maxX]) and ([minY], [maxY]).
+  void clampDouble(double minX, double maxX, double minY, double maxY) {
+    x = x.clamp(minX, maxX);
+    y = y.clamp(minY, maxY);
+  }
+
   /// Sets both x and y to [value].
   void setAll(double value) => setValues(value, value);
 

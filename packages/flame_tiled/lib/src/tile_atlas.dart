@@ -113,6 +113,7 @@ class TiledAtlas {
     bool useAtlas = true,
     double spacingX = 0,
     double spacingY = 0,
+    String? package,
   }) async {
     final tilesetImageList = _onlyTileImages(
       map,
@@ -166,7 +167,10 @@ class TiledAtlas {
       final tiledImage = mappedEntry.$2;
       // The map contains one image, so its either an atlas already, or a
       // really boring map.
-      final image = (await imagesInstance.load(resolvedImageSource)).clone();
+      final image = (await imagesInstance.load(
+        resolvedImageSource,
+        package: package,
+      )).clone();
 
       // There could be a special case that a concurrent call to this method
       // passes the check `if (atlasMap.containsKey(key))` due to the async call
@@ -202,7 +206,7 @@ class TiledAtlas {
     // parallelize the download of images.
     await Future.wait([
       ...mappedImageList.map(
-        (entry) => imagesInstance.load(entry.$1),
+        (entry) => imagesInstance.load(entry.$1, package: package),
       ),
     ]);
 
@@ -213,7 +217,10 @@ class TiledAtlas {
       final tiledImage = entry.$2;
       final tileImageSource = entry.$1;
 
-      final image = await imagesInstance.load(tileImageSource);
+      final image = await imagesInstance.load(
+        tileImageSource,
+        package: package,
+      );
       final rect = bin.pack(
         image.width.toDouble() + spacingX,
         image.height.toDouble() + spacingY,

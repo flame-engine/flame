@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:rogue_shooter/components/star_component.dart';
+import 'package:rogue_shooter/rogue_shooter_game.dart';
 
-class StarBackGroundCreator extends Component with HasGameReference {
+class StarBackGroundCreator extends Component
+    with HasGameReference<RogueShooterGame> {
   final gapSize = 12;
 
   late final SpriteSheet spriteSheet;
@@ -40,7 +42,9 @@ class StarBackGroundCreator extends Component with HasGameReference {
       stepTime: 0.1,
     )..variableStepTimes = [max(20, 100 * random.nextDouble()), 0.1, 0.1, 0.1];
 
-    game.add(StarComponent(animation: animation, position: Vector2(x, y)));
+    game.starGroup.add(
+      StarComponent(animation: animation, position: Vector2(x, y)),
+    );
   }
 
   void _createRowOfStars(double y) {

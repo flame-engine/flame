@@ -83,9 +83,13 @@ class SpriteFusionTilemapComponent extends PositionComponent {
     Iterable<Component>? children,
     int? priority,
     ComponentKey? key,
+    String? package,
   }) async {
+    final prefix = package == null
+        ? tilemapPrefix
+        : 'packages/$package/$tilemapPrefix';
     final content = await (assetBundle ?? Flame.bundle).loadString(
-      '$tilemapPrefix$mapJsonFile',
+      '$prefix$mapJsonFile',
     );
 
     final json = jsonDecode(content) as Map<String, dynamic>;
@@ -93,7 +97,10 @@ class SpriteFusionTilemapComponent extends PositionComponent {
     return SpriteFusionTilemapComponent(
       tilemapData: SpriteFusionTilemapData.fromMap(json),
       spriteSheet: SpriteSheet(
-        image: await (images ?? Flame.images).load(spriteSheetFile),
+        image: await (images ?? Flame.images).load(
+          spriteSheetFile,
+          package: package,
+        ),
         srcSize: Vector2.all(double.parse(json['tileSize'].toString())),
       ),
       useAtlas: useAtlas,

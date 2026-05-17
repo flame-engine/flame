@@ -13,8 +13,11 @@ and in the pub.dev [installation instructions](https://pub.dev/packages/flame_ri
 
 First, start with adding the `animation.riv` file to the assets folder. Then load the artboard of
 the animation to the game using the `loadArtboard` method. After that, create the
-`StateMachineController` from the artboard and add a controller to it. Then you can create a
-`RiveComponent` using that artboard.
+`StateMachine` from the artboard and pass it to the `RiveComponent`. The component will
+automatically advance the state machine for you.
+
+Interactivity should be handled via [Data Binding](https://rive.app/docs/runtimes/data-binding)
+instead of state machine inputs, as they are deprecated in Rive 0.14.x.
 
 ```{flutter-app}
 :sources: ../flame/examples
@@ -28,22 +31,39 @@ the animation to the game using the `loadArtboard` method. After that, create th
 class RiveExampleGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final skillsArtboard =
-    await loadArtboard(RiveFile.asset('assets/skills.riv'));
-
-    final controller = StateMachineController.fromArtboard(
-      skillsArtboard,
-      "Designer's Test",
+    final file = await File.asset(
+      'assets/rewards.riv', 
+      riveFactory: Factory.rive,
     );
 
-    skillsArtboard.addController(controller!);
+    final artboard = await loadArtboard(file!);
+    final stateMachine = artboard.defaultStateMachine();
 
-    add(RiveComponent(artboard: skillsArtboard, size: Vector2.all(550)));
+    if (stateMachine != null) {
+      final viewModel = file.defaultArtboardViewModel(artboard);
+      if (viewModel != null) {
+        final viewModelInstance = viewModel.createDefaultInstance();
+        if (viewModelInstance != null) {
+          stateMachine.bindViewModelInstance(viewModelInstance);
+          final coinAmount =
+              viewModelInstance.viewModel('Coin')?.number('Item_Value');
+          coinAmount?.value = 100;
+        }
+      }
+    }
+
+    add(
+      RiveComponent(
+        artboard: artboard,
+        stateMachine: stateMachine,
+        size: Vector2.all(550),
+      ),
+    );
   }
 }
 ```
 
-You can use the controller to manage the state of animation.
+You can use the state machine to manage the state of animation via data binding.
 Check out the example for more information.
 
 
@@ -51,4 +71,3 @@ Check out the example for more information.
 
 You can check an example
 [here](https://github.com/flame-engine/flame/tree/main/packages/flame_rive/example).
-

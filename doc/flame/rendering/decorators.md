@@ -10,6 +10,42 @@ necessary. We are planning to add shader-based decorators once Flutter fully sup
 web.
 
 
+## Performance considerations
+
+Applying a Decorator to a component can have a significant performance overhead, especially when
+it involves `canvas.saveLayer()`.
+
+- **Decorators**: Use `canvas.saveLayer()` by default to isolate rendering and apply
+  filters. This requires off-screen buffer allocation and GPU context switches. This is
+  computationally expensive but essential for correct visual composition of complex
+  objects (see below).
+- **Effects** (e.g., `OpacityEffect`, `ColorEffect`): Modify the component's properties
+  or `Paint` directly. These are extremely fast and hardware-accelerated, but they apply
+  to each child individually.
+
+
+### Decorators vs Effects: Visual Composition
+
+The key difference lies in how they handle composite objects (components with multiple
+overlapping children):
+
+1. **Effects (Individual Blend)**: If you apply an `OpacityEffect` to a parent component,
+   Flame will render each child with that opacity. If children overlap, you will see
+   through them to the background and to other children, creating a "double-exposure"
+   look.
+2. **Decorators (Group Blend)**: Because decorators use `saveLayer`, they render the
+   entire subtree into a flat buffer first, and then apply the effect to that
+   buffer. This results in a uniform appearance where overlaps are not visible,
+   making the group look like a single solid object.
+
+**Recommendation**:
+
+- Use **Effects** for simple property animations and high-performance color shifts on
+  large numbers of units.
+- Use **Decorators** for advanced post-processing (blurs, tints) and when you need
+  to treat a group of components as a single visual unit.
+
+
 ## Flame built-in decorators
 
 
@@ -157,6 +193,29 @@ limitation is that the shadows are flat and cannot interact with the environment
 decorator cannot handle shadows that fall onto walls or other vertical structures.
 
 
+### HueDecorator
+
+```{flutter-app}
+:sources: ../flame/examples
+:page: decorator_hue
+:show: widget code infobox
+:width: 180
+:height: 160
+```
+
+This decorator shifts the hue of the underlying component by the specified angle in radians.
+
+```dart
+final decorator = HueDecorator(hue: tau / 4);
+```
+
+Possible uses:
+
+- alternative color schemes for enemies ("palette swapping");
+- environmental changes (e.g., world turning purple/surreal);
+- power-up indicators.
+
+
 ## Using decorators
 
 
@@ -175,7 +234,7 @@ components the `HasDecorator` mixin is not needed.
 
 In fact, the `PositionComponent` uses its decorator in order to properly position the component on
 the screen. Thus, any new decorators that you'd want to apply to the `PositionComponent` will need
-to be chained (see the [](#multiple-decorators) section below).
+to be chained (see the [Multiple decorators](#multiple-decorators) section below).
 
 It is also possible to replace the root decorator of the `PositionComponent`, if you want to create
 an alternative logic for how the component shall be positioned on the screen.
@@ -196,5 +255,5 @@ from its root, which usually is `component.decorator`.
 
 
 [Component]: ../components/components.md#component
-[Effect]: ../../flame/effects.md
+[Effect]: ../effects/effects.md
 [HasDecorator]: #hasdecorator-mixin

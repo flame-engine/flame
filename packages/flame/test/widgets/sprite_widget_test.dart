@@ -109,5 +109,76 @@ Future<void> main() async {
         expect(internalSpriteWidgetFinder.sprite.srcPosition, Vector2(10, 10));
       });
     });
+
+    group('size parameter', () {
+      testWidgets('when null, does not wrap in SizedBox', (tester) async {
+        final sprite = Sprite(image);
+
+        await tester.pumpWidget(SpriteWidget(sprite: sprite));
+        await tester.pump();
+
+        // Check that InternalSpriteWidget is not wrapped in a SizedBox
+        final internalWidgetFinder = find.byType(InternalSpriteWidget);
+        final sizedBoxAncestor = find.ancestor(
+          of: internalWidgetFinder,
+          matching: find.byType(SizedBox),
+        );
+        expect(sizedBoxAncestor, findsNothing);
+      });
+
+      testWidgets('when provided, wraps in SizedBox with correct size', (
+        tester,
+      ) async {
+        final sprite = Sprite(image);
+        const customSize = Size(100, 200);
+
+        await tester.pumpWidget(
+          SpriteWidget(
+            sprite: sprite,
+            size: customSize,
+          ),
+        );
+        await tester.pump();
+
+        // Find SizedBox that is an ancestor of InternalSpriteWidget
+        final internalWidgetFinder = find.byType(InternalSpriteWidget);
+        final sizedBoxFinder = find.ancestor(
+          of: internalWidgetFinder,
+          matching: find.byType(SizedBox),
+        );
+        expect(sizedBoxFinder, findsOneWidget);
+
+        final sizedBox = tester.widget<SizedBox>(sizedBoxFinder);
+        expect(sizedBox.width, customSize.width);
+        expect(sizedBox.height, customSize.height);
+      });
+
+      testWidgets('asset constructor respects size parameter', (tester) async {
+        const imagePath = 'test_path_size';
+        Flame.images.add(imagePath, image);
+        const customSize = Size(150, 250);
+
+        await tester.pumpWidget(
+          SpriteWidget.asset(
+            path: imagePath,
+            size: customSize,
+          ),
+        );
+
+        await tester.pump();
+
+        // Find SizedBox that is an ancestor of InternalSpriteWidget
+        final internalWidgetFinder = find.byType(InternalSpriteWidget);
+        final sizedBoxFinder = find.ancestor(
+          of: internalWidgetFinder,
+          matching: find.byType(SizedBox),
+        );
+        expect(sizedBoxFinder, findsOneWidget);
+
+        final sizedBox = tester.widget<SizedBox>(sizedBoxFinder);
+        expect(sizedBox.width, customSize.width);
+        expect(sizedBox.height, customSize.height);
+      });
+    });
   });
 }

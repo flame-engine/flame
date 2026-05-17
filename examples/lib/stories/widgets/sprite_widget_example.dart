@@ -29,3 +29,28 @@ Widget spriteWidgetBuilder(DashbookContext ctx) {
     ),
   );
 }
+
+Widget spriteWidgetWithSizeBuilder(DashbookContext ctx) {
+  return DecoratedBox(
+    decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
+    child: SpriteWidget.asset(
+      size: Size(
+        ctx.numberProperty('width', 400),
+        ctx.numberProperty('height', 200),
+      ),
+      path: 'shield.png',
+      angle: pi / 180 * ctx.numberProperty('angle (deg)', 0),
+      anchor: Anchor.valueOf(
+        ctx.listProperty('anchor', 'center', anchorOptions),
+      ),
+      paint:
+          paintList[paintChoices.indexOf(
+            ctx.listProperty(
+              'paint',
+              'none',
+              paintChoices,
+            ),
+          )],
+    ),
+  );
+}

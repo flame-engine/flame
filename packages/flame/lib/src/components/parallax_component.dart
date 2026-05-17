@@ -27,6 +27,7 @@ extension ParallaxComponentExtension on FlameGame {
     int? priority,
     FilterQuality? filterQuality,
     ComponentKey? key,
+    String? package,
   }) {
     return ParallaxComponent.load(
       dataList,
@@ -44,6 +45,7 @@ extension ParallaxComponentExtension on FlameGame {
       priority: priority,
       filterQuality: filterQuality,
       key: key,
+      package: package,
     );
   }
 }
@@ -157,6 +159,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
     int? priority,
     FilterQuality? filterQuality,
     ComponentKey? key,
+    String? package,
   }) async {
     return ParallaxComponent(
       parallax: await Parallax.load(
@@ -169,6 +172,7 @@ class ParallaxComponent<T extends FlameGame> extends PositionComponent
         fill: fill,
         images: images,
         filterQuality: filterQuality,
+        package: package,
       ),
       position: position,
       size: size,
