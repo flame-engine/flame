@@ -519,7 +519,9 @@ class _DragPointerState {
   }
 
   void _dispose() {
-    _arenaEntry?.resolve(GestureDisposition.rejected);
+    if (!_resolved) {
+      _arenaEntry?.resolve(GestureDisposition.rejected);
+    }
     _arenaEntry = null;
     _drag = null;
   }
