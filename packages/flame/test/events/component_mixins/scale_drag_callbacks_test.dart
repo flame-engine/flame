@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -362,6 +364,57 @@ void main() {
         );
 
         expect(scales.skip(1), List.generate(21, (i) => i + 1));
+      },
+    );
+
+    testWidgets(
+      'scale event rotation respects camera & zoom',
+      (tester) async {
+        final resolution = Vector2(80, 60);
+        final game = FlameGame(
+          camera: CameraComponent.withFixedResolution(
+            width: resolution.x,
+            height: resolution.y,
+          ),
+        );
+        var rotations = [];
+
+        game.camera.viewfinder.zoom = 3;
+
+        await game.world.add(
+          ScaleDragWithCallbacksComponent(
+            position: Vector2.all(-5),
+            size: Vector2.all(10),
+            onScaleUpdate: (event) {
+              rotations.add(event.rotation);
+            },
+          ),
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+
+        final canvasSize = game.canvasSize;
+
+        final center = (canvasSize / 2).toOffset();
+        await tester.timedZoomFrom(
+          center.translate(-1, 0),
+          const Offset(0, 20),
+          center.translate(1, 0),
+          const Offset(0, -20),
+          const Duration(milliseconds: 300),
+          intervals: 10,
+        );
+
+        // computation of angle using trigonometry with triangle having a size
+        // of length 1 and one of length i.
+        final expected = List.generate(21, (i) => -atan(i));
+
+        // remove the first element that is registered twice in the simulation
+        rotations = rotations.sublist(1);
+        for (var i = 0; i < expected.length; i++) {
+          expect(rotations[i], closeTo(expected[i], 1e-6));
+        }
       },
     );
 
