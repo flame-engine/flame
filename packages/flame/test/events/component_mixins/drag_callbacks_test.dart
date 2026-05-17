@@ -438,7 +438,27 @@ void main() {
 
   group('MultiDragDispatcher lifecycle', () {
     testWithFlameGame(
-      'cancels active gestures and removes itself immediately on removal',
+      'rejects new gestures after markForRemoval',
+      (game) async {
+        final component = DragCallbacksComponent()
+          ..x = 10
+          ..y = 10
+          ..width = 10
+          ..height = 10;
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragDispatcher>()!;
+
+        dispatcher.markForRemoval();
+        dispatcher.handleDragStart(
+          1,
+          DragStartDetails(globalPosition: const Offset(12, 12)),
+        );
+        expect(component.dragStartEvent, 0);
+      },
+    );
+
+    testWithFlameGame(
+      'removes itself after last gesture ends when marked',
       (game) async {
         final component = DragCallbacksComponent()
           ..x = 10
@@ -453,12 +473,12 @@ void main() {
           DragStartDetails(globalPosition: const Offset(12, 12)),
         );
         expect(component.dragStartEvent, 1);
-        expect(component.isDragged, isTrue);
 
-        dispatcher.removeFromParent();
+        dispatcher.markForRemoval();
+        expect(dispatcher.isMounted, isTrue);
+
+        dispatcher.handleDragEnd(1, DragEndDetails());
         game.update(0);
-        expect(component.isDragged, isFalse);
-        expect(component.dragCancelEvent, 1);
         expect(game.children.whereType<MultiDragDispatcher>().length, 0);
       },
     );

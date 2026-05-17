@@ -27,6 +27,8 @@ class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
   /// Records all components currently being scaled, keyed by pointerId.
   final Set<TaggedComponent<ScaleCallbacks>> _records = {};
 
+  bool _shouldBeRemoved = false;
+
   /// Called when the user starts a scale gesture.
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
@@ -85,6 +87,9 @@ class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
   @internal
   @override
   void handleScaleStart(ScaleStartDetails details) {
+    if (_shouldBeRemoved) {
+      return;
+    }
     onScaleStart(ScaleStartEvent(0, game, details));
   }
 
@@ -98,9 +103,32 @@ class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
   @override
   void handleScaleEnd(ScaleEndDetails details) {
     onScaleEnd(ScaleEndEvent(0, details));
+    _tryRemoving();
   }
 
   //#endregion
+
+  /// Marks this dispatcher for removal after all active gestures end.
+  ///
+  /// This is called during a dispatcher upgrade (e.g. when a
+  /// [DragCallbacks] component is added and the system upgrades from
+  /// [ScaleDispatcher] to [MultiDragScaleDispatcher]).
+  ///
+  /// Active gestures continue to be delivered until they complete
+  /// naturally, at which point the dispatcher removes itself. New gestures
+  /// are rejected during this window so the new dispatcher can take over.
+  void markForRemoval() {
+    _shouldBeRemoved = true;
+    _tryRemoving();
+  }
+
+  bool _tryRemoving() {
+    if (_records.isEmpty && _shouldBeRemoved && isMounted) {
+      removeFromParent();
+      return true;
+    }
+    return false;
+  }
 
   static void addDispatcher(Component component) {
     Dispatcher.addDispatcher(
@@ -112,6 +140,9 @@ class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
 
   @override
   void onMount() {
+    if (_tryRemoving()) {
+      return;
+    }
     game.gestureDetectors.register<ScaleGestureRecognizer>(
       ScaleGestureRecognizer.new,
       (ScaleGestureRecognizer instance) {
@@ -126,13 +157,6 @@ class ScaleDispatcher extends Dispatcher<FlameGame> implements ScaleListener {
 
   @override
   void onRemove() {
-    final activeRecords = _records.toList();
-    _records.clear();
-    for (final record in activeRecords) {
-      record.component.onScaleEnd(
-        ScaleEndEvent(record.pointerId, ScaleEndDetails()),
-      );
-    }
     game.gestureDetectors.unregister<ScaleGestureRecognizer>();
     Dispatcher.removeDispatcher(game, const ScaleDispatcherKey());
     super.onRemove();

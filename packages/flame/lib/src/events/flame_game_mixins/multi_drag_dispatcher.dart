@@ -30,6 +30,8 @@ class MultiDragDispatcher extends Dispatcher<FlameGame>
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
+  bool _shouldBeRemoved = false;
+
   final _dragUpdateController = StreamController<DragUpdateEvent>.broadcast(
     sync: true,
   );
@@ -155,6 +157,9 @@ class MultiDragDispatcher extends Dispatcher<FlameGame>
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
+    if (_shouldBeRemoved) {
+      return;
+    }
     final event = DragStartEvent(pointerId, game, details);
     onDragStart(event);
     _dragStartController.add(event);
@@ -174,6 +179,7 @@ class MultiDragDispatcher extends Dispatcher<FlameGame>
     final event = DragEndEvent(pointerId, details);
     onDragEnd(event);
     _dragEndController.add(event);
+    _tryRemoving();
   }
 
   @internal
@@ -182,6 +188,29 @@ class MultiDragDispatcher extends Dispatcher<FlameGame>
     final event = DragCancelEvent(pointerId);
     onDragCancel(event);
     _dragCancelController.add(event);
+    _tryRemoving();
+  }
+
+  /// Marks this dispatcher for removal after all active gestures end.
+  ///
+  /// This is called during a dispatcher upgrade (e.g. when a
+  /// [ScaleCallbacks] component is added and the system upgrades from
+  /// [MultiDragDispatcher] to [MultiDragScaleDispatcher]).
+  ///
+  /// Active gestures continue to be delivered until the user lifts their
+  /// finger, at which point the dispatcher removes itself. New gestures
+  /// are rejected during this window so the new dispatcher can take over.
+  void markForRemoval() {
+    _shouldBeRemoved = true;
+    _tryRemoving();
+  }
+
+  bool _tryRemoving() {
+    if (_records.isEmpty && _shouldBeRemoved && isMounted) {
+      removeFromParent();
+      return true;
+    }
+    return false;
   }
 
   //#endregion
@@ -196,21 +225,24 @@ class MultiDragDispatcher extends Dispatcher<FlameGame>
 
   @override
   void onMount() {
+    if (_tryRemoving()) {
+      return;
+    }
     game.gestureDetectors.register<ImmediateMultiDragGestureRecognizer>(
       ImmediateMultiDragGestureRecognizer.new,
       (ImmediateMultiDragGestureRecognizer instance) {
-        instance.onStart = (Offset point) => FlameDragAdapter(this, point);
+        instance.onStart = (Offset point) {
+          if (_shouldBeRemoved) {
+            return null;
+          }
+          return FlameDragAdapter(this, point);
+        };
       },
     );
   }
 
   @override
   void onRemove() {
-    final activeRecords = _records.toList();
-    _records.clear();
-    for (final record in activeRecords) {
-      record.component.onDragCancel(DragCancelEvent(record.pointerId));
-    }
     game.gestureDetectors.unregister<ImmediateMultiDragGestureRecognizer>();
     Dispatcher.removeDispatcher(game, const MultiDragDispatcherKey());
     _dragUpdateController.close();

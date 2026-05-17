@@ -51,7 +51,7 @@ mixin ScaleCallbacks on Component {
       final dispatcher = MultiDragScaleDispatcher();
       game.registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
       game.add(dispatcher);
-      multiDragDispatcher.removeFromParent();
+      (multiDragDispatcher as MultiDragDispatcher).markForRemoval();
     }
   }
 }

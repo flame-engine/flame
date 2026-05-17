@@ -372,7 +372,26 @@ void main() {
 
   group('ScaleDispatcher lifecycle', () {
     testWithFlameGame(
-      'ends active gestures and removes itself immediately on removal',
+      'rejects new gestures after markForRemoval',
+      (game) async {
+        final component = ScaleCallbacksComponent()
+          ..x = 10
+          ..y = 10
+          ..width = 10
+          ..height = 10;
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<ScaleDispatcher>()!;
+
+        dispatcher.markForRemoval();
+        dispatcher.handleScaleStart(
+          ScaleStartDetails(focalPoint: const Offset(12, 12)),
+        );
+        expect(component.scaleStartEvent, 0);
+      },
+    );
+
+    testWithFlameGame(
+      'removes itself after last gesture ends when marked',
       (game) async {
         final component = ScaleCallbacksComponent()
           ..x = 10
@@ -386,12 +405,12 @@ void main() {
           ScaleStartDetails(focalPoint: const Offset(12, 12)),
         );
         expect(component.scaleStartEvent, 1);
-        expect(component.isScaling, isTrue);
 
-        dispatcher.removeFromParent();
+        dispatcher.markForRemoval();
+        expect(dispatcher.isMounted, isTrue);
+
+        dispatcher.handleScaleEnd(ScaleEndDetails());
         game.update(0);
-        expect(component.isScaling, isFalse);
-        expect(component.scaleEndEvent, 1);
         expect(game.children.whereType<ScaleDispatcher>().length, 0);
       },
     );
@@ -403,7 +422,7 @@ void main() {
         expect(game.children.whereType<ScaleDispatcher>().length, 1);
 
         final dispatcher = game.firstChild<ScaleDispatcher>()!;
-        dispatcher.removeFromParent();
+        dispatcher.markForRemoval();
         game.update(0);
         expect(game.children.whereType<ScaleDispatcher>().length, 0);
 
