@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 
 class InputHandler extends PositionComponent
-    with TapCallbacks, HasGameReference<CrystalBallGame> {
+    with TapCallbacks, DragCallbacks, HasGameReference<CrystalBallGame> {
   InputHandler()
     : super(
         anchor: Anchor.center,
@@ -44,15 +44,12 @@ class InputHandler extends PositionComponent
       onLeftStart();
     } else if (event.localPosition.x > game.size.x * 2 / 3) {
       onRightStart();
-    } else {
-      final pos = CameraComponent.currentCamera!.globalToLocal(
-        event.canvasPosition,
-      );
-      game.world.cameraTarget.go(
-        to: Vector2(0, pos.y),
-        duration: 5,
-      );
     }
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    game.world.cameraTarget.position.y += event.localDelta.y;
   }
 
   @override
