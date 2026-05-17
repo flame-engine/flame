@@ -49,7 +49,7 @@ class InputHandler extends PositionComponent
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    game.world.cameraTarget.position.y += event.localDelta.y;
+    game.world.cameraTarget.nudge(Vector2(0, event.localDelta.y));
   }
 
   @override
