@@ -149,38 +149,3 @@ class InteractiveRect extends RectangleComponent
   }
 }
 ```
-
-
-### Dynamic addition
-
-Components with different callback types can be added to the game at any time. For example, you can
-start with only `DragCallbacks` components and later add a `ScaleCallbacks` component. Flame will
-automatically reconfigure the gesture handling so that both types work correctly. Any gestures that
-are already in progress (e.g. an ongoing drag) will continue uninterrupted during this transition.
-
-See also [Scale Events — Combining with DragCallbacks](scale_events.md#combining-with-dragcallbacks).
-
-
-```dart
-class MyComponent extends PositionComponent with DragCallbacks {
-  MyComponent({super.size});
-
-  final _paint = Paint();
-  bool _isDragged = false;
-
-  @override
-  void onDragStart(DragStartEvent event) => _isDragged = true;
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) => position += event.delta;
-
-  @override
-  void onDragEnd(DragEndEvent event) => _isDragged = false;
-
-  @override
-  void render(Canvas canvas) {
-    _paint.color = _isDragged? Colors.red : Colors.white;
-    canvas.drawRect(size.toRect(), _paint);
-  }
-}
-```
