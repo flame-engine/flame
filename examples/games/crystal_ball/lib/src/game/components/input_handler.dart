@@ -40,9 +40,9 @@ class InputHandler extends PositionComponent
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
 
-    if (event.localPosition.x < size.x * 1 / 3) {
+    if (event.localPosition.x < size.x / 2) {
       onLeftStart();
-    } else if (event.localPosition.x > size.x * 2 / 3) {
+    } else {
       onRightStart();
     }
   }
@@ -51,10 +51,9 @@ class InputHandler extends PositionComponent
   void onTapUp(TapUpEvent event) {
     super.onTapUp(event);
 
-    if (event.localPosition.x < size.x * 1 / 3) {
+    if (event.localPosition.x < size.x / 2) {
       onLeftEnd();
-    }
-    if (event.localPosition.x > size.x * 2 / 3) {
+    } else {
       onRightEnd();
     }
   }
