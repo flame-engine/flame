@@ -117,25 +117,10 @@ class DynamicScaleDragExample extends FlameGame {
   @override
   void update(double dt) {
     super.update(dt);
-    final dispatchers = <String>[];
-    if (children.whereType<MultiDragScaleDispatcher>().isNotEmpty) {
-      dispatchers.add('MultiDragScaleDispatcher');
-    }
-    if (children.whereType<MultiDragDispatcher>().isNotEmpty) {
-      dispatchers.add('MultiDragDispatcher');
-    }
-    // ScaleDispatcher is not publicly exported, so detect it by exclusion.
-    final otherDispatchers = children.where(
-      (c) => c is! MultiDragScaleDispatcher && c is! MultiDragDispatcher,
-    );
-    for (final c in otherDispatchers) {
-      final name = c.runtimeType.toString();
-      if (name == 'ScaleDispatcher') {
-        dispatchers.add('ScaleDispatcher');
-      }
-    }
-    dispatcherLabel.text =
-        'Dispatcher: ${dispatchers.isEmpty ? 'none' : dispatchers.join(', ')}';
+    final active = children.whereType<MultiDragScaleDispatcher>().isNotEmpty;
+    dispatcherLabel.text = active
+        ? 'Dispatcher: MultiDragScaleDispatcher'
+        : 'Dispatcher: none';
   }
 }
 
