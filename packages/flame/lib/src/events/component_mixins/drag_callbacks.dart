@@ -69,4 +69,15 @@ mixin DragCallbacks on Component {
       hasScale: this is ScaleCallbacks,
     );
   }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    MultiDragScaleDispatcher.removeDispatcher(
+      this,
+      hasDrag: true,
+      hasScale: this is ScaleCallbacks,
+    );
+    super.onRemove();
+  }
 }

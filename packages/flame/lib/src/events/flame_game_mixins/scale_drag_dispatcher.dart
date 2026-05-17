@@ -34,7 +34,15 @@ class MultiDragScaleDispatcher extends Component
 
   bool _hasDrag = false;
   bool _hasScale = false;
+  int _dragCount = 0;
+  int _scaleCount = 0;
   MultiDragScaleGestureRecognizer? _recognizer;
+
+  @visibleForTesting
+  bool get hasDrag => _hasDrag;
+
+  @visibleForTesting
+  bool get hasScale => _hasScale;
 
   FlameGame get game => parent! as FlameGame;
 
@@ -42,6 +50,7 @@ class MultiDragScaleDispatcher extends Component
   ///
   /// Safe to call before or after [onMount].
   void enableDrag() {
+    _dragCount++;
     _hasDrag = true;
     _recognizer?.hasDrag = true;
   }
@@ -50,8 +59,25 @@ class MultiDragScaleDispatcher extends Component
   ///
   /// Safe to call before or after [onMount].
   void enableScale() {
+    _scaleCount++;
     _hasScale = true;
     _recognizer?.hasScale = true;
+  }
+
+  void _disableDrag() {
+    _dragCount--;
+    if (_dragCount == 0) {
+      _hasDrag = false;
+      _recognizer?.hasDrag = false;
+    }
+  }
+
+  void _disableScale() {
+    _scaleCount--;
+    if (_scaleCount == 0) {
+      _hasScale = false;
+      _recognizer?.hasScale = false;
+    }
   }
 
   /// Ensures a [MultiDragScaleDispatcher] is registered on the game that owns
@@ -75,6 +101,31 @@ class MultiDragScaleDispatcher extends Component
     }
     if (hasScale) {
       dispatcher.enableScale();
+    }
+  }
+
+  /// Decrements the reference counts for [component]'s event types and
+  /// disables the corresponding recognizer flags when the count reaches zero.
+  static void removeDispatcher(
+    Component component, {
+    required bool hasDrag,
+    required bool hasScale,
+  }) {
+    final game = component.findRootGame();
+    if (game == null) {
+      return;
+    }
+    final dispatcher =
+        game.findByKey(const MultiDragScaleDispatcherKey())
+            as MultiDragScaleDispatcher?;
+    if (dispatcher == null) {
+      return;
+    }
+    if (hasDrag) {
+      dispatcher._disableDrag();
+    }
+    if (hasScale) {
+      dispatcher._disableScale();
     }
   }
 

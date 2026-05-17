@@ -18,6 +18,43 @@ void main() {
         expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
     );
+
+    testWithFlameGame(
+      'removing the last ScaleCallbacks component disables hasScale on the '
+      'recognizer',
+      (game) async {
+        final component = ScaleCallbacksComponent()..size = Vector2.all(10);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+        expect(dispatcher.hasScale, isTrue);
+
+        game.remove(component);
+        await game.ready();
+
+        expect(dispatcher.hasScale, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'hasScale stays true while at least one ScaleCallbacks component remains',
+      (game) async {
+        final a = ScaleCallbacksComponent()..size = Vector2.all(10);
+        final b = ScaleCallbacksComponent()..size = Vector2.all(10);
+        await game.ensureAdd(a);
+        await game.ensureAdd(b);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        game.remove(a);
+        await game.ready();
+
+        expect(dispatcher.hasScale, isTrue);
+
+        game.remove(b);
+        await game.ready();
+
+        expect(dispatcher.hasScale, isFalse);
+      },
+    );
   });
   testWithFlameGame('scale event start', (game) async {
     final component = ScaleCallbacksComponent()

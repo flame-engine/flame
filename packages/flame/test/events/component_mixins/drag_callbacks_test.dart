@@ -18,6 +18,43 @@ void main() {
       },
     );
 
+    testWithFlameGame(
+      'removing the last DragCallbacks component disables hasDrag on the '
+      'recognizer',
+      (game) async {
+        final component = DragCallbacksComponent()..size = Vector2.all(10);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+        expect(dispatcher.hasDrag, isTrue);
+
+        game.remove(component);
+        await game.ready();
+
+        expect(dispatcher.hasDrag, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'hasDrag stays true while at least one DragCallbacks component remains',
+      (game) async {
+        final a = DragCallbacksComponent()..size = Vector2.all(10);
+        final b = DragCallbacksComponent()..size = Vector2.all(10);
+        await game.ensureAdd(a);
+        await game.ensureAdd(b);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        game.remove(a);
+        await game.ready();
+
+        expect(dispatcher.hasDrag, isTrue);
+
+        game.remove(b);
+        await game.ready();
+
+        expect(dispatcher.hasDrag, isFalse);
+      },
+    );
+
     testWithFlameGame('drag event start', (game) async {
       final component = DragCallbacksComponent()
         ..x = 10
