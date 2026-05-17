@@ -11,12 +11,13 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   late StreamSubscription<S> _subscription;
   late B _bloc;
   B? _blocOverride;
+  bool _blocInitialized = false;
 
   /// Returns the bloc that this component is reading from once the component
   /// has been mounted.
   B get bloc {
     assert(
-      isMounted,
+      _blocInitialized,
       'Cannot access the bloc instance before it has been mounted.',
     );
     return _bloc;
@@ -49,6 +50,7 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
       _blocOverride = bloc = provider.bloc;
     }
     _bloc = bloc;
+    _blocInitialized = true;
     _state = bloc.state;
     onInitialState(_state);
     _subscription = bloc.stream.listen((newState) {
@@ -84,5 +86,6 @@ mixin FlameBlocListenable<B extends BlocBase<S>, S> on Component {
   void onRemove() {
     super.onRemove();
     _subscription.cancel();
+    _blocInitialized = false;
   }
 }
