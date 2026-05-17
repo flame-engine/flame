@@ -216,58 +216,62 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     _update();
     _updateLines();
 
-    // End scale gesture if we drop below 2 pointers
-    if (_scaleGestureActive && _pointers.length < 2) {
-      if (onScaleEnd != null) {
-        final velocity = _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
+    _endScaleIfNeeded();
+  }
 
-        if (_isFlingGesture(velocity)) {
-          final pixelsPerSecond = velocity.pixelsPerSecond;
-          if (pixelsPerSecond.distanceSquared >
-              kMaxFlingVelocity * kMaxFlingVelocity) {
-            final clampedVelocity = Velocity(
-              pixelsPerSecond:
-                  (pixelsPerSecond / pixelsPerSecond.distance) *
-                  kMaxFlingVelocity,
-            );
-            invokeCallback<void>(
-              'onScaleEnd',
-              () => onScaleEnd!(
-                ScaleEndDetails(
-                  velocity: clampedVelocity,
-                  scaleVelocity: velocity.pixelsPerSecond.dx,
-                  pointerCount: pointerCount,
-                ),
+  void _endScaleIfNeeded() {
+    if (!_scaleGestureActive || _pointers.length >= 2) {
+      return;
+    }
+    if (onScaleEnd != null) {
+      final velocity = _scaleVelocityTracker?.getVelocity() ?? Velocity.zero;
+
+      if (_isFlingGesture(velocity)) {
+        final pixelsPerSecond = velocity.pixelsPerSecond;
+        if (pixelsPerSecond.distanceSquared >
+            kMaxFlingVelocity * kMaxFlingVelocity) {
+          final clampedVelocity = Velocity(
+            pixelsPerSecond:
+                (pixelsPerSecond / pixelsPerSecond.distance) *
+                kMaxFlingVelocity,
+          );
+          invokeCallback<void>(
+            'onScaleEnd',
+            () => onScaleEnd!(
+              ScaleEndDetails(
+                velocity: clampedVelocity,
+                scaleVelocity: velocity.pixelsPerSecond.dx,
+                pointerCount: pointerCount,
               ),
-            );
-          } else {
-            invokeCallback<void>(
-              'onScaleEnd',
-              () => onScaleEnd!(
-                ScaleEndDetails(
-                  velocity: velocity,
-                  scaleVelocity: velocity.pixelsPerSecond.dx,
-                  pointerCount: pointerCount,
-                ),
-              ),
-            );
-          }
+            ),
+          );
         } else {
           invokeCallback<void>(
             'onScaleEnd',
             () => onScaleEnd!(
               ScaleEndDetails(
+                velocity: velocity,
                 scaleVelocity: velocity.pixelsPerSecond.dx,
                 pointerCount: pointerCount,
               ),
             ),
           );
         }
+      } else {
+        invokeCallback<void>(
+          'onScaleEnd',
+          () => onScaleEnd!(
+            ScaleEndDetails(
+              scaleVelocity: velocity.pixelsPerSecond.dx,
+              pointerCount: pointerCount,
+            ),
+          ),
+        );
       }
-
-      _scaleGestureActive = false;
-      _scaleVelocityTracker = null;
     }
+
+    _scaleGestureActive = false;
+    _scaleVelocityTracker = null;
   }
 
   void _checkScaleGestureThreshold() {
@@ -413,6 +417,9 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     if (state != null) {
       state._rejected();
       _removeState(pointer);
+      _update();
+      _updateLines();
+      _endScaleIfNeeded();
     }
   }
 

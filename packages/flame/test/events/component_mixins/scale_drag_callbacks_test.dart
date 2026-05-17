@@ -88,6 +88,47 @@ void main() {
   );
 
   testWithFlameGame(
+    'removed dragged component receives cancel on update and clears state',
+    (game) async {
+      final component = ScaleDragCallbacksComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+      await game.ensureAdd(component);
+      final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+      dispatcher.onDragStart(
+        createDragStartEvents(
+          game: game,
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      );
+      expect(component.isDragged, isTrue);
+
+      game.remove(component);
+      await game.ready();
+
+      dispatcher.onDragUpdate(
+        createDragUpdateEvents(
+          game: game,
+          localPosition: const Offset(15, 15),
+          globalPosition: const Offset(15, 15),
+        ),
+      );
+
+      expect(component.dragCancelEvent, equals(1));
+      expect(component.dragEndEvent, equals(1));
+      expect(component.isDragged, isFalse);
+
+      dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
+      expect(component.dragCancelEvent, equals(1));
+      expect(component.dragEndEvent, equals(1));
+    },
+  );
+
+  testWithFlameGame(
     'scale and drag events update not called without onStart',
     (game) async {
       final component = ScaleDragCallbacksComponent()
