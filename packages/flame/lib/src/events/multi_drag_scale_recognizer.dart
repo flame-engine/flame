@@ -97,6 +97,14 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       _initialSpan = _currentSpan;
       _initialHorizontalSpan = _currentHorizontalSpan;
       _initialVerticalSpan = _currentVerticalSpan;
+    } else if (_pointers.length == 2) {
+      // Re-initialize span with actual 2-finger distance so the threshold
+      // check measures movement from this baseline, not from the zero span
+      // of the single-pointer state.
+      _update();
+      _initialSpan = _currentSpan;
+      _initialHorizontalSpan = _currentHorizontalSpan;
+      _initialVerticalSpan = _currentVerticalSpan;
     }
   }
 
