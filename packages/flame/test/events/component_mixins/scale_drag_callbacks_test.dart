@@ -129,6 +129,78 @@ void main() {
   );
 
   testWithFlameGame(
+    'removed scale component receives scale end on update and clears state',
+    (game) async {
+      final component = ScaleDragCallbacksComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+      await game.ensureAdd(component);
+      final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+      dispatcher.onScaleStart(
+        createScaleStartEvents(
+          game: game,
+          localFocalPoint: const Offset(12, 12),
+          focalPoint: const Offset(12, 12),
+        ),
+      );
+      expect(component.isScaling, isTrue);
+
+      game.remove(component);
+      await game.ready();
+
+      dispatcher.onScaleUpdate(
+        createScaleUpdateEvents(
+          game: game,
+          localFocalPoint: const Offset(15, 15),
+          focalPoint: const Offset(15, 15),
+        ),
+      );
+
+      expect(component.scaleEndEvent, equals(1));
+      expect(component.isScaling, isFalse);
+
+      dispatcher.onScaleEnd(ScaleEndEvent(1, ScaleEndDetails()));
+      expect(component.scaleEndEvent, equals(1));
+    },
+  );
+
+  testWithFlameGame(
+    'onDragCancel is routed to components that received onDragStart',
+    (game) async {
+      final component = ScaleDragCallbacksComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+      await game.ensureAdd(component);
+      final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+      dispatcher.onDragStart(
+        createDragStartEvents(
+          game: game,
+          localPosition: const Offset(12, 12),
+          globalPosition: const Offset(12, 12),
+        ),
+      );
+      expect(component.dragStartEvent, equals(1));
+      expect(component.dragCancelEvent, equals(0));
+
+      dispatcher.onDragCancel(DragCancelEvent(1));
+      expect(component.dragCancelEvent, equals(1));
+      // onDragCancel delegates to onDragEnd internally
+      expect(component.dragEndEvent, equals(1));
+      expect(component.isDragged, isFalse);
+
+      // record removed after cancel; subsequent end for same pointer is a no-op
+      dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
+      expect(component.dragEndEvent, equals(1));
+    },
+  );
+
+  testWithFlameGame(
     'scale and drag events update not called without onStart',
     (game) async {
       final component = ScaleDragCallbacksComponent()

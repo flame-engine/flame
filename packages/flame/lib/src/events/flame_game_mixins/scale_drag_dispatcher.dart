@@ -174,6 +174,7 @@ class MultiDragScaleDispatcher extends Component
   @mustCallSuper
   void onScaleUpdate(ScaleUpdateEvent event) {
     final updated = <TaggedComponent<ScaleCallbacks>>{};
+    final stale = <TaggedComponent<ScaleCallbacks>>{};
 
     // Deliver to components under the pointer
     event.deliverAtPoint(
@@ -182,8 +183,12 @@ class MultiDragScaleDispatcher extends Component
       eventHandler: (ScaleCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_scaleRecords.contains(record)) {
-          component.onScaleUpdate(event);
-          updated.add(record);
+          if (!component.isMounted || component.isRemoving) {
+            stale.add(record);
+          } else {
+            component.onScaleUpdate(event);
+            updated.add(record);
+          }
         }
       },
     );
@@ -193,9 +198,25 @@ class MultiDragScaleDispatcher extends Component
     // Currently, the id passed to the scale
     // events is always 0, so maybe it's not relevant.
     for (final record in _scaleRecords) {
-      if (record.pointerId == event.pointerId && !updated.contains(record)) {
+      if (record.pointerId != event.pointerId) {
+        continue;
+      }
+      final component = record.component;
+      if (!component.isMounted || component.isRemoving) {
+        stale.add(record);
+        continue;
+      }
+      if (!updated.contains(record)) {
         record.component.onScaleUpdate(event);
       }
+    }
+
+    if (stale.isNotEmpty) {
+      final endEvent = ScaleEndEvent(event.pointerId, ScaleEndDetails());
+      for (final record in stale) {
+        record.component.onScaleEnd(endEvent);
+      }
+      _scaleRecords.removeAll(stale);
     }
   }
 

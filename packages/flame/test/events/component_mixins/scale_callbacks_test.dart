@@ -76,6 +76,45 @@ void main() {
   });
 
   testWithFlameGame(
+    'removed scale component receives scale end on update and clears state',
+    (game) async {
+      final component = ScaleCallbacksComponent()
+        ..x = 10
+        ..y = 10
+        ..width = 10
+        ..height = 10;
+      await game.ensureAdd(component);
+      final dispatcher = game.firstChild<ScaleDispatcher>()!;
+
+      dispatcher.onScaleStart(
+        createScaleStartEvents(
+          game: game,
+          localFocalPoint: const Offset(12, 12),
+          focalPoint: const Offset(12, 12),
+        ),
+      );
+      expect(component.isScaling, isTrue);
+
+      game.remove(component);
+      await game.ready();
+
+      dispatcher.onScaleUpdate(
+        createScaleUpdateEvents(
+          game: game,
+          localFocalPoint: const Offset(15, 15),
+          focalPoint: const Offset(15, 15),
+        ),
+      );
+
+      expect(component.scaleEndEvent, equals(1));
+      expect(component.isScaling, isFalse);
+
+      dispatcher.onScaleEnd(ScaleEndEvent(1, ScaleEndDetails()));
+      expect(component.scaleEndEvent, equals(1));
+    },
+  );
+
+  testWithFlameGame(
     'scale event update not called without onScaleStart',
     (game) async {
       final component = ScaleCallbacksComponent()
