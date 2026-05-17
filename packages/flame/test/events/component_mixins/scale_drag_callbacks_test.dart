@@ -366,6 +366,44 @@ void main() {
     );
 
     testWidgets(
+      'two fingers on different components both receive drag updates',
+      (tester) async {
+        var nDragUpdatesA = 0;
+        var nDragUpdatesB = 0;
+        final game = FlameGame(
+          children: [
+            ScaleDragWithCallbacksComponent(
+              position: Vector2(0, 0),
+              size: Vector2.all(100),
+              onDragUpdate: (e) => nDragUpdatesA++,
+            ),
+            ScaleDragWithCallbacksComponent(
+              position: Vector2(200, 0),
+              size: Vector2.all(100),
+              onDragUpdate: (e) => nDragUpdatesB++,
+            ),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+
+        const intervals = 10;
+        await tester.timedZoomFrom(
+          const Offset(50, 50),
+          const Offset(10, 0),
+          const Offset(250, 50),
+          const Offset(-10, 0),
+          const Duration(milliseconds: 300),
+          intervals: intervals,
+        );
+
+        expect(nDragUpdatesA, greaterThan(0));
+        expect(nDragUpdatesB, greaterThan(0));
+      },
+    );
+
+    testWidgets(
       'scale event scale factor respects camera & zoom',
       (tester) async {
         final resolution = Vector2(80, 60);

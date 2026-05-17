@@ -191,21 +191,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
           );
         });
       }
-
-      // Send focal-point-based drag update during scale gesture
-      for (final state in _pointers.values) {
-        if (state._drag != null) {
-          state._drag!.update(
-            DragUpdateDetails(
-              globalPosition: _currentFocalPoint!,
-              delta: _delta,
-              sourceTimeStamp: event.timeStamp,
-              localPosition: _localFocalPoint,
-            ),
-          );
-          break; // Only send through one adapter
-        }
-      }
     }
   }
 
@@ -491,7 +476,7 @@ class _DragPointerState {
       }
     }
 
-    if (_drag != null && recognizer._pointers.length < 2) {
+    if (_drag != null) {
       _drag!.update(
         DragUpdateDetails(
           globalPosition: event.position,
