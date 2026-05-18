@@ -142,7 +142,7 @@ drag events. This is useful for components that should be draggable with one fin
 pinch-to-zoom or rotatable with two fingers.
 
 ```dart
-class InteractiveRect extends RectangleComponent
+class InteractiveRectangle extends RectangleComponent
     with ScaleCallbacks, DragCallbacks {
 
   double _initialAngle = 0;
