@@ -60,6 +60,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   }
 
   void _disableDrag() {
+    assert(_dragCount > 0, '_disableDrag called more times than enableDrag');
     _dragCount--;
     if (_dragCount == 0) {
       _recognizer?.hasDrag = false;
@@ -67,6 +68,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   }
 
   void _disableScale() {
+    assert(_scaleCount > 0, '_disableScale called more times than enableScale');
     _scaleCount--;
     if (_scaleCount == 0) {
       _recognizer?.hasScale = false;

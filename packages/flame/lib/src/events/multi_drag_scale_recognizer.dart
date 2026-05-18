@@ -127,11 +127,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     _updateScaleFields();
     _updateLines();
 
-    if (_drag.count >= 2 && !_scale.active) {
-      _checkScaleGestureThreshold();
-    }
-
-    if (!_scale.active && _drag.count >= 2) {
+    if (_drag.count >= 2 && !_scale.active && _checkScaleGestureThreshold()) {
       _scale.active = true;
       _scale.initialFocalPoint = _scale.currentFocalPoint;
       _scale.initialSpan = _scale.currentSpan;
@@ -230,9 +226,9 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     _scale.reset();
   }
 
-  void _checkScaleGestureThreshold() {
+  bool _checkScaleGestureThreshold() {
     if (_drag.pointers.isEmpty || _scale.initialFocalPoint == null) {
-      return;
+      return false;
     }
 
     final spanDelta = (_scale.currentSpan - _scale.initialSpan).abs();
@@ -246,7 +242,9 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
           state._arenaEntry?.resolve(GestureDisposition.accepted);
         }
       }
+      return true;
     }
+    return false;
   }
 
   void _updateScaleFields() {
