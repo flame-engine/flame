@@ -37,6 +37,12 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   int _scaleCount = 0;
   MultiDragScaleGestureRecognizer? _recognizer;
 
+  /// The minimum scale factor change required before a scale gesture is
+  /// recognized. Must be greater than 1.0. The default value is 1.05, meaning
+  /// the fingers must spread or pinch by at least 5% before scale events start
+  /// firing. Set this before the first [ScaleCallbacks] component mounts.
+  double scaleThreshold = 1.05;
+
   @visibleForTesting
   bool get hasDrag => _dragCount > 0;
 
@@ -350,7 +356,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   @override
   void onMount() {
     game.gestureDetectors.register<MultiDragScaleGestureRecognizer>(
-      MultiDragScaleGestureRecognizer.new,
+      () => MultiDragScaleGestureRecognizer(scaleThreshold: scaleThreshold),
       (MultiDragScaleGestureRecognizer instance) {
         _recognizer = instance;
         instance.hasDrag = _dragCount > 0;
