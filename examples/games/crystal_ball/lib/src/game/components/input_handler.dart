@@ -40,18 +40,10 @@ class InputHandler extends PositionComponent
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
 
-    if (event.localPosition.x < game.size.x * 1 / 3) {
+    if (event.localPosition.x < size.x / 2) {
       onLeftStart();
-    } else if (event.localPosition.x > game.size.x * 2 / 3) {
-      onRightStart();
     } else {
-      final pos = CameraComponent.currentCamera!.globalToLocal(
-        event.canvasPosition,
-      );
-      game.world.cameraTarget.go(
-        to: Vector2(0, pos.y),
-        duration: 5,
-      );
+      onRightStart();
     }
   }
 
@@ -59,10 +51,9 @@ class InputHandler extends PositionComponent
   void onTapUp(TapUpEvent event) {
     super.onTapUp(event);
 
-    if (event.localPosition.x < game.size.x * 1 / 3) {
+    if (event.localPosition.x < size.x / 2) {
       onLeftEnd();
-    }
-    if (event.localPosition.x > game.size.x * 2 / 3) {
+    } else {
       onRightEnd();
     }
   }
