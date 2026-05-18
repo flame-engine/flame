@@ -57,6 +57,9 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
   @override
   void addAllowedPointer(PointerDownEvent event) {
+    if (!hasDrag && !hasScale) {
+      return;
+    }
     assert(!_drag.pointers.containsKey(event.pointer));
     final state = _DragPointerState(recognizer: this, event: event);
     _drag.pointers[event.pointer] = state;
@@ -155,7 +158,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     if (_scale.active && _drag.count >= 2) {
       _scale.velocityTracker?.addPosition(
         event.timeStamp,
-        Offset(_scale.scaleFactor, 0),
+        _scale.currentFocalPoint!,
       );
 
       if (onScaleUpdate != null) {
@@ -199,7 +202,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
             () => onScaleEnd!(
               ScaleEndDetails(
                 velocity: clampedVelocity,
-                scaleVelocity: velocity.pixelsPerSecond.dx,
                 pointerCount: pointerCount,
               ),
             ),
@@ -210,7 +212,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
             () => onScaleEnd!(
               ScaleEndDetails(
                 velocity: velocity,
-                scaleVelocity: velocity.pixelsPerSecond.dx,
                 pointerCount: pointerCount,
               ),
             ),
@@ -220,10 +221,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
         invokeCallback<void>(
           'onScaleEnd',
           () => onScaleEnd!(
-            ScaleEndDetails(
-              scaleVelocity: velocity.pixelsPerSecond.dx,
-              pointerCount: pointerCount,
-            ),
+            ScaleEndDetails(pointerCount: pointerCount),
           ),
         );
       }

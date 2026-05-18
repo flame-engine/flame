@@ -132,6 +132,8 @@ pinch-to-zoom or rotatable with two fingers.
 class InteractiveRect extends RectangleComponent
     with ScaleCallbacks, DragCallbacks {
 
+  double _initialAngle = 0;
+
   @override
   void onDragUpdate(DragUpdateEvent event) {
     position += event.localDelta;
@@ -140,12 +142,12 @@ class InteractiveRect extends RectangleComponent
   @override
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
-    // store initial angle/scale for relative updates
+    _initialAngle = angle;
   }
 
   @override
   void onScaleUpdate(ScaleUpdateEvent event) {
-    angle = initialAngle + event.rotation;
+    angle = _initialAngle + event.rotation;
   }
 }
 ```

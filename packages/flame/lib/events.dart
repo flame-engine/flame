@@ -13,6 +13,8 @@ export 'src/events/component_mixins/secondary_tap_callbacks.dart'
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/component_mixins/tertiary_tap_callbacks.dart'
     show TertiaryTapCallbacks;
+export 'src/events/deprecated.dart'
+    show MultiDragDispatcher, MultiDragDispatcherKey;
 export 'src/events/flame_game_mixins/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
 export 'src/events/flame_game_mixins/long_press_dispatcher.dart'

@@ -7,7 +7,7 @@ import 'package:flame/src/events/multi_drag_scale_recognizer.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
 class MultiDragScaleDispatcherKey implements ComponentKey {
