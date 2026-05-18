@@ -8,17 +8,12 @@ import 'package:flame_3d_example/components/crate.dart';
 import 'package:flame_3d_example/components/rendered_point_light.dart';
 import 'package:flame_3d_example/components/rotating_light.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
-import 'package:flame_3d_example/scenarios/game_scenario.dart';
 
-class BoxesScenario implements GameScenario {
+class BoxesExample extends ExampleGame3D {
   @override
-  Future<void> onLoad() async {}
-
-  @override
-  void setup(ExampleGame3D game) {
-    game.world.addAll([
+  void onSetup() {
+    world.addAll([
       RotatingLight(),
-
       RenderedPointLight(
         position: Vector3(0, 0.1, 0),
         color: const Color(0xFFFF00FF),
@@ -27,22 +22,13 @@ class BoxesScenario implements GameScenario {
         position: Vector3(-2, 3, 2),
         color: const Color(0xFFFF2255),
       ),
-
-      // Floating crate
-      Crate(
-        position: Vector3(0, 5, 0),
-        size: Vector3.all(1),
-      ),
-
-      // Floating sphere
+      Crate(position: Vector3(0, 5, 0), size: Vector3.all(1)),
       MeshComponent(
         position: Vector3(5, 5, 5),
         mesh: SphereMesh(
           radius: 1,
           material: SpatialMaterial(
-            albedoTexture: ColorTexture(
-              BasicPalette.green.color,
-            ),
+            albedoTexture: ColorTexture(BasicPalette.green.color),
           ),
         ),
       ),
@@ -51,8 +37,7 @@ class BoxesScenario implements GameScenario {
     final rnd = Random();
     for (var i = 0; i < 20; i++) {
       final height = rnd.nextDoubleBetween(1, 12);
-
-      game.world.add(
+      world.add(
         MeshComponent(
           position: Vector3(
             rnd.nextDoubleBetween(-15, 15),

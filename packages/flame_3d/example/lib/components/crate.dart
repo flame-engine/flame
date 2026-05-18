@@ -11,17 +11,15 @@ class Crate extends MeshComponent {
     super.position,
   }) : super(mesh: CuboidMesh(size: size));
 
+  double direction = 0.1;
+
   @override
   FutureOr<void> onLoad() async {
     final crateTexture = await Flame.images.loadTexture('crate.jpg');
     mesh.updateSurfaces((surfaces) {
-      surfaces[0].material = SpatialMaterial(
-        albedoTexture: crateTexture,
-      );
+      surfaces[0].material = SpatialMaterial(albedoTexture: crateTexture);
     });
   }
-
-  double direction = 0.1;
 
   @override
   void update(double dt) {

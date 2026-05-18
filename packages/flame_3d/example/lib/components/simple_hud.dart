@@ -27,35 +27,11 @@ class SimpleHud extends Component with HasGameReference<ExampleGame3D> {
   String get fps =>
       children.query<FpsComponent>().firstOrNull?.fps.toStringAsFixed(2) ?? '0';
 
-  final _textLeft = TextPaint(style: _style);
-
-  final _textCenter = TextPaint(style: _style.copyWith(fontSize: 20));
-
   final _textRight = TextPaint(style: _style, textDirection: TextDirection.rtl);
 
   @override
   void render(Canvas canvas) {
     final CameraComponent3D(:position, :target, :up) = game.camera;
-
-    _textLeft.render(
-      canvas,
-      '''
-Camera controls:
-- Move using W, A, S, D, Space, Left-Ctrl
-- Look around with arrow keys or mouse
-- Change camera mode with 1, 2, 3 or 4
-- Change camera projection with P
-- Zoom in and out with scroll
-''',
-      Vector2.all(8),
-    );
-
-    _textCenter.render(
-      canvas,
-      'Welcome to the 3D world',
-      Vector2(game.size.x / 2, game.size.y - 8),
-      anchor: Anchor.bottomCenter,
-    );
 
     _textRight.render(
       canvas,
