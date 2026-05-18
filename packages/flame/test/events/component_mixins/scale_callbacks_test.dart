@@ -404,7 +404,7 @@ void main() {
           height: resolution.y,
         ),
       );
-      var rotations = [];
+      final rotations = [];
 
       game.camera.viewfinder.zoom = 3;
 
