@@ -116,6 +116,23 @@ threshold must be crossed first. By default, the fingers must spread or pinch by
 scale factor of 1.05) before `onScaleStart` is called. This prevents accidental scale gestures when
 the user simply places two fingers without intending to scale.
 
+The threshold can be changed by accessing the `MultiDragScaleDispatcher` from your game and setting
+`scaleThreshold` before any `ScaleCallbacks` component mounts:
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    final dispatcher = MultiDragScaleDispatcher()..scaleThreshold = 1.02;
+    registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+    add(dispatcher);
+  }
+}
+```
+
+A lower value makes the recognizer more sensitive (reacts to smaller pinch movements), while a
+higher value requires a more deliberate gesture before scale events fire.
+
 
 ## Combining with DragCallbacks
 
