@@ -431,7 +431,7 @@ void main() {
           const Duration(milliseconds: 300),
           intervals: intervals,
         );
-        expect(nScaleEvents, intervals * 2 + 2);
+        expect(nScaleEvents, intervals * 2 - 1);
         expect(nDragEvents, intervals * 2 + 2);
       },
     );
@@ -513,7 +513,7 @@ void main() {
           intervals: 10,
         );
 
-        expect(scales.skip(1), List.generate(21, (i) => i + 1));
+        expect(scales, List.generate(20, (i) => i + 2));
       },
     );
 
@@ -558,10 +558,7 @@ void main() {
 
         // computation of angle using trigonometry with triangle having a size
         // of length 1 and one of length i.
-        final expected = List.generate(21, (i) => -atan(i));
-
-        // remove the first element that is registered twice in the simulation
-        rotations = rotations.sublist(1);
+        final expected = List.generate(20, (i) => -atan(i + 1));
         for (var i = 0; i < expected.length; i++) {
           expect(rotations[i], closeTo(expected[i], 1e-6));
         }

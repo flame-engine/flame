@@ -129,11 +129,6 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
 
     if (_drag.count >= 2 && !_scale.active && _checkScaleGestureThreshold()) {
       _scale.active = true;
-      _scale.initialFocalPoint = _scale.currentFocalPoint;
-      _scale.initialSpan = _scale.currentSpan;
-      _scale.initialHorizontalSpan = _scale.currentHorizontalSpan;
-      _scale.initialVerticalSpan = _scale.currentVerticalSpan;
-      _scale.initialLine = _scale.currentLine;
       _scale.initialEventTimestamp = event.timeStamp;
       _scale.velocityTracker = VelocityTracker.withKind(event.kind);
 
