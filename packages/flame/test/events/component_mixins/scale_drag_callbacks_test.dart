@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
@@ -477,13 +476,7 @@ void main() {
     testWidgets(
       'scale event scale factor respects camera & zoom',
       (tester) async {
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
         final scales = [];
 
         game.camera.viewfinder.zoom = 3;
@@ -520,13 +513,7 @@ void main() {
     testWidgets(
       'scale event rotation respects camera & zoom',
       (tester) async {
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
         final rotations = [];
 
         game.camera.viewfinder.zoom = 3;
@@ -570,13 +557,7 @@ void main() {
       (tester) async {
         // canvas size is 800x600 so this means a 10x logical scale across
         // both dimensions
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
 
         game.camera.viewfinder.zoom = 2;
 
@@ -607,13 +588,7 @@ void main() {
       (tester) async {
         // canvas size is 800x600 so this means a 10x logical scale across
         // both dimensions
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
 
         game.camera.viewfinder.zoom = 1 / 2;
 
@@ -668,13 +643,7 @@ void main() {
     testWidgets(
       'scale event triggers both scale and drag',
       (tester) async {
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
 
         final component = ScaleDragWithCallbacksComponent(
           position: Vector2.all(-5),
@@ -713,13 +682,7 @@ void main() {
       '''adding drag component after scale component 
     upgrade dispatcher to multiDragMultiDragScaleDispatcher''',
       (tester) async {
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
 
         final scaleComponent = ScaleWithCallbacksComponent();
         await game.world.add(scaleComponent);
@@ -739,13 +702,7 @@ void main() {
       '''adding scale component after drag
      component allows current dragging to continue''',
       (tester) async {
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
         final dragComponent = DragWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),
@@ -777,13 +734,7 @@ void main() {
       '''adding drag component after scale
      component allows current scaling to continue''',
       (tester) async {
-        final resolution = Vector2(80, 60);
-        final game = FlameGame(
-          camera: CameraComponent.withFixedResolution(
-            width: resolution.x,
-            height: resolution.y,
-          ),
-        );
+        final game = makeFixedResolutionGame();
         final scaleComponent = ScaleWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),

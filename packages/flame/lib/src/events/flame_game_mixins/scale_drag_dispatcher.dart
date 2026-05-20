@@ -33,6 +33,9 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
+  // Reference counts rather than booleans so that enableDrag/enableScale can
+  // be called before onMount (when _recognizer is null). onMount uses these
+  // counts to initialise the recognizer flags.
   int _dragCount = 0;
   int _scaleCount = 0;
   MultiDragScaleGestureRecognizer? _recognizer;
@@ -83,6 +86,11 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
 
   /// Ensures a [MultiDragScaleDispatcher] is registered on the game that owns
   /// [component], then enables drag and/or scale as requested.
+  ///
+  /// For a component that mixes both [DragCallbacks] and [ScaleCallbacks],
+  /// this method is called twice from their separate [onMount] chains, once
+  /// with [hasDrag]=true and once with [hasScale]=true. The second call finds
+  /// the existing dispatcher and simply enables the remaining flag.
   static void addDispatcher(
     Component component, {
     required bool hasDrag,

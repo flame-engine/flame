@@ -5,9 +5,10 @@ import 'package:flutter/gestures.dart';
 /// and scale gestures simultaneously.
 ///
 /// This recognizer tracks each pointer independently (like Flutter's
-/// ImmediateMultiDragGestureRecognizer) while also tracking the overall scale
-/// gesture (like Flutter's ScaleGestureRecognizer). Each pointer can drag
-/// independently, and when 2+ pointers are down, scale callbacks also fire.
+/// [ImmediateMultiDragGestureRecognizer]) while also tracking the overall
+/// scale gesture (like Flutter's [ScaleGestureRecognizer]). Each pointer
+/// fires its own drag callbacks independently. When 2+ pointers are down
+/// and movement exceeds [scaleThreshold], scale callbacks also fire.
 ///
 /// Use [hasDrag] and [hasScale] to enable only the features needed. Both
 /// default to false; the dispatcher sets them via enableDrag/enableScale.
@@ -60,7 +61,10 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     if (!hasDrag && !hasScale) {
       return;
     }
-    assert(!_drag.pointers.containsKey(event.pointer));
+    assert(
+      !_drag.pointers.containsKey(event.pointer),
+      'Pointer ${event.pointer} is already tracked by this recognizer.',
+    );
     final state = _DragPointerState(recognizer: this, event: event);
     _drag.pointers[event.pointer] = state;
     GestureBinding.instance.pointerRouter.addRoute(event.pointer, _handleEvent);
@@ -116,6 +120,8 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
         _updateScaleFields();
         _updateLines();
         _endScaleIfNeeded();
+        // No need to reset initialSpan/initialLine here: addAllowedPointer
+        // re-initialises them whenever a new two-finger gesture begins.
       }
     } else if (event is! PointerDownEvent) {
       assert(false);
@@ -126,6 +132,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     _scale.lastTransform = event.transform;
     _updateScaleFields();
     _updateLines();
+    final focalPoint = _scale.currentFocalPoint!;
 
     if (_drag.count >= 2 && !_scale.active && _checkScaleGestureThreshold()) {
       _scale.active = true;
@@ -136,7 +143,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
         invokeCallback<void>('onScaleStart', () {
           onScaleStart!(
             ScaleStartDetails(
-              focalPoint: _scale.currentFocalPoint!,
+              focalPoint: focalPoint,
               localFocalPoint: _scale.localFocalPoint,
               pointerCount: pointerCount,
               sourceTimeStamp: _scale.initialEventTimestamp,
@@ -147,10 +154,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     }
 
     if (_scale.active && _drag.count >= 2) {
-      _scale.velocityTracker?.addPosition(
-        event.timeStamp,
-        _scale.currentFocalPoint!,
-      );
+      _scale.velocityTracker?.addPosition(event.timeStamp, focalPoint);
 
       if (onScaleUpdate != null) {
         invokeCallback<void>('onScaleUpdate', () {
@@ -159,7 +163,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
               scale: _scale.scaleFactor,
               horizontalScale: _scale.horizontalScaleFactor,
               verticalScale: _scale.verticalScaleFactor,
-              focalPoint: _scale.currentFocalPoint!,
+              focalPoint: focalPoint,
               localFocalPoint: _scale.localFocalPoint,
               rotation: _computeRotationFactor(),
               pointerCount: pointerCount,
@@ -420,6 +424,7 @@ class _ScaleState {
   VelocityTracker? velocityTracker;
   Duration? initialEventTimestamp;
 
+  // Spans are mean distances from the focal point, so they are always >= 0.
   double get scaleFactor => initialSpan > 0.0 ? currentSpan / initialSpan : 1.0;
 
   double get horizontalScaleFactor => initialHorizontalSpan > 0.0

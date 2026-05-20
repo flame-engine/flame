@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flame/components.dart';
 import 'package:flame/events.dart' hide PointerMoveEvent;
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
@@ -354,13 +353,7 @@ void main() {
   testWidgets(
     'scale event scale factor respects camera & zoom',
     (tester) async {
-      final resolution = Vector2(80, 60);
-      final game = FlameGame(
-        camera: CameraComponent.withFixedResolution(
-          width: resolution.x,
-          height: resolution.y,
-        ),
-      );
+      final game = makeFixedResolutionGame();
       final scales = [];
 
       game.camera.viewfinder.zoom = 3;
@@ -397,13 +390,7 @@ void main() {
   testWidgets(
     'scale event rotation respects camera & zoom',
     (tester) async {
-      final resolution = Vector2(80, 60);
-      final game = FlameGame(
-        camera: CameraComponent.withFixedResolution(
-          width: resolution.x,
-          height: resolution.y,
-        ),
-      );
+      final game = makeFixedResolutionGame();
       final rotations = [];
 
       game.camera.viewfinder.zoom = 3;

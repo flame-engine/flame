@@ -4,6 +4,12 @@ import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// Creates a [FlameGame] with a fixed 80x60 resolution camera, matching the
+/// canvas size used across the scale/drag event tests.
+FlameGame makeFixedResolutionGame() => FlameGame(
+  camera: CameraComponent.withFixedResolution(width: 80, height: 60),
+);
+
 mixin DragCounter on DragCallbacks {
   int dragStartEvent = 0;
   int dragUpdateEvent = 0;
