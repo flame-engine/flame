@@ -1,9 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/src/events/flame_game_mixins/scale_dispatcher.dart';
 import 'package:flutter/foundation.dart';
 
-/// This callback uses [ScaleDispatcher] to route events.
+/// Mixin for components that respond to scale (pinch/zoom/rotate) gestures.
 mixin ScaleCallbacks on Component {
   bool _isScaling = false;
 
@@ -26,6 +25,21 @@ mixin ScaleCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    ScaleDispatcher.addDispatcher(this);
+    MultiDragScaleDispatcher.addDispatcher(
+      this,
+      hasDrag: false,
+      hasScale: true,
+    );
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    MultiDragScaleDispatcher.removeDispatcher(
+      this,
+      hasDrag: false,
+      hasScale: true,
+    );
+    super.onRemove();
   }
 }

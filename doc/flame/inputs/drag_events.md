@@ -113,26 +113,41 @@ method must be implemented manually.
 If your component is a part of a larger hierarchy, then it will only receive drag events if its
 ancestors have all implemented the `containsLocalPoint` correctly.
 
+
+### isDragged
+
+The `DragCallbacks` mixin provides an `isDragged` getter that returns `true` while the component is
+actively being dragged. This is set to `true` at `onDragStart` and back to `false` at `onDragEnd`.
+It can be used, for example, to change the component's visual appearance during a drag.
+
+
+## Combining with ScaleCallbacks
+
+A component can use both `DragCallbacks` and `ScaleCallbacks` at the same time. When both mixins are
+present, single-finger gestures produce drag events and two-finger gestures produce both drag and
+scale events. This is useful for components that should be draggable with one finger and
+pinch-to-zoom or rotatable with two fingers.
+
 ```dart
-class MyComponent extends PositionComponent with DragCallbacks {
-  MyComponent({super.size});
+class InteractiveRectangle extends RectangleComponent
+    with ScaleCallbacks, DragCallbacks {
 
-  final _paint = Paint();
-  bool _isDragged = false;
-
-  @override
-  void onDragStart(DragStartEvent event) => _isDragged = true;
+  double _initialAngle = 0;
 
   @override
-  void onDragUpdate(DragUpdateEvent event) => position += event.delta;
+  void onDragUpdate(DragUpdateEvent event) {
+    position += event.localDelta;
+  }
 
   @override
-  void onDragEnd(DragEndEvent event) => _isDragged = false;
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    _initialAngle = angle;
+  }
 
   @override
-  void render(Canvas canvas) {
-    _paint.color = _isDragged? Colors.red : Colors.white;
-    canvas.drawRect(size.toRect(), _paint);
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    angle = _initialAngle + event.rotation;
   }
 }
 ```
