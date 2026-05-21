@@ -179,6 +179,6 @@ class UnmodifiableVector3 extends Vector3 {
   Float32List get storage => super.storage.asUnmodifiableView();
 }
 
-extension UnmodifieableVector3X on Vector3 {
+extension UnmodifieableVector3Extension on Vector3 {
   Vector3 asUnmodifiableView() => UnmodifiableVector3(x, y, z);
 }
