@@ -7,8 +7,7 @@ import 'package:flutter/rendering.dart';
 
 enum Direction {
   horizontal,
-  vertical
-  ;
+  vertical;
 
   /// A getter for returning the [LayoutAxis] whose [LayoutAxis.axisIndex] can
   /// be used with [Vector2]s to get the corresponding axis values.
@@ -328,7 +327,7 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   void _mainAxisPositioning({
     required List<PositionComponent> components,
 
-    /// The gap between [components]
+    /// The gap between `components`
     required double gap,
     required Direction direction,
 
