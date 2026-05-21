@@ -42,6 +42,7 @@ Supported platforms:
 ⚠️¹ Web support is experimental, see [Web support](#web-support-experimental)
 below.
 
+
 ## Prologue
 
 **STOP**, we know you are hyped up and want to start coding some funky 3D stuff
@@ -67,6 +68,7 @@ Documentation and tests might be lacking for quite a while because of the
 potential constant changes of the API. Where possible, we will try to provide
 in-code documentation and code examples to help developers but our main goal for
 now is to enable the usage of 3D rendering within a Flame ecosystem.
+
 
 ## Prerequisites
 
@@ -103,6 +105,7 @@ Also check our more advanced examples,
 [Collect the Donut](https://github.com/luanpotter/collect_the_donut) and
 [Defend the Donut](https://github.com/flame-engine/defend_the_donut).
 
+
 ## Web support (experimental)
 
 Flame 3D also runs on the web, though this is **even more experimental** than
@@ -115,6 +118,7 @@ following before your `runApp` call in `main.dart`:
 ```dart
 await GpuBackend.initialize();
 ```
+
 
 ## Building shaders
 
@@ -145,6 +149,7 @@ Including ones that `flame_3d` itself ships, such as
 You can check out the
 [default shaders](https://github.com/flame-engine/flame/tree/main/packages/flame_3d/shaders)
 if you want to have some examples.
+
 
 ## Contributing
 
