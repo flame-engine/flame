@@ -34,7 +34,7 @@ uniform Lights {
   float numLights;
   vec3 positions[MAX_LIGHTS];
   vec4 colors[MAX_LIGHTS];
-  float intensities[MAX_LIGHTS];
+  vec4 intensities[MAX_LIGHTS];
 } lights;
 
 // camera info
@@ -133,7 +133,7 @@ void main() {
     lo += processLight(
       lights.positions[i],
       lights.colors[i].rgb,
-      lights.intensities[i],
+      lights.intensities[i].x,
       baseColor, normal, viewDir, diffuse
     );
   }
