@@ -512,7 +512,7 @@ class _WebGpuColorTexture implements GpuTexture {
     final image = createImageFromImageBitmap(bitmap) as Image;
 
     // We retain a clone of the image as `createImageFromImageBitmap` is lazy.
-    // Once it has been recorded through `drawImageRect` we can dipose it.
+    // Once it has been recorded through `drawImageRect` we can dispose it.
     //
     // `clone` returns a ref-counted handle, so we are fully in control on when
     // it gets disposed.

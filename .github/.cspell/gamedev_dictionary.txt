@@ -64,6 +64,7 @@ uncapturederror # dumb webgpu javascript name
 viewports # plural of viewport
 WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
+webgpu # gpu standard for web browsers 
 WebP # WebP image format
 WGSL # WGSL shader language
 wgslbundle # WGSL shader bundle format
