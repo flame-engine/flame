@@ -2,7 +2,7 @@ import 'package:flame_3d/game.dart';
 import 'package:flutter/foundation.dart';
 
 /// {@template unmodifiable_vector_3}
-/// Extension of the standard [Vector3] class, but fully unmodfiable.
+/// Extension of the standard [Vector3] class, but fully unmodifiable.
 ///
 /// This class can be used as a regular [Vector3] class. However, if you do
 /// try to write values the calls will throw.
@@ -179,6 +179,6 @@ class UnmodifiableVector3 extends Vector3 {
   Float32List get storage => super.storage.asUnmodifiableView();
 }
 
-extension UnmodifieableVector3Extension on Vector3 {
+extension UnmodifiableVector3Extension on Vector3 {
   Vector3 asUnmodifiableView() => UnmodifiableVector3(x, y, z);
 }
