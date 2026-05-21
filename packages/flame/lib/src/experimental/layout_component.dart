@@ -2,8 +2,7 @@ import 'package:flame/components.dart';
 
 enum LayoutAxis {
   x(0),
-  y(1)
-  ;
+  y(1);
 
   const LayoutAxis(this.axisIndex);
 
