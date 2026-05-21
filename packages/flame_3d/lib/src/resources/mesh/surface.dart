@@ -2,9 +2,8 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 
 import 'package:flame_3d/game.dart';
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flame_3d/src/graphics/gpu_context_wrapper.dart';
-import 'package:flutter_gpu/gpu.dart' as gpu;
 
 enum PrimitiveType {
   triangles,
@@ -13,7 +12,7 @@ enum PrimitiveType {
 /// {@template surface}
 /// Base surface [Resource], it describes a single surface to be rendered.
 /// {@endtemplate}
-class Surface extends Resource<gpu.DeviceBuffer> {
+class Surface extends Resource<GpuBuffer> {
   /// {@macro surface}
   Surface({
     required List<Vertex> vertices,
@@ -71,15 +70,15 @@ class Surface extends Resource<gpu.DeviceBuffer> {
   }
 
   @override
-  gpu.DeviceBuffer createResource() {
+  GpuBuffer createResource() {
     final sizeInBytes = _vertices.lengthInBytes + _indices.lengthInBytes;
     resourceSizeInByes = sizeInBytes;
-    return GpuContextWrapper(gpu.gpuContext).createDeviceBuffer(
-        gpu.StorageMode.hostVisible,
-        sizeInBytes,
+    return GpuBackend.instance.createBuffer(
+        storageMode: GpuStorageMode.hostVisible,
+        sizeInBytes: sizeInBytes,
       )
-      ..overwrite(_vertices.asByteData())
-      ..overwrite(
+      ..write(_vertices.asByteData())
+      ..write(
         _indices.asByteData(),
         destinationOffsetInBytes: _vertices.lengthInBytes,
       );

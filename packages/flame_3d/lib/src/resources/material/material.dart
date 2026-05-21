@@ -2,13 +2,12 @@ import 'dart:ui';
 
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// {@template material}
 /// Base material [Resource], it holds the shader library that should be used
 /// for the material.
 /// {@endtemplate}
-abstract class Material extends Resource<gpu.RenderPipeline> {
+abstract class Material extends Resource<GpuPipeline> {
   /// {@macro material}
   Material({
     required Shader vertexShader,
@@ -20,10 +19,10 @@ abstract class Material extends Resource<gpu.RenderPipeline> {
     ..albedoColor = const Color(0xFFFF00FF);
 
   @override
-  gpu.RenderPipeline createResource() {
-    return gpu.gpuContext.createRenderPipeline(
-      _vertexShader.resource,
-      _fragmentShader.resource,
+  GpuPipeline createResource() {
+    return GpuBackend.instance.createPipeline(
+      vertexShader: _vertexShader.resource,
+      fragmentShader: _fragmentShader.resource,
     );
   }
 
