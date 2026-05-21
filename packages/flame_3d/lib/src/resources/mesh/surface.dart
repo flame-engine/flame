@@ -37,8 +37,19 @@ class Surface extends Resource<GpuBuffer> {
     ).buffer;
     _vertexCount = normalizedVertices.length;
 
-    _indices = Uint16List.fromList(indices).buffer;
+    final positions = Float32List(normalizedVertices.length * 3);
+    for (var i = 0; i < normalizedVertices.length; i++) {
+      final p = normalizedVertices[i].position;
+      positions[i * 3] = p.x;
+      positions[i * 3 + 1] = p.y;
+      positions[i * 3 + 2] = p.z;
+    }
+    this.positions = positions;
+
+    final indexList = Uint16List.fromList(indices);
+    _indices = indexList.buffer;
     _indexCount = indices.length;
+    this.indices = indexList;
 
     _calculateAabb(normalizedVertices);
   }
@@ -60,6 +71,14 @@ class Surface extends Resource<GpuBuffer> {
 
   int get indexCount => _indexCount;
   late int _indexCount;
+
+  /// The (x, y, z) positions of this surface's vertices, packed contiguously
+  /// as `[x0, y0, z0, x1, y1, z1, ...]`.
+  late final Float32List positions;
+
+  /// The triangle indices for this surface. Computed once during
+  /// construction.
+  late final Uint16List indices;
 
   int? resourceSizeInByes;
 
