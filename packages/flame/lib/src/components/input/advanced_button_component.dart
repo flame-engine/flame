@@ -258,8 +258,7 @@ enum ButtonState {
   hover,
   hoverAndSelected,
   disabled,
-  disabledAndSelected
-  ;
+  disabledAndSelected;
 
   const ButtonState();
 

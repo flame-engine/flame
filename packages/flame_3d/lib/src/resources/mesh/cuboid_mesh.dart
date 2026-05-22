@@ -10,7 +10,7 @@ class CuboidMesh extends Mesh {
     required Vector3 size,
     Material? material,
     bool useFaceNormals = true,
-  }) {
+  }) : size = size.asUnmodifiableView() {
     final Vector3(:x, :y, :z) = size / 2;
 
     Vertex vertex({
@@ -176,4 +176,7 @@ class CuboidMesh extends Mesh {
       ),
     );
   }
+
+  /// The full size of the cuboid along each axis.
+  final Vector3 size;
 }
