@@ -74,17 +74,14 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
     );
 
     if (hasScale) {
-      if (_drag.count == 1) {
+      if (_drag.count <= 2) {
+        // Re-baseline focal point and spans on the first two pointer-down
+        // events. For count==1 the span is zero; for count==2 the 2-finger
+        // midpoint differs from the single-finger initial position, so we
+        // reset both. For 3+ pointers the gesture is already in progress;
+        // leave the baseline unchanged.
         _updateScaleFields();
         _scale.initialFocalPoint = _scale.currentFocalPoint;
-        _scale.initialSpan = _scale.currentSpan;
-        _scale.initialHorizontalSpan = _scale.currentHorizontalSpan;
-        _scale.initialVerticalSpan = _scale.currentVerticalSpan;
-      } else if (_drag.count == 2) {
-        // Re-initialize span with actual 2-finger distance so the threshold
-        // check measures movement from this baseline, not from the zero span
-        // of the single-pointer state.
-        _updateScaleFields();
         _scale.initialSpan = _scale.currentSpan;
         _scale.initialHorizontalSpan = _scale.currentHorizontalSpan;
         _scale.initialVerticalSpan = _scale.currentVerticalSpan;
@@ -121,7 +118,7 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
         _updateLines();
         _endScaleIfNeeded();
         // No need to reset initialSpan/initialLine here: addAllowedPointer
-        // re-initialises them whenever a new two-finger gesture begins.
+        // re-initializes them whenever a new two-finger gesture begins.
       }
     } else if (event is! PointerDownEvent) {
       assert(false);
@@ -230,12 +227,15 @@ class MultiDragScaleGestureRecognizer extends GestureRecognizer {
       return false;
     }
 
+    final kind = _drag.pointers.values.first.kind;
     final spanDelta = (_scale.currentSpan - _scale.initialSpan).abs();
     final scaleFactor = _scale.scaleFactor;
-    final kind = _drag.pointers.values.first.kind;
+    final focalDelta =
+        (_scale.currentFocalPoint! - _scale.initialFocalPoint!).distance;
 
     if (spanDelta > computeScaleSlop(kind) ||
-        math.max(scaleFactor, 1.0 / scaleFactor) > scaleThreshold) {
+        math.max(scaleFactor, 1.0 / scaleFactor) > scaleThreshold ||
+        focalDelta > computePanSlop(kind, gestureSettings)) {
       for (final state in _drag.pointers.values) {
         if (!state._resolved) {
           state._arenaEntry?.resolve(GestureDisposition.accepted);
@@ -531,7 +531,7 @@ class _DragPointerState {
       if (_drag != null && !recognizer.hasScale) {
         _drag!.update(
           DragUpdateDetails(
-            globalPosition: initialPosition + _pendingDelta,
+            globalPosition: initialPosition,
             delta: _pendingDelta,
           ),
         );

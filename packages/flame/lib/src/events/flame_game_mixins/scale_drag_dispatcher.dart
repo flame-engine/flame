@@ -35,7 +35,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
 
   // Reference counts rather than booleans so that enableDrag/enableScale can
   // be called before onMount (when _recognizer is null). onMount uses these
-  // counts to initialise the recognizer flags.
+  // counts to initialize the recognizer flags.
   int _dragCount = 0;
   int _scaleCount = 0;
   MultiDragScaleGestureRecognizer? _recognizer;
