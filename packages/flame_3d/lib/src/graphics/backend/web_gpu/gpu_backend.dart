@@ -17,10 +17,10 @@ base class GpuBackend extends base.GpuBackend {
     : _queue = _device.queue,
       _defaultSampler = _device.createSampler(
         GPUSamplerDescriptor(
-          magFilter: 'linear',
-          minFilter: 'linear',
-          addressModeU: 'repeat',
-          addressModeV: 'repeat',
+          magFilter: 'nearest',
+          minFilter: 'nearest',
+          addressModeU: 'clamp-to-edge',
+          addressModeV: 'clamp-to-edge',
         ),
       ),
       _zeroBuffer = _device.createBuffer(
