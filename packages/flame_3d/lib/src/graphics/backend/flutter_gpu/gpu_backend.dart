@@ -11,7 +11,10 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// A [base.GpuBackend] implemented on top of `flutter_gpu`.
 base class GpuBackend extends base.GpuBackend {
-  static Future<void> initialize() => Future.syncValue(create() as Null);
+  static Future<void> initialize() {
+    create();
+    return Future.syncValue(null);
+  }
 
   static GpuBackend? create() => GpuBackend();
 
