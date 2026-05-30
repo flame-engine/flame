@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// {@template shader}
 /// A shader [Resource] that represents a compiled shader program and the
@@ -14,10 +13,10 @@ import 'package:flutter_gpu/gpu.dart' as gpu;
 /// `'Lights.positions[0]'`, `'someColor'`) and are automatically packed
 /// into GPU buffers using shader reflection for layout.
 ///
-/// Samplers are auto-detected at compile time via [gpu.UniformSlot.sizeInBytes]
+/// Samplers are auto-detected at compile time via [GpuUniformSlot.sizeInBytes]
 /// returning `null` — no need to declare them separately.
 /// {@endtemplate}
-class Shader extends Resource<gpu.Shader> {
+class Shader extends Resource<GpuShader> {
   /// Load a [Shader] from asset.
   Shader.fromAsset(
     String assetName, {
@@ -41,13 +40,13 @@ class Shader extends Resource<gpu.Shader> {
   /// Names of all uniform slots — both struct blocks and samplers.
   ///
   /// The type of each slot is auto-detected at compile time:
-  /// struct blocks have a non-null [gpu.UniformSlot.sizeInBytes],
+  /// struct blocks have a non-null [GpuUniformSlot.sizeInBytes],
   /// samplers return `null`.
   final List<String> slots;
 
-  final gpu.Shader Function(String key) _getShader;
+  final GpuShader Function(String key) _getShader;
 
-  final Map<String, gpu.UniformSlot> _slots = {};
+  final Map<String, GpuUniformSlot> _slots = {};
   final Map<String, _SlotBinding> _bindings = {};
 
   /// Set a [Texture] at the given [key].
@@ -110,7 +109,7 @@ class Shader extends Resource<gpu.Shader> {
   }
 
   @override
-  gpu.Shader createResource() {
+  GpuShader createResource() {
     // Always clear up old data to prevent memory leaks.
     _slots.clear();
     _bindings.clear();
@@ -168,23 +167,15 @@ class Shader extends Resource<gpu.Shader> {
 
   static final Map<Color, Float32List> _colorBytesCache = {};
 
-  static gpu.Shader Function(String key) _assetLibrary(String assetName) {
-    return (key) {
-      final shader = gpu.ShaderLibrary.fromAsset(assetName)![key];
-      if (shader == null) {
-        throw StateError(
-          'Shader "$key" not found in library "$assetName"',
-        );
-      }
-      return shader;
-    };
+  static GpuShader Function(String key) _assetLibrary(String assetName) {
+    return (key) => GpuBackend.instance.loadShaderLibrary(assetName)[key];
   }
 }
 
 sealed class _SlotBinding<T> {
   _SlotBinding(this.slot);
 
-  final gpu.UniformSlot slot;
+  final GpuUniformSlot slot;
 
   T get resource;
 }

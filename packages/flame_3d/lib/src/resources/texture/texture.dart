@@ -1,14 +1,13 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d/resources.dart';
-import 'package:flame_3d/src/graphics/gpu_context_wrapper.dart';
-import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// {@template texture}
 /// Base texture [Resource], represents an image/texture on the GPU.
 /// {@endtemplate}
-class Texture extends Resource<gpu.Texture> {
+class Texture extends Resource<GpuTexture> {
   final ByteData sourceData;
   final int width;
   final int height;
@@ -23,18 +22,18 @@ class Texture extends Resource<gpu.Texture> {
   });
 
   @override
-  gpu.Texture createResource() {
-    return GpuContextWrapper(gpu.gpuContext).createTexture(
-      gpu.StorageMode.hostVisible,
-      width,
-      height,
+  GpuTexture createResource() {
+    return GpuBackend.instance.createTexture(
+      storageMode: GpuStorageMode.hostVisible,
+      width: width,
+      height: height,
       format: switch (format) {
-        PixelFormat.rgba8888 => gpu.PixelFormat.r8g8b8a8UNormInt,
-        PixelFormat.bgra8888 => gpu.PixelFormat.b8g8r8a8UNormInt,
-        PixelFormat.rgbaFloat32 => gpu.PixelFormat.r32g32b32a32Float,
+        PixelFormat.rgba8888 => GpuPixelFormat.rgba8888,
+        PixelFormat.bgra8888 => GpuPixelFormat.bgra8888,
+        PixelFormat.rgbaFloat32 => GpuPixelFormat.rgbaFloat32,
         _ => throw UnsupportedError('Unsupported pixel format: $format'),
       },
-    )..overwrite(sourceData);
+    )..write(sourceData);
   }
 
   Image toImage() => resource.asImage();

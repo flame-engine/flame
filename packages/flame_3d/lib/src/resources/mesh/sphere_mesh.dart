@@ -9,7 +9,7 @@ import 'package:flame_3d/resources.dart';
 class SphereMesh extends Mesh {
   /// {@macro sphere_mesh}
   SphereMesh({
-    required double radius,
+    required this.radius,
     int segments = 64,
     Material? material,
   }) {
@@ -56,4 +56,7 @@ class SphereMesh extends Mesh {
       ),
     );
   }
+
+  /// The radius of the sphere.
+  final double radius;
 }

@@ -100,85 +100,67 @@ method must be implemented manually.
 If your component is a part of a larger hierarchy, then it will only receive scale events if its
 ancestors have all implemented the `containsLocalPoint` correctly.
 
-```dart
-class ScaleOnlyRectangle extends RectangleComponent with ScaleCallbacks {
-  ScaleOnlyRectangle({
-    required Vector2 position,
-    required Vector2 size,
-    Color color = Colors.blue,
-    Anchor anchor = Anchor.center,
-  }) : super(
-         position: position,
-         size: size,
-         anchor: anchor,
-         paint: Paint()..color = color,
-       );
 
+### isScaling
+
+The `ScaleCallbacks` mixin provides an `isScaling` getter that returns `true` while the component is
+actively being scaled. This is set to `true` at the start of `onScaleStart` and back to `false` at
+`onScaleEnd`. It can be used, for example, to change the component's visual appearance during a scale
+gesture.
+
+
+### scaleThreshold
+
+Scale events are not fired immediately when two fingers touch the screen. Instead, a small movement
+threshold must be crossed first. By default, the fingers must spread or pinch by at least 5% (a
+scale factor of 1.05) before `onScaleStart` is called. This prevents accidental scale gestures when
+the user simply places two fingers without intending to scale.
+
+The threshold can be changed by accessing the `MultiDragScaleDispatcher` from your game and setting
+`scaleThreshold` before any `ScaleCallbacks` component mounts:
+
+```dart
+class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final text = TextComponent(
-      text: 'scale',
-      textRenderer: TextPaint(
-        style: const TextStyle(fontSize: 25, color: Colors.white),
-      ),
-      position: size / 2,
-      anchor: Anchor.center,
-    );
-    add(text);
+    final dispatcher = MultiDragScaleDispatcher()..scaleThreshold = 1.02;
+    registerKey(const MultiDragScaleDispatcherKey(), dispatcher);
+    add(dispatcher);
+  }
+}
+```
+
+A lower value makes the recognizer more sensitive (reacts to smaller pinch movements), while a
+higher value requires a more deliberate gesture before scale events fire.
+
+
+## Combining with DragCallbacks
+
+A component can use both `ScaleCallbacks` and `DragCallbacks` at the same time. When both mixins are
+present, single-finger gestures produce drag events and two-finger gestures produce both scale and
+drag events. This is useful for components that should be draggable with one finger and
+pinch-to-zoom or rotatable with two fingers.
+
+```dart
+class InteractiveRectangle extends RectangleComponent
+    with ScaleCallbacks, DragCallbacks {
+
+  double _initialAngle = 0;
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    position += event.localDelta;
   }
 
-  bool isScaling = false;
-  double initialAngle = 0;
-  Vector2 initialScale = Vector2.all(1);
-  double lastScale = 1.0;
-
-  /// ScaleCallbacks overrides
   @override
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
-    isScaling = true;
-    initialAngle = angle;
-    initialScale = scale;
-    lastScale = 1.0;
-    debugPrint('Scale started at ${event.devicePosition}');
+    _initialAngle = angle;
   }
 
   @override
   void onScaleUpdate(ScaleUpdateEvent event) {
-    super.onScaleUpdate(event);
-    // scale rectangle size by pinch
-    angle = initialAngle + event.rotation;
-    // delta scale since last frame
-    if (lastScale == 0) {
-      return;
-    }
-    final scaleDelta = event.scale / lastScale;
-    lastScale = event.scale; // update for next frame
-
-    // apply delta gently
-    scale *= sqrt(scaleDelta);
-
-    // clamp
-    scale.clamp(Vector2.all(0.8), Vector2.all(3));
-  }
-
-  @override
-  void onScaleEnd(ScaleEndEvent event) {
-    super.onScaleEnd(event);
-    isScaling = false;
-    debugPrint('Scale ended with velocity ${event.velocity}');
+    angle = _initialAngle + event.rotation;
   }
 }
-
 ```
-
-
-## Scale and drag gestures interactions
-
-A multi drag gesture can sometimes look exactly like a scale gesture.
-This is the case for instance, if you try to move two components toward each other at the same time.
-If you added both a component using ScaleCallbacks and
-one using DragCallbacks (or one using both), this issue will arise.
-The Scale gesture will win over the drag gesture
-and prevent your user to perform the multi drag gesture as they wanted. This is a limitation
-with the current implementation that devs need to be aware of.

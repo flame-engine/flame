@@ -38,6 +38,7 @@ mixin HasWorldReference<T extends World> on Component {
 
   @override
   void onRemove() {
+    super.onRemove();
     _world = null;
   }
 }

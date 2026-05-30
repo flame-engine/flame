@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 ///
 /// This mixin is the replacement of the Draggable mixin.
 ///
-/// This callback uses [MultiDragDispatcher] to route events.
+/// This callback uses [MultiDragScaleDispatcher] to route events.
 mixin DragCallbacks on Component {
   bool _isDragged = false;
 
@@ -63,6 +63,21 @@ mixin DragCallbacks on Component {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    MultiDragDispatcher.addDispatcher(this);
+    MultiDragScaleDispatcher.addDispatcher(
+      this,
+      hasDrag: true,
+      hasScale: false,
+    );
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    MultiDragScaleDispatcher.removeDispatcher(
+      this,
+      hasDrag: true,
+      hasScale: false,
+    );
+    super.onRemove();
   }
 }

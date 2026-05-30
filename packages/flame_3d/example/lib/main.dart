@@ -1,10 +1,14 @@
 import 'package:flame/game.dart';
+import 'package:flame_3d/graphics.dart';
 import 'package:flame_3d_example/commands/commands.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 import 'package:flame_console/flame_console.dart';
 import 'package:flutter/widgets.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GpuBackend.initialize(); // Optional but some backends might require it.
+
   runApp(
     GameWidget.controlled(
       gameFactory: ExampleGame3D.new,
