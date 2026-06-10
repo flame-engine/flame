@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_drag_dispatcher.dart';
+import 'package:flame/events.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
@@ -85,7 +85,7 @@ void main() {
         await game.add(joystick);
         await game.ready();
         expect(joystick.knob!.position, closeToVector(Vector2(10, 10)));
-        final dragDispatcher = game.firstChild<MultiDragDispatcher>()!;
+        final dragDispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
         // Start dragging the joystick
         dragDispatcher.handleDragStart(
           1,
@@ -131,7 +131,7 @@ void main() {
         );
         await game.add(joystick);
         await game.ready();
-        final dragDispatcher = game.firstChild<MultiDragDispatcher>()!;
+        final dragDispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
 
         dragDispatcher.handleDragStart(
           1,

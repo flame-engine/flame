@@ -10,6 +10,7 @@ works, but adapted for Flame's component tree.
 
 - [Tap Events](tap_events.md)
 - [Drag Events](drag_events.md)
+- [Scale Events](scale_events.md)
 - [Long Press Events](long_press_events.md)
 - [Gesture Input](gesture_input.md)
 - [Keyboard Input](keyboard_input.md)
@@ -22,6 +23,7 @@ works, but adapted for Flame's component tree.
 
 Tap Events                <tap_events.md>
 Drag Events               <drag_events.md>
+Scale Events              <scale_events.md>
 Long Press Events         <long_press_events.md>
 Gesture Input             <gesture_input.md>
 Keyboard Input            <keyboard_input.md>

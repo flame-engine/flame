@@ -21,4 +21,5 @@ jobs:
       - uses: bluefireteam/melos-action@v3
         with:
           publish: true
+          create-release: true
 

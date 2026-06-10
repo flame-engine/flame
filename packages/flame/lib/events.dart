@@ -13,18 +13,20 @@ export 'src/events/component_mixins/secondary_tap_callbacks.dart'
 export 'src/events/component_mixins/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/component_mixins/tertiary_tap_callbacks.dart'
     show TertiaryTapCallbacks;
+export 'src/events/deprecated.dart'
+    show MultiDragDispatcher, MultiDragDispatcherKey;
 export 'src/events/flame_game_mixins/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
 export 'src/events/flame_game_mixins/long_press_dispatcher.dart'
     show LongPressDispatcher, LongPressDispatcherKey;
-export 'src/events/flame_game_mixins/multi_drag_dispatcher.dart'
-    show MultiDragDispatcher, MultiDragDispatcherKey;
 export 'src/events/flame_game_mixins/multi_tap_dispatcher.dart'
     show MultiTapDispatcher, MultiTapDispatcherKey;
 export 'src/events/flame_game_mixins/non_primary_tap_dispatcher.dart'
     show NonPrimaryTapDispatcher, NonPrimaryTapDispatcherKey;
 export 'src/events/flame_game_mixins/pointer_move_dispatcher.dart'
     show PointerMoveDispatcher, MouseMoveDispatcherKey;
+export 'src/events/flame_game_mixins/scale_drag_dispatcher.dart'
+    show MultiDragScaleDispatcher, MultiDragScaleDispatcherKey;
 export 'src/events/flame_game_mixins/scroll_dispatcher.dart'
     show ScrollDispatcher, ScrollDispatcherKey;
 export 'src/events/game_mixins/multi_touch_drag_detector.dart'
