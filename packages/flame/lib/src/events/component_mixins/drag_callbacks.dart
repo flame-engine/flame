@@ -54,10 +54,16 @@ mixin DragCallbacks on Component {
 
   /// The drag was cancelled.
   ///
-  /// This is a very rare event, so we provide a default implementation that
-  /// converts it into an [onDragEnd] event.
+  /// Unlike [onDragEnd], a cancellation is not the natural end of a gesture: it
+  /// happens when the drag is interrupted (another recognizer wins the gesture
+  /// arena, a second pointer triggers a scale takeover, a system event, etc.),
+  /// so it carries no meaningful velocity. The default implementation only
+  /// resets the drag state. Override this and call [onDragEnd] yourself if you
+  /// want a cancellation handled identically to a natural drag end.
   @mustCallSuper
-  void onDragCancel(DragCancelEvent event) => onDragEnd(event.toDragEnd());
+  void onDragCancel(DragCancelEvent event) {
+    _isDragged = false;
+  }
 
   @override
   @mustCallSuper
