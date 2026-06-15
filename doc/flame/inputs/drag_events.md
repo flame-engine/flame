@@ -87,8 +87,11 @@ position associated with this event.
 
 ### onDragCancel
 
-The precise semantics when this event occurs is not clear, so we provide a default implementation
-which simply converts this event into an `onDragEnd`.
+This event is fired when the drag gesture is interrupted before it ends naturally, for example when
+another gesture recognizer wins the gesture arena or a second pointer triggers a scale takeover.
+Unlike `onDragEnd` it carries no velocity information. The default implementation simply resets the
+drag state; override it and call `onDragEnd` yourself if you want a cancellation handled identically
+to a natural drag end.
 
 
 ## Mixins
