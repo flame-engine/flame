@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 
 class NineTileBoxExample extends FlameGame
-    with TapCallbacks, DoubleTapDetector {
+    with TapCallbacks, DoubleTapCallbacks {
   static const String description = '''
     If you want to create a background for something that can stretch you can
     use the `NineTileBox` which is showcased here.\n\n
@@ -33,7 +33,7 @@ class NineTileBoxExample extends FlameGame
   }
 
   @override
-  void onDoubleTap() {
+  void onDoubleTapDown(_) {
     nineTileBoxComponent.scale.scale(0.8);
   }
 }
