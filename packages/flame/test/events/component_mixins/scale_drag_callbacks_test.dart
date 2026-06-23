@@ -117,12 +117,13 @@ void main() {
       );
 
       expect(component.dragCancelEvent, equals(1));
-      expect(component.dragEndEvent, equals(1));
+      // onDragCancel no longer delegates to onDragEnd.
+      expect(component.dragEndEvent, equals(0));
       expect(component.isDragged, isFalse);
 
       dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
       expect(component.dragCancelEvent, equals(1));
-      expect(component.dragEndEvent, equals(1));
+      expect(component.dragEndEvent, equals(0));
     },
   );
 
@@ -188,13 +189,13 @@ void main() {
 
       dispatcher.onDragCancel(DragCancelEvent(1));
       expect(component.dragCancelEvent, equals(1));
-      // onDragCancel delegates to onDragEnd internally
-      expect(component.dragEndEvent, equals(1));
+      // onDragCancel no longer delegates to onDragEnd.
+      expect(component.dragEndEvent, equals(0));
       expect(component.isDragged, isFalse);
 
       // record removed after cancel; subsequent end for same pointer is a no-op
       dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
-      expect(component.dragEndEvent, equals(1));
+      expect(component.dragEndEvent, equals(0));
     },
   );
 
