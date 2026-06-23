@@ -4,7 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
 class TimerComponentExample extends FlameGame
-    with TapCallbacks, DoubleTapDetector {
+    with TapCallbacks, DoubleTapCallbacks {
   static const String description = '''
     This examples showcases the `TimerComponent`.\n\n
     Tap to start a timer that lives for one second and double tap to start
@@ -22,7 +22,7 @@ class TimerComponentExample extends FlameGame
   }
 
   @override
-  void onDoubleTap() {
+  void onDoubleTapDown(_) {
     doubleTapComponent?.removeFromParent();
     doubleTapComponent = RenderedTimeComponent(5, yOffset: 180);
     add(doubleTapComponent!);
