@@ -1,7 +1,5 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/events/messages/drag_end_event.dart';
-import 'package:flame/src/events/messages/drag_update_event.dart';
-import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flutter/gestures.dart';
 
 /// The event propagated through the Flame engine when the user starts a drag

@@ -1,5 +1,5 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/events/messages/displacement_event.dart';
 import 'package:flutter/gestures.dart';
 
 /// Event propagated through the Flame engine when the user updates a scale

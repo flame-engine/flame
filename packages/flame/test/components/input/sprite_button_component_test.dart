@@ -1,10 +1,10 @@
 import 'dart:ui';
 
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/sprite_group_component.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame/src/sprite_sheet.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';

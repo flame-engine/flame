@@ -1,9 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/flame_game_mixins/long_press_dispatcher.dart';
-import 'package:flame/src/events/messages/long_press_cancel_event.dart';
-import 'package:flame/src/events/messages/long_press_end_event.dart';
-import 'package:flame/src/events/messages/long_press_move_update_event.dart';
-import 'package:flame/src/events/messages/long_press_start_event.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 
 /// This mixin can be added to a [Component] allowing it to receive

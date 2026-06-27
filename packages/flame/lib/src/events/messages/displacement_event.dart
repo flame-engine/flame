@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/messages/location_context_event.dart';
+import 'package:flame/events.dart';
 import 'package:flame/src/game/game.dart';
 
 /// Location context for the Displacement Event.
