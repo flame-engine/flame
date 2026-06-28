@@ -1,4 +1,4 @@
-import 'package:flame/src/components/core/component.dart';
+import 'package:flame/components.dart';
 import 'package:meta/meta.dart';
 
 /// Base class for a variety of input events, such as tap events, drag events,

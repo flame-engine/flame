@@ -1,5 +1,5 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flutter/gestures.dart';
 
 /// The event propagated through the Flame engine when a long press gesture

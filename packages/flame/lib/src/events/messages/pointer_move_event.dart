@@ -1,6 +1,6 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/messages/position_event.dart';
 import 'package:flutter/services.dart';
 
 class PointerMoveEvent extends PositionEvent<PointerHoverEvent> {

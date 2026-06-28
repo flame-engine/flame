@@ -1,11 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/events/flame_drag_adapter.dart';
-import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
-import 'package:flame/src/events/interfaces/scale_listener.dart';
-import 'package:flame/src/events/multi_drag_scale_recognizer.dart';
 import 'package:flame/src/events/tagged_component.dart';
-import 'package:flame/src/game/flame_game.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';

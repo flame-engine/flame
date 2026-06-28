@@ -1,12 +1,7 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/component_mixins/long_press_callbacks.dart';
-import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
-import 'package:flame/src/events/messages/long_press_cancel_event.dart';
-import 'package:flame/src/events/messages/long_press_end_event.dart';
-import 'package:flame/src/events/messages/long_press_move_update_event.dart';
-import 'package:flame/src/events/messages/long_press_start_event.dart';
+import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 import 'package:flame/src/events/tagged_component.dart';
-import 'package:flame/src/game/flame_game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 

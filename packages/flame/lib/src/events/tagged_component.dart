@@ -1,6 +1,5 @@
-import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
-import 'package:flame/src/events/flame_game_mixins/scale_drag_dispatcher.dart';
+import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// [TaggedComponent] is a utility class that represents a pair of a component

@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/messages/location_context_event.dart';
-import 'package:flame/src/game/game.dart';
+import 'package:flame/events.dart';
+import 'package:flame/game.dart';
 
 /// Base class for events that originate at some point on the screen. These
 /// include: tap events, scale events, etc.

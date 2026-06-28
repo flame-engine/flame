@@ -1,4 +1,4 @@
-import 'package:flame/src/events/interfaces/multi_drag_listener.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 

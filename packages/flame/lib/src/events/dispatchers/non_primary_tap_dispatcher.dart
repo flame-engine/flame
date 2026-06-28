@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_game_mixins/dispatcher.dart';
 import 'package:flutter/gestures.dart';
 
 class NonPrimaryTapDispatcherKey implements ComponentKey {

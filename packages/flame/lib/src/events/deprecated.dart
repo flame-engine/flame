@@ -1,4 +1,4 @@
-import 'package:flame/src/events/flame_game_mixins/scale_drag_dispatcher.dart';
+import 'package:flame/src/events/dispatchers/multi_drag_scale_dispatcher.dart';
 
 @Deprecated('Use MultiDragScaleDispatcher instead.')
 typedef MultiDragDispatcher = MultiDragScaleDispatcher;

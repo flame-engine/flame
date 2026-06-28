@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/src/events/messages/event.dart';
+import 'package:flame/events.dart';
 import 'package:meta/meta.dart';
 
 /// A base event that includes a location context, i.e. a position or set of
