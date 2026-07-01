@@ -54,6 +54,17 @@ class TextPaint extends TextRenderer {
     return _textPainterCache.getValue(text)!;
   }
 
+  @override
+  TextRenderer copyWithOpacity(double opacity) {
+    return copyWith(
+      (style) {
+        return style.copyWith(
+          color: style.color?.withValues(alpha: opacity),
+        );
+      },
+    );
+  }
+
   TextPaint copyWith(
     TextStyle Function(TextStyle) transform, {
     TextDirection? textDirection,
@@ -96,4 +107,7 @@ class TextPaint extends TextRenderer {
     }
     return null;
   }
+
+  @override
+  double get opacity => style.color?.a ?? 0;
 }

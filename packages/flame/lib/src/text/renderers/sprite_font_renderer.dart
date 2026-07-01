@@ -56,4 +56,14 @@ class SpriteFontRenderer extends TextRenderer {
       ),
     );
   }
+
+  @override
+  TextRenderer copyWithOpacity(double opacity) {
+    // TODO(erickzanardo): Implement this, keeping as noop for now
+    return this;
+  }
+
+  @override
+  // TODO(erickzanardo): Implement this, keeping as noop for now
+  double get opacity => 1;
 }

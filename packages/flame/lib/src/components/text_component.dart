@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
-class TextComponent<T extends TextRenderer> extends PositionComponent {
+class TextComponent<T extends TextRenderer> extends PositionComponent
+    implements OpacityProvider {
   TextComponent({
     String? text,
     T? textRenderer,
@@ -51,5 +53,15 @@ class TextComponent<T extends TextRenderer> extends PositionComponent {
   @override
   void render(Canvas canvas) {
     _textElement.draw(canvas);
+  }
+
+  @override
+  set opacity(double opacity) {
+    textRenderer = textRenderer.copyWithOpacity(opacity) as T;
+  }
+
+  @override
+  double get opacity {
+    return textRenderer.opacity;
   }
 }

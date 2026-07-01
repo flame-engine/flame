@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
@@ -81,6 +82,20 @@ class TextExample extends FlameGame {
             timePerChar: 0.005,
             margins: EdgeInsets.fromLTRB(10, 10, 10, 10),
           ),
+        ),
+        TextComponent(
+          text: 'I fade in and fade out',
+          anchor: Anchor.topRight,
+          position: Vector2(size.x - 50, 20),
+          children: [
+            SequenceEffect(
+              [
+                OpacityEffect.fadeIn(LinearEffectController(1.5)),
+                OpacityEffect.fadeOut(LinearEffectController(1.5)),
+              ],
+              infinite: true,
+            ),
+          ],
         ),
       ],
     );

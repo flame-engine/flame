@@ -11,6 +11,10 @@ abstract class TextRenderer {
     return format(text).metrics;
   }
 
+  TextRenderer copyWithOpacity(double opacity);
+
+  double get opacity;
+
   void render(
     Canvas canvas,
     String text,
