@@ -208,7 +208,23 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     var offset = 0;
 
     while (offset < text.length) {
-      final range = textPainter.getLineBoundary(TextPosition(offset: offset));
+      var range = textPainter.getLineBoundary(TextPosition(offset: offset));
+      // Flutter web sometimes report the range on the previous page instead of
+      // the following. This is probably a bug cause by the
+      // JS floating number inaccuracies.
+      //
+      // We have an issue tracking that down on Flutter itself:
+      // https://github.com/flutter/flutter/issues/188874
+      //
+      // This code is a workaround, that captures when such we fall
+      // in that issue and tries to get the next page.
+      if (range.start < offset) {
+        range = textPainter.getLineBoundary(
+          TextPosition(
+            offset: offset + 1,
+          ),
+        );
+      }
       var lineText = text.substring(range.start, range.end);
 
       // Don't include the trailing newline character in the line text
