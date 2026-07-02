@@ -194,7 +194,7 @@ mixin HasPaint<T extends Object> on Component
     );
   }
 
-  /// Can be overriden to react when the [paint] object
+  /// Can be overridden to react when the [paint] object
   /// changed!
   ///
   /// Default implementation is a no-op.

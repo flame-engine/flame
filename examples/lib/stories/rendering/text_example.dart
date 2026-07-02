@@ -146,7 +146,7 @@ final _shaded = TextPaint(
 );
 
 class MyTextBox extends TextBoxComponent {
-  late Paint paint;
+  late Paint bgPaint;
   late Rect bgRect;
 
   MyTextBox(
@@ -168,25 +168,25 @@ class MyTextBox extends TextBoxComponent {
 
   @override
   Future<void> onLoad() {
-    paint = Paint();
+    bgPaint = Paint();
     bgRect = Rect.fromLTWH(0, 0, width, height);
     size.addListener(() {
       bgRect = Rect.fromLTWH(0, 0, width, height);
     });
 
-    paint.color = Colors.white10;
+    bgPaint.color = Colors.white10;
     return super.onLoad();
   }
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(bgRect, paint);
+    canvas.drawRect(bgRect, bgPaint);
     super.render(canvas);
   }
 }
 
 class MyScrollTextBox extends ScrollTextBoxComponent {
-  late Paint paint;
+  late Paint bgPaint;
   late Rect backgroundRect;
 
   MyScrollTextBox(
@@ -199,16 +199,16 @@ class MyScrollTextBox extends ScrollTextBoxComponent {
 
   @override
   FutureOr<void> onLoad() {
-    paint = Paint();
+    bgPaint = Paint();
     backgroundRect = Rect.fromLTWH(0, 0, width, height);
 
-    paint.color = Colors.white10;
+    bgPaint.color = Colors.white10;
     return super.onLoad();
   }
 
   @override
   void render(Canvas canvas) {
-    canvas.drawRect(backgroundRect, paint);
+    canvas.drawRect(backgroundRect, bgPaint);
     super.render(canvas);
   }
 }
