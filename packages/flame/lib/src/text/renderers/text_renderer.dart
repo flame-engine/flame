@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/text.dart';
@@ -11,9 +13,7 @@ abstract class TextRenderer {
     return format(text).metrics;
   }
 
-  TextRenderer copyWithOpacity(double opacity);
-
-  double get opacity;
+  TextRenderer copyWithPaint(Paint paint);
 
   void render(
     Canvas canvas,

@@ -1,13 +1,12 @@
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 class TextComponent<T extends TextRenderer> extends PositionComponent
-    implements OpacityProvider {
+    with HasPaint {
   TextComponent({
     String? text,
     T? textRenderer,
@@ -42,9 +41,13 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
 
   late InlineTextElement _textElement;
 
+  void _updateElement() {
+    _textElement = _textRenderer.format(_text);
+  }
+
   @internal
   void updateBounds() {
-    _textElement = _textRenderer.format(_text);
+    _updateElement();
     final measurements = _textElement.metrics;
     _textElement.translate(0, measurements.ascent);
     size.setValues(measurements.width, measurements.height);
@@ -56,12 +59,8 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
   }
 
   @override
-  set opacity(double opacity) {
-    textRenderer = textRenderer.copyWithOpacity(opacity) as T;
-  }
-
-  @override
-  double get opacity {
-    return textRenderer.opacity;
+  void onChanged() {
+    _textRenderer = _textRenderer.copyWithPaint(paint) as T;
+    _updateElement();
   }
 }

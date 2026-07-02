@@ -90,10 +90,27 @@ class TextExample extends FlameGame {
           children: [
             SequenceEffect(
               [
-                OpacityEffect.fadeIn(LinearEffectController(1.5)),
-                OpacityEffect.fadeOut(LinearEffectController(1.5)),
+                OpacityEffect.fadeOut(
+                  LinearEffectController(1.5),
+                ),
+                OpacityEffect.fadeIn(
+                  LinearEffectController(1.5),
+                ),
               ],
               infinite: true,
+            ),
+          ],
+        ),
+        TextComponent(
+          text: 'I change my color!',
+          anchor: Anchor.topRight,
+          position: Vector2(size.x - 50, 50),
+          children: [
+            ColorEffect(
+              Colors.blue,
+              InfiniteEffectController(
+                LinearEffectController(1.5),
+              ),
             ),
           ],
         ),

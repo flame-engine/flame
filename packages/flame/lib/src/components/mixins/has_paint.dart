@@ -113,6 +113,7 @@ mixin HasPaint<T extends Object> on Component
   /// Shortcut for changing the color of the paint.
   void setColor(Color color, {T? paintId}) {
     getPaint(paintId).color = color;
+    onChanged();
   }
 
   /// Applies a color filter to the paint which will make
@@ -120,6 +121,7 @@ mixin HasPaint<T extends Object> on Component
   /// tinted with the given color.
   void tint(Color color, {T? paintId}) {
     getPaint(paintId).colorFilter = ColorFilter.mode(color, BlendMode.srcATop);
+    onChanged();
   }
 
   @override
@@ -131,6 +133,7 @@ mixin HasPaint<T extends Object> on Component
     for (final paint in _paints.values) {
       paint.color = paint.color.withValues(alpha: value);
     }
+    onChanged();
   }
 
   @override
@@ -158,6 +161,7 @@ mixin HasPaint<T extends Object> on Component
         layerPaint.colorFilter = filter;
       }
     }
+    onChanged();
   }
 
   /// Creates an [OpacityProvider] for given [paintId] and can be used as
@@ -189,6 +193,12 @@ mixin HasPaint<T extends Object> on Component
       includeLayers: includeLayers,
     );
   }
+
+  /// Can be overriden to react when the [paint] object
+  /// changed!
+  ///
+  /// Default implementation is a no-op.
+  void onChanged() {}
 }
 
 class _ProxyOpacityProvider<T extends Object> implements OpacityProvider {

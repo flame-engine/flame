@@ -55,11 +55,11 @@ class TextPaint extends TextRenderer {
   }
 
   @override
-  TextRenderer copyWithOpacity(double opacity) {
+  TextRenderer copyWithPaint(Paint paint) {
     return copyWith(
       (style) {
         return style.copyWith(
-          color: style.color?.withValues(alpha: opacity),
+          foreground: paint,
         );
       },
     );
@@ -107,7 +107,4 @@ class TextPaint extends TextRenderer {
     }
     return null;
   }
-
-  @override
-  double get opacity => style.color?.a ?? 0;
 }
