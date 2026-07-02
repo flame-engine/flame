@@ -54,6 +54,17 @@ class TextPaint extends TextRenderer {
     return _textPainterCache.getValue(text)!;
   }
 
+  @override
+  TextRenderer copyWithPaint(Paint paint) {
+    return copyWith(
+      (style) {
+        return style.copyWith(
+          foreground: paint,
+        );
+      },
+    );
+  }
+
   TextPaint copyWith(
     TextStyle Function(TextStyle) transform, {
     TextDirection? textDirection,
