@@ -17,6 +17,13 @@ class SpriteFontRenderer extends TextRenderer {
     }
   }
 
+  SpriteFontRenderer.fromPaint(
+    this.font, {
+    required this.paint,
+    this.scale = 1.0,
+    this.letterSpacing = 0.0,
+  });
+
   final SpriteFont font;
   final double scale;
   final double letterSpacing;
@@ -59,7 +66,9 @@ class SpriteFontRenderer extends TextRenderer {
 
   @override
   TextRenderer copyWithPaint(Paint paint) {
-    // TODO: implement copyWithPaint
-    return this;
+    return SpriteFontRenderer.fromPaint(
+      font,
+      paint: paint,
+    );
   }
 }
