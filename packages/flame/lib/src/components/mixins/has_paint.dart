@@ -195,7 +195,7 @@ mixin HasPaint<T extends Object> on Component
   }
 
   /// Can be overridden to react when the [paint] object
-  /// changed!
+  /// changed.
   ///
   /// Default implementation is a no-op.
   void onChanged() {}
