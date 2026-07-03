@@ -6,8 +6,29 @@
 
 import 'dart:io';
 
+// flame_3d builds on the experimental flutter_gpu library, whose API changes
+// frequently in flutter/flutter's presubmit. Analyzing it here would block
+// framework changes on an unstable dependency that is not representative of
+// Flame, so it is excluded from this run.
+const _excludedPackages = {'flame_3d'};
+
 Future<void> main() async {
-  await _run('flutter', ['analyze', '--no-fatal-infos']);
+  final packages =
+      Directory('packages')
+          .listSync()
+          .whereType<Directory>()
+          .where(
+            (directory) => !_excludedPackages.contains(_packageName(directory)),
+          )
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
+
+  await _run('flutter', [
+    'analyze',
+    '--no-fatal-infos',
+    'doc',
+    ...packages.map((directory) => directory.path),
+  ]);
 
   // Golden and rendering tests are platform-sensitive, so the full per-package
   // test suites only run on Linux, where the golden files are generated.
@@ -15,21 +36,16 @@ Future<void> main() async {
     return;
   }
 
-  final packages =
-      Directory('packages')
-          .listSync()
-          .whereType<Directory>()
-          .where(
-            (directory) => Directory('${directory.path}/test').existsSync(),
-          )
-          .toList()
-        ..sort((a, b) => a.path.compareTo(b.path));
-
-  for (final package in packages) {
+  for (final package in packages.where(
+    (directory) => Directory('${directory.path}/test').existsSync(),
+  )) {
     stdout.writeln('Running tests in ${package.path}');
     await _run('flutter', ['test'], workingDirectory: package.path);
   }
 }
+
+String _packageName(Directory directory) =>
+    directory.path.split(Platform.pathSeparator).last;
 
 Future<void> _run(
   String executable,
