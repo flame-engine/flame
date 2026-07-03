@@ -17,6 +17,7 @@ preorder
 prerender
 prerendered
 pressable
+presubmit
 ptero # short for pterodactyl
 rasterizes
 refreshable
