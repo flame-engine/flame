@@ -80,5 +80,5 @@ jobs:
           cache: true
       - uses: bluefireteam/melos-action@v3
       - name: Run tests
-        run: melos test
+        run: melos run test:select --no-select
   # END TESTING STAGE
