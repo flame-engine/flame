@@ -80,6 +80,12 @@ extension RectExtension on Rect {
     );
   }
 
+  /// Displaces this [Rect] by the given [delta] displacement vector,
+  /// returning a new [Rect] instance. Equivalent to [shift] or [translate].
+  Rect displace(Vector2 delta) {
+    return shift(delta.toOffset());
+  }
+
   /// Generates a random point within the bounds of this [Rect].
   Vector2 randomPoint([Random? random]) {
     final randomGenerator = random ?? randomFallback;
