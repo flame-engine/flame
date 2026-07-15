@@ -34,8 +34,8 @@ class Svg {
   /// Whether we use a memory cache or a map to store pre-rendered images.
   bool get useMap => _useMap;
   set useMap(bool use) {
-    _useMap = use;
     emptyCache();
+    _useMap = use;
   }
 
   /// The current cache size.
