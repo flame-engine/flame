@@ -28,6 +28,20 @@ class Svg {
   /// The pixel ratio that this [Svg] is rendered based on.
   final double pixelRatio;
 
+  // TESTING.
+  var _useMap = false;
+
+  /// Whether we use a memory cache or a map to store pre-rendered images.
+  bool get useMap => _useMap;
+  set useMap(bool use) {
+    _useMap = use;
+    emptyCache();
+  }
+
+  /// The current cache size.
+  int get cacheSize => !useMap ? _imageCache.size : _imageMap.length;
+
+  final Map<Size, Image> _imageMap = {};
   final MemoryCache<Size, Image> _imageCache = MemoryCache();
 
   final _paint = Paint()..filterQuality = FilterQuality.medium;
@@ -101,7 +115,9 @@ class Svg {
 
   Image _getImage(Size size, double widthRatio, double heightRatio) {
     final cacheKey = Size(size.width * widthRatio, size.height * heightRatio);
-    final image = _imageCache.getValue(cacheKey);
+    final image = !useMap
+        ? _imageCache.getValue(cacheKey)
+        : _imageMap[cacheKey];
 
     if (image == null) {
       final recorder = PictureRecorder();
@@ -115,7 +131,11 @@ class Svg {
       );
 
       picture.dispose();
-      _imageCache.setValue(cacheKey, image);
+      if (!useMap) {
+        _imageCache.setValue(cacheKey, image);
+      } else {
+        _imageMap[cacheKey] = image;
+      }
       return image;
     }
 
@@ -139,10 +159,22 @@ class Svg {
   /// this method once the instance is no longer needed to avoid
   /// memory leaks
   void dispose() {
-    _imageCache.keys.forEach((key) {
-      _imageCache.getValue(key)?.dispose();
-    });
-    _imageCache.clearCache();
+    emptyCache();
+  }
+
+  /// Get rid of all cached images.
+  void emptyCache() {
+    if (!useMap) {
+      _imageCache.keys.forEach((key) {
+        _imageCache.getValue(key)?.dispose();
+      });
+      _imageCache.clearCache();
+    } else {
+      _imageMap.keys.forEach((key) {
+        _imageMap[key]?.dispose();
+      });
+      _imageMap.clear();
+    }
   }
 }
 
