@@ -12,15 +12,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Svg {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
+  /// Setting [integralSize] to `true` uses integer dimensions for cache keys.
+  /// Setting [fixedRatio] to `true` ensures the cache uses a single entry.
+  /// Default [cacheSize] is [defaultCacheSize], which is 10 as previously;
+  /// specifying [unlimitedCacheSize] is the same as using a [Map] instead
+  /// of a [MemoryCache].
   Svg(
     this.pictureInfo, {
     double? pixelRatio,
     bool integralSize = false,
     bool fixedRatio = false,
-    bool useMap = false,
+    int cacheSize = defaultCacheSize,
   }) : _integralSize = integralSize,
        _fixedRatio = fixedRatio,
-       _useMap = useMap,
+       _cacheSize = cacheSize,
        pixelRatio =
            pixelRatio ??
            WidgetsBinding
@@ -54,22 +59,25 @@ class Svg {
 
   late bool _fixedRatio;
 
-  // TODO(adario): Alternatively, set the memory cache size to e.g. max int...
-  /// Whether we use a MemoryCache or a Map to store pre-rendered images
-  /// (default: false).
-  bool get useMap => _useMap;
-  set useMap(bool use) {
-    emptyCache();
-    _useMap = use;
+  /// The current cache size (default 10): changing the size also empties it.
+  int get cacheSize => _cacheSize;
+  set cacheSize(int size) {
+    assert(size >= 1);
+    if (size >= 1 && size != cacheSize) {
+      emptyCache();
+      _cacheSize = size;
+      _imageCache = MemoryCache(cacheSize: _cacheSize);
+    }
   }
 
-  var _useMap = false;
+  late int _cacheSize;
 
-  /// The current cache size.
-  int get cacheSize => !useMap ? _imageCache.size : _imageMap.length;
+  /// The number of images currently used by the cache.
+  int get cacheUsage => _imageCache.size;
 
-  final Map<Size, Image> _imageMap = {};
-  final MemoryCache<Size, Image> _imageCache = MemoryCache();
+  late MemoryCache<Size, Image> _imageCache = MemoryCache(
+    cacheSize: _cacheSize,
+  );
 
   final _paint = Paint()..filterQuality = FilterQuality.medium;
 
@@ -81,7 +89,7 @@ class Svg {
     double? pixelRatio,
     bool integralSize = false,
     bool fixedRatio = false,
-    bool useMap = false,
+    int cacheSize = defaultCacheSize,
     String? package,
   }) async {
     cache ??= Flame.assets;
@@ -91,7 +99,7 @@ class Svg {
       pixelRatio: pixelRatio,
       integralSize: integralSize,
       fixedRatio: fixedRatio,
-      useMap: useMap,
+      cacheSize: cacheSize,
     );
   }
 
@@ -101,7 +109,7 @@ class Svg {
     double? pixelRatio,
     bool integralSize = false,
     bool fixedRatio = false,
-    bool useMap = false,
+    int cacheSize = defaultCacheSize,
   }) async {
     final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
     return Svg(
@@ -109,9 +117,15 @@ class Svg {
       pixelRatio: pixelRatio,
       integralSize: integralSize,
       fixedRatio: fixedRatio,
-      useMap: useMap,
+      cacheSize: cacheSize,
     );
   }
+
+  /// Default memory cache size.
+  static const int defaultCacheSize = 10;
+
+  /// Unlimited memory cache size.
+  static final int unlimitedCacheSize = double.maxFinite.toInt();
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(
@@ -166,9 +180,7 @@ class Svg {
     } else {
       cacheKey = Size(width, height);
     }
-    final image = !useMap
-        ? _imageCache.getValue(cacheKey)
-        : _imageMap[cacheKey];
+    final image = _imageCache.getValue(cacheKey);
 
     if (image == null) {
       final recorder = PictureRecorder();
@@ -182,11 +194,7 @@ class Svg {
       );
 
       picture.dispose();
-      if (!useMap) {
-        _imageCache.setValue(cacheKey, image);
-      } else {
-        _imageMap[cacheKey] = image;
-      }
+      _imageCache.setValue(cacheKey, image);
       return image;
     }
 
@@ -215,17 +223,10 @@ class Svg {
 
   /// Get rid of all cached images.
   void emptyCache() {
-    if (!useMap) {
-      _imageCache.keys.forEach((key) {
-        _imageCache.getValue(key)?.dispose();
-      });
-      _imageCache.clearCache();
-    } else {
-      _imageMap.keys.forEach((key) {
-        _imageMap[key]?.dispose();
-      });
-      _imageMap.clear();
-    }
+    _imageCache.keys.forEach((key) {
+      _imageCache.getValue(key)?.dispose();
+    });
+    _imageCache.clearCache();
   }
 }
 
@@ -237,13 +238,13 @@ extension SvgLoader on Game {
     String? package,
     bool integralSize = false,
     bool fixedRatio = false,
-    bool useMap = false,
+    int cacheSize = Svg.defaultCacheSize,
   }) => Svg.load(
     fileName,
     cache: assets,
     package: package,
     integralSize: integralSize,
     fixedRatio: fixedRatio,
-    useMap: useMap,
+    cacheSize: cacheSize,
   );
 }
