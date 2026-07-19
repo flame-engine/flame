@@ -16,8 +16,6 @@ workspace:
   - packages/flame_test/example
   - packages/flame_tiled
   - packages/flame_tiled/example
-  - packages/flame_oxygen
-  - packages/flame_oxygen/example
   - packages/flame_isolate
   - packages/flame_isolate/example
   - packages/flame_texturepacker

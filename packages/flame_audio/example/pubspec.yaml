@@ -10,8 +10,8 @@ environment:
   sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
-  flame: ^1.37.0
-  flame_audio: ^2.12.1
+  flame: ^1.38.0
+  flame_audio: ^2.12.2
   flutter:
     sdk: flutter
 
