@@ -19,8 +19,8 @@ class TimerComponent extends Component {
   /// [autoStart] When true, will start upon instantiation (default is true)
   /// [_onTick] When provided, will be called every time [period] is reached.
   /// This overrides the [_onTick] method
-  /// [tickWhenLoaded] When true, will call [_onTick] when the component is first
-  /// loaded (default is false).
+  /// [tickWhenLoaded] When true, will call [_onTick] when the component is
+  /// first loaded (default is false).
   /// [tickCount] The number of time the timer will tick before stopping.
   /// This is is only used when [repeat] is true. If null,
   /// the timer will run indefinitely.

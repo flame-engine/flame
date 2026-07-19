@@ -6,12 +6,11 @@ import 'package:flame/effects.dart';
 /// certain parts of that effect.
 class CallbackController extends DurationEffectController {
   /// Creates a controller that invokes the given [callback] function.
-  /// The [_progress] parameter specifies the progress level of the effect at the
-  /// time when the callback is invoked. It is the responsibility of the user to
-  /// ensure that this progress level is contiguous with respect to the progress
-  /// of the overall effect.
-  CallbackController(this.callback, {required this._progress})
-    : super(0.0);
+  /// The [_progress] parameter specifies the progress level of the effect at
+  /// the time when the callback is invoked. It is the responsibility of the
+  /// user to ensure that this progress level is contiguous with respect to the
+  /// progress of the overall effect.
+  CallbackController(this.callback, {required this._progress}) : super(0.0);
 
   final VoidCallback callback;
   final double _progress;
