@@ -75,6 +75,10 @@ class FlutterAppDirective(SphinxDirective):
     }
     # Static list of targets that were already compiled during the build
     COMPILED = []
+    # Static map of targets whose compilation failed, to the error it failed
+    # with. Compiling is expensive and deterministic within a single build, so
+    # a target that failed once is not attempted again.
+    FAILED = {}
 
     def __init__(self, *args, **kwds):
         super().__init__(*args, **kwds)
@@ -172,13 +176,24 @@ class FlutterAppDirective(SphinxDirective):
         )
         if not need_compiling:
             return
+        # A target that already failed to compile would fail again in exactly
+        # the same way, so report the original error instead of paying for
+        # another full `flutter build web`.
+        previous_error = FlutterAppDirective.FAILED.get(self.source_dir)
+        if previous_error is not None:
+            raise self.error(previous_error)
         self.logger.info('Compiling Flutter app [%s]' % self.app_name)
-        self._compile_source()
-        self._copy_compiled()
-        self._create_index_html()
+        try:
+            self._compile_source()
+            self._copy_compiled()
+            self._create_index_html()
+            assert os.path.isfile(self.target_dir + '/main.dart.js')
+            assert os.path.isfile(self.target_dir + '/index.html')
+        except Exception as e:
+            error = getattr(e, 'msg', str(e))
+            FlutterAppDirective.FAILED[self.source_dir] = error
+            raise
         self.logger.info('  + copied into ' + self.target_dir)
-        assert os.path.isfile(self.target_dir + '/main.dart.js')
-        assert os.path.isfile(self.target_dir + '/index.html')
         FlutterAppDirective.COMPILED.append(self.source_dir)
 
     def _compile_source(self):
