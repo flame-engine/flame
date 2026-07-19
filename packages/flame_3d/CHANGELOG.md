@@ -1,3 +1,15 @@
+## 0.3.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**(flame_3d): Abstract GPU implementation away for future proofing different backends ([#3928](https://github.com/flame-engine/flame/issues/3928)). ([f625173d](https://github.com/flame-engine/flame/commit/f625173d2b3ab2685b7b759c213a675b969af432))
+ - **REFACTOR**(flame_3d): Shader generation now supports `#include` ([#3924](https://github.com/flame-engine/flame/issues/3924)). ([2be34f8e](https://github.com/flame-engine/flame/commit/2be34f8e780abcc2737c1dbcdf4b12cbd835352f))
+ - **FEAT**(flame_3d): Add experimental `web` support using `webgpu` backend ([#3930](https://github.com/flame-engine/flame/issues/3930)). ([f21c5a8a](https://github.com/flame-engine/flame/commit/f21c5a8a5a08f973bd149aa40f1fc87ec160936b))
+ - **FEAT**(flame_3d): Expose mesh information as read-only ([#3927](https://github.com/flame-engine/flame/issues/3927)). ([c5c3e662](https://github.com/flame-engine/flame/commit/c5c3e662dc434ec28882ea1fe284159a85517cf3))
+ - **FEAT**(flame_3d): Add `UnlitMaterial` support ([#3914](https://github.com/flame-engine/flame/issues/3914)). ([9c88ff8c](https://github.com/flame-engine/flame/commit/9c88ff8cd9f2e6d351592eecf6156940c0361dd9))
+ - **BREAKING** **FIX**(flame_3d): Fix material on `Line3D` ([#3916](https://github.com/flame-engine/flame/issues/3916)). ([f6fc6104](https://github.com/flame-engine/flame/commit/f6fc61042728c89c756077ba32071cec30d9bd8f))
+ - **BREAKING** **FEAT**(flame_3d): Introduce `RenderContext` to make `GraphicsDevice` focused ([#3872](https://github.com/flame-engine/flame/issues/3872)). ([4338c624](https://github.com/flame-engine/flame/commit/4338c624da5b17e73a88fcb260dca5af14fc5a7f))
+
 ## 0.2.0
 
 > Note: This release has breaking changes.
