@@ -56,11 +56,6 @@ Use Lottie animations in Flame (bridge package for [Lottie]).
 Fetch assets over the network.
 :::
 
-:::{package} flame_oxygen
-
-Replace FCS with the Oxygen Entity Component System.
-:::
-
 :::{package} flame_rive
 
 Create interactive animations (bridge package for [Rive]).
@@ -129,7 +124,6 @@ flame_gamepads              <flame_gamepads/flame_gamepads.md>
 flame_isolate               <flame_isolate/flame_isolate.md>
 flame_lottie                <flame_lottie/flame_lottie.md>
 flame_network_assets        <flame_network_assets/flame_network_assets.md>
-flame_oxygen                <flame_oxygen/flame_oxygen.md>
 flame_rive                  <flame_rive/flame_rive.md>
 flame_riverpod              <flame_riverpod/flame_riverpod.md>
 flame_splash_screen         <flame_splash_screen/flame_splash_screen.md>

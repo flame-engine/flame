@@ -95,8 +95,6 @@ a Flame game.
 - [flame_lottie][flame_lottie] - Support for [Lottie][lottie] animation in Flame.
 - [flame_network_assets][flame_network_assets] - Helpers to load game assets from
 network.
-- [flame_oxygen][flame_oxygen] for [Oxygen][oxygen]: A lightweight Entity Component System (ECS)
-framework.
 - [flame_rive][flame_rive] for [Rive][rive]: Create interactive animations.
 - [flame_svg][flame_svg] for [flutter_svg][flutter_svg]: Draw SVG files in Flutter.
 - [flame_texturepacker][flame_texturepacker]: Load and use sprite sheets generated with [TexturePacker][texturepacker]
@@ -191,8 +189,6 @@ via an issue, GitHub discussion, or reach out to the team either using the
 [flame_lottie]: https://github.com/flame-engine/flame/tree/main/packages/flame_lottie
 [lottie]: https://airbnb.design/lottie/
 [flame_network_assets]: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
-[flame_oxygen]: https://github.com/flame-engine/flame/tree/main/packages/flame_oxygen
-[oxygen]: https://github.com/flame-engine/oxygen
 [flame_rive]: https://github.com/flame-engine/flame/tree/main/packages/flame_rive
 [rive]: https://rive.app/
 [flame_svg]: https://github.com/flame-engine/flame/tree/main/packages/flame_svg

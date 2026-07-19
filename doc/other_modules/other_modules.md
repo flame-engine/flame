@@ -8,9 +8,8 @@ and the dialogue runtime; use bridge package `flame_jenny` in order to add it in
 
 :::{package} oxygen
 
-Oxygen is a lightweight Entity Component System framework written in Dart, with a focus on
-performance and ease of use. This package replaces the Flame Component System with the Oxygen
-Entity Component System.
+Oxygen is deprecated and no longer maintained, and we do not recommend using it. The Flame
+Component System is as efficient in almost all cases.
 :::
 
 
