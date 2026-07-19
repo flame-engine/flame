@@ -28,3 +28,4 @@ tappable
 thumbstick
 trackpad
 underutilize
+untinted
