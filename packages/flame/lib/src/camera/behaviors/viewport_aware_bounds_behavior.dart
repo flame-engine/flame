@@ -21,9 +21,9 @@ class ViewportAwareBoundsBehavior extends Component with ParentIsA<Viewfinder> {
   late Rect _visibleWorldRect;
 
   ViewportAwareBoundsBehavior({
-    required Shape boundsShape,
+    required this._boundsShape,
     super.key,
-  }) : _boundsShape = boundsShape;
+  });
 
   @override
   void onLoad() {

@@ -7,7 +7,7 @@ import 'package:flame_svg/svg.dart';
 class SvgComponent extends PositionComponent with HasPaint {
   /// Creates an [SvgComponent]
   SvgComponent({
-    Svg? svg,
+    this._svg,
     super.position,
     super.size,
     super.scale,
@@ -17,7 +17,7 @@ class SvgComponent extends PositionComponent with HasPaint {
     super.priority,
     Paint? paint,
     super.key,
-  }) : _svg = svg {
+  }) {
     this.paint = paint ?? (this.paint..filterQuality = FilterQuality.medium);
   }
 

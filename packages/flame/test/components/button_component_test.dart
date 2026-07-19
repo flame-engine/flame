@@ -179,8 +179,8 @@ void main() {
 
 class _SimpleStatelessWidget extends StatelessWidget {
   const _SimpleStatelessWidget({
-    required Widget Function(BuildContext) build,
-  }) : _build = build;
+    required this._build,
+  });
 
   final Widget Function(BuildContext) _build;
 

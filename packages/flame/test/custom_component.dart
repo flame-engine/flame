@@ -7,20 +7,15 @@ import 'package:flame/components.dart';
 /// constructor.
 class CustomComponent extends Component {
   CustomComponent({
-    void Function(CustomComponent, Vector2)? onGameResize,
-    FutureOr<void> Function(CustomComponent)? onLoad,
-    void Function(CustomComponent)? onMount,
-    void Function(CustomComponent)? onRemove,
-    void Function(CustomComponent, double)? onUpdate,
-    void Function(CustomComponent, Canvas)? onRender,
+    this._onGameResize,
+    this._onLoad,
+    this._onMount,
+    this._onRemove,
+    this._onUpdate,
+    this._onRender,
     super.priority,
     super.children,
-  }) : _onGameResize = onGameResize,
-       _onLoad = onLoad,
-       _onMount = onMount,
-       _onRemove = onRemove,
-       _onUpdate = onUpdate,
-       _onRender = onRender;
+  });
 
   final void Function(CustomComponent, Vector2)? _onGameResize;
   final FutureOr<void> Function(CustomComponent)? _onLoad;
