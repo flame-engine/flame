@@ -3,6 +3,125 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-07-19
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame` - `v2.0.0`](#flame---v200)
+ - [`flame_3d` - `v0.3.0`](#flame_3d---v030)
+
+Packages with other changes:
+
+ - [`flame_behaviors` - `v1.4.0`](#flame_behaviors---v140)
+ - [`flame_bloc` - `v1.12.24`](#flame_bloc---v11224)
+ - [`flame_steering_behaviors` - `v0.2.2+6`](#flame_steering_behaviors---v0226)
+ - [`flame_test` - `v2.3.0`](#flame_test---v230)
+ - [`flame_tiled` - `v3.1.2`](#flame_tiled---v312)
+ - [`flame_behavior_tree` - `v0.1.5+5`](#flame_behavior_tree---v0155)
+ - [`flame_gamepads` - `v0.1.2`](#flame_gamepads---v012)
+ - [`flame_isolate` - `v0.6.3+23`](#flame_isolate---v06323)
+ - [`flame_texturepacker` - `v5.1.2`](#flame_texturepacker---v512)
+ - [`flame_sprite_fusion` - `v0.2.4+2`](#flame_sprite_fusion---v0242)
+ - [`flame_fire_atlas` - `v1.8.18`](#flame_fire_atlas---v1818)
+ - [`flame_audio` - `v2.12.2`](#flame_audio---v2122)
+ - [`flame_spine` - `v0.3.1+6`](#flame_spine---v0316)
+ - [`flame_kenney_xml` - `v0.1.3+2`](#flame_kenney_xml---v0132)
+ - [`flame_lottie` - `v0.4.3+23`](#flame_lottie---v04323)
+ - [`flame_markdown` - `v0.2.5+16`](#flame_markdown---v02516)
+ - [`flame_console` - `v0.1.4`](#flame_console---v014)
+ - [`flame_rive` - `v1.11.2`](#flame_rive---v1112)
+ - [`flame_forge2d` - `v0.19.3+7`](#flame_forge2d---v01937)
+ - [`flame_noise` - `v0.3.3+23`](#flame_noise---v03323)
+ - [`flame_riverpod` - `v5.5.5`](#flame_riverpod---v555)
+ - [`flame_svg` - `v1.12.2`](#flame_svg---v1122)
+ - [`flame_typled` - `v0.1.2`](#flame_typled---v012)
+ - [`flame_network_assets` - `v0.3.4+23`](#flame_network_assets---v03423)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flame_behavior_tree` - `v0.1.5+5`
+ - `flame_gamepads` - `v0.1.2`
+ - `flame_isolate` - `v0.6.3+23`
+ - `flame_texturepacker` - `v5.1.2`
+ - `flame_sprite_fusion` - `v0.2.4+2`
+ - `flame_fire_atlas` - `v1.8.18`
+ - `flame_audio` - `v2.12.2`
+ - `flame_spine` - `v0.3.1+6`
+ - `flame_kenney_xml` - `v0.1.3+2`
+ - `flame_lottie` - `v0.4.3+23`
+ - `flame_markdown` - `v0.2.5+16`
+ - `flame_console` - `v0.1.4`
+ - `flame_rive` - `v1.11.2`
+ - `flame_forge2d` - `v0.19.3+7`
+ - `flame_noise` - `v0.3.3+23`
+ - `flame_riverpod` - `v5.5.5`
+ - `flame_svg` - `v1.12.2`
+ - `flame_typled` - `v0.1.2`
+ - `flame_network_assets` - `v0.3.4+23`
+
+---
+
+#### `flame` - `v2.0.0`
+
+ - **REFACTOR**: Make GestureDetectorBuilder and detector/callback registering more resilient ([#3900](https://github.com/flame-engine/flame/issues/3900)). ([84b77a02](https://github.com/flame-engine/flame/commit/84b77a0279d826e24a10c48dfc4c4fec3c9f7bd4))
+ - **FIX**: Workaround for the TextBoxComponent entering an endless loop ([#3939](https://github.com/flame-engine/flame/issues/3939)). ([0b42aa00](https://github.com/flame-engine/flame/commit/0b42aa000f0280b041991c12d54309feda10ed51))
+ - **FIX**: HasWorldReference.onRemove() should call super.onRemove() ([#3920](https://github.com/flame-engine/flame/issues/3920)). ([412702c7](https://github.com/flame-engine/flame/commit/412702c7a8ae2d969db002eb355b3359406929d9))
+ - **FIX**: Fix flaky Transform2D random round-trip test tolerance ([#3917](https://github.com/flame-engine/flame/issues/3917)). ([f2fb4079](https://github.com/flame-engine/flame/commit/f2fb4079ee6ab6b44116c4e5d1862df086251054))
+ - **FIX**: Guard against double-dispose of TextBoxComponent cached image ([#3909](https://github.com/flame-engine/flame/issues/3909)). ([271288fb](https://github.com/flame-engine/flame/commit/271288fb8bd9bb10348798f9ea1d31b6b3e0a0be))
+ - **FIX**: Fix raycasting "pass-through" collision inaccuracies with better modelling ([#3906](https://github.com/flame-engine/flame/issues/3906)). ([6337980d](https://github.com/flame-engine/flame/commit/6337980d09d5a5c8406389a9a7fa0a4a38f6e434))
+ - **FIX**: Fix collision prospect checking to be fully reliable ([#3905](https://github.com/flame-engine/flame/issues/3905)). ([d5a21a72](https://github.com/flame-engine/flame/commit/d5a21a72deccf1a7cd31007e6bc3e89e93875a76))
+ - **FIX**: Prevent drag updates from reaching removed components ([#3901](https://github.com/flame-engine/flame/issues/3901)). ([3d58c9ac](https://github.com/flame-engine/flame/commit/3d58c9ac5b6cf6d6e85cf59c5a8f9c6d234fe60f))
+ - **FEAT**: Add displace extension to Rect ([#3943](https://github.com/flame-engine/flame/issues/3943)). ([d8e4db8b](https://github.com/flame-engine/flame/commit/d8e4db8b97da4c2d793751c73bca373a89c41ee8))
+ - **FEAT**: OpacityEffect support on text components ([#3940](https://github.com/flame-engine/flame/issues/3940)). ([749c73a4](https://github.com/flame-engine/flame/commit/749c73a45be5978cca53ce3737fe2d2382289306))
+ - **FEAT**: Expose brighten and darken helpers on palette ([#3936](https://github.com/flame-engine/flame/issues/3936)). ([953430e1](https://github.com/flame-engine/flame/commit/953430e177ce5e43f370fdd0f5c199f3e793e30e))
+ - **FEAT**: Adding bleed option to SpriteBatch ([#3871](https://github.com/flame-engine/flame/issues/3871)). ([2c4a6d5c](https://github.com/flame-engine/flame/commit/2c4a6d5cf9962acf967a86ebdf6b3e848acdfdb2))
+ - **FEAT**: Add regular polygon constructors to PolygonComponent and PolygonHitbox ([#3891](https://github.com/flame-engine/flame/issues/3891)). ([0d91f0f8](https://github.com/flame-engine/flame/commit/0d91f0f8d9350940421bc658623f62a899f1af50))
+ - **FEAT**: Implement TertiaryTapCallbacks on new event system ([#3899](https://github.com/flame-engine/flame/issues/3899)). ([933395e2](https://github.com/flame-engine/flame/commit/933395e233bf8a84aff435352054cd357c6acfa2))
+ - **FEAT**: Implement LongPressCallbacks on new event system ([#3896](https://github.com/flame-engine/flame/issues/3896)). ([8ee838c4](https://github.com/flame-engine/flame/commit/8ee838c415eb8c18653fe759fdf0086ab421da35))
+ - **FEAT**: Implement ScrollCallbacks on new event system ([#3892](https://github.com/flame-engine/flame/issues/3892)). ([d0010032](https://github.com/flame-engine/flame/commit/d0010032d7f94680a1fab1cd5b36dc6c69d6dba9))
+ - **BREAKING** **FIX**: Add HoverCallbacks.onHoverCancel for press-while-hovering ([#3912](https://github.com/flame-engine/flame/issues/3912)). ([ab354fb3](https://github.com/flame-engine/flame/commit/ab354fb37b26e4f5d6398b57a3300a9735fdcdef))
+ - **BREAKING** **FEAT**: Update scale event with custom recognizer ([#3782](https://github.com/flame-engine/flame/issues/3782)). ([050984b7](https://github.com/flame-engine/flame/commit/050984b72232d5cf83f0b462b293ced80061b87e))
+
+#### `flame_3d` - `v0.3.0`
+
+ - **REFACTOR**(flame_3d): Abstract GPU implementation away for future proofing different backends ([#3928](https://github.com/flame-engine/flame/issues/3928)). ([f625173d](https://github.com/flame-engine/flame/commit/f625173d2b3ab2685b7b759c213a675b969af432))
+ - **REFACTOR**(flame_3d): Shader generation now supports `#include` ([#3924](https://github.com/flame-engine/flame/issues/3924)). ([2be34f8e](https://github.com/flame-engine/flame/commit/2be34f8e780abcc2737c1dbcdf4b12cbd835352f))
+ - **FEAT**(flame_3d): Add experimental `web` support using `webgpu` backend ([#3930](https://github.com/flame-engine/flame/issues/3930)). ([f21c5a8a](https://github.com/flame-engine/flame/commit/f21c5a8a5a08f973bd149aa40f1fc87ec160936b))
+ - **FEAT**(flame_3d): Expose mesh information as read-only ([#3927](https://github.com/flame-engine/flame/issues/3927)). ([c5c3e662](https://github.com/flame-engine/flame/commit/c5c3e662dc434ec28882ea1fe284159a85517cf3))
+ - **FEAT**(flame_3d): Add `UnlitMaterial` support ([#3914](https://github.com/flame-engine/flame/issues/3914)). ([9c88ff8c](https://github.com/flame-engine/flame/commit/9c88ff8cd9f2e6d351592eecf6156940c0361dd9))
+ - **BREAKING** **FIX**(flame_3d): Fix material on `Line3D` ([#3916](https://github.com/flame-engine/flame/issues/3916)). ([f6fc6104](https://github.com/flame-engine/flame/commit/f6fc61042728c89c756077ba32071cec30d9bd8f))
+ - **BREAKING** **FEAT**(flame_3d): Introduce `RenderContext` to make `GraphicsDevice` focused ([#3872](https://github.com/flame-engine/flame/issues/3872)). ([4338c624](https://github.com/flame-engine/flame/commit/4338c624da5b17e73a88fcb260dca5af14fc5a7f))
+
+#### `flame_behaviors` - `v1.4.0`
+
+ - **FEAT**(flame_behaviors): Add ScreenCollisionBehavior ([#3910](https://github.com/flame-engine/flame/issues/3910)). ([48894135](https://github.com/flame-engine/flame/commit/48894135587218690f7faa7382ba24d45658e235))
+
+#### `flame_bloc` - `v1.12.24`
+
+ - **FIX**: Bloc instance was null on initial state ([#3921](https://github.com/flame-engine/flame/issues/3921)). ([8adeea69](https://github.com/flame-engine/flame/commit/8adeea69764002e763a4a9236945c2b8f57a8a3b))
+
+#### `flame_steering_behaviors` - `v0.2.2+6`
+
+ - **FEAT**(flame_behaviors): Add ScreenCollisionBehavior ([#3910](https://github.com/flame-engine/flame/issues/3910)). ([48894135](https://github.com/flame-engine/flame/commit/48894135587218690f7faa7382ba24d45658e235))
+
+#### `flame_test` - `v2.3.0`
+
+ - **FEAT**: OpacityEffect support on text components ([#3940](https://github.com/flame-engine/flame/issues/3940)). ([749c73a4](https://github.com/flame-engine/flame/commit/749c73a45be5978cca53ce3737fe2d2382289306))
+ - **FEAT**: Implement TertiaryTapCallbacks on new event system ([#3899](https://github.com/flame-engine/flame/issues/3899)). ([933395e2](https://github.com/flame-engine/flame/commit/933395e233bf8a84aff435352054cd357c6acfa2))
+ - **FEAT**: Implement LongPressCallbacks on new event system ([#3896](https://github.com/flame-engine/flame/issues/3896)). ([8ee838c4](https://github.com/flame-engine/flame/commit/8ee838c415eb8c18653fe759fdf0086ab421da35))
+ - **FEAT**: Implement ScrollCallbacks on new event system ([#3892](https://github.com/flame-engine/flame/issues/3892)). ([d0010032](https://github.com/flame-engine/flame/commit/d0010032d7f94680a1fab1cd5b36dc6c69d6dba9))
+
+#### `flame_tiled` - `v3.1.2`
+
+ - **FIX**(flame_tiled): Anchor oversized orthogonal tiles at bottom-left of cell ([#3923](https://github.com/flame-engine/flame/issues/3923)). ([4c775db0](https://github.com/flame-engine/flame/commit/4c775db08ffc4357420131251510bdbf71585948))
+
+
 ## 2026-04-01
 
 ### Changes

@@ -1,3 +1,26 @@
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **REFACTOR**: Make GestureDetectorBuilder and detector/callback registering more resilient ([#3900](https://github.com/flame-engine/flame/issues/3900)). ([84b77a02](https://github.com/flame-engine/flame/commit/84b77a0279d826e24a10c48dfc4c4fec3c9f7bd4))
+ - **FIX**: Workaround for the TextBoxComponent entering an endless loop ([#3939](https://github.com/flame-engine/flame/issues/3939)). ([0b42aa00](https://github.com/flame-engine/flame/commit/0b42aa000f0280b041991c12d54309feda10ed51))
+ - **FIX**: HasWorldReference.onRemove() should call super.onRemove() ([#3920](https://github.com/flame-engine/flame/issues/3920)). ([412702c7](https://github.com/flame-engine/flame/commit/412702c7a8ae2d969db002eb355b3359406929d9))
+ - **FIX**: Fix flaky Transform2D random round-trip test tolerance ([#3917](https://github.com/flame-engine/flame/issues/3917)). ([f2fb4079](https://github.com/flame-engine/flame/commit/f2fb4079ee6ab6b44116c4e5d1862df086251054))
+ - **FIX**: Guard against double-dispose of TextBoxComponent cached image ([#3909](https://github.com/flame-engine/flame/issues/3909)). ([271288fb](https://github.com/flame-engine/flame/commit/271288fb8bd9bb10348798f9ea1d31b6b3e0a0be))
+ - **FIX**: Fix raycasting "pass-through" collision inaccuracies with better modelling ([#3906](https://github.com/flame-engine/flame/issues/3906)). ([6337980d](https://github.com/flame-engine/flame/commit/6337980d09d5a5c8406389a9a7fa0a4a38f6e434))
+ - **FIX**: Fix collision prospect checking to be fully reliable ([#3905](https://github.com/flame-engine/flame/issues/3905)). ([d5a21a72](https://github.com/flame-engine/flame/commit/d5a21a72deccf1a7cd31007e6bc3e89e93875a76))
+ - **FIX**: Prevent drag updates from reaching removed components ([#3901](https://github.com/flame-engine/flame/issues/3901)). ([3d58c9ac](https://github.com/flame-engine/flame/commit/3d58c9ac5b6cf6d6e85cf59c5a8f9c6d234fe60f))
+ - **FEAT**: Add displace extension to Rect ([#3943](https://github.com/flame-engine/flame/issues/3943)). ([d8e4db8b](https://github.com/flame-engine/flame/commit/d8e4db8b97da4c2d793751c73bca373a89c41ee8))
+ - **FEAT**: OpacityEffect support on text components ([#3940](https://github.com/flame-engine/flame/issues/3940)). ([749c73a4](https://github.com/flame-engine/flame/commit/749c73a45be5978cca53ce3737fe2d2382289306))
+ - **FEAT**: Expose brighten and darken helpers on palette ([#3936](https://github.com/flame-engine/flame/issues/3936)). ([953430e1](https://github.com/flame-engine/flame/commit/953430e177ce5e43f370fdd0f5c199f3e793e30e))
+ - **FEAT**: Adding bleed option to SpriteBatch ([#3871](https://github.com/flame-engine/flame/issues/3871)). ([2c4a6d5c](https://github.com/flame-engine/flame/commit/2c4a6d5cf9962acf967a86ebdf6b3e848acdfdb2))
+ - **FEAT**: Add regular polygon constructors to PolygonComponent and PolygonHitbox ([#3891](https://github.com/flame-engine/flame/issues/3891)). ([0d91f0f8](https://github.com/flame-engine/flame/commit/0d91f0f8d9350940421bc658623f62a899f1af50))
+ - **FEAT**: Implement TertiaryTapCallbacks on new event system ([#3899](https://github.com/flame-engine/flame/issues/3899)). ([933395e2](https://github.com/flame-engine/flame/commit/933395e233bf8a84aff435352054cd357c6acfa2))
+ - **FEAT**: Implement LongPressCallbacks on new event system ([#3896](https://github.com/flame-engine/flame/issues/3896)). ([8ee838c4](https://github.com/flame-engine/flame/commit/8ee838c415eb8c18653fe759fdf0086ab421da35))
+ - **FEAT**: Implement ScrollCallbacks on new event system ([#3892](https://github.com/flame-engine/flame/issues/3892)). ([d0010032](https://github.com/flame-engine/flame/commit/d0010032d7f94680a1fab1cd5b36dc6c69d6dba9))
+ - **BREAKING** **FIX**: Add HoverCallbacks.onHoverCancel for press-while-hovering ([#3912](https://github.com/flame-engine/flame/issues/3912)). ([ab354fb3](https://github.com/flame-engine/flame/commit/ab354fb37b26e4f5d6398b57a3300a9735fdcdef))
+ - **BREAKING** **FEAT**: Update scale event with custom recognizer ([#3782](https://github.com/flame-engine/flame/issues/3782)). ([050984b7](https://github.com/flame-engine/flame/commit/050984b72232d5cf83f0b462b293ced80061b87e))
+
 ## 1.37.0
 
  - **FEAT**: Add `bleed` option to `SpriteBatch` to prevent seam artifacts in tilemaps ([#3871](https://github.com/flame-engine/flame/issues/3871)).

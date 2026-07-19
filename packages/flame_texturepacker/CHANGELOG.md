@@ -1,3 +1,7 @@
+## 5.1.2
+
+ - Update a dependency to the latest release.
+
 ## 5.1.1
 
  - **REFACTOR**: [flame_texturepacker]  Update package support filed and handle more sprite index patterns ([#3858](https://github.com/flame-engine/flame/issues/3858)). ([bb535013](https://github.com/flame-engine/flame/commit/bb5350133be424d65923a14f10eadfb21a3166e9))
