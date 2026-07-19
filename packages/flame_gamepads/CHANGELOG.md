@@ -1,3 +1,7 @@
+## 0.1.2
+
+ - Update a dependency to the latest release.
+
 ## 0.1.1
 
  - **FIX**: Rename flame_gamepads library file to match package name ([#3888](https://github.com/flame-engine/flame/issues/3888)). ([2fea504a](https://github.com/flame-engine/flame/commit/2fea504a338711d85c7d5591eae44df75786e516))

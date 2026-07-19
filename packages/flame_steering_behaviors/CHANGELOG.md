@@ -1,3 +1,7 @@
+## 0.2.2+6
+
+ - **FEAT**(flame_behaviors): Add ScreenCollisionBehavior ([#3910](https://github.com/flame-engine/flame/issues/3910)). ([48894135](https://github.com/flame-engine/flame/commit/48894135587218690f7faa7382ba24d45658e235))
+
 ## 0.2.1+5
 
  - Update a dependency to the latest release.
