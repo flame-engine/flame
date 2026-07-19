@@ -10,8 +10,8 @@ environment:
   sdk: ">=3.12.0 <4.0.0"
 
 dependencies:
-  flame: ^1.37.0
-  flame_sprite_fusion: ^0.2.3+1
+  flame: ^1.38.0
+  flame_sprite_fusion: ^0.2.4+2
   flutter:
     sdk: flutter
 
