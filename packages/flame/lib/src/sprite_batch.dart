@@ -160,10 +160,9 @@ class SpriteBatch {
     this.useAtlas = true,
     this.defaultColor,
     this.defaultBlendMode,
-    Images? imageCache,
-    String? imageKey,
-  }) : _imageCache = imageCache,
-       _imageKey = imageKey;
+    this._imageCache,
+    this._imageKey,
+  });
 
   /// Takes a path of an image, and optional arguments for the SpriteBatch.
   ///

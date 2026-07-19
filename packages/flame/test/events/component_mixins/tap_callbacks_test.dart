@@ -503,14 +503,11 @@ class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
     required Vector2 super.position,
     required Vector2 super.size,
     super.children,
-    void Function(TapDownEvent)? onTapDown,
-    void Function(TapDownEvent)? onLongTapDown,
-    void Function(TapUpEvent)? onTapUp,
-    void Function(TapCancelEvent)? onTapCancel,
-  }) : _onTapDown = onTapDown,
-       _onLongTapDown = onLongTapDown,
-       _onTapUp = onTapUp,
-       _onTapCancel = onTapCancel;
+    this._onTapDown,
+    this._onLongTapDown,
+    this._onTapUp,
+    this._onTapCancel,
+  });
 
   final void Function(TapDownEvent)? _onTapDown;
   final void Function(TapDownEvent)? _onLongTapDown;

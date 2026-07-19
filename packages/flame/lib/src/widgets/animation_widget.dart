@@ -39,7 +39,7 @@ class SpriteAnimationWidget extends StatefulWidget {
 
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
-    required SpriteAnimationTicker animationTicker,
+    required SpriteAnimationTicker this._animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
@@ -48,8 +48,7 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.paint,
     this.size,
     super.key,
-  }) : _animationFuture = animation,
-       _animationTicker = animationTicker;
+  }) : _animationFuture = animation;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///

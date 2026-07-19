@@ -11,8 +11,7 @@ class SpritePainter extends CustomPainter {
   final Paint? _paint;
   final double _angle;
 
-  SpritePainter(this._sprite, this._anchor, this._paint, {double angle = 0})
-    : _angle = angle;
+  SpritePainter(this._sprite, this._anchor, this._paint, {this._angle = 0});
 
   @override
   bool shouldRepaint(SpritePainter oldDelegate) {

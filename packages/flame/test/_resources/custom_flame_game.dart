@@ -3,10 +3,9 @@ import 'package:flame/game.dart';
 class CustomFlameGame extends FlameGame {
   CustomFlameGame({
     super.children,
-    Future<void>? Function(FlameGame)? onLoad,
-    void Function(FlameGame)? onMount,
-  }) : _onLoad = onLoad,
-       _onMount = onMount;
+    this._onLoad,
+    this._onMount,
+  });
 
   final Future<void>? Function(FlameGame)? _onLoad;
   final void Function(FlameGame)? _onMount;
