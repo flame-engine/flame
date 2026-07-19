@@ -13,6 +13,7 @@ class PrismaticJointExample extends Forge2DGame {
   ''';
 
   final Vector2 anchor = Vector2.zero();
+  final Vector2 axis = Vector2(1, 0);
 
   @override
   Future<void> onLoad() async {
@@ -23,49 +24,50 @@ class PrismaticJointExample extends Forge2DGame {
     await Future.wait([box.loaded]);
 
     final joint = createJoint(box.body, anchor);
-    world.add(JointRenderer(joint: joint, anchor: anchor));
+    world.add(JointRenderer(joint: joint, anchor: anchor, axis: axis));
   }
 
   PrismaticJoint createJoint(Body box, Vector2 anchor) {
     final groundBody = world.createBody(BodyDef());
 
-    final prismaticJointDef = PrismaticJointDef()
-      ..initialize(
-        box,
-        groundBody,
-        anchor,
-        Vector2(1, 0),
-      )
-      ..enableLimit = true
-      ..lowerTranslation = -20
-      ..upperTranslation = 20
-      ..enableMotor = true
-      ..motorSpeed = 1
-      ..maxMotorForce = 100;
-
-    final joint = PrismaticJoint(prismaticJointDef);
-    world.createJoint(joint);
-    return joint;
+    return world.physicsWorld.createPrismaticJoint(
+      PrismaticJointDef(
+        bodyA: box,
+        bodyB: groundBody,
+        localAxisA: axis,
+        enableLimit: true,
+        lowerTranslation: -20,
+        upperTranslation: 20,
+        enableMotor: true,
+        motorSpeed: 1,
+        maxMotorForce: 100,
+      ),
+    );
   }
 }
 
 class JointRenderer extends Component {
-  JointRenderer({required this.joint, required this.anchor});
+  JointRenderer({
+    required this.joint,
+    required this.anchor,
+    required this.axis,
+  });
 
   final PrismaticJoint joint;
   final Vector2 anchor;
+  final Vector2 axis;
   final Vector2 p1 = Vector2.zero();
   final Vector2 p2 = Vector2.zero();
 
   @override
   void render(Canvas canvas) {
     p1
-      ..setFrom(joint.getLocalAxisA())
-      ..scale(joint.getLowerLimit())
+      ..setFrom(axis)
+      ..scale(joint.lowerLimit)
       ..add(anchor);
     p2
-      ..setFrom(joint.getLocalAxisA())
-      ..scale(joint.getUpperLimit())
+      ..setFrom(axis)
+      ..scale(joint.upperLimit)
       ..add(anchor);
 
     canvas.drawLine(p1.toOffset(), p2.toOffset(), debugPaint);

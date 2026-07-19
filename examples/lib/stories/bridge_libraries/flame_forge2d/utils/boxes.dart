@@ -29,13 +29,10 @@ class Box extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = PolygonShape()
-      ..setAsBox(width / 2, height / 2, Vector2.zero(), 0);
-    final fixtureDef = FixtureDef(
-      shape,
-      friction: 0.3,
-      restitution: 0.2,
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(friction: 0.3, restitution: 0.2),
       density: 10,
+      enableContactEvents: true,
     );
     final bodyDef = BodyDef(
       userData: this, // To be able to determine object in collision
@@ -43,7 +40,8 @@ class Box extends BodyComponent {
       type: bodyType,
     );
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Polygon.box(width / 2, height / 2), shapeDef);
   }
 }
 
@@ -61,7 +59,7 @@ class DraggableBox extends Box with DragCallbacks {
   @override
   void update(double dt) {
     if (_destroyJoint && mouseJoint != null) {
-      world.destroyJoint(mouseJoint!);
+      mouseJoint!.destroy();
       mouseJoint = null;
       _destroyJoint = false;
     }
@@ -73,24 +71,21 @@ class DraggableBox extends Box with DragCallbacks {
 
     final target = game.screenToWorld(event.devicePosition);
 
-    final mouseJointDef = MouseJointDef()
-      ..maxForce = 5000 * body.mass
-      ..dampingRatio = 0.1
-      ..frequencyHz = 50
-      ..target.setFrom(target)
-      ..collideConnected = false
-      ..bodyA = groundBody
-      ..bodyB = body;
-    mouseJoint = MouseJoint(mouseJointDef);
-
-    world.createJoint(mouseJoint!);
+    mouseJoint = world.physicsWorld.createMouseJoint(
+      MouseJointDef(
+        bodyA: groundBody,
+        bodyB: body,
+        target: target,
+        maxForce: 5000 * body.mass,
+        dampingRatio: 0.1,
+        hertz: 50,
+      ),
+    );
   }
 
   @override
   bool onDragUpdate(DragUpdateEvent event) {
-    mouseJoint?.setTarget(
-      game.screenToWorld(event.deviceEndPosition),
-    );
+    mouseJoint?.target = game.screenToWorld(event.deviceEndPosition);
 
     return false;
   }

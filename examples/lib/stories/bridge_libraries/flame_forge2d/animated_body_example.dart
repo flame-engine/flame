@@ -72,21 +72,19 @@ class ChopperBody extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = CircleShape()..radius = size.x / 4;
-    final fixtureDef = FixtureDef(
-      shape,
+    final shapeDef = ShapeDef(
       userData: this, // To be able to determine object in collision
-      restitution: 0.8,
-      friction: 0.2,
+      material: SurfaceMaterial(restitution: 0.8, friction: 0.2),
     );
 
     final velocity = (Vector2.random() - Vector2.random()) * 200;
     final bodyDef = BodyDef(
       position: _position,
-      angle: velocity.angleTo(Vector2(1, 0)),
+      rotation: Rot.fromAngle(velocity.angleTo(Vector2(1, 0))),
       linearVelocity: velocity,
       type: BodyType.dynamic,
     );
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Circle(radius: size.x / 4), shapeDef);
   }
 }

@@ -32,13 +32,9 @@ class Ball extends BodyComponent with ContactCallbacks {
 
   @override
   Body createBody() {
-    final shape = CircleShape();
-    shape.radius = radius;
-
-    final fixtureDef = FixtureDef(
-      shape,
-      restitution: 0.8,
-      friction: 0.4,
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(restitution: 0.8, friction: 0.4),
+      enableContactEvents: true,
     );
 
     final bodyDef = BodyDef(
@@ -48,7 +44,8 @@ class Ball extends BodyComponent with ContactCallbacks {
       type: bodyType,
     );
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Circle(radius: radius), shapeDef);
   }
 
   @override

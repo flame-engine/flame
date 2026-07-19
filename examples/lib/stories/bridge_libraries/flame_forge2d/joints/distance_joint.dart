@@ -32,17 +32,15 @@ class DistanceJointWorld extends Forge2DWorld
 
     await Future.wait([first.loaded, second.loaded]);
 
-    final distanceJointDef = DistanceJointDef()
-      ..initialize(
-        first.body,
-        second.body,
-        first.body.worldCenter,
-        second.center,
-      )
-      ..length = 10
-      ..frequencyHz = 3
-      ..dampingRatio = 0.2;
-
-    createJoint(DistanceJoint(distanceJointDef));
+    physicsWorld.createDistanceJoint(
+      DistanceJointDef(
+        bodyA: first.body,
+        bodyB: second.body,
+        length: 10,
+        enableSpring: true,
+        hertz: 3,
+        dampingRatio: 0.2,
+      ),
+    );
   }
 }

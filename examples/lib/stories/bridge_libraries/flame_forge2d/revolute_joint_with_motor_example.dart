@@ -64,29 +64,27 @@ class CircleShuffler extends BodyComponent {
       final xPos = radius * cos(2 * pi * (i / numPieces));
       final yPos = radius * sin(2 * pi * (i / numPieces));
 
-      final shape = CircleShape()
-        ..radius = 1.2
-        ..position.setValues(xPos, yPos);
-
-      final fixtureDef = FixtureDef(
-        shape,
-        density: 50.0,
-        friction: 0.1,
-        restitution: 0.9,
+      body.createShape(
+        Circle(radius: 1.2, center: Vector2(xPos, yPos)),
+        ShapeDef(
+          density: 50.0,
+          material: SurfaceMaterial(friction: 0.1, restitution: 0.9),
+        ),
       );
-
-      body.createFixture(fixtureDef);
     }
     // Create an empty ground body.
     final groundBody = world.createBody(BodyDef());
 
-    final revoluteJointDef = RevoluteJointDef()
-      ..initialize(body, groundBody, body.position)
-      ..motorSpeed = pi
-      ..maxMotorTorque = 1000000.0
-      ..enableMotor = true;
-
-    world.createJoint(RevoluteJoint(revoluteJointDef));
+    world.physicsWorld.createRevoluteJoint(
+      RevoluteJointDef(
+        bodyA: body,
+        bodyB: groundBody,
+        localAnchorB: body.position.clone(),
+        motorSpeed: pi,
+        maxMotorTorque: 1000000.0,
+        enableMotor: true,
+      ),
+    );
     return body;
   }
 }
@@ -99,21 +97,30 @@ class CornerRamp extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = ChainShape();
     final mirrorFactor = isMirrored ? -1 : 1;
     final diff = 2.0 * mirrorFactor;
-    final vertices = [
+    // Chains need at least four points, so a collinear point is added on the
+    // closing edge of the triangular loop.
+    final points = [
       Vector2(diff, 0),
       Vector2(diff + 20.0 * mirrorFactor, -20.0),
       Vector2(diff + 35.0 * mirrorFactor, -30.0),
+      Vector2(diff + 17.5 * mirrorFactor, -15.0),
     ];
-    shape.createLoop(vertices);
+    if (isMirrored) {
+      // Chains are one-sided, and mirroring the points flips the winding
+      // direction, so reverse the list to keep the solid side consistent.
+      points.setAll(0, points.reversed.toList());
+    }
 
-    final fixtureDef = FixtureDef(shape, friction: 0.1);
-    final bodyDef = BodyDef()
-      ..position = _center
-      ..type = BodyType.static;
+    final bodyDef = BodyDef(position: _center);
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)..createChain(
+      ChainDef(
+        points: points,
+        materials: [SurfaceMaterial(friction: 0.1)],
+        isLoop: true,
+      ),
+    );
   }
 }

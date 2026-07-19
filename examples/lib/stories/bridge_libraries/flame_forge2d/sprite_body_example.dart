@@ -59,27 +59,22 @@ class Pizza extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = PolygonShape();
-
     final vertices = [
       Vector2(-size.x / 2, size.y / 2),
       Vector2(size.x / 2, size.y / 2),
       Vector2(0, -size.y / 2),
     ];
-    shape.set(vertices);
 
-    final fixtureDef = FixtureDef(
-      shape,
+    final shapeDef = ShapeDef(
       userData: this, // To be able to determine object in collision
-      restitution: 0.4,
-      friction: 0.5,
+      material: SurfaceMaterial(restitution: 0.4, friction: 0.5),
     );
 
     final bodyDef = BodyDef(
       position: initialPosition,
-      angle: (initialPosition.x + initialPosition.y) / 2 * pi,
+      rotation: Rot.fromAngle((initialPosition.x + initialPosition.y) / 2 * pi),
       type: BodyType.dynamic,
     );
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)..createShape(Polygon(vertices), shapeDef);
   }
 }

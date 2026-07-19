@@ -41,28 +41,27 @@ class MouseJointWorld extends Forge2DWorld
     if (mouseJoint != null) {
       return;
     }
-    final mouseJointDef = MouseJointDef()
-      ..maxForce = 3000 * ball.body.mass * 10
-      ..dampingRatio = 0.1
-      ..frequencyHz = 5
-      ..target.setFrom(ball.body.position)
-      ..collideConnected = false
-      ..bodyA = groundBody
-      ..bodyB = ball.body;
-
-    mouseJoint = MouseJoint(mouseJointDef);
-    createJoint(mouseJoint!);
+    mouseJoint = physicsWorld.createMouseJoint(
+      MouseJointDef(
+        bodyA: groundBody,
+        bodyB: ball.body,
+        target: ball.body.position,
+        maxForce: 3000 * ball.body.mass * 10,
+        dampingRatio: 0.1,
+        hertz: 5,
+      ),
+    );
   }
 
   @override
   void onDragUpdate(DragUpdateEvent info) {
-    mouseJoint?.setTarget(info.localEndPosition);
+    mouseJoint?.target = info.localEndPosition;
   }
 
   @override
   void onDragEnd(DragEndEvent info) {
     super.onDragEnd(info);
-    destroyJoint(mouseJoint!);
+    mouseJoint?.destroy();
     mouseJoint = null;
   }
 }

@@ -26,14 +26,17 @@ class Wall extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = EdgeShape()..set(start, end);
-    final fixtureDef = FixtureDef(shape, friction: 0.3);
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(friction: 0.3),
+      enableContactEvents: true,
+    );
     final bodyDef = BodyDef(
       userData: this, // To be able to determine object in collision
       position: Vector2.zero(),
     );
     paint.strokeWidth = strokeWidth;
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Segment(point1: start, point2: end), shapeDef);
   }
 }

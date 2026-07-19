@@ -10,7 +10,7 @@ import 'dart:io';
 // frequently in flutter/flutter's presubmit. Analyzing it here would block
 // framework changes on an unstable dependency that is not representative of
 // Flame, so it is excluded from this run.
-const _excludedPackages = {'flame_3d'};
+const _excludedPackages = {'flame_3d', 'flame_forge2d'};
 
 Future<void> main() async {
   final packages =

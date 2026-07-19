@@ -38,11 +38,12 @@ class Forge2DExample extends Forge2DGame {
 class Ball extends BodyComponent with TapCallbacks {
   Ball({Vector2? initialPosition})
     : super(
-        fixtureDefs: [
-          FixtureDef(
-            CircleShape()..radius = 5,
-            restitution: 0.8,
-            friction: 0.4,
+        shapeSpecs: [
+          ShapeSpec(
+            Circle(radius: 5),
+            ShapeDef(
+              material: SurfaceMaterial(restitution: 0.8, friction: 0.4),
+            ),
           ),
         ],
         bodyDef: BodyDef(
@@ -66,12 +67,12 @@ class Wall extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = EdgeShape()..set(_start, _end);
-    final fixtureDef = FixtureDef(shape, friction: 0.3);
+    final shapeDef = ShapeDef(material: SurfaceMaterial(friction: 0.3));
     final bodyDef = BodyDef(
       position: Vector2.zero(),
     );
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Segment(point1: _start, point2: _end), shapeDef);
   }
 }

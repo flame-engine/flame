@@ -54,23 +54,18 @@ class CircleShuffler extends BodyComponent {
       final xPos = radius * cos(2 * pi * (i / numPieces));
       final yPos = radius * sin(2 * pi * (i / numPieces));
 
-      final shape = CircleShape()
-        ..radius = 1.2
-        ..position.setValues(xPos, yPos);
-
-      final fixtureDef = FixtureDef(
-        shape,
-        density: 50.0,
-        friction: 0.1,
-        restitution: 0.9,
+      body.createShape(
+        Circle(radius: 1.2, center: Vector2(xPos, yPos)),
+        ShapeDef(
+          density: 50.0,
+          material: SurfaceMaterial(friction: 0.1, restitution: 0.9),
+        ),
       );
-
-      body.createFixture(fixtureDef);
     }
 
-    final jointDef = RevoluteJointDef()
-      ..initialize(body, ball.body, body.position);
-    world.createJoint(RevoluteJoint(jointDef));
+    world.physicsWorld.createRevoluteJoint(
+      RevoluteJointDef(bodyA: body, bodyB: ball.body),
+    );
 
     return body;
   }

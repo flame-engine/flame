@@ -89,9 +89,14 @@ class WeldJointWorld extends Forge2DWorld
   }
 
   void createWeldJoint(Body first, Body second, Vector2 anchor) {
-    final weldJointDef = WeldJointDef()..initialize(first, second, anchor);
-
-    createJoint(WeldJoint(weldJointDef));
+    physicsWorld.createWeldJoint(
+      WeldJointDef(
+        bodyA: first,
+        bodyB: second,
+        localAnchorA: first.localPoint(anchor),
+        localAnchorB: second.localPoint(anchor),
+      ),
+    );
   }
 
   @override

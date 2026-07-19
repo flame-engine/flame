@@ -1,7 +1,7 @@
 import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
+import 'package:flame_forge2d/contact_events_dispatcher.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
-import 'package:forge2d/forge2d.dart';
 
 /// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
@@ -9,14 +9,14 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
     Forge2DWorld? world,
     CameraComponent? camera,
     Vector2? gravity,
-    ContactListener? contactListener,
+    ContactEventsDispatcher? contactEventsDispatcher,
     double zoom = 10,
   }) : super(
          world:
              ((world?..gravity = gravity ?? world.gravity) ??
                      Forge2DWorld(
                        gravity: gravity,
-                       contactListener: contactListener,
+                       contactEventsDispatcher: contactEventsDispatcher,
                      ))
                  as T,
          camera: (camera ?? CameraComponent())..viewfinder.zoom = zoom,

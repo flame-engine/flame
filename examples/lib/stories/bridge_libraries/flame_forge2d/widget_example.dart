@@ -30,13 +30,10 @@ class WidgetExample extends Forge2DGame {
     );
     final body = world.createBody(bodyDef);
 
-    final shape = PolygonShape()..setAsBoxXY(4.6, 0.8);
-    final fixtureDef = FixtureDef(
-      shape,
-      restitution: 0.8,
-      friction: 0.2,
+    body.createShape(
+      Polygon.box(4.6, 0.8),
+      ShapeDef(material: SurfaceMaterial(restitution: 0.8, friction: 0.2)),
     );
-    body.createFixture(fixtureDef);
     return body;
   }
 

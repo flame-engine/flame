@@ -1,1 +1,7 @@
 include: package:flame_lint/analysis_options_with_dcm.yaml
+
+analyzer:
+  errors:
+    # TODO(spydon): Remove once the Box2D v3 based forge2d is published and
+    # the temporary git dependency is replaced with a pub version.
+    invalid_dependency: ignore

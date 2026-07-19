@@ -51,15 +51,15 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
   }
 
   MotorJoint createMotorJoint(Body first, Body second) {
-    final motorJointDef = MotorJointDef()
-      ..initialize(first, second)
-      ..maxForce = 1000
-      ..maxTorque = 1000
-      ..correctionFactor = 0.1;
-
-    final joint = MotorJoint(motorJointDef);
-    createJoint(joint);
-    return joint;
+    return physicsWorld.createMotorJoint(
+      MotorJointDef(
+        bodyA: first,
+        bodyB: second,
+        maxForce: 1000,
+        maxTorque: 1000,
+        correctionFactor: 0.1,
+      ),
+    );
   }
 
   final linearOffset = Vector2.zero();
@@ -73,13 +73,13 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
       deltaOffset = -deltaOffset;
     }
 
-    final linearOffsetX = joint.getLinearOffset().x + deltaOffset;
-    final linearOffsetY = joint.getLinearOffset().y + deltaOffset;
+    final linearOffsetX = joint.linearOffset.x + deltaOffset;
+    final linearOffsetY = joint.linearOffset.y + deltaOffset;
     linearOffset.setValues(linearOffsetX, linearOffsetY);
-    final angularOffset = joint.getAngularOffset() + deltaOffset;
+    final angularOffset = joint.angularOffset + deltaOffset;
 
-    joint.setLinearOffset(linearOffset);
-    joint.setAngularOffset(angularOffset);
+    joint.linearOffset = linearOffset;
+    joint.angularOffset = angularOffset;
   }
 }
 
@@ -91,8 +91,8 @@ class JointRenderer extends Component {
   @override
   void render(Canvas canvas) {
     canvas.drawLine(
-      joint.anchorA.toOffset(),
-      joint.anchorB.toOffset(),
+      joint.bodyA.worldPoint(joint.localAnchorA).toOffset(),
+      joint.bodyB.worldPoint(joint.localAnchorB).toOffset(),
       debugPaint,
     );
   }
