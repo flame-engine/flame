@@ -13,12 +13,12 @@ import 'package:flame_3d/src/camera/camera_component_3d.dart';
 class MeshComponent extends Object3D {
   /// {@macro mesh_component}
   MeshComponent({
-    required Mesh mesh,
+    required this._mesh,
     super.position,
     super.scale,
     super.rotation,
     super.children,
-  }) : _mesh = mesh;
+  });
 
   /// The mesh resource.
   Mesh get mesh => _mesh;

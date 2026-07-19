@@ -11,11 +11,10 @@ class Flower extends PositionComponent
     with TapCallbacks, HasPaint<FlowerPaint> {
   Flower({
     required double size,
-    void Function(Flower)? onTap,
+    this._onTap,
     Decorator? decorator,
     super.position,
-  }) : _onTap = onTap,
-       super(size: Vector2.all(size), anchor: Anchor.center) {
+  }) : super(size: Vector2.all(size), anchor: Anchor.center) {
     this.decorator.addLast(decorator);
     final radius = size * 0.38;
     _paths.add(_makePath(radius * 1.4, 6, -0.05, 0.8));

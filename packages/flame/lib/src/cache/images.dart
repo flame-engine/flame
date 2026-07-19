@@ -8,10 +8,9 @@ import 'package:flutter/services.dart';
 
 class Images {
   Images({
-    String prefix = 'assets/images/',
+    this._prefix = 'assets/images/',
     AssetBundle? bundle,
-  }) : _prefix = prefix,
-       bundle = bundle ?? Flame.bundle;
+  }) : bundle = bundle ?? Flame.bundle;
 
   final Map<String, _ImageAsset> _assets = {};
 

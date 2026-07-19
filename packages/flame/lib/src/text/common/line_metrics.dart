@@ -11,16 +11,13 @@ import 'package:flame/extensions.dart';
 /// improve legibility of multi-line text.
 class LineMetrics {
   LineMetrics({
-    double left = 0,
-    double baseline = 0,
-    double width = 0,
+    this._left = 0,
+    this._baseline = 0,
+    this._width = 0,
     double? ascent,
     double? descent,
     double? height,
-  }) : _left = left,
-       _baseline = baseline,
-       _width = width,
-       _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
+  }) : _ascent = ascent ?? (height == null ? 0 : height - (descent ?? 0)),
        _descent =
            descent ?? (height == null ? 0 : height - (ascent ?? height)) {
     _updateSize();

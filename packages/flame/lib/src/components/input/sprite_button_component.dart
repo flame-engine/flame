@@ -20,7 +20,7 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
     with TapCallbacks {
   SpriteButtonComponent({
     Sprite? button,
-    Sprite? buttonDown,
+    this._buttonDown,
     this.onPressed,
     super.position,
     Vector2? size,
@@ -30,7 +30,6 @@ class SpriteButtonComponent extends SpriteGroupComponent<ButtonState>
     super.children,
     super.priority,
   }) : _button = button,
-       _buttonDown = buttonDown,
        super(
          current: ButtonState.up,
          size: size ?? button?.originalSize,

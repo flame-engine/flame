@@ -109,9 +109,8 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     bool addTestHitbox = true,
     super.children,
     this.name,
-    bool Function(PositionComponent other)? onComponentTypeCheck,
-  }) : _onComponentTypeCheck = onComponentTypeCheck,
-       super(
+    this._onComponentTypeCheck,
+  }) : super(
          position: position,
          size: size,
        ) {

@@ -21,8 +21,8 @@ class RiveComponent extends PositionComponent {
     this.stateMachine,
     bool antialiasing = true,
     BoxFit fit = BoxFit.contain,
-    Alignment alignment = Alignment.center,
-    bool clipToBounds = false,
+    this._alignment = Alignment.center,
+    this._clipToBounds = false,
     super.position,
 
     /// The logical size of the component.
@@ -34,9 +34,7 @@ class RiveComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _alignment = alignment,
-       _clipToBounds = clipToBounds,
-       _riveFit = _toRiveFit(fit),
+  }) : _riveFit = _toRiveFit(fit),
        _layerPaint = antialiasing ? null : (Paint()..isAntiAlias = false),
        super(size: size ?? Vector2(artboard.width, artboard.height)) {
     void updateRenderSize() {
