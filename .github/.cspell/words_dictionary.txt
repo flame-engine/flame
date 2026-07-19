@@ -14,7 +14,6 @@ platformer
 positionable
 postmultiply
 preorder
-prerender
 prerendered
 pressable
 presubmit
