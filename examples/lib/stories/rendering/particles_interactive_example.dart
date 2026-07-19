@@ -1,28 +1,36 @@
-import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 
 class ParticlesInteractiveExample extends FlameGame with PanDetector {
   static const description =
-      'An example which shows how '
-      'ParticleSystemComponent can be added in runtime '
-      'following an event, in this example, the mouse '
-      'dragging';
-
-  final random = Random();
-  final Tween<double> noise = Tween(begin: -1, end: 1);
-  final ColorTween colorTween;
+      'A single pooled ParticleEmitterComponent follows the pointer while '
+      'you drag: worldSpace keeps already-spawned particles in place, and '
+      'emit() releases more from the preallocated buffer, so no objects are '
+      'allocated while the effect runs.';
 
   ParticlesInteractiveExample({
     required Color from,
     required Color to,
     required double zoom,
-  }) : colorTween = ColorTween(begin: from, end: to),
+  }) : _emitter = ParticleEmitterComponent(
+         emitter: ParticleEmitter(
+           maxParticles: 5000,
+           lifespan: (0.5, 2),
+           shape: const CircleEmitterShape(4),
+           speed: (10, 120),
+           drag: 1,
+           size: (2, 6),
+           scaleOverLife: ParticleCurve(1, 0, curve: Curves.easeOut),
+           colorOverLife: ColorRamp([from, to]),
+         ),
+         renderer: CircleParticleRenderer(),
+         emitting: false,
+         removeOnFinish: false,
+         worldSpace: true,
+       ),
        super(
          camera: CameraComponent.withFixedResolution(
            width: 400,
@@ -30,31 +38,16 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
          )..viewfinder.zoom = zoom,
        );
 
+  final ParticleEmitterComponent _emitter;
+
+  @override
+  Future<void> onLoad() async {
+    add(_emitter);
+  }
+
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    add(
-      ParticleSystemComponent(
-        position: info.eventPosition.widget,
-        particle: Particle.generate(
-          count: 40,
-          generator: (i) {
-            return AcceleratedParticle(
-              lifespan: 2,
-              speed:
-                  Vector2(
-                    noise.transform(random.nextDouble()),
-                    noise.transform(random.nextDouble()),
-                  ) *
-                  i.toDouble(),
-              child: CircleParticle(
-                radius: 2,
-                paint: Paint()
-                  ..color = colorTween.transform(random.nextDouble())!,
-              ),
-            );
-          },
-        ),
-      ),
-    );
+    _emitter.position = info.eventPosition.widget;
+    _emitter.emit(20);
   }
 }
