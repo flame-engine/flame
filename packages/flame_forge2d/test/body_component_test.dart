@@ -216,6 +216,32 @@ void main() {
       });
     });
 
+    group('rendering toggles', () {
+      testWithGame(
+        'render skips the shapes when renderBody is false and '
+        'renderDebugMode always renders them',
+        Forge2DGame.new,
+        (game) async {
+          final canvas = _MockCanvas();
+          final component = _CountingBodyComponent(
+            bodyDef: BodyDef(),
+            shapeSpecs: [ShapeSpec(Circle(radius: 1))],
+          );
+          await game.world.ensureAdd(component);
+
+          component.render(canvas);
+          expect(component.renderedShapes, 1);
+
+          component.renderBody = false;
+          component.render(canvas);
+          expect(component.renderedShapes, 1);
+
+          component.renderDebugMode(canvas);
+          expect(component.renderedShapes, 2);
+        },
+      );
+    });
+
     group('renderShape', () {
       group('returns normally', () {
         late Canvas canvas;
@@ -434,7 +460,109 @@ void main() {
             expect(radii, {10.0, 20.0, 30.0});
           },
         );
+
+        flameTester.testGameWidget(
+          'without contact events enabled when no ContactCallbacks is used',
+          setUp: (game, tester) async {
+            final bodyComponent = BodyComponent(
+              bodyDef: BodyDef(),
+              shapeSpecs: [ShapeSpec(Circle(radius: 10))],
+              key: ComponentKey.named('tested'),
+            );
+            game.world.add(bodyComponent);
+          },
+          verify: (game, tester) async {
+            final bodyComponent = game.findByKeyName<BodyComponent>('tested')!;
+            final shape = bodyComponent.body.shapes.single;
+            expect(shape.contactEventsEnabled, isFalse);
+            expect(shape.sensorEventsEnabled, isFalse);
+          },
+        );
+
+        flameTester.testGameWidget(
+          'with contact events enabled when the bodyDef userData is a '
+          'ContactCallbacks',
+          setUp: (game, tester) async {
+            final bodyComponent = BodyComponent(
+              bodyDef: BodyDef(userData: ContactCallbacks()),
+              shapeSpecs: [ShapeSpec(Circle(radius: 10))],
+              key: ComponentKey.named('tested'),
+            );
+            game.world.add(bodyComponent);
+          },
+          verify: (game, tester) async {
+            final bodyComponent = game.findByKeyName<BodyComponent>('tested')!;
+            final shape = bodyComponent.body.shapes.single;
+            expect(shape.contactEventsEnabled, isTrue);
+            expect(shape.sensorEventsEnabled, isTrue);
+          },
+        );
+
+        flameTester.testGameWidget(
+          'with contact events enabled when a ShapeDef userData is a '
+          'ContactCallbacks',
+          setUp: (game, tester) async {
+            final bodyComponent = BodyComponent(
+              bodyDef: BodyDef(),
+              shapeSpecs: [
+                ShapeSpec(
+                  Circle(radius: 10),
+                  ShapeDef(userData: ContactCallbacks()),
+                ),
+              ],
+              key: ComponentKey.named('tested'),
+            );
+            game.world.add(bodyComponent);
+          },
+          verify: (game, tester) async {
+            final bodyComponent = game.findByKeyName<BodyComponent>('tested')!;
+            final shape = bodyComponent.body.shapes.single;
+            expect(shape.contactEventsEnabled, isTrue);
+            expect(shape.sensorEventsEnabled, isTrue);
+          },
+        );
       });
+    });
+
+    group('accessors', () {
+      testWithGame('position, center and angle', Forge2DGame.new, (game) async {
+        final component = BodyComponent(
+          bodyDef: BodyDef(
+            position: Vector2(3, 4),
+            rotation: Rot.fromAngle(1),
+          ),
+          shapeSpecs: [ShapeSpec(Circle(radius: 2))],
+        );
+        await game.world.ensureAdd(component);
+
+        expect(component.position, Vector2(3, 4));
+        expect(component.center, Vector2(3, 4));
+        expect(component.angle, closeTo(1, 1e-6));
+        expect(component.camera, game.camera);
+      });
+
+      testWithGame(
+        'parentToLocal and localToParent are inverses',
+        Forge2DGame.new,
+        (game) async {
+          final component = BodyComponent(
+            bodyDef: BodyDef(
+              position: Vector2(3, 4),
+              rotation: Rot.fromAngle(1),
+            ),
+            shapeSpecs: [ShapeSpec(Circle(radius: 2))],
+          );
+          await game.world.ensureAdd(component);
+          game.update(0);
+
+          final point = Vector2(1, 2);
+          final roundTrip = component.parentToLocal(
+            component.localToParent(point),
+          );
+          expect(roundTrip.x, closeTo(point.x, 1e-6));
+          expect(roundTrip.y, closeTo(point.y, 1e-6));
+        },
+      );
     });
 
     group('containsLocalPoint', () {
@@ -526,6 +654,18 @@ void main() {
       },
     );
   });
+}
+
+class _CountingBodyComponent extends BodyComponent {
+  _CountingBodyComponent({super.bodyDef, super.shapeSpecs});
+
+  int renderedShapes = 0;
+
+  @override
+  void renderShape(Canvas canvas, Shape shape) {
+    renderedShapes++;
+    super.renderShape(canvas, shape);
+  }
 }
 
 class _ConsistentBodyComponent extends BodyComponent {

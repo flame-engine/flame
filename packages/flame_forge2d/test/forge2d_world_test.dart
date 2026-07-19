@@ -87,4 +87,125 @@ void main() {
       expect(hit.point.x, closeTo(9, 1e-4));
     },
   );
+
+  testWithGame(
+    'castRay reports every hit through the callback',
+    Forge2DGame.new,
+    (game) async {
+      game.world
+          .createBody(BodyDef(position: Vector2(10, 0)))
+          .createShape(
+            Circle(radius: 1),
+          );
+      game.world
+          .createBody(BodyDef(position: Vector2(15, 0)))
+          .createShape(
+            Circle(radius: 1),
+          );
+
+      final hits = <RayHit>[];
+      game.world.castRay(Vector2.zero(), Vector2(20, 0), (hit) {
+        hits.add(hit);
+        return 1;
+      });
+
+      expect(hits, hasLength(2));
+    },
+  );
+
+  testWithGame(
+    'castRayAll returns the hits sorted from nearest to farthest',
+    Forge2DGame.new,
+    (game) async {
+      final far = game.world.createBody(BodyDef(position: Vector2(15, 0)));
+      far.createShape(Circle(radius: 1));
+      final near = game.world.createBody(BodyDef(position: Vector2(10, 0)));
+      near.createShape(Circle(radius: 1));
+
+      final hits = game.world.castRayAll(Vector2.zero(), Vector2(20, 0));
+
+      expect(hits, hasLength(2));
+      expect(hits.first.shape.body, near);
+      expect(hits.last.shape.body, far);
+    },
+  );
+
+  testWithGame(
+    'overlapAabb returns the shapes overlapping the aabb',
+    Forge2DGame.new,
+    (game) async {
+      final inside = game.world.createBody(BodyDef(position: Vector2(5, 5)));
+      final insideShape = inside.createShape(Circle(radius: 1));
+      final outside = game.world.createBody(BodyDef(position: Vector2(50, 50)));
+      outside.createShape(Circle(radius: 1));
+
+      final overlapping = game.world.overlapAabb(
+        Aabb(Vector2.zero(), Vector2.all(10)),
+      );
+
+      expect(overlapping, [insideShape]);
+      expect(
+        game.world.overlapAabb(Aabb(Vector2(20, 20), Vector2(30, 30))),
+        isEmpty,
+      );
+    },
+  );
+
+  testWithGame(
+    'preSolveCallback can veto a contact',
+    Forge2DGame.new,
+    (game) async {
+      final platform = game.world.createBody(BodyDef(position: Vector2(0, 5)));
+      platform.createShape(
+        Polygon.box(10, 1),
+        ShapeDef(enablePreSolveEvents: true),
+      );
+      final ball = game.world.createBody(BodyDef(type: BodyType.dynamic));
+      ball.createShape(
+        Circle(radius: 1),
+        ShapeDef(enablePreSolveEvents: true),
+      );
+
+      var preSolveCalls = 0;
+      game.world.preSolveCallback = (shapeA, shapeB, normal) {
+        preSolveCalls++;
+        return false;
+      };
+
+      for (var i = 0; i < 120; i++) {
+        game.update(1 / 60);
+      }
+
+      // The vetoed contact never stopped the falling ball, so it has dropped
+      // through the platform.
+      expect(preSolveCalls, greaterThan(0));
+      expect(ball.position.y, greaterThan(6));
+    },
+  );
+
+  testWithGame(
+    'customFilterCallback can disable a collision',
+    Forge2DGame.new,
+    (game) async {
+      final platform = game.world.createBody(BodyDef(position: Vector2(0, 5)));
+      platform.createShape(Polygon.box(10, 1));
+      final ball = game.world.createBody(BodyDef(type: BodyType.dynamic));
+      ball.createShape(Circle(radius: 1));
+
+      var filterCalls = 0;
+      game.world.customFilterCallback = (shapeA, shapeB) {
+        filterCalls++;
+        return false;
+      };
+
+      for (var i = 0; i < 120; i++) {
+        game.update(1 / 60);
+      }
+
+      // The filtered pair never collided, so the ball has fallen through the
+      // platform.
+      expect(filterCalls, greaterThan(0));
+      expect(ball.position.y, greaterThan(6));
+    },
+  );
 }
