@@ -36,25 +36,16 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
                        contactEventsDispatcher: contactEventsDispatcher,
                      ))
                  as T,
-         camera: _prepareCamera(camera, metersToPixels),
-       );
-
-  static CameraComponent _prepareCamera(
-    CameraComponent? camera,
-    double metersToPixels,
-  ) {
-    if (camera == null) {
-      return CameraComponent(
-        viewfinder: Forge2DViewfinder(metersToPixels: metersToPixels),
-      );
-    }
-    final viewfinder = camera.viewfinder;
+         camera: camera ?? CameraComponent(),
+       ) {
+    final viewfinder = this.camera.viewfinder;
     if (viewfinder is Forge2DViewfinder) {
       viewfinder.metersToPixels = metersToPixels;
     } else {
-      camera.viewfinder = Forge2DViewfinder(metersToPixels: metersToPixels);
+      this.camera.viewfinder = Forge2DViewfinder(
+        metersToPixels: metersToPixels,
+      );
     }
-    return camera;
   }
 
   /// The number of pixels that one meter of the physics world is rendered as.
