@@ -88,6 +88,21 @@ void main() {
     );
 
     testWithGame(
+      'the zoom is applied on top of metersToPixels',
+      () => Forge2DGame(metersToPixels: 20),
+      (game) async {
+        game.onGameResize(Vector2.all(100));
+        game.camera.viewfinder.zoom = 2;
+
+        // One meter covers 20 * 2 pixels, measured from the centre of the
+        // screen, and the position stays in meters both ways.
+        expect(game.worldToScreen(Vector2(1, 0)), Vector2(90, 50));
+        expect(game.screenToWorld(Vector2(90, 50)), Vector2(1, 0));
+        expect(game.camera.viewfinder.position, Vector2.zero());
+      },
+    );
+
+    testWithGame(
       'the default renders one meter as ten pixels',
       Forge2DGame.new,
       (game) async {
