@@ -21,7 +21,7 @@ class WeldJointWorld extends Forge2DWorld
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     final leftPillar = Box(
       startPosition: game.screenToWorld(Vector2(50, game.size.y))

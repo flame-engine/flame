@@ -25,7 +25,7 @@ class RevoluteJointWithMotorWorld extends Forge2DWorld
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(game);
     addAll(boundaries);
     final center = Vector2.zero();

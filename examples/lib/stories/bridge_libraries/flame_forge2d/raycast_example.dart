@@ -27,7 +27,7 @@ class RaycastExample extends Forge2DGame with MouseMovementDetector {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     world.addAll(createBoundaries(this));
 
     const numberOfRows = 3;

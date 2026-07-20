@@ -25,7 +25,7 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     final box = Box(
       startPosition: Vector2.zero(),

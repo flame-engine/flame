@@ -33,12 +33,16 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
          camera: (camera ?? CameraComponent())..viewfinder.zoom = zoom,
        );
 
+  /// Initializes Forge2D and then loads the game.
+  ///
+  /// On the web this is what loads the Box2D WebAssembly module, and no
+  /// physics world can be created before it has completed, which is why the
+  /// world of a [Forge2DWorld] is created lazily.
+  ///
+  /// Subclasses that override this **must** await `super.onLoad()` before
+  /// they create any bodies, or the game will throw on the web.
   @override
   Future<void> onLoad() async {
-    // Forge2D has to be initialized before any physics world is created,
-    // which on the web means loading the Box2D WebAssembly module. The
-    // world of a [Forge2DWorld] is created lazily so that this can happen
-    // first.
     await initializeForge2D();
     await super.onLoad();
   }

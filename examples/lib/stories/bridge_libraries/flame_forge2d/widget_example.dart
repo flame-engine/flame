@@ -17,7 +17,7 @@ class WidgetExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(this, strokeWidth: 0);
     world.addAll(boundaries);
   }

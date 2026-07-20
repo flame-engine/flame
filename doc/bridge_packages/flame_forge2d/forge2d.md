@@ -20,9 +20,21 @@ clang or gcc on Linux). On the web a bundled WebAssembly build of Box2D is used 
 
 Forge2D has to be initialized with `await initializeForge2D()` before any physics world is
 created, which on the web is what loads that WebAssembly module. [Forge2DGame] awaits this in its
-`onLoad`, so games don't have to do anything. If you create a `Forge2DWorld` or a raw Forge2D
-`World` outside of a `Forge2DGame`, await `initializeForge2D()` yourself first, or the world
-creation will throw on the web.
+`onLoad`, so games don't have to do anything, but that also means that a `Forge2DGame` subclass
+which overrides `onLoad` has to await `super.onLoad()` before it creates any bodies:
+
+```dart
+class MyGame extends Forge2DGame {
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();  // Not awaiting this breaks the game on the web.
+    world.add(MyBody());
+  }
+}
+```
+
+If you create a `Forge2DWorld` or a raw Forge2D `World` outside of a `Forge2DGame`, await
+`initializeForge2D()` yourself first, or the world creation will throw on the web.
 
 If you are upgrading an existing game from flame_forge2d 0.19, see the
 [migration guide](migration.md).

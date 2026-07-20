@@ -17,7 +17,7 @@ class PrismaticJointExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     final box = DraggableBox(startPosition: anchor, width: 6, height: 6);
     world.add(box);

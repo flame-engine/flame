@@ -22,7 +22,7 @@ class RevoluteJointWorld extends Forge2DWorld
     with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     addAll(createBoundaries(game));
   }
 

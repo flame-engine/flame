@@ -18,7 +18,7 @@ class CompositionExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     world.addAll(boundaries);
     world.add(TappableText(Vector2(0, 5)));
@@ -74,7 +74,7 @@ class TappableBall extends Ball with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     _textPaint = TextPaint(style: _textStyle);
     textComponent = TextComponent(
       text: counter.toString(),

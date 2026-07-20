@@ -15,7 +15,7 @@ class TapCallbacksExample extends Forge2DGame {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     world.addAll(boundaries);
     world.add(TappableBall(Vector2.zero()));
