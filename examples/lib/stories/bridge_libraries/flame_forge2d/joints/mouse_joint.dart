@@ -1,4 +1,3 @@
-import 'package:examples/stories/bridge_libraries/flame_forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
@@ -31,12 +30,9 @@ class MouseJointWorld extends Forge2DWorld
     final boundaries = createBoundaries(game);
     addAll(boundaries);
 
-    final center = Vector2.zero();
     groundBody = createBody(BodyDef());
-    ball = Ball(center, radius: 5, color: ExampleColors.amber);
+    ball = Ball(Vector2.zero(), radius: 5, color: ExampleColors.amber);
     add(ball);
-    add(CornerRamp(center));
-    add(CornerRamp(center, isMirrored: true));
   }
 
   @override

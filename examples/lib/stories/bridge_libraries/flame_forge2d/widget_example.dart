@@ -6,15 +6,23 @@ import 'package:flutter/material.dart';
 
 class WidgetExample extends Forge2DExampleGame {
   static const String description = '''
-    This examples shows how to render a widget on top of a Forge2D body outside
-    of Flame.
+    This example shows how to render a widget on top of a Forge2D body,
+    outside of Flame. The Flutter buttons are real widgets in the Flutter
+    tree, driven by the physics bodies underneath them, so you can press them
+    while they tumble around.
   ''';
+
+  /// The size of the button widget in logical pixels.
+  static const buttonWidth = 190.0;
+  static const buttonHeight = 48.0;
 
   final List<void Function()> updateStates = [];
   final Map<int, Body> bodyIdMap = {};
   final List<int> addLaterIds = [];
 
-  WidgetExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  static const zoom = 20.0;
+
+  WidgetExample() : super(zoom: zoom, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -31,8 +39,9 @@ class WidgetExample extends Forge2DExampleGame {
     );
     final body = world.createBody(bodyDef);
 
+    // The body matches the size of the button widget that is drawn on top.
     body.createShape(
-      Polygon.box(4.6, 0.8),
+      Polygon.box(buttonWidth / 2 / zoom, buttonHeight / 2 / zoom),
       ShapeDef(material: SurfaceMaterial(restitution: 0.8, friction: 0.2)),
     );
     return body;
@@ -113,19 +122,23 @@ class _BodyButtonState extends State<BodyButtonWidget> {
     } else {
       final bodyPosition = _game.worldToScreen(body.position);
       return Positioned(
-        top: bodyPosition.y - 18,
-        left: bodyPosition.x - 90,
+        top: bodyPosition.y - WidgetExample.buttonHeight / 2,
+        left: bodyPosition.x - WidgetExample.buttonWidth / 2,
         child: Transform.rotate(
           angle: body.angle,
-          child: ElevatedButton(
-            onPressed: () {
-              setState(
-                () => body.applyLinearImpulse(Vector2(0.0, 1000)),
-              );
-            },
-            child: const Text(
-              'Flying button!',
-              textScaler: TextScaler.linear(2.0),
+          child: SizedBox(
+            width: WidgetExample.buttonWidth,
+            height: WidgetExample.buttonHeight,
+            child: FloatingActionButton.extended(
+              // Every button needs its own tag, since there is more than one.
+              heroTag: 'flying_button_$_bodyId',
+              onPressed: () {
+                setState(
+                  () => body.applyLinearImpulse(Vector2(0.0, 1000)),
+                );
+              },
+              icon: const FlutterLogo(size: 28),
+              label: const Text('Flutter'),
             ),
           ),
         ),
