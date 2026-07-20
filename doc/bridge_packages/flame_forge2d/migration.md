@@ -104,6 +104,12 @@ y-axis points down, that is the opposite order from what Box2D's own
 documentation describes: list ground chains from **left to right**, and wind
 loops clockwise on screen. If bodies fall through a chain, reverse its points.
 
+A one-sided chain is the right shape for ground and walls that are only ever
+approached from one side. For solid level geometry that has to block from
+every direction, such as a ramp or a platform that bodies can reach from
+below, use a `Polygon` instead: a chain loop is hollow, so bodies that get
+past one edge end up trapped inside it.
+
 
 ## Contact callbacks
 

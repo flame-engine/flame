@@ -9,7 +9,8 @@ class CameraExample extends Forge2DExampleGame {
     camera. When the screen is tapped a pizza is added, which the camera will
     follow. Other than that it is the same as the domino example.
   ''';
-  CameraExample() : super(world: CameraExampleWorld());
+  // The same zoom as the domino example, since it shows the same tower.
+  CameraExample() : super(world: CameraExampleWorld(), zoom: 24);
 }
 
 class CameraExampleWorld extends DominoExampleWorld {
