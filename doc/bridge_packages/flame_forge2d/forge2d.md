@@ -48,11 +48,19 @@ If you are going to use Forge2D in your project it can be a good idea to use the
 It is called `Forge2DGame` and supports both the special Forge2D components called `BodyComponents`
 as well as normal Flame components.
 
-`Forge2DGame` has a built-in `CameraComponent` and has a zoom level set to 10 by default, so your
-components will be a lot bigger than in a normal Flame game. This is due to the speed limit in the
-`Forge2D` world, which you would hit very quickly if you are using it with `zoom = 1.0`. You can
-easily change the zoom level either by calling `super(zoom: yourZoom)` in your constructor or
-doing `game.cameraComponent.viewfinder.zoom = yourZoom;` at a later stage.
+`Forge2DGame` has a built-in `CameraComponent` that uses a `Forge2DViewfinder`. The physics world
+is measured in meters, and the viewfinder renders one meter as `metersToPixels` pixels, which is
+10 by default. Your components will therefore be a lot bigger than in a normal Flame game, which
+is what you want: there is a speed limit in the `Forge2D` world that you would hit very quickly if
+one meter was one pixel.
+
+You can change the scale either by calling `super(metersToPixels: yourScale)` in your constructor
+or by doing `game.metersToPixels = yourScale;` at a later stage.
+
+The `zoom` of the viewfinder is applied on top of `metersToPixels` and defaults to 1, so it is free
+for what it is normally used for: zooming the camera in and out. Everything except the rendering
+stays in meters, so body positions, `camera.viewfinder.position`, `camera.visibleWorldRect` and the
+local positions that events report are all still expressed in meters.
 
 If you are previously familiar with Box2D it can be good to know that the whole concept of the
 Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body` that you want to

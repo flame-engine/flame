@@ -16,7 +16,11 @@ class WheelJointExample extends Forge2DExampleGame {
   ''';
 
   WheelJointExample()
-    : super(gravity: Vector2(0, 10.0), world: WheelJointWorld(), zoom: 14);
+    : super(
+        gravity: Vector2(0, 10.0),
+        world: WheelJointWorld(),
+        metersToPixels: 14,
+      );
 }
 
 class WheelJointWorld extends Forge2DWorld

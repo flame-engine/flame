@@ -14,7 +14,7 @@ class CompositionExample extends Forge2DExampleGame {
     Flame component. Click the ball to see the number increment.
   ''';
 
-  CompositionExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  CompositionExample() : super(metersToPixels: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {

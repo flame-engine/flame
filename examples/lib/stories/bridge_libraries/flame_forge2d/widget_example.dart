@@ -20,9 +20,10 @@ class WidgetExample extends Forge2DExampleGame {
   final Map<int, Body> bodyIdMap = {};
   final List<int> addLaterIds = [];
 
-  static const zoom = 20.0;
+  /// How many pixels one meter of the physics world is rendered as.
+  static const scale = 20.0;
 
-  WidgetExample() : super(zoom: zoom, gravity: Vector2(0, 10.0));
+  WidgetExample() : super(metersToPixels: scale, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
@@ -41,7 +42,10 @@ class WidgetExample extends Forge2DExampleGame {
 
     // The body matches the size of the button widget that is drawn on top.
     body.createShape(
-      Polygon.box(buttonWidth / 2 / zoom, buttonHeight / 2 / zoom),
+      Polygon.box(
+        buttonWidth / 2 / scale,
+        buttonHeight / 2 / scale,
+      ),
       ShapeDef(material: SurfaceMaterial(restitution: 0.8, friction: 0.2)),
     );
     return body;

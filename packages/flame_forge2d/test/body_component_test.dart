@@ -596,7 +596,7 @@ void main() {
     group('containsLocalPoint', () {
       testWithGame('with rotation', Forge2DGame.new, (game) async {
         game.camera.viewfinder.anchor = Anchor.topLeft;
-        final zoom = game.camera.viewfinder.zoom;
+        final zoom = game.metersToPixels;
         final position = Vector2.all(10);
         final body = game.world.createBody(
           BodyDef(position: position, rotation: Rot.fromAngle(pi / 2)),

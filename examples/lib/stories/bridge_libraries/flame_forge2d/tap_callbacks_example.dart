@@ -12,7 +12,7 @@ class TapCallbacksExample extends Forge2DExampleGame {
     Tap the ball to give it a random impulse, or the text to add an effect to
     it.
   ''';
-  TapCallbacksExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  TapCallbacksExample() : super(metersToPixels: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {

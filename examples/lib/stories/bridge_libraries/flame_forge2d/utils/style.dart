@@ -101,7 +101,12 @@ mixin GlowingBody on BodyComponent {
 /// The base game for the Forge2D examples, which gives them the shared dark
 /// background.
 class Forge2DExampleGame extends Forge2DGame {
-  Forge2DExampleGame({super.world, super.camera, super.gravity, super.zoom});
+  Forge2DExampleGame({
+    super.world,
+    super.camera,
+    super.gravity,
+    super.metersToPixels,
+  });
 
   @override
   Color backgroundColor() => ExampleColors.background;

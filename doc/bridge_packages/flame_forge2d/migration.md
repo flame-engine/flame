@@ -173,6 +173,25 @@ together with the body.
   later. Call `world.physicsWorld.destroy()` yourself when you are permanently done with a world.
 
 
+## Forge2DGame
+
+The meters-to-pixels scaling no longer goes through the camera's zoom, so the zoom is free for
+zooming the camera in and out.
+
+- `Forge2DGame(zoom: 24)` becomes `Forge2DGame(metersToPixels: 24)`, and
+  `game.camera.viewfinder.zoom = 24` becomes `game.metersToPixels = 24`. The default is still 10,
+  so games that did not set a zoom look the same as before.
+- The camera of a `Forge2DGame` uses a `Forge2DViewfinder`, which renders one meter of the physics
+  world as `metersToPixels` pixels. Its `zoom` is applied on top of that and now starts at 1. If
+  you pass your own `camera`, its viewfinder is replaced with a `Forge2DViewfinder`, so pass one
+  yourself if you have a custom viewfinder.
+- Nothing outside of the rendering changed units: body positions,
+  `camera.viewfinder.position`, `camera.viewfinder.visibleGameSize`, `camera.visibleWorldRect` and
+  the local positions that events report are all still in meters.
+- Code that used the zoom to convert between meters and pixels, for example when positioning a
+  Flutter widget on top of a body, should use `game.metersToPixels` instead.
+
+
 ## Name collisions
 
 Forge2D exports a `World`, which collides with Flame's `World` component, so files that use both

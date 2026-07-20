@@ -20,7 +20,7 @@ class DominoExample extends Forge2DExampleGame {
     : super(
         gravity: Vector2(0, 10.0),
         world: DominoExampleWorld(),
-        zoom: 24,
+        metersToPixels: 24,
       );
 }
 

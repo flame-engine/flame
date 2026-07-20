@@ -1,12 +1,18 @@
 import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/contact_events_dispatcher.dart';
+import 'package:flame_forge2d/forge2d_viewfinder.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
 import 'package:forge2d/forge2d.dart' show initializeForge2D;
 
 /// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   /// Creates a game with a [Forge2DWorld].
+  ///
+  /// The world is measured in meters and rendered with [metersToPixels]
+  /// pixels per meter, see [Forge2DViewfinder]. If you pass your own [camera]
+  /// its viewfinder is replaced with a [Forge2DViewfinder], unless it already
+  /// is one, in which case [metersToPixels] is applied to it.
   ///
   /// [contactEventsDispatcher] is only used for the world that this
   /// constructor creates, so pass it to the [Forge2DWorld] itself when you
@@ -16,7 +22,7 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
     CameraComponent? camera,
     Vector2? gravity,
     ContactEventsDispatcher? contactEventsDispatcher,
-    double zoom = 10,
+    double metersToPixels = Forge2DViewfinder.defaultMetersToPixels,
   }) : assert(
          world == null || contactEventsDispatcher == null,
          'contactEventsDispatcher is ignored when a world is provided, pass '
@@ -30,8 +36,34 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
                        contactEventsDispatcher: contactEventsDispatcher,
                      ))
                  as T,
-         camera: (camera ?? CameraComponent())..viewfinder.zoom = zoom,
+         camera: _prepareCamera(camera, metersToPixels),
        );
+
+  static CameraComponent _prepareCamera(
+    CameraComponent? camera,
+    double metersToPixels,
+  ) {
+    if (camera == null) {
+      return CameraComponent(
+        viewfinder: Forge2DViewfinder(metersToPixels: metersToPixels),
+      );
+    }
+    final viewfinder = camera.viewfinder;
+    if (viewfinder is Forge2DViewfinder) {
+      viewfinder.metersToPixels = metersToPixels;
+    } else {
+      camera.viewfinder = Forge2DViewfinder(metersToPixels: metersToPixels);
+    }
+    return camera;
+  }
+
+  /// The number of pixels that one meter of the physics world is rendered as.
+  ///
+  /// See [Forge2DViewfinder.metersToPixels].
+  double get metersToPixels => _viewfinder.metersToPixels;
+  set metersToPixels(double value) => _viewfinder.metersToPixels = value;
+
+  Forge2DViewfinder get _viewfinder => camera.viewfinder as Forge2DViewfinder;
 
   /// Initializes Forge2D and then loads the game.
   ///
