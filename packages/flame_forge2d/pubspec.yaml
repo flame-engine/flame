@@ -20,13 +20,7 @@ dependencies:
   flame: ^1.38.0
   flutter:
     sdk: flutter
-  # TODO(spydon): Switch back to a pub version constraint once the Box2D v3
-  # based forge2d has been published.
-  forge2d:
-    git:
-      url: https://github.com/flame-engine/forge2d.git
-      ref: box2d-wasm
-      path: packages/forge2d
+  forge2d: ^0.15.0
 
 dev_dependencies:
   dartdoc: ^9.0.0

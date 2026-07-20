@@ -22,23 +22,25 @@ class Forge2DWorld extends World {
     forge2d.WorldDef? definition,
     ContactEventsDispatcher? contactEventsDispatcher,
     super.children,
-  }) : physicsWorld = forge2d.World(
-         gravity: gravity ?? definition?.gravity ?? defaultGravity,
-         definition: definition,
-       ),
+  }) : _gravity = gravity ?? definition?.gravity ?? defaultGravity,
+       _definition = definition,
        contactEventsDispatcher =
-           contactEventsDispatcher ?? ContactEventsDispatcher() {
-    assert(
-      physicsWorld.isValid,
-      'The physics world could not be created. Box2D allows a limited number '
-      'of simultaneous worlds, and Forge2D worlds are not freed automatically, '
-      'so call physicsWorld.destroy() on the worlds that you are done with.',
-    );
-  }
+           contactEventsDispatcher ?? ContactEventsDispatcher();
 
   static final Vector2 defaultGravity = Vector2(0, 10.0);
 
+  Vector2 _gravity;
+  final forge2d.WorldDef? _definition;
+  forge2d.World? _physicsWorld;
+
   /// The underlying Forge2D physics world.
+  ///
+  /// It is created the first time it is used rather than in the constructor,
+  /// because Forge2D has to be initialized before a world can be created,
+  /// and on the web that initialization is asynchronous. [Forge2DGame] awaits
+  /// it in its `onLoad`; if you use a [Forge2DWorld] outside of a
+  /// [Forge2DGame] you have to `await initializeForge2D()` yourself before
+  /// the world is used.
   ///
   /// The world is never destroyed by the component, so that it can be
   /// re-added to the component tree later. Since it holds native resources
@@ -46,7 +48,23 @@ class Forge2DWorld extends World {
   /// of simultaneous worlds, call `physicsWorld.destroy()` when you are
   /// permanently done with it, for example when you tear down a game that
   /// you don't intend to show again.
-  final forge2d.World physicsWorld;
+  forge2d.World get physicsWorld {
+    final existingWorld = _physicsWorld;
+    if (existingWorld != null) {
+      return existingWorld;
+    }
+    final createdWorld = forge2d.World(
+      gravity: _gravity,
+      definition: _definition,
+    );
+    assert(
+      createdWorld.isValid,
+      'The physics world could not be created. Box2D allows a limited number '
+      'of simultaneous worlds, and Forge2D worlds are not freed automatically, '
+      'so call physicsWorld.destroy() on the worlds that you are done with.',
+    );
+    return _physicsWorld = createdWorld;
+  }
 
   /// Routes the contact and sensor events that the physics world generated
   /// during a step to the [ContactCallbacks] in the involved userData.
@@ -169,12 +187,18 @@ class Forge2DWorld extends World {
   }
 
   /// Don't change the gravity object directly, use the setter instead.
-  Vector2 get gravity => physicsWorld.gravity;
+  Vector2 get gravity => _physicsWorld?.gravity ?? _gravity;
 
   /// Sets the gravity of the world and wakes up all bodies that were created
   /// through [createBody].
   set gravity(Vector2? gravity) {
-    physicsWorld.gravity = gravity ?? defaultGravity;
+    _gravity = gravity ?? defaultGravity;
+    final existingWorld = _physicsWorld;
+    if (existingWorld == null) {
+      // The world picks the gravity up when it is created.
+      return;
+    }
+    existingWorld.gravity = _gravity;
     _pruneDestroyedBodies();
     for (final body in _bodies) {
       body.isAwake = true;

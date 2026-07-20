@@ -20,8 +20,14 @@ it, stay on flame_forge2d 0.19.
 
 The SDK floor is now Dart 3.12 (Flutter 3.44), and building for native platforms requires a C
 toolchain (Xcode on iOS and macOS, the NDK on Android, Visual Studio Build Tools on Windows, and
-clang or gcc on Linux) because Box2D is compiled through the Dart build hooks. Flutter web builds
-need no extra setup, the WebAssembly module is bundled automatically.
+clang or gcc on Linux) because Box2D is compiled through the Dart build hooks. On the web the
+WebAssembly module is bundled into the app automatically, so no build setup is needed there
+either.
+
+Forge2D now needs `await initializeForge2D()` before a physics world is created, which is what
+loads that module on the web. `Forge2DGame` awaits it in its `onLoad` and creates the physics
+world lazily, so games need no change. Code that creates a `Forge2DWorld` or a raw Forge2D
+`World` on its own, including tests, has to await it first.
 
 
 ## BodyComponent

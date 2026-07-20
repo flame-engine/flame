@@ -16,7 +16,13 @@ instructions](https://pub.dev/packages/flame_forge2d)](<https://pub.dev/packages
 
 Since Forge2D runs Box2D as native code, a C toolchain is required when building for native
 platforms (Xcode on iOS/macOS, the NDK on Android, Visual Studio Build Tools on Windows and
-clang or gcc on Linux). On the web a bundled WebAssembly build of Box2D is used automatically.
+clang or gcc on Linux). On the web a bundled WebAssembly build of Box2D is used instead.
+
+Forge2D has to be initialized with `await initializeForge2D()` before any physics world is
+created, which on the web is what loads that WebAssembly module. [Forge2DGame] awaits this in its
+`onLoad`, so games don't have to do anything. If you create a `Forge2DWorld` or a raw Forge2D
+`World` outside of a `Forge2DGame`, await `initializeForge2D()` yourself first, or the world
+creation will throw on the web.
 
 If you are upgrading an existing game from flame_forge2d 0.19, see the
 [migration guide](migration.md).

@@ -15,12 +15,26 @@ If your game depends on it, stay on forge2d 0.14.
 ```
 
 
+## Initialization is required
+
+`await initializeForge2D()` has to complete before the first `World` is created. On native
+platforms it returns immediately; on the web it loads the Box2D WebAssembly module, and creating
+a world without it throws a `StateError`. There was no such call in 0.14, so add one during
+startup:
+
+```dart
+await initializeForge2D();
+final world = World(gravity: Vector2(0, -10));
+```
+
+
 ## Platform requirements
 
 The Dart SDK floor is now 3.12 (Flutter 3.44). On native platforms the bundled Box2D sources are
 compiled through the Dart build hooks, so a C toolchain is needed: Xcode on iOS and macOS, the NDK
-on Android, Visual Studio Build Tools on Windows, and clang or gcc on Linux. On the web nothing
-extra is needed, the bundled WebAssembly module is loaded automatically.
+on Android, Visual Studio Build Tools on Windows, and clang or gcc on Linux. On the web the
+bundled WebAssembly module is found automatically in the common hosting setups, so beyond
+awaiting `initializeForge2D()` no extra setup is needed.
 
 
 ## Fixtures are gone, bodies carry shapes

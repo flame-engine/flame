@@ -2,6 +2,7 @@ import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/contact_events_dispatcher.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
+import 'package:forge2d/forge2d.dart' show initializeForge2D;
 
 /// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
@@ -31,6 +32,16 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
                  as T,
          camera: (camera ?? CameraComponent())..viewfinder.zoom = zoom,
        );
+
+  @override
+  Future<void> onLoad() async {
+    // Forge2D has to be initialized before any physics world is created,
+    // which on the web means loading the Box2D WebAssembly module. The
+    // world of a [Forge2DWorld] is created lazily so that this can happen
+    // first.
+    await initializeForge2D();
+    await super.onLoad();
+  }
 
   /// Takes a point in world coordinates and returns it in screen coordinates.
   Vector2 worldToScreen(Vector2 position) {

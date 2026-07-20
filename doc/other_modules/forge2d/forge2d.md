@@ -13,12 +13,15 @@ If you are upgrading from forge2d 0.14, see the [migration guide](migration.md).
 
 ## Getting started
 
-Add `forge2d` to your `pubspec.yaml` and create a world:
+Add `forge2d` to your `pubspec.yaml`, initialize Forge2D, and create a world:
 
 ```dart
 import 'package:forge2d/forge2d.dart';
 
-void main() {
+Future<void> main() async {
+  // Required before any world is created. See "Initialization" below.
+  await initializeForge2D();
+
   final world = World(gravity: Vector2(0, -10));
 
   final ground = world.createBody(BodyDef(position: Vector2(0, -1)));
@@ -44,6 +47,26 @@ void main() {
 Note that when forge2d is used standalone the world uses Box2D's y-up convention, so a downwards
 gravity has a negative y value. The `flame_forge2d` bridge flips this for you to match Flame's
 y-down coordinate system.
+
+
+## Initialization
+
+`await initializeForge2D()` has to complete before the first `World` is created. On native
+platforms it returns immediately, but on the web it fetches and instantiates the Box2D
+WebAssembly module, and creating a world before it has finished throws a `StateError`. Since the
+same code should run on every platform, always await it once during startup:
+
+```dart
+await initializeForge2D();
+```
+
+The web module is looked up at the package asset path served by the Dart web tooling, at the
+asset that Flutter web bundles automatically, and finally at a `box2d.wasm` next to the page, so
+no extra setup is needed for the common cases. If you host the module somewhere else, point
+Forge2D at it with `initializeForge2D(wasmUri: ...)`.
+
+`flame_forge2d` awaits this for you in `Forge2DGame.onLoad`, so games built on it don't need to
+call it, unless they create a `World` outside of the game.
 
 `World`, `Body`, `Shape`, `Chain`, and the joints are cheap value-like handles over ids inside the
 native engine. Destruction is explicit: call `destroy()` on the handle when you are done with it,

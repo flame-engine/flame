@@ -3,6 +3,10 @@ import 'package:test/expect.dart';
 import 'package:test/scaffolding.dart';
 
 void main() {
+  // Forge2D has to be initialized before a world can be created, which
+  // Forge2DGame does automatically but a bare World does not.
+  setUpAll(initializeForge2D);
+
   group('Contact', () {
     late World world;
     late Body bodyA;
