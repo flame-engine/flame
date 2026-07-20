@@ -3,4 +3,5 @@
 ```{toctree}
 Overview    <forge2d.md>
 Joints    <joints.md>
+Migration    <migration.md>
 ```

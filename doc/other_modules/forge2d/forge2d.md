@@ -8,6 +8,8 @@ If you want to use Forge2D in a Flame game you should use the
 [flame_forge2d](../../bridge_packages/flame_forge2d/flame_forge2d.md) bridge package instead, which
 wraps the concepts described here in Flame components.
 
+If you are upgrading from forge2d 0.14, see the [migration guide](migration.md).
+
 
 ## Getting started
 

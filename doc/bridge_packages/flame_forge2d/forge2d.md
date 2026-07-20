@@ -18,6 +18,9 @@ Since Forge2D runs Box2D as native code, a C toolchain is required when building
 platforms (Xcode on iOS/macOS, the NDK on Android, Visual Studio Build Tools on Windows and
 clang or gcc on Linux). On the web a bundled WebAssembly build of Box2D is used automatically.
 
+If you are upgrading an existing game from flame_forge2d 0.19, see the
+[migration guide](migration.md).
+
 
 ## Forge2DGame
 

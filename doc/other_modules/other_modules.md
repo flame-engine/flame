@@ -23,7 +23,8 @@ Component System is as efficient in almost all cases.
 ```{toctree}
 :hidden:
 
-forge2d  <forge2d/forge2d.md>
-jenny    <jenny/jenny.md>
-oxygen   <oxygen/oxygen.md>
+forge2d            <forge2d/forge2d.md>
+forge2d migration  <forge2d/migration.md>
+jenny              <jenny/jenny.md>
+oxygen             <oxygen/oxygen.md>
 ```
