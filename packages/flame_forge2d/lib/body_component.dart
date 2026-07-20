@@ -116,6 +116,13 @@ class BodyComponent<T extends Forge2DGame> extends Component
   void onMount() {
     super.onMount();
     world = game.world;
+    if (!body.isValid) {
+      // The body was destroyed when the component was removed, and since
+      // onLoad only runs once it has to be recreated here for the component
+      // to be usable again. Reading a destroyed body is not just stale, it
+      // reads freed native memory.
+      body = createBody();
+    }
   }
 
   late Forge2DWorld world;

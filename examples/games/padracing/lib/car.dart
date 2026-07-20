@@ -88,7 +88,7 @@ class Car extends BodyComponent<PadRacingGame> {
       Polygon(vertices),
       ShapeDef(
         density: 0.2,
-        material: SurfaceMaterial(restitution: 2.0),
+        material: SurfaceMaterial(friction: 0, restitution: 2.0),
         // So that the lap line sensors can detect the car.
         enableSensorEvents: true,
       ),

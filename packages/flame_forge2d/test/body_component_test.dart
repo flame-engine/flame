@@ -526,6 +526,32 @@ void main() {
       });
     });
 
+    testWithGame(
+      'the body is recreated when the component is added back',
+      Forge2DGame.new,
+      (game) async {
+        final component = BodyComponent(
+          bodyDef: BodyDef(type: BodyType.dynamic, position: Vector2(3, 4)),
+          shapeSpecs: [ShapeSpec(Circle(radius: 1))],
+        );
+        await game.world.ensureAdd(component);
+        final firstBody = component.body;
+
+        component.removeFromParent();
+        await game.ready();
+        expect(firstBody.isValid, isFalse);
+
+        await game.world.ensureAdd(component);
+
+        // Reading a destroyed body reads freed native memory, so the
+        // component must come back with a live one.
+        expect(component.body.isValid, isTrue);
+        expect(component.body.position, Vector2(3, 4));
+        expect(component.body.shapes, hasLength(1));
+        expect(() => game.update(0), returnsNormally);
+      },
+    );
+
     group('accessors', () {
       testWithGame('position, center and angle', Forge2DGame.new, (game) async {
         final component = BodyComponent(

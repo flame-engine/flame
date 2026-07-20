@@ -59,7 +59,12 @@ class Platform extends BodyComponent {
   @override
   Body createBody() {
     final bodyDef = BodyDef(position: _position);
-    return world.createBody(bodyDef)..createShape(Polygon.box(14.8, 0.125));
+    // The platform is frictionless, as it was before the Box2D v3 migration
+    // (SurfaceMaterial defaults to 0.6 friction), so that the bricks slide
+    // and topple the way this example intends.
+    final shapeDef = ShapeDef(material: SurfaceMaterial(friction: 0));
+    return world.createBody(bodyDef)
+      ..createShape(Polygon.box(14.8, 0.125), shapeDef);
   }
 }
 

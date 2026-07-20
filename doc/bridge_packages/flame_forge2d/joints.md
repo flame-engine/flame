@@ -381,11 +381,10 @@ revoluteJoint.motorSpeed = 2;
 revoluteJoint.maxMotorTorque = 200;
 ```
 
-Also, you can get the joint angle and speed using the following getters:
+Also, you can get the current joint angle:
 
 ```dart
 revoluteJoint.angle;
-revoluteJoint.motorSpeed;
 ```
 
 

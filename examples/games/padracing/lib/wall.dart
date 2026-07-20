@@ -97,7 +97,9 @@ class Wall extends BodyComponent<PadRacingGame> {
       ..userData = this
       ..angularDamping = 3.0;
 
-    final shapeDef = ShapeDef(material: SurfaceMaterial(restitution: 0.5));
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(friction: 0, restitution: 0.5),
+    );
     return body..createShape(Polygon.box(size.x / 2, size.y / 2), shapeDef);
   }
 

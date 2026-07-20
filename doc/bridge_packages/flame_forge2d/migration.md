@@ -84,6 +84,13 @@ The rendering hooks changed accordingly, and now read the geometry back from the
 `renderCircle` and `renderPolygon` are unchanged. `BodyComponent.center` now returns
 `body.worldCenterOfMass`, and `BodyDef(angle: a)` becomes `BodyDef(rotation: Rot.fromAngle(a))`.
 
+```{warning}
+The default friction changed: `FixtureDef` defaulted to 0, while
+`SurfaceMaterial` defaults to 0.6. Shapes that relied on the old default are
+no longer frictionless, so pass `SurfaceMaterial(friction: 0)` explicitly
+where you need the old behavior.
+```
+
 
 ## Contact callbacks
 
@@ -104,7 +111,9 @@ What changed:
 - `Contact` is now a small flame_forge2d class instead of the Forge2D one. It carries `shapeA`,
   `shapeB`, `bodyA`, `bodyB`, `isSensorEvent`, and, for begin events, `normal` and `points`. Since
   end events can arrive after a shape was destroyed, check `contact.isValid` before using the
-  bodies. `contact.fixtureA`/`fixtureB` become `contact.shapeA`/`shapeB`.
+  bodies. `contact.fixtureA`/`fixtureB` become `contact.shapeA`/`shapeB`. The old `isTouching()`
+  and `getWorldManifold()` methods are gone: a begin event already means the shapes started
+  touching, and the manifold data is on the event itself.
 - **Contact events are opt-in per shape.** Box2D v3 only generates events for shapes that asked
   for them, so the involved shapes need `ShapeDef(enableContactEvents: true)`, and sensors together
   with their visitors need `enableSensorEvents: true`. The default `BodyComponent.createBody()`
@@ -133,7 +142,8 @@ together with the body.
   `world.createJoint(joint)` and `world.destroyJoint(joint)`.
 - Queries follow the new Forge2D API: `raycast(callback, p1, p2)` becomes `castRayClosest`,
   `castRay`, or `castRayAll` (taking an origin and a translation), and `queryAABB(callback, aabb)`
-  becomes `overlapAabb(aabb)`. `clearForces()` and `raycastParticle` are gone.
+  becomes `overlapAabb(aabb)`, whose bounding box type was renamed from `AABB` to `Aabb`.
+  `clearForces()` and `raycastParticle` are gone.
 - `world.preSolveCallback` and `world.customFilterCallback` are new forwarding setters.
 - `subStepCount` (default 4) controls how many sub-steps each update performs, replacing the old
   velocity and position iteration counts.
@@ -146,10 +156,12 @@ together with the body.
 
 ## Name collisions
 
-Forge2D now exports `Transform`, `Rot`, `Circle`, `Polygon`, and `Segment`, which can collide with
-names from `flutter/material.dart` (`Transform`) and `flame/geometry.dart` (`Circle`, `Polygon`).
-Resolve them per file with `hide` or a prefixed import, for example:
+Forge2D exports a `World`, which collides with Flame's `World` component, so files that use both
+need `import 'package:flame_forge2d/flame_forge2d.dart' hide World;`. That was already the case
+before, but Forge2D now also exports `Transform`, `Rot`, `Circle`, `Polygon`, and `Segment`, which
+can collide with `flutter/material.dart` (`Transform`) and `flame/geometry.dart` (`Circle`,
+`Polygon`, `Shape`). Resolve them per file with `hide` or a prefixed import, for example:
 
 ```dart
-import 'package:flame_forge2d/flame_forge2d.dart' hide Transform;
+import 'package:flame_forge2d/flame_forge2d.dart' hide Transform, World;
 ```

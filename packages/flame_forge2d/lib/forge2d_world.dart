@@ -27,15 +27,25 @@ class Forge2DWorld extends World {
          definition: definition,
        ),
        contactEventsDispatcher =
-           contactEventsDispatcher ?? ContactEventsDispatcher();
+           contactEventsDispatcher ?? ContactEventsDispatcher() {
+    assert(
+      physicsWorld.isValid,
+      'The physics world could not be created. Box2D allows a limited number '
+      'of simultaneous worlds, and Forge2D worlds are not freed automatically, '
+      'so call physicsWorld.destroy() on the worlds that you are done with.',
+    );
+  }
 
   static final Vector2 defaultGravity = Vector2(0, 10.0);
 
   /// The underlying Forge2D physics world.
   ///
   /// The world is never destroyed by the component, so that it can be
-  /// re-added to the component tree later. If you are permanently done with
-  /// it, call `physicsWorld.destroy()` to free its native resources.
+  /// re-added to the component tree later. Since it holds native resources
+  /// that are not garbage collected, and Box2D allows only a limited number
+  /// of simultaneous worlds, call `physicsWorld.destroy()` when you are
+  /// permanently done with it, for example when you tear down a game that
+  /// you don't intend to show again.
   final forge2d.World physicsWorld;
 
   /// Routes the contact and sensor events that the physics world generated
@@ -66,8 +76,9 @@ class Forge2DWorld extends World {
   /// Drops the bodies that have been destroyed without going through
   /// [destroyBody], for example by calling [Body.destroy] directly.
   ///
-  /// Their handles are not only stale but unusable, since Forge2D asserts on
-  /// destroyed bodies.
+  /// Keeping them would be worse than a leak: Box2D reuses the slots of
+  /// destroyed bodies, so a stale handle silently reads and writes whichever
+  /// body took its place.
   void _pruneDestroyedBodies() {
     _bodies.removeWhere((body) => !body.isValid);
   }

@@ -80,7 +80,16 @@ class Tire extends BodyComponent<PadRacingGame> {
     );
     final body = world.createBody(def)..userData = this;
 
-    body.createShape(Polygon.box(0.5, 1.25)).userData = this;
+    // Tire friction against the track is simulated in _updateFriction, so
+    // the shape itself is frictionless, as it was before the Box2D v3
+    // migration (SurfaceMaterial defaults to 0.6 friction).
+    body
+            .createShape(
+              Polygon.box(0.5, 1.25),
+              ShapeDef(material: SurfaceMaterial(friction: 0)),
+            )
+            .userData =
+        this;
 
     joint = world.physicsWorld.createRevoluteJoint(
       RevoluteJointDef(

@@ -44,6 +44,14 @@ body.createShape(
 );
 ```
 
+```{warning}
+The default friction changed. `FixtureDef` defaulted to a friction of 0,
+while `SurfaceMaterial` defaults to 0.6. Box2D mixes the friction of a
+contact as `sqrt(frictionA * frictionB)`, so a pair where one side relied on
+the old default was frictionless and no longer is. Pass
+`SurfaceMaterial(friction: 0)` explicitly wherever you relied on it.
+```
+
 `body.fixtures` becomes `body.shapes`, and `fixture.testPoint` becomes `shape.testPoint` (still in
 world coordinates). The shape's geometry can be read back for rendering or inspection with
 `shape.geometry`, which returns the sealed `ShapeGeometry` type:
@@ -115,6 +123,11 @@ should be solved this step and requires `ShapeDef.enablePreSolveEvents` on the s
 Custom pair filtering, previously done by subclassing the contact filter, is now
 `world.customFilterCallback`.
 
+The old `Contact` class is gone entirely, so its methods have no direct replacement. In particular
+`contact.isTouching()`, which was commonly used to guard callbacks, is no longer needed because a
+begin event means the shapes started touching, and `contact.getWorldManifold(...)` is replaced by
+the `normal` and `points` on the begin event.
+
 
 ## Queries return their results
 
@@ -141,9 +154,9 @@ world.castRay(start, end - start, (hit) => 1);
 ```
 
 Each `RayHit` carries the `shape`, `point`, `normal`, and `fraction`. `world.queryAABB(callback,
-aabb)` becomes `world.overlapAabb(aabb)`, returning the overlapping shapes. `world.clearForces()`
-is gone, as forces are applied per step in Box2D v3. Explosions are available through
-`world.explode(ExplosionDef(...))`.
+aabb)` becomes `world.overlapAabb(aabb)`, returning the overlapping shapes, and the axis-aligned
+bounding box class was renamed from `AABB` to `Aabb`. `world.clearForces()` is gone, as forces are
+applied per step in Box2D v3. Explosions are available through `world.explode(ExplosionDef(...))`.
 
 
 ## Joints
@@ -180,6 +193,14 @@ enabled explicitly with `enableSpring`. Joint accessors are now getters and sett
 `getX()`/`setX()` methods, for example `joint.motorSpeed = 2` and `joint.angle`, and the limit
 setters take named arguments: `joint.setLimits(lower: 0, upper: pi)`.
 
+The world-space anchors `joint.anchorA` and `joint.anchorB` no longer exist; only the local
+anchors do. Compute the world position when you need it, for example when rendering a joint:
+
+```dart
+final anchorA = joint.bodyA.worldPoint(joint.localAnchorA);
+final anchorB = joint.bodyB.worldPoint(joint.localAnchorB);
+```
+
 
 ## World and body changes
 
@@ -194,6 +215,10 @@ setters take named arguments: `joint.setLimits(lower: 0, upper: pi)`.
   `body.angle` still exists.
 - Body renames: `worldCenter` is now `worldCenterOfMass`, `getLocalCenter()` is
   `localCenterOfMass`, `setAwake(value)` is `isAwake = value`, `getInertia()` is
-  `rotationalInertia`, and `worldVector(v)` is `rotation.rotate(v)`.
+  `rotationalInertia`, `bodyType` is `type`, `resetMassData()` is `applyMassFromShapes()`,
+  `setMassData(data)` is `massData = data`, `worldVector(v)` is `rotation.rotate(v)`, and
+  `localVector(v)` is `rotation.inverseRotate(v)`.
+- `BodyDef` renames: `allowSleep` is now `enableSleep`, `bullet` is `isBullet`, and `active` is
+  `isEnabled`. `gravityOverride` has no replacement; use `gravityScale` or apply your own forces.
 - `userData` is stored on the Dart side in the world instead of a native pointer, and is cleared
   when the owning handle is destroyed.

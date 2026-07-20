@@ -86,8 +86,9 @@ void main() {
       destroyed.destroy();
 
       expect(game.world.bodies, {kept});
-      // Waking the bodies must not touch the destroyed one, since Forge2D
-      // asserts when a destroyed body is used.
+      // Waking the bodies must not touch the destroyed one, since Box2D
+      // reuses its slot and the stale handle would write to whichever body
+      // took its place.
       expect(() => game.world.gravity = Vector2(0, 5), returnsNormally);
       expect(kept.isAwake, isTrue);
     },

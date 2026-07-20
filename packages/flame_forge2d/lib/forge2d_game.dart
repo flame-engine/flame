@@ -5,13 +5,23 @@ import 'package:flame_forge2d/forge2d_world.dart';
 
 /// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
+  /// Creates a game with a [Forge2DWorld].
+  ///
+  /// [contactEventsDispatcher] is only used for the world that this
+  /// constructor creates, so pass it to the [Forge2DWorld] itself when you
+  /// provide a [world].
   Forge2DGame({
     Forge2DWorld? world,
     CameraComponent? camera,
     Vector2? gravity,
     ContactEventsDispatcher? contactEventsDispatcher,
     double zoom = 10,
-  }) : super(
+  }) : assert(
+         world == null || contactEventsDispatcher == null,
+         'contactEventsDispatcher is ignored when a world is provided, pass '
+         'it to the Forge2DWorld constructor instead',
+       ),
+       super(
          world:
              ((world?..gravity = gravity ?? world.gravity) ??
                      Forge2DWorld(
