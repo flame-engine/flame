@@ -33,10 +33,9 @@ class Wall extends BodyComponent with GlowingBody {
 
   @override
   Body createBody() {
-    final shapeDef = ShapeDef(
-      material: SurfaceMaterial(friction: 0.3),
-      enableContactEvents: true,
-    );
+    // The default material gives the walls enough grip for bodies to come
+    // to rest against them instead of sliding along.
+    final shapeDef = ShapeDef(enableContactEvents: true);
     final bodyDef = BodyDef(
       userData: this, // To be able to determine object in collision
       position: Vector2.zero(),

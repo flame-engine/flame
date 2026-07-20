@@ -162,10 +162,10 @@ class Domino extends BodyComponent with GlowingBody {
         DominoExampleWorld.dominoWidth / 2,
         DominoExampleWorld.dominoHeight / 2,
       ),
-      ShapeDef(
-        density: density,
-        material: SurfaceMaterial(friction: 0.1, restitution: 0.65),
-      ),
+      // The default material is what a domino wants: plenty of grip and no
+      // bounce. With less friction the tower shakes itself apart as soon as
+      // the frame rate dips.
+      ShapeDef(density: density),
     );
   }
 }

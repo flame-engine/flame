@@ -34,7 +34,7 @@ class Ball extends BodyComponent with ContactCallbacks, GlowingBody {
   @override
   Body createBody() {
     final shapeDef = ShapeDef(
-      material: SurfaceMaterial(restitution: 0.8, friction: 0.4),
+      material: SurfaceMaterial(restitution: 0.7),
       enableContactEvents: true,
     );
 

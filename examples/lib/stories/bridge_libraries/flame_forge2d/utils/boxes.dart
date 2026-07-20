@@ -31,7 +31,7 @@ class Box extends BodyComponent with GlowingBody {
   @override
   Body createBody() {
     final shapeDef = ShapeDef(
-      material: SurfaceMaterial(friction: 0.3, restitution: 0.2),
+      material: SurfaceMaterial(restitution: 0.1),
       density: 10,
       enableContactEvents: true,
     );

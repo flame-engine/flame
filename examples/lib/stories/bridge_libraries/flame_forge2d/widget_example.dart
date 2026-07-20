@@ -46,7 +46,7 @@ class WidgetExample extends Forge2DExampleGame {
         buttonWidth / 2 / scale,
         buttonHeight / 2 / scale,
       ),
-      ShapeDef(material: SurfaceMaterial(restitution: 0.8, friction: 0.2)),
+      ShapeDef(material: SurfaceMaterial(restitution: 0.6, friction: 0.5)),
     );
     return body;
   }

@@ -70,7 +70,7 @@ class CircleShuffler extends BodyComponent {
         Circle(radius: 1.2, center: Vector2(xPos, yPos)),
         ShapeDef(
           density: 50.0,
-          material: SurfaceMaterial(friction: 0.1, restitution: 0.9),
+          material: SurfaceMaterial(friction: 0.5, restitution: 0.4),
         ),
       );
     }
@@ -116,7 +116,7 @@ class CornerRamp extends BodyComponent with GlowingBody {
 
     return world.createBody(bodyDef)..createShape(
       Polygon(vertices),
-      ShapeDef(material: SurfaceMaterial(friction: 0.1)),
+      ShapeDef(material: SurfaceMaterial(friction: 0.5)),
     );
   }
 }

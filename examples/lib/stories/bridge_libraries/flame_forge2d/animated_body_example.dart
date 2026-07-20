@@ -75,7 +75,7 @@ class ChopperBody extends BodyComponent {
   Body createBody() {
     final shapeDef = ShapeDef(
       userData: this, // To be able to determine object in collision
-      material: SurfaceMaterial(restitution: 0.8, friction: 0.2),
+      material: SurfaceMaterial(restitution: 0.6, friction: 0.5),
     );
 
     final velocity = (Vector2.random() - Vector2.random()) * 200;
