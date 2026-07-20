@@ -58,7 +58,19 @@ class Forge2DWorld extends World {
   /// destroyed.
   ///
   /// Bodies created directly on the [physicsWorld] are not included.
-  late final Set<Body> bodies = UnmodifiableSetView(_bodies);
+  Set<Body> get bodies {
+    _pruneDestroyedBodies();
+    return UnmodifiableSetView(_bodies);
+  }
+
+  /// Drops the bodies that have been destroyed without going through
+  /// [destroyBody], for example by calling [Body.destroy] directly.
+  ///
+  /// Their handles are not only stale but unusable, since Forge2D asserts on
+  /// destroyed bodies.
+  void _pruneDestroyedBodies() {
+    _bodies.removeWhere((body) => !body.isValid);
+  }
 
   @override
   void update(double dt) {
@@ -152,6 +164,7 @@ class Forge2DWorld extends World {
   /// through [createBody].
   set gravity(Vector2? gravity) {
     physicsWorld.gravity = gravity ?? defaultGravity;
+    _pruneDestroyedBodies();
     for (final body in _bodies) {
       body.isAwake = true;
     }

@@ -156,14 +156,16 @@ void main() {
           setUp: (game, tester) async {
             final body = game.world.createBody(BodyDef());
             // The first and last points of an open chain are ghost anchors
-            // and are not part of the collidable (and rendered) segments.
+            // and are not part of the collidable (and rendered) segments, so
+            // these five points render as two connected segments.
             body.createChain(
               ChainDef(
                 points: [
+                  Vector2(-10, 10),
                   Vector2(-10, 0),
                   Vector2.zero(),
                   Vector2.all(10),
-                  Vector2(10, 0),
+                  Vector2(20, 10),
                 ],
               ),
             );

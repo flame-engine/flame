@@ -81,6 +81,11 @@ class BodyComponent<T extends Forge2DGame> extends Component
   /// automatically enabled for that shape, since Forge2D only generates
   /// events for shapes that have opted in to them. If you override this
   /// method you have to enable the event flags yourself.
+  ///
+  /// Note that the event flags are set on the [ShapeDef] of the [ShapeSpec]
+  /// itself, since Forge2D snapshots them when the shape is created. Don't
+  /// share a single [ShapeDef] instance between components if you don't want
+  /// them to share those flags.
   Body createBody() {
     assert(
       bodyDef != null,

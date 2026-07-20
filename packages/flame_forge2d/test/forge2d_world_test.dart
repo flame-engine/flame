@@ -72,6 +72,28 @@ void main() {
   );
 
   testWithGame(
+    'bodies destroyed outside of destroyBody are dropped',
+    Forge2DGame.new,
+    (game) async {
+      final kept = game.world.createBody(BodyDef(type: BodyType.dynamic));
+      kept.createShape(Circle(radius: 1));
+      final destroyed = game.world.createBody(BodyDef(type: BodyType.dynamic));
+      destroyed.createShape(Circle(radius: 1));
+      expect(game.world.bodies, hasLength(2));
+
+      // Destroying the body directly bypasses Forge2DWorld.destroyBody, so
+      // the world is left holding a stale handle.
+      destroyed.destroy();
+
+      expect(game.world.bodies, {kept});
+      // Waking the bodies must not touch the destroyed one, since Forge2D
+      // asserts when a destroyed body is used.
+      expect(() => game.world.gravity = Vector2(0, 5), returnsNormally);
+      expect(kept.isAwake, isTrue);
+    },
+  );
+
+  testWithGame(
     'castRayClosest returns the closest hit',
     Forge2DGame.new,
     (game) async {
