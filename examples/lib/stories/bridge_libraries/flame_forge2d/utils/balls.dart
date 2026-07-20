@@ -1,9 +1,10 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-class Ball extends BodyComponent with ContactCallbacks {
+class Ball extends BodyComponent with ContactCallbacks, GlowingBody {
   late Paint originalPaint;
   bool giveNudge = false;
   final double radius;
@@ -12,23 +13,23 @@ class Ball extends BodyComponent with ContactCallbacks {
   double _timeSinceNudge = 0.0;
   static const double _minNudgeRest = 2.0;
 
-  final Paint _blue = BasicPalette.blue.paint();
-
   Ball(
     this._position, {
     this.radius = 2,
     this.bodyType = BodyType.dynamic,
     Color? color,
   }) {
-    if (color != null) {
-      originalPaint = PaletteEntry(color).paint();
-    } else {
-      originalPaint = randomPaint();
-    }
+    originalPaint = Paint()..color = color ?? randomColor();
     paint = originalPaint;
   }
 
-  Paint randomPaint() => PaintExtension.random(withAlpha: 0.9, base: 100);
+  static int _colorIndex = 0;
+
+  /// Cycles through the palette so that neighbouring balls stay readable.
+  Color randomColor() =>
+      ExampleColors.dynamicColor(_colorIndex++ % ExampleColors.dynamics.length);
+
+  Paint randomPaint() => Paint()..color = randomColor();
 
   @override
   Body createBody() {
@@ -46,13 +47,6 @@ class Ball extends BodyComponent with ContactCallbacks {
 
     return world.createBody(bodyDef)
       ..createShape(Circle(radius: radius), shapeDef);
-  }
-
-  @override
-  void renderCircle(Canvas canvas, Offset center, double radius) {
-    super.renderCircle(canvas, center, radius);
-    final lineRotation = Offset(0, radius);
-    canvas.drawLine(center, center + lineRotation, _blue);
   }
 
   final _impulseForce = Vector2(0, 1000);

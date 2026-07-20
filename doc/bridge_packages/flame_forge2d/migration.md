@@ -97,6 +97,13 @@ no longer frictionless, so pass `SurfaceMaterial(friction: 0)` explicitly
 where you need the old behavior.
 ```
 
+Chains changed from two-sided to one-sided, which is easy to miss because it
+compiles fine and only shows up as bodies falling through your level geometry.
+The solid surface is to the right of the winding direction, and since Flame's
+y-axis points down, that is the opposite order from what Box2D's own
+documentation describes: list ground chains from **left to right**, and wind
+loops clockwise on screen. If bodies fall through a chain, reverse its points.
+
 
 ## Contact callbacks
 

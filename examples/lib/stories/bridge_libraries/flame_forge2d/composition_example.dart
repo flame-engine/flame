@@ -1,14 +1,14 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 2);
 
-class CompositionExample extends Forge2DGame {
+class CompositionExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how to compose a `BodyComponent` together with a normal
     Flame component. Click the ball to see the number increment.

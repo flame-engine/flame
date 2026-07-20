@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart';
-import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class Box extends BodyComponent {
+class Box extends BodyComponent with GlowingBody {
   final Vector2 startPosition;
   final double width;
   final double height;
@@ -18,14 +18,15 @@ class Box extends BodyComponent {
     this.bodyType = BodyType.dynamic,
     Color? color,
   }) {
-    if (color != null) {
-      paint = PaletteEntry(color).paint();
-    } else {
-      paint = randomPaint();
-    }
+    paint = Paint()..color = color ?? randomColor();
   }
 
-  Paint randomPaint() => PaintExtension.random(withAlpha: 0.9, base: 100);
+  static int _colorIndex = 0;
+
+  Color randomColor() =>
+      ExampleColors.dynamicColor(_colorIndex++ % ExampleColors.dynamics.length);
+
+  Paint randomPaint() => Paint()..color = randomColor();
 
   @override
   Body createBody() {
@@ -47,6 +48,7 @@ class Box extends BodyComponent {
 
 class DraggableBox extends Box with DragCallbacks {
   MouseJoint? mouseJoint;
+  MouseJointRenderer? _jointRenderer;
   late final groundBody = world.createBody(BodyDef());
   bool _destroyJoint = false;
 
@@ -61,6 +63,8 @@ class DraggableBox extends Box with DragCallbacks {
     if (_destroyJoint && mouseJoint != null) {
       mouseJoint!.destroy();
       mouseJoint = null;
+      _jointRenderer?.removeFromParent();
+      _jointRenderer = null;
       _destroyJoint = false;
     }
   }
@@ -71,7 +75,7 @@ class DraggableBox extends Box with DragCallbacks {
 
     final target = game.screenToWorld(event.devicePosition);
 
-    mouseJoint = world.physicsWorld.createMouseJoint(
+    final joint = world.physicsWorld.createMouseJoint(
       MouseJointDef(
         bodyA: groundBody,
         bodyB: body,
@@ -81,6 +85,13 @@ class DraggableBox extends Box with DragCallbacks {
         hertz: 50,
       ),
     );
+    mouseJoint = joint;
+    // Show the spring that drags the box towards the pointer.
+    _jointRenderer = MouseJointRenderer(
+      joint: joint,
+      color: ExampleColors.amber,
+    );
+    world.add(_jointRenderer!);
   }
 
   @override

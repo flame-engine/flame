@@ -7,11 +7,13 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/contact_callback
 import 'package:examples/stories/bridge_libraries/flame_forge2d/domino_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/drag_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/filter_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/prismatic_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/revolute_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/weld_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/wheel_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/sprite_body_example.dart';
@@ -98,6 +100,12 @@ void addJointsStories(Dashbook dashbook) {
   dashbook
       .storiesOf('flame_forge2d/joints')
       .add(
+        'FilterJoint',
+        (DashbookContext ctx) => GameWidget(game: FilterJointExample()),
+        codeLink: link('joints/filter_joint.dart'),
+        info: FilterJointExample.description,
+      )
+      .add(
         'DistanceJoint',
         (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
         codeLink: link('joints/distance_joint.dart'),
@@ -132,5 +140,11 @@ void addJointsStories(Dashbook dashbook) {
         (DashbookContext ctx) => GameWidget(game: WeldJointExample()),
         codeLink: link('joints/weld_joint.dart'),
         info: WeldJointExample.description,
+      )
+      .add(
+        'WheelJoint',
+        (DashbookContext ctx) => GameWidget(game: WheelJointExample()),
+        codeLink: link('joints/wheel_joint.dart'),
+        info: WheelJointExample.description,
       );
 }

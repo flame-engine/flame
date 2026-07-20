@@ -2,11 +2,12 @@ import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointWithMotorExample extends Forge2DGame {
+class RevoluteJointWithMotorExample extends Forge2DExampleGame {
   static const String description = '''
     This example showcases a revolute joint, which is the spinning balls in the
     center.
@@ -107,9 +108,11 @@ class CornerRamp extends BodyComponent {
       Vector2(diff + 35.0 * mirrorFactor, -30.0),
       Vector2(diff + 17.5 * mirrorFactor, -15.0),
     ];
-    if (isMirrored) {
-      // Chains are one-sided, and mirroring the points flips the winding
-      // direction, so reverse the list to keep the solid side consistent.
+    if (!isMirrored) {
+      // Chains are one-sided: the solid surface is to the right of the
+      // winding direction, which with Flame's downwards y-axis means the
+      // points have to run the other way around than they would in Box2D's
+      // own coordinate system. Mirroring flips the winding again.
       points.setAll(0, points.reversed.toList());
     }
 

@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample extends Forge2DGame {
+class SpriteBodyExample extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add a sprite on top of a `BodyComponent`.
     Tap the screen to add more pizzas.

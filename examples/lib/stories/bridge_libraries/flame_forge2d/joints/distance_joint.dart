@@ -1,10 +1,12 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class DistanceJointExample extends Forge2DGame {
+class DistanceJointExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `DistanceJoint`. Tap the screen to add a 
     pair of balls joined with a `DistanceJoint`.
@@ -32,7 +34,7 @@ class DistanceJointWorld extends Forge2DWorld
 
     await Future.wait([first.loaded, second.loaded]);
 
-    physicsWorld.createDistanceJoint(
+    final joint = physicsWorld.createDistanceJoint(
       DistanceJointDef(
         bodyA: first.body,
         bodyB: second.body,
@@ -42,5 +44,6 @@ class DistanceJointWorld extends Forge2DWorld
         dampingRatio: 0.2,
       ),
     );
+    add(JointRenderer(joint: joint));
   }
 }

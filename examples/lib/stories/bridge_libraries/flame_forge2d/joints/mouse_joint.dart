@@ -1,14 +1,17 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class MouseJointExample extends Forge2DGame {
+class MouseJointExample extends Forge2DExampleGame {
   static const description = '''
     In this example we use a `MouseJoint` to make the ball follow the mouse
-    when you drag it around.
+    when you drag it around. The line shows the joint pulling the ball
+    towards the pointer.
   ''';
 
   MouseJointExample()
@@ -20,6 +23,7 @@ class MouseJointWorld extends Forge2DWorld
   late Ball ball;
   late Body groundBody;
   MouseJoint? mouseJoint;
+  MouseJointRenderer? _jointRenderer;
 
   @override
   Future<void> onLoad() async {
@@ -29,7 +33,7 @@ class MouseJointWorld extends Forge2DWorld
 
     final center = Vector2.zero();
     groundBody = createBody(BodyDef());
-    ball = Ball(center, radius: 5);
+    ball = Ball(center, radius: 5, color: ExampleColors.amber);
     add(ball);
     add(CornerRamp(center));
     add(CornerRamp(center, isMirrored: true));
@@ -41,7 +45,7 @@ class MouseJointWorld extends Forge2DWorld
     if (mouseJoint != null) {
       return;
     }
-    mouseJoint = physicsWorld.createMouseJoint(
+    final joint = physicsWorld.createMouseJoint(
       MouseJointDef(
         bodyA: groundBody,
         bodyB: ball.body,
@@ -51,6 +55,9 @@ class MouseJointWorld extends Forge2DWorld
         hertz: 5,
       ),
     );
+    mouseJoint = joint;
+    _jointRenderer = MouseJointRenderer(joint: joint);
+    add(_jointRenderer!);
   }
 
   @override
@@ -63,5 +70,7 @@ class MouseJointWorld extends Forge2DWorld
     super.onDragEnd(info);
     mouseJoint?.destroy();
     mouseJoint = null;
+    _jointRenderer?.removeFromParent();
+    _jointRenderer = null;
   }
 }

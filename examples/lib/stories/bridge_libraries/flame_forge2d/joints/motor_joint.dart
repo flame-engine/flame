@@ -1,12 +1,11 @@
-import 'dart:ui';
-
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
-import 'package:flame/components.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class MotorJointExample extends Forge2DGame {
+class MotorJointExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `MotorJoint`. The ball spins around the 
     center point. Tap the screen to change the direction.
@@ -32,10 +31,11 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
       width: 2,
       height: 1,
       bodyType: BodyType.static,
+      color: ExampleColors.slate,
     );
     add(box);
 
-    ball = Ball(Vector2(0, -5));
+    ball = Ball(Vector2(0, -5), color: ExampleColors.violet);
     add(ball);
 
     await Future.wait([ball.loaded, box.loaded]);
@@ -80,20 +80,5 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
 
     joint.linearOffset = linearOffset;
     joint.angularOffset = angularOffset;
-  }
-}
-
-class JointRenderer extends Component {
-  JointRenderer({required this.joint});
-
-  final MotorJoint joint;
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawLine(
-      joint.bodyA.worldPoint(joint.localAnchorA).toOffset(),
-      joint.bodyB.worldPoint(joint.localAnchorB).toOffset(),
-      debugPaint,
-    );
   }
 }

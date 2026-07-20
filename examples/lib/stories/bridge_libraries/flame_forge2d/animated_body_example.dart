@@ -1,12 +1,13 @@
 import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class AnimatedBodyExample extends Forge2DGame {
+class AnimatedBodyExample extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add an animated chopper, which is created
     with a SpriteAnimationComponent, on top of a BodyComponent.

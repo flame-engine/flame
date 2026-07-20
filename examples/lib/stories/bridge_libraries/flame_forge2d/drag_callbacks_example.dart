@@ -1,10 +1,11 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide Draggable;
 
-class DragCallbacksExample extends Forge2DGame {
+class DragCallbacksExample extends Forge2DExampleGame {
   static const description = '''
     In this example we use Flame's normal `DragCallbacks` mixin to give impulses
     to a ball when we are dragging it around. If you are interested in dragging

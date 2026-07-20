@@ -2,13 +2,14 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' show Colors, Paint, Canvas;
 
-class RaycastExample extends Forge2DGame with MouseMovementDetector {
+class RaycastExample extends Forge2DExampleGame with MouseMovementDetector {
   static const String description = '''
     This example shows how ray casts can be used to find the nearest and
     farthest shapes.

@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointExample extends Forge2DGame {
+class RevoluteJointExample extends Forge2DExampleGame {
   static const description = '''
     In this example we use a joint to keep a body with several fixtures stuck
     to another body.
@@ -63,9 +65,10 @@ class CircleShuffler extends BodyComponent {
       );
     }
 
-    world.physicsWorld.createRevoluteJoint(
+    final joint = world.physicsWorld.createRevoluteJoint(
       RevoluteJointDef(bodyA: body, bodyB: ball.body),
     );
+    world.add(JointRenderer(joint: joint));
 
     return body;
   }

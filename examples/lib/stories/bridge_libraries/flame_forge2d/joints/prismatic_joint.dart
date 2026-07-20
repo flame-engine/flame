@@ -1,15 +1,15 @@
-import 'dart:ui';
-
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
-import 'package:flame/components.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class PrismaticJointExample extends Forge2DGame {
+class PrismaticJointExample extends Forge2DExampleGame {
   static const description = '''
-    This example shows how to use a `PrismaticJoint`. 
-    
+    This example shows how to use a `PrismaticJoint`.
+
     Drag the box along the specified axis, bound between lower and upper limits.
     Also, there's a motor enabled that's pulling the box to the lower limit.
+    The line shows the axis between the two limits.
   ''';
 
   final Vector2 anchor = Vector2.zero();
@@ -19,12 +19,18 @@ class PrismaticJointExample extends Forge2DGame {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final box = DraggableBox(startPosition: anchor, width: 6, height: 6);
+    final box = DraggableBox(
+      startPosition: anchor,
+      width: 6,
+      height: 6,
+    );
     world.add(box);
     await Future.wait([box.loaded]);
 
     final joint = createJoint(box.body, anchor);
-    world.add(JointRenderer(joint: joint, anchor: anchor, axis: axis));
+    world.add(
+      PrismaticJointRenderer(joint: joint, anchor: anchor, axis: axis),
+    );
   }
 
   PrismaticJoint createJoint(Body box, Vector2 anchor) {
@@ -43,33 +49,5 @@ class PrismaticJointExample extends Forge2DGame {
         maxMotorForce: 100,
       ),
     );
-  }
-}
-
-class JointRenderer extends Component {
-  JointRenderer({
-    required this.joint,
-    required this.anchor,
-    required this.axis,
-  });
-
-  final PrismaticJoint joint;
-  final Vector2 anchor;
-  final Vector2 axis;
-  final Vector2 p1 = Vector2.zero();
-  final Vector2 p2 = Vector2.zero();
-
-  @override
-  void render(Canvas canvas) {
-    p1
-      ..setFrom(axis)
-      ..scale(joint.lowerLimit)
-      ..add(anchor);
-    p2
-      ..setFrom(axis)
-      ..scale(joint.upperLimit)
-      ..add(anchor);
-
-    canvas.drawLine(p1.toOffset(), p2.toOffset(), debugPaint);
   }
 }
