@@ -25,7 +25,7 @@ class Ball extends BodyComponent with ContactCallbacks, GlowingBody {
 
   static int _colorIndex = 0;
 
-  /// Cycles through the palette so that neighbouring balls stay readable.
+  /// Cycles through the palette so that neighboring balls stay readable.
   Color randomColor() =>
       ExampleColors.dynamicColor(_colorIndex++ % ExampleColors.dynamics.length);
 

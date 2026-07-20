@@ -24,6 +24,7 @@ renderable
 rerasterize
 rescan
 Roboto
+subclassing
 tappable
 thumbstick
 trackpad

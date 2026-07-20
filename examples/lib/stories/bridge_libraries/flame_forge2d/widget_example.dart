@@ -330,6 +330,7 @@ class _CounterAppOverlayState extends State<CounterAppOverlay> {
           _positioned(
             game.button,
             FloatingActionButton(
+              heroTag: 'counterButton',
               onPressed: _incrementCounter,
               tooltip: 'Increment',
               child: const Icon(Icons.add),
