@@ -23,7 +23,7 @@ import 'package:flame/math.dart';
 class SpawnComponent extends Component {
   /// {@macro spawn_component}
   SpawnComponent({
-    required double period,
+    required this._period,
     PositionComponent Function(int amount)? factory,
     List<PositionComponent> Function(int amount)? multiFactory,
     this.target,
@@ -43,7 +43,6 @@ class SpawnComponent extends Component {
          (factory != null) ^ (multiFactory != null),
          'You need to provide either a factory or a multiFactory, not both.',
        ),
-       _period = period,
        multiFactory = multiFactory ?? _wrapFactory(factory!),
        _random = random ?? randomFallback;
 

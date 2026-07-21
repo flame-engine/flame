@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 class ThirdPersonCamera extends CameraComponent3D {
   ThirdPersonCamera({
     required this.following,
-    double distance = 5.0,
+    this._distance = 5.0,
     this.followDamping = 1.0,
     super.fovY,
     super.position,
@@ -17,7 +17,7 @@ class ThirdPersonCamera extends CameraComponent3D {
     super.viewfinder,
     super.backdrop,
     super.hudComponents,
-  }) : _distance = distance;
+  });
 
   /// The point the camera should follow.
   Vector3 following;

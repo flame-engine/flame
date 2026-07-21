@@ -22,9 +22,9 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required super.parent,
     required super.map,
     required super.destTileSize,
-    required Image image,
+    required this._image,
     super.filterQuality,
-  }) : _image = image {
+  }) {
     _mapSize = Vector2(
       map.width * destTileSize.x,
       map.height * destTileSize.y,

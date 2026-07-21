@@ -32,8 +32,7 @@ import 'package:flutter/services.dart';
 /// [onKeyEvent]s. The events will also stop being delivered when the component
 /// is removed from the component tree.
 class HardwareKeyboardDetector extends Component {
-  HardwareKeyboardDetector({void Function(KeyEvent)? onKeyEvent})
-    : _onKeyEvent = onKeyEvent;
+  HardwareKeyboardDetector({this._onKeyEvent});
 
   final List<PhysicalKeyboardKey> _physicalKeys = [];
   Set<LogicalKeyboardKey> _logicalKeys = {};

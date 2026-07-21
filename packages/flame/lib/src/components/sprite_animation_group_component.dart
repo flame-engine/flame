@@ -38,8 +38,8 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
 
   /// Creates a component with an empty animation which can be set later
   SpriteAnimationGroupComponent({
-    Map<T, SpriteAnimation>? animations,
-    T? current,
+    this._animations,
+    this._current,
     bool? autoResize,
     this.playing = true,
     this.removeOnFinish = const {},
@@ -58,12 +58,10 @@ class SpriteAnimationGroupComponent<T> extends PositionComponent with HasPaint {
          (size == null) == (autoResize ?? size == null),
          '''If size is set, autoResize should be false or size should be null when autoResize is true.''',
        ),
-       _current = current,
-       _animations = animations,
        _autoResize = autoResize ?? size == null,
-       _animationTickers = animations != null
+       _animationTickers = _animations != null
            ? Map.fromEntries(
-               animations.entries
+               _animations.entries
                    .map((e) => MapEntry(e.key, e.value.createTicker()))
                    .toList(),
              )

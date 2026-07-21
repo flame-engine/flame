@@ -42,7 +42,7 @@ class ComponentPool<T extends Component> {
   final int maxSize;
 
   /// Creates a new component pool with the specified factory, maximum size, and
-  /// initial size. The [factory] is a function that creates new instances of
+  /// initial size. The [_factory] is a function that creates new instances of
   /// the component type. The [maxSize] parameter limits the number of
   /// components that can be stored in the pool, while the [initialSize]
   /// parameter determines how many components are created initially.
@@ -50,10 +50,10 @@ class ComponentPool<T extends Component> {
   /// If the [initialSize] exceeds the [maxSize], only [maxSize] components
   /// will be created and added to the pool.
   ComponentPool({
-    required T Function() factory,
+    required this._factory,
     this.maxSize = 100,
     int initialSize = 0,
-  }) : _factory = factory {
+  }) {
     for (var i = 0; i < initialSize && i < maxSize; i++) {
       _available.add(_factory());
     }

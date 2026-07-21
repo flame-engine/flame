@@ -12,14 +12,12 @@ import 'package:flame/src/geometry/ray2.dart';
 /// version, to make it possible to calculate the values lazily.
 class RaycastResult<T extends Hitbox<T>> {
   RaycastResult({
-    T? hitbox,
+    this._hitbox,
     Ray2? reflectionRay,
     Vector2? normal,
     double? distance,
-    bool isInsideHitbox = false,
-  }) : _isInsideHitbox = isInsideHitbox,
-       _hitbox = hitbox,
-       _reflectionRay = reflectionRay ?? Ray2.zero(),
+    this._isInsideHitbox = false,
+  }) : _reflectionRay = reflectionRay ?? Ray2.zero(),
        _normal = normal ?? Vector2.zero(),
        _distance = distance ?? double.maxFinite;
 
