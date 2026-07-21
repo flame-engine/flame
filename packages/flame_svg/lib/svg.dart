@@ -46,7 +46,7 @@ class Svg {
   /// Whether we're using integral sizes for the cache keys (default: false).
   bool get integralSize => _integralSize;
   set integralSize(bool integral) {
-    emptyCache();
+    _emptyCache();
     _integralSize = integral;
   }
 
@@ -55,7 +55,7 @@ class Svg {
   /// Whether we're using a fixed ratio for the cache keys (default: false).
   bool get fixedRatio => _fixedRatio;
   set fixedRatio(bool fixed) {
-    emptyCache();
+    _emptyCache();
     _fixedRatio = fixed;
   }
 
@@ -66,7 +66,7 @@ class Svg {
   set cacheSize(int size) {
     assert(size >= 1, 'The cache size must contain at least one slot.');
     if (size >= 1 && size != cacheSize) {
-      emptyCache();
+      _emptyCache();
       _cacheSize = size;
       _imageCache = MemoryCache(cacheSize: _cacheSize);
     }
@@ -218,11 +218,11 @@ class Svg {
   /// this method once the instance is no longer needed to avoid
   /// memory leaks
   void dispose() {
-    emptyCache();
+    _emptyCache();
   }
 
   /// Get rid of all cached images.
-  void emptyCache() {
+  void _emptyCache() {
     _imageCache.keys.forEach((key) {
       _imageCache.getValue(key)?.dispose();
     });
