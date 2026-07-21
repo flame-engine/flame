@@ -28,14 +28,14 @@ To get started, first add `flame_kenney_xml` as a dependency in your flutter pro
 flutter pub add flame_kenney_xml
 ```
 
-Then place the `spritesheet.json` in `assets/` and `spritesheet.png` in `assets/images/`
+Then place the `spritesheet.xml` in `assets/` and `spritesheet.png` in `assets/images/`
 (or whatever the names of the files are).
 
 Then load the image and the spritesheet using:
 
 ```dart
 final spritesheet = await XmlSpriteSheet.load(
-  image: 'spritesheet.png',
-  xml: 'spritesheet.xml`,
+  imagePath: 'spritesheet.png',
+  xmlPath: 'spritesheet.xml',
 );
 ```
