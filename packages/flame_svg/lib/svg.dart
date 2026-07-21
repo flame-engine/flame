@@ -34,7 +34,10 @@ class Svg {
     _integralSize = integralSize;
     _fixedRatio = fixedRatio;
     _cacheSize = cacheSize;
-    _imageCache = MemoryCache(cacheSize: _cacheSize);
+    assert(_cacheSize >= 1, 'The cache size must support at least one slot.');
+    _imageCache = MemoryCache(
+      cacheSize: _cacheSize >= 1 ? _cacheSize : defaultCacheSize,
+    );
   }
 
   /// The [PictureInfo] that this [Svg] represents.
@@ -64,7 +67,7 @@ class Svg {
   /// The current cache size (default 10): changing the size also empties it.
   int get cacheSize => _cacheSize;
   set cacheSize(int size) {
-    assert(size >= 1, 'The cache size must contain at least one slot.');
+    assert(size >= 1, 'The cache size must support at least one slot.');
     if (size >= 1 && size != cacheSize) {
       _emptyCache();
       _cacheSize = size;
@@ -176,7 +179,7 @@ class Svg {
     final height = size.height * heightRatio;
     Size cacheKey;
     if (fixedRatio || integralSize) {
-      cacheKey = Size(width.roundToDouble(), height.roundToDouble());
+      cacheKey = Size(width.ceilToDouble(), height.ceilToDouble());
     } else {
       cacheKey = Size(width, height);
     }
