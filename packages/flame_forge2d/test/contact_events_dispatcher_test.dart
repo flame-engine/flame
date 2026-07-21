@@ -6,6 +6,16 @@ import 'package:test/scaffolding.dart';
 
 import 'helpers/mocks.dart';
 
+class _CountingDispatcher extends ContactEventsDispatcher {
+  int dispatchCount = 0;
+
+  @override
+  void dispatch(ContactEvents contactEvents, SensorEvents sensorEvents) {
+    dispatchCount++;
+    super.dispatch(contactEvents, sensorEvents);
+  }
+}
+
 void main() {
   // Forge2D has to be initialized before a world can be created, which
   // Forge2DGame does automatically but a bare World does not.
@@ -200,15 +210,18 @@ void main() {
         for (var i = 0; i < 30; i++) {
           game.update(1 / 60);
         }
-        expect(beginCount, equals(1));
-        expect(endCount, equals(0));
+        // The ball may bounce before it settles, so a begin can be followed
+        // by an end and a new begin, but the counts always end on a live
+        // contact.
+        expect(beginCount, greaterThanOrEqualTo(1));
+        expect(endCount, beginCount - 1);
 
         // The resting ball may have fallen asleep, and a sleeping body's
         // contacts are not updated, so wake it up alongside the teleport.
         ball.setTransform(Vector2(100, 0), const Rot.identity());
         ball.isAwake = true;
         game.update(1 / 60);
-        expect(endCount, equals(1));
+        expect(endCount, equals(beginCount));
       },
     );
 
@@ -249,6 +262,53 @@ void main() {
         visitor.setTransform(Vector2(100, 0), const Rot.identity());
         game.update(1 / 60);
         expect(endCount, equals(1));
+      },
+    );
+  });
+
+  group('custom ContactEventsDispatcher', () {
+    testWithGame(
+      'a dispatcher passed to Forge2DGame is used by the created world',
+      () => Forge2DGame(contactEventsDispatcher: _CountingDispatcher()),
+      (game) async {
+        final dispatcher =
+            game.world.contactEventsDispatcher as _CountingDispatcher;
+
+        await game.ready();
+        final countBefore = dispatcher.dispatchCount;
+        game.update(1 / 60);
+
+        expect(dispatcher.dispatchCount, equals(countBefore + 1));
+      },
+    );
+
+    testWithGame(
+      'a dispatcher passed to Forge2DWorld is used by that world',
+      () => Forge2DGame(
+        world: Forge2DWorld(contactEventsDispatcher: _CountingDispatcher()),
+      ),
+      (game) async {
+        final dispatcher =
+            game.world.contactEventsDispatcher as _CountingDispatcher;
+
+        await game.ready();
+        final countBefore = dispatcher.dispatchCount;
+        game.update(1 / 60);
+
+        expect(dispatcher.dispatchCount, equals(countBefore + 1));
+      },
+    );
+
+    test(
+      'Forge2DGame asserts when both a world and a dispatcher are given',
+      () {
+        expect(
+          () => Forge2DGame(
+            world: Forge2DWorld(),
+            contactEventsDispatcher: ContactEventsDispatcher(),
+          ),
+          throwsA(isA<AssertionError>()),
+        );
       },
     );
   });

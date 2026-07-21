@@ -7,6 +7,44 @@ class _TestForge2DWorld extends Forge2DWorld {
 }
 
 void main() {
+  // Forge2D has to be initialized before a world can be created, which
+  // Forge2DGame does automatically but a bare Forge2DWorld does not.
+  setUpAll(initializeForge2D);
+
+  group('gravity before the physics world is created', () {
+    test('the gravity argument takes precedence over the definition', () {
+      final world = Forge2DWorld(
+        gravity: Vector2(1, 2),
+        definition: WorldDef(gravity: Vector2(0, -10)),
+      );
+      expect(world.gravity, Vector2(1, 2));
+      expect(world.physicsWorld.gravity, Vector2(1, 2));
+      world.physicsWorld.destroy();
+    });
+
+    test('the definition gravity is used when no gravity is given', () {
+      final world = Forge2DWorld(
+        definition: WorldDef(gravity: Vector2(0, -10)),
+      );
+      expect(world.physicsWorld.gravity, Vector2(0, -10));
+      world.physicsWorld.destroy();
+    });
+
+    test('a gravity set before creation is picked up by the created world', () {
+      final world = Forge2DWorld()..gravity = Vector2(3, 4);
+      expect(world.gravity, Vector2(3, 4));
+      expect(world.physicsWorld.gravity, Vector2(3, 4));
+      world.physicsWorld.destroy();
+    });
+
+    test('setting gravity to null falls back to the default gravity', () {
+      final world = Forge2DWorld(gravity: Vector2(3, 4))..gravity = null;
+      expect(world.gravity, Forge2DWorld.defaultGravity);
+      expect(world.physicsWorld.gravity, Forge2DWorld.defaultGravity);
+      world.physicsWorld.destroy();
+    });
+  });
+
   testWithGame(
     'Bodies are destroyed after world is removed when destroyBodiesOnRemove is '
     'true',

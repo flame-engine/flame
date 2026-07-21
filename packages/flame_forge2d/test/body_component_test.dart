@@ -17,9 +17,6 @@ class _TestBodyComponent extends BodyComponent with TapCallbacks {
   Body createBody() => body;
 
   @override
-  void noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-
-  @override
   void onTapDown(TapDownEvent _) {
     tapCount++;
   }
