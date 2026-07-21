@@ -8,18 +8,17 @@ If you want to use Forge2D specifically for Flame you should use our bridge libr
 just want to use it in a Dart project you can use the
 [forge2d](https://github.com/flame-engine/forge2d) library directly.
 
-To use it in your game you just need to add `flame_forge2d` to your
-`pubspec.yaml`, as can be seen in the [Forge2D
-[example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
-and the pub. dev [installation
-instructions](https://pub.dev/packages/flame_forge2d)](<https://pub.dev/packages/flame_forge2d>).
+To use it in your game you just need to add `flame_forge2d` to your `pubspec.yaml`, as can be
+seen in the
+[Forge2D example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
+and the pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
 
 Since Forge2D runs Box2D as native code, a C toolchain is required when building for native
 platforms (Xcode on iOS/macOS, the NDK on Android, Visual Studio Build Tools on Windows and
 clang or gcc on Linux). On the web a bundled WebAssembly build of Box2D is used instead.
 
 Forge2D has to be initialized with `await initializeForge2D()` before any physics world is
-created, which on the web is what loads that WebAssembly module. [Forge2DGame] awaits this in its
+created, which on the web is what loads that WebAssembly module. `Forge2DGame` awaits this in its
 `onLoad`, so games don't have to do anything, but that also means that a `Forge2DGame` subclass
 which overrides `onLoad` has to await `super.onLoad()` before it creates any bodies:
 
@@ -145,16 +144,18 @@ So instead of `add(Weapon()))`, `world.add(Weapon())` should be used (as below),
 should also of course initially be added to the world.
 
 ```dart
-class Weapon extends BodyComponent  {
+class Weapon extends BodyComponent {
   @override
-  void onLoad() {
-    ...
+  Future<void> onLoad() async {
+    await super.onLoad();
+    // ...
   }
 }
 
-class Player extends BodyComponent  {
+class Player extends BodyComponent {
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
+    await super.onLoad();
     world.add(Weapon());
   }
 }
@@ -189,7 +190,7 @@ class Ball extends BodyComponent with ContactCallbacks {
 ```
 
 For the above to work, the `Ball`'s `body.userData` or contacting `shape.userData` must be
-set to a `ContactCallback`. And if `Wall` is a `BodyComponent` it's `body.userData` or contacting
+set to a `ContactCallbacks`. And if `Wall` is a `BodyComponent` its `body.userData` or contacting
 `shape.userData` must be set to `Wall`.
 
 If `userData` is `null` the contact events are ignored, it is `null` by default.

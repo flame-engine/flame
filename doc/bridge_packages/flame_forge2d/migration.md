@@ -196,9 +196,10 @@ zooming the camera in and out.
 
 Forge2D exports a `World`, which collides with Flame's `World` component, so files that use both
 need `import 'package:flame_forge2d/flame_forge2d.dart' hide World;`. That was already the case
-before, but Forge2D now also exports `Transform`, `Rot`, `Circle`, `Polygon`, and `Segment`, which
-can collide with `flutter/material.dart` (`Transform`) and `flame/geometry.dart` (`Circle`,
-`Polygon`, `Shape`). Resolve them per file with `hide` or a prefixed import, for example:
+before, as was the collision between Forge2D's `Transform` and the one in
+`flutter/material.dart`, but Forge2D now also exports `Circle`, `Polygon`, and `Segment`, which
+can collide with `flame/geometry.dart`. Resolve them per file with `hide` or a prefixed import,
+for example:
 
 ```dart
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform, World;

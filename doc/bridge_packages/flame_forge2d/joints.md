@@ -120,7 +120,7 @@ final motorJoint = world.physicsWorld.createMotorJoint(
 :show: code popup
 ```
 
-A `MotorJointDef` has three optional parameters:
+A `MotorJointDef` has these optional tuning parameters:
 
 - `maxForce`: the maximum translational force which will be applied to the joined body to reach the
 target position.
@@ -134,8 +134,9 @@ makes it respond slower. If the value is set too high, the joint may overcompens
 becoming unstable. If set too low, it may respond too slowly.
 
 The linear and angular offsets are the target distance and angle that the bodies should achieve
-relative to each other's position and rotation. Use the `linearOffset` and `angularOffset` setters
-of the `MotorJoint` to set the desired relative translation and rotation between the bodies.
+relative to each other's position and rotation. They can be passed to the `MotorJointDef` as
+`linearOffset` and `angularOffset`, or changed later through the setters with the same names on
+the `MotorJoint`.
 
 For example, this code increments the angular offset of the joint every update cycle, causing the
 body to rotate.
@@ -215,7 +216,7 @@ can violate the constraint slightly.
 The joint translation is zero when the local anchor points coincide in world space.
 
 ```{warning}
-At least one body should by dynamic with a non-fixed rotation.
+At least one body should be dynamic with a non-fixed rotation.
 ```
 
 The `PrismaticJoint` definition is similar to the [`RevoluteJoint`](#revolutejoint) definition, but

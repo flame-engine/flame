@@ -88,9 +88,9 @@ Contact, sensor, and body-move events are polled from the world after each step 
 for shapes that have opted in through the `ShapeDef` event flags, like `enableContactEvents` and
 `enableSensorEvents`.
 
-Ray casts (`castRayClosest`, `castRay`, `castRayAll`), AABB overlap queries (`overlapAabb`), and
-explosions (`explode`) are available directly on `World`, returning their results instead of using
-callback classes.
+Ray casts (`castRayClosest`, `castRay`, `castRayAll`) and AABB overlap queries (`overlapAabb`)
+are available directly on `World`, returning their results instead of using callback classes,
+and explosions are applied with `World.explode`.
 
 
 ## Joints
