@@ -15,11 +15,15 @@ class ComponentTreeRoot extends Component {
     super.children,
     super.key,
   }) : queue = RecycledQueue(LifecycleEvent.new),
-       _blocked = <int>{};
+       _blocked = <Component>{};
 
   @internal
   final RecycledQueue<LifecycleEvent> queue;
-  final Set<int> _blocked;
+
+  /// Components whose events are blocked during the current
+  /// [processLifecycleEvents] pass. Compared by identity, since [Component]
+  /// does not override equality.
+  final Set<Component> _blocked;
   late final Map<ComponentKey, Component> _index = {};
   Completer<void>? _lifecycleEventsCompleter;
 
@@ -147,8 +151,7 @@ class ComponentTreeRoot extends Component {
       for (final event in queue) {
         final child = event.child!;
         final parent = event.parent!;
-        if (_blocked.contains(identityHashCode(child)) ||
-            _blocked.contains(identityHashCode(parent))) {
+        if (_blocked.contains(child) || _blocked.contains(parent)) {
           continue;
         }
 
@@ -165,8 +168,8 @@ class ComponentTreeRoot extends Component {
             queue.removeCurrent();
             repeatLoop = true;
           case LifecycleEventStatus.block:
-            _blocked.add(identityHashCode(child));
-            _blocked.add(identityHashCode(parent));
+            _blocked.add(child);
+            _blocked.add(parent);
           default:
         }
       }
