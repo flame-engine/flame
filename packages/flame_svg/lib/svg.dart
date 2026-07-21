@@ -62,7 +62,7 @@ class Svg {
   /// The current cache size (default 10): changing the size also empties it.
   int get cacheSize => _cacheSize;
   set cacheSize(int size) {
-    assert(size >= 1);
+    assert(size >= 1, 'The cache size must contain at least one slot.');
     if (size >= 1 && size != cacheSize) {
       emptyCache();
       _cacheSize = size;
