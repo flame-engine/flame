@@ -57,12 +57,17 @@ class Forge2DWorld extends World {
       gravity: _gravity,
       definition: _definition,
     );
-    assert(
-      createdWorld.isValid,
-      'The physics world could not be created. Box2D allows a limited number '
-      'of simultaneous worlds, and Forge2D worlds are not freed automatically, '
-      'so call physicsWorld.destroy() on the worlds that you are done with.',
-    );
+    if (!createdWorld.isValid) {
+      // Checked at runtime rather than with an assert, since an invalid world
+      // is cached and used by every later step and API call, which would crash
+      // far from the cause in a release build where asserts are stripped.
+      throw StateError(
+        'The physics world could not be created. Box2D allows a limited number '
+        'of simultaneous worlds, and Forge2D worlds are not freed '
+        'automatically, so call physicsWorld.destroy() on the worlds that you '
+        'are done with.',
+      );
+    }
     return _physicsWorld = createdWorld;
   }
 
