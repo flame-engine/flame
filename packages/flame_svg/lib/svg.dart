@@ -23,17 +23,19 @@ class Svg {
     bool integralSize = false,
     bool fixedRatio = false,
     int cacheSize = defaultCacheSize,
-  }) : _integralSize = integralSize,
-       _fixedRatio = fixedRatio,
-       _cacheSize = cacheSize,
-       pixelRatio =
+  }) : pixelRatio =
            pixelRatio ??
            WidgetsBinding
                .instance
                .platformDispatcher
                .views
                .first
-               .devicePixelRatio;
+               .devicePixelRatio {
+    _integralSize = integralSize;
+    _fixedRatio = fixedRatio;
+    _cacheSize = cacheSize;
+    _imageCache = MemoryCache(cacheSize: _cacheSize);
+  }
 
   /// The [PictureInfo] that this [Svg] represents.
   final PictureInfo pictureInfo;
@@ -75,9 +77,7 @@ class Svg {
   /// The number of images currently used by the cache.
   int get cacheUsage => _imageCache.size;
 
-  late MemoryCache<Size, Image> _imageCache = MemoryCache(
-    cacheSize: _cacheSize,
-  );
+  late MemoryCache<Size, Image> _imageCache;
 
   final _paint = Paint()..filterQuality = FilterQuality.medium;
 
