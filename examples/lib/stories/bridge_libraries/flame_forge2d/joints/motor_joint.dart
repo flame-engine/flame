@@ -55,6 +55,10 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
       MotorJointDef(
         bodyA: first,
         bodyB: second,
+        // The target offset of the box in the ball's frame. Starting with
+        // the current offset keeps the bodies where they are, and update
+        // below drifts it from there.
+        linearOffset: first.localPoint(second.position),
         maxForce: 1000,
         maxTorque: 1000,
         correctionFactor: 0.1,

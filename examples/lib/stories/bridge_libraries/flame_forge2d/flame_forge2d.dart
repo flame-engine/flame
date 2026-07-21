@@ -49,7 +49,7 @@ void addForge2DStories(Dashbook dashbook) {
       (DashbookContext ctx) =>
           GameWidget(game: RevoluteJointWithMotorExample()),
       codeLink: link('revolute_joint_with_motor_example.dart'),
-      info: RevoluteJointExample.description,
+      info: RevoluteJointWithMotorExample.description,
     )
     ..add(
       'Sprite Bodies',

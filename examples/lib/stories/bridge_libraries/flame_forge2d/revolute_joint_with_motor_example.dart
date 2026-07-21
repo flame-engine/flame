@@ -41,7 +41,7 @@ class RevoluteJointWithMotorWorld extends Forge2DWorld
     super.onTapDown(info);
     final tapPosition = info.localPosition;
     List.generate(15, (i) {
-      final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
+      final randomVector = (Vector2.random() - Vector2.all(0.5)).normalized();
       add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
     });
   }
