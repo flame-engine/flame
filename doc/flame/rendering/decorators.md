@@ -115,7 +115,7 @@ colored glass. It is recommended that the `color` used by this decorator was sem
 that you can see the details of the image below.
 
 ```dart
-final decorator = PaintDecorator.tint(const Color(0xAAFF0000);
+final decorator = PaintDecorator.tint(const Color(0xAAFF0000));
 ```
 
 Possible uses:
