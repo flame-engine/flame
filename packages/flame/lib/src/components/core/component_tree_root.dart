@@ -132,33 +132,9 @@ class ComponentTreeRoot extends Component {
     if (_flatVersion != ComponentList.structureVersion) {
       _flatVersion = ComponentList.structureVersion;
       _flatUpdateList.clear();
-      _flattenChildrenOf(this);
+      flattenUpdateSubtreeInto(_flatUpdateList);
     }
-    final list = _flatUpdateList;
-    for (var i = 0; i < list.length; i++) {
-      final component = list[i];
-      if (component is CustomTraversal) {
-        component.updateSubtree(dt);
-      } else {
-        component.update(dt);
-      }
-    }
-  }
-
-  void _flattenChildrenOf(Component component) {
-    if (!component.hasChildren) {
-      return;
-    }
-    final children = component.children..compact();
-    for (final child in children) {
-      if (child.updatePaused) {
-        continue;
-      }
-      _flatUpdateList.add(child);
-      if (child is! CustomTraversal) {
-        _flattenChildrenOf(child);
-      }
-    }
+    Component.updateFlatList(_flatUpdateList, dt);
   }
 
   /// A future that will complete once all lifecycle events have been

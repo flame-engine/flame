@@ -100,11 +100,6 @@ class ComponentList extends Iterable<Component> {
   @internal
   static int structureVersion = 0;
 
-  /// Compacts the tombstones out of the backing array, restoring exact
-  /// element indices. Safe to call only when no iteration is in progress.
-  @internal
-  void compact() => _compact();
-
   @override
   int get length => _length;
 

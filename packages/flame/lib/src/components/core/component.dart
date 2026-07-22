@@ -602,6 +602,49 @@ class Component {
     }
   }
 
+  /// Whether this component manages its own subtree traversal. Evaluated
+  /// once, so that the per-frame traversal loops pay a field load instead of
+  /// a type check.
+  late final bool _isTraversalBarrier = this is CustomTraversal;
+
+  /// Appends this component's subtree to [out] in pre-order (children in
+  /// priority order), stopping at (but including) `CustomTraversal` barriers
+  /// and skipping paused subtrees. Used by the root to build its flattened
+  /// update list.
+  @internal
+  void flattenUpdateSubtreeInto(List<Component> out) {
+    final children = _children;
+    if (children == null) {
+      return;
+    }
+    children._compact();
+    final elements = children._elements;
+    for (var i = 0; i < elements.length; i++) {
+      final child = elements[i];
+      if (child == null || child._updatePaused) {
+        continue;
+      }
+      out.add(child);
+      if (!child._isTraversalBarrier) {
+        child.flattenUpdateSubtreeInto(out);
+      }
+    }
+  }
+
+  /// Runs one update pass over a flattened traversal list produced by
+  /// [flattenUpdateSubtreeInto].
+  @internal
+  static void updateFlatList(List<Component> list, double dt) {
+    for (var i = 0; i < list.length; i++) {
+      final component = list[i];
+      if (component._isTraversalBarrier) {
+        (component as CustomTraversal).updateSubtree(dt);
+      } else {
+        component.update(dt);
+      }
+    }
+  }
+
   /// The engine's standard update traversal: update this component, then
   /// update the children in priority order.
   ///
