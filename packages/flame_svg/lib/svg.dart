@@ -12,15 +12,33 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Svg {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
-  Svg(this.pictureInfo, {double? pixelRatio})
-    : pixelRatio =
-          pixelRatio ??
-          WidgetsBinding
-              .instance
-              .platformDispatcher
-              .views
-              .first
-              .devicePixelRatio;
+  /// Setting [integralSize] to `true` uses integer dimensions for cache keys.
+  /// Setting [fixedRatio] to `true` ensures the cache uses a single entry.
+  /// Default [cacheSize] is [defaultCacheSize], which is 10 as previously;
+  /// specifying [unlimitedCacheSize] is the same as using a [Map] instead
+  /// of a [MemoryCache].
+  Svg(
+    this.pictureInfo, {
+    double? pixelRatio,
+    bool integralSize = false,
+    bool fixedRatio = false,
+    int cacheSize = defaultCacheSize,
+  }) : pixelRatio =
+           pixelRatio ??
+           WidgetsBinding
+               .instance
+               .platformDispatcher
+               .views
+               .first
+               .devicePixelRatio {
+    _integralSize = integralSize;
+    _fixedRatio = fixedRatio;
+    _cacheSize = cacheSize;
+    assert(_cacheSize >= 1, 'The cache size must support at least one slot.');
+    _imageCache = MemoryCache(
+      cacheSize: _cacheSize >= 1 ? _cacheSize : defaultCacheSize,
+    );
+  }
 
   /// The [PictureInfo] that this [Svg] represents.
   final PictureInfo pictureInfo;
@@ -28,7 +46,41 @@ class Svg {
   /// The pixel ratio that this [Svg] is rendered based on.
   final double pixelRatio;
 
-  final MemoryCache<Size, Image> _imageCache = MemoryCache();
+  /// Whether we're using integral sizes for the cache keys (default: false).
+  bool get integralSize => _integralSize;
+  set integralSize(bool integral) {
+    _emptyCache();
+    _integralSize = integral;
+  }
+
+  late bool _integralSize;
+
+  /// Whether we're using a fixed ratio for the cache keys (default: false).
+  bool get fixedRatio => _fixedRatio;
+  set fixedRatio(bool fixed) {
+    _emptyCache();
+    _fixedRatio = fixed;
+  }
+
+  late bool _fixedRatio;
+
+  /// The current cache size (default 10): changing the size also empties it.
+  int get cacheSize => _cacheSize;
+  set cacheSize(int size) {
+    assert(size >= 1, 'The cache size must support at least one slot.');
+    if (size >= 1 && size != cacheSize) {
+      _emptyCache();
+      _cacheSize = size;
+      _imageCache = MemoryCache(cacheSize: _cacheSize);
+    }
+  }
+
+  late int _cacheSize;
+
+  /// The number of images currently used by the cache.
+  int get cacheUsage => _imageCache.size;
+
+  late MemoryCache<Size, Image> _imageCache;
 
   final _paint = Paint()..filterQuality = FilterQuality.medium;
 
@@ -38,24 +90,45 @@ class Svg {
     String fileName, {
     AssetsCache? cache,
     double? pixelRatio,
+    bool integralSize = false,
+    bool fixedRatio = false,
+    int cacheSize = defaultCacheSize,
     String? package,
   }) async {
     cache ??= Flame.assets;
     final svgString = await cache.readFile(fileName, package: package);
-    return Svg.loadFromString(svgString, pixelRatio: pixelRatio);
+    return Svg.loadFromString(
+      svgString,
+      pixelRatio: pixelRatio,
+      integralSize: integralSize,
+      fixedRatio: fixedRatio,
+      cacheSize: cacheSize,
+    );
   }
 
   /// Loads an [Svg] from a string.
   static Future<Svg> loadFromString(
     String svgString, {
     double? pixelRatio,
+    bool integralSize = false,
+    bool fixedRatio = false,
+    int cacheSize = defaultCacheSize,
   }) async {
     final pictureInfo = await vg.loadPicture(SvgStringLoader(svgString), null);
     return Svg(
       pictureInfo,
       pixelRatio: pixelRatio,
+      integralSize: integralSize,
+      fixedRatio: fixedRatio,
+      cacheSize: cacheSize,
     );
   }
+
+  /// Default memory cache size.
+  static const int defaultCacheSize = 10;
+
+  /// Unlimited memory cache size.
+  static final int unlimitedCacheSize = double.maxFinite.toInt();
 
   /// Renders the svg on the [canvas] using the dimensions provided by [size].
   void render(
@@ -68,10 +141,12 @@ class Svg {
     // camera.viewfinder.zoom larger than 1.0
     final destinationClipBounds = canvas.getDestinationClipBounds();
     final localClipBounds = canvas.getLocalClipBounds();
-    final widthRatio =
-        destinationClipBounds.size.width / localClipBounds.size.width;
-    final heightRatio =
-        destinationClipBounds.size.height / localClipBounds.size.height;
+    final widthRatio = fixedRatio
+        ? 1.0
+        : destinationClipBounds.size.width / localClipBounds.size.width;
+    final heightRatio = fixedRatio
+        ? 1.0
+        : destinationClipBounds.size.height / localClipBounds.size.height;
 
     final localSize = Size(size.x, size.y);
     final image = _getImage(localSize, widthRatio, heightRatio);
@@ -100,7 +175,14 @@ class Svg {
   }
 
   Image _getImage(Size size, double widthRatio, double heightRatio) {
-    final cacheKey = Size(size.width * widthRatio, size.height * heightRatio);
+    final width = size.width * widthRatio;
+    final height = size.height * heightRatio;
+    Size cacheKey;
+    if (fixedRatio || integralSize) {
+      cacheKey = Size(width.ceilToDouble(), height.ceilToDouble());
+    } else {
+      cacheKey = Size(width, height);
+    }
     final image = _imageCache.getValue(cacheKey);
 
     if (image == null) {
@@ -110,8 +192,8 @@ class Svg {
       _render(canvas, size);
       final picture = recorder.endRecording();
       final image = picture.toImageSync(
-        (size.width * pixelRatio * widthRatio).ceil(),
-        (size.height * pixelRatio * heightRatio).ceil(),
+        (width * pixelRatio).ceil(),
+        (height * pixelRatio).ceil(),
       );
 
       picture.dispose();
@@ -139,6 +221,11 @@ class Svg {
   /// this method once the instance is no longer needed to avoid
   /// memory leaks
   void dispose() {
+    _emptyCache();
+  }
+
+  /// Get rid of all cached images.
+  void _emptyCache() {
     _imageCache.keys.forEach((key) {
       _imageCache.getValue(key)?.dispose();
     });
@@ -149,6 +236,18 @@ class Svg {
 /// Provides a loading method for [Svg] on the [Game] class.
 extension SvgLoader on Game {
   /// Loads an [Svg] using the [Game]'s own asset loader.
-  Future<Svg> loadSvg(String fileName, {String? package}) =>
-      Svg.load(fileName, cache: assets, package: package);
+  Future<Svg> loadSvg(
+    String fileName, {
+    String? package,
+    bool integralSize = false,
+    bool fixedRatio = false,
+    int cacheSize = Svg.defaultCacheSize,
+  }) => Svg.load(
+    fileName,
+    cache: assets,
+    package: package,
+    integralSize: integralSize,
+    fixedRatio: fixedRatio,
+    cacheSize: cacheSize,
+  );
 }
