@@ -576,11 +576,24 @@ class Component {
       return;
     }
     if (_isTraversalBarrier) {
-      (this as CustomTraversal).updateSubtree(dt);
+      updateSubtree(dt);
     } else {
       defaultUpdateSubtree(dt);
     }
   }
+
+  /// Updates this component and its subtree.
+  ///
+  /// The engine only invokes this method for components that are marked with
+  /// the [CustomTraversal] mixin, either directly or through a mixin that
+  /// `implements` it (such as `HasTimeScale`). The marker is what makes the
+  /// flattened update pass treat the component as a traversal barrier;
+  /// overriding this method without the marker has no effect.
+  ///
+  /// Call `super.updateSubtree` to run the surrounding traversal (the
+  /// standard one, or the next custom traversal in the mixin chain),
+  /// possibly with a modified time delta.
+  void updateSubtree(double dt) => defaultUpdateSubtree(dt);
 
   /// Whether the update pass is paused for this component and its entire
   /// subtree.
@@ -614,7 +627,7 @@ class Component {
     for (var i = 0; i < list.length; i++) {
       final component = list[i];
       if (component._isTraversalBarrier) {
-        (component as CustomTraversal).updateSubtree(dt);
+        component.updateSubtree(dt);
       } else {
         component.update(dt);
       }
@@ -642,7 +655,7 @@ class Component {
       }
       out.add(child);
       if (child._isTraversalBarrier) {
-        (child as CustomTraversal).updateSubtree(dt);
+        child.updateSubtree(dt);
       } else {
         child.update(dt);
         child.updateAndFlattenInto(out, dt);

@@ -161,9 +161,10 @@ class SlowMotionArea extends Component with CustomTraversal {
 ```
 
 The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
-flattened list itself and its `updateSubtree` drives its subtree. Mixins that compose with other
-custom traversals (like `HasTimeScale`) are declared `on CustomTraversal` and chain via
-`super.updateSubtree`.
+flattened list itself and its `updateSubtree` drives its subtree. `updateSubtree` lives on
+`Component`, but it is only invoked for components carrying the marker. Mixins that provide a
+custom traversal (like `HasTimeScale`) declare `implements CustomTraversal`, so their users do not
+need to add the marker themselves, and chain via `super.updateSubtree`.
 
 To temporarily stop updating a component and its whole subtree, set `updatePaused` to true. While
 paused, no `update` calls happen in the subtree, but rendering and event handling continue, and
