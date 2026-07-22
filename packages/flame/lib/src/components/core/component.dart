@@ -297,9 +297,12 @@ class Component {
   /// Maintained by [ComponentSet].
   ComponentSet? _containerSet;
 
-  /// This component's slot index within [_containerSet]'s backing array, or
-  /// -1 when the component is not in any container. Maintained by
-  /// [ComponentSet].
+  /// The priority bucket within [_containerSet] that holds this component.
+  /// Maintained by [ComponentSet].
+  _PriorityBucket? _bucket;
+
+  /// This component's slot index within [_bucket]'s member array, or -1 when
+  /// the component is not in any container. Maintained by [ComponentSet].
   int _containerIndex = -1;
 
   /// This field should be used internally for functionality when you need to
@@ -565,9 +568,12 @@ class Component {
       // The update pass doubles as the safe point where tombstones left by
       // removals since the last tick are compacted away.
       children._compact();
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        elements[i]?.updateTree(dt);
+      final buckets = children._buckets;
+      for (var b = 0; b < buckets.length; b++) {
+        final members = buckets[b].members;
+        for (var i = 0; i < members.length; i++) {
+          members[i]?.updateTree(dt);
+        }
       }
     }
   }
@@ -618,11 +624,14 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        final child = elements[i];
-        if (child != null) {
-          renderChild(canvas, child);
+      final buckets = children._buckets;
+      for (var b = 0; b < buckets.length; b++) {
+        final members = buckets[b].members;
+        for (var i = 0; i < members.length; i++) {
+          final child = members[i];
+          if (child != null) {
+            renderChild(canvas, child);
+          }
         }
       }
       afterChildrenRendered(canvas);
@@ -860,10 +869,8 @@ class Component {
   ) sync* {
     nestedContexts?.add(locationContext);
     if (_children != null) {
-      final elements = _children!._elements;
-      for (var i = elements.length - 1; i >= 0; i--) {
-        final child = elements[i];
-        if (child == null || (child is IgnoreEvents && child.ignoreEvents)) {
+      for (final child in _children!.reversed()) {
+        if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
         T? childPoint = locationContext;

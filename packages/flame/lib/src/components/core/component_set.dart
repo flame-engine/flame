@@ -2,39 +2,23 @@ part of 'component.dart';
 
 /// A fast, ordered container for a [Component]'s children.
 ///
-/// The children are stored in a single flat [List], sorted by
-/// [Component.priority]; components with equal priority keep the order in
-/// which they were added. This is the same ordering that the old
-/// `OrderedSet`-based container provided, but backed by a contiguous array
-/// instead of a splay tree of hash sets, which makes iteration, additions,
-/// removals and reorders significantly faster and allocation-free.
+/// Variant C: priority-bucketed dense arrays. The container keeps a list of
+/// buckets, one per distinct [Component.priority] value, sorted by priority;
+/// each bucket is a dense array of the components with that priority, in
+/// insertion order. Every component stores an intrusive reference to its
+/// bucket and its slot index within it.
 ///
 /// Performance characteristics:
-///  - iteration: O(n) over a contiguous array, without any allocations on the
-///    internal engine paths;
-///  - [add]: O(1) when the component sorts at or after the end, which is the
-///    common case, and O(n) for a mid-list insertion;
-///  - [remove] and [contains]: O(1), using the slot index that is stored on
-///    the component itself;
-///  - [rebalance] (after priority changes): O(n) when the list turns out to
-///    still be sorted, otherwise O(n log n) with a stable sort.
+///  - iteration: O(n) over the bucket arrays in priority order;
+///  - [add]: O(1) append into the right bucket (plus O(log b) bucket lookup,
+///    where b is the number of distinct priorities);
+///  - [remove] and [contains]: O(1) via the intrusive references;
+///  - [rebalance]: O(n) scan; each moved component pays a bucket move
+///    instead of participating in a global sort.
 ///
-/// A removal does not shift the array, it leaves a `null` "tombstone" in
-/// place. Tombstones are invisible to iteration and are compacted away at the
-/// start of the next update tick, or earlier if they grow to dominate the
-/// array.
-///
-/// Mutating the container while iterating it is allowed in the ways that the
-/// component lifecycle needs: removals take effect immediately (the removed
-/// component is simply not visited), and additions at the end may or may not
-/// be visited by an ongoing iteration. Operations that shift the positions of
-/// existing elements (a mid-list insertion, [rebalance], or tombstone
-/// compaction) invalidate live iterators, which will then throw a
-/// [ConcurrentModificationError].
-///
-/// The contents of this container are managed by the [Component] lifecycle:
-/// use [Component.add], [Component.remove] and their related methods to
-/// modify which components are in it.
+/// A removal leaves a `null` tombstone in its bucket; tombstones are
+/// invisible to iteration and are compacted at the next update tick, or when
+/// they grow to dominate their bucket.
 class ComponentSet extends Iterable<Component> {
   ComponentSet({bool? strictMode})
     : strictMode = strictMode ?? Component.strictQueryMode;
@@ -43,23 +27,19 @@ class ComponentSet extends Iterable<Component> {
   /// (`true`), or transparently registers the type on first use (`false`).
   final bool strictMode;
 
-  /// The backing store; `null` entries are tombstones left by removals.
-  final List<Component?> _elements = [];
+  /// The buckets, sorted by their unique [_PriorityBucket.priority].
+  final List<_PriorityBucket> _buckets = [];
 
-  /// The number of live (non-tombstone) elements.
+  /// The number of live elements across all buckets.
   int _length = 0;
 
-  /// The number of tombstones currently present in [_elements].
-  int _tombstones = 0;
-
-  /// Incremented whenever existing elements change their position within
-  /// [_elements] (mid-list insertion, sorting, or compaction). Iterators use
-  /// this to detect concurrent structural modification.
+  /// Incremented whenever existing elements change their position (bucket
+  /// list shifts, bucket compaction, reordering). Iterators use this to
+  /// detect concurrent structural modification.
   int _shiftCount = 0;
 
-  /// Compaction is deferred until this many tombstones have accumulated
-  /// (unless the whole set empties out, or a structural operation needs a
-  /// dense array anyway).
+  /// Compaction of a bucket is deferred until this many tombstones have
+  /// accumulated in it (unless it empties out entirely).
   static const int _tombstoneCompactionThreshold = 16;
 
   /// The per-type query caches, created by [register].
@@ -78,10 +58,6 @@ class ComponentSet extends Iterable<Component> {
   Iterator<Component> get iterator => _ComponentSetIterator(this);
 
   /// The elements of this set in reverse order.
-  ///
-  /// Unlike the rest of the [Iterable] interface, this is a method and not a
-  /// getter, for historical reasons. The returned iterable is a lazy view: it
-  /// costs nothing to create and always reflects the current contents.
   Iterable<Component> reversed() => _ReversedComponentSetView(this);
 
   @override
@@ -91,11 +67,14 @@ class ComponentSet extends Iterable<Component> {
 
   @override
   Component get first {
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        return element;
+    final buckets = _buckets;
+    for (var b = 0; b < buckets.length; b++) {
+      final members = buckets[b].members;
+      for (var i = 0; i < members.length; i++) {
+        final element = members[i];
+        if (element != null) {
+          return element;
+        }
       }
     }
     throw StateError('No element');
@@ -103,11 +82,14 @@ class ComponentSet extends Iterable<Component> {
 
   @override
   Component get last {
-    final elements = _elements;
-    for (var i = elements.length - 1; i >= 0; i--) {
-      final element = elements[i];
-      if (element != null) {
-        return element;
+    final buckets = _buckets;
+    for (var b = buckets.length - 1; b >= 0; b--) {
+      final members = buckets[b].members;
+      for (var i = members.length - 1; i >= 0; i--) {
+        final element = members[i];
+        if (element != null) {
+          return element;
+        }
       }
     }
     throw StateError('No element');
@@ -116,18 +98,15 @@ class ComponentSet extends Iterable<Component> {
   @override
   Component elementAt(int index) {
     RangeError.checkNotNegative(index, 'index');
-    final elements = _elements;
-    if (_tombstones == 0) {
-      if (index >= elements.length) {
-        throw IndexError.withLength(index, _length, indexable: this);
-      }
-      return elements[index]!;
-    }
     var live = 0;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null && live++ == index) {
-        return element;
+    final buckets = _buckets;
+    for (var b = 0; b < buckets.length; b++) {
+      final members = buckets[b].members;
+      for (var i = 0; i < members.length; i++) {
+        final element = members[i];
+        if (element != null && live++ == index) {
+          return element;
+        }
       }
     }
     throw IndexError.withLength(index, _length, indexable: this);
@@ -135,13 +114,56 @@ class ComponentSet extends Iterable<Component> {
 
   @override
   void forEach(void Function(Component element) action) {
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        action(element);
+    final buckets = _buckets;
+    for (var b = 0; b < buckets.length; b++) {
+      final members = buckets[b].members;
+      for (var i = 0; i < members.length; i++) {
+        final element = members[i];
+        if (element != null) {
+          action(element);
+        }
       }
     }
+  }
+
+  /// Binary search for the bucket with exactly [priority]; returns its index
+  /// or, if absent, `-(insertionPoint + 1)`.
+  int _bucketIndexOf(int priority) {
+    var lo = 0;
+    var hi = _buckets.length;
+    while (lo < hi) {
+      final mid = (lo + hi) >>> 1;
+      final midPriority = _buckets[mid].priority;
+      if (midPriority < priority) {
+        lo = mid + 1;
+      } else if (midPriority > priority) {
+        hi = mid;
+      } else {
+        return mid;
+      }
+    }
+    return -(lo + 1);
+  }
+
+  _PriorityBucket _bucketFor(int priority) {
+    final buckets = _buckets;
+    // Fast path: the common case is appending at (or after) the end.
+    if (buckets.isEmpty || buckets.last.priority < priority) {
+      final bucket = _PriorityBucket(priority);
+      buckets.add(bucket);
+      return bucket;
+    }
+    if (buckets.last.priority == priority) {
+      return buckets.last;
+    }
+    final index = _bucketIndexOf(priority);
+    if (index >= 0) {
+      return buckets[index];
+    }
+    final bucket = _PriorityBucket(priority);
+    buckets.insert(-index - 1, bucket);
+    _shiftCount++;
+    return bucket;
   }
 
   /// Adds [component] to this set, keeping the priority ordering; returns
@@ -158,24 +180,12 @@ class ComponentSet extends Iterable<Component> {
       component._containerSet == null,
       'A component cannot be contained by two children containers at once',
     );
-    final elements = _elements;
-    if (_length == 0 && elements.isNotEmpty) {
-      // The array contains only tombstones; reset it.
-      elements.clear();
-      _tombstones = 0;
-    }
-    final priority = component._priority;
-    var lastIndex = elements.length - 1;
-    while (lastIndex >= 0 && elements[lastIndex] == null) {
-      lastIndex--;
-    }
-    if (lastIndex >= 0 && elements[lastIndex]!._priority > priority) {
-      _insertSorted(component, priority);
-    } else {
-      component._containerIndex = elements.length;
-      elements.add(component);
-    }
+    final bucket = _bucketFor(component._priority);
+    component._containerIndex = bucket.members.length;
+    component._bucket = bucket;
     component._containerSet = this;
+    bucket.members.add(component);
+    bucket.live++;
     _length++;
     final queries = _queries;
     if (queries != null) {
@@ -188,29 +198,6 @@ class ComponentSet extends Iterable<Component> {
     return true;
   }
 
-  /// Inserts [component] before all existing elements with a higher priority,
-  /// and after all elements with the same or a lower priority.
-  void _insertSorted(Component component, int priority) {
-    _compact();
-    final elements = _elements;
-    var lo = 0;
-    var hi = elements.length;
-    while (lo < hi) {
-      final mid = (lo + hi) >>> 1;
-      if (elements[mid]!._priority <= priority) {
-        lo = mid + 1;
-      } else {
-        hi = mid;
-      }
-    }
-    elements.insert(lo, component);
-    component._containerIndex = lo;
-    for (var i = lo + 1; i < elements.length; i++) {
-      elements[i]!._containerIndex = i;
-    }
-    _shiftCount++;
-  }
-
   /// Removes [component] from this set; returns whether it was present.
   ///
   /// This is internal machinery: removing a component here does not make it
@@ -220,13 +207,16 @@ class ComponentSet extends Iterable<Component> {
     if (!identical(component._containerSet, this)) {
       return false;
     }
+    final bucket = component._bucket!;
     final index = component._containerIndex;
-    assert(identical(_elements[index], component));
-    _elements[index] = null;
+    assert(identical(bucket.members[index], component));
+    bucket.members[index] = null;
+    bucket.live--;
+    bucket.tombstones++;
     component._containerSet = null;
+    component._bucket = null;
     component._containerIndex = -1;
     _length--;
-    _tombstones++;
     final queries = _queries;
     if (queries != null) {
       for (final cache in queries.values) {
@@ -235,12 +225,15 @@ class ComponentSet extends Iterable<Component> {
         }
       }
     }
-    if (_length == 0) {
-      _elements.clear();
-      _tombstones = 0;
-    } else if (_tombstones >= _tombstoneCompactionThreshold &&
-        _tombstones * 2 >= _elements.length) {
-      _compact();
+    if (bucket.live == 0) {
+      final bucketIndex = _bucketIndexOf(bucket.priority);
+      assert(bucketIndex >= 0);
+      _buckets.removeAt(bucketIndex);
+      _shiftCount++;
+    } else if (bucket.tombstones >= _tombstoneCompactionThreshold &&
+        bucket.tombstones * 2 >= bucket.members.length) {
+      bucket.compact();
+      _shiftCount++;
     }
     return true;
   }
@@ -252,76 +245,92 @@ class ComponentSet extends Iterable<Component> {
   /// instead.
   @internal
   void clear() {
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        element._containerSet = null;
-        element._containerIndex = -1;
+    final buckets = _buckets;
+    for (var b = 0; b < buckets.length; b++) {
+      final members = buckets[b].members;
+      for (var i = 0; i < members.length; i++) {
+        final element = members[i];
+        if (element != null) {
+          element._containerSet = null;
+          element._bucket = null;
+          element._containerIndex = -1;
+        }
       }
     }
-    elements.clear();
+    buckets.clear();
     _length = 0;
-    _tombstones = 0;
     _shiftCount++;
     _queries?.forEach((_, cache) => cache.data.clear());
+  }
+
+  /// Compacts the tombstones out of every bucket. Called by the engine at
+  /// the start of each update pass, when no iteration can be in progress.
+  void _compact() {
+    final buckets = _buckets;
+    var compacted = false;
+    for (var b = 0; b < buckets.length; b++) {
+      final bucket = buckets[b];
+      if (bucket.tombstones > 0) {
+        bucket.compact();
+        compacted = true;
+      }
+    }
+    if (compacted) {
+      _shiftCount++;
+    }
   }
 
   /// Restores the priority ordering after one or more elements have changed
   /// their [Component.priority].
   ///
   /// This is invoked automatically, at most once per parent per game tick,
-  /// when priorities of mounted components change. The sort is stable:
-  /// components with equal priority keep their relative order.
+  /// when priorities of mounted components change. Components whose priority
+  /// changed are moved to the bucket matching their new priority, appended
+  /// after that bucket's existing members in their previous relative order.
   void rebalance() {
     _compact();
-    final elements = _elements;
-    var isSorted = true;
-    for (var i = 1; i < elements.length; i++) {
-      if (elements[i - 1]!._priority > elements[i]!._priority) {
-        isSorted = false;
-        break;
+    // Collect the components that no longer match their bucket's priority,
+    // in the current iteration order.
+    List<Component>? movers;
+    final buckets = _buckets;
+    for (var b = 0; b < buckets.length; b++) {
+      final bucket = buckets[b];
+      final members = bucket.members;
+      for (var i = 0; i < members.length; i++) {
+        final element = members[i];
+        if (element != null && element._priority != bucket.priority) {
+          (movers ??= []).add(element);
+        }
       }
     }
-    if (isSorted) {
+    if (movers == null) {
       return;
     }
     _shiftCount++;
-    // Ties are broken by the pre-sort index, which makes the (unstable)
-    // built-in sort behave as a stable sort.
-    elements.sort((a, b) {
-      final byPriority = a!._priority.compareTo(b!._priority);
-      return byPriority != 0
-          ? byPriority
-          : a._containerIndex - b._containerIndex;
-    });
-    for (var i = 0; i < elements.length; i++) {
-      elements[i]!._containerIndex = i;
+    for (var i = 0; i < movers.length; i++) {
+      final component = movers[i];
+      final bucket = component._bucket!;
+      bucket.members[component._containerIndex] = null;
+      bucket.live--;
+      bucket.tombstones++;
+    }
+    // Drop emptied buckets and compact the rest before re-inserting, so that
+    // bucket lookups and new indices are exact.
+    buckets.removeWhere((bucket) => bucket.live == 0);
+    for (var b = 0; b < buckets.length; b++) {
+      if (buckets[b].tombstones > 0) {
+        buckets[b].compact();
+      }
+    }
+    for (var i = 0; i < movers.length; i++) {
+      final component = movers[i];
+      final bucket = _bucketFor(component._priority);
+      component._containerIndex = bucket.members.length;
+      component._bucket = bucket;
+      bucket.members.add(component);
+      bucket.live++;
     }
     _queries?.forEach((_, cache) => cache.resort());
-  }
-
-  /// Rewrites the backing array without its tombstones, restoring exact
-  /// element indices.
-  void _compact() {
-    if (_tombstones == 0) {
-      return;
-    }
-    final elements = _elements;
-    var write = 0;
-    for (var read = 0; read < elements.length; read++) {
-      final element = elements[read];
-      if (element != null) {
-        if (write != read) {
-          elements[write] = element;
-          element._containerIndex = write;
-        }
-        write++;
-      }
-    }
-    elements.length = write;
-    _tombstones = 0;
-    _shiftCount++;
   }
 
   /// Whether type [C] has been registered as a queryable type.
@@ -330,30 +339,26 @@ class ComponentSet extends Iterable<Component> {
   }
 
   /// Registers [C] as a queryable type, so that [query] can answer in O(1).
-  ///
-  /// If the type is already registered this is a no-op. Registering a type on
-  /// a non-empty set costs one pass over the existing elements, so it is
-  /// recommended to register the desired types as early as possible.
   void register<C extends Component>() {
     final queries = _queries ??= {};
     if (queries.containsKey(C)) {
       return;
     }
     final data = <C>[];
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element is C) {
-        data.add(element);
+    final buckets = _buckets;
+    for (var b = 0; b < buckets.length; b++) {
+      final members = buckets[b].members;
+      for (var i = 0; i < members.length; i++) {
+        final element = members[i];
+        if (element is C) {
+          data.add(element);
+        }
       }
     }
     queries[C] = _QueryCache<C>(data);
   }
 
   /// All elements of type [C], in priority order, in O(1).
-  ///
-  /// The type [C] must have been [register]ed beforehand, unless [strictMode]
-  /// is false, in which case the registration happens on the first query.
   Iterable<C> query<C extends Component>() {
     final cache = _queries?[C];
     if (cache == null) {
@@ -363,8 +368,6 @@ class ComponentSet extends Iterable<Component> {
       register<C>();
       return query<C>();
     }
-    // The cached list itself is returned, but typed as an Iterable to prevent
-    // accidental modification of the cache from the outside.
     return cache.data as Iterable<C>;
   }
 
@@ -378,12 +381,40 @@ class ComponentSet extends Iterable<Component> {
   }
 }
 
+/// A single priority level: the components with that priority, in insertion
+/// order, with `null` tombstones left by removals.
+class _PriorityBucket {
+  _PriorityBucket(this.priority);
+
+  final int priority;
+  final List<Component?> members = [];
+  int live = 0;
+  int tombstones = 0;
+
+  void compact() {
+    var write = 0;
+    for (var read = 0; read < members.length; read++) {
+      final element = members[read];
+      if (element != null) {
+        if (write != read) {
+          members[write] = element;
+          element._containerIndex = write;
+        }
+        write++;
+      }
+    }
+    members.length = write;
+    tombstones = 0;
+  }
+}
+
 class _ComponentSetIterator implements Iterator<Component> {
   _ComponentSetIterator(this._set) : _shiftCount = _set._shiftCount;
 
   final ComponentSet _set;
   final int _shiftCount;
-  int _index = -1;
+  int _bucketIndex = 0;
+  int _memberIndex = -1;
   Component? _current;
 
   @override
@@ -397,16 +428,23 @@ class _ComponentSetIterator implements Iterator<Component> {
     if (set._shiftCount != _shiftCount) {
       throw ConcurrentModificationError(set);
     }
-    final elements = set._elements;
-    for (var i = _index + 1; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        _index = i;
-        _current = element;
-        return true;
+    final buckets = set._buckets;
+    var memberIndex = _memberIndex;
+    for (var b = _bucketIndex; b < buckets.length; b++) {
+      final members = buckets[b].members;
+      for (var i = memberIndex + 1; i < members.length; i++) {
+        final element = members[i];
+        if (element != null) {
+          _bucketIndex = b;
+          _memberIndex = i;
+          _current = element;
+          return true;
+        }
       }
+      memberIndex = -1;
     }
-    _index = elements.length;
+    _bucketIndex = buckets.length;
+    _memberIndex = -1;
     _current = null;
     return false;
   }
@@ -434,11 +472,15 @@ class _ReversedComponentSetIterator implements Iterator<Component> {
   _ReversedComponentSetIterator(ComponentSet set)
     : _set = set,
       _shiftCount = set._shiftCount,
-      _index = set._elements.length;
+      _bucketIndex = set._buckets.length - 1,
+      _memberIndex = set._buckets.isEmpty
+          ? 0
+          : set._buckets.last.members.length;
 
   final ComponentSet _set;
   final int _shiftCount;
-  int _index;
+  int _bucketIndex;
+  int _memberIndex;
   Component? _current;
 
   @override
@@ -452,23 +494,31 @@ class _ReversedComponentSetIterator implements Iterator<Component> {
     if (set._shiftCount != _shiftCount) {
       throw ConcurrentModificationError(set);
     }
-    final elements = set._elements;
-    for (var i = _index - 1; i >= 0; i--) {
-      final element = elements[i];
-      if (element != null) {
-        _index = i;
-        _current = element;
-        return true;
+    final buckets = set._buckets;
+    var memberIndex = _memberIndex;
+    for (var b = _bucketIndex; b >= 0; b--) {
+      final members = buckets[b].members;
+      for (var i = memberIndex - 1; i >= 0; i--) {
+        final element = members[i];
+        if (element != null) {
+          _bucketIndex = b;
+          _memberIndex = i;
+          _current = element;
+          return true;
+        }
       }
+      memberIndex = b > 0 ? buckets[b - 1].members.length : 0;
     }
-    _index = -1;
+    _bucketIndex = -1;
+    _memberIndex = 0;
     _current = null;
     return false;
   }
 }
 
 /// A cached, always up-to-date result of `query<C>()`: the subset of the
-/// elements that are of type [C], in the same order as the main array.
+/// elements that are of type [C], ordered consistently with the main
+/// iteration order.
 class _QueryCache<C extends Component> {
   _QueryCache(this.data);
 
@@ -476,12 +526,16 @@ class _QueryCache<C extends Component> {
 
   bool check(Component component) => component is C;
 
-  /// Inserts [component] into [data], keeping it ordered consistently with
-  /// the main backing array (which orders by priority).
+  static int _compareOrder(Component a, Component b) {
+    final byPriority = a._bucket!.priority.compareTo(b._bucket!.priority);
+    return byPriority != 0 ? byPriority : a._containerIndex - b._containerIndex;
+  }
+
+  /// Inserts [component] into [data], keeping the cache ordered consistently
+  /// with the main iteration order.
   void insertSorted(Component component) {
     final list = data;
-    final index = component._containerIndex;
-    if (list.isEmpty || list.last._containerIndex < index) {
+    if (list.isEmpty || _compareOrder(list.last, component) < 0) {
       list.add(component as C);
       return;
     }
@@ -489,7 +543,7 @@ class _QueryCache<C extends Component> {
     var hi = list.length;
     while (lo < hi) {
       final mid = (lo + hi) >>> 1;
-      if (list[mid]._containerIndex < index) {
+      if (_compareOrder(list[mid], component) < 0) {
         lo = mid + 1;
       } else {
         hi = mid;
@@ -498,9 +552,8 @@ class _QueryCache<C extends Component> {
     list.insert(lo, component as C);
   }
 
-  /// Re-sorts the cache after the main array has been re-sorted (at which
-  /// point every element's index is up to date again).
+  /// Re-sorts the cache after the buckets have been reorganized.
   void resort() {
-    data.sort((a, b) => a._containerIndex - b._containerIndex);
+    data.sort(_compareOrder);
   }
 }
