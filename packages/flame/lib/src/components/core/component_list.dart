@@ -84,7 +84,7 @@ class ComponentList extends Iterable<Component> {
   int _shiftCount = 0;
 
   /// Compaction is deferred until this many tombstones have accumulated
-  /// (unless the whole set empties out, or a structural operation needs a
+  /// (unless the whole list empties out, or a structural operation needs a
   /// dense array anyway).
   static const int _tombstoneCompactionThreshold = 16;
 
@@ -117,7 +117,7 @@ class ComponentList extends Iterable<Component> {
   @override
   Iterator<Component> get iterator => _ComponentListIterator(this);
 
-  /// The elements of this set in reverse order.
+  /// The elements of this list in reverse order.
   ///
   /// Unlike the rest of the [Iterable] interface, this is a method and not a
   /// getter, for historical reasons. The returned iterable is a lazy view: it
@@ -184,8 +184,8 @@ class ComponentList extends Iterable<Component> {
     }
   }
 
-  /// Adds [component] to this set, keeping the priority ordering; returns
-  /// whether the component was added (`false` if it already was in the set).
+  /// Adds [component] to this list, keeping the priority ordering; returns
+  /// whether the component was added (`false` if it already was in the list).
   ///
   /// This is internal machinery: adding a component here does not make it go
   /// through the component lifecycle. Use [Component.add] instead.
@@ -252,7 +252,7 @@ class ComponentList extends Iterable<Component> {
     _shiftCount++;
   }
 
-  /// Removes [component] from this set; returns whether it was present.
+  /// Removes [component] from this list; returns whether it was present.
   ///
   /// This is internal machinery: removing a component here does not make it
   /// go through the component lifecycle. Use [Component.remove] instead.
@@ -288,9 +288,9 @@ class ComponentList extends Iterable<Component> {
     return true;
   }
 
-  /// Removes all elements from this set.
+  /// Removes all elements from this list.
   ///
-  /// This is internal machinery: clearing this set does not make the
+  /// This is internal machinery: clearing this list does not make the
   /// components go through the component lifecycle. Use [Component.removeAll]
   /// instead.
   @internal
@@ -375,7 +375,7 @@ class ComponentList extends Iterable<Component> {
   /// Registers [C] as a queryable type, so that [query] can answer in O(1).
   ///
   /// If the type is already registered this is a no-op. Registering a type on
-  /// a non-empty set costs one pass over the existing elements, so it is
+  /// a non-empty list costs one pass over the existing elements, so it is
   /// recommended to register the desired types as early as possible.
   void register<C extends Component>() {
     final queries = _queries ??= {};
@@ -424,9 +424,9 @@ class ComponentList extends Iterable<Component> {
 }
 
 class _ComponentListIterator implements Iterator<Component> {
-  _ComponentListIterator(this._set) : _shiftCount = _set._shiftCount;
+  _ComponentListIterator(this._list) : _shiftCount = _list._shiftCount;
 
-  final ComponentList _set;
+  final ComponentList _list;
   final int _shiftCount;
   int _index = -1;
   Component? _current;
@@ -438,11 +438,11 @@ class _ComponentListIterator implements Iterator<Component> {
   @pragma('wasm:prefer-inline')
   @override
   bool moveNext() {
-    final set = _set;
-    if (set._shiftCount != _shiftCount) {
-      throw ConcurrentModificationError(set);
+    final list = _list;
+    if (list._shiftCount != _shiftCount) {
+      throw ConcurrentModificationError(list);
     }
-    final elements = set._elements;
+    final elements = list._elements;
     for (var i = _index + 1; i < elements.length; i++) {
       final element = elements[i];
       if (element != null) {
@@ -458,30 +458,30 @@ class _ComponentListIterator implements Iterator<Component> {
 }
 
 class _ReversedComponentListView extends Iterable<Component> {
-  _ReversedComponentListView(this._set);
+  _ReversedComponentListView(this._list);
 
-  final ComponentList _set;
-
-  @override
-  int get length => _set._length;
+  final ComponentList _list;
 
   @override
-  bool get isEmpty => _set._length == 0;
+  int get length => _list._length;
 
   @override
-  bool get isNotEmpty => _set._length != 0;
+  bool get isEmpty => _list._length == 0;
 
   @override
-  Iterator<Component> get iterator => _ReversedComponentListIterator(_set);
+  bool get isNotEmpty => _list._length != 0;
+
+  @override
+  Iterator<Component> get iterator => _ReversedComponentListIterator(_list);
 }
 
 class _ReversedComponentListIterator implements Iterator<Component> {
-  _ReversedComponentListIterator(ComponentList set)
-    : _set = set,
-      _shiftCount = set._shiftCount,
-      _index = set._elements.length;
+  _ReversedComponentListIterator(ComponentList list)
+    : _list = list,
+      _shiftCount = list._shiftCount,
+      _index = list._elements.length;
 
-  final ComponentList _set;
+  final ComponentList _list;
   final int _shiftCount;
   int _index;
   Component? _current;
@@ -493,11 +493,11 @@ class _ReversedComponentListIterator implements Iterator<Component> {
   @pragma('wasm:prefer-inline')
   @override
   bool moveNext() {
-    final set = _set;
-    if (set._shiftCount != _shiftCount) {
-      throw ConcurrentModificationError(set);
+    final list = _list;
+    if (list._shiftCount != _shiftCount) {
+      throw ConcurrentModificationError(list);
     }
-    final elements = set._elements;
+    final elements = list._elements;
     for (var i = _index - 1; i >= 0; i--) {
       final element = elements[i];
       if (element != null) {
