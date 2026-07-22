@@ -693,7 +693,7 @@ class Component {
       child.renderTree(canvas);
       return;
     }
-    final childContexts = child._renderContexts ??= QueueList();
+    final childContexts = child._renderContexts ??= [];
     final originalLength = childContexts.length;
     childContexts.addAll(contexts);
     child.renderTree(canvas);
@@ -710,7 +710,7 @@ class Component {
   void renderTree(Canvas canvas) {
     final context = renderContext;
     if (context != null) {
-      (_renderContexts ??= QueueList()).add(context);
+      (_renderContexts ??= []).add(context);
     }
 
     render(canvas);
@@ -1279,7 +1279,7 @@ class Component {
 
   /// The stack of render contexts inherited from ancestors during the render
   /// pass. Created lazily: most components never provide or receive one.
-  QueueList<ComponentRenderContext>? _renderContexts;
+  List<ComponentRenderContext>? _renderContexts;
 
   /// Override this method if you want your component to provide a custom
   /// render context to all its children (recursively).

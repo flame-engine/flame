@@ -189,7 +189,8 @@ class ComponentTreeRoot extends Component {
       for (final event in queue) {
         final child = event.child!;
         final parent = event.parent!;
-        if (_blocked.contains(child) || _blocked.contains(parent)) {
+        if (_blocked.isNotEmpty &&
+            (_blocked.contains(child) || _blocked.contains(parent))) {
           continue;
         }
 
