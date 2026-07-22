@@ -1,3 +1,4 @@
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/core/custom_traversal.dart';
 
 /// This mixin allows components to control their speed as compared to the
@@ -5,7 +6,7 @@ import 'package:flame/src/components/core/custom_traversal.dart';
 /// changes.
 ///
 /// Note: Modified [timeScale] will be applied to all children as well.
-mixin HasTimeScale on CustomTraversal {
+mixin HasTimeScale on Component implements CustomTraversal {
   /// The ratio of components tick speed and normal tick speed.
   /// It defaults to 1.0, which means the component moves normally.
   /// A value of 0.5 means the component moves half the normal speed
