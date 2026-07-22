@@ -109,6 +109,55 @@ class ComponentTreeRoot extends Component {
 
   bool get hasLifecycleEvents => queue.isNotEmpty;
 
+  /// The flattened pre-order list of all components below this root, stopping
+  /// at (and including) `CustomTraversal` barriers, whose subtrees are
+  /// traversed by their own `updateSubtree` implementations.
+  final List<Component> _flatUpdateList = [];
+
+  /// The [ComponentList.structureVersion] that [_flatUpdateList] was built
+  /// against.
+  int _flatVersion = -1;
+
+  /// Updates every component below this root using the flattened traversal
+  /// list, rebuilding the list first when the tree structure has possibly
+  /// changed since the previous tick.
+  ///
+  /// The visit order is identical to the recursive
+  /// `Component.defaultUpdateSubtree` traversal: pre-order, children in
+  /// priority order. Components mixing in `CustomTraversal` are treated as
+  /// barriers: they appear in the list themselves, and their `updateSubtree`
+  /// drives their subtree.
+  @internal
+  void updateChildrenFlat(double dt) {
+    if (_flatVersion != ComponentList.structureVersion) {
+      _flatVersion = ComponentList.structureVersion;
+      _flatUpdateList.clear();
+      _flattenChildrenOf(this);
+    }
+    final list = _flatUpdateList;
+    for (var i = 0; i < list.length; i++) {
+      final component = list[i];
+      if (component is CustomTraversal) {
+        component.updateSubtree(dt);
+      } else {
+        component.update(dt);
+      }
+    }
+  }
+
+  void _flattenChildrenOf(Component component) {
+    if (!component.hasChildren) {
+      return;
+    }
+    final children = component.children..compact();
+    for (final child in children) {
+      _flatUpdateList.add(child);
+      if (child is! CustomTraversal) {
+        _flattenChildrenOf(child);
+      }
+    }
+  }
+
   /// A future that will complete once all lifecycle events have been
   /// processed.
   ///
