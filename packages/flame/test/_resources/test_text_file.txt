@@ -1,1 +1,0 @@
-This is sample text file for AssetsCache Unit testing.

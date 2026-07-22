@@ -1,5 +1,0 @@
-include: package:flame_lint/analysis_options_with_dcm.yaml
-
-linter:
-  rules:
-    - public_member_api_docs
