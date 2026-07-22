@@ -73,6 +73,7 @@ class Component {
     int? priority,
     this.key,
   }) : _priority = priority ?? 0 {
+    _isTraversalBarrier = this is CustomTraversal;
     if (children != null) {
       addAll(children);
     }
@@ -574,9 +575,8 @@ class Component {
     if (_updatePaused) {
       return;
     }
-    final self = this;
-    if (self is CustomTraversal) {
-      self.updateSubtree(dt);
+    if (_isTraversalBarrier) {
+      (this as CustomTraversal).updateSubtree(dt);
     } else {
       defaultUpdateSubtree(dt);
     }
@@ -603,16 +603,32 @@ class Component {
   }
 
   /// Whether this component manages its own subtree traversal. Evaluated
-  /// once, so that the per-frame traversal loops pay a field load instead of
-  /// a type check.
-  late final bool _isTraversalBarrier = this is CustomTraversal;
+  /// once in the constructor, so that the per-frame traversal loops pay a
+  /// plain field load instead of a type check.
+  bool _isTraversalBarrier = false;
 
-  /// Appends this component's subtree to [out] in pre-order (children in
-  /// priority order), stopping at (but including) `CustomTraversal` barriers
-  /// and skipping paused subtrees. Used by the root to build its flattened
-  /// update list.
+  /// Runs one update pass over a flattened traversal list produced by
+  /// [updateAndFlattenInto].
   @internal
-  void flattenUpdateSubtreeInto(List<Component> out) {
+  static void updateFlatList(List<Component> list, double dt) {
+    for (var i = 0; i < list.length; i++) {
+      final component = list[i];
+      if (component._isTraversalBarrier) {
+        (component as CustomTraversal).updateSubtree(dt);
+      } else {
+        component.update(dt);
+      }
+    }
+  }
+
+  /// Combined update pass and flatten: updates this component's subtree
+  /// recursively while appending the visited components to [out], in
+  /// pre-order with children in priority order, stopping at (but including)
+  /// `CustomTraversal` barriers and skipping paused subtrees. Used by the
+  /// root on ticks where the structure changed, so that the flat-list
+  /// rebuild does not cost a separate pass over the tree.
+  @internal
+  void updateAndFlattenInto(List<Component> out, double dt) {
     final children = _children;
     if (children == null) {
       return;
@@ -625,22 +641,11 @@ class Component {
         continue;
       }
       out.add(child);
-      if (!child._isTraversalBarrier) {
-        child.flattenUpdateSubtreeInto(out);
-      }
-    }
-  }
-
-  /// Runs one update pass over a flattened traversal list produced by
-  /// [flattenUpdateSubtreeInto].
-  @internal
-  static void updateFlatList(List<Component> list, double dt) {
-    for (var i = 0; i < list.length; i++) {
-      final component = list[i];
-      if (component._isTraversalBarrier) {
-        (component as CustomTraversal).updateSubtree(dt);
+      if (child._isTraversalBarrier) {
+        (child as CustomTraversal).updateSubtree(dt);
       } else {
-        component.update(dt);
+        child.update(dt);
+        child.updateAndFlattenInto(out, dt);
       }
     }
   }

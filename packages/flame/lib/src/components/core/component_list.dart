@@ -88,8 +88,13 @@ class ComponentList extends Iterable<Component> {
   /// dense array anyway).
   static const int _tombstoneCompactionThreshold = 16;
 
-  /// The per-type query caches, created by [register].
+  /// The per-type query caches, created by [register], keyed by type for
+  /// [query] lookups.
   Map<Type, _QueryCache<Component>>? _queries;
+
+  /// The same caches as [_queries], as a list, so that the add/remove hot
+  /// paths can iterate them without allocating a map-values iterator.
+  List<_QueryCache<Component>>? _queryCaches;
 
   /// A monotonically increasing counter, bumped on every membership or order
   /// change of any [ComponentList] (adds, removes, clears, reorders). The
@@ -212,9 +217,10 @@ class ComponentList extends Iterable<Component> {
     component._containerList = this;
     _length++;
     structureVersion++;
-    final queries = _queries;
-    if (queries != null) {
-      for (final cache in queries.values) {
+    final caches = _queryCaches;
+    if (caches != null) {
+      for (var i = 0; i < caches.length; i++) {
+        final cache = caches[i];
         if (cache.check(component)) {
           cache.insertSorted(component);
         }
@@ -263,9 +269,10 @@ class ComponentList extends Iterable<Component> {
     _length--;
     _tombstones++;
     structureVersion++;
-    final queries = _queries;
-    if (queries != null) {
-      for (final cache in queries.values) {
+    final caches = _queryCaches;
+    if (caches != null) {
+      for (var i = 0; i < caches.length; i++) {
+        final cache = caches[i];
         if (cache.check(component)) {
           cache.data.remove(component);
         }
@@ -383,7 +390,9 @@ class ComponentList extends Iterable<Component> {
         data.add(element);
       }
     }
-    queries[C] = _QueryCache<C>(data);
+    final cache = _QueryCache<C>(data);
+    queries[C] = cache;
+    (_queryCaches ??= []).add(cache);
   }
 
   /// All elements of type [C], in priority order, in O(1).

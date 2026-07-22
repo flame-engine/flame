@@ -130,11 +130,15 @@ class ComponentTreeRoot extends Component {
   @internal
   void updateChildrenFlat(double dt) {
     if (_flatVersion != ComponentList.structureVersion) {
+      // The version is captured before the pass: structural changes made by
+      // update callbacks (pause toggles, detached-tree edits) invalidate the
+      // list that is being built and must trigger a rebuild next tick.
       _flatVersion = ComponentList.structureVersion;
       _flatUpdateList.clear();
-      flattenUpdateSubtreeInto(_flatUpdateList);
+      updateAndFlattenInto(_flatUpdateList, dt);
+    } else {
+      Component.updateFlatList(_flatUpdateList, dt);
     }
-    Component.updateFlatList(_flatUpdateList, dt);
   }
 
   /// A future that will complete once all lifecycle events have been
