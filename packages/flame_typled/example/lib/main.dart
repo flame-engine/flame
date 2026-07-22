@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: GameWidget.controlled(
+      home: GameWidget.managed(
         gameFactory: TypledExample.new,
       ),
     );

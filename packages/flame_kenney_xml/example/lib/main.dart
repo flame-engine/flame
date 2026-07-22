@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 /// sprite sheet to the screen when tapped.
 void main() {
   runApp(
-    GameWidget.controlled(
+    GameWidget.managed(
       gameFactory: () => FlameGame(world: KenneyWorld()),
     ),
   );

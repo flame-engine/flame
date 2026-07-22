@@ -141,7 +141,7 @@ void main() {
     );
   });
 
-  group('GameWidget.controlled', () {
+  group('GameWidget.managed', () {
     testWidgets('adds focus', (tester) async {
       final focusNode = FocusNode();
 
@@ -149,7 +149,7 @@ void main() {
 
       await tester.pumpWidget(
         _GamePage(
-          child: GameWidget.controlled(
+          child: GameWidget.managed(
             gameFactory: () => game,
             focusNode: focusNode,
           ),
@@ -164,7 +164,7 @@ void main() {
 
       await tester.pumpWidget(
         _GamePage(
-          child: GameWidget.controlled(
+          child: GameWidget.managed(
             gameFactory: () => game,
           ),
         ),
@@ -184,7 +184,7 @@ void main() {
 
         await tester.pumpWidget(
           _GamePage(
-            child: GameWidget.controlled(
+            child: GameWidget.managed(
               gameFactory: () => game,
             ),
           ),

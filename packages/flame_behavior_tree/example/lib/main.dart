@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: GameWidget<MyGame>.controlled(
+        body: GameWidget<MyGame>.managed(
           gameFactory: () => MyGame(
             world: GameWorld(),
             camera: CameraComponent.withFixedResolution(
