@@ -2,39 +2,22 @@ part of 'component.dart';
 
 /// A fast, ordered container for a [Component]'s children.
 ///
-/// The children are stored in a single flat [List], sorted by
+/// Variant B: an intrusive doubly-linked list. Each component carries
+/// `_prevSibling`/`_nextSibling` pointers, and the container only stores the
+/// head and tail of the chain. The children are kept sorted by
 /// [Component.priority]; components with equal priority keep the order in
-/// which they were added. This is the same ordering that the old
-/// `OrderedSet`-based container provided, but backed by a contiguous array
-/// instead of a splay tree of hash sets, which makes iteration, additions,
-/// removals and reorders significantly faster and allocation-free.
+/// which they were added.
 ///
 /// Performance characteristics:
-///  - iteration: O(n) over a contiguous array, without any allocations on the
-///    internal engine paths;
-///  - [add]: O(1) when the component sorts at or after the end, which is the
-///    common case, and O(n) for a mid-list insertion;
-///  - [remove] and [contains]: O(1), using the slot index that is stored on
-///    the component itself;
-///  - [rebalance] (after priority changes): O(n) when the list turns out to
-///    still be sorted, otherwise O(n log n) with a stable sort.
+///  - iteration: O(n) pointer walk, no allocations on engine paths;
+///  - [add]: O(1) when the component sorts at or after the end (the common
+///    case), otherwise O(n) backwards walk to the insertion point;
+///  - [remove] and [contains]: O(1) via the intrusive pointers;
+///  - [rebalance]: O(n) when still sorted, otherwise O(n log n) stable
+///    merge sort.
 ///
-/// A removal does not shift the array, it leaves a `null` "tombstone" in
-/// place. Tombstones are invisible to iteration and are compacted away at the
-/// start of the next update tick, or earlier if they grow to dominate the
-/// array.
-///
-/// Mutating the container while iterating it is allowed in the ways that the
-/// component lifecycle needs: removals take effect immediately (the removed
-/// component is simply not visited), and additions at the end may or may not
-/// be visited by an ongoing iteration. Operations that shift the positions of
-/// existing elements (a mid-list insertion, [rebalance], or tombstone
-/// compaction) invalidate live iterators, which will then throw a
-/// [ConcurrentModificationError].
-///
-/// The contents of this container are managed by the [Component] lifecycle:
-/// use [Component.add], [Component.remove] and their related methods to
-/// modify which components are in it.
+/// Any structural mutation invalidates live iterators, which will then throw
+/// a [ConcurrentModificationError].
 class ComponentSet extends Iterable<Component> {
   ComponentSet({bool? strictMode})
     : strictMode = strictMode ?? Component.strictQueryMode;
@@ -43,24 +26,13 @@ class ComponentSet extends Iterable<Component> {
   /// (`true`), or transparently registers the type on first use (`false`).
   final bool strictMode;
 
-  /// The backing store; `null` entries are tombstones left by removals.
-  final List<Component?> _elements = [];
-
-  /// The number of live (non-tombstone) elements.
+  Component? _first;
+  Component? _last;
   int _length = 0;
 
-  /// The number of tombstones currently present in [_elements].
-  int _tombstones = 0;
-
-  /// Incremented whenever existing elements change their position within
-  /// [_elements] (mid-list insertion, sorting, or compaction). Iterators use
-  /// this to detect concurrent structural modification.
-  int _shiftCount = 0;
-
-  /// Compaction is deferred until this many tombstones have accumulated
-  /// (unless the whole set empties out, or a structural operation needs a
-  /// dense array anyway).
-  static const int _tombstoneCompactionThreshold = 16;
+  /// Incremented on every structural mutation; iterators use this to detect
+  /// concurrent modification.
+  int _modCount = 0;
 
   /// The per-type query caches, created by [register].
   Map<Type, _QueryCache<Component>>? _queries;
@@ -78,10 +50,6 @@ class ComponentSet extends Iterable<Component> {
   Iterator<Component> get iterator => _ComponentSetIterator(this);
 
   /// The elements of this set in reverse order.
-  ///
-  /// Unlike the rest of the [Iterable] interface, this is a method and not a
-  /// getter, for historical reasons. The returned iterable is a lazy view: it
-  /// costs nothing to create and always reflects the current contents.
   Iterable<Component> reversed() => _ReversedComponentSetView(this);
 
   @override
@@ -91,43 +59,29 @@ class ComponentSet extends Iterable<Component> {
 
   @override
   Component get first {
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        return element;
-      }
+    final first = _first;
+    if (first == null) {
+      throw StateError('No element');
     }
-    throw StateError('No element');
+    return first;
   }
 
   @override
   Component get last {
-    final elements = _elements;
-    for (var i = elements.length - 1; i >= 0; i--) {
-      final element = elements[i];
-      if (element != null) {
-        return element;
-      }
+    final last = _last;
+    if (last == null) {
+      throw StateError('No element');
     }
-    throw StateError('No element');
+    return last;
   }
 
   @override
   Component elementAt(int index) {
     RangeError.checkNotNegative(index, 'index');
-    final elements = _elements;
-    if (_tombstones == 0) {
-      if (index >= elements.length) {
-        throw IndexError.withLength(index, _length, indexable: this);
-      }
-      return elements[index]!;
-    }
-    var live = 0;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null && live++ == index) {
-        return element;
+    var i = 0;
+    for (var node = _first; node != null; node = node._nextSibling) {
+      if (i++ == index) {
+        return node;
       }
     }
     throw IndexError.withLength(index, _length, indexable: this);
@@ -135,12 +89,11 @@ class ComponentSet extends Iterable<Component> {
 
   @override
   void forEach(void Function(Component element) action) {
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        action(element);
-      }
+    var node = _first;
+    while (node != null) {
+      final next = node._nextSibling;
+      action(node);
+      node = next;
     }
   }
 
@@ -158,57 +111,55 @@ class ComponentSet extends Iterable<Component> {
       component._containerSet == null,
       'A component cannot be contained by two children containers at once',
     );
-    final elements = _elements;
-    if (_length == 0 && elements.isNotEmpty) {
-      // The array contains only tombstones; reset it.
-      elements.clear();
-      _tombstones = 0;
-    }
     final priority = component._priority;
-    var lastIndex = elements.length - 1;
-    while (lastIndex >= 0 && elements[lastIndex] == null) {
-      lastIndex--;
-    }
-    if (lastIndex >= 0 && elements[lastIndex]!._priority > priority) {
-      _insertSorted(component, priority);
+    final last = _last;
+    var appended = false;
+    if (last == null) {
+      _first = component;
+      _last = component;
+      appended = true;
+    } else if (last._priority <= priority) {
+      last._nextSibling = component;
+      component._prevSibling = last;
+      _last = component;
+      appended = true;
     } else {
-      component._containerIndex = elements.length;
-      elements.add(component);
+      // Walk backwards to find the last node with priority <= the new one.
+      var node = last;
+      while (true) {
+        final prev = node._prevSibling;
+        if (prev == null || prev._priority <= priority) {
+          break;
+        }
+        node = prev;
+      }
+      // Insert before [node].
+      final prev = node._prevSibling;
+      component._prevSibling = prev;
+      component._nextSibling = node;
+      node._prevSibling = component;
+      if (prev == null) {
+        _first = component;
+      } else {
+        prev._nextSibling = component;
+      }
     }
     component._containerSet = this;
     _length++;
+    _modCount++;
     final queries = _queries;
     if (queries != null) {
       for (final cache in queries.values) {
         if (cache.check(component)) {
-          cache.insertSorted(component);
+          if (appended) {
+            cache.append(component);
+          } else {
+            cache.dirty = true;
+          }
         }
       }
     }
     return true;
-  }
-
-  /// Inserts [component] before all existing elements with a higher priority,
-  /// and after all elements with the same or a lower priority.
-  void _insertSorted(Component component, int priority) {
-    _compact();
-    final elements = _elements;
-    var lo = 0;
-    var hi = elements.length;
-    while (lo < hi) {
-      final mid = (lo + hi) >>> 1;
-      if (elements[mid]!._priority <= priority) {
-        lo = mid + 1;
-      } else {
-        hi = mid;
-      }
-    }
-    elements.insert(lo, component);
-    component._containerIndex = lo;
-    for (var i = lo + 1; i < elements.length; i++) {
-      elements[i]!._containerIndex = i;
-    }
-    _shiftCount++;
   }
 
   /// Removes [component] from this set; returns whether it was present.
@@ -220,27 +171,33 @@ class ComponentSet extends Iterable<Component> {
     if (!identical(component._containerSet, this)) {
       return false;
     }
-    final index = component._containerIndex;
-    assert(identical(_elements[index], component));
-    _elements[index] = null;
+    final prev = component._prevSibling;
+    final next = component._nextSibling;
+    if (prev == null) {
+      _first = next;
+    } else {
+      prev._nextSibling = next;
+    }
+    if (next == null) {
+      _last = prev;
+    } else {
+      next._prevSibling = prev;
+    }
+    component._prevSibling = null;
+    component._nextSibling = null;
     component._containerSet = null;
-    component._containerIndex = -1;
     _length--;
-    _tombstones++;
+    _modCount++;
     final queries = _queries;
     if (queries != null) {
       for (final cache in queries.values) {
         if (cache.check(component)) {
+          if (cache.dirty) {
+            continue;
+          }
           cache.data.remove(component);
         }
       }
-    }
-    if (_length == 0) {
-      _elements.clear();
-      _tombstones = 0;
-    } else if (_tombstones >= _tombstoneCompactionThreshold &&
-        _tombstones * 2 >= _elements.length) {
-      _compact();
     }
     return true;
   }
@@ -252,19 +209,22 @@ class ComponentSet extends Iterable<Component> {
   /// instead.
   @internal
   void clear() {
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        element._containerSet = null;
-        element._containerIndex = -1;
-      }
+    var node = _first;
+    while (node != null) {
+      final next = node._nextSibling;
+      node._prevSibling = null;
+      node._nextSibling = null;
+      node._containerSet = null;
+      node = next;
     }
-    elements.clear();
+    _first = null;
+    _last = null;
     _length = 0;
-    _tombstones = 0;
-    _shiftCount++;
-    _queries?.forEach((_, cache) => cache.data.clear());
+    _modCount++;
+    _queries?.forEach((_, cache) {
+      cache.data.clear();
+      cache.dirty = false;
+    });
   }
 
   /// Restores the priority ordering after one or more elements have changed
@@ -274,11 +234,13 @@ class ComponentSet extends Iterable<Component> {
   /// when priorities of mounted components change. The sort is stable:
   /// components with equal priority keep their relative order.
   void rebalance() {
-    _compact();
-    final elements = _elements;
+    if (_length < 2) {
+      return;
+    }
     var isSorted = true;
-    for (var i = 1; i < elements.length; i++) {
-      if (elements[i - 1]!._priority > elements[i]!._priority) {
+    for (var node = _first; node != null; node = node._nextSibling) {
+      final next = node._nextSibling;
+      if (next != null && node._priority > next._priority) {
         isSorted = false;
         break;
       }
@@ -286,42 +248,26 @@ class ComponentSet extends Iterable<Component> {
     if (isSorted) {
       return;
     }
-    _shiftCount++;
-    // Ties are broken by the pre-sort index, which makes the (unstable)
-    // built-in sort behave as a stable sort.
-    elements.sort((a, b) {
-      final byPriority = a!._priority.compareTo(b!._priority);
-      return byPriority != 0
-          ? byPriority
-          : a._containerIndex - b._containerIndex;
-    });
+    final elements = toList(growable: false);
+    mergeSort<Component>(
+      elements,
+      compare: (a, b) => a._priority.compareTo(b._priority),
+    );
+    Component? prev;
     for (var i = 0; i < elements.length; i++) {
-      elements[i]!._containerIndex = i;
-    }
-    _queries?.forEach((_, cache) => cache.resort());
-  }
-
-  /// Rewrites the backing array without its tombstones, restoring exact
-  /// element indices.
-  void _compact() {
-    if (_tombstones == 0) {
-      return;
-    }
-    final elements = _elements;
-    var write = 0;
-    for (var read = 0; read < elements.length; read++) {
-      final element = elements[read];
-      if (element != null) {
-        if (write != read) {
-          elements[write] = element;
-          element._containerIndex = write;
-        }
-        write++;
+      final node = elements[i];
+      node._prevSibling = prev;
+      node._nextSibling = null;
+      if (prev == null) {
+        _first = node;
+      } else {
+        prev._nextSibling = node;
       }
+      prev = node;
     }
-    elements.length = write;
-    _tombstones = 0;
-    _shiftCount++;
+    _last = prev;
+    _modCount++;
+    _queries?.forEach((_, cache) => cache.dirty = true);
   }
 
   /// Whether type [C] has been registered as a queryable type.
@@ -330,30 +276,27 @@ class ComponentSet extends Iterable<Component> {
   }
 
   /// Registers [C] as a queryable type, so that [query] can answer in O(1).
-  ///
-  /// If the type is already registered this is a no-op. Registering a type on
-  /// a non-empty set costs one pass over the existing elements, so it is
-  /// recommended to register the desired types as early as possible.
   void register<C extends Component>() {
     final queries = _queries ??= {};
     if (queries.containsKey(C)) {
       return;
     }
-    final data = <C>[];
-    final elements = _elements;
-    for (var i = 0; i < elements.length; i++) {
-      final element = elements[i];
-      if (element is C) {
-        data.add(element);
-      }
-    }
-    queries[C] = _QueryCache<C>(data);
+    final cache = _QueryCache<C>();
+    _fillCache(cache);
+    queries[C] = cache;
   }
 
-  /// All elements of type [C], in priority order, in O(1).
-  ///
-  /// The type [C] must have been [register]ed beforehand, unless [strictMode]
-  /// is false, in which case the registration happens on the first query.
+  void _fillCache(_QueryCache<Component> cache) {
+    for (var node = _first; node != null; node = node._nextSibling) {
+      if (cache.check(node)) {
+        cache.append(node);
+      }
+    }
+    cache.dirty = false;
+  }
+
+  /// All elements of type [C], in priority order, in O(1) (amortized: a
+  /// cache invalidated by a reorder is lazily rebuilt on the next query).
   Iterable<C> query<C extends Component>() {
     final cache = _queries?[C];
     if (cache == null) {
@@ -363,8 +306,10 @@ class ComponentSet extends Iterable<Component> {
       register<C>();
       return query<C>();
     }
-    // The cached list itself is returned, but typed as an Iterable to prevent
-    // accidental modification of the cache from the outside.
+    if (cache.dirty) {
+      cache.data.clear();
+      _fillCache(cache);
+    }
     return cache.data as Iterable<C>;
   }
 
@@ -372,6 +317,10 @@ class ComponentSet extends Iterable<Component> {
   Iterable<C> whereType<C>() {
     final cache = _queries?[C];
     if (cache != null) {
+      if (cache.dirty) {
+        cache.data.clear();
+        _fillCache(cache);
+      }
       return cache.data as Iterable<C>;
     }
     return super.whereType<C>();
@@ -379,11 +328,13 @@ class ComponentSet extends Iterable<Component> {
 }
 
 class _ComponentSetIterator implements Iterator<Component> {
-  _ComponentSetIterator(this._set) : _shiftCount = _set._shiftCount;
+  _ComponentSetIterator(this._set)
+    : _modCount = _set._modCount,
+      _next = _set._first;
 
   final ComponentSet _set;
-  final int _shiftCount;
-  int _index = -1;
+  final int _modCount;
+  Component? _next;
   Component? _current;
 
   @override
@@ -393,22 +344,17 @@ class _ComponentSetIterator implements Iterator<Component> {
   @pragma('wasm:prefer-inline')
   @override
   bool moveNext() {
-    final set = _set;
-    if (set._shiftCount != _shiftCount) {
-      throw ConcurrentModificationError(set);
+    if (_set._modCount != _modCount) {
+      throw ConcurrentModificationError(_set);
     }
-    final elements = set._elements;
-    for (var i = _index + 1; i < elements.length; i++) {
-      final element = elements[i];
-      if (element != null) {
-        _index = i;
-        _current = element;
-        return true;
-      }
+    final current = _next;
+    if (current == null) {
+      _current = null;
+      return false;
     }
-    _index = elements.length;
-    _current = null;
-    return false;
+    _current = current;
+    _next = current._nextSibling;
+    return true;
   }
 }
 
@@ -431,14 +377,13 @@ class _ReversedComponentSetView extends Iterable<Component> {
 }
 
 class _ReversedComponentSetIterator implements Iterator<Component> {
-  _ReversedComponentSetIterator(ComponentSet set)
-    : _set = set,
-      _shiftCount = set._shiftCount,
-      _index = set._elements.length;
+  _ReversedComponentSetIterator(this._set)
+    : _modCount = _set._modCount,
+      _next = _set._last;
 
   final ComponentSet _set;
-  final int _shiftCount;
-  int _index;
+  final int _modCount;
+  Component? _next;
   Component? _current;
 
   @override
@@ -448,59 +393,28 @@ class _ReversedComponentSetIterator implements Iterator<Component> {
   @pragma('wasm:prefer-inline')
   @override
   bool moveNext() {
-    final set = _set;
-    if (set._shiftCount != _shiftCount) {
-      throw ConcurrentModificationError(set);
+    if (_set._modCount != _modCount) {
+      throw ConcurrentModificationError(_set);
     }
-    final elements = set._elements;
-    for (var i = _index - 1; i >= 0; i--) {
-      final element = elements[i];
-      if (element != null) {
-        _index = i;
-        _current = element;
-        return true;
-      }
+    final current = _next;
+    if (current == null) {
+      _current = null;
+      return false;
     }
-    _index = -1;
-    _current = null;
-    return false;
+    _current = current;
+    _next = current._prevSibling;
+    return true;
   }
 }
 
-/// A cached, always up-to-date result of `query<C>()`: the subset of the
-/// elements that are of type [C], in the same order as the main array.
+/// A cached result of `query<C>()`. When an operation would make incremental
+/// maintenance expensive (mid-list insertion or a reorder), the cache is
+/// marked dirty and rebuilt on the next query instead.
 class _QueryCache<C extends Component> {
-  _QueryCache(this.data);
-
-  final List<C> data;
+  final List<C> data = [];
+  bool dirty = false;
 
   bool check(Component component) => component is C;
 
-  /// Inserts [component] into [data], keeping it ordered consistently with
-  /// the main backing array (which orders by priority).
-  void insertSorted(Component component) {
-    final list = data;
-    final index = component._containerIndex;
-    if (list.isEmpty || list.last._containerIndex < index) {
-      list.add(component as C);
-      return;
-    }
-    var lo = 0;
-    var hi = list.length;
-    while (lo < hi) {
-      final mid = (lo + hi) >>> 1;
-      if (list[mid]._containerIndex < index) {
-        lo = mid + 1;
-      } else {
-        hi = mid;
-      }
-    }
-    list.insert(lo, component as C);
-  }
-
-  /// Re-sorts the cache after the main array has been re-sorted (at which
-  /// point every element's index is up to date again).
-  void resort() {
-    data.sort((a, b) => a._containerIndex - b._containerIndex);
-  }
+  void append(Component component) => data.add(component as C);
 }

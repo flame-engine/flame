@@ -297,10 +297,10 @@ class Component {
   /// Maintained by [ComponentSet].
   ComponentSet? _containerSet;
 
-  /// This component's slot index within [_containerSet]'s backing array, or
-  /// -1 when the component is not in any container. Maintained by
+  /// Intrusive sibling chain within [_containerSet]. Maintained by
   /// [ComponentSet].
-  int _containerIndex = -1;
+  Component? _prevSibling;
+  Component? _nextSibling;
 
   /// This field should be used internally for functionality when you need to
   /// make sure that the component set is created if it doesn't already exist.
@@ -562,12 +562,11 @@ class Component {
     update(dt);
     final children = _children;
     if (children != null) {
-      // The update pass doubles as the safe point where tombstones left by
-      // removals since the last tick are compacted away.
-      children._compact();
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        elements[i]?.updateTree(dt);
+      var child = children._first;
+      while (child != null) {
+        final next = child._nextSibling;
+        child.updateTree(dt);
+        child = next;
       }
     }
   }
@@ -618,12 +617,11 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        final child = elements[i];
-        if (child != null) {
-          renderChild(canvas, child);
-        }
+      var child = children._first;
+      while (child != null) {
+        final next = child._nextSibling;
+        renderChild(canvas, child);
+        child = next;
       }
       afterChildrenRendered(canvas);
     }
@@ -860,10 +858,11 @@ class Component {
   ) sync* {
     nestedContexts?.add(locationContext);
     if (_children != null) {
-      final elements = _children!._elements;
-      for (var i = elements.length - 1; i >= 0; i--) {
-        final child = elements[i];
-        if (child == null || (child is IgnoreEvents && child.ignoreEvents)) {
+      var node = _children!._last;
+      while (node != null) {
+        final child = node;
+        node = child._prevSibling;
+        if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
         T? childPoint = locationContext;
