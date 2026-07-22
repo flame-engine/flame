@@ -92,7 +92,7 @@ class _Counter extends Component {
   }
 }
 
-class _ScaledBarrier extends Component with CustomTraversal {
+class _ScaledBarrier extends Component implements CustomTraversal {
   _ScaledBarrier({super.children});
 
   @override

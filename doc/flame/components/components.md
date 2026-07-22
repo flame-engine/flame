@@ -151,10 +151,10 @@ class MyComponent extends PositionComponent with TapCallbacks {
 The engine drives the update pass through a flattened traversal list owned by the game, so
 `updateTree` is non-virtual and cannot be overridden. Components that need to control how their
 subtree is updated (changing the effective `dt`, skipping children, or updating them manually)
-should mix in `CustomTraversal` and override its `updateSubtree` method:
+should implement the `CustomTraversal` marker and override the `updateSubtree` method:
 
 ```dart
-class SlowMotionArea extends Component with CustomTraversal {
+class SlowMotionArea extends Component implements CustomTraversal {
   @override
   void updateSubtree(double dt) => super.updateSubtree(dt / 2);
 }
