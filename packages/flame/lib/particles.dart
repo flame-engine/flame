@@ -1,17 +1,14 @@
-export 'src/anchor.dart';
-export 'src/particles/accelerated_particle.dart';
-export 'src/particles/circle_particle.dart';
-export 'src/particles/component_particle.dart';
-export 'src/particles/composed_particle.dart';
-export 'src/particles/computed_particle.dart';
-export 'src/particles/curved_particle.dart';
-export 'src/particles/image_particle.dart';
-export 'src/particles/moving_particle.dart';
-export 'src/particles/paint_particle.dart';
-export 'src/particles/particle.dart';
-export 'src/particles/rotating_particle.dart';
-export 'src/particles/scaled_particle.dart';
-export 'src/particles/scaling_particle.dart';
-export 'src/particles/sprite_animation_particle.dart';
-export 'src/particles/sprite_particle.dart';
-export 'src/particles/translated_particle.dart';
+/// A data-oriented particle system: declarative `ParticleEmitter` presets,
+/// struct-of-arrays simulation, and batched single-draw-call rendering.
+library;
+
+export 'src/particles/circle_particle_renderer.dart';
+export 'src/particles/color_ramp.dart';
+export 'src/particles/emitter_shape.dart';
+export 'src/particles/particle_buffer.dart';
+export 'src/particles/particle_curve.dart';
+export 'src/particles/particle_emitter.dart';
+export 'src/particles/particle_emitter_component.dart';
+export 'src/particles/particle_range.dart';
+export 'src/particles/particle_renderer.dart';
+export 'src/particles/sprite_particle_renderer.dart';

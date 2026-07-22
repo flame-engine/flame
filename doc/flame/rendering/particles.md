@@ -1,452 +1,303 @@
 # Particles
 
-Flame offers a basic, yet robust and extendable particle system. The core concept of this system is
-the `Particle` class, which is very similar in its behavior to the `ParticleSystemComponent`.
+Flame ships a data-oriented particle system built for large particle counts:
+all particle state lives in preallocated typed-data buffers, and the built-in
+renderers draw every particle of an emitter in a single batched canvas call.
+Effects are described declaratively through reusable presets, so most
+particle effects require no custom classes and no per-frame allocation.
 
-The most basic usage of a `Particle` with `FlameGame` would look as in the following:
+The system consists of three parts:
 
-```dart
-import 'package:flame/components.dart';
+- [`ParticleEmitter`](#particleemitter): a declarative, reusable description
+  of what to spawn and how particles behave over their lifetime.
+- [`ParticleRenderer`](#renderers): how particles are drawn (batched circles,
+  sprites, or fully custom canvas code).
+- [`ParticleEmitterComponent`](#particleemittercomponent): the
+  `PositionComponent` that ties the two together, simulating and rendering
+  the particles.
 
-// ...
-
-game.add(
-  // Wrapping a Particle with ParticleSystemComponent
-  // which maps Component lifecycle hooks to Particle ones
-  // and embeds a trigger for removing the component.
-  ParticleSystemComponent(
-    particle: CircleParticle(),
-  ),
-);
-```
-
-When using `Particle` with a custom `Game` implementation, please ensure that both the `update` and
-`render` methods are called during each game loop tick.
-
-Main approaches to implement desired particle effects:
-
-- Composition of existing behaviors.
-- Use behavior chaining (just a syntactic sugar of the first one).
-- Using `ComputedParticle`.
-
-Composition works in a similar fashion to those of Flutter widgets by defining the effect from top
-to bottom. Chaining allows to express the same composition trees more fluently by defining behaviors
-from bottom to top. Computed particles in their turn fully delegate implementation of the behavior
-to your code. Any of the approaches could be used in conjunction with existing behaviors where
-needed.
+A minimal explosion looks like this:
 
 ```dart
-Random rnd = Random();
+import 'package:flame/particles.dart';
 
-Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 200;
-
-// Composition.
-//
-// Defining a particle effect as a set of nested behaviors from top to bottom,
-// one within another:
-//
-// ParticleSystemComponent
-//   > ComposedParticle
-//     > AcceleratedParticle
-//       > CircleParticle
-game.add(
-  ParticleSystemComponent(
-    particle: Particle.generate(
-      count: 10,
-      generator: (i) => AcceleratedParticle(
-        acceleration: randomVector2(),
-        child: CircleParticle(
-          paint: Paint()..color = Colors.red,
-        ),
-      ),
+world.add(
+  ParticleEmitterComponent(
+    position: Vector2(200, 100),
+    emitter: ParticleEmitter(
+      bursts: [EmitterBurst(0, 200)],
+      lifespan: (0.4, 1.2),
+      speed: (50, 150),
+      gravity: Vector2(0, 200),
+      scaleOverLife: ParticleCurve(1, 0),
+      colorOverLife: ColorRamp([Colors.yellow, Colors.red]),
     ),
-  ),
-);
-
-// Chaining.
-//
-// Expresses the same behavior as above, but with a more fluent API.
-// Only Particles with SingleChildParticle mixin can be used as chainable behaviors.
-game.add(
-  ParticleSystemComponent(
-    particle: Particle.generate(
-      count: 10,
-      generator: (i) => pt.CircleParticle(paint: Paint()..color = Colors.red)
-    )
-  )
-);
-
-// Computed Particle.
-//
-// All the behaviors are defined explicitly. Offers greater flexibility
-// compared to built-in behaviors.
-game.add(
-  ParticleSystemComponent(
-      particle: Particle.generate(
-        count: 10,
-        generator: (i) {
-          Vector2 position = Vector2.zero();
-          Vector2 speed = Vector2.zero();
-          final acceleration = randomVector2();
-          final paint = Paint()..color = Colors.red;
-
-          return ComputedParticle(
-            renderer: (canvas, _) {
-              speed += acceleration;
-              position += speed;
-              canvas.drawCircle(Offset(position.x, position.y), 1, paint);
-            }
-        );
-      }
-    )
-  )
-);
-```
-
-See more [examples of how to use built-in particles in various
-combinations](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
-
-
-## Lifecycle
-
-A behavior common to all `Particle`s is that all of them accept a `lifespan` argument. This value is
-used to make the `ParticleSystemComponent` remove itself once its internal `Particle` has reached
-the end of its life. Time within the `Particle` itself is tracked using the Flame `Timer` class. It
-can be configured with a `double`, represented in seconds (with microsecond precision) by passing
-it into the corresponding `Particle` constructor.
-
-```dart
-Particle(lifespan: .2); // will live for 200ms.
-Particle(lifespan: 4); // will live for 4s.
-```
-
-It is also possible to reset a `Particle`'s lifespan by using the `setLifespan` method, which also
-accepts a `double` of seconds.
-
-```dart
-final particle = Particle(lifespan: 2);
-
-// ... after some time.
-particle.setLifespan(2) // will live for another 2s.
-```
-
-During its lifetime, a `Particle` tracks the time it was alive and exposes it through the `progress`
-getter, which returns a value between `0.0` and `1.0`. This value can be used in a similar fashion
-as the `value` property of the `AnimationController` class in Flutter.
-
-```dart
-final particle = Particle(lifespan: 2.0);
-
-game.add(ParticleSystemComponent(particle: particle));
-
-// Will print values from 0 to 1 with step of .1: 0, 0.1, 0.2 ... 0.9, 1.0.
-Timer.periodic(duration * .1, () => print(particle.progress));
-```
-
-The `lifespan` is passed down to all the descendants of a given `Particle`, if it supports any of
-the nesting behaviors.
-
-
-## Built-in particles
-
-Flame ships with a few built-in `Particle` behaviors:
-
-- The `TranslatedParticle` translates its `child` by given `Vector2`
-- The `MovingParticle` moves its `child` between two predefined `Vector2`, supports `Curve`
-- The `AcceleratedParticle` allows basic physics based effects, like gravitation or speed dampening
-- The `CircleParticle` renders circles of all shapes and sizes
-- The `SpriteParticle` renders Flame `Sprite` within a `Particle` effect
-- The `ImageParticle` renders *dart:ui* `Image` within a `Particle` effect
-- The `ComponentParticle` renders Flame `Component` within a `Particle` effect
-- The `FlareParticle` renders Flare animation within a `Particle` effect
-
-See more [examples of how to use built-in Particle behaviors
-together](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/rendering/particles_example.dart).
-All the implementations are available in the [particles folder on the
-Flame repository.](https://github.com/flame-engine/flame/tree/main/packages/flame/lib/src/particles)
-
-
-## TranslatedParticle
-
-Simply translates the underlying `Particle` to a specified `Vector2` within the rendering `Canvas`.
-Does not change or alter its position, consider using `MovingParticle` or `AcceleratedParticle`
-where change of position is required. Same effect could be achieved by translating the `Canvas`
-layer.
-
-```dart
-game.add(
-  ParticleSystemComponent(
-    particle: TranslatedParticle(
-      // Will translate the child Particle effect to the center of game canvas.
-      offset: game.size / 2,
-      child: Particle(),
-    ),
+    renderer: CircleParticleRenderer(),
   ),
 );
 ```
 
+The component removes itself automatically once the burst has fired and the
+last particle has died (see [Lifecycle](#lifecycle)).
 
-## MovingParticle
 
-Moves the child `Particle` between the `from` and `to` `Vector2`s during its lifespan. Supports
-`Curve` via `CurvedParticle`.
+## Ranges
+
+Emitter properties that vary from particle to particle are expressed as a
+`(min, max)` record called `ParticleRange`; each particle samples a uniform
+value from it when it spawns. Use the same value twice for a constant:
 
 ```dart
-game.add(
-  ParticleSystemComponent(
-    particle: MovingParticle(
-      // Will move from corner to corner of the game canvas.
-      from: Vector2.zero(),
-      to: game.size,
-      child: CircleParticle(
-        radius: 2.0,
-        paint: Paint()..color = Colors.red,
-      ),
-    ),
-  ),
-);
+lifespan: (0.5, 2),  // between 0.5 and 2 seconds
+size: (8, 8),        // always exactly 8
 ```
 
 
-## AcceleratedParticle
+## ParticleEmitter
 
-A basic physics particle which allows you to specify its initial `position`, `speed` and
-`acceleration` and lets the `update` cycle do the rest. All three are specified as `Vector2`s, which
-you can think of as vectors. It works especially well for physics-based "bursts", but it is not
-limited to that. Unit of the `Vector2` value is *logical px/s*. So a speed of `Vector2(0, 100)` will
-move a child `Particle` by 100 logical pixels of the device every second of game time.
+`ParticleEmitter` is a reusable preset that can be shared by any number of
+emitter components. All distances are in the component's local units, angles
+in radians, and times in seconds.
+
+
+### Emission
+
+Particles can be spawned continuously, in bursts, or both:
 
 ```dart
-final rnd = Random();
-Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 100;
-
-game.add(
-  ParticleSystemComponent(
-    particle: AcceleratedParticle(
-      // Will fire off in the center of game canvas
-      position: game.canvasSize/2,
-      // With random initial speed of Vector2(-100..100, 0..-100)
-      speed: Vector2(rnd.nextDouble() * 200 - 100, -rnd.nextDouble() * 100),
-      // Accelerating downwards, simulating "gravity"
-      // speed: Vector2(0, 100),
-      child: CircleParticle(
-        radius: 2.0,
-        paint: Paint()..color = Colors.red,
-      ),
-    ),
-  ),
+ParticleEmitter(
+  rate: 120,                     // particles per second
+  bursts: [
+    EmitterBurst(0, 50),         // 50 particles at t = 0
+    EmitterBurst(0.5, 25),       // 25 more at t = 0.5s
+  ],
+  duration: 1.5,                 // stop emitting after 1.5s
+  loop: true,                    // and restart the timeline
+  maxParticles: 2048,            // storage for simultaneous particles
 );
 ```
 
+- `rate` emits continuously; fractional amounts accumulate correctly across
+  frames.
+- `bursts` fire once per pass over the emission timeline.
+- `duration` ends emission; when null, a `rate`-based emitter runs forever
+  and a burst-only emitter finishes after its last burst.
+- `loop` restarts the timeline after `duration` (which must then be set).
+- `maxParticles` is allocated up front; spawns beyond it are dropped until
+  older particles die.
 
-## CircleParticle
 
-A `Particle` which renders a circle with given `Paint` at the zero offset of passed `Canvas`. Use in
-conjunction with `TranslatedParticle`, `MovingParticle` or `AcceleratedParticle` in order to achieve
-desired positioning.
+### Spawn position and velocity
+
+`shape` controls where particles appear, relative to the component's
+position:
 
 ```dart
-game.add(
-  ParticleSystemComponent(
-    particle: CircleParticle(
-      radius: game.size.x / 2,
-      paint: Paint()..color = Colors.red.withValues(alpha: .5),
-    ),
-  ),
-);
+shape: const PointEmitterShape(),                    // the default
+shape: const CircleEmitterShape(50),                 // inside a circle
+shape: const CircleEmitterShape(50, edgeOnly: true), // on its edge
+shape: const RectangleEmitterShape(100, 20),         // inside a rectangle
+```
+
+Custom spawn patterns are one subclass away: extend `EmitterShape` and
+implement `samplePosition`.
+
+The initial velocity is polar: a `speed` range plus a `direction` (radians,
+0 points along the positive x-axis, `-tau / 4` points up) with a `spread`
+angle centered on it. The default spread of `tau` emits in all directions.
+
+```dart
+speed: (100, 200),
+direction: -tau / 4,   // up
+spread: tau / 8,       // in a 45 degree cone
 ```
 
 
-## SpriteParticle
-
-Allows you to embed a `Sprite` into your particle effects.
+### Forces and rotation
 
 ```dart
-game.add(
-  ParticleSystemComponent(
-    particle: SpriteParticle(
-      sprite: Sprite('sprite.png'),
-      size: Vector2(64, 64),
-    ),
-  ),
-);
+gravity: Vector2(0, 300),  // constant acceleration
+drag: 2,                   // velocity damping, 0 = none
+rotation: (0, tau),        // initial rotation
+spin: (-5, 5),             // radians per second
+rotateToVelocity: true,    // or: always face the direction of travel
+```
+
+`rotateToVelocity` suits directional particles such as sparks or arrows;
+it overrides `rotation` and `spin`.
+
+
+### Behavior over a particle's lifetime
+
+Three optional properties change a particle as its life progresses from
+0 (spawn) to 1 (death). They are baked into lookup tables when the emitter
+is created, so evaluating them per particle per frame is just an array read,
+no matter how complex the curve.
+
+`scaleOverLife` multiplies the spawn `size`:
+
+```dart
+size: (10, 20),
+scaleOverLife: ParticleCurve(1, 0, curve: Curves.easeOut),  // shrink away
+```
+
+`ParticleCurve` interpolates between two values, optionally shaped by any
+Flutter animation `Curve`. `ParticleCurve.constant` holds a value and
+`ParticleCurve.custom` bakes an arbitrary function:
+
+```dart
+opacityOverLife: ParticleCurve.custom(
+  // Fade in during the first 20% of life, out during the rest.
+  (t) => t < 0.2 ? t / 0.2 : (1 - t) / 0.8,
+),
+```
+
+`colorOverLife` is a `ColorRamp`: a list of colors (optionally with stops)
+interpolated over the lifetime. `opacityOverLife` multiplies the ramp's
+alpha, so they compose naturally:
+
+```dart
+colorOverLife: ColorRamp([Colors.white, Colors.orange, Colors.red]),
+opacityOverLife: ParticleCurve(1, 0),
+```
+
+With the texture renderers the color tints the texture, so a white texture
+takes on the ramp color exactly and sprites stay untinted while the ramp is
+unset.
+
+
+## Renderers
+
+Renderers describe how particles are drawn and can also be shared between
+components.
+
+
+### CircleParticleRenderer
+
+Draws every particle as a circle. The circle is rasterized to a texture once
+at load; after that each particle is a transformed, tinted copy of it,
+drawn in one `drawRawAtlas` batch. `softness` fades the circle from crisp
+(0) to fully soft (1), and `blendMode: BlendMode.plus` gives additive glow,
+a natural fit for fire and magic:
+
+```dart
+renderer: CircleParticleRenderer(softness: 0.8, blendMode: BlendMode.plus),
 ```
 
 
-## ImageParticle
+### SpriteParticleRenderer
 
-Renders given `dart:ui` image within the particle tree.
+Draws every particle as a `Sprite` (or a whole image), also fully batched:
 
 ```dart
-// During game initialization
-await Flame.images.loadAll(const [
-  'image.png',
-]);
-
-// ...
-
-// Somewhere during the game loop
-final image = await Flame.images.load('image.png');
-
-game.add(
-  ParticleSystemComponent(
-    particle: ImageParticle(
-      size: Vector2.all(24),
-      image: image,
-    );
-  ),
-);
+renderer: SpriteParticleRenderer.fromImage(await images.load('spark.png')),
+renderer: SpriteParticleRenderer(sprite),  // a region of a sprite sheet
 ```
 
-
-## ScalingParticle
-
-Scales the child `Particle` between `1` and `to` during its lifespan.
-
-```dart
-game.add(
-  ParticleSystemComponent(
-    particle: ScalingParticle(
-      lifespan: 2,
-      to: 0,
-      curve: Curves.easeIn,
-      child: CircleParticle(
-        radius: 2.0,
-        paint: Paint()..color = Colors.red,
-      )
-    );
-  ),
-);
-```
+Particles are drawn centered, rotated by their rotation, and scaled so the
+sprite's width matches the particle's current size.
 
 
-## SpriteAnimationParticle
+### Custom rendering
 
-A `Particle` which embeds a `SpriteAnimation`.
-By default, aligns the `SpriteAnimation`'s `stepTime` so that
-it's fully played during the `Particle` lifespan. It's possible to override this behavior with the
-`alignAnimationTime` argument.
+For full control, use `CallbackParticleRenderer` (or extend
+`ParticleRenderer`). The callback receives the canvas, already in the
+component's local coordinate system, and the `ParticleBuffer` holding all
+live particle state as flat typed-data arrays:
 
 ```dart
-final spriteSheet = SpriteSheet(
-  image: yourSpriteSheetImage,
-  srcSize: Vector2.all(16.0),
-);
-
-game.add(
-  ParticleSystemComponent(
-    particle: SpriteAnimationParticle(
-      animation: spriteSheet.createAnimation(0, stepTime: 0.1),
-    );
-  ),
-);
-```
-
-
-## ComponentParticle
-
-This `Particle` allows you to embed a `Component` within the particle effects. The `Component` could
-have its own `update` lifecycle and could be reused across different effect trees. If the only thing
-you need is to add some dynamics to an instance of a certain `Component`, please consider adding it
-to the `game` directly, without the `Particle` in the middle.
-
-```dart
-final longLivingRect = RectComponent();
-
-game.add(
-  ParticleSystemComponent(
-    particle: ComponentParticle(
-      component: longLivingRect
-    );
-  ),
-);
-
-class RectComponent extends Component {
-  void render(Canvas c) {
-    c.drawRect(
-      Rect.fromCenter(center: Offset.zero, width: 100, height: 100),
-      Paint()..color = Colors.red
+renderer: CallbackParticleRenderer((canvas, particles) {
+  for (var i = 0; i < particles.length; i++) {
+    canvas.drawCircle(
+      Offset(particles.posX[i], particles.posY[i]),
+      particles.size[i] / 2,
+      paint,
     );
   }
+}),
+```
 
-  void update(double dt) {
-    /// Will be called by parent [Particle]
-  }
-}
+Nothing is batched in a callback renderer, so prefer the texture renderers
+for large particle counts.
+
+
+## ParticleEmitterComponent
+
+`ParticleEmitterComponent` is a regular `PositionComponent`: position it,
+give it a priority, add it anywhere in the component tree. It exposes
+runtime control over the effect:
+
+```dart
+final effect = ParticleEmitterComponent(
+  emitter: smokePreset,
+  renderer: CircleParticleRenderer(softness: 0.9),
+  emitting: false,     // start paused
+);
+
+effect.start();        // run the emission timeline (restarts if finished)
+effect.stop();         // pause emission; live particles keep simulating
+effect.emit(30);       // spawn 30 particles right now, timeline-independent
+effect.clearParticles();
+effect.particleCount;  // live particles
+```
+
+Pass a seeded `Random` for deterministic effects (useful in tests and
+replays):
+
+```dart
+ParticleEmitterComponent(emitter: e, renderer: r, random: Random(42));
 ```
 
 
-## ComputedParticle
+### Lifecycle
 
-A `Particle` which could help you when:
-
-- Default behavior is not enough
-- Complex effects optimization
-- Custom easings
-
-When created, it delegates all the rendering to a supplied `ParticleRenderDelegate` which is called
-on each frame to perform necessary computations and render something to the `Canvas`.
+With `removeOnFinish` (the default), the component removes itself once
+emission has naturally finished, meaning the timeline completed without
+looping, and the last particle has died. Endless emitters are never removed
+automatically. This makes one-shot effects fire-and-forget:
 
 ```dart
-game.add(
-  ParticleSystemComponent(
-    // Renders a circle which gradually changes its color and size during the
-    // particle lifespan.
-    particle: ComputedParticle(
-      renderer: (canvas, particle) => canvas.drawCircle(
-        Offset.zero,
-        particle.progress * 10,
-        Paint()
-          ..color = Color.lerp(
-            Colors.red,
-            Colors.blue,
-            particle.progress,
-          ),
-      ),
-    ),
+world.add(
+  ParticleEmitterComponent(
+    position: hitPosition,
+    emitter: sparksPreset,   // burst-only preset, shared by all hits
+    renderer: sparksRenderer,
   ),
-)
+);
 ```
 
 
-## Nesting behavior
+### Moving emitters and trails
 
-Flame's implementation of particles follows the same pattern of extreme composition as Flutter
-widgets. That is achieved by encapsulating small pieces of behavior in every particle and then
-nesting these behaviors together to achieve the desired visual effect.
-
-Two entities that allow `Particle`s to nest each other are: `SingleChildParticle` mixin and
-`ComposedParticle` class.
-
-A `SingleChildParticle` may help you with creating `Particles` with a custom behavior. For example,
-randomly positioning its child during each frame:
-
-The `SingleChildParticle` may help you with creating `Particles` with a custom behavior.
-
-For example, randomly positioning it's child during each frame:
+Particles simulate in the component's local space, so moving the component
+moves live particles with it. For trails, exhaust, and similar effects set
+`worldSpace: true`: already-spawned particles then keep their world
+position while the emitter moves on.
 
 ```dart
-var rnd = Random();
-
-class GlitchParticle extends Particle with SingleChildParticle {
-  Particle child;
-
-  GlitchParticle({
-    required this.child,
-    super.lifespan,
-  });
-
-  @override
-  render(Canvas canvas)  {
-    canvas.save();
-    canvas.translate(rnd.nextDouble() * 100, rnd.nextDouble() * 100);
-
-    // Will also render the child
-    super.render();
-
-    canvas.restore();
-  }
-}
+ship.add(
+  ParticleEmitterComponent(
+    position: exhaustOffset,
+    emitter: exhaustPreset,
+    renderer: CircleParticleRenderer(softness: 1),
+    worldSpace: true,
+  ),
+);
 ```
 
-The `ComposedParticle` could be used either as a standalone or within an existing `Particle` tree.
+Only translation is compensated: the component and its ancestors should not
+be rotated or scaled while `worldSpace` is enabled.
+
+
+## Performance notes
+
+- All per-particle state is stored in `Float32List`/`Int32List` columns
+  (a struct-of-arrays layout); simulation is a tight loop over contiguous
+  memory and dead particles are swap-removed in constant time.
+- The texture renderers issue a single `Canvas.drawRawAtlas` call per
+  component per frame, regardless of particle count.
+- Over-life curves and color ramps are baked into lookup tables at emitter
+  construction.
+- Storage is allocated once, at `maxParticles`; a running effect performs
+  no allocations. Reuse a paused component and call `emit()` instead of
+  spawning new components when an effect fires very frequently.

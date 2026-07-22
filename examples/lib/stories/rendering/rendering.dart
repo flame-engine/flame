@@ -58,8 +58,11 @@ void addRenderingStories(Dashbook dashbook) {
       'Particles (Interactive)',
       (context) => GameWidget(
         game: ParticlesInteractiveExample(
-          from: context.colorProperty('From color', Colors.pink),
-          to: context.colorProperty('To color', Colors.blue),
+          effect: context.listProperty(
+            'Effect',
+            ParticlesInteractiveExample.effects.first,
+            ParticlesInteractiveExample.effects,
+          ),
           zoom: context.numberProperty('Zoom', 1),
         ),
       ),

@@ -58,7 +58,6 @@ texels # plural of texel
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
 truecolor # truecolor rendering
-tweening # the process of tween
 uncapturederror # dumb webgpu javascript name
 unorm # unsigned normalized integer
 viewports # plural of viewport
