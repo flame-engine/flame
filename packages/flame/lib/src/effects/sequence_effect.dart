@@ -1,3 +1,4 @@
+import 'package:flame/src/components/core/custom_traversal.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
 import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';
@@ -45,7 +46,7 @@ EffectController _createController({
 /// [EffectController] as a parameter. This is because the timing of a sequence
 /// effect depends on the timings of individual effects, and cannot be
 /// represented as a regular effect controller.
-class SequenceEffect extends Effect {
+class SequenceEffect extends Effect with CustomTraversal {
   SequenceEffect(
     List<Effect> effects, {
     bool alternate = false,
@@ -74,7 +75,7 @@ class SequenceEffect extends Effect {
   void apply(double progress) {}
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     update(dt);
     // Do not update children: the controller will take care of it
   }
