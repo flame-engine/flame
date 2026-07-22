@@ -75,10 +75,7 @@ class TimeScaleExample extends FlameGame
 }
 
 class _Chopper extends SpriteAnimationComponent
-    with
-        HasGameRef<TimeScaleExample>,
-        CollisionCallbacks,
-        CustomTraversal {
+    with HasGameRef<TimeScaleExample>, CollisionCallbacks {
   _Chopper({
     super.animation,
     super.position,
@@ -105,9 +102,9 @@ class _Chopper extends SpriteAnimationComponent
   }
 
   @override
-  void updateSubtree(double dt) {
+  void update(double dt) {
     position.setFrom(position + _moveDirection * _speed * dt);
-    super.updateSubtree(dt);
+    super.update(dt);
   }
 
   @override
