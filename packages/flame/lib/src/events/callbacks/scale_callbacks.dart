@@ -30,11 +30,13 @@ mixin ScaleCallbacks on Component {
       hasDrag: false,
       hasScale: true,
     );
+    findRootGame()?.adjustPointerEventHandlerCount(1);
   }
 
   @override
   @mustCallSuper
   void onRemove() {
+    findRootGame()?.adjustPointerEventHandlerCount(-1);
     MultiDragScaleDispatcher.removeDispatcher(
       this,
       hasDrag: false,
