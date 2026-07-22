@@ -11,7 +11,7 @@ import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
-part 'component_set.dart';
+part 'component_list.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -291,20 +291,20 @@ class Component {
   ///
   /// This makes it possible to have lighter components that don't have any
   /// children.
-  ComponentSet? _children;
+  ComponentList? _children;
 
-  /// The [ComponentSet] that currently stores this component, if any.
-  /// Maintained by [ComponentSet].
-  ComponentSet? _containerSet;
+  /// The [ComponentList] that currently stores this component, if any.
+  /// Maintained by [ComponentList].
+  ComponentList? _containerList;
 
-  /// This component's slot index within [_containerSet]'s backing array, or
+  /// This component's slot index within [_containerList]'s backing array, or
   /// -1 when the component is not in any container. Maintained by
-  /// [ComponentSet].
+  /// [ComponentList].
   int _containerIndex = -1;
 
   /// This field should be used internally for functionality when you need to
   /// make sure that the component set is created if it doesn't already exist.
-  ComponentSet get _internalChildren => _children ??= createComponentSet();
+  ComponentList get _internalChildren => _children ??= createComponentList();
 
   /// Restores the priority ordering of the [children], after one or more of
   /// them have changed their [priority].
@@ -312,28 +312,32 @@ class Component {
 
   /// The children components of this component.
   ///
-  /// This getter will automatically create the [ComponentSet] container within
+  /// This getter will automatically create the [ComponentList] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  ComponentSet get children => _children ??= createComponentSet();
+  ComponentList get children => _children ??= createComponentList();
 
   /// Whether this component has any children.
   /// Avoids the creation of the children container if not necessary.
   bool get hasChildren => _children?.isNotEmpty ?? false;
 
-  /// `Component.childrenFactory` is the default method for creating children
-  /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [ComponentSet] instances in your project.
-  static ComponentSet Function() childrenFactory = ComponentSet.new;
-
-  /// Whether the strict query mode should be enabled for all children sets;
-  /// see [ComponentSet.strictMode].
+  /// Whether the strict query mode should be enabled for all children lists;
+  /// see [ComponentList.strictMode].
   static bool strictQueryMode = false;
 
   /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [ComponentSet] within
-  /// a particular class.
-  ComponentSet createComponentSet() => childrenFactory();
+  /// Override this method if you need a customized [ComponentList] for a
+  /// particular class, for example one with a custom ordering:
+  ///
+  /// ```dart
+  /// @override
+  /// ComponentList createComponentList() {
+  ///   return ComponentList(
+  ///     comparator: (a, b) => a.someValue.compareTo(b.someValue),
+  ///   );
+  /// }
+  /// ```
+  ComponentList createComponentList() => ComponentList();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.

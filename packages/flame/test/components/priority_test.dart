@@ -259,7 +259,7 @@ void main() {
   });
 }
 
-class _SpyComponentSet extends ComponentSet {
+class _SpyComponentList extends ComponentList {
   int callCount = 0;
 
   @override
@@ -277,11 +277,11 @@ class _ParentWithReorderSpy extends Component {
   _ParentWithReorderSpy(int priority) : super(priority: priority);
 
   @override
-  ComponentSet createComponentSet() => _SpyComponentSet();
+  ComponentList createComponentList() => _SpyComponentList();
 
   void assertCalled(int n) {
-    final componentSet = children as _SpyComponentSet;
-    expect(componentSet.callCount, n);
-    componentSet.callCount = 0;
+    final componentList = children as _SpyComponentList;
+    expect(componentList.callCount, n);
+    componentList.callCount = 0;
   }
 }

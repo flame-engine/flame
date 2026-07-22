@@ -3,8 +3,9 @@ part of 'component.dart';
 /// A fast, ordered container for a [Component]'s children.
 ///
 /// The children are stored in a single flat [List], sorted by
-/// [Component.priority]; components with equal priority keep the order in
-/// which they were added. This is the same ordering that the old
+/// [Component.priority] (or by a custom comparator, see
+/// [Component.createComponentList]); components that compare equal keep the
+/// order in which they were added. This is the same ordering that the old
 /// `OrderedSet`-based container provided, but backed by a contiguous array
 /// instead of a splay tree of hash sets, which makes iteration, additions,
 /// removals and reorders significantly faster and allocation-free.
@@ -35,13 +36,38 @@ part of 'component.dart';
 /// The contents of this container are managed by the [Component] lifecycle:
 /// use [Component.add], [Component.remove] and their related methods to
 /// modify which components are in it.
-class ComponentSet extends Iterable<Component> {
-  ComponentSet({bool? strictMode})
+class ComponentList extends Iterable<Component> {
+  ComponentList({bool? strictMode, this.comparator})
     : strictMode = strictMode ?? Component.strictQueryMode;
 
   /// Whether calling [query] for an unregistered type throws an error
   /// (`true`), or transparently registers the type on first use (`false`).
   final bool strictMode;
+
+  /// An optional custom ordering, replacing the default ordering by
+  /// [Component.priority]. Supply one via [Component.createComponentList].
+  ///
+  /// The ordering is stable in both cases: elements that compare equal keep
+  /// their insertion order. If the values that the comparator reads change
+  /// after insertion, call [Component.rebalanceChildren] to restore the
+  /// ordering (priority changes on mounted components do this automatically).
+  final Comparator<Component>? comparator;
+
+  /// The relative order of [a] and [b]: by the custom [comparator] if one
+  /// was supplied, otherwise by [Component.priority].
+  int _compareOrder(Component a, Component b) {
+    final comparator = this.comparator;
+    if (comparator == null) {
+      final ap = a._priority;
+      final bp = b._priority;
+      return ap < bp
+          ? -1
+          : ap > bp
+          ? 1
+          : 0;
+    }
+    return comparator(a, b);
+  }
 
   /// The backing store; `null` entries are tombstones left by removals.
   final List<Component?> _elements = [];
@@ -75,18 +101,18 @@ class ComponentSet extends Iterable<Component> {
   bool get isNotEmpty => _length != 0;
 
   @override
-  Iterator<Component> get iterator => _ComponentSetIterator(this);
+  Iterator<Component> get iterator => _ComponentListIterator(this);
 
   /// The elements of this set in reverse order.
   ///
   /// Unlike the rest of the [Iterable] interface, this is a method and not a
   /// getter, for historical reasons. The returned iterable is a lazy view: it
   /// costs nothing to create and always reflects the current contents.
-  Iterable<Component> reversed() => _ReversedComponentSetView(this);
+  Iterable<Component> reversed() => _ReversedComponentListView(this);
 
   @override
   bool contains(Object? element) {
-    return element is Component && identical(element._containerSet, this);
+    return element is Component && identical(element._containerList, this);
   }
 
   @override
@@ -151,11 +177,11 @@ class ComponentSet extends Iterable<Component> {
   /// through the component lifecycle. Use [Component.add] instead.
   @internal
   bool add(Component component) {
-    if (identical(component._containerSet, this)) {
+    if (identical(component._containerList, this)) {
       return false;
     }
     assert(
-      component._containerSet == null,
+      component._containerList == null,
       'A component cannot be contained by two children containers at once',
     );
     final elements = _elements;
@@ -164,18 +190,17 @@ class ComponentSet extends Iterable<Component> {
       elements.clear();
       _tombstones = 0;
     }
-    final priority = component._priority;
     var lastIndex = elements.length - 1;
     while (lastIndex >= 0 && elements[lastIndex] == null) {
       lastIndex--;
     }
-    if (lastIndex >= 0 && elements[lastIndex]!._priority > priority) {
-      _insertSorted(component, priority);
+    if (lastIndex >= 0 && _compareOrder(elements[lastIndex]!, component) > 0) {
+      _insertSorted(component);
     } else {
       component._containerIndex = elements.length;
       elements.add(component);
     }
-    component._containerSet = this;
+    component._containerList = this;
     _length++;
     final queries = _queries;
     if (queries != null) {
@@ -188,16 +213,16 @@ class ComponentSet extends Iterable<Component> {
     return true;
   }
 
-  /// Inserts [component] before all existing elements with a higher priority,
-  /// and after all elements with the same or a lower priority.
-  void _insertSorted(Component component, int priority) {
+  /// Inserts [component] before all existing elements that sort after it,
+  /// and after all elements that sort the same or before it.
+  void _insertSorted(Component component) {
     _compact();
     final elements = _elements;
     var lo = 0;
     var hi = elements.length;
     while (lo < hi) {
       final mid = (lo + hi) >>> 1;
-      if (elements[mid]!._priority <= priority) {
+      if (_compareOrder(elements[mid]!, component) <= 0) {
         lo = mid + 1;
       } else {
         hi = mid;
@@ -217,13 +242,13 @@ class ComponentSet extends Iterable<Component> {
   /// go through the component lifecycle. Use [Component.remove] instead.
   @internal
   bool remove(Component component) {
-    if (!identical(component._containerSet, this)) {
+    if (!identical(component._containerList, this)) {
       return false;
     }
     final index = component._containerIndex;
     assert(identical(_elements[index], component));
     _elements[index] = null;
-    component._containerSet = null;
+    component._containerList = null;
     component._containerIndex = -1;
     _length--;
     _tombstones++;
@@ -256,7 +281,7 @@ class ComponentSet extends Iterable<Component> {
     for (var i = 0; i < elements.length; i++) {
       final element = elements[i];
       if (element != null) {
-        element._containerSet = null;
+        element._containerList = null;
         element._containerIndex = -1;
       }
     }
@@ -278,7 +303,7 @@ class ComponentSet extends Iterable<Component> {
     final elements = _elements;
     var isSorted = true;
     for (var i = 1; i < elements.length; i++) {
-      if (elements[i - 1]!._priority > elements[i]!._priority) {
+      if (_compareOrder(elements[i - 1]!, elements[i]!) > 0) {
         isSorted = false;
         break;
       }
@@ -290,10 +315,8 @@ class ComponentSet extends Iterable<Component> {
     // Ties are broken by the pre-sort index, which makes the (unstable)
     // built-in sort behave as a stable sort.
     elements.sort((a, b) {
-      final byPriority = a!._priority.compareTo(b!._priority);
-      return byPriority != 0
-          ? byPriority
-          : a._containerIndex - b._containerIndex;
+      final byOrder = _compareOrder(a!, b!);
+      return byOrder != 0 ? byOrder : a._containerIndex - b._containerIndex;
     });
     for (var i = 0; i < elements.length; i++) {
       elements[i]!._containerIndex = i;
@@ -378,10 +401,10 @@ class ComponentSet extends Iterable<Component> {
   }
 }
 
-class _ComponentSetIterator implements Iterator<Component> {
-  _ComponentSetIterator(this._set) : _shiftCount = _set._shiftCount;
+class _ComponentListIterator implements Iterator<Component> {
+  _ComponentListIterator(this._set) : _shiftCount = _set._shiftCount;
 
-  final ComponentSet _set;
+  final ComponentList _set;
   final int _shiftCount;
   int _index = -1;
   Component? _current;
@@ -412,10 +435,10 @@ class _ComponentSetIterator implements Iterator<Component> {
   }
 }
 
-class _ReversedComponentSetView extends Iterable<Component> {
-  _ReversedComponentSetView(this._set);
+class _ReversedComponentListView extends Iterable<Component> {
+  _ReversedComponentListView(this._set);
 
-  final ComponentSet _set;
+  final ComponentList _set;
 
   @override
   int get length => _set._length;
@@ -427,16 +450,16 @@ class _ReversedComponentSetView extends Iterable<Component> {
   bool get isNotEmpty => _set._length != 0;
 
   @override
-  Iterator<Component> get iterator => _ReversedComponentSetIterator(_set);
+  Iterator<Component> get iterator => _ReversedComponentListIterator(_set);
 }
 
-class _ReversedComponentSetIterator implements Iterator<Component> {
-  _ReversedComponentSetIterator(ComponentSet set)
+class _ReversedComponentListIterator implements Iterator<Component> {
+  _ReversedComponentListIterator(ComponentList set)
     : _set = set,
       _shiftCount = set._shiftCount,
       _index = set._elements.length;
 
-  final ComponentSet _set;
+  final ComponentList _set;
   final int _shiftCount;
   int _index;
   Component? _current;
