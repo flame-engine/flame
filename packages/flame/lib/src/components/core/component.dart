@@ -599,11 +599,34 @@ class Component {
   /// instead of silently skipping their custom logic.
   @nonVirtual
   void updateTree(double dt) {
+    if (_updatePaused) {
+      return;
+    }
     final self = this;
     if (self is CustomTraversal) {
       self.updateSubtree(dt);
     } else {
       defaultUpdateSubtree(dt);
+    }
+  }
+
+  /// Whether the update pass is paused for this component and its entire
+  /// subtree.
+  ///
+  /// While `true`, neither this component's [update] nor any update of its
+  /// descendants will run; rendering and event handling continue as usual.
+  /// This is a lighter-weight alternative to removing the subtree, and is
+  /// unrelated to `Game.paused`, which stops the whole game loop.
+  ///
+  /// Toggling this takes effect from the next update pass.
+  bool get updatePaused => _updatePaused;
+  bool _updatePaused = false;
+  set updatePaused(bool value) {
+    if (_updatePaused != value) {
+      _updatePaused = value;
+      // The flattened update list excludes paused subtrees, so a toggle must
+      // invalidate it.
+      ComponentList.structureVersion++;
     }
   }
 
@@ -621,7 +644,9 @@ class Component {
       // removals since the last tick are compacted away.
       children._compact();
       for (final child in children._elements) {
-        child?.updateTree(dt);
+        if (child != null && !child._updatePaused) {
+          child.updateTree(dt);
+        }
       }
     }
   }
