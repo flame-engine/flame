@@ -146,6 +146,37 @@ class MyComponent extends PositionComponent with TapCallbacks {
 ```
 
 
+### Custom update traversal and pausing
+
+The engine drives the update pass through a flattened traversal list owned by the game, so
+`updateTree` is non-virtual and cannot be overridden. Components that need to control how their
+subtree is updated (changing the effective `dt`, skipping children, or updating them manually)
+should mix in `CustomTraversal` and override its `updateSubtree` method:
+
+```dart
+class SlowMotionArea extends Component with CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
+flattened list itself and its `updateSubtree` drives its subtree. Mixins that compose with other
+custom traversals (like `HasTimeScale`) are declared `on CustomTraversal` and chain via
+`super.updateSubtree`.
+
+To temporarily stop updating a component and its whole subtree, set `updatePaused` to true. While
+paused, no `update` calls happen in the subtree, but rendering and event handling continue, and
+pending lifecycle events (adds and removes) are still processed:
+
+```dart
+enemySquad.updatePaused = true; // freeze the squad
+enemySquad.updatePaused = false; // resume it
+```
+
+This is unrelated to `Game.paused`, which stops the whole game loop including rendering.
+
+
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
