@@ -591,19 +591,16 @@ class Component {
   /// cleans them up afterwards.
   @protected
   void renderChild(Canvas canvas, Component child) {
-    int? originalLength;
-    final hasContext = _renderContexts.isNotEmpty;
-    if (hasContext) {
-      originalLength = child._renderContexts.length;
-      child._renderContexts.addAll(_renderContexts);
+    final contexts = _renderContexts;
+    if (contexts == null || contexts.isEmpty) {
+      child.renderTree(canvas);
+      return;
     }
+    final childContexts = child._renderContexts ??= QueueList();
+    final originalLength = childContexts.length;
+    childContexts.addAll(contexts);
     child.renderTree(canvas);
-    if (hasContext) {
-      child._renderContexts.removeRange(
-        originalLength!,
-        child._renderContexts.length,
-      );
-    }
+    childContexts.removeRange(originalLength, childContexts.length);
   }
 
   /// Called once after all children have been rendered in [renderTree].
@@ -616,7 +613,7 @@ class Component {
   void renderTree(Canvas canvas) {
     final context = renderContext;
     if (context != null) {
-      _renderContexts.add(context);
+      (_renderContexts ??= QueueList()).add(context);
     }
 
     render(canvas);
@@ -638,7 +635,7 @@ class Component {
     }
 
     if (context != null) {
-      _renderContexts.removeLast();
+      _renderContexts!.removeLast();
     }
   }
 
@@ -1163,14 +1160,16 @@ class Component {
 
   //#region Context
 
-  final QueueList<ComponentRenderContext> _renderContexts = QueueList();
+  /// The stack of render contexts inherited from ancestors during the render
+  /// pass. Created lazily: most components never provide or receive one.
+  QueueList<ComponentRenderContext>? _renderContexts;
 
   /// Override this method if you want your component to provide a custom
   /// render context to all its children (recursively).
   ComponentRenderContext? get renderContext => null;
 
   T? findRenderContext<T extends ComponentRenderContext>() {
-    return _renderContexts.whereType<T>().lastOrNull;
+    return _renderContexts?.whereType<T>().lastOrNull;
   }
 
   //#endregion
@@ -1201,8 +1200,9 @@ class Component {
   /// The color that the debug output should be rendered with.
   Color debugColor = const Color(0xFFFF00FF);
 
-  final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
-  final ValueCache<TextPaint> _debugTextPaintCache = ValueCache<TextPaint>();
+  late final ValueCache<Paint> _debugPaintCache = ValueCache<Paint>();
+  late final ValueCache<TextPaint> _debugTextPaintCache =
+      ValueCache<TextPaint>();
 
   /// The [debugColor] represented as a [Paint] object.
   Paint get debugPaint {
