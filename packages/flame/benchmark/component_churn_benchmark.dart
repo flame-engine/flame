@@ -12,14 +12,14 @@ const _dt = 1.0 / 60;
 /// and spawners: every tick a batch of components is added, an older batch is
 /// removed, and the game updates. This exercises the full lifecycle pipeline
 /// (enqueueing, [FlameGame.processLifecycleEvents], loading, mounting,
-/// unmounting) plus the children-container add/remove operations, amid a
+/// unmounting) plus the children-container add and remove operations, amid a
 /// stable population of live components.
 ///
 /// The benchmark runs at two population sizes: removal cost inside one large
 /// sibling container scales differently per container implementation (for
-/// example, a sorted list pays a linear scan and memmove per removal, while a
-/// tree pays a logarithmic lookup), so a container replacement must be
-/// evaluated at both sizes.
+/// example, a sorted list shifts elements on every removal, while a tree does
+/// a logarithmic lookup), so a container replacement must be evaluated at
+/// both sizes.
 class ComponentChurnBenchmark extends AsyncBenchmarkBase {
   static const _batchSize = 100;
   static const _liveBatches = 5;
@@ -74,7 +74,7 @@ class ComponentChurnBenchmark extends AsyncBenchmarkBase {
 /// Measures bulk mounting and unmounting: 1000 components are added and
 /// processed in one tick, then all removed and processed in the next. This
 /// stresses [FlameGame.processLifecycleEvents] with a long event queue, as
-/// happens on level loads and level teardowns.
+/// happens when levels are loaded and torn down.
 class MassAddRemoveBenchmark extends AsyncBenchmarkBase {
   static const _amountComponents = 1000;
   static const _amountCycles = 5;
