@@ -165,7 +165,9 @@ game events. A very common approach to achieve these results is to manipulate th
 tick rate.
 
 To make this manipulation easier, Flame provides a `HasTimeScale` mixin. This mixin can be attached
-to any Flame `Component` and exposes a simple get/set API for `timeScale`. The default value of
+to any Flame `Component` that has the `CustomTraversal` mixin (so a component declares
+`with CustomTraversal, HasTimeScale`; `FlameGame` already has `CustomTraversal` built in) and
+exposes a simple get/set API for `timeScale`. The default value of
 `timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
 time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
 it tick at half the speed as compared to real life time. This mixin also provides `pause` and `resume`
