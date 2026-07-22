@@ -26,6 +26,32 @@ void main() {
     );
 
     testWithFlameGame(
+      'components with equal priority keep insertion order',
+      (game) async {
+        final components = List.generate(5, (_) => _PriorityComponent(0));
+        await game.world.ensureAddAll(components);
+        expect(game.world.children.toList(), components);
+      },
+    );
+
+    testWithFlameGame(
+      'equal-priority components keep their relative order after a sibling '
+      'changes priority',
+      (game) async {
+        final a = _PriorityComponent(0);
+        final b = _PriorityComponent(0);
+        final c = _PriorityComponent(0);
+        final d = _PriorityComponent(1);
+        await game.world.ensureAddAll([a, b, c, d]);
+        expect(game.world.children.toList(), [a, b, c, d]);
+
+        d.priority = -1;
+        game.update(0);
+        expect(game.world.children.toList(), [d, a, b, c]);
+      },
+    );
+
+    testWithFlameGame(
       'changing priority with the priority setter should reorder the list',
       (game) async {
         final firstComponent = _PriorityComponent(-1);
