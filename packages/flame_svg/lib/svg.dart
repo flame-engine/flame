@@ -12,7 +12,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Svg {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
-  /// Setting [integralSize] to `true` uses integer dimensions for cache keys.
   /// Setting [fixedRatio] to `true` ensures the cache uses a single entry.
   /// Default [cacheSize] is [defaultCacheSize], which is 10 as previously;
   /// specifying [unlimitedCacheSize] is the same as using a [Map] instead
@@ -20,7 +19,6 @@ class Svg {
   Svg(
     this.pictureInfo, {
     double? pixelRatio,
-    bool integralSize = false,
     bool fixedRatio = false,
     int cacheSize = defaultCacheSize,
   }) : pixelRatio =
@@ -31,7 +29,6 @@ class Svg {
                .views
                .first
                .devicePixelRatio {
-    _integralSize = integralSize;
     _fixedRatio = fixedRatio;
     _cacheSize = cacheSize;
     assert(_cacheSize >= 1, 'The cache size must support at least one slot.');
@@ -45,15 +42,6 @@ class Svg {
 
   /// The pixel ratio that this [Svg] is rendered based on.
   final double pixelRatio;
-
-  /// Whether we're using integral sizes for the cache keys (default: false).
-  bool get integralSize => _integralSize;
-  set integralSize(bool integral) {
-    _emptyCache();
-    _integralSize = integral;
-  }
-
-  late bool _integralSize;
 
   /// Whether we're using a fixed ratio for the cache keys (default: false).
   bool get fixedRatio => _fixedRatio;
@@ -90,7 +78,6 @@ class Svg {
     String fileName, {
     AssetsCache? cache,
     double? pixelRatio,
-    bool integralSize = false,
     bool fixedRatio = false,
     int cacheSize = defaultCacheSize,
     String? package,
@@ -100,7 +87,6 @@ class Svg {
     return Svg.loadFromString(
       svgString,
       pixelRatio: pixelRatio,
-      integralSize: integralSize,
       fixedRatio: fixedRatio,
       cacheSize: cacheSize,
     );
@@ -110,7 +96,6 @@ class Svg {
   static Future<Svg> loadFromString(
     String svgString, {
     double? pixelRatio,
-    bool integralSize = false,
     bool fixedRatio = false,
     int cacheSize = defaultCacheSize,
   }) async {
@@ -118,7 +103,6 @@ class Svg {
     return Svg(
       pictureInfo,
       pixelRatio: pixelRatio,
-      integralSize: integralSize,
       fixedRatio: fixedRatio,
       cacheSize: cacheSize,
     );
@@ -177,12 +161,7 @@ class Svg {
   Image _getImage(Size size, double widthRatio, double heightRatio) {
     final width = size.width * widthRatio;
     final height = size.height * heightRatio;
-    Size cacheKey;
-    if (fixedRatio || integralSize) {
-      cacheKey = Size(width.ceilToDouble(), height.ceilToDouble());
-    } else {
-      cacheKey = Size(width, height);
-    }
+    final cacheKey = Size(width.ceilToDouble(), height.ceilToDouble());
     final image = _imageCache.getValue(cacheKey);
 
     if (image == null) {
@@ -239,14 +218,12 @@ extension SvgLoader on Game {
   Future<Svg> loadSvg(
     String fileName, {
     String? package,
-    bool integralSize = false,
     bool fixedRatio = false,
     int cacheSize = Svg.defaultCacheSize,
   }) => Svg.load(
     fileName,
     cache: assets,
     package: package,
-    integralSize: integralSize,
     fixedRatio: fixedRatio,
     cacheSize: cacheSize,
   );
