@@ -745,3 +745,41 @@ class YSortedWorld extends World {
   }
 }
 ```
+
+
+### `Component.updateTree` is non-virtual
+
+The update pass runs over a flattened traversal list owned by the game, so `updateTree` can no
+longer be overridden. If you overrode it, implement the `CustomTraversal` marker interface and
+override `Component.updateSubtree` instead; call `super.updateSubtree(dt)` to run the standard
+traversal:
+
+```dart
+// Before
+class SlowMotionArea extends Component {
+  @override
+  void updateTree(double dt) => super.updateTree(dt / 2);
+}
+
+// After
+class SlowMotionArea extends Component implements CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+`HasTimeScale` usage is unchanged (`with HasTimeScale` still works; the mixin carries the marker
+itself). To simply stop updating a subtree, the new `updatePaused` flag replaces the common
+gating override: `component.updatePaused = true` pauses the update pass for the component and its
+whole subtree while rendering, event handling, and lifecycle processing continue.
+
+
+### `Route.stopTime()` no longer zeroes `timeScale`
+
+A stopped route is now paused through `updatePaused` instead of `timeScale = 0`:
+
+- While stopped, `timeScale` keeps its previous value, so a slow-motion factor survives a
+  stop/resume cycle.
+- Assigning a new `timeScale` no longer resumes a stopped route; use `resumeTime()` or
+  `updatePaused = false`.
+- Pending lifecycle events (adding or removing components) on a stopped route now still complete.
