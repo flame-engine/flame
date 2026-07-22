@@ -308,7 +308,12 @@ class ComponentList extends Iterable<Component> {
     _tombstones = 0;
     _shiftCount++;
     structureVersion++;
-    _queries?.forEach((_, cache) => cache.data.clear());
+    final caches = _queryCaches;
+    if (caches != null) {
+      for (var i = 0; i < caches.length; i++) {
+        caches[i].data.clear();
+      }
+    }
   }
 
   /// Restores the priority ordering after one or more elements have changed
@@ -341,7 +346,12 @@ class ComponentList extends Iterable<Component> {
     for (var i = 0; i < elements.length; i++) {
       elements[i]!._containerIndex = i;
     }
-    _queries?.forEach((_, cache) => cache.resort());
+    final caches = _queryCaches;
+    if (caches != null) {
+      for (var i = 0; i < caches.length; i++) {
+        caches[i].resort();
+      }
+    }
   }
 
   /// Rewrites the backing array without its tombstones, restoring exact
