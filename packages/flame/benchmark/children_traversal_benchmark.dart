@@ -185,7 +185,7 @@ class BarrierTreeUpdateBenchmark extends _TraversalBenchmark {
   }
 }
 
-class _TimeScaledParent extends Component with HasTimeScale {
+class _TimeScaledParent extends Component with CustomTraversal, HasTimeScale {
   _TimeScaledParent({super.children});
 }
 

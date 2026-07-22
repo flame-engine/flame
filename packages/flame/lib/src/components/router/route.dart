@@ -21,7 +21,7 @@ import 'package:meta/meta.dart';
 ///
 /// Routes are managed by the [RouterComponent] component.
 class Route extends PositionComponent
-    with ParentIsA<RouterComponent>, HasTimeScale {
+    with ParentIsA<RouterComponent>, CustomTraversal, HasTimeScale {
   Route(
     Component Function()? builder, {
     this._loadingBuilder,
@@ -174,9 +174,9 @@ class Route extends PositionComponent
   }
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     if (timeScale > 0) {
-      super.updateTree(dt);
+      super.updateSubtree(dt);
     }
   }
 

@@ -38,7 +38,7 @@ import 'package:meta/meta.dart';
 /// When [W] is specified, a matching world instance **must** be passed to the
 /// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
-    with Game
+    with Game, CustomTraversal
     implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
@@ -178,7 +178,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   }
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     processLifecycleEvents();
     if (parent != null) {
       update(dt);

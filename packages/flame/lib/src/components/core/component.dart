@@ -562,7 +562,30 @@ class Component {
   /// This method traverses the component tree and calls [update] on all its
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
+  ///
+  /// This method is non-virtual: components that need to customize how their
+  /// subtree is traversed (changing the effective [dt], skipping children,
+  /// or updating them manually) should mix in `CustomTraversal` and override
+  /// its `updateSubtree` method instead. The marker mixin lets the engine's
+  /// flattened update pass treat such components as traversal barriers
+  /// instead of silently skipping their custom logic.
+  @nonVirtual
   void updateTree(double dt) {
+    final self = this;
+    if (self is CustomTraversal) {
+      self.updateSubtree(dt);
+    } else {
+      defaultUpdateSubtree(dt);
+    }
+  }
+
+  /// The engine's standard update traversal: update this component, then
+  /// update the children in priority order.
+  ///
+  /// This is the default behavior of `CustomTraversal.updateSubtree`;
+  /// custom traversals can call it to delegate to the standard behavior.
+  @protected
+  void defaultUpdateSubtree(double dt) {
     update(dt);
     final children = _children;
     if (children != null) {
