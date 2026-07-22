@@ -7,6 +7,8 @@ import 'package:canvas_test/canvas_test.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
+import 'common.dart';
+
 const _amountComponents = 500;
 const _amountTicks = 2;
 const _depthMultiplier = 0.25;
@@ -29,7 +31,7 @@ class RenderComponentsBenchmark extends AsyncBenchmarkBase {
     _canvas = MockCanvas();
 
     _game = FlameGame();
-    _game.onGameResize(Vector2.all(100.0));
+    await mountGame(_game, size: Vector2.all(100.0));
 
     await _game.addAll(
       List.generate(
@@ -75,3 +77,5 @@ class _BenchmarkComponent extends PositionComponent {
     }
   }
 }
+
+Future<void> main() => RenderComponentsBenchmark.main();
