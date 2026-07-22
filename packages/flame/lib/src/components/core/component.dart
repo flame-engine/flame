@@ -683,7 +683,9 @@ class Component {
 
   /// A convenience method to [add] multiple children at once.
   void addAll(Iterable<Component> components) {
-    components.forEach(add);
+    for (final component in components) {
+      add(component);
+    }
   }
 
   FutureOr<void> _addChild(Component child) {
