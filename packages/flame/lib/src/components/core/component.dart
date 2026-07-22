@@ -10,8 +10,8 @@ import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-import 'package:ordered_set/ordered_set.dart';
-import 'package:ordered_set/read_only_ordered_set.dart';
+
+part 'component_set.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -291,26 +291,31 @@ class Component {
   ///
   /// This makes it possible to have lighter components that don't have any
   /// children.
-  OrderedSet<Component>? _children;
+  ComponentSet? _children;
+
+  /// The [ComponentSet] that currently stores this component, if any.
+  /// Maintained by [ComponentSet].
+  ComponentSet? _containerSet;
+
+  /// This component's slot index within [_containerSet]'s backing array, or
+  /// -1 when the component is not in any container. Maintained by
+  /// [ComponentSet].
+  int _containerIndex = -1;
 
   /// This field should be used internally for functionality when you need to
   /// make sure that the component set is created if it doesn't already exist.
-  OrderedSet<Component> get _internalChildren =>
-      _children ??= createComponentSet();
+  ComponentSet get _internalChildren => _children ??= createComponentSet();
 
-  void rebalanceChildren() {
-    if (_children != null) {
-      _children!.rebalanceAll();
-    }
-  }
+  /// Restores the priority ordering of the [children], after one or more of
+  /// them have changed their [priority].
+  void rebalanceChildren() => _children?.rebalance();
 
   /// The children components of this component.
   ///
-  /// This getter will automatically create the [OrderedSet] container within
+  /// This getter will automatically create the [ComponentSet] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  ReadOnlyOrderedSet<Component> get children =>
-      _children ??= createComponentSet();
+  ComponentSet get children => _children ??= createComponentSet();
 
   /// Whether this component has any children.
   /// Avoids the creation of the children container if not necessary.
@@ -318,26 +323,17 @@ class Component {
 
   /// `Component.childrenFactory` is the default method for creating children
   /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [OrderedSet] instances in your project.
-  static OrderedSet<Component> Function() childrenFactory = () {
-    return OrderedSet.mapping(
-      _componentPriorityMapper,
-      strictMode: strictQueryMode,
-    );
-  };
+  /// customized (non-default) [ComponentSet] instances in your project.
+  static ComponentSet Function() childrenFactory = ComponentSet.new;
 
-  /// Whether OrderedSet's strict mode mode should be enabled for all children
-  /// sets.
+  /// Whether the strict query mode should be enabled for all children sets;
+  /// see [ComponentSet.strictMode].
   static bool strictQueryMode = false;
 
-  static num _componentPriorityMapper(Component component) {
-    return component.priority;
-  }
-
   /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [OrderedSet] within
+  /// Override this method if you need to have a custom [ComponentSet] within
   /// a particular class.
-  OrderedSet<Component> createComponentSet() => childrenFactory();
+  ComponentSet createComponentSet() => childrenFactory();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
@@ -566,8 +562,12 @@ class Component {
     update(dt);
     final children = _children;
     if (children != null) {
-      for (final child in children) {
-        child.updateTree(dt);
+      // The update pass doubles as the safe point where tombstones left by
+      // removals since the last tick are compacted away.
+      children._compact();
+      final elements = children._elements;
+      for (var i = 0; i < elements.length; i++) {
+        elements[i]?.updateTree(dt);
       }
     }
   }
@@ -618,8 +618,12 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      for (final child in children) {
-        renderChild(canvas, child);
+      final elements = children._elements;
+      for (var i = 0; i < elements.length; i++) {
+        final child = elements[i];
+        if (child != null) {
+          renderChild(canvas, child);
+        }
       }
       afterChildrenRendered(canvas);
     }
@@ -856,8 +860,10 @@ class Component {
   ) sync* {
     nestedContexts?.add(locationContext);
     if (_children != null) {
-      for (final child in _children!.reversed()) {
-        if (child is IgnoreEvents && child.ignoreEvents) {
+      final elements = _children!._elements;
+      for (var i = elements.length - 1; i >= 0; i--) {
+        final child = elements[i];
+        if (child == null || (child is IgnoreEvents && child.ignoreEvents)) {
           continue;
         }
         T? childPoint = locationContext;

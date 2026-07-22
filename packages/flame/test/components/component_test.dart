@@ -6,8 +6,6 @@ import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ordered_set/mapping_ordered_set.dart';
-import 'package:ordered_set/ordered_set.dart';
 
 import '../custom_component.dart';
 
@@ -1665,18 +1663,14 @@ void main() {
         final component0 = Component();
         expect(component0.children.strictMode, false);
 
-        Component.childrenFactory = () => OrderedSet.mapping<num, Component>(
-          (e) => e.priority,
-          // ignore: avoid_redundant_argument_values
-          strictMode: true,
-        );
+        Component.childrenFactory = () => ComponentSet(strictMode: true);
         final component1 = Component();
         final component2 = Component();
         component1.add(component2);
         component2.add(Component());
-        expect(component1.children, isInstanceOf<MappingOrderedSet>());
+        expect(component1.children, isInstanceOf<ComponentSet>());
         expect(component1.children.strictMode, isTrue);
-        expect(component2.children, isInstanceOf<MappingOrderedSet>());
+        expect(component2.children, isInstanceOf<ComponentSet>());
         expect(component2.children.strictMode, isTrue);
       });
 
