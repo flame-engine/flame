@@ -58,11 +58,11 @@ class ComponentList extends Iterable<Component> {
   int _compareOrder(Component a, Component b) {
     final comparator = this.comparator;
     if (comparator == null) {
-      final ap = a._priority;
-      final bp = b._priority;
-      return ap < bp
+      final priorityA = a._priority;
+      final priorityB = b._priority;
+      return priorityA < priorityB
           ? -1
-          : ap > bp
+          : priorityA > priorityB
           ? 1
           : 0;
     }
@@ -234,19 +234,19 @@ class ComponentList extends Iterable<Component> {
   void _insertSorted(Component component) {
     _compact();
     final elements = _elements;
-    var lo = 0;
-    var hi = elements.length;
-    while (lo < hi) {
-      final mid = (lo + hi) >>> 1;
-      if (_compareOrder(elements[mid]!, component) <= 0) {
-        lo = mid + 1;
+    var low = 0;
+    var high = elements.length;
+    while (low < high) {
+      final middle = (low + high) >>> 1;
+      if (_compareOrder(elements[middle]!, component) <= 0) {
+        low = middle + 1;
       } else {
-        hi = mid;
+        high = middle;
       }
     }
-    elements.insert(lo, component);
-    component._containerIndex = lo;
-    for (var i = lo + 1; i < elements.length; i++) {
+    elements.insert(low, component);
+    component._containerIndex = low;
+    for (var i = low + 1; i < elements.length; i++) {
       elements[i]!._containerIndex = i;
     }
     _shiftCount++;
@@ -530,17 +530,17 @@ class _QueryCache<C extends Component> {
       list.add(component as C);
       return;
     }
-    var lo = 0;
-    var hi = list.length;
-    while (lo < hi) {
-      final mid = (lo + hi) >>> 1;
-      if (list[mid]._containerIndex < index) {
-        lo = mid + 1;
+    var low = 0;
+    var high = list.length;
+    while (low < high) {
+      final middle = (low + high) >>> 1;
+      if (list[middle]._containerIndex < index) {
+        low = middle + 1;
       } else {
-        hi = mid;
+        high = middle;
       }
     }
-    list.insert(lo, component as C);
+    list.insert(low, component as C);
   }
 
   /// Re-sorts the cache after the main array has been re-sorted (at which

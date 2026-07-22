@@ -24,13 +24,13 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
     final items = this.items;
     for (var i = 1; i < items.length; i++) {
       final item = items[i];
-      final key = item.aabb.min.x;
-      var j = i - 1;
-      while (j >= 0 && items[j].aabb.min.x > key) {
-        items[j + 1] = items[j];
-        j--;
+      final minX = item.aabb.min.x;
+      var previousIndex = i - 1;
+      while (previousIndex >= 0 && items[previousIndex].aabb.min.x > minX) {
+        items[previousIndex + 1] = items[previousIndex];
+        previousIndex--;
       }
-      items[j + 1] = item;
+      items[previousIndex + 1] = item;
     }
   }
 
