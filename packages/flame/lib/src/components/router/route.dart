@@ -144,7 +144,7 @@ class Route extends PositionComponent
   Future<void> _addLoadingPage() async {
     (_loadingPage ??= _loadingBuilder!()).addToParent(this);
     await _loadingPage!.loaded;
-    await add(_page!);
+    add(_page!);
     await _page!.loaded;
     _loadingPage!.removeFromParent();
   }

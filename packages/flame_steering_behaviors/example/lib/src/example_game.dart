@@ -15,7 +15,7 @@ class ExampleGame extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    await addAll([
+    addAll([
       for (var i = 0; i < 100; i++)
         Dot(position: Vector2.random()..multiply(size)),
     ]);

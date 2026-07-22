@@ -32,7 +32,7 @@ void main() {
         final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity();
 
-        await entity.add(screenWrappingBehavior);
+        entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
         screenWrappingBehavior.onCollisionEnd(screenHitbox);
@@ -46,7 +46,7 @@ void main() {
         final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(-25, 0));
 
-        await entity.add(screenWrappingBehavior);
+        entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
         screenWrappingBehavior.onCollisionEnd(screenHitbox);
@@ -60,7 +60,7 @@ void main() {
         final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(225, 0));
 
-        await entity.add(screenWrappingBehavior);
+        entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
         screenWrappingBehavior.onCollisionEnd(screenHitbox);
@@ -74,7 +74,7 @@ void main() {
         final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(0, -25));
 
-        await entity.add(screenWrappingBehavior);
+        entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
         screenWrappingBehavior.onCollisionEnd(screenHitbox);
@@ -88,7 +88,7 @@ void main() {
         final screenWrappingBehavior = ScreenWrappingBehavior();
         final entity = _TestEntity(position: Vector2(0, 225));
 
-        await entity.add(screenWrappingBehavior);
+        entity.add(screenWrappingBehavior);
         await game.ensureAdd(entity);
 
         screenWrappingBehavior.onCollisionEnd(screenHitbox);

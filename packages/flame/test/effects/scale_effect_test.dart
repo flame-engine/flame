@@ -12,7 +12,7 @@ void main() {
       final component = PositionComponent();
       await game.ensureAdd(component);
 
-      await component.add(
+      component.add(
         ScaleEffect.by(Vector2.all(2.0), EffectController(duration: 1)),
       );
       game.update(0);
@@ -34,7 +34,7 @@ void main() {
       await game.ensureAdd(component);
 
       component.scale = Vector2.all(1.0);
-      await component.add(
+      component.add(
         ScaleEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
@@ -59,7 +59,7 @@ void main() {
         Vector2.all(2.0),
         EffectController(duration: 1),
       );
-      await component.add(effect..removeOnFinish = false);
+      component.add(effect..removeOnFinish = false);
       var expectedScale = 1.0;
       for (var i = 0; i < 5; i++) {
         // After each reset the object will be scaled up twice
@@ -79,7 +79,7 @@ void main() {
         Vector2.all(1.0),
         EffectController(duration: 1),
       );
-      await component.add(effect..removeOnFinish = false);
+      component.add(effect..removeOnFinish = false);
       for (var i = 0; i < 5; i++) {
         component.scale = Vector2.all(1 + 4.0 * i);
         // After each reset the object will be scaled to the value of
@@ -94,7 +94,7 @@ void main() {
       final component = PositionComponent()..flipVertically();
       await game.ensureAdd(component);
 
-      await component.add(
+      component.add(
         ScaleEffect.by(Vector2.all(5), EffectController(duration: 10)),
       );
       component.add(
@@ -138,7 +138,7 @@ void main() {
           infinite: true,
         ),
       );
-      await component.add(effect);
+      component.add(effect);
 
       var totalTime = 0.0;
       while (totalTime < 999.9) {

@@ -33,12 +33,12 @@ void main() {
       (game) async {
         final parent = Component();
         final child = _DelayedComponent();
-        final future = child.addToParent(parent);
+        child.addToParent(parent);
         expect(parent.isMounted, false);
         expect(parent.isLoaded, false);
         expect(child.isMounted, false);
         expect(child.isLoaded, false); // not yet..
-        await future;
+        await child.loaded;
         expect(parent.isMounted, false);
         expect(child.isLoaded, true);
         expect(child.isMounted, false);

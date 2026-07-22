@@ -2458,8 +2458,8 @@ void main() {
           );
           final hitboxA = CircleHitbox();
           final hitboxB = CircleHitbox();
-          await componentA.add(hitboxA);
-          await componentB.add(hitboxB);
+          componentA.add(hitboxA);
+          componentB.add(hitboxB);
           await game.ensureAddAll([componentA, componentB]);
           // componentA: center=(10,10), scaledRadius=10
           // componentB: center=(20,5), scaledRadius=5
@@ -2488,8 +2488,8 @@ void main() {
               );
               final hitboxA = CircleHitbox();
               final hitboxB = CircleHitbox();
-              await componentA.add(hitboxA);
-              await componentB.add(hitboxB);
+              componentA.add(hitboxA);
+              componentB.add(hitboxB);
               await game.ensureAddAll([componentA, componentB]);
               // componentA: center=(5,5), radius=5
               // componentB: center=(20,5), radius=5
@@ -2521,8 +2521,8 @@ void main() {
             angle: pi / 2,
           );
           final hitboxA = RectangleHitbox();
-          await child.add(hitboxA);
-          await parent.add(child);
+          child.add(hitboxA);
+          parent.add(child);
 
           // Block from (-2,3) to (2,7) straddles the right edge at x=0.
           final blockComp = PositionComponent(
@@ -2530,7 +2530,7 @@ void main() {
             size: Vector2.all(4),
           );
           final hitboxB = RectangleHitbox();
-          await blockComp.add(hitboxB);
+          blockComp.add(hitboxB);
 
           await game.ensureAddAll([parent, blockComp]);
           game.update(0);
@@ -2561,8 +2561,8 @@ void main() {
             Vector2(10, 10),
             Vector2(0, 10),
           ]);
-          await child.add(hitbox);
-          await parent.add(child);
+          child.add(hitbox);
+          parent.add(child);
 
           // Block from (21,5) to (25,9) straddles the left edge.
           final blockComp = PositionComponent(
@@ -2570,7 +2570,7 @@ void main() {
             size: Vector2.all(4),
           );
           final hitboxB = RectangleHitbox();
-          await blockComp.add(hitboxB);
+          blockComp.add(hitboxB);
 
           await game.ensureAddAll([parent, blockComp]);
           game.update(0);
@@ -2601,9 +2601,9 @@ void main() {
             size: Vector2.all(10),
           );
           final hitbox = RectangleHitbox();
-          await child.add(hitbox);
-          await midParent.add(child);
-          await grandparent.add(midParent);
+          child.add(hitbox);
+          midParent.add(child);
+          grandparent.add(midParent);
 
           // Block from (-12,8) to (-8,12) straddles the left edge at x=-10.
           final blockComp = PositionComponent(
@@ -2611,7 +2611,7 @@ void main() {
             size: Vector2.all(4),
           );
           final hitboxB = RectangleHitbox();
-          await blockComp.add(hitboxB);
+          blockComp.add(hitboxB);
 
           await game.ensureAddAll([grandparent, blockComp]);
           game.update(0);

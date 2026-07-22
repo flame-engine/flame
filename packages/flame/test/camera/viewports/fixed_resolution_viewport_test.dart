@@ -28,7 +28,7 @@ void main() {
         game.camera.viewport = viewport;
 
         final child = _OnParentResizeTesterComponent();
-        await child.addToParent(viewport);
+        child.addToParent(viewport);
 
         await game.ready();
 

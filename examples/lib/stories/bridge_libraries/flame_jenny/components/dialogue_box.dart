@@ -16,7 +16,7 @@ class DialogueBoxComponent extends SpriteComponent with HasGameReference {
       'dialogue_box.png',
       srcSize: spriteSize,
     );
-    await addAll([buttonRow, textBox]);
+    addAll([buttonRow, textBox]);
     return super.onLoad();
   }
 

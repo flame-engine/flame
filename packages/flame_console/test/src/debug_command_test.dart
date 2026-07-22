@@ -14,7 +14,7 @@ void main() {
       'toggle debug mode on components',
       FlameGame.new,
       (game) async {
-        await game.world.addAll(components);
+        game.world.addAll(components);
 
         await game.ready();
 

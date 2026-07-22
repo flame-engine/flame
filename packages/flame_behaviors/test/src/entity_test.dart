@@ -32,7 +32,7 @@ void main() {
       setUp: (game, tester) async {
         final behavior = _TestBehavior();
         final entity = _TestEntity();
-        await entity.add(behavior);
+        entity.add(behavior);
         await game.ensureAdd(entity);
       },
       verify: (game, tester) async {

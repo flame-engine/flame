@@ -647,12 +647,18 @@ class Component {
   /// The cost of this flexibility is that the component won't be added right
   /// away. Instead, it will be placed into a queue, and then added later, after
   /// it has finished loading, but no sooner than on the next game tick.
-  /// You can await [FlameGame.lifecycleEventsProcessed] like so:
+  ///
+  /// This method is synchronous: it returns immediately without waiting for the
+  /// component to load or mount. This makes it safe to call from anywhere,
+  /// including inside [update] or a loop that spawns many components, without
+  /// having to `await` it or wrap it in `unawaited`. If you need to wait for a
+  /// particular lifecycle stage, await the child's [loaded], [mounted], or
+  /// [removed] future instead:
   ///
   /// ```dart
   /// world.add(coin);
-  /// await game.lifecycleEventsProcessed;
-  /// // The coin is now guaranteed to be added.
+  /// await coin.mounted;
+  /// // The coin is now guaranteed to be mounted.
   /// ```
   ///
   /// When multiple children are scheduled to be added to the same parent, we
@@ -666,32 +672,19 @@ class Component {
   /// its mounting will be delayed until such time when the parent becomes
   /// mounted.
   ///
-  /// This method returns a future that completes when the component is done
-  /// loading, and mounting if the parent is currently mounted. However, this
-  /// future will not guarantee that the component will become "fully mounted":
-  /// it still needs to be added to the parent's children list, and that
-  /// operation will only be done on the next game tick.
-  ///
   /// A component can only be added to one parent at a time. It is an error to
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [parent] setter.
-  FutureOr<void> add(Component component) => _addChild(component);
+  void add(Component component) => _addChild(component);
 
   /// Adds this component as a child of [parent] (see [add] for details).
-  FutureOr<void> addToParent(Component parent) => parent._addChild(this);
+  void addToParent(Component parent) => parent._addChild(this);
 
   /// A convenience method to [add] multiple children at once.
-  Future<void> addAll(Iterable<Component> components) async {
-    List<Future<void>>? futures;
+  void addAll(Iterable<Component> components) {
     for (final component in components) {
-      final future = add(component);
-      if (future is Future) {
-        (futures ??= []).add(future);
-      }
-    }
-    if (futures != null) {
-      await Future.wait(futures);
+      add(component);
     }
   }
 
@@ -1010,7 +1003,10 @@ class Component {
     _setLoadingBit();
     final onLoadFuture = onLoad();
     if (onLoadFuture is Future) {
-      return onLoadFuture.then((dynamic _) => _finishLoading());
+      return onLoadFuture.then(
+        (dynamic _) => _finishLoading(),
+        onError: _failLoading,
+      );
     } else {
       _finishLoading();
     }
@@ -1021,6 +1017,22 @@ class Component {
     _setLoadedBit();
     _loadCompleter?.complete();
     _loadCompleter = null;
+  }
+
+  /// Surfaces an error thrown by [onLoad].
+  ///
+  /// Since [add] is synchronous and no longer returns the loading future,
+  /// a load error is reported through the [loaded] future, so it can be caught
+  /// with `await component.loaded`. If nothing is awaiting [loaded], the error
+  /// is rethrown instead of being silently swallowed.
+  void _failLoading(Object error, StackTrace stackTrace) {
+    final completer = _loadCompleter;
+    if (completer != null) {
+      _loadCompleter = null;
+      completer.completeError(error, stackTrace);
+    } else {
+      Error.throwWithStackTrace(error, stackTrace);
+    }
   }
 
   /// Mount the component that is already loaded and has a mounted parent.

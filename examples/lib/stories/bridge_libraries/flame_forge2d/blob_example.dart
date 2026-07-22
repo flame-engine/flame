@@ -29,10 +29,12 @@ class BlobWorld extends Forge2DWorld
       ..dampingRatio = 1.0
       ..collideConnected = false;
 
-    await addAll([
+    final blobParts = [
       for (var i = 0; i < 20; i++)
         BlobPart(i, jointDef, blobRadius, blobCenter),
-    ]);
+    ];
+    addAll(blobParts);
+    await Future.wait(blobParts.map((part) => part.loaded));
     createJoint(ConstantVolumeJoint(physicsWorld, jointDef));
   }
 

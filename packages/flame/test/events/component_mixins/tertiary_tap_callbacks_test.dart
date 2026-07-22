@@ -182,7 +182,7 @@ void main() {
       'NonPrimaryTapDispatcher is added to game when the callback is mounted',
       (game) async {
         final component = _TertiaryTapCallbacksComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
 
         expect(game.firstChild<NonPrimaryTapDispatcher>(), isNotNull);
@@ -193,7 +193,7 @@ void main() {
       'NonPrimaryTapDispatcher persists after component is removed',
       (game) async {
         final component = _TertiaryTapCallbacksComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
 
         expect(game.firstChild<NonPrimaryTapDispatcher>(), isNotNull);

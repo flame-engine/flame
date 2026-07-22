@@ -12,7 +12,7 @@ void main() {
       final component = _PaintComponent();
       await game.ensureAdd(component);
       const color = Colors.red;
-      await component.add(
+      component.add(
         ColorEffect(color, EffectController(duration: 1)),
       );
       game.update(0);
@@ -49,7 +49,7 @@ void main() {
           color,
           EffectController(duration: 1),
         );
-        await component.add(effect);
+        component.add(effect);
         game.update(0.5);
 
         expect(
@@ -79,7 +79,7 @@ void main() {
           color,
           EffectController(duration: 1),
         );
-        await component.add(effect);
+        component.add(effect);
         game.update(0.5);
 
         expect(

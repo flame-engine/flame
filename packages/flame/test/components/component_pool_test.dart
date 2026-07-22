@@ -71,7 +71,7 @@ void main() {
 
           final original = pool.acquire();
           original.position.setValues(10, 20);
-          await game.add(original);
+          game.add(original);
           await game.ready();
 
           original.removeFromParent();
@@ -96,7 +96,7 @@ void main() {
           );
 
           final component = pool.acquire();
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           expect(component.isMounted, true);
@@ -121,7 +121,7 @@ void main() {
 
           // First cycle: acquire → mount → remove
           final comp = pool.acquire();
-          await game.add(comp);
+          game.add(comp);
           await game.ready();
           comp.removeFromParent();
           game.update(0);
@@ -138,7 +138,7 @@ void main() {
           expect(pool.availableCount, 0);
 
           // Mount it again
-          await game.add(recycled);
+          game.add(recycled);
           await game.ready();
 
           // Still in use (mounted, not yet removed)
@@ -164,7 +164,7 @@ void main() {
           for (var i = 0; i < 3; i++) {
             final component = pool.acquire();
             component.position.setValues(100, 200);
-            await game.add(component);
+            game.add(component);
             await game.ready();
 
             expect(component.isMounted, true);
@@ -194,9 +194,9 @@ void main() {
           final component2 = pool.acquire();
           final component3 = pool.acquire();
 
-          await game.add(component1);
-          await game.add(component2);
-          await game.add(component3);
+          game.add(component1);
+          game.add(component2);
+          game.add(component3);
           await game.ready();
 
           component1.removeFromParent();
@@ -236,9 +236,9 @@ void main() {
           final comp2 = pool.acquire();
           final comp3 = pool.acquire();
 
-          await game.add(comp1);
-          await game.add(comp2);
-          await game.add(comp3);
+          game.add(comp1);
+          game.add(comp2);
+          game.add(comp3);
           await game.ready();
 
           comp1.removeFromParent();
@@ -276,7 +276,7 @@ void main() {
           );
 
           final component = pool.acquire();
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           pool.clear();

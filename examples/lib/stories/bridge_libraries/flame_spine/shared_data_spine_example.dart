@@ -45,7 +45,7 @@ class SharedDataSpineExample extends FlameGame with TapCallbacks {
       spineboy.animationState.setAnimation(0, 'walk', true);
       spineboys.add(spineboy);
     }
-    await addAll(spineboys);
+    addAll(spineboys);
   }
 
   @override

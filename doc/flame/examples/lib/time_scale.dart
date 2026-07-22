@@ -10,7 +10,7 @@ class TimeScaleGame extends FlameGame with HasTimeScale {
 
   @override
   Future<void> onLoad() async {
-    await add(
+    add(
       EmberPlayer(
         position: size / 2,
         size: size / 4,

@@ -17,7 +17,7 @@ void main() {
 
       final lottieComponent = LottieComponent(composition);
 
-      await game.world.add(lottieComponent);
+      game.world.add(lottieComponent);
       await game.ready();
 
       expect(game.world.children, [lottieComponent]);

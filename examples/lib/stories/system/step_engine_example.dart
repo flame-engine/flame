@@ -55,7 +55,7 @@ class StepEngineExample extends FlameGame
       hudComponents: [_controlsText],
     );
 
-    await addAll([world, cameraComponent]);
+    addAll([world, cameraComponent]);
   }
 
   @override

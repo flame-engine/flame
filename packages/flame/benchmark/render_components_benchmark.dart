@@ -33,7 +33,7 @@ class RenderComponentsBenchmark extends AsyncBenchmarkBase {
     _game = FlameGame();
     await mountGame(_game, size: Vector2.all(100.0));
 
-    await _game.addAll(
+    _game.addAll(
       List.generate(
         _amountComponents,
         (_) => _BenchmarkComponent(random: random, level: 1),
@@ -63,7 +63,7 @@ class _BenchmarkComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     if (random.nextDouble() <= level) {
-      await addAll(
+      addAll(
         List.generate(
           random.nextInt(2) + 1,
           (_) {

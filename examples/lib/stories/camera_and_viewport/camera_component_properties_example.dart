@@ -46,7 +46,7 @@ class CameraComponentPropertiesExample extends FlameGame {
         ..strokeWidth = 0.25
         ..color = const Color(0xaaffff00),
     );
-    await world.add(_cullRect);
+    world.add(_cullRect);
     camera.mounted.then((_) {
       updateSize(canvasSize);
     });
