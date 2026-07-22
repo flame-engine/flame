@@ -433,7 +433,7 @@ class PausePage extends Component
   void onTapUp(TapUpEvent event) => game.router.pop();
 }
 
-class DecoratedWorld extends World with HasTimeScale {
+class DecoratedWorld extends World with CustomTraversal, HasTimeScale {
   PaintDecorator? decorator;
 
   @override
