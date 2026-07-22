@@ -285,9 +285,9 @@ class Component {
   ///
   /// ```dart
   /// coin.parent = inventory;
-  /// // The inventory.children set does not include coin yet.
+  /// // The inventory.children list does not include coin yet.
   /// await game.lifecycleEventsProcessed;
-  /// // The inventory.children set now includes coin.
+  /// // The inventory.children list now includes coin.
   /// ```
   Component? get parent => _parent;
   Component? _parent;
@@ -300,7 +300,7 @@ class Component {
   }
 
   /// This field should be used internally for functionality when you don't need
-  /// to create a component set for the children if one doesn't already exist.
+  /// to create a children list if one doesn't already exist.
   ///
   /// This makes it possible to have lighter components that don't have any
   /// children.
@@ -543,7 +543,7 @@ class Component {
   /// its [children] yet.
   ///
   /// After this method completes, the component is added to the parent's
-  /// children set, and then the flag [isMounted] set to true.
+  /// children list, and then the flag [isMounted] set to true.
   ///
   /// Example:
   /// ```dart

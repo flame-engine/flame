@@ -53,7 +53,7 @@ class ComponentList extends Iterable<Component> {
   int _tombstones = 0;
 
   /// Incremented whenever existing elements change their position within
-  /// [_elements] (mid-list insertion, sorting, or compaction). Iterators use
+  /// [_elements] (middle-list insertion, sorting, or compaction). Iterators use
   /// this to detect concurrent structural modification.
   int _shiftCount = 0;
 
