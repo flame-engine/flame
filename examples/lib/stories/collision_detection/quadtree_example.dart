@@ -310,7 +310,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 //#region Environment
 
 class Brick extends SpriteComponent
-    with CollisionCallbacks, GameCollidable, CustomTraversal, UpdateOnce {
+    with CollisionCallbacks, GameCollidable, UpdateOnce {
   Brick({
     required super.position,
     required super.size,
@@ -332,7 +332,7 @@ class Brick extends SpriteComponent
 }
 
 class Water extends SpriteComponent
-    with CollisionCallbacks, GameCollidable, CustomTraversal, UpdateOnce {
+    with CollisionCallbacks, GameCollidable, UpdateOnce {
   Water({
     required super.position,
     required super.size,
@@ -363,7 +363,7 @@ mixin GameCollidable on PositionComponent {
 
 //#region Utils
 
-mixin UpdateOnce on PositionComponent, CustomTraversal {
+mixin UpdateOnce on PositionComponent implements CustomTraversal {
   bool updateOnce = true;
 
   @override

@@ -21,7 +21,7 @@ import 'package:meta/meta.dart';
 ///
 /// Routes are managed by the [RouterComponent] component.
 class Route extends PositionComponent
-    with ParentIsA<RouterComponent>, CustomTraversal, HasTimeScale {
+    with ParentIsA<RouterComponent>, HasTimeScale {
   Route(
     Component Function()? builder, {
     this._loadingBuilder,

@@ -421,7 +421,7 @@ class PausePage extends Component with TapCallbacks, HasGameRef<RouterGame> {
   void onTapUp(TapUpEvent event) => gameRef.router.pop();
 }
 
-class DecoratedWorld extends World with CustomTraversal, HasTimeScale {
+class DecoratedWorld extends World with HasTimeScale {
   PaintDecorator? decorator;
 
   @override
