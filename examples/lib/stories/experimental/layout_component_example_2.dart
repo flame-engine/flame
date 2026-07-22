@@ -82,7 +82,7 @@ class LayoutDemo2 extends LinearLayoutComponent {
   FutureOr<void> onLoad() {
     super.onLoad();
     addAll(
-      createComponentList(
+      createLayoutChildren(
         direction: direction,
       ),
     );
@@ -95,7 +95,7 @@ class LayoutDemo2 extends LinearLayoutComponent {
   /// This needs to be a method rather than a static list
   /// because each of these components needs to be recreated.
   /// Otherwise, they'll be operated on by reference and re-parented.
-  static List<Component> createComponentList({
+  static List<Component> createLayoutChildren({
     required Direction direction,
   }) {
     return [

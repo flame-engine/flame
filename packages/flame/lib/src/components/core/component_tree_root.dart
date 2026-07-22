@@ -151,6 +151,9 @@ class ComponentTreeRoot extends Component {
     }
     final children = component.children..compact();
     for (final child in children) {
+      if (child.updatePaused) {
+        continue;
+      }
       _flatUpdateList.add(child);
       if (child is! CustomTraversal) {
         _flattenChildrenOf(child);
