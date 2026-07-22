@@ -10,7 +10,7 @@ Future<void> main() async {
   await GpuBackend.initialize(); // Optional but some backends might require it.
 
   runApp(
-    GameWidget.controlled(
+    GameWidget.managed(
       gameFactory: ExampleGame3D.new,
       overlayBuilderMap: {
         'console': (BuildContext context, ExampleGame3D game) {
