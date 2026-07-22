@@ -46,7 +46,7 @@ EffectController _createController({
 /// [EffectController] as a parameter. This is because the timing of a sequence
 /// effect depends on the timings of individual effects, and cannot be
 /// represented as a regular effect controller.
-class SequenceEffect extends Effect with CustomTraversal {
+class SequenceEffect extends Effect implements CustomTraversal {
   SequenceEffect(
     List<Effect> effects, {
     bool alternate = false,
