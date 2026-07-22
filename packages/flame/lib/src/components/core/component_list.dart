@@ -65,6 +65,20 @@ class ComponentList extends Iterable<Component> {
   /// The per-type query caches, created by [register].
   Map<Type, _QueryCache<Component>>? _queries;
 
+  /// A monotonically increasing counter, bumped on every membership or order
+  /// change of any [ComponentList] (adds, removes, clears, reorders). The
+  /// root's flattened update list compares against this to know when it must
+  /// be rebuilt. Note that this is bumped by structural changes anywhere,
+  /// including in other games or detached trees, so a bump means "possibly
+  /// changed", never the reverse.
+  @internal
+  static int structureVersion = 0;
+
+  /// Compacts the tombstones out of the backing array, restoring exact
+  /// element indices. Safe to call only when no iteration is in progress.
+  @internal
+  void compact() => _compact();
+
   @override
   int get length => _length;
 
@@ -166,6 +180,7 @@ class ComponentList extends Iterable<Component> {
     }
     component._containerList = this;
     _length++;
+    structureVersion++;
     final queries = _queries;
     if (queries != null) {
       for (final cache in queries.values) {
@@ -210,6 +225,7 @@ class ComponentList extends Iterable<Component> {
     component._containerIndex = -1;
     _length--;
     _tombstones++;
+    structureVersion++;
     final queries = _queries;
     if (queries != null) {
       for (final cache in queries.values) {
@@ -244,6 +260,7 @@ class ComponentList extends Iterable<Component> {
     _length = 0;
     _tombstones = 0;
     _shiftCount++;
+    structureVersion++;
     _queries?.forEach((_, cache) => cache.data.clear());
   }
 
@@ -269,6 +286,7 @@ class ComponentList extends Iterable<Component> {
       return;
     }
     _shiftCount++;
+    structureVersion++;
     // List.sort is not stable, and the stable alternatives (such as mergeSort
     // from package:collection) allocate a scratch buffer on every call.
     // Breaking ties by the pre-sort index costs nothing extra, since the index
