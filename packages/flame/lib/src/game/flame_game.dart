@@ -183,9 +183,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     if (parent != null) {
       update(dt);
     }
-    for (final component in children) {
-      component.updateTree(dt);
-    }
+    updateChildrenFlat(dt);
   }
 
   /// This passes the new size along to every component in the tree via their
