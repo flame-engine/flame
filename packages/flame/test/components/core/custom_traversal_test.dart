@@ -69,18 +69,18 @@ class _DtRecorder extends Component {
   }
 }
 
-class _PlainBarrier extends Component with CustomTraversal {
+class _PlainBarrier extends Component implements CustomTraversal {
   _PlainBarrier({super.children});
 }
 
-class _HalfSpeedBarrier extends Component with CustomTraversal {
+class _HalfSpeedBarrier extends Component implements CustomTraversal {
   _HalfSpeedBarrier({super.children});
 
   @override
   void updateSubtree(double dt) => super.updateSubtree(dt / 2);
 }
 
-class _FrozenBarrier extends _DtRecorder with CustomTraversal {
+class _FrozenBarrier extends _DtRecorder implements CustomTraversal {
   _FrozenBarrier({List<Component>? children}) {
     if (children != null) {
       addAll(children);
