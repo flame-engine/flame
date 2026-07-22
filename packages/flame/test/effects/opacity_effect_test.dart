@@ -29,7 +29,7 @@ void main() {
       await game.ensureAdd(component);
 
       component.setOpacity(0.2);
-      await component.add(
+      component.add(
         OpacityEffect.by(0.4, EffectController(duration: 1)),
       );
       game.update(0);
@@ -51,7 +51,7 @@ void main() {
       await game.ensureAdd(component);
 
       component.setOpacity(0.2);
-      await component.add(
+      component.add(
         OpacityEffect.to(0.4, EffectController(duration: 1)),
       );
       game.update(0);
@@ -118,10 +118,10 @@ void main() {
       component.setOpacity(0.0);
       await game.ensureAdd(component);
 
-      await component.add(
+      component.add(
         OpacityEffect.by(0.5, EffectController(duration: 10)),
       );
-      await component.add(
+      component.add(
         OpacityEffect.by(
           0.5,
           EffectController(
@@ -160,7 +160,7 @@ void main() {
 
         // Repeat the test 3 times
         for (var i = 0; i < 3; ++i) {
-          await component.add(
+          component.add(
             OpacityEffect.fadeOut(EffectController(duration: 3)),
           );
 
@@ -183,7 +183,7 @@ void main() {
         final component = _PaintComponent();
         await game.ensureAdd(component);
 
-        await component.add(
+        component.add(
           OpacityEffect.fadeOut(
             EffectController(
               duration: 3,
@@ -207,7 +207,7 @@ void main() {
         );
         await game.ensureAdd(component);
 
-        await component.add(
+        component.add(
           OpacityEffect.fadeOut(
             EffectController(duration: 1),
             target: component.opacityProviderOf('bluePaint'),
@@ -237,7 +237,7 @@ void main() {
         );
         await game.ensureAdd(component);
 
-        await component.add(
+        component.add(
           OpacityEffect.fadeOut(EffectController(duration: 1)),
         );
 
@@ -277,7 +277,7 @@ void main() {
         );
         await game.ensureAdd(component);
 
-        await component.add(
+        component.add(
           OpacityEffect.to(
             targetOpacity,
             EffectController(duration: 1),
@@ -328,7 +328,7 @@ void main() {
         );
         await game.ensureAdd(component);
 
-        await component.add(
+        component.add(
           OpacityEffect.fadeIn(
             EffectController(duration: 1),
             target: component.opacityProviderOfList(
@@ -368,7 +368,7 @@ void main() {
           infinite: true,
         ),
       );
-      await component.add(effect);
+      component.add(effect);
 
       var totalTime = 0.0;
       while (totalTime < 999.9) {

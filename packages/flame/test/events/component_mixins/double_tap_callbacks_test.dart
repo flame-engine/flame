@@ -152,7 +152,7 @@ void main() {
       'DoubleTapDispatcher is added to game when the callback is mounted',
       (game) async {
         final component = _DoubleTapCallbacksComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
 
         expect(game.firstChild<DoubleTapDispatcher>(), isNotNull);

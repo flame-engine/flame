@@ -23,6 +23,6 @@ class Background extends SpriteComponent with HasGameReference<MyGame> {
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await world.add(Background());
+    world.add(Background());
   }
 }

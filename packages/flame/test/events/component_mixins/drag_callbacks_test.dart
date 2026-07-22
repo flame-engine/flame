@@ -12,7 +12,7 @@ void main() {
     testWithFlameGame(
       'make sure DragCallback components can be added to a FlameGame',
       (game) async {
-        await game.add(DragCallbacksComponent());
+        game.add(DragCallbacksComponent());
         await game.ready();
         expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
@@ -391,7 +391,7 @@ void main() {
       game.camera.viewfinder.zoom = 2;
 
       final deltas = <Vector2>[];
-      await game.world.add(
+      game.world.add(
         DragWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),
@@ -428,7 +428,7 @@ void main() {
       game.camera.viewfinder.zoom = 1 / 2;
 
       final deltas = <Vector2>[];
-      await game.world.add(
+      game.world.add(
         DragWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),

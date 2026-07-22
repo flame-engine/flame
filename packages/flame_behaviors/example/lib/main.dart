@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 class ExampleGame extends FlameGame with EntityMixin, HasCollisionDetection {
   @override
   Future<void> onLoad() async {
-    await add(FpsTextComponent(position: Vector2.zero()));
-    await add(ScreenHitbox());
+    add(FpsTextComponent(position: Vector2.zero()));
+    add(ScreenHitbox());
 
     // Game-specific behaviors
-    await add(SpawningBehavior());
+    add(SpawningBehavior());
 
     return super.onLoad();
   }

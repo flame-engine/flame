@@ -20,7 +20,7 @@ starts to drop in FPS, this is without any sprite batching and such.
 
   @override
   Future<void> onLoad() async {
-    await camera.viewport.addAll([
+    camera.viewport.addAll([
       FpsTextComponent(
         position: size - Vector2(10, 50),
         anchor: Anchor.bottomRight,

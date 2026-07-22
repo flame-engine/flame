@@ -212,6 +212,19 @@ class MyGame extends FlameGame {
 The two approaches can be combined freely: the children specified within the constructor will be
 added first, and then any additional child components after.
 
+The `add()`, `addAll()`, and `addToParent()` methods are synchronous: they return immediately
+without waiting for the child to load or mount. This makes them safe to call from anywhere,
+including inside `update()` or a loop that spawns many components, without having to `await` them
+or wrap them in `unawaited`. If you need to wait until a child has reached a given lifecycle stage,
+await its `loaded`, `mounted`, or `removed` future instead (see the lifecycle getters under
+[Component lifecycle](#component-lifecycle)):
+
+```dart
+world.add(coin);
+await coin.mounted;
+// The coin is now guaranteed to be mounted.
+```
+
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
 in the same order as they were scheduled for addition.

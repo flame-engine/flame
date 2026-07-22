@@ -22,7 +22,8 @@ void main() {
         await game.ensureAdd(provider);
 
         final component = _PlayerReader();
-        expect(() => provider.ensureAdd(component), throwsAssertionError);
+        provider.add(component);
+        await expectLater(component.loaded, throwsAssertionError);
       },
     );
   });

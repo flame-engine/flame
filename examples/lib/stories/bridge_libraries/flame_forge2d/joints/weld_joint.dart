@@ -40,7 +40,8 @@ class WeldJointWorld extends Forge2DWorld
       color: Colors.white,
     );
 
-    await addAll([leftPillar, rightPillar]);
+    addAll([leftPillar, rightPillar]);
+    await Future.wait([leftPillar.loaded, rightPillar.loaded]);
 
     createBridge(leftPillar, rightPillar);
   }
@@ -71,7 +72,8 @@ class WeldJointWorld extends Forge2DWorld
         width: sectionWidth,
         height: 1,
       );
-      await add(section);
+      add(section);
+      await section.loaded;
 
       if (prevSection != null) {
         createWeldJoint(

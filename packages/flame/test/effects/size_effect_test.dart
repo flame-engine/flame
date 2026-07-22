@@ -12,7 +12,7 @@ void main() {
       await game.ensureAdd(component);
 
       component.size = Vector2.all(1.0);
-      await component.add(
+      component.add(
         SizeEffect.by(Vector2.all(1.0), EffectController(duration: 1)),
       );
       game.update(0);
@@ -34,7 +34,7 @@ void main() {
       await game.ensureAdd(component);
 
       component.size = Vector2.all(1.0);
-      await component.add(
+      component.add(
         SizeEffect.to(Vector2.all(3.0), EffectController(duration: 1)),
       );
       game.update(0);
@@ -59,7 +59,7 @@ void main() {
         Vector2.all(1.0),
         EffectController(duration: 1),
       );
-      await component.add(effect..removeOnFinish = false);
+      component.add(effect..removeOnFinish = false);
       final expectedSize = Vector2.zero();
       for (var i = 0; i < 5; i++) {
         // After each reset the object will be sized up by Vector2(1, 1)
@@ -94,10 +94,10 @@ void main() {
       final component = _ResizableComponent();
       await game.ensureAdd(component);
 
-      await component.add(
+      component.add(
         SizeEffect.by(Vector2.all(5), EffectController(duration: 10)),
       );
-      await component.add(
+      component.add(
         SizeEffect.by(
           Vector2.all(0.5),
           EffectController(
@@ -133,7 +133,7 @@ void main() {
           infinite: true,
         ),
       );
-      await component.add(effect);
+      component.add(effect);
 
       var totalTime = 0.0;
       var tolerance = toleranceFloat32(0);

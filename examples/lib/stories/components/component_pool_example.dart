@@ -56,7 +56,7 @@ class _BallWorld extends World with TapCallbacks {
 
     // Add a stats display to show pool information
     statsDisplay = _StatsDisplay(pool: ballPool);
-    await add(statsDisplay);
+    add(statsDisplay);
   }
 
   @override

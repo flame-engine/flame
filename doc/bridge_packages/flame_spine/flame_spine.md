@@ -40,7 +40,7 @@ class FlameSpineExample extends FlameGame {
 
   // Set the "walk" animation on track 0 in looping mode
   spineboy.animationState.setAnimationByName(0, 'walk', true);
-  await add(spineboy);
+  add(spineboy);
  }
 
  @override

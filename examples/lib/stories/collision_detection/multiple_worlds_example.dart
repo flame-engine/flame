@@ -24,7 +24,7 @@ class MultipleWorldsExample extends FlameGame {
     final world2 = CollisionDetectionWorld();
     final camera1 = CameraComponent(world: world1);
     final camera2 = CameraComponent(world: world2);
-    await addAll([world1, world2, camera1, camera2]);
+    addAll([world1, world2, camera1, camera2]);
     final ember1 = CollidableEmber(position: Vector2(75, 75));
     final ember2 = CollidableEmber(position: Vector2(-75, 75));
     final ember3 = CollidableEmber(position: Vector2(75, -75));

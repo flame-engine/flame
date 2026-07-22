@@ -73,7 +73,8 @@ void main() {
         await game.ensureAdd(provider);
 
         final component = _PlayerListener();
-        expect(() => provider.ensureAdd(component), throwsAssertionError);
+        provider.add(component);
+        await expectLater(game.ready(), throwsAssertionError);
       },
     );
 

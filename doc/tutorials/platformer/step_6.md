@@ -128,7 +128,7 @@ class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
 
     for (var i = 1; i <= game.health; i++) {
       final positionX = 40 * i;
-      await add(
+      add(
         HeartHealthComponent(
           heartNumber: i,
           position: Vector2(positionX.toDouble(), 20),

@@ -65,8 +65,8 @@ class GameWorld extends World with HasGameReference {
       position: Vector2(gameWidth * 0.76, gameHeight * 0.9),
     );
 
-    await house.add(door);
-    await addAll([house, agent]);
+    house.add(door);
+    addAll([house, agent]);
   }
 }
 
@@ -126,7 +126,7 @@ class Agent extends PositionComponent with HasBehaviorTree {
 
   @override
   Future<void> onLoad() async {
-    await add(CircleComponent(radius: 3, anchor: Anchor.center));
+    add(CircleComponent(radius: 3, anchor: Anchor.center));
     _setupBehaviorTree();
     super.onLoad();
   }

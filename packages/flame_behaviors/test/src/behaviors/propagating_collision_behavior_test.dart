@@ -163,7 +163,7 @@ void main() {
         );
 
         await expectLater(() async {
-          await entity.add(propagatingCollisionBehavior);
+          entity.add(propagatingCollisionBehavior);
           game.update(0);
         }, failsAssert('parent must be a PositionComponent'));
       },

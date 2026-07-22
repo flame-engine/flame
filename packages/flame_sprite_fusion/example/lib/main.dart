@@ -36,7 +36,7 @@ class PlatformerGame extends FlameGame {
       mapJsonFile: 'map.json',
       spriteSheetFile: 'spritesheet.png',
     );
-    await world.add(map);
+    world.add(map);
 
     camera.moveTo(map.size * 0.5);
   }

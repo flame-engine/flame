@@ -48,13 +48,13 @@ class ComponentChurnBenchmark extends AsyncBenchmarkBase {
   Future<void> setup() async {
     _game = FlameGame();
     await mountGame(_game);
-    await _game.world.addAll(
+    _game.world.addAll(
       List.generate(staticPopulation, (_) => Component()),
     );
     for (var i = 0; i < _liveBatches; i++) {
       final batch = _newBatch();
       _batches.addLast(batch);
-      await _game.world.addAll(batch);
+      _game.world.addAll(batch);
     }
     await _game.ready();
   }
@@ -65,7 +65,7 @@ class ComponentChurnBenchmark extends AsyncBenchmarkBase {
       _game.world.removeAll(_batches.removeFirst());
       final batch = _newBatch();
       _batches.addLast(batch);
-      await _game.world.addAll(batch);
+      _game.world.addAll(batch);
       _game.update(_dt);
     }
   }
@@ -97,7 +97,7 @@ class MassAddRemoveBenchmark extends AsyncBenchmarkBase {
   Future<void> run() async {
     for (var i = 0; i < _amountCycles; i++) {
       final components = List.generate(_amountComponents, (_) => Component());
-      await _game.world.addAll(components);
+      _game.world.addAll(components);
       _game.update(_dt);
       _game.world.removeAll(components);
       _game.update(_dt);

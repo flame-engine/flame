@@ -528,15 +528,16 @@ void main() {
         'Throws assertion when target is set without area',
         (game) async {
           final target = Component();
+          final spawn = SpawnComponent(
+            factory: (_) => PositionComponent(),
+            period: 1,
+            target: target,
+          );
 
-          expectLater(
-            game.ensureAdd(
-              SpawnComponent(
-                factory: (_) => PositionComponent(),
-                period: 1,
-                target: target,
-              ),
-            ),
+          game.add(spawn);
+
+          await expectLater(
+            spawn.loaded,
             throwsA(isA<AssertionError>()),
           );
         },

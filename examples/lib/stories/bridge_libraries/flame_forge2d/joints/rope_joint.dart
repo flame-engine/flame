@@ -36,7 +36,8 @@ class RopeJointWorld extends Forge2DWorld
       width: handleWidth,
       height: 3,
     );
-    await add(box);
+    add(box);
+    await box.loaded;
 
     createPrismaticJoint(box.body, anchor);
     return box.body;
@@ -49,7 +50,8 @@ class RopeJointWorld extends Forge2DWorld
     for (var i = 0; i < length; i++) {
       final newPosition = prevBody.worldCenter + Vector2(0, 1);
       final ball = Ball(newPosition, radius: 0.5, color: Colors.white);
-      await add(ball);
+      add(ball);
+      await ball.loaded;
 
       createRopeJoint(ball.body, prevBody);
       prevBody = ball.body;

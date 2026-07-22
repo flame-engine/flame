@@ -14,7 +14,7 @@ class CameraTarget extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await add(moveEffect);
+    add(moveEffect);
   }
 
   void go({

@@ -105,7 +105,7 @@ void main() {
           renderBox.attach(PipelineOwner());
 
           final component = _MyComponent();
-          await game.add(component);
+          game.add(component);
           renderBox.gameLoopCallback(1.0);
 
           expect(component.isUpdateCalled, isTrue);

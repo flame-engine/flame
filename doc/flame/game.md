@@ -38,8 +38,8 @@ class MyCrate extends SpriteComponent {
 
 class MyWorld extends World {
   @override
-  Future<void> onLoad() async {
-    await add(MyCrate());
+  void onLoad() {
+    add(MyCrate());
   }
 }
 
@@ -236,8 +236,8 @@ application. This is a common scenario when building games: there is a single fu
 
 Adding this mixin provides performance advantages in certain scenarios. In particular, a component's
 `onLoad` method is guaranteed to start when that component is added to its parent, even if the
-parent is not yet mounted itself. Consequently, `await`-ing on `parent.add(component)` is guaranteed
-to always finish loading the component.
+parent is not yet mounted itself. Consequently, awaiting `component.loaded` after
+`parent.add(component)` is guaranteed to finish loading the component.
 
 Using this mixin is simple:
 

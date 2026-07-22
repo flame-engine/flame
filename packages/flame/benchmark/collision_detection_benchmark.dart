@@ -40,7 +40,7 @@ class FlatCollisionBenchmark extends AsyncBenchmarkBase {
       ),
     );
 
-    await _game.addAll(_blocks);
+    _game.addAll(_blocks);
     await _game.ready();
   }
 
@@ -96,7 +96,7 @@ class NestedCollisionBenchmark extends AsyncBenchmarkBase {
       components.add(parent);
     }
 
-    await _game.addAll(components);
+    _game.addAll(components);
     await _game.ready();
   }
 
