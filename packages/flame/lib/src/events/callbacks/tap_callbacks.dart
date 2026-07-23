@@ -23,5 +23,13 @@ mixin TapCallbacks on Component {
   void onMount() {
     super.onMount();
     MultiTapDispatcher.addDispatcher(this);
+    findRootGame()?.adjustPointerEventHandlerCount(1);
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    findRootGame()?.adjustPointerEventHandlerCount(-1);
+    super.onRemove();
   }
 }

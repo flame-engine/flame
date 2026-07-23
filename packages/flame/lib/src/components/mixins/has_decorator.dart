@@ -16,12 +16,16 @@ import 'package:flame/src/rendering/decorator.dart';
 mixin HasDecorator on Component {
   Decorator? decorator;
 
+  /// Cached `super.renderTree` tear-off, so that the render pass does not
+  /// allocate a fresh closure for [Decorator.applyChain] on every frame.
+  void Function(Canvas)? _superRenderTree;
+
   @override
   void renderTree(Canvas canvas) {
     if (decorator == null) {
       super.renderTree(canvas);
     } else {
-      decorator!.applyChain(super.renderTree, canvas);
+      decorator!.applyChain(_superRenderTree ??= super.renderTree, canvas);
     }
   }
 }

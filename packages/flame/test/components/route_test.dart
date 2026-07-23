@@ -275,18 +275,23 @@ void main() {
       router.pushNamed('pause');
       await game.ready();
       expect(router.currentRoute.name, 'pause');
-      expect(router.previousRoute!.timeScale, 0);
+      expect(router.previousRoute!.updatePaused, isTrue);
+      expect(router.previousRoute!.timeScale, 1);
 
       game.update(10);
       expect(timer.elapsedTime, 1);
 
-      router.previousRoute!.timeScale = 0.1;
+      // Resuming into slow motion: unpause and slow the route down.
+      router.previousRoute!
+        ..updatePaused = false
+        ..timeScale = 0.1;
       game.update(10);
       expect(timer.elapsedTime, 2);
 
       router.pop();
       await game.ready();
       expect(router.currentRoute.name, 'start');
+      expect(router.currentRoute.updatePaused, isFalse);
       expect(router.currentRoute.timeScale, 1);
 
       game.update(10);

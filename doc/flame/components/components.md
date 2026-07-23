@@ -146,6 +146,38 @@ class MyComponent extends PositionComponent with TapCallbacks {
 ```
 
 
+### Custom update traversal and pausing
+
+The engine drives the update pass through a flattened traversal list owned by the game, so
+`updateTree` is non-virtual and cannot be overridden. Components that need to control how their
+subtree is updated (changing the effective `dt`, skipping children, or updating them manually)
+should implement the `CustomTraversal` marker and override the `updateSubtree` method:
+
+```dart
+class SlowMotionArea extends Component implements CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
+flattened list itself and its `updateSubtree` drives its subtree. `updateSubtree` lives on
+`Component`, but it is only invoked for components carrying the marker. Mixins that provide a
+custom traversal (like `HasTimeScale`) declare `implements CustomTraversal`, so their users do not
+need to add the marker themselves, and chain via `super.updateSubtree`.
+
+To temporarily stop updating a component and its whole subtree, set `updatePaused` to true. While
+paused, no `update` calls happen in the subtree, but rendering and event handling continue, and
+pending lifecycle events (adds and removes) are still processed:
+
+```dart
+enemySquad.updatePaused = true; // freeze the squad
+enemySquad.updatePaused = false; // resume it
+```
+
+This is unrelated to `Game.paused`, which stops the whole game loop including rendering.
+
+
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
@@ -331,7 +363,7 @@ flameGame.findByKeyName('player');
 
 ### Querying child components
 
-The children that have been added to a component live in a `QueryableOrderedSet` called
+The children that have been added to a component live in a `ComponentList` called
 `children`. To query for a specific type of components in the set, the `query<T>()` function can be
 used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
 queries will have to be registered with `children.register` before a query can be used.

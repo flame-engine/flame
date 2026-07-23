@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:meta/meta.dart';
 
 /// [DoubleTapCallbacks] adds the ability to receive double-tap events in a
 /// component.
@@ -25,8 +26,17 @@ mixin DoubleTapCallbacks on Component {
   void onDoubleTapCancel(DoubleTapCancelEvent event) {}
 
   @override
+  @mustCallSuper
   void onMount() {
     super.onMount();
     DoubleTapDispatcher.addDispatcher(this);
+    findRootGame()?.adjustPointerEventHandlerCount(1);
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    findRootGame()?.adjustPointerEventHandlerCount(-1);
+    super.onRemove();
   }
 }

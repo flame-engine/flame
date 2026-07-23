@@ -6,8 +6,6 @@ import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ordered_set/mapping_ordered_set.dart';
-import 'package:ordered_set/ordered_set.dart';
 
 import '../custom_component.dart';
 
@@ -1661,23 +1659,34 @@ void main() {
     });
 
     group('miscellaneous', () {
-      testWithFlameGame('childrenFactory', (game) async {
+      testWithFlameGame('createComponentList override', (game) async {
         final component0 = Component();
         expect(component0.children.strictMode, false);
 
-        Component.childrenFactory = () => OrderedSet.mapping<num, Component>(
-          (e) => e.priority,
-          // ignore: avoid_redundant_argument_values
-          strictMode: true,
-        );
-        final component1 = Component();
+        final component1 = _CustomListComponent();
         final component2 = Component();
         component1.add(component2);
         component2.add(Component());
-        expect(component1.children, isInstanceOf<MappingOrderedSet>());
+        expect(component1.children, isInstanceOf<ComponentList>());
         expect(component1.children.strictMode, isTrue);
-        expect(component2.children, isInstanceOf<MappingOrderedSet>());
-        expect(component2.children.strictMode, isTrue);
+        expect(component2.children.strictMode, isFalse);
+      });
+
+      testWithFlameGame('custom children comparator', (game) async {
+        final parent = _ReverseOrderedComponent();
+        final children = List.generate(5, (i) => Component(priority: i));
+        parent.addAll(children);
+        await game.ensureAdd(parent);
+
+        expect(
+          parent.children.toList(),
+          equals(children.reversed.toList()),
+        );
+
+        // Reordering after a priority change keeps following the comparator.
+        children.first.priority = 10;
+        game.update(0);
+        expect(parent.children.first, children.first);
       });
 
       testWithFlameGame('initially same debugMode as parent', (game) async {
@@ -2186,5 +2195,19 @@ class _RemoveAllChildrenComponent extends Component {
   void onRemove() {
     super.onRemove();
     removeAll(children);
+  }
+}
+
+class _CustomListComponent extends Component {
+  @override
+  ComponentList createComponentList() => ComponentList(strictMode: true);
+}
+
+class _ReverseOrderedComponent extends Component {
+  @override
+  ComponentList createComponentList() {
+    return ComponentList(
+      comparator: (a, b) => b.priority.compareTo(a.priority),
+    );
   }
 }

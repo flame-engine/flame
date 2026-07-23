@@ -90,16 +90,20 @@ class Route extends PositionComponent
 
   /// Completely stops time for the managed page.
   ///
-  /// When the time is stopped, the [updateTree] method of the page is not
-  /// called at all, which can save computational resources. However, this also
-  /// means that the lifecycle events on the page will not be processed, and
-  /// therefore no components will be able to be added or removed from the
-  /// page.
-  void stopTime() => timeScale = 0;
+  /// While stopped, neither the page nor any of its descendants are updated
+  /// at all (see [Component.updatePaused]), which saves computational
+  /// resources. The page keeps rendering, and pending lifecycle events
+  /// (adding or removing components) still complete. The [timeScale] is left
+  /// untouched, so a slow-motion factor survives a stop/resume cycle of the
+  /// route below a popup.
+  void stopTime() => updatePaused = true;
 
-  /// Resumes normal time progression for the page, if it was previously slowed
-  /// down or stopped.
-  void resumeTime() => timeScale = 1.0;
+  /// Resumes normal time progression for the page, if it was previously
+  /// slowed down or stopped.
+  void resumeTime() {
+    updatePaused = false;
+    timeScale = 1.0;
+  }
 
   /// Applies the provided [Decorator] to the page.
   ///
@@ -162,17 +166,14 @@ class Route extends PositionComponent
     }
   }
 
+  /// Cached `super.renderTree` tear-off, so that the render pass does not
+  /// allocate a fresh closure for [Decorator.applyChain] on every frame.
+  void Function(Canvas)? _superRenderTree;
+
   @override
   void renderTree(Canvas canvas) {
     if (isRendered) {
-      _renderEffect.applyChain(super.renderTree, canvas);
-    }
-  }
-
-  @override
-  void updateTree(double dt) {
-    if (timeScale > 0) {
-      super.updateTree(dt);
+      _renderEffect.applyChain(_superRenderTree ??= super.renderTree, canvas);
     }
   }
 

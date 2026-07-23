@@ -109,6 +109,38 @@ class ComponentTreeRoot extends Component {
 
   bool get hasLifecycleEvents => queue.isNotEmpty;
 
+  /// The flattened pre-order list of all components below this root, stopping
+  /// at (and including) `CustomTraversal` barriers, whose subtrees are
+  /// traversed by their own `updateSubtree` implementations.
+  final List<Component> _flatUpdateList = [];
+
+  /// The [ComponentList.structureVersion] that [_flatUpdateList] was built
+  /// against.
+  int _flatVersion = -1;
+
+  /// Updates every component below this root using the flattened traversal
+  /// list, rebuilding the list first when the tree structure has possibly
+  /// changed since the previous tick.
+  ///
+  /// The visit order is identical to the recursive
+  /// `Component.defaultUpdateSubtree` traversal: pre-order, children in
+  /// priority order. Components mixing in `CustomTraversal` are treated as
+  /// barriers: they appear in the list themselves, and their `updateSubtree`
+  /// drives their subtree.
+  @internal
+  void updateChildrenFlat(double dt) {
+    if (_flatVersion != ComponentList.structureVersion) {
+      // The version is captured before the pass: structural changes made by
+      // update callbacks (pause toggles, detached-tree edits) invalidate the
+      // list that is being built and must trigger a rebuild next tick.
+      _flatVersion = ComponentList.structureVersion;
+      _flatUpdateList.clear();
+      updateAndFlattenInto(_flatUpdateList, dt);
+    } else {
+      Component.updateFlatList(_flatUpdateList, dt);
+    }
+  }
+
   /// A future that will complete once all lifecycle events have been
   /// processed.
   ///
@@ -137,10 +169,16 @@ class ComponentTreeRoot extends Component {
   }
 
   void processLifecycleEvents() {
+    if (!hasLifecycleEvents) {
+      // The completer is only ever created while events are queued, so there
+      // is nothing to complete here either.
+      assert(_lifecycleEventsCompleter == null);
+      return;
+    }
     // reorder events to process later grouped by parent
-    final reorderParents = <Component>{};
+    Set<Component>? reorderParents;
     LifecycleEventStatus handleReorderEvent(Component parent) {
-      reorderParents.add(parent);
+      (reorderParents ??= {}).add(parent);
       return LifecycleEventStatus.done;
     }
 
@@ -151,7 +189,8 @@ class ComponentTreeRoot extends Component {
       for (final event in queue) {
         final child = event.child!;
         final parent = event.parent!;
-        if (_blocked.contains(child) || _blocked.contains(parent)) {
+        if (_blocked.isNotEmpty &&
+            (_blocked.contains(child) || _blocked.contains(parent))) {
           continue;
         }
 
@@ -176,8 +215,10 @@ class ComponentTreeRoot extends Component {
       _blocked.clear();
     }
 
-    for (final parent in reorderParents) {
-      parent.rebalanceChildren();
+    if (reorderParents != null) {
+      for (final parent in reorderParents!) {
+        parent.rebalanceChildren();
+      }
     }
 
     if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {

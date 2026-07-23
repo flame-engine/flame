@@ -105,22 +105,25 @@ class PostProcessComponent<T extends PostProcess> extends PositionComponent {
     return superSize;
   }
 
+  /// Cached render chain, so that the render pass does not allocate fresh
+  /// closures for `Decorator.applyChain` on every frame.
+  void Function(Canvas)? _renderChain;
+
   @override
   @mustCallSuper
   void renderTree(Canvas canvas) {
-    decorator.applyChain(
-      (canvas) {
-        postProcess.render(
-          canvas,
-          size,
-          super.renderTreeWithoutDecorator,
-          (context) {
-            _renderContext.postProcess = postProcess;
-          },
-        );
-      },
-      canvas,
-    );
+    decorator.applyChain(_renderChain ??= _buildRenderChain(), canvas);
+  }
+
+  void Function(Canvas) _buildRenderChain() {
+    final renderTree = super.renderTreeWithoutDecorator;
+    void updateContext(PostProcess? context) {
+      _renderContext.postProcess = postProcess;
+    }
+
+    return (canvas) {
+      postProcess.render(canvas, size, renderTree, updateContext);
+    };
   }
 }
 

@@ -363,15 +363,16 @@ mixin GameCollidable on PositionComponent {
 
 //#region Utils
 
+/// Lets the subtree update once and then pauses it; set [updateOnce] back to
+/// true to let it update once more.
 mixin UpdateOnce on PositionComponent {
-  bool updateOnce = true;
+  bool get updateOnce => !updatePaused;
+  set updateOnce(bool value) => updatePaused = !value;
 
   @override
-  void updateTree(double dt) {
-    if (updateOnce) {
-      super.updateTree(dt);
-      updateOnce = false;
-    }
+  void update(double dt) {
+    super.update(dt);
+    updatePaused = true;
   }
 }
 

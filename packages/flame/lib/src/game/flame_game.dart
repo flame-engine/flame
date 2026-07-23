@@ -39,7 +39,7 @@ import 'package:meta/meta.dart';
 /// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
     with Game
-    implements ReadOnlySizeProvider {
+    implements ReadOnlySizeProvider, CustomTraversal {
   FlameGame({
     super.children,
     W? world,
@@ -178,14 +178,12 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   }
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     processLifecycleEvents();
     if (parent != null) {
       update(dt);
     }
-    for (final component in children) {
-      component.updateTree(dt);
-    }
+    updateChildrenFlat(dt);
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -243,6 +241,20 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y < canvasSize.y;
   }
 
+  /// The number of currently mounted components (in this game or any nested
+  /// game) that can receive pointer events. Maintained by the event callback
+  /// mixins ([TapCallbacks], [DragCallbacks], [DoubleTapCallbacks],
+  /// [ScaleCallbacks], [SecondaryTapCallbacks]) on the root game, so that
+  /// [containsEventHandlerAt] can skip hit testing entirely for games
+  /// without any pointer-event handlers.
+  int _pointerEventHandlerCount = 0;
+
+  @internal
+  void adjustPointerEventHandlerCount(int delta) {
+    _pointerEventHandlerCount += delta;
+    assert(_pointerEventHandlerCount >= 0);
+  }
+
   @override
   bool containsEventHandlerAt(Vector2 position) {
     // Deprecated game-level detector mixins handle events for the entire
@@ -261,6 +273,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         this is MultiTapListener ||
         this is MultiTouchDragDetector) {
       return true;
+    }
+    if (_pointerEventHandlerCount == 0) {
+      return false;
     }
     for (final component in super.componentsAtPoint(position)) {
       if (component is TapCallbacks ||
