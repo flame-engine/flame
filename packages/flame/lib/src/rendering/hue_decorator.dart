@@ -18,7 +18,7 @@ List<double> hueRotationMatrix(double angle) {
     0,
     0,
     0.213 - 0.213 * cosT + 0.143 * sinT,
-    0.715 + 0.285 * cosT + 0.140 * sinT,
+    0.715 + 0.285 * cosT + 0.14 * sinT,
     0.072 - 0.072 * cosT - 0.283 * sinT,
     0,
     0,

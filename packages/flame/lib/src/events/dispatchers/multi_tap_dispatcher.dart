@@ -128,7 +128,7 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
     onTapCancel(TapCancelEvent(pointerId));
   }
 
-  @internal
+  @visibleForTesting
   @override
   void handleTapDown(int pointerId, TapDownDetails details) {
     onTapDown(TapDownEvent(pointerId, game, details));

@@ -1,21 +1,22 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/events.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class TapCallbacksExample extends Forge2DGame {
+class TapCallbacksExample extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to use Flame's TapCallbacks mixin to react to
     taps on `BodyComponent`s.
     Tap the ball to give it a random impulse, or the text to add an effect to
     it.
   ''';
-  TapCallbacksExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  TapCallbacksExample() : super(metersToPixels: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     world.addAll(boundaries);
     world.add(TappableBall(Vector2.zero()));

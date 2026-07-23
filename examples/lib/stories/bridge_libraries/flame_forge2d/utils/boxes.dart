@@ -1,11 +1,11 @@
 import 'dart:ui';
 
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/events.dart';
-import 'package:flame/extensions.dart';
-import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class Box extends BodyComponent {
+class Box extends BodyComponent with GlowingBody {
   final Vector2 startPosition;
   final double width;
   final double height;
@@ -18,24 +18,22 @@ class Box extends BodyComponent {
     this.bodyType = BodyType.dynamic,
     Color? color,
   }) {
-    if (color != null) {
-      paint = PaletteEntry(color).paint();
-    } else {
-      paint = randomPaint();
-    }
+    paint = Paint()..color = color ?? randomColor();
   }
 
-  Paint randomPaint() => PaintExtension.random(withAlpha: 0.9, base: 100);
+  static int _colorIndex = 0;
+
+  Color randomColor() =>
+      ExampleColors.dynamicColor(_colorIndex++ % ExampleColors.dynamics.length);
+
+  Paint randomPaint() => Paint()..color = randomColor();
 
   @override
   Body createBody() {
-    final shape = PolygonShape()
-      ..setAsBox(width / 2, height / 2, Vector2.zero(), 0);
-    final fixtureDef = FixtureDef(
-      shape,
-      friction: 0.3,
-      restitution: 0.2,
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(restitution: 0.1),
       density: 10,
+      enableContactEvents: true,
     );
     final bodyDef = BodyDef(
       userData: this, // To be able to determine object in collision
@@ -43,12 +41,14 @@ class Box extends BodyComponent {
       type: bodyType,
     );
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Polygon.box(width / 2, height / 2), shapeDef);
   }
 }
 
 class DraggableBox extends Box with DragCallbacks {
   MouseJoint? mouseJoint;
+  MouseJointRenderer? _jointRenderer;
   late final groundBody = world.createBody(BodyDef());
   bool _destroyJoint = false;
 
@@ -61,8 +61,10 @@ class DraggableBox extends Box with DragCallbacks {
   @override
   void update(double dt) {
     if (_destroyJoint && mouseJoint != null) {
-      world.destroyJoint(mouseJoint!);
+      mouseJoint!.destroy();
       mouseJoint = null;
+      _jointRenderer?.removeFromParent();
+      _jointRenderer = null;
       _destroyJoint = false;
     }
   }
@@ -73,24 +75,28 @@ class DraggableBox extends Box with DragCallbacks {
 
     final target = game.screenToWorld(event.devicePosition);
 
-    final mouseJointDef = MouseJointDef()
-      ..maxForce = 5000 * body.mass
-      ..dampingRatio = 0.1
-      ..frequencyHz = 50
-      ..target.setFrom(target)
-      ..collideConnected = false
-      ..bodyA = groundBody
-      ..bodyB = body;
-    mouseJoint = MouseJoint(mouseJointDef);
-
-    world.createJoint(mouseJoint!);
+    final joint = world.physicsWorld.createMouseJoint(
+      MouseJointDef(
+        bodyA: groundBody,
+        bodyB: body,
+        target: target,
+        maxForce: 5000 * body.mass,
+        dampingRatio: 0.1,
+        hertz: 50,
+      ),
+    );
+    mouseJoint = joint;
+    // Show the spring that drags the box towards the pointer.
+    _jointRenderer = MouseJointRenderer(
+      joint: joint,
+      color: ExampleColors.amber,
+    );
+    world.add(_jointRenderer!);
   }
 
   @override
   bool onDragUpdate(DragUpdateEvent event) {
-    mouseJoint?.setTarget(
-      game.screenToWorld(event.deviceEndPosition),
-    );
+    mouseJoint?.target = game.screenToWorld(event.deviceEndPosition);
 
     return false;
   }

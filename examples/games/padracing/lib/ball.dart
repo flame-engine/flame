@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:padracing/car.dart';
 import 'package:padracing/game_colors.dart';
 import 'package:padracing/padracing_game.dart';
@@ -45,17 +45,18 @@ class Ball extends BodyComponent<PadRacingGame> with ContactCallbacks {
 
   @override
   Body createBody() {
-    final def = BodyDef()
-      ..userData = this
-      ..type = isMovable ? BodyType.dynamic : BodyType.kinematic
-      ..position = initialPosition;
+    final def = BodyDef(
+      userData: this,
+      type: isMovable ? BodyType.dynamic : BodyType.kinematic,
+      position: initialPosition,
+    );
     final body = world.createBody(def)..angularVelocity = rotation;
 
-    final shape = CircleShape()..radius = radius;
-    final fixtureDef = FixtureDef(shape)
-      ..restitution = 0.5
-      ..friction = 0.5;
-    return body..createFixture(fixtureDef);
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(restitution: 0.5, friction: 0.5),
+      enableContactEvents: true,
+    );
+    return body..createShape(Circle(radius: radius), shapeDef);
   }
 
   @override

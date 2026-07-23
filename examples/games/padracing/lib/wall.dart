@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 
 import 'package:padracing/padracing_game.dart';
 
@@ -92,16 +92,15 @@ class Wall extends BodyComponent<PadRacingGame> {
 
   @override
   Body createBody() {
-    final def = BodyDef()
-      ..type = BodyType.static
-      ..position = _position;
+    final def = BodyDef(position: _position);
     final body = world.createBody(def)
       ..userData = this
       ..angularDamping = 3.0;
 
-    final shape = PolygonShape()..setAsBoxXY(size.x / 2, size.y / 2);
-    final fixtureDef = FixtureDef(shape)..restitution = 0.5;
-    return body..createFixture(fixtureDef);
+    final shapeDef = ShapeDef(
+      material: SurfaceMaterial(friction: 0, restitution: 0.5),
+    );
+    return body..createShape(Polygon.box(size.x / 2, size.y / 2), shapeDef);
   }
 
   late Rect asRect = Rect.fromCenter(

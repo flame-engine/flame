@@ -1,18 +1,42 @@
 # Forge2D
 
-Blue Fire maintains a ported version of the Box2D physics engine and our
-version is called Forge2D.
+Blue Fire maintains Forge2D, Dart bindings for the [Box2D](https://box2d.org/) physics engine
+(native on mobile and desktop, WebAssembly on the web).
 
 If you want to use Forge2D specifically for Flame you should use our bridge library
 [flame_forge2d](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d) and if you
 just want to use it in a Dart project you can use the
 [forge2d](https://github.com/flame-engine/forge2d) library directly.
 
-To use it in your game you just need to add `flame_forge2d` to your
-`pubspec.yaml`, as can be seen in the [Forge2D
-[example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
-and the pub. dev [installation
-instructions](https://pub.dev/packages/flame_forge2d)](<https://pub.dev/packages/flame_forge2d>).
+To use it in your game you just need to add `flame_forge2d` to your `pubspec.yaml`, as can be
+seen in the
+[Forge2D example](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example)
+and the pub.dev [installation instructions](https://pub.dev/packages/flame_forge2d).
+
+Since Forge2D runs Box2D as native code, a C toolchain is required when building for native
+platforms (Xcode on iOS/macOS, the NDK on Android, Visual Studio Build Tools on Windows and
+clang or gcc on Linux). On the web a bundled WebAssembly build of Box2D is used instead.
+
+Forge2D has to be initialized with `await initializeForge2D()` before any physics world is
+created, which on the web is what loads that WebAssembly module. `Forge2DGame` awaits this in its
+`onLoad`, so games don't have to do anything, but that also means that a `Forge2DGame` subclass
+which overrides `onLoad` has to await `super.onLoad()` before it creates any bodies:
+
+```dart
+class MyGame extends Forge2DGame {
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();  // Not awaiting this breaks the game on the web.
+    world.add(MyBody());
+  }
+}
+```
+
+If you create a `Forge2DWorld` or a raw Forge2D `World` outside of a `Forge2DGame`, await
+`initializeForge2D()` yourself first, or the world creation will throw on the web.
+
+If you are upgrading an existing game from flame_forge2d 0.19, see the
+[migration guide](migration.md).
 
 
 ## Forge2DGame
@@ -23,11 +47,19 @@ If you are going to use Forge2D in your project it can be a good idea to use the
 It is called `Forge2DGame` and supports both the special Forge2D components called `BodyComponents`
 as well as normal Flame components.
 
-`Forge2DGame` has a built-in `CameraComponent` and has a zoom level set to 10 by default, so your
-components will be a lot bigger than in a normal Flame game. This is due to the speed limit in the
-`Forge2D` world, which you would hit very quickly if you are using it with `zoom = 1.0`. You can
-easily change the zoom level either by calling `super(zoom: yourZoom)` in your constructor or
-doing `game.cameraComponent.viewfinder.zoom = yourZoom;` at a later stage.
+`Forge2DGame` has a built-in `CameraComponent` that uses a `Forge2DViewfinder`. The physics world
+is measured in meters, and the viewfinder renders one meter as `metersToPixels` pixels, which is
+10 by default. Your components will therefore be a lot bigger than in a normal Flame game, which
+is what you want: there is a speed limit in the `Forge2D` world that you would hit very quickly if
+one meter was one pixel.
+
+You can change the scale either by calling `super(metersToPixels: yourScale)` in your constructor
+or by doing `game.metersToPixels = yourScale;` at a later stage.
+
+The `zoom` of the viewfinder is applied on top of `metersToPixels` and defaults to 1, so it is free
+for what it is normally used for: zooming the camera in and out. Everything except the rendering
+stays in meters, so body positions, `camera.viewfinder.position`, `camera.visibleWorldRect` and the
+local positions that events report are all still expressed in meters.
 
 If you are previously familiar with Box2D it can be good to know that the whole concept of the
 Box2d world is mapped to `world` in the `Forge2DGame` component and every `Body` that you want to
@@ -59,19 +91,41 @@ to the `Forge2DGame` instance's `world` property, `game.world = Forge2DWorld()`.
 
 If you would like to re-use a world later and have it keep its physics state you have to make sure
 that the bodies aren't destroyed when the world is removed from the game. You can do this by
-setting `world.destroyOnRemove` to false, like `game.world.destroyOnRemove = false;`.
+setting `world.destroyBodiesOnRemove` to false, like `game.world.destroyBodiesOnRemove = false;`.
+
+The underlying Forge2D physics world is available as `world.physicsWorld`, which you can use to
+access the parts of the Forge2D API that `Forge2DWorld` doesn't wrap, like creating joints or
+polling the raw event streams.
 
 
 ## BodyComponent
 
 The `BodyComponent` is a wrapper for the `Forge2D` body, which is the body that the physics engine
-is interacting with. To create a `BodyComponent` you can either:
+is interacting with. A body carries one or more `Shape`s, which are created from a
+`ShapeGeometry` (`Circle`, `Capsule`, `Segment` or `Polygon`, plus chains via
+`body.createChain`) and an optional `ShapeDef` that holds the surface material (friction,
+restitution), density, filter, and event flags.
+
+To create a `BodyComponent` you can either:
 
 - override `createBody()` and create and return your created body;
 - use the default `createBody()` implementation by passing a `BodyDef` instance (and optionally a
-list of `FixtureDef` instances) to the BodyComponent's constructor;
+list of `ShapeSpec` instances, which pair a `ShapeGeometry` with an optional `ShapeDef`) to the
+BodyComponent's constructor;
 - use the default `createBody()` implementation and assign a `BodyDef` instance to `this.bodyDef`,
-and optionally a list of `FixtureDef` instances to `this.fixtureDefs`.
+and optionally a list of `ShapeSpec` instances to `this.shapeSpecs`.
+
+```dart
+final ball = BodyComponent(
+  bodyDef: BodyDef(type: BodyType.dynamic),
+  shapeSpecs: [
+    ShapeSpec(
+      Circle(radius: 5),
+      ShapeDef(material: SurfaceMaterial(restitution: 0.8)),
+    ),
+  ],
+);
+```
 
 The `BodyComponent` is by default having `renderBody = true`, since otherwise, it wouldn't show
 anything after you have created a `Body` and added the `BodyComponent` to the game. If you want to
@@ -90,16 +144,18 @@ So instead of `add(Weapon()))`, `world.add(Weapon())` should be used (as below),
 should also of course initially be added to the world.
 
 ```dart
-class Weapon extends BodyComponent  {
+class Weapon extends BodyComponent {
   @override
-  void onLoad() {
-    ...
+  Future<void> onLoad() async {
+    await super.onLoad();
+    // ...
   }
 }
 
-class Player extends BodyComponent  {
+class Player extends BodyComponent {
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
+    await super.onLoad();
     world.add(Weapon());
   }
 }
@@ -114,9 +170,9 @@ to avoid some tunneling problems.
 
 `Forge2DGame` provides a simple out-of-the-box solution to propagate contact events.
 
-Contact events occur whenever two `Fixture`s meet each other. These events allow listening when
-these `Fixture`s begin to come in contact (`beginContact`) and cease being in contact
-(`endContact`).
+Contact events occur whenever two `Shape`s meet each other. These events allow listening when
+these `Shape`s begin to come in contact (`beginContact`) and cease being in contact
+(`endContact`). Sensor overlaps are delivered through the same callbacks.
 
 There are multiple ways to listen to these events. One common way is to use the `ContactCallbacks`
 class as a mixin in the `BodyComponent` where you are interested in these events.
@@ -133,13 +189,18 @@ class Ball extends BodyComponent with ContactCallbacks {
 }
 ```
 
-For the above to work, the `Ball`'s `body.userData` or contacting `fixture.userData` must be
-set to a `ContactCallback`. And if `Wall` is a `BodyComponent` it's `body.userData` or contacting
-`fixture.userData` must be set to `Wall`.
+For the above to work, the `Ball`'s `body.userData` or contacting `shape.userData` must be
+set to a `ContactCallbacks`. And if `Wall` is a `BodyComponent` its `body.userData` or contacting
+`shape.userData` must be set to `Wall`.
 
 If `userData` is `null` the contact events are ignored, it is `null` by default.
 
-A convenient way of setting `userData` is to assign it when creating the body. For example:
+Forge2D only generates events for shapes that have opted in to them, so the involved shapes also
+need `ShapeDef.enableContactEvents` set to true (and `ShapeDef.enableSensorEvents` for sensors
+and their visitors). The default `createBody()` implementation of `BodyComponent` enables these
+flags automatically for shapes created through `shapeSpecs` when a `ContactCallbacks` is present
+in the body's or shape's userData, but if you override `createBody()` you need to set them
+yourself:
 
 ```dart
 class Ball extends BodyComponent with ContactCallbacks {
@@ -151,6 +212,9 @@ class Ball extends BodyComponent with ContactCallbacks {
     final bodyDef = BodyDef(
       userData: this,
     );
+    final shapeDef = ShapeDef(
+      enableContactEvents: true,
+    );
     ...
   }
 
@@ -158,7 +222,12 @@ class Ball extends BodyComponent with ContactCallbacks {
 ```
 
 Every time `Ball` and `Wall` begin to come in contact `beginContact` will be called, and once the
-fixtures cease being in contact, `endContact` will be called.
+shapes cease being in contact, `endContact` will be called.
+
+The old `preSolve` and `postSolve` callbacks no longer exist. To disable a contact before it is
+solved (for example for one-sided platforms), use `world.preSolveCallback` together with
+`ShapeDef.enablePreSolveEvents`. To measure impact strength, enable `ShapeDef.enableHitEvents`
+and poll `world.physicsWorld.contactEvents.hit`.
 
 An implementation example can be seen in the [Flame Forge2D
 example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/bridge_libraries/flame_forge2d/utils/balls.dart).

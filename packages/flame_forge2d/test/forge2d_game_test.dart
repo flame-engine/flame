@@ -3,7 +3,7 @@ import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
 class _TestForge2dGame extends Forge2DGame {
-  _TestForge2dGame() : super(zoom: 4.0, gravity: Vector2(0, -10.0));
+  _TestForge2dGame() : super(metersToPixels: 4.0, gravity: Vector2(0, -10.0));
 }
 
 void main() {
@@ -32,7 +32,7 @@ void main() {
           game.onGameResize(size);
           expect(
             game.screenToWorld(Vector2.zero()),
-            -(size / 2) / game.camera.viewfinder.zoom,
+            -(size / 2) / game.metersToPixels,
           );
         },
       );
@@ -46,7 +46,7 @@ void main() {
           game.onGameResize(size);
           expect(
             game.screenToWorld(screenPosition),
-            (-size / 2 + screenPosition) / game.camera.viewfinder.zoom,
+            (-size / 2 + screenPosition) / game.metersToPixels,
           );
         },
       );
@@ -73,7 +73,7 @@ void main() {
           game.onGameResize(size);
           expect(
             game.worldToScreen(worldPosition),
-            (size / 2) + worldPosition * game.camera.viewfinder.zoom,
+            (size / 2) + worldPosition * game.metersToPixels,
           );
         },
       );
@@ -90,8 +90,7 @@ void main() {
           expect(
             game.worldToScreen(worldPosition),
             (size / 2) +
-                (worldPosition - viewfinderPosition) *
-                    game.camera.viewfinder.zoom,
+                (worldPosition - viewfinderPosition) * game.metersToPixels,
           );
         },
       );

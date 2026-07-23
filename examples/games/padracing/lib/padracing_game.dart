@@ -6,7 +6,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/input.dart';
-import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:flutter/services.dart';
 import 'package:padracing/ball.dart';
@@ -39,7 +39,9 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
      Watch out for the balls, they make your car spin.
   ''';
 
-  PadRacingGame() : super(gravity: Vector2.zero(), zoom: 1);
+  // The game replaces the built-in camera with its own cameras below, which
+  // apply the scaling through their zoom, so one meter is one world unit here.
+  PadRacingGame() : super(gravity: Vector2.zero(), metersToPixels: 1);
 
   @override
   Color backgroundColor() => Colors.black;

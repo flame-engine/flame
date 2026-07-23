@@ -1,12 +1,11 @@
-import 'dart:ui';
-
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
-import 'package:flame/components.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class MotorJointExample extends Forge2DGame {
+class MotorJointExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `MotorJoint`. The ball spins around the 
     center point. Tap the screen to change the direction.
@@ -25,17 +24,18 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     final box = Box(
       startPosition: Vector2.zero(),
       width: 2,
       height: 1,
       bodyType: BodyType.static,
+      color: ExampleColors.slate,
     );
     add(box);
 
-    ball = Ball(Vector2(0, -5));
+    ball = Ball(Vector2(0, -5), color: ExampleColors.violet);
     add(ball);
 
     await Future.wait([ball.loaded, box.loaded]);
@@ -51,15 +51,19 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
   }
 
   MotorJoint createMotorJoint(Body first, Body second) {
-    final motorJointDef = MotorJointDef()
-      ..initialize(first, second)
-      ..maxForce = 1000
-      ..maxTorque = 1000
-      ..correctionFactor = 0.1;
-
-    final joint = MotorJoint(motorJointDef);
-    createJoint(joint);
-    return joint;
+    return physicsWorld.createMotorJoint(
+      MotorJointDef(
+        bodyA: first,
+        bodyB: second,
+        // The target offset of the box in the ball's frame. Starting with
+        // the current offset keeps the bodies where they are, and update
+        // below drifts it from there.
+        linearOffset: first.localPoint(second.position),
+        maxForce: 1000,
+        maxTorque: 1000,
+        correctionFactor: 0.1,
+      ),
+    );
   }
 
   final linearOffset = Vector2.zero();
@@ -73,27 +77,12 @@ class MotorJointWorld extends Forge2DWorld with TapCallbacks {
       deltaOffset = -deltaOffset;
     }
 
-    final linearOffsetX = joint.getLinearOffset().x + deltaOffset;
-    final linearOffsetY = joint.getLinearOffset().y + deltaOffset;
+    final linearOffsetX = joint.linearOffset.x + deltaOffset;
+    final linearOffsetY = joint.linearOffset.y + deltaOffset;
     linearOffset.setValues(linearOffsetX, linearOffsetY);
-    final angularOffset = joint.getAngularOffset() + deltaOffset;
+    final angularOffset = joint.angularOffset + deltaOffset;
 
-    joint.setLinearOffset(linearOffset);
-    joint.setAngularOffset(angularOffset);
-  }
-}
-
-class JointRenderer extends Component {
-  JointRenderer({required this.joint});
-
-  final MotorJoint joint;
-
-  @override
-  void render(Canvas canvas) {
-    canvas.drawLine(
-      joint.anchorA.toOffset(),
-      joint.anchorB.toOffset(),
-      debugPaint,
-    );
+    joint.linearOffset = linearOffset;
+    joint.angularOffset = angularOffset;
   }
 }

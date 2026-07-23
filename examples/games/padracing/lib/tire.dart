@@ -1,5 +1,5 @@
 import 'package:flame/palette.dart';
-import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:flutter/services.dart';
 import 'package:padracing/car.dart';
@@ -12,7 +12,6 @@ class Tire extends BodyComponent<PadRacingGame> {
     required this.pressedKeys,
     required this.isFrontTire,
     required this.isLeftTire,
-    required this.jointDef,
     this.isTurnableTire = false,
   }) : super(
          paint: Paint()
@@ -52,7 +51,6 @@ class Tire extends BodyComponent<PadRacingGame> {
   final double _maxForwardSpeed = 250.0;
   final double _maxBackwardSpeed = -40.0;
 
-  final RevoluteJointDef jointDef;
   late final RevoluteJoint joint;
   final bool isTurnableTire;
   final bool isFrontTire;
@@ -76,18 +74,31 @@ class Tire extends BodyComponent<PadRacingGame> {
       isFrontTire ? 3.5 : -4.25,
     );
 
-    final def = BodyDef()
-      ..type = BodyType.dynamic
-      ..position = car.body.position + jointAnchor;
+    final def = BodyDef(
+      type: BodyType.dynamic,
+      position: car.body.position + jointAnchor,
+    );
     final body = world.createBody(def)..userData = this;
 
-    final polygonShape = PolygonShape()..setAsBoxXY(0.5, 1.25);
-    body.createFixtureFromShape(polygonShape).userData = this;
+    // Tire friction against the track is simulated in _updateFriction, so
+    // the shape itself is frictionless, as it was before the Box2D v3
+    // migration (SurfaceMaterial defaults to 0.6 friction).
+    body
+            .createShape(
+              Polygon.box(0.5, 1.25),
+              ShapeDef(material: SurfaceMaterial(friction: 0)),
+            )
+            .userData =
+        this;
 
-    jointDef.bodyB = body;
-    jointDef.localAnchorA.setFrom(jointAnchor);
-    world.createJoint(joint = RevoluteJoint(jointDef));
-    joint.setLimits(0, 0);
+    joint = world.physicsWorld.createRevoluteJoint(
+      RevoluteJointDef(
+        bodyA: car.body,
+        bodyB: body,
+        localAnchorA: jointAnchor,
+        enableLimit: true,
+      ),
+    );
     return body;
   }
 
@@ -115,7 +126,7 @@ class Tire extends BodyComponent<PadRacingGame> {
       ..scale(_currentTraction);
     body.applyLinearImpulse(impulse);
     body.applyAngularImpulse(
-      0.1 * _currentTraction * body.getInertia() * -body.angularVelocity,
+      0.1 * _currentTraction * body.rotationalInertia * -body.angularVelocity,
     );
 
     final currentForwardNormal = _forwardVelocity;
@@ -136,7 +147,7 @@ class Tire extends BodyComponent<PadRacingGame> {
       desiredSpeed += _maxBackwardSpeed;
     }
 
-    final currentForwardNormal = body.worldVector(Vector2(0.0, 1.0));
+    final currentForwardNormal = body.rotation.rotate(Vector2(0.0, 1.0));
     final currentSpeed = _forwardVelocity.dot(currentForwardNormal);
     var force = 0.0;
     if (desiredSpeed < currentSpeed) {
@@ -166,15 +177,15 @@ class Tire extends BodyComponent<PadRacingGame> {
     }
     if (isTurnableTire && isTurning) {
       final turnPerTimeStep = _turnSpeedPerSecond * dt;
-      final angleNow = joint.jointAngle();
+      final angleNow = joint.angle;
       final angleToTurn = (desiredAngle - angleNow).clamp(
         -turnPerTimeStep,
         turnPerTimeStep,
       );
       final angle = angleNow + angleToTurn;
-      joint.setLimits(angle, angle);
+      joint.setLimits(lower: angle, upper: angle);
     } else {
-      joint.setLimits(0, 0);
+      joint.setLimits(lower: 0, upper: 0);
     }
     body.applyTorque(desiredTorque);
   }
@@ -184,13 +195,13 @@ class Tire extends BodyComponent<PadRacingGame> {
   final Vector2 _worldUp = Vector2(0.0, -1.0);
 
   Vector2 get _lateralVelocity {
-    final currentRightNormal = body.worldVector(_worldLeft);
+    final currentRightNormal = body.rotation.rotate(_worldLeft);
     return currentRightNormal
       ..scale(currentRightNormal.dot(body.linearVelocity));
   }
 
   Vector2 get _forwardVelocity {
-    final currentForwardNormal = body.worldVector(_worldUp);
+    final currentForwardNormal = body.rotation.rotate(_worldUp);
     return currentForwardNormal
       ..scale(currentForwardNormal.dot(body.linearVelocity));
   }

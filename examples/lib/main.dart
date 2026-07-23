@@ -4,17 +4,14 @@ import 'package:examples/platform/stub_provider.dart'
 import 'package:examples/stories/animations/animations.dart';
 import 'package:examples/stories/bridge_libraries/audio/audio.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/flame_forge2d.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/friction_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/gear_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/filter_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/prismatic_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/revolute_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/rope_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/weld_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/wheel_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_isolate/isolate.dart';
 import 'package:examples/stories/bridge_libraries/flame_jenny/jenny.dart';
 import 'package:examples/stories/bridge_libraries/flame_lottie/lottie.dart';
@@ -46,17 +43,14 @@ void main() {
   final page = PageProviderImpl().getPage();
 
   final routes = <String, FlameGame Function()>{
-    'constant_volume_joint': ConstantVolumeJointExample.new,
     'distance_joint': DistanceJointExample.new,
-    'friction_joint': FrictionJointExample.new,
-    'gear_joint': GearJointExample.new,
     'motor_joint': MotorJointExample.new,
     'mouse_joint': MouseJointExample.new,
-    'pulley_joint': PulleyJointExample.new,
     'prismatic_joint': PrismaticJointExample.new,
     'revolute_joint': RevoluteJointExample.new,
-    'rope_joint': RopeJointExample.new,
     'weld_joint': WeldJointExample.new,
+    'wheel_joint': WheelJointExample.new,
+    'filter_joint': FilterJointExample.new,
   };
   final game = routes[page]?.call();
   if (game != null) {

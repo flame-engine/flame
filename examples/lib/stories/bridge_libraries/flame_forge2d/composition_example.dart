@@ -1,24 +1,24 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
-import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
 const TextStyle _textStyle = TextStyle(color: Colors.white, fontSize: 2);
 
-class CompositionExample extends Forge2DGame {
+class CompositionExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how to compose a `BodyComponent` together with a normal
     Flame component. Click the ball to see the number increment.
   ''';
 
-  CompositionExample() : super(zoom: 20, gravity: Vector2(0, 10.0));
+  CompositionExample() : super(metersToPixels: 20, gravity: Vector2(0, 10.0));
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(this);
     world.addAll(boundaries);
     world.add(TappableText(Vector2(0, 5)));
@@ -74,7 +74,7 @@ class TappableBall extends Ball with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     _textPaint = TextPaint(style: _textStyle);
     textComponent = TextComponent(
       text: counter.toString(),

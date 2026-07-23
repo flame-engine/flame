@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart' hide World;
@@ -7,11 +8,25 @@ import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/foundation.dart';
 
+/// A pairing of a [ShapeGeometry] with an optional [ShapeDef], used by
+/// [BodyComponent.shapeSpecs] to describe the shapes that should be created
+/// on the body.
+class ShapeSpec {
+  const ShapeSpec(this.geometry, [this.definition]);
+
+  /// The geometry of the shape, for example a [Circle] or a [Polygon].
+  final ShapeGeometry geometry;
+
+  /// The definition that the shape is created with, or the Forge2D defaults
+  /// when null.
+  final ShapeDef? definition;
+}
+
 /// Since a pure BodyComponent doesn't have anything drawn on top of it,
 /// it is a good idea to turn on [debugMode] for it so that the bodies can be
 /// seen
 ///
-/// You can use the optional [bodyDef] and [fixtureDefs] arguments to create
+/// You can use the optional [bodyDef] and [shapeSpecs] arguments to create
 /// the [BodyComponent]'s body without having to create the definitions within
 /// the component.
 class BodyComponent<T extends Forge2DGame> extends Component
@@ -26,7 +41,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
     super.priority,
     this.renderBody = true,
     this.bodyDef,
-    this.fixtureDefs,
+    this.shapeSpecs,
     super.key,
   }) {
     this.paint = paint ?? (Paint()..color = defaultColor);
@@ -41,17 +56,17 @@ class BodyComponent<T extends Forge2DGame> extends Component
   /// If you do not provide a [BodyDef] here, you must override [createBody].
   BodyDef? bodyDef;
 
-  /// The default implementation of [createBody] will add these fixtures to the
-  /// [Body] that it creates from [bodyDef].
-  List<FixtureDef>? fixtureDefs;
+  /// The default implementation of [createBody] will create these shapes on
+  /// the [Body] that it creates from [bodyDef].
+  List<ShapeSpec>? shapeSpecs;
 
   @override
   Vector2 get position => body.position;
 
-  /// Specifies if the body's fixtures should be rendered.
+  /// Specifies if the body's shapes should be rendered.
   ///
   /// [renderBody] is true by default for [BodyComponent], if set to false
-  /// the body's fixtures wont be rendered.
+  /// the body's shapes wont be rendered.
   ///
   /// If you render something on top of the [BodyComponent], or doesn't want it
   /// to be seen, you probably want to set it to false.
@@ -59,13 +74,33 @@ class BodyComponent<T extends Forge2DGame> extends Component
 
   /// You should create the Forge2D [Body] in this method when you extend
   /// the BodyComponent.
+  ///
+  /// The default implementation creates the body from [bodyDef] and the
+  /// shapes from [shapeSpecs]. When the userData of [bodyDef] or of a shape's
+  /// [ShapeDef] is a [ContactCallbacks], contact and sensor events are
+  /// automatically enabled for that shape, since Forge2D only generates
+  /// events for shapes that have opted in to them. If you override this
+  /// method you have to enable the event flags yourself.
+  ///
+  /// Note that the event flags are set on the [ShapeDef] of the [ShapeSpec]
+  /// itself, since Forge2D snapshots them when the shape is created. Don't
+  /// share a single [ShapeDef] instance between components if you don't want
+  /// them to share those flags.
   Body createBody() {
     assert(
       bodyDef != null,
       'Ensure this.bodyDef is not null or override createBody',
     );
-    final body = world.createBody(bodyDef!);
-    fixtureDefs?.forEach(body.createFixture);
+    final body = world.createBody(bodyDef);
+    final bodyHasCallbacks = bodyDef!.userData is ContactCallbacks;
+    for (final spec in shapeSpecs ?? const <ShapeSpec>[]) {
+      final definition = spec.definition ?? ShapeDef();
+      if (bodyHasCallbacks || definition.userData is ContactCallbacks) {
+        definition.enableContactEvents = true;
+        definition.enableSensorEvents = true;
+      }
+      body.createShape(spec.geometry, definition);
+    }
     return body;
   }
 
@@ -81,11 +116,18 @@ class BodyComponent<T extends Forge2DGame> extends Component
   void onMount() {
     super.onMount();
     world = game.world;
+    if (!body.isValid) {
+      // The body was destroyed when the component was removed, and since
+      // onLoad only runs once it has to be recreated here for the component
+      // to be usable again. Reading a destroyed body is not just stale, it
+      // reads freed native memory.
+      body = createBody();
+    }
   }
 
   late Forge2DWorld world;
   CameraComponent get camera => game.camera;
-  Vector2 get center => body.worldCenter;
+  Vector2 get center => body.worldCenterOfMass;
 
   @override
   double get angle => body.angle;
@@ -116,69 +158,47 @@ class BodyComponent<T extends Forge2DGame> extends Component
   @override
   void render(Canvas canvas) {
     if (renderBody) {
-      for (final fixture in body.fixtures) {
-        renderFixture(canvas, fixture);
+      for (final shape in body.shapes) {
+        renderShape(canvas, shape);
       }
     }
   }
 
   @override
   void renderDebugMode(Canvas canvas) {
-    body.fixtures.forEach(
-      (fixture) => renderFixture(canvas, fixture),
-    );
+    for (final shape in body.shapes) {
+      renderShape(canvas, shape);
+    }
   }
 
-  /// Renders a [Fixture] in a [Canvas].
+  /// Renders a [Shape] in a [Canvas].
   ///
-  /// Called for each fixture in [body] when [render]ing. Override this method
-  /// to customize how fixtures are rendered. For example, you can filter out
-  /// fixtures that you don't want to render.
+  /// Called for each shape in [body] when [render]ing. Override this method
+  /// to customize how shapes are rendered. For example, you can filter out
+  /// shapes that you don't want to render.
   ///
-  /// **NOTE**: If [renderBody] is false, no fixtures will be rendered. Hence,
-  /// [renderFixture] is not called when [render]ing.
-  void renderFixture(Canvas canvas, Fixture fixture) {
+  /// **NOTE**: If [renderBody] is false, no shapes will be rendered. Hence,
+  /// [renderShape] is not called when [render]ing.
+  void renderShape(Canvas canvas, Shape shape) {
     canvas.save();
-    switch (fixture.type) {
-      case ShapeType.chain:
-        _renderChain(canvas, fixture);
-      case ShapeType.circle:
-        _renderCircle(canvas, fixture);
-      case ShapeType.edge:
-        _renderEdge(canvas, fixture);
-      case ShapeType.polygon:
-        _renderPolygon(canvas, fixture);
+    switch (shape.geometry) {
+      case Circle(:final center, :final radius):
+        renderCircle(canvas, center.toOffset(), radius);
+      case Capsule(:final center1, :final center2, :final radius):
+        renderCapsule(canvas, center1.toOffset(), center2.toOffset(), radius);
+      case Segment(:final point1, :final point2):
+        renderSegment(canvas, point1.toOffset(), point2.toOffset());
+      case Polygon(:final points):
+        renderPolygon(
+          canvas,
+          points!.map((v) => v.toOffset()).toList(growable: false),
+        );
     }
     canvas.restore();
   }
 
-  void _renderChain(Canvas canvas, Fixture fixture) {
-    final chainShape = fixture.shape as ChainShape;
-    renderChain(
-      canvas,
-      chainShape.vertices.map((v) => v.toOffset()).toList(growable: false),
-    );
-  }
-
-  void renderChain(Canvas canvas, List<Offset> points) {
-    canvas.drawPoints(PointMode.polygon, points, paint);
-  }
-
-  void _renderCircle(Canvas canvas, Fixture fixture) {
-    final circle = fixture.shape as CircleShape;
-    renderCircle(canvas, circle.position.toOffset(), circle.radius);
-  }
-
   void renderCircle(Canvas canvas, Offset center, double radius) {
     canvas.drawCircle(center, radius, paint);
-  }
-
-  void _renderPolygon(Canvas canvas, Fixture fixture) {
-    final polygon = fixture.shape as PolygonShape;
-    renderPolygon(
-      canvas,
-      polygon.vertices.map((v) => v.toOffset()).toList(growable: false),
-    );
   }
 
   late final Path _path = Path();
@@ -191,13 +211,28 @@ class BodyComponent<T extends Forge2DGame> extends Component
     canvas.drawPath(path, paint);
   }
 
-  void _renderEdge(Canvas canvas, Fixture fixture) {
-    final edge = fixture.shape as EdgeShape;
-    renderEdge(canvas, edge.vertex1.toOffset(), edge.vertex2.toOffset());
+  void renderSegment(Canvas canvas, Offset p1, Offset p2) {
+    canvas.drawLine(p1, p2, paint);
   }
 
-  void renderEdge(Canvas canvas, Offset p1, Offset p2) {
-    canvas.drawLine(p1, p2, paint);
+  void renderCapsule(Canvas canvas, Offset p1, Offset p2, double radius) {
+    final delta = p2 - p1;
+    final angle = math.atan2(delta.dy, delta.dx);
+    final path = _path
+      ..reset()
+      ..addArc(
+        Rect.fromCircle(center: p1, radius: radius),
+        angle + math.pi / 2,
+        math.pi,
+      )
+      ..arcTo(
+        Rect.fromCircle(center: p2, radius: radius),
+        angle - math.pi / 2,
+        math.pi,
+        false,
+      )
+      ..close();
+    canvas.drawPath(path, paint);
   }
 
   @override
@@ -211,12 +246,12 @@ class BodyComponent<T extends Forge2DGame> extends Component
   @override
   bool containsLocalPoint(Vector2 point) {
     _transform.localToGlobal(point, output: _hitTestPoint);
-    return body.fixtures.any((fixture) => fixture.testPoint(_hitTestPoint));
+    return body.shapes.any((shape) => shape.testPoint(_hitTestPoint));
   }
 
   @override
   bool containsPoint(Vector2 point) {
-    return body.fixtures.any((fixture) => fixture.testPoint(point));
+    return body.shapes.any((shape) => shape.testPoint(point));
   }
 
   @override
