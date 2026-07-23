@@ -26,6 +26,7 @@ GameWidget.managed(
 );
 ```
 
+
 ### `children` is now a `ComponentList` instead of an `OrderedSet`
 
 The `ordered_set` package is no longer used; children live in a Flame-owned `ComponentList` that
