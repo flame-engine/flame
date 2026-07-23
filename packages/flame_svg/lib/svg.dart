@@ -12,7 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class Svg {
   /// Creates an [Svg] with the received [pictureInfo].
   /// Default [pixelRatio] is the device pixel ratio.
-  /// Setting [fixedRatio] to `true` ensures the cache uses a single entry.
+  /// Setting [fixedRatio] to `true` ensures the cache uses one entry
+  /// per rendered size/scale.
   /// Default [cacheSize] is [defaultCacheSize], which is 10 as previously;
   /// specifying [unlimitedCacheSize] is the same as using a [Map] instead
   /// of a [MemoryCache].
