@@ -47,16 +47,16 @@ class IconComponent extends PositionComponent with HasPaint {
   /// Cached destination rect (component size), updated via a size listener.
   Rect _dstRect = Rect.zero;
 
-  /// Creates an [IconComponent] that renders [icon] as a Flame component.
+  /// Creates an [IconComponent] that renders [_icon] as a Flame component.
   ///
-  /// - [icon]: The [IconData] to render (e.g., `Icons.star`).
+  /// - [_icon]: The [IconData] to render (e.g., `Icons.star`).
   /// - [iconSize]: The resolution at which to rasterize the icon (default 64).
   /// - [paint]: Optional paint for rendering effects.
   /// - [size]: The display size of the component. Defaults to
   ///   `Vector2.all(iconSize)` if not specified.
   IconComponent({
-    IconData? icon,
-    double iconSize = 64,
+    this._icon,
+    this._iconSize = 64,
     Paint? paint,
     super.position,
     Vector2? size,
@@ -67,9 +67,7 @@ class IconComponent extends PositionComponent with HasPaint {
     super.children,
     super.priority,
     super.key,
-  }) : _icon = icon,
-       _iconSize = iconSize,
-       super(size: size ?? Vector2.all(iconSize)) {
+  }) : super(size: size ?? Vector2.all(_iconSize)) {
     if (paint != null) {
       this.paint = paint;
     }

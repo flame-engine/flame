@@ -76,14 +76,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///   Widget build(BuildContext context) {
   ///     return Container(
   ///       padding: EdgeInsets.all(20),
-  ///       child: GameWidget.controlled(
+  ///       child: GameWidget.managed(
   ///         gameFactory: MyGame.new,
   ///       ),
   ///     );
   ///   }
   /// }
   /// ```
-  const GameWidget.controlled({
+  const GameWidget.managed({
     required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
@@ -100,7 +100,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   }) : game = null;
 
   /// The game instance which this widget will render, if it was provided with
-  /// the default constructor. Otherwise, if the [GameWidget.controlled]
+  /// the default constructor. Otherwise, if the [GameWidget.managed]
   /// constructor was used, this will always be `null`.
   final T? game;
 

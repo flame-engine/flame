@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: GameWidget.controlled(
+      home: GameWidget.managed(
         gameFactory: () => PlatformerGame(
           camera: CameraComponent.withFixedResolution(width: 320, height: 180),
         ),

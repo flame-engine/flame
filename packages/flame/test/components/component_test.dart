@@ -1171,6 +1171,55 @@ void main() {
         expect(game.world.children.toList(), [parent, child]);
         expect(parent.children.toList(), isEmpty);
       });
+
+      testWithFlameGame(
+        'moving a component that is scheduled for removal cancels the removal',
+        (game) async {
+          final parentA = Component()..addToParent(game.world);
+          final parentB = Component()..addToParent(game.world);
+          final child = _LifecycleComponent('child')..addToParent(parentA);
+          await game.ready();
+
+          child.removeFromParent();
+          expect(child.isRemoving, true);
+          parentB.add(child);
+          expect(child.isRemoving, false);
+          await game.ready();
+
+          expect(child.isMounted, true);
+          expect(child.parent, parentB);
+          expect(parentA.hasChildren, false);
+          expect(child.countEvents('onRemove'), 1);
+          expect(child.countEvents('onMount'), 2);
+        },
+      );
+
+      testWithFlameGame(
+        'moving a removing child does not clear the removing state of the '
+        'new parent',
+        (game) async {
+          final parentA = Component()..addToParent(game.world);
+          final parentB = Component()..addToParent(game.world);
+          final child = Component()..addToParent(parentA);
+          await game.ready();
+
+          parentB.removeFromParent();
+          child.removeFromParent();
+          expect(parentB.isRemoving, true);
+          expect(child.isRemoving, true);
+
+          // Re-parenting the removing child must clear the child's removing
+          // state, not the new parent's.
+          parentB.add(child);
+          expect(child.isRemoving, false);
+          expect(parentB.isRemoving, true);
+          await game.ready();
+
+          expect(parentB.isRemoved, true);
+          expect(parentB.isMounted, false);
+          expect(child.parent, parentB);
+        },
+      );
     });
 
     group('Rebalancing components', () {
@@ -1553,6 +1602,38 @@ void main() {
           _Pair(world, [Vector2(664, 216)]),
         ]);
       });
+
+      testWithFlameGame(
+        'later siblings are hit first and can be removed during iteration',
+        (game) async {
+          final world = game.world;
+          final componentA = PositionComponent(size: Vector2.all(100))
+            ..addToParent(world);
+          final componentB = PositionComponent(size: Vector2.all(100))
+            ..addToParent(world);
+          final componentC = PositionComponent(size: Vector2.all(100))
+            ..addToParent(world);
+          await game.ready();
+
+          // Mimics an event handler that mutates the tree while the hit-test
+          // iterable is being consumed, like a tap handler removing the
+          // tapped component and one of its siblings.
+          final visited = <Component>[];
+          for (final component in world.componentsAtPoint(Vector2(50, 50))) {
+            if (component == componentC) {
+              componentC.removeFromParent();
+              componentB.removeFromParent();
+            }
+            visited.add(component);
+          }
+
+          // The removals are deferred, so the iteration still sees the tree
+          // as it was when the event was fired, in top-most-first order.
+          expect(visited, [componentC, componentB, componentA, world]);
+          await game.ready();
+          expect(world.children.toList(), [componentA]);
+        },
+      );
     });
 
     group('findRootGame()', () {

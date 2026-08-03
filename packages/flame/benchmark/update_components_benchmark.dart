@@ -4,9 +4,11 @@ import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
+import 'common.dart';
+
 const _amountComponents = 1000;
-const _amountTicks = 2000;
-const _amountInputs = 500;
+const _amountTicks = 500;
+const _amountInputs = 125;
 const _amountChildren = 10;
 
 class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
@@ -28,6 +30,10 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
   @override
   Future<void> setup() async {
     _game = FlameGame();
+    // Mount the game properly so that the components load and mount for real:
+    // without this, onLoad never runs and the child components are never
+    // created, making the benchmark measure a tree 11x smaller than intended.
+    await mountGame(_game);
     await _game.addAll(
       List.generate(_amountComponents, _BenchmarkComponent.new),
     );
@@ -103,3 +109,5 @@ class _BenchmarkComponent extends PositionComponent {
   @override
   String toString() => '[Component $id]';
 }
+
+Future<void> main() => UpdateComponentsBenchmark.main();

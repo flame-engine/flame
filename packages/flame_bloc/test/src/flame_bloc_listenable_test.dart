@@ -235,13 +235,10 @@ void main() {
 class _CustomBlocRoute extends Route {
   _CustomBlocRoute({
     Component Function()? builder,
-    void Function(Route, Route?)? onPush,
-    void Function(Route, Route)? onPop,
-    Component Function(Route)? build,
-  }) : _onPush = onPush,
-       _onPop = onPop,
-       _build = build,
-       super(builder);
+    this._onPush,
+    this._onPop,
+    this._build,
+  }) : super(builder);
 
   final void Function(Route, Route?)? _onPush;
   final void Function(Route, Route)? _onPop;

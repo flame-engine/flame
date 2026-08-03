@@ -11,8 +11,8 @@ topics:
   - flame
 
 environment:
-  sdk: ">=3.11.0 <4.0.0"
-  flutter: ">=3.41.0"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   behavior_tree: ^0.1.5+1

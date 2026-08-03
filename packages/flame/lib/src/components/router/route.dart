@@ -24,11 +24,10 @@ class Route extends PositionComponent
     with ParentIsA<RouterComponent>, HasTimeScale {
   Route(
     Component Function()? builder, {
-    Component Function()? loadingBuilder,
+    this._loadingBuilder,
     this.transparent = false,
     this.maintainState = true,
   }) : _builder = builder,
-       _loadingBuilder = loadingBuilder,
        _renderEffect = Decorator();
 
   /// If true, then the route below this one will continue to be rendered when

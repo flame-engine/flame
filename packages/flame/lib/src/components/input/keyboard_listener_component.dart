@@ -14,11 +14,10 @@ typedef KeyHandlerCallback = bool Function(Set<LogicalKeyboardKey>);
 class KeyboardListenerComponent extends Component with KeyboardHandler {
   /// {@macro keyboard_listener_component}
   KeyboardListenerComponent({
-    Map<LogicalKeyboardKey, KeyHandlerCallback> keyUp = const {},
-    Map<LogicalKeyboardKey, KeyHandlerCallback> keyDown = const {},
+    this._keyUp = const {},
+    this._keyDown = const {},
     super.key,
-  }) : _keyUp = keyUp,
-       _keyDown = keyDown;
+  });
 
   final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyUp;
   final Map<LogicalKeyboardKey, KeyHandlerCallback> _keyDown;

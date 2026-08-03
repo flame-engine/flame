@@ -19,14 +19,12 @@ import 'package:flame/src/extensions/vector2.dart';
 /// [PositionProvider].
 class BoundedPositionBehavior extends Component {
   BoundedPositionBehavior({
-    required Shape bounds,
-    PositionProvider? target,
+    required this._bounds,
+    this._target,
     double precision = 0.5,
     super.priority,
     super.key,
   }) : assert(precision > 0, 'Precision must be positive: $precision'),
-       _bounds = bounds,
-       _target = target,
        _previousPosition = Vector2.zero(),
        _precision = precision;
 

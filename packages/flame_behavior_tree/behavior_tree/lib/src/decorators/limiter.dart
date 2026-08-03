@@ -7,12 +7,12 @@ class Limiter extends BaseNode implements NodeInterface {
   /// Once this node has been ticked [limit] number of times, it stops ticking
   /// the child node. After this, [status] will keep returning the status of
   /// child the last time it was ticked. This behavior can be overridden by
-  /// providing an optional [statusAfterLimit].
+  /// providing an optional [_statusAfterLimit].
   Limiter(
     this.child,
     this.limit, {
-    NodeStatus? statusAfterLimit,
-  }) : _statusAfterLimit = statusAfterLimit {
+    this._statusAfterLimit,
+  }) {
     setParent(child);
     status = (_tickCount < limit)
         ? child.status

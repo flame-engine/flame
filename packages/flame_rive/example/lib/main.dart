@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await RiveNative.init();
-  runApp(const GameWidget.controlled(gameFactory: RiveExampleGame.new));
+  runApp(const GameWidget.managed(gameFactory: RiveExampleGame.new));
 }
 
 class RiveExampleGame extends FlameGame {

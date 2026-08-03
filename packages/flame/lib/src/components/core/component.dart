@@ -704,7 +704,7 @@ class Component {
     } else if (child._parent != null) {
       if (child.isRemoving) {
         game.dequeueRemove(child);
-        _clearRemovingBit();
+        child._clearRemovingBit();
       }
       game.enqueueMove(child, this);
     } else if (isMounted && !child.isMounted) {

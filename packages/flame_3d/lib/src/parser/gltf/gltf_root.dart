@@ -46,8 +46,8 @@ class GltfRoot {
   late final List<GlbChunk> chunks;
 
   GltfRoot._({
-    required String prefix,
-  }) : _prefix = prefix;
+    required this._prefix,
+  });
 
   Future<Uint8List> readChunk(GltfRef<Buffer> ref) async {
     if (chunks.isNotEmpty) {

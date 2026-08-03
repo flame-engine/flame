@@ -1,3 +1,7 @@
+## 1.13.0
+
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([cc47ed41](https://github.com/flame-engine/flame/commit/cc47ed41e39a40a6f5965399fed420192cb207c1))
+
 ## 1.12.2
 
  - Update a dependency to the latest release.

@@ -33,14 +33,13 @@ import 'package:meta/meta.dart';
 /// [DialogueView]s.
 class DialogueRunner {
   /// Creates a `DialogueRunner` for executing the [yarnProject]. The dialogue
-  /// will be delivered to all the provided [dialogueViews]. Each of these
+  /// will be delivered to all the provided [_dialogueViews]. Each of these
   /// dialogue views may only be assigned to a single `DialogueRunner` at a
   /// time.
   DialogueRunner({
     required YarnProject yarnProject,
-    required List<DialogueView> dialogueViews,
-  }) : project = yarnProject,
-       _dialogueViews = dialogueViews;
+    required this._dialogueViews,
+  }) : project = yarnProject;
 
   final List<DialogueView> _dialogueViews;
   _LineDeliveryPipeline? _linePipeline;

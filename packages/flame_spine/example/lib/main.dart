@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSpineFlutter();
-  runApp(const GameWidget.controlled(gameFactory: SpineExample.new));
+  runApp(const GameWidget.managed(gameFactory: SpineExample.new));
 }
 
 class SpineExample extends FlameGame with TapCallbacks {

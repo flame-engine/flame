@@ -7,13 +7,12 @@ import 'package:meta/meta.dart';
 @immutable
 class BlockStyle extends FlameTextStyle {
   const BlockStyle({
-    EdgeInsets? margin,
-    EdgeInsets? padding,
+    this._margin,
+    this._padding,
     this.background,
     this.text,
     this.textAlign,
-  }) : _margin = margin,
-       _padding = padding;
+  });
 
   final EdgeInsets? _margin;
   final EdgeInsets? _padding;
