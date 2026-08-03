@@ -7,6 +7,23 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### `MultiDragDispatcher` removed
+
+The deprecated `MultiDragDispatcher` and `MultiDragDispatcherKey` aliases have been removed. Use
+`MultiDragScaleDispatcher` and `MultiDragScaleDispatcherKey` instead, if you were using them
+directly at all (normally you should just use the mixins).
+
+```dart
+// Before
+game.findByKey(const MultiDragDispatcherKey())
+    as MultiDragDispatcher?;
+
+// After
+game.findByKey(const MultiDragScaleDispatcherKey())
+    as MultiDragScaleDispatcher?;
+```
+
+
 ### `GameWidget.controlled` renamed to `GameWidget.managed`
 
 The `GameWidget.controlled` constructor has been renamed to `GameWidget.managed`. The behavior is
