@@ -74,6 +74,7 @@ If you were using `handled` to let an event reach several components, set
 The equivalent field on the deprecated `*Info` event classes (`TapDownInfo.handled` and friends) has
 been removed as well.
 
+
 ### `GameWidget.controlled` renamed to `GameWidget.managed`
 
 The `GameWidget.controlled` constructor has been renamed to `GameWidget.managed`. The behavior is
