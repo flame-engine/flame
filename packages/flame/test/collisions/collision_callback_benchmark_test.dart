@@ -12,11 +12,11 @@ class _TestBlock extends PositionComponent with CollisionCallbacks {
   final Vector2 velocity;
   static int collisionCounter = 0;
 
-  _TestBlock(Vector2 position, Vector2 size, this.velocity)
-    : super(
-        position: position,
-        size: size,
-      ) {
+  _TestBlock({
+    required this.velocity,
+    required super.position,
+    required super.size,
+  }) {
     add(CircleHitbox());
   }
 
@@ -48,9 +48,9 @@ void main() {
         final blocks = List.generate(
           100,
           (_) => _TestBlock(
-            Vector2.random(rng) * game.size.x,
-            Vector2.random(rng) * 100,
-            Vector2(
+            position: Vector2.random(rng) * game.size.x,
+            size: Vector2.random(rng) * 100,
+            velocity: Vector2(
               rng.nextInt(100) * (rng.nextBool() ? 1 : -1),
               rng.nextInt(100) * (rng.nextBool() ? 1 : -1),
             ),
