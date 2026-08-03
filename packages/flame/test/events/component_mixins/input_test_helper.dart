@@ -22,7 +22,6 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    event.handled = true;
     dragStartEvent++;
     if (_wasDragged != isDragged) {
       ++isDraggedStateChange;
@@ -33,14 +32,12 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    event.handled = true;
     dragUpdateEvent++;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    event.handled = true;
     dragEndEvent++;
     if (_wasDragged != isDragged) {
       ++isDraggedStateChange;
@@ -51,7 +48,6 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragCancel(DragCancelEvent event) {
     super.onDragCancel(event);
-    event.handled = true;
     dragCancelEvent++;
   }
 }
@@ -69,7 +65,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleStartEvent++;
     if (_wasScaled != isScaling) {
       ++isScaledStateChange;
@@ -81,7 +76,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleUpdate(ScaleUpdateEvent event) {
     super.onScaleUpdate(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleUpdateEvent++;
   }
 
@@ -89,7 +83,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleEnd(ScaleEndEvent event) {
     super.onScaleEnd(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleEndEvent++;
     if (_wasScaled != isScaling) {
       ++isScaledStateChange;

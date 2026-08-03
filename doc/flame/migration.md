@@ -23,6 +23,56 @@ game.findByKey(const MultiDragScaleDispatcherKey())
     as MultiDragScaleDispatcher?;
 ```
 
+### `Event.handled` removed in favour of `continuePropagation`
+
+Events used to carry two independent booleans: `handled`, which Flame never set nor read, and
+`continuePropagation`, which actually controls whether an event keeps traversing down the component
+tree. The former has been removed; `continuePropagation` is now the single propagation flag on every
+event.
+
+By default, an event stops at the first component that can handle it, so a component that "consumes"
+an event does not need to do anything at all — the components below it will not see it:
+
+```dart
+// Before
+class Square extends RectangleComponent with TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    removeFromParent();
+    event.handled = true;
+  }
+}
+
+class MyWorld extends World with TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    if (!event.handled) {
+      add(Square(event.localPosition));
+    }
+  }
+}
+
+// After
+class Square extends RectangleComponent with TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    removeFromParent();
+  }
+}
+
+class MyWorld extends World with TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    add(Square(event.localPosition));
+  }
+}
+```
+
+If you were using `handled` to let an event reach several components, set
+`event.continuePropagation = true` in the components that should pass it along instead.
+
+The equivalent field on the deprecated `*Info` event classes (`TapDownInfo.handled` and friends) has
+been removed as well.
 
 ### `GameWidget.controlled` renamed to `GameWidget.managed`
 
