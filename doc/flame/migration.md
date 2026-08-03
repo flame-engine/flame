@@ -23,6 +23,7 @@ game.findByKey(const MultiDragScaleDispatcherKey())
     as MultiDragScaleDispatcher?;
 ```
 
+
 ### `Event.handled` removed in favour of `continuePropagation`
 
 Events used to carry two independent booleans: `handled`, which Flame never set nor read, and
