@@ -51,8 +51,11 @@ class ComponentSet extends Iterable<Component> {
   @override
   Iterator<Component> get iterator => _map.values.iterator;
 
-  /// The elements of this set in reverse order.
-  Iterable<Component> reversed() => _ReversedComponentSetView(this);
+  /// The elements of this set in reverse order: one in-order walk collected
+  /// into a list, matching what the old `OrderedSet` implementation did.
+  Iterable<Component> reversed() {
+    return _map.values.toList(growable: false).reversed;
+  }
 
   @override
   bool contains(Object? element) {
@@ -213,47 +216,6 @@ class ComponentSet extends Iterable<Component> {
       return cache.data as Iterable<C>;
     }
     return super.whereType<C>();
-  }
-}
-
-class _ReversedComponentSetView extends Iterable<Component> {
-  _ReversedComponentSetView(this._set);
-
-  final ComponentSet _set;
-
-  @override
-  int get length => _set.length;
-
-  @override
-  bool get isEmpty => _set.isEmpty;
-
-  @override
-  bool get isNotEmpty => _set.isNotEmpty;
-
-  @override
-  Iterator<Component> get iterator => _ReversedComponentSetIterator(_set._map);
-}
-
-class _ReversedComponentSetIterator implements Iterator<Component> {
-  _ReversedComponentSetIterator(this._map) : _nextKey = _map.lastKey();
-
-  final SplayTreeMap<(int, int), Component> _map;
-  (int, int)? _nextKey;
-  Component? _current;
-
-  @override
-  Component get current => _current!;
-
-  @override
-  bool moveNext() {
-    final key = _nextKey;
-    if (key == null) {
-      _current = null;
-      return false;
-    }
-    _current = _map[key];
-    _nextKey = _map.lastKeyBefore(key);
-    return true;
   }
 }
 
