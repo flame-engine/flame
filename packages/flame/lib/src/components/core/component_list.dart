@@ -23,7 +23,11 @@ part of 'component.dart';
 /// A removal does not shift the array, it leaves a `null` "tombstone" in
 /// place. Tombstones are invisible to iteration and are compacted away at the
 /// start of the next update tick, or earlier if they grow to dominate the
-/// array.
+/// array. The per-type [query] caches work the same way: a removal only marks
+/// them, and the entries of the removed components are dropped in a single
+/// pass before anything reads, reorders or adds to them again, so that a
+/// removal stays O(1) no matter how many types are registered or how much of
+/// the container each of them matches.
 ///
 /// Mutating the container while iterating it is allowed in the ways that the
 /// component lifecycle needs: removals take effect immediately (the removed
@@ -95,6 +99,15 @@ class ComponentList extends Iterable<Component> {
   /// The same caches as [_queries], as a list, so that the add/remove hot
   /// paths can iterate them without allocating a map-values iterator.
   List<_QueryCache<Component>>? _queryCaches;
+
+  /// Whether any of [_queryCaches] may still hold entries for components that
+  /// have since been removed from this list.
+  ///
+  /// Removals only raise this flag instead of searching every matching cache
+  /// for the removed component, which would be O(n) per removal. The stale
+  /// entries are dropped by [_compactQueryCaches], in a single pass that
+  /// covers any number of removals at once, before anything can observe them.
+  bool _hasStaleQueryEntries = false;
 
   /// A monotonically increasing counter, bumped on every membership or order
   /// change of any [ComponentList] (adds, removes, clears, reorders). The
@@ -198,6 +211,10 @@ class ComponentList extends Iterable<Component> {
       component._containerList == null,
       'A component cannot be contained by two children containers at once',
     );
+    // Must happen before [component] is linked to this list: a component that
+    // is removed and added back before the caches are compacted would
+    // otherwise be seen as a live entry and end up in a cache twice.
+    _compactQueryCaches();
     final elements = _elements;
     if (_length == 0 && elements.isNotEmpty) {
       // The array contains only tombstones; reset it.
@@ -274,16 +291,22 @@ class ComponentList extends Iterable<Component> {
       for (var i = 0; i < caches.length; i++) {
         final cache = caches[i];
         if (cache.check(component)) {
-          cache.data.remove(component);
+          cache.hasStaleEntries = true;
+          _hasStaleQueryEntries = true;
         }
       }
     }
     if (_length == 0) {
       _elements.clear();
       _tombstones = 0;
+      // Nothing is left to hold on to, so drop the stale cache entries right
+      // away instead of keeping the removed components alive until the next
+      // add or query.
+      _compactQueryCaches();
     } else if (_tombstones >= _tombstoneCompactionThreshold &&
         _tombstones * 2 >= _elements.length) {
       _compact();
+      _compactQueryCaches();
     }
     return true;
   }
@@ -311,9 +334,12 @@ class ComponentList extends Iterable<Component> {
     final caches = _queryCaches;
     if (caches != null) {
       for (var i = 0; i < caches.length; i++) {
-        caches[i].data.clear();
+        caches[i]
+          ..data.clear()
+          ..hasStaleEntries = false;
       }
     }
+    _hasStaleQueryEntries = false;
   }
 
   /// Restores the priority ordering after one or more elements have changed
@@ -324,6 +350,10 @@ class ComponentList extends Iterable<Component> {
   /// components with equal priority keep their relative order.
   void rebalance() {
     _compact();
+    // Not needed for correctness, since every read compacts as well, but it
+    // keeps [_QueryCache.resort] from ordering entries that are about to be
+    // dropped, by an element index that they no longer have.
+    _compactQueryCaches();
     final elements = _elements;
     var isSorted = true;
     for (var i = 1; i < elements.length; i++) {
@@ -377,6 +407,21 @@ class ComponentList extends Iterable<Component> {
     _shiftCount++;
   }
 
+  /// Drops the entries of removed components from the query caches, if any
+  /// removal has left some behind.
+  @pragma('vm:prefer-inline')
+  @pragma('wasm:prefer-inline')
+  void _compactQueryCaches() {
+    if (!_hasStaleQueryEntries) {
+      return;
+    }
+    _hasStaleQueryEntries = false;
+    final caches = _queryCaches!;
+    for (var i = 0; i < caches.length; i++) {
+      caches[i].compact(this);
+    }
+  }
+
   /// Whether type [C] has been registered as a queryable type.
   bool isRegistered<C extends Component>() {
     return _queries?.containsKey(C) ?? false;
@@ -418,6 +463,7 @@ class ComponentList extends Iterable<Component> {
       register<C>();
       return query<C>();
     }
+    _compactQueryCaches();
     // The cached list itself is returned, but typed as an Iterable to prevent
     // accidental modification of the cache from the outside.
     return cache.data as Iterable<C>;
@@ -427,6 +473,7 @@ class ComponentList extends Iterable<Component> {
   Iterable<C> whereType<C>() {
     final cache = _queries?[C];
     if (cache != null) {
+      _compactQueryCaches();
       return cache.data as Iterable<C>;
     }
     return super.whereType<C>();
@@ -529,7 +576,32 @@ class _QueryCache<C extends Component> {
 
   final List<C> data;
 
+  /// Whether [data] may hold entries for components that have since been
+  /// removed from the list; see [ComponentList._hasStaleQueryEntries].
+  bool hasStaleEntries = false;
+
   bool check(Component component) => component is C;
+
+  /// Drops the entries that are no longer in [list], in a single pass that
+  /// preserves the order of the remaining ones.
+  void compact(ComponentList list) {
+    if (!hasStaleEntries) {
+      return;
+    }
+    hasStaleEntries = false;
+    final data = this.data;
+    var write = 0;
+    for (var read = 0; read < data.length; read++) {
+      final element = data[read];
+      if (identical(element._containerList, list)) {
+        if (write != read) {
+          data[write] = element;
+        }
+        write++;
+      }
+    }
+    data.length = write;
+  }
 
   /// Inserts [component] into [data], keeping it ordered consistently with
   /// the main backing array (which orders by priority).
