@@ -233,6 +233,23 @@ final anchorB = joint.bodyB.worldPoint(joint.localAnchorB);
   `setMassData(data)` is `massData = data`, `worldVector(v)` is `rotation.rotate(v)`, and
   `localVector(v)` is `rotation.inverseRotate(v)`.
 - `BodyDef` renames: `allowSleep` is now `enableSleep`, `bullet` is `isBullet`, and `active` is
-  `isEnabled`. `gravityOverride` has no replacement; use `gravityScale` or apply your own forces.
+  `isEnabled`.
+- Per-body gravity changed. `gravityScale` is now a `double` instead of a `Vector2`, and it is a
+  multiplier of the world gravity, so it does nothing in a zero-gravity world. `gravityOverride`
+  was an extension of the old Dart port and has no replacement in Box2D v3: to give a body its
+  own gravity vector, set `gravityScale: 0` (or keep the world gravity at zero) and apply the
+  force yourself every update, for example in a `BodyComponent`:
+
+  ```dart
+  @override
+  void update(double dt) {
+    super.update(dt);
+    body.applyForce(customGravity * body.mass);
+  }
+  ```
+
+  Forces are cleared after every step, so this has to be applied each update rather than once.
+  Pass `wake: false` if resting bodies should be allowed to stay asleep, which is how regular
+  gravity behaves.
 - `userData` is stored on the Dart side in the world instead of a native pointer, and is cleared
   when the owning handle is destroyed.
