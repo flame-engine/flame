@@ -1339,8 +1339,8 @@ class Component {
     out ??= [];
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed) {
-        child._collectDescendants(out);
+      for (final child in children._elements.reversed) {
+        child?._collectDescendants(out);
       }
     }
     out.add(this);
