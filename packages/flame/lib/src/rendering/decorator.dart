@@ -31,16 +31,26 @@ class Decorator {
   /// The next decorator in the chain, or null if there is none.
   Decorator? _next;
 
+  /// Cached closure that forwards the draw call to the rest of the chain,
+  /// so that no closure needs to be allocated per frame. It is keyed by the
+  /// identity of the [_chainedDrawSource] it wraps: callers that pass the
+  /// same (cached) draw callback every frame reuse the same chain closure.
+  late void Function(Canvas) _chainedDraw;
+  void Function(Canvas)? _chainedDrawSource;
+
   /// Applies this and all subsequent decorators if any.
   ///
   /// This method is the main method through which the decorator is applied.
   void applyChain(void Function(Canvas) draw, Canvas canvas) {
-    apply(
-      _next == null
-          ? draw
-          : (nextCanvas) => _next!.applyChain(draw, nextCanvas),
-      canvas,
-    );
+    if (_next == null) {
+      apply(draw, canvas);
+    } else {
+      if (!identical(_chainedDrawSource, draw)) {
+        _chainedDrawSource = draw;
+        _chainedDraw = (nextCanvas) => _next!.applyChain(draw, nextCanvas);
+      }
+      apply(_chainedDraw, canvas);
+    }
   }
 
   /// Applies visual effect while [draw]ing on the [canvas].

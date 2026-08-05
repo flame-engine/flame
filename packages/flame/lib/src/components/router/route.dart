@@ -162,10 +162,14 @@ class Route extends PositionComponent
     }
   }
 
+  /// Cached `super.renderTree` tear-off, so that the render pass does not
+  /// allocate a fresh closure for [Decorator.applyChain] on every frame.
+  void Function(Canvas)? _superRenderTree;
+
   @override
   void renderTree(Canvas canvas) {
     if (isRendered) {
-      _renderEffect.applyChain(super.renderTree, canvas);
+      _renderEffect.applyChain(_superRenderTree ??= super.renderTree, canvas);
     }
   }
 
