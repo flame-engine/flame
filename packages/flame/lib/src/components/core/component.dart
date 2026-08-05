@@ -1328,8 +1328,9 @@ class Component {
   void _collectTeardown(List<Component> out) {
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
-        child._collectTeardown(out);
+      final elements = children._elements;
+      for (var i = elements.length - 1; i >= 0; i--) {
+        elements[i]?._collectTeardown(out);
       }
     }
     out.add(this);
