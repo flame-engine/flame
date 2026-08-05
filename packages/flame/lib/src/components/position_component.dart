@@ -518,9 +518,13 @@ class PositionComponent extends Component
     }
   }
 
+  /// Cached `super.renderTree` tear-off, so that the render pass does not
+  /// allocate a fresh closure for [Decorator.applyChain] on every frame.
+  void Function(Canvas)? _superRenderTree;
+
   @override
   void renderTree(Canvas canvas) {
-    decorator.applyChain(super.renderTree, canvas);
+    decorator.applyChain(_superRenderTree ??= super.renderTree, canvas);
   }
 
   @internal
