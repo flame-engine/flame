@@ -243,12 +243,29 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y < canvasSize.y;
   }
 
+  /// The number of currently mounted components (in this game or any nested
+  /// game) that can receive pointer events. Maintained by the event callback
+  /// mixins ([TapCallbacks], [DragCallbacks], [DoubleTapCallbacks],
+  /// [ScaleCallbacks], [SecondaryTapCallbacks]) on the root game, so that
+  /// [containsEventHandlerAt] can skip hit testing entirely for games
+  /// without any pointer-event handlers.
+  int _pointerEventHandlerCount = 0;
+
+  @internal
+  void adjustPointerEventHandlerCount(int delta) {
+    _pointerEventHandlerCount += delta;
+    assert(_pointerEventHandlerCount >= 0);
+  }
+
   @override
   bool containsEventHandlerAt(Vector2 position) {
     // Game-level detector mixins handle events for the entire game surface,
     // so any in-bounds point is a hit.
     if (this is PanDetector) {
       return true;
+    }
+    if (_pointerEventHandlerCount == 0) {
+      return false;
     }
     for (final component in super.componentsAtPoint(position)) {
       if (component is PointerInputCallbacks) {

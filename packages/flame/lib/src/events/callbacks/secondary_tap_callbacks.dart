@@ -23,5 +23,13 @@ mixin SecondaryTapCallbacks on Component implements PointerInputCallbacks {
   void onMount() {
     super.onMount();
     NonPrimaryTapDispatcher.addDispatcher(this);
+    findRootGame()?.adjustPointerEventHandlerCount(1);
+  }
+
+  @override
+  @mustCallSuper
+  void onRemove() {
+    findRootGame()?.adjustPointerEventHandlerCount(-1);
+    super.onRemove();
   }
 }
