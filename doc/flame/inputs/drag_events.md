@@ -90,8 +90,8 @@ position associated with this event.
 This event is fired when the drag gesture is interrupted before it ends naturally, for example when
 another gesture recognizer wins the gesture arena or a second pointer triggers a scale takeover.
 Unlike `onDragEnd` it carries no velocity information. The default implementation simply resets the
-drag state; override it and call `onDragEnd` yourself if you want a cancellation handled identically
-to a natural drag end.
+drag state; override it and call `onDragEnd(event.toDragEnd())` yourself if you want a cancellation
+handled identically to a natural drag end.
 
 
 ## Mixins

@@ -984,6 +984,20 @@ attached cards into the pile, and the same when it comes to returning the cards 
   }
 ```
 
+There is one more case to take care of: a drag can be *cancelled* instead of ended, for example when
+the player puts a second finger on the screen and the gesture turns into a pinch. Flame does not
+turn a cancellation into an `onDragEnd` event, so unless we handle it the card would be left
+floating in the middle of the table. Here we simply treat it as if the card had been dropped where
+it currently is:
+
+```dart
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    onDragEnd(event.toDragEnd());
+  }
+```
+
 Well, this is it! The game is now fully playable. Press the button below to see what the resulting
 code looks like, or to play it live. In the next section we will discuss how to make it more
 animated with the help of effects.
