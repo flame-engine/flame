@@ -96,6 +96,7 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
     this._onDragStart,
     this._onDragUpdate,
     this._onDragEnd,
+    this._onDragCancel,
     super.position,
     super.size,
   });
@@ -103,6 +104,7 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   final void Function(DragStartEvent)? _onDragStart;
   final void Function(DragUpdateEvent)? _onDragUpdate;
   final void Function(DragEndEvent)? _onDragEnd;
+  final void Function(DragCancelEvent)? _onDragCancel;
 
   @override
   void onDragStart(DragStartEvent event) {
@@ -119,6 +121,12 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
     return _onDragEnd?.call(event);
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    return _onDragCancel?.call(event);
   }
 }
 

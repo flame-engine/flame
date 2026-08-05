@@ -7,6 +7,50 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### `onDragCancel` no longer delegates to `onDragEnd`
+
+`DragCallbacks.onDragCancel` used to convert the cancellation into an `onDragEnd` event by default,
+which made a cancelled drag look exactly like a completed one. A cancellation means that the gesture
+was interrupted (another recognizer won the gesture arena, a second pointer triggered a scale
+takeover, a system event, etc.) and it carries no velocity, so components such as drag-to-dismiss
+would apply their action even though the drag never finished. This is not a rare event either, since
+with `MultiDragScaleDispatcher` every two finger pinch cancels the individual pointer drags.
+
+The default implementation now only resets `isDragged`, which means that `onDragEnd` is no longer
+called when a drag is cancelled. If you were relying on the old behavior, override `onDragCancel` and
+forward the event yourself with `DragCancelEvent.toDragEnd`:
+
+```dart
+// Before
+class MyComponent extends PositionComponent with DragCallbacks {
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    // This also ran when the drag was cancelled.
+    dismiss();
+  }
+}
+
+// After
+class MyComponent extends PositionComponent with DragCallbacks {
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    dismiss();
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    onDragEnd(event.toDragEnd());
+  }
+}
+```
+
+If a cancelled drag should instead be reverted, put that logic in `onDragCancel` without calling
+`onDragEnd`.
+
+
 ### `MultiDragDispatcher` removed
 
 The deprecated `MultiDragDispatcher` and `MultiDragDispatcherKey` aliases have been removed. Use

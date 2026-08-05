@@ -106,4 +106,15 @@ class DraggableBox extends Box with DragCallbacks {
     _destroyJoint = true;
     event.continuePropagation = false;
   }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+
+    if (mouseJoint == null) {
+      return;
+    }
+
+    _destroyJoint = true;
+  }
 }
