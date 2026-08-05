@@ -1181,24 +1181,43 @@ class Component {
     _removeCompleter = null;
   }
 
+  /// Reusable buffer for [_remove]. A fresh list is used in the rare case of
+  /// a re-entrant teardown (e.g. a nested game disposed from `onRemove`).
+  static final List<Component> _teardownBuffer = [];
+
   void _remove(Component parent) {
     parent._internalChildren.remove(this);
-    propagateToChildren(
-      (Component component) {
-        component
-          ..onRemove()
-          .._unregisterKey()
-          .._clearMountedBit()
-          .._clearRemovingBit()
-          .._setRemovedBit()
-          .._removeCompleter?.complete()
-          .._removeCompleter = null
-          .._parent!.onChildrenChanged(component, ChildrenChangeType.removed);
-        return true;
-      },
-      includeSelf: true,
-    );
+    final buffer = _teardownBuffer.isEmpty ? _teardownBuffer : <Component>[];
+    _collectTeardown(buffer);
+    for (var i = 0; i < buffer.length; i++) {
+      final component = buffer[i];
+      component
+        ..onRemove()
+        .._unregisterKey()
+        .._clearMountedBit()
+        .._clearRemovingBit()
+        .._setRemovedBit()
+        .._removeCompleter?.complete()
+        .._removeCompleter = null
+        .._parent!.onChildrenChanged(component, ChildrenChangeType.removed);
+    }
+    buffer.clear();
     _parent = null;
+  }
+
+  /// Collects this component and all its descendants into [out] in teardown
+  /// order: leaves first, siblings in reverse order, ancestors after their
+  /// subtrees. This matches the order that
+  /// `descendants(reversed: true, includeSelf: true)` would produce, without
+  /// allocating generator frames on every removal.
+  void _collectTeardown(List<Component> out) {
+    final children = _children;
+    if (children != null) {
+      for (final child in children.reversed()) {
+        child._collectTeardown(out);
+      }
+    }
+    out.add(this);
   }
 
   void _unregisterKey() {
