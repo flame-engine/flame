@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
@@ -297,10 +298,15 @@ class Component {
   /// Maintained by [ComponentSet].
   ComponentSet? _containerSet;
 
-  /// This component's slot index within [_containerSet]'s backing array, or
-  /// -1 when the component is not in any container. Maintained by
+  /// The insert-order half of this component's key within [_containerSet],
+  /// or -1 when the component is not in any container. Maintained by
   /// [ComponentSet].
   int _containerIndex = -1;
+
+  /// The priority half of this component's key within [_containerSet]
+  /// (a snapshot taken at insertion time; [priority] may drift from it until
+  /// the next rebalance). Maintained by [ComponentSet].
+  int _keyPriority = 0;
 
   /// This field should be used internally for functionality when you need to
   /// make sure that the component set is created if it doesn't already exist.
@@ -562,12 +568,8 @@ class Component {
     update(dt);
     final children = _children;
     if (children != null) {
-      // The update pass doubles as the safe point where tombstones left by
-      // removals since the last tick are compacted away.
-      children._compact();
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        elements[i]?.updateTree(dt);
+      for (final child in children._map.values) {
+        child.updateTree(dt);
       }
     }
   }
@@ -618,12 +620,8 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        final child = elements[i];
-        if (child != null) {
-          renderChild(canvas, child);
-        }
+      for (final child in children._map.values) {
+        renderChild(canvas, child);
       }
       afterChildrenRendered(canvas);
     }
@@ -860,10 +858,8 @@ class Component {
   ) sync* {
     nestedContexts?.add(locationContext);
     if (_children != null) {
-      final elements = _children!._elements;
-      for (var i = elements.length - 1; i >= 0; i--) {
-        final child = elements[i];
-        if (child == null || (child is IgnoreEvents && child.ignoreEvents)) {
+      for (final child in _children!.reversed()) {
+        if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
         T? childPoint = locationContext;
