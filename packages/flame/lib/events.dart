@@ -11,8 +11,6 @@ export 'src/events/callbacks/secondary_tap_callbacks.dart'
 export 'src/events/callbacks/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/callbacks/tertiary_tap_callbacks.dart'
     show TertiaryTapCallbacks;
-export 'src/events/deprecated.dart'
-    show MultiDragDispatcher, MultiDragDispatcherKey;
 export 'src/events/dispatchers/dispatcher.dart' show Dispatcher;
 export 'src/events/dispatchers/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
