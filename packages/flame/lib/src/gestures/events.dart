@@ -75,15 +75,6 @@ class TapUpInfo extends PositionInfo<TapUpDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class ForcePressInfo extends PositionInfo<ForcePressDetails> {
-  late final double pressure = raw.pressure;
-
-  ForcePressInfo.fromDetails(
-    Game game,
-    ForcePressDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
 class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
   late final EventDelta scrollDelta = EventDelta(raw.scrollDelta);
 

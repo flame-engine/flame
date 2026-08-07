@@ -68,17 +68,6 @@ class GestureDetectorBuilder {
         },
       );
     }
-    if (game is ForcePressDetector) {
-      register(
-        ForcePressGestureRecognizer.new,
-        (ForcePressGestureRecognizer instance) {
-          instance.onStart = game.handleForcePressStart;
-          instance.onPeak = game.handleForcePressPeak;
-          instance.onUpdate = game.handleForcePressUpdate;
-          instance.onEnd = game.handleForcePressEnd;
-        },
-      );
-    }
     if (game is PanDetector) {
       register(
         PanGestureRecognizer.new,
