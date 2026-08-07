@@ -182,22 +182,24 @@ The position where the event occurred relative to the `GameWidget` position and 
 ## Example
 
 ```dart
-class MyGame extends FlameGame with TapDetector {
+class MyGame extends FlameGame with MultiTouchTapDetector {
   // Other methods omitted
 
   @override
-  bool onTapDown(TapDownInfo info) {
-    print("Player tap down on ${info.eventPosition.widget}");
-    return true;
+  void onTapDown(int pointerId, TapDownInfo info) {
+    print('Player tap down on ${info.eventPosition.widget}');
   }
 
   @override
-  bool onTapUp(TapUpInfo info) {
-    print("Player tap up on ${info.eventPosition.widget}");
-    return true;
+  void onTapUp(int pointerId, TapUpInfo info) {
+    print('Player tap up on ${info.eventPosition.widget}');
   }
 }
 ```
+
+Note that there is no single-pointer tap detector at the game level; for that, use the component
+level [`TapCallbacks`](tap_events.md) instead, which `FlameGame` can mix in directly since it is
+itself a `Component`.
 
 You can also check more complete examples in the
 [input examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/).
