@@ -24,33 +24,6 @@ Detectors will be deprecated in the future. Prefer `Callbacks` instead.
 ```
 
 ```text
-- TapDetector
-  - onTap
-  - onTapCancel
-  - onTapDown
-  - onLongTapDown
-  - onTapUp
-
-- SecondaryTapDetector
-  - onSecondaryTapDown
-  - onSecondaryTapUp
-  - onSecondaryTapCancel
-
-- TertiaryTapDetector
-  - onTertiaryTapDown
-  - onTertiaryTapUp
-  - onTertiaryTapCancel
-
-- DoubleTapDetector
-  - onDoubleTap
-
-- LongPressDetector
-  - onLongPress
-  - onLongPressStart
-  - onLongPressMoveUpdate
-  - onLongPressUp
-  - onLongPressEnd
-
 - VerticalDragDetector
   - onVerticalDragDown
   - onVerticalDragStart
