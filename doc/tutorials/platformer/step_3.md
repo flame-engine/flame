@@ -342,8 +342,8 @@ class PlatformBlock extends SpriteComponent
 }
 ```
 
-We are going to extend the Flame `SpriteComponent` and we will need the `HasGameRef` mixin to access
-our game class just like we did before. We are starting with the empty `onLoad` and `update`
+We are going to extend the Flame `SpriteComponent` and we will need the `HasGameReference` mixin to
+access our game class just like we did before. We are starting with the empty `onLoad` and `update`
 methods and we will begin adding code to create the functionality that is necessary for the game.
 
 The secret to any gaming engine is the game loop. This is an infinite loop that calls all the
