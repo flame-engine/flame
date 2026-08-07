@@ -94,7 +94,7 @@ void main() {
       expect(game.calledFoo, true);
     });
 
-    testWithGame<_MyGame>('gameRef can be mocked', _MyGame.new, (game) async {
+    testWithGame<_MyGame>('game can be mocked', _MyGame.new, (game) async {
       final component = _BarComponent();
       await game.ensureAdd(component);
 

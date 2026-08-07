@@ -152,7 +152,7 @@ class EmberPlayer extends SpriteAnimationComponent
 }
 ```
 
-This file uses the `HasGameRef` mixin which allows us to reach back to `ember_quest.dart` and
+This file uses the `HasGameReference` mixin which allows us to reach back to `ember_quest.dart` and
 leverage any of the variables or methods that are defined in the game class. You can see this in
 use with the line `game.images.fromCache('assets/images/ember.png')`. Earlier, we loaded all the
 files into cache, so to use that file now, we call `fromCache` so it can be leveraged by the

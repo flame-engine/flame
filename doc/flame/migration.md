@@ -7,6 +7,27 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### `HasGameRef` removed in favour of `HasGameReference`
+
+The deprecated `HasGameRef` mixin has been removed. Use `HasGameReference` instead, which is
+otherwise identical apart from not offering the `gameRef` alias — use `game`:
+
+```dart
+// Before
+class MyComponent extends Component with HasGameRef<MyGame> {
+  void doSomething() => gameRef.score++;
+}
+
+// After
+class MyComponent extends Component with HasGameReference<MyGame> {
+  void doSomething() => game.score++;
+}
+```
+
+The `game` getter, its setter (useful for mocking in tests), and the `findGame()` override all
+behave exactly as before.
+
+
 ### Asset prefix removed
 
 `Images` and `AssetsCache` no longer prepend anything to the paths you give them. `Images` used to
