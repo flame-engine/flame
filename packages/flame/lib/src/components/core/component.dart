@@ -661,6 +661,11 @@ class Component {
   /// // The coin is now guaranteed to be mounted.
   /// ```
   ///
+  /// Be careful not to await these futures from inside the [onLoad] method of
+  /// the component you are adding the child to: a child only starts loading
+  /// after its parent's [onLoad] has completed, so awaiting the child's
+  /// [loaded] or [mounted] future there would never complete — a deadlock.
+  ///
   /// When multiple children are scheduled to be added to the same parent, we
   /// start loading all of them as soon as possible. Nevertheless, the children
   /// will end up being added to the parent in exactly the same order as they

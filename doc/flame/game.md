@@ -38,7 +38,8 @@ class MyCrate extends SpriteComponent {
 
 class MyWorld extends World {
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
+    await super.onLoad();
     add(MyCrate());
   }
 }

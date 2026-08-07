@@ -225,6 +225,10 @@ await coin.mounted;
 // The coin is now guaranteed to be mounted.
 ```
 
+Be careful not to await these futures from inside the `onLoad` method of the component you are
+adding the child to: a child only starts loading after its parent's `onLoad` has completed, so
+awaiting the child's `loaded` or `mounted` future there would never complete — a deadlock.
+
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
 in the same order as they were scheduled for addition.
