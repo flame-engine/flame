@@ -129,29 +129,6 @@ mixin HorizontalDragDetector on Game {
   }
 }
 
-mixin ForcePressDetector on Game {
-  void onForcePressStart(ForcePressInfo info) {}
-  void onForcePressPeak(ForcePressInfo info) {}
-  void onForcePressUpdate(ForcePressInfo info) {}
-  void onForcePressEnd(ForcePressInfo info) {}
-
-  void handleForcePressStart(ForcePressDetails details) {
-    onForcePressStart(ForcePressInfo.fromDetails(this, details));
-  }
-
-  void handleForcePressPeak(ForcePressDetails details) {
-    onForcePressPeak(ForcePressInfo.fromDetails(this, details));
-  }
-
-  void handleForcePressUpdate(ForcePressDetails details) {
-    onForcePressUpdate(ForcePressInfo.fromDetails(this, details));
-  }
-
-  void handleForcePressEnd(ForcePressDetails details) {
-    onForcePressEnd(ForcePressInfo.fromDetails(this, details));
-  }
-}
-
 mixin PanDetector on Game {
   void onPanDown(DragDownInfo info) {}
   void onPanStart(DragStartInfo info) {}

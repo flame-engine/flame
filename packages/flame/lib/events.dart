@@ -1,5 +1,7 @@
 export 'src/events/callbacks/double_tap_callbacks.dart' show DoubleTapCallbacks;
 export 'src/events/callbacks/drag_callbacks.dart' show DragCallbacks;
+export 'src/events/callbacks/force_press_callbacks.dart'
+    show ForcePressCallbacks;
 export 'src/events/callbacks/hover_callbacks.dart' show HoverCallbacks;
 export 'src/events/callbacks/long_press_callbacks.dart' show LongPressCallbacks;
 export 'src/events/callbacks/pointer_move_callbacks.dart'
@@ -14,6 +16,8 @@ export 'src/events/callbacks/tertiary_tap_callbacks.dart'
 export 'src/events/dispatchers/dispatcher.dart' show Dispatcher;
 export 'src/events/dispatchers/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
+export 'src/events/dispatchers/force_press_dispatcher.dart'
+    show ForcePressDispatcher, ForcePressDispatcherKey;
 export 'src/events/dispatchers/long_press_dispatcher.dart'
     show LongPressDispatcher, LongPressDispatcherKey;
 export 'src/events/dispatchers/multi_drag_scale_dispatcher.dart'
@@ -45,6 +49,7 @@ export 'src/events/messages/drag_end_event.dart' show DragEndEvent;
 export 'src/events/messages/drag_start_event.dart' show DragStartEvent;
 export 'src/events/messages/drag_update_event.dart' show DragUpdateEvent;
 export 'src/events/messages/event.dart' show Event;
+export 'src/events/messages/force_press_event.dart' show ForcePressEvent;
 export 'src/events/messages/location_context_event.dart'
     show LocationContextEvent;
 export 'src/events/messages/long_press_cancel_event.dart'
@@ -81,7 +86,6 @@ export 'src/game/mixins/keyboard.dart'
 export 'src/gestures/detectors.dart'
     show
         DoubleTapDetector,
-        ForcePressDetector,
         HorizontalDragDetector,
         LongPressDetector,
         MouseMovementDetector,
@@ -97,7 +101,6 @@ export 'src/gestures/events.dart'
         DragEndInfo,
         DragStartInfo,
         DragUpdateInfo,
-        ForcePressInfo,
         LongPressEndInfo,
         LongPressMoveUpdateInfo,
         LongPressStartInfo,

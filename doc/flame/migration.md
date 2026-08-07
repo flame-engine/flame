@@ -7,6 +7,47 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### `ForcePressDetector` replaced by `ForcePressCallbacks`
+
+Force press was the last gesture that only existed on the old game-level detector API. The
+`ForcePressDetector` mixin and its `ForcePressInfo` event class have been removed, and replaced by
+the `ForcePressCallbacks` component mixin and the `ForcePressEvent` class, in line with every other
+gesture.
+
+The four callbacks keep their names, but they now receive a single `ForcePressEvent` instead of a
+`ForcePressInfo`, and they are declared on a component rather than on the game:
+
+```dart
+// Before
+class MyGame extends FlameGame with ForcePressDetector {
+  @override
+  void onForcePressUpdate(ForcePressInfo info) {
+    final position = info.eventPosition.widget;
+    final pressure = info.pressure;
+  }
+}
+
+// After
+class MyComponent extends PositionComponent with ForcePressCallbacks {
+  @override
+  void onForcePressUpdate(ForcePressEvent event) {
+    final position = event.localPosition;
+    final pressure = event.pressure;
+  }
+}
+```
+
+As with the other callback mixins, the event is delivered only to components under the point of
+contact, `event.localPosition` is available in addition to `canvasPosition` and `devicePosition`,
+and propagation past the topmost component is opt-in via `event.continuePropagation`.
+
+Note that force press requires a pressure-sensitive screen — Apple's 3D Touch, which shipped on the
+iPhone 6s through the
+[iPhone XS](https://support.apple.com/guide/iphone/aside/iph945ccc462/14.0/ios/14.0), or a small
+number of Android devices. On any other device the gesture is never recognized, so these callbacks
+never fire. This is unchanged from the old API.
+
+
 ### `onDragCancel` no longer delegates to `onDragEnd`
 
 `DragCallbacks.onDragCancel` used to convert the cancellation into an `onDragEnd` event by default,

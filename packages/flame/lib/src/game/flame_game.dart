@@ -255,7 +255,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         this is LongPressDetector ||
         this is VerticalDragDetector ||
         this is HorizontalDragDetector ||
-        this is ForcePressDetector ||
         this is PanDetector ||
         this is ScaleDetector ||
         this is MultiTapListener ||
@@ -266,6 +265,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       if (component is TapCallbacks ||
           component is DragCallbacks ||
           component is DoubleTapCallbacks ||
+          component is ForcePressCallbacks ||
           component is ScaleCallbacks ||
           component is SecondaryTapCallbacks) {
         return true;

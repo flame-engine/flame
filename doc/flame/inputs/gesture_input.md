@@ -65,12 +65,6 @@ Detectors will be deprecated in the future. Prefer `Callbacks` instead.
   - onHorizontalDragEnd
   - onHorizontalDragCancel
 
-- ForcePressDetector
-  - onForcePressStart
-  - onForcePressPeak
-  - onForcePressUpdate
-  - onForcePressEnd
-
 - PanDetector
   - onPanDown
   - onPanStart

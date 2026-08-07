@@ -250,6 +250,55 @@ class MyComponent extends PositionComponent with DoubleTapCallbacks {
 ```
 
 
+### ForcePressCallbacks
+
+The `ForcePressCallbacks` mixin gives a component access to force press gestures, i.e. touches that
+report how hard the user is pressing.
+
+```{warning}
+Force press requires a pressure-sensitive screen: Apple's 3D Touch, which
+shipped on the iPhone 6s through the iPhone XS, or a small number of Android
+devices. On every other device the gesture is never recognized and these
+callbacks never fire.
+```
+
+All four callbacks receive the same `ForcePressEvent`, whose `pressure` is normalized to the
+`[0, 1]` range across the pressure range the device reports:
+
+```dart
+class MyComponent extends PositionComponent with ForcePressCallbacks {
+  MyComponent() : super(size: Vector2.all(100));
+
+  @override
+  void onForcePressStart(ForcePressEvent event) {
+    super.onForcePressStart(event);
+    // The press crossed the threshold at which the gesture is recognized.
+  }
+
+  @override
+  void onForcePressPeak(ForcePressEvent event) {
+    // The press crossed the "peak" pressure threshold.
+  }
+
+  @override
+  void onForcePressUpdate(ForcePressEvent event) {
+    scale = Vector2.all(1 + event.pressure);
+  }
+
+  @override
+  void onForcePressEnd(ForcePressEvent event) {
+    super.onForcePressEnd(event);
+    scale = Vector2.all(1);
+  }
+}
+```
+
+Only the topmost component under the point of contact receives `onForcePressStart`; set
+`event.continuePropagation` to true to let it through to the components below. Once a component has
+accepted the gesture it keeps receiving the peak, update and end events even if the pointer moves
+outside its bounds. The `isForcePressed` getter is true while a gesture is active.
+
+
 ## Migration
 
 If you have an existing game that uses `Tappable`/`Draggable` mixins, then this section will
