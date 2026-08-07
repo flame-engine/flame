@@ -7,6 +7,52 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### Deprecated tap and long press game detectors removed
+
+The game-level detector mixins that were deprecated in v1.38.0 have now been removed, together with
+the event classes that only they used:
+
+| Removed | Use instead |
+| --- | --- |
+| `TapDetector` | `TapCallbacks` |
+| `SecondaryTapDetector` | `SecondaryTapCallbacks` |
+| `TertiaryTapDetector` | `TertiaryTapCallbacks` |
+| `DoubleTapDetector` | `DoubleTapCallbacks` |
+| `LongPressDetector` | `LongPressCallbacks` |
+| `LongPressStartInfo` | `LongPressStartEvent` |
+| `LongPressMoveUpdateInfo` | `LongPressMoveUpdateEvent` |
+| `LongPressEndInfo` | `LongPressEndEvent` |
+
+The replacements are mixed into a component rather than into the game, and each callback takes a
+single event object:
+
+```dart
+// Before
+class MyGame extends FlameGame with TapDetector {
+  @override
+  void onTapDown(TapDownInfo info) {
+    final position = info.eventPosition.widget;
+  }
+}
+
+// After
+class MyComponent extends PositionComponent with TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    final position = event.localPosition;
+  }
+}
+```
+
+Note that a component only receives events that occur on top of it, as determined by
+`containsLocalPoint()`, whereas the old game-level detectors received every event on the game
+surface. To keep the old whole-screen behavior, add the mixin to your `FlameGame` subclass directly
+— `FlameGame` is itself a `Component`.
+
+See [Tap Events](inputs/tap_events.md) and [Long Press Events](inputs/long_press_events.md) for the
+full replacement APIs.
+
+
 ### `onDragCancel` no longer delegates to `onDragEnd`
 
 `DragCallbacks.onDragCancel` used to convert the cancellation into an `onDragEnd` event by default,

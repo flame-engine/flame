@@ -80,16 +80,12 @@ export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
 export 'src/gestures/detectors.dart'
     show
-        DoubleTapDetector,
         ForcePressDetector,
         HorizontalDragDetector,
-        LongPressDetector,
         MouseMovementDetector,
         PanDetector,
         ScaleDetector,
         ScrollDetector,
-        TertiaryTapDetector,
-        SecondaryTapDetector,
         VerticalDragDetector;
 export 'src/gestures/events.dart'
     show
@@ -98,9 +94,6 @@ export 'src/gestures/events.dart'
         DragStartInfo,
         DragUpdateInfo,
         ForcePressInfo,
-        LongPressEndInfo,
-        LongPressMoveUpdateInfo,
-        LongPressStartInfo,
         PointerHoverInfo,
         PointerScrollInfo,
         PositionInfo,

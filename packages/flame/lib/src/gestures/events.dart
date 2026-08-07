@@ -75,29 +75,6 @@ class TapUpInfo extends PositionInfo<TapUpDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
-  LongPressStartInfo.fromDetails(
-    Game game,
-    LongPressStartDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
-class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
-  late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
-
-  LongPressEndInfo.fromDetails(
-    Game game,
-    LongPressEndDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
-class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
-  LongPressMoveUpdateInfo.fromDetails(
-    Game game,
-    LongPressMoveUpdateDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
 class ForcePressInfo extends PositionInfo<ForcePressDetails> {
   late final double pressure = raw.pressure;
 

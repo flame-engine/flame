@@ -245,15 +245,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   bool containsEventHandlerAt(Vector2 position) {
-    // Deprecated game-level detector mixins handle events for the entire
-    // game surface, so any in-bounds point is a hit.
-    // ignore: deprecated_member_use_from_same_package
-    if (this is TapDetector ||
-        this is SecondaryTapDetector ||
-        this is TertiaryTapDetector ||
-        this is DoubleTapDetector ||
-        this is LongPressDetector ||
-        this is VerticalDragDetector ||
+    // Game-level detector mixins handle events for the entire game surface,
+    // so any in-bounds point is a hit.
+    if (this is VerticalDragDetector ||
         this is HorizontalDragDetector ||
         this is ForcePressDetector ||
         this is PanDetector ||
