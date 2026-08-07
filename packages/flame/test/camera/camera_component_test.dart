@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui' show PictureRecorder;
 
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
@@ -239,6 +240,39 @@ void main() {
         [component],
       );
     });
+
+    testWithFlameGame(
+      'componentsAtPoint that is not fully iterated keeps the camera '
+      'rendering',
+      (game) async {
+        game.camera.viewport = FixedSizeViewport(600, 400)
+          ..anchor = Anchor.center
+          ..position = Vector2(400, 300)
+          ..priority = -1;
+        game.camera.viewfinder.position = Vector2(100, 50);
+        final component = _RenderCounter(
+          size: Vector2(300, 100),
+          position: Vector2(50, 30),
+        );
+        game.world.add(component);
+        await game.ready();
+
+        // Stopping as soon as the wanted component turns up is what a game
+        // acting on whatever was tapped does.
+        for (var i = 0; i < CameraComponent.maxCamerasDepth * 2; i++) {
+          for (final candidate in game.componentsAtPoint(Vector2(400, 300))) {
+            if (candidate == component) {
+              break;
+            }
+          }
+          expect(CameraComponent.currentCameras, isEmpty);
+        }
+
+        component.renderCount = 0;
+        game.render(Canvas(PictureRecorder()));
+        expect(component.renderCount, 1);
+      },
+    );
 
     testWithFlameGame('visibleWorldRect', (game) async {
       await game.ready();
@@ -611,6 +645,13 @@ class _SolidBackground extends Component with HasPaint {
   final Color color;
   @override
   void render(Canvas canvas) => canvas.drawColor(color, BlendMode.src);
+}
+
+class _RenderCounter extends PositionComponent {
+  _RenderCounter({super.size, super.position});
+  int renderCount = 0;
+  @override
+  void render(Canvas canvas) => renderCount++;
 }
 
 class _PostProcessChecker extends PostProcess {

@@ -20,9 +20,6 @@ class SpawningBehavior extends TappableBehavior<ExampleGame> {
 
   @override
   void onTapDown(TapDownEvent event) {
-    if (event.handled) {
-      return;
-    }
     parent.add(nextRandomEntity(event.canvasPosition));
   }
 

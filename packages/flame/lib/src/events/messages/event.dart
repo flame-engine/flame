@@ -14,14 +14,6 @@ abstract class Event<R> {
   /// The original Flutter raw event that triggered this Flame event.
   R raw;
 
-  /// Flag that can be used to indicate that the event was handled by one of the
-  /// components.
-  ///
-  /// This flag is neither set nor read by Flame. Instead, it can be set by the
-  /// user in a component that handles an event, and then read by the user in a
-  /// different component, or at the root Game level.
-  bool handled = false;
-
   /// If this flag is false (default), the event will be delivered to the first
   /// component that can handle it. If that component sets this flag to true,
   /// the event will propagate further down the component tree to other eligible
