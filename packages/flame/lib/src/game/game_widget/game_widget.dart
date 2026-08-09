@@ -209,7 +209,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     assert(game.hasLayout);
     await game.load();
     game.mount();
-    if (!game.paused) {
+    if (!game.isPaused) {
       game.update(0);
     }
   })();
@@ -412,7 +412,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                       // This should only be called if the game has already been
                       // loaded (in the case of resizing for example), since
                       // update otherwise should be called after onMount.
-                      if (!currentGame.paused && currentGame.isAttached) {
+                      if (!currentGame.isPaused && currentGame.isAttached) {
                         currentGame.update(0);
                       }
                       return FutureBuilder(

@@ -71,9 +71,9 @@ class _MyGame extends FlameGame {
 }
 
 void main() {
-  FlameTester<_MyGame> myGame({bool paused = false}) {
+  FlameTester<_MyGame> myGame({bool isPaused = false}) {
     return FlameTester(
-      () => _MyGame()..paused = paused,
+      () => _MyGame()..isPaused = isPaused,
       pumpWidget: (gameWidget, tester) async {
         await tester.pumpWidget(_Wrapper(child: gameWidget));
       },
@@ -134,7 +134,7 @@ void main() {
     },
   );
 
-  myGame(paused: true).testGameWidget(
+  myGame(isPaused: true).testGameWidget(
     'can start paused',
     verify: (game, tester) async {
       // Run two frames
@@ -145,7 +145,7 @@ void main() {
     },
   );
 
-  myGame(paused: true).testGameWidget(
+  myGame(isPaused: true).testGameWidget(
     'can start paused and resumed later',
     verify: (game, tester) async {
       // Run two frames

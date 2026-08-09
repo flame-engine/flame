@@ -57,7 +57,7 @@ class GameLoopConnector extends DevToolsConnector {
   @override
   void initGame(FlameGame game) {
     super.initGame(game);
-    _pauseNotifier = ValueNotifier<bool>(game.paused);
+    _pauseNotifier = ValueNotifier<bool>(game.isPaused);
     _pauseNotifier.addListener(() {
       final newPaused = _pauseNotifier.value;
       if (newPaused) {
