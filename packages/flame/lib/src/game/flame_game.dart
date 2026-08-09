@@ -249,7 +249,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
     // so any in-bounds point is a hit.
     if (this is VerticalDragDetector ||
         this is HorizontalDragDetector ||
-        this is ForcePressDetector ||
         this is PanDetector ||
         this is ScaleDetector ||
         this is MultiTapListener ||

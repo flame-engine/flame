@@ -7,6 +7,30 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### `ForcePressDetector` removed
+
+The `ForcePressDetector` mixin and its `ForcePressInfo` event class have been removed, with no
+replacement.
+
+It was a niche API, only available on some older Apple's 3D Touch devices; the iPhone XS and XS Max
+(2018) were the last models to include it (see Apple's
+[Models with 3D Touch](https://support.apple.com/guide/iphone/aside/iph945ccc462/14.0/ios/14.0),
+a list that Apple even stopped carrying forward after the iOS 14 guide). Every iPhone since,
+starting with the XR, uses Haptic Touch, which responds to how long a press lasts rather than how
+hard it is, and so never produces these callbacks. Only a handful of Android devices ever
+supported it, and some of those (such as the Pixel 2 and 3) have faux pressure sensors that never
+fired the callbacks anyway.
+
+Combined with force press being the last gesture without an equivalent on the component-level event
+system, maintaining it was no longer worth the surface area.
+
+If you do still target a 3D Touch device, the gesture remains fully available from Flutter: wrap
+your `GameWidget` in a
+[`GestureDetector`](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html) and use its
+`onForcePressStart`, `onForcePressPeak`, `onForcePressUpdate` and `onForcePressEnd` callbacks
+directly.
+
+
 ### Deprecated tap and long press game detectors removed
 
 The game-level detector mixins that were deprecated in v1.38.0 have now been removed, together with
