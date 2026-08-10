@@ -208,3 +208,23 @@ GameWidget.managed(
   gameFactory: MyGame.new,
 );
 ```
+
+
+### `Game.paused` renamed to `Game.isPaused`
+
+The `paused` getter and setter on `Game` have been renamed to `isPaused`, to be consistent with the
+other boolean properties in Flame. The behavior is unchanged; only the name is different.
+
+Replace every usage of `game.paused` with `game.isPaused`:
+
+```dart
+// Before
+if (game.paused) {
+  game.paused = false;
+}
+
+// After
+if (game.isPaused) {
+  game.isPaused = false;
+}
+```

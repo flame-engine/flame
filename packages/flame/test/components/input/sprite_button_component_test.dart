@@ -188,11 +188,11 @@ Future<void> main() async {
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, true);
+        expect(game.isPaused, true);
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, false);
+        expect(game.isPaused, false);
       },
     );
 
@@ -365,11 +365,11 @@ Future<void> main() async {
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, true);
+        expect(game.isPaused, true);
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, false);
+        expect(game.isPaused, false);
       },
     );
   });

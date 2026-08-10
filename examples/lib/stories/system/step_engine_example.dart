@@ -64,7 +64,7 @@ class StepEngineExample extends FlameGame
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.keyP)) {
-      paused = !paused;
+      isPaused = !isPaused;
     } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
       stepEngine(stepTime: _stepTime * _stepTimeMultiplier);
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
