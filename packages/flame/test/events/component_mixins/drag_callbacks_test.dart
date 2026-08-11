@@ -142,12 +142,41 @@ void main() {
         );
 
         expect(component.dragCancelEvent, equals(1));
-        expect(component.dragEndEvent, equals(1));
+        // onDragCancel no longer delegates to onDragEnd.
+        expect(component.dragEndEvent, equals(0));
         expect(component.isDragged, isFalse);
 
         dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
         expect(component.dragCancelEvent, equals(1));
-        expect(component.dragEndEvent, equals(1));
+        expect(component.dragEndEvent, equals(0));
+      },
+    );
+
+    testWithFlameGame(
+      'onDragCancel resets isDragged without delegating to onDragEnd',
+      (game) async {
+        final component = DragCallbacksComponent()
+          ..x = 10
+          ..y = 10
+          ..width = 10
+          ..height = 10;
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
+          ),
+        );
+        expect(component.isDragged, isTrue);
+
+        dispatcher.onDragCancel(DragCancelEvent(1));
+
+        expect(component.dragCancelEvent, equals(1));
+        expect(component.dragEndEvent, equals(0));
+        expect(component.isDragged, isFalse);
       },
     );
 
@@ -271,6 +300,7 @@ void main() {
         var nDragStartCalled = 0;
         var nDragUpdateCalled = 0;
         var nDragEndCalled = 0;
+        var nDragCancelCalled = 0;
         final game = FlameGame(
           children: [
             DragWithCallbacksComponent(
@@ -279,6 +309,7 @@ void main() {
               onDragStart: (e) => nDragStartCalled++,
               onDragUpdate: (e) => nDragUpdateCalled++,
               onDragEnd: (e) => nDragEndCalled++,
+              onDragCancel: (e) => nDragCancelCalled++,
             ),
           ],
         );
@@ -306,7 +337,9 @@ void main() {
         await gesture.cancel();
         await tester.pump(const Duration(seconds: 1));
         expect(nDragStartCalled, 2);
-        expect(nDragEndCalled, 2);
+        expect(nDragCancelCalled, 1);
+        // The cancellation must not be reported as a drag end.
+        expect(nDragEndCalled, 1);
       },
     );
 

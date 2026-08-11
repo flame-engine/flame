@@ -40,7 +40,7 @@ void addCameraAndViewportStories(Dashbook dashbook) {
     ..add(
       'Fixed Resolution viewport',
       (context) {
-        return const GameWidget.controlled(
+        return const GameWidget.managed(
           gameFactory: FixedResolutionExample.new,
         );
       },

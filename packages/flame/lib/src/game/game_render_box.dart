@@ -105,7 +105,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
     final gameLoop = this.gameLoop = GameLoop(gameLoopCallback);
 
-    if (!game.paused) {
+    if (!game.isPaused) {
       gameLoop.start();
     }
 

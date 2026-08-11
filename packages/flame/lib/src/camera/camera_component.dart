@@ -284,25 +284,55 @@ class CameraComponent extends Component {
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       if (checkContains(viewport, viewportPoint)) {
-        currentCameras.add(this);
         final worldPoint = transformContext(viewfinder, viewportPoint);
         if (worldPoint == null) {
           return;
         }
-        yield* viewfinder.componentsAtLocation(
-          worldPoint,
-          nestedContexts,
-          transformContext,
-          checkContains,
+        yield* _onCameraStack(
+          viewfinder.componentsAtLocation(
+            worldPoint,
+            nestedContexts,
+            transformContext,
+            checkContains,
+          ),
         );
-        yield* world!.componentsAtLocation(
-          worldPoint,
-          nestedContexts,
-          transformContext,
-          checkContains,
+        yield* _onCameraStack(
+          world!.componentsAtLocation(
+            worldPoint,
+            nestedContexts,
+            transformContext,
+            checkContains,
+          ),
         );
+      }
+    }
+  }
+
+  /// Iterates [components] with this camera pushed onto [currentCameras], so
+  /// that a camera nested within the world still sees the correct depth.
+  ///
+  /// The camera is pushed and popped around every step rather than around the
+  /// whole iteration. This is a lazy iterable, so the caller is free to stop
+  /// early, for example by breaking out of a loop over [componentsAtPoint] as
+  /// soon as the tapped component is found. That leaves the generator
+  /// suspended at a `yield`, and the code after it never runs. Popping there
+  /// would therefore be skipped, and since [currentCameras] is static the
+  /// entry would be leaked for the rest of the process; after
+  /// [maxCamerasDepth] such leaks no camera renders its world any more.
+  Iterable<Component> _onCameraStack(Iterable<Component> components) sync* {
+    final iterator = components.iterator;
+    while (true) {
+      currentCameras.add(this);
+      final bool hasNext;
+      try {
+        hasNext = iterator.moveNext();
+      } finally {
         currentCameras.removeLast();
       }
+      if (!hasNext) {
+        return;
+      }
+      yield iterator.current;
     }
   }
 

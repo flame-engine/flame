@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-07-22
+
+### Changes
+
+---
+
+Packages with other changes:
+
+ - [`flame_svg` - `v1.13.0`](#flame_svg---v1130)
+
+---
+
+#### `flame_svg` - `v1.13.0`
+
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([cc47ed41](https://github.com/flame-engine/flame/commit/cc47ed41e39a40a6f5965399fed420192cb207c1))
+
+
 ## 2026-07-19
 
 ### Changes

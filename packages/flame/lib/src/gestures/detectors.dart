@@ -2,85 +2,6 @@ import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
-@Deprecated('Use TapCallbacks instead')
-mixin TapDetector on Game {
-  void onTap() {}
-  void onTapCancel() {}
-  void onTapDown(TapDownInfo info) {}
-  void onTapUp(TapUpInfo info) {}
-
-  void handleTapUp(TapUpDetails details) {
-    onTapUp(TapUpInfo.fromDetails(this, details));
-  }
-
-  void handleTapDown(TapDownDetails details) {
-    onTapDown(TapDownInfo.fromDetails(this, details));
-  }
-}
-
-@Deprecated('Use SecondaryTapCallbacks instead')
-mixin SecondaryTapDetector on Game {
-  void onSecondaryTapDown(TapDownInfo info) {}
-  void onSecondaryTapUp(TapUpInfo info) {}
-  void onSecondaryTapCancel() {}
-
-  void handleSecondaryTapUp(TapUpDetails details) {
-    onSecondaryTapUp(TapUpInfo.fromDetails(this, details));
-  }
-
-  void handleSecondaryTapDown(TapDownDetails details) {
-    onSecondaryTapDown(TapDownInfo.fromDetails(this, details));
-  }
-}
-
-@Deprecated('Use TertiaryTapCallbacks instead')
-mixin TertiaryTapDetector on Game {
-  void onTertiaryTapDown(TapDownInfo info) {}
-  void onTertiaryTapUp(TapUpInfo info) {}
-  void onTertiaryTapCancel() {}
-
-  void handleTertiaryTapUp(TapUpDetails details) {
-    onTertiaryTapUp(TapUpInfo.fromDetails(this, details));
-  }
-
-  void handleTertiaryTapDown(TapDownDetails details) {
-    onTertiaryTapDown(TapDownInfo.fromDetails(this, details));
-  }
-}
-
-@Deprecated('Use DoubleTapCallbacks instead')
-mixin DoubleTapDetector on Game {
-  void onDoubleTap() {}
-  void onDoubleTapCancel() {}
-  void onDoubleTapDown(TapDownInfo info) {}
-
-  void handleDoubleTapDown(TapDownDetails details) {
-    onDoubleTapDown(TapDownInfo.fromDetails(this, details));
-  }
-}
-
-@Deprecated('Use LongPressCallbacks instead')
-mixin LongPressDetector on Game {
-  void onLongPress() {}
-  void onLongPressStart(LongPressStartInfo info) {}
-  void onLongPressMoveUpdate(LongPressMoveUpdateInfo info) {}
-  void onLongPressUp() {}
-  void onLongPressEnd(LongPressEndInfo info) {}
-  void onLongPressCancel() {}
-
-  void handleLongPressStart(LongPressStartDetails details) {
-    onLongPressStart(LongPressStartInfo.fromDetails(this, details));
-  }
-
-  void handleLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
-    onLongPressMoveUpdate(LongPressMoveUpdateInfo.fromDetails(this, details));
-  }
-
-  void handleLongPressEnd(LongPressEndDetails details) {
-    onLongPressEnd(LongPressEndInfo.fromDetails(this, details));
-  }
-}
-
 mixin VerticalDragDetector on Game {
   void onVerticalDragDown(DragDownInfo info) {}
   void onVerticalDragStart(DragStartInfo info) {}
@@ -126,29 +47,6 @@ mixin HorizontalDragDetector on Game {
 
   void handleHorizontalDragEnd(DragEndDetails details) {
     onHorizontalDragEnd(DragEndInfo.fromDetails(details));
-  }
-}
-
-mixin ForcePressDetector on Game {
-  void onForcePressStart(ForcePressInfo info) {}
-  void onForcePressPeak(ForcePressInfo info) {}
-  void onForcePressUpdate(ForcePressInfo info) {}
-  void onForcePressEnd(ForcePressInfo info) {}
-
-  void handleForcePressStart(ForcePressDetails details) {
-    onForcePressStart(ForcePressInfo.fromDetails(this, details));
-  }
-
-  void handleForcePressPeak(ForcePressDetails details) {
-    onForcePressPeak(ForcePressInfo.fromDetails(this, details));
-  }
-
-  void handleForcePressUpdate(ForcePressDetails details) {
-    onForcePressUpdate(ForcePressInfo.fromDetails(this, details));
-  }
-
-  void handleForcePressEnd(ForcePressDetails details) {
-    onForcePressEnd(ForcePressInfo.fromDetails(this, details));
   }
 }
 

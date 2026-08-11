@@ -11,7 +11,7 @@ environment:
 
 dependencies:
   flame: ^1.38.0
-  flame_svg: ^1.12.2
+  flame_svg: ^1.13.0
   flutter:
     sdk: flutter
 

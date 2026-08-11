@@ -64,6 +64,16 @@ class MouseJointWorld extends Forge2DWorld
   @override
   void onDragEnd(DragEndEvent info) {
     super.onDragEnd(info);
+    _destroyMouseJoint();
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    _destroyMouseJoint();
+  }
+
+  void _destroyMouseJoint() {
     mouseJoint?.destroy();
     mouseJoint = null;
     _jointRenderer?.removeFromParent();

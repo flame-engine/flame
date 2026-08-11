@@ -79,7 +79,7 @@ import 'ember_quest.dart';
 
 void main() {
   runApp(
-    const GameWidget<EmberQuestGame>.controlled(
+    const GameWidget<EmberQuestGame>.managed(
       gameFactory: EmberQuestGame.new,
     ),
   );

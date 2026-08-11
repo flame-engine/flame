@@ -57,7 +57,7 @@ class _GamePage extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: GameWidget.controlled(
+            child: GameWidget.managed(
               gameFactory: () => _MyGame(events),
             ),
           ),

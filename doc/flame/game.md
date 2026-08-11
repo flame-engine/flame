@@ -84,7 +84,7 @@ will be thrown.
 If you instantiate your game in a build method your game will be rebuilt every
 time the Flutter tree gets rebuilt, which usually is more often than you'd like.
 To avoid this, you can either create an instance of your game first and
-reference it within your widget structure or use the `GameWidget.controlled`
+reference it within your widget structure or use the `GameWidget.managed`
 constructor.
 ```
 
@@ -299,7 +299,7 @@ void main() {
 A Flame `Game` can be paused and resumed in two ways:
 
 - With the use of the `pauseEngine` and `resumeEngine` methods.
-- By changing the `paused` attribute.
+- By changing the `isPaused` attribute.
 
 When pausing a `Game`, the `GameLoop` is effectively paused, meaning that no updates or new renders
 will happen until it is resumed.

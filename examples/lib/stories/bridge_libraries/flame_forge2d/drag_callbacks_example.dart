@@ -45,4 +45,10 @@ class DraggableBall extends Ball with DragCallbacks {
     super.onDragEnd(event);
     paint = originalPaint;
   }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    paint = originalPaint;
+  }
 }

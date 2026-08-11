@@ -22,7 +22,6 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    event.handled = true;
     dragStartEvent++;
     if (_wasDragged != isDragged) {
       ++isDraggedStateChange;
@@ -33,14 +32,12 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    event.handled = true;
     dragUpdateEvent++;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    event.handled = true;
     dragEndEvent++;
     if (_wasDragged != isDragged) {
       ++isDraggedStateChange;
@@ -51,7 +48,6 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragCancel(DragCancelEvent event) {
     super.onDragCancel(event);
-    event.handled = true;
     dragCancelEvent++;
   }
 }
@@ -69,7 +65,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleStartEvent++;
     if (_wasScaled != isScaling) {
       ++isScaledStateChange;
@@ -81,7 +76,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleUpdate(ScaleUpdateEvent event) {
     super.onScaleUpdate(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleUpdateEvent++;
   }
 
@@ -89,7 +83,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleEnd(ScaleEndEvent event) {
     super.onScaleEnd(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleEndEvent++;
     if (_wasScaled != isScaling) {
       ++isScaledStateChange;
@@ -103,6 +96,7 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
     this._onDragStart,
     this._onDragUpdate,
     this._onDragEnd,
+    this._onDragCancel,
     super.position,
     super.size,
   });
@@ -110,6 +104,7 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   final void Function(DragStartEvent)? _onDragStart;
   final void Function(DragUpdateEvent)? _onDragUpdate;
   final void Function(DragEndEvent)? _onDragEnd;
+  final void Function(DragCancelEvent)? _onDragCancel;
 
   @override
   void onDragStart(DragStartEvent event) {
@@ -126,6 +121,12 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
     return _onDragEnd?.call(event);
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    return _onDragCancel?.call(event);
   }
 }
 

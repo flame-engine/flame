@@ -228,7 +228,7 @@ To display the menus, add the following code to `lib/main.dart`:
 ```dart
 void main() {
   runApp(
-    GameWidget<EmberQuestGame>.controlled(
+    GameWidget<EmberQuestGame>.managed(
       gameFactory: EmberQuestGame.new,
       overlayBuilderMap: {
         'MainMenu': (_, game) => MainMenu(game: game),

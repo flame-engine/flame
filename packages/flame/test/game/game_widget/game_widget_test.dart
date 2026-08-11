@@ -129,7 +129,7 @@ void main() {
   );
 
   group('Subscription is valid after game change', () {
-    testWidgets('Uncontrolled to uncontrolled', (tester) async {
+    testWidgets('Unmanaged to unmanaged', (tester) async {
       const key = Key('flame-game');
       final game1 = FlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game1));
@@ -147,7 +147,7 @@ void main() {
       expect(game1.gameStateListeners.length, 0);
     });
 
-    testWidgets('Uncontrolled to controlled', (tester) async {
+    testWidgets('Unmanaged to managed', (tester) async {
       const key = Key('flame-game');
       final game1 = FlameGame();
       await tester.pumpWidget(GameWidget(key: key, game: game1));
@@ -156,7 +156,7 @@ void main() {
 
       late final FlameGame game2;
       await tester.pumpWidget(
-        GameWidget.controlled(
+        GameWidget.managed(
           key: key,
           gameFactory: () => game2 = FlameGame(),
         ),
@@ -176,12 +176,12 @@ void main() {
       expect(game2.isMounted, true);
     });
 
-    testWidgets('Controlled to uncontrolled', (tester) async {
+    testWidgets('Managed to unmanaged', (tester) async {
       const key = Key('flame-game');
 
       late final FlameGame game1;
       await tester.pumpWidget(
-        GameWidget.controlled(
+        GameWidget.managed(
           key: key,
           gameFactory: () => game1 = FlameGame(),
         ),
@@ -207,12 +207,12 @@ void main() {
       expect(game2.isMounted, true);
     });
 
-    testWidgets('Controlled to controlled', (tester) async {
+    testWidgets('Managed to managed', (tester) async {
       const key = Key('flame-game');
 
       late FlameGame game1;
       await tester.pumpWidget(
-        GameWidget.controlled(
+        GameWidget.managed(
           key: key,
           gameFactory: () => game1 = FlameGame(),
         ),
@@ -223,7 +223,7 @@ void main() {
 
       FlameGame? game2;
       await tester.pumpWidget(
-        GameWidget.controlled(
+        GameWidget.managed(
           key: key,
           gameFactory: () => game2 = FlameGame(),
         ),
