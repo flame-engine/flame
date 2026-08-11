@@ -97,7 +97,7 @@ Widget _secondaryMenuBuilder(BuildContext buildContext, OverlaysExample game) {
 
 Widget overlayBuilder(DashbookContext ctx) {
   return GameWidget<OverlaysExample>(
-    game: OverlaysExample()..paused = true,
+    game: OverlaysExample()..isPaused = true,
     overlayBuilderMap: {
       'PauseMenu': (context, game) => _pauseMenuBuilder(
         context,
