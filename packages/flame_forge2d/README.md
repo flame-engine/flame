@@ -50,7 +50,7 @@ Some more documentation can be found
 
 ## Migrating from 0.19
 
-Version 0.20 is built on Forge2D 0.15, which replaced the pure Dart port of Box2D 2.x with
+Version 0.20 is built on Forge2D 0.16, which replaced the pure Dart port of Box2D 2.x with
 bindings for Box2D v3, so the whole API changed. See the [flame_forge2d migration
 guide](https://docs.flame-engine.org/main/bridge_packages/flame_forge2d/migration.html) and the
 [Forge2D migration

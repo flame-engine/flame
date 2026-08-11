@@ -93,6 +93,9 @@ meters per step, so about 120 m/s, and the docs told you to lay the
 world out much smaller than a meter to stay under it. That limit is
 now `WorldDef.maximumLinearSpeed`, which defaults to 400 m/s and is
 settable per world through `Forge2DWorld(definition: WorldDef(...))`.
+When you pass a definition, also pass the `gravity` argument (or set
+`WorldDef.gravity` explicitly), because the definition's default is
+Box2D's y-up `(0, -10)` rather than Flame's y-down `(0, 10)`.
 There is no longer a reason to shrink the world, and there are good
 reasons not to.
 ```

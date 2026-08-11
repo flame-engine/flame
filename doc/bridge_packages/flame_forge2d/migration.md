@@ -1,6 +1,6 @@
 # Migrating from flame_forge2d 0.19
 
-flame_forge2d 0.20 is built on Forge2D 0.15, which replaced the pure Dart port of Box2D 2.x with
+flame_forge2d 0.20 is built on Forge2D 0.16, which replaced the pure Dart port of Box2D 2.x with
 bindings for [Box2D v3](https://box2d.org/). The whole underlying API changed, so this is a large
 breaking change.
 
@@ -226,9 +226,9 @@ enough for this to bite.
 Forge2D exports a `World`, which collides with Flame's `World` component, so files that use both
 need `import 'package:flame_forge2d/flame_forge2d.dart' hide World;`. That was already the case
 before, as was the collision between Forge2D's `Transform` and the one in
-`flutter/material.dart`, but Forge2D now also exports `Circle`, `Polygon`, and `Segment`, which
-can collide with `flame/geometry.dart`. Resolve them per file with `hide` or a prefixed import,
-for example:
+`flutter/material.dart`, but Forge2D now also exports `Circle`, `Polygon`, and `Shape`, which
+can collide with the ones in `flame/experimental.dart`. Resolve them per file with `hide` or a
+prefixed import, for example:
 
 ```dart
 import 'package:flame_forge2d/flame_forge2d.dart' hide Transform, World;
