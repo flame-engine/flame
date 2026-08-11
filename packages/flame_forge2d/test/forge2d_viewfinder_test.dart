@@ -37,11 +37,15 @@ void main() {
         throwsA(isA<AssertionError>()),
       );
       expect(
-        () => viewfinder.scale = Vector2(1, 2),
+        () => Forge2DViewfinder(metersToPixels: 0),
         throwsA(isA<AssertionError>()),
       );
+    });
+
+    test('rejects a non-uniform scale', () {
+      final viewfinder = Forge2DViewfinder();
       expect(
-        () => Forge2DViewfinder(metersToPixels: 0),
+        () => viewfinder.scale = Vector2(1, 2),
         throwsA(isA<AssertionError>()),
       );
     });

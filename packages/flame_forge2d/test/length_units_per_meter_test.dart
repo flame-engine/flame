@@ -29,8 +29,13 @@ void main() {
       expect(Tolerances.speculativeDistance, closeTo(2, 1e-6));
     });
 
-    // Runs after the game above has already fixed the length unit at 100.
     test('throws when a second game disagrees about the length unit', () async {
+      // The length unit only locks once a world exists, so fix it at 100
+      // here instead of relying on the test above having run first.
+      await initializeForge2D(lengthUnitsPerMeter: 100);
+      final world = World();
+      addTearDown(world.destroy);
+
       await expectLater(
         _ConflictingGame().onLoad(),
         throwsA(isA<StateError>()),
@@ -41,13 +46,15 @@ void main() {
       'a body is measured against the scaled tolerances',
       _ScaledGame.new,
       (game) async {
-        // Two meters across, which is tiny at this scale but well clear of
-        // the speculative distance in Box2D's own units.
+        // At 100 units per meter the warning threshold is five speculative
+        // distances, 10 units. This body is 20 units across (0.2 meters),
+        // which is comfortably above it, while a meter-scale check would
+        // have warned about anything this small.
         BodyComponent.debugWarnedAboutBodyScale = false;
         await game.world.ensureAdd(
           BodyComponent(
             bodyDef: BodyDef(type: BodyType.dynamic),
-            shapeSpecs: [ShapeSpec(Circle(radius: 5))],
+            shapeSpecs: [ShapeSpec(Circle(radius: 10))],
           ),
         );
 
