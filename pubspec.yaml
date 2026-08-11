@@ -125,3 +125,14 @@ melos:
       packageFilters:
         scope: flame_devtools
       description: Runs the devtools in the simulated mode.
+
+# TODO(spydon): Remove once forge2d 0.16.0 is published.
+# flame_forge2d needs `initializeForge2D(lengthUnitsPerMeter:)` and
+# `Tolerances`, which are in flame-engine/forge2d#120 and not in the published
+# 0.15.0.
+dependency_overrides:
+  forge2d:
+    git:
+      url: https://github.com/flame-engine/forge2d.git
+      ref: feat/length-units-per-meter
+      path: packages/forge2d
