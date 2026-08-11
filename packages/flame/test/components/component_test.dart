@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
@@ -514,6 +515,85 @@ void main() {
           component.parent = parent2;
 
           await game.ready();
+        });
+      });
+
+      group('load failures', () {
+        testWithFlameGame('loaded reports the error when awaited early', (
+          game,
+        ) async {
+          final component = _FailingLoadComponent();
+          final loaded = component.loaded;
+          game.world.add(component);
+
+          await expectLater(loaded, throwsA(isA<_LoadException>()));
+        });
+
+        testWithFlameGame('loaded reports the error when awaited late', (
+          game,
+        ) async {
+          final component = _FailingLoadComponent();
+          // Awaited from the start, so that the failure is never unhandled.
+          final loaded = component.loaded;
+          game.world.add(component);
+          await expectLater(loaded, throwsA(isA<_LoadException>()));
+
+          // The failure is remembered, so reading [loaded] afterwards reports
+          // it again instead of hanging forever.
+          await expectLater(
+            component.loaded,
+            throwsA(isA<_LoadException>()),
+          );
+          await expectLater(
+            component.loaded,
+            throwsA(isA<_LoadException>()),
+          );
+        });
+
+        testWithFlameGame(
+          'a synchronous onLoad failure does not escape add',
+          (game) async {
+            final component = _FailingSyncLoadComponent();
+            final loaded = component.loaded;
+
+            expect(() => game.world.add(component), returnsNormally);
+
+            await expectLater(loaded, throwsA(isA<_LoadException>()));
+          },
+        );
+
+        testWithFlameGame(
+          'the error goes to the zone when nothing awaits loaded',
+          (game) async {
+            final component = _FailingLoadComponent();
+            final errors = <Object>[];
+            runZonedGuarded(
+              () => game.world.add(component),
+              (error, _) => errors.add(error),
+            );
+            await game.ready();
+
+            expect(errors, [isA<_LoadException>()]);
+          },
+        );
+
+        testWithFlameGame('a failed load does not block the queue', (
+          game,
+        ) async {
+          await game.ready();
+          final failing = _FailingLoadComponent();
+          final loaded = failing.loaded;
+          final sibling = Component();
+          game.world.addAll([failing, sibling]);
+
+          await expectLater(loaded, throwsA(isA<_LoadException>()));
+          await game.ready();
+
+          expect(game.hasLifecycleEvents, isFalse);
+          expect(game.world.children, [sibling]);
+          expect(failing.isLoaded, isFalse);
+          expect(failing.isMounted, isFalse);
+          expect(failing.parent, isNull);
         });
       });
 
@@ -1978,6 +2058,23 @@ class _LifecycleComponent extends Component {
 
   @override
   String toString() => 'LifecycleComponent($name)';
+}
+
+class _LoadException implements Exception {
+  const _LoadException();
+}
+
+class _FailingLoadComponent extends Component {
+  @override
+  Future<void> onLoad() async {
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    throw const _LoadException();
+  }
+}
+
+class _FailingSyncLoadComponent extends Component {
+  @override
+  void onLoad() => throw const _LoadException();
 }
 
 class _SlowLoadingComponent extends Component {

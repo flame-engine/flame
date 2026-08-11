@@ -190,6 +190,68 @@ The equivalent field on the deprecated `*Info` event classes (`TapDownInfo.handl
 been removed as well.
 
 
+### `add`, `addAll` and `addToParent` are now synchronous
+
+`Component.add`, `Component.addAll` and `Component.addToParent` used to return a future, which made
+it look like you could await the addition. That future only covered the child's loading, never its
+mounting, so awaiting it was misleading, and forgetting to await it (or to wrap it in `unawaited`)
+tripped the `discarded_futures` lint in a lot of games. All three methods now return `void`.
+
+Drop the `await`:
+
+```dart
+// Before
+await add(MyComponent());
+await addAll([MyComponent(), MyOtherComponent()]);
+
+// After
+add(MyComponent());
+addAll([MyComponent(), MyOtherComponent()]);
+```
+
+If you were relying on the returned future to know when the child had loaded, await the child's
+`loaded` future instead:
+
+```dart
+// Before
+await add(crate);
+
+// After
+add(crate);
+await crate.loaded;
+```
+
+For a batch of children, or when you need them to be present in `children` rather than just loaded,
+await `game.lifecycleEventsProcessed` once after adding them.
+
+
+#### Load errors are no longer reported by `GameWidget.errorBuilder`
+
+`GameWidget.errorBuilder` shows a widget when the *game's* loading fails, and it used to catch a
+failing child's `onLoad` as well, because `await add(child)` chained the child's error onto the
+game's own `onLoad` future. Since `add` no longer returns a future, that chain is gone: a child that
+throws in `onLoad` no longer reaches `errorBuilder`.
+
+The component itself is not added to the tree, and the rest of the game keeps running. The error is
+reported through the child's `loaded` future, and if nothing is awaiting it, it is handed to the
+current `Zone` as an uncaught error.
+
+To get the old behavior for a specific child, await its `loaded` future inside the parent's `onLoad`,
+which puts the error back onto the future `errorBuilder` watches:
+
+```dart
+class MyGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    final level = Level();
+    world.add(level);
+    // Throws here if Level.onLoad fails, so errorBuilder is shown.
+    await level.loaded;
+  }
+}
+```
+
+
 ### `GameWidget.controlled` renamed to `GameWidget.managed`
 
 The `GameWidget.controlled` constructor has been renamed to `GameWidget.managed`. The behavior is

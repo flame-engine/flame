@@ -225,9 +225,34 @@ await coin.mounted;
 // The coin is now guaranteed to be mounted.
 ```
 
-Be careful not to await these futures from inside the `onLoad` method of the component you are
-adding the child to: a child only starts loading after its parent's `onLoad` has completed, so
-awaiting the child's `loaded` or `mounted` future there would never complete — a deadlock.
+When you add a batch of children and only care that all of them made it into the tree, await
+`game.lifecycleEventsProcessed` once instead of collecting the individual futures:
+
+```dart
+world.addAll(coins);
+await game.lifecycleEventsProcessed;
+// All the coins are now in world.children.
+```
+
+Awaiting `loaded` is safe from inside the parent's own `onLoad`, because the child starts loading as
+soon as it is added:
+
+```dart
+class Inventory extends Component {
+  @override
+  Future<void> onLoad() async {
+    final coin = Coin();
+    add(coin);
+    await coin.loaded;
+    // Anything the coin's onLoad set up is now available here.
+  }
+}
+```
+
+Awaiting `mounted` or `removed` there is not safe: a child can only be mounted after its parent has
+been, and the parent is only mounted once its `onLoad` has completed, so those futures would
+deadlock. The same goes for `game.lifecycleEventsProcessed`, since the parent's own pending mount is
+part of the queue it waits for.
 
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list

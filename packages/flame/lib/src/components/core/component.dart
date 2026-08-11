@@ -223,11 +223,22 @@ class Component {
   Completer<void>? _mountCompleter;
   Completer<void>? _removeCompleter;
 
+  /// The error thrown by [onLoad], if it failed.
+  ///
+  /// This is kept around so that [loaded] can report the failure to whoever
+  /// asks for it, no matter how late, and however many times.
+  ({Object error, StackTrace stackTrace})? _loadError;
+
   /// A future that completes when this component finishes loading.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
-  /// already completed future.
+  /// already completed future. If [onLoad] threw, this returns a future that
+  /// completes with that error, every time it is read.
   Future<void> get loaded {
+    final loadError = _loadError;
+    if (loadError != null) {
+      return Future.error(loadError.error, loadError.stackTrace);
+    }
     return isLoaded
         ? Future.value()
         : (_loadCompleter ??= Completer<void>()).future;
@@ -661,10 +672,17 @@ class Component {
   /// // The coin is now guaranteed to be mounted.
   /// ```
   ///
-  /// Be careful not to await these futures from inside the [onLoad] method of
-  /// the component you are adding the child to: a child only starts loading
-  /// after its parent's [onLoad] has completed, so awaiting the child's
-  /// [loaded] or [mounted] future there would never complete — a deadlock.
+  /// When you add a whole batch of children and only care that all of them made
+  /// it into the tree, await [FlameGame.lifecycleEventsProcessed] once instead
+  /// of collecting the individual futures.
+  ///
+  /// Awaiting [loaded] is safe from inside the parent's own [onLoad], because
+  /// the child starts loading as soon as it is added. Awaiting [mounted] or
+  /// [removed] there is not: a child can only be mounted after its parent has
+  /// been, and the parent is only mounted once its [onLoad] has completed, so
+  /// those futures would deadlock. The same applies to
+  /// [FlameGame.lifecycleEventsProcessed], since the parent's own pending
+  /// mount is part of the queue it waits for.
   ///
   /// When multiple children are scheduled to be added to the same parent, we
   /// start loading all of them as soon as possible. Nevertheless, the children
@@ -681,6 +699,11 @@ class Component {
   /// try to add it to multiple parents, or even to the same parent multiple
   /// times. If you need to change the parent of a component, use the
   /// [parent] setter.
+  ///
+  /// If [component]'s [onLoad] throws, the component is never mounted and the
+  /// rest of the tree carries on unaffected. The error is reported through the
+  /// component's [loaded] future, and to the current [Zone] if nothing is
+  /// awaiting it.
   void add(Component component) => _addChild(component);
 
   /// Adds this component as a child of [parent] (see [add] for details).
@@ -693,7 +716,7 @@ class Component {
     }
   }
 
-  FutureOr<void> _addChild(Component child) {
+  void _addChild(Component child) {
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
       child._parent?._internalChildren.remove(child);
@@ -714,7 +737,7 @@ class Component {
       _internalChildren.add(child);
     }
     if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
-      return child._startLoading();
+      child._startLoading();
     }
   }
 
@@ -921,6 +944,14 @@ class Component {
   @internal
   LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
+    if (_loadError != null) {
+      // This component will never finish loading, so waiting for it would block
+      // the rest of the queue forever. Drop the event and detach the component
+      // from the parent it never made it into.
+      _parent = null;
+      parent._children?.remove(this);
+      return LifecycleEventStatus.done;
+    }
     if (parent.isMounted && isLoaded) {
       _parent ??= parent;
       _mount();
@@ -1000,15 +1031,23 @@ class Component {
     }
   }
 
-  FutureOr<void> _startLoading() {
+  void _startLoading() {
     assert(_state == _initial);
     assert(_parent != null);
     assert(_parent!.findGame() != null);
     assert(_parent!.findGame()!.hasLayout);
     _setLoadingBit();
-    final onLoadFuture = onLoad();
+    final FutureOr<void> onLoadFuture;
+    try {
+      onLoadFuture = onLoad();
+    } on Object catch (error, stackTrace) {
+      // A synchronous [onLoad] must fail the same way an asynchronous one
+      // does, so that [add] never throws at its call site.
+      _failLoading(error, stackTrace);
+      return;
+    }
     if (onLoadFuture is Future) {
-      return onLoadFuture.then(
+      onLoadFuture.then(
         (dynamic _) => _finishLoading(),
         onError: _failLoading,
       );
@@ -1028,15 +1067,23 @@ class Component {
   ///
   /// Since [add] is synchronous and no longer returns the loading future,
   /// a load error is reported through the [loaded] future, so it can be caught
-  /// with `await component.loaded`. If nothing is awaiting [loaded], the error
-  /// is rethrown instead of being silently swallowed.
+  /// with `await component.loaded`. The error is remembered, so it is also
+  /// reported to anyone who reads [loaded] after the fact, or more than once.
+  ///
+  /// If nothing is awaiting [loaded] by the time the failure happens, the error
+  /// is handed to the current [Zone] instead of being silently swallowed, the
+  /// same way an unawaited future's error would be.
+  ///
+  /// The component is left unloaded: it never mounts, and its pending add event
+  /// is dropped from the lifecycle queue by [handleLifecycleEventAdd].
   void _failLoading(Object error, StackTrace stackTrace) {
+    _loadError = (error: error, stackTrace: stackTrace);
     final completer = _loadCompleter;
     if (completer != null) {
       _loadCompleter = null;
       completer.completeError(error, stackTrace);
     } else {
-      Error.throwWithStackTrace(error, stackTrace);
+      Zone.current.handleUncaughtError(error, stackTrace);
     }
   }
 

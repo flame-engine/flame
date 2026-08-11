@@ -124,6 +124,11 @@ class ComponentTreeRoot extends Component {
   /// its [Component.loaded], [Component.mounted] or [Component.removed] future;
   /// to wait for the whole queue to drain, await this future.
   ///
+  /// Don't await this from inside a component's [Component.onLoad]: that
+  /// component's own mount is part of the queue, and it can only be processed
+  /// after [Component.onLoad] has completed, so the wait would deadlock. Await
+  /// the child's [Component.loaded] future there instead.
+  ///
   /// Example usage:
   ///
   /// ```dart
