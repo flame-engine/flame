@@ -59,7 +59,7 @@ class PadRacingGame extends Forge2DGame with KeyboardEvents {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     camera.removeFromParent();
     children.register<CameraComponent>();
 

@@ -22,7 +22,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     if (isFinish) {
       _finishOverlay = await createFinishOverlay();
     }
