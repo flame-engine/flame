@@ -35,7 +35,7 @@ class MyGame extends FlameGame with DragCallbacks {
 }
 ```
 
-If you specifically need the arena behaviour, wrap your `GameWidget` in Flutter's own
+If you specifically need the arena behavior, wrap your `GameWidget` in Flutter's own
 [`GestureDetector`](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html) and use its
 `onVerticalDragUpdate` / `onHorizontalDragUpdate` callbacks.
 
