@@ -103,13 +103,13 @@ void main() {
     );
 
     testWithGame(
-      'the default renders one meter as ten pixels',
+      'the default renders one meter as a hundred pixels',
       Forge2DGame.new,
       (game) async {
         game.onGameResize(Vector2.all(100));
-        expect(game.metersToPixels, 10);
+        expect(game.metersToPixels, 100);
         expect(game.camera.viewfinder.zoom, 1);
-        expect(game.worldToScreen(Vector2.all(1)), Vector2.all(60));
+        expect(game.worldToScreen(Vector2.all(1)), Vector2.all(150));
       },
     );
   });

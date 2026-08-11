@@ -49,9 +49,8 @@ as well as normal Flame components.
 
 `Forge2DGame` has a built-in `CameraComponent` that uses a `Forge2DViewfinder`. The physics world
 is measured in meters, and the viewfinder renders one meter as `metersToPixels` pixels, which is
-10 by default. Your components will therefore be a lot bigger than in a normal Flame game, which
-is what you want: there is a speed limit in the `Forge2D` world that you would hit very quickly if
-one meter was one pixel.
+100 by default. Lay your world out in meters at a realistic scale and let `metersToPixels` decide
+how big that is on screen; see [](#units-and-scale) for why the two are kept apart.
 
 You can change the scale either by calling `super(metersToPixels: yourScale)` in your constructor
 or by doing `game.metersToPixels = yourScale;` at a later stage.
@@ -78,6 +77,91 @@ the constructor of the `Forge2DGame`.
 
 A simple `Forge2DGame` implementation example can be seen in the
 [examples folder](https://github.com/flame-engine/flame/tree/main/packages/flame_forge2d/example).
+
+
+## Units and scale
+
+Forge2D is Box2D, and Box2D is tuned for meters, kilograms and seconds. Lay your world out in
+meters at a realistic scale, aiming to keep moving bodies roughly between 0.1 and 10 of them, with
+1 meter being the sweet spot. How large that is on screen is a separate decision, and it is what
+`metersToPixels` is for.
+
+```{note}
+If you used flame_forge2d before the Box2D v3 migration, this is a
+change of advice. The old version had a hard `maxTranslation` of 2
+meters per step, so about 120 m/s, and the docs told you to lay the
+world out much smaller than a meter to stay under it. That limit is
+now `WorldDef.maximumLinearSpeed`, which defaults to 400 m/s and is
+settable per world through `Forge2DWorld(definition: WorldDef(...))`.
+There is no longer a reason to shrink the world, and there are good
+reasons not to.
+```
+
+
+### Why a shrunken world misbehaves
+
+A handful of Box2D's tolerances are absolute lengths rather than fractions of the shapes they
+apply to, so in a world laid out at a much smaller scale than a meter they stop being negligible
+and start dominating:
+
+| Tolerance | Default | What it does in a world only a meter across |
+| --- | --- | --- |
+| `Tolerances.speculativeDistance` | 0.02 m | contacts are reported across 2% of the world |
+| `WorldDef.restitutionThreshold` | 1 m/s | nothing ever bounces |
+| `WorldDef.hitEventThreshold` | 1 m/s | no hit events are ever generated |
+| `BodyDef.sleepThreshold` | 0.05 m/s | bodies fall asleep while still moving |
+| `WorldDef.maxContactPushSpeed` | 3 m/s | overlapping bodies are pushed apart violently |
+| `Tolerances.aabbMargin` | 0.05 m | broadphase bounds dwarf the shapes |
+
+The first one is the one that gets reported as a bug. Box2D creates contact points for shapes that
+are approaching but have not touched yet, which is what stops fast bodies from passing through
+things and removes most collision jitter. It also means `beginContact` fires while there is still
+a visible gap of up to `Tolerances.speculativeDistance`. A body that is not comfortably larger
+than that is permanently in contact with its neighbors. flame_forge2d prints a debug-mode warning
+once when it notices a moving body that small.
+
+
+### Scaling a world up
+
+If your world is currently too small, scale it up and scale gravity with it. That last part is the
+one that is easy to miss: scaling lengths alone makes everything look like it is moving in
+treacle, while scaling lengths and gravity by the same factor leaves the timing of the simulation
+completely unchanged. For a length scale factor of `S`:
+
+| Quantity | Scale by |
+| --- | --- |
+| lengths, positions, radii, velocities, gravity, accelerations | `S` |
+| densities, friction, restitution, damping, angular velocities | `1`, unchanged |
+| masses | `S²` |
+| forces, linear impulses | `S³` |
+| torques, rotational inertia, angular impulses | `S⁴` |
+| **time** | **`1`, unchanged** |
+
+So a world that was 1 meter tall with a 0.02 m ball and a gravity of 9.81 becomes a world 10
+meters tall with a 0.2 m ball and a gravity of 98.1, behaving identically but comfortably inside
+the range Box2D is tuned for. Divide `metersToPixels` by the same factor to keep it the same size
+on screen.
+
+
+### When the layout cannot change
+
+When scaling the world is not practical, tell Box2D how many of your length units make up a meter
+and every tolerance in the first table above moves with it:
+
+```dart
+class MyGame extends Forge2DGame {
+  MyGame() : super(lengthUnitsPerMeter: 0.04);
+}
+```
+
+A good rule of thumb is the height of your player character: if it is 0.04 units tall and you
+think of it as a person, pass 0.04. You are then responsible for gravity, densities and forces
+being sensible at that scale, using the same table.
+
+This is a process-wide setting inside Box2D that cannot change once a physics world exists, so it
+can only be passed to the constructor, and several games running at the same time have to agree on
+it. A game that asks for a different value than one already in effect throws a `StateError` rather
+than quietly corrupting the simulation.
 
 
 ## Forge2DWorld
@@ -120,7 +204,7 @@ final ball = BodyComponent(
   bodyDef: BodyDef(type: BodyType.dynamic),
   shapeSpecs: [
     ShapeSpec(
-      Circle(radius: 5),
+      Circle(radius: 0.5),
       ShapeDef(material: SurfaceMaterial(restitution: 0.8)),
     ),
   ],

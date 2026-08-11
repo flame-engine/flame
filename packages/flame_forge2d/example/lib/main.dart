@@ -35,12 +35,17 @@ class Forge2DExample extends Forge2DGame {
   }
 }
 
+/// A ball the size of a football, in a world measured in meters.
+///
+/// Forge2D is tuned for bodies roughly between 0.1 and 10 meters, so the
+/// world is laid out at a realistic scale and the camera decides how large
+/// that ends up being on screen.
 class Ball extends BodyComponent with TapCallbacks {
   Ball({Vector2? initialPosition})
     : super(
         shapeSpecs: [
           ShapeSpec(
-            Circle(radius: 5),
+            Circle(radius: 0.5),
             ShapeDef(
               material: SurfaceMaterial(restitution: 0.8, friction: 0.4),
             ),
@@ -55,7 +60,7 @@ class Ball extends BodyComponent with TapCallbacks {
 
   @override
   void onTapDown(_) {
-    body.applyLinearImpulse(Vector2.random() * 5000);
+    body.applyLinearImpulse(Vector2.random() * 5);
   }
 }
 

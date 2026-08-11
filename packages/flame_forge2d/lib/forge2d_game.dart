@@ -3,7 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame_forge2d/contact_events_dispatcher.dart';
 import 'package:flame_forge2d/forge2d_viewfinder.dart';
 import 'package:flame_forge2d/forge2d_world.dart';
-import 'package:forge2d/forge2d.dart' show initializeForge2D;
+import 'package:forge2d/forge2d.dart' show Tolerances, initializeForge2D;
 
 /// The base game class for creating games that uses the Forge2D physics engine.
 class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
@@ -14,6 +14,13 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   /// its viewfinder is replaced with a [Forge2DViewfinder], unless it already
   /// is one, in which case [metersToPixels] is applied to it.
   ///
+  /// [lengthUnitsPerMeter] tells Forge2D that the world is laid out in units
+  /// where one meter is that many of them, which scales the tolerances that
+  /// Box2D expresses as absolute lengths. Lay the world out so that moving
+  /// bodies are roughly 0.1 to 10 meters instead when you can; see
+  /// [Tolerances] and the `lengthUnitsPerMeter` argument of
+  /// [initializeForge2D], which this is forwarded to.
+  ///
   /// [contactEventsDispatcher] is only used for the world that this
   /// constructor creates, so pass it to the [Forge2DWorld] itself when you
   /// provide a [world].
@@ -23,6 +30,7 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
     Vector2? gravity,
     ContactEventsDispatcher? contactEventsDispatcher,
     double metersToPixels = Forge2DViewfinder.defaultMetersToPixels,
+    this.lengthUnitsPerMeter,
   }) : assert(
          world == null || contactEventsDispatcher == null,
          'contactEventsDispatcher is ignored when a world is provided, pass '
@@ -54,6 +62,15 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   double get metersToPixels => _viewfinder.metersToPixels;
   set metersToPixels(double value) => _viewfinder.metersToPixels = value;
 
+  /// How many of the world's length units make up one meter, or null to leave
+  /// the length unit alone.
+  ///
+  /// Forwarded to [initializeForge2D] in [onLoad]. The length unit is
+  /// process-wide and cannot change once a physics world exists, so this can
+  /// only be set through the constructor, and games that run at the same time
+  /// have to agree on it.
+  final double? lengthUnitsPerMeter;
+
   Forge2DViewfinder get _viewfinder => camera.viewfinder as Forge2DViewfinder;
 
   /// Initializes Forge2D and then loads the game.
@@ -66,7 +83,7 @@ class Forge2DGame<T extends Forge2DWorld> extends FlameGame<T> {
   /// they create any bodies, or the game will throw on the web.
   @override
   Future<void> onLoad() async {
-    await initializeForge2D();
+    await initializeForge2D(lengthUnitsPerMeter: lengthUnitsPerMeter);
     await super.onLoad();
   }
 

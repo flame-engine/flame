@@ -179,8 +179,11 @@ The meters-to-pixels scaling no longer goes through the camera's zoom, so the zo
 zooming the camera in and out.
 
 - `Forge2DGame(zoom: 24)` becomes `Forge2DGame(metersToPixels: 24)`, and
-  `game.camera.viewfinder.zoom = 24` becomes `game.metersToPixels = 24`. The default is still 10,
-  so games that did not set a zoom look the same as before.
+  `game.camera.viewfinder.zoom = 24` becomes `game.metersToPixels = 24`.
+- The default changed from 10 to 100, so a game that never set a zoom now renders ten times
+  larger. Pass `metersToPixels: 10` to keep it exactly as it was, but read
+  [](forge2d.md#units-and-scale) first: the old default came with advice to lay the world out much
+  smaller than a meter, and that advice is now actively harmful.
 - The camera of a `Forge2DGame` uses a `Forge2DViewfinder`, which renders one meter of the physics
   world as `metersToPixels` pixels. Its `zoom` is applied on top of that and now starts at 1. If
   you pass your own `camera`, its viewfinder is replaced with a `Forge2DViewfinder`, so pass one
@@ -190,6 +193,32 @@ zooming the camera in and out.
   the local positions that events report are all still in meters.
 - Code that used the zoom to convert between meters and pixels, for example when positioning a
   Flutter widget on top of a body, should use `game.metersToPixels` instead.
+
+
+## World scale
+
+This is the change most likely to break a game that otherwise compiles and runs.
+
+flame_forge2d used to tell you to lay your world out in meters much smaller than a pixel, because
+Box2D v2 clamped every body to `maxTranslation` of 2 meters per step, about 120 m/s. Box2D v3
+replaced that with `WorldDef.maximumLinearSpeed`, which defaults to 400 m/s and is settable per
+world, and it added speculative contacts, which report a contact as soon as two shapes are within
+`Tolerances.speculativeDistance` (0.02 meters) of each other.
+
+The upshot is that a world that was deliberately laid out at a sub-meter scale now reports
+contacts across visible gaps, never bounces, and puts bodies to sleep while they are still moving.
+See [](forge2d.md#units-and-scale) for the full picture; in short:
+
+- Prefer scaling the world up so that moving bodies are roughly 0.1 to 10 meters. Multiply lengths
+  **and gravity** by the same factor, which leaves the timing of the simulation unchanged, then
+  divide `metersToPixels` by it to keep everything the same size on screen. There is a table of
+  how the other quantities scale in the same section.
+- If that is impractical, pass `lengthUnitsPerMeter` to the `Forge2DGame` constructor to move
+  Box2D's tolerances to your scale instead, for example `super(lengthUnitsPerMeter: 0.04)` for a
+  world where a person is 0.04 units tall.
+
+In debug mode flame_forge2d prints a warning once when it creates a moving body that is small
+enough for this to bite.
 
 
 ## Name collisions

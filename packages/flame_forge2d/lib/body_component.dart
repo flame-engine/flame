@@ -50,6 +50,14 @@ class BodyComponent<T extends Forge2DGame> extends Component
   static const defaultColor = Color.fromARGB(255, 255, 255, 255);
   late Body body;
 
+  /// Whether the debug-mode warning about a body being too small for
+  /// Forge2D's tolerances has already been reported.
+  ///
+  /// A world that is laid out at the wrong scale has that problem everywhere,
+  /// so the warning is only worth printing once. Reset it to warn again.
+  @visibleForTesting
+  static bool debugWarnedAboutBodyScale = false;
+
   /// The default implementation of [createBody] will use this value to create
   /// the [Body], if it is provided.
   ///
@@ -110,6 +118,10 @@ class BodyComponent<T extends Forge2DGame> extends Component
     await super.onLoad();
     world = game.world;
     body = createBody();
+    assert(() {
+      _debugCheckBodyScale(this, body);
+      return true;
+    }());
   }
 
   @override
@@ -262,3 +274,97 @@ class BodyComponent<T extends Forge2DGame> extends Component
     super.onRemove();
   }
 }
+
+/// Warns when a moving body is small enough that Forge2D's absolute
+/// tolerances dominate it.
+///
+/// Forge2D reports a contact as soon as two shapes are within
+/// [Tolerances.speculativeDistance] of each other, which is what stops fast
+/// bodies from passing through things. It also means that a body which is not
+/// comfortably larger than that distance is permanently in contact with its
+/// neighbors, which usually shows up as `beginContact` firing across a
+/// visible gap.
+///
+/// Only non-static bodies are checked, since Forge2D's guidance is about
+/// moving objects and thin static geometry is a normal thing to have. The
+/// largest side of the shape is used rather than the smallest, so that thin
+/// but long shapes are not reported.
+void _debugCheckBodyScale(BodyComponent component, Body body) {
+  if (BodyComponent.debugWarnedAboutBodyScale || body.type == BodyType.static) {
+    return;
+  }
+  // Forge2D is tuned for moving bodies between 0.1 and 10 meters, and 0.1
+  // meters is five speculative distances.
+  final speculativeDistance = Tolerances.speculativeDistance;
+  final smallestUsefulSize = 5 * speculativeDistance;
+  for (final shape in body.shapes) {
+    final largestSide = _debugLargestSide(shape.geometry);
+    if (largestSide >= smallestUsefulSize || largestSide == 0) {
+      continue;
+    }
+    BodyComponent.debugWarnedAboutBodyScale = true;
+    debugPrint(
+      'flame_forge2d: $component has a shape that is only '
+      '${_debugMeters(largestSide)} meters across, while Forge2D '
+      'reports contacts across gaps of up to '
+      '${_debugMeters(speculativeDistance)} meters '
+      '(Tolerances.speculativeDistance). Bodies this small collide with '
+      'things they do not visibly touch, never bounce, and fall asleep while '
+      'still moving.\n'
+      'Forge2D is tuned for moving bodies between 0.1 and 10 meters. Lay the '
+      'world out at that scale and raise Forge2DGame.metersToPixels to keep '
+      'it the same size on screen, remembering to scale gravity by the same '
+      'factor so that the timing stays the same. If the layout cannot change, '
+      'pass lengthUnitsPerMeter to the Forge2DGame constructor to move the '
+      'tolerances instead.\n'
+      'This is a debug-mode warning and is only reported once.',
+    );
+    return;
+  }
+}
+
+/// The longest side of [geometry], used to tell a body that is small in every
+/// direction from one that is merely thin.
+///
+/// Measured on the geometry rather than on `Shape.aabb`, because Forge2D
+/// stores the bounds already grown by the speculative distance, which is the
+/// very thing being compared against here.
+double _debugLargestSide(ShapeGeometry geometry) {
+  switch (geometry) {
+    case Circle(:final radius):
+      return 2 * radius;
+    case Capsule(:final center1, :final center2, :final radius):
+      return center1.distanceTo(center2) + 2 * radius;
+    case Segment(:final point1, :final point2):
+      return point1.distanceTo(point2);
+    case Polygon(
+      :final points,
+      :final radius,
+      :final halfWidth,
+      :final halfHeight,
+    ):
+      if (points == null || points.isEmpty) {
+        // A box that has not been read back from Forge2D yet.
+        return 2 * (math.max(halfWidth ?? 0, halfHeight ?? 0) + radius);
+      }
+      var minimum = points.first.clone();
+      var maximum = points.first.clone();
+      for (final point in points) {
+        minimum = Vector2(
+          math.min(minimum.x, point.x),
+          math.min(minimum.y, point.y),
+        );
+        maximum = Vector2(
+          math.max(maximum.x, point.x),
+          math.max(maximum.y, point.y),
+        );
+      }
+      return math.max(maximum.x - minimum.x, maximum.y - minimum.y) +
+          2 * radius;
+  }
+}
+
+/// Formats a length without the trailing zeros that [num.toStringAsPrecision]
+/// leaves behind.
+String _debugMeters(double value) =>
+    double.parse(value.toStringAsPrecision(3)).toString();

@@ -101,11 +101,14 @@ mixin GlowingBody on BodyComponent {
 /// The base game for the Forge2D examples, which gives them the shared dark
 /// background.
 class Forge2DExampleGame extends Forge2DGame {
+  /// These examples are laid out for a screen that shows tens of meters, so
+  /// they pin the rendering scale they were written for rather than following
+  /// the default. See the package example for a world at the default scale.
   Forge2DExampleGame({
     super.world,
     super.camera,
     super.gravity,
-    super.metersToPixels,
+    super.metersToPixels = 10,
   });
 
   @override

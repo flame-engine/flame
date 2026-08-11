@@ -44,7 +44,9 @@ void main() {
       group('draws correctly', () {
         String goldenPath(String name) => 'goldens/body_component/$name.png';
 
-        final flameTester = FlameTester(Forge2DGame.new);
+        // Pinned so that the goldens do not have to be regenerated when
+        // the default rendering scale changes; they are about the shapes.
+        final flameTester = FlameTester(() => Forge2DGame(metersToPixels: 10));
         final testPaint = Paint()..color = const Color(0xffff0000);
 
         flameTester.testGameWidget(

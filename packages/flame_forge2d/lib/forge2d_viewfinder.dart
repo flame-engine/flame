@@ -1,15 +1,17 @@
 import 'package:flame/camera.dart';
 import 'package:flame/game.dart';
+import 'package:forge2d/forge2d.dart' show Tolerances;
 
 /// A [Viewfinder] that renders a world measured in meters onto a screen
 /// measured in pixels.
 ///
-/// Forge2D has a speed limit that a body reaches very quickly when one meter
-/// is rendered as one pixel, so a physics world has to be laid out in meters
-/// that are considerably smaller than a pixel. [metersToPixels] is the number
-/// of pixels that one meter is rendered as, and keeping it separate from the
-/// [zoom] leaves the zoom free for what it is meant for: zooming the camera
-/// in and out.
+/// Forge2D is tuned for meters, so a physics world is laid out in them and
+/// [metersToPixels] decides how large a meter is on screen. Keeping the two
+/// apart leaves the [zoom] free for what it is meant for: zooming the camera
+/// in and out. It also keeps the choice of screen size from leaking into the
+/// simulation, which matters because a world laid out at a much smaller
+/// scale than a meter runs into Forge2D's absolute tolerances; see
+/// [Tolerances].
 ///
 /// Only the rendering is affected, so body positions, the [position] of the
 /// viewfinder, [visibleGameSize], [CameraComponent.visibleWorldRect] and the
@@ -23,7 +25,12 @@ class Forge2DViewfinder extends Viewfinder {
 
   /// The number of pixels that one meter is rendered as when no other value
   /// is given.
-  static const double defaultMetersToPixels = 10;
+  ///
+  /// A meter of physics world covers a hundred pixels, which puts a
+  /// human-sized body at a couple of hundred pixels tall and a phone screen
+  /// at roughly ten meters. Laying a world out so that it fills the screen at
+  /// this scale lands it in the range that Forge2D is tuned for.
+  static const double defaultMetersToPixels = 100;
 
   double _metersToPixels;
 
