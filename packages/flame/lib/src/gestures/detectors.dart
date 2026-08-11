@@ -2,54 +2,6 @@ import 'package:flame/src/game/game.dart';
 import 'package:flame/src/gestures/events.dart';
 import 'package:flutter/gestures.dart';
 
-mixin VerticalDragDetector on Game {
-  void onVerticalDragDown(DragDownInfo info) {}
-  void onVerticalDragStart(DragStartInfo info) {}
-  void onVerticalDragUpdate(DragUpdateInfo info) {}
-  void onVerticalDragEnd(DragEndInfo info) {}
-  void onVerticalDragCancel() {}
-
-  void handleVerticalDragDown(DragDownDetails details) {
-    onVerticalDragDown(DragDownInfo.fromDetails(this, details));
-  }
-
-  void handleVerticalDragStart(DragStartDetails details) {
-    onVerticalDragStart(DragStartInfo.fromDetails(this, details));
-  }
-
-  void handleVerticalDragUpdate(DragUpdateDetails details) {
-    onVerticalDragUpdate(DragUpdateInfo.fromDetails(this, details));
-  }
-
-  void handleVerticalDragEnd(DragEndDetails details) {
-    onVerticalDragEnd(DragEndInfo.fromDetails(details));
-  }
-}
-
-mixin HorizontalDragDetector on Game {
-  void onHorizontalDragDown(DragDownInfo info) {}
-  void onHorizontalDragStart(DragStartInfo info) {}
-  void onHorizontalDragUpdate(DragUpdateInfo info) {}
-  void onHorizontalDragEnd(DragEndInfo info) {}
-  void onHorizontalDragCancel() {}
-
-  void handleHorizontalDragDown(DragDownDetails details) {
-    onHorizontalDragDown(DragDownInfo.fromDetails(this, details));
-  }
-
-  void handleHorizontalDragStart(DragStartDetails details) {
-    onHorizontalDragStart(DragStartInfo.fromDetails(this, details));
-  }
-
-  void handleHorizontalDragUpdate(DragUpdateDetails details) {
-    onHorizontalDragUpdate(DragUpdateInfo.fromDetails(this, details));
-  }
-
-  void handleHorizontalDragEnd(DragEndDetails details) {
-    onHorizontalDragEnd(DragEndInfo.fromDetails(details));
-  }
-}
-
 mixin PanDetector on Game {
   void onPanDown(DragDownInfo info) {}
   void onPanStart(DragStartInfo info) {}

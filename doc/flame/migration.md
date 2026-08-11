@@ -7,6 +7,39 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### `VerticalDragDetector` and `HorizontalDragDetector` removed
+
+Both game-level mixins have been removed, with no direct replacement in Flame.
+
+They existed only to expose Flutter's `VerticalDragGestureRecognizer` and
+`HorizontalDragGestureRecognizer`, whose distinguishing feature is not the filtering itself but how
+they behave in Flutter's gesture arena: an axis-constrained recognizer yields to a competitor on the
+other axis. That matters when a `GameWidget` is nested inside a scrollable, which is a concern of
+the widget tree rather than of the game, and it is not something the component-level `DragCallbacks`
+can reproduce.
+
+If your game accepts drags on any axis, use `DragCallbacks`, which can be mixed directly into your
+game class:
+
+```dart
+// Before
+class MyGame extends FlameGame with VerticalDragDetector {
+  @override
+  void onVerticalDragUpdate(DragUpdateInfo info) { /* ... */ }
+}
+
+// After
+class MyGame extends FlameGame with DragCallbacks {
+  @override
+  void onDragUpdate(DragUpdateEvent event) { /* ... */ }
+}
+```
+
+If you specifically need the arena behaviour, wrap your `GameWidget` in Flutter's own
+[`GestureDetector`](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html) and use its
+`onVerticalDragUpdate` / `onHorizontalDragUpdate` callbacks.
+
+
 ### `ForcePressDetector` removed
 
 The `ForcePressDetector` mixin and its `ForcePressInfo` event class have been removed, with no
