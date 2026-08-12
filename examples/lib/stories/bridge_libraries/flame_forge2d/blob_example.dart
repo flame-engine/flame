@@ -36,7 +36,7 @@ class BlobWorld extends Forge2DWorld
     addAll(blobParts);
     // The joint needs the body of every part, and those are created in the
     // parts' onLoad, so wait for all of them to finish loading first.
-    await Future.wait(blobParts.map((part) => part.loaded));
+    await blobParts.loaded;
     createJoint(ConstantVolumeJoint(physicsWorld, jointDef));
   }
 

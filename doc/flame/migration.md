@@ -87,8 +87,8 @@ would apply their action even though the drag never finished. This is not a rare
 with `MultiDragScaleDispatcher` every two finger pinch cancels the individual pointer drags.
 
 The default implementation now only resets `isDragged`, which means that `onDragEnd` is no longer
-called when a drag is cancelled. If you were relying on the old behavior, override `onDragCancel` and
-forward the event yourself with `DragCancelEvent.toDragEnd`:
+called when a drag is cancelled. If you were relying on the old behavior, override `onDragCancel`
+and forward the event yourself with `DragCancelEvent.toDragEnd`:
 
 ```dart
 // Before
@@ -221,8 +221,20 @@ add(crate);
 await crate.loaded;
 ```
 
-For a batch of children, or when you need them to be present in `children` rather than just loaded,
-await `game.lifecycleEventsProcessed` once after adding them.
+For a batch of children, `loaded`, `mounted` and `removed` are also available on any
+`Iterable<Component>`:
+
+```dart
+// Before
+await addAll(crates);
+
+// After
+addAll(crates);
+await crates.loaded;
+```
+
+Or, when you need them to be present in `children` rather than just loaded, await
+`game.lifecycleEventsProcessed` once after adding them.
 
 
 #### Load errors are no longer reported by `GameWidget.errorBuilder`
@@ -236,8 +248,8 @@ The component itself is not added to the tree, and the rest of the game keeps ru
 reported through the child's `loaded` future, and if nothing is awaiting it, it is handed to the
 current `Zone` as an uncaught error.
 
-To get the old behavior for a specific child, await its `loaded` future inside the parent's `onLoad`,
-which puts the error back onto the future `errorBuilder` watches:
+To get the old behavior for a specific child, await its `loaded` future inside the parent's
+`onLoad`, which puts the error back onto the future `errorBuilder` watches:
 
 ```dart
 class MyGame extends FlameGame {

@@ -38,7 +38,7 @@ extension FlameGameExtension on Component {
     addAll(componentList);
     await Future.wait([
       componentList.first.findGame()!.ready(),
-      ...componentList.map((component) => component.loaded),
+      componentList.loaded,
     ]);
   }
 

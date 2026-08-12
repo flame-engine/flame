@@ -1971,6 +1971,63 @@ void main() {
       );
     });
   });
+
+  group('ComponentIterableExtension', () {
+    testWithFlameGame('loaded completes once every component is loaded', (
+      game,
+    ) async {
+      final components = [
+        _SlowLoadingComponent(),
+        _SlowLoadingComponent(),
+        _SlowLoadingComponent(),
+      ];
+      game.world.addAll(components);
+
+      await components.loaded;
+
+      expect(components.every((component) => component.isLoaded), isTrue);
+    });
+
+    testWithFlameGame('loaded on an empty iterable completes', (game) async {
+      await expectLater(<Component>[].loaded, completes);
+    });
+
+    testWithFlameGame('loaded reports a failing component', (game) async {
+      final components = [_SlowLoadingComponent(), _FailingLoadComponent()];
+      // Created before adding, so that the failure is never unhandled.
+      final loaded = components.loaded;
+      game.world.addAll(components);
+
+      await expectLater(loaded, throwsA(isA<_LoadException>()));
+    });
+
+    testWithFlameGame('mounted completes once every component is mounted', (
+      game,
+    ) async {
+      final components = [_SlowLoadingComponent(), _SlowLoadingComponent()];
+      final mounted = components.mounted;
+      game.world.addAll(components);
+      await game.ready();
+
+      await expectLater(mounted, completes);
+      expect(components.every((component) => component.isMounted), isTrue);
+    });
+
+    testWithFlameGame('removed completes once every component is removed', (
+      game,
+    ) async {
+      final components = [Component(), Component()];
+      game.world.addAll(components);
+      await game.ready();
+
+      components.forEach(game.world.remove);
+      final removed = components.removed;
+      game.update(0);
+
+      await expectLater(removed, completes);
+      expect(components.every((component) => component.isRemoved), isTrue);
+    });
+  });
 }
 
 class _ComponentA extends Component {

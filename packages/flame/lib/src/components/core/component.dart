@@ -1301,3 +1301,29 @@ class Component {
 }
 
 enum ChildrenChangeType { added, removed }
+
+/// Lifecycle futures for a group of components, mirroring the ones available on
+/// a single [Component].
+extension ComponentIterableExtension on Iterable<Component> {
+  /// A future that completes when every component in this iterable has finished
+  /// loading.
+  ///
+  /// Completes with an error if any of the components failed to load.
+  ///
+  /// ```dart
+  /// final coins = [Coin(), Coin(), Coin()];
+  /// world.addAll(coins);
+  /// await coins.loaded;
+  /// ```
+  Future<void> get loaded => Future.wait(map((component) => component.loaded));
+
+  /// A future that completes when every component in this iterable has been
+  /// mounted on its parent.
+  Future<void> get mounted =>
+      Future.wait(map((component) => component.mounted));
+
+  /// A future that completes when every component in this iterable has been
+  /// removed from its parent.
+  Future<void> get removed =>
+      Future.wait(map((component) => component.removed));
+}

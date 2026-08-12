@@ -234,6 +234,15 @@ await game.lifecycleEventsProcessed;
 // All the coins are now in world.children.
 ```
 
+The same three getters are also available on any `Iterable<Component>`, for when you need a
+specific stage for a specific group of children rather than for the whole tree:
+
+```dart
+world.addAll(coins);
+await coins.loaded;
+// Every coin has finished loading.
+```
+
 Awaiting `loaded` is safe from inside the parent's own `onLoad`, because the child starts loading as
 soon as it is added:
 
