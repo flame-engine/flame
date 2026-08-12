@@ -3,7 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 
 /// Mixin for components that respond to scale (pinch/zoom/rotate) gestures.
-mixin ScaleCallbacks on Component {
+mixin ScaleCallbacks on Component implements PointerInputCallbacks {
   bool _isScaling = false;
 
   /// Returns true while the component is being scaled.
