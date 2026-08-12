@@ -11,10 +11,10 @@ class SpawningBehavior extends TappableBehavior<ExampleGame> {
 
   @override
   Future<void> onLoad() async {
-    await parent.add(nextRandomEntity(parent.size / 2));
+    parent.add(nextRandomEntity(parent.size / 2));
 
     for (var i = 0; i < 5; i++) {
-      await parent.add(nextRandomEntity(parent.size / 2));
+      parent.add(nextRandomEntity(parent.size / 2));
     }
   }
 

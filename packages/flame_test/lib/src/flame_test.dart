@@ -15,16 +15,31 @@ extension FlameFinds on CommonFinders {
 extension FlameGameExtension on Component {
   /// Makes sure that the [component] is added to the tree if you wait for the
   /// returned future to resolve.
+  ///
+  /// If the component fails to load, the returned future completes with that
+  /// error instead of never resolving.
   Future<void> ensureAdd(Component component) async {
-    await add(component);
-    await component.findGame()!.ready();
+    add(component);
+    // Both futures are created (and thus listened to) right away, so that a
+    // load failure isn't reported as an unhandled error before we get to it.
+    await Future.wait([
+      component.findGame()!.ready(),
+      component.loaded,
+    ]);
   }
 
   /// Makes sure that the [components] are added to the tree if you wait for the
   /// returned future to resolve.
+  ///
+  /// If any of the components fails to load, the returned future completes with
+  /// that error instead of never resolving.
   Future<void> ensureAddAll(Iterable<Component> components) async {
-    await addAll(components);
-    await components.first.findGame()!.ready();
+    final componentList = components.toList(growable: false);
+    addAll(componentList);
+    await Future.wait([
+      componentList.first.findGame()!.ready(),
+      componentList.loaded,
+    ]);
   }
 
   /// Makes sure that the [component] is removed from the tree if you wait for

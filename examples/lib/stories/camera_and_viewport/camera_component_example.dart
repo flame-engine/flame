@@ -171,7 +171,8 @@ class AntWorld extends World {
   Future<void> onLoad() async {
     final random = Random();
     curve = DragonCurve();
-    await add(curve);
+    add(curve);
+    await curve.loaded;
     bgRect = curve.boundingRect().inflate(100);
 
     const baseColor = HSVColor.fromAHSV(1, 38.5, 0.63, 0.68);

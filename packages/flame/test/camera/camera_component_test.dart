@@ -518,7 +518,7 @@ void main() {
       final world = World(children: [player]);
       final camera = CameraComponent();
 
-      await game.addAll([camera, world]);
+      game.addAll([camera, world]);
       await game.ready();
       expect(camera.canSee(player), false);
 
@@ -531,11 +531,11 @@ void main() {
       final world = World(children: [player]);
       final camera = CameraComponent(world: world);
 
-      await game.addAll([camera]);
+      game.addAll([camera]);
       await game.ready();
       expect(camera.canSee(player), false);
 
-      await game.add(world);
+      game.add(world);
       await game.ready();
       expect(camera.canSee(player), true);
     });
@@ -545,11 +545,11 @@ void main() {
       final world = World();
       final camera = CameraComponent(world: world);
 
-      await game.addAll([camera, world]);
+      game.addAll([camera, world]);
       await game.ready();
       expect(camera.canSee(player), false);
 
-      await world.add(player);
+      world.add(player);
       await game.ready();
       expect(camera.canSee(player), true);
     });
@@ -560,7 +560,7 @@ void main() {
       final world2 = World();
       final camera = CameraComponent(world: world2);
 
-      await game.addAll([camera, world1, world2]);
+      game.addAll([camera, world1, world2]);
       await game.ready();
 
       // can see when player world is not known.
@@ -581,7 +581,7 @@ void main() {
         world: world,
       );
 
-      await game.addAll([camera, world]);
+      game.addAll([camera, world]);
       await game.ready();
 
       camera.moveBy(size / 2);

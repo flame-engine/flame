@@ -10,7 +10,7 @@ void main() {
     testGolden(
       'label renders correctly',
       (game, tester) async {
-        await game.add(
+        game.add(
           AdvancedButtonComponent(
             defaultSkin: RectangleComponent(size: Vector2(40, 20)),
             defaultLabel: RectangleComponent(

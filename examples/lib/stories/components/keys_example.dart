@@ -77,7 +77,7 @@ class KeysExampleGame extends FlameGame {
     final mage = await loadSprite('mage.png');
     final ranger = await loadSprite('ranger.png');
 
-    await addAll([
+    addAll([
       SelectableClass(
         key: ComponentKey.named('knight'),
         sprite: knight,

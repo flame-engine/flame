@@ -55,7 +55,7 @@ void main() {
             children: [alwaysSuccess, alwaysFailure, alwaysRunning],
           );
 
-        expect(() async => await game.add(component), returnsNormally);
+        expect(() async => game.add(component), returnsNormally);
 
         await game.ready();
         expect(() => game.update(10), returnsNormally);
@@ -75,7 +75,7 @@ void main() {
           )
           ..tickInterval = 1;
 
-        await game.add(component);
+        game.add(component);
         await game.ready();
 
         const dt = 1 / 60;
@@ -130,7 +130,7 @@ void main() {
           final task = _TestTask();
           component.treeRoot = Sequence(children: [task]);
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           game.update(0.1);
@@ -153,7 +153,7 @@ void main() {
           final outerSequence = Sequence(children: [innerSequence]);
           component.treeRoot = outerSequence;
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           game.update(0.1);
@@ -174,7 +174,7 @@ void main() {
           final incrementTask = _IncrementTask();
           component.treeRoot = Sequence(children: [incrementTask]);
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           game.update(0.1);
@@ -201,7 +201,7 @@ void main() {
 
           component.treeRoot = Sequence(children: [task1, task2, task3]);
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           game.update(0.1);
@@ -219,7 +219,7 @@ void main() {
           final task = _TestTask();
           component.treeRoot = Sequence(children: [task]);
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           expect(() => game.update(0.1), returnsNormally);
@@ -237,7 +237,7 @@ void main() {
           final rootNode = Sequence(children: []);
           component.treeRoot = rootNode;
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           // Root node should have access to blackboard
@@ -257,7 +257,7 @@ void main() {
           final task = _TestTask();
           component.treeRoot = Sequence(children: [task]);
 
-          await game.add(component);
+          game.add(component);
           await game.ready();
 
           game.update(0.1);

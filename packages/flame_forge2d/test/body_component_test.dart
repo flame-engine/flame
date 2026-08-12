@@ -64,7 +64,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -84,7 +85,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -113,7 +115,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
 
@@ -145,7 +148,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -174,7 +178,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -491,7 +496,7 @@ void main() {
         body.createFixture(FixtureDef(shape));
 
         final component = _ConsistentBodyComponent(bodyDef: bodyDef);
-        await game.world.add(component);
+        game.world.add(component);
         await game.ready();
         component.removeFromParent();
         await game.ready();
@@ -511,7 +516,7 @@ void main() {
         body.createFixture(FixtureDef(shape));
 
         final component = _ConsistentBodyComponent(bodyDef: bodyDef);
-        await game.world.add(component);
+        game.world.add(component);
         await game.ready();
         game.world = Forge2DWorld();
         await game.ready();

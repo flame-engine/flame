@@ -14,7 +14,7 @@ class InputHandler extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    await add(
+    add(
       KeyboardListenerComponent(
         keyDown: {
           LogicalKeyboardKey.arrowLeft: (_) => onLeftStart(),
