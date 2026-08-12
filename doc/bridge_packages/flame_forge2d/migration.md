@@ -1,6 +1,6 @@
 # Migrating from flame_forge2d 0.19
 
-flame_forge2d 0.20 is built on Forge2D 0.16, which replaced the pure Dart port of Box2D 2.x with
+flame_forge2d 0.20 is built on Forge2D 0.15, which replaced the pure Dart port of Box2D 2.x with
 bindings for [Box2D v3](https://box2d.org/). The whole underlying API changed, so this is a large
 breaking change.
 
@@ -109,6 +109,10 @@ approached from one side. For solid level geometry that has to block from
 every direction, such as a ramp or a platform that bodies can reach from
 below, use a `Polygon` instead: a chain loop is hollow, so bodies that get
 past one edge end up trapped inside it.
+
+One behavior improvement to be aware of: a `BodyComponent` that was removed
+from the tree, which destroys its body by default, can now be safely added
+back again, since the component recreates its body when it is remounted.
 
 
 ## Contact callbacks
