@@ -44,30 +44,6 @@ class GestureDetectorBuilder {
   }
 
   void initializeGestures(Game game) {
-    if (game is VerticalDragDetector) {
-      register(
-        VerticalDragGestureRecognizer.new,
-        (VerticalDragGestureRecognizer instance) {
-          instance.onDown = game.handleVerticalDragDown;
-          instance.onStart = game.handleVerticalDragStart;
-          instance.onUpdate = game.handleVerticalDragUpdate;
-          instance.onEnd = game.handleVerticalDragEnd;
-          instance.onCancel = game.onVerticalDragCancel;
-        },
-      );
-    }
-    if (game is HorizontalDragDetector) {
-      register(
-        HorizontalDragGestureRecognizer.new,
-        (HorizontalDragGestureRecognizer instance) {
-          instance.onDown = game.handleHorizontalDragDown;
-          instance.onStart = game.handleHorizontalDragStart;
-          instance.onUpdate = game.handleHorizontalDragUpdate;
-          instance.onEnd = game.handleHorizontalDragEnd;
-          instance.onCancel = game.onHorizontalDragCancel;
-        },
-      );
-    }
     if (game is PanDetector) {
       register(
         PanGestureRecognizer.new,
