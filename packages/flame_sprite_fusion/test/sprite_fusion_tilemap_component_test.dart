@@ -97,7 +97,7 @@ void main() {
           images: images,
           tilemapPrefix: '',
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -115,7 +115,7 @@ void main() {
           tilemapPrefix: '',
           position: Vector2(100, 100),
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -133,7 +133,7 @@ void main() {
           tilemapPrefix: '',
           anchor: Anchor.center,
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -151,7 +151,7 @@ void main() {
           tilemapPrefix: '',
           scale: Vector2.all(0.5),
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -169,7 +169,7 @@ void main() {
           tilemapPrefix: '',
           angle: pi * 0.125,
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),

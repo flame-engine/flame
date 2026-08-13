@@ -19,7 +19,7 @@ class MarkdownGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     final markdown = await Flame.assets.readFile('fire_and_ice.md');
-    await add(
+    add(
       TextElementComponent.fromDocument(
         document: FlameMarkdown.toDocument(
           markdown,

@@ -47,7 +47,7 @@ class TimeScaleExample extends FlameGame
     );
     gameSpeedText.position = Vector2(size.x * 0.5, size.y * 0.8);
 
-    await world.addAll([
+    world.addAll([
       _Chopper(
         position: Vector2(-100, -10),
         size: Vector2.all(64),
@@ -96,8 +96,8 @@ class _Chopper extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    await add(CircleHitbox());
-    await add(_timer);
+    add(CircleHitbox());
+    add(_timer);
     return super.onLoad();
   }
 

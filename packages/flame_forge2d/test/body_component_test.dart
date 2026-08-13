@@ -58,7 +58,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -81,7 +82,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -108,7 +110,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -135,7 +138,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
 
@@ -172,7 +176,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -203,7 +208,8 @@ void main() {
             final component = _TestBodyComponent()
               ..body = body
               ..paint = testPaint;
-            await game.world.add(component);
+            game.world.add(component);
+            await component.loaded;
 
             game.camera.follow(component);
           },
@@ -656,7 +662,7 @@ void main() {
       Forge2DGame.new,
       (game) async {
         final component = _ConsistentBodyComponent(bodyDef: BodyDef());
-        await game.world.add(component);
+        game.world.add(component);
         await game.ready();
         component.removeFromParent();
         await game.ready();
@@ -671,7 +677,7 @@ void main() {
       Forge2DGame.new,
       (game) async {
         final component = _ConsistentBodyComponent(bodyDef: BodyDef());
-        await game.world.add(component);
+        game.world.add(component);
         await game.ready();
         game.world = Forge2DWorld();
         await game.ready();

@@ -212,6 +212,57 @@ class MyGame extends FlameGame {
 The two approaches can be combined freely: the children specified within the constructor will be
 added first, and then any additional child components after.
 
+The `add()`, `addAll()`, and `addToParent()` methods are synchronous: they return immediately
+without waiting for the child to load or mount. This makes them safe to call from anywhere,
+including inside `update()` or a loop that spawns many components, without having to `await` them
+or wrap them in `unawaited`. If you need to wait until a child has reached a given lifecycle stage,
+await its `loaded`, `mounted`, or `removed` future instead (see the lifecycle getters under
+[Component lifecycle](#component-lifecycle)):
+
+```dart
+world.add(coin);
+await coin.mounted;
+// The coin is now guaranteed to be mounted.
+```
+
+When you add a batch of children and only care that all of them made it into the tree, await
+`game.lifecycleEventsProcessed` once instead of collecting the individual futures:
+
+```dart
+world.addAll(coins);
+await game.lifecycleEventsProcessed;
+// All the coins are now in world.children.
+```
+
+The same three getters are also available on any `Iterable<Component>`, for when you need a
+specific stage for a specific group of children rather than for the whole tree:
+
+```dart
+world.addAll(coins);
+await coins.loaded;
+// Every coin has finished loading.
+```
+
+Awaiting `loaded` is safe from inside the parent's own `onLoad`, because the child starts loading as
+soon as it is added:
+
+```dart
+class Inventory extends Component {
+  @override
+  Future<void> onLoad() async {
+    final coin = Coin();
+    add(coin);
+    await coin.loaded;
+    // Anything the coin's onLoad set up is now available here.
+  }
+}
+```
+
+Awaiting `mounted` or `removed` there is not safe: a child can only be mounted after its parent has
+been, and the parent is only mounted once its `onLoad` has completed, so those futures would
+deadlock. The same goes for `game.lifecycleEventsProcessed`, since the parent's own pending mount is
+part of the queue it waits for.
+
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
 in the same order as they were scheduled for addition.

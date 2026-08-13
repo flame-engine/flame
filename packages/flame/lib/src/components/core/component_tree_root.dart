@@ -119,9 +119,15 @@ class ComponentTreeRoot extends Component {
   /// (by adding, moving or removing a component) and you want to make sure
   /// you react to the changed state, not the current one.
   /// Remember, methods like [Component.add] don't act immediately and instead
-  /// enqueue their action. This action also cannot be awaited
-  /// with something like `await world.add(something)` since that future
-  /// completes _before_ the lifecycle events are processed.
+  /// enqueue their action. They are synchronous and return nothing, so the
+  /// action cannot be awaited directly. To wait for a specific component, await
+  /// its [Component.loaded], [Component.mounted] or [Component.removed] future;
+  /// to wait for the whole queue to drain, await this future.
+  ///
+  /// Don't await this from inside a component's [Component.onLoad]: that
+  /// component's own mount is part of the queue, and it can only be processed
+  /// after [Component.onLoad] has completed, so the wait would deadlock. Await
+  /// the child's [Component.loaded] future there instead.
   ///
   /// Example usage:
   ///

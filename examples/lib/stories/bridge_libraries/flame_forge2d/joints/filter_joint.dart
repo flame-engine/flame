@@ -28,7 +28,8 @@ class FilterJointWorld extends Forge2DWorld with HasGameReference<Forge2DGame> {
     // The filtered pair, which passes through itself.
     final filteredTop = Ball(Vector2(-14, -12), color: ExampleColors.emerald);
     final filteredBottom = Ball(Vector2(-14, 4), color: ExampleColors.emerald);
-    await addAll([filteredTop, filteredBottom]);
+    addAll([filteredTop, filteredBottom]);
+    await Future.wait([filteredTop.loaded, filteredBottom.loaded]);
 
     final joint = physicsWorld.createFilterJoint(
       FilterJointDef(bodyA: filteredTop.body, bodyB: filteredBottom.body),

@@ -24,20 +24,6 @@ Detectors will be deprecated in the future. Prefer `Callbacks` instead.
 ```
 
 ```text
-- VerticalDragDetector
-  - onVerticalDragDown
-  - onVerticalDragStart
-  - onVerticalDragUpdate
-  - onVerticalDragEnd
-  - onVerticalDragCancel
-
-- HorizontalDragDetector
-  - onHorizontalDragDown
-  - onHorizontalDragStart
-  - onHorizontalDragUpdate
-  - onHorizontalDragEnd
-  - onHorizontalDragCancel
-
 - PanDetector
   - onPanDown
   - onPanStart

@@ -39,13 +39,15 @@ class WheelJointWorld extends Forge2DWorld
     add(TrackEnd(Terrain.endX));
 
     final chassis = Chassis(Vector2(-14, 1));
-    await add(chassis);
+    add(chassis);
+    await chassis.loaded;
     // Follow the car so that it stays visible while it drives.
     game.camera.follow(chassis);
 
     for (final offset in [Vector2(-1.6, 0.9), Vector2(1.6, 0.9)]) {
       final wheel = Wheel(chassis.body.position + offset);
-      await add(wheel);
+      add(wheel);
+      await wheel.loaded;
 
       // The wheel hangs under the chassis on a spring and is driven by the
       // joint's motor.
