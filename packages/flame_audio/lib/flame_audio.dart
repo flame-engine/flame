@@ -58,8 +58,7 @@ class FlameAudio {
     } else {
       player.audioCache = audioCache;
     }
-    audioContext ??= _defaultAudioContext;
-    await player.setAudioContext(audioContext);
+    await player.setAudioContext(audioContext ?? _defaultAudioContext);
     await player.setReleaseMode(releaseMode);
     final path = package == null
         ? file

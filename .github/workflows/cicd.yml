@@ -29,10 +29,10 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
+      # flame_3d always requires the latest stable, since flutter_gpu is still
+      # unstable, so it is only analyzed in the analyze-latest job.
       - name: "Analyze with lowest supported version"
-        uses: invertase/github-action-dart-analyzer@v3
-        with:
-          fatal-infos: true
+        run: melos exec --ignore="flame_3d*" -- dart analyze --fatal-infos .
 
   analyze-latest:
     runs-on: ubuntu-latest
