@@ -22,7 +22,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
     double opacityFrom = 0,
     double opacityTo = 1,
     this.paintId,
-    void Function()? onComplete,
+    super.onComplete,
     super.key,
   }) : assert(
          opacityFrom >= 0 &&
@@ -32,7 +32,7 @@ class ColorEffect extends ComponentEffect<HasPaint> {
          'Opacity value should be between 0 and 1',
        ),
        _tween = Tween(begin: opacityFrom, end: opacityTo),
-       super(controller, onComplete: onComplete);
+       super(controller);
 
   @override
   Future<void> onMount() async {
