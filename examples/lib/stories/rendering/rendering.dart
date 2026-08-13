@@ -60,8 +60,8 @@ void addRenderingStories(Dashbook dashbook) {
         game: ParticlesInteractiveExample(
           effect: context.listProperty(
             'Effect',
-            ParticlesInteractiveExample.effects.first,
-            ParticlesInteractiveExample.effects,
+            ParticleEffect.sparkles,
+            ParticleEffect.values,
           ),
           zoom: context.numberProperty('Zoom', 1),
         ),

@@ -7,6 +7,18 @@ import 'package:flame/geometry.dart';
 import 'package:flame/particles.dart';
 import 'package:flutter/material.dart' hide Image;
 
+/// The effect presets selectable in the properties panel.
+enum ParticleEffect {
+  sparkles,
+  fire,
+  smoke,
+  explosions,
+  sparks,
+  confetti,
+  streaks,
+  bubbles,
+}
+
 class ParticlesInteractiveExample extends FlameGame with PanDetector {
   static const description =
       'Drag around the canvas to paint with particles, and pick an effect in '
@@ -15,18 +27,6 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
       'ParticleEmitterComponent follows the pointer: worldSpace keeps '
       'already-spawned particles in place while emit() releases more from '
       'the preallocated buffer, so no objects are allocated while you draw.';
-
-  /// The effect presets selectable in the properties panel.
-  static const List<String> effects = [
-    'Sparkles',
-    'Fire',
-    'Smoke',
-    'Explosions',
-    'Sparks',
-    'Confetti',
-    'Streaks',
-    'Bubbles',
-  ];
 
   ParticlesInteractiveExample({
     required this.effect,
@@ -38,8 +38,8 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
          )..viewfinder.zoom = zoom,
        );
 
-  /// The name of the selected effect preset, one of [effects].
-  final String effect;
+  /// The selected effect preset.
+  final ParticleEffect effect;
 
   late ParticleEmitterComponent _emitter;
 
@@ -85,7 +85,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
 
   ParticleEmitterComponent _buildEffect(ui.Image zap) {
     switch (effect) {
-      case 'Fire':
+      case ParticleEffect.fire:
         _perDragUpdate = 6;
         return _pooled(
           ParticleEmitter(
@@ -104,7 +104,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           ),
           CircleParticleRenderer(softness: 0.8, blendMode: BlendMode.plus),
         );
-      case 'Smoke':
+      case ParticleEffect.smoke:
         _perDragUpdate = 4;
         return _pooled(
           ParticleEmitter(
@@ -124,7 +124,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           ),
           CircleParticleRenderer(softness: 0.9),
         );
-      case 'Explosions':
+      case ParticleEffect.explosions:
         _perDragStart = 120;
         _perDragUpdate = 5;
         return _pooled(
@@ -146,7 +146,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           ),
           CircleParticleRenderer(softness: 0.5, blendMode: BlendMode.plus),
         );
-      case 'Sparks':
+      case ParticleEffect.sparks:
         _perDragUpdate = 6;
         return _pooled(
           ParticleEmitter(
@@ -160,7 +160,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           ),
           SpriteParticleRenderer.fromImage(zap),
         );
-      case 'Confetti':
+      case ParticleEffect.confetti:
         _perDragUpdate = 6;
         return _pooled(
           ParticleEmitter(
@@ -179,7 +179,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           ),
           SpriteParticleRenderer.fromImage(zap),
         );
-      case 'Streaks':
+      case ParticleEffect.streaks:
         _perDragUpdate = 12;
         final paint = Paint()
           ..strokeWidth = 2
@@ -213,7 +213,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
             }
           }),
         );
-      case 'Bubbles':
+      case ParticleEffect.bubbles:
         _perDragUpdate = 8;
         return _pooled(
           ParticleEmitter(
@@ -231,8 +231,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
           ),
           CircleParticleRenderer(),
         );
-      case 'Sparkles':
-      default:
+      case ParticleEffect.sparkles:
         _perDragUpdate = 20;
         return _pooled(
           ParticleEmitter(
