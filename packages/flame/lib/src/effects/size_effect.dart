@@ -61,13 +61,12 @@ class _SizeToEffect extends SizeEffect {
   _SizeToEffect(
     Vector2 targetSize,
     EffectController controller, {
-    void Function()? onComplete,
+    super.onComplete,
     super.key,
   }) : _targetSize = targetSize.clone(),
        super.by(
          Vector2.zero(),
          controller,
-         onComplete: onComplete,
        );
 
   @override

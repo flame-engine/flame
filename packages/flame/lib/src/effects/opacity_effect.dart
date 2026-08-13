@@ -95,14 +95,12 @@ class _OpacityToEffect extends OpacityEffect {
   _OpacityToEffect(
     this._targetOpacity,
     EffectController controller, {
-    OpacityProvider? target,
-    void Function()? onComplete,
+    super.target,
+    super.onComplete,
     super.key,
   }) : super.by(
          0.0,
          controller,
-         target: target,
-         onComplete: onComplete,
        );
 
   @override
