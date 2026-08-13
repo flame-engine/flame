@@ -2,11 +2,12 @@ import 'dart:math' as math;
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class ContactCallbacksExample extends Forge2DGame {
+class ContactCallbacksExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how `BodyComponent`s can react to collisions with other
     bodies.
@@ -22,7 +23,7 @@ class ContactCallbackWorld extends Forge2DWorld
     with TapCallbacks, HasGameReference<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(game);
     addAll(boundaries);
   }

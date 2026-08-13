@@ -10,7 +10,12 @@ import 'dart:io';
 // frequently in flutter/flutter's presubmit. Analyzing it here would block
 // framework changes on an unstable dependency that is not representative of
 // Flame, so it is excluded from this run.
-const _excludedPackages = {'flame_3d'};
+//
+// flame_forge2d depends on forge2d, which compiles Box2D from source through
+// the Dart build hooks and therefore needs a C toolchain and working native
+// asset support on the runner. That is a property of the runner rather than
+// of the framework change under test, so it is excluded as well.
+const _excludedPackages = {'flame_3d', 'flame_forge2d'};
 
 Future<void> main() async {
   final packages =

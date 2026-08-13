@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:flutter/material.dart' hide Image, Gradient;
 
 import 'package:padracing/car.dart';
@@ -22,7 +22,7 @@ class LapLine extends BodyComponent with ContactCallbacks {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     if (isFinish) {
       _finishOverlay = await createFinishOverlay();
     }
@@ -49,9 +49,9 @@ class LapLine extends BodyComponent with ContactCallbacks {
         userData: this,
       ),
     );
-    final shape = PolygonShape()..setAsBoxXY(size.x / 2, size.y / 2);
-    final fixtureDef = FixtureDef(shape, isSensor: true);
-    return groundBody..createFixture(fixtureDef);
+    final shapeDef = ShapeDef(isSensor: true, enableSensorEvents: true);
+    return groundBody
+      ..createShape(Polygon.box(size.x / 2, size.y / 2), shapeDef);
   }
 
   late final Rect _scaledRect = (size * 10).toRect();

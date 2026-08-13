@@ -2,17 +2,18 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' show Colors, Paint, Canvas;
 
-class RaycastExample extends Forge2DGame with MouseMovementDetector {
+class RaycastExample extends Forge2DExampleGame with MouseMovementDetector {
   static const String description = '''
-    This example shows how raycasts can be used to find nearest and farthest
-    fixtures.
-    Red ray finds the nearest fixture and blue ray finds the farthest fixture.
+    This example shows how ray casts can be used to find the nearest and
+    farthest shapes.
+    The red ray finds the nearest shape and the blue ray the farthest shape.
   ''';
 
   final random = Random();
@@ -27,7 +28,7 @@ class RaycastExample extends Forge2DGame with MouseMovementDetector {
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     world.addAll(createBoundaries(this));
 
     const numberOfRows = 3;
@@ -78,36 +79,36 @@ class RaycastExample extends Forge2DGame with MouseMovementDetector {
     bluePoints.clear();
     bluePoints.add(rayStart);
 
-    final farthestCallback = FarthestBoxRayCastCallback();
-    world.raycast(farthestCallback, rayStart, rayTarget);
-
-    if (farthestCallback.farthestPoint != null) {
-      bluePoints.add(farthestCallback.farthestPoint!);
+    final hits = world.castRayAll(rayStart, rayTarget - rayStart);
+    if (hits.isNotEmpty) {
+      // The hits are sorted from nearest to farthest.
+      final farthestHit = hits.last;
+      bluePoints.add(farthestHit.point.clone());
+      farthestBox = farthestHit.shape.userData as Box?;
     } else {
       bluePoints.add(rayTarget);
+      farthestBox = null;
     }
-    farthestBox = farthestCallback.box;
   }
 
   void fireRedRay(Vector2 rayStart, Vector2 rayTarget) {
     redPoints.clear();
     redPoints.add(rayStart);
 
-    final nearestCallback = NearestBoxRayCastCallback();
-    world.raycast(nearestCallback, rayStart, rayTarget);
-
-    if (nearestCallback.nearestPoint != null) {
-      redPoints.add(nearestCallback.nearestPoint!);
+    final nearestHit = world.castRayClosest(rayStart, rayTarget - rayStart);
+    if (nearestHit != null) {
+      redPoints.add(nearestHit.point.clone());
+      nearestBox = nearestHit.shape.userData as Box?;
     } else {
       redPoints.add(rayTarget);
+      nearestBox = null;
     }
-    nearestBox = nearestCallback.box;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    children.whereType<Box>().forEach((component) {
+    world.children.whereType<Box>().forEach((component) {
       if ((component == nearestBox) && (component == farthestBox)) {
         component.paint.color = Colors.yellow;
       } else if (component == nearestBox) {
@@ -157,60 +158,8 @@ class Box extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = PolygonShape()..setAsBoxXY(2.0, 4.0);
-    final fixtureDef = FixtureDef(shape, userData: this);
     final bodyDef = BodyDef(position: initialPosition);
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
-  }
-}
-
-class NearestBoxRayCastCallback extends RayCastCallback {
-  Box? box;
-  Vector2? nearestPoint;
-  Vector2? normalAtInter;
-
-  @override
-  double reportFixture(
-    Fixture fixture,
-    Vector2 point,
-    Vector2 normal,
-    double fraction,
-  ) {
-    nearestPoint = point.clone();
-    normalAtInter = normal.clone();
-    box = fixture.userData as Box?;
-
-    // Returning fraction implies that we care only about
-    // fixtures that are closer to ray start point than
-    // the current fixture
-    return fraction;
-  }
-}
-
-class FarthestBoxRayCastCallback extends RayCastCallback {
-  Box? box;
-  Vector2? farthestPoint;
-  Vector2? normalAtInter;
-  double previousFraction = 0.0;
-
-  @override
-  double reportFixture(
-    Fixture fixture,
-    Vector2 point,
-    Vector2 normal,
-    double fraction,
-  ) {
-    // Value of fraction is directly proportional to
-    // the distance of fixture from ray start point.
-    // So we are interested in the current fixture only if
-    // it has a higher fraction value than previousFraction.
-    if (previousFraction < fraction) {
-      farthestPoint = point.clone();
-      normalAtInter = normal.clone();
-      box = fixture.userData as Box?;
-      previousFraction = fraction;
-    }
-
-    return 1;
+    return world.createBody(bodyDef)
+      ..createShape(Polygon.box(2.0, 4.0), ShapeDef(userData: this));
   }
 }
