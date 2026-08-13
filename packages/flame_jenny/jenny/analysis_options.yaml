@@ -5,3 +5,13 @@ linter:
     avoid_equals_and_hash_code_on_mutable_classes: false
     hash_and_equals: false
     unawaited_futures: true
+
+analyzer:
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
