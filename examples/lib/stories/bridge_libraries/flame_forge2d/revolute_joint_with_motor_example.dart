@@ -1,12 +1,14 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class RevoluteJointWithMotorExample extends Forge2DGame {
+class RevoluteJointWithMotorExample extends Forge2DExampleGame {
   static const String description = '''
     This example showcases a revolute joint, which is the spinning balls in the
     center.
@@ -25,7 +27,7 @@ class RevoluteJointWithMotorWorld extends Forge2DWorld
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     final boundaries = createBoundaries(game);
     addAll(boundaries);
     final center = Vector2.zero();
@@ -39,7 +41,7 @@ class RevoluteJointWithMotorWorld extends Forge2DWorld
     super.onTapDown(info);
     final tapPosition = info.localPosition;
     List.generate(15, (i) {
-      final randomVector = (Vector2.random() - Vector2.all(-0.5)).normalized();
+      final randomVector = (Vector2.random() - Vector2.all(0.5)).normalized();
       add(Ball(tapPosition + randomVector, radius: random.nextDouble()));
     });
   }
@@ -64,56 +66,57 @@ class CircleShuffler extends BodyComponent {
       final xPos = radius * cos(2 * pi * (i / numPieces));
       final yPos = radius * sin(2 * pi * (i / numPieces));
 
-      final shape = CircleShape()
-        ..radius = 1.2
-        ..position.setValues(xPos, yPos);
-
-      final fixtureDef = FixtureDef(
-        shape,
-        density: 50.0,
-        friction: 0.1,
-        restitution: 0.9,
+      body.createShape(
+        Circle(radius: 1.2, center: Vector2(xPos, yPos)),
+        ShapeDef(
+          density: 50.0,
+          material: SurfaceMaterial(friction: 0.5, restitution: 0.4),
+        ),
       );
-
-      body.createFixture(fixtureDef);
     }
     // Create an empty ground body.
     final groundBody = world.createBody(BodyDef());
 
-    final revoluteJointDef = RevoluteJointDef()
-      ..initialize(body, groundBody, body.position)
-      ..motorSpeed = pi
-      ..maxMotorTorque = 1000000.0
-      ..enableMotor = true;
-
-    world.createJoint(RevoluteJoint(revoluteJointDef));
+    world.physicsWorld.createRevoluteJoint(
+      RevoluteJointDef(
+        bodyA: body,
+        bodyB: groundBody,
+        localAnchorB: body.position.clone(),
+        motorSpeed: pi,
+        maxMotorTorque: 1000000.0,
+        enableMotor: true,
+      ),
+    );
     return body;
   }
 }
 
-class CornerRamp extends BodyComponent {
-  CornerRamp(this._center, {this.isMirrored = false});
+class CornerRamp extends BodyComponent with GlowingBody {
+  CornerRamp(this._center, {this.isMirrored = false}) {
+    paint = Paint()..color = ExampleColors.slate;
+  }
 
   final bool isMirrored;
   final Vector2 _center;
 
   @override
   Body createBody() {
-    final shape = ChainShape();
     final mirrorFactor = isMirrored ? -1 : 1;
     final diff = 2.0 * mirrorFactor;
+    // A solid polygon rather than a chain loop: chains are one-sided in
+    // Box2D v3, so a chain ramp lets balls through from the other side and
+    // they end up trapped inside it.
     final vertices = [
       Vector2(diff, 0),
       Vector2(diff + 20.0 * mirrorFactor, -20.0),
       Vector2(diff + 35.0 * mirrorFactor, -30.0),
     ];
-    shape.createLoop(vertices);
 
-    final fixtureDef = FixtureDef(shape, friction: 0.1);
-    final bodyDef = BodyDef()
-      ..position = _center
-      ..type = BodyType.static;
+    final bodyDef = BodyDef(position: _center);
 
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)..createShape(
+      Polygon(vertices),
+      ShapeDef(material: SurfaceMaterial(friction: 0.5)),
+    );
   }
 }

@@ -84,14 +84,12 @@ class LayoutDemo1 extends LinearLayoutComponent {
     required super.mainAxisAlignment,
     required super.gap,
     required super.position,
-    required EdgeInsets padding,
-    required bool expandedMode,
+    required this._padding,
+    required this._expandedMode,
     required this.paddingInflateChild,
     super.size,
     super.key,
-  }) : _padding = padding,
-       _expandedMode = expandedMode,
-       super(anchor: Anchor.topLeft, priority: 0, children: []);
+  }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
 
   bool _expandedMode = false;
 

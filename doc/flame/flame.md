@@ -1,6 +1,7 @@
 # Flame
 
 - [Getting Started](../README.md)
+- [Migration Guides](migration.md)
 - [Game Widget](game_widget.md)
 - [The game class](game.md)
 - [Assets Structure](structure.md)
@@ -20,6 +21,7 @@
 :hidden:
 
 Getting Started      <../README.md>
+Migration Guides     <migration.md>
 Game Widget          <game_widget.md>
 The game class       <game.md>
 Assets Structure     <structure.md>

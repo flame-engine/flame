@@ -13,7 +13,7 @@ void main() {
       '''make sure adding a component with both scale and drag mixins
       adds a MultiDragScaleDispatcher''',
       (game) async {
-        await game.add(ScaleDragCallbacksComponent());
+        game.add(ScaleDragCallbacksComponent());
         await game.ready();
         expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
@@ -117,12 +117,13 @@ void main() {
       );
 
       expect(component.dragCancelEvent, equals(1));
-      expect(component.dragEndEvent, equals(1));
+      // onDragCancel no longer delegates to onDragEnd.
+      expect(component.dragEndEvent, equals(0));
       expect(component.isDragged, isFalse);
 
       dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
       expect(component.dragCancelEvent, equals(1));
-      expect(component.dragEndEvent, equals(1));
+      expect(component.dragEndEvent, equals(0));
     },
   );
 
@@ -188,13 +189,13 @@ void main() {
 
       dispatcher.onDragCancel(DragCancelEvent(1));
       expect(component.dragCancelEvent, equals(1));
-      // onDragCancel delegates to onDragEnd internally
-      expect(component.dragEndEvent, equals(1));
+      // onDragCancel no longer delegates to onDragEnd.
+      expect(component.dragEndEvent, equals(0));
       expect(component.isDragged, isFalse);
 
       // record removed after cancel; subsequent end for same pointer is a no-op
       dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
-      expect(component.dragEndEvent, equals(1));
+      expect(component.dragEndEvent, equals(0));
     },
   );
 
@@ -481,7 +482,7 @@ void main() {
 
         game.camera.viewfinder.zoom = 3;
 
-        await game.world.add(
+        game.world.add(
           ScaleDragWithCallbacksComponent(
             position: Vector2.all(-5),
             size: Vector2.all(10),
@@ -518,7 +519,7 @@ void main() {
 
         game.camera.viewfinder.zoom = 3;
 
-        await game.world.add(
+        game.world.add(
           ScaleDragWithCallbacksComponent(
             position: Vector2.all(-5),
             size: Vector2.all(10),
@@ -562,7 +563,7 @@ void main() {
         game.camera.viewfinder.zoom = 2;
 
         final deltas = <Vector2>[];
-        await game.world.add(
+        game.world.add(
           ScaleDragWithCallbacksComponent(
             position: Vector2.all(-5),
             size: Vector2.all(10),
@@ -593,7 +594,7 @@ void main() {
         game.camera.viewfinder.zoom = 1 / 2;
 
         final deltas = <Vector2>[];
-        await game.world.add(
+        game.world.add(
           ScaleDragWithCallbacksComponent(
             position: Vector2.all(-5),
             size: Vector2.all(10),
@@ -649,7 +650,7 @@ void main() {
           position: Vector2.all(-5),
           size: Vector2.all(10),
         );
-        await game.world.add(component);
+        game.world.add(component);
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
         await tester.pump();
@@ -685,12 +686,12 @@ void main() {
         final game = makeFixedResolutionGame();
 
         final scaleComponent = ScaleWithCallbacksComponent();
-        await game.world.add(scaleComponent);
+        game.world.add(scaleComponent);
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump(Durations.short1);
 
         final dragComponent = DragWithCallbacksComponent();
-        await game.world.add(dragComponent);
+        game.world.add(dragComponent);
 
         await tester.pump();
         await tester.pump();
@@ -708,13 +709,13 @@ void main() {
           size: Vector2.all(10),
         );
 
-        await game.world.add(dragComponent);
+        game.world.add(dragComponent);
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
 
         Future<void> injectScale() async {
           final scaleComponent = ScaleWithCallbacksComponent();
-          await game.world.add(scaleComponent);
+          game.world.add(scaleComponent);
           await tester.pump();
           expect(dragComponent.isDragged, true);
         }
@@ -740,13 +741,13 @@ void main() {
           size: Vector2.all(10),
         );
 
-        await game.world.add(scaleComponent);
+        game.world.add(scaleComponent);
         await tester.pumpWidget(GameWidget(game: game));
         await tester.pump();
 
         Future<void> injectDrag() async {
           final dragComponent = DragWithCallbacksComponent();
-          await game.world.add(dragComponent);
+          game.world.add(dragComponent);
           await tester.pump();
           expect(scaleComponent.isScaling, true);
         }

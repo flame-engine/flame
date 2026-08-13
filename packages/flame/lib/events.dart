@@ -11,8 +11,6 @@ export 'src/events/callbacks/secondary_tap_callbacks.dart'
 export 'src/events/callbacks/tap_callbacks.dart' show TapCallbacks;
 export 'src/events/callbacks/tertiary_tap_callbacks.dart'
     show TertiaryTapCallbacks;
-export 'src/events/deprecated.dart'
-    show MultiDragDispatcher, MultiDragDispatcherKey;
 export 'src/events/dispatchers/dispatcher.dart' show Dispatcher;
 export 'src/events/dispatchers/double_tap_dispatcher.dart'
     show DoubleTapDispatcher, DoubleTapDispatcherKey;
@@ -81,28 +79,13 @@ export 'src/events/multi_drag_scale_recognizer.dart'
 export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
 export 'src/gestures/detectors.dart'
-    show
-        DoubleTapDetector,
-        ForcePressDetector,
-        HorizontalDragDetector,
-        LongPressDetector,
-        MouseMovementDetector,
-        PanDetector,
-        ScaleDetector,
-        ScrollDetector,
-        TertiaryTapDetector,
-        SecondaryTapDetector,
-        VerticalDragDetector;
+    show MouseMovementDetector, PanDetector, ScaleDetector, ScrollDetector;
 export 'src/gestures/events.dart'
     show
         DragDownInfo,
         DragEndInfo,
         DragStartInfo,
         DragUpdateInfo,
-        ForcePressInfo,
-        LongPressEndInfo,
-        LongPressMoveUpdateInfo,
-        LongPressStartInfo,
         PointerHoverInfo,
         PointerScrollInfo,
         PositionInfo,

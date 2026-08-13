@@ -1,3 +1,7 @@
+## 3.1.2
+
+ - **FIX**(flame_tiled): Anchor oversized orthogonal tiles at bottom-left of cell ([#3923](https://github.com/flame-engine/flame/issues/3923)). ([4c775db0](https://github.com/flame-engine/flame/commit/4c775db08ffc4357420131251510bdbf71585948))
+
 ## 3.1.1
 
  - Update a dependency to the latest release.

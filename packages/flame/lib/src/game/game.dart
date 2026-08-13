@@ -342,14 +342,14 @@ abstract mixin class Game {
     );
   }
 
-  bool _paused = false;
+  bool _isPaused = false;
 
-  /// Returns is the engine if currently paused or running
-  bool get paused => _paused;
+  /// Whether the engine is currently paused or running.
+  bool get isPaused => _isPaused;
 
-  /// Pauses or resume the engine
-  set paused(bool value) {
-    _paused = value;
+  /// Pauses or resumes the engine.
+  set isPaused(bool value) {
+    _isPaused = value;
 
     final gameLoop = _gameRenderBox?.gameLoop;
     if (gameLoop != null) {
@@ -363,23 +363,23 @@ abstract mixin class Game {
 
   /// Pauses the engine game loop execution.
   void pauseEngine() {
-    _paused = true;
+    _isPaused = true;
     _gameRenderBox?.gameLoop?.stop();
   }
 
   /// Resumes the engine game loop execution.
   void resumeEngine() {
-    _paused = false;
+    _isPaused = false;
     _gameRenderBox?.gameLoop?.start();
   }
 
   /// Steps the engine game loop by one frame. Works only if the engine is in
   /// paused state. By default step time is assumed to be 1/60th of a second.
   void stepEngine({double stepTime = 1 / 60}) {
-    if (_paused) {
-      _paused = false;
+    if (_isPaused) {
+      _isPaused = false;
       _gameRenderBox?.gameLoop?.step(stepTime);
-      _paused = true;
+      _isPaused = true;
     }
   }
 

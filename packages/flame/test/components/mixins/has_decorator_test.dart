@@ -10,13 +10,13 @@ void main() {
     testGolden(
       'Component rendering with and without a Decorator',
       (game, tester) async {
-        await game.add(
+        game.add(
           _DecoratedComponent(
             position: Vector2.all(25),
             size: Vector2.all(40),
           ),
         );
-        await game.add(
+        game.add(
           _DecoratedComponent(
             position: Vector2(75, 25),
             size: Vector2.all(40),

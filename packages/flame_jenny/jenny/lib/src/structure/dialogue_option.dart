@@ -7,9 +7,9 @@ class DialogueOption extends DialogueLine {
     required super.content,
     super.character,
     super.tags,
-    BoolExpression? condition,
+    this._condition,
     this.block = const Block([]),
-  }) : _condition = condition;
+  });
 
   final BoolExpression? _condition;
   final Block block;

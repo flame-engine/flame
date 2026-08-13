@@ -1,19 +1,18 @@
 // ignore_for_file: avoid_redundant_argument_values
 
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame_3d/game.dart';
 import 'package:flame_3d/src/graphics/backend/gpu_backend.dart' as base;
 import 'package:flame_3d/src/graphics/backend/gpu_enums.dart';
 import 'package:flame_3d/src/graphics/backend/gpu_handles.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gpu/gpu.dart' as gpu;
 
 /// A [base.GpuBackend] implemented on top of `flutter_gpu`.
 base class GpuBackend extends base.GpuBackend {
-  static Future<void> initialize() {
-    create();
-    return Future.syncValue(null);
+  static Future<void> initialize() async {
+    await create()?._preloadShaderLibraries();
   }
 
   static GpuBackend? create() => GpuBackend();
@@ -55,11 +54,35 @@ base class GpuBackend extends base.GpuBackend {
     );
   }
 
+  final Map<String, gpu.ShaderLibrary> _shaderLibraries = {};
+
+  /// Loads every `.shaderbundle` shader asset declared by the app.
+  ///
+  /// Bundles are discovered through [AssetManifest], so a game's own custom
+  /// shaders are picked up automatically alongside flame_3d's built-ins.
+  /// Loading is done up front because `flutter_gpu` can only load shader
+  /// bundles asynchronously, while [loadShaderLibrary] is synchronous.
+  Future<void> _preloadShaderLibraries() async {
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+    for (final assetName in manifest.listAssets()) {
+      if (assetName.endsWith('.shaderbundle')) {
+        final library = await gpu.ShaderLibrary.fromAsset(assetName);
+        if (library != null) {
+          _shaderLibraries[assetName] = library;
+        }
+      }
+    }
+  }
+
   @override
   GpuShaderLibrary loadShaderLibrary(String assetName) {
-    final library = gpu.ShaderLibrary.fromAsset(assetName);
+    final library = _shaderLibraries[assetName];
     if (library == null) {
-      throw StateError('Failed to load shader library "$assetName"');
+      throw StateError(
+        'Shader library "$assetName" has not been loaded. Make sure to '
+        '`await GpuBackend.initialize()` at the start of your main, and that '
+        'the asset is declared in pubspec.yaml.',
+      );
     }
     return _FlutterGpuShaderLibrary(library, assetName);
   }
@@ -275,7 +298,7 @@ class _FlutterGpuFrame implements base.GpuFrame {
 }
 
 class _FlutterGpuRenderPass implements base.GpuRenderPass {
-  const _FlutterGpuRenderPass(
+  _FlutterGpuRenderPass(
     this._backend,
     this._commandBuffer,
     this._renderPass,
@@ -287,6 +310,11 @@ class _FlutterGpuRenderPass implements base.GpuRenderPass {
 
   final gpu.RenderPass _renderPass;
 
+  // `flutter_gpu` takes the counts in `draw`/`drawIndexed` rather than at
+  // bind time, so they are recorded here until [draw] is called.
+  int _vertexCount = 0;
+  int? _indexCount;
+
   @override
   void bindPipeline(GpuPipeline pipeline, CullMode cullMode) {
     _renderPass
@@ -296,7 +324,8 @@ class _FlutterGpuRenderPass implements base.GpuRenderPass {
 
   @override
   void bindVertexBuffer(GpuBufferView view, int vertexCount) {
-    _renderPass.bindVertexBuffer(_bufferView(view), vertexCount);
+    _vertexCount = vertexCount;
+    _renderPass.bindVertexBuffer(_bufferView(view));
   }
 
   @override
@@ -305,13 +334,13 @@ class _FlutterGpuRenderPass implements base.GpuRenderPass {
     GpuIndexType indexType,
     int indexCount,
   ) {
+    _indexCount = indexCount;
     _renderPass.bindIndexBuffer(
       _bufferView(view),
       switch (indexType) {
         GpuIndexType.uint16 => gpu.IndexType.int16,
         GpuIndexType.uint32 => gpu.IndexType.int32,
       },
-      indexCount,
     );
   }
 
@@ -332,10 +361,21 @@ class _FlutterGpuRenderPass implements base.GpuRenderPass {
   }
 
   @override
-  void clearBindings() => _renderPass.clearBindings();
+  void clearBindings() {
+    _vertexCount = 0;
+    _indexCount = null;
+    _renderPass.clearBindings();
+  }
 
   @override
-  void draw() => _renderPass.draw();
+  void draw() {
+    final indexCount = _indexCount;
+    if (indexCount != null) {
+      _renderPass.drawIndexed(indexCount);
+    } else {
+      _renderPass.draw(_vertexCount);
+    }
+  }
 
   @override
   void submit() => _commandBuffer.submit();

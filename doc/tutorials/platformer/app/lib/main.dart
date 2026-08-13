@@ -7,7 +7,7 @@ import 'overlays/main_menu.dart';
 
 void main() {
   runApp(
-    GameWidget<EmberQuestGame>.controlled(
+    GameWidget<EmberQuestGame>.managed(
       gameFactory: EmberQuestGame.new,
       overlayBuilderMap: {
         'MainMenu': (_, game) => MainMenu(game: game),

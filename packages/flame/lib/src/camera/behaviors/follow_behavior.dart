@@ -19,16 +19,14 @@ import 'package:vector_math/vector_math.dart';
 /// movement to the horizontal/vertical directions respectively.
 class FollowBehavior extends Component {
   FollowBehavior({
-    required ReadOnlyPositionProvider target,
-    PositionProvider? owner,
+    required this._target,
+    this._owner,
     double maxSpeed = double.infinity,
     this.horizontalOnly = false,
     this.verticalOnly = false,
     super.priority,
     super.key,
-  }) : _target = target,
-       _owner = owner,
-       _speed = maxSpeed,
+  }) : _speed = maxSpeed,
        assert(maxSpeed > 0, 'maxSpeed must be positive: $maxSpeed'),
        assert(
          !(horizontalOnly && verticalOnly),

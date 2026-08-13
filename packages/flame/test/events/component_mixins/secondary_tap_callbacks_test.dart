@@ -189,7 +189,7 @@ void main() {
       'NonPrimaryTapDispatcher is added to game when the callback is mounted',
       (game) async {
         final component = _SecondaryTapCallbacksComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
 
         expect(game.firstChild<NonPrimaryTapDispatcher>(), isNotNull);

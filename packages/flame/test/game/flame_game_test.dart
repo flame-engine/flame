@@ -105,7 +105,7 @@ void main() {
           renderBox.attach(PipelineOwner());
 
           final component = _MyComponent();
-          await game.add(component);
+          game.add(component);
           renderBox.gameLoopCallback(1.0);
 
           expect(component.isUpdateCalled, isTrue);
@@ -320,15 +320,15 @@ void main() {
         final game = FlameGame();
 
         await tester.pumpWidget(GameWidget(game: game));
-        expect(game.paused, isFalse);
+        expect(game.isPaused, isFalse);
         expect(game.isPausedOnBackground, isFalse);
 
         await tester.pumpWidget(Container());
-        expect(game.paused, isTrue);
+        expect(game.isPaused, isTrue);
         expect(game.isPausedOnBackground, isTrue);
 
         await tester.pumpWidget(GameWidget(game: game));
-        expect(game.paused, isFalse, reason: 'Game should resume on remount');
+        expect(game.isPaused, isFalse, reason: 'Game should resume on remount');
         expect(
           game.isPausedOnBackground,
           isFalse,
@@ -341,20 +341,20 @@ void main() {
       game.pauseWhenBackgrounded = true;
 
       game.lifecycleStateChange(AppLifecycleState.paused);
-      expect(game.paused, isTrue);
+      expect(game.isPaused, isTrue);
 
       game.lifecycleStateChange(AppLifecycleState.resumed);
-      expect(game.paused, isFalse);
+      expect(game.isPaused, isFalse);
     });
 
     testWithFlameGame('false', (game) async {
       game.pauseWhenBackgrounded = false;
 
       game.lifecycleStateChange(AppLifecycleState.paused);
-      expect(game.paused, isFalse);
+      expect(game.isPaused, isFalse);
 
       game.lifecycleStateChange(AppLifecycleState.resumed);
-      expect(game.paused, isFalse);
+      expect(game.isPaused, isFalse);
     });
 
     for (final startingLifecycleState in AppLifecycleState.values) {
@@ -384,7 +384,7 @@ void main() {
 
           GameWidgetState.initGameStateListener(game, () {});
 
-          expect(game.paused, isFalse);
+          expect(game.isPaused, isFalse);
         },
       );
     }
@@ -399,15 +399,15 @@ void main() {
         await game.toBeLoaded();
         await tester.pump();
 
-        expect(game.paused, isFalse);
+        expect(game.isPaused, isFalse);
         WidgetsBinding.instance.handleAppLifecycleStateChanged(
           AppLifecycleState.paused,
         );
-        expect(game.paused, isTrue);
+        expect(game.isPaused, isTrue);
         WidgetsBinding.instance.handleAppLifecycleStateChanged(
           AppLifecycleState.resumed,
         );
-        expect(game.paused, isFalse);
+        expect(game.isPaused, isFalse);
       },
     );
 

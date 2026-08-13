@@ -94,7 +94,7 @@ For instance a `TimerComponent` can implement a time-based behavioral activity:
 class MyBehavior extends Behavior {
   @override
   Future<void> onLoad() async {
-    await add(TimerComponent(period: 5, repeat: true, onTick: _onTick));
+    add(TimerComponent(period: 5, repeat: true, onTick: _onTick));
   }
 
   void _onTick() {

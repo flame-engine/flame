@@ -10,7 +10,7 @@ void main() {
     testWithFlameGame('can apply to component having HasPaint', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
-      await component.add(
+      component.add(
         HueEffect.by(pi, EffectController(duration: 1)),
       );
 
@@ -35,7 +35,7 @@ void main() {
       final component = _PaintComponent();
       await game.ensureAdd(component);
       final effect = HueEffect.by(pi, EffectController(duration: 1));
-      await component.add(effect);
+      component.add(effect);
 
       game.update(0.5);
       expect(component.paint.colorFilter, isNotNull);
@@ -53,7 +53,7 @@ void main() {
     testWithFlameGame('animates hue to target angle', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
-      await component.add(
+      component.add(
         HueEffect.to(pi, EffectController(duration: 1)),
       );
 
@@ -71,7 +71,7 @@ void main() {
       final component = _PaintComponent();
       component.hue = pi / 4;
       await game.ensureAdd(component);
-      await component.add(
+      component.add(
         HueEffect.to(pi, EffectController(duration: 1)),
       );
 
@@ -85,7 +85,7 @@ void main() {
     testWithFlameGame('applies color filter', (game) async {
       final component = _PaintComponent();
       await game.ensureAdd(component);
-      await component.add(
+      component.add(
         HueEffect.to(pi / 2, EffectController(duration: 1)),
       );
 

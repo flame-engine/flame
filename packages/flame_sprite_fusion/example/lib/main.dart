@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: GameWidget.controlled(
+      home: GameWidget.managed(
         gameFactory: () => PlatformerGame(
           camera: CameraComponent.withFixedResolution(width: 320, height: 180),
         ),
@@ -36,7 +36,7 @@ class PlatformerGame extends FlameGame {
       mapJsonFile: 'map.json',
       spriteSheetFile: 'spritesheet.png',
     );
-    await world.add(map);
+    world.add(map);
 
     camera.moveTo(map.size * 0.5);
   }

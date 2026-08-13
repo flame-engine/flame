@@ -10,7 +10,7 @@ void main() {
     testGolden(
       'label renders correctly',
       (game, tester) async {
-        await game.add(
+        game.add(
           AdvancedButtonComponent(
             defaultSkin: RectangleComponent(size: Vector2(40, 20)),
             defaultLabel: RectangleComponent(
@@ -218,11 +218,11 @@ void main() {
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, true);
+        expect(game.isPaused, true);
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, false);
+        expect(game.isPaused, false);
       },
     );
   });
@@ -230,8 +230,8 @@ void main() {
 
 class _SimpleStatelessWidget extends StatelessWidget {
   const _SimpleStatelessWidget({
-    required Widget Function(BuildContext) build,
-  }) : _build = build;
+    required this._build,
+  });
 
   final Widget Function(BuildContext) _build;
 

@@ -18,7 +18,7 @@ Example:
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSpineFlutter();
-  runApp(const GameWidget.controlled(gameFactory: SpineExample.new));
+  runApp(const GameWidget.managed(gameFactory: SpineExample.new));
 }
 
 class FlameSpineExample extends FlameGame {
@@ -40,7 +40,7 @@ class FlameSpineExample extends FlameGame {
 
   // Set the "walk" animation on track 0 in looping mode
   spineboy.animationState.setAnimationByName(0, 'walk', true);
-  await add(spineboy);
+  add(spineboy);
  }
 
  @override
