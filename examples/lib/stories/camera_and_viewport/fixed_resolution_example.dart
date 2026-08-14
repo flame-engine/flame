@@ -6,8 +6,7 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
-class FixedResolutionExample extends FlameGame
-    with ScrollDetector, ScaleDetector {
+class FixedResolutionExample extends FlameGame with ScrollDetector {
   static const description = '''
     This example shows how to create a viewport with a fixed resolution.
     It is useful when you want the visible part of the game to be the same on

@@ -31,11 +31,6 @@ Detectors will be deprecated in the future. Prefer `Callbacks` instead.
   - onPanEnd
   - onPanCancel
 
-- ScaleDetector
-  - onScaleStart
-  - onScaleUpdate
-  - onScaleEnd
-
 - MultiTouchTapDetector
   - onTap
   - onTapCancel
@@ -69,53 +64,44 @@ also read more about
 [Flutter's gesture system](https://api.flutter.dev/flutter/gestures/gestures-library.html).
 
 
-## PanDetector and ScaleDetector
+## Panning and zooming
 
-If you add a `PanDetector` together with a `ScaleDetector` you will be prompted with a quite cryptic
-assertion from Flutter that says:
-
-```{note}
-Having both a pan gesture recognizer and a scale gesture recognizer is
-redundant; scale is a superset of pan.
-
-Just use the scale gesture recognizer.
-```
-
-This might seem strange, but `onScaleUpdate` is not only triggered when the scale should be changed,
-but for all pan/drag events too. So if you need to use both of those detectors you'll have to handle
-both of their logic inside `onScaleUpdate` (+`onScaleStart` and `onScaleEnd`).
-
-For example you could do something like this if you want to move the camera on pan events and zoom
-on scale events:
+To handle panning and pinch-to-zoom at the same time, use the
+[`DragCallbacks`](drag_events.md) and [`ScaleCallbacks`](scale_events.md) mixins together. Both are
+driven by the same recognizer, so they can be combined freely: drag events are reported per pointer,
+while scale events only start once two or more pointers are down.
 
 ```dart
+class MyGame extends FlameGame with DragCallbacks, ScaleCallbacks {
+  late double startZoom;
+
   void clampZoom() {
     camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 3.0);
   }
 
-  late double startZoom;
-
   @override
-  void onScaleStart(_) {
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
     startZoom = camera.viewfinder.zoom;
   }
 
   @override
-  void onScaleUpdate(ScaleUpdateInfo info) {
-    final currentScale = info.scale.global;
-    if (!currentScale.isIdentity()) {
-      camera.viewfinder.zoom = startZoom * currentScale.y;
-      clampZoom();
-    } else {
-      final zoom = camera.viewfinder.zoom;
-      final delta = (info.delta.global..negate()) / zoom;
-      camera.moveBy(delta);
-    }
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    camera.viewfinder.zoom = startZoom * event.verticalScale;
+    clampZoom();
   }
-```
 
-In the example above the pan events are handled with `info.delta` and the scale events with
-`info.scale`, although they are theoretically both from underlying scale events.
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    // Two-finger pinches emit both drag and scale; skip pan while zooming
+    if (isScaling) {
+      return;
+    }
+    final zoom = camera.viewfinder.zoom;
+    camera.moveBy((event.localDelta..negate()) / zoom);
+  }
+}
+```
 
 This can also be seen in the
 [zoom example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/camera_and_viewport/zoom_example.dart).

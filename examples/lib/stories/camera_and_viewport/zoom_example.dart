@@ -3,7 +3,8 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
+class ZoomExample extends FlameGame
+    with ScrollDetector, ScaleCallbacks, DragCallbacks {
   static const String description = '''
     On web: use scroll to zoom in and out.\n
     On mobile: use scale gesture to zoom in and out.
@@ -37,20 +38,24 @@ class ZoomExample extends FlameGame with ScrollDetector, ScaleDetector {
   late double startZoom;
 
   @override
-  void onScaleStart(_) {
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
     startZoom = camera.viewfinder.zoom;
   }
 
   @override
-  void onScaleUpdate(ScaleUpdateInfo info) {
-    final currentScale = info.scale.global;
-    if (!currentScale.isIdentity()) {
-      camera.viewfinder.zoom = startZoom * currentScale.y;
-      clampZoom();
-    } else {
-      final zoom = camera.viewfinder.zoom;
-      final delta = (info.delta.global..negate()) / zoom;
-      camera.moveBy(delta);
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    camera.viewfinder.zoom = startZoom * event.verticalScale;
+    clampZoom();
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    // Two-finger pinches emit both drag and scale; skip pan while zooming
+    if (isScaling) {
+      return;
     }
+    final zoom = camera.viewfinder.zoom;
+    camera.moveBy((event.localDelta..negate()) / zoom);
   }
 }
