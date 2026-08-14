@@ -112,6 +112,10 @@ class GameWidget<T extends Game> extends StatefulWidget {
 
   /// Builder to provide a widget which will be displayed while the game is
   /// loading. By default this is an empty `Container`.
+  ///
+  /// For a [FlameGame], the game counts as loading until the whole initial
+  /// component tree has been loaded and mounted, so the game does not start
+  /// until every component added during [Game.onLoad] is ready.
   final GameLoadingWidgetBuilder? loadingBuilder;
 
   /// If set, errors during the game loading will be caught and this widget
@@ -208,11 +212,26 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     final game = currentGame;
     assert(game.hasLayout);
     await game.load();
+    if (_isStale(game)) {
+      return;
+    }
     game.mount();
+    // Wait for the whole component tree to be loaded and mounted, so that
+    // the game does not start, and the loading widget is not removed,
+    // until every component added during the initial load is ready.
+    await game.ready();
+    if (_isStale(game)) {
+      return;
+    }
     if (!game.isPaused) {
       game.update(0);
     }
   })();
+
+  /// Whether [game] is no longer the game this widget state is showing,
+  /// either because the widget was disposed or because the game instance was
+  /// swapped out while the game was still loading.
+  bool _isStale(T game) => !mounted || !identical(game, currentGame);
 
   Future<void>? _loaderFuture;
 

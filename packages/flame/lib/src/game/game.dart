@@ -136,6 +136,14 @@ abstract mixin class Game {
     onMount();
   }
 
+  /// A future that completes when the game is fully ready to start.
+  ///
+  /// The `GameWidget` awaits this future after the game has been loaded and
+  /// mounted, before the game is shown and the first update tick runs. By
+  /// default it completes immediately; [FlameGame] overrides this to wait
+  /// until the whole initial component tree has been loaded and mounted.
+  Future<void> ready() async {}
+
   @mustCallSuper
   @internal
   void finalizeRemoval() {
