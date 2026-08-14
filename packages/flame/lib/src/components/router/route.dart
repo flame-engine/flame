@@ -24,11 +24,10 @@ class Route extends PositionComponent
     with ParentIsA<RouterComponent>, HasTimeScale {
   Route(
     Component Function()? builder, {
-    Component Function()? loadingBuilder,
+    this._loadingBuilder,
     this.transparent = false,
     this.maintainState = true,
   }) : _builder = builder,
-       _loadingBuilder = loadingBuilder,
        _renderEffect = Decorator();
 
   /// If true, then the route below this one will continue to be rendered when
@@ -145,7 +144,7 @@ class Route extends PositionComponent
   Future<void> _addLoadingPage() async {
     (_loadingPage ??= _loadingBuilder!()).addToParent(this);
     await _loadingPage!.loaded;
-    await add(_page!);
+    add(_page!);
     await _page!.loaded;
     _loadingPage!.removeFromParent();
   }

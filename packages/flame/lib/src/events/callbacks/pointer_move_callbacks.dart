@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 /// pointer movement events.
 ///
 /// This callback uses [PointerMoveDispatcher] to route events.
-mixin PointerMoveCallbacks on Component {
+mixin PointerMoveCallbacks on Component implements PointerInputCallbacks {
   void onPointerMove(PointerMoveEvent event) {}
 
   void onPointerMoveStop(PointerMoveEvent event) {}

@@ -1,7 +1,7 @@
 name: flame_network_assets
 resolution: workspace
 description: Network assets support for Flame.
-version: 0.3.3+22
+version: 0.3.4+23
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_network_assets
 funding:
   - https://opencollective.com/blue-fire
@@ -13,12 +13,12 @@ topics:
   - network-assets
 
 environment:
-  sdk: ">=3.11.0 <4.0.0"
-  flutter: ">=3.41.0"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   dev: ^1.0.0
-  flame: ^1.37.0
+  flame: ^1.38.0
   flutter:
     sdk: flutter
   http: ^1.2.1

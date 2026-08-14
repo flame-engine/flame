@@ -14,7 +14,7 @@ class ClipComponent extends PositionComponent {
   ///
   /// Clips the canvas based its shape and size.
   ClipComponent({
-    required ShapeBuilder builder,
+    required this._builder,
     super.position,
     super.size,
     super.scale,
@@ -23,7 +23,7 @@ class ClipComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _builder = builder;
+  });
 
   /// {@macro circle_clip_component}
   ///

@@ -61,49 +61,17 @@ abstract class PositionInfo<T> extends BaseInfo<T> {
   ) : super(raw);
 }
 
-class TapDownInfo extends PositionInfo<TapDownDetails> with _HandledField {
+class TapDownInfo extends PositionInfo<TapDownDetails> {
   TapDownInfo.fromDetails(
     Game game,
     TapDownDetails raw,
   ) : super(game, raw.globalPosition, raw);
 }
 
-class TapUpInfo extends PositionInfo<TapUpDetails> with _HandledField {
+class TapUpInfo extends PositionInfo<TapUpDetails> {
   TapUpInfo.fromDetails(
     Game game,
     TapUpDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
-class LongPressStartInfo extends PositionInfo<LongPressStartDetails> {
-  LongPressStartInfo.fromDetails(
-    Game game,
-    LongPressStartDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
-class LongPressEndInfo extends PositionInfo<LongPressEndDetails> {
-  late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
-
-  LongPressEndInfo.fromDetails(
-    Game game,
-    LongPressEndDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
-class LongPressMoveUpdateInfo extends PositionInfo<LongPressMoveUpdateDetails> {
-  LongPressMoveUpdateInfo.fromDetails(
-    Game game,
-    LongPressMoveUpdateDetails raw,
-  ) : super(game, raw.globalPosition, raw);
-}
-
-class ForcePressInfo extends PositionInfo<ForcePressDetails> {
-  late final double pressure = raw.pressure;
-
-  ForcePressInfo.fromDetails(
-    Game game,
-    ForcePressDetails raw,
   ) : super(game, raw.globalPosition, raw);
 }
 
@@ -116,8 +84,7 @@ class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
   ) : super(game, raw.position, raw);
 }
 
-class PointerHoverInfo extends PositionInfo<PointerHoverEvent>
-    with _HandledField {
+class PointerHoverInfo extends PositionInfo<PointerHoverEvent> {
   PointerHoverInfo.fromDetails(
     Game game,
     PointerHoverEvent raw,
@@ -131,15 +98,14 @@ class DragDownInfo extends PositionInfo<DragDownDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class DragStartInfo extends PositionInfo<DragStartDetails> with _HandledField {
+class DragStartInfo extends PositionInfo<DragStartDetails> {
   DragStartInfo.fromDetails(
     Game game,
     DragStartDetails raw,
   ) : super(game, raw.globalPosition, raw);
 }
 
-class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
-    with _HandledField {
+class DragUpdateInfo extends PositionInfo<DragUpdateDetails> {
   late final EventDelta delta = EventDelta(raw.delta);
 
   DragUpdateInfo.fromDetails(
@@ -148,7 +114,7 @@ class DragUpdateInfo extends PositionInfo<DragUpdateDetails>
   ) : super(game, raw.globalPosition, raw);
 }
 
-class DragEndInfo extends BaseInfo<DragEndDetails> with _HandledField {
+class DragEndInfo extends BaseInfo<DragEndDetails> {
   late final Vector2 velocity = raw.velocity.pixelsPerSecond.toVector2();
   double? get primaryVelocity => raw.primaryVelocity;
 
@@ -184,8 +150,4 @@ class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
     Game game,
     ScaleUpdateDetails raw,
   ) : super(game, raw.focalPoint, raw);
-}
-
-mixin _HandledField {
-  bool handled = false;
 }

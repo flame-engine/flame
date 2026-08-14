@@ -1,5 +1,4 @@
 import 'package:flame/events.dart';
-import 'package:flame/input.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -45,93 +44,6 @@ class GestureDetectorBuilder {
   }
 
   void initializeGestures(Game game) {
-    // support for deprecated detectors
-    // ignore: deprecated_member_use_from_same_package
-    if (game is TapDetector ||
-        game is SecondaryTapDetector ||
-        game is TertiaryTapDetector) {
-      register(
-        TapGestureRecognizer.new,
-        (TapGestureRecognizer instance) {
-          // support for deprecated detectors
-          // ignore: deprecated_member_use_from_same_package
-          if (game is TapDetector) {
-            instance.onTap = game.onTap;
-            instance.onTapCancel = game.onTapCancel;
-            instance.onTapUp = game.handleTapUp;
-            instance.onTapDown = game.handleTapDown;
-          }
-          if (game is SecondaryTapDetector) {
-            instance.onSecondaryTapCancel = game.onSecondaryTapCancel;
-            instance.onSecondaryTapUp = game.handleSecondaryTapUp;
-            instance.onSecondaryTapDown = game.handleSecondaryTapDown;
-          }
-          if (game is TertiaryTapDetector) {
-            instance.onTertiaryTapCancel = game.onTertiaryTapCancel;
-            instance.onTertiaryTapUp = game.handleTertiaryTapUp;
-            instance.onTertiaryTapDown = game.handleTertiaryTapDown;
-          }
-        },
-      );
-    }
-    if (game is DoubleTapDetector) {
-      register(
-        DoubleTapGestureRecognizer.new,
-        (DoubleTapGestureRecognizer instance) {
-          instance.onDoubleTap = game.onDoubleTap;
-          instance.onDoubleTapDown = game.handleDoubleTapDown;
-          instance.onDoubleTapCancel = game.onDoubleTapCancel;
-        },
-      );
-    }
-    if (game is LongPressDetector) {
-      register(
-        LongPressGestureRecognizer.new,
-        (LongPressGestureRecognizer instance) {
-          instance.onLongPress = game.onLongPress;
-          instance.onLongPressStart = game.handleLongPressStart;
-          instance.onLongPressMoveUpdate = game.handleLongPressMoveUpdate;
-          instance.onLongPressEnd = game.handleLongPressEnd;
-          instance.onLongPressUp = game.onLongPressUp;
-          instance.onLongPressCancel = game.onLongPressCancel;
-        },
-      );
-    }
-    if (game is VerticalDragDetector) {
-      register(
-        VerticalDragGestureRecognizer.new,
-        (VerticalDragGestureRecognizer instance) {
-          instance.onDown = game.handleVerticalDragDown;
-          instance.onStart = game.handleVerticalDragStart;
-          instance.onUpdate = game.handleVerticalDragUpdate;
-          instance.onEnd = game.handleVerticalDragEnd;
-          instance.onCancel = game.onVerticalDragCancel;
-        },
-      );
-    }
-    if (game is HorizontalDragDetector) {
-      register(
-        HorizontalDragGestureRecognizer.new,
-        (HorizontalDragGestureRecognizer instance) {
-          instance.onDown = game.handleHorizontalDragDown;
-          instance.onStart = game.handleHorizontalDragStart;
-          instance.onUpdate = game.handleHorizontalDragUpdate;
-          instance.onEnd = game.handleHorizontalDragEnd;
-          instance.onCancel = game.onHorizontalDragCancel;
-        },
-      );
-    }
-    if (game is ForcePressDetector) {
-      register(
-        ForcePressGestureRecognizer.new,
-        (ForcePressGestureRecognizer instance) {
-          instance.onStart = game.handleForcePressStart;
-          instance.onPeak = game.handleForcePressPeak;
-          instance.onUpdate = game.handleForcePressUpdate;
-          instance.onEnd = game.handleForcePressEnd;
-        },
-      );
-    }
     if (game is PanDetector) {
       register(
         PanGestureRecognizer.new,

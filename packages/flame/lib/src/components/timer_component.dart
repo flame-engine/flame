@@ -17,10 +17,10 @@ class TimerComponent extends Component {
   /// [period] The period of time in seconds that the tick will be called
   /// [repeat] When true, this will continue running after [period] is reached
   /// [autoStart] When true, will start upon instantiation (default is true)
-  /// [onTick] When provided, will be called every time [period] is reached.
-  /// This overrides the [onTick] method
-  /// [tickWhenLoaded] When true, will call [onTick] when the component is first
-  /// loaded (default is false).
+  /// [_onTick] When provided, will be called every time [period] is reached.
+  /// This overrides the [_onTick] method
+  /// [tickWhenLoaded] When true, will call [_onTick] when the component is
+  /// first loaded (default is false).
   /// [tickCount] The number of time the timer will tick before stopping.
   /// This is is only used when [repeat] is true. If null,
   /// the timer will run indefinitely.
@@ -29,15 +29,15 @@ class TimerComponent extends Component {
     bool repeat = false,
     bool autoStart = true,
     this.removeOnFinish = false,
-    VoidCallback? onTick,
+    this._onTick,
     this.tickWhenLoaded = false,
     int? tickCount,
     super.key,
-  }) : _onTick = onTick {
+  }) {
     timer = Timer(
       period,
       repeat: repeat,
-      onTick: this.onTick,
+      onTick: onTick,
       autoStart: autoStart,
       tickCount: tickCount,
     );

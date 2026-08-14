@@ -7,11 +7,11 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.11.0 <4.0.0"
+  sdk: ">=3.12.0 <4.0.0"
 
 dependencies:
-  flame: ^1.37.0
-  flame_fire_atlas: ^1.8.17
+  flame: ^1.38.0
+  flame_fire_atlas: ^1.8.18
   flutter:
     sdk: flutter
 

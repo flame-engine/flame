@@ -10,7 +10,7 @@ void main() {
       _GameWithTimeScale.new,
       (game) async {
         final component = _MovingComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
         const stepTime = 10.0;
         var distance = 0.0;
@@ -44,8 +44,8 @@ void main() {
       (game) async {
         final component1 = _ComponentWithTimeScale();
         final component2 = _MovingComponent();
-        await component1.add(component2);
-        await game.add(component1);
+        component1.add(component2);
+        game.add(component1);
         await game.ready();
         const stepTime = 10.0;
         var distance = 0.0;
@@ -91,7 +91,7 @@ void main() {
       _GameWithTimeScale.new,
       (game) async {
         final component = _MovingComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
         const stepTime = 10.0;
         var distance = 0.0;
@@ -124,7 +124,7 @@ void main() {
       _GameWithTimeScale.new,
       (game) async {
         final component = _MovingComponent();
-        await game.add(component);
+        game.add(component);
         await game.ready();
         const stepTime = 10.0;
         var distance = 0.0;

@@ -43,13 +43,10 @@ import 'package:jenny/src/structure/line_content.dart';
 /// Inline expressions cannot contain markup attributes.
 class DialogueLine extends DialogueEntry {
   DialogueLine({
-    required LineContent content,
-    Character? character,
-    List<String>? tags,
-  }) : _content = content,
-       _character = character,
-       _tags = tags,
-       _value = content.isConst ? content.text : null;
+    required this._content,
+    this._character,
+    this._tags,
+  }) : _value = _content.isConst ? _content.text : null;
 
   final Character? _character;
   final List<String>? _tags;

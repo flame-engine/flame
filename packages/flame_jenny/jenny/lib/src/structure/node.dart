@@ -6,12 +6,10 @@ import 'package:meta/meta.dart';
 class Node extends Iterable<DialogueEntry> {
   const Node({
     required this.title,
-    required Block content,
-    Map<String, String>? tags,
-    VariableStorage? variables,
-  }) : _content = content,
-       _tags = tags,
-       _variables = variables;
+    required this._content,
+    this._tags,
+    this._variables,
+  });
 
   final String title;
   final Map<String, String>? _tags;

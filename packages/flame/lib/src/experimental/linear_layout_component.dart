@@ -77,17 +77,15 @@ abstract class LinearLayoutComponent extends LayoutComponent {
   LinearLayoutComponent({
     required super.key,
     required this.direction,
-    required CrossAxisAlignment crossAxisAlignment,
-    required MainAxisAlignment mainAxisAlignment,
-    required double gap,
+    required this._crossAxisAlignment,
+    required this._mainAxisAlignment,
+    required this._gap,
     required super.size,
     required super.position,
     required super.priority,
     required super.anchor,
     required super.children,
-  }) : _crossAxisAlignment = crossAxisAlignment,
-       _mainAxisAlignment = mainAxisAlignment,
-       _gap = gap;
+  });
 
   factory LinearLayoutComponent.fromDirection(
     Direction direction, {

@@ -45,7 +45,7 @@ void addComponentsStories(Dashbook dashbook) {
     )
     ..add(
       'Component Pool',
-      (_) => const GameWidget.controlled(
+      (_) => const GameWidget.managed(
         gameFactory: ComponentPoolExample.new,
       ),
       codeLink: baseLink('components/component_pool_example.dart'),
@@ -79,7 +79,7 @@ void addComponentsStories(Dashbook dashbook) {
     )
     ..add(
       'Spawn Component',
-      (_) => const GameWidget.controlled(
+      (_) => const GameWidget.managed(
         gameFactory: SpawnComponentExample.new,
       ),
       codeLink: baseLink('components/spawn_component_example.dart'),
@@ -87,7 +87,7 @@ void addComponentsStories(Dashbook dashbook) {
     )
     ..add(
       'Time Scale',
-      (_) => const GameWidget.controlled(
+      (_) => const GameWidget.managed(
         gameFactory: TimeScaleExample.new,
       ),
       codeLink: baseLink('components/time_scale_example.dart'),

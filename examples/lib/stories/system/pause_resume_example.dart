@@ -5,14 +5,14 @@ import 'package:flame/game.dart';
 class PauseResumeExample extends FlameGame
     with TapCallbacks, DoubleTapCallbacks {
   static const description = '''
-    Demonstrate how to use the pause and resume engine methods and paused
+    Demonstrate how to use the pause and resume engine methods and isPaused
     attribute.
 
     Tap on the screen to toggle the execution of the engine using the
     `resumeEngine` and `pauseEngine`.
 
     Double Tap on the screen to toggle the execution of the engine using the
-    `paused` attribute.
+    `isPaused` attribute.
   ''';
 
   @override
@@ -38,7 +38,7 @@ class PauseResumeExample extends FlameGame
 
   @override
   void onTapDown(_) {
-    if (paused) {
+    if (isPaused) {
       resumeEngine();
     } else {
       pauseEngine();
@@ -47,6 +47,6 @@ class PauseResumeExample extends FlameGame
 
   @override
   void onDoubleTapDown(_) {
-    paused = !paused;
+    isPaused = !isPaused;
   }
 }

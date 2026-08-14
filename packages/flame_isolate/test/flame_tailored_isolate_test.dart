@@ -32,7 +32,7 @@ void main() {
       'Running isolateCompute in sub-component',
       (game) async {
         final isolateComponent = _IsolateComponent();
-        await game.add(isolateComponent);
+        game.add(isolateComponent);
         await game.ready();
         final result = isolateComponent.isolateCompute(_pow, 4);
         await expectLater(result, completion(16));
@@ -43,7 +43,7 @@ void main() {
       'Running isolateComputeStream in sub-component',
       (game) async {
         final isolateComponent = _IsolateComponent();
-        await game.add(isolateComponent);
+        game.add(isolateComponent);
         await game.ready();
         final result = isolateComponent.isolateComputeStream(_messages, 4);
         await expectLater(result, emitsInOrder([1, 2, 3, 4]));
@@ -54,7 +54,7 @@ void main() {
       'Running isolateCompute or isolateComputeStream after remove gives error',
       (game) async {
         final isolateComponent = _IsolateComponent();
-        await game.add(isolateComponent);
+        game.add(isolateComponent);
         await game.ready();
 
         final result = isolateComponent.isolateCompute(_pow, 4);

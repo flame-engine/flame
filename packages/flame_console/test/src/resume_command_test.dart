@@ -10,10 +10,10 @@ void main() {
       FlameGame.new,
       (game) async {
         game.pauseEngine();
-        expect(game.paused, isTrue);
+        expect(game.isPaused, isTrue);
         final command = ResumeConsoleCommand();
         command.execute(game, command.parser.parse([]));
-        expect(game.paused, isFalse);
+        expect(game.isPaused, isFalse);
       },
     );
 
@@ -22,10 +22,10 @@ void main() {
         'returns error',
         FlameGame.new,
         (game) async {
-          expect(game.paused, isFalse);
+          expect(game.isPaused, isFalse);
           final command = ResumeConsoleCommand();
           final result = command.execute(game, command.parser.parse([]));
-          expect(game.paused, isFalse);
+          expect(game.isPaused, isFalse);
 
           expect(
             result.$1,

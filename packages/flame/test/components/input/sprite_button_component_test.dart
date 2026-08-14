@@ -188,11 +188,11 @@ Future<void> main() async {
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, true);
+        expect(game.isPaused, true);
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, false);
+        expect(game.isPaused, false);
       },
     );
 
@@ -365,11 +365,11 @@ Future<void> main() async {
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, true);
+        expect(game.isPaused, true);
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, false);
+        expect(game.isPaused, false);
       },
     );
   });
@@ -471,8 +471,8 @@ class _CustomSpriteButtonComponent extends SpriteButtonComponent {
 
 class _SimpleStatelessWidget extends StatelessWidget {
   const _SimpleStatelessWidget({
-    required Widget Function(BuildContext) build,
-  }) : _build = build;
+    required this._build,
+  });
 
   final Widget Function(BuildContext) _build;
 

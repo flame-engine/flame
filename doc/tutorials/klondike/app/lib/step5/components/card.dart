@@ -356,6 +356,14 @@ class Card extends PositionComponent
     }
   }
 
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    // A cancelled drag is handled as if the card had been dropped where it is,
+    // otherwise the card would be left floating in the middle of the table.
+    onDragEnd(event.toDragEnd());
+  }
+
   //#endregion
 
   //#region Card-Tapping

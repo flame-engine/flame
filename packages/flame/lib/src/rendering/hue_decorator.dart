@@ -18,7 +18,7 @@ List<double> hueRotationMatrix(double angle) {
     0,
     0,
     0.213 - 0.213 * cosT + 0.143 * sinT,
-    0.715 + 0.285 * cosT + 0.140 * sinT,
+    0.715 + 0.285 * cosT + 0.14 * sinT,
     0.072 - 0.072 * cosT - 0.283 * sinT,
     0,
     0,
@@ -44,7 +44,7 @@ List<double> hueRotationMatrix(double angle) {
 /// significant overhead compared to direct [Paint] manipulation (like
 /// `HueEffect`). Prefer `HueEffect` for high-density rendering.
 class HueDecorator extends Decorator {
-  HueDecorator({double hue = 0.0}) : _hue = hue;
+  HueDecorator({this._hue = 0.0});
 
   final _paint = Paint();
   double _hue;

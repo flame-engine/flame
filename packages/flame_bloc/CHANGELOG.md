@@ -1,3 +1,7 @@
+## 1.12.24
+
+ - **FIX**: Bloc instance was null on initial state ([#3921](https://github.com/flame-engine/flame/issues/3921)). ([8adeea69](https://github.com/flame-engine/flame/commit/8adeea69764002e763a4a9236945c2b8f57a8a3b))
+
 ## 1.12.23
 
  - Update a dependency to the latest release.

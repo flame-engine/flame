@@ -245,29 +245,16 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   bool containsEventHandlerAt(Vector2 position) {
-    // Deprecated game-level detector mixins handle events for the entire
-    // game surface, so any in-bounds point is a hit.
-    // ignore: deprecated_member_use_from_same_package
-    if (this is TapDetector ||
-        this is SecondaryTapDetector ||
-        this is TertiaryTapDetector ||
-        this is DoubleTapDetector ||
-        this is LongPressDetector ||
-        this is VerticalDragDetector ||
-        this is HorizontalDragDetector ||
-        this is ForcePressDetector ||
-        this is PanDetector ||
+    // Game-level detector mixins handle events for the entire game surface,
+    // so any in-bounds point is a hit.
+    if (this is PanDetector ||
         this is ScaleDetector ||
         this is MultiTapListener ||
         this is MultiTouchDragDetector) {
       return true;
     }
     for (final component in super.componentsAtPoint(position)) {
-      if (component is TapCallbacks ||
-          component is DragCallbacks ||
-          component is DoubleTapCallbacks ||
-          component is ScaleCallbacks ||
-          component is SecondaryTapCallbacks) {
+      if (component is PointerInputCallbacks) {
         return true;
       }
     }
@@ -337,7 +324,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        if (pauseWhenBackgrounded && !paused) {
+        if (pauseWhenBackgrounded && !isPaused) {
           pauseEngine();
           _pausedBecauseBackgrounded = true;
         }

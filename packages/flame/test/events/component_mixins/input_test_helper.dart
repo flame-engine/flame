@@ -22,7 +22,6 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    event.handled = true;
     dragStartEvent++;
     if (_wasDragged != isDragged) {
       ++isDraggedStateChange;
@@ -33,14 +32,12 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    event.handled = true;
     dragUpdateEvent++;
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    event.handled = true;
     dragEndEvent++;
     if (_wasDragged != isDragged) {
       ++isDraggedStateChange;
@@ -51,7 +48,6 @@ mixin DragCounter on DragCallbacks {
   @override
   void onDragCancel(DragCancelEvent event) {
     super.onDragCancel(event);
-    event.handled = true;
     dragCancelEvent++;
   }
 }
@@ -69,7 +65,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleStart(ScaleStartEvent event) {
     super.onScaleStart(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleStartEvent++;
     if (_wasScaled != isScaling) {
       ++isScaledStateChange;
@@ -81,7 +76,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleUpdate(ScaleUpdateEvent event) {
     super.onScaleUpdate(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleUpdateEvent++;
   }
 
@@ -89,7 +83,6 @@ mixin ScaleCounter on ScaleCallbacks {
   void onScaleEnd(ScaleEndEvent event) {
     super.onScaleEnd(event);
     expect(event.raw, isNotNull);
-    event.handled = true;
     scaleEndEvent++;
     if (_wasScaled != isScaling) {
       ++isScaledStateChange;
@@ -100,18 +93,18 @@ mixin ScaleCounter on ScaleCallbacks {
 
 class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
   DragWithCallbacksComponent({
-    void Function(DragStartEvent)? onDragStart,
-    void Function(DragUpdateEvent)? onDragUpdate,
-    void Function(DragEndEvent)? onDragEnd,
+    this._onDragStart,
+    this._onDragUpdate,
+    this._onDragEnd,
+    this._onDragCancel,
     super.position,
     super.size,
-  }) : _onDragStart = onDragStart,
-       _onDragUpdate = onDragUpdate,
-       _onDragEnd = onDragEnd;
+  });
 
   final void Function(DragStartEvent)? _onDragStart;
   final void Function(DragUpdateEvent)? _onDragUpdate;
   final void Function(DragEndEvent)? _onDragEnd;
+  final void Function(DragCancelEvent)? _onDragCancel;
 
   @override
   void onDragStart(DragStartEvent event) {
@@ -129,19 +122,23 @@ class DragWithCallbacksComponent extends PositionComponent with DragCallbacks {
     super.onDragEnd(event);
     return _onDragEnd?.call(event);
   }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    return _onDragCancel?.call(event);
+  }
 }
 
 class ScaleWithCallbacksComponent extends PositionComponent
     with ScaleCallbacks {
   ScaleWithCallbacksComponent({
-    void Function(ScaleStartEvent)? onScaleStart,
-    void Function(ScaleUpdateEvent)? onScaleUpdate,
-    void Function(ScaleEndEvent)? onScaleEnd,
+    this._onScaleStart,
+    this._onScaleUpdate,
+    this._onScaleEnd,
     super.position,
     super.size,
-  }) : _onScaleStart = onScaleStart,
-       _onScaleUpdate = onScaleUpdate,
-       _onScaleEnd = onScaleEnd;
+  });
 
   final void Function(ScaleStartEvent)? _onScaleStart;
   final void Function(ScaleUpdateEvent)? _onScaleUpdate;
@@ -179,20 +176,15 @@ class SimpleScaleDragCallbacksComponent extends PositionComponent
 class ScaleDragWithCallbacksComponent extends PositionComponent
     with ScaleCallbacks, DragCallbacks, ScaleCounter, DragCounter {
   ScaleDragWithCallbacksComponent({
-    void Function(ScaleStartEvent)? onScaleStart,
-    void Function(ScaleUpdateEvent)? onScaleUpdate,
-    void Function(ScaleEndEvent)? onScaleEnd,
-    void Function(DragStartEvent)? onDragStart,
-    void Function(DragUpdateEvent)? onDragUpdate,
-    void Function(DragEndEvent)? onDragEnd,
+    this._onScaleStart,
+    this._onScaleUpdate,
+    this._onScaleEnd,
+    this._onDragStart,
+    this._onDragUpdate,
+    this._onDragEnd,
     super.position,
     super.size,
-  }) : _onScaleStart = onScaleStart,
-       _onScaleUpdate = onScaleUpdate,
-       _onScaleEnd = onScaleEnd,
-       _onDragStart = onDragStart,
-       _onDragUpdate = onDragUpdate,
-       _onDragEnd = onDragEnd;
+  });
 
   final void Function(ScaleStartEvent)? _onScaleStart;
   final void Function(ScaleUpdateEvent)? _onScaleUpdate;

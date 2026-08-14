@@ -17,7 +17,7 @@ void main() {
           Vector2.all(10),
         )..anchor = Anchor.center;
         final screenHitbox = ScreenHitbox();
-        await game.world.addAll([screenHitbox, testBlock]);
+        game.world.addAll([screenHitbox, testBlock]);
         await game.ready();
         game.update(0);
 
@@ -44,7 +44,7 @@ void main() {
           Vector2.all(10),
         )..anchor = Anchor.center;
         final screenHitbox = ScreenHitbox();
-        await game.world.addAll([screenHitbox, testBlock]);
+        game.world.addAll([screenHitbox, testBlock]);
         await game.ready();
         game.update(0);
 
@@ -70,7 +70,7 @@ void main() {
           Vector2.all(10),
         )..anchor = Anchor.center;
         final screenHitbox = ScreenHitbox();
-        await game.world.addAll([screenHitbox, testBlock]);
+        game.world.addAll([screenHitbox, testBlock]);
         await game.ready();
         game.update(0);
 
@@ -99,7 +99,7 @@ void main() {
           Vector2.all(10),
         )..anchor = Anchor.center;
         final screenHitbox = ScreenHitbox();
-        await game.world.addAll([screenHitbox, testBlock]);
+        game.world.addAll([screenHitbox, testBlock]);
         await game.ready();
         game.update(0);
 
@@ -128,7 +128,7 @@ void main() {
           Vector2.all(2),
         )..anchor = Anchor.center;
         final screenHitbox = ScreenHitbox();
-        await game.world.addAll([screenHitbox, testBlock]);
+        game.world.addAll([screenHitbox, testBlock]);
         await game.ready();
         game.update(0);
 

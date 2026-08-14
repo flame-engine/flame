@@ -23,8 +23,8 @@ Adds support for <a href="https://github.com/flame-engine/forge2d">Forge2d</a>, 
 
 # flame_forge2d
 
-This library acts as a bridge between [Forge2D](https://github.com/flame-engine/forge2d) (our port
-of Box2D) and the Flame game engine.
+This library acts as a bridge between [Forge2D](https://github.com/flame-engine/forge2d) (our
+bindings for Box2D) and the Flame game engine.
 
 
 ## Installation
@@ -46,4 +46,13 @@ and you can also find some examples in the
 
 Some more documentation can be found
 [here](https://docs.flame-engine.org/main/bridge_packages/flame_forge2d/flame_forge2d.html).
+
+
+## Migrating from 0.19
+
+Version 0.20 is built on Forge2D 0.15, which replaced the pure Dart port of Box2D 2.x with
+bindings for Box2D v3, so the whole API changed. See the [flame_forge2d migration
+guide](https://docs.flame-engine.org/main/bridge_packages/flame_forge2d/migration.html) and the
+[Forge2D migration
+guide](https://docs.flame-engine.org/main/other_modules/forge2d/migration.html).
 
