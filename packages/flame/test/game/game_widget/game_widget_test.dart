@@ -522,8 +522,30 @@ void main() {
         await tester.pump();
 
         expect(slowGame.isMounted, isFalse);
-        expect(slowGame.onMountCalled, isFalse);
+        expect(slowGame.onMountCount, 0);
         expect(quickGame.isAttached, isTrue);
+      },
+    );
+
+    testWidgets(
+      'swapping away and back during loading only mounts the game once',
+      (tester) async {
+        const key = Key('flame-game');
+        final loadGate = Completer<void>();
+        final slowGame = _GatedLoadGame(loadGate);
+        await tester.pumpWidget(GameWidget(key: key, game: slowGame));
+
+        final otherGame = FlameGame();
+        await tester.pumpWidget(GameWidget(key: key, game: otherGame));
+        await tester.pumpWidget(GameWidget(key: key, game: slowGame));
+
+        loadGate.complete();
+        await tester.pump();
+        await tester.pump();
+
+        expect(slowGame.isMounted, isTrue);
+        expect(slowGame.onMountCount, 1);
+        expect(slowGame.isAttached, isTrue);
       },
     );
 
@@ -611,14 +633,14 @@ class _GatedLoadGame extends FlameGame {
   _GatedLoadGame(this.loadGate);
 
   final Completer<void> loadGate;
-  bool onMountCalled = false;
+  int onMountCount = 0;
 
   @override
   Future<void> onLoad() => loadGate.future;
 
   @override
   void onMount() {
-    onMountCalled = true;
+    onMountCount++;
   }
 }
 
