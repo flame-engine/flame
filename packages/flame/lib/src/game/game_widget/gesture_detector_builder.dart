@@ -56,16 +56,6 @@ class GestureDetectorBuilder {
         },
       );
     }
-    if (game is ScaleDetector) {
-      register(
-        ScaleGestureRecognizer.new,
-        (ScaleGestureRecognizer instance) {
-          instance.onStart = game.handleScaleStart;
-          instance.onUpdate = game.handleScaleUpdate;
-          instance.onEnd = game.handleScaleEnd;
-        },
-      );
-    }
     if (game is MultiTapListener) {
       register(
         MultiTapGestureRecognizer.new,

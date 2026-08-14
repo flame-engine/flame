@@ -120,34 +120,3 @@ class DragEndInfo extends BaseInfo<DragEndDetails> {
 
   DragEndInfo.fromDetails(super.raw);
 }
-
-class ScaleStartInfo extends PositionInfo<ScaleStartDetails> {
-  int get pointerCount => raw.pointerCount;
-
-  ScaleStartInfo.fromDetails(
-    Game game,
-    ScaleStartDetails raw,
-  ) : super(game, raw.focalPoint, raw);
-}
-
-class ScaleEndInfo extends BaseInfo<ScaleEndDetails> {
-  late final EventDelta velocity = EventDelta(raw.velocity.pixelsPerSecond);
-
-  int get pointerCount => raw.pointerCount;
-
-  ScaleEndInfo.fromDetails(super.raw);
-}
-
-class ScaleUpdateInfo extends PositionInfo<ScaleUpdateDetails> {
-  int get pointerCount => raw.pointerCount;
-  double get rotation => raw.rotation;
-  late final EventDelta delta = EventDelta(raw.focalPointDelta);
-  late final EventDelta scale = EventDelta(
-    Offset(raw.horizontalScale, raw.verticalScale),
-  );
-
-  ScaleUpdateInfo.fromDetails(
-    Game game,
-    ScaleUpdateDetails raw,
-  ) : super(game, raw.focalPoint, raw);
-}
