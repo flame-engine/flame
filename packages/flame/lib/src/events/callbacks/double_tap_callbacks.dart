@@ -12,7 +12,7 @@ import 'package:flame/events.dart';
 /// far away from each other, only one callback will be fired (or none).
 ///
 /// This callback uses [DoubleTapDispatcher] to route events.
-mixin DoubleTapCallbacks on Component {
+mixin DoubleTapCallbacks on Component implements PointerInputCallbacks {
   /// This triggers when the pointer stops contacting the device after the
   /// second tap.
   void onDoubleTapUp(DoubleTapEvent event) {}

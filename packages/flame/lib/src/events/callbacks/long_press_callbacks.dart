@@ -17,7 +17,7 @@ import 'package:flutter/foundation.dart';
 /// - [onLongPressCancel]: called if the gesture is cancelled before completion.
 ///
 /// This callback uses [LongPressDispatcher] to route events.
-mixin LongPressCallbacks on Component {
+mixin LongPressCallbacks on Component implements PointerInputCallbacks {
   bool _isLongPressing = false;
 
   /// Returns true while a long press gesture is active on this component.

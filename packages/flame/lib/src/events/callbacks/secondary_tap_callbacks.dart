@@ -13,7 +13,7 @@ import 'package:meta/meta.dart';
 /// [containsLocalPoint]; so this can be used at the game level.
 ///
 /// This callback uses [NonPrimaryTapDispatcher] to route events.
-mixin SecondaryTapCallbacks on Component {
+mixin SecondaryTapCallbacks on Component implements PointerInputCallbacks {
   void onSecondaryTapDown(SecondaryTapDownEvent event) {}
   void onSecondaryTapUp(SecondaryTapUpEvent event) {}
   void onSecondaryTapCancel(SecondaryTapCancelEvent event) {}
