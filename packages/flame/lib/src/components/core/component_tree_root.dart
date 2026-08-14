@@ -22,12 +22,31 @@ class ComponentTreeRoot extends Component {
   final Set<Component> _blocked;
   late final Map<ComponentKey, Component> _index = {};
   Completer<void>? _lifecycleEventsCompleter;
+  Completer<void>? _lifecycleEventMutationCompleter;
+
+  /// A future that completes the next time the lifecycle event queue is
+  /// mutated: when a new event is enqueued or an existing event is cancelled.
+  ///
+  /// This is used by `FlameGame.ready` to re-evaluate the queue when it is
+  /// changed by something other than a component finishing its load, for
+  /// example when a component is removed while it is still loading.
+  @internal
+  Future<void> get nextLifecycleEventMutation =>
+      (_lifecycleEventMutationCompleter ??= Completer<void>()).future;
+
+  void _notifyLifecycleEventMutation() {
+    if (_lifecycleEventMutationCompleter != null) {
+      _lifecycleEventMutationCompleter!.complete();
+      _lifecycleEventMutationCompleter = null;
+    }
+  }
 
   void _enqueueAdd(Component child, Component parent) {
     queue.addLast()
       ..kind = LifecycleEventKind.add
       ..child = child
       ..parent = parent;
+    _notifyLifecycleEventMutation();
   }
 
   /// Cancels the pending ADD event for [child] into [parent].
@@ -53,6 +72,7 @@ class ComponentTreeRoot extends Component {
         'Cannot find a lifecycle event Add(child=$child, parent=$parent)',
       );
     }
+    _notifyLifecycleEventMutation();
   }
 
   void _enqueueRemove(Component child, Component parent) {
@@ -60,6 +80,7 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
+    _notifyLifecycleEventMutation();
   }
 
   /// Cancels all pending REMOVE events for [child].
@@ -68,11 +89,18 @@ class ComponentTreeRoot extends Component {
   /// [processLifecycleEvents] is iterating over the queue (for example from a
   /// component's [Component.onMount]).
   void _dequeueRemove(Component child) {
+    var dequeuedAny = false;
     queue.forEachWhere(
       (event) =>
           event.kind == LifecycleEventKind.remove && event.child == child,
-      (event) => event.kind = LifecycleEventKind.unknown,
+      (event) {
+        event.kind = LifecycleEventKind.unknown;
+        dequeuedAny = true;
+      },
     );
+    if (dequeuedAny) {
+      _notifyLifecycleEventMutation();
+    }
   }
 
   /// Finds all children in [candidates] that have a pending REMOVE event,
@@ -93,6 +121,9 @@ class ComponentTreeRoot extends Component {
         event.kind = LifecycleEventKind.unknown;
       },
     );
+    if (result.isNotEmpty) {
+      _notifyLifecycleEventMutation();
+    }
   }
 
   void _enqueueMove(Component child, Component newParent) {
@@ -100,6 +131,7 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.move
       ..child = child
       ..parent = newParent;
+    _notifyLifecycleEventMutation();
   }
 
   void _enqueuePriorityChange(
@@ -110,6 +142,7 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.rebalance
       ..child = child
       ..parent = parent;
+    _notifyLifecycleEventMutation();
   }
 
   bool get hasLifecycleEvents => queue.isNotEmpty;

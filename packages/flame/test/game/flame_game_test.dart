@@ -306,6 +306,9 @@ void main() {
 
         await tester.pumpWidget(GameWidget(game: game));
         await game.toBeLoaded();
+        // The loader also waits for the whole component tree to be ready, so
+        // an extra pump is needed before the game attaches.
+        await tester.pump();
         await tester.pump();
 
         expect(hasAttached, isTrue);
