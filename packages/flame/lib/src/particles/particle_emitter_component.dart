@@ -61,7 +61,9 @@ class ParticleEmitterComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _emitting = emitting,
+  }) : // `this._emitting` requires Dart 3.12, but the minimum SDK is 3.11.
+       // ignore: prefer_initializing_formals
+       _emitting = emitting,
        random = random ?? Random(),
        _buffer = ParticleBuffer(emitter.maxParticles),
        _burstFired = List.filled(emitter.bursts.length, false);
