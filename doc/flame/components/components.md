@@ -94,7 +94,8 @@ class MyComponent extends Component {
 A component's lifecycle state can be checked by a series of getters:
 
 - `isLoaded`: Returns a bool with the current loaded state.
-- `loaded`: Returns a future that will complete once the component has finished loading.
+- `loaded`: Returns a future that will complete once the component has finished loading, including
+  the loading of any children that were added during its `onLoad`.
 - `isMounted`: Returns a bool with the current mounted state.
 - `mounted`: Returns a future that will complete once the component has finished mounting.
 - `isRemoved`: Returns a bool with the current removed state.
@@ -262,6 +263,14 @@ Awaiting `mounted` or `removed` there is not safe: a child can only be mounted a
 been, and the parent is only mounted once its `onLoad` has completed, so those futures would
 deadlock. The same goes for `game.lifecycleEventsProcessed`, since the parent's own pending mount is
 part of the queue it waits for.
+
+A component does not count as loaded until every child that was added during its `onLoad` has
+finished loading as well, even without awaiting their `loaded` futures explicitly. This means that
+by the time the component mounts, the subtree it created during `onLoad` is fully loaded, and those
+children mount together with it in the same lifecycle processing pass. A child that fails to load
+is the exception: it is dropped from the tree without blocking its parent. Because the parent now
+waits for its children, a child's `onLoad` must not await the parent's `loaded` future, that would
+deadlock.
 
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
