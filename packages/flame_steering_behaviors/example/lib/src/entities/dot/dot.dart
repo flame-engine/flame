@@ -37,7 +37,7 @@ class Dot extends PositionedEntity with Steerable {
   @override
   Future<void> onLoad() async {
     parent!.children.register<Dot>();
-    await add(
+    add(
       SeparationBehavior(
         parent!.children.query<Dot>(),
         maxDistance: 1 * relativeValue,

@@ -49,7 +49,7 @@ void main() {
       final component = PositionComponent(children: [hitbox]);
       final testBlock = TestBlock(Vector2.zero(), Vector2.all(10));
 
-      await game.addAll([component, testBlock]);
+      game.addAll([component, testBlock]);
       await game.ready();
 
       expect(hitbox.passthroughParent, isNull);

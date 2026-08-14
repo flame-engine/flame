@@ -23,7 +23,7 @@ void main() {
       'listAllChildren crawls on all children',
       FlameGame.new,
       (game) async {
-        await game.world.add(
+        game.world.add(
           RectangleComponent(
             children: [
               PositionComponent(),
@@ -47,7 +47,7 @@ void main() {
         'match children with the given types',
         FlameGame.new,
         (game) async {
-          await game.world.addAll([
+          game.world.addAll([
             RectangleComponent(
               children: [
                 PositionComponent(),
@@ -76,7 +76,7 @@ void main() {
         'match children with the given types and limit',
         FlameGame.new,
         (game) async {
-          await game.world.addAll([
+          game.world.addAll([
             RectangleComponent(
               children: [
                 PositionComponent(),
@@ -106,7 +106,7 @@ void main() {
         FlameGame.new,
         (game) async {
           late Component target;
-          await game.world.addAll([
+          game.world.addAll([
             target = RectangleComponent(
               children: [
                 PositionComponent(),

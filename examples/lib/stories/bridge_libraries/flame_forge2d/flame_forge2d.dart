@@ -1,23 +1,19 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:examples/commons/commons.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/animated_body_example.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/blob_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/camera_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/composition_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/contact_callbacks_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/domino_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/drag_callbacks_example.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/constant_volume_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/distance_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/friction_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/gear_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/filter_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/motor_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/mouse_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/prismatic_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/pulley_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/revolute_joint.dart';
-import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/rope_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/weld_joint.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/joints/wheel_joint.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/raycast_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/revolute_joint_with_motor_example.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/sprite_body_example.dart';
@@ -30,12 +26,6 @@ String link(String example) =>
 
 void addForge2DStories(Dashbook dashbook) {
   dashbook.storiesOf('flame_forge2d')
-    ..add(
-      'Blob example',
-      (DashbookContext ctx) => GameWidget(game: BlobExample()),
-      codeLink: link('blob_example.dart'),
-      info: BlobExample.description,
-    )
     ..add(
       'Composition example',
       (DashbookContext ctx) => GameWidget(game: CompositionExample()),
@@ -59,7 +49,7 @@ void addForge2DStories(Dashbook dashbook) {
       (DashbookContext ctx) =>
           GameWidget(game: RevoluteJointWithMotorExample()),
       codeLink: link('revolute_joint_with_motor_example.dart'),
-      info: RevoluteJointExample.description,
+      info: RevoluteJointWithMotorExample.description,
     )
     ..add(
       'Sprite Bodies',
@@ -110,28 +100,16 @@ void addJointsStories(Dashbook dashbook) {
   dashbook
       .storiesOf('flame_forge2d/joints')
       .add(
-        'ConstantVolumeJoint',
-        (DashbookContext ctx) => GameWidget(game: ConstantVolumeJointExample()),
-        codeLink: link('joints/constant_volume_joint.dart'),
-        info: ConstantVolumeJointExample.description,
+        'FilterJoint',
+        (DashbookContext ctx) => GameWidget(game: FilterJointExample()),
+        codeLink: link('joints/filter_joint.dart'),
+        info: FilterJointExample.description,
       )
       .add(
         'DistanceJoint',
         (DashbookContext ctx) => GameWidget(game: DistanceJointExample()),
         codeLink: link('joints/distance_joint.dart'),
         info: DistanceJointExample.description,
-      )
-      .add(
-        'FrictionJoint',
-        (DashbookContext ctx) => GameWidget(game: FrictionJointExample()),
-        codeLink: link('joints/friction_joint.dart'),
-        info: FrictionJointExample.description,
-      )
-      .add(
-        'GearJoint',
-        (DashbookContext ctx) => GameWidget(game: GearJointExample()),
-        codeLink: link('joints/gear_joint.dart'),
-        info: GearJointExample.description,
       )
       .add(
         'MotorJoint',
@@ -152,27 +130,21 @@ void addJointsStories(Dashbook dashbook) {
         info: PrismaticJointExample.description,
       )
       .add(
-        'PulleyJoint',
-        (DashbookContext ctx) => GameWidget(game: PulleyJointExample()),
-        codeLink: link('joints/pulley_joint.dart'),
-        info: PulleyJointExample.description,
-      )
-      .add(
         'RevoluteJoint',
         (DashbookContext ctx) => GameWidget(game: RevoluteJointExample()),
         codeLink: link('joints/revolute_joint.dart'),
         info: RevoluteJointExample.description,
       )
       .add(
-        'RopeJoint',
-        (DashbookContext ctx) => GameWidget(game: RopeJointExample()),
-        codeLink: link('joints/rope_joint.dart'),
-        info: RopeJointExample.description,
-      )
-      .add(
         'WeldJoint',
         (DashbookContext ctx) => GameWidget(game: WeldJointExample()),
         codeLink: link('joints/weld_joint.dart'),
         info: WeldJointExample.description,
+      )
+      .add(
+        'WheelJoint',
+        (DashbookContext ctx) => GameWidget(game: WheelJointExample()),
+        codeLink: link('joints/wheel_joint.dart'),
+        info: WheelJointExample.description,
       );
 }

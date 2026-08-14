@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame_forge2d/flame_forge2d.dart' hide Particle, World;
+import 'package:flame_forge2d/flame_forge2d.dart' hide World;
 import 'package:flutter/material.dart' hide Image, Gradient;
 import 'package:padracing/game_colors.dart';
 import 'package:padracing/lap_line.dart';
@@ -84,18 +84,15 @@ class Car extends BodyComponent<PadRacingGame> {
       ..userData = this
       ..angularDamping = 3.0;
 
-    final shape = PolygonShape()..set(vertices);
-    final fixtureDef = FixtureDef(shape)
-      ..density = 0.2
-      ..restitution = 2.0;
-    body.createFixture(fixtureDef);
-
-    final jointDef = RevoluteJointDef()
-      ..bodyA = body
-      ..enableLimit = true
-      ..lowerAngle = 0.0
-      ..upperAngle = 0.0
-      ..localAnchorB.setZero();
+    body.createShape(
+      Polygon(vertices),
+      ShapeDef(
+        density: 0.2,
+        material: SurfaceMaterial(friction: 0, restitution: 2.0),
+        // So that the lap line sensors can detect the car.
+        enableSensorEvents: true,
+      ),
+    );
 
     tires = List.generate(4, (i) {
       final isFrontTire = i <= 1;
@@ -105,7 +102,6 @@ class Car extends BodyComponent<PadRacingGame> {
         pressedKeys: game.pressedKeySets[playerNumber],
         isFrontTire: isFrontTire,
         isLeftTire: isLeftTire,
-        jointDef: jointDef,
         isTurnableTire: isFrontTire,
       );
     });

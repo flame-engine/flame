@@ -60,13 +60,12 @@ class _ScaleToEffect extends ScaleEffect {
   _ScaleToEffect(
     Vector2 targetScale,
     EffectController controller, {
-    void Function()? onComplete,
+    super.onComplete,
     super.key,
   }) : _targetScale = targetScale.clone(),
        super.by(
          Vector2.zero(),
          controller,
-         onComplete: onComplete,
        );
 
   @override

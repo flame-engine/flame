@@ -34,7 +34,7 @@ class UpdateComponentsBenchmark extends AsyncBenchmarkBase {
     // without this, onLoad never runs and the child components are never
     // created, making the benchmark measure a tree 11x smaller than intended.
     await mountGame(_game);
-    await _game.addAll(
+    _game.addAll(
       List.generate(_amountComponents, _BenchmarkComponent.new),
     );
 
@@ -76,7 +76,7 @@ class _BenchmarkComponent extends PositionComponent {
   @override
   Future<void> onLoad() async {
     for (var i = 0; i < _amountChildren; i++) {
-      await add(PositionComponent(position: Vector2(i * 2, 0)));
+      add(PositionComponent(position: Vector2(i * 2, 0)));
     }
   }
 

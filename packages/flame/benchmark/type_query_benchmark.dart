@@ -47,7 +47,7 @@ class TypeQueryChurnBenchmark extends AsyncBenchmarkBase {
     await mountGame(_game);
     _game.world.children.register<_MarkedComponent>();
     _game.world.children.register<_PlainComponent>();
-    await _game.world.addAll(
+    _game.world.addAll(
       List.generate(
         _amountStatic,
         (i) =>
@@ -57,7 +57,7 @@ class TypeQueryChurnBenchmark extends AsyncBenchmarkBase {
     for (var i = 0; i < _liveBatches; i++) {
       final batch = _newBatch();
       _batches.addLast(batch);
-      await _game.world.addAll(batch);
+      _game.world.addAll(batch);
     }
     await _game.ready();
   }
@@ -69,7 +69,7 @@ class TypeQueryChurnBenchmark extends AsyncBenchmarkBase {
       _game.world.removeAll(_batches.removeFirst());
       final batch = _newBatch();
       _batches.addLast(batch);
-      await _game.world.addAll(batch);
+      _game.world.addAll(batch);
       for (final marked in _game.world.children.query<_MarkedComponent>()) {
         visited += marked.marker;
       }

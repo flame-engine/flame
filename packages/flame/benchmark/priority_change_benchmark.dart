@@ -47,7 +47,7 @@ class SiblingPriorityChangeBenchmark extends AsyncBenchmarkBase {
         ),
       ),
     );
-    await _game.world.addAll(parents);
+    _game.world.addAll(parents);
     await _game.ready();
     _children = [
       for (final parent in parents) parent.children.toList(growable: false),
@@ -98,7 +98,7 @@ class YSortPriorityBenchmark extends AsyncBenchmarkBase {
     final random = Random(_randomSeed);
     _game = FlameGame();
     await mountGame(_game);
-    await _game.world.addAll(
+    _game.world.addAll(
       List.generate(_amountChildren, (i) => Component(priority: i)),
     );
     await _game.ready();
