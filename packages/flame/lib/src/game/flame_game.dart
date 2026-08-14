@@ -263,11 +263,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       return true;
     }
     for (final component in super.componentsAtPoint(position)) {
-      if (component is TapCallbacks ||
-          component is DragCallbacks ||
-          component is DoubleTapCallbacks ||
-          component is ScaleCallbacks ||
-          component is SecondaryTapCallbacks) {
+      if (component is PointerInputCallbacks) {
         return true;
       }
     }

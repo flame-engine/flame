@@ -12,7 +12,7 @@ import 'package:meta/meta.dart';
 /// This mixin is the replacement of the Draggable mixin.
 ///
 /// This callback uses [MultiDragScaleDispatcher] to route events.
-mixin DragCallbacks on Component {
+mixin DragCallbacks on Component implements PointerInputCallbacks {
   bool _isDragged = false;
 
   /// Returns true while the component is being dragged.

@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 /// pointer scroll (mouse wheel) events.
 ///
 /// This callback uses [ScrollDispatcher] to route events.
-mixin ScrollCallbacks on Component {
+mixin ScrollCallbacks on Component implements PointerInputCallbacks {
   void onScroll(ScrollEvent event) {}
 
   @override
