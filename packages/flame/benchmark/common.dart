@@ -13,8 +13,6 @@ Future<void> mountGame(FlameGame game, {Vector2? size}) async {
   await game.load();
   // ignore: invalid_use_of_internal_member
   game.mount();
-  // Wait for the whole initial component tree to be loaded and mounted, the
-  // same way the GameWidget does before starting the game.
   await game.ready();
   game.update(0);
 }

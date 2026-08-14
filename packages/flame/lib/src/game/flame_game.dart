@@ -233,6 +233,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// then forget to mount `x` into the game.
   @override
   Future<void> ready() async {
+    while (isProcessingLifecycleEvents) {
+      // This call came from inside a lifecycle callback, which runs while
+      // [processLifecycleEvents] is iterating over the event queue. Since
+      // the queue only supports one iteration at a time, wait until the
+      // current processing pass has finished.
+      await null;
+    }
     var wake = Completer<void>();
     void wakeUp() {
       if (!wake.isCompleted) {

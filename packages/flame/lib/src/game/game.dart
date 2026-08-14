@@ -142,6 +142,9 @@ abstract mixin class Game {
   /// mounted, before the game is shown and the first update tick runs. By
   /// default it completes immediately; [FlameGame] overrides this to wait
   /// until the whole initial component tree has been loaded and mounted.
+  ///
+  /// Since this future is awaited on the startup critical path, an override
+  /// that never completes keeps the game on the loading widget forever.
   Future<void> ready() async {}
 
   @mustCallSuper

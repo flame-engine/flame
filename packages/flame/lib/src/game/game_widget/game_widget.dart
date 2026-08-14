@@ -210,9 +210,10 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
 
   Future<void> get loaderFuture => _loaderFuture ??= (() async {
     final game = currentGame;
+    final gameGeneration = _gameGeneration;
     assert(game.hasLayout);
     await game.load();
-    if (_isStale(game)) {
+    if (_isStale(gameGeneration)) {
       return;
     }
     game.mount();
@@ -220,7 +221,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     // the game does not start, and the loading widget is not removed,
     // until every component added during the initial load is ready.
     await game.ready();
-    if (_isStale(game)) {
+    if (_isStale(gameGeneration)) {
       return;
     }
     if (!game.isPaused) {
@@ -228,10 +229,16 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     }
   })();
 
-  /// Whether [game] is no longer the game this widget state is showing,
+  /// Whether the loader that captured [gameGeneration] is no longer current,
   /// either because the widget was disposed or because the game instance was
-  /// swapped out while the game was still loading.
-  bool _isStale(T game) => !mounted || !identical(game, currentGame);
+  /// swapped since then. A generation counter is used instead of comparing
+  /// game identities, so that swapping to another game and back to the
+  /// original one while it is still loading also invalidates the old loader.
+  bool _isStale(int gameGeneration) =>
+      !mounted || gameGeneration != _gameGeneration;
+
+  /// Incremented every time [initCurrentGame] installs a game instance.
+  int _gameGeneration = 0;
 
   Future<void>? _loaderFuture;
 
@@ -286,6 +293,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
       currentGame = widget.game!;
     }
     initGameStateListener(currentGame, _onGameStateChange);
+    _gameGeneration++;
     _loaderFuture = null;
   }
 

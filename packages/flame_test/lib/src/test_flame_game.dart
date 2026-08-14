@@ -99,8 +99,7 @@ Future<T> initializeGame<T extends FlameGame>(CreateFunction<T> create) async {
   await game.load();
   // ignore: invalid_use_of_internal_member
   game.mount();
-  // Wait for the whole initial component tree to be loaded and mounted, the
-  // same way the GameWidget does before starting the game.
+  // The same startup sequence as the GameWidget uses; see [FlameGame.ready].
   await game.ready();
   game.update(0);
   return game;

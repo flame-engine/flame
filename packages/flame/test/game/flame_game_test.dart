@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -316,6 +317,20 @@ void main() {
     });
   });
 
+  group('ready:', () {
+    testWithFlameGame(
+      'can be called from inside a lifecycle callback',
+      (game) async {
+        final component = _ReadyingOnMountComponent();
+        game.world.add(component);
+        await game.ready();
+
+        expect(component.isMounted, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+      },
+    );
+  });
+
   group('pauseWhenBackgrounded:', () {
     testWidgets(
       'game resumes when widget is rebuilt',
@@ -525,6 +540,13 @@ class _MyAsyncComponent extends _MyComponent {
   @override
   Future<void> onLoad() {
     return Future.value();
+  }
+}
+
+class _ReadyingOnMountComponent extends Component {
+  @override
+  void onMount() {
+    unawaited(findGame()!.ready());
   }
 }
 
