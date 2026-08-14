@@ -1,31 +1,27 @@
 import 'package:flame/events.dart';
 import 'package:flutter/gestures.dart';
 
-/// Interface that must be implemented by a game in order for it to be eligible
-/// to receive events from an [ScaleGestureRecognizer].
+/// Interface that must be implemented in order to be eligible to receive
+/// events from a [MultiDragScaleGestureRecognizer].
 ///
-/// Instead of implementing this class directly consider using one of the
-/// prebuilt mixins:
-///  - [MultiTouchDragDetector] for a custom `Game`
+/// Instead of implementing this class directly, consider using the
+/// [ScaleCallbacks] mixin on a `Component` (or `Game`).
 abstract class ScaleListener {
-  /// The beginning of a drag operation.
+  /// The beginning of a scale operation.
   ///
-  /// If the game is not listening to tap events, this event will occur as soon
-  /// as the user touches the screen. If the game uses both a [MultiTapListener]
-  /// and a [MultiDragListener] simultaneously, then this event will fire once
-  /// the user moves their finger away from the point of the initial touch.
+  /// This event fires once two or more pointers are touching the screen and
+  /// their movement exceeds the recognizer's scale threshold.
   void handleScaleStart(ScaleStartDetails details);
 
-  /// The pointer that was touching the screen has moved.
+  /// The pointers taking part in the scale gesture have moved.
   ///
-  /// This event occurs frequently during the drag, allowing you to keep track
-  /// of the position of the point of touch as it moves. This event will only
-  /// fire when the point of touch moves, and not when it stays still.
+  /// This event occurs frequently during the gesture, reporting the current
+  /// scale factors, the rotation and the focal point.
   void handleScaleUpdate(ScaleUpdateDetails details);
 
-  /// Marks the end of a drag operation.
+  /// Marks the end of a scale operation.
   ///
-  /// This event fires when the pointer stops touching the screen. It will fire
-  /// even if the pointer is currently outside of the game widget.
+  /// This event fires once fewer than two pointers are left touching the
+  /// screen.
   void handleScaleEnd(ScaleEndDetails details);
 }

@@ -8,8 +8,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
 
-class StaticComponentsExample extends FlameGame
-    with ScrollDetector, ScaleDetector {
+class StaticComponentsExample extends FlameGame with ScrollDetector {
   static const description = '''
   This example shows a parallax which is attached to the viewport (behind the
   world), four Flame logos that are added to the world, and a player added to

@@ -26,24 +26,6 @@ mixin PanDetector on Game {
   }
 }
 
-mixin ScaleDetector on Game {
-  void onScaleStart(ScaleStartInfo info) {}
-  void onScaleUpdate(ScaleUpdateInfo info) {}
-  void onScaleEnd(ScaleEndInfo info) {}
-
-  void handleScaleStart(ScaleStartDetails details) {
-    onScaleStart(ScaleStartInfo.fromDetails(this, details));
-  }
-
-  void handleScaleUpdate(ScaleUpdateDetails details) {
-    onScaleUpdate(ScaleUpdateInfo.fromDetails(this, details));
-  }
-
-  void handleScaleEnd(ScaleEndDetails details) {
-    onScaleEnd(ScaleEndInfo.fromDetails(details));
-  }
-}
-
 mixin MouseMovementDetector on Game {
   void onMouseMove(PointerHoverInfo info) {}
 }
