@@ -192,7 +192,8 @@ class Component {
   void _setLoadingBit() => _state |= _loading;
   void _clearLoadingBit() => _state &= ~_loading;
 
-  /// Whether this component has completed its [onLoad] step.
+  /// Whether this component has completed its [onLoad] step, including the
+  /// loading of every child that was added during [onLoad].
   bool get isLoaded => (_state & _loaded) != 0;
   void _setLoadedBit() => _state |= _loaded;
 
@@ -231,6 +232,11 @@ class Component {
   ({Object error, StackTrace stackTrace})? _loadError;
 
   /// A future that completes when this component finishes loading.
+  ///
+  /// A component only counts as finished loading once every child that was
+  /// added during its [onLoad] has finished loading as well, so awaiting
+  /// this future guarantees that the subtree created during [onLoad] is
+  /// loaded.
   ///
   /// If the component is already loaded (see [isLoaded]), this returns an
   /// already completed future. If [onLoad] threw, this returns a future that
@@ -814,6 +820,9 @@ class Component {
     } else {
       _children?.remove(child);
       child._parent = null;
+      if (isLoading) {
+        _notifyChildrenChangedWhileLoading();
+      }
     }
   }
 
@@ -1073,7 +1082,68 @@ class Component {
     }
   }
 
+  /// Finishes the load step once every child that is still loading has
+  /// settled as well, so that a component is only marked as loaded when the
+  /// children that were added during its [onLoad] have finished loading too.
   void _finishLoading() {
+    if (_loadingChildren().isEmpty) {
+      _completeLoading();
+    } else {
+      _waitForLoadingChildren().then((_) => _completeLoading());
+    }
+  }
+
+  /// Waits until no child of this component is loading anymore.
+  ///
+  /// Children whose load has failed do not count as loading; they are
+  /// dropped when this component mounts, the same way as when they fail to
+  /// load under a parent that is already mounted.
+  Future<void> _waitForLoadingChildren() async {
+    var wake = Completer<void>();
+    void wakeUp() {
+      if (!wake.isCompleted) {
+        wake.complete();
+      }
+    }
+
+    final watchedChildren = <Component>{};
+    while (true) {
+      final loadingChildren = _loadingChildren();
+      if (loadingChildren.isEmpty) {
+        return;
+      }
+      if (wake.isCompleted) {
+        wake = Completer<void>();
+      }
+      for (final child in loadingChildren) {
+        if (watchedChildren.add(child)) {
+          child.loadSettled.then((_) => wakeUp());
+        }
+      }
+      // Sleep until a child settles its load, or until a child is removed
+      // while this component is loading, and re-evaluate.
+      await Future.any([
+        wake.future,
+        (_childrenChangedWhileLoading ??= Completer<void>()).future,
+      ]);
+    }
+  }
+
+  /// The children whose loads still have to settle before this component can
+  /// be considered loaded.
+  List<Component> _loadingChildren() {
+    final children = _children;
+    if (children == null || children.isEmpty) {
+      return const [];
+    }
+    return [
+      for (final child in children)
+        if (child.isLoading && child._loadError == null) child,
+    ];
+  }
+
+  void _completeLoading() {
+    _childrenChangedWhileLoading = null;
     _clearLoadingBit();
     _setLoadedBit();
     _loadCompleter?.complete();
@@ -1084,6 +1154,16 @@ class Component {
   void _completeLoadSettled() {
     _loadSettledCompleter?.complete();
     _loadSettledCompleter = null;
+  }
+
+  /// Completed when the children set changes while this component is
+  /// loading, so that the pending [_finishLoading] gate re-evaluates, for
+  /// example when a child that never finishes loading is removed.
+  Completer<void>? _childrenChangedWhileLoading;
+
+  void _notifyChildrenChangedWhileLoading() {
+    _childrenChangedWhileLoading?.complete();
+    _childrenChangedWhileLoading = null;
   }
 
   /// Surfaces an error thrown by [onLoad].
@@ -1183,7 +1263,7 @@ class Component {
   /// Used by the [FlameGame] to set the loaded state of the component, since
   /// the game isn't going through the whole normal component life cycle.
   @internal
-  void setLoaded() => _finishLoading();
+  void setLoaded() => _completeLoading();
 
   /// Used by the [FlameGame] to set the mounted state of the component, since
   /// the game isn't going through the whole normal component life cycle.
