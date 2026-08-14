@@ -1,7 +1,10 @@
 export 'src/events/callbacks/double_tap_callbacks.dart' show DoubleTapCallbacks;
 export 'src/events/callbacks/drag_callbacks.dart' show DragCallbacks;
 export 'src/events/callbacks/hover_callbacks.dart' show HoverCallbacks;
+export 'src/events/callbacks/input_callbacks.dart' show InputCallbacks;
 export 'src/events/callbacks/long_press_callbacks.dart' show LongPressCallbacks;
+export 'src/events/callbacks/pointer_input_callbacks.dart'
+    show PointerInputCallbacks;
 export 'src/events/callbacks/pointer_move_callbacks.dart'
     show PointerMoveCallbacks;
 export 'src/events/callbacks/scale_callbacks.dart' show ScaleCallbacks;

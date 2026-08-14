@@ -12,7 +12,7 @@ import 'package:meta/meta.dart';
 /// [containsLocalPoint]; so this can be used at the game level.
 ///
 /// This callback uses [MultiTapDispatcher] to route events.
-mixin TapCallbacks on Component {
+mixin TapCallbacks on Component implements PointerInputCallbacks {
   void onTapDown(TapDownEvent event) {}
   void onLongTapDown(TapDownEvent event) {}
   void onTapUp(TapUpEvent event) {}
