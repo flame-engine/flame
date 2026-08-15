@@ -1,8 +1,9 @@
 # Gesture Input
 
-This is documentation for gesture inputs attached directly on the game class, most of the time you
-want to detect input on your components instead, see for example the [TapCallbacks](tap_events.md)
-and [DragCallbacks](drag_events.md) for that.
+This is documentation for the legacy detector mixins, which are added directly to your game class.
+New code should prefer the `Callbacks` mixins instead (e.g. [TapCallbacks](tap_events.md) and
+[DragCallbacks](drag_events.md)) which can be added to any `Component`, including the `FlameGame`
+itself.
 
 For other input documents, see also:
 
@@ -12,9 +13,9 @@ For other input documents, see also:
 
 ## Intro
 
-Inside `package:flame/gestures.dart` you can find a whole set of `mixin`s which can be included on
-your game class instance to be able to receive touch input events. Below you can see the full list
-of these `mixin`s and its methods:
+Inside `package:flame/input.dart` you can find a set of legacy `mixin`s which can be included on
+your game class instance to be able to receive touch input events. Below you can see the full
+list of these `mixin`s and its methods:
 
 
 ## Touch and mouse detectors
@@ -30,15 +31,6 @@ Detectors will be deprecated in the future. Prefer `Callbacks` instead.
   - onPanUpdate
   - onPanEnd
   - onPanCancel
-
-- MultiTouchTapDetector
-  - onTap
-  - onTapCancel
-  - onTapDown
-  - onTapUp
-
-- MultiTouchDragDetector
-  - onReceiveDrag
 ```
 
 Mouse only events
@@ -50,11 +42,6 @@ Mouse only events
   - onScroll
 ```
 
-
-It is not possible to mix advanced detectors (`MultiTouch*`) with basic detectors of the same
-kind, since the advanced detectors will *always win the gesture arena* and the basic detectors will
-never be triggered. So for example, you can't use both `MultiTouchTapDetector` and `PanDetector`
-together, since no events will be triggered for the latter (there is also an assertion for this).
 
 Flame's GestureApi is provided by Flutter's Gesture Widgets, including
 [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html),
@@ -148,27 +135,20 @@ The position where the event occurred relative to the `GameWidget` position and 
 ## Example
 
 ```dart
-class MyGame extends FlameGame with MultiTouchTapDetector {
+class MyGame extends FlameGame with PanDetector {
   // Other methods omitted
 
   @override
-  void onTapDown(int pointerId, TapDownInfo info) {
-    print('Player tap down on ${info.eventPosition.widget}');
+  void onPanStart(DragStartInfo info) {
+    print('Player started panning on ${info.eventPosition.widget}');
   }
 
   @override
-  void onTapUp(int pointerId, TapUpInfo info) {
-    print('Player tap up on ${info.eventPosition.widget}');
+  void onPanUpdate(DragUpdateInfo info) {
+    print('Player panned to ${info.eventPosition.widget}');
   }
 }
 ```
-
-Note that there is no single-pointer tap detector at the game level; for that, use the component
-level [`TapCallbacks`](tap_events.md) instead, which `FlameGame` can mix in directly since it is
-itself a `Component`.
-
-You can also check more complete examples in the
-[input examples directory](https://github.com/flame-engine/flame/tree/main/examples/lib/stories/input/).
 
 
 ### GestureHitboxes

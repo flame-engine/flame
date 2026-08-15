@@ -110,6 +110,108 @@ See [Tap Events](inputs/tap_events.md) and [Long Press Events](inputs/long_press
 full replacement APIs.
 
 
+### `ScaleDetector` removed
+
+The `ScaleDetector` game mixin has been removed, together with the event classes that only it used:
+
+| Removed | Use instead |
+| --- | --- |
+| `ScaleDetector` | `ScaleCallbacks` |
+| `ScaleStartInfo` | `ScaleStartEvent` |
+| `ScaleUpdateInfo` | `ScaleUpdateEvent` |
+| `ScaleEndInfo` | `ScaleEndEvent` |
+
+`ScaleUpdateEvent` is a strict superset of `ScaleUpdateInfo`: `info.scale.global.x` and
+`info.scale.global.y` become `event.horizontalScale` and `event.verticalScale`, and
+`info.delta.global` becomes `event.focalPointDelta`.
+
+There is one behavioral difference to be aware of. The old detector was backed by Flutter's
+`ScaleGestureRecognizer`, which also emits scale events for a *single* pointer, with a scale factor
+of 1.0 — a quirk that games commonly relied on to pan the camera from within `onScaleUpdate`. The
+new `MultiDragScaleGestureRecognizer` only emits scale events once two or more pointers are down, so
+panning must now be handled with `DragCallbacks`, which can be combined freely with `ScaleCallbacks`:
+
+```dart
+// Before
+class MyGame extends FlameGame with ScaleDetector {
+  @override
+  void onScaleUpdate(ScaleUpdateInfo info) {
+    final scale = info.scale.global;
+    if (!scale.isIdentity()) {
+      camera.viewfinder.zoom = startZoom * scale.y;
+    } else {
+      camera.moveBy((info.delta.global..negate()) / camera.viewfinder.zoom);
+    }
+  }
+}
+
+// After
+class MyGame extends FlameGame with ScaleCallbacks, DragCallbacks {
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    camera.viewfinder.zoom = startZoom * event.verticalScale;
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    // Two-finger pinches emit both drag and scale; skip pan while zooming
+    if (isScaling) {
+      return;
+    }
+    camera.moveBy((event.localDelta..negate()) / camera.viewfinder.zoom);
+  }
+}
+```
+
+Note that trackpad pinch gestures are not currently recognized by the new system:
+`MultiDragScaleGestureRecognizer` does not yet handle Flutter's `PointerPanZoom` events, which is how
+a trackpad pinch reaches a scale recognizer. Touchscreen pinches are unaffected.
+
+See [Scale Events](inputs/scale_events.md) for the full replacement API.
+
+
+### `MultiTouchTapDetector` and `MultiTouchDragDetector` removed
+
+Both game-level mixins have been removed:
+
+| Removed | Use instead |
+| --- | --- |
+| `MultiTouchTapDetector` | `TapCallbacks` |
+| `MultiTouchDragDetector` | `DragCallbacks` |
+
+The `pointerId` that used to be passed as a separate first argument is now carried on the event
+itself, so simultaneous touches can still be told apart:
+
+```dart
+// Before
+class MyGame extends FlameGame with MultiTouchTapDetector {
+  @override
+  void onTapDown(int pointerId, TapDownInfo info) {
+    taps[pointerId] = info.eventPosition.widget;
+  }
+}
+
+// After
+class MyGame extends FlameGame with TapCallbacks {
+  @override
+  void onTapDown(TapDownEvent event) {
+    taps[event.pointerId] = event.canvasPosition;
+  }
+}
+```
+
+`TapCallbacks` has no equivalent of `MultiTouchTapDetector.onTap`, which was a direct passthrough of
+Flutter's "tap completed" callback on `MultiTapGestureRecognizer`. Use `onTapUp` instead, which fires
+at the same point in the gesture.
+
+Because the new mixins are routed through `MultiDragScaleDispatcher`, they no longer conflict with
+`PanDetector` in the gesture arena, and the assertion that used to guard against combining
+`MultiTouchDragDetector` with `PanDetector` has been removed.
+
+See [Tap Events](inputs/tap_events.md) and [Drag Events](inputs/drag_events.md) for the full
+replacement APIs.
+
+
 ### `onDragCancel` no longer delegates to `onDragEnd`
 
 `DragCallbacks.onDragCancel` used to convert the cancellation into an `onDragEnd` event by default,

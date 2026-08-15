@@ -2,12 +2,11 @@ import 'package:flame/events.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 
-/// Interface that must be implemented by a game in order for it to be eligible
-/// to receive events from an [ImmediateMultiDragGestureRecognizer].
+/// Interface that must be implemented in order to be eligible to receive
+/// events from a [MultiDragScaleGestureRecognizer].
 ///
-/// Instead of implementing this class directly consider using one of the
-/// prebuilt mixins:
-///  - [MultiTouchDragDetector] for a custom `Game`
+/// Instead of implementing this class directly, consider using the
+/// [DragCallbacks] mixin on a `Component` (or `Game`).
 abstract class MultiDragListener {
   /// The beginning of a drag operation.
   ///

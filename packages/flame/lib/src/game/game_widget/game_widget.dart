@@ -359,13 +359,6 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         behavior: widget.behavior,
       );
 
-      assert(
-        !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
-        'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
-        'The MultiTouchDragDetector will override the PanDetector and it will '
-        'not receive events',
-      );
-
       internalGameWidget = currentGame.gestureDetectors.build(
         internalGameWidget,
       );

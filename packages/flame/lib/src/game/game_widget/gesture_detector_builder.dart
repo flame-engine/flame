@@ -56,22 +56,6 @@ class GestureDetectorBuilder {
         },
       );
     }
-    if (game is MultiTapListener) {
-      register(
-        MultiTapGestureRecognizer.new,
-        (MultiTapGestureRecognizer instance) {
-          final g = game as MultiTapListener;
-          instance.longTapDelay = Duration(
-            milliseconds: (g.longTapDelay * 1000).toInt(),
-          );
-          instance.onTap = g.handleTap;
-          instance.onTapDown = g.handleTapDown;
-          instance.onTapUp = g.handleTapUp;
-          instance.onTapCancel = g.handleTapCancel;
-          instance.onLongTapDown = g.handleLongTapDown;
-        },
-      );
-    }
   }
 }
 
