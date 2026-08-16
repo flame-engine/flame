@@ -75,15 +75,6 @@ class TapUpInfo extends PositionInfo<TapUpDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class PointerScrollInfo extends PositionInfo<PointerScrollEvent> {
-  late final EventDelta scrollDelta = EventDelta(raw.scrollDelta);
-
-  PointerScrollInfo.fromDetails(
-    Game game,
-    PointerScrollEvent raw,
-  ) : super(game, raw.position, raw);
-}
-
 class PointerHoverInfo extends PositionInfo<PointerHoverEvent> {
   PointerHoverInfo.fromDetails(
     Game game,

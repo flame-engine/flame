@@ -38,8 +38,6 @@ Mouse only events
 ```text
  - MouseMovementDetector
   - onMouseMove
- - ScrollDetector
-  - onScroll
 ```
 
 

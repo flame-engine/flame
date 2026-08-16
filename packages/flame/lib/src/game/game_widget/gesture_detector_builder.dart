@@ -61,7 +61,6 @@ class GestureDetectorBuilder {
 
 bool hasMouseDetectors(Game game) {
   return game is MouseMovementDetector ||
-      game is ScrollDetector ||
       game.mouseDetector != null ||
       game.mousePressDetector != null ||
       game.scrollDetector != null;
@@ -80,9 +79,6 @@ Widget applyMouseDetectors(Game game, Widget child) {
     onPointerDown: mousePressDetector,
     onPointerSignal: (event) {
       if (event is PointerScrollEvent) {
-        if (game is ScrollDetector) {
-          game.onScroll(PointerScrollInfo.fromDetails(game, event));
-        }
         scrollDetector?.call(event);
       }
     },

@@ -1,10 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 
 class ZoomExample extends FlameGame
-    with ScrollDetector, ScaleCallbacks, DragCallbacks {
+    with ScrollCallbacks, ScaleCallbacks, DragCallbacks {
   static const String description = '''
     On web: use scroll to zoom in and out.\n
     On mobile: use scale gesture to zoom in and out.
@@ -29,9 +28,8 @@ class ZoomExample extends FlameGame
   static const zoomPerScrollUnit = 0.02;
 
   @override
-  void onScroll(PointerScrollInfo info) {
-    camera.viewfinder.zoom +=
-        info.scrollDelta.global.y.sign * zoomPerScrollUnit;
+  void onScroll(ScrollEvent event) {
+    camera.viewfinder.zoom += event.scrollDelta.y.sign * zoomPerScrollUnit;
     clampZoom();
   }
 
