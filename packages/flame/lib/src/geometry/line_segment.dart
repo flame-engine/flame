@@ -64,9 +64,11 @@ class LineSegment {
     return inflate(-amount);
   }
 
-  /// Returns an empty list if there are no intersections between the segments
-  /// If the segments are concurrent, the intersecting point is returned as a
-  /// list with a single point
+  /// Returns an empty list if there are no intersections between the segments.
+  /// If the segments intersect in a single point, that point is returned in a
+  /// list with a single element.
+  /// If the segments are collinear and overlap, the end points of the
+  /// overlapping section are returned.
   List<Vector2> intersections(LineSegment otherSegment) {
     final result = toLine().intersections(otherSegment.toLine());
     if (result.isNotEmpty) {
@@ -85,13 +87,7 @@ class LineSegment {
         if (containsPoint(otherSegment.from)) otherSegment.from,
         if (containsPoint(otherSegment.to)) otherSegment.to,
       };
-      if (overlaps.isNotEmpty) {
-        final sum = Vector2.zero();
-        for (final overlap in overlaps) {
-          sum.add(overlap);
-        }
-        return [sum..scale(1 / overlaps.length)];
-      }
+      return overlaps.toList();
     }
     return [];
   }

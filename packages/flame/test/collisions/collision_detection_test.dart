@@ -107,11 +107,10 @@ void main() {
       final segmentB = LineSegment(Vector2.all(0), Vector2.all(1));
       final intersection = segmentA.intersections(segmentB);
       expect(
-        intersection.isNotEmpty,
-        true,
-        reason: 'Should have intersection at (0.5, 0.5)',
+        intersection,
+        unorderedEquals([Vector2.all(0), Vector2.all(1)]),
+        reason: 'Should intersect at the end points of the overlap',
       );
-      expect(intersection.first == Vector2.all(0.5), true);
     });
 
     test('overlapping line segments', () {
@@ -119,11 +118,10 @@ void main() {
       final segmentB = LineSegment(Vector2.all(0.5), Vector2.all(1.5));
       final intersection = segmentA.intersections(segmentB);
       expect(
-        intersection.isNotEmpty,
-        true,
-        reason: 'Should intersect at (0.75, 0.75)',
+        intersection,
+        unorderedEquals([Vector2.all(0.5), Vector2.all(1)]),
+        reason: 'Should intersect at the end points of the overlap',
       );
-      expect(intersection.first == Vector2.all(0.75), true);
     });
 
     test('one pixel overlap in different angles', () {
@@ -311,14 +309,13 @@ void main() {
       expect(
         intersections.containsAll([
           Vector2(2.0, 2.0),
-          Vector2(2.0, 1.5),
           Vector2(2.0, 1.0),
         ]),
         true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
-        intersections.length == 3,
+        intersections.length == 2,
         true,
         reason: 'Wrong number of intersections',
       );
@@ -376,16 +373,14 @@ void main() {
         intersections.containsAll([
           Vector2(2, 0),
           Vector2(2, 2),
-          Vector2(1, 0),
           Vector2(0, 0),
-          Vector2(0, 1),
           Vector2(0, 2),
         ]),
         true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
-        intersections.length == 6,
+        intersections.length == 4,
         true,
         reason: 'Wrong number of intersections',
       );
@@ -452,14 +447,13 @@ void main() {
       expect(
         intersections.containsAll([
           Vector2(4, 0),
-          Vector2(4, 2),
           Vector2(4, 4),
         ]),
         true,
         reason: 'Missed intersections',
       );
       expect(
-        intersections.length == 3,
+        intersections.length == 2,
         true,
         reason: 'Wrong number of intersections',
       );
