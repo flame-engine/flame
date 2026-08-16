@@ -143,10 +143,18 @@ class ComponentTreeRoot extends Component {
   }
 
   void processLifecycleEvents() {
+    if (!hasLifecycleEvents) {
+      assert(
+        _lifecycleEventsCompleter == null,
+        'The completer is only ever created while events are queued, so it '
+        'should never exist while the queue is empty',
+      );
+      return;
+    }
     // reorder events to process later grouped by parent
-    final reorderParents = <Component>{};
+    Set<Component>? reorderParents;
     LifecycleEventStatus handleReorderEvent(Component parent) {
-      reorderParents.add(parent);
+      (reorderParents ??= {}).add(parent);
       return LifecycleEventStatus.done;
     }
 
@@ -182,7 +190,7 @@ class ComponentTreeRoot extends Component {
       _blocked.clear();
     }
 
-    for (final parent in reorderParents) {
+    for (final parent in reorderParents ?? const <Component>{}) {
       parent.rebalanceChildren();
     }
 
