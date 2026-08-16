@@ -1680,6 +1680,84 @@ void main() {
       });
 
       testWithFlameGame(
+        'descendants() of a component without children',
+        (game) async {
+          final leaf = Component();
+          await game.world.ensureAdd(leaf);
+
+          expect(leaf.descendants().toList(), isEmpty);
+          expect(leaf.descendants(reversed: true).toList(), isEmpty);
+          expect(leaf.descendants(includeSelf: true).toList(), [leaf]);
+          expect(
+            leaf.descendants(includeSelf: true, reversed: true).toList(),
+            [leaf],
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() order matches on a deep chain with side branches',
+        (game) async {
+          final world = game.world;
+          final expectedOrder = <Component>[];
+          Component parent = world;
+          for (var level = 0; level < 50; level++) {
+            final sideBranch = Component()..addToParent(parent);
+            final next = Component()..addToParent(parent);
+            expectedOrder
+              ..add(sideBranch)
+              ..add(next);
+            parent = next;
+          }
+          await game.ready();
+
+          expect(world.descendants().toList(), expectedOrder);
+          expect(
+            world.descendants(reversed: true).toList(),
+            expectedOrder.reversed.toList(),
+          );
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() iterator can be resumed after exhaustion',
+        (game) async {
+          final componentA = Component()..addToParent(game.world);
+          final componentB = Component()..addToParent(componentA);
+          await game.ready();
+
+          final iterator = game.world.descendants().iterator;
+          expect(iterator.moveNext(), isTrue);
+          expect(iterator.current, componentA);
+          expect(iterator.moveNext(), isTrue);
+          expect(iterator.current, componentB);
+          expect(iterator.moveNext(), isFalse);
+          expect(iterator.moveNext(), isFalse);
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() throws when children are reordered during iteration',
+        (game) async {
+          final parent = Component();
+          await game.world.ensureAdd(parent);
+          await parent.ensureAddAll([Component(), Component()]);
+
+          expect(
+            () {
+              for (final component in game.world.descendants()) {
+                if (component == parent) {
+                  parent.add(Component(priority: -1));
+                  game.update(0);
+                }
+              }
+            },
+            throwsConcurrentModificationError,
+          );
+        },
+      );
+
+      testWithFlameGame(
         'firstChild returns the first child on the matching type',
         (game) async {
           final firstA = _ComponentA();

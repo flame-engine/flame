@@ -428,22 +428,21 @@ class Component {
   /// traverse the component tree when required. This allows efficient chaining
   /// of various iterable methods, such as filtering, early stopping, folding,
   /// and so on -- see the documentation of the [Iterable] class for details.
+  /// The traversal is driven by a single explicit stack of children iterators,
+  /// so its cost does not grow with the depth of the tree beyond that stack.
+  ///
+  /// Modifying the tree while iterating may throw a
+  /// [ConcurrentModificationError], exactly as iterating over [children] does.
+  /// Call `toList()` first to iterate over a snapshot instead.
   Iterable<Component> descendants({
     bool includeSelf = false,
     bool reversed = false,
-  }) sync* {
-    if (includeSelf && !reversed) {
-      yield this;
-    }
-    if (hasChildren) {
-      final childrenIterable = reversed ? children.reversed : children;
-      for (final child in childrenIterable) {
-        yield* child.descendants(includeSelf: true, reversed: reversed);
-      }
-    }
-    if (includeSelf && reversed) {
-      yield this;
-    }
+  }) {
+    return _DescendantsIterable(
+      this,
+      includeSelf: includeSelf,
+      reversed: reversed,
+    );
   }
 
   /// This method first calls the passed handler on the leaves in the tree,
@@ -1395,8 +1394,7 @@ class Component {
   /// order that `descendants(reversed: true, includeSelf: true)` would
   /// produce: leaves first, siblings in reverse order, ancestors after their
   /// subtrees. The snapshot allows [_remove] to run user callbacks that
-  /// mutate the tree while it walks the subtree, without allocating generator
-  /// frames per tree level the way [descendants] does.
+  /// mutate the tree while it walks the subtree.
   ///
   /// The [out] parameter is only used by the recursive calls, so that the
   /// whole subtree is collected into a single list.
@@ -1512,6 +1510,135 @@ class Component {
 }
 
 enum ChildrenChangeType { added, removed }
+
+/// The lazy [Iterable] returned by [Component.descendants].
+class _DescendantsIterable extends Iterable<Component> {
+  _DescendantsIterable(
+    this._root, {
+    required this.includeSelf,
+    required this.reversed,
+  });
+
+  final Component _root;
+  final bool includeSelf;
+  final bool reversed;
+
+  @override
+  Iterator<Component> get iterator => reversed
+      ? _ReversedDescendantsIterator(_root, includeSelf: includeSelf)
+      : _DescendantsIterator(_root, includeSelf: includeSelf);
+}
+
+/// Walks a subtree depth-first in preorder: every component is emitted before
+/// its children, and siblings are visited in the order of their container.
+///
+/// The walk keeps one children iterator per level on an explicit stack, so the
+/// only allocations are the stack itself and the container iterators, no
+/// matter how deep the tree is.
+class _DescendantsIterator implements Iterator<Component> {
+  _DescendantsIterator(this._root, {required bool includeSelf})
+    : _pendingRoot = includeSelf {
+    _push(_root);
+  }
+
+  final Component _root;
+  final List<Iterator<Component>> _stack = [];
+  bool _pendingRoot;
+  Component? _current;
+
+  @override
+  Component get current => _current!;
+
+  void _push(Component component) {
+    final children = component._children;
+    if (children != null && children.isNotEmpty) {
+      _stack.add(children.iterator);
+    }
+  }
+
+  @override
+  bool moveNext() {
+    if (_pendingRoot) {
+      _pendingRoot = false;
+      _current = _root;
+      return true;
+    }
+    final stack = _stack;
+    while (stack.isNotEmpty) {
+      final iterator = stack.last;
+      if (iterator.moveNext()) {
+        final component = iterator.current;
+        _current = component;
+        _push(component);
+        return true;
+      }
+      stack.removeLast();
+    }
+    _current = null;
+    return false;
+  }
+}
+
+/// Walks a subtree in the exact reverse of [_DescendantsIterator]: siblings
+/// are visited in reverse container order, and every component is emitted
+/// after its children.
+///
+/// A parent is emitted when its children iterator is exhausted, so the walk
+/// keeps the parent of every open iterator on a parallel stack.
+class _ReversedDescendantsIterator implements Iterator<Component> {
+  _ReversedDescendantsIterator(this._root, {required bool includeSelf})
+    : _pendingRoot = includeSelf {
+    _push(_root);
+  }
+
+  final Component _root;
+  final List<Component> _parents = [];
+  final List<Iterator<Component>> _stack = [];
+  bool _pendingRoot;
+  Component? _current;
+
+  @override
+  Component get current => _current!;
+
+  bool _push(Component component) {
+    final children = component._children;
+    if (children != null && children.isNotEmpty) {
+      _parents.add(component);
+      _stack.add(children.reversed.iterator);
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  bool moveNext() {
+    final stack = _stack;
+    while (stack.isNotEmpty) {
+      final iterator = stack.last;
+      if (iterator.moveNext()) {
+        final component = iterator.current;
+        if (!_push(component)) {
+          _current = component;
+          return true;
+        }
+      } else {
+        stack.removeLast();
+        final parent = _parents.removeLast();
+        if (!identical(parent, _root)) {
+          _current = parent;
+          return true;
+        }
+      }
+    }
+    if (_pendingRoot) {
+      _pendingRoot = false;
+      _current = _root;
+      return true;
+    }
+    _current = null;
+    return false;
+  }
+}
 
 /// Lifecycle futures for a group of components, mirroring the ones available on
 /// a single [Component].
