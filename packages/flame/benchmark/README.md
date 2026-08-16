@@ -45,7 +45,12 @@ the benchmark results are printed above it.
   changes across many parents, and the y-sort pattern where a whole container
   reorders every tick.
 - `type_query_benchmark.dart`: maintenance and read cost of the
-  `register<T>()`/`query<T>()` type-query caches under mixed-type churn.
+  `register<T>()`/`query<T>()` type-query caches. The churn suite varies how
+  many types are registered and how much of the container each cache matches;
+  the read suite compares a cached `query<T>()` against the `whereType<T>()`
+  scan that an unregistered type falls back to. Together they say what a cache
+  is worth, and what an accidental registration (the thing that
+  `Component.strictQueryMode` turns into an error) costs.
 - `update_components_benchmark.dart`: end-to-end update pass with game-like
   logic and inputs on a two-level tree.
 - `render_components_benchmark.dart`: render pass over a randomized tree onto
