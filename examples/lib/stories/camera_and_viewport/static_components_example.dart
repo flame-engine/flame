@@ -7,13 +7,18 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
 
-class StaticComponentsExample extends FlameGame {
+class StaticComponentsExample extends FlameGame with ScrollCallbacks {
   static const description = '''
   This example shows a parallax which is attached to the viewport (behind the
   world), four Flame logos that are added to the world, and a player added to
   the world which is also followed by the camera when you click somewhere.
   The text components that are added are self-explanatory.
+
+  Scroll to zoom: the world components scale with the camera, while the
+  viewport and backdrop components stay exactly where they are.
   ''';
+
+  static const zoomPerScrollUnit = 0.05;
 
   late final ParallaxComponent myParallax;
 
@@ -26,6 +31,13 @@ class StaticComponentsExample extends FlameGame {
          ),
          world: _StaticComponentWorld(),
        );
+
+  @override
+  void onScroll(ScrollEvent event) {
+    final zoom =
+        camera.viewfinder.zoom + event.scrollDelta.y.sign * zoomPerScrollUnit;
+    camera.viewfinder.zoom = zoom.clamp(0.25, 4.0);
+  }
 
   @override
   Future<void> onLoad() async {

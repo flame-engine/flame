@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -73,6 +74,25 @@ void main() {
         expect(game.receivedScrolls, hasLength(1));
         expect(game.receivedScrolls.last.localPosition, Vector2.all(12));
         expect(game.receivedScrolls.last.scrollDelta, Vector2(0, 10));
+      },
+    );
+
+    testWidgets(
+      'scroll events reach the game through the widget tree',
+      (tester) async {
+        final game = _ScrollCallbacksGame();
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump();
+
+        final testPointer = TestPointer(1, PointerDeviceKind.mouse);
+        testPointer.hover(const Offset(10, 10));
+        await tester.sendEventToBinding(
+          testPointer.scroll(const Offset(0, -300)),
+        );
+
+        expect(game.receivedScrolls, hasLength(1));
+        expect(game.receivedScrolls.last.scrollDelta, Vector2(0, -300));
       },
     );
 
