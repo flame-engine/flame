@@ -251,6 +251,63 @@ scrolls that occur on top of it, as determined by `containsLocalPoint()`. Mixing
 See [Pointer Events](inputs/pointer_events.md) for the full replacement API.
 
 
+### `MouseMovementDetector` removed and `PointerMove*` renamed to `MouseMove*`
+
+The `MouseMovementDetector` game mixin has been removed, together with the event class that only it
+used. At the same time, the component-level API it is replaced by has been renamed from `PointerMove`
+to `MouseMove`:
+
+| Removed / renamed | Use instead |
+| --- | --- |
+| `MouseMovementDetector` | `MouseMoveCallbacks` |
+| `PointerHoverInfo` | `MouseMoveEvent` |
+| `PointerMoveCallbacks` | `MouseMoveCallbacks` |
+| `PointerMoveEvent` | `MouseMoveEvent` |
+| `PointerMoveDispatcher` | `MouseMoveDispatcher` |
+| `onPointerMove` | `onMouseMove` |
+| `onPointerMoveStop` | `onMouseMoveStop` |
+
+The rename has two reasons. Flame's `PointerMoveEvent` collided with Flutter's class of the same
+name, forcing a `hide` on any file that imported both `package:flame/events.dart` and
+`package:flutter/material.dart`. And "mouse move" is simply more accurate: the event wraps Flutter's
+`PointerHoverEvent` and is delivered from a `MouseRegion`, so it is mouse movement specifically, not
+pointer movement in general. `MouseMoveDispatcherKey` was already named this way.
+
+Migrating from the detector, the callback keeps its `onMouseMove` name and only the parameter
+changes, with the position read directly off the event instead of through the nested `eventPosition`
+wrapper:
+
+```dart
+// Before
+class MyGame extends FlameGame with MouseMovementDetector {
+  @override
+  void onMouseMove(PointerHoverInfo info) {
+    target = info.eventPosition.widget;
+  }
+}
+
+// After
+class MyGame extends FlameGame with MouseMoveCallbacks {
+  @override
+  void onMouseMove(MouseMoveEvent event) {
+    target = event.canvasPosition;
+  }
+}
+```
+
+Unlike the old detector, which received every mouse movement anywhere on the game surface,
+`MouseMoveCallbacks` is routed by position like the other component callbacks: a component only
+receives movements that occur on top of it, as determined by `containsLocalPoint()`. Mixing it into
+your `FlameGame` subclass directly, as above, keeps the old whole-surface behavior.
+`MouseMoveCallbacks` additionally offers `onMouseMoveStop`, which has no equivalent on the old
+detector.
+
+`flame_test`'s `createMouseMoveEvent` helper now returns a `MouseMoveEvent`, and if you were using
+`flame_behaviors`, note that it no longer re-exports the legacy `*Info` event classes.
+
+See [Pointer Events](inputs/pointer_events.md) for the full replacement API.
+
+
 ### `onDragCancel` no longer delegates to `onDragEnd`
 
 `DragCallbacks.onDragCancel` used to convert the cancellation into an `onDragEnd` event by default,

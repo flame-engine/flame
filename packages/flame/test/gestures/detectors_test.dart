@@ -1,4 +1,4 @@
-import 'package:flame/events.dart' hide PointerMoveEvent;
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/gestures.dart';
@@ -66,24 +66,6 @@ void main() {
       },
     );
   });
-
-  group('MouseMovementDetector', () {
-    final mouseMoveGame = FlameTester(_MouseMovementDetectorGame.new);
-
-    mouseMoveGame.testGameWidget(
-      'Can register Mouse movements',
-      setUp: (game, tester) async {
-        final gesture = await tester.createGesture(
-          kind: PointerDeviceKind.mouse,
-        );
-        await gesture.addPointer(location: Offset.zero);
-        await gesture.moveTo(const Offset(10, 10));
-      },
-      verify: (game, tester) async {
-        expect(game.hasReceivedMouseMove, isTrue);
-      },
-    );
-  });
 }
 
 class _PanDetectorGame extends FlameGame with PanDetector {
@@ -116,14 +98,5 @@ class _PanDetectorGame extends FlameGame with PanDetector {
   @override
   void onPanStart(DragStartInfo info) {
     hasPanStart = true;
-  }
-}
-
-class _MouseMovementDetectorGame extends FlameGame with MouseMovementDetector {
-  bool hasReceivedMouseMove = false;
-
-  @override
-  void onMouseMove(PointerHoverInfo info) {
-    hasReceivedMouseMove = true;
   }
 }

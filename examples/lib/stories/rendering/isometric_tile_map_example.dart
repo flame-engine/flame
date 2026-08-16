@@ -4,10 +4,9 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/sprite.dart';
 
-class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
+class IsometricTileMapExample extends FlameGame with MouseMoveCallbacks {
   static const String description = '''
     Shows an example of how to use the `IsometricTileMapComponent`.\n\n
     Move the mouse over the board to see a selector appearing on the tiles.
@@ -72,8 +71,8 @@ class IsometricTileMapExample extends FlameGame with MouseMovementDetector {
   }
 
   @override
-  void onMouseMove(PointerHoverInfo info) {
-    final screenPosition = info.eventPosition.widget;
+  void onMouseMove(MouseMoveEvent event) {
+    final screenPosition = event.canvasPosition;
     final block = base.getBlock(screenPosition);
     selector.show = base.containsBlock(block);
     selector.position.setFrom(topLeft + base.getBlockRenderPosition(block));

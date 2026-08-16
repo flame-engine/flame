@@ -1,13 +1,12 @@
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-class MouseMovementExample extends FlameGame with MouseMovementDetector {
+class MouseMovementExample extends FlameGame with MouseMoveCallbacks {
   static const String description = '''
-    In this example we show how you can use `MouseMovementDetector`.\n\n
+    In this example we show how you can use `MouseMoveCallbacks`.\n\n
     Move around the mouse on the canvas and the white square will follow it and
     turn into blue if it reaches the mouse, or the edge of the canvas.
   ''';
@@ -23,8 +22,8 @@ class MouseMovementExample extends FlameGame with MouseMovementDetector {
   bool onTarget = false;
 
   @override
-  void onMouseMove(PointerHoverInfo info) {
-    target = info.eventPosition.widget;
+  void onMouseMove(MouseMoveEvent event) {
+    target = event.canvasPosition;
   }
 
   Rect _toRect() => position.toPositionedRect(objSize);

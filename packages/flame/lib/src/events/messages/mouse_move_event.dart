@@ -3,8 +3,8 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/services.dart';
 
-class PointerMoveEvent extends PositionEvent<PointerHoverEvent> {
-  PointerMoveEvent(
+class MouseMoveEvent extends PositionEvent<PointerHoverEvent> {
+  MouseMoveEvent(
     this.pointerId,
     super.game,
     PointerHoverEvent rawEvent,
@@ -28,16 +28,16 @@ class PointerMoveEvent extends PositionEvent<PointerHoverEvent> {
 
   @override
   String toString() =>
-      'PointerMoveEvent(devicePosition: $devicePosition, '
+      'MouseMoveEvent(devicePosition: $devicePosition, '
       'canvasPosition: $canvasPosition, '
       'delta: $delta, '
       'pointerId: $pointerId, timestamp: $timestamp)';
 
-  factory PointerMoveEvent.fromPointerHoverEvent(
+  factory MouseMoveEvent.fromPointerHoverEvent(
     Game game,
     PointerHoverEvent event,
   ) {
-    return PointerMoveEvent(
+    return MouseMoveEvent(
       event.pointer,
       game,
       event,

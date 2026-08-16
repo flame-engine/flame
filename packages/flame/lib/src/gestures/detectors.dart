@@ -25,7 +25,3 @@ mixin PanDetector on Game {
     onPanEnd(DragEndInfo.fromDetails(details));
   }
 }
-
-mixin MouseMovementDetector on Game {
-  void onMouseMove(PointerHoverInfo info) {}
-}

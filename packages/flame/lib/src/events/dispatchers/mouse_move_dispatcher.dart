@@ -6,41 +6,41 @@ import 'package:flutter/gestures.dart' as flutter;
 import 'package:meta/meta.dart';
 
 /// **MouseMoveDispatcher** facilitates dispatching of mouse move events to the
-/// [PointerMoveCallbacks] components in the component tree. It will be attached
+/// [MouseMoveCallbacks] components in the component tree. It will be attached
 /// to the [FlameGame] instance automatically whenever any
-/// [PointerMoveCallbacks] components are mounted into the component tree.
-class PointerMoveDispatcher extends Dispatcher<FlameGame> {
+/// [MouseMoveCallbacks] components are mounted into the component tree.
+class MouseMoveDispatcher extends Dispatcher<FlameGame> {
   /// The record of all components currently being hovered.
-  final Set<TaggedComponent<PointerMoveCallbacks>> _records = {};
+  final Set<TaggedComponent<MouseMoveCallbacks>> _records = {};
 
   @mustCallSuper
-  void onMouseMove(PointerMoveEvent event) {
-    final updated = <TaggedComponent<PointerMoveCallbacks>>{};
+  void onMouseMove(MouseMoveEvent event) {
+    final updated = <TaggedComponent<MouseMoveCallbacks>>{};
 
     event.deliverAtPoint(
       rootComponent: game,
       deliverToAll: true,
-      eventHandler: (PointerMoveCallbacks component) {
+      eventHandler: (MouseMoveCallbacks component) {
         final tagged = TaggedComponent(event.pointerId, component);
         _records.add(tagged);
         updated.add(tagged);
-        component.onPointerMove(event);
+        component.onMouseMove(event);
       },
     );
 
-    final toRemove = <TaggedComponent<PointerMoveCallbacks>>{};
+    final toRemove = <TaggedComponent<MouseMoveCallbacks>>{};
     for (final record in _records) {
       if (record.pointerId == event.pointerId && !updated.contains(record)) {
         // one last "exit" event
-        record.component.onPointerMoveStop(event);
+        record.component.onMouseMoveStop(event);
         toRemove.add(record);
       }
     }
     _records.removeAll(toRemove);
   }
 
-  void _handlePointerMove(flutter.PointerHoverEvent event) {
-    onMouseMove(PointerMoveEvent.fromPointerHoverEvent(game, event));
+  void _handleMouseMove(flutter.PointerHoverEvent event) {
+    onMouseMove(MouseMoveEvent.fromPointerHoverEvent(game, event));
   }
 
   /// Cancels the hover on every currently-hovered [HoverCallbacks] tracked by
@@ -49,7 +49,7 @@ class PointerMoveDispatcher extends Dispatcher<FlameGame> {
   /// without this hook hovered components would never learn the hover ended.
   /// See issue #2741.
   void _handlePointerPress(flutter.PointerDownEvent _) {
-    final cancelled = <TaggedComponent<PointerMoveCallbacks>>[];
+    final cancelled = <TaggedComponent<MouseMoveCallbacks>>[];
     for (final record in _records) {
       final component = record.component;
       if (component is HoverCallbacks && component.isHovered) {
@@ -64,13 +64,13 @@ class PointerMoveDispatcher extends Dispatcher<FlameGame> {
     Dispatcher.addDispatcher(
       component,
       const MouseMoveDispatcherKey(),
-      PointerMoveDispatcher.new,
+      MouseMoveDispatcher.new,
     );
   }
 
   @override
   void onMount() {
-    game.mouseDetector = _handlePointerMove;
+    game.mouseDetector = _handleMouseMove;
     game.mousePressDetector = _handlePointerPress;
   }
 

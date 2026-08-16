@@ -8,16 +8,16 @@ which is still supported, is described in [](gesture_input.md).
 **Pointer events** are Flutter's generalized "mouse-movement"-type events (for desktop or web).
 
 If you want to interact with mouse movement events within your component or game, you can use the
-`PointerMoveCallbacks` mixin.
+`MouseMoveCallbacks` mixin.
 
 For example:
 
 ```dart
-class MyComponent extends PositionComponent with PointerMoveCallbacks {
+class MyComponent extends PositionComponent with MouseMoveCallbacks {
   MyComponent() : super(size: Vector2(80, 60));
 
   @override
-  void onPointerMove(PointerMoveEvent event) {
+  void onMouseMove(MouseMoveEvent event) {
     // Do something in response to the mouse move (e.g. update coordinates)
   }
 }
@@ -25,8 +25,8 @@ class MyComponent extends PositionComponent with PointerMoveCallbacks {
 
 The mixin adds two overridable methods to your component:
 
-- `onPointerMove`: called when the mouse moves within the component
-- `onPointerMoveStop`: called once if the component was being hovered and the mouse leaves
+- `onMouseMove`: called when the mouse moves within the component
+- `onMouseMoveStop`: called once if the component was being hovered and the mouse leaves
 
 By default, each of these methods does nothing, they need to be overridden in order to perform any
 function.
@@ -36,7 +36,7 @@ In addition, the component must implement the `containsLocalPoint()` method (alr
 Flame to know whether the event occurred within the component or not.
 
 Note that only mouse events happening within your component will be proxied along. However,
-`onPointerMoveStop` will be fired once on the first mouse movement that leaves your component, so
+`onMouseMoveStop` will be fired once on the first mouse movement that leaves your component, so
 you can handle any exit conditions there.
 
 
@@ -69,7 +69,7 @@ class MyComponent extends PositionComponent with HoverCallbacks {
 }
 ```
 
-Note that you can still listen to the "raw" onPointerMove methods for additional functionality, just
+Note that you can still listen to the "raw" onMouseMove methods for additional functionality, just
 make sure to call the `super` version to enable the `HoverCallbacks` behavior.
 
 

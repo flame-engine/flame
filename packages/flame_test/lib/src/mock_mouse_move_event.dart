@@ -3,14 +3,14 @@ import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart' as flutter;
 
-PointerMoveEvent createMouseMoveEvent({
+MouseMoveEvent createMouseMoveEvent({
   required Game game,
   int? pointerId,
   Vector2? position,
   Vector2? delta,
   Duration? timestamp,
 }) {
-  return PointerMoveEvent(
+  return MouseMoveEvent(
     pointerId ?? 1,
     game,
     flutter.PointerHoverEvent(

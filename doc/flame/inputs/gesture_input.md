@@ -1,9 +1,15 @@
 # Gesture Input
 
-This is documentation for the legacy detector mixins, which are added directly to your game class.
-New code should prefer the `Callbacks` mixins instead (e.g. [TapCallbacks](tap_events.md) and
-[DragCallbacks](drag_events.md)) which can be added to any `Component`, including the `FlameGame`
-itself.
+Gesture input in Flame is handled by the `Callbacks` mixins. They can be added to any `Component`,
+and since `FlameGame` is itself a `Component`, adding one to your game class works exactly as well —
+no wrapper component required. Each family has its own page:
+
+- [Tap Events](tap_events.md): `TapCallbacks`, `DoubleTapCallbacks`, and the secondary/tertiary
+  button variants
+- [Drag Events](drag_events.md): `DragCallbacks`
+- [Scale Events](scale_events.md): `ScaleCallbacks`
+- [Long Press Events](long_press_events.md): `LongPressCallbacks`
+- [Pointer Events](pointer_events.md): `MouseMoveCallbacks`, `HoverCallbacks`, `ScrollCallbacks`
 
 For other input documents, see also:
 
@@ -11,17 +17,16 @@ For other input documents, see also:
 - [Other Inputs](other_inputs.md): For joysticks, game pads, etc.
 
 
-## Intro
+## PanDetector
 
-Inside `package:flame/input.dart` you can find a set of legacy `mixin`s which can be included on
-your game class instance to be able to receive touch input events. Below you can see the full
-list of these `mixin`s and its methods:
-
-
-## Touch and mouse detectors
+`PanDetector` is the last remaining detector mixin — the older style of input handling, added
+directly to the game class instead of to a component. Everything else on that side has already been
+replaced by the `Callbacks` mixins above.
 
 ```{warning}
-Detectors will be deprecated in the future. Prefer `Callbacks` instead.
+`PanDetector` will be removed. Prefer [`DragCallbacks`](drag_events.md), which
+can be added to your `FlameGame` directly and additionally reports a
+`pointerId` so that simultaneous drags can be told apart.
 ```
 
 ```text
@@ -32,14 +37,6 @@ Detectors will be deprecated in the future. Prefer `Callbacks` instead.
   - onPanEnd
   - onPanCancel
 ```
-
-Mouse only events
-
-```text
- - MouseMovementDetector
-  - onMouseMove
-```
-
 
 Flame's GestureApi is provided by Flutter's Gesture Widgets, including
 [GestureDetector widget](https://api.flutter.dev/flutter/widgets/GestureDetector-class.html),
@@ -147,22 +144,3 @@ class MyGame extends FlameGame with PanDetector {
   }
 }
 ```
-
-
-### GestureHitboxes
-
-The `GestureHitboxes` mixin is used to more accurately recognize gestures on top of your
-`Component`s. Say that you have a fairly round rock as a `SpriteComponent` for example, then you
-don't want to register input that is in the corner of the image where the rock is not displayed,
-since a `PositionComponent` is rectangular by default. Then you can use the `GestureHitboxes` mixin
-to define a more accurate circle or polygon (or another shape) for which the input should be within
-for the event to be registered on your component.
-
-You can add new hitboxes to the component that has the `GestureHitboxes` mixin just like they are
-added in the below `Collidable` example.
-
-More information about how to define hitboxes can be found in the hitbox section of the
-[collision detection](../collision_detection.md#shapehitbox) docs.
-
-An example of how to use it can be seen in the
-[gesture hitboxes example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/gesture_hitboxes_example.dart).

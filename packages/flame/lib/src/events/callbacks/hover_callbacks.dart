@@ -12,8 +12,8 @@ import 'package:meta/meta.dart';
 ///
 /// This mixin is the replacement of the Hoverable mixin.
 ///
-/// This callback uses [PointerMoveDispatcher] to route events.
-mixin HoverCallbacks on Component implements PointerMoveCallbacks {
+/// This callback uses [MouseMoveDispatcher] to route events.
+mixin HoverCallbacks on Component implements MouseMoveCallbacks {
   bool _isHovered = false;
 
   /// Returns true while the component is being dragged.
@@ -43,7 +43,7 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
     onHoverExit();
   }
 
-  /// Called by [PointerMoveDispatcher] when a pointer button is pressed while
+  /// Called by [MouseMoveDispatcher] when a pointer button is pressed while
   /// this component is hovered. Not intended to be called by user code.
   @internal
   void cancelHover() {
@@ -54,7 +54,7 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   }
 
   @override
-  void onPointerMove(PointerMoveEvent event) {
+  void onMouseMove(MouseMoveEvent event) {
     final position = event.localPosition;
     if (containsLocalPoint(position)) {
       if (!_isHovered) {
@@ -68,7 +68,7 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   }
 
   @override
-  void onPointerMoveStop(PointerMoveEvent event) {
+  void onMouseMoveStop(MouseMoveEvent event) {
     if (_isHovered) {
       _doHoverExit();
     }
@@ -78,6 +78,6 @@ mixin HoverCallbacks on Component implements PointerMoveCallbacks {
   @mustCallSuper
   void onMount() {
     super.onMount();
-    PointerMoveDispatcher.addDispatcher(this);
+    MouseMoveDispatcher.addDispatcher(this);
   }
 }

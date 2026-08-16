@@ -1,5 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/events.dart' hide PointerMoveEvent;
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
