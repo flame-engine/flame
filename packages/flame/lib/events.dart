@@ -29,10 +29,6 @@ export 'src/events/dispatchers/pointer_move_dispatcher.dart'
     show PointerMoveDispatcher, MouseMoveDispatcherKey;
 export 'src/events/dispatchers/scroll_dispatcher.dart'
     show ScrollDispatcher, ScrollDispatcherKey;
-export 'src/events/game_mixins/multi_touch_drag_detector.dart'
-    show MultiTouchDragDetector;
-export 'src/events/game_mixins/multi_touch_tap_detector.dart'
-    show MultiTouchTapDetector;
 export 'src/events/hardware_keyboard_detector.dart'
     show HardwareKeyboardDetector;
 export 'src/events/interfaces/multi_drag_listener.dart' show MultiDragListener;

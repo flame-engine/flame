@@ -12,11 +12,7 @@ import 'package:flutter/services.dart';
 /// events information on the screen, to allow exploration of the 3 coordinate
 /// systems of Flame (global, widget, game).
 class CoordinateSystemsExample extends FlameGame
-    with
-        MultiTouchTapDetector,
-        MultiTouchDragDetector,
-        ScrollDetector,
-        KeyboardEvents {
+    with TapCallbacks, DragCallbacks, ScrollDetector, KeyboardEvents {
   static const String description = '''
     Displays event data in all 3 coordinate systems (global, widget and game).
     Use WASD to move the camera and Q/E to zoom in/out.
@@ -90,48 +86,58 @@ class CoordinateSystemsExample extends FlameGame
   }
 
   @override
-  void onTapUp(int pointerId, TapUpInfo info) {
-    lastEventDescription = _describe('TapUp', info);
+  void onTapUp(TapUpEvent event) {
+    lastEventDescription = _describe('TapUp', event.devicePosition);
   }
 
   @override
-  void onTapDown(int pointerId, TapDownInfo info) {
-    lastEventDescription = _describe('TapDown', info);
+  void onTapDown(TapDownEvent event) {
+    lastEventDescription = _describe('TapDown', event.devicePosition);
   }
 
   @override
-  void onDragStart(int pointerId, DragStartInfo info) {
-    lastEventDescription = _describe('DragStart', info);
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    lastEventDescription = _describe('DragStart', event.devicePosition);
   }
 
   @override
-  void onDragUpdate(int pointerId, DragUpdateInfo info) {
-    lastEventDescription = _describe('DragUpdate', info);
+  void onDragUpdate(DragUpdateEvent event) {
+    lastEventDescription = _describe(
+      'DragUpdate',
+      event.deviceStartPosition,
+      delta: event.deviceDelta,
+    );
   }
 
   @override
   void onScroll(PointerScrollInfo info) {
-    lastEventDescription = _describe('Scroll', info);
+    lastEventDescription = _describe(
+      'Scroll',
+      info.eventPosition.global,
+      delta: info.scrollDelta.global,
+      deltaName: 'Scroll Delta',
+    );
   }
 
   /// Describes generic event information + some event specific details for
   /// some events.
-  String _describe(String name, PositionInfo info) {
+  String _describe(
+    String name,
+    Vector2 globalPosition, {
+    Vector2? delta,
+    String deltaName = 'Delta',
+  }) {
     return [
       name,
-      'Global: ${info.eventPosition.global}',
-      'Widget: ${info.eventPosition.widget}',
-      'World: ${camera.globalToLocal(info.eventPosition.global)}',
+      'Global: $globalPosition',
+      'Widget: ${convertGlobalToLocalCoordinate(globalPosition)}',
+      'World: ${camera.globalToLocal(globalPosition)}',
       'Camera: ${camera.viewfinder.position}',
-      if (info is DragUpdateInfo) ...[
-        'Delta',
-        'Global: ${info.delta.global}',
-        'World: ${info.delta.global / camera.viewfinder.zoom}',
-      ],
-      if (info is PointerScrollInfo) ...[
-        'Scroll Delta',
-        'Global: ${info.scrollDelta.global}',
-        'World: ${info.scrollDelta.global / camera.viewfinder.zoom}',
+      if (delta != null) ...[
+        deltaName,
+        'Global: $delta',
+        'World: ${delta / camera.viewfinder.zoom}',
       ],
     ].join('\n');
   }

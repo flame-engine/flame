@@ -247,9 +247,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   bool containsEventHandlerAt(Vector2 position) {
     // Game-level detector mixins handle events for the entire game surface,
     // so any in-bounds point is a hit.
-    if (this is PanDetector ||
-        this is MultiTapListener ||
-        this is MultiTouchDragDetector) {
+    if (this is PanDetector) {
       return true;
     }
     for (final component in super.componentsAtPoint(position)) {
