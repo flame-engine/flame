@@ -27,15 +27,13 @@ abstract class Event<R> {
     Component rootComponent,
     void Function(T component) eventHandler,
   ) {
-    for (final child
-        in rootComponent
-            .descendants(reversed: true, includeSelf: true)
-            .whereType<T>()) {
-      continuePropagation = false;
-      eventHandler(child);
-      if (!continuePropagation) {
-        break;
-      }
-    }
+    rootComponent.propagateToChildren<T>(
+      (component) {
+        continuePropagation = false;
+        eventHandler(component);
+        return continuePropagation;
+      },
+      includeSelf: true,
+    );
   }
 }
