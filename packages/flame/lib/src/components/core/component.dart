@@ -598,8 +598,8 @@ class Component {
   /// cleans them up afterwards.
   @protected
   void renderChild(Canvas canvas, Component child) {
-    final contexts = _renderContexts;
-    if (contexts == null || contexts.isEmpty) {
+    final contexts = _renderContexts ?? const <ComponentRenderContext>[];
+    if (contexts.isEmpty) {
       child.renderTree(canvas);
       return;
     }
@@ -619,8 +619,10 @@ class Component {
 
   void renderTree(Canvas canvas) {
     final context = renderContext;
+    List<ComponentRenderContext>? renderContexts;
     if (context != null) {
-      (_renderContexts ??= []).add(context);
+      renderContexts = _renderContexts ??= [];
+      renderContexts.add(context);
     }
 
     render(canvas);
@@ -637,9 +639,7 @@ class Component {
       renderDebugMode(canvas);
     }
 
-    if (context != null) {
-      _renderContexts!.removeLast();
-    }
+    renderContexts?.removeLast();
   }
 
   //#endregion
