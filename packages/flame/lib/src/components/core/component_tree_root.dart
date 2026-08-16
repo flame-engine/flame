@@ -26,6 +26,22 @@ class ComponentTreeRoot extends Component {
   final Set<Component> _blocked;
   late final Map<ComponentKey, Component> _index = {};
   Completer<void>? _lifecycleEventsCompleter;
+  Completer<void>? _lifecycleEventMutationCompleter;
+
+  /// A future that completes the next time the lifecycle event queue is
+  /// mutated: when a new event is enqueued or an existing event is cancelled.
+  ///
+  /// This is used by `FlameGame.ready` to re-evaluate the queue when it is
+  /// changed by something other than a component finishing its load, for
+  /// example when a component is removed while it is still loading.
+  @internal
+  Future<void> get nextLifecycleEventMutation =>
+      (_lifecycleEventMutationCompleter ??= Completer<void>()).future;
+
+  void _notifyLifecycleEventMutation() {
+    _lifecycleEventMutationCompleter?.complete();
+    _lifecycleEventMutationCompleter = null;
+  }
 
   @internal
   void enqueueAdd(Component child, Component parent) {
@@ -33,21 +49,28 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.add
       ..child = child
       ..parent = parent;
+    _notifyLifecycleEventMutation();
   }
 
   @internal
   void dequeueAdd(Component child, Component parent) {
-    for (final event in queue) {
-      if (event.kind == LifecycleEventKind.add &&
+    // This uses [RecycledQueue.firstWhereOrNull] instead of iterating over
+    // the queue, since it can be called from user code that runs while
+    // [processLifecycleEvents] is iterating over the queue, and the queue
+    // only supports one iteration at a time.
+    final event = queue.firstWhereOrNull(
+      (event) =>
+          event.kind == LifecycleEventKind.add &&
           event.child == child &&
-          event.parent == parent) {
-        event.kind = LifecycleEventKind.unknown;
-        return;
-      }
-    }
-    throw AssertionError(
-      'Cannot find a lifecycle event Add(child=$child, parent=$parent)',
+          event.parent == parent,
     );
+    if (event == null) {
+      throw AssertionError(
+        'Cannot find a lifecycle event Add(child=$child, parent=$parent)',
+      );
+    }
+    event.kind = LifecycleEventKind.unknown;
+    _notifyLifecycleEventMutation();
   }
 
   @internal
@@ -56,14 +79,23 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
+    _notifyLifecycleEventMutation();
   }
 
   @internal
   void dequeueRemove(Component child) {
-    for (final event in queue) {
-      if (event.kind == LifecycleEventKind.remove && event.child == child) {
+    // See [dequeueAdd] for why this doesn't iterate over the queue directly.
+    var dequeuedAny = false;
+    queue.forEachWhere(
+      (event) =>
+          event.kind == LifecycleEventKind.remove && event.child == child,
+      (event) {
         event.kind = LifecycleEventKind.unknown;
-      }
+        dequeuedAny = true;
+      },
+    );
+    if (dequeuedAny) {
+      _notifyLifecycleEventMutation();
     }
   }
 
@@ -86,6 +118,9 @@ class ComponentTreeRoot extends Component {
         event.kind = LifecycleEventKind.unknown;
       },
     );
+    if (result.isNotEmpty) {
+      _notifyLifecycleEventMutation();
+    }
   }
 
   @internal
@@ -94,6 +129,7 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.move
       ..child = child
       ..parent = newParent;
+    _notifyLifecycleEventMutation();
   }
 
   @internal
@@ -105,6 +141,7 @@ class ComponentTreeRoot extends Component {
       ..kind = LifecycleEventKind.rebalance
       ..child = child
       ..parent = parent;
+    _notifyLifecycleEventMutation();
   }
 
   bool get hasLifecycleEvents => queue.isNotEmpty;
@@ -142,7 +179,30 @@ class ComponentTreeRoot extends Component {
         : (_lifecycleEventsCompleter ??= Completer<void>()).future;
   }
 
+  /// Whether [processLifecycleEvents] is currently running.
+  ///
+  /// Used by `FlameGame.ready` to defer its own queue processing when it is
+  /// called from inside a lifecycle callback, since the queue only supports
+  /// one iteration at a time.
+  @internal
+  bool get isProcessingLifecycleEvents => _processingLifecycleEvents;
+  bool _processingLifecycleEvents = false;
+
   void processLifecycleEvents() {
+    assert(
+      !_processingLifecycleEvents,
+      'processLifecycleEvents cannot be called while it is already running, '
+      'for example from inside a lifecycle callback',
+    );
+    _processingLifecycleEvents = true;
+    try {
+      _processLifecycleEvents();
+    } finally {
+      _processingLifecycleEvents = false;
+    }
+  }
+
+  void _processLifecycleEvents() {
     // reorder events to process later grouped by parent
     final reorderParents = <Component>{};
     LifecycleEventStatus handleReorderEvent(Component parent) {
