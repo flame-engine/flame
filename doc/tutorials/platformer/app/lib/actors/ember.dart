@@ -112,7 +112,7 @@ class EmberPlayer extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(List<Vector2> intersectionPoints, PositionComponent other) {
     if (other is GroundBlock || other is PlatformBlock) {
       if (intersectionPoints.length == 2) {
         // Calculate the collision normal and separation distance.

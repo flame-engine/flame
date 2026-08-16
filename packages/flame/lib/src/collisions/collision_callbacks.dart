@@ -54,14 +54,14 @@ mixin GenericCollisionCallbacks<T> {
   /// [onCollision] is called in every tick when this object is colliding with
   /// [other].
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, T other) {
+  void onCollision(List<Vector2> intersectionPoints, T other) {
     onCollisionCallback?.call(intersectionPoints, other);
   }
 
   /// [onCollisionStart] is called in the first tick when this object starts
   /// colliding with [other].
   @mustCallSuper
-  void onCollisionStart(Set<Vector2> intersectionPoints, T other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, T other) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
   }
@@ -115,14 +115,14 @@ mixin CollisionCallbacks on Component
 
   @override
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(List<Vector2> intersectionPoints, PositionComponent other) {
     onCollisionCallback?.call(intersectionPoints, other);
   }
 
   @override
   @mustCallSuper
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     activeCollisions.add(other);
@@ -167,7 +167,7 @@ mixin CollisionCallbacks on Component
 /// `onCollisionStartCallback`.
 typedef CollisionCallback<T> =
     void Function(
-      Set<Vector2> intersectionPoints,
+      List<Vector2> intersectionPoints,
       T other,
     );
 

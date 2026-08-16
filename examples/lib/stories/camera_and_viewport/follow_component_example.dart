@@ -85,7 +85,7 @@ class MovableEmber extends Ember<FollowComponentExample>
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);

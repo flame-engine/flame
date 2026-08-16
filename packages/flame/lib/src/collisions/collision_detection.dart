@@ -80,11 +80,11 @@ abstract class CollisionDetection<
 
   /// Check what the intersection points of two items are,
   /// returns an empty list if there are no intersections.
-  Set<Vector2> intersections(T itemA, T itemB);
+  List<Vector2> intersections(T itemA, T itemB);
 
-  void handleCollisionStart(Set<Vector2> intersectionPoints, T itemA, T itemB);
+  void handleCollisionStart(List<Vector2> intersectionPoints, T itemA, T itemB);
 
-  void handleCollision(Set<Vector2> intersectionPoints, T itemA, T itemB);
+  void handleCollision(List<Vector2> intersectionPoints, T itemA, T itemB);
 
   void handleCollisionEnd(T itemA, T itemB);
 

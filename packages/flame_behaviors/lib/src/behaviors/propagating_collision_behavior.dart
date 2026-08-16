@@ -20,10 +20,10 @@ abstract class CollisionBehavior<
   bool isValid(Component c) => c is Collider;
 
   /// Called when the entity collides with [Collider].
-  void onCollision(Set<Vector2> intersectionPoints, Collider other) {}
+  void onCollision(List<Vector2> intersectionPoints, Collider other) {}
 
   /// Called when the entity starts to collides with [Collider].
-  void onCollisionStart(Set<Vector2> intersectionPoints, Collider other) {}
+  void onCollisionStart(List<Vector2> intersectionPoints, Collider other) {}
 
   /// Called when the entity stops to collides with [Collider].
   void onCollisionEnd(Collider other) {}
@@ -122,7 +122,7 @@ class PropagatingCollisionBehavior<Parent extends EntityMixin>
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     activeCollisions.add(other);
@@ -141,7 +141,7 @@ class PropagatingCollisionBehavior<Parent extends EntityMixin>
 
   @override
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(List<Vector2> intersectionPoints, PositionComponent other) {
     final otherEntity = findEntity(other);
     if (otherEntity == null) {
       return;

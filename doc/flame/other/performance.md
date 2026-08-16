@@ -177,7 +177,7 @@ class Bullet extends SpriteComponent with CollisionCallbacks {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
+  void onCollisionStart(List<Vector2> points, PositionComponent other) {
     super.onCollisionStart(points, other);
     // Return to pool on collision. No manual release needed.
     removeFromParent();
