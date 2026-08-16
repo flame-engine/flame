@@ -430,10 +430,21 @@ class Component {
     bool Function(T) handler, {
     bool includeSelf = false,
   }) {
-    return descendants(
-      reversed: true,
-      includeSelf: includeSelf,
-    ).whereType<T>().every(handler);
+    final children = _children;
+    if (children != null) {
+      for (final child in children.reversed()) {
+        if (!child.propagateToChildren(handler, includeSelf: true)) {
+          return false;
+        }
+      }
+    }
+    if (includeSelf) {
+      final self = this;
+      if (self is T && !handler(self)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @internal
@@ -1183,10 +1194,7 @@ class Component {
 
   void _remove(Component parent) {
     parent._internalChildren.remove(this);
-    final buffer = <Component>[];
-    _collectTeardown(buffer);
-    for (var i = 0; i < buffer.length; i++) {
-      final component = buffer[i];
+    for (final component in _collectDescendants()) {
       component
         ..onRemove()
         .._unregisterKey()
@@ -1200,19 +1208,25 @@ class Component {
     _parent = null;
   }
 
-  /// Collects this component and all its descendants into [out] in teardown
-  /// order: leaves first, siblings in reverse order, ancestors after their
-  /// subtrees. This matches the order that
-  /// `descendants(reversed: true, includeSelf: true)` would produce, without
-  /// allocating generator frames on every removal.
-  void _collectTeardown(List<Component> out) {
+  /// Collects this component and all its descendants into a list, in the
+  /// order that `descendants(reversed: true, includeSelf: true)` would
+  /// produce: leaves first, siblings in reverse order, ancestors after their
+  /// subtrees. The snapshot allows [_remove] to run user callbacks that
+  /// mutate the tree while it walks the subtree, without allocating generator
+  /// frames per tree level the way [descendants] does.
+  ///
+  /// The [out] parameter is only used by the recursive calls, so that the
+  /// whole subtree is collected into a single list.
+  List<Component> _collectDescendants([List<Component>? out]) {
+    out ??= [];
     final children = _children;
     if (children != null) {
       for (final child in children.reversed()) {
-        child._collectTeardown(out);
+        child._collectDescendants(out);
       }
     }
     out.add(this);
+    return out;
   }
 
   void _unregisterKey() {
