@@ -31,8 +31,8 @@ class PolygonPolygonIntersections
     extends Intersections<PolygonComponent, PolygonComponent> {
   /// Returns the intersection points of [polygonA] and [polygonB]
   /// The two polygons are required to be convex
-  /// If they share a segment of a line, both end points and the center point of
-  /// that line segment will be counted as collision points
+  /// If they share a segment of a line, both end points of that segment will
+  /// be counted as collision points
   @override
   List<Vector2> intersect(
     PolygonComponent polygonA,
