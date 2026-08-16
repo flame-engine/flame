@@ -1485,7 +1485,7 @@ void main() {
         },
       );
 
-      testWithFlameGame('descendants() iterator is lazy', (game) async {
+      testWithFlameGame('descendants() supports early stopping', (game) async {
         final componentA = _Visitor()..addToParent(game);
         final componentB = _Visitor()..addToParent(game);
         final componentC = _Visitor()..addToParent(componentB);
