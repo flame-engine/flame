@@ -38,7 +38,7 @@ abstract mixin class Game {
     refreshWidget,
   )..initializeGestures(this);
 
-  /// Set by the PointerMoveDispatcher to receive mouse events from the
+  /// Set by the MouseMoveDispatcher to receive mouse events from the
   /// game widget.
   void Function(PointerHoverEvent event)? get mouseDetector => _mouseDetector;
   void Function(PointerHoverEvent event)? _mouseDetector;
@@ -47,7 +47,7 @@ abstract mixin class Game {
     refreshWidget();
   }
 
-  /// Set by the PointerMoveDispatcher to receive mouse press events from the
+  /// Set by the MouseMoveDispatcher to receive mouse press events from the
   /// game widget so it can fire `onHoverCancel` on hovered `HoverCallbacks`
   /// components when the user presses a button while hovering.
   void Function(PointerDownEvent event)? get mousePressDetector =>

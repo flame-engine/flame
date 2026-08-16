@@ -75,13 +75,6 @@ class TapUpInfo extends PositionInfo<TapUpDetails> {
   ) : super(game, raw.globalPosition, raw);
 }
 
-class PointerHoverInfo extends PositionInfo<PointerHoverEvent> {
-  PointerHoverInfo.fromDetails(
-    Game game,
-    PointerHoverEvent raw,
-  ) : super(game, raw.position, raw);
-}
-
 class DragDownInfo extends PositionInfo<DragDownDetails> {
   DragDownInfo.fromDetails(
     Game game,

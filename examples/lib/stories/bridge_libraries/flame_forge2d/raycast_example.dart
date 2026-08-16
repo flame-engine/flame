@@ -5,11 +5,10 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/input.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' show Colors, Paint, Canvas;
 
-class RaycastExample extends Forge2DExampleGame with MouseMovementDetector {
+class RaycastExample extends Forge2DExampleGame with MouseMoveCallbacks {
   static const String description = '''
     This example shows how ray casts can be used to find the nearest and
     farthest shapes.
@@ -57,7 +56,7 @@ class RaycastExample extends Forge2DExampleGame with MouseMovementDetector {
   }
 
   @override
-  void onMouseMove(PointerHoverInfo info) {
+  void onMouseMove(MouseMoveEvent event) {
     final rayStart = screenToWorld(
       Vector2(
         camera.viewport.size.x / 4,
@@ -65,14 +64,14 @@ class RaycastExample extends Forge2DExampleGame with MouseMovementDetector {
       ),
     );
 
-    final worldPosition = screenToWorld(info.eventPosition.widget);
+    final worldPosition = screenToWorld(event.canvasPosition);
     final redRayTarget = worldPosition + Vector2(0, 2);
     fireRedRay(rayStart, redRayTarget);
 
     final blueRayTarget = worldPosition - Vector2(0, 2);
     fireBlueRay(rayStart, blueRayTarget);
 
-    super.onMouseMove(info);
+    super.onMouseMove(event);
   }
 
   void fireBlueRay(Vector2 rayStart, Vector2 rayTarget) {

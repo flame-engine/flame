@@ -60,14 +60,12 @@ class GestureDetectorBuilder {
 }
 
 bool hasMouseDetectors(Game game) {
-  return game is MouseMovementDetector ||
-      game.mouseDetector != null ||
+  return game.mouseDetector != null ||
       game.mousePressDetector != null ||
       game.scrollDetector != null;
 }
 
 Widget applyMouseDetectors(Game game, Widget child) {
-  final mouseMoveFn = game is MouseMovementDetector ? game.onMouseMove : null;
   final mouseDetector = game.mouseDetector;
   final mousePressDetector = game.mousePressDetector;
   final scrollDetector = game.scrollDetector;
@@ -83,10 +81,7 @@ Widget applyMouseDetectors(Game game, Widget child) {
       }
     },
     child: MouseRegion(
-      onHover: (PointerHoverEvent e) {
-        mouseMoveFn?.call(PointerHoverInfo.fromDetails(game, e));
-        mouseDetector?.call(e);
-      },
+      onHover: mouseDetector,
       child: child,
     ),
   );

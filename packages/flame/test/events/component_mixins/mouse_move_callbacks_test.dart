@@ -5,11 +5,11 @@ import 'package:flame_test/flame_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('PointerMoveCallbacks', () {
+  group('MouseMoveCallbacks', () {
     testWithFlameGame(
-      'make sure PointerMoveCallbacks components can be added to a FlameGame',
+      'make sure MouseMoveCallbacks components can be added to a FlameGame',
       (game) async {
-        await game.ensureAdd(_PointerMoveCallbacksComponent());
+        await game.ensureAdd(_MouseMoveCallbacksComponent());
         await game.ready();
 
         _hasDispatcher(game);
@@ -17,12 +17,12 @@ void main() {
     );
 
     testWithFlameGame('receive pointer move events on component', (game) async {
-      final c1 = _PointerMoveCallbacksComponent(
+      final c1 = _MouseMoveCallbacksComponent(
         position: Vector2.all(10),
         size: Vector2.all(10),
       );
       game.add(c1);
-      final c2 = _PointerMoveCallbacksComponent(
+      final c2 = _MouseMoveCallbacksComponent(
         position: Vector2.all(15),
         size: Vector2.all(10),
       );
@@ -51,7 +51,7 @@ void main() {
 
     testWithGame(
       'receive pointer move events on game',
-      _PointerMoveCallbacksGame.new,
+      _MouseMoveCallbacksGame.new,
       (game) async {
         _hasDispatcher(game);
 
@@ -72,7 +72,7 @@ void main() {
 }
 
 void _mouseEvent(FlameGame game, Vector2 position) {
-  game.firstChild<PointerMoveDispatcher>()!.onMouseMove(
+  game.firstChild<MouseMoveDispatcher>()!.onMouseMove(
     createMouseMoveEvent(
       game: game,
       position: position,
@@ -82,12 +82,12 @@ void _mouseEvent(FlameGame game, Vector2 position) {
 
 void _hasDispatcher(FlameGame game) {
   expect(
-    game.children.whereType<PointerMoveDispatcher>(),
+    game.children.whereType<MouseMoveDispatcher>(),
     hasLength(1),
   );
 }
 
-mixin _PointerMoveInspector on PointerMoveCallbacks {
+mixin _MouseMoveInspector on MouseMoveCallbacks {
   List<Vector2> receivedEventsAt = [];
 
   Vector2 removeSingle() {
@@ -96,19 +96,19 @@ mixin _PointerMoveInspector on PointerMoveCallbacks {
   }
 
   @override
-  void onPointerMove(PointerMoveEvent event) {
+  void onMouseMove(MouseMoveEvent event) {
     expect(event.raw, isNotNull);
     receivedEventsAt.add(event.localPosition);
   }
 }
 
-class _PointerMoveCallbacksComponent extends PositionComponent
-    with PointerMoveCallbacks, _PointerMoveInspector {
-  _PointerMoveCallbacksComponent({
+class _MouseMoveCallbacksComponent extends PositionComponent
+    with MouseMoveCallbacks, _MouseMoveInspector {
+  _MouseMoveCallbacksComponent({
     super.position,
     super.size,
   });
 }
 
-class _PointerMoveCallbacksGame extends FlameGame
-    with PointerMoveCallbacks, _PointerMoveInspector {}
+class _MouseMoveCallbacksGame extends FlameGame
+    with MouseMoveCallbacks, _MouseMoveInspector {}
