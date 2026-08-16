@@ -87,9 +87,11 @@ class LineSegment {
         if (containsPoint(otherSegment.from)) otherSegment.from,
         if (containsPoint(otherSegment.to)) otherSegment.to,
       };
-      return overlaps.toList();
+      if (overlaps.isNotEmpty) {
+        return overlaps.toList(growable: false);
+      }
     }
-    return [];
+    return const [];
   }
 
   /// Whether the given [point] lies in this line segment.
