@@ -29,7 +29,3 @@ mixin PanDetector on Game {
 mixin MouseMovementDetector on Game {
   void onMouseMove(PointerHoverInfo info) {}
 }
-
-mixin ScrollDetector on Game {
-  void onScroll(PointerScrollInfo info) {}
-}
