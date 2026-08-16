@@ -1,3 +1,10 @@
+## 0.20.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Migrate flame_forge2d to the Box2D v3 based forge2d ([#3952](https://github.com/flame-engine/flame/issues/3952)). ([9081a0f9](https://github.com/flame-engine/flame/commit/9081a0f92af5339f3fb17c4895e0d4ebf7012c6f))
+
 ## 0.19.3+7
 
  - Update a dependency to the latest release.

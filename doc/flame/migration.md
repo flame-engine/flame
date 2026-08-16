@@ -212,6 +212,45 @@ See [Tap Events](inputs/tap_events.md) and [Drag Events](inputs/drag_events.md) 
 replacement APIs.
 
 
+### `ScrollDetector` removed
+
+The `ScrollDetector` game mixin has been removed, together with the event class that only it used:
+
+| Removed | Use instead |
+| --- | --- |
+| `ScrollDetector` | `ScrollCallbacks` |
+| `PointerScrollInfo` | `ScrollEvent` |
+
+The scroll delta is now read directly off the event rather than through a nested wrapper, and the
+event carries the usual `PositionEvent` fields, so the position where the scroll occurred is
+available as `devicePosition` / `canvasPosition` / `localPosition`:
+
+```dart
+// Before
+class MyGame extends FlameGame with ScrollDetector {
+  @override
+  void onScroll(PointerScrollInfo info) {
+    camera.viewfinder.zoom += info.scrollDelta.global.y.sign * 0.02;
+  }
+}
+
+// After
+class MyGame extends FlameGame with ScrollCallbacks {
+  @override
+  void onScroll(ScrollEvent event) {
+    camera.viewfinder.zoom += event.scrollDelta.y.sign * 0.02;
+  }
+}
+```
+
+Unlike the old detector, which received every scroll event anywhere on the game surface,
+`ScrollCallbacks` is routed by position like the other component callbacks: a component only receives
+scrolls that occur on top of it, as determined by `containsLocalPoint()`. Mixing it into your
+`FlameGame` subclass directly, as above, keeps the old whole-surface behavior.
+
+See [Pointer Events](inputs/pointer_events.md) for the full replacement API.
+
+
 ### `onDragCancel` no longer delegates to `onDragEnd`
 
 `DragCallbacks.onDragCancel` used to convert the cancellation into an `onDragEnd` event by default,

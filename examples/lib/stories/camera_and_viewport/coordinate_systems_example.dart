@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 /// events information on the screen, to allow exploration of the 3 coordinate
 /// systems of Flame (global, widget, game).
 class CoordinateSystemsExample extends FlameGame
-    with TapCallbacks, DragCallbacks, ScrollDetector, KeyboardEvents {
+    with TapCallbacks, DragCallbacks, ScrollCallbacks, KeyboardEvents {
   static const String description = '''
     Displays event data in all 3 coordinate systems (global, widget and game).
     Use WASD to move the camera and Q/E to zoom in/out.
@@ -111,11 +111,11 @@ class CoordinateSystemsExample extends FlameGame
   }
 
   @override
-  void onScroll(PointerScrollInfo info) {
+  void onScroll(ScrollEvent event) {
     lastEventDescription = _describe(
       'Scroll',
-      info.eventPosition.global,
-      delta: info.scrollDelta.global,
+      event.devicePosition,
+      delta: event.scrollDelta,
       deltaName: 'Scroll Delta',
     );
   }

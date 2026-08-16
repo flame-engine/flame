@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 const tileSize = 8.0;
 
 class QuadTreeExample extends FlameGame
-    with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollDetector {
+    with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollCallbacks {
   QuadTreeExample();
 
   static const description = '''
@@ -191,8 +191,8 @@ Press T button to toggle player to collide with other objects.
   }
 
   @override
-  void onScroll(PointerScrollInfo info) {
-    camera.viewfinder.zoom += info.scrollDelta.global.y.sign * 0.08;
+  void onScroll(ScrollEvent event) {
+    camera.viewfinder.zoom += event.scrollDelta.y.sign * 0.08;
     camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 5.0);
   }
 }
