@@ -203,16 +203,6 @@ class CameraComponent extends Component {
       canvas.save();
       try {
         currentCameras.add(this);
-        void renderWorld(Canvas canvas) {
-          canvas.transform2D(viewfinder.transform);
-          world!.renderFromCamera(canvas);
-
-          // Render the viewfinder elements, which will be in front of
-          // the world,
-          // but with the same transforms applied to them.
-          viewfinder.renderTree(canvas);
-        }
-
         final postProcessors = children.query<PostProcessComponent>();
         if (postProcessors.isNotEmpty) {
           assert(
@@ -223,13 +213,11 @@ class CameraComponent extends Component {
           postProcessor.render(
             canvas,
             viewport.virtualSize,
-            renderWorld,
-            (context) {
-              renderContext.currentPostProcess = context;
-            },
+            _renderWorld,
+            _updatePostProcessContext,
           );
         } else {
-          renderWorld(canvas);
+          _renderWorld(canvas);
         }
       } finally {
         currentCameras.removeLast();
@@ -240,6 +228,24 @@ class CameraComponent extends Component {
       canvas.restore();
     }
     canvas.restore();
+  }
+
+  /// Renders the world and the viewfinder elements through the camera
+  /// transform. An instance method rather than a local function, so that the
+  /// render pass does not allocate a closure per camera per frame.
+  void _renderWorld(Canvas canvas) {
+    canvas.transform2D(viewfinder.transform);
+    world!.renderFromCamera(canvas);
+    // Render the viewfinder elements, which will be in front of the world,
+    // but with the same transforms applied to them.
+    viewfinder.renderTree(canvas);
+  }
+
+  // Not a setter: this is passed as a `ValueSetter` tear-off to
+  // `PostProcess.render`.
+  // ignore: use_setters_to_change_properties
+  void _updatePostProcessContext(PostProcess? context) {
+    renderContext.currentPostProcess = context;
   }
 
   /// Converts from the global (canvas) coordinate space to
