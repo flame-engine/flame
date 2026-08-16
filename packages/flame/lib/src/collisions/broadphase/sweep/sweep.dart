@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 
 class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
@@ -20,19 +21,13 @@ class Sweep<T extends Hitbox<T>> extends Broadphase<T> {
     // Between two ticks the hitboxes only move a little, so [items] is
     // always nearly sorted: an insertion sort runs in close to linear time
     // here, where a general-purpose sort would pay its full O(n log n) on
-    // every tick. This also avoids allocating a comparator closure per tick.
-    final items = this.items;
-    for (var i = 1; i < items.length; i++) {
-      final item = items[i];
-      final minX = item.aabb.min.x;
-      var previousIndex = i - 1;
-      while (previousIndex >= 0 && items[previousIndex].aabb.min.x > minX) {
-        items[previousIndex + 1] = items[previousIndex];
-        previousIndex--;
-      }
-      items[previousIndex + 1] = item;
-    }
+    // every tick. The comparator is a static tear-off, so nothing is
+    // allocated per tick.
+    insertionSort(items, compare: _compareMinX);
   }
+
+  static int _compareMinX(Hitbox<dynamic> a, Hitbox<dynamic> b) =>
+      a.aabb.min.x.compareTo(b.aabb.min.x);
 
   @override
   Iterable<CollisionProspect<T>> query() {
