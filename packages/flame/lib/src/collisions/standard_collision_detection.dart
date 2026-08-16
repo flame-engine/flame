@@ -18,7 +18,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   /// Check what the intersection points of two collidables are,
   /// returns an empty list if there are no intersections.
   @override
-  Set<Vector2> intersections(
+  List<Vector2> intersections(
     ShapeHitbox hitboxA,
     ShapeHitbox hitboxB,
   ) {
@@ -31,7 +31,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   /// [ShapeHitbox.hitboxParent] that they have collided with.
   @override
   void handleCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     ShapeHitbox hitboxA,
     ShapeHitbox hitboxB,
   ) {
@@ -45,7 +45,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
   /// [ShapeHitbox.hitboxParent] that they have collided with.
   @override
   void handleCollision(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     ShapeHitbox hitboxA,
     ShapeHitbox hitboxB,
   ) {

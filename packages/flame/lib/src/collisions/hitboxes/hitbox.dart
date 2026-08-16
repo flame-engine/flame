@@ -30,7 +30,7 @@ abstract class Hitbox<T extends Hitbox<T>>
   bool containsPoint(Vector2 point);
 
   /// Where this [Hitbox] has intersection points with another [Hitbox].
-  Set<Vector2> intersections(T other);
+  List<Vector2> intersections(T other);
 
   /// This should be a cheaper calculation than comparing the exact boundaries
   /// if the exact calculation is expensive.

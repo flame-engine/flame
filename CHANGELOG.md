@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-08-16
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_forge2d` - `v0.20.0`](#flame_forge2d---v0200)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `flame_forge2d` - `v0.20.0`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([0453bad6](https://github.com/flame-engine/flame/commit/0453bad6e726ff90610baec86e5c24dc4c89a5a4))
+ - **BREAKING** **FEAT**: Migrate flame_forge2d to the Box2D v3 based forge2d ([#3952](https://github.com/flame-engine/flame/issues/3952)). ([9081a0f9](https://github.com/flame-engine/flame/commit/9081a0f92af5339f3fb17c4895e0d4ebf7012c6f))
+
+
 ## 2026-07-22
 
 ### Changes

@@ -158,7 +158,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
 
   /// Where this [ShapeComponent] has intersection points with another shape
   @override
-  Set<Vector2> intersections(Hitbox other) {
+  List<Vector2> intersections(Hitbox other) {
     assert(
       other is ShapeComponent,
       'The intersection can only be performed between shapes',
@@ -218,7 +218,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
 
   @override
   @mustCallSuper
-  void onCollision(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollision(List<Vector2> intersectionPoints, ShapeHitbox other) {
     onCollisionCallback?.call(intersectionPoints, other);
     if (hitboxParent is CollisionCallbacks &&
         triggersParentCollision &&
@@ -232,7 +232,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
 
   @override
   @mustCallSuper
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, ShapeHitbox other) {
     activeCollisions.add(other);
     onCollisionStartCallback?.call(intersectionPoints, other);
     if (hitboxParent is CollisionCallbacks &&
