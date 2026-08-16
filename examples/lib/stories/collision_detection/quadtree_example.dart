@@ -226,7 +226,7 @@ class Player extends SpriteComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     final myCenter = Vector2(
@@ -295,7 +295,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     if (other is Brick) {

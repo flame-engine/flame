@@ -18,14 +18,14 @@ class _TrackingScreenCollisionBehavior
   ScreenHitbox? lastOther;
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ScreenHitbox other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, ScreenHitbox other) {
     super.onCollisionStart(intersectionPoints, other);
     startCalled = true;
     lastOther = other;
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, ScreenHitbox other) {
+  void onCollision(List<Vector2> intersectionPoints, ScreenHitbox other) {
     super.onCollision(intersectionPoints, other);
     collisionCalled = true;
   }

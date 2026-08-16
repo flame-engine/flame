@@ -147,7 +147,7 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
@@ -229,7 +229,7 @@ class SnowmanPart extends CircleHitbox {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, ShapeHitbox other) {
     super.onCollisionStart(intersectionPoints, other);
 
     if (other.hitboxParent is ScreenHitbox) {

@@ -101,7 +101,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);

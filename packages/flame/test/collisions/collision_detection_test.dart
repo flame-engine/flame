@@ -309,12 +309,12 @@ void main() {
       ]);
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(2.0, 2.0),
           Vector2(2.0, 1.5),
           Vector2(2.0, 1.0),
         ]),
-        true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
@@ -373,7 +373,8 @@ void main() {
       );
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(2, 0),
           Vector2(2, 2),
           Vector2(1, 0),
@@ -381,7 +382,6 @@ void main() {
           Vector2(0, 1),
           Vector2(0, 2),
         ]),
-        true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
@@ -407,12 +407,16 @@ void main() {
         Vector2(2, 1),
       ]);
       final intersections = geometry.intersections(polygonA, polygonB);
-      intersections.containsAll([
-        Vector2(-0.2857142857142857, 2.4285714285714284),
-        Vector2(1.7500000000000002, 1.2500000000000002),
-        Vector2(1.5555555555555556, 0.6666666666666667),
-        Vector2(1.1999999999999997, 0.39999999999999997),
-      ]);
+      expect(
+        intersections,
+        containsAll([
+          Vector2(-0.2857142857142857, 2.4285714285714284),
+          Vector2(1.7500000000000002, 1.2500000000000002),
+          Vector2(1.5555555555555556, 0.6666666666666667),
+          Vector2(1.1999999999999997, 0.39999999999999997),
+        ]),
+        reason: 'Does not have all the correct intersection points',
+      );
       expect(
         intersections.length == 4,
         true,
@@ -450,12 +454,12 @@ void main() {
       );
       final intersections = geometry.intersections(rectangleA, rectangleB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(4, 0),
           Vector2(4, 2),
           Vector2(4, 4),
         ]),
-        true,
         reason: 'Missed intersections',
       );
       expect(
@@ -709,13 +713,13 @@ void main() {
       final circleB = CircleComponent(radius: 4.0, position: Vector2.all(3));
       final intersections = geometry.intersections(circleA, circleB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(11, 7),
           Vector2(7, 3),
           Vector2(3, 7),
           Vector2(7, 11),
         ]),
-        true,
         reason: 'Missed intersections',
       );
       expect(
@@ -817,8 +821,8 @@ void main() {
       );
       final intersections = geometry.intersections(circle, polygon);
       expect(
-        intersections.containsAll([Vector2(0, 1), Vector2(1, 0)]),
-        true,
+        intersections,
+        containsAll([Vector2(0, 1), Vector2(1, 0)]),
         reason: 'Missed intersections',
       );
       expect(intersections.length, 2, reason: 'Wrong number of intersections');
@@ -863,13 +867,13 @@ void main() {
       ]);
       final intersections = geometry.intersections(circle, polygon);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(1, 2),
           Vector2(2, 1),
           Vector2(1, 0),
           Vector2(0, 1),
         ]),
-        true,
         reason: 'Missed intersections',
       );
       expect(

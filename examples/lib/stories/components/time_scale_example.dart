@@ -109,7 +109,7 @@ class _Chopper extends SpriteAnimationComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     if (other is _Chopper) {
