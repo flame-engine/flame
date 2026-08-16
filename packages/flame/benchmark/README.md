@@ -50,10 +50,6 @@ the benchmark results are printed above it.
   logic and inputs on a two-level tree.
 - `render_components_benchmark.dart`: render pass over a randomized tree onto
   a mock canvas.
-- `per_frame_allocation_benchmark.dart`: fixed per-frame overhead paid even by
-  an idle game: the render chain over a wide tree of bare `PositionComponent`s
-  onto a no-op canvas (per-component closure allocations), and update ticks
-  with an empty lifecycle queue (per-tick bookkeeping allocations).
 - `components_at_point_benchmark.dart`: pointer hit testing
   (`componentsAtPoint`) with and without the hit-test cache.
 - `collision_detection_benchmark.dart`: the collision detection system with
