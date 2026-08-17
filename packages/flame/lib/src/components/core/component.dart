@@ -10,8 +10,8 @@ import 'package:flame/src/components/core/component_tree_root.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-import 'package:ordered_set/ordered_set.dart';
-import 'package:ordered_set/read_only_ordered_set.dart';
+
+part 'component_list.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -73,6 +73,7 @@ class Component {
     int? priority,
     this.key,
   }) : _priority = priority ?? 0 {
+    _isTraversalBarrier = this is CustomTraversal;
     if (children != null) {
       addAll(children);
     }
@@ -283,9 +284,9 @@ class Component {
   ///
   /// ```dart
   /// coin.parent = inventory;
-  /// // The inventory.children set does not include coin yet.
+  /// // The inventory.children list does not include coin yet.
   /// await game.lifecycleEventsProcessed;
-  /// // The inventory.children set now includes coin.
+  /// // The inventory.children list now includes coin.
   /// ```
   Component? get parent => _parent;
   Component? _parent;
@@ -298,57 +299,57 @@ class Component {
   }
 
   /// This field should be used internally for functionality when you don't need
-  /// to create a component set for the children if one doesn't already exist.
+  /// to create a children list if one doesn't already exist.
   ///
   /// This makes it possible to have lighter components that don't have any
   /// children.
-  OrderedSet<Component>? _children;
+  ComponentList? _children;
+
+  /// The [ComponentList] that currently stores this component, if any.
+  /// Maintained by [ComponentList].
+  ComponentList? _containerList;
+
+  /// This component's slot index within [_containerList]'s backing array, or
+  /// -1 when the component is not in any container. Maintained by
+  /// [ComponentList].
+  int _containerIndex = -1;
 
   /// This field should be used internally for functionality when you need to
-  /// make sure that the component set is created if it doesn't already exist.
-  OrderedSet<Component> get _internalChildren =>
-      _children ??= createComponentSet();
+  /// make sure that the children list is created if it doesn't already exist.
+  ComponentList get _internalChildren => _children ??= createComponentList();
 
-  void rebalanceChildren() {
-    if (_children != null) {
-      _children!.rebalanceAll();
-    }
-  }
+  /// Restores the priority ordering of the [children], after one or more of
+  /// them have changed their [priority].
+  void rebalanceChildren() => _children?.rebalance();
 
   /// The children components of this component.
   ///
-  /// This getter will automatically create the [OrderedSet] container within
+  /// This getter will automatically create the [ComponentList] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  ReadOnlyOrderedSet<Component> get children =>
-      _children ??= createComponentSet();
+  ComponentList get children => _children ??= createComponentList();
 
   /// Whether this component has any children.
   /// Avoids the creation of the children container if not necessary.
   bool get hasChildren => _children?.isNotEmpty ?? false;
 
-  /// `Component.childrenFactory` is the default method for creating children
-  /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [OrderedSet] instances in your project.
-  static OrderedSet<Component> Function() childrenFactory = () {
-    return OrderedSet.mapping(
-      _componentPriorityMapper,
-      strictMode: strictQueryMode,
-    );
-  };
-
-  /// Whether OrderedSet's strict mode mode should be enabled for all children
-  /// sets.
+  /// Whether the strict query mode should be enabled for all children lists;
+  /// see [ComponentList.strictMode].
   static bool strictQueryMode = false;
 
-  static num _componentPriorityMapper(Component component) {
-    return component.priority;
-  }
-
   /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [OrderedSet] within
-  /// a particular class.
-  OrderedSet<Component> createComponentSet() => childrenFactory();
+  /// Override this method if you need a customized [ComponentList] for a
+  /// particular class, for example one with a custom ordering:
+  ///
+  /// ```dart
+  /// @override
+  /// ComponentList createComponentList() {
+  ///   return ComponentList(
+  ///     comparator: (a, b) => a.someValue.compareTo(b.someValue),
+  ///   );
+  /// }
+  /// ```
+  ComponentList createComponentList() => ComponentList();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
@@ -536,7 +537,7 @@ class Component {
   /// its [children] yet.
   ///
   /// After this method completes, the component is added to the parent's
-  /// children set, and then the flag [isMounted] set to true.
+  /// children list, and then the flag [isMounted] set to true.
   ///
   /// Example:
   /// ```dart
@@ -584,12 +585,125 @@ class Component {
   /// This method traverses the component tree and calls [update] on all its
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
+  ///
+  /// This method is non-virtual: components that need to customize how their
+  /// subtree is traversed (changing the effective [dt], skipping children,
+  /// or updating them manually) should mix in `CustomTraversal` and override
+  /// its `updateSubtree` method instead. The marker mixin lets the engine's
+  /// flattened update pass treat such components as traversal barriers
+  /// instead of silently skipping their custom logic.
+  @nonVirtual
   void updateTree(double dt) {
+    if (_updatePaused) {
+      return;
+    }
+    if (_isTraversalBarrier) {
+      updateSubtree(dt);
+    } else {
+      defaultUpdateSubtree(dt);
+    }
+  }
+
+  /// Updates this component and its subtree.
+  ///
+  /// The engine only invokes this method for components that are marked with
+  /// the [CustomTraversal] mixin, either directly or through a mixin that
+  /// `implements` it (such as `HasTimeScale`). The marker is what makes the
+  /// flattened update pass treat the component as a traversal barrier;
+  /// overriding this method without the marker has no effect.
+  ///
+  /// Call `super.updateSubtree` to run the surrounding traversal (the
+  /// standard one, or the next custom traversal in the mixin chain),
+  /// possibly with a modified time delta.
+  void updateSubtree(double dt) => defaultUpdateSubtree(dt);
+
+  /// Whether the update pass is paused for this component and its entire
+  /// subtree.
+  ///
+  /// While `true`, neither this component's [update] nor any update of its
+  /// descendants will run; rendering and event handling continue as usual.
+  /// This is a lighter-weight alternative to removing the subtree, and is
+  /// unrelated to `Game.paused`, which stops the whole game loop.
+  ///
+  /// Toggling this takes effect from the next update pass.
+  bool get updatePaused => _updatePaused;
+  bool _updatePaused = false;
+  set updatePaused(bool value) {
+    if (_updatePaused != value) {
+      _updatePaused = value;
+      // The flattened update list excludes paused subtrees, so a toggle must
+      // invalidate it.
+      ComponentList.structureVersion++;
+    }
+  }
+
+  /// Whether this component manages its own subtree traversal. Evaluated
+  /// once in the constructor, so that the per-frame traversal loops pay a
+  /// plain field load instead of a type check.
+  bool _isTraversalBarrier = false;
+
+  /// Runs one update pass over a flattened traversal list produced by
+  /// [updateAndFlattenInto].
+  @internal
+  static void updateFlatList(List<Component> list, double dt) {
+    for (var i = 0; i < list.length; i++) {
+      final component = list[i];
+      if (component._isTraversalBarrier) {
+        component.updateSubtree(dt);
+      } else {
+        component.update(dt);
+      }
+    }
+  }
+
+  /// Combined update pass and flatten: updates this component's subtree
+  /// recursively while appending the visited components to [out], in
+  /// pre-order with children in priority order, stopping at (but including)
+  /// `CustomTraversal` barriers and skipping paused subtrees. Used by the
+  /// root on ticks where the structure changed, so that the flat-list
+  /// rebuild does not cost a separate pass over the tree.
+  @internal
+  void updateAndFlattenInto(List<Component> out, double dt) {
+    final children = _children;
+    if (children == null) {
+      return;
+    }
+    children._compact();
+    final elements = children._elements;
+    for (var i = 0; i < elements.length; i++) {
+      final child = elements[i];
+      if (child == null || child._updatePaused) {
+        continue;
+      }
+      out.add(child);
+      if (child._isTraversalBarrier) {
+        child.updateSubtree(dt);
+      } else {
+        child.update(dt);
+        child.updateAndFlattenInto(out, dt);
+      }
+    }
+  }
+
+  /// The engine's standard update traversal: update this component, then
+  /// update the children in priority order.
+  ///
+  /// This is the default behavior of `CustomTraversal.updateSubtree`;
+  /// custom traversals can call it to delegate to the standard behavior.
+  @protected
+  void defaultUpdateSubtree(double dt) {
     update(dt);
     final children = _children;
     if (children != null) {
-      for (final child in children) {
-        child.updateTree(dt);
+      // The update pass doubles as the safe point where tombstones left by
+      // removals since the last tick are compacted away.
+      children._compact();
+      final elements = children._elements;
+      for (var i = 0; i < elements.length; i++) {
+        final child = elements[i];
+        if (child != null && !child._updatePaused) {
+          child.updateTree(dt);
+        }
       }
     }
   }
@@ -639,8 +753,12 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      for (final child in children) {
-        renderChild(canvas, child);
+      final elements = children._elements;
+      for (var i = 0; i < elements.length; i++) {
+        final child = elements[i];
+        if (child != null) {
+          renderChild(canvas, child);
+        }
       }
       afterChildrenRendered(canvas);
     }
@@ -885,8 +1003,10 @@ class Component {
   ) sync* {
     nestedContexts?.add(locationContext);
     if (_children != null) {
-      for (final child in _children!.reversed()) {
-        if (child is IgnoreEvents && child.ignoreEvents) {
+      final elements = _children!._elements;
+      for (var i = elements.length - 1; i >= 0; i--) {
+        final child = elements[i];
+        if (child == null || (child is IgnoreEvents && child.ignoreEvents)) {
           continue;
         }
         T? childPoint = locationContext;
@@ -1221,8 +1341,9 @@ class Component {
     out ??= [];
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
-        child._collectDescendants(out);
+      final elements = children._elements;
+      for (var i = elements.length - 1; i >= 0; i--) {
+        elements[i]?._collectDescendants(out);
       }
     }
     out.add(this);

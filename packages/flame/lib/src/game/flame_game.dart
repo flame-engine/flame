@@ -39,7 +39,7 @@ import 'package:meta/meta.dart';
 /// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
     with Game
-    implements ReadOnlySizeProvider {
+    implements ReadOnlySizeProvider, CustomTraversal {
   FlameGame({
     super.children,
     W? world,
@@ -178,14 +178,12 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   }
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     processLifecycleEvents();
     if (parent != null) {
       update(dt);
     }
-    for (final component in children) {
-      component.updateTree(dt);
-    }
+    updateChildrenFlat(dt);
   }
 
   /// This passes the new size along to every component in the tree via their

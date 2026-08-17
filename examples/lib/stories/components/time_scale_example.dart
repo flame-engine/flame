@@ -102,9 +102,9 @@ class _Chopper extends SpriteAnimationComponent
   }
 
   @override
-  void updateTree(double dt) {
+  void update(double dt) {
     position.setFrom(position + _moveDirection * _speed * dt);
-    super.updateTree(dt);
+    super.update(dt);
   }
 
   @override

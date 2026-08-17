@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 
 /// An effect that runs multiple effects simultaneously.
@@ -16,7 +17,7 @@ import 'package:flame/effects.dart';
 /// infinitely. This is equivalent to setting `repeatCount = infinity`. If both
 /// the `infinite` and the `repeatCount` parameters are given, then `infinite`
 /// takes precedence.
-class CombinedEffect extends Effect {
+class CombinedEffect extends Effect implements CustomTraversal {
   CombinedEffect(
     List<Effect> effects, {
     bool alternate = false,
@@ -53,7 +54,7 @@ class CombinedEffect extends Effect {
   void apply(double progress) {}
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     update(dt);
     // Do not update children: the controller will take care of it
   }
