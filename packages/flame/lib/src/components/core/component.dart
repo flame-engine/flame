@@ -393,26 +393,15 @@ class Component {
   /// on every game cycle. The optional parameter [reversed] allows iterating
   /// through the same set of descendants in reverse order.
   ///
-  /// The [Iterable] produced by this method is "lazy", which means it will only
-  /// traverse the component tree when required. This allows efficient chaining
-  /// of various iterable methods, such as filtering, early stopping, folding,
-  /// and so on -- see the documentation of the [Iterable] class for details.
-  Iterable<Component> descendants({
+  /// The returned list is an eagerly collected snapshot of the tree at the
+  /// moment of the call. This means that the whole subtree is always
+  /// traversed, but also that it is safe to add or remove components while
+  /// iterating over the result.
+  List<Component> descendants({
     bool includeSelf = false,
     bool reversed = false,
-  }) sync* {
-    if (includeSelf && !reversed) {
-      yield this;
-    }
-    if (hasChildren) {
-      final childrenIterable = reversed ? children.reversed() : children;
-      for (final child in childrenIterable) {
-        yield* child.descendants(includeSelf: true, reversed: reversed);
-      }
-    }
-    if (includeSelf && reversed) {
-      yield this;
-    }
+  }) {
+    return _collectDescendants(includeSelf: includeSelf, reversed: reversed);
   }
 
   /// This method first calls the passed handler on the leaves in the tree,
@@ -1194,7 +1183,7 @@ class Component {
 
   void _remove(Component parent) {
     parent._internalChildren.remove(this);
-    for (final component in _collectDescendants()) {
+    for (final component in _collectDescendants(reversed: true)) {
       component
         ..onRemove()
         .._unregisterKey()
@@ -1208,24 +1197,32 @@ class Component {
     _parent = null;
   }
 
-  /// Collects this component and all its descendants into a list, in the
-  /// order that `descendants(reversed: true, includeSelf: true)` would
-  /// produce: leaves first, siblings in reverse order, ancestors after their
-  /// subtrees. The snapshot allows [_remove] to run user callbacks that
-  /// mutate the tree while it walks the subtree, without allocating generator
-  /// frames per tree level the way [descendants] does.
+  /// Collects all descendants (and this component itself, unless
+  /// [includeSelf] is false) into a list, in the order that [descendants]
+  /// documents: preorder, or leaves-first with siblings in reverse order when
+  /// [reversed] is true. Working on a snapshot also allows [_remove] to run
+  /// user callbacks that mutate the tree while it walks the subtree.
   ///
   /// The [out] parameter is only used by the recursive calls, so that the
   /// whole subtree is collected into a single list.
-  List<Component> _collectDescendants([List<Component>? out]) {
+  List<Component> _collectDescendants({
+    bool includeSelf = true,
+    bool reversed = false,
+    List<Component>? out,
+  }) {
     out ??= [];
+    if (includeSelf && !reversed) {
+      out.add(this);
+    }
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
-        child._collectDescendants(out);
+      for (final child in reversed ? children.reversed() : children) {
+        child._collectDescendants(reversed: reversed, out: out);
       }
     }
-    out.add(this);
+    if (includeSelf && reversed) {
+      out.add(this);
+    }
     return out;
   }
 
