@@ -32,7 +32,7 @@ class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
     );
     add(_scoreTextComponent);
 
-    final starSprite = await game.loadSprite('star.png');
+    final starSprite = await game.loadSprite('assets/images/star.png');
     add(
       SpriteComponent(
         sprite: starSprite,

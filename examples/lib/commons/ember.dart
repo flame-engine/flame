@@ -14,7 +14,7 @@ class Ember<T extends FlameGame> extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = await game.loadSpriteAnimation(
-      'animations/ember.png',
+      'assets/images/animations/ember.png',
       SpriteAnimationData.sequenced(
         amount: 3,
         textureSize: Vector2.all(16),

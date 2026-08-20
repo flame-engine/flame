@@ -9,8 +9,10 @@ class AsepriteExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final image = await images.load('animations/chopper.png');
-    final jsonData = await assets.readJson('images/animations/chopper.json');
+    final image = await images.load('assets/images/animations/chopper.png');
+    final jsonData = await assets.readJson(
+      'assets/images/animations/chopper.json',
+    );
     final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
     final spriteSize = Vector2.all(200);
     final animationComponent = SpriteAnimationComponent(

@@ -16,7 +16,7 @@ class ImageDarknessExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final image = await images.load('flame.png');
+    final image = await images.load('assets/images/flame.png');
     final darkenedImage = await image.darken(darkness / 100);
 
     add(

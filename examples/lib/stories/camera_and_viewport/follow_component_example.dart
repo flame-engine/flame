@@ -191,7 +191,7 @@ class Rock extends SpriteComponent with HasGameReference, TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('nine-box.png');
+    sprite = await game.loadSprite('assets/images/nine-box.png');
     paint = Paint()..color = Colors.white;
     add(RectangleHitbox());
   }

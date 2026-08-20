@@ -27,7 +27,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
 
   @override
   Future<void> onLoad() async {
-    await Flame.images.load('klondike-sprites.png');
+    await Flame.images.load('assets/images/klondike-sprites.png');
 
     stock.position = Vector2(cardGap, topGap);
     waste.position = Vector2(cardSpaceWidth + cardGap, topGap);

@@ -316,6 +316,9 @@ abstract mixin class Game {
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   Future<Sprite> loadSprite(
     String path, {
     Vector2? srcSize,
@@ -331,6 +334,9 @@ abstract mixin class Game {
 
   /// Utility method to load and cache the image for a sprite animation based on
   /// its options.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   Future<SpriteAnimation> loadSpriteAnimation(
     String path,
     SpriteAnimationData data,

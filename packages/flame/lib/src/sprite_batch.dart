@@ -164,8 +164,11 @@ class SpriteBatch {
     this._imageKey,
   });
 
-  /// Takes a path of an image, and optional arguments for the SpriteBatch.
+  /// Takes the full path of an image, and optional arguments for the
+  /// SpriteBatch.
   ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/tiles.png`.
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteBatch> load(
     String path, {

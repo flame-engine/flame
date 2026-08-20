@@ -40,7 +40,7 @@ class Worker extends SpriteAnimationGroupComponent<MoveDirection>
 
   SpriteAnimation getSpriteAnimation(int row) {
     return SpriteAnimation.fromFrameData(
-      Flame.images.fromCache('ant_walk.png'),
+      Flame.images.fromCache('assets/images/ant_walk.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.1,

@@ -11,11 +11,11 @@ class SmallParallaxExample extends FlameGame {
   Future<void> onLoad() async {
     final component = await loadParallaxComponent(
       [
-        ParallaxImageData('parallax/bg.png'),
-        ParallaxImageData('parallax/mountain-far.png'),
-        ParallaxImageData('parallax/mountains.png'),
-        ParallaxImageData('parallax/trees.png'),
-        ParallaxImageData('parallax/foreground-trees.png'),
+        ParallaxImageData('assets/images/parallax/bg.png'),
+        ParallaxImageData('assets/images/parallax/mountain-far.png'),
+        ParallaxImageData('assets/images/parallax/mountains.png'),
+        ParallaxImageData('assets/images/parallax/trees.png'),
+        ParallaxImageData('assets/images/parallax/foreground-trees.png'),
       ],
       size: Vector2.all(200),
       baseVelocity: Vector2(20, 0),

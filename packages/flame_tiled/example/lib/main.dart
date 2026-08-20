@@ -36,13 +36,16 @@ class TiledGame extends FlameGame {
         ),
       );
 
-    mapComponent = await TiledComponent.load('map.tmx', Vector2.all(16));
+    mapComponent = await TiledComponent.load(
+      'assets/tiles/map.tmx',
+      Vector2.all(16),
+    );
     world.add(mapComponent);
 
     final objectGroup = mapComponent.tileMap.getLayer<ObjectGroup>(
       'AnimatedCoins',
     );
-    final coins = await Flame.images.load('coins.png');
+    final coins = await Flame.images.load('assets/images/coins.png');
 
     // We are 100% sure that an object layer named `AnimatedCoins`
     // exists in the example `map.tmx`.

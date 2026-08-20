@@ -49,11 +49,12 @@ class TexturePackerAtlas {
 
   /// Loads a texture atlas from a file path.
   ///
-  /// [path] - The path to the atlas file
+  /// [path] - The full path to the atlas file, as declared in the
+  ///          `pubspec.yaml`, for example `assets/images/sprites.atlas`.
+  ///          Page textures are resolved relative to that path.
   /// [fromStorage] - Load from device storage (true) or assets (false)
   /// [useOriginalSize] - Use original sprite dimensions before packing or not.
   /// [images] - Optional Images cache to use for loading textures
-  /// [assetsPrefix] - Prefix for asset paths (default: 'images')
   /// [assets] - Optional AssetsCache to use for loading assets
   /// [whiteList] - Optional list of sprite names to include.
   ///               If empty, all sprites are included
@@ -64,7 +65,6 @@ class TexturePackerAtlas {
     bool fromStorage = false,
     bool useOriginalSize = true,
     Images? images,
-    String assetsPrefix = 'images',
     AssetsCache? assets,
     List<String> whiteList = const [],
     String? package,
@@ -74,7 +74,6 @@ class TexturePackerAtlas {
       fromStorage: fromStorage,
       images: images,
       assets: assets,
-      assetsPrefix: assetsPrefix,
       package: package,
     );
 
@@ -90,7 +89,6 @@ class TexturePackerAtlas {
   /// [path] - The path to the atlas file
   /// [fromStorage] - Load from device storage (true) or assets (false)
   /// [images] - Optional Images cache to use for loading textures
-  /// [assetsPrefix] - Prefix for asset paths (default: 'images')
   /// [assets] - Optional AssetsCache to use for loading assets
   /// [loadImages] - Whether to load images (default: true)
   ///
@@ -100,7 +98,6 @@ class TexturePackerAtlas {
     bool fromStorage = false,
     Images? images,
     AssetsCache? assets,
-    String assetsPrefix = 'images',
     String? package,
     bool loadImages = true,
   }) async {
@@ -109,7 +106,6 @@ class TexturePackerAtlas {
         path,
         fromStorage: fromStorage,
         assets: assets,
-        assetsPrefix: assetsPrefix,
         package: package,
       );
 
@@ -120,8 +116,6 @@ class TexturePackerAtlas {
           fromStorage: fromStorage,
           images: images,
           package: package,
-          assetsPrefix: assetsPrefix,
-          assets: assets,
         );
       }
       return atlasData;

@@ -6,7 +6,9 @@ import 'package:flame_isolate_example/standard/int_vector2.dart';
 
 class Bread extends StaticColonistsObject {
   @override
-  Sprite objectSprite = Sprite(Flame.images.fromCache('bread.png'));
+  Sprite objectSprite = Sprite(
+    Flame.images.fromCache('assets/images/bread.png'),
+  );
 
   @override
   IntVector2 tileSize = const IntVector2(1, 1);

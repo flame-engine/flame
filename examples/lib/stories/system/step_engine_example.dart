@@ -32,7 +32,7 @@ class StepEngineExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final carSprite = await Sprite.load('Car.png');
+    final carSprite = await Sprite.load('assets/images/Car.png');
     final car = SpriteComponent(
       sprite: carSprite,
       anchor: Anchor.center,

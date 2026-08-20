@@ -27,12 +27,12 @@ class ButtonComponent extends SpriteGroupComponent<ButtonState>
   @override
   Future<void> onLoad() async {
     final pressedSprite = await game.loadSprite(
-      'buttons.png',
+      'assets/images/buttons.png',
       srcPosition: Vector2(0, 20),
       srcSize: Vector2(60, 20),
     );
     final unpressedSprite = await game.loadSprite(
-      'buttons.png',
+      'assets/images/buttons.png',
       srcSize: Vector2(60, 20),
     );
 

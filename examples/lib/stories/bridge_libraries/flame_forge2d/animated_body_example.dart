@@ -30,7 +30,7 @@ class AnimatedBodyWorld extends Forge2DWorld
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    chopper = await Flame.images.load('animations/chopper.png');
+    chopper = await Flame.images.load('assets/images/animations/chopper.png');
 
     animation = SpriteAnimation.fromFrameData(
       chopper,

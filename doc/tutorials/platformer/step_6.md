@@ -43,12 +43,12 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
   Future<void> onLoad() async {
     await super.onLoad();
     final availableSprite = await game.loadSprite(
-      'heart.png',
+      'assets/images/heart.png',
       srcSize: Vector2.all(32),
     );
 
     final unavailableSprite = await game.loadSprite(
-      'heart_half.png',
+      'assets/images/heart_half.png',
       srcSize: Vector2.all(32),
     );
 
@@ -116,7 +116,7 @@ class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
     );
     add(_scoreTextComponent);
 
-    final starSprite = await game.loadSprite('star.png');
+    final starSprite = await game.loadSprite('assets/images/star.png');
     add(
       SpriteComponent(
         sprite: starSprite,

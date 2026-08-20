@@ -7,6 +7,168 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### Asset prefix removed
+
+`Images` and `AssetsCache` no longer prepend anything to the paths you give them. `Images` used to
+prepend `assets/images/` and `AssetsCache` used to prepend `assets/`, both configurable through a
+`prefix` property. That property is gone, along with the `prefix` constructor argument.
+
+Every asset is now addressed by its full path, exactly as declared in the `pubspec.yaml`:
+
+```dart
+// Before
+await Flame.images.load('player.png');
+final level = await Flame.assets.readJson('levels/level1.json');
+
+// After
+await Flame.images.load('assets/images/player.png');
+final level = await Flame.assets.readJson('assets/levels/level1.json');
+```
+
+This applies to everything that loads through those caches, including `Sprite.load`,
+`SpriteAnimation.load`, `SpriteBatch.load`, `Game.loadSprite`, `Game.loadSpriteAnimation`, the
+`Parallax` loaders and `ParallaxImageData`/`ParallaxAnimationData`, and the `.asset` constructors of
+`SpriteWidget`, `SpriteAnimationWidget`, `NineTileBoxWidget` and `SpriteButton`.
+
+If you relied on a custom prefix, there is nothing to replace it with, and nothing to configure:
+just write the paths you actually want.
+
+```dart
+// Before
+Flame.images.prefix = 'gfx/';
+await Flame.images.load('player.png');
+
+// After
+await Flame.images.load('gfx/player.png');
+```
+
+
+#### Cache keys are now the full path
+
+The path is also the key the asset is cached under, so anything that reads the cache by key needs
+the same full path:
+
+```dart
+// Before
+await Flame.images.load('player.png');
+final image = Flame.images.fromCache('player.png');
+
+// After
+await Flame.images.load('assets/images/player.png');
+final image = Flame.images.fromCache('assets/images/player.png');
+```
+
+This affects `Images.fromCache`, `Images.containsKey`, `Images.clear`, `Images.keys`,
+`AssetsCache.fromCache` and `AssetsCache.clear`. It also affects `SpriteBatch`, whose internal
+`imageKey` is derived from the path you loaded with.
+
+One consequence is a bug fix: `Images.load` now includes the package in the cache key, matching what
+`AssetsCache` already did. Previously, loading the same filename from two different packages
+collided on one key and the second load silently returned the first package's image.
+
+
+#### `loadAllImages` and `loadAllFromPattern` require a directory
+
+These two methods used the prefix both to filter the asset manifest and to strip it back off the
+resulting keys. They now take a required `directory` argument instead, and cache entries under their
+full manifest path. Pass an empty string to scan the whole bundle.
+
+```dart
+// Before
+await Flame.images.loadAllImages();
+
+// After
+await Flame.images.loadAllImages(directory: 'assets/images/');
+```
+
+
+#### `flame_audio`
+
+The global `AudioCache` is now created with an empty prefix, so audio paths are full paths too.
+`FlameAudio.updatePrefix()` has been removed, as there is no longer a prefix to update.
+
+```dart
+// Before
+FlameAudio.play('explosion.mp3');
+FlameAudio.bgm.play('music/theme.mp3');
+
+// After
+FlameAudio.play('assets/audio/explosion.mp3');
+FlameAudio.bgm.play('assets/audio/music/theme.mp3');
+```
+
+
+#### `flame_tiled`
+
+The `prefix` argument is gone from `TiledComponent.load`, `RenderableTiledMap.fromFile`,
+`RenderableTiledMap.fromString` and `FlameTsxProvider.parse`. The map's file name is now a full
+path, and the assertion that it must not contain path separators has been removed.
+
+External `.tsx` tilesets are resolved relative to the map's own directory, derived from that path.
+`RenderableTiledMap.fromString` has no path to derive from, so its `prefix` argument became
+`tsxDirectory`.
+
+Watch out for these two, since they change behavior without failing to compile:
+`RenderableTiledMap.fromString`'s `tsxDirectory` and `FlameTsxProvider.parse`'s third argument both
+default to `''` now, where the old `prefix` defaulted to `assets/tiles/`. If you call either
+directly and rely on that default, pass the directory explicitly.
+
+Tileset and image-layer sources are resolved against a new `imagesDirectory` argument, which
+defaults to `assets/images/` and so preserves the previous behavior.
+
+```dart
+// Before
+await TiledComponent.load('map.tmx', Vector2.all(16));
+await TiledComponent.load(
+  'map.tmx',
+  Vector2.all(16),
+  prefix: 'assets/maps/',
+);
+
+// After
+await TiledComponent.load('assets/tiles/map.tmx', Vector2.all(16));
+await TiledComponent.load('assets/maps/map.tmx', Vector2.all(16));
+```
+
+Note that `TiledAtlas` cache keys are now scoped by `imagesDirectory`, so a key that was
+`tiles.png` is now `assets/images/tiles.png`.
+
+
+#### `flame_texturepacker`
+
+The `assetsPrefix` argument is gone from `atlasFromAssets`, `TexturePackerAtlas.load` and
+`TexturePackerAtlas.loadAtlas`. The atlas path is a full path, and page textures listed inside the
+atlas are resolved relative to the atlas's own directory.
+
+```dart
+// Before
+final atlas = await atlasFromAssets('atlas_map.atlas');
+
+// After
+final atlas = await atlasFromAssets('assets/images/atlas_map.atlas');
+```
+
+
+#### `flame_sprite_fusion`
+
+The `tilemapPrefix` argument is gone from `SpriteFusionTilemapComponent.load`. Both `mapJsonFile`
+and `spriteSheetFile` are now full paths.
+
+```dart
+// Before
+await SpriteFusionTilemapComponent.load(
+  mapJsonFile: 'map.json',
+  spriteSheetFile: 'spritesheet.png',
+);
+
+// After
+await SpriteFusionTilemapComponent.load(
+  mapJsonFile: 'assets/tiles/map.json',
+  spriteSheetFile: 'assets/images/spritesheet.png',
+);
+```
+
+
 ### `VerticalDragDetector` and `HorizontalDragDetector` removed
 
 Both game-level mixins have been removed, with no direct replacement in Flame.

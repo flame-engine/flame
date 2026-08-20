@@ -29,7 +29,7 @@ class AudioGame extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     pool = await FlameAudio.createPool(
-      'sfx/fire_2.mp3',
+      'assets/audio/sfx/fire_2.mp3',
       minPlayers: 3,
       maxPlayers: 4,
     );
@@ -40,11 +40,11 @@ class AudioGame extends FlameGame with TapCallbacks {
 
   Future<void> startBgmMusic() async {
     await FlameAudio.bgm.initialize();
-    await FlameAudio.bgm.play('music/bg_music.ogg');
+    await FlameAudio.bgm.play('assets/audio/music/bg_music.ogg');
   }
 
   void fireOne() {
-    FlameAudio.play('sfx/fire_1.mp3');
+    FlameAudio.play('assets/audio/sfx/fire_1.mp3');
   }
 
   void fireTwo() {

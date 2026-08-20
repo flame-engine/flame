@@ -18,7 +18,7 @@ class Star extends SpriteComponent with HasGameReference<EmberQuestGame> {
 
   @override
   Future<void> onLoad() async {
-    final starImage = game.images.fromCache('star.png');
+    final starImage = game.images.fromCache('assets/images/star.png');
     sprite = Sprite(starImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset + (size.x / 2),

@@ -25,7 +25,7 @@ Widget nineTileBoxBuilderWithAnimation(DashbookContext ctx) {
             child: NineTileBoxWidget.asset(
               width: 400,
               height: 400,
-              path: 'nine-box.png',
+              path: 'assets/images/nine-box.png',
               tileSize: 22,
               destTileSize: 50,
               child: const Center(

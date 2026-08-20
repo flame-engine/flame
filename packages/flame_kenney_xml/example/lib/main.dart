@@ -23,8 +23,8 @@ class KenneyWorld extends World with TapCallbacks {
   @override
   Future<void> onLoad() async {
     spritesheet = await XmlSpriteSheet.load(
-      imagePath: 'spritesheet_stone.png',
-      xmlPath: 'spritesheet_stone.xml',
+      imagePath: 'assets/images/spritesheet_stone.png',
+      xmlPath: 'assets/spritesheet_stone.xml',
     );
     add(randomSpriteComponent());
   }
