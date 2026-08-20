@@ -22,7 +22,7 @@ class ParticlesExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final zap = await images.load('zap.png');
+    final zap = await images.load('assets/images/zap.png');
     final cell = Vector2(size.x / _columns, size.y / _rows);
 
     final effects = <(String, PositionComponent)>[

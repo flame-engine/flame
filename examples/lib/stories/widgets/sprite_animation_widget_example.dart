@@ -11,7 +11,7 @@ Widget spriteAnimationWidgetBuilder(DashbookContext ctx) {
     width: ctx.numberProperty('container width', 400),
     height: ctx.numberProperty('container height', 200),
     child: SpriteAnimationWidget.asset(
-      path: 'bomb_ptero.png',
+      path: 'assets/images/bomb_ptero.png',
       data: SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
@@ -39,7 +39,7 @@ Widget spriteAnimationWithSizeWidgetBuilder(DashbookContext ctx) {
       ctx.numberProperty('width', 400),
       ctx.numberProperty('height', 200),
     ),
-    path: 'bomb_ptero.png',
+    path: 'assets/images/bomb_ptero.png',
     data: SpriteAnimationData.sequenced(
       amount: 4,
       stepTime: 0.2,

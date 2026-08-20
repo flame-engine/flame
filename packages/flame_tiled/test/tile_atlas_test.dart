@@ -111,9 +111,12 @@ void main() {
         expect(atlas.atlas, isNotNull);
         expect(atlas.atlas!.width, 128);
         expect(atlas.atlas!.height, 74);
-        expect(atlas.key, 'images/green.png');
+        expect(atlas.key, 'assets/images/images/green.png');
 
-        expect(images.containsKey('images/green.png'), isTrue);
+        expect(
+          images.containsKey('assets/images/images/green.png'),
+          isTrue,
+        );
         expect(images.keys, hasLength(1));
 
         expect(
@@ -133,7 +136,7 @@ void main() {
 
           expect(atlas.offsets, hasLength(1));
           expect(atlas.atlas, isNotNull);
-          expect(atlas.key, '../images/green.png');
+          expect(atlas.key, 'assets/images/../images/green.png');
         },
       );
 
@@ -154,7 +157,7 @@ void main() {
 
       test('packs complex maps with multiple images', () async {
         final component = await TiledComponent.load(
-          'isometric_plain.tmx',
+          'assets/tiles/isometric_plain.tmx',
           Vector2(128, 74),
           bundle: bundle,
           images: Images(bundle: bundle),
@@ -175,7 +178,7 @@ void main() {
         'packs complex maps with multiple images using a custom spacing',
         () async {
           final component = await TiledComponent.load(
-            'isometric_plain.tmx',
+            'assets/tiles/isometric_plain.tmx',
             Vector2(128, 74),
             bundle: bundle,
             images: Images(bundle: bundle),
@@ -199,7 +202,7 @@ void main() {
 
       test('can ignore tilesets in the packing', () async {
         await TiledComponent.load(
-          'isometric_plain.tmx',
+          'assets/tiles/isometric_plain.tmx',
           Vector2(128, 74),
           bundle: bundle,
           images: Images(bundle: bundle),
@@ -248,13 +251,13 @@ void main() {
         () async {
           final components = await Future.wait([
             TiledComponent.load(
-              'single_tile_map_1.tmx',
+              'assets/tiles/single_tile_map_1.tmx',
               Vector2(16, 16),
               bundle: bundle,
               images: Images(bundle: bundle),
             ),
             TiledComponent.load(
-              'single_tile_map_2.tmx',
+              'assets/tiles/single_tile_map_2.tmx',
               Vector2(16, 16),
               bundle: bundle,
               images: Images(bundle: bundle),

@@ -20,7 +20,7 @@ class MyGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final sprite = await Sprite.load('player.png');
+    final sprite = await Sprite.load('assets/images/player.png');
     final size = Vector2.all(128.0);
     final player = SpriteComponent(size: size, sprite: sprite);
 
@@ -72,7 +72,7 @@ Future<void> onLoad() async {
     stepTime: 0.1,
   );
   this.player = SpriteAnimationComponent.fromFrameData(
-    await images.load('player.png'),
+    await images.load('assets/images/player.png'),
     data,
   );
 }

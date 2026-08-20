@@ -42,7 +42,7 @@ class TimeScaleExample extends FlameGame
   @override
   Future<void> onLoad() async {
     final spriteSheet = SpriteSheet(
-      image: await images.load('animations/chopper.png'),
+      image: await images.load('assets/images/animations/chopper.png'),
       srcSize: Vector2.all(48),
     );
     gameSpeedText.position = Vector2(size.x * 0.5, size.y * 0.8);

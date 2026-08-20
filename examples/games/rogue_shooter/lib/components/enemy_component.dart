@@ -14,7 +14,7 @@ class EnemyComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = await game.loadSpriteAnimation(
-      'rogue_shooter/enemy.png',
+      'assets/images/rogue_shooter/enemy.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
         amount: 4,

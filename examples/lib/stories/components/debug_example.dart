@@ -13,7 +13,7 @@ class DebugExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final flameLogo = await loadSprite('flame.png');
+    final flameLogo = await loadSprite('assets/images/flame.png');
 
     final flame1 = LogoComponent(flameLogo);
     flame1.x = 100;

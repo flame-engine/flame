@@ -52,11 +52,11 @@ import 'package:flame_fire_atlas/flame_fire_atlas.dart';
 
 // Load the atlas from your assets
 // file at assets/atlas.fa
-final atlas = await FireAtlas.loadAsset('atlas.fa');
+final atlas = await FireAtlas.loadAsset('assets/atlas.fa');
 
 //or when inside a game instance, the loadFireAtlas can be used:
 // file at assets/atlas.fa
-final atlas = await loadFireAtlas('atlas.fa');
+final atlas = await loadFireAtlas('assets/atlas.fa');
 
 // Get a Sprite with the given key.
 FireAtlas.getSprite('sprite_name')
@@ -75,7 +75,7 @@ class ExampleGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    _atlas = await loadFireAtlas('atlas.fa');
+    _atlas = await loadFireAtlas('assets/atlas.fa');
 
     add(
       SpriteComponent(

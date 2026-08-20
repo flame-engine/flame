@@ -56,13 +56,13 @@ Press T button to toggle player to collide with other objects.
 
     final random = Random();
     final spriteBrick = await Sprite.load(
-      'retro_tiles.png',
+      'assets/images/retro_tiles.png',
       srcPosition: Vector2.all(0),
       srcSize: Vector2.all(tileSize),
     );
 
     final spriteWater = await Sprite.load(
-      'retro_tiles.png',
+      'assets/images/retro_tiles.png',
       srcPosition: Vector2(0, tileSize),
       srcSize: Vector2.all(tileSize),
     );
@@ -216,7 +216,7 @@ class Player extends SpriteComponent
   @override
   Future<void> onLoad() async {
     sprite = await Sprite.load(
-      'retro_tiles.png',
+      'assets/images/retro_tiles.png',
       srcSize: Vector2.all(tileSize),
       srcPosition: Vector2(tileSize * 3, tileSize),
     );

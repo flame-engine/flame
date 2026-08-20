@@ -16,9 +16,9 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   Future<void> onLoad() async {
     final parallax = await loadParallaxComponent(
       [
-        ParallaxImageData('stars_0.png'),
-        ParallaxImageData('stars_1.png'),
-        ParallaxImageData('stars_2.png'),
+        ParallaxImageData('assets/images/stars_0.png'),
+        ParallaxImageData('assets/images/stars_1.png'),
+        ParallaxImageData('assets/images/stars_2.png'),
       ],
       baseVelocity: Vector2(0, -5),
       repeat: ImageRepeat.repeat,
@@ -61,7 +61,7 @@ class Player extends SpriteAnimationComponent
     await super.onLoad();
 
     animation = await game.loadSpriteAnimation(
-      'player.png',
+      'assets/images/player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
@@ -117,7 +117,7 @@ class Bullet extends SpriteAnimationComponent
     await super.onLoad();
 
     animation = await game.loadSpriteAnimation(
-      'bullet.png',
+      'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,

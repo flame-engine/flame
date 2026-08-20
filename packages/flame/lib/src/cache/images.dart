@@ -7,37 +7,13 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 
 class Images {
-  Images({
-    this._prefix = 'assets/images/',
-    AssetBundle? bundle,
-  }) : bundle = bundle ?? Flame.bundle;
+  Images({AssetBundle? bundle}) : bundle = bundle ?? Flame.bundle;
 
   final Map<String, _ImageAsset> _assets = {};
 
   /// The [AssetBundle] from which images are loaded.
   /// defaults to [Flame.bundle].
   AssetBundle bundle;
-
-  /// Path prefix to the project's directory with images.
-  ///
-  /// This path is relative to the project's root, and the default prefix is
-  /// "assets/images/". If necessary, you may change this prefix at any time.
-  /// A prefix must be a valid directory name and end with "/" (empty prefix is
-  /// also allowed).
-  ///
-  /// The prefix is **not** part of the keys of the images stored in this cache.
-  /// For example, if you load image `player.png`, then it will be searched at
-  /// location `prefix + "player.png"` but stored in the cache under the key
-  /// `"player.png"`.
-  String get prefix => _prefix;
-  late String _prefix;
-  set prefix(String value) {
-    assert(
-      value.isEmpty || value.endsWith('/'),
-      'Prefix must be empty or end with a "/"',
-    );
-    _prefix = value;
-  }
 
   /// Adds the [image] into the cache under the key [name].
   ///
@@ -113,12 +89,18 @@ class Images {
     return asset!.image!;
   }
 
-  /// Loads the specified image with [fileName] into the cache.
-  /// By default the key in the cache is the [fileName], if another key is
+  /// Loads the image at [fileName] into the cache.
+  ///
+  /// The [fileName] is the full path of the asset, exactly as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`. When a [package]
+  /// is given, the path is resolved relative to that package's assets.
+  ///
+  /// By default the key in the cache is the resolved path, if another key is
   /// desired, specify the optional [key] argument.
   Future<Image> load(String fileName, {String? key, String? package}) {
-    return (_assets[key ?? fileName] ??= _ImageAsset.future(
-      _fetchToMemory(fileName, package: package),
+    final path = _resolve(fileName, package);
+    return (_assets[key ?? path] ??= _ImageAsset.future(
+      _fetchToMemory(path),
     )).retrieveAsync();
   }
 
@@ -127,27 +109,35 @@ class Images {
     return Future.wait(fileNames.map(load));
   }
 
-  /// Loads all images from the specified (or default) [prefix] into the cache.
-  Future<List<Image>> loadAllImages() {
+  /// Loads every image found under [directory] into the cache.
+  ///
+  /// The [directory] must be empty, or end with a "/". An empty [directory]
+  /// matches every asset in the bundle.
+  Future<List<Image>> loadAllImages({required String directory}) {
     return loadAllFromPattern(
       RegExp(
         r'\.(png|jpg|jpeg|svg|gif|webp|bmp|wbmp)$',
         caseSensitive: false,
       ),
+      directory: directory,
     );
   }
 
-  /// Loads all images in the [prefix]ed path that are matching the specified
-  /// pattern.
-  Future<List<Image>> loadAllFromPattern(Pattern pattern) async {
+  /// Loads all images under [directory] that match the specified pattern.
+  ///
+  /// Images are cached under their full path, as listed in the asset manifest.
+  Future<List<Image>> loadAllFromPattern(
+    Pattern pattern, {
+    required String directory,
+  }) async {
+    assert(
+      directory.isEmpty || directory.endsWith('/'),
+      'directory must be empty or end with a "/"',
+    );
     final manifest = await AssetManifest.loadFromAssetBundle(bundle);
-    final imagePaths = manifest
-        .listAssets()
-        .where((path) {
-          return path.startsWith(_prefix) &&
-              path.toLowerCase().contains(pattern);
-        })
-        .map((path) => path.replaceFirst(_prefix, ''));
+    final imagePaths = manifest.listAssets().where((path) {
+      return path.startsWith(directory) && path.toLowerCase().contains(pattern);
+    });
     return loadAll(imagePaths.toList());
   }
 
@@ -174,15 +164,17 @@ class Images {
     )).retrieveAsync();
   }
 
+  static String _resolve(String fileName, String? package) =>
+      package == null ? fileName : 'packages/$package/$fileName';
+
   Future<Image> _fetchFromBase64(String base64Data) {
     final data = base64Data.substring(base64Data.indexOf(',') + 1);
     final bytes = base64.decode(data);
     return decodeImageFromList(bytes);
   }
 
-  Future<Image> _fetchToMemory(String name, {String? package}) async {
-    final prefix = package == null ? _prefix : 'packages/$package/$_prefix';
-    final data = await bundle.load('$prefix$name');
+  Future<Image> _fetchToMemory(String path) async {
+    final data = await bundle.load(path);
     final bytes = Uint8List.view(data.buffer);
     return decodeImageFromList(bytes);
   }

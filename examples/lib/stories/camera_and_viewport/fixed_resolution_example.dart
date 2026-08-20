@@ -70,7 +70,9 @@ class FixedResolutionWorld extends World
 
   @override
   Future<void> onLoad() async {
-    final flameSprite = await game.loadSprite('layers/player.png');
+    final flameSprite = await game.loadSprite(
+      'assets/images/layers/player.png',
+    );
 
     add(Background());
     add(

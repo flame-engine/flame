@@ -21,10 +21,10 @@ class BasicAnimationsWorld extends World with TapCallbacks, HasGameReference {
 
   @override
   Future<void> onLoad() async {
-    creature = await game.images.load('animations/creature.png');
+    creature = await game.images.load('assets/images/animations/creature.png');
 
     final animation = await game.loadSpriteAnimation(
-      'animations/chopper.png',
+      'assets/images/animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),

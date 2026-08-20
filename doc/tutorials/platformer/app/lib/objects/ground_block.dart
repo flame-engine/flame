@@ -22,7 +22,7 @@ class GroundBlock extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final groundImage = game.images.fromCache('ground.png');
+    final groundImage = game.images.fromCache('assets/images/ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset,

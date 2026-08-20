@@ -17,7 +17,7 @@ class StarBackGroundCreator extends Component
   @override
   Future<void> onLoad() async {
     spriteSheet = SpriteSheet.fromColumnsAndRows(
-      image: await game.images.load('rogue_shooter/stars.png'),
+      image: await game.images.load('assets/images/rogue_shooter/stars.png'),
       rows: 4,
       columns: 4,
     );

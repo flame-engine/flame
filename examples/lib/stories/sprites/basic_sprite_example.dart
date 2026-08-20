@@ -9,7 +9,7 @@ class BasicSpriteExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final sprite = await loadSprite('flame.png');
+    final sprite = await loadSprite('assets/images/flame.png');
     add(
       SpriteComponent(
         sprite: sprite,

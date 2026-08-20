@@ -110,6 +110,9 @@ class SpriteButton extends StatelessWidget {
   /// To render without loading, or when you want to have a gapless playback
   /// when the [path] value changes, consider loading the image beforehand
   /// and direct pass it to the default constructor.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   SpriteButton.asset({
     required String path,
     required String pressedPath,

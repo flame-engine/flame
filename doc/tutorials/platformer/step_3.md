@@ -287,13 +287,13 @@ as:
 @override
   Future<void> onLoad() async {
     await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
     ]);
     
     camera.viewfinder.anchor = Anchor.topLeft;
@@ -394,7 +394,7 @@ Now we just need to finish the `onLoad` method. So make your `onLoad` method loo
 ```dart
   @override
   void onLoad() {
-    final platformImage = game.images.fromCache('block.png');
+    final platformImage = game.images.fromCache('assets/images/block.png');
     sprite = Sprite(platformImage);
     position = Vector2((gridPosition.x * size.x) + xOffset,
         game.size.y - (gridPosition.y * size.y),

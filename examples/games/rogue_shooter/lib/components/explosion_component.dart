@@ -12,7 +12,7 @@ class ExplosionComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = await game.loadSpriteAnimation(
-      'rogue_shooter/explosion.png',
+      'assets/images/rogue_shooter/explosion.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.1,
         amount: 6,

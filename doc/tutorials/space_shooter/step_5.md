@@ -27,7 +27,7 @@ class Enemy extends SpriteAnimationComponent
     await super.onLoad();
 
     animation = await game.loadSpriteAnimation(
-      'enemy.png',
+      'assets/images/enemy.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: .2,
