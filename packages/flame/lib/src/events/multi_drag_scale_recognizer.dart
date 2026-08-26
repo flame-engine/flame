@@ -480,10 +480,17 @@ class _DragPointerState {
     if (!_resolved) {
       _pendingDelta += delta;
       if (!recognizer.hasScale) {
-        // Drag-only mode: accept on any movement. If accepted synchronously,
-        // _accepted fires the initial update with _pendingDelta; no extra
-        // update fires here because we are still in the if(!_resolved) branch.
-        _arenaEntry?.resolve(GestureDisposition.accepted);
+        // Drag-only mode: accept once the accumulated movement exceeds the
+        // hit slop, matching ImmediateMultiDragGestureRecognizer. Some
+        // platforms emit zero-delta move events during a tap, so accepting on
+        // any move would steal the gesture from tap recognizers. If accepted
+        // synchronously, _accepted fires the initial update with
+        // _pendingDelta; no extra update fires here because we are still in
+        // the if(!_resolved) branch.
+        final hitSlop = computeHitSlop(kind, recognizer.gestureSettings);
+        if (_pendingDelta.distance > hitSlop) {
+          _arenaEntry?.resolve(GestureDisposition.accepted);
+        }
       } else {
         final distance = (currentPosition - initialPosition).distance;
         if (distance > computePanSlop(kind, recognizer.gestureSettings)) {
@@ -511,12 +518,10 @@ class _DragPointerState {
     if (_drag != null) {
       _drag!.end(DragEndDetails(velocity: velocityTracker.getVelocity()));
     }
-    _resolved = true;
   }
 
   void _cancel(PointerCancelEvent event) {
     _drag?.cancel();
-    _resolved = true;
   }
 
   void _accepted(Drag? Function() starter) {
