@@ -166,17 +166,6 @@ flattened list itself and its `updateSubtree` drives its subtree. `updateSubtree
 custom traversal (like `HasTimeScale`) declare `implements CustomTraversal`, so their users do not
 need to add the marker themselves, and chain via `super.updateSubtree`.
 
-To temporarily stop updating a component and its whole subtree, set `updatePaused` to true. While
-paused, no `update` calls happen in the subtree, but rendering and event handling continue, and
-pending lifecycle events (adds and removes) are still processed:
-
-```dart
-enemySquad.updatePaused = true; // freeze the squad
-enemySquad.updatePaused = false; // resume it
-```
-
-This is unrelated to `Game.paused`, which stops the whole game loop including rendering.
-
 
 ### Composability of components
 

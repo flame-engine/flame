@@ -769,17 +769,5 @@ class SlowMotionArea extends Component implements CustomTraversal {
 ```
 
 `HasTimeScale` usage is unchanged (`with HasTimeScale` still works; the mixin carries the marker
-itself). To simply stop updating a subtree, the new `updatePaused` flag replaces the common
-gating override: `component.updatePaused = true` pauses the update pass for the component and its
-whole subtree while rendering, event handling, and lifecycle processing continue.
-
-
-### `Route.stopTime()` no longer zeroes `timeScale`
-
-A stopped route is now paused through `updatePaused` instead of `timeScale = 0`:
-
-- While stopped, `timeScale` keeps its previous value, so a slow-motion factor survives a
-  stop/resume cycle.
-- Assigning a new `timeScale` no longer resumes a stopped route; use `resumeTime()` or
-  `updatePaused = false`.
-- Pending lifecycle events (adding or removing components) on a stopped route now still complete.
+itself). To stop updating a subtree, gate `updateSubtree` in the same way, which is what
+`Route.stopTime()` does.

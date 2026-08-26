@@ -91,19 +91,15 @@ class Route extends PositionComponent
   /// Completely stops time for the managed page.
   ///
   /// While stopped, neither the page nor any of its descendants are updated
-  /// at all (see [Component.updatePaused]), which saves computational
-  /// resources. The page keeps rendering, and pending lifecycle events
-  /// (adding or removing components) still complete. The [timeScale] is left
-  /// untouched, so a slow-motion factor survives a stop/resume cycle of the
-  /// route below a popup.
-  void stopTime() => updatePaused = true;
+  /// at all, which saves computational resources. The page keeps rendering,
+  /// and pending lifecycle events (adding or removing components) still
+  /// complete, since those are processed by the game rather than by the
+  /// update pass.
+  void stopTime() => timeScale = 0;
 
-  /// Resumes normal time progression for the page, if it was previously
-  /// slowed down or stopped.
-  void resumeTime() {
-    updatePaused = false;
-    timeScale = 1.0;
-  }
+  /// Resumes normal time progression for the page, if it was previously slowed
+  /// down or stopped.
+  void resumeTime() => timeScale = 1.0;
 
   /// Applies the provided [Decorator] to the page.
   ///
@@ -170,6 +166,13 @@ class Route extends PositionComponent
   void renderTree(Canvas canvas) {
     if (isRendered) {
       _renderEffect.applyChain(super.renderTree, canvas);
+    }
+  }
+
+  @override
+  void updateSubtree(double dt) {
+    if (timeScale > 0) {
+      super.updateSubtree(dt);
     }
   }
 

@@ -600,9 +600,6 @@ class Component {
   /// instead of silently skipping their custom logic.
   @nonVirtual
   void updateTree(double dt) {
-    if (_updatePaused) {
-      return;
-    }
     if (_isTraversalBarrier) {
       updateSubtree(dt);
     } else {
@@ -622,26 +619,6 @@ class Component {
   /// standard one, or the next custom traversal in the mixin chain),
   /// possibly with a modified time delta.
   void updateSubtree(double dt) => defaultUpdateSubtree(dt);
-
-  /// Whether the update pass is paused for this component and its entire
-  /// subtree.
-  ///
-  /// While `true`, neither this component's [update] nor any update of its
-  /// descendants will run; rendering and event handling continue as usual.
-  /// This is a lighter-weight alternative to removing the subtree, and is
-  /// unrelated to `Game.paused`, which stops the whole game loop.
-  ///
-  /// Toggling this takes effect from the next update pass.
-  bool get updatePaused => _updatePaused;
-  bool _updatePaused = false;
-  set updatePaused(bool value) {
-    if (_updatePaused != value) {
-      _updatePaused = value;
-      // The flattened update list excludes paused subtrees, so a toggle must
-      // invalidate it.
-      ComponentList.structureVersion++;
-    }
-  }
 
   /// Whether this component manages its own subtree traversal. Evaluated
   /// once in the constructor, so that the per-frame traversal loops pay a
@@ -665,9 +642,9 @@ class Component {
   /// Combined update pass and flatten: updates this component's subtree
   /// recursively while appending the visited components to [out], in
   /// pre-order with children in priority order, stopping at (but including)
-  /// `CustomTraversal` barriers and skipping paused subtrees. Used by the
-  /// root on ticks where the structure changed, so that the flat-list
-  /// rebuild does not cost a separate pass over the tree.
+  /// `CustomTraversal` barriers. Used by the root on ticks where the
+  /// structure changed, so that the flat-list rebuild does not cost a
+  /// separate pass over the tree.
   @internal
   void updateAndFlattenInto(List<Component> out, double dt) {
     final children = _children;
@@ -678,7 +655,7 @@ class Component {
     final elements = children._elements;
     for (var i = 0; i < elements.length; i++) {
       final child = elements[i];
-      if (child == null || child._updatePaused) {
+      if (child == null) {
         continue;
       }
       out.add(child);
@@ -705,9 +682,7 @@ class Component {
       // removals since the last tick are compacted away.
       children._compact();
       for (final child in children._elements) {
-        if (child != null && !child._updatePaused) {
-          child.updateTree(dt);
-        }
+        child?.updateTree(dt);
       }
     }
   }
