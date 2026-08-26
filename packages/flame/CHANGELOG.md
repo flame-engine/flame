@@ -1,3 +1,9 @@
+## 1.38.1
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+ - **FIX**: Recognize every input callbacks mixin when hit testing ([#3994](https://github.com/flame-engine/flame/issues/3994)). ([6b8223b1](https://github.com/flame-engine/flame/commit/6b8223b19e16f6cee9ecc54ff5d0ae64120fde72))
+ - **FIX**: Require touch slop before DragCallbacks accepts a drag ([#4017](https://github.com/flame-engine/flame/issues/4017)). ([dbe5c9a0](https://github.com/flame-engine/flame/commit/dbe5c9a0867e1bcd353222e1bd27496fbe075041))
+
 ## 1.38.0
 
 > Note: This release has breaking changes.

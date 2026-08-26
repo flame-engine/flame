@@ -1,3 +1,7 @@
+## 2.3.1
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+
 ## 2.3.0
 
  - **FEAT**: OpacityEffect support on text components ([#3940](https://github.com/flame-engine/flame/issues/3940)). ([749c73a4](https://github.com/flame-engine/flame/commit/749c73a45be5978cca53ce3737fe2d2382289306))
