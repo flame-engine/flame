@@ -58,6 +58,11 @@ local coordinate system.
 Any component that receives `onDragStart` will later be receiving `onDragUpdate` and `onDragEnd`
 events as well.
 
+A drag only starts once the pointer has moved further than the platform's touch slop from the
+point where it went down, so a tap with a slightly wobbling finger is still delivered as a tap and
+not as a drag. When the drag starts, the movement accumulated before that point is delivered in the
+first `onDragUpdate`.
+
 
 ### onDragUpdate
 
