@@ -1124,6 +1124,41 @@ void main() {
           expect(parent.parent, isNull);
         },
       );
+
+      testWithFlameGame(
+        'removing a queued sibling from onMount does not mount twice',
+        (game) async {
+          final sibling = _LifecycleComponent('sibling');
+          final component = _SiblingRemovingOnMountComponent(sibling);
+          game.world.add(component);
+          game.world.add(sibling);
+          await game.ready();
+
+          expect(component.isMounted, true);
+          expect(component.countEvents('onMount'), 1);
+          expect(sibling.isMounted, false);
+          expect(sibling.parent, isNull);
+          expect(game.world.children, [component]);
+        },
+      );
+
+      testWithFlameGame(
+        're-adding a removing component from onMount keeps it in the tree',
+        (game) async {
+          final existing = _LifecycleComponent('existing');
+          await game.world.ensureAdd(existing);
+          final component = _ReAddingOnMountComponent(existing);
+          game.world.add(component);
+          game.world.remove(existing);
+          await game.ready();
+
+          expect(component.isMounted, true);
+          expect(existing.isMounted, true);
+          expect(existing.isRemoving, false);
+          expect(existing.parent, game.world);
+          expect(game.world.children, containsAll([component, existing]));
+        },
+      );
     });
 
     group('Moving components', () {
@@ -1935,6 +1970,29 @@ class _SelfRemovingOnMountComponent extends Component {
   @override
   void onMount() {
     removeFromParent();
+  }
+}
+
+class _SiblingRemovingOnMountComponent extends _LifecycleComponent {
+  _SiblingRemovingOnMountComponent(this.sibling) : super('remover');
+
+  final Component sibling;
+
+  @override
+  void onMount() {
+    super.onMount();
+    parent!.remove(sibling);
+  }
+}
+
+class _ReAddingOnMountComponent extends Component {
+  _ReAddingOnMountComponent(this.component);
+
+  final Component component;
+
+  @override
+  void onMount() {
+    parent!.add(component);
   }
 }
 
