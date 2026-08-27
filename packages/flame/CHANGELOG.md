@@ -1,3 +1,7 @@
+## 1.38.2
+
+ - **FIX**: Scan the lifecycle queue without its iterator in dequeueAdd/dequeueRemove ([#4021](https://github.com/flame-engine/flame/issues/4021)). ([1f340706](https://github.com/flame-engine/flame/commit/1f34070651179d23285ec4875a1c0f8bd040867c))
+
 ## 1.38.1
 
  - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))

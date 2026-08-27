@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-08-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flame` - `v1.38.2`](#flame---v1382)
+
+---
+
+#### `flame` - `v1.38.2`
+
+ - **FIX**: Scan the lifecycle queue without its iterator in dequeueAdd/dequeueRemove ([#4021](https://github.com/flame-engine/flame/issues/4021)). ([1f340706](https://github.com/flame-engine/flame/commit/1f34070651179d23285ec4875a1c0f8bd040867c))
+
+
 ## 2026-08-26
 
 ### Changes
