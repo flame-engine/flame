@@ -54,6 +54,9 @@ the benchmark results are printed above it.
   (`componentsAtPoint`) with and without the hit-test cache.
 - `collision_detection_benchmark.dart`: the collision detection system with
   flat and nested hitbox hierarchies.
+- `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
+  recalculation after position and angle changes, point conversion, matrix
+  assignment, and copying transforms.
 
 
 ## Writing benchmarks
