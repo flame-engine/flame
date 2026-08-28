@@ -181,17 +181,13 @@ class Transform2D extends ChangeNotifier {
       final scaleY = _scale.y;
       final offsetX = _offset.x;
       final offsetY = _offset.y;
-      final m0 = cosA * scaleX;
-      final m1 = sinA * scaleX;
-      final m4 = -sinA * scaleY;
-      final m5 = cosA * scaleY;
       final m = _transformMatrix.storage;
-      m[0] = m0;
-      m[1] = m1;
-      m[4] = m4;
-      m[5] = m5;
-      m[12] = _position.x + m0 * offsetX + m4 * offsetY;
-      m[13] = _position.y + m1 * offsetX + m5 * offsetY;
+      m[0] = cosA * scaleX;
+      m[1] = sinA * scaleX;
+      m[4] = -sinA * scaleY;
+      m[5] = cosA * scaleY;
+      m[12] = _position.x + m[0] * offsetX + m[4] * offsetY;
+      m[13] = _position.y + m[1] * offsetX + m[5] * offsetY;
       _recalculate = false;
     }
     return _transformMatrix;
