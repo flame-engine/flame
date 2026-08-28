@@ -411,17 +411,17 @@ class ComponentList extends Iterable<Component> {
 /// which it is true come before all elements for which it is false. This is
 /// the insertion point that keeps a sorted list sorted.
 int _partitionPoint<T>(List<T> list, bool Function(T element) isBefore) {
-  var lo = 0;
-  var hi = list.length;
-  while (lo < hi) {
-    final mid = (lo + hi) ~/ 2;
-    if (isBefore(list[mid])) {
-      lo = mid + 1;
+  var low = 0;
+  var high = list.length;
+  while (low < high) {
+    final middle = (low + high) ~/ 2;
+    if (isBefore(list[middle])) {
+      low = middle + 1;
     } else {
-      hi = mid;
+      high = middle;
     }
   }
-  return lo;
+  return low;
 }
 
 class _ComponentListIterator implements Iterator<Component> {
