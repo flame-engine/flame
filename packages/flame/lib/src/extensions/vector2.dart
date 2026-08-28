@@ -1,8 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/src/game/notifying_vector2.dart';
+import 'package:flame/src/math/vector_value.dart';
 import 'package:vector_math/vector_math.dart';
 
+export 'package:flame/src/math/vector_value.dart';
 export 'package:vector_math/vector_math.dart' hide Colors;
 
 extension Vector2Extension on Vector2 {
@@ -12,6 +15,25 @@ extension Vector2Extension on Vector2 {
   /// Avoid using this in async extension methods, as it can lead to race
   /// conditions.
   static final _reusableVector = Vector2.zero();
+
+  /// The current components of this vector as an immutable [VectorValue].
+  ///
+  /// Reading [value] does not allocate, and neither does assigning a
+  /// [VectorValue] expression back to it, so this is the allocation-free way
+  /// to write vector math on a stored vector:
+  ///
+  /// ```dart
+  /// position.value += velocity * dt;
+  /// position.value = size.value / 2 + offset + velocity * dt;
+  /// ```
+  ///
+  /// Assigning goes through [setValues], so a [NotifyingVector2] notifies its
+  /// listeners exactly once per assignment.
+  @pragma('vm:prefer-inline')
+  VectorValue get value => VectorValue(x, y);
+
+  @pragma('vm:prefer-inline')
+  set value(VectorValue value) => setValues(value.x, value.y);
 
   /// Creates an [Offset] from the [Vector2]
   Offset toOffset() => Offset(x, y);

@@ -325,6 +325,47 @@ Operators:
   right.
 - `%`: Modulo/Remainder of x and y separately of two `Vector2`s.
 
+Every `Vector2` also has a `value` property that reads and writes its components as a
+`VectorValue`, see below.
+
+
+### VectorValue
+
+`VectorValue` is an immutable vector value that is free to create and combine: it is an extension
+type over `Float64x2`, which the Dart VM keeps out of the heap, so a whole expression such as
+
+```dart
+position.value = size.value / 2 + offset + velocity * dt;
+```
+
+runs without allocating anything, while the same expression written with `Vector2` operators
+allocates a new vector per operator. Use `VectorValue` for math and `Vector2` (or
+`NotifyingVector2`) for storage that can be observed and modified in place. The two are bridged by
+the `value` property on `Vector2`:
+
+```dart
+final direction = (target.value - position.value).normalized();
+position.value += direction * speed * dt;
+```
+
+Assigning to `value` goes through `setValues`, so a `NotifyingVector2` notifies its listeners
+exactly once per assignment, and `VectorValue.copyInto` writes into an existing `Vector2` without
+allocating.
+
+`VectorValue` keeps full double precision (`VectorValue(0.1, 0).x == 0.1`, whereas `Vector2`
+stores floats). Since extension types cannot declare `==`, comparing two `VectorValue`s with `==`
+compares by identity; use `equals` or `closeTo` instead, and do not use `VectorValue` as a map key.
+
+Methods and getters: `x`, `y`, `withX`, `withY`, `+`, `-`, unary `-`, `*`, `/`, `multiplied`,
+`divided`, `dot`, `cross`, `length`, `length2`, `normalized`, `withLength`, `withLengthClamped`,
+`perpendicular`, `distanceTo`, `distanceToSquared`, `lerp`, `rotated`, `angleTo`, `angleToSigned`,
+`screenAngle`, `abs`, `min`, `max`, `clamp`, `floor`, `ceil`, `round`, `isZero`, `isFinite`,
+`equals`, `closeTo`, `copyInto`, `toVector2`, `toOffset`, `toSize`, `describe`.
+
+Constructors: `VectorValue(x, y)`, `VectorValue.all`, `VectorValue.fromVector2`,
+`VectorValue.fromOffset`, `VectorValue.fromSize`, `VectorValue.fromRadians`, and the constants
+`VectorValue.zero` and `VectorValue.one`.
+
 
 ### Matrix4
 

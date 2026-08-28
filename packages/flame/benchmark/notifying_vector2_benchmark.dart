@@ -68,6 +68,69 @@ class PositionAddExpressionBenchmark extends _NotifyingVector2Benchmark {
   }
 }
 
+class PositionValueAddBenchmark extends _NotifyingVector2Benchmark {
+  final _velocity = VectorValue(30, -20);
+
+  PositionValueAddBenchmark()
+    : super('NotifyingVector2 value += velocity * dt, allocation-free');
+
+  static Future<void> main() async {
+    PositionValueAddBenchmark().report();
+  }
+
+  @override
+  void run() {
+    for (var i = 0; i < _amountComponents; i++) {
+      _components[i].position.value += _velocity * _dt;
+    }
+  }
+}
+
+class PositionValueExpressionBenchmark extends _NotifyingVector2Benchmark {
+  final _velocity = VectorValue(30, -20);
+  final _offset = VectorValue(3, 4);
+
+  PositionValueExpressionBenchmark()
+    : super('NotifyingVector2 value = size.value / 2 + offset + velocity * dt');
+
+  static Future<void> main() async {
+    PositionValueExpressionBenchmark().report();
+  }
+
+  @override
+  void run() {
+    for (var i = 0; i < _amountComponents; i++) {
+      final component = _components[i];
+      component.position.value =
+          component.size.value / 2 + _offset + _velocity * _dt;
+    }
+  }
+}
+
+class PositionChainedExpressionBenchmark extends _NotifyingVector2Benchmark {
+  final _velocity = Vector2(30, -20);
+  final _offset = Vector2(3, 4);
+
+  PositionChainedExpressionBenchmark()
+    : super('NotifyingVector2 setFrom((size / 2)..add(offset)..addScaled())');
+
+  static Future<void> main() async {
+    PositionChainedExpressionBenchmark().report();
+  }
+
+  @override
+  void run() {
+    for (var i = 0; i < _amountComponents; i++) {
+      final component = _components[i];
+      component.position.setFrom(
+        (component.size / 2)
+          ..add(_offset)
+          ..addScaled(_velocity, _dt),
+      );
+    }
+  }
+}
+
 class PositionSetXBenchmark extends _NotifyingVector2Benchmark {
   PositionSetXBenchmark() : super('NotifyingVector2 set x');
 
@@ -111,6 +174,9 @@ class SizeSetValuesBenchmark extends _NotifyingVector2Benchmark {
 Future<void> main() async {
   await PositionAddScaledBenchmark.main();
   await PositionAddExpressionBenchmark.main();
+  await PositionValueAddBenchmark.main();
+  await PositionChainedExpressionBenchmark.main();
+  await PositionValueExpressionBenchmark.main();
   await PositionSetXBenchmark.main();
   await SizeSetValuesBenchmark.main();
 }
