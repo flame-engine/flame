@@ -175,19 +175,19 @@ class Transform2D extends ChangeNotifier {
         _sinAngle = math.sin(_angle);
         _recalculateRotation = false;
       }
-      final cosA = _cosAngle;
-      final sinA = _sinAngle;
+      final cosAngle = _cosAngle;
+      final sinAngle = _sinAngle;
       final scaleX = _scale.x;
       final scaleY = _scale.y;
       final offsetX = _offset.x;
       final offsetY = _offset.y;
-      final m = _transformMatrix.storage;
-      m[0] = cosA * scaleX;
-      m[1] = sinA * scaleX;
-      m[4] = -sinA * scaleY;
-      m[5] = cosA * scaleY;
-      m[12] = _position.x + m[0] * offsetX + m[4] * offsetY;
-      m[13] = _position.y + m[1] * offsetX + m[5] * offsetY;
+      final storage = _transformMatrix.storage;
+      storage[0] = cosAngle * scaleX;
+      storage[1] = sinAngle * scaleX;
+      storage[4] = -sinAngle * scaleY;
+      storage[5] = cosAngle * scaleY;
+      storage[12] = _position.x + storage[0] * offsetX + storage[4] * offsetY;
+      storage[13] = _position.y + storage[1] * offsetX + storage[5] * offsetY;
       _recalculate = false;
     }
     return _transformMatrix;
@@ -207,25 +207,25 @@ class Transform2D extends ChangeNotifier {
           value.storage[15] == 1,
       'The provided matrix is not a valid 2D transformation',
     );
-    final m = _transformMatrix.storage;
-    m.setAll(0, value.storage);
+    final storage = _transformMatrix.storage;
+    storage.setAll(0, value.storage);
 
-    final m0 = m[0];
-    final m1 = m[1];
-    final m4 = m[4];
-    final m5 = m[5];
+    final xAxisX = storage[0];
+    final xAxisY = storage[1];
+    final yAxisX = storage[4];
+    final yAxisY = storage[5];
     final double scaleX;
     final double scaleY;
     final double angle;
-    final scaleXSquared = m0 * m0 + m1 * m1;
+    final scaleXSquared = xAxisX * xAxisX + xAxisY * xAxisY;
     if (scaleXSquared == 0) {
       scaleX = 0;
-      scaleY = math.sqrt(m4 * m4 + m5 * m5);
-      angle = math.atan2(-m4, m5);
+      scaleY = math.sqrt(yAxisX * yAxisX + yAxisY * yAxisY);
+      angle = math.atan2(-yAxisX, yAxisY);
     } else {
       scaleX = math.sqrt(scaleXSquared);
-      scaleY = (m0 * m5 - m1 * m4) / scaleX;
-      angle = math.atan2(m1, m0);
+      scaleY = (xAxisX * yAxisY - xAxisY * yAxisX) / scaleX;
+      angle = math.atan2(xAxisY, xAxisX);
     }
     final offsetX = _offset.x;
     final offsetY = _offset.y;
@@ -235,8 +235,8 @@ class Transform2D extends ChangeNotifier {
     _recalculateRotation = true;
     _scale.setValues(scaleX, scaleY);
     _position.setValues(
-      m[12] - (m0 * offsetX + m4 * offsetY),
-      m[13] - (m1 * offsetX + m5 * offsetY),
+      storage[12] - (xAxisX * offsetX + yAxisX * offsetY),
+      storage[13] - (xAxisY * offsetX + yAxisY * offsetY),
     );
     _isBatchUpdating = false;
     _recalculate = false;
@@ -249,11 +249,11 @@ class Transform2D extends ChangeNotifier {
   /// Use [output] to send in a Vector2 object that will be used to avoid
   /// creating a new Vector2 object in this method.
   Vector2 localToGlobal(Vector2 point, {Vector2? output}) {
-    final m = transformMatrix.storage;
-    final px = point.x;
-    final py = point.y;
-    final x = m[0] * px + m[4] * py + m[12];
-    final y = m[1] * px + m[5] * py + m[13];
+    final storage = transformMatrix.storage;
+    final pointX = point.x;
+    final pointY = point.y;
+    final x = storage[0] * pointX + storage[4] * pointY + storage[12];
+    final y = storage[1] * pointX + storage[5] * pointY + storage[13];
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 
@@ -268,21 +268,22 @@ class Transform2D extends ChangeNotifier {
   /// creating a new Vector2 object in this method.
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
     // Here we rely on the fact that in the transform matrix only elements
-    // `m[0]`, `m[1]`, `m[4]`, `m[5]`, `m[12]`, and `m[13]` are modified.
+    // `storage[0]`, `storage[1]`, `storage[4]`, `storage[5]`, `storage[12]`,
+    // and `storage[13]` are modified.
     // This greatly simplifies computation of the inverse matrix.
-    final m = transformMatrix.storage;
-    final m0 = m[0];
-    final m1 = m[1];
-    final m4 = m[4];
-    final m5 = m[5];
-    var det = m0 * m5 - m1 * m4;
-    if (det != 0) {
-      det = 1 / det;
+    final storage = transformMatrix.storage;
+    final xAxisX = storage[0];
+    final xAxisY = storage[1];
+    final yAxisX = storage[4];
+    final yAxisY = storage[5];
+    var determinant = xAxisX * yAxisY - xAxisY * yAxisX;
+    if (determinant != 0) {
+      determinant = 1 / determinant;
     }
-    final dx = point.x - m[12];
-    final dy = point.y - m[13];
-    final x = (dx * m5 - dy * m4) * det;
-    final y = (dy * m0 - dx * m1) * det;
+    final deltaX = point.x - storage[12];
+    final deltaY = point.y - storage[13];
+    final x = (deltaX * yAxisY - deltaY * yAxisX) * determinant;
+    final y = (deltaY * xAxisX - deltaX * xAxisY) * determinant;
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 
