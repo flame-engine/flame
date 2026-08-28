@@ -304,13 +304,20 @@ class Component {
   /// children.
   ComponentList? _children;
 
-  /// The [ComponentList] that currently stores this component, if any.
-  /// Maintained by [ComponentList].
+  /// The [ComponentList] that physically stores this component right now, if
+  /// any. Maintained by [ComponentList].
+  ///
+  /// This is the same list as `_parent?._children` once the component has
+  /// actually been inserted, but the two are not always in sync: [_parent] is
+  /// assigned as soon as an add is requested, while the insertion into the
+  /// list may be deferred to the lifecycle queue, and on removal the
+  /// component leaves the list before [_parent] is cleared. Together with
+  /// [_containerIndex] this is what makes [ComponentList.contains] and
+  /// [ComponentList.remove] constant time.
   ComponentList? _containerList;
 
-  /// This component's slot index within [_containerList]'s backing array, or
-  /// -1 when the component is not in any container. Maintained by
-  /// [ComponentList].
+  /// This component's index within [_containerList]'s backing list, or -1
+  /// when the component is not in any list. Maintained by [ComponentList].
   int _containerIndex = -1;
 
   /// This field should be used internally for functionality when you need to
@@ -331,10 +338,6 @@ class Component {
   /// Whether this component has any children.
   /// Avoids the creation of the children container if not necessary.
   bool get hasChildren => _children?.isNotEmpty ?? false;
-
-  /// Whether the strict query mode should be enabled for all children lists;
-  /// see [ComponentList.strictMode].
-  static bool strictQueryMode = false;
 
   /// This method creates the children container for the current component.
   /// Override this method if you need a customized [ComponentList] for a
@@ -368,7 +371,7 @@ class Component {
   /// Returns the last child that matches the given type [T], or null if there
   /// are no such children.
   T? lastChild<T extends Component>() {
-    return children.reversed().whereType<T>().firstOrNull;
+    return children.reversed.whereType<T>().firstOrNull;
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -405,7 +408,7 @@ class Component {
       yield this;
     }
     if (hasChildren) {
-      final childrenIterable = reversed ? children.reversed() : children;
+      final childrenIterable = reversed ? children.reversed : children;
       for (final child in childrenIterable) {
         yield* child.descendants(includeSelf: true, reversed: reversed);
       }
@@ -432,7 +435,7 @@ class Component {
   }) {
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
+      for (final child in children.reversed) {
         if (!child.propagateToChildren(handler, includeSelf: true)) {
           return false;
         }
@@ -591,9 +594,8 @@ class Component {
       // The update pass doubles as the safe point where tombstones left by
       // removals since the last tick are compacted away.
       children._compact();
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        elements[i]?.updateTree(dt);
+      for (final child in children._elements) {
+        child?.updateTree(dt);
       }
     }
   }
@@ -643,9 +645,7 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      final elements = children._elements;
-      for (var i = 0; i < elements.length; i++) {
-        final child = elements[i];
+      for (final child in children._elements) {
         if (child != null) {
           renderChild(canvas, child);
         }
@@ -893,10 +893,8 @@ class Component {
   ) sync* {
     nestedContexts?.add(locationContext);
     if (_children != null) {
-      final elements = _children!._elements;
-      for (var i = elements.length - 1; i >= 0; i--) {
-        final child = elements[i];
-        if (child == null || (child is IgnoreEvents && child.ignoreEvents)) {
+      for (final child in _children!.reversed) {
+        if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
         T? childPoint = locationContext;
@@ -1231,7 +1229,7 @@ class Component {
     out ??= [];
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
+      for (final child in children.reversed) {
         child._collectDescendants(out);
       }
     }
