@@ -116,7 +116,7 @@ class Player extends SpriteComponent {
 
   @override
   Future<void> onLoad() async {
-    sprite = await Sprite.load('player.png');
+    sprite = await Sprite.load('assets/images/player.png');
   }
 }
 ```
@@ -151,7 +151,7 @@ class Player extends SpriteComponent with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    sprite = await Sprite.load('player.png');
+    sprite = await Sprite.load('assets/images/player.png');
   }
   
   @override

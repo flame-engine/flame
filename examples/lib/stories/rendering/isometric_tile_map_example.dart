@@ -32,7 +32,9 @@ class IsometricTileMapExample extends FlameGame with MouseMoveCallbacks {
 
   @override
   Future<void> onLoad() async {
-    final tilesetImage = await images.load('tile_maps/tiles$suffix.png');
+    final tilesetImage = await images.load(
+      'assets/images/tile_maps/tiles$suffix.png',
+    );
     final tileset = SpriteSheet(
       image: tilesetImage,
       srcSize: Vector2.all(srcTileSize),
@@ -55,7 +57,9 @@ class IsometricTileMapExample extends FlameGame with MouseMoveCallbacks {
       ),
     );
 
-    final selectorImage = await images.load('tile_maps/selector$suffix.png');
+    final selectorImage = await images.load(
+      'assets/images/tile_maps/selector$suffix.png',
+    );
     add(selector = Selector(destTileSize, selectorImage));
   }
 

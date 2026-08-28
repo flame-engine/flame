@@ -11,7 +11,7 @@ class SpriteSheetExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     final spriteSheet = SpriteSheet(
-      image: await images.load('sprite_sheet.png'),
+      image: await images.load('assets/images/sprite_sheet.png'),
       srcSize: Vector2(16.0, 18.0),
     );
 

@@ -87,7 +87,7 @@ rendered in the game:
 ```dart
 @override
 Future<void> onLoad() async {
-  final svg = await Svg.load('android.svg');
+  final svg = await Svg.load('assets/android.svg');
   final android = SvgComponent.fromSvg(
     svg,
     position: Vector2.all(100),
@@ -108,7 +108,7 @@ A simple example on how to use it:
 ```dart
 // Creates a tileset, the block ids are automatically assigned sequentially
 // starting at 0, from left to right and then top to bottom.
-final tilesetImage = await images.load('tileset.png');
+final tilesetImage = await images.load('assets/images/tileset.png');
 final tileset = SpriteSheet(image: tilesetImage, srcSize: Vector2.all(32));
 // Each element is a block id, -1 means nothing
 final matrix = [[0, 1, 0], [1, 0, 0], [1, 1, 1]];

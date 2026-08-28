@@ -13,7 +13,7 @@ class DialogueBoxComponent extends SpriteComponent with HasGameReference {
     position = Vector2(game.size.x / 2, 96);
     anchor = Anchor.center;
     sprite = await Sprite.load(
-      'dialogue_box.png',
+      'assets/images/dialogue_box.png',
       srcSize: spriteSize,
     );
     addAll([buttonRow, textBox]);

@@ -33,20 +33,20 @@ Then you have the following methods at your disposal:
 import 'package:flame_audio/flame_audio.dart';
 
 // For shorter reused audio clips, like sound effects
-FlameAudio.play('explosion.mp3');
+FlameAudio.play('assets/audio/explosion.mp3');
 
 // For looping an audio file
-FlameAudio.loop('music.mp3');
+FlameAudio.loop('assets/audio/music.mp3');
 
 // For playing a longer audio file
-FlameAudio.playLongAudio('music.mp3');
+FlameAudio.playLongAudio('assets/audio/music.mp3');
 
 // For looping a longer audio file
-FlameAudio.loopLongAudio('music.mp3');
+FlameAudio.loopLongAudio('assets/audio/music.mp3');
 
 // For background music that should be paused/played when the pausing/resuming
 // the game
-FlameAudio.bgm.play('music.mp3');
+FlameAudio.bgm.play('assets/audio/music.mp3');
 ```
 
 The difference between the `play/loop` and `playLongAudio/loopLongAudio` is that `play/loop` makes
@@ -89,14 +89,17 @@ are requested; therefore, the first time you play each mp3 you might get a delay
 pre-load your audios, just use:
 
 ```dart
-await FlameAudio.audioCache.load('explosion.mp3');
+await FlameAudio.audioCache.load('assets/audio/explosion.mp3');
 ```
 
 You can load all your audios in the beginning in your game's `onLoad` method so that they always
 play smoothly. To load multiple audio files, use the `loadAll` method:
 
 ```dart
-await FlameAudio.audioCache.loadAll(['explosion.mp3', 'music.mp3']);
+await FlameAudio.audioCache.loadAll([
+  'assets/audio/explosion.mp3',
+  'assets/audio/music.mp3',
+]);
 ```
 
 Finally, you can use the `clear` method to remove a file that has been loaded into the cache:

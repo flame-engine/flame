@@ -35,13 +35,14 @@ class FlameTsxProvider implements TsxProvider {
 
   /// Parses a file returning a [FlameTsxProvider].
   ///
-  /// {@macro renderable_tile_prefix_path}
+  /// The [key] is resolved against [tsxDirectory], which is the directory of
+  /// the map that references this tileset.
   static Future<FlameTsxProvider> parse(
     String key, [
     AssetBundle? bundle,
-    String prefix = 'assets/tiles/',
+    String tsxDirectory = '',
   ]) async {
-    final data = await (bundle ?? Flame.bundle).loadString('$prefix$key');
+    final data = await (bundle ?? Flame.bundle).loadString('$tsxDirectory$key');
     return FlameTsxProvider._(data, key);
   }
 }

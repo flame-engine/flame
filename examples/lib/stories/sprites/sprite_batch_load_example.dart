@@ -27,7 +27,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
 
   @override
   Future<void> onLoad() async {
-    final spriteBatch = await game.loadSpriteBatch('boom.png');
+    final spriteBatch = await game.loadSpriteBatch('assets/images/boom.png');
     this.spriteBatch = spriteBatch;
 
     spriteBatch.add(

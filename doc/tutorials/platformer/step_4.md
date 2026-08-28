@@ -30,7 +30,7 @@ class Star extends SpriteComponent
 
   @override
   void onLoad() {
-    final starImage = game.images.fromCache('star.png');
+    final starImage = game.images.fromCache('assets/images/star.png');
     sprite = Sprite(starImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset + (size.x / 2),
@@ -122,7 +122,7 @@ class WaterEnemy extends SpriteAnimationComponent
   @override
   void onLoad() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('water_enemy.png'),
+      game.images.fromCache('assets/images/water_enemy.png'),
       SpriteAnimationData.sequenced(
         amount: 2,
         textureSize: Vector2.all(16),
@@ -215,7 +215,7 @@ class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> 
 
   @override
   void onLoad() {
-    final groundImage = game.images.fromCache('ground.png');
+    final groundImage = game.images.fromCache('assets/images/ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
       gridPosition.x * size.x + xOffset,
@@ -346,7 +346,7 @@ class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> 
 
   @override
   void onLoad() {
-    final groundImage = game.images.fromCache('ground.png');
+    final groundImage = game.images.fromCache('assets/images/ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
       gridPosition.x * size.x + xOffset,

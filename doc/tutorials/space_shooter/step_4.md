@@ -27,7 +27,7 @@ class Bullet extends SpriteAnimationComponent
     await super.onLoad();
 
     animation = await game.loadSpriteAnimation(
-      'bullet.png',
+      'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: .2,

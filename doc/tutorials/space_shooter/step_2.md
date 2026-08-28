@@ -108,7 +108,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    final playerSprite = await loadSprite('player-sprite.png');
+    final playerSprite = await loadSprite('assets/images/player-sprite.png');
     player = Player()
       ..sprite = playerSprite
       ..x = size.x / 2
@@ -163,7 +163,7 @@ class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await game.loadSprite('player-sprite.png');
+    sprite = await game.loadSprite('assets/images/player-sprite.png');
 
     position = game.size / 2;
   }

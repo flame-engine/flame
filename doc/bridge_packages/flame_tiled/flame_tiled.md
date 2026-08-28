@@ -10,7 +10,7 @@ To use this,
 
 ```dart
 final component = await TiledComponent.load(
-  'my_map.tmx',
+  'assets/tiles/my_map.tmx',
   Vector2.all(32),
 );
 
@@ -80,7 +80,7 @@ resizing the original tileset images so that when packed they fit with the limit
 
 ```dart
 final component = await TiledComponent.load(
-  'my_map.tmx',
+  'assets/tiles/my_map.tmx',
   Vector2.all(32),
   atlasMaxX: 9216,
   atlasMaxY: 9216,
@@ -106,7 +106,7 @@ where the sum of their dimensions are in the thousands.
 
 ```dart
 final component = await TiledComponent.load(
-  'my_map.tmx',
+  'assets/tiles/my_map.tmx',
   Vector2.all(32),
   ignoreFlip: true,
 );

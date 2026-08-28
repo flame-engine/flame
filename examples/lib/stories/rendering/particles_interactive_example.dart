@@ -50,7 +50,7 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    final zap = await images.load('zap.png');
+    final zap = await images.load('assets/images/zap.png');
     _emitter = _buildEffect(zap);
     add(_emitter);
   }

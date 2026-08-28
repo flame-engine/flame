@@ -34,7 +34,7 @@ class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await game.loadSprite('player-sprite.png');
+    sprite = await game.loadSprite('assets/images/player-sprite.png');
 
     position = game.size / 2;
     anchor = Anchor.center;

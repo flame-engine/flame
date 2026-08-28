@@ -46,6 +46,7 @@ abstract class RenderableLayer<T extends Layer> {
     bool? ignoreFlip,
     Images? images,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) async {
     if (layer is TileLayer) {
       return FlameTileLayer.load(
@@ -69,6 +70,7 @@ abstract class RenderableLayer<T extends Layer> {
         filterQuality: filterQuality,
         images: images,
         package: package,
+        imagesDirectory: imagesDirectory,
       );
     } else if (layer is ObjectGroup) {
       return ObjectLayer.load(

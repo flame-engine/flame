@@ -11,7 +11,7 @@ class ZoomExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final flameSprite = await loadSprite('flame.png');
+    final flameSprite = await loadSprite('assets/images/flame.png');
 
     world.add(
       SpriteComponent(

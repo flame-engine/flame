@@ -15,7 +15,7 @@ class ExplosionComponent extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
     animation = await game.loadSpriteAnimation(
-      'explosion.png',
+      'assets/images/explosion.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.1,
         amount: 6,

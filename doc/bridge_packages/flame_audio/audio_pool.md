@@ -45,7 +45,7 @@ Future<void> loadSounds() async {
   // Create a pool with minimum 1 player and maximum 2 players
   // This automatically uses Flame's global audio cache
   AudioPool explosionSoundPool = await FlameAudio.createPool(
-    'explosion.mp3',
+    'assets/audio/explosion.mp3',
     minPlayers: 1,
     maxPlayers: 2,
   );
@@ -144,13 +144,13 @@ class MyGame extends FlameGame {
   Future<void> onLoad() async {
     // Load sound effects into audio pools
     laserSound = await FlameAudio.createPool(
-      'laser.mp3',
+      'assets/audio/laser.mp3',
       minPlayers: 3,
       maxPlayers: 6,
     );
 
     explosionSound = await FlameAudio.createPool(
-      'explosion.mp3',
+      'assets/audio/explosion.mp3',
       minPlayers: 2,
       maxPlayers: 4,
     );

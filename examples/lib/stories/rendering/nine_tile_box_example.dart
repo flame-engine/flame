@@ -14,7 +14,7 @@ class NineTileBoxExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final sprite = Sprite(await images.load('nine-box.png'));
+    final sprite = Sprite(await images.load('assets/images/nine-box.png'));
     final boxSize = Vector2.all(300);
     final nineTileBox = NineTileBox(sprite, destTileSize: 148);
     add(

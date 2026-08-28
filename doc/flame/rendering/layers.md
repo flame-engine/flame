@@ -175,11 +175,11 @@ class MyGame extends FlameGame {
     add(root);
 
     // Add some children.
-    final background1Sprite = Sprite(await images.load('background1.png'));
+    final background1Sprite = Sprite(await images.load('assets/images/background1.png'));
     background1 = SpriteComponent(sprite: background1Sprite);
     root.add(background1);
 
-    final background2Sprite = Sprite(await images.load('background2.png'));
+    final background2Sprite = Sprite(await images.load('assets/images/background2.png'));
     background2 = SpriteComponent(sprite: background2Sprite);
     root.add(background2);
 

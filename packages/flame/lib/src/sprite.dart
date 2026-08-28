@@ -29,8 +29,11 @@ class Sprite {
     this.srcPosition = srcPosition;
   }
 
-  /// Takes a path of an image, a [srcPosition] and [srcSize] and loads the
-  /// sprite animation.
+  /// Takes the full path of an image, a [srcPosition] and [srcSize] and loads
+  /// the sprite.
+  ///
+  /// The [src] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<Sprite> load(
     String src, {

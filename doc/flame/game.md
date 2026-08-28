@@ -32,7 +32,7 @@ class MyCrate extends SpriteComponent {
 
   @override
   Future<void> onLoad() async {
-    sprite = await Sprite.load('crate.png');
+    sprite = await Sprite.load('assets/images/crate.png');
   }
 }
 

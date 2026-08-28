@@ -48,7 +48,7 @@ class PlayerComponent extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
     animation = await game.loadSpriteAnimation(
-      'player.png',
+      'assets/images/player.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
         amount: 4,

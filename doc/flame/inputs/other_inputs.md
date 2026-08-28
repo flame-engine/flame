@@ -22,7 +22,7 @@ class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final image = await images.load('joystick.png');
+    final image = await images.load('assets/images/joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: 6,
@@ -60,7 +60,7 @@ class Player extends SpriteComponent with HasGameReference {
 
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('layers/player.png');
+    sprite = await game.loadSprite('assets/images/layers/player.png');
     position = game.size / 2;
   }
 

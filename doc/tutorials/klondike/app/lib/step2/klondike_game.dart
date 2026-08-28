@@ -16,7 +16,7 @@ class KlondikeGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    await Flame.images.load('klondike-sprites.png');
+    await Flame.images.load('assets/images/klondike-sprites.png');
 
     final stock = Stock()
       ..size = cardSize
@@ -59,7 +59,7 @@ class KlondikeGame extends FlameGame {
 
 Sprite klondikeSprite(double x, double y, double width, double height) {
   return Sprite(
-    Flame.images.fromCache('klondike-sprites.png'),
+    Flame.images.fromCache('assets/images/klondike-sprites.png'),
     srcPosition: Vector2(x, y),
     srcSize: Vector2(width, height),
   );

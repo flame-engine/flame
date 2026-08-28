@@ -14,7 +14,7 @@ class MyGameWidget extends StatelessWidget {
 class Background extends SpriteComponent with HasGameReference<MyGame> {
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('city.png');
+    sprite = await game.loadSprite('assets/images/city.png');
     size = Vector2.all(200);
     position = Vector2.all(100);
   }

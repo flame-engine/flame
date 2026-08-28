@@ -125,7 +125,7 @@ class Explosion extends SpriteAnimationComponent
     await super.onLoad();
 
     animation = await game.loadSpriteAnimation(
-      'explosion.png',
+      'assets/images/explosion.png',
       SpriteAnimationData.sequenced(
         amount: 6,
         stepTime: .1,

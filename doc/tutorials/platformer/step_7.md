@@ -177,13 +177,13 @@ Open `lib/ember_quest.dart` and add / update the following code:
 @override
 Future<void> onLoad() async {
   await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
   ]);
   
   camera.viewfinder.anchor = Anchor.topLeft;

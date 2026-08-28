@@ -121,6 +121,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     FilterQuality? filterQuality,
     Images? images,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) async {
     return FlameImageLayer(
       layer: layer,
@@ -129,7 +130,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       destTileSize: destTileSize,
       filterQuality: filterQuality,
       image: await (images ?? Flame.images).load(
-        layer.image.source!,
+        '$imagesDirectory${layer.image.source!}',
         package: package,
       ),
     );
