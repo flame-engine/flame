@@ -48,6 +48,9 @@ the benchmark results are printed above it.
   `register<T>()`/`query<T>()` type-query caches under mixed-type churn.
 - `update_components_benchmark.dart`: end-to-end update pass with game-like
   logic and inputs on a two-level tree.
+- `notifying_vector2_benchmark.dart`: mutation cost of the `position` and
+  `size` vectors of `PositionComponent`s, including listener dispatch to the
+  owning transform.
 - `render_components_benchmark.dart`: render pass over a randomized tree onto
   a mock canvas.
 - `components_at_point_benchmark.dart`: pointer hit testing

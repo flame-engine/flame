@@ -102,5 +102,27 @@ void main() {
       expect(storage[0], 0);
       expect(storage[1], 0);
     });
+
+    test('storage view reflects later modifications', () {
+      final nv = NotifyingVector2.zero();
+      final storage = nv.storage;
+      nv.setValues(3, 4);
+      expect(storage[0], 3);
+      expect(storage[1], 4);
+      expect(identical(storage, nv.storage), isTrue);
+    });
+
+    test('version increments on every modification', () {
+      final nv = NotifyingVector2.zero();
+      expect(nv.version, 0);
+      nv.x = 1;
+      expect(nv.version, 1);
+      nv.setValues(1, 1);
+      expect(nv.version, 2);
+      nv.add(Vector2(1, 1));
+      expect(nv.version, 3);
+      nv.scale(2);
+      expect(nv.version, 4);
+    });
   });
 }

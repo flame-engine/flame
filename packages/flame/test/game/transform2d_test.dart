@@ -315,5 +315,50 @@ void main() {
         expect(notifications, 1);
       });
     });
+
+    group('listener forwarding', () {
+      test('matrix is recalculated without any listeners', () {
+        final transform = Transform2D();
+        expect(transform.transformMatrix.storage[12], 0);
+        transform.position.x = 5;
+        expect(transform.transformMatrix.storage[12], 5);
+        transform.scale.setValues(2, 3);
+        expect(transform.transformMatrix.storage[0], 2);
+        transform.offset.y = 1;
+        expect(transform.transformMatrix.storage[13], 3);
+      });
+
+      test('vector changes are forwarded only while there are listeners', () {
+        final transform = Transform2D();
+        var notified = 0;
+        void listener() => notified++;
+
+        transform.position.x = 1;
+        transform.addListener(listener);
+        transform.position.x = 2;
+        transform.scale.y = 2;
+        transform.offset.setValues(1, 1);
+        expect(notified, 3);
+
+        transform.removeListener(listener);
+        transform.position.x = 3;
+        expect(notified, 3);
+
+        transform.addListener(listener);
+        transform.position.x = 4;
+        expect(notified, 4);
+        expect(transform.transformMatrix.storage[12], closeTo(4 + 1, 1e-9));
+      });
+
+      test('listener on position sees a fresh matrix', () {
+        final transform = Transform2D();
+        late double x;
+        transform.position.addListener(() {
+          x = transform.transformMatrix.storage[12];
+        });
+        transform.position.x = 7;
+        expect(x, 7);
+      });
+    });
   });
 }

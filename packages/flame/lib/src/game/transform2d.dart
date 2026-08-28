@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flame/geometry.dart' as geometry;
 import 'package:flame/src/game/notifying_vector2.dart';
+import 'package:flame/src/game/simple_change_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:vector_math/vector_math.dart';
 
@@ -24,11 +25,17 @@ import 'package:vector_math/vector_math.dart';
 /// requested by the user. Thus, modifying multiple properties at once does
 /// not incur the penalty of unnecessary recalculations.
 ///
-/// This class implements the [ChangeNotifier] API, allowing you to subscribe
-/// for notifications whenever the transform matrix changes. In addition, you
-/// can subscribe to get notified when individual components of the transform
-/// change: [position], [scale], and [offset] (but not [angle]).
-class Transform2D extends ChangeNotifier {
+/// Changes to [position], [scale] and [offset] are detected through their
+/// [NotifyingVector2.version] counters when the matrix is requested, so
+/// modifying them does not invoke any callbacks unless somebody is listening
+/// to this transform.
+///
+/// This class implements the [Listenable] API (through
+/// [SimpleChangeNotifier]), allowing you to subscribe for notifications
+/// whenever the transform matrix changes. In addition, you can subscribe to
+/// get notified when individual components of the transform change:
+/// [position], [scale], and [offset] (but not [angle]).
+class Transform2D with SimpleChangeNotifier {
   final Matrix4 _transformMatrix;
   bool _recalculate;
   bool _isBatchUpdating = false;
@@ -36,6 +43,9 @@ class Transform2D extends ChangeNotifier {
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
   final NotifyingVector2 _offset;
+  int _positionVersion = -1;
+  int _scaleVersion = -1;
+  int _offsetVersion = -1;
 
   Transform2D()
     : _transformMatrix = Matrix4.identity(),
@@ -43,10 +53,42 @@ class Transform2D extends ChangeNotifier {
       _angle = 0,
       _position = NotifyingVector2.zero(),
       _scale = NotifyingVector2.all(1),
-      _offset = NotifyingVector2.zero() {
-    _position.addListener(_markAsModified);
-    _scale.addListener(_markAsModified);
-    _offset.addListener(_markAsModified);
+      _offset = NotifyingVector2.zero();
+
+  @override
+  void addListener(VoidCallback listener) {
+    if (!hasListeners) {
+      _position.addListener(_forwardNotification);
+      _scale.addListener(_forwardNotification);
+      _offset.addListener(_forwardNotification);
+    }
+    super.addListener(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    super.removeListener(listener);
+    if (!hasListeners) {
+      _stopForwarding();
+    }
+  }
+
+  @override
+  void dispose() {
+    _stopForwarding();
+    super.dispose();
+  }
+
+  void _stopForwarding() {
+    _position.removeListener(_forwardNotification);
+    _scale.removeListener(_forwardNotification);
+    _offset.removeListener(_forwardNotification);
+  }
+
+  void _forwardNotification() {
+    if (!_isBatchUpdating) {
+      notifyListeners();
+    }
   }
 
   factory Transform2D.copy(Transform2D other) => Transform2D()
@@ -159,7 +201,10 @@ class Transform2D extends ChangeNotifier {
   ///
   /// The returned matrix must not be modified by the user.
   Matrix4 get transformMatrix {
-    if (_recalculate) {
+    if (_recalculate ||
+        _position.version != _positionVersion ||
+        _scale.version != _scaleVersion ||
+        _offset.version != _offsetVersion) {
       // The transforms below are equivalent to:
       //   _transformMatrix = Matrix4.identity()
       //       .. translate(_position.x, _position.y)
@@ -175,9 +220,16 @@ class Transform2D extends ChangeNotifier {
       m[5] = cosA * _scale.y;
       m[12] = _position.x + m[0] * _offset.x + m[4] * _offset.y;
       m[13] = _position.y + m[1] * _offset.x + m[5] * _offset.y;
-      _recalculate = false;
+      _markAsCalculated();
     }
     return _transformMatrix;
+  }
+
+  void _markAsCalculated() {
+    _recalculate = false;
+    _positionVersion = _position.version;
+    _scaleVersion = _scale.version;
+    _offsetVersion = _offset.version;
   }
 
   set transformMatrix(Matrix4 value) {
@@ -195,7 +247,6 @@ class Transform2D extends ChangeNotifier {
       'The provided matrix is not a valid 2D transformation',
     );
     _transformMatrix.setFrom(value);
-    _recalculate = false;
 
     final storage = _transformMatrix.storage;
     _isBatchUpdating = true;
@@ -214,6 +265,7 @@ class Transform2D extends ChangeNotifier {
     _position.y =
         storage[13] - (storage[1] * _offset.x + storage[5] * _offset.y);
     _isBatchUpdating = false;
+    _markAsCalculated();
     notifyListeners();
   }
 
@@ -273,8 +325,6 @@ class Transform2D extends ChangeNotifier {
 
   void _markAsModified() {
     _recalculate = true;
-    if (!_isBatchUpdating) {
-      notifyListeners();
-    }
+    _forwardNotification();
   }
 }

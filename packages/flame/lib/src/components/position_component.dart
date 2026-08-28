@@ -483,7 +483,7 @@ class PositionComponent extends Component
   /// Internal handler that must be invoked whenever either the [size]
   /// or the [anchor] change.
   void _onModifiedSizeOrAnchor() {
-    transform.offset = Vector2(-_anchor.x * _size.x, -_anchor.y * _size.y);
+    transform.offset.setValues(-_anchor.x * _size.x, -_anchor.y * _size.y);
   }
 
   @override
