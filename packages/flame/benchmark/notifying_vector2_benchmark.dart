@@ -50,6 +50,24 @@ class PositionAddScaledBenchmark extends _NotifyingVector2Benchmark {
   }
 }
 
+class PositionAddExpressionBenchmark extends _NotifyingVector2Benchmark {
+  final _velocity = Vector2(30, -20);
+
+  PositionAddExpressionBenchmark()
+    : super('NotifyingVector2 add(velocity * dt), allocating');
+
+  static Future<void> main() async {
+    PositionAddExpressionBenchmark().report();
+  }
+
+  @override
+  void run() {
+    for (var i = 0; i < _amountComponents; i++) {
+      _components[i].position.add(_velocity * _dt);
+    }
+  }
+}
+
 class PositionSetXBenchmark extends _NotifyingVector2Benchmark {
   PositionSetXBenchmark() : super('NotifyingVector2 set x');
 
@@ -92,6 +110,7 @@ class SizeSetValuesBenchmark extends _NotifyingVector2Benchmark {
 
 Future<void> main() async {
   await PositionAddScaledBenchmark.main();
+  await PositionAddExpressionBenchmark.main();
   await PositionSetXBenchmark.main();
   await SizeSetValuesBenchmark.main();
 }
