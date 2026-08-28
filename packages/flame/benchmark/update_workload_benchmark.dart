@@ -25,6 +25,9 @@ const _worldHeight = 600.0;
 ///   movement direction, and tick a cooldown timer. This is representative of
 ///   a logic-heavy entity.
 ///
+/// Neither workload allocates per tick, so the measured time is the update
+/// logic itself rather than garbage collection of temporary vectors.
+///
 /// The tick counts are chosen so that each run stays well under 100ms, so
 /// the light and heavy rows are not directly comparable to each other, only
 /// to their own no-op counterpart in the traversal suite and across engine
@@ -154,7 +157,7 @@ class _LightComponent extends PositionComponent {
 
   @override
   void update(double dt) {
-    position += velocity * dt;
+    position.addScaled(velocity, dt);
     if (position.x < 0 || position.x > _worldWidth) {
       velocity.x = -velocity.x;
     }
@@ -207,7 +210,7 @@ class _HeavyComponent extends PositionComponent {
       velocity.scale(_maxSpeed / speed);
     }
 
-    position += velocity * dt;
+    position.addScaled(velocity, dt);
     angle = atan2(velocity.y, velocity.x);
 
     cooldown -= dt;
