@@ -1,9 +1,5 @@
 name: Publish packages
 on:
-  # Enable to also publish, when pushing a tag
-  #push:
-  #  tags:
-  #    - '*'
   workflow_dispatch:
 
 jobs:
