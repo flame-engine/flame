@@ -76,13 +76,3 @@ export 'src/events/multi_drag_scale_recognizer.dart'
     show MultiDragScaleGestureRecognizer;
 export 'src/game/mixins/keyboard.dart'
     show HasKeyboardHandlerComponents, KeyboardEvents;
-export 'src/gestures/detectors.dart' show PanDetector;
-export 'src/gestures/events.dart'
-    show
-        DragDownInfo,
-        DragEndInfo,
-        DragStartInfo,
-        DragUpdateInfo,
-        PositionInfo,
-        TapDownInfo,
-        TapUpInfo;

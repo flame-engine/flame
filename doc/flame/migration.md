@@ -390,9 +390,9 @@ class MyGame extends FlameGame with TapCallbacks {
 Flutter's "tap completed" callback on `MultiTapGestureRecognizer`. Use `onTapUp` instead, which fires
 at the same point in the gesture.
 
-Because the new mixins are routed through `MultiDragScaleDispatcher`, they no longer conflict with
-`PanDetector` in the gesture arena, and the assertion that used to guard against combining
-`MultiTouchDragDetector` with `PanDetector` has been removed.
+Because the new mixins are routed through `MultiDragScaleDispatcher`, the assertion that used to
+guard against combining `MultiTouchDragDetector` with `PanDetector` in the gesture arena is gone
+(as is `PanDetector` itself; see below).
 
 See [Tap Events](inputs/tap_events.md) and [Drag Events](inputs/drag_events.md) for the full
 replacement APIs.
@@ -492,6 +492,86 @@ detector.
 `flame_behaviors`, note that it no longer re-exports the legacy `*Info` event classes.
 
 See [Pointer Events](inputs/pointer_events.md) for the full replacement API.
+
+
+### `PanDetector` removed, and with it the whole `*Info` event hierarchy
+
+`PanDetector` was the last of the game-level gesture detectors, so removing it also removes every
+event class that existed to serve them:
+
+| Removed          | Use instead       |
+| ---------------- | ----------------- |
+| `PanDetector`    | `DragCallbacks`   |
+| `DragStartInfo`  | `DragStartEvent`  |
+| `DragUpdateInfo` | `DragUpdateEvent` |
+| `DragEndInfo`    | `DragEndEvent`    |
+| `DragDownInfo`   | —                 |
+| `TapDownInfo`    | `TapDownEvent`    |
+| `TapUpInfo`      | `TapUpEvent`      |
+| `PositionInfo`   | `PositionEvent`   |
+
+```dart
+// Before
+class MyGame extends FlameGame with PanDetector {
+  @override
+  void onPanStart(DragStartInfo info) {
+    player.startShooting();
+  }
+
+  @override
+  void onPanUpdate(DragUpdateInfo info) {
+    player.move(info.delta.global);
+  }
+
+  @override
+  void onPanEnd(DragEndInfo info) {
+    player.stopShooting();
+  }
+}
+
+// After
+class MyGame extends FlameGame with DragCallbacks {
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    player.startShooting();
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    player.stopShooting();
+  }
+}
+```
+
+A few differences to be aware of:
+
+- `onDragStart`, `onDragEnd` and `onDragCancel` are `@mustCallSuper`, because they maintain the
+  `isDragged` flag; your overrides have to call `super` first.
+- There is no equivalent of `onPanDown`. Use `onDragStart`, which fires once the touch slop has been
+  exceeded, exactly like `onPanStart` did.
+- The nested position and delta wrappers are gone: `info.eventPosition.widget` becomes
+  `event.canvasPosition`, and `info.delta.global` becomes `event.localDelta` (or `event.canvasDelta`
+  if you want the delta before any camera transform is applied).
+- `DragEndEvent` exposes `velocity`, but there is no replacement for `DragEndInfo.primaryVelocity` —
+  it was permanently `null` anyway, since only axis-constrained recognizers ever set it.
+- Every drag event carries a `pointerId`, so simultaneous drags can be told apart. `PanDetector`
+  could only ever track one.
+- Like the other component callbacks, drags are routed by position: a component only receives a drag
+  that starts on top of it, as determined by `containsLocalPoint()`. Mixing `DragCallbacks` into
+  your `FlameGame` subclass directly, as above, keeps the old whole-surface behavior.
+
+With this, `package:flame/events.dart` and `package:flame/input.dart` no longer export any `*Detector`
+mixin or `*Info` class, and `GestureDetectorBuilder.initializeGestures` - which existed only to wire
+those detectors up — has been removed.
+
+See [Drag Events](inputs/drag_events.md) for the full replacement API.
 
 
 ### `onDragCancel` no longer delegates to `onDragEnd`
