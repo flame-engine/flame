@@ -73,7 +73,7 @@ class DraggableBox extends Box with DragCallbacks {
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
 
-    final target = game.screenToWorld(event.devicePosition);
+    final target = gameRef.screenToWorld(event.devicePosition);
 
     final joint = world.physicsWorld.createMouseJoint(
       MouseJointDef(
@@ -96,7 +96,7 @@ class DraggableBox extends Box with DragCallbacks {
 
   @override
   bool onDragUpdate(DragUpdateEvent event) {
-    mouseJoint?.target = game.screenToWorld(event.deviceEndPosition);
+    mouseJoint?.target = gameRef.screenToWorld(event.deviceEndPosition);
 
     return false;
   }

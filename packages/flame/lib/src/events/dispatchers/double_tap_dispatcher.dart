@@ -23,7 +23,7 @@ class DoubleTapDispatcher extends Dispatcher<FlameGame> {
 
   void _onDoubleTapDown(DoubleTapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (DoubleTapCallbacks component) {
         _components.add(component..onDoubleTapDown(event));
       },
@@ -54,11 +54,11 @@ class DoubleTapDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onMount() {
-    game.gestureDetectors.register<DoubleTapGestureRecognizer>(
+    gameRef.gestureDetectors.register<DoubleTapGestureRecognizer>(
       DoubleTapGestureRecognizer.new,
       (DoubleTapGestureRecognizer instance) {
         instance.onDoubleTapDown = (details) =>
-            _onDoubleTapDown(DoubleTapDownEvent(game, details));
+            _onDoubleTapDown(DoubleTapDownEvent(gameRef, details));
         instance.onDoubleTapCancel = () =>
             _onDoubleTapCancel(DoubleTapCancelEvent());
         instance.onDoubleTap = () => _onDoubleTapUp(DoubleTapEvent());
@@ -68,7 +68,7 @@ class DoubleTapDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onRemove() {
-    game.gestureDetectors.unregister<DoubleTapGestureRecognizer>();
-    Dispatcher.removeDispatcher(game, const DoubleTapDispatcherKey());
+    gameRef.gestureDetectors.unregister<DoubleTapGestureRecognizer>();
+    Dispatcher.removeDispatcher(gameRef, const DoubleTapDispatcherKey());
   }
 }

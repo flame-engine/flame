@@ -133,7 +133,7 @@ import 'package:flame/components.dart';
 import '../ember_quest.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
-    with HasGameReference<EmberQuestGame> {
+    with HasGameRef<EmberQuestGame> {
   EmberPlayer({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
@@ -141,7 +141,7 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   void onLoad() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('assets/images/ember.png'),
+      gameRef.images.fromCache('assets/images/ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),
@@ -152,10 +152,10 @@ class EmberPlayer extends SpriteAnimationComponent
 }
 ```
 
-This file uses the `HasGameReference` mixin which allows us to reach back to `ember_quest.dart` and
+This file uses the `HasGameRef` mixin which allows us to reach back to `ember_quest.dart` and
 leverage any of the variables or methods that are defined in the game class. You can see this in
-use with the line `game.images.fromCache('assets/images/ember.png')`. Earlier, we loaded all the
-files into cache, so to use that file now, we call `fromCache` so it can be leveraged by the
+use with the line `gameRef.images.fromCache('assets/images/ember.png')`. Earlier, we loaded all
+the files into cache, so to use that file now, we call `fromCache` so it can be leveraged by the
 `SpriteAnimation`.
 The `EmberPlayer` class is extending a `SpriteAnimationComponent` which allows us to define
 animation as well as position it accordingly in our game world. When we construct this class, the

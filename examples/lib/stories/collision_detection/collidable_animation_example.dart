@@ -53,7 +53,7 @@ class CollidableAnimationExample extends FlameGame with HasCollisionDetection {
 }
 
 class AnimatedComponent extends SpriteAnimationComponent
-    with CollisionCallbacks, HasGameReference {
+    with CollisionCallbacks, HasGameRef {
   final Vector2 velocity;
 
   AnimatedComponent(
@@ -70,7 +70,7 @@ class AnimatedComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/bomb_ptero.png',
       SpriteAnimationData.sequenced(
         amount: 4,

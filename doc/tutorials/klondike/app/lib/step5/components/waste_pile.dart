@@ -5,7 +5,7 @@ import '../pile.dart';
 import 'card.dart';
 
 class WastePile extends PositionComponent
-    with HasGameReference<KlondikeGame>
+    with HasGameRef<KlondikeGame>
     implements Pile {
   WastePile({super.position}) : super(size: KlondikeGame.cardSize);
 
@@ -53,7 +53,7 @@ class WastePile extends PositionComponent
   }
 
   void _fanOutTopCards() {
-    if (game.klondikeDraw == 1) {
+    if (gameRef.klondikeDraw == 1) {
       // No fan-out in Klondike Draw 1.
       return;
     }

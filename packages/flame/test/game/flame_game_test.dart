@@ -51,7 +51,7 @@ void main() {
 
           expect(game.children.contains(component), isTrue);
           expect(component.gameSize, game.size);
-          expect(component.game, game);
+          expect(component.gameRef, game);
         },
       );
 
@@ -62,7 +62,7 @@ void main() {
           await game.ensureAdd(component);
 
           expect(component.gameSize, game.size);
-          expect(component.game, game);
+          expect(component.gameRef, game);
         },
       );
 
@@ -486,7 +486,7 @@ class _MyTappableComponent extends _MyComponent with TapCallbacks {
   }
 }
 
-class _MyComponent extends PositionComponent with HasGameReference {
+class _MyComponent extends PositionComponent with HasGameRef {
   bool isUpdateCalled = false;
   bool isRenderCalled = false;
   int onRemoveCallCounter = 0;

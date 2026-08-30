@@ -64,7 +64,7 @@ class Tire extends BodyComponent<PadRacingGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    game.world.add(Trail(car: car, tire: this));
+    gameRef.world.add(Trail(car: car, tire: this));
   }
 
   @override
@@ -107,7 +107,7 @@ class Tire extends BodyComponent<PadRacingGame> {
     if (body.isAwake || pressedKeys.isNotEmpty) {
       _updateTurn(dt);
       _updateFriction();
-      if (!game.isGameOver) {
+      if (!gameRef.isGameOver) {
         _updateDrive();
       }
     }

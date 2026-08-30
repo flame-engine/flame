@@ -25,7 +25,7 @@ class DominoExample extends Forge2DExampleGame {
 }
 
 class DominoExampleWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   static const dominoWidth = 0.2;
   static const dominoHeight = 1.0;
   static const baseCount = 12;
@@ -39,7 +39,7 @@ class DominoExampleWorld extends Forge2DWorld
     _buildTower();
 
     // Frame the tower, which is built upwards from the ground at y = 0.
-    game.camera.viewfinder.position = Vector2(0, -towerHeight / 2);
+    gameRef.camera.viewfinder.position = Vector2(0, -towerHeight / 2);
   }
 
   /// How tall the finished tower is, in world units.

@@ -23,7 +23,7 @@ import 'package:meta/meta.dart';
 /// [CameraComponent].
 // TODO(Lukas): Rename this since it isn't necessarily related to the viewport.
 mixin ComponentViewportMargin<T extends FlameGame>
-    on PositionComponent, HasGameReference<T> {
+    on PositionComponent, HasGameRef<T> {
   /// Instead of setting a position of the [PositionComponent] that uses
   /// [ComponentViewportMargin] a margin from the edges of the parent can be
   /// used instead.

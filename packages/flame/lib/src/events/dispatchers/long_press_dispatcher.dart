@@ -26,7 +26,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
   @mustCallSuper
   void onLongPressStart(LongPressStartEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (LongPressCallbacks component) {
         _records.add(TaggedComponent(event.pointerId, component));
         component.onLongPressStart(event);
@@ -38,7 +38,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
   void onLongPressMoveUpdate(LongPressMoveUpdateEvent event) {
     final delivered = <TaggedComponent<LongPressCallbacks>>{};
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       deliverToAll: true,
       eventHandler: (LongPressCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
@@ -84,7 +84,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
     _currentPointerId = _nextPointerId++;
     _previousGlobalPosition = details.globalPosition;
     onLongPressStart(
-      LongPressStartEvent(_currentPointerId, game, details),
+      LongPressStartEvent(_currentPointerId, gameRef, details),
     );
   }
 
@@ -93,7 +93,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
     onLongPressMoveUpdate(
       LongPressMoveUpdateEvent(
         _currentPointerId,
-        game,
+        gameRef,
         details,
         previousGlobalPosition: _previousGlobalPosition,
       ),
@@ -104,7 +104,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
   @internal
   void handleLongPressEnd(LongPressEndDetails details) {
     onLongPressEnd(
-      LongPressEndEvent(_currentPointerId, game, details),
+      LongPressEndEvent(_currentPointerId, gameRef, details),
     );
   }
 
@@ -127,7 +127,7 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onMount() {
-    game.gestureDetectors.register<LongPressGestureRecognizer>(
+    gameRef.gestureDetectors.register<LongPressGestureRecognizer>(
       LongPressGestureRecognizer.new,
       (LongPressGestureRecognizer instance) {
         instance
@@ -142,8 +142,8 @@ class LongPressDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onRemove() {
-    game.gestureDetectors.unregister<LongPressGestureRecognizer>();
-    Dispatcher.removeDispatcher(game, const LongPressDispatcherKey());
+    gameRef.gestureDetectors.unregister<LongPressGestureRecognizer>();
+    Dispatcher.removeDispatcher(gameRef, const LongPressDispatcherKey());
   }
 }
 

@@ -29,12 +29,12 @@ maybe we should have KlondikeGame provide a value 1 or 3 to each of them. They b
 constructors, so we could just add an extra parameter to that code, but in Flame there is another
 way, which works even if your component has a default constructor (no code for it) or your game has
 many game-wide values. Let us call our value `klondikeDraw`. In your class declaration add the
-`HasGameReference<MyGame>` mixin, then write `game.klondikeDraw` wherever you need the value 1 or 3.
+`HasGameRef<MyGame>` mixin, then write `gameRef.klondikeDraw` wherever you need the value 1 or 3.
 For class StockPile we will have:
 
 ```dart
 class StockPile extends PositionComponent
-    with TapCallbacks, HasGameReference<KlondikeGame>
+    with TapCallbacks, HasGameRef<KlondikeGame>
     implements Pile {
 ```
 
@@ -50,7 +50,7 @@ and
         acquireCard(card);
       });
     } else {
-      for (var i = 0; i < game.klondikeDraw; i++) {
+      for (var i = 0; i < gameRef.klondikeDraw; i++) {
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
           card.flip();
@@ -65,7 +65,7 @@ For class WastePile we will have:
 
 ```dart
 class WastePile extends PositionComponent
-    with HasGameReference<KlondikeGame>
+    with HasGameRef<KlondikeGame>
     implements Pile {
 ```
 
@@ -73,7 +73,7 @@ and
 
 ```dart
   void _fanOutTopCards() {
-    if (game.klondikeDraw == 1) {   // No fan-out in Klondike Draw 1.
+    if (gameRef.klondikeDraw == 1) {   // No fan-out in Klondike Draw 1.
       return;
     }
     final n = _cards.length;
@@ -542,15 +542,15 @@ now includes some animation:
   void deal() {
     assert(cards.length == 52, 'There are ${cards.length} cards: should be 52');
 
-    if (game.action != Action.sameDeal) {
+    if (gameRef.action != Action.sameDeal) {
       // New deal: change the Random Number Generator's seed.
-      game.seed = Random().nextInt(KlondikeGame.maxInt);
-      if (game.action == Action.changeDraw) {
-        game.klondikeDraw = (game.klondikeDraw == 3) ? 1 : 3;
+      gameRef.seed = Random().nextInt(KlondikeGame.maxInt);
+      if (gameRef.action == Action.changeDraw) {
+        gameRef.klondikeDraw = (gameRef.klondikeDraw == 3) ? 1 : 3;
       }
     }
     // For the "Same deal" option, re-use the previous seed, else use a new one.
-    cards.shuffle(Random(game.seed));
+    cards.shuffle(Random(gameRef.seed));
 
     var cardToDeal = cards.length - 1;
     var nMovingCards = 0;
@@ -746,8 +746,8 @@ value, a `klondikeDraw` value (1 or 3) and a `seed` from the previous game. Each
           letsCelebrate();
         } else {
           // Restart with a new deal or the same deal as before.
-          game.action = action;
-          game.world = KlondikeWorld();
+          gameRef.action = action;
+          gameRef.world = KlondikeWorld();
         }
       },
 ```
@@ -761,8 +761,8 @@ trigger KlondikeWorld's `onLoad()` method.
 The `letsCelebrate()` method ends with similar code, but forces a new deal:
 
 ```dart
-              game.action = Action.newDeal;
-              game.world = KlondikeWorld();
+              gameRef.action = Action.newDeal;
+              gameRef.world = KlondikeWorld();
 ```
 
 

@@ -8,7 +8,7 @@ import 'card.dart';
 import 'waste_pile.dart';
 
 class StockPile extends PositionComponent
-    with HasGameReference<KlondikeGame>
+    with HasGameRef<KlondikeGame>
     implements Pile {
   StockPile({super.position}) : super(size: KlondikeGame.cardSize);
 
@@ -54,7 +54,7 @@ class StockPile extends PositionComponent
         acquireCard(card);
       });
     } else {
-      for (var i = 0; i < game.klondikeDraw; i++) {
+      for (var i = 0; i < gameRef.klondikeDraw; i++) {
         if (_cards.isNotEmpty) {
           final card = _cards.removeLast();
           card.doMoveAndFlip(

@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 
 class JoystickPlayer extends SpriteComponent
-    with HasGameReference, CollisionCallbacks {
+    with HasGameRef, CollisionCallbacks {
   /// Pixels/s
   double maxSpeed = 300.0;
   late final Vector2 _lastSize = size.clone();
@@ -16,7 +16,7 @@ class JoystickPlayer extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('assets/images/layers/player.png');
+    sprite = await gameRef.loadSprite('assets/images/layers/player.png');
     add(RectangleHitbox());
   }
 

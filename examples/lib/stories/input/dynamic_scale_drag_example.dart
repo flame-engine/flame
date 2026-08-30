@@ -146,7 +146,7 @@ class _Button extends PositionComponent with TapCallbacks {
 
 /// A rectangle that only responds to drag.
 class _DragBox extends RectangleComponent
-    with DragCallbacks, HasGameReference<FlameGame> {
+    with DragCallbacks, HasGameRef<FlameGame> {
   _DragBox({
     required this._label,
     required Vector2 position,
@@ -232,7 +232,7 @@ class _ScaleBox extends RectangleComponent with ScaleCallbacks {
 
 /// A rectangle that responds to both drag and scale.
 class _DragScaleBox extends RectangleComponent
-    with ScaleCallbacks, DragCallbacks, HasGameReference<FlameGame> {
+    with ScaleCallbacks, DragCallbacks, HasGameRef<FlameGame> {
   _DragScaleBox({
     required this._label,
     required Vector2 position,

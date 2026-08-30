@@ -5,8 +5,7 @@ import 'package:flame_3d_example/components/player.dart';
 import 'package:flame_3d_example/components/simple_hud.dart';
 import 'package:flame_3d_example/example_game_3d.dart';
 
-class ExampleCamera3D extends CameraComponent3D
-    with HasGameReference<ExampleGame3D> {
+class ExampleCamera3D extends CameraComponent3D with HasGameRef<ExampleGame3D> {
   CameraMode _mode = CameraMode.player;
   double distance = 5.0;
   Vector2 delta = Vector2.zero();
@@ -54,7 +53,7 @@ class ExampleCamera3D extends CameraComponent3D
     target.setFrom(position + _computePositionOffset(rotation));
   }
 
-  Player get player => game.player;
+  Player get player => gameRef.player;
 
   void _playerCameraUpdate(double dt) {
     final targetOffset =

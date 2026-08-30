@@ -4,7 +4,7 @@ import 'package:flame/components.dart' hide Timer;
 import 'package:jenny/jenny.dart';
 
 class DialogueControllerComponent extends Component
-    with DialogueView, HasGameReference {
+    with DialogueView, HasGameRef {
   Completer<void> _forwardCompleter = Completer();
   Completer<int> _choiceCompleter = Completer<int>();
   Completer<void> _closeCompleter = Completer();
@@ -18,7 +18,7 @@ class DialogueControllerComponent extends Component
   }
 
   void _addDialogueBox() {
-    game.camera.viewport.add(_dialogueBoxComponent);
+    gameRef.camera.viewport.add(_dialogueBoxComponent);
   }
 
   @override
@@ -31,9 +31,9 @@ class DialogueControllerComponent extends Component
     if (!_closeCompleter.isCompleted) {
       _closeCompleter.complete();
     }
-    final list = game.camera.viewport.children.query<DialogueBoxComponent>();
+    final list = gameRef.camera.viewport.children.query<DialogueBoxComponent>();
     if (list.isNotEmpty) {
-      game.camera.viewport.removeAll(list);
+      gameRef.camera.viewport.removeAll(list);
     }
   }
 
