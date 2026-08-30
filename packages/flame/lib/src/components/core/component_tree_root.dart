@@ -128,7 +128,7 @@ class ComponentTreeRoot extends Component {
   /// changed since the previous tick.
   ///
   /// The visit order is identical to the recursive
-  /// `Component.defaultUpdateSubtree` traversal: pre-order, children in
+  /// standard traversal: pre-order, children in
   /// priority order. Components mixing in `CustomTraversal` are treated as
   /// barriers: they appear in the list themselves, and their `updateSubtree`
   /// drives their subtree.

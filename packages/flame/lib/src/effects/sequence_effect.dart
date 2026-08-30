@@ -1,4 +1,4 @@
-import 'package:flame/src/components/core/custom_traversal.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/controllers/infinite_effect_controller.dart';
 import 'package:flame/src/effects/controllers/repeated_effect_controller.dart';

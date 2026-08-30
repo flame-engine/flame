@@ -19,8 +19,8 @@ const _dt = 1.0 / 60;
 /// - wide: one container holding many children (container iteration cost),
 /// - nested: many small containers (iterator setup cost per parent),
 /// - deep: a long parent chain (recursion depth cost),
-/// - barrier: a nested tree where a fraction of the parents override
-///   `updateTree` (via [HasTimeScale]). This is the realistic case for
+/// - barrier: a nested tree where a fraction of the parents customize their
+///   traversal (via [HasTimeScale]). This is the realistic case for
 ///   evaluating flattened traversal designs, since components like
 ///   `SequenceEffect`, `Route`, and `HasTimeScale` users manage their own
 ///   subtree traversal and cannot be inlined into a flat list.
@@ -151,9 +151,9 @@ class DeepTreeBenchmark extends _TraversalBenchmark {
   }
 }
 
-/// Same shape as the nested tree, but every 10th parent overrides
-/// `updateTree` through [HasTimeScale] (with the time scale left at 1.0, so
-/// the traversal work stays identical and only the override indirection is
+/// Same shape as the nested tree, but every 10th parent customizes its
+/// traversal through [HasTimeScale] (with the time scale left at 1.0, so
+/// the traversal work stays identical and only the barrier indirection is
 /// measured).
 class BarrierTreeUpdateBenchmark extends _TraversalBenchmark {
   static const _amountParents = 1000;

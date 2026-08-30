@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 
 part 'component_list.dart';
 part 'component_tree_root.dart';
+part 'custom_traversal.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -592,18 +593,16 @@ class Component {
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
   ///
-  /// This method is non-virtual: components that need to customize how their
-  /// subtree is traversed (changing the effective [dt], skipping children,
-  /// or updating them manually) should mix in [CustomTraversal] and override
-  /// its `updateSubtree` method instead. The mixin lets the engine's
-  /// flattened update pass treat such components as traversal barriers
-  /// instead of silently skipping their custom logic.
+  /// This method cannot be overridden. Components that need to customize how
+  /// their subtree is traversed (changing the effective [dt], skipping
+  /// children, or updating them manually) mix in [CustomTraversal] and
+  /// override its [CustomTraversal.updateSubtree] method.
   @nonVirtual
   void updateTree(double dt) {
     if (_isTraversalBarrier) {
       (this as CustomTraversal).updateSubtree(dt);
     } else {
-      defaultUpdateSubtree(dt);
+      _defaultUpdateSubtree(dt);
     }
   }
 
@@ -658,10 +657,9 @@ class Component {
   /// The engine's standard update traversal: update this component, then
   /// update the children in priority order.
   ///
-  /// This is the default behavior of [CustomTraversal.updateSubtree];
-  /// custom traversals can call it to delegate to the standard behavior.
-  @protected
-  void defaultUpdateSubtree(double dt) {
+  /// Used for components without a [CustomTraversal], and as the default
+  /// behavior of [CustomTraversal.updateSubtree].
+  void _defaultUpdateSubtree(double dt) {
     update(dt);
     final children = _children;
     if (children != null) {

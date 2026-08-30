@@ -1,5 +1,4 @@
 import 'package:flame/src/components/core/component.dart';
-import 'package:flame/src/components/core/custom_traversal.dart';
 
 /// This mixin allows components to control their speed as compared to the
 /// normal speed. Only framerate independent logic will benefit from [timeScale]

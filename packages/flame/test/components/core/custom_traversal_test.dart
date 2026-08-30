@@ -18,9 +18,8 @@ void main() {
     testWithFlameGame('updateSubtree can modify the dt for the subtree', (
       game,
     ) async {
-      final child = _DtRecorder();
       final grandChild = _DtRecorder();
-      child.add(grandChild);
+      final child = _DtRecorder()..add(grandChild);
       final parent = _HalfSpeedBarrier(children: [child]);
       await game.world.ensureAdd(parent);
 
