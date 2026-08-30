@@ -170,13 +170,6 @@ class Route extends PositionComponent
   }
 
   @override
-  void updateSubtree(double dt) {
-    if (timeScale > 0) {
-      super.updateSubtree(dt);
-    }
-  }
-
-  @override
   Iterable<Component> componentsAtLocation<T>(
     T locationContext,
     List<T>? nestedContexts,

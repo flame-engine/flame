@@ -1,10 +1,14 @@
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/components/core/custom_traversal.dart';
 
 /// This mixin allows components to control their speed as compared to the
 /// normal speed. Only framerate independent logic will benefit from [timeScale]
 /// changes.
 ///
-/// Note: Modified [timeScale] will be applied to all children as well.
+/// Note: Modified [timeScale] will be applied to all children as well. A
+/// [timeScale] of 0 stops the update pass for the component and its whole
+/// subtree: [Component.update] is not called on any of them until the time
+/// scale is raised again.
 mixin HasTimeScale on CustomTraversal {
   /// The ratio of components tick speed and normal tick speed.
   /// It defaults to 1.0, which means the component moves normally.
@@ -27,10 +31,13 @@ mixin HasTimeScale on CustomTraversal {
 
   @override
   void updateSubtree(double dt) {
+    if (_timeScale == 0) {
+      return;
+    }
     super.updateSubtree(dt * _timeScale);
   }
 
-  /// Pauses the component by setting the time scale to 0.0.
+  /// Pauses the component and its subtree by setting the time scale to 0.0.
   void pause() {
     timeScale = 0.0;
   }

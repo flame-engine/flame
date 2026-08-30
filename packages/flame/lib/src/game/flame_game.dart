@@ -173,14 +173,17 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @mustCallSuper
   void update(double dt) {
     if (parent == null) {
+      // Lifecycle events are processed before the traversal so that they
+      // complete even while the traversal is paused through a time scale.
+      processLifecycleEvents();
       updateTree(dt);
     }
   }
 
   @override
   void updateSubtree(double dt) {
-    processLifecycleEvents();
     if (parent != null) {
+      processLifecycleEvents();
       update(dt);
     }
     updateChildrenFlat(dt);

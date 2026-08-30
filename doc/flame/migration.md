@@ -778,5 +778,5 @@ class SlowWorld extends World with HasTimeScale {}
 class SlowWorld extends World with CustomTraversal, HasTimeScale {}
 ```
 
-To stop updating a subtree, gate `updateSubtree` in the same way, which is what `Route.stopTime()`
-does.
+A `HasTimeScale` time scale of `0` (or `pause()`) now stops the update pass for the whole subtree
+instead of updating it with a `dt` of `0`, which is what `Route.stopTime()` relies on.
