@@ -259,16 +259,6 @@ void main() {
   });
 }
 
-class _SpyComponentList extends ComponentList {
-  int callCount = 0;
-
-  @override
-  void rebalance() {
-    callCount++;
-    super.rebalance();
-  }
-}
-
 class _PriorityComponent extends Component {
   _PriorityComponent(int priority) : super(priority: priority);
 }
@@ -276,12 +266,16 @@ class _PriorityComponent extends Component {
 class _ParentWithReorderSpy extends Component {
   _ParentWithReorderSpy(int priority) : super(priority: priority);
 
+  int callCount = 0;
+
   @override
-  ComponentList createComponentList() => _SpyComponentList();
+  void rebalanceChildren() {
+    callCount++;
+    super.rebalanceChildren();
+  }
 
   void assertCalled(int n) {
-    final componentList = children as _SpyComponentList;
-    expect(componentList.callCount, n);
-    componentList.callCount = 0;
+    expect(callCount, n);
+    callCount = 0;
   }
 }

@@ -6,12 +6,13 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/core/recycled_queue.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
 
 part 'component_list.dart';
+part 'component_tree_root.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -320,9 +321,15 @@ class Component {
   /// when the component is not in any list. Maintained by [ComponentList].
   int _containerIndex = -1;
 
-  /// Restores the priority ordering of the [children], after one or more of
-  /// them have changed their [priority].
-  void rebalanceChildren() => _children?.rebalance();
+  /// Restores the ordering of the [children] after values that their ordering
+  /// depends on have changed.
+  ///
+  /// Priority changes on mounted components trigger this automatically before
+  /// the next update pass. Call it yourself when a custom comparator (see
+  /// [createComponentList]) reads values that changed, but not while
+  /// iterating the [children], since reordering the list invalidates live
+  /// iterators.
+  void rebalanceChildren() => _children?._rebalance();
 
   /// The children components of this component.
   ///
@@ -736,13 +743,13 @@ class Component {
       children._add(child);
     } else if (child._parent != null) {
       if (child.isRemoving) {
-        game.dequeueRemove(child);
+        game._dequeueRemove(child);
         child._clearRemovingBit();
       }
-      game.enqueueMove(child, this);
+      game._enqueueMove(child, this);
     } else if (isMounted && !child.isMounted) {
       child._parent = this;
-      game.enqueueAdd(child, this);
+      game._enqueueAdd(child, this);
     } else {
       child._parent = this;
       // This will be reconciled during the mounting stage
@@ -792,11 +799,11 @@ class Component {
       final root = findGame()!;
       if (child.isMounted || child.isMounting) {
         if (!child.isRemoving) {
-          root.enqueueRemove(child, this);
+          root._enqueueRemove(child, this);
           child._setRemovingBit();
         }
       } else if (!child.isRemoved) {
-        root.dequeueAdd(child, this);
+        root._dequeueAdd(child, this);
         child._parent = null;
       } else if (isRemoving) {
         // This parent is being removed from the tree, and the child was
@@ -945,7 +952,7 @@ class Component {
       final parent = _parent;
       final game = findGame();
       if (game != null && parent != null) {
-        game.enqueuePriorityChange(parent, this);
+        game._enqueuePriorityChange(parent, this);
       }
     }
   }
@@ -954,8 +961,7 @@ class Component {
 
   //#region Internal lifecycle management
 
-  @internal
-  LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
+  _LifecycleEventStatus _handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
     if (_loadError != null) {
       // This component will never finish loading, so waiting for it would block
@@ -963,12 +969,12 @@ class Component {
       // from the parent it never made it into.
       _parent = null;
       parent._children?._remove(this);
-      return LifecycleEventStatus.done;
+      return _LifecycleEventStatus.done;
     }
     if (parent.isMounted && isLoaded) {
       _parent ??= parent;
       _mount();
-      return LifecycleEventStatus.done;
+      return _LifecycleEventStatus.done;
     } else {
       if (parent.isMounted && !isLoading) {
         _startLoading();
@@ -977,25 +983,23 @@ class Component {
         // removed in the same tick.
         _parent = parent;
         parent.children._add(this);
-        return LifecycleEventStatus.done;
+        return _LifecycleEventStatus.done;
       }
-      return LifecycleEventStatus.block;
+      return _LifecycleEventStatus.block;
     }
   }
 
-  @internal
-  LifecycleEventStatus handleLifecycleEventRemove(Component parent) {
+  _LifecycleEventStatus _handleLifecycleEventRemove(Component parent) {
     if (_parent == null) {
       parent._children?._remove(this);
     } else {
       _remove(parent);
       assert(_parent == null);
     }
-    return LifecycleEventStatus.done;
+    return _LifecycleEventStatus.done;
   }
 
-  @internal
-  LifecycleEventStatus handleLifecycleEventMove(Component newParent) {
+  _LifecycleEventStatus _handleLifecycleEventMove(Component newParent) {
     final parent = _parent;
     if (parent != null) {
       _remove(parent);
@@ -1006,7 +1010,7 @@ class Component {
     } else {
       newParent.add(this);
     }
-    return LifecycleEventStatus.done;
+    return _LifecycleEventStatus.done;
   }
 
   @mustCallSuper
@@ -1088,7 +1092,7 @@ class Component {
   /// same way an unawaited future's error would be.
   ///
   /// The component is left unloaded: it never mounts, and its pending add event
-  /// is dropped from the lifecycle queue by [handleLifecycleEventAdd].
+  /// is dropped from the lifecycle queue by [_handleLifecycleEventAdd].
   void _failLoading(Object error, StackTrace stackTrace) {
     _loadError = (error: error, stackTrace: stackTrace);
     final completer = _loadCompleter;
@@ -1156,7 +1160,7 @@ class Component {
       _tmpChildren.addAll(_children!);
       _children!._clear();
       assert(_tmpPendingRemoves.isEmpty);
-      findGame()?.cancelQueuedRemoves(_tmpChildren, _tmpPendingRemoves);
+      findGame()?._cancelQueuedRemoves(_tmpChildren, _tmpPendingRemoves);
       for (final child in _tmpChildren) {
         child._parent = null;
         if (_tmpPendingRemoves.contains(child)) {

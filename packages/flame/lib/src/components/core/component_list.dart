@@ -11,9 +11,9 @@ part of 'component.dart';
 /// [Component.remove] and their related methods to change which components
 /// are in the list. Removing a component while iterating the list is allowed,
 /// the removed component is simply no longer visited. Reordering the list
-/// while iterating it (through [rebalance], or by an addition that does not
-/// end up at the end of the list) makes live iterators throw a
-/// [ConcurrentModificationError].
+/// while iterating it (through [Component.rebalanceChildren], or by an
+/// addition that does not end up at the end of the list) makes live iterators
+/// throw a [ConcurrentModificationError].
 ///
 /// Components of a specific type can be retrieved in constant time with
 /// [query], once the type has been registered with [register].
@@ -250,10 +250,11 @@ class ComponentList extends Iterable<Component> {
   /// Restores the priority ordering after one or more elements have changed
   /// their [Component.priority].
   ///
-  /// This is invoked automatically, at most once per parent per game tick,
-  /// when priorities of mounted components change. The sort is stable:
-  /// components with equal priority keep their relative order.
-  void rebalance() {
+  /// Invoked through [Component.rebalanceChildren], which the engine calls at
+  /// most once per parent per game tick when priorities of mounted components
+  /// change. The sort is stable: components with equal priority keep their
+  /// relative order.
+  void _rebalance() {
     // Removes all tombstones, which makes the `element!` accesses safe.
     _compact();
     final elements = _elements;
