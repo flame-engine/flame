@@ -14,7 +14,7 @@ class Player extends SvgComponent with HasGameReference<SvgComponentExample> {
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await game.loadSvg('svgs/happy_player.svg');
+    svg = await game.loadSvg('assets/svgs/happy_player.svg');
   }
 
   @override
@@ -46,7 +46,7 @@ class Background extends SvgComponent
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await game.loadSvg('svgs/checkerboard.svg');
+    svg = await game.loadSvg('assets/svgs/checkerboard.svg');
   }
 }
 
@@ -64,7 +64,7 @@ class Balloons extends SvgComponent with HasGameReference<SvgComponentExample> {
 
     final color = Random().nextBool() ? 'red' : 'green';
 
-    svg = await game.loadSvg('svgs/${color}_balloons.svg');
+    svg = await game.loadSvg('assets/svgs/${color}_balloons.svg');
   }
 }
 
