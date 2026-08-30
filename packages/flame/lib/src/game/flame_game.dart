@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/input.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -245,11 +244,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   bool containsEventHandlerAt(Vector2 position) {
-    // Game-level detector mixins handle events for the entire game surface,
-    // so any in-bounds point is a hit.
-    if (this is PanDetector) {
-      return true;
-    }
     for (final component in super.componentsAtPoint(position)) {
       if (component is PointerInputCallbacks) {
         return true;

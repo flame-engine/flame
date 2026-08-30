@@ -136,10 +136,10 @@ higher value requires a more deliberate gesture before scale events fire.
 
 ## Combining with DragCallbacks
 
-A component can use both `ScaleCallbacks` and `DragCallbacks` at the same time. When both mixins are
-present, single-finger gestures produce drag events and two-finger gestures produce both scale and
-drag events. This is useful for components that should be draggable with one finger and
-pinch-to-zoom or rotatable with two fingers.
+`ScaleCallbacks` and `DragCallbacks` can be used at the same time. Both are driven by the same
+recognizer, so they combine freely: single-finger gestures produce drag events, and two-finger
+gestures produce both scale and drag events. This is useful for components that should be draggable
+with one finger and pinch-to-zoom or rotatable with two fingers.
 
 ```dart
 class InteractiveRectangle extends RectangleComponent
@@ -164,3 +164,42 @@ class InteractiveRectangle extends RectangleComponent
   }
 }
 ```
+
+The same pair mixed into a `FlameGame` gives you the usual "drag to pan, pinch to zoom" camera
+controls. Because a two-finger pinch emits drag events as well, the drag handler has to bail out
+while a scale is in progress, otherwise the camera would pan and zoom at once:
+
+```dart
+class MyGame extends FlameGame with DragCallbacks, ScaleCallbacks {
+  late double startZoom;
+
+  void clampZoom() {
+    camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 3.0);
+  }
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    startZoom = camera.viewfinder.zoom;
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    camera.viewfinder.zoom = startZoom * event.verticalScale;
+    clampZoom();
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    // Two-finger pinches emit both drag and scale; skip pan while zooming
+    if (isScaling) {
+      return;
+    }
+    final zoom = camera.viewfinder.zoom;
+    camera.moveBy((event.localDelta..negate()) / zoom);
+  }
+}
+```
+
+This can also be seen in the
+[zoom example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/camera_and_viewport/zoom_example.dart).

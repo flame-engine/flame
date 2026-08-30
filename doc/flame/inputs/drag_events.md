@@ -131,31 +131,7 @@ It can be used, for example, to change the component's visual appearance during 
 
 ## Combining with ScaleCallbacks
 
-A component can use both `DragCallbacks` and `ScaleCallbacks` at the same time. When both mixins are
-present, single-finger gestures produce drag events and two-finger gestures produce both drag and
-scale events. This is useful for components that should be draggable with one finger and
-pinch-to-zoom or rotatable with two fingers.
-
-```dart
-class InteractiveRectangle extends RectangleComponent
-    with ScaleCallbacks, DragCallbacks {
-
-  double _initialAngle = 0;
-
-  @override
-  void onDragUpdate(DragUpdateEvent event) {
-    position += event.localDelta;
-  }
-
-  @override
-  void onScaleStart(ScaleStartEvent event) {
-    super.onScaleStart(event);
-    _initialAngle = angle;
-  }
-
-  @override
-  void onScaleUpdate(ScaleUpdateEvent event) {
-    angle = _initialAngle + event.rotation;
-  }
-}
-```
+`DragCallbacks` and `ScaleCallbacks` can be used at the same time: single-finger gestures produce
+drag events, and two-finger gestures produce both drag and scale events. See
+[Combining with DragCallbacks](scale_events.md#combining-with-dragcallbacks) for how to make the two
+work together, both on a component and for panning and zooming the camera.
