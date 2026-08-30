@@ -18,6 +18,28 @@ mixin DragCallbacks on Component implements PointerInputCallbacks {
   /// Returns true while the component is being dragged.
   bool get isDragged => _isDragged;
 
+  /// Whether this component accepts multiple simultaneous drags.
+  ///
+  /// Drags are tracked per pointer; so, by default, a component that is already
+  /// being dragged can start a second, independent drag from another pointer,
+  /// which might or might not be desirable.
+  ///
+  /// Override this to `false` to accept only one drag at a time. While a drag
+  /// is in progress, [onDragStart] is not delivered for any other pointer, and
+  /// no [onDragUpdate], [onDragEnd] or [onDragCancel] follow for it either;
+  /// the event is offered to the components below it in propagation order 
+  /// Once the accepted drag finishes, the component is freed to accept further
+  /// drags.
+  ///
+  /// Note that control is not handed over: if the accepted pointer is lifted
+  /// while another that was first rejected is still down, the drag ends rather
+  /// than continuing on the remaining finger.
+  ///
+  /// Note that this only gates drags: a component that also mixes in
+  /// [ScaleCallbacks] keeps receiving scale events normally, so one-finger drag
+  /// plus two-finger pinch still works.
+  bool get allowsMultiPointerDrag => true;
+
   /// The user initiated a drag gesture on top of this component.
   ///
   /// By default, only one component will receive a drag event. However, setting

@@ -129,6 +129,39 @@ actively being dragged. This is set to `true` at `onDragStart` and back to `fals
 It can be used, for example, to change the component's visual appearance during a drag.
 
 
+### allowsMultiPointerDrag
+
+Drags are tracked per pointer, so a component that is already being dragged will start a second,
+independent drag when another finger touches it. That is what you want when each drag manipulates
+something of its own, but not when they all drive a single piece of state (such as a camera or
+a draggable object), where a second finger just fights the first.
+
+Override `allowsMultiPointerDrag` to `false` to accept only one drag at a time:
+
+```dart
+class MagnifyingGlass extends PositionComponent with DragCallbacks {
+  @override
+  bool get allowsMultiPointerDrag => false;
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    position = event.canvasEndPosition;
+  }
+}
+```
+
+While a drag is in progress, no other pointer gets an `onDragStart` on this component, and no
+`onDragUpdate`, `onDragEnd` or `onDragCancel` follow for it either; the event is offered to the
+components below instead. Once the accepted drag ends or is cancelled, the component is free to
+accept a new one.
+
+Control is not handed over: if the accepted pointer is lifted while another is still down, the drag
+ends rather than continuing on the remaining finger.
+
+This only gates drags. A component that also uses `ScaleCallbacks` keeps receiving scale events
+normally, so one-finger drag plus two-finger pinch still works.
+
+
 ## Combining with ScaleCallbacks
 
 `DragCallbacks` and `ScaleCallbacks` can be used at the same time: single-finger gestures produce

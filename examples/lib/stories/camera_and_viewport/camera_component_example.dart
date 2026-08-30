@@ -43,46 +43,31 @@ class CameraComponentExample extends FlameGame<AntWorld> with DragCallbacks {
     magnifyingGlass.viewfinder.zoom = zoom;
   }
 
-  /// There is only one magnifying glass, so only the first pointer to start
-  /// dragging controls it; drags from any other pointers are ignored.
-  int? _controllingPointerId;
+  /// Multiple pointers would flip-flop the glass and drop it on the first lift.
+  @override
+  bool get allowsMultiPointerDrag => false;
 
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    if (_controllingPointerId != null) {
-      return;
-    }
-    _controllingPointerId = event.pointerId;
     _updateMagnifyingGlassPosition(event.canvasPosition);
     add(magnifyingGlass);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (event.pointerId != _controllingPointerId) {
-      return;
-    }
     _updateMagnifyingGlassPosition(event.canvasEndPosition);
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    _releaseMagnifyingGlass(event.pointerId);
+    magnifyingGlass.removeFromParent();
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
     super.onDragCancel(event);
-    _releaseMagnifyingGlass(event.pointerId);
-  }
-
-  void _releaseMagnifyingGlass(int pointerId) {
-    if (pointerId != _controllingPointerId) {
-      return;
-    }
-    _controllingPointerId = null;
     magnifyingGlass.removeFromParent();
   }
 
