@@ -53,7 +53,7 @@ class ComponentList extends Iterable<Component> {
   int _tombstones = 0;
 
   /// Incremented whenever existing elements change their position within
-  /// [_elements] (mid-list insertion, sorting, or compaction). Iterators use
+  /// [_elements] (middle-list insertion, sorting, or compaction). Iterators use
   /// this to detect concurrent structural modification.
   int _shiftCount = 0;
 
@@ -64,6 +64,14 @@ class ComponentList extends Iterable<Component> {
 
   /// The per-type query caches, created by [register].
   Map<Type, _QueryCache<Component>>? _queries;
+
+  /// A monotonically increasing counter, bumped on every membership or order
+  /// change of any [ComponentList] (adds, removes, clears, reorders). The
+  /// root's flattened update list compares against this to know when it must
+  /// be rebuilt. Note that this is bumped by structural changes anywhere,
+  /// including in other games or detached trees, so a bump means "possibly
+  /// changed", never the reverse.
+  static int _structureVersion = 0;
 
   @override
   int get length => _length;
@@ -166,9 +174,10 @@ class ComponentList extends Iterable<Component> {
     }
     component._containerList = this;
     _length++;
-    final queries = _queries;
-    if (queries != null) {
-      for (final cache in queries.values) {
+    _structureVersion++;
+    final caches = _queries?.values;
+    if (caches != null) {
+      for (final cache in caches) {
         if (cache.check(component)) {
           cache.insertSorted(component);
         }
@@ -210,9 +219,10 @@ class ComponentList extends Iterable<Component> {
     component._containerIndex = -1;
     _length--;
     _tombstones++;
-    final queries = _queries;
-    if (queries != null) {
-      for (final cache in queries.values) {
+    _structureVersion++;
+    final caches = _queries?.values;
+    if (caches != null) {
+      for (final cache in caches) {
         if (cache.check(component)) {
           cache.data.remove(component);
         }
@@ -244,7 +254,13 @@ class ComponentList extends Iterable<Component> {
     _length = 0;
     _tombstones = 0;
     _shiftCount++;
-    _queries?.forEach((_, cache) => cache.data.clear());
+    _structureVersion++;
+    final caches = _queries?.values;
+    if (caches != null) {
+      for (final cache in caches) {
+        cache.data.clear();
+      }
+    }
   }
 
   /// Restores the priority ordering after one or more elements have changed
@@ -269,6 +285,7 @@ class ComponentList extends Iterable<Component> {
       return;
     }
     _shiftCount++;
+    _structureVersion++;
     // List.sort is not stable, and the stable alternatives (such as mergeSort
     // from package:collection) allocate a scratch buffer on every call.
     // Breaking ties by the pre-sort index costs nothing extra, since the index
@@ -281,7 +298,12 @@ class ComponentList extends Iterable<Component> {
     for (var i = 0; i < elements.length; i++) {
       elements[i]!._containerIndex = i;
     }
-    _queries?.forEach((_, cache) => cache.resort());
+    final caches = _queries?.values;
+    if (caches != null) {
+      for (final cache in caches) {
+        cache.resort();
+      }
+    }
   }
 
   /// Rewrites the backing list without its tombstones, restoring exact

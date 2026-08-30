@@ -13,6 +13,7 @@ import 'package:meta/meta.dart';
 
 part 'component_list.dart';
 part 'component_tree_root.dart';
+part 'custom_traversal.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -74,6 +75,7 @@ class Component {
     int? priority,
     this.key,
   }) : _priority = priority ?? 0 {
+    _isTraversalBarrier = this is CustomTraversal;
     if (children != null) {
       addAll(children);
     }
@@ -284,9 +286,9 @@ class Component {
   ///
   /// ```dart
   /// coin.parent = inventory;
-  /// // The inventory.children set does not include coin yet.
+  /// // The inventory.children list does not include coin yet.
   /// await game.lifecycleEventsProcessed;
-  /// // The inventory.children set now includes coin.
+  /// // The inventory.children list now includes coin.
   /// ```
   Component? get parent => _parent;
   Component? _parent;
@@ -299,7 +301,7 @@ class Component {
   }
 
   /// This field should be used internally for functionality when you don't need
-  /// to create a component set for the children if one doesn't already exist.
+  /// to create a children list if one doesn't already exist.
   ///
   /// This makes it possible to have lighter components that don't have any
   /// children.
@@ -542,7 +544,7 @@ class Component {
   /// its [children] yet.
   ///
   /// After this method completes, the component is added to the parent's
-  /// children set, and then the flag [isMounted] set to true.
+  /// children list, and then the flag [isMounted] set to true.
   ///
   /// Example:
   /// ```dart
@@ -590,7 +592,69 @@ class Component {
   /// This method traverses the component tree and calls [update] on all its
   /// children according to their [priority] order, relative to the
   /// priority of the direct siblings, not the children or the ancestors.
+  ///
+  /// This method cannot be overridden. Components that need to customize how
+  /// their subtree is traversed (changing the effective [dt], skipping
+  /// children, or updating them manually) mix in [CustomTraversal] and
+  /// override its [CustomTraversal.updateSubtree] method.
+  @nonVirtual
   void updateTree(double dt) {
+    if (_isTraversalBarrier) {
+      (this as CustomTraversal).updateSubtree(dt);
+    } else {
+      _defaultUpdateSubtree(dt);
+    }
+  }
+
+  /// Whether this component manages its own subtree traversal. Evaluated
+  /// once in the constructor, so that the per-frame traversal loops pay a
+  /// plain field load instead of a type check.
+  bool _isTraversalBarrier = false;
+
+  /// Runs one update pass over a flattened traversal list produced by
+  /// [_updateAndFlattenInto].
+  static void _updateFlatList(List<Component> list, double dt) {
+    for (final component in list) {
+      if (component._isTraversalBarrier) {
+        (component as CustomTraversal).updateSubtree(dt);
+      } else {
+        component.update(dt);
+      }
+    }
+  }
+
+  /// Combined update pass and flatten: updates this component's subtree
+  /// recursively while appending the visited components to [out], in
+  /// pre-order with children in priority order, stopping at (but including)
+  /// `CustomTraversal` barriers. Used by the root on ticks where the
+  /// structure changed, so that the flat-list rebuild does not cost a
+  /// separate pass over the tree.
+  void _updateAndFlattenInto(List<Component> out, double dt) {
+    final children = _children;
+    if (children == null) {
+      return;
+    }
+    children._compact();
+    for (final child in children._elements) {
+      if (child == null) {
+        continue;
+      }
+      out.add(child);
+      if (child._isTraversalBarrier) {
+        (child as CustomTraversal).updateSubtree(dt);
+      } else {
+        child.update(dt);
+        child._updateAndFlattenInto(out, dt);
+      }
+    }
+  }
+
+  /// The engine's standard update traversal: update this component, then
+  /// update the children in priority order.
+  ///
+  /// Used for components without a [CustomTraversal], and as the default
+  /// behavior of [CustomTraversal.updateSubtree].
+  void _defaultUpdateSubtree(double dt) {
     update(dt);
     final children = _children;
     if (children != null) {
@@ -1230,8 +1294,8 @@ class Component {
     out ??= [];
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed) {
-        child._collectDescendants(out);
+      for (final child in children._elements.reversed) {
+        child?._collectDescendants(out);
       }
     }
     out.add(this);
