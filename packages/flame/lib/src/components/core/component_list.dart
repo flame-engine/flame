@@ -347,8 +347,7 @@ class ComponentList extends Iterable<Component> {
         data.add(element);
       }
     }
-    final cache = _QueryCache<C>(data);
-    queries[C] = cache;
+    queries[C] = _QueryCache<C>(data);
   }
 
   /// All elements of type [C], in priority order, in constant time.
