@@ -26,7 +26,7 @@ void main() {
   });
 }
 
-class _ScaledRecorder extends Component with HasTimeScale {
+class _ScaledRecorder extends Component with CustomTraversal, HasTimeScale {
   final List<double> recordedDts = [];
 
   @override

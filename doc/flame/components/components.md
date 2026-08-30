@@ -151,20 +151,21 @@ class MyComponent extends PositionComponent with TapCallbacks {
 The engine drives the update pass through a flattened traversal list owned by the game, so
 `updateTree` is non-virtual and cannot be overridden. Components that need to control how their
 subtree is updated (changing the effective `dt`, skipping children, or updating them manually)
-should implement the `CustomTraversal` marker and override the `updateSubtree` method:
+should mix in `CustomTraversal` and override its `updateSubtree` method:
 
 ```dart
-class SlowMotionArea extends Component implements CustomTraversal {
+class SlowMotionArea extends Component with CustomTraversal {
   @override
   void updateSubtree(double dt) => super.updateSubtree(dt / 2);
 }
 ```
 
 The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
-flattened list itself and its `updateSubtree` drives its subtree. `updateSubtree` lives on
-`Component`, but it is only invoked for components carrying the marker. Mixins that provide a
-custom traversal (like `HasTimeScale`) declare `implements CustomTraversal`, so their users do not
-need to add the marker themselves, and chain via `super.updateSubtree`.
+flattened list itself and its `updateSubtree` drives its subtree. `updateSubtree` only exists on
+the mixin, so it cannot be overridden without also becoming a barrier. Mixins that build on it
+(like `HasTimeScale`) are declared `on CustomTraversal` and chain via `super.updateSubtree`, so
+their users mix in `CustomTraversal` first: `with CustomTraversal, HasTimeScale`. `FlameGame`
+already mixes it in, so `extends FlameGame with HasTimeScale` needs nothing extra.
 
 
 ### Composability of components
