@@ -185,7 +185,7 @@ class MyGame extends FlameGame with DragCallbacks, ScaleCallbacks {
 
   @override
   void onScaleUpdate(ScaleUpdateEvent event) {
-    camera.viewfinder.zoom = startZoom * event.verticalScale;
+    camera.viewfinder.zoom = startZoom * event.scale;
     clampZoom();
   }
 
