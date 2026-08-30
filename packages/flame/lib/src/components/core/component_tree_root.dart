@@ -119,7 +119,7 @@ class ComponentTreeRoot extends Component {
   /// traversed by their own `updateSubtree` implementations.
   final List<Component> _flatUpdateList = [];
 
-  /// The [ComponentList.structureVersion] that [_flatUpdateList] was built
+  /// The [ComponentList._structureVersion] that [_flatUpdateList] was built
   /// against.
   int _flatVersion = -1;
 
@@ -134,15 +134,15 @@ class ComponentTreeRoot extends Component {
   /// drives their subtree.
   @internal
   void updateChildrenFlat(double dt) {
-    if (_flatVersion != ComponentList.structureVersion) {
+    if (_flatVersion != ComponentList._structureVersion) {
       // The version is captured before the pass: structural changes made by
       // update callbacks (pause toggles, detached-tree edits) invalidate the
       // list that is being built and must trigger a rebuild next tick.
-      _flatVersion = ComponentList.structureVersion;
+      _flatVersion = ComponentList._structureVersion;
       _flatUpdateList.clear();
-      updateAndFlattenInto(_flatUpdateList, dt);
+      _updateAndFlattenInto(_flatUpdateList, dt);
     } else {
-      Component.updateFlatList(_flatUpdateList, dt);
+      Component._updateFlatList(_flatUpdateList, dt);
     }
   }
 

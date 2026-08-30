@@ -76,8 +76,7 @@ class ComponentList extends Iterable<Component> {
   /// be rebuilt. Note that this is bumped by structural changes anywhere,
   /// including in other games or detached trees, so a bump means "possibly
   /// changed", never the reverse.
-  @internal
-  static int structureVersion = 0;
+  static int _structureVersion = 0;
 
   @override
   int get length => _length;
@@ -180,7 +179,7 @@ class ComponentList extends Iterable<Component> {
     }
     component._containerList = this;
     _length++;
-    structureVersion++;
+    _structureVersion++;
     final caches = _queryCaches;
     if (caches != null) {
       for (var i = 0; i < caches.length; i++) {
@@ -226,7 +225,7 @@ class ComponentList extends Iterable<Component> {
     component._containerIndex = -1;
     _length--;
     _tombstones++;
-    structureVersion++;
+    _structureVersion++;
     final caches = _queryCaches;
     if (caches != null) {
       for (var i = 0; i < caches.length; i++) {
@@ -262,7 +261,7 @@ class ComponentList extends Iterable<Component> {
     _length = 0;
     _tombstones = 0;
     _shiftCount++;
-    structureVersion++;
+    _structureVersion++;
     final caches = _queryCaches;
     if (caches != null) {
       for (var i = 0; i < caches.length; i++) {
@@ -293,7 +292,7 @@ class ComponentList extends Iterable<Component> {
       return;
     }
     _shiftCount++;
-    structureVersion++;
+    _structureVersion++;
     // List.sort is not stable, and the stable alternatives (such as mergeSort
     // from package:collection) allocate a scratch buffer on every call.
     // Breaking ties by the pre-sort index costs nothing extra, since the index

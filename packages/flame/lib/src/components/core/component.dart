@@ -612,9 +612,8 @@ class Component {
   bool _isTraversalBarrier = false;
 
   /// Runs one update pass over a flattened traversal list produced by
-  /// [updateAndFlattenInto].
-  @internal
-  static void updateFlatList(List<Component> list, double dt) {
+  /// [_updateAndFlattenInto].
+  static void _updateFlatList(List<Component> list, double dt) {
     for (var i = 0; i < list.length; i++) {
       final component = list[i];
       if (component._isTraversalBarrier) {
@@ -631,8 +630,7 @@ class Component {
   /// `CustomTraversal` barriers. Used by the root on ticks where the
   /// structure changed, so that the flat-list rebuild does not cost a
   /// separate pass over the tree.
-  @internal
-  void updateAndFlattenInto(List<Component> out, double dt) {
+  void _updateAndFlattenInto(List<Component> out, double dt) {
     final children = _children;
     if (children == null) {
       return;
@@ -649,7 +647,7 @@ class Component {
         (child as CustomTraversal).updateSubtree(dt);
       } else {
         child.update(dt);
-        child.updateAndFlattenInto(out, dt);
+        child._updateAndFlattenInto(out, dt);
       }
     }
   }
