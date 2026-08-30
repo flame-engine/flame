@@ -475,16 +475,16 @@ See [Pointer Events](inputs/pointer_events.md) for the full replacement API.
 `PanDetector` was the last of the game-level gesture detectors, so removing it also removes every
 event class that existed to serve them:
 
-| Removed | Use instead |
-| --- | --- |
-| `PanDetector` | `DragCallbacks` |
-| `DragStartInfo` | `DragStartEvent` |
+| Removed          | Use instead       |
+| ---------------- | ----------------- |
+| `PanDetector`    | `DragCallbacks`   |
+| `DragStartInfo`  | `DragStartEvent`  |
 | `DragUpdateInfo` | `DragUpdateEvent` |
-| `DragEndInfo` | `DragEndEvent` |
-| `DragDownInfo` | — |
-| `TapDownInfo` | `TapDownEvent` |
-| `TapUpInfo` | `TapUpEvent` |
-| `PositionInfo` | `PositionEvent` |
+| `DragEndInfo`    | `DragEndEvent`    |
+| `DragDownInfo`   | —                 |
+| `TapDownInfo`    | `TapDownEvent`    |
+| `TapUpInfo`      | `TapUpEvent`      |
+| `PositionInfo`   | `PositionEvent`   |
 
 ```dart
 // Before
