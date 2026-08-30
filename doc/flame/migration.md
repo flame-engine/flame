@@ -255,16 +255,16 @@ directly.
 The game-level detector mixins that were deprecated in v1.38.0 have now been removed, together with
 the event classes that only they used:
 
-| Removed | Use instead |
-| --- | --- |
-| `TapDetector` | `TapCallbacks` |
-| `SecondaryTapDetector` | `SecondaryTapCallbacks` |
-| `TertiaryTapDetector` | `TertiaryTapCallbacks` |
-| `DoubleTapDetector` | `DoubleTapCallbacks` |
-| `LongPressDetector` | `LongPressCallbacks` |
-| `LongPressStartInfo` | `LongPressStartEvent` |
+| Removed                   | Use instead                |
+| ------------------------- | -------------------------- |
+| `TapDetector`             | `TapCallbacks`             |
+| `SecondaryTapDetector`    | `SecondaryTapCallbacks`    |
+| `TertiaryTapDetector`     | `TertiaryTapCallbacks`     |
+| `DoubleTapDetector`       | `DoubleTapCallbacks`       |
+| `LongPressDetector`       | `LongPressCallbacks`       |
+| `LongPressStartInfo`      | `LongPressStartEvent`      |
 | `LongPressMoveUpdateInfo` | `LongPressMoveUpdateEvent` |
-| `LongPressEndInfo` | `LongPressEndEvent` |
+| `LongPressEndInfo`        | `LongPressEndEvent`        |
 
 The replacements are mixed into a component rather than into the game, and each callback takes a
 single event object:
@@ -300,12 +300,12 @@ full replacement APIs.
 
 The `ScaleDetector` game mixin has been removed, together with the event classes that only it used:
 
-| Removed | Use instead |
-| --- | --- |
-| `ScaleDetector` | `ScaleCallbacks` |
-| `ScaleStartInfo` | `ScaleStartEvent` |
+| Removed           | Use instead        |
+| ----------------- | ------------------ |
+| `ScaleDetector`   | `ScaleCallbacks`   |
+| `ScaleStartInfo`  | `ScaleStartEvent`  |
 | `ScaleUpdateInfo` | `ScaleUpdateEvent` |
-| `ScaleEndInfo` | `ScaleEndEvent` |
+| `ScaleEndInfo`    | `ScaleEndEvent`    |
 
 `ScaleUpdateEvent` is a strict superset of `ScaleUpdateInfo`: `info.scale.global.x` and
 `info.scale.global.y` become `event.horizontalScale` and `event.verticalScale`, and
@@ -360,9 +360,9 @@ See [Scale Events](inputs/scale_events.md) for the full replacement API.
 
 Both game-level mixins have been removed:
 
-| Removed | Use instead |
-| --- | --- |
-| `MultiTouchTapDetector` | `TapCallbacks` |
+| Removed                  | Use instead     |
+| ------------------------ | --------------- |
+| `MultiTouchTapDetector`  | `TapCallbacks`  |
 | `MultiTouchDragDetector` | `DragCallbacks` |
 
 The `pointerId` that used to be passed as a separate first argument is now carried on the event
@@ -402,10 +402,10 @@ replacement APIs.
 
 The `ScrollDetector` game mixin has been removed, together with the event class that only it used:
 
-| Removed | Use instead |
-| --- | --- |
-| `ScrollDetector` | `ScrollCallbacks` |
-| `PointerScrollInfo` | `ScrollEvent` |
+| Removed             | Use instead       |
+| ------------------- | ----------------- |
+| `ScrollDetector`    | `ScrollCallbacks` |
+| `PointerScrollInfo` | `ScrollEvent`     |
 
 The scroll delta is now read directly off the event rather than through a nested wrapper, and the
 event carries the usual `PositionEvent` fields, so the position where the scroll occurred is
@@ -443,15 +443,15 @@ The `MouseMovementDetector` game mixin has been removed, together with the event
 used. At the same time, the component-level API it is replaced by has been renamed from `PointerMove`
 to `MouseMove`:
 
-| Removed / renamed | Use instead |
-| --- | --- |
-| `MouseMovementDetector` | `MouseMoveCallbacks` |
-| `PointerHoverInfo` | `MouseMoveEvent` |
-| `PointerMoveCallbacks` | `MouseMoveCallbacks` |
-| `PointerMoveEvent` | `MouseMoveEvent` |
+| Removed / renamed       | Use instead           |
+| ----------------------- | --------------------- |
+| `MouseMovementDetector` | `MouseMoveCallbacks`  |
+| `PointerHoverInfo`      | `MouseMoveEvent`      |
+| `PointerMoveCallbacks`  | `MouseMoveCallbacks`  |
+| `PointerMoveEvent`      | `MouseMoveEvent`      |
 | `PointerMoveDispatcher` | `MouseMoveDispatcher` |
-| `onPointerMove` | `onMouseMove` |
-| `onPointerMoveStop` | `onMouseMoveStop` |
+| `onPointerMove`         | `onMouseMove`         |
+| `onPointerMoveStop`     | `onMouseMoveStop`     |
 
 The rename has two reasons. Flame's `PointerMoveEvent` collided with Flutter's class of the same
 name, forcing a `hide` on any file that imported both `package:flame/events.dart` and
