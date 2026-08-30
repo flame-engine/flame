@@ -3,18 +3,15 @@
 Now that we have the base for our game and a component for our player, let's add some interactivity
 to it. We can begin by allowing the player to be controlled by mouse/touch gestures.
 
-There are a couple of ways of doing that in Flame. For this tutorial, we will do that by using one
-of Flame's gesture detectors: `PanDetector`.
-
-This detector will make our game class receive pan (or drag) events. To do so, we just need to add
-the `PanDetector` mixin to our game class and override its listener methods; in our case, we will
-use the `onPanUpdate` method. The updated code will look like the following:
+Flame handles input with mixins that you add to a component, one for each kind of gesture. Dragging
+is `DragCallbacks`, and since `FlameGame` is itself a component we can add it straight to our game
+class and override its listener methods; in our case, we will use the `onDragUpdate` method. The
+updated code will look like the following:
 
 ```dart
-import 'package:flame/input.dart';
 import 'package:flame/events.dart';
 
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -23,14 +20,14 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
+  void onDragUpdate(DragUpdateEvent event) {
   }
 }
 
 ```
 
-At this point, our game should be receiving all the pan update inputs, but we are not doing anything
-with these events.
+At this point, our game should be receiving all the drag update inputs, but we are not doing
+anything with these events.
 
 We now need a way to move our player. That can be achieved by simply saving our `Player` component
 to a variable inside our game class, adding a method `move` to our `Player`, and just connect
@@ -50,7 +47,7 @@ class Player extends PositionComponent {
   }
 }
 
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -67,8 +64,8 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 }
 ```
@@ -101,7 +98,7 @@ class Player extends SpriteComponent {
   }
 }
 
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -121,8 +118,8 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 }
 ```
@@ -173,7 +170,7 @@ class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   }
 }
 
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -186,8 +183,8 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 }
 ```

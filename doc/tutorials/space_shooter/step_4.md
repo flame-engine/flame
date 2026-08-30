@@ -100,32 +100,37 @@ class Player extends SpriteAnimationComponent
 }
 ```
 
-And let's hook into those methods from the game class by using the `onPanStart()`
-and `onPanEnd()` methods from the `PanDetector` mixin that we already have been using for the ship
-movement:
+And let's hook into those methods from the game class by using the `onDragStart()`
+and `onDragEnd()` methods from the `DragCallbacks` mixin that we already have been using for the
+ship movement:
 
 ```dart
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   // Rest of implementation omitted
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 
   @override
-  void onPanStart(DragStartInfo info) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     player.startShooting();
   }
 
   @override
-  void onPanEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     player.stopShooting();
   }
 }
 ```
+
+Note that `onDragStart` and `onDragEnd` keep track of the drag state for us, so our overrides have
+to call `super` before doing their own work.
 
 We now have everything set up, so let's write the shooting routine in our player class.
 

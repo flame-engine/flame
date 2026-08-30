@@ -2,7 +2,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +9,7 @@ void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -42,17 +41,19 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 
   @override
-  void onPanStart(DragStartInfo info) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     player.startShooting();
   }
 
   @override
-  void onPanEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     player.stopShooting();
   }
 }

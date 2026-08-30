@@ -26,7 +26,7 @@ class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
 }
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection, HasKeyboardHandlerComponents {
+    with DragCallbacks, HasCollisionDetection, HasKeyboardHandlerComponents {
   late PlayerComponent player;
 
   final GameStatsBloc statsBloc;
@@ -60,24 +60,47 @@ class SpaceShooterGame extends FlameGame
     add(EnemyCreator());
   }
 
+  /// The pointer currently flying the ship. Drag events are reported per
+  /// pointer, so without this a second finger would move the ship twice as
+  /// fast and stop the fire when lifted.
+  int? _controllingPointerId;
+
   @override
-  void onPanStart(_) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    if (_controllingPointerId != null) {
+      return;
+    }
+    _controllingPointerId = event.pointerId;
     player.beginFire();
   }
 
   @override
-  void onPanEnd(_) {
-    player.stopFire();
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    _releaseControl(event.pointerId);
   }
 
   @override
-  void onPanCancel() {
-    player.stopFire();
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    _releaseControl(event.pointerId);
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global.x, info.delta.global.y);
+  void onDragUpdate(DragUpdateEvent event) {
+    if (event.pointerId != _controllingPointerId) {
+      return;
+    }
+    player.move(event.localDelta.x, event.localDelta.y);
+  }
+
+  void _releaseControl(int pointerId) {
+    if (pointerId != _controllingPointerId) {
+      return;
+    }
+    _controllingPointerId = null;
+    player.stopFire();
   }
 
   void increaseScore() {

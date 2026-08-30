@@ -19,7 +19,7 @@ enum ParticleEffect {
   bubbles,
 }
 
-class ParticlesInteractiveExample extends FlameGame with PanDetector {
+class ParticlesInteractiveExample extends FlameGame with DragCallbacks {
   static const description =
       'Drag around the canvas to paint with particles, and pick an effect in '
       'the properties panel (the knobs icon in the top right) to try the '
@@ -55,16 +55,46 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
     add(_emitter);
   }
 
+  /// There is a single emitter, so only the first pointer to start dragging
+  /// paints; a second finger would otherwise make it jump back and forth.
+  int? _paintingPointerId;
+
   @override
-  void onPanStart(DragStartInfo info) {
-    _emitter.position = info.eventPosition.widget;
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    if (_paintingPointerId != null) {
+      return;
+    }
+    _paintingPointerId = event.pointerId;
+    _emitter.position = event.canvasPosition;
     _emitter.emit(_perDragStart);
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    _emitter.position = info.eventPosition.widget;
+  void onDragUpdate(DragUpdateEvent event) {
+    if (event.pointerId != _paintingPointerId) {
+      return;
+    }
+    _emitter.position = event.canvasEndPosition;
     _emitter.emit(_perDragUpdate);
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    _releaseBrush(event.pointerId);
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    _releaseBrush(event.pointerId);
+  }
+
+  void _releaseBrush(int pointerId) {
+    if (pointerId == _paintingPointerId) {
+      _paintingPointerId = null;
+    }
   }
 
   /// All presets share the same pooled setup: emission is driven purely by

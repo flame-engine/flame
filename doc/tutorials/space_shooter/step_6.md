@@ -12,7 +12,7 @@ of the game class:
 
 ```dart
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+    with DragCallbacks, HasCollisionDetection {
     // ...
 }
 ```

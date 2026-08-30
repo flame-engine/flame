@@ -6,10 +6,9 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart' show OffsetExtension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
-class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
+class CameraComponentExample extends FlameGame<AntWorld> with DragCallbacks {
   static const description = '''
     This example shows how a camera can be dynamically added into a game using
     a CameraComponent.
@@ -44,29 +43,47 @@ class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
     magnifyingGlass.viewfinder.zoom = zoom;
   }
 
+  /// There is only one magnifying glass, so only the first pointer to start
+  /// dragging controls it; drags from any other pointers are ignored.
+  int? _controllingPointerId;
+
   @override
-  bool onPanStart(DragStartInfo info) {
-    _updateMagnifyingGlassPosition(info.eventPosition.widget);
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    if (_controllingPointerId != null) {
+      return;
+    }
+    _controllingPointerId = event.pointerId;
+    _updateMagnifyingGlassPosition(event.canvasPosition);
     add(magnifyingGlass);
-    return false;
   }
 
   @override
-  bool onPanUpdate(DragUpdateInfo info) {
-    _updateMagnifyingGlassPosition(info.eventPosition.widget);
-    return false;
+  void onDragUpdate(DragUpdateEvent event) {
+    if (event.pointerId != _controllingPointerId) {
+      return;
+    }
+    _updateMagnifyingGlassPosition(event.canvasEndPosition);
   }
 
   @override
-  bool onPanEnd(DragEndInfo info) {
-    onPanCancel();
-    return false;
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    _releaseMagnifyingGlass(event.pointerId);
   }
 
   @override
-  bool onPanCancel() {
-    remove(magnifyingGlass);
-    return false;
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    _releaseMagnifyingGlass(event.pointerId);
+  }
+
+  void _releaseMagnifyingGlass(int pointerId) {
+    if (pointerId != _controllingPointerId) {
+      return;
+    }
+    _controllingPointerId = null;
+    magnifyingGlass.removeFromParent();
   }
 
   void _updateMagnifyingGlassPosition(Vector2 point) {
