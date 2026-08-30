@@ -146,6 +146,30 @@ class MyComponent extends PositionComponent with TapCallbacks {
 ```
 
 
+### Custom update traversal and pausing
+
+The engine drives the update pass through a flattened traversal list owned by the game, and
+`updateTree` itself cannot be overridden. Components that need to control how their subtree is
+updated (changing the effective `dt`, skipping children, or updating them manually) mix in
+`CustomTraversal` and override its `updateSubtree` method:
+
+```dart
+class SlowMotionArea extends Component with CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
+flattened list itself and its `updateSubtree` drives its subtree. Mixins that build on it (like
+`HasTimeScale`) are declared `on CustomTraversal` and chain via `super.updateSubtree`, so their
+users mix in `CustomTraversal` first: `with CustomTraversal, HasTimeScale`. `FlameGame` already
+mixes it in, so `extends FlameGame with HasTimeScale` needs nothing extra.
+
+To pause a subtree, set a `HasTimeScale` time scale to `0` (or call `pause()`): the update pass
+then skips the component and all of its descendants until the time scale is raised again.
+
+
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping

@@ -745,3 +745,38 @@ class YSortedWorld extends World {
   }
 }
 ```
+
+
+### `Component.updateTree` is non-virtual
+
+The update pass runs over a flattened traversal list owned by the game, so `updateTree` can no
+longer be overridden. If you overrode it, mix in `CustomTraversal` and override its
+`updateSubtree` instead; call `super.updateSubtree(dt)` to run the standard traversal:
+
+```dart
+// Before
+class SlowMotionArea extends Component {
+  @override
+  void updateTree(double dt) => super.updateTree(dt / 2);
+}
+
+// After
+class SlowMotionArea extends Component with CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+`HasTimeScale` is now declared `on CustomTraversal`, so components other than `FlameGame` (which
+already mixes it in) must mix in `CustomTraversal` before it:
+
+```dart
+// Before
+class SlowWorld extends World with HasTimeScale {}
+
+// After
+class SlowWorld extends World with CustomTraversal, HasTimeScale {}
+```
+
+A `HasTimeScale` time scale of `0` (or `pause()`) now stops the update pass for the whole subtree
+instead of updating it with a `dt` of `0`, which is what `Route.stopTime()` relies on.
