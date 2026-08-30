@@ -61,27 +61,47 @@ class SpaceShooterGame extends FlameGame
     add(EnemyCreator());
   }
 
+  /// The pointer currently flying the ship. Drag events are reported per
+  /// pointer, so without this a second finger would move the ship twice as
+  /// fast and stop the fire when lifted.
+  int? _controllingPointerId;
+
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
+    if (_controllingPointerId != null) {
+      return;
+    }
+    _controllingPointerId = event.pointerId;
     player.beginFire();
   }
 
   @override
   void onDragEnd(DragEndEvent event) {
     super.onDragEnd(event);
-    player.stopFire();
+    _releaseControl(event.pointerId);
   }
 
   @override
   void onDragCancel(DragCancelEvent event) {
     super.onDragCancel(event);
-    player.stopFire();
+    _releaseControl(event.pointerId);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
+    if (event.pointerId != _controllingPointerId) {
+      return;
+    }
     player.move(event.localDelta.x, event.localDelta.y);
+  }
+
+  void _releaseControl(int pointerId) {
+    if (pointerId != _controllingPointerId) {
+      return;
+    }
+    _controllingPointerId = null;
+    player.stopFire();
   }
 
   void increaseScore() {
