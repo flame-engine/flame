@@ -182,8 +182,7 @@ class ComponentList extends Iterable<Component> {
     _structureVersion++;
     final caches = _queryCaches;
     if (caches != null) {
-      for (var i = 0; i < caches.length; i++) {
-        final cache = caches[i];
+      for (final cache in caches) {
         if (cache.check(component)) {
           cache.insertSorted(component);
         }
@@ -228,8 +227,7 @@ class ComponentList extends Iterable<Component> {
     _structureVersion++;
     final caches = _queryCaches;
     if (caches != null) {
-      for (var i = 0; i < caches.length; i++) {
-        final cache = caches[i];
+      for (final cache in caches) {
         if (cache.check(component)) {
           cache.data.remove(component);
         }
@@ -264,8 +262,8 @@ class ComponentList extends Iterable<Component> {
     _structureVersion++;
     final caches = _queryCaches;
     if (caches != null) {
-      for (var i = 0; i < caches.length; i++) {
-        caches[i].data.clear();
+      for (final cache in caches) {
+        cache.data.clear();
       }
     }
   }
@@ -307,8 +305,8 @@ class ComponentList extends Iterable<Component> {
     }
     final caches = _queryCaches;
     if (caches != null) {
-      for (var i = 0; i < caches.length; i++) {
-        caches[i].resort();
+      for (final cache in caches) {
+        cache.resort();
       }
     }
   }

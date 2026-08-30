@@ -614,8 +614,7 @@ class Component {
   /// Runs one update pass over a flattened traversal list produced by
   /// [_updateAndFlattenInto].
   static void _updateFlatList(List<Component> list, double dt) {
-    for (var i = 0; i < list.length; i++) {
-      final component = list[i];
+    for (final component in list) {
       if (component._isTraversalBarrier) {
         (component as CustomTraversal).updateSubtree(dt);
       } else {
@@ -636,9 +635,7 @@ class Component {
       return;
     }
     children._compact();
-    final elements = children._elements;
-    for (var i = 0; i < elements.length; i++) {
-      final child = elements[i];
+    for (final child in children._elements) {
       if (child == null) {
         continue;
       }
