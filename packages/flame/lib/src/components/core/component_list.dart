@@ -1,55 +1,27 @@
 part of 'component.dart';
 
-/// A fast, ordered container for a [Component]'s children.
+/// The ordered container for a [Component]'s [Component.children].
 ///
-/// The children are stored in a single flat [List], sorted by
-/// [Component.priority] (or by a custom comparator, see
-/// [Component.createComponentList]); components that compare equal keep the
-/// order in which they were added. Each component also stores the list it is
-/// in and its index within that list, which is what makes membership checks
-/// and removals constant time.
+/// Components are ordered by [Component.priority], or by the [comparator] if
+/// one was supplied through [Component.createComponentList]; components that
+/// compare equal keep the order in which they were added. Iterating the list,
+/// directly or through [reversed], visits the components in that order.
 ///
-/// Performance characteristics:
-///  - iteration: O(n) over the backing list, without any allocations on the
-///    internal engine paths;
-///  - adding: O(1) when the component sorts at or after the current last
-///    element, which is the common case since children are usually added with
-///    the default priority or in non-decreasing priority order, and O(n) when
-///    a lower priority forces a mid-list insertion. Additions made through
-///    [Component.add] on a mounted parent are deferred to the lifecycle queue
-///    and applied in a batch at the start of the next tick, but each one is
-///    still an individual insertion into this list;
-///  - removing and [contains]: O(1), using the index that is stored on the
-///    component itself;
-///  - [rebalance] (after priority changes): O(n) when the list turns out to
-///    still be sorted, otherwise O(n log n) with a stable sort.
-///
-/// A removal does not shift the backing list, it leaves a `null` "tombstone"
-/// in place. Tombstones are invisible to iteration and are compacted away at
-/// the start of the next update tick, or earlier if they grow to dominate the
-/// list.
-///
-/// Mutating the container while iterating it is allowed in the ways that the
-/// component lifecycle needs: removals take effect immediately (the removed
-/// component is simply not visited), and additions at the end may or may not
-/// be visited by an ongoing iteration. Operations that shift the positions of
-/// existing elements (a mid-list insertion, [rebalance], or tombstone
-/// compaction) invalidate live iterators, which will then throw a
+/// The contents are managed by the component lifecycle: use [Component.add],
+/// [Component.remove] and their related methods to change which components
+/// are in the list. Removing a component while iterating the list is allowed,
+/// the removed component is simply no longer visited. Reordering the list
+/// while iterating it (through [rebalance], or by an addition that does not
+/// end up at the end of the list) makes live iterators throw a
 /// [ConcurrentModificationError].
 ///
-/// The contents of this container are managed by the [Component] lifecycle:
-/// use [Component.add], [Component.remove] and their related methods to
-/// modify which components are in it.
+/// Components of a specific type can be retrieved in constant time with
+/// [query], once the type has been registered with [register].
 class ComponentList extends Iterable<Component> {
   ComponentList({this.strictMode = false, this.comparator});
 
   /// Whether calling [query] for an unregistered type throws an error
-  /// (`true`), or transparently registers the type on first use (`false`).
-  ///
-  /// Registering a type builds its query cache with one pass over the current
-  /// elements. Strict mode forces that pass to happen at a moment of your
-  /// choosing (typically `onLoad`) instead of on the first query, which could
-  /// otherwise cause a frame drop in the middle of gameplay.
+  /// (`true`), or registers the type on first use (`false`).
   final bool strictMode;
 
   /// An optional custom ordering, replacing the default ordering by
@@ -173,8 +145,7 @@ class ComponentList extends Iterable<Component> {
   /// Adds [component] to this list, keeping the priority ordering; returns
   /// whether the component was added (`false` if it already was in the list).
   ///
-  /// Adding a component here does not make it go through the component
-  /// lifecycle, which is why this is only reachable from [Component.add].
+  /// Does not run the component lifecycle; that is done by [Component.add].
   bool _add(Component component) {
     if (identical(component._containerList, this)) {
       return false;
@@ -232,8 +203,8 @@ class ComponentList extends Iterable<Component> {
 
   /// Removes [component] from this list; returns whether it was present.
   ///
-  /// Removing a component here does not make it go through the component
-  /// lifecycle, which is why this is only reachable from [Component.remove].
+  /// Does not run the component lifecycle; that is done by
+  /// [Component.remove].
   bool _remove(Component component) {
     if (!identical(component._containerList, this)) {
       return false;
@@ -265,8 +236,7 @@ class ComponentList extends Iterable<Component> {
 
   /// Removes all elements from this list.
   ///
-  /// Clearing this list does not make the components go through the
-  /// component lifecycle, which is why this is only reachable from
+  /// Does not run the component lifecycle; that is done by
   /// [Component.removeAll].
   void _clear() {
     final elements = _elements;
@@ -347,11 +317,8 @@ class ComponentList extends Iterable<Component> {
     return _queries?.containsKey(C) ?? false;
   }
 
-  /// Registers [C] as a queryable type, so that [query] can answer in O(1).
-  ///
-  /// If the type is already registered this is a no-op. Registering a type on
-  /// a non-empty list costs one pass over the existing elements, so it is
-  /// recommended to register the desired types as early as possible.
+  /// Registers [C] as a queryable type, so that [query] can answer in
+  /// constant time. Does nothing if the type is already registered.
   void register<C extends Component>() {
     final queries = _queries ??= {};
     if (queries.containsKey(C)) {
@@ -366,7 +333,7 @@ class ComponentList extends Iterable<Component> {
     queries[C] = _QueryCache<C>(data);
   }
 
-  /// All elements of type [C], in priority order, in O(1).
+  /// All elements of type [C], in priority order, in constant time.
   ///
   /// The type [C] must have been [register]ed beforehand, unless [strictMode]
   /// is false, in which case the registration happens on the first query.
