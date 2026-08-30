@@ -453,7 +453,6 @@ void main() {
 
       group('lifecycleEventsProcessed', () {
         testWithFlameGame('waits for unprocessed events', (game) async {
-          await game.ready();
           final component = _LifecycleComponent();
           game.world.add(component);
           expect(game.hasLifecycleEvents, isTrue);
@@ -466,7 +465,6 @@ void main() {
         testWithFlameGame("doesn't block when there are no events", (
           game,
         ) async {
-          await game.ready();
           expect(game.hasLifecycleEvents, isFalse);
           await game.lifecycleEventsProcessed;
           expect(game.hasLifecycleEvents, isFalse);
@@ -475,7 +473,6 @@ void main() {
         testWithFlameGame('guarantees addition even with heavy onLoad', (
           game,
         ) async {
-          await game.ready();
           final component = _SlowComponent('heavy', 0.1);
           final child = _SlowComponent('child', 0.1);
           component.add(child);
@@ -580,7 +577,6 @@ void main() {
         testWithFlameGame('a failed load does not block the queue', (
           game,
         ) async {
-          await game.ready();
           final failing = _FailingLoadComponent();
           final loaded = failing.loaded;
           final sibling = Component();
@@ -598,7 +594,6 @@ void main() {
       });
 
       testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {
-        await game.ready();
         final component = Component();
         game.world.add(component);
         expect(game.hasLifecycleEvents, isTrue);
@@ -791,7 +786,6 @@ void main() {
         'not run double onMount',
         _PrepareGame.new,
         (game) async {
-          await game.ready();
           final parent = game.prepareParent;
           expect(parent.onMountRuns, 1);
           expect(parent.children.isNotEmpty, true);
@@ -1899,8 +1893,6 @@ void main() {
       testWithFlameGame(
         'findByKey returns null if no component is found',
         (game) async {
-          await game.ready();
-
           expect(game.findByKey(ComponentKey.unique()), isNull);
         },
       );

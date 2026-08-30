@@ -52,8 +52,6 @@ void main() {
       'can receive onPanDown',
       _PanDetectorGame.new,
       (game) async {
-        await game.ready();
-
         game.handlePanDown(DragDownDetails());
         expect(game.hasPanDown, isTrue);
       },
@@ -63,8 +61,6 @@ void main() {
       'can receive onPanEnd',
       _PanDetectorGame.new,
       (game) async {
-        await game.ready();
-
         game.handlePanEnd(DragEndDetails());
         expect(game.hasPanEnd, isTrue);
       },
@@ -74,8 +70,6 @@ void main() {
       'can receive onPanStart',
       _PanDetectorGame.new,
       (game) async {
-        await game.ready();
-
         game.handlePanStart(DragStartDetails());
         expect(game.hasPanStart, isTrue);
       },
@@ -85,8 +79,6 @@ void main() {
       'can receive onPanUpdate',
       _PanDetectorGame.new,
       (game) async {
-        await game.ready();
-
         game.handlePanUpdate(
           DragUpdateDetails(globalPosition: const Offset(10, 10)),
         );
