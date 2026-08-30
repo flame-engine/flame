@@ -1,8 +1,4 @@
-import 'dart:async';
-
-import 'package:flame/components.dart';
-import 'package:flame/src/components/core/recycled_queue.dart';
-import 'package:meta/meta.dart';
+part of 'component.dart';
 
 /// **ComponentTreeRoot** is a component that can be used as a root node of a
 /// component tree.
@@ -15,60 +11,75 @@ class ComponentTreeRoot extends Component {
     super.children,
     super.key,
   }) : queue = RecycledQueue(LifecycleEvent.new),
-       _blocked = <int>{};
+       _blocked = <Component>{};
 
   @internal
   final RecycledQueue<LifecycleEvent> queue;
-  final Set<int> _blocked;
+
+  /// Components whose events are blocked during the current
+  /// [processLifecycleEvents] pass. Compared by identity, since [Component]
+  /// does not override equality.
+  final Set<Component> _blocked;
   late final Map<ComponentKey, Component> _index = {};
   Completer<void>? _lifecycleEventsCompleter;
 
-  @internal
-  void enqueueAdd(Component child, Component parent) {
+  void _enqueueAdd(Component child, Component parent) {
     queue.addLast()
       ..kind = LifecycleEventKind.add
       ..child = child
       ..parent = parent;
   }
 
-  @internal
-  void dequeueAdd(Component child, Component parent) {
-    for (final event in queue) {
-      if (event.kind == LifecycleEventKind.add &&
+  /// Cancels the pending ADD event for [child] into [parent].
+  ///
+  /// Scans the queue without using its iterator, so this is safe to call while
+  /// [processLifecycleEvents] is iterating over the queue (for example from a
+  /// component's [Component.onMount]).
+  void _dequeueAdd(Component child, Component parent) {
+    var found = false;
+    queue.forEachWhere(
+      (event) =>
+          !found &&
+          event.kind == LifecycleEventKind.add &&
           event.child == child &&
-          event.parent == parent) {
+          event.parent == parent,
+      (event) {
         event.kind = LifecycleEventKind.unknown;
-        return;
-      }
-    }
-    throw AssertionError(
-      'Cannot find a lifecycle event Add(child=$child, parent=$parent)',
+        found = true;
+      },
     );
+    if (!found) {
+      throw AssertionError(
+        'Cannot find a lifecycle event Add(child=$child, parent=$parent)',
+      );
+    }
   }
 
-  @internal
-  void enqueueRemove(Component child, Component parent) {
+  void _enqueueRemove(Component child, Component parent) {
     queue.addLast()
       ..kind = LifecycleEventKind.remove
       ..child = child
       ..parent = parent;
   }
 
-  @internal
-  void dequeueRemove(Component child) {
-    for (final event in queue) {
-      if (event.kind == LifecycleEventKind.remove && event.child == child) {
-        event.kind = LifecycleEventKind.unknown;
-      }
-    }
+  /// Cancels all pending REMOVE events for [child].
+  ///
+  /// Scans the queue without using its iterator, so this is safe to call while
+  /// [processLifecycleEvents] is iterating over the queue (for example from a
+  /// component's [Component.onMount]).
+  void _dequeueRemove(Component child) {
+    queue.forEachWhere(
+      (event) =>
+          event.kind == LifecycleEventKind.remove && event.child == child,
+      (event) => event.kind = LifecycleEventKind.unknown,
+    );
   }
 
   /// Finds all children in [candidates] that have a pending REMOVE event,
   /// cancels those events, and adds the matched children to [result].
   ///
   /// Scans the queue once in O(Q) time. Safe to call during queue iteration.
-  @internal
-  void cancelQueuedRemoves(
+  void _cancelQueuedRemoves(
     List<Component> candidates,
     Set<Component> result,
   ) {
@@ -84,16 +95,14 @@ class ComponentTreeRoot extends Component {
     );
   }
 
-  @internal
-  void enqueueMove(Component child, Component newParent) {
+  void _enqueueMove(Component child, Component newParent) {
     queue.addLast()
       ..kind = LifecycleEventKind.move
       ..child = child
       ..parent = newParent;
   }
 
-  @internal
-  void enqueuePriorityChange(
+  void _enqueuePriorityChange(
     Component parent,
     Component child,
   ) {
@@ -105,6 +114,38 @@ class ComponentTreeRoot extends Component {
 
   bool get hasLifecycleEvents => queue.isNotEmpty;
 
+  /// The flattened pre-order list of all components below this root, stopping
+  /// at (and including) `CustomTraversal` barriers, whose subtrees are
+  /// traversed by their own `updateSubtree` implementations.
+  final List<Component> _flatUpdateList = [];
+
+  /// The [ComponentList._structureVersion] that [_flatUpdateList] was built
+  /// against.
+  int _flatVersion = -1;
+
+  /// Updates every component below this root using the flattened traversal
+  /// list, rebuilding the list first when the tree structure has possibly
+  /// changed since the previous tick.
+  ///
+  /// The visit order is identical to the recursive
+  /// standard traversal: pre-order, children in
+  /// priority order. Components mixing in `CustomTraversal` are treated as
+  /// barriers: they appear in the list themselves, and their `updateSubtree`
+  /// drives their subtree.
+  @internal
+  void updateChildrenFlat(double dt) {
+    if (_flatVersion != ComponentList._structureVersion) {
+      // The version is captured before the pass: structural changes made by
+      // update callbacks (pause toggles, detached-tree edits) invalidate the
+      // list that is being built and must trigger a rebuild next tick.
+      _flatVersion = ComponentList._structureVersion;
+      _flatUpdateList.clear();
+      _updateAndFlattenInto(_flatUpdateList, dt);
+    } else {
+      Component._updateFlatList(_flatUpdateList, dt);
+    }
+  }
+
   /// A future that will complete once all lifecycle events have been
   /// processed.
   ///
@@ -115,9 +156,15 @@ class ComponentTreeRoot extends Component {
   /// (by adding, moving or removing a component) and you want to make sure
   /// you react to the changed state, not the current one.
   /// Remember, methods like [Component.add] don't act immediately and instead
-  /// enqueue their action. This action also cannot be awaited
-  /// with something like `await world.add(something)` since that future
-  /// completes _before_ the lifecycle events are processed.
+  /// enqueue their action. They are synchronous and return nothing, so the
+  /// action cannot be awaited directly. To wait for a specific component, await
+  /// its [Component.loaded], [Component.mounted] or [Component.removed] future;
+  /// to wait for the whole queue to drain, await this future.
+  ///
+  /// Don't await this from inside a component's [Component.onLoad]: that
+  /// component's own mount is part of the queue, and it can only be processed
+  /// after [Component.onLoad] has completed, so the wait would deadlock. Await
+  /// the child's [Component.loaded] future there instead.
   ///
   /// Example usage:
   ///
@@ -133,11 +180,19 @@ class ComponentTreeRoot extends Component {
   }
 
   void processLifecycleEvents() {
+    if (!hasLifecycleEvents) {
+      assert(
+        _lifecycleEventsCompleter == null,
+        'The completer is only ever created while events are queued, so it '
+        'should never exist while the queue is empty',
+      );
+      return;
+    }
     // reorder events to process later grouped by parent
-    final reorderParents = <Component>{};
-    LifecycleEventStatus handleReorderEvent(Component parent) {
-      reorderParents.add(parent);
-      return LifecycleEventStatus.done;
+    Set<Component>? reorderParents;
+    _LifecycleEventStatus handleReorderEvent(Component parent) {
+      (reorderParents ??= {}).add(parent);
+      return _LifecycleEventStatus.done;
     }
 
     assert(_blocked.isEmpty);
@@ -147,33 +202,33 @@ class ComponentTreeRoot extends Component {
       for (final event in queue) {
         final child = event.child!;
         final parent = event.parent!;
-        if (_blocked.contains(identityHashCode(child)) ||
-            _blocked.contains(identityHashCode(parent))) {
+        if (_blocked.contains(child) || _blocked.contains(parent)) {
           continue;
         }
 
         final status = switch (event.kind) {
-          LifecycleEventKind.add => child.handleLifecycleEventAdd(parent),
-          LifecycleEventKind.remove => child.handleLifecycleEventRemove(parent),
-          LifecycleEventKind.move => child.handleLifecycleEventMove(parent),
+          LifecycleEventKind.add => child._handleLifecycleEventAdd(parent),
+          LifecycleEventKind.remove => child._handleLifecycleEventRemove(
+            parent,
+          ),
+          LifecycleEventKind.move => child._handleLifecycleEventMove(parent),
           LifecycleEventKind.rebalance => handleReorderEvent(parent),
-          LifecycleEventKind.unknown => LifecycleEventStatus.done,
+          LifecycleEventKind.unknown => _LifecycleEventStatus.done,
         };
 
         switch (status) {
-          case LifecycleEventStatus.done:
+          case _LifecycleEventStatus.done:
             queue.removeCurrent();
             repeatLoop = true;
-          case LifecycleEventStatus.block:
-            _blocked.add(identityHashCode(child));
-            _blocked.add(identityHashCode(parent));
-          default:
+          case _LifecycleEventStatus.block:
+            _blocked.add(child);
+            _blocked.add(parent);
         }
       }
       _blocked.clear();
     }
 
-    for (final parent in reorderParents) {
+    for (final parent in reorderParents ?? const <Component>{}) {
       parent.rebalanceChildren();
     }
 
@@ -188,12 +243,10 @@ class ComponentTreeRoot extends Component {
   @internal
   void handleResize(Vector2 size) {
     super.handleResize(size);
-    for (final event in queue) {
-      if ((event.kind == LifecycleEventKind.add) &&
-          (event.child!.isLoading || event.child!.isLoaded)) {
-        event.child!.onGameResize(size);
-      }
-    }
+    queue.forEachWhere(
+      _isPendingAddOfLoadingOrLoadedChild,
+      (event) => event.child!.onGameResize(size),
+    );
   }
 
   @mustCallSuper
@@ -201,12 +254,15 @@ class ComponentTreeRoot extends Component {
   @internal
   void handleHotReload() {
     super.handleHotReload();
-    for (final event in queue) {
-      if ((event.kind == LifecycleEventKind.add) &&
-          (event.child!.isLoading || event.child!.isLoaded)) {
-        event.child!.onHotReload();
-      }
-    }
+    queue.forEachWhere(
+      _isPendingAddOfLoadingOrLoadedChild,
+      (event) => event.child!.onHotReload(),
+    );
+  }
+
+  static bool _isPendingAddOfLoadingOrLoadedChild(LifecycleEvent event) {
+    return event.kind == LifecycleEventKind.add &&
+        (event.child!.isLoading || event.child!.isLoaded);
   }
 
   @mustCallSuper
@@ -233,12 +289,9 @@ class ComponentTreeRoot extends Component {
 }
 
 /// The status of processing a Lifecycle event.
-enum LifecycleEventStatus {
-  /// The event cannot be processed, move over to the next one.
-  skip,
-
-  /// Same as [skip], but also prevent processing of any other events for the
-  /// same child or parent.
+enum _LifecycleEventStatus {
+  /// The event cannot be processed yet: move over to the next one, and skip
+  /// any other events for the same child or parent in this pass.
   block,
 
   /// The event was fully processed and can now be removed from the queue.

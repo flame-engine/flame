@@ -16,8 +16,8 @@ The simplest `ParallaxComponent` is created like this:
 @override
 Future<void> onLoad() async {
   final parallaxComponent = await loadParallaxComponent([
-    ParallaxImageData('bg.png'),
-    ParallaxImageData('trees.png'),
+    ParallaxImageData('assets/images/bg.png'),
+    ParallaxImageData('assets/images/trees.png'),
   ]);
   add(parallaxComponent);
 }
@@ -29,9 +29,9 @@ A ParallaxComponent can also "load itself" by implementing the `onLoad` method:
 class MyParallaxComponent extends ParallaxComponent<MyGame> {
   @override
   Future<void> onLoad() async {
-    parallax = await game.loadParallax([
-      ParallaxImageData('bg.png'),
-      ParallaxImageData('trees.png'),
+    parallax = await gameRef.loadParallax([
+      ParallaxImageData('assets/images/bg.png'),
+      ParallaxImageData('assets/images/trees.png'),
     ]);
   }
 }
@@ -86,19 +86,19 @@ Advanced example:
 ```dart
 final images = [
   loadParallaxImage(
-    'stars.jpg',
+    'assets/images/stars.jpg',
     repeat: ImageRepeat.repeat,
     alignment: Alignment.center,
     fill: LayerFill.width,
   ),
   loadParallaxImage(
-    'planets.jpg',
+    'assets/images/planets.jpg',
     repeat: ImageRepeat.repeatY,
     alignment: Alignment.bottomLeft,
     fill: LayerFill.none,
   ),
   loadParallaxImage(
-    'dust.jpg',
+    'assets/images/dust.jpg',
     repeat: ImageRepeat.repeatX,
     alignment: Alignment.topRight,
     fill: LayerFill.height,

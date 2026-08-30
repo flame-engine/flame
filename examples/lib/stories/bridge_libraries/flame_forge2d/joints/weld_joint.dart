@@ -1,11 +1,13 @@
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/balls.dart';
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boxes.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/joint_renderer.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart';
 
-class WeldJointExample extends Forge2DGame {
+class WeldJointExample extends Forge2DExampleGame {
   static const description = '''
     This example shows how to use a `WeldJoint`. Tap the screen to add a 
     ball to test the bridge built using a `WeldJoint`
@@ -15,16 +17,16 @@ class WeldJointExample extends Forge2DGame {
 }
 
 class WeldJointWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   final pillarHeight = 20.0;
   final pillarWidth = 5.0;
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
 
     final leftPillar = Box(
-      startPosition: game.screenToWorld(Vector2(50, game.size.y))
+      startPosition: gameRef.screenToWorld(Vector2(50, gameRef.size.y))
         ..y -= pillarHeight / 2,
       width: pillarWidth,
       height: pillarHeight,
@@ -32,15 +34,18 @@ class WeldJointWorld extends Forge2DWorld
       color: Colors.white,
     );
     final rightPillar = Box(
-      startPosition: game.screenToWorld(Vector2(game.size.x - 50, game.size.y))
-        ..y -= pillarHeight / 2,
+      startPosition: gameRef.screenToWorld(
+        Vector2(gameRef.size.x - 50, gameRef.size.y),
+      )..y -= pillarHeight / 2,
       width: pillarWidth,
       height: pillarHeight,
       bodyType: BodyType.static,
       color: Colors.white,
     );
 
-    await addAll([leftPillar, rightPillar]);
+    final pillars = [leftPillar, rightPillar];
+    addAll(pillars);
+    await pillars.loaded;
 
     createBridge(leftPillar, rightPillar);
   }
@@ -53,7 +58,7 @@ class WeldJointWorld extends Forge2DWorld
     // Vector2.zero is used here since 0,0 is in the middle and 0,0 in the
     // screen space then gives us the coordinates of the upper left corner in
     // world space.
-    final halfSize = game.screenToWorld(Vector2.zero())..absolute();
+    final halfSize = gameRef.screenToWorld(Vector2.zero())..absolute();
     final sectionWidth =
         ((leftPillar.center.x.abs() +
                     rightPillar.center.x.abs() +
@@ -71,7 +76,8 @@ class WeldJointWorld extends Forge2DWorld
         width: sectionWidth,
         height: 1,
       );
-      await add(section);
+      add(section);
+      await section.loaded;
 
       if (prevSection != null) {
         createWeldJoint(
@@ -89,9 +95,15 @@ class WeldJointWorld extends Forge2DWorld
   }
 
   void createWeldJoint(Body first, Body second, Vector2 anchor) {
-    final weldJointDef = WeldJointDef()..initialize(first, second, anchor);
-
-    createJoint(WeldJoint(weldJointDef));
+    final joint = physicsWorld.createWeldJoint(
+      WeldJointDef(
+        bodyA: first,
+        bodyB: second,
+        localAnchorA: first.localPoint(anchor),
+        localAnchorB: second.localPoint(anchor),
+      ),
+    );
+    add(JointRenderer(joint: joint));
   }
 
   @override

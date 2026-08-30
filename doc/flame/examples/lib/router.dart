@@ -25,7 +25,7 @@ class RouterGame extends FlameGame {
   }
 }
 
-class StartPage extends Component with HasGameReference<RouterGame> {
+class StartPage extends Component with HasGameRef<RouterGame> {
   StartPage() {
     addAll([
       _logo = TextComponent(
@@ -41,13 +41,13 @@ class StartPage extends Component with HasGameReference<RouterGame> {
       ),
       _button1 = RoundedButton(
         text: 'Level 1',
-        action: () => game.router.pushNamed('level1'),
+        action: () => gameRef.router.pushNamed('level1'),
         color: const Color(0xffadde6c),
         borderColor: const Color(0xffedffab),
       ),
       _button2 = RoundedButton(
         text: 'Level 2',
-        action: () => game.router.pushNamed('level2'),
+        action: () => gameRef.router.pushNamed('level2'),
         color: const Color(0xffdebe6c),
         borderColor: const Color(0xfffff4c7),
       ),
@@ -177,7 +177,7 @@ abstract class SimpleButton extends PositionComponent with TapCallbacks {
   }
 }
 
-class BackButton extends SimpleButton with HasGameReference<RouterGame> {
+class BackButton extends SimpleButton with HasGameRef<RouterGame> {
   BackButton()
     : super(
         Path()
@@ -190,10 +190,10 @@ class BackButton extends SimpleButton with HasGameReference<RouterGame> {
       );
 
   @override
-  void action() => game.router.pop();
+  void action() => gameRef.router.pop();
 }
 
-class PauseButton extends SimpleButton with HasGameReference<RouterGame> {
+class PauseButton extends SimpleButton with HasGameRef<RouterGame> {
   PauseButton()
     : super(
         Path()
@@ -209,15 +209,15 @@ class PauseButton extends SimpleButton with HasGameReference<RouterGame> {
   @override
   void action() {
     if (isPaused) {
-      game.router.pop();
+      gameRef.router.pop();
     } else {
-      game.router.pushNamed('pause');
+      gameRef.router.pushNamed('pause');
     }
     isPaused = !isPaused;
   }
 }
 
-class Level1Page extends DecoratedWorld with HasGameReference {
+class Level1Page extends DecoratedWorld with HasGameRef {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -254,17 +254,17 @@ class Level1Page extends DecoratedWorld with HasGameReference {
       BackButton(),
       PauseButton(),
     ]);
-    game.camera.viewport.addAll(hudComponents);
+    gameRef.camera.viewport.addAll(hudComponents);
   }
 
   @override
   void onRemove() {
-    game.camera.viewport.removeAll(hudComponents);
+    gameRef.camera.viewport.removeAll(hudComponents);
     super.onRemove();
   }
 }
 
-class Level2Page extends DecoratedWorld with HasGameReference {
+class Level2Page extends DecoratedWorld with HasGameRef {
   @override
   Future<void> onLoad() async {
     addAll([
@@ -311,12 +311,12 @@ class Level2Page extends DecoratedWorld with HasGameReference {
       BackButton(),
       PauseButton(),
     ]);
-    game.camera.viewport.addAll(hudComponents);
+    gameRef.camera.viewport.addAll(hudComponents);
   }
 
   @override
   void onRemove() {
-    game.camera.viewport.removeAll(hudComponents);
+    gameRef.camera.viewport.removeAll(hudComponents);
     super.onRemove();
   }
 }
@@ -391,8 +391,7 @@ class PauseRoute extends Route {
   }
 }
 
-class PausePage extends Component
-    with TapCallbacks, HasGameReference<RouterGame> {
+class PausePage extends Component with TapCallbacks, HasGameRef<RouterGame> {
   @override
   Future<void> onLoad() async {
     final game = findGame()!;
@@ -419,10 +418,10 @@ class PausePage extends Component
   bool containsLocalPoint(Vector2 point) => true;
 
   @override
-  void onTapUp(TapUpEvent event) => game.router.pop();
+  void onTapUp(TapUpEvent event) => gameRef.router.pop();
 }
 
-class DecoratedWorld extends World with HasTimeScale {
+class DecoratedWorld extends World with CustomTraversal, HasTimeScale {
   PaintDecorator? decorator;
 
   @override

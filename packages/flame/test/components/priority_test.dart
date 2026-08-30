@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:ordered_set/mapping_ordered_set.dart';
-import 'package:ordered_set/ordered_set.dart';
 import 'package:test/test.dart';
 
 import '../custom_component.dart';
@@ -22,6 +20,32 @@ void main() {
         priorityComponents.shuffle();
         await game.ensureAddAll(priorityComponents);
         componentsSorted(game.children);
+      },
+    );
+
+    testWithFlameGame(
+      'components with equal priority keep insertion order',
+      (game) async {
+        final components = List.generate(5, (_) => _PriorityComponent(0));
+        await game.world.ensureAddAll(components);
+        expect(game.world.children.toList(), components);
+      },
+    );
+
+    testWithFlameGame(
+      'equal-priority components keep their relative order after a sibling '
+      'changes priority',
+      (game) async {
+        final a = _PriorityComponent(0);
+        final b = _PriorityComponent(0);
+        final c = _PriorityComponent(0);
+        final d = _PriorityComponent(1);
+        await game.world.ensureAddAll([a, b, c, d]);
+        expect(game.world.children.toList(), [a, b, c, d]);
+
+        d.priority = -1;
+        game.update(0);
+        expect(game.world.children.toList(), [d, a, b, c]);
       },
     );
 
@@ -235,18 +259,6 @@ void main() {
   });
 }
 
-class _SpyComponentSet extends MappingOrderedSet<num, Component> {
-  int callCount = 0;
-
-  _SpyComponentSet() : super((e) => e.priority);
-
-  @override
-  void rebalanceAll() {
-    callCount++;
-    super.rebalanceAll();
-  }
-}
-
 class _PriorityComponent extends Component {
   _PriorityComponent(int priority) : super(priority: priority);
 }
@@ -254,12 +266,16 @@ class _PriorityComponent extends Component {
 class _ParentWithReorderSpy extends Component {
   _ParentWithReorderSpy(int priority) : super(priority: priority);
 
+  int callCount = 0;
+
   @override
-  OrderedSet<Component> createComponentSet() => _SpyComponentSet();
+  void rebalanceChildren() {
+    callCount++;
+    super.rebalanceChildren();
+  }
 
   void assertCalled(int n) {
-    final componentSet = children as _SpyComponentSet;
-    expect(componentSet.callCount, n);
-    componentSet.callCount = 0;
+    expect(callCount, n);
+    callCount = 0;
   }
 }

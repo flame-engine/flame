@@ -31,10 +31,10 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
       );
 }
 
-class MultiShapesWorld extends World with HasGameReference {
+class MultiShapesWorld extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
-    add(FpsTextComponent(position: Vector2(0, game.size.y - 24)));
+    add(FpsTextComponent(position: Vector2(0, gameRef.size.y - 24)));
     final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -49,8 +49,8 @@ class MultiShapesWorld extends World with HasGameReference {
     while (totalAdded < 1000) {
       lastToAdd = nextRandomCollidable(lastToAdd, screenHitbox);
       final lastBottomRight = lastToAdd.toAbsoluteRect().bottomRight;
-      if (lastBottomRight.dx < game.size.x &&
-          lastBottomRight.dy < game.size.y) {
+      if (lastBottomRight.dx < gameRef.size.x &&
+          lastBottomRight.dy < gameRef.size.y) {
         add(lastToAdd);
         totalAdded++;
       } else {
@@ -72,7 +72,7 @@ class MultiShapesWorld extends World with HasGameReference {
             lastCollidable.size.x / 2 +
             _distance.x +
             collidableSize.x >
-        game.size.x;
+        gameRef.size.x;
     var position = _distance + Vector2(0, lastCollidable.position.y + 200);
     if (!isXOverflow) {
       position = (lastCollidable.position + _distance)
@@ -147,7 +147,7 @@ abstract class MyCollidable extends PositionComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
@@ -229,7 +229,7 @@ class SnowmanPart extends CircleHitbox {
   }
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, ShapeHitbox other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, ShapeHitbox other) {
     super.onCollisionStart(intersectionPoints, other);
 
     if (other.hitboxParent is ScreenHitbox) {

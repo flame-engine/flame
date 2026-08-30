@@ -5,12 +5,12 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.11.0 <4.0.0"
+  sdk: ">=3.12.0 <4.0.0"
 
 dependencies:
   collection: ^1.17.1
-  flame: ^1.37.0
-  flame_forge2d: ^0.19.2+6
+  flame: ^1.38.0
+  flame_forge2d: ^0.20.0
   flutter:
     sdk: flutter
   google_fonts: ^8.0.2

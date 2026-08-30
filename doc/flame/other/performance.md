@@ -171,13 +171,13 @@ class Bullet extends SpriteComponent with CollisionCallbacks {
     position.add(velocity * dt);
 
     // Remove bullet if it goes off screen. Automatically returned to pool.
-    if (position.x < -100 || position.x > game.size.x + 100) {
+    if (position.x < -100 || position.x > gameRef.size.x + 100) {
       removeFromParent();
     }
   }
 
   @override
-  void onCollisionStart(Set<Vector2> points, PositionComponent other) {
+  void onCollisionStart(List<Vector2> points, PositionComponent other) {
     super.onCollisionStart(points, other);
     // Return to pool on collision. No manual release needed.
     removeFromParent();

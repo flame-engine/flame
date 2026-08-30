@@ -14,7 +14,7 @@ class OverlaysExample extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     final animation = await loadSpriteAnimation(
-      'animations/chopper.png',
+      'assets/images/animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),
@@ -97,7 +97,7 @@ Widget _secondaryMenuBuilder(BuildContext buildContext, OverlaysExample game) {
 
 Widget overlayBuilder(DashbookContext ctx) {
   return GameWidget<OverlaysExample>(
-    game: OverlaysExample()..paused = true,
+    game: OverlaysExample()..isPaused = true,
     overlayBuilderMap: {
       'PauseMenu': (context, game) => _pauseMenuBuilder(
         context,

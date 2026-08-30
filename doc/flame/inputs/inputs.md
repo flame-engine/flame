@@ -18,6 +18,27 @@ works, but adapted for Flame's component tree.
 - [Pointer Events](pointer_events.md)
 - [Hardware Keyboard Detector](hardware_keyboard_detector.md)
 
+
+## GestureHitboxes
+
+Every mixin whose events carry a position implements `PointerInputCallbacks` — that is all of the
+above except keyboard — and they all decide whether an event belongs to a component by asking its
+`containsLocalPoint()`, which for a `PositionComponent` is its rectangular bounds. The
+`GestureHitboxes` mixin is used to recognize input on top of your `Component`s more accurately than
+that. Say that you have a fairly round rock as a `SpriteComponent` for example, then you don't want
+to register input that is in the corner of the image where the rock is not displayed. Then you can
+use the `GestureHitboxes` mixin to define a more accurate circle or polygon (or another shape) for
+which the input should be within for the event to be registered on your component.
+
+You can add new hitboxes to the component that has the `GestureHitboxes` mixin just like they are
+added in the `Collidable` example.
+
+More information about how to define hitboxes can be found in the hitbox section of the
+[collision detection](../collision_detection.md#shapehitbox) docs.
+
+An example of how to use it can be seen in the
+[gesture hitboxes example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/input/gesture_hitboxes_example.dart).
+
 ```{toctree}
 :hidden:
 

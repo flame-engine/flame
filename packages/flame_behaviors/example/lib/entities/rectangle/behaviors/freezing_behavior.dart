@@ -22,6 +22,5 @@ class FreezingBehavior extends TappableBehavior<Rectangle> {
       originalVelocity = movement?.velocity.clone();
       movement?.velocity.setFrom(Vector2.zero());
     }
-    event.handled = true;
   }
 }

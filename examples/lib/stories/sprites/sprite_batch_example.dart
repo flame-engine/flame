@@ -13,7 +13,7 @@ class SpriteBatchExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final spriteBatch = await SpriteBatch.load('boom.png');
+    final spriteBatch = await SpriteBatch.load('assets/images/boom.png');
 
     spriteBatch.add(
       source: const Rect.fromLTWH(128 * 4.0, 128 * 4.0, 64, 128),

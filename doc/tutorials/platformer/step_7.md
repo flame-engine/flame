@@ -177,13 +177,13 @@ Open `lib/ember_quest.dart` and add / update the following code:
 @override
 Future<void> onLoad() async {
   await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
   ]);
   
   camera.viewfinder.anchor = Anchor.topLeft;
@@ -228,7 +228,7 @@ To display the menus, add the following code to `lib/main.dart`:
 ```dart
 void main() {
   runApp(
-    GameWidget<EmberQuestGame>.controlled(
+    GameWidget<EmberQuestGame>.managed(
       gameFactory: EmberQuestGame.new,
       overlayBuilderMap: {
         'MainMenu': (_, game) => MainMenu(game: game),
@@ -260,11 +260,11 @@ In `lib/actors/ember.dart`, in the `update` method, add the following:
 
 ```dart
 // If ember fell in pit, then game over.
-if (position.y > game.size.y + size.y) {
-  game.health = 0;
+if (position.y > gameRef.size.y + size.y) {
+  gameRef.health = 0;
 }
 
-if (game.health <= 0) {
+if (gameRef.health <= 0) {
   removeFromParent();
 }
 ```
@@ -272,7 +272,7 @@ if (game.health <= 0) {
 In `lib/actors/water_enemy.dart`, in the `update` method update the following code:
 
 ```dart
-if (position.x < -size.x || game.health <= 0) {
+if (position.x < -size.x || gameRef.health <= 0) {
   removeFromParent();
 }
 ```
@@ -280,7 +280,7 @@ if (position.x < -size.x || game.health <= 0) {
 In `lib/objects/ground_block.dart`, in the `update` method update the following code:
 
 ```dart
-if (game.health <= 0) {
+if (gameRef.health <= 0) {
   removeFromParent();
 }
 ```
@@ -288,7 +288,7 @@ if (game.health <= 0) {
 In `lib/objects/platform_block.dart`, in the `update` method update the following code:
 
 ```dart
-if (position.x < -size.x || game.health <= 0) {
+if (position.x < -size.x || gameRef.health <= 0) {
   removeFromParent();
 }
 ```
@@ -296,7 +296,7 @@ if (position.x < -size.x || game.health <= 0) {
 In `lib/objects/star.dart`, in the `update` method update the following code:
 
 ```dart
-if (position.x < -size.x || game.health <= 0) {
+if (position.x < -size.x || gameRef.health <= 0) {
   removeFromParent();
 }
 ```

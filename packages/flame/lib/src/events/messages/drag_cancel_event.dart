@@ -1,6 +1,4 @@
-import 'package:flame/src/events/messages/drag_end_event.dart';
-import 'package:flame/src/events/messages/drag_start_event.dart';
-import 'package:flame/src/events/messages/event.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/gestures.dart';
 
 class DragCancelEvent extends Event<void> {

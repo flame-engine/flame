@@ -1,5 +1,5 @@
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/src/events/messages/event.dart';
 import 'package:flutter/gestures.dart';
 
 class DragEndEvent extends Event<DragEndDetails> {

@@ -12,8 +12,8 @@ class SpineComponent extends PositionComponent {
 
   SpineComponent(
     this._drawable, {
-    bool ownsDrawable = true,
-    BoundsProvider boundsProvider = const SetupPoseBounds(),
+    this._ownsDrawable = true,
+    this._boundsProvider = const SetupPoseBounds(),
     super.position,
     super.scale,
     double super.angle = 0.0,
@@ -21,8 +21,7 @@ class SpineComponent extends PositionComponent {
     super.children,
     super.priority,
     super.key,
-  }) : _ownsDrawable = ownsDrawable,
-       _boundsProvider = boundsProvider {
+  }) {
     _drawable.update(0);
     _bounds = _boundsProvider.computeBounds(_drawable);
     size = Vector2(_bounds.width, _bounds.height);

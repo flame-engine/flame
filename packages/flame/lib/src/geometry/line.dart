@@ -27,7 +27,7 @@ class Line {
     final determinant = a * otherLine.b - otherLine.a * b;
     if (determinant == 0) {
       //The lines are parallel (potentially coincides) and have no intersection
-      return [];
+      return const [];
     }
     return [
       Vector2(

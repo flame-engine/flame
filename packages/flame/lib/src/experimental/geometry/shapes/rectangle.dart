@@ -157,8 +157,16 @@ class Rectangle extends Shape {
 
   /// Returns all intersections between this rectangle's edges and the given
   /// line segment.
-  Set<Vector2> intersections(LineSegment line) {
-    return edges.expand((e) => e.intersections(line)).toSet();
+  List<Vector2> intersections(LineSegment line) {
+    final intersectionPoints = <Vector2>[];
+    for (final edge in edges) {
+      for (final intersection in edge.intersections(line)) {
+        if (!intersectionPoints.contains(intersection)) {
+          intersectionPoints.add(intersection);
+        }
+      }
+    }
+    return intersectionPoints;
   }
 
   @override

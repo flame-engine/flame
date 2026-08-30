@@ -39,7 +39,7 @@ class SpriteAnimationWidget extends StatefulWidget {
 
   const SpriteAnimationWidget({
     required SpriteAnimation animation,
-    required SpriteAnimationTicker animationTicker,
+    required SpriteAnimationTicker this._animationTicker,
     this.playing = true,
     this.anchor = Anchor.topLeft,
     this.errorBuilder,
@@ -48,8 +48,7 @@ class SpriteAnimationWidget extends StatefulWidget {
     this.paint,
     this.size,
     super.key,
-  }) : _animationFuture = animation,
-       _animationTicker = animationTicker;
+  }) : _animationFuture = animation;
 
   /// Loads image from the asset [path] and renders it as a widget.
   ///
@@ -57,6 +56,9 @@ class SpriteAnimationWidget extends StatefulWidget {
   /// To render without loading, or when you want to have a gapless playback
   /// when the [path] value changes, consider loading the [SpriteAnimation]
   /// beforehand and direct pass it to the default constructor.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   SpriteAnimationWidget.asset({
     required String path,
     required SpriteAnimationData data,

@@ -23,7 +23,6 @@
  
     %% Nodes  %%
     
-    A(OxygenGame)
     B(Game):::yellow
     C(FlameGame)
     D(Component)
@@ -32,7 +31,6 @@
 
     %% Flow  %%
 
-    A-- Extends -->B
     F-- Wants -->B
 
     C-- Extends -->D

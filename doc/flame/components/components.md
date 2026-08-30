@@ -146,6 +146,30 @@ class MyComponent extends PositionComponent with TapCallbacks {
 ```
 
 
+### Custom update traversal and pausing
+
+The engine drives the update pass through a flattened traversal list owned by the game, and
+`updateTree` itself cannot be overridden. Components that need to control how their subtree is
+updated (changing the effective `dt`, skipping children, or updating them manually) mix in
+`CustomTraversal` and override its `updateSubtree` method:
+
+```dart
+class SlowMotionArea extends Component with CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
+flattened list itself and its `updateSubtree` drives its subtree. Mixins that build on it (like
+`HasTimeScale`) are declared `on CustomTraversal` and chain via `super.updateSubtree`, so their
+users mix in `CustomTraversal` first: `with CustomTraversal, HasTimeScale`. `FlameGame` already
+mixes it in, so `extends FlameGame with HasTimeScale` needs nothing extra.
+
+To pause a subtree, set a `HasTimeScale` time scale to `0` (or call `pause()`): the update pass
+then skips the component and all of its descendants until the time scale is raised again.
+
+
 ### Composability of components
 
 Sometimes it is useful to wrap other components inside of your component. For example by grouping
@@ -211,6 +235,57 @@ class MyGame extends FlameGame {
 
 The two approaches can be combined freely: the children specified within the constructor will be
 added first, and then any additional child components after.
+
+The `add()`, `addAll()`, and `addToParent()` methods are synchronous: they return immediately
+without waiting for the child to load or mount. This makes them safe to call from anywhere,
+including inside `update()` or a loop that spawns many components, without having to `await` them
+or wrap them in `unawaited`. If you need to wait until a child has reached a given lifecycle stage,
+await its `loaded`, `mounted`, or `removed` future instead (see the lifecycle getters under
+[Component lifecycle](#component-lifecycle)):
+
+```dart
+world.add(coin);
+await coin.mounted;
+// The coin is now guaranteed to be mounted.
+```
+
+When you add a batch of children and only care that all of them made it into the tree, await
+`game.lifecycleEventsProcessed` once instead of collecting the individual futures:
+
+```dart
+world.addAll(coins);
+await game.lifecycleEventsProcessed;
+// All the coins are now in world.children.
+```
+
+The same three getters are also available on any `Iterable<Component>`, for when you need a
+specific stage for a specific group of children rather than for the whole tree:
+
+```dart
+world.addAll(coins);
+await coins.loaded;
+// Every coin has finished loading.
+```
+
+Awaiting `loaded` is safe from inside the parent's own `onLoad`, because the child starts loading as
+soon as it is added:
+
+```dart
+class Inventory extends Component {
+  @override
+  Future<void> onLoad() async {
+    final coin = Coin();
+    add(coin);
+    await coin.loaded;
+    // Anything the coin's onLoad set up is now available here.
+  }
+}
+```
+
+Awaiting `mounted` or `removed` there is not safe: a child can only be mounted after its parent has
+been, and the parent is only mounted once its `onLoad` has completed, so those futures would
+deadlock. The same goes for `game.lifecycleEventsProcessed`, since the parent's own pending mount is
+part of the queue it waits for.
 
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
@@ -331,10 +406,11 @@ flameGame.findByKeyName('player');
 
 ### Querying child components
 
-The children that have been added to a component live in a `QueryableOrderedSet` called
+The children that have been added to a component live in a `ComponentList` called
 `children`. To query for a specific type of components in the set, the `query<T>()` function can be
-used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
-queries will have to be registered with `children.register` before a query can be used.
+used. By default `strictMode` is `false` in the children list, but if you enable it (by overriding
+`createComponentList` to return a `ComponentList(strictMode: true)`), then the queries will have to
+be registered with `children.register` before a query can be used.
 
 If you know at compile time that you later will run a query of a specific type it is recommended to
 register the query, no matter if the `strictMode` is set to `true` or `false`, since there are some
@@ -378,8 +454,8 @@ to implement the `containsLocalPoint()` method yourself.
 Here is an example of how `componentsAtPoint()` can be used:
 
 ```dart
-void onDragUpdate(DragUpdateInfo info) {
-  game.componentsAtPoint(info.widget).forEach((component) {
+void onDragUpdate(DragUpdateEvent event) {
+  game.componentsAtPoint(event.canvasEndPosition).forEach((component) {
     if (component is DropTarget) {
       component.highlight();
     }

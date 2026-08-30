@@ -73,11 +73,11 @@ class KeysExampleGame extends FlameGame {
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    final knight = await loadSprite('knight.png');
-    final mage = await loadSprite('mage.png');
-    final ranger = await loadSprite('ranger.png');
+    final knight = await loadSprite('assets/images/knight.png');
+    final mage = await loadSprite('assets/images/mage.png');
+    final ranger = await loadSprite('assets/images/ranger.png');
 
-    await addAll([
+    addAll([
       SelectableClass(
         key: ComponentKey.named('knight'),
         sprite: knight,

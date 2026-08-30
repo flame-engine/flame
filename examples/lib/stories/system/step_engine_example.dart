@@ -32,7 +32,7 @@ class StepEngineExample extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    final carSprite = await Sprite.load('Car.png');
+    final carSprite = await Sprite.load('assets/images/Car.png');
     final car = SpriteComponent(
       sprite: carSprite,
       anchor: Anchor.center,
@@ -55,7 +55,7 @@ class StepEngineExample extends FlameGame
       hudComponents: [_controlsText],
     );
 
-    await addAll([world, cameraComponent]);
+    addAll([world, cameraComponent]);
   }
 
   @override
@@ -64,7 +64,7 @@ class StepEngineExample extends FlameGame
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.keyP)) {
-      paused = !paused;
+      isPaused = !isPaused;
     } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
       stepEngine(stepTime: _stepTime * _stepTimeMultiplier);
     } else if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
@@ -132,7 +132,7 @@ class _DetectorComponents extends CircleComponent with CollisionCallbacks {
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     paint.color = BasicPalette.black.color;

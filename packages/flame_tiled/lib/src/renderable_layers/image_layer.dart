@@ -22,9 +22,9 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     required super.parent,
     required super.map,
     required super.destTileSize,
-    required Image image,
+    required this._image,
     super.filterQuality,
-  }) : _image = image {
+  }) {
     _mapSize = Vector2(
       map.width * destTileSize.x,
       map.height * destTileSize.y,
@@ -121,6 +121,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
     FilterQuality? filterQuality,
     Images? images,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) async {
     return FlameImageLayer(
       layer: layer,
@@ -129,7 +130,7 @@ class FlameImageLayer extends RenderableLayer<ImageLayer> {
       destTileSize: destTileSize,
       filterQuality: filterQuality,
       image: await (images ?? Flame.images).load(
-        layer.image.source!,
+        '$imagesDirectory${layer.image.source!}',
         package: package,
       ),
     );

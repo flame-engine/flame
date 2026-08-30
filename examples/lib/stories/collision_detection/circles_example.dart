@@ -28,7 +28,7 @@ class MyWorld extends World with TapCallbacks, HasCollisionDetection {
 }
 
 class MyCollidable extends PositionComponent
-    with HasGameReference<CirclesExample>, CollisionCallbacks {
+    with HasGameRef<CirclesExample>, CollisionCallbacks {
   MyCollidable({super.position})
     : super(size: Vector2.all(30), anchor: Anchor.center);
 
@@ -58,7 +58,7 @@ class MyCollidable extends PositionComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);

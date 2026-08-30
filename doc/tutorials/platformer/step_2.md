@@ -46,13 +46,13 @@ class EmberQuestGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
     ]);
 
   }
@@ -62,8 +62,8 @@ class EmberQuestGame extends FlameGame {
 As I mentioned in the [assets](step_1.md#assets) section, we are using multiple individual image
 files and for performance reasons, we should leverage Flame's built-in caching system which will
 only load the files once, but allow us to access them as many times as needed without an impact to
-the game. `await images.loadAll()` takes a list of the file names that are found in `assets/images`
-and loads them to cache.
+the game. `await images.loadAll()` takes a list of full asset paths and loads them into the cache,
+keyed by those same paths.
 
 
 ## Scaffolding
@@ -79,7 +79,7 @@ import 'ember_quest.dart';
 
 void main() {
   runApp(
-    const GameWidget<EmberQuestGame>.controlled(
+    const GameWidget<EmberQuestGame>.managed(
       gameFactory: EmberQuestGame.new,
     ),
   );
@@ -103,13 +103,13 @@ class EmberQuestGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
     ]);
 
     // Everything in this tutorial assumes that the position
@@ -133,7 +133,7 @@ import 'package:flame/components.dart';
 import '../ember_quest.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
-    with HasGameReference<EmberQuestGame> {
+    with HasGameRef<EmberQuestGame> {
   EmberPlayer({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
@@ -141,7 +141,7 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   void onLoad() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('ember.png'),
+      gameRef.images.fromCache('assets/images/ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),
@@ -154,8 +154,9 @@ class EmberPlayer extends SpriteAnimationComponent
 
 This file uses the `HasGameRef` mixin which allows us to reach back to `ember_quest.dart` and
 leverage any of the variables or methods that are defined in the game class. You can see this in
-use with the line `game.images.fromCache('ember.png')`. Earlier, we loaded all the files into
-cache, so to use that file now, we call `fromCache` so it can be leveraged by the `SpriteAnimation`.
+use with the line `gameRef.images.fromCache('assets/images/ember.png')`. Earlier, we loaded all
+the files into cache, so to use that file now, we call `fromCache` so it can be leveraged by the
+`SpriteAnimation`.
 The `EmberPlayer` class is extending a `SpriteAnimationComponent` which allows us to define
 animation as well as position it accordingly in our game world. When we construct this class, the
 default size of `Vector2.all(64)` is defined as the size of Ember in our game world should be 64x64.
@@ -179,13 +180,13 @@ class EmberQuestGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
     ]);
 
     camera.viewfinder.anchor = Anchor.topLeft;

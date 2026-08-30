@@ -30,7 +30,7 @@ class LookAtExample extends FlameGame<_TapWorld>
   @override
   Future<void> onLoad() async {
     final spriteSheet = SpriteSheet(
-      image: await images.load('animations/chopper.png'),
+      image: await images.load('assets/images/animations/chopper.png'),
       srcSize: Vector2.all(48),
     );
 
@@ -67,7 +67,7 @@ class LookAtExample extends FlameGame<_TapWorld>
 }
 
 class _TapWorld extends World
-    with TapCallbacks, KeyboardHandler, HasGameReference<LookAtExample> {
+    with TapCallbacks, KeyboardHandler, HasGameRef<LookAtExample> {
   final CircleComponent target = CircleComponent(
     radius: 5,
     anchor: Anchor.center,
@@ -113,7 +113,7 @@ class _TapWorld extends World
   void _cycleFlips() {
     _currentFlipIndex = (_currentFlipIndex + 1) % _flips.length;
     final nextFlip = _flips[_currentFlipIndex];
-    for (final parent in game._choppers) {
+    for (final parent in gameRef._choppers) {
       parent.scale = nextFlip.$1;
       parent.chopper.scale = nextFlip.$2;
     }
@@ -124,14 +124,13 @@ class _TapWorld extends World
       add(target);
     }
     target.position = position;
-    for (final parent in game._choppers) {
+    for (final parent in gameRef._choppers) {
       parent.chopper.lookAt(position);
     }
   }
 }
 
-class _ChopperParent extends PositionComponent
-    with HasGameReference<LookAtExample> {
+class _ChopperParent extends PositionComponent with HasGameRef<LookAtExample> {
   final PositionComponent chopper;
   late TextBoxComponent textBox;
 
@@ -168,7 +167,7 @@ class _ChopperParent extends PositionComponent
 
   @override
   void update(double dt) {
-    final angleTo = chopper.angleTo(game.world.target.position);
+    final angleTo = chopper.angleTo(gameRef.world.target.position);
     textBox.text =
         '''
       nativeAngle = ${chopper.nativeAngle.toStringAsFixed(2)}

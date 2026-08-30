@@ -3,20 +3,20 @@ import 'package:examples/stories/bridge_libraries/flame_jenny/components/dialogu
 import 'package:flame/components.dart';
 import 'package:jenny/jenny.dart';
 
-class DialogueBoxComponent extends SpriteComponent with HasGameReference {
+class DialogueBoxComponent extends SpriteComponent with HasGameRef {
   DialogueTextBox textBox = DialogueTextBox(text: '');
   final Vector2 spriteSize = Vector2(736, 128);
   late final ButtonRow buttonRow = ButtonRow(size: spriteSize);
 
   @override
   Future<void> onLoad() async {
-    position = Vector2(game.size.x / 2, 96);
+    position = Vector2(gameRef.size.x / 2, 96);
     anchor = Anchor.center;
     sprite = await Sprite.load(
-      'dialogue_box.png',
+      'assets/images/dialogue_box.png',
       srcSize: spriteSize,
     );
-    await addAll([buttonRow, textBox]);
+    addAll([buttonRow, textBox]);
     return super.onLoad();
   }
 

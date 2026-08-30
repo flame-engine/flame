@@ -7,7 +7,7 @@ class CircleCollidingBehavior extends CollisionBehavior<Circle, Rectangle> {
   final _collisionColor = Colors.green.withValues(alpha: 0.8);
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, Circle other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, Circle other) {
     parent.paint.color = _collisionColor;
   }
 

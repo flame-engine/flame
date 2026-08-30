@@ -9,14 +9,14 @@ on:
 
 
 env:
-  FLUTTER_MIN_VERSION: '3.41.0'
+  FLUTTER_MIN_VERSION: '3.44.0'
 
 jobs:
   # BEGIN LINTING STAGE
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v3
       - run: melos run format-check
@@ -24,20 +24,20 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{env.FLUTTER_MIN_VERSION}}
       - uses: bluefireteam/melos-action@v3
+      # flame_3d always requires the latest stable, since flutter_gpu is still
+      # unstable, so it is only analyzed in the analyze-latest job.
       - name: "Analyze with lowest supported version"
-        uses: invertase/github-action-dart-analyzer@v3
-        with:
-          fatal-infos: true
+        run: melos exec --ignore="flame_3d*" -- dart analyze --fatal-infos .
 
   analyze-latest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v3
       - name: "Analyze with latest stable"
@@ -48,8 +48,8 @@ jobs:
   markdown-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 18
       - run: npm install -g markdownlint-cli
@@ -58,7 +58,7 @@ jobs:
   dcm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v3
       - name: Install DCM
@@ -74,11 +74,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: subosito/flutter-action@v2
         with:
           cache: true
       - uses: bluefireteam/melos-action@v3
       - name: Run tests
-        run: melos test
+        run: melos run test:select --no-select
   # END TESTING STAGE

@@ -1,6 +1,7 @@
 # general development-adjacent terms and expressions
 AABB # axis aligned bounding box
 abelian # Abelian Group, also known as commutative group
+alignof # alignment of
 ARGB # alpha red green blue
 arities # plural of arity
 backgrounded # moving the app to the background
@@ -57,8 +58,12 @@ texels # plural of texel
 tileset # image with a collection of tiles. in games, tiles are small square sprites laid out in a grid to form the game map
 tilesets # plural of tileset
 truecolor # truecolor rendering
-tweening # the process of tween
+uncapturederror # dumb webgpu javascript name
+unorm # unsigned normalized integer
 viewports # plural of viewport
 WASD # movement keys on a keyboard
 WBMP # wireless bitmap image format
+webgpu # gpu standard for web browsers 
 WebP # WebP image format
+WGSL # WGSL shader language
+wgslbundle # WGSL shader bundle format

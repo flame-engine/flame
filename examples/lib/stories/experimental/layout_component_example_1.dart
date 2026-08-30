@@ -84,14 +84,12 @@ class LayoutDemo1 extends LinearLayoutComponent {
     required super.mainAxisAlignment,
     required super.gap,
     required super.position,
-    required EdgeInsets padding,
-    required bool expandedMode,
+    required this._padding,
+    required this._expandedMode,
     required this.paddingInflateChild,
     super.size,
     super.key,
-  }) : _padding = padding,
-       _expandedMode = expandedMode,
-       super(anchor: Anchor.topLeft, priority: 0, children: []);
+  }) : super(anchor: Anchor.topLeft, priority: 0, children: []);
 
   bool _expandedMode = false;
 
@@ -101,7 +99,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
     _expandedMode = value;
     removeAll(children.toList());
     addAll(
-      createComponentList(
+      createLayoutChildren(
         expandedMode: expandedMode,
         padding: padding,
         inflateChild: paddingInflateChild,
@@ -124,7 +122,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
   FutureOr<void> onLoad() {
     super.onLoad();
     addAll(
-      createComponentList(
+      createLayoutChildren(
         expandedMode: expandedMode,
         padding: padding,
         inflateChild: paddingInflateChild,
@@ -139,7 +137,7 @@ class LayoutDemo1 extends LinearLayoutComponent {
   /// This needs to be a method rather than a static list
   /// because each of these components needs to be recreated.
   /// Otherwise, they'll be operated on by reference and re-parented.
-  static List<Component> createComponentList({
+  static List<Component> createLayoutChildren({
     required bool expandedMode,
     required EdgeInsets padding,
     required bool inflateChild,

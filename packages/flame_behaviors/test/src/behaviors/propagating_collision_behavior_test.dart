@@ -31,13 +31,13 @@ abstract class _CollisionBehavior<
   bool onCollisionEndCalled = false;
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, A other) {
+  void onCollisionStart(List<Vector2> intersectionPoints, A other) {
     super.onCollisionStart(intersectionPoints, other);
     onCollisionStartCalled = true;
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, A other) {
+  void onCollision(List<Vector2> intersectionPoints, A other) {
     super.onCollision(intersectionPoints, other);
     onCollisionCalled = true;
   }
@@ -163,7 +163,7 @@ void main() {
         );
 
         await expectLater(() async {
-          await entity.add(propagatingCollisionBehavior);
+          entity.add(propagatingCollisionBehavior);
           game.update(0);
         }, failsAssert('parent must be a PositionComponent'));
       },

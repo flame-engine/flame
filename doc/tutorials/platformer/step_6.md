@@ -26,7 +26,7 @@ enum HeartState {
 }
 
 class HeartHealthComponent extends SpriteGroupComponent<HeartState>
-    with HasGameReference<EmberQuestGame> {
+    with HasGameRef<EmberQuestGame> {
   final int heartNumber;
 
   HeartHealthComponent({
@@ -42,13 +42,13 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final availableSprite = await game.loadSprite(
-      'heart.png',
+    final availableSprite = await gameRef.loadSprite(
+      'assets/images/heart.png',
       srcSize: Vector2.all(32),
     );
 
-    final unavailableSprite = await game.loadSprite(
-      'heart_half.png',
+    final unavailableSprite = await gameRef.loadSprite(
+      'assets/images/heart_half.png',
       srcSize: Vector2.all(32),
     );
 
@@ -62,7 +62,7 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 
   @override
   void update(double dt) {
-    if (game.health < heartNumber) {
+    if (gameRef.health < heartNumber) {
       current = HeartState.unavailable;
     } else {
       current = HeartState.available;
@@ -76,8 +76,8 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 The `HeartHealthComponent` is just a [SpriteGroupComponent](../../flame/components/sprite_components.md#spritegroupcomponent)
 that uses the heart images that were created early on. The unique thing that is being done, is when
 the component is created, it requires a `heartNumber`, so in the `update` method, we check to see if
-the `game.health` is less than the `heartNumber` and if so, change the state of the component to
-unavailable.
+the `gameRef.health` is less than the `heartNumber` and if so, change the state of the component
+to unavailable.
 
 To put this all together, create `hud.dart` in the same folder and add the following code:
 
@@ -88,7 +88,7 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 import 'heart.dart';
 
-class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
+class Hud extends PositionComponent with HasGameRef<EmberQuestGame> {
   Hud({
     super.position,
     super.size,
@@ -104,7 +104,7 @@ class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
   @override
   Future<void> onLoad() async {
     _scoreTextComponent = TextComponent(
-      text: '${game.starsCollected}',
+      text: '${gameRef.starsCollected}',
       textRenderer: TextPaint(
         style: const TextStyle(
           fontSize: 32,
@@ -112,23 +112,23 @@ class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
         ),
       ),
       anchor: Anchor.center,
-      position: Vector2(game.size.x - 60, 20),
+      position: Vector2(gameRef.size.x - 60, 20),
     );
     add(_scoreTextComponent);
 
-    final starSprite = await game.loadSprite('star.png');
+    final starSprite = await gameRef.loadSprite('assets/images/star.png');
     add(
       SpriteComponent(
         sprite: starSprite,
-        position: Vector2(game.size.x - 100, 20),
+        position: Vector2(gameRef.size.x - 100, 20),
         size: Vector2.all(32),
         anchor: Anchor.center,
       ),
     );
 
-    for (var i = 1; i <= game.health; i++) {
+    for (var i = 1; i <= gameRef.health; i++) {
       final positionX = 40 * i;
-      await add(
+      add(
         HeartHealthComponent(
           heartNumber: i,
           position: Vector2(positionX.toDouble(), 20),
@@ -140,14 +140,14 @@ class Hud extends PositionComponent with HasGameReference<EmberQuestGame> {
 
   @override
   void update(double dt) {
-    _scoreTextComponent.text = '${game.starsCollected}';
+    _scoreTextComponent.text = '${gameRef.starsCollected}';
   }
 }
 
 ```
 
-In the `onLoad` method, you can see where we loop from 1 to the `game.health` amount, to create
-the number of hearts necessary. The last step is to add the hud to the game.
+In the `onLoad` method, you can see where we loop from 1 to the `gameRef.health` amount, to
+create the number of hearts necessary. The last step is to add the hud to the game.
 
 Go to `lib/ember_quest.dart` and add the following code in the `initializeGame` method:
 
@@ -176,14 +176,14 @@ to open `lib/actors/ember.dart` and add the following code:
 ```dart
 if (other is Star) {
   other.removeFromParent();
-  game.starsCollected++;
+  gameRef.starsCollected++;
 }
 ```
 
 ```dart
 void hit() {
   if (!hitByEnemy) {
-    game.health--;
+    gameRef.health--;
     hitByEnemy = true;
   }
   add(

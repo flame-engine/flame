@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
 import 'package:flutter/material.dart';
 
@@ -12,16 +11,16 @@ void main() {
 }
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection {
+    with DragCallbacks, HasCollisionDetection {
   late Player player;
 
   @override
   Future<void> onLoad() async {
     final parallax = await loadParallaxComponent(
       [
-        ParallaxImageData('stars_0.png'),
-        ParallaxImageData('stars_1.png'),
-        ParallaxImageData('stars_2.png'),
+        ParallaxImageData('assets/images/stars_0.png'),
+        ParallaxImageData('assets/images/stars_1.png'),
+        ParallaxImageData('assets/images/stars_2.png'),
       ],
       baseVelocity: Vector2(0, -5),
       repeat: ImageRepeat.repeat,
@@ -44,23 +43,25 @@ class SpaceShooterGame extends FlameGame
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 
   @override
-  void onPanStart(DragStartInfo info) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     player.startShooting();
   }
 
   @override
-  void onPanEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     player.stopShooting();
   }
 }
 
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Player()
     : super(
         size: Vector2(100, 150),
@@ -73,8 +74,8 @@ class Player extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
-      'player.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
@@ -82,7 +83,7 @@ class Player extends SpriteAnimationComponent
       ),
     );
 
-    position = game.size / 2;
+    position = gameRef.size / 2;
 
     _bulletSpawner = SpawnComponent(
       period: 0.2,
@@ -100,7 +101,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    game.add(_bulletSpawner);
+    gameRef.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {
@@ -117,7 +118,7 @@ class Player extends SpriteAnimationComponent
 }
 
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -129,8 +130,8 @@ class Bullet extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
-      'bullet.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
@@ -158,7 +159,7 @@ class Bullet extends SpriteAnimationComponent
 }
 
 class Enemy extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   Enemy({
     super.position,
   }) : super(
@@ -172,8 +173,8 @@ class Enemy extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
-      'enemy.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/enemy.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.2,
@@ -190,14 +191,14 @@ class Enemy extends SpriteAnimationComponent
 
     position.y += dt * 250;
 
-    if (position.y > game.size.y) {
+    if (position.y > gameRef.size.y) {
       removeFromParent();
     }
   }
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
@@ -205,13 +206,13 @@ class Enemy extends SpriteAnimationComponent
     if (other is Bullet) {
       removeFromParent();
       other.removeFromParent();
-      game.add(Explosion(position: position));
+      gameRef.add(Explosion(position: position));
     }
   }
 }
 
 class Explosion extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Explosion({
     super.position,
   }) : super(
@@ -224,8 +225,8 @@ class Explosion extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
-      'explosion.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/explosion.png',
       SpriteAnimationData.sequenced(
         amount: 6,
         stepTime: 0.1,

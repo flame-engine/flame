@@ -68,11 +68,14 @@ class SpriteFusionTilemapComponent extends PositionComponent {
 
   /// Loads a [SpriteFusionTilemapComponent] from the given json file and
   /// spritesheet file.
+  ///
+  /// Both [mapJsonFile] and [spriteSheetFile] are full paths, as declared in
+  /// the `pubspec.yaml`, for example `assets/tiles/map.json` and
+  /// `assets/images/spritesheet.png`.
   static Future<SpriteFusionTilemapComponent> load({
     required String mapJsonFile,
     required String spriteSheetFile,
     bool useAtlas = true,
-    String tilemapPrefix = 'assets/tiles/',
     AssetBundle? assetBundle,
     Images? images,
     Vector2? position,
@@ -85,12 +88,10 @@ class SpriteFusionTilemapComponent extends PositionComponent {
     ComponentKey? key,
     String? package,
   }) async {
-    final prefix = package == null
-        ? tilemapPrefix
-        : 'packages/$package/$tilemapPrefix';
-    final content = await (assetBundle ?? Flame.bundle).loadString(
-      '$prefix$mapJsonFile',
-    );
+    final mapPath = package == null
+        ? mapJsonFile
+        : 'packages/$package/$mapJsonFile';
+    final content = await (assetBundle ?? Flame.bundle).loadString(mapPath);
 
     final json = jsonDecode(content) as Map<String, dynamic>;
 

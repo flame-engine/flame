@@ -1,12 +1,13 @@
 import 'dart:ui';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class AnimatedBodyExample extends Forge2DGame {
+class AnimatedBodyExample extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add an animated chopper, which is created
     with a SpriteAnimationComponent, on top of a BodyComponent.
@@ -22,14 +23,14 @@ class AnimatedBodyExample extends Forge2DGame {
 }
 
 class AnimatedBodyWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   late Image chopper;
   late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
-    chopper = await Flame.images.load('animations/chopper.png');
+    await super.onLoad();
+    chopper = await Flame.images.load('assets/images/animations/chopper.png');
 
     animation = SpriteAnimation.fromFrameData(
       chopper,
@@ -40,7 +41,7 @@ class AnimatedBodyWorld extends Forge2DWorld
       ),
     );
 
-    final boundaries = createBoundaries(game);
+    final boundaries = createBoundaries(gameRef);
     addAll(boundaries);
   }
 
@@ -72,21 +73,19 @@ class ChopperBody extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = CircleShape()..radius = size.x / 4;
-    final fixtureDef = FixtureDef(
-      shape,
+    final shapeDef = ShapeDef(
       userData: this, // To be able to determine object in collision
-      restitution: 0.8,
-      friction: 0.2,
+      material: SurfaceMaterial(restitution: 0.6, friction: 0.5),
     );
 
     final velocity = (Vector2.random() - Vector2.random()) * 200;
     final bodyDef = BodyDef(
       position: _position,
-      angle: velocity.angleTo(Vector2(1, 0)),
+      rotation: Rot.fromAngle(velocity.angleTo(Vector2(1, 0))),
       linearVelocity: velocity,
       type: BodyType.dynamic,
     );
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)
+      ..createShape(Circle(radius: size.x / 4), shapeDef);
   }
 }

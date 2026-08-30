@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flame/extensions.dart';
+
 class PaletteEntry {
   final Color color;
 
@@ -21,6 +23,14 @@ class PaletteEntry {
 
   PaletteEntry withBlue(int blue) {
     return PaletteEntry(color.withBlue(blue));
+  }
+
+  PaletteEntry darken(double amount) {
+    return PaletteEntry(color.darken(amount));
+  }
+
+  PaletteEntry brighten(double amount) {
+    return PaletteEntry(color.brighten(amount));
   }
 }
 

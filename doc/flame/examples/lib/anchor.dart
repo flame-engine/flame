@@ -25,12 +25,12 @@ class AnchorGame extends FlameGame {
       paint: BasicPalette.blue.paint(),
     );
 
-    await _redComponent.addAll([
+    _redComponent.addAll([
       _blueComponent,
       CircleComponent(radius: 2, anchor: Anchor.center),
     ]);
 
-    await addAll([
+    addAll([
       _redComponent,
       _parentAnchorText,
       _childAnchorText,

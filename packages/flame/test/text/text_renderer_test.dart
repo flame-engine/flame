@@ -37,6 +37,11 @@ class _CustomTextRenderer extends TextRenderer {
   InlineTextElement format(String text) {
     return _CustomTextElement();
   }
+
+  @override
+  TextRenderer copyWithPaint(Paint paint) {
+    return _CustomTextRenderer();
+  }
 }
 
 class _CustomTextElement extends InlineTextElement {

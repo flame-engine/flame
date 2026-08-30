@@ -1,4 +1,4 @@
-import 'package:flame/src/events/messages/event.dart';
+import 'package:flame/events.dart';
 
 /// The event propagated through the Flame engine when a long press gesture
 /// is cancelled before completing.

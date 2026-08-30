@@ -34,7 +34,7 @@ void main() {
       );
 
       final spriteSheet = SpriteSheet(
-        image: await images.load('spritesheet.png'),
+        image: await images.load('assets/spritesheet.png'),
         srcSize: Vector2.all(tilemapData.tileSize),
       );
 
@@ -50,11 +50,10 @@ void main() {
     test('loads map from file', () {
       expect(
         SpriteFusionTilemapComponent.load(
-          mapJsonFile: 'map.json',
-          spriteSheetFile: 'spritesheet.png',
+          mapJsonFile: 'assets/map.json',
+          spriteSheetFile: 'assets/spritesheet.png',
           assetBundle: bundle,
           images: images,
-          tilemapPrefix: '',
         ),
         completes,
       );
@@ -69,7 +68,7 @@ void main() {
       );
 
       final spriteSheet = SpriteSheet(
-        image: await images.load('spritesheet.png'),
+        image: await images.load('assets/spritesheet.png'),
         srcSize: Vector2.all(tilemapData.tileSize),
       );
 
@@ -91,13 +90,12 @@ void main() {
       'renders the map correctly',
       (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
-          mapJsonFile: 'map.json',
-          spriteSheetFile: 'spritesheet.png',
+          mapJsonFile: 'assets/map.json',
+          spriteSheetFile: 'assets/spritesheet.png',
           assetBundle: bundle,
           images: images,
-          tilemapPrefix: '',
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -108,14 +106,13 @@ void main() {
       'position is respected when rendering',
       (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
-          mapJsonFile: 'map.json',
-          spriteSheetFile: 'spritesheet.png',
+          mapJsonFile: 'assets/map.json',
+          spriteSheetFile: 'assets/spritesheet.png',
           assetBundle: bundle,
           images: images,
-          tilemapPrefix: '',
           position: Vector2(100, 100),
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -126,14 +123,13 @@ void main() {
       'anchor is respected when rendering',
       (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
-          mapJsonFile: 'map.json',
-          spriteSheetFile: 'spritesheet.png',
+          mapJsonFile: 'assets/map.json',
+          spriteSheetFile: 'assets/spritesheet.png',
           assetBundle: bundle,
           images: images,
-          tilemapPrefix: '',
           anchor: Anchor.center,
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -144,14 +140,13 @@ void main() {
       'scale is respected when rendering',
       (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
-          mapJsonFile: 'map.json',
-          spriteSheetFile: 'spritesheet.png',
+          mapJsonFile: 'assets/map.json',
+          spriteSheetFile: 'assets/spritesheet.png',
           assetBundle: bundle,
           images: images,
-          tilemapPrefix: '',
           scale: Vector2.all(0.5),
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),
@@ -162,14 +157,13 @@ void main() {
       'angle is respected when rendering',
       (game, tester) async {
         final map = await SpriteFusionTilemapComponent.load(
-          mapJsonFile: 'map.json',
-          spriteSheetFile: 'spritesheet.png',
+          mapJsonFile: 'assets/map.json',
+          spriteSheetFile: 'assets/spritesheet.png',
           assetBundle: bundle,
           images: images,
-          tilemapPrefix: '',
           angle: pi * 0.125,
         );
-        await game.add(map);
+        game.add(map);
         await game.ready();
       },
       size: Vector2(360, 216),

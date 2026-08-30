@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flame/events.dart' hide PointerMoveEvent;
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ void main() {
     testWithFlameGame(
       'make sure ScaleCallback components can be added to a FlameGame',
       (game) async {
-        await game.add(ScaleCallbacksComponent());
+        game.add(ScaleCallbacksComponent());
         await game.ready();
         expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
@@ -358,7 +358,7 @@ void main() {
 
       game.camera.viewfinder.zoom = 3;
 
-      await game.world.add(
+      game.world.add(
         ScaleWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),
@@ -395,7 +395,7 @@ void main() {
 
       game.camera.viewfinder.zoom = 3;
 
-      await game.world.add(
+      game.world.add(
         ScaleWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),

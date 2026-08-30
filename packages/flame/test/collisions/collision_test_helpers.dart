@@ -109,9 +109,8 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
     bool addTestHitbox = true,
     super.children,
     this.name,
-    bool Function(PositionComponent other)? onComponentTypeCheck,
-  }) : _onComponentTypeCheck = onComponentTypeCheck,
-       super(
+    this._onComponentTypeCheck,
+  }) : super(
          position: position,
          size: size,
        ) {
@@ -139,8 +138,8 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
         : '_TestBlock[$name]';
   }
 
-  Set<Vector2> intersections(TestBlock other) {
-    final result = <Vector2>{};
+  List<Vector2> intersections(TestBlock other) {
+    final result = <Vector2>[];
     for (final hitboxA in children.query<ShapeHitbox>()) {
       for (final hitboxB in other.children.query<ShapeHitbox>()) {
         result.addAll(hitboxA.intersections(hitboxB));
@@ -151,7 +150,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
@@ -159,7 +158,7 @@ class TestBlock extends PositionComponent with CollisionCallbacks {
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(List<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     onCollisionCounter++;
   }

@@ -16,7 +16,7 @@ class ExampleGame extends FlameGame with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    _atlas = await loadFireAtlas('cave_ace.fa');
+    _atlas = await loadFireAtlas('assets/cave_ace.fa');
     add(
       SpriteAnimationComponent(
         size: Vector2(150, 100),

@@ -1,16 +1,15 @@
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/palette.dart';
 
-/// Showcases how to mix two advanced detectors
+/// Showcases how to mix tap and drag callbacks
 class MultitapAdvancedExample extends FlameGame
-    with MultiTouchTapDetector, MultiTouchDragDetector {
+    with TapCallbacks, DragCallbacks {
   static const String description = '''
-    This showcases the use of both `MultiTouchTapDetector` and
-    `MultiTouchDragDetector` simultaneously. Drag multiple fingers on the screen
-    to see rectangles of different sizes being drawn.
+    This showcases the use of both `TapCallbacks` and `DragCallbacks`
+    simultaneously. Drag multiple fingers on the screen to see rectangles of
+    different sizes being drawn.
   ''';
 
   static final whitePaint = BasicPalette.white.paint();
@@ -23,40 +22,43 @@ class MultitapAdvancedExample extends FlameGame
   Rect? panRect;
 
   @override
-  void onTapDown(int pointerId, TapDownInfo info) {
-    taps[pointerId] = info.eventPosition.widget.toPositionedRect(tapSize);
+  void onTapDown(TapDownEvent event) {
+    taps[event.pointerId] = event.canvasPosition.toPositionedRect(tapSize);
   }
 
   @override
-  void onTapUp(int pointerId, _) {
-    taps.remove(pointerId);
+  void onTapUp(TapUpEvent event) {
+    taps.remove(event.pointerId);
   }
 
   @override
-  void onTapCancel(int pointerId) {
-    taps.remove(pointerId);
+  void onTapCancel(TapCancelEvent event) {
+    taps.remove(event.pointerId);
   }
 
   @override
-  void onDragCancel(int pointerId) {
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     end = null;
     start = null;
     panRect = null;
   }
 
   @override
-  void onDragStart(int pointerId, DragStartInfo info) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     end = null;
-    start = info.eventPosition.widget;
+    start = event.canvasPosition;
   }
 
   @override
-  void onDragUpdate(int pointerId, DragUpdateInfo info) {
-    end = info.eventPosition.widget;
+  void onDragUpdate(DragUpdateEvent event) {
+    end = event.canvasStartPosition;
   }
 
   @override
-  void onDragEnd(int pointerId, _) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     final start = this.start;
     final end = this.end;
     if (start != null && end != null) {

@@ -1,5 +1,4 @@
-import 'package:flame/src/events/messages/event.dart';
-import 'package:flame/src/events/messages/tap_down_event.dart';
+import 'package:flame/events.dart';
 
 /// The event propagated through the Flame engine when a tap on a component is
 /// cancelled.

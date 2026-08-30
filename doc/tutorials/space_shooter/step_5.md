@@ -9,8 +9,7 @@ image below, choose "Save as...", and store it as `enemy.png` in your `assets/im
 ![enemy](app/assets/images/enemy.png)
 
 ```dart
-class Enemy extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+class Enemy extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
 
   Enemy({
     super.position,
@@ -26,8 +25,8 @@ class Enemy extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
-      'enemy.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/enemy.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: .2,
@@ -42,7 +41,7 @@ class Enemy extends SpriteAnimationComponent
 
     position.y += dt * 250;
 
-    if (position.y > game.size.y) {
+    if (position.y > gameRef.size.y) {
       removeFromParent();
     }
   }

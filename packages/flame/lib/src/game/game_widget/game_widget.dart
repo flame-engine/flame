@@ -76,14 +76,14 @@ class GameWidget<T extends Game> extends StatefulWidget {
   ///   Widget build(BuildContext context) {
   ///     return Container(
   ///       padding: EdgeInsets.all(20),
-  ///       child: GameWidget.controlled(
+  ///       child: GameWidget.managed(
   ///         gameFactory: MyGame.new,
   ///       ),
   ///     );
   ///   }
   /// }
   /// ```
-  const GameWidget.controlled({
+  const GameWidget.managed({
     required GameFactory<T> this.gameFactory,
     this.textDirection,
     this.loadingBuilder,
@@ -100,7 +100,7 @@ class GameWidget<T extends Game> extends StatefulWidget {
   }) : game = null;
 
   /// The game instance which this widget will render, if it was provided with
-  /// the default constructor. Otherwise, if the [GameWidget.controlled]
+  /// the default constructor. Otherwise, if the [GameWidget.managed]
   /// constructor was used, this will always be `null`.
   final T? game;
 
@@ -209,7 +209,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
     assert(game.hasLayout);
     await game.load();
     game.mount();
-    if (!game.paused) {
+    if (!game.isPaused) {
       game.update(0);
     }
   })();
@@ -359,13 +359,6 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         behavior: widget.behavior,
       );
 
-      assert(
-        !(currentGame is MultiTouchDragDetector && currentGame is PanDetector),
-        'WARNING: Both MultiTouchDragDetector and a PanDetector detected. '
-        'The MultiTouchDragDetector will override the PanDetector and it will '
-        'not receive events',
-      );
-
       internalGameWidget = currentGame.gestureDetectors.build(
         internalGameWidget,
       );
@@ -412,7 +405,7 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
                       // This should only be called if the game has already been
                       // loaded (in the case of resizing for example), since
                       // update otherwise should be called after onMount.
-                      if (!currentGame.paused && currentGame.isAttached) {
+                      if (!currentGame.isPaused && currentGame.isAttached) {
                         currentGame.update(0);
                       }
                       return FutureBuilder(

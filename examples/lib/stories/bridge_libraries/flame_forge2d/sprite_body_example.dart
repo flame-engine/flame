@@ -1,11 +1,12 @@
 import 'dart:math';
 
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries.dart';
+import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 
-class SpriteBodyExample extends Forge2DGame {
+class SpriteBodyExample extends Forge2DExampleGame {
   static const String description = '''
     In this example we show how to add a sprite on top of a `BodyComponent`.
     Tap the screen to add more pizzas.
@@ -19,11 +20,11 @@ class SpriteBodyExample extends Forge2DGame {
 }
 
 class SpriteBodyWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
-    super.onLoad();
-    addAll(createBoundaries(game));
+    await super.onLoad();
+    addAll(createBoundaries(gameRef));
   }
 
   @override
@@ -46,7 +47,7 @@ class Pizza extends BodyComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final sprite = await game.loadSprite('pizza.png');
+    final sprite = await gameRef.loadSprite('assets/images/pizza.png');
     renderBody = false;
     add(
       SpriteComponent(
@@ -59,27 +60,22 @@ class Pizza extends BodyComponent {
 
   @override
   Body createBody() {
-    final shape = PolygonShape();
-
     final vertices = [
       Vector2(-size.x / 2, size.y / 2),
       Vector2(size.x / 2, size.y / 2),
       Vector2(0, -size.y / 2),
     ];
-    shape.set(vertices);
 
-    final fixtureDef = FixtureDef(
-      shape,
+    final shapeDef = ShapeDef(
       userData: this, // To be able to determine object in collision
-      restitution: 0.4,
-      friction: 0.5,
+      material: SurfaceMaterial(restitution: 0.4, friction: 0.5),
     );
 
     final bodyDef = BodyDef(
       position: initialPosition,
-      angle: (initialPosition.x + initialPosition.y) / 2 * pi,
+      rotation: Rot.fromAngle((initialPosition.x + initialPosition.y) / 2 * pi),
       type: BodyType.dynamic,
     );
-    return world.createBody(bodyDef)..createFixture(fixtureDef);
+    return world.createBody(bodyDef)..createShape(Polygon(vertices), shapeDef);
   }
 }

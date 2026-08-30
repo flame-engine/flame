@@ -1,3 +1,10 @@
+## 2.3.0
+
+ - **FEAT**: OpacityEffect support on text components ([#3940](https://github.com/flame-engine/flame/issues/3940)). ([749c73a4](https://github.com/flame-engine/flame/commit/749c73a45be5978cca53ce3737fe2d2382289306))
+ - **FEAT**: Implement TertiaryTapCallbacks on new event system ([#3899](https://github.com/flame-engine/flame/issues/3899)). ([933395e2](https://github.com/flame-engine/flame/commit/933395e233bf8a84aff435352054cd357c6acfa2))
+ - **FEAT**: Implement LongPressCallbacks on new event system ([#3896](https://github.com/flame-engine/flame/issues/3896)). ([8ee838c4](https://github.com/flame-engine/flame/commit/8ee838c415eb8c18653fe759fdf0086ab421da35))
+ - **FEAT**: Implement ScrollCallbacks on new event system ([#3892](https://github.com/flame-engine/flame/issues/3892)). ([d0010032](https://github.com/flame-engine/flame/commit/d0010032d7f94680a1fab1cd5b36dc6c69d6dba9))
+
 ## 2.2.4
 
  - **FIX**: Remove async from flame test helpers ([#3860](https://github.com/flame-engine/flame/issues/3860)). ([4e63e93e](https://github.com/flame-engine/flame/commit/4e63e93eb78d5e6e3c48e0cc02577bf2581b0e87))

@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/events/flame_game_mixins/multi_tap_dispatcher.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -167,11 +167,11 @@ void main() {
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, true);
+        expect(game.isPaused, true);
 
         await tester.tapAt(const Offset(400, 300));
         await tester.pump(const Duration(seconds: 1));
-        expect(game.paused, false);
+        expect(game.isPaused, false);
       },
     );
   });
@@ -179,8 +179,8 @@ void main() {
 
 class _SimpleStatelessWidget extends StatelessWidget {
   const _SimpleStatelessWidget({
-    required Widget Function(BuildContext) build,
-  }) : _build = build;
+    required this._build,
+  });
 
   final Widget Function(BuildContext) _build;
 

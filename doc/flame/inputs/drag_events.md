@@ -58,6 +58,11 @@ local coordinate system.
 Any component that receives `onDragStart` will later be receiving `onDragUpdate` and `onDragEnd`
 events as well.
 
+A drag only starts once the pointer has moved further than the platform's touch slop from the
+point where it went down, so a tap with a slightly wobbling finger is still delivered as a tap and
+not as a drag. When the drag starts, the movement accumulated before that point is delivered in the
+first `onDragUpdate`.
+
 
 ### onDragUpdate
 
@@ -87,8 +92,11 @@ position associated with this event.
 
 ### onDragCancel
 
-The precise semantics when this event occurs is not clear, so we provide a default implementation
-which simply converts this event into an `onDragEnd`.
+This event is fired when the drag gesture is interrupted before it ends naturally, for example when
+another gesture recognizer wins the gesture arena or a second pointer triggers a scale takeover.
+Unlike `onDragEnd` it carries no velocity information. The default implementation simply resets the
+drag state; override it and call `onDragEnd(event.toDragEnd())` yourself if you want a cancellation
+handled identically to a natural drag end.
 
 
 ## Mixins

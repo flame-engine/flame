@@ -106,14 +106,11 @@ class DynamicScaleDragExample extends FlameGame {
 
 class _Button extends PositionComponent with TapCallbacks {
   _Button({
-    required String text,
+    required this._text,
     required super.position,
-    required Color color,
-    required VoidCallback onPressed,
-  }) : _color = color,
-       _onPressed = onPressed,
-       _text = text,
-       super(size: Vector2(100, 30));
+    required this._color,
+    required this._onPressed,
+  }) : super(size: Vector2(100, 30));
 
   final Color _color;
   final VoidCallback _onPressed;
@@ -149,13 +146,12 @@ class _Button extends PositionComponent with TapCallbacks {
 
 /// A rectangle that only responds to drag.
 class _DragBox extends RectangleComponent
-    with DragCallbacks, HasGameReference<FlameGame> {
+    with DragCallbacks, HasGameRef<FlameGame> {
   _DragBox({
-    required String label,
+    required this._label,
     required Vector2 position,
     required Color color,
-  }) : _label = label,
-       super(
+  }) : super(
          position: position,
          size: Vector2.all(120),
          anchor: Anchor.center,
@@ -187,11 +183,10 @@ class _DragBox extends RectangleComponent
 /// A rectangle that only responds to scale (pinch/zoom).
 class _ScaleBox extends RectangleComponent with ScaleCallbacks {
   _ScaleBox({
-    required String label,
+    required this._label,
     required Vector2 position,
     required Color color,
-  }) : _label = label,
-       super(
+  }) : super(
          position: position,
          size: Vector2.all(120),
          anchor: Anchor.center,
@@ -237,13 +232,12 @@ class _ScaleBox extends RectangleComponent with ScaleCallbacks {
 
 /// A rectangle that responds to both drag and scale.
 class _DragScaleBox extends RectangleComponent
-    with ScaleCallbacks, DragCallbacks, HasGameReference<FlameGame> {
+    with ScaleCallbacks, DragCallbacks, HasGameRef<FlameGame> {
   _DragScaleBox({
-    required String label,
+    required this._label,
     required Vector2 position,
     required Color color,
-  }) : _label = label,
-       super(
+  }) : super(
          position: position,
          size: Vector2.all(120),
          anchor: Anchor.center,

@@ -38,7 +38,7 @@ abstract mixin class Game {
     refreshWidget,
   )..initializeGestures(this);
 
-  /// Set by the PointerMoveDispatcher to receive mouse events from the
+  /// Set by the MouseMoveDispatcher to receive mouse events from the
   /// game widget.
   void Function(PointerHoverEvent event)? get mouseDetector => _mouseDetector;
   void Function(PointerHoverEvent event)? _mouseDetector;
@@ -47,7 +47,7 @@ abstract mixin class Game {
     refreshWidget();
   }
 
-  /// Set by the PointerMoveDispatcher to receive mouse press events from the
+  /// Set by the MouseMoveDispatcher to receive mouse press events from the
   /// game widget so it can fire `onHoverCancel` on hovered `HoverCallbacks`
   /// components when the user presses a button while hovering.
   void Function(PointerDownEvent event)? get mousePressDetector =>
@@ -316,6 +316,9 @@ abstract mixin class Game {
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   Future<Sprite> loadSprite(
     String path, {
     Vector2? srcSize,
@@ -331,6 +334,9 @@ abstract mixin class Game {
 
   /// Utility method to load and cache the image for a sprite animation based on
   /// its options.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   Future<SpriteAnimation> loadSpriteAnimation(
     String path,
     SpriteAnimationData data,
@@ -342,14 +348,14 @@ abstract mixin class Game {
     );
   }
 
-  bool _paused = false;
+  bool _isPaused = false;
 
-  /// Returns is the engine if currently paused or running
-  bool get paused => _paused;
+  /// Whether the engine is currently paused or running.
+  bool get isPaused => _isPaused;
 
-  /// Pauses or resume the engine
-  set paused(bool value) {
-    _paused = value;
+  /// Pauses or resumes the engine.
+  set isPaused(bool value) {
+    _isPaused = value;
 
     final gameLoop = _gameRenderBox?.gameLoop;
     if (gameLoop != null) {
@@ -363,23 +369,23 @@ abstract mixin class Game {
 
   /// Pauses the engine game loop execution.
   void pauseEngine() {
-    _paused = true;
+    _isPaused = true;
     _gameRenderBox?.gameLoop?.stop();
   }
 
   /// Resumes the engine game loop execution.
   void resumeEngine() {
-    _paused = false;
+    _isPaused = false;
     _gameRenderBox?.gameLoop?.start();
   }
 
   /// Steps the engine game loop by one frame. Works only if the engine is in
   /// paused state. By default step time is assumed to be 1/60th of a second.
   void stepEngine({double stepTime = 1 / 60}) {
-    if (_paused) {
-      _paused = false;
+    if (_isPaused) {
+      _isPaused = false;
       _gameRenderBox?.gameLoop?.step(stepTime);
-      _paused = true;
+      _isPaused = true;
     }
   }
 

@@ -10,7 +10,10 @@ class FlameTiledAnimationExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    map = await TiledComponent.load('dungeon.tmx', Vector2.all(32));
+    map = await TiledComponent.load(
+      'assets/tiles/dungeon.tmx',
+      Vector2.all(32),
+    );
     add(map);
   }
 }

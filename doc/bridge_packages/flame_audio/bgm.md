@@ -29,7 +29,7 @@ To play a looping background music track, run:
 ```dart
 import 'package:flame_audio/flame_audio.dart';
 
-FlameAudio.bgm.play('adventure-track.mp3');
+FlameAudio.bgm.play('assets/audio/adventure-track.mp3');
 ```
 
 You must have an appropriate folder structure and add the files to the `pubspec.yaml` file, as
@@ -61,11 +61,11 @@ You can pass an additional optional `double` parameter which is the `volume` (de
 Examples:
 
 ```dart
-FlameAudio.bgm.play('music/boss-fight/level-382.mp3');
+FlameAudio.bgm.play('assets/audio/music/boss-fight/level-382.mp3');
 ```
 
 ```dart
-FlameAudio.bgm.play('music/world-map.mp3', volume: .25);
+FlameAudio.bgm.play('assets/audio/music/world-map.mp3', volume: .25);
 ```
 
 

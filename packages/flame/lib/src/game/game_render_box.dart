@@ -44,9 +44,9 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
   GameRenderBox(
     this._game,
     this.buildContext, {
-    required bool isRepaintBoundary,
+    required this._isRepaintBoundary,
     this.behavior = HitTestBehavior.opaque,
-  }) : _isRepaintBoundary = isRepaintBoundary;
+  });
 
   GameLoop? gameLoop;
 
@@ -105,7 +105,7 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
     final gameLoop = this.gameLoop = GameLoop(gameLoopCallback);
 
-    if (!game.paused) {
+    if (!game.isPaused) {
       gameLoop.start();
     }
 

@@ -6,23 +6,32 @@ import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 
-class FixedResolutionExample extends FlameGame
-    with ScrollDetector, ScaleDetector {
+class FixedResolutionExample extends FlameGame with ScrollCallbacks {
   static const description = '''
     This example shows how to create a viewport with a fixed resolution.
     It is useful when you want the visible part of the game to be the same on
     all devices no matter the actual screen size of the device.
     Resize the window or change device orientation to see the difference.
-    
+
     If you tap once you will set the zoom to 2 and if you tap again it goes back
-    to 1, so that you can test how it works with a zoom level.
+    to 1, so that you can test how it works with a zoom level. Scroll to zoom
+    freely in between.
   ''';
+
+  static const zoomPerScrollUnit = 0.05;
 
   FixedResolutionExample()
     : super(
         camera: CameraComponent.withFixedResolution(width: 600, height: 1024),
         world: FixedResolutionWorld(),
       );
+
+  @override
+  void onScroll(ScrollEvent event) {
+    final zoom =
+        camera.viewfinder.zoom + event.scrollDelta.y.sign * zoomPerScrollUnit;
+    camera.viewfinder.zoom = zoom.clamp(0.25, 4.0);
+  }
 
   @override
   Future<void> onLoad() async {
@@ -56,12 +65,14 @@ class FixedResolutionExample extends FlameGame
 }
 
 class FixedResolutionWorld extends World
-    with HasGameReference, TapCallbacks, DoubleTapCallbacks {
+    with HasGameRef, TapCallbacks, DoubleTapCallbacks {
   final red = BasicPalette.red.paint();
 
   @override
   Future<void> onLoad() async {
-    final flameSprite = await game.loadSprite('layers/player.png');
+    final flameSprite = await gameRef.loadSprite(
+      'assets/images/layers/player.png',
+    );
 
     add(Background());
     add(
@@ -85,8 +96,8 @@ class FixedResolutionWorld extends World
 
   @override
   void onDoubleTapDown(DoubleTapDownEvent event) {
-    final currentZoom = game.camera.viewfinder.zoom;
-    game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
+    final currentZoom = gameRef.camera.viewfinder.zoom;
+    gameRef.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
   }
 }
 

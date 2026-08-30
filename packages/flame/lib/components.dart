@@ -9,7 +9,8 @@ export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/clip_component.dart';
 export 'src/components/component_pool.dart';
 export 'src/components/components_notifier.dart';
-export 'src/components/core/component.dart';
+export 'src/components/core/component.dart'
+    hide ComponentTreeRoot, LifecycleEvent, LifecycleEventKind;
 export 'src/components/core/component_key.dart';
 export 'src/components/core/component_render_context.dart';
 export 'src/components/custom_painter_component.dart';
@@ -28,9 +29,7 @@ export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_auto_batched_children.dart'
     show HasAutoBatchedChildren;
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
-// ignore: deprecated_member_use_from_same_package
 export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
-export 'src/components/mixins/has_game_reference.dart' show HasGameReference;
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/has_time_scale.dart';
 export 'src/components/mixins/has_visibility.dart';
@@ -39,11 +38,9 @@ export 'src/components/mixins/ignore_events.dart';
 export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';
 export 'src/components/mixins/parent_is_a.dart';
-export 'src/components/mixins/single_child_particle.dart';
 export 'src/components/mixins/snapshot.dart';
 export 'src/components/nine_tile_box_component.dart';
 export 'src/components/parallax_component.dart';
-export 'src/components/particle_system_component.dart';
 export 'src/components/position_component.dart';
 export 'src/components/raster_sprite_component.dart';
 export 'src/components/scroll_text_box_component.dart';

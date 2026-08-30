@@ -12,7 +12,7 @@ import 'package:flame/effects.dart';
 import 'package:flutter/animation.dart';
 
 class TheBall extends PositionComponent
-    with CollisionCallbacks, HasGameReference<CrystalBallGame> {
+    with CollisionCallbacks, HasGameRef<CrystalBallGame> {
   TheBall({
     required Vector2 super.position,
   }) : super(
@@ -48,7 +48,7 @@ class TheBall extends PositionComponent
 
     velocity.y += 8500 * dt;
     final horizontalV = pow(velocity.y.abs(), 1.8) * 0.0015;
-    velocity.x = game.inputHandler.directionalCoefficient * horizontalV;
+    velocity.x = gameRef.inputHandler.directionalCoefficient * horizontalV;
 
     final maxH = kCameraSize.x / 2 - kPlayerRadius - 50;
 
@@ -58,7 +58,7 @@ class TheBall extends PositionComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
@@ -67,7 +67,7 @@ class TheBall extends PositionComponent
       position.y = 0;
       jump();
 
-      game.world.cameraTarget.go(
+      gameRef.world.cameraTarget.go(
         to: Vector2(0, -200),
         duration: 0.5,
       );

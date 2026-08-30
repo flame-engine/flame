@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initSpineFlutter();
-  runApp(const GameWidget.controlled(gameFactory: SpineExample.new));
+  runApp(const GameWidget.managed(gameFactory: SpineExample.new));
 }
 
 class SpineExample extends FlameGame with TapCallbacks {
@@ -42,7 +42,7 @@ class SpineExample extends FlameGame with TapCallbacks {
 
     // Set the "walk" animation on track 0 in looping mode
     spineboy.animationState.setAnimation(0, 'walk', true);
-    await add(spineboy);
+    add(spineboy);
   }
 
   @override

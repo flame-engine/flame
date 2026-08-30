@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/input.dart';
-import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
@@ -38,7 +38,7 @@ import 'package:meta/meta.dart';
 /// When [W] is specified, a matching world instance **must** be passed to the
 /// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
-    with Game
+    with Game, CustomTraversal
     implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
@@ -173,19 +173,20 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @mustCallSuper
   void update(double dt) {
     if (parent == null) {
+      // Lifecycle events are processed before the traversal so that they
+      // complete even while the traversal is paused through a time scale.
+      processLifecycleEvents();
       updateTree(dt);
     }
   }
 
   @override
-  void updateTree(double dt) {
-    processLifecycleEvents();
+  void updateSubtree(double dt) {
     if (parent != null) {
+      processLifecycleEvents();
       update(dt);
     }
-    for (final component in children) {
-      component.updateTree(dt);
-    }
+    updateChildrenFlat(dt);
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -245,29 +246,13 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   bool containsEventHandlerAt(Vector2 position) {
-    // Deprecated game-level detector mixins handle events for the entire
-    // game surface, so any in-bounds point is a hit.
-    // ignore: deprecated_member_use_from_same_package
-    if (this is TapDetector ||
-        this is SecondaryTapDetector ||
-        this is TertiaryTapDetector ||
-        this is DoubleTapDetector ||
-        this is LongPressDetector ||
-        this is VerticalDragDetector ||
-        this is HorizontalDragDetector ||
-        this is ForcePressDetector ||
-        this is PanDetector ||
-        this is ScaleDetector ||
-        this is MultiTapListener ||
-        this is MultiTouchDragDetector) {
+    // Game-level detector mixins handle events for the entire game surface,
+    // so any in-bounds point is a hit.
+    if (this is PanDetector) {
       return true;
     }
     for (final component in super.componentsAtPoint(position)) {
-      if (component is TapCallbacks ||
-          component is DragCallbacks ||
-          component is DoubleTapCallbacks ||
-          component is ScaleCallbacks ||
-          component is SecondaryTapCallbacks) {
+      if (component is PointerInputCallbacks) {
         return true;
       }
     }
@@ -337,7 +322,7 @@ class FlameGame<W extends World> extends ComponentTreeRoot
       case AppLifecycleState.paused:
       case AppLifecycleState.detached:
       case AppLifecycleState.hidden:
-        if (pauseWhenBackgrounded && !paused) {
+        if (pauseWhenBackgrounded && !isPaused) {
           pauseEngine();
           _pausedBecauseBackgrounded = true;
         }

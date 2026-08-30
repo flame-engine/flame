@@ -33,7 +33,7 @@ class MyEntityCollisionBehavior
     extends CollisionBehavior<MyCollidingEntity, MyParentEntity> {
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     MyCollidingEntity other,
   ) {
     // We are starting colliding with MyCollidingEntity

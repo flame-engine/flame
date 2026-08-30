@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:rogue_shooter/components/enemy_component.dart';
 
 class BulletComponent extends SpriteAnimationComponent
-    with HasGameReference, CollisionCallbacks {
+    with HasGameRef, CollisionCallbacks {
   static const speed = 500.0;
   late final Vector2 velocity;
   final Vector2 deltaPosition = Vector2.zero();
@@ -14,8 +14,8 @@ class BulletComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     add(CircleHitbox());
-    animation = await game.loadSpriteAnimation(
-      'rogue_shooter/bullet.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/rogue_shooter/bullet.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
         amount: 4,
@@ -29,7 +29,7 @@ class BulletComponent extends SpriteAnimationComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
@@ -47,7 +47,9 @@ class BulletComponent extends SpriteAnimationComponent
       ..scale(dt);
     position += deltaPosition;
 
-    if (position.y < 0 || position.x > game.size.x || position.x + size.x < 0) {
+    if (position.y < 0 ||
+        position.x > gameRef.size.x ||
+        position.x + size.x < 0) {
       removeFromParent();
     }
   }

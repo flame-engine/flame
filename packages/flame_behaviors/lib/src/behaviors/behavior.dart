@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flame/components.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 
@@ -16,10 +14,10 @@ abstract class Behavior<Parent extends EntityMixin> extends Component
   Behavior({super.children, super.priority, super.key});
 
   @override
-  FutureOr<void> add(Component component) {
+  void add(Component component) {
     assert(component is! EntityMixin, 'Behaviors cannot have entities.');
     assert(component is! Behavior, 'Behaviors cannot have behaviors.');
-    return super.add(component);
+    super.add(component);
   }
 
   @override

@@ -81,7 +81,7 @@ Example:
 ```dart
 class MyCollidable extends PositionComponent with CollisionCallbacks {
   @override
-  void onCollision(Set<Vector2> points, PositionComponent other) {
+  void onCollision(List<Vector2> points, PositionComponent other) {
     if (other is ScreenHitbox) {
       //...
     } else if (other is YourOtherComponent) {
@@ -101,7 +101,7 @@ class MyCollidable extends PositionComponent with CollisionCallbacks {
 ```
 
 In this example we use Dart's `is` keyword to check what kind of component we collided with.
-The set of points is where the edges of the hitboxes intersect.
+The list of points is where the edges of the hitboxes intersect.
 
 Note that the `onCollision` method will be called on both `PositionComponent`s if they have both
 implemented the `onCollision` method, and also on both hitboxes. The same goes for the
@@ -137,7 +137,7 @@ save all the other `PositionComponent`s to this list:
 
 ```dart
 @override
-void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+void onCollision(List<Vector2> intersectionPoints, PositionComponent other) {
   collisionComponents.add(other);
   super.onCollision(intersectionPoints, other);
 }
@@ -148,7 +148,7 @@ Finally, one adds a listener to the `onLoad` method of the `PositionComponent` t
 which will resolve how the collisions should be dealt with:
 
 ```dart
-(game as HasCollisionDetection)
+(gameRef as HasCollisionDetection)
     .collisionDetection
     .collisionsCompletedNotifier
     .addListener(() {
@@ -395,7 +395,7 @@ class Bullet extends PositionComponent with CollisionCallbacks {
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     // Removes the component when it comes in contact with a Brick.
@@ -471,7 +471,7 @@ range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class,
-or with the `HasGameReference` mixin from other components as well.
+or with the `HasGameRef` mixin from other components as well.
 
 Example:
 

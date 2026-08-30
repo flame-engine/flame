@@ -10,7 +10,7 @@ import 'package:flame/src/camera/viewfinder.dart';
 import 'package:flame/src/camera/viewport.dart';
 import 'package:flame/src/camera/viewports/fixed_resolution_viewport.dart';
 import 'package:flame/src/camera/viewports/max_viewport.dart';
-import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/effects/controllers/effect_controller.dart';
 import 'package:flame/src/effects/move_by_effect.dart';
 import 'package:flame/src/effects/move_effect.dart';
@@ -203,16 +203,6 @@ class CameraComponent extends Component {
       canvas.save();
       try {
         currentCameras.add(this);
-        void renderWorld(Canvas canvas) {
-          canvas.transform2D(viewfinder.transform);
-          world!.renderFromCamera(canvas);
-
-          // Render the viewfinder elements, which will be in front of
-          // the world,
-          // but with the same transforms applied to them.
-          viewfinder.renderTree(canvas);
-        }
-
         final postProcessors = children.query<PostProcessComponent>();
         if (postProcessors.isNotEmpty) {
           assert(
@@ -223,13 +213,11 @@ class CameraComponent extends Component {
           postProcessor.render(
             canvas,
             viewport.virtualSize,
-            renderWorld,
-            (context) {
-              renderContext.currentPostProcess = context;
-            },
+            _renderWorld,
+            _updatePostProcessContext,
           );
         } else {
-          renderWorld(canvas);
+          _renderWorld(canvas);
         }
       } finally {
         currentCameras.removeLast();
@@ -240,6 +228,24 @@ class CameraComponent extends Component {
       canvas.restore();
     }
     canvas.restore();
+  }
+
+  /// Renders the world and the viewfinder elements through the camera
+  /// transform. An instance method rather than a local function, so that the
+  /// render pass does not allocate a closure per camera per frame.
+  void _renderWorld(Canvas canvas) {
+    canvas.transform2D(viewfinder.transform);
+    world!.renderFromCamera(canvas);
+    // Render the viewfinder elements, which will be in front of the world,
+    // but with the same transforms applied to them.
+    viewfinder.renderTree(canvas);
+  }
+
+  // Not a setter: this is passed as a `ValueSetter` tear-off to
+  // `PostProcess.render`.
+  // ignore: use_setters_to_change_properties
+  void _updatePostProcessContext(PostProcess? context) {
+    renderContext.currentPostProcess = context;
   }
 
   /// Converts from the global (canvas) coordinate space to
@@ -284,25 +290,55 @@ class CameraComponent extends Component {
     if ((world?.isMounted ?? false) &&
         currentCameras.length < maxCamerasDepth) {
       if (checkContains(viewport, viewportPoint)) {
-        currentCameras.add(this);
         final worldPoint = transformContext(viewfinder, viewportPoint);
         if (worldPoint == null) {
           return;
         }
-        yield* viewfinder.componentsAtLocation(
-          worldPoint,
-          nestedContexts,
-          transformContext,
-          checkContains,
+        yield* _onCameraStack(
+          viewfinder.componentsAtLocation(
+            worldPoint,
+            nestedContexts,
+            transformContext,
+            checkContains,
+          ),
         );
-        yield* world!.componentsAtLocation(
-          worldPoint,
-          nestedContexts,
-          transformContext,
-          checkContains,
+        yield* _onCameraStack(
+          world!.componentsAtLocation(
+            worldPoint,
+            nestedContexts,
+            transformContext,
+            checkContains,
+          ),
         );
+      }
+    }
+  }
+
+  /// Iterates [components] with this camera pushed onto [currentCameras], so
+  /// that a camera nested within the world still sees the correct depth.
+  ///
+  /// The camera is pushed and popped around every step rather than around the
+  /// whole iteration. This is a lazy iterable, so the caller is free to stop
+  /// early, for example by breaking out of a loop over [componentsAtPoint] as
+  /// soon as the tapped component is found. That leaves the generator
+  /// suspended at a `yield`, and the code after it never runs. Popping there
+  /// would therefore be skipped, and since [currentCameras] is static the
+  /// entry would be leaked for the rest of the process; after
+  /// [maxCamerasDepth] such leaks no camera renders its world any more.
+  Iterable<Component> _onCameraStack(Iterable<Component> components) sync* {
+    final iterator = components.iterator;
+    while (true) {
+      currentCameras.add(this);
+      final bool hasNext;
+      try {
+        hasNext = iterator.moveNext();
+      } finally {
         currentCameras.removeLast();
       }
+      if (!hasNext) {
+        return;
+      }
+      yield iterator.current;
     }
   }
 

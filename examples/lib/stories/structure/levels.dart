@@ -69,7 +69,7 @@ class ResettableLevel extends Level {
         ),
       ),
     );
-    game.header.text = 'Resettable';
+    gameRef.header.text = 'Resettable';
   }
 }
 
@@ -77,7 +77,7 @@ class Level1 extends Level {
   @override
   Future<void> onLoad() async {
     add(Ember());
-    game.header.text = 'Level 1';
+    gameRef.header.text = 'Level 1';
   }
 }
 
@@ -86,7 +86,7 @@ class Level2 extends Level {
   Future<void> onLoad() async {
     add(Ember(position: Vector2(-100, 0)));
     add(Ember(position: Vector2(100, 0)));
-    game.header.text = 'Level 2';
+    gameRef.header.text = 'Level 2';
   }
 }
 
@@ -96,11 +96,11 @@ class Level3 extends Level {
     add(Ember(position: Vector2(-100, -50)));
     add(Ember(position: Vector2(100, -50)));
     add(Ember(position: Vector2(0, 50)));
-    game.header.text = 'Level 3';
+    gameRef.header.text = 'Level 3';
   }
 }
 
-class Level extends World with HasGameReference<LevelsExample>, TapCallbacks {
+class Level extends World with HasGameRef<LevelsExample>, TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     add(Ember(position: event.localPosition));

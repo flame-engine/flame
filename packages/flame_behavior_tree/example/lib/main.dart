@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: GameWidget<MyGame>.controlled(
+        body: GameWidget<MyGame>.managed(
           gameFactory: () => MyGame(
             world: GameWorld(),
             camera: CameraComponent.withFixedResolution(
@@ -39,10 +39,10 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class GameWorld extends World with HasGameReference {
+class GameWorld extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
-    game.camera.moveTo(Vector2(gameWidth * 0.5, gameHeight * 0.5));
+    gameRef.camera.moveTo(Vector2(gameWidth * 0.5, gameHeight * 0.5));
 
     final house = RectangleComponent(
       size: Vector2(100, 100),
@@ -65,8 +65,8 @@ class GameWorld extends World with HasGameReference {
       position: Vector2(gameWidth * 0.76, gameHeight * 0.9),
     );
 
-    await house.add(door);
-    await addAll([house, agent]);
+    house.add(door);
+    addAll([house, agent]);
   }
 }
 
@@ -126,7 +126,7 @@ class Agent extends PositionComponent with HasBehaviorTree {
 
   @override
   Future<void> onLoad() async {
-    await add(CircleComponent(radius: 3, anchor: Anchor.center));
+    add(CircleComponent(radius: 3, anchor: Anchor.center));
     _setupBehaviorTree();
     super.onLoad();
   }

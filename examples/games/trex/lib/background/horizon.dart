@@ -7,7 +7,7 @@ import 'package:trex_game/background/cloud_manager.dart';
 import 'package:trex_game/obstacle/obstacle_manager.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Horizon extends PositionComponent with HasGameReference<TRexGame> {
+class Horizon extends PositionComponent with HasGameRef<TRexGame> {
   Horizon() : super();
 
   static final Vector2 lineSize = Vector2(1200, 24);
@@ -16,14 +16,14 @@ class Horizon extends PositionComponent with HasGameReference<TRexGame> {
   late final ObstacleManager obstacleManager = ObstacleManager();
 
   late final _softSprite = Sprite(
-    game.spriteImage,
+    gameRef.spriteImage,
     srcPosition: Vector2(2.0, 104.0),
     srcSize: lineSize,
   );
 
   late final _bumpySprite = Sprite(
-    game.spriteImage,
-    srcPosition: Vector2(game.spriteImage.width / 2, 104.0),
+    gameRef.spriteImage,
+    srcPosition: Vector2(gameRef.spriteImage.width / 2, 104.0),
     srcSize: lineSize,
   );
 
@@ -36,7 +36,7 @@ class Horizon extends PositionComponent with HasGameReference<TRexGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    final increment = game.currentSpeed * dt;
+    final increment = gameRef.currentSpeed * dt;
     for (final line in groundLayers) {
       line.x -= increment;
     }
@@ -65,7 +65,8 @@ class Horizon extends PositionComponent with HasGameReference<TRexGame> {
   }
 
   List<SpriteComponent> _generateLines() {
-    final number = 1 + (game.size.x / lineSize.x).ceil() - groundLayers.length;
+    final number =
+        1 + (gameRef.size.x / lineSize.x).ceil() - groundLayers.length;
     final lastX =
         (groundLayers.lastOrNull?.x ?? 0) +
         (groundLayers.lastOrNull?.width ?? 0);

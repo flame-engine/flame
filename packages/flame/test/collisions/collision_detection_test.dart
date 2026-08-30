@@ -107,11 +107,10 @@ void main() {
       final segmentB = LineSegment(Vector2.all(0), Vector2.all(1));
       final intersection = segmentA.intersections(segmentB);
       expect(
-        intersection.isNotEmpty,
-        true,
-        reason: 'Should have intersection at (0.5, 0.5)',
+        intersection,
+        unorderedEquals([Vector2.all(0), Vector2.all(1)]),
+        reason: 'Should intersect at the end points of the overlap',
       );
-      expect(intersection.first == Vector2.all(0.5), true);
     });
 
     test('overlapping line segments', () {
@@ -119,11 +118,10 @@ void main() {
       final segmentB = LineSegment(Vector2.all(0.5), Vector2.all(1.5));
       final intersection = segmentA.intersections(segmentB);
       expect(
-        intersection.isNotEmpty,
-        true,
-        reason: 'Should intersect at (0.75, 0.75)',
+        intersection,
+        unorderedEquals([Vector2.all(0.5), Vector2.all(1)]),
+        reason: 'Should intersect at the end points of the overlap',
       );
-      expect(intersection.first == Vector2.all(0.75), true);
     });
 
     test('one pixel overlap in different angles', () {
@@ -309,16 +307,15 @@ void main() {
       ]);
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(2.0, 2.0),
-          Vector2(2.0, 1.5),
           Vector2(2.0, 1.0),
         ]),
-        true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
-        intersections.length == 3,
+        intersections.length == 2,
         true,
         reason: 'Wrong number of intersections',
       );
@@ -373,19 +370,17 @@ void main() {
       );
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(2, 0),
           Vector2(2, 2),
-          Vector2(1, 0),
           Vector2(0, 0),
-          Vector2(0, 1),
           Vector2(0, 2),
         ]),
-        true,
         reason: 'Does not have all the correct intersection points',
       );
       expect(
-        intersections.length == 6,
+        intersections.length == 4,
         true,
         reason: 'Wrong number of intersections',
       );
@@ -407,12 +402,16 @@ void main() {
         Vector2(2, 1),
       ]);
       final intersections = geometry.intersections(polygonA, polygonB);
-      intersections.containsAll([
-        Vector2(-0.2857142857142857, 2.4285714285714284),
-        Vector2(1.7500000000000002, 1.2500000000000002),
-        Vector2(1.5555555555555556, 0.6666666666666667),
-        Vector2(1.1999999999999997, 0.39999999999999997),
-      ]);
+      expect(
+        intersections,
+        containsAll([
+          Vector2(-0.2857142857142857, 2.4285714285714284),
+          Vector2(1.7500000000000002, 1.2500000000000002),
+          Vector2(1.5555555555555556, 0.6666666666666667),
+          Vector2(1.1999999999999997, 0.39999999999999997),
+        ]),
+        reason: 'Does not have all the correct intersection points',
+      );
       expect(
         intersections.length == 4,
         true,
@@ -450,16 +449,15 @@ void main() {
       );
       final intersections = geometry.intersections(rectangleA, rectangleB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(4, 0),
-          Vector2(4, 2),
           Vector2(4, 4),
         ]),
-        true,
         reason: 'Missed intersections',
       );
       expect(
-        intersections.length == 3,
+        intersections.length == 2,
         true,
         reason: 'Wrong number of intersections',
       );
@@ -709,13 +707,13 @@ void main() {
       final circleB = CircleComponent(radius: 4.0, position: Vector2.all(3));
       final intersections = geometry.intersections(circleA, circleB);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(11, 7),
           Vector2(7, 3),
           Vector2(3, 7),
           Vector2(7, 11),
         ]),
-        true,
         reason: 'Missed intersections',
       );
       expect(
@@ -817,8 +815,8 @@ void main() {
       );
       final intersections = geometry.intersections(circle, polygon);
       expect(
-        intersections.containsAll([Vector2(0, 1), Vector2(1, 0)]),
-        true,
+        intersections,
+        containsAll([Vector2(0, 1), Vector2(1, 0)]),
         reason: 'Missed intersections',
       );
       expect(intersections.length, 2, reason: 'Wrong number of intersections');
@@ -863,13 +861,13 @@ void main() {
       ]);
       final intersections = geometry.intersections(circle, polygon);
       expect(
-        intersections.containsAll([
+        intersections,
+        containsAll([
           Vector2(1, 2),
           Vector2(2, 1),
           Vector2(1, 0),
           Vector2(0, 1),
         ]),
-        true,
         reason: 'Missed intersections',
       );
       expect(
@@ -2458,8 +2456,8 @@ void main() {
           );
           final hitboxA = CircleHitbox();
           final hitboxB = CircleHitbox();
-          await componentA.add(hitboxA);
-          await componentB.add(hitboxB);
+          componentA.add(hitboxA);
+          componentB.add(hitboxB);
           await game.ensureAddAll([componentA, componentB]);
           // componentA: center=(10,10), scaledRadius=10
           // componentB: center=(20,5), scaledRadius=5
@@ -2488,8 +2486,8 @@ void main() {
               );
               final hitboxA = CircleHitbox();
               final hitboxB = CircleHitbox();
-              await componentA.add(hitboxA);
-              await componentB.add(hitboxB);
+              componentA.add(hitboxA);
+              componentB.add(hitboxB);
               await game.ensureAddAll([componentA, componentB]);
               // componentA: center=(5,5), radius=5
               // componentB: center=(20,5), radius=5
@@ -2521,8 +2519,8 @@ void main() {
             angle: pi / 2,
           );
           final hitboxA = RectangleHitbox();
-          await child.add(hitboxA);
-          await parent.add(child);
+          child.add(hitboxA);
+          parent.add(child);
 
           // Block from (-2,3) to (2,7) straddles the right edge at x=0.
           final blockComp = PositionComponent(
@@ -2530,7 +2528,7 @@ void main() {
             size: Vector2.all(4),
           );
           final hitboxB = RectangleHitbox();
-          await blockComp.add(hitboxB);
+          blockComp.add(hitboxB);
 
           await game.ensureAddAll([parent, blockComp]);
           game.update(0);
@@ -2561,8 +2559,8 @@ void main() {
             Vector2(10, 10),
             Vector2(0, 10),
           ]);
-          await child.add(hitbox);
-          await parent.add(child);
+          child.add(hitbox);
+          parent.add(child);
 
           // Block from (21,5) to (25,9) straddles the left edge.
           final blockComp = PositionComponent(
@@ -2570,7 +2568,7 @@ void main() {
             size: Vector2.all(4),
           );
           final hitboxB = RectangleHitbox();
-          await blockComp.add(hitboxB);
+          blockComp.add(hitboxB);
 
           await game.ensureAddAll([parent, blockComp]);
           game.update(0);
@@ -2601,9 +2599,9 @@ void main() {
             size: Vector2.all(10),
           );
           final hitbox = RectangleHitbox();
-          await child.add(hitbox);
-          await midParent.add(child);
-          await grandparent.add(midParent);
+          child.add(hitbox);
+          midParent.add(child);
+          grandparent.add(midParent);
 
           // Block from (-12,8) to (-8,12) straddles the left edge at x=-10.
           final blockComp = PositionComponent(
@@ -2611,7 +2609,7 @@ void main() {
             size: Vector2.all(4),
           );
           final hitboxB = RectangleHitbox();
-          await blockComp.add(hitboxB);
+          blockComp.add(hitboxB);
 
           await game.ensureAddAll([grandparent, blockComp]);
           game.update(0);

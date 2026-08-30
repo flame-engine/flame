@@ -9,7 +9,7 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaytraceExample extends FlameGame
-    with HasCollisionDetection, MouseMovementDetector, TapCallbacks {
+    with HasCollisionDetection, MouseMoveCallbacks, TapCallbacks {
   static const description = '''
 In this example the raytrace functionality is showcased.
 Click to start sending out a ray which will bounce around to visualize how it
@@ -124,8 +124,8 @@ bounce on will appear.
   }
 
   @override
-  void onMouseMove(PointerHoverInfo info) {
-    final origin = info.eventPosition.widget;
+  void onMouseMove(MouseMoveEvent event) {
+    final origin = event.canvasPosition;
     isOriginCasted = origin == this.origin;
     this.origin = origin;
   }

@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
-    with DragCallbacks, ScrollDetector, HasKeyboardHandlerComponents {
+    with DragCallbacks, ScrollCallbacks, HasKeyboardHandlerComponents {
   late final Player player;
 
   ExampleGame3D()
@@ -70,9 +70,9 @@ class ExampleGame3D extends FlameGame3D<World3D, ExampleCamera3D>
   }
 
   @override
-  void onScroll(PointerScrollInfo info) {
+  void onScroll(ScrollEvent event) {
     const scrollSensitivity = 0.01;
-    final delta = info.scrollDelta.global.y.clamp(-10, 10) * scrollSensitivity;
+    final delta = event.scrollDelta.y.clamp(-10, 10) * scrollSensitivity;
 
     camera.distance += delta;
   }

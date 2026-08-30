@@ -234,8 +234,11 @@ class SpriteAnimation {
     );
   }
 
-  /// Takes a path of an image, a [SpriteAnimationData] and loads the sprite
-  /// animation.
+  /// Takes the full path of an image, a [SpriteAnimationData] and loads the
+  /// sprite animation.
+  ///
+  /// The [src] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   /// When the [images] is omitted, the global [Flame.images] is used.
   static Future<SpriteAnimation> load(
     String src,

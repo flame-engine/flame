@@ -56,7 +56,7 @@ Import the plugin like this:
 Load the TextureAtlas passing the path of the sprite sheet atlas file:
 
 ```Dart
-final atlas = await TexturePackerAtlas.load('atlas_map.atlas');
+final atlas = await TexturePackerAtlas.load('assets/images/atlas_map.atlas');
 ```
 
 
@@ -71,10 +71,23 @@ that allows you to load an atlas directly:
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final atlas = await atlasFromAssets('atlas_map.atlas');
+    final atlas = await atlasFromAssets('assets/images/atlas_map.atlas');
     // ...
   }
 }
+```
+
+
+### Atlas Location
+
+
+The path is a full asset path, exactly as declared in the `pubspec.yaml`, so the atlas file can
+live anywhere. Page textures listed inside the atlas are resolved relative to the atlas's own
+directory:
+
+```dart
+// Path: assets/atlases/hero.atlas
+final atlas = await TexturePackerAtlas.load('assets/atlases/hero.atlas');
 ```
 
 
@@ -83,69 +96,11 @@ class MyGame extends FlameGame {
 
 To load an atlas from another Flutter package, use the `package` parameter:
 
-```Dart
+```dart
 final atlas = await TexturePackerAtlas.load(
-  'atlas_map.atlas',
+  'assets/images/atlas_map.atlas',
   package: 'my_assets_package',
 );
-```
-
-
-### Paths and Prefixes
-
-
-By default, `TexturePackerAtlas.load` looks for files in `assets/images/`. This is controlled by the
-`assetsPrefix` parameter, which defaults to `'images'`.
-
-
-#### 1. Default usage (relative to `assets/images/`)
-
-
-```dart
-// Path: assets/images/hero.atlas
-final atlas = await TexturePackerAtlas.load('hero.atlas');
-```
-
-
-#### 2. Custom prefix (relative to `assets/`)
-
-
-```dart
-// Path: assets/atlases/hero.atlas
-final atlas = await TexturePackerAtlas.load(
-  'hero.atlas',
-  assetsPrefix: 'atlases',
-);
-```
-
-
-#### 3. Full path (stripping standard prefix)
-
-
-If you provide a path that already includes the standard `assets/`
-or `images/` prefix, the library will automatically strip them to avoid duplication.
-This is particularly useful when working with full asset paths.
-
-
-```dart
-// Path: assets/images/mega_explosions.atlas
-final atlas = await TexturePackerAtlas.load(
-  'assets/images/mega_explosions.atlas',
-  assetsPrefix: '',
-);
-```
-
-
-#### 4. Automatic Package Detection
-
-
-If you provide a path that starts with `packages/package_name/...`,
-the library will automatically detect the package name
-and adjust the internal loading logic.
-
-```dart
-// Path: packages/my_assets_package/assets/images/heroes.atlas
-final atlas = await TexturePackerAtlas.load('packages/my_assets_package/assets/images/heroes.atlas');
 ```
 
 
@@ -155,7 +110,7 @@ This is optional, but recommended to avoid loading every sprite from your textur
 Use a list of relative paths to load only the Sprites you need into memory.
 
 ```Dart
-final regions = await TexturePackerAtlas.loadAtlas('atlas_map.atlas');
+final regions = await TexturePackerAtlas.loadAtlas('assets/images/atlas_map.atlas');
 final atlas = TexturePackerAtlas.fromAtlas(regions, whiteList: [
   'weapons/',
   'ships/',
@@ -197,7 +152,7 @@ final animation = atlas.getAnimation('robot_walk', stepTime: 0.1, loop: true);
 If your atlas contains multiple animations, load it once and reuse it:
 
 ```Dart
-final atlas = await TexturePackerAtlas.load('atlas_map.atlas');
+final atlas = await TexturePackerAtlas.load('assets/images/atlas_map.atlas');
 
 final walkAnim = atlas.getAnimation('robot_walk');
 final runAnim  = atlas.getAnimation('robot_run');

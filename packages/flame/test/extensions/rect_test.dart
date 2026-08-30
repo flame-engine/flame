@@ -181,6 +181,16 @@ void main() {
       expect(result.bottomRight.toVector2(), closeToVector(Vector2(20, 20)));
     });
 
+    test('test displace', () {
+      const input = Rect.fromLTWH(0, 1, 10, 10);
+      final delta = Vector2(10, 10);
+      final result = input.displace(delta);
+
+      expect(result.topLeft.toVector2(), closeToVector(Vector2(10, 11)));
+      expect(result.bottomRight.toVector2(), closeToVector(Vector2(20, 21)));
+      expect(result.size.toVector2(), closeToVector(input.size.toVector2()));
+    });
+
     testRandom('test bounding box', (Random r) {
       final points = List.generate(
         r.nextInt(15) + 2,

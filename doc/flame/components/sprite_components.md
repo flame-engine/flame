@@ -20,7 +20,7 @@ class MyGame extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final sprite = await Sprite.load('player.png');
+    final sprite = await Sprite.load('assets/images/player.png');
     final size = Vector2.all(128.0);
     final player = SpriteComponent(size: size, sprite: sprite);
 
@@ -47,7 +47,7 @@ This will create a simple three frame animation using 3 different images:
 @override
 Future<void> onLoad() async {
   final sprites = [0, 1, 2]
-      .map((i) => Sprite.load('player_$i.png'));
+      .map((i) => Sprite.load('assets/images/player_$i.png'));
   final animation = SpriteAnimation.spriteList(
     await Future.wait(sprites),
     stepTime: 0.01,
@@ -72,7 +72,7 @@ Future<void> onLoad() async {
     stepTime: 0.1,
   );
   this.player = SpriteAnimationComponent.fromFrameData(
-    await images.load('player.png'),
+    await images.load('assets/images/player.png'),
     data,
   );
 }
@@ -226,11 +226,11 @@ Example:
 
 ```dart
 class PlayerComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameReference<SpriteGroupExample>, TapCallbacks {
+    with HasGameRef<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void> onLoad() async {
-    final pressedSprite = await game.loadSprite(/* omitted */);
-    final unpressedSprite = await game.loadSprite(/* omitted */);
+    final pressedSprite = await gameRef.loadSprite(/* omitted */);
+    final unpressedSprite = await gameRef.loadSprite(/* omitted */);
 
     sprites = {
       ButtonState.pressed: pressedSprite,

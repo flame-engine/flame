@@ -82,7 +82,7 @@ void main() {
           size: 20,
           margin: const EdgeInsets.only(left: 20, top: 20),
         );
-        await game.add(joystick);
+        game.add(joystick);
         await game.ready();
         expect(joystick.knob!.position, closeToVector(Vector2(10, 10)));
         final dragDispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
@@ -129,7 +129,7 @@ void main() {
           size: 20,
           margin: const EdgeInsets.only(left: 20, top: 20),
         );
-        await game.add(joystick);
+        game.add(joystick);
         await game.ready();
         final dragDispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
 

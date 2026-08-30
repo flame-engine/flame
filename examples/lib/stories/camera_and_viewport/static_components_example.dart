@@ -5,17 +5,20 @@ import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flame/parallax.dart';
 
-class StaticComponentsExample extends FlameGame
-    with ScrollDetector, ScaleDetector {
+class StaticComponentsExample extends FlameGame with ScrollCallbacks {
   static const description = '''
   This example shows a parallax which is attached to the viewport (behind the
   world), four Flame logos that are added to the world, and a player added to
   the world which is also followed by the camera when you click somewhere.
   The text components that are added are self-explanatory.
+
+  Scroll to zoom: the world components scale with the camera, while the
+  viewport and backdrop components stay exactly where they are.
   ''';
+
+  static const zoomPerScrollUnit = 0.05;
 
   late final ParallaxComponent myParallax;
 
@@ -28,6 +31,13 @@ class StaticComponentsExample extends FlameGame
          ),
          world: _StaticComponentWorld(),
        );
+
+  @override
+  void onScroll(ScrollEvent event) {
+    final zoom =
+        camera.viewfinder.zoom + event.scrollDelta.y.sign * zoomPerScrollUnit;
+    camera.viewfinder.zoom = zoom.clamp(0.25, 4.0);
+  }
 
   @override
   Future<void> onLoad() async {
@@ -57,16 +67,15 @@ class StaticComponentsExample extends FlameGame
 }
 
 class _StaticComponentWorld extends World
-    with
-        HasGameReference<StaticComponentsExample>,
-        TapCallbacks,
-        DoubleTapCallbacks {
+    with HasGameRef<StaticComponentsExample>, TapCallbacks, DoubleTapCallbacks {
   late SpriteComponent player;
   @override
   Future<void> onLoad() async {
-    final playerSprite = await game.loadSprite('layers/player.png');
-    final flameSprite = await game.loadSprite('flame.png');
-    final visibleSize = game.camera.visibleWorldRect.toVector2();
+    final playerSprite = await gameRef.loadSprite(
+      'assets/images/layers/player.png',
+    );
+    final flameSprite = await gameRef.loadSprite('assets/images/flame.png');
+    final visibleSize = gameRef.camera.visibleWorldRect.toVector2();
     add(player = SpriteComponent(sprite: playerSprite, anchor: Anchor.center));
     addAll([
       SpriteComponent(
@@ -94,7 +103,7 @@ class _StaticComponentWorld extends World
         size: Vector2(20, 30),
       ),
     ]);
-    game.camera.follow(player, maxSpeed: 100);
+    gameRef.camera.follow(player, maxSpeed: 100);
   }
 
   @override
@@ -107,24 +116,24 @@ class _StaticComponentWorld extends World
         EffectController(
           duration: moveDuration,
         ),
-        onComplete: () => game.myParallax.parallax?.baseVelocity.setZero(),
+        onComplete: () => gameRef.myParallax.parallax?.baseVelocity.setZero(),
       ),
     );
     final moveSpeedX = deltaX / moveDuration;
-    game.myParallax.parallax?.baseVelocity.setValues(moveSpeedX, 0);
+    gameRef.myParallax.parallax?.baseVelocity.setValues(moveSpeedX, 0);
   }
 }
 
 class MyParallaxComponent extends ParallaxComponent {
   @override
   Future<void> onLoad() async {
-    parallax = await game.loadParallax(
+    parallax = await gameRef.loadParallax(
       [
-        ParallaxImageData('parallax/bg.png'),
-        ParallaxImageData('parallax/mountain-far.png'),
-        ParallaxImageData('parallax/mountains.png'),
-        ParallaxImageData('parallax/trees.png'),
-        ParallaxImageData('parallax/foreground-trees.png'),
+        ParallaxImageData('assets/images/parallax/bg.png'),
+        ParallaxImageData('assets/images/parallax/mountain-far.png'),
+        ParallaxImageData('assets/images/parallax/mountains.png'),
+        ParallaxImageData('assets/images/parallax/trees.png'),
+        ParallaxImageData('assets/images/parallax/foreground-trees.png'),
       ],
       baseVelocity: Vector2(0, 0),
       velocityMultiplierDelta: Vector2(1.8, 1.0),

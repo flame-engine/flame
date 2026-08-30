@@ -4,7 +4,7 @@ import 'package:rogue_shooter/components/explosion_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
 class EnemyComponent extends SpriteAnimationComponent
-    with HasGameReference<RogueShooterGame>, CollisionCallbacks {
+    with HasGameRef<RogueShooterGame>, CollisionCallbacks {
   static const speed = 150;
   static final Vector2 initialSize = Vector2.all(25);
 
@@ -13,8 +13,8 @@ class EnemyComponent extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    animation = await game.loadSpriteAnimation(
-      'rogue_shooter/enemy.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/rogue_shooter/enemy.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
         amount: 4,
@@ -28,7 +28,7 @@ class EnemyComponent extends SpriteAnimationComponent
   void update(double dt) {
     super.update(dt);
     y += speed * dt;
-    if (y >= game.size.y) {
+    if (y >= gameRef.size.y) {
       removeFromParent();
     }
   }
@@ -36,7 +36,7 @@ class EnemyComponent extends SpriteAnimationComponent
   void takeHit() {
     removeFromParent();
 
-    game.explosionGroup.add(ExplosionComponent(position: position));
-    game.increaseScore();
+    gameRef.explosionGroup.add(ExplosionComponent(position: position));
+    gameRef.increaseScore();
   }
 }

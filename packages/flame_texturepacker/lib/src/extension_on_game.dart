@@ -3,15 +3,17 @@ import 'package:flame/game.dart';
 import 'package:flame_texturepacker/flame_texturepacker.dart';
 
 extension TexturepackerLoader on Game {
-  /// Loads the specified pack file from assets
-  /// Uses the parent directory of the pack file to find the page images.
+  /// Loads the specified pack file from assets.
+  ///
+  /// The [assetsPath] is the full path of the atlas, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/sprites.atlas`. The parent
+  /// directory of the pack file is used to find the page images.
   Future<TexturePackerAtlas> atlasFromAssets(
     String assetsPath, {
     Images? images,
     AssetsCache? assets,
     bool useOriginalSize = true,
     List<String> whiteList = const [],
-    String assetsPrefix = 'images',
     String? package,
   }) => TexturePackerAtlas.load(
     assetsPath,
@@ -19,7 +21,6 @@ extension TexturepackerLoader on Game {
     assets: assets ?? this.assets,
     useOriginalSize: useOriginalSize,
     whiteList: whiteList,
-    assetsPrefix: assetsPrefix,
     package: package,
   );
 

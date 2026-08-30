@@ -29,20 +29,15 @@ class FlameAudio {
   static BgmFactory bgmFactory = Bgm.new;
 
   /// Access a shared instance of the [AudioCache] class.
-  static AudioCache audioCache = audioCacheFactory(
-    prefix: 'assets/audio/',
-  );
+  ///
+  /// Assets are addressed by their full path, as declared in the
+  /// `pubspec.yaml`, for example `assets/audio/boom.mp3`.
+  static AudioCache audioCache = audioCacheFactory(prefix: '');
 
   /// Access a shared instance of the [Bgm] class.
   ///
   /// This will use the same global audio cache from [FlameAudio].
   static final Bgm bgm = bgmFactory(audioCache: audioCache);
-
-  /// Updates the prefix in the global [AudioCache] and [bgm] instances.
-  static void updatePrefix(String prefix) {
-    audioCache.prefix = prefix;
-    bgm.audioPlayer.audioCache.prefix = prefix;
-  }
 
   static Future<AudioPlayer> _preparePlayer(
     String file,
@@ -53,17 +48,10 @@ class FlameAudio {
     String? package,
   }) async {
     final player = AudioPlayer();
-    if (package != null) {
-      player.audioCache = audioCacheFactory(prefix: '');
-    } else {
-      player.audioCache = audioCache;
-    }
-    audioContext ??= _defaultAudioContext;
-    await player.setAudioContext(audioContext);
+    player.audioCache = audioCache;
+    await player.setAudioContext(audioContext ?? _defaultAudioContext);
     await player.setReleaseMode(releaseMode);
-    final path = package == null
-        ? file
-        : 'packages/$package/${audioCache.prefix}$file';
+    final path = package == null ? file : 'packages/$package/$file';
     await player.play(
       AssetSource(path),
       volume: volume,
@@ -73,6 +61,9 @@ class FlameAudio {
   }
 
   /// Plays a single run of the given [file], with a given [volume].
+  ///
+  /// The [file] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/audio/boom.mp3`.
   static Future<AudioPlayer> play(
     String file, {
     double volume = 1.0,
@@ -90,6 +81,9 @@ class FlameAudio {
   }
 
   /// Plays, and keeps looping the given [file].
+  ///
+  /// The [file] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/audio/song.mp3`.
   static Future<AudioPlayer> loop(
     String file, {
     double volume = 1.0,
@@ -155,12 +149,10 @@ class FlameAudio {
     String? package,
   }) async {
     audioContext ??= _defaultAudioContext;
-    final path = package == null
-        ? sound
-        : 'packages/$package/${audioCache.prefix}$sound';
+    final path = package == null ? sound : 'packages/$package/$sound';
     return AudioPool.create(
       source: AssetSource(path),
-      audioCache: package == null ? audioCache : audioCacheFactory(prefix: ''),
+      audioCache: audioCache,
       minPlayers: minPlayers,
       maxPlayers: maxPlayers,
       audioContext: audioContext,

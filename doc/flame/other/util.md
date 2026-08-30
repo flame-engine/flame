@@ -169,7 +169,10 @@ to any Flame `Component` and exposes a simple get/set API for `timeScale`. The d
 `timeScale` is `1`, implying in-game time of the component is running at the same speed as real life
 time. Setting it to `2` will make the component tick twice as fast and setting it to `0.5` will make
 it tick at half the speed as compared to real life time. This mixin also provides `pause` and `resume`
-methods, which can be used instead of manually setting the timeScale to 0 and 1 respectively.
+methods, which can be used instead of manually setting the timeScale to 0 and 1 respectively. A
+`timeScale` of `0` stops the update pass for the component and its whole subtree: `update` is not
+called on any of them until the time scale is changed again. Components added to a paused game are
+still mounted, since lifecycle events are processed independently of the time scale.
 
 Since `FlameGame` is a `Component` too, this mixin can be attached to the `FlameGame` as well. Doing
 so will allow controlling time scale for all the component of the game from a single place.

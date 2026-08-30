@@ -20,7 +20,7 @@ void main() {
     test('game/attach', () {
       final owner = PipelineOwner();
       final game = _MockFlameGame();
-      when(() => game.paused).thenReturn(true);
+      when(() => game.isPaused).thenReturn(true);
 
       final BuildContext context = _MockBuildContext();
       final renderBox = GameRenderBox(game, context, isRepaintBoundary: false);
@@ -28,22 +28,22 @@ void main() {
 
       verify(() => game.attach(owner, renderBox)).called(1);
       expect(renderBox.gameLoop, isNotNull);
-      verify(() => game.paused).called(1);
+      verify(() => game.isPaused).called(1);
 
       final anotherGame = _MockFlameGame();
-      when(() => anotherGame.paused).thenReturn(true);
+      when(() => anotherGame.isPaused).thenReturn(true);
 
       renderBox.game = anotherGame;
       verify(game.detach).called(1);
       verify(() => anotherGame.attach(owner, renderBox)).called(1);
-      verify(() => anotherGame.paused).called(1);
+      verify(() => anotherGame.isPaused).called(1);
       expect(renderBox.gameLoop, isNotNull);
     });
 
     test('buildContext', () {
       final owner = PipelineOwner();
       final game = _MockFlameGame();
-      when(() => game.paused).thenReturn(true);
+      when(() => game.isPaused).thenReturn(true);
 
       final BuildContext context = _MockBuildContext();
       final renderBox = GameRenderBox(game, context, isRepaintBoundary: false);
@@ -56,7 +56,7 @@ void main() {
       final owner = PipelineOwner();
 
       final game = _MockFlameGame();
-      when(() => game.paused).thenReturn(true);
+      when(() => game.isPaused).thenReturn(true);
 
       final BuildContext context = _MockBuildContext();
       final renderBox = GameRenderBox(game, context, isRepaintBoundary: false);

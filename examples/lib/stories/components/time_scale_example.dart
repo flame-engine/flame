@@ -42,12 +42,12 @@ class TimeScaleExample extends FlameGame
   @override
   Future<void> onLoad() async {
     final spriteSheet = SpriteSheet(
-      image: await images.load('animations/chopper.png'),
+      image: await images.load('assets/images/animations/chopper.png'),
       srcSize: Vector2.all(48),
     );
     gameSpeedText.position = Vector2(size.x * 0.5, size.y * 0.8);
 
-    await world.addAll([
+    world.addAll([
       _Chopper(
         position: Vector2(-100, -10),
         size: Vector2.all(64),
@@ -75,7 +75,7 @@ class TimeScaleExample extends FlameGame
 }
 
 class _Chopper extends SpriteAnimationComponent
-    with HasGameReference<TimeScaleExample>, CollisionCallbacks {
+    with HasGameRef<TimeScaleExample>, CollisionCallbacks {
   _Chopper({
     super.animation,
     super.position,
@@ -96,24 +96,24 @@ class _Chopper extends SpriteAnimationComponent
 
   @override
   Future<void> onLoad() async {
-    await add(CircleHitbox());
-    await add(_timer);
+    add(CircleHitbox());
+    add(_timer);
     return super.onLoad();
   }
 
   @override
-  void updateTree(double dt) {
+  void update(double dt) {
     position.setFrom(position + _moveDirection * _speed * dt);
-    super.updateTree(dt);
+    super.update(dt);
   }
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     if (other is _Chopper) {
-      game.timeScale = 0.25;
+      gameRef.timeScale = 0.25;
     }
     super.onCollisionStart(intersectionPoints, other);
   }
@@ -121,7 +121,7 @@ class _Chopper extends SpriteAnimationComponent
   @override
   void onCollisionEnd(PositionComponent other) {
     if (other is _Chopper) {
-      game.timeScale = 1.0;
+      gameRef.timeScale = 1.0;
       _timer.timer.start();
     }
     super.onCollisionEnd(other);

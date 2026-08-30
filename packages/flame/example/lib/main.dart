@@ -26,10 +26,7 @@ class MyWorld extends World with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     super.onTapDown(event);
-    if (!event.handled) {
-      final touchPoint = event.localPosition;
-      add(Square(touchPoint));
-    }
+    add(Square(event.localPosition));
   }
 }
 
@@ -77,6 +74,5 @@ class Square extends RectangleComponent with TapCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     removeFromParent();
-    event.handled = true;
   }
 }

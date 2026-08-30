@@ -18,7 +18,7 @@ void main() {
       testGolden(
         'renders correctly',
         (game, tester) async {
-          await game.add(
+          game.add(
             ClipComponent.rectangle(
               size: Vector2(100, 100),
               children: [_Rectangle()],
@@ -33,7 +33,7 @@ void main() {
       testGolden(
         'renders correctly',
         (game, tester) async {
-          await game.add(
+          game.add(
             ClipComponent.circle(
               size: Vector2(100, 100),
               children: [_Rectangle()],
@@ -48,7 +48,7 @@ void main() {
       testGolden(
         'renders correctly',
         (game, tester) async {
-          await game.add(
+          game.add(
             ClipComponent.polygon(
               points: [
                 Vector2(1, 0),

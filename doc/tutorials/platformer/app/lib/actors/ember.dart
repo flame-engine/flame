@@ -10,7 +10,7 @@ import '../objects/star.dart';
 import 'water_enemy.dart';
 
 class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
+    with KeyboardHandler, CollisionCallbacks, HasGameRef<EmberQuestGame> {
   EmberPlayer({
     required super.position,
   }) : super(size: Vector2.all(64), anchor: Anchor.center);
@@ -30,7 +30,7 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('ember.png'),
+      gameRef.images.fromCache('assets/images/ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),
@@ -64,15 +64,15 @@ class EmberPlayer extends SpriteAnimationComponent
   @override
   void update(double dt) {
     velocity.x = horizontalDirection * moveSpeed;
-    game.objectSpeed = 0;
+    gameRef.objectSpeed = 0;
     // Prevent ember from going backwards at screen edge.
     if (position.x - 36 <= 0 && horizontalDirection < 0) {
       velocity.x = 0;
     }
     // Prevent ember from going beyond half screen.
-    if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
+    if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
       velocity.x = 0;
-      game.objectSpeed = -moveSpeed;
+      gameRef.objectSpeed = -moveSpeed;
     }
 
     // Apply basic gravity.
@@ -94,11 +94,11 @@ class EmberPlayer extends SpriteAnimationComponent
     position += velocity * dt;
 
     // If ember fell in pit, then game over.
-    if (position.y > game.size.y + size.y) {
-      game.health = 0;
+    if (position.y > gameRef.size.y + size.y) {
+      gameRef.health = 0;
     }
 
-    if (game.health <= 0) {
+    if (gameRef.health <= 0) {
       removeFromParent();
     }
 
@@ -112,7 +112,7 @@ class EmberPlayer extends SpriteAnimationComponent
   }
 
   @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollision(List<Vector2> intersectionPoints, PositionComponent other) {
     if (other is GroundBlock || other is PlatformBlock) {
       if (intersectionPoints.length == 2) {
         // Calculate the collision normal and separation distance.
@@ -139,7 +139,7 @@ class EmberPlayer extends SpriteAnimationComponent
 
     if (other is Star) {
       other.removeFromParent();
-      game.starsCollected++;
+      gameRef.starsCollected++;
     }
 
     if (other is WaterEnemy) {
@@ -152,7 +152,7 @@ class EmberPlayer extends SpriteAnimationComponent
   // to make it blink.
   void hit() {
     if (!hitByEnemy) {
-      game.health--;
+      gameRef.health--;
       hitByEnemy = true;
     }
     add(

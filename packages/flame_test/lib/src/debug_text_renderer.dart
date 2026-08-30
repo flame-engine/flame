@@ -25,6 +25,17 @@ class DebugTextRenderer extends TextRenderer {
 
   @override
   InlineTextElement format(String text) => _DebugTextElement(this, text);
+
+  @override
+  TextRenderer copyWithPaint(Paint paint) {
+    return DebugTextRenderer(
+      color: paint.color,
+      fontSize: fontSize,
+      lineHeight: lineHeight,
+      fontWeight: fontWeight,
+      fontStyle: fontStyle,
+    );
+  }
 }
 
 class _DebugTextElement extends InlineTextElement {

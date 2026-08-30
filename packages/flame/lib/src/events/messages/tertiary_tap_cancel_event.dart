@@ -1,5 +1,4 @@
-import 'package:flame/src/events/messages/event.dart';
-import 'package:flame/src/events/messages/tertiary_tap_down_event.dart';
+import 'package:flame/events.dart';
 
 /// The event propagated through the Flame engine when a tertiary tap
 /// (i.e. middle mouse button click) on a component is cancelled.

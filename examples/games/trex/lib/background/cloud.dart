@@ -4,7 +4,7 @@ import 'package:trex_game/background/cloud_manager.dart';
 import 'package:trex_game/trex_game.dart';
 
 class Cloud extends SpriteComponent
-    with ParentIsA<CloudManager>, HasGameReference<TRexGame> {
+    with ParentIsA<CloudManager>, HasGameRef<TRexGame> {
   Cloud({required Vector2 position})
     : super(
         position: position,
@@ -19,7 +19,7 @@ class Cloud extends SpriteComponent
   static const double maxSkyLevel = 71.0;
   static const double minSkyLevel = 30.0;
 
-  late final double cloudGap = game.random.nextDoubleBetween(
+  late final double cloudGap = gameRef.random.nextDoubleBetween(
     minCloudGap,
     maxCloudGap,
   );
@@ -27,7 +27,7 @@ class Cloud extends SpriteComponent
   @override
   Future<void> onLoad() async {
     sprite = Sprite(
-      game.spriteImage,
+      gameRef.spriteImage,
       srcPosition: Vector2(166.0, 2.0),
       srcSize: initialSize,
     );
@@ -55,7 +55,7 @@ class Cloud extends SpriteComponent
     super.onGameResize(size);
     y =
         ((absolutePosition.y / 2 - (maxSkyLevel - minSkyLevel)) +
-            game.random.nextDoubleBetween(minSkyLevel, maxSkyLevel)) -
+            gameRef.random.nextDoubleBetween(minSkyLevel, maxSkyLevel)) -
         absolutePositionOf(absoluteTopLeftPosition).y;
   }
 }

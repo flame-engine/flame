@@ -100,7 +100,7 @@ void main() {
 }
 
 void _mouseEvent(FlameGame game, Vector2 position) {
-  game.firstChild<PointerMoveDispatcher>()!.onMouseMove(
+  game.firstChild<MouseMoveDispatcher>()!.onMouseMove(
     createMouseMoveEvent(
       game: game,
       position: position,
@@ -110,7 +110,7 @@ void _mouseEvent(FlameGame game, Vector2 position) {
 
 void _hasDispatcher(FlameGame game) {
   expect(
-    game.children.whereType<PointerMoveDispatcher>(),
+    game.children.whereType<MouseMoveDispatcher>(),
     hasLength(1),
   );
 }

@@ -44,49 +44,43 @@ sprite1
       when(
         () => images.load(any(), package: any(named: 'package')),
       ).thenAnswer((_) async => FakeImage());
-
-      when(() => images.prefix).thenReturn('assets/images/');
     });
 
-    test('should resolve paths correctly with leading slashes', () async {
+    test('loads the atlas from the path exactly as given', () async {
       final assets = AssetsCache(bundle: bundle);
 
       await TexturePackerAtlas.load(
-        '/path/to/atlas_name.atlas',
-        assets: assets,
-        images: images,
-      );
-
-      // Verify it tried to load 'images/path/to/atlas.atlas'
-      // The leading slash in /path/to/atlas.atlas should be removed.
-      verify(
-        () => bundle.loadString(
-          'assets/images/path/to/atlas_name.atlas',
-          cache: any(named: 'cache'),
-        ),
-      ).called(1);
-    });
-
-    test('should handle assetsPrefix WITH trailing slash', () async {
-      final assets = AssetsCache(bundle: bundle);
-
-      await TexturePackerAtlas.load(
-        'atlas_name.atlas',
-        assetsPrefix: 'custom/',
+        'assets/images/atlas_name.atlas',
         assets: assets,
         images: images,
       );
 
       verify(
         () => bundle.loadString(
-          'assets/custom/atlas_name.atlas',
+          'assets/images/atlas_name.atlas',
           cache: any(named: 'cache'),
         ),
       ).called(1);
     });
 
-    test('should not apply assetsPrefix to image paths loaded via Images',
-        () async {
+    test('resolves page textures relative to the atlas directory', () async {
+      final assets = AssetsCache(bundle: bundle);
+
+      await TexturePackerAtlas.load(
+        'assets/atlases/atlas_name.atlas',
+        assets: assets,
+        images: images,
+      );
+
+      verify(
+        () => images.load(
+          'assets/atlases/test.png',
+          package: any(named: 'package'),
+        ),
+      ).called(1);
+    });
+
+    test('resolves a page texture with no atlas directory', () async {
       final assets = AssetsCache(bundle: bundle);
 
       await TexturePackerAtlas.load(
@@ -95,20 +89,15 @@ sprite1
         images: images,
       );
 
-      // assetsPrefix is for Flame.assets (prefix 'assets/'), NOT for
-      // Flame.images (prefix 'assets/images/'). The image path must be
-      // relative to Flame.images's prefix, without assetsPrefix applied.
       verify(
         () => images.load('test.png', package: any(named: 'package')),
       ).called(1);
     });
 
-    test(
-      'should not double-prefix image paths in subdirectories',
-      () async {
-        final assets = AssetsCache(bundle: bundle);
-        const subDirAtlasContent = '''
-textures.png
+    test('honours a relative page texture path literally', () async {
+      final assets = AssetsCache(bundle: bundle);
+      const nestedAtlasContent = '''
+pages/test.png
 size: 64, 64
 filter: Nearest, Nearest
 repeat: none
@@ -116,57 +105,34 @@ sprite1
   bounds: 0, 0, 32, 32
 ''';
 
-        when(
-          () => bundle.loadString(any(), cache: any(named: 'cache')),
-        ).thenAnswer((_) async => subDirAtlasContent);
-
-        await TexturePackerAtlas.load(
-          'packs/atlas_name.atlas',
-          assets: assets,
-          images: images,
-        );
-
-        // The image path should be 'packs/textures.png' (parent dir + filename),
-        // NOT 'images/packs/textures.png' which would cause Flame.images to
-        // resolve 'assets/images/images/packs/textures.png'.
-        verify(
-          () => images.load(
-            'packs/textures.png',
-            package: any(named: 'package'),
-          ),
-        ).called(1);
-      },
-    );
-
-    test('should handle assetsPrefix WITHOUT trailing slash', () async {
-      final assets = AssetsCache(bundle: bundle);
+      when(
+        () => bundle.loadString(any(), cache: any(named: 'cache')),
+      ).thenAnswer((_) async => nestedAtlasContent);
 
       await TexturePackerAtlas.load(
-        'atlas_name.atlas',
-        assetsPrefix: 'custom',
+        'assets/images/atlas_name.atlas',
         assets: assets,
         images: images,
       );
 
       verify(
-        () => bundle.loadString(
-          'assets/custom/atlas_name.atlas',
-          cache: any(named: 'cache'),
+        () => images.load(
+          'assets/images/pages/test.png',
+          package: any(named: 'package'),
         ),
       ).called(1);
     });
 
-    test('should pass package parameter to AssetsCache and Images', () async {
+    test('passes the package through to both caches', () async {
       final assets = AssetsCache(bundle: bundle);
 
       await TexturePackerAtlas.load(
-        'atlas_name.atlas',
+        'assets/images/atlas_name.atlas',
         assets: assets,
         images: images,
         package: 'my_package',
       );
 
-      // Verify bundle call includes the package-prefixed path
       verify(
         () => bundle.loadString(
           'packages/my_package/assets/images/atlas_name.atlas',
@@ -174,88 +140,37 @@ sprite1
         ),
       ).called(1);
 
-      // Verify images.load call also includes the package
       verify(
-        () => images.load('test.png', package: 'my_package'),
+        () => images.load(
+          'assets/images/test.png',
+          package: 'my_package',
+        ),
       ).called(1);
     });
 
-    test(
-      'should auto-detect package from path if package parameter is null',
-      () async {
-        final assets = AssetsCache(bundle: bundle);
+    test('loads a path that already points inside a package', () async {
+      final assets = AssetsCache(bundle: bundle);
 
-        await TexturePackerAtlas.load(
+      await TexturePackerAtlas.load(
+        'packages/custom_package/assets/images/atlas_name.atlas',
+        assets: assets,
+        images: images,
+      );
+
+      verify(
+        () => bundle.loadString(
           'packages/custom_package/assets/images/atlas_name.atlas',
-          assets: assets,
-          images: images,
-        );
+          cache: any(named: 'cache'),
+        ),
+      ).called(1);
 
-        // Verify bundle call extracted 'custom_package' and cleaned the path
-        verify(
-          () => bundle.loadString(
-            'packages/custom_package/assets/images/atlas_name.atlas',
-            cache: any(named: 'cache'),
-          ),
-        ).called(1);
-
-        // Verify images.load also uses the extracted package
-        verify(
-          () => images.load('test.png', package: 'custom_package'),
-        ).called(1);
-      },
-    );
-
-    test(
-      'should load correctly when full assets/ path is provided with empty prefix',
-      () async {
-        final assets = AssetsCache(bundle: bundle);
-
-        await TexturePackerAtlas.load(
-          'assets/images/atlas_name.atlas',
-          assetsPrefix: '',
-          assets: assets,
-          images: images,
-        );
-
-        verify(
-          () => bundle.loadString(
-            'assets/images/atlas_name.atlas',
-            cache: any(named: 'cache'),
-          ),
-        ).called(1);
-      },
-    );
-
-    test(
-      'should handle redundant images/ prefix in atlas file for page images',
-      () async {
-        final assets = AssetsCache(bundle: bundle);
-        const redundantAtlasContent = '''
-images/test.png
-size: 64, 64
-filter: Nearest, Nearest
-repeat: none
-sprite1
-  bounds: 0, 0, 32, 32
-''';
-
-        when(
-          () => bundle.loadString(any(), cache: any(named: 'cache')),
-        ).thenAnswer((_) async => redundantAtlasContent);
-
-        await TexturePackerAtlas.load(
-          'atlas_name.atlas',
-          assets: assets,
-          images: images,
-        );
-
-        // Verify images.load call strips the redundant 'images/' from inside the atlas
-        verify(
-          () => images.load('test.png', package: any(named: 'package')),
-        ).called(1);
-      },
-    );
+      verify(
+        () => images.load(
+          'packages/custom_package/assets/images/test.png',
+          package: any(named: 'package'),
+        ),
+      ).called(1);
+    });
 
     test(
       'should preserve region names with trailing digits (no index stripping)',
@@ -277,7 +192,7 @@ knight_walk_02.png
         ).thenAnswer((_) async => complexAtlasContent);
 
         final atlas = await TexturePackerAtlas.load(
-          'knight.atlas',
+          'assets/images/knight.atlas',
           assets: assets,
           images: images,
         );

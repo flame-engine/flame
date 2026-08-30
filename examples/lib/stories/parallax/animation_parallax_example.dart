@@ -11,13 +11,13 @@ class AnimationParallaxExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     final cityLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/city.png'),
+      ParallaxImageData('assets/images/parallax/city.png'),
       filterQuality: FilterQuality.none,
     );
 
     final rainLayer = await loadParallaxLayer(
       ParallaxAnimationData(
-        'parallax/rain.png',
+        'assets/images/parallax/rain.png',
         SpriteAnimationData.sequenced(
           amount: 4,
           stepTime: 0.3,
@@ -29,7 +29,7 @@ class AnimationParallaxExample extends FlameGame {
     );
 
     final cloudsLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/heavy_clouded.png'),
+      ParallaxImageData('assets/images/parallax/heavy_clouded.png'),
       velocityMultiplier: Vector2(4, 0),
       fill: LayerFill.none,
       alignment: Alignment.topLeft,

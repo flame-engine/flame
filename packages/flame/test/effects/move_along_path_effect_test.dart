@@ -163,7 +163,7 @@ void main() {
         final world = World()..addToParent(game);
         final camera = CameraComponent(world: world)..addToParent(game);
         await game.ready();
-        await camera.viewport.add(
+        camera.viewport.add(
           MoveAlongPathEffect(
             Path()..lineTo(10, 10),
             EffectController(duration: 1),

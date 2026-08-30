@@ -14,11 +14,13 @@ typedef TextureAtlasData = ({List<Page> pages, List<Region> regions});
 /// Internal parser for TexturePacker atlas files.
 abstract class TexturePackerParser {
   /// Parses structural data of a texture atlas file.
+  ///
+  /// The [path] is the full path of the atlas, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/sprites.atlas`.
   static Future<TextureAtlasData> parseAtlasMetadata(
     String path, {
     required bool fromStorage,
     AssetsCache? assets,
-    String? assetsPrefix,
     String? package,
   }) async {
     final pages = <Page>[];
@@ -28,28 +30,9 @@ abstract class TexturePackerParser {
     if (fromStorage) {
       fileContent = await XFile(path).readAsString();
     } else {
-      final assetsCache = assets ?? Flame.assets;
-      final prefix = (assetsPrefix ?? '').trim();
-      final cleanPath = path.trim().replaceFirst(RegExp('^/'), '');
-
-      var fullPath = cleanPath;
-      if (prefix.isNotEmpty &&
-          !cleanPath.contains('packages/') &&
-          !cleanPath.startsWith('assets/')) {
-        final effectivePrefix = prefix.endsWith('/') ? prefix : '$prefix/';
-        if (!cleanPath.startsWith(effectivePrefix)) {
-          fullPath = '$effectivePrefix$cleanPath';
-        }
-      }
-
-      final resolved = resolvePath(fullPath, package);
-      final finalPath = resolved.path.startsWith(assetsCache.prefix)
-          ? resolved.path.substring(assetsCache.prefix.length)
-          : resolved.path;
-
-      fileContent = await assetsCache.readFile(
-        finalPath,
-        package: resolved.package,
+      fileContent = await (assets ?? Flame.assets).readFile(
+        path,
+        package: package,
       );
     }
 
@@ -106,14 +89,14 @@ abstract class TexturePackerParser {
   }
 
   /// Loads images for all pages in the given atlas data.
+  ///
+  /// Page textures are resolved relative to the directory of [path].
   static Future<void> loadAtlasDataImages(
     TextureAtlasData atlasData,
     String path, {
     required bool fromStorage,
     Images? images,
     String? package,
-    String? assetsPrefix,
-    AssetsCache? assets,
   }) async {
     final img = images ?? Flame.images;
     for (final page in atlasData.pages) {
@@ -128,26 +111,7 @@ abstract class TexturePackerParser {
         img.add(texturePath, image);
         page.texture = img.fromCache(texturePath);
       } else {
-        final resolved = resolvePath(texturePath, package);
-        final assetsCachePrefix = (assets ?? Flame.assets).prefix;
-
-        String toRelative(String p) => p.startsWith(assetsCachePrefix)
-            ? p.substring(assetsCachePrefix.length)
-            : p;
-
-        final relativePath = toRelative(resolved.path);
-        final relativePrefix = toRelative(img.prefix);
-
-        final finalTexturePath =
-            (relativePrefix.isNotEmpty &&
-                relativePath.startsWith(relativePrefix))
-            ? relativePath.substring(relativePrefix.length)
-            : relativePath;
-
-        page.texture = await img.load(
-          finalTexturePath,
-          package: resolved.package,
-        );
+        page.texture = await img.load(texturePath, package: package);
       }
     }
   }
@@ -268,25 +232,6 @@ abstract class TexturePackerParser {
     const imageExtensions = ['.png', '.jpg', '.jpeg', '.bmp', '.tga', '.webp'];
     final trimmed = line.trim().toLowerCase();
     return imageExtensions.any(trimmed.endsWith);
-  }
-
-  static ({String path, String? package}) resolvePath(
-    String path,
-    String? package,
-  ) {
-    const pkg = 'packages/';
-    final index = path.indexOf(pkg);
-    if (index != -1) {
-      final subPath = path.substring(index + pkg.length);
-      final segments = subPath.split('/');
-      if (segments.length > 1) {
-        return (
-          path: segments.sublist(1).join('/'),
-          package: package ?? segments[0],
-        );
-      }
-    }
-    return (path: path, package: package);
   }
 
   static int _parseDegrees(String? value) {

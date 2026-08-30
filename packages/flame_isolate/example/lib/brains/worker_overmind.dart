@@ -13,14 +13,14 @@ import 'package:flame_isolate_example/units/worker.dart';
 import 'package:flutter/foundation.dart';
 
 class WorkerOvermind extends Component
-    with HasGameReference<ColonistsGame>, FlameIsolate {
+    with HasGameRef<ColonistsGame>, FlameIsolate {
   final List<Pair<StaticColonistsObject, Vector2>> _queuedTasks = [];
   late Timer _assignTaskInterval;
   late WorkerOvermindHud isolateHud;
 
   @override
   Future<void> onLoad() async {
-    game.camera.viewport.add(isolateHud = WorkerOvermindHud());
+    gameRef.camera.viewport.add(isolateHud = WorkerOvermindHud());
     super.onLoad();
   }
 
@@ -34,7 +34,7 @@ class WorkerOvermind extends Component
 
   // Note: This would, in reality, also be moved to isolate
   void calculateTasks() {
-    game.worldObjects.whereType<Bread>().forEach((bread) {
+    gameRef.worldObjects.whereType<Bread>().forEach((bread) {
       moveObject(bread, Vector2(8, 2));
     });
   }
@@ -62,7 +62,7 @@ class WorkerOvermind extends Component
       return;
     }
 
-    final idleWorkers = game.workers
+    final idleWorkers = gameRef.workers
         .where(
           (worker) =>
               worker.isIdle && !_workersBeingCalculated.contains(worker),
@@ -94,7 +94,7 @@ class WorkerOvermind extends Component
               .map((worker) => worker.tilePosition)
               .toList(growable: false),
           destinations: subQueue,
-          pathFinderData: game.pathFinderData,
+          pathFinderData: gameRef.pathFinderData,
         );
 
         final paths = switch (isolateHud.computeType) {

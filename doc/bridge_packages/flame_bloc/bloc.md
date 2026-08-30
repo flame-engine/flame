@@ -22,7 +22,7 @@ We can do that by using `FlameBlocProvider` component:
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await add(
+    add(
       FlameBlocProvider<PlayerInventoryBloc, PlayerInventoryState>(
         create: () => PlayerInventoryBloc(),
         children: [
@@ -44,7 +44,7 @@ fashion:
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await add(
+    add(
       FlameMultiBlocProvider(
         providers: [
           FlameBlocProvider<PlayerInventoryBloc, PlayerInventoryState>(
@@ -72,7 +72,7 @@ By using `FlameBlocListener` component:
 class Player extends PositionComponent {
   @override
   Future<void> onLoad() async {
-    await add(
+    add(
       FlameBlocListener<PlayerInventoryBloc, PlayerInventoryState>(
         listener: (state) {
           updateGear(state);

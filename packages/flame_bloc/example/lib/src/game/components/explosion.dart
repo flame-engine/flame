@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame_bloc_example/src/game/game.dart';
 
 class ExplosionComponent extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   ExplosionComponent(double x, double y)
     : super(
         position: Vector2(x, y),
@@ -14,8 +14,8 @@ class ExplosionComponent extends SpriteAnimationComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    animation = await game.loadSpriteAnimation(
-      'explosion.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/explosion.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.1,
         amount: 6,

@@ -8,7 +8,7 @@ import 'package:flame_network_assets/flame_network_assets.dart';
 import 'package:flutter/material.dart' hide Image;
 
 void main() {
-  runApp(const GameWidget.controlled(gameFactory: MyGame.new));
+  runApp(const GameWidget.managed(gameFactory: MyGame.new));
 }
 
 class MyGame extends FlameGame with TapCallbacks {

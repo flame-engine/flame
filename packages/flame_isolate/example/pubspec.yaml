@@ -7,13 +7,13 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.11.0 <4.0.0"
-  flutter: ">=3.41.0"
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
 
 dependencies:
   collection: ^1.18.0
-  flame: ^1.37.0
-  flame_isolate: ^0.6.2+22
+  flame: ^1.38.0
+  flame_isolate: ^0.6.3+23
   flutter:
     sdk: flutter
   quiver: ^3.2.1

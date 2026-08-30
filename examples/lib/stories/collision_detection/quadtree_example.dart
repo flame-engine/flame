@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 const tileSize = 8.0;
 
 class QuadTreeExample extends FlameGame
-    with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollDetector {
+    with HasQuadTreeCollisionDetection, KeyboardEvents, ScrollCallbacks {
   QuadTreeExample();
 
   static const description = '''
@@ -56,13 +56,13 @@ Press T button to toggle player to collide with other objects.
 
     final random = Random();
     final spriteBrick = await Sprite.load(
-      'retro_tiles.png',
+      'assets/images/retro_tiles.png',
       srcPosition: Vector2.all(0),
       srcSize: Vector2.all(tileSize),
     );
 
     final spriteWater = await Sprite.load(
-      'retro_tiles.png',
+      'assets/images/retro_tiles.png',
       srcPosition: Vector2(0, tileSize),
       srcSize: Vector2.all(tileSize),
     );
@@ -191,8 +191,8 @@ Press T button to toggle player to collide with other objects.
   }
 
   @override
-  void onScroll(PointerScrollInfo info) {
-    camera.viewfinder.zoom += info.scrollDelta.global.y.sign * 0.08;
+  void onScroll(ScrollEvent event) {
+    camera.viewfinder.zoom += event.scrollDelta.y.sign * 0.08;
     camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 5.0);
   }
 }
@@ -200,7 +200,7 @@ Press T button to toggle player to collide with other objects.
 //#region Player
 
 class Player extends SpriteComponent
-    with CollisionCallbacks, HasGameReference<QuadTreeExample> {
+    with CollisionCallbacks, HasGameRef<QuadTreeExample> {
   Player({
     required super.position,
     required super.size,
@@ -216,7 +216,7 @@ class Player extends SpriteComponent
   @override
   Future<void> onLoad() async {
     sprite = await Sprite.load(
-      'retro_tiles.png',
+      'assets/images/retro_tiles.png',
       srcSize: Vector2.all(tileSize),
       srcPosition: Vector2(tileSize * 3, tileSize),
     );
@@ -226,7 +226,7 @@ class Player extends SpriteComponent
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     final myCenter = Vector2(
@@ -295,7 +295,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 
   @override
   void onCollisionStart(
-    Set<Vector2> intersectionPoints,
+    List<Vector2> intersectionPoints,
     PositionComponent other,
   ) {
     if (other is Brick) {
@@ -310,7 +310,7 @@ class Bullet extends PositionComponent with CollisionCallbacks, HasPaint {
 //#region Environment
 
 class Brick extends SpriteComponent
-    with CollisionCallbacks, GameCollidable, UpdateOnce {
+    with CollisionCallbacks, GameCollidable, CustomTraversal, UpdateOnce {
   Brick({
     required super.position,
     required super.size,
@@ -332,7 +332,7 @@ class Brick extends SpriteComponent
 }
 
 class Water extends SpriteComponent
-    with CollisionCallbacks, GameCollidable, UpdateOnce {
+    with CollisionCallbacks, GameCollidable, CustomTraversal, UpdateOnce {
   Water({
     required super.position,
     required super.size,
@@ -363,13 +363,13 @@ mixin GameCollidable on PositionComponent {
 
 //#region Utils
 
-mixin UpdateOnce on PositionComponent {
+mixin UpdateOnce on CustomTraversal {
   bool updateOnce = true;
 
   @override
-  void updateTree(double dt) {
+  void updateSubtree(double dt) {
     if (updateOnce) {
-      super.updateTree(dt);
+      super.updateSubtree(dt);
       updateOnce = false;
     }
   }

@@ -14,9 +14,9 @@ platformer
 positionable
 postmultiply
 preorder
-prerender
 prerendered
 pressable
+presubmit
 ptero # short for pterodactyl
 rasterizes
 refreshable
@@ -24,7 +24,9 @@ renderable
 rerasterize
 rescan
 Roboto
+subclassing
 tappable
 thumbstick
 trackpad
 underutilize
+untinted

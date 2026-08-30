@@ -29,8 +29,9 @@ class XmlSpriteSheet {
 
   /// Load an [XmlSpriteSheet] from an image and an XML file.
   ///
-  /// The [imagePath] should be in relation to `assets/images/`.
-  /// The [xmlPath] should be in relation to `assets/`.
+  /// Both [imagePath] and [xmlPath] are full paths, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/spritesheet.png` and
+  /// `assets/spritesheet.xml`.
   static Future<XmlSpriteSheet> load({
     required String imagePath,
     required String xmlPath,

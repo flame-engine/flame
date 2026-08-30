@@ -20,7 +20,7 @@ starts to drop in FPS, this is without any sprite batching and such.
 
   @override
   Future<void> onLoad() async {
-    await camera.viewport.addAll([
+    camera.viewport.addAll([
       FpsTextComponent(
         position: size - Vector2(10, 50),
         anchor: Anchor.bottomRight,
@@ -44,7 +44,7 @@ starts to drop in FPS, this is without any sprite batching and such.
 }
 
 class BenchmarkWorld extends World
-    with TapCallbacks, HasGameReference<BenchmarkExample> {
+    with TapCallbacks, HasGameRef<BenchmarkExample> {
   final Random random = Random();
 
   @override
@@ -53,12 +53,12 @@ class BenchmarkWorld extends World
       List.generate(
         100,
         (_) => Ember(
-          size: game.emberSize,
+          size: gameRef.emberSize,
           position: Vector2(
-            (game.size.x / 2) *
+            (gameRef.size.x / 2) *
                 random.nextDouble() *
                 (random.nextBool() ? 1 : -1),
-            (game.size.y / 2) *
+            (gameRef.size.y / 2) *
                 random.nextDouble() *
                 (random.nextBool() ? 1 : -1),
           ),

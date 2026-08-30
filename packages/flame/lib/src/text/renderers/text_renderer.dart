@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/src/anchor.dart';
 import 'package:flame/text.dart';
@@ -10,6 +12,8 @@ abstract class TextRenderer {
   LineMetrics getLineMetrics(String text) {
     return format(text).metrics;
   }
+
+  TextRenderer copyWithPaint(Paint paint);
 
   void render(
     Canvas canvas,

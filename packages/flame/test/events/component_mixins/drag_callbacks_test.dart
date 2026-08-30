@@ -12,7 +12,7 @@ void main() {
     testWithFlameGame(
       'make sure DragCallback components can be added to a FlameGame',
       (game) async {
-        await game.add(DragCallbacksComponent());
+        game.add(DragCallbacksComponent());
         await game.ready();
         expect(game.children.toList()[2], isA<MultiDragScaleDispatcher>());
       },
@@ -142,12 +142,41 @@ void main() {
         );
 
         expect(component.dragCancelEvent, equals(1));
-        expect(component.dragEndEvent, equals(1));
+        // onDragCancel no longer delegates to onDragEnd.
+        expect(component.dragEndEvent, equals(0));
         expect(component.isDragged, isFalse);
 
         dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
         expect(component.dragCancelEvent, equals(1));
-        expect(component.dragEndEvent, equals(1));
+        expect(component.dragEndEvent, equals(0));
+      },
+    );
+
+    testWithFlameGame(
+      'onDragCancel resets isDragged without delegating to onDragEnd',
+      (game) async {
+        final component = DragCallbacksComponent()
+          ..x = 10
+          ..y = 10
+          ..width = 10
+          ..height = 10;
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            localPosition: const Offset(12, 12),
+            globalPosition: const Offset(12, 12),
+          ),
+        );
+        expect(component.isDragged, isTrue);
+
+        dispatcher.onDragCancel(DragCancelEvent(1));
+
+        expect(component.dragCancelEvent, equals(1));
+        expect(component.dragEndEvent, equals(0));
+        expect(component.isDragged, isFalse);
       },
     );
 
@@ -271,6 +300,7 @@ void main() {
         var nDragStartCalled = 0;
         var nDragUpdateCalled = 0;
         var nDragEndCalled = 0;
+        var nDragCancelCalled = 0;
         final game = FlameGame(
           children: [
             DragWithCallbacksComponent(
@@ -279,6 +309,7 @@ void main() {
               onDragStart: (e) => nDragStartCalled++,
               onDragUpdate: (e) => nDragUpdateCalled++,
               onDragEnd: (e) => nDragEndCalled++,
+              onDragCancel: (e) => nDragCancelCalled++,
             ),
           ],
         );
@@ -302,11 +333,134 @@ void main() {
 
         // cancelled drag
         final gesture = await tester.startGesture(const Offset(50, 50));
-        await gesture.moveBy(const Offset(10, 10));
+        await gesture.moveBy(const Offset(20, 20));
         await gesture.cancel();
         await tester.pump(const Duration(seconds: 1));
         expect(nDragStartCalled, 2);
-        expect(nDragEndCalled, 2);
+        expect(nDragCancelCalled, 1);
+        // The cancellation must not be reported as a drag end.
+        expect(nDragEndCalled, 1);
+      },
+    );
+
+    testWidgets(
+      'tap is not cancelled when a DragCallbacks component is mounted first',
+      (tester) async {
+        var nDragStartCalled = 0;
+        final tapComponent = _TapCounterComponent(
+          position: Vector2(20, 20),
+          size: Vector2(100, 100),
+        );
+        final game = FlameGame(
+          children: [
+            DragWithCallbacksComponent(
+              position: Vector2(200, 200),
+              size: Vector2(100, 100),
+              onDragStart: (e) => nDragStartCalled++,
+            ),
+            tapComponent,
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 10));
+
+        await tester.tapAt(const Offset(50, 50));
+        await tester.pump(const Duration(seconds: 1));
+
+        expect(nDragStartCalled, 0);
+        expect(tapComponent.nTapDown, 1);
+        expect(tapComponent.nTapUp, 1);
+        expect(tapComponent.nTapCancel, 0);
+      },
+    );
+
+    testWidgets(
+      'zero-delta pointer moves do not start a drag or cancel a tap',
+      (tester) async {
+        var nDragStartCalled = 0;
+        final tapComponent = _TapCounterComponent(
+          position: Vector2(20, 20),
+          size: Vector2(100, 100),
+        );
+        final game = FlameGame(
+          children: [
+            DragWithCallbacksComponent(
+              position: Vector2(200, 200),
+              size: Vector2(100, 100),
+              onDragStart: (e) => nDragStartCalled++,
+            ),
+            tapComponent,
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 10));
+
+        final gesture = await tester.startGesture(const Offset(50, 50));
+        await gesture.moveBy(Offset.zero);
+        await gesture.moveBy(Offset.zero);
+        await gesture.moveBy(Offset.zero);
+        await gesture.up();
+        await tester.pump(const Duration(seconds: 1));
+
+        expect(nDragStartCalled, 0);
+        expect(tapComponent.nTapDown, 1);
+        expect(tapComponent.nTapUp, 1);
+        expect(tapComponent.nTapCancel, 0);
+      },
+    );
+
+    testWidgets(
+      'pointer moves below the touch slop do not start a drag',
+      (tester) async {
+        var nDragStartCalled = 0;
+        var nDragUpdateCalled = 0;
+        var nDragEndCalled = 0;
+        final tapComponent = _TapCounterComponent(
+          position: Vector2(20, 20),
+          size: Vector2(100, 100),
+        );
+        final game = FlameGame(
+          children: [
+            DragWithCallbacksComponent(
+              position: Vector2(20, 20),
+              size: Vector2(100, 100),
+              onDragStart: (e) => nDragStartCalled++,
+              onDragUpdate: (e) => nDragUpdateCalled++,
+              onDragEnd: (e) => nDragEndCalled++,
+            ),
+            tapComponent,
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 10));
+
+        // Movement below the touch slop is a tap, not a drag.
+        var gesture = await tester.startGesture(const Offset(50, 50));
+        await gesture.moveBy(const Offset(5, 5));
+        await gesture.moveBy(const Offset(5, 5));
+        await gesture.up();
+        await tester.pump(const Duration(seconds: 1));
+        expect(nDragStartCalled, 0);
+        expect(nDragUpdateCalled, 0);
+        expect(nDragEndCalled, 0);
+        expect(tapComponent.nTapUp, 1);
+        expect(tapComponent.nTapCancel, 0);
+
+        // Once the accumulated movement exceeds the touch slop the drag
+        // starts, and the pending movement is delivered as one update.
+        gesture = await tester.startGesture(const Offset(50, 50));
+        await gesture.moveBy(const Offset(5, 5));
+        await gesture.moveBy(const Offset(20, 20));
+        await gesture.up();
+        await tester.pump(const Duration(seconds: 1));
+        expect(nDragStartCalled, 1);
+        expect(nDragUpdateCalled, 1);
+        expect(nDragEndCalled, 1);
+        expect(tapComponent.nTapUp, 1);
+        expect(tapComponent.nTapCancel, 1);
       },
     );
 
@@ -391,7 +545,7 @@ void main() {
       game.camera.viewfinder.zoom = 2;
 
       final deltas = <Vector2>[];
-      await game.world.add(
+      game.world.add(
         DragWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),
@@ -428,7 +582,7 @@ void main() {
       game.camera.viewfinder.zoom = 1 / 2;
 
       final deltas = <Vector2>[];
-      await game.world.add(
+      game.world.add(
         DragWithCallbacksComponent(
           position: Vector2.all(-5),
           size: Vector2.all(10),
@@ -472,4 +626,21 @@ void main() {
       expect(totalDelta, Vector2(16, 0));
     },
   );
+}
+
+class _TapCounterComponent extends PositionComponent with TapCallbacks {
+  _TapCounterComponent({super.position, super.size});
+
+  int nTapDown = 0;
+  int nTapUp = 0;
+  int nTapCancel = 0;
+
+  @override
+  void onTapDown(TapDownEvent event) => nTapDown++;
+
+  @override
+  void onTapUp(TapUpEvent event) => nTapUp++;
+
+  @override
+  void onTapCancel(TapCancelEvent event) => nTapCancel++;
 }
