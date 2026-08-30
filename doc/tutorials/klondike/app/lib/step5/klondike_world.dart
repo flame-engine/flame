@@ -12,7 +12,7 @@ import 'components/waste_pile.dart';
 
 import 'klondike_game.dart';
 
-class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
+class KlondikeWorld extends World with HasGameRef<KlondikeGame> {
   final cardGap = KlondikeGame.cardGap;
   final topGap = KlondikeGame.topGap;
   final cardSpaceWidth = KlondikeGame.cardSpaceWidth;
@@ -85,7 +85,7 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     addButton('Draw 1 or 3', gameMidX + 2 * cardSpaceWidth, Action.changeDraw);
     addButton('Have fun', gameMidX + 3 * cardSpaceWidth, Action.haveFun);
 
-    final camera = game.camera;
+    final camera = gameRef.camera;
     camera.viewfinder.visibleGameSize = playAreaSize;
     camera.viewfinder.position = Vector2(gameMidX, 0);
     camera.viewfinder.anchor = Anchor.topCenter;
@@ -104,8 +104,8 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
           letsCelebrate();
         } else {
           // Restart with a new deal or the same deal as before.
-          game.action = action;
-          game.world = KlondikeWorld();
+          gameRef.action = action;
+          gameRef.world = KlondikeWorld();
         }
       },
     );
@@ -115,15 +115,15 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
   void deal() {
     assert(cards.length == 52, 'There are ${cards.length} cards: should be 52');
 
-    if (game.action != Action.sameDeal) {
+    if (gameRef.action != Action.sameDeal) {
       // New deal: change the Random Number Generator's seed.
-      game.seed = Random().nextInt(KlondikeGame.maxInt);
-      if (game.action == Action.changeDraw) {
-        game.klondikeDraw = (game.klondikeDraw == 3) ? 1 : 3;
+      gameRef.seed = Random().nextInt(KlondikeGame.maxInt);
+      if (gameRef.action == Action.changeDraw) {
+        gameRef.klondikeDraw = (gameRef.klondikeDraw == 3) ? 1 : 3;
       }
     }
     // For the "Same deal" option, re-use the previous seed, else use a new one.
-    cards.shuffle(Random(game.seed));
+    cards.shuffle(Random(gameRef.seed));
 
     // Each card dealt must be seen to come from the top of the deck!
     var dealPriority = 1;
@@ -183,8 +183,8 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
     // top-left of the off-screen area that will accept the scattered cards.
     // Note: The play area is anchored at TopCenter, so topLeft.y is fixed.
 
-    final cameraZoom = game.camera.viewfinder.zoom;
-    final zoomedScreen = game.size / cameraZoom;
+    final cameraZoom = gameRef.camera.viewfinder.zoom;
+    final zoomedScreen = gameRef.size / cameraZoom;
     final screenCenter = (playAreaSize - KlondikeGame.cardSize) / 2;
     final topLeft = Vector2(
       (playAreaSize.x - zoomedScreen.x) / 2 - KlondikeGame.cardWidth,
@@ -242,8 +242,8 @@ class KlondikeWorld extends World with HasGameReference<KlondikeGame> {
               letsCelebrate(phase: 2);
             } else {
               // Restart with a new deal after winning or pressing "Have fun".
-              game.action = Action.newDeal;
-              game.world = KlondikeWorld();
+              gameRef.action = Action.newDeal;
+              gameRef.world = KlondikeWorld();
             }
           }
         },

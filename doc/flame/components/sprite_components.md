@@ -226,11 +226,11 @@ Example:
 
 ```dart
 class PlayerComponent extends SpriteGroupComponent<ButtonState>
-    with HasGameReference<SpriteGroupExample>, TapCallbacks {
+    with HasGameRef<SpriteGroupExample>, TapCallbacks {
   @override
   Future<void> onLoad() async {
-    final pressedSprite = await game.loadSprite(/* omitted */);
-    final unpressedSprite = await game.loadSprite(/* omitted */);
+    final pressedSprite = await gameRef.loadSprite(/* omitted */);
+    final unpressedSprite = await gameRef.loadSprite(/* omitted */);
 
     sprites = {
       ButtonState.pressed: pressedSprite,

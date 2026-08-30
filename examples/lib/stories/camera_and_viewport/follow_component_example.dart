@@ -180,7 +180,7 @@ class Map extends Component {
   }
 }
 
-class Rock extends SpriteComponent with HasGameReference, TapCallbacks {
+class Rock extends SpriteComponent with HasGameRef, TapCallbacks {
   Rock(Vector2 position)
     : super(
         position: position,
@@ -191,7 +191,7 @@ class Rock extends SpriteComponent with HasGameReference, TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('assets/images/nine-box.png');
+    sprite = await gameRef.loadSprite('assets/images/nine-box.png');
     paint = Paint()..color = Colors.white;
     add(RectangleHitbox());
   }

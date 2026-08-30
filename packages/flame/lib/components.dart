@@ -29,8 +29,8 @@ export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_auto_batched_children.dart'
     show HasAutoBatchedChildren;
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
-// ignore: deprecated_member_use_from_same_package
 export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
+// ignore: deprecated_member_use_from_same_package
 export 'src/components/mixins/has_game_reference.dart' show HasGameReference;
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/has_time_scale.dart';

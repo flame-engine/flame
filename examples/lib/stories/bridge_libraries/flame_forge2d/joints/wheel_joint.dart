@@ -24,7 +24,7 @@ class WheelJointExample extends Forge2DExampleGame {
 }
 
 class WheelJointWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   final joints = <WheelJoint>[];
   static const _motorSpeed = 20.0;
   bool drivingRight = true;
@@ -42,7 +42,7 @@ class WheelJointWorld extends Forge2DWorld
     add(chassis);
     await chassis.loaded;
     // Follow the car so that it stays visible while it drives.
-    game.camera.follow(chassis);
+    gameRef.camera.follow(chassis);
 
     for (final offset in [Vector2(-1.6, 0.9), Vector2(1.6, 0.9)]) {
       final wheel = Wheel(chassis.body.position + offset);

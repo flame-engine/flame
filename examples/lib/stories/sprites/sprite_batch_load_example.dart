@@ -19,7 +19,7 @@ class SpriteBatchLoadExample extends FlameGame {
 }
 
 class MySpriteBatchComponent extends SpriteBatchComponent
-    with HasGameReference<SpriteBatchLoadExample> {
+    with HasGameRef<SpriteBatchLoadExample> {
   MySpriteBatchComponent()
     : super(
         blendMode: BlendMode.srcOver,
@@ -27,7 +27,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
 
   @override
   Future<void> onLoad() async {
-    final spriteBatch = await game.loadSpriteBatch('assets/images/boom.png');
+    final spriteBatch = await gameRef.loadSpriteBatch('assets/images/boom.png');
     this.spriteBatch = spriteBatch;
 
     spriteBatch.add(
@@ -44,7 +44,7 @@ class MySpriteBatchComponent extends SpriteBatchComponent
       color: Colors.redAccent,
     );
 
-    final size = game.size;
+    final size = gameRef.size;
     const num = 100;
     final r = Random();
     for (var i = 0; i < num; ++i) {

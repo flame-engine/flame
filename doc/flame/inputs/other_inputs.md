@@ -46,7 +46,7 @@ class MyGame extends FlameGame {
   }
 }
 
-class Player extends SpriteComponent with HasGameReference {
+class Player extends SpriteComponent with HasGameRef {
   Player(this.joystick)
     : super(
         anchor: Anchor.center,
@@ -60,8 +60,8 @@ class Player extends SpriteComponent with HasGameReference {
 
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('assets/images/layers/player.png');
-    position = game.size / 2;
+    sprite = await gameRef.loadSprite('assets/images/layers/player.png');
+    position = gameRef.size / 2;
   }
 
   @override

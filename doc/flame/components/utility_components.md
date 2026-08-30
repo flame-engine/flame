@@ -237,11 +237,11 @@ class Player extends SpriteComponent with Notifier {
 Then our hud component could look like:
 
 ```dart
-class Hud extends PositionComponent with HasGameReference {
+class Hud extends PositionComponent with HasGameRef {
 
   @override
   void onLoad() {
-    final playerNotifier = game.componentsNotifier<Player>()
+    final playerNotifier = gameRef.componentsNotifier<Player>()
         ..addListener(() {
           final player = playerNotifier.single;
           if (player != null) {

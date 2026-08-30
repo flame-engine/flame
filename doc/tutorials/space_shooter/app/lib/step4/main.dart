@@ -47,7 +47,7 @@ class SpaceShooterGame extends FlameGame with PanDetector {
 }
 
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Player()
     : super(
         size: Vector2(100, 150),
@@ -60,7 +60,7 @@ class Player extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -69,7 +69,7 @@ class Player extends SpriteAnimationComponent
       ),
     );
 
-    position = game.size / 2;
+    position = gameRef.size / 2;
 
     _bulletSpawner = SpawnComponent(
       period: 0.2,
@@ -87,7 +87,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    game.add(_bulletSpawner);
+    gameRef.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {
@@ -104,7 +104,7 @@ class Player extends SpriteAnimationComponent
 }
 
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -116,7 +116,7 @@ class Bullet extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,

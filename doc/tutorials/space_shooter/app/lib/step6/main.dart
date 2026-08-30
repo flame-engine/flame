@@ -60,7 +60,7 @@ class SpaceShooterGame extends FlameGame
 }
 
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Player()
     : super(
         size: Vector2(100, 150),
@@ -73,7 +73,7 @@ class Player extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -82,7 +82,7 @@ class Player extends SpriteAnimationComponent
       ),
     );
 
-    position = game.size / 2;
+    position = gameRef.size / 2;
 
     _bulletSpawner = SpawnComponent(
       period: 0.2,
@@ -100,7 +100,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    game.add(_bulletSpawner);
+    gameRef.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {
@@ -117,7 +117,7 @@ class Player extends SpriteAnimationComponent
 }
 
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -129,7 +129,7 @@ class Bullet extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -158,7 +158,7 @@ class Bullet extends SpriteAnimationComponent
 }
 
 class Enemy extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
   Enemy({
     super.position,
   }) : super(
@@ -172,7 +172,7 @@ class Enemy extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/enemy.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -190,7 +190,7 @@ class Enemy extends SpriteAnimationComponent
 
     position.y += dt * 250;
 
-    if (position.y > game.size.y) {
+    if (position.y > gameRef.size.y) {
       removeFromParent();
     }
   }
@@ -205,13 +205,13 @@ class Enemy extends SpriteAnimationComponent
     if (other is Bullet) {
       removeFromParent();
       other.removeFromParent();
-      game.add(Explosion(position: position));
+      gameRef.add(Explosion(position: position));
     }
   }
 }
 
 class Explosion extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Explosion({
     super.position,
   }) : super(
@@ -224,7 +224,7 @@ class Explosion extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/explosion.png',
       SpriteAnimationData.sequenced(
         amount: 6,

@@ -22,13 +22,13 @@ class RevoluteJointWithMotorExample extends Forge2DExampleGame {
 }
 
 class RevoluteJointWithMotorWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   final random = Random();
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final boundaries = createBoundaries(game);
+    final boundaries = createBoundaries(gameRef);
     addAll(boundaries);
     final center = Vector2.zero();
     add(CircleShuffler(center));

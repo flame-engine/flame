@@ -16,8 +16,7 @@ import 'package:flutter/material.dart';
 
 import '../ember_quest.dart';
 
-class Star extends SpriteComponent
-    with HasGameReference<EmberQuestGame> {
+class Star extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -30,11 +29,11 @@ class Star extends SpriteComponent
 
   @override
   void onLoad() {
-    final starImage = game.images.fromCache('assets/images/star.png');
+    final starImage = gameRef.images.fromCache('assets/images/star.png');
     sprite = Sprite(starImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset + (size.x / 2),
-      game.size.y - (gridPosition.y * size.y) - (size.y / 2),
+      gameRef.size.y - (gridPosition.y * size.y) - (size.y / 2),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
@@ -52,7 +51,7 @@ class Star extends SpriteComponent
 
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -108,7 +107,7 @@ import 'package:flame/effects.dart';
 import '../ember_quest.dart';
 
 class WaterEnemy extends SpriteAnimationComponent
-    with HasGameReference<EmberQuestGame> {
+    with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -122,7 +121,7 @@ class WaterEnemy extends SpriteAnimationComponent
   @override
   void onLoad() {
     animation = SpriteAnimation.fromFrameData(
-      game.images.fromCache('assets/images/water_enemy.png'),
+      gameRef.images.fromCache('assets/images/water_enemy.png'),
       SpriteAnimationData.sequenced(
         amount: 2,
         textureSize: Vector2.all(16),
@@ -131,7 +130,7 @@ class WaterEnemy extends SpriteAnimationComponent
     );
     position = Vector2(
       (gridPosition.x * size.x) + xOffset,
-      game.size.y - (gridPosition.y * size.y),
+      gameRef.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
     add(
@@ -148,7 +147,7 @@ class WaterEnemy extends SpriteAnimationComponent
 
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -202,7 +201,7 @@ import 'package:flutter/material.dart';
 
 import '../ember_quest.dart';
 
-class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> {
+class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -215,18 +214,18 @@ class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> 
 
   @override
   void onLoad() {
-    final groundImage = game.images.fromCache('assets/images/ground.png');
+    final groundImage = gameRef.images.fromCache('assets/images/ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
       gridPosition.x * size.x + xOffset,
-      game.size.y - gridPosition.y * size.y,
+      gameRef.size.y - gridPosition.y * size.y,
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     super.update(dt);
   }
@@ -250,9 +249,9 @@ final UniqueKey _blockKey = UniqueKey();
 Now in your Ground Block's `onLoad` method, add the following at the end of the method:
 
 ```dart
-if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
-  game.lastBlockKey = _blockKey;
-  game.lastBlockXPosition = position.x + size.x;
+if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+  gameRef.lastBlockKey = _blockKey;
+  gameRef.lastBlockXPosition = position.x + size.x;
 }
 ```
 
@@ -266,12 +265,12 @@ Now we can address updating this information, so in the `update` method, add the
 ```dart
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
 
     if (gridPosition.x == 9) {
-      if (game.lastBlockKey == _blockKey) {
-        game.lastBlockXPosition = position.x + size.x - 10;
+      if (gameRef.lastBlockKey == _blockKey) {
+        gameRef.lastBlockXPosition = position.x + size.x - 10;
       }
     }
 
@@ -279,8 +278,8 @@ Now we can address updating this information, so in the `update` method, add the
   }
 ```
 
-`game.lastBlockXPosition` is being updated by the block's current x-axis position plus its width -
-10 pixels. This will cause a little overlap, but due to the potential variance in `dt` this
+`gameRef.lastBlockXPosition` is being updated by the block's current x-axis position plus its
+width - 10 pixels. This will cause a little overlap, but due to the potential variance in `dt` this
 prevents gaps in the map as it loads while a player is moving.
 
 
@@ -301,9 +300,9 @@ the other block we just added:
 if (position.x < -size.x) {
   removeFromParent();
   if (gridPosition.x == 0) {
-    game.loadGameSegments(
+    gameRef.loadGameSegments(
       Random().nextInt(segments.length),
-      game.lastBlockXPosition,
+      gameRef.lastBlockXPosition,
     );
   }
 }
@@ -332,7 +331,7 @@ import 'package:flutter/material.dart';
 import '../ember_quest.dart';
 import '../managers/segment_manager.dart';
 
-class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> {
+class GroundBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
   
@@ -346,36 +345,36 @@ class GroundBlock extends SpriteComponent with HasGameReference<EmberQuestGame> 
 
   @override
   void onLoad() {
-    final groundImage = game.images.fromCache('assets/images/ground.png');
+    final groundImage = gameRef.images.fromCache('assets/images/ground.png');
     sprite = Sprite(groundImage);
     position = Vector2(
       gridPosition.x * size.x + xOffset,
-      game.size.y - gridPosition.y * size.y,
+      gameRef.size.y - gridPosition.y * size.y,
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
-    if (gridPosition.x == 9 && position.x > game.lastBlockXPosition) {
-      game.lastBlockKey = _blockKey;
-      game.lastBlockXPosition = position.x + size.x;
+    if (gridPosition.x == 9 && position.x > gameRef.lastBlockXPosition) {
+      gameRef.lastBlockKey = _blockKey;
+      gameRef.lastBlockXPosition = position.x + size.x;
     }
   }
 
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
 
     if (position.x < -size.x) {
       removeFromParent();
       if (gridPosition.x == 0) {
-        game.loadGameSegments(
+        gameRef.loadGameSegments(
           Random().nextInt(segments.length),
-          game.lastBlockXPosition,
+          gameRef.lastBlockXPosition,
         );
       }
     }
     if (gridPosition.x == 9) {
-      if (game.lastBlockKey == _blockKey) {
-        game.lastBlockXPosition = position.x + size.x - 10;
+      if (gameRef.lastBlockKey == _blockKey) {
+        gameRef.lastBlockXPosition = position.x + size.x - 10;
       }
     }
 

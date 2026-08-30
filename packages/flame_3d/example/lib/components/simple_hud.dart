@@ -21,7 +21,7 @@ final _style = TextStyle(
   ],
 );
 
-class SimpleHud extends Component with HasGameReference<ExampleGame3D> {
+class SimpleHud extends Component with HasGameRef<ExampleGame3D> {
   SimpleHud() : super(children: [FpsComponent()]);
 
   String get fps =>
@@ -35,7 +35,7 @@ class SimpleHud extends Component with HasGameReference<ExampleGame3D> {
 
   @override
   void render(Canvas canvas) {
-    final CameraComponent3D(:position, :target, :up) = game.camera;
+    final CameraComponent3D(:position, :target, :up) = gameRef.camera;
 
     _textLeft.render(
       canvas,
@@ -53,7 +53,7 @@ Camera controls:
     _textCenter.render(
       canvas,
       'Welcome to the 3D world',
-      Vector2(game.size.x / 2, game.size.y - 8),
+      Vector2(gameRef.size.x / 2, gameRef.size.y - 8),
       anchor: Anchor.bottomCenter,
     );
 
@@ -61,14 +61,14 @@ Camera controls:
       canvas,
       '''
 FPS: $fps
-Projection: ${game.camera.projection.name}
-Draw: ${game.world.context.drawCount}
+Projection: ${gameRef.camera.projection.name}
+Draw: ${gameRef.world.context.drawCount}
 
 Position: ${position.x.toStringAsFixed(2)}, ${position.y.toStringAsFixed(2)}, ${position.z.toStringAsFixed(2)}
 Target: ${target.x.toStringAsFixed(2)}, ${target.y.toStringAsFixed(2)}, ${target.z.toStringAsFixed(2)}
 Up: ${up.x.toStringAsFixed(2)}, ${up.y.toStringAsFixed(2)}, ${up.z.toStringAsFixed(2)}
 ''',
-      Vector2(game.size.x - 8, 8),
+      Vector2(gameRef.size.x - 8, 8),
       anchor: Anchor.topRight,
     );
   }

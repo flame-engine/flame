@@ -67,18 +67,15 @@ class StaticComponentsExample extends FlameGame with ScrollCallbacks {
 }
 
 class _StaticComponentWorld extends World
-    with
-        HasGameReference<StaticComponentsExample>,
-        TapCallbacks,
-        DoubleTapCallbacks {
+    with HasGameRef<StaticComponentsExample>, TapCallbacks, DoubleTapCallbacks {
   late SpriteComponent player;
   @override
   Future<void> onLoad() async {
-    final playerSprite = await game.loadSprite(
+    final playerSprite = await gameRef.loadSprite(
       'assets/images/layers/player.png',
     );
-    final flameSprite = await game.loadSprite('assets/images/flame.png');
-    final visibleSize = game.camera.visibleWorldRect.toVector2();
+    final flameSprite = await gameRef.loadSprite('assets/images/flame.png');
+    final visibleSize = gameRef.camera.visibleWorldRect.toVector2();
     add(player = SpriteComponent(sprite: playerSprite, anchor: Anchor.center));
     addAll([
       SpriteComponent(
@@ -106,7 +103,7 @@ class _StaticComponentWorld extends World
         size: Vector2(20, 30),
       ),
     ]);
-    game.camera.follow(player, maxSpeed: 100);
+    gameRef.camera.follow(player, maxSpeed: 100);
   }
 
   @override
@@ -119,18 +116,18 @@ class _StaticComponentWorld extends World
         EffectController(
           duration: moveDuration,
         ),
-        onComplete: () => game.myParallax.parallax?.baseVelocity.setZero(),
+        onComplete: () => gameRef.myParallax.parallax?.baseVelocity.setZero(),
       ),
     );
     final moveSpeedX = deltaX / moveDuration;
-    game.myParallax.parallax?.baseVelocity.setValues(moveSpeedX, 0);
+    gameRef.myParallax.parallax?.baseVelocity.setValues(moveSpeedX, 0);
   }
 }
 
 class MyParallaxComponent extends ParallaxComponent {
   @override
   Future<void> onLoad() async {
-    parallax = await game.loadParallax(
+    parallax = await gameRef.loadParallax(
       [
         ParallaxImageData('assets/images/parallax/bg.png'),
         ParallaxImageData('assets/images/parallax/mountain-far.png'),

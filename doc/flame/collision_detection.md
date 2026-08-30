@@ -148,7 +148,7 @@ Finally, one adds a listener to the `onLoad` method of the `PositionComponent` t
 which will resolve how the collisions should be dealt with:
 
 ```dart
-(game as HasCollisionDetection)
+(gameRef as HasCollisionDetection)
     .collisionDetection
     .collisionsCompletedNotifier
     .addListener(() {
@@ -471,7 +471,7 @@ range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class,
-or with the `HasGameReference` mixin from other components as well.
+or with the `HasGameRef` mixin from other components as well.
 
 Example:
 

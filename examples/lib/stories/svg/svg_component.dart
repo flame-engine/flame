@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_svg/flame_svg.dart';
 
-class Player extends SvgComponent with HasGameReference<SvgComponentExample> {
+class Player extends SvgComponent with HasGameRef<SvgComponentExample> {
   Player() : super(priority: 3, size: Vector2(106, 146), anchor: Anchor.center);
 
   Vector2? destination;
@@ -14,7 +14,7 @@ class Player extends SvgComponent with HasGameReference<SvgComponentExample> {
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await game.loadSvg('assets/svgs/happy_player.svg');
+    svg = await gameRef.loadSvg('assets/svgs/happy_player.svg');
   }
 
   @override
@@ -33,8 +33,7 @@ class Player extends SvgComponent with HasGameReference<SvgComponentExample> {
   }
 }
 
-class Background extends SvgComponent
-    with HasGameReference<SvgComponentExample> {
+class Background extends SvgComponent with HasGameRef<SvgComponentExample> {
   Background()
     : super(
         priority: 1,
@@ -46,11 +45,11 @@ class Background extends SvgComponent
   Future<void>? onLoad() async {
     await super.onLoad();
 
-    svg = await game.loadSvg('assets/svgs/checkerboard.svg');
+    svg = await gameRef.loadSvg('assets/svgs/checkerboard.svg');
   }
 }
 
-class Balloons extends SvgComponent with HasGameReference<SvgComponentExample> {
+class Balloons extends SvgComponent with HasGameRef<SvgComponentExample> {
   Balloons({super.position})
     : super(
         priority: 2,
@@ -64,7 +63,7 @@ class Balloons extends SvgComponent with HasGameReference<SvgComponentExample> {
 
     final color = Random().nextBool() ? 'red' : 'green';
 
-    svg = await game.loadSvg('assets/svgs/${color}_balloons.svg');
+    svg = await gameRef.loadSvg('assets/svgs/${color}_balloons.svg');
   }
 }
 

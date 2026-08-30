@@ -36,7 +36,7 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
   @mustCallSuper
   void onTapDown(TapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (TapCallbacks component) {
         _record.add(TaggedComponent(event.pointerId, component));
         component.onTapDown(event);
@@ -53,7 +53,7 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
   @mustCallSuper
   void onLongTapDown(TapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (TapCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
         if (_record.contains(record)) {
@@ -78,7 +78,7 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
   @mustCallSuper
   void onTapUp(TapUpEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (TapCallbacks component) {
         if (_record.remove(TaggedComponent(event.pointerId, component))) {
           component.onTapUp(event);
@@ -131,19 +131,19 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
   @visibleForTesting
   @override
   void handleTapDown(int pointerId, TapDownDetails details) {
-    onTapDown(TapDownEvent(pointerId, game, details));
+    onTapDown(TapDownEvent(pointerId, gameRef, details));
   }
 
   @internal
   @override
   void handleTapUp(int pointerId, TapUpDetails details) {
-    onTapUp(TapUpEvent(pointerId, game, details));
+    onTapUp(TapUpEvent(pointerId, gameRef, details));
   }
 
   @internal
   @override
   void handleLongTapDown(int pointerId, TapDownDetails details) {
-    onLongTapDown(TapDownEvent(pointerId, game, details));
+    onLongTapDown(TapDownEvent(pointerId, gameRef, details));
   }
 
   //#endregion
@@ -158,7 +158,7 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
 
   @override
   void onMount() {
-    game.gestureDetectors.register<MultiTapGestureRecognizer>(
+    gameRef.gestureDetectors.register<MultiTapGestureRecognizer>(
       () => MultiTapGestureRecognizer(
         allowedButtonsFilter: (buttons) => buttons == kPrimaryButton,
       ),
@@ -177,10 +177,10 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
 
   @override
   void onRemove() {
-    game.gestureDetectors.unregister<MultiTapGestureRecognizer>();
-    Dispatcher.removeDispatcher(game, const MultiTapDispatcherKey());
+    gameRef.gestureDetectors.unregister<MultiTapGestureRecognizer>();
+    Dispatcher.removeDispatcher(gameRef, const MultiTapDispatcherKey());
   }
 
   @override
-  GameRenderBox get renderBox => game.renderBox;
+  GameRenderBox get renderBox => gameRef.renderBox;
 }

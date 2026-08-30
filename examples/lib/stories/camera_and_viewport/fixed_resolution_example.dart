@@ -65,12 +65,12 @@ class FixedResolutionExample extends FlameGame with ScrollCallbacks {
 }
 
 class FixedResolutionWorld extends World
-    with HasGameReference, TapCallbacks, DoubleTapCallbacks {
+    with HasGameRef, TapCallbacks, DoubleTapCallbacks {
   final red = BasicPalette.red.paint();
 
   @override
   Future<void> onLoad() async {
-    final flameSprite = await game.loadSprite(
+    final flameSprite = await gameRef.loadSprite(
       'assets/images/layers/player.png',
     );
 
@@ -96,8 +96,8 @@ class FixedResolutionWorld extends World
 
   @override
   void onDoubleTapDown(DoubleTapDownEvent event) {
-    final currentZoom = game.camera.viewfinder.zoom;
-    game.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
+    final currentZoom = gameRef.camera.viewfinder.zoom;
+    gameRef.camera.viewfinder.zoom = currentZoom > 1 ? 1 : 2;
   }
 }
 
