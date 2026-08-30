@@ -12,14 +12,14 @@ part of 'component.dart';
 /// Performance characteristics:
 ///  - iteration: O(n) over the backing list, without any allocations on the
 ///    internal engine paths;
-///  - [add]: O(1) when the component sorts at or after the current last
+///  - adding: O(1) when the component sorts at or after the current last
 ///    element, which is the common case since children are usually added with
 ///    the default priority or in non-decreasing priority order, and O(n) when
 ///    a lower priority forces a mid-list insertion. Additions made through
 ///    [Component.add] on a mounted parent are deferred to the lifecycle queue
 ///    and applied in a batch at the start of the next tick, but each one is
 ///    still an individual insertion into this list;
-///  - [remove] and [contains]: O(1), using the index that is stored on the
+///  - removing and [contains]: O(1), using the index that is stored on the
 ///    component itself;
 ///  - [rebalance] (after priority changes): O(n) when the list turns out to
 ///    still be sorted, otherwise O(n log n) with a stable sort.
@@ -173,10 +173,9 @@ class ComponentList extends Iterable<Component> {
   /// Adds [component] to this list, keeping the priority ordering; returns
   /// whether the component was added (`false` if it already was in the list).
   ///
-  /// This is internal machinery: adding a component here does not make it go
-  /// through the component lifecycle. Use [Component.add] instead.
-  @internal
-  bool add(Component component) {
+  /// Adding a component here does not make it go through the component
+  /// lifecycle, which is why this is only reachable from [Component.add].
+  bool _add(Component component) {
     if (identical(component._containerList, this)) {
       return false;
     }
@@ -233,10 +232,9 @@ class ComponentList extends Iterable<Component> {
 
   /// Removes [component] from this list; returns whether it was present.
   ///
-  /// This is internal machinery: removing a component here does not make it
-  /// go through the component lifecycle. Use [Component.remove] instead.
-  @internal
-  bool remove(Component component) {
+  /// Removing a component here does not make it go through the component
+  /// lifecycle, which is why this is only reachable from [Component.remove].
+  bool _remove(Component component) {
     if (!identical(component._containerList, this)) {
       return false;
     }
@@ -267,11 +265,10 @@ class ComponentList extends Iterable<Component> {
 
   /// Removes all elements from this list.
   ///
-  /// This is internal machinery: clearing this list does not make the
-  /// components go through the component lifecycle. Use [Component.removeAll]
-  /// instead.
-  @internal
-  void clear() {
+  /// Clearing this list does not make the components go through the
+  /// component lifecycle, which is why this is only reachable from
+  /// [Component.removeAll].
+  void _clear() {
     final elements = _elements;
     for (final element in elements) {
       if (element != null) {

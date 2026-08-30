@@ -313,16 +313,12 @@ class Component {
   /// list may be deferred to the lifecycle queue, and on removal the
   /// component leaves the list before [_parent] is cleared. Together with
   /// [_containerIndex] this is what makes [ComponentList.contains] and
-  /// [ComponentList.remove] constant time.
+  /// removals constant time.
   ComponentList? _containerList;
 
   /// This component's index within [_containerList]'s backing list, or -1
   /// when the component is not in any list. Maintained by [ComponentList].
   int _containerIndex = -1;
-
-  /// This field should be used internally for functionality when you need to
-  /// make sure that the component set is created if it doesn't already exist.
-  ComponentList get _internalChildren => _children ??= createComponentList();
 
   /// Restores the priority ordering of the [children], after one or more of
   /// them have changed their [priority].
@@ -735,9 +731,9 @@ class Component {
   void _addChild(Component child) {
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
-      child._parent?._internalChildren.remove(child);
+      child._parent?.children._remove(child);
       child._parent = this;
-      _internalChildren.add(child);
+      children._add(child);
     } else if (child._parent != null) {
       if (child.isRemoving) {
         game.dequeueRemove(child);
@@ -750,7 +746,7 @@ class Component {
     } else {
       child._parent = this;
       // This will be reconciled during the mounting stage
-      _internalChildren.add(child);
+      children._add(child);
     }
     if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
       child._startLoading();
@@ -807,11 +803,11 @@ class Component {
         // already marked as removed during ancestor removal propagation.
         // The child is now being explicitly removed by user code (e.g.
         // via removeAll(children) in onRemove), so detach it.
-        _internalChildren.remove(child);
+        children._remove(child);
         child._parent = null;
       }
     } else {
-      _children?.remove(child);
+      _children?._remove(child);
       child._parent = null;
     }
   }
@@ -965,7 +961,7 @@ class Component {
       // the rest of the queue forever. Drop the event and detach the component
       // from the parent it never made it into.
       _parent = null;
-      parent._children?.remove(this);
+      parent._children?._remove(this);
       return LifecycleEventStatus.done;
     }
     if (parent.isMounted && isLoaded) {
@@ -979,7 +975,7 @@ class Component {
         // This case happens when the child is added to a parent that is being
         // removed in the same tick.
         _parent = parent;
-        parent._internalChildren.add(this);
+        parent.children._add(this);
         return LifecycleEventStatus.done;
       }
       return LifecycleEventStatus.block;
@@ -989,7 +985,7 @@ class Component {
   @internal
   LifecycleEventStatus handleLifecycleEventRemove(Component parent) {
     if (_parent == null) {
-      parent._children?.remove(this);
+      parent._children?._remove(this);
     } else {
       _remove(parent);
       assert(_parent == null);
@@ -1129,7 +1125,7 @@ class Component {
     _setMountedBit();
     _mountCompleter?.complete();
     _mountCompleter = null;
-    _parent!._internalChildren.add(this);
+    _parent!.children._add(this);
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
@@ -1157,7 +1153,7 @@ class Component {
     if (_children != null && _children!.isNotEmpty) {
       assert(_tmpChildren.isEmpty);
       _tmpChildren.addAll(_children!);
-      _children!.clear();
+      _children!._clear();
       assert(_tmpPendingRemoves.isEmpty);
       findGame()?.cancelQueuedRemoves(_tmpChildren, _tmpPendingRemoves);
       for (final child in _tmpChildren) {
@@ -1201,7 +1197,7 @@ class Component {
   }
 
   void _remove(Component parent) {
-    parent._internalChildren.remove(this);
+    parent.children._remove(this);
     for (final component in _collectDescendants()) {
       component
         ..onRemove()

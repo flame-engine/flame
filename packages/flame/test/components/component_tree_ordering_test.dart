@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:test/test.dart';
 
-/// Golden tests that pin the observable behavior of the component tree:
+/// Tests that pin the observable ordering behavior of the component tree:
 /// lifecycle event ordering in same-tick edge cases, hit-test order, and
 /// the ordering guarantees for children with equal priorities.
 ///
