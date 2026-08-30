@@ -228,9 +228,15 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// reported through its [Component.loaded] future, or the current [Zone] if
   /// nothing is awaiting that future.
   ///
-  /// Warning: awaiting on a game that was not fully connected will result in
-  /// an infinite loop. For example, this could occur if you run `x.add(y)` but
-  /// then forget to mount `x` into the game.
+  /// Warning: since every pending component has to finish loading and
+  /// mounting first, this future never completes if the tree can never
+  /// settle. That happens when a component in the tree has an [onLoad] that
+  /// never completes, for example one that awaits something which only
+  /// happens once the game is running. Such a component keeps the
+  /// `GameWidget` on the loading widget until it is removed from the tree.
+  /// Components that are added to a parent which is not itself part of the
+  /// game tree are not waited for, since they are not loaded until that
+  /// parent is added to the game.
   @override
   Future<void> ready() async {
     while (isProcessingLifecycleEvents) {
