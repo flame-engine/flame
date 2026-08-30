@@ -27,7 +27,7 @@ class GameStatsController extends Component
 }
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection, HasKeyboardHandlerComponents {
+    with DragCallbacks, HasCollisionDetection, HasKeyboardHandlerComponents {
   late PlayerComponent player;
 
   final GameStatsBloc statsBloc;
@@ -62,23 +62,26 @@ class SpaceShooterGame extends FlameGame
   }
 
   @override
-  void onPanStart(_) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     player.beginFire();
   }
 
   @override
-  void onPanEnd(_) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     player.stopFire();
   }
 
   @override
-  void onPanCancel() {
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     player.stopFire();
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global.x, info.delta.global.y);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta.x, event.localDelta.y);
   }
 
   void increaseScore() {

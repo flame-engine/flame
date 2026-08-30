@@ -429,8 +429,8 @@ to implement the `containsLocalPoint()` method yourself.
 Here is an example of how `componentsAtPoint()` can be used:
 
 ```dart
-void onDragUpdate(DragUpdateInfo info) {
-  game.componentsAtPoint(info.widget).forEach((component) {
+void onDragUpdate(DragUpdateEvent event) {
+  game.componentsAtPoint(event.canvasEndPosition).forEach((component) {
     if (component is DropTarget) {
       component.highlight();
     }

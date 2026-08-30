@@ -6,10 +6,9 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart' show OffsetExtension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/painting.dart';
 
-class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
+class CameraComponentExample extends FlameGame<AntWorld> with DragCallbacks {
   static const description = '''
     This example shows how a camera can be dynamically added into a game using
     a CameraComponent.
@@ -45,28 +44,27 @@ class CameraComponentExample extends FlameGame<AntWorld> with PanDetector {
   }
 
   @override
-  bool onPanStart(DragStartInfo info) {
-    _updateMagnifyingGlassPosition(info.eventPosition.widget);
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    _updateMagnifyingGlassPosition(event.canvasPosition);
     add(magnifyingGlass);
-    return false;
   }
 
   @override
-  bool onPanUpdate(DragUpdateInfo info) {
-    _updateMagnifyingGlassPosition(info.eventPosition.widget);
-    return false;
+  void onDragUpdate(DragUpdateEvent event) {
+    _updateMagnifyingGlassPosition(event.canvasEndPosition);
   }
 
   @override
-  bool onPanEnd(DragEndInfo info) {
-    onPanCancel();
-    return false;
-  }
-
-  @override
-  bool onPanCancel() {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     remove(magnifyingGlass);
-    return false;
+  }
+
+  @override
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
+    remove(magnifyingGlass);
   }
 
   void _updateMagnifyingGlassPosition(Vector2 point) {
