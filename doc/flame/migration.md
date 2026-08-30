@@ -25,8 +25,7 @@ class MyComponent extends Component with HasGameRef<MyGame> {
 }
 ```
 
-If you were already using `HasGameRef`, only the property name changes: replace `game` with
-`gameRef`. Code that used the old `gameRef` alias keeps working as is.
+If you were already using `HasGameRef`, no changes are required; its accessor remains `gameRef`.
 
 Setting the game instance explicitly (useful for mocking in tests) is done through `gameRef` as
 well, and the `findGame()` override behaves exactly as before.
