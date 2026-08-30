@@ -47,9 +47,9 @@ sprite1
       expect(atlasData.pages.first.textureFile, 'test.png');
       expect(atlasData.pages.first.texture, isNull);
       expect(atlasData.regions, hasLength(1));
-      // 'sprite1' becomes 'sprite' with index 1
-      expect(atlasData.regions.first.name, 'sprite');
-      expect(atlasData.regions.first.index, 1);
+      // Name is preserved as-is; index only comes from explicit 'index:' field
+      expect(atlasData.regions.first.name, 'sprite1');
+      expect(atlasData.regions.first.index, -1);
     });
 
     test('should load images later for already parsed atlas data', () async {
@@ -83,28 +83,31 @@ sprite1
       // 3. Create atlas from data
       final atlas = TexturePackerAtlas.fromAtlas(atlasData);
       expect(atlas.sprites, hasLength(1));
-      expect(atlas.sprites.first.region.name, 'sprite');
+      expect(atlas.sprites.first.region.name, 'sprite1');
     });
 
     test('getAnimation provides sequences easily', () async {
+      // Animations require explicit index: fields in the atlas
       const animationAtlas = '''
 anim.png
 size: 64, 64
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-walk_0
+walk
   rotate: false
   xy: 0, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
-walk_1
+  index: 0
+walk
   rotate: false
   xy: 32, 0
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
+  index: 1
 ''';
       final atlasFile = File('${tempDir.path}/anim.atlas');
       await atlasFile.writeAsString(animationAtlas);
