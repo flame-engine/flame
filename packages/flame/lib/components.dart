@@ -9,7 +9,8 @@ export 'src/collisions/hitboxes/screen_hitbox.dart';
 export 'src/components/clip_component.dart';
 export 'src/components/component_pool.dart';
 export 'src/components/components_notifier.dart';
-export 'src/components/core/component.dart';
+export 'src/components/core/component.dart'
+    hide ComponentTreeRoot, LifecycleEvent, LifecycleEventKind;
 export 'src/components/core/component_key.dart';
 export 'src/components/core/component_render_context.dart';
 export 'src/components/custom_painter_component.dart';

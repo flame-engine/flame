@@ -6,9 +6,11 @@ import 'priority_change_benchmark.dart' as priority_change;
 import 'render_components_benchmark.dart' as render_components;
 import 'type_query_benchmark.dart' as type_query;
 import 'update_components_benchmark.dart' as update_components;
+import 'update_workload_benchmark.dart' as update_workload;
 
 Future<void> main() async {
   await children_traversal.main();
+  await update_workload.main();
   await component_churn.main();
   await priority_change.main();
   await type_query.main();

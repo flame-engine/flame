@@ -695,3 +695,53 @@ if (game.isPaused) {
   game.isPaused = false;
 }
 ```
+
+
+### `children` is now a `ComponentList` instead of an `OrderedSet`
+
+The `ordered_set` package is no longer used; children live in a Flame-owned `ComponentList`. The
+iterable surface, `query<T>()`, and `register<T>()` are unchanged, so most code compiles as is. If
+you imported `package:ordered_set` types to annotate variables, use `ComponentList` (from
+`package:flame/components.dart`) instead:
+
+```dart
+// Before
+import 'package:ordered_set/ordered_set.dart';
+OrderedSet<Component> children = component.children;
+
+// After
+ComponentList children = component.children;
+```
+
+Other changes to be aware of:
+
+- `children.reversed()` is now a getter: `children.reversed`.
+- `Component.strictQueryMode` is removed. Strict mode is off by default; to enable it for a
+  component, override `createComponentList()` to return `ComponentList(strictMode: true)`.
+- `query<T>()` results are now always in priority order.
+- Removing components while iterating `children` is allowed; reordering the list while iterating
+  it throws `ConcurrentModificationError`.
+
+
+### `Component.childrenFactory` is removed
+
+The global children-container factory is gone. Override `createComponentList()` on the component
+instead. The constructor accepts an optional `Comparator<Component>` that replaces priority
+ordering for that parent, which gives custom orderings such as y-sort a supported home:
+
+```dart
+// Before
+Component.childrenFactory = () => OrderedSet.mapping<num, Component>((c) => c.priority);
+
+// After
+class YSortedWorld extends World {
+  @override
+  ComponentList createComponentList() {
+    return ComponentList(
+      comparator: (a, b) => (a as PositionComponent)
+          .position.y
+          .compareTo((b as PositionComponent).position.y),
+    );
+  }
+}
+```

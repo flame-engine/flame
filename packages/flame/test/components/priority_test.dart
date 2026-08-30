@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:ordered_set/mapping_ordered_set.dart';
-import 'package:ordered_set/ordered_set.dart';
 import 'package:test/test.dart';
 
 import '../custom_component.dart';
@@ -261,18 +259,6 @@ void main() {
   });
 }
 
-class _SpyComponentSet extends MappingOrderedSet<num, Component> {
-  int callCount = 0;
-
-  _SpyComponentSet() : super((e) => e.priority);
-
-  @override
-  void rebalanceAll() {
-    callCount++;
-    super.rebalanceAll();
-  }
-}
-
 class _PriorityComponent extends Component {
   _PriorityComponent(int priority) : super(priority: priority);
 }
@@ -280,12 +266,16 @@ class _PriorityComponent extends Component {
 class _ParentWithReorderSpy extends Component {
   _ParentWithReorderSpy(int priority) : super(priority: priority);
 
+  int callCount = 0;
+
   @override
-  OrderedSet<Component> createComponentSet() => _SpyComponentSet();
+  void rebalanceChildren() {
+    callCount++;
+    super.rebalanceChildren();
+  }
 
   void assertCalled(int n) {
-    final componentSet = children as _SpyComponentSet;
-    expect(componentSet.callCount, n);
-    componentSet.callCount = 0;
+    expect(callCount, n);
+    callCount = 0;
   }
 }

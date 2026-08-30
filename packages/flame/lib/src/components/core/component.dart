@@ -6,12 +6,13 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/cache/value_cache.dart';
 import 'package:flame/src/camera/viewport.dart';
-import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/core/recycled_queue.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flutter/painting.dart';
 import 'package:meta/meta.dart';
-import 'package:ordered_set/ordered_set.dart';
-import 'package:ordered_set/read_only_ordered_set.dart';
+
+part 'component_list.dart';
+part 'component_tree_root.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///
@@ -302,53 +303,58 @@ class Component {
   ///
   /// This makes it possible to have lighter components that don't have any
   /// children.
-  OrderedSet<Component>? _children;
+  ComponentList? _children;
 
-  /// This field should be used internally for functionality when you need to
-  /// make sure that the component set is created if it doesn't already exist.
-  OrderedSet<Component> get _internalChildren =>
-      _children ??= createComponentSet();
+  /// The [ComponentList] that physically stores this component right now, if
+  /// any. Maintained by [ComponentList].
+  ///
+  /// This is the same list as `_parent?._children` once the component has
+  /// actually been inserted, but the two are not always in sync: [_parent] is
+  /// assigned as soon as an add is requested, while the insertion into the
+  /// list may be deferred to the lifecycle queue, and on removal the
+  /// component leaves the list before [_parent] is cleared. Together with
+  /// [_containerIndex] this is what makes [ComponentList.contains] and
+  /// removals constant time.
+  ComponentList? _containerList;
 
-  void rebalanceChildren() {
-    if (_children != null) {
-      _children!.rebalanceAll();
-    }
-  }
+  /// This component's index within [_containerList]'s backing list, or -1
+  /// when the component is not in any list. Maintained by [ComponentList].
+  int _containerIndex = -1;
+
+  /// Restores the ordering of the [children] after values that their ordering
+  /// depends on have changed.
+  ///
+  /// Priority changes on mounted components trigger this automatically before
+  /// the next update pass. Call it yourself when a custom comparator (see
+  /// [createComponentList]) reads values that changed, but not while
+  /// iterating the [children], since reordering the list invalidates live
+  /// iterators.
+  void rebalanceChildren() => _children?._rebalance();
 
   /// The children components of this component.
   ///
-  /// This getter will automatically create the [OrderedSet] container within
+  /// This getter will automatically create the [ComponentList] container within
   /// the current object if it didn't exist before. Check the [hasChildren]
   /// property in order to avoid instantiating the children container.
-  ReadOnlyOrderedSet<Component> get children =>
-      _children ??= createComponentSet();
+  ComponentList get children => _children ??= createComponentList();
 
   /// Whether this component has any children.
   /// Avoids the creation of the children container if not necessary.
   bool get hasChildren => _children?.isNotEmpty ?? false;
 
-  /// `Component.childrenFactory` is the default method for creating children
-  /// containers within all components. Replace this method if you want to have
-  /// customized (non-default) [OrderedSet] instances in your project.
-  static OrderedSet<Component> Function() childrenFactory = () {
-    return OrderedSet.mapping(
-      _componentPriorityMapper,
-      strictMode: strictQueryMode,
-    );
-  };
-
-  /// Whether OrderedSet's strict mode mode should be enabled for all children
-  /// sets.
-  static bool strictQueryMode = false;
-
-  static num _componentPriorityMapper(Component component) {
-    return component.priority;
-  }
-
   /// This method creates the children container for the current component.
-  /// Override this method if you need to have a custom [OrderedSet] within
-  /// a particular class.
-  OrderedSet<Component> createComponentSet() => childrenFactory();
+  /// Override this method if you need a customized [ComponentList] for a
+  /// particular class, for example one with a custom ordering:
+  ///
+  /// ```dart
+  /// @override
+  /// ComponentList createComponentList() {
+  ///   return ComponentList(
+  ///     comparator: (a, b) => a.someValue.compareTo(b.someValue),
+  ///   );
+  /// }
+  /// ```
+  ComponentList createComponentList() => ComponentList();
 
   /// Returns the closest parent further up the hierarchy that satisfies type=T,
   /// or null if no such parent can be found.
@@ -368,7 +374,7 @@ class Component {
   /// Returns the last child that matches the given type [T], or null if there
   /// are no such children.
   T? lastChild<T extends Component>() {
-    return children.reversed().whereType<T>().firstOrNull;
+    return children.reversed.whereType<T>().firstOrNull;
   }
 
   /// An iterator producing this component's parent, then its parent's parent,
@@ -405,7 +411,7 @@ class Component {
       yield this;
     }
     if (hasChildren) {
-      final childrenIterable = reversed ? children.reversed() : children;
+      final childrenIterable = reversed ? children.reversed : children;
       for (final child in childrenIterable) {
         yield* child.descendants(includeSelf: true, reversed: reversed);
       }
@@ -432,7 +438,7 @@ class Component {
   }) {
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
+      for (final child in children.reversed) {
         if (!child.propagateToChildren(handler, includeSelf: true)) {
           return false;
         }
@@ -588,8 +594,11 @@ class Component {
     update(dt);
     final children = _children;
     if (children != null) {
-      for (final child in children) {
-        child.updateTree(dt);
+      // The update pass doubles as the safe point where tombstones left by
+      // removals since the last tick are compacted away.
+      children._compact();
+      for (final child in children._elements) {
+        child?.updateTree(dt);
       }
     }
   }
@@ -639,8 +648,10 @@ class Component {
     render(canvas);
     final children = _children;
     if (children != null) {
-      for (final child in children) {
-        renderChild(canvas, child);
+      for (final child in children._elements) {
+        if (child != null) {
+          renderChild(canvas, child);
+        }
       }
       afterChildrenRendered(canvas);
     }
@@ -727,22 +738,22 @@ class Component {
   void _addChild(Component child) {
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
-      child._parent?._internalChildren.remove(child);
+      child._parent?.children._remove(child);
       child._parent = this;
-      _internalChildren.add(child);
+      children._add(child);
     } else if (child._parent != null) {
       if (child.isRemoving) {
-        game.dequeueRemove(child);
+        game._dequeueRemove(child);
         child._clearRemovingBit();
       }
-      game.enqueueMove(child, this);
+      game._enqueueMove(child, this);
     } else if (isMounted && !child.isMounted) {
       child._parent = this;
-      game.enqueueAdd(child, this);
+      game._enqueueAdd(child, this);
     } else {
       child._parent = this;
       // This will be reconciled during the mounting stage
-      _internalChildren.add(child);
+      children._add(child);
     }
     if (!child.isLoaded && !child.isLoading && (game?.hasLayout ?? false)) {
       child._startLoading();
@@ -788,22 +799,22 @@ class Component {
       final root = findGame()!;
       if (child.isMounted || child.isMounting) {
         if (!child.isRemoving) {
-          root.enqueueRemove(child, this);
+          root._enqueueRemove(child, this);
           child._setRemovingBit();
         }
       } else if (!child.isRemoved) {
-        root.dequeueAdd(child, this);
+        root._dequeueAdd(child, this);
         child._parent = null;
       } else if (isRemoving) {
         // This parent is being removed from the tree, and the child was
         // already marked as removed during ancestor removal propagation.
         // The child is now being explicitly removed by user code (e.g.
         // via removeAll(children) in onRemove), so detach it.
-        _internalChildren.remove(child);
+        children._remove(child);
         child._parent = null;
       }
     } else {
-      _children?.remove(child);
+      _children?._remove(child);
       child._parent = null;
     }
   }
@@ -884,8 +895,9 @@ class Component {
     bool Function(Component, T) checkContains,
   ) sync* {
     nestedContexts?.add(locationContext);
-    if (_children != null) {
-      for (final child in _children!.reversed()) {
+    final children = _children;
+    if (children != null) {
+      for (final child in children.reversed) {
         if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }
@@ -940,7 +952,7 @@ class Component {
       final parent = _parent;
       final game = findGame();
       if (game != null && parent != null) {
-        game.enqueuePriorityChange(parent, this);
+        game._enqueuePriorityChange(parent, this);
       }
     }
   }
@@ -949,21 +961,20 @@ class Component {
 
   //#region Internal lifecycle management
 
-  @internal
-  LifecycleEventStatus handleLifecycleEventAdd(Component parent) {
+  _LifecycleEventStatus _handleLifecycleEventAdd(Component parent) {
     assert(!isMounted);
     if (_loadError != null) {
       // This component will never finish loading, so waiting for it would block
       // the rest of the queue forever. Drop the event and detach the component
       // from the parent it never made it into.
       _parent = null;
-      parent._children?.remove(this);
-      return LifecycleEventStatus.done;
+      parent._children?._remove(this);
+      return _LifecycleEventStatus.done;
     }
     if (parent.isMounted && isLoaded) {
       _parent ??= parent;
       _mount();
-      return LifecycleEventStatus.done;
+      return _LifecycleEventStatus.done;
     } else {
       if (parent.isMounted && !isLoading) {
         _startLoading();
@@ -971,26 +982,24 @@ class Component {
         // This case happens when the child is added to a parent that is being
         // removed in the same tick.
         _parent = parent;
-        parent._internalChildren.add(this);
-        return LifecycleEventStatus.done;
+        parent.children._add(this);
+        return _LifecycleEventStatus.done;
       }
-      return LifecycleEventStatus.block;
+      return _LifecycleEventStatus.block;
     }
   }
 
-  @internal
-  LifecycleEventStatus handleLifecycleEventRemove(Component parent) {
+  _LifecycleEventStatus _handleLifecycleEventRemove(Component parent) {
     if (_parent == null) {
-      parent._children?.remove(this);
+      parent._children?._remove(this);
     } else {
       _remove(parent);
       assert(_parent == null);
     }
-    return LifecycleEventStatus.done;
+    return _LifecycleEventStatus.done;
   }
 
-  @internal
-  LifecycleEventStatus handleLifecycleEventMove(Component newParent) {
+  _LifecycleEventStatus _handleLifecycleEventMove(Component newParent) {
     final parent = _parent;
     if (parent != null) {
       _remove(parent);
@@ -1001,7 +1010,7 @@ class Component {
     } else {
       newParent.add(this);
     }
-    return LifecycleEventStatus.done;
+    return _LifecycleEventStatus.done;
   }
 
   @mustCallSuper
@@ -1083,7 +1092,7 @@ class Component {
   /// same way an unawaited future's error would be.
   ///
   /// The component is left unloaded: it never mounts, and its pending add event
-  /// is dropped from the lifecycle queue by [handleLifecycleEventAdd].
+  /// is dropped from the lifecycle queue by [_handleLifecycleEventAdd].
   void _failLoading(Object error, StackTrace stackTrace) {
     _loadError = (error: error, stackTrace: stackTrace);
     final completer = _loadCompleter;
@@ -1121,7 +1130,7 @@ class Component {
     _setMountedBit();
     _mountCompleter?.complete();
     _mountCompleter = null;
-    _parent!._internalChildren.add(this);
+    _parent!.children._add(this);
     _reAddChildren();
     _parent!.onChildrenChanged(this, ChildrenChangeType.added);
     _clearMountingBit();
@@ -1149,9 +1158,9 @@ class Component {
     if (_children != null && _children!.isNotEmpty) {
       assert(_tmpChildren.isEmpty);
       _tmpChildren.addAll(_children!);
-      _children!.clear();
+      _children!._clear();
       assert(_tmpPendingRemoves.isEmpty);
-      findGame()?.cancelQueuedRemoves(_tmpChildren, _tmpPendingRemoves);
+      findGame()?._cancelQueuedRemoves(_tmpChildren, _tmpPendingRemoves);
       for (final child in _tmpChildren) {
         child._parent = null;
         if (_tmpPendingRemoves.contains(child)) {
@@ -1193,7 +1202,7 @@ class Component {
   }
 
   void _remove(Component parent) {
-    parent._internalChildren.remove(this);
+    parent.children._remove(this);
     for (final component in _collectDescendants()) {
       component
         ..onRemove()
@@ -1221,7 +1230,7 @@ class Component {
     out ??= [];
     final children = _children;
     if (children != null) {
-      for (final child in children.reversed()) {
+      for (final child in children.reversed) {
         child._collectDescendants(out);
       }
     }
