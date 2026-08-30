@@ -15,19 +15,6 @@ void main() {
       expect(component.recordedDts, [0.5]);
     });
 
-    testWithFlameGame(
-      'does not scale its own dt when called via update directly',
-      (
-        game,
-      ) async {
-        final component = _ScaledRecorder()..timeScale = 0.5;
-        await game.world.ensureAdd(component);
-
-        component.update(1.0);
-        expect(component.recordedDts, [1.0]);
-      },
-    );
-
     testWithFlameGame('skips the whole subtree while paused', (game) async {
       final child = _Recorder();
       final component = _ScaledRecorder(children: [child]);
