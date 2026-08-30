@@ -382,10 +382,11 @@ flameGame.findByKeyName('player');
 
 ### Querying child components
 
-The children that have been added to a component live in a `QueryableOrderedSet` called
+The children that have been added to a component live in a `ComponentList` called
 `children`. To query for a specific type of components in the set, the `query<T>()` function can be
-used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
-queries will have to be registered with `children.register` before a query can be used.
+used. By default `strictMode` is `false` in the children list, but if you enable it (by overriding
+`createComponentList` to return a `ComponentList(strictMode: true)`), then the queries will have to
+be registered with `children.register` before a query can be used.
 
 If you know at compile time that you later will run a query of a specific type it is recommended to
 register the query, no matter if the `strictMode` is set to `true` or `false`, since there are some
