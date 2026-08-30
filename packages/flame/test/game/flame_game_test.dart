@@ -144,7 +144,7 @@ void main() {
           await world.ensureAdd(component);
           expect(world.children.length, equals(1));
           component.removeFromParent();
-          game.updateTree(0);
+          game.update(0);
           expect(world.children.isEmpty, equals(isTrue));
         },
       );
