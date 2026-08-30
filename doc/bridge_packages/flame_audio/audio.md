@@ -15,8 +15,8 @@ The latest version can be found on [pub.dev](https://pub.dev/packages/flame_audi
 After installing the `flame_audio` package, you can add audio files in the assets section of your
 `pubspec.yaml` file. Make sure that the audio files exists in the paths that you provide.
 
-The default directory for `FlameAudio` is `assets/audio` (which can be changed by providing your own
-instance of `AudioCache`).
+Every path is given in full, exactly as declared in the `pubspec.yaml`, nothing is prepended.
+The examples below keep the audio files in `assets/audio`, but any directory works.
 
 For the examples below, your `pubspec.yaml` file needs to contain something like this:
 
@@ -105,7 +105,7 @@ await FlameAudio.audioCache.loadAll([
 Finally, you can use the `clear` method to remove a file that has been loaded into the cache:
 
 ```dart
-FlameAudio.audioCache.clear('explosion.mp3');
+FlameAudio.audioCache.clear('assets/audio/explosion.mp3');
 ```
 
 There is also a `clearCache` method, that clears the whole cache.

@@ -34,9 +34,9 @@ class BulletComponent extends SpriteAnimationComponent
 
   String _mapSpritePath() {
     return switch (weapon) {
-      Weapon.bullet => 'bullet.png',
-      Weapon.laser => 'laser.png',
-      Weapon.plasma => 'plasma.png',
+      Weapon.bullet => 'assets/images/bullet.png',
+      Weapon.laser => 'assets/images/laser.png',
+      Weapon.plasma => 'assets/images/plasma.png',
     };
   }
 

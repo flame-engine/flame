@@ -64,7 +64,7 @@ import 'package:flame_audio/flame_audio.dart';
 Future<void> loadSounds() async {
   // Create a pool with a specific Source
   AudioPool explosionSoundPool = await AudioPool.create(
-    source: AssetSource('explosion.mp3'),
+    source: AssetSource('assets/audio/explosion.mp3'),
     minPlayers: 1,
     maxPlayers: 2,
     audioCache: FlameAudio.audioCache, // Optional
@@ -82,7 +82,7 @@ import 'package:flame_audio/flame_audio.dart';
 
 Future<void> loadSounds() async {
   AudioPool explosionSoundPool = await AudioPool.createFromAsset(
-    path: 'explosion.mp3',
+    path: 'assets/audio/explosion.mp3',
     minPlayers: 1,
     maxPlayers: 2,
     audioCache: FlameAudio.audioCache, // Optional

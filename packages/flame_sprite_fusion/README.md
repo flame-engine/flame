@@ -47,8 +47,8 @@ and `assets/images/` directory of your project respectively.
 ```dart
 // Load the map.
 final map = await SpriteFusionTilemapComponent.load(
-  mapJsonFile: 'map.json',
-  spriteSheetFile: 'spritesheet.png'
+  mapJsonFile: 'assets/tiles/map.json',
+  spriteSheetFile: 'assets/images/spritesheet.png',
 );
 
 //Add it to the game world.

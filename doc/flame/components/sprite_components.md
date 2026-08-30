@@ -47,7 +47,7 @@ This will create a simple three frame animation using 3 different images:
 @override
 Future<void> onLoad() async {
   final sprites = [0, 1, 2]
-      .map((i) => Sprite.load('player_$i.png'));
+      .map((i) => Sprite.load('assets/images/player_$i.png'));
   final animation = SpriteAnimation.spriteList(
     await Future.wait(sprites),
     stepTime: 0.01,
