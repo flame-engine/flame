@@ -1,3 +1,11 @@
+## 2.0.0
+
+> Note: This release has breaking changes.
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([7d8e0012](https://github.com/flame-engine/flame/commit/7d8e0012b20340079a604eba9b762a7994a3838d))
+ - **BREAKING** **FEAT**: Remove integralSize property from class Svg, enforcing 'always true' behaviour ([#3969](https://github.com/flame-engine/flame/issues/3969)). ([9668c6db](https://github.com/flame-engine/flame/commit/9668c6db19ef9aece920c74bea5e37837005a189))
+
 ## 1.12.2
 
  - Update a dependency to the latest release.

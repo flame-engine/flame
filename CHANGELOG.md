@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2026-08-30
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`flame_svg` - `v2.0.0`](#flame_svg---v200)
+
+Packages with other changes:
+
+ - There are no other changes in this release.
+
+---
+
+#### `flame_svg` - `v2.0.0`
+
+ - **FIX**: Adapt to Flutter 3.47 ([#3995](https://github.com/flame-engine/flame/issues/3995)). ([3bf30496](https://github.com/flame-engine/flame/commit/3bf304968867101cdb17aa02927b205bf46f664f))
+ - **FEAT**: Prevent cache thrashing in class Svg by adding cache parameters/properties. ([#3956](https://github.com/flame-engine/flame/issues/3956)). ([7d8e0012](https://github.com/flame-engine/flame/commit/7d8e0012b20340079a604eba9b762a7994a3838d))
+ - **BREAKING** **FEAT**: Remove integralSize property from class Svg, enforcing 'always true' behaviour ([#3969](https://github.com/flame-engine/flame/issues/3969)). ([9668c6db](https://github.com/flame-engine/flame/commit/9668c6db19ef9aece920c74bea5e37837005a189))
+
+
 ## 2026-08-27
 
 ### Changes
