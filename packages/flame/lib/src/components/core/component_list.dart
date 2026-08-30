@@ -62,13 +62,8 @@ class ComponentList extends Iterable<Component> {
   /// dense list anyway).
   static const int _tombstoneCompactionThreshold = 16;
 
-  /// The per-type query caches, created by [register], keyed by type for
-  /// [query] lookups.
+  /// The per-type query caches, created by [register].
   Map<Type, _QueryCache<Component>>? _queries;
-
-  /// The same caches as [_queries], as a list, so that the add/remove hot
-  /// paths can iterate them without allocating a map-values iterator.
-  List<_QueryCache<Component>>? _queryCaches;
 
   /// A monotonically increasing counter, bumped on every membership or order
   /// change of any [ComponentList] (adds, removes, clears, reorders). The
@@ -180,7 +175,7 @@ class ComponentList extends Iterable<Component> {
     component._containerList = this;
     _length++;
     _structureVersion++;
-    final caches = _queryCaches;
+    final caches = _queries?.values;
     if (caches != null) {
       for (final cache in caches) {
         if (cache.check(component)) {
@@ -225,7 +220,7 @@ class ComponentList extends Iterable<Component> {
     _length--;
     _tombstones++;
     _structureVersion++;
-    final caches = _queryCaches;
+    final caches = _queries?.values;
     if (caches != null) {
       for (final cache in caches) {
         if (cache.check(component)) {
@@ -260,7 +255,7 @@ class ComponentList extends Iterable<Component> {
     _tombstones = 0;
     _shiftCount++;
     _structureVersion++;
-    final caches = _queryCaches;
+    final caches = _queries?.values;
     if (caches != null) {
       for (final cache in caches) {
         cache.data.clear();
@@ -303,7 +298,7 @@ class ComponentList extends Iterable<Component> {
     for (var i = 0; i < elements.length; i++) {
       elements[i]!._containerIndex = i;
     }
-    final caches = _queryCaches;
+    final caches = _queries?.values;
     if (caches != null) {
       for (final cache in caches) {
         cache.resort();
@@ -354,7 +349,6 @@ class ComponentList extends Iterable<Component> {
     }
     final cache = _QueryCache<C>(data);
     queries[C] = cache;
-    (_queryCaches ??= []).add(cache);
   }
 
   /// All elements of type [C], in priority order, in constant time.
