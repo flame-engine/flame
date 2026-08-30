@@ -30,7 +30,7 @@ class ShapeSpec {
 /// the [BodyComponent]'s body without having to create the definitions within
 /// the component.
 class BodyComponent<T extends Forge2DGame> extends Component
-    with HasGameReference<T>, HasPaint
+    with HasGameRef<T>, HasPaint
     implements
         CoordinateTransform,
         ReadOnlyPositionProvider,
@@ -116,7 +116,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    world = game.world;
+    world = gameRef.world;
     body = createBody();
     assert(() {
       _debugCheckBodyScale(this, body);
@@ -127,7 +127,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
   @override
   void onMount() {
     super.onMount();
-    world = game.world;
+    world = gameRef.world;
     if (!body.isValid) {
       // The body was destroyed when the component was removed, and since
       // onLoad only runs once it has to be recreated here for the component
@@ -138,7 +138,7 @@ class BodyComponent<T extends Forge2DGame> extends Component
   }
 
   late Forge2DWorld world;
-  CameraComponent get camera => game.camera;
+  CameraComponent get camera => gameRef.camera;
   Vector2 get center => body.worldCenterOfMass;
 
   @override

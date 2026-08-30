@@ -18,7 +18,7 @@ class MouseJointExample extends Forge2DExampleGame {
 }
 
 class MouseJointWorld extends Forge2DWorld
-    with DragCallbacks, HasGameReference<Forge2DGame> {
+    with DragCallbacks, HasGameRef<Forge2DGame> {
   late Ball ball;
   late Body groundBody;
   MouseJoint? mouseJoint;
@@ -27,7 +27,7 @@ class MouseJointWorld extends Forge2DWorld
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final boundaries = createBoundaries(game);
+    final boundaries = createBoundaries(gameRef);
     addAll(boundaries);
 
     groundBody = createBody(BodyDef());

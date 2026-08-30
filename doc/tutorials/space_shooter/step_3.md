@@ -28,7 +28,7 @@ simple, take a look at how the component will look like now:
 
 ```dart
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
 
   Player() : super(
     size: Vector2(100, 150),
@@ -39,7 +39,7 @@ class Player extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/player.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -48,7 +48,7 @@ class Player extends SpriteAnimationComponent
       ),
     );
 
-    position = game.size / 2;
+    position = gameRef.size / 2;
   }
 
   // Other methods omitted
@@ -59,7 +59,7 @@ So lets break down the changes:
 
 - First we changed our `Player` component to extend from `SpriteAnimationComponent` instead of
 `SpriteComponent`
-- In the `onLoad` method we are now using the `game.loadSpriteAnimation` helper instead of the
+- In the `onLoad` method we are now using the `gameRef.loadSpriteAnimation` helper instead of the
  `loadSprite` one, and setting the `animation` attribute with its returned value.
 
 The `SpriteAnimationData` class might look complicated at first glance, but it is actually quite

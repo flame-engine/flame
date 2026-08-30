@@ -3,8 +3,7 @@ import 'package:flame/components.dart';
 
 import '../ember_quest.dart';
 
-class PlatformBlock extends SpriteComponent
-    with HasGameReference<EmberQuestGame> {
+class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -17,20 +16,20 @@ class PlatformBlock extends SpriteComponent
 
   @override
   Future<void> onLoad() async {
-    final platformImage = game.images.fromCache('assets/images/block.png');
+    final platformImage = gameRef.images.fromCache('assets/images/block.png');
     sprite = Sprite(platformImage);
     position = Vector2(
       (gridPosition.x * size.x) + xOffset,
-      game.size.y - (gridPosition.y * size.y),
+      gameRef.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
   }
 
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
-    if (position.x < -size.x || game.health <= 0) {
+    if (position.x < -size.x || gameRef.health <= 0) {
       removeFromParent();
     }
     super.update(dt);

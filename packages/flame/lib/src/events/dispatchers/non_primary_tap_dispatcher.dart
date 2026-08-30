@@ -26,7 +26,7 @@ class NonPrimaryTapDispatcher extends Dispatcher<FlameGame> {
 
   void _onSecondaryTapDown(SecondaryTapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (SecondaryTapCallbacks component) {
         _secondaryComponents.add(component..onSecondaryTapDown(event));
       },
@@ -49,7 +49,7 @@ class NonPrimaryTapDispatcher extends Dispatcher<FlameGame> {
 
   void _onTertiaryTapDown(TertiaryTapDownEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (TertiaryTapCallbacks component) {
         _tertiaryComponents.add(component..onTertiaryTapDown(event));
       },
@@ -80,28 +80,28 @@ class NonPrimaryTapDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onMount() {
-    game.gestureDetectors.register(
+    gameRef.gestureDetectors.register(
       TapGestureRecognizer.new,
       (TapGestureRecognizer instance) {
         instance.onSecondaryTapDown = (details) =>
-            _onSecondaryTapDown(SecondaryTapDownEvent(game, details));
+            _onSecondaryTapDown(SecondaryTapDownEvent(gameRef, details));
         instance.onSecondaryTapCancel = () =>
             _onSecondaryTapCancel(SecondaryTapCancelEvent());
         instance.onSecondaryTapUp = (details) =>
-            _onSecondaryTapUp(SecondaryTapUpEvent(game, details));
+            _onSecondaryTapUp(SecondaryTapUpEvent(gameRef, details));
         instance.onTertiaryTapDown = (details) =>
-            _onTertiaryTapDown(TertiaryTapDownEvent(game, details));
+            _onTertiaryTapDown(TertiaryTapDownEvent(gameRef, details));
         instance.onTertiaryTapCancel = () =>
             _onTertiaryTapCancel(TertiaryTapCancelEvent());
         instance.onTertiaryTapUp = (details) =>
-            _onTertiaryTapUp(TertiaryTapUpEvent(game, details));
+            _onTertiaryTapUp(TertiaryTapUpEvent(gameRef, details));
       },
     );
   }
 
   @override
   void onRemove() {
-    game.gestureDetectors.unregister<TapGestureRecognizer>();
-    Dispatcher.removeDispatcher(game, const NonPrimaryTapDispatcherKey());
+    gameRef.gestureDetectors.unregister<TapGestureRecognizer>();
+    Dispatcher.removeDispatcher(gameRef, const NonPrimaryTapDispatcherKey());
   }
 }

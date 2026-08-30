@@ -20,13 +20,13 @@ class GameOverPanel extends Component {
   }
 }
 
-class GameOverText extends SpriteComponent with HasGameReference<TRexGame> {
+class GameOverText extends SpriteComponent with HasGameRef<TRexGame> {
   GameOverText() : super(size: Vector2(382, 25), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
     sprite = Sprite(
-      game.spriteImage,
+      gameRef.spriteImage,
       srcPosition: Vector2(955.0, 26.0),
       srcSize: size,
     );
@@ -40,13 +40,13 @@ class GameOverText extends SpriteComponent with HasGameReference<TRexGame> {
   }
 }
 
-class GameOverRestart extends SpriteComponent with HasGameReference<TRexGame> {
+class GameOverRestart extends SpriteComponent with HasGameRef<TRexGame> {
   GameOverRestart() : super(size: Vector2(72, 64), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
     sprite = Sprite(
-      game.spriteImage,
+      gameRef.spriteImage,
       srcPosition: Vector2.all(2.0),
       srcSize: size,
     );

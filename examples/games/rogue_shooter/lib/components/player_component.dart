@@ -6,14 +6,14 @@ import 'package:rogue_shooter/components/explosion_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
 class PlayerComponent extends SpriteAnimationComponent
-    with HasGameReference<RogueShooterGame>, CollisionCallbacks {
+    with HasGameRef<RogueShooterGame>, CollisionCallbacks {
   late TimerComponent bulletCreator;
 
   PlayerComponent() : super(size: Vector2(50, 75), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
-    position = game.size / 2;
+    position = gameRef.size / 2;
     add(CircleHitbox());
     add(
       bulletCreator = TimerComponent(
@@ -23,7 +23,7 @@ class PlayerComponent extends SpriteAnimationComponent
         onTick: _createBullet,
       ),
     );
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/rogue_shooter/player.png',
       SpriteAnimationData.sequenced(
         stepTime: 0.2,
@@ -35,7 +35,7 @@ class PlayerComponent extends SpriteAnimationComponent
 
   final _bulletAngles = [0.5, 0.3, 0.0, -0.5, -0.3];
   void _createBullet() {
-    game.bulletGroup.addAll(
+    gameRef.bulletGroup.addAll(
       _bulletAngles.map(
         (angle) => BulletComponent(
           position: position + Vector2(0, -size.y / 2),
@@ -54,7 +54,7 @@ class PlayerComponent extends SpriteAnimationComponent
   }
 
   void takeHit() {
-    game.explosionGroup.add(ExplosionComponent(position: position));
+    gameRef.explosionGroup.add(ExplosionComponent(position: position));
   }
 
   @override

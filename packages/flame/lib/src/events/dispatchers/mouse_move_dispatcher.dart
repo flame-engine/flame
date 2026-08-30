@@ -18,7 +18,7 @@ class MouseMoveDispatcher extends Dispatcher<FlameGame> {
     final updated = <TaggedComponent<MouseMoveCallbacks>>{};
 
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       deliverToAll: true,
       eventHandler: (MouseMoveCallbacks component) {
         final tagged = TaggedComponent(event.pointerId, component);
@@ -40,7 +40,7 @@ class MouseMoveDispatcher extends Dispatcher<FlameGame> {
   }
 
   void _handleMouseMove(flutter.PointerHoverEvent event) {
-    onMouseMove(MouseMoveEvent.fromPointerHoverEvent(game, event));
+    onMouseMove(MouseMoveEvent.fromPointerHoverEvent(gameRef, event));
   }
 
   /// Cancels the hover on every currently-hovered [HoverCallbacks] tracked by
@@ -70,15 +70,15 @@ class MouseMoveDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onMount() {
-    game.mouseDetector = _handleMouseMove;
-    game.mousePressDetector = _handlePointerPress;
+    gameRef.mouseDetector = _handleMouseMove;
+    gameRef.mousePressDetector = _handlePointerPress;
   }
 
   @override
   void onRemove() {
-    game.mouseDetector = null;
-    game.mousePressDetector = null;
-    Dispatcher.removeDispatcher(game, const MouseMoveDispatcherKey());
+    gameRef.mouseDetector = null;
+    gameRef.mousePressDetector = null;
+    Dispatcher.removeDispatcher(gameRef, const MouseMoveDispatcherKey());
   }
 }
 

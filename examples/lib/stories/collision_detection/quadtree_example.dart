@@ -200,7 +200,7 @@ Press T button to toggle player to collide with other objects.
 //#region Player
 
 class Player extends SpriteComponent
-    with CollisionCallbacks, HasGameReference<QuadTreeExample> {
+    with CollisionCallbacks, HasGameRef<QuadTreeExample> {
   Player({
     required super.position,
     required super.size,

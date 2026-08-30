@@ -74,7 +74,7 @@ So let's make a few changes to the `Enemy` class:
 
 ```dart
 class Enemy extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame>, CollisionCallbacks {
+    with HasGameRef<SpaceShooterGame>, CollisionCallbacks {
 
   // Other methods omitted
 
@@ -110,7 +110,7 @@ Now let's create the explosion class:
 
 ```dart
 class Explosion extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Explosion({
     super.position,
   }) : super(
@@ -124,7 +124,7 @@ class Explosion extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/explosion.png',
       SpriteAnimationData.sequenced(
         amount: 6,
@@ -156,7 +156,7 @@ in order to add the explosion to the game:
     if (other is Bullet) {
       removeFromParent();
       other.removeFromParent();
-      game.add(Explosion(position: position));
+      gameRef.add(Explosion(position: position));
     }
   }
 ```

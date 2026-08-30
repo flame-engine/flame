@@ -20,11 +20,11 @@ class SpriteBodyExample extends Forge2DExampleGame {
 }
 
 class SpriteBodyWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    addAll(createBoundaries(game));
+    addAll(createBoundaries(gameRef));
   }
 
   @override
@@ -47,7 +47,7 @@ class Pizza extends BodyComponent {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final sprite = await game.loadSprite('assets/images/pizza.png');
+    final sprite = await gameRef.loadSprite('assets/images/pizza.png');
     renderBody = false;
     add(
       SpriteComponent(

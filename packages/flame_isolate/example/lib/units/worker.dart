@@ -8,7 +8,7 @@ import 'package:flame_isolate_example/standard/pair.dart';
 import 'package:flame_isolate_example/units/actions/movable.dart';
 
 class Worker extends SpriteAnimationGroupComponent<MoveDirection>
-    with ColonistsObject, HasGameReference<ColonistsGame>, Movable {
+    with ColonistsObject, HasGameRef<ColonistsGame>, Movable {
   @override
   final double speed;
 

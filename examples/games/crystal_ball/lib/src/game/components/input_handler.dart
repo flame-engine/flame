@@ -5,7 +5,7 @@ import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 
 class InputHandler extends PositionComponent
-    with TapCallbacks, HasGameReference<CrystalBallGame> {
+    with TapCallbacks, HasGameRef<CrystalBallGame> {
   InputHandler()
     : super(
         anchor: Anchor.center,
@@ -33,7 +33,7 @@ class InputHandler extends PositionComponent
   @override
   void update(double dt) {
     super.update(dt);
-    position = game.world.cameraTarget.position;
+    position = gameRef.world.cameraTarget.position;
   }
 
   @override

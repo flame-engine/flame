@@ -8,8 +8,7 @@ import 'package:flame_bloc_example/src/game/components/player.dart';
 import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class GameStatsController extends Component
-    with HasGameReference<SpaceShooterGame> {
+class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   @override
   Future<void>? onLoad() async {
     add(
@@ -19,7 +18,7 @@ class GameStatsController extends Component
               newState.status == GameStatus.initial;
         },
         onNewState: (state) {
-          game.removeWhere((element) => element is EnemyComponent);
+          gameRef.removeWhere((element) => element is EnemyComponent);
         },
       ),
     );

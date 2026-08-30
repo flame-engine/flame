@@ -14,7 +14,7 @@ bullet sprite for it. Right-click the image below, choose "Save as...", and stor
 
 ```dart
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -26,7 +26,7 @@ class Bullet extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
+    animation = await gameRef.loadSpriteAnimation(
       'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
@@ -47,7 +47,7 @@ and make it happen:
 
 ```dart
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -86,7 +86,7 @@ First thing, let's create two empty methods in the `Player` class, `startShootin
 
 ```dart
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
 
   // Rest of implementation omitted
 
@@ -143,7 +143,7 @@ provides a component out of the box for that, the `SpawnComponent`, so let's tak
 
 ```dart
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   late final SpawnComponent _bulletSpawner;
 
   @override
@@ -159,7 +159,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    game.add(_bulletSpawner);
+    gameRef.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {

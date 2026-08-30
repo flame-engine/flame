@@ -20,7 +20,7 @@ class _ParentComponent extends Component {
 class _ChildComponent extends _ParentComponent with HasWorldReference<World> {}
 
 void main() {
-  group('HasGameRef', () {
+  group('HasWorldReference', () {
     testWithGame<FlameGame>('onRemove calls super', FlameGame.new, (
       game,
     ) async {

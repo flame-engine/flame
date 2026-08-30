@@ -6,7 +6,7 @@ import 'package:rogue_shooter/components/star_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
 class StarBackGroundCreator extends Component
-    with HasGameReference<RogueShooterGame> {
+    with HasGameRef<RogueShooterGame> {
   final gapSize = 12;
 
   late final SpriteSheet spriteSheet;
@@ -17,12 +17,12 @@ class StarBackGroundCreator extends Component
   @override
   Future<void> onLoad() async {
     spriteSheet = SpriteSheet.fromColumnsAndRows(
-      image: await game.images.load('assets/images/rogue_shooter/stars.png'),
+      image: await gameRef.images.load('assets/images/rogue_shooter/stars.png'),
       rows: 4,
       columns: 4,
     );
 
-    final starGapTime = (game.size.y / gapSize) / StarComponent.speed;
+    final starGapTime = (gameRef.size.y / gapSize) / StarComponent.speed;
 
     add(
       TimerComponent(
@@ -42,14 +42,14 @@ class StarBackGroundCreator extends Component
       stepTime: 0.1,
     )..variableStepTimes = [max(20, 100 * random.nextDouble()), 0.1, 0.1, 0.1];
 
-    game.starGroup.add(
+    gameRef.starGroup.add(
       StarComponent(animation: animation, position: Vector2(x, y)),
     );
   }
 
   void _createRowOfStars(double y) {
     const gapSize = 6;
-    final starGap = game.size.x / gapSize;
+    final starGap = gameRef.size.x / gapSize;
 
     for (var i = 0; i < gapSize; i++) {
       _createStarAt(
@@ -60,7 +60,7 @@ class StarBackGroundCreator extends Component
   }
 
   void _createInitialStars() {
-    final rows = game.size.y / gapSize;
+    final rows = gameRef.size.y / gapSize;
 
     for (var i = 0; i < gapSize; i++) {
       _createRowOfStars(i * rows);

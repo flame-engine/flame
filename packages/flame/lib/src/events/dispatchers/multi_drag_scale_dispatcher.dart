@@ -148,7 +148,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   @mustCallSuper
   void onDragStart(DragStartEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (DragCallbacks component) {
         _records.add(TaggedComponent(event.pointerId, component));
         component.onDragStart(event);
@@ -167,7 +167,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
     final updated = <TaggedComponent<DragCallbacks>>{};
     final stale = <TaggedComponent<DragCallbacks>>{};
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       deliverToAll: true,
       eventHandler: (DragCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
@@ -235,14 +235,14 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   @internal
   @override
   void handleDragStart(int pointerId, DragStartDetails details) {
-    final event = DragStartEvent(pointerId, game, details);
+    final event = DragStartEvent(pointerId, gameRef, details);
     onDragStart(event);
   }
 
   @internal
   @override
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
-    final event = DragUpdateEvent(pointerId, game, details);
+    final event = DragUpdateEvent(pointerId, gameRef, details);
     onDragUpdate(event);
   }
 
@@ -266,7 +266,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   @mustCallSuper
   void onScaleStart(ScaleStartEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       eventHandler: (ScaleCallbacks component) {
         _scaleRecords.add(TaggedComponent(event.pointerId, component));
         component.onScaleStart(event);
@@ -282,7 +282,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
 
     // Deliver to components under the pointer
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       deliverToAll: true,
       eventHandler: (ScaleCallbacks component) {
         final record = TaggedComponent(event.pointerId, component);
@@ -341,13 +341,13 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   @internal
   @override
   void handleScaleStart(ScaleStartDetails details) {
-    onScaleStart(ScaleStartEvent(0, game, details));
+    onScaleStart(ScaleStartEvent(0, gameRef, details));
   }
 
   @internal
   @override
   void handleScaleUpdate(ScaleUpdateDetails details) {
-    onScaleUpdate(ScaleUpdateEvent(0, game, details));
+    onScaleUpdate(ScaleUpdateEvent(0, gameRef, details));
   }
 
   @internal
@@ -360,7 +360,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
 
   @override
   void onMount() {
-    game.gestureDetectors.register<MultiDragScaleGestureRecognizer>(
+    gameRef.gestureDetectors.register<MultiDragScaleGestureRecognizer>(
       () => MultiDragScaleGestureRecognizer(scaleThreshold: scaleThreshold),
       (MultiDragScaleGestureRecognizer instance) {
         _recognizer = instance;
@@ -377,10 +377,10 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   @override
   void onRemove() {
     _recognizer = null;
-    game.gestureDetectors.unregister<MultiDragScaleGestureRecognizer>();
-    game.unregisterKey(const MultiDragScaleDispatcherKey());
+    gameRef.gestureDetectors.unregister<MultiDragScaleGestureRecognizer>();
+    gameRef.unregisterKey(const MultiDragScaleDispatcherKey());
   }
 
   @override
-  GameRenderBox get renderBox => game.renderBox;
+  GameRenderBox get renderBox => gameRef.renderBox;
 }

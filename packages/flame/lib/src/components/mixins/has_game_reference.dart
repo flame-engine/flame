@@ -8,6 +8,10 @@ import 'package:flame/src/game/mixins/single_game_instance.dart';
 /// The type [T] on the mixin is the type of your game class. This type will be
 /// the type of the [game] reference, and the mixin will check at runtime that
 /// the actual type matches the expectation.
+@Deprecated(
+  'Use HasGameRef instead. This mixin will be removed in a future '
+  'version of Flame.',
+)
 mixin HasGameReference<T extends FlameGame> on Component {
   T? _game;
 
