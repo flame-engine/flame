@@ -888,8 +888,9 @@ class Component {
     bool Function(Component, T) checkContains,
   ) sync* {
     nestedContexts?.add(locationContext);
-    if (_children != null) {
-      for (final child in _children!.reversed) {
+    final children = _children;
+    if (children != null) {
+      for (final child in children.reversed) {
         if (child is IgnoreEvents && child.ignoreEvents) {
           continue;
         }

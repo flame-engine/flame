@@ -38,13 +38,7 @@ class ComponentList extends Iterable<Component> {
   int _compareOrder(Component a, Component b) {
     final comparator = this.comparator;
     if (comparator == null) {
-      final ap = a._priority;
-      final bp = b._priority;
-      return ap < bp
-          ? -1
-          : ap > bp
-          ? 1
-          : 0;
+      return a._priority.compareTo(b._priority);
     }
     return comparator(a, b);
   }
@@ -147,7 +141,7 @@ class ComponentList extends Iterable<Component> {
   ///
   /// Does not run the component lifecycle; that is done by [Component.add].
   bool _add(Component component) {
-    if (identical(component._containerList, this)) {
+    if (contains(component)) {
       return false;
     }
     assert(
@@ -206,7 +200,7 @@ class ComponentList extends Iterable<Component> {
   /// Does not run the component lifecycle; that is done by
   /// [Component.remove].
   bool _remove(Component component) {
-    if (!identical(component._containerList, this)) {
+    if (!contains(component)) {
       return false;
     }
     final index = component._containerIndex;
