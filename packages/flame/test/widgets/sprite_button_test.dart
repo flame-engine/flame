@@ -120,5 +120,40 @@ Future<void> main() async {
         expect(internalButtonFinder, findsOneWidget);
       },
     );
+
+    testWidgets(
+      'resolves the paths relative to package when one is given',
+      (tester) async {
+        const imagePath1 = 'sprite_button_package_path_1';
+        const imagePath2 = 'sprite_button_package_path_2';
+        final images = Images()
+          ..add('packages/my_package/$imagePath1', image)
+          ..add('packages/my_package/$imagePath2', image);
+
+        await tester.pumpWidget(
+          SpriteButton.asset(
+            path: imagePath1,
+            pressedPath: imagePath2,
+            onPressed: () {},
+            width: 100,
+            height: 100,
+            label: const SizedBox(),
+            loadingBuilder: (_) => const LoadingWidget(),
+            images: images,
+            package: 'my_package',
+          ),
+        );
+
+        expect(find.byType(FutureBuilder<List<Sprite>>), findsNothing);
+        expect(find.byType(LoadingWidget), findsNothing);
+
+        final internalButton = tester.widget<InternalSpriteButton>(
+          find.byType(InternalSpriteButton),
+        );
+
+        expect(internalButton.sprite.image, image);
+        expect(internalButton.pressedSprite.image, image);
+      },
+    );
   });
 }
