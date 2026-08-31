@@ -293,6 +293,206 @@ void main() {
     );
   });
 
+  group('allowsMultiPointerDrag', () {
+    testWithFlameGame(
+      'defaults to true, so a second pointer starts a second drag',
+      (game) async {
+        final component = DragCallbacksComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(30, 30),
+          ),
+        );
+
+        expect(component.dragStartEvent, equals(2));
+      },
+    );
+
+    testWithFlameGame(
+      'when false, a second pointer is not delivered while a drag is active',
+      (game) async {
+        final component = _SingleDragComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(30, 30),
+          ),
+        );
+        expect(component.dragStartEvent, equals(1));
+
+        // No follow-ups for the rejected pointer either.
+        dispatcher.onDragUpdate(
+          createDragUpdateEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(35, 35),
+          ),
+        );
+        dispatcher.onDragEnd(DragEndEvent(2, DragEndDetails()));
+        expect(component.dragUpdateEvent, equals(0));
+        expect(component.dragEndEvent, equals(0));
+
+        // The accepted pointer still works normally.
+        dispatcher.onDragUpdate(
+          createDragUpdateEvents(
+            game: game,
+            globalPosition: const Offset(25, 25),
+          ),
+        );
+        dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
+        expect(component.dragUpdateEvent, equals(1));
+        expect(component.dragEndEvent, equals(1));
+      },
+    );
+
+    testWithFlameGame(
+      'a new drag is accepted once the previous one ends',
+      (game) async {
+        final component = _SingleDragComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+        dispatcher.onDragEnd(DragEndEvent(1, DragEndDetails()));
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(30, 30),
+          ),
+        );
+
+        expect(component.dragStartEvent, equals(2));
+      },
+    );
+
+    testWithFlameGame(
+      'a cancelled drag also frees the component up',
+      (game) async {
+        final component = _SingleDragComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+        dispatcher.onDragCancel(DragCancelEvent(1));
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(30, 30),
+          ),
+        );
+
+        expect(component.dragStartEvent, equals(2));
+      },
+    );
+
+    testWithFlameGame(
+      'the rejected pointer falls through to the component below',
+      (game) async {
+        final below = DragCallbacksComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        final above = _SingleDragComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        game.add(below);
+        game.add(above);
+        await game.ready();
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+        expect(above.dragStartEvent, equals(1));
+        expect(below.dragStartEvent, equals(0));
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(30, 30),
+          ),
+        );
+        expect(above.dragStartEvent, equals(1));
+        expect(below.dragStartEvent, equals(1));
+      },
+    );
+
+    testWithFlameGame(
+      'gating drags does not gate scale events',
+      (game) async {
+        final component = _SingleDragScaleComponent()
+          ..position = Vector2.all(10)
+          ..size = Vector2.all(50);
+        await game.ensureAdd(component);
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            globalPosition: const Offset(20, 20),
+          ),
+        );
+        dispatcher.onDragStart(
+          createDragStartEvents(
+            game: game,
+            pointerId: 2,
+            globalPosition: const Offset(30, 30),
+          ),
+        );
+        expect(component.dragStartEvent, equals(1));
+
+        dispatcher.onScaleStart(
+          createScaleStartEvents(game: game, focalPoint: const Offset(25, 25)),
+        );
+        expect(component.scaleStartEvent, equals(1));
+      },
+    );
+  });
+
   group('HasDraggableComponents', () {
     testWidgets(
       'drags are delivered to DragCallbacks components',
@@ -626,6 +826,18 @@ void main() {
       expect(totalDelta, Vector2(16, 0));
     },
   );
+}
+
+class _SingleDragComponent extends PositionComponent
+    with DragCallbacks, DragCounter {
+  @override
+  bool get allowsMultiPointerDrag => false;
+}
+
+class _SingleDragScaleComponent extends PositionComponent
+    with DragCallbacks, DragCounter, ScaleCallbacks, ScaleCounter {
+  @override
+  bool get allowsMultiPointerDrag => false;
 }
 
 class _TapCounterComponent extends PositionComponent with TapCallbacks {

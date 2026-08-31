@@ -145,15 +145,27 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   ///
   /// Each [event] has an `event.pointerId` to keep track of multiple touches
   /// that may occur simultaneously.
+  ///
+  /// A component that sets [DragCallbacks.allowsMultiPointerDrag] to false is
+  /// skipped while it already has a drag in progress, and the event carries on
+  /// to the components below it.
   @mustCallSuper
   void onDragStart(DragStartEvent event) {
     event.deliverAtPoint(
       rootComponent: gameRef,
       eventHandler: (DragCallbacks component) {
+        if (!component.allowsMultiPointerDrag && _isDragging(component)) {
+          event.continuePropagation = true;
+          return;
+        }
         _records.add(TaggedComponent(event.pointerId, component));
         component.onDragStart(event);
       },
     );
+  }
+
+  bool _isDragging(DragCallbacks component) {
+    return _records.any((record) => record.component == component);
   }
 
   /// Called continuously during the drag as the user moves their finger.

@@ -55,46 +55,21 @@ class ParticlesInteractiveExample extends FlameGame with DragCallbacks {
     add(_emitter);
   }
 
-  /// There is a single emitter, so only the first pointer to start dragging
-  /// paints; a second finger would otherwise make it jump back and forth.
-  int? _paintingPointerId;
+  /// Multiple pointers would flip-flop the emitter, spraying between them.
+  @override
+  bool get allowsMultiPointerDrag => false;
 
   @override
   void onDragStart(DragStartEvent event) {
     super.onDragStart(event);
-    if (_paintingPointerId != null) {
-      return;
-    }
-    _paintingPointerId = event.pointerId;
     _emitter.position = event.canvasPosition;
     _emitter.emit(_perDragStart);
   }
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    if (event.pointerId != _paintingPointerId) {
-      return;
-    }
     _emitter.position = event.canvasEndPosition;
     _emitter.emit(_perDragUpdate);
-  }
-
-  @override
-  void onDragEnd(DragEndEvent event) {
-    super.onDragEnd(event);
-    _releaseBrush(event.pointerId);
-  }
-
-  @override
-  void onDragCancel(DragCancelEvent event) {
-    super.onDragCancel(event);
-    _releaseBrush(event.pointerId);
-  }
-
-  void _releaseBrush(int pointerId) {
-    if (pointerId == _paintingPointerId) {
-      _paintingPointerId = null;
-    }
   }
 
   /// All presets share the same pooled setup: emission is driven purely by
