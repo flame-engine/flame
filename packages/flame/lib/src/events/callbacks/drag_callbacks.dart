@@ -27,7 +27,7 @@ mixin DragCallbacks on Component implements PointerInputCallbacks {
   /// Override this to `false` to accept only one drag at a time. While a drag
   /// is in progress, [onDragStart] is not delivered for any other pointer, and
   /// no [onDragUpdate], [onDragEnd] or [onDragCancel] follow for it either;
-  /// the event is offered to the components below it in propagation order 
+  /// the event is offered to the components below it in propagation order.
   /// Once the accepted drag finishes, the component is freed to accept further
   /// drags.
   ///
