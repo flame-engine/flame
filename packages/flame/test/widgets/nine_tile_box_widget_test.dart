@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 
+import 'package:flame/cache.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/widgets.dart';
 import 'package:flame_test/flame_test.dart';
@@ -59,6 +60,34 @@ Future<void> main() async {
         expect(futureBuilderFinder, findsOneWidget);
         expect(loadingWidgetFinder, findsNothing);
         expect(nineTileBoxWidgetFinder, findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'resolves the path relative to package when one is given',
+      (tester) async {
+        const imagePath = 'nine_tile_box_package_path';
+        final packagedImage = await generateImage(100, 102);
+        final images = Images()
+          ..add('packages/my_package/$imagePath', packagedImage);
+
+        await tester.pumpWidget(
+          NineTileBoxWidget.asset(
+            path: imagePath,
+            tileSize: 10,
+            destTileSize: 10,
+            images: images,
+            package: 'my_package',
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        final internalWidget = tester.widget<InternalNineTileBox>(
+          find.byType(InternalNineTileBox),
+        );
+
+        expect(internalWidget.image, packagedImage);
       },
     );
 
