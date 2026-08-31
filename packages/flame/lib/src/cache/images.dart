@@ -98,7 +98,7 @@ class Images {
   /// By default the key in the cache is the resolved path, if another key is
   /// desired, specify the optional [key] argument.
   Future<Image> load(String fileName, {String? key, String? package}) {
-    final path = _resolve(fileName, package);
+    final path = resolvePath(fileName, package);
     return (_assets[key ?? path] ??= _ImageAsset.future(
       _fetchToMemory(path),
     )).retrieveAsync();
@@ -164,7 +164,9 @@ class Images {
     )).retrieveAsync();
   }
 
-  static String _resolve(String fileName, String? package) =>
+  /// Resolves [fileName] to the path it is loaded from, and cached under, when
+  /// it belongs to [package].
+  static String resolvePath(String fileName, String? package) =>
       package == null ? fileName : 'packages/$package/$fileName';
 
   Future<Image> _fetchFromBase64(String base64Data) {

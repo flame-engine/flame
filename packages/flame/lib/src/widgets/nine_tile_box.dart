@@ -79,7 +79,8 @@ class NineTileBoxWidget extends StatefulWidget {
   /// and direct pass it to the default constructor.
   ///
   /// The [path] is the full path of the asset, as declared in the
-  /// `pubspec.yaml`, for example `assets/images/player.png`.
+  /// `pubspec.yaml`, for example `assets/images/player.png`. When a [package]
+  /// is given, the path is resolved relative to that package's assets.
   NineTileBoxWidget.asset({
     required String path,
     required this.tileSize,
@@ -91,8 +92,9 @@ class NineTileBoxWidget extends StatefulWidget {
     this.padding,
     this.errorBuilder,
     this.loadingBuilder,
+    String? package,
     super.key,
-  }) : _imageFuture = (images ?? Flame.images).load(path);
+  }) : _imageFuture = (images ?? Flame.images).load(path, package: package);
 
   @override
   State<NineTileBoxWidget> createState() => _NineTileBoxWidgetState();
