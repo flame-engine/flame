@@ -20,10 +20,12 @@ abstract class LocationContextEvent<C, R> extends Event<R> {
 
   /// The context in the parent's coordinate space, containing start and end
   /// points.
+  ///
+  /// Null when the receiving component is the root of the delivery.
   C? get parentContext {
     if (renderingTrace.length >= 2) {
       final lastIndex = renderingTrace.length - 1;
-      return renderingTrace[lastIndex];
+      return renderingTrace[lastIndex - 1];
     } else {
       return null;
     }
