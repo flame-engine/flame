@@ -350,6 +350,88 @@ void main() {
     );
   });
 
+  group('local coordinates during a scale', () {
+    testWithFlameGame(
+      'stay available when the focal point leaves the component bounds',
+      (game) async {
+        Vector2? localStart;
+        final component = ScaleWithCallbacksComponent(
+          position: Vector2.all(10),
+          size: Vector2.all(30),
+          onScaleUpdate: (e) => localStart = e.localStartPosition.clone(),
+        );
+        await game.ensureAdd(component);
+        await game.ready();
+
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+        dispatcher.onScaleStart(
+          createScaleStartEvents(game: game, focalPoint: const Offset(20, 20)),
+        );
+        // The focal point is now far outside the 30x30 component at (10, 10).
+        dispatcher.onScaleUpdate(
+          createScaleUpdateEvents(
+            game: game,
+            focalPoint: const Offset(500, 500),
+          ),
+        );
+
+        // Scales bypass the containment check, so the gesture is not lost and
+        // the coordinates keep being computed past the component's edge.
+        expect(localStart, Vector2.all(490));
+      },
+    );
+
+    testWithFlameGame(
+      'become unavailable if hit testing stops reaching the component',
+      (game) async {
+        var updates = 0;
+        int? traceLength;
+        Vector2? canvasStart;
+        Vector2? deviceStart;
+        final component = ScaleWithCallbacksComponent(
+          position: Vector2.zero(),
+          size: Vector2.all(100),
+          onScaleUpdate: (e) {
+            // Everything here is asserted during delivery: reading the event
+            // afterwards would find an unwound trace either way.
+            updates++;
+            traceLength = e.renderingTrace.length;
+            expect(() => e.localStartPosition, throwsStateError);
+            canvasStart = e.canvasStartPosition.clone();
+            deviceStart = e.deviceStartPosition.clone();
+          },
+        );
+        final gate = EventGate(
+          position: Vector2.zero(),
+          size: Vector2.all(200),
+          children: [component],
+        );
+        await game.ensureAdd(gate);
+        await game.ready();
+
+        final dispatcher = game.firstChild<MultiDragScaleDispatcher>()!;
+        dispatcher.onScaleStart(
+          createScaleStartEvents(game: game, focalPoint: const Offset(10, 10)),
+        );
+
+        // The ancestor now swallows events, so hit testing no longer reaches
+        // the component, but the scale record still points at it.
+        gate.ignoreEvents = true;
+
+        dispatcher.onScaleUpdate(
+          createScaleUpdateEvents(game: game, focalPoint: const Offset(20, 20)),
+        );
+
+        // It is still delivered to, but with nothing behind it in the trace.
+        expect(updates, equals(1));
+        expect(traceLength, equals(0));
+        // Canvas and device coordinates never depend on the trace.
+        expect(canvasStart, Vector2.all(20));
+        expect(deviceStart, Vector2.all(20));
+      },
+    );
+  });
+
   testWidgets(
     'scale event scale factor respects camera & zoom',
     (tester) async {

@@ -422,3 +422,11 @@ class DragCallbacksComponent extends PositionComponent
     with DragCallbacks, DragCounter {}
 
 class DragCallbacksGame extends FlameGame with DragCallbacks, DragCounter {}
+
+/// An ancestor that starts out passing events through, but can be made to
+/// swallow them partway through a gesture by setting [ignoreEvents].
+class EventGate extends PositionComponent with IgnoreEvents {
+  EventGate({super.position, super.size, super.children}) {
+    ignoreEvents = false;
+  }
+}

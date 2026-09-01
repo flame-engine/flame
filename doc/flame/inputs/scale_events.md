@@ -51,11 +51,15 @@ This event is fired continuously as user drags their finger across the screen. I
 the user is holding their finger still.
 
 The default implementation delivers this event to all the components that received the previous
-`onScaleStart`. If the point of touch is still within the component, then
-`event.localPosition` will give the position of that point in the local coordinate system. However,
-if the user moves their finger away from the component, the property `event.localPosition` will
-return a point whose coordinates are NaNs. Likewise, the `event.renderingTrace` in this case will be
-empty. However, the `canvasPosition` and `devicePosition` properties of the event will be valid.
+`onScaleStart`. Moving the focal point off the component **does not** stop the scale gesture,
+and the local coordinates are still computed (potentially outside the component bounds).
+
+The exception is when hit testing stops reaching the component altogether while it still holds the
+gesture, for example if an ancestor turns on `IgnoreEvents` mid-gesture. The component still
+receives the event, but with an empty `event.renderingTrace` behind it, so reading
+`localStartPosition`, `localEndPosition` or `localDelta` throws. `canvasStartPosition`,
+`canvasEndPosition`, `deviceStartPosition` and `deviceEndPosition` never depend on the trace and
+remain valid.
 
 In addition, the `ScaleUpdateEvent` will contain `focalPointDelta` --
 the amount the focal point has moved since the
