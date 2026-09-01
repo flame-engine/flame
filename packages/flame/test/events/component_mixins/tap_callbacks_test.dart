@@ -494,8 +494,92 @@ void main() {
       expect(trace[1], Vector2(100, 75));
       expect(trace[2], Vector2(190, 190));
       expect(trace[3], Vector2(200, 200));
+      expect(tapDownEvent!.parentContext, Vector2(100, 75));
     },
   );
+
+  testWidgets(
+    'parentContext is null when the game itself receives the event',
+    (tester) async {
+      Vector2? localPosition;
+      Vector2? parentContext;
+      final game = _TapWithCallbacksGame(
+        onTapDownCallback: (e) {
+          localPosition = e.localPosition;
+          parentContext = e.parentContext;
+        },
+      );
+      await tester.pumpWidget(GameWidget(game: game));
+      await tester.pump();
+      await tester.pump();
+
+      await tester.tapAt(const Offset(200, 200));
+      await tester.pump(const Duration(seconds: 1));
+
+      // The game is the root of the delivery: it has local coordinates of its
+      // own, but nothing above it in the trace.
+      expect(localPosition, Vector2(200, 200));
+      expect(parentContext, isNull);
+    },
+  );
+
+  testWidgets(
+    'parentContext is also available on displacement events',
+    (tester) async {
+      Vector2? localStart;
+      Vector2? parentStart;
+      final game = FlameGame(
+        children: [
+          PositionComponent(
+            size: Vector2.all(400),
+            position: Vector2.all(10),
+            children: [
+              _DragWithParentContextComponent(
+                size: Vector2.all(200),
+                position: Vector2.all(40),
+                onDragUpdateCallback: (e) {
+                  localStart = e.localStartPosition;
+                  parentStart = e.parentContext?.start;
+                },
+              ),
+            ],
+          ),
+        ],
+      );
+      await tester.pumpWidget(GameWidget(game: game));
+      await tester.pump();
+      await tester.pump();
+
+      await tester.dragFrom(const Offset(100, 100), const Offset(20, 20));
+
+      // The dragged component sits at (40, 40) within its parent.
+      expect(localStart, isNotNull);
+      expect(parentStart! - localStart!, Vector2.all(40));
+    },
+  );
+}
+
+class _TapWithCallbacksGame extends FlameGame with TapCallbacks {
+  _TapWithCallbacksGame({required this.onTapDownCallback});
+
+  final void Function(TapDownEvent) onTapDownCallback;
+
+  @override
+  void onTapDown(TapDownEvent event) => onTapDownCallback(event);
+}
+
+class _DragWithParentContextComponent extends PositionComponent
+    with DragCallbacks {
+  _DragWithParentContextComponent({
+    required Vector2 super.position,
+    required Vector2 super.size,
+    required this.onDragUpdateCallback,
+  });
+
+  final void Function(DragUpdateEvent) onDragUpdateCallback;
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) => onDragUpdateCallback(event);
 }
 
 class _TapWithCallbacksComponent extends PositionComponent with TapCallbacks {
