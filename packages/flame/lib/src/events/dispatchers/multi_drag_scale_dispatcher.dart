@@ -173,7 +173,10 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
   /// The default handler propagates this event to those components who received
   /// the initial [onDragStart] event. If the position of the pointer is outside
   /// of the bounds of the component, then this event will nevertheless be
-  /// delivered, however its `event.localPosition` property will contain NaNs.
+  /// delivered, with local coordinates that fall outside those bounds. A
+  /// component that hit testing no longer reaches at all -- because an ancestor
+  /// started ignoring events, say -- is delivered to from [_records] instead,
+  /// with an empty rendering trace, so its local coordinates are unavailable.
   @mustCallSuper
   void onDragUpdate(DragUpdateEvent event) {
     final updated = <TaggedComponent<DragCallbacks>>{};
