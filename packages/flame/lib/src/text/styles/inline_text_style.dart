@@ -28,7 +28,10 @@ class InlineTextStyle extends FlameTextStyle {
     this.decorationThickness,
     this.background,
     this.foreground,
-  });
+  }) : assert(
+          color == null || foreground == null,
+          'Cannot provide both color and foreground',
+        );
 
   final Color? color;
   final String? fontFamily;
@@ -84,10 +87,15 @@ class InlineTextStyle extends FlameTextStyle {
   }
 
   TextStyle asTextStyle() {
+    final fontSize = this.fontSize;
+    if (fontSize == null) {
+      throw Exception('fontSize must be set');
+    }
+
     return TextStyle(
       color: color,
       fontFamily: fontFamily,
-      fontSize: fontSize! * (fontScale ?? 1.0),
+      fontSize: fontSize * (fontScale ?? 1.0),
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       letterSpacing: letterSpacing,
