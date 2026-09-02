@@ -22,6 +22,10 @@ abstract class LocationContextEvent<C, R> extends Event<R> {
   /// points.
   ///
   /// Null when the receiving component is the root of the delivery.
+  ///
+  /// Like the local coordinates, this is only accessible while the event is
+  /// being propagated to the components via [deliverAtPoint], and is null at
+  /// other times.
   C? get parentContext {
     if (renderingTrace.length >= 2) {
       final lastIndex = renderingTrace.length - 1;
@@ -53,5 +57,8 @@ abstract class LocationContextEvent<C, R> extends Event<R> {
         break;
       }
     }
+    // [collectApplicableChildren] might stop short, leaving the frames
+    // un-popped; for consistency, they are always cleaned at the end.
+    renderingTrace.clear();
   }
 }

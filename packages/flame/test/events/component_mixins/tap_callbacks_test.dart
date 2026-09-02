@@ -455,6 +455,7 @@ void main() {
     'local coordinates during tap events',
     (tester) async {
       TapDownEvent? tapDownEvent;
+      final captured = _CapturedTapEvent();
       final game = FlameGame(
         children: [
           PositionComponent(
@@ -469,7 +470,10 @@ void main() {
                   _TapWithCallbacksComponent(
                     size: Vector2(100, 50),
                     position: Vector2(50, 50),
-                    onTapDown: (e) => tapDownEvent = e,
+                    onTapDown: (e) {
+                      tapDownEvent = e;
+                      captured.absorb(e);
+                    },
                   ),
                 ],
               ),
@@ -486,29 +490,30 @@ void main() {
       await tester.tapAt(const Offset(200, 200));
       await tester.pump(const Duration(seconds: 1));
       expect(tapDownEvent, isNotNull);
+      // devicePosition and canvasPosition do not come from the rendering
+      // trace, so they can be read off the event at any time.
       expect(tapDownEvent!.devicePosition, Vector2(200, 200));
       expect(tapDownEvent!.canvasPosition, Vector2(200, 200));
-      expect(tapDownEvent!.localPosition, Vector2(50, 25));
-      final trace = tapDownEvent!.renderingTrace.reversed.toList();
-      expect(trace[0], Vector2(50, 25));
-      expect(trace[1], Vector2(100, 75));
-      expect(trace[2], Vector2(190, 190));
-      expect(trace[3], Vector2(200, 200));
-      expect(tapDownEvent!.parentContext, Vector2(100, 75));
+      expect(captured.localPosition, Vector2(50, 25));
+      expect(captured.trace[0], Vector2(50, 25));
+      expect(captured.trace[1], Vector2(100, 75));
+      expect(captured.trace[2], Vector2(190, 190));
+      expect(captured.trace[3], Vector2(200, 200));
+      expect(captured.parentContext, Vector2(100, 75));
+
+      // The trace is unwound once delivery is over, so the properties derived
+      // from it are no longer readable, whichever way the delivery ended.
+      expect(tapDownEvent!.renderingTrace, isEmpty);
+      expect(() => tapDownEvent!.localPosition, throwsStateError);
+      expect(tapDownEvent!.parentContext, isNull);
     },
   );
 
   testWidgets(
     'parentContext is null when the game itself receives the event',
     (tester) async {
-      Vector2? localPosition;
-      Vector2? parentContext;
-      final game = _TapWithCallbacksGame(
-        onTapDownCallback: (e) {
-          localPosition = e.localPosition;
-          parentContext = e.parentContext;
-        },
-      );
+      final captured = _CapturedTapEvent();
+      final game = _TapWithCallbacksGame(onTapDownCallback: captured.absorb);
       await tester.pumpWidget(GameWidget(game: game));
       await tester.pump();
       await tester.pump();
@@ -518,8 +523,8 @@ void main() {
 
       // The game is the root of the delivery: it has local coordinates of its
       // own, but nothing above it in the trace.
-      expect(localPosition, Vector2(200, 200));
-      expect(parentContext, isNull);
+      expect(captured.localPosition, Vector2(200, 200));
+      expect(captured.parentContext, isNull);
     },
   );
 
@@ -557,6 +562,20 @@ void main() {
       expect(parentStart! - localStart!, Vector2.all(40));
     },
   );
+}
+
+/// Holds the values that are only readable while an event is being delivered,
+/// so that they can be asserted on after the gesture has finished.
+class _CapturedTapEvent {
+  late final Vector2 localPosition;
+  late final Vector2? parentContext;
+  late final List<Vector2> trace;
+
+  void absorb(TapDownEvent event) {
+    localPosition = event.localPosition;
+    parentContext = event.parentContext;
+    trace = event.renderingTrace.reversed.toList();
+  }
 }
 
 class _TapWithCallbacksGame extends FlameGame with TapCallbacks {
