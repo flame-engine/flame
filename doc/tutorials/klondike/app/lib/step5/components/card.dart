@@ -16,7 +16,7 @@ import 'stock_pile.dart';
 import 'tableau_pile.dart';
 
 class Card extends PositionComponent
-    with DragCallbacks, TapCallbacks, HasWorldReference<KlondikeWorld> {
+    with DragCallbacks, TapCallbacks, HasWorldRef<KlondikeWorld> {
   Card(int intRank, int intSuit, {this.isBaseCard = false})
     : rank = Rank.fromInt(intRank),
       suit = Suit.fromInt(intSuit),
@@ -381,17 +381,17 @@ class Card extends PositionComponent
     // We need to be more user-friendly towards taps that include a short drag.
     if (pile?.canMoveCard(this, MoveMethod.tap) ?? false) {
       final suitIndex = suit.value;
-      if (world.foundations[suitIndex].canAcceptCard(this)) {
+      if (worldRef.foundations[suitIndex].canAcceptCard(this)) {
         pile!.removeCard(this, MoveMethod.tap);
         doMove(
-          world.foundations[suitIndex].position,
+          worldRef.foundations[suitIndex].position,
           onComplete: () {
-            world.foundations[suitIndex].acquireCard(this);
+            worldRef.foundations[suitIndex].acquireCard(this);
           },
         );
       }
     } else if (pile is StockPile) {
-      world.stock.handleTapUp(this);
+      worldRef.stock.handleTapUp(this);
     }
   }
 
