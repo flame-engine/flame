@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/events/flame_drag_adapter.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
@@ -25,8 +24,7 @@ class MultiDragScaleDispatcherKey implements ComponentKey {
 /// Use [enableDrag] and [enableScale] (called via [addDispatcher]) to control
 /// which event types are forwarded to the underlying
 /// [MultiDragScaleGestureRecognizer].
-class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
-    implements MultiDragListener, ScaleListener {
+class MultiDragScaleDispatcher extends Dispatcher<FlameGame> {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<DragCallbacks>> _records = {};
 
@@ -245,35 +243,52 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
     });
   }
 
-  //#region MultiDragListener API
+  //#region MultiDragScaleGestureRecognizer drag API
 
+  /// The beginning of a drag operation.
+  ///
+  /// This does not fire as soon as the pointer touches the screen: the
+  /// recognizer waits until the movement exceeds the platform's touch slop, so
+  /// that a tap with a slightly wobbling finger stays a tap. The movement
+  /// accumulated up to that point is delivered in the first
+  /// [handleDragUpdate].
   @internal
-  @override
   void handleDragStart(int pointerId, DragStartDetails details) {
     final event = DragStartEvent(pointerId, gameRef, details);
     onDragStart(event);
   }
 
+  /// The pointer that was touching the screen has moved.
+  ///
+  /// This occurs frequently during the drag, and only when the point of touch
+  /// actually moves, not when it stays still.
   @internal
-  @override
   void handleDragUpdate(int pointerId, DragUpdateDetails details) {
     final event = DragUpdateEvent(pointerId, gameRef, details);
     onDragUpdate(event);
   }
 
+  /// Marks the end of a drag operation.
+  ///
+  /// Fires when the pointer stops touching the screen, even if the pointer is
+  /// outside of the game widget at the time.
   @internal
-  @override
   void handleDragEnd(int pointerId, DragEndDetails details) {
     final event = DragEndEvent(pointerId, details);
     onDragEnd(event);
   }
 
+  /// The drag operation is cancelled.
+  ///
+  /// For example, this may happen if the drag was interrupted by a
+  /// system-modal dialog appearing during the drag.
   @internal
-  @override
   void handleDragCancel(int pointerId) {
     final event = DragCancelEvent(pointerId);
     onDragCancel(event);
   }
+
+  //#endregion
 
   final Set<TaggedComponent<ScaleCallbacks>> _scaleRecords = {};
 
@@ -351,22 +366,30 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
     });
   }
 
-  //#region ScaleListener API
+  //#region MultiDragScaleGestureRecognizer scale API
 
+  /// The beginning of a scale operation.
+  ///
+  /// Fires once two or more pointers are touching the screen and their
+  /// movement exceeds the recognizer's [scaleThreshold].
   @internal
-  @override
   void handleScaleStart(ScaleStartDetails details) {
     onScaleStart(ScaleStartEvent(0, gameRef, details));
   }
 
+  /// The pointers taking part in the scale gesture have moved.
+  ///
+  /// This occurs frequently during the gesture, reporting the current scale
+  /// factors, the rotation and the focal point.
   @internal
-  @override
   void handleScaleUpdate(ScaleUpdateDetails details) {
     onScaleUpdate(ScaleUpdateEvent(0, gameRef, details));
   }
 
+  /// Marks the end of a scale operation.
+  ///
+  /// Fires once fewer than two pointers are left touching the screen.
   @internal
-  @override
   void handleScaleEnd(ScaleEndDetails details) {
     onScaleEnd(ScaleEndEvent(0, details));
   }
@@ -381,7 +404,7 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
         _recognizer = instance;
         instance.hasDrag = _dragCount > 0;
         instance.hasScale = _scaleCount > 0;
-        instance.onStart = (Offset point) => FlameDragAdapter(this, point);
+        instance.onStart = (Offset point) => _FlameDragAdapter(this, point);
         instance.onScaleStart = handleScaleStart;
         instance.onScaleUpdate = handleScaleUpdate;
         instance.onScaleEnd = handleScaleEnd;
@@ -396,6 +419,41 @@ class MultiDragScaleDispatcher extends Dispatcher<FlameGame>
     gameRef.unregisterKey(const MultiDragScaleDispatcherKey());
   }
 
+  GameRenderBox get _renderBox => gameRef.renderBox;
+}
+
+/// Adapts the drag API expected by [MultiDragScaleGestureRecognizer] into the
+/// one expected by [MultiDragScaleDispatcher].
+///
+/// Flutter identifies a drag by the [Drag] object returned from `onStart`, and
+/// its `update`/`end`/`cancel` callbacks carry no pointer id of their own. The
+/// dispatcher, in contrast, is shared by the whole game and needs to tell
+/// pointers apart, so one of these is created per pointer to hold the id and
+/// attach it to every event that follows.
+class _FlameDragAdapter implements Drag {
+  _FlameDragAdapter(this._dispatcher, Offset startPoint) {
+    _id = _globalIdCounter++;
+    _dispatcher.handleDragStart(
+      _id,
+      DragStartDetails(
+        sourceTimeStamp: Duration.zero,
+        globalPosition: startPoint,
+        localPosition: _dispatcher._renderBox.globalToLocal(startPoint),
+      ),
+    );
+  }
+
+  final MultiDragScaleDispatcher _dispatcher;
+  late final int _id;
+  static int _globalIdCounter = 0;
+
   @override
-  GameRenderBox get renderBox => gameRef.renderBox;
+  void update(DragUpdateDetails event) =>
+      _dispatcher.handleDragUpdate(_id, event);
+
+  @override
+  void end(DragEndDetails event) => _dispatcher.handleDragEnd(_id, event);
+
+  @override
+  void cancel() => _dispatcher.handleDragCancel(_id);
 }

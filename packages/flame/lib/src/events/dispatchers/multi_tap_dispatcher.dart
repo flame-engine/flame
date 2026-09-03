@@ -3,7 +3,6 @@ import 'package:flame/events.dart';
 import 'package:flame/input.dart';
 import 'package:flame/src/events/tagged_component.dart';
 import 'package:flame/src/game/flame_game.dart';
-import 'package:flame/src/game/game_render_box.dart';
 import 'package:flutter/gestures.dart';
 import 'package:meta/meta.dart';
 
@@ -18,8 +17,7 @@ class MultiTapDispatcherKey implements ComponentKey {
       other is MultiTapDispatcherKey && other.hashCode == hashCode;
 }
 
-class MultiTapDispatcher extends Dispatcher<FlameGame>
-    implements MultiTapListener {
+class MultiTapDispatcher extends Dispatcher<FlameGame> {
   /// The record of all components currently being touched.
   final Set<TaggedComponent<TapCallbacks>> _record = {};
 
@@ -113,35 +111,39 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
     });
   }
 
-  //#region MultiTapListener API
+  //#region MultiTapGestureRecognizer API
 
   /// The delay (in seconds) after which a tap is considered a long tap.
-  @override
   double get longTapDelay => TapConfig.longTapDelay;
 
-  @override
+  /// A tap has occurred.
+  ///
+  /// Flame reports taps through [handleTapUp] instead, which fires at the same
+  /// point in the gesture, so this is deliberately a no-op.
   void handleTap(int pointerId) {}
 
+  /// A pointer that already triggered [handleTapDown] will not trigger
+  /// [handleTap].
   @internal
-  @override
   void handleTapCancel(int pointerId) {
     onTapCancel(TapCancelEvent(pointerId));
   }
 
+  /// A pointer has touched the screen.
   @visibleForTesting
-  @override
   void handleTapDown(int pointerId, TapDownDetails details) {
     onTapDown(TapDownEvent(pointerId, gameRef, details));
   }
 
+  /// A pointer stopped contacting the screen.
   @internal
-  @override
   void handleTapUp(int pointerId, TapUpDetails details) {
     onTapUp(TapUpEvent(pointerId, gameRef, details));
   }
 
+  /// A pointer that has previously triggered [handleTapDown] is still touching
+  /// the screen after [longTapDelay] seconds.
   @internal
-  @override
   void handleLongTapDown(int pointerId, TapDownDetails details) {
     onLongTapDown(TapDownEvent(pointerId, gameRef, details));
   }
@@ -180,7 +182,4 @@ class MultiTapDispatcher extends Dispatcher<FlameGame>
     gameRef.gestureDetectors.unregister<MultiTapGestureRecognizer>();
     Dispatcher.removeDispatcher(gameRef, const MultiTapDispatcherKey());
   }
-
-  @override
-  GameRenderBox get renderBox => gameRef.renderBox;
 }
