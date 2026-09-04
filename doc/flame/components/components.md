@@ -295,22 +295,22 @@ in the same order as they were scheduled for addition.
 ### Access to the World from a Component
 
 If a component that has a `World` as an ancestor and requires access to that `World` object, one
-can use the `HasWorldReference` mixin.
+can use the `HasWorldRef` mixin.
 
 Example:
 
 ```dart
-class MyComponent extends Component with HasWorldReference<MyWorld>,
+class MyComponent extends Component with HasWorldRef<MyWorld>,
     TapCallbacks {
   @override
   void onTapDown(TapDownEvent info) {
-    // world is of type MyWorld
-    world.add(AnotherComponent());
+    // worldRef is of type MyWorld
+    worldRef.add(AnotherComponent());
   }
 }
 ```
 
-If you try to access `world` from a component that doesn't have a `World` ancestor of the
+If you try to access `worldRef` from a component that doesn't have a `World` ancestor of the
 correct type an assertion error will be thrown.
 
 

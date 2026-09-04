@@ -1,8 +1,8 @@
 import 'package:flame/components.dart' show Component;
 import 'package:flame/game.dart' show FlameGame;
 import 'package:flame/src/camera/world.dart' show World;
-import 'package:flame/src/components/mixins/has_world.dart'
-    show HasWorldReference;
+import 'package:flame/src/components/mixins/has_world_ref.dart'
+    show HasWorldRef;
 import 'package:flame_test/flame_test.dart' show testWithGame;
 import 'package:flutter_test/flutter_test.dart' show group;
 import 'package:test/expect.dart' show expect;
@@ -17,10 +17,10 @@ class _ParentComponent extends Component {
   }
 }
 
-class _ChildComponent extends _ParentComponent with HasWorldReference<World> {}
+class _ChildComponent extends _ParentComponent with HasWorldRef<World> {}
 
 void main() {
-  group('HasWorldReference', () {
+  group('HasWorldRef', () {
     testWithGame<FlameGame>('onRemove calls super', FlameGame.new, (
       game,
     ) async {
