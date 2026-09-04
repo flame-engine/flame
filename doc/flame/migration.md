@@ -7,6 +7,21 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### The gesture listener interfaces removed
+
+`MultiTapListener`, `MultiDragListener` and `ScaleListener` have been removed, with no replacement.
+
+They existed so that one adapter could work with either of two implementations: the component-level
+mixins, or the matching game-level detector. Those detectors were removed earlier in the v2 rewrite,
+leaving each interface with a single implementation and nothing that consumed it as an interface.
+
+If you implemented one of these directly, use the `TapCallbacks`, `DragCallbacks` or
+`ScaleCallbacks` mixin on your component or game instead, which is what they already pointed you at.
+
+`FlameDragAdapter` is gone too, folded into `MultiDragScaleDispatcher` as a private class. It was
+already `@internal`, so it could not be constructed from outside Flame.
+
+
 ### `HasGameReference` removed in favour of `HasGameRef`
 
 `HasGameReference` has been removed. Use `HasGameRef` instead, which is no longer deprecated and is

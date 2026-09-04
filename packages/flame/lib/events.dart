@@ -30,9 +30,6 @@ export 'src/events/dispatchers/scroll_dispatcher.dart'
     show ScrollDispatcher, ScrollDispatcherKey;
 export 'src/events/hardware_keyboard_detector.dart'
     show HardwareKeyboardDetector;
-export 'src/events/interfaces/multi_drag_listener.dart' show MultiDragListener;
-export 'src/events/interfaces/multi_tap_listener.dart' show MultiTapListener;
-export 'src/events/interfaces/scale_listener.dart' show ScaleListener;
 export 'src/events/messages/displacement_event.dart' show DisplacementEvent;
 export 'src/events/messages/double_tap_cancel_event.dart'
     show DoubleTapCancelEvent;
