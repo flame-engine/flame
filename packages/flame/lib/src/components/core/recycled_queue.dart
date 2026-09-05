@@ -209,6 +209,28 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
     }
   }
 
+  /// Returns the first element matching [test], or null if there is none,
+  /// by directly traversing the internal storage. Unlike iteration, this can
+  /// be safely called while another iteration is in progress.
+  T? firstWhereOrNull(bool Function(T) test) {
+    if (isEmpty) {
+      return null;
+    }
+    var i = _startIndex;
+    while (true) {
+      if (!_indicesToRemove.contains(i) && test(_elements[i])) {
+        return _elements[i];
+      }
+      if (i == _endIndex) {
+        return null;
+      }
+      i += 1;
+      if (i == _elements.length) {
+        i = 0;
+      }
+    }
+  }
+
   @override
   Iterator<T> get iterator {
     _garbageCollect();

@@ -216,21 +216,73 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   /// Ensure that all pending tree operations finish.
   ///
-  /// This is mainly intended for testing purposes: awaiting on this future
-  /// ensures that the game is fully loaded, and that all pending operations
-  /// of adding the components into the tree are fully materialized.
+  /// Awaiting on this future ensures that all pending operations of adding
+  /// components into the tree are fully materialized, waiting for any
+  /// components that are still loading.
   ///
-  /// Warning: awaiting on a game that was not fully connected will result in an
-  /// infinite loop. For example, this could occur if you run `x.add(y)` but
-  /// then forget to mount `x` into the game.
+  /// The `GameWidget` awaits this future when the game is first shown, so
+  /// that the game only starts, and the loading widget is only removed, once
+  /// the whole initial component tree has been loaded and mounted.
+  ///
+  /// A component that fails to load does not block this future; its error is
+  /// reported through its [Component.loaded] future, or the current [Zone] if
+  /// nothing is awaiting that future.
+  ///
+  /// Warning: since every pending component has to finish loading and
+  /// mounting first, this future never completes if the tree can never
+  /// settle. That happens when a component in the tree has an [onLoad] that
+  /// never completes, for example one that awaits something which only
+  /// happens once the game is running. Such a component keeps the
+  /// `GameWidget` on the loading widget until it is removed from the tree.
+  /// Components that are added to a parent which is not itself part of the
+  /// game tree are not waited for, since they are not loaded until that
+  /// parent is added to the game.
+  @override
   Future<void> ready() async {
-    var repeat = true;
-    while (repeat) {
-      // Give chance to other futures to execute first
-      await Future<void>.delayed(Duration.zero);
-      repeat = false;
+    while (isProcessingLifecycleEvents) {
+      // This call came from inside a lifecycle callback, which runs while
+      // [processLifecycleEvents] is iterating over the event queue. Since
+      // the queue only supports one iteration at a time, wait until the
+      // current processing pass has finished.
+      await null;
+    }
+    var wake = Completer<void>();
+    void wakeUp() {
+      if (!wake.isCompleted) {
+        wake.complete();
+      }
+    }
+
+    final watchedChildren = <Component>{};
+    while (hasLifecycleEvents) {
       processLifecycleEvents();
-      repeat |= hasLifecycleEvents;
+      if (!hasLifecycleEvents) {
+        break;
+      }
+      if (wake.isCompleted) {
+        wake = Completer<void>();
+      }
+      var hasLoadingChildren = false;
+      for (final event in queue) {
+        final child = event.child;
+        if (child == null || !child.isLoading) {
+          continue;
+        }
+        hasLoadingChildren = true;
+        if (watchedChildren.add(child)) {
+          child.loadSettled.then((_) => wakeUp());
+        }
+      }
+      if (hasLoadingChildren) {
+        // Sleep until a load settles, or until the event queue is changed
+        // from the outside, for example by a component being removed while
+        // it is still loading.
+        await Future.any([wake.future, nextLifecycleEventMutation]);
+      } else {
+        // The queue is blocked on something other than loading, give other
+        // futures a chance to execute and try again.
+        await Future<void>.delayed(Duration.zero);
+      }
     }
   }
 

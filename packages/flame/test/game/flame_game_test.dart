@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -306,11 +307,66 @@ void main() {
 
         await tester.pumpWidget(GameWidget(game: game));
         await game.toBeLoaded();
+        // The loader also waits for the whole component tree to be ready, so
+        // an extra pump is needed before the game attaches.
+        await tester.pump();
         await tester.pump();
 
         expect(hasAttached, isTrue);
       });
     });
+  });
+
+  group('ready:', () {
+    testWithFlameGame(
+      'can be called from inside a lifecycle callback',
+      (game) async {
+        final component = _ReadyingOnMountComponent();
+        game.world.add(component);
+        await game.ready();
+
+        expect(component.isMounted, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'is not blocked by children of a parent outside of the game tree',
+      (game) async {
+        final detachedParent = Component();
+        final child = Component();
+        detachedParent.add(child);
+
+        await game.ready();
+
+        expect(game.hasLifecycleEvents, isFalse);
+        expect(child.isLoaded, isFalse);
+        expect(child.isMounted, isFalse);
+        expect(detachedParent.children, contains(child));
+      },
+    );
+
+    testWithFlameGame(
+      'stays pending while a child is loading and completes when it is removed',
+      (game) async {
+        final slowChild = _NeverLoadingComponent();
+        game.world.add(slowChild);
+        var isReady = false;
+        final ready = game.ready().then((_) => isReady = true);
+
+        await Future<void>.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
+        expect(isReady, isFalse);
+        expect(game.hasLifecycleEvents, isTrue);
+
+        slowChild.removeFromParent();
+        await ready;
+
+        expect(isReady, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+        expect(slowChild.isMounted, isFalse);
+      },
+    );
   });
 
   group('pauseWhenBackgrounded:', () {
@@ -523,6 +579,18 @@ class _MyAsyncComponent extends _MyComponent {
   Future<void> onLoad() {
     return Future.value();
   }
+}
+
+class _ReadyingOnMountComponent extends Component {
+  @override
+  void onMount() {
+    unawaited(findGame()!.ready());
+  }
+}
+
+class _NeverLoadingComponent extends Component {
+  @override
+  Future<void> onLoad() => Completer<void>().future;
 }
 
 class _OnAttachGame extends FlameGame {
