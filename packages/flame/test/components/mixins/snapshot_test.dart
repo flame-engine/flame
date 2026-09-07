@@ -15,7 +15,6 @@ void main() {
         'Snapshot should be created once',
         _SnapshotTestGame.new,
         (game) async {
-          await game.ready();
           final snapshotComponent = game.snapshotComponent;
 
           // Wait a few frames
@@ -38,7 +37,6 @@ void main() {
         'Should render normally when renderSnapshot is false',
         () => _SnapshotTestGame(renderSnapshot: false),
         (game) async {
-          await game.ready();
           final snapshotComponent = game.snapshotComponent;
 
           // Wait a few frames

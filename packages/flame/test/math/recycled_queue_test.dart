@@ -125,6 +125,52 @@ void main() {
       }
     });
 
+    group('firstWhereOrNull', () {
+      test('returns the first match without disturbing iteration', () {
+        final queue = RecycledQueue(_Int.new, initialCapacity: 2);
+        queue.addLast().value = 1;
+        queue.addLast().value = 2;
+        queue.addLast().value = 3;
+        queue.addLast().value = 2;
+
+        expect(queue.firstWhereOrNull((element) => element.value == 5), null);
+
+        final visited = <int?>[];
+        for (final element in queue) {
+          visited.add(element.value);
+          // Can be called mid-iteration without resetting the iterator.
+          final match = queue.firstWhereOrNull(
+            (element) => element.value == 2,
+          );
+          expect(match, _Int(2));
+        }
+        expect(visited, [1, 2, 3, 2]);
+      });
+
+      test('returns null for an empty queue', () {
+        final queue = RecycledQueue(_Int.new, initialCapacity: 0);
+        expect(queue.firstWhereOrNull((element) => true), null);
+      });
+
+      test('works on a wrapped-around queue', () {
+        final queue = RecycledQueue(_Int.new, initialCapacity: 4);
+        for (var i = 0; i < 4; i++) {
+          queue.addLast().value = i;
+        }
+        queue.removeFirst();
+        queue.removeFirst();
+        queue.addLast().value = 4;
+        queue.addLast().value = 5;
+
+        expect(queue.toList(), [2, 3, 4, 5].map(_Int.new));
+        expect(
+          queue.firstWhereOrNull((element) => element.value == 5),
+          _Int(5),
+        );
+        expect(queue.firstWhereOrNull((element) => element.value == 0), null);
+      });
+    });
+
     group('iteration', () {
       test('iterate over an empty queue', () {
         final queue1 = RecycledQueue(_Int.new, initialCapacity: 0);

@@ -50,7 +50,6 @@ void main() {
     'true',
     () => Forge2DGame(world: _TestForge2DWorld()),
     (game) async {
-      await game.ready();
       final bodyDef = BodyDef(type: BodyType.dynamic);
       final component = BodyComponent(bodyDef: bodyDef);
       await game.world.ensureAdd(component);
@@ -70,7 +69,6 @@ void main() {
       world: _TestForge2DWorld()..destroyBodiesOnRemove = false,
     ),
     (game) async {
-      await game.ready();
       final bodyDef = BodyDef(type: BodyType.dynamic);
       final component = BodyComponent(bodyDef: bodyDef);
       await game.world.ensureAdd(component);

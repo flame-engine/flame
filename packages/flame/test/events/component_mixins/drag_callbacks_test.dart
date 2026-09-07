@@ -250,7 +250,6 @@ void main() {
       'make sure the FlameGame can registers DragCallback on itself',
       DragCallbacksGame.new,
       (game) async {
-        await game.ready();
         expect(game.children.length, equals(3));
         expect(game.children.elementAt(1), isA<MultiDragScaleDispatcher>());
       },

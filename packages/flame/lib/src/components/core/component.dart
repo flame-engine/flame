@@ -223,6 +223,7 @@ class Component {
   void _clearRemovedBit() => _state &= ~_removed;
 
   Completer<void>? _loadCompleter;
+  Completer<void>? _loadSettledCompleter;
   Completer<void>? _mountCompleter;
   Completer<void>? _removeCompleter;
 
@@ -245,6 +246,22 @@ class Component {
     return isLoaded
         ? Future.value()
         : (_loadCompleter ??= Completer<void>()).future;
+  }
+
+  /// A future that completes once the [onLoad] step has settled, regardless
+  /// of whether it succeeded or failed.
+  ///
+  /// Unlike [loaded], this future never completes with an error; a load
+  /// failure is still reported through [loaded], or through the current
+  /// [Zone] if nothing is awaiting [loaded]. This is used by
+  /// [FlameGame.ready] to wait for loading components without interfering
+  /// with how their load errors are reported.
+  @internal
+  Future<void> get loadSettled {
+    if (isLoaded || _loadError != null) {
+      return Future.value();
+    }
+    return (_loadSettledCompleter ??= Completer<void>()).future;
   }
 
   /// A future that will complete once the component is mounted on its parent.
@@ -1142,6 +1159,12 @@ class Component {
     _setLoadedBit();
     _loadCompleter?.complete();
     _loadCompleter = null;
+    _completeLoadSettled();
+  }
+
+  void _completeLoadSettled() {
+    _loadSettledCompleter?.complete();
+    _loadSettledCompleter = null;
   }
 
   /// Surfaces an error thrown by [onLoad].
@@ -1166,6 +1189,7 @@ class Component {
     } else {
       Zone.current.handleUncaughtError(error, stackTrace);
     }
+    _completeLoadSettled();
   }
 
   /// Mount the component that is already loaded and has a mounted parent.
@@ -1240,11 +1264,7 @@ class Component {
   /// Used by the [FlameGame] to set the loaded state of the component, since
   /// the game isn't going through the whole normal component life cycle.
   @internal
-  void setLoaded() {
-    _setLoadedBit();
-    _loadCompleter?.complete();
-    _loadCompleter = null;
-  }
+  void setLoaded() => _finishLoading();
 
   /// Used by the [FlameGame] to set the mounted state of the component, since
   /// the game isn't going through the whole normal component life cycle.

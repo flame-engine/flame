@@ -123,7 +123,6 @@ void main() {
         ),
       ),
       (game) async {
-        await game.ready();
         final viewport = game.camera.viewport;
 
         bool hit(double x, double y) {

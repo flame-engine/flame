@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -431,6 +433,144 @@ void main() {
     });
   });
 
+  group('loading', () {
+    testWidgets(
+      'loading builder is shown until the whole component tree is loaded',
+      (tester) async {
+        final game = _SlowLoadingGame();
+        await tester.pumpWidget(
+          GameWidget(
+            game: game,
+            loadingBuilder: (_) => const Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text('Loading'),
+            ),
+          ),
+        );
+        await game.toBeLoaded();
+        await tester.pump();
+
+        // The game's own onLoad has finished, but the child component is
+        // still loading, so the game should not have started yet.
+        expect(find.text('Loading'), findsOneWidget);
+        expect(game.isAttached, isFalse);
+
+        game.childLoadCompleter.complete();
+        await tester.pump();
+
+        // The grandchild only starts loading once the child has mounted, and
+        // it should also be waited for.
+        expect(find.text('Loading'), findsOneWidget);
+        expect(game.isAttached, isFalse);
+
+        game.grandChildLoadCompleter.complete();
+        await tester.pump();
+        await tester.pump();
+
+        expect(find.text('Loading'), findsNothing);
+        expect(game.isAttached, isTrue);
+        final slowComponents = game.descendants().whereType<_SlowComponent>();
+        expect(slowComponents.length, 2);
+        expect(slowComponents.every((component) => component.isMounted), true);
+      },
+    );
+
+    testWidgets(
+      'removing a component that is stuck loading lets the game start',
+      (tester) async {
+        final game = _SlowLoadingGame();
+        await tester.pumpWidget(
+          GameWidget(
+            game: game,
+            loadingBuilder: (_) => const Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text('Loading'),
+            ),
+          ),
+        );
+        await game.toBeLoaded();
+        await tester.pump();
+
+        expect(find.text('Loading'), findsOneWidget);
+
+        // The slow component never finishes loading, but removing it should
+        // unblock the game start.
+        game.slowChild.removeFromParent();
+        await tester.pump();
+        await tester.pump();
+
+        expect(find.text('Loading'), findsNothing);
+        expect(game.isAttached, isTrue);
+        expect(game.slowChild.isMounted, isFalse);
+      },
+    );
+
+    testWidgets(
+      'game swapped out while loading is never mounted',
+      (tester) async {
+        const key = Key('flame-game');
+        final loadGate = Completer<void>();
+        final slowGame = _GatedLoadGame(loadGate);
+        await tester.pumpWidget(GameWidget(key: key, game: slowGame));
+
+        final quickGame = FlameGame();
+        await tester.pumpWidget(GameWidget(key: key, game: quickGame));
+        expect(quickGame.isMounted, isTrue);
+
+        loadGate.complete();
+        await tester.pump();
+        await tester.pump();
+
+        expect(slowGame.isMounted, isFalse);
+        expect(slowGame.onMountCount, 0);
+        expect(quickGame.isAttached, isTrue);
+      },
+    );
+
+    testWidgets(
+      'swapping away and back during loading only mounts the game once',
+      (tester) async {
+        const key = Key('flame-game');
+        final loadGate = Completer<void>();
+        final slowGame = _GatedLoadGame(loadGate);
+        await tester.pumpWidget(GameWidget(key: key, game: slowGame));
+
+        final otherGame = FlameGame();
+        await tester.pumpWidget(GameWidget(key: key, game: otherGame));
+        await tester.pumpWidget(GameWidget(key: key, game: slowGame));
+
+        loadGate.complete();
+        await tester.pump();
+        await tester.pump();
+
+        expect(slowGame.isMounted, isTrue);
+        expect(slowGame.onMountCount, 1);
+        expect(slowGame.isAttached, isTrue);
+      },
+    );
+
+    testWidgets(
+      'game with a synchronously loaded tree starts fully mounted',
+      (tester) async {
+        final game = FlameGame(
+          children: [
+            Component(children: [Component()]),
+          ],
+        );
+        await tester.pumpWidget(GameWidget(game: game));
+        await game.toBeLoaded();
+        await tester.pump();
+
+        expect(game.isAttached, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+        expect(
+          game.descendants().every((component) => component.isMounted),
+          isTrue,
+        );
+      },
+    );
+  });
+
   group('buildContext availability', () {
     testWidgets(
       'buildContext is available during onLoad',
@@ -465,6 +605,43 @@ void main() {
       },
     );
   });
+}
+
+class _SlowComponent extends Component {
+  _SlowComponent(this.loadCompleter);
+
+  final Completer<void> loadCompleter;
+
+  @override
+  Future<void> onLoad() => loadCompleter.future;
+}
+
+class _SlowLoadingGame extends FlameGame {
+  final childLoadCompleter = Completer<void>();
+  final grandChildLoadCompleter = Completer<void>();
+  late final _SlowComponent slowChild;
+
+  @override
+  Future<void> onLoad() async {
+    slowChild = _SlowComponent(childLoadCompleter)
+      ..add(_SlowComponent(grandChildLoadCompleter));
+    world.add(slowChild);
+  }
+}
+
+class _GatedLoadGame extends FlameGame {
+  _GatedLoadGame(this.loadGate);
+
+  final Completer<void> loadGate;
+  int onMountCount = 0;
+
+  @override
+  Future<void> onLoad() => loadGate.future;
+
+  @override
+  void onMount() {
+    onMountCount++;
+  }
 }
 
 class _GameWithBuildContextCheck extends FlameGame {
