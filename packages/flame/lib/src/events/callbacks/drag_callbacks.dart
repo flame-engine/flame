@@ -60,8 +60,15 @@ mixin DragCallbacks on Component implements PointerInputCallbacks {
   ///
   /// This event will be delivered to the component(s) that captured the initial
   /// [onDragStart], even if the point of touch moves outside of the boundaries
-  /// of the component. In the latter case `event.localPosition` will contain a
-  /// NaN point.
+  /// of the component; the local coordinates simply fall outside the
+  /// component's own bounds in that case.
+  ///
+  /// The exception is when hit testing stops reaching the component altogether
+  /// while it still holds the drag, for example if an ancestor turns on
+  /// [IgnoreEvents] mid-gesture. It still receives the event, but with no
+  /// rendering trace behind it, so reading `event.localStartPosition`,
+  /// `localEndPosition` or `localDelta` throws. Use `canvasStartPosition` /
+  /// `canvasEndPosition` if you need a position that is always available.
   void onDragUpdate(DragUpdateEvent event) {}
 
   /// The drag event has ended.
