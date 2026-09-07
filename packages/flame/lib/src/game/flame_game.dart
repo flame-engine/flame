@@ -234,9 +234,11 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   /// never completes, for example one that awaits something which only
   /// happens once the game is running. Such a component keeps the
   /// `GameWidget` on the loading widget until it is removed from the tree.
-  /// Components that are added to a parent which is not itself part of the
-  /// game tree are not waited for, since they are not loaded until that
-  /// parent is added to the game.
+  /// The same happens when a component is added to a parent that is not
+  /// itself part of the game tree: it never starts loading, since loading
+  /// only begins once its parent is mounted, so it blocks this future in
+  /// the same way until either the parent is added to the game or the
+  /// orphaned component is removed.
   @override
   Future<void> ready() async {
     while (isProcessingLifecycleEvents) {
@@ -279,8 +281,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         // it is still loading.
         await Future.any([wake.future, nextLifecycleEventMutation]);
       } else {
-        // The queue is blocked on something other than loading, give other
-        // futures a chance to execute and try again.
+        // The queue is stuck on a component whose parent is not part of the
+        // game tree, so it will never start loading. Keep retrying in case
+        // that gets fixed.
         await Future<void>.delayed(Duration.zero);
       }
     }

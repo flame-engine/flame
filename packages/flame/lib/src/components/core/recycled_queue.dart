@@ -15,8 +15,16 @@ import 'dart:math';
 ///   it (use [first] to retrieve the first element beforehand).
 ///
 /// In addition, the queue can be iterated over, and modified during that
-/// iteration via the methods [removeCurrent] and [addLast]. However, only one
-/// iterator is allowed at a time.
+/// iteration via the methods [removeCurrent] and [addLast]. However, the
+/// queue is its own [Iterator]: [iterator] returns `this` instead of a
+/// fresh object, so there is only one cursor shared by every `for`-in loop
+/// or [Iterable] method over the same queue instance. Starting a second
+/// iteration while the first one is still in progress, for example calling
+/// a `for`-in loop over the queue from inside another one, resets that
+/// shared cursor and corrupts the outer iteration. Use [forEachWhere] or
+/// [firstWhereOrNull] instead when the queue may already be mid-iteration:
+/// they read the backing storage directly rather than going through the
+/// shared cursor.
 ///
 /// Internally, the queue is backed by a circular list.
 class RecycledQueue<T extends Disposable> extends Iterable<T>
@@ -188,8 +196,10 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
   }
 
   /// Calls [action] for each element matching [test] by directly traversing
-  /// the internal storage. Unlike iteration, this can be safely called while
-  /// another iteration is in progress.
+  /// the internal storage, rather than through [iterator]. Unlike a `for`-in
+  /// loop over the queue, this can be safely called while another iteration
+  /// of the same queue is already in progress, since it does not touch the
+  /// shared cursor that iteration relies on.
   void forEachWhere(bool Function(T) test, void Function(T) action) {
     if (isEmpty) {
       return;
@@ -210,8 +220,11 @@ class RecycledQueue<T extends Disposable> extends Iterable<T>
   }
 
   /// Returns the first element matching [test], or null if there is none,
-  /// by directly traversing the internal storage. Unlike iteration, this can
-  /// be safely called while another iteration is in progress.
+  /// by directly traversing the internal storage, rather than through
+  /// [iterator]. Unlike a `for`-in loop over the queue, this can be safely
+  /// called while another iteration of the same queue is already in
+  /// progress, since it does not touch the shared cursor that iteration
+  /// relies on.
   T? firstWhereOrNull(bool Function(T) test) {
     if (isEmpty) {
       return null;

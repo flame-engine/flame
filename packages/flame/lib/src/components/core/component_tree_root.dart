@@ -1,5 +1,22 @@
 part of 'component.dart';
 
+/// A future that can be awaited repeatedly, and is resolved by calling
+/// [fire]. Once fired, a new future is created lazily for the next round of
+/// waiters, so the signal can be awaited again right away.
+class _ResettableSignal {
+  Completer<void>? _completer;
+
+  /// Whether some caller is currently awaiting [future].
+  bool get isPending => _completer != null;
+
+  Future<void> get future => (_completer ??= Completer<void>()).future;
+
+  void fire() {
+    _completer?.complete();
+    _completer = null;
+  }
+}
+
 /// **ComponentTreeRoot** is a component that can be used as a root node of a
 /// component tree.
 ///
@@ -21,8 +38,8 @@ class ComponentTreeRoot extends Component {
   /// does not override equality.
   final Set<Component> _blocked;
   late final Map<ComponentKey, Component> _index = {};
-  Completer<void>? _lifecycleEventsCompleter;
-  Completer<void>? _lifecycleEventMutationCompleter;
+  final _ResettableSignal _lifecycleEventsSignal = _ResettableSignal();
+  final _ResettableSignal _lifecycleEventMutationSignal = _ResettableSignal();
 
   /// A future that completes the next time the lifecycle event queue is
   /// mutated: when a new event is enqueued or an existing event is cancelled.
@@ -32,11 +49,10 @@ class ComponentTreeRoot extends Component {
   /// example when a component is removed while it is still loading.
   @internal
   Future<void> get nextLifecycleEventMutation =>
-      (_lifecycleEventMutationCompleter ??= Completer<void>()).future;
+      _lifecycleEventMutationSignal.future;
 
   void _notifyLifecycleEventMutation() {
-    _lifecycleEventMutationCompleter?.complete();
-    _lifecycleEventMutationCompleter = null;
+    _lifecycleEventMutationSignal.fire();
   }
 
   void _enqueueAdd(Component child, Component parent) {
@@ -200,9 +216,7 @@ class ComponentTreeRoot extends Component {
   /// updateUi(player.inventory);
   /// ```
   Future<void> get lifecycleEventsProcessed {
-    return !hasLifecycleEvents
-        ? Future.value()
-        : (_lifecycleEventsCompleter ??= Completer<void>()).future;
+    return !hasLifecycleEvents ? Future.value() : _lifecycleEventsSignal.future;
   }
 
   /// Whether [processLifecycleEvents] is currently running.
@@ -217,7 +231,7 @@ class ComponentTreeRoot extends Component {
   void processLifecycleEvents() {
     if (!hasLifecycleEvents) {
       assert(
-        _lifecycleEventsCompleter == null,
+        !_lifecycleEventsSignal.isPending,
         'The completer is only ever created while events are queued, so it '
         'should never exist while the queue is empty',
       );
@@ -281,9 +295,8 @@ class ComponentTreeRoot extends Component {
       parent.rebalanceChildren();
     }
 
-    if (!hasLifecycleEvents && _lifecycleEventsCompleter != null) {
-      _lifecycleEventsCompleter!.complete();
-      _lifecycleEventsCompleter = null;
+    if (!hasLifecycleEvents) {
+      _lifecycleEventsSignal.fire();
     }
   }
 
