@@ -281,9 +281,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         // it is still loading.
         await Future.any([wake.future, nextLifecycleEventMutation]);
       } else {
-        // The queue is stuck on a component whose parent is not part of the
-        // game tree, so it will never start loading. Keep retrying in case
-        // that gets fixed.
+        // The queue is stuck on a component added to a parent that is not
+        // part of the game tree, so it will never start loading. There is
+        // nothing to await here, so yield and check again next iteration.
         await Future<void>.delayed(Duration.zero);
       }
     }
