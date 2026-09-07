@@ -1,4 +1,4 @@
-import 'package:flame/components.dart' show Component, HasWorldReference;
+import 'package:flame/components.dart' show Component, HasWorldRef;
 import 'package:flame_3d/camera.dart';
 import 'package:flame_3d/components.dart';
 import 'package:flame_3d/game.dart';
@@ -30,7 +30,7 @@ import 'package:meta/meta.dart';
 /// rotating or scaling the [Component3D] will affect the whole
 /// group as if it was a single entity.
 /// {@endtemplate}
-abstract class Component3D extends Component with HasWorldReference<World3D> {
+abstract class Component3D extends Component with HasWorldRef<World3D> {
   final Transform3D transform;
 
   /// {@macro component_3d}

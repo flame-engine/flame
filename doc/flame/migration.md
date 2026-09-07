@@ -46,6 +46,32 @@ Setting the game instance explicitly (useful for mocking in tests) is done throu
 well, and the `findGame()` override behaves exactly as before.
 
 
+### `HasWorldReference` renamed to `HasWorldRef`
+
+`HasWorldReference` has been renamed to `HasWorldRef`, and its accessor `world` has been renamed to
+`worldRef`, so that it mirrors `HasGameRef`/`gameRef` exactly. The old name is gone, there is no
+deprecated alias:
+
+```dart
+// Before
+class MyComponent extends Component with HasWorldReference<MyWorld> {
+  void doSomething() => world.add(AnotherComponent());
+}
+
+// After
+class MyComponent extends Component with HasWorldRef<MyWorld> {
+  void doSomething() => worldRef.add(AnotherComponent());
+}
+```
+
+Note that this only affects the mixin's accessor; `FlameGame.world` and `CameraComponent.world` are
+unchanged. Setting the world instance explicitly (useful for mocking in tests) is now done through
+`worldRef`, and `findWorld()` behaves exactly as before.
+
+Components that get the mixin indirectly are affected too: `Component3D` in `flame_3d` mixes in
+`HasWorldRef<World3D>`, so subclasses reaching for the enclosing world must use `worldRef`.
+
+
 ### Asset prefix removed
 
 `Images` and `AssetsCache` no longer prepend anything to the paths you give them. `Images` used to

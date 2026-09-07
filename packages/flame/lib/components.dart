@@ -29,11 +29,11 @@ export 'src/components/mixins/has_ancestor.dart';
 export 'src/components/mixins/has_auto_batched_children.dart'
     show HasAutoBatchedChildren;
 export 'src/components/mixins/has_decorator.dart' show HasDecorator;
-export 'src/components/mixins/has_game_ref.dart' show HasGameRef;
+export 'src/components/mixins/has_game_ref.dart';
 export 'src/components/mixins/has_paint.dart';
 export 'src/components/mixins/has_time_scale.dart';
 export 'src/components/mixins/has_visibility.dart';
-export 'src/components/mixins/has_world.dart';
+export 'src/components/mixins/has_world_ref.dart';
 export 'src/components/mixins/ignore_events.dart';
 export 'src/components/mixins/keyboard_handler.dart';
 export 'src/components/mixins/notifier.dart';

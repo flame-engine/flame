@@ -49,12 +49,12 @@ class LightComponent extends Component3D {
   @override
   void onMount() {
     super.onMount();
-    world.addLight(_light);
+    worldRef.addLight(_light);
   }
 
   @override
   void onRemove() {
-    world.removeLight(_light);
+    worldRef.removeLight(_light);
     super.onRemove();
   }
 
