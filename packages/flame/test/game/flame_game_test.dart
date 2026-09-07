@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -365,6 +366,40 @@ void main() {
         expect(isReady, isTrue);
         expect(game.hasLifecycleEvents, isFalse);
         expect(slowChild.isMounted, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'wakes from a queue mutation when the queue is stuck without a '
+      'loading child',
+      (game) async {
+        // An ADD event can only ever be enqueued once its parent is already
+        // mounted, so the public API cannot produce an event that is
+        // permanently blocked without a loading child. Craft one directly to
+        // exercise that fallback branch of `ready`.
+        final stuckEvent = game.queue.addLast()
+          ..kind = LifecycleEventKind.add
+          ..child = Component()
+          ..parent = Component();
+
+        var isReady = false;
+        final ready = game.ready().then((_) => isReady = true);
+
+        await Future<void>.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
+        expect(isReady, isFalse);
+        expect(game.hasLifecycleEvents, isTrue);
+
+        // Cancel the stuck event and add an unrelated component: `ready`
+        // only has the queue-mutation notification to wait on here, so it
+        // must be woken up by this, rather than by anything related to the
+        // loading child it would watch in the other branch.
+        stuckEvent.kind = LifecycleEventKind.unknown;
+        game.world.add(Component());
+        await ready;
+
+        expect(isReady, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
       },
     );
   });
