@@ -265,6 +265,9 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         wake = Completer<void>();
       }
       var hasLoadingChildren = false;
+      // Safe to iterate plainly: this always runs after
+      // [processLifecycleEvents] has returned, so it is never nested inside
+      // its own iteration over the same queue.
       for (final event in queue) {
         final child = event.child;
         if (child == null || !child.isLoading) {
