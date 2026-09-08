@@ -58,8 +58,20 @@ class TextPaint extends TextRenderer {
   TextRenderer copyWithPaint(Paint paint) {
     return copyWith(
       (style) {
+        final shadows = style.shadows;
         return style.copyWith(
           foreground: paint,
+          shadows: shadows
+              ?.map(
+                (shadow) => Shadow(
+                  color: shadow.color.withValues(
+                    alpha: shadow.color.a * paint.color.a,
+                  ),
+                  offset: shadow.offset,
+                  blurRadius: shadow.blurRadius,
+                ),
+              )
+              .toList(),
         );
       },
     );

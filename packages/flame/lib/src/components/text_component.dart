@@ -20,6 +20,8 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
     super.key,
   }) : _text = text ?? '',
        _textRenderer = textRenderer ?? TextRendererFactory.createDefault<T>() {
+    _paintedTextRenderer = _textRenderer;
+    _seedPaintColor();
     updateBounds();
   }
 
@@ -32,17 +34,41 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
     }
   }
 
+  /// The renderer as given by the user. Setting it also starts [paint] from
+  /// the style's own color, see [paintedTextRenderer].
   T get textRenderer => _textRenderer;
   T _textRenderer;
   set textRenderer(T textRenderer) {
     _textRenderer = textRenderer;
+    _paintedTextRenderer = textRenderer;
+    _seedPaintColor();
     updateBounds();
+  }
+
+  /// [textRenderer] with the component's [paint] applied, which is what the
+  /// text is drawn with. It is derived from [textRenderer] again on every
+  /// paint change, so the paint never compounds across changes.
+  @internal
+  T get paintedTextRenderer => _paintedTextRenderer;
+  late T _paintedTextRenderer;
+
+  /// Starts [paint] from the style's own color, so that the first paint change
+  /// (for example an `OpacityEffect`) fades the text in its color instead of
+  /// replacing it with the default white paint.
+  void _seedPaintColor() {
+    final renderer = _textRenderer;
+    if (renderer is TextPaint) {
+      final color = renderer.style.color;
+      if (color != null) {
+        paint.color = color;
+      }
+    }
   }
 
   late InlineTextElement _textElement;
 
   void _updateElement() {
-    _textElement = _textRenderer.format(_text);
+    _textElement = _paintedTextRenderer.format(_text);
   }
 
   @internal
@@ -60,7 +86,7 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
 
   @override
   void onChanged() {
-    _textRenderer = _textRenderer.copyWithPaint(paint) as T;
+    _paintedTextRenderer = _textRenderer.copyWithPaint(paint) as T;
     _updateElement();
   }
 }

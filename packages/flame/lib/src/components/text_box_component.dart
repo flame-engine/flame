@@ -401,7 +401,7 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
         line = line.substring(0, nChars);
       }
 
-      final textElement = textRenderer.format(line);
+      final textElement = paintedTextRenderer.format(line);
       final metrics = textElement.metrics;
 
       final position = Vector2(
