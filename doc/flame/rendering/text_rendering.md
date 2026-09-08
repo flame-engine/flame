@@ -67,6 +67,13 @@ class MyGame extends FlameGame {
 }
 ```
 
+`TextComponent` has the `HasPaint` mixin, so effects such as `OpacityEffect` and `ColorEffect`
+work on it. The component's `paint` is applied on top of the `TextRenderer`: the opacity of the
+paint scales the opacity of the text and of the shadows defined in the style, and a color filter
+set on the paint is applied to the glyphs. The renderer you set is never modified, `textRenderer`
+always returns it. `TextBoxComponent` applies the `paint` to its whole box instead, including the
+background.
+
 You can find all the options under [TextComponent's
 API](https://pub.dev/documentation/flame/latest/components/TextComponent-class.html).
 

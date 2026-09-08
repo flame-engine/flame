@@ -29,6 +29,23 @@ void main() {
       );
     });
 
+    test('copyWithPaint keeps the renderer properties', () async {
+      final renderer = await _createRenderer(scale: 2, letterSpacing: 1);
+      const colorFilter = ColorFilter.mode(Color(0xFFFF0000), BlendMode.srcIn);
+      renderer.paint.colorFilter = colorFilter;
+
+      final copy =
+          renderer.copyWithPaint(Paint()..color = const Color(0x80FFFFFF))
+              as SpriteFontRenderer;
+
+      expect(copy.font, same(renderer.font));
+      expect(copy.scale, 2);
+      expect(copy.letterSpacing, 1);
+      expect(copy.paint, isNot(same(renderer.paint)));
+      expect(copy.paint.colorFilter, colorFilter);
+      expectColorAlpha(copy.paint.color, const Color(0x80FFFFFF));
+    });
+
     testGolden(
       'text rendering at different scales',
       (game, tester) async {
