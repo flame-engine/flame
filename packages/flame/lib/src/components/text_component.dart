@@ -69,13 +69,13 @@ class TextComponent<T extends TextRenderer> extends PositionComponent
 
   void _updateElement() {
     _textElement = _paintedTextRenderer.format(_text);
+    _textElement.translate(0, _textElement.metrics.ascent);
   }
 
   @internal
   void updateBounds() {
     _updateElement();
     final measurements = _textElement.metrics;
-    _textElement.translate(0, measurements.ascent);
     size.setValues(measurements.width, measurements.height);
   }
 
