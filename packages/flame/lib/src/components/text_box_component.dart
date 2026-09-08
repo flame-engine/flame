@@ -6,7 +6,6 @@ import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
 import 'package:flutter/widgets.dart' hide Image;
 import 'package:meta/meta.dart';
@@ -63,8 +62,6 @@ class TextBoxConfig {
 }
 
 class TextBoxComponent<T extends TextRenderer> extends TextComponent {
-  static final Paint _imagePaint = BasicPalette.white.paint()
-    ..filterQuality = FilterQuality.medium;
   TextBoxConfig _boxConfig;
 
   TextBoxConfig get boxConfig => _boxConfig;
@@ -361,6 +358,9 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
   }
 
+  /// Draws the cached image of the text box with the component's [paint], so
+  /// that the opacity and the color filter of the paint apply to the whole
+  /// box, including the background, without re-rendering the text.
   @override
   void render(Canvas canvas) {
     if (cache == null) {
@@ -368,9 +368,18 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     canvas.save();
     canvas.scale(1 / pixelRatio);
-    canvas.drawImage(cache!, Offset.zero, _imagePaint);
+    canvas.drawImage(
+      cache!,
+      Offset.zero,
+      paint..filterQuality = FilterQuality.medium,
+    );
     canvas.restore();
   }
+
+  /// The paint is applied when the cached image is drawn in [render], so the
+  /// text does not need to be formatted again when the paint changes.
+  @override
+  void onChanged() {}
 
   Future<Image> _fullRenderAsImage(Vector2 size) {
     final recorder = PictureRecorder();

@@ -29,7 +29,7 @@ class DebugTextRenderer extends TextRenderer {
   @override
   TextRenderer copyWithPaint(Paint paint) {
     return DebugTextRenderer(
-      color: paint.color,
+      color: color.withValues(alpha: color.a * paint.color.a),
       fontSize: fontSize,
       lineHeight: lineHeight,
       fontWeight: fontWeight,

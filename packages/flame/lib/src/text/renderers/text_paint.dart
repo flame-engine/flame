@@ -54,15 +54,60 @@ class TextPaint extends TextRenderer {
     return _textPainterCache.getValue(text)!;
   }
 
+  /// Returns a copy of this [TextPaint] where [paint] is applied on top of
+  /// the [style].
+  ///
+  /// The opacity of [paint] scales the opacity of the text color, the
+  /// [TextStyle.shadows], the decoration color and the background, so opacity
+  /// changes made to the paint of a component affect the whole text without
+  /// discarding the colors that the [style] defines. The color filter, mask
+  /// filter and shader of [paint] are applied to the glyphs when set.
   @override
   TextRenderer copyWithPaint(Paint paint) {
+    final opacity = paint.color.a;
     return copyWith(
       (style) {
         return style.copyWith(
-          foreground: paint,
+          foreground: _foregroundWithPaint(style, paint),
+          shadows: style.shadows
+              ?.map((shadow) => _shadowWithOpacity(shadow, opacity))
+              .toList(),
+          decorationColor: _withOpacity(style.decorationColor, opacity),
+          backgroundColor: _withOpacity(style.backgroundColor, opacity),
+          background: _paintWithOpacity(style.background, opacity),
         );
       },
     );
+  }
+
+  static Paint _foregroundWithPaint(TextStyle style, Paint paint) {
+    final foreground = style.foreground;
+    final color = foreground?.color ?? style.color ?? defaultTextStyle.color!;
+    return (foreground == null ? Paint() : Paint.from(foreground))
+      ..color = color.withValues(alpha: color.a * paint.color.a)
+      ..colorFilter = paint.colorFilter ?? foreground?.colorFilter
+      ..maskFilter = paint.maskFilter ?? foreground?.maskFilter
+      ..shader = paint.shader ?? foreground?.shader;
+  }
+
+  static Shadow _shadowWithOpacity(Shadow shadow, double opacity) {
+    return Shadow(
+      color: shadow.color.withValues(alpha: shadow.color.a * opacity),
+      offset: shadow.offset,
+      blurRadius: shadow.blurRadius,
+    );
+  }
+
+  static Color? _withOpacity(Color? color, double opacity) {
+    return color?.withValues(alpha: color.a * opacity);
+  }
+
+  static Paint? _paintWithOpacity(Paint? paint, double opacity) {
+    if (paint == null) {
+      return null;
+    }
+    return Paint.from(paint)
+      ..color = paint.color.withValues(alpha: paint.color.a * opacity);
   }
 
   TextPaint copyWith(
