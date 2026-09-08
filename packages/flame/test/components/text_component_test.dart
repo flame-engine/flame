@@ -75,6 +75,7 @@ void main() {
       expect(painted.fontSize, 30);
       expectDouble(painted.foreground!.color.a, 0.25);
       expectDouble(painted.shadows!.single.color.a, shadowColor.a * 0.25);
+    });
 
     test('keeps the glyphs translated by the ascent after a paint change', () {
       final elements = <_RecordingTextElement>[];
