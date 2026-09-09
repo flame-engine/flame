@@ -97,6 +97,32 @@ void main() {
     );
 
     testWithFlameGame(
+      'reset notifies the component of the restored color filter',
+      (game) async {
+        final component = TextComponent<TextPaint>(text: 'foo');
+        await game.ensureAdd(component);
+
+        final effect = ColorEffect(
+          Colors.red,
+          EffectController(duration: 1),
+        );
+        await component.ensureAdd(effect);
+        game.update(0.5);
+        expect(
+          component.paintedTextRenderer.style.foreground!.colorFilter,
+          isNotNull,
+        );
+
+        effect.reset();
+
+        expect(
+          component.paintedTextRenderer.style.foreground!.colorFilter,
+          isNull,
+        );
+      },
+    );
+
+    testWithFlameGame(
       'can be re-added in the component tree',
       (game) async {
         final component = _PaintComponent();

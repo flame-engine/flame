@@ -53,5 +53,6 @@ class ColorEffect extends ComponentEffect<HasPaint> {
   void reset() {
     super.reset();
     target.getPaint(paintId).colorFilter = _original;
+    target.onChanged();
   }
 }
