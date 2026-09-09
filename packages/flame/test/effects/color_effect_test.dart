@@ -109,14 +109,14 @@ void main() {
         await component.ensureAdd(effect);
         game.update(0.5);
         expect(
-          component.textRenderer.style.foreground!.colorFilter,
+          component.paintedTextRenderer.style.foreground!.colorFilter,
           isNotNull,
         );
 
         effect.reset();
 
         expect(
-          component.textRenderer.style.foreground!.colorFilter,
+          component.paintedTextRenderer.style.foreground!.colorFilter,
           isNull,
         );
       },
