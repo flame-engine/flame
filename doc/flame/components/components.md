@@ -292,9 +292,9 @@ A component does not count as loaded until every child that was added during its
 finished loading as well, even without awaiting their `loaded` futures explicitly. This means that
 by the time the component mounts, the subtree it created during `onLoad` is fully loaded, and those
 children mount together with it in the same lifecycle processing pass. A child that fails to load
-is the exception: it is dropped from the tree without blocking its parent. Because the parent now
-waits for its children, a child's `onLoad` must not await the parent's `loaded` future, that would
-deadlock.
+is the exception: it is dropped from the tree without blocking its parent. Because the parent
+waits for its children, a child's `onLoad` must not await the parent's `loaded` or `mounted`
+future, that would deadlock.
 
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list

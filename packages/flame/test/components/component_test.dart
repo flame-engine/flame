@@ -716,6 +716,27 @@ void main() {
             expect(parent.child.isMounted, isFalse);
           },
         );
+
+        testWithFlameGame(
+          'moving a child that never loads to another parent unblocks the '
+          'old parent',
+          (game) async {
+            final neverCompletingGate = Completer<void>();
+            final parent = _ParentWithGatedChild(neverCompletingGate);
+            final otherParent = Component();
+            game.world.add(parent);
+            game.update(0);
+            expect(parent.isLoaded, isFalse);
+
+            otherParent.add(parent.child);
+            await parent.loaded;
+            await game.ready();
+
+            expect(parent.isMounted, isTrue);
+            expect(parent.children, isEmpty);
+            expect(parent.child.parent, otherParent);
+          },
+        );
       });
 
       testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {

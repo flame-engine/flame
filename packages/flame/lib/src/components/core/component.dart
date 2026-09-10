@@ -825,7 +825,7 @@ class Component {
   void _addChild(Component child) {
     final game = findGame() ?? child.findGame();
     if ((!isMounted && !child.isMounted) || game == null) {
-      child._parent?.children._remove(child);
+      child._parent?._detachChild(child);
       child._parent = this;
       children._add(child);
     } else if (child._parent != null) {
@@ -901,11 +901,18 @@ class Component {
         child._parent = null;
       }
     } else {
-      _children?._remove(child);
+      _detachChild(child);
       child._parent = null;
-      if (isLoading) {
-        _notifyChildrenChangedWhileLoading();
-      }
+    }
+  }
+
+  /// Takes [child] out of the children of this not yet mounted component,
+  /// and re-evaluates the load gate in case this component is waiting for
+  /// that child to finish loading.
+  void _detachChild(Component child) {
+    _children?._remove(child);
+    if (isLoading) {
+      _notifyChildrenChangedWhileLoading();
     }
   }
 
@@ -1170,16 +1177,18 @@ class Component {
     if (_loadingChildren().isEmpty) {
       _completeLoading();
     } else {
-      _waitForLoadingChildren().then((_) => _completeLoading());
+      _completeLoadingAfterChildren();
     }
   }
 
-  /// Waits until no child of this component is loading anymore.
+  /// Waits until no child of this component is loading anymore, and then
+  /// completes the load, synchronously with that observation so that no
+  /// child can start loading in between.
   ///
   /// Children whose load has failed do not count as loading; they are
   /// dropped when this component mounts, the same way as when they fail to
   /// load under a parent that is already mounted.
-  Future<void> _waitForLoadingChildren() async {
+  Future<void> _completeLoadingAfterChildren() async {
     var wake = Completer<void>();
     void wakeUp() {
       if (!wake.isCompleted) {
@@ -1191,6 +1200,7 @@ class Component {
     while (true) {
       final loadingChildren = _loadingChildren();
       if (loadingChildren.isEmpty) {
+        _completeLoading();
         return;
       }
       if (wake.isCompleted) {
