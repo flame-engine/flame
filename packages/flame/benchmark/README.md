@@ -58,6 +58,11 @@ the benchmark results are printed above it.
   (`componentsAtPoint`) with and without the hit-test cache.
 - `collision_detection_benchmark.dart`: the collision detection system with
   flat and nested hitbox hierarchies.
+- `path_collision_benchmark.dart`: the collision detection system with a
+  hitbox sampled from a `Path` contour against circles, rectangles, polygons,
+  and itself, next to the same scenes with a hand-written polygon of the same
+  shape. The polygon scenes also run on main, so a branch that adds `Path`
+  hitboxes can be compared against it.
 - `path_contour_benchmark.dart`: a standalone report, not part of `main.dart`,
   that compares hitboxes built from sampled `Path` contours with a
   hand-written polygon: vertex counts and sampling error, per-ray intersection
