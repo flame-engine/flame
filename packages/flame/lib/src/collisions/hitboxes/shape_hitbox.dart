@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -163,8 +165,21 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
       other is ShapeComponent,
       'The intersection can only be performed between shapes',
     );
-    return intersection_system.intersections(this, other as ShapeComponent);
+    final otherAabb = (other as ShapeHitbox).aabb;
+    final overlappingRect = Rect.fromLTRB(
+      max(aabb.min.x, otherAabb.min.x),
+      max(aabb.min.y, otherAabb.min.y),
+      min(aabb.max.x, otherAabb.max.x),
+      min(aabb.max.y, otherAabb.max.y),
+    ).inflate(_overlapEpsilon);
+    return intersection_system.intersections(
+      this,
+      other,
+      overlappingRect: overlappingRect,
+    );
   }
+
+  static const double _overlapEpsilon = 0.01;
 
   /// Since this is a cheaper calculation than checking towards all shapes, this
   /// check can be done first to see if it even is possible that the shapes can

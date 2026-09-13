@@ -7,7 +7,7 @@ abstract class Intersections<
   T1 extends ShapeComponent,
   T2 extends ShapeComponent
 > {
-  List<Vector2> intersect(T1 shapeA, T2 shapeB);
+  List<Vector2> intersect(T1 shapeA, T2 shapeB, {Rect? overlappingRect});
 
   bool supportsShapes(ShapeComponent shapeA, ShapeComponent shapeB) {
     return shapeA is T1 && shapeB is T2 || shapeA is T2 && shapeB is T1;
@@ -15,12 +15,13 @@ abstract class Intersections<
 
   List<Vector2> unorderedIntersect(
     ShapeComponent shapeA,
-    ShapeComponent shapeB,
-  ) {
+    ShapeComponent shapeB, {
+    Rect? overlappingRect,
+  }) {
     if (shapeA is T1 && shapeB is T2) {
-      return intersect(shapeA, shapeB);
+      return intersect(shapeA, shapeB, overlappingRect: overlappingRect);
     } else if (shapeA is T2 && shapeB is T1) {
-      return intersect(shapeB, shapeA);
+      return intersect(shapeB, shapeA, overlappingRect: overlappingRect);
     } else {
       throw 'Unsupported shapes';
     }
@@ -106,7 +107,11 @@ class CirclePolygonIntersections
 class CircleCircleIntersections
     extends Intersections<CircleComponent, CircleComponent> {
   @override
-  List<Vector2> intersect(CircleComponent shapeA, CircleComponent shapeB) {
+  List<Vector2> intersect(
+    CircleComponent shapeA,
+    CircleComponent shapeB, {
+    Rect? overlappingRect,
+  }) {
     final centerA = shapeA.absoluteCenter;
     final centerB = shapeB.absoluteCenter;
     final distance = centerA.distanceTo(centerB);
@@ -184,7 +189,11 @@ final List<Intersections> _intersectionSystems = [
   PolygonPolygonIntersections(),
 ];
 
-List<Vector2> intersections(ShapeComponent shapeA, ShapeComponent shapeB) {
+List<Vector2> intersections(
+  ShapeComponent shapeA,
+  ShapeComponent shapeB, {
+  Rect? overlappingRect,
+}) {
   final intersectionSystem = _intersectionSystems.firstWhere(
     (system) => system.supportsShapes(shapeA, shapeB),
     orElse: () {
@@ -192,5 +201,9 @@ List<Vector2> intersections(ShapeComponent shapeA, ShapeComponent shapeB) {
           '${shapeA.runtimeType} and ${shapeB.runtimeType}';
     },
   );
-  return intersectionSystem.unorderedIntersect(shapeA, shapeB);
+  return intersectionSystem.unorderedIntersect(
+    shapeA,
+    shapeB,
+    overlappingRect: overlappingRect,
+  );
 }
