@@ -118,26 +118,39 @@ class CircleComponent extends ShapeComponent {
   List<Vector2> lineSegmentIntersections(
     LineSegment lineSegment, {
     double epsilon = double.minPositive,
+    Vector2? center,
+    double? radius,
   }) {
+    final effectiveCenter = center ?? absoluteCenter;
+    final effectiveRadius = radius ?? scaledRadius;
+    final from = lineSegment.from;
+    final to = lineSegment.to;
+    // The segment can only reach the circle if its bounding box comes within
+    // the radius of the center.
+    if (min(from.x, to.x) > effectiveCenter.x + effectiveRadius ||
+        max(from.x, to.x) < effectiveCenter.x - effectiveRadius ||
+        min(from.y, to.y) > effectiveCenter.y + effectiveRadius ||
+        max(from.y, to.y) < effectiveCenter.y - effectiveRadius) {
+      return const [];
+    }
     // A point on a line is `from + t*(to - from)`. We're trying to solve the
     // equation `‖point - center‖² == radius²`. Or, denoting `Δ₂₁ = to - from`
     // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == radius²`.
     // Expanding the norm, this becomes a square equation in `t`:
     // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
     _delta21
-      ..setFrom(lineSegment.to)
-      ..sub(lineSegment.from); // to - from
+      ..setFrom(to)
+      ..sub(from); // to - from
     _delta10
-      ..setFrom(lineSegment.from)
-      ..sub(absoluteCenter); // from - absoluteCenter
+      ..setFrom(from)
+      ..sub(effectiveCenter); // from - absoluteCenter
     final a = _delta21.length2;
     final b = 2 * _delta21.dot(_delta10);
-    final effectiveRadius = scaledRadius;
     final c = _delta10.length2 - effectiveRadius * effectiveRadius;
 
     return solveQuadratic(a, b, c)
         .where((t) => t > 0 && t <= 1)
-        .map((t) => lineSegment.from.clone()..addScaled(_delta21, t))
+        .map((t) => from.clone()..addScaled(_delta21, t))
         .toList();
   }
 
