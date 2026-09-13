@@ -1,8 +1,8 @@
 import 'dart:math';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -12,15 +12,13 @@ class PolygonComponent extends ShapeComponent {
   final List<Vector2> _vertices;
   UnmodifiableListView<Vector2> get vertices => UnmodifiableListView(_vertices);
   // These lists are used to minimize the amount of objects that are created,
-  // and only change the contained object if the corresponding `ValueCache` is
+  // and only change the contained object if the cached absolute transform is
   // deemed outdated.
   late final List<Vector2> _globalVertices;
   late final List<LineSegment> _lineSegments;
   final Path _path = Path();
   final bool shrinkToBounds;
   final bool manuallyPositioned;
-
-  final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
   /// With this constructor you create your [PolygonComponent] from positions
   /// anywhere in the 2d-space. It will automatically calculate the [size] of
@@ -187,30 +185,87 @@ class PolygonComponent extends ShapeComponent {
 
   /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
-    final scale = absoluteScale;
-    final shouldReverse = scale.y.isNegative ^ scale.x.isNegative;
-    final angle = absoluteAngle;
-    final position = absoluteTopLeftPosition;
-    if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
-      position,
-      size,
-      scale,
-      angle,
-    ])) {
-      for (var i = 0; i < _vertices.length; i++) {
-        _globalVertices[i].setFrom(absolutePositionOf(_vertices[i]));
+    _composeAbsoluteTransform();
+    final m = _absoluteTransform;
+    final cache = _globalVerticesCacheKey;
+    var isCacheValid = _hasGlobalVertices;
+    if (isCacheValid) {
+      for (var i = 0; i < 6; i++) {
+        if (cache[i] != m[i]) {
+          isCacheValid = false;
+          break;
+        }
       }
-      if (shouldReverse) {
-        // Since the list will be clockwise we have to reverse it for it to
-        // become counterclockwise.
+      isCacheValid = isCacheValid && cache[6] == size.x && cache[7] == size.y;
+    }
+    if (!isCacheValid) {
+      for (var i = 0; i < _vertices.length; i++) {
+        final vertex = _vertices[i];
+        _globalVertices[i].setValues(
+          m[0] * vertex.x + m[2] * vertex.y + m[4],
+          m[1] * vertex.x + m[3] * vertex.y + m[5],
+        );
+      }
+      // A negative determinant means the transform mirrors the polygon, so the
+      // list will be clockwise and has to be reversed to become
+      // counterclockwise.
+      if (m[0] * m[3] - m[1] * m[2] < 0) {
         _reverseList(_globalVertices);
       }
-      _cachedGlobalVertices.updateCache<dynamic>(
-        _globalVertices,
-        <dynamic>[position.clone(), size.clone(), scale.clone(), angle],
-      );
+      for (var i = 0; i < 6; i++) {
+        cache[i] = m[i];
+      }
+      cache[6] = size.x;
+      cache[7] = size.y;
+      _hasGlobalVertices = true;
     }
-    return _cachedGlobalVertices.value!;
+    return _globalVertices;
+  }
+
+  final Float64List _absoluteTransform = Float64List(6);
+  final Float64List _globalVerticesCacheKey = Float64List(8);
+  bool _hasGlobalVertices = false;
+
+  /// Composes the 2D affine transform from local to global coordinates into
+  /// [_absoluteTransform] as `[a, b, c, d, tx, ty]`, where a point maps to
+  /// `(a * x + c * y + tx, b * x + d * y + ty)`.
+  void _composeAbsoluteTransform() {
+    final own = transform.transformMatrix.storage;
+    var a = own[0];
+    var b = own[1];
+    var c = own[4];
+    var d = own[5];
+    var tx = own[12];
+    var ty = own[13];
+    var ancestor = parent;
+    while (ancestor != null) {
+      if (ancestor is PositionComponent) {
+        final p = ancestor.transform.transformMatrix.storage;
+        final p0 = p[0];
+        final p1 = p[1];
+        final p4 = p[4];
+        final p5 = p[5];
+        final newA = p0 * a + p4 * b;
+        final newB = p1 * a + p5 * b;
+        final newC = p0 * c + p4 * d;
+        final newD = p1 * c + p5 * d;
+        final newTx = p0 * tx + p4 * ty + p[12];
+        final newTy = p1 * tx + p5 * ty + p[13];
+        a = newA;
+        b = newB;
+        c = newC;
+        d = newD;
+        tx = newTx;
+        ty = newTy;
+      }
+      ancestor = ancestor.parent;
+    }
+    _absoluteTransform[0] = a;
+    _absoluteTransform[1] = b;
+    _absoluteTransform[2] = c;
+    _absoluteTransform[3] = d;
+    _absoluteTransform[4] = tx;
+    _absoluteTransform[5] = ty;
   }
 
   @override
