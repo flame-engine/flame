@@ -11,7 +11,7 @@ Widget partialSpriteWidgetBuilder(DashbookContext ctx) {
     height: ctx.numberProperty('container height', 200),
     decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
     child: SpriteWidget.asset(
-      path: 'bomb_ptero.png',
+      path: 'assets/images/bomb_ptero.png',
       srcPosition: Vector2(
         ctx.numberProperty('srcPosition.x', 48),
         ctx.numberProperty('srcPosition.y', 0),

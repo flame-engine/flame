@@ -31,9 +31,9 @@ class ColonistsGame extends FlameGame with KeyboardEvents {
     camera.follow(_cameraPosition);
     camera.viewfinder.zoom = 0.4;
 
-    await Flame.images.load('bread.png');
-    await Flame.images.load('ant_walk.png');
-    await Flame.images.load('cheese.png');
+    await Flame.images.load('assets/images/bread.png');
+    await Flame.images.load('assets/images/ant_walk.png');
+    await Flame.images.load('assets/images/cheese.png');
 
     world.add(_currentMap = GameMap());
 

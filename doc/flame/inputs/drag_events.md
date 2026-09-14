@@ -70,11 +70,14 @@ This event is fired continuously as user drags their finger across the screen. I
 the user is holding their finger still.
 
 The default implementation delivers this event to all the components that received the previous
-`onDragStart` with the same pointer id. If the point of touch is still within the component, then
-`event.localPosition` will give the position of that point in the local coordinate system. However,
-if the user moves their finger away from the component, the property `event.localPosition` will
-return a point whose coordinates are NaNs. Likewise, the `event.renderingTrace` in this case will be
-empty. However, the `canvasPosition` and `devicePosition` properties of the event will be valid.
+`onDragStart` with the same pointer id. Moving the finger off the component **does not** stop
+the drag, and the local coordinates are still computed (potentially outside the component bounds).
+
+The exception is when hit testing stops reaching the component altogether while it still holds the
+drag, for example if an ancestor turns on `IgnoreEvents` mid-gesture. The component still receives
+the event, but with an empty `event.renderingTrace` behind it, so reading `localStartPosition`,
+`localEndPosition` or `localDelta` throws. `canvasStartPosition`, `canvasEndPosition`,
+`deviceStartPosition` and `deviceEndPosition` never depend on the trace and remain valid.
 
 In addition, the `DragUpdateEvent` will contain `delta`, the amount the finger has moved since
 the previous `onDragUpdate`, or since the `onDragStart` if this is the first drag-update after
@@ -129,33 +132,42 @@ actively being dragged. This is set to `true` at `onDragStart` and back to `fals
 It can be used, for example, to change the component's visual appearance during a drag.
 
 
-## Combining with ScaleCallbacks
+### allowsMultiPointerDrag
 
-A component can use both `DragCallbacks` and `ScaleCallbacks` at the same time. When both mixins are
-present, single-finger gestures produce drag events and two-finger gestures produce both drag and
-scale events. This is useful for components that should be draggable with one finger and
-pinch-to-zoom or rotatable with two fingers.
+Drags are tracked per pointer, so a component that is already being dragged will start a second,
+independent drag when another finger touches it. That is what you want when each drag manipulates
+something of its own, but not when they all drive a single piece of state (such as a camera or
+a draggable object), where a second finger just fights the first.
+
+Override `allowsMultiPointerDrag` to `false` to accept only one drag at a time:
 
 ```dart
-class InteractiveRectangle extends RectangleComponent
-    with ScaleCallbacks, DragCallbacks {
-
-  double _initialAngle = 0;
+class MagnifyingGlass extends PositionComponent with DragCallbacks {
+  @override
+  bool get allowsMultiPointerDrag => false;
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    position += event.localDelta;
-  }
-
-  @override
-  void onScaleStart(ScaleStartEvent event) {
-    super.onScaleStart(event);
-    _initialAngle = angle;
-  }
-
-  @override
-  void onScaleUpdate(ScaleUpdateEvent event) {
-    angle = _initialAngle + event.rotation;
+    position = event.canvasEndPosition;
   }
 }
 ```
+
+While a drag is in progress, no other pointer gets an `onDragStart` on this component, and no
+`onDragUpdate`, `onDragEnd` or `onDragCancel` follow for it either; the event is offered to the
+components below instead. Once the accepted drag ends or is cancelled, the component is free to
+accept a new one.
+
+Control is not handed over: if the accepted pointer is lifted while another is still down, the drag
+ends rather than continuing on the remaining finger.
+
+This only gates drags. A component that also uses `ScaleCallbacks` keeps receiving scale events
+normally, so one-finger drag plus two-finger pinch still works.
+
+
+## Combining with ScaleCallbacks
+
+`DragCallbacks` and `ScaleCallbacks` can be used at the same time: single-finger gestures produce
+drag events, and two-finger gestures produce both drag and scale events. See
+[Combining with DragCallbacks](scale_events.md#combining-with-dragcallbacks) for how to make the two
+work together, both on a component and for panning and zooming the camera.

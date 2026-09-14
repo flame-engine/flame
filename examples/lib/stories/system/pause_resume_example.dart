@@ -18,7 +18,7 @@ class PauseResumeExample extends FlameGame
   @override
   Future<void> onLoad() async {
     final animation = await loadSpriteAnimation(
-      'animations/chopper.png',
+      'assets/images/animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),

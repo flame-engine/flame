@@ -35,7 +35,7 @@ Then load the image and the spritesheet using:
 
 ```dart
 final spritesheet = await XmlSpriteSheet.load(
-  imagePath: 'spritesheet.png',
-  xmlPath: 'spritesheet.xml',
+  imagePath: 'assets/images/spritesheet.png',
+  xmlPath: 'assets/spritesheet.xml',
 );
 ```

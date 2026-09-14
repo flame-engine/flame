@@ -54,6 +54,9 @@ class Bgm extends WidgetsBindingObserver {
 
   /// Plays and loops a background music file specified by [fileName].
   ///
+  /// The [fileName] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/audio/song.mp3`.
+  ///
   /// The volume can be specified in the optional named parameter [volume]
   /// where `0` means off and `1` means max.
   ///
@@ -67,17 +70,8 @@ class Bgm extends WidgetsBindingObserver {
     await audioPlayer.release();
     await audioPlayer.setReleaseMode(ReleaseMode.loop);
     await audioPlayer.setVolume(volume);
-    final path = package == null
-        ? fileName
-        : 'packages/$package/${audioPlayer.audioCache.prefix}$fileName';
-    if (package != null) {
-      final originalPrefix = audioPlayer.audioCache.prefix;
-      audioPlayer.audioCache.prefix = '';
-      await audioPlayer.setSource(AssetSource(path));
-      audioPlayer.audioCache.prefix = originalPrefix;
-    } else {
-      await audioPlayer.setSource(AssetSource(path));
-    }
+    final path = package == null ? fileName : 'packages/$package/$fileName';
+    await audioPlayer.setSource(AssetSource(path));
     await audioPlayer.resume();
     isPlaying = true;
   }

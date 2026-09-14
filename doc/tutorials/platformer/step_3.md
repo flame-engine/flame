@@ -287,13 +287,13 @@ as:
 @override
   Future<void> onLoad() async {
     await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
     ]);
     
     camera.viewfinder.anchor = Anchor.topLeft;
@@ -321,8 +321,7 @@ import 'package:flame/components.dart';
 
 import '../ember_quest.dart';
 
-class PlatformBlock extends SpriteComponent
-    with HasGameReference<EmberQuestGame> {
+class PlatformBlock extends SpriteComponent with HasGameRef<EmberQuestGame> {
   final Vector2 gridPosition;
   double xOffset;
 
@@ -371,7 +370,7 @@ final Vector2 velocity = Vector2.zero();
 ```dart
   @override
   void update(double dt) {
-    velocity.x = game.objectSpeed;
+    velocity.x = gameRef.objectSpeed;
     position += velocity * dt;
     if (position.x < -size.x) removeFromParent();
     super.update(dt);
@@ -394,10 +393,10 @@ Now we just need to finish the `onLoad` method. So make your `onLoad` method loo
 ```dart
   @override
   void onLoad() {
-    final platformImage = game.images.fromCache('block.png');
+    final platformImage = gameRef.images.fromCache('assets/images/block.png');
     sprite = Sprite(platformImage);
     position = Vector2((gridPosition.x * size.x) + xOffset,
-        game.size.y - (gridPosition.y * size.y),
+        gameRef.size.y - (gridPosition.y * size.y),
     );
     add(RectangleHitbox(collisionType: CollisionType.passive));
   }

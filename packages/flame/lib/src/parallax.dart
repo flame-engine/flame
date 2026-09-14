@@ -139,11 +139,14 @@ class ParallaxImage extends ParallaxRenderer {
     super.filterQuality,
   });
 
-  /// Takes a path of an image, and optionally arguments for how the image
-  /// should repeat ([repeat]), which edge it should align with ([alignment]),
-  /// which axis it should fill the image on ([fill]) and [images] which is the
-  /// image cache that should be used. If no image cache is set, the global
-  /// flame cache is used.
+  /// Takes the full path of an image, and optionally arguments for how the
+  /// image should repeat ([repeat]), which edge it should align with
+  /// ([alignment]), which axis it should fill the image on ([fill]) and
+  /// [images] which is the image cache that should be used. If no image cache
+  /// is set, the global flame cache is used.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/sky.png`.
   static Future<ParallaxImage> load(
     String path, {
     ImageRepeat repeat = ImageRepeat.repeatX,
@@ -190,11 +193,14 @@ class ParallaxAnimation extends ParallaxRenderer {
     super.filterQuality,
   }) : _animationTicker = animation.createTicker();
 
-  /// Takes a path of an image, a SpriteAnimationData, and optionally arguments
-  /// for how the image should repeat ([repeat]), which edge it should align
-  /// with ([alignment]), which axis it should fill the image on ([fill]) and
-  /// [images] which is the image cache that should be used. If no image cache
-  /// is set, the global flame cache is used.
+  /// Takes the full path of an image, a SpriteAnimationData, and optionally
+  /// arguments for how the image should repeat ([repeat]), which edge it should
+  /// align with ([alignment]), which axis it should fill the image on ([fill])
+  /// and [images] which is the image cache that should be used. If no image
+  /// cache is set, the global flame cache is used.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/clouds.png`.
   ///
   /// _IMPORTANT_: This method pre render all the frames of the animation into
   /// image instances so it can be used inside the parallax. Just keep that in

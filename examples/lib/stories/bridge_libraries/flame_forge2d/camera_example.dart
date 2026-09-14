@@ -19,6 +19,6 @@ class CameraExampleWorld extends DominoExampleWorld {
     final position = info.localPosition;
     final pizza = Pizza(position);
     add(pizza);
-    pizza.mounted.whenComplete(() => game.camera.follow(pizza));
+    pizza.mounted.whenComplete(() => gameRef.camera.follow(pizza));
   }
 }

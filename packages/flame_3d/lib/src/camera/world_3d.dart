@@ -15,7 +15,7 @@ import 'package:meta/meta.dart';
 /// The primary feature of this component is that it allows [Component3D]s to
 /// render directly to a [GraphicsDevice] instead of the regular rendering.
 /// {@endtemplate}
-class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
+class World3D extends flame.World with flame.HasGameRef<FlameGame3D> {
   /// {@macro world_3d}
   World3D({
     super.children,
@@ -24,7 +24,7 @@ class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
 
   final List<Light> _lights = [];
 
-  RenderContext3D get context => game.context;
+  RenderContext3D get context => gameRef.context;
 
   /// Register a [light] with this world.
   @internal
@@ -40,18 +40,18 @@ class World3D extends flame.World with flame.HasGameReference<FlameGame3D> {
     final camera = CameraComponent3D.currentCamera!;
     final Viewport(virtualSize: size) = camera.viewport;
 
-    final pixelRatio = MediaQuery.devicePixelRatioOf(game.buildContext!);
+    final pixelRatio = MediaQuery.devicePixelRatioOf(gameRef.buildContext!);
     final renderSize = Size(size.x * pixelRatio, size.y * pixelRatio);
 
     context
       ..lights = _lights
       ..setCamera(camera.viewMatrix, camera.projectionMatrix);
 
-    game.device.beginPass(renderSize);
+    gameRef.device.beginPass(renderSize);
     super.renderFromCamera(canvas);
     context.flush();
 
-    final image = game.device.endPass();
+    final image = gameRef.device.endPass();
     canvas.drawImageRect(
       image,
       Offset.zero & renderSize,

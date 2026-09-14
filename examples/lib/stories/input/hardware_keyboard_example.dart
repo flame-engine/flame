@@ -46,7 +46,7 @@ class HardwareKeyboardExample extends FlameGame {
 }
 
 class MyKeyboardDetector extends HardwareKeyboardDetector
-    with HasGameReference<HardwareKeyboardExample> {
+    with HasGameRef<HardwareKeyboardExample> {
   @override
   void onKeyEvent(KeyEvent event) {
     final newComponents = <KeyboardKey>[];
@@ -60,7 +60,7 @@ class MyKeyboardDetector extends HardwareKeyboardDetector
       newComponents.add(keyComponent);
       x0 += keyComponent.width + 10;
     }
-    game.replaceKeyComponents(newComponents);
+    gameRef.replaceKeyComponents(newComponents);
   }
 
   /// The names of keyboard keys (at least the most important ones). We can't

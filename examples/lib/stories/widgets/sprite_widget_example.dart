@@ -13,7 +13,7 @@ Widget spriteWidgetBuilder(DashbookContext ctx) {
     height: ctx.numberProperty('container height', 200),
     decoration: BoxDecoration(border: Border.all(color: Colors.amber)),
     child: SpriteWidget.asset(
-      path: 'shield.png',
+      path: 'assets/images/shield.png',
       angle: pi / 180 * ctx.numberProperty('angle (deg)', 0),
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),
@@ -38,7 +38,7 @@ Widget spriteWidgetWithSizeBuilder(DashbookContext ctx) {
         ctx.numberProperty('width', 400),
         ctx.numberProperty('height', 200),
       ),
-      path: 'shield.png',
+      path: 'assets/images/shield.png',
       angle: pi / 180 * ctx.numberProperty('angle (deg)', 0),
       anchor: Anchor.valueOf(
         ctx.listProperty('anchor', 'center', anchorOptions),

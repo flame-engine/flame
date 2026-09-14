@@ -4,8 +4,11 @@ import 'package:flame/src/components/core/component.dart';
 /// normal speed. Only framerate independent logic will benefit from [timeScale]
 /// changes.
 ///
-/// Note: Modified [timeScale] will be applied to all children as well.
-mixin HasTimeScale on Component {
+/// Note: Modified [timeScale] will be applied to all children as well. A
+/// [timeScale] of 0 stops the update pass for the component and its whole
+/// subtree: [Component.update] is not called on any of them until the time
+/// scale is raised again.
+mixin HasTimeScale on CustomTraversal {
   /// The ratio of components tick speed and normal tick speed.
   /// It defaults to 1.0, which means the component moves normally.
   /// A value of 0.5 means the component moves half the normal speed
@@ -26,16 +29,14 @@ mixin HasTimeScale on Component {
   }
 
   @override
-  void update(double dt) {
-    super.update(dt * (parent == null ? _timeScale : 1.0));
+  void updateSubtree(double dt) {
+    if (_timeScale == 0) {
+      return;
+    }
+    super.updateSubtree(dt * _timeScale);
   }
 
-  @override
-  void updateTree(double dt) {
-    super.updateTree(dt * (parent != null ? _timeScale : 1.0));
-  }
-
-  /// Pauses the component by setting the time scale to 0.0.
+  /// Pauses the component and its subtree by setting the time scale to 0.0.
   void pause() {
     timeScale = 0.0;
   }

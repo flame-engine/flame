@@ -15,7 +15,7 @@ class OpacityEffectExample extends FlameGame with TapCallbacks {
 
   @override
   Future<void> onLoad() async {
-    final flameSprite = await loadSprite('flame.png');
+    final flameSprite = await loadSprite('assets/images/flame.png');
     add(
       sprite = SpriteComponent(
         sprite: flameSprite,

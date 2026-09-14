@@ -20,11 +20,11 @@ class ContactCallbacksExample extends Forge2DExampleGame {
 }
 
 class ContactCallbackWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final boundaries = createBoundaries(game);
+    final boundaries = createBoundaries(gameRef);
     addAll(boundaries);
   }
 

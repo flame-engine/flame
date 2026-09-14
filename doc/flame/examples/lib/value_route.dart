@@ -20,15 +20,15 @@ class ValueRouteExample extends FlameGame {
   }
 }
 
-class HomePage extends Component with HasGameReference<ValueRouteExample> {
+class HomePage extends Component with HasGameRef<ValueRouteExample> {
   @override
   Future<void> onLoad() async {
     add(
       RoundedButton(
         text: 'Rate me',
-        position: game.size / 2,
+        position: gameRef.size / 2,
         action: () async {
-          final score = await game.router.pushAndWait(RateRoute());
+          final score = await gameRef.router.pushAndWait(RateRoute());
           firstChild<TextComponent>()!.text = 'Score: $score';
         },
         color: const Color(0xff758f9a),
@@ -39,15 +39,14 @@ class HomePage extends Component with HasGameReference<ValueRouteExample> {
       TextComponent(
         text: 'Score: –',
         anchor: Anchor.topCenter,
-        position: game.size / 2 + Vector2(0, 30),
+        position: gameRef.size / 2 + Vector2(0, 30),
         scale: Vector2.all(0.7),
       ),
     );
   }
 }
 
-class RateRoute extends ValueRoute<int>
-    with HasGameReference<ValueRouteExample> {
+class RateRoute extends ValueRoute<int> with HasGameRef<ValueRouteExample> {
   RateRoute() : super(value: -1, transparent: true);
 
   @override
@@ -56,7 +55,7 @@ class RateRoute extends ValueRoute<int>
     const radius = 18.0;
     final starGap = (size.x - 5 * 2 * radius) / 6;
     return DialogBackground(
-      position: game.size / 2,
+      position: gameRef.size / 2,
       size: size,
       children: [
         RoundedButton(

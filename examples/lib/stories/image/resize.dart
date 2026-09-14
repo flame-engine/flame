@@ -14,7 +14,7 @@ class ImageResizeExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final image = await images.load('flame.png');
+    final image = await images.load('assets/images/flame.png');
 
     final resized = await image.resize(sizeTarget);
     add(

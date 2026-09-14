@@ -16,7 +16,7 @@ class EmberPlayer extends SpriteAnimationComponent with TapCallbacks {
   @override
   Future<void> onLoad() async {
     animation = SpriteAnimation.fromFrameData(
-      await Flame.images.load('ember.png'),
+      await Flame.images.load('assets/images/ember.png'),
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(16),

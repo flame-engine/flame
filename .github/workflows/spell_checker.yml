@@ -15,7 +15,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: npm -g install cspell@9.2.1
       # spell check
       - run: ./scripts/cspell-run.sh

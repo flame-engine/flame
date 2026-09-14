@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:padracing/car.dart';
 import 'package:padracing/padracing_game.dart';
 
-class LapText extends PositionComponent with HasGameReference<PadRacingGame> {
+class LapText extends PositionComponent with HasGameRef<PadRacingGame> {
   LapText({required this.car, required Vector2 position})
     : super(position: position);
 
@@ -66,10 +66,10 @@ class LapText extends PositionComponent with HasGameReference<PadRacingGame> {
 
   @override
   void update(double dt) {
-    if (game.isGameOver) {
+    if (gameRef.isGameOver) {
       return;
     }
-    _timePassedComponent.text = game.timePassed;
+    _timePassedComponent.text = gameRef.timePassed;
   }
 
   final _backgroundRect = RRect.fromRectAndRadius(

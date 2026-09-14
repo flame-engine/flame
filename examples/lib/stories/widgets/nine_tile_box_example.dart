@@ -7,7 +7,7 @@ Widget nineTileBoxBuilder(DashbookContext ctx) {
     width: ctx.numberProperty('width', 200),
     height: ctx.numberProperty('height', 200),
     child: NineTileBoxWidget.asset(
-      path: 'nine-box.png',
+      path: 'assets/images/nine-box.png',
       tileSize: 22,
       destTileSize: 50,
       child: const Center(

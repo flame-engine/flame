@@ -1,10 +1,5 @@
 # Pointer Events
 
-```{note}
-This document describes the new events API. The old (legacy) approach,
-which is still supported, is described in [](gesture_input.md).
-```
-
 **Pointer events** are Flutter's generalized "mouse-movement"-type events (for desktop or web).
 
 If you want to interact with mouse movement events within your component or game, you can use the
@@ -86,8 +81,7 @@ Play with the demo below to see the pointer hover events in action.
 
 ## ScrollCallbacks
 
-If you want to handle mouse-wheel or trackpad scroll events at the component level, use the
-`ScrollCallbacks` mixin.
+If you want to handle mouse-wheel or trackpad scroll events, use the `ScrollCallbacks` mixin.
 
 ```dart
 class ScrollableSquare extends RectangleComponent with ScrollCallbacks {
@@ -119,8 +113,8 @@ The `ScrollEvent` provides:
 Scroll events are delivered to **all** components under the pointer (not just the topmost one),
 unless set `continuePropagation = false` is set to stop it from bubbling further.
 
-You can also mix `ScrollCallbacks` directly into your `FlameGame` to handle scrolling at the
-game level.
+You can also mix `ScrollCallbacks` directly into your `FlameGame` to handle scrolling anywhere on
+the game surface.
 
 
 ### Scroll Demo
@@ -129,4 +123,23 @@ game level.
 :sources: ../flame/examples
 :page: scroll
 :show: widget code
+```
+
+
+## Mouse cursor
+
+It is also possible to change the current mouse cursor displayed on the `GameWidget` region. To do
+so the following code can be used inside the `Game` class
+
+```dart
+mouseCursor.value = SystemMouseCursors.move;
+```
+
+To initialize the `GameWidget` with a custom cursor immediately, the `mouseCursor` property can be used:
+
+```dart
+GameWidget(
+  game: MouseCursorGame(),
+  mouseCursor: SystemMouseCursors.move,
+);
 ```

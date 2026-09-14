@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-class StarComponent extends SpriteAnimationComponent with HasGameReference {
+class StarComponent extends SpriteAnimationComponent with HasGameRef {
   static const speed = 10;
 
   StarComponent({super.animation, super.position})
@@ -10,7 +10,7 @@ class StarComponent extends SpriteAnimationComponent with HasGameReference {
   void update(double dt) {
     super.update(dt);
     y += dt * speed;
-    if (y >= game.size.y) {
+    if (y >= gameRef.size.y) {
       removeFromParent();
     }
   }

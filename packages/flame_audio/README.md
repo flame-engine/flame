@@ -32,12 +32,16 @@ ambient sounds, sound effects, etc. For the full documentation, visit [flame_aud
 
 ## How to use
 
-Add sound files to `assets/audio`. Remember to run `pub get` after updating pubspec.yaml with:
+Add your sound files to the assets section of your `pubspec.yaml`, and remember to run `pub get`
+afterwards:
 
-```dart
-assets:
-    - assets/audio
+```yaml
+flutter:
+  assets:
+    - assets/audio/
 ```
+
+Every path is given in full, exactly as declared in the `pubspec.yaml`, nothing is prepended.
 
 
 ### General sounds
@@ -48,16 +52,16 @@ Use these built-in methods to play sounds in your Flame game:
 import 'package:flame_audio/flame_audio.dart';
 
 // For shorter reused audio clips, like sound effects
-FlameAudio.play('explosion.mp3');
+FlameAudio.play('assets/audio/explosion.mp3');
 
 // For looping an audio file
-FlameAudio.loop('music.mp3');
+FlameAudio.loop('assets/audio/music.mp3');
 
 // For playing a longer audio file
-FlameAudio.playLongAudio('music.mp3');
+FlameAudio.playLongAudio('assets/audio/music.mp3');
 
 // For looping a longer audio file
-FlameAudio.loopLongAudio('music.mp3');
+FlameAudio.loopLongAudio('assets/audio/music.mp3');
 ```
 
 
@@ -81,7 +85,7 @@ To play a looping background music
 import 'package:flame_audio/flame_audio.dart';
 
 // play with optional volume param
-FlameAudio.bgm.play('music/world-map.mp3', volume: .25);
+FlameAudio.bgm.play('assets/audio/music/world-map.mp3', volume: .25);
 ```
 
 To stop background music
@@ -106,17 +110,20 @@ The files are cached automatically after the first time.
 
 ```dart
 // cache single track
-await FlameAudio.audioCache.load('explosion.mp3');
+await FlameAudio.audioCache.load('assets/audio/explosion.mp3');
 
 // cache multiple tracks
-await FlameAudio.audioCache.loadAll(['explosion.mp3', 'music.mp3']);
+await FlameAudio.audioCache.loadAll([
+  'assets/audio/explosion.mp3',
+  'assets/audio/music.mp3',
+]);
 ```
 
 To clear the cache
 
 ```dart
 // clear specific track
-FlameAudio.audioCache.clear('explosion.mp3');
+FlameAudio.audioCache.clear('assets/audio/explosion.mp3');
 
 // clear whole cache
 FlameAudio.audioCache.clearCache();
@@ -129,6 +136,9 @@ Use AudioPools if you have extremely quick firing, repetitive or simultaneous so
 To create an AudioPool:
 
 ```dart
-AudioPool audioPool = await FlameAudio.createPool('explosion.mp3', maxPlayers: 2);
+AudioPool audioPool = await FlameAudio.createPool(
+  'assets/audio/explosion.mp3',
+  maxPlayers: 2,
+);
 audioPool.start();
 ```

@@ -10,7 +10,7 @@ class ModelsScenario implements GameScenario {
   @override
   Future<void> onLoad() async {
     // source: https://kaylousberg.itch.io/kaykit-skeletons
-    model = await ModelParser.parse('objects/skeleton.glb');
+    model = await ModelParser.parse('assets/objects/skeleton.glb');
   }
 
   @override

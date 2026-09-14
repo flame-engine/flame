@@ -8,8 +8,7 @@ import 'package:flame_bloc_example/src/game/components/player.dart';
 import 'package:flame_bloc_example/src/game_stats/bloc/game_stats_bloc.dart';
 import 'package:flame_bloc_example/src/inventory/bloc/inventory_bloc.dart';
 
-class GameStatsController extends Component
-    with HasGameReference<SpaceShooterGame> {
+class GameStatsController extends Component with HasGameRef<SpaceShooterGame> {
   @override
   Future<void>? onLoad() async {
     add(
@@ -19,7 +18,7 @@ class GameStatsController extends Component
               newState.status == GameStatus.initial;
         },
         onNewState: (state) {
-          game.removeWhere((element) => element is EnemyComponent);
+          gameRef.removeWhere((element) => element is EnemyComponent);
         },
       ),
     );
@@ -27,7 +26,7 @@ class GameStatsController extends Component
 }
 
 class SpaceShooterGame extends FlameGame
-    with PanDetector, HasCollisionDetection, HasKeyboardHandlerComponents {
+    with DragCallbacks, HasCollisionDetection, HasKeyboardHandlerComponents {
   late PlayerComponent player;
 
   final GameStatsBloc statsBloc;
@@ -61,24 +60,31 @@ class SpaceShooterGame extends FlameGame
     add(EnemyCreator());
   }
 
+  /// Multiple pointers would each apply their delta, accumulating ship speed.
   @override
-  void onPanStart(_) {
+  bool get allowsMultiPointerDrag => false;
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     player.beginFire();
   }
 
   @override
-  void onPanEnd(_) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     player.stopFire();
   }
 
   @override
-  void onPanCancel() {
+  void onDragCancel(DragCancelEvent event) {
+    super.onDragCancel(event);
     player.stopFire();
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global.x, info.delta.global.y);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta.x, event.localDelta.y);
   }
 
   void increaseScore() {

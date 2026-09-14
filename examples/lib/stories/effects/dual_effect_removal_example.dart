@@ -20,7 +20,7 @@ class DualEffectRemovalExample extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     final mySprite = SpriteComponent(
-      sprite: await loadSprite('flame.png'),
+      sprite: await loadSprite('assets/images/flame.png'),
       position: Vector2(50, 50),
     );
 

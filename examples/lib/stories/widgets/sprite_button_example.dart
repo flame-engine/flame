@@ -7,8 +7,8 @@ Widget spriteButtonBuilder(DashbookContext ctx) {
   return Container(
     padding: const EdgeInsets.all(20),
     child: SpriteButton.asset(
-      path: 'buttons.png',
-      pressedPath: 'buttons.png',
+      path: 'assets/images/buttons.png',
+      pressedPath: 'assets/images/buttons.png',
       srcPosition: Vector2(0, 0),
       srcSize: Vector2(60, 20),
       pressedSrcPosition: Vector2(0, 20),

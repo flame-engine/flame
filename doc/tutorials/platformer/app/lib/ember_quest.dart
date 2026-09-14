@@ -28,13 +28,13 @@ class EmberQuestGame extends FlameGame
   Future<void> onLoad() async {
     //debugMode = true; // Uncomment to see the bounding boxes
     await images.loadAll([
-      'block.png',
-      'ember.png',
-      'ground.png',
-      'heart_half.png',
-      'heart.png',
-      'star.png',
-      'water_enemy.png',
+      'assets/images/block.png',
+      'assets/images/ember.png',
+      'assets/images/ground.png',
+      'assets/images/heart_half.png',
+      'assets/images/heart.png',
+      'assets/images/star.png',
+      'assets/images/water_enemy.png',
     ]);
     camera.viewfinder.anchor = Anchor.topLeft;
 

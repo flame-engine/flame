@@ -21,11 +21,11 @@ class RevoluteJointExample extends Forge2DExampleGame {
 }
 
 class RevoluteJointWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    addAll(createBoundaries(game));
+    addAll(createBoundaries(gameRef));
   }
 
   @override

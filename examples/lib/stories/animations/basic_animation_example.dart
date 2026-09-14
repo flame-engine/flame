@@ -16,15 +16,17 @@ class BasicAnimationsExample extends FlameGame {
   BasicAnimationsExample() : super(world: BasicAnimationsWorld());
 }
 
-class BasicAnimationsWorld extends World with TapCallbacks, HasGameReference {
+class BasicAnimationsWorld extends World with TapCallbacks, HasGameRef {
   late Image creature;
 
   @override
   Future<void> onLoad() async {
-    creature = await game.images.load('animations/creature.png');
+    creature = await gameRef.images.load(
+      'assets/images/animations/creature.png',
+    );
 
-    final animation = await game.loadSpriteAnimation(
-      'animations/chopper.png',
+    final animation = await gameRef.loadSpriteAnimation(
+      'assets/images/animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),

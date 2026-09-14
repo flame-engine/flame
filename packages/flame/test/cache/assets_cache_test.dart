@@ -14,7 +14,7 @@ void main() {
 
   group('AssetsCache', () {
     test('readFile', () async {
-      final assetsCache = AssetsCache(prefix: '');
+      final assetsCache = AssetsCache();
       final fileName = fixture('test_text_file.txt').path;
       final file = await assetsCache.readFile(fileName);
       expect(file, isA<String>());
@@ -26,13 +26,13 @@ void main() {
     });
 
     test('readJson', () async {
-      final assetsCache = AssetsCache(prefix: '');
+      final assetsCache = AssetsCache();
       final file = await assetsCache.readJson(fixture('chopper.json').path);
       expect(file, isA<Map<String, dynamic>>());
     });
 
     test('readBinaryFile', () async {
-      final assetsCache = AssetsCache(prefix: '');
+      final assetsCache = AssetsCache();
       final fileName = fixture('cave_ace.fa').path;
       final file = await assetsCache.readBinaryFile(fileName);
       expect(file, isA<Uint8List>());
@@ -44,7 +44,7 @@ void main() {
     });
 
     test('clear', () async {
-      final assetsCache = AssetsCache(prefix: '');
+      final assetsCache = AssetsCache();
 
       final fileName = fixture('test_text_file.txt').path;
       final file = await assetsCache.readFile(fileName);
@@ -55,7 +55,7 @@ void main() {
     });
 
     test('clearCache', () async {
-      final assetsCache = AssetsCache(prefix: '');
+      final assetsCache = AssetsCache();
 
       final fileName = fixture('test_text_file.txt').path;
       final file = await assetsCache.readFile(fileName);
@@ -64,14 +64,6 @@ void main() {
       assetsCache.clearCache();
       expect(assetsCache.cacheCount, equals(0));
     });
-
-    testWithFlameGame(
-      'prefix on assets can not be changed',
-      (game) async {
-        game.assets = AssetsCache();
-        expect(game.assets.prefix, 'assets/');
-      },
-    );
 
     testWithFlameGame(
       'Game.assets is same as Flame.assets',
@@ -86,7 +78,7 @@ void main() {
 
       final cache = AssetsCache(bundle: bundle);
 
-      final result = await cache.readFile('duck_count');
+      final result = await cache.readFile('assets/duck_count');
       expect(result, equals('Two ducks'));
       verify(() => bundle.loadString('assets/duck_count')).called(1);
     });
@@ -99,7 +91,10 @@ void main() {
 
       final cache = AssetsCache(bundle: bundle);
 
-      final result = await cache.readFile('duck_count', package: 'my_pkg');
+      final result = await cache.readFile(
+        'assets/duck_count',
+        package: 'my_pkg',
+      );
       expect(result, equals('Three ducks'));
       verify(
         () => bundle.loadString('packages/my_pkg/assets/duck_count'),
@@ -108,7 +103,7 @@ void main() {
 
     group('fromCache', () {
       test('returns cached string asset', () async {
-        final assetsCache = AssetsCache(prefix: '');
+        final assetsCache = AssetsCache();
         final fileName = fixture('test_text_file.txt').path;
 
         await assetsCache.readFile(fileName);
@@ -123,7 +118,7 @@ void main() {
       });
 
       test('returns cached binary asset', () async {
-        final assetsCache = AssetsCache(prefix: '');
+        final assetsCache = AssetsCache();
         final fileName = fixture('cave_ace.fa').path;
 
         await assetsCache.readBinaryFile(fileName);
@@ -132,7 +127,7 @@ void main() {
       });
 
       test('returns cached json asset', () async {
-        final assetsCache = AssetsCache(prefix: '');
+        final assetsCache = AssetsCache();
         final fileName = fixture('chopper.json').path;
         final file = await assetsCache.readJson(fileName);
         expect(file, isA<Map<String, dynamic>>());
@@ -143,7 +138,7 @@ void main() {
       });
 
       test('throws assertion when asset not in cache', () {
-        final assetsCache = AssetsCache(prefix: '');
+        final assetsCache = AssetsCache();
 
         expect(
           () => assetsCache.fromCache<String>('nonexistent.txt'),

@@ -3,7 +3,7 @@ import 'package:flame/extensions.dart';
 import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/trex_game.dart';
 
-class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
+class Obstacle extends SpriteComponent with HasGameRef<TRexGame> {
   Obstacle({
     required this.settings,
     required this.groupIndex,
@@ -21,10 +21,10 @@ class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
 
   @override
   Future<void> onLoad() async {
-    sprite = settings.sprite(game.spriteImage);
-    x = game.size.x + width * groupIndex;
+    sprite = settings.sprite(gameRef.spriteImage);
+    x = gameRef.size.x + width * groupIndex;
     y = settings.y;
-    gap = computeGap(_gapCoefficient, game.currentSpeed);
+    gap = computeGap(_gapCoefficient, gameRef.currentSpeed);
     addAll(settings.generateHitboxes());
   }
 
@@ -32,13 +32,13 @@ class Obstacle extends SpriteComponent with HasGameReference<TRexGame> {
     final minGap = (width * speed * settings.minGap * gapCoefficient)
         .roundToDouble();
     final maxGap = (minGap * _maxGapCoefficient).roundToDouble();
-    return game.random.nextDoubleBetween(minGap, maxGap);
+    return gameRef.random.nextDoubleBetween(minGap, maxGap);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    x -= game.currentSpeed * dt;
+    x -= gameRef.currentSpeed * dt;
 
     if (!isVisible) {
       removeFromParent();

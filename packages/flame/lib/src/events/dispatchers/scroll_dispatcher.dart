@@ -12,7 +12,7 @@ class ScrollDispatcher extends Dispatcher<FlameGame> {
   @mustCallSuper
   void onPointerScroll(ScrollEvent event) {
     event.deliverAtPoint(
-      rootComponent: game,
+      rootComponent: gameRef,
       deliverToAll: true,
       eventHandler: (ScrollCallbacks component) {
         component.onScroll(event);
@@ -21,7 +21,7 @@ class ScrollDispatcher extends Dispatcher<FlameGame> {
   }
 
   void _handlePointerScroll(flutter.PointerScrollEvent event) {
-    onPointerScroll(ScrollEvent.fromPointerScrollEvent(game, event));
+    onPointerScroll(ScrollEvent.fromPointerScrollEvent(gameRef, event));
   }
 
   static void addDispatcher(Component component) {
@@ -34,13 +34,13 @@ class ScrollDispatcher extends Dispatcher<FlameGame> {
 
   @override
   void onMount() {
-    game.scrollDetector = _handlePointerScroll;
+    gameRef.scrollDetector = _handlePointerScroll;
   }
 
   @override
   void onRemove() {
-    game.scrollDetector = null;
-    Dispatcher.removeDispatcher(game, const ScrollDispatcherKey());
+    gameRef.scrollDetector = null;
+    Dispatcher.removeDispatcher(gameRef, const ScrollDispatcherKey());
   }
 }
 

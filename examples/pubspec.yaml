@@ -20,7 +20,7 @@ dependencies:
   flame_lottie: ^0.4.3+23
   flame_noise: ^0.3.3+23
   flame_spine: ^0.3.1+6
-  flame_svg: ^1.12.2
+  flame_svg: ^2.0.0
   flame_tiled: ^3.1.2
   flutter:
     sdk: flutter

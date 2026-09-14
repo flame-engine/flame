@@ -1,9 +1,5 @@
 name: Publish packages
 on:
-  # Enable to also publish, when pushing a tag
-  #push:
-  #  tags:
-  #    - '*'
   workflow_dispatch:
 
 jobs:
@@ -14,7 +10,7 @@ jobs:
       id-token: write # Required for authentication using OIDC
     runs-on: [ ubuntu-latest ]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: subosito/flutter-action@v2

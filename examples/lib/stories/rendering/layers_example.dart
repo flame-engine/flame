@@ -14,9 +14,15 @@ class LayerExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final playerSprite = Sprite(await images.load('layers/player.png'));
-    final enemySprite = Sprite(await images.load('layers/enemy.png'));
-    final backgroundSprite = Sprite(await images.load('layers/background.png'));
+    final playerSprite = Sprite(
+      await images.load('assets/images/layers/player.png'),
+    );
+    final enemySprite = Sprite(
+      await images.load('assets/images/layers/enemy.png'),
+    );
+    final backgroundSprite = Sprite(
+      await images.load('assets/images/layers/background.png'),
+    );
 
     gameLayer = GameLayer(playerSprite, enemySprite);
     backgroundLayer = BackgroundLayer(backgroundSprite);

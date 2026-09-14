@@ -2,11 +2,6 @@
 
 This includes documentation for input methods besides keyboard and mouse.
 
-For other input documents, see also:
-
-- [Gesture Input](gesture_input.md): for mouse and touch pointer gestures
-- [Keyboard Input](keyboard_input.md): for keystrokes
-
 
 ## Joystick
 
@@ -22,7 +17,7 @@ class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     super.onLoad();
-    final image = await images.load('joystick.png');
+    final image = await images.load('assets/images/joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: 6,
@@ -46,7 +41,7 @@ class MyGame extends FlameGame {
   }
 }
 
-class Player extends SpriteComponent with HasGameReference {
+class Player extends SpriteComponent with HasGameRef {
   Player(this.joystick)
     : super(
         anchor: Anchor.center,
@@ -60,8 +55,8 @@ class Player extends SpriteComponent with HasGameReference {
 
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('layers/player.png');
-    position = game.size / 2;
+    sprite = await gameRef.loadSprite('assets/images/layers/player.png');
+    position = gameRef.size / 2;
   }
 
   @override

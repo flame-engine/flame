@@ -7,6 +7,233 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### The gesture listener interfaces removed
+
+`MultiTapListener`, `MultiDragListener` and `ScaleListener` have been removed, with no replacement.
+
+They existed so that one adapter could work with either of two implementations: the component-level
+mixins, or the matching game-level detector. Those detectors were removed earlier in the v2 rewrite,
+leaving each interface with a single implementation and nothing that consumed it as an interface.
+
+If you implemented one of these directly, use the `TapCallbacks`, `DragCallbacks` or
+`ScaleCallbacks` mixin on your component or game instead, which is what they already pointed you at.
+
+`FlameDragAdapter` is gone too, folded into `MultiDragScaleDispatcher` as a private class. It was
+already `@internal`, so it could not be constructed from outside Flame.
+
+
+### `HasGameReference` removed in favour of `HasGameRef`
+
+`HasGameReference` has been removed. Use `HasGameRef` instead, which is no longer deprecated and is
+now the one and only mixin used to access the game instance from a component. Its accessor is
+called `gameRef`, the `game` getter and setter are gone:
+
+```dart
+// Before
+class MyComponent extends Component with HasGameReference<MyGame> {
+  void doSomething() => game.score++;
+}
+
+// After
+class MyComponent extends Component with HasGameRef<MyGame> {
+  void doSomething() => gameRef.score++;
+}
+```
+
+If you were already using `HasGameRef`, no changes are required; its accessor remains `gameRef`.
+
+Setting the game instance explicitly (useful for mocking in tests) is done through `gameRef` as
+well, and the `findGame()` override behaves exactly as before.
+
+
+### `HasWorldReference` renamed to `HasWorldRef`
+
+`HasWorldReference` has been renamed to `HasWorldRef`, and its accessor `world` has been renamed to
+`worldRef`, so that it mirrors `HasGameRef`/`gameRef` exactly. The old name is gone, there is no
+deprecated alias:
+
+```dart
+// Before
+class MyComponent extends Component with HasWorldReference<MyWorld> {
+  void doSomething() => world.add(AnotherComponent());
+}
+
+// After
+class MyComponent extends Component with HasWorldRef<MyWorld> {
+  void doSomething() => worldRef.add(AnotherComponent());
+}
+```
+
+Note that this only affects the mixin's accessor; `FlameGame.world` and `CameraComponent.world` are
+unchanged. Setting the world instance explicitly (useful for mocking in tests) is now done through
+`worldRef`, and `findWorld()` behaves exactly as before.
+
+Components that get the mixin indirectly are affected too: `Component3D` in `flame_3d` mixes in
+`HasWorldRef<World3D>`, so subclasses reaching for the enclosing world must use `worldRef`.
+
+
+### Asset prefix removed
+
+`Images` and `AssetsCache` no longer prepend anything to the paths you give them. `Images` used to
+prepend `assets/images/` and `AssetsCache` used to prepend `assets/`, both configurable through a
+`prefix` property. That property is gone, along with the `prefix` constructor argument.
+
+Every asset is now addressed by its full path, exactly as declared in the `pubspec.yaml`:
+
+```dart
+// Before
+await Flame.images.load('player.png');
+final level = await Flame.assets.readJson('levels/level1.json');
+
+// After
+await Flame.images.load('assets/images/player.png');
+final level = await Flame.assets.readJson('assets/levels/level1.json');
+```
+
+This applies to everything that loads through those caches, including `Sprite.load`,
+`SpriteAnimation.load`, `SpriteBatch.load`, `Game.loadSprite`, `Game.loadSpriteAnimation`, the
+`Parallax` loaders and `ParallaxImageData`/`ParallaxAnimationData`, and the `.asset` constructors of
+`SpriteWidget`, `SpriteAnimationWidget`, `NineTileBoxWidget` and `SpriteButton`.
+
+If you relied on a custom prefix, there is nothing to replace it with, and nothing to configure:
+just write the paths you actually want.
+
+```dart
+// Before
+Flame.images.prefix = 'gfx/';
+await Flame.images.load('player.png');
+
+// After
+await Flame.images.load('gfx/player.png');
+```
+
+
+#### Cache keys are now the full path
+
+The path is also the key the asset is cached under, so anything that reads the cache by key needs
+the same full path:
+
+```dart
+// Before
+await Flame.images.load('player.png');
+final image = Flame.images.fromCache('player.png');
+
+// After
+await Flame.images.load('assets/images/player.png');
+final image = Flame.images.fromCache('assets/images/player.png');
+```
+
+This affects `Images.fromCache`, `Images.containsKey`, `Images.clear`, `Images.keys`,
+`AssetsCache.fromCache` and `AssetsCache.clear`. It also affects `SpriteBatch`, whose internal
+`imageKey` is derived from the path you loaded with.
+
+One consequence is a bug fix: `Images.load` now includes the package in the cache key, matching what
+`AssetsCache` already did. Previously, loading the same filename from two different packages
+collided on one key and the second load silently returned the first package's image.
+
+
+#### `loadAllImages` and `loadAllFromPattern` require a directory
+
+These two methods used the prefix both to filter the asset manifest and to strip it back off the
+resulting keys. They now take a required `directory` argument instead, and cache entries under their
+full manifest path. Pass an empty string to scan the whole bundle.
+
+```dart
+// Before
+await Flame.images.loadAllImages();
+
+// After
+await Flame.images.loadAllImages(directory: 'assets/images/');
+```
+
+
+#### `flame_audio`
+
+The global `AudioCache` is now created with an empty prefix, so audio paths are full paths too.
+`FlameAudio.updatePrefix()` has been removed, as there is no longer a prefix to update.
+
+```dart
+// Before
+FlameAudio.play('explosion.mp3');
+FlameAudio.bgm.play('music/theme.mp3');
+
+// After
+FlameAudio.play('assets/audio/explosion.mp3');
+FlameAudio.bgm.play('assets/audio/music/theme.mp3');
+```
+
+
+#### `flame_tiled`
+
+The `prefix` argument is gone from `TiledComponent.load`, `RenderableTiledMap.fromFile`,
+`RenderableTiledMap.fromString` and `FlameTsxProvider.parse`. The map's file name is now a full
+path, and the assertion that it must not contain path separators has been removed.
+
+External `.tsx` tilesets are resolved relative to the map's own directory, derived from that path.
+`RenderableTiledMap.fromString` has no path to derive from, so its `prefix` argument became
+`tsxDirectory`.
+
+Watch out for these two, since they change behavior without failing to compile:
+`RenderableTiledMap.fromString`'s `tsxDirectory` and `FlameTsxProvider.parse`'s third argument both
+default to `''` now, where the old `prefix` defaulted to `assets/tiles/`. If you call either
+directly and rely on that default, pass the directory explicitly.
+
+Tileset and image-layer sources are resolved against a new `imagesDirectory` argument, which
+defaults to `assets/images/` and so preserves the previous behavior.
+
+```dart
+// Before
+await TiledComponent.load('map.tmx', Vector2.all(16));
+await TiledComponent.load(
+  'map.tmx',
+  Vector2.all(16),
+  prefix: 'assets/maps/',
+);
+
+// After
+await TiledComponent.load('assets/tiles/map.tmx', Vector2.all(16));
+await TiledComponent.load('assets/maps/map.tmx', Vector2.all(16));
+```
+
+Note that `TiledAtlas` cache keys are now scoped by `imagesDirectory`, so a key that was
+`tiles.png` is now `assets/images/tiles.png`.
+
+
+#### `flame_texturepacker`
+
+The `assetsPrefix` argument is gone from `atlasFromAssets`, `TexturePackerAtlas.load` and
+`TexturePackerAtlas.loadAtlas`. The atlas path is a full path, and page textures listed inside the
+atlas are resolved relative to the atlas's own directory.
+
+```dart
+// Before
+final atlas = await atlasFromAssets('atlas_map.atlas');
+
+// After
+final atlas = await atlasFromAssets('assets/images/atlas_map.atlas');
+```
+
+
+#### `flame_sprite_fusion`
+
+The `tilemapPrefix` argument is gone from `SpriteFusionTilemapComponent.load`. Both `mapJsonFile`
+and `spriteSheetFile` are now full paths.
+
+```dart
+// Before
+await SpriteFusionTilemapComponent.load(
+  mapJsonFile: 'map.json',
+  spriteSheetFile: 'spritesheet.png',
+);
+
+// After
+await SpriteFusionTilemapComponent.load(
+  mapJsonFile: 'assets/tiles/map.json',
+  spriteSheetFile: 'assets/images/spritesheet.png',
+);
+```
+
+
 ### `VerticalDragDetector` and `HorizontalDragDetector` removed
 
 Both game-level mixins have been removed, with no direct replacement in Flame.
@@ -69,16 +296,16 @@ directly.
 The game-level detector mixins that were deprecated in v1.38.0 have now been removed, together with
 the event classes that only they used:
 
-| Removed | Use instead |
-| --- | --- |
-| `TapDetector` | `TapCallbacks` |
-| `SecondaryTapDetector` | `SecondaryTapCallbacks` |
-| `TertiaryTapDetector` | `TertiaryTapCallbacks` |
-| `DoubleTapDetector` | `DoubleTapCallbacks` |
-| `LongPressDetector` | `LongPressCallbacks` |
-| `LongPressStartInfo` | `LongPressStartEvent` |
+| Removed                   | Use instead                |
+| ------------------------- | -------------------------- |
+| `TapDetector`             | `TapCallbacks`             |
+| `SecondaryTapDetector`    | `SecondaryTapCallbacks`    |
+| `TertiaryTapDetector`     | `TertiaryTapCallbacks`     |
+| `DoubleTapDetector`       | `DoubleTapCallbacks`       |
+| `LongPressDetector`       | `LongPressCallbacks`       |
+| `LongPressStartInfo`      | `LongPressStartEvent`      |
 | `LongPressMoveUpdateInfo` | `LongPressMoveUpdateEvent` |
-| `LongPressEndInfo` | `LongPressEndEvent` |
+| `LongPressEndInfo`        | `LongPressEndEvent`        |
 
 The replacements are mixed into a component rather than into the game, and each callback takes a
 single event object:
@@ -114,12 +341,12 @@ full replacement APIs.
 
 The `ScaleDetector` game mixin has been removed, together with the event classes that only it used:
 
-| Removed | Use instead |
-| --- | --- |
-| `ScaleDetector` | `ScaleCallbacks` |
-| `ScaleStartInfo` | `ScaleStartEvent` |
+| Removed           | Use instead        |
+| ----------------- | ------------------ |
+| `ScaleDetector`   | `ScaleCallbacks`   |
+| `ScaleStartInfo`  | `ScaleStartEvent`  |
 | `ScaleUpdateInfo` | `ScaleUpdateEvent` |
-| `ScaleEndInfo` | `ScaleEndEvent` |
+| `ScaleEndInfo`    | `ScaleEndEvent`    |
 
 `ScaleUpdateEvent` is a strict superset of `ScaleUpdateInfo`: `info.scale.global.x` and
 `info.scale.global.y` become `event.horizontalScale` and `event.verticalScale`, and
@@ -174,9 +401,9 @@ See [Scale Events](inputs/scale_events.md) for the full replacement API.
 
 Both game-level mixins have been removed:
 
-| Removed | Use instead |
-| --- | --- |
-| `MultiTouchTapDetector` | `TapCallbacks` |
+| Removed                  | Use instead     |
+| ------------------------ | --------------- |
+| `MultiTouchTapDetector`  | `TapCallbacks`  |
 | `MultiTouchDragDetector` | `DragCallbacks` |
 
 The `pointerId` that used to be passed as a separate first argument is now carried on the event
@@ -204,9 +431,9 @@ class MyGame extends FlameGame with TapCallbacks {
 Flutter's "tap completed" callback on `MultiTapGestureRecognizer`. Use `onTapUp` instead, which fires
 at the same point in the gesture.
 
-Because the new mixins are routed through `MultiDragScaleDispatcher`, they no longer conflict with
-`PanDetector` in the gesture arena, and the assertion that used to guard against combining
-`MultiTouchDragDetector` with `PanDetector` has been removed.
+Because the new mixins are routed through `MultiDragScaleDispatcher`, the assertion that used to
+guard against combining `MultiTouchDragDetector` with `PanDetector` in the gesture arena is gone
+(as is `PanDetector` itself; see below).
 
 See [Tap Events](inputs/tap_events.md) and [Drag Events](inputs/drag_events.md) for the full
 replacement APIs.
@@ -216,10 +443,10 @@ replacement APIs.
 
 The `ScrollDetector` game mixin has been removed, together with the event class that only it used:
 
-| Removed | Use instead |
-| --- | --- |
-| `ScrollDetector` | `ScrollCallbacks` |
-| `PointerScrollInfo` | `ScrollEvent` |
+| Removed             | Use instead       |
+| ------------------- | ----------------- |
+| `ScrollDetector`    | `ScrollCallbacks` |
+| `PointerScrollInfo` | `ScrollEvent`     |
 
 The scroll delta is now read directly off the event rather than through a nested wrapper, and the
 event carries the usual `PositionEvent` fields, so the position where the scroll occurred is
@@ -257,15 +484,15 @@ The `MouseMovementDetector` game mixin has been removed, together with the event
 used. At the same time, the component-level API it is replaced by has been renamed from `PointerMove`
 to `MouseMove`:
 
-| Removed / renamed | Use instead |
-| --- | --- |
-| `MouseMovementDetector` | `MouseMoveCallbacks` |
-| `PointerHoverInfo` | `MouseMoveEvent` |
-| `PointerMoveCallbacks` | `MouseMoveCallbacks` |
-| `PointerMoveEvent` | `MouseMoveEvent` |
+| Removed / renamed       | Use instead           |
+| ----------------------- | --------------------- |
+| `MouseMovementDetector` | `MouseMoveCallbacks`  |
+| `PointerHoverInfo`      | `MouseMoveEvent`      |
+| `PointerMoveCallbacks`  | `MouseMoveCallbacks`  |
+| `PointerMoveEvent`      | `MouseMoveEvent`      |
 | `PointerMoveDispatcher` | `MouseMoveDispatcher` |
-| `onPointerMove` | `onMouseMove` |
-| `onPointerMoveStop` | `onMouseMoveStop` |
+| `onPointerMove`         | `onMouseMove`         |
+| `onPointerMoveStop`     | `onMouseMoveStop`     |
 
 The rename has two reasons. Flame's `PointerMoveEvent` collided with Flutter's class of the same
 name, forcing a `hide` on any file that imported both `package:flame/events.dart` and
@@ -306,6 +533,86 @@ detector.
 `flame_behaviors`, note that it no longer re-exports the legacy `*Info` event classes.
 
 See [Pointer Events](inputs/pointer_events.md) for the full replacement API.
+
+
+### `PanDetector` removed, and with it the whole `*Info` event hierarchy
+
+`PanDetector` was the last of the game-level gesture detectors, so removing it also removes every
+event class that existed to serve them:
+
+| Removed          | Use instead       |
+| ---------------- | ----------------- |
+| `PanDetector`    | `DragCallbacks`   |
+| `DragStartInfo`  | `DragStartEvent`  |
+| `DragUpdateInfo` | `DragUpdateEvent` |
+| `DragEndInfo`    | `DragEndEvent`    |
+| `DragDownInfo`   | —                 |
+| `TapDownInfo`    | `TapDownEvent`    |
+| `TapUpInfo`      | `TapUpEvent`      |
+| `PositionInfo`   | `PositionEvent`   |
+
+```dart
+// Before
+class MyGame extends FlameGame with PanDetector {
+  @override
+  void onPanStart(DragStartInfo info) {
+    player.startShooting();
+  }
+
+  @override
+  void onPanUpdate(DragUpdateInfo info) {
+    player.move(info.delta.global);
+  }
+
+  @override
+  void onPanEnd(DragEndInfo info) {
+    player.stopShooting();
+  }
+}
+
+// After
+class MyGame extends FlameGame with DragCallbacks {
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    player.startShooting();
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
+  }
+
+  @override
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
+    player.stopShooting();
+  }
+}
+```
+
+A few differences to be aware of:
+
+- `onDragStart`, `onDragEnd` and `onDragCancel` are `@mustCallSuper`, because they maintain the
+  `isDragged` flag; your overrides have to call `super` first.
+- There is no equivalent of `onPanDown`. Use `onDragStart`, which fires once the touch slop has been
+  exceeded, exactly like `onPanStart` did.
+- The nested position and delta wrappers are gone: `info.eventPosition.widget` becomes
+  `event.canvasPosition`, and `info.delta.global` becomes `event.localDelta` (or `event.canvasDelta`
+  if you want the delta before any camera transform is applied).
+- `DragEndEvent` exposes `velocity`, but there is no replacement for `DragEndInfo.primaryVelocity` —
+  it was permanently `null` anyway, since only axis-constrained recognizers ever set it.
+- Every drag event carries a `pointerId`, so simultaneous drags can be told apart. `PanDetector`
+  could only ever track one.
+- Like the other component callbacks, drags are routed by position: a component only receives a drag
+  that starts on top of it, as determined by `containsLocalPoint()`. Mixing `DragCallbacks` into
+  your `FlameGame` subclass directly, as above, keeps the old whole-surface behavior.
+
+With this, `package:flame/events.dart` and `package:flame/input.dart` no longer export any `*Detector`
+mixin or `*Info` class, and `GestureDetectorBuilder.initializeGestures` - which existed only to wire
+those detectors up — has been removed.
+
+See [Drag Events](inputs/drag_events.md) for the full replacement API.
 
 
 ### `onDragCancel` no longer delegates to `onDragEnd`
@@ -533,3 +840,88 @@ if (game.isPaused) {
   game.isPaused = false;
 }
 ```
+
+
+### `children` is now a `ComponentList` instead of an `OrderedSet`
+
+The `ordered_set` package is no longer used; children live in a Flame-owned `ComponentList`. The
+iterable surface, `query<T>()`, and `register<T>()` are unchanged, so most code compiles as is. If
+you imported `package:ordered_set` types to annotate variables, use `ComponentList` (from
+`package:flame/components.dart`) instead:
+
+```dart
+// Before
+import 'package:ordered_set/ordered_set.dart';
+OrderedSet<Component> children = component.children;
+
+// After
+ComponentList children = component.children;
+```
+
+Other changes to be aware of:
+
+- `children.reversed()` is now a getter: `children.reversed`.
+- `Component.strictQueryMode` is removed. Strict mode is off by default; to enable it for a
+  component, override `createComponentList()` to return `ComponentList(strictMode: true)`.
+- `query<T>()` results are now always in priority order.
+- Removing components while iterating `children` is allowed; reordering the list while iterating
+  it throws `ConcurrentModificationError`.
+
+
+### `Component.childrenFactory` is removed
+
+The global children-container factory is gone. Override `createComponentList()` on the component
+instead. The constructor accepts an optional `Comparator<Component>` that replaces priority
+ordering for that parent, which gives custom orderings such as y-sort a supported home:
+
+```dart
+// Before
+Component.childrenFactory = () => OrderedSet.mapping<num, Component>((c) => c.priority);
+
+// After
+class YSortedWorld extends World {
+  @override
+  ComponentList createComponentList() {
+    return ComponentList(
+      comparator: (a, b) => (a as PositionComponent)
+          .position.y
+          .compareTo((b as PositionComponent).position.y),
+    );
+  }
+}
+```
+
+
+### `Component.updateTree` is non-virtual
+
+The update pass runs over a flattened traversal list owned by the game, so `updateTree` can no
+longer be overridden. If you overrode it, mix in `CustomTraversal` and override its
+`updateSubtree` instead; call `super.updateSubtree(dt)` to run the standard traversal:
+
+```dart
+// Before
+class SlowMotionArea extends Component {
+  @override
+  void updateTree(double dt) => super.updateTree(dt / 2);
+}
+
+// After
+class SlowMotionArea extends Component with CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+`HasTimeScale` is now declared `on CustomTraversal`, so components other than `FlameGame` (which
+already mixes it in) must mix in `CustomTraversal` before it:
+
+```dart
+// Before
+class SlowWorld extends World with HasTimeScale {}
+
+// After
+class SlowWorld extends World with CustomTraversal, HasTimeScale {}
+```
+
+A `HasTimeScale` time scale of `0` (or `pause()`) now stops the update pass for the whole subtree
+instead of updating it with a `dt` of `0`, which is what `Route.stopTime()` relies on.

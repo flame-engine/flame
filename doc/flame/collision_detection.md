@@ -10,7 +10,7 @@ other. For example, an arrow hitting an enemy or the player picking up a coin.
 
 In most collision detection systems you use something called hitboxes to create more precise
 bounding boxes of your components. In Flame the hitboxes are areas of the component that can react
-to collisions and make [gesture input](inputs/gesture_input.md#gesturehitboxes) more accurate.
+to collisions and make [gesture input](inputs/inputs.md#gesturehitboxes) more accurate.
 
 The collision detection system supports three different types of shapes that you can build hitboxes
 from, these shapes are Polygon, Rectangle and Circle. Multiple hitboxes can be added to a
@@ -148,7 +148,7 @@ Finally, one adds a listener to the `onLoad` method of the `PositionComponent` t
 which will resolve how the collisions should be dealt with:
 
 ```dart
-(game as HasCollisionDetection)
+(gameRef as HasCollisionDetection)
     .collisionDetection
     .collisionsCompletedNotifier
     .addListener(() {
@@ -226,7 +226,7 @@ and two `RectangleHitbox`s as its hat.
 
 A hitbox can be used either for collision detection or for making gesture detection more accurate
 on top of components, see more regarding the latter in the section about the
-[GestureHitboxes](inputs/gesture_input.md#gesturehitboxes) mixin.
+[GestureHitboxes](inputs/inputs.md#gesturehitboxes) mixin.
 
 
 ### CollisionType
@@ -471,7 +471,7 @@ range. For such cases, an optional `maxDistance` can be provided.
 
 To use the ray casting functionality you have to have the `HasCollisionDetection` mixin on your
 game. After you have added that, you can call `collisionDetection.raycast(...)` on your game class,
-or with the `HasGameReference` mixin from other components as well.
+or with the `HasGameRef` mixin from other components as well.
 
 Example:
 

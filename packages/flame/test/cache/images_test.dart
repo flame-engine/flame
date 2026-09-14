@@ -104,18 +104,6 @@ void main() {
     });
 
     testWithFlameGame(
-      'prefix on game.images can be changed',
-      (game) async {
-        game.images = Images();
-        expect(game.images.prefix, 'assets/images/');
-        game.images.prefix = 'assets/pictures/';
-        expect(game.images.prefix, 'assets/pictures/');
-        game.images.prefix = '';
-        expect(game.images.prefix, '');
-      },
-    );
-
-    testWithFlameGame(
       'Game.images is same as Flame.images',
       (game) async {
         expect(game.images, equals(Flame.images));
@@ -130,14 +118,6 @@ void main() {
         expect(Flame.images.containsKey('new image'), isFalse);
       },
     );
-
-    test('throws when setting an invalid prefix', () {
-      final images = Images();
-      expect(
-        () => images.prefix = 'foo',
-        failsAssert('Prefix must be empty or end with a "/"'),
-      );
-    });
 
     test('.ready()', () async {
       final images = Images();
@@ -160,7 +140,7 @@ void main() {
       );
 
       final images = Images(bundle: bundle);
-      await images.load('pixel.png', package: 'my_pkg');
+      await images.load('assets/images/pixel.png', package: 'my_pkg');
 
       verify(
         () => bundle.load('packages/my_pkg/assets/images/pixel.png'),
@@ -177,14 +157,119 @@ void main() {
       );
 
       final images = Images(bundle: bundle);
-      final image = await images.load('pixel.png');
+      final image = await images.load('assets/images/pixel.png');
 
       expect(image.width, equals(1));
       expect(image.height, equals(1));
 
       verify(() => bundle.load('assets/images/pixel.png')).called(1);
     });
+
+    group('loadAllFromPattern', () {
+      _ManifestAssetBundle bundleWith(List<String> paths) {
+        return _ManifestAssetBundle(
+          paths,
+          base64Decode(pixel.split(',').last),
+        );
+      }
+
+      test('only loads assets under the given directory', () async {
+        final bundle = bundleWith([
+          'assets/images/player.png',
+          'assets/images/enemy.jpg',
+          'assets/images/notes.txt',
+          'assets/tiles/map.png',
+          'packages/other/assets/images/logo.png',
+        ]);
+        final images = Images(bundle: bundle);
+
+        await images.loadAllImages(directory: 'assets/images/');
+
+        expect(
+          images.keys.toSet(),
+          {'assets/images/player.png', 'assets/images/enemy.jpg'},
+        );
+      });
+
+      test('caches entries under their full manifest path', () async {
+        final bundle = bundleWith(['assets/images/nested/player.png']);
+        final images = Images(bundle: bundle);
+
+        await images.loadAllImages(directory: 'assets/images/');
+
+        expect(images.keys, equals(['assets/images/nested/player.png']));
+        expect(bundle.loadedKeys, equals(['assets/images/nested/player.png']));
+      });
+
+      test('an empty directory matches the whole bundle', () async {
+        final bundle = bundleWith([
+          'assets/images/player.png',
+          'assets/tiles/map.png',
+        ]);
+        final images = Images(bundle: bundle);
+
+        await images.loadAllImages(directory: '');
+
+        expect(
+          images.keys.toSet(),
+          {'assets/images/player.png', 'assets/tiles/map.png'},
+        );
+      });
+
+      test('throws when the directory does not end with a slash', () {
+        final images = Images(bundle: bundleWith([]));
+        expect(
+          () => images.loadAllImages(directory: 'assets/images'),
+          failsAssert('directory must be empty or end with a "/"'),
+        );
+      });
+    });
+
+    test('the same file in two packages does not collide', () async {
+      final bundle = _MockAssetBundle();
+      when(() => bundle.load(any())).thenAnswer(
+        (_) async {
+          final list = base64Decode(pixel.split(',').last);
+          return ByteData.view(list.buffer);
+        },
+      );
+
+      final images = Images(bundle: bundle);
+      await images.load('assets/images/pixel.png', package: 'pkg_a');
+      await images.load('assets/images/pixel.png', package: 'pkg_b');
+
+      expect(images.keys.toSet(), {
+        'packages/pkg_a/assets/images/pixel.png',
+        'packages/pkg_b/assets/images/pixel.png',
+      });
+      verify(
+        () => bundle.load('packages/pkg_a/assets/images/pixel.png'),
+      ).called(1);
+      verify(
+        () => bundle.load('packages/pkg_b/assets/images/pixel.png'),
+      ).called(1);
+    });
   });
+}
+
+class _ManifestAssetBundle extends CachingAssetBundle {
+  _ManifestAssetBundle(this.assetPaths, this.pixelBytes);
+
+  final List<String> assetPaths;
+  final Uint8List pixelBytes;
+
+  final List<String> loadedKeys = [];
+
+  @override
+  Future<ByteData> load(String key) async {
+    if (key == 'AssetManifest.bin') {
+      return const StandardMessageCodec().encodeMessage(<String, Object?>{
+        for (final path in assetPaths) path: <Object?>[],
+      })!;
+    }
+    loadedKeys.add(key);
+    return ByteData.view(pixelBytes.buffer);
+  }
 }
 
 class _MockImage extends Mock implements Image {

@@ -22,7 +22,7 @@ class ParticlesExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final zap = await images.load('zap.png');
+    final zap = await images.load('assets/images/zap.png');
     final cell = Vector2(size.x / _columns, size.y / _rows);
 
     final effects = <(String, PositionComponent)>[
@@ -393,7 +393,7 @@ class _OrbitingEmitter extends PositionComponent {
 
 /// Displays the frame rate and the total number of live particles across
 /// all emitters, refreshed a few times per second.
-class _StatsText extends TextComponent with HasGameReference {
+class _StatsText extends TextComponent with HasGameRef {
   _StatsText({super.position, super.anchor})
     : super(
         textRenderer: TextPaint(
@@ -419,7 +419,7 @@ class _StatsText extends TextComponent with HasGameReference {
     _sinceRefresh = 0;
     var count = 0;
     for (final emitter
-        in game.descendants().whereType<ParticleEmitterComponent>()) {
+        in gameRef.descendants().whereType<ParticleEmitterComponent>()) {
       count += emitter.particleCount;
     }
     text = '${_fps.fps.round()} fps, $count particles';

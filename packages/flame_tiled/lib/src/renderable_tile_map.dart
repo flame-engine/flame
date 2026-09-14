@@ -250,9 +250,15 @@ class RenderableTiledMap {
 
   /// Parses a file returning a [RenderableTiledMap].
   ///
-  /// {@template renderable_tile_prefix_path}
-  /// This method looks for files under the path "assets/tiles/" by default.
-  /// This can be changed by providing a different path to [prefix].
+  /// {@template renderable_tile_map_path}
+  /// The [fileName] is the full path of the map, as declared in the
+  /// `pubspec.yaml`, for example `assets/tiles/map.tmx`. Any external `.tsx`
+  /// tileset the map references is resolved relative to that path.
+  /// {@endtemplate}
+  ///
+  /// {@template tiled_images_directory}
+  /// Tileset and image-layer sources are resolved against [imagesDirectory],
+  /// which defaults to `assets/images/`.
   /// {@endtemplate}
   ///
   /// {@template renderable_tile_map_factory}
@@ -264,7 +270,6 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     double? atlasMaxX,
     double? atlasMaxY,
-    String prefix = 'assets/tiles/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
@@ -275,22 +280,17 @@ class RenderableTiledMap {
     double atlasPackingSpacingX = 0,
     double atlasPackingSpacingY = 0,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) async {
-    assert(
-      !fileName.contains(RegExp(r'[/\\]')),
-      'fileName should not contain path separators, use prefix to specify a '
-      'path.',
-    );
-    final fullPrefix = package == null ? prefix : 'packages/$package/$prefix';
-    final contents = await (bundle ?? Flame.bundle).loadString(
-      '$fullPrefix$fileName',
-    );
+    final mapPath = package == null ? fileName : 'packages/$package/$fileName';
+    final contents = await (bundle ?? Flame.bundle).loadString(mapPath);
     return fromString(
       contents,
       destTileSize,
       atlasMaxX: atlasMaxX,
       atlasMaxY: atlasMaxY,
-      prefix: fullPrefix,
+      tsxDirectory: mapPath.substring(0, mapPath.lastIndexOf('/') + 1),
+      imagesDirectory: imagesDirectory,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
@@ -306,7 +306,10 @@ class RenderableTiledMap {
 
   /// Parses a string returning a [RenderableTiledMap].
   ///
-  /// {@macro renderable_tile_prefix_path}
+  /// External `.tsx` tilesets the map references are resolved against
+  /// [tsxDirectory].
+  ///
+  /// {@macro tiled_images_directory}
   ///
   /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromString(
@@ -314,7 +317,8 @@ class RenderableTiledMap {
     Vector2 destTileSize, {
     double? atlasMaxX,
     double? atlasMaxY,
-    String prefix = 'assets/tiles/',
+    String tsxDirectory = '',
+    String imagesDirectory = 'assets/images/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
@@ -328,13 +332,14 @@ class RenderableTiledMap {
   }) async {
     final map = await TiledMap.fromString(
       contents,
-      (key) => FlameTsxProvider.parse(key, bundle, prefix),
+      (key) => FlameTsxProvider.parse(key, bundle, tsxDirectory),
     );
     return fromTiledMap(
       map,
       destTileSize,
       atlasMaxX: atlasMaxX,
       atlasMaxY: atlasMaxY,
+      imagesDirectory: imagesDirectory,
       camera: camera,
       ignoreFlip: ignoreFlip,
       images: images,
@@ -350,12 +355,15 @@ class RenderableTiledMap {
 
   /// Parses a [TiledMap] returning a [RenderableTiledMap].
   ///
+  /// {@macro tiled_images_directory}
+  ///
   /// {@macro renderable_tile_map_factory}
   static Future<RenderableTiledMap> fromTiledMap(
     TiledMap map,
     Vector2 destTileSize, {
     double? atlasMaxX,
     double? atlasMaxY,
+    String imagesDirectory = 'assets/images/',
     CameraComponent? camera,
     bool? ignoreFlip,
     Images? images,
@@ -393,11 +401,13 @@ class RenderableTiledMap {
         spacingX: atlasPackingSpacingX,
         spacingY: atlasPackingSpacingY,
         package: package,
+        imagesDirectory: imagesDirectory,
       ),
       ignoreFlip: ignoreFlip,
       images: images,
       layerPaintFactory: layerPaintFactory ?? _defaultLayerPaintFactory,
       package: package,
+      imagesDirectory: imagesDirectory,
     );
 
     return RenderableTiledMap(
@@ -421,6 +431,7 @@ class RenderableTiledMap {
     bool? ignoreFlip,
     Images? images,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) {
     final visibleLayers = layers.where((layer) => layer.visible);
 
@@ -437,6 +448,7 @@ class RenderableTiledMap {
         images: images,
         layerPaintFactory: layerPaintFactory,
         package: package,
+        imagesDirectory: imagesDirectory,
       );
 
       if (layer is Group && renderableLayer is GroupLayer) {
@@ -452,6 +464,7 @@ class RenderableTiledMap {
           images: images,
           layerPaintFactory: layerPaintFactory,
           package: package,
+          imagesDirectory: imagesDirectory,
         );
       }
 

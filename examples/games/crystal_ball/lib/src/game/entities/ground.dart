@@ -12,10 +12,7 @@ class Ground extends Component {
 }
 
 class Rectangle extends PositionComponent
-    with
-        CollisionCallbacks,
-        ParentIsA<Ground>,
-        HasGameReference<CrystalBallGame> {
+    with CollisionCallbacks, ParentIsA<Ground>, HasGameRef<CrystalBallGame> {
   Rectangle(double y)
     : super(
         anchor: Anchor.topCenter,

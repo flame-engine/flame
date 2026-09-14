@@ -21,7 +21,7 @@ class BouncingBallExample extends FlameGame with HasCollisionDetection {
 }
 
 class Ball extends CircleComponent
-    with HasGameReference<FlameGame>, CollisionCallbacks {
+    with HasGameRef<FlameGame>, CollisionCallbacks {
   late Vector2 velocity;
 
   Ball() {
@@ -52,7 +52,7 @@ class Ball extends CircleComponent
   }
 
   void get _resetBall {
-    position = game.size / 2;
+    position = gameRef.size / 2;
     final spawnAngle = getSpawnAngle;
 
     final vx = math.cos(spawnAngle * degree) * speed;
@@ -86,7 +86,7 @@ class Ball extends CircleComponent
         velocity.y = velocity.y;
       }
       // Right Side Collision
-      if (collisionPoint.x == game.size.x) {
+      if (collisionPoint.x == gameRef.size.x) {
         velocity.x = -velocity.x;
         velocity.y = velocity.y;
       }
@@ -96,7 +96,7 @@ class Ball extends CircleComponent
         velocity.y = -velocity.y;
       }
       // Bottom Side Collision
-      if (collisionPoint.y == game.size.y) {
+      if (collisionPoint.y == gameRef.size.y) {
         velocity.x = velocity.x;
         velocity.y = -velocity.y;
       }

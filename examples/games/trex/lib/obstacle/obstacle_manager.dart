@@ -6,7 +6,7 @@ import 'package:trex_game/obstacle/obstacle.dart';
 import 'package:trex_game/obstacle/obstacle_type.dart';
 import 'package:trex_game/trex_game.dart';
 
-class ObstacleManager extends Component with HasGameReference<TRexGame> {
+class ObstacleManager extends Component with HasGameRef<TRexGame> {
   ObstacleManager();
 
   ListQueue<ObstacleType> history = ListQueue();
@@ -23,7 +23,7 @@ class ObstacleManager extends Component with HasGameReference<TRexGame> {
           !lastObstacle.followingObstacleCreated &&
           lastObstacle.isVisible &&
           (lastObstacle.x + lastObstacle.width + lastObstacle.gap) <
-              game.size.x) {
+              gameRef.size.x) {
         addNewObstacle();
         lastObstacle.followingObstacleCreated = true;
       }
@@ -33,11 +33,11 @@ class ObstacleManager extends Component with HasGameReference<TRexGame> {
   }
 
   void addNewObstacle() {
-    final speed = game.currentSpeed;
+    final speed = gameRef.currentSpeed;
     if (speed == 0) {
       return;
     }
-    var settings = game.random.nextBool()
+    var settings = gameRef.random.nextBool()
         ? ObstacleTypeSettings.cactusSmall
         : ObstacleTypeSettings.cactusLarge;
     if (duplicateObstacleCheck(settings.type) || speed < settings.allowedAt) {
@@ -47,7 +47,7 @@ class ObstacleManager extends Component with HasGameReference<TRexGame> {
     final groupSize = _groupSize(settings);
     for (var i = 0; i < groupSize; i++) {
       add(Obstacle(settings: settings, groupIndex: i));
-      game.score++;
+      gameRef.score++;
     }
 
     history.addFirst(settings.type);
@@ -71,8 +71,8 @@ class ObstacleManager extends Component with HasGameReference<TRexGame> {
   }
 
   int _groupSize(ObstacleTypeSettings settings) {
-    if (game.currentSpeed > settings.multipleAt) {
-      return game.random
+    if (gameRef.currentSpeed > settings.multipleAt) {
+      return gameRef.random
           .nextDoubleBetween(1.0, ObstacleTypeSettings.maxGroupSize)
           .floor();
     } else {

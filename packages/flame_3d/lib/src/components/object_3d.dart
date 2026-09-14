@@ -60,7 +60,7 @@ abstract class Object3D extends Component3D {
     _ancestorFullyInside = wasAncestorFullyInside;
 
     if (cullResult == CullResult.inside || isVisible(camera!)) {
-      world.context.submitDraw(this, worldTransformMatrix);
+      worldRef.context.submitDraw(this, worldTransformMatrix);
     }
   }
 

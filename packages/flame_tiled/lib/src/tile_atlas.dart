@@ -104,6 +104,8 @@ class TiledAtlas {
   }
 
   /// Loads all the tileset images for the [map] into one [TiledAtlas].
+  ///
+  /// {@macro tiled_images_directory}
   static Future<TiledAtlas> fromTiledMap(
     TiledMap map, {
     double? maxX,
@@ -114,6 +116,7 @@ class TiledAtlas {
     double spacingX = 0,
     double spacingY = 0,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) async {
     final tilesetImageList = _onlyTileImages(
       map,
@@ -125,21 +128,19 @@ class TiledAtlas {
       var tileImageSource = tiledImage.source!;
       final tilesetSource = entry.$1;
 
-      if (tilesetSource == null) {
-        return (tileImageSource, tiledImage);
+      if (tilesetSource != null) {
+        final tilesetParts = tilesetSource.split('/');
+        final imageParts = tileImageSource.split('/');
+
+        if (tilesetParts.length != imageParts.length) {
+          tileImageSource = [
+            ...tilesetParts.sublist(0, tilesetParts.length - 1),
+            ...imageParts,
+          ].join('/');
+        }
       }
 
-      final tilesetParts = tilesetSource.split('/');
-      final imageParts = tileImageSource.split('/');
-
-      if (tilesetParts.length != imageParts.length) {
-        tileImageSource = [
-          ...tilesetParts.sublist(0, tilesetParts.length - 1),
-          ...imageParts,
-        ].join('/');
-      }
-
-      return (tileImageSource, tiledImage);
+      return ('$imagesDirectory$tileImageSource', tiledImage);
     });
 
     if (mappedImageList.isEmpty) {
@@ -156,7 +157,7 @@ class TiledAtlas {
 
     final imageList = mappedImageList.map((e) => e.$2).toList();
 
-    final key = atlasKey(imageList);
+    final key = '$imagesDirectory${atlasKey(imageList)}';
     if (atlasMap.containsKey(key)) {
       return atlasMap[key]!.clone();
     }

@@ -1,10 +1,5 @@
 # Tap Events
 
-```{note}
-This document describes the new events API. The old (legacy) approach,
-which is still supported, is described in [](gesture_input.md).
-```
-
 **Tap events** are one of the most basic methods of interaction with a Flame game. These events
 occur when the user touches the screen with a finger, or clicks with a mouse, or taps with a stylus.
 A tap can be "long", but the finger isn't supposed to move during the gesture. Thus, touching the

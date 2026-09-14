@@ -19,7 +19,7 @@ enum ParticleEffect {
   bubbles,
 }
 
-class ParticlesInteractiveExample extends FlameGame with PanDetector {
+class ParticlesInteractiveExample extends FlameGame with DragCallbacks {
   static const description =
       'Drag around the canvas to paint with particles, and pick an effect in '
       'the properties panel (the knobs icon in the top right) to try the '
@@ -50,20 +50,25 @@ class ParticlesInteractiveExample extends FlameGame with PanDetector {
 
   @override
   Future<void> onLoad() async {
-    final zap = await images.load('zap.png');
+    final zap = await images.load('assets/images/zap.png');
     _emitter = _buildEffect(zap);
     add(_emitter);
   }
 
+  /// Multiple pointers would flip-flop the emitter, spraying between them.
   @override
-  void onPanStart(DragStartInfo info) {
-    _emitter.position = info.eventPosition.widget;
+  bool get allowsMultiPointerDrag => false;
+
+  @override
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
+    _emitter.position = event.canvasPosition;
     _emitter.emit(_perDragStart);
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    _emitter.position = info.eventPosition.widget;
+  void onDragUpdate(DragUpdateEvent event) {
+    _emitter.position = event.canvasEndPosition;
     _emitter.emit(_perDragUpdate);
   }
 

@@ -35,7 +35,7 @@ void main() {
         stringNames: ['map.tmx', 'tiles_custom_path/map_custom_path.tmx'],
       );
       tiled = await TiledComponent.load(
-        'map.tmx',
+        'assets/tiles/map.tmx',
         Vector2.all(16),
         key: ComponentKey.named('test'),
       );
@@ -48,27 +48,16 @@ void main() {
     test('component atlases returns the loaded atlases', () {
       final atlases = tiled.atlases();
       expect(atlases, hasLength(1));
-      expect(atlases.first.$1, equals('map-level1.png'));
+      expect(atlases.first.$1, equals('assets/images/map-level1.png'));
     });
 
-    test('correct loads the file, with different prefix', () async {
+    test('correct loads the file, from a nested directory', () async {
       tiled = await TiledComponent.load(
-        'map_custom_path.tmx',
+        'assets/tiles/tiles_custom_path/map_custom_path.tmx',
         Vector2.all(16),
-        prefix: 'assets/tiles/tiles_custom_path/',
       );
 
       expect(tiled.tileMap.renderableLayers.length, equals(3));
-    });
-
-    test('throws assertion error if fileName contains a path', () async {
-      expectLater(
-        TiledComponent.load(
-          'path/to/map.tmx',
-          Vector2.all(16),
-        ),
-        throwsAssertionError,
-      );
     });
 
     test('assigns key', () async {
@@ -149,7 +138,6 @@ void main() {
       ],
     );
 
-    // TestAssetBundle strips assets/tiles/ from the prefix.
     final tsxProvider = await FlameTsxProvider.parse(
       'external_tileset_custom_path.tsx',
       Flame.bundle,
@@ -183,7 +171,7 @@ void main() {
         stringNames: ['2_tiles-green_on_red.tmx'],
       );
       overlapMap = await RenderableTiledMap.fromFile(
-        '2_tiles-green_on_red.tmx',
+        'assets/tiles/2_tiles-green_on_red.tmx',
         Vector2.all(16),
         bundle: bundle,
         images: Images(bundle: bundle),
@@ -285,7 +273,7 @@ void main() {
         stringNames: ['8_tiles-flips.tmx'],
       );
       overlapMap = await RenderableTiledMap.fromFile(
-        '8_tiles-flips.tmx',
+        'assets/tiles/8_tiles-flips.tmx',
         Vector2.all(16),
         bundle: bundle,
         images: Images(bundle: bundle),
@@ -397,7 +385,7 @@ void main() {
       );
       final tiledComponent = TiledComponent(
         await RenderableTiledMap.fromFile(
-          '8_tiles-flips.tmx',
+          'assets/tiles/8_tiles-flips.tmx',
           Vector2.all(16),
           ignoreFlip: ignoreFlip,
           bundle: bundle,
@@ -442,7 +430,7 @@ void main() {
         stringNames: ['layers_test.tmx'],
       );
       renderableTiledMap = await RenderableTiledMap.fromFile(
-        'layers_test.tmx',
+        'assets/tiles/layers_test.tmx',
         Vector2.all(32),
         bundle: Flame.bundle,
       );
@@ -497,7 +485,7 @@ void main() {
         stringNames: ['map.tmx'],
       );
       component = await TiledComponent.load(
-        'map.tmx',
+        'assets/tiles/map.tmx',
         Vector2(16, 16),
         bundle: Flame.bundle,
       );
@@ -542,7 +530,7 @@ void main() {
         stringNames: ['test_isometric.tmx'],
       );
       component = await TiledComponent.load(
-        'test_isometric.tmx',
+        'assets/tiles/test_isometric.tmx',
         Vector2(256 / 4, 128 / 4),
         bundle: bundle,
         images: Images(bundle: bundle),
@@ -840,7 +828,7 @@ void main() {
         stringNames: ['test_shifted.tmx'],
       );
       component = await TiledComponent.load(
-        'test_shifted.tmx',
+        'assets/tiles/test_shifted.tmx',
         destTileSize,
         bundle: bundle,
         images: Images(bundle: bundle),
@@ -892,7 +880,7 @@ void main() {
         stringNames: ['test_isometric.tmx'],
       );
       component = await TiledComponent.load(
-        'test_isometric.tmx',
+        'assets/tiles/test_isometric.tmx',
         size,
         bundle: bundle,
         images: Images(bundle: bundle),
@@ -963,7 +951,7 @@ void main() {
             stringNames: ['dungeon_animation_$mapType.tmx'],
           );
           component = await TiledComponent.load(
-            'dungeon_animation_$mapType.tmx',
+            'assets/tiles/dungeon_animation_$mapType.tmx',
             size,
             bundle: bundle,
             images: Images(bundle: bundle),
@@ -1091,7 +1079,7 @@ void main() {
             stringNames: ['oversized_tiles_$mapType.tmx'],
           );
           component = await TiledComponent.load(
-            'oversized_tiles_$mapType.tmx',
+            'assets/tiles/oversized_tiles_$mapType.tmx',
             size,
             bundle: bundle,
             images: Images(bundle: bundle),
@@ -1118,7 +1106,7 @@ void main() {
         stringNames: ['deleted_layer_map.tmx'],
       );
       renderableTiledMap = await RenderableTiledMap.fromFile(
-        'deleted_layer_map.tmx',
+        'assets/tiles/deleted_layer_map.tmx',
         Vector2.all(16),
         bundle: bundle,
         images: Images(bundle: bundle),
@@ -1152,7 +1140,7 @@ void main() {
         stringNames: ['layers_test.tmx'],
       );
       renderableTiledMap = await RenderableTiledMap.fromFile(
-        'layers_test.tmx',
+        'assets/tiles/layers_test.tmx',
         Vector2.all(32),
         bundle: Flame.bundle,
       );
@@ -1205,7 +1193,7 @@ void main() {
         stringNames: ['map.tmx'],
       );
       renderableTiledMap = await RenderableTiledMap.fromFile(
-        'map.tmx',
+        'assets/tiles/map.tmx',
         Vector2.all(16),
         bundle: Flame.bundle,
       );

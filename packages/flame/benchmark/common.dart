@@ -13,5 +13,6 @@ Future<void> mountGame(FlameGame game, {Vector2? size}) async {
   await game.load();
   // ignore: invalid_use_of_internal_member
   game.mount();
+  await game.ready();
   game.update(0);
 }

@@ -13,7 +13,7 @@ import 'package:flame_isolate_example/terrain/grass.dart';
 import 'package:flame_isolate_example/terrain/terrain.dart';
 import 'package:flame_isolate_example/units/worker.dart';
 
-class GameMap extends Component with HasGameReference<ColonistsGame> {
+class GameMap extends Component with HasGameRef<ColonistsGame> {
   static const mapSizeX = 50;
   static const mapSizeY = 50;
   static const totalPositions = mapSizeX * mapSizeY;
@@ -60,7 +60,7 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
     worldObjects.forEach(addObject);
 
     if (workers.isNotEmpty) {
-      game.camera.follow(workers.first);
+      gameRef.camera.follow(workers.first);
     }
   }
 
@@ -93,7 +93,7 @@ class GameMap extends Component with HasGameReference<ColonistsGame> {
 
   PathFinderData get pathFinderData => PathFinderData.fromWorld(
     terrain: _terrain,
-    worldObjects: game.worldObjects,
+    worldObjects: gameRef.worldObjects,
   );
 
   Terrain tileAtPosition(int x, int y) {

@@ -26,7 +26,7 @@ void main() {
         );
 
         final component = await TiledComponent.load(
-          'image_layer_full_screen.tmx',
+          'assets/tiles/image_layer_full_screen.tmx',
           Vector2.all(16),
           bundle: bundle,
           images: Images(bundle: bundle),

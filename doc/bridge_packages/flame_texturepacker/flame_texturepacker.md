@@ -48,7 +48,7 @@ class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
     // Load the texture atlas
-    final atlas = await atlasFromAssets('atlas_map.atlas');
+    final atlas = await atlasFromAssets('assets/images/atlas_map.atlas');
     
     // Use the atlas to get sprites
     final sprite = atlas.findSpriteByName('robot_jump')!;
@@ -109,7 +109,7 @@ names contain any of the whitelist strings will be loaded:
 
 ```dart
 final atlas = await TexturePackerAtlas.load(
-  'atlas_map.atlas',
+  'assets/images/atlas_map.atlas',
   whiteList: [ 'robot_walk' ]
 );
 ```
@@ -124,21 +124,19 @@ TexturePacker can trim transparent pixels from sprites to save space. By default
 
 ```dart
 final atlas = await TexturePackerAtlas.load(
-  'atlas_map.atlas',
+  'assets/images/atlas_map.atlas',
   useOriginalSize: false, // Use the trimmed/packed size instead
 );
 ```
 
 
-### Custom Asset Prefix
+### Atlas Location
 
-If your ``.atlas`` data file is not stored in the default `images` directory:
+The ``.atlas`` path is a full asset path, so the file can live anywhere. Page textures listed
+inside the atlas are resolved relative to the atlas's own directory:
 
 ```dart
-final atlas = await atlasFromAssets(
-  'atlas_map.atlas',
-  assetsPrefix: 'custom_path',
-);
+final atlas = await atlasFromAssets('assets/atlases/atlas_map.atlas');
 ```
 
 

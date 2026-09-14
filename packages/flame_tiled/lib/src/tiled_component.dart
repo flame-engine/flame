@@ -18,7 +18,7 @@ import 'package:tiled/tiled.dart';
 /// Sprite Batches.
 /// {@endtemplate}
 class TiledComponent<T extends FlameGame> extends PositionComponent
-    with HasGameReference<T> {
+    with HasGameRef<T> {
   /// Map instance of this component.
   RenderableTiledMap tileMap;
 
@@ -70,7 +70,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.onLoad();
     // Automatically use the first attached CameraComponent camera if it's not
     // already set..
-    tileMap.camera ??= game.children.query<CameraComponent>().firstOrNull;
+    tileMap.camera ??= gameRef.children.query<CameraComponent>().firstOrNull;
   }
 
   @override
@@ -91,7 +91,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
 
   /// Loads a [TiledComponent] from a file.
   ///
-  /// {@macro renderable_tile_prefix_path}
+  /// {@macro renderable_tile_map_path}
+  ///
+  /// {@macro tiled_images_directory}
   ///
   /// By default, [RenderableTiledMap] renders flipped tiles if they exist.
   /// You can disable it by passing [ignoreFlip] as `true`.
@@ -109,7 +111,6 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     Vector2 destTileSize, {
     double? atlasMaxX,
     double? atlasMaxY,
-    String prefix = 'assets/tiles/',
     int? priority,
     bool? ignoreFlip,
     AssetBundle? bundle,
@@ -121,6 +122,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     double atlasPackingSpacingY = 0,
     ComponentKey? key,
     String? package,
+    String imagesDirectory = 'assets/images/',
   }) async {
     return TiledComponent(
       await RenderableTiledMap.fromFile(
@@ -129,7 +131,6 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         atlasMaxX: atlasMaxX,
         atlasMaxY: atlasMaxY,
         ignoreFlip: ignoreFlip,
-        prefix: prefix,
         bundle: bundle,
         images: images,
         tsxPackingFilter: tsxPackingFilter,
@@ -138,6 +139,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         atlasPackingSpacingX: atlasPackingSpacingX,
         atlasPackingSpacingY: atlasPackingSpacingY,
         package: package,
+        imagesDirectory: imagesDirectory,
       ),
       priority: priority,
       key: key,

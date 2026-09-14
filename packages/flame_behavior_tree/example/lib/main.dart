@@ -39,10 +39,10 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class GameWorld extends World with HasGameReference {
+class GameWorld extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
-    game.camera.moveTo(Vector2(gameWidth * 0.5, gameHeight * 0.5));
+    gameRef.camera.moveTo(Vector2(gameWidth * 0.5, gameHeight * 0.5));
 
     final house = RectangleComponent(
       size: Vector2(100, 100),

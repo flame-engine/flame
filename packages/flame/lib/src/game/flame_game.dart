@@ -3,8 +3,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/input.dart';
-import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
 import 'package:flame/src/game/game.dart';
@@ -38,7 +37,7 @@ import 'package:meta/meta.dart';
 /// When [W] is specified, a matching world instance **must** be passed to the
 /// constructor; otherwise, a runtime assertion error is thrown.
 class FlameGame<W extends World> extends ComponentTreeRoot
-    with Game
+    with Game, CustomTraversal
     implements ReadOnlySizeProvider {
   FlameGame({
     super.children,
@@ -173,19 +172,20 @@ class FlameGame<W extends World> extends ComponentTreeRoot
   @mustCallSuper
   void update(double dt) {
     if (parent == null) {
+      // Lifecycle events are processed before the traversal so that they
+      // complete even while the traversal is paused through a time scale.
+      processLifecycleEvents();
       updateTree(dt);
     }
   }
 
   @override
-  void updateTree(double dt) {
-    processLifecycleEvents();
+  void updateSubtree(double dt) {
     if (parent != null) {
+      processLifecycleEvents();
       update(dt);
     }
-    for (final component in children) {
-      component.updateTree(dt);
-    }
+    updateChildrenFlat(dt);
   }
 
   /// This passes the new size along to every component in the tree via their
@@ -216,21 +216,80 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   /// Ensure that all pending tree operations finish.
   ///
-  /// This is mainly intended for testing purposes: awaiting on this future
-  /// ensures that the game is fully loaded, and that all pending operations
-  /// of adding the components into the tree are fully materialized.
+  /// Awaiting on this future ensures that all pending operations of adding
+  /// components into the tree are fully materialized, waiting for any
+  /// components that are still loading.
   ///
-  /// Warning: awaiting on a game that was not fully connected will result in an
-  /// infinite loop. For example, this could occur if you run `x.add(y)` but
-  /// then forget to mount `x` into the game.
+  /// The `GameWidget` awaits this future when the game is first shown, so
+  /// that the game only starts, and the loading widget is only removed, once
+  /// the whole initial component tree has been loaded and mounted.
+  ///
+  /// A component that fails to load does not block this future; its error is
+  /// reported through its [Component.loaded] future, or the current [Zone] if
+  /// nothing is awaiting that future.
+  ///
+  /// Warning: since every pending component has to finish loading and
+  /// mounting first, this future never completes if the tree can never
+  /// settle. That happens when a component in the tree has an [onLoad] that
+  /// never completes, for example one that awaits something which only
+  /// happens once the game is running. Such a component keeps the
+  /// `GameWidget` on the loading widget until it is removed from the tree.
+  /// The same happens when a component is added to a parent that is not
+  /// itself part of the game tree: it never starts loading, since loading
+  /// only begins once its parent is mounted, so it blocks this future in
+  /// the same way until either the parent is added to the game or the
+  /// orphaned component is removed.
+  @override
   Future<void> ready() async {
-    var repeat = true;
-    while (repeat) {
-      // Give chance to other futures to execute first
-      await Future<void>.delayed(Duration.zero);
-      repeat = false;
+    while (isProcessingLifecycleEvents) {
+      // This call came from inside a lifecycle callback, which runs while
+      // [processLifecycleEvents] is iterating over the event queue. Since
+      // the queue only supports one iteration at a time, wait until the
+      // current processing pass has finished.
+      await null;
+    }
+    var wake = Completer<void>();
+    void wakeUp() {
+      if (!wake.isCompleted) {
+        wake.complete();
+      }
+    }
+
+    final watchedChildren = <Component>{};
+    while (hasLifecycleEvents) {
       processLifecycleEvents();
-      repeat |= hasLifecycleEvents;
+      if (!hasLifecycleEvents) {
+        break;
+      }
+      if (wake.isCompleted) {
+        wake = Completer<void>();
+      }
+      var hasLoadingChildren = false;
+      // Safe to iterate plainly: this always runs after
+      // [processLifecycleEvents] has returned, so it is never nested inside
+      // its own iteration over the same queue.
+      for (final event in queue) {
+        final child = event.child;
+        if (child == null || !child.isLoading) {
+          continue;
+        }
+        hasLoadingChildren = true;
+        if (watchedChildren.add(child)) {
+          child.loadSettled.then((_) => wakeUp());
+        }
+      }
+      if (hasLoadingChildren) {
+        // Sleep until a load settles, or until the event queue is changed
+        // from the outside, for example by a component being removed while
+        // it is still loading.
+        await Future.any([wake.future, nextLifecycleEventMutation]);
+      } else {
+        // The queue is stuck on a component added to a parent that is not
+        // part of the game tree, so it will never start loading on its own.
+        // Wait for the queue to change, for example because that parent, or
+        // the stuck component itself, is added to or removed from the tree.
+        await nextLifecycleEventMutation;
+      }
     }
   }
 
@@ -245,11 +304,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
 
   @override
   bool containsEventHandlerAt(Vector2 position) {
-    // Game-level detector mixins handle events for the entire game surface,
-    // so any in-bounds point is a hit.
-    if (this is PanDetector) {
-      return true;
-    }
     for (final component in super.componentsAtPoint(position)) {
       if (component is PointerInputCallbacks) {
         return true;

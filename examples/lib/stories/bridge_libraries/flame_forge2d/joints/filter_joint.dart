@@ -19,11 +19,11 @@ class FilterJointExample extends Forge2DExampleGame {
     : super(gravity: Vector2(0, 10.0), world: FilterJointWorld());
 }
 
-class FilterJointWorld extends Forge2DWorld with HasGameReference<Forge2DGame> {
+class FilterJointWorld extends Forge2DWorld with HasGameRef<Forge2DGame> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    addAll(createBoundaries(game));
+    addAll(createBoundaries(gameRef));
 
     // The filtered pair, which passes through itself.
     final filteredTop = Ball(Vector2(-14, -12), color: ExampleColors.emerald);

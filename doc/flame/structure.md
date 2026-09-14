@@ -5,8 +5,13 @@ tile maps for levels. Organizing these files consistently ensures that Flame's b
 (and Flutter's own [asset system](https://docs.flutter.dev/ui/assets/assets-and-images)) can find
 them without extra configuration.
 
+Every Flame loader takes the **full path** of the asset, exactly as you declared it in your
+`pubspec.yaml`. Nothing is prepended for you, so the string you write is the string that gets
+loaded.
+
 Flame has a proposed structure for your project that includes the standard Flutter `assets`
-directory in addition to some children: `audio`, `images` and `tiles`.
+directory in addition to some children: `audio`, `images` and `tiles`. It is only a convention,
+not a requirement.
 
 If using the following example code:
 
@@ -14,21 +19,21 @@ If using the following example code:
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    await FlameAudio.play('explosion.mp3');
+    await FlameAudio.play('assets/audio/explosion.mp3');
 
     // Load some images
-    await Flame.images.load('player.png');
-    await Flame.images.load('enemy.png');
-    
-    // Or load all images in your images folder
-    await Flame.images.loadAllImages();
+    await Flame.images.load('assets/images/player.png');
+    await Flame.images.load('assets/images/enemy.png');
 
-    final map1 = await TiledComponent.load('level.tmx', tileSize);
+    // Or load every image in a directory
+    await Flame.images.loadAllImages(directory: 'assets/images/');
+
+    final map1 = await TiledComponent.load('assets/tiles/level.tmx', tileSize);
   }
 }
 ```
 
-The following file structure is where Flame would expect to find the files:
+The following file structure matches those paths:
 
 ```text
 .
@@ -57,11 +62,17 @@ flutter:
     - assets/tiles/level.tmx
 ```
 
-If you want to change this structure, this is possible by using the `prefix` parameter and creating
-your instances of `AssetsCache`, `Images`, and `AudioCache`, instead of using the
-global ones provided by Flame.
+You are free to use any structure you like. Because every path is given in full, laying your
+assets out differently needs no configuration at all, just different strings:
 
-Additionally, `AssetsCache` and `Images` can receive a custom
+```dart
+await Flame.images.load('gfx/sprites/player.png');
+```
+
+Note that the path is also the key the asset is cached under, so `Flame.images.fromCache` and
+`Images.containsKey` take that same full path.
+
+`AssetsCache` and `Images` can receive a custom
 [`AssetBundle`](https://api.flutter.dev/flutter/services/AssetBundle-class.html).
 This can be used to make Flame look for assets in a different location other than the `rootBundle`,
 like the file system for example.

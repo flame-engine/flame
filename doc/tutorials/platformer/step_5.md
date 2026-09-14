@@ -20,7 +20,7 @@ class EmberQuestGame extends FlameGame with HasKeyboardHandlerComponents {
 
 ```dart
 class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, HasGameReference<EmberQuestGame> {
+    with KeyboardHandler, HasGameRef<EmberQuestGame> {
 ```
 
 Now we can add a new method:
@@ -118,7 +118,7 @@ Next, add the `CollisionCallbacks` mixin to `lib/actors/ember.dart` like:
 
 ```dart
 class EmberPlayer extends SpriteAnimationComponent
-    with KeyboardHandler, CollisionCallbacks, HasGameReference<EmberQuestGame> {
+    with KeyboardHandler, CollisionCallbacks, HasGameRef<EmberQuestGame> {
 ```
 
 If it did not auto-import, you will need the following:
@@ -296,15 +296,15 @@ go off-screen and we never move the map. So to implement this feature, we simply
 following to the end of our `update` method:
 
 ```dart
-game.objectSpeed = 0;
+gameRef.objectSpeed = 0;
 // Prevent ember from going backwards at screen edge.
 if (position.x - 36 <= 0 && horizontalDirection < 0) {
   velocity.x = 0;
 }
 // Prevent ember from going beyond half screen.
-if (position.x + 64 >= game.size.x / 2 && horizontalDirection > 0) {
+if (position.x + 64 >= gameRef.size.x / 2 && horizontalDirection > 0) {
   velocity.x = 0;
-  game.objectSpeed = -moveSpeed;
+  gameRef.objectSpeed = -moveSpeed;
 }
 
 position += velocity * dt;
@@ -313,7 +313,7 @@ super.update(dt);
 
 If you run the game now, Ember can't move off-screen to the left, and as Ember moves to the right,
 once they get to the middle of the screen, the rest of the objects scroll by. This is because we
-are now updating `game.objectSpeed` which we established early on in the series. Additionally,
+are now updating `gameRef.objectSpeed` which we established early on in the series. Additionally,
 you will see the next random segment be generated and added to the level based on the work we did in
 Ground Block.
 

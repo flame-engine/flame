@@ -1,4 +1,3 @@
-import 'package:flame/events.dart';
 import 'package:flame/src/game/game.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -41,21 +40,6 @@ class GestureDetectorBuilder {
       behavior: HitTestBehavior.deferToChild,
       child: child,
     );
-  }
-
-  void initializeGestures(Game game) {
-    if (game is PanDetector) {
-      register(
-        PanGestureRecognizer.new,
-        (PanGestureRecognizer instance) {
-          instance.onDown = game.handlePanDown;
-          instance.onStart = game.handlePanStart;
-          instance.onUpdate = game.handlePanUpdate;
-          instance.onEnd = game.handlePanEnd;
-          instance.onCancel = game.onPanCancel;
-        },
-      );
-    }
   }
 }
 

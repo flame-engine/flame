@@ -47,10 +47,7 @@ final redStroke = Paint()
   ..style = PaintingStyle.stroke;
 
 class RaysInShapeWorld extends World
-    with
-        HasGameReference<RaysInShapeExample>,
-        HasCollisionDetection,
-        TapCallbacks {
+    with HasGameRef<RaysInShapeExample>, HasCollisionDetection, TapCallbacks {
   final _rng = Random();
   List<Ray2> _rays = [];
 

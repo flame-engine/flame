@@ -23,7 +23,7 @@ class AnimationGroupExample extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     final running = await loadSpriteAnimation(
-      'animations/robot.png',
+      'assets/images/animations/robot.png',
       SpriteAnimationData.sequenced(
         amount: 8,
         stepTime: 0.2,
@@ -31,7 +31,7 @@ class AnimationGroupExample extends FlameGame with TapCallbacks {
       ),
     );
     final idle = await loadSpriteAnimation(
-      'animations/robot-idle.png',
+      'assets/images/animations/robot-idle.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.4,

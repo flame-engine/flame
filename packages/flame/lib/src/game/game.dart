@@ -36,7 +36,7 @@ abstract mixin class Game {
   /// functionality in Flutter.
   late final GestureDetectorBuilder gestureDetectors = GestureDetectorBuilder(
     refreshWidget,
-  )..initializeGestures(this);
+  );
 
   /// Set by the MouseMoveDispatcher to receive mouse events from the
   /// game widget.
@@ -135,6 +135,17 @@ abstract mixin class Game {
   void mount() {
     onMount();
   }
+
+  /// A future that completes when the game is fully ready to start.
+  ///
+  /// The `GameWidget` awaits this future after the game has been loaded and
+  /// mounted, before the game is shown and the first update tick runs. By
+  /// default it completes immediately; [FlameGame] overrides this to wait
+  /// until the whole initial component tree has been loaded and mounted.
+  ///
+  /// Since this future is awaited on the startup critical path, an override
+  /// that never completes keeps the game on the loading widget forever.
+  Future<void> ready() async {}
 
   @mustCallSuper
   @internal
@@ -316,6 +327,9 @@ abstract mixin class Game {
 
   /// Utility method to load and cache the image for a sprite based on its
   /// options.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   Future<Sprite> loadSprite(
     String path, {
     Vector2? srcSize,
@@ -331,6 +345,9 @@ abstract mixin class Game {
 
   /// Utility method to load and cache the image for a sprite animation based on
   /// its options.
+  ///
+  /// The [path] is the full path of the asset, as declared in the
+  /// `pubspec.yaml`, for example `assets/images/player.png`.
   Future<SpriteAnimation> loadSpriteAnimation(
     String path,
     SpriteAnimationData data,

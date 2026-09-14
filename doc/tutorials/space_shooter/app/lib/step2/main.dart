@@ -1,14 +1,13 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(GameWidget(game: SpaceShooterGame()));
 }
 
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   @override
@@ -18,12 +17,12 @@ class SpaceShooterGame extends FlameGame with PanDetector {
   }
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 }
 
-class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
+class Player extends SpriteComponent with HasGameRef<SpaceShooterGame> {
   Player()
     : super(
         size: Vector2(100, 150),
@@ -34,9 +33,9 @@ class Player extends SpriteComponent with HasGameReference<SpaceShooterGame> {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await game.loadSprite('player-sprite.png');
+    sprite = await gameRef.loadSprite('assets/images/player-sprite.png');
 
-    position = game.size / 2;
+    position = gameRef.size / 2;
     anchor = Anchor.center;
   }
 

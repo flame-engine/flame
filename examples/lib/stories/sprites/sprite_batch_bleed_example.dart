@@ -28,7 +28,7 @@ class SpriteBatchBleedExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final spriteBatch = await SpriteBatch.load('retro_tiles.png');
+    final spriteBatch = await SpriteBatch.load('assets/images/retro_tiles.png');
 
     const tile1 = Rect.fromLTWH(0, 0, tileSize, tileSize);
     const tile2 = Rect.fromLTWH(tileSize, 0, tileSize, tileSize);

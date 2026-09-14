@@ -4,8 +4,7 @@ import 'package:flame/components.dart';
 import 'package:rogue_shooter/components/enemy_component.dart';
 import 'package:rogue_shooter/rogue_shooter_game.dart';
 
-class EnemyCreator extends TimerComponent
-    with HasGameReference<RogueShooterGame> {
+class EnemyCreator extends TimerComponent with HasGameRef<RogueShooterGame> {
   final Random random = Random();
   final _halfWidth = EnemyComponent.initialSize.x / 2;
 
@@ -13,12 +12,12 @@ class EnemyCreator extends TimerComponent
 
   @override
   void onTick() {
-    game.enemyGroup.addAll(
+    gameRef.enemyGroup.addAll(
       List.generate(
         5,
         (index) => EnemyComponent(
           position: Vector2(
-            _halfWidth + (game.size.x - _halfWidth) * random.nextDouble(),
+            _halfWidth + (gameRef.size.x - _halfWidth) * random.nextDouble(),
             0,
           ),
         ),

@@ -38,6 +38,10 @@ the benchmark results are printed above it.
   overhead (container iteration, recursion) over wide, nested, and deep trees
   of no-op components, plus a barrier-dense tree where a fraction of the
   parents override `updateTree`.
+- `update_workload_benchmark.dart`: the wide and nested trees from the
+  traversal suite, but with every component running a realistic `update`
+  body (light: bullet-style movement, heavy: seek-nearest-target steering),
+  to put the framework overhead in proportion to actual game logic.
 - `component_churn_benchmark.dart`: steady-state add/remove churn
   (bullets/particles) at 1k and 10k populations, and bulk add/remove cycles
   (level loads) through the lifecycle queue.

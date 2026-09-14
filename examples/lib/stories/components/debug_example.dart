@@ -13,7 +13,7 @@ class DebugExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
-    final flameLogo = await loadSprite('flame.png');
+    final flameLogo = await loadSprite('assets/images/flame.png');
 
     final flame1 = LogoComponent(flameLogo);
     flame1.x = 100;
@@ -37,8 +37,7 @@ class DebugExample extends FlameGame {
   }
 }
 
-class LogoComponent extends SpriteComponent
-    with HasGameReference<DebugExample> {
+class LogoComponent extends SpriteComponent with HasGameRef<DebugExample> {
   static const int speed = 150;
 
   int xDirection = 1;
@@ -53,14 +52,14 @@ class LogoComponent extends SpriteComponent
     final rect = toRect();
 
     if ((x <= 0 && xDirection == -1) ||
-        (rect.right >= game.size.x && xDirection == 1)) {
+        (rect.right >= gameRef.size.x && xDirection == 1)) {
       xDirection = xDirection * -1;
     }
 
     y += yDirection * speed * dt;
 
     if ((y <= 0 && yDirection == -1) ||
-        (rect.bottom >= game.size.y && yDirection == 1)) {
+        (rect.bottom >= gameRef.size.y && yDirection == 1)) {
       yDirection = yDirection * -1;
     }
   }

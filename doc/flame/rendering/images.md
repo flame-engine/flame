@@ -24,15 +24,21 @@ Flutter has a handful of types related to images, and converting everything prop
 asset to an `Image` that can be drawn on Canvas is a bit convoluted. This class allows you to obtain
 an `Image` that can be drawn on the `Canvas` using the `drawImageRect` method.
 
-It automatically caches any image loaded by filename, so you can safely call it many times.
+Images are addressed by their full asset path, exactly as declared in the `pubspec.yaml`, for
+example `assets/images/player.png`. Nothing is prepended for you, and that same path is the key the
+image is cached under, so you can safely call `load` many times.
 
-The methods for loading and clearing the cache are: `load`, `loadAll`, `clear` and `clearCache`.
+The methods for loading and clearing the cache are: `load`, `loadAll`, `loadAllImages`,
+`loadAllFromPattern`, `clear` and `clearCache`. The two `loadAll*` methods scan the asset manifest
+and take a required `directory` to scope the search, for example
+`loadAllImages(directory: 'assets/images/')`.
 They return `Future`s for loading the images. These futures must be awaited for before the images
 can be used in any way. If you do not want to await these futures right away, you can initiate
 multiple `load()` operations and then await for all of them at once using `Images.ready()` method.
 
-To synchronously retrieve a previously cached image, the `fromCache` method can be used. If an image
-with that key was not previously loaded, it will throw an exception.
+To synchronously retrieve a previously cached image, the `fromCache` method can be used, passing the
+same full path you loaded it with. If an image with that key was not previously loaded, it will
+throw an exception.
 
 To add an already loaded image to the cache, the `add` method can be used and you can set the key
 that the image should have in the cache. You can retrieve all the keys in the cache using the `keys`
@@ -51,7 +57,7 @@ It can manually be used by instantiating it:
 ```dart
 import 'package:flame/cache.dart';
 final imagesLoader = Images();
-Image image = await imagesLoader.load('yourImage.png');
+Image image = await imagesLoader.load('assets/images/yourImage.png');
 ```
 
 But Flame also offers two ways of using this class without instantiating it yourself.
@@ -68,7 +74,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 
 // inside an async context
-Image image = await Flame.images.load('player.png');
+Image image = await Flame.images.load('assets/images/player.png');
 
 final playerSprite = Sprite(image);
 ```
@@ -92,7 +98,7 @@ class MyGame extends Game {
   @override
   Future<void> onLoad() async {
     // Note that you could also use Sprite.load for this.
-    final playerImage = await images.load('player.png');
+    final playerImage = await images.load('assets/images/player.png');
     player = Sprite(playerImage);
   }
 }
@@ -108,13 +114,13 @@ class MyGame extends Game {
   @override
   Future<void> onLoad() async {
     // other loads omitted
-    await images.load('bullet.png');
+    await images.load('assets/images/bullet.png');
   }
 
   void shoot() {
     // This is just an example, in your game you probably don't want to
     // instantiate new [Sprite] objects every time you shoot.
-    final bulletSprite = Sprite(images.fromCache('bullet.png'));
+    final bulletSprite = Sprite(images.fromCache('assets/images/bullet.png'));
     _bullets.add(bulletSprite);
   }
 }
@@ -157,7 +163,7 @@ image that that sprite represents.
 For example, this will create a sprite representing the whole image of the file passed:
 
 ```dart
-final image = await images.load('player.png');
+final image = await images.load('assets/images/player.png');
 Sprite player = Sprite(image);
 ```
 
@@ -165,7 +171,7 @@ You can also specify the coordinates in the original image where the sprite is l
 you to use sprite sheets and reduce the number of images in memory, for example:
 
 ```dart
-final image = await images.load('player.png');
+final image = await images.load('assets/images/player.png');
 final playerFrame = Sprite(
   image,
   srcPosition: Vector2(32.0, 0),
@@ -179,7 +185,7 @@ the full width/height of the source image).
 The `Sprite` class has a render method, that allows you to render the sprite onto a `Canvas`:
 
 ```dart
-final image = await images.load('block.png');
+final image = await images.load('assets/images/block.png');
 Sprite block = Sprite(image);
 
 // in your render method
@@ -219,7 +225,7 @@ is a double value that represents the amount of bleeding to be applied to the ed
 For example, if you do:
 
 ```dart
-final image = await images.load('player.png');
+final image = await images.load('assets/images/player.png');
 final playerFrame = Sprite(
   image,
   srcPosition: Vector2(32.0, 0),
@@ -265,7 +271,7 @@ since it then renders an image that only contains the selected area.
 Example of using a `RasterSpriteComponent`:
 
 ```dart
-final sprite = await Sprite.load('flame.png');
+final sprite = await Sprite.load('assets/images/flame.png');
 final rasterSpriteComponent = RasterSpriteComponent(
   sprite: sprite,
   size: Vector2.all(16.0),
@@ -278,7 +284,7 @@ loaded.
 If you need to rasterize a sprite manually, you can use the `Sprite.rasterize` method:
 
 ```dart
-final image = await images.load('player.png');
+final image = await images.load('assets/images/player.png');
 final playerFrame = Sprite(
   image,
   srcPosition: Vector2(32.0, 0),
@@ -407,8 +413,8 @@ JSON data. To use this feature you will need to export the Sprite Sheet's JSON d
 something like the following snippet:
 
 ```dart
-final image = await images.load('chopper.png');
-final jsonData = await assets.readJson('chopper.json');
+final image = await images.load('assets/images/chopper.png');
+final jsonData = await assets.readJson('assets/chopper.json');
 final animation = SpriteAnimation.fromAsepriteData(image, jsonData);
 ```
 

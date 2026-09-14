@@ -10,11 +10,11 @@ class AdvancedParallaxExample extends FlameGame {
   ''';
 
   final _layersMeta = {
-    'parallax/bg.png': 1.0,
-    'parallax/mountain-far.png': 1.5,
-    'parallax/mountains.png': 2.3,
-    'parallax/trees.png': 3.8,
-    'parallax/foreground-trees.png': 6.6,
+    'assets/images/parallax/bg.png': 1.0,
+    'assets/images/parallax/mountain-far.png': 1.5,
+    'assets/images/parallax/mountains.png': 2.3,
+    'assets/images/parallax/trees.png': 3.8,
+    'assets/images/parallax/foreground-trees.png': 6.6,
   };
 
   @override

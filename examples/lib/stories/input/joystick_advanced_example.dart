@@ -32,7 +32,7 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
 
   @override
   Future<void> onLoad() async {
-    final image = await images.load('joystick.png');
+    final image = await images.load('assets/images/joystick.png');
     final sheet = SpriteSheet.fromColumnsAndRows(
       image: image,
       columns: 6,
@@ -136,7 +136,7 @@ class JoystickAdvancedExample extends FlameGame with HasCollisionDetection {
       ),
     );
 
-    final buttonSprites = await images.load('buttons.png');
+    final buttonSprites = await images.load('assets/images/buttons.png');
     final buttonSheet = SpriteSheet.fromColumnsAndRows(
       image: buttonSprites,
       columns: 1,

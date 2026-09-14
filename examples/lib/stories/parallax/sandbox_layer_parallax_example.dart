@@ -25,32 +25,32 @@ class SandboxLayerParallaxExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     final bgLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/bg.png'),
+      ParallaxImageData('assets/images/parallax/bg.png'),
       filterQuality: FilterQuality.none,
     );
     final mountainFarLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/mountain-far.png'),
+      ParallaxImageData('assets/images/parallax/mountain-far.png'),
       velocityMultiplier: Vector2(1.8, 0),
       filterQuality: FilterQuality.none,
     );
     final mountainLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/mountains.png'),
+      ParallaxImageData('assets/images/parallax/mountains.png'),
       velocityMultiplier: Vector2(2.8, 0),
       filterQuality: FilterQuality.none,
     );
     final treeLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/trees.png'),
+      ParallaxImageData('assets/images/parallax/trees.png'),
       velocityMultiplier: Vector2(3.8, 0),
       filterQuality: FilterQuality.none,
     );
     final foregroundTreesLayer = await loadParallaxLayer(
-      ParallaxImageData('parallax/foreground-trees.png'),
+      ParallaxImageData('assets/images/parallax/foreground-trees.png'),
       velocityMultiplier: Vector2(4.8, 0),
       filterQuality: FilterQuality.none,
     );
     final airplaneLayer = await loadParallaxLayer(
       ParallaxAnimationData(
-        'parallax/airplane.png',
+        'assets/images/parallax/airplane.png',
         SpriteAnimationData.sequenced(
           amount: 4,
           stepTime: 0.2,

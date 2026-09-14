@@ -6,18 +6,15 @@ import 'package:flutter/services.dart' show AssetBundle;
 
 /// A class that loads, and caches files.
 ///
-/// It automatically looks for files in the `assets` directory.
+/// Files are addressed by their full path, exactly as declared in the
+/// `pubspec.yaml`, for example `assets/levels/level1.json`.
 class AssetsCache {
-  AssetsCache({
-    this.prefix = 'assets/',
-    AssetBundle? bundle,
-  }) : bundle = bundle ?? Flame.bundle;
+  AssetsCache({AssetBundle? bundle}) : bundle = bundle ?? Flame.bundle;
 
   /// The [AssetBundle] from which assets are loaded.
   /// defaults to [Flame.bundle].
   AssetBundle bundle;
 
-  String prefix;
   final Map<String, _Asset<dynamic>> _files = {};
 
   /// Removes the file from the cache.
@@ -33,63 +30,73 @@ class AssetsCache {
   /// Returns the number of files in the cache.
   int get cacheCount => _files.length;
 
-  /// Reads a file from assets folder.
+  /// Reads a file from the assets.
+  ///
+  /// The [fileName] is the full path of the asset. When a [package] is given,
+  /// the path is resolved relative to that package's assets.
   Future<String> readFile(String fileName, {String? package}) async {
-    final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
-    if (!_files.containsKey(cacheKey)) {
-      _files[cacheKey] = await _readFile(fileName, package: package);
+    final path = _resolve(fileName, package);
+    if (!_files.containsKey(path)) {
+      _files[path] = await _readFile(path);
     }
     assert(
-      _files[cacheKey] is _StringAsset,
-      '"$cacheKey" was previously loaded as a binary file',
+      _files[path] is _StringAsset,
+      '"$path" was previously loaded as a binary file',
     );
-    return (_files[cacheKey]! as _StringAsset).value;
+    return (_files[path]! as _StringAsset).value;
   }
 
-  /// Reads a binary file from assets folder.
+  /// Reads a binary file from the assets.
+  ///
+  /// The [fileName] is the full path of the asset. When a [package] is given,
+  /// the path is resolved relative to that package's assets.
   Future<Uint8List> readBinaryFile(String fileName, {String? package}) async {
-    final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
-    if (!_files.containsKey(cacheKey)) {
-      _files[cacheKey] = await _readBinary(fileName, package: package);
+    final path = _resolve(fileName, package);
+    if (!_files.containsKey(path)) {
+      _files[path] = await _readBinary(path);
     }
     assert(
-      _files[cacheKey] is _BinaryAsset,
-      '"$cacheKey" was previously loaded as a text file',
+      _files[path] is _BinaryAsset,
+      '"$path" was previously loaded as a text file',
     );
-    return (_files[cacheKey]! as _BinaryAsset).value;
+    return (_files[path]! as _BinaryAsset).value;
   }
 
-  /// Reads a json file from the assets folder.
+  /// Reads a json file from the assets.
+  ///
+  /// The [fileName] is the full path of the asset. When a [package] is given,
+  /// the path is resolved relative to that package's assets.
   Future<Map<String, dynamic>> readJson(
     String fileName, {
     String? package,
   }) async {
-    final cacheKey = package == null ? fileName : 'packages/$package/$fileName';
-    if (!_files.containsKey(cacheKey)) {
-      _files[cacheKey] = await _readJson(fileName, package: package);
+    final path = _resolve(fileName, package);
+    if (!_files.containsKey(path)) {
+      _files[path] = await _readJson(path);
     }
     assert(
-      _files[cacheKey] is _JsonAsset,
-      '"$cacheKey" was previously loaded as a different type',
+      _files[path] is _JsonAsset,
+      '"$path" was previously loaded as a different type',
     );
-    return (_files[cacheKey]! as _JsonAsset).value;
+    return (_files[path]! as _JsonAsset).value;
   }
 
-  Future<_StringAsset> _readFile(String fileName, {String? package}) async {
-    final fullPrefix = package == null ? prefix : 'packages/$package/$prefix';
-    final string = await bundle.loadString('$fullPrefix$fileName');
+  static String _resolve(String fileName, String? package) =>
+      package == null ? fileName : 'packages/$package/$fileName';
+
+  Future<_StringAsset> _readFile(String path) async {
+    final string = await bundle.loadString(path);
     return _StringAsset(string);
   }
 
-  Future<_BinaryAsset> _readBinary(String fileName, {String? package}) async {
-    final fullPrefix = package == null ? prefix : 'packages/$package/$prefix';
-    final data = await bundle.load('$fullPrefix$fileName');
+  Future<_BinaryAsset> _readBinary(String path) async {
+    final data = await bundle.load(path);
     final bytes = Uint8List.view(data.buffer);
     return _BinaryAsset(bytes);
   }
 
-  Future<_JsonAsset> _readJson(String fileName, {String? package}) async {
-    final string = await _readFile(fileName, package: package);
+  Future<_JsonAsset> _readJson(String path) async {
+    final string = await _readFile(path);
     final json = jsonDecode(string.value) as Map<String, dynamic>;
     return _JsonAsset(json);
   }

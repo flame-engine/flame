@@ -7,7 +7,7 @@ import 'package:flame/extensions.dart';
 import 'package:flame/post_process.dart';
 
 class BallGlow extends PostProcessComponent<BallGlowPostProcess>
-    with HasGameReference<CrystalBallGame> {
+    with HasGameRef<CrystalBallGame> {
   BallGlow({
     super.position,
     super.scale,
@@ -21,14 +21,14 @@ class BallGlow extends PostProcessComponent<BallGlowPostProcess>
 
   @override
   Future<void> onLoad() {
-    postProcess.world = game.world;
+    postProcess.world = gameRef.world;
     return super.onLoad();
   }
 
   @override
   void update(double dt) {
-    position = game.world.cameraTarget.position;
-    size = game.size;
+    position = gameRef.world.cameraTarget.position;
+    size = gameRef.size;
     super.update(dt);
   }
 }

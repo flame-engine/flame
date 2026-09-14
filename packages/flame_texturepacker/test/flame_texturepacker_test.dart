@@ -44,8 +44,8 @@ void main() {
       );
 
       final flameGame = FlameGame()
-        ..assets = AssetsCache(bundle: bundle, prefix: '')
-        ..images = Images(bundle: bundle, prefix: '');
+        ..assets = AssetsCache(bundle: bundle)
+        ..images = Images(bundle: bundle);
 
       final atlas = await flameGame.atlasFromAssets(atlasPath);
 

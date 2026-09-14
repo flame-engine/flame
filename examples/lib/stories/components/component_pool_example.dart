@@ -91,7 +91,7 @@ class _BallWorld extends World with TapCallbacks {
 /// lower priority) and the ball itself on top. A bouncing scale effect
 /// simulates the ball bouncing up and down as it travels outward.
 class _PooledBall extends PositionComponent
-    with HasGameReference, ParentIsA<_BallWorld> {
+    with HasGameRef, ParentIsA<_BallWorld> {
   static const _radius = 4.0;
   static const _bounceSpeed = 8.0;
   static const _maxShadowOffset = 16.0;

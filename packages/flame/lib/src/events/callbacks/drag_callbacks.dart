@@ -18,6 +18,28 @@ mixin DragCallbacks on Component implements PointerInputCallbacks {
   /// Returns true while the component is being dragged.
   bool get isDragged => _isDragged;
 
+  /// Whether this component accepts multiple simultaneous drags.
+  ///
+  /// Drags are tracked per pointer; so, by default, a component that is already
+  /// being dragged can start a second, independent drag from another pointer,
+  /// which might or might not be desirable.
+  ///
+  /// Override this to `false` to accept only one drag at a time. While a drag
+  /// is in progress, [onDragStart] is not delivered for any other pointer, and
+  /// no [onDragUpdate], [onDragEnd] or [onDragCancel] follow for it either;
+  /// the event is offered to the components below it in propagation order.
+  /// Once the accepted drag finishes, the component is freed to accept further
+  /// drags.
+  ///
+  /// Note that control is not handed over: if the accepted pointer is lifted
+  /// while another that was first rejected is still down, the drag ends rather
+  /// than continuing on the remaining finger.
+  ///
+  /// Note that this only gates drags: a component that also mixes in
+  /// [ScaleCallbacks] keeps receiving scale events normally, so one-finger drag
+  /// plus two-finger pinch still works.
+  bool get allowsMultiPointerDrag => true;
+
   /// The user initiated a drag gesture on top of this component.
   ///
   /// By default, only one component will receive a drag event. However, setting
@@ -38,8 +60,15 @@ mixin DragCallbacks on Component implements PointerInputCallbacks {
   ///
   /// This event will be delivered to the component(s) that captured the initial
   /// [onDragStart], even if the point of touch moves outside of the boundaries
-  /// of the component. In the latter case `event.localPosition` will contain a
-  /// NaN point.
+  /// of the component; the local coordinates simply fall outside the
+  /// component's own bounds in that case.
+  ///
+  /// The exception is when hit testing stops reaching the component altogether
+  /// while it still holds the drag, for example if an ancestor turns on
+  /// [IgnoreEvents] mid-gesture. It still receives the event, but with no
+  /// rendering trace behind it, so reading `event.localStartPosition`,
+  /// `localEndPosition` or `localDelta` throws. Use `canvasStartPosition` /
+  /// `canvasEndPosition` if you need a position that is always available.
   void onDragUpdate(DragUpdateEvent event) {}
 
   /// The drag event has ended.

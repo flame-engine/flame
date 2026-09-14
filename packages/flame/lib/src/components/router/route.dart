@@ -21,7 +21,7 @@ import 'package:meta/meta.dart';
 ///
 /// Routes are managed by the [RouterComponent] component.
 class Route extends PositionComponent
-    with ParentIsA<RouterComponent>, HasTimeScale {
+    with ParentIsA<RouterComponent>, CustomTraversal, HasTimeScale {
   Route(
     Component Function()? builder, {
     this._loadingBuilder,
@@ -90,11 +90,11 @@ class Route extends PositionComponent
 
   /// Completely stops time for the managed page.
   ///
-  /// When the time is stopped, the [updateTree] method of the page is not
-  /// called at all, which can save computational resources. However, this also
-  /// means that the lifecycle events on the page will not be processed, and
-  /// therefore no components will be able to be added or removed from the
-  /// page.
+  /// While stopped, neither the page nor any of its descendants are updated
+  /// at all, which saves computational resources. The page keeps rendering,
+  /// and pending lifecycle events (adding or removing components) still
+  /// complete, since those are processed by the game rather than by the
+  /// update pass.
   void stopTime() => timeScale = 0;
 
   /// Resumes normal time progression for the page, if it was previously slowed
@@ -166,13 +166,6 @@ class Route extends PositionComponent
   void renderTree(Canvas canvas) {
     if (isRendered) {
       _renderEffect.applyChain(super.renderTree, canvas);
-    }
-  }
-
-  @override
-  void updateTree(double dt) {
-    if (timeScale > 0) {
-      super.updateTree(dt);
     }
   }
 

@@ -190,7 +190,7 @@ renderer: CircleParticleRenderer(softness: 0.8, blendMode: BlendMode.plus),
 Draws every particle as a `Sprite` (or a whole image), also fully batched:
 
 ```dart
-renderer: SpriteParticleRenderer.fromImage(await images.load('spark.png')),
+renderer: SpriteParticleRenderer.fromImage(await images.load('assets/images/spark.png')),
 renderer: SpriteParticleRenderer(sprite),  // a region of a sprite sheet
 ```
 

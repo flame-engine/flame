@@ -19,7 +19,7 @@ The robot will switch between running and idle animations over the duration of
   @override
   Future<void> onLoad() async {
     final running = await loadSpriteAnimation(
-      'animations/robot.png',
+      'assets/images/animations/robot.png',
       SpriteAnimationData.sequenced(
         amount: 8,
         stepTime: 0.2,
@@ -27,7 +27,7 @@ The robot will switch between running and idle animations over the duration of
       ),
     );
     final idle = await loadSpriteAnimation(
-      'animations/robot-idle.png',
+      'assets/images/animations/robot-idle.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: 0.4,

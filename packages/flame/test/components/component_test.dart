@@ -3,12 +3,10 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/src/components/core/component_tree_root.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ordered_set/mapping_ordered_set.dart';
-import 'package:ordered_set/ordered_set.dart';
 
 import '../custom_component.dart';
 
@@ -453,7 +451,6 @@ void main() {
 
       group('lifecycleEventsProcessed', () {
         testWithFlameGame('waits for unprocessed events', (game) async {
-          await game.ready();
           final component = _LifecycleComponent();
           game.world.add(component);
           expect(game.hasLifecycleEvents, isTrue);
@@ -466,7 +463,6 @@ void main() {
         testWithFlameGame("doesn't block when there are no events", (
           game,
         ) async {
-          await game.ready();
           expect(game.hasLifecycleEvents, isFalse);
           await game.lifecycleEventsProcessed;
           expect(game.hasLifecycleEvents, isFalse);
@@ -475,7 +471,6 @@ void main() {
         testWithFlameGame('guarantees addition even with heavy onLoad', (
           game,
         ) async {
-          await game.ready();
           final component = _SlowComponent('heavy', 0.1);
           final child = _SlowComponent('child', 0.1);
           component.add(child);
@@ -580,7 +575,6 @@ void main() {
         testWithFlameGame('a failed load does not block the queue', (
           game,
         ) async {
-          await game.ready();
           final failing = _FailingLoadComponent();
           final loaded = failing.loaded;
           final sibling = Component();
@@ -597,8 +591,155 @@ void main() {
         });
       });
 
+      group('loading with children', () {
+        testWithFlameGame(
+          'a component is not loaded until a child added in onLoad is loaded',
+          (game) async {
+            final childLoadGate = Completer<void>();
+            final parent = _ParentWithGatedChild(childLoadGate);
+            game.world.add(parent);
+            game.update(0);
+
+            expect(parent.isLoading, isTrue);
+            expect(parent.isLoaded, isFalse);
+            expect(parent.isMounted, isFalse);
+
+            childLoadGate.complete();
+            await parent.loaded;
+
+            expect(parent.child.isLoaded, isTrue);
+            game.update(0);
+            expect(parent.isMounted, isTrue);
+            expect(parent.child.isMounted, isTrue);
+          },
+        );
+
+        testWithFlameGame(
+          'a component is not loaded until its whole subtree is loaded',
+          (game) async {
+            final grandChildLoadGate = Completer<void>();
+            final grandParent = _GrandParentWithGatedGrandChild(
+              grandChildLoadGate,
+            );
+            game.world.add(grandParent);
+            game.update(0);
+
+            expect(grandParent.isLoading, isTrue);
+            expect(grandParent.child.isLoading, isTrue);
+            expect(grandParent.isLoaded, isFalse);
+
+            grandChildLoadGate.complete();
+            await grandParent.loaded;
+
+            expect(grandParent.child.isLoaded, isTrue);
+            expect(grandParent.child.child.isLoaded, isTrue);
+
+            await game.ready();
+            expect(grandParent.isMounted, isTrue);
+            expect(grandParent.child.isMounted, isTrue);
+            expect(grandParent.child.child.isMounted, isTrue);
+          },
+        );
+
+        testWithFlameGame(
+          'children added before the parent starts loading do not gate it',
+          (game) async {
+            // Children that are not loading yet when the parent finishes its
+            // own onLoad, such as children given to the constructor of a
+            // detached component, keep loading when the parent mounts.
+            final childLoadGate = Completer<void>();
+            final child = _GatedLoadComponent(childLoadGate);
+            final parent = Component(children: [child]);
+            game.world.add(parent);
+            game.update(0);
+
+            expect(parent.isMounted, isTrue);
+            expect(child.isLoading, isTrue);
+
+            childLoadGate.complete();
+            await game.ready();
+            expect(child.isMounted, isTrue);
+          },
+        );
+
+        testWithFlameGame(
+          'when the parent mounts the whole subtree is mounted',
+          (game) async {
+            final childLoadGate = Completer<void>();
+            final parent = _ParentWithGatedChild(childLoadGate);
+            game.world.add(parent);
+
+            childLoadGate.complete();
+            final readyFuture = game.ready();
+            await parent.mounted;
+
+            // The child mounts in the same lifecycle processing pass as the
+            // parent, so once the parent is mounted the whole subtree is.
+            expect(parent.child.isMounted, isTrue);
+            await readyFuture;
+          },
+        );
+
+        testWithFlameGame(
+          'a child that fails loading does not block its parent',
+          (game) async {
+            final parent = _ParentWithFailingChild();
+            game.world.add(parent);
+            final loaded = parent.child.loaded;
+
+            await expectLater(loaded, throwsA(isA<_LoadException>()));
+            await parent.loaded;
+            await game.ready();
+
+            expect(parent.isMounted, isTrue);
+            expect(parent.children, isEmpty);
+            expect(parent.child.isMounted, isFalse);
+            expect(parent.child.parent, isNull);
+          },
+        );
+
+        testWithFlameGame(
+          'removing a child that never loads unblocks the parent',
+          (game) async {
+            final neverCompletingGate = Completer<void>();
+            final parent = _ParentWithGatedChild(neverCompletingGate);
+            game.world.add(parent);
+            game.update(0);
+            expect(parent.isLoaded, isFalse);
+
+            parent.remove(parent.child);
+            await parent.loaded;
+            await game.ready();
+
+            expect(parent.isMounted, isTrue);
+            expect(parent.child.parent, isNull);
+            expect(parent.child.isMounted, isFalse);
+          },
+        );
+
+        testWithFlameGame(
+          'moving a child that never loads to another parent unblocks the '
+          'old parent',
+          (game) async {
+            final neverCompletingGate = Completer<void>();
+            final parent = _ParentWithGatedChild(neverCompletingGate);
+            final otherParent = Component();
+            game.world.add(parent);
+            game.update(0);
+            expect(parent.isLoaded, isFalse);
+
+            otherParent.add(parent.child);
+            await parent.loaded;
+            await game.ready();
+
+            expect(parent.isMounted, isTrue);
+            expect(parent.children, isEmpty);
+            expect(parent.child.parent, otherParent);
+          },
+        );
+      });
+
       testWithFlameGame('Can wait for lifecycleEventsProcessed', (game) async {
-        await game.ready();
         final component = Component();
         game.world.add(component);
         expect(game.hasLifecycleEvents, isTrue);
@@ -791,7 +932,6 @@ void main() {
         'not run double onMount',
         _PrepareGame.new,
         (game) async {
-          await game.ready();
           final parent = game.prepareParent;
           expect(parent.onMountRuns, 1);
           expect(parent.children.isNotEmpty, true);
@@ -1777,23 +1917,34 @@ void main() {
     });
 
     group('miscellaneous', () {
-      testWithFlameGame('childrenFactory', (game) async {
+      testWithFlameGame('createComponentList override', (game) async {
         final component0 = Component();
         expect(component0.children.strictMode, false);
 
-        Component.childrenFactory = () => OrderedSet.mapping<num, Component>(
-          (e) => e.priority,
-          // ignore: avoid_redundant_argument_values
-          strictMode: true,
-        );
-        final component1 = Component();
+        final component1 = _CustomListComponent();
         final component2 = Component();
         component1.add(component2);
         component2.add(Component());
-        expect(component1.children, isInstanceOf<MappingOrderedSet>());
+        expect(component1.children, isInstanceOf<ComponentList>());
         expect(component1.children.strictMode, isTrue);
-        expect(component2.children, isInstanceOf<MappingOrderedSet>());
-        expect(component2.children.strictMode, isTrue);
+        expect(component2.children.strictMode, isFalse);
+      });
+
+      testWithFlameGame('custom children comparator', (game) async {
+        final parent = _ReverseOrderedComponent();
+        final children = List.generate(5, (i) => Component(priority: i));
+        parent.addAll(children);
+        await game.ensureAdd(parent);
+
+        expect(
+          parent.children.toList(),
+          equals(children.reversed.toList()),
+        );
+
+        // Reordering after a priority change keeps following the comparator.
+        children.first.priority = 10;
+        game.update(0);
+        expect(parent.children.first, children.first);
       });
 
       testWithFlameGame('initially same debugMode as parent', (game) async {
@@ -1934,8 +2085,6 @@ void main() {
       testWithFlameGame(
         'findByKey returns null if no component is found',
         (game) async {
-          await game.ready();
-
           expect(game.findByKey(ComponentKey.unique()), isNull);
         },
       );
@@ -2194,6 +2343,51 @@ class _SlowComponent extends Component {
   String toString() => 'SlowComponent($name, loadTime=$loadTime)';
 }
 
+class _GatedLoadComponent extends Component {
+  _GatedLoadComponent(this.loadGate);
+
+  final Completer<void> loadGate;
+
+  @override
+  Future<void> onLoad() => loadGate.future;
+}
+
+class _ParentWithGatedChild extends Component {
+  _ParentWithGatedChild(this.childLoadGate);
+
+  final Completer<void> childLoadGate;
+  late final _GatedLoadComponent child;
+
+  @override
+  void onLoad() {
+    child = _GatedLoadComponent(childLoadGate);
+    add(child);
+  }
+}
+
+class _ParentWithFailingChild extends Component {
+  late final _FailingLoadComponent child;
+
+  @override
+  void onLoad() {
+    child = _FailingLoadComponent();
+    add(child);
+  }
+}
+
+class _GrandParentWithGatedGrandChild extends Component {
+  _GrandParentWithGatedGrandChild(this.grandChildLoadGate);
+
+  final Completer<void> grandChildLoadGate;
+  late final _ParentWithGatedChild child;
+
+  @override
+  void onLoad() {
+    child = _ParentWithGatedChild(grandChildLoadGate);
+    add(child);
+  }
+}
+
 class _SelfRemovingOnLoadComponent extends Component {
   @override
   Future<void>? onLoad() {
@@ -2399,5 +2593,19 @@ class _RemoveAllChildrenComponent extends Component {
   void onRemove() {
     super.onRemove();
     removeAll(children);
+  }
+}
+
+class _CustomListComponent extends Component {
+  @override
+  ComponentList createComponentList() => ComponentList(strictMode: true);
+}
+
+class _ReverseOrderedComponent extends Component {
+  @override
+  ComponentList createComponentList() {
+    return ComponentList(
+      comparator: (a, b) => b.priority.compareTo(a.priority),
+    );
   }
 }

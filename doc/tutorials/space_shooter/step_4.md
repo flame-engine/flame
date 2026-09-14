@@ -14,7 +14,7 @@ bullet sprite for it. Right-click the image below, choose "Save as...", and stor
 
 ```dart
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -26,8 +26,8 @@ class Bullet extends SpriteAnimationComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    animation = await game.loadSpriteAnimation(
-      'bullet.png',
+    animation = await gameRef.loadSpriteAnimation(
+      'assets/images/bullet.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         stepTime: .2,
@@ -47,7 +47,7 @@ and make it happen:
 
 ```dart
 class Bullet extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   Bullet({
     super.position,
   }) : super(
@@ -86,7 +86,7 @@ First thing, let's create two empty methods in the `Player` class, `startShootin
 
 ```dart
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
 
   // Rest of implementation omitted
 
@@ -100,32 +100,37 @@ class Player extends SpriteAnimationComponent
 }
 ```
 
-And let's hook into those methods from the game class by using the `onPanStart()`
-and `onPanEnd()` methods from the `PanDetector` mixin that we already have been using for the ship
-movement:
+And let's hook into those methods from the game class by using the `onDragStart()`
+and `onDragEnd()` methods from the `DragCallbacks` mixin that we already have been using for the
+ship movement:
 
 ```dart
-class SpaceShooterGame extends FlameGame with PanDetector {
+class SpaceShooterGame extends FlameGame with DragCallbacks {
   late Player player;
 
   // Rest of implementation omitted
 
   @override
-  void onPanUpdate(DragUpdateInfo info) {
-    player.move(info.delta.global);
+  void onDragUpdate(DragUpdateEvent event) {
+    player.move(event.localDelta);
   }
 
   @override
-  void onPanStart(DragStartInfo info) {
+  void onDragStart(DragStartEvent event) {
+    super.onDragStart(event);
     player.startShooting();
   }
 
   @override
-  void onPanEnd(DragEndInfo info) {
+  void onDragEnd(DragEndEvent event) {
+    super.onDragEnd(event);
     player.stopShooting();
   }
 }
 ```
+
+Note that `onDragStart` and `onDragEnd` keep track of the drag state for us, so our overrides have
+to call `super` before doing their own work.
 
 We now have everything set up, so let's write the shooting routine in our player class.
 
@@ -138,7 +143,7 @@ provides a component out of the box for that, the `SpawnComponent`, so let's tak
 
 ```dart
 class Player extends SpriteAnimationComponent
-    with HasGameReference<SpaceShooterGame> {
+    with HasGameRef<SpaceShooterGame> {
   late final SpawnComponent _bulletSpawner;
 
   @override
@@ -154,7 +159,7 @@ class Player extends SpriteAnimationComponent
       autoStart: false,
     );
 
-    game.add(_bulletSpawner);
+    gameRef.add(_bulletSpawner);
   }
 
   void move(Vector2 delta) {

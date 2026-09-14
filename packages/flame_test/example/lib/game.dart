@@ -11,10 +11,10 @@ class MyGameWidget extends StatelessWidget {
   }
 }
 
-class Background extends SpriteComponent with HasGameReference<MyGame> {
+class Background extends SpriteComponent with HasGameRef<MyGame> {
   @override
   Future<void> onLoad() async {
-    sprite = await game.loadSprite('city.png');
+    sprite = await gameRef.loadSprite('assets/images/city.png');
     size = Vector2.all(200);
     position = Vector2.all(100);
   }
@@ -25,6 +25,5 @@ class MyGame extends FlameGame {
   Future<void> onLoad() async {
     final background = Background();
     world.add(background);
-    await background.loaded;
   }
 }

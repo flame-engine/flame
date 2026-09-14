@@ -99,14 +99,14 @@ class Car extends BodyComponent<PadRacingGame> {
       final isLeftTire = i.isEven;
       return Tire(
         car: this,
-        pressedKeys: game.pressedKeySets[playerNumber],
+        pressedKeys: gameRef.pressedKeySets[playerNumber],
         isFrontTire: isFrontTire,
         isLeftTire: isLeftTire,
         isTurnableTire: isFrontTire,
       );
     });
 
-    game.world.addAll(tires);
+    gameRef.world.addAll(tires);
     return body;
   }
 

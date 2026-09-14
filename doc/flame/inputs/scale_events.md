@@ -51,11 +51,15 @@ This event is fired continuously as user drags their finger across the screen. I
 the user is holding their finger still.
 
 The default implementation delivers this event to all the components that received the previous
-`onScaleStart`. If the point of touch is still within the component, then
-`event.localPosition` will give the position of that point in the local coordinate system. However,
-if the user moves their finger away from the component, the property `event.localPosition` will
-return a point whose coordinates are NaNs. Likewise, the `event.renderingTrace` in this case will be
-empty. However, the `canvasPosition` and `devicePosition` properties of the event will be valid.
+`onScaleStart`. Moving the focal point off the component **does not** stop the scale gesture,
+and the local coordinates are still computed (potentially outside the component bounds).
+
+The exception is when hit testing stops reaching the component altogether while it still holds the
+gesture, for example if an ancestor turns on `IgnoreEvents` mid-gesture. The component still
+receives the event, but with an empty `event.renderingTrace` behind it, so reading
+`localStartPosition`, `localEndPosition` or `localDelta` throws. `canvasStartPosition`,
+`canvasEndPosition`, `deviceStartPosition` and `deviceEndPosition` never depend on the trace and
+remain valid.
 
 In addition, the `ScaleUpdateEvent` will contain `focalPointDelta` --
 the amount the focal point has moved since the
@@ -136,10 +140,10 @@ higher value requires a more deliberate gesture before scale events fire.
 
 ## Combining with DragCallbacks
 
-A component can use both `ScaleCallbacks` and `DragCallbacks` at the same time. When both mixins are
-present, single-finger gestures produce drag events and two-finger gestures produce both scale and
-drag events. This is useful for components that should be draggable with one finger and
-pinch-to-zoom or rotatable with two fingers.
+`ScaleCallbacks` and `DragCallbacks` can be used at the same time. Both are driven by the same
+recognizer, so they combine freely: single-finger gestures produce drag events, and two-finger
+gestures produce both scale and drag events. This is useful for components that should be draggable
+with one finger and pinch-to-zoom or rotatable with two fingers.
 
 ```dart
 class InteractiveRectangle extends RectangleComponent
@@ -164,3 +168,42 @@ class InteractiveRectangle extends RectangleComponent
   }
 }
 ```
+
+The same pair mixed into a `FlameGame` gives you the usual "drag to pan, pinch to zoom" camera
+controls. Because a two-finger pinch emits drag events as well, the drag handler has to bail out
+while a scale is in progress, otherwise the camera would pan and zoom at once:
+
+```dart
+class MyGame extends FlameGame with DragCallbacks, ScaleCallbacks {
+  late double startZoom;
+
+  void clampZoom() {
+    camera.viewfinder.zoom = camera.viewfinder.zoom.clamp(0.05, 3.0);
+  }
+
+  @override
+  void onScaleStart(ScaleStartEvent event) {
+    super.onScaleStart(event);
+    startZoom = camera.viewfinder.zoom;
+  }
+
+  @override
+  void onScaleUpdate(ScaleUpdateEvent event) {
+    camera.viewfinder.zoom = startZoom * event.scale;
+    clampZoom();
+  }
+
+  @override
+  void onDragUpdate(DragUpdateEvent event) {
+    // Two-finger pinches emit both drag and scale; skip pan while zooming
+    if (isScaling) {
+      return;
+    }
+    final zoom = camera.viewfinder.zoom;
+    camera.moveBy((event.localDelta..negate()) / zoom);
+  }
+}
+```
+
+This can also be seen in the
+[zoom example](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/camera_and_viewport/zoom_example.dart).

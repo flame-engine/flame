@@ -17,7 +17,7 @@ enum JoystickDirection {
 }
 
 class JoystickComponent extends PositionComponent
-    with HasGameReference, ComponentViewportMargin, DragCallbacks {
+    with HasGameRef, ComponentViewportMargin, DragCallbacks {
   late final PositionComponent? knob;
   late final PositionComponent? background;
 

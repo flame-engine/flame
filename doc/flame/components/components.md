@@ -94,7 +94,8 @@ class MyComponent extends Component {
 A component's lifecycle state can be checked by a series of getters:
 
 - `isLoaded`: Returns a bool with the current loaded state.
-- `loaded`: Returns a future that will complete once the component has finished loading.
+- `loaded`: Returns a future that will complete once the component has finished loading, including
+  the loading of any children that were added during its `onLoad`.
 - `isMounted`: Returns a bool with the current mounted state.
 - `mounted`: Returns a future that will complete once the component has finished mounting.
 - `isRemoved`: Returns a bool with the current removed state.
@@ -144,6 +145,30 @@ class MyComponent extends PositionComponent with TapCallbacks {
   }
 }
 ```
+
+
+### Custom update traversal and pausing
+
+The engine drives the update pass through a flattened traversal list owned by the game, and
+`updateTree` itself cannot be overridden. Components that need to control how their subtree is
+updated (changing the effective `dt`, skipping children, or updating them manually) mix in
+`CustomTraversal` and override its `updateSubtree` method:
+
+```dart
+class SlowMotionArea extends Component with CustomTraversal {
+  @override
+  void updateSubtree(double dt) => super.updateSubtree(dt / 2);
+}
+```
+
+The engine treats every `CustomTraversal` component as a traversal barrier: it appears in the
+flattened list itself and its `updateSubtree` drives its subtree. Mixins that build on it (like
+`HasTimeScale`) are declared `on CustomTraversal` and chain via `super.updateSubtree`, so their
+users mix in `CustomTraversal` first: `with CustomTraversal, HasTimeScale`. `FlameGame` already
+mixes it in, so `extends FlameGame with HasTimeScale` needs nothing extra.
+
+To pause a subtree, set a `HasTimeScale` time scale to `0` (or call `pause()`): the update pass
+then skips the component and all of its descendants until the time scale is raised again.
 
 
 ### Composability of components
@@ -263,6 +288,14 @@ been, and the parent is only mounted once its `onLoad` has completed, so those f
 deadlock. The same goes for `game.lifecycleEventsProcessed`, since the parent's own pending mount is
 part of the queue it waits for.
 
+A component does not count as loaded until every child that was added during its `onLoad` has
+finished loading as well, even without awaiting their `loaded` futures explicitly. This means that
+by the time the component mounts, the subtree it created during `onLoad` is fully loaded, and those
+children mount together with it in the same lifecycle processing pass. A child that fails to load
+is the exception: it is dropped from the tree without blocking its parent. Because the parent
+waits for its children, a child's `onLoad` must not await the parent's `loaded` or `mounted`
+future, that would deadlock.
+
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
 in the same order as they were scheduled for addition.
@@ -271,22 +304,22 @@ in the same order as they were scheduled for addition.
 ### Access to the World from a Component
 
 If a component that has a `World` as an ancestor and requires access to that `World` object, one
-can use the `HasWorldReference` mixin.
+can use the `HasWorldRef` mixin.
 
 Example:
 
 ```dart
-class MyComponent extends Component with HasWorldReference<MyWorld>,
+class MyComponent extends Component with HasWorldRef<MyWorld>,
     TapCallbacks {
   @override
   void onTapDown(TapDownEvent info) {
-    // world is of type MyWorld
-    world.add(AnotherComponent());
+    // worldRef is of type MyWorld
+    worldRef.add(AnotherComponent());
   }
 }
 ```
 
-If you try to access `world` from a component that doesn't have a `World` ancestor of the
+If you try to access `worldRef` from a component that doesn't have a `World` ancestor of the
 correct type an assertion error will be thrown.
 
 
@@ -382,10 +415,11 @@ flameGame.findByKeyName('player');
 
 ### Querying child components
 
-The children that have been added to a component live in a `QueryableOrderedSet` called
+The children that have been added to a component live in a `ComponentList` called
 `children`. To query for a specific type of components in the set, the `query<T>()` function can be
-used. By default `strictMode` is `false` in the children set, but if you set it to true, then the
-queries will have to be registered with `children.register` before a query can be used.
+used. By default `strictMode` is `false` in the children list, but if you enable it (by overriding
+`createComponentList` to return a `ComponentList(strictMode: true)`), then the queries will have to
+be registered with `children.register` before a query can be used.
 
 If you know at compile time that you later will run a query of a specific type it is recommended to
 register the query, no matter if the `strictMode` is set to `true` or `false`, since there are some
@@ -429,8 +463,8 @@ to implement the `containsLocalPoint()` method yourself.
 Here is an example of how `componentsAtPoint()` can be used:
 
 ```dart
-void onDragUpdate(DragUpdateInfo info) {
-  game.componentsAtPoint(info.widget).forEach((component) {
+void onDragUpdate(DragUpdateEvent event) {
+  game.componentsAtPoint(event.canvasEndPosition).forEach((component) {
     if (component is DropTarget) {
       component.highlight();
     }

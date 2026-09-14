@@ -275,7 +275,6 @@ void main() {
     );
 
     testWithFlameGame('visibleWorldRect', (game) async {
-      await game.ready();
       final camera = game.camera;
       game.onGameResize(Vector2(60, 40));
 

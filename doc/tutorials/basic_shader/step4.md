@@ -111,7 +111,7 @@ class OutlinedSwordSprite extends PostProcessComponent
 class SwordSprite extends SpriteComponent {
   @override
   Future<void> onLoad() async {
-    sprite = await Sprite.load('sword.png');
+    sprite = await Sprite.load('assets/images/sword.png');
     size = sprite!.srcSize;
   }
 }

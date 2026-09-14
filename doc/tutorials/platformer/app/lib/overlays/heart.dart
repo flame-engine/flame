@@ -8,7 +8,7 @@ enum HeartState {
 }
 
 class HeartHealthComponent extends SpriteGroupComponent<HeartState>
-    with HasGameReference<EmberQuestGame> {
+    with HasGameRef<EmberQuestGame> {
   final int heartNumber;
 
   HeartHealthComponent({
@@ -24,13 +24,13 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final availableSprite = await game.loadSprite(
-      'heart.png',
+    final availableSprite = await gameRef.loadSprite(
+      'assets/images/heart.png',
       srcSize: Vector2.all(32),
     );
 
-    final unavailableSprite = await game.loadSprite(
-      'heart_half.png',
+    final unavailableSprite = await gameRef.loadSprite(
+      'assets/images/heart_half.png',
       srcSize: Vector2.all(32),
     );
 
@@ -44,7 +44,7 @@ class HeartHealthComponent extends SpriteGroupComponent<HeartState>
 
   @override
   void update(double dt) {
-    if (game.health < heartNumber) {
+    if (gameRef.health < heartNumber) {
       current = HeartState.unavailable;
     } else {
       current = HeartState.available;

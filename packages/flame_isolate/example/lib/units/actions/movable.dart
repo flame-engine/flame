@@ -36,7 +36,7 @@ enum MoveDirection {
   }
 }
 
-mixin Movable on PositionComponent, HasGameReference<ColonistsGame> {
+mixin Movable on PositionComponent, HasGameRef<ColonistsGame> {
   double get speed;
 
   void reachedDestination();
@@ -80,13 +80,13 @@ mixin Movable on PositionComponent, HasGameReference<ColonistsGame> {
 
   void walkPath(List<IntVector2> path) {
     final absolutePath = path.map((e) {
-      return game.tileAtPosition(e.x, e.y).positionOfAnchor(Anchor.center);
+      return gameRef.tileAtPosition(e.x, e.y).positionOfAnchor(Anchor.center);
     }).toList();
 
     _walkAlongPath(absolutePath);
 
     if (path.length > 2) {
-      game.world.add(pathLine = PathLine(absolutePath));
+      gameRef.world.add(pathLine = PathLine(absolutePath));
     }
   }
 

@@ -14,7 +14,7 @@ class OverlaysExample extends FlameGame with TapCallbacks {
   @override
   Future<void> onLoad() async {
     final animation = await loadSpriteAnimation(
-      'animations/chopper.png',
+      'assets/images/animations/chopper.png',
       SpriteAnimationData.sequenced(
         amount: 4,
         textureSize: Vector2.all(48),

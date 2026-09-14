@@ -23,14 +23,14 @@ class AnimatedBodyExample extends Forge2DExampleGame {
 }
 
 class AnimatedBodyWorld extends Forge2DWorld
-    with TapCallbacks, HasGameReference<Forge2DGame> {
+    with TapCallbacks, HasGameRef<Forge2DGame> {
   late Image chopper;
   late SpriteAnimation animation;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    chopper = await Flame.images.load('animations/chopper.png');
+    chopper = await Flame.images.load('assets/images/animations/chopper.png');
 
     animation = SpriteAnimation.fromFrameData(
       chopper,
@@ -41,7 +41,7 @@ class AnimatedBodyWorld extends Forge2DWorld
       ),
     );
 
-    final boundaries = createBoundaries(game);
+    final boundaries = createBoundaries(gameRef);
     addAll(boundaries);
   }
 

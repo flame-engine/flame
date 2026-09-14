@@ -5,7 +5,7 @@ import 'package:trex_game/trex_game.dart';
 enum PlayerState { crashed, jumping, running, waiting }
 
 class Player extends SpriteAnimationGroupComponent<PlayerState>
-    with HasGameReference<TRexGame>, CollisionCallbacks {
+    with HasGameRef<TRexGame>, CollisionCallbacks {
   Player() : super(size: Vector2(90, 88));
 
   final double gravity = 0.85;
@@ -17,7 +17,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
   double _jumpVelocity = 0.0;
 
   double get groundYPos {
-    return (game.size.y / 2) - height / 2;
+    return (gameRef.size.y / 2) - height / 2;
   }
 
   @override
@@ -88,7 +88,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
       y = groundYPos;
     }
 
-    if (game.isIntro && x < startXPosition) {
+    if (gameRef.isIntro && x < startXPosition) {
       x += (startXPosition / introDuration) * dt * 5000;
     }
   }
@@ -105,7 +105,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    game.gameOver();
+    gameRef.gameOver();
   }
 
   SpriteAnimation _getAnimation({
@@ -117,7 +117,7 @@ class Player extends SpriteAnimationGroupComponent<PlayerState>
       frames
           .map(
             (vector) => Sprite(
-              game.spriteImage,
+              gameRef.spriteImage,
               srcSize: size,
               srcPosition: vector,
             ),

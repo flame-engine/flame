@@ -18,7 +18,7 @@ To use it just import the `Svg` class from `'package:flame_svg/flame_svg.dart'`,
 following snippet to render it on the canvas:
 
 ```dart
-final svgInstance = await Svg.load('android.svg');
+final svgInstance = await Svg.load('assets/android.svg');
 
 final position = Vector2(100, 100);
 final size = Vector2(300, 300);
@@ -32,7 +32,7 @@ or use the `SvgComponent` and add it to the component tree:
 class MyGame extends FlameGame {
   @override
   Future<void> onLoad() async {
-    final svgInstance = await Svg.load('android.svg');
+    final svgInstance = await Svg.load('assets/android.svg');
     final size = Vector2.all(100);
     final position = Vector2.all(100);
     final svgComponent = SvgComponent(
