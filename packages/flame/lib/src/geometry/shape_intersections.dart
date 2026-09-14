@@ -84,8 +84,15 @@ class CirclePolygonIntersections
     final possibleVertices = polygon.possibleIntersectionVertices(
       overlappingRect,
     );
+    final center = circle.absoluteCenter;
+    final radius = circle.scaledRadius;
     for (final line in possibleVertices) {
-      for (final intersection in circle.lineSegmentIntersections(line)) {
+      final intersections = circle.lineSegmentIntersections(
+        line,
+        center: center,
+        radius: radius,
+      );
+      for (final intersection in intersections) {
         if (!intersectionPoints.contains(intersection)) {
           intersectionPoints.add(intersection);
         }

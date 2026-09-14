@@ -985,6 +985,48 @@ void main() {
         reason: 'Should not be any intersections',
       );
     });
+
+    test('precomputed center and radius give the same intersections', () {
+      final circle = CircleComponent(
+        radius: 1.0,
+        position: Vector2(3, 4),
+        anchor: Anchor.center,
+        scale: Vector2.all(2),
+      );
+      final segment = LineSegment(Vector2(0, 4), Vector2(6, 4));
+      expect(
+        circle.lineSegmentIntersections(
+          segment,
+          center: circle.absoluteCenter,
+          radius: circle.scaledRadius,
+        ),
+        unorderedEquals(circle.lineSegmentIntersections(segment)),
+      );
+      expect(
+        circle.lineSegmentIntersections(segment),
+        unorderedEquals([Vector2(1, 4), Vector2(5, 4)]),
+      );
+    });
+
+    test('segment outside the radius has no intersections', () {
+      final circle = CircleComponent(
+        radius: 1.0,
+        position: Vector2.zero(),
+        anchor: Anchor.center,
+      );
+      expect(
+        circle.lineSegmentIntersections(
+          LineSegment(Vector2(5, -5), Vector2(5, 5)),
+        ),
+        isEmpty,
+      );
+      expect(
+        circle.lineSegmentIntersections(
+          LineSegment(Vector2(-5, 1.5), Vector2(5, 1.5)),
+        ),
+        isEmpty,
+      );
+    });
   });
 
   group('Solid intersections', () {
