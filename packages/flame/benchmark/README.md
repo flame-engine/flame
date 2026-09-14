@@ -68,6 +68,9 @@ the benchmark results are printed above it.
   hand-written polygon: vertex counts and sampling error, per-ray intersection
   cost, agreement of the inside-hitbox strategies on concave shapes, the effect
   of simplifying the sampled contour, and polygon-polygon intersection cost.
+- `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
+  recalculation after position and angle changes, point conversion, matrix
+  assignment, and copying transforms.
 
 
 ## Writing benchmarks
