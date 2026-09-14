@@ -62,7 +62,8 @@ extension PathContours on Path {
 
   /// Walk the contours of a [Path] and return them as a list of [Offset] lists.
   /// Each entry in the list corresponds to a given sub-contour.
-  /// The [granularity] parameter controls the amplitude of the sampling step.
+  /// The [granularity] parameter controls the amplitude of the sampling step:
+  /// higher values produce fewer samples.
   List<OffsetList> walkContours([double granularity = 1.0]) {
     final contours = this.contours;
     final allPoints = <OffsetList>[];
@@ -83,7 +84,8 @@ extension Contour on PathMetric {
   /// tolerance. This reduces vertex count while maintaining acceptable
   /// accuracy for hitbox geometry.
   ///
-  /// The [granularity] parameter controls the amplitude of the sampling step.
+  /// The [granularity] parameter controls the amplitude of the sampling step:
+  /// higher values produce fewer samples.
   OffsetList walkContour([double granularity = 1.0]) {
     // Calculate step size: base step is 1.0, scaled by granularity
     var step = 1.0;

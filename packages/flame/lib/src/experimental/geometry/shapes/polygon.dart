@@ -35,8 +35,9 @@ class Polygon extends Shape {
   }
 
   /// Constructs the polygon from the given [contour] of a [Path]
-  /// (the first by default), with an optional overall [pathLength].
-  /// The [granularity] parameter controls the amplitude of the sampling step.
+  /// (the first by default).
+  /// The [granularity] parameter controls the amplitude of the sampling step:
+  /// higher values produce fewer samples.
   factory Polygon.fromPath(
     Path path, [
     double granularity = 1.0,
