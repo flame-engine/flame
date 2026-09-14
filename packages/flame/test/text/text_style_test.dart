@@ -1,5 +1,6 @@
 import 'package:flame/text.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_test/flutter_test.dart' show throwsAssertionError;
 import 'package:test/test.dart';
 
 void main() {
@@ -139,6 +140,37 @@ void main() {
       expect(styles[3].fontWeight, isNull);
       expect(styles[3].fontStyle, FontStyle.italic);
       expect(styles[3].fontFamily, 'Arial');
+    });
+
+    test("inline text style can be converted to Flutter's text style", () {
+      final withColor = InlineTextStyle(
+        color: const Color(0xFF00FF00),
+        fontSize: 12,
+      );
+      final withColorTextStyle = withColor.asTextStyle();
+      expect(withColorTextStyle.color, const Color(0xFF00FF00));
+      expect(withColorTextStyle.foreground, isNull);
+
+      final paint = Paint()..color = const Color(0xFF00FF00);
+      final withForeground = InlineTextStyle(
+        foreground: paint,
+        fontSize: 12,
+      );
+      final withForegroundTextStyle = withForeground.asTextStyle();
+      expect(withForegroundTextStyle.foreground, paint);
+      expect(withForegroundTextStyle.color, isNull);
+
+      // try setting both options will throw an error
+      expect(
+        () {
+          InlineTextStyle(
+            color: const Color(0xFF00FF00),
+            foreground: paint,
+            fontSize: 12,
+          ).asTextStyle();
+        },
+        throwsAssertionError,
+      );
     });
   });
 }
