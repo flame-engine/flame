@@ -60,11 +60,14 @@ class PolygonHitbox extends PolygonComponent
   /// [granularity].
   PolygonHitbox.contour(
     super.path, {
-    super.position,
-    super.angle,
-    super.anchor,
     super.contour,
     super.granularity,
+    super.position,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.priority,
+    super.shrinkToBounds,
     bool isSolid = false,
     CollisionType collisionType = CollisionType.active,
   }) : super.contour() {
