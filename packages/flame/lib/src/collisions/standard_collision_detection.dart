@@ -172,6 +172,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     bool Function(ShapeHitbox candidate)? hitboxFilter,
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
+    bool useContainment = false,
   }) sync* {
     if (out != null) {
       for (final result in out) {
@@ -189,6 +190,7 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
         hitboxFilter: hitboxFilter,
         ignoreHitboxes: ignoreHitboxes,
         out: storeResult,
+        useContainment: useContainment,
       );
       if (currentResult != null) {
         currentRay = storeResult.reflectionRay!;
