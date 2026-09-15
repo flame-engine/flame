@@ -55,8 +55,9 @@ class PolygonHitbox extends PolygonComponent
     this.collisionType = collisionType;
   }
 
-  /// With this constructor you create a [PolygonHitbox] from the first
-  /// contour of a [Path].
+  /// With this constructor you create a [PolygonHitbox] from the given
+  /// [contour] (the first by default) of a [Path], with an optional
+  /// [granularity].
   PolygonHitbox.contour(
     super.path, {
     super.position,

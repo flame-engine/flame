@@ -95,7 +95,7 @@ class PolygonComponent extends ShapeComponent {
 
   /// With this constructor you create a [PolygonComponent] from the given
   /// [contour] (the first by default) of a [Path], with an optional
-  ///
+  /// [granularity].
   PolygonComponent.contour(
     Path path, {
     int contour = 0,
