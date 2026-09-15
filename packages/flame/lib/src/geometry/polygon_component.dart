@@ -273,8 +273,7 @@ class PolygonComponent extends ShapeComponent {
     canvas.drawPath(_path, debugPaint);
   }
 
-  @internal
-  bool containsPointInVertices(Vector2 point, List<Vector2> vertices) {
+  bool _containsPoint(Vector2 point, List<Vector2> vertices) {
     // If the size is 0 then it can't contain any points
     if (size.x == 0 || size.y == 0) {
       return false;
@@ -323,12 +322,12 @@ class PolygonComponent extends ShapeComponent {
   @override
   bool containsPoint(Vector2 point) {
     final vertices = globalVertices();
-    return containsPointInVertices(point, vertices);
+    return _containsPoint(point, vertices);
   }
 
   @override
   bool containsLocalPoint(Vector2 point) {
-    return containsPointInVertices(point, _vertices);
+    return _containsPoint(point, _vertices);
   }
 
   /// Return all vertices as [LineSegment]s that intersect [rect], if [rect]

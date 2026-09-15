@@ -75,7 +75,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     bool Function(ShapeHitbox candidate)? hitboxFilter,
     List<ShapeHitbox>? ignoreHitboxes,
     RaycastResult<ShapeHitbox>? out,
-    bool useContainment = false,
   }) {
     var finalResult = out?..reset();
     _updateRayAabb(ray, maxDistance);
@@ -94,7 +93,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
       final currentResult = item.rayIntersection(
         ray,
         out: _temporaryRaycastResult,
-        useContainment: useContainment,
       );
       final possiblyFirstResult = !(finalResult?.isActive ?? false);
       if (currentResult != null &&
@@ -122,7 +120,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
     bool Function(ShapeHitbox candidate)? hitboxFilter,
     List<ShapeHitbox>? ignoreHitboxes,
     List<RaycastResult<ShapeHitbox>>? out,
-    bool useContainment = false,
   }) {
     final isFullCircle = (sweepAngle % tau).abs() < 0.0001;
     final angle = sweepAngle / (numberOfRays + (isFullCircle ? 0 : -1));
@@ -155,7 +152,6 @@ class StandardCollisionDetection<B extends Broadphase<ShapeHitbox>>
         hitboxFilter: hitboxFilter,
         ignoreHitboxes: ignoreHitboxes,
         out: result,
-        useContainment: useContainment,
       );
 
       if (result != null) {

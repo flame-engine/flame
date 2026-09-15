@@ -106,18 +106,12 @@ abstract class CollisionDetection<
   ///
   /// If [out] is provided that object will be modified and returned with the
   /// result.
-  ///
-  /// When [useContainment] is `false` (default for backwards compatibility),
-  /// the standard edge-crossing behavior is used; otherwise, the behavior
-  /// is based on point containment, which is more expensive but should work
-  /// on concave polygons as well.
   RaycastResult<T>? raycast(
     Ray2 ray, {
     double? maxDistance,
     bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     RaycastResult<T>? out,
-    bool useContainment = false,
   });
 
   /// Casts rays uniformly between [startAngle] to [startAngle]+[sweepAngle]
@@ -146,11 +140,6 @@ abstract class CollisionDetection<
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
-  ///
-  /// When [useContainment] is `false` (default for backwards compatibility),
-  /// the standard edge-crossing behavior is used; otherwise, the behavior
-  /// is based on point containment, which is more expensive but should work
-  /// on concave polygons as well.
   List<RaycastResult<T>> raycastAll(
     Vector2 origin, {
     required int numberOfRays,
@@ -161,7 +150,6 @@ abstract class CollisionDetection<
     bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
-    bool useContainment = false,
   });
 
   /// Follows the ray and its reflections until [maxDepth] is reached and then

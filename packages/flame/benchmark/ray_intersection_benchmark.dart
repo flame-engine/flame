@@ -30,55 +30,32 @@ abstract class RayIntersectionBenchmark extends AsyncBenchmarkBase {
   }
 }
 
-class ConcaveCrossingsBenchmark extends RayIntersectionBenchmark {
+class ConcaveRayIntersectionBenchmark extends RayIntersectionBenchmark {
   final RayInputs inputs;
 
-  ConcaveCrossingsBenchmark(this.inputs, {required super.random})
-    : super('Concave polygon ray intersection (crossings)');
+  ConcaveRayIntersectionBenchmark(this.inputs, {required super.random})
+    : super('Concave polygon ray intersection');
 
   static Future<void> main() async {
     final r = Random(69420);
     final inputsConcave = _createRayInputs(r, _flamePath());
-    await ConcaveCrossingsBenchmark(inputsConcave, random: r).report();
+    await ConcaveRayIntersectionBenchmark(inputsConcave, random: r).report();
   }
 
   @override
   Future<void> setup() async {
     game = RayIntersectionGame(
       _createBatch(_pathVertices(_flamePath()), inputs),
-      useContainment: false,
     );
     await game.prepare();
   }
 }
 
-class ConcaveContainmentBenchmark extends RayIntersectionBenchmark {
+class ConvexRayIntersectionBenchmark extends RayIntersectionBenchmark {
   final RayInputs inputs;
 
-  ConcaveContainmentBenchmark(this.inputs, {required super.random})
-    : super('Concave polygon ray intersection (containment)');
-
-  static Future<void> main() async {
-    final r = Random(69420);
-    final inputsConcave = _createRayInputs(r, _flamePath());
-    await ConcaveContainmentBenchmark(inputsConcave, random: r).report();
-  }
-
-  @override
-  Future<void> setup() async {
-    game = RayIntersectionGame(
-      _createBatch(_pathVertices(_flamePath()), inputs),
-      useContainment: true,
-    );
-    await game.prepare();
-  }
-}
-
-class ConvexCrossingsBenchmark extends RayIntersectionBenchmark {
-  final RayInputs inputs;
-
-  ConvexCrossingsBenchmark(this.inputs, {required super.random})
-    : super('Convex polygon ray intersection (crossings)');
+  ConvexRayIntersectionBenchmark(this.inputs, {required super.random})
+    : super('Convex polygon ray intersection');
 
   static Future<void> main() async {
     final r = Random(69420);
@@ -86,7 +63,7 @@ class ConvexCrossingsBenchmark extends RayIntersectionBenchmark {
       r,
       _roundRectPath(const Size(64, 48)),
     );
-    await ConvexCrossingsBenchmark(inputsConvex, random: r).report();
+    await ConvexRayIntersectionBenchmark(inputsConvex, random: r).report();
   }
 
   @override
@@ -96,35 +73,6 @@ class ConvexCrossingsBenchmark extends RayIntersectionBenchmark {
         _pathVertices(_roundRectPath(const Size(64, 48))),
         inputs,
       ),
-      useContainment: false,
-    );
-    await game.prepare();
-  }
-}
-
-class ConvexContainmentBenchmark extends RayIntersectionBenchmark {
-  final RayInputs inputs;
-
-  ConvexContainmentBenchmark(this.inputs, {required super.random})
-    : super('Convex polygon ray intersection (containment)');
-
-  static Future<void> main() async {
-    final r = Random(69420);
-    final inputsConvex = _createRayInputs(
-      r,
-      _roundRectPath(const Size(64, 48)),
-    );
-    await ConvexContainmentBenchmark(inputsConvex, random: r).report();
-  }
-
-  @override
-  Future<void> setup() async {
-    game = RayIntersectionGame(
-      _createBatch(
-        _pathVertices(_roundRectPath(const Size(64, 48))),
-        inputs,
-      ),
-      useContainment: true,
     );
     await game.prepare();
   }
@@ -133,12 +81,8 @@ class ConvexContainmentBenchmark extends RayIntersectionBenchmark {
 class RayIntersectionGame extends FlameGame {
   late final RayIntersectionComponent rayIntersectionComponent;
   late final RayBatch batch;
-  late final bool useContainment;
 
-  RayIntersectionGame(
-    this.batch, {
-    required this.useContainment,
-  });
+  RayIntersectionGame(this.batch);
 
   FutureOr<void> prepare() async {
     onGameResize(Vector2(_worldWidth, _worldHeight));
@@ -154,31 +98,21 @@ class RayIntersectionGame extends FlameGame {
 
   void addComponents() {
     addAll(batch.hitboxes);
-    rayIntersectionComponent = RayIntersectionComponent(
-      batch,
-      useContainment: useContainment,
-    );
+    rayIntersectionComponent = RayIntersectionComponent(batch);
     add(rayIntersectionComponent);
   }
 }
 
 class RayIntersectionComponent extends Component {
-  RayIntersectionComponent(
-    this.batch, {
-    required this.useContainment,
-  });
+  RayIntersectionComponent(this.batch);
 
   final RayBatch batch;
-  final bool useContainment;
 
   @override
   void update(double dt) {
     super.update(dt);
     for (var index = 0; index < batch.hitboxes.length; index++) {
-      batch.hitboxes[index].rayIntersection(
-        batch.rays[index],
-        useContainment: useContainment,
-      );
+      batch.hitboxes[index].rayIntersection(batch.rays[index]);
     }
   }
 }
@@ -279,13 +213,14 @@ Path _flamePath() {
 Future<void> main() async {
   final rConcave = Random(69420);
   final inputsConcave = _createRayInputs(rConcave, _flamePath());
-  await ConcaveCrossingsBenchmark(inputsConcave, random: rConcave).report();
-  await ConcaveContainmentBenchmark(inputsConcave, random: rConcave).report();
+  await ConcaveRayIntersectionBenchmark(
+    inputsConcave,
+    random: rConcave,
+  ).report();
   final rConvex = Random(69420);
   final inputsConvex = _createRayInputs(
     rConvex,
     _roundRectPath(const Size(64, 48)),
   );
-  await ConvexCrossingsBenchmark(inputsConvex, random: rConvex).report();
-  await ConvexContainmentBenchmark(inputsConvex, random: rConvex).report();
+  await ConvexRayIntersectionBenchmark(inputsConvex, random: rConvex).report();
 }

@@ -14,20 +14,16 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
   /// If [out] is defined that is used to populate with the result and then
   /// returned, to minimize the creation of new objects.
   ///
-  /// When [useContainment] is `false` (default for backwards compatibility),
-  /// the standard edge-crossing behavior is used; otherwise, the behavior
-  /// is based on point containment, which is more expensive but should work
-  /// on concave polygons as well.
+  /// Whether the ray starts inside the polygon is decided by the parity of the
+  /// edges that it crosses, which works for concave polygons as well.
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
-    bool useContainment = false,
   }) {
     final vertices = globalVertices();
     var closestDistance = double.infinity;
     LineSegment? closestSegment;
     var crossings = 0;
-    var isOverlappingPoint = false;
     // Float32List (used by Vector2) carries ~7 significant digits. After
     // reflecting, the stored origin can drift by up to |coord| * 2^-23.
     // Scale epsilon to the origin's magnitude so we skip self-intersections
@@ -38,17 +34,16 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       final lineSegment = getEdge(i, vertices: vertices);
       final distance = ray.lineSegmentIntersection(lineSegment);
       if (distance != null && distance > epsilon) {
-        if (!useContainment) {
+        // An edge only counts as a crossing when its endpoints are on opposite
+        // sides of the ray, with a vertex on the ray assigned to one side, so
+        // that a ray through a vertex counts once and a touch counts twice.
+        if (_isLeftOfRay(ray, lineSegment.from) !=
+            _isLeftOfRay(ray, lineSegment.to)) {
           crossings++;
         }
         if (distance < closestDistance) {
-          if (!useContainment) {
-            isOverlappingPoint = false;
-          }
           closestDistance = distance;
           closestSegment = lineSegment;
-        } else if (!useContainment && distance == closestDistance) {
-          isOverlappingPoint = true;
         }
       }
     }
@@ -65,9 +60,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       _temporaryNormal
         ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
-      final isInsideHitbox = useContainment
-          ? containsPointInVertices(ray.origin, vertices)
-          : crossings.isOdd || isOverlappingPoint;
+      final isInsideHitbox = crossings.isOdd;
       if (isInsideHitbox) {
         _temporaryNormal.invert();
       }
@@ -95,5 +88,13 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     }
     out?.reset();
     return null;
+  }
+
+  static bool _isLeftOfRay(Ray2 ray, Vector2 point) {
+    final origin = ray.origin;
+    final direction = ray.direction;
+    return direction.x * (point.y - origin.y) -
+            direction.y * (point.x - origin.x) >
+        0;
   }
 }

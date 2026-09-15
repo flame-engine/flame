@@ -195,15 +195,9 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   ///
   /// If you are only interested in the intersection point use
   /// [RaycastResult.intersectionPoint] of the result.
-  ///
-  /// When [useContainment] is `false` (default for backwards compatibility),
-  /// the standard edge-crossing behavior is used; otherwise, the behavior
-  /// is based on point containment, which is more expensive but should work
-  /// on concave polygons as well.
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
-    bool useContainment = false,
   });
 
   /// This determines how the shape should scale if it should try to fill its

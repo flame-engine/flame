@@ -1,5 +1,3 @@
-// ignore_for_file: lines_longer_than_80_chars, avoid_print
-
 import 'dart:math';
 import 'dart:ui';
 
@@ -10,8 +8,6 @@ import 'package:test/test.dart';
 
 const _testWidth = 1024.0;
 const _testHeight = 768.0;
-
-int _verbose = 0;
 
 Path roundRectPath(Size size) {
   return Path()..addRRect(
@@ -112,7 +108,44 @@ List<_RayCase> _randomRayCases(
   return cases;
 }
 
-typedef BatchResult = (int, int);
+void _expectBatchHits(List<Vector2> vertices, {Vector2? safePoint}) {
+  const hitboxCount = 100;
+  final template = PolygonHitbox(
+    vertices.map((vertex) => vertex.clone()).toList(),
+  );
+  final random = Random(0);
+  final positions = [
+    for (var index = 0; index < hitboxCount; index++)
+      Vector2(
+        random.nextDouble() * _testWidth,
+        random.nextDouble() * _testHeight,
+      ),
+  ];
+  final hitboxes = [
+    for (var index = 0; index < hitboxCount; index++)
+      PolygonHitbox(
+        vertices.map((vertex) => vertex.clone()).toList(),
+        position: positions[index].clone(),
+      ),
+  ];
+  final rayCases = _randomRayCases(
+    template,
+    hitboxCount,
+    Random(1),
+    safePoint: safePoint,
+  );
+  for (var index = 0; index < hitboxCount; index++) {
+    final ray = Ray2(
+      origin: rayCases[index].ray.origin + positions[index],
+      direction: rayCases[index].ray.direction,
+    );
+    expect(
+      hitboxes[index].rayIntersection(ray) != null,
+      rayCases[index].expectsHit,
+      reason: 'ray $index',
+    );
+  }
+}
 
 void main() {
   test('does not classify an outside vertex hit as inside', () {
@@ -128,15 +161,24 @@ void main() {
     );
 
     expect(result, isNotNull);
-    expect(result!.isInsideHitbox, isTrue);
+    expect(result!.isInsideHitbox, isFalse);
+  });
 
-    final correctedResult = hitbox.rayIntersection(
-      Ray2(origin: Vector2(-1, -1), direction: Vector2(1, 1).normalized()),
-      useContainment: true,
+  test('classifies an inside ray exiting through a vertex as inside', () {
+    final hitbox = PolygonHitbox([
+      Vector2(0, 0),
+      Vector2(10, 0),
+      Vector2(10, 10),
+      Vector2(0, 10),
+    ]);
+
+    final result = hitbox.rayIntersection(
+      Ray2(origin: Vector2(5, 5), direction: Vector2(1, 1).normalized()),
     );
 
-    expect(correctedResult, isNotNull);
-    expect(correctedResult!.isInsideHitbox, isFalse);
+    expect(result, isNotNull);
+    expect(result!.isInsideHitbox, isTrue);
+    expect(result.distance, closeTo(sqrt(50), 1e-4));
   });
 
   test('classifies a concave polygon with multiple crossings correctly', () {
@@ -151,214 +193,64 @@ void main() {
       Vector2(0, 4),
     ]);
 
-    final result = hitbox.rayIntersection(
+    final insideResult = hitbox.rayIntersection(
       Ray2(origin: Vector2(0.5, 2), direction: Vector2(1, 0)),
     );
+    expect(insideResult, isNotNull);
+    expect(insideResult!.isInsideHitbox, isTrue);
 
-    expect(result, isNotNull);
-    expect(result!.isInsideHitbox, isFalse);
-
-    final correctedResult = hitbox.rayIntersection(
-      Ray2(origin: Vector2(0.5, 2), direction: Vector2(1, 0)),
-      useContainment: true,
+    final notchResult = hitbox.rayIntersection(
+      Ray2(origin: Vector2(2, 2), direction: Vector2(1, 0)),
     );
-
-    expect(correctedResult, isNotNull);
-    expect(correctedResult!.isInsideHitbox, isTrue);
+    expect(notchResult, isNotNull);
+    expect(notchResult!.isInsideHitbox, isFalse);
   });
 
-  test('compares both modes over a concave polygon batch', () {
-    BatchResult runTest(int hitboxCount) {
-      final vertices = pathVertices(flamePath());
-      final template = PolygonHitbox(
-        vertices.map((vertex) => vertex.clone()).toList(),
-      );
-      final random = Random(0);
-      final positions = [
-        for (var index = 0; index < hitboxCount; index++)
-          Vector2(
-            random.nextDouble() * _testWidth,
-            random.nextDouble() * _testHeight,
-          ),
-      ];
-      final hitboxes = [
-        for (var index = 0; index < hitboxCount; index++)
-          PolygonHitbox(
-            vertices.map((vertex) => vertex.clone()).toList(),
-            position: positions[index].clone(),
-          ),
-      ];
-      final rayCases = _randomRayCases(template, hitboxCount, Random(1));
-      final rays = [
-        for (var index = 0; index < hitboxCount; index++)
-          Ray2(
-            origin: rayCases[index].ray.origin + positions[index],
-            direction: rayCases[index].ray.direction,
-          ),
-      ];
-      final expectedHitCount = rayCases
-          .where((rayCase) => rayCase.expectsHit)
-          .length;
-
-      int run({required bool useContainment}) {
-        var hitCount = 0;
-        for (var index = 0; index < hitboxes.length; index++) {
-          if (hitboxes[index].rayIntersection(
-                rays[index],
-                useContainment: useContainment,
-              ) !=
-              null) {
-            hitCount++;
-          }
-        }
-        return hitCount;
-      }
-
-      final crossingsStopwatch = Stopwatch()..start();
-      final crossingsHitCount = run(useContainment: false);
-      crossingsStopwatch.stop();
-
-      final containmentStopwatch = Stopwatch()..start();
-      final containmentHitCount = run(useContainment: true);
-      containmentStopwatch.stop();
-
-      expect(crossingsHitCount, expectedHitCount);
-      expect(containmentHitCount, expectedHitCount);
-      expect(
-        rays.map((ray) => ray.direction.toString()).toSet(),
-        hasLength(hitboxCount),
-      );
-      expect(
-        positions.map((position) => position.toString()).toSet(),
-        hasLength(hitboxCount),
-      );
-      final result = (
-        crossingsStopwatch.elapsedMicroseconds,
-        containmentStopwatch.elapsedMicroseconds,
-      );
-      if (_verbose > 1) {
-        print(
-          'Concave PolygonRayIntersection: #${hitboxes.length} hitboxes, #${rays.length} rays, expected hits = $expectedHitCount -> crossings: ${result.$1}µs, containment: ${result.$2}µs',
+  test('does not classify a reflected ray as inside a concave polygon', () {
+    final hitbox = PolygonHitbox(
+      pathVertices(flamePath()),
+      position: Vector2.zero(),
+    );
+    final random = Random(5);
+    final center = hitbox.size / 2;
+    final radius = hitbox.size.length;
+    var secondHits = 0;
+    for (var index = 0; index < 2000; index++) {
+      final angle = random.nextDouble() * 2 * pi;
+      final origin = center + Vector2(cos(angle), sin(angle)) * radius;
+      Vector2 target;
+      do {
+        target = Vector2(
+          random.nextDouble() * hitbox.size.x,
+          random.nextDouble() * hitbox.size.y,
         );
-      }
-      return result;
-    }
-
-    var crossings = 0;
-    var containment = 0;
-    const numRuns = 500;
-    const count = 100;
-    for (var index = 0; index < numRuns; ++index) {
-      final result = runTest(count);
-      crossings += result.$1;
-      containment += result.$2;
-    }
-    final avgCrossings = crossings / numRuns;
-    final avgContainment = containment / numRuns;
-    if (_verbose > 0) {
-      print(
-        'Concave PolygonRayIntersection: #$numRuns runs == crossings: $crossingsµs ⨏:${avgCrossings.toStringAsFixed(1)}µs, containment: $containmentµs ⨏:${avgContainment.toStringAsFixed(1)}µs',
+      } while (!hitbox.containsLocalPoint(target));
+      final ray = Ray2(
+        origin: origin,
+        direction: (target - origin).normalized(),
       );
+      final first = hitbox.rayIntersection(ray);
+      expect(first, isNotNull);
+      expect(first!.isInsideHitbox, isFalse);
+      final second = hitbox.rayIntersection(first.reflectionRay!);
+      if (second == null) {
+        continue;
+      }
+      secondHits++;
+      expect(second.isInsideHitbox, isFalse);
     }
+    expect(secondHits, greaterThan(0));
   });
 
-  test('compares both modes over a convex polygon batch', () {
-    BatchResult runTest(int hitboxCount) {
-      final vertices = pathVertices(roundRectPath(const Size(64, 48)));
-      final template = PolygonHitbox(
-        vertices.map((vertex) => vertex.clone()).toList(),
-      );
-      final random = Random(0);
-      final positions = [
-        for (var index = 0; index < hitboxCount; index++)
-          Vector2(
-            random.nextDouble() * _testWidth,
-            random.nextDouble() * _testHeight,
-          ),
-      ];
-      final hitboxes = [
-        for (var index = 0; index < hitboxCount; index++)
-          PolygonHitbox(
-            vertices.map((vertex) => vertex.clone()).toList(),
-            position: positions[index].clone(),
-          ),
-      ];
-      final rayCases = _randomRayCases(
-        template,
-        hitboxCount,
-        Random(1),
-        safePoint: template.size / 2,
-      );
-      final rays = [
-        for (var index = 0; index < hitboxCount; index++)
-          Ray2(
-            origin: rayCases[index].ray.origin + positions[index],
-            direction: rayCases[index].ray.direction,
-          ),
-      ];
-      final expectedHitCount = rayCases
-          .where((rayCase) => rayCase.expectsHit)
-          .length;
+  test('hits the expected rays over a concave polygon batch', () {
+    _expectBatchHits(pathVertices(flamePath()));
+  });
 
-      int run({required bool useContainment}) {
-        var hitCount = 0;
-        for (var index = 0; index < hitboxes.length; index++) {
-          if (hitboxes[index].rayIntersection(
-                rays[index],
-                useContainment: useContainment,
-              ) !=
-              null) {
-            hitCount++;
-          }
-        }
-        return hitCount;
-      }
-
-      final crossingsStopwatch = Stopwatch()..start();
-      final crossingsHitCount = run(useContainment: false);
-      crossingsStopwatch.stop();
-
-      final containmentStopwatch = Stopwatch()..start();
-      final containmentHitCount = run(useContainment: true);
-      containmentStopwatch.stop();
-
-      expect(crossingsHitCount, expectedHitCount);
-      expect(containmentHitCount, expectedHitCount);
-      expect(
-        rays.map((ray) => ray.direction.toString()).toSet(),
-        hasLength(hitboxCount),
-      );
-      expect(
-        positions.map((position) => position.toString()).toSet(),
-        hasLength(hitboxCount),
-      );
-      final result = (
-        crossingsStopwatch.elapsedMicroseconds,
-        containmentStopwatch.elapsedMicroseconds,
-      );
-      if (_verbose > 1) {
-        print(
-          'Convex PolygonRayIntersection: #${hitboxes.length} hitboxes, #${rays.length} rays, expected hits = $expectedHitCount -> crossings: ${result.$1}µs, containment: ${result.$2}µs',
-        );
-      }
-      return result;
-    }
-
-    var crossings = 0;
-    var containment = 0;
-    const numRuns = 500;
-    const count = 100;
-    for (var index = 0; index < numRuns; ++index) {
-      final result = runTest(count);
-      crossings += result.$1;
-      containment += result.$2;
-    }
-    final avgCrossings = crossings / numRuns;
-    final avgContainment = containment / numRuns;
-    if (_verbose > 0) {
-      print(
-        'Convex PolygonRayIntersection: #$numRuns runs == crossings: $crossingsµs ⨏:${avgCrossings.toStringAsFixed(1)}µs, containment: $containmentµs ⨏:${avgContainment.toStringAsFixed(1)}µs',
-      );
-    }
+  test('hits the expected rays over a convex polygon batch', () {
+    final vertices = pathVertices(roundRectPath(const Size(64, 48)));
+    final template = PolygonHitbox(
+      vertices.map((vertex) => vertex.clone()).toList(),
+    );
+    _expectBatchHits(vertices, safePoint: template.size / 2);
   });
 }

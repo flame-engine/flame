@@ -92,7 +92,7 @@ void _reportScaleSensitivity() {
 void _reportRayIntersectionCost() {
   print('');
   print('rayIntersection cost per call in nanoseconds over $_rayCount rays');
-  print('shape         vertices  crossings  containment  hit percentage');
+  print('shape         vertices  nanoseconds  hit percentage');
   final rays = _randomRays(Random(1), 300);
   final hitboxes = <String, PolygonHitbox>{
     'hand-written': _handWrittenHitbox(Vector2.zero()),
@@ -102,15 +102,9 @@ void _reportRayIntersectionCost() {
   final result = RaycastResult<ShapeHitbox>();
   for (final entry in hitboxes.entries) {
     final hitbox = entry.value;
-    void castCrossings() {
+    void cast() {
       for (final ray in rays) {
         hitbox.rayIntersection(ray, out: result);
-      }
-    }
-
-    void castContainment() {
-      for (final ray in rays) {
-        hitbox.rayIntersection(ray, out: result, useContainment: true);
       }
     }
 
@@ -120,54 +114,48 @@ void _reportRayIntersectionCost() {
         hits++;
       }
     }
-    castCrossings();
-    castContainment();
-    final crossings = _medianMicroseconds(castCrossings, repetitions: 7);
-    final containment = _medianMicroseconds(castContainment, repetitions: 7);
+    cast();
+    final microseconds = _medianMicroseconds(cast, repetitions: 7);
     print(
       '${entry.key.padRight(13)} '
       '${hitbox.vertices.length.toString().padLeft(8)}  '
-      '${(crossings * 1000 / rays.length).toStringAsFixed(0).padLeft(9)}  '
-      '${(containment * 1000 / rays.length).toStringAsFixed(0).padLeft(11)}  '
+      '${(microseconds * 1000 / rays.length).toStringAsFixed(0).padLeft(11)}  '
       '${(100 * hits / rays.length).toStringAsFixed(0).padLeft(14)}',
     );
   }
 }
 
-/// Compares three ways of deciding whether the ray origin is inside the
-/// polygon: the crossings heuristic used before this branch, the containment
-/// test added by this branch, and plain odd crossing parity.
+/// Checks the crossing parity that [PolygonRayIntersection.rayIntersection]
+/// uses to decide whether the ray origin is inside the polygon against
+/// [Path.contains] on the sampled polygon.
 void _reportInsideAgreement() {
   print('');
-  print('isInsideHitbox agreement over rays that hit the shape');
-  print('shape        hits  heuristic differs  odd parity differs');
+  print('isInsideHitbox agreement with Path.contains over rays that hit');
+  print('shape        hits  differs');
   final rays = _randomRays(Random(2), 160);
   for (var index = 0; index < pathContourShapeNames.length; index++) {
     final hitbox = _contourHitbox(index, Vector2.zero());
+    final polygon = Path()
+      ..addPolygon(
+        hitbox.globalVertices().map((vertex) => vertex.toOffset()).toList(),
+        true,
+      );
     var hits = 0;
-    var heuristicDiffers = 0;
-    var parityDiffers = 0;
-    final crossingsResult = RaycastResult<ShapeHitbox>();
-    final containmentResult = RaycastResult<ShapeHitbox>();
+    var differs = 0;
+    final result = RaycastResult<ShapeHitbox>();
     for (final ray in rays) {
-      if (hitbox.rayIntersection(ray, out: crossingsResult) == null) {
+      if (hitbox.rayIntersection(ray, out: result) == null) {
         continue;
       }
       hits++;
-      hitbox.rayIntersection(ray, out: containmentResult, useContainment: true);
-      final inside = containmentResult.isInsideHitbox;
-      if (crossingsResult.isInsideHitbox != inside) {
-        heuristicDiffers++;
-      }
-      if (_countCrossings(hitbox, ray).isOdd != inside) {
-        parityDiffers++;
+      if (result.isInsideHitbox != polygon.contains(ray.origin.toOffset())) {
+        differs++;
       }
     }
     print(
       '${pathContourShapeNames[index].padRight(11)} '
       '${hits.toString().padLeft(6)}  '
-      '${heuristicDiffers.toString().padLeft(17)}  '
-      '${parityDiffers.toString().padLeft(18)}',
+      '${differs.toString().padLeft(7)}',
     );
   }
 }
@@ -277,22 +265,6 @@ List<Ray2> _randomRays(Random random, double spread) => List.generate(
     direction: (Vector2.random(random) - Vector2.all(0.5)).normalized(),
   ),
 );
-
-/// The same crossing count that [PolygonRayIntersection.rayIntersection]
-/// computes internally.
-int _countCrossings(PolygonHitbox hitbox, Ray2 ray) {
-  final vertices = hitbox.globalVertices();
-  final epsilon = max(1.0, max(ray.origin.x.abs(), ray.origin.y.abs())) * 1e-4;
-  var crossings = 0;
-  for (var index = 0; index < vertices.length; index++) {
-    final edge = hitbox.getEdge(index, vertices: vertices);
-    final distance = ray.lineSegmentIntersection(edge);
-    if (distance != null && distance > epsilon) {
-      crossings++;
-    }
-  }
-  return crossings;
-}
 
 /// The largest distance from any point on [path] to the closest edge of
 /// [polygon], sampled every quarter unit along the path.
