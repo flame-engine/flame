@@ -110,7 +110,7 @@ abstract class CollisionDetection<
   /// When [useContainment] is `false` (default for backwards compatibility),
   /// the standard edge-crossing behavior is used; otherwise, the behavior
   /// is based on point containment, which is more expensive but should work
-  /// on all concave polygons.
+  /// on concave polygons as well.
   RaycastResult<T>? raycast(
     Ray2 ray, {
     double? maxDistance,
@@ -150,7 +150,7 @@ abstract class CollisionDetection<
   /// When [useContainment] is `false` (default for backwards compatibility),
   /// the standard edge-crossing behavior is used; otherwise, the behavior
   /// is based on point containment, which is more expensive but should work
-  /// on all concave polygons.
+  /// on concave polygons as well.
   List<RaycastResult<T>> raycastAll(
     Vector2 origin, {
     required int numberOfRays,
@@ -184,18 +184,12 @@ abstract class CollisionDetection<
   /// If [out] is provided the [RaycastResult]s in that list be modified and
   /// returned with the result. If there are less objects in [out] than the
   /// result requires, the missing [RaycastResult] objects will be created.
-  ///
-  /// When [useContainment] is `false` (default for backwards compatibility),
-  /// the standard edge-crossing behavior is used; otherwise, the behavior
-  /// is based on point containment, which is more expensive but should work
-  /// on all concave polygons.
   Iterable<RaycastResult<T>> raytrace(
     Ray2 ray, {
     int maxDepth = 10,
     bool Function(T candidate)? hitboxFilter,
     List<T>? ignoreHitboxes,
     List<RaycastResult<T>>? out,
-    bool useContainment = false,
   });
 }
 

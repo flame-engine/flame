@@ -199,7 +199,7 @@ mixin ShapeHitbox on ShapeComponent implements Hitbox<ShapeHitbox> {
   /// When [useContainment] is `false` (default for backwards compatibility),
   /// the standard edge-crossing behavior is used; otherwise, the behavior
   /// is based on point containment, which is more expensive but should work
-  /// on all concave polygons.
+  /// on concave polygons as well.
   RaycastResult<ShapeHitbox>? rayIntersection(
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
