@@ -38,12 +38,14 @@ class PolygonComponent extends ShapeComponent {
     super.paintLayers,
     super.key,
     bool? shrinkToBounds,
+    bool isSolid = false,
   }) : assert(
          _vertices.length > 2,
          'Number of vertices are too few to create a polygon',
        ),
        shrinkToBounds = shrinkToBounds ?? size == null,
        manuallyPositioned = position != null {
+    this.isSolid = isSolid;
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
@@ -77,6 +79,7 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
+    bool isSolid = false,
     ComponentKey? key,
     List<Component>? children,
   }) : this(
@@ -89,6 +92,7 @@ class PolygonComponent extends ShapeComponent {
          paint: paint,
          paintLayers: paintLayers,
          shrinkToBounds: shrinkToBounds,
+         isSolid: isSolid,
          key: key,
          children: children,
        );
@@ -108,6 +112,7 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
+    bool isSolid = false,
     ComponentKey? key,
     List<Component>? children,
   }) : this(
@@ -120,6 +125,7 @@ class PolygonComponent extends ShapeComponent {
          paint: paint,
          paintLayers: paintLayers,
          shrinkToBounds: shrinkToBounds ?? true,
+         isSolid: isSolid,
          key: key,
          children: children,
        );
@@ -153,6 +159,7 @@ class PolygonComponent extends ShapeComponent {
     List<Paint>? paintLayers,
     ComponentKey? key,
     bool? shrinkToBounds,
+    bool isSolid = false,
   }) : this(
          List.generate(sides, (i) {
            final angle = tau * i / sides;
@@ -169,6 +176,7 @@ class PolygonComponent extends ShapeComponent {
          paintLayers: paintLayers,
          key: key,
          shrinkToBounds: shrinkToBounds,
+         isSolid: isSolid,
        );
 
   @internal

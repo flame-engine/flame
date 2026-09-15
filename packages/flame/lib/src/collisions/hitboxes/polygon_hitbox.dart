@@ -13,10 +13,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -33,10 +32,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     double super.angle = 0,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.relative(shrinkToBounds: true) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -48,10 +46,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.regular() {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -68,10 +65,9 @@ class PolygonHitbox extends PolygonComponent
     super.anchor,
     super.priority,
     super.shrinkToBounds,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.contour() {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
