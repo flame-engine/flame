@@ -259,7 +259,6 @@ PolygonHitbox _handWrittenHitbox(Vector2 position) => PolygonHitbox.relative(
 PolygonHitbox _contourHitbox(int index, Vector2 position) =>
     PolygonHitbox.contour(
       pathContourShape(index, _shapeSize),
-      granularity: 1.0,
       anchor: Anchor.center,
       position: position,
     );
