@@ -67,9 +67,9 @@ extension OffsetListExtension on List<Offset> {
 }
 
 extension VerticesList on List<List<Offset>> {
-  /// Returns the given subcontour as a vertices list.
+  /// Returns the given sub-contour as a vertices list.
   List<Vector2> getVertices([int index = 0]) {
-    assert(index >= 0 && index < length, 'Ivalid subcontour index $index');
+    assert(index >= 0 && index < length, 'Invalid sub-contour index $index');
     return this[index].vertices;
   }
 }
