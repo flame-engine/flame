@@ -21,11 +21,8 @@ extension PathExtension on Path {
     final box = getBounds();
     final scale = Vector2(size.width / box.width, size.height / box.height);
     if (keepRatio) {
-      if (box.height > box.width) {
-        scale.setValues(scale.y, scale.y);
-      } else {
-        scale.setValues(scale.x, scale.x);
-      }
+      final uniformScale = scale.x < scale.y ? scale.x : scale.y;
+      scale.setValues(uniformScale, uniformScale);
     }
     final t = Transform2D()..scale = scale;
     return transform32(t.transformMatrix.storage);

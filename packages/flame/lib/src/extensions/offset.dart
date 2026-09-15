@@ -49,7 +49,7 @@ extension OffsetListExtension on List<Offset> {
   /// Returns the approximate enclosing rectangle.
   Rect get rectangle {
     const epsilon = 1e-6;
-    var r = Rect.fromCenter(center: .zero, width: 0, height: 0);
+    var r = Rect.zero;
     forEach((offset) {
       final p = Rect.fromCenter(
         center: offset,
