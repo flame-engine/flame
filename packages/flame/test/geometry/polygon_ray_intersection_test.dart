@@ -9,7 +9,7 @@ import 'package:test/test.dart';
 const _testWidth = 1024.0;
 const _testHeight = 768.0;
 
-Path roundRectPath(Size size) {
+Path _roundRectPath(Size size) {
   return Path()..addRRect(
     RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height),
@@ -18,7 +18,7 @@ Path roundRectPath(Size size) {
   );
 }
 
-Path flamePath() {
+Path _flamePath() {
   return Path()
     ..moveTo(62.0, 42.8)
     ..cubicTo(62.0, 58.9, 49.0, 65.0, 33.0, 65.0)
@@ -34,7 +34,7 @@ Path flamePath() {
     ..close();
 }
 
-List<Vector2> pathVertices(Path path) {
+List<Vector2> _pathVertices(Path path) {
   final contours = path.centered.walkContours(2);
   assert(contours.isNotEmpty, 'Empty path contours');
   final vertices = contours.first.map((offset) => offset.toVector2()).toList();
@@ -208,7 +208,7 @@ void main() {
 
   test('does not classify a reflected ray as inside a concave polygon', () {
     final hitbox = PolygonHitbox(
-      pathVertices(flamePath()),
+      _pathVertices(_flamePath()),
       position: Vector2.zero(),
     );
     final random = Random(5);
@@ -243,11 +243,11 @@ void main() {
   });
 
   test('hits the expected rays over a concave polygon batch', () {
-    _expectBatchHits(pathVertices(flamePath()));
+    _expectBatchHits(_pathVertices(_flamePath()));
   });
 
   test('hits the expected rays over a convex polygon batch', () {
-    final vertices = pathVertices(roundRectPath(const Size(64, 48)));
+    final vertices = _pathVertices(_roundRectPath(const Size(64, 48)));
     final template = PolygonHitbox(
       vertices.map((vertex) => vertex.clone()).toList(),
     );
