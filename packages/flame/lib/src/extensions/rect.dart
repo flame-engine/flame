@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/experimental.dart' as flame show Rectangle;
 import 'package:flame/geometry.dart';
+import 'package:flame/src/extensions/aabb.dart';
 import 'package:flame/src/extensions/matrix4.dart';
 import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
@@ -53,6 +54,14 @@ extension RectExtension on Rect {
       bottomRight.toVector2(),
       bottomLeft.toVector2(),
     ];
+  }
+
+  /// Create a [Rect] from an [offsets] list.
+  static Rect fromOffsets(List<Offset> offsets) {
+    if (offsets.isEmpty) {
+      return .zero;
+    }
+    return Aabb2Extension.fromOffsets(offsets).toRect();
   }
 
   /// Transform Rect using the transformation defined by [matrix].

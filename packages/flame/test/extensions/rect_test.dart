@@ -219,6 +219,14 @@ void main() {
         ),
         reason: 'bottomRight offset is not OK',
       );
+
+      final offsets = points.map((p) => p.toOffset()).toList(growable: false);
+      final boundingRect = RectExtension.fromOffsets(offsets);
+      expect(
+        boundingBox,
+        boundingRect,
+        reason: 'boundingBox differs from boundingRect',
+      );
     });
 
     testRandom('fromCenter position and size is OK', (Random r) {

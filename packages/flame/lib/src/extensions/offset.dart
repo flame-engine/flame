@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/src/extensions/rect.dart';
 import 'package:flame/src/extensions/vector2.dart';
 
 export 'dart:ui' show Offset;
@@ -46,24 +47,8 @@ extension OffsetListExtension on List<Offset> {
   List<Vector2> get vertices =>
       map((o) => o.toVector2()).toList(growable: false);
 
-  /// Returns the approximate enclosing rectangle.
-  Rect get rectangle {
-    const epsilon = 1e-6;
-    var r = Rect.zero;
-    forEach((offset) {
-      final p = Rect.fromCenter(
-        center: offset,
-        width: epsilon,
-        height: epsilon,
-      );
-      if (r.isEmpty) {
-        r = p;
-      } else {
-        r = r.expandToInclude(p);
-      }
-    });
-    return r;
-  }
+  /// Returns the enclosing area as a [Rect].
+  Rect get rectangle => RectExtension.fromOffsets(this);
 }
 
 extension VerticesList on List<List<Offset>> {

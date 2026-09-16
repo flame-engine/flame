@@ -55,6 +55,36 @@ void main() {
         bottom: max.y,
       );
     });
+
+    testRandom('aabb Aabb2Extension.fromOffsets constructor', (Random r) {
+      const numOffsets = 100;
+      const aabbSize = Size(1, 1);
+      final offsets = <Offset>[
+        for (var index = 0; index < numOffsets; ++index)
+          Offset(
+            aabbSize.width * r.nextDouble(),
+            aabbSize.height * r.nextDouble(),
+          ),
+      ];
+
+      final aabb2 = Aabb2Extension.fromOffsets(offsets);
+
+      final vertices = offsets
+          .map((o) => o.toVector2())
+          .toList(growable: false);
+      final verticesBounds = RectExtension.getBounds(vertices);
+
+      final min = aabb2.min;
+      final max = aabb2.max;
+
+      _checkRectValues(
+        verticesBounds,
+        left: min.x,
+        top: min.y,
+        right: max.x,
+        bottom: max.y,
+      );
+    });
   });
 }
 
