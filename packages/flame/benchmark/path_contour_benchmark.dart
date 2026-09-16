@@ -162,7 +162,7 @@ void _reportInsideAgreement() {
 
 void _reportSimplification() {
   print('');
-  print('Ramer-Douglas-Peucker simplification of the granularity 1.0 contour');
+  print('RDP simplification of the granularity 1.0 contour');
   print(
     'shape       tolerance  before  after  max error (px)  '
     'ray (nanoseconds)  polygon-polygon (microseconds)',
@@ -306,7 +306,7 @@ double _distanceToSegment(Offset point, Offset from, Offset to) {
   return (point - (from + delta * projection.clamp(0.0, 1.0))).distance;
 }
 
-List<Offset> _ramerDouglasPeucker(List<Offset> points, double tolerance) {
+List<Offset> _rdp(List<Offset> points, double tolerance) {
   if (points.length < 3) {
     return List.of(points);
   }
@@ -326,11 +326,11 @@ List<Offset> _ramerDouglasPeucker(List<Offset> points, double tolerance) {
   if (worst <= tolerance) {
     return [points.first, points.last];
   }
-  final left = _ramerDouglasPeucker(
+  final left = _rdp(
     points.sublist(0, worstIndex + 1),
     tolerance,
   );
-  final right = _ramerDouglasPeucker(points.sublist(worstIndex), tolerance);
+  final right = _rdp(points.sublist(worstIndex), tolerance);
   return [...left.sublist(0, left.length - 1), ...right];
 }
 
@@ -346,11 +346,11 @@ List<Offset> _simplifyClosed(List<Offset> polygon, double tolerance) {
       farthestIndex = index;
     }
   }
-  final first = _ramerDouglasPeucker(
+  final first = _rdp(
     polygon.sublist(0, farthestIndex + 1),
     tolerance,
   );
-  final second = _ramerDouglasPeucker(
+  final second = _rdp(
     [...polygon.sublist(farthestIndex), polygon.first],
     tolerance,
   );

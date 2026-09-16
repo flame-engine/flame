@@ -77,9 +77,8 @@ extension Contour on PathMetric {
   /// Walk a single contour of a [Path] and return it as an [Offset] list.
   ///
   /// The polyline is sampled at regular intervals along the path, then
-  /// simplified using the 'Ramer-Douglas-Peucker' algorithm with a 0.5px
-  /// tolerance. This reduces vertex count while maintaining acceptable
-  /// accuracy for hitbox geometry.
+  /// simplified using the RDP algorithm with a 0.5px tolerance. This reduces
+  /// vertex count while maintaining acceptable accuracy for hitbox geometry.
   ///
   /// The [granularity] parameter controls the amplitude of the sampling step:
   /// higher values produce fewer samples.
@@ -108,11 +107,11 @@ extension Contour on PathMetric {
     // Remove duplicate last point if any
     points.removeDuplicateLast();
 
-    // Simplify using 'Ramer-Douglas-Peucker' algorithm
+    // Simplify using RDP algorithm.
     return _simplifyPolyline(points, _simplificationTolerance);
   }
 
-  /// Simplify a polyline using the 'Ramer-Douglas-Peucker' algorithm.
+  /// Simplify a polyline using the RDP algorithm.
   ///
   /// Recursively removes points that are within [tolerance] distance
   /// from the line segment connecting their neighbors.
