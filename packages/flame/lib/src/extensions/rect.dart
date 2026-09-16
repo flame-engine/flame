@@ -61,7 +61,7 @@ extension RectExtension on Rect {
     if (offsets.isEmpty) {
       return .zero;
     }
-    return Aabb2Extension.fromOffsets(offsets).toRect();
+    return Aabb2Extension.fromVertices(offsets.vertices).toRect();
   }
 
   /// Transform Rect using the transformation defined by [matrix].

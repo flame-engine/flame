@@ -67,11 +67,9 @@ void main() {
           ),
       ];
 
-      final aabb2 = Aabb2Extension.fromOffsets(offsets);
+      final vertices = offsets.vertices;
 
-      final vertices = offsets
-          .map((o) => o.toVector2())
-          .toList(growable: false);
+      final aabb2 = Aabb2Extension.fromVertices(vertices);
       final verticesBounds = RectExtension.getBounds(vertices);
 
       final min = aabb2.min;

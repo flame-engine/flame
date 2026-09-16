@@ -37,11 +37,7 @@ Path _flamePath() {
 List<Vector2> _pathVertices(Path path) {
   final contours = path.centered.walkContours(2);
   assert(contours.isNotEmpty, 'Empty path contours');
-  final vertices = contours.first.map((offset) => offset.toVector2()).toList();
-  if (vertices.length > 1 && vertices.first == vertices.last) {
-    vertices.removeLast();
-  }
-  return vertices;
+  return contours.first.vertices;
 }
 
 class _RayCase {
