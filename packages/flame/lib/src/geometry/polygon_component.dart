@@ -115,7 +115,7 @@ class PolygonComponent extends ShapeComponent {
     ComponentKey? key,
     List<Component>? children,
   }) : this(
-         pathContourToVertices(path, granularity, contour),
+         path.walkContourAt(contour, granularity).vertices,
          position: position,
          angle: angle,
          anchor: anchor,
@@ -128,17 +128,6 @@ class PolygonComponent extends ShapeComponent {
          key: key,
          children: children,
        );
-
-  @internal
-  static List<Vector2> pathContourToVertices(
-    Path path,
-    double granularity,
-    int contour,
-  ) {
-    final contours = path.walkContours(granularity);
-    assert(contours.isNotEmpty, 'Empty path contours');
-    return contours.getVertices(contour);
-  }
 
   /// With this constructor you create a regular (equiangular and equilateral)
   /// polygon from number of sides and radius anywhere in the 2d-space. It will

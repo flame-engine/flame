@@ -207,4 +207,22 @@ void main() {
       expect(polygon.length, lessThan(200));
     });
   });
+
+  group('walkContourAt', () {
+    test('walks only the requested contour', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(0, 0, 10, 10))
+        ..addOval(const Rect.fromLTWH(20, 20, 50, 30));
+      final contours = path.walkContours();
+      expect(path.walkContourAt(0), contours[0]);
+      expect(path.walkContourAt(1), contours[1]);
+      expect(path.walkContourAt(1, 2, 0.3), path.walkContours(2, 0.3)[1]);
+    });
+
+    test('rejects a contour that does not exist', () {
+      final path = Path()..addRect(const Rect.fromLTWH(0, 0, 10, 10));
+      expect(() => path.walkContourAt(1), throwsRangeError);
+      expect(() => path.walkContourAt(-1), throwsRangeError);
+    });
+  });
 }

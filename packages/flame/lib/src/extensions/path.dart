@@ -75,6 +75,26 @@ extension PathContours on Path {
         metric.walkContour(granularity, tolerance),
     ];
   }
+
+  /// Walk only the contour at [index], without sampling the other contours of
+  /// the path.
+  ///
+  /// See [Contour.walkContour] for the [granularity] and [tolerance]
+  /// parameters.
+  OffsetList walkContourAt(
+    int index, [
+    double granularity = 1.0,
+    double? tolerance,
+  ]) {
+    var current = 0;
+    for (final metric in computeMetrics()) {
+      if (current == index) {
+        return metric.walkContour(granularity, tolerance);
+      }
+      current++;
+    }
+    throw RangeError.index(index, this, 'index', null, current);
+  }
 }
 
 extension Contour on PathMetric {
