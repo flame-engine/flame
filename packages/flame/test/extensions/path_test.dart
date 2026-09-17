@@ -156,11 +156,11 @@ void main() {
 
     test('a larger tolerance needs fewer vertices', () {
       final path = Path()..addOval(const Rect.fromLTWH(0, 0, 100, 60));
-      final unsimplified = path.walkContours(1, 0).single.length;
+      final everySample = path.walkContours(1, 0).single.length;
       final fine = path.walkContours(1, 0.1).single.length;
       final normal = path.walkContours().single.length;
       final coarse = path.walkContours(1, 3).single.length;
-      expect(unsimplified, greaterThan(fine));
+      expect(everySample, greaterThan(fine));
       expect(fine, greaterThan(normal));
       expect(normal, greaterThan(coarse));
       expect(coarse, greaterThanOrEqualTo(4));

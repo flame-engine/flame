@@ -68,7 +68,8 @@ the benchmark results are printed above it.
   hand-written polygon: vertex counts and sampling error, per-ray intersection
   cost, agreement of the inside-hitbox test with `Path.contains` on concave
   shapes, the effect of the simplification tolerance of `walkContours` next to
-  the unsimplified samples, and polygon-polygon intersection cost.
+  the samples before they are simplified, and polygon-polygon intersection
+  cost.
 - `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
   that are sampled from a concave and from a convex `Path` contour, with one
   precomputed ray for each hitbox in every tick.
