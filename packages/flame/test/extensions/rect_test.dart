@@ -229,6 +229,22 @@ void main() {
       );
     });
 
+    test('fromOffsets contains the offsets it was made from', () {
+      const offsets = [
+        Offset(0.1, 0.7),
+        Offset(0.7, 0.1),
+        Offset(16777217, 0.3),
+      ];
+      final rect = RectExtension.fromOffsets(offsets);
+      expect(rect, const Rect.fromLTRB(0.1, 0.1, 16777217, 0.7));
+      expect(offsets.rectangle, rect);
+      expect(RectExtension.fromOffsets(const []), Rect.zero);
+      expect(
+        RectExtension.fromOffsets(const [Offset(3, 4)]),
+        const Rect.fromLTRB(3, 4, 3, 4),
+      );
+    });
+
     testRandom('fromCenter position and size is OK', (Random r) {
       final center = Vector2(r.nextDouble(), r.nextDouble());
       final width = r.nextDouble();

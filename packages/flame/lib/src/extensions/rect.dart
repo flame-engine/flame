@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:flame/experimental.dart' as flame show Rectangle;
 import 'package:flame/geometry.dart';
-import 'package:flame/src/extensions/aabb.dart';
 import 'package:flame/src/extensions/matrix4.dart';
 import 'package:flame/src/extensions/offset.dart';
 import 'package:flame/src/extensions/vector2.dart';
@@ -58,12 +57,30 @@ extension RectExtension on Rect {
     ];
   }
 
-  /// Create a [Rect] from an [offsets] list.
+  /// Create the smallest [Rect] that has all of the [offsets] within it or on
+  /// its edges.
   static Rect fromOffsets(List<Offset> offsets) {
     if (offsets.isEmpty) {
       return .zero;
     }
-    return Aabb2Extension.fromVertices(offsets.vertices).toRect();
+    var left = offsets.first.dx;
+    var top = offsets.first.dy;
+    var right = left;
+    var bottom = top;
+    for (var i = 1; i < offsets.length; i++) {
+      final offset = offsets[i];
+      if (offset.dx < left) {
+        left = offset.dx;
+      } else if (offset.dx > right) {
+        right = offset.dx;
+      }
+      if (offset.dy < top) {
+        top = offset.dy;
+      } else if (offset.dy > bottom) {
+        bottom = offset.dy;
+      }
+    }
+    return Rect.fromLTRB(left, top, right, bottom);
   }
 
   /// Transform Rect using the transformation defined by [matrix].
