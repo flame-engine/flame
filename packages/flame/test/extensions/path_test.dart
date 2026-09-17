@@ -226,6 +226,19 @@ void main() {
     });
   });
 
+  group('contours', () {
+    test('can be read more than once', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(0, 0, 100, 50))
+        ..addRect(const Rect.fromLTWH(200, 0, 10, 10));
+      final contours = path.contours;
+      expect(contours.contoursLength, 340);
+      expect(contours, hasLength(2));
+      expect(contours.contoursLength, 340);
+      expect(contours.first.length, 300);
+    });
+  });
+
   group('resizeTo', () {
     test('keeps the top left corner of the bounds in place', () {
       final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));

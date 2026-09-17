@@ -687,18 +687,6 @@ class _ContourSampler {
   }
 }
 
-extension Contours on PathMetrics {
-  /// Return all the [PathMetric]s from a [Path]'s pre-computed metrics.
-  PathMetricList get contours {
-    return toList(growable: false);
-  }
-
-  /// Return the length of all contours in a [Path]'s pre-computed metrics.
-  double get contoursLength {
-    return contours.contoursLength;
-  }
-}
-
 extension ContoursLength on PathMetricList {
   /// Compute the cumulative length of a [List] of [PathMetric] objects,
   /// provided by the [PathContours] extension.

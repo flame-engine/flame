@@ -45,10 +45,7 @@ void _reportSampling() {
   );
   for (var index = 0; index < pathContourShapeNames.length; index++) {
     final path = pathContourShape(index, _shapeSize);
-    final length = path.computeMetrics().fold(
-      0.0,
-      (sum, metric) => sum + metric.length,
-    );
+    final length = path.contours.contoursLength;
     for (final granularity in [1.0, 2.0]) {
       // The conversion is short enough to be measured before the compiler has
       // optimized it, unless it is warmed up first.
