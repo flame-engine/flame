@@ -262,9 +262,10 @@ them so don't hesitate to use them even if your use case isn't listed here.
 
 ### PolygonHitbox
 
-It should be noted that if you want to use collision detection or `containsPoint` on the `Polygon`,
-the polygon needs to be convex. So always use convex polygons or you will most likely run into
-problems if you don't really know what you are doing.
+A `PolygonHitbox` can be either convex or concave. Collisions, `containsPoint` and ray casting work
+for both, since whether a point is inside of the polygon is decided by how many of its edges are
+crossed on the way out of it. The cost grows with the number of vertices though, so a polygon with
+many of them is more expensive to collide with and to cast rays against than one with a few.
 
 The other hitbox shapes don't have any mandatory constructor, that is because they can have a
 default calculated from the size of the collidable that they are attached to, but since a
@@ -273,6 +274,28 @@ definition in the constructor for this shape.
 
 The `PolygonHitbox` has the same constructors as the [](components/shape_components.md#polygoncomponent),
 see that section for documentation regarding those.
+
+That includes `PolygonHitbox.contour`, which makes the hitbox
+[from a contour of a Path](components/shape_components.md#from-a-path). This is a quick way to get a
+hitbox that follows the outline of a sprite or a vector graphic, which usually is concave:
+
+```dart
+class Spaceship extends SpriteComponent with CollisionCallbacks {
+  Spaceship(this.outline);
+
+  final Path outline;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(PolygonHitbox.contour(outline, granularity: 2));
+  }
+}
+```
+
+Since the amount of vertices decides what the hitbox costs, use the highest `granularity` that still
+follows the outline closely enough for your game. The contour is walked when the hitbox is created,
+so create it once and not in every tick.
 
 
 ### RectangleHitbox
