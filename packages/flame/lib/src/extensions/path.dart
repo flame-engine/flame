@@ -1,4 +1,4 @@
-import 'dart:math' show sqrt;
+import 'dart:math' show max, sqrt;
 import 'dart:typed_data' show Float32List;
 import 'dart:ui';
 
@@ -78,6 +78,9 @@ extension PathContours on Path {
 extension Contour on PathMetric {
   static const _simplificationTolerance = 0.5; // pixels
 
+  /// The upper bound for the amount of sampling steps in a single contour.
+  static const _maxSteps = 1 << 20;
+
   /// Walk a single contour of a [Path] and return it as an [Offset] list.
   ///
   /// The polyline is sampled at regular intervals along the path, then
@@ -85,13 +88,17 @@ extension Contour on PathMetric {
   /// vertex count while maintaining acceptable accuracy for hitbox geometry.
   ///
   /// The [granularity] parameter controls the amplitude of the sampling step:
-  /// higher values produce fewer samples.
+  /// higher values produce fewer samples. It has to be a positive number, and
+  /// a contour is never sampled in more than about a million steps.
   OffsetList walkContour([double granularity = 1.0]) {
-    // Calculate step size: base step is 1.0, scaled by granularity
-    var step = 1.0;
-    if (granularity > 0) {
-      step *= granularity;
-    }
+    assert(
+      granularity.isFinite && granularity > 0,
+      'The granularity has to be a positive number: $granularity',
+    );
+    final validGranularity = granularity.isFinite && granularity > 0
+        ? granularity
+        : 1.0;
+    final step = max(validGranularity, length / _maxSteps);
 
     // Sample the path at regular intervals
     final points = <Offset>[];
