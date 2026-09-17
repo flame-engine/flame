@@ -1,4 +1,4 @@
-import 'dart:math' show max, min;
+import 'dart:math' show max, min, sqrt;
 import 'dart:typed_data' show Float32List;
 import 'dart:ui';
 
@@ -83,14 +83,17 @@ extension Contour on PathMetric {
 
   /// Walk a single contour of a [Path] and return it as an [Offset] list.
   ///
-  /// The contour is sampled at regular intervals of about the [granularity],
-  /// so that higher values produce fewer samples, which has to be a positive
-  /// number. A closed contour is not sampled where it ends, since that is
-  /// where it starts.
+  /// The [granularity] is the sampling step along the contour: higher values
+  /// produce fewer samples. It only limits how finely curves are followed,
+  /// since straight stretches are skipped over and the corners between them
+  /// are located exactly.
   ///
   /// The samples that are not needed to stay within [tolerance] of the sampled
-  /// contour are removed. It defaults to half of the [granularity], and a
-  /// [tolerance] of zero keeps every sample.
+  /// contour are removed, while the corners and the points where the contour
+  /// reaches its bounds are always kept, so that the result has the size of
+  /// the contour. The [tolerance] defaults to half of the [granularity], and
+  /// the samples themselves are taken so that the contour stays within a sixth
+  /// of it. A [tolerance] of zero keeps every sample.
   OffsetList walkContour([double granularity = 1.0, double? tolerance]) {
     assert(
       granularity.isFinite && granularity > 0,
@@ -107,24 +110,13 @@ extension Contour on PathMetric {
         ? granularity
         : 1.0;
     final step = max(validGranularity, length / _maxSteps);
-    final steps = (length / step).ceil();
-    final points = <Offset>[];
-    for (var i = 0; i <= steps; i++) {
-      final tangent = getTangentForOffset(length * i / steps);
-      if (tangent != null) {
-        points.add(tangent.position);
-      }
-    }
-    final closed =
-        points.length > 1 && (isClosed || points.first == points.last);
-    if (closed) {
-      points.removeLast();
-    }
+    final maxDeviation = tolerance ?? step / 2;
+    final sampler = _ContourSampler(this, step, maxDeviation / 6)..sample();
     return _simplify(
-      points,
-      const [],
-      closed: closed,
-      tolerance: tolerance ?? step / 2,
+      sampler.points,
+      sampler.anchors,
+      closed: sampler.isClosed,
+      tolerance: maxDeviation,
     );
   }
 
@@ -270,6 +262,393 @@ extension Contour on PathMetric {
     }
     final across = px * dy - py * dx;
     return across * across / lengthSquared;
+  }
+}
+
+/// Samples a contour so that the polyline through [points] stays within
+/// [_maxDeviation] of it, using as few tangent lookups as possible.
+///
+/// The stride to the next sample is predicted from how much the contour bent
+/// over the previous one, so that straight stretches are crossed in a few
+/// lookups while tight curves are followed below the step. A sample that turns
+/// out to be too far ahead is kept in [_ahead] until the walk reaches it. The
+/// indices of the corners and of the points where the contour reaches its
+/// bounds are collected in [anchors].
+class _ContourSampler {
+  _ContourSampler(this._metric, this._step, this._maxDeviation);
+
+  static const _maxStepsPerStride = 32;
+  static const _subdivisionsPerStep = 4;
+
+  final PathMetric _metric;
+  final double _step;
+  final double _maxDeviation;
+
+  final OffsetList points = [];
+  final List<int> anchors = [];
+  bool isClosed = false;
+
+  /// A feature that stays unnoticed by the length check of a curved stretch is
+  /// at most a twenty-fifth of the stretch deep, which has to be within the
+  /// tolerance, that is six times [_maxDeviation].
+  late final double _maxCurveStride = 150 * _maxDeviation;
+
+  final List<int> _turns = [];
+  bool _isAfterLine = false;
+  final List<Tangent> _ahead = [];
+  final List<double> _aheadOffsets = [];
+  Tangent? _spare;
+  double _spareOffset = 0;
+
+  Tangent? _lookup(double offset) => _metric.getTangentForOffset(offset);
+
+  void sample() {
+    final length = _metric.length;
+    final first = _lookup(0);
+    if (first == null) {
+      return;
+    }
+    final maxStride = _step * _maxStepsPerStride;
+    final minStride = _maxDeviation > 0 ? _step / _subdivisionsPerStep : _step;
+
+    points.add(first.position);
+    var from = first;
+    var fromOffset = 0.0;
+    var stride = _step;
+    // Every round either moves on or shortens the stride by a fifth at least,
+    // the limit only keeps an unforeseen case from never returning.
+    final maxRounds = 64 * (length / minStride).ceil() + 64;
+    for (var round = 0; fromOffset < length && round < maxRounds; round++) {
+      _spare = null;
+      while (_ahead.isNotEmpty && _aheadOffsets.last <= fromOffset) {
+        _ahead.removeLast();
+        _aheadOffsets.removeLast();
+      }
+      final Tangent? to;
+      final double toOffset;
+      if (_ahead.isNotEmpty &&
+          _aheadOffsets.last <= fromOffset + stride * 1.2) {
+        to = _ahead.removeLast();
+        toOffset = _aheadOffsets.removeLast();
+      } else {
+        final isLast = length - fromOffset <= stride * 1.2;
+        toOffset = isLast ? length : fromOffset + stride;
+        to = _lookup(toOffset);
+      }
+      if (to == null) {
+        break;
+      }
+      final arc = toOffset - fromOffset;
+      final bend = _bend(from, to, arc);
+      if (bend <= 1) {
+        _addExtremes(fromOffset, from, toOffset, to);
+        _add(to.position);
+        _isAfterLine = bend == 0;
+        stride = bend < 1e-3 ? maxStride : arc * 0.9 / sqrt(bend);
+        if (stride > maxStride) {
+          stride = maxStride;
+        } else if (stride < minStride) {
+          stride = minStride;
+        }
+      } else if (_addCorner(fromOffset, from, to, arc)) {
+        stride = max(arc, minStride);
+        _isAfterLine = true;
+      } else if (arc <= minStride * 1.2) {
+        _isAfterLine = false;
+        _add(to.position);
+        stride = minStride;
+      } else {
+        _ahead.add(to);
+        _aheadOffsets.add(toOffset);
+        final spare = _spare;
+        if (spare != null) {
+          _ahead.add(spare);
+          _aheadOffsets.add(_spareOffset);
+          _spare = null;
+        }
+        var shrink = bend.isFinite ? 0.9 / sqrt(bend) : 0.5;
+        if (shrink > 0.8) {
+          shrink = 0.8;
+        } else if (shrink < 0.25) {
+          shrink = 0.25;
+        }
+        stride = max(arc * shrink, minStride);
+        continue;
+      }
+      from = to;
+      fromOffset = toOffset;
+    }
+    if (fromOffset < length) {
+      final last = _lookup(length);
+      if (last != null) {
+        _add(last.position);
+        from = last;
+      }
+    }
+    _close(first, from);
+  }
+
+  /// Joins the end of a closed contour with its start, which are the same
+  /// point with possibly different tangents.
+  ///
+  /// The turns only become anchors when they are on the bounds of the contour,
+  /// since the other ones are as good as any other sample.
+  void _close(Tangent first, Tangent last) {
+    isClosed =
+        points.length > 1 && (_metric.isClosed || points.first == points.last);
+    var seam = -1;
+    if (isClosed) {
+      points.removeLast();
+      seam = points.length;
+      final from = last.vector;
+      final to = first.vector;
+      if (from.dx * to.dx + from.dy * to.dy < 0.9999) {
+        anchors.add(0);
+      }
+      if (_changesDirection(from.dx, to.dx) ||
+          _changesDirection(from.dy, to.dy)) {
+        _turns.add(0);
+      }
+    }
+
+    var left = double.infinity;
+    var top = double.infinity;
+    var right = double.negativeInfinity;
+    var bottom = double.negativeInfinity;
+    for (final point in points) {
+      left = min(left, point.dx);
+      top = min(top, point.dy);
+      right = max(right, point.dx);
+      bottom = max(bottom, point.dy);
+    }
+    final fixed = <int>{
+      for (final index in anchors)
+        if (index == seam) 0 else index,
+    };
+    final count = points.length;
+    final turnSides = <int, int>{};
+    for (final turn in _turns) {
+      final index = turn == seam ? 0 : turn;
+      final point = points[index];
+      final sides =
+          (point.dx - left <= _maxDeviation ? 1 : 0) |
+          (right - point.dx <= _maxDeviation ? 2 : 0) |
+          (point.dy - top <= _maxDeviation ? 4 : 0) |
+          (bottom - point.dy <= _maxDeviation ? 8 : 0);
+      // A turn adds nothing when a neighboring sample is on the same sides of
+      // the bounds already.
+      final neighborSides =
+          (turnSides[(index + 1) % count] ?? 0) |
+          (turnSides[(index - 1 + count) % count] ?? 0);
+      if (sides & ~neighborSides == 0) {
+        continue;
+      }
+      turnSides[index] = sides;
+      fixed.add(index);
+    }
+    anchors
+      ..clear()
+      ..addAll(fixed)
+      ..sort();
+  }
+
+  void _add(Offset point, {bool isAnchor = false, bool isTurn = false}) {
+    if (point != points.last) {
+      points.add(point);
+    }
+    if (isAnchor) {
+      _anchorLast();
+    }
+    if (isTurn) {
+      _turnLast();
+    }
+  }
+
+  void _anchorLast() {
+    final index = points.length - 1;
+    if (anchors.isEmpty || anchors.last != index) {
+      anchors.add(index);
+    }
+  }
+
+  void _turnLast() {
+    final index = points.length - 1;
+    if (_turns.isEmpty || _turns.last != index) {
+      _turns.add(index);
+    }
+  }
+
+  /// How far the contour between the two samples bends away from the chord
+  /// between them, as a share of [_maxDeviation]. The stretch is flat enough
+  /// when this is at most one.
+  ///
+  /// When both tangents are aligned with the chord the stretch is a line,
+  /// unless something is hidden between the samples. A stretch of length `arc`
+  /// between two points can not leave the ellipse that has them as its foci,
+  /// whose semi-minor axis is `sqrt(arc² - chord²) / 2`, and lengths are exact
+  /// along lines, so that settles it.
+  ///
+  /// Lengths along curves are off by up to a third over short stretches, so
+  /// there the bend comes from the tangents: a curve with end tangents at the
+  /// angles `a` and `b` to its chord deviates by about `chord * (a + b) / 8`
+  /// from it. Its length only has to be plausible, which together with
+  /// [_maxCurveStride] limits what could hide between the samples.
+  double _bend(Tangent from, Tangent to, double arc) {
+    final dx = to.position.dx - from.position.dx;
+    final dy = to.position.dy - from.position.dy;
+    final fromVector = from.vector;
+    final toVector = to.vector;
+    if (dx * fromVector.dx + dy * fromVector.dy <= 0 ||
+        dx * toVector.dx + dy * toVector.dy <= 0) {
+      return double.infinity;
+    }
+    final sway =
+        (dx * fromVector.dy - dy * fromVector.dx).abs() +
+        (dx * toVector.dy - dy * toVector.dx).abs();
+    final chordSquared = dx * dx + dy * dy;
+    final arcSquared = arc * arc;
+    if (sway <= 1e-4 * arc) {
+      final limit = 4 * _maxDeviation * _maxDeviation;
+      return arcSquared - chordSquared > limit ? double.infinity : 0;
+    }
+    if (arc > _maxCurveStride ||
+        (arc > _step && chordSquared < 0.85 * arcSquared)) {
+      return double.infinity;
+    }
+    return sway / (8 * _maxDeviation);
+  }
+
+  /// Adds the corner between the two samples together with the `to` sample, if
+  /// the contour between them consists of two straight lines.
+  ///
+  /// That is the case when the legs from the samples to the point where their
+  /// tangent lines meet are together as long as the contour between them.
+  bool _addCorner(double fromOffset, Tangent from, Tangent to, double arc) {
+    final fromVector = from.vector;
+    final toVector = to.vector;
+    final cross = fromVector.dx * toVector.dy - fromVector.dy * toVector.dx;
+    if (cross.abs() < 1e-6) {
+      return false;
+    }
+    final dx = to.position.dx - from.position.dx;
+    final dy = to.position.dy - from.position.dy;
+    final fromLeg = (dx * toVector.dy - dy * toVector.dx) / cross;
+    final toLeg = (fromVector.dx * dy - fromVector.dy * dx) / cross;
+    final slack = max(2 * _maxDeviation * _maxDeviation / arc, arc * 1e-6);
+    if (fromLeg < -slack ||
+        toLeg < -slack ||
+        (fromLeg + toLeg - arc).abs() > slack) {
+      return false;
+    }
+    final corner = from.position + fromVector * fromLeg;
+    final merge = max(_maxDeviation / 2, arc * 1e-6);
+    if (fromLeg > merge && toLeg > merge) {
+      // A staircase is as long as a single corner, so the contour has to pass
+      // through the corner as well.
+      final sample = _lookup(fromOffset + fromLeg);
+      if (sample == null) {
+        return false;
+      }
+      if ((sample.position - corner).distance > slack) {
+        if (toLeg > arc / 8 && fromLeg > arc / 8) {
+          _spare = sample;
+          _spareOffset = fromOffset + fromLeg;
+        }
+        return false;
+      }
+    }
+    if (fromLeg <= merge) {
+      points.last = corner;
+      _anchorLast();
+      _add(to.position);
+    } else if (toLeg <= merge) {
+      _add(corner, isAnchor: true);
+    } else {
+      _add(corner, isAnchor: true);
+      _add(to.position);
+    }
+    return true;
+  }
+
+  /// Anchors the points where the contour turns around horizontally or
+  /// vertically between the two samples, since those define its bounds.
+  void _addExtremes(
+    double fromOffset,
+    Tangent from,
+    double toOffset,
+    Tangent to,
+  ) {
+    final fromVector = from.vector;
+    final toVector = to.vector;
+    final turnsX = _changesDirection(fromVector.dx, toVector.dx);
+    final turnsY = _changesDirection(fromVector.dy, toVector.dy);
+    if (!turnsX && !turnsY) {
+      return;
+    }
+    final arc = toOffset - fromOffset;
+    final shareX = turnsX ? _turnShare(fromVector.dx, toVector.dx) : 2.0;
+    final shareY = turnsY ? _turnShare(fromVector.dy, toVector.dy) : 2.0;
+    if (shareX == 0 || shareY == 0) {
+      // Without a line before it, the sample is where a curve turns around.
+      final junction = _isAfterLine
+          ? _junction(from, to, alongFrom: true)
+          : null;
+      if (junction == null) {
+        _turnLast();
+      } else {
+        _add(junction, isTurn: true);
+      }
+    }
+    for (final share in [min(shareX, shareY), max(shareX, shareY)]) {
+      if (share > 0 && share < 1) {
+        final extreme = _lookup(fromOffset + arc * share);
+        if (extreme != null) {
+          _add(extreme.position, isTurn: true);
+        }
+      }
+    }
+    if (shareX == 1 || shareY == 1) {
+      _add(
+        _junction(from, to, alongFrom: false) ?? to.position,
+        isTurn: true,
+      );
+    }
+  }
+
+  /// The point where the tangent lines of the two samples of a flat stretch
+  /// meet, if it lies between them.
+  ///
+  /// When one of the samples is on a line that is parallel to an axis and the
+  /// other one is on a curve that leaves it, this point is on that line and
+  /// next to the point where the curve starts.
+  Offset? _junction(Tangent from, Tangent to, {required bool alongFrom}) {
+    final fromVector = from.vector;
+    final toVector = to.vector;
+    final cross = fromVector.dx * toVector.dy - fromVector.dy * toVector.dx;
+    if (cross.abs() < 1e-6) {
+      return null;
+    }
+    final dx = to.position.dx - from.position.dx;
+    final dy = to.position.dy - from.position.dy;
+    final fromLeg = (dx * toVector.dy - dy * toVector.dx) / cross;
+    final toLeg = (fromVector.dx * dy - fromVector.dy * dx) / cross;
+    if (fromLeg <= 0 || toLeg <= 0) {
+      return null;
+    }
+    // Measured along the axis-parallel line, so that the point is exactly on
+    // it.
+    return alongFrom
+        ? from.position + fromVector * fromLeg
+        : to.position - toVector * toLeg;
+  }
+
+  static bool _changesDirection(double from, double to) {
+    return from.sign != to.sign;
+  }
+
+  /// How far between two samples a tangent component passes through zero.
+  static double _turnShare(double from, double to) {
+    return from.abs() / (from.abs() + to.abs());
   }
 }
 
