@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -54,6 +55,7 @@ void _reportSampling() {
       );
       final contours = path.walkContours(granularity);
       final polygon = contours.first;
+      final error = _maxError(path.contours.first, polygon);
       final tangentCalls = (length / granularity).ceil() + 1;
       final suffix = contours.length > 1
           ? '  (${contours.length} contours)'
@@ -64,7 +66,7 @@ void _reportSampling() {
         '${polygon.length.toString().padLeft(8)}  '
         '${tangentCalls.toString().padLeft(13)}  '
         '${microseconds.toStringAsFixed(0).padLeft(22)}  '
-        '${_maxError(path, polygon).toStringAsFixed(2).padLeft(14)}  '
+        '${error.toStringAsFixed(2).padLeft(14)}  '
         '${length.toStringAsFixed(0).padLeft(11)}$suffix',
       );
     }
@@ -79,11 +81,12 @@ void _reportScaleSensitivity() {
     for (final side in [20.0, 100.0, 500.0, 2000.0]) {
       final path = pathContourShape(index, Size(side, side));
       final polygon = path.walkContours(2).first;
+      final error = _maxError(path.contours.first, polygon);
       print(
         '${pathContourShapeNames[index].padRight(11)} '
         '${side.toStringAsFixed(0).padLeft(4)}  '
         '${polygon.length.toString().padLeft(8)}  '
-        '${_maxError(path, polygon).toStringAsFixed(2).padLeft(14)}',
+        '${error.toStringAsFixed(2).padLeft(14)}',
       );
     }
   }
@@ -192,12 +195,13 @@ void _reportSimplification() {
         repetitions: 21,
       );
       final rayNanoseconds = rayMicroseconds * 1000 / rays.length;
+      final error = _maxError(path.contours.first, simplified);
       print(
         '${pathContourShapeNames[index].padRight(11)} '
         '${tolerance.toStringAsFixed(2).padLeft(9)}  '
         '${polygon.length.toString().padLeft(6)}  '
         '${simplified.length.toString().padLeft(5)}  '
-        '${_maxError(path, simplified).toStringAsFixed(2).padLeft(14)}  '
+        '${error.toStringAsFixed(2).padLeft(14)}  '
         '${rayNanoseconds.toStringAsFixed(0).padLeft(17)}  '
         '${polygonMicroseconds.toStringAsFixed(0).padLeft(30)}',
       );
@@ -266,15 +270,16 @@ List<Ray2> _randomRays(Random random, double spread) => List.generate(
   ),
 );
 
-/// The largest distance from any point on [path] to the closest edge of
-/// [polygon], sampled every quarter unit along the path.
-double _maxError(Path path, List<Offset> polygon) {
+/// The largest distance from any point on [contour] to the closest edge of
+/// [polygon], sampled every quarter unit along the contour.
+///
+/// The [polygon] has to be sampled from that same [contour], since points on
+/// any other contour of the path are unrelated to it.
+double _maxError(PathMetric contour, List<Offset> polygon) {
   var worst = 0.0;
-  for (final metric in path.computeMetrics()) {
-    for (var distance = 0.0; distance < metric.length; distance += 0.25) {
-      final position = metric.getTangentForOffset(distance)!.position;
-      worst = max(worst, _distanceToPolygon(position, polygon));
-    }
+  for (var distance = 0.0; distance < contour.length; distance += 0.25) {
+    final position = contour.getTangentForOffset(distance)!.position;
+    worst = max(worst, _distanceToPolygon(position, polygon));
   }
   return worst;
 }
