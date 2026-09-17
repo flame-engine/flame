@@ -18,6 +18,7 @@ import 'path_contour_shapes.dart';
 /// `main.dart`. Run it with `flutter test benchmark/path_contour_benchmark.dart`.
 const _shapeSize = Size(100, 100);
 const _rayCount = 20000;
+const _conversionWarmUps = 2000;
 
 final _handWrittenVertices = [
   Vector2(-0.7, -1),
@@ -39,7 +40,7 @@ void _reportSampling() {
   print('');
   print('Path to vertices through walkContours at ${_shapeSize.width}px');
   print(
-    'shape       granularity  vertices  tangent calls  '
+    'shape       granularity  vertices  '
     'convert (microseconds)  max error (px)  path length',
   );
   for (var index = 0; index < pathContourShapeNames.length; index++) {
@@ -49,14 +50,18 @@ void _reportSampling() {
       (sum, metric) => sum + metric.length,
     );
     for (final granularity in [1.0, 2.0]) {
-      path.walkContours(granularity);
+      // The conversion is short enough to be measured before the compiler has
+      // optimized it, unless it is warmed up first.
+      for (var warmUp = 0; warmUp < _conversionWarmUps; warmUp++) {
+        path.walkContours(granularity);
+      }
       final microseconds = _medianMicroseconds(
         () => path.walkContours(granularity),
+        repetitions: 101,
       );
       final contours = path.walkContours(granularity);
       final polygon = contours.first;
       final error = _maxError(path.contours.first, polygon);
-      final tangentCalls = (length / granularity).ceil() + 1;
       final suffix = contours.length > 1
           ? '  (${contours.length} contours)'
           : '';
@@ -64,7 +69,6 @@ void _reportSampling() {
         '${pathContourShapeNames[index].padRight(11)} '
         '${granularity.toStringAsFixed(1).padLeft(11)}  '
         '${polygon.length.toString().padLeft(8)}  '
-        '${tangentCalls.toString().padLeft(13)}  '
         '${microseconds.toStringAsFixed(0).padLeft(22)}  '
         '${error.toStringAsFixed(2).padLeft(14)}  '
         '${length.toStringAsFixed(0).padLeft(11)}$suffix',
@@ -165,7 +169,7 @@ void _reportInsideAgreement() {
 
 void _reportSimplification() {
   print('');
-  print('RDP simplification of the granularity 1.0 contour');
+  print('Simplification of the granularity 1.0 contour by tolerance');
   print(
     'shape       tolerance  before  after  max error (px)  '
     'ray (nanoseconds)  polygon-polygon (microseconds)',
@@ -175,9 +179,9 @@ void _reportSimplification() {
   final intersections = PolygonPolygonIntersections();
   for (var index = 0; index < pathContourShapeNames.length; index++) {
     final path = pathContourShape(index, _shapeSize);
-    final polygon = path.walkContours().first;
+    final polygon = path.walkContourAt(0, 1, 0);
     for (final tolerance in [0.25, 0.5, 1.0]) {
-      final simplified = _simplifyClosed(polygon, tolerance);
+      final simplified = path.walkContourAt(0, 1, tolerance);
       final vertices = simplified.vertices;
       final first = _hitbox(vertices, Vector2.zero());
       final second = _hitbox(vertices, Vector2(40, 30));
@@ -309,60 +313,6 @@ double _distanceToSegment(Offset point, Offset from, Offset to) {
   final projection =
       (toPoint.dx * delta.dx + toPoint.dy * delta.dy) / lengthSquared;
   return (point - (from + delta * projection.clamp(0.0, 1.0))).distance;
-}
-
-List<Offset> _rdp(List<Offset> points, double tolerance) {
-  if (points.length < 3) {
-    return List.of(points);
-  }
-  var worst = 0.0;
-  var worstIndex = 0;
-  for (var index = 1; index < points.length - 1; index++) {
-    final distance = _distanceToSegment(
-      points[index],
-      points.first,
-      points.last,
-    );
-    if (distance > worst) {
-      worst = distance;
-      worstIndex = index;
-    }
-  }
-  if (worst <= tolerance) {
-    return [points.first, points.last];
-  }
-  final left = _rdp(
-    points.sublist(0, worstIndex + 1),
-    tolerance,
-  );
-  final right = _rdp(points.sublist(worstIndex), tolerance);
-  return [...left.sublist(0, left.length - 1), ...right];
-}
-
-/// Splits the closed [polygon] at the vertex farthest from the first one and
-/// simplifies both halves, so that the closing edge is treated like any other.
-List<Offset> _simplifyClosed(List<Offset> polygon, double tolerance) {
-  var farthestIndex = 0;
-  var farthestDistance = 0.0;
-  for (var index = 1; index < polygon.length; index++) {
-    final distance = (polygon[index] - polygon.first).distance;
-    if (distance > farthestDistance) {
-      farthestDistance = distance;
-      farthestIndex = index;
-    }
-  }
-  final first = _rdp(
-    polygon.sublist(0, farthestIndex + 1),
-    tolerance,
-  );
-  final second = _rdp(
-    [...polygon.sublist(farthestIndex), polygon.first],
-    tolerance,
-  );
-  return [
-    ...first.sublist(0, first.length - 1),
-    ...second.sublist(0, second.length - 1),
-  ];
 }
 
 double _medianMicroseconds(void Function() body, {int repetitions = 15}) {

@@ -67,8 +67,8 @@ the benchmark results are printed above it.
   that compares hitboxes built from sampled `Path` contours with a
   hand-written polygon: vertex counts and sampling error, per-ray intersection
   cost, agreement of the inside-hitbox test with `Path.contains` on concave
-  shapes, the effect of simplifying the sampled contour, and polygon-polygon
-  intersection cost.
+  shapes, the effect of the simplification tolerance of `walkContours` next to
+  the unsimplified samples, and polygon-polygon intersection cost.
 - `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
   recalculation after position and angle changes, point conversion, matrix
   assignment, and copying transforms.
