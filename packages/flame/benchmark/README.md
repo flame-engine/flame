@@ -69,6 +69,9 @@ the benchmark results are printed above it.
   cost, agreement of the inside-hitbox test with `Path.contains` on concave
   shapes, the effect of the simplification tolerance of `walkContours` next to
   the unsimplified samples, and polygon-polygon intersection cost.
+- `ray_intersection_benchmark.dart`: `rayIntersection` on polygon hitboxes
+  that are sampled from a concave and from a convex `Path` contour, with one
+  precomputed ray for each hitbox in every tick.
 - `transform2d_benchmark.dart`: the `Transform2D` hot paths: matrix
   recalculation after position and angle changes, point conversion, matrix
   assignment, and copying transforms.

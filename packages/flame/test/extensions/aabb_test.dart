@@ -56,7 +56,7 @@ void main() {
       );
     });
 
-    testRandom('aabb Aabb2Extension.fromOffsets constructor', (Random r) {
+    testRandom('aabb Aabb2Extension.fromVertices constructor', (Random r) {
       const numOffsets = 100;
       const aabbSize = Size(1, 1);
       final offsets = <Offset>[

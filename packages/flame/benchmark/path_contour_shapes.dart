@@ -18,7 +18,6 @@ const pathContourShapeNames = [
   'setup',
   'recycle',
 ];
-final numPaths = pathContourShapeNames.length;
 
 Path pathContourShape(int index, Size size) {
   final Path path;
