@@ -249,4 +249,38 @@ void main() {
     );
     _expectBatchHits(vertices, safePoint: template.size / 2);
   });
+
+  test('rays through the vertices of rotated polygons are not misjudged', () {
+    final random = Random(3);
+    final result = RaycastResult<ShapeHitbox>();
+    for (var round = 0; round < 5000; round++) {
+      final hitbox = PolygonHitbox.regular(
+        sides: 3 + random.nextInt(8),
+        radius: 5 + random.nextDouble() * 200,
+        position: Vector2(
+          random.nextDouble() * 2000 - 1000,
+          random.nextDouble() * 2000 - 1000,
+        ),
+        angle: random.nextDouble() * tau,
+      );
+      final vertices = hitbox.globalVertices();
+      final vertex = vertices[random.nextInt(vertices.length)];
+      final center = hitbox.absoluteCenter;
+      final outward = (vertex - center).normalized();
+
+      final fromOutside = Ray2(
+        origin: vertex + outward * (10 + random.nextDouble() * 100),
+        direction: -outward,
+      );
+      expect(hitbox.rayIntersection(fromOutside, out: result), isNotNull);
+      expect(result.isInsideHitbox, isFalse, reason: 'round $round');
+
+      final fromInside = Ray2(
+        origin: center + outward * (random.nextDouble() * 0.5),
+        direction: outward,
+      );
+      expect(hitbox.rayIntersection(fromInside, out: result), isNotNull);
+      expect(result.isInsideHitbox, isTrue, reason: 'round $round');
+    }
+  });
 }

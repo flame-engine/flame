@@ -22,32 +22,49 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
   }) {
     final vertices = globalVertices();
     var closestDistance = double.infinity;
-    LineSegment? closestSegment;
+    Vector2? closestFrom;
+    Vector2? closestTo;
     var crossings = 0;
+    final originX = ray.origin.x;
+    final originY = ray.origin.y;
+    final directionX = ray.direction.x;
+    final directionY = ray.direction.y;
     // Float32List (used by Vector2) carries ~7 significant digits. After
     // reflecting, the stored origin can drift by up to |coord| * 2^-23.
     // Scale epsilon to the origin's magnitude so we skip self-intersections
     // without missing real hits.
-    final epsilon =
-        max(1.0, max(ray.origin.x.abs(), ray.origin.y.abs())) * 1e-4;
+    final epsilon = max(1.0, max(originX.abs(), originY.abs())) * 1e-4;
+    // An edge crosses the line of the ray when its vertices are on opposite
+    // sides of it, with a vertex on the line assigned to one side, so that a
+    // ray through a vertex crosses once and a touch crosses twice or not at
+    // all. The side of each vertex is computed once and shared by both of its
+    // edges, which is what keeps a ray from slipping through between them.
+    var from = vertices[vertices.length - 1];
+    var fromSide =
+        directionX * (from.y - originY) - directionY * (from.x - originX);
     for (var i = 0; i < vertices.length; i++) {
-      final lineSegment = getEdge(i, vertices: vertices);
-      final distance = ray.lineSegmentIntersection(lineSegment);
-      if (distance != null && distance > epsilon) {
-        // An edge only counts as a crossing when its endpoints are on opposite
-        // sides of the ray, with a vertex on the ray assigned to one side, so
-        // that a ray through a vertex counts once and a touch counts twice.
-        if (_isLeftOfRay(ray, lineSegment.from) !=
-            _isLeftOfRay(ray, lineSegment.to)) {
+      final to = vertices[i];
+      final toSide =
+          directionX * (to.y - originY) - directionY * (to.x - originX);
+      if ((fromSide > 0) != (toSide > 0)) {
+        final edgeX = to.x - from.x;
+        final edgeY = to.y - from.y;
+        final distance =
+            (edgeX * (originY - from.y) - edgeY * (originX - from.x)) /
+            (edgeY * directionX - edgeX * directionY);
+        if (distance > epsilon) {
           crossings++;
-        }
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestSegment = lineSegment;
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestFrom = from;
+            closestTo = to;
+          }
         }
       }
+      from = to;
+      fromSide = toSide;
     }
-    if (closestSegment != null) {
+    if (closestFrom != null && closestTo != null) {
       final intersectionPoint = ray.point(
         closestDistance,
         out: out?.intersectionPoint,
@@ -55,8 +72,8 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       // This is "from" to "to" since it is defined ccw in the canvas
       // coordinate system
       _temporaryNormal
-        ..setFrom(closestSegment.from)
-        ..sub(closestSegment.to);
+        ..setFrom(closestFrom)
+        ..sub(closestTo);
       _temporaryNormal
         ..setValues(_temporaryNormal.y, -_temporaryNormal.x)
         ..normalize();
@@ -88,13 +105,5 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
     }
     out?.reset();
     return null;
-  }
-
-  static bool _isLeftOfRay(Ray2 ray, Vector2 point) {
-    final origin = ray.origin;
-    final direction = ray.direction;
-    return direction.x * (point.y - origin.y) -
-            direction.y * (point.x - origin.x) >
-        0;
   }
 }
