@@ -132,7 +132,7 @@ extension PathMetricExtension on PathMetric {
       tolerance == null || (tolerance.isFinite && tolerance >= 0),
       'The tolerance can not be negative: $tolerance',
     );
-    if (!(length > 0)) {
+    if (length <= 0) {
       return [];
     }
     final validGranularity = granularity.isFinite && granularity > 0
