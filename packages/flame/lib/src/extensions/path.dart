@@ -3,7 +3,6 @@ import 'dart:typed_data' show Float32List;
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
-import 'package:flame/game.dart' show Transform2D, Vector2;
 import 'package:flame/src/cache/matrix_pool.dart' show pathTransform;
 
 export 'dart:ui' show Path;
@@ -13,21 +12,37 @@ extension PathExtension on Path {
     return pathTransform(this, matrix4);
   }
 
-  /// Returns a new [Path] with the given [size], which is scaled to
-  /// to the current aspect ratio if [keepRatio] is true.
+  /// Returns a new [Path] with the given [size], that has the top left corner
+  /// of its bounds where this path has it. If [keepRatio] is true the aspect
+  /// ratio is kept, so that the path fits within the [size].
+  ///
+  /// A path without a width or a height is not scaled in that direction, since
+  /// no scale can give it one.
   Path resizeTo(Size size, {bool keepRatio = false}) {
     assert(
       size.width > 0 && size.height > 0,
       'Resizing with invalid size: $size',
     );
     final box = getBounds();
-    final scale = Vector2(size.width / box.width, size.height / box.height);
+    final hasWidth = box.width > 0;
+    final hasHeight = box.height > 0;
+    var scaleX = hasWidth ? size.width / box.width : 1.0;
+    var scaleY = hasHeight ? size.height / box.height : 1.0;
     if (keepRatio) {
-      final uniformScale = scale.x < scale.y ? scale.x : scale.y;
-      scale.setValues(uniformScale, uniformScale);
+      final uniformScale = hasWidth && hasHeight
+          ? min(scaleX, scaleY)
+          : (hasWidth ? scaleX : scaleY);
+      scaleX = uniformScale;
+      scaleY = uniformScale;
     }
-    final t = Transform2D()..scale = scale;
-    return transform32(t.transformMatrix.storage);
+    final matrix = Float32List(16)
+      ..[0] = scaleX
+      ..[5] = scaleY
+      ..[10] = 1
+      ..[12] = box.left * (1 - scaleX)
+      ..[13] = box.top * (1 - scaleY)
+      ..[15] = 1;
+    return transform32(matrix);
   }
 
   /// Returns a new [Path] translated such that its `topLeft` is at zero.

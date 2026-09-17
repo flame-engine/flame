@@ -225,4 +225,49 @@ void main() {
       expect(() => path.walkContourAt(-1), throwsRangeError);
     });
   });
+
+  group('resizeTo', () {
+    test('keeps the top left corner of the bounds in place', () {
+      final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));
+      expect(
+        path.resizeTo(const Size(10, 20)).getBounds(),
+        const Rect.fromLTWH(50, 60, 10, 20),
+      );
+    });
+
+    test('fits within the size when the ratio is kept', () {
+      final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));
+      expect(
+        path.resizeTo(const Size(10, 20), keepRatio: true).getBounds(),
+        const Rect.fromLTWH(50, 60, 10, 5),
+      );
+      expect(
+        path.resizeTo(const Size(400, 100), keepRatio: true).getBounds(),
+        const Rect.fromLTWH(50, 60, 200, 100),
+      );
+    });
+
+    test('does not scale a path in a direction that it has no size in', () {
+      final line = Path()
+        ..moveTo(5, 7)
+        ..lineTo(15, 7);
+      expect(
+        line.resizeTo(const Size(40, 30)).getBounds(),
+        const Rect.fromLTWH(5, 7, 40, 0),
+      );
+      expect(
+        line.resizeTo(const Size(40, 30), keepRatio: true).getBounds(),
+        const Rect.fromLTWH(5, 7, 40, 0),
+      );
+      expect(Path().resizeTo(const Size(40, 30)).getBounds(), Rect.zero);
+    });
+
+    test('rejects an empty size', () {
+      final path = Path()..addRect(const Rect.fromLTWH(0, 0, 10, 10));
+      expect(
+        () => path.resizeTo(Size.zero),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+  });
 }
