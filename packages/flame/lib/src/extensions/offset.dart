@@ -20,41 +20,11 @@ extension OffsetExtension on Offset {
   Rect toRect() => Rect.fromLTWH(0, 0, dx, dy);
 }
 
-extension FuzzyEqual on Offset {
-  /// Returns true if the two offsets are equal up to given [epsilon].
-  bool fuzzyEqual(Offset other, {double epsilon = 1e-3}) {
-    final fDx = (dx - other.dx).abs();
-    final fDy = (dy - other.dy).abs();
-    return fDx <= epsilon && fDy <= epsilon;
-  }
-}
-
 extension OffsetListExtension on List<Offset> {
-  /// Removes the last element if it matches the first one.
-  /// If the [strict] parameter is `false`, equality checking is carried out
-  /// via the above extension.
-  bool removeDuplicateLast({bool strict = true, double epsilon = 1e-3}) {
-    if (length > 1 &&
-        ((strict && first == last) ||
-            (!strict && first.fuzzyEqual(last, epsilon: epsilon)))) {
-      removeLast();
-      return true;
-    }
-    return false;
-  }
-
   /// Returns itself as a fixed list of [Vector2] objects.
   List<Vector2> get vertices =>
       map((o) => o.toVector2()).toList(growable: false);
 
   /// Returns the enclosing area as a [Rect].
   Rect get rectangle => RectExtension.fromOffsets(this);
-}
-
-extension VerticesList on List<List<Offset>> {
-  /// Returns the given sub-contour as a vertices list.
-  List<Vector2> getVertices([int index = 0]) {
-    assert(index >= 0 && index < length, 'Invalid sub-contour index $index');
-    return this[index].vertices;
-  }
 }
