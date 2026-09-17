@@ -63,37 +63,44 @@ extension PathContours on Path {
 
   /// Walk the contours of a [Path] and return them as a list of [Offset] lists.
   /// Each entry in the list corresponds to a given sub-contour.
-  /// The [granularity] parameter controls the amplitude of the sampling step:
-  /// higher values produce fewer samples.
-  List<OffsetList> walkContours([double granularity = 1.0]) {
-    final contours = this.contours;
-    final allPoints = <OffsetList>[];
-    for (final metric in contours) {
-      allPoints.add(metric.walkContour(granularity));
-    }
-    return allPoints;
+  ///
+  /// See [Contour.walkContour] for the [granularity] and [tolerance]
+  /// parameters.
+  List<OffsetList> walkContours([
+    double granularity = 1.0,
+    double? tolerance,
+  ]) {
+    return [
+      for (final metric in computeMetrics())
+        metric.walkContour(granularity, tolerance),
+    ];
   }
 }
 
 extension Contour on PathMetric {
-  static const _simplificationTolerance = 0.5; // pixels
-
   /// The upper bound for the amount of sampling steps in a single contour.
   static const _maxSteps = 1 << 20;
 
   /// Walk a single contour of a [Path] and return it as an [Offset] list.
   ///
   /// The polyline is sampled at regular intervals along the path, then
-  /// simplified using the RDP algorithm with a 0.5px tolerance. This reduces
-  /// vertex count while maintaining acceptable accuracy for hitbox geometry.
+  /// simplified using the RDP algorithm with the given [tolerance], which
+  /// defaults to half of the [granularity] so that it follows the scale that
+  /// the path is sampled at. This reduces vertex count while maintaining
+  /// acceptable accuracy for hitbox geometry. A [tolerance] of zero only
+  /// removes the samples that are on a line between their neighbors.
   ///
   /// The [granularity] parameter controls the amplitude of the sampling step:
   /// higher values produce fewer samples. It has to be a positive number, and
   /// a contour is never sampled in more than about a million steps.
-  OffsetList walkContour([double granularity = 1.0]) {
+  OffsetList walkContour([double granularity = 1.0, double? tolerance]) {
     assert(
       granularity.isFinite && granularity > 0,
       'The granularity has to be a positive number: $granularity',
+    );
+    assert(
+      tolerance == null || (tolerance.isFinite && tolerance >= 0),
+      'The tolerance can not be negative: $tolerance',
     );
     final validGranularity = granularity.isFinite && granularity > 0
         ? granularity
@@ -119,7 +126,7 @@ extension Contour on PathMetric {
     points.removeDuplicateLast();
 
     // Simplify using RDP algorithm.
-    return _simplifyPolyline(points, _simplificationTolerance);
+    return _simplifyPolyline(points, tolerance ?? step / 2);
   }
 
   /// Simplify a polyline using the RDP algorithm.
