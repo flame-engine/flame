@@ -69,7 +69,7 @@ arrows.
 ### From a Path
 
 When the outline of a shape already exists as a `Path`, for example one that was converted from a
-vector graphic, the `PolygonComponent.contour` constructor follows that outline with straight edges
+vector graphic, the `PolygonComponent.fromPath` constructor follows that outline with straight edges
 instead of you having to list the vertices by hand. The corners between the straight lines of the
 path become vertices as they are, and the curves are approximated.
 
@@ -85,7 +85,7 @@ void main() {
       ),
     );
 
-  PolygonComponent.contour(
+  PolygonComponent.fromPath(
     path,
     position: Vector2(200, 100),
     anchor: Anchor.center,

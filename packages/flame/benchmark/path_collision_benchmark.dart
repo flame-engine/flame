@@ -145,8 +145,8 @@ class _Rectangle extends RectangleHitbox with _PartnerFilter {}
 class _Polygon extends PolygonHitbox with _PartnerFilter {
   _Polygon(super.vertices, {super.anchor, super.position});
 
-  _Polygon.contour(super.path, {super.anchor, super.position})
-    : super.contour();
+  _Polygon.fromPath(super.path, {super.anchor, super.position})
+    : super.fromPath();
 }
 
 _Polygon _flamePolygonHitbox(Vector2 size) {
@@ -160,7 +160,7 @@ _Polygon _flamePolygonHitbox(Vector2 size) {
 
 _Polygon _flamePathHitbox(Vector2 size) {
   final path = pathContourShape(1, size.toSize());
-  return _Polygon.contour(path, anchor: Anchor.center, position: size / 2);
+  return _Polygon.fromPath(path, anchor: Anchor.center, position: size / 2);
 }
 
 Future<void> main() async {

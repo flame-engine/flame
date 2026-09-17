@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('contour preserves the path bounds', () {
+  test('fromPath preserves the path bounds', () {
     final path = Path()
       ..addRRect(
         RRect.fromRectAndRadius(
@@ -13,14 +13,14 @@ void main() {
         ),
       );
 
-    final polygon = PolygonComponent.contour(path);
+    final polygon = PolygonComponent.fromPath(path);
 
     expect(polygon.size.x, closeTo(64, 1e-10));
     expect(polygon.size.y, closeTo(64, 1e-10));
     expect(polygon.vertices.first, isNot(polygon.vertices.last));
   });
 
-  test('contour picks the requested contour of the path', () {
+  test('fromPath picks the requested contour of the path', () {
     final path = Path()
       ..addRect(const Rect.fromLTWH(0, 0, 10, 10))
       ..addPolygon(const [
@@ -29,12 +29,12 @@ void main() {
         Offset(20, 60),
       ], true);
 
-    expect(PolygonComponent.contour(path).vertices, hasLength(4));
-    final triangle = PolygonComponent.contour(path, contour: 1);
+    expect(PolygonComponent.fromPath(path).vertices, hasLength(4));
+    final triangle = PolygonComponent.fromPath(path, contour: 1);
     expect(triangle.vertices, hasLength(3));
     expect(triangle.size, Vector2(30, 40));
     expect(
-      () => PolygonComponent.contour(path, contour: 2),
+      () => PolygonComponent.fromPath(path, contour: 2),
       throwsRangeError,
     );
   });

@@ -27,7 +27,7 @@ void main() {
               Vector2.all(64),
               addTestHitbox: false,
             )..anchor = Anchor.center;
-            block.add(PolygonHitbox.contour(path));
+            block.add(PolygonHitbox.fromPath(path));
             final screenHitbox = ScreenHitbox();
             game.world.addAll([screenHitbox, block]);
             await game.ready();

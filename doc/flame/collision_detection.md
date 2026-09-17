@@ -275,7 +275,7 @@ definition in the constructor for this shape.
 The `PolygonHitbox` has the same constructors as the [](components/shape_components.md#polygoncomponent),
 see that section for documentation regarding those.
 
-That includes `PolygonHitbox.contour`, which makes the hitbox
+That includes `PolygonHitbox.fromPath`, which makes the hitbox
 [from a contour of a Path](components/shape_components.md#from-a-path). This is a quick way to get a
 hitbox that follows the outline of a sprite or a vector graphic, which usually is concave:
 
@@ -288,7 +288,7 @@ class Spaceship extends SpriteComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(PolygonHitbox.contour(outline, granularity: 2));
+    add(PolygonHitbox.fromPath(outline, granularity: 2));
   }
 }
 ```
