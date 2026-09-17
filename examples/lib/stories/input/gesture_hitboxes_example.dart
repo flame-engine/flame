@@ -1,12 +1,14 @@
 import 'dart:math';
 
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
 
-enum Shapes { circle, rectangle, polygon }
+enum Shapes { circle, rectangle, polygon, path }
 
 class GestureHitboxesExample extends FlameGame {
   static const description = '''
@@ -19,7 +21,8 @@ class GestureHitboxesExample extends FlameGame {
   GestureHitboxesExample() : super(world: _GestureHitboxesWorld());
 }
 
-class _GestureHitboxesWorld extends World with TapCallbacks {
+class _GestureHitboxesWorld extends World
+    with TapCallbacks, HasGameRef<GestureHitboxesExample> {
   final _rng = Random();
 
   PositionComponent randomShape(Vector2 position) {
@@ -30,14 +33,16 @@ class _GestureHitboxesWorld extends World with TapCallbacks {
     final hitbox = switch (shapeType) {
       Shapes.circle => CircleHitbox(),
       Shapes.rectangle => RectangleHitbox(),
-      Shapes.polygon => PolygonHitbox.relative(
-        [
-          -Vector2.random(_rng),
-          Vector2.random(_rng)..x *= -1,
-          Vector2.random(_rng),
-          Vector2.random(_rng)..y *= -1,
-        ],
-        parentSize: shapeSize,
+      Shapes.polygon => PolygonHitbox.relative([
+        -Vector2.random(_rng),
+        Vector2.random(_rng)..x *= -1,
+        Vector2.random(_rng),
+        Vector2.random(_rng)..y *= -1,
+      ], parentSize: shapeSize),
+      Shapes.path => PolygonHitbox.fromPath(
+        randomPath(shapeSize.toSize()),
+        position: shapeSize * 0.5,
+        anchor: .center,
       ),
     };
     return MyShapeComponent(
@@ -45,6 +50,21 @@ class _GestureHitboxesWorld extends World with TapCallbacks {
       position: position,
       size: shapeSize,
       angle: shapeAngle,
+    );
+  }
+
+  TextPaint get _textRenderer =>
+      TextPaint(style: const TextStyle(color: Colors.white, fontSize: 16));
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(
+      FpsTextComponent(
+        position: Vector2((-gameRef.size.x / 2) + 8, (gameRef.size.y / 2) - 24),
+        priority: 1,
+        textRenderer: _textRenderer,
+      ),
     );
   }
 

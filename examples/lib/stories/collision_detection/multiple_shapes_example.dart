@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -8,7 +9,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-enum Shapes { circle, rectangle, polygon }
+enum Shapes { circle, rectangle, polygon, path }
 
 class MultipleShapesExample extends FlameGame with HasCollisionDetection {
   static const description = '''
@@ -34,7 +35,8 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
 class MultiShapesWorld extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
-    add(FpsTextComponent(position: Vector2(0, gameRef.size.y - 24)));
+    await super.onLoad();
+    add(FpsTextComponent(position: Vector2(8, gameRef.size.y - 24)));
     final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -97,16 +99,14 @@ abstract class MyCollidable extends PositionComponent
   double angleDelta = 0;
   final Color _defaultColor = Colors.blue.withValues(alpha: 0.8);
   final Color _collisionColor = Colors.green.withValues(alpha: 0.8);
+  final Color _screenColor = Colors.purple.withValues(alpha: 0.8);
+
   late final Paint _dragIndicatorPaint;
   final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
 
-  MyCollidable(
-    Vector2 position,
-    Vector2 size,
-    this.velocity,
-    this.screenHitbox,
-  ) : super(position: position, size: size, anchor: Anchor.center) {
+  MyCollidable(Vector2 position, Vector2 size, this.velocity, this.screenHitbox)
+    : super(position: position, size: size, anchor: Anchor.center) {
     _dragIndicatorPaint = BasicPalette.white.paint();
   }
 
@@ -151,7 +151,9 @@ abstract class MyCollidable extends PositionComponent
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    hitbox?.paint.color = _collisionColor;
+    hitbox?.paint.color = other is ScreenHitbox
+        ? _screenColor
+        : _collisionColor;
   }
 
   @override
@@ -176,19 +178,29 @@ class CollidablePolygon extends MyCollidable {
     Vector2 velocity,
     ScreenHitbox screenHitbox,
   ) : super(position, size, velocity, screenHitbox) {
-    hitbox = PolygonHitbox.relative(
-      [
-        Vector2(-1.0, 0.0),
-        Vector2(-0.8, 0.6),
-        Vector2(0.0, 1.0),
-        Vector2(0.6, 0.9),
-        Vector2(1.0, 0.0),
-        Vector2(0.6, -0.8),
-        Vector2(0, -1.0),
-        Vector2(-0.8, -0.8),
-      ],
-      parentSize: size,
-    )..renderShape = true;
+    hitbox = PolygonHitbox.relative([
+      Vector2(-1.0, 0.0),
+      Vector2(-0.8, 0.6),
+      Vector2(0.0, 1.0),
+      Vector2(0.6, 0.9),
+      Vector2(1.0, 0.0),
+      Vector2(0.6, -0.8),
+      Vector2(0, -1.0),
+      Vector2(-0.8, -0.8),
+    ], parentSize: size)..renderShape = true;
+    add(hitbox!);
+  }
+}
+
+class CollidablePath extends MyCollidable {
+  CollidablePath(
+    super.position,
+    super.size,
+    super.velocity,
+    super.screenHitbox,
+  ) {
+    final path = randomPath(size.toSize());
+    hitbox = PolygonHitbox.fromPath(path)..renderShape = true;
     add(hitbox!);
   }
 }
@@ -218,14 +230,13 @@ class CollidableCircle extends MyCollidable {
 }
 
 class SnowmanPart extends CircleHitbox {
-  @override
-  final renderShape = true;
   final startColor = Colors.white.withValues(alpha: 0.8);
   final Color hitColor;
 
   SnowmanPart(double radius, Vector2 position, this.hitColor)
     : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
+    renderShape = true;
   }
 
   @override
@@ -302,6 +313,12 @@ MyCollidable randomCollidable(
       screenHitbox,
     )..rotationSpeed = rotationSpeed,
     Shapes.polygon => CollidablePolygon(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
+    Shapes.path => CollidablePath(
       position,
       size,
       velocity,

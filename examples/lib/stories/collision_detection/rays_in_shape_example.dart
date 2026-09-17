@@ -28,7 +28,7 @@ the rays are inside the shapes or not. Double-click to change the shape that the
 are casted against. The rays originates from small circles, and if the circle is
 inside the shape it will be red, otherwise green. And if the ray doesn't hit any
 shape it will be gray. Click once in all shapes but the circle to toggle
-the ray casting/intersection behaviour between the (current) crossings approach
+the ray casting/intersection behavior between the (current) crossings approach
 and the point-containment proposal, which should be used for concave polygons.
 ''';
 

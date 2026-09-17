@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -23,10 +26,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
     text: "Hey! Who's there?",
     anchor: Anchor.center,
     textRenderer: TextPaint(
-      style: const TextStyle(
-        fontSize: 8,
-        color: Colors.amber,
-      ),
+      style: const TextStyle(fontSize: 8, color: Colors.amber),
     ),
   );
 
@@ -38,7 +38,8 @@ This examples showcases how raycast APIs can be used to detect hits within certa
       height: 180,
     );
 
-    _addMovingWall();
+    // _addMovingWall();
+    _addMovingShape();
 
     world.add(
       _character = _Character(
@@ -50,31 +51,43 @@ This examples showcases how raycast APIs can be used to detect hits within certa
 
     _text.position = _character.position - Vector2(0, 50);
 
-    _ray = Ray2(
-      origin: _character.absolutePosition,
-      direction: Vector2(1, 0),
-    );
+    _ray = Ray2(origin: _character.absolutePosition, direction: Vector2(1, 0));
   }
 
-  void _addMovingWall() {
-    world.add(
-      RectangleComponent(
-        size: Vector2(20, 40),
-        anchor: Anchor.center,
-        paint: BasicPalette.red.paint(),
-        children: [
-          RectangleHitbox(),
-          MoveByEffect(
-            Vector2(50, 0),
-            EffectController(
-              duration: 2,
-              alternate: true,
-              infinite: true,
-            ),
-          ),
-        ],
+  // void _addMovingWall() {
+  //   world.add(
+  //     RectangleComponent(
+  //       size: Vector2(20, 40),
+  //       anchor: Anchor.center,
+  //       paint: BasicPalette.red.paint(),
+  //       children: [
+  //         RectangleHitbox(),
+  //         MoveByEffect(
+  //           Vector2(50, 0),
+  //           EffectController(duration: 2, alternate: true, infinite: true),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  void _addMovingShape() {
+    final rnd = Random();
+    final size = Vector2(20, 40) * 1.5;
+    final path = rnd.nextIntBetween(0, numTestPaths);
+    final component = pathComponent(
+      path,
+      size.toSize(),
+      position: Vector2(0, size.y / 2),
+      paint: BasicPalette.red.paint()..style = .stroke,
+    )..anchor = .center;
+    component.add(
+      MoveByEffect(
+        Vector2(50, 0),
+        EffectController(duration: 2, alternate: true, infinite: true),
       ),
     );
+    world.add(component);
   }
 
   @override
@@ -119,15 +132,8 @@ class _Character extends PositionComponent {
         anchor: Anchor.center,
         paint: BasicPalette.green.paint(),
       )..scale = Vector2(0.55, 1),
-      CircleComponent(
-        radius: 10,
-        anchor: Anchor.center,
-        paint: _rayPaint,
-      ),
-      RectangleComponent(
-        size: Vector2(10, 3),
-        position: Vector2(12, 5),
-      ),
+      CircleComponent(radius: 10, anchor: Anchor.center, paint: _rayPaint),
+      RectangleComponent(size: Vector2(10, 3), position: Vector2(12, 5)),
     ]);
   }
 
