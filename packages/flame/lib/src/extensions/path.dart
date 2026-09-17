@@ -64,24 +64,19 @@ extension PathExtension on Path {
     }
     return this;
   }
-}
 
-typedef PathMetricList = List<PathMetric>;
-typedef OffsetList = List<Offset>;
-
-extension PathContours on Path {
   /// Return a list of [PathMetric] objects, corresponding to the contours
   /// in this path.
-  PathMetricList get contours {
+  List<PathMetric> get contours {
     return computeMetrics().toList(growable: false);
   }
 
   /// Walk the contours of a [Path] and return them as a list of [Offset] lists.
   /// Each entry in the list corresponds to a given sub-contour.
   ///
-  /// See [Contour.walkContour] for the [granularity] and [tolerance]
-  /// parameters.
-  List<OffsetList> walkContours([
+  /// See [PathMetricExtension.walkContour] for the [granularity] and the
+  /// [tolerance] parameters.
+  List<List<Offset>> walkContours([
     double granularity = 1.0,
     double? tolerance,
   ]) {
@@ -94,9 +89,9 @@ extension PathContours on Path {
   /// Walk only the contour at [index], without sampling the other contours of
   /// the path.
   ///
-  /// See [Contour.walkContour] for the [granularity] and [tolerance]
-  /// parameters.
-  OffsetList walkContourAt(
+  /// See [PathMetricExtension.walkContour] for the [granularity] and the
+  /// [tolerance] parameters.
+  List<Offset> walkContourAt(
     int index, [
     double granularity = 1.0,
     double? tolerance,
@@ -112,7 +107,7 @@ extension PathContours on Path {
   }
 }
 
-extension Contour on PathMetric {
+extension PathMetricExtension on PathMetric {
   /// The upper bound for the amount of sampling steps in a single contour.
   static const _maxSteps = 1 << 20;
 
@@ -129,7 +124,7 @@ extension Contour on PathMetric {
   /// the contour. The [tolerance] defaults to half of the [granularity], and
   /// the samples themselves are taken so that the contour stays within a sixth
   /// of it. A [tolerance] of zero keeps every sample.
-  OffsetList walkContour([double granularity = 1.0, double? tolerance]) {
+  List<Offset> walkContour([double granularity = 1.0, double? tolerance]) {
     assert(
       granularity.isFinite && granularity > 0,
       'The granularity has to be a positive number: $granularity',
@@ -163,8 +158,8 @@ extension Contour on PathMetric {
   /// The [anchors] are the ascending indices of the points that have to be
   /// kept. Each stretch between two of them is simplified on its own,
   /// including the one that wraps around the end of a [closed] contour.
-  static OffsetList _simplify(
-    OffsetList points,
+  static List<Offset> _simplify(
+    List<Offset> points,
     List<int> anchors, {
     required bool closed,
     required double tolerance,
@@ -219,7 +214,7 @@ extension Contour on PathMetric {
   ///
   /// The indices go past the end of [points] for the stretch that wraps around.
   static int _reach(
-    OffsetList points,
+    List<Offset> points,
     int from,
     int to,
     double toleranceSquared,
@@ -246,7 +241,7 @@ extension Contour on PathMetric {
   }
 
   static bool _fits(
-    OffsetList points,
+    List<Offset> points,
     int from,
     int to,
     double toleranceSquared,
@@ -263,7 +258,7 @@ extension Contour on PathMetric {
     return true;
   }
 
-  static int _farthestFrom(OffsetList points, int origin) {
+  static int _farthestFrom(List<Offset> points, int origin) {
     var farthest = origin;
     var farthestDistance = 0.0;
     for (var i = 0; i < points.length; i++) {
@@ -319,7 +314,7 @@ class _ContourSampler {
   final double _step;
   final double _maxDeviation;
 
-  final OffsetList points = [];
+  final List<Offset> points = [];
   final List<int> anchors = [];
   bool isClosed = false;
 
@@ -687,9 +682,9 @@ class _ContourSampler {
   }
 }
 
-extension ContoursLength on PathMetricList {
-  /// Compute the cumulative length of a [List] of [PathMetric] objects,
-  /// provided by the [PathContours] extension.
+extension PathMetricListExtension on List<PathMetric> {
+  /// Compute the cumulative length of a [List] of [PathMetric] objects, like
+  /// the [PathExtension.contours] of a [Path].
   double get contoursLength {
     return fold(0.0, (sum, metric) => sum + metric.length);
   }
