@@ -37,15 +37,14 @@ class PolygonComponent extends ShapeComponent {
     super.paint,
     super.paintLayers,
     super.key,
+    super.isSolid,
     bool? shrinkToBounds,
-    bool isSolid = false,
   }) : assert(
          _vertices.length > 2,
          'Number of vertices are too few to create a polygon',
        ),
        shrinkToBounds = shrinkToBounds ?? size == null,
        manuallyPositioned = position != null {
-    this.isSolid = isSolid;
     refreshVertices(newVertices: _vertices);
 
     final verticesLength = _vertices.length;
