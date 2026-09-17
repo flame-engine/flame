@@ -1,8 +1,11 @@
 import 'dart:math';
 
+import 'package:examples/commons/path_component.dart';
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
@@ -35,16 +38,27 @@ bounce on will appear.
   final List<Ray2> rays = [];
   final List<RaycastResult<ShapeHitbox>> results = [];
 
-  late Path path;
+  Size get pathSize => Size.square(125 + (50 * random.nextDouble()));
+  Path get path => randomPath(pathSize);
   @override
   Future<void> onLoad() async {
+    final halfCanvas = Size.square(min(canvasSize.x, canvasSize.y) / 2);
     addAll([
       ScreenHitbox(),
-      CircleComponent(
-        radius: min(canvasSize.x, canvasSize.y) / 2,
-        paint: boxPaint,
-        children: [CircleHitbox()],
-      ),
+      if (random.nextDouble() <= 0.5)
+        CircleComponent(
+          radius: min(canvasSize.x, canvasSize.y) / 2,
+          paint: boxPaint,
+          children: [CircleHitbox()],
+        )
+      else
+        PathComponent(
+          path: randomPath(halfCanvas * 2),
+          position: halfCanvas.toVector2(),
+          anchor: .center,
+          paint: boxPaint,
+          filterHitboxes: false,
+        ),
     ]);
   }
 
@@ -82,11 +96,11 @@ bounce on will appear.
               anchor: Anchor.center,
               children: [CircleHitbox()],
             ),
-            RectangleComponent(
-              position: Vector2.all(300),
-              size: Vector2.all(100),
+            PathComponent(
+              path: path,
+              position: Vector2.all(350),
               paint: boxPaint,
-              children: [RectangleHitbox()],
+              filterHitboxes: false,
             ),
             RectangleComponent(
               position: Vector2.all(500),

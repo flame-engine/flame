@@ -14,6 +14,7 @@ class PathComponent extends ShapeComponent
     this.loadHitboxes = true,
     this.hasHitboxes = true,
     this.renderHitboxes = false,
+    this.filterHitboxes = true,
     this.hitboxesPaint,
     super.position,
     super.size,
@@ -34,6 +35,7 @@ class PathComponent extends ShapeComponent
   final Path path;
   final bool hasHitboxes;
   final bool renderHitboxes;
+  final bool filterHitboxes;
   final Paint? hitboxesPaint;
 
   List<PolygonHitbox> get hitboxes => _hitboxes;
@@ -96,17 +98,19 @@ class PathComponent extends ShapeComponent
 
     // We always keep the first hitbox (the largest one): the others
     // are discarded if they fit entirely within it.
-    hitboxes.removeWhere((element) {
-      if (element == first) {
-        return false;
-      }
-      final bounds = Rect.fromCenter(
-        center: Offset(element.x, element.y),
-        width: element.width,
-        height: element.height,
-      );
-      return area.expandToInclude(bounds) == area;
-    });
+    if (filterHitboxes) {
+      hitboxes.removeWhere((element) {
+        if (element == first) {
+          return false;
+        }
+        final bounds = Rect.fromCenter(
+          center: Offset(element.x, element.y),
+          width: element.width,
+          height: element.height,
+        );
+        return area.expandToInclude(bounds) == area;
+      });
+    }
     return hitboxes;
   }
 
