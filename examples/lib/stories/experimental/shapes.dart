@@ -1,9 +1,13 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:examples/commons/paths.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/extensions.dart'
+    show Aabb2Extension, PathExtension, SizeExtension;
 import 'package:flame/game.dart';
+import 'package:flame/palette.dart';
 
 class ShapesExample extends FlameGame {
   static const description = '''
@@ -14,6 +18,17 @@ class ShapesExample extends FlameGame {
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
+    const flameSize = Size(200, 200);
+    final flame = randomPath(flameSize).shift(const Offset(300, 350));
+    final contours = flame.contours;
+    final polygons = [
+      for (var index = 0; index < contours.length; ++index)
+        Polygon.fromPath(flame, contour: index),
+    ];
+    final disjoint = _findDisjoint(polygons);
+    final disjointColor = BasicPalette.lightOrange.color;
+    final overlapColor = BasicPalette.yellow.color.withValues(alpha: 0.8);
     final shapes = [
       Circle(Vector2(50, 30), 20),
       Circle(Vector2(700, 500), 50),
@@ -31,17 +46,47 @@ class ShapesExample extends FlameGame {
         Vector2(750, 60),
         Vector2(590, 30),
       ]),
+      ...polygons.reversed,
     ];
-    const colors = [
-      Color(0xFFFFFF88),
-      Color(0xFFff88FF),
-      Color(0xFF88FFFF),
-      Color(0xFF88FF88),
-      Color(0xFFaaaaFF),
-      Color(0xFFFF8888),
+    final colors = [
+      const Color(0xFFFFFF88),
+      const Color(0xFFff88FF),
+      const Color(0xFF88FFFF),
+      const Color(0xFF88FF88),
+      const Color(0xFFaaaaFF),
+      const Color(0xFFFF8888),
+      for (var index = contours.length - 1; index >= 0; --index)
+        if (disjoint[index]) disjointColor else overlapColor,
     ];
     add(ShapesComponent(shapes, colors));
     add(DotsComponent(shapes, colors));
+    add(FpsTextComponent(position: Vector2(8, size.y - 24), priority: 1));
+  }
+
+  List<bool> _findDisjoint(List<Polygon> polygons) {
+    if (polygons.length < 2) {
+      return polygons.isEmpty ? [] : [true];
+    }
+    // Sort the polygons by size: we will use the largest area
+    // in order to approximate full inclusion.
+    polygons.sort(
+      (a, b) =>
+          (b.aabb.toRect().size.toVector2().length2 -
+                  a.aabb.toRect().size.toVector2().length2)
+              .toInt(),
+    );
+    final largest = polygons.first;
+    final area = largest.aabb.toRect();
+
+    return polygons
+        .map((element) {
+          if (element == largest) {
+            return true;
+          }
+          final bounds = element.aabb.toRect();
+          return area.expandToInclude(bounds) != area;
+        })
+        .toList(growable: false);
   }
 }
 
