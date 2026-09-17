@@ -267,23 +267,54 @@ void main() {
   });
 
   group('resizeTo', () {
-    test('keeps the top left corner of the bounds in place', () {
+    test('scales the path about the origin', () {
       final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));
-      expect(
+      _expectRect(
         path.resizeTo(const Size(10, 20)).getBounds(),
-        const Rect.fromLTWH(50, 60, 10, 20),
+        const Rect.fromLTWH(5, 24, 10, 20),
+        1e-4,
+      );
+    });
+
+    test('keeps a centered path centered', () {
+      final shapes = [
+        Path()..addOval(const Rect.fromLTWH(310, -40, 1000, 640)),
+        Path()..addRect(const Rect.fromLTWH(3, 4, 12, 6)),
+      ];
+      for (final shape in shapes) {
+        for (final keepRatio in [true, false]) {
+          final resized = shape.centered.resizeTo(
+            const Size(174, 186),
+            keepRatio: keepRatio,
+          );
+          final bounds = resized.getBounds();
+          expect(bounds.center.dx, closeTo(0, 1e-4));
+          expect(bounds.center.dy, closeTo(0, 1e-4));
+          expect(bounds.width, closeTo(174, 1e-3));
+        }
+      }
+    });
+
+    test('keeps a path that starts in the origin there', () {
+      final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));
+      _expectRect(
+        path.toOrigin.resizeTo(const Size(10, 20)).getBounds(),
+        const Rect.fromLTWH(0, 0, 10, 20),
+        1e-4,
       );
     });
 
     test('fits within the size when the ratio is kept', () {
       final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));
-      expect(
+      _expectRect(
         path.resizeTo(const Size(10, 20), keepRatio: true).getBounds(),
-        const Rect.fromLTWH(50, 60, 10, 5),
+        const Rect.fromLTWH(5, 6, 10, 5),
+        1e-4,
       );
-      expect(
+      _expectRect(
         path.resizeTo(const Size(400, 100), keepRatio: true).getBounds(),
-        const Rect.fromLTWH(50, 60, 200, 100),
+        const Rect.fromLTWH(100, 120, 200, 100),
+        1e-4,
       );
     });
 
@@ -291,13 +322,15 @@ void main() {
       final line = Path()
         ..moveTo(5, 7)
         ..lineTo(15, 7);
-      expect(
+      _expectRect(
         line.resizeTo(const Size(40, 30)).getBounds(),
-        const Rect.fromLTWH(5, 7, 40, 0),
+        const Rect.fromLTWH(20, 7, 40, 0),
+        1e-4,
       );
-      expect(
+      _expectRect(
         line.resizeTo(const Size(40, 30), keepRatio: true).getBounds(),
-        const Rect.fromLTWH(5, 7, 40, 0),
+        const Rect.fromLTWH(20, 28, 40, 0),
+        1e-4,
       );
       expect(Path().resizeTo(const Size(40, 30)).getBounds(), Rect.zero);
     });

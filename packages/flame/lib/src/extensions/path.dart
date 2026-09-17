@@ -12,9 +12,12 @@ extension PathExtension on Path {
     return pathTransform(this, matrix4);
   }
 
-  /// Returns a new [Path] with the given [size], that has the top left corner
-  /// of its bounds where this path has it. If [keepRatio] is true the aspect
-  /// ratio is kept, so that the path fits within the [size].
+  /// Returns a new [Path] with the given [size]. If [keepRatio] is true the
+  /// aspect ratio is kept, so that the path fits within the [size].
+  ///
+  /// The path is scaled about the origin, like a canvas is, so a path that is
+  /// [centered] stays centered and a path that was moved [toOrigin] stays
+  /// there, while any other path moves along with its distance to the origin.
   ///
   /// A path without a width or a height is not scaled in that direction, since
   /// no scale can give it one.
@@ -39,8 +42,6 @@ extension PathExtension on Path {
       ..[0] = scaleX
       ..[5] = scaleY
       ..[10] = 1
-      ..[12] = box.left * (1 - scaleX)
-      ..[13] = box.top * (1 - scaleY)
       ..[15] = 1;
     return transform32(matrix);
   }
