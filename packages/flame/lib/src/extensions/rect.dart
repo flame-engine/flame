@@ -47,6 +47,8 @@ extension RectExtension on Rect {
     return intersectsSegment(segment.from, segment.to);
   }
 
+  /// Returns a list of [Vector2] vertices representing the four corners
+  /// in clockwise order.
   List<Vector2> toVertices() {
     return [
       topLeft.toVector2(),

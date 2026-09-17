@@ -13,6 +13,8 @@ extension PathExtension on Path {
     return pathTransform(this, matrix4);
   }
 
+  /// Returns a new [Path] with the given [size], which is scaled to
+  /// to the current aspect ratio if [keepRatio] is true.
   Path resizeTo(Size size, {bool keepRatio = false}) {
     assert(
       size.width > 0 && size.height > 0,
@@ -28,6 +30,7 @@ extension PathExtension on Path {
     return transform32(t.transformMatrix.storage);
   }
 
+  /// Returns a new [Path] translated such that its `topLeft` is at zero.
   Path get toOrigin {
     final box = getBounds();
     final origin = box.topLeft;
@@ -37,6 +40,7 @@ extension PathExtension on Path {
     return this;
   }
 
+  /// Returns a new [Path] translated such that its `center` is at zero.
   Path get centered {
     final box = getBounds();
     final center = box.center;
