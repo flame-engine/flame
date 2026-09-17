@@ -514,7 +514,7 @@ class RaysInShapeWorld extends World
 
   void _addRotate(Component component) {
     _removeRotate();
-    final effect = current.firstChild();
+    final effect = current.firstChild<Effect>();
     if (_componentIndex != 0 && effect == null) {
       rotate = createRotate();
       component.add(rotate!);
