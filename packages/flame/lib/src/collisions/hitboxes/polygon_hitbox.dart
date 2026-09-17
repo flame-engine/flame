@@ -60,11 +60,8 @@ class PolygonHitbox extends PolygonComponent
     super.contour,
     super.granularity,
     super.position,
-    super.scale,
     super.angle,
     super.anchor,
-    super.priority,
-    super.shrinkToBounds,
     super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.contour() {
