@@ -57,10 +57,9 @@ extension PathExtension on Path {
 
   /// Returns a new [Path] translated such that its `center` is at zero.
   Path get centered {
-    final box = getBounds();
-    final center = box.center;
+    final center = getBounds().center;
     if (center != .zero) {
-      return toOrigin.shift(-(box.size.toOffset() * 0.5));
+      return shift(-center);
     }
     return this;
   }

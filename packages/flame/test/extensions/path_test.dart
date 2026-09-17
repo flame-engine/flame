@@ -239,6 +239,33 @@ void main() {
     });
   });
 
+  group('toOrigin', () {
+    test('moves the top left corner of the bounds to the origin', () {
+      final path = Path()..addRect(const Rect.fromLTWH(50, -60, 100, 40));
+      expect(path.toOrigin.getBounds(), const Rect.fromLTWH(0, 0, 100, 40));
+    });
+
+    test('returns the path itself when it is there already', () {
+      final path = Path()..addRect(const Rect.fromLTWH(0, 0, 100, 40));
+      expect(path.toOrigin, same(path));
+    });
+  });
+
+  group('centered', () {
+    test('moves the center of the bounds to the origin', () {
+      final path = Path()..addOval(const Rect.fromLTWH(50, -60, 100, 40));
+      expect(
+        path.centered.getBounds(),
+        const Rect.fromLTRB(-50, -20, 50, 20),
+      );
+    });
+
+    test('returns the path itself when it is there already', () {
+      final path = Path()..addRect(const Rect.fromLTRB(-50, -20, 50, 20));
+      expect(path.centered, same(path));
+    });
+  });
+
   group('resizeTo', () {
     test('keeps the top left corner of the bounds in place', () {
       final path = Path()..addRect(const Rect.fromLTWH(50, 60, 100, 50));
