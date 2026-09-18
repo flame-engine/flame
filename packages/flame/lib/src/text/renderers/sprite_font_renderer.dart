@@ -64,11 +64,25 @@ class SpriteFontRenderer extends TextRenderer {
     );
   }
 
+  /// Returns a copy of this [SpriteFontRenderer] where [paint] is applied on
+  /// top of the renderer's own [SpriteFontRenderer.paint].
+  ///
+  /// The opacity of [paint] is multiplied into the glyph opacity, and the
+  /// color filter of [paint] replaces the one set through the `color`
+  /// argument of [SpriteFontRenderer.fromFont] when present.
   @override
   TextRenderer copyWithPaint(Paint paint) {
     return SpriteFontRenderer.fromPaint(
       font,
-      paint: paint,
+      paint: Paint.from(this.paint)
+        ..color = this.paint.color.withValues(
+          alpha: this.paint.color.a * paint.color.a,
+        )
+        ..colorFilter = paint.colorFilter ?? this.paint.colorFilter
+        ..maskFilter = paint.maskFilter ?? this.paint.maskFilter
+        ..shader = paint.shader ?? this.paint.shader,
+      scale: scale,
+      letterSpacing: letterSpacing,
     );
   }
 }

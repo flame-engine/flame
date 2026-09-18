@@ -7,6 +7,29 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('DebugTextFormatter', () {
+    test('copyWithPaint keeps the color and scales the opacity', () {
+      final renderer = DebugTextRenderer(
+        color: const Color(0xFFFF0000),
+        fontSize: 10,
+        lineHeight: 1.5,
+        fontWeight: FontWeight.bold,
+        fontStyle: FontStyle.italic,
+      );
+
+      final copy =
+          renderer.copyWithPaint(Paint()..color = const Color(0x80FFFFFF))
+              as DebugTextRenderer;
+
+      expect(copy.color.r, 1.0);
+      expect(copy.color.g, 0.0);
+      expect(copy.color.b, 0.0);
+      expect(copy.color.a, closeTo(128 / 255, 1e-7));
+      expect(copy.fontSize, 10);
+      expect(copy.lineHeight, 1.5);
+      expect(copy.fontWeight, FontWeight.bold);
+      expect(copy.fontStyle, FontStyle.italic);
+    });
+
     testGolden(
       'Render debug text',
       (game, tester) async {

@@ -216,6 +216,26 @@ void main() {
       );
     });
 
+    testWithFlameGame('draws the cached image with the component paint', (
+      game,
+    ) async {
+      final c = TextBoxComponent(text: 'foo bar');
+      await game.ensureAdd(c);
+
+      c.setOpacity(0.5);
+
+      final canvas = MockCanvas();
+      game.render(canvas);
+      expect(
+        canvas,
+        MockCanvas(mode: AssertionMode.containsAnyOrder)..drawImage(
+          null,
+          Offset.zero,
+          Paint()..color = const Color(0xFFFFFFFF).withValues(alpha: 0.5),
+        ),
+      );
+    });
+
     testWithFlameGame(
       'internal image is disposed when component is removed',
       (game) async {

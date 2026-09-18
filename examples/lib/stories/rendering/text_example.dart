@@ -85,6 +85,13 @@ class TextExample extends FlameGame {
         ),
         TextComponent(
           text: 'I fade in and fade out',
+          textRenderer: TextPaint(
+            style: const TextStyle(
+              color: Color(0xFF2E9940),
+              fontSize: 24,
+              shadows: [Shadow(color: Color(0x99FFFFFF), blurRadius: 4)],
+            ),
+          ),
           anchor: Anchor.topRight,
           position: Vector2(size.x - 50, 20),
           children: [
