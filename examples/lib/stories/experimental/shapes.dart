@@ -124,6 +124,7 @@ class DotsComponent extends Component {
   final Random random = Random();
   final List<Vector2> points = [];
   final List<Color> pointColors = [];
+  final Paint _paint = Paint();
   static const pointSize = 3;
 
   @override
@@ -149,12 +150,11 @@ class DotsComponent extends Component {
   @override
   void render(Canvas canvas) {
     const d = pointSize / 2;
-    final paint = Paint();
     for (var i = 0; i < points.length; i++) {
       final x = points[i].x;
       final y = points[i].y;
-      paint.color = pointColors[i];
-      canvas.drawRect(Rect.fromLTRB(x - d, y - d, x + d, y + d), paint);
+      _paint.color = pointColors[i];
+      canvas.drawRect(Rect.fromLTRB(x - d, y - d, x + d, y + d), _paint);
     }
   }
 }

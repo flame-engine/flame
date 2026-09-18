@@ -53,8 +53,9 @@ class _GestureHitboxesWorld extends World
     );
   }
 
-  TextPaint get _textRenderer =>
-      TextPaint(style: const TextStyle(color: Colors.white, fontSize: 16));
+  final _textRenderer = TextPaint(
+    style: const TextStyle(color: Colors.white, fontSize: 16),
+  );
 
   @override
   Future<void> onLoad() async {

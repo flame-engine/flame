@@ -33,21 +33,21 @@ casted against, which includes concave shapes made from paths, the Rays button
 casts a new set of rays and the Rotate button rotates the shape.
 ''';
 
-  TextRenderer get textRenderer => TextPaint(
+  final TextRenderer textRenderer = TextPaint(
     style: const TextStyle(
       fontSize: fontSize - 1,
       color: Colors.white,
     ),
   );
 
-  TextRenderer get textOffRenderer => TextPaint(
+  final TextRenderer textOffRenderer = TextPaint(
     style: const TextStyle(
       fontSize: fontSize - 1,
       color: Colors.white54,
     ),
   );
 
-  Vector2 get buttonSize => Vector2(40, 16);
+  final buttonSize = Vector2(40, 16);
 
   late AdvancedButtonComponent _rotateButton;
   late AdvancedButtonComponent _shapeButton;
@@ -437,7 +437,7 @@ class RaysInShapeWorld extends World
   ];
 
   late TextComponent _textComponent;
-  TextPaint get _textRenderer => TextPaint(
+  final _textRenderer = TextPaint(
     style: const TextStyle(
       color: Colors.white,
       fontSize: fontSize,
