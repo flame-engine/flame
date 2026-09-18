@@ -317,8 +317,11 @@ class RayCircleComponent extends CircleComponent
   void _updateFromDrag(Vector2 drag) {
     final delta = drag - Vector2(radius, radius);
     if (_lineDrag) {
-      final dir = ray.direction + delta.normalized();
-      ray.direction = dir.normalized();
+      // Aim the ray at the pointer, which has to be away from the origin to
+      // give a direction.
+      if (!delta.isZero()) {
+        ray.direction = delta.normalized();
+      }
     } else {
       position += delta;
       ray.origin += delta;
