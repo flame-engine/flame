@@ -21,14 +21,15 @@ mixin PathsCreationMixin on FlameGame {
     return index;
   }
 
+  /// A random position for the center of something with the given
+  /// [dimension], such that it is fully within the game.
   Vector2 randomPosition(Size dimension) {
-    final rnd = Vector2.random();
-    final half = dimension * 0.5;
+    final half = dimension.toVector2() / 2;
     return Vector2(
-          rnd.x * (size.x - dimension.width),
-          rnd.y * (size.y - dimension.height),
+          random.nextDouble() * (size.x - dimension.width),
+          random.nextDouble() * (size.y - dimension.height),
         ) +
-        half.toVector2();
+        half;
   }
 
   void addFixedPaths(Paint paint) {
@@ -81,11 +82,10 @@ mixin PathsCreationMixin on FlameGame {
   }) {
     const pathSize = Size.square(100);
     for (var index = 0; index < numPaths; ++index) {
-      final pathIndex = nextRandomPath;
       add(
         pathComponent(
-          pathIndex,
-          const Size.square(100),
+          nextRandomPath,
+          pathSize,
           position: randomPosition(pathSize),
           paint: paint,
           renderHitboxes: renderHitboxes,
