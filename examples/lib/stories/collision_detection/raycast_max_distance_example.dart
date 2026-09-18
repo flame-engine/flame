@@ -39,7 +39,6 @@ This examples showcases how raycast APIs can be used to detect hits within certa
       height: 180,
     );
 
-    // _addMovingWall();
     _addMovingShape();
 
     world.add(
@@ -54,23 +53,6 @@ This examples showcases how raycast APIs can be used to detect hits within certa
 
     _ray = Ray2(origin: _character.absolutePosition, direction: Vector2(1, 0));
   }
-
-  // void _addMovingWall() {
-  //   world.add(
-  //     RectangleComponent(
-  //       size: Vector2(20, 40),
-  //       anchor: Anchor.center,
-  //       paint: BasicPalette.red.paint(),
-  //       children: [
-  //         RectangleHitbox(),
-  //         MoveByEffect(
-  //           Vector2(50, 0),
-  //           EffectController(duration: 2, alternate: true, infinite: true),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   void _addMovingShape() {
     final rnd = Random();
