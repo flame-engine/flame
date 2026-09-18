@@ -20,7 +20,9 @@ extension PathExtension on Path {
   /// there, while any other path moves along with its distance to the origin.
   ///
   /// A path without a width or a height is not scaled in that direction, since
-  /// no scale can give it one.
+  /// no scale can give it one, unless [keepRatio] is true: then the scale of
+  /// the other direction applies to both, so that its distance to the origin
+  /// still scales along.
   Path resizeTo(Size size, {bool keepRatio = false}) {
     assert(
       size.width > 0 && size.height > 0,
