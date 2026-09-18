@@ -7,9 +7,9 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 
 import 'common.dart';
-import 'path_contour_shapes.dart';
 
 /// Benchmarks the collision detection system when one of the shapes is a
 /// hitbox sampled from a [Path] contour, against every other hitbox type and
@@ -26,7 +26,7 @@ const _worldSize = 800.0;
 /// The subject is the shape under test, the other is what it collides with.
 enum ShapeKind { circle, rectangle, polygon, path }
 
-/// The anchor points of the flame path in `path_contour_shapes.dart`, which is
+/// The anchor points of [TestPaths.flame], which is
 /// what a hand-written polygon of that shape would look like.
 final _flameVertices = [
   Vector2(62.0, 42.8),
@@ -159,7 +159,7 @@ _Polygon _flamePolygonHitbox(Vector2 size) {
 }
 
 _Polygon _flamePathHitbox(Vector2 size) {
-  final path = pathContourShape(1, size.toSize());
+  final path = TestPaths.byIndex(1, size.toSize());
   return _Polygon.fromPath(path, anchor: Anchor.center, position: size / 2);
 }
 

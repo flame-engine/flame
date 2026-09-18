@@ -7,8 +7,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-
-import 'path_contour_shapes.dart';
+import 'package:flame_test/flame_test.dart';
 
 /// Measures what it costs to build hitboxes from sampled [Path] contours
 /// compared with a hand-written polygon, and how the sampled vertices behave
@@ -43,8 +42,8 @@ void _reportSampling() {
     'shape       granularity  vertices  '
     'convert (microseconds)  max error (px)  path length',
   );
-  for (var index = 0; index < pathContourShapeNames.length; index++) {
-    final path = pathContourShape(index, _shapeSize);
+  for (var index = 0; index < TestPaths.names.length; index++) {
+    final path = TestPaths.byIndex(index, _shapeSize);
     final length = path.contours.contoursLength;
     for (final granularity in [1.0, 2.0]) {
       // The conversion is short enough to be measured before the compiler has
@@ -63,7 +62,7 @@ void _reportSampling() {
           ? '  (${contours.length} contours)'
           : '';
       print(
-        '${pathContourShapeNames[index].padRight(11)} '
+        '${TestPaths.names[index].padRight(11)} '
         '${granularity.toStringAsFixed(1).padLeft(11)}  '
         '${polygon.length.toString().padLeft(8)}  '
         '${microseconds.toStringAsFixed(0).padLeft(22)}  '
@@ -78,13 +77,13 @@ void _reportScaleSensitivity() {
   print('');
   print('Scale sensitivity of the sampler at granularity 2.0');
   print('shape       size  vertices  max error (px)');
-  for (var index = 0; index < pathContourShapeNames.length; index++) {
+  for (var index = 0; index < TestPaths.names.length; index++) {
     for (final side in [20.0, 100.0, 500.0, 2000.0]) {
-      final path = pathContourShape(index, Size(side, side));
+      final path = TestPaths.byIndex(index, Size(side, side));
       final polygon = path.walkContours(2).first;
       final error = _maxError(path.contours.first, polygon);
       print(
-        '${pathContourShapeNames[index].padRight(11)} '
+        '${TestPaths.names[index].padRight(11)} '
         '${side.toStringAsFixed(0).padLeft(4)}  '
         '${polygon.length.toString().padLeft(8)}  '
         '${error.toStringAsFixed(2).padLeft(14)}',
@@ -100,8 +99,8 @@ void _reportRayIntersectionCost() {
   final rays = _randomRays(Random(1), 300);
   final hitboxes = <String, PolygonHitbox>{
     'hand-written': _handWrittenHitbox(Vector2.zero()),
-    for (var index = 0; index < pathContourShapeNames.length; index++)
-      pathContourShapeNames[index]: _contourHitbox(index, Vector2.zero()),
+    for (var index = 0; index < TestPaths.names.length; index++)
+      TestPaths.names[index]: _contourHitbox(index, Vector2.zero()),
   };
   final result = RaycastResult<ShapeHitbox>();
   for (final entry in hitboxes.entries) {
@@ -137,7 +136,7 @@ void _reportInsideAgreement() {
   print('isInsideHitbox agreement with Path.contains over rays that hit');
   print('shape        hits  differs');
   final rays = _randomRays(Random(2), 160);
-  for (var index = 0; index < pathContourShapeNames.length; index++) {
+  for (var index = 0; index < TestPaths.names.length; index++) {
     final hitbox = _contourHitbox(index, Vector2.zero());
     final polygon = Path()
       ..addPolygon(
@@ -157,7 +156,7 @@ void _reportInsideAgreement() {
       }
     }
     print(
-      '${pathContourShapeNames[index].padRight(11)} '
+      '${TestPaths.names[index].padRight(11)} '
       '${hits.toString().padLeft(6)}  '
       '${differs.toString().padLeft(7)}',
     );
@@ -174,8 +173,8 @@ void _reportSimplification() {
   final rays = _randomRays(Random(1), 300);
   final result = RaycastResult<ShapeHitbox>();
   final intersections = PolygonPolygonIntersections();
-  for (var index = 0; index < pathContourShapeNames.length; index++) {
-    final path = pathContourShape(index, _shapeSize);
+  for (var index = 0; index < TestPaths.names.length; index++) {
+    final path = TestPaths.byIndex(index, _shapeSize);
     final polygon = path.walkContourAt(0, 1, 0);
     for (final tolerance in [0.25, 0.5, 1.0]) {
       final simplified = path.walkContourAt(0, 1, tolerance);
@@ -198,7 +197,7 @@ void _reportSimplification() {
       final rayNanoseconds = rayMicroseconds * 1000 / rays.length;
       final error = _maxError(path.contours.first, simplified);
       print(
-        '${pathContourShapeNames[index].padRight(11)} '
+        '${TestPaths.names[index].padRight(11)} '
         '${tolerance.toStringAsFixed(2).padLeft(9)}  '
         '${polygon.length.toString().padLeft(6)}  '
         '${simplified.length.toString().padLeft(5)}  '
@@ -215,7 +214,7 @@ void _reportPolygonIntersectionCost() {
   print('PolygonPolygonIntersections.intersect cost per call in microseconds');
   print('shape         vertices  overlapping  separated');
   final intersections = PolygonPolygonIntersections();
-  for (var index = -1; index < pathContourShapeNames.length; index++) {
+  for (var index = -1; index < TestPaths.names.length; index++) {
     PolygonHitbox make(Vector2 position) => index < 0
         ? _handWrittenHitbox(position)
         : _contourHitbox(index, position);
@@ -232,7 +231,7 @@ void _reportPolygonIntersectionCost() {
       () => intersections.intersect(first, separated),
       repetitions: 21,
     );
-    final name = index < 0 ? 'hand-written' : pathContourShapeNames[index];
+    final name = index < 0 ? 'hand-written' : TestPaths.names[index];
     print(
       '${name.padRight(13)} '
       '${first.vertices.length.toString().padLeft(8)}  '
@@ -251,7 +250,7 @@ PolygonHitbox _handWrittenHitbox(Vector2 position) => PolygonHitbox.relative(
 
 PolygonHitbox _contourHitbox(int index, Vector2 position) =>
     PolygonHitbox.fromPath(
-      pathContourShape(index, _shapeSize),
+      TestPaths.byIndex(index, _shapeSize),
       anchor: Anchor.center,
       position: position,
     );

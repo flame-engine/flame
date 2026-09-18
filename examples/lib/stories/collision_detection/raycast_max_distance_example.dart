@@ -9,6 +9,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_noise/flame_noise.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 
 class RaycastMaxDistanceExample extends FlameGame with HasCollisionDetection {
@@ -74,7 +75,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
   void _addMovingShape() {
     final rnd = Random();
     final size = Vector2(20, 40) * 1.5;
-    final path = rnd.nextIntBetween(0, numTestPaths);
+    final path = rnd.nextIntBetween(0, TestPaths.count);
     final component = pathComponent(
       path,
       size.toSize(),

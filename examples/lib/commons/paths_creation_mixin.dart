@@ -6,15 +6,16 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame_test/flame_test.dart';
 
 mixin PathsCreationMixin on FlameGame {
   final random = Random();
 
   var _lastRandom = -1;
   int get nextRandomPath {
-    var index = random.nextIntBetween(0, numTestPaths);
+    var index = random.nextIntBetween(0, TestPaths.count);
     while (index == _lastRandom) {
-      index = random.nextIntBetween(0, numTestPaths);
+      index = random.nextIntBetween(0, TestPaths.count);
     }
     _lastRandom = index;
     return index;

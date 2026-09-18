@@ -13,6 +13,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
+import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
 
 const side = 200.0;
@@ -434,7 +435,7 @@ class RaysInShapeWorld extends World
           ..renderShape = true,
       ],
     ),
-    for (var index = 0; index < numTestPaths; ++index)
+    for (var index = 0; index < TestPaths.count; ++index)
       pathComponent(index, _pathSize, renderHitboxes: true),
   ];
 
@@ -646,7 +647,7 @@ class RaysInShapeWorld extends World
       case 2:
         shape = 'relative';
       default:
-        shape = pathContourShapeNames[_componentIndex - 3];
+        shape = TestPaths.names[_componentIndex - 3];
     }
     message += '$shape ';
     message += elapsedString(elapsed).padLeft(7);
