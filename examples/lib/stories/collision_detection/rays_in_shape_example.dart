@@ -25,12 +25,12 @@ typedef ButtonColors = (Color, Color);
 class RaysInShapeExample extends FlameGame<RaysInShapeWorld> {
   static const description = '''
 In this example we showcase the raytrace functionality where you can see whether
-the rays are inside the shapes or not. Double-click to change the shape that the rays
-are casted against. The rays originates from small circles, and if the circle is
-inside the shape it will be red, otherwise green. And if the ray doesn't hit any
-shape it will be gray. Click once in all shapes but the circle to toggle
-the ray casting/intersection behavior between the (current) crossings approach
-and the point-containment proposal, which should be used for concave polygons.
+the rays are inside the shapes or not. The rays originate from small circles,
+and if the circle is inside the shape it will be green, otherwise red. And if
+the ray doesn't hit any shape it will be gray. Drag a circle to move its ray and
+drag its line to aim it. The Shape button changes the shape that the rays are
+casted against, which includes concave shapes made from paths, the Rays button
+casts a new set of rays and the Rotate button rotates the shape.
 ''';
 
   TextRenderer get textRenderer => TextPaint(
@@ -439,8 +439,6 @@ class RaysInShapeWorld extends World
       pathComponent(index, _pathSize, renderHitboxes: true),
   ];
 
-  final _ignoredHitboxes = <PolygonHitbox>[];
-
   late TextComponent _textComponent;
   TextPaint get _textRenderer => TextPaint(
     style: const TextStyle(
@@ -463,12 +461,9 @@ class RaysInShapeWorld extends World
     return _hovering.contains(circle);
   }
 
-  int get numHovering => _hovering.length;
   bool get hasHovering => _hovering.isNotEmpty;
 
   final _hovering = <RayCircleComponent>{};
-  bool useContainment = false;
-  int? hoveredRay;
   Effect? rotate;
   bool isRotating = false;
 
@@ -617,11 +612,7 @@ class RaysInShapeWorld extends World
 
     _startTimer();
     for (final ray in _rays) {
-      final result = collisionDetection.raycast(
-        ray,
-        ignoreHitboxes: _ignoredHitboxes,
-      );
-      _intersections[ray] = result;
+      _intersections[ray] = collisionDetection.raycast(ray);
     }
     final elapsed = _advanceTimer();
     if (elapsed != null) {
