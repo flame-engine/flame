@@ -99,6 +99,7 @@ bounce on will appear.
             PathComponent(
               path: path,
               position: Vector2.all(350),
+              anchor: Anchor.center,
               paint: boxPaint,
               filterHitboxes: false,
             ),

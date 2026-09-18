@@ -89,8 +89,8 @@ PathComponent pathComponent(
   bool? renderHitboxes,
   Anchor? anchor,
 }) {
-  // Create a standard test path with our chosen size but the original
-  // aspect ratio; this is centered by default.
+  // Create a standard test path that fits within our chosen size with its
+  // original aspect ratio.
   final path = TestPaths.byIndex(index % TestPaths.count, size);
 
   // Create a component that displays the whole path: we filter all hitboxes
@@ -99,8 +99,7 @@ PathComponent pathComponent(
     path: path,
     priority: shapePriority,
     position: position ?? Vector2.zero(),
-    size: size.toVector2(),
-    anchor: anchor,
+    anchor: anchor ?? Anchor.center,
     paint: paint ?? pathStroke,
     hitboxesPaint: contourPaint,
     renderHitboxes: renderHitboxes ?? false,

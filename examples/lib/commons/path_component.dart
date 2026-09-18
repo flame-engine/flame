@@ -7,17 +7,21 @@ import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 
+/// Renders a [Path] and gives it a hitbox for each of its contours.
+///
+/// The path is moved so that its bounds start at the origin of the component,
+/// which gets the size of those bounds, so that the anchor and the transform
+/// of the component apply to the path like to any other shape.
 class PathComponent extends ShapeComponent
     with CollisionCallbacks, CollisionPassthrough {
   PathComponent({
-    required this.path,
+    required Path path,
     this.addHitboxes = false,
     this.loadHitboxes = true,
     this.renderHitboxes = false,
     this.filterHitboxes = true,
     this.hitboxesPaint,
     super.position,
-    super.size,
     super.scale,
     super.angle,
     super.anchor,
@@ -26,7 +30,8 @@ class PathComponent extends ShapeComponent
     super.key,
     super.paint,
     super.paintLayers,
-  }) {
+  }) : path = path.toOrigin,
+       super(size: path.getBounds().size.toVector2()) {
     if (addHitboxes) {
       _addHitboxes();
     }
