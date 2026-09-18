@@ -13,7 +13,6 @@ class PathComponent extends ShapeComponent
     required this.path,
     this.addHitboxes = false,
     this.loadHitboxes = true,
-    this.hasHitboxes = true,
     this.renderHitboxes = false,
     this.filterHitboxes = true,
     this.hitboxesPaint,
@@ -34,15 +33,17 @@ class PathComponent extends ShapeComponent
   }
 
   final Path path;
-  final bool hasHitboxes;
+
+  /// Whether the hitboxes are added right away, in the constructor.
+  final bool addHitboxes;
+
+  /// Whether the hitboxes are added when the component loads.
+  final bool loadHitboxes;
   final bool renderHitboxes;
   final bool filterHitboxes;
   final Paint? hitboxesPaint;
 
   List<PolygonHitbox> get hitboxes => _hitboxes;
-
-  late bool addHitboxes;
-  late bool loadHitboxes;
 
   var _hitboxesAdded = false;
   late final _hitboxes = _hitboxesFor(path);
