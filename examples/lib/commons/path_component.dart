@@ -90,11 +90,7 @@ class PathComponent extends ShapeComponent
     // area in order to approximate full inclusion.
     hitboxes.sort((a, b) => (b.size.length2 - a.size.length2).toInt());
     final first = hitboxes.first;
-    final area = Rect.fromCenter(
-      center: Offset(first.x, first.y),
-      width: first.width,
-      height: first.height,
-    );
+    final area = first.toRect();
 
     // We always keep the first hitbox (the largest one): the others
     // are discarded if they fit entirely within it.
@@ -103,33 +99,19 @@ class PathComponent extends ShapeComponent
         if (element == first) {
           return false;
         }
-        final bounds = Rect.fromCenter(
-          center: Offset(element.x, element.y),
-          width: element.width,
-          height: element.height,
-        );
-        return area.expandToInclude(bounds) == area;
+        return area.expandToInclude(element.toRect()) == area;
       });
     }
     return hitboxes;
   }
 
   List<PolygonHitbox> _hitboxesFor(Path path) {
-    final hitboxes = <PolygonHitbox>[];
-    final contours = path.walkContours();
-    for (final contour in contours) {
-      final rectangle = contour.rectangle;
-      hitboxes.add(
-        PolygonHitbox(
-            contour.vertices,
-            anchor: .center,
-            position: rectangle.center.toVector2(),
-          )
+    return [
+      for (var contour = 0; contour < path.contours.length; contour++)
+        PolygonHitbox.fromPath(path, contour: contour)
           ..priority = priority + 1
           ..paint = hitboxesPaint ?? whiteStroke
           ..renderShape = renderHitboxes,
-      );
-    }
-    return hitboxes;
+    ];
   }
 }
