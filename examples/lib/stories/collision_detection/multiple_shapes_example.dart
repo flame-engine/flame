@@ -206,8 +206,14 @@ class CollidablePath extends MyCollidable {
     super.velocity,
     super.screenHitbox,
   ) {
+    // The path is centered on the origin, so the hitbox is placed in the
+    // middle of the component.
     final path = randomPath(size.toSize());
-    hitbox = PolygonHitbox.fromPath(path)..renderShape = true;
+    hitbox = PolygonHitbox.fromPath(
+      path,
+      position: size / 2,
+      anchor: Anchor.center,
+    )..renderShape = true;
     add(hitbox!);
   }
 }
