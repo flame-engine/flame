@@ -1,11 +1,11 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
-import 'package:flame/extensions.dart'
-    show Aabb2Extension, PathExtension, SizeExtension;
+import 'package:flame/extensions.dart' show Aabb2Extension, PathExtension;
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 
@@ -46,7 +46,7 @@ class ShapesExample extends FlameGame {
         Vector2(750, 60),
         Vector2(590, 30),
       ]),
-      ...polygons.reversed,
+      ...polygons,
     ];
     final colors = [
       const Color(0xFFFFFF88),
@@ -55,8 +55,8 @@ class ShapesExample extends FlameGame {
       const Color(0xFF88FF88),
       const Color(0xFFaaaaFF),
       const Color(0xFFFF8888),
-      for (var index = contours.length - 1; index >= 0; --index)
-        if (disjoint[index]) disjointColor else overlapColor,
+      for (final isDisjoint in disjoint)
+        if (isDisjoint) disjointColor else overlapColor,
     ];
     add(ShapesComponent(shapes, colors));
     add(DotsComponent(shapes, colors));
@@ -69,13 +69,8 @@ class ShapesExample extends FlameGame {
     }
     // Sort the polygons by size: we will use the largest area
     // in order to approximate full inclusion.
-    polygons.sort(
-      (a, b) =>
-          (b.aabb.toRect().size.toVector2().length2 -
-                  a.aabb.toRect().size.toVector2().length2)
-              .toInt(),
-    );
-    final largest = polygons.first;
+    polygons.sortBy((polygon) => (polygon.aabb.max - polygon.aabb.min).length2);
+    final largest = polygons.last;
     final area = largest.aabb.toRect();
 
     return polygons

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -86,17 +87,17 @@ class PathComponent extends ShapeComponent
     if (hitboxes.length < 2) {
       return hitboxes;
     }
-    // Sort the hitboxes by size in ascending order: we will use the largest
-    // area in order to approximate full inclusion.
-    hitboxes.sort((a, b) => (b.size.length2 - a.size.length2).toInt());
-    final first = hitboxes.first;
-    final area = first.toRect();
+    // Sort the hitboxes by size: we will use the largest area in order to
+    // approximate full inclusion.
+    hitboxes.sortBy((hitbox) => hitbox.size.length2);
+    final largest = hitboxes.last;
+    final area = largest.toRect();
 
-    // We always keep the first hitbox (the largest one): the others
-    // are discarded if they fit entirely within it.
+    // We always keep the largest hitbox: the others are discarded if they fit
+    // entirely within it.
     if (filterHitboxes) {
       hitboxes.removeWhere((element) {
-        if (element == first) {
+        if (element == largest) {
           return false;
         }
         return area.expandToInclude(element.toRect()) == area;
