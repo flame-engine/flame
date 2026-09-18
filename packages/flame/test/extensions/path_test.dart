@@ -206,6 +206,15 @@ void main() {
       final polygon = path.walkContours(1e-7, 0.5).single;
       expect(polygon.length, lessThan(200));
     });
+
+    test('a closed contour always gives at least three vertices', () {
+      final oval = Path()..addOval(const Rect.fromLTWH(0, 0, 4, 2));
+      for (final (granularity, tolerance) in [(1000.0, null), (1.0, 100.0)]) {
+        final polygon = oval.walkContours(granularity, tolerance).single;
+        expect(polygon.length, greaterThanOrEqualTo(3));
+        expect(polygon.toSet(), hasLength(polygon.length));
+      }
+    });
   });
 
   group('walkContourAt', () {

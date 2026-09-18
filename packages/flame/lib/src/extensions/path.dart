@@ -124,6 +124,10 @@ extension PathMetricExtension on PathMetric {
   /// the contour. The [tolerance] defaults to half of the [granularity], and
   /// the samples themselves are taken so that the contour stays within a sixth
   /// of it. A [tolerance] of zero keeps every sample.
+  ///
+  /// A closed contour gives at least three vertices whatever the
+  /// [granularity] and the [tolerance] are, so that it can always be a
+  /// polygon.
   List<Offset> walkContour([double granularity = 1.0, double? tolerance]) {
     assert(
       granularity.isFinite && granularity > 0,
@@ -139,15 +143,30 @@ extension PathMetricExtension on PathMetric {
     final validGranularity = granularity.isFinite && granularity > 0
         ? granularity
         : 1.0;
-    final step = max(validGranularity, length / _maxSteps);
+    // A closed contour is sampled in at least three steps, so that it can be a
+    // polygon no matter how coarse the granularity is.
+    final step = isClosed
+        ? min(max(validGranularity, length / _maxSteps), length / 3)
+        : max(validGranularity, length / _maxSteps);
     final maxDeviation = tolerance ?? step / 2;
     final sampler = _ContourSampler(this, step, maxDeviation / 6)..sample();
-    return _simplify(
+    final points = _simplify(
       sampler.points,
       sampler.anchors,
       closed: sampler.isClosed,
       tolerance: maxDeviation,
     );
+    if (sampler.isClosed && points.length < 3 && sampler.points.length >= 3) {
+      return _spread(sampler.points, 3);
+    }
+    return points;
+  }
+
+  /// Returns [count] of the [points], evenly spread over them.
+  static List<Offset> _spread(List<Offset> points, int count) {
+    return [
+      for (var i = 0; i < count; i++) points[i * points.length ~/ count],
+    ];
   }
 
   /// Remove the [points] that are within [tolerance] of the edge that replaces
@@ -338,7 +357,11 @@ class _ContourSampler {
     if (first == null) {
       return;
     }
-    final maxStride = _step * _maxStepsPerStride;
+    // The strides grow past the step on flat stretches, so a closed contour
+    // caps them as well to keep its three steps.
+    final maxStride = _metric.isClosed
+        ? min(_step * _maxStepsPerStride, length / 3)
+        : _step * _maxStepsPerStride;
     final minStride = _maxDeviation > 0 ? _step / _subdivisionsPerStep : _step;
 
     points.add(first.position);
