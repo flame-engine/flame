@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:examples/commons/cancellable_button_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:examples/commons/rounded_rect_component.dart';
 import 'package:flame/collisions.dart';
@@ -104,7 +103,7 @@ casts a new set of rays and the Rotate button rotates the shape.
     final colors = _getColorsFor(color);
     final disabledColor = colors.$2;
     final downColor = colors.$1;
-    return CancellableButtonComponent(
+    return AdvancedButtonComponent(
       position: Vector2(x, y),
       size: buttonSize,
       anchor: anchor,
