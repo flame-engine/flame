@@ -27,7 +27,10 @@ This examples showcases how raycast APIs can be used to detect hits within certa
     text: "Hey! Who's there?",
     anchor: Anchor.center,
     textRenderer: TextPaint(
-      style: const TextStyle(fontSize: 8, color: Colors.amber),
+      style: const TextStyle(
+        fontSize: 8,
+        color: Colors.amber,
+      ),
     ),
   );
 
@@ -51,7 +54,10 @@ This examples showcases how raycast APIs can be used to detect hits within certa
 
     _text.position = _character.position - Vector2(0, 50);
 
-    _ray = Ray2(origin: _character.absolutePosition, direction: Vector2(1, 0));
+    _ray = Ray2(
+      origin: _character.absolutePosition,
+      direction: Vector2(1, 0),
+    );
   }
 
   void _addMovingShape() {
@@ -67,7 +73,11 @@ This examples showcases how raycast APIs can be used to detect hits within certa
     component.add(
       MoveByEffect(
         Vector2(50, 0),
-        EffectController(duration: 2, alternate: true, infinite: true),
+        EffectController(
+          duration: 2,
+          alternate: true,
+          infinite: true,
+        ),
       ),
     );
     world.add(component);
@@ -115,8 +125,15 @@ class _Character extends PositionComponent {
         anchor: Anchor.center,
         paint: BasicPalette.green.paint(),
       )..scale = Vector2(0.55, 1),
-      CircleComponent(radius: 10, anchor: Anchor.center, paint: _rayPaint),
-      RectangleComponent(size: Vector2(10, 3), position: Vector2(12, 5)),
+      CircleComponent(
+        radius: 10,
+        anchor: Anchor.center,
+        paint: _rayPaint,
+      ),
+      RectangleComponent(
+        size: Vector2(10, 3),
+        position: Vector2(12, 5),
+      ),
     ]);
   }
 

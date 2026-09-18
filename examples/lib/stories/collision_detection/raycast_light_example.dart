@@ -118,7 +118,11 @@ with with mouse.
         continue;
       }
       final intersectionPoint = result.intersectionPoint!.toOffset();
-      canvas.drawLine(originOffset, intersectionPoint, paint);
+      canvas.drawLine(
+        originOffset,
+        intersectionPoint,
+        paint,
+      );
     }
   }
 }

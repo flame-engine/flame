@@ -33,12 +33,15 @@ class _GestureHitboxesWorld extends World
     final hitbox = switch (shapeType) {
       Shapes.circle => CircleHitbox(),
       Shapes.rectangle => RectangleHitbox(),
-      Shapes.polygon => PolygonHitbox.relative([
-        -Vector2.random(_rng),
-        Vector2.random(_rng)..x *= -1,
-        Vector2.random(_rng),
-        Vector2.random(_rng)..y *= -1,
-      ], parentSize: shapeSize),
+      Shapes.polygon => PolygonHitbox.relative(
+        [
+          -Vector2.random(_rng),
+          Vector2.random(_rng)..x *= -1,
+          Vector2.random(_rng),
+          Vector2.random(_rng)..y *= -1,
+        ],
+        parentSize: shapeSize,
+      ),
       Shapes.path => PolygonHitbox.fromPath(
         randomPath(shapeSize.toSize()),
         position: shapeSize * 0.5,

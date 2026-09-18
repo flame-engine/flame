@@ -88,7 +88,11 @@ around trying not to hit them.
         continue;
       }
       final intersectionPoint = result.intersectionPoint!.toOffset();
-      canvas.drawLine(originOffset, intersectionPoint, paint);
+      canvas.drawLine(
+        originOffset,
+        intersectionPoint,
+        paint,
+      );
     }
     canvas.drawCircle(originOffset, 5, paint);
   }
