@@ -5,7 +5,7 @@ import 'package:examples/commons/path_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 
 final _rnd = Random();
 
@@ -31,7 +31,7 @@ class StatePaints {
     required Color normal,
     required Color hovered,
     required Color active,
-  }) : normal = _stroke(normal, 1),
+  }) : normal = _stroke(normal),
        hovered = _stroke(hovered, 1.05),
        active = _stroke(active, 1.25);
 
@@ -46,11 +46,15 @@ class StatePaints {
     return isHovering ? hovered : normal;
   }
 
-  static Paint _stroke(Color color, double width) {
-    return Paint()
+  /// A hairline stroke, unless a [width] is given.
+  static Paint _stroke(Color color, [double? width]) {
+    final paint = Paint()
       ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = width;
+      ..style = PaintingStyle.stroke;
+    if (width != null) {
+      paint.strokeWidth = width;
+    }
+    return paint;
   }
 }
 
