@@ -151,6 +151,10 @@ These are the fields that can be used to customize the looks of the `AdvancedBut
 - `disabledSkin`: Component displayed when button is disabled.
 - `disabledLabel`: Component shown on top of skins when button is disabled.
 
+To act upon the button, pass in the `onPressed`, `onReleased` and `onCancelled` callbacks. The
+`onCancelled` callback is called when a tap is cancelled, for example when the pointer is dragged
+outside of the button before it is released, and the button then returns to its default state.
+
 
 ## ToggleButtonComponent
 
