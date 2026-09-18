@@ -287,8 +287,6 @@ class RayCircleComponent extends CircleComponent
     _isDragging = false;
   }
 
-  final _segmentFactor = pi * 10;
-
   @override
   bool containsLocalPoint(Vector2 point) {
     _lineDrag = false;
@@ -296,10 +294,11 @@ class RayCircleComponent extends CircleComponent
     final taxiDistance = point.x.abs() + point.y.abs();
     var result = taxiDistance <= length || super.containsLocalPoint(point);
     if (!result) {
-      // Why the enormous factor to pick correctly within the epsilon...?
+      // The epsilon is compared with a cross product, which is the distance
+      // to the line times the length of the segment.
       result = _lineSegment.containsPoint(
         point,
-        epsilon: length * _segmentFactor,
+        epsilon: length * _lineSegment.length,
       );
       _lineDrag = result;
     }
