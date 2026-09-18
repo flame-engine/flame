@@ -82,6 +82,38 @@ void main() {
       expect(releasedTimes, 1);
     });
 
+    testWithFlameGame('returns to the default state on tap cancel', (
+      game,
+    ) async {
+      var cancelledTimes = 0;
+      final states = <ButtonState>[];
+      final componentSize = Vector2.all(10);
+      final buttonPosition = Vector2.all(100);
+      game.onGameResize(Vector2.all(200));
+      await game.ensureAdd(
+        AdvancedButtonComponent(
+          defaultSkin: RectangleComponent(size: componentSize),
+          downSkin: RectangleComponent(size: componentSize),
+          onCancelled: () => cancelledTimes++,
+          onChangeState: states.add,
+          position: buttonPosition,
+          size: componentSize,
+        ),
+      );
+      final tapDispatcher = game.firstChild<MultiTapDispatcher>()!;
+
+      tapDispatcher.handleTapDown(
+        1,
+        TapDownDetails(globalPosition: buttonPosition.toOffset()),
+      );
+      expect(states, [ButtonState.down]);
+      expect(cancelledTimes, 0);
+
+      tapDispatcher.handleTapCancel(1);
+      expect(states, [ButtonState.down, ButtonState.up]);
+      expect(cancelledTimes, 1);
+    });
+
     testWithFlameGame('correctly registers taps onGameResize', (game) async {
       var pressedTimes = 0;
       var releasedTimes = 0;
