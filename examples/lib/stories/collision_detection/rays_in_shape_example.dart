@@ -13,7 +13,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flame/text.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 import 'package:flutter/material.dart';
 
 const side = 200.0;
@@ -293,7 +293,8 @@ class RayCircleComponent extends CircleComponent
     final length = radius * 2;
     final taxiDistance = point.x.abs() + point.y.abs();
     var result = taxiDistance <= length || super.containsLocalPoint(point);
-    if (!result) {
+    // A segment without a length contains every point.
+    if (!result && _lineSegment.from != _lineSegment.to) {
       // The epsilon is compared with a cross product, which is the distance
       // to the line times the length of the segment.
       result = _lineSegment.containsPoint(

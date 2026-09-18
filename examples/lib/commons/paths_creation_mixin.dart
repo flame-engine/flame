@@ -6,7 +6,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 
 mixin PathsCreationMixin on FlameGame {
   final random = Random();

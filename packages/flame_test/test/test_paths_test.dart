@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 import 'package:test/test.dart';
 
 void main() {

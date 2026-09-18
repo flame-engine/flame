@@ -9,7 +9,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_noise/flame_noise.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 import 'package:flutter/material.dart';
 
 class RaycastMaxDistanceExample extends FlameGame with HasCollisionDetection {

@@ -7,7 +7,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 
 /// Measures what it costs to build hitboxes from sampled [Path] contours
 /// compared with a hand-written polygon, and how the sampled vertices behave
@@ -42,7 +42,7 @@ void _reportSampling() {
     'shape       granularity  vertices  '
     'convert (microseconds)  max error (px)  path length',
   );
-  for (var index = 0; index < TestPaths.names.length; index++) {
+  for (var index = 0; index < TestPaths.count; index++) {
     final path = TestPaths.byIndex(index, _shapeSize);
     final length = path.contours.contoursLength;
     for (final granularity in [1.0, 2.0]) {
@@ -77,7 +77,7 @@ void _reportScaleSensitivity() {
   print('');
   print('Scale sensitivity of the sampler at granularity 2.0');
   print('shape       size  vertices  max error (px)');
-  for (var index = 0; index < TestPaths.names.length; index++) {
+  for (var index = 0; index < TestPaths.count; index++) {
     for (final side in [20.0, 100.0, 500.0, 2000.0]) {
       final path = TestPaths.byIndex(index, Size(side, side));
       final polygon = path.walkContours(2).first;
@@ -99,7 +99,7 @@ void _reportRayIntersectionCost() {
   final rays = _randomRays(Random(1), 300);
   final hitboxes = <String, PolygonHitbox>{
     'hand-written': _handWrittenHitbox(Vector2.zero()),
-    for (var index = 0; index < TestPaths.names.length; index++)
+    for (var index = 0; index < TestPaths.count; index++)
       TestPaths.names[index]: _contourHitbox(index, Vector2.zero()),
   };
   final result = RaycastResult<ShapeHitbox>();
@@ -136,7 +136,7 @@ void _reportInsideAgreement() {
   print('isInsideHitbox agreement with Path.contains over rays that hit');
   print('shape        hits  differs');
   final rays = _randomRays(Random(2), 160);
-  for (var index = 0; index < TestPaths.names.length; index++) {
+  for (var index = 0; index < TestPaths.count; index++) {
     final hitbox = _contourHitbox(index, Vector2.zero());
     final polygon = Path()
       ..addPolygon(
@@ -173,7 +173,7 @@ void _reportSimplification() {
   final rays = _randomRays(Random(1), 300);
   final result = RaycastResult<ShapeHitbox>();
   final intersections = PolygonPolygonIntersections();
-  for (var index = 0; index < TestPaths.names.length; index++) {
+  for (var index = 0; index < TestPaths.count; index++) {
     final path = TestPaths.byIndex(index, _shapeSize);
     final polygon = path.walkContourAt(0, 1, 0);
     for (final tolerance in [0.25, 0.5, 1.0]) {
@@ -214,7 +214,7 @@ void _reportPolygonIntersectionCost() {
   print('PolygonPolygonIntersections.intersect cost per call in microseconds');
   print('shape         vertices  overlapping  separated');
   final intersections = PolygonPolygonIntersections();
-  for (var index = -1; index < TestPaths.names.length; index++) {
+  for (var index = -1; index < TestPaths.count; index++) {
     PolygonHitbox make(Vector2 position) => index < 0
         ? _handWrittenHitbox(position)
         : _contourHitbox(index, position);

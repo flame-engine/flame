@@ -22,10 +22,12 @@ class ShapesExample extends FlameGame {
     const flameSize = Size(200, 200);
     final flame = randomPath(flameSize).shift(const Offset(300, 350));
     final contours = flame.contours;
+    // Sorted by size, so that the largest one is drawn first and can be used
+    // to approximate full inclusion.
     final polygons = [
       for (var index = 0; index < contours.length; ++index)
         Polygon.fromPath(flame, contour: index),
-    ];
+    ]..sortBy((polygon) => (polygon.aabb.max - polygon.aabb.min).length2);
     final disjoint = _findDisjoint(polygons);
     final disjointColor = BasicPalette.lightOrange.color;
     final overlapColor = BasicPalette.yellow.color.withValues(alpha: 0.8);
@@ -63,13 +65,12 @@ class ShapesExample extends FlameGame {
     add(FpsTextComponent(position: Vector2(8, size.y - 24), priority: 1));
   }
 
+  /// Whether each of the [polygons], which have to be sorted by size, is
+  /// outside of the largest one.
   List<bool> _findDisjoint(List<Polygon> polygons) {
     if (polygons.length < 2) {
       return polygons.isEmpty ? [] : [true];
     }
-    // Sort the polygons by size: we will use the largest area
-    // in order to approximate full inclusion.
-    polygons.sortBy((polygon) => (polygon.aabb.max - polygon.aabb.min).length2);
     final largest = polygons.last;
     final area = largest.aabb.toRect();
 

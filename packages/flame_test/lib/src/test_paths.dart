@@ -1,51 +1,43 @@
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui';
+
+import 'package:flame/extensions.dart';
 
 /// A set of [Path]s with different kinds of contours, for tests, benchmarks
 /// and examples of code that works on paths.
 ///
 /// The paths are in the coordinates that they were drawn in, so they differ
 /// in size and position. [byIndex] and [byName] return them fitted into a
-/// given size and centered on the origin, apart from [roundRect] which takes
-/// its size directly.
+/// given size, with their aspect ratio kept, and centered on the origin. Only
+/// [roundRect] takes its size directly, so it is never scaled by them.
 abstract final class TestPaths {
-  /// The names of the paths, in the order of their indices.
-  static const names = [
-    'roundRect',
-    'flame',
-    'invader1',
-    'invader2',
-    'invader3',
-    'clover',
-    'abstract',
-    'alien1',
-    'alien2',
-    'setup',
-    'recycle',
+  static final _paths = <(String, Path Function(Size))>[
+    ('roundRect', roundRect),
+    ('flame', (_) => flame()),
+    ('invader1', (_) => invader1()),
+    ('invader2', (_) => invader2()),
+    ('invader3', (_) => invader3()),
+    ('clover', (_) => clover()),
+    ('abstract', (_) => abstractShape()),
+    ('alien1', (_) => alien1()),
+    ('alien2', (_) => alien2()),
+    ('setup', (_) => setup()),
+    ('recycle', (_) => recycle()),
   ];
 
+  /// The names of the paths, in the order of their indices.
+  static final names = List<String>.unmodifiable([
+    for (final (name, _) in _paths) name,
+  ]);
+
   /// The amount of paths.
-  static int get count => names.length;
+  static int get count => _paths.length;
 
   /// The path with the given [index], fitted into [size] while keeping its
   /// aspect ratio and centered on the origin.
   static Path byIndex(int index, Size size) {
-    final path = switch (index) {
-      0 => roundRect(size),
-      1 => flame(),
-      2 => invader1(),
-      3 => invader2(),
-      4 => invader3(),
-      5 => clover(),
-      6 => abstractShape(),
-      7 => alien1(),
-      8 => alien2(),
-      9 => setup(),
-      10 => recycle(),
-      _ => throw RangeError.index(index, names, 'index'),
-    };
-    return _fit(path, size);
+    final (_, build) = _paths[index];
+    return build(size).centered.resizeTo(size, keepRatio: true);
   }
 
   /// The path with the given [name], fitted into [size] while keeping its
@@ -56,20 +48,6 @@ abstract final class TestPaths {
       throw ArgumentError.value(name, 'name', 'Not one of $names');
     }
     return byIndex(index, size);
-  }
-
-  static Path _fit(Path path, Size size) {
-    final bounds = path.getBounds();
-    final scale = min(size.width / bounds.width, size.height / bounds.height);
-    final center = bounds.center;
-    final matrix = Float64List(16)
-      ..[0] = scale
-      ..[5] = scale
-      ..[10] = 1
-      ..[12] = -center.dx * scale
-      ..[13] = -center.dy * scale
-      ..[15] = 1;
-    return path.transform(matrix);
   }
 
   static Path roundRect(Size size) {

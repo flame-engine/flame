@@ -7,7 +7,7 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flame_test/flame_test.dart';
+import 'package:flame_test/test_paths.dart';
 
 import 'common.dart';
 
@@ -159,7 +159,7 @@ _Polygon _flamePolygonHitbox(Vector2 size) {
 }
 
 _Polygon _flamePathHitbox(Vector2 size) {
-  final path = TestPaths.byIndex(1, size.toSize());
+  final path = TestPaths.byName('flame', size.toSize());
   return _Polygon.fromPath(path, anchor: Anchor.center, position: size / 2);
 }
 

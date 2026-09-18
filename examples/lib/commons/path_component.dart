@@ -107,8 +107,9 @@ class PathComponent extends ShapeComponent
   }
 
   List<PolygonHitbox> _hitboxesFor(Path path) {
+    final count = path.contours.length;
     return [
-      for (var contour = 0; contour < path.contours.length; contour++)
+      for (var contour = 0; contour < count; contour++)
         PolygonHitbox.fromPath(path, contour: contour)
           ..priority = priority + 1
           ..paint = hitboxesPaint ?? whiteStroke
