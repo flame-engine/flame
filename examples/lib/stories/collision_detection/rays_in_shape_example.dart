@@ -332,15 +332,13 @@ class RayCircleComponent extends CircleComponent
   bool _isDragging = false;
   bool _isHovering = false;
 
-  Paint get _lightPaint => isDragging
-      ? activeLightStroke
-      : (isHovering ? hoveredLightStroke : lightStroke);
-  Paint get _redPaint => isDragging
-      ? activeRedStroke
-      : (isHovering ? hoveredRedStroke : redStroke);
-  Paint get _greenPaint => isDragging
-      ? activeGreenStroke
-      : (isHovering ? hoveredGreenStroke : greenStroke);
+  Paint get _lightPaint => _paintFrom(lightStrokes);
+  Paint get _redPaint => _paintFrom(redStrokes);
+  Paint get _greenPaint => _paintFrom(greenStrokes);
+
+  Paint _paintFrom(StatePaints paints) {
+    return paints.forState(isDragging: isDragging, isHovering: isHovering);
+  }
 }
 
 class RaysInShapeWorld extends World
@@ -372,7 +370,7 @@ class RaysInShapeWorld extends World
         position: ray.origin.clone(),
         radius: 3,
         anchor: .center,
-        paint: lightStroke,
+        paint: lightStrokes.normal,
       );
       _circles[ray] = circle;
     }

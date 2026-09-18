@@ -22,47 +22,55 @@ final pathStroke = Paint()
   ..strokeCap = .round
   ..strokeJoin = .bevel;
 
-final lightStroke = Paint()
-  ..color = const Color(0x90ffffff)
-  ..style = PaintingStyle.stroke;
+/// The stroke paints of something that can be hovered and dragged.
+///
+/// Paints are expensive to create, so the three of them are created once
+/// and picked by state with [forState] whenever they are needed.
+class StatePaints {
+  StatePaints({
+    required Color normal,
+    required Color hovered,
+    required Color active,
+  }) : normal = _stroke(normal, 1),
+       hovered = _stroke(hovered, 1.05),
+       active = _stroke(active, 1.25);
 
-final hoveredLightStroke = Paint()
-  ..color = const Color(0xd0ffffff)
-  ..style = PaintingStyle.stroke
-  ..strokeWidth = 1.05;
+  final Paint normal;
+  final Paint hovered;
+  final Paint active;
 
-final activeLightStroke = Paint()
-  ..color = const Color(0xe0ffffff)
-  ..style = PaintingStyle.stroke
-  ..strokeWidth = 1.25;
+  Paint forState({required bool isDragging, required bool isHovering}) {
+    if (isDragging) {
+      return active;
+    }
+    return isHovering ? hovered : normal;
+  }
 
-final greenStroke = Paint()
-  ..color = const Color(0xd000ff00)
-  ..style = PaintingStyle.stroke;
+  static Paint _stroke(Color color, double width) {
+    return Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = width;
+  }
+}
 
-final hoveredGreenStroke = Paint()
-  ..color = const Color(0xef00ff00)
-  ..style = PaintingStyle.stroke
-  ..strokeWidth = 1.05;
+final lightStrokes = StatePaints(
+  normal: const Color(0x90ffffff),
+  hovered: const Color(0xd0ffffff),
+  active: const Color(0xe0ffffff),
+);
 
-final activeGreenStroke = Paint()
-  ..color = const Color(0xff00ff00)
-  ..style = PaintingStyle.stroke
-  ..strokeWidth = 1.25;
+final greenStrokes = StatePaints(
+  normal: const Color(0xd000ff00),
+  hovered: const Color(0xef00ff00),
+  active: const Color(0xff00ff00),
+);
 
-final redStroke = Paint()
-  ..color = const Color(0xd0ff0000)
-  ..style = PaintingStyle.stroke;
-
-final hoveredRedStroke = Paint()
-  ..color = const Color(0xe0ff0000)
-  ..style = PaintingStyle.stroke
-  ..strokeWidth = 1.05;
-
-final activeRedStroke = Paint()
-  ..color = const Color(0xffff0000)
-  ..style = PaintingStyle.stroke
-  ..strokeWidth = 1.25;
+final redStrokes = StatePaints(
+  normal: const Color(0xd0ff0000),
+  hovered: const Color(0xe0ff0000),
+  active: const Color(0xffff0000),
+);
 
 Path randomPath(Size size) {
   return TestPaths.byIndex(_rnd.nextIntBetween(0, TestPaths.count), size);

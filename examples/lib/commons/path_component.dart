@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/palette.dart';
 
 class PathComponent extends ShapeComponent
     with CollisionCallbacks, CollisionPassthrough {
@@ -47,7 +47,6 @@ class PathComponent extends ShapeComponent
 
   var _hitboxesAdded = false;
   late final _hitboxes = _hitboxesFor(path);
-  late final whiteStroke = BasicPalette.white.paint()..style = .stroke;
 
   @override
   FutureOr<void> onLoad() async {
