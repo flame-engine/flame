@@ -15,6 +15,8 @@ class PathComponent extends ShapeComponent
     with CollisionCallbacks, CollisionPassthrough {
   PathComponent({
     required Path path,
+    this.granularity = 1.0,
+    this.hitboxesPriority,
     this.addHitboxes = false,
     this.loadHitboxes = true,
     this.renderHitboxes = false,
@@ -38,11 +40,19 @@ class PathComponent extends ShapeComponent
 
   /// The default paint used to render hitboxes.
   static Paint hitboxStroke = Paint()
-    ..color = Color(0xffffffff)
+    ..color = const Color(0xffffffff)
     ..style = .stroke;
 
   /// The path to display, already rooted at the origin.
   final Path path;
+
+  /// The granularity used when sampling the path contours used to
+  /// create the hitboxes.
+  final double granularity;
+
+  /// The hitboxes priority: if not specified, by default the hitboxes
+  /// use a relative priority of 1.
+  final int? hitboxesPriority;
 
   /// Whether the hitboxes are added right away, in the constructor.
   final bool addHitboxes;
@@ -97,6 +107,7 @@ class PathComponent extends ShapeComponent
     _hitboxesAdded = true;
   }
 
+  // Filter the hitboxes by keeping only the largest and all disjoint ones.
   List<PolygonHitbox> _filterHitboxes(List<PolygonHitbox> hitboxes) {
     if (hitboxes.length < 2) {
       return hitboxes;
@@ -120,12 +131,13 @@ class PathComponent extends ShapeComponent
     return hitboxes;
   }
 
+  // Create a hitbox for each path contour.
   List<PolygonHitbox> _hitboxesFor(Path path) {
     final count = path.contours.length;
     return [
       for (var contour = 0; contour < count; contour++)
-        PolygonHitbox.fromPath(path, contour: contour)
-          ..priority = priority + 1
+        PolygonHitbox.fromPath(path, contour: contour, granularity: granularity)
+          ..priority = hitboxesPriority ?? priority + 1
           ..paint = hitboxesPaint ?? hitboxStroke
           ..renderShape = renderHitboxes,
     ];
