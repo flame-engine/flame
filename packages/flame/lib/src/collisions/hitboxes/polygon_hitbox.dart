@@ -13,10 +13,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -33,10 +32,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     double super.angle = 0,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.relative(shrinkToBounds: true) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -48,10 +46,25 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.regular() {
-    this.isSolid = isSolid;
+    this.collisionType = collisionType;
+  }
+
+  /// With this constructor you create a [PolygonHitbox] from the given
+  /// [contour] (the first by default) of a [Path], with an optional
+  /// [granularity].
+  PolygonHitbox.fromPath(
+    super.path, {
+    super.contour,
+    super.granularity,
+    super.position,
+    super.angle,
+    super.anchor,
+    super.isSolid,
+    CollisionType collisionType = CollisionType.active,
+  }) : super.fromPath() {
     this.collisionType = collisionType;
   }
 

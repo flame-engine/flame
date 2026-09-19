@@ -37,6 +37,7 @@ class PolygonComponent extends ShapeComponent {
     super.paint,
     super.paintLayers,
     super.key,
+    super.isSolid,
     bool? shrinkToBounds,
   }) : assert(
          _vertices.length > 2,
@@ -77,6 +78,7 @@ class PolygonComponent extends ShapeComponent {
     Paint? paint,
     List<Paint>? paintLayers,
     bool? shrinkToBounds,
+    bool isSolid = false,
     ComponentKey? key,
     List<Component>? children,
   }) : this(
@@ -89,6 +91,40 @@ class PolygonComponent extends ShapeComponent {
          paint: paint,
          paintLayers: paintLayers,
          shrinkToBounds: shrinkToBounds,
+         isSolid: isSolid,
+         key: key,
+         children: children,
+       );
+
+  /// With this constructor you create a [PolygonComponent] from the given
+  /// [contour] (the first by default) of a [Path], with an optional
+  /// [granularity].
+  PolygonComponent.fromPath(
+    Path path, {
+    int contour = 0,
+    double granularity = 1.0,
+    Vector2? position,
+    Vector2? scale,
+    double? angle,
+    Anchor? anchor,
+    int? priority,
+    Paint? paint,
+    List<Paint>? paintLayers,
+    bool? shrinkToBounds,
+    bool isSolid = false,
+    ComponentKey? key,
+    List<Component>? children,
+  }) : this(
+         path.walkContourAt(contour, granularity).vertices,
+         position: position,
+         angle: angle,
+         anchor: anchor,
+         scale: scale,
+         priority: priority,
+         paint: paint,
+         paintLayers: paintLayers,
+         shrinkToBounds: shrinkToBounds ?? true,
+         isSolid: isSolid,
          key: key,
          children: children,
        );
@@ -111,6 +147,7 @@ class PolygonComponent extends ShapeComponent {
     List<Paint>? paintLayers,
     ComponentKey? key,
     bool? shrinkToBounds,
+    bool isSolid = false,
   }) : this(
          List.generate(sides, (i) {
            final angle = tau * i / sides;
@@ -127,13 +164,11 @@ class PolygonComponent extends ShapeComponent {
          paintLayers: paintLayers,
          key: key,
          shrinkToBounds: shrinkToBounds,
+         isSolid: isSolid,
        );
 
   @internal
-  static List<Vector2> normalsToVertices(
-    List<Vector2> normals,
-    Vector2 size,
-  ) {
+  static List<Vector2> normalsToVertices(List<Vector2> normals, Vector2 size) {
     final halfSize = size / 2;
     return normals
         .map(
@@ -205,10 +240,12 @@ class PolygonComponent extends ShapeComponent {
         // become counterclockwise.
         _reverseList(_globalVertices);
       }
-      _cachedGlobalVertices.updateCache<dynamic>(
-        _globalVertices,
-        <dynamic>[position.clone(), size.clone(), scale.clone(), angle],
-      );
+      _cachedGlobalVertices.updateCache<dynamic>(_globalVertices, <dynamic>[
+        position.clone(),
+        size.clone(),
+        scale.clone(),
+        angle,
+      ]);
     }
     return _cachedGlobalVertices.value!;
   }

@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:examples/commons/path_component.dart';
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -8,7 +10,7 @@ import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart' hide Image, Draggable;
 
-enum Shapes { circle, rectangle, polygon }
+enum Shapes { circle, rectangle, polygon, path }
 
 class MultipleShapesExample extends FlameGame with HasCollisionDetection {
   static const description = '''
@@ -34,7 +36,8 @@ class MultipleShapesExample extends FlameGame with HasCollisionDetection {
 class MultiShapesWorld extends World with HasGameRef {
   @override
   Future<void> onLoad() async {
-    add(FpsTextComponent(position: Vector2(0, gameRef.size.y - 24)));
+    await super.onLoad();
+    add(FpsTextComponent(position: Vector2(8, gameRef.size.y - 24)));
     final screenHitbox = ScreenHitbox();
     final snowman = CollidableSnowman(
       Vector2.all(150),
@@ -42,7 +45,7 @@ class MultiShapesWorld extends World with HasGameRef {
       Vector2(-100, 100),
       screenHitbox,
     );
-    MyCollidable lastToAdd = snowman;
+    PositionComponent lastToAdd = snowman;
     add(screenHitbox);
     add(snowman);
     var totalAdded = 1;
@@ -62,8 +65,8 @@ class MultiShapesWorld extends World with HasGameRef {
   final _rng = Random();
   final _distance = Vector2(100, 0);
 
-  MyCollidable nextRandomCollidable(
-    MyCollidable lastCollidable,
+  PositionComponent nextRandomCollidable(
+    PositionComponent lastCollidable,
     ScreenHitbox screenHitbox,
   ) {
     final collidableSize = Vector2.all(50) + Vector2.random(_rng) * 100;
@@ -78,7 +81,7 @@ class MultiShapesWorld extends World with HasGameRef {
       position = (lastCollidable.position + _distance)
         ..x += collidableSize.x / 2;
     }
-    final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 400;
+    final velocity = (Vector2.random(_rng) - Vector2.random(_rng)) * 200;
     return randomCollidable(
       position,
       collidableSize,
@@ -95,9 +98,11 @@ abstract class MyCollidable extends PositionComponent
   final Vector2 velocity;
   final delta = Vector2.zero();
   double angleDelta = 0;
-  final Color _defaultColor = Colors.blue.withValues(alpha: 0.8);
-  final Color _collisionColor = Colors.green.withValues(alpha: 0.8);
-  late final Paint _dragIndicatorPaint;
+  final Color defaultColor = Colors.blue.withValues(alpha: 0.8);
+  final Color collisionColor = Colors.green.withValues(alpha: 0.8);
+  final Color screenColor = Colors.purple.withValues(alpha: 0.8);
+
+  late final Paint dragIndicatorPaint;
   final ScreenHitbox screenHitbox;
   ShapeHitbox? hitbox;
 
@@ -107,12 +112,12 @@ abstract class MyCollidable extends PositionComponent
     this.velocity,
     this.screenHitbox,
   ) : super(position: position, size: size, anchor: Anchor.center) {
-    _dragIndicatorPaint = BasicPalette.white.paint();
+    dragIndicatorPaint = BasicPalette.white.paint();
   }
 
   @override
   void onMount() {
-    hitbox?.paint.color = _defaultColor;
+    hitbox?.paint.color = defaultColor;
     super.onMount();
   }
 
@@ -141,7 +146,7 @@ abstract class MyCollidable extends PositionComponent
   void render(Canvas canvas) {
     if (isDragged) {
       final localCenter = scaledSize.toOffset() / 2;
-      canvas.drawCircle(localCenter, 5, _dragIndicatorPaint);
+      canvas.drawCircle(localCenter, 5, dragIndicatorPaint);
     }
   }
 
@@ -151,14 +156,14 @@ abstract class MyCollidable extends PositionComponent
     PositionComponent other,
   ) {
     super.onCollisionStart(intersectionPoints, other);
-    hitbox?.paint.color = _collisionColor;
+    hitbox?.paint.color = other is ScreenHitbox ? screenColor : collisionColor;
   }
 
   @override
   void onCollisionEnd(PositionComponent other) {
     super.onCollisionEnd(other);
     if (!isColliding) {
-      hitbox?.paint.color = _defaultColor;
+      hitbox?.paint.color = defaultColor;
     }
   }
 
@@ -193,6 +198,64 @@ class CollidablePolygon extends MyCollidable {
   }
 }
 
+class CollidablePath extends MyCollidable with CollisionPassthrough {
+  CollidablePath(
+    super.position,
+    super.size,
+    super.velocity,
+    super.screenHitbox,
+  ) {
+    // The path is centered on the origin, so the hitbox is placed in the
+    // middle of the component.
+    final path = randomPath(size.toSize());
+    _pathPaint = Paint.from(pathStroke)..color = defaultColor;
+    _component = pathComponentWith(
+      path,
+      size.toSize(),
+      paint: _pathPaint,
+      anchor: .center,
+    );
+    add(_component);
+  }
+
+  @override
+  bool containsLocalPoint(Vector2 point) {
+    var result = super.containsLocalPoint(point);
+    if (!result) {
+      final area = Rect.fromCenter(center: .zero, width: width, height: height);
+      result = area.containsPoint(point);
+    }
+    return result;
+  }
+
+  @override
+  void render(Canvas canvas) {
+    if (isDragged) {
+      canvas.drawCircle(.zero, 5, dragIndicatorPaint);
+    }
+  }
+
+  @override
+  void onCollisionStart(
+    List<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
+    super.onCollisionStart(intersectionPoints, other);
+    _pathPaint.color = other is ScreenHitbox ? screenColor : collisionColor;
+  }
+
+  @override
+  void onCollisionEnd(PositionComponent other) {
+    super.onCollisionEnd(other);
+    if (!isColliding) {
+      _pathPaint.color = defaultColor;
+    }
+  }
+
+  late final PathComponent _component;
+  late final Paint _pathPaint;
+}
+
 class CollidableRectangle extends MyCollidable {
   CollidableRectangle(
     super.position,
@@ -218,14 +281,13 @@ class CollidableCircle extends MyCollidable {
 }
 
 class SnowmanPart extends CircleHitbox {
-  @override
-  final renderShape = true;
   final startColor = Colors.white.withValues(alpha: 0.8);
   final Color hitColor;
 
   SnowmanPart(double radius, Vector2 position, this.hitColor)
     : super(radius: radius, position: position, anchor: Anchor.center) {
     paint.color = startColor;
+    renderShape = true;
   }
 
   @override
@@ -278,7 +340,7 @@ class CollidableSnowman extends MyCollidable {
   }
 }
 
-MyCollidable randomCollidable(
+PositionComponent randomCollidable(
   Vector2 position,
   Vector2 size,
   Vector2 velocity,
@@ -302,6 +364,12 @@ MyCollidable randomCollidable(
       screenHitbox,
     )..rotationSpeed = rotationSpeed,
     Shapes.polygon => CollidablePolygon(
+      position,
+      size,
+      velocity,
+      screenHitbox,
+    )..rotationSpeed = rotationSpeed,
+    Shapes.path => CollidablePath(
       position,
       size,
       velocity,

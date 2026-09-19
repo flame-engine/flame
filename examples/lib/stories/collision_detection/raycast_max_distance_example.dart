@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -6,6 +9,7 @@ import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_noise/flame_noise.dart';
+import 'package:flame_test/test_paths.dart';
 import 'package:flutter/material.dart';
 
 class RaycastMaxDistanceExample extends FlameGame with HasCollisionDetection {
@@ -38,7 +42,7 @@ This examples showcases how raycast APIs can be used to detect hits within certa
       height: 180,
     );
 
-    _addMovingWall();
+    _addMovingShape();
 
     world.add(
       _character = _Character(
@@ -56,25 +60,26 @@ This examples showcases how raycast APIs can be used to detect hits within certa
     );
   }
 
-  void _addMovingWall() {
-    world.add(
-      RectangleComponent(
-        size: Vector2(20, 40),
-        anchor: Anchor.center,
-        paint: BasicPalette.red.paint(),
-        children: [
-          RectangleHitbox(),
-          MoveByEffect(
-            Vector2(50, 0),
-            EffectController(
-              duration: 2,
-              alternate: true,
-              infinite: true,
-            ),
-          ),
-        ],
+  void _addMovingShape() {
+    final rnd = Random();
+    final size = Vector2(20, 40) * 1.5;
+    final path = rnd.nextIntBetween(0, TestPaths.count);
+    final component = pathComponent(
+      path,
+      size.toSize(),
+      paint: BasicPalette.red.paint()..style = .stroke,
+    )..anchor = .center;
+    component.add(
+      MoveByEffect(
+        Vector2(50, 0),
+        EffectController(
+          duration: 2,
+          alternate: true,
+          infinite: true,
+        ),
       ),
     );
+    world.add(component);
   }
 
   @override
