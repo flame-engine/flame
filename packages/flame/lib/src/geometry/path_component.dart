@@ -31,8 +31,10 @@ class PathComponent extends ShapeComponent
     super.key,
     super.paint,
     super.paintLayers,
+    bool renderShape = true,
   }) : path = path.toOrigin,
        super(size: path.getBounds().size.toVector2()) {
+    this.renderShape = renderShape;
     if (addHitboxes) {
       _addHitboxes();
     }
