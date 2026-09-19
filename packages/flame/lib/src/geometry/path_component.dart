@@ -37,7 +37,9 @@ class PathComponent extends ShapeComponent
   }
 
   /// The default paint used to render hitboxes.
-  static Paint hitboxStroke = Paint()..style = .stroke;
+  static Paint hitboxStroke = Paint()
+    ..color = Color(0xffffffff)
+    ..style = .stroke;
 
   /// The path to display, already rooted at the origin.
   final Path path;
