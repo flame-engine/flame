@@ -31,7 +31,7 @@ class _GestureHitboxesWorld extends World
     final shapeSize =
         Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
-    final Path path = randomPath(shapeSize.toSize());
+    final path = randomPath(shapeSize.toSize());
     final hitbox = switch (shapeType) {
       Shapes.circle => CircleHitbox(),
       Shapes.rectangle => RectangleHitbox(),

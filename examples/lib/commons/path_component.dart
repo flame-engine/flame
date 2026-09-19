@@ -49,7 +49,7 @@ class PathComponent extends ShapeComponent
   /// Whether the hitboxes are rendered or not (the default).
   final bool renderHitboxes;
 
-  /// Whether the hitbxes are filtered such that only
+  /// Whether the hitboxes are filtered to include only disjoint ones.
   final bool filterHitboxes;
 
   /// The paint used to render the hitboxes.
