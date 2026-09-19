@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
@@ -8,6 +11,32 @@ import 'collision_test_helpers.dart';
 
 void main() {
   group('ScreenHitbox', () {
+    runCollisionTestRegistry({
+      'does not collide when a contour is fully contained':
+          (hasCollisionDetection) async {
+            final game = hasCollisionDetection as FlameGame;
+            final path = Path()
+              ..addRRect(
+                RRect.fromRectAndRadius(
+                  const Rect.fromLTWH(0, 0, 64, 64),
+                  const Radius.circular(10),
+                ),
+              );
+            final block = TestBlock(
+              Vector2(100, 100),
+              Vector2.all(64),
+              addTestHitbox: false,
+            )..anchor = Anchor.center;
+            block.add(PolygonHitbox.fromPath(path));
+            final screenHitbox = ScreenHitbox();
+            game.world.addAll([screenHitbox, block]);
+            await game.ready();
+            game.update(0);
+
+            expect(block.activeCollisions, isEmpty);
+          },
+    });
+
     runCollisionTestRegistry({
       'collides': (hasCollisionDetection) async {
         final game = hasCollisionDetection as FlameGame;
@@ -123,10 +152,8 @@ void main() {
           width: 100,
           height: 100,
         );
-        final testBlock = TestBlock(
-          Vector2.all(-50),
-          Vector2.all(2),
-        )..anchor = Anchor.center;
+        final testBlock = TestBlock(Vector2.all(-50), Vector2.all(2))
+          ..anchor = Anchor.center;
         final screenHitbox = ScreenHitbox();
         game.world.addAll([screenHitbox, testBlock]);
         await game.ready();

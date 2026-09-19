@@ -20,6 +20,7 @@ class CircleComponent extends ShapeComponent {
     super.paint,
     super.paintLayers,
     super.key,
+    super.isSolid,
   }) : super(size: Vector2.all((radius ?? 0) * 2)) {
     _updateCenterOffset();
     size.addListener(_updateCenterOffset);
@@ -39,6 +40,7 @@ class CircleComponent extends ShapeComponent {
     super.paintLayers,
     super.children,
     super.key,
+    super.isSolid,
   }) : super(size: Vector2.all(relation * min(parentSize.x, parentSize.y))) {
     _updateCenterOffset();
     size.addListener(_updateCenterOffset);

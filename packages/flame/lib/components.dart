@@ -56,6 +56,7 @@ export 'src/components/text_element_component.dart';
 export 'src/components/timer_component.dart';
 export 'src/extensions/vector2.dart';
 export 'src/geometry/circle_component.dart';
+export 'src/geometry/path_component.dart';
 export 'src/geometry/polygon_component.dart';
 export 'src/geometry/rectangle_component.dart';
 export 'src/geometry/shape_component.dart';

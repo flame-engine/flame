@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/experimental.dart';
 import 'package:flame/game.dart';
@@ -70,6 +71,21 @@ void main() {
       expect(polygon.containsPoint(Vector2(-10, 30)), false);
       expect(polygon.containsPoint(Vector2(100, 30)), false);
       expect(polygon.containsPoint(Vector2(100, 100)), false);
+    });
+
+    test('fromPath', () {
+      final path = Path()
+        ..addRect(const Rect.fromLTWH(0, 0, 10, 10))
+        ..addPolygon(const [
+          Offset(20, 20),
+          Offset(50, 20),
+          Offset(20, 60),
+        ], true);
+      expect(Polygon.fromPath(path).vertices, hasLength(4));
+      final triangle = Polygon.fromPath(path, contour: 1, granularity: 2);
+      expect(triangle.vertices, hasLength(3));
+      expect(triangle.containsPoint(Vector2(25, 30)), true);
+      expect(() => Polygon.fromPath(path, contour: 2), throwsRangeError);
     });
 
     test('asPath', () {

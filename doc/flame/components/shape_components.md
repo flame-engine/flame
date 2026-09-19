@@ -66,6 +66,92 @@ In the image you can see how the polygon shape formed by the purple arrows is de
 arrows.
 
 
+### From a Path
+
+When the outline of a shape already exists as a `Path`, for example one that was converted from a
+vector graphic, the `PolygonComponent.fromPath` constructor follows that outline with straight edges
+instead of you having to list the vertices by hand. The corners between the straight lines of the
+path become vertices as they are, and the curves are approximated.
+
+The following would create a rounded rectangle with a size of `(100, 60)`, centered in `(200, 100)`:
+
+```dart
+void main() {
+  final path = Path()
+    ..addRRect(
+      RRect.fromRectAndRadius(
+        const Rect.fromLTWH(0, 0, 100, 60),
+        const Radius.circular(20),
+      ),
+    );
+
+  PolygonComponent.fromPath(
+    path,
+    position: Vector2(200, 100),
+    anchor: Anchor.center,
+  );
+}
+```
+
+The component gets the size of the contour, so that curves which reach the bounds of the path are
+not cut short. If no `position` is given the polygon ends up where the contour is in the coordinates
+of the path.
+
+There are two arguments that control how the path is followed:
+
+- `contour`: A path has one contour for each shape that was added to it, and for each `moveTo`.
+  This is the index of the one that the polygon is made from, and it defaults to the first one. An
+  index that the path does not have results in a `RangeError`.
+- `granularity`: The step that curves are followed with, in the units of the path, which defaults
+  to `1.0`. The polygon stays within about half of it from the path. A higher value gives fewer
+  vertices, which makes collision detection and ray casting cheaper, and a lower value follows the
+  curves more closely. A path that is defined in small units, like meters, needs a granularity that
+  is small compared to its size. Straight stretches cost the same whatever the granularity is.
+
+The constructor is built on the `walkContours`, `walkContourAt` and `walkContour` extension methods
+on `Path` and `PathMetric`, which return the vertices as lists of `Offset`s. Those also accept a
+`tolerance`, in case the simplification of the sampled contour should not follow the granularity.
+
+```dart
+void main() {
+  final path = Path()
+    ..addOval(const Rect.fromLTWH(0, 0, 100, 60))
+    ..addRect(const Rect.fromLTWH(200, 0, 50, 50));
+
+  // One list of offsets for each contour in the path.
+  final contours = path.walkContours();
+  // Only the rectangle, sampled with a step of 2 and simplified with a
+  // tolerance of 0.5.
+  final rectangle = path.walkContourAt(1, 2, 0.5);
+}
+```
+
+
+## PathComponent
+
+When a whole `Path` is needed (for rendering or collision detection) instead of a single contour,
+creating a `PathComponent` automatically walks all contours in the given  `Path` and creates
+`PolygonHitbox` objects for each contour; by default, only disjoint contours become hitboxes,
+but `PathComponent` supports keeping conjoint contours via the `filterHitboxes` parameter.
+The component size is derived directly from the given `Path`.
+
+Also by default, the `Path` is rendered, whereas the hitboxes are not: this behavior may be
+changed via (respectively) the `renderShape` and `renderHitboxes` parameters.
+
+Using the previous two-contour `Path`, creating a `PathComponent` for both contours works thusly:
+
+
+```dart
+void main() {
+  final path = Path()
+    ..addOval(const Rect.fromLTWH(0, 0, 100, 60))
+    ..addRect(const Rect.fromLTWH(200, 0, 50, 50));
+
+  final component = PathComponent(path: path);
+}
+```
+
+
 ## RectangleComponent
 
 A `RectangleComponent` is created very similarly to how a `PositionComponent` is created, since it
