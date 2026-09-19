@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -36,6 +35,9 @@ class PathComponent extends ShapeComponent
       _addHitboxes();
     }
   }
+
+  /// The default paint used to render hitboxes.
+  static Paint hitboxStroke = Paint()..style = .stroke;
 
   /// The path to display, already rooted at the origin.
   final Path path;
@@ -122,7 +124,7 @@ class PathComponent extends ShapeComponent
       for (var contour = 0; contour < count; contour++)
         PolygonHitbox.fromPath(path, contour: contour)
           ..priority = priority + 1
-          ..paint = hitboxesPaint ?? whiteStroke
+          ..paint = hitboxesPaint ?? hitboxStroke
           ..renderShape = renderHitboxes,
     ];
   }
