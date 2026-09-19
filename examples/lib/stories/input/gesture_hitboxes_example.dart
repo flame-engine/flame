@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:examples/commons/path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -30,6 +31,7 @@ class _GestureHitboxesWorld extends World
     final shapeSize =
         Vector2.all(100) + Vector2.all(50.0).scaled(_rng.nextDouble());
     final shapeAngle = _rng.nextDouble() * 6;
+    final Path path = randomPath(shapeSize.toSize());
     final hitbox = switch (shapeType) {
       Shapes.circle => CircleHitbox(),
       Shapes.rectangle => RectangleHitbox(),
@@ -43,11 +45,14 @@ class _GestureHitboxesWorld extends World
         parentSize: shapeSize,
       ),
       Shapes.path => PolygonHitbox.fromPath(
-        randomPath(shapeSize.toSize()),
+        path,
         position: shapeSize * 0.5,
         anchor: .center,
       ),
     };
+    if (shapeType == .path) {
+      return MyPathComponent(path: path, position: position, angle: shapeAngle);
+    }
     return MyShapeComponent(
       hitbox: hitbox,
       position: position,
@@ -78,11 +83,44 @@ class _GestureHitboxesWorld extends World
   }
 }
 
+class MyPathComponent extends PathComponent
+    with TapCallbacks, HoverCallbacks, GestureHitboxes {
+  late final Color baseColor;
+
+  MyPathComponent({
+    required super.path,
+    super.position,
+    super.scale,
+    super.angle,
+  }) : super(anchor: .center, renderHitboxes: true);
+
+  @override
+  Future<void> onLoad() async {
+    super.onLoad();
+    baseColor = ColorExtension.random(withAlpha: 0.8, base: 100);
+    paint.color = baseColor;
+  }
+
+  @override
+  void onTapDown(TapDownEvent _) {
+    removeFromParent();
+  }
+
+  @override
+  void onHoverEnter() {
+    paint.color = paint.color.darken(0.5);
+  }
+
+  @override
+  void onHoverExit() {
+    paint.color = baseColor;
+  }
+}
+
 class MyShapeComponent extends PositionComponent
     with TapCallbacks, HoverCallbacks, GestureHitboxes {
   final ShapeHitbox hitbox;
   late final Color baseColor;
-  late final Color hoverColor;
 
   MyShapeComponent({
     required this.hitbox,

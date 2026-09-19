@@ -85,6 +85,7 @@ PathComponent pathComponent(
   Size size, {
   Vector2? position,
   Paint? paint,
+  List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
   Anchor? anchor,
@@ -92,6 +93,32 @@ PathComponent pathComponent(
   // Create a standard test path that fits within our chosen size with its
   // original aspect ratio.
   final path = TestPaths.byIndex(index % TestPaths.count, size);
+  return pathComponentWith(
+    path,
+    size,
+    position: position,
+    paint: paint ?? pathStroke,
+    paintLayers: paintLayers,
+    contourPaint: contourPaint,
+    renderHitboxes: renderHitboxes,
+    anchor: anchor,
+  );
+}
+
+PathComponent pathComponentWith(
+  Path srcPath,
+  Size size, {
+  bool resize = false,
+  Vector2? position,
+  Paint? paint,
+  List<Paint>? paintLayers,
+  Paint? contourPaint,
+  bool? renderHitboxes,
+  Anchor? anchor,
+}) {
+  // Adjust the path such that fits within our chosen size with its
+  // original aspect ratio.
+  final path = resize ? srcPath.resizeTo(size, keepRatio: true) : srcPath;
 
   // Create a component that displays the whole path: we filter all hitboxes
   // that are (approximately) fully enclosed in the largest one.
@@ -101,6 +128,7 @@ PathComponent pathComponent(
     position: position ?? Vector2.zero(),
     anchor: anchor ?? Anchor.center,
     paint: paint ?? pathStroke,
+    paintLayers: paintLayers,
     hitboxesPaint: contourPaint,
     renderHitboxes: renderHitboxes ?? false,
   )..renderShape = true;

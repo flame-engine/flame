@@ -37,6 +37,7 @@ class PathComponent extends ShapeComponent
     }
   }
 
+  /// The path to display, already rooted at the origin.
   final Path path;
 
   /// Whether the hitboxes are added right away, in the constructor.
@@ -44,11 +45,15 @@ class PathComponent extends ShapeComponent
 
   /// Whether the hitboxes are added when the component loads.
   final bool loadHitboxes;
-  final bool renderHitboxes;
-  final bool filterHitboxes;
-  final Paint? hitboxesPaint;
 
-  List<PolygonHitbox> get hitboxes => _hitboxes;
+  /// Whether the hitboxes are rendered or not (the default).
+  final bool renderHitboxes;
+
+  /// Whether the hitbxes are filtered such that only
+  final bool filterHitboxes;
+
+  /// The paint used to render the hitboxes.
+  final Paint? hitboxesPaint;
 
   var _hitboxesAdded = false;
   late final _hitboxes = _hitboxesFor(path);
@@ -84,7 +89,7 @@ class PathComponent extends ShapeComponent
     if (_hitboxesAdded) {
       return;
     }
-    addAll(_filterHitboxes(hitboxes));
+    addAll(_filterHitboxes(_hitboxes));
     _hitboxesAdded = true;
   }
 
