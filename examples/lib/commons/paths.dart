@@ -10,10 +10,6 @@ final _rnd = Random();
 
 const shapePriority = 1;
 
-final whiteStroke = Paint()
-  ..color = const Color(0xffffffff)
-  ..style = PaintingStyle.stroke;
-
 final pathStroke = Paint()
   ..color = BasicPalette.blue.color
   ..style = PaintingStyle.stroke
