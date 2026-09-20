@@ -46,7 +46,7 @@ mixin PolygonRayIntersection<T extends ShapeHitbox> on PolygonComponent {
       final to = vertices[i];
       final toSide =
           directionX * (to.y - originY) - directionY * (to.x - originX);
-      if ((fromSide > 0) != (toSide > 0)) {
+      if ((fromSide > 0 && toSide <= 0) || (fromSide <= 0 && toSide > 0)) {
         final edgeX = to.x - from.x;
         final edgeY = to.y - from.y;
         final distance =
