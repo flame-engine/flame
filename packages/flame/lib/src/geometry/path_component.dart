@@ -72,7 +72,7 @@ class PathComponent extends ShapeComponent
   final Paint? hitboxesPaint;
 
   var _hitboxesAdded = false;
-  late final _hitboxes = _hitboxesFor(path);
+  late final _hitboxes = _createHitboxes();
 
   @override
   FutureOr<void> onLoad() async {
@@ -133,15 +133,21 @@ class PathComponent extends ShapeComponent
     return hitboxes;
   }
 
-  // Create a hitbox for each path contour.
-  List<PolygonHitbox> _hitboxesFor(Path path) {
-    final count = path.contours.length;
-    return [
-      for (var contour = 0; contour < count; contour++)
-        PolygonHitbox.fromPath(path, contour: contour, granularity: granularity)
-          ..priority = hitboxesPriority ?? priority + 1
-          ..paint = hitboxesPaint ?? hitboxStroke
-          ..renderShape = renderHitboxes,
-    ];
+  // Create a hitbox for each path contour with at least three vertices.
+  List<PolygonHitbox> _createHitboxes() {
+    final contours = path.walkContours(granularity);
+    final boxes = <PolygonHitbox>[];
+    for (var index = 0; index < contours.length; index++) {
+      final contour = contours[index];
+      if (contour.length > 2) {
+        boxes.add(
+          PolygonHitbox(contour.vertices)
+            ..priority = hitboxesPriority ?? priority + 1
+            ..paint = hitboxesPaint ?? hitboxStroke
+            ..renderShape = renderHitboxes,
+        );
+      }
+    }
+    return boxes;
   }
 }
