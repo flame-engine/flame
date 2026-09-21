@@ -98,7 +98,7 @@ class PolygonComponent extends ShapeComponent {
 
   /// With this constructor you create a [PolygonComponent] from the given
   /// [contour] (the first by default) of a [Path], with an optional
-  /// [granularity], which is the sampling step along the contour: higher values
+  /// [sampling], which is the sampling step along the contour: higher values
   /// produce fewer samples. It only limits how finely curves are followed,
   /// since straight stretches are skipped over and the corners between them
   /// are located exactly.
@@ -106,7 +106,7 @@ class PolygonComponent extends ShapeComponent {
   PolygonComponent.fromPath(
     Path path, {
     int contour = 0,
-    double granularity = 1.0,
+    double sampling = 1.0,
     Vector2? position,
     Vector2? scale,
     double? angle,
@@ -119,7 +119,7 @@ class PolygonComponent extends ShapeComponent {
     ComponentKey? key,
     List<Component>? children,
   }) : this(
-         path.walkContourAt(contour, granularity).vertices,
+         path.walkContourAt(contour, sampling).vertices,
          position: position,
          angle: angle,
          anchor: anchor,

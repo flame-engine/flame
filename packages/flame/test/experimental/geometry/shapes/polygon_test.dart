@@ -82,7 +82,7 @@ void main() {
           Offset(20, 60),
         ], true);
       expect(Polygon.fromPath(path).vertices, hasLength(4));
-      final triangle = Polygon.fromPath(path, contour: 1, granularity: 2);
+      final triangle = Polygon.fromPath(path, contour: 1, sampling: 2);
       expect(triangle.vertices, hasLength(3));
       expect(triangle.containsPoint(Vector2(25, 30)), true);
       expect(() => Polygon.fromPath(path, contour: 2), throwsRangeError);

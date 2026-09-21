@@ -76,32 +76,32 @@ extension PathExtension on Path {
   /// Walk the contours of a [Path] and return them as a list of [Offset] lists.
   /// Each entry in the list corresponds to a given sub-contour.
   ///
-  /// See [PathMetricExtension.walkContour] for the [granularity] and the
+  /// See [PathMetricExtension.walkContour] for the [sampling] and the
   /// [tolerance] parameters.
   List<List<Offset>> walkContours([
-    double granularity = 1.0,
+    double sampling = 1.0,
     double? tolerance,
   ]) {
     return [
       for (final metric in computeMetrics())
-        metric.walkContour(granularity, tolerance),
+        metric.walkContour(sampling, tolerance),
     ];
   }
 
   /// Walk only the contour at [index], without sampling the other contours of
   /// the path.
   ///
-  /// See [PathMetricExtension.walkContour] for the [granularity] and the
+  /// See [PathMetricExtension.walkContour] for the [sampling] and the
   /// [tolerance] parameters.
   List<Offset> walkContourAt(
     int index, [
-    double granularity = 1.0,
+    double sampling = 1.0,
     double? tolerance,
   ]) {
     var current = 0;
     for (final metric in computeMetrics()) {
       if (current == index) {
-        return metric.walkContour(granularity, tolerance);
+        return metric.walkContour(sampling, tolerance);
       }
       current++;
     }
@@ -115,7 +115,7 @@ extension PathMetricExtension on PathMetric {
 
   /// Walk a single contour of a [Path] and return it as an [Offset] list.
   ///
-  /// The [granularity] is the sampling step along the contour: higher values
+  /// The [sampling] is the sampling step along the contour: higher values
   /// produce fewer samples. It only limits how finely curves are followed,
   /// since straight stretches are skipped over and the corners between them
   /// are located exactly.
@@ -123,17 +123,17 @@ extension PathMetricExtension on PathMetric {
   /// The samples that are not needed to stay within [tolerance] of the sampled
   /// contour are removed, while the corners and the points where the contour
   /// reaches its bounds are always kept, so that the result has the size of
-  /// the contour. The [tolerance] defaults to half of the [granularity], and
+  /// the contour. The [tolerance] defaults to half of the [sampling], and
   /// the samples themselves are taken so that the contour stays within a sixth
   /// of it. A [tolerance] of zero keeps every sample.
   ///
   /// A closed contour gives at least three vertices whatever the
-  /// [granularity] and the [tolerance] are, so that it can always be a
+  /// [sampling] and the [tolerance] are, so that it can always be a
   /// polygon.
-  List<Offset> walkContour([double granularity = 1.0, double? tolerance]) {
+  List<Offset> walkContour([double sampling = 1.0, double? tolerance]) {
     assert(
-      granularity.isFinite && granularity > 0,
-      'The granularity has to be a positive number: $granularity',
+      sampling.isFinite && sampling > 0,
+      'The sampling has to be a positive number: $sampling',
     );
     assert(
       tolerance == null || (tolerance.isFinite && tolerance >= 0),
@@ -142,11 +142,9 @@ extension PathMetricExtension on PathMetric {
     if (length <= 0) {
       return [];
     }
-    final validGranularity = granularity.isFinite && granularity > 0
-        ? granularity
-        : 1.0;
+    final validGranularity = sampling.isFinite && sampling > 0 ? sampling : 1.0;
     // A closed contour is sampled in at least three steps, so that it can be a
-    // polygon no matter how coarse the granularity is.
+    // polygon no matter how coarse the sampling is.
     final step = isClosed
         ? min(max(validGranularity, length / _maxSteps), length / 3)
         : max(validGranularity, length / _maxSteps);

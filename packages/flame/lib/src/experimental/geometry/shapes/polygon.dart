@@ -36,14 +36,14 @@ class Polygon extends Shape {
 
   /// Constructs the polygon from the given [contour] of a [Path]
   /// (the first by default).
-  /// The [granularity] parameter controls the amplitude of the sampling step:
+  /// The [sampling] parameter controls the amplitude of the sampling step:
   /// higher values produce fewer samples.
   factory Polygon.fromPath(
     Path path, {
     int contour = 0,
-    double granularity = 1.0,
+    double sampling = 1.0,
   }) {
-    return Polygon(path.walkContourAt(contour, granularity).vertices);
+    return Polygon(path.walkContourAt(contour, sampling).vertices);
   }
 
   /// The vertices (corners) of the polygon.

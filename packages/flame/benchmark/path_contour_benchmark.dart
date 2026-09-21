@@ -39,23 +39,23 @@ void _reportSampling() {
   print('');
   print('Path to vertices through walkContours at ${_shapeSize.width}px');
   print(
-    'shape       granularity  vertices  '
+    'shape       sampling     vertices  '
     'convert (microseconds)  max error (px)  path length',
   );
   for (var index = 0; index < TestPaths.count; index++) {
     final path = TestPaths.byIndex(index, _shapeSize);
     final length = path.contours.contoursLength;
-    for (final granularity in [1.0, 2.0]) {
+    for (final sampling in [1.0, 2.0]) {
       // The conversion is short enough to be measured before the compiler has
       // optimized it, unless it is warmed up first.
       for (var warmUp = 0; warmUp < _conversionWarmUps; warmUp++) {
-        path.walkContours(granularity);
+        path.walkContours(sampling);
       }
       final microseconds = _medianMicroseconds(
-        () => path.walkContours(granularity),
+        () => path.walkContours(sampling),
         repetitions: 101,
       );
-      final contours = path.walkContours(granularity);
+      final contours = path.walkContours(sampling);
       final polygon = contours.first;
       final error = _maxError(path.contours.first, polygon);
       final suffix = contours.length > 1
@@ -63,7 +63,7 @@ void _reportSampling() {
           : '';
       print(
         '${TestPaths.names[index].padRight(11)} '
-        '${granularity.toStringAsFixed(1).padLeft(11)}  '
+        '${sampling.toStringAsFixed(1).padLeft(11)}  '
         '${polygon.length.toString().padLeft(8)}  '
         '${microseconds.toStringAsFixed(0).padLeft(22)}  '
         '${error.toStringAsFixed(2).padLeft(14)}  '
@@ -75,7 +75,7 @@ void _reportSampling() {
 
 void _reportScaleSensitivity() {
   print('');
-  print('Scale sensitivity of the sampler at granularity 2.0');
+  print('Scale sensitivity of the sampler at sampling 2.0');
   print('shape       size  vertices  max error (px)');
   for (var index = 0; index < TestPaths.count; index++) {
     for (final side in [20.0, 100.0, 500.0, 2000.0]) {
@@ -165,7 +165,7 @@ void _reportInsideAgreement() {
 
 void _reportSimplification() {
   print('');
-  print('Simplification of the granularity 1.0 contour by tolerance');
+  print('Simplification of the sampling 1.0 contour by tolerance');
   print(
     'shape       tolerance  before  after  max error (px)  '
     'ray (nanoseconds)  polygon-polygon (microseconds)',
