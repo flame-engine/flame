@@ -23,14 +23,6 @@ double _shortestEdge(List<Offset> polygon) {
   return shortest;
 }
 
-Rect _bounds(List<Offset> points) {
-  var bounds = Rect.fromPoints(points.first, points.first);
-  for (final point in points) {
-    bounds = bounds.expandToInclude(Rect.fromPoints(point, point));
-  }
-  return bounds;
-}
-
 void _expectRect(Rect actual, Rect expected, double precision) {
   expect(actual.left, closeTo(expected.left, precision));
   expect(actual.top, closeTo(expected.top, precision));
@@ -119,13 +111,13 @@ void main() {
       for (final path in paths) {
         // The bounds of a path include the control points of its curves.
         final metric = path.computeMetrics().single;
-        final expected = _bounds([
+        final expected = [
           for (var offset = 0.0; offset < metric.length; offset += 0.001)
             metric.getTangentForOffset(offset)!.position,
-        ]);
+        ].enclosingRectangle;
         for (final sampling in [1.0, 2.0, 5.0]) {
           final polygon = path.walkContours(sampling).single;
-          _expectRect(_bounds(polygon), expected, 0.02);
+          _expectRect(polygon.enclosingRectangle, expected, 0.02);
         }
       }
     });
