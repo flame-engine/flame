@@ -36,8 +36,15 @@ class Polygon extends Shape {
 
   /// Constructs the polygon from the given [contour] of a [Path]
   /// (the first by default).
-  /// The [sampling] parameter controls the amplitude of the sampling step:
-  /// higher values produce fewer samples.
+  ///
+  /// A polygon only has straight edges, so the curves of the path are
+  /// approximated. The contour is sampled every [sampling] along its length,
+  /// and the samples that are not needed to stay within about half of the
+  /// [sampling] of the contour are left out. Higher values give fewer vertices
+  /// and a looser fit, while straight stretches and the corners between them
+  /// are exact whatever the [sampling] is.
+  ///
+  /// See [PathMetricExtension.walkContour] for the details of the sampling.
   factory Polygon.fromPath(
     Path path, {
     int contour = 0,

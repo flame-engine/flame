@@ -97,12 +97,16 @@ class PolygonComponent extends ShapeComponent {
        );
 
   /// With this constructor you create a [PolygonComponent] from the given
-  /// [contour] (the first by default) of a [Path], with an optional
-  /// [sampling], which is the sampling step along the contour: higher values
-  /// produce fewer samples. It only limits how finely curves are followed,
-  /// since straight stretches are skipped over and the corners between them
-  /// are located exactly.
-
+  /// [contour] (the first by default) of a [Path].
+  ///
+  /// A polygon only has straight edges, so the curves of the path are
+  /// approximated. The contour is sampled every [sampling] along its length,
+  /// and the samples that are not needed to stay within about half of the
+  /// [sampling] of the contour are left out. Higher values give fewer vertices
+  /// and a looser fit, while straight stretches and the corners between them
+  /// are exact whatever the [sampling] is.
+  ///
+  /// See [PathMetricExtension.walkContour] for the details of the sampling.
   PolygonComponent.fromPath(
     Path path, {
     int contour = 0,
