@@ -237,7 +237,7 @@ void main() {
       ];
       final rect = RectExtension.smallestContaining(offsets);
       expect(rect, const Rect.fromLTRB(0.1, 0.1, 16777217, 0.7));
-      expect(offsets.rectangle, rect);
+      expect(offsets.enclosingRectangle, rect);
       expect(RectExtension.smallestContaining(const []), Rect.zero);
       expect(
         RectExtension.smallestContaining(const [Offset(3, 4)]),
