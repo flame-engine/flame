@@ -16,6 +16,7 @@ class PathComponent extends ShapeComponent
   PathComponent({
     required Path path,
     this.sampling = 1.0,
+    this.tolerance,
     this.hitboxesPriority,
     this.addHitboxes = false,
     this.loadHitboxes = true,
@@ -48,8 +49,13 @@ class PathComponent extends ShapeComponent
   /// The path to display, already rooted at the origin.
   final Path path;
 
-  /// The step used when sampling the path contours generating the hitboxes.
+  /// The step used when sampling the path contours that generate
+  /// the hitboxes.
   final double sampling;
+
+  /// The tolerance used when sampling the path contours; if not specified,
+  /// it defaults to half the [sampling].
+  final double? tolerance;
 
   /// The hitboxes priority: if not specified, by default the hitboxes
   /// use a relative priority of 1.
@@ -134,7 +140,7 @@ class PathComponent extends ShapeComponent
 
   // Create a hitbox for each path contour with at least three vertices.
   List<PolygonHitbox> _createHitboxes() {
-    final contours = path.walkContours(sampling);
+    final contours = path.walkContours(sampling, tolerance);
     final boxes = <PolygonHitbox>[];
     for (var index = 0; index < contours.length; index++) {
       final contour = contours[index];

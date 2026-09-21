@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/collisions/hitboxes/polygon_hitbox.dart';
 import 'package:flame_test/test_paths.dart';
 import 'package:test/test.dart';
 
@@ -71,5 +72,17 @@ void main() {
     final pathComponent = PathComponent(path: path, addHitboxes: true);
 
     expect(pathComponent.children.length, 4);
+  });
+
+  test('PathComponent invader3 respects the given tolerance', () {
+    const size = Size(64, 64);
+    final path = TestPaths.byName('invader3', size);
+
+    final path1 = PathComponent(path: path, addHitboxes: true);
+    final path2 = PathComponent(path: path, addHitboxes: true, tolerance: 1);
+    final hitbox1 = path1.firstChild<PolygonHitbox>();
+    final hitbox2 = path2.firstChild<PolygonHitbox>();
+
+    expect(hitbox1!.vertices.length, greaterThan(hitbox2!.vertices.length));
   });
 }
