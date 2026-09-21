@@ -102,15 +102,15 @@ There are two arguments that control how the path is followed:
 - `contour`: A path has one contour for each shape that was added to it, and for each `moveTo`.
   This is the index of the one that the polygon is made from, and it defaults to the first one. An
   index that the path does not have results in a `RangeError`.
-- `granularity`: The step that curves are followed with, in the units of the path, which defaults
+- `sampling`: The step that curves are followed with, in the units of the path, which defaults
   to `1.0`. The polygon stays within about half of it from the path. A higher value gives fewer
   vertices, which makes collision detection and ray casting cheaper, and a lower value follows the
-  curves more closely. A path that is defined in small units, like meters, needs a granularity that
-  is small compared to its size. Straight stretches cost the same whatever the granularity is.
+  curves more closely. A path that is defined in small units, like meters, needs a sampling that
+  is small compared to its size. Straight stretches cost the same whatever the sampling is.
 
 The constructor is built on the `walkContours`, `walkContourAt` and `walkContour` extension methods
 on `Path` and `PathMetric`, which return the vertices as lists of `Offset`s. Those also accept a
-`tolerance`, in case the simplification of the sampled contour should not follow the granularity.
+`tolerance`, in case the simplification of the sampled contour should not follow the sampling.
 
 ```dart
 void main() {

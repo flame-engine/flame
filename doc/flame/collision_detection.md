@@ -288,12 +288,12 @@ class Spaceship extends SpriteComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(PolygonHitbox.fromPath(outline, granularity: 2));
+    add(PolygonHitbox.fromPath(outline, sampling: 2));
   }
 }
 ```
 
-Since the amount of vertices decides what the hitbox costs, use the highest `granularity` that still
+Since the amount of vertices decides what the hitbox costs, use the highest `sampling` that still
 follows the outline closely enough for your game. The contour is walked when the hitbox is created,
 so create it once and not in every tick.
 

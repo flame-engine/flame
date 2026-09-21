@@ -40,13 +40,13 @@ void _expectRect(Rect actual, Rect expected, double precision) {
 
 void main() {
   group('walkContours', () {
-    test('a rectangle gives its corners at any granularity', () {
+    test('a rectangle gives its corners at any sampling', () {
       final path = Path()..addRect(const Rect.fromLTWH(0, 0, 100, 50));
-      for (final granularity in [0.1, 0.3, 0.7, 1.0, 2.0, 7.0]) {
+      for (final sampling in [0.1, 0.3, 0.7, 1.0, 2.0, 7.0]) {
         expect(
-          path.walkContours(granularity).single,
+          path.walkContours(sampling).single,
           const [Offset.zero, Offset(100, 0), Offset(100, 50), Offset(0, 50)],
-          reason: 'granularity $granularity',
+          reason: 'sampling $sampling',
         );
       }
     });
@@ -54,8 +54,8 @@ void main() {
     test('corners that are not on the sampling steps are kept', () {
       const corners = [Offset(10.3, 0), Offset(57.7, 33.1), Offset(3.9, 71.2)];
       final path = Path()..addPolygon(corners, true);
-      for (final granularity in [1.0, 2.0]) {
-        final polygon = path.walkContours(granularity).single;
+      for (final sampling in [1.0, 2.0]) {
+        final polygon = path.walkContours(sampling).single;
         expect(polygon, hasLength(3));
         for (var i = 0; i < 3; i++) {
           expect(polygon[i].dx, closeTo(corners[i].dx, 1e-4));
@@ -89,9 +89,9 @@ void main() {
         ),
       ];
       for (final path in paths) {
-        for (final granularity in [0.1, 1.0, 2.0]) {
-          final polygon = path.walkContours(granularity).single;
-          expect(_shortestEdge(polygon), greaterThan(granularity / 2));
+        for (final sampling in [0.1, 1.0, 2.0]) {
+          final polygon = path.walkContours(sampling).single;
+          expect(_shortestEdge(polygon), greaterThan(sampling / 2));
         }
       }
     });
@@ -123,8 +123,8 @@ void main() {
           for (var offset = 0.0; offset < metric.length; offset += 0.001)
             metric.getTangentForOffset(offset)!.position,
         ]);
-        for (final granularity in [1.0, 2.0, 5.0]) {
-          final polygon = path.walkContours(granularity).single;
+        for (final sampling in [1.0, 2.0, 5.0]) {
+          final polygon = path.walkContours(sampling).single;
           _expectRect(_bounds(polygon), expected, 0.02);
         }
       }
@@ -141,9 +141,9 @@ void main() {
       const radius = 50.0;
       final path = Path()
         ..addOval(Rect.fromCircle(center: Offset.zero, radius: radius));
-      for (final (granularity, tolerance) in [(1.0, null), (1.0, 2.0)]) {
-        final polygon = path.walkContours(granularity, tolerance).single;
-        final allowed = tolerance ?? granularity / 2;
+      for (final (sampling, tolerance) in [(1.0, null), (1.0, 2.0)]) {
+        final polygon = path.walkContours(sampling, tolerance).single;
+        final allowed = tolerance ?? sampling / 2;
         for (var i = 0; i < polygon.length; i++) {
           final from = polygon[i];
           final to = polygon[(i + 1) % polygon.length];
@@ -187,11 +187,11 @@ void main() {
       expect(Path().walkContours(), isEmpty);
     });
 
-    test('an invalid granularity is rejected', () {
+    test('an invalid sampling is rejected', () {
       final path = Path()..addRect(const Rect.fromLTWH(0, 0, 10, 10));
-      for (final granularity in [0.0, -5.0, double.nan, double.infinity]) {
+      for (final sampling in [0.0, -5.0, double.nan, double.infinity]) {
         expect(
-          () => path.walkContours(granularity),
+          () => path.walkContours(sampling),
           throwsA(isA<AssertionError>()),
         );
       }
@@ -201,7 +201,7 @@ void main() {
       );
     });
 
-    test('a tiny granularity does not exhaust the memory', () {
+    test('a tiny sampling does not exhaust the memory', () {
       final path = Path()..addOval(const Rect.fromLTWH(0, 0, 300, 300));
       final polygon = path.walkContours(1e-7, 0.5).single;
       expect(polygon.length, lessThan(200));
@@ -209,8 +209,8 @@ void main() {
 
     test('a closed contour always gives at least three vertices', () {
       final oval = Path()..addOval(const Rect.fromLTWH(0, 0, 4, 2));
-      for (final (granularity, tolerance) in [(1000.0, null), (1.0, 100.0)]) {
-        final polygon = oval.walkContours(granularity, tolerance).single;
+      for (final (sampling, tolerance) in [(1000.0, null), (1.0, 100.0)]) {
+        final polygon = oval.walkContours(sampling, tolerance).single;
         expect(polygon.length, greaterThanOrEqualTo(3));
         expect(polygon.toSet(), hasLength(polygon.length));
       }

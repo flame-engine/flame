@@ -59,7 +59,7 @@ extension RectExtension on Rect {
 
   /// Create the smallest [Rect] that has all of the [offsets] within it or on
   /// its edges.
-  static Rect fromOffsets(List<Offset> offsets) {
+  static Rect smallestContaining(List<Offset> offsets) {
     if (offsets.isEmpty) {
       return .zero;
     }

@@ -26,5 +26,5 @@ extension OffsetListExtension on List<Offset> {
       map((o) => o.toVector2()).toList(growable: false);
 
   /// Returns the enclosing area as a [Rect].
-  Rect get rectangle => RectExtension.fromOffsets(this);
+  Rect get enclosingRectangle => RectExtension.smallestContaining(this);
 }
