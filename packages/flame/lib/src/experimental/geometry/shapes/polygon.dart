@@ -1,8 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/math.dart';
 import 'package:flame/src/experimental/geometry/shapes/shape.dart';
 import 'package:flame/src/game/transform2d.dart';
@@ -33,6 +32,25 @@ class Polygon extends Shape {
     } else {
       _convex = convex;
     }
+  }
+
+  /// Constructs the polygon from the given [contour] of a [Path]
+  /// (the first by default).
+  ///
+  /// A polygon only has straight edges, so the curves of the path are
+  /// approximated. The contour is sampled every [sampling] along its length,
+  /// and the samples that are not needed to stay within about half of the
+  /// [sampling] of the contour are left out. Higher values give fewer vertices
+  /// and a looser fit, while straight stretches and the corners between them
+  /// are exact whatever the [sampling] is.
+  ///
+  /// See [PathMetricExtension.walkContour] for the details of the sampling.
+  factory Polygon.fromPath(
+    Path path, {
+    int contour = 0,
+    double sampling = 1.0,
+  }) {
+    return Polygon(path.walkContourAt(contour, sampling).vertices);
   }
 
   /// The vertices (corners) of the polygon.

@@ -16,6 +16,7 @@ class RectangleComponent extends PolygonComponent {
     super.paint,
     super.paintLayers,
     super.key,
+    super.isSolid,
   }) : super(sizeToVertices(size ?? Vector2.zero(), anchor)) {
     size.addListener(
       () => refreshVertices(
@@ -36,6 +37,7 @@ class RectangleComponent extends PolygonComponent {
     super.paintLayers,
     super.children,
     super.key,
+    super.isSolid,
   }) : super(sizeToVertices(Vector2.all(size), anchor)) {
     this.size.addListener(
       () => refreshVertices(
@@ -62,6 +64,7 @@ class RectangleComponent extends PolygonComponent {
     super.shrinkToBounds,
     super.key,
     super.children,
+    super.isSolid,
   }) : super.relative([
          relation.clone(),
          Vector2(relation.x, -relation.y),
@@ -87,6 +90,7 @@ class RectangleComponent extends PolygonComponent {
     List<Paint>? paintLayers,
     ComponentKey? key,
     List<Component>? children,
+    bool isSolid = false,
   }) {
     return RectangleComponent(
       position: anchor == Anchor.topLeft
@@ -105,6 +109,7 @@ class RectangleComponent extends PolygonComponent {
       paintLayers: paintLayers,
       key: key,
       children: children,
+      isSolid: isSolid,
     );
   }
 

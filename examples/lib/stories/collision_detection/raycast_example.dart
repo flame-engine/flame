@@ -1,13 +1,14 @@
-import 'dart:math';
-
+import 'package:examples/commons/paths_creation_mixin.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/geometry.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
-class RaycastExample extends FlameGame with HasCollisionDetection {
+class RaycastExample extends FlameGame
+    with HasCollisionDetection, PathsCreationMixin {
   static const description = '''
 In this example the raycast functionality is showcased. The circle moves around
 and casts 10 rays and checks how far the nearest hitboxes are and naively moves
@@ -23,9 +24,8 @@ around trying not to hit them.
   final safetyDistance = 50;
   final direction = Vector2(0, 1);
   final velocity = Vector2.zero();
-  final random = Random();
 
-  static const numberOfRays = 10;
+  static const numberOfRays = 12;
   final List<Ray2> rays = [];
   final List<RaycastResult<ShapeHitbox>> results = [];
 
@@ -34,48 +34,10 @@ around trying not to hit them.
   Future<void> onLoad() async {
     final paint = BasicPalette.gray.paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
+      ..strokeWidth = 3.0;
     add(ScreenHitbox());
-    add(
-      CircleComponent(
-        position: Vector2(100, 100),
-        radius: 50,
-        paint: paint,
-        children: [CircleHitbox()],
-      ),
-    );
-    add(
-      CircleComponent(
-        position: Vector2(150, 500),
-        radius: 50,
-        paint: paint,
-        children: [CircleHitbox()],
-      ),
-    );
-    add(
-      RectangleComponent(
-        position: Vector2.all(300),
-        size: Vector2.all(100),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-    );
-    add(
-      RectangleComponent(
-        position: Vector2.all(500),
-        size: Vector2(100, 200),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-    );
-    add(
-      RectangleComponent(
-        position: Vector2(550, 200),
-        size: Vector2(200, 150),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-    );
+    addFixedPaths(paint);
+    addTestPaths(paint);
   }
 
   final _velocityModifier = Vector2.zero();
