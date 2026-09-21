@@ -23,7 +23,7 @@ void main() {
                 ),
               );
             final block = TestBlock(
-              Vector2(100, 100),
+              Vector2.all(100),
               Vector2.all(64),
               addTestHitbox: false,
             )..anchor = Anchor.center;
