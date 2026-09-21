@@ -56,32 +56,54 @@ void main() {
       );
     });
 
-    testRandom('aabb Aabb2Extension.fromVertices constructor', (Random r) {
-      const numOffsets = 100;
-      const aabbSize = Size(1, 1);
-      final offsets = <Offset>[
-        for (var index = 0; index < numOffsets; ++index)
-          Offset(
-            aabbSize.width * r.nextDouble(),
-            aabbSize.height * r.nextDouble(),
-          ),
-      ];
+    group('fromVertices', () {
+      test('spans the extremes of the vertices', () {
+        final aabb2 = Aabb2Extension.fromVertices([
+          Vector2(2, -7),
+          Vector2(-4, 1),
+          Vector2(9, 3),
+          Vector2(0, 12),
+          Vector2(1, 2),
+        ]);
 
-      final vertices = offsets.vertices;
+        expect(aabb2.min, Vector2(-4, -7));
+        expect(aabb2.max, Vector2(9, 12));
+      });
 
-      final aabb2 = Aabb2Extension.fromVertices(vertices);
-      final verticesBounds = RectExtension.getBounds(vertices);
+      test('does not include the origin for vertices away from it', () {
+        final aabb2 = Aabb2Extension.fromVertices([
+          Vector2(10, 20),
+          Vector2(30, 25),
+          Vector2(15, 40),
+        ]);
 
-      final min = aabb2.min;
-      final max = aabb2.max;
+        expect(aabb2.min, Vector2(10, 20));
+        expect(aabb2.max, Vector2(30, 40));
+      });
 
-      _checkRectValues(
-        verticesBounds,
-        left: min.x,
-        top: min.y,
-        right: max.x,
-        bottom: max.y,
-      );
+      test('is a point for a single vertex', () {
+        final vertex = Vector2(3, -5);
+        final aabb2 = Aabb2Extension.fromVertices([vertex]);
+
+        expect(aabb2.min, Vector2(3, -5));
+        expect(aabb2.max, Vector2(3, -5));
+        expect(aabb2.min, isNot(same(vertex)));
+        expect(aabb2.max, isNot(same(vertex)));
+      });
+
+      test('is empty at the origin without vertices', () {
+        final aabb2 = Aabb2Extension.fromVertices([]);
+
+        expect(aabb2.min, Vector2.zero());
+        expect(aabb2.max, Vector2.zero());
+      });
+
+      test('leaves the vertices untouched', () {
+        final vertices = [Vector2(5, 5), Vector2(-1, 8), Vector2(7, -2)];
+        Aabb2Extension.fromVertices(vertices);
+
+        expect(vertices, [Vector2(5, 5), Vector2(-1, 8), Vector2(7, -2)]);
+      });
     });
   });
 }
