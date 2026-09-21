@@ -276,39 +276,22 @@ List<Ray2> _randomRays(Random random, double spread) => List.generate(
 /// The [polygon] has to be sampled from that same [contour], since points on
 /// any other contour of the path are unrelated to it.
 double _maxError(PathMetric contour, List<Offset> polygon) {
-  var worst = 0.0;
+  var worstSquared = 0.0;
   for (var distance = 0.0; distance < contour.length; distance += 0.25) {
     final position = contour.getTangentForOffset(distance)!.position;
-    worst = max(worst, _distanceToPolygon(position, polygon));
-  }
-  return worst;
-}
-
-double _distanceToPolygon(Offset point, List<Offset> polygon) {
-  var best = double.infinity;
-  for (var index = 0; index < polygon.length; index++) {
-    final distance = _distanceToSegment(
-      point,
-      polygon[index],
-      polygon[(index + 1) % polygon.length],
-    );
-    if (distance < best) {
-      best = distance;
+    var closestSquared = double.infinity;
+    for (var index = 0; index < polygon.length; index++) {
+      closestSquared = min(
+        closestSquared,
+        position.distanceToSegmentSquared(
+          polygon[index],
+          polygon[(index + 1) % polygon.length],
+        ),
+      );
     }
+    worstSquared = max(worstSquared, closestSquared);
   }
-  return best;
-}
-
-double _distanceToSegment(Offset point, Offset from, Offset to) {
-  final delta = to - from;
-  final lengthSquared = delta.dx * delta.dx + delta.dy * delta.dy;
-  if (lengthSquared == 0) {
-    return (point - from).distance;
-  }
-  final toPoint = point - from;
-  final projection =
-      (toPoint.dx * delta.dx + toPoint.dy * delta.dy) / lengthSquared;
-  return (point - (from + delta * projection.clamp(0.0, 1.0))).distance;
+  return sqrt(worstSquared);
 }
 
 double _medianMicroseconds(void Function() body, {int repetitions = 15}) {

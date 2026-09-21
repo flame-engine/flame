@@ -18,6 +18,27 @@ extension OffsetExtension on Offset {
 
   /// Creates a [Rect] starting in origin and going the [Offset]
   Rect toRect() => Rect.fromLTWH(0, 0, dx, dy);
+
+  /// The squared distance from this [Offset] to the closest point on the line
+  /// segment between [from] and [to].
+  double distanceToSegmentSquared(Offset from, Offset to) {
+    final segmentX = to.dx - from.dx;
+    final segmentY = to.dy - from.dy;
+    final pointX = dx - from.dx;
+    final pointY = dy - from.dy;
+    final lengthSquared = segmentX * segmentX + segmentY * segmentY;
+    final along = pointX * segmentX + pointY * segmentY;
+    if (along <= 0) {
+      return pointX * pointX + pointY * pointY;
+    }
+    if (along >= lengthSquared) {
+      final endX = pointX - segmentX;
+      final endY = pointY - segmentY;
+      return endX * endX + endY * endY;
+    }
+    final across = pointX * segmentY - pointY * segmentX;
+    return across * across / lengthSquared;
+  }
 }
 
 extension OffsetListExtension on List<Offset> {
