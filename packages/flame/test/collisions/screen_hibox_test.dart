@@ -12,7 +12,7 @@ import 'collision_test_helpers.dart';
 void main() {
   group('ScreenHitbox', () {
     runCollisionTestRegistry({
-      'does not collide when a contour is fully contained':
+      'collides with a contour only once it reaches the edge of the screen':
           (hasCollisionDetection) async {
             final game = hasCollisionDetection as FlameGame;
             final path = Path()
@@ -34,6 +34,21 @@ void main() {
             game.update(0);
 
             expect(block.activeCollisions, isEmpty);
+            expect(block.startCounter, 0);
+
+            block.position = game.camera.visibleWorldRect.topLeft.toVector2();
+            game.update(0);
+
+            expect(block.activeCollisions, {screenHitbox});
+            expect(block.startCounter, 1);
+            expect(block.onCollisionCounter, 1);
+            expect(block.endCounter, 0);
+
+            block.position = Vector2.all(100);
+            game.update(0);
+
+            expect(block.activeCollisions, isEmpty);
+            expect(block.endCounter, 1);
           },
     });
 
