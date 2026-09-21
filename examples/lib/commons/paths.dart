@@ -26,8 +26,8 @@ final pathStroke = Paint()
 ///
 /// Paints are expensive to create, so the three of them are created once
 /// and picked by state with [forState] whenever they are needed.
-class StatePaints {
-  StatePaints({
+class InteractiveStatePaints {
+  InteractiveStatePaints({
     required Color normal,
     required Color hovered,
     required Color active,
@@ -58,19 +58,19 @@ class StatePaints {
   }
 }
 
-final lightStrokes = StatePaints(
+final lightStrokes = InteractiveStatePaints(
   normal: const Color(0x90ffffff),
   hovered: const Color(0xd0ffffff),
   active: const Color(0xe0ffffff),
 );
 
-final greenStrokes = StatePaints(
+final greenStrokes = InteractiveStatePaints(
   normal: const Color(0xd000ff00),
   hovered: const Color(0xef00ff00),
   active: const Color(0xff00ff00),
 );
 
-final redStrokes = StatePaints(
+final redStrokes = InteractiveStatePaints(
   normal: const Color(0xd0ff0000),
   hovered: const Color(0xe0ff0000),
   active: const Color(0xffff0000),

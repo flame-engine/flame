@@ -334,7 +334,7 @@ class RayCircleComponent extends CircleComponent
   Paint get _redPaint => _paintFrom(redStrokes);
   Paint get _greenPaint => _paintFrom(greenStrokes);
 
-  Paint _paintFrom(StatePaints paints) {
+  Paint _paintFrom(InteractiveStatePaints paints) {
     return paints.forState(isDragging: isDragging, isHovering: isHovering);
   }
 }
