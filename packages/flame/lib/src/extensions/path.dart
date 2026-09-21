@@ -142,12 +142,12 @@ extension PathMetricExtension on PathMetric {
     if (length <= 0) {
       return [];
     }
-    final validGranularity = sampling.isFinite && sampling > 0 ? sampling : 1.0;
+    final validSampling = sampling.isFinite && sampling > 0 ? sampling : 1.0;
     // A closed contour is sampled in at least three steps, so that it can be a
     // polygon no matter how coarse the sampling is.
     final step = isClosed
-        ? min(max(validGranularity, length / _maxSteps), length / 3)
-        : max(validGranularity, length / _maxSteps);
+        ? min(max(validSampling, length / _maxSteps), length / 3)
+        : max(validSampling, length / _maxSteps);
     final maxDeviation = tolerance ?? step / 2;
     final sampler = _ContourSampler(this, step, maxDeviation / 6)..sample();
     final points = _simplify(

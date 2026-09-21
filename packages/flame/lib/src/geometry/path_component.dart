@@ -15,7 +15,7 @@ class PathComponent extends ShapeComponent
     with CollisionCallbacks, CollisionPassthrough {
   PathComponent({
     required Path path,
-    this.granularity = 1.0,
+    this.sampling = 1.0,
     this.hitboxesPriority,
     this.addHitboxes = false,
     this.loadHitboxes = true,
@@ -48,9 +48,8 @@ class PathComponent extends ShapeComponent
   /// The path to display, already rooted at the origin.
   final Path path;
 
-  /// The granularity used when sampling the path contours used to
-  /// create the hitboxes.
-  final double granularity;
+  /// The step used when sampling the path contours generating the hitboxes.
+  final double sampling;
 
   /// The hitboxes priority: if not specified, by default the hitboxes
   /// use a relative priority of 1.
@@ -135,7 +134,7 @@ class PathComponent extends ShapeComponent
 
   // Create a hitbox for each path contour with at least three vertices.
   List<PolygonHitbox> _createHitboxes() {
-    final contours = path.walkContours(granularity);
+    final contours = path.walkContours(sampling);
     final boxes = <PolygonHitbox>[];
     for (var index = 0; index < contours.length; index++) {
       final contour = contours[index];
