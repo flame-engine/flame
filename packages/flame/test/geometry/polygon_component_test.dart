@@ -71,6 +71,36 @@ void main() {
       expect(identical(first, second), isTrue);
     });
 
+    testWithFlameGame('is recomputed when only the vertices change', (
+      game,
+    ) async {
+      final rectangle = RectangleComponent(
+        position: Vector2(10, 20),
+        size: Vector2(4, 2),
+      );
+      await game.ensureAdd(rectangle);
+
+      expect(
+        rectangle.globalVertices(),
+        unorderedEquals([
+          Vector2(10, 20),
+          Vector2(14, 20),
+          Vector2(14, 22),
+          Vector2(10, 22),
+        ]),
+      );
+      rectangle.size.setValues(8, 6);
+      expect(
+        rectangle.globalVertices(),
+        unorderedEquals([
+          Vector2(10, 20),
+          Vector2(18, 20),
+          Vector2(18, 26),
+          Vector2(10, 26),
+        ]),
+      );
+    });
+
     testWithFlameGame('stays counterclockwise under a mirrored ancestor', (
       game,
     ) async {

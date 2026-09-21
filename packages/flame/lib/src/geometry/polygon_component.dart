@@ -1,11 +1,11 @@
 import 'dart:math';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/geometry/absolute_transform.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
@@ -211,6 +211,7 @@ class PolygonComponent extends ShapeComponent {
       final newVertex = newVertices[i];
       _vertices[i].setFrom(newVertex - topLeft);
     }
+    _hasValidGlobalVertices = false;
     _path
       ..reset()
       ..addPolygon(
@@ -228,88 +229,23 @@ class PolygonComponent extends ShapeComponent {
 
   /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
-    _composeAbsoluteTransform();
-    final m = _absoluteTransform;
-    final cache = _globalVerticesCacheKey;
-    var isCacheValid = _hasGlobalVertices;
-    if (isCacheValid) {
-      for (var i = 0; i < 6; i++) {
-        if (cache[i] != m[i]) {
-          isCacheValid = false;
-          break;
-        }
-      }
-      isCacheValid = isCacheValid && cache[6] == size.x && cache[7] == size.y;
-    }
-    if (!isCacheValid) {
+    final hasMoved = _absoluteTransform.update(this);
+    if (hasMoved || !_hasValidGlobalVertices) {
       for (var i = 0; i < _vertices.length; i++) {
-        final vertex = _vertices[i];
-        _globalVertices[i].setValues(
-          m[0] * vertex.x + m[2] * vertex.y + m[4],
-          m[1] * vertex.x + m[3] * vertex.y + m[5],
-        );
+        _absoluteTransform.apply(_vertices[i], output: _globalVertices[i]);
       }
-      // A negative determinant means the transform mirrors the polygon, so the
-      // list will be clockwise and has to be reversed to become
-      // counterclockwise.
-      if (m[0] * m[3] - m[1] * m[2] < 0) {
+      if (_absoluteTransform.isMirrored) {
+        // Since the list will be clockwise we have to reverse it for it to
+        // become counterclockwise.
         _reverseList(_globalVertices);
       }
-      for (var i = 0; i < 6; i++) {
-        cache[i] = m[i];
-      }
-      cache[6] = size.x;
-      cache[7] = size.y;
-      _hasGlobalVertices = true;
+      _hasValidGlobalVertices = true;
     }
     return _globalVertices;
   }
 
-  final Float64List _absoluteTransform = Float64List(6);
-  final Float64List _globalVerticesCacheKey = Float64List(8);
-  bool _hasGlobalVertices = false;
-
-  /// Composes the 2D affine transform from local to global coordinates into
-  /// [_absoluteTransform] as `[a, b, c, d, tx, ty]`, where a point maps to
-  /// `(a * x + c * y + tx, b * x + d * y + ty)`.
-  void _composeAbsoluteTransform() {
-    final own = transform.transformMatrix.storage;
-    var a = own[0];
-    var b = own[1];
-    var c = own[4];
-    var d = own[5];
-    var tx = own[12];
-    var ty = own[13];
-    var ancestor = parent;
-    while (ancestor != null) {
-      if (ancestor is PositionComponent) {
-        final p = ancestor.transform.transformMatrix.storage;
-        final p0 = p[0];
-        final p1 = p[1];
-        final p4 = p[4];
-        final p5 = p[5];
-        final newA = p0 * a + p4 * b;
-        final newB = p1 * a + p5 * b;
-        final newC = p0 * c + p4 * d;
-        final newD = p1 * c + p5 * d;
-        final newTx = p0 * tx + p4 * ty + p[12];
-        final newTy = p1 * tx + p5 * ty + p[13];
-        a = newA;
-        b = newB;
-        c = newC;
-        d = newD;
-        tx = newTx;
-        ty = newTy;
-      }
-      ancestor = ancestor.parent;
-    }
-    _absoluteTransform[0] = a;
-    _absoluteTransform[1] = b;
-    _absoluteTransform[2] = c;
-    _absoluteTransform[3] = d;
-    _absoluteTransform[4] = tx;
-    _absoluteTransform[5] = ty;
-  }
+  final AbsoluteTransform _absoluteTransform = AbsoluteTransform();
+  bool _hasValidGlobalVertices = false;
 
   @override
   void render(Canvas canvas) {

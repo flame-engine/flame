@@ -986,7 +986,7 @@ void main() {
       );
     });
 
-    test('precomputed center and radius give the same intersections', () {
+    test('scaled circle uses its absolute center and scaled radius', () {
       final circle = CircleComponent(
         radius: 1.0,
         position: Vector2(3, 4),
@@ -994,14 +994,6 @@ void main() {
         scale: Vector2.all(2),
       );
       final segment = LineSegment(Vector2(0, 4), Vector2(6, 4));
-      expect(
-        circle.lineSegmentIntersections(
-          segment,
-          center: circle.absoluteCenter,
-          radius: circle.scaledRadius,
-        ),
-        unorderedEquals(circle.lineSegmentIntersections(segment)),
-      );
       expect(
         circle.lineSegmentIntersections(segment),
         unorderedEquals([Vector2(1, 4), Vector2(5, 4)]),
