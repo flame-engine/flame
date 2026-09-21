@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:examples/commons/path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';

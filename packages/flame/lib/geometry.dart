@@ -2,7 +2,6 @@ export 'src/geometry/circle_component.dart';
 export 'src/geometry/constants.dart';
 export 'src/geometry/line.dart';
 export 'src/geometry/line_segment.dart';
-export 'src/geometry/path_component.dart';
 export 'src/geometry/polygon_component.dart';
 export 'src/geometry/polygon_ray_intersection.dart';
 export 'src/geometry/ray2.dart';

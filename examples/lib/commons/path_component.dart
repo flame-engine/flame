@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
@@ -15,8 +16,6 @@ class PathComponent extends ShapeComponent
     with CollisionCallbacks, CollisionPassthrough {
   PathComponent({
     required Path path,
-    this.granularity = 1.0,
-    this.hitboxesPriority,
     this.addHitboxes = false,
     this.loadHitboxes = true,
     this.renderHitboxes = false,
@@ -31,30 +30,15 @@ class PathComponent extends ShapeComponent
     super.key,
     super.paint,
     super.paintLayers,
-    bool renderShape = true,
   }) : path = path.toOrigin,
        super(size: path.getBounds().size.toVector2()) {
-    this.renderShape = renderShape;
     if (addHitboxes) {
       _addHitboxes();
     }
   }
 
-  /// The default paint used to render hitboxes.
-  static Paint hitboxStroke = Paint()
-    ..color = const Color(0xffffffff)
-    ..style = .stroke;
-
   /// The path to display, already rooted at the origin.
   final Path path;
-
-  /// The granularity used when sampling the path contours used to
-  /// create the hitboxes.
-  final double granularity;
-
-  /// The hitboxes priority: if not specified, by default the hitboxes
-  /// use a relative priority of 1.
-  final int? hitboxesPriority;
 
   /// Whether the hitboxes are added right away, in the constructor.
   final bool addHitboxes;
@@ -72,7 +56,7 @@ class PathComponent extends ShapeComponent
   final Paint? hitboxesPaint;
 
   var _hitboxesAdded = false;
-  late final _hitboxes = _createHitboxes();
+  late final _hitboxes = _hitboxesFor(path);
 
   @override
   FutureOr<void> onLoad() async {
@@ -109,7 +93,6 @@ class PathComponent extends ShapeComponent
     _hitboxesAdded = true;
   }
 
-  // Filter the hitboxes by keeping only the largest and all disjoint ones.
   List<PolygonHitbox> _filterHitboxes(List<PolygonHitbox> hitboxes) {
     if (hitboxes.length < 2) {
       return hitboxes;
@@ -133,21 +116,14 @@ class PathComponent extends ShapeComponent
     return hitboxes;
   }
 
-  // Create a hitbox for each path contour with at least three vertices.
-  List<PolygonHitbox> _createHitboxes() {
-    final contours = path.walkContours(granularity);
-    final boxes = <PolygonHitbox>[];
-    for (var index = 0; index < contours.length; index++) {
-      final contour = contours[index];
-      if (contour.length > 2) {
-        boxes.add(
-          PolygonHitbox(contour.vertices)
-            ..priority = hitboxesPriority ?? priority + 1
-            ..paint = hitboxesPaint ?? hitboxStroke
-            ..renderShape = renderHitboxes,
-        );
-      }
-    }
-    return boxes;
+  List<PolygonHitbox> _hitboxesFor(Path path) {
+    final count = path.contours.length;
+    return [
+      for (var contour = 0; contour < count; contour++)
+        PolygonHitbox.fromPath(path, contour: contour)
+          ..priority = priority + 1
+          ..paint = hitboxesPaint ?? whiteStroke
+          ..renderShape = renderHitboxes,
+    ];
   }
 }

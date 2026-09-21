@@ -127,31 +127,6 @@ void main() {
 ```
 
 
-## PathComponent
-
-When a whole `Path` is needed (for rendering or collision detection) instead of a single contour,
-creating a `PathComponent` automatically walks all contours in the given  `Path` and creates
-`PolygonHitbox` objects for each contour; by default, only disjoint contours become hitboxes,
-but `PathComponent` supports keeping conjoint contours via the `filterHitboxes` parameter.
-The component size is derived directly from the given `Path`.
-
-Also by default, the `Path` is rendered, whereas the hitboxes are not: this behavior may be
-changed via (respectively) the `renderShape` and `renderHitboxes` parameters.
-
-Using the previous two-contour `Path`, creating a `PathComponent` for both contours works thusly:
-
-
-```dart
-void main() {
-  final path = Path()
-    ..addOval(const Rect.fromLTWH(0, 0, 100, 60))
-    ..addRect(const Rect.fromLTWH(200, 0, 50, 50));
-
-  final component = PathComponent(path: path);
-}
-```
-
-
 ## RectangleComponent
 
 A `RectangleComponent` is created very similarly to how a `PositionComponent` is created, since it

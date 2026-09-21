@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:examples/commons/path_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -9,6 +10,10 @@ import 'package:flame_test/test_paths.dart';
 final _rnd = Random();
 
 const shapePriority = 1;
+
+final whiteStroke = Paint()
+  ..color = const Color(0xffffffff)
+  ..style = PaintingStyle.stroke;
 
 final pathStroke = Paint()
   ..color = BasicPalette.blue.color
