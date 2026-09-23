@@ -196,8 +196,11 @@ world.add(
 ```
 
 When `size` is given, the widget is laid out with tight constraints of that size, in the same way
-as a `SizedBox` would. When it is omitted, the widget is laid out with loose constraints bounded by
-the size of the game canvas, and the component adopts whatever size the widget ends up with.
+as a `SizedBox` would. When it is omitted, the component adopts whatever size the widget ends up
+with. In that case the widget is laid out with the `constraints` passed to the component, or, when
+those are omitted too, with loose constraints bounded by the size of the game canvas expressed in
+the local units of the component, so the scale of the component and of its ancestors is taken into
+account but the camera zoom is not.
 
 The hosted widget can be replaced at any time by assigning `widget`, which rebuilds the hosted
 subtree in the same way as returning a new widget from a `build` method would. State inside the
@@ -226,6 +229,11 @@ There are some limitations to be aware of:
 - A widget that needs its own compositing layer (for example one that contains a `RepaintBoundary`,
   a scrollable list, or a platform view) splits the game's picture in two around it. Any `saveLayer`
   that an ancestor component has active at that point is closed and reopened around the widget.
+- A widget can only be painted once per frame. When the same `WidgetComponent` is rendered several
+  times in one frame, for example because its world is viewed by several cameras, only the first
+  render paints the widget.
+- While the component is not rendered, for example because an ancestor is hidden, the widget stays
+  in the widget tree but is excluded from focus and semantics, and `isPainted` is false.
 
 Check the example app
 [widget_component](https://github.com/flame-engine/flame/blob/main/examples/lib/stories/components/widget_component_example.dart)

@@ -386,10 +386,9 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         behavior: widget.behavior,
         children: [
           for (final component in currentGame.widgetComponents)
-            WidgetComponentParentDataWidget(
+            WidgetComponentHost(
               key: ObjectKey(component),
               component: component,
-              child: component.widget,
             ),
         ],
       );

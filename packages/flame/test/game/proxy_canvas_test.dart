@@ -47,7 +47,7 @@ void main() {
 
       expect(canvas.inner, same(second));
       expect(second.getSaveCount(), expectedSaveCount);
-      expect(second.getTransform(), expectedTransform);
+      _expectTransform(second.getTransform(), expectedTransform);
       expect(second.getDestinationClipBounds(), expectedClip);
 
       canvas.restore();
@@ -83,8 +83,57 @@ void main() {
       canvas.swap(second);
 
       expect(second.getSaveCount(), 2);
-      expect(second.getTransform(), expectedTransform);
+      _expectTransform(second.getTransform(), expectedTransform);
       expect(second.getTransform()[12], 1);
+
+      firstRecorder.endRecording().dispose();
+      secondRecorder.endRecording().dispose();
+    });
+
+    test('replays a clip in the coordinate space it was applied in', () {
+      final firstRecorder = PictureRecorder();
+      final first = Canvas(firstRecorder);
+      final canvas = ProxyCanvas(first);
+
+      canvas.translate(10, 0);
+      canvas.clipRect(const Rect.fromLTWH(0, 0, 50, 50));
+      canvas.translate(5, 0);
+      canvas.save();
+      canvas.scale(2);
+      canvas.clipRect(const Rect.fromLTWH(0, 0, 10, 10));
+      canvas.translate(1, 1);
+      final expectedTransform = first.getTransform();
+      final expectedClip = first.getDestinationClipBounds();
+
+      final secondRecorder = PictureRecorder();
+      final second = Canvas(secondRecorder);
+      canvas.swap(second);
+
+      _expectTransform(second.getTransform(), expectedTransform);
+      expect(second.getDestinationClipBounds(), expectedClip);
+      expect(expectedClip, const Rect.fromLTWH(15, 0, 20, 20));
+
+      firstRecorder.endRecording().dispose();
+      secondRecorder.endRecording().dispose();
+    });
+
+    test('replays the state the inner canvas had before the proxy', () {
+      final firstRecorder = PictureRecorder();
+      final first = Canvas(firstRecorder);
+      first.translate(7, 0);
+      first.clipRect(const Rect.fromLTWH(0, 0, 100, 100));
+      final canvas = ProxyCanvas(first);
+      canvas.translate(3, 0);
+      final expectedTransform = first.getTransform();
+      final expectedClip = first.getDestinationClipBounds();
+
+      final secondRecorder = PictureRecorder();
+      final second = Canvas(secondRecorder);
+      canvas.swap(second);
+
+      _expectTransform(second.getTransform(), expectedTransform);
+      expect(second.getDestinationClipBounds(), expectedClip);
+      expect(second.getTransform()[12], 10);
 
       firstRecorder.endRecording().dispose();
       secondRecorder.endRecording().dispose();
@@ -112,4 +161,10 @@ void main() {
       secondRecorder.endRecording().dispose();
     });
   });
+}
+
+void _expectTransform(Float64List actual, Float64List expected) {
+  for (var i = 0; i < 16; i++) {
+    expect(actual[i], closeTo(expected[i], 1e-6), reason: 'element $i');
+  }
 }

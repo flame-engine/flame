@@ -6,6 +6,7 @@ import 'package:flame/src/components/widget_component.dart';
 import 'package:flame/src/game/game_loop.dart';
 import 'package:flame/src/game/proxy_canvas.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart' hide WidgetBuilder;
 import 'package:meta/meta.dart';
 
@@ -15,8 +16,7 @@ import 'package:meta/meta.dart';
 /// render the game.
 ///
 /// Its [children] are the widgets hosted by the [WidgetComponent]s that are
-/// currently mounted in the game, each wrapped in a
-/// [WidgetComponentParentDataWidget].
+/// currently mounted in the game, each wrapped in a [WidgetComponentHost].
 class RenderGameWidget extends MultiChildRenderObjectWidget {
   const RenderGameWidget({
     required this.game,
@@ -56,8 +56,12 @@ class WidgetComponentParentData extends ContainerBoxParentData<RenderBox> {
   WidgetComponent? component;
 
   /// The transform from the child's coordinates to the local coordinates of
-  /// the [GameRenderBox], as of the last time the child was painted.
+  /// the [GameRenderBox], as of the last time the child was painted, or null
+  /// when the child was not painted during the last paint.
   Matrix4? paintTransform;
+
+  /// Whether the child has been painted during the current paint.
+  bool paintedThisFrame = false;
 }
 
 /// Wraps the widget of a [WidgetComponent] so that the [GameRenderBox] knows
@@ -84,6 +88,79 @@ class WidgetComponentParentDataWidget
 
   @override
   Type get debugTypicalAncestorWidgetClass => RenderGameWidget;
+}
+
+/// Hosts the widget of a [WidgetComponent] in the Flutter tree.
+///
+/// Rebuilds the hosted subtree when the component's widget changes, without
+/// rebuilding the whole `GameWidget`, and excludes the subtree from focus and
+/// semantics while the component is not being painted.
+@internal
+class WidgetComponentHost extends StatefulWidget {
+  const WidgetComponentHost({required this.component, super.key});
+
+  final WidgetComponent component;
+
+  @override
+  State<WidgetComponentHost> createState() => _WidgetComponentHostState();
+}
+
+class _WidgetComponentHostState extends State<WidgetComponentHost> {
+  bool _rebuildScheduled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.component.hostListenable.addListener(_onComponentChanged);
+  }
+
+  @override
+  void didUpdateWidget(WidgetComponentHost oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.component != widget.component) {
+      oldWidget.component.hostListenable.removeListener(_onComponentChanged);
+      widget.component.hostListenable.addListener(_onComponentChanged);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.component.hostListenable.removeListener(_onComponentChanged);
+    super.dispose();
+  }
+
+  void _onComponentChanged() {
+    final phase = SchedulerBinding.instance.schedulerPhase;
+    if (phase == SchedulerPhase.persistentCallbacks) {
+      if (_rebuildScheduled) {
+        return;
+      }
+      _rebuildScheduled = true;
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        _rebuildScheduled = false;
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    } else {
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final component = widget.component;
+    return WidgetComponentParentDataWidget(
+      component: component,
+      child: ExcludeFocus(
+        excluding: !component.isPainted,
+        child: ExcludeSemantics(
+          excluding: !component.isPainted,
+          child: component.widget,
+        ),
+      ),
+    );
+  }
 }
 
 class GameRenderBox extends RenderBox
@@ -142,6 +219,9 @@ class GameRenderBox extends RenderBox
   /// The widgets that were painted during the last paint, in paint order.
   final List<_PaintedWidget> _paintedWidgets = [];
 
+  bool _isPerformingLayout = false;
+  bool _paintedStateUpdateScheduled = false;
+
   PaintingContext? _paintingContext;
   ProxyCanvas? _canvas;
 
@@ -171,23 +251,41 @@ class GameRenderBox extends RenderBox
     }
   }
 
+  /// Requests a relayout of the hosted widgets, for example because the size
+  /// of a [WidgetComponent] changed. Ignored while the layout is running,
+  /// since the sizes set during layout are already the laid out ones.
+  @internal
+  void markNeedsWidgetLayout() {
+    if (!_isPerformingLayout) {
+      markNeedsLayout();
+    }
+  }
+
   @override
   void performLayout() {
-    _childByComponent.clear();
-    _paintedWidgets.clear();
-    final gameSize = size.toVector2();
-    var child = firstChild;
-    while (child != null) {
-      final parentData = child.parentData! as WidgetComponentParentData;
-      final component = parentData.component;
-      if (component == null) {
-        child.layout(BoxConstraints.tight(Size.zero));
-      } else {
-        _childByComponent[component] = child;
-        child.layout(component.constraintsFor(gameSize), parentUsesSize: true);
-        component.adoptWidgetSize(child.size);
+    _isPerformingLayout = true;
+    try {
+      _childByComponent.clear();
+      _paintedWidgets.clear();
+      final gameSize = size.toVector2();
+      var child = firstChild;
+      while (child != null) {
+        final parentData = child.parentData! as WidgetComponentParentData;
+        final component = parentData.component;
+        if (component == null) {
+          child.layout(BoxConstraints.tight(Size.zero));
+        } else {
+          _childByComponent[component] = child;
+          child.layout(
+            component.constraintsFor(gameSize),
+            parentUsesSize: true,
+          );
+          component.adoptWidgetSize(child.size);
+        }
+        child = parentData.nextSibling;
       }
-      child = parentData.nextSibling;
+    } finally {
+      _isPerformingLayout = false;
     }
   }
 
@@ -287,6 +385,9 @@ class GameRenderBox extends RenderBox
       return;
     }
 
+    for (final child in _childByComponent.values) {
+      (child.parentData! as WidgetComponentParentData).paintedThisFrame = false;
+    }
     final canvas = ProxyCanvas(context.canvas);
     _paintingContext = context;
     _canvas = canvas;
@@ -302,6 +403,36 @@ class GameRenderBox extends RenderBox
       _paintingContext = null;
       _canvas = null;
     }
+    _updatePaintedState();
+  }
+
+  /// Clears the paint transform of the children that were not painted and
+  /// tells the components whose painted state changed, after the frame, so
+  /// that their hosts can rebuild.
+  void _updatePaintedState() {
+    var needsUpdate = false;
+    for (final entry in _childByComponent.entries) {
+      final parentData = entry.value.parentData! as WidgetComponentParentData;
+      if (!parentData.paintedThisFrame) {
+        parentData.paintTransform = null;
+      }
+      if (parentData.paintedThisFrame != entry.key.isPainted) {
+        needsUpdate = true;
+      }
+    }
+    if (!needsUpdate || _paintedStateUpdateScheduled) {
+      return;
+    }
+    _paintedStateUpdateScheduled = true;
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _paintedStateUpdateScheduled = false;
+      for (final entry in _childByComponent.entries) {
+        final parentData = entry.value.parentData;
+        if (parentData is WidgetComponentParentData) {
+          entry.key.markPainted(isPainted: parentData.paintedThisFrame);
+        }
+      }
+    });
   }
 
   /// Paints the widget hosted by [component] at the current transform of
@@ -309,7 +440,8 @@ class GameRenderBox extends RenderBox
   ///
   /// Does nothing when [canvas] is not the canvas of the current paint, which
   /// is the case when the component tree is being rendered somewhere else,
-  /// for example into a snapshot.
+  /// for example into a snapshot, or when the widget has already been painted
+  /// during this paint.
   @internal
   void paintWidgetComponent(WidgetComponent component, ui.Canvas canvas) {
     final context = _paintingContext;
@@ -325,6 +457,10 @@ class GameRenderBox extends RenderBox
     if (child == null) {
       return;
     }
+    final parentData = child.parentData! as WidgetComponentParentData;
+    if (parentData.paintedThisFrame) {
+      return;
+    }
 
     final transform = Matrix4.fromFloat64List(canvas.getTransform());
     if (transform.determinant() == 0) {
@@ -332,8 +468,9 @@ class GameRenderBox extends RenderBox
     }
     final clip = canvas.getDestinationClipBounds();
     final localTransform = inverseBaseTransform.multiplied(transform);
-    (child.parentData! as WidgetComponentParentData).paintTransform =
-        localTransform;
+    parentData
+      ..paintTransform = localTransform
+      ..paintedThisFrame = true;
     _paintedWidgets.add(
       _PaintedWidget(
         component: component,

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 /// A [Canvas] that forwards every call to an underlying canvas, and that can
 /// swap that underlying canvas mid-frame while preserving the current save
@@ -15,15 +16,32 @@ import 'package:meta/meta.dart';
 /// canvas is brought to the same state (save count, transforms and clips) that
 /// the old one was in, so that pending `restore` calls in the component tree
 /// keep balancing.
+///
+/// Transforms are accumulated into a single matrix per save level, so that
+/// recording them does not allocate. Clips are recorded as objects together
+/// with the transform that was accumulated before them, so that they can be
+/// replayed in the right coordinate space.
+///
+/// Any transform or clip that the underlying canvas already had when the proxy
+/// was created is replayed too. In practice there is none: whenever a widget
+/// needs compositing, Flutter also composites the transforms and clips of the
+/// ancestors of the game render box through layers instead of drawing them on
+/// the shared canvas.
 @internal
 class ProxyCanvas implements Canvas {
-  ProxyCanvas(this._canvas) : _baseSaveCount = _canvas.getSaveCount() {
+  ProxyCanvas(this._canvas)
+    : _baseSaveCount = _canvas.getSaveCount(),
+      _initialTransform = _canvas.getTransform(),
+      _initialClip = _canvas.getDestinationClipBounds() {
     _levels.add(_SaveLevel.plain());
   }
 
   Canvas _canvas;
   int _baseSaveCount;
+  final Float64List _initialTransform;
+  final Rect _initialClip;
   final List<_SaveLevel> _levels = [];
+  final Matrix4 _scratch = Matrix4.identity();
 
   /// The canvas that currently receives all the calls.
   Canvas get inner => _canvas;
@@ -32,6 +50,12 @@ class ProxyCanvas implements Canvas {
   /// stack, transforms and clips onto it first.
   void swap(Canvas canvas) {
     _baseSaveCount = canvas.getSaveCount();
+    if (_initialClip.isFinite && _initialClip != Rect.largest) {
+      canvas.clipRect(_initialClip);
+    }
+    if (!_isIdentity(_initialTransform)) {
+      canvas.transform(_initialTransform);
+    }
     for (var i = 0; i < _levels.length; i++) {
       final level = _levels[i];
       if (i > 0) {
@@ -41,9 +65,7 @@ class ProxyCanvas implements Canvas {
           canvas.save();
         }
       }
-      for (final op in level.ops) {
-        op.apply(canvas);
-      }
+      level.replay(canvas);
     }
     _canvas = canvas;
   }
@@ -83,31 +105,35 @@ class ProxyCanvas implements Canvas {
   @override
   void translate(double dx, double dy) {
     _canvas.translate(dx, dy);
-    _current.ops.add(_TranslateOp(dx, dy));
+    _current.pendingTransform.translateByDouble(dx, dy, 0, 1);
   }
 
   @override
   void scale(double sx, [double? sy]) {
     _canvas.scale(sx, sy);
-    _current.ops.add(_ScaleOp(sx, sy));
+    _current.pendingTransform.scaleByDouble(sx, sy ?? sx, 1, 1);
   }
 
   @override
   void rotate(double radians) {
     _canvas.rotate(radians);
-    _current.ops.add(_RotateOp(radians));
+    _current.pendingTransform.rotateZ(radians);
   }
 
   @override
   void skew(double sx, double sy) {
     _canvas.skew(sx, sy);
-    _current.ops.add(_SkewOp(sx, sy));
+    _scratch.setIdentity();
+    _scratch.storage[4] = sx;
+    _scratch.storage[1] = sy;
+    _current.pendingTransform.multiply(_scratch);
   }
 
   @override
   void transform(Float64List matrix4) {
     _canvas.transform(matrix4);
-    _current.ops.add(_TransformOp(Float64List.fromList(matrix4)));
+    _scratch.storage.setAll(0, matrix4);
+    _current.pendingTransform.multiply(_scratch);
   }
 
   @override
@@ -120,15 +146,15 @@ class ProxyCanvas implements Canvas {
     bool doAntiAlias = true,
   }) {
     _canvas.clipRect(rect, clipOp: clipOp, doAntiAlias: doAntiAlias);
-    _current.ops.add(
-      _ClipRectOp(rect, clipOp: clipOp, doAntiAlias: doAntiAlias),
+    _current.recordClip(
+      _ClipRectOperation(rect, clipOp: clipOp, doAntiAlias: doAntiAlias),
     );
   }
 
   @override
   void clipRRect(RRect rrect, {bool doAntiAlias = true}) {
     _canvas.clipRRect(rrect, doAntiAlias: doAntiAlias);
-    _current.ops.add(_ClipRRectOp(rrect, doAntiAlias: doAntiAlias));
+    _current.recordClip(_ClipRRectOperation(rrect, doAntiAlias: doAntiAlias));
   }
 
   @override
@@ -137,15 +163,15 @@ class ProxyCanvas implements Canvas {
     bool doAntiAlias = true,
   }) {
     _canvas.clipRSuperellipse(shape, doAntiAlias: doAntiAlias);
-    _current.ops.add(
-      _ClipRSuperellipseOp(shape, doAntiAlias: doAntiAlias),
+    _current.recordClip(
+      _ClipRSuperellipseOperation(shape, doAntiAlias: doAntiAlias),
     );
   }
 
   @override
   void clipPath(Path path, {bool doAntiAlias = true}) {
     _canvas.clipPath(path, doAntiAlias: doAntiAlias);
-    _current.ops.add(_ClipPathOp(path, doAntiAlias: doAntiAlias));
+    _current.recordClip(_ClipPathOperation(path, doAntiAlias: doAntiAlias));
   }
 
   @override
@@ -306,8 +332,20 @@ class ProxyCanvas implements Canvas {
   ) {
     _canvas.drawShadow(path, color, elevation, transparentOccluder);
   }
+
+  static bool _isIdentity(Float64List matrix) {
+    for (var i = 0; i < 16; i++) {
+      final expected = i % 5 == 0 ? 1.0 : 0.0;
+      if (matrix[i] != expected) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
 
+/// One level of the save stack: the transforms and clips applied since the
+/// `save` or `saveLayer` call that opened it.
 class _SaveLevel {
   _SaveLevel.plain() : isLayer = false, layerBounds = null, layerPaint = null;
 
@@ -316,58 +354,52 @@ class _SaveLevel {
   final bool isLayer;
   final Rect? layerBounds;
   final Paint? layerPaint;
-  final List<_CanvasOp> ops = [];
+
+  /// The transforms accumulated since the last recorded clip, or since the
+  /// start of the level when there is none.
+  final Matrix4 pendingTransform = Matrix4.identity();
+
+  List<_ClipOperation>? _clips;
+
+  void recordClip(_ClipOperation clip) {
+    clip.transformBefore.setFrom(pendingTransform);
+    pendingTransform.setIdentity();
+    (_clips ??= []).add(clip);
+  }
+
+  void replay(Canvas canvas) {
+    final clips = _clips;
+    if (clips != null) {
+      for (final clip in clips) {
+        _applyTransform(canvas, clip.transformBefore);
+        clip.apply(canvas);
+      }
+    }
+    _applyTransform(canvas, pendingTransform);
+  }
+
+  static void _applyTransform(Canvas canvas, Matrix4 transform) {
+    if (!transform.isIdentity()) {
+      canvas.transform(transform.storage);
+    }
+  }
 }
 
-abstract class _CanvasOp {
+abstract class _ClipOperation {
+  /// The transform that was accumulated between the previous clip (or the
+  /// start of the save level) and this clip.
+  final Matrix4 transformBefore = Matrix4.identity();
+
   void apply(Canvas canvas);
 }
 
-class _TranslateOp implements _CanvasOp {
-  _TranslateOp(this.dx, this.dy);
-  final double dx;
-  final double dy;
+class _ClipRectOperation extends _ClipOperation {
+  _ClipRectOperation(
+    this.rect, {
+    required this.clipOp,
+    required this.doAntiAlias,
+  });
 
-  @override
-  void apply(Canvas canvas) => canvas.translate(dx, dy);
-}
-
-class _ScaleOp implements _CanvasOp {
-  _ScaleOp(this.sx, this.sy);
-  final double sx;
-  final double? sy;
-
-  @override
-  void apply(Canvas canvas) => canvas.scale(sx, sy);
-}
-
-class _RotateOp implements _CanvasOp {
-  _RotateOp(this.radians);
-  final double radians;
-
-  @override
-  void apply(Canvas canvas) => canvas.rotate(radians);
-}
-
-class _SkewOp implements _CanvasOp {
-  _SkewOp(this.sx, this.sy);
-  final double sx;
-  final double sy;
-
-  @override
-  void apply(Canvas canvas) => canvas.skew(sx, sy);
-}
-
-class _TransformOp implements _CanvasOp {
-  _TransformOp(this.matrix4);
-  final Float64List matrix4;
-
-  @override
-  void apply(Canvas canvas) => canvas.transform(matrix4);
-}
-
-class _ClipRectOp implements _CanvasOp {
-  _ClipRectOp(this.rect, {required this.clipOp, required this.doAntiAlias});
   final Rect rect;
   final ClipOp clipOp;
   final bool doAntiAlias;
@@ -378,8 +410,9 @@ class _ClipRectOp implements _CanvasOp {
   }
 }
 
-class _ClipRRectOp implements _CanvasOp {
-  _ClipRRectOp(this.rrect, {required this.doAntiAlias});
+class _ClipRRectOperation extends _ClipOperation {
+  _ClipRRectOperation(this.rrect, {required this.doAntiAlias});
+
   final RRect rrect;
   final bool doAntiAlias;
 
@@ -389,8 +422,9 @@ class _ClipRRectOp implements _CanvasOp {
   }
 }
 
-class _ClipRSuperellipseOp implements _CanvasOp {
-  _ClipRSuperellipseOp(this.shape, {required this.doAntiAlias});
+class _ClipRSuperellipseOperation extends _ClipOperation {
+  _ClipRSuperellipseOperation(this.shape, {required this.doAntiAlias});
+
   final RSuperellipse shape;
   final bool doAntiAlias;
 
@@ -400,8 +434,9 @@ class _ClipRSuperellipseOp implements _CanvasOp {
   }
 }
 
-class _ClipPathOp implements _CanvasOp {
-  _ClipPathOp(this.path, {required this.doAntiAlias});
+class _ClipPathOperation extends _ClipOperation {
+  _ClipPathOperation(this.path, {required this.doAntiAlias});
+
   final Path path;
   final bool doAntiAlias;
 

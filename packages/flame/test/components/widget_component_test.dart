@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -58,11 +59,44 @@ Future<void> _pumpGame(WidgetTester tester, FlameGame game) async {
   await tester.pump();
 }
 
-Widget _button(String label, VoidCallback onPressed) {
-  return Material(
-    child: ElevatedButton(onPressed: onPressed, child: Text(label)),
-  );
+class _Button extends StatelessWidget {
+  const _Button(this.label, this.onPressed);
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: ElevatedButton(onPressed: onPressed, child: Text(label)),
+    );
+  }
 }
+
+class _ResizeCountingGame extends FlameGame {
+  int resizeCount = 0;
+
+  @override
+  void onGameResize(Vector2 size) {
+    resizeCount++;
+    super.onGameResize(size);
+  }
+}
+
+class _SplitScreenGame extends FlameGame {
+  @override
+  Future<void> onLoad() async {
+    camera.viewport = FixedSizeViewport(400, 600);
+    camera.viewfinder.anchor = Anchor.topLeft;
+    final secondCamera = CameraComponent(
+      world: world,
+      viewport: FixedSizeViewport(400, 600)..position = Vector2(400, 0),
+    )..viewfinder.anchor = Anchor.topLeft;
+    add(secondCamera);
+  }
+}
+
+class _HidableComponent extends PositionComponent with HasVisibility {}
 
 void main() {
   group('WidgetComponent', () {
@@ -157,7 +191,7 @@ void main() {
       final game = FlameGame();
       game.add(
         WidgetComponent(
-          widget: _button('Press', () => pressed++),
+          widget: _Button('Press', () => pressed++),
           size: Vector2(120, 40),
           position: Vector2(300, 200),
         ),
@@ -177,7 +211,7 @@ void main() {
       var pressed = 0;
       final game = FlameGame();
       final component = WidgetComponent(
-        widget: _button('Press', () => pressed++),
+        widget: _Button('Press', () => pressed++),
         size: Vector2(120, 40),
         position: Vector2(300, 200),
         anchor: Anchor.center,
@@ -207,7 +241,7 @@ void main() {
       game.add(tappable);
       game.add(
         WidgetComponent(
-          widget: _button('Press', () => pressed++),
+          widget: _Button('Press', () => pressed++),
           size: Vector2(120, 40),
           position: Vector2(300, 200),
           priority: 1,
@@ -233,13 +267,13 @@ void main() {
       var topPressed = 0;
       final game = FlameGame();
       final bottom = WidgetComponent(
-        widget: _button('Bottom', () => bottomPressed++),
+        widget: _Button('Bottom', () => bottomPressed++),
         size: Vector2(120, 40),
         position: Vector2(300, 200),
         priority: 2,
       );
       final top = WidgetComponent(
-        widget: _button('Top', () => topPressed++),
+        widget: _Button('Top', () => topPressed++),
         size: Vector2(120, 40),
         position: Vector2(300, 200),
         priority: 1,
@@ -272,7 +306,7 @@ void main() {
       game.add(
         WidgetComponent(
           widget: RepaintBoundary(
-            child: _button('Press', () => pressed++),
+            child: _Button('Press', () => pressed++),
           ),
           size: Vector2(120, 40),
           position: Vector2(300, 200),
@@ -325,6 +359,113 @@ void main() {
       expect(transformLayer.transform!.getTranslation().y, 200);
     });
 
+    testWidgets('lays an adopting widget out in local units', (tester) async {
+      final game = FlameGame();
+      final parent = PositionComponent(scale: Vector2(2, 4));
+      final component = WidgetComponent(widget: const SizedBox.expand());
+      parent.add(component);
+      game.add(parent);
+      await _pumpGame(tester, game);
+
+      expect(component.size, Vector2(400, 150));
+    });
+
+    testWidgets('lays an adopting widget out with explicit constraints', (
+      tester,
+    ) async {
+      final game = FlameGame();
+      final component = WidgetComponent(
+        widget: const SizedBox.expand(),
+        constraints: const BoxConstraints.tightFor(width: 50, height: 20),
+      );
+      game.add(component);
+      await _pumpGame(tester, game);
+
+      expect(component.size, Vector2(50, 20));
+    });
+
+    testWidgets('replaces the widget without rebuilding the game widget', (
+      tester,
+    ) async {
+      final game = _ResizeCountingGame();
+      final component = WidgetComponent(
+        widget: const Text('one'),
+        size: Vector2(100, 40),
+      );
+      game.add(component);
+      await _pumpGame(tester, game);
+      final resizeCount = game.resizeCount;
+
+      component.widget = const Text('two');
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('one'), findsNothing);
+      expect(find.text('two'), findsOneWidget);
+      expect(game.resizeCount, resizeCount);
+    });
+
+    testWidgets('paints a widget once when its world has several cameras', (
+      tester,
+    ) async {
+      var pressed = 0;
+      final game = _SplitScreenGame();
+      final component = WidgetComponent(
+        widget: RepaintBoundary(child: _Button('Press', () => pressed++)),
+        size: Vector2(120, 40),
+        position: Vector2(100, 200),
+      );
+      game.world.add(component);
+      await _pumpGame(tester, game);
+
+      expect(tester.takeException(), isNull);
+      expect(game.renderBox.paintedWidgetComponents, [component]);
+
+      await tester.tapAt(const Offset(160, 220));
+      await tester.pump();
+      expect(pressed, 1);
+
+      await tester.tapAt(const Offset(560, 220));
+      await tester.pump();
+      expect(pressed, 1);
+    });
+
+    testWidgets('excludes a widget that is not rendered from focus', (
+      tester,
+    ) async {
+      final game = FlameGame();
+      final parent = _HidableComponent();
+      final component = WidgetComponent(
+        widget: const Material(child: TextField()),
+        size: Vector2(200, 60),
+        position: Vector2(100, 100),
+      );
+      parent.add(component);
+      game.add(parent);
+      await _pumpGame(tester, game);
+      await tester.pump();
+      expect(component.isPainted, isTrue);
+
+      await tester.tap(find.byType(TextField));
+      await tester.pump();
+      final editable = tester.widget<EditableText>(find.byType(EditableText));
+      expect(editable.focusNode.hasFocus, isTrue);
+
+      parent.isVisible = false;
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+      expect(component.isPainted, isFalse);
+      expect(editable.focusNode.hasFocus, isFalse);
+      expect(game.renderBox.paintedWidgetComponents, isEmpty);
+
+      parent.isVisible = true;
+      await tester.pump();
+      await tester.pump();
+      await tester.pump();
+      expect(component.isPainted, isTrue);
+      expect(game.renderBox.paintedWidgetComponents, [component]);
+    });
+
     testWidgets('skips a widget that is scaled to nothing', (tester) async {
       final game = FlameGame();
       final component = WidgetComponent(
@@ -353,7 +494,7 @@ void main() {
       game.world.add(
         WidgetComponent(
           widget: RepaintBoundary(
-            child: _button('Press', () => pressed++),
+            child: _Button('Press', () => pressed++),
           ),
           size: Vector2(120, 40),
           position: Vector2(380, 100),
