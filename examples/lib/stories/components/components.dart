@@ -15,6 +15,7 @@ import 'package:examples/stories/components/priority_example.dart';
 import 'package:examples/stories/components/skip_text_box_component_example.dart';
 import 'package:examples/stories/components/spawn_component_example.dart';
 import 'package:examples/stories/components/time_scale_example.dart';
+import 'package:examples/stories/components/widget_component_example.dart';
 import 'package:flame/game.dart';
 
 void addComponentsStories(Dashbook dashbook) {
@@ -116,5 +117,11 @@ void addComponentsStories(Dashbook dashbook) {
       (_) => GameWidget(game: SkipTextBoxComponentExample()),
       codeLink: baseLink('components/skip_text_box_component_example.dart'),
       info: SkipTextBoxComponentExample.description,
+    )
+    ..add(
+      'Widget Component',
+      (_) => GameWidget(game: WidgetComponentExample()),
+      codeLink: baseLink('components/widget_component_example.dart'),
+      info: WidgetComponentExample.description,
     );
 }
