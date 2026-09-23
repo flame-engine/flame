@@ -120,7 +120,9 @@ void addComponentsStories(Dashbook dashbook) {
     )
     ..add(
       'Widget Component',
-      (_) => GameWidget(game: WidgetComponentExample()),
+      (_) => const GameWidget.managed(
+        gameFactory: WidgetComponentExample.new,
+      ),
       codeLink: baseLink('components/widget_component_example.dart'),
       info: WidgetComponentExample.description,
     );

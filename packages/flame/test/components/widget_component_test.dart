@@ -325,6 +325,26 @@ void main() {
       expect(transformLayer.transform!.getTranslation().y, 200);
     });
 
+    testWidgets('skips a widget that is scaled to nothing', (tester) async {
+      final game = FlameGame();
+      final component = WidgetComponent(
+        widget: const RepaintBoundary(child: ColoredBox(color: _red)),
+        size: Vector2(120, 40),
+        position: Vector2(300, 200),
+        scale: Vector2.zero(),
+      );
+      game.add(component);
+      await _pumpGame(tester, game);
+
+      expect(tester.takeException(), isNull);
+      expect(game.renderBox.paintedWidgetComponents, isEmpty);
+
+      component.scale = Vector2.all(1);
+      await tester.pump();
+      await tester.pump();
+      expect(game.renderBox.paintedWidgetComponents, [component]);
+    });
+
     testWidgets('is clipped and hit tested by the camera viewport', (
       tester,
     ) async {

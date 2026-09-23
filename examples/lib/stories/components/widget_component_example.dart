@@ -14,12 +14,15 @@ class WidgetComponentExample extends FlameGame {
     keyboard input, while they are rendered with the position, angle, scale and
     priority of their component, in between other Flame components.
 
-    Press the button to spawn an Ember, and type in the text field to change the
-    label of the rotating card.
+    Press the button to spawn Embers around the card, randomly behind or in
+    front of it, and type in the text field to change the label of the
+    rotating card.
   ''';
 
-  int _spawned = 0;
+  final Random _random = Random();
   final ValueNotifier<String> _label = ValueNotifier('Flame');
+
+  Vector2 get _cardCenter => size / 2 + Vector2(0, 80);
 
   @override
   Future<void> onLoad() async {
@@ -44,18 +47,20 @@ class WidgetComponentExample extends FlameGame {
         color: Colors.transparent,
         child: TextField(
           onChanged: (value) => _label.value = value,
+          style: const TextStyle(color: Colors.black87),
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             filled: true,
             fillColor: Colors.white,
             labelText: 'Card label',
+            labelStyle: TextStyle(color: Colors.black54),
           ),
         ),
       ),
     );
 
     final card = WidgetComponent(
-      position: size / 2 + Vector2(0, 80),
+      position: _cardCenter,
       size: Vector2(220, 120),
       anchor: Anchor.center,
       priority: 1,
@@ -79,22 +84,22 @@ class WidgetComponentExample extends FlameGame {
     );
 
     addAll([
-      _BackgroundEmber(position: size / 2 + Vector2(0, 80)),
+      _BackgroundEmber(position: _cardCenter),
       button,
       textField,
       card,
-      _ForegroundEmber(position: size / 2 + Vector2(0, 80)),
+      _ForegroundEmber(position: _cardCenter),
     ]);
   }
 
   void _spawnEmber() {
-    _spawned++;
+    final angle = _random.nextDouble() * 2 * pi;
+    final distance = 80 + _random.nextDouble() * 120;
+    final inFront = _random.nextBool();
     final ember = Ember(
-      position: Vector2(
-        60.0 + (_spawned * 70) % (size.x - 120),
-        size.y - 60,
-      ),
+      position: _cardCenter + Vector2(cos(angle), sin(angle)) * distance,
       size: Vector2.all(40),
+      priority: inFront ? 2 : 0,
     );
     ember.add(
       MoveEffect.by(
@@ -148,14 +153,18 @@ class _LabelCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.widgets, size: 32),
+            const Icon(Icons.widgets, size: 32, color: Colors.black87),
             const SizedBox(height: 8),
             ValueListenableBuilder<String>(
               valueListenable: label,
               builder: (context, value, child) {
                 return Text(
                   value.isEmpty ? 'Flame' : value,
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: const TextStyle(
+                    color: Colors.black87,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                 );

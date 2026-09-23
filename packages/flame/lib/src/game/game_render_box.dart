@@ -327,6 +327,9 @@ class GameRenderBox extends RenderBox
     }
 
     final transform = Matrix4.fromFloat64List(canvas.getTransform());
+    if (transform.determinant() == 0) {
+      return;
+    }
     final clip = canvas.getDestinationClipBounds();
     final localTransform = inverseBaseTransform.multiplied(transform);
     (child.parentData! as WidgetComponentParentData).paintTransform =
