@@ -2,25 +2,23 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
-import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
+import 'package:flame/src/geometry/absolute_transform.dart';
 import 'package:meta/meta.dart';
 
 class PolygonComponent extends ShapeComponent {
   final List<Vector2> _vertices;
   UnmodifiableListView<Vector2> get vertices => UnmodifiableListView(_vertices);
   // These lists are used to minimize the amount of objects that are created,
-  // and only change the contained object if the corresponding `ValueCache` is
+  // and only change the contained object if the cached absolute transform is
   // deemed outdated.
   late final List<Vector2> _globalVertices;
   late final List<LineSegment> _lineSegments;
   final Path _path = Path();
   final bool shrinkToBounds;
   final bool manuallyPositioned;
-
-  final _cachedGlobalVertices = ValueCache<List<Vector2>>();
 
   /// With this constructor you create your [PolygonComponent] from positions
   /// anywhere in the 2d-space. It will automatically calculate the [size] of
@@ -213,6 +211,7 @@ class PolygonComponent extends ShapeComponent {
       final newVertex = newVertices[i];
       _vertices[i].setFrom(newVertex - topLeft);
     }
+    _hasValidGlobalVertices = false;
     _path
       ..reset()
       ..addPolygon(
@@ -230,33 +229,23 @@ class PolygonComponent extends ShapeComponent {
 
   /// gives back the shape vectors multiplied by the size and scale
   List<Vector2> globalVertices() {
-    final scale = absoluteScale;
-    final shouldReverse = scale.y.isNegative ^ scale.x.isNegative;
-    final angle = absoluteAngle;
-    final position = absoluteTopLeftPosition;
-    if (!_cachedGlobalVertices.isCacheValid<dynamic>(<dynamic>[
-      position,
-      size,
-      scale,
-      angle,
-    ])) {
+    final hasMoved = _absoluteTransform.update(this);
+    if (hasMoved || !_hasValidGlobalVertices) {
       for (var i = 0; i < _vertices.length; i++) {
-        _globalVertices[i].setFrom(absolutePositionOf(_vertices[i]));
+        _absoluteTransform.apply(_vertices[i], output: _globalVertices[i]);
       }
-      if (shouldReverse) {
+      if (_absoluteTransform.isMirrored) {
         // Since the list will be clockwise we have to reverse it for it to
         // become counterclockwise.
         _reverseList(_globalVertices);
       }
-      _cachedGlobalVertices.updateCache<dynamic>(_globalVertices, <dynamic>[
-        position.clone(),
-        size.clone(),
-        scale.clone(),
-        angle,
-      ]);
+      _hasValidGlobalVertices = true;
     }
-    return _cachedGlobalVertices.value!;
+    return _globalVertices;
   }
+
+  final AbsoluteTransform _absoluteTransform = AbsoluteTransform();
+  bool _hasValidGlobalVertices = false;
 
   @override
   void render(Canvas canvas) {

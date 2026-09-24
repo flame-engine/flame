@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
-import 'package:flame/src/math/solve_quadratic.dart';
 
 class CircleComponent extends ShapeComponent {
   /// With this constructor you can create your [CircleComponent] from a radius
@@ -119,28 +118,6 @@ class CircleComponent extends ShapeComponent {
     LineSegment lineSegment, {
     double epsilon = double.minPositive,
   }) {
-    // A point on a line is `from + t*(to - from)`. We're trying to solve the
-    // equation `‖point - center‖² == radius²`. Or, denoting `Δ₂₁ = to - from`
-    // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == radius²`.
-    // Expanding the norm, this becomes a square equation in `t`:
-    // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
-    _delta21
-      ..setFrom(lineSegment.to)
-      ..sub(lineSegment.from); // to - from
-    _delta10
-      ..setFrom(lineSegment.from)
-      ..sub(absoluteCenter); // from - absoluteCenter
-    final a = _delta21.length2;
-    final b = 2 * _delta21.dot(_delta10);
-    final effectiveRadius = scaledRadius;
-    final c = _delta10.length2 - effectiveRadius * effectiveRadius;
-
-    return solveQuadratic(a, b, c)
-        .where((t) => t > 0 && t <= 1)
-        .map((t) => lineSegment.from.clone()..addScaled(_delta21, t))
-        .toList();
+    return lineSegment.circleIntersections(absoluteCenter, scaledRadius);
   }
-
-  static final Vector2 _delta21 = Vector2.zero();
-  static final Vector2 _delta10 = Vector2.zero();
 }

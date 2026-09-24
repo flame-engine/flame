@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 import 'package:flame/src/geometry/line.dart';
+import 'package:flame/src/math/solve_quadratic.dart';
 
 /// A [LineSegment] represent a segment of an infinitely long line, it is the
 /// segment between the [from] and [to] vectors (inclusive).
@@ -113,6 +114,39 @@ class LineSegment {
     }
     return const [];
   }
+
+  /// Returns the points where this segment crosses the edge of the circle with
+  /// the given [center] and [radius].
+  ///
+  /// This can be an empty list (if they don't intersect), one point (if the
+  /// segment only crosses the edge once) or two points (if the segment is
+  /// secant, or tangent in which case the two points are equal).
+  /// If [from] lies on the edge of the circle it doesn't count as an
+  /// intersection.
+  List<Vector2> circleIntersections(Vector2 center, double radius) {
+    // A point on a line is `from + t*(to - from)`. We're trying to solve the
+    // equation `‖point - center‖² == radius²`. Or, denoting `Δ₂₁ = to - from`
+    // and `Δ₁₀ = from - center`, the equation is `‖t*Δ₂₁ + Δ₁₀‖² == radius²`.
+    // Expanding the norm, this becomes a square equation in `t`:
+    // `t²Δ₂₁² + 2tΔ₂₁Δ₁₀ + Δ₁₀² - radius² == 0`.
+    _delta21
+      ..setFrom(to)
+      ..sub(from);
+    _delta10
+      ..setFrom(from)
+      ..sub(center);
+    final a = _delta21.length2;
+    final b = 2 * _delta21.dot(_delta10);
+    final c = _delta10.length2 - radius * radius;
+
+    return solveQuadratic(a, b, c)
+        .where((t) => t > 0 && t <= 1)
+        .map((t) => from.clone()..addScaled(_delta21, t))
+        .toList();
+  }
+
+  static final Vector2 _delta21 = Vector2.zero();
+  static final Vector2 _delta10 = Vector2.zero();
 
   /// Whether the given [point] lies in this line segment.
   bool containsPoint(Vector2 point, {double epsilon = 0.01}) {
