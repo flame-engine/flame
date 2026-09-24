@@ -15,11 +15,17 @@ void main() {
       for (var i = 0; i < 50; i++) {
         testRandom('a', (Random rnd) => seeds.add(rnd.nextInt(1000000)));
       }
-      test('verify', () {
-        final nTotal = seeds.length;
-        // Allow some seeds to coincide by pure luck
-        expect(seeds.toSet().length, greaterThanOrEqualTo(nTotal - 2));
-      });
+      test(
+        'verify',
+        () {
+          final nTotal = seeds.length;
+          // Allow some seeds to coincide by pure luck
+          expect(seeds.toSet().length, greaterThanOrEqualTo(nTotal - 2));
+        },
+        skip: seedFromEnvironment(null) != null
+            ? 'RANDOM_SEED is set, so every test uses the same seed'
+            : null,
+      );
     });
 
     group('Uses specific seed', () {
@@ -44,6 +50,24 @@ void main() {
       test('verify', () {
         expect(seeds.length, 20);
         expect(seeds.toSet().length, greaterThanOrEqualTo(18));
+      });
+    });
+
+    group('Repeat count offsets a fixed seed', () {
+      final seeds = <int>[];
+      testRandom(
+        'd',
+        (Random rnd) => seeds.add(rnd.nextInt(1000000)),
+        seed: 123456,
+        repeatCount: 3,
+      );
+      test('verify', () {
+        expect(seeds, [
+          Random(123456).nextInt(1000000),
+          Random(123457).nextInt(1000000),
+          Random(123458).nextInt(1000000),
+        ]);
+        expect(seeds.toSet().length, 3);
       });
     });
   });

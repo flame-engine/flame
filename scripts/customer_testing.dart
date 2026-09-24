@@ -17,6 +17,12 @@ import 'dart:io';
 // of the framework change under test, so it is excluded as well.
 const _excludedPackages = {'flame_3d', 'flame_forge2d'};
 
+// The purpose of this run is to catch regressions in flutter/flutter, so the
+// randomized tests (see testRandom in flame_test) are pinned to a fixed seed to
+// keep the run deterministic. Flame's own CI keeps running them with fresh
+// seeds.
+const _randomSeed = 20260922;
+
 Future<void> main() async {
   final packages =
       Directory('packages')
@@ -45,7 +51,10 @@ Future<void> main() async {
     (directory) => Directory('${directory.path}/test').existsSync(),
   )) {
     stdout.writeln('Running tests in ${package.path}');
-    await _run('flutter', ['test'], workingDirectory: package.path);
+    await _run('flutter', [
+      'test',
+      '--dart-define=RANDOM_SEED=$_randomSeed',
+    ], workingDirectory: package.path);
   }
 }
 
