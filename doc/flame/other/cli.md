@@ -79,12 +79,62 @@ flame run -d macos
 ```
 
 All the arguments are passed on to `flutter run`, and it works just like `flutter run`, including
-hot reload from the terminal. The file is removed again when the game is stopped. The `.dart_tool`
-directory is ignored by version control in Flutter projects, so the file is never committed.
+the keys in the terminal such as `r` for hot reload and `q` to quit. Next to the URI, `flame run`
+keeps two more files in `.dart_tool/flame`: `control_port`, through which the [reload and
+restart](#reload-and-restart) commands talk to it, and `log`, which the [logs](#logs) command
+reads. The URI and the port are removed when the game is stopped, the log is kept. The `.dart_tool`
+directory is ignored by version control in Flutter projects, so the files are never committed.
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
-succeed.
+succeed. Since `flame run` reads the terminal input like `flutter run` does, redirect its input
+from `/dev/null` when it runs in the background of an interactive shell:
+
+```shell
+flame run -d macos < /dev/null > run.log 2>&1 &
+```
+
+
+### reload and restart
+
+Hot reloads or hot restarts a game that was started with `flame run`, and waits for the result:
+
+```shell
+$ flame reload
+Reloaded 1 of 1097 libraries in 71ms.
+```
+
+This is the same as pressing `r` or `R` in the terminal of `flame run`, but it can be done from
+another terminal or from a script, and the command only returns when the reload is done. If the
+reload fails, for example because of a compile error, the errors are printed and the command exits
+with `70`, so an agent can fix the code and try again:
+
+```shell
+$ flame reload
+lib/main.dart:19:44: Error: Expected ';' after this.
+        paint: Paint()..color = Colors.orange
+                                       ^^^^^^
+Try again after fixing the above error(s).
+```
+
+A hot reload swaps the code but keeps the state of the game, so a change to something that was
+set when a component was created, such as a paint in its constructor or a position in `onLoad`,
+is only visible after a hot restart. Changes to `update` and `render` methods show up right away.
+Component ids change with a restart, so run `tree` again afterwards.
+
+
+### logs
+
+Prints the output of the `flutter run` that `flame run` started, which includes everything the
+game prints and the exceptions it throws:
+
+```shell
+flame logs --lines 50
+```
+
+`--lines` (`-n`) is the number of lines from the end to print, 100 by default, and `--follow`
+(`-f`) keeps printing new output until the game is stopped. The log is kept after the game has
+stopped, so it can still be read after a crash.
 
 
 ### snapshot
@@ -246,7 +296,8 @@ Flutter widgets, so they are not part of the images that `snapshot` takes.
 ## Exit codes
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
-apart. `flame run` exits with the exit code of `flutter run`, and the other commands use these:
+apart. `flame run` exits with the exit code of `flutter run`, `reload` and `restart` exit with
+`70` when the reload failed, and the other commands use these:
 
 - `0`: The command succeeded.
 - `64`: The command was used incorrectly, for example with an invalid option.

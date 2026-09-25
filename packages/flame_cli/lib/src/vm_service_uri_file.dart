@@ -1,15 +1,16 @@
 import 'dart:io';
 
+import 'package:flame_cli/src/project_files.dart';
 import 'package:path/path.dart' as p;
 
 /// The path, relative to the project directory, of the file that `flame run`
 /// writes the Dart VM Service URI of the running game to.
-final vmServiceUriFilePath = p.join('.dart_tool', 'flame', 'vm_service_uri');
+final vmServiceUriFilePath = p.join(flameDirectoryPath, vmServiceUriFileName);
 
 /// The file that `flame run` writes the Dart VM Service URI to, when it is
 /// started in [projectDirectory].
 File vmServiceUriFile(Directory projectDirectory) {
-  return File(p.join(projectDirectory.path, vmServiceUriFilePath));
+  return projectFile(projectDirectory, vmServiceUriFileName);
 }
 
 /// Finds the file that `flame run` wrote the Dart VM Service URI to, by
@@ -17,16 +18,5 @@ File vmServiceUriFile(Directory projectDirectory) {
 ///
 /// Returns null if no game that was started with `flame run` is found.
 File? findVmServiceUriFile(Directory directory) {
-  var current = directory.absolute;
-  while (true) {
-    final file = vmServiceUriFile(current);
-    if (file.existsSync()) {
-      return file;
-    }
-    final parent = current.parent;
-    if (parent.path == current.path) {
-      return null;
-    }
-    current = parent;
-  }
+  return findProjectFile(directory, vmServiceUriFileName);
 }
