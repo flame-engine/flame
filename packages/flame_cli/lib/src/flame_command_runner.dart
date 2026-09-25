@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/commands/control_commands.dart';
 import 'package:flame_cli/src/commands/debug_command.dart';
+import 'package:flame_cli/src/commands/diff_command.dart';
 import 'package:flame_cli/src/commands/game_loop_commands.dart';
+import 'package:flame_cli/src/commands/input_commands.dart';
 import 'package:flame_cli/src/commands/inspect_command.dart';
 import 'package:flame_cli/src/commands/logs_command.dart';
 import 'package:flame_cli/src/commands/overlay_commands.dart';
@@ -52,6 +54,8 @@ class FlameCommandRunner extends CommandRunner<int> {
     addCommand(DebugCommand(output, directory));
     addCommand(OverlaysCommand(output, directory));
     addCommand(OverlayCommand(output, directory));
+    addCommand(InputCommand(output, directory));
+    addCommand(DiffCommand(output, directory));
   }
 
   final StringSink _err;
