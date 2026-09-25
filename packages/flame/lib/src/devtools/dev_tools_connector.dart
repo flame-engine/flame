@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/debug.dart';
@@ -48,5 +50,12 @@ abstract class DevToolsConnector {
     );
 
     return component;
+  }
+
+  /// Encodes [image] as a base64 PNG string and disposes the image.
+  Future<String> encodePng(Image image) async {
+    final byteData = await image.toByteData(format: ImageByteFormat.png);
+    image.dispose();
+    return base64Encode(byteData!.buffer.asUint8List());
   }
 }

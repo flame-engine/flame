@@ -5,6 +5,7 @@ but are still important for day-to-day game development: debugging helpers, perf
 Flutter widget integration, and general-purpose utility functions.
 
 - [Debugging](debug.md)
+- [Flame CLI](cli.md)
 - [Utils](util.md)
 - [Widgets](widgets.md)
 - [Performance](performance.md)
@@ -13,6 +14,7 @@ Flutter widget integration, and general-purpose utility functions.
 :hidden:
 
 Debugging    <debug.md>
+Flame CLI    <cli.md>
 Utils        <util.md>
 Widgets      <widgets.md>
 Performance  <performance.md>
