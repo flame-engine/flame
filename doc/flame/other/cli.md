@@ -103,7 +103,7 @@ These are the options:
 - `--uri` (`-u`): The Dart VM Service URI of the running game, not needed when the game was
   started with `flame run`.
 - `--output` (`-o`): The file that the PNG image is written to, by default `flame_snapshot.png`.
-- `--pixel-ratio` (`-p`): Renders the game in a higher resolution, for example `2` renders an
+- `--pixel-ratio` (`-p`): Renders the image in a higher resolution, for example `2` renders an
   800x600 game to a 1600x1200 image.
 - `--component` (`-c`): The id of a single component to render instead of the whole game, see the
   [tree](#tree) command for how to find the id.
@@ -146,6 +146,7 @@ apart. `flame run` exits with the exit code of `flutter run`, and the other comm
 - `69`: No running game was found, the game could not be reached, or it runs a version of Flame
   that does not support the command.
 - `70`: The game reported an error while running the command.
+- `73`: The output file could not be written.
 
 
 ## Compatibility

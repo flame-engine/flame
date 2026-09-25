@@ -6,6 +6,7 @@ import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:path/path.dart' as p;
 
 /// Renders the whole game, or a single component, to a PNG image.
 class SnapshotCommand extends FlameCommand {
@@ -27,7 +28,7 @@ class SnapshotCommand extends FlameCommand {
       ..addOption(
         'pixel-ratio',
         abbr: 'p',
-        help: 'The pixel ratio that the whole game is rendered with.',
+        help: 'The pixel ratio that the image is rendered with.',
         defaultsTo: '1',
       );
   }
@@ -44,7 +45,7 @@ class SnapshotCommand extends FlameCommand {
   @override
   void validate() {
     final pixelRatio = double.tryParse(argResults!.option('pixel-ratio')!);
-    if (pixelRatio == null || pixelRatio <= 0) {
+    if (pixelRatio == null || !pixelRatio.isFinite || pixelRatio <= 0) {
       throw UsageException(
         '--pixel-ratio has to be a positive number.',
         usage,
@@ -56,26 +57,42 @@ class SnapshotCommand extends FlameCommand {
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     final componentId = argResults!.option('component');
+    final pixelRatio = _pixelRatio.toString();
     final response = componentId == null
         ? await connection.call(
             'getGameSnapshot',
-            args: {'pixelRatio': _pixelRatio.toString()},
+            args: {'pixelRatio': pixelRatio},
           )
         : await connection.call(
             'getComponentSnapshot',
-            args: {'id': componentId},
+            args: {'id': componentId, 'pixelRatio': pixelRatio},
           );
 
     final snapshot = response['snapshot'] as String? ?? '';
     if (snapshot.isEmpty) {
       throw FlameCliException(
-        'No component with the id $componentId was found.',
+        componentId == null
+            ? 'The game returned an empty snapshot.'
+            : 'No component with the id $componentId was found.',
         exitCode: ExitCodes.data,
       );
     }
 
-    final file = File(argResults!.option('output')!);
-    await file.writeAsBytes(base64Decode(snapshot));
+    final file = File(
+      p.join(workingDirectory.path, argResults!.option('output')),
+    );
+    try {
+      await file.writeAsBytes(base64Decode(snapshot));
+    } on FileSystemException catch (error, stackTrace) {
+      Error.throwWithStackTrace(
+        FlameCliException(
+          'Could not write the snapshot to ${file.path}: '
+          '${error.osError?.message ?? error.message}',
+          exitCode: ExitCodes.cantCreate,
+        ),
+        stackTrace,
+      );
+    }
     out.writeln(file.absolute.path);
     return ExitCodes.success;
   }

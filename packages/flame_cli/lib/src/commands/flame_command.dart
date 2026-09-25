@@ -48,17 +48,24 @@ abstract class FlameCommand extends Command<int> {
       return FlameConnection.connect(uri);
     }
 
+    const noGameFound = FlameCliException(
+      'No running game was found. Start the game with `flame run`, or pass '
+      'the Dart VM Service URI of the game with --uri.',
+      exitCode: ExitCodes.unavailable,
+    );
     final file = findVmServiceUriFile(workingDirectory);
     if (file == null) {
-      throw const FlameCliException(
-        'No running game was found. Start the game with `flame run`, or pass '
-        'the Dart VM Service URI of the game with --uri.',
-        exitCode: ExitCodes.unavailable,
-      );
+      throw noGameFound;
+    }
+    final String fileUri;
+    try {
+      fileUri = file.readAsStringSync();
+    } on FileSystemException catch (_, stackTrace) {
+      Error.throwWithStackTrace(noGameFound, stackTrace);
     }
 
     try {
-      return await FlameConnection.connect(file.readAsStringSync());
+      return await FlameConnection.connect(fileUri);
     } on FlameCliException catch (error, stackTrace) {
       Error.throwWithStackTrace(
         FlameCliException(
