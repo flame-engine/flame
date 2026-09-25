@@ -70,10 +70,8 @@ class SnapshotCommand extends FlameCommand {
 
     final snapshot = response['snapshot'] as String? ?? '';
     if (snapshot.isEmpty) {
-      throw FlameCliException(
-        componentId == null
-            ? 'The game returned an empty snapshot.'
-            : 'No component with the id $componentId was found.',
+      throw const FlameCliException(
+        'The game returned an empty snapshot.',
         exitCode: ExitCodes.data,
       );
     }

@@ -94,7 +94,12 @@ class FlameConnection {
       return response.json ?? {};
     } on RPCError catch (error, stackTrace) {
       Error.throwWithStackTrace(
-        FlameCliException(error.details ?? error.message),
+        FlameCliException(
+          error.details ?? error.message,
+          exitCode: error.code == RPCErrorKind.kInvalidParams.code
+              ? ExitCodes.data
+              : ExitCodes.software,
+        ),
         stackTrace,
       );
     } on SentinelException catch (error, stackTrace) {

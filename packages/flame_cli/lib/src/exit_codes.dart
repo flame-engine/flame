@@ -6,7 +6,8 @@ abstract final class ExitCodes {
   /// The command was used incorrectly, for example with a missing option.
   static const usage = 64;
 
-  /// The requested data, for example a component, could not be found.
+  /// The game rejected the input, for example because a component with the
+  /// given id does not exist.
   static const data = 65;
 
   /// The game could not be reached, or it does not support the command.

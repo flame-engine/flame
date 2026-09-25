@@ -142,7 +142,8 @@ apart. `flame run` exits with the exit code of `flutter run`, and the other comm
 
 - `0`: The command succeeded.
 - `64`: The command was used incorrectly, for example with an invalid option.
-- `65`: The requested data could not be found, for example a component with the given id.
+- `65`: The game rejected the input, for example because there is no component with the given
+  id.
 - `69`: No running game was found, the game could not be reached, or it runs a version of Flame
   that does not support the command.
 - `70`: The game reported an error while running the command.
