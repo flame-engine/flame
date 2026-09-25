@@ -92,7 +92,9 @@ separate instances, and the other commands pick the one whose project they are r
 
 Several games can also be started from the same project, for example on two devices. The commands
 then go to the game that was started last. When that game is stopped, the game started before it
-becomes reachable again, with its own output in the log.
+becomes reachable again, with its own output in the log. To reach a game that was not started
+last, pass the Dart VM Service URI that its `flutter run` printed with `--uri`, and for `reload`
+and `restart` the control port that its `flame run` printed with `--port`.
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
@@ -125,6 +127,9 @@ lib/main.dart:19:44: Error: Expected ';' after this.
                                        ^^^^^^
 Try again after fixing the above error(s).
 ```
+
+Both commands take `--port` (`-p`) to reach a specific `flame run` when several games were
+started from the same project, see [run](#run).
 
 A hot reload swaps the code but keeps the state of the game, so a change to something that was
 set when a component was created, such as a paint in its constructor or a position in `onLoad`,

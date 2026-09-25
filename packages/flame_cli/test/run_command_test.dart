@@ -119,7 +119,11 @@ void main() {
       ..exit(0);
 
     expect(await running, ExitCodes.success);
-    expect(out.toString(), 'Launching lib/main.dart\n');
+    expect(out.toString(), contains('Launching lib/main.dart\n'));
+    expect(
+      out.toString(),
+      contains('flame run: the reload and restart commands reach this game'),
+    );
     expect(err.toString(), 'Something went wrong\n');
     expect(
       projectFile(directory.absolute, logFileName).readAsStringSync(),

@@ -42,6 +42,25 @@ void main() {
     });
   }
 
+  test('reload sends the request to the given port', () async {
+    final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+    server.listen((socket) {
+      socket.writeln('{"ok": true, "message": "Reloaded 1 of 2 libraries"}');
+      socket.close();
+    });
+
+    final exitCode = await runner.run(['reload', '--port', '${server.port}']);
+    await server.close();
+
+    expect(exitCode, ExitCodes.success);
+    expect(out.toString(), 'Reloaded 1 of 2 libraries\n');
+  });
+
+  test('reload validates the port', () async {
+    expect(await runner.run(['reload', '-p', 'x']), ExitCodes.usage);
+    expect(err.toString(), contains('--port has to be'));
+  });
+
   group('logs', () {
     test('needs a log', () async {
       expect(await runner.run(['logs']), ExitCodes.unavailable);

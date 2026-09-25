@@ -88,6 +88,10 @@ class RunController {
     _server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
     _controlPortFile.writeAsStringSync(_server.port.toString());
     _server.listen(_handleConnection);
+    _out.writeln(
+      'flame run: the reload and restart commands reach this game on port '
+      '${_server.port}.',
+    );
     final ownershipTimer = Timer.periodic(
       ownershipCheckInterval,
       (_) => _checkOwnership(),
