@@ -25,21 +25,3 @@ A set of useful helpers and utilities for testing your <a href="https://github.c
 
 This package contains classes that helps with testing applications using the Flame Engine.  
 It is also used for testing parts of Flame itself.
-
-
-## Taking snapshots of a running game
-
-This package also comes with a `snapshot` command that renders a Flame game that is running in
-debug mode to a PNG image, without having to open the DevTools. This makes it possible for scripts
-and AI coding agents to see what the game currently looks like.
-
-Run your game with `flutter run`, copy the Dart VM Service URI that it prints and run:
-
-```shell
-dart run flame_test:snapshot --uri http://127.0.0.1:50300/abc123=/ --output snapshot.png
-```
-
-Use `--tree` to list the components with their ids and `--component <id>` to render a single
-component. See `dart run flame_test:snapshot --help` and the
-[debugging documentation](https://docs.flame-engine.org/latest/flame/other/debug.html) for all the
-options.
