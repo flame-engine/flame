@@ -384,6 +384,13 @@ class GameWidgetState<T extends Game> extends State<GameWidget<T>> {
         game: currentGame,
         addRepaintBoundary: widget.addRepaintBoundary,
         behavior: widget.behavior,
+        children: [
+          for (final component in currentGame.widgetComponents)
+            WidgetComponentHost(
+              key: ObjectKey(component),
+              component: component,
+            ),
+        ],
       );
 
       internalGameWidget = currentGame.gestureDetectors.build(

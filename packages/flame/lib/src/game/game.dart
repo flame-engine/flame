@@ -414,6 +414,34 @@ abstract mixin class Game {
   /// ```
   late final overlays = OverlayManager(this);
 
+  final List<WidgetComponent> _widgetComponents = [];
+
+  /// The [WidgetComponent]s that are currently mounted in this game, in the
+  /// order they were mounted. The `GameWidget` builds the widget of each of
+  /// them as a child of the game's render box.
+  @internal
+  List<WidgetComponent> get widgetComponents => _widgetComponents;
+
+  /// Registers a mounted [WidgetComponent] so that its widget is built into
+  /// the widget tree. Called by the component itself when it is mounted.
+  @internal
+  void registerWidgetComponent(WidgetComponent component) {
+    if (_widgetComponents.contains(component)) {
+      return;
+    }
+    _widgetComponents.add(component);
+    refreshWidget(isInternalRefresh: false);
+  }
+
+  /// Removes a [WidgetComponent] that is no longer mounted. Called by the
+  /// component itself when it is removed.
+  @internal
+  void unregisterWidgetComponent(WidgetComponent component) {
+    if (_widgetComponents.remove(component)) {
+      refreshWidget(isInternalRefresh: false);
+    }
+  }
+
   /// Used to change the mouse cursor of the GameWidget running this game.
   /// Setting the value to null will make the GameWidget defer the choice
   /// of the cursor to the closest region available on the tree.
