@@ -1,3 +1,3 @@
 ## 0.1.0
 
- - Initial release with the `snapshot` and `tree` commands.
+ - Initial release with the `run`, `snapshot` and `tree` commands.

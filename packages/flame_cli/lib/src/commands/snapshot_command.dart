@@ -9,7 +9,7 @@ import 'package:flame_cli/src/flame_connection.dart';
 
 /// Renders the whole game, or a single component, to a PNG image.
 class SnapshotCommand extends FlameCommand {
-  SnapshotCommand(super.out) {
+  SnapshotCommand(super.out, super.workingDirectory) {
     argParser
       ..addOption(
         'output',

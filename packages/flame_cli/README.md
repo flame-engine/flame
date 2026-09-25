@@ -37,19 +37,28 @@ dart pub global activate flame_cli
 
 ## Usage
 
-Run your game in debug mode with `flutter run` and copy the Dart VM Service URI that it prints.
+Start your game with `flame run` from your project directory. It takes the same arguments as
+`flutter run`, and lets the other commands find the game:
+
+```shell
+flame run -d macos
+```
+
 Then render the whole game to a PNG image:
 
 ```shell
-flame snapshot --uri http://127.0.0.1:50300/abc123=/ --output snapshot.png
+flame snapshot --output snapshot.png
 ```
 
 List the components together with their ids, and render a single component:
 
 ```shell
-flame tree --uri http://127.0.0.1:50300/abc123=/
-flame snapshot --uri http://127.0.0.1:50300/abc123=/ --component 220731871
+flame tree
+flame snapshot --component 220731871
 ```
+
+If the game was started in another way, pass the Dart VM Service URI that `flutter run` prints to
+the commands with `--uri`.
 
 Run `flame --help` for all the commands and options, and see the
 [documentation](https://docs.flame-engine.org/latest/flame/other/cli.html) for more information.

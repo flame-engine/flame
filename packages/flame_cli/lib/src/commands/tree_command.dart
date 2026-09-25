@@ -5,7 +5,7 @@ import 'package:flame_cli/src/flame_connection.dart';
 
 /// Prints the component tree of the game, with the id of every component.
 class TreeCommand extends FlameCommand {
-  TreeCommand(super.out);
+  TreeCommand(super.out, super.workingDirectory);
 
   @override
   String get name => 'tree';
