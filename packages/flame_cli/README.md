@@ -57,6 +57,13 @@ flame tree
 flame snapshot --component 220731871
 ```
 
+Hot reload or restart the game after changing the code, and read its output:
+
+```shell
+flame reload
+flame logs
+```
+
 Pause the game, step it forward a number of frames, inspect and change components, turn on the
 debug rendering and show or hide overlays:
 
