@@ -6,6 +6,7 @@ export 'src/exit_codes.dart';
 export 'src/flame_cli_exception.dart';
 export 'src/flame_command_runner.dart';
 export 'src/flame_connection.dart';
+export 'src/image_diff.dart';
 export 'src/json_output.dart';
 export 'src/project_files.dart';
 export 'src/run_controller.dart';

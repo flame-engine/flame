@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flame/src/devtools/connectors/game_snapshot_connector.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
 /// The [ComponentSnapshotConnector] is responsible for rendering a single
@@ -56,7 +57,8 @@ class ComponentSnapshotConnector extends DevToolsConnector {
   ///
   /// For a [PositionComponent] the image covers the bounding rectangle of the
   /// component in its parent's coordinate space, so anchor, angle and scale are
-  /// all taken into account.
+  /// all taken into account. For a [World] the bounding rectangle of all its
+  /// position components is used.
   static Image snapshotComponent(
     Component component, {
     double pixelRatio = 1,
@@ -70,14 +72,26 @@ class ComponentSnapshotConnector extends DevToolsConnector {
     var width = 100.0;
     var height = 100.0;
 
-    if (component is PositionComponent) {
-      final rect = component.toRect();
+    final rect = switch (component) {
+      PositionComponent() => component.toRect(),
+      World() => GameSnapshotConnector.worldBounds(component),
+      _ => null,
+    };
+    if (rect != null) {
       width = rect.width;
       height = rect.height;
       canvas.translate(-rect.left, -rect.top);
     }
 
-    component.renderTree(canvas);
+    if (component is World) {
+      // A world is only rendered through a camera, so its children are
+      // rendered directly instead.
+      for (final child in component.children) {
+        child.renderTree(canvas);
+      }
+    } else {
+      component.renderTree(canvas);
+    }
 
     final picture = pictureRecorder.endRecording();
     final image = picture.toImageSync(

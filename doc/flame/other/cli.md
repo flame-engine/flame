@@ -205,14 +205,24 @@ These are the options:
   800x600 game to a 1600x1200 image.
 - `--component` (`-c`): The id of a single component to render instead of the whole game, see the
   [tree](#tree) command for how to find the id.
+- `--world` (`-w`): Renders the whole world directly instead of through the camera, so that
+  components that are off screen are visible too. The image covers the bounding rectangle of all
+  the position components in the world.
+- `--rect` (`-r`): Renders only this part of the world, given as `x,y,width,height` in world
+  coordinates, for example `--rect -100,-100,200,200`.
 
 A single component is rendered together with its children, but without the camera. For a
 `PositionComponent`, the image covers the component's bounding rectangle, with its anchor, angle
-and scale taken into account. Other components are rendered in a 100x100 image.
+and scale taken into account. For the `World` it covers all the position components in it, like
+`--world`. Other components are rendered in a 100x100 image.
 
 ```shell
 flame snapshot --component 220731871
 ```
+
+The pixel coordinates of a snapshot of the whole game, at the default pixel ratio, are the same
+coordinates that the [input](#input) commands take, so a position found in the image can be
+tapped directly.
 
 
 ### tree
@@ -340,6 +350,52 @@ the others, and `overlay only <name>` shows one overlay and hides all the others
 Flutter widgets, so they are not part of the images that `snapshot` takes.
 
 
+### input
+
+Sends taps, drags and key presses to the game, so that it can be played from the terminal:
+
+```shell
+flame input tap 400,300
+flame input drag 100,300 500,300 --steps 20
+flame input key space
+flame input key arrowLeft --down
+flame input key arrowLeft --up
+```
+
+Positions are in canvas coordinates, the same ones as the pixels of a `snapshot` of the whole
+game at pixel ratio 1. The events go through the same dispatchers as real input, so they reach the
+components with the `TapCallbacks` and `DragCallbacks` mixins, in the same order and with the same
+propagation rules. A drag sends a start event, `--steps` update events (10 by default) evenly
+spaced between the two positions, and an end event, all at once. If the game has no component
+that handles the event, the command fails with exit code `65` and says which mixin is missing.
+
+Keys are delivered to the `onKeyEvent` of a game with the `HasKeyboardHandlerComponents` or
+`KeyboardEvents` mixin. A key is named like the `LogicalKeyboardKey` constants, for example
+`space`, `enter`, `escape`, `arrowLeft`, `a` or `digit1`, and the name is matched without regard
+to case, spaces and underscores. By default the key is pressed and released right away. Pass
+`--down` to hold it, for example to keep a character walking while stepping the game, and `--up`
+to release it again.
+
+
+### diff
+
+Compares two PNG images, for example two snapshots, and reports how much and where they differ:
+
+```shell
+$ flame diff before.png after.png --output diff.png
+4.17% of the pixels differ (20000 of 480000), within the rectangle
+300,250 of size 200x100.
+/path/to/diff.png
+```
+
+The bounding rectangle of the changes makes it easy to tell what moved, even when the difference
+is too small to notice by looking at the two images. With `--output` the differing pixels are
+written in red on top of a dimmed version of the second image. `--threshold` (`-t`) is how much
+a color channel may differ, from 0 to 255, before a pixel counts as different, which helps with
+anti-aliasing. `--exit-code` makes the command exit with `1` when the images differ, like
+`git diff`, for use in scripts.
+
+
 ## Exit codes
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
@@ -349,7 +405,7 @@ apart. `flame run` exits with the exit code of `flutter run`, `reload` and `rest
 - `0`: The command succeeded.
 - `64`: The command was used incorrectly, for example with an invalid option.
 - `65`: The game rejected the input, for example because there is no component with the given
-  id.
+  id, or the input files could not be read.
 - `69`: No running game was found, the game could not be reached, or it runs a version of Flame
   that does not support the command.
 - `70`: The game reported an error while running the command.

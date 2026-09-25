@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/commands/inspect_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
@@ -38,6 +39,9 @@ class SetCommand extends FlameCommand {
 
   @override
   String get name => 'set';
+
+  @override
+  String get category => CommandCategories.changing;
 
   @override
   String get description =>

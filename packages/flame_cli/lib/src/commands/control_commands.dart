@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/project_files.dart';
@@ -49,6 +50,9 @@ abstract class _RunRequestCommand extends Command<int> {
   final StringSink out;
   final Directory workingDirectory;
   final RunRequest request;
+
+  @override
+  String get category => CommandCategories.launching;
 
   @override
   Future<int> run() async {

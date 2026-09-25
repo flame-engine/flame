@@ -5,6 +5,7 @@ import 'package:flame/src/devtools/connectors/component_tree_connector.dart';
 import 'package:flame/src/devtools/connectors/debug_mode_connector.dart';
 import 'package:flame/src/devtools/connectors/game_loop_connector.dart';
 import 'package:flame/src/devtools/connectors/game_snapshot_connector.dart';
+import 'package:flame/src/devtools/connectors/input_connector.dart';
 import 'package:flame/src/devtools/connectors/overlay_navigation_connector.dart';
 import 'package:flame/src/devtools/connectors/position_component_attributes_connector.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
@@ -43,6 +44,7 @@ class DevToolsService {
     GameSnapshotConnector(),
     PositionComponentAttributesConnector(),
     OverlayNavigationConnector(),
+    InputConnector(),
   ];
 
   /// This method is called every time a new game is set in the service and it
