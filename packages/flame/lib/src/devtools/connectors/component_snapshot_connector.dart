@@ -31,12 +31,16 @@ class ComponentSnapshotConnector extends DevToolsConnector {
 
         final id = int.tryParse(parameters['id'] ?? '');
         final component = findComponent<Component>(id);
-        final snapshot = component == null
-            ? ''
-            : await encodePng(
-                snapshotComponent(component, pixelRatio: pixelRatio),
-              );
+        if (component == null) {
+          return ServiceExtensionResponse.error(
+            ServiceExtensionResponse.invalidParams,
+            'No component with the id ${parameters['id']} was found.',
+          );
+        }
 
+        final snapshot = await encodePng(
+          snapshotComponent(component, pixelRatio: pixelRatio),
+        );
         return ServiceExtensionResponse.result(
           json.encode({
             'id': id,
