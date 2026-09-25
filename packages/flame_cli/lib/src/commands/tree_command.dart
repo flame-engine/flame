@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/component_tree.dart';
 import 'package:flame_cli/src/exit_codes.dart';
@@ -32,6 +33,9 @@ class TreeCommand extends FlameCommand {
 
   @override
   String get name => 'tree';
+
+  @override
+  String get category => CommandCategories.observing;
 
   @override
   String get description =>

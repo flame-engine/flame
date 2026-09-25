@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_connection.dart';
@@ -16,6 +17,9 @@ class InspectCommand extends FlameCommand {
 
   @override
   String get name => 'inspect';
+
+  @override
+  String get category => CommandCategories.observing;
 
   @override
   String get description =>

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_connection.dart';
@@ -15,6 +16,9 @@ class InputCommand extends Command<int> {
 
   @override
   String get name => 'input';
+
+  @override
+  String get category => CommandCategories.playing;
 
   @override
   String get description =>

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
@@ -50,6 +51,9 @@ class SnapshotCommand extends FlameCommand {
 
   @override
   String get name => 'snapshot';
+
+  @override
+  String get category => CommandCategories.observing;
 
   @override
   String get description =>

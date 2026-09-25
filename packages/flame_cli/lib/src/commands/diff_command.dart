@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/image_diff.dart';
@@ -38,6 +39,9 @@ class DiffCommand extends Command<int> {
 
   @override
   String get name => 'diff';
+
+  @override
+  String get category => CommandCategories.observing;
 
   @override
   String get description =>

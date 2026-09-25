@@ -1,4 +1,5 @@
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_connection.dart';
@@ -9,6 +10,9 @@ class PauseCommand extends FlameCommand {
 
   @override
   String get name => 'pause';
+
+  @override
+  String get category => CommandCategories.changing;
 
   @override
   String get description =>
@@ -29,6 +33,9 @@ class ResumeCommand extends FlameCommand {
 
   @override
   String get name => 'resume';
+
+  @override
+  String get category => CommandCategories.changing;
 
   @override
   String get description => 'Resume the game loop after it was paused.';
@@ -61,6 +68,9 @@ class StepCommand extends FlameCommand {
 
   @override
   String get name => 'step';
+
+  @override
+  String get category => CommandCategories.changing;
 
   @override
   String get description =>

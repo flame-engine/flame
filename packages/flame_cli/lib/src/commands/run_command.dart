@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/project_files.dart';
@@ -52,6 +53,9 @@ class RunCommand extends Command<int> {
 
   @override
   String get name => 'run';
+
+  @override
+  String get category => CommandCategories.launching;
 
   @override
   String get description =>

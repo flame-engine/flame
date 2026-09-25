@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:flame_cli/src/command_categories.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_connection.dart';
@@ -18,6 +19,9 @@ class OverlaysCommand extends FlameCommand {
 
   @override
   String get name => 'overlays';
+
+  @override
+  String get category => CommandCategories.changing;
 
   @override
   String get description =>
@@ -55,6 +59,9 @@ class OverlayCommand extends Command<int> {
 
   @override
   String get name => 'overlay';
+
+  @override
+  String get category => CommandCategories.changing;
 
   @override
   String get description => 'Show or hide an overlay of the game.';
