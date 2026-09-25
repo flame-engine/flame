@@ -94,7 +94,7 @@ class WidgetComponentExample extends FlameGame {
 
   void _spawnEmber() {
     final angle = _random.nextDouble() * 2 * pi;
-    final distance = 80 + _random.nextDouble() * 120;
+    final distance = 30 + _random.nextDouble() * 70;
     final inFront = _random.nextBool();
     final ember = Ember(
       position: _cardCenter + Vector2(cos(angle), sin(angle)) * distance,
