@@ -20,6 +20,32 @@ void main() {
     );
   });
 
+  group('findProjectRoot', () {
+    test('finds the closest directory with a pubspec', () {
+      File(p.join(directory.path, 'pubspec.yaml')).createSync();
+      final lib = Directory(p.join(directory.path, 'lib', 'src'))
+        ..createSync(recursive: true);
+
+      expect(findProjectRoot(lib).path, directory.absolute.path);
+      expect(findProjectRoot(directory).path, directory.absolute.path);
+    });
+
+    test('prefers a nested project over its parent', () {
+      File(p.join(directory.path, 'pubspec.yaml')).createSync();
+      final example = Directory(p.join(directory.path, 'example'))
+        ..createSync();
+      File(p.join(example.path, 'pubspec.yaml')).createSync();
+
+      expect(findProjectRoot(example).path, example.absolute.path);
+    });
+
+    test('falls back to the directory itself', () {
+      final child = Directory(p.join(directory.path, 'child'))..createSync();
+
+      expect(findProjectRoot(child).path, child.absolute.path);
+    });
+  });
+
   group('findVmServiceUriFile', () {
     test('finds the file in the directory itself', () {
       final file = vmServiceUriFile(directory)..createSync(recursive: true);

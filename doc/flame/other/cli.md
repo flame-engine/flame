@@ -85,6 +85,15 @@ restart](#reload-and-restart) commands talk to it, and `log`, which the [logs](#
 reads. The URI and the port are removed when the game is stopped, the log is kept. The `.dart_tool`
 directory is ignored by version control in Flutter projects, so the files are never committed.
 
+The files live in the root of the project, the closest directory with a `pubspec.yaml`, no matter
+which subdirectory `flame run` was started from. That ties every running game to its project:
+games started from different projects, including separate git checkouts of the same game, are
+separate instances, and the other commands pick the one whose project they are run in.
+
+Several games can also be started from the same project, for example on two devices. The commands
+then go to the game that was started last. When that game is stopped, the game started before it
+becomes reachable again, with its own output in the log.
+
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
 succeed. Since `flame run` reads the terminal input like `flutter run` does, redirect its input
