@@ -63,6 +63,45 @@ If you have multiple games in your app, only the last one created is connected, 
 `DevToolsService.initWithGame` to change it.
 
 
+### Running several instances of one game
+
+A running game is tied to its project, the closest directory with a `pubspec.yaml`. Games started
+from different projects never interfere with each other, and that includes separate git checkouts
+of the same game: the commands pick the game of the project they are run in.
+
+You can also start the same project several times, for example to test on two devices at once or
+to compare two builds of the game:
+
+```shell
+flame run -d macos
+flame run -d chrome
+```
+
+The commands go to the game that was started last, in this case the one in Chrome. When that game
+is stopped, the game started before it becomes reachable again, and the [logs](#logs) command
+shows the output of whichever game the commands currently go to.
+
+To reach a game that was not started last, address it explicitly. Every `flame run` prints the two
+things needed for that when it starts:
+
+```text
+flame run: the reload and restart commands reach this game on port 50312.
+...
+A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
+```
+
+Pass the URI with `--uri` to the commands that talk to the game, and the port with `--port` to
+`reload` and `restart`:
+
+```shell
+flame snapshot --uri http://127.0.0.1:50300/abc123=/ --output macos.png
+flame reload --port 50312
+```
+
+A script that drives several instances can keep the URI and the port of each one and pass them
+every time, so that it never depends on which game was started last.
+
+
 ## Commands
 
 Run `flame --help` to list the commands, and `flame help <command>` for the options of a
@@ -86,15 +125,9 @@ reads. The URI and the port are removed when the game is stopped, the log is kep
 directory is ignored by version control in Flutter projects, so the files are never committed.
 
 The files live in the root of the project, the closest directory with a `pubspec.yaml`, no matter
-which subdirectory `flame run` was started from. That ties every running game to its project:
-games started from different projects, including separate git checkouts of the same game, are
-separate instances, and the other commands pick the one whose project they are run in.
-
-Several games can also be started from the same project, for example on two devices. The commands
-then go to the game that was started last. When that game is stopped, the game started before it
-becomes reachable again, with its own output in the log. To reach a game that was not started
-last, pass the Dart VM Service URI that its `flutter run` printed with `--uri`, and for `reload`
-and `restart` the control port that its `flame run` printed with `--port`.
+which subdirectory `flame run` was started from. That ties every running game to its project, and
+the same project can be started several times, see
+[running several instances of one game](#running-several-instances-of-one-game).
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
