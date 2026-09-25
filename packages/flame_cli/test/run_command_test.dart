@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flame_cli/flame_cli.dart';
+import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
 import 'fake_process.dart';
@@ -83,6 +84,28 @@ void main() {
     expect(usedDirectory, directory.path);
     expect(staleFileExisted, isFalse);
     expect(file.existsSync(), isFalse);
+  });
+
+  test('keeps the files in the root of the project', () async {
+    File(p.join(directory.path, 'pubspec.yaml')).createSync();
+    final lib = Directory(p.join(directory.path, 'lib'))..createSync();
+    late List<String> usedArguments;
+    final runner = FlameCommandRunner(
+      out: out,
+      err: err,
+      workingDirectory: lib,
+      startProcess: _starter((_, arguments, _) {
+        usedArguments = arguments;
+        return FakeProcess(exitCode: 0);
+      }),
+    );
+
+    await runner.run(['run']);
+
+    final uriFile = vmServiceUriFile(directory.absolute);
+    expect(usedArguments.last, '--vmservice-out-file=${uriFile.path}');
+    expect(projectFile(directory.absolute, logFileName).existsSync(), isTrue);
+    expect(flameDirectory(lib).existsSync(), isFalse);
   });
 
   test('mirrors the output to the terminal and the log', () async {

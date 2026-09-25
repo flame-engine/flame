@@ -72,7 +72,7 @@ class RunCommand extends Command<int> {
       );
     }
 
-    final projectDirectory = workingDirectory.absolute;
+    final projectDirectory = findProjectRoot(workingDirectory);
     final uriFile = projectFile(projectDirectory, vmServiceUriFileName);
     if (uriFile.existsSync()) {
       uriFile.deleteSync();

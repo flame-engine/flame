@@ -18,6 +18,25 @@ const logFileName = 'log';
 /// `flame run` keeps its files in.
 final flameDirectoryPath = p.join('.dart_tool', 'flame');
 
+/// Finds the root directory of the project that [directory] is in, which is
+/// the closest directory with a `pubspec.yaml`, looking in [directory] and
+/// then in each of its parents.
+///
+/// Returns [directory] itself if there is no `pubspec.yaml` above it.
+Directory findProjectRoot(Directory directory) {
+  var current = directory.absolute;
+  while (true) {
+    if (File(p.join(current.path, 'pubspec.yaml')).existsSync()) {
+      return current;
+    }
+    final parent = current.parent;
+    if (parent.path == current.path) {
+      return directory.absolute;
+    }
+    current = parent;
+  }
+}
+
 /// The directory that `flame run` keeps its files in, for the project in
 /// [projectDirectory].
 Directory flameDirectory(Directory projectDirectory) {

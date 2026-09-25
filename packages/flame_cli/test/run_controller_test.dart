@@ -6,11 +6,15 @@ import 'package:test/test.dart';
 
 import 'fake_process.dart';
 
+const _checkInterval = Duration(milliseconds: 20);
+
 void main() {
   late Directory directory;
   late FakeProcess process;
   late RunController controller;
   late Future<int> running;
+
+  Future<void> settle() => Future<void>.delayed(_checkInterval * 4);
 
   setUp(() async {
     directory = Directory.systemTemp.createTempSync('flame_cli_test').absolute;
@@ -21,6 +25,7 @@ void main() {
       out: StringBuffer(),
       err: StringBuffer(),
       responseTimeout: const Duration(seconds: 2),
+      ownershipCheckInterval: _checkInterval,
     );
     running = controller.run();
     while (!projectFile(directory, controlPortFileName).existsSync()) {
@@ -115,6 +120,54 @@ void main() {
     socket.destroy();
 
     expect(line, contains('Unknown request: dance'));
+  });
+
+  group('when a newer flame run takes over the project', () {
+    late File portFile;
+    late File uriFile;
+    late File logFile;
+
+    setUp(() async {
+      portFile = projectFile(directory, controlPortFileName);
+      uriFile = projectFile(directory, vmServiceUriFileName)
+        ..writeAsStringSync('ws://127.0.0.1:1/old=/ws');
+      logFile = projectFile(directory, logFileName);
+      process.printLine('before');
+      await settle();
+      portFile.writeAsStringSync('1');
+      uriFile.writeAsStringSync('ws://127.0.0.1:2/new=/ws');
+      await settle();
+    });
+
+    test('stops writing to the log', () async {
+      process.printLine('after');
+      await settle();
+
+      expect(logFile.readAsStringSync(), 'before\n');
+    });
+
+    test('leaves the files of the newer run alone when it exits', () async {
+      process.exit(0);
+      await running;
+
+      expect(portFile.readAsStringSync(), '1');
+      expect(uriFile.readAsStringSync(), 'ws://127.0.0.1:2/new=/ws');
+    });
+
+    test('takes the project back when the newer run stops', () async {
+      portFile.deleteSync();
+      uriFile.deleteSync();
+      await settle();
+
+      expect(portFile.readAsStringSync(), isNot('1'));
+      expect(uriFile.readAsStringSync(), 'ws://127.0.0.1:1/old=/ws');
+      final result = await sendRunRequest(directory, RunRequest.reload);
+      expect(result['message'], contains('did not report'));
+
+      process.printLine('again');
+      await settle();
+      expect(logFile.readAsStringSync(), 'again\n');
+    });
   });
 }
 
