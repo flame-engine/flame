@@ -41,7 +41,7 @@ from the devtools extension. Don't forget to add the new connector to the
 list of connectors in the `DevToolsService` class.
 
 The service extensions can also be called by other tools than this
-extension. For example, the `snapshot` command in `flame_test` uses the
+extension. For example, the `snapshot` command in `flame_cli` uses the
 `GameSnapshotConnector` and `ComponentSnapshotConnector` to render a running
 game to a PNG image, so keep the responses of the existing extensions
 backwards compatible.

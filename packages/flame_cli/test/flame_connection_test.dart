@@ -1,6 +1,5 @@
+import 'package:flame_cli/flame_cli.dart';
 import 'package:test/test.dart';
-
-import '../bin/snapshot.dart';
 
 void main() {
   group('webSocketUri', () {
@@ -25,36 +24,11 @@ void main() {
       );
     });
 
-    test('handles a uri without a trailing slash', () {
+    test('handles surrounding whitespace and no trailing slash', () {
       expect(
         webSocketUri(' http://127.0.0.1:50300/abc123= ').toString(),
         'ws://127.0.0.1:50300/abc123=/ws',
       );
     });
-  });
-
-  test('formatComponentTree indents children by depth', () {
-    final tree = {
-      'id': 1,
-      'name': 'MyGame',
-      'children': [
-        {
-          'id': 2,
-          'name': 'World',
-          'children': [
-            {'id': 3, 'name': 'Player', 'children': <dynamic>[]},
-          ],
-        },
-        {'id': 4, 'name': 'CameraComponent', 'children': <dynamic>[]},
-      ],
-    };
-
-    expect(
-      formatComponentTree(tree),
-      'MyGame (id: 1)\n'
-      '  World (id: 2)\n'
-      '    Player (id: 3)\n'
-      '  CameraComponent (id: 4)\n',
-    );
   });
 }

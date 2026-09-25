@@ -17,7 +17,6 @@ environment:
   flutter: ">=3.44.0"
 
 dependencies:
-  args: ^2.5.0
   flame: ^1.38.0
   flutter:
     sdk: flutter
@@ -27,10 +26,6 @@ dependencies:
   test: ^1.24.1
   typed_data: ^1.4.0
   vector_math: ^2.1.4
-  vm_service: ^15.0.0
-
-executables:
-  snapshot:
 
 dev_dependencies:
   dartdoc: ^9.0.0

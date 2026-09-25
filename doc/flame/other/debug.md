@@ -22,72 +22,8 @@ about the selected component, and more.
 The extension talks to the game through
 [service extensions](https://api.flutter.dev/flutter/dart-developer/registerExtension.html) that
 Flame registers when a `FlameGame` is created in debug mode. Other tools can call the same service
-extensions through the Dart VM Service, for example to take snapshots of a running game.
-
-
-### Taking snapshots of a running game
-
-Snapshots of a running game can be taken without opening the DevTools. This is useful for scripts
-and for AI coding agents that want to see what the game currently looks like, since they can read
-the resulting PNG image.
-
-The easiest way to take a snapshot is with the `snapshot` command that comes with the
-[flame_test](https://pub.dev/packages/flame_test) package. First run your game in debug mode, and
-copy the Dart VM Service URI that `flutter run` prints:
-
-```text
-A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
-```
-
-Then, from your project directory, run:
-
-```shell
-dart run flame_test:snapshot --uri http://127.0.0.1:50300/abc123=/ --output snapshot.png
-```
-
-This renders the whole game, through the camera and with the game's background color, the same
-way that it is currently shown on the screen. Flutter overlays are not part of the game canvas, so
-they are not included in the image.
-
-These are the available options:
-
-- `--uri` (`-u`): The Dart VM Service URI of the running game, either the `http` URI that
-  `flutter run` prints or the `ws` URI.
-- `--output` (`-o`): The file that the PNG image is written to, by default `flame_snapshot.png`.
-- `--pixel-ratio` (`-p`): Renders the game in a higher resolution, for example `2` renders an
-  800x600 game to a 1600x1200 image.
-- `--tree` (`-t`): Prints the component tree together with the id of every component, instead of
-  taking a snapshot.
-- `--component` (`-c`): The id of a single component to render instead of the whole game.
-
-To take a snapshot of a single component, first list the ids with `--tree`:
-
-```shell
-$ dart run flame_test:snapshot --uri http://127.0.0.1:50300/abc123=/ --tree
-MyGame (id: 6126309)
-  World (id: 729356887)
-    Player (id: 220731871)
-  CameraComponent (id: 167418721)
-    ...
-```
-
-Then pass the id with `--component`:
-
-```shell
-dart run flame_test:snapshot --uri http://127.0.0.1:50300/abc123=/ --component 220731871
-```
-
-The component is rendered together with its children, but without the camera. For a
-`PositionComponent`, the image covers the component's bounding rectangle, with its anchor, angle
-and scale taken into account. Other components are rendered in a 100x100 image.
-
-To avoid having to copy the URI by hand, for example when an agent starts the game itself, you can
-let `flutter run` write it to a file:
-
-```shell
-flutter run --vmservice-out-file=vm_service_uri.txt
-dart run flame_test:snapshot --uri "$(cat vm_service_uri.txt)"
-```
+extensions through the Dart VM Service. The [Flame CLI](cli.md) uses them to take snapshots of a
+running game from the terminal, which is also useful for scripts and AI coding agents.
 
 
 ### Service extensions
