@@ -24,6 +24,13 @@ enum RunRequest {
 /// port file of the project. A request presses the corresponding key in
 /// `flutter run` and responds with the line that `flutter run` prints when it
 /// is done, as JSON with `ok`, `message` and `output` fields.
+///
+/// Several games can run from the same project at once, and the commands go
+/// to the one that was started last. A controller owns the files of the
+/// project as long as the control port file holds its port. When a newer
+/// `flame run` takes them over, the controller stops writing to the log and
+/// leaves the files alone when it exits, and when the newer run stops it
+/// takes the files back.
 class RunController {
   RunController({
     required this.process,
@@ -32,6 +39,7 @@ class RunController {
     StringSink? out,
     StringSink? err,
     this.responseTimeout = const Duration(minutes: 2),
+    this.ownershipCheckInterval = const Duration(seconds: 1),
   }) : _out = out ?? stdout,
        _err = err ?? stderr;
 
@@ -39,64 +47,116 @@ class RunController {
   final Directory projectDirectory;
   final Stream<List<int>>? input;
   final Duration responseTimeout;
+
+  /// How often the control port file is checked to find out whether a newer
+  /// `flame run` has taken over the project, or has stopped again.
+  final Duration ownershipCheckInterval;
+
   final StringSink _out;
   final StringSink _err;
 
   final _lines = StreamController<String>.broadcast();
   Future<void> _requests = Future.value();
   bool _exited = false;
+  bool _ownsFiles = true;
+  IOSink? _log;
+  String? _vmServiceUri;
+  late final ServerSocket _server;
 
   static final _resultLine = RegExp(
     r'^(Reloaded \d+ (of \d+ )?(library|libraries)|Restarted application|'
     'Reload rejected|Hot reload was rejected|Try again after fixing)',
   );
 
+  File get _controlPortFile =>
+      projectFile(projectDirectory, controlPortFileName);
+  File get _vmServiceUriFile =>
+      projectFile(projectDirectory, vmServiceUriFileName);
+  File get _logFile => projectFile(projectDirectory, logFileName);
+
   /// Runs until the process exits, and returns its exit code.
   Future<int> run() async {
-    final logFile = projectFile(projectDirectory, logFileName)
-      ..createSync(recursive: true);
-    final log = logFile.openWrite();
-    final controlPortFile = projectFile(projectDirectory, controlPortFileName);
+    _logFile.createSync(recursive: true);
+    _log = _logFile.openWrite();
 
     final subscriptions = <StreamSubscription<Object?>>[
-      _mirror(process.stdout, _out, log),
-      _mirror(process.stderr, _err, log),
+      _mirror(process.stdout, _out),
+      _mirror(process.stderr, _err),
       if (input != null) input!.listen(_forwardInput, onError: (_) {}),
     ];
 
-    final server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
-    controlPortFile.writeAsStringSync(server.port.toString());
-    server.listen(_handleConnection);
+    _server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 0);
+    _controlPortFile.writeAsStringSync(_server.port.toString());
+    _server.listen(_handleConnection);
+    final ownershipTimer = Timer.periodic(
+      ownershipCheckInterval,
+      (_) => _checkOwnership(),
+    );
 
     try {
       return await process.exitCode;
     } finally {
       _exited = true;
-      await server.close();
+      ownershipTimer.cancel();
+      await _server.close();
       for (final subscription in subscriptions) {
         await subscription.cancel();
       }
       await _lines.close();
-      await log.close();
-      for (final name in [controlPortFileName, vmServiceUriFileName]) {
-        final file = projectFile(projectDirectory, name);
-        if (file.existsSync()) {
-          file.deleteSync();
+      await _log?.close();
+      if (_ownsFiles) {
+        for (final file in [_controlPortFile, _vmServiceUriFile]) {
+          if (file.existsSync()) {
+            file.deleteSync();
+          }
         }
       }
+    }
+  }
+
+  void _checkOwnership() {
+    final String? owner;
+    try {
+      owner = _controlPortFile.existsSync()
+          ? _controlPortFile.readAsStringSync().trim()
+          : null;
+    } on FileSystemException {
+      return;
+    }
+
+    if (owner == '${_server.port}') {
+      _ownsFiles = true;
+      if (_vmServiceUri == null && _vmServiceUriFile.existsSync()) {
+        _vmServiceUri = _vmServiceUriFile.readAsStringSync();
+      }
+    } else if (owner == null) {
+      // The newer flame run has stopped and removed the files, so this one
+      // takes the project back.
+      _controlPortFile.writeAsStringSync(_server.port.toString());
+      final uri = _vmServiceUri;
+      if (uri != null) {
+        _vmServiceUriFile.writeAsStringSync(uri);
+      }
+      if (!_ownsFiles) {
+        _ownsFiles = true;
+        _log = _logFile.openWrite();
+      }
+    } else if (_ownsFiles) {
+      _ownsFiles = false;
+      _log?.close();
+      _log = null;
     }
   }
 
   StreamSubscription<List<int>> _mirror(
     Stream<List<int>> stream,
     StringSink sink,
-    IOSink log,
   ) {
     final broadcast = stream.asBroadcastStream();
     broadcast.transform(utf8.decoder).transform(const LineSplitter()).listen((
       line,
     ) {
-      log.writeln(line);
+      _log?.writeln(line);
       _lines.add(line);
     });
     return broadcast.listen((bytes) => sink.write(utf8.decode(bytes)));
