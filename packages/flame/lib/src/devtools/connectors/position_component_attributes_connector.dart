@@ -4,6 +4,12 @@ import 'dart:developer';
 import 'package:flame/components.dart';
 import 'package:flame/src/devtools/dev_tools_connector.dart';
 
+/// The [PositionComponentAttributesConnector] is responsible for reporting and
+/// changing the attributes of a [PositionComponent] from the devtools
+/// extension.
+///
+/// The `priority` attribute can be set on any component, the other attributes
+/// only on a [PositionComponent].
 class PositionComponentAttributesConnector extends DevToolsConnector {
   @override
   void init() {
@@ -25,6 +31,8 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
               'angle': positionComponent.angle,
               'scaleX': positionComponent.scale.x,
               'scaleY': positionComponent.scale.y,
+              'anchor': positionComponent.anchor.toString(),
+              'priority': positionComponent.priority,
             }),
           );
         } else {
@@ -41,37 +49,59 @@ class PositionComponentAttributesConnector extends DevToolsConnector {
       (method, parameters) async {
         final id = int.tryParse(parameters['id'] ?? '');
         final attribute = parameters['attribute'];
+        final value = parameters['value'] ?? '';
 
-        final positionComponent = findComponent<PositionComponent>(id);
+        final component = findComponent<Component>(id);
+        if (component == null) {
+          return ServiceExtensionResponse.error(
+            ServiceExtensionResponse.extensionError,
+            'No component found with id: $id',
+          );
+        }
 
-        if (positionComponent != null) {
-          if (attribute == 'x') {
-            positionComponent.x = double.parse(parameters['value']!);
+        try {
+          if (attribute == 'priority') {
+            component.priority = int.parse(value);
+          } else if (component is! PositionComponent) {
+            return ServiceExtensionResponse.error(
+              ServiceExtensionResponse.extensionError,
+              'No PositionComponent found with id: $id',
+            );
+          } else if (attribute == 'x') {
+            component.x = double.parse(value);
           } else if (attribute == 'y') {
-            positionComponent.y = double.parse(parameters['value']!);
+            component.y = double.parse(value);
           } else if (attribute == 'width') {
-            positionComponent.width = double.parse(parameters['value']!);
+            component.width = double.parse(value);
           } else if (attribute == 'height') {
-            positionComponent.height = double.parse(parameters['value']!);
+            component.height = double.parse(value);
           } else if (attribute == 'angle') {
-            positionComponent.angle = double.parse(parameters['value']!);
+            component.angle = double.parse(value);
           } else if (attribute == 'scaleX') {
-            positionComponent.scale.x = double.parse(parameters['value']!);
+            component.scale.x = double.parse(value);
           } else if (attribute == 'scaleY') {
-            positionComponent.scale.y = double.parse(parameters['value']!);
+            component.scale.y = double.parse(value);
+          } else if (attribute == 'anchor') {
+            component.anchor = Anchor.valueOf(value);
           } else {
             return ServiceExtensionResponse.error(
               ServiceExtensionResponse.extensionError,
               'Invalid attribute: $attribute',
             );
           }
-          return ServiceExtensionResponse.result('Success');
-        } else {
+        } on FormatException catch (error) {
           return ServiceExtensionResponse.error(
-            ServiceExtensionResponse.extensionError,
-            'No PositionComponent found with id: $id',
+            ServiceExtensionResponse.invalidParams,
+            'Invalid value for $attribute: ${error.message}',
           );
         }
+        return ServiceExtensionResponse.result(
+          json.encode({
+            'id': id,
+            'attribute': attribute,
+            'value': value,
+          }),
+        );
       },
     );
   }
