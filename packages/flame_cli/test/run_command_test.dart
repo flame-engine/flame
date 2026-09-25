@@ -145,6 +145,24 @@ void main() {
     expect(process.input, 'r');
   });
 
+  test('prints an introduction before the help of flutter run', () async {
+    late List<String> usedArguments;
+    final runner = createRunner(
+      _starter((_, arguments, _) {
+        usedArguments = arguments;
+        final process = FakeProcess()..printLine('Usage: flutter run');
+        return process..exit(0);
+      }),
+    );
+
+    expect(await runner.run(['run', '--help']), ExitCodes.success);
+
+    expect(usedArguments, ['run', '--help']);
+    expect(out.toString(), startsWith('Run the game with `flutter run`'));
+    expect(out.toString(), endsWith('Usage: flutter run\n'));
+    expect(flameDirectory(directory.absolute).existsSync(), isFalse);
+  });
+
   test('does not allow --vmservice-out-file', () async {
     final runner = createRunner(
       _starter((_, _, _) => fail('flutter run should not be started')),

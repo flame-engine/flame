@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -59,15 +60,48 @@ class RunCommand extends Command<int> {
 
   @override
   String get description =>
-      'Run the game with `flutter run`, so that the other commands can find '
-      'it without --uri. All the arguments are passed on to `flutter run`.';
+      'Run the game with `flutter run` and remember where it is, so that the '
+      'other commands find it. All the arguments are passed on to '
+      '`flutter run`.';
 
   @override
   String get invocation => 'flame run [flutter run arguments]';
 
+  /// The introduction that is printed before the help of `flutter run` when
+  /// `flame run --help` is called, since `flutter run` prints its own help.
+  static const helpHeader =
+      'Run the game with `flutter run` and remember where it is, so that the '
+      'other flame commands find it without --uri.\n'
+      '\n'
+      'Usage: flame run [flutter run arguments]\n'
+      '\n'
+      'All the arguments are passed on to `flutter run`, and its keys in the '
+      'terminal, such as r for hot reload and q to quit, keep working. The '
+      'Dart VM Service URI, the port for the reload and restart commands and '
+      'the log for the logs command are kept in .dart_tool/flame in the root '
+      'of the project. Games started from different projects are separate, '
+      'and when several are started from the same project the commands go to '
+      'the one started last.\n'
+      '\n'
+      'When it runs in the background of an interactive shell, redirect its '
+      'input from /dev/null, as `flutter run` needs that too.\n'
+      '\n'
+      'These are the options of `flutter run`:\n';
+
   @override
   Future<int> run() async {
     final arguments = argResults!.rest;
+    if (arguments.contains('--help') || arguments.contains('-h')) {
+      final outSink = out ?? stdout;
+      final errSink = err ?? stderr;
+      outSink.writeln(helpHeader);
+      final process = await _startFlutterRun(['--help']);
+      await Future.wait([
+        utf8.decoder.bind(process.stdout).forEach(outSink.write),
+        utf8.decoder.bind(process.stderr).forEach(errSink.write),
+      ]);
+      return process.exitCode;
+    }
     if (arguments.any((a) => a.startsWith('--vmservice-out-file'))) {
       throw UsageException(
         'flame run sets --vmservice-out-file itself, remove it from the '
@@ -83,25 +117,10 @@ class RunCommand extends Command<int> {
     }
     uriFile.parent.createSync(recursive: true);
 
-    final Process process;
-    try {
-      process = await _startProcess(
-        'flutter',
-        ['run', ...arguments, '--vmservice-out-file=${uriFile.path}'],
-        workingDirectory: workingDirectory.path,
-        runInShell: Platform.isWindows,
-        mode: ProcessStartMode.normal,
-      );
-    } on ProcessException catch (error, stackTrace) {
-      Error.throwWithStackTrace(
-        FlameCliException(
-          'Could not start `flutter run`: ${error.message}\n'
-          'Make sure that Flutter is installed and on your PATH.',
-          exitCode: ExitCodes.unavailable,
-        ),
-        stackTrace,
-      );
-    }
+    final process = await _startFlutterRun([
+      ...arguments,
+      '--vmservice-out-file=${uriFile.path}',
+    ]);
 
     // Ctrl+C is sent to `flutter run` as well, so it is ignored here to be
     // able to clean up after `flutter run` has stopped the game.
@@ -118,6 +137,27 @@ class RunCommand extends Command<int> {
     } finally {
       rawMode?.restore();
       await interrupts.cancel();
+    }
+  }
+
+  Future<Process> _startFlutterRun(List<String> arguments) async {
+    try {
+      return await _startProcess(
+        'flutter',
+        ['run', ...arguments],
+        workingDirectory: workingDirectory.path,
+        runInShell: Platform.isWindows,
+        mode: ProcessStartMode.normal,
+      );
+    } on ProcessException catch (error, stackTrace) {
+      Error.throwWithStackTrace(
+        FlameCliException(
+          'Could not start `flutter run`: ${error.message}\n'
+          'Make sure that Flutter is installed and on your PATH.',
+          exitCode: ExitCodes.unavailable,
+        ),
+        stackTrace,
+      );
     }
   }
 
