@@ -40,6 +40,12 @@ registers the new extension end points so that you can communicate with Flame
 from the devtools extension. Don't forget to add the new connector to the
 list of connectors in the `DevToolsService` class.
 
+The service extensions can also be called by other tools than this
+extension. For example, the `snapshot` command in `flame_test` uses the
+`GameSnapshotConnector` and `ComponentSnapshotConnector` to render a running
+game to a PNG image, so keep the responses of the existing extensions
+backwards compatible.
+
 If you want to run with the devtools extension with the simulated mode for
 faster development, you can use `melos devtools-simulator` to start the
 simulated environment and run the devtools extension in the browser.
