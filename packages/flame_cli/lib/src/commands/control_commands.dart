@@ -34,7 +34,17 @@ class RestartCommand extends _RunRequestCommand {
 }
 
 abstract class _RunRequestCommand extends Command<int> {
-  _RunRequestCommand(this.out, this.workingDirectory, {required this.request});
+  _RunRequestCommand(this.out, this.workingDirectory, {required this.request}) {
+    argParser.addOption(
+      'port',
+      abbr: 'p',
+      help:
+          'The control port of the `flame run` to send the request to, which '
+          'it prints when it starts. Only needed when several games were '
+          'started from the same project and the request is for one that '
+          'was not started last.',
+    );
+  }
 
   final StringSink out;
   final Directory workingDirectory;
@@ -42,7 +52,16 @@ abstract class _RunRequestCommand extends Command<int> {
 
   @override
   Future<int> run() async {
-    final response = await sendRunRequest(workingDirectory, request);
+    final portOption = argResults!.option('port');
+    final port = portOption == null ? null : int.tryParse(portOption);
+    if (portOption != null && (port == null || port <= 0)) {
+      throw UsageException('--port has to be a positive integer.', usage);
+    }
+    final response = await sendRunRequest(
+      workingDirectory,
+      request,
+      port: port,
+    );
     final ok = response['ok'] == true;
     final message = response['message'];
     final output = ok ? const [] : (response['output'] as List?) ?? const [];
@@ -57,16 +76,21 @@ abstract class _RunRequestCommand extends Command<int> {
 }
 
 /// Sends [request] to the `flame run` of the project that [workingDirectory]
-/// is in, and returns its response.
+/// is in, or to the one listening on [port] if given, and returns its
+/// response.
 Future<Map<String, dynamic>> sendRunRequest(
   Directory workingDirectory,
-  RunRequest request,
-) async {
-  final portFile = findProjectFile(workingDirectory, controlPortFileName);
-  final port = portFile == null
-      ? null
-      : int.tryParse(portFile.readAsStringSync().trim());
-  if (port == null) {
+  RunRequest request, {
+  int? port,
+}) async {
+  var targetPort = port;
+  if (targetPort == null) {
+    final portFile = findProjectFile(workingDirectory, controlPortFileName);
+    targetPort = portFile == null
+        ? null
+        : int.tryParse(portFile.readAsStringSync().trim());
+  }
+  if (targetPort == null) {
     throw const FlameCliException(
       'No game that was started with `flame run` was found, so there is '
       'nothing to send the request to.',
@@ -78,13 +102,14 @@ Future<Map<String, dynamic>> sendRunRequest(
   try {
     socket = await Socket.connect(
       InternetAddress.loopbackIPv4,
-      port,
+      targetPort,
       timeout: const Duration(seconds: 5),
     );
   } on SocketException catch (error, stackTrace) {
     Error.throwWithStackTrace(
       FlameCliException(
-        'Could not reach `flame run` on port $port, it might have stopped: '
+        'Could not reach `flame run` on port $targetPort, it might have '
+        'stopped: '
         '${error.message}',
         exitCode: ExitCodes.unavailable,
       ),
