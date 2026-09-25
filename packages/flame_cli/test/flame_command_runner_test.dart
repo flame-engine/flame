@@ -50,6 +50,19 @@ void main() {
     expect(err.toString(), contains('--pixel-ratio has to be a positive'));
   });
 
+  test('snapshot requires a finite pixel ratio', () async {
+    final exitCode = await runner.run([
+      'snapshot',
+      '--uri',
+      _unreachableUri,
+      '--pixel-ratio',
+      'Infinity',
+    ]);
+
+    expect(exitCode, ExitCodes.usage);
+    expect(err.toString(), contains('--pixel-ratio has to be a positive'));
+  });
+
   test('reports when the game cannot be reached', () async {
     final exitCode = await runner.run(['tree', '--uri', _unreachableUri]);
 

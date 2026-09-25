@@ -36,7 +36,12 @@ class FlameConnection {
     try {
       final vm = await service.getVM();
       for (final isolateReference in vm.isolates ?? <IsolateRef>[]) {
-        final isolate = await service.getIsolate(isolateReference.id!);
+        final Isolate isolate;
+        try {
+          isolate = await service.getIsolate(isolateReference.id!);
+        } on SentinelException {
+          continue;
+        }
         final extensions = {
           ...?isolate.extensionRPCs?.where(
             (extension) => extension.startsWith(_extensionPrefix),
@@ -46,9 +51,15 @@ class FlameConnection {
           return FlameConnection._(service, isolate.id!, extensions);
         }
       }
-    } on Object {
+    } on Object catch (error, stackTrace) {
       await service.dispose();
-      rethrow;
+      Error.throwWithStackTrace(
+        FlameCliException(
+          'Could not list the isolates of the Dart VM Service at $uri: $error',
+          exitCode: ExitCodes.unavailable,
+        ),
+        stackTrace,
+      );
     }
 
     await service.dispose();
@@ -84,6 +95,14 @@ class FlameConnection {
     } on RPCError catch (error, stackTrace) {
       Error.throwWithStackTrace(
         FlameCliException(error.details ?? error.message),
+        stackTrace,
+      );
+    } on SentinelException catch (error, stackTrace) {
+      Error.throwWithStackTrace(
+        FlameCliException(
+          'The game is no longer running: ${error.sentinel.valueAsString}',
+          exitCode: ExitCodes.unavailable,
+        ),
         stackTrace,
       );
     }

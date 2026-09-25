@@ -78,6 +78,23 @@ void main() {
       expect(await _pixelAt(image, 10, 20), Colors.white);
     });
 
+    testWithFlameGame('scales the image with the pixel ratio', (game) async {
+      final component = RectangleComponent(
+        size: Vector2(20, 10),
+        paint: Paint()..color = Colors.white,
+      );
+      await game.world.ensureAdd(component);
+
+      final image = ComponentSnapshotConnector.snapshotComponent(
+        component,
+        pixelRatio: 2,
+      );
+
+      expect(image.width, 40);
+      expect(image.height, 20);
+      expect(await _pixelAt(image, 39, 19), Colors.white);
+    });
+
     testWithFlameGame('gives zero sized components a size', (game) async {
       final component = PositionComponent();
       await game.world.ensureAdd(component);

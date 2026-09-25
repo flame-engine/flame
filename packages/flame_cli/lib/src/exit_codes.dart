@@ -14,4 +14,7 @@ abstract final class ExitCodes {
 
   /// The game reported an error while running the command.
   static const software = 70;
+
+  /// The output file could not be written.
+  static const cantCreate = 73;
 }

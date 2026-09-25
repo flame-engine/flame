@@ -35,8 +35,8 @@ game.
 - `ext.flame_devtools.getGameSnapshot`: Renders the whole game. It takes an optional `pixelRatio`
   parameter and returns `snapshot` (a base64 encoded PNG image), `width` and `height`.
 - `ext.flame_devtools.getComponentSnapshot`: Renders a single component. It takes the `id` of the
-  component and returns `snapshot` (a base64 encoded PNG image), which is empty if no component with
-  that id was found.
+  component and an optional `pixelRatio` parameter, and returns `snapshot` (a base64 encoded PNG
+  image), which is empty if no component with that id was found.
 - `ext.flame_devtools.getComponentTree`: Returns the `component_tree`, where every node has an
   `id`, a `name`, the `toString` of the component and its `children`.
 

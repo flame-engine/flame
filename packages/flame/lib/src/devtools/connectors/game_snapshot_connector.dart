@@ -18,7 +18,7 @@ class GameSnapshotConnector extends DevToolsConnector {
       'ext.flame_devtools.getGameSnapshot',
       (method, parameters) async {
         final pixelRatio = double.tryParse(parameters['pixelRatio'] ?? '1');
-        if (pixelRatio == null || pixelRatio <= 0) {
+        if (pixelRatio == null || !pixelRatio.isFinite || pixelRatio <= 0) {
           return ServiceExtensionResponse.error(
             ServiceExtensionResponse.invalidParams,
             'pixelRatio has to be a positive number, '
