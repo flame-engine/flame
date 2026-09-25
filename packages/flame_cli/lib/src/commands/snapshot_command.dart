@@ -8,7 +8,7 @@ import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
 import 'package:path/path.dart' as p;
 
-/// Renders the whole game, or a single component, to a PNG image.
+/// Renders the whole game, the world, or a single component, to a PNG image.
 class SnapshotCommand extends FlameCommand {
   SnapshotCommand(super.out, super.workingDirectory) {
     argParser
@@ -25,6 +25,21 @@ class SnapshotCommand extends FlameCommand {
             'The id of a single component to render instead of the whole '
             'game. Use the tree command to list the ids.',
       )
+      ..addFlag(
+        'world',
+        abbr: 'w',
+        negatable: false,
+        help:
+            'Render the whole world directly instead of through the camera, '
+            'which also shows the components that are off screen.',
+      )
+      ..addOption(
+        'rect',
+        abbr: 'r',
+        help:
+            'Render this part of the world, given as x,y,width,height in '
+            'world coordinates, instead of the whole world.',
+      )
       ..addOption(
         'pixel-ratio',
         abbr: 'p',
@@ -38,7 +53,7 @@ class SnapshotCommand extends FlameCommand {
 
   @override
   String get description =>
-      'Render the game, or a single component, to a PNG image.';
+      'Render the game, the world, or a single component, to a PNG image.';
 
   late double _pixelRatio;
 
@@ -52,16 +67,45 @@ class SnapshotCommand extends FlameCommand {
       );
     }
     _pixelRatio = pixelRatio;
+
+    final rect = argResults!.option('rect');
+    if (rect != null) {
+      final parts = rect.split(',').map(double.tryParse).toList();
+      if (parts.length != 4 ||
+          parts.any((p) => p == null || !p.isFinite) ||
+          parts[2]! <= 0 ||
+          parts[3]! <= 0) {
+        throw UsageException(
+          '--rect has to be four numbers x,y,width,height with a positive '
+          'width and height.',
+          usage,
+        );
+      }
+    }
+
+    final world = argResults!.flag('world') || rect != null;
+    if (world && argResults!.option('component') != null) {
+      throw UsageException(
+        '--component renders a single component, it cannot be combined with '
+        '--world or --rect.',
+        usage,
+      );
+    }
   }
 
   @override
   Future<int> runWithConnection(FlameConnection connection) async {
     final componentId = argResults!.option('component');
+    final rect = argResults!.option('rect');
     final pixelRatio = _pixelRatio.toString();
     final response = componentId == null
         ? await connection.call(
             'getGameSnapshot',
-            args: {'pixelRatio': pixelRatio},
+            args: {
+              'pixelRatio': pixelRatio,
+              if (argResults!.flag('world')) 'world': 'true',
+              if (rect != null) 'rect': rect,
+            },
           )
         : await connection.call(
             'getComponentSnapshot',

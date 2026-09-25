@@ -89,6 +89,49 @@ void main() {
     });
   });
 
+  group('snapshot', () {
+    test('validates the rect', () async {
+      await expectUsageError(['snapshot', '--rect', '1,2,3'], '--rect has to');
+      await expectUsageError(['snapshot', '-r', '0,0,-1,5'], '--rect has to');
+    });
+
+    test('does not combine a component with the world', () async {
+      await expectUsageError(
+        ['snapshot', '-c', '1', '--world'],
+        'cannot be combined',
+      );
+      await expectUsageError(
+        ['snapshot', '-c', '1', '--rect', '0,0,1,1'],
+        'cannot be combined',
+      );
+    });
+  });
+
+  group('input', () {
+    test('tap requires one position', () async {
+      await expectUsageError(['input', 'tap'], 'Pass one position');
+      await expectUsageError(['input', 'tap', '1'], 'two numbers');
+      await expectUsageError(['input', 'tap', '1,2', '3,4'], 'Pass one');
+    });
+
+    test('drag requires two positions and positive steps', () async {
+      await expectUsageError(['input', 'drag', '1,2'], 'Pass two positions');
+      await expectUsageError(['input', 'drag', '1,2', 'x,y'], 'two numbers');
+      await expectUsageError(
+        ['input', 'drag', '1,2', '3,4', '--steps', '0'],
+        '--steps has to be',
+      );
+    });
+
+    test('key requires one key and one direction', () async {
+      await expectUsageError(['input', 'key'], 'Pass the name of one key');
+      await expectUsageError(
+        ['input', 'key', 'space', '--down', '--up'],
+        'either --down or --up',
+      );
+    });
+  });
+
   group('overlay', () {
     test('requires an overlay name', () async {
       await expectUsageError(['overlay', 'show'], 'Pass the name of one');

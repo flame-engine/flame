@@ -79,5 +79,13 @@ flame overlay show PauseMenu
 If the game was started in another way, pass the Dart VM Service URI that `flutter run` prints to
 the commands with `--uri`.
 
+Play the game by sending taps, drags and key presses, and compare two snapshots:
+
+```shell
+flame input tap 400,300
+flame input key space
+flame diff before.png after.png --output diff.png
+```
+
 Run `flame --help` for all the commands and options, and see the
 [documentation](https://docs.flame-engine.org/latest/flame/other/cli.html) for more information.

@@ -95,6 +95,22 @@ void main() {
       expect(await _pixelAt(image, 39, 19), Colors.white);
     });
 
+    testWithFlameGame('renders the world without the camera', (game) async {
+      await game.world.ensureAdd(
+        RectangleComponent(
+          position: Vector2(-1000, 500),
+          size: Vector2(20, 10),
+          paint: Paint()..color = Colors.white,
+        ),
+      );
+
+      final image = ComponentSnapshotConnector.snapshotComponent(game.world);
+
+      expect(image.width, 20);
+      expect(image.height, 10);
+      expect(await _pixelAt(image, 0, 0), Colors.white);
+    });
+
     testWithFlameGame('gives zero sized components a size', (game) async {
       final component = PositionComponent();
       await game.world.ensureAdd(component);
@@ -137,5 +153,57 @@ void main() {
       expect(image.width, game.canvasSize.x * 2);
       expect(image.height, game.canvasSize.y * 2);
     });
+  });
+
+  group('GameSnapshotConnector.worldBounds', () {
+    testWithFlameGame('is null for an empty world', (game) async {
+      expect(GameSnapshotConnector.worldBounds(game.world), isNull);
+    });
+
+    testWithFlameGame('contains all position components', (game) async {
+      await game.world.ensureAddAll([
+        PositionComponent(position: Vector2(-10, -20), size: Vector2(5, 5)),
+        PositionComponent(
+          position: Vector2(100, 50),
+          size: Vector2(10, 10),
+          anchor: Anchor.center,
+          children: [
+            PositionComponent(position: Vector2(20, 0), size: Vector2(4, 4)),
+          ],
+        ),
+      ]);
+
+      expect(
+        GameSnapshotConnector.worldBounds(game.world),
+        const Rect.fromLTRB(-10, -20, 119, 55),
+      );
+    });
+  });
+
+  group('GameSnapshotConnector.snapshotWorld', () {
+    testWithGame(
+      'renders a rect of the world in world coordinates',
+      _BackgroundGame.new,
+      (game) async {
+        await game.world.ensureAdd(
+          RectangleComponent(
+            position: Vector2(-1000, -1000),
+            size: Vector2(10, 10),
+            paint: Paint()..color = Colors.white,
+          ),
+        );
+
+        final image = await GameSnapshotConnector.snapshotWorld(
+          game,
+          const Rect.fromLTWH(-1005, -1005, 20, 20),
+          pixelRatio: 2,
+        );
+
+        expect(image.width, 40);
+        expect(image.height, 20 * 2);
+        expect(await _pixelAt(image, 2, 2), const Color(0xFF0000FF));
+        expect(await _pixelAt(image, 20, 20), Colors.white);
+      },
+    );
   });
 }
