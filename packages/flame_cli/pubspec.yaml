@@ -1,6 +1,6 @@
 name: flame_cli
 resolution: workspace
-description: A command line tool for inspecting and controlling running Flame games, for example to take snapshots of them.
+description: A command line tool for creating Flame games, and for inspecting, controlling and playing running ones, for example to take snapshots of them.
 version: 0.1.0
 homepage: https://github.com/flame-engine/flame/tree/main/packages/flame_cli
 funding:

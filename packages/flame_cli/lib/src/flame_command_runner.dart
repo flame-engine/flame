@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/commands/control_commands.dart';
+import 'package:flame_cli/src/commands/create_command.dart';
 import 'package:flame_cli/src/commands/debug_command.dart';
 import 'package:flame_cli/src/commands/diff_command.dart';
 import 'package:flame_cli/src/commands/game_loop_commands.dart';
@@ -33,6 +34,9 @@ class FlameCommandRunner extends CommandRunner<int> {
        ) {
     final output = out ?? stdout;
     final directory = workingDirectory ?? Directory.current;
+    addCommand(
+      CreateCommand(output, directory, startProcess: startProcess, err: err),
+    );
     addCommand(
       RunCommand(
         directory,

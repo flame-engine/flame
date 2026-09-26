@@ -1,7 +1,9 @@
 export 'src/commands/control_commands.dart' show sendRunRequest;
+export 'src/commands/create_command.dart' show validateProjectName;
 export 'src/commands/inspect_command.dart' show formatComponentInfo;
 export 'src/commands/run_command.dart' show ProcessStarter;
 export 'src/component_tree.dart';
+export 'src/create_templates.dart';
 export 'src/exit_codes.dart';
 export 'src/flame_cli_exception.dart';
 export 'src/flame_command_runner.dart';
