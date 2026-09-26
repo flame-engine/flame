@@ -37,6 +37,14 @@ dart pub global activate flame_cli
 
 ## Usage
 
+Create a new game, like `flutter create` but from a Flame template and with the Flame packages
+set up:
+
+```shell
+flame create my_game
+cd my_game
+```
+
 Start your game with `flame run` from your project directory. It takes the same arguments as
 `flutter run`, and lets the other commands find the game:
 
