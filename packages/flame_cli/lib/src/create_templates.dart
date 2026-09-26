@@ -1,9 +1,8 @@
 /// A template that `flame create` writes on top of the project that
 /// `flutter create` generated.
 ///
-/// The [files] are relative to the project directory, and `{{name}}` and
-/// `{{description}}` in their contents are replaced with the project name and
-/// description.
+/// The [files] are relative to the project directory, and `{{name}}` in
+/// their contents is replaced with the project name.
 class CreateTemplate {
   const CreateTemplate({
     required this.name,
@@ -175,11 +174,7 @@ class MyGame extends FlameGame<MyWorld>
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    camera.viewfinder.anchor = Anchor.center;
-    scoreText = TextComponent(
-      text: 'Score: 0',
-      position: Vector2.all(16),
-    );
+    scoreText = TextComponent(text: 'Score: 0', position: Vector2.all(16));
     await camera.viewport.add(scoreText);
   }
 
@@ -346,19 +341,22 @@ void main() {
       expect(game.score, 0);
     });
 
-    testWithGame('collecting a star raises the score and spawns a new one',
-        MyGame.new, (game) async {
-      await game.ready();
-      final star = game.world.children.whereType<Star>().single;
-      game.world.player.position.setFrom(star.position + Vector2(30, 0));
-      game.update(0);
-      await game.ready();
+    testWithGame(
+      'collecting a star raises the score and spawns a new one',
+      MyGame.new,
+      (game) async {
+        await game.ready();
+        final star = game.world.children.whereType<Star>().single;
+        game.world.player.position.setFrom(star.position + Vector2(30, 0));
+        game.update(0);
+        await game.ready();
 
-      expect(game.score, 1);
-      expect(game.scoreText.text, 'Score: 1');
-      expect(game.world.children.whereType<Star>(), hasLength(1));
-      expect(game.world.children.whereType<Star>().single, isNot(star));
-    });
+        expect(game.score, 1);
+        expect(game.scoreText.text, 'Score: 1');
+        expect(game.world.children.whereType<Star>(), hasLength(1));
+        expect(game.world.children.whereType<Star>().single, isNot(star));
+      },
+    );
 
     testWithGame('the arrow keys move the player', MyGame.new, (game) async {
       await game.ready();
@@ -376,8 +374,7 @@ void main() {
       expect(game.world.player.position.y, 0);
     });
 
-    testWithGame('a tap moves the player to the tapped position', MyGame.new,
-        (game) async {
+    testWithGame('the player moves to its target', MyGame.new, (game) async {
       await game.ready();
       game.world.player.target = Vector2(100, 0);
       game.update(10);

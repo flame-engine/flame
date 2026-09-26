@@ -39,9 +39,6 @@ void main() {
               final project = Directory(arguments.last)
                 ..createSync(recursive: true);
               File(p.join(project.path, 'pubspec.yaml')).createSync();
-              File(
-                p.join(project.path, 'test', 'widget_test.dart'),
-              ).createSync(recursive: true);
             }
             return FakeProcess()
               ..printLine('flutter ${arguments[0]}')
@@ -63,6 +60,7 @@ void main() {
       [
         'create',
         '--empty',
+        '--no-pub',
         '--project-name',
         'my_game',
         '--org',
@@ -84,12 +82,6 @@ void main() {
       read('analysis_options.yaml'),
       'include: package:flame_lint/analysis_options.yaml\n',
     );
-    expect(
-      File(
-        p.join(directory.path, 'my_game', 'test', 'widget_test.dart'),
-      ).existsSync(),
-      isFalse,
-    );
     expect(out.toString(), contains('Created the Flame game my_game'));
     expect(out.toString(), contains('flame run'));
   });
@@ -107,7 +99,9 @@ void main() {
       '--template',
       'simple',
       '--platforms',
-      'macos,web',
+      'macos',
+      '--platforms',
+      'web',
       '--packages',
       'flame_audio,flame_tiled',
       '--flame-version',
@@ -119,6 +113,7 @@ void main() {
     expect(calls[0], [
       'create',
       '--empty',
+      '--no-pub',
       '--project-name',
       'space_shooter',
       '--org',
@@ -138,8 +133,10 @@ void main() {
       'flame_tiled',
     ]);
     expect(
-      Directory(p.join(directory.path, 'games', 'my_game', 'test')).listSync(),
-      isEmpty,
+      Directory(
+        p.join(directory.path, 'games', 'my_game', 'test'),
+      ).existsSync(),
+      isFalse,
     );
   });
 
@@ -211,6 +208,7 @@ void main() {
       expect(validateProjectName('my-game'), contains('try "my_game"'));
       expect(validateProjectName('2games'), isNot(contains('try')));
       expect(validateProjectName('class'), contains('not a valid'));
+      expect(validateProjectName('native'), contains('not a valid'));
       expect(validateProjectName(''), contains('not a valid'));
     });
 
