@@ -19,6 +19,43 @@ typedef ProcessStarter =
       ProcessStartMode mode,
     });
 
+/// Starts `flutter` with [arguments] through [startProcess], and turns a
+/// failure to start it into a [FlameCliException] that tells the user to
+/// install Flutter.
+Future<Process> startFlutter(
+  ProcessStarter startProcess,
+  List<String> arguments, {
+  required Directory workingDirectory,
+}) async {
+  try {
+    return await startProcess(
+      'flutter',
+      arguments,
+      workingDirectory: workingDirectory.path,
+      runInShell: Platform.isWindows,
+      mode: ProcessStartMode.normal,
+    );
+  } on ProcessException catch (error, stackTrace) {
+    Error.throwWithStackTrace(
+      FlameCliException(
+        'Could not start `flutter ${arguments.first}`: ${error.message}\n'
+        'Make sure that Flutter is installed and on your PATH.',
+        exitCode: ExitCodes.unavailable,
+      ),
+      stackTrace,
+    );
+  }
+}
+
+/// Writes the standard output and error of [process] to [out] and [err]
+/// until both are closed.
+Future<void> forwardOutput(Process process, StringSink out, StringSink err) {
+  return Future.wait([
+    utf8.decoder.bind(process.stdout).forEach(out.write),
+    utf8.decoder.bind(process.stderr).forEach(err.write),
+  ]);
+}
+
 /// Runs the game with `flutter run` and writes the Dart VM Service URI of the
 /// game to a file in the project, so that the other commands can find the game
 /// without the `--uri` option.
@@ -97,10 +134,7 @@ class RunCommand extends Command<int> {
       final errSink = err ?? stderr;
       outSink.writeln(helpHeader);
       final process = await _startFlutterRun(['--help']);
-      await Future.wait([
-        utf8.decoder.bind(process.stdout).forEach(outSink.write),
-        utf8.decoder.bind(process.stderr).forEach(errSink.write),
-      ]);
+      await forwardOutput(process, outSink, errSink);
       return process.exitCode;
     }
     if (arguments.any((a) => a.startsWith('--vmservice-out-file'))) {
@@ -141,25 +175,12 @@ class RunCommand extends Command<int> {
     }
   }
 
-  Future<Process> _startFlutterRun(List<String> arguments) async {
-    try {
-      return await _startProcess(
-        'flutter',
-        ['run', ...arguments],
-        workingDirectory: workingDirectory.path,
-        runInShell: Platform.isWindows,
-        mode: ProcessStartMode.normal,
-      );
-    } on ProcessException catch (error, stackTrace) {
-      Error.throwWithStackTrace(
-        FlameCliException(
-          'Could not start `flutter run`: ${error.message}\n'
-          'Make sure that Flutter is installed and on your PATH.',
-          exitCode: ExitCodes.unavailable,
-        ),
-        stackTrace,
-      );
-    }
+  Future<Process> _startFlutterRun(List<String> arguments) {
+    return startFlutter(
+      _startProcess,
+      ['run', ...arguments],
+      workingDirectory: workingDirectory,
+    );
   }
 
   /// Puts the terminal in the same mode as `flutter run` does, so that single
