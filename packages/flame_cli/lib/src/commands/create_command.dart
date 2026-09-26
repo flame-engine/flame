@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
@@ -54,7 +53,7 @@ class CreateCommand extends Command<int> {
         },
         defaultsTo: CreateTemplate.basics.name,
       )
-      ..addOption(
+      ..addMultiOption(
         'platforms',
         help:
             'The platforms supported by the game, as a comma separated list, '
@@ -132,17 +131,18 @@ class CreateCommand extends Command<int> {
       );
     }
 
+    final platforms = argResults!.multiOption('platforms');
     final flutterCreateArguments = [
       'create',
       '--empty',
+      '--no-pub',
       '--project-name',
       projectName,
       '--org',
       org,
       '--description',
       argResults!.option('description')!,
-      if (argResults!.option('platforms') != null)
-        '--platforms=${argResults!.option('platforms')}',
+      if (platforms.isNotEmpty) '--platforms=${platforms.join(',')}',
       if (overwrite) '--overwrite',
       directory.path,
     ];
@@ -192,19 +192,10 @@ class CreateCommand extends Command<int> {
       'analysis_options.yaml':
           'include: package:flame_lint/analysis_options.yaml\n',
     };
-    final generatedTest = File(
-      p.join(directory.path, 'test', 'widget_test.dart'),
-    );
-    if (generatedTest.existsSync()) {
-      generatedTest.deleteSync();
-    }
     for (final entry in files.entries) {
-      final content = entry.value
-          .replaceAll('{{name}}', projectName)
-          .replaceAll('{{description}}', argResults!.option('description')!);
       File(p.join(directory.path, entry.key))
         ..createSync(recursive: true)
-        ..writeAsStringSync(content);
+        ..writeAsStringSync(entry.value.replaceAll('{{name}}', projectName));
     }
   }
 
@@ -214,29 +205,12 @@ class CreateCommand extends Command<int> {
     Directory? workingDirectory,
     bool ignoreFailure = false,
   }) async {
-    final Process process;
-    try {
-      process = await _startProcess(
-        'flutter',
-        arguments,
-        workingDirectory: (workingDirectory ?? this.workingDirectory).path,
-        runInShell: Platform.isWindows,
-        mode: ProcessStartMode.normal,
-      );
-    } on ProcessException catch (error, stackTrace) {
-      Error.throwWithStackTrace(
-        FlameCliException(
-          'Could not start `flutter`: ${error.message}\n'
-          'Make sure that Flutter is installed and on your PATH.',
-          exitCode: ExitCodes.unavailable,
-        ),
-        stackTrace,
-      );
-    }
-    await Future.wait([
-      utf8.decoder.bind(process.stdout).forEach(out.write),
-      utf8.decoder.bind(process.stderr).forEach(_err.write),
-    ]);
+    final process = await startFlutter(
+      _startProcess,
+      arguments,
+      workingDirectory: workingDirectory ?? this.workingDirectory,
+    );
+    await forwardOutput(process, out, _err);
     final exitCode = await process.exitCode;
     if (exitCode != 0 && !ignoreFailure) {
       throw FlameCliException(
@@ -282,21 +256,27 @@ const _dartKeywords = {
   'implements',
   'import',
   'in',
+  'inout',
   'interface',
   'is',
   'late',
   'library',
   'mixin',
+  'native',
   'new',
   'null',
+  'of',
   'on',
   'operator',
+  'out',
   'part',
+  'patch',
   'required',
   'rethrow',
   'return',
   'set',
   'show',
+  'source',
   'static',
   'super',
   'switch',

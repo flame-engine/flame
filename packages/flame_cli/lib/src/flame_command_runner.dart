@@ -29,8 +29,8 @@ class FlameCommandRunner extends CommandRunner<int> {
   }) : _err = err ?? stderr,
        super(
          'flame',
-         'Launch, observe, change and play Flame games that are running in '
-             'debug mode.',
+         'Create Flame games, and launch, observe, change and play the ones '
+             'that are running in debug mode.',
        ) {
     final output = out ?? stdout;
     final directory = workingDirectory ?? Directory.current;
