@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:meta/meta.dart';
@@ -46,6 +47,9 @@ class PathComponent extends ShapeComponent {
 
   /// The actual contours for this path.
   late final contours = path.walkContours(sampling, tolerance);
+
+  /// The current path hitbox (if any).
+  PathHitbox? get pathHitbox => firstChild<PathHitbox>();
 
   /// Our polygon hitboxes.
   Iterable<PolygonComponent> get polygonComponents =>
@@ -116,12 +120,12 @@ class PathComponent extends ShapeComponent {
     // Sort the polygons by size: we will use the largest area in order to
     // approximate full inclusion.
     polygons.sortBy((hitbox) => hitbox.size.length2);
-    final largest = polygons.last;
-    final area = largest.toRect();
 
     // We always keep the largest hitbox: the others are discarded if they fit
     // entirely within it.
     if (filterPolygons) {
+      final largest = polygons.last;
+      final area = largest.toRect();
       polygons.removeWhere((element) {
         if (element == largest) {
           return false;

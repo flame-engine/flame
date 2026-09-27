@@ -197,7 +197,7 @@ class CollidablePolygon extends MyCollidable {
   }
 }
 
-class CollidablePath extends MyCollidable with CollisionPassthrough {
+class CollidablePath extends MyCollidable {
   CollidablePath(
     super.position,
     super.size,

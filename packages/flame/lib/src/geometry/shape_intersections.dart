@@ -42,7 +42,11 @@ class PathPathIntersections
     final polygonsB = pathB.children.whereType<PolygonComponent>();
     for (final polygonA in polygonsA) {
       for (final polygonB in polygonsB) {
-        final intersections = _polygons.intersect(polygonA, polygonB);
+        final intersections = _polygons.intersect(
+          polygonA,
+          polygonB,
+          overlappingRect: overlappingRect,
+        );
         if (intersections.isNotEmpty) {
           return intersections;
         }
@@ -64,7 +68,11 @@ class PathPolygonIntersections
     // TODO(adario): linear, should it accumulate all results?
     final polygonsA = pathA.children.whereType<PolygonComponent>();
     for (final polygonA in polygonsA) {
-      final intersections = _polygons.intersect(polygonA, polygonB);
+      final intersections = _polygons.intersect(
+        polygonA,
+        polygonB,
+        overlappingRect: overlappingRect,
+      );
       if (intersections.isNotEmpty) {
         return intersections;
       }
@@ -85,7 +93,11 @@ class CirclePathIntersections
     // TODO(adario): linear, should it accumulate all results?
     final polygonsB = pathB.children.whereType<PolygonComponent>();
     for (final polygonB in polygonsB) {
-      final intersections = _polygons.intersect(circleA, polygonB);
+      final intersections = _polygons.intersect(
+        circleA,
+        polygonB,
+        overlappingRect: overlappingRect,
+      );
       if (intersections.isNotEmpty) {
         return intersections;
       }
