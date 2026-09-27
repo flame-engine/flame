@@ -28,6 +28,72 @@ abstract class Intersections<
   }
 }
 
+class PathPathIntersections
+    extends Intersections<PathComponent, PathComponent> {
+  late final _polygons = PolygonPolygonIntersections();
+  @override
+  List<Vector2> intersect(
+    PathComponent pathA,
+    PathComponent pathB, {
+    Rect? overlappingRect,
+  }) {
+    // TODO(adario): O(n^2)...
+    final polygonsA = pathA.children.whereType<PolygonComponent>();
+    final polygonsB = pathB.children.whereType<PolygonComponent>();
+    for (final polygonA in polygonsA) {
+      for (final polygonB in polygonsB) {
+        final intersections = _polygons.intersect(polygonA, polygonB);
+        if (intersections.isNotEmpty) {
+          return intersections;
+        }
+      }
+    }
+    return [];
+  }
+}
+
+class PathPolygonIntersections
+    extends Intersections<PathComponent, PolygonComponent> {
+  late final _polygons = PolygonPolygonIntersections();
+  @override
+  List<Vector2> intersect(
+    PathComponent pathA,
+    PolygonComponent polygonB, {
+    Rect? overlappingRect,
+  }) {
+    // TODO(adario): linear, should it accumulate all results?
+    final polygonsA = pathA.children.whereType<PolygonComponent>();
+    for (final polygonA in polygonsA) {
+      final intersections = _polygons.intersect(polygonA, polygonB);
+      if (intersections.isNotEmpty) {
+        return intersections;
+      }
+    }
+    return [];
+  }
+}
+
+class CirclePathIntersections
+    extends Intersections<CircleComponent, PathComponent> {
+  late final _polygons = CirclePolygonIntersections();
+  @override
+  List<Vector2> intersect(
+    CircleComponent circleA,
+    PathComponent pathB, {
+    Rect? overlappingRect,
+  }) {
+    // TODO(adario): linear, should it accumulate all results?
+    final polygonsB = pathB.children.whereType<PolygonComponent>();
+    for (final polygonB in polygonsB) {
+      final intersections = _polygons.intersect(circleA, polygonB);
+      if (intersections.isNotEmpty) {
+        return intersections;
+      }
+    }
+    return [];
+  }
+}
+
 class PolygonPolygonIntersections
     extends Intersections<PolygonComponent, PolygonComponent> {
   /// Returns the intersection points of [polygonA] and [polygonB]
@@ -187,6 +253,9 @@ final List<Intersections> _intersectionSystems = [
   CircleCircleIntersections(),
   CirclePolygonIntersections(),
   PolygonPolygonIntersections(),
+  CirclePathIntersections(),
+  PathPolygonIntersections(),
+  PathPathIntersections(),
 ];
 
 List<Vector2> intersections(

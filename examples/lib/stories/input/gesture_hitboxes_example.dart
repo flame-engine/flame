@@ -82,7 +82,7 @@ class _GestureHitboxesWorld extends World
   }
 }
 
-class MyPathComponent extends PathComponent
+class MyPathComponent extends CollidablePathComponent
     with TapCallbacks, HoverCallbacks, GestureHitboxes {
   late final Color baseColor;
 
@@ -91,8 +91,7 @@ class MyPathComponent extends PathComponent
     super.position,
     super.scale,
     super.angle,
-    // TODO(adario): support hitbox rendering
-  }) : super(anchor: .center);
+  }) : super(anchor: .center, renderHitboxes: true);
 
   @override
   Future<void> onLoad() async {

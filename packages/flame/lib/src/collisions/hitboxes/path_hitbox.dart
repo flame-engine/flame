@@ -1,12 +1,11 @@
-import 'package:collection/collection.dart';
 import 'package:flame/collisions.dart';
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/geometry.dart';
+import 'package:meta/meta.dart';
 
 /// In this [PathComponent], hitboxes are added to emulate a hitbox
 /// that is a composition of other hitboxes.
-class PathHitbox extends PathComponent
-    with CollisionCallbacks, CollisionPassthrough {
+class PathHitbox extends PathComponent with ShapeHitbox {
   PathHitbox({
     required super.path,
     this.filterHitboxes = true,
@@ -24,12 +23,52 @@ class PathHitbox extends PathComponent
     super.isSolid = false,
   }) {
     // TODO(adario): convenience...
-    _addHitboxes();
+    addHitboxes();
   }
 
   /// Whether the hitboxes are filtered to include only disjoint ones.
   final bool filterHitboxes;
 
+  /// Our polygon hitboxes.
+  Iterable<PolygonHitbox> get polygonHitboxes =>
+      children.query<PolygonHitbox>();
+
+  /// Returns information about how the ray intersects the shape.
+  ///
+  /// If you are only interested in the intersection point use
+  /// [RaycastResult.intersectionPoint] of the result.
+  @override
+  RaycastResult<ShapeHitbox>? rayIntersection(
+    Ray2 ray, {
+    RaycastResult<ShapeHitbox>? out,
+  }) {
+    for (final hitbox in polygonHitboxes) {
+      final result = hitbox.rayIntersection(ray, out: out);
+      if (result != null) {
+        return result;
+      }
+    }
+    return null;
+  }
+
+  /// This determines how the shape should scale if it should try to fill its
+  /// parents boundaries.
+  @override
+  void fillParent() {
+    // TODO(adario): is this correct?
+    throw UnsupportedError('PathHitbox already fills its parent');
+  }
+
+  @override
+  @protected
+  void computeAabb(Aabb2 aabb) {
+    aabb.min.setValues(aabb.max.x, aabb.max.y);
+    for (final box in polygonHitboxes) {
+      aabb.hull(box.aabb);
+    }
+  }
+
+  /// Ensure we can perform queries quickly.
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -37,58 +76,25 @@ class PathHitbox extends PathComponent
   }
 
   /// Add all the hitboxes and return them.
-  List<PolygonHitbox> _addHitboxes() {
-    final boxes = _createHitboxes(path, sampling, tolerance);
-    addAll(_prepareHitboxes(boxes));
+  List<PolygonHitbox> addHitboxes() {
+    final boxes = createHitboxes(this, sampling, tolerance);
+    addAll(PathComponent.preparePolygons(boxes));
     return boxes;
   }
 
-  // Prepare the hitboxes by first sorting them by size; then, (potentially)
-  // filter them by keeping only the largest and all disjoint ones.
-  static List<PolygonHitbox> _prepareHitboxes(
-    List<PolygonHitbox> hitboxes, {
-    bool filterHitboxes = true,
-  }) {
-    if (hitboxes.length < 2) {
-      return hitboxes;
-    }
-    // Sort the hitboxes by size: we will use the largest area in order to
-    // approximate full inclusion.
-    hitboxes.sortBy((hitbox) => hitbox.size.length2);
-    final largest = hitboxes.last;
-    final area = largest.toRect();
-
-    // We always keep the largest hitbox: the others are discarded if they fit
-    // entirely within it.
-    if (filterHitboxes) {
-      hitboxes.removeWhere((element) {
-        if (element == largest) {
-          return false;
-        }
-        return area.expandToInclude(element.toRect()) == area;
-      });
-    }
-    return hitboxes;
-  }
-
-  // Create a hitbox for each path contour with at least three vertices.
-  static List<PolygonHitbox> _createHitboxes(
-    Path path,
+  /// Create a hitbox for each path contour with at least three vertices.
+  @internal
+  static List<PolygonHitbox> createHitboxes(
+    PathComponent path,
     double sampling,
     double? tolerance,
   ) {
-    final contours = path.walkContours(sampling, tolerance);
+    final contours = path.contours;
     final boxes = <PolygonHitbox>[];
     for (var index = 0; index < contours.length; index++) {
       final contour = contours[index];
       if (contour.length > 2) {
-        boxes.add(
-          PolygonHitbox(contour.vertices),
-          // TODO(adario): support hitboxes paint
-          // ..priority = hitboxesPriority ?? priority + 1
-          // ..paint = hitboxesPaint ?? hitboxStroke
-          // ..renderShape = renderHitboxes,
-        );
+        boxes.add(PolygonHitbox(contour.vertices));
       }
     }
     return boxes;

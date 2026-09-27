@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -87,6 +88,7 @@ PathComponent pathComponent(
   List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
+  bool? filterHitboxes,
   Anchor? anchor,
 }) {
   // Create a standard test path that fits within our chosen size with its
@@ -100,6 +102,7 @@ PathComponent pathComponent(
     paintLayers: paintLayers,
     contourPaint: contourPaint,
     renderHitboxes: renderHitboxes,
+    filterHitboxes: filterHitboxes,
     anchor: anchor,
   );
 }
@@ -113,6 +116,7 @@ PathComponent pathComponentWith(
   List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
+  bool? filterHitboxes,
   Anchor? anchor,
 }) {
   // Adjust the path such that fits within our chosen size with its
@@ -121,19 +125,51 @@ PathComponent pathComponentWith(
 
   // Create a component that displays the whole path: we filter all hitboxes
   // that are (approximately) fully enclosed in the largest one.
-  final component = PathComponent(
+  return CollidablePathComponent(
     path: path,
     priority: shapePriority,
     position: position ?? Vector2.zero(),
     anchor: anchor ?? Anchor.center,
     paint: paint ?? pathStroke,
     paintLayers: paintLayers,
-    // TODO(adario): support hitbox painting
-    // hitboxesPaint: contourPaint,
+    contourPaint: contourPaint,
+    renderHitboxes: renderHitboxes,
+    filterHitboxes: filterHitboxes,
   );
-  // TODO(adario): support hitboxes
-  if (renderHitboxes ?? false) {
-    // TODO(adario): support hitboxes
+}
+
+class CollidablePathComponent extends PathComponent
+    with CollisionCallbacks, CollisionPassthrough {
+  CollidablePathComponent({
+    required super.path,
+    super.sampling,
+    super.tolerance,
+    super.position,
+    super.scale,
+    super.angle,
+    super.anchor,
+    super.children,
+    super.priority,
+    super.key,
+    super.paint,
+    super.paintLayers,
+    Paint? contourPaint,
+    bool? renderHitboxes,
+    bool? filterHitboxes,
+  }) : super() {
+    final pathHitbox = PathHitbox(
+      path: path,
+      filterHitboxes: filterHitboxes ?? true,
+      sampling: sampling,
+      tolerance: tolerance,
+    );
+    add(pathHitbox);
+    if (renderHitboxes ?? false) {
+      final hitboxPaint = contourPaint ?? hitboxStroke;
+      for (final hitbox in pathHitbox.polygonHitboxes) {
+        hitbox.renderShape = true;
+        hitbox.paint = hitboxPaint;
+      }
+    }
   }
-  return component;
 }

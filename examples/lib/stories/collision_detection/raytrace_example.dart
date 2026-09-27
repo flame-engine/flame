@@ -51,13 +51,12 @@ bounce on will appear.
           children: [CircleHitbox()],
         )
       else
-        PathComponent(
+        CollidablePathComponent(
           path: randomPath(halfCanvas * 2),
           position: halfCanvas.toVector2(),
           anchor: .center,
           paint: boxPaint,
-          // TODO(adario): disable hitbox filtering
-          // filterHitboxes: false,
+          filterHitboxes: false,
         ),
     ]);
   }
@@ -96,13 +95,12 @@ bounce on will appear.
               anchor: Anchor.center,
               children: [CircleHitbox()],
             ),
-            PathComponent(
+            CollidablePathComponent(
               path: path,
               position: Vector2.all(350),
               anchor: Anchor.center,
               paint: boxPaint,
-              // TODO(adario): disable hitbox filtering
-              // filterHitboxes: false,
+              filterHitboxes: false,
             ),
             RectangleComponent(
               position: Vector2.all(500),
