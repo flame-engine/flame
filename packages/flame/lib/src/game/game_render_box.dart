@@ -136,7 +136,10 @@ class GameRenderBox extends RenderBox with WidgetsBindingObserver {
 
   @override
   bool hitTestSelf(Offset position) {
-    if (behavior == HitTestBehavior.opaque) {
+    // `translucent` means "hit me, and let the widgets behind me be hit too",
+    // so the game is always a hit; the passthrough is Flutter's job. Only
+    // `deferToChild` asks the game whether this particular point is its own.
+    if (behavior != HitTestBehavior.deferToChild) {
       return true;
     }
     return game.containsEventHandlerAt(position.toVector2());
