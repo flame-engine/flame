@@ -52,5 +52,37 @@ void main() {
         expect(rect.height, offset.dy, reason: 'height dy does not match');
       },
     );
+
+    group('distanceToSegmentSquared', () {
+      const from = Offset(1, 1);
+      const to = Offset(5, 1);
+
+      test('is the distance to the segment for a point next to it', () {
+        expect(const Offset(3, 4).distanceToSegmentSquared(from, to), 9);
+      });
+
+      test('is the distance to the closest end for a point beyond it', () {
+        expect(const Offset(-2, 5).distanceToSegmentSquared(from, to), 25);
+        expect(const Offset(8, -3).distanceToSegmentSquared(from, to), 25);
+      });
+
+      test('is zero for a point on the segment', () {
+        expect(const Offset(2, 1).distanceToSegmentSquared(from, to), 0);
+        expect(from.distanceToSegmentSquared(from, to), 0);
+        expect(to.distanceToSegmentSquared(from, to), 0);
+      });
+
+      test('is the distance to the point of a segment without a length', () {
+        expect(const Offset(4, 5).distanceToSegmentSquared(from, from), 25);
+      });
+
+      test('does not depend on the direction of the segment', () {
+        const point = Offset(2.5, -3.25);
+        expect(
+          point.distanceToSegmentSquared(from, to),
+          point.distanceToSegmentSquared(to, from),
+        );
+      });
+    });
   });
 }

@@ -46,6 +46,8 @@ extension RectExtension on Rect {
     return intersectsSegment(segment.from, segment.to);
   }
 
+  /// Returns a list of [Vector2] vertices representing the four corners
+  /// in clockwise order.
   List<Vector2> toVertices() {
     return [
       topLeft.toVector2(),
@@ -53,6 +55,32 @@ extension RectExtension on Rect {
       bottomRight.toVector2(),
       bottomLeft.toVector2(),
     ];
+  }
+
+  /// Create the smallest [Rect] that has all of the [offsets] within it or on
+  /// its edges.
+  static Rect smallestContaining(List<Offset> offsets) {
+    if (offsets.isEmpty) {
+      return .zero;
+    }
+    var left = offsets.first.dx;
+    var top = offsets.first.dy;
+    var right = left;
+    var bottom = top;
+    for (var i = 1; i < offsets.length; i++) {
+      final offset = offsets[i];
+      if (offset.dx < left) {
+        left = offset.dx;
+      } else if (offset.dx > right) {
+        right = offset.dx;
+      }
+      if (offset.dy < top) {
+        top = offset.dy;
+      } else if (offset.dy > bottom) {
+        bottom = offset.dy;
+      }
+    }
+    return Rect.fromLTRB(left, top, right, bottom);
   }
 
   /// Transform Rect using the transformation defined by [matrix].

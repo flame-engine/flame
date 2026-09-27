@@ -147,6 +147,31 @@ void main() {
       );
       expect(intersection.first == Vector2.all(1), true);
     });
+
+    test('crossing lines whose segments are far apart', () {
+      final segmentA = LineSegment(Vector2(0, 0), Vector2(1, 1));
+      final segmentB = LineSegment(Vector2(10, 0), Vector2(11, -1));
+      expect(
+        segmentA.intersections(segmentB),
+        isEmpty,
+        reason: 'The lines cross at (5, 5) but neither segment reaches it',
+      );
+      expect(segmentB.intersections(segmentA), isEmpty);
+    });
+
+    test('segments meeting in a point at a right angle', () {
+      final segmentA = LineSegment(Vector2(0, 0), Vector2(2, 0));
+      final segmentB = LineSegment(Vector2(1, 0), Vector2(1, 3));
+      expect(segmentA.intersections(segmentB), [Vector2(1, 0)]);
+      expect(segmentB.intersections(segmentA), [Vector2(1, 0)]);
+    });
+
+    test('vertical and horizontal segments that miss by a gap', () {
+      final segmentA = LineSegment(Vector2(0, 0), Vector2(2, 0));
+      final segmentB = LineSegment(Vector2(1, 0.5), Vector2(1, 3));
+      expect(segmentA.intersections(segmentB), isEmpty);
+      expect(segmentB.intersections(segmentA), isEmpty);
+    });
   });
 
   group('Line.intersections', () {
@@ -435,6 +460,70 @@ void main() {
       final intersections = geometry.intersections(polygonA, polygonB);
       expect(intersections, isNotEmpty);
     });
+
+    testWithFlameGame(
+      'hitboxes only test the edges inside their overlapping area',
+      (game) async {
+        final zigzagHitbox = PolygonHitbox([
+          Vector2(0, 0),
+          Vector2(1, 1),
+          Vector2(2, 0),
+          Vector2(3, 1),
+          Vector2(4, 0),
+          Vector2(4, 4),
+          Vector2(0, 4),
+        ]);
+        final squareHitbox = PolygonHitbox([
+          Vector2(3, 3),
+          Vector2(7, 3),
+          Vector2(7, 7),
+          Vector2(3, 7),
+        ]);
+        await game.ensureAddAll([
+          PositionComponent(children: [zigzagHitbox]),
+          PositionComponent(children: [squareHitbox]),
+        ]);
+
+        final intersections = zigzagHitbox.intersections(squareHitbox);
+        expect(
+          intersections,
+          unorderedEquals([Vector2(4, 3), Vector2(3, 4)]),
+          reason: 'Only the edges around the overlapping corner intersect',
+        );
+        expect(
+          squareHitbox.intersections(zigzagHitbox),
+          unorderedEquals([Vector2(4, 3), Vector2(3, 4)]),
+        );
+      },
+    );
+
+    testWithFlameGame(
+      'hitboxes that only touch along an edge still intersect',
+      (game) async {
+        final leftHitbox = PolygonHitbox([
+          Vector2(0, 0),
+          Vector2(2, 0),
+          Vector2(2, 2),
+          Vector2(0, 2),
+        ]);
+        final rightHitbox = PolygonHitbox([
+          Vector2(2, 0),
+          Vector2(4, 0),
+          Vector2(4, 2),
+          Vector2(2, 2),
+        ]);
+        await game.ensureAddAll([
+          PositionComponent(children: [leftHitbox]),
+          PositionComponent(children: [rightHitbox]),
+        ]);
+
+        expect(
+          leftHitbox.intersections(rightHitbox),
+          unorderedEquals([Vector2(2, 0), Vector2(2, 2)]),
+          reason: 'The shared edge should be reported',
+        );
+      },
+    );
   });
 
   group('Rectangle intersections tests', () {

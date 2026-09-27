@@ -18,6 +18,7 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
     super.key,
     Paint? paint,
     List<Paint>? paintLayers,
+    this.isSolid = false,
   }) {
     this.paint = paint ?? this.paint;
     // Only read from this.paintLayers if paintLayers not null to prevent
@@ -39,5 +40,5 @@ abstract class ShapeComponent extends PositionComponent with HasPaint {
   ///
   /// This field is not related to how the shape should be rendered, see
   /// [Paint.style] for that.
-  bool isSolid = false;
+  bool isSolid;
 }

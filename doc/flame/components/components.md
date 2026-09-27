@@ -94,7 +94,8 @@ class MyComponent extends Component {
 A component's lifecycle state can be checked by a series of getters:
 
 - `isLoaded`: Returns a bool with the current loaded state.
-- `loaded`: Returns a future that will complete once the component has finished loading.
+- `loaded`: Returns a future that will complete once the component has finished loading, including
+  the loading of any children that were added during its `onLoad`.
 - `isMounted`: Returns a bool with the current mounted state.
 - `mounted`: Returns a future that will complete once the component has finished mounting.
 - `isRemoved`: Returns a bool with the current removed state.
@@ -287,6 +288,14 @@ been, and the parent is only mounted once its `onLoad` has completed, so those f
 deadlock. The same goes for `game.lifecycleEventsProcessed`, since the parent's own pending mount is
 part of the queue it waits for.
 
+A component does not count as loaded until every child that was added during its `onLoad` has
+finished loading as well, even without awaiting their `loaded` futures explicitly. This means that
+by the time the component mounts, the subtree it created during `onLoad` is fully loaded, and those
+children mount together with it in the same lifecycle processing pass. A child that fails to load
+is the exception: it is dropped from the tree without blocking its parent. Because the parent
+waits for its children, a child's `onLoad` must not await the parent's `loaded` or `mounted`
+future, that would deadlock.
+
 Note that the children added via either method are only guaranteed to be available eventually:
 after they are loaded and mounted. We can only assure that they will appear in the children list
 in the same order as they were scheduled for addition.
@@ -295,22 +304,22 @@ in the same order as they were scheduled for addition.
 ### Access to the World from a Component
 
 If a component that has a `World` as an ancestor and requires access to that `World` object, one
-can use the `HasWorldReference` mixin.
+can use the `HasWorldRef` mixin.
 
 Example:
 
 ```dart
-class MyComponent extends Component with HasWorldReference<MyWorld>,
+class MyComponent extends Component with HasWorldRef<MyWorld>,
     TapCallbacks {
   @override
   void onTapDown(TapDownEvent info) {
-    // world is of type MyWorld
-    world.add(AnotherComponent());
+    // worldRef is of type MyWorld
+    worldRef.add(AnotherComponent());
   }
 }
 ```
 
-If you try to access `world` from a component that doesn't have a `World` ancestor of the
+If you try to access `worldRef` from a component that doesn't have a `World` ancestor of the
 correct type an assertion error will be thrown.
 
 

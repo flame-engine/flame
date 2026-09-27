@@ -13,10 +13,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -33,10 +32,9 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     double super.angle = 0,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.relative(shrinkToBounds: true) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -48,10 +46,34 @@ class PolygonHitbox extends PolygonComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : super.regular() {
-    this.isSolid = isSolid;
+    this.collisionType = collisionType;
+  }
+
+  /// With this constructor you create a [PolygonHitbox] from the given
+  /// [contour] (the first by default) of a [Path].
+  ///
+  /// A polygon only has straight edges, so the curves of the path are
+  /// approximated. The contour is sampled every [sampling] along its length,
+  /// and the samples that are not needed to stay within about half of the
+  /// [sampling] of the contour are left out. Higher values give fewer vertices,
+  /// which makes the collision detection cheaper, and a looser fit, while
+  /// straight stretches and the corners between them are exact whatever the
+  /// [sampling] is.
+  ///
+  /// See [PathMetricExtension.walkContour] for the details of the sampling.
+  PolygonHitbox.fromPath(
+    super.path, {
+    super.contour,
+    super.sampling,
+    super.position,
+    super.angle,
+    super.anchor,
+    super.isSolid,
+    CollisionType collisionType = CollisionType.active,
+  }) : super.fromPath() {
     this.collisionType = collisionType;
   }
 

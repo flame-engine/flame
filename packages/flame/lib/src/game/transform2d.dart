@@ -31,8 +31,11 @@ import 'package:vector_math/vector_math.dart';
 class Transform2D extends ChangeNotifier {
   final Matrix4 _transformMatrix;
   bool _recalculate;
+  bool _recalculateRotation;
   bool _isBatchUpdating = false;
   double _angle;
+  double _cosAngle;
+  double _sinAngle;
   final NotifyingVector2 _position;
   final NotifyingVector2 _scale;
   final NotifyingVector2 _offset;
@@ -40,7 +43,10 @@ class Transform2D extends ChangeNotifier {
   Transform2D()
     : _transformMatrix = Matrix4.identity(),
       _recalculate = true,
+      _recalculateRotation = false,
       _angle = 0,
+      _cosAngle = 1,
+      _sinAngle = 0,
       _position = NotifyingVector2.zero(),
       _scale = NotifyingVector2.all(1),
       _offset = NotifyingVector2.zero() {
@@ -49,11 +55,7 @@ class Transform2D extends ChangeNotifier {
     _offset.addListener(_markAsModified);
   }
 
-  factory Transform2D.copy(Transform2D other) => Transform2D()
-    ..angle = other.angle
-    ..position = other.position
-    ..scale = other.scale
-    ..offset = other.offset;
+  factory Transform2D.copy(Transform2D other) => Transform2D()..setFrom(other);
 
   /// Clone of this.
   Transform2D clone() => Transform2D.copy(this);
@@ -61,11 +63,15 @@ class Transform2D extends ChangeNotifier {
   /// Set this to the values of the [other] [Transform2D].
   void setFrom(Transform2D other) {
     _isBatchUpdating = true;
-    angle = other.angle;
-    position = other.position;
-    scale = other.scale;
-    offset = other.offset;
+    _angle = other._angle;
+    _cosAngle = other._cosAngle;
+    _sinAngle = other._sinAngle;
+    _recalculateRotation = other._recalculateRotation;
+    _position.setFrom(other._position);
+    _scale.setFrom(other._scale);
+    _offset.setFrom(other._offset);
     _isBatchUpdating = false;
+    _recalculate = true;
     notifyListeners();
   }
 
@@ -77,16 +83,16 @@ class Transform2D extends ChangeNotifier {
   ///
   /// The [tolerance] parameter is in absolute units, not relative.
   bool closeTo(Transform2D other, {double tolerance = 1e-10}) {
-    final deltaAngle = (angle - other.angle) % geometry.tau;
+    final deltaAngle = (_angle - other._angle) % geometry.tau;
     assert(deltaAngle >= 0);
     return (deltaAngle <= tolerance ||
             deltaAngle >= geometry.tau - tolerance) &&
-        (position.x - other.position.x).abs() <= tolerance &&
-        (position.y - other.position.y).abs() <= tolerance &&
-        (scale.x - other.scale.x).abs() <= tolerance &&
-        (scale.y - other.scale.y).abs() <= tolerance &&
-        (offset.x - other.offset.x).abs() <= tolerance &&
-        (offset.y - other.offset.y).abs() <= tolerance;
+        (_position.x - other._position.x).abs() <= tolerance &&
+        (_position.y - other._position.y).abs() <= tolerance &&
+        (_scale.x - other._scale.x).abs() <= tolerance &&
+        (_scale.y - other._scale.y).abs() <= tolerance &&
+        (_offset.x - other._offset.x).abs() <= tolerance &&
+        (_offset.y - other._offset.y).abs() <= tolerance;
   }
 
   /// The translation part of the transform. This translation is applied
@@ -111,15 +117,13 @@ class Transform2D extends ChangeNotifier {
   double get angle => _angle;
   set angle(double a) {
     _angle = a;
+    _recalculateRotation = true;
     _markAsModified();
   }
 
   /// Similar to [angle], but uses degrees instead of radians.
   double get angleDegrees => _angle * (360 / geometry.tau);
-  set angleDegrees(double a) {
-    _angle = a * (geometry.tau / 360);
-    _markAsModified();
-  }
+  set angleDegrees(double a) => angle = a * (geometry.tau / 360);
 
   /// The scale part of the transform. The default scale factor is (1, 1),
   /// a scale greater than 1 corresponds to expansion, and less than 1 is
@@ -166,15 +170,24 @@ class Transform2D extends ChangeNotifier {
       //       .. rotateZ(_angle)
       //       .. scale(_scale.x, _scale.y, 1)
       //       .. translate(_offset.x, _offset.y);
-      final m = _transformMatrix.storage;
-      final cosA = math.cos(_angle);
-      final sinA = math.sin(_angle);
-      m[0] = cosA * _scale.x;
-      m[1] = sinA * _scale.x;
-      m[4] = -sinA * _scale.y;
-      m[5] = cosA * _scale.y;
-      m[12] = _position.x + m[0] * _offset.x + m[4] * _offset.y;
-      m[13] = _position.y + m[1] * _offset.x + m[5] * _offset.y;
+      if (_recalculateRotation) {
+        _cosAngle = math.cos(_angle);
+        _sinAngle = math.sin(_angle);
+        _recalculateRotation = false;
+      }
+      final cosAngle = _cosAngle;
+      final sinAngle = _sinAngle;
+      final scaleX = _scale.x;
+      final scaleY = _scale.y;
+      final offsetX = _offset.x;
+      final offsetY = _offset.y;
+      final storage = _transformMatrix.storage;
+      storage[0] = cosAngle * scaleX;
+      storage[1] = sinAngle * scaleX;
+      storage[4] = -sinAngle * scaleY;
+      storage[5] = cosAngle * scaleY;
+      storage[12] = _position.x + storage[0] * offsetX + storage[4] * offsetY;
+      storage[13] = _position.y + storage[1] * offsetX + storage[5] * offsetY;
       _recalculate = false;
     }
     return _transformMatrix;
@@ -194,26 +207,39 @@ class Transform2D extends ChangeNotifier {
           value.storage[15] == 1,
       'The provided matrix is not a valid 2D transformation',
     );
-    _transformMatrix.setFrom(value);
-    _recalculate = false;
-
     final storage = _transformMatrix.storage;
-    _isBatchUpdating = true;
-    final determinant = storage[0] * storage[5] - storage[1] * storage[4];
-    _scale.x = math.sqrt(storage[0] * storage[0] + storage[1] * storage[1]);
-    if (_scale.x == 0) {
-      _angle = math.atan2(-storage[4], storage[5]);
-      _scale.y = math.sqrt(storage[4] * storage[4] + storage[5] * storage[5]);
-    } else {
-      _angle = math.atan2(storage[1], storage[0]);
-      _scale.y = determinant / _scale.x;
-    }
+    storage.setAll(0, value.storage);
 
-    _position.x =
-        storage[12] - (storage[0] * _offset.x + storage[4] * _offset.y);
-    _position.y =
-        storage[13] - (storage[1] * _offset.x + storage[5] * _offset.y);
+    final xAxisX = storage[0];
+    final xAxisY = storage[1];
+    final yAxisX = storage[4];
+    final yAxisY = storage[5];
+    final double scaleX;
+    final double scaleY;
+    final double angle;
+    final scaleXSquared = xAxisX * xAxisX + xAxisY * xAxisY;
+    if (scaleXSquared == 0) {
+      scaleX = 0;
+      scaleY = math.sqrt(yAxisX * yAxisX + yAxisY * yAxisY);
+      angle = math.atan2(-yAxisX, yAxisY);
+    } else {
+      scaleX = math.sqrt(scaleXSquared);
+      scaleY = (xAxisX * yAxisY - xAxisY * yAxisX) / scaleX;
+      angle = math.atan2(xAxisY, xAxisX);
+    }
+    final offsetX = _offset.x;
+    final offsetY = _offset.y;
+
+    _isBatchUpdating = true;
+    _angle = angle;
+    _recalculateRotation = true;
+    _scale.setValues(scaleX, scaleY);
+    _position.setValues(
+      storage[12] - (xAxisX * offsetX + yAxisX * offsetY),
+      storage[13] - (xAxisY * offsetX + yAxisY * offsetY),
+    );
     _isBatchUpdating = false;
+    _recalculate = false;
     notifyListeners();
   }
 
@@ -223,9 +249,11 @@ class Transform2D extends ChangeNotifier {
   /// Use [output] to send in a Vector2 object that will be used to avoid
   /// creating a new Vector2 object in this method.
   Vector2 localToGlobal(Vector2 point, {Vector2? output}) {
-    final m = transformMatrix.storage;
-    final x = m[0] * point.x + m[4] * point.y + m[12];
-    final y = m[1] * point.x + m[5] * point.y + m[13];
+    final storage = transformMatrix.storage;
+    final pointX = point.x;
+    final pointY = point.y;
+    final x = storage[0] * pointX + storage[4] * pointY + storage[12];
+    final y = storage[1] * pointX + storage[5] * pointY + storage[13];
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 
@@ -240,15 +268,22 @@ class Transform2D extends ChangeNotifier {
   /// creating a new Vector2 object in this method.
   Vector2 globalToLocal(Vector2 point, {Vector2? output}) {
     // Here we rely on the fact that in the transform matrix only elements
-    // `m[0]`, `m[1]`, `m[4]`, `m[5]`, `m[12]`, and `m[13]` are modified.
+    // `storage[0]`, `storage[1]`, `storage[4]`, `storage[5]`, `storage[12]`,
+    // and `storage[13]` are modified.
     // This greatly simplifies computation of the inverse matrix.
-    final m = transformMatrix.storage;
-    var det = m[0] * m[5] - m[1] * m[4];
-    if (det != 0) {
-      det = 1 / det;
+    final storage = transformMatrix.storage;
+    final xAxisX = storage[0];
+    final xAxisY = storage[1];
+    final yAxisX = storage[4];
+    final yAxisY = storage[5];
+    var determinant = xAxisX * yAxisY - xAxisY * yAxisX;
+    if (determinant != 0) {
+      determinant = 1 / determinant;
     }
-    final x = ((point.x - m[12]) * m[5] - (point.y - m[13]) * m[4]) * det;
-    final y = ((point.y - m[13]) * m[0] - (point.x - m[12]) * m[1]) * det;
+    final deltaX = point.x - storage[12];
+    final deltaY = point.y - storage[13];
+    final x = (deltaX * yAxisY - deltaY * yAxisX) * determinant;
+    final y = (deltaY * xAxisX - deltaX * xAxisY) * determinant;
     return (output?..setValues(x, y)) ?? Vector2(x, y);
   }
 
@@ -269,7 +304,7 @@ class Transform2D extends ChangeNotifier {
 
   /// Whether the transform includes a reflection, i.e. it flips the orientation
   /// of the coordinate system.
-  bool get hasReflection => _scale.x.sign * _scale.y.sign == -1;
+  bool get hasReflection => _scale.x * _scale.y < 0;
 
   void _markAsModified() {
     _recalculate = true;

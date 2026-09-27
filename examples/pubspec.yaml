@@ -11,6 +11,7 @@ environment:
   flutter: ">=3.44.0"
 
 dependencies:
+  collection: ^1.18.0
   crystal_ball: ^0.1.0
   dashbook: ^0.1.18
   flame: ^1.38.0
@@ -21,6 +22,7 @@ dependencies:
   flame_noise: ^0.3.3+23
   flame_spine: ^0.3.1+6
   flame_svg: ^2.0.0
+  flame_test: ^2.3.0
   flame_tiled: ^3.1.2
   flutter:
     sdk: flutter

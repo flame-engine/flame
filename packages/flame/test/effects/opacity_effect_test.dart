@@ -154,7 +154,7 @@ void main() {
     testWithFlameGame(
       'fade out',
       (game) async {
-        final rng = Random();
+        final rng = Random(seedFromEnvironment(null));
         final component = _PaintComponent();
         await game.ensureAdd(component);
 

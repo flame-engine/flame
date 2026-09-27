@@ -20,6 +20,7 @@ class AdvancedButtonComponent extends PositionComponent
   AdvancedButtonComponent({
     this.onPressed,
     this.onReleased,
+    this.onCancelled,
     this.onChangeState,
     PositionComponent? defaultSkin,
     PositionComponent? downSkin,
@@ -49,6 +50,10 @@ class AdvancedButtonComponent extends PositionComponent
 
   /// Callback for what should happen when the button is released.
   void Function()? onReleased;
+
+  /// Callback for what should happen when the tap is cancelled, for example
+  /// when the pointer is dragged outside of the button before it is released.
+  void Function()? onCancelled;
 
   /// Callback when button state changes
   void Function(ButtonState state)? onChangeState;
@@ -103,6 +108,16 @@ class AdvancedButtonComponent extends PositionComponent
     isPressed = false;
     updateState();
     onReleased?.call();
+  }
+
+  @override
+  void onTapCancel(TapCancelEvent event) {
+    if (_isDisabled) {
+      return;
+    }
+    isPressed = false;
+    updateState();
+    onCancelled?.call();
   }
 
   @override
