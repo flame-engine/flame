@@ -91,7 +91,8 @@ class MyPathComponent extends PathComponent
     super.position,
     super.scale,
     super.angle,
-  }) : super(anchor: .center, renderHitboxes: true);
+    // TODO(adario): support hitbox rendering
+  }) : super(anchor: .center);
 
   @override
   Future<void> onLoad() async {

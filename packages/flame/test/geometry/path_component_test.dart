@@ -46,8 +46,8 @@ void main() {
   test('PathComponent invader2 keeps only one disjoint contour', () {
     const size = Size(64, 64);
     final path = TestPaths.byName('invader2', size);
-
-    final pathComponent = PathComponent(path: path, addHitboxes: true);
+    // TODO(adario): add hitboxes
+    final pathComponent = PathComponent(path: path);
 
     expect(pathComponent.children.length, 1);
   });
@@ -56,10 +56,11 @@ void main() {
     const size = Size(64, 64);
     final path = TestPaths.byName('invader2', size);
 
+    // TODO(adario): add hitboxes
     final pathComponent = PathComponent(
       path: path,
-      addHitboxes: true,
-      filterHitboxes: false,
+      // TODO(adario): disable hitbox filtering
+      // filterHitboxes: false,
     );
 
     expect(pathComponent.children.length, 3);
@@ -68,8 +69,8 @@ void main() {
   test('PathComponent alien2 implicitly keeps all disjoint contours', () {
     const size = Size(64, 64);
     final path = TestPaths.byName('alien2', size);
-
-    final pathComponent = PathComponent(path: path, addHitboxes: true);
+    // TODO(adario): add hitboxes
+    final pathComponent = PathComponent(path: path);
 
     expect(pathComponent.children.length, 4);
   });
@@ -78,8 +79,9 @@ void main() {
     const size = Size(64, 64);
     final path = TestPaths.byName('invader3', size);
 
-    final path1 = PathComponent(path: path, addHitboxes: true);
-    final path2 = PathComponent(path: path, addHitboxes: true, tolerance: 1);
+    // TODO(adario): add hitboxes
+    final path1 = PathComponent(path: path);
+    final path2 = PathComponent(path: path, tolerance: 1);
     final hitbox1 = path1.firstChild<PolygonHitbox>();
     final hitbox2 = path2.firstChild<PolygonHitbox>();
 

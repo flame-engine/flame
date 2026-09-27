@@ -56,7 +56,8 @@ bounce on will appear.
           position: halfCanvas.toVector2(),
           anchor: .center,
           paint: boxPaint,
-          filterHitboxes: false,
+          // TODO(adario): disable hitbox filtering
+          // filterHitboxes: false,
         ),
     ]);
   }
@@ -100,7 +101,8 @@ bounce on will appear.
               position: Vector2.all(350),
               anchor: Anchor.center,
               paint: boxPaint,
-              filterHitboxes: false,
+              // TODO(adario): disable hitbox filtering
+              // filterHitboxes: false,
             ),
             RectangleComponent(
               position: Vector2.all(500),

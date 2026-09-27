@@ -10,6 +10,10 @@ final _rnd = Random();
 
 const shapePriority = 1;
 
+final Paint hitboxStroke = Paint()
+  ..color = const Color(0xffffffff)
+  ..style = .stroke;
+
 final pathStroke = Paint()
   ..color = BasicPalette.blue.color
   ..style = PaintingStyle.stroke
@@ -117,14 +121,19 @@ PathComponent pathComponentWith(
 
   // Create a component that displays the whole path: we filter all hitboxes
   // that are (approximately) fully enclosed in the largest one.
-  return PathComponent(
+  final component = PathComponent(
     path: path,
     priority: shapePriority,
     position: position ?? Vector2.zero(),
     anchor: anchor ?? Anchor.center,
     paint: paint ?? pathStroke,
     paintLayers: paintLayers,
-    hitboxesPaint: contourPaint,
-    renderHitboxes: renderHitboxes ?? false,
-  )..renderShape = true;
+    // TODO(adario): support hitbox painting
+    // hitboxesPaint: contourPaint,
+  );
+  // TODO(adario): support hitboxes
+  if (renderHitboxes ?? false) {
+    // TODO(adario): support hitboxes
+  }
+  return component;
 }
