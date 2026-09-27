@@ -58,6 +58,7 @@ void main() {
           BoldTextNode.simple('d'),
           PlainTextNode('e f'),
         ], 50),
+        // cSpell:ignore bcde
         ['aa', 'bcde', 'f'],
       );
     });

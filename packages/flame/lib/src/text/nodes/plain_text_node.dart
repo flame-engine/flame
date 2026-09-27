@@ -56,7 +56,7 @@ class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
       // The last word is glued to what follows unless the text ends in a
       // space (in which case the last word is empty).
       final isGlued = index1 == words.length && words.last.isNotEmpty;
-      final maxWidth = isGlued ? availableWidth - trailingWidth : availableWidth;
+      final maxWidth = availableWidth - (isGlued ? trailingWidth : 0);
       if (formattedPiece.metrics.width > maxWidth) {
         break;
       } else {
