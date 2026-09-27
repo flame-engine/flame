@@ -8,8 +8,22 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('FlameGame.containsEventHandlerAt', () {
     testWithGame(
-      'detects any component implementing the marker',
+      'reports a hit everywhere by default',
       FlameGame.new,
+      (game) async {
+        await game.ensureAdd(_PlainComponent());
+
+        // Games are opaque by default, so the component tree is never checked.
+        expect(game.containsEventHandlerAt(Vector2(30, 30)), isTrue);
+        expect(game.containsEventHandlerAt(Vector2(400, 300)), isTrue);
+      },
+    );
+  });
+
+  group('DeferHitTestToComponents', () {
+    testWithGame(
+      'detects any component implementing the marker',
+      _DeferringGame.new,
       (game) async {
         await game.ensureAdd(_CustomInputComponent());
 
@@ -20,7 +34,7 @@ void main() {
 
     testWithGame(
       'ignores components that handle no input',
-      FlameGame.new,
+      _DeferringGame.new,
       (game) async {
         await game.ensureAdd(_PlainComponent());
 
@@ -30,7 +44,7 @@ void main() {
 
     testWithGame(
       'detects a built-in mixin',
-      FlameGame.new,
+      _DeferringGame.new,
       (game) async {
         await game.ensureAdd(_ScrollComponent());
 
@@ -38,14 +52,14 @@ void main() {
       },
     );
 
-    testWithGame(
-      'detects a game that handles input itself',
-      _ScrollGame.new,
-      (game) async {
-        // FlameGame is itself a Component, so componentsAtPoint yields the
-        // game and any in-bounds point counts as a hit.
-        expect(game.containsEventHandlerAt(Vector2(400, 300)), isTrue);
-        expect(game.containsEventHandlerAt(Vector2(900, 700)), isFalse);
+    testWidgets(
+      'asserts when the game handles pointer events itself',
+      (tester) async {
+        // This game receives events all over, so there is nothing to defer.
+        await tester.pumpWidget(GameWidget(game: _DeferringScrollGame()));
+        await tester.pump();
+
+        expect(tester.takeException(), isAssertionError);
       },
     );
   });
@@ -93,17 +107,65 @@ void main() {
         expect(buttonTapped, isFalse);
       },
     );
+
+    testWidgets(
+      'translucent hits the game without consulting it',
+      (tester) async {
+        var buttonTapped = false;
+        // With no components, everything is deferred; effectively, transparent.
+        final game = _TransparentGame();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Stack(
+                children: [
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () => buttonTapped = true,
+                      child: const Text('Tap me'),
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: GameWidget(
+                      game: game,
+                      behavior: HitTestBehavior.translucent,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+        await tester.pump();
+        await tester.pump();
+
+        expect(
+          game.renderBox.hitTestSelf(const Offset(400, 300)),
+          isTrue,
+          reason: 'translucent should not ask the game about the position',
+        );
+
+        // Translucent still lets the widgets behind receive the event.
+        await tester.tap(find.byType(ElevatedButton));
+        await tester.pump();
+        expect(buttonTapped, isTrue);
+      },
+    );
   });
 }
 
 mixin _CustomInputCallbacks on Component implements PointerInputCallbacks {}
 
-class _TransparentGame extends FlameGame {
+class _TransparentGame extends FlameGame with DeferHitTestToComponents {
   @override
   Color backgroundColor() => const Color(0x00000000);
 }
 
-class _ScrollGame extends FlameGame with ScrollCallbacks {}
+class _DeferringGame extends FlameGame with DeferHitTestToComponents {}
+
+class _DeferringScrollGame extends FlameGame
+    with ScrollCallbacks, DeferHitTestToComponents {}
 
 class _Box extends PositionComponent {
   _Box() : super(position: Vector2.all(10), size: Vector2.all(50));

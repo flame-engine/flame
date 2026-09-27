@@ -7,6 +7,33 @@ major versions of Flame, together with the steps required to migrate your code.
 ## Migrating from v1.38.0 to v2.0.0
 
 
+### Games are opaque to hit tests by default
+
+`FlameGame` used to answer `containsEventHandlerAt` by walking the component tree and reporting a
+hit only where a component implemented `PointerInputCallbacks`. It now reports a hit everywhere,
+like the base `Game` class, and the tree walk is opt-in:
+
+```dart
+// Before: implicit, and paid for on every hit test under deferToChild
+class MyGame extends FlameGame {}
+
+// After
+class MyGame extends FlameGame with DeferHitTestToComponents {}
+```
+
+This only affects games built with `HitTestBehavior.deferToChild`, since `opaque` (the default) and
+`translucent` never consult the game. If you use `deferToChild` to let events reach widgets behind
+the `GameWidget`, add the mixin, or override `containsEventHandlerAt` with a cheaper rule of your
+own.
+
+Separately, `translucent` no longer consults the game either. Flutter's meaning for it is "hit me,
+and hit what is behind me too", so the game is now always a hit and the passthrough is left to
+Flutter. Previously a translucent game could not be hit at all wherever it had no interactive
+component.
+
+See [Hit Test Behavior](game_widget.md#hit-test-behavior) for the full picture.
+
+
 ### The gesture listener interfaces removed
 
 `MultiTapListener`, `MultiDragListener` and `ScaleListener` have been removed, with no replacement.
