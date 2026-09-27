@@ -49,8 +49,8 @@ class Enemy extends SpriteAnimationComponent with HasGameRef<SpaceShooterGame> {
 ```
 
 Note that for now, the `Enemy` class is super similar to the `Bullet` one, the only differences are
-their sizes, animation information and that bullets travel from bottom to top, while enemies travel from
-top to bottom, so nothing new here.
+their sizes, animation information and that bullets travel from bottom to top, while enemies
+travel from top to bottom, so nothing new here.
 
 Next we need to make the enemies spawn in the game, the logic here will be simple:
 we will make enemies spawn from the top of the screen at a random position on the `x` axis.

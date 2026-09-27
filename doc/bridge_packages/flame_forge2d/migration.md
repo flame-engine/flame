@@ -81,7 +81,7 @@ Body createBody() {
 The rendering hooks changed accordingly, and now read the geometry back from the shape:
 
 | Before | After |
-|---|---|
+| --- | --- |
 | `renderFixture(Canvas, Fixture)` | `renderShape(Canvas, Shape)` |
 | `renderEdge(Canvas, Offset, Offset)` | `renderSegment(Canvas, Offset, Offset)` |
 | `renderChain(Canvas, List<Offset>)` | removed, chain segments render through `renderSegment` |

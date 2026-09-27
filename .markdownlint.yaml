@@ -237,3 +237,10 @@ MD052: true
 MD053:
   # Ignored definitions
   ignored_definitions: ["//"]
+
+# MD059/descriptive-link-text - Link text should be descriptive
+MD059: false # rejects simple anchors such as "link" or "here", which we use
+
+# MD060/table-column-style - Table column style
+MD060:
+  style: "any" # any accepts aligned, compact or tight

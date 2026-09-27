@@ -83,7 +83,7 @@ switch (shape.geometry) {
 ## Shape construction
 
 | Before | After |
-|---|---|
+| --- | --- |
 | `CircleShape()..radius = r` | `Circle(radius: r, center: c)` |
 | `EdgeShape()..set(a, b)` | `Segment(point1: a, point2: b)` |
 | `PolygonShape()..set(vertices)` | `Polygon(vertices)` |
