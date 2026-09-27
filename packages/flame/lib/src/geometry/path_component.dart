@@ -47,6 +47,17 @@ class PathComponent extends ShapeComponent {
   /// The actual contours for this path.
   late final contours = path.walkContours(sampling, tolerance);
 
+  /// Our polygon hitboxes.
+  Iterable<PolygonComponent> get polygonComponents =>
+      children.query<PolygonComponent>();
+
+  /// Ensure we can perform [PolygonComponent] queries quickly.
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    children.register<PolygonComponent>();
+  }
+
   @override
   void render(Canvas canvas) {
     if (renderShape) {
@@ -67,6 +78,7 @@ class PathComponent extends ShapeComponent {
   }
 
   /// Add all the polygon components and return them.
+  @internal
   List<PolygonComponent> addPolygons() {
     final polygons = createPolygons(this, sampling, tolerance);
     addAll(preparePolygons(polygons, filterPolygons: filter));

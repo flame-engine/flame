@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:examples/commons/collidable_path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -95,7 +96,7 @@ class MyPathComponent extends CollidablePathComponent
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     baseColor = ColorExtension.random(withAlpha: 0.8, base: 100);
     paint.color = baseColor;
   }
@@ -130,7 +131,7 @@ class MyShapeComponent extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    super.onLoad();
+    await super.onLoad();
     baseColor = ColorExtension.random(withAlpha: 0.8, base: 100);
     hitbox.paint.color = baseColor;
     hitbox.renderShape = true;

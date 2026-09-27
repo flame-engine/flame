@@ -1,4 +1,5 @@
 # specific people's names and/or usernames
+adario # github.com/adario
 akida # github.com/akida 
 bdero # github.com/bdero
 bluefireteam # github.com/bluefireteam

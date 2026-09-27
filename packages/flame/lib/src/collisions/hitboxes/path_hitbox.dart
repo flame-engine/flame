@@ -56,16 +56,19 @@ class PathHitbox extends PathComponent with ShapeHitbox {
     throw UnsupportedError('PathHitbox already fills its parent');
   }
 
+  /// Compute the [aabb] as the hitboxes hull.
   @override
   @protected
   void computeAabb(Aabb2 aabb) {
-    aabb.min.setValues(aabb.max.x, aabb.max.y);
-    for (final box in polygonHitboxes) {
+    final boxes = polygonHitboxes.toList();
+    final last = boxes.removeLast();
+    aabb.hull(last.aabb);
+    for (final box in boxes) {
       aabb.hull(box.aabb);
     }
   }
 
-  /// Ensure we can perform queries quickly.
+  /// Ensure we can perform [PolygonHitbox] queries quickly.
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -73,6 +76,7 @@ class PathHitbox extends PathComponent with ShapeHitbox {
   }
 
   /// Add all the hitboxes and return them.
+  @internal
   List<PolygonHitbox> addHitboxes() {
     final boxes = createHitboxes(this, sampling, tolerance);
     addAll(PathComponent.preparePolygons(boxes, filterPolygons: filter));

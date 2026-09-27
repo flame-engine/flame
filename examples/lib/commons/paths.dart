@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/collisions.dart';
+import 'package:examples/commons/collidable_path_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -10,10 +10,6 @@ import 'package:flame_test/test_paths.dart';
 final _rnd = Random();
 
 const shapePriority = 1;
-
-final Paint hitboxStroke = Paint()
-  ..color = const Color(0xffffffff)
-  ..style = .stroke;
 
 final pathStroke = Paint()
   ..color = BasicPalette.blue.color
@@ -136,40 +132,4 @@ PathComponent pathComponentWith(
     renderHitboxes: renderHitboxes,
     filter: filter,
   );
-}
-
-class CollidablePathComponent extends PathComponent
-    with CollisionCallbacks, CollisionPassthrough {
-  CollidablePathComponent({
-    required super.path,
-    super.sampling,
-    super.tolerance,
-    super.position,
-    super.scale,
-    super.angle,
-    super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-    super.paint,
-    super.paintLayers,
-    Paint? contourPaint,
-    bool? renderHitboxes,
-    bool? filter,
-  }) : super() {
-    final pathHitbox = PathHitbox(
-      path: path,
-      filter: filter ?? true,
-      sampling: sampling,
-      tolerance: tolerance,
-    );
-    add(pathHitbox);
-    if (renderHitboxes ?? false) {
-      final hitboxPaint = contourPaint ?? hitboxStroke;
-      for (final hitbox in pathHitbox.polygonHitboxes) {
-        hitbox.renderShape = true;
-        hitbox.paint = hitboxPaint;
-      }
-    }
-  }
 }

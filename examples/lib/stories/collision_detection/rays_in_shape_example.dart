@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:examples/commons/collidable_path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:examples/commons/rounded_rect_component.dart';
 import 'package:flame/collisions.dart';
