@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/devtools/dev_tools_service.dart';
 import 'package:flame/src/effects/provider_interfaces.dart';
@@ -300,16 +299,6 @@ class FlameGame<W extends World> extends ComponentTreeRoot
         point.y >= 0 &&
         point.x < canvasSize.x &&
         point.y < canvasSize.y;
-  }
-
-  @override
-  bool containsEventHandlerAt(Vector2 position) {
-    for (final component in super.componentsAtPoint(position)) {
-      if (component is PointerInputCallbacks) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /// Returns the current time in seconds with microseconds precision.
