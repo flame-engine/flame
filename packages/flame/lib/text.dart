@@ -22,7 +22,7 @@ export 'src/text/nodes/custom_text_node.dart' show CustomInlineTextNode;
 export 'src/text/nodes/document_root.dart' show DocumentRoot;
 export 'src/text/nodes/group_text_node.dart' show GroupTextNode;
 export 'src/text/nodes/header_node.dart' show HeaderNode;
-export 'src/text/nodes/inline_text_node.dart' 
+export 'src/text/nodes/inline_text_node.dart'
     show InlineTextNode, TextNodeLayoutBuilder;
 export 'src/text/nodes/italic_text_node.dart' show ItalicTextNode;
 export 'src/text/nodes/paragraph_node.dart' show ParagraphNode;
