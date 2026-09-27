@@ -174,3 +174,14 @@ If the test breaks at some particular seed, then that seed will be shown in the 
 as the `seed: NNN` parameter to your test, and you'll be able to run it for the same seed as long
 as you need until the test is fixed. Do not leave the `seed:` parameter when submitting your code,
 as it defeats the purpose of having the test randomized.
+
+You can also fix the seed for a whole test run without touching the code, by passing it as a
+compile-time define:
+
+```bash
+flutter test --dart-define=RANDOM_SEED=1234
+```
+
+Every randomized test then starts from that seed, and each repeat of a test offsets it by the
+repeat index so that the repeats stay distinct. This is what the flutter/tests customer testing run
+uses to stay deterministic.

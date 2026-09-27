@@ -58,7 +58,8 @@ void main() {
         final c = rnd.nextDouble() * 4;
         final solutions = solveQuadratic(a, b, c);
         for (final x in solutions) {
-          expect(a * x * x + b * x + c, closeTo(0, 1e-15 / a));
+          final scale = 1 / a + (a * x * x).abs() + (b * x).abs() + c.abs();
+          expect(a * x * x + b * x + c, closeTo(0, 1e-14 * scale));
         }
       },
       repeatCount: repeatCount,

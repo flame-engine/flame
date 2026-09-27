@@ -127,9 +127,12 @@ The `FlameGame` lifecycle callbacks, `onLoad`, `render`, etc. are called in the 
 ```
 
 When a `FlameGame` is first added to a `GameWidget` the lifecycle methods `onGameResize`, `onLoad`
-and `onMount` will be called in that order. Then `update` and `render` are called in sequence for
-every game tick. If the `FlameGame` is removed from the `GameWidget` then `onRemove` is called.
-If the `FlameGame` is added to a new `GameWidget` the sequence repeats from `onGameResize`.
+and `onMount` will be called in that order. After that, the `GameWidget` waits for the whole initial
+component tree to be loaded and mounted, so the game does not start (and the `loadingBuilder`
+widget, if one is set, stays visible) until every component added during `onLoad` is ready. Then
+`update` and `render` are called in sequence for every game tick. If the `FlameGame` is removed
+from the `GameWidget` then `onRemove` is called. If the `FlameGame` is added to a new `GameWidget`
+the sequence repeats from `onGameResize`.
 
 ```{note}
 The order of `onGameResize` and `onLoad` are reversed from that of other

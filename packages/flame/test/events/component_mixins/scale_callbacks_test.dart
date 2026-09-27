@@ -226,7 +226,6 @@ void main() {
     'make sure the FlameGame can registers Scale Callbacks on itself',
     ScaleCallbacksGame.new,
     (game) async {
-      await game.ready();
       expect(game.children.length, equals(3));
       expect(game.children.elementAt(1), isA<MultiDragScaleDispatcher>());
     },

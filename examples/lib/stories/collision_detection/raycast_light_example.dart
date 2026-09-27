@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:examples/commons/paths_creation_mixin.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -9,7 +10,11 @@ import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
 
 class RaycastLightExample extends FlameGame
-    with HasCollisionDetection, TapCallbacks, MouseMoveCallbacks {
+    with
+        HasCollisionDetection,
+        TapCallbacks,
+        MouseMoveCallbacks,
+        PathsCreationMixin {
   static const description = '''
 In this example the raycast functionality is showcased by using it as a light
 source, if you move the mouse around the canvas the rays will be cast from its
@@ -44,46 +49,8 @@ with with mouse.
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
     add(ScreenHitbox());
-    add(
-      CircleComponent(
-        position: Vector2(100, 100),
-        radius: 50,
-        paint: paint,
-        children: [CircleHitbox()],
-      ),
-    );
-    add(
-      CircleComponent(
-        position: Vector2(150, 500),
-        radius: 50,
-        paint: paint,
-        children: [CircleHitbox()],
-      ),
-    );
-    add(
-      RectangleComponent(
-        position: Vector2.all(300),
-        size: Vector2.all(100),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-    );
-    add(
-      RectangleComponent(
-        position: Vector2.all(500),
-        size: Vector2(100, 200),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-    );
-    add(
-      RectangleComponent(
-        position: Vector2(550, 200),
-        size: Vector2(200, 150),
-        paint: paint,
-        children: [RectangleHitbox()],
-      ),
-    );
+    addFixedPaths(paint);
+    addTestPaths(paint);
   }
 
   @override

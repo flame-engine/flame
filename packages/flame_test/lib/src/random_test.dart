@@ -8,10 +8,13 @@ final _seedGenerator = Random();
 const _maxSeed = 1 << 32;
 
 /// Get the random seed for a test. If the [seed] parameter is passed in,
-/// it takes precedence. Otherwise, if the environment variable
-/// `RANDOM_SEED` is set, it is used. If neither is set, returns null.
-/// Note: When using this, the `random_test_test` will fail because it will
-/// use the same seed for all tests. This is expected.
+/// it takes precedence. Otherwise, if the compile-time environment variable
+/// `RANDOM_SEED` is set (`flutter test --dart-define=RANDOM_SEED=NNN`), it is
+/// used. If neither is set, returns null.
+///
+/// When `RANDOM_SEED` is set, every randomized test in the run becomes
+/// deterministic: each test starts from that seed and each repeat of a test
+/// offsets it by the repeat index.
 int? seedFromEnvironment(int? seed) {
   if (seed != null) {
     return seed;
@@ -48,7 +51,10 @@ int? seedFromEnvironment(int? seed) {
 /// to use that specific seed.
 ///
 /// Optional parameter `repeatCount` allows the test to be repeated multiple
-/// times, each time with a different seed.
+/// times, each time with a different seed. When the seed is fixed, either
+/// through the `seed` parameter or the `RANDOM_SEED` environment variable,
+/// repeat number `i` uses `seed + i` so that the repeats stay distinct while
+/// remaining reproducible.
 @isTest
 void testRandom(
   String name,
@@ -65,7 +71,9 @@ void testRandom(
   assert(repeatCount > 0, 'repeatCount needs to be a positive number');
   final resolvedSeed = seedFromEnvironment(seed);
   for (var i = 0; i < repeatCount; i++) {
-    final seed0 = resolvedSeed ?? _seedGenerator.nextInt(_maxSeed);
+    final seed0 = resolvedSeed != null
+        ? resolvedSeed + i
+        : _seedGenerator.nextInt(_maxSeed);
     test(
       '$name [seed=$seed0]',
       () => body(Random(seed0)),
@@ -107,7 +115,8 @@ typedef TestWidgetsCallback =
 /// ```
 /// Then if the test output shows that the test failed with seed `s`,
 /// simply adding parameter `seed=s` into the function will force it
-/// to run for that specific seed.
+/// to run for that specific seed. The `RANDOM_SEED` environment variable is
+/// honored in the same way as for [testRandom].
 @isTest
 void testWidgetsRandom(
   String description,
@@ -118,10 +127,11 @@ void testWidgetsRandom(
   bool semanticsEnabled = true,
   dynamic tags,
 }) {
-  seed ??= _seedGenerator.nextInt(_maxSeed);
+  final resolvedSeed =
+      seedFromEnvironment(seed) ?? _seedGenerator.nextInt(_maxSeed);
   testWidgets(
-    '$description [seed=$seed]',
-    (WidgetTester widgetTester) => callback(Random(seed), widgetTester),
+    '$description [seed=$resolvedSeed]',
+    (WidgetTester widgetTester) => callback(Random(resolvedSeed), widgetTester),
     skip: skip,
     timeout: timeout,
     semanticsEnabled: semanticsEnabled,

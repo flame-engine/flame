@@ -219,6 +219,30 @@ void main() {
         ),
         reason: 'bottomRight offset is not OK',
       );
+
+      final offsets = points.map((p) => p.toOffset()).toList(growable: false);
+      final boundingRect = RectExtension.smallestContaining(offsets);
+      expect(
+        boundingBox,
+        boundingRect,
+        reason: 'boundingBox differs from boundingRect',
+      );
+    });
+
+    test('smallestContaining contains the offsets it was made from', () {
+      const offsets = [
+        Offset(0.1, 0.7),
+        Offset(0.7, 0.1),
+        Offset(16777217, 0.3),
+      ];
+      final rect = RectExtension.smallestContaining(offsets);
+      expect(rect, const Rect.fromLTRB(0.1, 0.1, 16777217, 0.7));
+      expect(offsets.enclosingRectangle, rect);
+      expect(RectExtension.smallestContaining(const []), Rect.zero);
+      expect(
+        RectExtension.smallestContaining(const [Offset(3, 4)]),
+        const Rect.fromLTRB(3, 4, 3, 4),
+      );
     });
 
     testRandom('fromCenter position and size is OK', (Random r) {

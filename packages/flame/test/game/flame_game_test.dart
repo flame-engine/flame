@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/components/core/component.dart';
 import 'package:flame/src/game/game_render_box.dart';
 import 'package:flame_test/flame_test.dart';
 import 'package:flutter/material.dart';
@@ -306,11 +308,100 @@ void main() {
 
         await tester.pumpWidget(GameWidget(game: game));
         await game.toBeLoaded();
+        // The loader also waits for the whole component tree to be ready, so
+        // an extra pump is needed before the game attaches.
+        await tester.pump();
         await tester.pump();
 
         expect(hasAttached, isTrue);
       });
     });
+  });
+
+  group('ready:', () {
+    testWithFlameGame(
+      'can be called from inside a lifecycle callback',
+      (game) async {
+        final component = _ReadyingOnMountComponent();
+        game.world.add(component);
+        await game.ready();
+
+        expect(component.isMounted, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'is not blocked by children of a parent outside of the game tree',
+      (game) async {
+        final detachedParent = Component();
+        final child = Component();
+        detachedParent.add(child);
+
+        await game.ready();
+
+        expect(game.hasLifecycleEvents, isFalse);
+        expect(child.isLoaded, isFalse);
+        expect(child.isMounted, isFalse);
+        expect(detachedParent.children, contains(child));
+      },
+    );
+
+    testWithFlameGame(
+      'stays pending while a child is loading and completes when it is removed',
+      (game) async {
+        final slowChild = _NeverLoadingComponent();
+        game.world.add(slowChild);
+        var isReady = false;
+        final ready = game.ready().then((_) => isReady = true);
+
+        await Future<void>.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
+        expect(isReady, isFalse);
+        expect(game.hasLifecycleEvents, isTrue);
+
+        slowChild.removeFromParent();
+        await ready;
+
+        expect(isReady, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+        expect(slowChild.isMounted, isFalse);
+      },
+    );
+
+    testWithFlameGame(
+      'wakes from a queue mutation when the queue is stuck without a '
+      'loading child',
+      (game) async {
+        // An ADD event can only ever be enqueued once its parent is already
+        // mounted, so the public API cannot produce an event that is
+        // permanently blocked without a loading child. Craft one directly to
+        // exercise that fallback branch of `ready`.
+        final stuckEvent = game.queue.addLast()
+          ..kind = LifecycleEventKind.add
+          ..child = Component()
+          ..parent = Component();
+
+        var isReady = false;
+        final ready = game.ready().then((_) => isReady = true);
+
+        await Future<void>.delayed(Duration.zero);
+        await Future<void>.delayed(Duration.zero);
+        expect(isReady, isFalse);
+        expect(game.hasLifecycleEvents, isTrue);
+
+        // Cancel the stuck event and add an unrelated component: `ready`
+        // only has the queue-mutation notification to wait on here, so it
+        // must be woken up by this, rather than by anything related to the
+        // loading child it would watch in the other branch.
+        stuckEvent.kind = LifecycleEventKind.unknown;
+        game.world.add(Component());
+        await ready;
+
+        expect(isReady, isTrue);
+        expect(game.hasLifecycleEvents, isFalse);
+      },
+    );
   });
 
   group('pauseWhenBackgrounded:', () {
@@ -523,6 +614,18 @@ class _MyAsyncComponent extends _MyComponent {
   Future<void> onLoad() {
     return Future.value();
   }
+}
+
+class _ReadyingOnMountComponent extends Component {
+  @override
+  void onMount() {
+    unawaited(findGame()!.ready());
+  }
+}
+
+class _NeverLoadingComponent extends Component {
+  @override
+  Future<void> onLoad() => Completer<void>().future;
 }
 
 class _OnAttachGame extends FlameGame {

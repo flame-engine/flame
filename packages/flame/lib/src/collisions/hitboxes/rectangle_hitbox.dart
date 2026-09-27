@@ -17,10 +17,9 @@ class RectangleHitbox extends RectangleComponent
     super.angle,
     super.anchor,
     super.priority,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : shouldFillParent = size == null && position == null {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 
@@ -34,13 +33,12 @@ class RectangleHitbox extends RectangleComponent
     super.position,
     super.angle,
     super.anchor,
-    bool isSolid = false,
+    super.isSolid,
     CollisionType collisionType = CollisionType.active,
   }) : shouldFillParent = false,
        super.relative(
          shrinkToBounds: true,
        ) {
-    this.isSolid = isSolid;
     this.collisionType = collisionType;
   }
 

@@ -45,7 +45,7 @@ void main() {
       game.add(camera);
       await game.ready();
 
-      final random = Random();
+      final random = Random(seedFromEnvironment(null));
       for (var i = 0; i < 20; i++) {
         // keep it as a float32 value
         final width = prevFloat32(random.nextDouble() * 1000.0 + 10.0);

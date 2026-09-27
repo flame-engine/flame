@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flame/extensions.dart';
 import 'package:flame/src/geometry/line.dart';
 
@@ -70,14 +72,32 @@ class LineSegment {
   /// If the segments are collinear and overlap, the end points of the
   /// overlapping section are returned.
   List<Vector2> intersections(LineSegment otherSegment) {
-    final result = toLine().intersections(otherSegment.toLine());
-    if (result.isNotEmpty) {
+    const epsilon = 0.01;
+    final otherFrom = otherSegment.from;
+    final otherTo = otherSegment.to;
+    if (max(from.x, to.x) + epsilon < min(otherFrom.x, otherTo.x) ||
+        min(from.x, to.x) - epsilon > max(otherFrom.x, otherTo.x) ||
+        max(from.y, to.y) + epsilon < min(otherFrom.y, otherTo.y) ||
+        min(from.y, to.y) - epsilon > max(otherFrom.y, otherTo.y)) {
+      return const [];
+    }
+    final a1 = to.y - from.y;
+    final b1 = from.x - to.x;
+    final c1 = to.y * from.x - from.y * to.x;
+    final a2 = otherTo.y - otherFrom.y;
+    final b2 = otherFrom.x - otherTo.x;
+    final c2 = otherTo.y * otherFrom.x - otherFrom.y * otherTo.x;
+    final determinant = a1 * b2 - a2 * b1;
+    if (determinant != 0) {
       // The lines are not parallel
-      final intersection = result.first;
+      final intersection = Vector2(
+        (b2 * c1 - b1 * c2) / determinant,
+        (a1 * c2 - a2 * c1) / determinant,
+      );
       if (containsPoint(intersection) &&
           otherSegment.containsPoint(intersection)) {
         // The intersection point is on both line segments
-        return result;
+        return [intersection];
       }
     } else {
       // In here we know that the lines are parallel

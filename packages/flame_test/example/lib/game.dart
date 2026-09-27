@@ -25,6 +25,5 @@ class MyGame extends FlameGame {
   Future<void> onLoad() async {
     final background = Background();
     world.add(background);
-    await background.loaded;
   }
 }
