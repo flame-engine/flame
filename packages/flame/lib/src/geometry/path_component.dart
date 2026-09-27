@@ -11,6 +11,7 @@ import 'package:meta/meta.dart';
 class PathComponent extends ShapeComponent {
   PathComponent({
     required Path path,
+    this.filter = true,
     this.sampling = 1.0,
     this.tolerance,
     super.position,
@@ -40,6 +41,9 @@ class PathComponent extends ShapeComponent {
   /// it defaults to half the [sampling].
   final double? tolerance;
 
+  /// Whether the components are filtered to include only disjoint ones.
+  final bool filter;
+
   /// The actual contours for this path.
   late final contours = path.walkContours(sampling, tolerance);
 
@@ -65,7 +69,7 @@ class PathComponent extends ShapeComponent {
   /// Add all the polygon components and return them.
   List<PolygonComponent> addPolygons() {
     final polygons = createPolygons(this, sampling, tolerance);
-    addAll(preparePolygons(polygons));
+    addAll(preparePolygons(polygons, filterPolygons: filter));
     return polygons;
   }
 

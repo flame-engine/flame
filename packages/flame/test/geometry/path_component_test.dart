@@ -2,7 +2,6 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components.dart';
-import 'package:flame/src/collisions/hitboxes/polygon_hitbox.dart';
 import 'package:flame_test/test_paths.dart';
 import 'package:test/test.dart';
 
@@ -46,7 +45,6 @@ void main() {
   test('PathComponent invader2 keeps only one disjoint contour', () {
     const size = Size(64, 64);
     final path = TestPaths.byName('invader2', size);
-    // TODO(adario): add hitboxes
     final pathComponent = PathComponent(path: path);
 
     expect(pathComponent.children.length, 1);
@@ -56,11 +54,9 @@ void main() {
     const size = Size(64, 64);
     final path = TestPaths.byName('invader2', size);
 
-    // TODO(adario): add hitboxes
     final pathComponent = PathComponent(
       path: path,
-      // TODO(adario): disable hitbox filtering
-      // filterHitboxes: false,
+      filter: false,
     );
 
     expect(pathComponent.children.length, 3);
@@ -69,7 +65,6 @@ void main() {
   test('PathComponent alien2 implicitly keeps all disjoint contours', () {
     const size = Size(64, 64);
     final path = TestPaths.byName('alien2', size);
-    // TODO(adario): add hitboxes
     final pathComponent = PathComponent(path: path);
 
     expect(pathComponent.children.length, 4);
@@ -79,11 +74,10 @@ void main() {
     const size = Size(64, 64);
     final path = TestPaths.byName('invader3', size);
 
-    // TODO(adario): add hitboxes
     final path1 = PathComponent(path: path);
     final path2 = PathComponent(path: path, tolerance: 1);
-    final hitbox1 = path1.firstChild<PolygonHitbox>();
-    final hitbox2 = path2.firstChild<PolygonHitbox>();
+    final hitbox1 = path1.firstChild<PolygonComponent>();
+    final hitbox2 = path2.firstChild<PolygonComponent>();
 
     expect(hitbox1!.vertices.length, greaterThan(hitbox2!.vertices.length));
   });

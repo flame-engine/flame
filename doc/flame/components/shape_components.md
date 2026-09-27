@@ -130,9 +130,9 @@ void main() {
 ## PathComponent
 
 When a whole `Path` is needed (for rendering or collision detection) instead of a single contour,
-creating a `PathComponent` automatically walks all contours in the given  `Path` and creates
+creating a `PathComponent` automatically walks all contours in the given `Path` and creates
 `PolygonHitbox` objects for each contour; by default, only disjoint contours become hitboxes,
-but `PathComponent` supports keeping conjoint contours via the `filterHitboxes` parameter.
+but `PathComponent` supports keeping conjoint contours via the `filter` parameter.
 The component size is derived directly from the given `Path`.
 
 Also by default, the `Path` is rendered, whereas the hitboxes are not: this behavior may be

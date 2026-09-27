@@ -37,7 +37,7 @@ class PathPathIntersections
     PathComponent pathB, {
     Rect? overlappingRect,
   }) {
-    // TODO(adario): O(n^2)...
+    // TODO(adario): already quadratic, should it accumulate all results?
     final polygonsA = pathA.children.whereType<PolygonComponent>();
     final polygonsB = pathB.children.whereType<PolygonComponent>();
     for (final polygonA in polygonsA) {

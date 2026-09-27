@@ -56,7 +56,7 @@ bounce on will appear.
           position: halfCanvas.toVector2(),
           anchor: .center,
           paint: boxPaint,
-          filterHitboxes: false,
+          filter: false,
         ),
     ]);
   }
@@ -100,7 +100,7 @@ bounce on will appear.
               position: Vector2.all(350),
               anchor: Anchor.center,
               paint: boxPaint,
-              filterHitboxes: false,
+              filter: false,
             ),
             RectangleComponent(
               position: Vector2.all(500),

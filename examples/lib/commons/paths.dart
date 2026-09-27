@@ -88,7 +88,7 @@ PathComponent pathComponent(
   List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
-  bool? filterHitboxes,
+  bool? filter,
   Anchor? anchor,
 }) {
   // Create a standard test path that fits within our chosen size with its
@@ -102,7 +102,7 @@ PathComponent pathComponent(
     paintLayers: paintLayers,
     contourPaint: contourPaint,
     renderHitboxes: renderHitboxes,
-    filterHitboxes: filterHitboxes,
+    filter: filter,
     anchor: anchor,
   );
 }
@@ -116,7 +116,7 @@ PathComponent pathComponentWith(
   List<Paint>? paintLayers,
   Paint? contourPaint,
   bool? renderHitboxes,
-  bool? filterHitboxes,
+  bool? filter,
   Anchor? anchor,
 }) {
   // Adjust the path such that fits within our chosen size with its
@@ -134,7 +134,7 @@ PathComponent pathComponentWith(
     paintLayers: paintLayers,
     contourPaint: contourPaint,
     renderHitboxes: renderHitboxes,
-    filterHitboxes: filterHitboxes,
+    filter: filter,
   );
 }
 
@@ -155,11 +155,11 @@ class CollidablePathComponent extends PathComponent
     super.paintLayers,
     Paint? contourPaint,
     bool? renderHitboxes,
-    bool? filterHitboxes,
+    bool? filter,
   }) : super() {
     final pathHitbox = PathHitbox(
       path: path,
-      filterHitboxes: filterHitboxes ?? true,
+      filter: filter ?? true,
       sampling: sampling,
       tolerance: tolerance,
     );

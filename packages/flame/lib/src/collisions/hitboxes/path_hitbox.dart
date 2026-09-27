@@ -8,7 +8,7 @@ import 'package:meta/meta.dart';
 class PathHitbox extends PathComponent with ShapeHitbox {
   PathHitbox({
     required super.path,
-    this.filterHitboxes = true,
+    super.filter,
     super.sampling,
     super.tolerance,
     super.position,
@@ -25,9 +25,6 @@ class PathHitbox extends PathComponent with ShapeHitbox {
     // TODO(adario): convenience...
     addHitboxes();
   }
-
-  /// Whether the hitboxes are filtered to include only disjoint ones.
-  final bool filterHitboxes;
 
   /// Our polygon hitboxes.
   Iterable<PolygonHitbox> get polygonHitboxes =>
@@ -78,7 +75,7 @@ class PathHitbox extends PathComponent with ShapeHitbox {
   /// Add all the hitboxes and return them.
   List<PolygonHitbox> addHitboxes() {
     final boxes = createHitboxes(this, sampling, tolerance);
-    addAll(PathComponent.preparePolygons(boxes));
+    addAll(PathComponent.preparePolygons(boxes, filterPolygons: filter));
     return boxes;
   }
 
