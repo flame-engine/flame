@@ -78,6 +78,7 @@ void addRenderingStories(Dashbook dashbook) {
             TextAlign.left,
             TextAlign.values,
           ),
+          width: context.numberProperty('Width', 400),
         ),
       ),
       codeLink: baseLink('rendering/rich_text_example.dart'),
