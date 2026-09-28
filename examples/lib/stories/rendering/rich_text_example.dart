@@ -5,8 +5,9 @@ import 'package:flutter/painting.dart';
 
 class RichTextExample extends FlameGame {
   final TextAlign textAlign;
+  final double width;
 
-  RichTextExample({this.textAlign = TextAlign.left});
+  RichTextExample({this.textAlign = TextAlign.left, this.width = 400});
 
   static const String description =
       'A non-interactive example of how to render rich text in Flame.';
@@ -17,7 +18,7 @@ class RichTextExample extends FlameGame {
   @override
   Future<void> onLoad() async {
     final style = DocumentStyle(
-      width: 400,
+      width: width,
       height: 200,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       background: BackgroundStyle(
