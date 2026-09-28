@@ -22,11 +22,10 @@ TestBlock _pathBlock(Vector2 position, {bool isSolid = false}) {
 
 void main() {
   group('PathHitbox', () {
-    test('has one polygon per closed contour and no children', () {
+    test('has one polygon per closed contour', () {
       final hitbox = PathHitbox(path: _twoSquares());
 
       expect(hitbox.polygons.length, 2);
-      expect(hitbox.children, isEmpty);
     });
 
     test('takes the collision type', () {

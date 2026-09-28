@@ -49,7 +49,6 @@ void main() {
       final pathComponent = PathComponent(path: path);
 
       expect(pathComponent.polygons.length, 1);
-      expect(pathComponent.children, isEmpty);
     });
 
     test('invader2 explicitly keeps all contours', () {

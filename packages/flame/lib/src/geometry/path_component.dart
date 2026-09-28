@@ -13,8 +13,8 @@ import 'package:meta/meta.dart';
 ///
 /// The polygons follow the contours with straight edges, in the same way as
 /// [PolygonComponent.fromPath] follows a single contour, and they decide
-/// whether a point is inside of the component. They are kept as vertices, and
-/// not as child components.
+/// whether a point is inside of the component. Their vertices are available
+/// in [polygons].
 class PathComponent extends ShapeComponent {
   /// With this constructor you create a [PathComponent] from all the contours
   /// of the [path].

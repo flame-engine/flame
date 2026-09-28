@@ -97,20 +97,22 @@ The component gets the size of the contour, so that curves which reach the bound
 not cut short. If no `position` is given the polygon ends up where the contour is in the coordinates
 of the path.
 
-There are two arguments that control how the path is followed:
+There are three arguments that control how the path is followed:
 
 - `contour`: A path has one contour for each shape that was added to it, and for each `moveTo`.
   This is the index of the one that the polygon is made from, and it defaults to the first one. An
   index that the path does not have results in a `RangeError`.
 - `sampling`: The step that curves are followed with, in the units of the path, which defaults
-  to `1.0`. The polygon stays within about half of it from the path. A higher value gives fewer
-  vertices, which makes collision detection and ray casting cheaper, and a lower value follows the
-  curves more closely. A path that is defined in small units, like meters, needs a sampling that
-  is small compared to its size. Straight stretches cost the same whatever the sampling is.
+  to `1.0`. A higher value gives fewer vertices, which makes collision detection and ray casting
+  cheaper, and a lower value follows the curves more closely. A path that is defined in small
+  units, like meters, needs a sampling that is small compared to its size. Straight stretches cost
+  the same whatever the sampling is.
+- `tolerance`: How far the polygon may stray from the path, in the units of the path. The samples
+  that are not needed to stay within it are left out. It defaults to half of the `sampling`.
 
 The constructor is built on the `walkContours`, `walkContourAt` and `walkContour` extension methods
-on `Path` and `PathMetric`, which return the vertices as lists of `Offset`s. Those also accept a
-`tolerance`, in case the simplification of the sampled contour should not follow the sampling.
+on `Path` and `PathMetric`, which take the same `sampling` and `tolerance` and return the vertices
+as lists of `Offset`s.
 
 ```dart
 void main() {
@@ -151,7 +153,7 @@ void main() {
 ```
 
 The `sampling` and `tolerance` arguments control how the contours are followed, see
-[](#from-a-path). The polygons are kept as vertices in `polygons`, they are not child components.
+[](#from-a-path). The vertices of each polygon are available in `polygons`.
 
 Contours with fewer than three vertices, like open lines, are rendered but do not become polygons.
 By default, the polygons whose vertices all lie inside of the largest polygon are left out as well,

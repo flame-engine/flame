@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 /// A [Hitbox] in the shape of all the closed contours of a [Path].
 ///
-/// The hitbox is a single hitbox, so it collides, contains points and is hit
+/// The polygons form a single hitbox: it collides, contains points and is hit
 /// by rays as a whole, whichever of its polygons is involved. See
 /// [PathComponent] for how the polygons are made from the path.
 class PathHitbox extends PathComponent with ShapeHitbox {

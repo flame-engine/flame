@@ -301,10 +301,10 @@ so create it once and not in every tick.
 ### PathHitbox
 
 A `PathHitbox` follows all the closed contours of a `Path` at once, with one polygon for each of
-them, where `PolygonHitbox.fromPath` follows a single contour. It is one hitbox, so it collides,
-contains points and is hit by rays as a whole, whichever of its polygons is involved, and it reports
-one collision to its parent even when several of its polygons touch the other hitbox. A ray hits
-the nearest of the polygons.
+them, where `PolygonHitbox.fromPath` follows a single contour. The polygons form a single hitbox:
+it collides, contains points and is hit by rays as a whole, whichever of its polygons is involved,
+and it reports one collision to its parent even when several of its polygons touch the other
+hitbox. A ray hits the nearest of the polygons.
 
 The `PathHitbox` has the same constructor as the [](components/shape_components.md#pathcomponent),
 see that section for the `sampling`, `tolerance` and `filter` arguments, and it takes the

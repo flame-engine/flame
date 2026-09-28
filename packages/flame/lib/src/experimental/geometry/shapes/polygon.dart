@@ -42,7 +42,7 @@ class Polygon extends Shape {
   /// and the samples that are not needed to stay within about half of the
   /// [sampling] of the contour are left out. Higher values give fewer vertices
   /// and a looser fit, while straight stretches and the corners between them
-  /// are exact whatever the [sampling] is.  The given [tolerance] decides
+  /// are exact whatever the [sampling] is. The given [tolerance] decides
   /// what samples to discard: by default, its value is half the [sampling].
   ///
   /// See [PathMetricExtension.walkContour] for the details of the [sampling]
