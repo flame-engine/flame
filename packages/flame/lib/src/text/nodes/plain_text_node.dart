@@ -1,4 +1,3 @@
-import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
 /// An [InlineTextNode] representing plain text.
@@ -31,9 +30,22 @@ class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
   bool get isDone => index1 > words.length;
 
   @override
+  double get leadingRunWidth {
+    // Past the first word, the remaining content starts with a space.
+    if (isDone || index0 > 0 || words.first.isEmpty) {
+      return 0;
+    }
+    return renderer.format(words.first).metrics.width;
+  }
+
+  @override
+  bool get hasBreakOpportunity => !isDone && (index0 > 0 || words.length > 1);
+
+  @override
   InlineTextElement? layOutNextLine(
     double availableWidth, {
     required bool isStartOfLine,
+    double trailingWidth = 0,
   }) {
     InlineTextElement? tentativeLine;
     int? tentativeIndex0;
@@ -41,7 +53,11 @@ class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
       final prependSpace = index0 == 0 || isStartOfLine ? '' : ' ';
       final textPiece = prependSpace + words.sublist(index0, index1).join(' ');
       final formattedPiece = renderer.format(textPiece);
-      if (formattedPiece.metrics.width > availableWidth) {
+      // The last word is glued to what follows unless the text ends in a
+      // space (in which case the last word is empty).
+      final isGlued = index1 == words.length && words.last.isNotEmpty;
+      final maxWidth = availableWidth - (isGlued ? trailingWidth : 0);
+      if (formattedPiece.metrics.width > maxWidth) {
         break;
       } else {
         tentativeLine = formattedPiece;
@@ -53,6 +69,9 @@ class _PlainTextLayoutBuilder extends TextNodeLayoutBuilder {
       assert(tentativeIndex0 != 0 && tentativeIndex0! > index0);
       index0 = tentativeIndex0!;
       return tentativeLine;
+    } else if (isStartOfLine && trailingWidth > 0) {
+      // The glued run is wider than a whole line, so it has to be broken.
+      return layOutNextLine(availableWidth, isStartOfLine: true);
     } else {
       return null;
     }

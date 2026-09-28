@@ -1,4 +1,3 @@
-import 'package:flame/src/text/nodes/inline_text_node.dart';
 import 'package:flame/text.dart';
 
 /// An [InlineTextNode] representing an inline code block string.
