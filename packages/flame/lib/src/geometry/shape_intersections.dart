@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 
@@ -28,81 +29,132 @@ abstract class Intersections<
   }
 }
 
+/// The distinct intersection points of the [edgesA] and the [edgesB].
+List<Vector2> _edgeIntersections(
+  List<LineSegment> edgesA,
+  List<LineSegment> edgesB,
+) {
+  final intersectionPoints = <Vector2>[];
+  for (final lineA in edgesA) {
+    for (final lineB in edgesB) {
+      for (final intersection in lineA.intersections(lineB)) {
+        if (!intersectionPoints.contains(intersection)) {
+          intersectionPoints.add(intersection);
+        }
+      }
+    }
+  }
+  return intersectionPoints;
+}
+
+/// The center of the shape that is enclosed by the other, solid, shape, or
+/// nothing when neither shape encloses the other or the outer one is hollow.
+///
+/// Whether a shape is enclosed is decided by [pointA] and [pointB], which are
+/// a point of [shapeA] and of [shapeB] respectively.
+List<Vector2> _enclosedCenter(
+  ShapeComponent shapeA,
+  Vector2? pointA,
+  ShapeComponent shapeB,
+  Vector2? pointB,
+) {
+  if (!shapeA.isSolid && !shapeB.isSolid) {
+    return [];
+  }
+  final ShapeComponent? outerShape;
+  if (pointB != null && shapeA.containsPoint(pointB)) {
+    outerShape = shapeA;
+  } else if (pointA != null && shapeB.containsPoint(pointA)) {
+    outerShape = shapeB;
+  } else {
+    outerShape = null;
+  }
+  if (outerShape != null && outerShape.isSolid) {
+    final innerShape = outerShape == shapeA ? shapeB : shapeA;
+    return [innerShape.absoluteCenter];
+  }
+  return [];
+}
+
+/// A vertex of the [path], or null when it has no polygons.
+Vector2? _vertexOf(PathComponent path) {
+  return path.globalPolygons().firstOrNull?.first;
+}
+
 class PathPathIntersections
     extends Intersections<PathComponent, PathComponent> {
-  late final _polygons = PolygonPolygonIntersections();
+  /// Returns the intersection points of the edges of all the polygons of
+  /// [pathA] and [pathB].
   @override
   List<Vector2> intersect(
     PathComponent pathA,
     PathComponent pathB, {
     Rect? overlappingRect,
   }) {
-    // TODO(adario): already quadratic, should it accumulate all results?
-    final polygonsA = pathA.children.whereType<PolygonComponent>();
-    final polygonsB = pathB.children.whereType<PolygonComponent>();
-    for (final polygonA in polygonsA) {
-      for (final polygonB in polygonsB) {
-        final intersections = _polygons.intersect(
-          polygonA,
-          polygonB,
-          overlappingRect: overlappingRect,
-        );
-        if (intersections.isNotEmpty) {
-          return intersections;
-        }
-      }
+    final intersectionPoints = _edgeIntersections(
+      pathA.possibleIntersectionVertices(overlappingRect),
+      pathB.possibleIntersectionVertices(overlappingRect),
+    );
+    if (intersectionPoints.isEmpty) {
+      return _enclosedCenter(pathA, _vertexOf(pathA), pathB, _vertexOf(pathB));
     }
-    return [];
+    return intersectionPoints;
   }
 }
 
 class PathPolygonIntersections
     extends Intersections<PathComponent, PolygonComponent> {
-  late final _polygons = PolygonPolygonIntersections();
+  /// Returns the intersection points of the edges of all the polygons of
+  /// [path] and the edges of [polygon].
   @override
   List<Vector2> intersect(
-    PathComponent pathA,
-    PolygonComponent polygonB, {
+    PathComponent path,
+    PolygonComponent polygon, {
     Rect? overlappingRect,
   }) {
-    // TODO(adario): linear, should it accumulate all results?
-    final polygonsA = pathA.children.whereType<PolygonComponent>();
-    for (final polygonA in polygonsA) {
-      final intersections = _polygons.intersect(
-        polygonA,
-        polygonB,
-        overlappingRect: overlappingRect,
+    final intersectionPoints = _edgeIntersections(
+      path.possibleIntersectionVertices(overlappingRect),
+      polygon.possibleIntersectionVertices(overlappingRect),
+    );
+    if (intersectionPoints.isEmpty) {
+      return _enclosedCenter(
+        path,
+        _vertexOf(path),
+        polygon,
+        polygon.globalVertices().first,
       );
-      if (intersections.isNotEmpty) {
-        return intersections;
-      }
     }
-    return [];
+    return intersectionPoints;
   }
 }
 
 class CirclePathIntersections
     extends Intersections<CircleComponent, PathComponent> {
-  late final _polygons = CirclePolygonIntersections();
+  /// Returns the intersection points of [circle] and the edges of all the
+  /// polygons of [path].
   @override
   List<Vector2> intersect(
-    CircleComponent circleA,
-    PathComponent pathB, {
+    CircleComponent circle,
+    PathComponent path, {
     Rect? overlappingRect,
   }) {
-    // TODO(adario): linear, should it accumulate all results?
-    final polygonsB = pathB.children.whereType<PolygonComponent>();
-    for (final polygonB in polygonsB) {
-      final intersections = _polygons.intersect(
-        circleA,
-        polygonB,
-        overlappingRect: overlappingRect,
-      );
-      if (intersections.isNotEmpty) {
-        return intersections;
+    final intersectionPoints = <Vector2>[];
+    for (final line in path.possibleIntersectionVertices(overlappingRect)) {
+      for (final intersection in circle.lineSegmentIntersections(line)) {
+        if (!intersectionPoints.contains(intersection)) {
+          intersectionPoints.add(intersection);
+        }
       }
     }
-    return [];
+    if (intersectionPoints.isEmpty) {
+      return _enclosedCenter(
+        circle,
+        circle.absoluteCenter,
+        path,
+        _vertexOf(path),
+      );
+    }
+    return intersectionPoints;
   }
 }
 

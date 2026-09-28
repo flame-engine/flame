@@ -119,8 +119,8 @@ PathComponent pathComponentWith(
   // original aspect ratio.
   final path = resize ? srcPath.resizeTo(size, keepRatio: true) : srcPath;
 
-  // Create a component that displays the whole path: we filter all hitboxes
-  // that are (approximately) fully enclosed in the largest one.
+  // Create a component that displays the whole path: by default, the polygons
+  // that are fully enclosed in the largest one are left out of the hitbox.
   return CollidablePathComponent(
     path: path,
     priority: shapePriority,
@@ -129,7 +129,7 @@ PathComponent pathComponentWith(
     paint: paint ?? pathStroke,
     paintLayers: paintLayers,
     contourPaint: contourPaint,
-    renderHitboxes: renderHitboxes,
-    filter: filter,
+    renderHitboxes: renderHitboxes ?? false,
+    filter: filter ?? true,
   );
 }

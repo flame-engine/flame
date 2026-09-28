@@ -6,6 +6,11 @@ final Paint hitboxStroke = Paint()
   ..color = const Color(0xffffffff)
   ..style = .stroke;
 
+/// A [PathComponent] with a [PathHitbox] that follows its path, so that it
+/// collides and reacts to gestures as a whole.
+///
+/// The hitbox polygons are rendered with the given contour paint when the
+/// hitboxes are rendered, which shows how closely they follow the path.
 class CollidablePathComponent extends PathComponent
     with CollisionCallbacks, CollisionPassthrough {
   CollidablePathComponent({
@@ -22,22 +27,22 @@ class CollidablePathComponent extends PathComponent
     super.paint,
     super.paintLayers,
     Paint? contourPaint,
-    bool? renderHitboxes,
-    bool? filter,
-  }) : super() {
-    final pathHitbox = PathHitbox(
+    bool renderHitboxes = false,
+    bool filter = true,
+  }) : super(filter: filter) {
+    hitbox = PathHitbox(
       path: path,
-      filter: filter ?? true,
+      filter: filter,
       sampling: sampling,
       tolerance: tolerance,
     );
-    add(pathHitbox);
-    if (renderHitboxes ?? false) {
-      final hitboxPaint = contourPaint ?? hitboxStroke;
-      for (final hitbox in pathHitbox.polygonHitboxes) {
-        hitbox.renderShape = true;
-        hitbox.paint = hitboxPaint;
-      }
+    if (renderHitboxes) {
+      hitbox
+        ..renderShape = true
+        ..paint = contourPaint ?? hitboxStroke;
     }
+    add(hitbox);
   }
+
+  late final PathHitbox hitbox;
 }

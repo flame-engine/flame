@@ -3,8 +3,11 @@ import 'package:flame/extensions.dart';
 import 'package:flame/geometry.dart';
 import 'package:meta/meta.dart';
 
-/// In this [PathComponent], hitboxes are added to emulate a hitbox
-/// that is a composition of other hitboxes.
+/// A [Hitbox] in the shape of all the closed contours of a [Path].
+///
+/// The hitbox is a single hitbox, so it collides, contains points and is hit
+/// by rays as a whole, whichever of its polygons is involved. See
+/// [PathComponent] for how the polygons are made from the path.
 class PathHitbox extends PathComponent with ShapeHitbox {
   PathHitbox({
     required super.path,
@@ -21,16 +24,28 @@ class PathHitbox extends PathComponent with ShapeHitbox {
     super.paint,
     super.paintLayers,
     super.isSolid = false,
-  }) {
-    // TODO(adario): convenience...
-    addHitboxes();
+  });
+
+  late final _temporaryNormal = Vector2.zero();
+  late final _temporaryResult = RaycastResult<ShapeHitbox>();
+  late final _closestResult = RaycastResult<ShapeHitbox>();
+
+  /// Renders the polygons of the hitbox, since those are what collides.
+  @override
+  void render(Canvas canvas) {
+    if (renderShape) {
+      if (hasPaintLayers) {
+        for (final paint in paintLayers) {
+          canvas.drawPath(polygonsPath, paint);
+        }
+      } else {
+        canvas.drawPath(polygonsPath, paint);
+      }
+    }
   }
 
-  /// Our polygon hitboxes.
-  Iterable<PolygonHitbox> get polygonHitboxes =>
-      children.query<PolygonHitbox>();
-
-  /// Returns information about how the ray intersects the shape.
+  /// Returns information about how the ray intersects the closest of the
+  /// polygons.
   ///
   /// If you are only interested in the intersection point use
   /// [RaycastResult.intersectionPoint] of the result.
@@ -39,65 +54,68 @@ class PathHitbox extends PathComponent with ShapeHitbox {
     Ray2 ray, {
     RaycastResult<ShapeHitbox>? out,
   }) {
-    for (final hitbox in polygonHitboxes) {
-      final result = hitbox.rayIntersection(ray, out: out);
-      if (result != null) {
-        return result;
+    var closestDistance = double.infinity;
+    for (final vertices in globalPolygons()) {
+      final result = PolygonRayIntersection.intersectPolygon(
+        ray,
+        vertices,
+        hitbox: this,
+        normal: _temporaryNormal,
+        out: _temporaryResult,
+      );
+      final distance = result?.distance;
+      if (distance != null && distance < closestDistance) {
+        closestDistance = distance;
+        _closestResult.setFrom(result!);
       }
     }
-    return null;
+    if (closestDistance.isInfinite) {
+      out?.reset();
+      return null;
+    }
+    return (out ?? RaycastResult<ShapeHitbox>())..setFrom(_closestResult);
   }
 
-  /// This determines how the shape should scale if it should try to fill its
-  /// parents boundaries.
   @override
   void fillParent() {
-    // TODO(adario): is this correct?
-    throw UnsupportedError('PathHitbox already fills its parent');
+    throw UnsupportedError(
+      'Use the RectangleHitbox if you want to fill the parent',
+    );
   }
 
-  /// Compute the [aabb] as the hitboxes hull.
+  /// Computes the [aabb] from the vertices of all the polygons.
   @override
   @protected
   void computeAabb(Aabb2 aabb) {
-    final boxes = polygonHitboxes.toList();
-    final last = boxes.removeLast();
-    aabb.hull(last.aabb);
-    for (final box in boxes) {
-      aabb.hull(box.aabb);
+    final polygons = globalPolygons();
+    if (polygons.isEmpty) {
+      super.computeAabb(aabb);
+      return;
     }
-  }
-
-  /// Ensure we can perform [PolygonHitbox] queries quickly.
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
-    children.register<PolygonHitbox>();
-  }
-
-  /// Add all the hitboxes and return them.
-  @internal
-  List<PolygonHitbox> addHitboxes() {
-    final boxes = createHitboxes(this, sampling, tolerance);
-    addAll(PathComponent.preparePolygons(boxes, filterPolygons: filter));
-    return boxes;
-  }
-
-  /// Create a hitbox for each path contour with at least three vertices.
-  @internal
-  static List<PolygonHitbox> createHitboxes(
-    PathComponent path,
-    double sampling,
-    double? tolerance,
-  ) {
-    final contours = path.contours;
-    final boxes = <PolygonHitbox>[];
-    for (var index = 0; index < contours.length; index++) {
-      final contour = contours[index];
-      if (contour.length > 2) {
-        boxes.add(PolygonHitbox(contour.vertices));
+    final first = polygons.first.first;
+    var minX = first.x;
+    var minY = first.y;
+    var maxX = first.x;
+    var maxY = first.y;
+    for (final vertices in polygons) {
+      for (final v in vertices) {
+        if (v.x < minX) {
+          minX = v.x;
+        }
+        if (v.y < minY) {
+          minY = v.y;
+        }
+        if (v.x > maxX) {
+          maxX = v.x;
+        }
+        if (v.y > maxY) {
+          maxY = v.y;
+        }
       }
     }
-    return boxes;
+    // Add a small epsilon since points on the AABB edge are counted as outside.
+    const epsilon = 0.000000000000001;
+    aabb.min.setValues(minX - epsilon, minY - epsilon);
+    aabb.max.setValues(maxX + epsilon, maxY + epsilon);
   }
 }
