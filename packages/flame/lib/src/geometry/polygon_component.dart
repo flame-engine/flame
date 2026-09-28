@@ -201,7 +201,7 @@ class PolygonComponent extends ShapeComponent {
     );
     // If the list isn't ccw we have to reverse the order in order for
     // `containsPoint` to work.
-    if (_isClockwise(newVertices)) {
+    if (isClockwise(newVertices)) {
       newVertices.reverse();
     }
     final topLeft = Vector2.zero();
@@ -285,7 +285,16 @@ class PolygonComponent extends ShapeComponent {
     if (size.x == 0 || size.y == 0) {
       return false;
     }
+    return polygonContainsPoint(point, vertices);
+  }
 
+  /// Whether the polygon with the given [vertices] contains the [point], where
+  /// a point on an edge counts as contained.
+  ///
+  /// The polygon can be either convex or concave, since the check counts the
+  /// edges that are crossed by going left from the point.
+  @internal
+  static bool polygonContainsPoint(Vector2 point, List<Vector2> vertices) {
     // Count the amount of edges crossed by going left from the point
     var count = 0;
     for (var i = 0; i < vertices.length; i++) {
@@ -376,7 +385,10 @@ class PolygonComponent extends ShapeComponent {
     }
   }
 
-  bool _isClockwise(List<Vector2> vertices) {
+  /// Whether the given [vertices] go clockwise in the screen coordinate
+  /// system, where the y axis points down.
+  @internal
+  static bool isClockwise(List<Vector2> vertices) {
     var area = 0.0;
     for (var i = 0; i < vertices.length; i++) {
       final j = (i + 1) % vertices.length;
