@@ -55,11 +55,10 @@ import 'package:meta/meta.dart';
 ///   because its world is viewed by several cameras, only the first render
 ///   paints the widget.
 class WidgetComponent extends PositionComponent {
-  // ignore: use_super_parameters
   WidgetComponent({
     required Widget widget,
-    Vector2? size,
     this.constraints,
+    super.size,
     super.position,
     super.scale,
     super.angle,
@@ -69,9 +68,8 @@ class WidgetComponent extends PositionComponent {
     super.priority,
     super.key,
   }) : _widget = widget, // ignore: prefer_initializing_formals
-       _adoptsWidgetSize = size == null,
-       super(size: size) {
-    this.size.addListener(_onSizeChanged);
+       _adoptsWidgetSize = size == null {
+    size.addListener(_onSizeChanged);
   }
 
   Widget _widget;
