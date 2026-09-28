@@ -107,14 +107,14 @@ A handful of Box2D's tolerances are absolute lengths rather than fractions of th
 apply to, so in a world laid out at a much smaller scale than a meter they stop being negligible
 and start dominating:
 
-| Tolerance | Default | What it does in a world only a meter across |
-| --- | --- | --- |
-| `Tolerances.speculativeDistance` | 0.02 m | contacts are reported across 2% of the world |
-| `WorldDef.restitutionThreshold` | 1 m/s | nothing ever bounces |
-| `WorldDef.hitEventThreshold` | 1 m/s | no hit events are ever generated |
-| `BodyDef.sleepThreshold` | 0.05 m/s | bodies fall asleep while still moving |
-| `WorldDef.maxContactPushSpeed` | 3 m/s | overlapping bodies are pushed apart violently |
-| `Tolerances.aabbMargin` | 0.05 m | broadphase bounds dwarf the shapes |
+| Tolerance                        | Default  | What it does in a world only a meter across   |
+| -------------------------------- | -------- | --------------------------------------------- |
+| `Tolerances.speculativeDistance` | 0.02 m   | contacts are reported across 2% of the world  |
+| `WorldDef.restitutionThreshold`  | 1 m/s    | nothing ever bounces                          |
+| `WorldDef.hitEventThreshold`     | 1 m/s    | no hit events are ever generated              |
+| `BodyDef.sleepThreshold`         | 0.05 m/s | bodies fall asleep while still moving         |
+| `WorldDef.maxContactPushSpeed`   | 3 m/s    | overlapping bodies are pushed apart violently |
+| `Tolerances.aabbMargin`          | 0.05 m   | broadphase bounds dwarf the shapes            |
 
 The first one is the one that gets reported as a bug. Box2D creates contact points for shapes that
 are approaching but have not touched yet, which is what stops fast bodies from passing through
@@ -131,14 +131,14 @@ one that is easy to miss: scaling lengths alone makes everything look like it is
 treacle, while scaling lengths and gravity by the same factor leaves the timing of the simulation
 completely unchanged. For a length scale factor of `S`:
 
-| Quantity | Scale by |
-| --- | --- |
-| lengths, positions, radii, velocities, gravity, accelerations | `S` |
-| densities, friction, restitution, damping, angular velocities | `1`, unchanged |
-| masses | `S²` |
-| forces, linear impulses | `S³` |
-| torques, rotational inertia, angular impulses | `S⁴` |
-| **time** | **`1`, unchanged** |
+| Quantity                                                      | Scale by           |
+| ------------------------------------------------------------- | ------------------ |
+| lengths, positions, radii, velocities, gravity, accelerations | `S`                |
+| densities, friction, restitution, damping, angular velocities | `1`, unchanged     |
+| masses                                                        | `S²`               |
+| forces, linear impulses                                       | `S³`               |
+| torques, rotational inertia, angular impulses                 | `S⁴`               |
+| **time**                                                      | **`1`, unchanged** |
 
 So a world that was 1 meter tall with a 0.02 m ball and a gravity of 9.81 becomes a world 10
 meters tall with a 0.2 m ball and a gravity of 98.1, behaving identically but comfortably inside
