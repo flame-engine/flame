@@ -9,22 +9,25 @@ import 'package:meta/meta.dart';
 /// by rays as a whole, whichever of its polygons is involved. See
 /// [PathComponent] for how the polygons are made from the path.
 class PathHitbox extends PathComponent with ShapeHitbox {
+  /// With this constructor you create a [PathHitbox] from all the closed
+  /// contours of the [path].
+  ///
+  /// See [PathComponent.new] for the [sampling], [tolerance] and [filter]
+  /// parameters. Fewer vertices make the collision detection cheaper, so use
+  /// the highest sampling that still follows the path closely enough.
   PathHitbox({
     required super.path,
-    super.filter,
     super.sampling,
     super.tolerance,
+    super.filter,
     super.position,
-    super.scale,
     super.angle,
     super.anchor,
-    super.children,
-    super.priority,
-    super.key,
-    super.paint,
-    super.paintLayers,
-    super.isSolid = false,
-  });
+    super.isSolid,
+    CollisionType collisionType = CollisionType.active,
+  }) {
+    this.collisionType = collisionType;
+  }
 
   late final _temporaryNormal = Vector2.zero();
   late final _temporaryResult = RaycastResult<ShapeHitbox>();
