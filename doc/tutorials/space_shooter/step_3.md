@@ -81,9 +81,9 @@ speeds, this not only creates the sensation of depth but also improves the movem
 of the game a lot. If you want to read more about Parallax Scrolling, check this article
 from [Wikipedia](https://en.wikipedia.org/wiki/Parallax_scrolling).
 
-Flame provides classes to implement parallax scrolling out of the box, these classes are `Parallax` and
-`ParallaxComponent`. We will need three star layer images for our parallax background. Right-click
-each image below, choose "Save as...", and store them in your `assets/images/` folder:
+Flame provides classes to implement parallax scrolling out of the box, these classes are `Parallax`
+and `ParallaxComponent`. We will need three star layer images for our parallax background.
+Right-click each image below, choose "Save as...", and store them in your `assets/images/` folder:
 
 - `stars_0.png` (farthest layer): ![stars_0](app/assets/images/stars_0.png)
 - `stars_1.png` (middle layer): ![stars_1](app/assets/images/stars_1.png)
