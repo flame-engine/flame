@@ -14,6 +14,7 @@ import 'package:meta/meta.dart';
 part 'component_list.dart';
 part 'component_tree_root.dart';
 part 'custom_traversal.dart';
+part 'query_cache.dart';
 
 /// [Component]s are the basic building blocks for a [FlameGame].
 ///

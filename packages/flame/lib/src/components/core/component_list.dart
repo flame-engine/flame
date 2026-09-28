@@ -63,7 +63,7 @@ class ComponentList extends Iterable<Component> {
   static const int _tombstoneCompactionThreshold = 16;
 
   /// The per-type query caches, created by [register].
-  Map<Type, _QueryCache<Component>>? _queries;
+  _QueryCacheStore? _queries;
 
   /// A monotonically increasing counter, bumped on every membership or order
   /// change of any [ComponentList] (adds, removes, clears, reorders). The
@@ -156,6 +156,10 @@ class ComponentList extends Iterable<Component> {
       component._containerList == null,
       'A component cannot be contained by two children containers at once',
     );
+    // Must happen before [component] is linked to this list: a component that
+    // is removed and added back before the caches are compacted would
+    // otherwise be seen as a live entry and end up in a cache twice.
+    _queries?.compact(this);
     final elements = _elements;
     if (_length == 0 && elements.isNotEmpty) {
       // The list contains only tombstones; reset it.
@@ -175,14 +179,7 @@ class ComponentList extends Iterable<Component> {
     component._containerList = this;
     _length++;
     _structureVersion++;
-    final caches = _queries?.values;
-    if (caches != null) {
-      for (final cache in caches) {
-        if (cache.check(component)) {
-          cache.insertSorted(component);
-        }
-      }
-    }
+    _queries?.onAdd(component);
     return true;
   }
 
@@ -220,20 +217,18 @@ class ComponentList extends Iterable<Component> {
     _length--;
     _tombstones++;
     _structureVersion++;
-    final caches = _queries?.values;
-    if (caches != null) {
-      for (final cache in caches) {
-        if (cache.check(component)) {
-          cache.data.remove(component);
-        }
-      }
-    }
+    _queries?.onRemove(component);
     if (_length == 0) {
       _elements.clear();
       _tombstones = 0;
+      // Nothing is left to hold on to, so drop the stale cache entries right
+      // away instead of keeping the removed components alive until the next
+      // add or query.
+      _queries?.compact(this);
     } else if (_tombstones >= _tombstoneCompactionThreshold &&
         _tombstones * 2 >= _elements.length) {
       _compact();
+      _queries?.compact(this);
     }
     return true;
   }
@@ -255,12 +250,7 @@ class ComponentList extends Iterable<Component> {
     _tombstones = 0;
     _shiftCount++;
     _structureVersion++;
-    final caches = _queries?.values;
-    if (caches != null) {
-      for (final cache in caches) {
-        cache.data.clear();
-      }
-    }
+    _queries?.clear();
   }
 
   /// Restores the priority ordering after one or more elements have changed
@@ -273,6 +263,10 @@ class ComponentList extends Iterable<Component> {
   void _rebalance() {
     // Removes all tombstones, which makes the `element!` accesses safe.
     _compact();
+    // Not needed for correctness, since every read compacts as well, but it
+    // keeps [_QueryCacheStore.resort] from ordering entries that are about to
+    // be dropped, by an element index that they no longer have.
+    _queries?.compact(this);
     final elements = _elements;
     var isSorted = true;
     for (var i = 1; i < elements.length; i++) {
@@ -298,12 +292,7 @@ class ComponentList extends Iterable<Component> {
     for (var i = 0; i < elements.length; i++) {
       elements[i]!._containerIndex = i;
     }
-    final caches = _queries?.values;
-    if (caches != null) {
-      for (final cache in caches) {
-        cache.resort();
-      }
-    }
+    _queries?.resort();
   }
 
   /// Rewrites the backing list without its tombstones, restoring exact
@@ -331,23 +320,13 @@ class ComponentList extends Iterable<Component> {
 
   /// Whether type [C] has been registered as a queryable type.
   bool isRegistered<C extends Component>() {
-    return _queries?.containsKey(C) ?? false;
+    return _queries?.isRegistered<C>() ?? false;
   }
 
   /// Registers [C] as a queryable type, so that [query] can answer in
   /// constant time. Does nothing if the type is already registered.
   void register<C extends Component>() {
-    final queries = _queries ??= {};
-    if (queries.containsKey(C)) {
-      return;
-    }
-    final data = <C>[];
-    for (final element in _elements) {
-      if (element is C) {
-        data.add(element);
-      }
-    }
-    queries[C] = _QueryCache<C>(data);
+    (_queries ??= _QueryCacheStore()).register<C>(this);
   }
 
   /// All elements of type [C], in priority order, in constant time.
@@ -355,33 +334,27 @@ class ComponentList extends Iterable<Component> {
   /// The type [C] must have been [register]ed beforehand, unless [strictMode]
   /// is false, in which case the registration happens on the first query.
   Iterable<C> query<C extends Component>() {
-    final cache = _queries?[C];
-    if (cache == null) {
-      if (strictMode) {
-        throw StateError(
-          'Cannot query unregistered type $C. This list is in strict mode, '
-          'which requires register<$C>() to be called before the first '
-          'query<$C>(), so that the query cache is built at a controlled '
-          'moment (typically in onLoad) instead of in the middle of a frame. '
-          'To register types lazily instead, create the list with '
-          'strictMode: false.',
-        );
-      }
-      register<C>();
-      return query<C>();
+    final cached = _queries?.find<C>(this);
+    if (cached != null) {
+      return cached;
     }
-    // The cached list itself is returned, but typed as an Iterable to prevent
-    // accidental modification of the cache from the outside.
-    return cache.data as Iterable<C>;
+    if (strictMode) {
+      throw StateError(
+        'Cannot query unregistered type $C. This list is in strict mode, '
+        'which requires register<$C>() to be called before the first '
+        'query<$C>(), so that the query cache is built at a controlled '
+        'moment (typically in onLoad) instead of in the middle of a frame. '
+        'To register types lazily instead, create the list with '
+        'strictMode: false.',
+      );
+    }
+    register<C>();
+    return _queries!.find<C>(this)!;
   }
 
   @override
   Iterable<C> whereType<C>() {
-    final cache = _queries?[C];
-    if (cache != null) {
-      return cache.data as Iterable<C>;
-    }
-    return super.whereType<C>();
+    return _queries?.find<C>(this) ?? super.whereType<C>();
   }
 }
 
@@ -491,37 +464,5 @@ class _ReversedComponentListIterator implements Iterator<Component> {
     _index = -1;
     _current = null;
     return false;
-  }
-}
-
-/// A cached, always up-to-date result of `query<C>()`: the subset of the
-/// elements that are of type [C], in the same order as the main list.
-class _QueryCache<C extends Component> {
-  _QueryCache(this.data);
-
-  final List<C> data;
-
-  bool check(Component component) => component is C;
-
-  /// Inserts [component] into [data], keeping it ordered consistently with
-  /// the main backing list (which orders by priority).
-  void insertSorted(Component component) {
-    final list = data;
-    final index = component._containerIndex;
-    if (list.isEmpty || list.last._containerIndex < index) {
-      list.add(component as C);
-      return;
-    }
-    final insertionIndex = _partitionPoint(
-      list,
-      (element) => element._containerIndex < index,
-    );
-    list.insert(insertionIndex, component as C);
-  }
-
-  /// Re-sorts the cache after the main list has been re-sorted (at which
-  /// point every element's index is up to date again).
-  void resort() {
-    data.sort((a, b) => a._containerIndex - b._containerIndex);
   }
 }
