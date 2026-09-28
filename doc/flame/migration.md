@@ -971,6 +971,8 @@ As a consequence of this, a few things changed:
 - `RenderableTiledMap.render`, `update` and `handleResize` are no longer meant to be called
   directly, the map renders and updates as any other component. Where you rendered the map
   yourself, use `renderTree` and `updateTree` instead.
+- `TiledComponent.tileMap` is final, since the map is a child of the component. To show another
+  map, replace the `TiledComponent`.
 - Layers that are not visible in Tiled are still loaded, so `renderableLayers` and the indices
   used by `setLayerOpacity` and `getLayerOpacity` now match `TiledMap.layers`. Toggling the
   visibility of a layer with `setLayerVisibility` works at runtime.

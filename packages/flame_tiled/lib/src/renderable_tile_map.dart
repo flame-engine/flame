@@ -14,6 +14,7 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flame_tiled/src/tile_stack.dart';
+import 'package:flame_tiled/src/tiled_component.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:tiled/tiled.dart';
@@ -59,6 +60,17 @@ class RenderableTiledMap extends Component {
 
   /// The target size for each tile in the tiled map.
   final Vector2 destTileSize;
+
+  /// The size of the rendered map, see [TiledComponent.computeSize].
+  late final Vector2 size = TiledComponent.computeSize(
+    map.orientation,
+    destTileSize,
+    map.tileWidth,
+    map.tileHeight,
+    map.width,
+    map.height,
+    map.staggerAxis,
+  );
 
   /// The camera that the parallax factors of the layers are calculated
   /// against.
@@ -505,6 +517,8 @@ class RenderableTiledMap extends Component {
   static final Vector2 _viewCenter = Vector2.zero();
   static final Vector2 _corner = Vector2.zero();
 
+  late final Rect _mapRect = Rect.fromLTWH(0, 0, size.x, size.y);
+
   /// Positions the layers for the view of the camera before rendering them.
   @override
   void renderTree(Canvas canvas) {
@@ -512,12 +526,7 @@ class RenderableTiledMap extends Component {
     final Rect visibleRect;
     if (camera == null) {
       _viewCenter.setZero();
-      visibleRect = Rect.fromLTWH(
-        0,
-        0,
-        map.width * destTileSize.x,
-        map.height * destTileSize.y,
-      );
+      visibleRect = _mapRect;
     } else {
       visibleRect = _visibleRectInMap(camera.visibleWorldRect);
       _viewCenter.setValues(visibleRect.center.dx, visibleRect.center.dy);
@@ -540,13 +549,11 @@ class RenderableTiledMap extends Component {
     var minY = double.infinity;
     var maxX = double.negativeInfinity;
     var maxY = double.negativeInfinity;
-    for (final corner in [
-      worldRect.topLeft,
-      worldRect.topRight,
-      worldRect.bottomLeft,
-      worldRect.bottomRight,
-    ]) {
-      _corner.setValues(corner.dx, corner.dy);
+    for (var i = 0; i < 4; i++) {
+      _corner.setValues(
+        i.isEven ? worldRect.left : worldRect.right,
+        i < 2 ? worldRect.top : worldRect.bottom,
+      );
       final local = space.absoluteToLocal(_corner);
       minX = min(minX, local.x);
       minY = min(minY, local.y);

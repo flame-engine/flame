@@ -7,7 +7,6 @@ import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/renderable_tile_map.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
 /// {@template _tiled_component}
@@ -19,22 +18,8 @@ import 'package:tiled/tiled.dart';
 /// {@endtemplate}
 class TiledComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
-  /// The map that this component renders.
-  ///
-  /// Assigning a new map replaces the previous one in the component tree and
-  /// resizes this component to fit the new map.
-  RenderableTiledMap get tileMap => _tileMap;
-  RenderableTiledMap _tileMap;
-
-  set tileMap(RenderableTiledMap value) {
-    if (identical(value, _tileMap)) {
-      return;
-    }
-    _tileMap.removeFromParent();
-    _tileMap = value;
-    super.size = _computeSize(value);
-    add(value);
-  }
+  /// The map that this component renders, which is a child of this component.
+  final RenderableTiledMap tileMap;
 
   /// This property **cannot** be reassigned at runtime. To make the
   /// [PositionComponent] larger or smaller, change its [scale].
@@ -59,29 +44,19 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
 
   /// {@macro _tiled_component}
   TiledComponent(
-    RenderableTiledMap tileMap, {
+    this.tileMap, {
     super.position,
     super.scale,
     super.angle,
     super.anchor,
-    super.children,
+    Iterable<Component>? children,
     super.priority,
     super.key,
-  }) : _tileMap = tileMap,
-       super(size: _computeSize(tileMap)) {
+  }) : super(size: tileMap.size) {
     add(tileMap);
-  }
-
-  static Vector2 _computeSize(RenderableTiledMap tileMap) {
-    return computeSize(
-      tileMap.map.orientation,
-      tileMap.destTileSize,
-      tileMap.map.tileWidth,
-      tileMap.map.tileHeight,
-      tileMap.map.width,
-      tileMap.map.height,
-      tileMap.map.staggerAxis,
-    );
+    if (children != null) {
+      addAll(children);
+    }
   }
 
   /// Loads a [TiledComponent] from a file.
@@ -146,7 +121,8 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     );
   }
 
-  @visibleForTesting
+  /// Computes the size of a map with the given properties when it is rendered
+  /// with [destTileSize].
   static Vector2 computeSize(
     MapOrientation? orientation,
     Vector2 destTileSize,

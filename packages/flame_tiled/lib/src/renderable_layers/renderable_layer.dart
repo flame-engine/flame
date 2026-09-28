@@ -9,6 +9,7 @@ import 'package:flame_tiled/src/renderable_layers/object_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/tile_layer.dart';
 import 'package:flame_tiled/src/tile_animation.dart';
 import 'package:flame_tiled/src/tile_atlas.dart';
+import 'package:flame_tiled/src/tiled_component.dart';
 import 'package:meta/meta.dart';
 import 'package:tiled/tiled.dart';
 
@@ -59,7 +60,9 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
     required this.map,
     required this.destTileSize,
     FilterQuality? filterQuality,
-  }) : filterQuality = filterQuality ?? FilterQuality.none;
+  }) : filterQuality = filterQuality ?? FilterQuality.none {
+    position.setValues(offsetX, offsetY);
+  }
 
   /// [load] is a factory method to create [RenderableLayer] by type of [layer].
   @internal
@@ -120,10 +123,10 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
     );
   }
 
-  /// The [GroupLayer] that this layer is nested in, if any.
-  GroupLayer? get parentLayer {
+  /// The group layer that this layer is nested in, if any.
+  RenderableLayer<Group>? get parentLayer {
     final parent = this.parent;
-    return parent is GroupLayer ? parent : null;
+    return parent is RenderableLayer<Group> ? parent : null;
   }
 
   /// Whether this layer, and the components added to it, are rendered.
@@ -166,15 +169,21 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
   /// The area of this layer, in its local coordinates, that is currently
   /// visible through the camera, or the area of the map when the map is
   /// rendered without a camera.
-  Rect get visibleRect =>
-      _visibleRect ??
-      Rect.fromLTWH(
-        0,
-        0,
-        map.width * destTileSize.x,
-        map.height * destTileSize.y,
-      );
+  Rect get visibleRect => _visibleRect ??= _mapRect;
   Rect? _visibleRect;
+
+  Rect get _mapRect {
+    final size = TiledComponent.computeSize(
+      map.orientation,
+      destTileSize,
+      map.tileWidth,
+      map.tileHeight,
+      map.width,
+      map.height,
+      map.staggerAxis,
+    );
+    return Rect.fromLTWH(0, 0, size.x, size.y);
+  }
 
   /// Positions this layer for the current view of the camera, following the
   /// parallax scrolling rules of Tiled.
@@ -195,11 +204,12 @@ abstract class RenderableLayer<T extends Layer> extends PositionComponent {
   void updateView(Vector2 viewCenter, Rect visibleRect) {
     final parentParallaxX = parentLayer?.parallaxX ?? 1;
     final parentParallaxY = parentLayer?.parallaxY ?? 1;
-    position.setValues(
-      offsetX + viewCenter.x * parentParallaxX * (1 - layer.parallaxX),
-      offsetY + viewCenter.y * parentParallaxY * (1 - layer.parallaxY),
-    );
-    _visibleRect = visibleRect.shift(Offset(-position.x, -position.y));
+    final x = offsetX + viewCenter.x * parentParallaxX * (1 - layer.parallaxX);
+    final y = offsetY + viewCenter.y * parentParallaxY * (1 - layer.parallaxY);
+    if (position.x != x || position.y != y) {
+      position.setValues(x, y);
+    }
+    _visibleRect = visibleRect.shift(Offset(-x, -y));
   }
 
   @override

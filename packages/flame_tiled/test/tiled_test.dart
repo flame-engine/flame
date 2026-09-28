@@ -1258,6 +1258,22 @@ void main() {
       expect(pixelAt(pixels, 24, 8), [0, 0, 255, 255]);
     });
 
+    test('children of the TiledComponent render on top of the map', () async {
+      final blue = RectangleComponent(
+        size: Vector2(32, 16),
+        paint: Paint()..color = const Color(0xff0000ff),
+      );
+      final component = TiledComponent(overlapMap, children: [blue]);
+      final canvasRecorder = PictureRecorder();
+      component.renderTree(Canvas(canvasRecorder));
+      final picture = canvasRecorder.endRecording();
+      final image = await picture.toImageSafe(32, 16);
+      final pixels = (await image.toByteData())!.buffer.asUint8List();
+
+      expect(pixelAt(pixels, 8, 8), [0, 0, 255, 255]);
+      expect(pixelAt(pixels, 24, 8), [0, 0, 255, 255]);
+    });
+
     test('components added to a layer follow the offset of the layer', () {
       final layer = overlapMap.getRenderableLayer('green_tile-top')!;
       final marker = PositionComponent(position: Vector2(4, 2));
