@@ -1,7 +1,7 @@
 import 'package:flame_cli/src/commands/flame_command.dart';
 import 'package:flame_cli/src/component_tree.dart';
-import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:io/io.dart';
 
 /// Prints the component tree of the game, with the id of every component.
 class TreeCommand extends FlameCommand {
@@ -19,6 +19,6 @@ class TreeCommand extends FlameCommand {
     final response = await connection.call('getComponentTree');
     final tree = response['component_tree'] as Map<String, dynamic>;
     out.write(formatComponentTree(tree));
-    return ExitCodes.success;
+    return ExitCode.success.code;
   }
 }

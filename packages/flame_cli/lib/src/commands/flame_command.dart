@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
 import 'package:flame_cli/src/vm_service_uri_file.dart';
+import 'package:io/io.dart';
 
 /// A command that talks to a running game.
 ///
@@ -51,7 +51,7 @@ abstract class FlameCommand extends Command<int> {
     const noGameFound = FlameCliException(
       'No running game was found. Start the game with `flame run`, or pass '
       'the Dart VM Service URI of the game with --uri.',
-      exitCode: ExitCodes.unavailable,
+      exitCode: ExitCode.unavailable,
     );
     final file = findVmServiceUriFile(workingDirectory);
     if (file == null) {

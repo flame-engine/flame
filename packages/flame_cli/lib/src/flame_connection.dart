@@ -1,5 +1,5 @@
-import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
+import 'package:io/io.dart';
 import 'package:vm_service/vm_service.dart' hide Error;
 import 'package:vm_service/vm_service_io.dart';
 
@@ -27,7 +27,7 @@ class FlameConnection {
       Error.throwWithStackTrace(
         FlameCliException(
           'Could not connect to the Dart VM Service at $uri: $error',
-          exitCode: ExitCodes.unavailable,
+          exitCode: ExitCode.unavailable,
         ),
         stackTrace,
       );
@@ -56,7 +56,7 @@ class FlameConnection {
       Error.throwWithStackTrace(
         FlameCliException(
           'Could not list the isolates of the Dart VM Service at $uri: $error',
-          exitCode: ExitCodes.unavailable,
+          exitCode: ExitCode.unavailable,
         ),
         stackTrace,
       );
@@ -66,7 +66,7 @@ class FlameConnection {
     throw const FlameCliException(
       'No Flame game was found. Make sure that the game is running in debug '
       'mode and that a FlameGame has been created.',
-      exitCode: ExitCodes.unavailable,
+      exitCode: ExitCode.unavailable,
     );
   }
 
@@ -81,7 +81,7 @@ class FlameConnection {
       throw FlameCliException(
         'The running game does not support $extension, update Flame to the '
         'latest version.',
-        exitCode: ExitCodes.unavailable,
+        exitCode: ExitCode.unavailable,
       );
     }
 
@@ -97,8 +97,8 @@ class FlameConnection {
         FlameCliException(
           error.details ?? error.message,
           exitCode: error.code == RPCErrorKind.kInvalidParams.code
-              ? ExitCodes.data
-              : ExitCodes.software,
+              ? ExitCode.data
+              : ExitCode.software,
         ),
         stackTrace,
       );
@@ -106,7 +106,7 @@ class FlameConnection {
       Error.throwWithStackTrace(
         FlameCliException(
           'The game is no longer running: ${error.sentinel.valueAsString}',
-          exitCode: ExitCodes.unavailable,
+          exitCode: ExitCode.unavailable,
         ),
         stackTrace,
       );

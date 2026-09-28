@@ -96,7 +96,7 @@ void main() {
       '--vmservice-out-file=uri.txt',
     ]);
 
-    expect(exitCode, ExitCodes.usage);
+    expect(exitCode, ExitCode.usage.code);
     expect(err.toString(), contains('sets --vmservice-out-file itself'));
   });
 
@@ -107,7 +107,7 @@ void main() {
       ),
     );
 
-    expect(await runner.run(['run']), ExitCodes.unavailable);
+    expect(await runner.run(['run']), ExitCode.unavailable.code);
     expect(err.toString(), contains('Make sure that Flutter is installed'));
   });
 }

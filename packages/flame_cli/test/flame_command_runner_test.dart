@@ -26,13 +26,13 @@ void main() {
   tearDown(() => directory.deleteSync(recursive: true));
 
   test('fails with a usage error for an unknown command', () async {
-    expect(await runner.run(['unknown']), ExitCodes.usage);
+    expect(await runner.run(['unknown']), ExitCode.usage.code);
     expect(err.toString(), contains('Could not find a command named'));
   });
 
   for (final command in ['snapshot', 'tree']) {
     test('$command asks for flame run or --uri without a game', () async {
-      expect(await runner.run([command]), ExitCodes.unavailable);
+      expect(await runner.run([command]), ExitCode.unavailable.code);
       expect(err.toString(), contains('Start the game with `flame run`'));
     });
   }
@@ -46,7 +46,7 @@ void main() {
       '0',
     ]);
 
-    expect(exitCode, ExitCodes.usage);
+    expect(exitCode, ExitCode.usage.code);
     expect(err.toString(), contains('--pixel-ratio has to be a positive'));
   });
 
@@ -59,14 +59,14 @@ void main() {
       'Infinity',
     ]);
 
-    expect(exitCode, ExitCodes.usage);
+    expect(exitCode, ExitCode.usage.code);
     expect(err.toString(), contains('--pixel-ratio has to be a positive'));
   });
 
   test('reports when the game cannot be reached', () async {
     final exitCode = await runner.run(['tree', '--uri', _unreachableUri]);
 
-    expect(exitCode, ExitCodes.unavailable);
+    expect(exitCode, ExitCode.unavailable.code);
     expect(err.toString(), contains('Could not connect'));
   });
 
@@ -81,7 +81,7 @@ void main() {
       workingDirectory: child,
     );
 
-    expect(await runner.run(['tree']), ExitCodes.unavailable);
+    expect(await runner.run(['tree']), ExitCode.unavailable.code);
     expect(err.toString(), contains('Could not connect'));
     expect(err.toString(), contains('The URI was read from'));
   });

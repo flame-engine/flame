@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:args/command_runner.dart';
-import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/vm_service_uri_file.dart';
+import 'package:io/io.dart';
 
 /// Starts a process, with the same signature as [Process.start].
 typedef ProcessStarter =
@@ -72,7 +72,7 @@ class RunCommand extends Command<int> {
         FlameCliException(
           'Could not start `flutter run`: ${error.message}\n'
           'Make sure that Flutter is installed and on your PATH.',
-          exitCode: ExitCodes.unavailable,
+          exitCode: ExitCode.unavailable,
         ),
         stackTrace,
       );

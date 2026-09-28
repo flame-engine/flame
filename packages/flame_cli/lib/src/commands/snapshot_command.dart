@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:flame_cli/src/commands/flame_command.dart';
-import 'package:flame_cli/src/exit_codes.dart';
 import 'package:flame_cli/src/flame_cli_exception.dart';
 import 'package:flame_cli/src/flame_connection.dart';
+import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 
 /// Renders the whole game, or a single component, to a PNG image.
@@ -72,7 +72,7 @@ class SnapshotCommand extends FlameCommand {
     if (snapshot.isEmpty) {
       throw const FlameCliException(
         'The game returned an empty snapshot.',
-        exitCode: ExitCodes.data,
+        exitCode: ExitCode.data,
       );
     }
 
@@ -86,12 +86,12 @@ class SnapshotCommand extends FlameCommand {
         FlameCliException(
           'Could not write the snapshot to ${file.path}: '
           '${error.osError?.message ?? error.message}',
-          exitCode: ExitCodes.cantCreate,
+          exitCode: ExitCode.cantCreate,
         ),
         stackTrace,
       );
     }
     out.writeln(file.absolute.path);
-    return ExitCodes.success;
+    return ExitCode.success.code;
   }
 }
