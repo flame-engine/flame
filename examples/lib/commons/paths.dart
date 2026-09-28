@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:examples/commons/collidable_path_component.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/palette.dart';
@@ -10,6 +10,10 @@ import 'package:flame_test/test_paths.dart';
 final _rnd = Random();
 
 const shapePriority = 1;
+
+final whiteStroke = Paint()
+  ..color = const Color(0xffffffff)
+  ..style = PaintingStyle.stroke;
 
 final pathStroke = Paint()
   ..color = BasicPalette.blue.color
@@ -119,17 +123,23 @@ PathComponent pathComponentWith(
   // original aspect ratio.
   final path = resize ? srcPath.resizeTo(size, keepRatio: true) : srcPath;
 
-  // Create a component that displays the whole path: by default, the polygons
-  // that are fully enclosed in the largest one are left out of the hitbox.
-  return CollidablePathComponent(
+  // The hitbox follows the same path as the component, so that the component
+  // collides and reacts to gestures as a whole. By default, the polygons that
+  // lie inside of the largest one are left out of both.
+  final hitbox = PathHitbox(path: path, filter: filter ?? true);
+  if (renderHitboxes ?? false) {
+    hitbox
+      ..renderShape = true
+      ..paint = contourPaint ?? whiteStroke;
+  }
+  return PathComponent(
     path: path,
     priority: shapePriority,
     position: position ?? Vector2.zero(),
     anchor: anchor ?? Anchor.center,
     paint: paint ?? pathStroke,
     paintLayers: paintLayers,
-    contourPaint: contourPaint,
-    renderHitboxes: renderHitboxes ?? false,
     filter: filter ?? true,
+    children: [hitbox],
   );
 }

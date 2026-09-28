@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:examples/commons/collidable_path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:examples/commons/rounded_rect_component.dart';
 import 'package:flame/collisions.dart';
@@ -401,7 +400,7 @@ class RaysInShapeWorld extends World
       radius: _componentSize.x * 0.6,
       anchor: Anchor.center,
       position: Vector2.zero(),
-      paint: hitboxStroke,
+      paint: whiteStroke,
       children: [CircleHitbox()],
     ),
     RectangleComponent(
@@ -409,7 +408,7 @@ class RaysInShapeWorld extends World
       size: _componentSize,
       anchor: Anchor.center,
       position: Vector2.zero(),
-      paint: hitboxStroke,
+      paint: whiteStroke,
       children: [RectangleHitbox()],
     ),
     PositionComponent(
@@ -427,7 +426,7 @@ class RaysInShapeWorld extends World
             anchor: Anchor.center,
             position: Vector2.zero(),
           )
-          ..paint = hitboxStroke
+          ..paint = whiteStroke
           ..renderShape = true,
       ],
     ),

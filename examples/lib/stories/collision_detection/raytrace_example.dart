@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:examples/commons/collidable_path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -43,6 +42,7 @@ bounce on will appear.
   @override
   Future<void> onLoad() async {
     final halfCanvas = Size.square(min(canvasSize.x, canvasSize.y) / 2);
+    final canvasPath = randomPath(halfCanvas * 2);
     addAll([
       ScreenHitbox(),
       if (random.nextDouble() <= 0.5)
@@ -52,12 +52,14 @@ bounce on will appear.
           children: [CircleHitbox()],
         )
       else
-        CollidablePathComponent(
-          path: randomPath(halfCanvas * 2),
+        // The rays should bounce on the inner contours too, so the hitbox
+        // keeps every polygon of the path.
+        PathComponent(
+          path: canvasPath,
           position: halfCanvas.toVector2(),
           anchor: .center,
           paint: boxPaint,
-          filter: false,
+          children: [PathHitbox(path: canvasPath, filter: false)],
         ),
     ]);
   }
@@ -73,6 +75,7 @@ bounce on will appear.
     }
     _timePassed = 0;
     if (extraChildren.isEmpty) {
+      final extraPath = path;
       addAll(
         extraChildren..addAll(
           [
@@ -96,12 +99,12 @@ bounce on will appear.
               anchor: Anchor.center,
               children: [CircleHitbox()],
             ),
-            CollidablePathComponent(
-              path: path,
+            PathComponent(
+              path: extraPath,
               position: Vector2.all(350),
               anchor: Anchor.center,
               paint: boxPaint,
-              filter: false,
+              children: [PathHitbox(path: extraPath, filter: false)],
             ),
             RectangleComponent(
               position: Vector2.all(500),

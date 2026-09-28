@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:examples/commons/collidable_path_component.dart';
 import 'package:examples/commons/paths.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -83,7 +82,7 @@ class _GestureHitboxesWorld extends World
   }
 }
 
-class MyPathComponent extends CollidablePathComponent
+class MyPathComponent extends PathComponent
     with TapCallbacks, HoverCallbacks, GestureHitboxes {
   late final Color baseColor;
 
@@ -92,7 +91,15 @@ class MyPathComponent extends CollidablePathComponent
     super.position,
     super.scale,
     super.angle,
-  }) : super(anchor: .center, renderHitboxes: true);
+  }) : super(anchor: .center) {
+    // The hitbox follows the same path, and it is rendered so that you can
+    // see the polygons that receive the gestures.
+    add(
+      PathHitbox(path: path)
+        ..renderShape = true
+        ..paint = whiteStroke,
+    );
+  }
 
   @override
   Future<void> onLoad() async {
