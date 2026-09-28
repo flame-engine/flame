@@ -52,7 +52,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - run: npm install -g markdownlint-cli@^0.49.0
+      - run: npm install -g markdownlint-cli@~0.49.0
       - run: markdownlint . -p .markdownlintignore -c .markdownlint.yaml
 
   dcm:
