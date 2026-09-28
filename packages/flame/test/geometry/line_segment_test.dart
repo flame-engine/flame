@@ -100,5 +100,59 @@ void main() {
       final lineB = LineSegment(Vector2(-25, -25), Vector2(-25 + 1 / 18, 25));
       expect(lineA.intersections(lineB), isNotEmpty);
     });
+
+    group('circleIntersections', () {
+      test('secant segment crosses the circle twice', () {
+        final segment = LineSegment(Vector2(0, 4), Vector2(6, 4));
+        expect(
+          segment.circleIntersections(Vector2(3, 4), 2),
+          unorderedEquals([Vector2(1, 4), Vector2(5, 4)]),
+        );
+      });
+
+      test('segment that ends inside of the circle crosses it once', () {
+        final segment = LineSegment(Vector2(0, 4), Vector2(3, 4));
+        expect(
+          segment.circleIntersections(Vector2(3, 4), 2),
+          [Vector2(1, 4)],
+        );
+      });
+
+      test('tangent segment gives the point where it touches twice', () {
+        final segment = LineSegment(Vector2(-5, 2), Vector2(5, 2));
+        expect(
+          segment.circleIntersections(Vector2.zero(), 2),
+          [Vector2(0, 2), Vector2(0, 2)],
+        );
+      });
+
+      test('segment inside of the circle has no intersections', () {
+        final segment = LineSegment(Vector2(-1, 0), Vector2(1, 0));
+        expect(segment.circleIntersections(Vector2.zero(), 2), isEmpty);
+      });
+
+      test('segment outside of the circle has no intersections', () {
+        final center = Vector2.zero();
+        expect(
+          LineSegment(
+            Vector2(5, -5),
+            Vector2(5, 5),
+          ).circleIntersections(center, 1),
+          isEmpty,
+        );
+        expect(
+          LineSegment(
+            Vector2(2, 0),
+            Vector2(5, 0),
+          ).circleIntersections(center, 1),
+          isEmpty,
+        );
+      });
+
+      test('start of the segment on the edge of the circle is not counted', () {
+        final segment = LineSegment(Vector2(2, 0), Vector2(5, 0));
+        expect(segment.circleIntersections(Vector2.zero(), 2), isEmpty);
+      });
+    });
   });
 }
