@@ -26,7 +26,10 @@ void main() {
     }
 
     List<String> layOut(List<InlineTextNode> nodes, double width) {
-      return layOutParagraph(nodes, width).lines.map((l) => l.trim()).toList();
+      return layOutParagraph(
+        nodes,
+        width,
+      ).lines.map((line) => line.trim()).toList();
     }
 
     test('breaks between words', () {

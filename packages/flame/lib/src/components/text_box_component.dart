@@ -84,7 +84,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
 
   @visibleForTesting
   final List<String> lines = [];
-  double _maxLineWidth = 0.0;
   late double _lineHeight;
   late int _totalLines;
 
@@ -201,18 +200,14 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     final textPaint = textRenderer as TextPaint;
     // A dedicated painter is used so that the wrapped layout does not leak
     // into the painter that TextPaint caches for this string.
-    final textPainter = TextPainter(
-      text: TextSpan(text: text, style: textPaint.style),
+    final paragraph = ParagraphTextElement.layout(
+      TextSpan(text: text, style: textPaint.style),
+      maxWidth: availableWidth,
       textDirection: textPaint.textDirection,
-    )..layout(maxWidth: availableWidth);
-    final paragraph = ParagraphTextElement(textPainter);
+    );
 
     lines.addAll(paragraph.lines);
-    final lineMetricsList = paragraph.lineMetrics;
-    for (final lineMetrics in lineMetricsList) {
-      _updateMaxWidth(lineMetrics.width);
-    }
-    _lineHeight = lineMetricsList.firstOrNull?.height ?? 0;
+    _lineHeight = paragraph.lineMetrics.firstOrNull?.height ?? 0;
     _totalLines = lines.length;
     paragraph.dispose();
   }
@@ -227,7 +222,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
       final metrics = textRenderer.getLineMetrics(possibleLine);
       lineHeight = max(lineHeight, metrics.height);
 
-      _updateMaxWidth(metrics.width);
       final bool canAppend;
       if (metrics.width <= availableWidth) {
         canAppend = lines.isNotEmpty;
@@ -247,12 +241,6 @@ class TextBoxComponent<T extends TextRenderer> extends TextComponent {
     }
     _totalLines = lines.length;
     _lineHeight = lineHeight;
-  }
-
-  void _updateMaxWidth(double w) {
-    if (w > _maxLineWidth) {
-      _maxLineWidth = w;
-    }
   }
 
   double get totalCharTime => text.length * boxConfig.timePerChar;

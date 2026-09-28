@@ -18,8 +18,8 @@ abstract class TextBlockNode extends BlockNode {
 
   /// Converts this node into a [BlockElement].
   ///
-  /// The inline content is laid out as a single paragraph by Flutter, which
-  /// takes care of line breaking, alignment, bidirectional text, kerning and
+  /// The inline content is laid out as a single left-to-right paragraph by
+  /// Flutter, which takes care of line breaking, alignment, kerning and
   /// ligatures across differently styled spans.
   ///
   /// All late variables must be initialized prior to calling this method.
@@ -29,21 +29,23 @@ abstract class TextBlockNode extends BlockNode {
     final contentWidth = max(blockWidth - style.padding.horizontal, 0.0);
     final textAlign = style.textAlign ?? TextAlign.left;
 
-    final textPainter = TextPainter(
-      text: child.toInlineSpan(),
+    final paragraph = ParagraphTextElement.layout(
+      child.toInlineSpan(),
+      maxWidth: contentWidth,
       textAlign: textAlign,
-      textDirection: TextDirection.ltr,
-    )..layout(maxWidth: contentWidth);
-
-    final paragraph = ParagraphTextElement(textPainter);
+    );
     final dx =
         style.padding.left +
         (contentWidth - paragraph.width) * _relativeOffset(textAlign);
     paragraph.translate(dx, style.padding.top);
 
     final blockHeight = paragraph.height + style.padding.vertical;
-    final bg = makeBackground(style.background, blockWidth, blockHeight);
-    final elements = bg == null ? [paragraph] : [bg, paragraph];
+    final background = makeBackground(
+      style.background,
+      blockWidth,
+      blockHeight,
+    );
+    final elements = background == null ? [paragraph] : [background, paragraph];
     return GroupElement(
       width: blockWidth,
       height: blockHeight,

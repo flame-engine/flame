@@ -14,6 +14,20 @@ class ParagraphTextElement extends TextElement {
   /// Wraps a [textPainter] that has already had `layout` called on it.
   ParagraphTextElement(this._textPainter);
 
+  /// Lays out [text] within [maxWidth] and wraps the resulting painter.
+  ParagraphTextElement.layout(
+    InlineSpan text, {
+    required double maxWidth,
+    TextAlign textAlign = TextAlign.start,
+    TextDirection textDirection = TextDirection.ltr,
+  }) : this(
+         TextPainter(
+           text: text,
+           textAlign: textAlign,
+           textDirection: textDirection,
+         )..layout(maxWidth: maxWidth),
+       );
+
   final TextPainter _textPainter;
   Offset _offset = Offset.zero;
 
