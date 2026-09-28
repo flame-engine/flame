@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/src/flame.dart';
@@ -171,16 +170,16 @@ abstract mixin class Game {
   /// of a FlameGame, to receive components.
   bool get hasLayout => _size != null;
 
-  /// Whether the game has an event-handling component at the given [position].
+  /// Whether the game should consume pointer events at the given [position],
+  /// rather than letting them through to the Flutter widgets behind it.
   ///
-  /// Used by [GameRenderBox] for hit testing to determine if pointer events
-  /// should be consumed by the game or passed through to Flutter widgets
-  /// behind it.
+  /// Only consulted when the [GameWidget] is built with
+  /// `HitTestBehavior.deferToChild`; the other behaviors decide without asking
+  /// the game.
   ///
-  /// The default returns `true`, meaning games that directly extend [Game]
-  /// will catch all events on their entire surface. [FlameGame] overrides this
-  /// to only report a hit when a component with event callbacks
-  /// (e.g. [TapCallbacks]) exists at the given position.
+  /// The default returns `true`, so the game is opaque across its whole
+  /// surface. To be transparent wherever no component handles input, add the
+  /// `DeferHitTestToComponents` mixin, or override this with your own rule.
   bool containsEventHandlerAt(Vector2 position) => true;
 
   /// Returns the game background color.

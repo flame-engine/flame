@@ -29,15 +29,15 @@ There are three possible values from Flutter's `HitTestBehavior`:
   preventing any widgets behind it from receiving them. This is the classic behavior where the game
   acts as a solid layer.
 
-- **`HitTestBehavior.deferToChild`**: The game only intercepts events at positions where a component
-  with event callbacks (e.g. `TapCallbacks`) exists. Events at positions with no interactive
-  components pass through to widgets behind the `GameWidget`. This is useful when layering a game on
-  top of Flutter UI and you want the underlying widgets to remain interactive in areas the game
-  doesn't need to handle.
+- **`HitTestBehavior.deferToChild`**: The game is asked, position by position, whether the event is
+  its own, by calling `containsEventHandlerAt`. Events it declines pass through to widgets behind
+  the `GameWidget`. This is useful when layering a game on top of Flutter UI and you want the
+  underlying widgets to remain interactive in areas the game doesn't need to handle. See
+  [Deciding what the game absorbs](#deciding-what-the-game-absorbs) below, since the default answer
+  is "everything".
 
-- **`HitTestBehavior.translucent`**: The game receives events where it has event-handling
-  components, but always allows widgets behind it to be hit-tested as well. Both the game and the
-  widgets behind it can receive the same event.
+- **`HitTestBehavior.translucent`**: The game absorbs events on its entire surface, and the widgets
+  behind it are hit-tested as well, so both can receive the same event.
 
 
 ### Allowing taps to pass through
@@ -69,15 +69,33 @@ Widget build(BuildContext context) {
 }
 ```
 
-In this setup, tapping an area with no interactive game components will reach the `ElevatedButton`
-behind the game. Tapping a game component that uses `TapCallbacks` will be handled by the game
-instead.
+On its own this is not enough: `deferToChild` asks the game which positions are its own, and a game
+answers "all of them" unless told otherwise. Add the `DeferHitTestToComponents` mixin so it answers
+based on its components:
 
-```{note}
-When using `deferToChild` or `translucent`, `FlameGame` determines whether a
-position has an interactive component by traversing the component tree via
-`componentsAtPoint`, and treating any component that implements
-`PointerInputCallbacks` as interactive. Games that directly extend the
-low-level `Game` class report a hit on their entire surface by default;
-override `containsEventHandlerAt` to customize this.
+```dart
+class MyGame extends FlameGame with DeferHitTestToComponents {}
 ```
+
+With both in place, tapping an area with no interactive game components reaches the
+`ElevatedButton` behind the game, while tapping a component that uses `TapCallbacks` is handled by
+the game.
+
+
+### Deciding what the game absorbs
+
+`containsEventHandlerAt` answers, for a single position, whether the game wants the event. It is
+only consulted under `deferToChild`; `opaque` and `translucent` decide without asking.
+
+By default it returns `true` everywhere, which is why a game is opaque until you opt out. There are
+two ways to change that:
+
+- add the `DeferHitTestToComponents` mixin, which walks the components at that point and reports a
+  hit if any of them implements `PointerInputCallbacks` (which every positional callbacks mixin
+  does);
+- or override `containsEventHandlerAt` with your own rule, for instance a fixed rectangle, which
+  avoids the per-event tree walk that the mixin costs.
+
+Note that a `FlameGame` which handles pointer events itself, by mixing in something like
+`TapCallbacks` directly, is interactive across its whole surface; the mixin has nothing to defer in
+that case and asserts.
