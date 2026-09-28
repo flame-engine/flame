@@ -1737,16 +1737,17 @@ void main() {
       );
 
       testWithFlameGame(
-        'descendants() throws when children are reordered during iteration',
+        'descendants() throws when the container being walked is reordered',
         (game) async {
           final parent = Component();
           await game.world.ensureAdd(parent);
-          await parent.ensureAddAll([Component(), Component()]);
+          final firstChild = Component();
+          await parent.ensureAddAll([firstChild, Component()]);
 
           expect(
             () {
               for (final component in game.world.descendants()) {
-                if (component == parent) {
+                if (component == firstChild) {
                   parent.add(Component(priority: -1));
                   game.update(0);
                 }
@@ -1754,6 +1755,47 @@ void main() {
             },
             throwsConcurrentModificationError,
           );
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() allows reordering the children of the component that '
+        'was just emitted',
+        (game) async {
+          final parent = Component();
+          await game.world.ensureAdd(parent);
+          await parent.ensureAddAll([Component(), Component()]);
+          final inserted = Component(priority: -1);
+
+          final visited = <Component>[];
+          for (final component in game.world.descendants()) {
+            visited.add(component);
+            if (component == parent) {
+              parent.add(inserted);
+              game.update(0);
+            }
+          }
+          expect(visited, [parent, inserted, ...parent.children.skip(1)]);
+        },
+      );
+
+      testWithFlameGame(
+        'descendants() does not touch the tree before iteration starts',
+        (game) async {
+          final parent = Component();
+          await game.world.ensureAdd(parent);
+          await parent.ensureAddAll([Component(), Component()]);
+
+          for (final reversed in [false, true]) {
+            final iterator = parent.descendants(reversed: reversed).iterator;
+            parent.add(Component(priority: -1));
+            game.update(0);
+            final visited = <Component>[];
+            while (iterator.moveNext()) {
+              visited.add(iterator.current);
+            }
+            expect(visited.length, parent.children.length);
+          }
         },
       );
 

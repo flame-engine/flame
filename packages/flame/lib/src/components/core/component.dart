@@ -1534,34 +1534,43 @@ class _DescendantsIterable extends Iterable<Component> {
 ///
 /// The walk keeps one children iterator per level on an explicit stack, so the
 /// only allocations are the stack itself and the container iterators, no
-/// matter how deep the tree is.
+/// matter how deep the tree is. The children iterator of an emitted component
+/// is only created on the following [moveNext], after the caller has processed
+/// the component itself, so a caller may still reorder the children of the
+/// component it just received.
 class _DescendantsIterator implements Iterator<Component> {
-  _DescendantsIterator(this._root, {required bool includeSelf})
-    : _pendingRoot = includeSelf {
-    _push(_root);
-  }
+  _DescendantsIterator(Component root, {required bool includeSelf})
+    : _pendingRoot = includeSelf ? root : null,
+      _pendingPush = includeSelf ? null : root;
 
-  final Component _root;
+  /// The root, while it still has to be emitted.
+  Component? _pendingRoot;
+
+  /// The component whose children iterator has not been pushed yet.
+  Component? _pendingPush;
+
   final List<Iterator<Component>> _stack = [];
-  bool _pendingRoot;
   Component? _current;
 
   @override
   Component get current => _current!;
 
-  void _push(Component component) {
-    final children = component._children;
-    if (children != null && children.isNotEmpty) {
-      _stack.add(children.iterator);
-    }
-  }
-
   @override
   bool moveNext() {
-    if (_pendingRoot) {
-      _pendingRoot = false;
-      _current = _root;
+    final pendingRoot = _pendingRoot;
+    if (pendingRoot != null) {
+      _pendingRoot = null;
+      _pendingPush = pendingRoot;
+      _current = pendingRoot;
       return true;
+    }
+    final pendingPush = _pendingPush;
+    if (pendingPush != null) {
+      _pendingPush = null;
+      final children = pendingPush._children;
+      if (children != null && children.isNotEmpty) {
+        _stack.add(children.iterator);
+      }
     }
     final stack = _stack;
     while (stack.isNotEmpty) {
@@ -1569,7 +1578,7 @@ class _DescendantsIterator implements Iterator<Component> {
       if (iterator.moveNext()) {
         final component = iterator.current;
         _current = component;
-        _push(component);
+        _pendingPush = component;
         return true;
       }
       stack.removeLast();
@@ -1584,17 +1593,18 @@ class _DescendantsIterator implements Iterator<Component> {
 /// after its children.
 ///
 /// A parent is emitted when its children iterator is exhausted, so the walk
-/// keeps the parent of every open iterator on a parallel stack.
+/// keeps the parent of every open iterator on a parallel stack. The root's
+/// children iterator is only created on the first [moveNext], so the tree is
+/// not touched before iteration starts.
 class _ReversedDescendantsIterator implements Iterator<Component> {
   _ReversedDescendantsIterator(this._root, {required bool includeSelf})
-    : _pendingRoot = includeSelf {
-    _push(_root);
-  }
+    : _pendingRoot = includeSelf;
 
   final Component _root;
   final List<Component> _parents = [];
   final List<Iterator<Component>> _stack = [];
   bool _pendingRoot;
+  bool _started = false;
   Component? _current;
 
   @override
@@ -1612,6 +1622,10 @@ class _ReversedDescendantsIterator implements Iterator<Component> {
 
   @override
   bool moveNext() {
+    if (!_started) {
+      _started = true;
+      _push(_root);
+    }
     final stack = _stack;
     while (stack.isNotEmpty) {
       final iterator = stack.last;
