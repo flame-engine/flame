@@ -11,8 +11,7 @@ final Paint hitboxStroke = Paint()
 ///
 /// The hitbox polygons are rendered with the given contour paint when the
 /// hitboxes are rendered, which shows how closely they follow the path.
-class CollidablePathComponent extends PathComponent
-    with CollisionCallbacks, CollisionPassthrough {
+class CollidablePathComponent extends PathComponent with CollisionCallbacks {
   CollidablePathComponent({
     required super.path,
     super.sampling,
