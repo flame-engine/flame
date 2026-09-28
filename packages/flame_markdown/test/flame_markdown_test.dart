@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/text.dart';
 import 'package:flame_markdown/custom_attribute_syntax.dart';
 import 'package:flame_markdown/flame_markdown.dart';
+import 'package:flutter/painting.dart' show InlineSpan, TextSpan;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:markdown/markdown.dart';
 
@@ -27,13 +28,15 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-          (el) => _expectElementTextPainter(
-            el,
-            'Hello world!',
-            const TextStyle(
-              fontSize: 12,
-            ),
-          ),
+          (el) => _expectParagraphElement(el, (span) {
+            _expectSpanText(
+              span,
+              'Hello world!',
+              const TextStyle(
+                fontSize: 12,
+              ),
+            );
+          }),
         ]),
       ]);
     });
@@ -69,38 +72,40 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-          (el) => _expectElementGroupText(el, [
-            (el) => _expectElementTextPainter(
-              el,
-              'Flame',
-              const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
+          (el) => _expectParagraphElement(el, (span) {
+            _expectSpanGroup(span, [
+              (span) => _expectSpanText(
+                span,
+                'Flame',
+                const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              ': Hello, ',
-              const TextStyle(
-                fontSize: 12,
+              (span) => _expectSpanText(
+                span,
+                ': Hello, ',
+                const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              'world',
-              const TextStyle(
-                fontSize: 12,
-                fontStyle: FontStyle.italic,
+              (span) => _expectSpanText(
+                span,
+                'world',
+                const TextStyle(
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              '!',
-              const TextStyle(
-                fontSize: 12,
+              (span) => _expectSpanText(
+                span,
+                '!',
+                const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-          ]),
+            ]);
+          }),
         ]),
       ]);
     });
@@ -131,23 +136,25 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-          (el) => _expectElementGroupText(el, [
-            (el) => _expectElementTextPainter(
-              el,
-              'Flame: ',
-              const TextStyle(
-                fontSize: 12,
+          (el) => _expectParagraphElement(el, (span) {
+            _expectSpanGroup(span, [
+              (span) => _expectSpanText(
+                span,
+                'Flame: ',
+                const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              'var game = FlameGame();',
-              const TextStyle(
-                fontSize: 12,
-                fontFamily: 'monospace',
+              (span) => _expectSpanText(
+                span,
+                'var game = FlameGame();',
+                const TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'monospace',
+                ),
               ),
-            ),
-          ]),
+            ]);
+          }),
         ]),
       ]);
     });
@@ -191,54 +198,56 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-          (el) => _expectElementGroupText(el, [
-            (el) => _expectElementTextPainter(
-              el,
-              'This ',
-              const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            (el) => _expectElementGroupText(el, [
-              (el) => _expectElementTextPainter(
-                el,
-                'is ',
+          (el) => _expectParagraphElement(el, (span) {
+            _expectSpanGroup(span, [
+              (span) => _expectSpanText(
+                span,
+                'This ',
                 const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
                 ),
               ),
-              (el) => _expectElementTextPainter(
-                el,
-                'code',
+              (span) => _expectSpanGroup(span, [
+                (span) => _expectSpanText(
+                  span,
+                  'is ',
+                  const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                (span) => _expectSpanText(
+                  span,
+                  'code',
+                  const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+                (span) => _expectSpanText(
+                  span,
+                  ' inside italics',
+                  const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ]),
+              (span) => _expectSpanText(
+                span,
+                ' inside bold.',
                 const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontFamily: 'monospace',
                 ),
               ),
-              (el) => _expectElementTextPainter(
-                el,
-                ' inside italics',
-                const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ]),
-            (el) => _expectElementTextPainter(
-              el,
-              ' inside bold.',
-              const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ]),
+            ]);
+          }),
         ]),
       ]);
     });
@@ -375,45 +384,47 @@ void main() {
 
       _expectElementGroup(element, [
         (el) => _expectElementGroup(el, [
-          (el) => _expectElementGroupText(el, [
-            (el) => _expectElementTextPainter(
-              el,
-              'This one will be ',
-              const TextStyle(
-                fontSize: 12,
+          (el) => _expectParagraphElement(el, (span) {
+            _expectSpanGroup(span, [
+              (span) => _expectSpanText(
+                span,
+                'This one will be ',
+                const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              'red',
-              const TextStyle(
-                fontSize: 12,
-                color: Color(0xFFFF0000),
+              (span) => _expectSpanText(
+                span,
+                'red',
+                const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFFFF0000),
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              ' and this one will be ',
-              const TextStyle(
-                fontSize: 12,
+              (span) => _expectSpanText(
+                span,
+                ' and this one will be ',
+                const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              'blue',
-              const TextStyle(
-                fontSize: 12,
-                color: Color(0xFF0000FF),
+              (span) => _expectSpanText(
+                span,
+                'blue',
+                const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF0000FF),
+                ),
               ),
-            ),
-            (el) => _expectElementTextPainter(
-              el,
-              '.',
-              const TextStyle(
-                fontSize: 12,
+              (span) => _expectSpanText(
+                span,
+                '.',
+                const TextStyle(
+                  fontSize: 12,
+                ),
               ),
-            ),
-          ]),
+            ]);
+          }),
         ]),
       ]);
     });
@@ -543,25 +554,31 @@ void _expectElementGroup(
   }
 }
 
-void _expectElementGroupText(
+void _expectParagraphElement(
   TextElement element,
-  List<void Function(TextElement)> expectChildren,
+  void Function(InlineSpan) expectSpan,
 ) {
-  expect(element, isA<GroupTextElement>());
-  final group = element as GroupTextElement;
+  expect(element, isA<ParagraphTextElement>());
+  final paragraph = element as ParagraphTextElement;
+  expectSpan(paragraph.textPainter.text!);
+}
+
+void _expectSpanGroup(
+  InlineSpan span,
+  List<void Function(InlineSpan)> expectChildren,
+) {
+  expect(span, isA<TextSpan>());
+  final group = span as TextSpan;
+  expect(group.text, isNull);
   expect(group.children, hasLength(expectChildren.length));
   for (final (index, expectChild) in expectChildren.indexed) {
-    expectChild(group.children[index]);
+    expectChild(group.children![index]);
   }
 }
 
-void _expectElementTextPainter(
-  TextElement element,
-  String text,
-  TextStyle style,
-) {
-  expect(element, isA<TextPainterTextElement>());
-  final textPainterElement = element as TextPainterTextElement;
-  expect(textPainterElement.textPainter.text!.toPlainText(), text);
-  expect(textPainterElement.textPainter.text!.style, style);
+void _expectSpanText(InlineSpan span, String text, TextStyle style) {
+  expect(span, isA<TextSpan>());
+  final textSpan = span as TextSpan;
+  expect(textSpan.text, text);
+  expect(textSpan.style, style);
 }
