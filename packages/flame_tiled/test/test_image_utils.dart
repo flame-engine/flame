@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flame/extensions.dart';
+import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
 Future<Uint8List> renderMapToPng(
@@ -9,7 +10,7 @@ Future<Uint8List> renderMapToPng(
 ) async {
   final canvasRecorder = PictureRecorder();
   final canvas = Canvas(canvasRecorder);
-  component.tileMap.render(canvas);
+  component.tileMap.renderTree(canvas);
   final picture = canvasRecorder.endRecording();
 
   final size = component.size;
@@ -30,13 +31,25 @@ Future<Uint8List> renderMapRegionToPng(
   final canvasRecorder = PictureRecorder();
   final canvas = Canvas(canvasRecorder);
   canvas.translate(-region.left, -region.top);
-  map.render(canvas);
+  map.renderTree(canvas);
   final picture = canvasRecorder.endRecording();
 
   final image = await picture.toImageSafe(
     region.width.toInt(),
     region.height.toInt(),
   );
+  return imageToPng(image);
+}
+
+/// Renders the [game] the way it is shown on the screen, through its camera.
+Future<Uint8List> renderGameToPng(FlameGame game) async {
+  final canvasRecorder = PictureRecorder();
+  final canvas = Canvas(canvasRecorder);
+  game.render(canvas);
+  final picture = canvasRecorder.endRecording();
+
+  final size = game.canvasSize;
+  final image = await picture.toImageSafe(size.x.toInt(), size.y.toInt());
   return imageToPng(image);
 }
 

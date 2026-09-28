@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -15,12 +14,27 @@ import 'package:tiled/tiled.dart';
 /// A Flame [Component] to render a Tiled TiledMap.
 ///
 /// It uses a preloaded [RenderableTiledMap] to batch rendering calls into
-/// Sprite Batches.
+/// Sprite Batches. The map, and the layers of the map, are children of this
+/// component.
 /// {@endtemplate}
 class TiledComponent<T extends FlameGame> extends PositionComponent
     with HasGameRef<T> {
-  /// Map instance of this component.
-  RenderableTiledMap tileMap;
+  /// The map that this component renders.
+  ///
+  /// Assigning a new map replaces the previous one in the component tree and
+  /// resizes this component to fit the new map.
+  RenderableTiledMap get tileMap => _tileMap;
+  RenderableTiledMap _tileMap;
+
+  set tileMap(RenderableTiledMap value) {
+    if (identical(value, _tileMap)) {
+      return;
+    }
+    _tileMap.removeFromParent();
+    _tileMap = value;
+    super.size = _computeSize(value);
+    add(value);
+  }
 
   /// This property **cannot** be reassigned at runtime. To make the
   /// [PositionComponent] larger or smaller, change its [scale].
@@ -45,7 +59,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
 
   /// {@macro _tiled_component}
   TiledComponent(
-    this.tileMap, {
+    RenderableTiledMap tileMap, {
     super.position,
     super.scale,
     super.angle,
@@ -53,40 +67,21 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     super.children,
     super.priority,
     super.key,
-  }) : super(
-         size: computeSize(
-           tileMap.map.orientation,
-           tileMap.destTileSize,
-           tileMap.map.tileWidth,
-           tileMap.map.tileHeight,
-           tileMap.map.width,
-           tileMap.map.height,
-           tileMap.map.staggerAxis,
-         ),
-       );
-
-  @override
-  Future<void>? onLoad() async {
-    super.onLoad();
-    // Automatically use the first attached CameraComponent camera if it's not
-    // already set..
-    tileMap.camera ??= gameRef.children.query<CameraComponent>().firstOrNull;
+  }) : _tileMap = tileMap,
+       super(size: _computeSize(tileMap)) {
+    add(tileMap);
   }
 
-  @override
-  void update(double dt) {
-    tileMap.update(dt);
-  }
-
-  @override
-  void render(Canvas canvas) {
-    tileMap.render(canvas);
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    tileMap.handleResize(size);
+  static Vector2 _computeSize(RenderableTiledMap tileMap) {
+    return computeSize(
+      tileMap.map.orientation,
+      tileMap.destTileSize,
+      tileMap.map.tileWidth,
+      tileMap.map.tileHeight,
+      tileMap.map.width,
+      tileMap.map.height,
+      tileMap.map.staggerAxis,
+    );
   }
 
   /// Loads a [TiledComponent] from a file.
@@ -106,6 +101,9 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
   /// the hood uses `Canvas.drawAtlas` calls to render the tiles. This behavior
   /// can be changed by setting `useAtlas` to `false`. This will make the map
   /// be rendered with `Canvas.drawImageRect` calls instead.
+  ///
+  /// The parallax factors of the layers are calculated against the camera that
+  /// renders the map, pass a [camera] to use a specific one instead.
   static Future<TiledComponent> load(
     String fileName,
     Vector2 destTileSize, {
@@ -114,6 +112,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
     int? priority,
     bool? ignoreFlip,
     AssetBundle? bundle,
+    CameraComponent? camera,
     Images? images,
     bool Function(Tileset)? tsxPackingFilter,
     bool useAtlas = true,
@@ -132,6 +131,7 @@ class TiledComponent<T extends FlameGame> extends PositionComponent
         atlasMaxY: atlasMaxY,
         ignoreFlip: ignoreFlip,
         bundle: bundle,
+        camera: camera,
         images: images,
         tsxPackingFilter: tsxPackingFilter,
         useAtlas: useAtlas,

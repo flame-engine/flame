@@ -1,12 +1,9 @@
 import 'dart:collection';
 
-import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flame_tiled/src/mutable_rect.dart';
-import 'package:flame_tiled/src/renderable_layers/group_layer.dart';
-import 'package:flame_tiled/src/renderable_layers/renderable_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/hexagonal_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/isometric_tile_layer.dart';
 import 'package:flame_tiled/src/renderable_layers/tile_layers/orthogonal_tile_layer.dart';
@@ -35,7 +32,7 @@ import 'package:meta/meta.dart';
 /// {@endtemplate}
 @internal
 abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
-  late Paint _layerPaint;
+  late Paint _layerPaint = layerPaintFactory(opacity);
   final TiledAtlas tiledAtlas;
 
   /// Cached transform of every tile, indexed as
@@ -58,7 +55,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
 
   FlameTileLayer({
     required super.layer,
-    required super.parent,
     required super.map,
     required super.destTileSize,
     required this.tiledAtlas,
@@ -66,9 +62,7 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     required this.ignoreFlip,
     required this.layerPaintFactory,
     super.filterQuality,
-  }) {
-    _layerPaint = layerPaintFactory(opacity);
-  }
+  });
 
   @override
   void onOpacityChanged() {
@@ -78,7 +72,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   /// {@macro flame_tile_layer}
   static FlameTileLayer load({
     required TileLayer layer,
-    required GroupLayer? parent,
     required TiledMap map,
     required Vector2 destTileSize,
     required Map<Tile, TileFrames> animationFrames,
@@ -96,7 +89,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
     return switch (mapOrientation) {
       MapOrientation.isometric => IsometricTileLayer(
         layer: layer,
-        parent: parent,
         map: map,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
@@ -107,7 +99,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
       ),
       MapOrientation.staggered => StaggeredTileLayer(
         layer: layer,
-        parent: parent,
         map: map,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
@@ -118,7 +109,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
       ),
       MapOrientation.hexagonal => HexagonalTileLayer(
         layer: layer,
-        parent: parent,
         map: map,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
@@ -129,7 +119,6 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
       ),
       MapOrientation.orthogonal => OrthogonalTileLayer(
         layer: layer,
-        parent: parent,
         map: map,
         destTileSize: destTileSize,
         tiledAtlas: atlas,
@@ -149,22 +138,9 @@ abstract class FlameTileLayer extends RenderableLayer<TileLayer> {
   }
 
   @override
-  void render(Canvas canvas, CameraComponent? camera) {
-    if (tiledAtlas.batch == null) {
-      return;
-    }
-
-    canvas.save();
-    canvas.translate(offsetX, offsetY);
-    if (camera != null) {
-      applyParallaxOffset(canvas, camera);
-    }
-    tiledAtlas.batch!.render(canvas, paint: _layerPaint);
-    canvas.restore();
+  void render(Canvas canvas) {
+    tiledAtlas.batch?.render(canvas, paint: _layerPaint);
   }
-
-  @override
-  void handleResize(Vector2 canvasSize) {}
 
   @protected
   void addAnimation(Tile tile, Tileset tileset, MutableRect source) {
