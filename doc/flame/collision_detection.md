@@ -298,6 +298,38 @@ follows the outline closely enough for your game. The contour is walked when the
 so create it once and not in every tick.
 
 
+### PathHitbox
+
+A `PathHitbox` follows all the closed contours of a `Path` at once, with one polygon for each of
+them, where `PolygonHitbox.fromPath` follows a single contour. It is one hitbox, so it collides,
+contains points and is hit by rays as a whole, whichever of its polygons is involved, and it reports
+one collision to its parent even when several of its polygons touch the other hitbox. A ray hits
+the nearest of the polygons.
+
+The `PathHitbox` has the same constructor as the [](components/shape_components.md#pathcomponent),
+see that section for the `sampling`, `tolerance` and `filter` arguments, and it takes the
+`collisionType` like the other hitboxes. When rendered, it draws its polygons and not the path, so
+that you can see what actually collides:
+
+```dart
+class Spaceship extends SpriteComponent with CollisionCallbacks {
+  Spaceship(this.outline);
+
+  final Path outline;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    add(PathHitbox(path: outline, sampling: 2));
+  }
+}
+```
+
+Every polygon takes part in the collision detection, so a path with many contours or many vertices
+costs accordingly. Keep the `filter` on unless the inner contours matter, and use the highest
+`sampling` that still follows the outline closely enough.
+
+
 ### RectangleHitbox
 
 The `RectangleHitbox` has the same constructors as the [](components/shape_components.md#rectanglecomponent),

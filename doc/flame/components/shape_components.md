@@ -129,17 +129,16 @@ void main() {
 
 ## PathComponent
 
-When a whole `Path` is needed (for rendering or collision detection) instead of a single contour,
-creating a `PathComponent` automatically walks all contours in the given `Path` and creates
-`PolygonHitbox` objects for each contour; by default, only disjoint contours become hitboxes,
-but `PathComponent` supports keeping conjoint contours via the `filter` parameter.
-The component size is derived directly from the given `Path`.
+When a whole `Path` is needed instead of a single contour, a `PathComponent` renders the path as it
+is and follows each of its closed contours with a polygon, in the same way as
+`PolygonComponent.fromPath` follows one contour. The polygons decide whether a point is inside of
+the component, so taps and drags only count on the shapes of the path and not in the space between
+them. The component gets the size of the bounds of the path, and the path is moved so that those
+bounds start at the origin of the component, so the anchor and the transforms apply to it like to
+any other shape.
 
-Also by default, the `Path` is rendered, whereas the hitboxes are not: this behavior may be
-changed via (respectively) the `renderShape` and `renderHitboxes` parameters.
-
-Using the previous two-contour `Path`, creating a `PathComponent` for both contours works thusly:
-
+Using the previous two-contour `Path`, a `PathComponent` that renders and covers both shapes is
+created like this:
 
 ```dart
 void main() {
@@ -150,6 +149,17 @@ void main() {
   final component = PathComponent(path: path);
 }
 ```
+
+The `sampling` and `tolerance` arguments control how the contours are followed, see
+[](#from-a-path). The polygons are kept as vertices in `polygons`, they are not child components.
+
+Contours with fewer than three vertices, like open lines, are rendered but do not become polygons.
+By default, the polygons whose vertices all lie inside of the largest polygon are left out as well,
+since the largest one already covers them; the eyes of a face are an example of this. Pass
+`filter: false` to keep every polygon, for example when the inner contours should be hit by rays.
+
+The `PathHitbox` is the hitbox counterpart of the `PathComponent`, see
+[](../collision_detection.md#pathhitbox).
 
 
 ## RectangleComponent
