@@ -81,11 +81,20 @@ class CirclePolygonIntersections
     Rect? overlappingRect,
   }) {
     final intersectionPoints = <Vector2>[];
+    final center = circle.absoluteCenter;
+    final radius = circle.scaledRadius;
+    // The bounding box of a rotated or unevenly scaled circle is larger than
+    // the circle, so the edges only have to be within the bounds of the circle
+    // itself.
+    final circleBounds = Rect.fromCircle(
+      center: center.toOffset(),
+      radius: radius + _circleBoundsEpsilon,
+    );
     final possibleVertices = polygon.possibleIntersectionVertices(
-      overlappingRect,
+      overlappingRect?.intersect(circleBounds) ?? circleBounds,
     );
     for (final line in possibleVertices) {
-      for (final intersection in circle.lineSegmentIntersections(line)) {
+      for (final intersection in line.circleIntersections(center, radius)) {
         if (!intersectionPoints.contains(intersection)) {
           intersectionPoints.add(intersection);
         }
@@ -102,6 +111,8 @@ class CirclePolygonIntersections
     }
     return intersectionPoints;
   }
+
+  static const double _circleBoundsEpsilon = 0.01;
 }
 
 class CircleCircleIntersections

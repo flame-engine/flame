@@ -56,6 +56,38 @@ void main() {
       );
     });
 
+    group('intersectionWithAabb2', () {
+      test('is the area that both boxes cover', () {
+        final aabb2 = Aabb2.minMax(Vector2(0, 0), Vector2(10, 10));
+        final other = Aabb2.minMax(Vector2(4, -3), Vector2(15, 6));
+
+        expect(
+          aabb2.intersectionWithAabb2(other),
+          const Rect.fromLTRB(4, 0, 10, 6),
+        );
+        expect(
+          other.intersectionWithAabb2(aabb2),
+          const Rect.fromLTRB(4, 0, 10, 6),
+        );
+      });
+
+      test('is the inner box when it is fully contained', () {
+        final aabb2 = Aabb2.minMax(Vector2(0, 0), Vector2(10, 10));
+        final inner = Aabb2.minMax(Vector2(2, 3), Vector2(4, 5));
+
+        expect(aabb2.intersectionWithAabb2(inner), inner.toRect());
+      });
+
+      test('has a negative extent when the boxes do not overlap', () {
+        final aabb2 = Aabb2.minMax(Vector2(0, 0), Vector2(1, 1));
+        final other = Aabb2.minMax(Vector2(3, 0), Vector2(4, 1));
+
+        final intersection = aabb2.intersectionWithAabb2(other);
+        expect(intersection.width, isNegative);
+        expect(intersection.isEmpty, isTrue);
+      });
+    });
+
     group('fromVertices', () {
       test('spans the extremes of the vertices', () {
         final aabb2 = Aabb2Extension.fromVertices([
