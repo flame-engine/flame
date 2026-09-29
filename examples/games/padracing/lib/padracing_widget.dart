@@ -1,5 +1,5 @@
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Image, Gradient;
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:padracing/game_over.dart';

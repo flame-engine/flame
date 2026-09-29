@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flame/widgets.dart';
 import 'package:flame_devtools/repository.dart';
-import 'package:flutter/material.dart' hide Image;
+import 'package:material_ui/material_ui.dart' hide Image;
 
 class ComponentSnapshot extends StatefulWidget {
   const ComponentSnapshot({

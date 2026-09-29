@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flame/extensions.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 final _output = List.filled(8 * 8 * 4, 255);

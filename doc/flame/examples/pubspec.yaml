@@ -16,6 +16,8 @@ dependencies:
   flutter_shaders:
   web: ^1.1.0
 
+  material_ui: any
+  cupertino_ui: any
 dev_dependencies:
   flame_lint: ^1.4.3
 

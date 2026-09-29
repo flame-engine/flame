@@ -1,6 +1,6 @@
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart' hide World;
-import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Image, Gradient;
 import 'package:flutter/services.dart';
 import 'package:padracing/car.dart';
 import 'package:padracing/padracing_game.dart';

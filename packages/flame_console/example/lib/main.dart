@@ -2,7 +2,7 @@ import 'package:flame/game.dart';
 import 'package:flame_console/flame_console.dart';
 import 'package:flame_console_example/commands/commands.dart';
 import 'package:flame_console_example/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   runApp(const MaterialApp(home: MyGameApp()));

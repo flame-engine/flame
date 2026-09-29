@@ -7,7 +7,7 @@ import 'package:flame/src/anchor.dart';
 import 'package:flame/src/components/sprite_group_component.dart';
 import 'package:flame/src/sprite_sheet.dart';
 import 'package:flame_test/flame_test.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 enum _ButtonState {

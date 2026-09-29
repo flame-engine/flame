@@ -30,3 +30,4 @@ dev_dependencies:
     sdk: flutter
   mocktail: ^1.0.4
   test: any
+  material_ui: any

@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:material_ui/material_ui.dart' hide Image, Gradient;
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:padracing/car.dart';

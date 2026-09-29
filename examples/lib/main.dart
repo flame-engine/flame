@@ -37,7 +37,7 @@ import 'package:examples/stories/tiled/tiled.dart';
 import 'package:examples/stories/utils/utils.dart';
 import 'package:examples/stories/widgets/widgets.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void main() {
   final page = PageProviderImpl().getPage();
