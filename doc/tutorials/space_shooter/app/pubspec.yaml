@@ -13,9 +13,9 @@ dependencies:
   flame: ^1.38.0
   flutter:
     sdk: flutter
+  material_ui: any
   web: ^1.1.0
 
-  material_ui: any
 dev_dependencies:
   flame_lint: ^1.4.3
   flutter_test:

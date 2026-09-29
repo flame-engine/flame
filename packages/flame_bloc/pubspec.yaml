@@ -21,9 +21,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ">=8.1.2 <10.0.0"
+  material_ui: any
   meta: ^1.12.0
 
-  material_ui: any
 dev_dependencies:
   dartdoc: ^9.0.0
   flame_lint: ^1.4.3

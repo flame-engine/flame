@@ -30,5 +30,5 @@ dev_dependencies:
   flame_lint: ^1.4.3
   flutter_test:
     sdk: flutter
-  mocktail: ^1.0.4
   material_ui: any
+  mocktail: ^1.0.4

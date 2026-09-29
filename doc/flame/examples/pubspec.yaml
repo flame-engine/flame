@@ -9,15 +9,14 @@ environment:
   flutter: ">=3.44.0"
 
 dependencies:
+  cupertino_ui: any
   flame: ^1.38.0
   flame_rive: ^1.11.2
   flutter:
     sdk: flutter
   flutter_shaders:
   web: ^1.1.0
-
   material_ui: any
-  cupertino_ui: any
 dev_dependencies:
   flame_lint: ^1.4.3
 
