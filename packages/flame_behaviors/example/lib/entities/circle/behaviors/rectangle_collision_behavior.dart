@@ -1,7 +1,7 @@
 import 'package:flame/extensions.dart';
 import 'package:flame_behaviors/flame_behaviors.dart';
 import 'package:flame_behaviors_example/entities/entities.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class RectangleCollisionBehavior extends CollisionBehavior<Rectangle, Circle> {
   final _collisionColor = Colors.yellow.withValues(alpha: 0.8);

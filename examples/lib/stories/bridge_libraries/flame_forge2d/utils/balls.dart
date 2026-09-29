@@ -2,7 +2,7 @@ import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/boundaries
 import 'package:examples/stories/bridge_libraries/flame_forge2d/utils/style.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class Ball extends BodyComponent with ContactCallbacks, GlowingBody {
   late Paint originalPaint;

@@ -1,6 +1,6 @@
 import 'package:dashbook/dashbook.dart';
 import 'package:flame/widgets.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 var _opacity = 1.0;
 

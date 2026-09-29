@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A [FlameGame] mixin that implements [KeyboardEvents] with keyboard event
 /// propagation to components that are mixed with [KeyboardHandler].

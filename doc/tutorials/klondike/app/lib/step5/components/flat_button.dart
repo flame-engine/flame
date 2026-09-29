@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
 import 'package:flame/text.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class FlatButton extends ButtonComponent {
   FlatButton(

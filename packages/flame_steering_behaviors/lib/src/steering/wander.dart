@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flame/extensions.dart';
 import 'package:flame_steering_behaviors/flame_steering_behaviors.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template wander}
 /// Wander steering algorithm.

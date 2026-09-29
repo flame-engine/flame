@@ -10,7 +10,7 @@ import 'package:examples/stories/rendering/rich_text_example.dart';
 import 'package:examples/stories/rendering/text_box_example.dart';
 import 'package:examples/stories/rendering/text_example.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 void addRenderingStories(Dashbook dashbook) {
   dashbook.storiesOf('Rendering')
