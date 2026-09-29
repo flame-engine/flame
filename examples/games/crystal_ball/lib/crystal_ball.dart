@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:crystal_ball/src/game/game.dart';
 
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class CrystalBallWidget extends StatefulWidget {
   const CrystalBallWidget({super.key});

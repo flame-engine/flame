@@ -2,8 +2,8 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flame_network_assets/flame_network_assets.dart';
-import 'package:flutter/material.dart' hide Image;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart' hide Image;
 import 'package:mocktail/mocktail.dart';
 import 'package:path/path.dart' as path;
 

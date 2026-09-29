@@ -1,7 +1,7 @@
 import 'package:examples/commons/ember.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'package:material_ui/material_ui.dart' show Colors;
 
 class DragCallbacksExample extends FlameGame {
   static const String description = '''

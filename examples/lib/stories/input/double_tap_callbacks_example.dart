@@ -2,7 +2,7 @@ import 'package:examples/commons/ember.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class DoubleTapCallbacksExample extends FlameGame with DoubleTapCallbacks {
   static const String description = '''

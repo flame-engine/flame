@@ -7,7 +7,7 @@ import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flutter/material.dart' hide Image, Draggable;
+import 'package:material_ui/material_ui.dart' hide Image, Draggable;
 
 enum Shapes { circle, rectangle, polygon, path }
 
