@@ -63,7 +63,6 @@ void main() {
 void runAsDashbook() {
   final dashbook = Dashbook(
     title: 'Flame Examples',
-    theme: ThemeData.dark(),
   );
 
   // Some small sample games
