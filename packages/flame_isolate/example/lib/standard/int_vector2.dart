@@ -1,5 +1,5 @@
-import 'package:flame/components.dart';
 import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flame/components.dart';
 import 'package:quiver/core.dart';
 
 @immutable
