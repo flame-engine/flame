@@ -1,6 +1,6 @@
 import 'package:devtools_app_shared/ui.dart' as devtools_ui;
 import 'package:flame_devtools/repository.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 class OverlayNavigation extends StatefulWidget {
   const OverlayNavigation({super.key});
@@ -63,7 +63,8 @@ class _OverlayNavigationState extends State<OverlayNavigation> {
                   ],
                 ),
               ),
-              Flexible(
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 240),
                 child: ListView(
                   shrinkWrap: true,
                   children: [
