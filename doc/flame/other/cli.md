@@ -63,6 +63,45 @@ If you have multiple games in your app, only the last one created is connected, 
 `DevToolsService.initWithGame` to change it.
 
 
+### Running several instances of one game
+
+A running game is tied to its project, the closest directory with a `pubspec.yaml`. Games started
+from different projects never interfere with each other, and that includes separate git checkouts
+of the same game: the commands pick the game of the project they are run in.
+
+You can also start the same project several times, for example to test on two devices at once or
+to compare two builds of the game:
+
+```shell
+flame run -d macos
+flame run -d chrome
+```
+
+The commands go to the game that was started last, in this case the one in Chrome. When that game
+is stopped, the game started before it becomes reachable again, and the [logs](#logs) command
+shows the output of whichever game the commands currently go to.
+
+To reach a game that was not started last, address it explicitly. Every `flame run` prints the two
+things needed for that when it starts:
+
+```text
+flame run: the reload and restart commands reach this game on port 50312.
+...
+A Dart VM Service on macOS is available at: http://127.0.0.1:50300/abc123=/
+```
+
+Pass the URI with `--uri` to the commands that talk to the game, and the port with `--port` to
+`reload` and `restart`:
+
+```shell
+flame snapshot --uri http://127.0.0.1:50300/abc123=/ --output macos.png
+flame reload --port 50312
+```
+
+A script that drives several instances can keep the URI and the port of each one and pass them
+every time, so that it never depends on which game was started last.
+
+
 ## Commands
 
 Run `flame --help` to list the commands, and `flame help <command>` for the options of a
@@ -79,12 +118,70 @@ flame run -d macos
 ```
 
 All the arguments are passed on to `flutter run`, and it works just like `flutter run`, including
-hot reload from the terminal. The file is removed again when the game is stopped. The `.dart_tool`
-directory is ignored by version control in Flutter projects, so the file is never committed.
+the keys in the terminal such as `r` for hot reload and `q` to quit. Next to the URI, `flame run`
+keeps two more files in `.dart_tool/flame`: `control_port`, through which the [reload and
+restart](#reload-and-restart) commands talk to it, and `log`, which the [logs](#logs) command
+reads. The URI and the port are removed when the game is stopped, the log is kept. The `.dart_tool`
+directory is ignored by version control in Flutter projects, so the files are never committed.
+
+The files live in the root of the project, the closest directory with a `pubspec.yaml`, no matter
+which subdirectory `flame run` was started from. That ties every running game to its project, and
+the same project can be started several times, see
+[running several instances of one game](#running-several-instances-of-one-game).
 
 When an agent or a script starts the game with `flame run` in the background, the other commands
 say that no running game was found until the game has started, so they can be retried until they
-succeed.
+succeed. Since `flame run` reads the terminal input like `flutter run` does, redirect its input
+from `/dev/null` when it runs in the background of an interactive shell:
+
+```shell
+flame run -d macos < /dev/null > run.log 2>&1 &
+```
+
+
+### reload and restart
+
+Hot reloads or hot restarts a game that was started with `flame run`, and waits for the result:
+
+```shell
+$ flame reload
+Reloaded 1 of 1097 libraries in 71ms.
+```
+
+This is the same as pressing `r` or `R` in the terminal of `flame run`, but it can be done from
+another terminal or from a script, and the command only returns when the reload is done. If the
+reload fails, for example because of a compile error, the errors are printed and the command exits
+with `70`, so an agent can fix the code and try again:
+
+```shell
+$ flame reload
+lib/main.dart:19:44: Error: Expected ';' after this.
+        paint: Paint()..color = Colors.orange
+                                       ^^^^^^
+Try again after fixing the above error(s).
+```
+
+Both commands take `--port` (`-p`) to reach a specific `flame run` when several games were
+started from the same project, see [run](#run).
+
+A hot reload swaps the code but keeps the state of the game, so a change to something that was
+set when a component was created, such as a paint in its constructor or a position in `onLoad`,
+is only visible after a hot restart. Changes to `update` and `render` methods show up right away.
+Component ids change with a restart, so run `tree` again afterwards.
+
+
+### logs
+
+Prints the output of the `flutter run` that `flame run` started, which includes everything the
+game prints and the exceptions it throws:
+
+```shell
+flame logs --lines 50
+```
+
+`--lines` (`-n`) is the number of lines from the end to print, 100 by default, and `--follow`
+(`-f`) keeps printing new output until the game is stopped. The log is kept after the game has
+stopped, so it can still be read after a crash.
 
 
 ### snapshot
@@ -246,7 +343,8 @@ Flutter widgets, so they are not part of the images that `snapshot` takes.
 ## Exit codes
 
 The commands follow the common Unix conventions for exit codes, so that scripts can tell failures
-apart. `flame run` exits with the exit code of `flutter run`, and the other commands use these:
+apart. `flame run` exits with the exit code of `flutter run`, `reload` and `restart` exit with
+`70` when the reload failed, and the other commands use these:
 
 - `0`: The command succeeded.
 - `64`: The command was used incorrectly, for example with an invalid option.
